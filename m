@@ -2,87 +2,123 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BC9DCC1
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 09:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1132DDCB
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 10:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727306AbfD2HX6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 03:23:58 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:40881 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727253AbfD2HX5 (ORCPT
+        id S1727576AbfD2IeF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 04:34:05 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34729 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727480AbfD2IeC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 03:23:57 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N7AAk-1giQjU0jDY-017SZ2; Mon, 29 Apr 2019 09:23:28 +0200
-Subject: Re: [PATCH 01/41] drivers: tty: serial: dz: use dev_err() instead of
- printk()
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, andrew@aj.id.au,
-        andriy.shevchenko@linux.intel.com, macro@linux-mips.org,
-        vz@mleia.com, slemieux.tyco@gmail.com, khilman@baylibre.com,
-        liviu.dudau@arm.com, sudeep.holla@arm.com,
-        lorenzo.pieralisi@arm.com, davem@davemloft.net, jacmet@sunsite.dk,
-        linux@prisktech.co.nz, matthias.bgg@gmail.com,
-        linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-2-git-send-email-info@metux.net>
- <20190427133117.GC11368@kroah.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <721dc048-8b5f-e7f5-2dab-f0f328435e0c@metux.net>
-Date:   Mon, 29 Apr 2019 09:23:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        Mon, 29 Apr 2019 04:34:02 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b3so4972751pfd.1;
+        Mon, 29 Apr 2019 01:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OPcDt9d30P2DrWihwMD5KzyLdiEc+hDV0Ch16pAIVx8=;
+        b=bV+A2rvcF3dA7spUDvQeVqaw2j2wj1Em7g8BVD/QBu58K3ZrFGsOZx/8WDXwt7BhkN
+         Yk//y77bc6jXfg4ab7OQmXf5/9vThJ7i5VVaedHG8Wl1N7CbX6PtqQCr7dTvAymynUWf
+         c0ev+ZvvetNTtlylD8F7bLsIN14xdK0wcZaOYWjcNB4l+6wx7x19B1gr35emJvEpapMI
+         OjNHvJS0hBXZqV2DRc3oPeRrVbwFxYYRAnOYSHn/WFVTzHD35qF6uOTKbtB6Z2zUBHgq
+         r/qIkVXnxZVNOa5+0dxNZCi75oblwyvoLU3gm9W0+F5RL8/2PpHWt5IGwZ10Vu3ZJPQm
+         c8Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OPcDt9d30P2DrWihwMD5KzyLdiEc+hDV0Ch16pAIVx8=;
+        b=BzBPcg6t7sZclssP1eva8ZrB0EyNlO2l1+JslaVfg4jPwx1dWYHGhcmemlXK/9g9KJ
+         AvLwk8gKLSHs7a96sCn/Ac+3BXbKw6NPlmPkOwDtryoKoBcaIpo8qPZhaZGElAKueGOo
+         EodStK3nzfyaZOVIC3kn3CA57NXk+2Q1QSBTV4YpRjO5g/GfzL2mefgfrpMm+4zTf9iD
+         xApasdWuZEVK3nHKyV81QGWrzLyaq6R6Ls+wOnBlCEBjn1QHd+hQ8WTNfpQqg48BXpKA
+         Eyk7X/skPTeL68mcd1OZtcVYZkKRLsd+Aqz83ywNBiXPtkiojHPXk7AEsryXIs8NGnPs
+         DvVg==
+X-Gm-Message-State: APjAAAUybhZDHmwHNKfquLfzCKO1PDgTcBXAyaiIR3Rz3bVeZzj8ygRT
+        vn/0+Vnp5swyBG7gCszXJRAVJDzNr4Z9p/RRXaM=
+X-Google-Smtp-Source: APXvYqzFn3/GrqRKNZvkx00c1IEVkavMQqVD3bsmosVh/pAKMxYWQGpWeG4KJBIjvx2zfhLykgaYfTgfx+KbKTMD1T4=
+X-Received: by 2002:a63:dd58:: with SMTP id g24mr28476366pgj.161.1556526841661;
+ Mon, 29 Apr 2019 01:34:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190427133117.GC11368@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:2yBsSwNlRemILw3qvHg+EUmYturt1pLcLjGTAKgJyue8kvRS4SA
- Ycg5vG+6X+ZgHuQ3PHVzy/Dv44Zuxjh37IHDyzF2jEvtvZGNvYkKtrnXVZYGUnPdIu0W46i
- 2IMqhI87Gg+pJeqQ6/ht5bwJVFkYWHqCEPoyT4ASEIm1+8v8y21GaFqc39ZCbGTdMT51cQj
- 0S+tKBdUy1LLCwqz09Z5Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hvct3rbX28g=:TmP05eZMgYa4HiZY4PnD/X
- 6m3IhBL+nEVPGdArSYiuiX7eZZXEk5U/K4fdA/5I69ZzNB+lgpMzTJARgTptylrCcsF+ec56R
- EcFsOKNj9r4+Pijm0w6PIOOCQR9sDUMsKWVVev1N7blGt5gqfEfHG3QYEEANluS9l3kZ85qbk
- LdiiJxi6KrmHyMeNDiFyYrsu6r5+ZF6VhCjr35ptTbfRr0e5WdHohtBwPezdwun0dBypwZywX
- L5iAIZgzdTo2KZXu+RTM7QCX25OsuIZNUK0fBx7MuFFqj8vtok69bXzmZ8j7mixBq7tx5Wrn6
- i/cdujidsg4MAPszgSCu03/hJyb8p1ELPZ5aG5Cw03pNubg+wvW0vv70xGJY2ux2SC5jfv/TZ
- 0kjKPYeKxFMu/0DII+t2N4c4ZCQJKTkCH/2d297RXIqJfaPcp0I+1ngc88j46FPAj7Y/CXSna
- oWFRjB2Mk47zKZTsVGCP+SZCjO+ppRHXdfWvy2WO2L47GwCItPGmDKR1G9/dkNJT/v4lSeMO9
- 8RlnxdMzk4uTIE1tZ0xj9SJNh31sjQNICyC1uJ5Jnx2LeKdeZw8Ultodwh9RHuzYigZGtEqtq
- +w5cJnlLXt6zOcX65xf+ZznoLz9/DKEE+bN1MafnjmBF5nahezF1Q9YFoj0JclEWAYzhUDE9C
- F62YYxCgxwvt3b48D5G4DMkXK5gD+OnF6o1vZQ8+QwLzMY/Vt77ayebi1+6HkKqsi3zgXZHmD
- 8+778zAcA9tvPs8yE7LGV7ixGCrb8ircrZMSmUQV9blo0HEhiHR6q028GOw=
+References: <20190426084038.6377-1-esben@geanix.com> <20190426084038.6377-2-esben@geanix.com>
+ <20190426143946.GX9224@smile.fi.intel.com> <871s1og11u.fsf@haabendal.dk>
+ <20190426215103.GD9224@smile.fi.intel.com> <87tvejakot.fsf@haabendal.dk>
+ <CAHp75VfZMuQ3xagGSt6dXv1tZbSfanUdaw0SgjTqq3YET5YBKQ@mail.gmail.com> <87y33tz5oz.fsf@haabendal.dk>
+In-Reply-To: <87y33tz5oz.fsf@haabendal.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 29 Apr 2019 11:33:50 +0300
+Message-ID: <CAHp75Vc6cLnLztXtvTcWisjAqDUTEWBBgv20CA34ZQmBEAvpbA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] serial: 8250: Allow port registration without UPF_BOOT_AUTOCONF
+To:     Esben Haabendal <esben@haabendal.dk>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        He Zhe <zhe.he@windriver.com>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 27.04.19 15:31, Greg KH wrote:
-> On Sat, Apr 27, 2019 at 02:51:42PM +0200, Enrico Weigelt, metux IT consult wrote:
->> Using dev_err() instead of printk() for more consistent output.
->> (prints device name, etc).
->>
->> Signed-off-by: Enrico Weigelt <info@metux.net>
->> ---
->>  drivers/tty/serial/dz.c | 8 ++++----
-> 
-> Do you have this hardware to test any of these changes with?
+On Mon, Apr 29, 2019 at 9:27 AM Esben Haabendal <esben@haabendal.dk> wrote:
+> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+> > On Sat, Apr 27, 2019 at 12:01 PM Esben Haabendal <esben@haabendal.dk> wrote:
+> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> >> > On Fri, Apr 26, 2019 at 06:54:05PM +0200, Esben Haabendal wrote:
+> >> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> >> >> The reason for this patch is to be able to do exactly that (set port
+> >> >> type and UPF_FIXED_TYPE) without having UPF_BOOT_AUTOCONF added.
+> >> >>
+> >> >> In the current serial8250_register_8250_port() there is:
+> >> >>
+> >> >>     uart->port.flags        = up->port.flags | UPF_BOOT_AUTOCONF;
+> >> >>
+> >> >> So, even though I set UPF_FIXED_TYPE, I get
+> >> >> UPF_FIXED_TYPE|UPF_BOOT_AUTOCONF.
+> >> >
+> >> > Yes.
+> >> >
+> >> >> So I need this patch.
+> >> >
+> >> > Why? I don't see any problems to have these flags set.
+> >>
+> >> The problem with having UPF_BOOT_AUTOCONF is the call to
+> >> serial8250_request_std_resource().  It calls request_mem_region(), which
+> >> fails if the MFD driver already have requested the memory region for the
+> >> MFD device.
+> >
+> > If it's MFD, why it requested the region for its child?
+> > Isn't it a bug in MFD driver?
+>
+> It is a PCI driver, which calls pci_request_regions().  The PCI device
+> carries a lot of different functions, which uses small slices of the PCI
+> memory region(s).  With the resources being a tree structure, I don't
+> think it is a bug when a parent driver requests the entire memory
+> region.
 
-Unfortunately not :(
+If it's MFD driver, it's not its business to do something
+child-related on child behalf.
+In any case, Linux device resource model uses exclusive region
+slicing. If you do like above, you call for a problems.
 
-Do you happen to know anybody who has ?
+Btw, we have PCI MFD driver which enumerates 8250 (more precisely
+8250_dw) w/o any issues.
 
---mtx
+> It would be nice if child drivers requesting memory would pass the
+> parent memory resource.  Maybe 8250 driver could be changed to accept a
+> struct resource pointer instead of a simple mapbase value, allowing to
+> setup the resource with parent pointing to the MFD memory resource.
 
+I don't see the problem in certain driver, I guess you are trying to
+workaround existin Linux device resource model.
 
 -- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+With Best Regards,
+Andy Shevchenko
