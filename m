@@ -2,140 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCBCE4AD
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 16:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CF4E4C8
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 16:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728258AbfD2OZc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 10:25:32 -0400
-Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com ([46.30.210.182]:24214
-        "EHLO mailrelay1-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728240AbfD2OZc (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 10:25:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=haabendal.dk; s=20140924;
-        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
-         to:from:from;
-        bh=oG7i9yZn/o4Oxniofl2+2tqTuOuKa8Z6pDLjDTXSntk=;
-        b=f20o62MWzUz1nSfv4iDYjBclUCli1f+9PftRlQ/ZaHZ39mkGqAgVgeHsm9a06in6IqM7eHLkdY5yt
-         6ovvYuYqT+far/+sywpMS2ZnjBr80o+m/QZJ6WndfrwushehfubjV1HOt667j0EvoxbmXZCm32laiS
-         CAPAcuGs7xTN5Ugc=
-X-HalOne-Cookie: 24a4b16c7a3db857b5122c41d5790eda3687d85a
-X-HalOne-ID: a257edac-6a8a-11e9-b614-d0431ea8a283
-Received: from localhost (unknown [193.163.1.7])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id a257edac-6a8a-11e9-b614-d0431ea8a283;
-        Mon, 29 Apr 2019 14:25:27 +0000 (UTC)
-From:   Esben Haabendal <esben@haabendal.dk>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "open list\:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        He Zhe <zhe.he@windriver.com>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] serial: 8250: Allow port registration without UPF_BOOT_AUTOCONF
-References: <20190426084038.6377-1-esben@geanix.com>
-        <20190426084038.6377-2-esben@geanix.com>
-        <20190426143946.GX9224@smile.fi.intel.com>
-        <871s1og11u.fsf@haabendal.dk>
-        <20190426215103.GD9224@smile.fi.intel.com>
-        <87tvejakot.fsf@haabendal.dk>
-        <CAHp75VfZMuQ3xagGSt6dXv1tZbSfanUdaw0SgjTqq3YET5YBKQ@mail.gmail.com>
-        <87y33tz5oz.fsf@haabendal.dk>
-        <CAHp75Vc6cLnLztXtvTcWisjAqDUTEWBBgv20CA34ZQmBEAvpbA@mail.gmail.com>
-        <87ef5lxiqm.fsf@haabendal.dk>
-        <20190429133535.GG9224@smile.fi.intel.com>
-Date:   Mon, 29 Apr 2019 16:25:27 +0200
-In-Reply-To: <20190429133535.GG9224@smile.fi.intel.com> (Andy Shevchenko's
-        message of "Mon, 29 Apr 2019 16:35:35 +0300")
-Message-ID: <87v9ywhors.fsf@haabendal.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        id S1728276AbfD2ObV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 10:31:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47432 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728240AbfD2ObU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Apr 2019 10:31:20 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 870AC204EC;
+        Mon, 29 Apr 2019 14:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556548280;
+        bh=iLPez6aL8Qyb4FMaCswXFWPVTnFlnE/oSNnuMiusZB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X4bMJc7ag8MpYvn57/m2S5y0Q8O5lsawtizPxZkUSNyCiLkF0MmPFrZp55p3Q301B
+         XXqYsCi7QTvlWXkWGC40bJfEnUzT/mXJZF75f4vTMXFwVOV4oXNomKan/9NVFAHEae
+         TJZN07cELsPpKYxpHNxPCy1IT+thHuIo15VCdDcU=
+Date:   Mon, 29 Apr 2019 16:31:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hao Lee <haolee.swjtu@gmail.com>
+Cc:     jslaby@suse.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tty: serial: 8250: Fix type field in format string
+Message-ID: <20190429143117.GA1474@kroah.com>
+References: <20190427091943.GA3810@haolee.io>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190427091943.GA3810@haolee.io>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+On Sat, Apr 27, 2019 at 05:19:43PM +0800, Hao Lee wrote:
+> The dev_dbg statement should print the value of uart.port.mapbase instead
+> of its address. Besides that, uart.port.irq and uart.port.iotype are all
+> unsigned types, so using %u is more appropriate.
+> 
+> Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_pnp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_pnp.c b/drivers/tty/serial/8250/8250_pnp.c
+> index 431e69a5a6a0..9dea11baf479 100644
+> --- a/drivers/tty/serial/8250/8250_pnp.c
+> +++ b/drivers/tty/serial/8250/8250_pnp.c
+> @@ -462,8 +462,8 @@ serial_pnp_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
+>  		return -ENODEV;
+>  
+>  	dev_dbg(&dev->dev,
+> -		 "Setup PNP port: port %lx, mem %pa, irq %d, type %d\n",
+> -		 uart.port.iobase, &uart.port.mapbase,
+> +		 "Setup PNP port: port %#lx, mem %#lx, irq %u, type %u\n",
+> +		 uart.port.iobase, uart.port.mapbase,
+>  		 uart.port.irq, uart.port.iotype);
+>  
+>  	if (flags & CIR_PORT) {
+> -- 
+> 2.14.5
 
-> On Mon, Apr 29, 2019 at 11:29:05AM +0200, Esben Haabendal wrote:
->> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
->> > On Mon, Apr 29, 2019 at 9:27 AM Esben Haabendal <esben@haabendal.dk> wrote:
->> >> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
->> >> > On Sat, Apr 27, 2019 at 12:01 PM Esben Haabendal <esben@haabendal.dk>
->> >> > wrote:
->> >> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->> >> >> > On Fri, Apr 26, 2019 at 06:54:05PM +0200, Esben Haabendal wrote:
->> >> >> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->
->> So maybe we should go down that direction intead, extending 8250 driver
->> to replace mapbase with a resource struct instead?
->> 
->> > Btw, we have PCI MFD driver which enumerates 8250 (more precisely
->> > 8250_dw) w/o any issues.
->> 
->> I am aware of that (sm501.c).  It avoids the problem by not requesting
->> the parent memory region (sm->io_res), and requesting all child memory
->> regions directly in root instead of relative to the sm->io_res parent.
->> 
->> But as resoure management is designed for managing a parent/child
->> resource tree, this looks much more like a workaround than the right
->> solution.
->> 
->> >> It would be nice if child drivers requesting memory would pass the
->> >> parent memory resource.  Maybe 8250 driver could be changed to accept a
->> >> struct resource pointer instead of a simple mapbase value, allowing to
->> >> setup the resource with parent pointing to the MFD memory resource.
->> >
->> > I don't see the problem in certain driver, I guess you are trying to
->> > workaround existin Linux device resource model.
->> 
->> No, I actually try to do the right thing in relation to Linux device
->> resource model.  But 8250 is just not behaving very well in that
->> respect, not having been made really aware of the resource model.
->
-> The point here is that. MFD driver can re-use existing platform drivers which
-> may be used standalone. They and only they are the right owners of the
-> requesting *their* resources.
->
-> When parent request resources on the behalf of its child it simple will break
-> this flexibility.
+This causes build warnings when applied, I'm having to drop it now.
 
-I hear what you say.  And I agree, parent/mfd drivers should not request
-resources on behalf of it's children.
+Please be more careful, when submitting patches, always test-build them
+first.
 
-But on the other side, something is broken by design in mfd, if it is
-not possible for parent/mfd driver to request the resources for itself,
-which naturally contains the resources for all it's mfd
-functions/childs.
-
-Please take a look at mfd_add_device() in drivers/mfd/mfd-core.c, and
-the use of the cell and mem_base arguments in particular.
-
-        for (r = 0; r < cell->num_resources; r++) {
-                res[r].name = cell->resources[r].name;
-                res[r].flags = cell->resources[r].flags;
-
-                /* Find out base to use */
-                if ((cell->resources[r].flags & IORESOURCE_MEM) && mem_base) {
-                        res[r].parent = mem_base;
-                        res[r].start = mem_base->start +
-                                cell->resources[r].start;
-                        res[r].end = mem_base->start +
-                                cell->resources[r].end;
-
-It really is a core part of mfd drivers that you request a memory
-resource for the mfd driver, and then have one or more child memory
-resources requsted with the parent memory resource as base.
-
-Many mfd drivers handle resources like this, like: htc/pasic3.c,
-sta2x11-mfd.c and intel-lpss.c.
-Ofcourse, the sm501.c driver does not, as it does not use the mfd API at
-all, and is thus not a good example of a mfd driver, and there is
-therefore no good examples of using 8250 with an mfd driver.
-
-/Esben
+greg k-h
