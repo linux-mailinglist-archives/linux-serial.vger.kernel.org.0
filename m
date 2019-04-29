@@ -2,58 +2,34 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1132DDCB
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 10:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C385BDF6D
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 11:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727576AbfD2IeF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 04:34:05 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34729 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727480AbfD2IeC (ORCPT
+        id S1727470AbfD2J3K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 05:29:10 -0400
+Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com ([46.30.210.182]:37735
+        "EHLO mailrelay1-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727454AbfD2J3K (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 04:34:02 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b3so4972751pfd.1;
-        Mon, 29 Apr 2019 01:34:02 -0700 (PDT)
+        Mon, 29 Apr 2019 05:29:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OPcDt9d30P2DrWihwMD5KzyLdiEc+hDV0Ch16pAIVx8=;
-        b=bV+A2rvcF3dA7spUDvQeVqaw2j2wj1Em7g8BVD/QBu58K3ZrFGsOZx/8WDXwt7BhkN
-         Yk//y77bc6jXfg4ab7OQmXf5/9vThJ7i5VVaedHG8Wl1N7CbX6PtqQCr7dTvAymynUWf
-         c0ev+ZvvetNTtlylD8F7bLsIN14xdK0wcZaOYWjcNB4l+6wx7x19B1gr35emJvEpapMI
-         OjNHvJS0hBXZqV2DRc3oPeRrVbwFxYYRAnOYSHn/WFVTzHD35qF6uOTKbtB6Z2zUBHgq
-         r/qIkVXnxZVNOa5+0dxNZCi75oblwyvoLU3gm9W0+F5RL8/2PpHWt5IGwZ10Vu3ZJPQm
-         c8Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OPcDt9d30P2DrWihwMD5KzyLdiEc+hDV0Ch16pAIVx8=;
-        b=BzBPcg6t7sZclssP1eva8ZrB0EyNlO2l1+JslaVfg4jPwx1dWYHGhcmemlXK/9g9KJ
-         AvLwk8gKLSHs7a96sCn/Ac+3BXbKw6NPlmPkOwDtryoKoBcaIpo8qPZhaZGElAKueGOo
-         EodStK3nzfyaZOVIC3kn3CA57NXk+2Q1QSBTV4YpRjO5g/GfzL2mefgfrpMm+4zTf9iD
-         xApasdWuZEVK3nHKyV81QGWrzLyaq6R6Ls+wOnBlCEBjn1QHd+hQ8WTNfpQqg48BXpKA
-         Eyk7X/skPTeL68mcd1OZtcVYZkKRLsd+Aqz83ywNBiXPtkiojHPXk7AEsryXIs8NGnPs
-         DvVg==
-X-Gm-Message-State: APjAAAUybhZDHmwHNKfquLfzCKO1PDgTcBXAyaiIR3Rz3bVeZzj8ygRT
-        vn/0+Vnp5swyBG7gCszXJRAVJDzNr4Z9p/RRXaM=
-X-Google-Smtp-Source: APXvYqzFn3/GrqRKNZvkx00c1IEVkavMQqVD3bsmosVh/pAKMxYWQGpWeG4KJBIjvx2zfhLykgaYfTgfx+KbKTMD1T4=
-X-Received: by 2002:a63:dd58:: with SMTP id g24mr28476366pgj.161.1556526841661;
- Mon, 29 Apr 2019 01:34:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190426084038.6377-1-esben@geanix.com> <20190426084038.6377-2-esben@geanix.com>
- <20190426143946.GX9224@smile.fi.intel.com> <871s1og11u.fsf@haabendal.dk>
- <20190426215103.GD9224@smile.fi.intel.com> <87tvejakot.fsf@haabendal.dk>
- <CAHp75VfZMuQ3xagGSt6dXv1tZbSfanUdaw0SgjTqq3YET5YBKQ@mail.gmail.com> <87y33tz5oz.fsf@haabendal.dk>
-In-Reply-To: <87y33tz5oz.fsf@haabendal.dk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 29 Apr 2019 11:33:50 +0300
-Message-ID: <CAHp75Vc6cLnLztXtvTcWisjAqDUTEWBBgv20CA34ZQmBEAvpbA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] serial: 8250: Allow port registration without UPF_BOOT_AUTOCONF
-To:     Esben Haabendal <esben@haabendal.dk>
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=ifymHMGnHOHzVOFXiriBoIxk5jjlP0O8eZurpF5ChEk=;
+        b=CoHVv0L8awhe10d2U1yvta9ssprLfcxihS9ZZ50Iu6tVnQeYW7UPT5TGWwM0BvAjFXX3E8Kgz64N8
+         nTb1vAhUtgoyYLImQji4EFy801IWhcnXlJuk6Pm/5Xqefqima2HWFLxvmJVLIB8smWtQ8zl+205jsS
+         bQV2LVJ/cmRWV7F8=
+X-HalOne-Cookie: e4143cdfe25c006a9ecfa1ea84fa7f3bdb48107f
+X-HalOne-ID: 3b934c2a-6a61-11e9-b614-d0431ea8a283
+Received: from localhost (unknown [193.163.1.7])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 3b934c2a-6a61-11e9-b614-d0431ea8a283;
+        Mon, 29 Apr 2019 09:29:05 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list\:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
@@ -61,64 +37,126 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/2] serial: 8250: Allow port registration without UPF_BOOT_AUTOCONF
+References: <20190426084038.6377-1-esben@geanix.com>
+        <20190426084038.6377-2-esben@geanix.com>
+        <20190426143946.GX9224@smile.fi.intel.com>
+        <871s1og11u.fsf@haabendal.dk>
+        <20190426215103.GD9224@smile.fi.intel.com>
+        <87tvejakot.fsf@haabendal.dk>
+        <CAHp75VfZMuQ3xagGSt6dXv1tZbSfanUdaw0SgjTqq3YET5YBKQ@mail.gmail.com>
+        <87y33tz5oz.fsf@haabendal.dk>
+        <CAHp75Vc6cLnLztXtvTcWisjAqDUTEWBBgv20CA34ZQmBEAvpbA@mail.gmail.com>
+Date:   Mon, 29 Apr 2019 11:29:05 +0200
+In-Reply-To: <CAHp75Vc6cLnLztXtvTcWisjAqDUTEWBBgv20CA34ZQmBEAvpbA@mail.gmail.com>
+        (Andy Shevchenko's message of "Mon, 29 Apr 2019 11:33:50 +0300")
+Message-ID: <87ef5lxiqm.fsf@haabendal.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 9:27 AM Esben Haabendal <esben@haabendal.dk> wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> > On Sat, Apr 27, 2019 at 12:01 PM Esben Haabendal <esben@haabendal.dk> wrote:
-> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-> >> > On Fri, Apr 26, 2019 at 06:54:05PM +0200, Esben Haabendal wrote:
-> >> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-> >> >> The reason for this patch is to be able to do exactly that (set port
-> >> >> type and UPF_FIXED_TYPE) without having UPF_BOOT_AUTOCONF added.
-> >> >>
-> >> >> In the current serial8250_register_8250_port() there is:
-> >> >>
-> >> >>     uart->port.flags        = up->port.flags | UPF_BOOT_AUTOCONF;
-> >> >>
-> >> >> So, even though I set UPF_FIXED_TYPE, I get
-> >> >> UPF_FIXED_TYPE|UPF_BOOT_AUTOCONF.
-> >> >
-> >> > Yes.
-> >> >
-> >> >> So I need this patch.
-> >> >
-> >> > Why? I don't see any problems to have these flags set.
-> >>
-> >> The problem with having UPF_BOOT_AUTOCONF is the call to
-> >> serial8250_request_std_resource().  It calls request_mem_region(), which
-> >> fails if the MFD driver already have requested the memory region for the
-> >> MFD device.
-> >
-> > If it's MFD, why it requested the region for its child?
-> > Isn't it a bug in MFD driver?
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+
+> On Mon, Apr 29, 2019 at 9:27 AM Esben Haabendal <esben@haabendal.dk> wrote:
+>> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+>> > On Sat, Apr 27, 2019 at 12:01 PM Esben Haabendal <esben@haabendal.dk> wrote:
+>> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> >> > On Fri, Apr 26, 2019 at 06:54:05PM +0200, Esben Haabendal wrote:
+>> >> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> >> >> The reason for this patch is to be able to do exactly that (set port
+>> >> >> type and UPF_FIXED_TYPE) without having UPF_BOOT_AUTOCONF added.
+>> >> >>
+>> >> >> In the current serial8250_register_8250_port() there is:
+>> >> >>
+>> >> >>     uart->port.flags        = up->port.flags | UPF_BOOT_AUTOCONF;
+>> >> >>
+>> >> >> So, even though I set UPF_FIXED_TYPE, I get
+>> >> >> UPF_FIXED_TYPE|UPF_BOOT_AUTOCONF.
+>> >> >
+>> >> > Yes.
+>> >> >
+>> >> >> So I need this patch.
+>> >> >
+>> >> > Why? I don't see any problems to have these flags set.
+>> >>
+>> >> The problem with having UPF_BOOT_AUTOCONF is the call to
+>> >> serial8250_request_std_resource().  It calls request_mem_region(), which
+>> >> fails if the MFD driver already have requested the memory region for the
+>> >> MFD device.
+>> >
+>> > If it's MFD, why it requested the region for its child?
+>> > Isn't it a bug in MFD driver?
+>>
+>> It is a PCI driver, which calls pci_request_regions().  The PCI device
+>> carries a lot of different functions, which uses small slices of the PCI
+>> memory region(s).  With the resources being a tree structure, I don't
+>> think it is a bug when a parent driver requests the entire memory
+>> region.
 >
-> It is a PCI driver, which calls pci_request_regions().  The PCI device
-> carries a lot of different functions, which uses small slices of the PCI
-> memory region(s).  With the resources being a tree structure, I don't
-> think it is a bug when a parent driver requests the entire memory
-> region.
+> If it's MFD driver, it's not its business to do something
+> child-related on child behalf.
 
-If it's MFD driver, it's not its business to do something
-child-related on child behalf.
-In any case, Linux device resource model uses exclusive region
-slicing. If you do like above, you call for a problems.
+The MFD driver is not doing anything on behalf of the child.  Being the
+parent (MFD), it is requesting the memory region of the MFD/parent
+device, using pci_request_regions(), similar to how it is done in
+fx. janz-cmodio.c.
 
-Btw, we have PCI MFD driver which enumerates 8250 (more precisely
-8250_dw) w/o any issues.
+> In any case, Linux device resource model uses exclusive region
+> slicing. If you do like above, you call for a problems.
 
-> It would be nice if child drivers requesting memory would pass the
-> parent memory resource.  Maybe 8250 driver could be changed to accept a
-> struct resource pointer instead of a simple mapbase value, allowing to
-> setup the resource with parent pointing to the MFD memory resource.
+Linux device resource model supports a parent/child/sibling
+structure, specifically to allow for doing something like this.
+Requesting memory resources are not restricted to use the iomem_resource
+root.
 
-I don't see the problem in certain driver, I guess you are trying to
-workaround existin Linux device resource model.
+For example, drivers/pcmcia/soc_common.c:soc_pcmcia_add_one()
 
--- 
-With Best Regards,
-Andy Shevchenko
+	ret = request_resource(&iomem_resource, &skt->res_skt);
+	if (ret)
+		goto out_err_1;
+
+	ret = request_resource(&skt->res_skt, &skt->res_io);
+	if (ret)
+		goto out_err_2;
+
+As an example of a parent/child memory resource request.
+
+The problem is that the 8250 driver only allows for requesting memory
+region from the root (iomem_resource), as it uses a single
+resource_size_t mapbase value for specifying the memory resource instead
+of a full struct resource, which would allow passing in a parent.
+
+So maybe we should go down that direction intead, extending 8250 driver
+to replace mapbase with a resource struct instead?
+
+> Btw, we have PCI MFD driver which enumerates 8250 (more precisely
+> 8250_dw) w/o any issues.
+
+I am aware of that (sm501.c).  It avoids the problem by not requesting
+the parent memory region (sm->io_res), and requesting all child memory
+regions directly in root instead of relative to the sm->io_res parent.
+
+But as resoure management is designed for managing a parent/child
+resource tree, this looks much more like a workaround than the right
+solution.
+
+>> It would be nice if child drivers requesting memory would pass the
+>> parent memory resource.  Maybe 8250 driver could be changed to accept a
+>> struct resource pointer instead of a simple mapbase value, allowing to
+>> setup the resource with parent pointing to the MFD memory resource.
+>
+> I don't see the problem in certain driver, I guess you are trying to
+> workaround existin Linux device resource model.
+
+No, I actually try to do the right thing in relation to Linux device
+resource model.  But 8250 is just not behaving very well in that
+respect, not having been made really aware of the resource model.
+
+And sm501.c MFD driver ignores the way resource model is designed, and
+just make things work.
+
+/Esben
