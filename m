@@ -2,87 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39701E64F
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 17:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF190E6B6
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 17:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbfD2P0E (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 11:26:04 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:34504 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728214AbfD2P0D (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 11:26:03 -0400
-Received: by mail-ed1-f66.google.com with SMTP id a6so9533110edv.1;
-        Mon, 29 Apr 2019 08:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=aonALYgL+fC9zvkDd9D30wIh1ca4DE2TOFz5g+1UCQg=;
-        b=MqOlHKGBUrtkGw/thEAiOVcQipneXzleb0RM/WE/NAIrWKwuZ/igOcZfZutIC36Y+D
-         kLv5JhJxZNlHfPV2unFalEBIn+R251ZYHMnUFKHLzWPTKPDBh4j1DH5fBQWKGZMvzLVb
-         SMz6kHEmwAk1jVmwT0zVVqmJxkqUZFnh5Be3UtymNcZBxrZC1dCeA8ZWGCke6h3WuDTI
-         PsjH3VSHWs1BZGE7yQ1Vs9L+vcwsR8eXgeZFz0UjkEq1+l6KvTCFALNtGLuE09m3CghC
-         cx6yoPLSQGZxVeq6086SUPMPKPbmJkifbBv8cOkt/YaQS5IgtCtZFbdEKFHyYcct3Z1K
-         HqIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=aonALYgL+fC9zvkDd9D30wIh1ca4DE2TOFz5g+1UCQg=;
-        b=oreQoeFV56KpNe1UbPOkHvD/GBJE6e5phON4qyYTD/KyEIpUcJ8nZWlyxz9s5jeu7c
-         FJMys67UXRGdh5FrPUKh3l+GDOuYAHCYUljMRGSWiyojJukVLrMV7gOjrsLnnSd78wty
-         do4jYoiSktEdPanVqK2Y6mhrK1lmTMZuTI6dx3FWETU+0zT0jZFH9A55kHKh+/l0MaQe
-         5epYXLS9l4NqYOKJegTXbPvdRrY6ZCvUnmIJWcb5zldrH+THUCoM8sH2fzQWOpti5Zsm
-         oSOyY5ay7hshntcW8I9pejovY9BAw3yu91qqvOYEQY3hF3RYeX3aMmJKwYGeaZ4pSpDY
-         yp0Q==
-X-Gm-Message-State: APjAAAXQEO60ZV1oMlwCvqeboCQRT1NAGgCiyHHDqtKxLIwETYoa1mb8
-        dy6jIwOWYUGRQEXhCz7wIEQ=
-X-Google-Smtp-Source: APXvYqyEQJEsE2ti6PwOMykBv5n2TIgt00/3l4kIKwcwjUrTagamP80EumknDfmmfKrxqeVCL9NbNA==
-X-Received: by 2002:a17:906:4c95:: with SMTP id q21mr31492152eju.14.1556551561666;
-        Mon, 29 Apr 2019 08:26:01 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id z32sm862711edz.85.2019.04.29.08.26.00
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Apr 2019 08:26:00 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.89)
-        (envelope-from <peter@korsgaard.com>)
-        id 1hL8AK-0000pF-C1; Mon, 29 Apr 2019 17:26:00 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     "Enrico Weigelt\, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        linux-ia64@vger.kernel.org, linux-serial@vger.kernel.org,
-        andrew@aj.id.au, gregkh@linuxfoundation.org, sudeep.holla@arm.com,
-        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
-        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
-        khilman@baylibre.com, macro@linux-mips.org,
-        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
-        linux-amlogic@lists.infradead.org,
-        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net
-Subject: Re: [PATCH 12/41] drivers: tty: serial: uartlite: use dev_dbg() instead of pr_debug()
+        id S1728563AbfD2Pj6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 11:39:58 -0400
+Received: from mga01.intel.com ([192.55.52.88]:3329 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728436AbfD2Pj6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Apr 2019 11:39:58 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Apr 2019 08:39:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,410,1549958400"; 
+   d="scan'208";a="295503882"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
+  by orsmga004.jf.intel.com with ESMTP; 29 Apr 2019 08:39:51 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hL8Nh-0001DD-6k; Mon, 29 Apr 2019 18:39:49 +0300
+Date:   Mon, 29 Apr 2019 18:39:49 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        andrew@aj.id.au, macro@linux-mips.org, vz@mleia.com,
+        slemieux.tyco@gmail.com, khilman@baylibre.com, liviu.dudau@arm.com,
+        sudeep.holla@arm.com, lorenzo.pieralisi@arm.com,
+        davem@davemloft.net, jacmet@sunsite.dk, linux@prisktech.co.nz,
+        matthias.bgg@gmail.com, linux-mips@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 36/41] drivers: tty: serial: 8250: store mmio resource
+ size in port struct
+Message-ID: <20190429153949.GV9224@smile.fi.intel.com>
 References: <1556369542-13247-1-git-send-email-info@metux.net>
-        <1556369542-13247-13-git-send-email-info@metux.net>
-Date:   Mon, 29 Apr 2019 17:26:00 +0200
-In-Reply-To: <1556369542-13247-13-git-send-email-info@metux.net> (Enrico
-        Weigelt's message of "Sat, 27 Apr 2019 14:51:53 +0200")
-Message-ID: <875zqwrfxz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+ <1556369542-13247-37-git-send-email-info@metux.net>
+ <20190428151848.GO9224@smile.fi.intel.com>
+ <4bab941a-c2f2-7f1c-9bc2-86c63f171c25@metux.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4bab941a-c2f2-7f1c-9bc2-86c63f171c25@metux.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
->>>>> "Enrico" == Enrico Weigelt, metux IT consult <info@metux.net> writes:
+On Mon, Apr 29, 2019 at 04:55:05PM +0200, Enrico Weigelt, metux IT consult wrote:
+> On 28.04.19 17:18, Andy Shevchenko wrote:
+> > On Sat, Apr 27, 2019 at 02:52:17PM +0200, Enrico Weigelt, metux IT consult wrote:
 
- > Using dev_dbg() instead of pr_debg() for more consistent output.
- > (prints device name, etc).
+> >> -	int ret = 0;
+> > 
+> > This and Co is a separate change that can be done in its own patch.
+> 
+> I don't really understand :(
+> Do you mean the splitting off the retval part from the rest ?
 
- > Signed-off-by: Enrico Weigelt <info@metux.net>
+You do two things here: one of them is removing ret and other relative changes.
+This should be split to a separate patch.
 
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
+> > You may increase readability by introducing temporary variables
+> > 
+> > 	... mapbase = port->mapbase;
+> > 	... mapsize = port->mapsize;
+> > 	...
+> > 	port->membase = ioremap_nocache(mapbase, mapsize);
+> > 	...
+> 
+> Is that really necessary ? Maybe it's just my personal taste, but I
+> don't feel the more more verbose one is really easier to read.
+
+Up to Greg. For me it's harder to read all those port-> in several parameters.
+
 
 -- 
-Bye, Peter Korsgaard
+With Best Regards,
+Andy Shevchenko
+
+
