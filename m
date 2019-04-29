@@ -2,89 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01311E7AE
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 18:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF3BE81C
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 18:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728735AbfD2QYH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 12:24:07 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41893 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728524AbfD2QYG (ORCPT
+        id S1728778AbfD2QvC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 12:51:02 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:52385 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728663AbfD2QvC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 12:24:06 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 188so5554859pfd.8;
-        Mon, 29 Apr 2019 09:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=uB2Cn6vt7lIHnf3rgmPWq5gvyZqG3kA3H3L/WXF6eJw=;
-        b=mp22GgP5px0fmIqfkmimZYOiRhIzoxPaiTvDL/7i07QjDIIQJ0rpdygJtmuy/AWKPc
-         DnQq3BrvQwpq7tQeOeF35NdBA16WtWGFGSvNbh+1t83b+GdSfrv9v5JvvAvug8M8Q4ht
-         7tvzfamRLebvk00LU3eRV38p/NFhgx+sr+YSxJpxJILiaZp40gbKz4g4JUpUe687VCRp
-         oLPXWYrUBKkSUijNyVusjOH2s2VV2dlQy2ahF4HvPqtDKGS0FXlOidRajgaKGNu2zZ4h
-         0631a0sNTixhig1A0WUVa0clS2+P7u2iMwsscFATCUXY5oQNlWzD5zYgz/+jGtamHaye
-         kSMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=uB2Cn6vt7lIHnf3rgmPWq5gvyZqG3kA3H3L/WXF6eJw=;
-        b=RGzXA0S+o5ycUW9/aSQZY+nYAuDu6G6S9q46IGTz8J2IMxMazNrtZw1rDOI+nb5i4g
-         DHoZv9iGLFP2bbY46INCxGT29Mvi9+dfjSQAcgLcX6oZWVs02mO0f4G3g7IkKJqxWENI
-         grukDFwX224XjcObtR1IYc/nihF4jMMK5iFgDdodyecN4dmwMnj+bY4fDn6nj+Mvkli+
-         zxN9RHKWhRbcHuGoagJ7ZGp9hTGXmRhX3kbIHepbK7FXZrzRDZIbRM4NI1lBoX5fetbZ
-         11CUgvZ8ejA3OHVLzkTMAPp4XczNGvJAJ0tZIfzKC8es08KF3DOEeF/zdlgzst4lOLrW
-         oRVg==
-X-Gm-Message-State: APjAAAVYqqTRL5vycFq9QcjdXoquMfamf1GG+WdWHbSkD67ayK3J3QX9
-        nDRNxTJUp8l5xHguuT1z0N4=
-X-Google-Smtp-Source: APXvYqwtFrG+aznLkWMjUUxD5mJkPl2+rcD4GhwpQwuID2vGgJPv3EzF65p2NYVstIAmSoJ+wwkpgg==
-X-Received: by 2002:a62:b602:: with SMTP id j2mr63953905pff.68.1556555045404;
-        Mon, 29 Apr 2019 09:24:05 -0700 (PDT)
-Received: from haolee.io ([2600:3c01::f03c:91ff:fe77:6cf4])
-        by smtp.gmail.com with ESMTPSA id 63sm3114849pfe.140.2019.04.29.09.24.03
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Apr 2019 09:24:04 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 00:24:02 +0800
-From:   Hao Lee <haolee.swjtu@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jslaby@suse.com, haolee.swjtu@gmail.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] tty: serial: 8250: Fix type field in format string
-Message-ID: <20190429162402.GA5086@haolee.io>
+        Mon, 29 Apr 2019 12:51:02 -0400
+Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MCsDe-1hTuvS0cZE-008vUo; Mon, 29 Apr 2019 18:50:26 +0200
+Subject: Re: serial drivers polishing
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org
+Cc:     lorenzo.pieralisi@arm.com, linux-ia64@vger.kernel.org,
+        linux-serial@vger.kernel.org, andrew@aj.id.au,
+        gregkh@linuxfoundation.org, sudeep.holla@arm.com,
+        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
+        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
+        khilman@baylibre.com, macro@linux-mips.org,
+        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
+        linux-amlogic@lists.infradead.org,
+        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
+        davem@davemloft.net
+References: <1556369542-13247-1-git-send-email-info@metux.net>
+ <7471c418-4058-db7b-b2ed-af9a67fff201@c-s.fr>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <5a826a97-4098-7e1e-4f07-5a1a372e66b8@metux.net>
+Date:   Mon, 29 Apr 2019 18:50:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <7471c418-4058-db7b-b2ed-af9a67fff201@c-s.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:4Az+bKXfpphMCirSkhKFORck7bJVPT2vr0hUbYV1dZ3UTKG5BDU
+ TBxxFim3uD9wy42V2JkDIAjQaQq2ReWyoUc1DN0rdiVQkVig/vB99Cx7w1EEfOAYNzuwxhb
+ f4/BRWBebII5HZVGg0UvowwXDI1h5ABVpWiuWuh4eTYZtMAEQD4sc1EXMWP3gmaFheqF9bP
+ k5GRKc1Y11dojpA/k5Txg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dCFArW9i7V0=:h4nMfqswc3y5+ZupbaXaxc
+ tFoKtwMnvQVs0UwzjVcogEfzKBl3arCAwUg+Qu2VWAk2Ilq7u2sNI5O1aMJ6CAJkqNHu2uTPX
+ Y3yx3fYjWCtcDy9l6OLkwaa69ZvQvWGQCJp3Ou9S8dkvnJ6UmLCcPgM531kn8G+8Il5uw4Qq4
+ fSneffuJsYTee2KWv7CFrjm6vlXv5wrAldDuvE1Khsd6M+A8SZ+jCROvLUS+UdQlH5E+u2nm0
+ EvQpAmgUmrj0a5vj/qvnfze1O4+gwOONXa+ocsMc2OKjF5rvp3e+m6YVagAVH+9ogDyKxzBSF
+ B4Dr7HSCDnjQD6Mno9OfSajn4UzlVCI24/oGwljbOtIR9C4iKsIrWouZp+d/KBBemRUtjbLGl
+ JTv2aGZ8xzgbybG4zdtIBrxnTZ+pRhY7K6AjrqZupXlLsuu5g6xlz6e5BUJQC8D03+qT50g2G
+ Bt4JGNeR8100ay+aT7Cn/oKa4OtJqHS8if5wsK1bT10QXwQLOrjjacfC+a6NLdIw8N/1nfAw8
+ MiA+uGAceRZskTXQwiQ4Fk5YGHD1WsB3tYZQ00f4eBEpSHSbdIZA3h9rSuna888oPBs9mmvVl
+ dxWjwGYboM6MpHRT3CrdtGYHP+aeLUDykmNkW1ZrYfNAUuJV5vyfs1Nn/1C54xLYS3mUKyTHa
+ el3kZJNkFRqAGhafsnVMEKWsIZ0GCa6lEfp1Xq1UEieK+Q33XlNGAf6xe1G91Hlz/ziLEXu8L
+ nQiV+8UmVcbDgxrr/wHIsn9iAsSE0sxMoLbGDcyYyZ+/IRqAPRWFc7zzB4E=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The dev_dbg statement should print the value of uart.port.mapbase instead
-of its address. Besides that, uart.port.irq and uart.port.iotype are all
-unsigned types, so using %u is more appropriate.
+On 29.04.19 18:16, Christophe Leroy wrote:
 
-Signed-off-by: Hao Lee <haolee.swjtu@gmail.com>
----
- drivers/tty/serial/8250/8250_pnp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/drivers/tty/serial/8250/8250_pnp.c b/drivers/tty/serial/8250/8250_pnp.c
-index 431e69a5a6a0..dfca33141fcc 100644
---- a/drivers/tty/serial/8250/8250_pnp.c
-+++ b/drivers/tty/serial/8250/8250_pnp.c
-@@ -462,8 +462,8 @@ serial_pnp_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
- 		return -ENODEV;
- 
- 	dev_dbg(&dev->dev,
--		 "Setup PNP port: port %lx, mem %pa, irq %d, type %d\n",
--		 uart.port.iobase, &uart.port.mapbase,
-+		 "Setup PNP port: port %#lx, mem %#llx, irq %u, type %u\n",
-+		 uart.port.iobase, (unsigned long long)uart.port.mapbase,
- 		 uart.port.irq, uart.port.iotype);
- 
- 	if (flags & CIR_PORT) {
+> Got the following build  error while compiling for my powerpc board with
+> your full series applied. No time to investigate though.
+
+thanks, fixed it. That was the unclean patch where i've forgotten to
+add 'rfc' into the title ... turned out that this one needs some
+more rework :o
+
+--mtx
+
 -- 
-2.14.5
-
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
