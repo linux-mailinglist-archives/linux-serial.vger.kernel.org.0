@@ -2,67 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB91E475
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 16:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B629E486
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 16:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728334AbfD2OQN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 10:16:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34716 "EHLO mail.kernel.org"
+        id S1728267AbfD2OTS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 10:19:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36748 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725838AbfD2OQN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 10:16:13 -0400
+        id S1728240AbfD2OTS (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Apr 2019 10:19:18 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7240120652;
-        Mon, 29 Apr 2019 14:16:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0112520673;
+        Mon, 29 Apr 2019 14:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556547372;
-        bh=Jy7wW9SesxQRIddpm99IMDL532x4my772dExgLMy5qg=;
+        s=default; t=1556547557;
+        bh=zgnDjgXgwQhfBXfEQ4wZmUL2KxvT1MkJOQtIQPea4iQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZOMEMPNwHDwC2hSrHJwhydy+M/+BzvChosToN9/9HjkBMMGG4Za5clpmaJsmyIb1w
-         gHGdQb4RbqdW5Q9yIDqRczOWXz/qmjpjyfbuZUDegcKAy5I04FjnFLDVGm6RHoJhHw
-         eGNA0w9wQOc6+lWReZxsOLvDmhVOEzs1T8v3Atrc=
-Date:   Mon, 29 Apr 2019 16:16:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Fatih =?utf-8?B?QcWfxLFjxLE=?= <fatih.asici@procenne.com>
-Cc:     Rob Herring <robh@kernel.org>, Jiri Slaby <jslaby@suse.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        fatih.asici@gmail.com
-Subject: Re: [PATCH] serdev: add method to set stop bits
-Message-ID: <20190429141610.GA12903@kroah.com>
-References: <20190412064737.30424-1-fatih.asici@procenne.com>
- <CAL_JsqLgURV2uHMG-q904Z+hWsP0qskPKCf4MQQBOGTGUjqfcw@mail.gmail.com>
- <5406741.ymGCjNrDGl@fatih-x542urr>
+        b=Wdw08b+JZ0ABU2EvqgOiGNtxVlzQkAF+7RmJNLkFW3Ku1VIZ1htD2UH9X1wqGatge
+         Q/nVofDg/Ck0Lcc8vSLJKLLPNv5QWIcwFiXKAsk4KRfFV+sMkPm+QHi+PfeHdsA+UB
+         FmIwmzHZZvpw8Jo8bovvxGQhGCgnhJyvAUYhV+C8=
+Date:   Mon, 29 Apr 2019 16:19:15 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH] serial: 8250: Fix TX interrupt handling condition
+Message-ID: <20190429141915.GB12903@kroah.com>
+References: <1556280367-28685-1-git-send-email-ext-kimmo.rautkoski@vaisala.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5406741.ymGCjNrDGl@fatih-x542urr>
+In-Reply-To: <1556280367-28685-1-git-send-email-ext-kimmo.rautkoski@vaisala.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 09:27:26AM +0300, Fatih Aşıcı wrote:
-> On 26 Nisan 2019 Cuma 17:00:02 +03 Rob Herring wrote:
-> > On Fri, Apr 12, 2019 at 1:55 AM Fatih Aşıcı <fatih.asici@procenne.com> 
-> wrote:
-> > > Adds serdev_device_set_stop_bits() which takes an int argument with
-> > > a value of 1 or 2.
-> > 
-> > Do you have a user? We normally like to have one before adding
-> > functions to the kernel.
+On Fri, Apr 26, 2019 at 12:06:13PM +0000, Rautkoski Kimmo EXT wrote:
+> Interrupt handler checked THRE bit (transmitter holding register
+> empty) in LSR to detect if TX fifo is empty.
+> In case when there is only receive interrupts the TX handling
+> got called because THRE bit in LSR is set when there is no
+> transmission (FIFO empty). TX handling caused TX stop, which in
+> RS-485 half-duplex mode actually resets receiver FIFO. This is not
+> desired during reception because of possible data loss.
 > 
-> We are developing a smartcard interface [1] driver for use in our embedded 
-> project. The driver is not suitable for general use.
+> The fix is to use IIR instead of LSR to detect the TX fifo status.
+> This ensures that TX handling is only called when there is really
+> an interrupt for THRE and not when there is only RX interrupts.
+> 
+> Signed-off-by: Kimmo Rautkoski <ext-kimmo.rautkoski@vaisala.com>
+> ---
+>  drivers/tty/serial/8250/8250_port.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index d2f3310..91ca0ca 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -1875,7 +1875,7 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
+>  			status = serial8250_rx_chars(up, status);
+>  	}
+>  	serial8250_modem_status(up);
+> -	if ((!up->dma || up->dma->tx_err) && (status & UART_LSR_THRE))
+> +	if ((!up->dma || up->dma->tx_err) && (iir & UART_IIR_THRI))
+>  		serial8250_tx_chars(up);
 
-Why not?  Who's to say what others will find useful?  You have to
-publish the changes somewhere, might as well be upstream so you do not
-have to drag it around for the next 10+ years :)
-
-Please submit it, we do not add new apis with no in-kernel users.
+This feels wrong to me, can someone else test this to verify that it
+really does work properly?  I don't have access to any 8250 devices at
+the moment :(
 
 thanks,
 
