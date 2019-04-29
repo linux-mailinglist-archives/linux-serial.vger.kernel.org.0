@@ -2,83 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CA5DC2B
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 08:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F11DC30
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 08:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbfD2Gtb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 02:49:31 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:53559 "EHLO
+        id S1727378AbfD2GuW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 02:50:22 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:41225 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726764AbfD2Gtb (ORCPT
+        with ESMTP id S1727173AbfD2GuW (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 02:49:31 -0400
+        Mon, 29 Apr 2019 02:50:22 -0400
 Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
  (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mcp3E-1gl7730n7C-00ZzhK; Mon, 29 Apr 2019 08:48:59 +0200
-Subject: Re: [PATCH 37/41] drivers: tty: serial: 8250: simplify io resource
- size computation
+ 1M9Ezx-1hO0GD3dVH-006Rqh; Mon, 29 Apr 2019 08:50:18 +0200
+Subject: Re: serial drivers polishing
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        andrew@aj.id.au, macro@linux-mips.org, vz@mleia.com,
-        slemieux.tyco@gmail.com, khilman@baylibre.com, liviu.dudau@arm.com,
-        sudeep.holla@arm.com, lorenzo.pieralisi@arm.com,
-        davem@davemloft.net, jacmet@sunsite.dk, linux@prisktech.co.nz,
-        matthias.bgg@gmail.com, linux-mips@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org
 References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-38-git-send-email-info@metux.net>
- <20190428152103.GP9224@smile.fi.intel.com>
+ <20190428152434.GQ9224@smile.fi.intel.com>
 From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
 Organization: metux IT consult
-Message-ID: <431b36fe-3071-fcfd-b04e-b4b293e79a80@metux.net>
-Date:   Mon, 29 Apr 2019 08:48:53 +0200
+Message-ID: <86c7ba5b-e8bf-70fc-1eac-6b24b5681233@metux.net>
+Date:   Mon, 29 Apr 2019 08:50:18 +0200
 User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.2.1
 MIME-Version: 1.0
-In-Reply-To: <20190428152103.GP9224@smile.fi.intel.com>
+In-Reply-To: <20190428152434.GQ9224@smile.fi.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:M88UFXLBX4VkHOON6uaOcOnE636KnuLI4S/ApACS+qnAPKvNe1+
- 9MFUOX3DMU30BBIWozSwvAEA9pGnmBl6OGeXBQ8Y1viVSeN44w0UCqfu9VYX20rWKj/nkKL
- vlvP3uU93E8RgsPKi9ujRFjje3G/Y2BUL7L9RvbqLvk4fuIny6ic9WkRhGLxllJ4DYLhyIb
- wH0HgSJz+Bi+9teW53wMg==
+X-Provags-ID: V03:K1:yPoE8Duf8WDLrme6LtalhtKUtn+D0SVwXYYTLMFxqt0iVMK0qZy
+ DKpiqg6fjW1R9Wv6wvSFbWYCAUfBpm4+sq84nYxO8eS5N34pBuTkOhIusgzkc2UdYt0Gz9g
+ laQOq/2gTW927/MPaA6nQGi9UGZyS7UycsPl/kMt3fU8372bqV8abLAdwGAWDdPyleAxdBJ
+ az5C95F9TMq/bFLLnf55g==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UkSaLiNxTwM=:2TXPwgpE5+RBFRbyUqHOFQ
- xeHDo/3j0Na0BnkC+0JTCEUa34sTmyQbRB7w4ugZtpJdoNSu1xdU+BMA09hadC91DTT1c0yzO
- kuk7XpLkyI+N0+19kIGZ5gCjqYsD/gbKZ8Qyy9JocWvi4y1vEXHasSDdt8iTaU9VrQLQy8flK
- qSDevaqy2gkfA3bR4BtjfkFZnSKHQtpDiqq3mXC+4IcTnAFIySQzIAlEJJiI55bqb+tSkbzKq
- owQcCerB9D3TCNpnxqqLNVjWK+g79RDFMzNjrcbVvEkGniIRma6jIIKMCyNf42DVoMiMrhh0x
- aXAPFtRiFh/GxROS/IxKSP4wV6B5wR/h27VqFY21bHhQofeIIGTmI0KiIabQGBsdW35kxOhxg
- 1i/1jG+pgigRkOKnignHIi2N2wHB6JAqxpWKLNKvEGWP50G0wE8Z6ORBFJtpohgAXfmwiFBxW
- 3n1pn+bbr+SvajsKMQUl3+ZkelGKovLL03+RClDxUZP2SUJsaCOHtLAKZGFiCfwViK8E8xgfT
- G9pOuAh4EzKSrpcY52lyA+aZpShZ857A09XO01lj1MT/UIHMroXwGqPKTYB4pmEmeIzsrBOO+
- 5T+0kwhObrwWG+hIxyGgBRbGwhYmyae04xr2e8gQMLYXfoA6nSOT3OsoSAIHPclTioTlxFhoE
- Oa4DTHlLTaZWs27uSZAC9epbFBl9Fx2JmP26IreUA0ypMl3yx9fpLArWCrivScL7WAoEN62AS
- VaOqKOyMslPbPSY1JUwq9qDAdgT3eIjQcZTeU8BmLykfVe2cq22dosTi4sw=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XJeVKavZF18=:Dg5JDzuXLhAM9HLcapEk6N
+ YWOC37ErZCt+P+UAzNwUqbBdNSH0kPQ+joLOCQ9NmCI1FABRmA7U0ehxDL5FC1UGTlr8Eom2s
+ BRsipzwUGAPuDIv71YEc2mUDNwPRzJyEP4iXNg+tUpOOp+w54bI1okK8XSQSfo9xFQvwMmcQh
+ zKMxbI1K2PdAJ2Pm8H+b5uh+HGUYTmdKz9sPXQ/xAyXlqj9B4LXlFEMLGIDjZhEYb1wHSAiJ+
+ ySUvH8MfYk9rhoFKyNrEWcjYie5aD/ln3vW6p+A7yA1Lmd62yh8PaTurjl8PrQgy0QO1RspTI
+ Sy38vBhdRIZmcnIfpT6cHRoOkCYC+VMWvhDPRKdQfta8ahsD7xNyLOWivSFCFmUg4qi7AIEna
+ Z+e1YVLz8xl8P7O5xewT8xE0DA5a+7A2dtCtjRmWP9xX/XItpEvyQRU2X8ZhfpJ42gfGhurnK
+ G8leNV/eJ2Z2D6k2ZJzpCtO8IeJYNofqp9NgYGXJATrys0tJm9d7A2hIsmFHxVdBx57h56apv
+ LNc0SZ6zrt/68WuVR6LfDSa2pZCTxjoZYRHQ5rMCxs/rjQJUt2t5maVU/3O65y+vxi+RQ10P7
+ 6qW8/eZdmrut3wU7fC9YP8HgNRSFAv6ykbaaw2XoVpv6L4DxYDLxBz4OpqAnzL+wMGgfChbLz
+ 6G1iWwq+dXrAEIIe/w1UWCL3hm2eKPQy8fUHQK062P1V+CJA+TzizygS0dFGotmrbQ/5Wev8k
+ ldRWVh1+JIv9ySRfR1fo3ssqXOmaL8IFP2nbvPrBGGzKJvbO6d9h8bgTXrY=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 28.04.19 17:21, Andy Shevchenko wrote:
-
+On 28.04.19 17:24, Andy Shevchenko wrote:
+> On Sat, Apr 27, 2019 at 02:51:41PM +0200, Enrico Weigelt, metux IT consult wrote:
 > 
->> +#define SERIAL_RT2880_IOSIZE	0x100
+> Thanks for this work.
 > 
-> And why this is in the header file and not in corresponding C one?
+> I would really appreciate if at some point you would be able to clean up UART
+> ->pm() callbacks. If you ever saw my UART runtime PM support series, it will
+> need some reduction of ->pm() callbacks and rethink of its implementation.
 
-hmm, no particular reason, maybe just an old habit to put definitions
-into .h files ;-)
-
-I can move it to 8250_of.c if you like me to.
-
+Haven't seen it yet. Can you give me a pointer ?
 
 
 --mtx
+
 
 -- 
 Enrico Weigelt, metux IT consult
