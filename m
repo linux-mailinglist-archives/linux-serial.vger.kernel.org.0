@@ -2,84 +2,68 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E69E45B
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 16:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB91E475
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 16:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbfD2OLv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 10:11:51 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:45011 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728119AbfD2OLu (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 10:11:50 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N9d4t-1ggOYm2XMj-015Xti; Mon, 29 Apr 2019 16:11:21 +0200
-Subject: Re: [PATCH 01/41] drivers: tty: serial: dz: use dev_err() instead of
- printk()
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, andrew@aj.id.au,
-        andriy.shevchenko@linux.intel.com, macro@linux-mips.org,
-        vz@mleia.com, slemieux.tyco@gmail.com, khilman@baylibre.com,
-        liviu.dudau@arm.com, sudeep.holla@arm.com,
-        lorenzo.pieralisi@arm.com, davem@davemloft.net, jacmet@sunsite.dk,
-        linux@prisktech.co.nz, matthias.bgg@gmail.com,
-        linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-2-git-send-email-info@metux.net>
- <20190427132959.GA11368@kroah.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <e10175d0-bc3b-a4ab-cb47-0b4761bfb629@metux.net>
-Date:   Mon, 29 Apr 2019 16:11:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1728334AbfD2OQN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 10:16:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725838AbfD2OQN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Apr 2019 10:16:13 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7240120652;
+        Mon, 29 Apr 2019 14:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556547372;
+        bh=Jy7wW9SesxQRIddpm99IMDL532x4my772dExgLMy5qg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZOMEMPNwHDwC2hSrHJwhydy+M/+BzvChosToN9/9HjkBMMGG4Za5clpmaJsmyIb1w
+         gHGdQb4RbqdW5Q9yIDqRczOWXz/qmjpjyfbuZUDegcKAy5I04FjnFLDVGm6RHoJhHw
+         eGNA0w9wQOc6+lWReZxsOLvDmhVOEzs1T8v3Atrc=
+Date:   Mon, 29 Apr 2019 16:16:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Fatih =?utf-8?B?QcWfxLFjxLE=?= <fatih.asici@procenne.com>
+Cc:     Rob Herring <robh@kernel.org>, Jiri Slaby <jslaby@suse.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        fatih.asici@gmail.com
+Subject: Re: [PATCH] serdev: add method to set stop bits
+Message-ID: <20190429141610.GA12903@kroah.com>
+References: <20190412064737.30424-1-fatih.asici@procenne.com>
+ <CAL_JsqLgURV2uHMG-q904Z+hWsP0qskPKCf4MQQBOGTGUjqfcw@mail.gmail.com>
+ <5406741.ymGCjNrDGl@fatih-x542urr>
 MIME-Version: 1.0
-In-Reply-To: <20190427132959.GA11368@kroah.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:w68pyQn6kRKE7GRI8D4DIjXrIG1rM4JVO8YNhN1PjmA9qeJlTnd
- FRfk7wZg3723UrBQe25rwfOnwSzGszEb1MIoCQQLNzhyCTgLVqEInQLMVDSZ6SrfQMpGeUD
- sSICNMoMdNK6YaqchK3BXnaBaPE/dmfwd/DCv3Rgt3Peb9t9zVGwhF+PiwHnSknkczZ5jwA
- iaTSwPj+i6uzJ5jOg0EOg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GSBkrDSKESA=:2lO9/amCuq6fFF597Ih05m
- lHF5oKmclj72Zzkyd/7n7OIiwaRhSBo7oYOd2+ffp/NEUvN2Jn/raFhf0e6E8K+EU2aJRWYj6
- xPazKtRy6+71hDxb8N8/muna5/ompU5XUHAHWvNiNsi3xQSwdRdyVk8toFHaLpavPormaaAC5
- x6cZ0/wtOs54z6LsUIHciLayFiB+BmZ83+sLMyUYXe0KBI/zPixrZD+tu0VcsfcS7r7VYQj4/
- JjNFl9B8X8o/Sjh9uG6Y3vBTGv49VcPY/5tQwUnsC39CoM168B+bxUNpEQ5zA3Jhrk95A+B1n
- 6nETxBNJQ3EbF6WPXuX4E75BpNeVCeXQKfLnBOd3nrSBkj/uFH76O1vrWS4AgsfOTt4MHiI62
- WKvPVRgqATCb3N2+oJ8px9tLb4lTxX6XUOOyI503AcT66SDfLFH39tMUPPkDqizBhpx9VxXp2
- FfZsnVaVxHhAOPNsBpVjuzon/QzxCbElmVdBDB7ooHtQ3iaspczt+e5dMm0V3iq1okxyFRY5F
- F/WoUUpE4JmdzZv6STWYNcXwQiTMhpJKgYW0+6X2Vmh2qw16Aiuqtn+H6LLyYHl3ToJgVosT6
- IXgBwLjn12BZ5AjiiM6dfeDhbcZqWNCFedbIreNfGBORb11xOTrYSFbUOSyh0j1BEZIcGO+gz
- XzZByfB5wMLlxYXWanXG9Wg07pbtgY6qOVP/x1S66+XQvoODts6tl2AdS2HQ7qtZOiBu6Jcml
- CvF1VoxkjSF83yH+uX/lseAL7VLzTmM1k9ETeNvnTFIEjvXYr5L640CRVkc=
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5406741.ymGCjNrDGl@fatih-x542urr>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 27.04.19 15:29, Greg KH wrote:
-> On Sat, Apr 27, 2019 at 02:51:42PM +0200, Enrico Weigelt, metux IT consult wrote:
->> Using dev_err() instead of printk() for more consistent output.
->> (prints device name, etc).
->>
->> Signed-off-by: Enrico Weigelt <info@metux.net>
+On Mon, Apr 29, 2019 at 09:27:26AM +0300, Fatih Aşıcı wrote:
+> On 26 Nisan 2019 Cuma 17:00:02 +03 Rob Herring wrote:
+> > On Fri, Apr 12, 2019 at 1:55 AM Fatih Aşıcı <fatih.asici@procenne.com> 
+> wrote:
+> > > Adds serdev_device_set_stop_bits() which takes an int argument with
+> > > a value of 1 or 2.
+> > 
+> > Do you have a user? We normally like to have one before adding
+> > functions to the kernel.
 > 
-> Your "From:" line does not match the signed-off-by line, so I can't take
-> any of these if I wanted to :(
+> We are developing a smartcard interface [1] driver for use in our embedded 
+> project. The driver is not suitable for general use.
 
-Grmpf. I've manually changed it, as you isisted in having my company
-name remove from it ....
+Why not?  Who's to say what others will find useful?  You have to
+publish the changes somewhere, might as well be upstream so you do not
+have to drag it around for the next 10+ years :)
 
---mtx
+Please submit it, we do not add new apis with no in-kernel users.
 
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+thanks,
+
+greg k-h
