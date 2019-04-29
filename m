@@ -2,74 +2,149 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F11DC30
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 08:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600BCDC68
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 08:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727378AbfD2GuW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 02:50:22 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:41225 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727173AbfD2GuW (ORCPT
+        id S1726764AbfD2G5s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 02:57:48 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com ([46.30.210.185]:24049
+        "EHLO mailrelay4-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727253AbfD2G5s (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 02:50:22 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M9Ezx-1hO0GD3dVH-006Rqh; Mon, 29 Apr 2019 08:50:18 +0200
-Subject: Re: serial drivers polishing
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-serial@vger.kernel.org
+        Mon, 29 Apr 2019 02:57:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=6XgGXBZd9XuP2oE4RYwYzog341NRJDxtjWMZBSjiAvQ=;
+        b=lBNJsg0TqOZCs9zsmi7OlOlz1wKeTb8FI0J/+yKQeypPoT337WSvpPYP2/pyW3ht3JjaSTybk0hbz
+         c0LpDVQOhmRpZB7EFxCcruxLFgSmAMtfq2RxssZSD9SC3JZbOA2dkqsbdOav7qrmogx3ryl8zofC4J
+         4WA76c54x5vGgSFE=
+X-HalOne-Cookie: ee6e547916cc579600553f0a2d7cd6ab5b054162
+X-HalOne-ID: 164fce27-6a4c-11e9-a5a1-d0431ea8bb10
+Received: from localhost (unknown [193.163.1.7])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 164fce27-6a4c-11e9-a5a1-d0431ea8bb10;
+        Mon, 29 Apr 2019 06:57:43 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     "Enrico Weigelt\, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        andrew@aj.id.au, andriy.shevchenko@linux.intel.com,
+        macro@linux-mips.org, vz@mleia.com, slemieux.tyco@gmail.com,
+        khilman@baylibre.com, liviu.dudau@arm.com, sudeep.holla@arm.com,
+        lorenzo.pieralisi@arm.com, davem@davemloft.net, jacmet@sunsite.dk,
+        linux@prisktech.co.nz, matthias.bgg@gmail.com,
+        linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 40/41] drivers: tty: serial: helper for setting mmio range
 References: <1556369542-13247-1-git-send-email-info@metux.net>
- <20190428152434.GQ9224@smile.fi.intel.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <86c7ba5b-e8bf-70fc-1eac-6b24b5681233@metux.net>
-Date:   Mon, 29 Apr 2019 08:50:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        <1556369542-13247-41-git-send-email-info@metux.net>
+Date:   Mon, 29 Apr 2019 08:57:43 +0200
+In-Reply-To: <1556369542-13247-41-git-send-email-info@metux.net> (Enrico
+        Weigelt's message of "Sat, 27 Apr 2019 14:52:21 +0200")
+Message-ID: <87muk9z4bc.fsf@haabendal.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20190428152434.GQ9224@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:yPoE8Duf8WDLrme6LtalhtKUtn+D0SVwXYYTLMFxqt0iVMK0qZy
- DKpiqg6fjW1R9Wv6wvSFbWYCAUfBpm4+sq84nYxO8eS5N34pBuTkOhIusgzkc2UdYt0Gz9g
- laQOq/2gTW927/MPaA6nQGi9UGZyS7UycsPl/kMt3fU8372bqV8abLAdwGAWDdPyleAxdBJ
- az5C95F9TMq/bFLLnf55g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XJeVKavZF18=:Dg5JDzuXLhAM9HLcapEk6N
- YWOC37ErZCt+P+UAzNwUqbBdNSH0kPQ+joLOCQ9NmCI1FABRmA7U0ehxDL5FC1UGTlr8Eom2s
- BRsipzwUGAPuDIv71YEc2mUDNwPRzJyEP4iXNg+tUpOOp+w54bI1okK8XSQSfo9xFQvwMmcQh
- zKMxbI1K2PdAJ2Pm8H+b5uh+HGUYTmdKz9sPXQ/xAyXlqj9B4LXlFEMLGIDjZhEYb1wHSAiJ+
- ySUvH8MfYk9rhoFKyNrEWcjYie5aD/ln3vW6p+A7yA1Lmd62yh8PaTurjl8PrQgy0QO1RspTI
- Sy38vBhdRIZmcnIfpT6cHRoOkCYC+VMWvhDPRKdQfta8ahsD7xNyLOWivSFCFmUg4qi7AIEna
- Z+e1YVLz8xl8P7O5xewT8xE0DA5a+7A2dtCtjRmWP9xX/XItpEvyQRU2X8ZhfpJ42gfGhurnK
- G8leNV/eJ2Z2D6k2ZJzpCtO8IeJYNofqp9NgYGXJATrys0tJm9d7A2hIsmFHxVdBx57h56apv
- LNc0SZ6zrt/68WuVR6LfDSa2pZCTxjoZYRHQ5rMCxs/rjQJUt2t5maVU/3O65y+vxi+RQ10P7
- 6qW8/eZdmrut3wU7fC9YP8HgNRSFAv6ykbaaw2XoVpv6L4DxYDLxBz4OpqAnzL+wMGgfChbLz
- 6G1iWwq+dXrAEIIe/w1UWCL3hm2eKPQy8fUHQK062P1V+CJA+TzizygS0dFGotmrbQ/5Wev8k
- ldRWVh1+JIv9ySRfR1fo3ssqXOmaL8IFP2nbvPrBGGzKJvbO6d9h8bgTXrY=
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 28.04.19 17:24, Andy Shevchenko wrote:
-> On Sat, Apr 27, 2019 at 02:51:41PM +0200, Enrico Weigelt, metux IT consult wrote:
-> 
-> Thanks for this work.
-> 
-> I would really appreciate if at some point you would be able to clean up UART
-> ->pm() callbacks. If you ever saw my UART runtime PM support series, it will
-> need some reduction of ->pm() callbacks and rethink of its implementation.
+"Enrico Weigelt, metux IT consult" <info@metux.net> writes:
 
-Haven't seen it yet. Can you give me a pointer ?
+> @@ -131,7 +133,8 @@ int __init hp300_setup_serial_console(void)
+>  		pr_info("Serial console is HP DCA at select code %d\n", scode);
+>  
+>  		port.uartclk = HPDCA_BAUD_BASE * 16;
+> -		port.mapbase = (pa + UART_OFFSET);
+> +
+> +		uart_memres_set_start_len(&port, (pa + UART_OFFSET));
 
+Missing length argument here.
 
---mtx
+>  		port.membase = (char *)(port.mapbase + DIO_VIRADDRBASE);
+>  		port.regshift = 1;
+>  		port.irq = DIO_IPL(pa + DIO_VIRADDRBASE);
 
+> diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
+> index cf8ca66..895c90c 100644
+> --- a/drivers/tty/serial/xilinx_uartps.c
+> +++ b/drivers/tty/serial/xilinx_uartps.c
+> @@ -1626,8 +1626,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
+>  	 * This function also registers this device with the tty layer
+>  	 * and triggers invocation of the config_port() entry point.
+>  	 */
+> -	port->mapbase = res->start;
+> -	port->mapsize = CDNS_UART_REGISTER_SPACE;
+> +	uart_memres_set_start_len(res->start, CDNS_UART_REGISTER_SPACE);
 
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Missing 1st (port) argument here.
+
+>  	port->irq = irq;
+>  	port->dev = &pdev->dev;
+>  	port->uartclk = clk_get_rate(cdns_uart_data->uartclk);
+
+> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+> index 5fe2b03..d891c8d 100644
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -427,6 +427,46 @@ void uart_console_write(struct uart_port *port, const char *s,
+>  int uart_match_port(struct uart_port *port1, struct uart_port *port2);
+>  
+>  /*
+> + * set physical io range from struct resource
+> + * if resource is NULL, clear the fields
+> + * also set the iotype to UPIO_MEM
+> + */
+> +static inline void uart_memres_set_res(struct uart_port *port,
+> +				       struct resource *res)
+> +{
+> +	if (!res) {
+> +		port->mapsize = 0;
+> +		port->mapbase = 0;
+> +		port->iobase = 0;
+> +		return;
+> +	}
+> +
+> +	if (resource_type(res) == IORESOURCE_IO) {
+> +		port->iotype = UPIO_PORT;
+> +		port->iobase = resource->start;
+> +		return;
+> +	}
+> +
+> +	uart->mapbase = res->start;
+> +	uart->mapsize = resource_size(res);
+> +	uart->iotype  = UPIO_MEM;
+
+Hardcoding UPIO_MEM like does not work for drivers using other kind of
+memory access, like UPIO_MEM16, UPIO_MEM32 and UPIO_MEM32BE.
+
+Why not leave the control of iotype to drivers as before this patch?
+
+> +}
+> +
+> +/*
+> + * set physical io range by start address and length
+> + * if resource is NULL, clear the fields
+> + * also set the iotype to UPIO_MEM
+> + */
+> +static inline void uart_memres_set_start_len(struct uart_driver *uart,
+> +					     resource_size_t start,
+> +					     resource_size_t len)
+> +{
+> +	uart->mapbase = start;
+> +	uart->mapsize = len;
+> +	uart->iotype  = UPIO_MEM;
+
+Same here, other iotype values must be possible.
+
+> +}
+> +
+> +/*
+>   * Power Management
+>   */
+>  int uart_suspend_port(struct uart_driver *reg, struct uart_port *port);
+
+/Esben
