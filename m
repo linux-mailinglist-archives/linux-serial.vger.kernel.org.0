@@ -2,86 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9863CE7A3
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 18:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA97AE7AC
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 18:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728742AbfD2QVI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 12:21:08 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:51893 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728518AbfD2QVI (ORCPT
+        id S1728542AbfD2QYF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Apr 2019 12:24:05 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:34094 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728524AbfD2QYE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 12:21:08 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mwwm5-1gaMFo1KN1-00yOxX; Mon, 29 Apr 2019 18:20:39 +0200
-Subject: Re: [PATCH 22/41] drivers: tty: serial: cpm_uart: fix logging calls
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     lorenzo.pieralisi@arm.com, linux-ia64@vger.kernel.org,
-        linux-serial@vger.kernel.org, andrew@aj.id.au,
-        gregkh@linuxfoundation.org, sudeep.holla@arm.com,
-        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
-        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
-        khilman@baylibre.com, macro@linux-mips.org,
-        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
-        linux-amlogic@lists.infradead.org,
-        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-23-git-send-email-info@metux.net>
- <a00ba23b-e73e-c964-a6d0-347cb605b8c8@c-s.fr>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <fc01df37-3e7e-0c71-745d-63fbd83c1079@metux.net>
-Date:   Mon, 29 Apr 2019 18:20:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        Mon, 29 Apr 2019 12:24:04 -0400
+Received: by mail-qt1-f194.google.com with SMTP id j6so12663756qtq.1;
+        Mon, 29 Apr 2019 09:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/UgqaWUxLcC8gGmp13yybw0qPVB2rLQrJf42/DjKghA=;
+        b=HA7T20eLOs8rd1tDGgNkjEr9zZJqSV/ArHZgiBxI2SEVbKnNfdko8VYcrsBsTvRWRW
+         n9mmTPL84xb7SBpfFnXXrOWUgzij2MjbOghSsKfEV1HxcJKbXDzQDT6vfNQfXxh50u35
+         X3j1YpqfClMYiZ3+2jvXq5SWRr6IvxpDz66XFNrjBmNvQCE9cl3k0uCah/cUzlmTtZxL
+         rRSAinfkFS0074HfXy7+GOSnfFSq2YdnoNchj5ycTgLD/iw8S/zl+LDQs6eaO9qW6oWS
+         GGyVYZauKeDI1r/M/BAQvKbaQsoUqZeyhe6uXtrKN9fcfyyUUxh2iXX8C87uj3zFMu5z
+         5dOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/UgqaWUxLcC8gGmp13yybw0qPVB2rLQrJf42/DjKghA=;
+        b=lITCa93K7pa/w6kjFlyUrkoATqHNNd/Lw4poYNzFOlbT5PnviH+GnodJYdYNMBBX/e
+         WK2BZUsWtTI5kd4DQy6geVeIrlmPrRdINajs0Bbwl5r2zflEVPHI1j9ixvUcOI2IUQe2
+         n3TW+8tVEwgjpRJ8Ga3QflGBXNclqOP3+9+I3dIcszuTDY/P0LTn2y7KBukRKCb+k3pu
+         mXL++Wsrve2GI+cQeO/GVQ1+yGDfpzXbS+Huzv6uB4nHOdvIR1SQrk2g4b3mo6ZynV+L
+         GpFHG0jsHMLOzCwCpyqkQXW0CJ6IQWDjM0jew7gh+j230KkjZag5Q/ec+ZXF3mk6sbpV
+         xa3Q==
+X-Gm-Message-State: APjAAAU8rfMFo0g+wkipEOMk5p3Mhht31Cy+pojF0camZ0Sc8N/viPEe
+        sV04dcgMlCv4RACs2HIqhQKSlXyPwBm2tWajUc4=
+X-Google-Smtp-Source: APXvYqyThClpmkzcWrMn8TCFfVrAhf3rhXeBpEHCLIlLSmM7WMewnl14CXSI9pG/58YiSgCB/6F2piTt91krXqtAMCE=
+X-Received: by 2002:a0c:89c5:: with SMTP id 5mr5827397qvs.240.1556555043841;
+ Mon, 29 Apr 2019 09:24:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <a00ba23b-e73e-c964-a6d0-347cb605b8c8@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:tyjLH/89kE1DHJTcj7yQUi5/jAAZ5RWHEAZ1BEYsF/kWEbRkhEH
- ZeaoyF1df0iBCTPcuY9nMjeSr96B+reEDpUpVACuMx58hYfg0Ovl49rQYub23PLjPK+yUID
- slNmJJYsTtoV+aOWQj1HRbA5ynpZ744EoI0A3tjgNZt1lZntfjDIcPBJU9Pfhs6+X+GK7WP
- t2o2PeOOqkzRGtr61EECg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VjVnj6n6CTk=:oLoFfSXyDvVj4bcXT6Ih/4
- kL0M02IkYcM23hQBqWuWitHhRHbYjCdwo7yZCm+3pBB5no8X/Ztr8zkGyrVRrPMSlNYX0gK3B
- zLkvJlnWomR5UquIKZ13gZBV4/wjOl1kSv+4LiRfmqDVFOKnXIw+UAnjDoRPwbvqi2dxuhVHa
- IXOpQP00pNeser50seIPI/ovlbFbXJMBOVj1rt+0+0uSk0wstKhVVSaWsva/3NcMpYr44iwKN
- pL8XlLZaS2QOBl/ynF7SoVxFIvZnEMQhJorItjLuphNxXCvtzj8rhqLrrkkajgQ/0pjUy4Tiq
- 3WJvabYmjDHm85gs3l1RGTIP/leL/aifhMaOXM4Qx1sHVTJJxlMw1it7I31wrFqe0C0T5Tnk3
- +5c0iqDZF6VBw0XsN+FMTdvwwN5so9je+rNUHID3sD5Yvm8xjw93Uo6bviA4/IiHvX0mEdSAj
- xKxitSG92ozPUuigbzb+oogChLmFoFbXi6s3ER6JiRSVDa9POQO26X1cecixkOz2/SyaNrtd5
- wi3bBiZX/zwK/cEVJZg0BMo3ilxjtajTeiY2OsNJmCcBp61mptn8TueHekBXTEmqhyvIWEcks
- Pwcb//riDg9W1mzMTxm5SPvVgmRR3xYRVRFYmTDZ46n62kPQaVUbket7jbv2AqHlWLKiCqkR4
- n4RNCb4xflN9afHD65/ruEWM68k3MVK9H9CPTVyg90priPsyjBaWTOwBYdw4mnSSnWx3W9pFV
- HxWHJkWswPIQsZuk5ib+4UBHe5duPTXhYEDd7bKV8coJopag7yNzn+KUAT2H9z/JPgKcId2QY
- fg2wigxSa7xJUSvPOamObTx2eMiO5lok3NOq7YtNTSlPbcGNlc13ID61c5JH/6t6NJ6lPjs
+References: <20190427091943.GA3810@haolee.io> <20190429143117.GA1474@kroah.com>
+In-Reply-To: <20190429143117.GA1474@kroah.com>
+From:   Hao Lee <haolee.swjtu@gmail.com>
+Date:   Tue, 30 Apr 2019 00:23:50 +0800
+Message-ID: <CA+PpKPmFzLcE=gBwB9q0UNF1Rt1KU7_q3p9xyL-mh9g=imm22Q@mail.gmail.com>
+Subject: Re: [PATCH v2] tty: serial: 8250: Fix type field in format string
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jslaby@suse.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 29.04.19 17:59, Christophe Leroy wrote:
+On Mon, 29 Apr 2019 at 22:31, Greg KH <gregkh@linuxfoundation.org> wrote:
+> This causes build warnings when applied, I'm having to drop it now.
+>
+> Please be more careful, when submitting patches, always test-build them
+> first.
 
-> If we want to do something useful, wouldn't it make more sense to
-> introduce the use of dev_err() in order to identify the faulting device
-> in the message ?
-
-Well, I could get the struct device* pointer via pinfo.port->dev,
-but I wasn't entirely sure that it's always defined before these
-functions could be called.
-
-Shall I change it to dev_*() ?
-
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+I have found my mistake. Although I have built a kernel to test my
+patch, I forget to turn on the 8250 configurations which are turned
+off during another kernel test. As a result, 8250_pnp.c was not
+compiled at all, so I didn't see any warnings. Sorry for that and
+thanks for your guidance. I will submit my patch v3.
