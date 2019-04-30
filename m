@@ -2,95 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B371DEA19
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Apr 2019 20:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28917F318
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Apr 2019 11:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbfD2S2I (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Apr 2019 14:28:08 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:41349 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728972AbfD2S2I (ORCPT
+        id S1726012AbfD3Jfx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Apr 2019 05:35:53 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:46024 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbfD3Jfx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Apr 2019 14:28:08 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N0FE1-1gWweB2srv-00xJGe; Mon, 29 Apr 2019 20:27:00 +0200
-Subject: Re: [PATCH 13/41] drivers: tty: serial: uartlite: fill mapsize and
- use it
-To:     Peter Korsgaard <peter@korsgaard.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        linux-ia64@vger.kernel.org, linux-serial@vger.kernel.org,
-        andrew@aj.id.au, gregkh@linuxfoundation.org, sudeep.holla@arm.com,
-        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
-        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
-        khilman@baylibre.com, macro@linux-mips.org,
-        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
-        linux-amlogic@lists.infradead.org,
-        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-14-git-send-email-info@metux.net>
- <87muk8rg82.fsf@dell.be.48ers.dk>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <cb01328c-6308-d9c7-17ba-644d983b0a50@metux.net>
-Date:   Mon, 29 Apr 2019 20:26:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        Tue, 30 Apr 2019 05:35:53 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3U9SOsE027785;
+        Tue, 30 Apr 2019 09:35:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=7NESZQ+VXjBNGWYCMQ5Ga1HxOlsu/81yUESa2dUGf00=;
+ b=vRwXGEf5rRn3JidL57FxJv/6t+a07RKpQq7m6gZlM6Wtxdiko6knL/BfJwkginO0H7xe
+ secE9HAQtVdS3W561w4i7KPFANrBpZKUsPC10gSjQcQ26oduhf5Y512UvfgJnz2gkF0L
+ ukG+KuhxWgqMBOjGPSxPkKsCtIldCG4MEp1m4KPvHKmQls7iw0RrsQWbKV3BpjkXc3+U
+ /NvYNbElEI2iDp2W8iN/jOlspE+mK2CwMeNxJwMyKtde8p6/XeYUp2RiIT63+XPf9u5d
+ yagoubqPx1e5IQhslrSP0rOgPKNHfuQStsPutFsxUZfQrKbirGWTmFlwaMBavLT2jqI8 Dg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2s4fqq3bp7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Apr 2019 09:35:41 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3U9Zacb182678;
+        Tue, 30 Apr 2019 09:35:40 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2s4yy9emwq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Apr 2019 09:35:40 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x3U9ZcMb031395;
+        Tue, 30 Apr 2019 09:35:39 GMT
+Received: from kadam (/196.97.65.153)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 30 Apr 2019 02:35:38 -0700
+Date:   Tue, 30 Apr 2019 12:35:26 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sugaya Taichi <sugaya.taichi@socionext.com>,
+        linux-serial@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH -next] serial: milbeaut_usio: Fix error handling in probe
+ and remove
+Message-ID: <20190430093526.GB2269@kadam>
+References: <20190425151044.105045-1-weiyongjun1@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <87muk8rg82.fsf@dell.be.48ers.dk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:au94e1eq1t1YlnnJViJhE/K6kMah+BGDcbk5VT8+2eMOcjazNzP
- K5DjPTgP9xkJSFVa90iiUwfTMbygt1pa/q/QVqLjBcRjKGldPhF1PlUIGuwEcvTYnwNYXHD
- 4V5xXevhSRFXCoXSYK9fBGWVz8C7Tl/uH4wFGRM4rQiiRQ/9UA/oGA18KOJhfyGX6iPZWpN
- XbvZlLq2pR9jNFgvXr4Sg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9sF2aDxgqew=:FGiiUO8PT3ifq3hod8tMoL
- +SEtG8hOTCH9pJUceAM5iP2H5Es8lUmMB0syxlho4LBC+yxxXRhOFRB2cWsSjbWIidwwPruTU
- 0EH2VtAuQux2vVmh6WCiw729yobnsE6+P1JmGeH3xjLZdERrEdqLAdFjESsBb3Q0acApejZtZ
- zF8Viv5HEqMjOgJ1mYJhsAFbtXu1GQ8IITc7sTnty/rlKmhJexVwNJgnBjdqF5ZvLqLxecutK
- kZYcw0VOhspQU0gpK38Kxzp7r0nRLryCZTn/J1G4yqdgXd9ZksMtMoU9Aq3CF83pBTmKEuMfc
- W6iTXMoanXU5yPYQUsjPJ4X8CSucyPOh99f8HWSnnz59FeA5v7yE/kp7l1fIlr5K1u57DIYas
- R7YtCVkI4bBRX3RmDPo/y1IOHz2JqWRDKz2GpU26JYmU2yzf9ADZMm3w9nHD2iQOS21515NNx
- aQoEbBqIk+5kUHNVp2sw8kl8W5rbQ5QZSsgH/c8toQw67UhsUeuPvx425Yp7z4mplQmH4NlbT
- NgVx6Ahvz5wR9VoYhgLcei+Vz3/MqzReS6oP0JQ4aQh/MwUkU8lJwFW9tBu361Ays/BqoFyDb
- xiUN4IP0nNNMQp9V228OUBdjFFGdu4aU8k6c+QTT3D33uXP0z0uWrG8na7KNTfy7xff4cGQ0o
- TMDfGeX3+/tR9Z8ZWz8juRpzoZCUwqW4ATnaFyO1hO1XGHBPU/Tr30mlExcmRm/bx7EI73fMC
- AI9rD1w3c+BVcecBqTfQ0HHodM0p73pOlAR0KOmXf0piKKh5JjRv5OoDRY4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190425151044.105045-1-weiyongjun1@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9242 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1904300063
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9242 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1904300063
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 29.04.19 17:19, Peter Korsgaard wrote:
->>>>>> "Enrico" == Enrico Weigelt, metux IT consult <info@metux.net> writes:
-> 
->  > Fill the struct uart_port->mapsize field and use it, insteaf of
-> 
-> s/insteaf/instead/
+On Thu, Apr 25, 2019 at 03:10:44PM +0000, Wei Yongjun wrote:
+> devm_clk_get() is used so there is no reason to explicitly call
+> clk_put() in probe or remove functions.
 
-Fixed.
+Your patch is correct, but next time the patch description should be
+more clear that this is a double free.  To me the patch description
+sounded like it was just tidying up or something instead of fixing a
+crash.  It might feel rude to say that the original code will crash, but
+we are all human so introducing crashing bugs is not something to be
+embarrassed about.
 
->  > hardcoded values in many places. This makes the code layout a bit
->  > more consistent and easily allows using generic helpers for the
->  > io memory handling.
-> 
->  > Candidates for such helpers could be eg. the request+ioremap and
->  > iounmap+release combinations.
-> 
->  > Signed-off-by: Enrico Weigelt <info@metux.net>
-> 
-> Acked-by: Peter Korsgaard <peter@korsgaard.com>
+regards,
+dan carpenter
 
-thanks for review.
-
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
