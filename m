@@ -2,89 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9967CFB1A
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Apr 2019 16:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664F4FCCA
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Apr 2019 17:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727394AbfD3OKi (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Apr 2019 10:10:38 -0400
-Received: from mga02.intel.com ([134.134.136.20]:61608 "EHLO mga02.intel.com"
+        id S1726017AbfD3PZJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Apr 2019 11:25:09 -0400
+Received: from mga04.intel.com ([192.55.52.120]:37127 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726758AbfD3OKi (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Apr 2019 10:10:38 -0400
-X-Amp-Result: UNSCANNABLE
+        id S1726006AbfD3PZI (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Apr 2019 11:25:08 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Apr 2019 07:10:36 -0700
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Apr 2019 08:24:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.60,414,1549958400"; 
-   d="scan'208";a="342158227"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Apr 2019 07:10:31 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hLTSn-0006VO-Gw; Tue, 30 Apr 2019 17:10:29 +0300
-Date:   Tue, 30 Apr 2019 17:10:29 +0300
+   d="scan'208";a="140130194"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 30 Apr 2019 08:24:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E912411F; Tue, 30 Apr 2019 18:24:52 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        linux-ia64@vger.kernel.org, linux-serial@vger.kernel.org,
-        andrew@aj.id.au, gregkh@linuxfoundation.org, sudeep.holla@arm.com,
-        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
-        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
-        khilman@baylibre.com, macro@linux-mips.org,
-        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
-        linux-amlogic@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net
-Subject: Re: [PATCH 22/41] drivers: tty: serial: cpm_uart: fix logging calls
-Message-ID: <20190430141029.GK9224@smile.fi.intel.com>
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-23-git-send-email-info@metux.net>
- <a00ba23b-e73e-c964-a6d0-347cb605b8c8@c-s.fr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, John Garry <john.garry@huawei.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] serial: 8250_of: Use of_device_get_match_data()
+Date:   Tue, 30 Apr 2019 18:24:52 +0300
+Message-Id: <20190430152452.29883-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a00ba23b-e73e-c964-a6d0-347cb605b8c8@c-s.fr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 05:59:04PM +0200, Christophe Leroy wrote:
-> Le 27/04/2019 à 14:52, Enrico Weigelt, metux IT consult a écrit :
-> > Fix checkpatch warnings by using pr_err():
-> > 
-> >      WARNING: Prefer [subsystem eg: netdev]_err([subsystem]dev, ... then dev_err(dev, ... then pr_err(...  to printk(KERN_ERR ...
-> >      #109: FILE: drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c:109:
-> >      +		printk(KERN_ERR
-> > 
-> >      WARNING: Prefer [subsystem eg: netdev]_err([subsystem]dev, ... then dev_err(dev, ... then pr_err(...  to printk(KERN_ERR ...
-> >      #128: FILE: drivers/tty/serial/cpm_uart/cpm_uart_cpm2.c:128:
-> >      +		printk(KERN_ERR
-> > 
-> >      WARNING: Prefer [subsystem eg: netdev]_err([subsystem]dev, ... then dev_err(dev, ... then pr_err(...  to printk(KERN_ERR ...
-> >      +           printk(KERN_ERR
-> > 
-> >      WARNING: Prefer [subsystem eg: netdev]_err([subsystem]dev, ... then dev_err(dev, ... then pr_err(...  to printk(KERN_ERR ...
-> >      +           printk(KERN_ERR
-> > 
-> > Signed-off-by: Enrico Weigelt <info@metux.net>
-> 
-> Reviewed-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> 
-> But is that really worth doing those changes ?
-> 
-> If we want to do something useful, wouldn't it make more sense to introduce
-> the use of dev_err() in order to identify the faulting device in the message
-> ?
+Use of_device_get_match_data() to simplify the code a bit.
 
-+1 for switching to dev_*().
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_of.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
+index 0277479c87e9..9d11aa33f60d 100644
+--- a/drivers/tty/serial/8250/8250_of.c
++++ b/drivers/tty/serial/8250/8250_of.c
+@@ -205,18 +205,16 @@ static int of_platform_serial_setup(struct platform_device *ofdev,
+ /*
+  * Try to register a serial port
+  */
+-static const struct of_device_id of_platform_serial_table[];
+ static int of_platform_serial_probe(struct platform_device *ofdev)
+ {
+-	const struct of_device_id *match;
+ 	struct of_serial_info *info;
+ 	struct uart_8250_port port8250;
+ 	u32 tx_threshold;
+ 	int port_type;
+ 	int ret;
+ 
+-	match = of_match_device(of_platform_serial_table, &ofdev->dev);
+-	if (!match)
++	port_type = (unsigned int)of_device_get_match_data(&ofdev->dev);
++	if (port_type == PORT_UNKNOWN)
+ 		return -EINVAL;
+ 
+ 	if (of_property_read_bool(ofdev->dev.of_node, "used-by-rtas"))
+@@ -226,7 +224,6 @@ static int of_platform_serial_probe(struct platform_device *ofdev)
+ 	if (info == NULL)
+ 		return -ENOMEM;
+ 
+-	port_type = (unsigned long)match->data;
+ 	memset(&port8250, 0, sizeof(port8250));
+ 	ret = of_platform_serial_setup(ofdev, port_type, &port8250.port, info);
+ 	if (ret)
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
