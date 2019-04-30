@@ -2,84 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF21FFE6
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Apr 2019 20:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7DB10131
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Apr 2019 22:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbfD3SqD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Apr 2019 14:46:03 -0400
-Received: from mga09.intel.com ([134.134.136.24]:59485 "EHLO mga09.intel.com"
+        id S1727177AbfD3UxD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Apr 2019 16:53:03 -0400
+Received: from mleia.com ([178.79.152.223]:57188 "EHLO mail.mleia.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726056AbfD3SqD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Apr 2019 14:46:03 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Apr 2019 11:46:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,414,1549958400"; 
-   d="scan'208";a="140178010"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 30 Apr 2019 11:46:01 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4AA4511F; Tue, 30 Apr 2019 21:45:59 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, John Garry <john.garry@huawei.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2] serial: 8250_of: Use of_device_get_match_data()
-Date:   Tue, 30 Apr 2019 21:45:59 +0300
-Message-Id: <20190430184559.35206-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726612AbfD3UxC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Apr 2019 16:53:02 -0400
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 6A35D4668DD;
+        Tue, 30 Apr 2019 21:53:00 +0100 (BST)
+Subject: Re: [PATCH 41/41] drivers: tty: serial: lpc32xx_hs: fill mapsize and
+ use it
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, andrew@aj.id.au,
+        andriy.shevchenko@linux.intel.com, macro@linux-mips.org,
+        slemieux.tyco@gmail.com, khilman@baylibre.com, liviu.dudau@arm.com,
+        sudeep.holla@arm.com, lorenzo.pieralisi@arm.com,
+        davem@davemloft.net, jacmet@sunsite.dk, linux@prisktech.co.nz,
+        matthias.bgg@gmail.com, linux-mips@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+References: <1556369542-13247-1-git-send-email-info@metux.net>
+ <1556369542-13247-42-git-send-email-info@metux.net>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <3cfc4396-b152-e9a6-bf29-a4c901ac90e6@mleia.com>
+Date:   Tue, 30 Apr 2019 23:52:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1556369542-13247-42-git-send-email-info@metux.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20190430_215300_466850_76BEA83B 
+X-CRM114-Status: UNSURE (   6.73  )
+X-CRM114-Notice: Please train this message. 
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Use of_device_get_match_data() to simplify the code a bit.
+Hi Enrico,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-- cast to longer type to avoid "cast from pointer to integer of different size"
-- change type of port_type to unsigned int
- drivers/tty/serial/8250/8250_of.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+On 04/27/2019 03:52 PM, Enrico Weigelt, metux IT consult wrote:
+> Fill the struct uart_port->mapsize field and use it, insteaf of
 
-diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-index 0277479c87e9..1308b3d1e17a 100644
---- a/drivers/tty/serial/8250/8250_of.c
-+++ b/drivers/tty/serial/8250/8250_of.c
-@@ -205,18 +205,16 @@ static int of_platform_serial_setup(struct platform_device *ofdev,
- /*
-  * Try to register a serial port
-  */
--static const struct of_device_id of_platform_serial_table[];
- static int of_platform_serial_probe(struct platform_device *ofdev)
- {
--	const struct of_device_id *match;
- 	struct of_serial_info *info;
- 	struct uart_8250_port port8250;
-+	unsigned int port_type;
- 	u32 tx_threshold;
--	int port_type;
- 	int ret;
- 
--	match = of_match_device(of_platform_serial_table, &ofdev->dev);
--	if (!match)
-+	port_type = (unsigned long)of_device_get_match_data(&ofdev->dev);
-+	if (port_type == PORT_UNKNOWN)
- 		return -EINVAL;
- 
- 	if (of_property_read_bool(ofdev->dev.of_node, "used-by-rtas"))
-@@ -226,7 +224,6 @@ static int of_platform_serial_probe(struct platform_device *ofdev)
- 	if (info == NULL)
- 		return -ENOMEM;
- 
--	port_type = (unsigned long)match->data;
- 	memset(&port8250, 0, sizeof(port8250));
- 	ret = of_platform_serial_setup(ofdev, port_type, &port8250.port, info);
- 	if (ret)
--- 
-2.20.1
+typo, s/insteaf/instead/
 
+> hardcoded values in many places. This makes the code layout a bit
+> more consistent and easily allows using generic helpers for the
+> io memory handling.
+> 
+> Candidates for such helpers could be eg. the request+ioremap and
+> iounmap+release combinations.
+> 
+> Signed-off-by: Enrico Weigelt <info@metux.net>
+
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+
+--
+Best wishes,
+Vladimir
