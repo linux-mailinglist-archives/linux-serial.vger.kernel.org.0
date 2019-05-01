@@ -2,70 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7DB10131
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Apr 2019 22:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93D3103DD
+	for <lists+linux-serial@lfdr.de>; Wed,  1 May 2019 04:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbfD3UxD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Apr 2019 16:53:03 -0400
-Received: from mleia.com ([178.79.152.223]:57188 "EHLO mail.mleia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726612AbfD3UxC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Apr 2019 16:53:02 -0400
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 6A35D4668DD;
-        Tue, 30 Apr 2019 21:53:00 +0100 (BST)
-Subject: Re: [PATCH 41/41] drivers: tty: serial: lpc32xx_hs: fill mapsize and
- use it
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, andrew@aj.id.au,
-        andriy.shevchenko@linux.intel.com, macro@linux-mips.org,
+        id S1726923AbfEACUk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Apr 2019 22:20:40 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:49124 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726123AbfEACUk (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Apr 2019 22:20:40 -0400
+Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
+        with ESMTP id S23990394AbfEACUhiM2bj (ORCPT
+        <rfc822;sparclinux@vger.kernel.org> + 4 others);
+        Wed, 1 May 2019 04:20:37 +0200
+Date:   Wed, 1 May 2019 03:20:37 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org, andrew@aj.id.au,
+        andriy.shevchenko@linux.intel.com, vz@mleia.com,
         slemieux.tyco@gmail.com, khilman@baylibre.com, liviu.dudau@arm.com,
         sudeep.holla@arm.com, lorenzo.pieralisi@arm.com,
-        davem@davemloft.net, jacmet@sunsite.dk, linux@prisktech.co.nz,
-        matthias.bgg@gmail.com, linux-mips@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-42-git-send-email-info@metux.net>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <3cfc4396-b152-e9a6-bf29-a4c901ac90e6@mleia.com>
-Date:   Tue, 30 Apr 2019 23:52:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.6.0
+        "David S. Miller" <davem@davemloft.net>, jacmet@sunsite.dk,
+        linux@prisktech.co.nz, matthias.bgg@gmail.com,
+        linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 01/41] drivers: tty: serial: dz: use dev_err() instead
+ of printk()
+In-Reply-To: <20190429131224.GA27385@kroah.com>
+Message-ID: <alpine.LFD.2.21.1905010255070.30973@eddie.linux-mips.org>
+References: <1556369542-13247-1-git-send-email-info@metux.net> <1556369542-13247-2-git-send-email-info@metux.net> <20190427133117.GC11368@kroah.com> <bae3f23b-8823-f089-c40e-024ba225555f@metux.net> <20190429131224.GA27385@kroah.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <1556369542-13247-42-git-send-email-info@metux.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20190430_215300_466850_76BEA83B 
-X-CRM114-Status: UNSURE (   6.73  )
-X-CRM114-Notice: Please train this message. 
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Enrico,
+On Mon, 29 Apr 2019, Greg KH wrote:
 
-On 04/27/2019 03:52 PM, Enrico Weigelt, metux IT consult wrote:
-> Fill the struct uart_port->mapsize field and use it, insteaf of
-
-typo, s/insteaf/instead/
-
-> hardcoded values in many places. This makes the code layout a bit
-> more consistent and easily allows using generic helpers for the
-> io memory handling.
+> > >>  drivers/tty/serial/dz.c | 8 ++++----
+> > > 
+> > > Do you have this hardware to test any of these changes with?
+> > 
+> > Unfortunately not :(
 > 
-> Candidates for such helpers could be eg. the request+ioremap and
-> iounmap+release combinations.
-> 
-> Signed-off-by: Enrico Weigelt <info@metux.net>
+> Then I can take the "basic" types of patches for the driver (like this
+> one), but not any others, sorry.
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+ I can verify changes to dz.c, sb1250-duart.c and zs.c with real hardware, 
+but regrettably not right away: the hardware is in a remote location and 
+while I have it wired for remote operation unfortunately its connectivity 
+has been cut off by an unfriendly ISP.
 
---
-Best wishes,
-Vladimir
+ I'm not sure if all the changes make sense though: if there is a compiler 
+warning or a usability issue, then a patch is surely welcome, otherwise: 
+"If it ain't broke, don't fix it".
+
+  Maciej
