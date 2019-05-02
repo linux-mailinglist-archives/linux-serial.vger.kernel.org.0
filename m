@@ -2,134 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3A811782
-	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2019 12:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3732711833
+	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2019 13:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbfEBKqC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 May 2019 06:46:02 -0400
-Received: from mga14.intel.com ([192.55.52.115]:20662 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726231AbfEBKqC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 May 2019 06:46:02 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 May 2019 03:46:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,421,1549958400"; 
-   d="scan'208";a="228622453"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by orsmga001.jf.intel.com with ESMTP; 02 May 2019 03:45:58 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hM9Dw-0004MM-M5; Thu, 02 May 2019 13:45:56 +0300
-Date:   Thu, 2 May 2019 13:45:56 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Esben Haabendal <esben@haabendal.dk>
-Cc:     linux-serial@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250: Add support for using platform_device
- resources
-Message-ID: <20190502104556.GS9224@smile.fi.intel.com>
-References: <20190430140416.4707-1-esben@geanix.com>
- <20190430153736.GL9224@smile.fi.intel.com>
- <874l6efxta.fsf@haabendal.dk>
+        id S1726220AbfEBLdN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 May 2019 07:33:13 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:42454 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbfEBLdN (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 2 May 2019 07:33:13 -0400
+Received: by mail-lj1-f178.google.com with SMTP id r72so1826173ljb.9
+        for <linux-serial@vger.kernel.org>; Thu, 02 May 2019 04:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qVFah4rxlea4NvGzxcSgojiQwwje8YG+C0Gi7vR3PU4=;
+        b=qvYK+d96O9hSEJNMT5PrNc2noLhObQhQyz5iCmSKFY48dHUvsqA8cRA5HUZO/y+Ung
+         /i84StLm1NoVdEcepXGbhS7zs6OMXY2mNijinSL4FNREoIFDpsTnMEi1qT5I2tYUxZ3U
+         vfgriEJnqbsorahCFZcmhX6CtW1v2qKnZ1edMnts35/myWqcHB6neifD+zdhyOiY+TMU
+         W6FykYjKcc3Mj1LC0bu84pxdltf7C1vDaB5ddQdvej3c++p+1GigD5dPc6a9hcL6lR+J
+         CsCozwSSQEy7fxV9T2iZa+5E9mWchOr5xGNO3GLvaRQR9sX1paxcYkdKg+kmBnyLUM5s
+         vtLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qVFah4rxlea4NvGzxcSgojiQwwje8YG+C0Gi7vR3PU4=;
+        b=OBW3+0vv4l9ZsUeuxvjoq6eCWH5IpegCFKIMxN6aW5mQnE9ehqtWthGomFUNojo1kL
+         ICJkeo6BlyM6fNNjem8PzGS0LL+85/kHC5M524f86zrZV5U9cuXWx5JlSGk2pZ7/9GO0
+         hUe2Y4mbz3HeZZ15sMTM28oZ4w6WWZQ/3OiWnwmXDPfvKG/KrzWGkmQPjXe1sw+Kx6Cp
+         LHV3BY6RgOA4BOYomLqoRMQNn8FcqbsmH9+0gndE528OD3PFy4ToJxbtRZshzRitTQC2
+         51z6Ea5Sm4FDKBnDhOnUS+Mp781pLE51pY7hn2T2cDVaACGrIYTVocGUHAi14ulvr/7y
+         ikLQ==
+X-Gm-Message-State: APjAAAVRr2lGfIZ9vHNzraT/ekt/UozpmHTlQfmhWbmYOCDLeLEmLsc2
+        43i9JGjarDTeyBrQj4R4nevlVA8lum4I1g7fqs8IBhk5
+X-Google-Smtp-Source: APXvYqxVtYv6Z9kKqgxvj7kWOQzQyAL1jeXr8qe2xzCHj6I4vWt17/m4tdEEzeSCQ/by0c6QzB4D+SIsxSbC9lhs7lc=
+X-Received: by 2002:a2e:7318:: with SMTP id o24mr1502267ljc.138.1556796719898;
+ Thu, 02 May 2019 04:31:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874l6efxta.fsf@haabendal.dk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <kcis.DC82F67FDB724ECD9A98DE07DACAC907@DHPLMX01>
+In-Reply-To: <kcis.DC82F67FDB724ECD9A98DE07DACAC907@DHPLMX01>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 2 May 2019 08:31:54 -0300
+Message-ID: <CAOMZO5DmeaxZTvOLeJrvb8_YbzTuYQVUZhLU1z2s-tm98gPf1A@mail.gmail.com>
+Subject: Re: cpu power up timing changes causes UART rx character loss on imx6ull
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Anson Huang <anson.huang@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, May 01, 2019 at 09:17:37AM +0200, Esben Haabendal wrote:
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+Hi Christoph,
 
-> > Hmm... Currently it's done inside individual port drivers, like 8250_dw.c.
-> > Each of the drivers can do it differently, for example 8250_lpss.c or
-> > 8250_pnp.c.
-> 
-> So, you would prefer to create a new "specialized" port driver that uses
-> platform resources?  I am not doing anything else different from
-> the generic port driver here in 8250_core.c.
+On Thu, May 2, 2019 at 6:40 AM Christoph Niedermaier
+<cniedermaier@dh-electronics.com> wrote:
+>
+> I have tested the patch with kernel version 5.1-rc7 and I could not reproduce the loss of characters any more.
 
-If it's required and using serial8250 directly is not enough.
+Excellent. I have just sent a formal patch.
 
-> >> +				if (!(port->flags & UPF_DEV_RESOURCES))
-> >> +					release_mem_region(port->mapbase, size);
-> >
-> > This is again same issue. The parent should not request resource it
-> > doesn't use.
-> 
-> Yes, this is same issue.
-> 
-> But the last part is not true.  A parent mfd driver might "use" a memory
-> resource for the sole purpose of splitting it up for it's mfd child
-> devices.  This is a core part of mfd framework, and not something I am
-> inventing with this patch.  I am just trying to make it possible to use
-> 8250 driver in that context.
-> 
-> > I think I understand what is a confusion here.
-> >
-> > For the IO resources we have two operations:
-> > - mapping / re-mapping (may be shared)
-> > - requesting (exclusive)
-> >
-> > In the parenthesis I put a level of access to it. While many device
-> > drivers can *share* same resource (mapped or unmapped), the only one
-> > can actually request it.
-> 
-> Mostly true.  But there is an important twist to the exclusive restriction.
-> 
-> The exclusive part of the request is limited to the the same root/parent
-> resource.
-> 
-> When you request a memory resource from the root resource
-> (iomem_resource), the resource returned can be used as a new parent
-> resource.  This new parent can then be used to give exclusive access to
-> slices of that resource.  When used like that, I expect that the parent
-> resource is not supposed to be used for anything else than honoring
-> resource requests.
-> 
-> And this is exactly what mfd-core uses the mem_base argument
-> in mfd_add_devices().
-> 
-> > So, the parent can take an slice resources as it would be
-> > appropriated, but not requesting them.
-> 
-> The parent is not and should not be doing that by itself.  The request
-> is done on by mfd-core when mfd_add_devices() is called.
+> Couldn't it perhaps be better to name the define SW2ISO_IMX6SX instead of SW2ISO_IMX6X?
 
-No, MFD *does not* (and actually *may not* in order to allow standalone drivers
-to be used as children w/o modifications) request resources. It just passes
-them to children as parent suggested.
+Yes, I have changed it in the forma patch. Please reply with your
+Tested-by when you have a chance.
 
-> > OTOH, it's possible to have a (weird) MFD case where parent *requested*
-> > resources, and *all* of its children are aware of that.
-> 
-> I am not sure what you mean with this, but mfd drivers should not pass
-> along it's intire requested memory resource(s) to child devices.  The
-> child devices will get the requested resource slices, as implemented by
-> mfd_add_devices().
-> 
-> I hope you can see that I am not violating any fundamental design
-> decissions here, but actually try adhere to them (resource management,
-> platform_device resource management, and mfd-core).
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks
