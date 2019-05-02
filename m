@@ -2,108 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A89D81223B
-	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2019 20:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43CE122A1
+	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2019 21:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbfEBS6O (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 May 2019 14:58:14 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:43317 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfEBS6O (ORCPT
+        id S1726145AbfEBTmJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 May 2019 15:42:09 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:34107 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBTmJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 May 2019 14:58:14 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t22so1460842pgi.10
-        for <linux-serial@vger.kernel.org>; Thu, 02 May 2019 11:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=5FgSWzT6cp2rvJ1/txB98YcNdupdx1c0jgM9/LDh5nA=;
-        b=czjywQBHbF0HA0icUfD5qcGpwPG3KMZkyi3FO1PvySKIAEdrS3LBSNyBEwB/WJZkDE
-         z4GOfEWnt/T5/aTAsPev7b/4n6zxo3xHvW1hpiZDxFYiLhxaWd5v8Y7Ju5fcFrsszttJ
-         oPTqz6uy/8U0CeTBuOyFcuDmfMjW6dmDfvM6B9cm43s5hRMX/r7JP8VFj4eaX6IR8Ydi
-         RsYZnO0o8J/IgIpYifiWy1s3319OwkDHVDEYdl7nRAoCPxBKQrKepf1AOsDP82+bU0nG
-         n2eSTYzXxYfx+u0fMIMix0W+jqcjR0vv15MwD1OKqAXGvyFmYJQR6iemBYbNm+EEBdLx
-         XuBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=5FgSWzT6cp2rvJ1/txB98YcNdupdx1c0jgM9/LDh5nA=;
-        b=axfoSBKWn7dl+viDR65T/BNQgLD32xDljWaRgWaI2koQsbWr+eWJZ/Xb8FOzAY3+a1
-         MBLe8qJNEz3/7EGpMCXuCSlrm56F41efo96qou9YawijLQNVjV1wh75cOaEJiORSNqrp
-         euAiRi4pLXn98z6t8IbZY2ORicsEzkk0ODfOSQ0RzMKX+Ejbb5RSuPqKpWekxJ1wP/NK
-         7In4USpLV2iSrb5w8hGzvZDBUq8ihOSkOT+jPTZ+qZXIZ1nTA5vc8ghL73pDm92JlVvm
-         eqy1I+NJx0u/FiNuF80hHKFL0Rf68ORMNaKjuU2kkVSmYcUfZZkwDHWuQMW5Sz+mOYC9
-         CWmg==
-X-Gm-Message-State: APjAAAU0hSjID4/BIs4K0xD/cmBeS0nh8KGPON8u9Vyq+W4We1R6/wJl
-        dWzDGK6aK3WasTpsRs4h89X1SA==
-X-Google-Smtp-Source: APXvYqxRLqzZyute+oKqyMi3R2+Lo0Yovv9sNOI08RvIWIN78cB1mkCzZthekg8/lTPfNIgyB2pVTQ==
-X-Received: by 2002:a62:7089:: with SMTP id l131mr6047867pfc.158.1556823493889;
-        Thu, 02 May 2019 11:58:13 -0700 (PDT)
-Received: from localhost ([2601:602:9200:a1a5:e50d:c7fa:92aa:c53d])
-        by smtp.googlemail.com with ESMTPSA id j12sm19593256pff.148.2019.05.02.11.58.12
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 11:58:13 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-riscv@lists.infradead.org, gregkh@linuxfoundation.org
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Paul Walmsley <paul@pwsan.com>, Jiri Slaby <jslaby@suse.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Wesley Terpstra <wesley@sifive.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Andreas Schwab <schwab@suse.de>
-Subject: Re: [PATCH v5 2/2] tty: serial: add driver for the SiFive UART
-In-Reply-To: <20190413020111.23400-3-paul.walmsley@sifive.com>
-References: <20190413020111.23400-1-paul.walmsley@sifive.com> <20190413020111.23400-3-paul.walmsley@sifive.com>
-Date:   Thu, 02 May 2019 11:58:12 -0700
-Message-ID: <7hpnp0lm4b.fsf@baylibre.com>
+        Thu, 2 May 2019 15:42:09 -0400
+Received: from [192.168.1.110] ([95.117.102.184]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mae7u-1gkTii3ric-00cBpa; Thu, 02 May 2019 21:41:07 +0200
+Subject: Re: [PATCH] serial: 8250: Add support for using platform_device
+ resources
+To:     Esben Haabendal <esben@geanix.com>, linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
+        linux-kernel@vger.kernel.org
+References: <20190430140416.4707-1-esben@geanix.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <a535c7b6-54e0-ab58-7626-f7f631773c18@metux.net>
+Date:   Thu, 2 May 2019 21:41:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20190430140416.4707-1-esben@geanix.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:D8hPpdY1OO8vv+VyuKhIoYmLojZgGU5xSg88u+CaUVpeXhJslsS
+ +d9h80w8M1im8D7a5Apj/sDDTxO/uOkQ/jpoeimd3QvYiO6WPH9GFtO6nl7cK/Ns9OlJ2Zq
+ UZRArJu0K5asxPzWtSyVjnOabVMcehgOkd4tBa4c2EMn4BEzYqnluIE1YjT9NbJpco5D/IT
+ SSipn++UZVsfObLkTBVPQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qCvAS6/VJzQ=:jz5k+6E5nMadVaIGSsP2DG
+ +C5cM4GUtpxEoEqPVGSqqEkzT7awgDwgvDCEiC3YnX0e9Ls1imhj2SL6e0AimF3VOkQ9KWf/0
+ oFs8ecL3zjcasyHYWOx4xn34eXc0TP4lvQlky1ektE2Odwq+iLztDAYdvgeRLm+Qh935+8lse
+ QgT/1NEOE6HzBH6FHthck40w56hUSbI1sQbtsRyVhfl2LncCL6Ngr984yNvgSCrOJPLvGQtx5
+ MSVONG7Sq388EDRRs/sby4VWmAWbULfJb2FL7PWGODk08sqhYShTgKl+NXmfzxBEyPJA99t5R
+ lESC1VPxwXiajrsanvV+T3t+vHNh433O2pK0nwZ+K4r6RSPMWqEDiSUmyGcZasUPluXF9ZH1t
+ ZAvZPAbRqHFBu1lR4z3J4xW7ITRLiFwX2VWsrw8PvIp5Wd8JNTDtoLMYzTDaRJLRTPllwiVuG
+ BeOh/8KWhOHdYXOKqUW1O+8efDd2tKcMpZT7Sqpa+vFUs/qGMMmPZ7JkWO9GW6JKhoZ6Ew1BS
+ Y5QnvTYyYinqJoyNGNS5Xb8ecaLHMBSbbdvh1IiaHgRwf9U5AyW5VnjWPBvxKtRo88P1F4tBG
+ Zmg/Om4aUpNMb9D4Jz1WmZwyLvfeau0bkdXEBSltdGVxxo9Qh+t7wxfY0KGRrBZqU56aRDlu7
+ a6GDrUt9LAwsYk3LTbEuE2lATvJKq3d8sBgHC+kjLoQccX3MUsFlAx5iDqQlcASjpyZRe4SZr
+ jHoHuhd/cHbM5iMe5crmNNBzMFRoP7SgMPSx6pnpJS79jRLY+EaC0Kr+qM0=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Paul Walmsley <paul.walmsley@sifive.com> writes:
+On 30.04.19 16:04, Esben Haabendal wrote:
+> Allow getting memory resource (mapbase or iobase) as well as irq from
+> platform_device resources.
+> 
+> The UPF_DEV_RESOURCES flag must be set for devices where platform_device
+> resources are to be used.  When not set, driver behaves as before.
+> 
+> This allows use of the serial8250 driver together with devices with
+> resources added by platform_device_add_resources(), such as mfd child
+> devices added with mfd_add_devices().
 
-> Add a serial driver for the SiFive UART, found on SiFive FU540 devices
-> (among others).
->
-> The underlying serial IP block is relatively basic, and currently does
-> not support serial break detection.  Further information on the IP
-> block can be found in the documentation and Chisel sources:
->
->     https://static.dev.sifive.com/FU540-C000-v1.0.pdf
->
->     https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/uart
->
-> This driver was written in collaboration with Wesley Terpstra
-> <wesley@sifive.com>.
->
-> Tested on a SiFive HiFive Unleashed A00 board, using BBL and the open-
-> source FSBL (using a DT file based on what's targeted for mainline).
->
-> This revision incorporates changes based on comments by Julia Lawall
-> <julia.lawall@lip6.fr>, Emil Renner Berthing <kernel@esmil.dk>, and
-> Andreas Schwab <schwab@suse.de>.  Thanks also to Andreas for testing
-> the driver with his userspace and reporting a bug with the
-> set_termios implementation.
->
-> Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
-> Signed-off-by: Paul Walmsley <paul@pwsan.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jiri Slaby <jslaby@suse.com>
-> Cc: Palmer Dabbelt <palmer@sifive.com>
-> Cc: Wesley Terpstra <wesley@sifive.com>
-> Cc: linux-serial@vger.kernel.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Julia Lawall <julia.lawall@lip6.fr>
-> Cc: Emil Renner Berthing <kernel@esmil.dk>
-> Cc: Andreas Schwab <schwab@suse.de>
+I like the idea (actually, quite the direction I'd like to go), but
+unfortunately it's more compilicated than that.
 
-Tested-by: Kevin Hilman <khilman@baylibre.com>
+Some drivers don't use these fields, eg. 8250 determines the mapsize
+based on several factors, at the time of the mapping is done. That's
+one of the things my patches shall clean up.
+
+
+--mtx
+
+-- 
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
