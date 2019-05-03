@@ -2,143 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F49130C9
-	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2019 16:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71376133D7
+	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2019 21:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbfECO5f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 3 May 2019 10:57:35 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55220 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbfECO5f (ORCPT
+        id S1726914AbfECTFM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 May 2019 15:05:12 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:39049 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726755AbfECTFM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 3 May 2019 10:57:35 -0400
-Received: by mail-wm1-f65.google.com with SMTP id b10so7487149wmj.4
-        for <linux-serial@vger.kernel.org>; Fri, 03 May 2019 07:57:33 -0700 (PDT)
+        Fri, 3 May 2019 15:05:12 -0400
+Received: by mail-it1-f196.google.com with SMTP id t200so10668324itf.4
+        for <linux-serial@vger.kernel.org>; Fri, 03 May 2019 12:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OVZXpzX2/H9jJjV5448BfKXXASMqgdrpjS+oYJ8297Y=;
-        b=qit253pzGtgooiEkFUJx2wIpCZOrs8Jzw6T/TbRhiCCv80wliQo2+jB4wjOh+RhON4
-         spKjMPrNXkt7ZTGpTUK1K+0EaPMJ5OfsbTf8fv7qGbhLNJxC3Jprx/tsNl53GwhPGcyL
-         BDhWowzQgcNiQfWFOZ7S7oFzs77CP+s7GEw9ZN/0aqmiCzO02DZdue/jU8euL/lA+uP3
-         IQx4BmTMD99s/O+5b7kHvoc5A45SjOth1dyJsnhLyO50WOn/JVw+nfJZxYcm13HVQAth
-         DYsXcV4n10T/JL8bCFSdKYKhvPwtTJiM7+mb+hzYxMA66TFsBfMv0ftNkXJBfZzLdQ4F
-         haGQ==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=WUEvVuMZ7YPl2dVmcnur9vXgWXYbDp4Kv2NYf/KfC/E=;
+        b=YyLoqA+MOSgu5Z/mdOZYresCbnsrP9MOECqAR4bgemiqd1NPH4z1kTNshqMr1wGxrO
+         1ulkumKpTQ6uWLtA2Ene+eq+HrTs1KZoMqs9xg+p39iicmy0zTCL7uVABR+WOuDZA063
+         +oNPgr10wY9fURWnsMIn4Glzq/w4seTiQt6nzHUkagCRCpv7txThNbb5poKXXUtiaq0C
+         amJC+5CNfkSN3LxFTXn27zjZN09O67v/k/iPmRYOidALpODycYOWZxGJ1kWkYY3q8zeE
+         jHByq6IVQuw2xmMN/9K1zm6po5Ybx+hPTG4ELBhJgSBqEWzHWP+zmvqJygso2YzaXz1P
+         hhwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OVZXpzX2/H9jJjV5448BfKXXASMqgdrpjS+oYJ8297Y=;
-        b=iAHVbDK/S1g3q+6TulQtGJATB+v+lb6GDgvkE/mX9MUNy6g3bS6VhTkY6f4Ahacz1w
-         qQfqvOiQb8TIGzI5cfUhjdKwXW7eaGdIkaML5mvLbMpJBC8b7L5iTy51n66GEYOiMnFm
-         K+7m5bjnyHP00CnyqmyIv6B5G5trge6CwKE19SPbpJR8iIQarLoh8xLFFYUeVyNmN4N1
-         sKdjD+4QY6Bg51e67T9fhL3RNRPAmqrs9bq1rhn6Ie5RiLjlN9XvLbhqs/yjFdQw2T5X
-         Zw2YU0yZU1EgazqtNujvv4zT/SB5/vbqERVRIpfoxqsge3wrcEaSupw/WB0vkL+WJ570
-         Jiog==
-X-Gm-Message-State: APjAAAXibeeFewOaw6A1wTGl28oDorxUwexcrZOHtLo0vLn6iZ0QmuS0
-        aD/nbA52juiLKVLiJTvv9Wd7ckpP
-X-Google-Smtp-Source: APXvYqxpxu72IgW60NhqEV3BpchcjLpGVjf0O+cAR1IdxgNdqDNaomB6ICmVJeKRq4xv2vkVrcB86g==
-X-Received: by 2002:a1c:a541:: with SMTP id o62mr6501122wme.22.1556895449548;
-        Fri, 03 May 2019 07:57:29 -0700 (PDT)
-Received: from ?IPv6:2a00:23c5:f786:ec00:1128:f7da:df35:f704? ([2a00:23c5:f786:ec00:1128:f7da:df35:f704])
-        by smtp.googlemail.com with ESMTPSA id s145sm3748527wme.38.2019.05.03.07.57.28
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 May 2019 07:57:29 -0700 (PDT)
-Subject: Re: [PATCH] serial: 8250: Fix TX interrupt handling condition
-To:     Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=WUEvVuMZ7YPl2dVmcnur9vXgWXYbDp4Kv2NYf/KfC/E=;
+        b=YtNrkIwIzfhR37I0GekWbbHV4Tkd9pvN1OozNRyvE4Iq5LLSnBT7R9RnomVMBFng4r
+         8nMdt/IZClbKE4wPJxcw3aCZAWUef1xlEfC3gI8n//6Qaa+RRo3TDtR6oo/cDRz0eSJl
+         ETpGEl+8ZNpJRVftbXteqSEcObZDGFE5PWSXA0u/c2teaDEYPXGWIE0kRw6HgGE4m9tN
+         PZlIudCwmpFNKdfm5O0T9dkvMHR/koAhsZ+EocTdp84/jeCToevIZi1brSYzGovsfnVJ
+         jZyoFPkVwabd2OU1dsA584r5p+GxVxuVDscS+//G3sm4Wmh72cyYNTqtxVOtxHMUiyfn
+         FJaw==
+X-Gm-Message-State: APjAAAX0JePspLMPmbk30WVwTVRnInF1Z5f6guV2yIVI89EqFm+Clf0i
+        2H8fJQM/uFezxUDiSS7CmdR6Sw==
+X-Google-Smtp-Source: APXvYqzFS3nViSd8Ml55qWBQUACdB1pGNmsO/5+y7g1p6Gt2X232FHXVSyZ7sg92TLGrQz/n1IlHPQ==
+X-Received: by 2002:a02:1146:: with SMTP id 67mr8522400jaf.10.1556910311443;
+        Fri, 03 May 2019 12:05:11 -0700 (PDT)
+Received: from localhost (74-95-18-198-Albuquerque.hfc.comcastbusiness.net. [74.95.18.198])
+        by smtp.gmail.com with ESMTPSA id d193sm1154451iog.34.2019.05.03.12.05.10
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 03 May 2019 12:05:10 -0700 (PDT)
+Date:   Fri, 3 May 2019 12:05:09 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Kevin Hilman <khilman@baylibre.com>
+cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-References: <1556280367-28685-1-git-send-email-ext-kimmo.rautkoski@vaisala.com>
- <20190429141915.GB12903@kroah.com>
- <HE1PR06MB30986E007789F2DAB69F2E33B4350@HE1PR06MB3098.eurprd06.prod.outlook.com>
-From:   Ian Arkver <ian.arkver.dev@gmail.com>
-Message-ID: <d4bc7860-c54b-571f-a4f9-1785fade15a1@gmail.com>
-Date:   Fri, 3 May 2019 15:57:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+Subject: Re: [PATCH v5 0/2] tty: serial: add DT bindings and serial driver
+ for the SiFive FU540 UART
+In-Reply-To: <7hsgtwlm5t.fsf@baylibre.com>
+Message-ID: <alpine.DEB.2.21.9999.1905031141530.4777@viisi.sifive.com>
+References: <20190413020111.23400-1-paul.walmsley@sifive.com> <7hmukmew5j.fsf@baylibre.com> <883f3d5f-9b04-1435-30d3-2b48ab7eb76d@wdc.com> <7h5zr9dcsi.fsf@baylibre.com> <f2bb876c-2b44-663b-ea06-d849f721fb6c@wdc.com> <7htvetbupi.fsf@baylibre.com>
+ <alpine.DEB.2.21.9999.1904191407310.5118@viisi.sifive.com> <7hsgtwlm5t.fsf@baylibre.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-In-Reply-To: <HE1PR06MB30986E007789F2DAB69F2E33B4350@HE1PR06MB3098.eurprd06.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi.
+On Thu, 2 May 2019, Kevin Hilman wrote:
 
-On 03/05/2019 13:10, Rautkoski Kimmo EXT wrote:
+> Paul Walmsley <paul.walmsley@sifive.com> writes:
 > 
+> > I'd recommend testing the DT patches with BBL and the open-source FSBL.  
+> > That's the traditional way of booting RISC-V Linux systems.
 > 
->> -----Original Message-----
->> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
->> Sent: Monday, 29 April, 2019 17:19
->> To: Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
->> Cc: linux-serial@vger.kernel.org
->> Subject: Re: [PATCH] serial: 8250: Fix TX interrupt handling condition
->>
->> On Fri, Apr 26, 2019 at 12:06:13PM +0000, Rautkoski Kimmo EXT wrote:
->>> Interrupt handler checked THRE bit (transmitter holding register
->>> empty) in LSR to detect if TX fifo is empty.
->>> In case when there is only receive interrupts the TX handling
->>> got called because THRE bit in LSR is set when there is no
->>> transmission (FIFO empty). TX handling caused TX stop, which in
->>> RS-485 half-duplex mode actually resets receiver FIFO. This is not
->>> desired during reception because of possible data loss.
->>>
->>> The fix is to use IIR instead of LSR to detect the TX fifo status.
->>> This ensures that TX handling is only called when there is really
->>> an interrupt for THRE and not when there is only RX interrupts.
->>>
->>> Signed-off-by: Kimmo Rautkoski <ext-kimmo.rautkoski@vaisala.com>
->>> ---
->>>   drivers/tty/serial/8250/8250_port.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/tty/serial/8250/8250_port.c
->> b/drivers/tty/serial/8250/8250_port.c
->>> index d2f3310..91ca0ca 100644
->>> --- a/drivers/tty/serial/8250/8250_port.c
->>> +++ b/drivers/tty/serial/8250/8250_port.c
->>> @@ -1875,7 +1875,7 @@ int serial8250_handle_irq(struct uart_port *port,
->> unsigned int iir)
->>>   			status = serial8250_rx_chars(up, status);
->>>   	}
->>>   	serial8250_modem_status(up);
->>> -	if ((!up->dma || up->dma->tx_err) && (status & UART_LSR_THRE))
->>> +	if ((!up->dma || up->dma->tx_err) && (iir & UART_IIR_THRI))
->>>   		serial8250_tx_chars(up);
->>
->> This feels wrong to me, can someone else test this to verify that it
->> really does work properly?  I don't have access to any 8250 devices at
->> the moment :(
->>
->> thanks,
->>
->> greg k-h
+> OK, but as you know, not the tradiaional way of booting most other linux
+> systems.  ;)
 > 
-> Thanks for checking this. There is indeed a problem with the patch. Interrupt ID in Interrupt Identification register is actually 3 bits, so the check should be different: ((iir & UART_IIR_ID) == UART_IIR_THRI)
-> 
-> I'll send v2 of the patch soon.
+> I'm working on getting RISC-V supported in kernelCI in a fully-automated
+> way, and I don't currently have the time to add add support for BBL+FSBL
+> to kernelCI automation tooling, so having u-boot support is the best way
+> to get support in kernelCI, IMO.
 
-Rather than switching to the IIR which can have other meanings for 
-devices with FIFOs (eg. FIFO space avail), or may be flaky (see 
-UART_BUG_THRE), could you continue to use the LSR THRE bit but also 
-check for up->ier & UART_IER_THRI. This is set in __start_tx and cleared 
-in __do_stop_tx.
+That's great.  Please keep hacking away on RISC-V support for kernelCI.  
+My point is just that the U-boot and OpenSBI software stack you're working 
+with is not going to be useful for automatic tests of some kernel patches 
+yet.  That stack is still very new, and was written around a non-upstream 
+set of DT data.  We are in the process of posting and merging patches to 
+fix that, but it's going to take a few releases of both the kernel and 
+those other boot stack components until things are sorted out in a more 
+durable way.
 
-It's really just doing in software what the IIR hardware should in 
-theory be doing for a regular 8250.
 
-Disclaimer: I don't have any such devices either.
-
-Regards,
-Ian
-
-> 
-> BR,
-> Kimmo
-> 
+- Paul
