@@ -2,96 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71376133D7
-	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2019 21:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CC613D0E
+	for <lists+linux-serial@lfdr.de>; Sun,  5 May 2019 06:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726914AbfECTFM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 3 May 2019 15:05:12 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:39049 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbfECTFM (ORCPT
+        id S1726395AbfEEELj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 5 May 2019 00:11:39 -0400
+Received: from es50001.diputaciodetarragona.cat ([195.76.233.47]:58643 "EHLO
+        es50001.diputaciodetarragona.cat" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726237AbfEEELj (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 3 May 2019 15:05:12 -0400
-Received: by mail-it1-f196.google.com with SMTP id t200so10668324itf.4
-        for <linux-serial@vger.kernel.org>; Fri, 03 May 2019 12:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=WUEvVuMZ7YPl2dVmcnur9vXgWXYbDp4Kv2NYf/KfC/E=;
-        b=YyLoqA+MOSgu5Z/mdOZYresCbnsrP9MOECqAR4bgemiqd1NPH4z1kTNshqMr1wGxrO
-         1ulkumKpTQ6uWLtA2Ene+eq+HrTs1KZoMqs9xg+p39iicmy0zTCL7uVABR+WOuDZA063
-         +oNPgr10wY9fURWnsMIn4Glzq/w4seTiQt6nzHUkagCRCpv7txThNbb5poKXXUtiaq0C
-         amJC+5CNfkSN3LxFTXn27zjZN09O67v/k/iPmRYOidALpODycYOWZxGJ1kWkYY3q8zeE
-         jHByq6IVQuw2xmMN/9K1zm6po5Ybx+hPTG4ELBhJgSBqEWzHWP+zmvqJygso2YzaXz1P
-         hhwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=WUEvVuMZ7YPl2dVmcnur9vXgWXYbDp4Kv2NYf/KfC/E=;
-        b=YtNrkIwIzfhR37I0GekWbbHV4Tkd9pvN1OozNRyvE4Iq5LLSnBT7R9RnomVMBFng4r
-         8nMdt/IZClbKE4wPJxcw3aCZAWUef1xlEfC3gI8n//6Qaa+RRo3TDtR6oo/cDRz0eSJl
-         ETpGEl+8ZNpJRVftbXteqSEcObZDGFE5PWSXA0u/c2teaDEYPXGWIE0kRw6HgGE4m9tN
-         PZlIudCwmpFNKdfm5O0T9dkvMHR/koAhsZ+EocTdp84/jeCToevIZi1brSYzGovsfnVJ
-         jZyoFPkVwabd2OU1dsA584r5p+GxVxuVDscS+//G3sm4Wmh72cyYNTqtxVOtxHMUiyfn
-         FJaw==
-X-Gm-Message-State: APjAAAX0JePspLMPmbk30WVwTVRnInF1Z5f6guV2yIVI89EqFm+Clf0i
-        2H8fJQM/uFezxUDiSS7CmdR6Sw==
-X-Google-Smtp-Source: APXvYqzFS3nViSd8Ml55qWBQUACdB1pGNmsO/5+y7g1p6Gt2X232FHXVSyZ7sg92TLGrQz/n1IlHPQ==
-X-Received: by 2002:a02:1146:: with SMTP id 67mr8522400jaf.10.1556910311443;
-        Fri, 03 May 2019 12:05:11 -0700 (PDT)
-Received: from localhost (74-95-18-198-Albuquerque.hfc.comcastbusiness.net. [74.95.18.198])
-        by smtp.gmail.com with ESMTPSA id d193sm1154451iog.34.2019.05.03.12.05.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 03 May 2019 12:05:10 -0700 (PDT)
-Date:   Fri, 3 May 2019 12:05:09 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Kevin Hilman <khilman@baylibre.com>
-cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v5 0/2] tty: serial: add DT bindings and serial driver
- for the SiFive FU540 UART
-In-Reply-To: <7hsgtwlm5t.fsf@baylibre.com>
-Message-ID: <alpine.DEB.2.21.9999.1905031141530.4777@viisi.sifive.com>
-References: <20190413020111.23400-1-paul.walmsley@sifive.com> <7hmukmew5j.fsf@baylibre.com> <883f3d5f-9b04-1435-30d3-2b48ab7eb76d@wdc.com> <7h5zr9dcsi.fsf@baylibre.com> <f2bb876c-2b44-663b-ea06-d849f721fb6c@wdc.com> <7htvetbupi.fsf@baylibre.com>
- <alpine.DEB.2.21.9999.1904191407310.5118@viisi.sifive.com> <7hsgtwlm5t.fsf@baylibre.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        Sun, 5 May 2019 00:11:39 -0400
+X-Greylist: delayed 581 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 May 2019 00:11:38 EDT
+Received: from es50001.diputaciodetarragona.cat (localhost.localdomain [127.0.0.1])
+        by localhost (Email Security Appliance) with SMTP id 09B351416A94_CCE6031B;
+        Sun,  5 May 2019 04:01:53 +0000 (GMT)
+Received: from correu.valls.cat (unknown [195.53.107.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by es50001.diputaciodetarragona.cat (Sophos Email Appliance) with ESMTPS id 52026142408B_CCE6030F;
+        Sun,  5 May 2019 04:01:52 +0000 (GMT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by correu.valls.cat (Postfix) with ESMTP id 4E1BE28004E;
+        Sun,  5 May 2019 06:03:21 +0200 (CEST)
+Received: from correu.valls.cat ([127.0.0.1])
+        by localhost (correu02.vallsnet.local [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id dVKaX821zXGI; Sun,  5 May 2019 06:03:21 +0200 (CEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by correu.valls.cat (Postfix) with ESMTP id A066C2804F0;
+        Sun,  5 May 2019 06:03:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at correu02.vallsnet.local
+Received: from correu.valls.cat ([127.0.0.1])
+        by localhost (correu02.vallsnet.local [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yz56dugr6guf; Sun,  5 May 2019 06:03:19 +0200 (CEST)
+Received: from correu01.vallsnet.local (correu01.vallsnet.local [10.65.4.2])
+        by correu.valls.cat (Postfix) with ESMTP id 1FC2328004E;
+        Sun,  5 May 2019 06:03:13 +0200 (CEST)
+Date:   Sun, 5 May 2019 06:02:49 +0200 (CEST)
+From:   Gav <turisme@valls.cat>
+Reply-To: Gav <2154233057@qq.com>
+Message-ID: <2122144104.3580132.1557028969669.JavaMail.zimbra@valls.cat>
+Subject: Hi gorgeous
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [134.91.230.32]
+X-Mailer: Zimbra 8.8.12_GA_3794 (zclient/8.8.12_GA_3794)
+Thread-Index: uGCE0F9u1Zgs1d6vrPXTGOsXzMv/CQ==
+Thread-Topic: Hi gorgeous
+X-SASI-RCODE: 200
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, 2 May 2019, Kevin Hilman wrote:
+My name is Gavin. I want to get to know you better, if I may be so bold. I consider myself an honest man, and I am currently looking for a relationship in which I feel loved. Please tell me more about yourself, if you don't mind.
 
-> Paul Walmsley <paul.walmsley@sifive.com> writes:
-> 
-> > I'd recommend testing the DT patches with BBL and the open-source FSBL.  
-> > That's the traditional way of booting RISC-V Linux systems.
-> 
-> OK, but as you know, not the tradiaional way of booting most other linux
-> systems.  ;)
-> 
-> I'm working on getting RISC-V supported in kernelCI in a fully-automated
-> way, and I don't currently have the time to add add support for BBL+FSBL
-> to kernelCI automation tooling, so having u-boot support is the best way
-> to get support in kernelCI, IMO.
-
-That's great.  Please keep hacking away on RISC-V support for kernelCI.  
-My point is just that the U-boot and OpenSBI software stack you're working 
-with is not going to be useful for automatic tests of some kernel patches 
-yet.  That stack is still very new, and was written around a non-upstream 
-set of DT data.  We are in the process of posting and merging patches to 
-fix that, but it's going to take a few releases of both the kernel and 
-those other boot stack components until things are sorted out in a more 
-durable way.
-
-
-- Paul
+Gavin.
