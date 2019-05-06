@@ -2,69 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D1914944
-	for <lists+linux-serial@lfdr.de>; Mon,  6 May 2019 14:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4ECF14FEF
+	for <lists+linux-serial@lfdr.de>; Mon,  6 May 2019 17:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725852AbfEFMEo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 May 2019 08:04:44 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:37812 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbfEFMEn (ORCPT
+        id S1726348AbfEFPTb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 May 2019 11:19:31 -0400
+Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com ([46.30.210.182]:33423
+        "EHLO mailrelay1-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726095AbfEFPTb (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 May 2019 08:04:43 -0400
-Received: by mail-ua1-f68.google.com with SMTP id l17so4540796uar.4
-        for <linux-serial@vger.kernel.org>; Mon, 06 May 2019 05:04:43 -0700 (PDT)
+        Mon, 6 May 2019 11:19:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=woNHKWCMV3Iuol1+WwEKGmkvpkweo+xgT+JeqC8FVv4=;
-        b=dTdYrfiM4HJAGKe4ex8HwJa1+qz/AhvEGtzWZRwLkVjNgx7jreOg426+qiSbqqLQbu
-         ib6TQ3FdqyWesLlrJdFig+kCii61i67/GhNRSQ+XBGaq+Jo37iNFIK54sq3u9OcyNvEv
-         GsH09zU+DAz1RAsydL/UAORTmsvfWqhmcr8Pp7jSWdLEccXrs1qc6RG2xBcST+WO5hbF
-         AliC8/35RICzRKjotkD6xWSdNWoLjJYgyR8KVDlqnj5nW62ceS7poDVzXiZp/7LWJG+k
-         z2Q1aQnA21k9ZW1Bn+30n7JcXkkslaAdctGivLyxzqbyyxTIbmaZDu/edq1tNeMo3xHw
-         FLYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=woNHKWCMV3Iuol1+WwEKGmkvpkweo+xgT+JeqC8FVv4=;
-        b=j93+5fyhIzCoSn8f0ZLKJeS/Dqmd/CGpsU9vbv8Vyo2JFaVXE5oVMZuEynvmRGBRcB
-         pfst9RCIyHk3a3pMkYXDvijdX2jExZmcXoCHeZ/iXSUSazkEc1KHyoV5ByJvcEBO9kjc
-         P8D9rS3NPzYx8jfIYrFoBcurtFnurmHlXUjFuW82Cqc8nnlXAKQa2481SFubNi1dOzLb
-         AQoseid0wY/sihBb9JHSCWE/d0N/QG1so5nlKEmGNr8Iv0VbQwzA9t7dCddlFXrVGF6s
-         jxel9WqsDc2K19oQm/me4rj+TnrA0cPZuFV7zVhO8CjULtaNA8UuV+SWG/SbSlyEWQqP
-         gKTw==
-X-Gm-Message-State: APjAAAVeQRyr0YddjDm12mlCvFb75RP0/FV7lQMi6ECdQWP4zislx2Ce
-        VApUxMo9zYUr51TI+EFYwDsFsJT/lBpb+MTbugM=
-X-Google-Smtp-Source: APXvYqyi1xoAlVoZ9ae2eezhWJ1iW7FIscKrpp6VX5X9QGylDDmfSxqc3y7XJ08yjZakHk7Sv5wOSR/f4Qsm40I+p7g=
-X-Received: by 2002:a9f:2085:: with SMTP id 5mr1074549uaa.53.1557144282483;
- Mon, 06 May 2019 05:04:42 -0700 (PDT)
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=tIIjXVsYUQfztV2HMDyykqPnej8ujRojeO25gbPLAx8=;
+        b=sb528pFjnouTzc+J3eVPhDX7vdvgMDXk7BFMuSZKambgzakehkG2af6Eb6srR1N1yDwoC8KtZnvPQ
+         FU0t8xwGzqIPbM+AC+LEjkp16i0sMn26is3+Dp4i+K8hz36uub3HsQdSayvF5pfuL9hum9evDt4e76
+         82cUEXBMxPHLOmcY=
+X-HalOne-Cookie: 97b3711e6a3e173542b3f9ed2cff811ff8f0d11a
+X-HalOne-ID: 56a34210-7012-11e9-be4a-d0431ea8a283
+Received: from localhost (unknown [193.163.1.7])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 56a34210-7012-11e9-be4a-d0431ea8a283;
+        Mon, 06 May 2019 15:19:27 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     "Enrico Weigelt\, metux IT consult" <lkml@metux.net>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
+References: <20190430140416.4707-1-esben@geanix.com>
+        <a535c7b6-54e0-ab58-7626-f7f631773c18@metux.net>
+Date:   Mon, 06 May 2019 17:19:27 +0200
+In-Reply-To: <a535c7b6-54e0-ab58-7626-f7f631773c18@metux.net> (Enrico
+        Weigelt's message of "Thu, 2 May 2019 21:41:01 +0200")
+Message-ID: <87imunobk0.fsf@haabendal.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-Reply-To: zia412@outlook.com
-Received: by 2002:ab0:754d:0:0:0:0:0 with HTTP; Mon, 6 May 2019 05:04:41 -0700 (PDT)
-From:   Ahmed Zama <zaaama250@gmail.com>
-Date:   Mon, 6 May 2019 14:04:41 +0200
-X-Google-Sender-Auth: mVxUqdkHYZbXU4hHXbWF2xO-Fpg
-Message-ID: <CAFdLk-3NNMjNFPNgbMdDvc3re1SfZ3dTYFx64WFKz6Q3N-u2nw@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings
+"Enrico Weigelt, metux IT consult" <lkml@metux.net> writes:
 
- I know that this note will surprise you as we never know ourselves. I
-am a banker by profession; I need your urgent assistance to transfer
-the sum of =E2=82=AC15 million Euros into your account. It is 100% risk fre=
-e
-and more details will be sent to you on confirmation of your interest.
+> On 30.04.19 16:04, Esben Haabendal wrote:
+>> Allow getting memory resource (mapbase or iobase) as well as irq from
+>> platform_device resources.
+>> 
+>> The UPF_DEV_RESOURCES flag must be set for devices where platform_device
+>> resources are to be used.  When not set, driver behaves as before.
+>> 
+>> This allows use of the serial8250 driver together with devices with
+>> resources added by platform_device_add_resources(), such as mfd child
+>> devices added with mfd_add_devices().
+>
+> I like the idea (actually, quite the direction I'd like to go), but
+> unfortunately it's more compilicated than that.
+>
+> Some drivers don't use these fields, eg. 8250 determines the mapsize
+> based on several factors, at the time of the mapping is done. That's
+> one of the things my patches shall clean up.
 
-Regards,
+Could you take a quick look at my patch again.  The patch only changes
+the probe method in the serial8250_isa_driver in 8250_core.c file.
 
-Ahmed Zama
+So other drivers are not affected by this change.
+
+And with the addition of the new UPF_DEV_RESOURCES flag, no existing
+platforms should be affected either.
+
+The patch merely makes it possible to start using plain "serial8250"
+driver (serial8250_isa_driver) with standard platform resources, fx. as
+implemented by mfd-core.
+
+/Esben
