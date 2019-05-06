@@ -2,33 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7417152E7
-	for <lists+linux-serial@lfdr.de>; Mon,  6 May 2019 19:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A8A15539
+	for <lists+linux-serial@lfdr.de>; Mon,  6 May 2019 23:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfEFRkM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 May 2019 13:40:12 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com ([46.30.210.183]:37861
-        "EHLO mailrelay2-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726517AbfEFRkL (ORCPT
+        id S1726338AbfEFVEm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 May 2019 17:04:42 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35659 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726324AbfEFVEm (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 May 2019 13:40:11 -0400
+        Mon, 6 May 2019 17:04:42 -0400
+Received: by mail-pg1-f196.google.com with SMTP id h1so7080390pgs.2;
+        Mon, 06 May 2019 14:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=haabendal.dk; s=20140924;
-        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
-         to:from:from;
-        bh=QvIXuHSMi14BbgpAu71CyRRHzUx37OGpE4k435JO/ew=;
-        b=MkebEHJxy/Ptg/tSISn8t20elUABLs5VBPAUjaKtmoUeDnFL+ppsnT112xciWn38oV6s9jAV5zMsD
-         icMY3u9sjspKLoEB8zuy6294GwriOl2X5LDBikWX/FK2qduTRZxWX1WJJRQmJxpUJDbDq8GIxhta1F
-         lwTJOJCLCRLhcLEY=
-X-HalOne-Cookie: 5d44f6536f09bb48291f160d6ae784b75b759e4b
-X-HalOne-ID: fd5217d1-7025-11e9-9368-d0431ea8a290
-Received: from localhost (unknown [87.49.44.240])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id fd5217d1-7025-11e9-9368-d0431ea8a290;
-        Mon, 06 May 2019 17:40:08 +0000 (UTC)
-From:   Esben Haabendal <esben@haabendal.dk>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4dZVddJX6dMijqEXGKkV471ROICyanljBDry/3kQwHE=;
+        b=rEWglwM7FrXe29arU/lKim1znCqIQIKo71qAmJUZ8tQeLam9LNqYnznBKa6vHh2M9q
+         fLYfBl2XMLeI7z3xwKHdzK6+DF65yuTxE02rgAa4lZsFxhD7EAygFJzfvDnGJdgACgUs
+         kierdsh75TiIZG80k+qjjHj9YCajOyTuWiooia+ThQMdYlKhcooIygGEoMGDuc/bJqNb
+         r5wu1nGOZWGUGD2g/fzHJleSRmFPYDUjuJ6kvEGdH6nrB5Krv3qyUmKeyvstyz/SvnBP
+         ItfexgvmNFlmdPZEaVOmE/TOJUOHybrbKsImBxQsX5vyiF0KwR/EP52NfPY2/l8FyxRh
+         POPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4dZVddJX6dMijqEXGKkV471ROICyanljBDry/3kQwHE=;
+        b=ZVcqDa8H6TNWLeuSfemyDCNrnu8HLBrxtPdNcHQisubVSbdcnOAvB3OhfiARSr8WOt
+         Kz1p8ADM1e86Ticvpwk9yUXQnFFu5+oHIh8shyUqUmXOip7+qMsJbL+OWfrq4UuwMsaD
+         3I8FfBr2Slh0c2U//gW8wVLp+9Pefroh1Xajikcr8qh7En1WQUDw96SzCcAlpHnZW0XA
+         gXyT4lCE6DbC/Ce3QTg1dG34ka7eTDm+kH3Sc2sVv0X2B35sNdsNF874BpArMVV4Bm7d
+         zWtgwIUU5onNfpGNIJA9WHjb9/582+/V92/8FLdZ9XPT7R01ij1ef2Any2cqQOX1mJXR
+         T48Q==
+X-Gm-Message-State: APjAAAXAlrSgZBMSavtl5nIwvLkAYWzVieWqkzFkEKWaH/fI0FdLxyI6
+        W8HAklkqQB1qPI4JK9f9yQ39AR0l72vHujElgq4=
+X-Google-Smtp-Source: APXvYqwkYd9R+WPJnLY9uPOahv8nf186eg24IAcFCrV7u8vAy0nUe9XlS1pkRvKRo3qfnyWJe01ZrID2vLEl3PI653Q=
+X-Received: by 2002:a63:dd58:: with SMTP id g24mr34753988pgj.161.1557176681420;
+ Mon, 06 May 2019 14:04:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190430140416.4707-1-esben@geanix.com> <20190430153736.GL9224@smile.fi.intel.com>
+ <874l6efxta.fsf@haabendal.dk> <20190502104556.GS9224@smile.fi.intel.com>
+ <87pnp11112.fsf@haabendal.dk> <20190502153124.GA9224@smile.fi.intel.com>
+ <87ef5boaa7.fsf@haabendal.dk> <20190506164426.GO9224@smile.fi.intel.com> <87o94f32iw.fsf@haabendal.dk>
+In-Reply-To: <87o94f32iw.fsf@haabendal.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 7 May 2019 00:04:30 +0300
+Message-ID: <CAHp75VevGGYiWPLE_T5cXFKSNHDh=ORUNC2xW_CwTAtYsS8S1A@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
+To:     Esben Haabendal <esben@haabendal.dk>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Enrico Weigelt <lkml@metux.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
@@ -38,137 +64,33 @@ Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
         He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
         Douglas Anderson <dianders@chromium.org>,
         Paul Burton <paul.burton@mips.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
-References: <20190430140416.4707-1-esben@geanix.com>
-        <20190430153736.GL9224@smile.fi.intel.com>
-        <874l6efxta.fsf@haabendal.dk>
-        <20190502104556.GS9224@smile.fi.intel.com>
-        <87pnp11112.fsf@haabendal.dk>
-        <20190502153124.GA9224@smile.fi.intel.com>
-        <87ef5boaa7.fsf@haabendal.dk>
-        <20190506164426.GO9224@smile.fi.intel.com>
-Date:   Mon, 06 May 2019 19:40:07 +0200
-In-Reply-To: <20190506164426.GO9224@smile.fi.intel.com> (Andy Shevchenko's
-        message of "Mon, 6 May 2019 19:44:26 +0300")
-Message-ID: <87o94f32iw.fsf@haabendal.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-> On Mon, May 06, 2019 at 05:46:56PM +0200, Esben Haabendal wrote:
->> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->> >> > On Wed, May 01, 2019 at 09:17:37AM +0200, Esben Haabendal wrote:
->> >> >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->
->> As an example, the sm501.c driver, the only driver in drivers/mfd/ which
->> uses serial8250 driver, does not use any code from mfd-core.
->> Incidentally, it is 1 year older than mfd-core.c, and as never been
->> refactored to use mfd-core functionality.
->
-> So, sm501.c should not request resources for its children. This as simple as
-> that.
+Let's start from simple things:
+- I really failed to find where resources are requested in
+mfd_add_device():
+https://elixir.bootlin.com/linux/latest/ident/mfd_add_device
+- as for 8250_dw.c (as MFD child of intel-lpss-pci.c) see below...
 
-Funny thing.  Even though sm501.c does not use mfd-core at all, it does
-request resources for all its child devices, except for the uart
-children.
+1. 8250_dw.c remaps resources, but doesn't request them.
+2. It calls
+ -> serial8250_register_8250_port(), which sets UPF_BOOT_AUTOCONF
+unconditionally, as you noticed
+  -> uart_add_one_port()
+   -> uart_configure_port()
+    -> port->ops->config_port(), if UPF_BOOT_AUTOCONF is set, see above
+3. And ->config_port() is defined to serial8250_config_port() in
+https://elixir.bootlin.com/linux/latest/source/drivers/tty/serial/8250/8250_port.c#L3147
 
-sm501_register_usbhost(), sm501_register_display() and
-sm501_register_gpio() all creates/requests resources.  But
-sm501_register_uart() does not.
+So, it *does* request resources implicitly via 8250 core.
 
-How many concrete examples are needed to convince you that what I am
-trying to do is how it is done everywhere else (than
-serial8250_core.c/serial8250_port.c, even in other 8250_*.c drivers)
-(obviously not 100% true, there are ofcourse other pieces of code not
-working well with resource management) ?
+I maybe miss something obvious, though.
 
-> What you are trying to do here is a hack workaround on the current
-> behaviour in the Linux device model (resource management) as I told
-> you already.
-
-No.  If it was, then all (most) mfd drivers added after 2008 are hacky
-workarounds, because the use mfd_add_devices().
-
-There are currently 53 drivers in drivers/mfd/ that calls
-mfd_add_devices() with one or more cells with resources attached.
-
-Are they all hacky workarounds?
-
-I am not trying to do anything that they are not already doing.
-
->> > Why not? Again, *slicing* resources is OK and that's what MFD for,
->> > *requesting*
->> > them in the parent is not.
->> 
->> Why we cannot use request_mem_region() for those memory resources again?
->
-> Because it's how it was designed. "One device per one resource". If you would
-> like to fix this, it should be done obviously not in 8250 driver or any other
-> driver, but driver core.
->
-> Nevertheless there is one particular exception here,
-> i.e. IORESOURCE_MUXED.
-
-I am not trying to fix the problem of having multiple drivers owning the
-same resource.  I am just trying to make serial8250 driver behave so it
-can use the resources that it is handed by mfd-core.
-
-This really is how it (mfd and also device resource management) is
-designed.  I am not inventing anything, or making a workaround.
-
-Actually, you should take a look at the following specialized 8250
-8250_aspeed_vuart.c
-8250_bcm2835aux.c
-8250_dw.c
-8250_em.c
-8250_ingenic.c
-8250_lpc18xx.c
-8250_mtk.c
-8250_omap.c
-8250_pxa.c
-8250_uniphier.c
-
-They all use platform_get_resource(), and will work nicely with mfd.
-And of-course, none of them use request_mem_region().
-
-So, if you want to insist that I create a clone of the current standard
-serial8250 driver (serial8250_isa_driver in 8520_core.c), even though I
-want absolutely nothing specialized, just need it to play nicely with
-platform_get_resource(), what should I call the driver?  8520_plat.c ?
-
->> It fails because the resources are now already owned the mfd driver, on
->> behalf of the child.
->
-> Yes. Behaves in order how it's implementer. No issues here.
-
-If that was the case, then mfd-core would be implemented in order to not
-work with existing platform drivers.  There definitely is an issue
-here.  And it is in 8250_core.c and 8250_port.c.
-
->> > Nope, *requesting* resources as you mentioned lock them to the certain user.
->> 
->> I still think there is some confusion in relation to your use of the
->> word "requesting".  There is no explicit request/lock action in
->> kernel/resource.c.
->
-> You have to check IORESOURCE_BUSY. It seems that what you missed in your
-> picture.
-
-Point taken.  I haven't put much focus on that.  But I don't see how
-that is going to help making use of serial8250_isa_driver in combination
-with mfd_add_devices().  I am not creating/requesting the resources.
-That is done by mfd_add_device(), which I fail to see why I would need
-to change.
-
-> I didn't comment the rest until we will figure out the IO resource management
-> in general.
-
-I believe all my comments were related to this same resource management
-discussion.
-
-/Esben
+-- 
+With Best Regards,
+Andy Shevchenko
