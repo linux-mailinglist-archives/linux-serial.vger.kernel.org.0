@@ -2,266 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8DA1630F
-	for <lists+linux-serial@lfdr.de>; Tue,  7 May 2019 13:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74311631D
+	for <lists+linux-serial@lfdr.de>; Tue,  7 May 2019 13:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbfEGLtK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 May 2019 07:49:10 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52816 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfEGLtK (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 May 2019 07:49:10 -0400
-Received: by mail-wm1-f66.google.com with SMTP id o25so8926150wmf.2
-        for <linux-serial@vger.kernel.org>; Tue, 07 May 2019 04:49:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=WaB9FrChMlT+hKDw9IPExf1c79Rgm6Ezzn05/0LC6oE=;
-        b=HVZ1TpAkoj5uGcpHvFQuMURkx8qCxk33cIXBSrUp/e84yoTlMW1DQA2+i49XI5z5k/
-         vGUG7FCrQvQokOBOeXJHMHDKPgNKQO/vK2Teod7QHyjeljZmNLHyA3jQasizRcTTXvH5
-         tcZxFanueqsTeA+Ja0eKZSOzvfVMlvrbxLywb5Bx/g5aSYFh+6f/V+HmZvcsZQ2+HLV9
-         KxLYHD8LqtPgTuAWrNQlQa7mxcf8j0Rblg5JudPGg9zkxcfwMr2xYa9eaaekSpTMDmos
-         X0TqTcLCD70wLg09+AMnwFyG0M98dZCrn/e1uLBvg2NqNIZxT2iYjjYIOgAIS66t8Ogt
-         zjTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=WaB9FrChMlT+hKDw9IPExf1c79Rgm6Ezzn05/0LC6oE=;
-        b=i++/Z9JLzlVq4sd02mN6nSLby75NRyBcxRTyhM9l9BA4cZ1NIcsKFLNWE+ghwxht6V
-         1t470tzKgNxkF/YSm/0LAYMlo2M5Ny9aM3fjcIao3Mw+z01gynRQShw+rmfJGwmdcmnq
-         yN83QEvwulEtxa4/2/DEDxUh2PnRcXjPQGOdfdvSkG5Y9KQAh7wu0GpczAOj9WqkxgSx
-         yIh1Ah8gRwqO8e4XpjOLczxRJ3wdlWCYkhszI5NQTuVN/UI3qBX2Hz/kSrr4oSTckwOZ
-         MDXVIBVXOBU9iB1+T9x8fYmHPsCYvlq6YI6LEFSkOEDDuWFoP2uZdYTpDET5tgVDs108
-         Qfaw==
-X-Gm-Message-State: APjAAAWE/xajeWIp5zSWeQsNE2WcT6kM2OSiqwJ4/gMtNO45rVEFOX3C
-        UGrD+VG9p3jAUxPlJPkM9RcUyw==
-X-Google-Smtp-Source: APXvYqzoS0C54HO6RQmx/tdz86kSEEnHfi+Bn9M5bbK4QmlFjUCeFT/JMmBPVDeRAe1LtkX1D6dKdg==
-X-Received: by 2002:a1c:1c8:: with SMTP id 191mr12726066wmb.101.1557229747724;
-        Tue, 07 May 2019 04:49:07 -0700 (PDT)
-Received: from dell ([2.27.167.43])
-        by smtp.gmail.com with ESMTPSA id d14sm11395878wre.78.2019.05.07.04.49.06
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 May 2019 04:49:07 -0700 (PDT)
-Date:   Tue, 7 May 2019 12:49:05 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Esben Haabendal <esben@geanix.com>
-Cc:     linux-serial@vger.kernel.org,
+        id S1726322AbfEGLxb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 May 2019 07:53:31 -0400
+Received: from mga02.intel.com ([134.134.136.20]:22953 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725858AbfEGLxb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 7 May 2019 07:53:31 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 May 2019 04:53:31 -0700
+X-ExtLoop1: 1
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
+  by fmsmga006.fm.intel.com with ESMTP; 07 May 2019 04:53:27 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hNyez-00033G-L0; Tue, 07 May 2019 14:53:25 +0300
+Date:   Tue, 7 May 2019 14:53:25 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Esben Haabendal <esben@haabendal.dk>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
+        Enrico Weigelt <lkml@metux.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD
- function
-Message-ID: <20190507114905.GB29524@dell>
-References: <20190426084038.6377-1-esben@geanix.com>
- <20190426084038.6377-3-esben@geanix.com>
+Subject: Re: [PATCH] serial: 8250: Add support for using platform_device
+ resources
+Message-ID: <20190507115325.GV9224@smile.fi.intel.com>
+References: <20190430140416.4707-1-esben@geanix.com>
+ <20190430153736.GL9224@smile.fi.intel.com>
+ <874l6efxta.fsf@haabendal.dk>
+ <20190502104556.GS9224@smile.fi.intel.com>
+ <87pnp11112.fsf@haabendal.dk>
+ <20190507093239.GB4529@dell>
+ <87sgtqjy3l.fsf@haabendal.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190426084038.6377-3-esben@geanix.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <87sgtqjy3l.fsf@haabendal.dk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 26 Apr 2019, Esben Haabendal wrote:
-
-> The serial8250-mfd driver is for adding 8250/16550 UART ports as functions
-> to an MFD driver.
+On Tue, May 07, 2019 at 01:35:58PM +0200, Esben Haabendal wrote:
+> Lee Jones <lee.jones@linaro.org> writes:
+> > On Thu, 02 May 2019, Esben Haabendal wrote:
+> >
+> >> Could you help clarify whether or not this patch is trying to do
+> >> something odd/wrong?
+> >> 
+> >> I might be misunderstanding Andy (probably is), but the discussion
+> >> revolves around the changes I propose where I change the serial8250
+> >> driver to use platform_get_resource() in favour of
+> >> request_mem_region()/release_mem_region().
+> >
+> > Since 'serial8250' is registered as a platform device, I don't see any
+> > reason why it shouldn't have the capability to obtain its memory
+> > regions from the platform_get_*() helpers.
 > 
-> When calling mfd_add_device(), platform_data should be a pointer to a
-> struct plat_serial8250_port, with proper settings like .flags, .type,
-> .iotype, .regshift and .uartclk.  Memory (or ioport) and IRQ should be
-> passed as cell resources.
-
-What?  No, please!
-
-If you *must* create a whole driver just to be able to use
-platform_*() helpers (which I don't think you should), then please
-call it something else.  This doesn't have anything to do with MFD.
-
-> Do not include UPF_BOOT_AUTOCONF in platform_data.flags.
+> Good to hear.  That is exactly what I am trying do with this patch.
 > 
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
-> ---
->  drivers/tty/serial/8250/8250_mfd.c | 119 +++++++++++++++++++++++++++++++++++++
->  drivers/tty/serial/8250/Kconfig    |  12 ++++
->  drivers/tty/serial/8250/Makefile   |   1 +
->  3 files changed, 132 insertions(+)
->  create mode 100644 drivers/tty/serial/8250/8250_mfd.c
-> 
-> diff --git a/drivers/tty/serial/8250/8250_mfd.c b/drivers/tty/serial/8250/8250_mfd.c
-> new file mode 100644
-> index 0000000..eae1566
-> --- /dev/null
-> +++ b/drivers/tty/serial/8250/8250_mfd.c
-> @@ -0,0 +1,119 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + *  Serial Port driver for 8250/16550-type MFD sub devices
-> + *
-> + *  This mimics the serial8250_probe of 8250_core.c, while allowing
-> + *  use without UPF_BOOT_AUTOCONF, which is problematic for MFD, as
-> + *  the request_mem_region() will typically fail as the region is
-> + *  already requested by the MFD device.
-> + *
-> + *  Memory and irq are passed as platform resources, which allows easy
-> + *  use together with (devm_)mfd_add_devices().
-> + *
-> + *  Other parameters are passed as struct plat_serial8250_port in
-> + *  device platform_data.
-> + */
-> +
-> +#include <linux/platform_device.h>
-> +#include <linux/module.h>
-> +#include <linux/io.h>
-> +#include <linux/serial_8250.h>
-> +
-> +struct serial8250_mfd_data {
-> +	int			line;
-> +};
-> +
-> +static int serial8250_mfd_probe(struct platform_device *pdev)
-> +{
-> +	struct plat_serial8250_port *pdata = dev_get_platdata(&pdev->dev);
-> +	struct serial8250_mfd_data *data;
-> +	struct uart_8250_port up;
-> +	struct resource *r;
-> +	void __iomem *membase;
-> +
-> +	if (!pdata)
-> +		return -ENODEV;
-> +
-> +	memset(&up, 0, sizeof(up));
-> +
-> +	switch (pdata->iotype) {
-> +	case UPIO_AU:
-> +	case UPIO_TSI:
-> +	case UPIO_MEM32:
-> +	case UPIO_MEM32BE:
-> +	case UPIO_MEM16:
-> +	case UPIO_MEM:
-> +		r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +		if (!r)
-> +			return -ENODEV;
-> +		membase = devm_ioremap_nocache(&pdev->dev,
-> +					       r->start, resource_size(r));
-> +		if (!membase)
-> +			return -ENOMEM;
-> +		up.port.mapbase = r->start;
-> +		up.port.membase = membase;
-> +		break;
-> +	case UPIO_HUB6:
-> +	case UPIO_PORT:
-> +		r = platform_get_resource(pdev, IORESOURCE_IO, 0);
-> +		if (!r)
-> +			return -ENODEV;
-> +		up.port.iobase = r->start;
-> +		break;
-> +	}
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	up.port.irq = platform_get_irq(pdev, 0);
-> +	if (up.port.irq < 0)
-> +		up.port.irq = 0; /* no interrupt -> use polling */
-> +
-> +	/* Register with 8250_core.c */
-> +	up.port.irqflags = pdata->irqflags;
-> +	up.port.uartclk = pdata->uartclk;
-> +	up.port.regshift = pdata->regshift;
-> +	up.port.iotype = pdata->iotype;
-> +	up.port.flags = pdata->flags;
-> +	up.port.hub6 = pdata->hub6;
-> +	up.port.private_data = pdata->private_data;
-> +	up.port.type = pdata->type;
-> +	up.port.serial_in = pdata->serial_in;
-> +	up.port.serial_out = pdata->serial_out;
-> +	up.port.handle_irq = pdata->handle_irq;
-> +	up.port.handle_break = pdata->handle_break;
-> +	up.port.set_termios = pdata->set_termios;
-> +	up.port.set_ldisc = pdata->set_ldisc;
-> +	up.port.get_mctrl = pdata->get_mctrl;
-> +	up.port.pm = pdata->pm;
-> +	up.port.dev = &pdev->dev;
-> +	data->line = __serial8250_register_8250_port(&up, 0);
-> +	if (data->line < 0)
-> +		return data->line;
-> +
-> +	platform_set_drvdata(pdev, data);
-> +	return 0;
-> +}
-> +
-> +static int serial8250_mfd_remove(struct platform_device *pdev)
-> +{
-> +	struct serial8250_mfd_data *data = platform_get_drvdata(pdev);
-> +
-> +	serial8250_unregister_port(data->line);
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver serial8250_mfd_driver = {
-> +	.probe = serial8250_mfd_probe,
-> +	.remove = serial8250_mfd_remove,
-> +	.driver = {
-> +		.name = "serial8250-mfd",
-> +	},
-> +};
-> +
-> +module_platform_driver(serial8250_mfd_driver);
-> +
-> +MODULE_AUTHOR("Esben Haabendal <esben@geanix.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Driver for 8250/16550-type MFD sub devices");
-> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-> index 15c2c54..ef1572b 100644
-> --- a/drivers/tty/serial/8250/Kconfig
-> +++ b/drivers/tty/serial/8250/Kconfig
-> @@ -58,6 +58,18 @@ config SERIAL_8250_PNP
->  	  This builds standard PNP serial support. You may be able to
->  	  disable this feature if you only need legacy serial support.
->  
-> +config SERIAL_8250_MFD
-> +	bool "8250/16550 MFD function support"
-> +	depends on SERIAL_8250 && MFD_CORE
-> +	default n
-> +	help
-> +	  This builds support for using 8250/16550-type UARTs as MFD
-> +	  functions.
-> +
-> +	  MFD drivers needing this should select it automatically.
-> +
-> +	  If unsure, say N.
-> +
->  config SERIAL_8250_FINTEK
->  	bool "Support for Fintek F81216A LPC to 4 UART RS485 API"
->  	depends on SERIAL_8250
-> diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-> index 18751bc..da8e139 100644
-> --- a/drivers/tty/serial/8250/Makefile
-> +++ b/drivers/tty/serial/8250/Makefile
-> @@ -6,6 +6,7 @@
->  obj-$(CONFIG_SERIAL_8250)		+= 8250.o 8250_base.o
->  8250-y					:= 8250_core.o
->  8250-$(CONFIG_SERIAL_8250_PNP)		+= 8250_pnp.o
-> +8250-$(CONFIG_SERIAL_8250_MFD)		+= 8250_mfd.o
->  8250_base-y				:= 8250_port.o
->  8250_base-$(CONFIG_SERIAL_8250_DMA)	+= 8250_dma.o
->  8250_base-$(CONFIG_SERIAL_8250_FINTEK)	+= 8250_fintek.o
+> @Andy: If you still don't like my approach, could you please advice an
+> acceptable method for improving the serial8250 driver to allow the use
+> of platform_get_*() helpers?
+
+I still don't get why you need this.
+
+If it's MFD, you may use "serial8250" with a given platform data like dozens of
+current users do.
+
+Another approach is to use 8250 library, thus, creating a specific glue driver
+(like all 8250_* do).
+
+Yes, I understand that 8250 driver is full of quirks and not modern approaches
+to do one or another thing. Unfortunately it's not too easy to fix it without
+uglifying code and doing some kind of ping-pong thru the conversion. I don't
+think it worth to do it in the current state of affairs. Though, cleaning up
+the core part from the quirks and custom pieces would make this task
+achievable.
+
+I'm also puzzled why you don't use FPGA manager which should handle, as far as
+I understand, very flexible configurations of FPGAs.
+
+Btw, what exact IP of UART do you have implemented there?
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+With Best Regards,
+Andy Shevchenko
+
+
