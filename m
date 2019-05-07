@@ -2,34 +2,34 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A46162D7
-	for <lists+linux-serial@lfdr.de>; Tue,  7 May 2019 13:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78ECD162E9
+	for <lists+linux-serial@lfdr.de>; Tue,  7 May 2019 13:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbfEGLcq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 May 2019 07:32:46 -0400
-Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com ([46.30.210.182]:51286
-        "EHLO mailrelay1-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726329AbfEGLcq (ORCPT
+        id S1726329AbfEGLgC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 May 2019 07:36:02 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com ([46.30.210.185]:21955
+        "EHLO mailrelay4-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726276AbfEGLgC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 May 2019 07:32:46 -0400
+        Tue, 7 May 2019 07:36:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=haabendal.dk; s=20140924;
         h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
          to:from:from;
-        bh=lFL8IZmKwJqoyNss0tfJ1Sb2p+/9FnYRZqyq6BeOLTg=;
-        b=puvTEdg70iRNAavyyF4jNiJRXxF3z2FPpW+jbQNgS4Q9Oe1Kt9lBJykrPbzDf3hKxjMg41yRPxUt0
-         C8FFZZH4ucG3joNvI0sceCYCxTSkZWpKyoTlXqNGCZ9mUEjt50aqf5I1BPAJlykM5BTbhEoaQZFT0k
-         OeemWS+2tTmyFCQY=
-X-HalOne-Cookie: 07c12b20bf8977491cce9da87c47e1242f400d49
-X-HalOne-ID: d34e2284-70bb-11e9-be4a-d0431ea8a283
+        bh=Uh3f7qnRbSQQXQkMm0s19BuoSqf0wRLQse1bOkuUKK4=;
+        b=Grhq43zgaue0On9gftW7qUtepFq7wFqh+NFFWeBHc70giS3ymHNBOEJ5rauaVsT3JU3s3ZhXnDAlw
+         XwHNudsR3VU4yi8ZHoTTHDy4yld5B+unu8JLqMbDkewSaSZOOsD/6sRglaAJRGElsGQH/0Xg+AwXcQ
+         9W1PiOX7GOxXNSH4=
+X-HalOne-Cookie: fac621c1e4a6af216c8d436403609853b7145ede
+X-HalOne-ID: 486930ec-70bc-11e9-a343-d0431ea8bb10
 Received: from localhost (unknown [193.163.1.7])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id d34e2284-70bb-11e9-be4a-d0431ea8a283;
-        Tue, 07 May 2019 11:32:41 +0000 (UTC)
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 486930ec-70bc-11e9-a343-d0431ea8bb10;
+        Tue, 07 May 2019 11:35:58 +0000 (UTC)
 From:   Esben Haabendal <esben@haabendal.dk>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+To:     Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
@@ -45,11 +45,10 @@ References: <20190430140416.4707-1-esben@geanix.com>
         <874l6efxta.fsf@haabendal.dk>
         <20190502104556.GS9224@smile.fi.intel.com>
         <87pnp11112.fsf@haabendal.dk> <20190507093239.GB4529@dell>
-        <20190507093631.GC4529@dell>
-Date:   Tue, 07 May 2019 13:32:41 +0200
-In-Reply-To: <20190507093631.GC4529@dell> (Lee Jones's message of "Tue, 7 May
-        2019 10:36:31 +0100")
-Message-ID: <87woj2jy92.fsf@haabendal.dk>
+Date:   Tue, 07 May 2019 13:35:58 +0200
+In-Reply-To: <20190507093239.GB4529@dell> (Lee Jones's message of "Tue, 7 May
+        2019 10:32:39 +0100")
+Message-ID: <87sgtqjy3l.fsf@haabendal.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -59,36 +58,24 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 Lee Jones <lee.jones@linaro.org> writes:
-
-> On Tue, 07 May 2019, Lee Jones wrote:
->> On Thu, 02 May 2019, Esben Haabendal wrote:
->> 
->> > Could you help clarify whether or not this patch is trying to do
->> > something odd/wrong?
->> > 
->> > I might be misunderstanding Andy (probably is), but the discussion
->> > revolves around the changes I propose where I change the serial8250
->> > driver to use platform_get_resource() in favour of
->> > request_mem_region()/release_mem_region().
->> 
->> Since 'serial8250' is registered as a platform device, I don't see any
->> reason why it shouldn't have the capability to obtain its memory
->> regions from the platform_get_*() helpers.
+> On Thu, 02 May 2019, Esben Haabendal wrote:
 >
-> Not sure which device you're trying to enable, but if it's booted
-> using Device Tree, you could always use 'of_serial'.
+>> Could you help clarify whether or not this patch is trying to do
+>> something odd/wrong?
+>> 
+>> I might be misunderstanding Andy (probably is), but the discussion
+>> revolves around the changes I propose where I change the serial8250
+>> driver to use platform_get_resource() in favour of
+>> request_mem_region()/release_mem_region().
+>
+> Since 'serial8250' is registered as a platform device, I don't see any
+> reason why it shouldn't have the capability to obtain its memory
+> regions from the platform_get_*() helpers.
 
-It is an x86_64 platform, so there is unfortunately no device tree.
+Good to hear.  That is exactly what I am trying do with this patch.
 
-> It does seem a little odd that the 'serial8250' IP block has been
-> incorporated into an MFD.  Which device is it you're trying to enable
-> exactly? 
-
-It is a Xilinx FPGA, containing a number of different devices, including
-5 16550A UART devices (XPS 16550 UART v3.00a).  It also contains 3
-Ethernet interfaces and a number of custom IP blocks.
-
-The FPGA is connected to the CPU using PCIe, with all devices using
-parts of a big common io memory block, specified by a PCI BAR.
+@Andy: If you still don't like my approach, could you please advice an
+acceptable method for improving the serial8250 driver to allow the use
+of platform_get_*() helpers?
 
 /Esben
