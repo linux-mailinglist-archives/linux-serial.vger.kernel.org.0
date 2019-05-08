@@ -2,46 +2,40 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C858F17953
-	for <lists+linux-serial@lfdr.de>; Wed,  8 May 2019 14:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCED179CB
+	for <lists+linux-serial@lfdr.de>; Wed,  8 May 2019 14:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728494AbfEHMWK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 8 May 2019 08:22:10 -0400
-Received: from mx.socionext.com ([202.248.49.38]:8119 "EHLO mx.socionext.com"
+        id S1726634AbfEHMzg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 8 May 2019 08:55:36 -0400
+Received: from mx.socionext.com ([202.248.49.38]:8343 "EHLO mx.socionext.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728469AbfEHMWJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 8 May 2019 08:22:09 -0400
-Received: from unknown (HELO iyokan-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 08 May 2019 21:22:07 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan-ex.css.socionext.com (Postfix) with ESMTP id 603886117D;
-        Wed,  8 May 2019 21:22:07 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 8 May 2019 21:22:07 +0900
+        id S1726444AbfEHMzf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 8 May 2019 08:55:35 -0400
+Received: from unknown (HELO kinkan-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 08 May 2019 21:55:34 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by kinkan-ex.css.socionext.com (Postfix) with ESMTP id D817B180B3E;
+        Wed,  8 May 2019 21:55:34 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 8 May 2019 21:55:34 +0900
 Received: from yuzu.css.socionext.com (yuzu [172.31.8.45])
-        by kinkan.css.socionext.com (Postfix) with ESMTP id D14B81A04E1;
-        Wed,  8 May 2019 21:22:06 +0900 (JST)
+        by kinkan.css.socionext.com (Postfix) with ESMTP id 8964B1A04E1;
+        Wed,  8 May 2019 21:55:34 +0900 (JST)
 Received: from [127.0.0.1] (unknown [10.213.119.83])
-        by yuzu.css.socionext.com (Postfix) with ESMTP id BCB33121BCE;
-        Wed,  8 May 2019 21:22:06 +0900 (JST)
-Subject: Re: [PATCH v3] serial: Add Milbeaut serial control
-To:     Alan Cox <gnomes@lxorguk.ukuu.org.uk>
+        by yuzu.css.socionext.com (Postfix) with ESMTP id 7AB7A121BCE;
+        Wed,  8 May 2019 21:55:34 +0900 (JST)
+Subject: Re: serial: Add Milbeaut serial control
+To:     Colin Ian King <colin.king@canonical.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Takao Orito <orito.takao@socionext.com>,
-        Kazuhiro Kasai <kasai.kazuhiro@socionext.com>,
-        Shinji Kanematsu <kanematsu.shinji@socionext.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <1555555916-22251-1-git-send-email-sugaya.taichi@socionext.com>
- <20190426191515.757e6015@alans-desktop>
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <246f81ba-0ed1-d5bc-1a48-bcf0fb2cc05e@canonical.com>
 From:   "Sugaya, Taichi" <sugaya.taichi@socionext.com>
-Message-ID: <93002681-37f8-cb12-725c-48c1695d29a0@socionext.com>
-Date:   Wed, 8 May 2019 21:22:05 +0900
+Message-ID: <d19f16aa-1066-9a51-a743-4483a1b2ac46@socionext.com>
+Date:   Wed, 8 May 2019 21:55:33 +0900
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190426191515.757e6015@alans-desktop>
+In-Reply-To: <246f81ba-0ed1-d5bc-1a48-bcf0fb2cc05e@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,66 +48,28 @@ Hi,
 
 Thank you for pointing out.
 
-On 2019/04/27 3:15, Alan Cox wrote:
-> O
->> +static void mlb_usio_set_termios(struct uart_port *port,
->> +			struct ktermios *termios, struct ktermios *old)
->> +{
->> +	unsigned int escr, smr = MLB_USIO_SMR_SOE;
->> +	unsigned long flags, baud, quot;
->> +
->> +	switch (termios->c_cflag & CSIZE) {
->> +	case CS5:
->> +		escr = MLB_USIO_ESCR_L_5BIT;
->> +		break;
->> +	case CS6:
->> +		escr = MLB_USIO_ESCR_L_6BIT;
->> +		break;
->> +	case CS7:
->> +		escr = MLB_USIO_ESCR_L_7BIT;
->> +		break;
->> +	case CS8:
->> +	default:
->> +		escr = MLB_USIO_ESCR_L_8BIT;
->> +		break;
->> +	}
->> +
->> +	if (termios->c_cflag & CSTOPB)
->> +		smr |= MLB_USIO_SMR_SBL;
->> +
->> +	if (termios->c_cflag & PARENB) {
->> +		escr |= MLB_USIO_ESCR_PEN;
->> +		if (termios->c_cflag & PARODD)
->> +			escr |= MLB_USIO_ESCR_P;
->> +	}
+On 2019/05/02 20:47, Colin Ian King wrote:
+> Hi,
 > 
-> If you don't suport CMSPAR then clear that bit in termios as well
+> Static analysis with Coverity has picked up an issue in commit:
 > 
+> commit ba44dc04300441b47618f9933bf36e75a280e5fe
+> Author: Sugaya Taichi <sugaya.taichi@socionext.com>
+> Date:   Mon Apr 15 20:31:40 2019 +0900
+> 
+>      serial: Add Milbeaut serial control
+> 
+> In function mlb_usio_rx_chars() the u8 status is being bit-wise AND'd
+> with MLB_USIO_SSR_BRK (which is 1UL << 8) and hence the result is always
+> false, which looks incorrect to me.  Is this intentional?
+>
 
-OK, clear the bit because of not supported.
-
->> +	/* Set hard flow control */
->> +	if (of_property_read_bool(port->dev->of_node, "auto-flow-control") ||
->> +			(termios->c_cflag & CRTSCTS))
->> +		escr |= MLB_USIO_ESCR_FLWEN;
-> 
-> That's just broken. The termios bits are the definitive things for the
-> port, and in addition even if they are forced you need to correct the
-> termios data.
-> 
-> You might want to control flow control *at boot* with an OF property but
-> doing it post boot is just busted.
-> 
-
-Ah, Yes.
-I think OF property should not be here, and it may only be used to determine
-the characteristics of the port.
-I try to make a fixes patch.
+No. It is always false so should be dropped.
+I will send a fixes patch.
 
 Thanks,
 Sugaya Taichi
 
-
-> Alan
+> Colin
 > 
 
