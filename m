@@ -2,22 +2,27 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32ABC1B765
-	for <lists+linux-serial@lfdr.de>; Mon, 13 May 2019 15:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6DB1BA48
+	for <lists+linux-serial@lfdr.de>; Mon, 13 May 2019 17:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbfEMNvR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 13 May 2019 09:51:17 -0400
-Received: from sauhun.de ([88.99.104.3]:40712 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729465AbfEMNvR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 13 May 2019 09:51:17 -0400
-Received: from localhost (p54B3324F.dip0.t-ipconnect.de [84.179.50.79])
-        by pokefinder.org (Postfix) with ESMTPSA id 745163E42F7;
-        Mon, 13 May 2019 15:51:14 +0200 (CEST)
-Date:   Mon, 13 May 2019 15:51:14 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     "George G. Davis" <ggdavisiv@gmail.com>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        id S1727587AbfEMPnT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 13 May 2019 11:43:19 -0400
+Received: from relay1.mentorg.com ([192.94.38.131]:37075 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726274AbfEMPnT (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 13 May 2019 11:43:19 -0400
+Received: from svr-orw-mbx-01.mgc.mentorg.com ([147.34.90.201])
+        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
+        id 1hQD6c-0001Xa-5u from George_Davis@mentor.com ; Mon, 13 May 2019 08:43:10 -0700
+Received: from localhost (147.34.91.1) by svr-orw-mbx-01.mgc.mentorg.com
+ (147.34.90.201) with Microsoft SMTP Server (TLS) id 15.0.1320.4; Mon, 13 May
+ 2019 08:43:07 -0700
+Date:   Mon, 13 May 2019 11:43:06 -0400
+From:   "George G. Davis" <george_davis@mentor.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+CC:     "George G. Davis" <ggdavisiv@gmail.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
@@ -32,87 +37,70 @@ Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
         OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
         <devicetree@vger.kernel.org>, Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "George G. Davis" <george_davis@mentor.com>
+        Mark Rutland <mark.rutland@arm.com>
 Subject: Re: [PATCH] serial: sh-sci: disable DMA for uart_console
-Message-ID: <20190513135114.GA20443@kunai>
+Message-ID: <20190513154306.GA6060@mam-gdavis-lt>
 References: <20190506194233.GA32430@vmlxhi-102.adit-jv.com>
  <1557413011-1662-1-git-send-email-george_davis@mentor.com>
+ <20190513135114.GA20443@kunai>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d6Gm4EdcadzBjdND"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1557413011-1662-1-git-send-email-george_davis@mentor.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190513135114.GA20443@kunai>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-ClientProxiedBy: svr-orw-mbx-01.mgc.mentorg.com (147.34.90.201) To
+ svr-orw-mbx-01.mgc.mentorg.com (147.34.90.201)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hello Wolfram,
 
---d6Gm4EdcadzBjdND
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 13, 2019 at 03:51:14PM +0200, Wolfram Sang wrote:
+> On Thu, May 09, 2019 at 10:43:30AM -0400, George G. Davis wrote:
+> > As noted in commit 84b40e3b57ee ("serial: 8250: omap: Disable DMA for
+> > console UART"), UART console lines use low-level PIO only access functions
+> > which will conflict with use of the line when DMA is enabled, e.g. when
+> > the console line is also used for systemd messages. So disable DMA
+> > support for UART console lines.
+> > 
+> > Fixes: https://patchwork.kernel.org/patch/10929511/
+> > Reported-by: Michael Rodin <mrodin@de.adit-jv.com>
+> > Cc: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > Signed-off-by: George G. Davis <george_davis@mentor.com>
+> > ---
+> >  drivers/tty/serial/sh-sci.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> > index 3cd139752d3f..885b56b1d4e4 100644
+> > --- a/drivers/tty/serial/sh-sci.c
+> > +++ b/drivers/tty/serial/sh-sci.c
+> > @@ -1557,6 +1557,9 @@ static void sci_request_dma(struct uart_port *port)
+> >  
+> >  	dev_dbg(port->dev, "%s: port %d\n", __func__, port->line);
+> >  
+> > +	if (uart_console(port))
+> > +		return; /* Cannot use DMA on console */
+> 
+> Minor nit: maybe the comment can be made more specific?
+> 
+> /*
+>  * DMA on console may interfere with Kernel log messages which use
+>  * plain putchar(). So, simply don't use it with a console.
+>  */
 
-On Thu, May 09, 2019 at 10:43:30AM -0400, George G. Davis wrote:
-> As noted in commit 84b40e3b57ee ("serial: 8250: omap: Disable DMA for
-> console UART"), UART console lines use low-level PIO only access functions
-> which will conflict with use of the line when DMA is enabled, e.g. when
-> the console line is also used for systemd messages. So disable DMA
-> support for UART console lines.
->=20
-> Fixes: https://patchwork.kernel.org/patch/10929511/
-> Reported-by: Michael Rodin <mrodin@de.adit-jv.com>
-> Cc: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Signed-off-by: George G. Davis <george_davis@mentor.com>
-> ---
->  drivers/tty/serial/sh-sci.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> index 3cd139752d3f..885b56b1d4e4 100644
-> --- a/drivers/tty/serial/sh-sci.c
-> +++ b/drivers/tty/serial/sh-sci.c
-> @@ -1557,6 +1557,9 @@ static void sci_request_dma(struct uart_port *port)
-> =20
->  	dev_dbg(port->dev, "%s: port %d\n", __func__, port->line);
-> =20
-> +	if (uart_console(port))
-> +		return; /* Cannot use DMA on console */
+I'll submit v2 with the above recommended change.
 
-Minor nit: maybe the comment can be made more specific?
+Thanks!
 
-/*
- * DMA on console may interfere with Kernel log messages which use
- * plain putchar(). So, simply don't use it with a console.
- */
+> Other than that:
+> 
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> 
+> Much better than dropping the properties, as Geert noted.
 
-Other than that:
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Much better than dropping the properties, as Geert noted.
-
-
---d6Gm4EdcadzBjdND
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzZdk0ACgkQFA3kzBSg
-KbbUJg/0D+EF6AyzLCGEPsV3puYcRKlpa9CGvd9V4bDHTn0Ft4v3pq+VR8CZg8Xc
-GGERKTh4+uu5SAFeYT9ZamkFLTBcyrzJ+qJWVuSmkZROJg6OlRn10tMV5Vw1L5PY
-O4IHapY707vQb6c9Sey6xoF15n7sKWD3HeoNyTDKwncPPwdDulsri2Q0WLIwrq3T
-L5T+wDTVlAW+Vbw4TA3FBZVjWjWthT85hpTZW802YWyA+ZJMwS678BU6eL7UZFwN
-+/raK/zqcTfyoY3vk03nG82BIQeZ4IVenLo7F9eXSYUY2d0JBzBbPqJOqINy2pbD
-j1eaOap+xS4TmlDNRSI9mIJb75AQXNaVz47P/tCQmLvJnNsFXREtzTlKT5pk489k
-FNQ0S1wpAf2clOUr+of53LKKnK2nS5vtWnoTcIE+g8dOztRDn2WkW20Ly0TgF8e1
-UPPOeoNkdGzeHHOQh0CA4yOlaKef0CV/WpxLTtRmlP+hPkyQOSbyYeVkipVd7TWu
-wwVBCSkIzUPnv6Ybmrrp0B0T6F5pZ3+c0Gy9SZH895dzYZF3ybnAqrRQ/T62UBvV
-7birU3vYq5sr4pyoQtnsrF2pAfcJecMcGem5WeQlbAlhRUkq7k89BJ91FNf73blL
-QsZr8CAATc7aCb/7Cj8O38Ify07O45dNe/djQ25GyP+rfrL+OA==
-=7vLz
------END PGP SIGNATURE-----
-
---d6Gm4EdcadzBjdND--
+-- 
+Regards,
+George
