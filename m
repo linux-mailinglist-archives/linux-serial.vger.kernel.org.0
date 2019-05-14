@@ -2,116 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 117921C431
-	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 09:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A631C44E
+	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 10:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725980AbfENHyM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 May 2019 03:54:12 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:36553 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbfENHyL (ORCPT
+        id S1726036AbfENIA6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 May 2019 04:00:58 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com ([46.30.210.185]:27244
+        "EHLO mailrelay4-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725866AbfENIA6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 May 2019 03:54:11 -0400
-Received: by mail-ua1-f66.google.com with SMTP id z17so5856155uar.3
-        for <linux-serial@vger.kernel.org>; Tue, 14 May 2019 00:54:11 -0700 (PDT)
+        Tue, 14 May 2019 04:00:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zf8IJjcdPrQOgX1z3j6gO2WdWT6UVn+L7AhNfe6yMi8=;
-        b=IAsJ4EQAYOn036lV8psLdhXQfclTm/pOQHGolyhy+F/M9PN51UF1V/AzbmQ2+szdeA
-         50WNp67zAeq6LM46Rm5S8gA77LBMEMw1JsVn/tpSuW3Fmn2xta1oG5hpd6oQAlItiBS0
-         V7wGhDfi+6qvy0RGWnt2gDFdS1UQBmLgdXkSmdDpeafokFQHUZoUqTZIOHCETe6JfFAC
-         a7PnXUppJHzhn2AVGetOalutM2jS6ypHR9488igXkCBQ8h9ghd/iSRHKRauDRdWVhy3O
-         1dBuucve8gsrdUniXl3OAxGA0NC4JSN5HrSsxuOzyO7z9KI/68uSfGyLt3t1vA/hmfgL
-         34qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zf8IJjcdPrQOgX1z3j6gO2WdWT6UVn+L7AhNfe6yMi8=;
-        b=VQhfba4IZaDEga0eTe6CnxhaEaCz4kocykSSgIwYSaOGYyHJlm2Nx5+C8tBrCFt3Cn
-         UpO683L+ebXpQBjbhewtkku0csE014lHC+1mQxoI4HfUHLgWj2bRc1FDfdbriTApYbtm
-         keuyuSJuGv/wOikvLOwI52lVQosXQxlB0WaLshaXF0hyNfu1kGRCRS48vPpPQAhpiXzG
-         kTO9Cif9jstmvL/siRG9KnaOeRjDp7HqqWKF2w44ScmrApP6Fo4bL79lotTVr4DDlaiV
-         8uvnTdAy53sz2rn3QcE0LpHtqYvfEIBSW9GVS66tvi5QdK1aBLLEdHBzna5Yb2FQ9Ocz
-         V/bw==
-X-Gm-Message-State: APjAAAWiUoyqw4JfxLisYo6S+DRFe+EdIJz54HrJj2rkWvTxMsWA+Vhm
-        f4q4khtLA1ZrKPVfQkhTQ//iK19xJlZoR9nmzG4FeA==
-X-Google-Smtp-Source: APXvYqw26na4iAl9OES8/pXHjHR4OX/mYE4JxGMYMoMM698JgOYmYEnp2SYDxqwKYvDyL7iTIXPA7w04vcm/XFFuFFI=
-X-Received: by 2002:ab0:30a1:: with SMTP id b1mr13121475uam.104.1557820450699;
- Tue, 14 May 2019 00:54:10 -0700 (PDT)
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=QlmDVaRpqxxukroinxw3TPJxyM76gDhPC9ypTGUAIq4=;
+        b=xtQ7y135cx8t5EkkC0nUAPWeX3hcy1sfumg5qyLt2aA9a9M++qdmephxzHIhiMEhFD94mRNcfx9sX
+         4MXCDOxNMX9nGm6X1cqXH8j0Uxuu8N6EqYOi6n4DUf99ec2AwhTszry9zU96x/QoC0dvMiKybErnpD
+         P9tqCsoxK3hee0nA=
+X-HalOne-Cookie: 3c078f0ae0e520a51c24966b95c318af61496e8f
+X-HalOne-ID: 664b6b39-761e-11e9-abc4-d0431ea8bb10
+Received: from localhost (unknown [193.163.1.7])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 664b6b39-761e-11e9-abc4-d0431ea8bb10;
+        Tue, 14 May 2019 08:00:55 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD function
+References: <20190426084038.6377-1-esben@geanix.com>
+        <20190426084038.6377-3-esben@geanix.com> <20190507114905.GB29524@dell>
+        <87o94ejwrx.fsf@haabendal.dk> <20190507133844.GA6194@dell>
+Date:   Tue, 14 May 2019 10:00:54 +0200
+In-Reply-To: <20190507133844.GA6194@dell> (Lee Jones's message of "Tue, 7 May
+        2019 14:38:44 +0100")
+Message-ID: <87bm05mpmx.fsf@haabendal.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20190320094918.20234-1-rnayak@codeaurora.org> <20190320094918.20234-9-rnayak@codeaurora.org>
-In-Reply-To: <20190320094918.20234-9-rnayak@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 14 May 2019 09:53:34 +0200
-Message-ID: <CAPDyKFppirfM7B9TB=jZzo67E=rdMnfVKEjdv0wn1zBAUoY_HA@mail.gmail.com>
-Subject: Re: [RFC v2 08/11] arm64: dts: sdm845: Add ufs opps and power-domains
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 20 Mar 2019 at 10:50, Rajendra Nayak <rnayak@codeaurora.org> wrote:
->
-> Add the additional power domain and the OPP table for ufs on sdm845
-> so the driver can set the appropriate performance state of the
-> power domain while setting the clock rate.
->
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 027ffe6e93e8..a3af4a1757b4 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -1140,6 +1140,21 @@
->                         };
->                 };
->
-> +               ufs_opp_table: ufs-opp-table {
-> +                       compatible = "operating-points-v2";
-> +
-> +                       opp-50000000 {
-> +                               opp-hz = /bits/ 64 <50000000>;
-> +                               required-opps = <&rpmhpd_opp_min_svs>;
-> +                       };
-> +
-> +                       opp-200000000 {
-> +                               opp-hz = /bits/ 64 <200000000>;
-> +                               required-opps = <&rpmhpd_opp_nom>;
-> +
-> +                       };
-> +               };
-> +
->                 ufs_mem_hc: ufshc@1d84000 {
->                         compatible = "qcom,sdm845-ufshc", "qcom,ufshc",
->                                      "jedec,ufs-2.0";
-> @@ -1148,7 +1163,7 @@
->                         phys = <&ufs_mem_phy_lanes>;
->                         phy-names = "ufsphy";
->                         lanes-per-direction = <2>;
-> -                       power-domains = <&gcc UFS_PHY_GDSC>;
-> +                       power-domains = <&gcc UFS_PHY_GDSC>, <&rpmhpd SDM845_CX>;
+Lee Jones <lee.jones@linaro.org> writes:
 
-You probably want to use "power-domain-names" as well.
+> On Tue, 07 May 2019, Esben Haabendal wrote:
+>
+>> Lee Jones <lee.jones@linaro.org> writes:
+>> 
+>> > On Fri, 26 Apr 2019, Esben Haabendal wrote:
+>> >
+>> >> The serial8250-mfd driver is for adding 8250/16550 UART ports as functions
+>> >> to an MFD driver.
+>> >> 
+>> >> When calling mfd_add_device(), platform_data should be a pointer to a
+>> >> struct plat_serial8250_port, with proper settings like .flags, .type,
+>> >> .iotype, .regshift and .uartclk.  Memory (or ioport) and IRQ should be
+>> >> passed as cell resources.
+>> >
+>> > What?  No, please!
+>> >
+>> > If you *must* create a whole driver just to be able to use
+>> > platform_*() helpers (which I don't think you should), then please
+>> > call it something else.  This doesn't have anything to do with MFD.
+>> 
+>> True.
+>> 
+>> I really don't think it is a good idea to create a whole driver just to
+>> be able to use platform_get_*() helpers.  And if I am forced to do this,
+>> because I am unable to convince Andy to improve the standard serial8250
+>> driver to support that, it should be called MFD.  The driver would be
+>
+> I assume you mean "shouldn't"?
 
-[...]
+Of-course.
 
-Kind regards
-Uffe
+>> generally usable for all usecases where platform_get_*() works.
+>> 
+>> I don't have any idea what to call such a driver.  It really would just
+>> be a fork of the current serial8250 driver, just allowing use of
+>> platform_get_*(), supporting exactly the same hardware.
+>> 
+>> I am still hoping that we can find a way to improve serial8250 to be
+>> usable in these cases.
+>
+> Me too.
+
+Unfortunately, I don't seem to be able to convince Andy to accept
+something like that.
+
+I might have to do this out-of-tree :(
+
+/Esben
