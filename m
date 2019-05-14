@@ -2,97 +2,118 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2E81C638
-	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 11:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0367F1C6C3
+	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 12:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbfENJhh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 May 2019 05:37:37 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:44523 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbfENJhh (ORCPT
+        id S1726290AbfENKOc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 May 2019 06:14:32 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45065 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbfENKOb (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 May 2019 05:37:37 -0400
-Received: by mail-pl1-f195.google.com with SMTP id c5so269290pll.11;
-        Tue, 14 May 2019 02:37:37 -0700 (PDT)
+        Tue, 14 May 2019 06:14:31 -0400
+Received: by mail-lf1-f68.google.com with SMTP id n22so11374284lfe.12;
+        Tue, 14 May 2019 03:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OvMTiTp630B1RClH7jSrtIkHfKMtygVVx68tUAbzGQc=;
-        b=uZ1X/sICHLjRWIm1T95SwqeFod/jCmB0IDLQf9xRYTAXDmPepVuoX4qFz1uVdggbSV
-         /x807dOc2tlpIfYooURCHEbgAvlcKYqm4T61DDEPa39E6yGabRqE9DmnH368/IjFHG8i
-         SDJwny4kz5XblkgbqBq3WgO7F4eUmH5YYzyJXYQC5yGZVSg2gCrXAd56b62NPAKFNvuU
-         bO31pI2pPcLfuQ2ofo1JEAFlmrEmAsueziKO4zsJ+gfPkMINl2ByPU5H+2y5Y8ABohyB
-         56EgOXNU5G4vGVYKfpZm2A7hBnO5Q52OHvCrw5EpI1BSMAI4zvuArM6BmmyUwE3TLbBu
-         WYhw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YIZ3kgLRbbPlHjkQaU8GGW+xZ44MSvuVReE59qUFDXA=;
+        b=JBRvZK070+rHxRCffanCjbI2/OlhQwa/N8JN3+t1UbNb0ZYQimUxd33Mv2Zpx4KLZS
+         GDvFb4JSDz7hP5h76UhrEJWz/qIWfJ0msGEEEZo0sUCN4IFw+2cvNTZDHm63L7wLQ/oJ
+         giFTSAhwjDZcMxYwT4pB6APvKq4MLectAthKeM7idFVQcDynqel4xIZx7LJ5zLLvPIn+
+         5u75SlFeZ/B7+FnH7tFI3p7MB+ytK8OkyfXYEa/seXEMHEptW4v4kb5EWLEwAJ+LUZ2l
+         TuFrbnP2dv4sln+jpjciiwC/vTze9SdWsUqKFycqD5rrpoCa5MhGjRuT72aRMua/ztu2
+         DaNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OvMTiTp630B1RClH7jSrtIkHfKMtygVVx68tUAbzGQc=;
-        b=L0FJ8TRrATE415wn/3SLWsti7JW9u7NjNm9+z7tXQNLF93kRRXz8yXH3XChZKkqvDJ
-         3GaYK4ziIroq2dADAnKhBRq/hYzar2ZwUMU0Utmd7vP9gNa3H0I93XKFb2c4ag77yMUA
-         4xI2vUbiT1nTXgL/XeCn9xzpleBnOPnFXzVuEvWJIcpp53unQ99H1HSg1Nzr5hpUAu4v
-         T/8DWsYWvRYlov4K5vI0bnxo9NvE3ylQc9VtEk8tLoBMlk+ytu9ZevM5cLM1kkOREL9J
-         DfnrkdxnQ57zzMsF791cb6gpxHKVENCX98Z0jyS7VRkGQEa5/lhwnjQEnrHLG16pgHsF
-         GVhw==
-X-Gm-Message-State: APjAAAVcwc2fAq270oKulOQVtngRrHq+w+wh0Lf7qn/aluMV/eiKy/FO
-        4TZJ4/KyhX2xptPFf2Jc0GG1KzeDKTigAx2d4zN3H+Q/
-X-Google-Smtp-Source: APXvYqywlyuT/yYUMuVyxYjm8M1x9tR+efDT6lZyKMLEiLPXIxwFVggHCyUkrd6eNliOjK2YJZqkiJWYNi42YUa8ir8=
-X-Received: by 2002:a17:902:7407:: with SMTP id g7mr2022271pll.311.1557826656741;
- Tue, 14 May 2019 02:37:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YIZ3kgLRbbPlHjkQaU8GGW+xZ44MSvuVReE59qUFDXA=;
+        b=aES5zRpUEmBEEGmAGdgYD3Xeuesp3L4KAy1fOvKK5uzPrbNmTazFJ4AFsBKiJCpcpE
+         gdC19IO52rYyUP9FffYGjwafZUGYYI996NMwa5WVvRu1nQxxxkrCaryh3rHl+1wi2jFn
+         O9H9lIMuwhOmKkW1b7w0RTj/ulsjruWan08bAdLe3f8SoOp+lOBONVjkVEc7F+bKIG0f
+         MWWOuL1bEAtdPubd9v803aYDsy5ofxn56by8kGnsbErPXP8a9kKkUS4lPGklHY8QopOi
+         4d1zqd9KYzNS50XCRSqGyX7uv95dexFt0rYRbS2VTUy71OETIBiBjuocrX/YaliLmNk5
+         LzNg==
+X-Gm-Message-State: APjAAAUkUAmy/P8x3HtQEXTXAISdW5lpXrYSIT4/Zc0vuSMfmSgUKdwk
+        hLtNjSNA4a311L4qSHzgVhY=
+X-Google-Smtp-Source: APXvYqzF+ksXffBErnYUSHAodm5Kp8IJ34xoA3xPxb207dmag1RJmhmD9ql2mAc2x/a2hhTvHKfRiQ==
+X-Received: by 2002:ac2:51a9:: with SMTP id f9mr17085224lfk.56.1557828869654;
+        Tue, 14 May 2019 03:14:29 -0700 (PDT)
+Received: from localhost.localdomain ([5.164.217.122])
+        by smtp.gmail.com with ESMTPSA id v2sm3126359ljg.6.2019.05.14.03.14.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 03:14:28 -0700 (PDT)
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Cc:     Serge Semin <Sergey.Semin@t-platforms.ru>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] tty: max310x: Simplify the code and fix a few bugs
+Date:   Tue, 14 May 2019 13:14:08 +0300
+Message-Id: <20190514101415.26754-1-fancer.lancer@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <20190430140416.4707-1-esben@geanix.com> <20190430153736.GL9224@smile.fi.intel.com>
- <874l6efxta.fsf@haabendal.dk> <20190502104556.GS9224@smile.fi.intel.com>
- <87pnp11112.fsf@haabendal.dk> <20190507093239.GB4529@dell>
- <87sgtqjy3l.fsf@haabendal.dk> <20190507115325.GV9224@smile.fi.intel.com>
- <87k1f2jvyd.fsf@haabendal.dk> <20190507150847.GW9224@smile.fi.intel.com>
- <87k1etmrfk.fsf@haabendal.dk> <CAHp75VfrP6SLVzmp6LepN7dU1c7QYxfRDRtj7dCTuWzmYp2tCA@mail.gmail.com>
-In-Reply-To: <CAHp75VfrP6SLVzmp6LepN7dU1c7QYxfRDRtj7dCTuWzmYp2tCA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 14 May 2019 12:37:25 +0300
-Message-ID: <CAHp75VetoajaeqUnUuj4sNjhujqDkbqvQmxE+LMtzFN4so_jwA@mail.gmail.com>
-Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
-To:     Esben Haabendal <esben@haabendal.dk>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Enrico Weigelt <lkml@metux.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, May 14, 2019 at 12:23 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, May 14, 2019 at 10:24 AM Esben Haabendal <esben@haabendal.dk> wrote:
+I started using this driver two years ago in kernek 4.4 and then in kernel
+4.9. It didn't go well from the very beginning due to my platform
+peculiarities: DW SPI core with hardware CS and relatively slow MIPS-based
+SoC. This patchset is intended to fix some of the problems I found out
+during the max310x driver utilization with max14830 device.
 
-> > Please take a look at https://lkml.org/lkml/2019/4/9/576
-> > ("[PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip")
->
-> Thank you for this link.
-> Now, look at this comment:
->
-> + /*
-> + * Map all IOC3 registers.  These are shared between subdevices
-> + * so the main IOC3 module manages them.
-> + */
->
-> Is it your case? Can we see the code?
+First of all it was discovered, that workqueue API isn't optimally used.
+Work context isn't re-entrant by design, so the mutex used to guard the
+TX-method is redundant. schedule_work() method is also created in a way
+the work item is scheduled only if it isn't pending. Patch 1 concerns all
+these fixes. Seeing the similar container_of(uart_port) is used three
+times in the driver, the patch 2 introduces a macro to_max310x_port() to
+get a pointer to corresponding struct max310x_one. This is the code
+simplification and is going to be used in the following patches.
 
-They do not request resources by the way.
-You may do the same, I told you this several times.
+It was found out, that batch read and write methods used buffers allocated
+on the kernel stack. Since they might be utilized by SPI controllers for
+DMA it might be unsafe on some platforms. Patch 3 provides a dedicated
+kmalloced buffers for this.
+
+The baud-rate calculator function didn't work correct for all the possible
+baud-rates requested within a pre-defined input reference frequency.
+Instead an algo fully compliant with datasheet divisor formulae is
+implemented in patch 4.
+
+Patches 5 and 6 are created to fix some rs485 issues. Particularly the
+rs485 mode is configured on the port startup if it's enabled. And seeing
+the mode2 register provides a way to enable/disable the echo-suppression
+in RS485 mode, it is used to implement the SER_RS485_RX_DURING_TX flag
+support.
+
+Finally it was discovered that in case if inbound hardware FIFO
+experienced overflow, a lot of '\0' characters inserted into the
+flip-buffer as a character of the RX-FIFO overrun. It isn't quite correct
+since the overflow happened only after the last character had been
+received. Patch 7 is dedicated to push only a single RX-FIFO overrun
+character in this case.
+
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+
+
+Serge Semin (7):
+  tty: max310x: Simplify tx-work item code
+  tty: max310x: Introduce max310x_one port macro-wrapper
+  tty: max310x: Don't pass stacked buffers to SPI
+  tty: max310x: Fix invalid baudrate divisors calculator
+  tty: max310x: Add rx-during-tx rs485 flag support
+  tty: max310x: Optionally enable rs485 on startup
+  tty: max310x: Split uart characters insertion loop
+
+ drivers/tty/serial/max310x.c | 157 +++++++++++++++++++++--------------
+ 1 file changed, 95 insertions(+), 62 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.21.0
+
