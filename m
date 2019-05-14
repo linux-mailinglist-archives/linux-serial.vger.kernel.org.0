@@ -2,102 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A631C44E
-	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 10:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1412D1C4F0
+	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 10:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbfENIA6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 May 2019 04:00:58 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com ([46.30.210.185]:27244
-        "EHLO mailrelay4-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725866AbfENIA6 (ORCPT
+        id S1726491AbfENI2s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 May 2019 04:28:48 -0400
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:34085 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726109AbfENI2s (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 May 2019 04:00:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=haabendal.dk; s=20140924;
-        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
-         to:from:from;
-        bh=QlmDVaRpqxxukroinxw3TPJxyM76gDhPC9ypTGUAIq4=;
-        b=xtQ7y135cx8t5EkkC0nUAPWeX3hcy1sfumg5qyLt2aA9a9M++qdmephxzHIhiMEhFD94mRNcfx9sX
-         4MXCDOxNMX9nGm6X1cqXH8j0Uxuu8N6EqYOi6n4DUf99ec2AwhTszry9zU96x/QoC0dvMiKybErnpD
-         P9tqCsoxK3hee0nA=
-X-HalOne-Cookie: 3c078f0ae0e520a51c24966b95c318af61496e8f
-X-HalOne-ID: 664b6b39-761e-11e9-abc4-d0431ea8bb10
-Received: from localhost (unknown [193.163.1.7])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 664b6b39-761e-11e9-abc4-d0431ea8bb10;
-        Tue, 14 May 2019 08:00:55 +0000 (UTC)
-From:   Esben Haabendal <esben@haabendal.dk>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD function
-References: <20190426084038.6377-1-esben@geanix.com>
-        <20190426084038.6377-3-esben@geanix.com> <20190507114905.GB29524@dell>
-        <87o94ejwrx.fsf@haabendal.dk> <20190507133844.GA6194@dell>
-Date:   Tue, 14 May 2019 10:00:54 +0200
-In-Reply-To: <20190507133844.GA6194@dell> (Lee Jones's message of "Tue, 7 May
-        2019 14:38:44 +0100")
-Message-ID: <87bm05mpmx.fsf@haabendal.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        Tue, 14 May 2019 04:28:48 -0400
+Received: by mail-ua1-f67.google.com with SMTP id 7so1786842uah.1;
+        Tue, 14 May 2019 01:28:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/NA3o69AVedwbrS8I/JNFCMoka6aSRYx6sOSkm7j+ZY=;
+        b=sWgbCysasls5T0fl83xIYjpsrFQUwdFB9c00tAyeFdNssQL6P4oHoo5COXUm+f/6A1
+         ayG7O8p9Tgf2fUn8N6rzoQnSZUePC4/JzJQYlfE/ZbTkgMRO2yeAAefz8nq6YSGZ43UT
+         W40o3xXh9d9538IE0NrDii59lG6ogBdYvkRa2IauaAG5xJ7uc1KuS/rQOnixZrAe7IkV
+         1tUZYKZKemMSpYaD4ie9Edhd7FQdxBOUJtgHIEWJauyGGuCGGMc0SuzOceh1ZnGBbSPC
+         gOkQ68MKkpGA/wWNks4CnVKO7XO27I/VfMbgbocICTjRhe0O03pSpCDWYas++gLnEgYC
+         tp7g==
+X-Gm-Message-State: APjAAAVvpSQ02Mb7kYjA24EDNaHNWCNtrKlOwY3H1QsyyQlsrRNOd5wH
+        bc6ZGzQf0B8iRuPZ2FmWsH67XBV8TXG3PqFXj04=
+X-Google-Smtp-Source: APXvYqwdcU+/txalebspsx4VOD+EnsWOMl3ldpM6w0yNu5aBmbUhQ7DwUL4yoq5BDqRktbvDVPuCHNLpcUJd09+lby0=
+X-Received: by 2002:ab0:45e9:: with SMTP id u96mr4671687uau.75.1557822526733;
+ Tue, 14 May 2019 01:28:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <1557762446-23811-1-git-send-email-george_davis@mentor.com>
+In-Reply-To: <1557762446-23811-1-git-send-email-george_davis@mentor.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 May 2019 10:28:34 +0200
+Message-ID: <CAMuHMdVaNWa=Q-7K-+_rM-8yYWB0-+4_o4hgACK6o-4BOrY07A@mail.gmail.com>
+Subject: Re: [PATCH v2] serial: sh-sci: disable DMA for uart_console
+To:     "George G. Davis" <george_davis@mentor.com>
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Simon Horman <horms+renesas@verge.net.au>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
+        Andy Lowe <andy_lowe@mentor.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>, Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> writes:
+Hi George,
 
-> On Tue, 07 May 2019, Esben Haabendal wrote:
+On Mon, May 13, 2019 at 5:48 PM George G. Davis <george_davis@mentor.com> wrote:
+> As noted in commit 84b40e3b57ee ("serial: 8250: omap: Disable DMA for
+> console UART"), UART console lines use low-level PIO only access functions
+> which will conflict with use of the line when DMA is enabled, e.g. when
+> the console line is also used for systemd messages. So disable DMA
+> support for UART console lines.
 >
->> Lee Jones <lee.jones@linaro.org> writes:
->> 
->> > On Fri, 26 Apr 2019, Esben Haabendal wrote:
->> >
->> >> The serial8250-mfd driver is for adding 8250/16550 UART ports as functions
->> >> to an MFD driver.
->> >> 
->> >> When calling mfd_add_device(), platform_data should be a pointer to a
->> >> struct plat_serial8250_port, with proper settings like .flags, .type,
->> >> .iotype, .regshift and .uartclk.  Memory (or ioport) and IRQ should be
->> >> passed as cell resources.
->> >
->> > What?  No, please!
->> >
->> > If you *must* create a whole driver just to be able to use
->> > platform_*() helpers (which I don't think you should), then please
->> > call it something else.  This doesn't have anything to do with MFD.
->> 
->> True.
->> 
->> I really don't think it is a good idea to create a whole driver just to
->> be able to use platform_get_*() helpers.  And if I am forced to do this,
->> because I am unable to convince Andy to improve the standard serial8250
->> driver to support that, it should be called MFD.  The driver would be
->
-> I assume you mean "shouldn't"?
+> Fixes: https://patchwork.kernel.org/patch/10929511/
 
-Of-course.
+I don't think this is an appropriate reference, as it points to a patch that
+was never applied.
 
->> generally usable for all usecases where platform_get_*() works.
->> 
->> I don't have any idea what to call such a driver.  It really would just
->> be a fork of the current serial8250 driver, just allowing use of
->> platform_get_*(), supporting exactly the same hardware.
->> 
->> I am still hoping that we can find a way to improve serial8250 to be
->> usable in these cases.
->
-> Me too.
+As the problem has basically existed forever, IMHO no Fixes tag
+is needed.
 
-Unfortunately, I don't seem to be able to convince Andy to accept
-something like that.
+> Reported-by: Michael Rodin <mrodin@de.adit-jv.com>
+> Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: George G. Davis <george_davis@mentor.com>
+> ---
+> v2: Clarify comment regarding DMA support on kernel console,
+>     add {Tested,Reviewed}-by:, and Cc: linux-stable lines.
 
-I might have to do this out-of-tree :(
+Thanks for the update!
 
-/Esben
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
