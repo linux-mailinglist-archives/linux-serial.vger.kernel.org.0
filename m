@@ -2,102 +2,120 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1412D1C4F0
-	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 10:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138B31C5F6
+	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 11:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbfENI2s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 May 2019 04:28:48 -0400
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:34085 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbfENI2s (ORCPT
+        id S1726246AbfENJXp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 May 2019 05:23:45 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43233 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726148AbfENJXp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 May 2019 04:28:48 -0400
-Received: by mail-ua1-f67.google.com with SMTP id 7so1786842uah.1;
-        Tue, 14 May 2019 01:28:47 -0700 (PDT)
+        Tue, 14 May 2019 05:23:45 -0400
+Received: by mail-pg1-f193.google.com with SMTP id t22so8311452pgi.10;
+        Tue, 14 May 2019 02:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5YuxfzalVyz39bS5lxDVxBPQxHNRqBsXyUAh+iAMKKQ=;
+        b=vQSL1vI8y/pobIeEAf+6sVKN7MQRUqCOKfqM1PV+aH5OE0icjkzECfBzZmitQ98Svo
+         XDXmRTZkyLfN5eIgZ0B6daFC5TZWFFedUokzmDo+74gY2ifevOAaozTMu8KDUuFHgKP9
+         ZBvGng5nkXYXeXpoVAw3EUrjwdjr+MkdQ3oL89XiX/dNM+d8hx5ECzbkWs9V/wiqTffQ
+         MO9dWCuiwA7T0ZP0xx84t21FGJIb2pHO8NalHjrMCPfbnqd8A6nIXYPQzWaeb87QfSJj
+         1THQRYa+38c2f0GuRdugvKBnRTbY76ebqzhfQZpgmX+y5gGuto1ECPqS0yFggz6F8+mL
+         Ui+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/NA3o69AVedwbrS8I/JNFCMoka6aSRYx6sOSkm7j+ZY=;
-        b=sWgbCysasls5T0fl83xIYjpsrFQUwdFB9c00tAyeFdNssQL6P4oHoo5COXUm+f/6A1
-         ayG7O8p9Tgf2fUn8N6rzoQnSZUePC4/JzJQYlfE/ZbTkgMRO2yeAAefz8nq6YSGZ43UT
-         W40o3xXh9d9538IE0NrDii59lG6ogBdYvkRa2IauaAG5xJ7uc1KuS/rQOnixZrAe7IkV
-         1tUZYKZKemMSpYaD4ie9Edhd7FQdxBOUJtgHIEWJauyGGuCGGMc0SuzOceh1ZnGBbSPC
-         gOkQ68MKkpGA/wWNks4CnVKO7XO27I/VfMbgbocICTjRhe0O03pSpCDWYas++gLnEgYC
-         tp7g==
-X-Gm-Message-State: APjAAAVvpSQ02Mb7kYjA24EDNaHNWCNtrKlOwY3H1QsyyQlsrRNOd5wH
-        bc6ZGzQf0B8iRuPZ2FmWsH67XBV8TXG3PqFXj04=
-X-Google-Smtp-Source: APXvYqwdcU+/txalebspsx4VOD+EnsWOMl3ldpM6w0yNu5aBmbUhQ7DwUL4yoq5BDqRktbvDVPuCHNLpcUJd09+lby0=
-X-Received: by 2002:ab0:45e9:: with SMTP id u96mr4671687uau.75.1557822526733;
- Tue, 14 May 2019 01:28:46 -0700 (PDT)
+        bh=5YuxfzalVyz39bS5lxDVxBPQxHNRqBsXyUAh+iAMKKQ=;
+        b=jeQRRn18Bl76K2zvhBK3uiaGEmU3ESj60UtXql1dUByilr1xK7fY9dPXOFUYHTzu8H
+         8mznUCbovoKeNw3rd+xCi8AcPY5V2YNqv9ORctZ3U9HjROj1VeEfIQLNsdCY1i5L1EgL
+         8iIaQ4451v0UtKBCmoLAzSaCzUxzpF1og8AdioWYZyYjp4GziE/e4I2Jq04J4WwAkEJ+
+         1SAt7HIjxppX+C0p2uACwdjUsl0um30pUDNP6QUJG6NZx7eTmPLMbjT6E9z4J52zpZsb
+         76hzvUbVihtc4X5pQAelYzc+DN/J1cZ8nbLNq3MSEpho0KhtVI1D7ZavTeq2TbHWv8/a
+         OZtQ==
+X-Gm-Message-State: APjAAAXgtcs6e/B1CoHElrf1bBX9jVBaO1u4LUl6KzRU8n3b7+K0qUKA
+        XbHe6G01ThkhajEPpG6Iu6O8Ydcv7fkBRDpB33ZIgDPY2ZA=
+X-Google-Smtp-Source: APXvYqxijTaU+rkG79VpDp9pINfS+w4/WWN8EseUFB++/R49pbRj0MA3YmeqtZC5mrvUYTir5ATJZ3WL6YPAGz1RJXE=
+X-Received: by 2002:a63:42:: with SMTP id 63mr37044591pga.337.1557825824401;
+ Tue, 14 May 2019 02:23:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <1557762446-23811-1-git-send-email-george_davis@mentor.com>
-In-Reply-To: <1557762446-23811-1-git-send-email-george_davis@mentor.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 May 2019 10:28:34 +0200
-Message-ID: <CAMuHMdVaNWa=Q-7K-+_rM-8yYWB0-+4_o4hgACK6o-4BOrY07A@mail.gmail.com>
-Subject: Re: [PATCH v2] serial: sh-sci: disable DMA for uart_console
-To:     "George G. Davis" <george_davis@mentor.com>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+References: <20190430140416.4707-1-esben@geanix.com> <20190430153736.GL9224@smile.fi.intel.com>
+ <874l6efxta.fsf@haabendal.dk> <20190502104556.GS9224@smile.fi.intel.com>
+ <87pnp11112.fsf@haabendal.dk> <20190507093239.GB4529@dell>
+ <87sgtqjy3l.fsf@haabendal.dk> <20190507115325.GV9224@smile.fi.intel.com>
+ <87k1f2jvyd.fsf@haabendal.dk> <20190507150847.GW9224@smile.fi.intel.com> <87k1etmrfk.fsf@haabendal.dk>
+In-Reply-To: <87k1etmrfk.fsf@haabendal.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 14 May 2019 12:23:33 +0300
+Message-ID: <CAHp75VfrP6SLVzmp6LepN7dU1c7QYxfRDRtj7dCTuWzmYp2tCA@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
+To:     Esben Haabendal <esben@haabendal.dk>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Enrico Weigelt <lkml@metux.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
-        Andy Lowe <andy_lowe@mentor.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        stable <stable@vger.kernel.org>
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi George,
+On Tue, May 14, 2019 at 10:24 AM Esben Haabendal <esben@haabendal.dk> wrote:
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+> > On Tue, May 07, 2019 at 02:22:18PM +0200, Esben Haabendal wrote:
 
-On Mon, May 13, 2019 at 5:48 PM George G. Davis <george_davis@mentor.com> wrote:
-> As noted in commit 84b40e3b57ee ("serial: 8250: omap: Disable DMA for
-> console UART"), UART console lines use low-level PIO only access functions
-> which will conflict with use of the line when DMA is enabled, e.g. when
-> the console line is also used for systemd messages. So disable DMA
-> support for UART console lines.
->
-> Fixes: https://patchwork.kernel.org/patch/10929511/
+> We are on repeat here.  I don't agree with you here.  I have a simple
+> generic 8250 (16550A) compatible device, and cannot use it in a mfd
+> driver using the standard mfd-core framework.
 
-I don't think this is an appropriate reference, as it points to a patch that
-was never applied.
+> The lacking of support for platform_get_resource() in the generic
+> serial8250 driver is not a feature.  It should be supported, just as it
+> is in several of the specialized 8250 drivers.
 
-As the problem has basically existed forever, IMHO no Fixes tag
-is needed.
+We are going circles here.
+What exactly prevents you to use it? Presence of request_mem_region()?
 
-> Reported-by: Michael Rodin <mrodin@de.adit-jv.com>
-> Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: George G. Davis <george_davis@mentor.com>
-> ---
-> v2: Clarify comment regarding DMA support on kernel console,
->     add {Tested,Reviewed}-by:, and Cc: linux-stable lines.
+> It would still mean that I would have revert to not using convenient and
+> otherwise fully appropriate API calls like pci_request_regions() and
+> mfd_add_devices().
 
-Thanks for the update!
+Yes, here is the issue. 8250 requires the parent not to *request*
+resources. Because child handles IO access itself.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> The mfd driver in question is for a PCI device.  Not being able to
+> request the PCI regions seems silly.
 
-Gr{oetje,eeting}s,
+Nope. Otherwise, the parent which *doesn't handle* IO on behalf of
+child should not request its resources.
 
-                        Geert
+> Not being able to register all child devices with the call introduced
+> for that sole purpose also seems silly.
+
+> Please take a look at https://lkml.org/lkml/2019/4/9/576
+> ("[PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip")
+
+Thank you for this link.
+Now, look at this comment:
+
++ /*
++ * Map all IOC3 registers.  These are shared between subdevices
++ * so the main IOC3 module manages them.
++ */
+
+Is it your case? Can we see the code?
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+With Best Regards,
+Andy Shevchenko
