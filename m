@@ -2,95 +2,117 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5B71C3D8
-	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 09:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3606D1C3E1
+	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 09:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfENHfE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 May 2019 03:35:04 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40583 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfENHfD (ORCPT
+        id S1726381AbfENHhk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 May 2019 03:37:40 -0400
+Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com ([46.30.210.183]:51445
+        "EHLO mailrelay2-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726324AbfENHhk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 May 2019 03:35:03 -0400
-Received: by mail-lf1-f67.google.com with SMTP id h13so11026733lfc.7;
-        Tue, 14 May 2019 00:35:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ypxcL+Y2IvMWn09TLf/QK34oXMbYOcjJzriH87EFApU=;
-        b=Zt61CVWfeJRKPEEh7jwVW2RaAhOUVD+pyubobdEXvlsLpnyJIzpjHRZVneaQCRYw+g
-         ADDd+MfAL3U8ndjB0hm6Y0v5tA5QN25XqRTPwWINJ4IO4puLYVsIVoJqxt/+drxFEQsY
-         0uJ9s3Y61qocUec1imklZbCixKguZl2btNcn23AWHFXLR1cOhQzWrO8xE6pY0HBh/5oR
-         5CEMw4jq224OF9p/4dm9Q9Jxh3++dL0VlvW2YlEeHupQp3mWHcqque8KeFLhimhrugCu
-         G3Li4vI8Q+YwOM+x0hxtu3In1aL2IrQE8+rKFJf2PBUM2usvIlFXL+V2ZaUxr9zKqxfY
-         3Lhg==
-X-Gm-Message-State: APjAAAVTJ7Pj5LP2aHEeb6MPC7FELGPhIWATlwFWAy9JgD29F7S3vPfN
-        j7txJAHUViX/puic4ya1rSk=
-X-Google-Smtp-Source: APXvYqwvIVbr1t/VMMtD1U3VMsknRUaH0j4RtqgHXjcjMa0T4yPZPIKf0rw2L5S9o797Mn8xRnVIKA==
-X-Received: by 2002:a19:2d1a:: with SMTP id k26mr16477193lfj.104.1557819301422;
-        Tue, 14 May 2019 00:35:01 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id m5sm3625700lfb.47.2019.05.14.00.35.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 00:35:00 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.91)
-        (envelope-from <johan@kernel.org>)
-        id 1hQRxh-0001Dz-9k; Tue, 14 May 2019 09:34:57 +0200
-Date:   Tue, 14 May 2019 09:34:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Lanqing Liu <liuhhome@gmail.com>, Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     baolin.wang@unisoc.com, baolin.wang@linaro.org, jslaby@suse.com,
-        lanqing.liu@unisoc.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chunyan.zhang@unisoc.com,
-        orson.zhai@unisoc.com, zhang.lyra@gmail.com
-Subject: Re: [PATCH] tty: serial_core: Fix the incorrect configuration of
- baud rate and data length at the console serial port resume
-Message-ID: <20190514073457.GI9651@localhost>
-References: <a8bd7d19de25b799098659334de7e19670a806fc.1557379676.git.liuhhome@gmail.com>
+        Tue, 14 May 2019 03:37:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=QWHIQNN3/GVloHpDWkd7tztidhfedB4/rDXwqwKC8io=;
+        b=WzTyjZI53WEUsDvqnoWAqeK3pEs2doKcx/BafTy9r2Vlw8jBqCPhCSXf/4Szj4hp/OXMrgz5loeG6
+         iLnTEKmLAvK+k9F/pBsZz8BaCOmW1y/7XeK6y0AGHtk30IDnn3SCgCvyiBlQYw35LDZ8brUmPDUgVx
+         V9e57T+AiFQ2n3LU=
+X-HalOne-Cookie: d6c52a14cb2ac12375b82504112820e375415ae5
+X-HalOne-ID: 24f28efd-761b-11e9-81c1-d0431ea8a290
+Received: from localhost (unknown [193.163.1.7])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 24f28efd-761b-11e9-81c1-d0431ea8a290;
+        Tue, 14 May 2019 07:37:36 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
+        Enrico Weigelt <lkml@metux.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
+References: <20190430140416.4707-1-esben@geanix.com>
+        <20190430153736.GL9224@smile.fi.intel.com>
+        <874l6efxta.fsf@haabendal.dk>
+        <20190502104556.GS9224@smile.fi.intel.com>
+        <87pnp11112.fsf@haabendal.dk> <20190507093239.GB4529@dell>
+        <87sgtqjy3l.fsf@haabendal.dk>
+        <20190507115325.GV9224@smile.fi.intel.com>
+        <87k1f2jvyd.fsf@haabendal.dk>
+        <20190507150847.GW9224@smile.fi.intel.com>
+Date:   Tue, 14 May 2019 09:37:36 +0200
+In-Reply-To: <20190507150847.GW9224@smile.fi.intel.com> (Andy Shevchenko's
+        message of "Tue, 7 May 2019 18:08:47 +0300")
+Message-ID: <87ftphmqpr.fsf@haabendal.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8bd7d19de25b799098659334de7e19670a806fc.1557379676.git.liuhhome@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, May 09, 2019 at 01:42:39PM +0800, Lanqing Liu wrote:
-> When userspace opens a serial port for console, uart_port_startup()
-> is called. This function assigns the uport->cons->cflag value to
-> TTY->termios.c_cflag, then it is cleared to 0. When the user space
-> closes this serial port, the TTY structure will be released, and at
-> this time uport->cons->cflag has also been cleared.
-> 
-> On the Spreadtrum platform, in some special scenarios, like charging mode,
-> userspace needs to close the console, which means the uport->cons->cflag
-> has also been cleared. But printing logs is still needed in the kernel. So
-> when system enters suspend and resume, the console needs to be configure
-> the baud rate and data length of the serial port according to its own cflag
-> when resuming the console port. At this time, the cflag is 0, which will
-> cause serial port to produce configuration errors that do not meet user
-> expectations.
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
-This is actually yet another regression due to 761ed4a94582 ("tty:
-serial_core: convert uart_close to use tty_port_close") which
-incidentally removed the call to uart_shutdown() where the cflag was
-being saved precisely to avoid the problem you're describing:
+> On Tue, May 07, 2019 at 02:22:18PM +0200, Esben Haabendal wrote:
+>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+>> > On Tue, May 07, 2019 at 01:35:58PM +0200, Esben Haabendal wrote:
+>> >> Lee Jones <lee.jones@linaro.org> writes:
+>> >> > On Thu, 02 May 2019, Esben Haabendal wrote:
+>> >> >
+>> >> >> Could you help clarify whether or not this patch is trying to do
+>> >> >> something odd/wrong?
+>> >> >> 
+>> >> >> I might be misunderstanding Andy (probably is), but the discussion
+>> >> >> revolves around the changes I propose where I change the serial8250
+>> >> >> driver to use platform_get_resource() in favour of
+>> >> >> request_mem_region()/release_mem_region().
+>> >> >
+>> >> > Since 'serial8250' is registered as a platform device, I don't see any
+>> >> > reason why it shouldn't have the capability to obtain its memory
+>> >> > regions from the platform_get_*() helpers.
+>> >> 
+>> >> Good to hear.  That is exactly what I am trying do with this patch.
+>> >> 
+>> >> @Andy: If you still don't like my approach, could you please advice an
+>> >> acceptable method for improving the serial8250 driver to allow the use
+>> >> of platform_get_*() helpers?
+>> >
+>> > I still don't get why you need this.
+>> 
+>> Because platform_get_resource() is a generally available and useful
+>> helper function for working with platform_device resources, that the
+>> current standard serial8250 driver does not support.
+>> 
+>> I am uncertain if I still haven't convinced you that current serial8250
+>> driver does not work with platform_get_resource(), or if you believe
+>> that it really should not support it.
+>
+> I believe there is no need to do this support.
+>
+> Most of the platform code that uses it is quite legacy, and all under arch/
+> ideally should be converted to use Device Tree.
 
-	ae84db9661ca ("serial: core: Preserve termios c_cflag for console resume")
+Please take a look at https://lkml.org/lkml/2019/4/9/576
+("[PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip")
 
-Judging from a quick look it seems the xmit buf, which is released in
-that function may now be leaking too.
+This is basically what I am trying to do.  I am just so unfortunate that
+the serial devices I have are completely generic, so it does not make
+sense for me to create a specialized 8250 driver.
 
-> To fix this, assigning the TTY->termios.c_cflag value to uport->cons->cflag
-> before the userspace closes this console serial port. It will ensure that
-> the correct cflag value can be gotten when the console serial port was
-> resumed.
+Look at how the serial8250_ioc3_driver uses platform_get_resource() to
+get the register memory, and how that works together with
+mfd_add_devices() in the mfd driver.  Nice and elegant.  Standard
+recommended approach for an mfd driver.
 
-Not sure this is the right fix, but I don't have time to look at this
-right now.
-
-Johan
+/Esben
