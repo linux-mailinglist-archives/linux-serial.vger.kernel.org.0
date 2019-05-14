@@ -2,117 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3606D1C3E1
-	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 09:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117921C431
+	for <lists+linux-serial@lfdr.de>; Tue, 14 May 2019 09:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbfENHhk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 May 2019 03:37:40 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com ([46.30.210.183]:51445
-        "EHLO mailrelay2-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726324AbfENHhk (ORCPT
+        id S1725980AbfENHyM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 May 2019 03:54:12 -0400
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:36553 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbfENHyL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 May 2019 03:37:40 -0400
+        Tue, 14 May 2019 03:54:11 -0400
+Received: by mail-ua1-f66.google.com with SMTP id z17so5856155uar.3
+        for <linux-serial@vger.kernel.org>; Tue, 14 May 2019 00:54:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=haabendal.dk; s=20140924;
-        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
-         to:from:from;
-        bh=QWHIQNN3/GVloHpDWkd7tztidhfedB4/rDXwqwKC8io=;
-        b=WzTyjZI53WEUsDvqnoWAqeK3pEs2doKcx/BafTy9r2Vlw8jBqCPhCSXf/4Szj4hp/OXMrgz5loeG6
-         iLnTEKmLAvK+k9F/pBsZz8BaCOmW1y/7XeK6y0AGHtk30IDnn3SCgCvyiBlQYw35LDZ8brUmPDUgVx
-         V9e57T+AiFQ2n3LU=
-X-HalOne-Cookie: d6c52a14cb2ac12375b82504112820e375415ae5
-X-HalOne-ID: 24f28efd-761b-11e9-81c1-d0431ea8a290
-Received: from localhost (unknown [193.163.1.7])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 24f28efd-761b-11e9-81c1-d0431ea8a290;
-        Tue, 14 May 2019 07:37:36 +0000 (UTC)
-From:   Esben Haabendal <esben@haabendal.dk>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
-        Enrico Weigelt <lkml@metux.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Subject: Re: [PATCH] serial: 8250: Add support for using platform_device resources
-References: <20190430140416.4707-1-esben@geanix.com>
-        <20190430153736.GL9224@smile.fi.intel.com>
-        <874l6efxta.fsf@haabendal.dk>
-        <20190502104556.GS9224@smile.fi.intel.com>
-        <87pnp11112.fsf@haabendal.dk> <20190507093239.GB4529@dell>
-        <87sgtqjy3l.fsf@haabendal.dk>
-        <20190507115325.GV9224@smile.fi.intel.com>
-        <87k1f2jvyd.fsf@haabendal.dk>
-        <20190507150847.GW9224@smile.fi.intel.com>
-Date:   Tue, 14 May 2019 09:37:36 +0200
-In-Reply-To: <20190507150847.GW9224@smile.fi.intel.com> (Andy Shevchenko's
-        message of "Tue, 7 May 2019 18:08:47 +0300")
-Message-ID: <87ftphmqpr.fsf@haabendal.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zf8IJjcdPrQOgX1z3j6gO2WdWT6UVn+L7AhNfe6yMi8=;
+        b=IAsJ4EQAYOn036lV8psLdhXQfclTm/pOQHGolyhy+F/M9PN51UF1V/AzbmQ2+szdeA
+         50WNp67zAeq6LM46Rm5S8gA77LBMEMw1JsVn/tpSuW3Fmn2xta1oG5hpd6oQAlItiBS0
+         V7wGhDfi+6qvy0RGWnt2gDFdS1UQBmLgdXkSmdDpeafokFQHUZoUqTZIOHCETe6JfFAC
+         a7PnXUppJHzhn2AVGetOalutM2jS6ypHR9488igXkCBQ8h9ghd/iSRHKRauDRdWVhy3O
+         1dBuucve8gsrdUniXl3OAxGA0NC4JSN5HrSsxuOzyO7z9KI/68uSfGyLt3t1vA/hmfgL
+         34qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zf8IJjcdPrQOgX1z3j6gO2WdWT6UVn+L7AhNfe6yMi8=;
+        b=VQhfba4IZaDEga0eTe6CnxhaEaCz4kocykSSgIwYSaOGYyHJlm2Nx5+C8tBrCFt3Cn
+         UpO683L+ebXpQBjbhewtkku0csE014lHC+1mQxoI4HfUHLgWj2bRc1FDfdbriTApYbtm
+         keuyuSJuGv/wOikvLOwI52lVQosXQxlB0WaLshaXF0hyNfu1kGRCRS48vPpPQAhpiXzG
+         kTO9Cif9jstmvL/siRG9KnaOeRjDp7HqqWKF2w44ScmrApP6Fo4bL79lotTVr4DDlaiV
+         8uvnTdAy53sz2rn3QcE0LpHtqYvfEIBSW9GVS66tvi5QdK1aBLLEdHBzna5Yb2FQ9Ocz
+         V/bw==
+X-Gm-Message-State: APjAAAWiUoyqw4JfxLisYo6S+DRFe+EdIJz54HrJj2rkWvTxMsWA+Vhm
+        f4q4khtLA1ZrKPVfQkhTQ//iK19xJlZoR9nmzG4FeA==
+X-Google-Smtp-Source: APXvYqw26na4iAl9OES8/pXHjHR4OX/mYE4JxGMYMoMM698JgOYmYEnp2SYDxqwKYvDyL7iTIXPA7w04vcm/XFFuFFI=
+X-Received: by 2002:ab0:30a1:: with SMTP id b1mr13121475uam.104.1557820450699;
+ Tue, 14 May 2019 00:54:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190320094918.20234-1-rnayak@codeaurora.org> <20190320094918.20234-9-rnayak@codeaurora.org>
+In-Reply-To: <20190320094918.20234-9-rnayak@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 14 May 2019 09:53:34 +0200
+Message-ID: <CAPDyKFppirfM7B9TB=jZzo67E=rdMnfVKEjdv0wn1zBAUoY_HA@mail.gmail.com>
+Subject: Re: [RFC v2 08/11] arm64: dts: sdm845: Add ufs opps and power-domains
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-
-> On Tue, May 07, 2019 at 02:22:18PM +0200, Esben Haabendal wrote:
->> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->> > On Tue, May 07, 2019 at 01:35:58PM +0200, Esben Haabendal wrote:
->> >> Lee Jones <lee.jones@linaro.org> writes:
->> >> > On Thu, 02 May 2019, Esben Haabendal wrote:
->> >> >
->> >> >> Could you help clarify whether or not this patch is trying to do
->> >> >> something odd/wrong?
->> >> >> 
->> >> >> I might be misunderstanding Andy (probably is), but the discussion
->> >> >> revolves around the changes I propose where I change the serial8250
->> >> >> driver to use platform_get_resource() in favour of
->> >> >> request_mem_region()/release_mem_region().
->> >> >
->> >> > Since 'serial8250' is registered as a platform device, I don't see any
->> >> > reason why it shouldn't have the capability to obtain its memory
->> >> > regions from the platform_get_*() helpers.
->> >> 
->> >> Good to hear.  That is exactly what I am trying do with this patch.
->> >> 
->> >> @Andy: If you still don't like my approach, could you please advice an
->> >> acceptable method for improving the serial8250 driver to allow the use
->> >> of platform_get_*() helpers?
->> >
->> > I still don't get why you need this.
->> 
->> Because platform_get_resource() is a generally available and useful
->> helper function for working with platform_device resources, that the
->> current standard serial8250 driver does not support.
->> 
->> I am uncertain if I still haven't convinced you that current serial8250
->> driver does not work with platform_get_resource(), or if you believe
->> that it really should not support it.
+On Wed, 20 Mar 2019 at 10:50, Rajendra Nayak <rnayak@codeaurora.org> wrote:
 >
-> I believe there is no need to do this support.
+> Add the additional power domain and the OPP table for ufs on sdm845
+> so the driver can set the appropriate performance state of the
+> power domain while setting the clock rate.
 >
-> Most of the platform code that uses it is quite legacy, and all under arch/
-> ideally should be converted to use Device Tree.
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 027ffe6e93e8..a3af4a1757b4 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -1140,6 +1140,21 @@
+>                         };
+>                 };
+>
+> +               ufs_opp_table: ufs-opp-table {
+> +                       compatible = "operating-points-v2";
+> +
+> +                       opp-50000000 {
+> +                               opp-hz = /bits/ 64 <50000000>;
+> +                               required-opps = <&rpmhpd_opp_min_svs>;
+> +                       };
+> +
+> +                       opp-200000000 {
+> +                               opp-hz = /bits/ 64 <200000000>;
+> +                               required-opps = <&rpmhpd_opp_nom>;
+> +
+> +                       };
+> +               };
+> +
+>                 ufs_mem_hc: ufshc@1d84000 {
+>                         compatible = "qcom,sdm845-ufshc", "qcom,ufshc",
+>                                      "jedec,ufs-2.0";
+> @@ -1148,7 +1163,7 @@
+>                         phys = <&ufs_mem_phy_lanes>;
+>                         phy-names = "ufsphy";
+>                         lanes-per-direction = <2>;
+> -                       power-domains = <&gcc UFS_PHY_GDSC>;
+> +                       power-domains = <&gcc UFS_PHY_GDSC>, <&rpmhpd SDM845_CX>;
 
-Please take a look at https://lkml.org/lkml/2019/4/9/576
-("[PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip")
+You probably want to use "power-domain-names" as well.
 
-This is basically what I am trying to do.  I am just so unfortunate that
-the serial devices I have are completely generic, so it does not make
-sense for me to create a specialized 8250 driver.
+[...]
 
-Look at how the serial8250_ioc3_driver uses platform_get_resource() to
-get the register memory, and how that works together with
-mfd_add_devices() in the mfd driver.  Nice and elegant.  Standard
-recommended approach for an mfd driver.
-
-/Esben
+Kind regards
+Uffe
