@@ -2,122 +2,216 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EA11EAC4
-	for <lists+linux-serial@lfdr.de>; Wed, 15 May 2019 11:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842501F5E5
+	for <lists+linux-serial@lfdr.de>; Wed, 15 May 2019 15:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725966AbfEOJP3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 15 May 2019 05:15:29 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:34258 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbfEOJP3 (ORCPT
+        id S1728194AbfEONtG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 May 2019 09:49:06 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:47022 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727968AbfEONtG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 15 May 2019 05:15:29 -0400
-Received: by mail-oi1-f195.google.com with SMTP id v10so1309701oib.1;
-        Wed, 15 May 2019 02:15:28 -0700 (PDT)
+        Wed, 15 May 2019 09:49:06 -0400
+Received: by mail-qk1-f195.google.com with SMTP id a132so1469616qkb.13
+        for <linux-serial@vger.kernel.org>; Wed, 15 May 2019 06:49:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8l+XsAWtzDO+iVF8T+43qDNahyoPM+IYYP74fL9auB0=;
-        b=p+UZ57l126N1SmeVU3MI6F+D8dLYxvuEP2cSlhSnFkK2cWvQzhBrKHTv/XXifW9cJp
-         n9xvtEVQnB8G8b1fE36eBGkSIkJvqTUjsDQ1j2kXyW5IGKrrGuT0TLiA/Sm/yLAs6xM9
-         HYVfVeWmueaGTSKGcYzDKlQaf98U4NXxkLZEe7NNsx8x+1pafuZeH3Cx1is+pub2tv0A
-         3cHcEfTyE+jmGNmTpLq0sNKUo3bKIiZkR65Dh+LwGE3jCSEs4X1I1JFjROZ1BvXQ16Pj
-         tr1zzZ0HqoUurxgMJbwXDi5lvJ88/oBP0H0Y1/RolqAMPOOhmNwOJzG6XvKGvyMuX8t2
-         IG9Q==
+         :cc;
+        bh=0bU82F+gt2zE3PINH+I2iOdx7/P2Z54mTmX7HD0f23g=;
+        b=Rz/eTH+AhP/E1BbGJwPsapzQcGBCN6AsXcTjNCMhLwf/Y4ROLeWXnzuXXCGskE4ial
+         C6vT5lbVMECErTsbOqncFmph2Tp1d0H7MkmabSVn4yEYTkDH28DQUEmZW/+6q04J8i/T
+         CJuQRVnjMj4PSEctgFELgkj3rPlU7ctawx7IU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8l+XsAWtzDO+iVF8T+43qDNahyoPM+IYYP74fL9auB0=;
-        b=EvfFmmn+I81iuFRlnM4FzcDDvNwiKk3u0M7ijxZZFRapWdz95thJRzREtE4QNL02qZ
-         nYMPBr5U5nD3c/aweIbKAGZEAgtD0r7qIBqbIDB7wffIyca+luYlYso8wkmxu997boDL
-         LJTRIoBrVCOdO6WdINWooTx3wODWnQcxPwWJ2EW+yn1Mnk+Rc0zT077psWeD62hY6ovw
-         Zsz20CT/pHUWHjnDtoldm51oW94lOWjPdcHQTP8KcY6BVxxfYooFfNokxHV1whLsuKAU
-         RU6svvO6pqgNEyeDxxL+lfQlm5oWeLqDGpVpgOCtaeFdpmkjMGQnWqni2OLJNkVPhIIl
-         G1Gg==
-X-Gm-Message-State: APjAAAXbwbEKts34RFG9yty7F+NMDtonnyUsEWGjm7o4B72ByKhZQ6Rv
-        hpRO3LX9Yb6ffGI9H+jnNfI4ZZUHXnsI0ju8s5k=
-X-Google-Smtp-Source: APXvYqxTdaRgRjYNW4hVS2P6W8+KG+Z6TQ1MlwfaunbmBTnAF75Npc2yQcnDpFb4TJhy/VAo5mQgzJafRp494U3hWMI=
-X-Received: by 2002:aca:df09:: with SMTP id w9mr5504644oig.94.1557911728083;
- Wed, 15 May 2019 02:15:28 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=0bU82F+gt2zE3PINH+I2iOdx7/P2Z54mTmX7HD0f23g=;
+        b=mYH9djJlvouXOp92/rFs7CgDJUZz8gFbbGHPYFDNLbS9Uea7wJEQ8Ko08e2+Qe3IKI
+         J9z95tU3rcRCY5dZ5foL4vgcf711sZp4i6eA1SmScv4g0zAeNa1gTtjJYNjfVx135ffH
+         CAxamW4oqDt7sfK+QBGkPihIpNr87M3UXv1bQJkJR4pmjCpfIwCi909KtH4gzNo3NlD/
+         a3PiHPOQrY9kTg/NL5azHjZ6COeD2IbG4IrtBsEHzZKZwj0+wHXJcrZgcuHePRMqi9KQ
+         Pl8Md8CN4yyNoaGldX0CaESvVsntGRHxl3NWMwjdHSNKpIGsnZIVPlrXcUsOiucQEGjD
+         jkPw==
+X-Gm-Message-State: APjAAAWwRlJCU9io5qwfy+CsFX0zgCIB8uggiw+8XjPKa2Smqe5zekuF
+        4EEPYvCRWVX1TWEtJ14Wo74t9LyVA9FLX/LeYD/ebg==
+X-Google-Smtp-Source: APXvYqwlUOhQfWVG0cDXJfSD77I136CNQYmnycgW7CY0DPgH6v1ONynTfzyo3enPqgR8mXrkE9bC5wWl+/AN2lmlbhE=
+X-Received: by 2002:ae9:f818:: with SMTP id x24mr32636878qkh.329.1557928145116;
+ Wed, 15 May 2019 06:49:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <a8bd7d19de25b799098659334de7e19670a806fc.1557379676.git.liuhhome@gmail.com>
- <20190514073457.GI9651@localhost>
-In-Reply-To: <20190514073457.GI9651@localhost>
-From:   hhome liu <liuhhome@gmail.com>
-Date:   Wed, 15 May 2019 17:15:16 +0800
-Message-ID: <CAHshu7NGmPO+7KjjPBtJT77vTobk0m7iX1FPnMfzh_G4SCKkRw@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial_core: Fix the incorrect configuration of baud
- rate and data length at the console serial port resume
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
+References: <1556336193-15198-1-git-send-email-long.cheng@mediatek.com> <1556336193-15198-5-git-send-email-long.cheng@mediatek.com>
+In-Reply-To: <1556336193-15198-5-git-send-email-long.cheng@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Wed, 15 May 2019 21:48:52 +0800
+Message-ID: <CANMq1KDTyu48joV6uMksGBMz9EmjFH9SEpGAm93YCZ40jxgBpQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] serial: 8250-mtk: modify uart DMA rx
+To:     Long Cheng <long.cheng@mediatek.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        baolin.wang@unisoc.com, Baolin Wang <baolin.wang@linaro.org>,
-        jslaby@suse.com,
-        =?UTF-8?B?5YiY5bKa5riFIChMYW5xaW5nIExpdSk=?= 
-        <lanqing.liu@unisoc.com>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chunyan.zhang@unisoc.com,
-        orson.zhai@unisoc.com, zhang.lyra@gmail.com
+        Jiri Slaby <jslaby@suse.com>,
+        Sean Wang <sean.wang@mediatek.com>, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-serial@vger.kernel.org,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        YT Shen <yt.shen@mediatek.com>,
+        Zhenbao Liu <zhenbao.liu@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Johan Hovold <johan@kernel.org> =E4=BA=8E2019=E5=B9=B45=E6=9C=8814=E6=97=A5=
-=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=883:35=E5=86=99=E9=81=93=EF=BC=9A
+On Sat, Apr 27, 2019 at 11:36 AM Long Cheng <long.cheng@mediatek.com> wrote:
+>
+> Modify uart rx and complete for DMA.
+
+I don't know much about the DMA framework, but can you please explain
+why you are making the changes in this CL? I see that you are dropping
+dma_sync_single_for_device calls, for example, why?
 
 >
-> On Thu, May 09, 2019 at 01:42:39PM +0800, Lanqing Liu wrote:
-> > When userspace opens a serial port for console, uart_port_startup()
-> > is called. This function assigns the uport->cons->cflag value to
-> > TTY->termios.c_cflag, then it is cleared to 0. When the user space
-> > closes this serial port, the TTY structure will be released, and at
-> > this time uport->cons->cflag has also been cleared.
-> >
-> > On the Spreadtrum platform, in some special scenarios, like charging mo=
-de,
-> > userspace needs to close the console, which means the uport->cons->cfla=
-g
-> > has also been cleared. But printing logs is still needed in the kernel.=
- So
-> > when system enters suspend and resume, the console needs to be configur=
-e
-> > the baud rate and data length of the serial port according to its own c=
-flag
-> > when resuming the console port. At this time, the cflag is 0, which wil=
-l
-> > cause serial port to produce configuration errors that do not meet user
-> > expectations.
+> Signed-off-by: Long Cheng <long.cheng@mediatek.com>
+> ---
+>  drivers/tty/serial/8250/8250_mtk.c |   53 ++++++++++++++++--------------------
+>  1 file changed, 23 insertions(+), 30 deletions(-)
 >
-> This is actually yet another regression due to 761ed4a94582 ("tty:
-> serial_core: convert uart_close to use tty_port_close") which
-> incidentally removed the call to uart_shutdown() where the cflag was
-> being saved precisely to avoid the problem you're describing:
+> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
+> index c1fdbc0..04081a6 100644
+> --- a/drivers/tty/serial/8250/8250_mtk.c
+> +++ b/drivers/tty/serial/8250/8250_mtk.c
+> @@ -30,7 +30,6 @@
+>  #define MTK_UART_DMA_EN_TX     0x2
+>  #define MTK_UART_DMA_EN_RX     0x5
 >
->         ae84db9661ca ("serial: core: Preserve termios c_cflag for console=
- resume")
+> -#define MTK_UART_TX_SIZE       UART_XMIT_SIZE
+>  #define MTK_UART_RX_SIZE       0x8000
+>  #define MTK_UART_TX_TRIGGER    1
+>  #define MTK_UART_RX_TRIGGER    MTK_UART_RX_SIZE
+> @@ -64,28 +63,30 @@ static void mtk8250_dma_rx_complete(void *param)
+>         struct mtk8250_data *data = up->port.private_data;
+>         struct tty_port *tty_port = &up->port.state->port;
+>         struct dma_tx_state state;
+> +       int copied, cnt, tmp;
+>         unsigned char *ptr;
+> -       int copied;
+>
+> -       dma_sync_single_for_cpu(dma->rxchan->device->dev, dma->rx_addr,
+> -                               dma->rx_size, DMA_FROM_DEVICE);
+> +       if (data->rx_status == DMA_RX_SHUTDOWN)
+> +               return;
+>
+>         dmaengine_tx_status(dma->rxchan, dma->rx_cookie, &state);
+> +       cnt = dma->rx_size - state.residue;
+> +       tmp = cnt;
 
-Yes, agree with you.
+I ponder, maybe we should rename cnt to left? (like, how many bytes
+are left to transfer, in total) Or maybe "total"
+Then maybe rename tmp to cnt.
 
 >
-> Judging from a quick look it seems the xmit buf, which is released in
-> that function may now be leaking too.
+> -       if (data->rx_status == DMA_RX_SHUTDOWN)
+> -               return;
+> +       if ((data->rx_pos + cnt) > dma->rx_size)
+> +               tmp = dma->rx_size - data->rx_pos;
 
-We haven't found this issue before, but we can try to reproduce it on
-our platform.
+Maybe replace this and the line above:
+tmp = max_t(int, cnt, dma->rx_size - data->rx_pos);
 
 >
-> > To fix this, assigning the TTY->termios.c_cflag value to uport->cons->c=
-flag
-> > before the userspace closes this console serial port. It will ensure th=
-at
-> > the correct cflag value can be gotten when the console serial port was
-> > resumed.
+> -       if ((data->rx_pos + state.residue) <= dma->rx_size) {
+> -               ptr = (unsigned char *)(data->rx_pos + dma->rx_buf);
+> -               copied = tty_insert_flip_string(tty_port, ptr, state.residue);
+> -       } else {
+> -               ptr = (unsigned char *)(data->rx_pos + dma->rx_buf);
+> -               copied = tty_insert_flip_string(tty_port, ptr,
+> -                                               dma->rx_size - data->rx_pos);
+> +       ptr = (unsigned char *)(data->rx_pos + dma->rx_buf);
+> +       copied = tty_insert_flip_string(tty_port, ptr, tmp);
+> +       data->rx_pos += tmp;
+> +
+> +       if (cnt > tmp) {
+>                 ptr = (unsigned char *)(dma->rx_buf);
+> -               copied += tty_insert_flip_string(tty_port, ptr,
+> -                               data->rx_pos + state.residue - dma->rx_size);
+> +               tmp = cnt - tmp;
+> +               copied += tty_insert_flip_string(tty_port, ptr, tmp);
+> +               data->rx_pos = tmp;
+>         }
+> +
+>         up->port.icount.rx += copied;
 >
-> Not sure this is the right fix, but I don't have time to look at this
-> right now.
+>         tty_flip_buffer_push(tty_port);
+> @@ -96,9 +97,7 @@ static void mtk8250_dma_rx_complete(void *param)
+>  static void mtk8250_rx_dma(struct uart_8250_port *up)
+>  {
+>         struct uart_8250_dma *dma = up->dma;
+> -       struct mtk8250_data *data = up->port.private_data;
+>         struct dma_async_tx_descriptor  *desc;
+> -       struct dma_tx_state      state;
+>
+>         desc = dmaengine_prep_slave_single(dma->rxchan, dma->rx_addr,
+>                                            dma->rx_size, DMA_DEV_TO_MEM,
+> @@ -113,12 +112,6 @@ static void mtk8250_rx_dma(struct uart_8250_port *up)
+>
+>         dma->rx_cookie = dmaengine_submit(desc);
+>
+> -       dmaengine_tx_status(dma->rxchan, dma->rx_cookie, &state);
+> -       data->rx_pos = state.residue;
+> -
+> -       dma_sync_single_for_device(dma->rxchan->device->dev, dma->rx_addr,
+> -                                  dma->rx_size, DMA_FROM_DEVICE);
+> -
+>         dma_async_issue_pending(dma->rxchan);
+>  }
+>
+> @@ -131,13 +124,13 @@ static void mtk8250_dma_enable(struct uart_8250_port *up)
+>         if (data->rx_status != DMA_RX_START)
+>                 return;
+>
+> -       dma->rxconf.direction           = DMA_DEV_TO_MEM;
+> -       dma->rxconf.src_addr_width      = dma->rx_size / 1024;
+> -       dma->rxconf.src_addr            = dma->rx_addr;
+> +       dma->rxconf.direction                           = DMA_DEV_TO_MEM;
+> +       dma->rxconf.src_port_window_size        = dma->rx_size;
+> +       dma->rxconf.src_addr                            = dma->rx_addr;
+>
+> -       dma->txconf.direction           = DMA_MEM_TO_DEV;
+> -       dma->txconf.dst_addr_width      = MTK_UART_TX_SIZE / 1024;
+> -       dma->txconf.dst_addr            = dma->tx_addr;
+> +       dma->txconf.direction                           = DMA_MEM_TO_DEV;
+> +       dma->txconf.dst_port_window_size        = UART_XMIT_SIZE;
+> +       dma->txconf.dst_addr                            = dma->tx_addr;
+>
+>         serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO | UART_FCR_CLEAR_RCVR |
+>                 UART_FCR_CLEAR_XMIT);
+> @@ -217,7 +210,7 @@ static void mtk8250_shutdown(struct uart_port *port)
+>          * Mediatek UARTs use an extra highspeed register (UART_MTK_HIGHS)
+>          *
+>          * We need to recalcualte the quot register, as the claculation depends
+> -        * on the vaule in the highspeed register.
+> +        * on the value in the highspeed register.
 
-OK. Thanks for your comments.
+Since you're doing some cosmetic changes here, you might as well fix
+recalcualte => recalculate and claculation => calculation on the line
+above.
+
+But technically, this should belong in another patch...
+
+>          *
+>          * Some baudrates are not supported by the chip, so we use the next
+>          * lower rate supported and update termios c_flag.
+> --
+> 1.7.9.5
+>
