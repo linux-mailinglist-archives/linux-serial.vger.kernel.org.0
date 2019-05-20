@@ -2,71 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C4621742
-	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2019 12:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B3823163
+	for <lists+linux-serial@lfdr.de>; Mon, 20 May 2019 12:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbfEQKu4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 17 May 2019 06:50:56 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46407 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727689AbfEQKu4 (ORCPT
+        id S1731266AbfETKen (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 May 2019 06:34:43 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50293 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731320AbfETKen (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 17 May 2019 06:50:56 -0400
-Received: by mail-lj1-f193.google.com with SMTP id h21so5831058ljk.13
-        for <linux-serial@vger.kernel.org>; Fri, 17 May 2019 03:50:55 -0700 (PDT)
+        Mon, 20 May 2019 06:34:43 -0400
+Received: by mail-wm1-f68.google.com with SMTP id f204so12746990wme.0
+        for <linux-serial@vger.kernel.org>; Mon, 20 May 2019 03:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kEU6fWjzkzqv9SRv8NcfTyeO+J/oLvpwUjWxmmSbKOc=;
-        b=gmJ8bSOwQEmlSl9bcD+oxfuvmzAUIZSt2m9B3Oxt+6B6+jfzENpi0Qwid1DnD8WFVM
-         Nj04YDneWTocnxOtGJH/d1pnOpM0qtLQcv7Dzc0u/xpWthBACmgevIRmaWtigboPJGt1
-         BdWnAi9YjL5WD1FfhaRA54D+hKxlI7w1lgZC9EX5vnQH9NTWUqsIeTOvgVyEnXwkJ62Z
-         9mx6EU4tfLRRvbC9/O1832T2sAWNU+ljuu5GEZp/ZI3gXji793diepJ2trijF1o42MXs
-         cZ2GOx/34GYuAzVO/HlQIMBaW1wlvJfHT3a9mbA2RCQY/mcP+AjtI1bzYb0Sk31rr3vF
-         8k4Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hJaOf0A2/Xd/g+78Nlk/c2RYeLP2fm2K/KoH/Yw8zbU=;
+        b=ypVliwq7SwcxaYxl4+KiThvD4LBr7BJikL4QOM8mIJ1xCwBblENKpU/2RMOMFrDXhu
+         ZCEZ+yDmJHVEgB2KWcttKNH0OvBVItB+jFrmE7BTTwD7UMwrV7UnHc0PecqPCuAXmcOl
+         w2B8sFUdppF3vAnZ8wUjq65AEXMemnsy26U6g+dAdMiY5pWxP8zvy//xpmBvZesOpLLq
+         R4BfkZlqIvXbOShH6BB+h2YXfWzRxGcjEx2QEiua6ZQLxHMLi+WFyoThOP39eJ9meyvi
+         A41aoqlxNOmH8Yr9WBqjUy42j43/Ff3Ui29P773BgS2uly+rHJXXsYmn/u/nIh+J7VuY
+         /cBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kEU6fWjzkzqv9SRv8NcfTyeO+J/oLvpwUjWxmmSbKOc=;
-        b=EAsOzT1KouR1bIsxXZ3Fyk8YrB9zIJLvETrBjTiRhgtkh9WtBE+/79Ly4RXACtgrPO
-         NjLtfH+laZmqcpsVt7c3zFLAVPO9fEJACJZN8begBnZ/2OFMcihZGH7mCOWoyR6TNmh0
-         55t3uRvmblbQ38dPtDqngmu70XJcw7ZHWRLYJUD9hmnFuu6EOiwisc7Tzq46BlSmyA8L
-         wBlsEFU/PFTb6VRdyP+WQvB5uTb6EBxg476ocMDcBNXKZYmXRMquyutdI5FroKm+YzpT
-         jOq9IpRUKyzPt+iwj/G0qL18y9yK4ZiLRH96UVLKkBJ7w1UywmTZx869XXHtELq8t8hZ
-         5jdw==
-X-Gm-Message-State: APjAAAU8m8c156cTurf0UpFOx9QrKwJqVanqsKcb9Foy04/ehuCtP7Dk
-        z5aMwj7FI55A8WnLVEqx8czI6m/hWfOs+6GUAICZxSef
-X-Google-Smtp-Source: APXvYqy0YhjsEq2M9raFUg0ZSJZei8ocmMjCtvd2J906CaHcAlFT492j3Wc1CJjCagx7mEdwLCRW6XKDyUp99443Xg8=
-X-Received: by 2002:a2e:8956:: with SMTP id b22mr20972607ljk.134.1558090254931;
- Fri, 17 May 2019 03:50:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hJaOf0A2/Xd/g+78Nlk/c2RYeLP2fm2K/KoH/Yw8zbU=;
+        b=SKvlfr1HJ7CtxdVti4G88eH44VMQTaVUetr0/zrSbpU8A3Gjc/uvS34e06TWVrzgwS
+         HapJOXGtKbNP9qkEK4ydU/V40ER5lziGy5rbu0hhrqv0XIw+ZaQ+cDNXp4U8HfTfkk/i
+         +bhWbFEfZjxEeElw6o5NetJo8i5mgVGCejTkpWvtbdgUfKtELRoPLiCcemGPNxHmEJ/4
+         W+hcBklhLxdQAMLzq3mhckcPDCILGlo51rZ7Jou/kCByG/mnC88asf1XIdeXAnPhHWCy
+         EunOkUK5Ol+ossqrF2mk4HT89MkqH3WIKLzdDh+CP8EayRBLqUA/mHc2wcHIjDtejJ6D
+         HgIA==
+X-Gm-Message-State: APjAAAVWNr/nf9Pp25rGUlct3BIi37K4DR3twh8naWIoEDUUrk8tdTXl
+        qBvH4JmKZoq1tDPSrELhSR/fLQ==
+X-Google-Smtp-Source: APXvYqwX9w3fvgtsddUeORMpPjPJpygGZ2d2dpnnMtIHE7PR28RyVQbZiw+0IFSL0wKLtzL2qxf8yA==
+X-Received: by 2002:a7b:c744:: with SMTP id w4mr20213217wmk.116.1558348481406;
+        Mon, 20 May 2019 03:34:41 -0700 (PDT)
+Received: from localhost.localdomain (139.red-79-146-81.dynamicip.rima-tde.net. [79.146.81.139])
+        by smtp.gmail.com with ESMTPSA id l2sm23451641wmf.16.2019.05.20.03.34.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 20 May 2019 03:34:40 -0700 (PDT)
+From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+To:     jorge.ramirez-ortiz@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, gregkh@linuxfoundation.org
+Cc:     jslaby@suse.com, keescook@chromium.org, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khasim.mohammed@linaro.org,
+        agsumit@qti.qualcomm.com
+Subject: [PATCH] tty: serial: msm_serial: Fix XON/XOFF
+Date:   Mon, 20 May 2019 12:34:35 +0200
+Message-Id: <20190520103435.30850-1-jorge.ramirez-ortiz@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <20190517100138.12910-1-s.hauer@pengutronix.de>
-In-Reply-To: <20190517100138.12910-1-s.hauer@pengutronix.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 17 May 2019 07:50:46 -0300
-Message-ID: <CAOMZO5Dr_4re5FZTgAwURKvLHwM-8Ae6EZ6uk8WmuEpy+sX5Zw@mail.gmail.com>
-Subject: Re: [PATCH] serial: imx: remove log spamming error message
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 17, 2019 at 7:38 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
->
-> Each time the DMA engine signals a transaction error the driver prints
-> a message at error level. Getting transaction errors is pretty much
-> expected on baudrate mismatches and the correspoding error counters
-> are increased in this case properly. Remove the error message which
-> is possibly repeated at a very high rate which can lock up the whole
-> system.
->
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+When the tty layer requests the uart to throttle, the current code
+executing in msm_serial will trigger "Bad mode in Error Handler" and
+generate an invalid stack frame in pstore before rebooting (that is if
+pstore is indeed configured: otherwise the user shall just notice a
+reboot with no further information dumped to the console).
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+This patch replaces the PIO byte accessor with the word accessor
+already used in PIO mode.
+
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+---
+ drivers/tty/serial/msm_serial.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 109096033bb1..23833ad952ba 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -860,6 +860,7 @@ static void msm_handle_tx(struct uart_port *port)
+ 	struct circ_buf *xmit = &msm_port->uart.state->xmit;
+ 	struct msm_dma *dma = &msm_port->tx_dma;
+ 	unsigned int pio_count, dma_count, dma_min;
++	char buf[4] = { 0 };
+ 	void __iomem *tf;
+ 	int err = 0;
+ 
+@@ -869,10 +870,12 @@ static void msm_handle_tx(struct uart_port *port)
+ 		else
+ 			tf = port->membase + UART_TF;
+ 
++		buf[0] = port->x_char;
++
+ 		if (msm_port->is_uartdm)
+ 			msm_reset_dm_count(port, 1);
+ 
+-		iowrite8_rep(tf, &port->x_char, 1);
++		iowrite32_rep(tf, buf, 1);
+ 		port->icount.tx++;
+ 		port->x_char = 0;
+ 		return;
+-- 
+2.21.0
+
