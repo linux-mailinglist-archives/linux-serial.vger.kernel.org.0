@@ -2,103 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2335523BAE
-	for <lists+linux-serial@lfdr.de>; Mon, 20 May 2019 17:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E5123BBE
+	for <lists+linux-serial@lfdr.de>; Mon, 20 May 2019 17:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387702AbfETPH4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 May 2019 11:07:56 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52902 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731505AbfETPHz (ORCPT
+        id S2387857AbfETPKg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 May 2019 11:10:36 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35824 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732690AbfETPKf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 May 2019 11:07:55 -0400
-Received: by mail-wm1-f66.google.com with SMTP id y3so13704988wmm.2
-        for <linux-serial@vger.kernel.org>; Mon, 20 May 2019 08:07:54 -0700 (PDT)
+        Mon, 20 May 2019 11:10:35 -0400
+Received: by mail-pl1-f194.google.com with SMTP id p1so1481054plo.2
+        for <linux-serial@vger.kernel.org>; Mon, 20 May 2019 08:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3FCkJMun06bDUVWTAvV42COQZNf02FQ8u62uqqJiOUg=;
-        b=EzqGCTeHr1mxFc/IIH/eDfjStg8gyhuoN7DpS3KC+9YyD2U5qUFrxigfAPSw4xCK0n
-         MbFMfVEOChtVmivqDSSSqSdBP3ZUHRXbQeZnffYrr5TFW05A/RTwj9wSOys1oOBiK7Kn
-         756EffHkeyW9iNA3rer9/kTbd0tCHUioS2XLz87ZX+N064+Xf6rkHhwy8KE+y7oEyesr
-         R97BQK76VTBbxwl9u0OZEWgkWPOIjjyLF6bYkoAnCkgPenv0vd90n2fkKE9bJX83L0y0
-         m+h207nWDlglAG/p4vFzjhXcwihCxdRteNjfqS7l6EO1UZGbWL8o8my6Nr28LXx0tks9
-         MGlA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Zf/b75c5bSD4qvEIIv/t+c3t9VM2ZbZd5sbL+Pqt2/A=;
+        b=axp4PAGTZM3hbODFyEUuqLrn6uI5P/Kg9MvWlfIiXTe15qdoZWMSpo+ZzlLIPrXywu
+         e4tzGjPDk6ZF+TIK5y9iTEkdRVtMoaBaD8kT+5xiTSWZbs5RxOBDQeoYFcGAt6fALWQK
+         +deE2WHpizsTr9UUYtj+Sd0HWwmLTufGrI0++xAboUkMP2obDwrJHYDdAmnU7SCJiKjY
+         tBQxR9kQxVaKa/JWh+bhSFNExbFO09vT4dXNlllSxeSL4wE6tetSzUi4Yz3M33+/aLNp
+         pRsLLynl7xNONdQZHKqUb9Bn2u3gGwgtkD++CzB8ThT02XfzOe8eNw7oO6NjRym28QCc
+         wV3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3FCkJMun06bDUVWTAvV42COQZNf02FQ8u62uqqJiOUg=;
-        b=qgYii1VI0GvZN4ZjBH4L4kBn/yKVcyOtNIuZpepb0ZXAHJwG5jXjfJM7SqxgoSvEMr
-         VALzsHAhFf4+A+p+jbuBt6P8xR9JzwUrg0fhrt8K99yjaDKBTxCMwr4P9s0JtfRZrG2E
-         zvJXgCFMyZ+FvdaXT7ZbwQY0m2whhzz1p7zKY2Mff0CrwZTHGUrWnMuabmDeqUd2yt24
-         lq31YLB2U0e2LgRvAPNTwaNbtK0u+3pT/AiQ09ejCimBbR43wQzqObMbkha0srMEiV01
-         g6GOGjctXGUdGQ7m+zbim7YPKhOuZHmlb8DX0J4hfNsN4Y8V04LFHIMqDumHhH0oZsPT
-         hYGw==
-X-Gm-Message-State: APjAAAWPs6XV4L8VWCcJ5qngc4SxWj95PQbfoyUobtJjHBGPRaUrCEkM
-        xmxHI9k+s4GOz/xvt0NWIiseLQ==
-X-Google-Smtp-Source: APXvYqzjhtWs2ECOpc6DH3Regf74W/w90rqJ9sdZ9gYa3j955AR0Pgj0HE8TQfallTTr07Ejd0Hg2Q==
-X-Received: by 2002:a1c:f10f:: with SMTP id p15mr9221577wmh.150.1558364873726;
-        Mon, 20 May 2019 08:07:53 -0700 (PDT)
-Received: from [192.168.1.7] (139.red-79-146-81.dynamicip.rima-tde.net. [79.146.81.139])
-        by smtp.gmail.com with ESMTPSA id l12sm16472733wmj.0.2019.05.20.08.07.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 08:07:53 -0700 (PDT)
-Subject: Re: [PATCH] tty: serial: msm_serial: Fix XON/XOFF
-To:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
-        david.brown@linaro.org, gregkh@linuxfoundation.org
-Cc:     jslaby@suse.com, keescook@chromium.org, anton@enomsg.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Zf/b75c5bSD4qvEIIv/t+c3t9VM2ZbZd5sbL+Pqt2/A=;
+        b=jt1sPZVQd9DnmiknQgrIBezgpzzXRpn6Efxy0P6xrnLfynGfOCHMoy0dzBvtMB6qWY
+         YUAl5fZjMh671MzXor/J/fnnWWla8Gf4/XM0fg0jlGPL3yE79ol2qp4KbL5kqulKU8gL
+         dZD+P1LAqKIVlDHTqTVfvU4JvZmegVmrNHyxwNwdxqyFYBk0rSAoUZe8AktcmGFmVqQD
+         AlSXLCeCtBXowfgOXYjX6UgWXQhfZJrtycIMBGkHYgrki03822KX4W4pjpvHF0rLbeG3
+         mqr96XPqBP6dNMumz145hYqQcIv5acReKDIag8fHeyauKRU+WwPMe/nNK3lnJXuzwZZu
+         sQ9Q==
+X-Gm-Message-State: APjAAAXQVg2p2CLZm7CqoiEu5FgKKEsrO3aPFpWVD721aLraocPfMCmL
+        9WntyMZqw7WPee95cFFA4ZOBmQ==
+X-Google-Smtp-Source: APXvYqyIbxhF72Gddpb/bXpKewAASsv+q88oJd8k2OIHZXaugro0tQWP23rMQUZmDPFL6LFBkt1pqg==
+X-Received: by 2002:a17:902:24c7:: with SMTP id l7mr26678451plg.192.1558365034795;
+        Mon, 20 May 2019 08:10:34 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id o66sm21164864pfb.184.2019.05.20.08.10.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 20 May 2019 08:10:34 -0700 (PDT)
+Date:   Mon, 20 May 2019 08:11:01 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
+        david.brown@linaro.org, gregkh@linuxfoundation.org,
+        jslaby@suse.com, keescook@chromium.org, anton@enomsg.org,
         ccross@android.com, tony.luck@intel.com,
         linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org, khasim.mohammed@linaro.org,
         agsumit@qti.qualcomm.com
+Subject: Re: [PATCH] tty: serial: msm_serial: Fix XON/XOFF
+Message-ID: <20190520151101.GN2085@tuxbook-pro>
 References: <20190520103435.30850-1-jorge.ramirez-ortiz@linaro.org>
  <20190520145110.7BDAE21721@mail.kernel.org>
  <254704a2-ee20-30cd-8362-6e1bd23ec090@linaro.org>
  <f0c89b84-7c3d-596d-06e1-cb5172e62970@linaro.org>
- <20190520150320.5DBC520856@mail.kernel.org>
-From:   Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
-Message-ID: <c728b454-1aa5-da93-8ed7-f6e4ad75fc4a@linaro.org>
-Date:   Mon, 20 May 2019 17:07:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
 MIME-Version: 1.0
-In-Reply-To: <20190520150320.5DBC520856@mail.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0c89b84-7c3d-596d-06e1-cb5172e62970@linaro.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 5/20/19 17:03, Stephen Boyd wrote:
-> Quoting Jorge Ramirez (2019-05-20 07:58:54)
->> On 5/20/19 16:56, Jorge Ramirez wrote:
->>>
->>> yeah, semantically confusing msm_reset_dm_count is what really matters:
->>> it tells the hardware to only take n bytes (in this case only one) so
->>> the others will be ignored
->>
->> um after I said this, maybe iowrite32_rep should only be applied to
->> uartdm ... what do you think?
->>
+On Mon 20 May 07:58 PDT 2019, Jorge Ramirez wrote:
+
+> On 5/20/19 16:56, Jorge Ramirez wrote:
+> > On 5/20/19 16:51, Stephen Boyd wrote:
+> >> Quoting Jorge Ramirez-Ortiz (2019-05-20 03:34:35)
+> >>> When the tty layer requests the uart to throttle, the current code
+> >>> executing in msm_serial will trigger "Bad mode in Error Handler" and
+> >>> generate an invalid stack frame in pstore before rebooting (that is if
+> >>> pstore is indeed configured: otherwise the user shall just notice a
+> >>> reboot with no further information dumped to the console).
+> >>>
+> >>> This patch replaces the PIO byte accessor with the word accessor
+> >>> already used in PIO mode.
+> >>
+> >> Because the hardware only accepts word based accessors and fails
+> >> otherwise? I can believe that.
+> >>
+> >> I wonder if the earlier UART hardware this driver used to support (i.e.
+> >> pre-DM) would accept byte access to the registers. It's possible, but we
+> >> don't really care because those boards aren't supported.
+> > 
+> > ok.
+> > 
+> > also the PIO path uses iowrite32_rep to write a number of bytes (from 1
+> > to 4) so I think it is also appropriate to use it for XON/XOFF.
+> > 
+> >>
+> >>>
+> >>> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+> >>> ---
+> >>
+> >> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> >>
+> >>>  drivers/tty/serial/msm_serial.c | 5 ++++-
+> >>>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+> >>> index 109096033bb1..23833ad952ba 100644
+> >>> --- a/drivers/tty/serial/msm_serial.c
+> >>> +++ b/drivers/tty/serial/msm_serial.c
+> >>> @@ -869,10 +870,12 @@ static void msm_handle_tx(struct uart_port *port)
+> >>>                 else
+> >>>                         tf = port->membase + UART_TF;
+> >>>  
+> >>> +               buf[0] = port->x_char;
+> >>> +
+> >>>                 if (msm_port->is_uartdm)
+> >>>                         msm_reset_dm_count(port, 1);
+> >>>  
+> >>> -               iowrite8_rep(tf, &port->x_char, 1);
+> >>> +               iowrite32_rep(tf, buf, 1);
+> >>
+> >> I suppose it's OK to write some extra zeroes here?
+> >>
+> >>
+> > 
+> > yeah, semantically confusing msm_reset_dm_count is what really matters:
+> > it tells the hardware to only take n bytes (in this case only one) so
+> > the others will be ignored
 > 
-> Probably. The uartdm hardware typically required words everywhere while
-> the pre-dm hardware didn't. It's an if condition so it should be OK.
-> 
-> It may be time to remove non-uartdm support from this driver
-> all-together. From what I recall the only devices that are upstream are
-> the uartdm ones, so it may be easier to just remove the legacy stuff
-> that nobody has tested in many years.
-> 
+> um after I said this, maybe iowrite32_rep should only be applied to
+> uartdm ... what do you think?
 > 
 
-should this be merged before removing the non-uartdm support or after?
+If I read the history correctly this write was a writel() up until
+68252424a7c7 ("tty: serial: msm: Support big-endian CPUs").
 
-I also have some other changes - in particular with respect to the usage
-of fifosize which according to the documentation is in words not in bytes.
+So I think you should just change this back to a iowrite32_rep() and add
+a Fixes tag.
 
-
+Regards,
+Bjorn
