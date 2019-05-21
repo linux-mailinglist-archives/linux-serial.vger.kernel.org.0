@@ -2,112 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD4324F0F
-	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 14:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34BB24F61
+	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 14:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbfEUMmH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 May 2019 08:42:07 -0400
-Received: from mga06.intel.com ([134.134.136.31]:37645 "EHLO mga06.intel.com"
+        id S1728045AbfEUM4y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 May 2019 08:56:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42516 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727819AbfEUMmH (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 May 2019 08:42:07 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 May 2019 05:42:07 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga006.fm.intel.com with ESMTP; 21 May 2019 05:42:03 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hT45i-00081U-Q2; Tue, 21 May 2019 15:42:02 +0300
-Date:   Tue, 21 May 2019 15:42:02 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Esben Haabendal <esben@geanix.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Enrico Weigelt <lkml@metux.net>, Jiri Slaby <jslaby@suse.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
+        id S1726692AbfEUM4y (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 21 May 2019 08:56:54 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 566CB21773;
+        Tue, 21 May 2019 12:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558443413;
+        bh=DNJAuBIygsRZsy8YE6AFsvRkHodu3Ps7PRoyN9cJG9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QBjOnqT6AXnI//DQ6VhlhHPldQqPZFA0zrSHyc7t5AiJ/YhrmEIKJvp7cD98aOqej
+         LPMO8J0h/p8266dD9mdgrW6EDw891UUfAP/Fg03Xogs2009MME+23lrgHcTatPbjOp
+         wYd4pbCw+fZwvzAXOz8V6TQeImhjJNEGzJ2Z+8Pc=
+Date:   Tue, 21 May 2019 14:56:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Esben Haabendal <esben@haabendal.dk>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH resend] serial: 8250: Add support for using
- platform_device resources
-Message-ID: <20190521124202.GE9224@smile.fi.intel.com>
-References: <20190430140416.4707-1-esben@geanix.com>
- <20190521113426.16790-1-esben@geanix.com>
+Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD
+ function
+Message-ID: <20190521125651.GA6264@kroah.com>
+References: <87o94ejwrx.fsf@haabendal.dk>
+ <20190507133844.GA6194@dell>
+ <87bm05mpmx.fsf@haabendal.dk>
+ <20190514104741.GO4319@dell>
+ <20190514122618.GA18859@kroah.com>
+ <87imudky2o.fsf@haabendal.dk>
+ <20190521100904.GA13612@kroah.com>
+ <87pnocm59v.fsf@haabendal.dk>
+ <20190521111817.GA24911@kroah.com>
+ <87lfz0m3ge.fsf@haabendal.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190521113426.16790-1-esben@geanix.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <87lfz0m3ge.fsf@haabendal.dk>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, May 21, 2019 at 01:34:26PM +0200, Esben Haabendal wrote:
-> Allow getting memory resource (mapbase or iobase) as well as irq from
-> platform_device resources.
+On Tue, May 21, 2019 at 01:50:25PM +0200, Esben Haabendal wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 > 
-> The UPF_DEV_RESOURCES flag must be set for devices where platform_device
-> resources are to be used.  When not set, driver behaves as before.
+> > On Tue, May 21, 2019 at 01:11:08PM +0200, Esben Haabendal wrote:
+> >> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> >> 
+> >> >> I will try ad hold back with this thread until you get back to it.
+> >> >
+> >> > Ok, I have no idea what is going on here, sorry.  This is a really long
+> >> > and meandering thread, and I can't even find the original patches in my
+> >> > queue.
+> >> >
+> >> > So can you resend things and we can start over?  :)
+> >> 
+> >> Will do.
+> >> 
+> >> > But note, using a mfd for a uart seems VERY odd to me...
+> >> 
+> >> Ok.  In my case, I have a pcie card with an fpga which includes 5 uart
+> >> ports, 3 ethernet interfaces and a number of custom IP blocks.
+> >> I believe that an mfd driver for that pcie card in that case.
+> >
+> > I believe you need to fix that fpga to expose individual pci devices
+> > such that you can properly bind the individual devices to the expected
+> > drivers :)
 > 
-> This allows use of the serial8250 driver together with devices with
-> resources added by platform_device_add_resources(), such as mfd child
-> devices added with mfd_add_devices().
+> Well, that is really out-of-scope of what I am doing here.
+
+Not really, if you have control over the fpga firmware (and odds are you
+do), just fix that and instantly your device works with all kernels, no
+need to change anything.
+
+Why not do this?
+
+> > Seriously, who makes such a broken fpga device that goes against the PCI
+> > spec that way?  Well, not so much as "goes against it", as "ignores all
+> > of the proper ideas of the past 20 years for working with PCI devices".
 > 
-> When UPF_DEV_RESOURCES flag is set, the following platform_data fields should
-> not be used: mapbase, iobase, mapsize, and irq.  They are superseded by the
-> resources attached to the device.
-> 
+> Might be.  But that is the firmware I have to work with here, and I
+> still hope we can find a good solution for implementing a driver without
+> having to maintain out-of-tree patches.
 
-Same comment here: Requesting resource is orthogonal to the retrieving or
-slicing them.
+As this hardware will not work on any operating system as-is, why not
+fix the firmware to keep from having to support a one-off device that no
+one else would be crazy enough to create?  :)
 
-> +		if (p->flags & UPF_DEV_RESOURCES) {
-> +			serial8250_probe_resources(dev, i, p, &uart);
+thanks,
 
-This can be easily detected by checking for the resources directly, like
-
-	res = platform_get_resource(...);
-	if (res)
-		new_scheme();
-	else
-		old_scheme();
-
-Otherwise looks good.
-
-
-> -		if (!request_mem_region(port->mapbase, size, "serial")) {
-> +		if (!(port->flags & UPF_DEV_RESOURCES) &&
-> +		    !request_mem_region(port->mapbase, size, "serial")) {
-
-> -				release_mem_region(port->mapbase, size);
-> +				if (!(port->flags & UPF_DEV_RESOURCES))
-> +					release_mem_region(port->mapbase, size);
-
-> -		if (!request_region(port->iobase, size, "serial"))
-> +		if (!(port->flags & UPF_DEV_RESOURCES) &&
-> +		    !request_region(port->iobase, size, "serial"))
-
-> -		release_mem_region(port->mapbase, size);
-> +		if (!(port->flags & UPF_DEV_RESOURCES))
-> +			release_mem_region(port->mapbase, size);
-
-> -		release_region(port->iobase, size);
-> +		if (!(port->flags & UPF_DEV_RESOURCES))
-> +			release_region(port->iobase, size);
-
-All these changes are not related to what you describe in the commit message.
-is a workaround for the bug in the parent MFD driver of the 8250.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
