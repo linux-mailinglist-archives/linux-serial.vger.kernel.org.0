@@ -2,104 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E34BB24F61
-	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 14:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9959F24FDA
+	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 15:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728045AbfEUM4y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 May 2019 08:56:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42516 "EHLO mail.kernel.org"
+        id S1728247AbfEUNLe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 May 2019 09:11:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726692AbfEUM4y (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 May 2019 08:56:54 -0400
+        id S1726900AbfEUNLd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 21 May 2019 09:11:33 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 566CB21773;
-        Tue, 21 May 2019 12:56:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DA77620856;
+        Tue, 21 May 2019 13:11:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558443413;
-        bh=DNJAuBIygsRZsy8YE6AFsvRkHodu3Ps7PRoyN9cJG9w=;
+        s=default; t=1558444293;
+        bh=PswCI7qaEh7te+WzS2oP8fteQs8KoBFwCF8/BdVQ8Cw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QBjOnqT6AXnI//DQ6VhlhHPldQqPZFA0zrSHyc7t5AiJ/YhrmEIKJvp7cD98aOqej
-         LPMO8J0h/p8266dD9mdgrW6EDw891UUfAP/Fg03Xogs2009MME+23lrgHcTatPbjOp
-         wYd4pbCw+fZwvzAXOz8V6TQeImhjJNEGzJ2Z+8Pc=
-Date:   Tue, 21 May 2019 14:56:51 +0200
+        b=NzLJV1RaZC8MshHxDBTshU7//9I8vU3RdIHJuIP9aN8FzCHsfhNnYC26m/PHnsimt
+         jRXq4FBdoFgvF+3kA+jnUCFEpGpAEe2wQSUoSZSAJWStyO9Fi1xMPdWt8GGBF4OmAH
+         b7s+/Y2Lw6fQRDI+D7lsYUdTghpWTrC2pQRnrdiU=
+Date:   Tue, 21 May 2019 15:11:31 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Esben Haabendal <esben@haabendal.dk>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+To:     Esben Haabendal <esben@geanix.com>
+Cc:     linux-serial@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Enrico Weigelt <lkml@metux.net>, Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD
- function
-Message-ID: <20190521125651.GA6264@kroah.com>
-References: <87o94ejwrx.fsf@haabendal.dk>
- <20190507133844.GA6194@dell>
- <87bm05mpmx.fsf@haabendal.dk>
- <20190514104741.GO4319@dell>
- <20190514122618.GA18859@kroah.com>
- <87imudky2o.fsf@haabendal.dk>
- <20190521100904.GA13612@kroah.com>
- <87pnocm59v.fsf@haabendal.dk>
- <20190521111817.GA24911@kroah.com>
- <87lfz0m3ge.fsf@haabendal.dk>
+Subject: Re: [PATCH resend] serial: 8250: Add support for using
+ platform_device resources
+Message-ID: <20190521131131.GA19685@kroah.com>
+References: <20190430140416.4707-1-esben@geanix.com>
+ <20190521113426.16790-1-esben@geanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87lfz0m3ge.fsf@haabendal.dk>
+In-Reply-To: <20190521113426.16790-1-esben@geanix.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, May 21, 2019 at 01:50:25PM +0200, Esben Haabendal wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+On Tue, May 21, 2019 at 01:34:26PM +0200, Esben Haabendal wrote:
+> Allow getting memory resource (mapbase or iobase) as well as irq from
+> platform_device resources.
 > 
-> > On Tue, May 21, 2019 at 01:11:08PM +0200, Esben Haabendal wrote:
-> >> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> >> 
-> >> >> I will try ad hold back with this thread until you get back to it.
-> >> >
-> >> > Ok, I have no idea what is going on here, sorry.  This is a really long
-> >> > and meandering thread, and I can't even find the original patches in my
-> >> > queue.
-> >> >
-> >> > So can you resend things and we can start over?  :)
-> >> 
-> >> Will do.
-> >> 
-> >> > But note, using a mfd for a uart seems VERY odd to me...
-> >> 
-> >> Ok.  In my case, I have a pcie card with an fpga which includes 5 uart
-> >> ports, 3 ethernet interfaces and a number of custom IP blocks.
-> >> I believe that an mfd driver for that pcie card in that case.
-> >
-> > I believe you need to fix that fpga to expose individual pci devices
-> > such that you can properly bind the individual devices to the expected
-> > drivers :)
-> 
-> Well, that is really out-of-scope of what I am doing here.
+> The UPF_DEV_RESOURCES flag must be set for devices where platform_device
+> resources are to be used.  When not set, driver behaves as before.
 
-Not really, if you have control over the fpga firmware (and odds are you
-do), just fix that and instantly your device works with all kernels, no
-need to change anything.
+Nothing actually sets this flag in this patch, so I can't take this as
+you are adding new features that no one uses :(
 
-Why not do this?
-
-> > Seriously, who makes such a broken fpga device that goes against the PCI
-> > spec that way?  Well, not so much as "goes against it", as "ignores all
-> > of the proper ideas of the past 20 years for working with PCI devices".
-> 
-> Might be.  But that is the firmware I have to work with here, and I
-> still hope we can find a good solution for implementing a driver without
-> having to maintain out-of-tree patches.
-
-As this hardware will not work on any operating system as-is, why not
-fix the firmware to keep from having to support a one-off device that no
-one else would be crazy enough to create?  :)
+Where is the driver that sets this?
 
 thanks,
 
