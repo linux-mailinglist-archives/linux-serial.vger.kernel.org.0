@@ -2,159 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6E925294
-	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 16:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F1625308
+	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 16:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728651AbfEUOrs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 May 2019 10:47:48 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42323 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727044AbfEUOrr (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 May 2019 10:47:47 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 145so8706065pgg.9;
-        Tue, 21 May 2019 07:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=vWapel5oQFRL5IS9nITnTDS1CiQKS+fkgwKTVcUkRi8=;
-        b=J+wfUmDSL7gurwPNzxB20Y9csHlDX+J2lMuxHU1BjO7Ee4cmiTK3EE9XkA8tMMn42W
-         tpNPg1ZAjRJesMpVd8tltQp5G3UdZSkYd7s2iUQZnoF4ZHlXjn1NwcMWf0p+gms2GcSW
-         uOK0LiORxiKO8x2i6QVei6lCzwf/Opm9dLSkMSuxG6bWc+lYkLbmpcV9askG7wkwCGeZ
-         p+qPqk66IZYb5VzlNCh1Llg/fKpj/4lGWf/W63jm8IekkNnB+EVElP15Ay/Iz57W50SU
-         8VulXzLuTttSDYpHHb9B4whok/Yqx9b5E1gk68sEd01REGO192+SgL/PDwIKH8M1JkcA
-         k7gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=vWapel5oQFRL5IS9nITnTDS1CiQKS+fkgwKTVcUkRi8=;
-        b=FrDfaKdWEfdmhoCpSEH2sRgwN/pOCx6i/SKXjX7vRKFe1DRbV9RaGc0UgvlPssi97X
-         vNEUPtSLQ6aQ7vX1VbzyYIzthgZ2NjMrePOKwjaYFQ7qd3du/vbvEPIie7Qvo+RH/MYS
-         +wcccbXKL/28Petvz7zkbajiPSVMOL4mayknFEWmYkjpaWLhL0QbKQJUQoAjnwvxhGhI
-         /smuZbnmwBsoFlmgoyJmXpI4G3Jq/7r9C/xwIBdd6iScdNZmk1vBb382NbNAdj0FdNU6
-         7lsDRLipoJxq6R1XgvyIpOVku1Gt8WSbLFlZtZElaRZEBs0O559Ss9sS5rmcjBjocw1E
-         EPVA==
-X-Gm-Message-State: APjAAAUOgwe9EogSr3h/Ix6QYOaSuY3pJjpC1//j8UWUhbHAkyO2OxHc
-        p8YeR1e4jdf303IrRswtyeY=
-X-Google-Smtp-Source: APXvYqzLKro+yl9TmaN24S/pQj0fpek+/qhlfX1j1ZWZnpe6kEvnbtW9El8eBXcB5losLDhepUyYKA==
-X-Received: by 2002:a62:304:: with SMTP id 4mr70248166pfd.186.1558450067108;
-        Tue, 21 May 2019 07:47:47 -0700 (PDT)
-Received: from localhost ([43.224.245.181])
-        by smtp.gmail.com with ESMTPSA id a7sm40112206pgj.42.2019.05.21.07.47.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 May 2019 07:47:46 -0700 (PDT)
-From:   houweitao <houweitaoo@gmail.com>
-X-Google-Original-From: houweitao <houweitao@xiaomi.com>
-To:     linus.walleij@linaro.org, yamada.masahiro@socionext.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        baohua@kernel.org, gregkh@linuxfoundation.org, jslaby@suse.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, davem@davemloft.net,
-        rostedt@goodmis.org, mingo@redhat.com
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, sparclinux@vger.kernel.org,
-        houweitao <houweitao@xiaomi.com>
-Subject: [PATCH] tracing: fix typos in code and comments
-Date:   Tue, 21 May 2019 22:47:40 +0800
-Message-Id: <20190521144740.22490-1-houweitao@xiaomi.com>
-X-Mailer: git-send-email 2.18.0
+        id S1728045AbfEUOxg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 May 2019 10:53:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727941AbfEUOxg (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 21 May 2019 10:53:36 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F269208C3;
+        Tue, 21 May 2019 14:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558450416;
+        bh=AjUIu/ylmOl1CFi7JWDOg4hBOHxxuVBfcLwEBhgOb04=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2LL4MO6xFmvTJU8dsdLggafCdcnhpALUcbLH7G5g2ZEFKhyziOLQL5060cX4VFo2A
+         7rcfVmUp6Kc7ndLsp+8aq4Ixh/s2zULsYzKiMSyaDRIzNtilOPiACwlOfqGSfWI2Ok
+         Hdg4RQduSz5p4xRxeZRib2kaMQJ7qFNqTe724Fvk=
+Date:   Tue, 21 May 2019 16:53:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Esben Haabendal <esben@haabendal.dk>
+Cc:     linux-serial@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Enrico Weigelt <lkml@metux.net>, Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend] serial: 8250: Add support for using
+ platform_device resources
+Message-ID: <20190521145333.GA3491@kroah.com>
+References: <20190430140416.4707-1-esben@geanix.com>
+ <20190521113426.16790-1-esben@geanix.com>
+ <20190521131131.GA19685@kroah.com>
+ <878suzn9wx.fsf@haabendal.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878suzn9wx.fsf@haabendal.dk>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-fix ingore to ignore in kernel; since there are other
-mistakes can be found with "git grep ",fix all
+On Tue, May 21, 2019 at 04:45:34PM +0200, Esben Haabendal wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> 
+> > On Tue, May 21, 2019 at 01:34:26PM +0200, Esben Haabendal wrote:
+> >> Allow getting memory resource (mapbase or iobase) as well as irq from
+> >> platform_device resources.
+> >> 
+> >> The UPF_DEV_RESOURCES flag must be set for devices where platform_device
+> >> resources are to be used.  When not set, driver behaves as before.
+> >
+> > Nothing actually sets this flag in this patch, so I can't take this as
+> > you are adding new features that no one uses :(
+> >
+> > Where is the driver that sets this?
+> 
+> It sits here.
 
-Signed-off-by: houweitao <houweitao@xiaomi.com>
----
- drivers/pinctrl/uniphier/pinctrl-uniphier-core.c | 2 +-
- drivers/rtc/rtc-sirfsoc.c                        | 2 +-
- drivers/tty/serial/mxs-auart.c                   | 2 +-
- drivers/tty/serial/serial_txx9.c                 | 2 +-
- drivers/tty/serial/sunsab.c                      | 2 +-
- kernel/trace/trace.c                             | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+Where is "here"?
 
-diff --git a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-index 57babf31e320..9f56863ed481 100644
---- a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-+++ b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-@@ -399,7 +399,7 @@ static int uniphier_conf_pin_bias_set(struct pinctrl_dev *pctldev,
- 		}
- 
- 		if (arg == 0)
--			return 0; /* configuration ingored */
-+			return 0; /* configuration ignored */
- 		break;
- 	default:
- 		BUG();
-diff --git a/drivers/rtc/rtc-sirfsoc.c b/drivers/rtc/rtc-sirfsoc.c
-index 9ba28d1ebd87..af1b7ba403fc 100644
---- a/drivers/rtc/rtc-sirfsoc.c
-+++ b/drivers/rtc/rtc-sirfsoc.c
-@@ -121,7 +121,7 @@ static int sirfsoc_rtc_set_alarm(struct device *dev,
- 		rtc_status_reg = sirfsoc_rtc_readl(rtcdrv, RTC_STATUS);
- 		if (rtc_status_reg & SIRFSOC_RTC_AL0E) {
- 			/*
--			 * An ongoing alarm in progress - ingore it and not
-+			 * An ongoing alarm in progress - ignore it and not
- 			 * to return EBUSY
- 			 */
- 			dev_info(dev, "An old alarm was set, will be replaced by a new one\n");
-diff --git a/drivers/tty/serial/mxs-auart.c b/drivers/tty/serial/mxs-auart.c
-index 4c188f4079b3..9f83a387d6ed 100644
---- a/drivers/tty/serial/mxs-auart.c
-+++ b/drivers/tty/serial/mxs-auart.c
-@@ -667,7 +667,7 @@ static void mxs_auart_rx_char(struct mxs_auart_port *s)
- 	}
- 
- 	/*
--	 * Mask off conditions which should be ingored.
-+	 * Mask off conditions which should be ignored.
- 	 */
- 	stat &= s->port.read_status_mask;
- 
-diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
-index d22ccb32aa9b..372890e3b896 100644
---- a/drivers/tty/serial/serial_txx9.c
-+++ b/drivers/tty/serial/serial_txx9.c
-@@ -314,7 +314,7 @@ receive_chars(struct uart_txx9_port *up, unsigned int *status)
- 			}
- 
- 			/*
--			 * Mask off conditions which should be ingored.
-+			 * Mask off conditions which should be ignored.
- 			 */
- 			disr &= up->port.read_status_mask;
- 
-diff --git a/drivers/tty/serial/sunsab.c b/drivers/tty/serial/sunsab.c
-index 72131b5e132e..daae2b0dbe11 100644
---- a/drivers/tty/serial/sunsab.c
-+++ b/drivers/tty/serial/sunsab.c
-@@ -200,7 +200,7 @@ receive_chars(struct uart_sunsab_port *up,
- 				up->port.icount.overrun++;
- 
- 			/*
--			 * Mask off conditions which should be ingored.
-+			 * Mask off conditions which should be ignored.
- 			 */
- 			stat->sreg.isr0 &= (up->port.read_status_mask & 0xff);
- 			stat->sreg.isr1 &= ((up->port.read_status_mask >> 8) & 0xff);
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 2c92b3d9ea30..bfa5ab0663e7 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -8554,7 +8554,7 @@ init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
- 	ftrace_init_tracefs(tr, d_tracer);
- }
- 
--static struct vfsmount *trace_automount(struct dentry *mntpt, void *ingore)
-+static struct vfsmount *trace_automount(struct dentry *mntpt, void *ignore)
- {
- 	struct vfsmount *mnt;
- 	struct file_system_type *type;
--- 
-2.18.0
+> It is a rather big and clunky mfd driver, not ready for
+> upstreaming in its current form.  I hope to get around to clean it up.
+> But it is for a very specific hardware that is really available or
+> usable for anybody else.  Does it make sense to spend effort on
+> submitting such a driver?
 
+I can not take kernel apis/features being added for no in-kernel user,
+that's just how Linux kernel development works.  I'll be glad to review
+this if we have an actual user for this code, but it also needs to be
+submitted at the same time.
+
+That's how we have always worked, nothing new here :)
+
+thanks,
+
+greg k-h
