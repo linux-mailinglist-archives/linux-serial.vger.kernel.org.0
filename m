@@ -2,219 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D479F24DEF
-	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 13:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C72424E59
+	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 13:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbfEULec (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 May 2019 07:34:32 -0400
-Received: from first.geanix.com ([116.203.34.67]:52160 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726995AbfEULeb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 May 2019 07:34:31 -0400
+        id S1728004AbfEULu3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 May 2019 07:50:29 -0400
+Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com ([46.30.210.182]:48213
+        "EHLO mailrelay1-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727262AbfEULu3 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 21 May 2019 07:50:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=eEuX7iutFvi1HOGEPs3UIDtx4qkK8OvCvI0OJsFeod4=;
+        b=nwqFvBDK3fqszHkd0uNt2gYOdVmI4rKnl55oFSOB004/238Qo9tuSBi76k5fzsXp0ooR0KTAp1OPF
+         9FDwdQ67qmf9DKj+wceYctN0d/y+GxYqAEojl1RRAm79+cCxsbHTgMyeucBMcBC61BgTMl/bQ5P3c9
+         15Iz2cMv3JgJCNqo=
+X-HalOne-Cookie: 9767e542c6c60036e2d58a9f057583b96d4064d7
+X-HalOne-ID: 9efd9c0d-7bbe-11e9-bc27-d0431ea8a283
 Received: from localhost (unknown [193.163.1.7])
-        by first.geanix.com (Postfix) with ESMTPSA id 41086FD5;
-        Tue, 21 May 2019 11:33:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1558438427; bh=9NTb6le4iq4juAZ9jC1zP9By91T4sFHGiEAbPhiZnnA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JI0VHVdKOKMtkVUcND0jJ5MgoNLOVcgBerQFcwQMJ+nhIvJCYEa0U/Ln6jzNZ9Fjk
-         QrvpPyr9am8YXGCg1u4zctRDJj7F/ae407ArB+aqigzlawmAgVNJYgTk6olWeank9B
-         lpfachS6pCMBJwXedA9s5a3mdLtXrXzcCTckldIuNP3eO8hS2ZFBBzSNEOApR7RCGs
-         EYaXe7Et51Bj70a69orMV/WUq9/jnNf6GjSNgKQiL5+/3JQoD+LrbukRd/MBCK2Y1y
-         4qrccd3z4G4mEXRVXdg//PGFyNoH8JPk9LCx4QQ8FxOXIQDG3gLrTVN1wHKmBT3mD2
-         Xm64v4i3mo4ZQ==
-From:   Esben Haabendal <esben@geanix.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Enrico Weigelt <lkml@metux.net>,
-        Jiri Slaby <jslaby@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 9efd9c0d-7bbe-11e9-bc27-d0431ea8a283;
+        Tue, 21 May 2019 11:50:25 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH resend] serial: 8250: Add support for using platform_device resources
-Date:   Tue, 21 May 2019 13:34:26 +0200
-Message-Id: <20190521113426.16790-1-esben@geanix.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190430140416.4707-1-esben@geanix.com>
-References: <20190430140416.4707-1-esben@geanix.com>
+Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD function
+References: <20190426084038.6377-3-esben@geanix.com>
+        <20190507114905.GB29524@dell> <87o94ejwrx.fsf@haabendal.dk>
+        <20190507133844.GA6194@dell> <87bm05mpmx.fsf@haabendal.dk>
+        <20190514104741.GO4319@dell> <20190514122618.GA18859@kroah.com>
+        <87imudky2o.fsf@haabendal.dk> <20190521100904.GA13612@kroah.com>
+        <87pnocm59v.fsf@haabendal.dk> <20190521111817.GA24911@kroah.com>
+Date:   Tue, 21 May 2019 13:50:25 +0200
+In-Reply-To: <20190521111817.GA24911@kroah.com> (Greg Kroah-Hartman's message
+        of "Tue, 21 May 2019 13:18:17 +0200")
+Message-ID: <87lfz0m3ge.fsf@haabendal.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 796779db2bec
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Allow getting memory resource (mapbase or iobase) as well as irq from
-platform_device resources.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-The UPF_DEV_RESOURCES flag must be set for devices where platform_device
-resources are to be used.  When not set, driver behaves as before.
+> On Tue, May 21, 2019 at 01:11:08PM +0200, Esben Haabendal wrote:
+>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+>> 
+>> >> I will try ad hold back with this thread until you get back to it.
+>> >
+>> > Ok, I have no idea what is going on here, sorry.  This is a really long
+>> > and meandering thread, and I can't even find the original patches in my
+>> > queue.
+>> >
+>> > So can you resend things and we can start over?  :)
+>> 
+>> Will do.
+>> 
+>> > But note, using a mfd for a uart seems VERY odd to me...
+>> 
+>> Ok.  In my case, I have a pcie card with an fpga which includes 5 uart
+>> ports, 3 ethernet interfaces and a number of custom IP blocks.
+>> I believe that an mfd driver for that pcie card in that case.
+>
+> I believe you need to fix that fpga to expose individual pci devices
+> such that you can properly bind the individual devices to the expected
+> drivers :)
 
-This allows use of the serial8250 driver together with devices with
-resources added by platform_device_add_resources(), such as mfd child
-devices added with mfd_add_devices().
+Well, that is really out-of-scope of what I am doing here.
 
-When UPF_DEV_RESOURCES flag is set, the following platform_data fields should
-not be used: mapbase, iobase, mapsize, and irq.  They are superseded by the
-resources attached to the device.
+> Seriously, who makes such a broken fpga device that goes against the PCI
+> spec that way?  Well, not so much as "goes against it", as "ignores all
+> of the proper ideas of the past 20 years for working with PCI devices".
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
----
- drivers/tty/serial/8250/8250_core.c | 56 +++++++++++++++++++++++++++++++++----
- drivers/tty/serial/8250/8250_port.c | 15 ++++++----
- include/linux/serial_core.h         |  1 +
- 3 files changed, 62 insertions(+), 10 deletions(-)
+Might be.  But that is the firmware I have to work with here, and I
+still hope we can find a good solution for implementing a driver without
+having to maintain out-of-tree patches.
 
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index e441221..9df6a98 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -788,6 +788,48 @@ void serial8250_resume_port(int line)
- }
- EXPORT_SYMBOL(serial8250_resume_port);
- 
-+static int serial8250_probe_resources(struct platform_device *pdev,
-+				      unsigned int num,
-+				      struct plat_serial8250_port *p,
-+				      struct uart_8250_port *uart)
-+{
-+	struct resource *r;
-+	int irq;
-+
-+	switch (p->iotype) {
-+	case UPIO_AU:
-+	case UPIO_TSI:
-+	case UPIO_MEM32:
-+	case UPIO_MEM32BE:
-+	case UPIO_MEM16:
-+	case UPIO_MEM:
-+		r = platform_get_resource(pdev, IORESOURCE_MEM, num);
-+		if (!r)
-+			return -ENODEV;
-+		uart->port.mapbase = r->start;
-+		uart->port.mapsize = resource_size(r);
-+		uart->port.flags |= UPF_IOREMAP;
-+		break;
-+	case UPIO_HUB6:
-+	case UPIO_PORT:
-+		r = platform_get_resource(pdev, IORESOURCE_IO, num);
-+		if (!r)
-+			return -ENODEV;
-+		uart->port.iobase = r->start;
-+		uart->port.mapsize = resource_size(r);
-+		break;
-+	}
-+
-+	irq = platform_get_irq(pdev, num);
-+	if (irq == -ENXIO)
-+		uart->port.irq = 0; /* no interrupt -> use polling */
-+	else if (irq < 0)
-+		return irq;
-+	uart->port.irq = irq;
-+
-+	return 0;
-+}
-+
- /*
-  * Register a set of serial devices attached to a platform device.  The
-  * list is terminated with a zero flags entry, which means we expect
-@@ -805,15 +847,19 @@ static int serial8250_probe(struct platform_device *dev)
- 		irqflag = IRQF_SHARED;
- 
- 	for (i = 0; p && p->flags != 0; p++, i++) {
--		uart.port.iobase	= p->iobase;
--		uart.port.membase	= p->membase;
--		uart.port.irq		= p->irq;
-+		uart.port.flags		= p->flags;
-+		if (p->flags & UPF_DEV_RESOURCES) {
-+			serial8250_probe_resources(dev, i, p, &uart);
-+		} else {
-+			uart.port.iobase	= p->iobase;
-+			uart.port.mapbase	= p->mapbase;
-+			uart.port.membase	= p->membase;
-+			uart.port.irq		= p->irq;
-+		}
- 		uart.port.irqflags	= p->irqflags;
- 		uart.port.uartclk	= p->uartclk;
- 		uart.port.regshift	= p->regshift;
- 		uart.port.iotype	= p->iotype;
--		uart.port.flags		= p->flags;
--		uart.port.mapbase	= p->mapbase;
- 		uart.port.hub6		= p->hub6;
- 		uart.port.private_data	= p->private_data;
- 		uart.port.type		= p->type;
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index d2f3310..7fa1e49 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2863,7 +2863,8 @@ static int serial8250_request_std_resource(struct uart_8250_port *up)
- 		if (!port->mapbase)
- 			break;
- 
--		if (!request_mem_region(port->mapbase, size, "serial")) {
-+		if (!(port->flags & UPF_DEV_RESOURCES) &&
-+		    !request_mem_region(port->mapbase, size, "serial")) {
- 			ret = -EBUSY;
- 			break;
- 		}
-@@ -2871,7 +2872,8 @@ static int serial8250_request_std_resource(struct uart_8250_port *up)
- 		if (port->flags & UPF_IOREMAP) {
- 			port->membase = ioremap_nocache(port->mapbase, size);
- 			if (!port->membase) {
--				release_mem_region(port->mapbase, size);
-+				if (!(port->flags & UPF_DEV_RESOURCES))
-+					release_mem_region(port->mapbase, size);
- 				ret = -ENOMEM;
- 			}
- 		}
-@@ -2879,7 +2881,8 @@ static int serial8250_request_std_resource(struct uart_8250_port *up)
- 
- 	case UPIO_HUB6:
- 	case UPIO_PORT:
--		if (!request_region(port->iobase, size, "serial"))
-+		if (!(port->flags & UPF_DEV_RESOURCES) &&
-+		    !request_region(port->iobase, size, "serial"))
- 			ret = -EBUSY;
- 		break;
- 	}
-@@ -2906,12 +2909,14 @@ static void serial8250_release_std_resource(struct uart_8250_port *up)
- 			port->membase = NULL;
- 		}
- 
--		release_mem_region(port->mapbase, size);
-+		if (!(port->flags & UPF_DEV_RESOURCES))
-+			release_mem_region(port->mapbase, size);
- 		break;
- 
- 	case UPIO_HUB6:
- 	case UPIO_PORT:
--		release_region(port->iobase, size);
-+		if (!(port->flags & UPF_DEV_RESOURCES))
-+			release_region(port->iobase, size);
- 		break;
- 	}
- }
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index 5fe2b03..87b4ed3 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -207,6 +207,7 @@ struct uart_port {
- #define UPF_BUGGY_UART		((__force upf_t) ASYNC_BUGGY_UART     /* 14 */ )
- #define UPF_MAGIC_MULTIPLIER	((__force upf_t) ASYNC_MAGIC_MULTIPLIER /* 16 */ )
- 
-+#define UPF_DEV_RESOURCES	((__force upf_t) (1 << 18))
- #define UPF_NO_THRE_TEST	((__force upf_t) (1 << 19))
- /* Port has hardware-assisted h/w flow control */
- #define UPF_AUTO_CTS		((__force upf_t) (1 << 20))
--- 
-2.4.11
-
+/Esben
