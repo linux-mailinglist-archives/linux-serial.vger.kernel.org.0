@@ -2,87 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C753D24C84
-	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 12:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB2424CBB
+	for <lists+linux-serial@lfdr.de>; Tue, 21 May 2019 12:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbfEUKRM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 May 2019 06:17:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45002 "EHLO mail.kernel.org"
+        id S1726389AbfEUKbW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 May 2019 06:31:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbfEUKRM (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 May 2019 06:17:12 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1726344AbfEUKbW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 21 May 2019 06:31:22 -0400
+Received: from localhost (unknown [49.207.56.136])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 537E921773;
-        Tue, 21 May 2019 10:17:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C20FE21743;
+        Tue, 21 May 2019 10:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558433831;
-        bh=omOok4OFtOW0GJ23HMKWDqUM1PZkhGph9ABMqIPnCkQ=;
+        s=default; t=1558434681;
+        bh=mb4gcRCdlc4t1BxrH1KDO67uUQe97itsvMsgFVRR+oI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LF22EzwwEy0UTKUxnbibe7PJbBYAXTZEDlL9f24YFxvNBit710rgIS/qikBBwKQkZ
-         GiIfMq8FClOSqnG4lZt2NBrCkwEwhGKwYvcI/9P166dJg/hQgd1nVdVma0sZ4vuvyx
-         AqUFfEs/m97vpoAgfv/86v07f0RXSn/aYa83BbIg=
-Date:   Tue, 21 May 2019 12:17:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Jiri Slaby <jslaby@suse.com>,
-        Serge Semin <Sergey.Semin@t-platforms.ru>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] tty: max310x: Simplify the code and fix a few bugs
-Message-ID: <20190521101701.GA31141@kroah.com>
-References: <20190514101415.26754-1-fancer.lancer@gmail.com>
+        b=1T3azC+0XgH3xEp8zysLMOSu8S++YutNokP4axowBzBYutjJuCkzQ7/lP7XAaYOlW
+         Snz0V6hyebzOKq70E2UHDr5QECQvx96Tszf1olmuzgFudaQ7kHEldkcMOj8WN96mF8
+         MlGCXvuGWzq8EJexNscqQiGDglTT3tQZ38Y/WuxQ=
+Date:   Tue, 21 May 2019 16:01:17 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Cc:     agross@kernel.org, david.brown@linaro.org,
+        gregkh@linuxfoundation.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, jslaby@suse.com, keescook@chromium.org,
+        anton@enomsg.org, ccross@android.com, tony.luck@intel.com,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tty: serial: msm_serial: Fix XON/XOFF
+Message-ID: <20190521103117.GD15118@vkoul-mobl>
+References: <20190520183848.27719-1-jorge.ramirez-ortiz@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190514101415.26754-1-fancer.lancer@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190520183848.27719-1-jorge.ramirez-ortiz@linaro.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, May 14, 2019 at 01:14:08PM +0300, Serge Semin wrote:
-> I started using this driver two years ago in kernek 4.4 and then in kernel
-> 4.9. It didn't go well from the very beginning due to my platform
-> peculiarities: DW SPI core with hardware CS and relatively slow MIPS-based
-> SoC. This patchset is intended to fix some of the problems I found out
-> during the max310x driver utilization with max14830 device.
+On 20-05-19, 20:38, Jorge Ramirez-Ortiz wrote:
+> When the tty layer requests the uart to throttle, the current code
+> executing in msm_serial will trigger "Bad mode in Error Handler" and
+> generate an invalid stack frame in pstore before rebooting (that is if
+> pstore is indeed configured: otherwise the user shall just notice a
+> reboot with no further information dumped to the console).
 > 
-> First of all it was discovered, that workqueue API isn't optimally used.
-> Work context isn't re-entrant by design, so the mutex used to guard the
-> TX-method is redundant. schedule_work() method is also created in a way
-> the work item is scheduled only if it isn't pending. Patch 1 concerns all
-> these fixes. Seeing the similar container_of(uart_port) is used three
-> times in the driver, the patch 2 introduces a macro to_max310x_port() to
-> get a pointer to corresponding struct max310x_one. This is the code
-> simplification and is going to be used in the following patches.
+> This patch replaces the PIO byte accessor with the word accessor
+> already used in PIO mode.
 > 
-> It was found out, that batch read and write methods used buffers allocated
-> on the kernel stack. Since they might be utilized by SPI controllers for
-> DMA it might be unsafe on some platforms. Patch 3 provides a dedicated
-> kmalloced buffers for this.
-> 
-> The baud-rate calculator function didn't work correct for all the possible
-> baud-rates requested within a pre-defined input reference frequency.
-> Instead an algo fully compliant with datasheet divisor formulae is
-> implemented in patch 4.
-> 
-> Patches 5 and 6 are created to fix some rs485 issues. Particularly the
-> rs485 mode is configured on the port startup if it's enabled. And seeing
-> the mode2 register provides a way to enable/disable the echo-suppression
-> in RS485 mode, it is used to implement the SER_RS485_RX_DURING_TX flag
-> support.
-> 
-> Finally it was discovered that in case if inbound hardware FIFO
-> experienced overflow, a lot of '\0' characters inserted into the
-> flip-buffer as a character of the RX-FIFO overrun. It isn't quite correct
-> since the overflow happened only after the last character had been
-> received. Patch 7 is dedicated to push only a single RX-FIFO overrun
-> character in this case.
-> 
-> Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> Fixes: 68252424a7c7 ("tty: serial: msm: Support big-endian CPUs")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Nice cleanups, all now applied, thanks!
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
 
-greg k-h
+-- 
+~Vinod
