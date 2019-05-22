@@ -2,124 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C29902639C
-	for <lists+linux-serial@lfdr.de>; Wed, 22 May 2019 14:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2C22680E
+	for <lists+linux-serial@lfdr.de>; Wed, 22 May 2019 18:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728914AbfEVMRO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 May 2019 08:17:14 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:45745 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728680AbfEVMRO (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 May 2019 08:17:14 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 458BTM0ZB4z9v2JC;
-        Wed, 22 May 2019 14:17:11 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=aSA1itul; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 2tBcVXNsQ-sn; Wed, 22 May 2019 14:17:11 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 458BTL6PbWz9v2JB;
-        Wed, 22 May 2019 14:17:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1558527430; bh=ULpgX9HYncfSaEjyyyTwrdNHRBTq+jrPPxiAH/Bi1aw=;
-        h=From:Subject:To:Cc:Date:From;
-        b=aSA1itulWnmknDSRHJhSq1WT91YKt9nFX1g2vucCgzWDHHhNM0nDTcVysFxUvQZic
-         1v9U+CpLqpd8blZoTTPh8TgLi0ZrXGB2y7lrwuGlEn9MQBjybBAVdsixui/i5AXygf
-         0bmPvZ5IMK1zkqvNUvDbvhChGB8o7760K93FkHZU=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2F6C18B840;
-        Wed, 22 May 2019 14:17:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id a6HB5Dsaeycs; Wed, 22 May 2019 14:17:12 +0200 (CEST)
-Received: from po16846vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.231.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0A5E98B83E;
-        Wed, 22 May 2019 14:17:12 +0200 (CEST)
-Received: by po16846vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id E04AD68430; Wed, 22 May 2019 12:17:11 +0000 (UTC)
-Message-Id: <d99f90e2107d7bff3adc187b5ce36a79cc786bfd.1558527014.git.christophe.leroy@c-s.fr>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [PATCH] tty: serial: cpm_uart - fix init when SMC is relocated
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org
-Date:   Wed, 22 May 2019 12:17:11 +0000 (UTC)
+        id S1730073AbfEVQVS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 May 2019 12:21:18 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:49362 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730067AbfEVQVJ (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 22 May 2019 12:21:09 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x4MGKdr8102263;
+        Wed, 22 May 2019 11:20:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1558542039;
+        bh=Gpb1vaUdYj+cDL8YzUJEgAabIosE4tzV3esirEzT5bc=;
+        h=From:To:CC:Subject:Date;
+        b=hJkryzLGiqUHyZsDkaWVfinO/co2x5l0xtABReY1fM9yvC2pLvFu68aNHRfIE+j6m
+         3F7pCq5vpxFYQFEzOAVSxEvQdhG1wqbQ5LEZp6+UwLGDUFHKJpfFRz0gEYZNs2fwoK
+         Gk5/RUivXFH7r8IUST5s9Bwwqi6WT76wgNQHdpao=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x4MGKdFP099352
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 22 May 2019 11:20:39 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 22
+ May 2019 11:20:38 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 22 May 2019 11:20:38 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x4MGKceh104530;
+        Wed, 22 May 2019 11:20:38 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tero Kristo <t-kristo@ti.com>, Nishanth Menon <nm@ti.com>
+Subject: [PATCH 0/6] arm64: Initial support Texas Instrument's J721E Platform
+Date:   Wed, 22 May 2019 11:19:15 -0500
+Message-ID: <20190522161921.20750-1-nm@ti.com>
+X-Mailer: git-send-email 2.21.0.777.g83232e38648b
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-SMC relocation can also be activated earlier by the bootloader,
-so the driver's behaviour cannot rely on selected kernel config.
+Hi,
 
-When the SMC is relocated, CPM_CR_INIT_TRX cannot be used.
+This series adds support for the latest new SoC, J721E, from Texas Instruments.
 
-But the only thing CPM_CR_INIT_TRX does is to clear the
-rstate and tstate registers, so this can be done manually,
-even when SMC is not relocated.
+The series is an based off v5.2-rc1 and has the following driver
+dependencies for a successful boot:
+1.  https://lore.kernel.org/lkml/20190429131533.25122-1-afd@ti.com (for newer firmware)
+2.  https://lore.kernel.org/linux-arm-kernel/1555093342-428-1-git-send-email-t-kristo@ti.com/
+    - Clock IDs cannot be guarenteed to be sequential, has to be
+      discovered from hardware description in dts
+    - Clock IDs on this massive chip also exceeds 255, so, the support
+      for the same is expected in follow on patches.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-Fixes: 9ab921201444 ("cpm_uart: fix non-console port startup bug")
----
- drivers/tty/serial/cpm_uart/cpm_uart_core.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+The full series is available here (including dependencies):
+https://github.com/nmenon/linux-2.6-playground/commits/upstream/v5.2-rc1/j7es-base-v1
 
-diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-index b929c7ae3a27..7bab9a3eda92 100644
---- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-+++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-@@ -407,7 +407,16 @@ static int cpm_uart_startup(struct uart_port *port)
- 			clrbits16(&pinfo->sccp->scc_sccm, UART_SCCM_RX);
- 		}
- 		cpm_uart_initbd(pinfo);
--		cpm_line_cr_cmd(pinfo, CPM_CR_INIT_TRX);
-+		if (IS_SMC(pinfo)) {
-+			out_be32(&pinfo->smcup->smc_rstate, 0);
-+			out_be32(&pinfo->smcup->smc_tstate, 0);
-+			out_be16(&pinfo->smcup->smc_rbptr,
-+				 in_be16(&pinfo->smcup->smc_rbase));
-+			out_be16(&pinfo->smcup->smc_tbptr,
-+				 in_be16(&pinfo->smcup->smc_tbase));
-+		} else {
-+			cpm_line_cr_cmd(pinfo, CPM_CR_INIT_TRX);
-+		}
- 	}
- 	/* Install interrupt handler. */
- 	retval = request_irq(port->irq, cpm_uart_int, 0, "cpm_uart", port);
-@@ -861,16 +870,14 @@ static void cpm_uart_init_smc(struct uart_cpm_port *pinfo)
- 	         (u8 __iomem *)pinfo->tx_bd_base - DPRAM_BASE);
- 
- /*
-- *  In case SMC1 is being relocated...
-+ *  In case SMC is being relocated...
-  */
--#if defined (CONFIG_I2C_SPI_SMC1_UCODE_PATCH)
- 	out_be16(&up->smc_rbptr, in_be16(&pinfo->smcup->smc_rbase));
- 	out_be16(&up->smc_tbptr, in_be16(&pinfo->smcup->smc_tbase));
- 	out_be32(&up->smc_rstate, 0);
- 	out_be32(&up->smc_tstate, 0);
- 	out_be16(&up->smc_brkcr, 1);              /* number of break chars */
- 	out_be16(&up->smc_brkec, 0);
--#endif
- 
- 	/* Set up the uart parameters in the
- 	 * parameter ram.
-@@ -884,8 +891,6 @@ static void cpm_uart_init_smc(struct uart_cpm_port *pinfo)
- 	out_be16(&up->smc_brkec, 0);
- 	out_be16(&up->smc_brkcr, 1);
- 
--	cpm_line_cr_cmd(pinfo, CPM_CR_INIT_TRX);
--
- 	/* Set UART mode, 8 bit, no parity, one stop.
- 	 * Enable receive and transmit.
- 	 */
+Boot Log: https://pastebin.ubuntu.com/p/j3NtfF8FQr/
+
+NOTE:
+ - If Greg is ok, we can pick up the uart compatibility via the k3 tree,
+   else, I can spawn it off the series.
+ - I will resubmit patch 6 (defconfig update) separately once again once
+   patches 1-5 hit the next tree or for 5.3-rc2 which ever is convenient.
+
+The J721E SoC belongs to the K3 Multicore SoC architecture platform
+for automotive applications such as infotainment, cluster, premium
+Audio, Gateway, industrial and a range of broad market applications.
+This SoC is designed around reducing the system cost by eliminating
+the need of an external system MCU and is targeted towards ASIL-B/C
+certification/requirements in addition to allowing complex software
+and system use-cases.
+
+The Linux development follows AM654 in most of the configurations, but
+adds new capabilities (details in follow on patches).
+
+See J721E Technical Reference Manual (SPRUIL1, May 2019)
+for further details: http://www.ti.com/lit/pdf/spruil1
+
+Nishanth Menon (6):
+  dt-bindings: arm: ti: Add bindings for J721E SoC
+  dt-bindings: serial: 8250_omap: Add compatible for J721E UART
+    controller
+  arm64: dts: ti: Add Support for J721E SoC
+  soc: ti: Add Support for J721E SoC config option
+  arm64: dts: ti: Add support for J721E Common Processor Board
+  arm64: defconfig: Enable TI's J721E SoC platform
+
+ .../devicetree/bindings/arm/ti/k3.txt         |   3 +
+ .../bindings/serial/omap_serial.txt           |   1 +
+ arch/arm64/boot/dts/ti/Makefile               |   2 +
+ .../dts/ti/k3-j721e-common-proc-board.dts     |  50 +++++
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 202 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  72 +++++++
+ arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi   |  29 +++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          | 176 +++++++++++++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/ti/Kconfig                        |   5 +
+ 10 files changed, 541 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e.dtsi
+
 -- 
-2.13.3
+2.21.0.777.g83232e38648b
 
