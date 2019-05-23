@@ -2,294 +2,303 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7844927D19
-	for <lists+linux-serial@lfdr.de>; Thu, 23 May 2019 14:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36CC2847B
+	for <lists+linux-serial@lfdr.de>; Thu, 23 May 2019 19:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729966AbfEWMsG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 23 May 2019 08:48:06 -0400
-Received: from mail-eopbgr790072.outbound.protection.outlook.com ([40.107.79.72]:12312
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728309AbfEWMsG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 23 May 2019 08:48:06 -0400
+        id S1730913AbfEWREW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 23 May 2019 13:04:22 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:41917 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730790AbfEWREW (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 23 May 2019 13:04:22 -0400
+Received: by mail-ed1-f66.google.com with SMTP id m4so10187008edd.8;
+        Thu, 23 May 2019 10:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector1-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=98/9JVKedYk32ITwR1SYoZCfVhoIEOVCTNqnNd948As=;
- b=lp/0yHQCqodGQa6cfnWCuLMG8yOh6GL6U9x/A4ysDkWElg0wSmheVDDoLoTHVsRBBvE3G4xuOS75KznGoFRVVTbmcMTfAhrqE//uAPPHUTvK8ig5XKC6DAmYbsJmhbSYH6SqpdwAtgL/rNm5Nylq9r7syheNexza7UYI7FNltjo=
-Received: from DM6PR02CA0077.namprd02.prod.outlook.com (2603:10b6:5:1f4::18)
- by CH2PR02MB6229.namprd02.prod.outlook.com (2603:10b6:610:d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1900.19; Thu, 23 May
- 2019 12:47:58 +0000
-Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::204) by DM6PR02CA0077.outlook.office365.com
- (2603:10b6:5:1f4::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1922.15 via Frontend
- Transport; Thu, 23 May 2019 12:47:58 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.100)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.100; helo=xsj-pvapsmtpgw02;
-Received: from xsj-pvapsmtpgw02 (149.199.60.100) by
- SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
- via Frontend Transport; Thu, 23 May 2019 12:47:57 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66]:45181 helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw02 with esmtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1hTn8X-00070F-KF; Thu, 23 May 2019 05:47:57 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1hTn8S-0004Ey-HJ; Thu, 23 May 2019 05:47:52 -0700
-Received: from xsj-pvapsmtp01 (smtp3.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x4NClmw8006719;
-        Thu, 23 May 2019 05:47:48 -0700
-Received: from [172.30.17.111]
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <michals@xilinx.com>)
-        id 1hTn8N-0004EY-Qc; Thu, 23 May 2019 05:47:48 -0700
-Subject: Re: [PATCH] serial-uartlite: Fix null-ptr-deref in ulite_exit
-To:     Johan Hovold <johan@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        YueHaibing <yuehaibing@huawei.com>, jslaby@suse.com,
-        shubhrajyoti.datta@xilinx.com, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20190516040931.16276-1-yuehaibing@huawei.com>
- <20190517075502.GE28564@localhost> <20190521101059.GB13612@kroah.com>
- <20190523091839.GC568@localhost>
- <3bdfe2ab-daec-e222-8e2b-cac96fd218a2@xilinx.com>
- <20190523123140.GF568@localhost>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <dd262bb0-3af3-fbbb-b26e-68a23e937d9a@xilinx.com>
-Date:   Thu, 23 May 2019 14:47:45 +0200
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=pJftvEyxg8C/zVVqR3zI4TRUVSE8hkNVwSfcuCSM4dQ=;
+        b=Fx6VLlqvmPVMYPGmLwhgSrCkii8y09bkYVGSIeAQfRPro/eewll725dIuhrax7LEK0
+         cOOje9BGKuNC7LxG9f+2TwSDaFtzO6OL8Lr81BkL2gM3YDdS0eKgJ4fh3ITM+RFuy4om
+         nB9vZz7BZbMKIfknDYesHMxDTACba5WQxOuCuTYThU+8VAPJYD7c5NIIQhZD34e16Kbn
+         uTcV+zaWearGcIpeHscMhgMqVx2Wy+NjBBbPOAt6TMUfWB2jEgFWXexyZaIGaSjLL635
+         qz4GtDyhkaykqzyOwEWR+5nh2/TJdJZwNB2esPkis1X7mvSypyRPjz87a2dnUmbfLW/B
+         ddnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=pJftvEyxg8C/zVVqR3zI4TRUVSE8hkNVwSfcuCSM4dQ=;
+        b=FAwiwdiJV5Q8wLDOP6POPNDqXM13m/obvfjz4Nd05qh5lL1xQbNVKqd/ju5ppqcFE2
+         +2+XYsH3Fhox8xY4Z+B1AVR35EbinDXBV/l8XaXQ0qPabezqusFQhY5CjAbEXqL9EK6r
+         99HAHLaksQ91YKfUc+//nLqJtPqfbF8WCmaKltSUiZ3RKLeHiZVGPbsr+F7SbsFxKl+E
+         SYGYW9ewqxOHksiRdNmI23MzfjyCMkOTgpqvIw+Je/ekjdNPsR1JlJ23uhmDM3OH2VS8
+         xxfnA1LtCXIW5cgWixzdeUTDEETgVPJ1CljV97DPLArIlraRuPoGup9elSUB3++tXX0e
+         6+/A==
+X-Gm-Message-State: APjAAAX56aGY0nKv9yXHisqqZkIBarURXIARfcf2diXHemPzoA8nd5Or
+        ky1PAXs/9RsW35ClEQsEM+E=
+X-Google-Smtp-Source: APXvYqxtZo/LyrKlcb+xz8tRO/M6SeJIHYIpUYajWWsVxF8S5TXWDCkhdEL/zKJ3f6NmU/2y0Yc0Aw==
+X-Received: by 2002:a17:906:b20f:: with SMTP id p15mr66459415ejz.63.1558631058628;
+        Thu, 23 May 2019 10:04:18 -0700 (PDT)
+Received: from ziggy.stardust (charybdis-ext.suse.de. [195.135.221.2])
+        by smtp.gmail.com with ESMTPSA id h23sm4535518ejc.34.2019.05.23.10.04.17
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 May 2019 10:04:17 -0700 (PDT)
+Subject: Re: [PATCH v13 1/2] arm: dts: mt2712: add uart APDMA to device tree
+To:     Long Cheng <long.cheng@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sean Wang <sean.wang@mediatek.com>, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, srv_heupstream@mediatek.com,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        YT Shen <yt.shen@mediatek.com>,
+        Zhenbao Liu <zhenbao.liu@mediatek.com>
+References: <1558596909-14084-1-git-send-email-long.cheng@mediatek.com>
+ <1558596909-14084-2-git-send-email-long.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
+ mQINBFP1zgUBEAC21D6hk7//0kOmsUrE3eZ55kjc9DmFPKIz6l4NggqwQjBNRHIMh04BbCMY
+ fL3eT7ZsYV5nur7zctmJ+vbszoOASXUpfq8M+S5hU2w7sBaVk5rpH9yW8CUWz2+ZpQXPJcFa
+ OhLZuSKB1F5JcvLbETRjNzNU7B3TdS2+zkgQQdEyt7Ij2HXGLJ2w+yG2GuR9/iyCJRf10Okq
+ gTh//XESJZ8S6KlOWbLXRE+yfkKDXQx2Jr1XuVvM3zPqH5FMg8reRVFsQ+vI0b+OlyekT/Xe
+ 0Hwvqkev95GG6x7yseJwI+2ydDH6M5O7fPKFW5mzAdDE2g/K9B4e2tYK6/rA7Fq4cqiAw1+u
+ EgO44+eFgv082xtBez5WNkGn18vtw0LW3ESmKh19u6kEGoi0WZwslCNaGFrS4M7OH+aOJeqK
+ fx5dIv2CEbxc6xnHY7dwkcHikTA4QdbdFeUSuj4YhIZ+0QlDVtS1QEXyvZbZky7ur9rHkZvP
+ ZqlUsLJ2nOqsmahMTIQ8Mgx9SLEShWqD4kOF4zNfPJsgEMB49KbS2o9jxbGB+JKupjNddfxZ
+ HlH1KF8QwCMZEYaTNogrVazuEJzx6JdRpR3sFda/0x5qjTadwIW6Cl9tkqe2h391dOGX1eOA
+ 1ntn9O/39KqSrWNGvm+1raHK+Ev1yPtn0Wxn+0oy1tl67TxUjQARAQABtClNYXR0aGlhcyBC
+ cnVnZ2VyIDxtYXR0aGlhcy5iZ2dAZ21haWwuY29tPokCUgQTAQIAPAIbAwYLCQgHAwIGFQgC
+ CQoLBBYCAwECHgECF4AWIQTmuZIYwPLDJRwsOhfZFAuyVhMC8QUCWt3scQIZAQAKCRDZFAuy
+ VhMC8WzRD/4onkC+gCxG+dvui5SXCJ7bGLCu0xVtiGC673Kz5Aq3heITsERHBV0BqqctOEBy
+ ZozQQe2Hindu9lasOmwfH8+vfTK+2teCgWesoE3g3XKbrOCB4RSrQmXGC3JYx6rcvMlLV/Ch
+ YMRR3qv04BOchnjkGtvm9aZWH52/6XfChyh7XYndTe5F2bqeTjt+kF/ql+xMc4E6pniqIfkv
+ c0wsH4CkBHqoZl9w5e/b9MspTqsU9NszTEOFhy7p2CYw6JEa/vmzR6YDzGs8AihieIXDOfpT
+ DUr0YUlDrwDSrlm/2MjNIPTmSGHH94ScOqu/XmGW/0q1iar/Yr0leomUOeeEzCqQtunqShtE
+ 4Mn2uEixFL+9jiVtMjujr6mphznwpEqObPCZ3IcWqOFEz77rSL+oqFiEA03A2WBDlMm++Sve
+ 9jpkJBLosJRhAYmQ6ey6MFO6Krylw1LXcq5z1XQQavtFRgZoruHZ3XlhT5wcfLJtAqrtfCe0
+ aQ0kJW+4zj9/So0uxJDAtGuOpDYnmK26dgFN0tAhVuNInEVhtErtLJHeJzFKJzNyQ4GlCaLw
+ jKcwWcqDJcrx9R7LsCu4l2XpKiyxY6fO4O8DnSleVll9NPfAZFZvf8AIy3EQ8BokUsiuUYHz
+ wUo6pclk55PZRaAsHDX/fNr24uC6Eh5oNQ+v4Pax/gtyybkCDQRT9c4FARAAqdGWpdzcSM8q
+ 6I2oTPS5J4KXXIJS8O2jbUcxoNuaSBnUkhwp2eML/i30oLbEC+akmagcOLD0kOY46yRFeSEC
+ SPM9SWLxKvKUTQYGLX2sphPVZ3hEdFYKen3+cbvo6GyYTnm8ropHM9uqmXPZFFfLJDL76Nau
+ kFsRfPMQUuwMe3hFVLmF7ntvdX3Z3jKImoMWrgA/SnsT6K40n/GCl1HNz2T8PSnqAUQjvSoI
+ FAenxb23NtW6kg50xIxlb7DKbncnQGGTwoYn8u9Lgxkh8gJ03IMiSDHZ9o+wl21U8B3OXr1K
+ L08vXmdR70d6MJSmt6pKs7yTjxraF0ZS6gz+F2BTy080jxceZwEWIIbK7zU3tm1hnr7QIbj/
+ H6W2Pv9p5CXzQCIw17FXFXjpGPa9knzd4WMzJv2Rgx/m8/ZG91aKq+4Cbz9TLQ7OyRdXqhPJ
+ CopfKgZ2l/Fc5+AGhogJLxOopBoELIdHgB50Durx4YJLmQ1z/oimD0O/mUb5fJu0FUQ5Boc1
+ kHHJ8J8bZTuFrGAomfvnsek+dyenegqBpZCDniCSfdgeAx9oWNoXG4cgo8OVG7J/1YIWBHRa
+ Wnk+WyXGBfbY/8247Gy8oaXtQs1OnehbMKBHRIY0tgoyUlag3wXuUzeK+0PKtWC7ZYelKNC0
+ Fn+zL9XpnK3HLE5ckhBLgK8AEQEAAYkCHwQYAQIACQUCU/XOBQIbDAAKCRDZFAuyVhMC8Yyu
+ D/9g6+JZZ+oEy7HoGZ0Bawnlxu/xQrzaK/ltQhA2vtiMaxCN46gOvEF/x+IvFscAucm3q4Dy
+ bJJkW2qY30ISK9MDELnudPmHRqCxTj8koabvcI1cP8Z0Fw1reMNZVgWgVZJkwHuPYnkhY15u
+ 3vHDzcWnfnvmguKgYoJxkqqdp/acb0x/qpQgufrWGeYv2yb1YNidXBHTJSuelFcGp/oBXeJz
+ rQ2IP1JBbQmQfPSePZzWdSLlrR+3jcBJEP/A/73lSObOQpiYJomXPcla6dH+iyV0IiiZdYgU
+ Htwru4Stv/cFVFsUJk1fIOP1qjSa+L6Y0dWX6JMniqUXHhaXo6OPf7ArpVbBygMuzvy99LtS
+ FSkMcYXn359sXOYsRy4V+Yr7Bs0lzdnHnKdpVqHiDvNgrrLoPNrKTiYwTmzTVbb9u/BjUGhC
+ YUS705vcjBgXhdXS44kgO22kaB5c6Obg7WP7cucFomITovtZs5Rm1iaZZc31lzobfFPUwDSc
+ YXOj6ckS9bF9lDG26z3C/muyiifZeiQvvG1ygexrHtnKYTNxqisOGjjcXzDzpS8egIOtIEI/
+ arzlqK5RprMLVOl6n/npxEWmInjBetsBsaX/9kJNZFM4Yais5scOnP+tuTnFTW2K9xKySyuD
+ q/iLORJYRYMloJPaDAftiYfjFa8zuw1XnQyG17kCDQRT9gX3ARAAsL2UwyvSLQuMxOW2GRLv
+ CiZuxtIEoUuhaBWdC/Yq3c6rWpTu692lhLd4bRpKJkE4nE3saaTVxIHFF3tt3IHSa3Qf831S
+ lW39EkcFxr7DbO17kRThOyU1k7KDhUQqhRaUoT1NznrykvpTlNszhYNjA0CMYWH249MJXgck
+ iKOezSHbQ2bZWtFG3uTloWSKloFsjsmRsb7Vn2FlyeP+00PVC6j7CRqczxpkyYoHuqIS0w1z
+ Aq8HP5DDSH7+arijtPuJhVv9uaiD6YFLgSIQy4ZCZuMcdzKJz2j6KCw2kUXLehk4BU326O0G
+ r9+AojZT8J3qvZYBpvCmIhGliKhZ7pYDKZWVseRw7rJS5UFnst5OBukBIjOaSVdp6JMpe99o
+ caLjyow2By6DCEYgLCrquzuUxMQ8plEMfPD1yXBo00bLPatkuxIibM0G4IstKL5hSAKiaFCc
+ 2f73ppp7eby3ZceyF4uCIxN3ABjW9ZCEAcEwC40S3rnh2wZhscBFZ+7sO7+Fgsd0w67zjpt+
+ YHFNv/chRJiPnDGGRt0jPWryaasDnQtAAf59LY3qd4GVHu8RA1G0Rz4hVw27yssHGycc4+/Z
+ ZX7sPpgNKlpsToMaB5NWgc389HdqOG80Ia+sGkNj9ylp74MPbd0t3fzQnKXzBSHOCNuS67sc
+ lUAw7HB+wa3BqgsAEQEAAYkEPgQYAQIACQUCU/YF9wIbAgIpCRDZFAuyVhMC8cFdIAQZAQIA
+ BgUCU/YF9wAKCRC0OWJbLPHTQ14xD/9crEKZOwhIWX32UXvB/nWbhEx6+PQG2uWsnah7oc5D
+ 7V+aY7M1jy5af8yhlhVdaxL5xUoepfOP08lkCEuSdrYbS5wBcQj4NE1QUoeAjJKbq4JwxUkX
+ Baq2Lu91UZpdKxEVFfSkEzmeMaVvClGjGOtNCUKl8lwLuthU7dGTW74mJaW5jjlXldgzfzFd
+ BkS3fsXfcmeDhHh5TpA4e3MYVBIJrq6Repv151g/zxdA02gjJgGvJlXTb6OgEZGNFr8LGJDh
+ LP7MSksBw6IxCAJSicMESu5kXsJfcODlm4zFaV8QDBevI/s/TgOQ9KQ/EJQsG+XBAuh0dqpu
+ ImmCdhlHx+YaGmwKO1/yhfWvg1h1xbVn98izeotmq1+0J1jt9tgM17MGvgHjmvqlaY+oUXfj
+ OkHkcCGOvao5uAsddQhZcSLmLhrSot8WJI0z3NIM30yiNx/r6OMu47lzTobdYCU8/8m7Rhsq
+ fyW68D+XR098NIlU2oYy1zUetw59WJLf2j5u6D6a9p10doY5lYUEeTjy9Ejs/cL+tQbGwgWh
+ WwKVal1lAtZVaru0GMbSQQ2BycZsZ+H+sbVwpDNEOxQaQPMmEzwgv2Sk2hvR3dTnhUoUaVoR
+ hQE3/+fVRbWHEEroh/+vXV6n4Ps5bDd+75NCQ/lfPZNzGxgxqbd/rd2wStVZpQXkhofMD/4k
+ Z8IivHZYaTA+udUk3iRm0l0qnuX2M5eUbyHW0sZVPnL7Oa4OKXoOir1EWwzzq0GNZjHCh6Cz
+ vLOb1+pllnMkBky0G/+txtgvj5T/366ErUF+lQfgNtENKY6In8tw06hPJbu1sUTQIs50Jg9h
+ RNkDSIQ544ack0fzOusSPM+vo6OkvIHt8tV0fTO1muclwCX/5jb7zQIDgGiUIgS8y0M4hIkP
+ KvdmgurPywi74nEoQQrKF6LpPYYHsDteWR/k2m2BOj0ciZDIIxVR09Y9moQIjBLJKN0J21XJ
+ eAgam4uLV2p1kRDdw/ST5uMCqD4Qi5zrZyWilCci6jF1TR2VEt906E2+AZ3BEheRyn8yb2KO
+ +cJD3kB4RzOyBC/Cq/CGAujfDkRiy1ypFF3TkZdya0NnMgka9LXwBV29sAw9vvrxHxGa+tO+
+ RpgKRywr4Al7QGiw7tRPbxkcatkxg67OcRyntfT0lbKlSTEQUxM06qvwFN7nobc9YiJJTeLu
+ gfa4fCqhQCyquWVVoVP+MnLqkzu1F6lSB6dGIpiW0s3LwyE/WbCAVBraPoENlt69jI0WTXvH
+ 4v71zEffYaGWqtrSize20x9xZf5c/Aukpx0UmsqheKeoSprKyRD/Wj/LgsuTE2Uod85U36Xk
+ eFYetwQY1h3lok2Zb/3uFhWr0NqmT14EL7kCDQRT9gkSARAApxtQ4zUMC512kZ+gCiySFcIF
+ /mAf7+l45689Tn7LI1xmPQrAYJDoqQVXcyh3utgtvBvDLmpQ+1BfEONDWc8KRP6Abo35YqBx
+ 3udAkLZgr/RmEg3+Tiof+e1PJ2zRh5zmdei5MT8biE2zVd9DYSJHZ8ltEWIALC9lAsv9oa+2
+ L6naC+KFF3i0m5mxklgFoSthswUnonqvclsjYaiVPoSldDrreCPzmRCUd8znf//Z4BxtlTw3
+ SulF8weKLJ+Hlpw8lwb3sUl6yPS6pL6UV45gyWMe677bVUtxLYOu+kiv2B/+nrNRDs7B35y/
+ J4t8dtK0S3M/7xtinPiYRmsnJdk+sdAe8TgGkEaooF57k1aczcJlUTBQvlYAEg2NJnqaKg3S
+ CJ4fEuT8rLjzuZmLkoHNumhH/mEbyKca82HvANu5C9clyQusJdU+MNRQLRmOAd/wxGLJ0xmA
+ ye7Ozja86AIzbEmuNhNH9xNjwbwSJNZefV2SoZUv0+V9EfEVxTzraBNUZifqv6hernMQXGxs
+ +lBjnyl624U8nnQWnA8PwJ2hI3DeQou1HypLFPeY9DfWv4xYdkyeOtGpueeBlqhtMoZ0kDw2
+ C3vzj77nWwBgpgn1Vpf4hG/sW/CRR6tuIQWWTvUM3ACa1pgEsBvIEBiVvPxyAtL+L+Lh1Sni
+ 7w3HBk1EJvUAEQEAAYkCHwQYAQIACQUCU/YJEgIbDAAKCRDZFAuyVhMC8QndEACuN16mvivn
+ WwLDdypvco5PF8w9yrfZDKW4ggf9TFVB9skzMNCuQc+tc+QM+ni2c4kKIdz2jmcg6QytgqVu
+ m6V1OsNmpjADaQkVp5jL0tmg6/KA9Tvr07Kuv+Uo4tSrS/4djDjJnXHEp/tB+Fw7CArNtUtL
+ lc8SuADCmMD+kBOVWktZyzkBkDfBXlTWl46T/8291lEspDWe5YW1ZAH/HdCR1rQNZWjNCpB2
+ Cic58CYMD1rSonCnbfUeyZYNNhNHZosl4dl7f+am87Q2x3pK0DLSoJRxWb7vZB0uo9CzCSm3
+ I++aYozF25xQoT+7zCx2cQi33jwvnJAK1o4VlNx36RfrxzBqc1uZGzJBCQu48UjmUSsTwWC3
+ HpE/D9sM+xACs803lFUIZC5H62G059cCPAXKgsFpNMKmBAWweBkVJAisoQeX50OP+/11ArV0
+ cv+fOTfJj0/KwFXJaaYh3LUQNILLBNxkSrhCLl8dUg53IbHx4NfIAgqxLWGfXM8DY1aFdU79
+ pac005PuhxCWkKTJz3gCmznnoat4GCnL5gy/m0Qk45l4PFqwWXVLo9AQg2Kp3mlIFZ6fsEKI
+ AN5hxlbNvNb9V2Zo5bFZjPWPFTxOteM0omUAS+QopwU0yPLLGJVf2iCmItHcUXI+r2JwH1CJ
+ jrHWeQEI2ucSKsNa8FllDmG/fQ==
+Message-ID: <434cbd9b-face-de45-0d17-4096ad81a7b9@gmail.com>
+Date:   Thu, 23 May 2019 19:04:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190523123140.GF568@localhost>
+In-Reply-To: <1558596909-14084-2-git-send-email-long.cheng@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.100;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(346002)(376002)(136003)(396003)(39860400002)(2980300002)(199004)(189003)(4326008)(44832011)(6246003)(63266004)(81156014)(81166006)(8676002)(8936002)(9786002)(966005)(316002)(6306002)(486006)(77096007)(186003)(336012)(26005)(229853002)(2906002)(476003)(446003)(11346002)(2616005)(305945005)(126002)(70206006)(70586007)(426003)(36386004)(14444005)(50466002)(31696002)(31686004)(110136005)(478600001)(6666004)(54906003)(356004)(64126003)(36756003)(76176011)(106002)(23676004)(5660300002)(52146003)(65956001)(47776003)(65806001)(58126008)(65826007)(325944009)(2486003)(230700001)(5001870100001);DIR:OUT;SFP:1101;SCL:1;SRVR:CH2PR02MB6229;H:xsj-pvapsmtpgw02;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-100.xilinx.com,xapps1.xilinx.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 86b9e270-4203-4dfd-d154-08d6df7ce22f
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328);SRVR:CH2PR02MB6229;
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6229:
-X-MS-Exchange-PUrlCount: 8
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-Microsoft-Antispam-PRVS: <CH2PR02MB62295CB61EBEDE91AD16FCC4C6010@CH2PR02MB6229.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 00462943DE
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: j22O3zr/mf0vRk7ghtdmLgaNqWggp27qbuxuvwDzBg8ykQK00iYB5GIv0im0BHOxnomG849fKTqsJdbXVpv/K9bXS/Lu7LWJsknQj2w+4OrAA4LhdR0OR/U/Sv7jqYDRIJDpdmjOUAOope6ckzC+6JiKEQT4Kzn360Tsc8gB6lSkCndTD2hMiWZz1Y+nQcONdWac4mqVgR3HoDWvwGD+DZGzJ9R75hhbhxFG5hMRdR4GBCRi4kQE0Lm+JNOpkyJyVsnAZlNOC0z66hoDdwjWlRYfosvZqJOvnyeU2sLXK1fOb9fI62tY0aQD07hcS05GQPbxabSJAy+BLAE+QqMY2BbnfPdVTSo/MGhNUsX3QuegoFQuBPf5Rh0MMpdjWF0VCIV9IyqkmJ6YnYZBsosWYnTn6VZro3n7YXSehaLjJ8A=
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2019 12:47:57.9984
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86b9e270-4203-4dfd-d154-08d6df7ce22f
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.100];Helo=[xsj-pvapsmtpgw02]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6229
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 23. 05. 19 14:31, Johan Hovold wrote:
-> On Thu, May 23, 2019 at 12:46:38PM +0200, Michal Simek wrote:
->> Hi Johan,
->>
->> On 23. 05. 19 11:18, Johan Hovold wrote:
->>> On Tue, May 21, 2019 at 12:10:59PM +0200, Greg Kroah-Hartman wrote:
->>>> On Fri, May 17, 2019 at 09:55:02AM +0200, Johan Hovold wrote:
->>>>> On Thu, May 16, 2019 at 12:09:31PM +0800, YueHaibing wrote:
->>>>>> If ulite_probe is not called or failed to registed
->>>>>> uart_register_driver, unload the module will call
->>>>>> uart_unregister_driver, which will tigger NULL
->>>>>> pointer dereference like this:
->>>>>>
->>>>>> BUG: KASAN: null-ptr-deref in tty_unregister_driver+0x19/0x100
->>>>>> Read of size 4 at addr 0000000000000034 by task syz-executor.0/4246
->>>>>
->>>>>> This patch fix this by moving uart_unregister_driver
->>>>>> to ulite_remove.
->>>>>>
->>>>>> Reported-by: Hulk Robot <hulkci@huawei.com>
->>>>>> Fixes: 415b43bdb008 ("tty: serial: uartlite: Move uart register to probe")
->>>>>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->>>>>> ---
->>>>>>  drivers/tty/serial/uartlite.c | 2 +-
->>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
->>>>>> index b8b912b..2e49fb6 100644
->>>>>> --- a/drivers/tty/serial/uartlite.c
->>>>>> +++ b/drivers/tty/serial/uartlite.c
->>>>>> @@ -867,6 +867,7 @@ static int ulite_remove(struct platform_device *pdev)
->>>>>>  	pm_runtime_disable(&pdev->dev);
->>>>>>  	pm_runtime_set_suspended(&pdev->dev);
->>>>>>  	pm_runtime_dont_use_autosuspend(&pdev->dev);
->>>>>> +	uart_unregister_driver(&ulite_uart_driver);
->>>>>
->>>>> This broken. Consider what happens if you have tho ports registered and
->>>>> you unbind the first.
->>>>>
->>>>> Someone else sent a fix for this here
->>>>>
->>>>> 	https://lkml.kernel.org/r/20190514033219.169947-1-wangkefeng.wang@huawei.com
->>>>>
->>>>> That fix also has some issues, but is still better given the current
->>>>> state this driver is in.
->>>>
->>>> I'm not taking any of these patches until people agree on what needs to
->>>> be done here :)
->>>
->>> Good. :)
->>>
->>>> Why is this driver so "special" it is having these types of problems?
->>>> Why can't it do what all other drivers do in this case?
->>>
->>> Apparently some vendor-tree hacks has made it into mainline.
->>
->> I have designed this change and it didn't go to vendor tree first.
->> I have been also asking if this is the right way to go.
->> You can find the whole series started with this RFC
->> https://lore.kernel.org/lkml/e2039dc5-92ec-d3a1-bc4f-6565a8c901ac@suse.de/t/
->>
->> https://lkml.org/lkml/2018/6/6/346
->> and then
->>
->> https://lkml.org/lkml/2018/9/3/404
-> 
-> Looks like you didn't get any real feedback to your first two RFC
-> series, before you resent as non-RFC and it was merged without any
-> discussion. :/
-> 
->> And even this step was discussed before in
->> [RFC PATCH 0/4] serial: uartps: Dynamic allocation
->> which was July 2017.
-> 
-> Yeah, you definitely tried to get feedback on this.
-> 
->> And all these patches have been merged by Greg and then I have taken
->> them back to Xilinx Linux tree.
-> 
-> Right, I had missed some of the back story.
-> 
->> And the same concept was also applied to uartlite and intention is also
->> to apply it to pl011 driver to avoid this warning.
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tty/serial/amba-pl011.c?h=v5.2-rc1#n2538
-> 
-> Perhaps you should hold off on spreading this further until it can be
-> reviewed. Looks like it's mostly contained to xilinx_uartps right now.
-> 
->>> They're trying to register one tty/uart driver per physical port
->>> which sounds like a terrible idea. And even the implementation is
->>> broken as these bug reports indicate.
->>
->> I have followed standard process and I have been asking for advices how
->> to do it without hardcoded any number and limiting amount of
->> pre-registered uarts because adding Kconfig options for NR_UARTs was
->> NACK in past too.
-> 
-> Yep, you clearly tried to get feedback, but our process fails sometimes.
-> 
->> If you know better way how this can be done, please let us know.
-> 
-> Having separate tty drivers and allocating a new major number for every
-> serial port clearly isn't the right way at least (and especially not for
-> fpga uarts of which there could be plenty).
 
 
-There is no fixed major number for uartps which is not the case for
-uartlite.
-It means from description you can see that every uartps instance is
-getting different major number and also different minor number.
-I am aware about this and it was also described. I have one issue
-regarding this flying around. But thinking to save non 0 major number
-after first registration and pass it to other instances to avoid this
-behavior.
-
-In uartlite where dynamic major number allocation is not present you get
-correct behavior.
-uartlite0 204/187
-uartlite1 204/188
-etc.
-
-> If you can't implement what you're after with the current serial-core
-> and tty infrastructure, those subsystems may need to be updated first.
-
-I didn't need to change anything in tty core because all of this is
-possible to do. There was one patch in connection to reading aliases
-which was properly reviewed and applied.
-In general DT aliases behavior should be the same across all boards but
-in reality it is not.
-
->> And if there is bug we should definitely fix it.
+On 23/05/2019 09:35, Long Cheng wrote:
+> 1. add uart APDMA controller device node
+> 2. add uart 0/1/2/3/4/5 DMA function
 > 
-> Yes, but not by papering over the problem. 
-
-sure. This is the first time I hear about it. Based on my understanding
-and current linux-next this patch is wrong. If there is any other series
-please keep in me in CC and I will take a look at will test it on HW.
-
-
->>> A series was apparently first posted for xilinks_uartps.c, but that one
->>> has not yet been merged AFAICT.
->>
->> Series have been applied by Great 2018-09-18. Feel free to check log here:
+> Signed-off-by: Long Cheng <long.cheng@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt2712e.dtsi |   51 +++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
-> "Greg the Great" does have a nice ring to it. ;)
+> diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+> index 43307ba..a7a7362 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+> @@ -300,6 +300,9 @@
+>  		interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+>  		clocks = <&baud_clk>, <&sys_clk>;
+>  		clock-names = "baud", "bus";
+> +		dmas = <&apdma 10
+> +			&apdma 11>;
+> +		dma-names = "tx", "rx";
+>  		status = "disabled";
+>  	};
+>  
+> @@ -369,6 +372,39 @@
+>  			 (GIC_CPU_MASK_RAW(0x13) | IRQ_TYPE_LEVEL_HIGH)>;
+>  	};
+>  
+> +	apdma: dma-controller@11000400 {
+> +		compatible = "mediatek,mt2712-uart-dma",
+> +			     "mediatek,mt6577-uart-dma";
 
+I was able to find a binding descpription but no actual driver.
+drivers/dma/mediatek only has hsdma and cqdma but no apdma driver.
 
-:-) nice typo.
+Seems there is something missing here.
 
+Regards,
+Matthias
+
+> +		reg = <0 0x11000400 0 0x80>,
+> +		      <0 0x11000480 0 0x80>,
+> +		      <0 0x11000500 0 0x80>,
+> +		      <0 0x11000580 0 0x80>,
+> +		      <0 0x11000600 0 0x80>,
+> +		      <0 0x11000680 0 0x80>,
+> +		      <0 0x11000700 0 0x80>,
+> +		      <0 0x11000780 0 0x80>,
+> +		      <0 0x11000800 0 0x80>,
+> +		      <0 0x11000880 0 0x80>,
+> +		      <0 0x11000900 0 0x80>,
+> +		      <0 0x11000980 0 0x80>;
+> +		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 105 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 106 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 107 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 108 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 109 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 110 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 111 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 113 IRQ_TYPE_LEVEL_LOW>,
+> +			     <GIC_SPI 114 IRQ_TYPE_LEVEL_LOW>;
+> +		dma-requests = <12>;
+> +		clocks = <&pericfg CLK_PERI_AP_DMA>;
+> +		clock-names = "apdma";
+> +		#dma-cells = <1>;
+> +	};
+> +
+>  	auxadc: adc@11001000 {
+>  		compatible = "mediatek,mt2712-auxadc";
+>  		reg = <0 0x11001000 0 0x1000>;
+> @@ -385,6 +421,9 @@
+>  		interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_LOW>;
+>  		clocks = <&baud_clk>, <&sys_clk>;
+>  		clock-names = "baud", "bus";
+> +		dmas = <&apdma 0
+> +			&apdma 1>;
+> +		dma-names = "tx", "rx";
+>  		status = "disabled";
+>  	};
+>  
+> @@ -395,6 +434,9 @@
+>  		interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_LOW>;
+>  		clocks = <&baud_clk>, <&sys_clk>;
+>  		clock-names = "baud", "bus";
+> +		dmas = <&apdma 2
+> +			&apdma 3>;
+> +		dma-names = "tx", "rx";
+>  		status = "disabled";
+>  	};
+>  
+> @@ -405,6 +447,9 @@
+>  		interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_LOW>;
+>  		clocks = <&baud_clk>, <&sys_clk>;
+>  		clock-names = "baud", "bus";
+> +		dmas = <&apdma 4
+> +			&apdma 5>;
+> +		dma-names = "tx", "rx";
+>  		status = "disabled";
+>  	};
+>  
+> @@ -415,6 +460,9 @@
+>  		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_LOW>;
+>  		clocks = <&baud_clk>, <&sys_clk>;
+>  		clock-names = "baud", "bus";
+> +		dmas = <&apdma 6
+> +			&apdma 7>;
+> +		dma-names = "tx", "rx";
+>  		status = "disabled";
+>  	};
+>  
+> @@ -629,6 +677,9 @@
+>  		interrupts = <GIC_SPI 126 IRQ_TYPE_LEVEL_LOW>;
+>  		clocks = <&baud_clk>, <&sys_clk>;
+>  		clock-names = "baud", "bus";
+> +		dmas = <&apdma 8
+> +			&apdma 9>;
+> +		dma-names = "tx", "rx";
+>  		status = "disabled";
+>  	};
+>  
 > 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/drivers/tty/serial/xilinx_uartps.c?h=v5.2-rc1
-> 
-> Yeah, sorry, I was obviously looking at the wrong tree this morning.
-
-good.
-
-> 
->>> A similar series was later posted for
->>> uartlite.c, but only the first half or so got in:
->>>
->>> 	https://lkml.kernel.org/r/1539685088-13465-1-git-send-email-shubhrajyoti.datta@gmail.com
->>>
->>> Actually, it looks like the problems started already with:
->>>
->>> 	https://lkml.kernel.org/r/1533545534-24458-1-git-send-email-shubhrajyoti.datta@gmail.com
->>>
->>> So the first broken commit is
->>>
->>> 	415b43bdb008 ("tty: serial: uartlite: Move uart register to probe")
->>>
->>> I think the offending patches should be reverted, but unfortunately they
->>> may no longer revert cleanly since there were some new features (e.g.
->>> runtime pm) thrown in the mix.
->>
->> Similar changes have been sent for uartlite but they should use the same
->> concept as I started to use for uartps.
->> But based on what I see in linux-next these patches haven't been merged
->> there.
->> That's why I don't understand the reason for this patch.
-> 
-> As I mentioned above, only half of the uartlite series was merged, but
-> that was enough to break module unload.
-
-I didn't strictly follow this. Internally I have reviewed it but didn't
-watch what exactly was merged to mainline.
-
-Thanks,
-Michal
