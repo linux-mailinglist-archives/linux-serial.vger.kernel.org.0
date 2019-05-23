@@ -2,94 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD90F2680F
-	for <lists+linux-serial@lfdr.de>; Wed, 22 May 2019 18:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAF227710
+	for <lists+linux-serial@lfdr.de>; Thu, 23 May 2019 09:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730129AbfEVQVT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 May 2019 12:21:19 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:45632 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730043AbfEVQVI (ORCPT
+        id S1730034AbfEWHfX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 23 May 2019 03:35:23 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:15999 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727232AbfEWHfX (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 May 2019 12:21:08 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x4MGKdj8073724;
-        Wed, 22 May 2019 11:20:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1558542039;
-        bh=apO8eMVnfKkUjdfUlHR78LYsKxvNCJinYTTRGC5uokA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Au+LhdClQtcdLTU94xmr6Z2ZbL4zUdQHQgTNb0plovZp3Yjt/+QBjiEnIORL+IF8S
-         piyH6nLpmvzuvXNeUQP5//eSoSiVEyP+YEDVqqMVp0GID/eQVf9TbHY9RwyG+cSvk/
-         z0UGLKMqBvCkRZz7Yh6ezacxVk6wOtFPUYBAA/AQ=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x4MGKdqe080391
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 22 May 2019 11:20:39 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 22
- May 2019 11:20:38 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 22 May 2019 11:20:39 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x4MGKcWF126469;
-        Wed, 22 May 2019 11:20:38 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 23 May 2019 03:35:23 -0400
+X-UUID: 864bf361aa5b4a52b11e6e1b6f7e7682-20190523
+X-UUID: 864bf361aa5b4a52b11e6e1b6f7e7682-20190523
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <long.cheng@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 802912487; Thu, 23 May 2019 15:35:14 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs03n1.mediatek.inc (172.21.101.181) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 23 May 2019 15:35:12 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 23 May 2019 15:35:11 +0800
+From:   Long Cheng <long.cheng@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tero Kristo <t-kristo@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH 6/6] arm64: defconfig: Enable TI's J721E SoC platform
-Date:   Wed, 22 May 2019 11:19:21 -0500
-Message-ID: <20190522161921.20750-7-nm@ti.com>
-X-Mailer: git-send-email 2.21.0.777.g83232e38648b
-In-Reply-To: <20190522161921.20750-1-nm@ti.com>
-References: <20190522161921.20750-1-nm@ti.com>
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        YT Shen <yt.shen@mediatek.com>,
+        Zhenbao Liu <zhenbao.liu@mediatek.com>,
+        Long Cheng <long.cheng@mediatek.com>
+Subject: [PATCH v13 0/2] add uart DMA function 
+Date:   Thu, 23 May 2019 15:35:07 +0800
+Message-ID: <1558596909-14084-1-git-send-email-long.cheng@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-MTK:  N
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Enable J721E SoC support from TI.
+In Mediatek SOCs, the uart can support DMA function.
+Base on DMA engine formwork, we add the DMA code to support uart. And put the code under drivers/dma/mediatek.
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
+This series contains document bindings, Kconfig to control the function enable or not,
+device tree including interrupt and dma device node, the code of UART DMA
 
-NOTE:
- - I will resubmit this patch (defconfig update) separately once again once
-   patches 1-7 hit the next tree or for 5.3-rc2 which ever is convenient.
+Changes compared to v12
+-rename parameters
+-remove direction
+Changes compared to v11
+-modify TX/RX
+-pause function by software
+Changes compared to v10
+-modify DMA tx status function
+-modify 8250_mtk for DMA rx
+-add notes to binding Document.
+Changes compared to v9
+-rename dt-bindings file
+-remove direction from device_config
+-simplified code
+Changes compared to v8
+-revise missing items
+Changes compared to v7:
+-modify apdma uart tx
+Changes compared to v6:
+-Correct spelling
+Changes compared to v5:
+-move 'requst irqs' to alloc channel
+-remove tasklet.
+Changes compared to v4:
+-modify Kconfig depends on.
+Changes compared to v3:
+-fix CONFIG_PM, will cause build fail
+Changes compared to v2:
+-remove unimportant parameters
+-instead of cookie, use APIs of virtual channel.
+-use of_dma_xlate_by_chan_id.
+Changes compared to v1:
+-mian revised file, 8250_mtk_dma.c
+--parameters renamed for standard
+--remove atomic operation
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Long Cheng (2):
+  arm: dts: mt2712: add uart APDMA to device tree
+  serial: 8250-mtk: modify uart DMA rx
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 4d583514258c..83a509dc247d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -696,6 +696,7 @@ CONFIG_ARCH_TEGRA_210_SOC=y
- CONFIG_ARCH_TEGRA_186_SOC=y
- CONFIG_ARCH_TEGRA_194_SOC=y
- CONFIG_ARCH_K3_AM6_SOC=y
-+CONFIG_ARCH_K3_J721E_SOC=y
- CONFIG_SOC_TI=y
- CONFIG_TI_SCI_PM_DOMAINS=y
- CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi |   51 +++++++++++++++++++++++++++++
+ drivers/tty/serial/8250/8250_mtk.c        |   49 +++++++++++----------------
+ 2 files changed, 71 insertions(+), 29 deletions(-)
+
 -- 
-2.21.0.777.g83232e38648b
+1.7.9.5
 
