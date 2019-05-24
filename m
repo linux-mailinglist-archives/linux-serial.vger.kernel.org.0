@@ -2,101 +2,122 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5973529598
-	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 12:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062862959E
+	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 12:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389616AbfEXKUG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 May 2019 06:20:06 -0400
-Received: from mga18.intel.com ([134.134.136.126]:27154 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389448AbfEXKUG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 May 2019 06:20:06 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 May 2019 03:20:05 -0700
-X-ExtLoop1: 1
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 24 May 2019 03:20:02 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 24 May 2019 13:20:02 +0300
-Date:   Fri, 24 May 2019 13:20:02 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>
-Subject: Re: [PATCH 1/2 v2] serial: mctrl_gpio: Check if GPIO property
- exisits before requesting it
-Message-ID: <20190524102002.GT2781@lahna.fi.intel.com>
-References: <20190524094825.16151-1-sr@denx.de>
+        id S2390201AbfEXKW2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 May 2019 06:22:28 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:34369 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389448AbfEXKW2 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 24 May 2019 06:22:28 -0400
+Received: by mail-wm1-f67.google.com with SMTP id e19so1588189wme.1
+        for <linux-serial@vger.kernel.org>; Fri, 24 May 2019 03:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VckbwsaqxCWYJ3+xkcRYBwTkgfTC5IcPs57wTWTAXlc=;
+        b=u0JJueyGsa3sYwitkkv0S49MpHD6CbQWp0D0B+MIY1kMwVyB/OVtCfQbBIGD/GTTrt
+         InBUM4zEEHEECDSfCfvDZ6TMvDBkUaVknlM8QIU8PjXd7BSs5ajksj22QW6GfkWVyrWF
+         PRsCTLJPIlnQnDdBNhdR3SPqZqscL8eM6idyPaN8ojC7f8o+4U/XRmzf1Bo5HV8PCRMI
+         4+pnTfU3j237lc/esMAZuUezpL4bjrKrRCwEB/ImEg5Gva9EgbzkpUDc/IYG5twbzX9M
+         QTYIf9bowHEI5JTW/siqZqrvlcm9kIhw/aF+IcC9hk+29gLUG42qsOy636JrwgwxKizd
+         BkVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VckbwsaqxCWYJ3+xkcRYBwTkgfTC5IcPs57wTWTAXlc=;
+        b=sXA++ITCcttZEXLrurqVUsCHN2XwH5cdZl6UjlMj6eA630731JNaXQkEwWFYxJ1BQr
+         nHNkoFdVKhT0qVOZUTBWy1LaTo5rVhOHdh96kxnyP9ZZjOKOTeJUqXDi2LwqB3oXKRHy
+         A8Kv8l5TG9Kf6RWX/w9F9dpAP624+7arbPTGcLohrPPW9q+RVSWiz5ZOzIegH9gt8qXn
+         LyDTM3uxKeNaRamKMpgMcYL/4dYmmfxuv4p7lJqpKLiGX6NjN+v2VFl9TaZrdYY1v1Hh
+         rVVXLz501Bnp2OLplxclM2dvi51kHZVGOz4BXcs7X6Fh29MDzxdpLh/0vW38MIm4O0LC
+         32sA==
+X-Gm-Message-State: APjAAAV7KPVqQ8DqhtwxEguGKcn/tWmTZGtO+tsJU7Iq29fNwGP85FeV
+        DMD1ypopUo39mepKft2fVoV1dHP1TBn6RZXfau19Dw==
+X-Google-Smtp-Source: APXvYqxjyztjd3Ij/vKYotk7k6oQzMIk/DFvauJShIe3rnao3++ct0y0mBDsBaC3dOmqI+xOTGvbomSRB64Bvom5fWY=
+X-Received: by 2002:a1c:cf4f:: with SMTP id f76mr16180324wmg.18.1558693346341;
+ Fri, 24 May 2019 03:22:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190524094825.16151-1-sr@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <1558436618-26194-1-git-send-email-shubhrajyoti.datta@gmail.com> <20190524075211.GB13559@kroah.com>
+In-Reply-To: <20190524075211.GB13559@kroah.com>
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+Date:   Fri, 24 May 2019 15:52:16 +0530
+Message-ID: <CAKfKVtFyMJyKyA5UpKP+x7qPWJGHy6qHX5Dz8cV0eLXTui=E-g@mail.gmail.com>
+Subject: Re: [PATCHv2 2/2] serial: uartps: Add a timeout to the tx empty wait
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 24, 2019 at 11:48:24AM +0200, Stefan Roese wrote:
-> This patch adds a check for the GPIOs property existence, before the
-> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
-> support is added (2nd patch in this patch series) on x86 platforms using
-> ACPI.
-> 
-> Here Mika's comments from 2016-08-09:
-> 
-> "
-> I noticed that with v4.8-rc1 serial console of some of our Broxton
-> systems does not work properly anymore. I'm able to see output but input
-> does not work.
-> 
-> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
-> ("tty/serial/8250: use mctrl_gpio helpers").
-> 
-> The reason why it fails is that in ACPI we do not have names for GPIOs
-> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
-> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
-> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
-> UART device in Broxton has following (simplified) ACPI description:
-> 
->     Device (URT4)
->     {
->         ...
->         Name (_CRS, ResourceTemplate () {
->             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
->                     "\\_SB.GPO0", 0x00, ResourceConsumer)
->             {
->                 0x003A
->             }
->             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
->                     "\\_SB.GPO0", 0x00, ResourceConsumer)
->             {
->                 0x003D
->             }
->         })
-> 
-> In this case it finds the first GPIO (0x003A which happens to be RX pin
-> for that UART), turns it into GPIO which then breaks input for the UART
-> device. This also breaks systems with bluetooth connected to UART (those
-> typically have some GPIOs in their _CRS).
-> 
-> Any ideas how to fix this?
-> 
-> We cannot just drop the _CRS index lookup fallback because that would
-> break many existing machines out there so maybe we can limit this to
-> only DT enabled machines. Or alternatively probe if the property first
-> exists before trying to acquire the GPIOs (using
-> device_property_present()).
-> "
-> 
-> This patch implements the fix suggested by Mika in his statement above.
-> 
-> Signed-off-by: Stefan Roese <sr@denx.de>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Fri, May 24, 2019 at 1:22 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, May 21, 2019 at 04:33:38PM +0530, shubhrajyoti.datta@gmail.com wrote:
+> > From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> >
+> > In case the cable is not connected then the target gets into
+> > a infinite wait for tx empty.
+> > Add a timeout to the tx empty wait.
+> >
+> > Reported-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> > ---
+> >  drivers/tty/serial/xilinx_uartps.c | 14 ++++++++++----
+> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
+> > index 8850790..dc86511 100644
+> > --- a/drivers/tty/serial/xilinx_uartps.c
+> > +++ b/drivers/tty/serial/xilinx_uartps.c
+> > @@ -26,12 +26,14 @@
+> >  #include <linux/of.h>
+> >  #include <linux/module.h>
+> >  #include <linux/pm_runtime.h>
+> > +#include <linux/iopoll.h>
+> >
+> >  #define CDNS_UART_TTY_NAME   "ttyPS"
+> >  #define CDNS_UART_NAME               "xuartps"
+> >  #define CDNS_UART_MAJOR              0       /* use dynamic node allocation */
+> >  #define CDNS_UART_FIFO_SIZE  64      /* FIFO size */
+> >  #define CDNS_UART_REGISTER_SPACE     0x1000
+> > +#define TX_TIMEOUT           500000
+> >
+> >  /* Rx Trigger level */
+> >  static int rx_trigger_level = 56;
+> > @@ -688,14 +690,18 @@ static void cdns_uart_set_termios(struct uart_port *port,
+> >       unsigned int cval = 0;
+> >       unsigned int baud, minbaud, maxbaud;
+> >       unsigned long flags;
+> > -     unsigned int ctrl_reg, mode_reg;
+> > +     unsigned int ctrl_reg, mode_reg, val;
+> > +     int err;
+> >
+> >       /* Wait for the transmit FIFO to empty before making changes */
+> >       if (!(readl(port->membase + CDNS_UART_CR) &
+> >                               CDNS_UART_CR_TX_DIS)) {
+> > -             while (!(readl(port->membase + CDNS_UART_SR) &
+> > -                             CDNS_UART_SR_TXEMPTY)) {
+> > -                     cpu_relax();
+> > +             err = readl_poll_timeout(port->membase + CDNS_UART_SR,
+> > +                                      val, (val & CDNS_UART_SR_TXEMPTY),
+> > +                                      1000, TX_TIMEOUT);
+> > +             if (err) {
+> > +                     dev_info(port->dev, "timed out waiting for tx empty");
+> > +                     return;
+>
+> Also, shouldn't this be an error?  Why not tell the caller something
+> went wrong?
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Will  do in next version
+>
+> thanks,
+>
+> greg k-h
