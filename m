@@ -2,142 +2,134 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B67296B8
-	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 13:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEB22972C
+	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 13:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390920AbfEXLLQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 May 2019 07:11:16 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46536 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390865AbfEXLLP (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 May 2019 07:11:15 -0400
-Received: by mail-pg1-f194.google.com with SMTP id o11so274309pgm.13;
-        Fri, 24 May 2019 04:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+7J3y/fRv6XMK7gAKFuZ39eh40Af0wWeNJ4E0Zu6iH0=;
-        b=HYoUYWIh3uxH3NcvCusp33T+XJZGa3fl3oPvO7fB2blpt4QwpbEZ766Q6PdGDR/jo0
-         6aSBiNvJpU5mDgahFRvLB9LBIE2cUeHXTyFTHszceQw8jfChjmoT29ycbO6G4mLcjkFM
-         pHmIEiwTY7vIw5+kqnuhBDwVnP5a0U+mlm3P/Z74RJ6ALUTXP6fXK8OpIH9JE+0F4oEp
-         UMbXXoMwNDDjUD4OvuQVRdpp07ivomZNl79TGq401M3SdkdgZKlsxtTzM6YfVwppXTC0
-         aPua41Z1j5GWqWXGUY7VMsobwPUDzDvp/uzkRzVojgE11zv26SIUT8a71z36yQBTprjB
-         U8hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+7J3y/fRv6XMK7gAKFuZ39eh40Af0wWeNJ4E0Zu6iH0=;
-        b=mHLV9fA11ZNU+paXL2N30QMK3/hfDBpooKjUHTBPhu02JGkkB7CjVD1nRWHwnYxnE7
-         8h7AgAe4NKECFlMHYG6krBPXSXLEYcieL5cPCU3h/FzCh3a65Ivpp/wIiCsaRpkJgFTk
-         6cE60Me17zMlVjCnmiO1WNL9LFa5LaPq6b52IlQpStD22AW0njU5OzCEVPpGDvwOSpdw
-         33HE01UcwSIgN3AUggo5yKKj5woRvitZKQmnqiZMkzmqVMxwhsV9aExkAnSqo925mkd/
-         JSglaXmVNILGextcuQtX0PhubGIw2cttWB3ERjQaqNB9YCfp06Ho5OlPKTk3VY3RVV6r
-         5NtQ==
-X-Gm-Message-State: APjAAAVVa+HM5hyMJmTqWoXnyKG4G2Fy9Py6JQsIcUxXaNo+dWy7PZKu
-        rz5kUJYSapQGvMaYCNrjpt3SfKcuiiVzMROISW1yfVttl5s=
-X-Google-Smtp-Source: APXvYqzYyUtbyEanugU1hCluTgnfxJNvdrqZABRyTDBTH6kPu9nHnVaBSweAUERuV3/ZxPF8YN2yIXwMP9HRBBhe+Vg=
-X-Received: by 2002:a63:4d0b:: with SMTP id a11mr16877570pgb.74.1558696275115;
- Fri, 24 May 2019 04:11:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190524094825.16151-1-sr@denx.de> <20190524102002.GT2781@lahna.fi.intel.com>
-In-Reply-To: <20190524102002.GT2781@lahna.fi.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 24 May 2019 14:11:04 +0300
-Message-ID: <CAHp75VcMVrYv1MXmmqE9fDXShS=Y8pPdWZ4f1neo=ne88TLZDg@mail.gmail.com>
+        id S2390699AbfEXL3x (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 May 2019 07:29:53 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:24394 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390654AbfEXL3x (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 24 May 2019 07:29:53 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 341A550865;
+        Fri, 24 May 2019 13:29:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id lIo4zlih5dcF; Fri, 24 May 2019 13:29:35 +0200 (CEST)
 Subject: Re: [PATCH 1/2 v2] serial: mctrl_gpio: Check if GPIO property exisits
  before requesting it
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Stefan Roese <sr@denx.de>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Yegor Yefremov <yegorslists@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Giulio Benetti <giulio.benetti@micronovasrl.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20190524094825.16151-1-sr@denx.de>
+ <20190524102002.GT2781@lahna.fi.intel.com>
+ <CAHp75VcMVrYv1MXmmqE9fDXShS=Y8pPdWZ4f1neo=ne88TLZDg@mail.gmail.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <287cdcc8-9a8f-4583-8be9-bd1f95936733@denx.de>
+Date:   Fri, 24 May 2019 13:29:34 +0200
+MIME-Version: 1.0
+In-Reply-To: <CAHp75VcMVrYv1MXmmqE9fDXShS=Y8pPdWZ4f1neo=ne88TLZDg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 24, 2019 at 1:21 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Fri, May 24, 2019 at 11:48:24AM +0200, Stefan Roese wrote:
-> > This patch adds a check for the GPIOs property existence, before the
-> > GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
-> > support is added (2nd patch in this patch series) on x86 platforms using
-> > ACPI.
-> >
-> > Here Mika's comments from 2016-08-09:
-> >
-> > "
-> > I noticed that with v4.8-rc1 serial console of some of our Broxton
-> > systems does not work properly anymore. I'm able to see output but input
-> > does not work.
-> >
-> > I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
-> > ("tty/serial/8250: use mctrl_gpio helpers").
-> >
-> > The reason why it fails is that in ACPI we do not have names for GPIOs
-> > (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
-> > resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
-> > calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
-> > UART device in Broxton has following (simplified) ACPI description:
-> >
-> >     Device (URT4)
-> >     {
-> >         ...
-> >         Name (_CRS, ResourceTemplate () {
-> >             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-> >                     "\\_SB.GPO0", 0x00, ResourceConsumer)
-> >             {
-> >                 0x003A
-> >             }
-> >             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-> >                     "\\_SB.GPO0", 0x00, ResourceConsumer)
-> >             {
-> >                 0x003D
-> >             }
-> >         })
-> >
-> > In this case it finds the first GPIO (0x003A which happens to be RX pin
-> > for that UART), turns it into GPIO which then breaks input for the UART
-> > device. This also breaks systems with bluetooth connected to UART (those
-> > typically have some GPIOs in their _CRS).
-> >
-> > Any ideas how to fix this?
-> >
-> > We cannot just drop the _CRS index lookup fallback because that would
-> > break many existing machines out there so maybe we can limit this to
-> > only DT enabled machines. Or alternatively probe if the property first
-> > exists before trying to acquire the GPIOs (using
-> > device_property_present()).
-> > "
-> >
-> > This patch implements the fix suggested by Mika in his statement above.
-> >
+On 24.05.19 13:11, Andy Shevchenko wrote:
+> On Fri, May 24, 2019 at 1:21 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+>>
+>> On Fri, May 24, 2019 at 11:48:24AM +0200, Stefan Roese wrote:
+>>> This patch adds a check for the GPIOs property existence, before the
+>>> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+>>> support is added (2nd patch in this patch series) on x86 platforms using
+>>> ACPI.
+>>>
+>>> Here Mika's comments from 2016-08-09:
+>>>
+>>> "
+>>> I noticed that with v4.8-rc1 serial console of some of our Broxton
+>>> systems does not work properly anymore. I'm able to see output but input
+>>> does not work.
+>>>
+>>> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+>>> ("tty/serial/8250: use mctrl_gpio helpers").
+>>>
+>>> The reason why it fails is that in ACPI we do not have names for GPIOs
+>>> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+>>> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+>>> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+>>> UART device in Broxton has following (simplified) ACPI description:
+>>>
+>>>      Device (URT4)
+>>>      {
+>>>          ...
+>>>          Name (_CRS, ResourceTemplate () {
+>>>              GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+>>>                      "\\_SB.GPO0", 0x00, ResourceConsumer)
+>>>              {
+>>>                  0x003A
+>>>              }
+>>>              GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+>>>                      "\\_SB.GPO0", 0x00, ResourceConsumer)
+>>>              {
+>>>                  0x003D
+>>>              }
+>>>          })
+>>>
+>>> In this case it finds the first GPIO (0x003A which happens to be RX pin
+>>> for that UART), turns it into GPIO which then breaks input for the UART
+>>> device. This also breaks systems with bluetooth connected to UART (those
+>>> typically have some GPIOs in their _CRS).
+>>>
+>>> Any ideas how to fix this?
+>>>
+>>> We cannot just drop the _CRS index lookup fallback because that would
+>>> break many existing machines out there so maybe we can limit this to
+>>> only DT enabled machines. Or alternatively probe if the property first
+>>> exists before trying to acquire the GPIOs (using
+>>> device_property_present()).
+>>> "
+>>>
+>>> This patch implements the fix suggested by Mika in his statement above.
+>>>
+> 
+> We have a board where ASL provides _DSD for CTS and RxD pins.
+> I'm afraid this won't work on it.
 
-We have a board where ASL provides _DSD for CTS and RxD pins.
-I'm afraid this won't work on it.
+With "won't work" you mean, that the GPIO can't be used for modem
+control in this case in the current implementation (with this
+patchset)? Or do you mean, that the breakage (input does not work
+on Broxton systems) will not be solved by this patch?
 
-Basically we need to understand the use of the GPIOs in UART. In our
-case it's an out-of-band wake up source for UART.
-Simply requiring GPIOs to be present is not enough.
+If its the former, then I think that solving this issue is something
+for a new patch, to support modem-control on such platforms as well
+(if needed).
 
-Perhaps property like 'modem-control-gpio-in-use' (this seems a bad
-name, given for sake of example).
+Please note that this patch is not trying to get modem-control working
+on such ACPI based systems. Its targeted for device-tree enabled
+platforms, using the 8250 serial driver, here specifically a MIPS
+MT7688 based board. And just wants to fix the latter issue mentioned
+above so that the 8250 modem-control support can be accepted in
+mainline.
+  
+> Basically we need to understand the use of the GPIOs in UART. In our
+> case it's an out-of-band wake up source for UART.
+> Simply requiring GPIOs to be present is not enough.
+> 
+> Perhaps property like 'modem-control-gpio-in-use' (this seems a bad
+> name, given for sake of example).
 
-> > Signed-off-by: Stefan Roese <sr@denx.de>
-> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Stefan
