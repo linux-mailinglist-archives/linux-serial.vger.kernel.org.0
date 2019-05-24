@@ -2,122 +2,142 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 062862959E
-	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 12:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B67296B8
+	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 13:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390201AbfEXKW2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 May 2019 06:22:28 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:34369 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389448AbfEXKW2 (ORCPT
+        id S2390920AbfEXLLQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 May 2019 07:11:16 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:46536 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390865AbfEXLLP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 May 2019 06:22:28 -0400
-Received: by mail-wm1-f67.google.com with SMTP id e19so1588189wme.1
-        for <linux-serial@vger.kernel.org>; Fri, 24 May 2019 03:22:27 -0700 (PDT)
+        Fri, 24 May 2019 07:11:15 -0400
+Received: by mail-pg1-f194.google.com with SMTP id o11so274309pgm.13;
+        Fri, 24 May 2019 04:11:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VckbwsaqxCWYJ3+xkcRYBwTkgfTC5IcPs57wTWTAXlc=;
-        b=u0JJueyGsa3sYwitkkv0S49MpHD6CbQWp0D0B+MIY1kMwVyB/OVtCfQbBIGD/GTTrt
-         InBUM4zEEHEECDSfCfvDZ6TMvDBkUaVknlM8QIU8PjXd7BSs5ajksj22QW6GfkWVyrWF
-         PRsCTLJPIlnQnDdBNhdR3SPqZqscL8eM6idyPaN8ojC7f8o+4U/XRmzf1Bo5HV8PCRMI
-         4+pnTfU3j237lc/esMAZuUezpL4bjrKrRCwEB/ImEg5Gva9EgbzkpUDc/IYG5twbzX9M
-         QTYIf9bowHEI5JTW/siqZqrvlcm9kIhw/aF+IcC9hk+29gLUG42qsOy636JrwgwxKizd
-         BkVQ==
+        bh=+7J3y/fRv6XMK7gAKFuZ39eh40Af0wWeNJ4E0Zu6iH0=;
+        b=HYoUYWIh3uxH3NcvCusp33T+XJZGa3fl3oPvO7fB2blpt4QwpbEZ766Q6PdGDR/jo0
+         6aSBiNvJpU5mDgahFRvLB9LBIE2cUeHXTyFTHszceQw8jfChjmoT29ycbO6G4mLcjkFM
+         pHmIEiwTY7vIw5+kqnuhBDwVnP5a0U+mlm3P/Z74RJ6ALUTXP6fXK8OpIH9JE+0F4oEp
+         UMbXXoMwNDDjUD4OvuQVRdpp07ivomZNl79TGq401M3SdkdgZKlsxtTzM6YfVwppXTC0
+         aPua41Z1j5GWqWXGUY7VMsobwPUDzDvp/uzkRzVojgE11zv26SIUT8a71z36yQBTprjB
+         U8hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VckbwsaqxCWYJ3+xkcRYBwTkgfTC5IcPs57wTWTAXlc=;
-        b=sXA++ITCcttZEXLrurqVUsCHN2XwH5cdZl6UjlMj6eA630731JNaXQkEwWFYxJ1BQr
-         nHNkoFdVKhT0qVOZUTBWy1LaTo5rVhOHdh96kxnyP9ZZjOKOTeJUqXDi2LwqB3oXKRHy
-         A8Kv8l5TG9Kf6RWX/w9F9dpAP624+7arbPTGcLohrPPW9q+RVSWiz5ZOzIegH9gt8qXn
-         LyDTM3uxKeNaRamKMpgMcYL/4dYmmfxuv4p7lJqpKLiGX6NjN+v2VFl9TaZrdYY1v1Hh
-         rVVXLz501Bnp2OLplxclM2dvi51kHZVGOz4BXcs7X6Fh29MDzxdpLh/0vW38MIm4O0LC
-         32sA==
-X-Gm-Message-State: APjAAAV7KPVqQ8DqhtwxEguGKcn/tWmTZGtO+tsJU7Iq29fNwGP85FeV
-        DMD1ypopUo39mepKft2fVoV1dHP1TBn6RZXfau19Dw==
-X-Google-Smtp-Source: APXvYqxjyztjd3Ij/vKYotk7k6oQzMIk/DFvauJShIe3rnao3++ct0y0mBDsBaC3dOmqI+xOTGvbomSRB64Bvom5fWY=
-X-Received: by 2002:a1c:cf4f:: with SMTP id f76mr16180324wmg.18.1558693346341;
- Fri, 24 May 2019 03:22:26 -0700 (PDT)
+        bh=+7J3y/fRv6XMK7gAKFuZ39eh40Af0wWeNJ4E0Zu6iH0=;
+        b=mHLV9fA11ZNU+paXL2N30QMK3/hfDBpooKjUHTBPhu02JGkkB7CjVD1nRWHwnYxnE7
+         8h7AgAe4NKECFlMHYG6krBPXSXLEYcieL5cPCU3h/FzCh3a65Ivpp/wIiCsaRpkJgFTk
+         6cE60Me17zMlVjCnmiO1WNL9LFa5LaPq6b52IlQpStD22AW0njU5OzCEVPpGDvwOSpdw
+         33HE01UcwSIgN3AUggo5yKKj5woRvitZKQmnqiZMkzmqVMxwhsV9aExkAnSqo925mkd/
+         JSglaXmVNILGextcuQtX0PhubGIw2cttWB3ERjQaqNB9YCfp06Ho5OlPKTk3VY3RVV6r
+         5NtQ==
+X-Gm-Message-State: APjAAAVVa+HM5hyMJmTqWoXnyKG4G2Fy9Py6JQsIcUxXaNo+dWy7PZKu
+        rz5kUJYSapQGvMaYCNrjpt3SfKcuiiVzMROISW1yfVttl5s=
+X-Google-Smtp-Source: APXvYqzYyUtbyEanugU1hCluTgnfxJNvdrqZABRyTDBTH6kPu9nHnVaBSweAUERuV3/ZxPF8YN2yIXwMP9HRBBhe+Vg=
+X-Received: by 2002:a63:4d0b:: with SMTP id a11mr16877570pgb.74.1558696275115;
+ Fri, 24 May 2019 04:11:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <1558436618-26194-1-git-send-email-shubhrajyoti.datta@gmail.com> <20190524075211.GB13559@kroah.com>
-In-Reply-To: <20190524075211.GB13559@kroah.com>
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Date:   Fri, 24 May 2019 15:52:16 +0530
-Message-ID: <CAKfKVtFyMJyKyA5UpKP+x7qPWJGHy6qHX5Dz8cV0eLXTui=E-g@mail.gmail.com>
-Subject: Re: [PATCHv2 2/2] serial: uartps: Add a timeout to the tx empty wait
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+References: <20190524094825.16151-1-sr@denx.de> <20190524102002.GT2781@lahna.fi.intel.com>
+In-Reply-To: <20190524102002.GT2781@lahna.fi.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 24 May 2019 14:11:04 +0300
+Message-ID: <CAHp75VcMVrYv1MXmmqE9fDXShS=Y8pPdWZ4f1neo=ne88TLZDg@mail.gmail.com>
+Subject: Re: [PATCH 1/2 v2] serial: mctrl_gpio: Check if GPIO property exisits
+ before requesting it
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Stefan Roese <sr@denx.de>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 24, 2019 at 1:22 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Fri, May 24, 2019 at 1:21 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
 >
-> On Tue, May 21, 2019 at 04:33:38PM +0530, shubhrajyoti.datta@gmail.com wrote:
-> > From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> On Fri, May 24, 2019 at 11:48:24AM +0200, Stefan Roese wrote:
+> > This patch adds a check for the GPIOs property existence, before the
+> > GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+> > support is added (2nd patch in this patch series) on x86 platforms using
+> > ACPI.
 > >
-> > In case the cable is not connected then the target gets into
-> > a infinite wait for tx empty.
-> > Add a timeout to the tx empty wait.
+> > Here Mika's comments from 2016-08-09:
 > >
-> > Reported-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> > ---
-> >  drivers/tty/serial/xilinx_uartps.c | 14 ++++++++++----
-> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> > "
+> > I noticed that with v4.8-rc1 serial console of some of our Broxton
+> > systems does not work properly anymore. I'm able to see output but input
+> > does not work.
 > >
-> > diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-> > index 8850790..dc86511 100644
-> > --- a/drivers/tty/serial/xilinx_uartps.c
-> > +++ b/drivers/tty/serial/xilinx_uartps.c
-> > @@ -26,12 +26,14 @@
-> >  #include <linux/of.h>
-> >  #include <linux/module.h>
-> >  #include <linux/pm_runtime.h>
-> > +#include <linux/iopoll.h>
+> > I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+> > ("tty/serial/8250: use mctrl_gpio helpers").
 > >
-> >  #define CDNS_UART_TTY_NAME   "ttyPS"
-> >  #define CDNS_UART_NAME               "xuartps"
-> >  #define CDNS_UART_MAJOR              0       /* use dynamic node allocation */
-> >  #define CDNS_UART_FIFO_SIZE  64      /* FIFO size */
-> >  #define CDNS_UART_REGISTER_SPACE     0x1000
-> > +#define TX_TIMEOUT           500000
+> > The reason why it fails is that in ACPI we do not have names for GPIOs
+> > (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+> > resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+> > calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+> > UART device in Broxton has following (simplified) ACPI description:
 > >
-> >  /* Rx Trigger level */
-> >  static int rx_trigger_level = 56;
-> > @@ -688,14 +690,18 @@ static void cdns_uart_set_termios(struct uart_port *port,
-> >       unsigned int cval = 0;
-> >       unsigned int baud, minbaud, maxbaud;
-> >       unsigned long flags;
-> > -     unsigned int ctrl_reg, mode_reg;
-> > +     unsigned int ctrl_reg, mode_reg, val;
-> > +     int err;
+> >     Device (URT4)
+> >     {
+> >         ...
+> >         Name (_CRS, ResourceTemplate () {
+> >             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+> >                     "\\_SB.GPO0", 0x00, ResourceConsumer)
+> >             {
+> >                 0x003A
+> >             }
+> >             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+> >                     "\\_SB.GPO0", 0x00, ResourceConsumer)
+> >             {
+> >                 0x003D
+> >             }
+> >         })
 > >
-> >       /* Wait for the transmit FIFO to empty before making changes */
-> >       if (!(readl(port->membase + CDNS_UART_CR) &
-> >                               CDNS_UART_CR_TX_DIS)) {
-> > -             while (!(readl(port->membase + CDNS_UART_SR) &
-> > -                             CDNS_UART_SR_TXEMPTY)) {
-> > -                     cpu_relax();
-> > +             err = readl_poll_timeout(port->membase + CDNS_UART_SR,
-> > +                                      val, (val & CDNS_UART_SR_TXEMPTY),
-> > +                                      1000, TX_TIMEOUT);
-> > +             if (err) {
-> > +                     dev_info(port->dev, "timed out waiting for tx empty");
-> > +                     return;
->
-> Also, shouldn't this be an error?  Why not tell the caller something
-> went wrong?
+> > In this case it finds the first GPIO (0x003A which happens to be RX pin
+> > for that UART), turns it into GPIO which then breaks input for the UART
+> > device. This also breaks systems with bluetooth connected to UART (those
+> > typically have some GPIOs in their _CRS).
+> >
+> > Any ideas how to fix this?
+> >
+> > We cannot just drop the _CRS index lookup fallback because that would
+> > break many existing machines out there so maybe we can limit this to
+> > only DT enabled machines. Or alternatively probe if the property first
+> > exists before trying to acquire the GPIOs (using
+> > device_property_present()).
+> > "
+> >
+> > This patch implements the fix suggested by Mika in his statement above.
+> >
 
-Will  do in next version
+We have a board where ASL provides _DSD for CTS and RxD pins.
+I'm afraid this won't work on it.
+
+Basically we need to understand the use of the GPIOs in UART. In our
+case it's an out-of-band wake up source for UART.
+Simply requiring GPIOs to be present is not enough.
+
+Perhaps property like 'modem-control-gpio-in-use' (this seems a bad
+name, given for sake of example).
+
+> > Signed-off-by: Stefan Roese <sr@denx.de>
+> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
 >
-> thanks,
->
-> greg k-h
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
