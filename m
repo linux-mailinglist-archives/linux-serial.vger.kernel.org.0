@@ -2,34 +2,34 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 562FF29213
-	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 09:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B7F29214
+	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 09:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389001AbfEXHvd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 May 2019 03:51:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36308 "EHLO mail.kernel.org"
+        id S2389021AbfEXHwP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 May 2019 03:52:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36446 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388911AbfEXHvd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 May 2019 03:51:33 -0400
+        id S2388911AbfEXHwP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 24 May 2019 03:52:15 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C6DC6217F9;
-        Fri, 24 May 2019 07:51:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B8B2217F9;
+        Fri, 24 May 2019 07:52:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558684292;
-        bh=z+3V3UnW/wXYQ382ujJ+wYbisLgqO9nMfaYWEBGTABU=;
+        s=default; t=1558684334;
+        bh=cgNe78Opw1PC/TWjq1Qcg/+lEYOE92NeKya+UKvK0Dc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=geCQVDIX0mBS1qz5qt/2RUZ1M4ss2gKnXmlf0ptFTkrKimOEr79u5CtVbMzCZ/CpU
-         cw2HF2e9Z2n0l2XQnyWYZHZdths0zebmbJ8s9wCJ7p0k1OwkkS8bXV4Hfbd2N9ffx3
-         8dPpzkAEtHCbUoiSnWEqnfY5pVzht93MzwCVFiU0=
-Date:   Fri, 24 May 2019 09:51:29 +0200
+        b=kV6x6o3eVy7aOtkhb6KZwC1vo+vXibY86uarXACuNFY1ktjmzWB43YbIfySnGoBem
+         QV0vYQX4zaXd765MqOXlZEIWl1Hn9XhFM4lDoPV8VPc7LGVFtD2qUlZp8RegU2FEGG
+         lGIlW/m2iSqzAww3gfIDitnF9bvlYPsbmlVedQdM=
+Date:   Fri, 24 May 2019 09:52:11 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     shubhrajyoti.datta@gmail.com
 Cc:     linux-serial@vger.kernel.org, michal.simek@xilinx.com,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 Subject: Re: [PATCHv2 2/2] serial: uartps: Add a timeout to the tx empty wait
-Message-ID: <20190524075129.GA13559@kroah.com>
+Message-ID: <20190524075211.GB13559@kroah.com>
 References: <1558436618-26194-1-git-send-email-shubhrajyoti.datta@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -92,9 +92,10 @@ On Tue, May 21, 2019 at 04:33:38PM +0530, shubhrajyoti.datta@gmail.com wrote:
 > +					 1000, TX_TIMEOUT);
 > +		if (err) {
 > +			dev_info(port->dev, "timed out waiting for tx empty");
+> +			return;
 
-That is not an "informational" message, isn't it an error?  And if this
-happens, what can userspace do about it?  Why report it at all?
+Also, shouldn't this be an error?  Why not tell the caller something
+went wrong?
 
 thanks,
 
