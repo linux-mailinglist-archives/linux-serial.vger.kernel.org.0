@@ -2,61 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8100A29222
-	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 09:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6142922D
+	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 09:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389198AbfEXH4W (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 May 2019 03:56:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38084 "EHLO mail.kernel.org"
+        id S2389044AbfEXH5Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 May 2019 03:57:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389197AbfEXH4W (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 May 2019 03:56:22 -0400
+        id S2388911AbfEXH5Q (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 24 May 2019 03:57:16 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10FB820879;
-        Fri, 24 May 2019 07:56:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA48020879;
+        Fri, 24 May 2019 07:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558684581;
-        bh=bXD6QdoJrj8nxRE6cBPxuj0h6h954JnbAXNYAFv5zSc=;
+        s=default; t=1558684635;
+        bh=vAYcLZiYVq3O5KhRY0OKolvSq/MVf8bBgjD/JdjCsCg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BTsYSM/SGgpLTTjkF6vD8AxB0UHlJeCDNcHJ5G+5lAeOCW8Qq1rUfN2Klr23mO/U6
-         KVFBv6BW3E0CMDFZ4n+hURGKqz6STou24e9sTPtf5jOvUGGDWx6WiPt1jQE5su1Ye3
-         MlRV7XGBrOQK0CQB6LQmzL22JCCiCv5ZTSQwA/Mw=
-Date:   Fri, 24 May 2019 09:56:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>
-Subject: Re: [PATCH 1/2] serial: mctrl_gpio: Check if GPIO property exisits
- before requesting it
-Message-ID: <20190524075619.GB31438@kroah.com>
-References: <20190522121117.14347-1-sr@denx.de>
+        b=hri8bYkq46EXQBVgdJ9xPHx9IHmnef7c2H6SapXWTmsh1FfJPflXoOBIyxneL4tVI
+         F7fXLHWzrD60QA+jL0STKNXfTqgRkd0gBe8rR/xaZ8pt6I+kGammv/2jdF96Sl2biE
+         ZhEi5pWWukb1RJZ0zvtQVXdxJkxZ1HsbZFwf8VAE=
+Date:   Fri, 24 May 2019 09:57:12 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v3] serial: 8250: Fix TX interrupt handling condition
+Message-ID: <20190524075712.GC31438@kroah.com>
+References: <1558680424-57578-1-git-send-email-ext-kimmo.rautkoski@vaisala.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190522121117.14347-1-sr@denx.de>
+In-Reply-To: <1558680424-57578-1-git-send-email-ext-kimmo.rautkoski@vaisala.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, May 22, 2019 at 02:11:16PM +0200, Stefan Roese wrote:
-> This patch adds a check for the GPIOs property existence, before the
-> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
-> support is added (2nd patch in this patch series) on x86 platforms using
-> ACPI. Please find a details problem description here:
+On Fri, May 24, 2019 at 06:47:33AM +0000, Rautkoski Kimmo EXT wrote:
+> Interrupt handler checked THRE bit (transmitter holding register
+> empty) in LSR to detect if TX fifo is empty.
+> In case when there is only receive interrupts the TX handling
+> got called because THRE bit in LSR is set when there is no
+> transmission (FIFO empty). TX handling caused TX stop, which in
+> RS-485 half-duplex mode actually resets receiver FIFO. This is not
+> desired during reception because of possible data loss.
 > 
-> https://lkml.org/lkml/2016/8/9/357
+> The fix is to check if THRI is set in IER in addition of the TX
+> fifo status. THRI in IER is set when TX is started and cleared
+> when TX is stopped.
+> This ensures that TX handling is only called when there is really
+> transmission on going and an interrupt for THRE and not when there
+> are only RX interrupts.
+> 
+> Signed-off-by: Kimmo Rautkoski <ext-kimmo.rautkoski@vaisala.com>
+> ---
+>  drivers/tty/serial/8250/8250_port.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-Can you change this to a lore.kernel.org link instead?
+What changed from all of the previous versions of this patch?  That
+needs to go below the --- line.
 
-Actually, just put the information in here, no one should ever have to
-search somewhere else to determine what happened in a changelog entry.
+Please fix up and resend a v4.
 
 thanks,
 
