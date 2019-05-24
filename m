@@ -2,145 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFC629443
-	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 11:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107B529466
+	for <lists+linux-serial@lfdr.de>; Fri, 24 May 2019 11:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389425AbfEXJLp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 May 2019 05:11:45 -0400
-Received: from mail-eopbgr720040.outbound.protection.outlook.com ([40.107.72.40]:51888
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        id S2389836AbfEXJT0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 May 2019 05:19:26 -0400
+Received: from mail-eopbgr00050.outbound.protection.outlook.com ([40.107.0.50]:50510
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389564AbfEXJLo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 May 2019 05:11:44 -0400
-Received: from DM6PR02CA0075.namprd02.prod.outlook.com (2603:10b6:5:1f4::16)
- by SN6PR02MB4733.namprd02.prod.outlook.com (2603:10b6:805:8f::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.15; Fri, 24 May
- 2019 09:11:41 +0000
-Received: from CY1NAM02FT040.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::205) by DM6PR02CA0075.outlook.office365.com
- (2603:10b6:5:1f4::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1922.16 via Frontend
- Transport; Fri, 24 May 2019 09:11:41 +0000
-Authentication-Results: spf=softfail (sender IP is 149.199.60.83)
- smtp.mailfrom=gmail.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=fail action=none header.from=gmail.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- gmail.com discourages use of 149.199.60.83 as permitted sender)
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT040.mail.protection.outlook.com (10.152.75.135) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
- via Frontend Transport; Fri, 24 May 2019 09:11:41 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1hU6Em-0001Wy-Vj; Fri, 24 May 2019 02:11:40 -0700
-Received: from localhost ([127.0.0.1] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1hU6Eh-00029L-SF; Fri, 24 May 2019 02:11:35 -0700
-Received: from [172.23.37.106] (helo=xhdshubhraj40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1hU6Eh-00028j-73; Fri, 24 May 2019 02:11:35 -0700
-From:   shubhrajyoti.datta@gmail.com
-To:     linux-serial@vger.kernel.org
-Cc:     michal.simek@xilinx.com, gregkh@linuxfoundation.org,
-        shubhrajyoti.datta@gmail.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCHv3 2/2] serial: uartps: Add a timeout to the tx empty wait
-Date:   Fri, 24 May 2019 14:41:29 +0530
-Message-Id: <1558689089-8107-2-git-send-email-shubhrajyoti.datta@gmail.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1558689089-8107-1-git-send-email-shubhrajyoti.datta@gmail.com>
-References: <1558689089-8107-1-git-send-email-shubhrajyoti.datta@gmail.com>
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-Result: No--7.000-7.0-31-1
-X-imss-scan-details: No--7.000-7.0-31-1;No--7.000-5.0-31-1
-X-TM-AS-User-Approved-Sender: No;No
-X-TM-AS-Result-Xfilter: Match text exemption rules:No
-X-EOPAttributedMessage: 0
-X-Matching-Connectors: 132031627016249280;(f9e945fa-a09a-4caa-7158-08d2eb1d8c44);()
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(136003)(396003)(39860400002)(376002)(346002)(2980300002)(199004)(189003)(14444005)(86362001)(87572001)(50466002)(55446002)(9786002)(51416003)(76176011)(85782001)(82202003)(4326008)(8676002)(81156014)(2361001)(2906002)(81166006)(63266004)(2351001)(16586007)(8936002)(316002)(6916009)(498600001)(83322999)(50226002)(486006)(356004)(6666004)(5660300002)(70206006)(73972006)(26005)(107886003)(36756003)(73392003)(77096007)(336012)(126002)(61266001)(48376002)(446003)(70586007)(9686003)(76482006)(426003)(47776003)(305945005)(11346002)(2616005)(476003)(85772001);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR02MB4733;H:xsj-pvapsmtpgw01;FPR:;SPF:SoftFail;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
+        id S2389569AbfEXJT0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 24 May 2019 05:19:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W1fIuoq37MO2m9JsTOFtvKDXcziY9dB588LvAxIkk88=;
+ b=vCmhwJGHSZhP8p0vT0Ghl1IOsU8UKp/BRvp60omrYufVx9k4n9xP+zeT9FwLqLCSR/fUjw/VpnuZzL17iQ6gkonn/QFHywlJ4VKfO16L9C4ZORnLOPP3c2HfK1IBxUyAbWfP2nEjcmwJxFjPXmivHjaxYACEJHwototLoD74VQ4=
+Received: from HE1PR06MB3098.eurprd06.prod.outlook.com (10.171.197.142) by
+ HE1PR06MB3196.eurprd06.prod.outlook.com (10.171.198.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.17; Fri, 24 May 2019 09:19:22 +0000
+Received: from HE1PR06MB3098.eurprd06.prod.outlook.com
+ ([fe80::b9fe:93:6eb9:335b]) by HE1PR06MB3098.eurprd06.prod.outlook.com
+ ([fe80::b9fe:93:6eb9:335b%6]) with mapi id 15.20.1922.017; Fri, 24 May 2019
+ 09:19:22 +0000
+From:   Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
+Subject: [PATCH v4] serial: 8250: Fix TX interrupt handling condition
+Thread-Topic: [PATCH v4] serial: 8250: Fix TX interrupt handling condition
+Thread-Index: AQHVEhHGiFPVdov7YEyWsL0iBe5iwA==
+Date:   Fri, 24 May 2019 09:19:22 +0000
+Message-ID: <1558689546-27701-1-git-send-email-ext-kimmo.rautkoski@vaisala.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1P192CA0010.EURP192.PROD.OUTLOOK.COM (2603:10a6:3:fe::20)
+ To HE1PR06MB3098.eurprd06.prod.outlook.com (2603:10a6:7:23::14)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ext-kimmo.rautkoski@vaisala.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.1.4
+x-originating-ip: [193.143.230.131]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2aacf83c-25e8-4178-713f-08d6e028e83b
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:HE1PR06MB3196;
+x-ms-traffictypediagnostic: HE1PR06MB3196:
+x-tenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+x-microsoft-antispam-prvs: <HE1PR06MB3196DADA7927DD65498EEFF4B4020@HE1PR06MB3196.eurprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 0047BC5ADE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(376002)(39850400004)(366004)(136003)(346002)(54534003)(189003)(199004)(36756003)(2906002)(6436002)(6512007)(6486002)(476003)(14454004)(5640700003)(54906003)(26005)(3846002)(6116002)(7736002)(186003)(305945005)(68736007)(99286004)(6916009)(107886003)(66066001)(102836004)(4326008)(386003)(6506007)(2351001)(316002)(73956011)(66946007)(66476007)(66556008)(52116002)(256004)(64756008)(66446008)(486006)(86362001)(5660300002)(478600001)(14444005)(2501003)(50226002)(81166006)(25786009)(71190400001)(71200400001)(8936002)(81156014)(2616005)(1730700003)(53936002)(8676002)(326664003);DIR:OUT;SFP:1101;SCL:1;SRVR:HE1PR06MB3196;H:HE1PR06MB3098.eurprd06.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: vaisala.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: I/blB/41unW1GUZ7qW7F4qm6Tn50fNiI7nJ6V5rEq7QmxAAiTyDrPOtmKPYliQH8x0BkVzJxzJvM4YB2YQXAcefFMwE1BwMAESaBaqpXb7NAFqNt7FpfTavqY1UxIZLCz0vz84unttyk76+lNo0h5tVeIt7+ewdkTS4z8TycJi1a0CWK0cSBN0vpx7zX+0M4blnSsFw/IC6lxbYoz55xg+X1NFhPVvISQTlO5v0x+8rdP0aA0QU9EWgXgxkvO5bmF5jC8KJNJ2G7/kjPAJaAn/ZDdRd0AIGMilsuxhH1I0sEqT2B3Z4WgXRIokOBTbQlwfG9QkfC+qdhRU7LPKV7U+BYIVmaOFI8zKMyMOHbepz8bEJbwfihGzYrPjo70wUa4ecQ8rQ+xjYYMOt0gd7YrhT3TtiIOieULRhaEw6E6C0=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e4fb852d-3f5c-4f28-2428-08d6e027d5db
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(5600141)(711020)(4605104)(2017052603328);SRVR:SN6PR02MB4733;
-X-MS-TrafficTypeDiagnostic: SN6PR02MB4733:
-X-Microsoft-Antispam-PRVS: <SN6PR02MB4733E3D5BB023AD94585C7BC87020@SN6PR02MB4733.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-Forefront-PRVS: 0047BC5ADE
-X-Microsoft-Antispam-Message-Info: 8wmmr571KM5hXf68Xd0cIqLvd6Z/+/Zh0vy0rib5dfKdkk0/vkqvSSw9R506Oak8tROO7RNZn8rLJm2eUN7v6xjBjikmT2gv2CR7mbPyfSr+Amr1BPgqlRP7sxywbxVFf5U1Z7HmEQ4qSibiDgbbMw/qomgm2H6RzvN1+gK2fna1jCxaqLHp8ZqXxEgh3yDYySgcELCk//zsqcKoyfSltVZYuonCdYddBEmhGqQenIYnLx1Ey65UZ9mdDX9RYgFUBCipYqtDqSQRyd70Dg0LYbl6eQ4eZ1GQAVMJD2xqc5vSOHHhGe/l+fVQjCk55sA84SqC5rlMxx4brxX9dg1KJDvpNkRm16uISzpf9HLXqoTJW1icuquuT/EUEcg4CFVuY8BLelNmEXvRIollSWeCOZ15X61DYOSwHoFC4Ulny8M=
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2019 09:11:41.4497
+X-OriginatorOrg: vaisala.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aacf83c-25e8-4178-713f-08d6e028e83b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2019 09:19:22.4384
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4fb852d-3f5c-4f28-2428-08d6e027d5db
-X-MS-Exchange-CrossTenant-Id: 5afe0b00-7697-4969-b663-5eab37d5f47e
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5afe0b00-7697-4969-b663-5eab37d5f47e;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4733
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR06MB3196
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-
-In case the cable is not connected then the target gets into
-an infinite wait for tx empty.
-Add a timeout to the tx empty wait.
-
-Reported-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
-v3:
-update the print to dev_err
-
- drivers/tty/serial/xilinx_uartps.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 8850790..d872b25 100644
---- a/drivers/tty/serial/xilinx_uartps.c
-+++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -26,12 +26,14 @@
- #include <linux/of.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
-+#include <linux/iopoll.h>
- 
- #define CDNS_UART_TTY_NAME	"ttyPS"
- #define CDNS_UART_NAME		"xuartps"
- #define CDNS_UART_MAJOR		0	/* use dynamic node allocation */
- #define CDNS_UART_FIFO_SIZE	64	/* FIFO size */
- #define CDNS_UART_REGISTER_SPACE	0x1000
-+#define TX_TIMEOUT		500000
- 
- /* Rx Trigger level */
- static int rx_trigger_level = 56;
-@@ -688,14 +690,18 @@ static void cdns_uart_set_termios(struct uart_port *port,
- 	unsigned int cval = 0;
- 	unsigned int baud, minbaud, maxbaud;
- 	unsigned long flags;
--	unsigned int ctrl_reg, mode_reg;
-+	unsigned int ctrl_reg, mode_reg, val;
-+	int err;
- 
- 	/* Wait for the transmit FIFO to empty before making changes */
- 	if (!(readl(port->membase + CDNS_UART_CR) &
- 				CDNS_UART_CR_TX_DIS)) {
--		while (!(readl(port->membase + CDNS_UART_SR) &
--				CDNS_UART_SR_TXEMPTY)) {
--			cpu_relax();
-+		err = readl_poll_timeout(port->membase + CDNS_UART_SR,
-+					 val, (val & CDNS_UART_SR_TXEMPTY),
-+					 1000, TX_TIMEOUT);
-+		if (err) {
-+			dev_err(port->dev, "timed out waiting for tx empty");
-+			return;
- 		}
- 	}
- 	spin_lock_irqsave(&port->lock, flags);
--- 
-2.1.1
-
+SW50ZXJydXB0IGhhbmRsZXIgY2hlY2tlZCBUSFJFIGJpdCAodHJhbnNtaXR0ZXIgaG9sZGluZyBy
+ZWdpc3Rlcg0KZW1wdHkpIGluIExTUiB0byBkZXRlY3QgaWYgVFggZmlmbyBpcyBlbXB0eS4NCklu
+IGNhc2Ugd2hlbiB0aGVyZSBpcyBvbmx5IHJlY2VpdmUgaW50ZXJydXB0cyB0aGUgVFggaGFuZGxp
+bmcNCmdvdCBjYWxsZWQgYmVjYXVzZSBUSFJFIGJpdCBpbiBMU1IgaXMgc2V0IHdoZW4gdGhlcmUg
+aXMgbm8NCnRyYW5zbWlzc2lvbiAoRklGTyBlbXB0eSkuIFRYIGhhbmRsaW5nIGNhdXNlZCBUWCBz
+dG9wLCB3aGljaCBpbg0KUlMtNDg1IGhhbGYtZHVwbGV4IG1vZGUgYWN0dWFsbHkgcmVzZXRzIHJl
+Y2VpdmVyIEZJRk8uIFRoaXMgaXMgbm90DQpkZXNpcmVkIGR1cmluZyByZWNlcHRpb24gYmVjYXVz
+ZSBvZiBwb3NzaWJsZSBkYXRhIGxvc3MuDQoNClRoZSBmaXggaXMgdG8gY2hlY2sgaWYgVEhSSSBp
+cyBzZXQgaW4gSUVSIGluIGFkZGl0aW9uIG9mIHRoZSBUWA0KZmlmbyBzdGF0dXMuIFRIUkkgaW4g
+SUVSIGlzIHNldCB3aGVuIFRYIGlzIHN0YXJ0ZWQgYW5kIGNsZWFyZWQNCndoZW4gVFggaXMgc3Rv
+cHBlZC4NClRoaXMgZW5zdXJlcyB0aGF0IFRYIGhhbmRsaW5nIGlzIG9ubHkgY2FsbGVkIHdoZW4g
+dGhlcmUgaXMgcmVhbGx5DQp0cmFuc21pc3Npb24gb24gZ29pbmcgYW5kIGFuIGludGVycnVwdCBm
+b3IgVEhSRSBhbmQgbm90IHdoZW4gdGhlcmUNCmFyZSBvbmx5IFJYIGludGVycnVwdHMuDQoNClNp
+Z25lZC1vZmYtYnk6IEtpbW1vIFJhdXRrb3NraSA8ZXh0LWtpbW1vLnJhdXRrb3NraUB2YWlzYWxh
+LmNvbT4NCi0tLQ0KdjI6IGlpciBjaGVjayBjb25kaXRpb24gZml4ZWQuDQp2MzogSW5zdGVhZCBv
+ZiBjaGVja2luZyB0aGUgVEhSSSBpbiBpaXIsIGNoZWNrIGlmIHRyYW5zbWlzc2lvbiBpcw0KICAg
+IGFjdGl2ZSBieSBjaGVja2luZyBpZiBUSFJJIGlzIGVuYWJsZWQuDQp2NDogQWRkZWQgdGhpcyBj
+aGFuZ2Vsb2cuDQotLS0NCiBkcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYyB8IDMg
+KystDQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KDQpk
+aWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMgYi9kcml2ZXJz
+L3R0eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYw0KaW5kZXggZDJmMzMxMC4uZmRiNmZkMCAxMDA2
+NDQNCi0tLSBhL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTBfcG9ydC5jDQorKysgYi9kcml2
+ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYw0KQEAgLTE4NzUsNyArMTg3NSw4IEBAIGlu
+dCBzZXJpYWw4MjUwX2hhbmRsZV9pcnEoc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwgdW5zaWduZWQg
+aW50IGlpcikNCiAJCQlzdGF0dXMgPSBzZXJpYWw4MjUwX3J4X2NoYXJzKHVwLCBzdGF0dXMpOw0K
+IAl9DQogCXNlcmlhbDgyNTBfbW9kZW1fc3RhdHVzKHVwKTsNCi0JaWYgKCghdXAtPmRtYSB8fCB1
+cC0+ZG1hLT50eF9lcnIpICYmIChzdGF0dXMgJiBVQVJUX0xTUl9USFJFKSkNCisJaWYgKCghdXAt
+PmRtYSB8fCB1cC0+ZG1hLT50eF9lcnIpICYmIChzdGF0dXMgJiBVQVJUX0xTUl9USFJFKSAmJg0K
+KwkJKHVwLT5pZXIgJiBVQVJUX0lFUl9USFJJKSkNCiAJCXNlcmlhbDgyNTBfdHhfY2hhcnModXAp
+Ow0KIA0KIAl1YXJ0X3VubG9ja19hbmRfY2hlY2tfc3lzcnEocG9ydCwgZmxhZ3MpOw0KLS0gDQoy
+LjEuNA0KDQo=
