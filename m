@@ -2,122 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E845E2B8C1
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 18:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC432BAF8
+	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 21:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbfE0QMv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 May 2019 12:12:51 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38550 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726351AbfE0QMs (ORCPT
+        id S1726879AbfE0T4q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 May 2019 15:56:46 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:46823 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbfE0T4q (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 May 2019 12:12:48 -0400
-Received: by mail-wm1-f68.google.com with SMTP id t5so23468wmh.3
-        for <linux-serial@vger.kernel.org>; Mon, 27 May 2019 09:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=5mEyxNiTxG7QHCldnzuLItg2WJUiLZE71Nb5mEMikHM=;
-        b=Qdfu7lKbLkMVRKD6Gk7EDaRAOh0aHQeWqxjDWZvknbEkiHbKsi7MUieqe1q8sGforH
-         it5X5CBTkk6qo5HNbES2BPpxyemCI6jyrLk3xnUgbwWjJoh/Ow0M4+2IUTCZAGqEAbQg
-         D0qw0M8yy/tOMTfXLx4t+bVdXWkasDV0e1OK68nTpcw+pdg9fQzg8WsSX9LDU1q4YbYp
-         XGdy2qR8AMJSV8pK7CtZCuNJ4/EuRlo04Ka/dr8MNMdo1w/xpqZtNZjyObGnL/bJnBku
-         wRBWl2UF2uz7+wSaRjYdJPxBfPcfgsTQ1KJJ5tL5gE/AyiKI7Ifo582sH7jV988+ie2c
-         xTIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=5mEyxNiTxG7QHCldnzuLItg2WJUiLZE71Nb5mEMikHM=;
-        b=PkXyox2SzNWRbn5iBpkfiRheTrJOsQqrDXtA+F51yEfug4LiLvwdbE1SMe4sejxohw
-         1G6NqUtWw5Z1SvdE9TALqaBzecf2QLEK0F/9cyqUXrhefdGoQFQ5Jj6TY3OttQTExbFx
-         pRt3IifXGkvtDL0CrnTmq5jr+imXKueAWSWJkyTzI6Q/IS+TTnDpIiQoWeXUrKoDUYAz
-         mr7TX2xOOhJ8hxu6TNVX3pJi0afIfV2U2MviaybkvTaXR+g6XX6nFZNMYIT57NE+CZDe
-         xIjkv86D9yy2IWofSdqUWJ5Zm3VKFvX0EZshcHDQ+Gc4XGIs7eDNBtEoWmZQoQkFTNCw
-         JEHw==
-X-Gm-Message-State: APjAAAW0VldOK6ntIhyO6hzQ7i7FErXLtKXCoaSK+PzIb/W1l7Nrg8j3
-        AAV+W/PGjba8WGCuhVWn7YAihA==
-X-Google-Smtp-Source: APXvYqxdhEw7utvMO4VRArF33KJ19jG5BwvZVlrj9QcVk6+kzn3PBObGHvAKrpcEoNeAF24NJ1LU5g==
-X-Received: by 2002:a05:600c:228c:: with SMTP id 12mr14844150wmf.91.1558973565870;
-        Mon, 27 May 2019 09:12:45 -0700 (PDT)
-Received: from localhost (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j123sm21766217wmb.32.2019.05.27.09.12.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 May 2019 09:12:45 -0700 (PDT)
-From:   Loys Ollivier <lollivier@baylibre.com>
-To:     Atish Patra <atish.patra@wdc.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-serial\@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-riscv\@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v5 0/2] tty: serial: add DT bindings and serial driver for the SiFive FU540 UART
-References: <20190413020111.23400-1-paul.walmsley@sifive.com>
-        <7hmukmew5j.fsf@baylibre.com>
-        <883f3d5f-9b04-1435-30d3-2b48ab7eb76d@wdc.com>
-Date:   Mon, 27 May 2019 18:12:43 +0200
-In-Reply-To: <883f3d5f-9b04-1435-30d3-2b48ab7eb76d@wdc.com> (Atish Patra's
-        message of "Thu, 18 Apr 2019 18:04:34 -0700")
-Message-ID: <86sgszq3k4.fsf@baylibre.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+        Mon, 27 May 2019 15:56:46 -0400
+Received: from [192.168.1.110] ([95.115.42.131]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N18MG-1gUDUG0dsw-012Y0Z; Mon, 27 May 2019 21:56:34 +0200
+Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD
+ function
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Esben Haabendal <esben@haabendal.dk>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <87bm05mpmx.fsf@haabendal.dk> <20190514104741.GO4319@dell>
+ <20190514122618.GA18859@kroah.com> <87imudky2o.fsf@haabendal.dk>
+ <20190521100904.GA13612@kroah.com> <87pnocm59v.fsf@haabendal.dk>
+ <20190521111817.GA24911@kroah.com> <87lfz0m3ge.fsf@haabendal.dk>
+ <20190521125651.GA6264@kroah.com> <87h89nnajr.fsf@haabendal.dk>
+ <20190521144319.GA28747@kroah.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <5c7e21b6-3701-a685-02c6-a584996aa811@metux.net>
+Date:   Mon, 27 May 2019 21:56:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20190521144319.GA28747@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:K7GEJZtbQJhy4IMLkG1/HregCwPnj0S7Td/78D9wZMC4RrPz3mE
+ GngyVqIgDk5XwhKx8Mo/hYcIWUOFY/dJ8MTC6Ij+sQy482FsKAkmBVlzF9lNFGYQo8x1w2X
+ cSEG7qHzysKTdoc80JyGfW4nP/hO4l3V69FjSw6r7gETAIdIVDVOH34KvV0TOBoTr2WlFsL
+ SptcrrBq/5Jui1CUM0mOQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NeHRnzJkYP0=:6c4Z10cEv6QAFoYDO7mHfR
+ xjhz30RJUU3aPxaw91gITyNo8DOJrsTtC5aGRiv8b9YFsv+DP47FGFdoVDnNogQtN/KAPEtkj
+ aeG6phlUVUFcr7ShwFtE8CEdEJ3fJaJ0kxy4Gy6YjA63hSo1X0b0H0LSQ69t6xqMl1obJToRU
+ EoDY5zl+qtxLUQseyNAgYYfO2ZVkMoi/Izr/f6mFeDLotiUxLmnrpN2UNTFNVFFJ7K+P2x9fU
+ O/9Bf0sS64+EYNJF4giRdjMcUMHIqW/O8bYrm3mOQ6Qs6HSDO1IOEZea1O54A+Q4UwP2JD+7+
+ j8crVwZKiOdFNCa9UpwKYiQlOapdumXu3lc9TvHbdPey2Uv5knlFRC67JS2OY3Xcju+His2nU
+ ohImuPlKrU2ioAznUW9Rxa7RqL0ujF/zr/kNGRfSh/D/vWzZdf/9YIqulpVAz0k/QJJI5YPsS
+ cAUvc+BLHUCF/YKQQB0loDB1tvxMgCkamiqf+yiCyZ3429V94ppyOALzZ/xFvZjsOwQH9Flz4
+ vvQIPiIzoAMb8seO8BIsXS83YRlu8Tk8cUiUZYrFUnvujoBaQaL5HI/Dgv4txMjOIlnRAUdaS
+ oDuRQMQVOfaZZmnz8ZMOQ71+8aAjQgqZkWnzPf/8Kwq+jSSltEsS1z7PI25IwJKi+A+Ok44T+
+ IVni29vYsozZM5tFo7NQBo+eyaTDi5xx0pD0xp6ufMDwTBtHQqmiUK38oo5L657wWU3RiYMbT
+ 4+YT3yHPoQtw4uQ7w/pDR0GGVfwdy7bCJPRhFKUGB9LmBlb8LREbNyhTk5o=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu 18 Apr 2019 at 18:04, Atish Patra <atish.patra@wdc.com> wrote:
+On 21.05.19 16:43, Greg Kroah-Hartman wrote:
 
-> On 4/18/19 4:22 PM, Kevin Hilman wrote:
->> Hi Paul,
->>
->> Paul Walmsley <paul.walmsley@sifive.com> writes:
->>
->>> This series adds a serial driver, with console support, for the
->>> UART IP block present on the SiFive FU540 SoC.  The programming
->>> model is straightforward, but unique.
->>>
->>> Boot-tested on a SiFive FU540 HiFive-U board, using BBL and the
->>> open-source FSBL (with appropriate patches to the DT data).
->>>
->>> This fifth version fixes a bug in the set_termios handler,
->>> found by Andreas Schwab <schwab@suse.de>.
->>>
->>> The patches in this series can also be found, with the PRCI patches,
->>> DT patches, and DT prerequisite patch, at:
->>>
->>> https://github.com/sifive/riscv-linux/tree/dev/paulw/serial-v5.1-rc4
->>
->> I tried this branch, and it doesn't boot on my unleashed board.
->>
->> Here's the boot log when I pass the DT built from your branch via
->> u-boot: https://termbin.com/rfp3.
->>
->
-> Unfortunately, that won't work. The current DT modifications by OpenSBI.
->
-> 1. Change hart status to "masked" from "okay".
-> 2. M-mode interrupt masking in PLIC node.
-> 3. Add a chosen node for serial access in U-Boot.
->
-> You can ignore 3 for your use case. However, if you pass a dtb built from source
-> code, that will have hart0 enabled and M-mode interrupts enabled in DT.
+Hi,
 
-Atish,
-I'm trying to get the kernel boot with the current linux kernel DT from
-Paul's patch series [0].
+> Sometimes you need to go tell the hardware/firmware people not to do
+> foolish things.  You can not always fix their problems in software.
+> Please push back on this.
 
-Could you point me to some documentation on 2. ?
-Or do you know of a way to disable M-mode interrupts from U-boot ?
+I've often been in the same situation. It's hopeless with those folks.
+Even worse: you give'em a clear spec on how the register interface
+shall look like, and they make something really weird out of it
+(shuffled byte orders, multiplexing irqs over a single gpio line and
+leave the other's empty instead of just one gpio per irq, ...)
 
-[0]: https://lore.kernel.org/patchwork/project/lkml/list/?series=390077
+The kernel is full of buggy hardware, because hw folks seem not really
+capable of doing their homework :(
 
-Thanks,
-Loys
+Actually, the whole existance of these hundreds of different uart
+devices, IMHO, is a clear sing of hw folks not doing the homework.
 
->
-> Not sure if we should do these DT modifications in U-Boot as well.
->
+
+By the way: I've somewhat lost track of what the patch was actually
+about ... :o
+
+
+--mtx
+
+-- 
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
