@@ -2,40 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E512BB81
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 22:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33102B314
+	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 13:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbfE0UrN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 May 2019 16:47:13 -0400
-Received: from dolcegabbana.com ([198.23.132.36]:33851 "EHLO petraband.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727090AbfE0UrN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 May 2019 16:47:13 -0400
+        id S1726451AbfE0LSU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 May 2019 07:18:20 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:18768 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726418AbfE0LSU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 27 May 2019 07:18:20 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 0C4B9A1054;
+        Mon, 27 May 2019 13:18:18 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id 4ZAFuh7M_7kM; Mon, 27 May 2019 13:18:06 +0200 (CEST)
+From:   Stefan Roese <sr@denx.de>
 To:     linux-serial@vger.kernel.org
-Subject: Need traffic for your website?
-Message-ID: <ad7cf259040c8ed52c8eaed5ec9522ea@walkeralextra.tech>
-Date:   Mon, 27 May 2019 11:38:31 +0200
-From:   "Alex Walker" <schutz@walkeralextra.tech>
-Reply-To: fanfenqi@sina.com
+Cc:     linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>
+Subject: [PATCH 1/2 v3] serial: mctrl_gpio: Check if GPIO property exisits before requesting it
+Date:   Mon, 27 May 2019 13:18:04 +0200
+Message-Id: <20190527111805.876-1-sr@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi
+This patch adds a check for the GPIOs property existence, before the
+GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+support is added (2nd patch in this patch series) on x86 platforms using
+ACPI.
 
-Do you need traffic for your website, or ecommerce store?
-We can bring 1-2 thousands of visitors to your website daily.
+Here Mika's comments from 2016-08-09:
 
-No matter what you are selling, products or service. Getting more traffic
-is the key to your business.
+"
+I noticed that with v4.8-rc1 serial console of some of our Broxton
+systems does not work properly anymore. I'm able to see output but input
+does not work.
 
-Please reply if interested, we will go options for you.
+I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+("tty/serial/8250: use mctrl_gpio helpers").
 
-Thanks,
-Alex Walker
-Whatsapp: +8617199402387
+The reason why it fails is that in ACPI we do not have names for GPIOs
+(except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+UART device in Broxton has following (simplified) ACPI description:
+
+    Device (URT4)
+    {
+        ...
+        Name (_CRS, ResourceTemplate () {
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003A
+            }
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003D
+            }
+        })
+
+In this case it finds the first GPIO (0x003A which happens to be RX pin
+for that UART), turns it into GPIO which then breaks input for the UART
+device. This also breaks systems with bluetooth connected to UART (those
+typically have some GPIOs in their _CRS).
+
+Any ideas how to fix this?
+
+We cannot just drop the _CRS index lookup fallback because that would
+break many existing machines out there so maybe we can limit this to
+only DT enabled machines. Or alternatively probe if the property first
+exists before trying to acquire the GPIOs (using
+device_property_present()).
+"
+
+This patch implements the fix suggested by Mika in his statement above.
+
+Signed-off-by: Stefan Roese <sr@denx.de>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+v3:
+- No change
+
+v2:
+- Include the problem description and analysis from Mika into the commit
+  text, as suggested by Greg.
+
+ drivers/tty/serial/serial_mctrl_gpio.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 39ed56214cd3..cac50b20a119 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -116,6 +116,13 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+ 
+ 	for (i = 0; i < UART_GPIO_MAX; i++) {
+ 		enum gpiod_flags flags;
++		char *gpio_str;
++
++		/* Check if GPIO property exists and continue if not */
++		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
++				     mctrl_gpios_desc[i].name);
++		if (!device_property_present(dev, gpio_str))
++			continue;
+ 
+ 		if (mctrl_gpios_desc[i].dir_out)
+ 			flags = GPIOD_OUT_LOW;
+-- 
+2.21.0
 
