@@ -2,148 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD412B042
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 10:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA03E2B0DA
+	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 11:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbfE0IcB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 May 2019 04:32:01 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43571 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbfE0IcB (ORCPT
+        id S1726114AbfE0JFH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 May 2019 05:05:07 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:34618 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726071AbfE0JFH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 May 2019 04:32:01 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c6so9161684pfa.10
-        for <linux-serial@vger.kernel.org>; Mon, 27 May 2019 01:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LqoCn9Xhl56Gl3+VvLRbq2L1F7zbqoVOBwyCwaTUpoM=;
-        b=O+YQVkHQNN/p5LUAtWx+Tnj9GQq88I6z6fhkAa9LVS5XiwVAGzLe3C9XXGeCmG7koh
-         mvXhcoSURd6jFjMGLpL1uRe/boOy8vAhM+2cW2hnh7uPeewWk8ORIVEG/8xUMD90b+70
-         ryS2Fi+Fqxs1otmya2No2gkmuFcSN64bikuuk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LqoCn9Xhl56Gl3+VvLRbq2L1F7zbqoVOBwyCwaTUpoM=;
-        b=iewgB7irdqgo6nMssyh0jH0sx9rKSN9CSuNTUFGCtONg83VAMzxS2Fj5jf6aMWAmzf
-         nut1uOYzki82x61GldRmUzhx0W5KjTnpgs5lYPiVywENUM7vSKev+0Ag10JrJxzXvOe+
-         q/vZS7G7zal2/0lZvcACH1i8ERU0seNFiMX6rW284S3B+eWJVgMSLRlw97YkdwM10M9x
-         0yMcGeayqk8QG0gsR613dAAAo3TfpTolHvRq+APdEGQrhERH4YT/gJ/lt7wd17drtAHN
-         9Ip4prJcby9mIGrh3uamicC7dRZEeDzKrChdz/h8i7vhWQiVZm18YZgun/S184jPDs8i
-         DWog==
-X-Gm-Message-State: APjAAAXM19IiWcVfYc3MHYAa3dfGrgEnRLEYe4bIW85XHx64XrW8eZ6R
-        czFBgiRqIy2YU/V5Wh5kQihcXA==
-X-Google-Smtp-Source: APXvYqwjlREo18YcQPzD0JN8hZ/tFQ9UzO6kb3YZgMEKdPeOdh+Hinr68gQDfNLo8vVcF+ciOR1Dbw==
-X-Received: by 2002:a17:90a:5d09:: with SMTP id s9mr28893570pji.120.1558945920357;
-        Mon, 27 May 2019 01:32:00 -0700 (PDT)
-Received: from localhost ([2401:fa00:1:10:3db2:76bf:938b:be05])
-        by smtp.gmail.com with ESMTPSA id n35sm9517453pgl.44.2019.05.27.01.31.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 May 2019 01:31:59 -0700 (PDT)
-From:   Claire Chang <tientzu@chromium.org>
-To:     gregkh@linuxfoundation.org
-Cc:     changqi.hu@mediatek.com, linux-serial@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, drinkcat@chromium.org,
-        Claire Chang <tientzu@chromium.org>
-Subject: [PATCH v3 2/2] uart: mediatek: support Rx in-band wakeup
-Date:   Mon, 27 May 2019 16:31:50 +0800
-Message-Id: <20190527083150.220194-3-tientzu@chromium.org>
-X-Mailer: git-send-email 2.22.0.rc1.257.g3120a18244-goog
-In-Reply-To: <20190527083150.220194-1-tientzu@chromium.org>
-References: <20190527083150.220194-1-tientzu@chromium.org>
+        Mon, 27 May 2019 05:05:07 -0400
+X-UUID: 9b45fc4f1566450c808686863345d682-20190527
+X-UUID: 9b45fc4f1566450c808686863345d682-20190527
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <erin.lo@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 2099036367; Mon, 27 May 2019 17:05:01 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 27 May 2019 17:04:59 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 27 May 2019 17:04:59 +0800
+From:   Erin Lo <erin.lo@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <devicetree@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <erin.lo@mediatek.com>,
+        <mars.cheng@mediatek.com>, <eddie.huang@mediatek.com>
+Subject: [PATCH v11 0/6] Add basic node support for Mediatek MT8183 SoC
+Date:   Mon, 27 May 2019 17:04:41 +0800
+Message-ID: <1558947887-31084-1-git-send-email-erin.lo@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: A3A3979E730E1DEDDFD1A2DDEE29397448A5ACC75A9DFEC103545943F1E524CC2000:8
+X-MTK:  N
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-In order to support Rx in-band wakeup, we need to enable irq wake on an
-edge sensitive interrupt of Rx pin before suspend and disable it when
-resuming.
+MT8183 is a SoC based on 64bit ARMv8 architecture.
+It contains 4 CA53 and 4 CA73 cores.
+MT8183 share many HW IP with MT65xx series.
+This patchset was tested on MT8183 evaluation board and use correct clock to shell.
 
-This interrupt is used only as wake source to resume the system when
-suspended. Note that the sent character will be lost as the controller is
-actually suspended.
+Based on v5.2-rc1
 
-We use this to support wakeup on bluetooth. Bluetooth will repeatedly send
-0xFD to wakeup host. Once host detects Rx falling, an interrupt is
-triggered, and the system leaves sleep state. Then, the bluetooth driver
-will send 0xFC to bluetooth and bluetooth can start to send normal HCI
-packets.
+Change in v11:
+New add spi node, efuse node, pinctrl node, auxadc node, and capacity-dmips-mhz field
 
-Signed-off-by: Claire Chang <tientzu@chromium.org>
----
- drivers/tty/serial/8250/8250_mtk.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Change in v10:
+Add the L2 cache node to prevent warning on unable to detect cache
+hierarchy.
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index 417c7c810df9..5b94b853387d 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/of_irq.h>
- #include <linux/of_platform.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/serial_8250.h>
-@@ -70,6 +71,7 @@ struct mtk8250_data {
- #ifdef CONFIG_SERIAL_8250_DMA
- 	enum dma_rx_status	rx_status;
- #endif
-+	int			rx_wakeup_irq;
- };
- 
- /* flow control mode */
-@@ -551,6 +553,8 @@ static int mtk8250_probe(struct platform_device *pdev)
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
-+	data->rx_wakeup_irq = platform_get_irq(pdev, 1);
-+
- 	return 0;
- }
- 
-@@ -572,15 +576,35 @@ static int mtk8250_remove(struct platform_device *pdev)
- static int __maybe_unused mtk8250_suspend(struct device *dev)
- {
- 	struct mtk8250_data *data = dev_get_drvdata(dev);
-+	int irq = data->rx_wakeup_irq;
-+	int err;
- 
- 	serial8250_suspend_port(data->line);
- 
-+	pinctrl_pm_select_sleep_state(dev);
-+	if (irq >= 0) {
-+		err = enable_irq_wake(irq);
-+		if (err) {
-+			dev_err(dev,
-+				"failed to enable irq wake on IRQ %d: %d\n",
-+				irq, err);
-+			pinctrl_pm_select_default_state(dev);
-+			serial8250_resume_port(data->line);
-+			return err;
-+		}
-+	}
-+
- 	return 0;
- }
- 
- static int __maybe_unused mtk8250_resume(struct device *dev)
- {
- 	struct mtk8250_data *data = dev_get_drvdata(dev);
-+	int irq = data->rx_wakeup_irq;
-+
-+	if (irq >= 0)
-+		disable_irq_wake(irq);
-+	pinctrl_pm_select_default_state(dev);
- 
- 	serial8250_resume_port(data->line);
- 
--- 
-2.22.0.rc1.257.g3120a18244-goog
+Change in v9:
+Remove pio node since binding is not documented yet
+
+Change in v8:
+1. Fix interrupt-parent of pio node
+2. Remove pinfunc.h and spi node patches
+
+Change in v7:
+1. Place all the MMIO peripherals under one or more simple-bus nodes
+2. Make the pinfunc.h and spi node into seperate patch
+3. Modify SPIs pamerater from 4 back to 3
+   and remove patch "support 4 interrupt parameters for sysirq"
+4. Rename intpol-controller to interrupt-controller
+5. Rename pinctrl@1000b000 to pinctrl@10005000
+
+Change in v6:
+1. Remove power and iommu nodes
+2. Fix dtb build warning
+3. Fix pinctrl binding doc
+4. Fix '_' in node names
+
+Change in v5:
+1. Collect all device tree nodes to the last patch
+2. Add PMU
+3. Add Signed-off-by
+4. Remove clock driver code and binding doc
+5. Add pinctrl, iommu, spi, and pwrap nodes
+
+Change in v4:
+1. Correct syntax error in dtsi
+2. Add MT8183 clock support
+
+Change in v3:
+1. Fill out GICC, GICH, GICV regions
+2. Update Copyright to 2018
+
+Change in v2:
+1. Split dt-bindings into different patches
+2. Correct bindings for supported SoCs (mtk-uart.txt)
+
+Ben Ho (1):
+  arm64: dts: Add Mediatek SoC MT8183 and evaluation board dts and
+    Makefile
+
+Erin Lo (1):
+  arm64: dts: mt8183: add spi node
+
+Hsin-Yi, Wang (1):
+  arm64: dts: mt8183: add capacity-dmips-mhz
+
+Michael Mei (1):
+  arm64: dts: mt8183: add efuse and Mediatek Chip id node to read
+
+Zhiyong Tao (2):
+  arm64: dts: mt8183: add pinctrl device node
+  arm64: dts: mt8183: Add auxadc device node
+
+ arch/arm64/boot/dts/mediatek/Makefile       |   1 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts | 140 ++++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi    | 447 ++++++++++++++++++++
+ 3 files changed, 588 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8183.dtsi
+
+--
+1.8.1.1.dirty
 
