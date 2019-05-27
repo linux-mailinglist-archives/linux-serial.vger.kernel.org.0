@@ -2,136 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A622AE50
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 07:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E372AED8
+	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 08:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbfE0F5U (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 May 2019 01:57:20 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43235 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbfE0F5T (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 May 2019 01:57:19 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c6so8924318pfa.10
-        for <linux-serial@vger.kernel.org>; Sun, 26 May 2019 22:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JyuJRgpS/Z7CTA8H0O+hxtzN/dPpz0TyAwIDE7XTsoE=;
-        b=tuK8ZJtVIXwdPqsWdCte9y3TqlJG9qgELDQ3Qtp6LQKM8RKkyKpCzZkxEj0Rc2WkDL
-         2Zsfou7/kcXjVBVVKZbyd1vpgHoltIgN/xtEWFYBHpnAG3V6zkWDiy1iTyxASIA9CENQ
-         mA7+QcLY3xq9OCa85rUrfTnUC93wNgN7pb/iWF9gDRmtjp/EREjqEwTpSmkigkxsMWFW
-         Dch1i+eR2PB3g/qfC+a+rSADliGMCp1rcVIDlZ1nUQhX3IA1oVSLv+0kdbMvq+wLMVEH
-         EiFnt8NM5d7BexcLwQ+IFWTjLJXCKlKrLgcaDZCIFCHPhnltSPGoP4cbGO158bKGJAU7
-         /huA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JyuJRgpS/Z7CTA8H0O+hxtzN/dPpz0TyAwIDE7XTsoE=;
-        b=EMWalToza/SsEqOOwU6EBKz2iSDxXI7lGy/5pJMOT1MMYWwEuH7QLOtADkWEUSGFZH
-         XaXUz1twFrBdYi1W9rZ9fWsvcmk7QhAJ+hqA1+gHMAw2dgNFH799FWRTPbs4gjXBJuFp
-         5UYiqwWYDFQvneWKH124eiIFpH6281RwkJiocekwhhpjP8wHMWmyZPooqPRe0aZ+sn+4
-         sWVf/pYRuySxUw/HMYdbxIQHL+/+LVR75y3/qVSNNStTfbiWa2vkn+wnOMIgput6tqZP
-         3YzCbn+Vc2s1IiuHm2V5Udf/eNRIUiDCRQOli/p6XspC9zwKR6J7rdNWnxWDhk+/ykhp
-         lbkA==
-X-Gm-Message-State: APjAAAUbpEwGvm9WFUnzIuLpaLdS5IYhj1mq0mAVQWYXw5kwDUmfcUH5
-        MB2iW30zYh19ZoLtCgGDqDR2Dw==
-X-Google-Smtp-Source: APXvYqyFsSMergPg5Nna/kdDGDiTnNFmQX2Z9Q80x2Bevc9+pSNViT0695L4158UfsAXYGHWblpzzg==
-X-Received: by 2002:a63:e603:: with SMTP id g3mr14837549pgh.167.1558936638925;
-        Sun, 26 May 2019 22:57:18 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id t18sm8297274pgm.69.2019.05.26.22.57.16
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 26 May 2019 22:57:17 -0700 (PDT)
-Date:   Sun, 26 May 2019 22:57:15 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        eric@anholt.net, stefan.wahren@i2se.com, f.fainelli@gmail.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        andriy.shevchenko@linux.intel.com, vz@mleia.com,
-        matthias.bgg@gmail.com, yamada.masahiro@socionext.com,
-        tklauser@distanz.ch, richard.genoud@gmail.com,
-        macro@linux-mips.org, u.kleine-koenig@pengutronix.de,
-        kernel@pengutronix.de, slemieux.tyco@gmail.com,
-        andy.gross@linaro.org, david.brown@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        baohua@kernel.org, jacmet@sunsite.dk, linux-serial@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 20/45] drivers: tty: serial: msm_serial: use devm_*
- functions
-Message-ID: <20190527055715.GW31438@minitux>
-References: <1552602855-26086-1-git-send-email-info@metux.net>
- <1552602855-26086-21-git-send-email-info@metux.net>
+        id S1726072AbfE0Gkc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 May 2019 02:40:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725940AbfE0Gkc (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 27 May 2019 02:40:32 -0400
+Received: from localhost (unknown [171.61.91.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1584E2054F;
+        Mon, 27 May 2019 06:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558939232;
+        bh=BHfKzP74YWA7kcBQ/qwfq+fqK1Y003G+3r317SLetK8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FSaudunkYFzawMqo1bzztysqx2NNsUUvjh1TBGur6O9QjaRii8o8ti25T/Q2JX1Is
+         mXG+tG1y/ASmhHkD4rE37rzWOfrT9wpOWmNIa2fFc5+x7cij7S+r7CUwJsR/CcQnXq
+         jKUNd0SzyCA9X6F5yfStF6RmE+Q/ri5MzjQR+fsI=
+Date:   Mon, 27 May 2019 12:10:28 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Long Cheng <long.cheng@mediatek.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sean Wang <sean.wang@mediatek.com>, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, srv_heupstream@mediatek.com,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        YT Shen <yt.shen@mediatek.com>,
+        Zhenbao Liu <zhenbao.liu@mediatek.com>
+Subject: Re: [PATCH 2/2] serial: 8250-mtk: modify uart DMA rx
+Message-ID: <20190527064028.GF15118@vkoul-mobl>
+References: <1558596909-14084-1-git-send-email-long.cheng@mediatek.com>
+ <1558596909-14084-3-git-send-email-long.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1552602855-26086-21-git-send-email-info@metux.net>
+In-Reply-To: <1558596909-14084-3-git-send-email-long.cheng@mediatek.com>
 User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu 14 Mar 15:33 PDT 2019, Enrico Weigelt, metux IT consult wrote:
+On 23-05-19, 15:35, Long Cheng wrote:
+> Modify uart rx and complete for DMA
 
-> Use the safer devm versions of memory mapping functions.
-> 
-> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
 
-As pointed out by others, this resource does not follow the life cycle
-of the port->dev, so I don't think this improves the code.
-
-Regards,
-Bjorn
-
-> ---
->  drivers/tty/serial/msm_serial.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-> index 1090960..e8e0c87 100644
-> --- a/drivers/tty/serial/msm_serial.c
-> +++ b/drivers/tty/serial/msm_serial.c
-> @@ -1324,8 +1324,8 @@ static void msm_release_port(struct uart_port *port)
->  		return;
->  	size = resource_size(uart_resource);
->  
-> -	release_mem_region(port->mapbase, size);
-> -	iounmap(port->membase);
-> +	devm_release_mem_region(port->dev, port->mapbase, size);
-> +	devm_iounmap(port->dev, port->membase);
->  	port->membase = NULL;
->  }
->  
-> @@ -1342,10 +1342,13 @@ static int msm_request_port(struct uart_port *port)
->  
->  	size = resource_size(uart_resource);
->  
-> -	if (!request_mem_region(port->mapbase, size, "msm_serial"))
-> +	if (!devm_request_mem_region(port->dev,
-> +				     port->mapbase,
-> +				     size,
-> +				     "msm_serial"))
->  		return -EBUSY;
->  
-> -	port->membase = ioremap(port->mapbase, size);
-> +	port->membase = ioremap(port->dev, port->mapbase, size);
->  	if (!port->membase) {
->  		ret = -EBUSY;
->  		goto fail_release_port;
-> @@ -1354,7 +1357,7 @@ static int msm_request_port(struct uart_port *port)
->  	return 0;
->  
->  fail_release_port:
-> -	release_mem_region(port->mapbase, size);
-> +	devm_release_mem_region(port->dev, port->mapbase, size);
->  	return ret;
->  }
->  
-> -- 
-> 1.9.1
-> 
+-- 
+~Vinod
