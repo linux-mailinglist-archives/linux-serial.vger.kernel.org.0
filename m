@@ -2,96 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC432BAF8
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2019 21:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5E82BE04
+	for <lists+linux-serial@lfdr.de>; Tue, 28 May 2019 05:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726879AbfE0T4q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 May 2019 15:56:46 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:46823 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726817AbfE0T4q (ORCPT
+        id S1727386AbfE1D7y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 May 2019 23:59:54 -0400
+Received: from mail-pg1-f170.google.com ([209.85.215.170]:46158 "EHLO
+        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727320AbfE1D7x (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 May 2019 15:56:46 -0400
-Received: from [192.168.1.110] ([95.115.42.131]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N18MG-1gUDUG0dsw-012Y0Z; Mon, 27 May 2019 21:56:34 +0200
-Subject: Re: [PATCH 2/2] serial: 8250: Add support for 8250/16550 as MFD
- function
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Esben Haabendal <esben@haabendal.dk>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-serial@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh R <vigneshr@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <87bm05mpmx.fsf@haabendal.dk> <20190514104741.GO4319@dell>
- <20190514122618.GA18859@kroah.com> <87imudky2o.fsf@haabendal.dk>
- <20190521100904.GA13612@kroah.com> <87pnocm59v.fsf@haabendal.dk>
- <20190521111817.GA24911@kroah.com> <87lfz0m3ge.fsf@haabendal.dk>
- <20190521125651.GA6264@kroah.com> <87h89nnajr.fsf@haabendal.dk>
- <20190521144319.GA28747@kroah.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <5c7e21b6-3701-a685-02c6-a584996aa811@metux.net>
-Date:   Mon, 27 May 2019 21:56:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
-MIME-Version: 1.0
-In-Reply-To: <20190521144319.GA28747@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:K7GEJZtbQJhy4IMLkG1/HregCwPnj0S7Td/78D9wZMC4RrPz3mE
- GngyVqIgDk5XwhKx8Mo/hYcIWUOFY/dJ8MTC6Ij+sQy482FsKAkmBVlzF9lNFGYQo8x1w2X
- cSEG7qHzysKTdoc80JyGfW4nP/hO4l3V69FjSw6r7gETAIdIVDVOH34KvV0TOBoTr2WlFsL
- SptcrrBq/5Jui1CUM0mOQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NeHRnzJkYP0=:6c4Z10cEv6QAFoYDO7mHfR
- xjhz30RJUU3aPxaw91gITyNo8DOJrsTtC5aGRiv8b9YFsv+DP47FGFdoVDnNogQtN/KAPEtkj
- aeG6phlUVUFcr7ShwFtE8CEdEJ3fJaJ0kxy4Gy6YjA63hSo1X0b0H0LSQ69t6xqMl1obJToRU
- EoDY5zl+qtxLUQseyNAgYYfO2ZVkMoi/Izr/f6mFeDLotiUxLmnrpN2UNTFNVFFJ7K+P2x9fU
- O/9Bf0sS64+EYNJF4giRdjMcUMHIqW/O8bYrm3mOQ6Qs6HSDO1IOEZea1O54A+Q4UwP2JD+7+
- j8crVwZKiOdFNCa9UpwKYiQlOapdumXu3lc9TvHbdPey2Uv5knlFRC67JS2OY3Xcju+His2nU
- ohImuPlKrU2ioAznUW9Rxa7RqL0ujF/zr/kNGRfSh/D/vWzZdf/9YIqulpVAz0k/QJJI5YPsS
- cAUvc+BLHUCF/YKQQB0loDB1tvxMgCkamiqf+yiCyZ3429V94ppyOALzZ/xFvZjsOwQH9Flz4
- vvQIPiIzoAMb8seO8BIsXS83YRlu8Tk8cUiUZYrFUnvujoBaQaL5HI/Dgv4txMjOIlnRAUdaS
- oDuRQMQVOfaZZmnz8ZMOQ71+8aAjQgqZkWnzPf/8Kwq+jSSltEsS1z7PI25IwJKi+A+Ok44T+
- IVni29vYsozZM5tFo7NQBo+eyaTDi5xx0pD0xp6ufMDwTBtHQqmiUK38oo5L657wWU3RiYMbT
- 4+YT3yHPoQtw4uQ7w/pDR0GGVfwdy7bCJPRhFKUGB9LmBlb8LREbNyhTk5o=
+        Mon, 27 May 2019 23:59:53 -0400
+Received: by mail-pg1-f170.google.com with SMTP id v9so3712378pgr.13
+        for <linux-serial@vger.kernel.org>; Mon, 27 May 2019 20:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=accesio-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=3Cl89/tyholnwx8+FcDKA+kcoSLNN4fn7uuWTfTZgOc=;
+        b=dmd2tuEgBNYXipPzKXagUCEI8JcRnI1qoZLfhz87Q1Jd3tbH+ZdAxAcbQZk+LxDbpV
+         9XhyPQyrWX4/tXRSj7/ao7pwCLf5L0/VXHFMaqV/GLQJ2SJ44Obtryz76AFh3m9OKRyW
+         nlkRZCul6VTy5ewpZQILzPZJxYOerjN8BAEkbPnxh3YXv1KHHz2nu0njePeoYdLx1E/A
+         q3gPHnN2tq9CZWwbLFFb14PaNfTrRqoCJs3objdC0NgAbtwv92AUF67HYoXPX9LOCfxi
+         SPK/btmVvXebD0L/nhnZ0QwDwU1qE8d220nLdfs02ZnVNSh+I6fzuWKgsUH7LiRaJ1vh
+         cHRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3Cl89/tyholnwx8+FcDKA+kcoSLNN4fn7uuWTfTZgOc=;
+        b=VQVDMoYz6IoDUoQIECiHklERraDYZEpA6TparMtezz0yePqFTwRipY9D/ZuVwAy9yi
+         I4Dasp8ZVg9jc/rVhLd1F2Qc4vz5PEByqN4zg4xvaBtnLMM/eF1iQ9SUzVMojhmnBplO
+         sg6fH6TT1Vsa1vVfxMCYE67ZPMdnD1ZnO63SrMdd04tWL7v5Cmt/dmBIRZfLSrr5Tjot
+         IZstwD5J9mEwbnpmLVKeXExzytWJJyez+mcUQX1nENrdytPizsDlJAcjsl+zrOFYkHr2
+         O6YWqHtTGJGVYs70piW9bjJj5H2zHeC/iw+mme2yeDZjCw+r4H8yyXH7M9Fp9WgBrSEx
+         VSTQ==
+X-Gm-Message-State: APjAAAUm9YCxTf/J2gxq2rcAq20wSRbzG/Ymy3tBFybtQ3Q1pdiiZnLx
+        yCSZYb1eTrm/jIXjrXV+tHz2+pWakSkftFqLj4DeLqHEgM7uhle3NkM+DfXtbpMRkwQ5dIbNB/p
+        ZpoOigN+hxqJfKNzBD76BGAS0YOGkaBMiodeOn8vk8otjz/nwvCwHZL9VsYlaQDf0eGNIQKm/EO
+        rc
+X-Google-Smtp-Source: APXvYqxC6Y0WtOa/bbUpXc2xgkcg1Bu/n3EI0630R7xfpMTNGEUgFgXlHqDTQlHVgMSzQC/ZHHEdTw==
+X-Received: by 2002:a17:90a:5d09:: with SMTP id s9mr2820449pji.120.1559015993054;
+        Mon, 27 May 2019 20:59:53 -0700 (PDT)
+Received: from acces-pc.dolannet.net (cpe-70-95-148-49.san.res.rr.com. [70.95.148.49])
+        by smtp.gmail.com with ESMTPSA id j64sm23438052pfb.126.2019.05.27.20.59.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 May 2019 20:59:52 -0700 (PDT)
+From:   jay.dolan@accesio.com
+To:     linux-serial@vger.kernel.org
+Cc:     Jay Dolan <jay.dolan@accesio.com>
+Subject: [PATCH v3 0/1] Add support for higher baud rates to Pericom
+Date:   Mon, 27 May 2019 20:59:42 -0700
+Message-Id: <20190528035943.6274-1-jay.dolan@accesio.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 21.05.19 16:43, Greg Kroah-Hartman wrote:
+From: Jay Dolan <jay.dolan@accesio.com>
 
-Hi,
+Change in v3:
+1. Moved pericom_do_set_divisor to 8250_pci.c
+2. No longer touch any other file
 
-> Sometimes you need to go tell the hardware/firmware people not to do
-> foolish things.  You can not always fix their problems in software.
-> Please push back on this.
+Change in v2:
+1. Fixed whitespace
+2. Don't export pericom_do_set_divisor()
 
-I've often been in the same situation. It's hopeless with those folks.
-Even worse: you give'em a clear spec on how the register interface
-shall look like, and they make something really weird out of it
-(shuffled byte orders, multiplexing irqs over a single gpio line and
-leave the other's empty instead of just one gpio per irq, ...)
+Jay Dolan (1):
+  serial: 8250: Add support for higher baud rates to Pericom chips
 
-The kernel is full of buggy hardware, because hw folks seem not really
-capable of doing their homework :(
-
-Actually, the whole existance of these hundreds of different uart
-devices, IMHO, is a clear sing of hw folks not doing the homework.
-
-
-By the way: I've somewhat lost track of what the patch was actually
-about ... :o
-
-
---mtx
+ drivers/tty/serial/8250/8250_pci.c | 97 ++++++++++++++++++++++++------
+ 1 file changed, 79 insertions(+), 18 deletions(-)
 
 -- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+2.17.1
+
