@@ -2,138 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5508A2FF82
-	for <lists+linux-serial@lfdr.de>; Thu, 30 May 2019 17:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044F630361
+	for <lists+linux-serial@lfdr.de>; Thu, 30 May 2019 22:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbfE3PgG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 30 May 2019 11:36:06 -0400
-Received: from mail.javad.com ([54.86.164.124]:59874 "EHLO mail.javad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726355AbfE3PgF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 30 May 2019 11:36:05 -0400
-Received: from localhost6.localdomain6 (unknown [89.175.180.246])
-        by mail.javad.com (Postfix) with ESMTPSA id 598B054543;
-        Thu, 30 May 2019 15:30:09 +0000 (UTC)
-Authentication-Results: ip-172-31-2-110;
-        spf=pass (sender IP is 89.175.180.246) smtp.mailfrom=osv@gnss.ru smtp.helo=localhost6.localdomain6
-Received-SPF: pass (ip-172-31-2-110: connection is authenticated)
-Received: from localhost6.localdomain6 (localhost.localdomain [127.0.0.1])
-        by localhost6.localdomain6 (8.14.4/8.14.4) with ESMTP id x4UFU7tB026068;
-        Thu, 30 May 2019 18:30:07 +0300
-Received: (from osv@localhost)
-        by localhost6.localdomain6 (8.14.4/8.14.4/Submit) id x4UFU76Q026065;
-        Thu, 30 May 2019 18:30:07 +0300
-From:   Sergey Organov <sorganov@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
+        id S1726079AbfE3Ujg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 30 May 2019 16:39:36 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42471 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbfE3Ujg (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 30 May 2019 16:39:36 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWRpl-0001fO-K6; Thu, 30 May 2019 22:39:33 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWRpj-0007So-5Q; Thu, 30 May 2019 22:39:31 +0200
+Date:   Thu, 30 May 2019 22:39:31 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Sergey Organov <sorganov@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Sergey Organov <sorganov@gmail.com>
-Subject: [PATCH 8/8] serial: imx: use Tx ready rather than Tx empty irq
-Date:   Thu, 30 May 2019 18:29:50 +0300
-Message-Id: <20190530152950.25377-9-sorganov@gmail.com>
-X-Mailer: git-send-email 2.10.0.1.g57b01a3
-In-Reply-To: <20190530152950.25377-1-sorganov@gmail.com>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Russell King <rmk@arm.linux.org.uk>
+Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl
+ change
+Message-ID: <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
 References: <20190530152950.25377-1-sorganov@gmail.com>
+ <20190530152950.25377-3-sorganov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190530152950.25377-3-sorganov@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This should help to avoid unnecessary gaps in transmission while
-adding little overhead due to low default Tx threshold level (2
-bytes).
+Hello,
 
-Signed-off-by: Sergey Organov <sorganov@gmail.com>
----
- drivers/tty/serial/imx.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+On Thu, May 30, 2019 at 06:29:44PM +0300, Sergey Organov wrote:
+> imx_set_mctrl() stop fiddling with UCR2_CTSC bit
+> 
+> Signed-off-by: Sergey Organov <sorganov@gmail.com>
+> ---
+>  drivers/tty/serial/imx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index e9e812a..6577552 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -967,9 +967,9 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>  		u32 ucr2;
+>  
+>  		ucr2 = imx_uart_readl(sport, UCR2);
+> -		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+> +		ucr2 &= ~UCR2_CTS;
+>  		if (mctrl & TIOCM_RTS)
+> -			ucr2 |= UCR2_CTS | UCR2_CTSC;
+> +			ucr2 |= UCR2_CTS;
+>  		imx_uart_writel(sport, ucr2, UCR2);
+>  	}
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index db3fb4c..f1d5c75 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -442,7 +442,7 @@ static void imx_uart_stop_tx(struct uart_port *port)
- 		return;
- 
- 	ucr1 = imx_uart_readl(sport, UCR1);
--	imx_uart_writel(sport, ucr1 & ~UCR1_TXMPTYEN, UCR1);
-+	imx_uart_writel(sport, ucr1 & ~UCR1_TRDYEN, UCR1);
- 
- 	/* in rs485 mode disable transmitter if shifter is empty */
- 	if (port->rs485.flags & SER_RS485_ENABLED &&
-@@ -520,7 +520,7 @@ static inline void imx_uart_transmit_buffer(struct imx_port *sport)
- 		 * and the TX IRQ is disabled.
- 		 **/
- 		ucr1 = imx_uart_readl(sport, UCR1);
--		ucr1 &= ~UCR1_TXMPTYEN;
-+		ucr1 &= ~UCR1_TRDYEN;
- 		if (sport->dma_is_txing) {
- 			ucr1 |= UCR1_TXDMAEN;
- 			imx_uart_writel(sport, ucr1, UCR1);
-@@ -682,7 +682,7 @@ static void imx_uart_start_tx(struct uart_port *port)
- 
- 	if (!sport->dma_is_enabled) {
- 		ucr1 = imx_uart_readl(sport, UCR1);
--		imx_uart_writel(sport, ucr1 | UCR1_TXMPTYEN, UCR1);
-+		imx_uart_writel(sport, ucr1 | UCR1_TRDYEN, UCR1);
- 	}
- 
- 	if (sport->dma_is_enabled) {
-@@ -691,7 +691,7 @@ static void imx_uart_start_tx(struct uart_port *port)
- 			 * disable TX DMA to let TX interrupt to send X-char */
- 			ucr1 = imx_uart_readl(sport, UCR1);
- 			ucr1 &= ~UCR1_TXDMAEN;
--			ucr1 |= UCR1_TXMPTYEN;
-+			ucr1 |= UCR1_TRDYEN;
- 			imx_uart_writel(sport, ucr1, UCR1);
- 			return;
- 		}
-@@ -877,7 +877,7 @@ static irqreturn_t imx_uart_int(int irq, void *dev_id)
- 		usr1 &= ~USR1_RRDY;
- 	if ((ucr2 & UCR2_ATEN) == 0)
- 		usr1 &= ~USR1_AGTIM;
--	if ((ucr1 & UCR1_TXMPTYEN) == 0)
-+	if ((ucr1 & UCR1_TRDYEN) == 0)
- 		usr1 &= ~USR1_TRDY;
- 	if ((ucr4 & UCR4_TCEN) == 0)
- 		usr2 &= ~USR2_TXDC;
-@@ -1466,7 +1466,7 @@ static void imx_uart_shutdown(struct uart_port *port)
- 
- 	spin_lock_irqsave(&sport->port.lock, flags);
- 	ucr1 = imx_uart_readl(sport, UCR1);
--	ucr1 &= ~(UCR1_TXMPTYEN | UCR1_RRDYEN | UCR1_RTSDEN | UCR1_UARTEN | UCR1_RXDMAEN | UCR1_ATDMAEN);
-+	ucr1 &= ~(UCR1_TRDYEN | UCR1_RRDYEN | UCR1_RTSDEN | UCR1_UARTEN | UCR1_RXDMAEN | UCR1_ATDMAEN);
- 
- 	imx_uart_writel(sport, ucr1, UCR1);
- 	spin_unlock_irqrestore(&sport->port.lock, flags);
-@@ -1771,7 +1771,7 @@ static int imx_uart_poll_init(struct uart_port *port)
- 		ucr1 |= IMX1_UCR1_UARTCLKEN;
- 
- 	ucr1 |= UCR1_UARTEN;
--	ucr1 &= ~(UCR1_TXMPTYEN | UCR1_RTSDEN | UCR1_RRDYEN);
-+	ucr1 &= ~(UCR1_TRDYEN | UCR1_RTSDEN | UCR1_RRDYEN);
- 
- 	ucr2 |= UCR2_RXEN;
- 	ucr2 &= ~UCR2_ATEN;
-@@ -1931,7 +1931,7 @@ imx_uart_console_write(struct console *co, const char *s, unsigned int count)
- 	if (imx_uart_is_imx1(sport))
- 		ucr1 |= IMX1_UCR1_UARTCLKEN;
- 	ucr1 |= UCR1_UARTEN;
--	ucr1 &= ~(UCR1_TXMPTYEN | UCR1_RRDYEN | UCR1_RTSDEN);
-+	ucr1 &= ~(UCR1_TRDYEN | UCR1_RRDYEN | UCR1_RTSDEN);
- 
- 	imx_uart_writel(sport, ucr1, UCR1);
- 
-@@ -2287,7 +2287,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 	/* Disable interrupts before requesting them */
- 	ucr1 = imx_uart_readl(sport, UCR1);
- 	ucr1 &= ~(UCR1_ADEN | UCR1_TRDYEN | UCR1_IDEN | UCR1_RRDYEN |
--		 UCR1_TXMPTYEN | UCR1_RTSDEN);
-+		 UCR1_TRDYEN | UCR1_RTSDEN);
- 	imx_uart_writel(sport, ucr1, UCR1);
- 
- 	if (!imx_uart_is_imx1(sport) && sport->dte_mode) {
+I'm sure this patch is wrong. And your change log fails to point out
+what you want to achieve.
+
+Independant of your patch I discussed a problem in imx_uart_set_mctrl()
+with Sascha and Russell (both added to Cc:) earlier this week. In the
+current implementation there are actually two problems.
+
+Currently imx_uart_set_mctrl does:
+
+	if TIOCM_RTS is set:
+		let the receiver control the RTS signal
+	else:
+		set RTS inactive
+
+The bigger problem is that if the UART is configured not to use
+handshaking (CRTSCTS unset) the mode "let the receiver control the RTS
+signal" should not be used.
+
+The smaller (and irrelevant for correctness) problem is that setting
+UCR2_CTS is a no-op when UCR2_CTSC is also set.
+
+We think the right thing to do is:
+
+	ucr2 = imx_uart_readl(sport, UCR2);
+	ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+
+	if (mctrl & TIOCM_RTS) {
+		if (sport->crtscts)
+			/* let the receiver control RTS */
+			ucr2 |= UCR2_CTSC;
+		else
+			/* Force RTS active */
+			ucr2 |= UCR2_CTS;
+	} else {
+		/* Force RTS inactive, i.e. CTS=0, CTSC=0 */
+	}
+
+	imx_uart_writel(sport, ucr2, UCR2);
+
+but AFAICT this isn't tested yet to an end in the use case that Sascha
+currently has and so there isn't a complete patch available yet.
+
+Best regards
+Uwe
+
 -- 
-2.10.0.1.g57b01a3
-
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
