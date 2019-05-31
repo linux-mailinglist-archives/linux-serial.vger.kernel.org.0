@@ -2,129 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DC9314E6
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 20:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF76231698
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 23:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726601AbfEaSrQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 14:47:16 -0400
-Received: from mail.javad.com ([54.86.164.124]:52777 "EHLO mail.javad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726589AbfEaSrQ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 14:47:16 -0400
-Received: from osv (unknown [89.175.180.246])
-        by mail.javad.com (Postfix) with ESMTPSA id D326B3E8ED;
-        Fri, 31 May 2019 18:47:14 +0000 (UTC)
-Authentication-Results: mail.javad.com;
-        dkim=pass (1024-bit key; unprotected) header.d=javad.com header.i=@javad.com header.b=EFfVjxzH;
-        dkim-atps=neutral
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=javad.com;
-        s=default; t=1559328435;
-        bh=wl71DCFcU+/cFOkiE2M3NL6ij0NZCLjj1mb7cSMQn7g=; l=2348;
-        h=Received:From:To:Subject;
-        b=EFfVjxzHIf/rLH0On7f9m8TKJ4DI4akR+DvKKxOrymZsjsj578Wrvm1JpTFFy6o7H
-         he4A+79YkC+xJ+eDm5joLAyAavg0PSD6TFJsGa65XWFELZEHjAStBQrOW+ypnRilpV
-         LiHVdoJSObtMxsG/Rti9bWv3ganRF+AegMOjiZf8=
-Authentication-Results: ip-172-31-2-110;
-        spf=pass (sender IP is 89.175.180.246) smtp.mailfrom=osv@javad.com smtp.helo=osv
-Received-SPF: pass (ip-172-31-2-110: connection is authenticated)
-Received: from osv by osv with local (Exim 4.84_2)
-        (envelope-from <osv@osv.gnss.ru>)
-        id 1hWmYb-0002YO-9y; Fri, 31 May 2019 21:47:13 +0300
-From:   Sergey Organov <sorganov@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        id S1726518AbfEaV1G (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 17:27:06 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46905 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbfEaV1G (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 31 May 2019 17:27:06 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWp3I-0001Yq-TQ; Fri, 31 May 2019 23:27:04 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWp3G-0006ye-EM; Fri, 31 May 2019 23:27:02 +0200
+Date:   Fri, 31 May 2019 23:27:02 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 1/8] serial: imx: fix DTR inversion
-References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-2-sorganov@gmail.com>
-        <20190530205313.uwue3q2t5tp2vwz6@pengutronix.de>
-        <87ftovw7h8.fsf@javad.com>
-        <20190531051430.yojydtk63vkuektg@pengutronix.de>
-        <87ef4fup0h.fsf@javad.com>
-        <20190531064448.llskliwcqdeagjb4@pengutronix.de>
-        <877ea6d4vv.fsf@javad.com>
-        <20190531163537.xohpsfskmap4wo2k@pengutronix.de>
-Date:   Fri, 31 May 2019 21:47:13 +0300
-In-Reply-To: <20190531163537.xohpsfskmap4wo2k@pengutronix.de> ("Uwe
-        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Fri, 31 May 2019 18:35:37
- +0200")
-Message-ID: <87lfyma2by.fsf@javad.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v2] serial: sa1100: add note about modem control signals
+Message-ID: <20190531212702.cmqbaqwdybgkb3ug@pengutronix.de>
+References: <20190531155700.crrawgf3iot2sm2t@shell.armlinux.org.uk>
+ <E1hWjyQ-0008Ni-8V@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <E1hWjyQ-0008Ni-8V@rmk-PC.armlinux.org.uk>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
+Hello Russell,
 
-> Hello,
->
-> On Fri, May 31, 2019 at 06:23:48PM +0300, Sergey Organov wrote:
->> Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
->> 
->> > Hello Sergey,
->> >
->> > On Fri, May 31, 2019 at 09:17:02AM +0300, Sergey Organov wrote:
->> >> Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
->> >> 
->> >> > On Fri, May 31, 2019 at 07:52:51AM +0300, Sergey Organov wrote:
->> >> >> My best reasoning was that  DSR/ DTR is likely implemented the same as
->> >> >> CTS/ RTS in the metal, and I found other drivers where both RTS and DSR
->> >> >> are inverted, so I guessed it could be a remnant of old copy-paste.
->> >> >
->> >> > This is not a good enough reason to "fix" that.
->> >> 
->> >> Yeah, I agree. I rather mostly kept it in the series not to forget about
->> >> the issue. I should have said that in the comments, sorry.
->> >
->> > Then also sort this to the end of the series to allow clean application
->> > of the patches you are sure about and mark the questionable patches as
->> > RFC or RFT.
->> 
->> I'm not sure we shouldn't actually fix it. Can we get help from NXP for
->> clarification on the issue? I'm still 90% sure it's a bug.
->
-> When the DTR bit is set the (TTL) output is one as the following command
-> sequence on an i.MX25 proves:
->
-> 	# set SION bit for MX25_PAD_KPP_ROW0 and mux to UART1_DTR
-> 	bootloader: mw 0x43fac1a8 0x00000014
->
-> 	# configure GPIO2.29 as input
-> 	bootloader: gpio_direction_input 61
->
-> 	bootloader: md 0x43f90088+4
-> 	43f90088: 00000784                                           ....
->
-> 	# DTR is set ...
->
-> 	bootloader: gpio_get_value 61; echo $?
-> 	1
->
-> 	# and the output is high
->
-> 	# after unsetting DTR ...
-> 	bootloader: mw 0x43f90088 0x384
-> 	bootloader: gpio_get_value 61; echo $?
-> 	0
->
-> 	# ... the output is low.
->
-> Together with TTL-level 0 meaning "active" the driver is right as is.
-> (Well, I'm not entirely sure about 0 == "active", so this is the point
-> you should target when continuing to argue :-)
+On Fri, May 31, 2019 at 05:01:42PM +0100, Russell King wrote:
+> As suggested by Uwe, add a note indicating that the modem control
+> signals do not support interrupts, which precludes the driver from
+> using mctrl_gpio_init().
+> 
+> Suggested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+> ---
+>  drivers/tty/serial/sa1100.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+> index 97bdfeccbea9..8e618129e65c 100644
+> --- a/drivers/tty/serial/sa1100.c
+> +++ b/drivers/tty/serial/sa1100.c
+> @@ -860,6 +860,10 @@ static int sa1100_serial_resume(struct platform_device *dev)
+>  static int sa1100_serial_add_one_port(struct sa1100_port *sport, struct platform_device *dev)
+>  {
+>  	sport->port.dev = &dev->dev;
+> +
+> +	// mctrl_gpio_init() requires that the GPIO driver supports interrupts,
+> +	// but we need to support GPIO drivers for hardware that has no such
+> +	// interrupts.  Use mctrl_gpio_init_noauto() instead.
 
-Nice, thanks a lot for checking!
+I hope it's not an impostor who claimed to be Linus to spread deviance
+from K&R :-)
 
-Is RTS "active" has the same TTL-level 0 for you?
+Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-If (likely) so, it's not only the manual that is inconsistent, but the hardware
-as well, and then the patch rather should add bold comment to this piece
-of code, to document this consistent inconsistency ;-)
+If you want to, squash this in the commit that introduced
+mctrl_gpio_init_noauto while keeping my Ack on the resulting patch.
 
--- Sergey
+Best regards
+Uwe
+
+>  	sport->gpios = mctrl_gpio_init_noauto(sport->port.dev, 0);
+>  	if (IS_ERR(sport->gpios)) {
+>  		int err = PTR_ERR(sport->gpios);
+> -- 
+> 2.7.4
+> 
+> 
+
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
