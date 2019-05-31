@@ -2,47 +2,46 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E89A3127E
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 18:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F59E312FE
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 18:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbfEaQfk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 12:35:40 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:38671 "EHLO
+        id S1726601AbfEaQsz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 12:48:55 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40247 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbfEaQfk (ORCPT
+        with ESMTP id S1726037AbfEaQsz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 12:35:40 -0400
+        Fri, 31 May 2019 12:48:55 -0400
 Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <ukl@pengutronix.de>)
-        id 1hWkVF-0007Nu-V8; Fri, 31 May 2019 18:35:37 +0200
+        id 1hWki3-0000KX-DM; Fri, 31 May 2019 18:48:51 +0200
 Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
         (envelope-from <ukl@pengutronix.de>)
-        id 1hWkVF-0006Ly-4h; Fri, 31 May 2019 18:35:37 +0200
-Date:   Fri, 31 May 2019 18:35:37 +0200
+        id 1hWki0-0006b3-MI; Fri, 31 May 2019 18:48:48 +0200
+Date:   Fri, 31 May 2019 18:48:48 +0200
 From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
+To:     Sergey Organov <sorganov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@arm.linux.org.uk>
+Cc:     Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 1/8] serial: imx: fix DTR inversion
-Message-ID: <20190531163537.xohpsfskmap4wo2k@pengutronix.de>
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 4/8] serial: imx: get rid of unbounded busy-waiting loop
+Message-ID: <20190531164848.jnxib6ju7bdudfyx@pengutronix.de>
 References: <20190530152950.25377-1-sorganov@gmail.com>
- <20190530152950.25377-2-sorganov@gmail.com>
- <20190530205313.uwue3q2t5tp2vwz6@pengutronix.de>
- <87ftovw7h8.fsf@javad.com>
- <20190531051430.yojydtk63vkuektg@pengutronix.de>
- <87ef4fup0h.fsf@javad.com>
- <20190531064448.llskliwcqdeagjb4@pengutronix.de>
- <877ea6d4vv.fsf@javad.com>
+ <20190530152950.25377-5-sorganov@gmail.com>
+ <20190530210059.xt7qlyk57cf3zaux@pengutronix.de>
+ <87imtrup3z.fsf@javad.com>
+ <20190531064248.qh4tecbv6ejvroyw@pengutronix.de>
+ <87k1e6bnxi.fsf@javad.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <877ea6d4vv.fsf@javad.com>
+In-Reply-To: <87k1e6bnxi.fsf@javad.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
 X-SA-Exim-Mail-From: ukl@pengutronix.de
@@ -55,68 +54,62 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Hello,
 
-On Fri, May 31, 2019 at 06:23:48PM +0300, Sergey Organov wrote:
+TL;DR: The key question in this thread is, if a driver should drain fifo
+and transmitter in .set_termios or not.
+
+On Fri, May 31, 2019 at 07:15:21PM +0300, Sergey Organov wrote:
 > Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
-> 
-> > Hello Sergey,
-> >
-> > On Fri, May 31, 2019 at 09:17:02AM +0300, Sergey Organov wrote:
+> > On Fri, May 31, 2019 at 09:14:56AM +0300, Sergey Organov wrote:
 > >> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
 > >> 
-> >> > On Fri, May 31, 2019 at 07:52:51AM +0300, Sergey Organov wrote:
-> >> >> My best reasoning was that  DSR/ DTR is likely implemented the same as
-> >> >> CTS/ RTS in the metal, and I found other drivers where both RTS and DSR
-> >> >> are inverted, so I guessed it could be a remnant of old copy-paste.
+> >> > On Thu, May 30, 2019 at 06:29:46PM +0300, Sergey Organov wrote:
+> >> >> imx_set_termios(): remove busy-waiting "drain Tx FIFO" loop. Worse
+> >> >> yet, it was potentially unbounded wait due to RTS/CTS (hardware)
+> >> >> handshake.
+> >> >> 
+> >> >> Let user space ensure draining is done before termios change, if
+> >> >> draining is needed in the first place.
 > >> >
-> >> > This is not a good enough reason to "fix" that.
+> >> > I don't know for sure what the intended behaviour is here, but I tend to
+> >> > think that changing the unbounded wait to a timeout and then return
+> >> > -EBUSY (?) would be more suitable.
 > >> 
-> >> Yeah, I agree. I rather mostly kept it in the series not to forget about
-> >> the issue. I should have said that in the comments, sorry.
+> >> No, please! Bytes in Tx FIFO are not an excuse to exit with error
+> >> instead of setting new termios as asked to. 
 > >
-> > Then also sort this to the end of the series to allow clean application
-> > of the patches you are sure about and mark the questionable patches as
-> > RFC or RFT.
+> > Well, my suggestion is more defensive. It at least tells the user that
+> > they do something wrong. If they already care for having the FIFO and
+> > transmitter empty before changing the baud rate the behaviour of both
+> > your and my approach are identical. With yours however it undefined if
+> > characters written to the device before the change are sent with the old
+> > or new settings. So my suggestions yields a deterministic behaviour
+> > which is good. And it tells the user when they do something wrong, which
+> > is good, too.
+> >
+> >> > With your change you're possibly breaking existent software.
+> >> 
+> >> Well, I suspect the software is already broken then, as most widely used
+> >> drivers out there seem to do no Tx FIFO draining on set_termios() call,
+> >> or do they?
+> >> 
+> >> I mean I tried to find similar code in some of the other drivers, to
+> >> replicate it, but I failed to find one.
+> >
+> > The first (and only) driver I checked does. (sa1100.c)
 > 
-> I'm not sure we shouldn't actually fix it. Can we get help from NXP for
-> clarification on the issue? I'm still 90% sure it's a bug.
+> I think I'd rather take 8250 as reference implementation, as being most
+> widely used. Can anybody please tell how 8250 code handles this? Does it
+> attempt to drain Tx FIFO on termios changes?
 
-When the DTR bit is set the (TTL) output is one as the following command
-sequence on an i.MX25 proves:
+Well, there are so many 8250 variants that the driver is rather
+complicated. Also the original 8250 doesn't have a FIFO at all.
 
-	# set SION bit for MX25_PAD_KPP_ROW0 and mux to UART1_DTR
-	bootloader: mw 0x43fac1a8 0x00000014
+Given that it might not be so easy to judge if a given driver drains the
+FIFO and transmitter without consulting the reference manual I'd rather
+rely on an authority for the serial core. (Apart from that I bet we're
+finding examples for both variants.)
 
-	# configure GPIO2.29 as input
-	bootloader: gpio_direction_input 61
-
-	bootloader: md 0x43f90088+4
-	43f90088: 00000784                                           ....
-
-	# DTR is set ...
-
-	bootloader: gpio_get_value 61; echo $?
-	1
-
-	# and the output is high
-
-	# after unsetting DTR ...
-	bootloader: mw 0x43f90088 0x384
-	bootloader: gpio_get_value 61; echo $?
-	0
-
-	# ... the output is low.
-
-Together with TTL-level 0 meaning "active" the driver is right as is.
-(Well, I'm not entirely sure about 0 == "active", so this is the point
-you should target when continuing to argue :-)
-
-> The rest of the series should apply clearly independent on this one, but
-> I'll re-check anyway.
-
-As author you should make life easy for reviewers and maintainers to
-understand and apply respectively. To achieve this it's better to sort
-patches you are unsure about to the end and mark them accordingly. Even
-in cases where the patches apply irrespective of their order.
+@gregkh, rmk: What do you think?
 
 Best regards
 Uwe
