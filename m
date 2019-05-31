@@ -2,51 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1444730819
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 07:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A013083E
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 08:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726002AbfEaFdS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 01:33:18 -0400
-Received: from mail.javad.com ([54.86.164.124]:32944 "EHLO mail.javad.com"
+        id S1725963AbfEaGED (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 02:04:03 -0400
+Received: from mail.javad.com ([54.86.164.124]:43521 "EHLO mail.javad.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbfEaFdS (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 01:33:18 -0400
+        id S1725955AbfEaGED (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 31 May 2019 02:04:03 -0400
 Received: from osv (unknown [89.175.180.246])
-        by mail.javad.com (Postfix) with ESMTPSA id A229854540;
-        Fri, 31 May 2019 05:33:16 +0000 (UTC)
+        by mail.javad.com (Postfix) with ESMTPSA id BDB8F3E8A0;
+        Fri, 31 May 2019 06:04:01 +0000 (UTC)
 Authentication-Results: mail.javad.com;
-        dkim=pass (1024-bit key; unprotected) header.d=javad.com header.i=@javad.com header.b=jt/F4ioV;
+        dkim=pass (1024-bit key; unprotected) header.d=javad.com header.i=@javad.com header.b=lEYMMnUc;
         dkim-atps=neutral
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=javad.com;
-        s=default; t=1559280797;
-        bh=K0T/OnmBWVRW4hkdN1iuzne2RnBgwAHrwCt1fsfUh7w=; l=3563;
+        s=default; t=1559282642;
+        bh=p57IBuvPgZzeK8FM94zeODCLBWMV+V4glny4yqODchE=; l=2161;
         h=Received:From:To:Subject;
-        b=jt/F4ioVqqaQml3l1yij5cJ38SrXUrmRoC9c+bsYridYamHwb6aF73cF7xDln/3uJ
-         pBJXaQ8lOGzHAay1C3/D7eWQaVmhj/l5OtW+5iS4VoONKwshgj7yuHC7uCXPEfP13k
-         8Rc1HqozjXjCp9hTjHrmS3plsEDN9CN9D3J0LmRg=
+        b=lEYMMnUcseWXnJM08MChWY4RJMJ/8HQD9qA9dyOT/xUj4aDorZdaYlmRp7Ru7G+dj
+         +2H8c3YPf/Ylkpxy7Cc80DCIKVUeHyTo3vVWbbpVvBLGGK1dtWiKjMyynT0TfG6rh6
+         rfY8VqbcsS+JUBR2ddK9ru+APjxW2Dp59c+m9asY=
 Authentication-Results: ip-172-31-2-110;
         spf=pass (sender IP is 89.175.180.246) smtp.mailfrom=osv@javad.com smtp.helo=osv
 Received-SPF: pass (ip-172-31-2-110: connection is authenticated)
 Received: from osv by osv with local (Exim 4.84_2)
         (envelope-from <osv@osv.gnss.ru>)
-        id 1hWaAF-0003Ak-3c; Fri, 31 May 2019 08:33:15 +0300
+        id 1hWae0-0003DB-0v; Fri, 31 May 2019 09:04:00 +0300
 From:   Sergey Organov <sorganov@gmail.com>
 To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Russell King <rmk@arm.linux.org.uk>
-Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl change
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 3/8] serial: imx: preserve RTS state over termios change
 References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-3-sorganov@gmail.com>
-        <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
-Date:   Fri, 31 May 2019 08:33:15 +0300
-In-Reply-To: <20190530203931.n6b22ktbzuyg67sd@pengutronix.de> ("Uwe
-        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 30 May 2019 22:39:31
+        <20190530152950.25377-4-sorganov@gmail.com>
+        <20190530210824.rf2aaxumcc3cnc5c@pengutronix.de>
+Date:   Fri, 31 May 2019 09:03:59 +0300
+In-Reply-To: <20190530210824.rf2aaxumcc3cnc5c@pengutronix.de> ("Uwe
+        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 30 May 2019 23:08:24
  +0200")
-Message-ID: <87woi7ur1g.fsf@javad.com>
+Message-ID: <87r28fupm8.fsf@javad.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -58,10 +56,10 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
 
-> Hello,
+> On Thu, May 30, 2019 at 06:29:45PM +0300, Sergey Organov wrote:
+>> imx_set_mctrl() cleared RTS on every call
 >
-> On Thu, May 30, 2019 at 06:29:44PM +0300, Sergey Organov wrote:
->> imx_set_mctrl() stop fiddling with UCR2_CTSC bit
+>
 >> 
 >> Signed-off-by: Sergey Organov <sorganov@gmail.com>
 >> ---
@@ -69,94 +67,55 @@ Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
 >>  1 file changed, 2 insertions(+), 2 deletions(-)
 >> 
 >> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
->> index e9e812a..6577552 100644
+>> index 6577552..13face9 100644
 >> --- a/drivers/tty/serial/imx.c
 >> +++ b/drivers/tty/serial/imx.c
->> @@ -967,9 +967,9 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
->>  		u32 ucr2;
+>> @@ -1648,7 +1648,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
 >>  
->>  		ucr2 = imx_uart_readl(sport, UCR2);
->> -		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
->> +		ucr2 &= ~UCR2_CTS;
->>  		if (mctrl & TIOCM_RTS)
->> -			ucr2 |= UCR2_CTS | UCR2_CTSC;
->> +			ucr2 |= UCR2_CTS;
->>  		imx_uart_writel(sport, ucr2, UCR2);
->>  	}
+>>  	/* then, disable everything */
+>>  	imx_uart_writel(sport, old_ucr2 & ~(UCR2_TXEN | UCR2_RXEN | UCR2_ATEN), UCR2);
+>> -	old_ucr2 &= (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
+>>  
+>>  	/* custom-baudrate handling */
+>>  	div = sport->port.uartclk / (baud * 16);
+>> @@ -1686,7 +1685,8 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+>>  
+>>  	imx_uart_writel(sport, old_ucr1, UCR1);
+>>  
+>> -	/* set the parity, stop bits and data size */
+>> +	/* Set parity, stop bits, data size, etc. Keep bits we don't compute. */
+>> +	old_ucr2 &= (UCR2_CTS | UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
 >
-> I'm sure this patch is wrong. And your change log fails to point out
-> what you want to achieve.
-
-Sorry, I somehow thought it's obvious when in fact it appears it isn't.
-
-When user calls ioctl() to set/clear TIOCM_RTS bit from user space, the
-RTS/CTS automatic handshake must not be affected. Without this patch
-setting TIOCM_RTS to logic 0 turns off RTS/CTS handshake in hardware,
-and setting it to logic 1 turns on RTS/CTS handshake in hardware, that
-is wrong thing to do in both cases.
-
-I'm sure the patch is the right thing to do here (see below for more
-discussion). Just stop fiddling with RTS/CTS handshake bit in
-set_mctrl(), and it will work as expected.
-
+> I wonder if that fixes a certain usecase and breaks another.
 >
-> Independant of your patch I discussed a problem in imx_uart_set_mctrl()
-> with Sascha and Russell (both added to Cc:) earlier this week. In the
-> current implementation there are actually two problems.
+> If I change the baud rate of the UART the sequence I actually want to
+> have is:
 >
-> Currently imx_uart_set_mctrl does:
->
-> 	if TIOCM_RTS is set:
-> 		let the receiver control the RTS signal
-> 	else:
-> 		set RTS inactive
+> 	clear RTS (to not encourage the other side to send data)
+> 	disable receiver
+> 	reconfigure requested settings
+> 	reenable receiver
+> 	(maybe) reactivate RTS to signal being ready again
 
-Worse. In fact it breaks current UCR2_CTSC state on both branches of the
-if, and thus breaks correspondence between CRTSCTS and UCR2_CTSC that
-the driver should preserve at all times.
+Sorry, I fail to see how this patch breaks anything here. It just now
+correctly does:
 
-> The bigger problem is that if the UART is configured not to use
-> handshaking (CRTSCTS unset) the mode "let the receiver control the RTS
-> signal" should not be used.
+> 	(maybe) reactivate RTS to signal being ready again
 
-Once again, that's exactly why we need to stop touching UCR2_CTSC in
-set_mctrl().
+step, touching nothing else.
 
-> The smaller (and irrelevant for correctness) problem is that setting
-> UCR2_CTS is a no-op when UCR2_CTSC is also set.
+Please notice that the line
 
-It's not a problem at all. When user wants to drive RTS manually, he
-turns off RTS/CTS handshake. When RTS/CTS handshake is turned on,
-setting/clearing TIOCM_RTS usually has no effect on the level of the RTS
-pin. 
+>> -	old_ucr2 &= (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
 
->
-> We think the right thing to do is:
->
-> 	ucr2 = imx_uart_readl(sport, UCR2);
-> 	ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
->
-> 	if (mctrl & TIOCM_RTS) {
-> 		if (sport->crtscts)
-> 			/* let the receiver control RTS */
-> 			ucr2 |= UCR2_CTSC;
-> 		else
-> 			/* Force RTS active */
-> 			ucr2 |= UCR2_CTS;
-> 	} else {
-> 		/* Force RTS inactive, i.e. CTS=0, CTSC=0 */
-> 	}
->
-> 	imx_uart_writel(sport, ucr2, UCR2);
->
-> but AFAICT this isn't tested yet to an end in the use case that Sascha
-> currently has and so there isn't a complete patch available yet.
+just changes internal variable, and changed to:
 
-This is still wrong, as it turns off RTS/CTS handshake in hardware on
-TIOCM_RTS=0. Once again, set_mctrl() should not touch UCR2_CTSC, -- it's
-as simple as that.
+>> +	old_ucr2 &= (UCR2_CTS | UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
 
-I still think it's rather what I did in the patch above is the right
-thing to do. It's simple and does the job, no surprises.
+exactly to restore RTS state at exit.
+
+It's then moved down to where it's used, to make code and comments
+clearer. I decided it's too much granularity to break this into 2
+separate patches.
 
 -- Sergey
