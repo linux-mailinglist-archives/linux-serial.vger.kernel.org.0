@@ -2,136 +2,226 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A2C30D24
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 13:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2F030D26
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 13:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfEaLOW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 07:14:22 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:58762 "EHLO
+        id S1726442AbfEaLO1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 07:14:27 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:58774 "EHLO
         pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfEaLOW (ORCPT
+        with ESMTP id S1726240AbfEaLO1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 07:14:22 -0400
+        Fri, 31 May 2019 07:14:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
         Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
         In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sEApIaqlXAgNfqtUPcWBB7YpvkDyHM3SN5uqZlRAsYo=; b=fkkbJs4Oi5jsy0SQIGVC/6dIqx
-        q5p/8I6Z95onuyyCUWbn28DwQgzYUGQkild6jOwRLzBnod0VR4O6IS0qdqUwFvILkP6HkXTALo6nr
-        RrZxhx86059zw6+2C2NoLsEoI9zG2v9f2ISLhoPA9rPZp3ZWOjdaj1oj3KOtPMaRMzmtvV0+OEFJ+
-        dUMuD7Qtc9LyfKx3Bm+TtMDtVxIAeVzBjpLua6kbpHsQavQGZaG5eWh2VRE7e6EC90ORvyQqLT+Jl
-        qC0jUbrwk+MGXU5GfMGqF+2Non0Z9XstKCJ7oFcgKv1HrA/XXc9evOgIuo5/SGmGcUcXv+3KWHltt
-        1jGI+1SQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:39632 helo=rmk-PC.armlinux.org.uk)
+        bh=erskDUB/2Fs4KqYqDJJfeR3vqL23NrMODoSCo1hPoYM=; b=OhIRskAD01Ht7HI8SHXc30mfb0
+        2sQdUpvnHW0jjpWbv6QobmboDTt+Hnw4bhwHSvhGz4c2M/oLjvmagZQZ5RzKlnomVmhgIyUeorkog
+        i5xI4DSNWrsBTcl94CGKQkGrhcUeubo8I2k22bpGG/sE2Aym2XCTAHSm13Hsgez5pd5D8GDjj8WRF
+        iYdfHthY7AmdvSqReUYp072NbOZEfYcXm/gKyiMqBSPO0hd6UMJv43We+lxhmPedb0KJ+4rZYFlrN
+        ImUkYsPmEsaMe44lRg9702pDxo0LPJfTYo+6D/8mHYQfSi5ZOBjE+jrZDrCAkGxsMWTIjLJ1RYFZh
+        1Hcr7Ivw==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:39634 helo=rmk-PC.armlinux.org.uk)
         by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.90_1)
         (envelope-from <rmk@armlinux.org.uk>)
-        id 1hWfUA-0000PF-9O; Fri, 31 May 2019 12:14:10 +0100
+        id 1hWfUF-0000PV-N2; Fri, 31 May 2019 12:14:15 +0100
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.82_1-5b7a7c0-XX)
         (envelope-from <rmk@armlinux.org.uk>)
-        id 1hWfU8-0003fr-DP; Fri, 31 May 2019 12:14:08 +0100
+        id 1hWfUD-0003fy-Hm; Fri, 31 May 2019 12:14:13 +0100
 In-Reply-To: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
 References: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
 From:   Russell King <rmk+kernel@armlinux.org.uk>
 To:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>
-Subject: [PATCH 5/6] ARM: sa1100/hackkit: remove empty serial mctrl functions
+Subject: [PATCH 6/6] ARM: sa1100/neponset: convert serial to use gpiod APIs
 MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1hWfU8-0003fr-DP@rmk-PC.armlinux.org.uk>
-Date:   Fri, 31 May 2019 12:14:08 +0100
+Message-Id: <E1hWfUD-0003fy-Hm@rmk-PC.armlinux.org.uk>
+Date:   Fri, 31 May 2019 12:14:13 +0100
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Remove the empty serial modem control signal functions from hackkit
-as these are unnecessary - the core code can copes fine without
-these.
+Convert the serial modem control signals to use the gpiod APIs rather
+than the private platform callbacks.
 
 Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
 ---
- arch/arm/mach-sa1100/hackkit.c | 48 ------------------------------------------
- 1 file changed, 48 deletions(-)
+ arch/arm/mach-sa1100/neponset.c | 109 +++++++++++-----------------------------
+ 1 file changed, 28 insertions(+), 81 deletions(-)
 
-diff --git a/arch/arm/mach-sa1100/hackkit.c b/arch/arm/mach-sa1100/hackkit.c
-index 643d5f2d9af9..9faf602666cf 100644
---- a/arch/arm/mach-sa1100/hackkit.c
-+++ b/arch/arm/mach-sa1100/hackkit.c
-@@ -49,8 +49,6 @@
- /* init funcs */
- static void __init hackkit_map_io(void);
+diff --git a/arch/arm/mach-sa1100/neponset.c b/arch/arm/mach-sa1100/neponset.c
+index eb60a71cf125..f1f70fc98fb7 100644
+--- a/arch/arm/mach-sa1100/neponset.c
++++ b/arch/arm/mach-sa1100/neponset.c
+@@ -11,7 +11,6 @@
+ #include <linux/irq.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/platform_data/sa11x0-serial.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/serial_core.h>
+@@ -49,23 +48,8 @@
+ #define IRR_SA1111	(1 << 2)
  
--static u_int hackkit_get_mctrl(struct uart_port *port);
--static void hackkit_set_mctrl(struct uart_port *port, u_int mctrl);
- static void hackkit_uart_pm(struct uart_port *port, u_int state, u_int oldstate);
+ #define NCR_NGPIO	7
+-
+-#define MDM_CTL0_RTS1	(1 << 0)
+-#define MDM_CTL0_DTR1	(1 << 1)
+-#define MDM_CTL0_RTS2	(1 << 2)
+-#define MDM_CTL0_DTR2	(1 << 3)
+ #define MDM_CTL0_NGPIO	4
+-
+-#define MDM_CTL1_CTS1	(1 << 0)
+-#define MDM_CTL1_DSR1	(1 << 1)
+-#define MDM_CTL1_DCD1	(1 << 2)
+-#define MDM_CTL1_CTS2	(1 << 3)
+-#define MDM_CTL1_DSR2	(1 << 4)
+-#define MDM_CTL1_DCD2	(1 << 5)
+ #define MDM_CTL1_NGPIO	6
+-
+-#define AUD_SEL_1341	(1 << 0)
+-#define AUD_MUTE_1341	(1 << 1)
+ #define AUD_NGPIO	2
  
- /**********************************************************************
-@@ -71,8 +69,6 @@ static struct map_desc hackkit_io_desc[] __initdata = {
+ extern void sa1110_mb_disable(void);
+@@ -97,6 +81,30 @@ struct neponset_drvdata {
+ 	struct gpio_chip *gpio[4];
  };
  
- static struct sa1100_port_fns hackkit_port_fns __initdata = {
--	.set_mctrl	= hackkit_set_mctrl,
--	.get_mctrl	= hackkit_get_mctrl,
- 	.pm		= hackkit_uart_pm,
- };
- 
-@@ -105,50 +101,6 @@ static void hackkit_uart_pm(struct uart_port *port, u_int state, u_int oldstate)
- 	/* TODO: switch on/off uart in powersave mode */
++static struct gpiod_lookup_table neponset_uart1_gpio_table = {
++	.dev_id = "sa11x0-uart.1",
++	.table = {
++		GPIO_LOOKUP("neponset-mdm-ctl0", 2, "rts", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl0", 3, "dtr", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl1", 3, "cts", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl1", 4, "dsr", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl1", 5, "dcd", GPIO_ACTIVE_LOW),
++		{ },
++	},
++};
++
++static struct gpiod_lookup_table neponset_uart3_gpio_table = {
++	.dev_id = "sa11x0-uart.3",
++	.table = {
++		GPIO_LOOKUP("neponset-mdm-ctl0", 0, "rts", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl0", 1, "dtr", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl1", 0, "cts", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl1", 1, "dsr", GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("neponset-mdm-ctl1", 2, "dcd", GPIO_ACTIVE_LOW),
++		{ },
++	},
++};
++
+ static struct gpiod_lookup_table neponset_pcmcia_table = {
+ 	.dev_id = "1800",
+ 	.table = {
+@@ -124,69 +132,6 @@ void neponset_ncr_frob(unsigned int mask, unsigned int val)
  }
+ EXPORT_SYMBOL(neponset_ncr_frob);
  
--/*
-- * Note! this can be called from IRQ context.
-- * FIXME: No modem ctrl lines yet.
-- */
--static void hackkit_set_mctrl(struct uart_port *port, u_int mctrl)
+-static void neponset_set_mctrl(struct uart_port *port, u_int mctrl)
 -{
--#if 0
+-	struct neponset_drvdata *n = nep;
+-	unsigned long mask, val = 0;
+-
+-	if (!n)
+-		return;
+-
 -	if (port->mapbase == _Ser1UTCR0) {
--		u_int set = 0, clear = 0;
+-		mask = MDM_CTL0_RTS2 | MDM_CTL0_DTR2;
 -
--		if (mctrl & TIOCM_RTS)
--			set |= PT_CTRL2_RS1_RTS;
--		else
--			clear |= PT_CTRL2_RS1_RTS;
+-		if (!(mctrl & TIOCM_RTS))
+-			val |= MDM_CTL0_RTS2;
 -
--		if (mctrl & TIOCM_DTR)
--			set |= PT_CTRL2_RS1_DTR;
--		else
--			clear |= PT_CTRL2_RS1_DTR;
+-		if (!(mctrl & TIOCM_DTR))
+-			val |= MDM_CTL0_DTR2;
+-	} else if (port->mapbase == _Ser3UTCR0) {
+-		mask = MDM_CTL0_RTS1 | MDM_CTL0_DTR1;
 -
--		PTCTRL2_clear(clear);
--		PTCTRL2_set(set);
+-		if (!(mctrl & TIOCM_RTS))
+-			val |= MDM_CTL0_RTS1;
+-
+-		if (!(mctrl & TIOCM_DTR))
+-			val |= MDM_CTL0_DTR1;
 -	}
--#endif
+-
+-	n->gpio[1]->set_multiple(n->gpio[1], &mask, &val);
 -}
 -
--static u_int hackkit_get_mctrl(struct uart_port *port)
+-static u_int neponset_get_mctrl(struct uart_port *port)
 -{
--	u_int ret = 0;
--#if 0
--	u_int irqsr = PT_IRQSR;
+-	void __iomem *base = nep->base;
+-	u_int ret = TIOCM_CD | TIOCM_CTS | TIOCM_DSR;
+-	u_int mdm_ctl1;
 -
--	/* need 2 reads to read current value */
--	irqsr = PT_IRQSR;
+-	if (!base)
+-		return ret;
 -
--	/* TODO: check IRQ source register for modem/com
--	 status lines and set them correctly. */
--#endif
--
--	ret = TIOCM_CD | TIOCM_CTS | TIOCM_DSR;
+-	mdm_ctl1 = readb_relaxed(base + MDM_CTL_1);
+-	if (port->mapbase == _Ser1UTCR0) {
+-		if (mdm_ctl1 & MDM_CTL1_DCD2)
+-			ret &= ~TIOCM_CD;
+-		if (mdm_ctl1 & MDM_CTL1_CTS2)
+-			ret &= ~TIOCM_CTS;
+-		if (mdm_ctl1 & MDM_CTL1_DSR2)
+-			ret &= ~TIOCM_DSR;
+-	} else if (port->mapbase == _Ser3UTCR0) {
+-		if (mdm_ctl1 & MDM_CTL1_DCD1)
+-			ret &= ~TIOCM_CD;
+-		if (mdm_ctl1 & MDM_CTL1_CTS1)
+-			ret &= ~TIOCM_CTS;
+-		if (mdm_ctl1 & MDM_CTL1_DSR1)
+-			ret &= ~TIOCM_DSR;
+-	}
 -
 -	return ret;
 -}
 -
- static struct mtd_partition hackkit_partitions[] = {
- 	{
- 		.name		= "BLOB",
+-static struct sa1100_port_fns neponset_port_fns = {
+-	.set_mctrl	= neponset_set_mctrl,
+-	.get_mctrl	= neponset_get_mctrl,
+-};
+-
+ /*
+  * Install handler for Neponset IRQ.  Note that we have to loop here
+  * since the ETHERNET and USAR IRQs are level based, and we need to
+@@ -388,6 +333,8 @@ static int neponset_probe(struct platform_device *dev)
+ 			   d->base + AUD_CTL, AUD_NGPIO, false,
+ 			   neponset_aud_names);
+ 
++	gpiod_add_lookup_table(&neponset_uart1_gpio_table);
++	gpiod_add_lookup_table(&neponset_uart3_gpio_table);
+ 	gpiod_add_lookup_table(&neponset_pcmcia_table);
+ 
+ 	/*
+@@ -402,8 +349,6 @@ static int neponset_probe(struct platform_device *dev)
+ 		 d->irq_base, d->irq_base + NEP_IRQ_NR - 1);
+ 	nep = d;
+ 
+-	sa1100_register_uart_fns(&neponset_port_fns);
+-
+ 	/* Ensure that the memory bus request/grant signals are setup */
+ 	sa1110_mb_disable();
+ 
+@@ -442,6 +387,8 @@ static int neponset_remove(struct platform_device *dev)
+ 		platform_device_unregister(d->smc91x);
+ 
+ 	gpiod_remove_lookup_table(&neponset_pcmcia_table);
++	gpiod_remove_lookup_table(&neponset_uart3_gpio_table);
++	gpiod_remove_lookup_table(&neponset_uart1_gpio_table);
+ 
+ 	irq_set_chained_handler(irq, NULL);
+ 	irq_free_descs(d->irq_base, NEP_IRQ_NR);
 -- 
 2.7.4
 
