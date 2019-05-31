@@ -2,80 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A09310EC
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 17:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B6131137
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 17:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726418AbfEaPKf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 11:10:35 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49879 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfEaPKf (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 11:10:35 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hWjAv-0007Ee-J5; Fri, 31 May 2019 17:10:33 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hWjAu-0003Zv-98; Fri, 31 May 2019 17:10:32 +0200
-Date:   Fri, 31 May 2019 17:10:32 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+        id S1726806AbfEaPXx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 11:23:53 -0400
+Received: from mail.javad.com ([54.86.164.124]:57122 "EHLO mail.javad.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726418AbfEaPXv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 31 May 2019 11:23:51 -0400
+Received: from osv (unknown [89.175.180.246])
+        by mail.javad.com (Postfix) with ESMTPSA id D368C3E8ED;
+        Fri, 31 May 2019 15:23:49 +0000 (UTC)
+Authentication-Results: mail.javad.com;
+        dkim=pass (1024-bit key; unprotected) header.d=javad.com header.i=@javad.com header.b=gXxyZRFO;
+        dkim-atps=neutral
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=javad.com;
+        s=default; t=1559316230;
+        bh=QMr8ldr7ud8h6i9SGmbIA7ScYZkdCuC+qiGejlno6Fg=; l=1135;
+        h=Received:From:To:Subject;
+        b=gXxyZRFOG5U/LPfEzHwgztjNldKwVJseDpnjCjJ0ySve+mR3Z+yl8HUmZ1CGBnTF0
+         j+a9XY8Hp/J3Pkgp5umPgBFyDmZGFx7j494m5zQax+Kvf65quto8QqgfnYXdia6hVP
+         MDwU1z0j/6YlrCB3s1gor6HU71ISmigfNzw/Lr/g=
+Authentication-Results: ip-172-31-2-110;
+        spf=pass (sender IP is 89.175.180.246) smtp.mailfrom=osv@javad.com smtp.helo=osv
+Received-SPF: pass (ip-172-31-2-110: connection is authenticated)
+Received: from osv by osv with local (Exim 4.84_2)
+        (envelope-from <osv@osv.gnss.ru>)
+        id 1hWjNk-0002MS-7m; Fri, 31 May 2019 18:23:48 +0300
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH 1/6] serial: sa1100: add support for mctrl gpios
-Message-ID: <20190531151032.tfrl7yqph6wsg5pl@pengutronix.de>
-References: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
- <E1hWfTn-0003fP-Rl@rmk-PC.armlinux.org.uk>
- <20190531125013.3gkexhmbqjpdvrtf@pengutronix.de>
- <20190531132340.bco6xpyl3aatbryl@shell.armlinux.org.uk>
- <20190531135658.jo4kas3ozj7gpmmc@pengutronix.de>
- <20190531140127.yp2o7effrsxencyb@shell.armlinux.org.uk>
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/8] serial: imx: fix DTR inversion
+References: <20190530152950.25377-1-sorganov@gmail.com>
+        <20190530152950.25377-2-sorganov@gmail.com>
+        <20190530205313.uwue3q2t5tp2vwz6@pengutronix.de>
+        <87ftovw7h8.fsf@javad.com>
+        <20190531051430.yojydtk63vkuektg@pengutronix.de>
+        <87ef4fup0h.fsf@javad.com>
+        <20190531064448.llskliwcqdeagjb4@pengutronix.de>
+Date:   Fri, 31 May 2019 18:23:48 +0300
+In-Reply-To: <20190531064448.llskliwcqdeagjb4@pengutronix.de> ("Uwe
+        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Fri, 31 May 2019 08:44:48
+ +0200")
+Message-ID: <877ea6d4vv.fsf@javad.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190531140127.yp2o7effrsxencyb@shell.armlinux.org.uk>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 31, 2019 at 03:01:28PM +0100, Russell King - ARM Linux admin wrote:
-> On Fri, May 31, 2019 at 03:56:58PM +0200, Uwe Kleine-König wrote:
-> > Unless I miss something (which is quite possible given that it's quite
-> > some time ago I looked into mctrl_gpio) with mctrl_gpio_init_noauto()
-> > having a CTS-gpio is just ignored unless the modem ctrl lines are
-> > explicitely requestet while with mctrl_gpio_init() it results in an
-> > error. Isn't the error the better alternative?
-> 
-> Unless the serial driver polls the modem control line status, which
-> the SA1100 driver continues to do in exactly the same way after this
-> conversion.
-> 
-> Do you suggest that we just regress the driver by ripping out this
-> support that no one has had any problems with, and that is known to
-> work sufficiently in its day, just because we now don't like it?
+Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
 
-No, of course not. A nice improvement would be to teach gpio_mctrl (or
-serial core?) about polling. But this is of course out of scope for this
-patch, so I suggest to stay with mctrl_gpio_init_noauto and document the
-lack of irq-capability somewhere prominently such that someone who picks
-up converting mctrl_gpio_init_noauto to mctrl_gpio_init notices this
-problem before actually hitting it.
+> Hello Sergey,
+>
+> On Fri, May 31, 2019 at 09:17:02AM +0300, Sergey Organov wrote:
+>> Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
+>> 
+>> > On Fri, May 31, 2019 at 07:52:51AM +0300, Sergey Organov wrote:
+>> >> My best reasoning was that  DSR/ DTR is likely implemented the same as
+>> >> CTS/ RTS in the metal, and I found other drivers where both RTS and DSR
+>> >> are inverted, so I guessed it could be a remnant of old copy-paste.
+>> >
+>> > This is not a good enough reason to "fix" that.
+>> 
+>> Yeah, I agree. I rather mostly kept it in the series not to forget about
+>> the issue. I should have said that in the comments, sorry.
+>
+> Then also sort this to the end of the series to allow clean application
+> of the patches you are sure about and mark the questionable patches as
+> RFC or RFT.
 
-Best regards
-Uwe
+I'm not sure we shouldn't actually fix it. Can we get help from NXP for
+clarification on the issue? I'm still 90% sure it's a bug.
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+The rest of the series should apply clearly independent on this one, but
+I'll re-check anyway.
+
+-- Sergey
