@@ -2,226 +2,149 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2F030D26
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 13:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7211A30E5D
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 14:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbfEaLO1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 07:14:27 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:58774 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbfEaLO1 (ORCPT
+        id S1726403AbfEaMuU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 08:50:20 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57589 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbfEaMuU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 07:14:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-        In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=erskDUB/2Fs4KqYqDJJfeR3vqL23NrMODoSCo1hPoYM=; b=OhIRskAD01Ht7HI8SHXc30mfb0
-        2sQdUpvnHW0jjpWbv6QobmboDTt+Hnw4bhwHSvhGz4c2M/oLjvmagZQZ5RzKlnomVmhgIyUeorkog
-        i5xI4DSNWrsBTcl94CGKQkGrhcUeubo8I2k22bpGG/sE2Aym2XCTAHSm13Hsgez5pd5D8GDjj8WRF
-        iYdfHthY7AmdvSqReUYp072NbOZEfYcXm/gKyiMqBSPO0hd6UMJv43We+lxhmPedb0KJ+4rZYFlrN
-        ImUkYsPmEsaMe44lRg9702pDxo0LPJfTYo+6D/8mHYQfSi5ZOBjE+jrZDrCAkGxsMWTIjLJ1RYFZh
-        1Hcr7Ivw==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:39634 helo=rmk-PC.armlinux.org.uk)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1hWfUF-0000PV-N2; Fri, 31 May 2019 12:14:15 +0100
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.82_1-5b7a7c0-XX)
-        (envelope-from <rmk@armlinux.org.uk>)
-        id 1hWfUD-0003fy-Hm; Fri, 31 May 2019 12:14:13 +0100
-In-Reply-To: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
-References: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
-From:   Russell King <rmk+kernel@armlinux.org.uk>
-To:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fri, 31 May 2019 08:50:20 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWgz9-00020A-Fo; Fri, 31 May 2019 14:50:15 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWgz7-00078v-KN; Fri, 31 May 2019 14:50:13 +0200
+Date:   Fri, 31 May 2019 14:50:13 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>
-Subject: [PATCH 6/6] ARM: sa1100/neponset: convert serial to use gpiod APIs
+Subject: Re: [PATCH 1/6] serial: sa1100: add support for mctrl gpios
+Message-ID: <20190531125013.3gkexhmbqjpdvrtf@pengutronix.de>
+References: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
+ <E1hWfTn-0003fP-Rl@rmk-PC.armlinux.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1hWfUD-0003fy-Hm@rmk-PC.armlinux.org.uk>
-Date:   Fri, 31 May 2019 12:14:13 +0100
+In-Reply-To: <E1hWfTn-0003fP-Rl@rmk-PC.armlinux.org.uk>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Convert the serial modem control signals to use the gpiod APIs rather
-than the private platform callbacks.
+On Fri, May 31, 2019 at 12:13:47PM +0100, Russell King wrote:
+> Add support for the generic mctrl gpio helper.  This will allow us to
+> convert several board files to use the gpiod tables to assign GPIOs to
+> serial ports, rather than needing to have private function callbacks.
+> 
+> If the generic mctrl gpio helper fails, ignore the mctrl gpios rather
+> than preventing the (possibly console) serial port from being created.
+> 
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+> ---
+>  drivers/tty/serial/Kconfig  |  1 +
+>  drivers/tty/serial/sa1100.c | 42 ++++++++++++++++++++++++++++++++++++++----
+>  2 files changed, 39 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 72966bc0ac76..f4372ac1a774 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -511,6 +511,7 @@ config SERIAL_SA1100
+>  	bool "SA1100 serial port support"
+>  	depends on ARCH_SA1100
+>  	select SERIAL_CORE
+> +	select SERIAL_MCTRL_GPIO if GPIOLIB
+>  	help
+>  	  If you have a machine based on a SA1100/SA1110 StrongARM(R) CPU you
+>  	  can enable its onboard serial port by enabling this option.
+> diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+> index a399772be3fc..97bdfeccbea9 100644
+> --- a/drivers/tty/serial/sa1100.c
+> +++ b/drivers/tty/serial/sa1100.c
+> @@ -28,6 +28,8 @@
+>  #include <mach/hardware.h>
+>  #include <mach/irqs.h>
+>  
+> +#include "serial_mctrl_gpio.h"
+> +
+>  /* We've been assigned a range on the "Low-density serial ports" major */
+>  #define SERIAL_SA1100_MAJOR	204
+>  #define MINOR_START		5
+> @@ -77,6 +79,7 @@ struct sa1100_port {
+>  	struct uart_port	port;
+>  	struct timer_list	timer;
+>  	unsigned int		old_status;
+> +	struct mctrl_gpios	*gpios;
+>  };
+>  
+>  /*
+> @@ -174,6 +177,8 @@ static void sa1100_enable_ms(struct uart_port *port)
+>  		container_of(port, struct sa1100_port, port);
+>  
+>  	mod_timer(&sport->timer, jiffies);
+> +
+> +	mctrl_gpio_enable_ms(sport->gpios);
+>  }
+>  
+>  static void
+> @@ -322,11 +327,21 @@ static unsigned int sa1100_tx_empty(struct uart_port *port)
+>  
+>  static unsigned int sa1100_get_mctrl(struct uart_port *port)
+>  {
+> -	return TIOCM_CTS | TIOCM_DSR | TIOCM_CAR;
+> +	struct sa1100_port *sport =
+> +		container_of(port, struct sa1100_port, port);
+> +	int ret = TIOCM_CTS | TIOCM_DSR | TIOCM_CAR;
+> +
+> +	mctrl_gpio_get(sport->gpios, &ret);
+> +
+> +	return ret;
+>  }
+>  
+>  static void sa1100_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>  {
+> +	struct sa1100_port *sport =
+> +		container_of(port, struct sa1100_port, port);
+> +
+> +	mctrl_gpio_set(sport->gpios, mctrl);
+>  }
+>  
+>  /*
+> @@ -842,6 +857,27 @@ static int sa1100_serial_resume(struct platform_device *dev)
+>  	return 0;
+>  }
+>  
+> +static int sa1100_serial_add_one_port(struct sa1100_port *sport, struct platform_device *dev)
+> +{
+> +	sport->port.dev = &dev->dev;
+> +	sport->gpios = mctrl_gpio_init_noauto(sport->port.dev, 0);
 
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
----
- arch/arm/mach-sa1100/neponset.c | 109 +++++++++++-----------------------------
- 1 file changed, 28 insertions(+), 81 deletions(-)
+the _noauto function was only introduced to ease a transition. I think
+the driver would benefit to use mctrl_gpio_init() instead.
 
-diff --git a/arch/arm/mach-sa1100/neponset.c b/arch/arm/mach-sa1100/neponset.c
-index eb60a71cf125..f1f70fc98fb7 100644
---- a/arch/arm/mach-sa1100/neponset.c
-+++ b/arch/arm/mach-sa1100/neponset.c
-@@ -11,7 +11,6 @@
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/platform_data/sa11x0-serial.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/serial_core.h>
-@@ -49,23 +48,8 @@
- #define IRR_SA1111	(1 << 2)
- 
- #define NCR_NGPIO	7
--
--#define MDM_CTL0_RTS1	(1 << 0)
--#define MDM_CTL0_DTR1	(1 << 1)
--#define MDM_CTL0_RTS2	(1 << 2)
--#define MDM_CTL0_DTR2	(1 << 3)
- #define MDM_CTL0_NGPIO	4
--
--#define MDM_CTL1_CTS1	(1 << 0)
--#define MDM_CTL1_DSR1	(1 << 1)
--#define MDM_CTL1_DCD1	(1 << 2)
--#define MDM_CTL1_CTS2	(1 << 3)
--#define MDM_CTL1_DSR2	(1 << 4)
--#define MDM_CTL1_DCD2	(1 << 5)
- #define MDM_CTL1_NGPIO	6
--
--#define AUD_SEL_1341	(1 << 0)
--#define AUD_MUTE_1341	(1 << 1)
- #define AUD_NGPIO	2
- 
- extern void sa1110_mb_disable(void);
-@@ -97,6 +81,30 @@ struct neponset_drvdata {
- 	struct gpio_chip *gpio[4];
- };
- 
-+static struct gpiod_lookup_table neponset_uart1_gpio_table = {
-+	.dev_id = "sa11x0-uart.1",
-+	.table = {
-+		GPIO_LOOKUP("neponset-mdm-ctl0", 2, "rts", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl0", 3, "dtr", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl1", 3, "cts", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl1", 4, "dsr", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl1", 5, "dcd", GPIO_ACTIVE_LOW),
-+		{ },
-+	},
-+};
-+
-+static struct gpiod_lookup_table neponset_uart3_gpio_table = {
-+	.dev_id = "sa11x0-uart.3",
-+	.table = {
-+		GPIO_LOOKUP("neponset-mdm-ctl0", 0, "rts", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl0", 1, "dtr", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl1", 0, "cts", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl1", 1, "dsr", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("neponset-mdm-ctl1", 2, "dcd", GPIO_ACTIVE_LOW),
-+		{ },
-+	},
-+};
-+
- static struct gpiod_lookup_table neponset_pcmcia_table = {
- 	.dev_id = "1800",
- 	.table = {
-@@ -124,69 +132,6 @@ void neponset_ncr_frob(unsigned int mask, unsigned int val)
- }
- EXPORT_SYMBOL(neponset_ncr_frob);
- 
--static void neponset_set_mctrl(struct uart_port *port, u_int mctrl)
--{
--	struct neponset_drvdata *n = nep;
--	unsigned long mask, val = 0;
--
--	if (!n)
--		return;
--
--	if (port->mapbase == _Ser1UTCR0) {
--		mask = MDM_CTL0_RTS2 | MDM_CTL0_DTR2;
--
--		if (!(mctrl & TIOCM_RTS))
--			val |= MDM_CTL0_RTS2;
--
--		if (!(mctrl & TIOCM_DTR))
--			val |= MDM_CTL0_DTR2;
--	} else if (port->mapbase == _Ser3UTCR0) {
--		mask = MDM_CTL0_RTS1 | MDM_CTL0_DTR1;
--
--		if (!(mctrl & TIOCM_RTS))
--			val |= MDM_CTL0_RTS1;
--
--		if (!(mctrl & TIOCM_DTR))
--			val |= MDM_CTL0_DTR1;
--	}
--
--	n->gpio[1]->set_multiple(n->gpio[1], &mask, &val);
--}
--
--static u_int neponset_get_mctrl(struct uart_port *port)
--{
--	void __iomem *base = nep->base;
--	u_int ret = TIOCM_CD | TIOCM_CTS | TIOCM_DSR;
--	u_int mdm_ctl1;
--
--	if (!base)
--		return ret;
--
--	mdm_ctl1 = readb_relaxed(base + MDM_CTL_1);
--	if (port->mapbase == _Ser1UTCR0) {
--		if (mdm_ctl1 & MDM_CTL1_DCD2)
--			ret &= ~TIOCM_CD;
--		if (mdm_ctl1 & MDM_CTL1_CTS2)
--			ret &= ~TIOCM_CTS;
--		if (mdm_ctl1 & MDM_CTL1_DSR2)
--			ret &= ~TIOCM_DSR;
--	} else if (port->mapbase == _Ser3UTCR0) {
--		if (mdm_ctl1 & MDM_CTL1_DCD1)
--			ret &= ~TIOCM_CD;
--		if (mdm_ctl1 & MDM_CTL1_CTS1)
--			ret &= ~TIOCM_CTS;
--		if (mdm_ctl1 & MDM_CTL1_DSR1)
--			ret &= ~TIOCM_DSR;
--	}
--
--	return ret;
--}
--
--static struct sa1100_port_fns neponset_port_fns = {
--	.set_mctrl	= neponset_set_mctrl,
--	.get_mctrl	= neponset_get_mctrl,
--};
--
- /*
-  * Install handler for Neponset IRQ.  Note that we have to loop here
-  * since the ETHERNET and USAR IRQs are level based, and we need to
-@@ -388,6 +333,8 @@ static int neponset_probe(struct platform_device *dev)
- 			   d->base + AUD_CTL, AUD_NGPIO, false,
- 			   neponset_aud_names);
- 
-+	gpiod_add_lookup_table(&neponset_uart1_gpio_table);
-+	gpiod_add_lookup_table(&neponset_uart3_gpio_table);
- 	gpiod_add_lookup_table(&neponset_pcmcia_table);
- 
- 	/*
-@@ -402,8 +349,6 @@ static int neponset_probe(struct platform_device *dev)
- 		 d->irq_base, d->irq_base + NEP_IRQ_NR - 1);
- 	nep = d;
- 
--	sa1100_register_uart_fns(&neponset_port_fns);
--
- 	/* Ensure that the memory bus request/grant signals are setup */
- 	sa1110_mb_disable();
- 
-@@ -442,6 +387,8 @@ static int neponset_remove(struct platform_device *dev)
- 		platform_device_unregister(d->smc91x);
- 
- 	gpiod_remove_lookup_table(&neponset_pcmcia_table);
-+	gpiod_remove_lookup_table(&neponset_uart3_gpio_table);
-+	gpiod_remove_lookup_table(&neponset_uart1_gpio_table);
- 
- 	irq_set_chained_handler(irq, NULL);
- 	irq_free_descs(d->irq_base, NEP_IRQ_NR);
+Getting rid of mctrl_gpio_init_noauto() was on my todo list for some
+time, but it was pushed down too far :-|
+
+Best regards
+Uwe
+
 -- 
-2.7.4
-
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
