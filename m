@@ -2,102 +2,80 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E35930F79
-	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 16:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A09310EC
+	for <lists+linux-serial@lfdr.de>; Fri, 31 May 2019 17:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726037AbfEaOBd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 31 May 2019 10:01:33 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:60708 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbfEaOBd (ORCPT
+        id S1726418AbfEaPKf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 31 May 2019 11:10:35 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:49879 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbfEaPKf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 31 May 2019 10:01:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=gwiVuzFV6bQvlyPXmdEGdPq+Cy17hU8CYkt3Fw8v/lU=; b=lcPC/c3qpa4vkVD3PvIN0ICGd
-        0zoixj25uxmyrPC1Gl7gwqwTnH6jZaINctHr7f5EijX5pDknWZP6zUFb2gEvXbD9QQrYgydwfY6Sv
-        5MQXJtQCEc1sNkIluhHPJ2YGMK75RfPb7BRy2d5ig5+iwtW0LxtnP6yqh+d7DXzJELG+kxT+grrvB
-        R9BBnisnkcsa7ILE9alXYIYhhRpOK6oqTJW5iIehQRjLG/7v5iVG/Ori9lflWJTHLrO0VvwxbBYM4
-        VXEkVwSZOlsqgBv8em/B2/mCJBPqpy5foQ28445i0ge0zgUsqpt6kItLt8thiAb5gtuAh5JlKGeQP
-        avpaTKeSw==;
-Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:56106)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1hWi66-0001AF-6m; Fri, 31 May 2019 15:01:30 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hWi64-0006Oj-3h; Fri, 31 May 2019 15:01:28 +0100
-Date:   Fri, 31 May 2019 15:01:28 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        Fri, 31 May 2019 11:10:35 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWjAv-0007Ee-J5; Fri, 31 May 2019 17:10:33 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hWjAu-0003Zv-98; Fri, 31 May 2019 17:10:32 +0200
+Date:   Fri, 31 May 2019 17:10:32 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Jiri Slaby <jslaby@suse.com>
 Subject: Re: [PATCH 1/6] serial: sa1100: add support for mctrl gpios
-Message-ID: <20190531140127.yp2o7effrsxencyb@shell.armlinux.org.uk>
+Message-ID: <20190531151032.tfrl7yqph6wsg5pl@pengutronix.de>
 References: <20190531111257.27hor6xgb3nsdghg@shell.armlinux.org.uk>
  <E1hWfTn-0003fP-Rl@rmk-PC.armlinux.org.uk>
  <20190531125013.3gkexhmbqjpdvrtf@pengutronix.de>
  <20190531132340.bco6xpyl3aatbryl@shell.armlinux.org.uk>
  <20190531135658.jo4kas3ozj7gpmmc@pengutronix.de>
+ <20190531140127.yp2o7effrsxencyb@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190531135658.jo4kas3ozj7gpmmc@pengutronix.de>
+In-Reply-To: <20190531140127.yp2o7effrsxencyb@shell.armlinux.org.uk>
 User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 31, 2019 at 03:56:58PM +0200, Uwe Kleine-König wrote:
-> On Fri, May 31, 2019 at 02:23:40PM +0100, Russell King - ARM Linux admin wrote:
-> > On Fri, May 31, 2019 at 02:50:13PM +0200, Uwe Kleine-König wrote:
-> > > On Fri, May 31, 2019 at 12:13:47PM +0100, Russell King wrote:
-> > > > +static int sa1100_serial_add_one_port(struct sa1100_port *sport, struct platform_device *dev)
-> > > > +{
-> > > > +	sport->port.dev = &dev->dev;
-> > > > +	sport->gpios = mctrl_gpio_init_noauto(sport->port.dev, 0);
-> > > 
-> > > the _noauto function was only introduced to ease a transition. I think
-> > > the driver would benefit to use mctrl_gpio_init() instead.
-> > 
-> > In what way would the driver benefit?  mctrl_gpio_init() requires that
-> > there are IRQs for each input GPIO.  This is not the case with most
-> > SA11x0 platforms, where the GPIO controls are implemented using simple
-> > latches, hence that interface is entirely unsuitable.
+On Fri, May 31, 2019 at 03:01:28PM +0100, Russell King - ARM Linux admin wrote:
+> On Fri, May 31, 2019 at 03:56:58PM +0200, Uwe Kleine-König wrote:
+> > Unless I miss something (which is quite possible given that it's quite
+> > some time ago I looked into mctrl_gpio) with mctrl_gpio_init_noauto()
+> > having a CTS-gpio is just ignored unless the modem ctrl lines are
+> > explicitely requestet while with mctrl_gpio_init() it results in an
+> > error. Isn't the error the better alternative?
 > 
-> Ah, but then you can only use the outputs reliably here as an edge on
-> (say) CTS stays unnoticed with both mctrl_gpio_init() and
-> mctrl_gpio_init_noauto().
+> Unless the serial driver polls the modem control line status, which
+> the SA1100 driver continues to do in exactly the same way after this
+> conversion.
+> 
+> Do you suggest that we just regress the driver by ripping out this
+> support that no one has had any problems with, and that is known to
+> work sufficiently in its day, just because we now don't like it?
 
-Right that is a risk with a polled approach, but that is the approach
-that the SA1100 serial driver has taken ever since it was written
-almost twenty years ago, and no one has raised any concerns about
-that until now.
+No, of course not. A nice improvement would be to teach gpio_mctrl (or
+serial core?) about polling. But this is of course out of scope for this
+patch, so I suggest to stay with mctrl_gpio_init_noauto and document the
+lack of irq-capability somewhere prominently such that someone who picks
+up converting mctrl_gpio_init_noauto to mctrl_gpio_init notices this
+problem before actually hitting it.
 
-> Unless I miss something (which is quite possible given that it's quite
-> some time ago I looked into mctrl_gpio) with mctrl_gpio_init_noauto()
-> having a CTS-gpio is just ignored unless the modem ctrl lines are
-> explicitely requestet while with mctrl_gpio_init() it results in an
-> error. Isn't the error the better alternative?
-
-Unless the serial driver polls the modem control line status, which
-the SA1100 driver continues to do in exactly the same way after this
-conversion.
-
-Do you suggest that we just regress the driver by ripping out this
-support that no one has had any problems with, and that is known to
-work sufficiently in its day, just because we now don't like it?
+Best regards
+Uwe
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
