@@ -2,71 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1F53302E
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 14:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF383325A
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 16:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727248AbfFCMtu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Jun 2019 08:49:50 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41012 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727141AbfFCMtu (ORCPT
+        id S1728883AbfFCOmP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Jun 2019 10:42:15 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38289 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728882AbfFCOmP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Jun 2019 08:49:50 -0400
-Received: by mail-lj1-f196.google.com with SMTP id s21so5419123lji.8
-        for <linux-serial@vger.kernel.org>; Mon, 03 Jun 2019 05:49:49 -0700 (PDT)
+        Mon, 3 Jun 2019 10:42:15 -0400
+Received: by mail-lf1-f67.google.com with SMTP id b11so13824975lfa.5
+        for <linux-serial@vger.kernel.org>; Mon, 03 Jun 2019 07:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:references:date:in-reply-to:message-id
          :user-agent:mime-version:content-transfer-encoding;
-        bh=X/Fp6iGxHAu/lnalHD1r9Fjglv+z5wxMbn3MXhPZfow=;
-        b=eV2d99OQqhdbulGy0D2PByKUNJky+EPuESHMaDG71IZ3uyYUH4YuSNe1dp13skl7KV
-         yFe4tmvaRlfhgimX/6OvJhZQGvjRNXmZ+OtvGzo0/D6wezvDGZrUr2eeSoYkjdWAV/kW
-         AwA/CsRIINmj2PHw24eccPP0j/UyKpnvYj6CXWqtfA3g8EvBU1msa64HDEiV3AdA0NKr
-         6jfBPL7h0+eppQ276ju0chfem25bCzzjRRjDIY5yHg+6BG4+jTUz98PcF5k5QjCQHzH1
-         UCmd/sR+tqAFMLAZj8l6D+23Ul4FaQ75vvPHse4v4Jr68AKhg0pJi3gDE9kiJt8mAG1s
-         cPgw==
+        bh=y9jjv4B5ZEIqBTQG0IWdSaLZKyZ1iTMA3qmY6LYWbAQ=;
+        b=Fc2Gr02OwALs7olgFwXlhg7tn54OfTLP2H9Ni5Y4NhJxrqMi1fGag7TtsVFslt+Q6C
+         wG2G8bGpLMxzs3Ql6RsK0ZGkpbhIZJF/LmWRoUtZrWyQBG4KB3YXhqpFKo/F+KnrCcM5
+         gf+GozDNBkjBfWLaE8d/fj9hsOp2xX0LdbaGmyRLpDBQeNz71KoB8/Dz6W3HyvLFVzAM
+         TFctbLES8sfCzuQ/Gy81IWTYMp1JSeJTU21gJiYZ3G5imjF/cbEJbz2UhXPHBRzS+cbG
+         ko4Q8FiE9beNEJXiRkk1cCQJNRBNBp4yh2EaheAxoWHGLLBJ7ZvFgA0GuQN8u3xWxhBW
+         GCoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
          :message-id:user-agent:mime-version:content-transfer-encoding;
-        bh=X/Fp6iGxHAu/lnalHD1r9Fjglv+z5wxMbn3MXhPZfow=;
-        b=fRn9Rnk0J3VZyesnT2sO1AQ97B8qnJgG3C5W3nKHqdChW5ieIQrrjL44fIDU3/Rj2q
-         uGxxqcB2ZqsD4pNk/F/Q6ub13SWruDbmaTv05wKeGKP0E14ZfkmvbjoYeNYvUqbwoNAT
-         LDDilKb92p15T8OWaCAL+y70FaiWmOGAU/AepvUSnfcwQcowBrpFsO8uNEWYxOGmvDlz
-         dTCbSn+CGIAbe8uZd3+O06t338XVYZ0xt/hxdZbv2u/lULzKsU+toNxfHRWj/5yqvqVi
-         hwWEj56304EqSsKkCA7zmxyidPUjBTKTmtjeKS69jp6/7c6Bsa9vXNOtJXIEWXnoQvZE
-         3B7A==
-X-Gm-Message-State: APjAAAVG2Uri3de75g/uWAGFmY4ocpPd87/PRSp+dwYPSCwfjKiyA3I6
-        szzZLLPiw2xhZen7RBJ1GUqXWNAztgc=
-X-Google-Smtp-Source: APXvYqzX+dmnIgVZSHsOgNNILwCL8FcJIpP9VPs28WkN6L00h+oSb1t2AzwjzcEgjN8mppmh/CbuMg==
-X-Received: by 2002:a2e:a0d1:: with SMTP id f17mr13049573ljm.117.1559566188368;
-        Mon, 03 Jun 2019 05:49:48 -0700 (PDT)
+        bh=y9jjv4B5ZEIqBTQG0IWdSaLZKyZ1iTMA3qmY6LYWbAQ=;
+        b=AJ1oUe9uJgR3Fd22gkC8Aei02GzxX28jYkrYGDowbJCf/kXNNJadPylx+/m3cmCFc+
+         EceZ1OehOVdgfyN+Alyyen7HkCRONr7LzhNBPEMttTglHtayPK8ihVs8E9MaFu7Seenu
+         O08PysJ0TDcvG77J5oIxMyKMO63s/sQHRdNaHQ3wgxicjtPJps/NNjaIgEFDi9+yUyXK
+         Boaq3kQn/etzkhxLyoli/rAqakwOmkLBNLqU2tIpROLGygJ6fbynUZntI+bcn6R7C8Fk
+         cBui5dOEL8TqyUku91QDvK22rvQOBHmiqDEv+dKmXYRNOQ2ZTfLvgf1Uk7Xusmt4xTZ0
+         ve4g==
+X-Gm-Message-State: APjAAAWxg/U80u6VaZk+q6i/HegajeyYvUJ4stl+RWhMYruyQVi5dVZ5
+        vgiUgCQkfQlQoJJYnKURxtY=
+X-Google-Smtp-Source: APXvYqxi/JBhmWViz9ezy09MgxguonsCMH4MkRsJAwNgJ6ZccsoRkhsj8up9vXTOUiCdRUfx76PP/Q==
+X-Received: by 2002:ac2:569c:: with SMTP id 28mr1085507lfr.147.1559572933367;
+        Mon, 03 Jun 2019 07:42:13 -0700 (PDT)
 Received: from osv ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id r11sm2487947ljh.90.2019.06.03.05.49.47
+        by smtp.gmail.com with ESMTPSA id c5sm3201547lfm.7.2019.06.03.07.42.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 05:49:47 -0700 (PDT)
+        Mon, 03 Jun 2019 07:42:12 -0700 (PDT)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Russell King <linux@armlinux.org.uk>, linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl change
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 3/8] serial: imx: preserve RTS state over termios change
 References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-3-sorganov@gmail.com>
-        <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
-        <87woi7ur1g.fsf@javad.com>
-        <20190531062809.nacg54russc3wvcz@pengutronix.de>
-        <20190531135438.bqrpek6niddnrqmo@shell.armlinux.org.uk>
-        <87r28ea2qa.fsf@javad.com>
-        <20190601161256.4zuhqzrdskjdymu5@pengutronix.de>
-Date:   Mon, 03 Jun 2019 15:49:46 +0300
-In-Reply-To: <20190601161256.4zuhqzrdskjdymu5@pengutronix.de> ("Uwe
-        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Sat, 1 Jun 2019 18:12:56
+        <20190530152950.25377-4-sorganov@gmail.com>
+        <20190530210824.rf2aaxumcc3cnc5c@pengutronix.de>
+Date:   Mon, 03 Jun 2019 17:42:11 +0300
+In-Reply-To: <20190530210824.rf2aaxumcc3cnc5c@pengutronix.de> ("Uwe
+        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 30 May 2019 23:08:24
  +0200")
-Message-ID: <87y32i6dg5.fsf@javad.com>
+Message-ID: <87v9xm3f3w.fsf@javad.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -76,84 +69,75 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
-
 Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
-> Hello,
+
+> On Thu, May 30, 2019 at 06:29:45PM +0300, Sergey Organov wrote:
+>> imx_set_mctrl() cleared RTS on every call
 >
-> On Fri, May 31, 2019 at 09:38:37PM +0300, Sergey Organov wrote:
->> Russell King <rmk@armlinux.org.uk> writes:
->> > If this is not done, data loss will occur: characters will be received
->> > from the FIFO, and the attempt to place them into the kernel buffer
->> > will fail, resulting in the characters being discarded.  This would not
->> > be an effective hardware flow control implementation.
->> 
->> Why? Doesn't kernel stop its receiving machinery anyway when software
->> receive buffers get filled?
->> 
->> If it does, that seems logical, then it will rather stop reading from
->> FIFO, and once FIFO fills above threshold (if at all), hardware will
->> de-assert RTS by itself, no complications required.
 >
-> Not all hardware has a FIFO
+>> 
+>> Signed-off-by: Sergey Organov <sorganov@gmail.com>
+>> ---
+>>  drivers/tty/serial/imx.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+>> index 6577552..13face9 100644
+>> --- a/drivers/tty/serial/imx.c
+>> +++ b/drivers/tty/serial/imx.c
+>> @@ -1648,7 +1648,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+>>  
+>>  	/* then, disable everything */
+>>  	imx_uart_writel(sport, old_ucr2 & ~(UCR2_TXEN | UCR2_RXEN | UCR2_ATEN), UCR2);
+>> -	old_ucr2 &= (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
+>>  
+>>  	/* custom-baudrate handling */
+>>  	div = sport->port.uartclk / (baud * 16);
+>> @@ -1686,7 +1685,8 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+>>  
+>>  	imx_uart_writel(sport, old_ucr1, UCR1);
+>>  
+>> -	/* set the parity, stop bits and data size */
+>> +	/* Set parity, stop bits, data size, etc. Keep bits we don't compute. */
+>> +	old_ucr2 &= (UCR2_CTS | UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
+>
+> I wonder if that fixes a certain usecase and breaks another.
+>
+> If I change the baud rate of the UART the sequence I actually want to
+> have is:
+>
+> 	clear RTS (to not encourage the other side to send data)
+> 	disable receiver
+> 	reconfigure requested settings
+> 	reenable receiver
+> 	(maybe) reactivate RTS to signal being ready again
+>
+> So I think your approach is too simple.
 
-Actually, most (all?) have. TxD + shifter = FIFO of depth 1 ;-)
+This patch in fact should be dropped, but for different reason:
 
-> and the necessary mechanisms to auto-deassert RTS when it fills.
+It will set back UCR2_CTS that was cleared by imx_uart_rts_active(),
+i.e., it'd break RS485 mode.
 
-This is correct.
+... provided it's not broken anyway as:
 
-> So there must be support in software to deassert RTS, too.
+static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
+{
+	*ucr2 &= ~(UCR2_CTSC | UCR2_CTS);
+	sport->port.mctrl |= TIOCM_RTS;
+	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
+}
 
-So there is. The question is why it still needs to be de-asserted
-manually when there is hardware support to de-assert it automatically?
+Seems to have inverted logic between TIOCM_RTS and UCR2_CTS (once again
+intentional? with no comments?), compared to set_mctrl():
 
-Hardware is capable to de-assert RTS automatically. Why do I need to do it
-manually? 
+		if (mctrl & TIOCM_RTS)
+			ucr2 |= UCR2_CTS;
 
-I still see this as unnecessary complication of the logic of low-level
-driver. (single) Top level could have been smarter to make (multiple)
-low-level simpler.
+Moreover, imx_uart_rts_active() is called from set_termios() before
 
-Anyway, to get back to the patches, to fulfill current serial core
-requirements, how about this:
+          spin_lock_irqsave(&sport->port.lock, flags);
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index dff75dc..ea95fe4 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -966,10 +966,17 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
- 	if (!(port->rs485.flags & SER_RS485_ENABLED)) {
- 		u32 ucr2;
- 
-+		/*
-+		 * Turn off autoRTS (UCR2_CTSC) if RTS is lowered and restore
-+		 * autoRTS setting if RTS is raised
-+		 */
- 		ucr2 = imx_uart_readl(sport, UCR2);
- 		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
--		if (mctrl & TIOCM_RTS)
--			ucr2 |= UCR2_CTS | UCR2_CTSC;
-+		if (mctrl & TIOCM_RTS) {
-+			ucr2 |= UCR2_CTS;
-+			if (port->status & UPSTAT_AUTORTS)
-+				ucr2 |= UCR2_CTSC;
-+		}
- 		imx_uart_writel(sport, ucr2, UCR2);
- 	}
- 
-> And even in the presence of a "smart" FIFO, the software then usually
-> knows earlier about having to stop the other side and this might be
-> the necessary margin that makes them stop before the local buffer is
-> over full.
-
-Suppose you have 4k software buffer and 4k hardware FIFO. Do you argue
-wasting 4k of hardware FIFO space by manually stopping sender earlier is
-the best thing to do?
-
-It's more logical not to read from FIFO and disable Rx IRQ once there is
-no space in the software buffer. Nothing complex. Just saying.
-
-Regards,
+is called, yet it changes sport->port.mctrl. A bug?
 
 -- Sergey
