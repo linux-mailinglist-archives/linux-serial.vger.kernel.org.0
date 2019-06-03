@@ -2,136 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74713332FA
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 17:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6295333C1
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 17:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729240AbfFCPAg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Jun 2019 11:00:36 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34192 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729038AbfFCPAf (ORCPT
+        id S1727420AbfFCPkt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Jun 2019 11:40:49 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:52282 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727343AbfFCPks (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Jun 2019 11:00:35 -0400
-Received: by mail-lj1-f195.google.com with SMTP id j24so16564372ljg.1
-        for <linux-serial@vger.kernel.org>; Mon, 03 Jun 2019 08:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Z0q56m29JKs/KSc5kZjLD8aOvRo5OnqtBUIzP0WVLuA=;
-        b=GhMUbql6/srHaDxQoep3dj9gs65RWfp0h5ODaftQK5QSssSnZqtZ7Qrf/107svyxNh
-         ryLfxSVOuF2IKPUqo5OjO0PjcrfERmKdi/4stKSI8nPjvzTZG06+tR/UU1yNygMuzVYg
-         uQibPIYPzGH0eDdeEbDAZ3zq9UKs2ubO9dkEkfmqRL884HDE1cxFJYT9daJNbcSsnRWP
-         s3qJdYk/m0Dt7AH4nbyrhMupXGmniK4BUM48TqMlfSk2a01Sb5qDe29wpGVkibfSIAzD
-         viJIgLxkK+R4dKdHmC5rKufatOEc2vwHLLvMYc4zoirmEY0gRRO7le7rPYLFb6JIWO5M
-         CYJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version:content-transfer-encoding;
-        bh=Z0q56m29JKs/KSc5kZjLD8aOvRo5OnqtBUIzP0WVLuA=;
-        b=al1VpRWw11LsBvDiTci4pL3hHZFfY5TEpMhn3hQnI91tskNB6eVjPd8hd9xrnCnSdz
-         5s+vHzYbuNJbMbFp6xbPeWmnCHbuBH5Wt94sLhCjFHFjfRp6gEMfiihM2ZxGeaaatWtN
-         M8rVpL5wKPIY3Blu3xIjvs5HlgCQQUtijigGVcbzvpJ5DKHmDU2Ar9xHH71ARqOP5mTC
-         MANUCuQ7Mgep++Dzj2na6S6OXncG94xIOX2t36MYuIamiNPdwdHl0esYerJhIWFgCZE5
-         9pkwMKGWfZCRQmkh/x8EWkcdvzQOeM6tQg3kw6//Ixd4L7vMebSXQVJOHn7BbCUDNp/y
-         aFAA==
-X-Gm-Message-State: APjAAAV7Sl0GezQCDvet6cDQkhztMp6sElJOrt/k1cHC+KMNUoI5xDdy
-        gRlBLoSQWThoWzm1Bcf9kWjCZm2/UOs=
-X-Google-Smtp-Source: APXvYqyGMVo9LXQvwTblQtU9w9An1tT1pdq3R8W7yI6CwFVnGxMQbten4xyhRLRN45ehPmsXz9e3Kw==
-X-Received: by 2002:a2e:9d07:: with SMTP id t7mr6995203lji.43.1559574033691;
-        Mon, 03 Jun 2019 08:00:33 -0700 (PDT)
-Received: from osv ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id r10sm1290983lja.29.2019.06.03.08.00.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 08:00:32 -0700 (PDT)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Mon, 3 Jun 2019 11:40:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=YSNg+78IfBsInyz5teLIuGp2liUpOszxWOcCrlIMeYc=; b=wXXQpOx9TdKU4jLk6LqOM+oBe
+        DT9H7wTM2KTN67UG1fctXmYzOi2B88a8qZBNwtC7MhyDfHQL8uxPvwdrRoHjsy8PSxVGxiFZqrrNc
+        pijTphCaoUFJUC+xl9h7qFjEtzPppIIQDaacx1l2N0iijk+DEdp7vbLTdY+gxjGuKwBoHCvFf2czp
+        BN9pXTxHSfQvxu/PZBdnTy6G1tl5y//W7HYwLaANBOB1jl1BHDArUudx5cy2LQKg2hBaWpIkKjOXi
+        0sQZufA6eDd+n8eacaIhR+jXyrLcKkynGCPUHSffoRzinSRvhuM01FjzhVYciUlC1HGnIXte3R+0u
+        7j2nh19fA==;
+Received: from shell.armlinux.org.uk ([2002:4e20:1eda:1:5054:ff:fe00:4ec]:38472)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1hXp4m-0003nF-Pl; Mon, 03 Jun 2019 16:40:44 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1hXp4k-0000jB-0t; Mon, 03 Jun 2019 16:40:42 +0100
+Date:   Mon, 3 Jun 2019 16:40:41 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Sergey Organov <sorganov@gmail.com>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Russell King <rmk@arm.linux.org.uk>
-Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl change
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl
+ change
+Message-ID: <20190603154041.disl65ibr5zasqor@shell.armlinux.org.uk>
 References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-3-sorganov@gmail.com>
-        <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
-Date:   Mon, 03 Jun 2019 18:00:31 +0300
-In-Reply-To: <20190530203931.n6b22ktbzuyg67sd@pengutronix.de> ("Uwe
-        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 30 May 2019 22:39:31
- +0200")
-Message-ID: <87muiy3e9c.fsf@javad.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+ <20190530152950.25377-3-sorganov@gmail.com>
+ <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
+ <87woi7ur1g.fsf@javad.com>
+ <20190531062809.nacg54russc3wvcz@pengutronix.de>
+ <20190531135438.bqrpek6niddnrqmo@shell.armlinux.org.uk>
+ <87r28ea2qa.fsf@javad.com>
+ <20190601161256.4zuhqzrdskjdymu5@pengutronix.de>
+ <20190601193436.irs6sdknz755uyem@shell.armlinux.org.uk>
+ <875zpm7ty1.fsf@javad.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875zpm7ty1.fsf@javad.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
+On Mon, Jun 03, 2019 at 03:08:06PM +0300, Sergey Organov wrote:
+> Russell King - ARM Linux admin <linux@armlinux.org.uk> writes:
+> 
+> [...]
+> 
+> > If we want the kernel to stop reading the FIFO, we would have to add
+> > additional complexity to a lot of serial drivers, and a capability
+> > which tells the kernel that they support this behaviour - why do we
+> > want individual drivers to have to implement this?
+> 
+> How does it work when no handshake is configured? Drivers continue to
+> read FIFOs/TxDs and drop data when software buffers are full, spending
+> CPU cycles on nothing?
 
+I assume what you mean by "no handshake" is "no flow control", then
+yes, the CPU continues to read the FIFO and drops the received
+characters on the floor.
 
-[...]
+When no flow control is configured, it means there is no way to signal
+to the remote end that there is congestion at the receiving end, and
+if there is no buffer space available, where would you expect the
+received characters to be stored?
 
-> Independant of your patch I discussed a problem in imx_uart_set_mctrl()
-> with Sascha and Russell (both added to Cc:) earlier this week. In the
-> current implementation there are actually two problems.
->
-> Currently imx_uart_set_mctrl does:
->
-> 	if TIOCM_RTS is set:
-> 		let the receiver control the RTS signal
-> 	else:
-> 		set RTS inactive
->
-> The bigger problem is that if the UART is configured not to use
-> handshaking (CRTSCTS unset) the mode "let the receiver control the RTS
-> signal" should not be used.
->
-> The smaller (and irrelevant for correctness) problem is that setting
-> UCR2_CTS is a no-op when UCR2_CTSC is also set.
->
-> We think the right thing to do is:
->
-> 	ucr2 = imx_uart_readl(sport, UCR2);
-> 	ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
->
-> 	if (mctrl & TIOCM_RTS) {
-> 		if (sport->crtscts)
-> 			/* let the receiver control RTS */
-> 			ucr2 |= UCR2_CTSC;
-> 		else
-> 			/* Force RTS active */
-> 			ucr2 |= UCR2_CTS;
-> 	} else {
-> 		/* Force RTS inactive, i.e. CTS=0, CTSC=0 */
-> 	}
->
-> 	imx_uart_writel(sport, ucr2, UCR2);
->
-> but AFAICT this isn't tested yet to an end in the use case that Sascha
-> currently has and so there isn't a complete patch available yet.
+If the CPU were to stop reading the FIFO, the result would be that the
+FIFO fills, and then any further characters received get discarded by
+the hardware (instead of the CPU) and the hardware marks an overrun
+error.
 
-This looks almost correct, except there is no sport->crtscts. Are you
-going to add it? Other drivers use port->status & UPSTAT_AUTORTS for
-that, and maybe it'd better to follow, except it seems you then need to
-manage UPSTAT_AUTORTS yourself, no help from top-level :-(
-
-However, I figure that it could rather be calculated right here as:
-
-         !(ucr2 & UCR2_IRTS)
-
-as autoCTS is set if and only if autoRTS is also set, and UCR2_IRTS
-otherwise remains static.
-
-... and then set_termios() should still be fixed, as it clears UCR2_CTS
-bit on every invocation, but differently from my original patch (see
-separate mail on that patch).
-
-I'll try to come-up with new separate patches for this particular issue
-(I mean RTS/CTS handshake handling).
-
--- Sergey
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
