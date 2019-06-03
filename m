@@ -2,149 +2,141 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33733326E7
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 05:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0AD32AEA
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 10:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfFCDbh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 2 Jun 2019 23:31:37 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:36652 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbfFCDbh (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 2 Jun 2019 23:31:37 -0400
-Received: by mail-qk1-f196.google.com with SMTP id g18so10191668qkl.3
-        for <linux-serial@vger.kernel.org>; Sun, 02 Jun 2019 20:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M2pM/nkf1A1euBtVWZMDLIqDbLGr66zihKn/vdYTjTQ=;
-        b=UlW2uTB2hMdPcjBNNW5Lbo14ZXuAeoI4n/h8qMjd1qHsaoDYKe66yYTvfIWtY0fJHK
-         dkvvwaUCGt5is3ltB0Srvsr2kbg+aKKvVqSifbv/YEeWZQmtb9fTzWAmfJqm82UinXGi
-         RAb6CzCifI/b/d1BqBqQp8Iax55LjNHqbZkcg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M2pM/nkf1A1euBtVWZMDLIqDbLGr66zihKn/vdYTjTQ=;
-        b=mjDc7kT8Qh5RvkmSTmraJhDXnY67md/SjAnWHi2BhQ4RggOX+8HJGUdBsR7nwEV12h
-         HiFHbq0uDBEJ+BDdteXwMYMfxt4skhuzr6FlA97LhV/XQ0olQtzjRhEzceL6f4en2D4O
-         umPaxr5YmOm4Y3pEuWil/vdXkIwbr8U3+4wttINmbvczcVQBCMUV3gHSFFVqn4rgrbgL
-         E/pWjpfzYPyAQGP1ikQPdehY5cV5Jmx+NRyg3JWtHcIpSXMzU/jR/j3adbso//DL2ZoL
-         RGbmfuT+5p4bnhZnR5MkiquJAN+5SEa91bS8mB/NZJcwv0QqTSwcc+c1jxTNHsJHdrYc
-         QzEQ==
-X-Gm-Message-State: APjAAAWgfW+wwFMuqtLgsI6A7vNBYD9iU6ARjieqmpZpVOUxOGZvziJM
-        eSrbtNyn0k1KkQDhpsbthXkdDGiKT69C24Rkkj7Exw==
-X-Google-Smtp-Source: APXvYqymK56mIsfk25HR9DGgVNvsNl7A358Z+rnD4UFU4EfXzBDVvfpl0srlguV90A6phujqMAsvuDwUioifOaAf590=
-X-Received: by 2002:a37:4c04:: with SMTP id z4mr20217027qka.195.1559532696386;
- Sun, 02 Jun 2019 20:31:36 -0700 (PDT)
+        id S1727734AbfFCIdo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Jun 2019 04:33:44 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:14466 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727255AbfFCIdm (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 3 Jun 2019 04:33:42 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id B58E65023B;
+        Mon,  3 Jun 2019 10:33:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id lSgL1cpt3KJ8; Mon,  3 Jun 2019 10:33:35 +0200 (CEST)
+From:   Stefan Roese <sr@denx.de>
+To:     linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 1/2 v4] serial: mctrl_gpio: Check if GPIO property exisits before requesting it
+Date:   Mon,  3 Jun 2019 10:33:31 +0200
+Message-Id: <20190603083332.12480-1-sr@denx.de>
 MIME-Version: 1.0
-References: <20190527083150.220194-1-tientzu@chromium.org> <20190527083150.220194-3-tientzu@chromium.org>
-In-Reply-To: <20190527083150.220194-3-tientzu@chromium.org>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Mon, 3 Jun 2019 11:31:25 +0800
-Message-ID: <CANMq1KAym_cp8vCJ0+OtxAMJmsFp1LXM15rcZdKEM+w6f92=aA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] uart: mediatek: support Rx in-band wakeup
-To:     Claire Chang <tientzu@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        changqi.hu@mediatek.com, linux-serial@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, May 27, 2019 at 4:32 PM Claire Chang <tientzu@chromium.org> wrote:
->
-> In order to support Rx in-band wakeup, we need to enable irq wake on an
-> edge sensitive interrupt of Rx pin before suspend and disable it when
-> resuming.
->
-> This interrupt is used only as wake source to resume the system when
-> suspended. Note that the sent character will be lost as the controller is
-> actually suspended.
->
-> We use this to support wakeup on bluetooth. Bluetooth will repeatedly send
-> 0xFD to wakeup host. Once host detects Rx falling, an interrupt is
-> triggered, and the system leaves sleep state. Then, the bluetooth driver
-> will send 0xFC to bluetooth and bluetooth can start to send normal HCI
-> packets.
->
-> Signed-off-by: Claire Chang <tientzu@chromium.org>
+This patch adds a check for the GPIOs property existence, before the
+GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+support is added (2nd patch in this patch series) on x86 platforms using
+ACPI.
 
-Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
+Here Mika's comments from 2016-08-09:
 
-> ---
->  drivers/tty/serial/8250/8250_mtk.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-> index 417c7c810df9..5b94b853387d 100644
-> --- a/drivers/tty/serial/8250/8250_mtk.c
-> +++ b/drivers/tty/serial/8250/8250_mtk.c
-> @@ -10,6 +10,7 @@
->  #include <linux/module.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
-> +#include <linux/pinctrl/consumer.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/serial_8250.h>
-> @@ -70,6 +71,7 @@ struct mtk8250_data {
->  #ifdef CONFIG_SERIAL_8250_DMA
->         enum dma_rx_status      rx_status;
->  #endif
-> +       int                     rx_wakeup_irq;
->  };
->
->  /* flow control mode */
-> @@ -551,6 +553,8 @@ static int mtk8250_probe(struct platform_device *pdev)
->         pm_runtime_set_active(&pdev->dev);
->         pm_runtime_enable(&pdev->dev);
->
-> +       data->rx_wakeup_irq = platform_get_irq(pdev, 1);
-> +
->         return 0;
->  }
->
-> @@ -572,15 +576,35 @@ static int mtk8250_remove(struct platform_device *pdev)
->  static int __maybe_unused mtk8250_suspend(struct device *dev)
->  {
->         struct mtk8250_data *data = dev_get_drvdata(dev);
-> +       int irq = data->rx_wakeup_irq;
-> +       int err;
->
->         serial8250_suspend_port(data->line);
->
-> +       pinctrl_pm_select_sleep_state(dev);
-> +       if (irq >= 0) {
-> +               err = enable_irq_wake(irq);
-> +               if (err) {
-> +                       dev_err(dev,
-> +                               "failed to enable irq wake on IRQ %d: %d\n",
-> +                               irq, err);
-> +                       pinctrl_pm_select_default_state(dev);
-> +                       serial8250_resume_port(data->line);
-> +                       return err;
-> +               }
-> +       }
-> +
->         return 0;
->  }
->
->  static int __maybe_unused mtk8250_resume(struct device *dev)
->  {
->         struct mtk8250_data *data = dev_get_drvdata(dev);
-> +       int irq = data->rx_wakeup_irq;
-> +
-> +       if (irq >= 0)
-> +               disable_irq_wake(irq);
-> +       pinctrl_pm_select_default_state(dev);
->
->         serial8250_resume_port(data->line);
->
-> --
-> 2.22.0.rc1.257.g3120a18244-goog
->
+"
+I noticed that with v4.8-rc1 serial console of some of our Broxton
+systems does not work properly anymore. I'm able to see output but input
+does not work.
+
+I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+("tty/serial/8250: use mctrl_gpio helpers").
+
+The reason why it fails is that in ACPI we do not have names for GPIOs
+(except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+UART device in Broxton has following (simplified) ACPI description:
+
+    Device (URT4)
+    {
+        ...
+        Name (_CRS, ResourceTemplate () {
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003A
+            }
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003D
+            }
+        })
+
+In this case it finds the first GPIO (0x003A which happens to be RX pin
+for that UART), turns it into GPIO which then breaks input for the UART
+device. This also breaks systems with bluetooth connected to UART (those
+typically have some GPIOs in their _CRS).
+
+Any ideas how to fix this?
+
+We cannot just drop the _CRS index lookup fallback because that would
+break many existing machines out there so maybe we can limit this to
+only DT enabled machines. Or alternatively probe if the property first
+exists before trying to acquire the GPIOs (using
+device_property_present()).
+"
+
+This patch implements the fix suggested by Mika in his statement above.
+
+Signed-off-by: Stefan Roese <sr@denx.de>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Cc: Johan Hovold <johan@kernel.org>
+---
+v4:
+- Add missing free() calls (Johan)
+- Added Mika's reviewed by tag
+- Added Johan to Cc
+
+v3:
+- No change
+
+v2:
+- Include the problem description and analysis from Mika into the commit
+  text, as suggested by Greg.
+
+ drivers/tty/serial/serial_mctrl_gpio.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 39ed56214cd3..6367f389cdfc 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -116,6 +116,16 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+ 
+ 	for (i = 0; i < UART_GPIO_MAX; i++) {
+ 		enum gpiod_flags flags;
++		char *gpio_str;
++
++		/* Check if GPIO property exists and continue if not */
++		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
++				     mctrl_gpios_desc[i].name);
++		if (!device_property_present(dev, gpio_str)) {
++			kfree(gpio_str);
++			continue;
++		}
++		kfree(gpio_str);
+ 
+ 		if (mctrl_gpios_desc[i].dir_out)
+ 			flags = GPIOD_OUT_LOW;
+-- 
+2.21.0
+
