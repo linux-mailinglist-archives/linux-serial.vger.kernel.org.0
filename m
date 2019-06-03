@@ -2,64 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF383325A
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 16:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74713332FA
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 17:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728883AbfFCOmP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Jun 2019 10:42:15 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38289 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728882AbfFCOmP (ORCPT
+        id S1729240AbfFCPAg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Jun 2019 11:00:36 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:34192 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729038AbfFCPAf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Jun 2019 10:42:15 -0400
-Received: by mail-lf1-f67.google.com with SMTP id b11so13824975lfa.5
-        for <linux-serial@vger.kernel.org>; Mon, 03 Jun 2019 07:42:14 -0700 (PDT)
+        Mon, 3 Jun 2019 11:00:35 -0400
+Received: by mail-lj1-f195.google.com with SMTP id j24so16564372ljg.1
+        for <linux-serial@vger.kernel.org>; Mon, 03 Jun 2019 08:00:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:references:date:in-reply-to:message-id
          :user-agent:mime-version:content-transfer-encoding;
-        bh=y9jjv4B5ZEIqBTQG0IWdSaLZKyZ1iTMA3qmY6LYWbAQ=;
-        b=Fc2Gr02OwALs7olgFwXlhg7tn54OfTLP2H9Ni5Y4NhJxrqMi1fGag7TtsVFslt+Q6C
-         wG2G8bGpLMxzs3Ql6RsK0ZGkpbhIZJF/LmWRoUtZrWyQBG4KB3YXhqpFKo/F+KnrCcM5
-         gf+GozDNBkjBfWLaE8d/fj9hsOp2xX0LdbaGmyRLpDBQeNz71KoB8/Dz6W3HyvLFVzAM
-         TFctbLES8sfCzuQ/Gy81IWTYMp1JSeJTU21gJiYZ3G5imjF/cbEJbz2UhXPHBRzS+cbG
-         ko4Q8FiE9beNEJXiRkk1cCQJNRBNBp4yh2EaheAxoWHGLLBJ7ZvFgA0GuQN8u3xWxhBW
-         GCoQ==
+        bh=Z0q56m29JKs/KSc5kZjLD8aOvRo5OnqtBUIzP0WVLuA=;
+        b=GhMUbql6/srHaDxQoep3dj9gs65RWfp0h5ODaftQK5QSssSnZqtZ7Qrf/107svyxNh
+         ryLfxSVOuF2IKPUqo5OjO0PjcrfERmKdi/4stKSI8nPjvzTZG06+tR/UU1yNygMuzVYg
+         uQibPIYPzGH0eDdeEbDAZ3zq9UKs2ubO9dkEkfmqRL884HDE1cxFJYT9daJNbcSsnRWP
+         s3qJdYk/m0Dt7AH4nbyrhMupXGmniK4BUM48TqMlfSk2a01Sb5qDe29wpGVkibfSIAzD
+         viJIgLxkK+R4dKdHmC5rKufatOEc2vwHLLvMYc4zoirmEY0gRRO7le7rPYLFb6JIWO5M
+         CYJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
          :message-id:user-agent:mime-version:content-transfer-encoding;
-        bh=y9jjv4B5ZEIqBTQG0IWdSaLZKyZ1iTMA3qmY6LYWbAQ=;
-        b=AJ1oUe9uJgR3Fd22gkC8Aei02GzxX28jYkrYGDowbJCf/kXNNJadPylx+/m3cmCFc+
-         EceZ1OehOVdgfyN+Alyyen7HkCRONr7LzhNBPEMttTglHtayPK8ihVs8E9MaFu7Seenu
-         O08PysJ0TDcvG77J5oIxMyKMO63s/sQHRdNaHQ3wgxicjtPJps/NNjaIgEFDi9+yUyXK
-         Boaq3kQn/etzkhxLyoli/rAqakwOmkLBNLqU2tIpROLGygJ6fbynUZntI+bcn6R7C8Fk
-         cBui5dOEL8TqyUku91QDvK22rvQOBHmiqDEv+dKmXYRNOQ2ZTfLvgf1Uk7Xusmt4xTZ0
-         ve4g==
-X-Gm-Message-State: APjAAAWxg/U80u6VaZk+q6i/HegajeyYvUJ4stl+RWhMYruyQVi5dVZ5
-        vgiUgCQkfQlQoJJYnKURxtY=
-X-Google-Smtp-Source: APXvYqxi/JBhmWViz9ezy09MgxguonsCMH4MkRsJAwNgJ6ZccsoRkhsj8up9vXTOUiCdRUfx76PP/Q==
-X-Received: by 2002:ac2:569c:: with SMTP id 28mr1085507lfr.147.1559572933367;
-        Mon, 03 Jun 2019 07:42:13 -0700 (PDT)
+        bh=Z0q56m29JKs/KSc5kZjLD8aOvRo5OnqtBUIzP0WVLuA=;
+        b=al1VpRWw11LsBvDiTci4pL3hHZFfY5TEpMhn3hQnI91tskNB6eVjPd8hd9xrnCnSdz
+         5s+vHzYbuNJbMbFp6xbPeWmnCHbuBH5Wt94sLhCjFHFjfRp6gEMfiihM2ZxGeaaatWtN
+         M8rVpL5wKPIY3Blu3xIjvs5HlgCQQUtijigGVcbzvpJ5DKHmDU2Ar9xHH71ARqOP5mTC
+         MANUCuQ7Mgep++Dzj2na6S6OXncG94xIOX2t36MYuIamiNPdwdHl0esYerJhIWFgCZE5
+         9pkwMKGWfZCRQmkh/x8EWkcdvzQOeM6tQg3kw6//Ixd4L7vMebSXQVJOHn7BbCUDNp/y
+         aFAA==
+X-Gm-Message-State: APjAAAV7Sl0GezQCDvet6cDQkhztMp6sElJOrt/k1cHC+KMNUoI5xDdy
+        gRlBLoSQWThoWzm1Bcf9kWjCZm2/UOs=
+X-Google-Smtp-Source: APXvYqyGMVo9LXQvwTblQtU9w9An1tT1pdq3R8W7yI6CwFVnGxMQbten4xyhRLRN45ehPmsXz9e3Kw==
+X-Received: by 2002:a2e:9d07:: with SMTP id t7mr6995203lji.43.1559574033691;
+        Mon, 03 Jun 2019 08:00:33 -0700 (PDT)
 Received: from osv ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id c5sm3201547lfm.7.2019.06.03.07.42.12
+        by smtp.gmail.com with ESMTPSA id r10sm1290983lja.29.2019.06.03.08.00.31
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 07:42:12 -0700 (PDT)
+        Mon, 03 Jun 2019 08:00:32 -0700 (PDT)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 3/8] serial: imx: preserve RTS state over termios change
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Russell King <rmk@arm.linux.org.uk>
+Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl change
 References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-4-sorganov@gmail.com>
-        <20190530210824.rf2aaxumcc3cnc5c@pengutronix.de>
-Date:   Mon, 03 Jun 2019 17:42:11 +0300
-In-Reply-To: <20190530210824.rf2aaxumcc3cnc5c@pengutronix.de> ("Uwe
-        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 30 May 2019 23:08:24
+        <20190530152950.25377-3-sorganov@gmail.com>
+        <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
+Date:   Mon, 03 Jun 2019 18:00:31 +0300
+In-Reply-To: <20190530203931.n6b22ktbzuyg67sd@pengutronix.de> ("Uwe
+        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 30 May 2019 22:39:31
  +0200")
-Message-ID: <87v9xm3f3w.fsf@javad.com>
+Message-ID: <87muiy3e9c.fsf@javad.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -71,73 +73,65 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
 
-> On Thu, May 30, 2019 at 06:29:45PM +0300, Sergey Organov wrote:
->> imx_set_mctrl() cleared RTS on every call
+
+[...]
+
+> Independant of your patch I discussed a problem in imx_uart_set_mctrl()
+> with Sascha and Russell (both added to Cc:) earlier this week. In the
+> current implementation there are actually two problems.
 >
+> Currently imx_uart_set_mctrl does:
 >
->> 
->> Signed-off-by: Sergey Organov <sorganov@gmail.com>
->> ---
->>  drivers/tty/serial/imx.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->> 
->> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
->> index 6577552..13face9 100644
->> --- a/drivers/tty/serial/imx.c
->> +++ b/drivers/tty/serial/imx.c
->> @@ -1648,7 +1648,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
->>  
->>  	/* then, disable everything */
->>  	imx_uart_writel(sport, old_ucr2 & ~(UCR2_TXEN | UCR2_RXEN | UCR2_ATEN), UCR2);
->> -	old_ucr2 &= (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
->>  
->>  	/* custom-baudrate handling */
->>  	div = sport->port.uartclk / (baud * 16);
->> @@ -1686,7 +1685,8 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
->>  
->>  	imx_uart_writel(sport, old_ucr1, UCR1);
->>  
->> -	/* set the parity, stop bits and data size */
->> +	/* Set parity, stop bits, data size, etc. Keep bits we don't compute. */
->> +	old_ucr2 &= (UCR2_CTS | UCR2_TXEN | UCR2_RXEN | UCR2_ATEN);
+> 	if TIOCM_RTS is set:
+> 		let the receiver control the RTS signal
+> 	else:
+> 		set RTS inactive
 >
-> I wonder if that fixes a certain usecase and breaks another.
+> The bigger problem is that if the UART is configured not to use
+> handshaking (CRTSCTS unset) the mode "let the receiver control the RTS
+> signal" should not be used.
 >
-> If I change the baud rate of the UART the sequence I actually want to
-> have is:
+> The smaller (and irrelevant for correctness) problem is that setting
+> UCR2_CTS is a no-op when UCR2_CTSC is also set.
 >
-> 	clear RTS (to not encourage the other side to send data)
-> 	disable receiver
-> 	reconfigure requested settings
-> 	reenable receiver
-> 	(maybe) reactivate RTS to signal being ready again
+> We think the right thing to do is:
 >
-> So I think your approach is too simple.
+> 	ucr2 = imx_uart_readl(sport, UCR2);
+> 	ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+>
+> 	if (mctrl & TIOCM_RTS) {
+> 		if (sport->crtscts)
+> 			/* let the receiver control RTS */
+> 			ucr2 |= UCR2_CTSC;
+> 		else
+> 			/* Force RTS active */
+> 			ucr2 |= UCR2_CTS;
+> 	} else {
+> 		/* Force RTS inactive, i.e. CTS=0, CTSC=0 */
+> 	}
+>
+> 	imx_uart_writel(sport, ucr2, UCR2);
+>
+> but AFAICT this isn't tested yet to an end in the use case that Sascha
+> currently has and so there isn't a complete patch available yet.
 
-This patch in fact should be dropped, but for different reason:
+This looks almost correct, except there is no sport->crtscts. Are you
+going to add it? Other drivers use port->status & UPSTAT_AUTORTS for
+that, and maybe it'd better to follow, except it seems you then need to
+manage UPSTAT_AUTORTS yourself, no help from top-level :-(
 
-It will set back UCR2_CTS that was cleared by imx_uart_rts_active(),
-i.e., it'd break RS485 mode.
+However, I figure that it could rather be calculated right here as:
 
-... provided it's not broken anyway as:
+         !(ucr2 & UCR2_IRTS)
 
-static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
-{
-	*ucr2 &= ~(UCR2_CTSC | UCR2_CTS);
-	sport->port.mctrl |= TIOCM_RTS;
-	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
-}
+as autoCTS is set if and only if autoRTS is also set, and UCR2_IRTS
+otherwise remains static.
 
-Seems to have inverted logic between TIOCM_RTS and UCR2_CTS (once again
-intentional? with no comments?), compared to set_mctrl():
+... and then set_termios() should still be fixed, as it clears UCR2_CTS
+bit on every invocation, but differently from my original patch (see
+separate mail on that patch).
 
-		if (mctrl & TIOCM_RTS)
-			ucr2 |= UCR2_CTS;
-
-Moreover, imx_uart_rts_active() is called from set_termios() before
-
-          spin_lock_irqsave(&sport->port.lock, flags);
-
-is called, yet it changes sport->port.mctrl. A bug?
+I'll try to come-up with new separate patches for this particular issue
+(I mean RTS/CTS handshake handling).
 
 -- Sergey
