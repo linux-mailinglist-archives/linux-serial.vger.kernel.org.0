@@ -2,123 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB7133E86
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 07:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4993434249
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 10:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfFDFoF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 4 Jun 2019 01:44:05 -0400
-Received: from mail-eopbgr80045.outbound.protection.outlook.com ([40.107.8.45]:36866
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726427AbfFDFoF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 4 Jun 2019 01:44:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6bHVQS1E1Gwhwc79P4AKShBjeoI3pfBppXqclmlBL4o=;
- b=IipQZhn6sY0z0WXgIM9UMg7+k3oalTFEFMfagMJylMdHyzi8BJNTxeFQ04EQGu6u45n4MPTDtlZMX9eRd++W3Q6JjWxDGlWpF6yaT/19vIwRLlbnA64G8m8G+riuVXgXCcaSkZLQ03oySs14w43WiSc1z4wozdtdVj52AnFl2v4=
-Received: from VI1PR0402MB3600.eurprd04.prod.outlook.com (52.134.5.23) by
- VI1PR0402MB3821.eurprd04.prod.outlook.com (52.134.16.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.21; Tue, 4 Jun 2019 05:44:02 +0000
-Received: from VI1PR0402MB3600.eurprd04.prod.outlook.com
- ([fe80::4c3e:205:bec9:54ef]) by VI1PR0402MB3600.eurprd04.prod.outlook.com
- ([fe80::4c3e:205:bec9:54ef%4]) with mapi id 15.20.1943.018; Tue, 4 Jun 2019
- 05:44:02 +0000
-From:   Andy Duan <fugang.duan@nxp.com>
-To:     Fabio Estevam <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: RE: [EXT] [PATCH v2 1/2] serial: fsl_lpuart: Use dev_info() instead
- of printk()
-Thread-Topic: [EXT] [PATCH v2 1/2] serial: fsl_lpuart: Use dev_info() instead
- of printk()
-Thread-Index: AQHVGoYMz7ZG+aY7V0Sz/yLg65NOmaaK+4JA
-Date:   Tue, 4 Jun 2019 05:44:02 +0000
-Message-ID: <VI1PR0402MB3600D80B8FFDC144A1FD5759FF150@VI1PR0402MB3600.eurprd04.prod.outlook.com>
-References: <20190604033139.25546-1-festevam@gmail.com>
-In-Reply-To: <20190604033139.25546-1-festevam@gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=fugang.duan@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 87976ad3-a45e-423b-376d-08d6e8afa64f
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3821;
-x-ms-traffictypediagnostic: VI1PR0402MB3821:
-x-microsoft-antispam-prvs: <VI1PR0402MB3821D74FC50AA9EDBE5A6643FF150@VI1PR0402MB3821.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3383;
-x-forefront-prvs: 0058ABBBC7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(376002)(39860400002)(396003)(366004)(346002)(199004)(189003)(186003)(11346002)(486006)(73956011)(476003)(68736007)(6116002)(110136005)(26005)(3846002)(4326008)(7736002)(9686003)(66066001)(2906002)(446003)(66946007)(99286004)(6246003)(6506007)(8936002)(7696005)(8676002)(81156014)(81166006)(102836004)(76176011)(74316002)(5660300002)(256004)(52536014)(6436002)(55016002)(53936002)(14454004)(2501003)(71200400001)(71190400001)(86362001)(76116006)(66556008)(66446008)(305945005)(316002)(25786009)(229853002)(33656002)(66476007)(64756008)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3821;H:VI1PR0402MB3600.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: XsI+/K4jWxJb7YYXYrtdUJen3qRDI17i444nCJWUsAY+pSQrmaH+a6/t0Xk/TF9Sm774gFVdCJBva60PdVHT2IwJ/0A4JhqUtL7PYZWSA/KsESOS/IbzWfzy836QlHnerCTECew6Ee7XSDfydGt5iCyx7FmTDcOPGG2u9QeDOfY76IF9HjeH3YbezLO1viFcWIV+CT7LvsMMYDGVZnFC0hbpiwR8Ov9GyGEL0hHZv0VKo6T8/3hYOlNHucw6CLXNgNnFwGlDLa32URgNB2huyroHrSC3y3TqHM8tEfTTVmJuTzTgP8Vjbd7S3LDUgJ7AFISqI0MFiVDDDe2nQzPfXAjRRaFik3Ek1g9E/RWEhP115z/kLQp5KGM7HRvOEn+blXSTuVvXkDDrpck3psrir7fvzxPqApqJpTblvv4UCuY=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726918AbfFDIzq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 4 Jun 2019 04:55:46 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52684 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726708AbfFDIzp (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 4 Jun 2019 04:55:45 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x548tKLL021280;
+        Tue, 4 Jun 2019 10:55:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=aeRZHet8+3ng2HzHWI6D57uf7dMIn0WG1kjDInB0Y8s=;
+ b=wiKlCJWMv8lNPSmBz84bvLgrRRzwH7Tdnn57y/e+lH3rwW6YNBFk715p8vQlrG0EeHAj
+ P9hJBWBssMTTmBjE7FS8g58EUH4icp+Z5fzOZD3IU4CMNjqInVPxOxp8tWA9P/IpoLyT
+ 1yxYYI211XVh1IvWTEAhfAOv2ofLBPYfw+S0h03B/93sDS0ecOW0KAWl9hu9pnddQ/1Y
+ fUcuMqIe7LitRBXZ836EwKcWGUnoVesQm0SPZPn9rJRV+SJVWiHu75dcERTR6Vfh/v3z
+ g6NshufKOarSyR0AszxMPlGgJNcZeChWbEZUQK4xXxQIXmQYtsAzRnwaDcueef4o9Cn5 yA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2sundryngq-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Tue, 04 Jun 2019 10:55:28 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 34DFA163;
+        Tue,  4 Jun 2019 08:55:24 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas23.st.com [10.75.90.46])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 066B92507;
+        Tue,  4 Jun 2019 08:55:24 +0000 (GMT)
+Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by SAFEX1HUBCAS23.st.com
+ (10.75.90.46) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 4 Jun 2019
+ 10:55:23 +0200
+Received: from localhost (10.201.23.31) by Webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 4 Jun 2019 10:55:23
+ +0200
+From:   Erwan Le Ray <erwan.leray@st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Alexandre Torgue" <alexandre.torgue@st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Erwan Le Ray <erwan.leray@st.com>,
+        "Fabrice Gasnier" <fabrice.gasnier@st.com>
+Subject: [PATCH 00/10] STM32 usart power improvements
+Date:   Tue, 4 Jun 2019 10:55:09 +0200
+Message-ID: <1559638519-6128-1-git-send-email-erwan.leray@st.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87976ad3-a45e-423b-376d-08d6e8afa64f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2019 05:44:02.5484
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fugang.duan@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3821
+Content-Type: text/plain
+X-Originating-IP: [10.201.23.31]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-04_07:,,
+ signatures=0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com> Sent: Tuesday, June 4, 2019 11:32 =
-AM
-> dev_info() is more appropriate for printing messages inside drivers, so s=
-witch
-> to dev_info().
->=20
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+This series delivers power improvements for stm32-usart driver.
 
-Reviewed-by: Fugang Duan <fugang.duan@nxp.com>
-> ---
-> Changes since v1:
-> - None
->=20
->  drivers/tty/serial/fsl_lpuart.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpu=
-art.c index
-> ea1c85e3b432..08b52cca650c 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -2078,7 +2078,7 @@ lpuart_console_get_options(struct lpuart_port
-> *sport, int *baud,
->         baud_raw =3D uartclk / (16 * (sbr + brfa / 32));
->=20
->         if (*baud !=3D baud_raw)
-> -               printk(KERN_INFO "Serial: Console lpuart rounded baud
-> rate"
-> +               dev_info(sport->port.dev, "Serial: Console lpuart rounded
-> baud rate"
->                                 "from %d to %d\n", baud_raw,
-> *baud);  }
->=20
-> @@ -2121,7 +2121,7 @@ lpuart32_console_get_options(struct lpuart_port
-> *sport, int *baud,
->         baud_raw =3D uartclk / (16 * sbr);
->=20
->         if (*baud !=3D baud_raw)
-> -               printk(KERN_INFO "Serial: Console lpuart rounded baud
-> rate"
-> +               dev_info(sport->port.dev, "Serial: Console lpuart rounded
-> baud rate"
->                                 "from %d to %d\n", baud_raw,
-> *baud);  }
->=20
-> --
-> 2.17.1
+Bich Hemon (4):
+  dt-bindings: serial: add optional pinctrl states
+  serial: stm32: select pinctrl state in each suspend/resume function
+  ARM: dts: stm32: Update pin states for uart4 on stm32mp157c-ed1
+  ARM: dts: stm32: Update UART4 pin states on stm32mp157a-dk1
+
+Erwan Le Ray (6):
+  dt-bindings: serial: stm32: add wakeup option
+  serial: stm32: add pm_runtime support
+  serial: stm32: Use __maybe_unused instead of #if CONFIG_PM_SLEEP
+  serial: stm32: add support for no_console_suspend
+  ARM: dts: stm32: update uart4 pin configurations for low power
+  ARM: dts: stm32: add wakeup capability on each usart/uart on
+    stm32mp157c
+
+ .../devicetree/bindings/serial/st,stm32-usart.txt  | 19 ++++-
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi          | 17 +++++
+ arch/arm/boot/dts/stm32mp157a-dk1.dts              |  5 +-
+ arch/arm/boot/dts/stm32mp157c-ed1.dts              |  5 +-
+ arch/arm/boot/dts/stm32mp157c.dtsi                 | 40 ++++++++--
+ drivers/tty/serial/stm32-usart.c                   | 88 ++++++++++++++++++++--
+ drivers/tty/serial/stm32-usart.h                   |  1 +
+ 7 files changed, 155 insertions(+), 20 deletions(-)
+
+-- 
+1.9.1
 
