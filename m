@@ -2,98 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6295333C1
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Jun 2019 17:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D8133D84
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 05:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbfFCPkt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Jun 2019 11:40:49 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:52282 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727343AbfFCPks (ORCPT
+        id S1726076AbfFDD1n (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Jun 2019 23:27:43 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:43057 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfFDD1n (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Jun 2019 11:40:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=YSNg+78IfBsInyz5teLIuGp2liUpOszxWOcCrlIMeYc=; b=wXXQpOx9TdKU4jLk6LqOM+oBe
-        DT9H7wTM2KTN67UG1fctXmYzOi2B88a8qZBNwtC7MhyDfHQL8uxPvwdrRoHjsy8PSxVGxiFZqrrNc
-        pijTphCaoUFJUC+xl9h7qFjEtzPppIIQDaacx1l2N0iijk+DEdp7vbLTdY+gxjGuKwBoHCvFf2czp
-        BN9pXTxHSfQvxu/PZBdnTy6G1tl5y//W7HYwLaANBOB1jl1BHDArUudx5cy2LQKg2hBaWpIkKjOXi
-        0sQZufA6eDd+n8eacaIhR+jXyrLcKkynGCPUHSffoRzinSRvhuM01FjzhVYciUlC1HGnIXte3R+0u
-        7j2nh19fA==;
-Received: from shell.armlinux.org.uk ([2002:4e20:1eda:1:5054:ff:fe00:4ec]:38472)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1hXp4m-0003nF-Pl; Mon, 03 Jun 2019 16:40:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hXp4k-0000jB-0t; Mon, 03 Jun 2019 16:40:42 +0100
-Date:   Mon, 3 Jun 2019 16:40:41 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH 2/8] serial: imx: fix breaking RTS/CTS handshake by mctrl
- change
-Message-ID: <20190603154041.disl65ibr5zasqor@shell.armlinux.org.uk>
-References: <20190530152950.25377-1-sorganov@gmail.com>
- <20190530152950.25377-3-sorganov@gmail.com>
- <20190530203931.n6b22ktbzuyg67sd@pengutronix.de>
- <87woi7ur1g.fsf@javad.com>
- <20190531062809.nacg54russc3wvcz@pengutronix.de>
- <20190531135438.bqrpek6niddnrqmo@shell.armlinux.org.uk>
- <87r28ea2qa.fsf@javad.com>
- <20190601161256.4zuhqzrdskjdymu5@pengutronix.de>
- <20190601193436.irs6sdknz755uyem@shell.armlinux.org.uk>
- <875zpm7ty1.fsf@javad.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875zpm7ty1.fsf@javad.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        Mon, 3 Jun 2019 23:27:43 -0400
+Received: by mail-qk1-f195.google.com with SMTP id m14so1914626qka.10
+        for <linux-serial@vger.kernel.org>; Mon, 03 Jun 2019 20:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=yBWyicZE1NcqvS/4F8eB32+kjIBGm128H4hPZZ0ocmM=;
+        b=cHkYiWEw6TF3CMbMKjHOfWCZNbX0Tiklmgvs/3d/lRsNM1FcMN5hw5kyhE8iturcTU
+         haDrNcq7BUdckmBu0JaYMSUHFJR/JmftWYrcfUB0i263U+r4YL7OubRrWaoSys4ZuiSw
+         TZkno5OYunOqUDCblas9uybxPe7KKF36yhqXtqeyUvH8OLJ2Z3s3NyypfpZmx+cD7vuM
+         4Zh9Cie4NRRLRwSifCBG81+3KiBnqz5peMW8xVYjibYD8zecOQ10G4UcfOeipkgZ3oaY
+         z/YuOOBlqY5gul49j8eDO7HqZeqyikfcwKy06sD3aASnwTL/g2R83AZ0cSJnkGrzwpOi
+         XXoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yBWyicZE1NcqvS/4F8eB32+kjIBGm128H4hPZZ0ocmM=;
+        b=RHMB6ko3BkdLRVGpouUNkOquBb7Z6IAGwtDMZvdYFCmvg/DKj4TN9PkT8xi4LknTVs
+         1Tcmn1ffvGxGDMaUaGvxdTW+tVYLH07r1fQLr4iltwQQ8ZLSl2W9mYP2CnKEMrAQ9fIX
+         yONtjf5U9jECXvvRYj1xaXf4uPfPVkVrxSTJpiPchw+IgLtIzbYBjQTP9HTYyjK9Kwwi
+         5P3c5wDnRWxic5QmzmYkCQPQGVhxk+jc5uNG4XM1G0deMnumOnQZy/NcEpoRSBhIdWQv
+         d4D0oi8OCcxPJGQ5zI+RsoSkigurDKO6t1lJK5VQoabMaF1yyxc6J/KLmC18N4OnzOFf
+         uV9g==
+X-Gm-Message-State: APjAAAVq3iL3bzocP2KCWNhVoTrqPnrOPNb4jjvC9KA5hFZIc+SKBzYh
+        n8M5Lam1HOrxrzmzg2GeAKw=
+X-Google-Smtp-Source: APXvYqwflnXaVhrlj3Kmjb6HBnlUrmJ/CwdVB74HxHXDqtRSQ4TZj7Yycbgj8SP9Hqn2WQJZB6N3Jw==
+X-Received: by 2002:a37:e506:: with SMTP id e6mr24619714qkg.229.1559618862205;
+        Mon, 03 Jun 2019 20:27:42 -0700 (PDT)
+Received: from fabio-Latitude-E5450.am.freescale.net ([2804:14c:482:3c8:56cb:1049:60d2:137b])
+        by smtp.gmail.com with ESMTPSA id a16sm5213873qtj.9.2019.06.03.20.27.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 20:27:41 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     fugang.duan@nxp.com, linux-serial@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH 1/2] serial: fsl_lpuart: Use dev_info() instead of printk()
+Date:   Tue,  4 Jun 2019 00:27:26 -0300
+Message-Id: <20190604032727.24688-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 03:08:06PM +0300, Sergey Organov wrote:
-> Russell King - ARM Linux admin <linux@armlinux.org.uk> writes:
-> 
-> [...]
-> 
-> > If we want the kernel to stop reading the FIFO, we would have to add
-> > additional complexity to a lot of serial drivers, and a capability
-> > which tells the kernel that they support this behaviour - why do we
-> > want individual drivers to have to implement this?
-> 
-> How does it work when no handshake is configured? Drivers continue to
-> read FIFOs/TxDs and drop data when software buffers are full, spending
-> CPU cycles on nothing?
+dev_info() is more appropriate for printing messages inside drivers, so
+switch to dev_info().
 
-I assume what you mean by "no handshake" is "no flow control", then
-yes, the CPU continues to read the FIFO and drops the received
-characters on the floor.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/tty/serial/fsl_lpuart.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-When no flow control is configured, it means there is no way to signal
-to the remote end that there is congestion at the receiving end, and
-if there is no buffer space available, where would you expect the
-received characters to be stored?
-
-If the CPU were to stop reading the FIFO, the result would be that the
-FIFO fills, and then any further characters received get discarded by
-the hardware (instead of the CPU) and the hardware marks an overrun
-error.
-
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index ea1c85e3b432..08b52cca650c 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -2078,7 +2078,7 @@ lpuart_console_get_options(struct lpuart_port *sport, int *baud,
+ 	baud_raw = uartclk / (16 * (sbr + brfa / 32));
+ 
+ 	if (*baud != baud_raw)
+-		printk(KERN_INFO "Serial: Console lpuart rounded baud rate"
++		dev_info(sport->port.dev, "Serial: Console lpuart rounded baud rate"
+ 				"from %d to %d\n", baud_raw, *baud);
+ }
+ 
+@@ -2121,7 +2121,7 @@ lpuart32_console_get_options(struct lpuart_port *sport, int *baud,
+ 	baud_raw = uartclk / (16 * sbr);
+ 
+ 	if (*baud != baud_raw)
+-		printk(KERN_INFO "Serial: Console lpuart rounded baud rate"
++		dev_info(sport->port.dev, "Serial: Console lpuart rounded baud rate"
+ 				"from %d to %d\n", baud_raw, *baud);
+ }
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+2.17.1
+
