@@ -2,112 +2,133 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB2A34616
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 14:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A1B34933
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 15:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727374AbfFDMBP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 4 Jun 2019 08:01:15 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39525 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727250AbfFDMBP (ORCPT
+        id S1727340AbfFDNmd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 4 Jun 2019 09:42:33 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:35838 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727129AbfFDNmd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 4 Jun 2019 08:01:15 -0400
-Received: by mail-lf1-f67.google.com with SMTP id p24so9774660lfo.6
-        for <linux-serial@vger.kernel.org>; Tue, 04 Jun 2019 05:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=LZXmKmxHB28e5H6Cj2fVa7Dg7+npkYBZtnBQA5MXwXA=;
-        b=YdeEKRwyOrj403/tRxpNu9Lnjqqz5T6QwKrIZKc45x/v5R9uffkkWGflfYlou4dPRT
-         5KF/Aa3Y0lwUScq8MNSz2gLgFkIXuhsLP96UyUYhHTxAy+so/aYr4eNPPaW6OT7oahu2
-         eZx1bCzrn2B3y8JYip6Y2SGoWiLq0ZtQD9KjWz/s2U5ij8XArcsN/LJKL8yOIz9+334S
-         ivtpqw43a3wtHiM6qsmUyC/ANnFyZZtZfIwcc+Krn4lPvtO/eSqD/vWOtbZlcnnq2m5R
-         nKaw6ZFfmi+P+Op2Sp0X1a8hdtBtuATFKTzBDXxDIM8eZDKpj+Abf0ojGGAgtok0HDax
-         7Gog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version:content-transfer-encoding;
-        bh=LZXmKmxHB28e5H6Cj2fVa7Dg7+npkYBZtnBQA5MXwXA=;
-        b=Tw9ZVmzEWyERlkwz4Nddc0/qMSivOnpbQz68NNYpGzkfOaxLfskutMrXGBlPkpvtYy
-         JMPJg/HtqhZfnyB8R+Twgx7Dw8yBSeEul5zkX3hdhMGeuqiUkip1ILXhlOwCa4OXJHiu
-         bV/9Dmvn/9xPpkBq3UHJQvKQUVltqpdvc/OV1O958wVfqMN4jYHf5D+GdsQX6t8gvj3X
-         3gRuB28wg5rQsb2n28L1XKG0nGQcKzdo9d2MuElxHiWqaX9CQvbeAD062Q83EI0pA8aB
-         AHdQ5tWt5Zq+l9uPX0HqTJK30VHBdIvW+lkrKwCpZlUd8XguI8XhOmSC1WlyWvicajYp
-         O/Tw==
-X-Gm-Message-State: APjAAAXodh/04gtwlz3MYgaP88F7Zdl55uPKxy9RlYUZnsiUuqkZFhFE
-        VUmqQDclYQYezGD+3K8JRJw=
-X-Google-Smtp-Source: APXvYqzIu0pdlCbOTMwbjSYKvosqHdRl5OIH5b2uWY1L1AgEEAY6ltmfUeqGX5akEgSCXTVJIQIJ6A==
-X-Received: by 2002:a19:9545:: with SMTP id x66mr15725329lfd.94.1559649673531;
-        Tue, 04 Jun 2019 05:01:13 -0700 (PDT)
-Received: from osv ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id l25sm2204774lfh.49.2019.06.04.05.01.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 05:01:12 -0700 (PDT)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 4/8] serial: imx: get rid of unbounded busy-waiting loop
-References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-5-sorganov@gmail.com>
-        <20190530210059.xt7qlyk57cf3zaux@pengutronix.de>
-        <87imtrup3z.fsf@javad.com>
-        <20190531064248.qh4tecbv6ejvroyw@pengutronix.de>
-        <87k1e6bnxi.fsf@javad.com>
-        <20190531164848.jnxib6ju7bdudfyx@pengutronix.de>
-        <20190531173734.umxt3kifjel5w4yi@shell.armlinux.org.uk>
-Date:   Tue, 04 Jun 2019 15:01:11 +0300
-In-Reply-To: <20190531173734.umxt3kifjel5w4yi@shell.armlinux.org.uk> (Russell
-        King's message of "Fri, 31 May 2019 18:37:34 +0100")
-Message-ID: <87pnnty2yg.fsf@javad.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+        Tue, 4 Jun 2019 09:42:33 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x54DfteG014985;
+        Tue, 4 Jun 2019 15:41:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=M1ARtYLXli88iDKYpkMnq7TdIq5neeJeurB8IVq3Y8M=;
+ b=b9g0hMiciQtFL5y2yOY571VXhnDx2lIN/CI7j+1MLpKo1hrGXeSH497fap8dykQRQigX
+ 5zC0ptZgKu3QpKYo/dSuF/bywTIktJ0N1OQK6gPHDE+Q4fGPxm/oglW40BWHia+02+Yf
+ dJE6nj4/ah802DrCqnbpweoyHTZpFes4l6OGcXBVtO/K86WFtANxHqVvRnyWV1KkCRnp
+ 3tYasdyHASH/fqtLBw6FH6A9TM0z75LgXQcdIytLXF75wWfGpY4rdDhXcyS6Fam9BFS0
+ dpCJjP+1epNmXoLPgp6uCfpf1GEZczW4Z5oDWXEJBAkehXQa8+wiY6i3wlnC/kW6A3Xe YA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2sunds15t3-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Tue, 04 Jun 2019 15:41:56 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6908F70;
+        Tue,  4 Jun 2019 13:41:47 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 36F7D2AEA;
+        Tue,  4 Jun 2019 13:41:47 +0000 (GMT)
+Received: from SFHDAG3NODE1.st.com (10.75.127.7) by SFHDAG3NODE3.st.com
+ (10.75.127.9) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 4 Jun
+ 2019 15:41:47 +0200
+Received: from SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86]) by
+ SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86%20]) with mapi id
+ 15.00.1347.000; Tue, 4 Jun 2019 15:41:46 +0200
+From:   Erwan LE RAY <erwan.leray@st.com>
+To:     Borut Seljak <borut.seljak@t-2.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "\"; linux-arm-kernel\"@lists.infradead.org" 
+        <"; linux-arm-kernel"@lists.infradead.org>
+Subject: Re: Fwd: [PATCH] serial: stm32: fix a recursive locking in
+ stm32_config_rs485
+Thread-Topic: Fwd: [PATCH] serial: stm32: fix a recursive locking in
+ stm32_config_rs485
+Thread-Index: AQHVGr0egfGBr+I5bUuvhxEmcTN9eaaLX30A
+Date:   Tue, 4 Jun 2019 13:41:46 +0000
+Message-ID: <41dddd5f-5c1c-3346-890a-8018f26ebd49@st.com>
+References: <20190604095452.6360-1-borut.seljak@t-2.net>
+ <f2a264ac-e334-63b7-18c9-e45cde7bdf95@st.com>
+In-Reply-To: <f2a264ac-e334-63b7-18c9-e45cde7bdf95@st.com>
+Accept-Language: en-US, fr-FR
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.46]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <524BAF3F71F59E4E93DCC9EEEDA70D24@st.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-04_09:,,
+ signatures=0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Russell King - ARM Linux admin <linux@armlinux.org.uk> writes:
+Hi Borut,
 
-> On Fri, May 31, 2019 at 06:48:48PM +0200, Uwe Kleine-König wrote:
->> On Fri, May 31, 2019 at 07:15:21PM +0300, Sergey Organov wrote:
->> > Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
->> > > The first (and only) driver I checked does. (sa1100.c)
->> > 
->> > I think I'd rather take 8250 as reference implementation, as being most
->> > widely used. Can anybody please tell how 8250 code handles this? Does it
->> > attempt to drain Tx FIFO on termios changes?
->> 
->> Well, there are so many 8250 variants that the driver is rather
->> complicated. Also the original 8250 doesn't have a FIFO at all.
->> 
->> Given that it might not be so easy to judge if a given driver drains the
->> FIFO and transmitter without consulting the reference manual I'd rather
->> rely on an authority for the serial core. (Apart from that I bet we're
->> finding examples for both variants.)
->> 
->> @gregkh, rmk: What do you think?
+Please add the following line in the commit message (before your=20
+sign-off) in a V2 of your patch:
+
+fixes: 1bcda09d291081 ("serial: stm32: add support for RS485 hardware=20
+control mode")
+
+I'm OK with the patch itself.
+
+Erwan.
+
+
+Subject: [PATCH] serial: stm32: fix a recursive locking in
+> stm32_config_rs485
+> Date: Tue,  4 Jun 2019 11:54:51 +0200
+> From: Borut Seljak <borut.seljak@t-2.net>
+> CC: Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+> <alexandre.torgue@st.com>, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+> borut.seljak@t-2.net, linux-serial@vger.kernel.org, Jiri Slaby
+> <jslaby@suse.com>, linux-stm32@st-md-mailman.stormreply.com,
+> linux-arm-kernel@lists.infradead.org
 >
-> Let me also clarify something above.  Yes, sa1100.c is good to use as
-> a reference driver - it was carefully converted to serial_core by me
-> along with 8250, and I made sure the semantics in the driver were
-> correct for what the hardware supports.
+> Remove spin_lock_irqsave in stm32_config_rs485, it cause recursive lockin=
+g.
+> Already locked in uart_set_rs485_config.
 >
-> The key thing is "what the hardware supports" though - the serial
-> block has no hardware flow control signals, and it is expected that
-> GPIOs or other arrangements would be made where such signals were
-> necessary:
-
-What driver(s) do you recommend as a good reference implementation that
-manages decent hardware featuring FIFO and automatic RTS/CTS control?
-DMA?
-
--- Sergey
+> Signed-off-by: Borut Seljak <borut.seljak@t-2.net>
+> ---
+>   drivers/tty/serial/stm32-usart.c | 2 --
+>   1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/tty/serial/stm32-usart.c
+> b/drivers/tty/serial/stm32-usart.c
+> index e8d7a7bb4339..da373a465f51 100644
+> --- a/drivers/tty/serial/stm32-usart.c
+> +++ b/drivers/tty/serial/stm32-usart.c
+> @@ -107,7 +107,6 @@ static int stm32_config_rs485(struct uart_port *port,
+>   	bool over8;
+>   	unsigned long flags;
+>   -	spin_lock_irqsave(&port->lock, flags);
+>   	stm32_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+>    	port->rs485 =3D *rs485conf;
+> @@ -147,7 +146,6 @@ static int stm32_config_rs485(struct uart_port *port,
+>   	}
+>    	stm32_set_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+> -	spin_unlock_irqrestore(&port->lock, flags);
+>    	return 0;
+>   }=
