@@ -2,98 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D14EA34534
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 13:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB2A34616
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 14:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727323AbfFDLQM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 4 Jun 2019 07:16:12 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:38040 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727217AbfFDLQM (ORCPT
+        id S1727374AbfFDMBP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 4 Jun 2019 08:01:15 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39525 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727250AbfFDMBP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 4 Jun 2019 07:16:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=wnIWM1sutZPHP5l1xG0B5EZ8RdjswMiBjWZmLmapwzs=; b=g645oWxA7WoMXJOZWqq4PNrSj
-        LqQ/7oxcWul9/UOJpiqiWEft+ac5lyzwr6P9aB/WVKj74xvOLUE8Nx/H4ZfT5LC8Zre2y2bLYq2c5
-        3CIKHQDFRUe1nJISyS3+XgO7/bykhCUsQz4GXOLVoAK4bRJ7UCbTzbarpMnqsGkXuPJbYq6yTtLzS
-        K551QN5CGADIpxcju76NnsVaAFaNIidN3zPKhMAaJpn2CPRhO20sQISl++Gw8iKPdw5q/eRRqnNBb
-        Cdsdvh0zf5LjTa0TG8RQoLbDERwBKQedazTEA99h3e6JgV3OSOyA3uSXNHgL/HS+x8oS7jGSQBoDI
-        iqcRjub/A==;
-Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:56180)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1hY7QG-0000na-CG; Tue, 04 Jun 2019 12:16:08 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hY7QD-0001St-IE; Tue, 04 Jun 2019 12:16:05 +0100
-Date:   Tue, 4 Jun 2019 12:16:05 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v2] serial: sa1100: add note about modem control signals
-Message-ID: <20190604111605.thwhicndrqmy7rlx@shell.armlinux.org.uk>
-References: <20190531155700.crrawgf3iot2sm2t@shell.armlinux.org.uk>
- <E1hWjyQ-0008Ni-8V@rmk-PC.armlinux.org.uk>
- <20190531212702.cmqbaqwdybgkb3ug@pengutronix.de>
+        Tue, 4 Jun 2019 08:01:15 -0400
+Received: by mail-lf1-f67.google.com with SMTP id p24so9774660lfo.6
+        for <linux-serial@vger.kernel.org>; Tue, 04 Jun 2019 05:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=LZXmKmxHB28e5H6Cj2fVa7Dg7+npkYBZtnBQA5MXwXA=;
+        b=YdeEKRwyOrj403/tRxpNu9Lnjqqz5T6QwKrIZKc45x/v5R9uffkkWGflfYlou4dPRT
+         5KF/Aa3Y0lwUScq8MNSz2gLgFkIXuhsLP96UyUYhHTxAy+so/aYr4eNPPaW6OT7oahu2
+         eZx1bCzrn2B3y8JYip6Y2SGoWiLq0ZtQD9KjWz/s2U5ij8XArcsN/LJKL8yOIz9+334S
+         ivtpqw43a3wtHiM6qsmUyC/ANnFyZZtZfIwcc+Krn4lPvtO/eSqD/vWOtbZlcnnq2m5R
+         nKaw6ZFfmi+P+Op2Sp0X1a8hdtBtuATFKTzBDXxDIM8eZDKpj+Abf0ojGGAgtok0HDax
+         7Gog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=LZXmKmxHB28e5H6Cj2fVa7Dg7+npkYBZtnBQA5MXwXA=;
+        b=Tw9ZVmzEWyERlkwz4Nddc0/qMSivOnpbQz68NNYpGzkfOaxLfskutMrXGBlPkpvtYy
+         JMPJg/HtqhZfnyB8R+Twgx7Dw8yBSeEul5zkX3hdhMGeuqiUkip1ILXhlOwCa4OXJHiu
+         bV/9Dmvn/9xPpkBq3UHJQvKQUVltqpdvc/OV1O958wVfqMN4jYHf5D+GdsQX6t8gvj3X
+         3gRuB28wg5rQsb2n28L1XKG0nGQcKzdo9d2MuElxHiWqaX9CQvbeAD062Q83EI0pA8aB
+         AHdQ5tWt5Zq+l9uPX0HqTJK30VHBdIvW+lkrKwCpZlUd8XguI8XhOmSC1WlyWvicajYp
+         O/Tw==
+X-Gm-Message-State: APjAAAXodh/04gtwlz3MYgaP88F7Zdl55uPKxy9RlYUZnsiUuqkZFhFE
+        VUmqQDclYQYezGD+3K8JRJw=
+X-Google-Smtp-Source: APXvYqzIu0pdlCbOTMwbjSYKvosqHdRl5OIH5b2uWY1L1AgEEAY6ltmfUeqGX5akEgSCXTVJIQIJ6A==
+X-Received: by 2002:a19:9545:: with SMTP id x66mr15725329lfd.94.1559649673531;
+        Tue, 04 Jun 2019 05:01:13 -0700 (PDT)
+Received: from osv ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id l25sm2204774lfh.49.2019.06.04.05.01.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Jun 2019 05:01:12 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 4/8] serial: imx: get rid of unbounded busy-waiting loop
+References: <20190530152950.25377-1-sorganov@gmail.com>
+        <20190530152950.25377-5-sorganov@gmail.com>
+        <20190530210059.xt7qlyk57cf3zaux@pengutronix.de>
+        <87imtrup3z.fsf@javad.com>
+        <20190531064248.qh4tecbv6ejvroyw@pengutronix.de>
+        <87k1e6bnxi.fsf@javad.com>
+        <20190531164848.jnxib6ju7bdudfyx@pengutronix.de>
+        <20190531173734.umxt3kifjel5w4yi@shell.armlinux.org.uk>
+Date:   Tue, 04 Jun 2019 15:01:11 +0300
+In-Reply-To: <20190531173734.umxt3kifjel5w4yi@shell.armlinux.org.uk> (Russell
+        King's message of "Fri, 31 May 2019 18:37:34 +0100")
+Message-ID: <87pnnty2yg.fsf@javad.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190531212702.cmqbaqwdybgkb3ug@pengutronix.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, May 31, 2019 at 11:27:02PM +0200, Uwe Kleine-König wrote:
-> Hello Russell,
-> 
-> On Fri, May 31, 2019 at 05:01:42PM +0100, Russell King wrote:
-> > As suggested by Uwe, add a note indicating that the modem control
-> > signals do not support interrupts, which precludes the driver from
-> > using mctrl_gpio_init().
-> > 
-> > Suggested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/tty/serial/sa1100.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
-> > index 97bdfeccbea9..8e618129e65c 100644
-> > --- a/drivers/tty/serial/sa1100.c
-> > +++ b/drivers/tty/serial/sa1100.c
-> > @@ -860,6 +860,10 @@ static int sa1100_serial_resume(struct platform_device *dev)
-> >  static int sa1100_serial_add_one_port(struct sa1100_port *sport, struct platform_device *dev)
-> >  {
-> >  	sport->port.dev = &dev->dev;
-> > +
-> > +	// mctrl_gpio_init() requires that the GPIO driver supports interrupts,
-> > +	// but we need to support GPIO drivers for hardware that has no such
-> > +	// interrupts.  Use mctrl_gpio_init_noauto() instead.
-> 
-> I hope it's not an impostor who claimed to be Linus to spread deviance
-> from K&R :-)
-> 
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> If you want to, squash this in the commit that introduced
-> mctrl_gpio_init_noauto while keeping my Ack on the resulting patch.
+Russell King - ARM Linux admin <linux@armlinux.org.uk> writes:
 
-I'd prefer to keep it separate to avoid invalidating the acks that I
-already have on the first patch.
+> On Fri, May 31, 2019 at 06:48:48PM +0200, Uwe Kleine-KÃ¶nig wrote:
+>> On Fri, May 31, 2019 at 07:15:21PM +0300, Sergey Organov wrote:
+>> > Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
+>> > > The first (and only) driver I checked does. (sa1100.c)
+>> > 
+>> > I think I'd rather take 8250 as reference implementation, as being most
+>> > widely used. Can anybody please tell how 8250 code handles this? Does it
+>> > attempt to drain Tx FIFO on termios changes?
+>> 
+>> Well, there are so many 8250 variants that the driver is rather
+>> complicated. Also the original 8250 doesn't have a FIFO at all.
+>> 
+>> Given that it might not be so easy to judge if a given driver drains the
+>> FIFO and transmitter without consulting the reference manual I'd rather
+>> rely on an authority for the serial core. (Apart from that I bet we're
+>> finding examples for both variants.)
+>> 
+>> @gregkh, rmk: What do you think?
+>
+> Let me also clarify something above.  Yes, sa1100.c is good to use as
+> a reference driver - it was carefully converted to serial_core by me
+> along with 8250, and I made sure the semantics in the driver were
+> correct for what the hardware supports.
+>
+> The key thing is "what the hardware supports" though - the serial
+> block has no hardware flow control signals, and it is expected that
+> GPIOs or other arrangements would be made where such signals were
+> necessary:
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+What driver(s) do you recommend as a good reference implementation that
+manages decent hardware featuring FIFO and automatic RTS/CTS control?
+DMA?
+
+-- Sergey
