@@ -2,184 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1D6342D5
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 11:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B758E343A6
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 12:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbfFDJMo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 4 Jun 2019 05:12:44 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:12822 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727100AbfFDJMn (ORCPT
+        id S1727038AbfFDKCM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 4 Jun 2019 06:02:12 -0400
+Received: from smtp-good-out-2.t-2.net ([84.255.208.44]:32868 "EHLO
+        smtp-good-out-2.t-2.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727083AbfFDKCM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 4 Jun 2019 05:12:43 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5498qNr019707;
-        Tue, 4 Jun 2019 11:12:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=Bc+KS/X3joAnx5lC8TCpo/aZhNkGuBuIX5CpxV56wqo=;
- b=pvZ1Zq03DxTWhc2UPp72ygSR9h6LwOSwwEsNykmCOFX2qtw2gKpD+uZn/g/7zwXdjqeI
- UgLnopAc7hEY9jP7gJnPxtYH5aJf9vzeTQsJQ0/dqJTLIweUrnFUxGo+kCzCMhu7yM3d
- /EEGrAjhHXYrcorNr92Mews7GGoSoAYQWFXTPod6hq/BqRhizWL+V5KS/kdq0vG1eqLM
- sJCR1YfmKfWgK6+I0rjk9vvsMdUDykVz2DByAjWzoq7cv5MMR5IGJcnWo2SOgVrnEKH5
- cUBmqZkL0XG38xYtbLkvbHoRNQeVfjZc99QzGr7B3cU+Jjbo1EL9nE601ktlc2BcZFIL Vg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2sunmefkt8-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 04 Jun 2019 11:12:21 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9CBCB1C9;
-        Tue,  4 Jun 2019 08:55:46 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6D6DD2503;
-        Tue,  4 Jun 2019 08:55:46 +0000 (GMT)
-Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by Safex1hubcas24.st.com
- (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 4 Jun 2019
- 10:55:46 +0200
-Received: from localhost (10.201.23.31) by Webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 4 Jun 2019 10:55:45
- +0200
-From:   Erwan Le Ray <erwan.leray@st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 4 Jun 2019 06:02:12 -0400
+X-Greylist: delayed 323 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jun 2019 06:02:11 EDT
+Received: from smtp-2.t-2.si (smtp-2.t-2.si [IPv6:2a01:260:1:4::1f])
+        by smtp-good-out-2.t-2.net (Postfix) with ESMTP id 45J6lM093jzZC2;
+        Tue,  4 Jun 2019 11:56:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-2.net;
+        s=smtp-out-2; t=1559642207;
+        bh=jugmZr/W92kCdoEqAM0kfct8ubp8M0N+NIqvhkjT2+c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=g0qgbT2ZCZkQWCpE/mUidKZ7dSfUschbC9105fgaW7tpRW7j2/sLpDUVxZc9kgHPa
+         f6XFF+SNFAfkwE83yHls7G3drTG8WYpu1oWZQgpnmyAlJkPIYPnoy2QgKXeLg+hD97
+         vp0QLmoelHDVlHCuW4RIl8HsNX1T2IklmOc3yhqs=
+Received: from localhost (localhost [127.0.0.1])
+        by smtp-2.t-2.si (Postfix) with ESMTP id 45J6lL70LQzMs4PY;
+        Tue,  4 Jun 2019 11:56:46 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at t-2.si
+Received: from smtp-2.t-2.si ([127.0.0.1])
+        by localhost (smtp-2.t-2.si [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1ViU4qouKY2p; Tue,  4 Jun 2019 11:56:46 +0200 (CEST)
+Received: from localhost.localdomain (unknown [89.212.35.59])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: borut_seljak@t-2.net)
+        by smtp-2.t-2.si (Postfix) with ESMTPSA;
+        Tue,  4 Jun 2019 11:56:20 +0200 (CEST)
+From:   Borut Seljak <borut.seljak@t-2.net>
+Cc:     borut.seljak@t-2.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Alexandre Torgue" <alexandre.torgue@st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Erwan Le Ray <erwan.leray@st.com>,
-        "Fabrice Gasnier" <fabrice.gasnier@st.com>
-Subject: [PATCH 10/10] ARM: dts: stm32: add wakeup capability on each usart/uart on stm32mp157c
-Date:   Tue, 4 Jun 2019 10:55:19 +0200
-Message-ID: <1559638519-6128-11-git-send-email-erwan.leray@st.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1559638519-6128-1-git-send-email-erwan.leray@st.com>
-References: <1559638519-6128-1-git-send-email-erwan.leray@st.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.31]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-04_07:,,
- signatures=0
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: stm32: fix a recursive locking in stm32_config_rs485
+Date:   Tue,  4 Jun 2019 11:54:51 +0200
+Message-Id: <20190604095452.6360-1-borut.seljak@t-2.net>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <borut.seljak@t-2.net>
+References: <borut.seljak@t-2.net>
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-- Mark all usart/uart devices as wakeup source.
-- Identify all dedicated interrupts with a specific interrupt name (either
- "event" or "wakeup").
-- add interrupts-extended wakeup interrupt
+Remove spin_lock_irqsave in stm32_config_rs485, it cause recursive locking.
+Already locked in uart_set_rs485_config.
 
-Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
+Signed-off-by: Borut Seljak <borut.seljak@t-2.net>
+---
+ drivers/tty/serial/stm32-usart.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
-index 2afeee6..de5b1bf 100644
---- a/arch/arm/boot/dts/stm32mp157c.dtsi
-+++ b/arch/arm/boot/dts/stm32mp157c.dtsi
-@@ -395,32 +395,44 @@
- 		usart2: serial@4000e000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x4000e000 0x400>;
--			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 27 1>;
- 			clocks = <&rcc USART2_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index e8d7a7bb4339..da373a465f51 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -107,7 +107,6 @@ static int stm32_config_rs485(struct uart_port *port,
+ 	bool over8;
+ 	unsigned long flags;
  
- 		usart3: serial@4000f000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x4000f000 0x400>;
--			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 28 1>;
- 			clocks = <&rcc USART3_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
+-	spin_lock_irqsave(&port->lock, flags);
+ 	stm32_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
  
- 		uart4: serial@40010000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40010000 0x400>;
--			interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 30 1>;
- 			clocks = <&rcc UART4_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
+ 	port->rs485 = *rs485conf;
+@@ -147,7 +146,6 @@ static int stm32_config_rs485(struct uart_port *port,
+ 	}
  
- 		uart5: serial@40011000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40011000 0x400>;
--			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 31 1>;
- 			clocks = <&rcc UART5_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
+ 	stm32_set_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+-	spin_unlock_irqrestore(&port->lock, flags);
  
-@@ -512,16 +524,22 @@
- 		uart7: serial@40018000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40018000 0x400>;
--			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 32 1>;
- 			clocks = <&rcc UART7_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart8: serial@40019000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40019000 0x400>;
--			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 33 1>;
- 			clocks = <&rcc UART8_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -588,8 +606,11 @@
- 		usart6: serial@44003000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x44003000 0x400>;
--			interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 29 1>;
- 			clocks = <&rcc USART6_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -1201,8 +1222,11 @@
- 		usart1: serial@5c000000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x5c000000 0x400>;
--			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 26 1>;
- 			clocks = <&rcc USART1_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
+ 	return 0;
+ }
 -- 
-1.9.1
+2.17.1
 
