@@ -2,89 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B758E343A6
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 12:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D809B34503
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2019 13:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfFDKCM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 4 Jun 2019 06:02:12 -0400
-Received: from smtp-good-out-2.t-2.net ([84.255.208.44]:32868 "EHLO
-        smtp-good-out-2.t-2.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727083AbfFDKCM (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 4 Jun 2019 06:02:12 -0400
-X-Greylist: delayed 323 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jun 2019 06:02:11 EDT
-Received: from smtp-2.t-2.si (smtp-2.t-2.si [IPv6:2a01:260:1:4::1f])
-        by smtp-good-out-2.t-2.net (Postfix) with ESMTP id 45J6lM093jzZC2;
-        Tue,  4 Jun 2019 11:56:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-2.net;
-        s=smtp-out-2; t=1559642207;
-        bh=jugmZr/W92kCdoEqAM0kfct8ubp8M0N+NIqvhkjT2+c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=g0qgbT2ZCZkQWCpE/mUidKZ7dSfUschbC9105fgaW7tpRW7j2/sLpDUVxZc9kgHPa
-         f6XFF+SNFAfkwE83yHls7G3drTG8WYpu1oWZQgpnmyAlJkPIYPnoy2QgKXeLg+hD97
-         vp0QLmoelHDVlHCuW4RIl8HsNX1T2IklmOc3yhqs=
-Received: from localhost (localhost [127.0.0.1])
-        by smtp-2.t-2.si (Postfix) with ESMTP id 45J6lL70LQzMs4PY;
-        Tue,  4 Jun 2019 11:56:46 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at t-2.si
-Received: from smtp-2.t-2.si ([127.0.0.1])
-        by localhost (smtp-2.t-2.si [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1ViU4qouKY2p; Tue,  4 Jun 2019 11:56:46 +0200 (CEST)
-Received: from localhost.localdomain (unknown [89.212.35.59])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: borut_seljak@t-2.net)
-        by smtp-2.t-2.si (Postfix) with ESMTPSA;
-        Tue,  4 Jun 2019 11:56:20 +0200 (CEST)
-From:   Borut Seljak <borut.seljak@t-2.net>
-Cc:     borut.seljak@t-2.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-serial@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: stm32: fix a recursive locking in stm32_config_rs485
-Date:   Tue,  4 Jun 2019 11:54:51 +0200
-Message-Id: <20190604095452.6360-1-borut.seljak@t-2.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <borut.seljak@t-2.net>
-References: <borut.seljak@t-2.net>
+        id S1727246AbfFDLCR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 4 Jun 2019 07:02:17 -0400
+Received: from smtp1.ono.com ([62.42.230.162]:38079 "EHLO smtp1.ono.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727242AbfFDLCQ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 4 Jun 2019 07:02:16 -0400
+X-Junkmail-Premium-Raw: score=35/50,refid=2.7.2:2019.6.4.103616:17:35.434,ip=62.42.230.131,rules=__HAS_MSGID,
+ __SANE_MSGID, MSGID_JMAIL_DEFAULT, INVALID_MSGID_NO_FQDN, __HAS_FROM,
+ __HAS_REPLYTO, __FRAUD_WEBMAIL_REPLYTO, __PHISH_SPEAR_SUBJ_ALERT,
+ __MIME_VERSION, __CT, __CT_TEXT_PLAIN, __CTE, MISSING_HEADERS, __FRAUD_INTRO,
+ __STOCK_PHRASE_7, __FRAUD_MONEY_BIG_COIN_DIG, __OEM_PRICE,
+ __FRAUD_MONEY_CURRENCY_DOLLAR, __NO_HTML_TAG_RAW, BODYTEXTP_SIZE_400_LESS,
+ BODY_SIZE_200_299, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_P1,
+ __MIME_TEXT_ONLY, HTML_00_01, HTML_00_10, __FRAUD_MONEY_CURRENCY,
+ __FRAUD_MONEY_BIG_COIN, __FRAUD_MONEY_VALUE, __PHISH_SPEAR_GREETING,
+ __FRAUD_MONEY, FRAUD_X3, BODY_SIZE_5000_LESS, __FRAUD_WEBMAIL,
+ WEBMAIL_REPLYTO_NOT_FROM, FRAUD_WEBMAIL_R_NOT_F, __MIME_TEXT_P, NO_URI_FOUND,
+ NO_CTA_URI_FOUND, FRAUD_LITTLE_BODY, __PHISH_SPEAR_STRUCTURE_1,
+ BODY_SIZE_1000_LESS, BODY_SIZE_2000_LESS, SMALL_BODY,
+ __PHISH_SPEAR_STRUCTURE_2, REPLYTO_FROM_DIFF_ADDY, NO_URI_HTTPS,
+ BODY_SIZE_7000_LESS, TO_MALFORMED
+Received: from resprs01 (62.42.230.131) by smtp1.ono.com (9.0.019.09-1)
+        id 5C12554F089CFF31; Tue, 4 Jun 2019 13:01:38 +0200
+Received: from (149.126.75.2) by webmailcpr01n.ono.com;  Tue, 4 Jun 2019 13:01:39 +0200
+Message-ID: <29417265.42811559646099953.JavaMail.defaultUser@defaultHost>
+Date:   Tue, 4 Jun 2019 13:01:39 +0200 (CEST)
+From:   Mrs M Compola <oposicionesayudantes@ono.com>
+Reply-To: mrsmcompola444@gmail.com
+Subject: Compliment of the day to you Dear Friend.
+MIME-Version: 1.0
+Content-Type: text/plain;charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Remove spin_lock_irqsave in stm32_config_rs485, it cause recursive locking.
-Already locked in uart_set_rs485_config.
+Compliment of the day to you Dear Friend.
 
-Signed-off-by: Borut Seljak <borut.seljak@t-2.net>
----
- drivers/tty/serial/stm32-usart.c | 2 --
- 1 file changed, 2 deletions(-)
+Dear Friend.
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index e8d7a7bb4339..da373a465f51 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -107,7 +107,6 @@ static int stm32_config_rs485(struct uart_port *port,
- 	bool over8;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&port->lock, flags);
- 	stm32_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
- 
- 	port->rs485 = *rs485conf;
-@@ -147,7 +146,6 @@ static int stm32_config_rs485(struct uart_port *port,
- 	}
- 
- 	stm32_set_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
--	spin_unlock_irqrestore(&port->lock, flags);
- 
- 	return 0;
- }
--- 
-2.17.1
+  I am Mrs.M Compola. am sending this brief letter to solicit your
+partnership to transfer $5 million US Dollars. I shall send you
+more information and procedures when I receive positive response from
+you.
 
+
+Mrs M Compola
