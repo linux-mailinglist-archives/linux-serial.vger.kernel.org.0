@@ -2,143 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C11E2359BC
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Jun 2019 11:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F73359E8
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Jun 2019 11:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfFEJfJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 5 Jun 2019 05:35:09 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:59686 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726690AbfFEJfJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 5 Jun 2019 05:35:09 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 7734AA0191;
-        Wed,  5 Jun 2019 11:35:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id zXe4_JImFazw; Wed,  5 Jun 2019 11:35:02 +0200 (CEST)
-Subject: Re: [PATCH 2/2 v4] tty/serial/8250: use mctrl_gpio helpers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>
-References: <20190603083332.12480-1-sr@denx.de>
- <20190603083332.12480-2-sr@denx.de>
- <20190604165224.GP9224@smile.fi.intel.com>
-From:   Stefan Roese <sr@denx.de>
-Message-ID: <115804ab-7d7c-a656-e6f4-ad61b3e02705@denx.de>
-Date:   Wed, 5 Jun 2019 11:35:01 +0200
-MIME-Version: 1.0
-In-Reply-To: <20190604165224.GP9224@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1726841AbfFEJxU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 5 Jun 2019 05:53:20 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46942 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726690AbfFEJxU (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 5 Jun 2019 05:53:20 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x559qAUa006990;
+        Wed, 5 Jun 2019 11:52:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type : content-id :
+ content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=QAM96c5x86qtvrcwPA8iFjsdl0keQYZLN5l0wUdrcH4=;
+ b=T+xYyd3lN4+QwhVqtmPs285cdb1IwzOyokvWfCgDUhtMnnleJ+BuThjGe8BQC2qPG8gm
+ Xlg2+3138kxiOTKGnX9wFhkTKzzPINpNhcBeGUIuubEwd+tUOMNXByaVLtlhBFff4gvN
+ 5s7Rpk9bXV14j/KHy4i9OJklJregeb2wB56k46ilh2evMQUZxxoTAShYL4aqyjcVtKKK
+ 4gXY0TRZjhlLKZfOy4n2SGJDuL8CmofQInzBaCGAf6Cmn1BAaQHO7nvzi7GifL+O0JdY
+ IoEkKl/8Gh2DT/4dQcbq6vqrjRgcCOnRYftv3OR2pQGbtK0FTXGKSro921+UJbN6tICE tA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2sunds5v86-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 05 Jun 2019 11:52:45 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8974334;
+        Wed,  5 Jun 2019 09:52:27 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 608C425FA;
+        Wed,  5 Jun 2019 09:52:27 +0000 (GMT)
+Received: from SFHDAG3NODE1.st.com (10.75.127.7) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 5 Jun
+ 2019 11:52:27 +0200
+Received: from SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86]) by
+ SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86%20]) with mapi id
+ 15.00.1347.000; Wed, 5 Jun 2019 11:52:27 +0200
+From:   Erwan LE RAY <erwan.leray@st.com>
+To:     YueHaibing <yuehaibing@huawei.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: Fwd: [PATCH -next] serial: stm32: Make stm32_get_databits static
+Thread-Topic: Fwd: [PATCH -next] serial: stm32: Make stm32_get_databits static
+Thread-Index: AQHVG22K0BtbDefYo066WH7MNa5zfKaMsGAA
+Date:   Wed, 5 Jun 2019 09:52:27 +0000
+Message-ID: <1eb3edf6-054d-be59-340c-312f57815912@st.com>
+References: <20190528090449.22868-1-yuehaibing@huawei.com>
+ <e7a74cb7-fd9f-89d2-8314-5e216eae2d13@st.com>
+In-Reply-To: <e7a74cb7-fd9f-89d2-8314-5e216eae2d13@st.com>
+Accept-Language: en-US, fr-FR
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.50]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <BB60DC7AEE09EE43BA33DB5BCAA320CD@st.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-05_07:,,
+ signatures=0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 04.06.19 18:52, Andy Shevchenko wrote:
-> On Mon, Jun 03, 2019 at 10:33:32AM +0200, Stefan Roese wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> This patch permits the usage for GPIOs to control
->> the CTS/RTS/DTR/DSR/DCD/RI signals.
-> 
->> +	if (up->gpios) {
-> 
->> +		mctrl_gpio_set(up->gpios, mctrl_gpio);
->> +	}
-> 
-> ...
-> 
->> +	if (up->gpios) {
-> 
->> +		mctrl_gpio = mctrl_gpio_get_outputs(up->gpios, &mctrl_gpio);
-> 
->> +	}
-> 
-> ...
-> 
->> +			gpios = mctrl_gpio_init(&uart->port, 0);
->> +			if (IS_ERR(gpios)) {
->> +				if (PTR_ERR(gpios) != -ENOSYS)
->> +					return PTR_ERR(gpios);
->> +			}
-> 
-> ...
-> 
->> +	if (IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(up->gpios,
->> +						UART_GPIO_RTS))) {
-> 
->> +	}
-> 
-> ...
-> 
->> -	if (termios->c_cflag & CRTSCTS && up->port.flags & UPF_HARD_FLOW) {
->> +	if (termios->c_cflag & CRTSCTS && up->port.flags & UPF_HARD_FLOW
->> +		&& IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(up->gpios,
->> +							UART_GPIO_RTS))) {
-> 
->> }
-> 
-> ...
-> 
->> +	if (up->gpios)
->> +		mctrl_gpio_disable_ms(up->gpios);
-> 
-> ...
-> 
->> +	if (up->gpios)
->> +		mctrl_gpio_enable_ms(up->gpios);
-> 
-> ...
-> 
->> +	if (up->gpios)
->> +		return mctrl_gpio_get(up->gpios, &ret);
-> 
-> 
-> Can we rather make this mimic the gpiod_get_optional() API?
-> 
-> So, if we get an error, it's an error, otherwise with NULL pointer the
-> operations goes to be no-op.
-> 
-> [IS_ERR_OR_NULL() -> IS_ERR(), if (up->gpios) -> /dev/null, etc]
+OK for me.
 
-So you want me to drop all "if (up->gpios)" checks? I can do this in
-some cases (e.g. serial8250_disable_ms()). But I would like to keep
-it in other cases, like serial8250_out_MCR(), where this check prevents
-some unnecessary code execution in the "non-gpios mode" (and vice-versa).
+Erwan.
 
-Would this be acceptable?
 
-BTW: Regarding the OMAP specific code: I'm not the author of this code
-and I don't have access to such hardware to do some tests here. But
-changing IS_ERR_OR_NULL() -> IS_ERR() in this OMAP code does not
-seem correct. IIUTC, these "if" clauses are extended here by
-IS_ERR_OR_NULL(mctrl_gpio_to_gpiod()) to check if the GPIO's are not
-enabled / used. Currently this will probably break, since when called
-with "gpios == NULL", mctrl_gpio_to_gpiod() will crash [1].
-
-If you don't object (or have other suggestions), I'll change this to
-use "up->gpios == 0" instead. This seems to be what the original author
-wanted to achieve.
-
-Okay?
-
-Thanks,
-Stefan
-
-[1]
-
-struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
-				      enum mctrl_gpio_idx gidx)
-{
-	return gpios->gpio[gidx];
-}
+On 6/5/19 9:08 AM, Fabrice Gasnier wrote:
+> Un autre qu'on avait pas vu...
+>
+>
+> -------- Forwarded Message --------
+> Subject: [PATCH -next] serial: stm32: Make stm32_get_databits static
+> Date: Tue, 28 May 2019 17:04:49 +0800
+> From: YueHaibing <yuehaibing@huawei.com>
+> To: gregkh@linuxfoundation.org, jslaby@suse.com,
+> mcoquelin.stm32@gmail.com, alexandre.torgue@st.com
+> CC: YueHaibing <yuehaibing@huawei.com>, linux-serial@vger.kernel.org,
+> linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+> linux-stm32@st-md-mailman.stormreply.com
+>
+> Fix sparse warning:
+>
+> drivers/tty/serial/stm32-usart.c:603:14: warning:
+>   symbol 'stm32_get_databits' was not declared. Should it be static?
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>   drivers/tty/serial/stm32-usart.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/stm32-usart.c
+> b/drivers/tty/serial/stm32-usart.c
+> index 9c2b04e..4517f2b 100644
+> --- a/drivers/tty/serial/stm32-usart.c
+> +++ b/drivers/tty/serial/stm32-usart.c
+> @@ -600,7 +600,7 @@ static void stm32_shutdown(struct uart_port *port)
+>   	free_irq(port->irq, port);
+>   }
+>   -unsigned int stm32_get_databits(struct ktermios *termios)
+> +static unsigned int stm32_get_databits(struct ktermios *termios)
+>   {
+>   	unsigned int bits;
+>   -- 2.7.4
+>
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel=
