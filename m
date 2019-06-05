@@ -2,112 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E3835619
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Jun 2019 07:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9433F358FD
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Jun 2019 10:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbfFEFCn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 5 Jun 2019 01:02:43 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:34207 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbfFEFCn (ORCPT
+        id S1726728AbfFEIvp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 5 Jun 2019 04:51:45 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:35906 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726717AbfFEIvp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 5 Jun 2019 01:02:43 -0400
-Received: by mail-lf1-f66.google.com with SMTP id y198so7597549lfa.1
-        for <linux-serial@vger.kernel.org>; Tue, 04 Jun 2019 22:02:42 -0700 (PDT)
+        Wed, 5 Jun 2019 04:51:45 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n4so15545680wrs.3;
+        Wed, 05 Jun 2019 01:51:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Vv5BNt8UV0wEEWTnOpq36ubv6OlyHL1lKwu8V954TOo=;
-        b=SQHIMMGgyigO8FsrlHx2ANEjk3o4URXvtadPWl46U8RAdVZjHkliS7QmuNfQQRBzbK
-         oDSvsYYNGFslFFRSg4ma9ViMD19yD8QlNRfcC60bko8kKqamjPzy/zyLon7EAHNXgwC+
-         PvJNdKIGFb/eqJ4Q3MJolfpJpqwg5r6BNCnHPdMzol2hfzcNkjxzNDSRif0gmj46KzTP
-         Af2iPJLGQJ9MhmUSozXEOkua/MvekPTEjOmGyLNSH/UU8ni5dtI9SbHcWdOHKA77L+yL
-         lp2GDl5O0sfz0ylFfXvSPFpNDk4LfIvUgZKvr1Tn2g7u9qjNreMmw2X6IXlgoRZucCpc
-         dnNQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+VyGoQKAdyot/bp5WLVhVb61YYYCRfPZnDleP6IdQm0=;
+        b=RfpkbDC895FXS7xJlgZcd6hC3WMZgIiPYciHXCxhHHT8gWE5OiCQqqSi3U1SDBR6qc
+         Jp8YYMB8W+35zcMix6DfyU4nANpOk6SQahXg6i9ggy139CjUGRyImDJvPfXOwfDVGo8a
+         7N2qZJI0p7ugQdl6FRt0NW+9OK2fTVIHQLLG1tkHCaEp5cKvThUDqUJe51DeDE5lPW4y
+         8y2l2jFO1AxYx3WSm+Yra0gBjLZfRz3QTrz9QEgU3FWP7DInzPGTLlOtNm8tW3l8wHvg
+         gHMKdVJLx7QfrI0Iof4uMPiiuLB61eUK3o7gxI0jGQpmKz95FLfzghRW0t8SdrK+np08
+         Sw4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version:content-transfer-encoding;
-        bh=Vv5BNt8UV0wEEWTnOpq36ubv6OlyHL1lKwu8V954TOo=;
-        b=Z8RlYoyQKAPvi3JlcNnqOE9kdpD7kEaFLCdriN3l68nJK5c3e9Inrlp7UGXGXCDtsI
-         dZy0i765nV20uU70xCKppQw0tzIuUtFZk9BGuN5+UqY5fKAgR4RVTtK4CeeEtUnDcoab
-         McbDItiFSFlsZjVCeey2Cc9MnX3gWauQ26mGzSQX2F0Yzy/owvJYwoyyiU7oGZPa2bIp
-         VVtS71MrmcRfPiFkIfTbdgDumLQyhZ0YA4EJtW+PyRf2+xj+CoeXzM1dD0Ijh7mEh4Jz
-         AUEacYntafMhR2wY6rMWlNqKOBNTkwLgO3KXXSx0Yq3eA9VW4hVO3YRcq3ZA/BkI8alZ
-         vZnw==
-X-Gm-Message-State: APjAAAX/iR6ITTVS30sx9W/X0z+XpRG8AxHTKVKM+jXTWrakiMQmXmnQ
-        iPeUIkOHRBA8mFyXOOO5JsA=
-X-Google-Smtp-Source: APXvYqyB1Z78vV9aZvZtt64ZGt0VKTajNnF9bvcJt62g2N+ykLhjo3pXXCDuMG8qI5DggjLyjew1vQ==
-X-Received: by 2002:a19:4f50:: with SMTP id a16mr18318066lfk.24.1559710961827;
-        Tue, 04 Jun 2019 22:02:41 -0700 (PDT)
-Received: from osv ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id q7sm3906036ljc.45.2019.06.04.22.02.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 22:02:41 -0700 (PDT)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>, linux-serial@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH 4/8] serial: imx: get rid of unbounded busy-waiting loop
-References: <20190530152950.25377-1-sorganov@gmail.com>
-        <20190530152950.25377-5-sorganov@gmail.com>
-        <20190530210059.xt7qlyk57cf3zaux@pengutronix.de>
-        <87imtrup3z.fsf@javad.com>
-        <20190531064248.qh4tecbv6ejvroyw@pengutronix.de>
-        <87k1e6bnxi.fsf@javad.com>
-        <20190531164848.jnxib6ju7bdudfyx@pengutronix.de>
-        <20190531173734.umxt3kifjel5w4yi@shell.armlinux.org.uk>
-Date:   Wed, 05 Jun 2019 08:02:40 +0300
-In-Reply-To: <20190531173734.umxt3kifjel5w4yi@shell.armlinux.org.uk> (Russell
-        King's message of "Fri, 31 May 2019 18:37:34 +0100")
-Message-ID: <87a7ewvd3j.fsf@javad.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+VyGoQKAdyot/bp5WLVhVb61YYYCRfPZnDleP6IdQm0=;
+        b=SHIE6Gn1hEvVVWwoci6pvG15v6lvNDj8+YGqK5xkDSVUnA6y3eFEiqxczI3As24EvQ
+         q2TR60+xBn63Etnpudmxm/Q2K5xPgtMWf7fNTBvHnTCVMg6wDvhCRjY0bMbCqdLtTofr
+         3rqeZsLy4SwDzbQPQw/NoJu5G0AVloKNmZ5XQuw7O2k+WjBMU3OB+al4zEirdeXNZSHT
+         YrkxIx9+5T1EUoEJUtK2VcPFmrv/2TaDClb1dBElAWxHMDHIa/EJKEPqqfeA33FUWNg7
+         WIk+hcmoLxlxhTcm4o6Qn5t1Aug5OgQWhbHac2IwraZB4PDSjHS/9atBHhW7yK2Ww1l8
+         hO9A==
+X-Gm-Message-State: APjAAAWNt08SnCGHKaj2HTAreAfFhK6hVSproaji7ukzUVAmEiVXuVqR
+        3cItPThIZz9QwMSyM765VLehVPS6
+X-Google-Smtp-Source: APXvYqzyrs1WhkBjaZPt4CV8cTLH6XNq1VlTmcKT2R9y1TgYDgkoLqw2DyfROjGjTilwZKAPxwYl5Q==
+X-Received: by 2002:adf:8183:: with SMTP id 3mr10348617wra.181.1559724703736;
+        Wed, 05 Jun 2019 01:51:43 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id j15sm9561477wrn.50.2019.06.05.01.51.42
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 05 Jun 2019 01:51:43 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Cc:     linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH] tty: serial: 8250-of: Do not warn on deferred probe
+Date:   Wed,  5 Jun 2019 10:51:42 +0200
+Message-Id: <20190605085142.13292-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Russell King - ARM Linux admin <linux@armlinux.org.uk> writes:
+From: Thierry Reding <treding@nvidia.com>
 
-> On Fri, May 31, 2019 at 06:48:48PM +0200, Uwe Kleine-König wrote:
->> On Fri, May 31, 2019 at 07:15:21PM +0300, Sergey Organov wrote:
->> > Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
->> > > The first (and only) driver I checked does. (sa1100.c)
->> > 
->> > I think I'd rather take 8250 as reference implementation, as being most
->> > widely used. Can anybody please tell how 8250 code handles this? Does it
->> > attempt to drain Tx FIFO on termios changes?
->> 
->> Well, there are so many 8250 variants that the driver is rather
->> complicated. Also the original 8250 doesn't have a FIFO at all.
->> 
->> Given that it might not be so easy to judge if a given driver drains the
->> FIFO and transmitter without consulting the reference manual I'd rather
->> rely on an authority for the serial core. (Apart from that I bet we're
->> finding examples for both variants.)
->> 
->> @gregkh, rmk: What do you think?
->
-> Let me also clarify something above.  Yes, sa1100.c is good to use as
-> a reference driver - it was carefully converted to serial_core by me
-> along with 8250, and I made sure the semantics in the driver were
-> correct for what the hardware supports.
->
-> The key thing is "what the hardware supports" though - the serial
-> block has no hardware flow control signals, and it is expected that
-> GPIOs or other arrangements would be made where such signals were
-> necessary:
+Deferred probe is an expected return value for clk_get() on many
+platforms. The driver deals with it properly, so there's no need
+to output a warning that may potentially confuse users.
 
-What driver would you recommend as a good reference implementation that
-manages decent hardware featuring FIFO and automatic RTS/CTS control,
-preferably with DMA support as well?
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/tty/serial/8250/8250_of.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
--- Sergey
+diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
+index 1308b3d1e17a..0826cfdbd406 100644
+--- a/drivers/tty/serial/8250/8250_of.c
++++ b/drivers/tty/serial/8250/8250_of.c
+@@ -70,9 +70,10 @@ static int of_platform_serial_setup(struct platform_device *ofdev,
+ 		/* Get clk rate through clk driver if present */
+ 		info->clk = devm_clk_get(&ofdev->dev, NULL);
+ 		if (IS_ERR(info->clk)) {
+-			dev_warn(&ofdev->dev,
+-				"clk or clock-frequency not defined\n");
+ 			ret = PTR_ERR(info->clk);
++			if (ret != -EPROBE_DEFER)
++				dev_warn(&ofdev->dev,
++					 "failed to get clock: %d\n", ret);
+ 			goto err_pmruntime;
+ 		}
+ 
+-- 
+2.21.0
+
