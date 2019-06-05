@@ -2,92 +2,143 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9433F358FD
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Jun 2019 10:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11E2359BC
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Jun 2019 11:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbfFEIvp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 5 Jun 2019 04:51:45 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35906 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726717AbfFEIvp (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 5 Jun 2019 04:51:45 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n4so15545680wrs.3;
-        Wed, 05 Jun 2019 01:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+VyGoQKAdyot/bp5WLVhVb61YYYCRfPZnDleP6IdQm0=;
-        b=RfpkbDC895FXS7xJlgZcd6hC3WMZgIiPYciHXCxhHHT8gWE5OiCQqqSi3U1SDBR6qc
-         Jp8YYMB8W+35zcMix6DfyU4nANpOk6SQahXg6i9ggy139CjUGRyImDJvPfXOwfDVGo8a
-         7N2qZJI0p7ugQdl6FRt0NW+9OK2fTVIHQLLG1tkHCaEp5cKvThUDqUJe51DeDE5lPW4y
-         8y2l2jFO1AxYx3WSm+Yra0gBjLZfRz3QTrz9QEgU3FWP7DInzPGTLlOtNm8tW3l8wHvg
-         gHMKdVJLx7QfrI0Iof4uMPiiuLB61eUK3o7gxI0jGQpmKz95FLfzghRW0t8SdrK+np08
-         Sw4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+VyGoQKAdyot/bp5WLVhVb61YYYCRfPZnDleP6IdQm0=;
-        b=SHIE6Gn1hEvVVWwoci6pvG15v6lvNDj8+YGqK5xkDSVUnA6y3eFEiqxczI3As24EvQ
-         q2TR60+xBn63Etnpudmxm/Q2K5xPgtMWf7fNTBvHnTCVMg6wDvhCRjY0bMbCqdLtTofr
-         3rqeZsLy4SwDzbQPQw/NoJu5G0AVloKNmZ5XQuw7O2k+WjBMU3OB+al4zEirdeXNZSHT
-         YrkxIx9+5T1EUoEJUtK2VcPFmrv/2TaDClb1dBElAWxHMDHIa/EJKEPqqfeA33FUWNg7
-         WIk+hcmoLxlxhTcm4o6Qn5t1Aug5OgQWhbHac2IwraZB4PDSjHS/9atBHhW7yK2Ww1l8
-         hO9A==
-X-Gm-Message-State: APjAAAWNt08SnCGHKaj2HTAreAfFhK6hVSproaji7ukzUVAmEiVXuVqR
-        3cItPThIZz9QwMSyM765VLehVPS6
-X-Google-Smtp-Source: APXvYqzyrs1WhkBjaZPt4CV8cTLH6XNq1VlTmcKT2R9y1TgYDgkoLqw2DyfROjGjTilwZKAPxwYl5Q==
-X-Received: by 2002:adf:8183:: with SMTP id 3mr10348617wra.181.1559724703736;
-        Wed, 05 Jun 2019 01:51:43 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id j15sm9561477wrn.50.2019.06.05.01.51.42
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 05 Jun 2019 01:51:43 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Cc:     linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH] tty: serial: 8250-of: Do not warn on deferred probe
-Date:   Wed,  5 Jun 2019 10:51:42 +0200
-Message-Id: <20190605085142.13292-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.21.0
+        id S1726964AbfFEJfJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 5 Jun 2019 05:35:09 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:59686 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726690AbfFEJfJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 5 Jun 2019 05:35:09 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 7734AA0191;
+        Wed,  5 Jun 2019 11:35:06 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id zXe4_JImFazw; Wed,  5 Jun 2019 11:35:02 +0200 (CEST)
+Subject: Re: [PATCH 2/2 v4] tty/serial/8250: use mctrl_gpio helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>
+References: <20190603083332.12480-1-sr@denx.de>
+ <20190603083332.12480-2-sr@denx.de>
+ <20190604165224.GP9224@smile.fi.intel.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <115804ab-7d7c-a656-e6f4-ad61b3e02705@denx.de>
+Date:   Wed, 5 Jun 2019 11:35:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190604165224.GP9224@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On 04.06.19 18:52, Andy Shevchenko wrote:
+> On Mon, Jun 03, 2019 at 10:33:32AM +0200, Stefan Roese wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> This patch permits the usage for GPIOs to control
+>> the CTS/RTS/DTR/DSR/DCD/RI signals.
+> 
+>> +	if (up->gpios) {
+> 
+>> +		mctrl_gpio_set(up->gpios, mctrl_gpio);
+>> +	}
+> 
+> ...
+> 
+>> +	if (up->gpios) {
+> 
+>> +		mctrl_gpio = mctrl_gpio_get_outputs(up->gpios, &mctrl_gpio);
+> 
+>> +	}
+> 
+> ...
+> 
+>> +			gpios = mctrl_gpio_init(&uart->port, 0);
+>> +			if (IS_ERR(gpios)) {
+>> +				if (PTR_ERR(gpios) != -ENOSYS)
+>> +					return PTR_ERR(gpios);
+>> +			}
+> 
+> ...
+> 
+>> +	if (IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(up->gpios,
+>> +						UART_GPIO_RTS))) {
+> 
+>> +	}
+> 
+> ...
+> 
+>> -	if (termios->c_cflag & CRTSCTS && up->port.flags & UPF_HARD_FLOW) {
+>> +	if (termios->c_cflag & CRTSCTS && up->port.flags & UPF_HARD_FLOW
+>> +		&& IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(up->gpios,
+>> +							UART_GPIO_RTS))) {
+> 
+>> }
+> 
+> ...
+> 
+>> +	if (up->gpios)
+>> +		mctrl_gpio_disable_ms(up->gpios);
+> 
+> ...
+> 
+>> +	if (up->gpios)
+>> +		mctrl_gpio_enable_ms(up->gpios);
+> 
+> ...
+> 
+>> +	if (up->gpios)
+>> +		return mctrl_gpio_get(up->gpios, &ret);
+> 
+> 
+> Can we rather make this mimic the gpiod_get_optional() API?
+> 
+> So, if we get an error, it's an error, otherwise with NULL pointer the
+> operations goes to be no-op.
+> 
+> [IS_ERR_OR_NULL() -> IS_ERR(), if (up->gpios) -> /dev/null, etc]
 
-Deferred probe is an expected return value for clk_get() on many
-platforms. The driver deals with it properly, so there's no need
-to output a warning that may potentially confuse users.
+So you want me to drop all "if (up->gpios)" checks? I can do this in
+some cases (e.g. serial8250_disable_ms()). But I would like to keep
+it in other cases, like serial8250_out_MCR(), where this check prevents
+some unnecessary code execution in the "non-gpios mode" (and vice-versa).
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/tty/serial/8250/8250_of.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Would this be acceptable?
 
-diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-index 1308b3d1e17a..0826cfdbd406 100644
---- a/drivers/tty/serial/8250/8250_of.c
-+++ b/drivers/tty/serial/8250/8250_of.c
-@@ -70,9 +70,10 @@ static int of_platform_serial_setup(struct platform_device *ofdev,
- 		/* Get clk rate through clk driver if present */
- 		info->clk = devm_clk_get(&ofdev->dev, NULL);
- 		if (IS_ERR(info->clk)) {
--			dev_warn(&ofdev->dev,
--				"clk or clock-frequency not defined\n");
- 			ret = PTR_ERR(info->clk);
-+			if (ret != -EPROBE_DEFER)
-+				dev_warn(&ofdev->dev,
-+					 "failed to get clock: %d\n", ret);
- 			goto err_pmruntime;
- 		}
- 
--- 
-2.21.0
+BTW: Regarding the OMAP specific code: I'm not the author of this code
+and I don't have access to such hardware to do some tests here. But
+changing IS_ERR_OR_NULL() -> IS_ERR() in this OMAP code does not
+seem correct. IIUTC, these "if" clauses are extended here by
+IS_ERR_OR_NULL(mctrl_gpio_to_gpiod()) to check if the GPIO's are not
+enabled / used. Currently this will probably break, since when called
+with "gpios == NULL", mctrl_gpio_to_gpiod() will crash [1].
 
+If you don't object (or have other suggestions), I'll change this to
+use "up->gpios == 0" instead. This seems to be what the original author
+wanted to achieve.
+
+Okay?
+
+Thanks,
+Stefan
+
+[1]
+
+struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+				      enum mctrl_gpio_idx gidx)
+{
+	return gpios->gpio[gidx];
+}
