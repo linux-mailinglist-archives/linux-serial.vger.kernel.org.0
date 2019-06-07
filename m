@@ -2,93 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E43385C8
-	for <lists+linux-serial@lfdr.de>; Fri,  7 Jun 2019 09:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8086B38848
+	for <lists+linux-serial@lfdr.de>; Fri,  7 Jun 2019 12:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbfFGHzY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 7 Jun 2019 03:55:24 -0400
-Received: from smtp4.iitb.ac.in ([103.21.127.18]:55434 "EHLO smtp1.iitb.ac.in"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727145AbfFGHzY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 7 Jun 2019 03:55:24 -0400
-X-Greylist: delayed 4689 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 03:55:23 EDT
-Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
-        by smtp1.iitb.ac.in (Postfix) with SMTP id B581110575BD
-        for <linux-serial@vger.kernel.org>; Fri,  7 Jun 2019 12:01:33 +0530 (IST)
-Received: (qmail 27999 invoked by uid 510); 7 Jun 2019 12:01:33 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
- Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 2.069313 secs; 07 Jun 2019 12:01:33 +0530
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns1.iitb.ac.in
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
-        MISSING_HEADERS,PROPER_IITB_MSGID,T_RP_MATCHES_RCVD autolearn=disabled
-        version=3.4.1
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: rws@aero.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
-  by ldns1.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by ldns1.iitb.ac.in (Postfix) with ESMTP id 80518360036;
-        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
+        id S1728121AbfFGKy2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 7 Jun 2019 06:54:28 -0400
+Received: from smtp-good-out-2.t-2.net ([84.255.208.44]:52550 "EHLO
+        smtp-good-out-2.t-2.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727935AbfFGKy2 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 7 Jun 2019 06:54:28 -0400
+Received: from smtp-2.t-2.si (smtp-2.t-2.si [84.255.208.31])
+        by smtp-good-out-2.t-2.net (Postfix) with ESMTP id 45KztT5kt0z1Zxh;
+        Fri,  7 Jun 2019 12:54:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-2.net;
+        s=smtp-out-2; t=1559904865;
+        bh=fUk0XkUlQdzlALymuAqAwf9BsyOqku2ixV/KDFYYH2w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=CkpiVnTHhILcYNM8bLBTKukUMr6kDo6yCevSCHEzZo+skyMw1dXe2t7wZ0xyJkmZf
+         leNWDKjtyy3aXHGMlcCxffa/wBktUV7h9BXMT/+Fyn7QGSOPoWtR1Js0T8t5RrJBFS
+         bYU6/pa844MSuSvUNrgeKnle4sJu74slghAmVIh8=
 Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id E4B948902E55E;
-        Fri,  7 Jun 2019 12:01:16 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id uy24o_MU5OGU; Fri,  7 Jun 2019 12:01:16 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5C3AC8902E548;
-        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
-Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
-        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2kbUWSjAc2AF; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
-Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
-        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
-        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
-Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
-From:   Martins Henry <rws@aero.iitb.ac.in>
-Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
-Subject: Thanks and I wait for your answer
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.101.1.5]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
-Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
-Thread-Topic: Thanks and I wait for your answer
-To:     unlisted-recipients:; (no To-header on input)
+        by smtp-2.t-2.si (Postfix) with ESMTP id 45KztT5X2tzMsJG1;
+        Fri,  7 Jun 2019 12:54:25 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at t-2.si
+Received: from smtp-2.t-2.si ([127.0.0.1])
+        by localhost (smtp-2.t-2.si [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id g9GBfN1ATuF1; Fri,  7 Jun 2019 12:54:25 +0200 (CEST)
+Received: from localhost.localdomain (unknown [89.212.35.59])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: borut_seljak@t-2.net)
+        by smtp-2.t-2.si (Postfix) with ESMTPSA;
+        Fri,  7 Jun 2019 12:53:56 +0200 (CEST)
+From:   Borut Seljak <borut.seljak@t-2.net>
+To:     erwan.leray@st.com
+Cc:     borut.seljak@t-2.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] serial: stm32: fix a recursive locking in stm32_config_rs485
+Date:   Fri,  7 Jun 2019 12:53:06 +0200
+Message-Id: <20190607105307.31053-1-borut.seljak@t-2.net>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <e0f8d4b2-a622-3758-473b-b78bd8949323@st.com>
+References: <e0f8d4b2-a622-3758-473b-b78bd8949323@st.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
+Remove spin_lock_irqsave in stm32_config_rs485, it cause recursive locking.
+Already locked in uart_set_rs485_config.
 
-I am Martin Henry, An American Citizen; I am the personal secretary to
-Mr. Donald Railton, the controller of a Lottery Company. Please I am
-having big problem now, I have a 6yrs old daughter who has leukemia, a
-disease of the blood, and she needs a bone marrow transplant or she
-will die.
+Fixes: 1bcda09d291081 ("serial: stm32: add support for RS485 hardware control mode")
 
-Please I am only asking for your help and you will benefit from it
-also. As an insider with Lottery Firm, working as the personal
-secretary to the controller, I want you to send me your name to play,
-I have some numbers that are going to win, stored in his secret data
-system in the office. The Lottery is an online entry with credit card
-anywhere with a name and address. All I want you to do is to send your
-name to play it and I will send confirmation to you.
+Signed-off-by: Borut Seljak <borut.seljak@t-2.net>
+---
+ drivers/tty/serial/stm32-usart.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-I will play with my card on your name and the Prize will be shared
-equally between us. Immediately the results are released they will
-contact you for payment as the oversea winner. The lotto can be played
-with 9.00 dollars, or 50 dollars but the prize will be Millions.
-Remember that I am playing on your name with my card; I just want to
-front you for this, because I need this money to save the life of my
-little daughter.
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index e8d7a7bb4339..5d072ec61071 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -105,9 +105,7 @@ static int stm32_config_rs485(struct uart_port *port,
+ 	struct stm32_usart_config *cfg = &stm32_port->info->cfg;
+ 	u32 usartdiv, baud, cr1, cr3;
+ 	bool over8;
+-	unsigned long flags;
+ 
+-	spin_lock_irqsave(&port->lock, flags);
+ 	stm32_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+ 
+ 	port->rs485 = *rs485conf;
+@@ -147,7 +145,6 @@ static int stm32_config_rs485(struct uart_port *port,
+ 	}
+ 
+ 	stm32_set_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+-	spin_unlock_irqrestore(&port->lock, flags);
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
 
-Thanks and I wait for your answer
-Martin Henry.
