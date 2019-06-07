@@ -2,107 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DF83787F
-	for <lists+linux-serial@lfdr.de>; Thu,  6 Jun 2019 17:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E43385C8
+	for <lists+linux-serial@lfdr.de>; Fri,  7 Jun 2019 09:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729077AbfFFPs0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 6 Jun 2019 11:48:26 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:37303 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729156AbfFFPs0 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 6 Jun 2019 11:48:26 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x56FkhkV020575;
-        Thu, 6 Jun 2019 17:48:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=gGCf28774irLLSKFXYWcYkPoYMFVE7Vt0PR7IMC2LZY=;
- b=fiBqVAL0EjZRJKzxblB62imKyCV/3cHFrVj4nR7fLs+a/s3NvoQw7ufiFo+9e11zwXEP
- u6e+P4AuuRwKzycKkiEs1eRtvV2hvnDVLIjFjmlLeN7lp3wPaNbh14hKEJpJsF4627sB
- XyDc6XL1YvPfTrxEfNpPPLlAS42B2MLCGdT5xuX91wA12Yh8HpnJTKOtk6H32aD2tlrh
- TjxuKeQUbGbUi0N3fAiNYbu0rjZmiMb8ITYZohDjGcc6ro1VlR4gRGGd21uV+pxj+7qX
- WW6n3WuKH84RFDTMDti12vRtU3vZf8YSObvVg6v82gm9spc07XTRLfh4zWYfwEPbozhO vQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2sxqxmv5ws-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Thu, 06 Jun 2019 17:48:07 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B7A9B31;
-        Thu,  6 Jun 2019 15:48:06 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8E6812B23;
-        Thu,  6 Jun 2019 15:48:06 +0000 (GMT)
-Received: from SFHDAG3NODE1.st.com (10.75.127.7) by SFHDAG3NODE3.st.com
- (10.75.127.9) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 6 Jun
- 2019 17:48:06 +0200
-Received: from SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86]) by
- SFHDAG3NODE1.st.com ([fe80::1166:1abb:aad4:5f86%20]) with mapi id
- 15.00.1347.000; Thu, 6 Jun 2019 17:48:06 +0200
-From:   Erwan LE RAY <erwan.leray@st.com>
-To:     Borut Seljak <borut.seljak@t-2.net>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Alexandre TORGUE" <alexandre.torgue@st.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] serial: stm32: fix a recursive locking in
- stm32_config_rs485
-Thread-Topic: [PATCH v3] serial: stm32: fix a recursive locking in
- stm32_config_rs485
-Thread-Index: AQHVHFHrSWlGRhgeoU6uFgV0pT5nv6aOpEqA
-Date:   Thu, 6 Jun 2019 15:48:06 +0000
-Message-ID: <e0f8d4b2-a622-3758-473b-b78bd8949323@st.com>
-References: <erwan.leray@st.com> <20190606101901.31151-1-borut.seljak@t-2.net>
-In-Reply-To: <20190606101901.31151-1-borut.seljak@t-2.net>
-Accept-Language: en-US, fr-FR
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.47]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E7F0DC97BDB15B4E944187432787DEC1@st.com>
-Content-Transfer-Encoding: base64
+        id S1727158AbfFGHzY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 7 Jun 2019 03:55:24 -0400
+Received: from smtp4.iitb.ac.in ([103.21.127.18]:55434 "EHLO smtp1.iitb.ac.in"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727145AbfFGHzY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 7 Jun 2019 03:55:24 -0400
+X-Greylist: delayed 4689 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 03:55:23 EDT
+Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
+        by smtp1.iitb.ac.in (Postfix) with SMTP id B581110575BD
+        for <linux-serial@vger.kernel.org>; Fri,  7 Jun 2019 12:01:33 +0530 (IST)
+Received: (qmail 27999 invoked by uid 510); 7 Jun 2019 12:01:33 +0530
+X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
+ spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
+ Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 2.069313 secs; 07 Jun 2019 12:01:33 +0530
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns1.iitb.ac.in
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
+        MISSING_HEADERS,PROPER_IITB_MSGID,T_RP_MATCHES_RCVD autolearn=disabled
+        version=3.4.1
+X-Spam-Pyzor: Reported 0 times.
+X-Envelope-From: rws@aero.iitb.ac.in
+X-Qmail-Scanner-Mime-Attachments: |
+X-Qmail-Scanner-Zip-Files: |
+Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
+  by ldns1.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by ldns1.iitb.ac.in (Postfix) with ESMTP id 80518360036;
+        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id E4B948902E55E;
+        Fri,  7 Jun 2019 12:01:16 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id uy24o_MU5OGU; Fri,  7 Jun 2019 12:01:16 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5C3AC8902E548;
+        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
+X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2kbUWSjAc2AF; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
+        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
+Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
+From:   Martins Henry <rws@aero.iitb.ac.in>
+Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
+Subject: Thanks and I wait for your answer
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_11:,,
- signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.101.1.5]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
+Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
+Thread-Topic: Thanks and I wait for your answer
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-DQpPbiA2LzYvMTkgMTI6MTkgUE0sIEJvcnV0IFNlbGphayB3cm90ZToNCj4gUmVtb3ZlIHNwaW5f
-bG9ja19pcnFzYXZlIGluIHN0bTMyX2NvbmZpZ19yczQ4NSwgaXQgY2F1c2UgcmVjdXJzaXZlIGxv
-Y2tpbmcuDQo+IEFscmVhZHkgbG9ja2VkIGluIHVhcnRfc2V0X3JzNDg1X2NvbmZpZy4NCj4NCj4g
-Zml4ZXM6IDFiY2RhMDlkMjkxMDgxICgic2VyaWFsOiBzdG0zMjogYWRkIHN1cHBvcnQgZm9yIFJT
-NDg1IGhhcmR3YXJlIGNvbnRyb2wgbW9kZSIpDQo+DQo+IFNpZ25lZC1vZmYtYnk6IEJvcnV0IFNl
-bGphayA8Ym9ydXQuc2VsamFrQHQtMi5uZXQ+DQoNCkhpIEJvcnV0LA0KDQpUaGFua3MgZm9yIHlv
-dXIgcGF0Y2guDQoNCkFja2VkLWJ5OiBFcndhbiBMZSBSYXkgPGVyd2FuLmxlcmF5QHN0LmNvbT4N
-Cg0KUGxlYXNlIGNvcnJlY3QgYSB0eXBvIGluIGNvbW1pdCBtZXNzYWdlOiAiRml4ZXMiIGluc3Rl
-YWQgImZpeGVzIg0KDQpFcndhbi4NCg0KPiAtLS0NCj4gICBkcml2ZXJzL3R0eS9zZXJpYWwvc3Rt
-MzItdXNhcnQuYyB8IDMgLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgZGVsZXRpb25zKC0pDQo+
-DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3R0eS9zZXJpYWwvc3RtMzItdXNhcnQuYyBiL2RyaXZl
-cnMvdHR5L3NlcmlhbC9zdG0zMi11c2FydC5jDQo+IGluZGV4IGU4ZDdhN2JiNDMzOS4uNWQwNzJl
-YzYxMDcxIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3R0eS9zZXJpYWwvc3RtMzItdXNhcnQuYw0K
-PiArKysgYi9kcml2ZXJzL3R0eS9zZXJpYWwvc3RtMzItdXNhcnQuYw0KPiBAQCAtMTA1LDkgKzEw
-NSw3IEBAIHN0YXRpYyBpbnQgc3RtMzJfY29uZmlnX3JzNDg1KHN0cnVjdCB1YXJ0X3BvcnQgKnBv
-cnQsDQo+ICAgCXN0cnVjdCBzdG0zMl91c2FydF9jb25maWcgKmNmZyA9ICZzdG0zMl9wb3J0LT5p
-bmZvLT5jZmc7DQo+ICAgCXUzMiB1c2FydGRpdiwgYmF1ZCwgY3IxLCBjcjM7DQo+ICAgCWJvb2wg
-b3Zlcjg7DQo+IC0JdW5zaWduZWQgbG9uZyBmbGFnczsNCj4gICANCj4gLQlzcGluX2xvY2tfaXJx
-c2F2ZSgmcG9ydC0+bG9jaywgZmxhZ3MpOw0KPiAgIAlzdG0zMl9jbHJfYml0cyhwb3J0LCBvZnMt
-PmNyMSwgQklUKGNmZy0+dWFydF9lbmFibGVfYml0KSk7DQo+ICAgDQo+ICAgCXBvcnQtPnJzNDg1
-ID0gKnJzNDg1Y29uZjsNCj4gQEAgLTE0Nyw3ICsxNDUsNiBAQCBzdGF0aWMgaW50IHN0bTMyX2Nv
-bmZpZ19yczQ4NShzdHJ1Y3QgdWFydF9wb3J0ICpwb3J0LA0KPiAgIAl9DQo+ICAgDQo+ICAgCXN0
-bTMyX3NldF9iaXRzKHBvcnQsIG9mcy0+Y3IxLCBCSVQoY2ZnLT51YXJ0X2VuYWJsZV9iaXQpKTsN
-Cj4gLQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZwb3J0LT5sb2NrLCBmbGFncyk7DQo+ICAgDQo+
-ICAgCXJldHVybiAwOw0KPiAgIH0=
+Hello,
+
+I am Martin Henry, An American Citizen; I am the personal secretary to
+Mr. Donald Railton, the controller of a Lottery Company. Please I am
+having big problem now, I have a 6yrs old daughter who has leukemia, a
+disease of the blood, and she needs a bone marrow transplant or she
+will die.
+
+Please I am only asking for your help and you will benefit from it
+also. As an insider with Lottery Firm, working as the personal
+secretary to the controller, I want you to send me your name to play,
+I have some numbers that are going to win, stored in his secret data
+system in the office. The Lottery is an online entry with credit card
+anywhere with a name and address. All I want you to do is to send your
+name to play it and I will send confirmation to you.
+
+I will play with my card on your name and the Prize will be shared
+equally between us. Immediately the results are released they will
+contact you for payment as the oversea winner. The lotto can be played
+with 9.00 dollars, or 50 dollars but the prize will be Millions.
+Remember that I am playing on your name with my card; I just want to
+front you for this, because I need this money to save the life of my
+little daughter.
+
+Thanks and I wait for your answer
+Martin Henry.
