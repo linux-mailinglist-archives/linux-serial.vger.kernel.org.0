@@ -2,603 +2,126 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F5D39727
-	for <lists+linux-serial@lfdr.de>; Fri,  7 Jun 2019 22:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A633A52F
+	for <lists+linux-serial@lfdr.de>; Sun,  9 Jun 2019 13:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730461AbfFGU7M (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 7 Jun 2019 16:59:12 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:44606 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729891AbfFGU7L (ORCPT
+        id S1728246AbfFILuq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 9 Jun 2019 07:50:46 -0400
+Received: from mail-ed1-f44.google.com ([209.85.208.44]:42323 "EHLO
+        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728161AbfFILuq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 7 Jun 2019 16:59:11 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x57Kwk4X002683;
-        Fri, 7 Jun 2019 15:58:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1559941126;
-        bh=9QtQal/xgElQVUNSxI8kli7RpOLvcTlQZVRN1BbzmTY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=XE7QKg1zrni68UMyzhodUGceebmi+JBn8sUbZgDu01pe5KZbqjQWvHy9d8P+PZYzT
-         zYQIYtF6hshR8efq+FYvcc6xo4mDzvJGsnM+D3TqPqrMTP+6+uBrFAvTQcDUPuMXWv
-         lGX5KSCtEeR4K4MN4oBslkm3heFzw5mm3UXeHWZ8=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x57Kwj53052763
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 7 Jun 2019 15:58:46 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 7 Jun
- 2019 15:58:45 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 7 Jun 2019 15:58:45 -0500
-Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x57Kwi4P051693;
-        Fri, 7 Jun 2019 15:58:45 -0500
-Subject: Re: [PATCH 3/6] arm64: dts: ti: Add Support for J721E SoC
-To:     Nishanth Menon <nm@ti.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tero Kristo <t-kristo@ti.com>
-References: <20190522161921.20750-1-nm@ti.com>
- <20190522161921.20750-4-nm@ti.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <a786a889-7414-8cb9-7618-67fa1adf705d@ti.com>
-Date:   Fri, 7 Jun 2019 15:58:44 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Sun, 9 Jun 2019 07:50:46 -0400
+Received: by mail-ed1-f44.google.com with SMTP id z25so9727988edq.9
+        for <linux-serial@vger.kernel.org>; Sun, 09 Jun 2019 04:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=UYvqnbxrPZ1Lps6sz2SegnWqDlr9WZObAh41cn4G5xc=;
+        b=dVkjGPBUrK5SX4JArQQHXG8vUIT5G7qt4KY7Wj4BhQSnM5OMtdHNh2Kf/dCVx3LBoF
+         mkXvC4bpJEb2BNuY/f5CIfnvitTDYY8s4s7Qse9snyjG3dNDjiw8B5WEk75YiyrnQQHn
+         v4G5vxyxeEkrzG7leMx0aRKII0QtmIn6810qyhkUy2d2A71NOg1qM9PuH8tCMXIRpKQE
+         uVXqwpFb6wWjldxp8XCoQtLSOXPZHgKk2a28DBgjf93PQI7z4nHh/jWYoRFvSwS2yNhS
+         qUQ4VHWye134gMvs0gxBVu3RzKyrrp3Q1P4LhmHB+PyhwgBmptXmJKFtgIqwiIvuIqDk
+         4x1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=UYvqnbxrPZ1Lps6sz2SegnWqDlr9WZObAh41cn4G5xc=;
+        b=h0Phr9F/riZra13lzg/IPr3DPGXJqYdxbkDs53konUyXw7byl4Rt/ChR+qznuBttrh
+         fBgcb7MaxkRNPFzmH+makFpQ2duEynmgsy4IX5jcOMKAdWMARu2On8vVs/l5FGwohP12
+         Mhtd96zSzM6o7PZXEVs6EyiDgjbOU5mQBShJB0V7nC8PS3HewuHz1nGVEFhSoGOiUX8F
+         NGzvMzybhh5D0B4HA494zqq6w10EJFTw7ac2cIcXEoCSXJ7GJRtZZ6jadFxZktrKuB57
+         IW8/qQ8fcuUzDbdPfDYIwPjI5S7dYkyqcuJTi4G+3Zzl9eAYTElvoqA+2BcJLn4UDhwG
+         sfIA==
+X-Gm-Message-State: APjAAAW9UNJN7DWRkk87xRHYTYg6MvVWxRTR1SuXUaeGDNyQDYIpo5G8
+        9A7P71l4awFgou/hc2/yCxXhH03IdFqRdebkN3jxYbOC
+X-Google-Smtp-Source: APXvYqww+Yc+Yn02Q4QVOUoieuCi0Wf0E/PEoILcL9GzTUQD8c0iGReDD+tDNwcJ0bj5hI2qQiYPBALBrFI0djvwljE=
+X-Received: by 2002:a50:ac46:: with SMTP id w6mr33964240edc.238.1560081044247;
+ Sun, 09 Jun 2019 04:50:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190522161921.20750-4-nm@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From:   Oliver Barta <o.barta89@gmail.com>
+Date:   Sun, 9 Jun 2019 13:50:28 +0200
+Message-ID: <CALJK04N=v9DQKkdL2cwrRmObWTHMikkv2vhV-eqrt_-J4tpLAg@mail.gmail.com>
+Subject: serial: 8250: Potential loss of transmission error information in serial8250_handle_irq
+To:     linux-serial@vger.kernel.org
+Cc:     Vignesh R <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <alexander.levin@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Nishanth, Tero,
+Hello,
 
-On 5/22/19 11:19 AM, Nishanth Menon wrote:
-> The J721E SoC belongs to the K3 Multicore SoC architecture platform,
-> providing advanced system integration to enable lower system costs
-> of automotive applications such as infotainment, cluster, premium
-> Audio, Gateway, industrial and a range of broad market applications.
-> This SoC is designed around reducing the system cost by eliminating
-> the need of an external system MCU and is targeted towards ASIL-B/C
-> certification/requirements in addition to allowing complex software
-> and system use-cases.
-> 
-> Some highlights of this SoC are:
-> * Dual Cortex-A72s in a single cluster, three clusters of lockstep
->   capable dual Cortex-R5F MCUs, Deep-learning Matrix Multiply Accelerator(MMA),
->   C7x floating point Vector DSP, Two C66x floating point DSPs.
-> * 3D GPU PowerVR Rogue 8XE GE8430
-> * Vision Processing Accelerator (VPAC) with image signal processor and Depth
->   and Motion Processing Accelerator (DMPAC)
-> * Two Gigabit Industrial Communication Subsystems (ICSSG), each with dual
->   PRUs and dual RTUs
-> * Two CSI2.0 4L RX plus one CSI2.0 4L TX, one eDP/DP, One DSI Tx, and
->   up to two DPI interfaces.
-> * Integrated Ethernet switch supporting up to a total of 8 external ports in
->   addition to legacy Ethernet switch of up to 2 ports.
-> * System MMU (SMMU) Version 3.0 and advanced virtualisation
->   capabilities.
-> * Upto 4 PCIe-GEN3 controllers, 2 USB3.0 Dual-role device subsystems,
->   16 MCANs, 12 McASP, eMMC and SD, UFS, OSPI/HyperBus memory controller, QSPI,
->   I3C and I2C, eCAP/eQEP, eHRPWM, MLB among other peripherals.
-> * Two hardware accelerator block containing AES/DES/SHA/MD5 called SA2UL
->   management.
-> * Configurable L3 Cache and IO-coherent architecture with high data throughput
->   capable distributed DMA architecture under NAVSS
-> * Centralized System Controller for Security, Power, and Resource
->   Management (DMSC)
-> 
-> See J721E Technical Reference Manual (SPRUIL1, May 2019)
-> for further details: http://www.ti.com/lit/pdf/spruil1
-> 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 202 ++++++++++++++++++
->  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  72 +++++++
->  arch/arm64/boot/dts/ti/k3-j721e.dtsi          | 176 +++++++++++++++
->  3 files changed, 450 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> new file mode 100644
-> index 000000000000..d42912044a5d
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> @@ -0,0 +1,202 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree Source for J721E SoC Family Main Domain peripherals
-> + *
-> + * Copyright (C) 2016-2019 Texas Instruments Incorporated - http://www.ti.com/
-> + */
-> +
-> +&cbass_main {
-> +	msmc_ram: sram@70000000 {
-> +		compatible = "mmio-sram";
-> +		reg = <0x0 0x70000000 0x0 0x800000>;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x0 0x0 0x70000000 0x800000>;
-> +
-> +		atf-sram@0 {
-> +			reg = <0x0 0x20000>;
-> +		};
-> +	};
-> +
-> +	gic500: interrupt-controller@1800000 {
-> +		compatible = "arm,gic-v3";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +		#interrupt-cells = <3>;
-> +		interrupt-controller;
-> +		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
-> +		      <0x00 0x01900000 0x00 0x100000>;	/* GICR */
-> +
-> +		/* vcpumntirq: virtual CPU interface maintenance interrupt */
-> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +		gic_its: gic-its@18200000 {
-> +			compatible = "arm,gic-v3-its";
-> +			reg = <0x00 0x01820000 0x00 0x10000>;
-> +			socionext,synquacer-pre-its = <0x1000000 0x400000>;
-> +			msi-controller;
-> +			#msi-cells = <1>;
-> +		};
-> +	};
-> +
-> +	smmu0: smmu@36600000 {
-> +		compatible = "arm,smmu-v3";
-> +		reg = <0x0 0x36600000 0x0 0x100000>;
-> +		interrupt-parent = <&gic500>;
-> +		interrupts = <GIC_SPI 772 IRQ_TYPE_EDGE_RISING>,
-> +			     <GIC_SPI 768 IRQ_TYPE_EDGE_RISING>;
-> +		interrupt-names = "eventq", "gerror";
-> +		#iommu-cells = <1>;
-> +	};
-> +
-> +	secure_proxy_main: mailbox@32c00000 {
-> +		compatible = "ti,am654-secure-proxy";
-> +		#mbox-cells = <1>;
-> +		reg-names = "target_data", "rt", "scfg";
-> +		reg = <0x00 0x32c00000 0x00 0x100000>,
-> +		      <0x00 0x32400000 0x00 0x100000>,
-> +		      <0x00 0x32800000 0x00 0x100000>;
-> +		interrupt-names = "rx_011";
-> +		interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-> +	};
-> +
-> +	main_pmx0: pinmux@11c000 {
-> +		compatible = "pinctrl-single";
-> +		/* Proxy 0 addressing */
-> +		reg = <0x0 0x11c000 0x0 0x2b4>;
-> +		#pinctrl-cells = <1>;
-> +		pinctrl-single,register-width = <32>;
-> +		pinctrl-single,function-mask = <0xffffffff>;
-> +	};
-> +
-> +	main_uart0: serial@2800000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02800000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 146>;
-> +		clocks = <&k3_clks 146 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart1: serial@2810000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02810000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 193 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 278>;
-> +		clocks = <&k3_clks 278 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart2: serial@2820000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02820000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 194 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 279>;
-> +		clocks = <&k3_clks 279 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart3: serial@2830000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02830000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 195 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 280>;
-> +		clocks = <&k3_clks 280 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart4: serial@2840000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02840000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 281>;
-> +		clocks = <&k3_clks 281 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart5: serial@2850000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02850000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 282>;
-> +		clocks = <&k3_clks 282 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart6: serial@2860000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02860000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 283>;
-> +		clocks = <&k3_clks 283 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart7: serial@2870000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02870000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 199 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 284>;
-> +		clocks = <&k3_clks 284 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart8: serial@2880000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02880000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 248 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 285>;
-> +		clocks = <&k3_clks 285 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	main_uart9: serial@2890000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x02890000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 286>;
-> +		clocks = <&k3_clks 286 0>;
-> +		clock-names = "fclk";
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> new file mode 100644
-> index 000000000000..b72e033fa159
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree Source for J721E SoC Family MCU/WAKEUP Domain peripherals
-> + *
-> + * Copyright (C) 2016-2019 Texas Instruments Incorporated - http://www.ti.com/
-> + */
-> +
-> +&cbass_mcu_wakeup {
-> +	dmsc: dmsc@44083000 {
-> +		compatible = "ti,k2g-sci";
-> +		ti,host-id = <12>;
-> +
-> +		mbox-names = "rx", "tx";
-> +
-> +		mboxes= <&secure_proxy_main 11>,
-> +			<&secure_proxy_main 13>;
-> +
-> +		reg-names = "debug_messages";
-> +		reg = <0x00 0x44083000 0x0 0x1000>;
-> +
-> +		k3_pds: power-controller {
-> +			compatible = "ti,sci-pm-domain";
-> +			#power-domain-cells = <1>;
-> +		};
-> +
-> +		k3_clks: clocks {
-> +			compatible = "ti,k2g-sci-clk";
-> +			#clock-cells = <2>;
-> +			ti,scan-clocks-from-dt;
-> +		};
-> +
-> +		k3_reset: reset-controller {
-> +			compatible = "ti,sci-reset";
-> +			#reset-cells = <2>;
-> +		};
-> +	};
-> +
-> +	wkup_pmx0: pinmux@4301c000 {
-> +		compatible = "pinctrl-single";
-> +		/* Proxy 0 addressing */
-> +		reg = <0x00 0x4301c000 0x00 0x178>;
-> +		#pinctrl-cells = <1>;
-> +		pinctrl-single,register-width = <32>;
-> +		pinctrl-single,function-mask = <0xffffffff>;
-> +	};
-> +
-> +	wkup_uart0: serial@42300000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x42300000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 897 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <48000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 287>;
-> +		clocks = <&k3_clks 287 0>;
-> +		clock-names = "fclk";
-> +	};
-> +
-> +	mcu_uart0: serial@40a00000 {
-> +		compatible = "ti,j721e-uart", "ti,am654-uart";
-> +		reg = <0x00 0x40a00000 0x00 0x100>;
-> +		reg-shift = <2>;
-> +		reg-io-width = <4>;
-> +		interrupts = <GIC_SPI 846 IRQ_TYPE_LEVEL_HIGH>;
-> +		clock-frequency = <96000000>;
-> +		current-speed = <115200>;
-> +		power-domains = <&k3_pds 149>;
-> +		clocks = <&k3_clks 149 0>;
-> +		clock-names = "fclk";
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> new file mode 100644
-> index 000000000000..e7c366c98ce1
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> @@ -0,0 +1,176 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree Source for J721E SoC Family
-> + *
-> + * Copyright (C) 2016-2019 Texas Instruments Incorporated - http://www.ti.com/
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/pinctrl/k3.h>
-> +
-> +/ {
-> +	model = "Texas Instruments K3 J721E SoC";
-> +	compatible = "ti,j721e";
-> +	interrupt-parent = <&gic500>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	aliases {
-> +		serial0 = &wkup_uart0;
-> +		serial1 = &mcu_uart0;
-> +		serial2 = &main_uart0;
-> +		serial3 = &main_uart1;
-> +		serial4 = &main_uart2;
-> +		serial5 = &main_uart3;
-> +		serial6 = &main_uart4;
-> +		serial7 = &main_uart5;
-> +		serial8 = &main_uart6;
-> +		serial9 = &main_uart7;
-> +		serial10 = &main_uart8;
-> +		serial11 = &main_uart9;
-> +	};
-> +
-> +	chosen { };
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		cpu-map {
-> +			cluster0: cluster0 {
-> +				core0 {
-> +					cpu = <&cpu0>;
-> +				};
-> +
-> +				core1 {
-> +					cpu = <&cpu1>;
-> +				};
-> +			};
-> +
-> +		};
-> +
-> +		cpu0: cpu@0 {
-> +			compatible = "arm,cortex-a72";
-> +			reg = <0x000>;
-> +			device_type = "cpu";
-> +			enable-method = "psci";
-> +			i-cache-size = <0xC000>;
-> +			i-cache-line-size = <64>;
-> +			i-cache-sets = <256>;
-> +			d-cache-size = <0x8000>;
-> +			d-cache-line-size = <64>;
-> +			d-cache-sets = <128>;
-> +			next-level-cache = <&L2_0>;
-> +		};
-> +
-> +		cpu1: cpu@1 {
-> +			compatible = "arm,cortex-a72";
-> +			reg = <0x001>;
-> +			device_type = "cpu";
-> +			enable-method = "psci";
-> +			i-cache-size = <0xC000>;
-> +			i-cache-line-size = <64>;
-> +			i-cache-sets = <256>;
-> +			d-cache-size = <0x8000>;
-> +			d-cache-line-size = <64>;
-> +			d-cache-sets = <128>;
-> +			next-level-cache = <&L2_0>;
-> +		};
-> +	};
-> +
-> +	L2_0: l2-cache0 {
-> +		compatible = "cache";
-> +		cache-level = <2>;
-> +		cache-size = <0x100000>;
-> +		cache-line-size = <64>;
-> +		cache-sets = <2048>;
-> +		next-level-cache = <&msmc_l3>;
-> +	};
-> +
-> +	msmc_l3: l3-cache0 {
-> +		compatible = "cache";
-> +		cache-level = <3>;
-> +	};
-> +
-> +	firmware {
-> +		optee {
-> +			compatible = "linaro,optee-tz";
-> +			method = "smc";
-> +		};
-> +
-> +		psci: psci {
-> +			compatible = "arm,psci-1.0";
-> +			method = "smc";
-> +		};
-> +	};
-> +
-> +	a72_timer0: timer-cl0-cpu0 {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>, /* cntpsirq */
-> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>, /* cntpnsirq */
-> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>, /* cntvirq */
-> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>; /* cnthpirq */
-> +	};
-> +
-> +	pmu: pmu {
-> +		compatible = "arm,armv8-pmuv3";
-> +		/* Recommendation from GIC500 TRM Table A.3 */
-> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +	};
-> +
-> +	cbass_main: interconnect@100000 {
-> +		compatible = "simple-bus";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
-> +			 <0x00 0x00600000 0x00 0x00600000 0x00 0x00031100>, /* GPIO */
-> +			 <0x00 0x00900000 0x00 0x00900000 0x00 0x00012000>, /* serdes */
-> +			 <0x00 0x00A40000 0x00 0x00A40000 0x00 0x00000800>, /* timesync router */
-> +			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0af02400>, /* Most peripherals */
-> +			 <0x00 0x30800000 0x00 0x30800000 0x00 0x0bc00000>, /* MAIN NAVSS */
-> +			 <0x00 0x0d000000 0x00 0x0d000000 0x00 0x01000000>, /* PCIe Core*/
-> +			 <0x00 0x10000000 0x00 0x10000000 0x00 0x10000000>, /* PCIe DAT */
-> +			 <0x00 0x64800000 0x00 0x64800000 0x00 0x00800000>, /* C71 */
-> +			 <0x4d 0x80800000 0x4d 0x80800000 0x00 0x00800000>, /* C66_0 */
-> +			 <0x4d 0x81800000 0x4d 0x81800000 0x00 0x00800000>, /* C66_1 */
-> +			 <0x4e 0x20000000 0x4e 0x20000000 0x00 0x00080000>, /* GPU */
-> +			 /* MCUSS_WKUP Range */
-> +			 <0x00 0x28380000 0x00 0x28380000 0x00 0x03880000>,
-> +			 <0x00 0x40200000 0x00 0x40200000 0x00 0x00998400>,
-> +			 <0x00 0x40f00000 0x00 0x40f00000 0x00 0x00020000>,
-> +			 <0x00 0x41000000 0x00 0x41000000 0x00 0x00020000>,
-> +			 <0x00 0x41400000 0x00 0x41400000 0x00 0x00020000>,
-> +			 <0x00 0x41c00000 0x00 0x41c00000 0x00 0x00100000>,
-> +			 <0x00 0x42040000 0x00 0x42040000 0x00 0x03ac2400>,
-> +			 <0x00 0x45100000 0x00 0x45100000 0x00 0x00c24000>,
-> +			 <0x00 0x46000000 0x00 0x46000000 0x00 0x00200000>,
-> +			 <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
-> +			 <0x00 0x50000000 0x00 0x50000000 0x00 0x10000000>,
-> +			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00800000>,
+there is a small issue in serial8250_handle_irq function.
 
-minor nit, can we have this MSMC RAM range line moved to before the
-MCUSS_WKUP comment since it doesn't belong to the MCUSS range. Perhaps
-can be fixed up while applying the patch.
+    status = serial_port_in(port, UART_LSR);
 
-Other than that, everything looks good.
+    if (status & (UART_LSR_DR | UART_LSR_BI) &&
+        iir & UART_IIR_RDI) {
+        if (!up->dma || handle_rx_dma(up, iir))
+            status = serial8250_rx_chars(up, status);
+    }
 
-Reviewed-by: Suman Anna <s-anna@ti.com>
+The line status register is read unconditionally but the contained
+error flags are processed only if UART_IIR_RDI bit is set in iir
+variable which was updated by a read of the interrupt identification
+register which happened before the read of LSR. It is unlikely but
+under certain timing conditions (steps for testing below) it may
+happen that some error flags are set while the UART_IIR_RDI bit is
+cleared in iir variable. In this case the error information (e.g.
+framing error or parity error) obtained from LSR will be lost as the
+bits in the hardware register are cleared by the read.
 
-regards
-Suman
 
-> +			 <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>,
-> +			 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>;
-> +
-> +		cbass_mcu_wakeup: interconnect@28380000 {
-> +			compatible = "simple-bus";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges = <0x00 0x28380000 0x00 0x28380000 0x00 0x03880000>, /* MCU NAVSS*/
-> +				 <0x00 0x40200000 0x00 0x40200000 0x00 0x00998400>, /* First peripheral window */
-> +				 <0x00 0x40f00000 0x00 0x40f00000 0x00 0x00020000>, /* CTRL_MMR0 */
-> +				 <0x00 0x41000000 0x00 0x41000000 0x00 0x00020000>, /* MCU R5F Core0 */
-> +				 <0x00 0x41400000 0x00 0x41400000 0x00 0x00020000>, /* MCU R5F Core1 */
-> +				 <0x00 0x41c00000 0x00 0x41c00000 0x00 0x00100000>, /* MCU SRAM */
-> +				 <0x00 0x42040000 0x00 0x42040000 0x00 0x03ac2400>, /* WKUP peripheral window */
-> +				 <0x00 0x45100000 0x00 0x45100000 0x00 0x00c24000>, /* MMRs, remaining NAVSS */
-> +				 <0x00 0x46000000 0x00 0x46000000 0x00 0x00200000>, /* CPSW */
-> +				 <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>, /* OSPI register space */
-> +				 <0x00 0x50000000 0x00 0x50000000 0x00 0x10000000>, /* FSS OSPI0/1 data region 0 */
-> +				 <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>, /* FSS OSPI0 data region 3 */
-> +				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3*/
-> +		};
-> +	};
-> +};
-> +
-> +/* Now include the peripherals for each bus segments */
-> +#include "k3-j721e-main.dtsi"
-> +#include "k3-j721e-mcu-wakeup.dtsi"
-> 
+This problem was introduced by commit
 
+2e9fe539108320820016f78ca7704a7342788380 serial: 8250: Don't service
+RX FIFO if interrupts are disabled
+
+I see two possible solutions, either reverting this change or saving
+the error flags with
+
+up->lsr_saved_flags |= status & LSR_SAVE_FLAGS;
+
+in case they are not processed right away as done at several other
+places. I would vote for reverting it but I would like to hear a
+second opinion first.
+
+
+The commit message explains that the original change was required
+because some OMAP UART driver disables UART RX FIFO interrupts as
+response to a throttling request and it needs to be ensured that UART
+RX FIFO processing is actually stopped if the corresponding interrupts
+are disabled. I'm not sure if this is the right way to handle a
+throttling request. Based on the documentation in Documentation/serial
+I would expect a throttling request to only trigger hardware flow
+control to inform the sender that it should stop sending data. It
+should be the responsibility of the sender to act accordingly.
+Stopping processing of the input FIFO seems problematic to me as this
+FIFO is typically small and will likely overflow if input processing
+is stopped immediately.
+
+
+Steps to trigger this issue:
+1) Send a data packet which is larger than the TX FIFO.
+2) Trigger an external function generator on the outgoing data packet
+which is programmed to send a character with a parity error with a
+specific delay relative to the outgoing packet so that the character
+is received while the UART_IIR_THRI interrupt is processed in order to
+reload the TX FIFO. In particular it needs to be received between the
+read of IIR and LSR. (During my testing I added a delay of several
+micro seconds between both read operations to increase the probability
+for this to happen.)
+3) Check if parity error information was properly processed.
+
+I was testing on an Intel SOC with integrated DesignWare 16550A
+compatible UART without DMA support.
+
+Best regards,
+Oliver Barta
