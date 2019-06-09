@@ -2,126 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A633A52F
-	for <lists+linux-serial@lfdr.de>; Sun,  9 Jun 2019 13:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2D23ADA0
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 05:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728246AbfFILuq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 9 Jun 2019 07:50:46 -0400
-Received: from mail-ed1-f44.google.com ([209.85.208.44]:42323 "EHLO
-        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728161AbfFILuq (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 9 Jun 2019 07:50:46 -0400
-Received: by mail-ed1-f44.google.com with SMTP id z25so9727988edq.9
-        for <linux-serial@vger.kernel.org>; Sun, 09 Jun 2019 04:50:45 -0700 (PDT)
+        id S2387457AbfFJD1t (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 9 Jun 2019 23:27:49 -0400
+Received: from mtax.cdmx.gob.mx ([187.141.35.197]:8492 "EHLO mtax.cdmx.gob.mx"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387459AbfFJD1t (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 9 Jun 2019 23:27:49 -0400
+X-NAI-Header: Modified by McAfee Email Gateway (4500)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=UYvqnbxrPZ1Lps6sz2SegnWqDlr9WZObAh41cn4G5xc=;
-        b=dVkjGPBUrK5SX4JArQQHXG8vUIT5G7qt4KY7Wj4BhQSnM5OMtdHNh2Kf/dCVx3LBoF
-         mkXvC4bpJEb2BNuY/f5CIfnvitTDYY8s4s7Qse9snyjG3dNDjiw8B5WEk75YiyrnQQHn
-         v4G5vxyxeEkrzG7leMx0aRKII0QtmIn6810qyhkUy2d2A71NOg1qM9PuH8tCMXIRpKQE
-         uVXqwpFb6wWjldxp8XCoQtLSOXPZHgKk2a28DBgjf93PQI7z4nHh/jWYoRFvSwS2yNhS
-         qUQ4VHWye134gMvs0gxBVu3RzKyrrp3Q1P4LhmHB+PyhwgBmptXmJKFtgIqwiIvuIqDk
-         4x1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=UYvqnbxrPZ1Lps6sz2SegnWqDlr9WZObAh41cn4G5xc=;
-        b=h0Phr9F/riZra13lzg/IPr3DPGXJqYdxbkDs53konUyXw7byl4Rt/ChR+qznuBttrh
-         fBgcb7MaxkRNPFzmH+makFpQ2duEynmgsy4IX5jcOMKAdWMARu2On8vVs/l5FGwohP12
-         Mhtd96zSzM6o7PZXEVs6EyiDgjbOU5mQBShJB0V7nC8PS3HewuHz1nGVEFhSoGOiUX8F
-         NGzvMzybhh5D0B4HA494zqq6w10EJFTw7ac2cIcXEoCSXJ7GJRtZZ6jadFxZktrKuB57
-         IW8/qQ8fcuUzDbdPfDYIwPjI5S7dYkyqcuJTi4G+3Zzl9eAYTElvoqA+2BcJLn4UDhwG
-         sfIA==
-X-Gm-Message-State: APjAAAW9UNJN7DWRkk87xRHYTYg6MvVWxRTR1SuXUaeGDNyQDYIpo5G8
-        9A7P71l4awFgou/hc2/yCxXhH03IdFqRdebkN3jxYbOC
-X-Google-Smtp-Source: APXvYqww+Yc+Yn02Q4QVOUoieuCi0Wf0E/PEoILcL9GzTUQD8c0iGReDD+tDNwcJ0bj5hI2qQiYPBALBrFI0djvwljE=
-X-Received: by 2002:a50:ac46:: with SMTP id w6mr33964240edc.238.1560081044247;
- Sun, 09 Jun 2019 04:50:44 -0700 (PDT)
+        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
+        t=1560137056; h=DKIM-Filter:X-Virus-Scanned:
+         Content-Type:MIME-Version:Content-Transfer-Encoding:
+         Content-Description:Subject:To:From:Date:Reply-To:
+         Message-Id:X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
+         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
+         X-SAAS-TrackingID:X-NAI-Spam-Flag:X-NAI-Spam-Threshold:
+         X-NAI-Spam-Score:X-NAI-Spam-Rules:X-NAI-Spam-Version;
+        bh=U0Muiz5ECa3gaTzMJe13Eshf2iywdDpIp+lqwE
+        FBq5U=; b=fVwDtlEchKdPX7ElFYc49fUZhcr+Vcaa/cV0Z56C
+        6J12LRPm9v3fCXatOld+jtZREotfdiDbI2oY33OsWOUTfFEPyq
+        GmaZ/JY4cDpluj58341m84ngA62eeYgFY/9S8GjAxJwOBkPulk
+        /y6cbg9VCUczBkOBvGth2dAaSpM/Zus=
+Received: from cdmx.gob.mx (unknown [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
+        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
+         id 69c5_cba1_f1c8000d_7f72_48eb_91a7_1a1c3c960d49;
+        Sun, 09 Jun 2019 22:24:16 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id 8450B2C2726;
+        Sun,  9 Jun 2019 14:51:14 -0500 (CDT)
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id opurH8JRpT0l; Sun,  9 Jun 2019 14:51:14 -0500 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id D83061FA7E4;
+        Sun,  9 Jun 2019 11:18:06 -0500 (CDT)
+DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx D83061FA7E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
+        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1560097086;
+        bh=U0Muiz5ECa3gaTzMJe13Eshf2iywdDpIp+lqwEFBq5U=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Reply-To:Message-Id;
+        b=r7AxTZGzHd09qgSKFC5G3uGVlP6pwP9WxbdhMnLPV+64mowNPpeDK6MssjLSijBX3
+         +fIvD2jDvz4oz6fvB6hbujHoA4JgWtQ5YWKKe8A1kxcmeT/O+V6A3irqGwrIY+ffbh
+         Ia7jXnISHeB2dRrTawaM/x7JypSI2nRXt9OhsRcY=
+X-Virus-Scanned: amavisd-new at cdmx.gob.mx
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id uwIAulmg2X0t; Sun,  9 Jun 2019 11:18:06 -0500 (CDT)
+Received: from [51.38.116.193] (ip193.ip-51-38-116.eu [51.38.116.193])
+        by cdmx.gob.mx (Postfix) with ESMTPSA id B6AA81E6B7B;
+        Sun,  9 Jun 2019 09:52:47 -0500 (CDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-From:   Oliver Barta <o.barta89@gmail.com>
-Date:   Sun, 9 Jun 2019 13:50:28 +0200
-Message-ID: <CALJK04N=v9DQKkdL2cwrRmObWTHMikkv2vhV-eqrt_-J4tpLAg@mail.gmail.com>
-Subject: serial: 8250: Potential loss of transmission error information in serial8250_handle_irq
-To:     linux-serial@vger.kernel.org
-Cc:     Vignesh R <vigneshr@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sasha Levin <alexander.levin@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?4oKsIDIuMDAwLjAwMCwwMCBFdXJv?=
+To:     Recipients <cilpinez@cdmx.gob.mx>
+From:   cilpinez@cdmx.gob.mx
+Date:   Sun, 09 Jun 2019 07:52:49 -0700
+Reply-To: johnwalterlove2010@gmail.com
+Message-Id: <20190609145247.B6AA81E6B7B@cdmx.gob.mx>
+X-AnalysisOut: [v=2.2 cv=JpWBlIwC c=1 sm=1 tr=0 p=d_9A9YPZgCEA:10 p=UhPmRW]
+X-AnalysisOut: [QW4yN_uUvCwugA:9 p=Ner0o0mvyuUA:10 p=CwrrfTYHidcoWUP_FusY:]
+X-AnalysisOut: [22 p=Z3hVr4-9LPz_iBwj1Snb:22 a=T6zFoIZ12MK39YzkfxrL7A==:11]
+X-AnalysisOut: [7 a=o6exIZH9ckoXPxROjXgmHg==:17 a=IkcTkHD0fZMA:10 a=x7bEGL]
+X-AnalysisOut: [p0ZPQA:10 a=dq6fvYVFJ5YA:10 a=pGLkceISAAAA:8 a=QEXdDO2ut3Y]
+X-AnalysisOut: [A:10 a=uXetiwfYVjQA:10]
+X-SAAS-TrackingID: d7dcdfc5.0.366874067.00-2356.627117332.s12p02m001.mxlogic.net
+X-NAI-Spam-Flag: NO
+X-NAI-Spam-Threshold: 3
+X-NAI-Spam-Score: -5000
+X-NAI-Spam-Rules: 1 Rules triggered
+        WHITELISTED=-5000
+X-NAI-Spam-Version: 2.3.0.9418 : core <6564> : inlines <7098> : streams
+ <1824044> : uri <2854455>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
-
-there is a small issue in serial8250_handle_irq function.
-
-    status = serial_port_in(port, UART_LSR);
-
-    if (status & (UART_LSR_DR | UART_LSR_BI) &&
-        iir & UART_IIR_RDI) {
-        if (!up->dma || handle_rx_dma(up, iir))
-            status = serial8250_rx_chars(up, status);
-    }
-
-The line status register is read unconditionally but the contained
-error flags are processed only if UART_IIR_RDI bit is set in iir
-variable which was updated by a read of the interrupt identification
-register which happened before the read of LSR. It is unlikely but
-under certain timing conditions (steps for testing below) it may
-happen that some error flags are set while the UART_IIR_RDI bit is
-cleared in iir variable. In this case the error information (e.g.
-framing error or parity error) obtained from LSR will be lost as the
-bits in the hardware register are cleared by the read.
-
-
-This problem was introduced by commit
-
-2e9fe539108320820016f78ca7704a7342788380 serial: 8250: Don't service
-RX FIFO if interrupts are disabled
-
-I see two possible solutions, either reverting this change or saving
-the error flags with
-
-up->lsr_saved_flags |= status & LSR_SAVE_FLAGS;
-
-in case they are not processed right away as done at several other
-places. I would vote for reverting it but I would like to hear a
-second opinion first.
-
-
-The commit message explains that the original change was required
-because some OMAP UART driver disables UART RX FIFO interrupts as
-response to a throttling request and it needs to be ensured that UART
-RX FIFO processing is actually stopped if the corresponding interrupts
-are disabled. I'm not sure if this is the right way to handle a
-throttling request. Based on the documentation in Documentation/serial
-I would expect a throttling request to only trigger hardware flow
-control to inform the sender that it should stop sending data. It
-should be the responsibility of the sender to act accordingly.
-Stopping processing of the input FIFO seems problematic to me as this
-FIFO is typically small and will likely overflow if input processing
-is stopped immediately.
-
-
-Steps to trigger this issue:
-1) Send a data packet which is larger than the TX FIFO.
-2) Trigger an external function generator on the outgoing data packet
-which is programmed to send a character with a parity error with a
-specific delay relative to the outgoing packet so that the character
-is received while the UART_IIR_THRI interrupt is processed in order to
-reload the TX FIFO. In particular it needs to be received between the
-read of IIR and LSR. (During my testing I added a delay of several
-micro seconds between both read operations to increase the probability
-for this to happen.)
-3) Check if parity error information was properly processed.
-
-I was testing on an Intel SOC with integrated DesignWare 16550A
-compatible UART without DMA support.
-
-Best regards,
-Oliver Barta
+Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jac=
+kpot spende ich an 5 zuf=C3=A4llige Personen, wenn Sie diese E-Mail erhalte=
+n, dann wurde Ihre E-Mail nach einem Spinball ausgew=C3=A4hlt. Ich habe den=
+ gr=C3=B6=C3=9Ften Teil meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=
+=A4tigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwi=
+llig dazu entschieden, Ihnen den Betrag von =E2=82=AC 2.000.000,00 zu spend=
+en eine der ausgew=C3=A4hlten 5, um meine Gewinne zu =C3=BCberpr=C3=BCfen. =
+Das ist dein Spendencode: [DF00430342018] Antworten Sie mit dem Spendencode=
+ auf diese E-Mail: richardpovertyorg@gmail.com
