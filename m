@@ -2,52 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E13403BC76
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 21:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB30B3BCFE
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 21:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388826AbfFJTLZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 10 Jun 2019 15:11:25 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38496 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388790AbfFJTLY (ORCPT
+        id S2389155AbfFJTj2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Jun 2019 15:39:28 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40543 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388843AbfFJTj2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 10 Jun 2019 15:11:24 -0400
-Received: by mail-wr1-f65.google.com with SMTP id d18so10311630wrs.5
-        for <linux-serial@vger.kernel.org>; Mon, 10 Jun 2019 12:11:24 -0700 (PDT)
+        Mon, 10 Jun 2019 15:39:28 -0400
+Received: by mail-ed1-f67.google.com with SMTP id k8so1481660eds.7;
+        Mon, 10 Jun 2019 12:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VxGrZIk0ilyARGeNNCgKhGQZa7EH/uMSHTcMGHhDQ9M=;
-        b=QMaQ4W4XXGQx0RuwZjmX5oQJYDawi3cbL6qNm1PK0Wyej+cgQNfVpDdaq7fey/MKcb
-         zOCdXr371bMnJRfUQTXs+tdQueXm/uqqzB9J/0KXwg8tlN2X+5nGePhB13smhK+2cw8C
-         JcRLFcqhAQlp4Jz5y4+0ULVZIjm7fGB/cfCFhNYCI4oMHzK/j/IxxZLYIvhEXRRoVC/8
-         uvocrR09DFwzwPzqRcNGkR1cPFPHqvMEBGObCisxro16CUwjov61326mO9IO0nizld2H
-         1V0uEl5ImOgXLQmSvZPoVDR50OE0azQpoVbPtbFy3vV53WLz2jBtb89I4BR0ek7vZfoK
-         vGMg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IQPQvjuDv27sTzepAG4hWhvF4AgvvEXXIYtlZua8qVQ=;
+        b=h+NSyqIvUV+3LLYL3yPhITD/OHCKfeCqwo8Yu/73jT6TWZfN6Txmzu6Nc4NZFByIjF
+         0P+ii2f0WRPdG/Cf8IKWJfqFGtcalr0FEh3hl9uyFWA6xPT2nD5MlbmtWnYSE9FgRRaJ
+         C71Kq2gyZuDJDtLS/AKq553ko4BSYjF4oMqFifSGUeOefMQw1j1blTYnhl13BkdPeQGA
+         yS3jTGaKdasCCOQyoVkYupCk4y0QgSNxPHX5QpbjoblIZRYZCWspJaCrtirmYJf6o2vP
+         Vt9JWQXyD6rgTWJ6QM6TKn4CpthjHMTJk9y1Cg5mFzyTJV6zzWkbXD8jPLtGrsSlWizF
+         j6sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VxGrZIk0ilyARGeNNCgKhGQZa7EH/uMSHTcMGHhDQ9M=;
-        b=S064DmrLoELlhAPIshmZC65NOjCY9ZpwzRBjf3QsKUDm2hE6cvMSFvLw/QEOGZQvst
-         w4yYWp/KQ7QvA+/RzltENSPdjaHvdcMhnNySkh/G2lGTP/Dbq/WeSxfvlPrRz+dSbtTB
-         t5Gol8ZhJSrgdluJkTeHDSrKFI2u54x8gryFKZ0AG1NL9LNoIWLPSnF++84mvSnSEf9z
-         v57l1+GreOEaTpjkBURmQlfi1C9nzgZ161TG0vDLJ7nmISfscPGH7WMXlllGXjpxcuYE
-         tR5MCbSWQ2Lh37/atSC+QYAd7BwU7BM4W9EJofsrJEcCpK7bhXqH8jYPOzR0+ukLdLay
-         qMoA==
-X-Gm-Message-State: APjAAAWu2NnnswDhFSUiIyu4C053lxrmgrz9su70w3Jn8Slv8p5Nupi1
-        spX6kXRXU3JlpaCNUOKZn/NqwQ==
-X-Google-Smtp-Source: APXvYqy5gdI/Dzp9A6lc41i4FU3NFeqmkX4ph+neuoWpmKseNBvFiu579ofTaiIrZ1zsU+GqKySYbw==
-X-Received: by 2002:a5d:6343:: with SMTP id b3mr13243554wrw.317.1560193883338;
-        Mon, 10 Jun 2019 12:11:23 -0700 (PDT)
-Received: from [192.168.1.6] (233.red-79-146-84.dynamicip.rima-tde.net. [79.146.84.233])
-        by smtp.gmail.com with ESMTPSA id b136sm670675wme.30.2019.06.10.12.11.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Jun 2019 12:11:22 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IQPQvjuDv27sTzepAG4hWhvF4AgvvEXXIYtlZua8qVQ=;
+        b=CbdzZXQNSqWiXTh8zE651XZZksbZHZq6i+SvLuI/LKtmcaABF+jpBGv5HAMYS+0PxB
+         JOuUvY5OuZX6RSgnsyUJ8dWmcMo0F/ex0xK78cV61E/Ov+4/ORpq6Fuko3ilVYVtAU1p
+         kmhKb0pR/6wVRVV/piROSIUIx75XmpgIicU+L8qXxh2lonv2l80sNtqCtwU263mhkiuG
+         A0/4cYOp3bJif/X7jWX49sLudhNInTuQSOAplFIjKBnXJtfXqg2xuGJZyjRGuqPs1OiU
+         1lSMMh715dSSMD1B8ZVEPckXrw7I+PE27/IS5ejRbIAwYgJ1OZZWYCPUiAJDKK1vNVWt
+         yYOQ==
+X-Gm-Message-State: APjAAAVKR7Zj6COPWlrWoekygAkxBdSqvcFOpxPB4gAPNzRJHSOUOwTR
+        4mtAMW4aNTSh5siZzWetsTcffbkNWbqxF+DMhbKE9A26
+X-Google-Smtp-Source: APXvYqz1kexxtSxSbC/mQomznP8lJlzG27uSLKICLaSKbIC97I6MgU7HMDNaWIJHB6w1kOBzjMPBX5pxlUqhvF4APOE=
+X-Received: by 2002:a17:906:604e:: with SMTP id p14mr16491664ejj.192.1560195565360;
+ Mon, 10 Jun 2019 12:39:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190610172308.21129-1-jorge.ramirez-ortiz@linaro.org>
+ <CAF6AEGuAPurGcRh42iRkt3paD=kWLJw-ic_LL1QGY=ws8_00XA@mail.gmail.com> <e656ddd3-f327-818d-3688-f24fddcb52c5@linaro.org>
+In-Reply-To: <e656ddd3-f327-818d-3688-f24fddcb52c5@linaro.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 10 Jun 2019 12:39:11 -0700
+Message-ID: <CAF6AEGt9=xND3TyJy5HDg3RbXB=dxzj6oqBxKX9MaC5O2=JYVQ@mail.gmail.com>
 Subject: Re: [PATCH v3] tty: serial: msm_serial: avoid system lockup condition
-To:     Rob Clark <robdclark@gmail.com>
+To:     Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
 Cc:     Greg KH <gregkh@linuxfoundation.org>, agross@kernel.org,
         David Brown <david.brown@linaro.org>, jslaby@suse.com,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
@@ -55,52 +57,62 @@ Cc:     Greg KH <gregkh@linuxfoundation.org>, agross@kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         khasim.mohammed@linaro.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20190610172308.21129-1-jorge.ramirez-ortiz@linaro.org>
- <CAF6AEGuAPurGcRh42iRkt3paD=kWLJw-ic_LL1QGY=ws8_00XA@mail.gmail.com>
-From:   Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
-Message-ID: <e656ddd3-f327-818d-3688-f24fddcb52c5@linaro.org>
-Date:   Mon, 10 Jun 2019 21:11:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
-MIME-Version: 1.0
-In-Reply-To: <CAF6AEGuAPurGcRh42iRkt3paD=kWLJw-ic_LL1QGY=ws8_00XA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 6/10/19 19:53, Rob Clark wrote:
-> On Mon, Jun 10, 2019 at 10:23 AM Jorge Ramirez-Ortiz
-> <jorge.ramirez-ortiz@linaro.org> wrote:
->> The function msm_wait_for_xmitr can be taken with interrupts
->> disabled. In order to avoid a potential system lockup - demonstrated
->> under stress testing conditions on SoC QCS404/5 - make sure we wait
->> for a bounded amount of time.
->>
->> Tested on SoC QCS404.
->>
->> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> 
-> I had observed that heavy UART traffic would lockup the system (on
-> sdm845, but I guess same serial driver)?
-> 
-> But a comment from the peanut gallary:  wouldn't this fix lead to TX
-> corruption, ie. writing more into TX fifo before hw is ready?  I
-> haven't looked closely at the driver, but a way to wait without irqs
-> disabled would seem nicer..
-> 
-> BR,
-> -R
-> 
+On Mon, Jun 10, 2019 at 12:11 PM Jorge Ramirez
+<jorge.ramirez-ortiz@linaro.org> wrote:
+>
+> On 6/10/19 19:53, Rob Clark wrote:
+> > On Mon, Jun 10, 2019 at 10:23 AM Jorge Ramirez-Ortiz
+> > <jorge.ramirez-ortiz@linaro.org> wrote:
+> >> The function msm_wait_for_xmitr can be taken with interrupts
+> >> disabled. In order to avoid a potential system lockup - demonstrated
+> >> under stress testing conditions on SoC QCS404/5 - make sure we wait
+> >> for a bounded amount of time.
+> >>
+> >> Tested on SoC QCS404.
+> >>
+> >> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+> >
+> > I had observed that heavy UART traffic would lockup the system (on
+> > sdm845, but I guess same serial driver)?
+> >
+> > But a comment from the peanut gallary:  wouldn't this fix lead to TX
+> > corruption, ie. writing more into TX fifo before hw is ready?  I
+> > haven't looked closely at the driver, but a way to wait without irqs
+> > disabled would seem nicer..
+> >
+> > BR,
+> > -R
+> >
+>
+> I think sdm845 uses a different driver (qcom_geni_serial.c) but yes in
+> any case we need to determine the sequence leading to the lockup. In our
+> internal releases we are adding additional debug information to try to
+> capture this info.
 
-I think sdm845 uses a different driver (qcom_geni_serial.c) but yes in
-any case we need to determine the sequence leading to the lockup. In our
-internal releases we are adding additional debug information to try to
-capture this info.
+ahh, ok.. perhaps qcom_geni_serial has a similar issue.. fwiw where I
+tend to hit it is debugging mesa, bugs that can trigger GPU lockups
+can tricker a lot of them, and a lot of dmesg spew.  Which in turn
+seems to freeze usb (? I think.. I'm using a usb-c ethernet adapter)
+making it hard to ctrl-c the thing that  is causing the GPU lockups in
+the first place.
 
-But also I dont think this means that the safety net should not be used
+> But also I dont think this means that the safety net should not be used
 
-btw, do you think that perhaps we should add a WARN_ONCE() on timeout?.
+yeah, probably not worse than the current state.. although a proper
+solution would be nice
+
+> btw, do you think that perhaps we should add a WARN_ONCE() on timeout?.
+
+not sure if backtrace adds much value here.. but perhaps a (very)
+ratelimited warning msg?  You don't want to make the underlying
+problem too much worse with too much debug msg but some hint about
+what is happening could be useful.
+
+BR,
+-R
