@@ -2,94 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2D23ADA0
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 05:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5033AFCB
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 09:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387457AbfFJD1t (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 9 Jun 2019 23:27:49 -0400
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:8492 "EHLO mtax.cdmx.gob.mx"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387459AbfFJD1t (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 9 Jun 2019 23:27:49 -0400
-X-NAI-Header: Modified by McAfee Email Gateway (4500)
+        id S2388172AbfFJHhm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Jun 2019 03:37:42 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43285 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388136AbfFJHhl (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 10 Jun 2019 03:37:41 -0400
+Received: by mail-wr1-f65.google.com with SMTP id r18so8040700wrm.10
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jun 2019 00:37:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1560137056; h=DKIM-Filter:X-Virus-Scanned:
-         Content-Type:MIME-Version:Content-Transfer-Encoding:
-         Content-Description:Subject:To:From:Date:Reply-To:
-         Message-Id:X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-SAAS-TrackingID:X-NAI-Spam-Flag:X-NAI-Spam-Threshold:
-         X-NAI-Spam-Score:X-NAI-Spam-Rules:X-NAI-Spam-Version;
-        bh=U0Muiz5ECa3gaTzMJe13Eshf2iywdDpIp+lqwE
-        FBq5U=; b=fVwDtlEchKdPX7ElFYc49fUZhcr+Vcaa/cV0Z56C
-        6J12LRPm9v3fCXatOld+jtZREotfdiDbI2oY33OsWOUTfFEPyq
-        GmaZ/JY4cDpluj58341m84ngA62eeYgFY/9S8GjAxJwOBkPulk
-        /y6cbg9VCUczBkOBvGth2dAaSpM/Zus=
-Received: from cdmx.gob.mx (unknown [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
-        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
-         id 69c5_cba1_f1c8000d_7f72_48eb_91a7_1a1c3c960d49;
-        Sun, 09 Jun 2019 22:24:16 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cdmx.gob.mx (Postfix) with ESMTP id 8450B2C2726;
-        Sun,  9 Jun 2019 14:51:14 -0500 (CDT)
-Received: from cdmx.gob.mx ([127.0.0.1])
-        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id opurH8JRpT0l; Sun,  9 Jun 2019 14:51:14 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by cdmx.gob.mx (Postfix) with ESMTP id D83061FA7E4;
-        Sun,  9 Jun 2019 11:18:06 -0500 (CDT)
-DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx D83061FA7E4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
-        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1560097086;
-        bh=U0Muiz5ECa3gaTzMJe13Eshf2iywdDpIp+lqwEFBq5U=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=r7AxTZGzHd09qgSKFC5G3uGVlP6pwP9WxbdhMnLPV+64mowNPpeDK6MssjLSijBX3
-         +fIvD2jDvz4oz6fvB6hbujHoA4JgWtQ5YWKKe8A1kxcmeT/O+V6A3irqGwrIY+ffbh
-         Ia7jXnISHeB2dRrTawaM/x7JypSI2nRXt9OhsRcY=
-X-Virus-Scanned: amavisd-new at cdmx.gob.mx
-Received: from cdmx.gob.mx ([127.0.0.1])
-        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id uwIAulmg2X0t; Sun,  9 Jun 2019 11:18:06 -0500 (CDT)
-Received: from [51.38.116.193] (ip193.ip-51-38-116.eu [51.38.116.193])
-        by cdmx.gob.mx (Postfix) with ESMTPSA id B6AA81E6B7B;
-        Sun,  9 Jun 2019 09:52:47 -0500 (CDT)
-Content-Type: text/plain; charset="utf-8"
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3aJUsVJEK9+CBcf4UpPeGea/cLMYkv5xsZDArHsWziA=;
+        b=x7cXKFFBTeToSOdu9ScaVUDjqDt66N6zxwx5eiCRELdilz4D9HOV0PNBw0USpTHZyo
+         pRyDwvR7FHnybSkI/LJYZw00nrY/2UmFQdxuklZCaowJP0dgKU9AkSgaiLYbmq16A1rq
+         DZhmYxD5o/LDMc4Bu6RveBnZNWrIFtzHcRYI17JXx+3s1EhRfi7ZJoKoeFB+qZ0J7ubW
+         TWeaZgAjZcBYdfawOgOIIxbBa7oRvhWafut/epTazByr2fkOnHkbS4hFO2iTzqmGTZlE
+         Tx928gmgtLkiMPbuQdxchrEQ2aYEWIhfSjfrLSGV2PuhiExO1oP4JRtM0C/TY9hRwPWh
+         zb5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3aJUsVJEK9+CBcf4UpPeGea/cLMYkv5xsZDArHsWziA=;
+        b=fhw4FSSDj7biolbzXk/PVKpjELDDkUXUuvGkhfZxq8+8NGVdO3HTsuN7qngTBCuIxU
+         tVMFSeul26zS+WVhZpNvWAR1NIj8UV7jgB4a62O+HdpoK6lOM/vR6b02EVoWFSDqfLK/
+         3nlxzmbI8ihRdtHN3J8bkQWECB97/uzkCso8i54ejuzi064UXPhMGX7Ll7ohIFogiT/L
+         3b7+eZGz/qEKUTWy8Js//8IPRMFTnwl5oZpsQhDowYbeVnWXCkbSt8L8DiLsy2Tdy9CQ
+         SDAenrWnkEMbDHfs0JWyp9Ml/lBTppwcOA/if+xbpk+OU3Kfw9enzS2bDs2akDnG7XIu
+         M2SA==
+X-Gm-Message-State: APjAAAWHeBQKlpyt/sRhEW33z7QY54wgCuJLzpHXpfdBuF6IYrFcxvvx
+        xdDf+gHOLs2E5dzUyV/XRH8zag==
+X-Google-Smtp-Source: APXvYqxFZIVaBoMnIveU6WQwFqVvm62qPtjos9GCmyqHffI7iTlBHH5oTNEWoqPqzxf7MS571LsXFw==
+X-Received: by 2002:adf:f951:: with SMTP id q17mr16745992wrr.173.1560152260502;
+        Mon, 10 Jun 2019 00:37:40 -0700 (PDT)
+Received: from localhost.localdomain (233.red-79-146-84.dynamicip.rima-tde.net. [79.146.84.233])
+        by smtp.gmail.com with ESMTPSA id t7sm8769520wrn.52.2019.06.10.00.37.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 10 Jun 2019 00:37:40 -0700 (PDT)
+From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+To:     jorge.ramirez-ortiz@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, gregkh@linuxfoundation.org, jslaby@suse.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khasim.mohammed@linaro.org,
+        bjorn.andersson@linaro.org
+Subject: [PATCH] tty: serial: msm_serial: avoid system lockup condition
+Date:   Mon, 10 Jun 2019 09:37:37 +0200
+Message-Id: <20190610073737.22856-1-jorge.ramirez-ortiz@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDIuMDAwLjAwMCwwMCBFdXJv?=
-To:     Recipients <cilpinez@cdmx.gob.mx>
-From:   cilpinez@cdmx.gob.mx
-Date:   Sun, 09 Jun 2019 07:52:49 -0700
-Reply-To: johnwalterlove2010@gmail.com
-Message-Id: <20190609145247.B6AA81E6B7B@cdmx.gob.mx>
-X-AnalysisOut: [v=2.2 cv=JpWBlIwC c=1 sm=1 tr=0 p=d_9A9YPZgCEA:10 p=UhPmRW]
-X-AnalysisOut: [QW4yN_uUvCwugA:9 p=Ner0o0mvyuUA:10 p=CwrrfTYHidcoWUP_FusY:]
-X-AnalysisOut: [22 p=Z3hVr4-9LPz_iBwj1Snb:22 a=T6zFoIZ12MK39YzkfxrL7A==:11]
-X-AnalysisOut: [7 a=o6exIZH9ckoXPxROjXgmHg==:17 a=IkcTkHD0fZMA:10 a=x7bEGL]
-X-AnalysisOut: [p0ZPQA:10 a=dq6fvYVFJ5YA:10 a=pGLkceISAAAA:8 a=QEXdDO2ut3Y]
-X-AnalysisOut: [A:10 a=uXetiwfYVjQA:10]
-X-SAAS-TrackingID: d7dcdfc5.0.366874067.00-2356.627117332.s12p02m001.mxlogic.net
-X-NAI-Spam-Flag: NO
-X-NAI-Spam-Threshold: 3
-X-NAI-Spam-Score: -5000
-X-NAI-Spam-Rules: 1 Rules triggered
-        WHITELISTED=-5000
-X-NAI-Spam-Version: 2.3.0.9418 : core <6564> : inlines <7098> : streams
- <1824044> : uri <2854455>
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jac=
-kpot spende ich an 5 zuf=C3=A4llige Personen, wenn Sie diese E-Mail erhalte=
-n, dann wurde Ihre E-Mail nach einem Spinball ausgew=C3=A4hlt. Ich habe den=
- gr=C3=B6=C3=9Ften Teil meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=
-=A4tigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwi=
-llig dazu entschieden, Ihnen den Betrag von =E2=82=AC 2.000.000,00 zu spend=
-en eine der ausgew=C3=A4hlten 5, um meine Gewinne zu =C3=BCberpr=C3=BCfen. =
-Das ist dein Spendencode: [DF00430342018] Antworten Sie mit dem Spendencode=
- auf diese E-Mail: richardpovertyorg@gmail.com
+The function msm_wait_for_xmitr can be taken with interrupts
+disabled. In order to avoid a potential system lockup - demonstrated
+under stress testing conditions on SoC QCS404/5 - make sure we wait
+for a bounded amount of time.
+
+Tested on SoC QCS404.
+
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+---
+ drivers/tty/serial/msm_serial.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 23833ad952ba..0d4f1fe2b3a2 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -383,10 +383,14 @@ static void msm_request_rx_dma(struct msm_port *msm_port, resource_size_t base)
+ 
+ static inline void msm_wait_for_xmitr(struct uart_port *port)
+ {
++	unsigned int timeout = 500000;
++
+ 	while (!(msm_read(port, UART_SR) & UART_SR_TX_EMPTY)) {
+ 		if (msm_read(port, UART_ISR) & UART_ISR_TX_READY)
+ 			break;
+ 		udelay(1);
++		if (timeout--)
++			break;
+ 	}
+ 	msm_write(port, UART_CR_CMD_RESET_TX_READY, UART_CR);
+ }
+-- 
+2.21.0
+
