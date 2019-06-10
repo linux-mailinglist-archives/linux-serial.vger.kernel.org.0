@@ -2,73 +2,100 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FB83BAB1
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 19:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672B33BADD
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 19:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387741AbfFJRNG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 10 Jun 2019 13:13:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387500AbfFJRNG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 10 Jun 2019 13:13:06 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 41AE5207E0;
-        Mon, 10 Jun 2019 17:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560186785;
-        bh=sT/rZSZYEkVXc+vfxxISMm6Asd7SJoGF8UinSixDpnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1bSwVDIRlZNG9xrSaFEIuayW/tn8kHGx1Y+QO1S18vHPPtZ9tJlabLj8ZLJC6+Tz2
-         y8zMJ6kOVtka73LQLBRNh+BCMJSvcylXJPydtkd+yOr2W2daDYUUczRmRC32TVuVqy
-         9Ynq/LYS1yDKhy4KOLZhtUGXm2SmfunmUR5jtq2A=
-Date:   Mon, 10 Jun 2019 19:13:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu, johan@kernel.org,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] serial: uartps: Use the same dynamin major number
- for all ports
-Message-ID: <20190610171303.GA14134@kroah.com>
-References: <c6753260caf8b20cc002b15fcbf22b759c91d760.1560156294.git.michal.simek@xilinx.com>
- <381ea608440345a4424d24296666b2451b1a20ee.1560156294.git.michal.simek@xilinx.com>
+        id S2387823AbfFJRXO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Jun 2019 13:23:14 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42995 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728416AbfFJRXO (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 10 Jun 2019 13:23:14 -0400
+Received: by mail-wr1-f65.google.com with SMTP id x17so9984073wrl.9
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jun 2019 10:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hE4cR11QUq+RsE+T2OXtTk5Fiz8rk9hoeeEatdOHPQM=;
+        b=DYCkAdiUnfostkm8Hivw7VIDgB6ztRtb5vpXxRVM8Gy7u2qzeKbULe2FAkpkmxsGuC
+         e8dFxmka3vVJmQtR0L+lKeCuI5rECXgOeNiuiqkohPLon3Zu/J6pIJGpDH6sAnVNBRdy
+         iYj0cmRtJLOZIRfdYpm5c+25f1k1lOIQ9se8RXYe2kigfn9PjhP/jMhsnV4/FWwA8LMe
+         vZ1pMlKVQDJHiSjjNr7yYS8h0bO1PSPX8pdEk1bbuu6UeNB+/3RqzTrG0tOSEYGNUQu0
+         XM6/RHV4jttnLWJzsGRkz+OgNKuLBkLRBKKRjzkOgNcrw86Cci352k8OrtwaNR0g+ul9
+         PiEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hE4cR11QUq+RsE+T2OXtTk5Fiz8rk9hoeeEatdOHPQM=;
+        b=udAeH+OqlkNowJ0rddpsNUi5gwZI4RozZGciMcTg32ldG+qlnyRBBjrJg7ZD+icmv8
+         vI1k9V1Qqm0FeK3saDDtQbzxffQio298f41Bu0aCXRsWq+rxNeFdwu4OsyAg5KoYO3hD
+         fvyw/UJlGs+VJ7YujaWCTwjbhxz1pdyECS3N0ZB9q0ADrNiRbbcsZn94lDDeysfsu6XY
+         cyomcUx3FkVHhQ14CuEzSEYbeZ6uftPgkwLBvqXm5dL21IZct4HrLWr3/ovFA8Ps8ajH
+         VJxW5R/VNqzzstbutjrPR0ARlWWX1qQRZeGMztqmwBp/2UImSxZxVp/CIp1eq8sAL33M
+         widw==
+X-Gm-Message-State: APjAAAUDdUFi2f6UaGZb4jqpxPTStJFC6uHWhQzDN7XsHXIEW8C+sFGC
+        MsEACW1BZe/8SfeVhhw9kdz/2g==
+X-Google-Smtp-Source: APXvYqyoZES/st9Q7kYb+Li6V2PdFuszQXBxanwuOTUOBVBPdGObPs4cF7PE4Wf0IvDmw5hHlnnD1g==
+X-Received: by 2002:a5d:4489:: with SMTP id j9mr656490wrq.15.1560187393072;
+        Mon, 10 Jun 2019 10:23:13 -0700 (PDT)
+Received: from localhost.localdomain (233.red-79-146-84.dynamicip.rima-tde.net. [79.146.84.233])
+        by smtp.gmail.com with ESMTPSA id f2sm19853686wrq.48.2019.06.10.10.23.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 10 Jun 2019 10:23:12 -0700 (PDT)
+From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+To:     jorge.ramirez-ortiz@linaro.org, gregkh@linuxfoundation.org,
+        agross@kernel.org, david.brown@linaro.org, jslaby@suse.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khasim.mohammed@linaro.org,
+        bjorn.andersson@linaro.org
+Subject: [PATCH v3] tty: serial: msm_serial: avoid system lockup condition
+Date:   Mon, 10 Jun 2019 19:23:08 +0200
+Message-Id: <20190610172308.21129-1-jorge.ramirez-ortiz@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <381ea608440345a4424d24296666b2451b1a20ee.1560156294.git.michal.simek@xilinx.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 10:44:56AM +0200, Michal Simek wrote:
-> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> 
-> Let kernel to find out major number dynamically for the first device and
-> then reuse it for other instances.
-> This fixes the issue that each uart is registered with a
-> different major number.
-> 
-> After the patch:
-> crw-------    1 root     root      253,   0 Jun 10 08:31 /dev/ttyPS0
-> crw--w----    1 root     root      253,   1 Jan  1  1970 /dev/ttyPS1
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> ---
-> 
->  drivers/tty/serial/xilinx_uartps.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+The function msm_wait_for_xmitr can be taken with interrupts
+disabled. In order to avoid a potential system lockup - demonstrated
+under stress testing conditions on SoC QCS404/5 - make sure we wait
+for a bounded amount of time.
 
-Does not apply without patch 1/2, so dropping it from my queue.
+Tested on SoC QCS404.
 
-Which is ALWAYS a good reason why you should submit bug fixes or other
-things before code cleanup patches.
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+---
+ v2: fix exit condition (timeout --> !timeout)
+ v3: add these clarification messages
+ 
+ drivers/tty/serial/msm_serial.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-thanks,
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 23833ad952ba..3657a24913fc 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -383,10 +383,14 @@ static void msm_request_rx_dma(struct msm_port *msm_port, resource_size_t base)
+ 
+ static inline void msm_wait_for_xmitr(struct uart_port *port)
+ {
++	unsigned int timeout = 500000;
++
+ 	while (!(msm_read(port, UART_SR) & UART_SR_TX_EMPTY)) {
+ 		if (msm_read(port, UART_ISR) & UART_ISR_TX_READY)
+ 			break;
+ 		udelay(1);
++		if (!timeout--)
++			break;
+ 	}
+ 	msm_write(port, UART_CR_CMD_RESET_TX_READY, UART_CR);
+ }
+-- 
+2.21.0
 
-greg k-h
