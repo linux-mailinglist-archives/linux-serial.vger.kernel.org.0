@@ -2,97 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF33E3B006
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 09:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445963B11F
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jun 2019 10:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388015AbfFJH4A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 10 Jun 2019 03:56:00 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:43206 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387879AbfFJHz7 (ORCPT
+        id S2388335AbfFJIpE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Jun 2019 04:45:04 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40422 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388489AbfFJIpD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 10 Jun 2019 03:55:59 -0400
-Received: by mail-wr1-f68.google.com with SMTP id r18so8095919wrm.10
-        for <linux-serial@vger.kernel.org>; Mon, 10 Jun 2019 00:55:58 -0700 (PDT)
+        Mon, 10 Jun 2019 04:45:03 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v19so7288717wmj.5
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jun 2019 01:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=59OBAj0fI25tEYttQXITetWvFu8mb0M8xC0iXb+r1/Q=;
-        b=ac55uDWvwtnRMO4dwo2jOwokokoGQqChSr8nLRQkch3cqmntcsHmIs5Enlxes4BMmD
-         whsoQL32Phf74kG9p3ykb4BQpVNP5cJqt+cKlIDj4Zdm24Diem/ePySIdftWtIgPyWvy
-         5p0cqzqB9FFQq+TYlniqybtJAIfZ4NAgd1YaG7zkhbQvdpOCxk7J5mc279Hc2osCt1vd
-         Yl1fUWZqlbXJ/w97BoASau/j4/JSf2CTqRYtgMXw2CLCv729XFXLUeFukUuYvVJ5gmQM
-         G4SPTb4u2rAhJ5Y4dX5clBzE9vGyNBmO2HARalYO+9+qToitJnp5HTEtK2qpmoVHbXQM
-         nsaQ==
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=qNwGVD0v2tDJVOma8Me2tLXYHNv3uP9ayQAL5Zl5p8M=;
+        b=nSxgBY6UD0ogbvDpleZuxipRQtaVHmWNbd3+eNF78yabI2JIsfMO39rdkJuMbNNNEe
+         uIru4cBb1MmPcYWj/kOLluu1HIst5DczKJbRnNe3C7chIny78xJnJTbDtp/bTTC1rJ9A
+         CmsykBhDqPh7Zez/O5wtjuOyEWDN1wnP4Jnzw4pIcLWrTRNn2YEDYEE0JRNkS8JYgE/M
+         AjOs8MemHx6dr4ab2ob+j1UcCcxRGLyhd5CdXX244kUkBitDNEIpROnrP/ooYoi31a1c
+         SkWZtppIKK3rhjmELkQWW0VubtKtcsVIwBvkvM4IJPb/n+25vEnNmktuAdmvI1nxggCR
+         X/sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=59OBAj0fI25tEYttQXITetWvFu8mb0M8xC0iXb+r1/Q=;
-        b=epaPr0gf43oU0GBx73PDMnCBAt0+C609OskilXH2HPa/l5Weo5TUX8WpWa84BKK/eI
-         nBIETX3zKwxNLHfGlEUBasItdkk6VZovTIGir/TJKeWmyO5t8W3apRiQjPxJaWsbnbih
-         IvTkgEa+Z8J4GzRaxEryLsThKmbtpeIEq9iQiFCuL4NY+r9nkCFZLVfai/WshQTFxMuv
-         l88nxH78gIPP8uzvdYATrjLgsWmed6EZmATXHEoVnS1/r92aJW0CB8fw3VsBvmUT5ldP
-         zMfrJpisp3TgeftODeuYN4RS22Dhim9MZHCqb66bT1/pZF0sMN78xqWIjpCphmVsKdo0
-         KABg==
-X-Gm-Message-State: APjAAAUzRHI3kqTgE30AF8U5u8jc6p20CmfB5qHQ5BXdsVkE8XImB4tr
-        Jd3g1DiSCW5dpFTnm96tplBjGw==
-X-Google-Smtp-Source: APXvYqxbn9YaeW8aGMKMh2aP+dx2pUtvPkFwVo6Ly0icmWY5OKpn9BPA1ZwRVm/Nm5h9j9ZfLAU01g==
-X-Received: by 2002:adf:9ed3:: with SMTP id b19mr21441431wrf.292.1560153358334;
-        Mon, 10 Jun 2019 00:55:58 -0700 (PDT)
-Received: from localhost.localdomain (233.red-79-146-84.dynamicip.rima-tde.net. [79.146.84.233])
-        by smtp.gmail.com with ESMTPSA id e13sm22627166wra.16.2019.06.10.00.55.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 10 Jun 2019 00:55:57 -0700 (PDT)
-From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-To:     jorge.ramirez-ortiz@linaro.org, agross@kernel.org,
-        david.brown@linaro.org, gregkh@linuxfoundation.org, jslaby@suse.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khasim.mohammed@linaro.org,
-        bjorn.andersson@linaro.org
-Subject: [PATCH v2] tty: serial: msm_serial: avoid system lockup condition
-Date:   Mon, 10 Jun 2019 09:55:54 +0200
-Message-Id: <20190610075554.24979-1-jorge.ramirez-ortiz@linaro.org>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=qNwGVD0v2tDJVOma8Me2tLXYHNv3uP9ayQAL5Zl5p8M=;
+        b=POGgDXbX4ojyLTEV70EALDhRSnu5LRVVS/dLBmoPOvI5EjptHpWh81Hi5R4EMl2SAO
+         A2f1kLjuf+p6P9wVfgO6io4+jCn4koBVYjnRDtD+inXy47fNcYbOsXx8Lp4BjbbPDQJL
+         jWjox7wj7O+tISzN+6TxhTj5hTWHdUNQnv1QFMKB4eHDaXW7LwS0SN5FIuk3FLHStfSj
+         v/vnKwXUCmQJmXaQZwPl0xCLO+xIuSMsFpe2sFEhNyiVyZSXwMdqxvwODSlKX3SIsOKG
+         z9fjSn9wTVPbF38xcCl1ZqHlFwGHIabJ/nDjCAJEegc3gkluFmUDr+USz5I14l0spR/o
+         hd3A==
+X-Gm-Message-State: APjAAAX/QnXLL4afGFjWKSToK386vrD9VuXvh/n2VPEaz8nE+aexvgIG
+        HTF4lEYAWVMvsFVqN8quRJZo1A==
+X-Google-Smtp-Source: APXvYqzqd62YGTXD2QtIldC59KTmIjNitmODkstbY2lZa1eC733LOO1gBiQtxJ40qqkDdHCG3xx5MQ==
+X-Received: by 2002:a1c:750d:: with SMTP id o13mr12156907wmc.35.1560156301810;
+        Mon, 10 Jun 2019 01:45:01 -0700 (PDT)
+Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id j132sm17445435wmj.21.2019.06.10.01.45.00
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 10 Jun 2019 01:45:01 -0700 (PDT)
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, johan@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/2] serial: xilinx_uartps: Fix warnings in the driver
+Date:   Mon, 10 Jun 2019 10:44:55 +0200
+Message-Id: <c6753260caf8b20cc002b15fcbf22b759c91d760.1560156294.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The function msm_wait_for_xmitr can be taken with interrupts
-disabled. In order to avoid a potential system lockup - demonstrated
-under stress testing conditions on SoC QCS404/5 - make sure we wait
-for a bounded amount of time.
+From: Nava kishore Manne <nava.manne@xilinx.com>
 
-Tested on SoC QCS404.
+This patch fixes the below warning
 
-Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+        -->Symbolic permissions 'S_IRUGO' are not preferred.
+           Consider using octal permissions '0444'.
+        -->macros should not use a trailing semicolon.
+        -->line over 80 characters.
+        -->void function return statements are not generally useful.
+        -->Prefer 'unsigned int' to bare use of 'unsigned'.
+
+Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 ---
- drivers/tty/serial/msm_serial.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-index 23833ad952ba..3657a24913fc 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -383,10 +383,14 @@ static void msm_request_rx_dma(struct msm_port *msm_port, resource_size_t base)
+Happy to split it if needed.
+---
+ drivers/tty/serial/xilinx_uartps.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
+index 605354fd60b1..6af2886f5ba7 100644
+--- a/drivers/tty/serial/xilinx_uartps.c
++++ b/drivers/tty/serial/xilinx_uartps.c
+@@ -35,12 +35,12 @@
  
- static inline void msm_wait_for_xmitr(struct uart_port *port)
- {
-+	unsigned int timeout = 500000;
-+
- 	while (!(msm_read(port, UART_SR) & UART_SR_TX_EMPTY)) {
- 		if (msm_read(port, UART_ISR) & UART_ISR_TX_READY)
- 			break;
- 		udelay(1);
-+		if (!timeout--)
-+			break;
- 	}
- 	msm_write(port, UART_CR_CMD_RESET_TX_READY, UART_CR);
+ /* Rx Trigger level */
+ static int rx_trigger_level = 56;
+-module_param(rx_trigger_level, uint, S_IRUGO);
++module_param(rx_trigger_level, uint, 0444);
+ MODULE_PARM_DESC(rx_trigger_level, "Rx trigger level, 1-63 bytes");
+ 
+ /* Rx Timeout */
+ static int rx_timeout = 10;
+-module_param(rx_timeout, uint, S_IRUGO);
++module_param(rx_timeout, uint, 0444);
+ MODULE_PARM_DESC(rx_timeout, "Rx timeout, 1-255");
+ 
+ /* Register offsets for the UART. */
+@@ -199,7 +199,7 @@ struct cdns_platform_data {
+ 	u32 quirks;
+ };
+ #define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, \
+-		clk_rate_change_nb);
++		clk_rate_change_nb)
+ 
+ /**
+  * cdns_uart_handle_rx - Handle the received bytes along with Rx errors.
+@@ -312,7 +312,8 @@ static void cdns_uart_handle_tx(void *dev_id)
+ 	} else {
+ 		numbytes = port->fifosize;
+ 		while (numbytes && !uart_circ_empty(&port->state->xmit) &&
+-		       !(readl(port->membase + CDNS_UART_SR) & CDNS_UART_SR_TXFULL)) {
++		       !(readl(port->membase + CDNS_UART_SR) &
++						CDNS_UART_SR_TXFULL)) {
+ 			/*
+ 			 * Get the data from the UART circular buffer
+ 			 * and write it to the cdns_uart's TX_FIFO
+@@ -1073,8 +1074,6 @@ static void cdns_uart_poll_put_char(struct uart_port *port, unsigned char c)
+ 		cpu_relax();
+ 
+ 	spin_unlock_irqrestore(&port->lock, flags);
+-
+-	return;
  }
+ #endif
+ 
 -- 
-2.21.0
+2.17.1
 
