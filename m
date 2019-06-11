@@ -2,73 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 355B23CAF9
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F8E3CB34
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbfFKMSP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 08:18:15 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37275 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728159AbfFKMSP (ORCPT
+        id S2389406AbfFKMZx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 08:25:53 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:49127 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389224AbfFKMZx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 08:18:15 -0400
-Received: by mail-qt1-f195.google.com with SMTP id y57so14206385qtk.4
-        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g5i49l4VfJcEzoWbFwIf3HpGCD6+/0Z2WJ63n1g5Dzs=;
-        b=lHy7l5iuNJJVbYGg8Pr0qdGaYDIgmTC+o3rhUwXxq6E9ILKH7VCOaCqdgmCNguSS67
-         vt8hDhDUDyKbztEdmsIKJkY9vPCRWlvo1bCPp2rQMKZ5aUd8ySk5+c8Jxu5mnklh0jCI
-         P+S51JBU0KBY570Wejx5bk/w9W8LJJO1ipYAE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g5i49l4VfJcEzoWbFwIf3HpGCD6+/0Z2WJ63n1g5Dzs=;
-        b=kF+WszCgvQGBo1k/fEV0GfozB824OQt6tBtUabPysrpdKr44tLZc/xLsieH/cLQR9u
-         zC0fB/DFIkGEKQcAzKWbrn25NFSPfMJyYDlumvkLMzXhYpYocj39MBthcCOskfSkT6TL
-         2N6XB0QdAYcgmSkLaVDYN9zWw1lQXCbUDeUph720rk8RWQZL4Q0yorlmemwgF+2ELqM5
-         6EQ/43wPw5VMq/xHJJw8CZ6u8G6Uaoj8ZKbExjol91wVcYy5z/pcsoGMVJXMMgHa1GIs
-         /tdKnDvvrH7tAttMzH2EaW1G/zLLI15s2LlMvDl8HpnMzl/R5q+F/jb/BkZFtMCSv7iD
-         Xarg==
-X-Gm-Message-State: APjAAAXq18mT8aqrAUegpM3K/oxrRBpy0xDHG9LLcO+5fApSexkNFGuo
-        nKfIhOYhbrJSBEkOCU3sxTGxpaHkjGQ=
-X-Google-Smtp-Source: APXvYqwWVY42NK5KurGcmXY4kA51xa0o1sooEROkS4KCMDrKetrYS7qZOcimhNnALKF84KkP/f3bMQ==
-X-Received: by 2002:ac8:34ce:: with SMTP id x14mr65137506qtb.33.1560255493870;
-        Tue, 11 Jun 2019 05:18:13 -0700 (PDT)
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com. [209.85.160.172])
-        by smtp.gmail.com with ESMTPSA id v72sm5629221qkb.0.2019.06.11.05.18.11
-        for <linux-serial@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 05:18:12 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id s15so14152272qtk.9
-        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:18:11 -0700 (PDT)
-X-Received: by 2002:ac8:7346:: with SMTP id q6mr46465019qtp.380.1560255491256;
- Tue, 11 Jun 2019 05:18:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190527083150.220194-1-tientzu@chromium.org> <20190527083150.220194-2-tientzu@chromium.org>
- <CALiNf2_Kuu9agO31Wg2X4uUa0EHWYL=qG5RLQ=catn8M9XDKGQ@mail.gmail.com> <20190611095752.GA24058@kroah.com>
-In-Reply-To: <20190611095752.GA24058@kroah.com>
-From:   Claire Chang <tientzu@chromium.org>
-Date:   Tue, 11 Jun 2019 20:17:59 +0800
-X-Gmail-Original-Message-ID: <CALiNf2-79LEg+dvSqQK8kVkf99ARLwy9uLCmJNgq-vJO9r0a9g@mail.gmail.com>
-Message-ID: <CALiNf2-79LEg+dvSqQK8kVkf99ARLwy9uLCmJNgq-vJO9r0a9g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: serial: add documentation for Rx
- in-band wakeup support
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     changqi.hu@mediatek.com, linux-serial@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
+        Tue, 11 Jun 2019 08:25:53 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BCLjBT023743;
+        Tue, 11 Jun 2019 14:25:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=aeRZHet8+3ng2HzHWI6D57uf7dMIn0WG1kjDInB0Y8s=;
+ b=Dan+flqMxX70RsesdizcgHNaFzn53siputM3LcwuJMGREEPNc33Qbupvt9zzys+yAbks
+ IsLYb3iNLbekknEGjEvsLZMzkVXW3AMJw09EKIijjzwvj2C0p/3X4E0PX8CDh9RMFhqe
+ RjJz+H8BAk7y3W86/DzalEzdOlVgPnl5WSq0j+XqAh4VdK8oYli7FrmLuJu5eAzvgyL2
+ P/al3qI5DklO4+UlVhug9bXpvf5CMHhRAzwVgMAIBOP9n4Bec61ST0kts2uiZSTy0DVm
+ DiBwj1FME+tNcvJocB/BxInTPhPrGoBYygO62qWNYwrm1nHFplRSeZfYxI/Hr7oF7rPQ lQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2t26rm9vav-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Tue, 11 Jun 2019 14:25:37 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ADD7034;
+        Tue, 11 Jun 2019 12:25:36 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5C86A2A29;
+        Tue, 11 Jun 2019 12:25:36 +0000 (GMT)
+Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by SAFEX1HUBCAS21.st.com
+ (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 11 Jun
+ 2019 14:25:36 +0200
+Received: from localhost (10.201.23.31) by Webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 11 Jun 2019 14:25:33
+ +0200
+From:   Erwan Le Ray <erwan.leray@st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Alexandre Torgue" <alexandre.torgue@st.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "Mark Rutland" <mark.rutland@arm.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Erwan Le Ray <erwan.leray@st.com>,
+        "Fabrice Gasnier" <fabrice.gasnier@st.com>
+Subject: [PATCH v2 00/10] STM32 usart power improvements
+Date:   Tue, 11 Jun 2019 14:25:20 +0200
+Message-ID: <1560255930-22554-1-git-send-email-erwan.leray@st.com>
+X-Mailer: git-send-email 1.9.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.201.23.31]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-11_06:,,
+ signatures=0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-resent here: https://patchwork.ozlabs.org/patch/1113768/
-sorry for the inconvenience
+This series delivers power improvements for stm32-usart driver.
+
+Bich Hemon (4):
+  dt-bindings: serial: add optional pinctrl states
+  serial: stm32: select pinctrl state in each suspend/resume function
+  ARM: dts: stm32: Update pin states for uart4 on stm32mp157c-ed1
+  ARM: dts: stm32: Update UART4 pin states on stm32mp157a-dk1
+
+Erwan Le Ray (6):
+  dt-bindings: serial: stm32: add wakeup option
+  serial: stm32: add pm_runtime support
+  serial: stm32: Use __maybe_unused instead of #if CONFIG_PM_SLEEP
+  serial: stm32: add support for no_console_suspend
+  ARM: dts: stm32: update uart4 pin configurations for low power
+  ARM: dts: stm32: add wakeup capability on each usart/uart on
+    stm32mp157c
+
+ .../devicetree/bindings/serial/st,stm32-usart.txt  | 19 ++++-
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi          | 17 +++++
+ arch/arm/boot/dts/stm32mp157a-dk1.dts              |  5 +-
+ arch/arm/boot/dts/stm32mp157c-ed1.dts              |  5 +-
+ arch/arm/boot/dts/stm32mp157c.dtsi                 | 40 ++++++++--
+ drivers/tty/serial/stm32-usart.c                   | 88 ++++++++++++++++++++--
+ drivers/tty/serial/stm32-usart.h                   |  1 +
+ 7 files changed, 155 insertions(+), 20 deletions(-)
+
+-- 
+1.9.1
+
