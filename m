@@ -2,112 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2337A3CAD8
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355B23CAF9
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727319AbfFKMPR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 08:15:17 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42127 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726713AbfFKMPR (ORCPT
+        id S1728825AbfFKMSP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 08:18:15 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:37275 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728159AbfFKMSP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 08:15:17 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q10so7319080pff.9
-        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:15:17 -0700 (PDT)
+        Tue, 11 Jun 2019 08:18:15 -0400
+Received: by mail-qt1-f195.google.com with SMTP id y57so14206385qtk.4
+        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=277jozT1EhnETi89SmaTO49VB6Qbwp9X0r3PGVGxDhE=;
-        b=Ww63+Xlbz4oK1Jz/cqksi2ICwOtBWEdsmgvx/5beLkK+ZscdTZpdNY/fzSYmG1IQNC
-         ijDQoWRysxire9m9Qk+h2v9FlroD70SbecgOXOKOyU+eYo9qPQO3P3wc6UhrCCpjMor+
-         9zZqGBVNEAHNFTWtPvNK5T4gGf+FOW4xxeSLU=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g5i49l4VfJcEzoWbFwIf3HpGCD6+/0Z2WJ63n1g5Dzs=;
+        b=lHy7l5iuNJJVbYGg8Pr0qdGaYDIgmTC+o3rhUwXxq6E9ILKH7VCOaCqdgmCNguSS67
+         vt8hDhDUDyKbztEdmsIKJkY9vPCRWlvo1bCPp2rQMKZ5aUd8ySk5+c8Jxu5mnklh0jCI
+         P+S51JBU0KBY570Wejx5bk/w9W8LJJO1ipYAE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=277jozT1EhnETi89SmaTO49VB6Qbwp9X0r3PGVGxDhE=;
-        b=i3Okir2yTlbqFomu48lwGsjM8jAp/RQvfHrJnK8zSQLSqPYdUeSawI3K/9Eny1ObYw
-         RCKz/bOrsPP0zUOA/+a5VuiU+lKnl4FSrnRnbh37uDMq1PcbRwEsWecDuYLLmxT7O6Q5
-         9YrqYQ70FSBCcP4UGWG9iJJnb9ycW1xqSylzCSpYQyKlO/XvvOUo0ZJLx/ALVkz55RZV
-         OG+d3NZKgxEqDr4PdKEVwmuye+mm6uStDO3pbflz7P6IT8B5NGB17r1NmX2xWXskqDm6
-         Gs1txPe1CqOGesN9F04v9K0fmr+/suRuLWw16VMJUYmX7Pvbv3kUE8NSMrNPwdC+5k1t
-         BkzQ==
-X-Gm-Message-State: APjAAAV2cd3hfIsHD0QfOkNoa0M4MWk6h9dIOrbrvfdELuvcsRinBzQY
-        d9Q40+Ne/SHlazk60rbchqWKdw==
-X-Google-Smtp-Source: APXvYqzfL5/fYY3pUluAdCK4To2DjW6uJoqnkuLN+CDF0FrDaPtwWj5bx6sBBXQh8lVRyRN6c4BC2w==
-X-Received: by 2002:a17:90a:30aa:: with SMTP id h39mr6385861pjb.32.1560255316897;
-        Tue, 11 Jun 2019 05:15:16 -0700 (PDT)
-Received: from localhost ([2401:fa00:1:10:3db2:76bf:938b:be05])
-        by smtp.gmail.com with ESMTPSA id d4sm2416832pju.19.2019.06.11.05.15.14
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 05:15:16 -0700 (PDT)
-From:   Claire Chang <tientzu@chromium.org>
-To:     robh+dt@kernel.org
-Cc:     gregkh@linuxfoundation.org, mark.rutland@arm.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        drinkcat@chromium.org, changqi.hu@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Claire Chang <tientzu@chromium.org>
-Subject: [PATCH] dt-bindings: serial: add documentation for Rx in-band wakeup support
-Date:   Tue, 11 Jun 2019 20:15:10 +0800
-Message-Id: <20190611121510.260188-1-tientzu@chromium.org>
-X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g5i49l4VfJcEzoWbFwIf3HpGCD6+/0Z2WJ63n1g5Dzs=;
+        b=kF+WszCgvQGBo1k/fEV0GfozB824OQt6tBtUabPysrpdKr44tLZc/xLsieH/cLQR9u
+         zC0fB/DFIkGEKQcAzKWbrn25NFSPfMJyYDlumvkLMzXhYpYocj39MBthcCOskfSkT6TL
+         2N6XB0QdAYcgmSkLaVDYN9zWw1lQXCbUDeUph720rk8RWQZL4Q0yorlmemwgF+2ELqM5
+         6EQ/43wPw5VMq/xHJJw8CZ6u8G6Uaoj8ZKbExjol91wVcYy5z/pcsoGMVJXMMgHa1GIs
+         /tdKnDvvrH7tAttMzH2EaW1G/zLLI15s2LlMvDl8HpnMzl/R5q+F/jb/BkZFtMCSv7iD
+         Xarg==
+X-Gm-Message-State: APjAAAXq18mT8aqrAUegpM3K/oxrRBpy0xDHG9LLcO+5fApSexkNFGuo
+        nKfIhOYhbrJSBEkOCU3sxTGxpaHkjGQ=
+X-Google-Smtp-Source: APXvYqwWVY42NK5KurGcmXY4kA51xa0o1sooEROkS4KCMDrKetrYS7qZOcimhNnALKF84KkP/f3bMQ==
+X-Received: by 2002:ac8:34ce:: with SMTP id x14mr65137506qtb.33.1560255493870;
+        Tue, 11 Jun 2019 05:18:13 -0700 (PDT)
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com. [209.85.160.172])
+        by smtp.gmail.com with ESMTPSA id v72sm5629221qkb.0.2019.06.11.05.18.11
+        for <linux-serial@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 05:18:12 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id s15so14152272qtk.9
+        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:18:11 -0700 (PDT)
+X-Received: by 2002:ac8:7346:: with SMTP id q6mr46465019qtp.380.1560255491256;
+ Tue, 11 Jun 2019 05:18:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190527083150.220194-1-tientzu@chromium.org> <20190527083150.220194-2-tientzu@chromium.org>
+ <CALiNf2_Kuu9agO31Wg2X4uUa0EHWYL=qG5RLQ=catn8M9XDKGQ@mail.gmail.com> <20190611095752.GA24058@kroah.com>
+In-Reply-To: <20190611095752.GA24058@kroah.com>
+From:   Claire Chang <tientzu@chromium.org>
+Date:   Tue, 11 Jun 2019 20:17:59 +0800
+X-Gmail-Original-Message-ID: <CALiNf2-79LEg+dvSqQK8kVkf99ARLwy9uLCmJNgq-vJO9r0a9g@mail.gmail.com>
+Message-ID: <CALiNf2-79LEg+dvSqQK8kVkf99ARLwy9uLCmJNgq-vJO9r0a9g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: serial: add documentation for Rx
+ in-band wakeup support
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     changqi.hu@mediatek.com, linux-serial@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-To support Rx in-band wakeup, one must create an interrupt specifier with
-edge sensitivity on Rx pin and an addtional pinctrl to reconfigure Rx pin
-to normal GPIO in sleep state. Driver will switch to sleep mode pinctrl and
-enable irq wake before suspend and restore to default settings when
-resuming.
-
-Signed-off-by: Claire Chang <tientzu@chromium.org>
----
-Resending this patch since I forgot to cc device tree maintainers/mailing list.
-The 2/2 patch in this series[1] is already in tty-next[2].
-
-[1] https://patchwork.kernel.org/patch/10962299/
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-testing
-
- .../devicetree/bindings/serial/mtk-uart.txt         | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-index bcfb13194f16..3488b6e24e0c 100644
---- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
-+++ b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-@@ -21,7 +21,12 @@ Required properties:
- 
- - reg: The base address of the UART register bank.
- 
--- interrupts: A single interrupt specifier.
-+- interrupts or interrupts-extended:
-+  index 0: an interrupt specifier for the UART controller itself
-+  index 1: optional, an interrupt specifier with edge sensitivity on Rx pin to
-+           support Rx in-band wake up. If one would like to use this feature,
-+           one must create an addtional pinctrl to reconfigure Rx pin to normal
-+           GPIO before suspend.
- 
- - clocks : Must contain an entry for each entry in clock-names.
-   See ../clocks/clock-bindings.txt for details.
-@@ -37,7 +42,11 @@ Example:
- 	uart0: serial@11006000 {
- 		compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
- 		reg = <0x11006000 0x400>;
--		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>;
-+		interrupts-extended = <&sysirq GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gpio 121 IRQ_TYPE_EDGE_FALLING>;
- 		clocks = <&uart_clk>, <&bus_clk>;
- 		clock-names = "baud", "bus";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&uart_pin>;
-+		pinctrl-1 = <&uart_pin_sleep>;
- 	};
--- 
-2.22.0.rc2.383.gf4fbbf30c2-goog
-
+resent here: https://patchwork.ozlabs.org/patch/1113768/
+sorry for the inconvenience
