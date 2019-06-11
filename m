@@ -2,116 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C640E3C702
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 11:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D562A3C7B2
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 11:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403786AbfFKJHq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 05:07:46 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51027 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404078AbfFKJHq (ORCPT
+        id S2404989AbfFKJyI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 05:54:08 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:44969 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404425AbfFKJyH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 05:07:46 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hackq-0002ra-Mf; Tue, 11 Jun 2019 11:07:44 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hackp-0007aR-Je; Tue, 11 Jun 2019 11:07:43 +0200
-Date:   Tue, 11 Jun 2019 11:07:43 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH RFC] serial: imx: fix locking in set_termios()
-Message-ID: <20190611090743.lkuiuvsd2hsmhcmc@pengutronix.de>
-References: <1559807977-4598-1-git-send-email-sorganov@gmail.com>
- <20190611071024.xpnxrx7sdys43hnf@pengutronix.de>
- <87ef40tw1r.fsf@osv.gnss.ru>
+        Tue, 11 Jun 2019 05:54:07 -0400
+Received: by mail-qk1-f196.google.com with SMTP id w187so7192231qkb.11
+        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 02:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+38Lbr9rNUhSKar2BeR7VlIqBZLydDsxiHIDtpA/c3A=;
+        b=Z4JEhv0f3lRlQOqp16GGJPy7vo+ohK7tFrcMiCjMmz3xt4glhA5S+gKoiZ10q4U7Gq
+         kUj80uBjld/wT8KgyE/nkAdzUVxWtd1fMxSeJF/zhLirggcLf1bzM0qSEv4PyfNfF4WQ
+         yjnvzv8OZ2q6+VPAPB99Q+99/573fTz64YGzg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+38Lbr9rNUhSKar2BeR7VlIqBZLydDsxiHIDtpA/c3A=;
+        b=dydBHgVAk1ymYzeDrrLj6Q7oxWsWJhrcCwnRWHC3HQZ8lS/6dfSn5PauiYpPj7AKpS
+         RgkA6Nw3zUwGFuNf4VdJqgcZnsWmaNh76WGRNQ69zrRHY57v9OPAztB2RSZvYlxVerUX
+         xsOTs8GZsfuWotbdQNeFxj0CnwSHVAcSdT9t393S2bGoYTtDm7fBUj52TD/P9kEvWjd0
+         U4DahHLLVUpTP7A912UM2wgZQqpO3+GqxSTpcMmOd4aKE/Skym5TR2ipB5odlaKLzKze
+         fbpr7hUXq6pt/+iXyhE09QMPkAb6mgKfX4X2yAy2OoMF8Hz9zUsjcaAwsOZwi1JF3s8C
+         ts4A==
+X-Gm-Message-State: APjAAAUTLE2iAoVknzJwXSyuQDNaHcOz82O3zB2dMePAEYRY0uBxv9u6
+        F6IjG2/03NjjdSC43tkmmzMQX81Xu/o=
+X-Google-Smtp-Source: APXvYqzkp9KzGTzD2BD04Aj6qf/nYNM6qavkbcS9u1PX2iFZDn2d7HcHBLVtXPYPqowoVeK7Nf6nsg==
+X-Received: by 2002:ae9:ed48:: with SMTP id c69mr58472758qkg.114.1560246846622;
+        Tue, 11 Jun 2019 02:54:06 -0700 (PDT)
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com. [209.85.160.181])
+        by smtp.gmail.com with ESMTPSA id v9sm6577157qti.60.2019.06.11.02.54.05
+        for <linux-serial@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 02:54:05 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id h21so13700679qtn.13
+        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 02:54:05 -0700 (PDT)
+X-Received: by 2002:ac8:28e2:: with SMTP id j31mr23670135qtj.274.1560246845373;
+ Tue, 11 Jun 2019 02:54:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ef40tw1r.fsf@osv.gnss.ru>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+References: <20190527083150.220194-1-tientzu@chromium.org> <20190527083150.220194-2-tientzu@chromium.org>
+In-Reply-To: <20190527083150.220194-2-tientzu@chromium.org>
+From:   Claire Chang <tientzu@chromium.org>
+Date:   Tue, 11 Jun 2019 17:53:54 +0800
+X-Gmail-Original-Message-ID: <CALiNf2_Kuu9agO31Wg2X4uUa0EHWYL=qG5RLQ=catn8M9XDKGQ@mail.gmail.com>
+Message-ID: <CALiNf2_Kuu9agO31Wg2X4uUa0EHWYL=qG5RLQ=catn8M9XDKGQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: serial: add documentation for Rx
+ in-band wakeup support
+To:     gregkh@linuxfoundation.org
+Cc:     changqi.hu@mediatek.com, linux-serial@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Sergey,
+(cc-ed device tree maintainers and mailing list)
 
-On Tue, Jun 11, 2019 at 10:34:24AM +0300, Sergey Organov wrote:
-> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
-> >> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> >> index dff75dc..cb95ff71 100644
-> >> --- a/drivers/tty/serial/imx.c
-> >> +++ b/drivers/tty/serial/imx.c
-> >> @@ -1550,6 +1550,20 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
-> >>  		old_csize = CS8;
-> >>  	}
-> >>  
-> >> +	del_timer_sync(&sport->timer);
-> >> +
-> >> +	/*
-> >> +	 * Ask the core to calculate the divisor for us.
-> >> +	 */
-> >> +	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
-> >> +	quot = uart_get_divisor(port, baud);
-> >> +
-> >> +	/*
-> >> +	 * Take port lock before imx_uart_rts_*() calls, as they change
-> >> +	 * sport->port.mctrl
-> >> +	 */
-> >> +	spin_lock_irqsave(&sport->port.lock, flags);
-> >> +
-> >
-> > You can move this block a bit down (and so grab the lock later). The
-> > check for CSIZE doesn't need protection.
-> 
-> I considered it, but decided putting lock inside UCR2 initialization
-> sequence would negatively affect readability of the code. OTOH, 2-3 more
-> asm instructions under the lock shouldn't be a big deal, right?
+The second patch in this series[1] is already in tty-next[2].
 
-It seems I wasn't affected by the reduced readability. But I don't care
-much, so if you prefer it that way, keep it as is.
+Sorry for not cc-ing device tree maintainers/mailing list at the beginning.
+I can resend this patch if needed.
 
-> In addition, I've got further patches on top of this one, and there I
-> need to read-modify-write the UCR2, so I need to take the lock before
-> taking initial value.
-> 
-> I'll move the lock down in this patch if you still think it's worth it.
-> 
-> > Assuming you respin: Several functions are annotated to have to be
-> > called with the lock taken; I would put the comment to imx_uart_rts_* in
-> > the same way, instead of in imx_uart_set_termios.
-> 
-> Yeah, I will. I assume you mean
-> 
-> /* called with port.lock taken and irqs off */ 
-> 
-> comment? The "and irqs off" part doesn't seem to be true for calls from
-> set_termios() though, so I'd need to get rid of it for these new
-> comments, right?
+Thanks.
 
-Sometimes the settermios callback is called with irqs disabled, at least
-that's what Documentation/serial/driver.rst claims. I think this needs
-fixing.
-
-Best regards
-Uwe
-
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+[1] https://patchwork.kernel.org/patch/10962299/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-testing
