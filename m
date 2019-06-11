@@ -2,82 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 491963D4ED
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 20:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BAD3D549
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 20:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406736AbfFKSEK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 14:04:10 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:46953 "EHLO
+        id S2406840AbfFKSNE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 14:13:04 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:56987 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406724AbfFKSEK (ORCPT
+        with ESMTP id S2406831AbfFKSNE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 14:04:10 -0400
+        Tue, 11 Jun 2019 14:13:04 -0400
 Received: from [192.168.1.110] ([95.118.191.213]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MSKq0-1h838b1yQq-00Sce9 for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019
- 20:04:09 +0200
-To:     linux-serial@vger.kernel.org
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MwQCb-1giNZA3N25-00sOvD; Tue, 11 Jun 2019 20:11:17 +0200
+Subject: Re: [PATCH resend] serial: 8250: Add support for using
+ platform_device resources
+To:     Esben Haabendal <esben@haabendal.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        He Zhe <zhe.he@windriver.com>, Marek Vasut <marex@denx.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        Paul Burton <paul.burton@mips.com>,
+        linux-kernel@vger.kernel.org
+References: <20190430140416.4707-1-esben@geanix.com>
+ <20190521113426.16790-1-esben@geanix.com> <20190521131131.GA19685@kroah.com>
+ <878suzn9wx.fsf@haabendal.dk>
 From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Subject: RFC: can we get rid of ->request_port() boilerplate ?
 Organization: metux IT consult
-Message-ID: <999dbc29-8254-7168-1fa0-7caf03bb6d77@metux.net>
-Date:   Tue, 11 Jun 2019 20:04:08 +0200
+Message-ID: <ef125e69-3128-255d-483e-14b50036905f@metux.net>
+Date:   Tue, 11 Jun 2019 20:11:06 +0200
 User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.2.1
 MIME-Version: 1.0
+In-Reply-To: <878suzn9wx.fsf@haabendal.dk>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:DGYQ/R9Z0uzqTZQY1pZ3gx9t6gU5lr4TGTn3ERwpoAv0yc7yb/H
- Sazk1jNOv4c04jQ6eWQAJcnMMquHRQ3rfONvGvUrPhuL/W6AjPf12ZGU0whsYDGbTarfoNW
- 7XiO4O1LvJExoNV0UZZv8VT0GG5fWfT1nEnxmSFzDjlHgRfz6dJFJ9UpuTYIY+1l/L5NmyZ
- ld3uyriGFjXdznlxssYow==
+X-Provags-ID: V03:K1:x93nJV3Bbkp8Z/g8aMYok3VV7GLXLxitWGsdzTWg68qpXr7r4Fx
+ CnQUJRVBah+Qe5WXAw0Uf3WyAiaLDgHZ5fgXiCikahMozhuantK5PAbqE9iGnDZdlVF9dNR
+ d2lo4627itDIdvvpfuzQPYBVTPJJFKaGRZbeO711zzd46UxLit8ZZaUUqHVMasW0ColbCJ/
+ qLVj844T5AL99/c/aphjA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wIW+lumFlgs=:674Y7IfMPHyjG9J+1mos6/
- 9BF7qWcoYj7xT7b+xq+hOX1MJPkx0Funfi+O3SGYgOjjlTB1RlDtjDCjOGQsT8KasXZWn8J3B
- pSguIgPpOqV3lbesAdMl7k0T7VagkRPDjVTobBhzyAM1ziq5voyjkZrJ6LzUgZgvNYLHI76LW
- HGifdWFO1nKWT97tR9UvTLy0ipZ9b9EZw81EndeD5IIrVJeX9oEBrnM6GJV3Ryu3hsw5csqZn
- vsAfSk4ehrrcKbaWnqmnvxqt6VcxWKSm5IT19VAJdqKAgHZvUpX0yM2ESE+92rnKYmY2pKU98
- HDT1LLO2JFzoWOtFOImW5ef45slmUiaP+y4id76wGXk9xX6N315vUnoLABoK9M4OGFMA2qejn
- 30Pk0g0vmnm37S2iiSIfEM9CuzY6gxM2FKeq1GbIzBTnYj1Jxz4Gyc/c9zMu3QlPuzwd9j1rr
- VTtn7ykm42nPPKOr8LjeBZ8Frj/cSuKqSmXSZSsB8mAVteFY83IEulDP3yx+ho7lQHyumZK2n
- tYQvllIlQMiYcYZvzhIsL8anA7e/SbF4dx3+RgxcUT9hWCXIHYmv757BBjfQL9UBrk1t90aJW
- IOK7zNG8r4V9SrtkR23+WBNqPw2TinGHRYFaz86fyacq3tuPxLS6LFw/OHkm4IeqmPHtDR9w9
- zdTrGzkb27wUUflybQ4KkIO6fcny87PXbidklCjc0BBR5VcaVXSS3RFy82DW6APxeHc1oxoHN
- jh7TgrZI3ovrOiDfDdU01izL0zhDT62jS3miV1Kz8/BRHIKWVVOGJ/ezNdg=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TkpVOKfh1aw=:DF8vRhPwBU7XHqD5rSAaza
+ MRtAkq1iIi/YC6+Yy7yf8v17rcoi0Bx7RUZcgpUHcbJ0XxQtOFg2wwbD1v9Dzf0JKQUqjPR+S
+ E+uwcwznlRuUUFX8d3RoIkNokLhdOWCGPWGtFAcGW8XlLWuMOo0dfOWpBdUImOPbrNgRJfqeq
+ Io9JrP9pourQ8hmRJj5k56JCmxTP/RkXfM9473BsVW+B9hiuUznjr4I5usZUE6T9NLvvh68FA
+ G31ojb/S8252vCh5fPDhEanwnvqYUFoCjWq/m/LiYcHIxtAOlimuKhNSurxEfysZQotLZI9xi
+ 1yA5UPcQkOGNg7hI3G6MGBHW1XwsNlm5/r94lxZY7o3GbN5eGNvwZDg0dmIsbTLo641UMsxXR
+ ++Vlj6HkICH1tFnil2GF382YNkfGEdy/Rn7qk/Ao+cA9TqUgfEZ26X4K3C8hZXVcd5k5ymhIA
+ 9eBpLD7G38GwDPp1/RZkUtcweb2vl2FA4/lLaHFlO1zNXklWy3Qyl1YEvL+L7TlMKkS2NGRp/
+ 63jmgKpTX8+wJ1H5GN3Iw0ohwCZve4+zmkxZEeBjPAs4tSU5nnKCNeBUrxt8EDr1U3U8JiZf+
+ 38yl2snfj1JllqQZgwB85dQwhosj4HvLQNISweeY4llBrH4SqTgXfLmFG39ln9dzE58NsMZYE
+ bZ+judknO2OYW2bHalP5STZAdLTi2Aagbqd4NN2ra/h9e/ayqD1tF4Lk5JGfr4N4twb8v/nRL
+ l9TchayIw3q3YK3izxM7Vprz8SJLgdTqmV0SomaPewYuprExAKc9UHrUIgbB9v5wNC4kJBXpD
+ YgJr1Bw
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi folks,
+On 21.05.19 16:45, Esben Haabendal wrote:
+> It sits here.  It is a rather big and clunky mfd driver, not ready for
+> upstreaming in its current form.  I hope to get around to clean it up.
+> But it is for a very specific hardware that is really available or
+> usable for anybody else.  Does it make sense to spend effort on
+> submitting such a driver?
 
+Maybe you could post your queue w/ "RFC: " prefix and add a proper
+introduction, so everybody knows that isn't meant to be upstreamed,
+but instead a basis for discussions ?
 
-we've got lots of cases, where ->request_port() / ->release_port()
-are just (request|release)_mem_region calls, where the parameter
-values are practicall known after the device is initialized (*1).
-The only preparation needed for that is changing the individual
-drivers to initialize mapsize field on probing (*2).
-
-I see two practical options for that:
-
-a) introduce generic helpers, which are assigned as driver callbacks
-   instead of the currently used driver specific ones.
-
-b) introduce a flag which tells the serial core to do that.
-
-
-What's your oppinion on that ?
-
-If you like, I can prepare some patches and post them here.
+Personally, I'd like to have a look at it and understand, what's the
+actual problem you'd like to solve.
 
 
 --mtx
-
-*1) this also can be done w/ 8250, even though currently an extra
-function is called to compute the io size - I've already sent a
-patch for that some time ago.
-*2) already sent patches for that, a while go.
 
 -- 
 Enrico Weigelt, metux IT consult
