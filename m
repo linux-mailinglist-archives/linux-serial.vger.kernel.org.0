@@ -2,83 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DC53C57E
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 09:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C640E3C702
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 11:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404486AbfFKH6p (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 03:58:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39470 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403815AbfFKH6p (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 03:58:45 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5695D208E3;
-        Tue, 11 Jun 2019 07:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560239924;
-        bh=l7IGuoBcx5l6hBGHKT+HgAxkvhEVkTLPCSI893kIBpY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YZ9YxWLs81PHNoghv31MDzwl7eAGmsRwBV+xd+0CJCkyg8/35rglLdikKeIyYENkU
-         hX67yzfL0+DRd+RA9SmCW19f3mKgCJv0xiSa9pNvAgjLNikF7EuLk5Ce08581G2kCC
-         IkP2AIOqRUK+BL+0Yh1VIXBSEGqT1m4VrQVakBms=
-Date:   Tue, 11 Jun 2019 09:58:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S2403786AbfFKJHq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 05:07:46 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51027 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404078AbfFKJHq (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 11 Jun 2019 05:07:46 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hackq-0002ra-Mf; Tue, 11 Jun 2019 11:07:44 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hackp-0007aR-Je; Tue, 11 Jun 2019 11:07:43 +0200
+Date:   Tue, 11 Jun 2019 11:07:43 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
 To:     Sergey Organov <sorganov@gmail.com>
-Cc:     linux-serial@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>
 Subject: Re: [PATCH RFC] serial: imx: fix locking in set_termios()
-Message-ID: <20190611075841.GA13408@kroah.com>
+Message-ID: <20190611090743.lkuiuvsd2hsmhcmc@pengutronix.de>
 References: <1559807977-4598-1-git-send-email-sorganov@gmail.com>
- <20190610165239.GC32085@kroah.com>
- <87tvcwu2dl.fsf@osv.gnss.ru>
+ <20190611071024.xpnxrx7sdys43hnf@pengutronix.de>
+ <87ef40tw1r.fsf@osv.gnss.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87tvcwu2dl.fsf@osv.gnss.ru>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ef40tw1r.fsf@osv.gnss.ru>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 08:17:42AM +0300, Sergey Organov wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> 
-> > On Thu, Jun 06, 2019 at 10:59:37AM +0300, Sergey Organov wrote:
-> >> imx_uart_set_termios() called imx_uart_rts_active(), or
-> >> imx_uart_rts_inactive() before taking port->port.lock.
-> >> 
-> >> As a consequence, sport->port.mctrl that these functions modify
-> >> could have been changed without holding port->port.lock.
-> >> 
-> >> Moved locking of port->port.lock above the calls to fix the issue.
-> >> 
-> >> Signed-off-by: Sergey Organov <sorganov@gmail.com>
-> >> ---
-> >>  drivers/tty/serial/imx.c | 24 ++++++++++++++----------
-> >>  1 file changed, 14 insertions(+), 10 deletions(-)
+Hello Sergey,
+
+On Tue, Jun 11, 2019 at 10:34:24AM +0300, Sergey Organov wrote:
+> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
+> >> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> >> index dff75dc..cb95ff71 100644
+> >> --- a/drivers/tty/serial/imx.c
+> >> +++ b/drivers/tty/serial/imx.c
+> >> @@ -1550,6 +1550,20 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+> >>  		old_csize = CS8;
+> >>  	}
+> >>  
+> >> +	del_timer_sync(&sport->timer);
+> >> +
+> >> +	/*
+> >> +	 * Ask the core to calculate the divisor for us.
+> >> +	 */
+> >> +	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
+> >> +	quot = uart_get_divisor(port, baud);
+> >> +
+> >> +	/*
+> >> +	 * Take port lock before imx_uart_rts_*() calls, as they change
+> >> +	 * sport->port.mctrl
+> >> +	 */
+> >> +	spin_lock_irqsave(&sport->port.lock, flags);
+> >> +
 > >
-> > I do not review "RFC" patches as obviously the submitter doesn't think
-> > they are actually correct :)
+> > You can move this block a bit down (and so grab the lock later). The
+> > check for CSIZE doesn't need protection.
 > 
-> Oops! Noticed. As an excuse, there is no: "Don't put "RFC" in if you'd
-> like Greg to review the patch" in the submitting-patches :)
+> I considered it, but decided putting lock inside UCR2 initialization
+> sequence would negatively affect readability of the code. OTOH, 2-3 more
+> asm instructions under the lock shouldn't be a big deal, right?
 
-You can't document everything :)
+It seems I wasn't affected by the reduced readability. But I don't care
+much, so if you prefer it that way, keep it as is.
 
-> Lock-correctness is delicate matter that is hard to test, reviewing by
-> the experts in the filed being probably the best testing strategy
-> available, and thus your review, Greg, is in fact one of those I'd
-> especially like to achieve.
+> In addition, I've got further patches on top of this one, and there I
+> need to read-modify-write the UCR2, so I need to take the lock before
+> taking initial value.
+> 
+> I'll move the lock down in this patch if you still think it's worth it.
+> 
+> > Assuming you respin: Several functions are annotated to have to be
+> > called with the lock taken; I would put the comment to imx_uart_rts_* in
+> > the same way, instead of in imx_uart_set_termios.
+> 
+> Yeah, I will. I assume you mean
+> 
+> /* called with port.lock taken and irqs off */ 
+> 
+> comment? The "and irqs off" part doesn't seem to be true for calls from
+> set_termios() though, so I'd need to get rid of it for these new
+> comments, right?
 
-Then write the patch to your satisfaction and post it without the RFC!
+Sometimes the settermios callback is called with irqs disabled, at least
+that's what Documentation/serial/driver.rst claims. I think this needs
+fixing.
 
-thanks,
+Best regards
+Uwe
 
-greg k-h
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
