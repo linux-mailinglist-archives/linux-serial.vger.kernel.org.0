@@ -2,151 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBA13CAB1
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2337A3CAD8
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390115AbfFKMGT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 08:06:19 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41277 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387538AbfFKMGS (ORCPT
+        id S1727319AbfFKMPR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 08:15:17 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42127 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfFKMPR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 08:06:18 -0400
-Received: by mail-lj1-f196.google.com with SMTP id s21so11363826lji.8
-        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:06:17 -0700 (PDT)
+        Tue, 11 Jun 2019 08:15:17 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q10so7319080pff.9
+        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7A8q3L9M+Q620jro/rcp0uqzd0O66Enq7x2/73E1cNU=;
-        b=H/c7NadWC2gvucHKBh3SHsh2NBJsoLUPFyHnbC/goL+NAscUNTUVtaHv5fR+RPMNLe
-         Yu2HDXX9FAvV8Q+yrU2Lr4buZvs04m/pNgmNsBfRW0vrE6BqfuUAhrdtCGSLs5zmEKh0
-         ucE7Q/K+M9WHEVfM04WVHj+GvHyCmNyiwP65817wHckWYR2k5dWJsb3EjWfJvw8s1dV3
-         fS7zEynYpIGurEzyUwlnzTa51LwXCv8EV8eE2NqJwjasFTttw6XYKhliqLHrNMmrzpb8
-         zZQ4qdkrFb0gLj8ppTdIEOaxOT3eMj/+JLPyD1Ek5g9TCrCJdsFZcZ/n/oyua4/Dtg/X
-         /HhA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=277jozT1EhnETi89SmaTO49VB6Qbwp9X0r3PGVGxDhE=;
+        b=Ww63+Xlbz4oK1Jz/cqksi2ICwOtBWEdsmgvx/5beLkK+ZscdTZpdNY/fzSYmG1IQNC
+         ijDQoWRysxire9m9Qk+h2v9FlroD70SbecgOXOKOyU+eYo9qPQO3P3wc6UhrCCpjMor+
+         9zZqGBVNEAHNFTWtPvNK5T4gGf+FOW4xxeSLU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7A8q3L9M+Q620jro/rcp0uqzd0O66Enq7x2/73E1cNU=;
-        b=MMAKui+SFDj24Nj2r42Aq4ojvt/g/VYoq2tdZulfygsG7ymiqmFrg/Lu++mOuBP5CN
-         OYVQ9YRpIFOPnVqHYCctxwP08LTtSpcp4x/N7IgSwJCtBFXVSg99+goTnG/97BvXyX3B
-         WidRs6tB2rECYljKpPnSm7rZehlCL4l5DP+Tb5ctW2TzTxSo9fsPOcaPtZL2QFTr/Q9y
-         sLec0jO5VUfTK7fuVh4NCX0o8p+4ulSIWsp8h28EQTp9enlD9E8jEY6NXmCc6tHS8Aal
-         vmQUGPJWpNSlKaDyhbBYt5YLw6KJ73IvQ6A09sr6elm8Ux9DTAkRmkAZu621tYGKtJZa
-         RxTA==
-X-Gm-Message-State: APjAAAV7ouu8uSOh1/C513IpBlP96u8LceZIepDBMkFDbJa06b02ERuV
-        GITG/XMSt8n39UJYB1R1I7LIjnek
-X-Google-Smtp-Source: APXvYqyR3s6wUopyfHTJMJFbw9CfA7bRTxK7hA0nJwMRbWFCfd/HOh4klWcZQ9xGZpLXySJ4sGD6wg==
-X-Received: by 2002:a2e:4e09:: with SMTP id c9mr27536052ljb.30.1560254775461;
-        Tue, 11 Jun 2019 05:06:15 -0700 (PDT)
-Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id o74sm2498806lff.46.2019.06.11.05.06.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 11 Jun 2019 05:06:14 -0700 (PDT)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     linux-serial@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: [PATCH v1] serial: imx: fix locking in set_termios()
-Date:   Tue, 11 Jun 2019 15:05:24 +0300
-Message-Id: <1560254724-5130-1-git-send-email-sorganov@gmail.com>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1559807977-4598-1-git-send-email-sorganov@gmail.com>
-References: <1559807977-4598-1-git-send-email-sorganov@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=277jozT1EhnETi89SmaTO49VB6Qbwp9X0r3PGVGxDhE=;
+        b=i3Okir2yTlbqFomu48lwGsjM8jAp/RQvfHrJnK8zSQLSqPYdUeSawI3K/9Eny1ObYw
+         RCKz/bOrsPP0zUOA/+a5VuiU+lKnl4FSrnRnbh37uDMq1PcbRwEsWecDuYLLmxT7O6Q5
+         9YrqYQ70FSBCcP4UGWG9iJJnb9ycW1xqSylzCSpYQyKlO/XvvOUo0ZJLx/ALVkz55RZV
+         OG+d3NZKgxEqDr4PdKEVwmuye+mm6uStDO3pbflz7P6IT8B5NGB17r1NmX2xWXskqDm6
+         Gs1txPe1CqOGesN9F04v9K0fmr+/suRuLWw16VMJUYmX7Pvbv3kUE8NSMrNPwdC+5k1t
+         BkzQ==
+X-Gm-Message-State: APjAAAV2cd3hfIsHD0QfOkNoa0M4MWk6h9dIOrbrvfdELuvcsRinBzQY
+        d9Q40+Ne/SHlazk60rbchqWKdw==
+X-Google-Smtp-Source: APXvYqzfL5/fYY3pUluAdCK4To2DjW6uJoqnkuLN+CDF0FrDaPtwWj5bx6sBBXQh8lVRyRN6c4BC2w==
+X-Received: by 2002:a17:90a:30aa:: with SMTP id h39mr6385861pjb.32.1560255316897;
+        Tue, 11 Jun 2019 05:15:16 -0700 (PDT)
+Received: from localhost ([2401:fa00:1:10:3db2:76bf:938b:be05])
+        by smtp.gmail.com with ESMTPSA id d4sm2416832pju.19.2019.06.11.05.15.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 05:15:16 -0700 (PDT)
+From:   Claire Chang <tientzu@chromium.org>
+To:     robh+dt@kernel.org
+Cc:     gregkh@linuxfoundation.org, mark.rutland@arm.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        drinkcat@chromium.org, changqi.hu@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Claire Chang <tientzu@chromium.org>
+Subject: [PATCH] dt-bindings: serial: add documentation for Rx in-band wakeup support
+Date:   Tue, 11 Jun 2019 20:15:10 +0800
+Message-Id: <20190611121510.260188-1-tientzu@chromium.org>
+X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-imx_uart_set_termios() called imx_uart_rts_active(), or
-imx_uart_rts_inactive() before taking port->port.lock.
+To support Rx in-band wakeup, one must create an interrupt specifier with
+edge sensitivity on Rx pin and an addtional pinctrl to reconfigure Rx pin
+to normal GPIO in sleep state. Driver will switch to sleep mode pinctrl and
+enable irq wake before suspend and restore to default settings when
+resuming.
 
-As a consequence, sport->port.mctrl that these functions modify
-could have been changed without holding port->port.lock.
-
-Moved locking of port->port.lock above the calls to fix the issue.
-
-Signed-off-by: Sergey Organov <sorganov@gmail.com>
+Signed-off-by: Claire Chang <tientzu@chromium.org>
 ---
+Resending this patch since I forgot to cc device tree maintainers/mailing list.
+The 2/2 patch in this series[1] is already in tty-next[2].
 
- v1: Improve comments as suggested by
-     Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+[1] https://patchwork.kernel.org/patch/10962299/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-testing
 
- drivers/tty/serial/imx.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ .../devicetree/bindings/serial/mtk-uart.txt         | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index dff75dc..1055124 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -383,6 +383,7 @@ static void imx_uart_ucrs_restore(struct imx_port *sport,
- }
- #endif
+diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
+index bcfb13194f16..3488b6e24e0c 100644
+--- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
++++ b/Documentation/devicetree/bindings/serial/mtk-uart.txt
+@@ -21,7 +21,12 @@ Required properties:
  
-+/* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
- {
- 	*ucr2 &= ~(UCR2_CTSC | UCR2_CTS);
-@@ -391,6 +392,7 @@ static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
- 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
- }
+ - reg: The base address of the UART register bank.
  
-+/* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
- {
- 	*ucr2 &= ~UCR2_CTSC;
-@@ -400,6 +402,7 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
- 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
- }
+-- interrupts: A single interrupt specifier.
++- interrupts or interrupts-extended:
++  index 0: an interrupt specifier for the UART controller itself
++  index 1: optional, an interrupt specifier with edge sensitivity on Rx pin to
++           support Rx in-band wake up. If one would like to use this feature,
++           one must create an addtional pinctrl to reconfigure Rx pin to normal
++           GPIO before suspend.
  
-+/* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
- {
- 	*ucr2 |= UCR2_CTSC;
-@@ -1550,6 +1553,16 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
- 		old_csize = CS8;
- 	}
- 
-+	del_timer_sync(&sport->timer);
-+
-+	/*
-+	 * Ask the core to calculate the divisor for us.
-+	 */
-+	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
-+	quot = uart_get_divisor(port, baud);
-+
-+	spin_lock_irqsave(&sport->port.lock, flags);
-+
- 	if ((termios->c_cflag & CSIZE) == CS8)
- 		ucr2 = UCR2_WS | UCR2_SRST | UCR2_IRTS;
- 	else
-@@ -1593,16 +1606,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
- 			ucr2 |= UCR2_PROE;
- 	}
- 
--	del_timer_sync(&sport->timer);
--
--	/*
--	 * Ask the core to calculate the divisor for us.
--	 */
--	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
--	quot = uart_get_divisor(port, baud);
--
--	spin_lock_irqsave(&sport->port.lock, flags);
--
- 	sport->port.read_status_mask = 0;
- 	if (termios->c_iflag & INPCK)
- 		sport->port.read_status_mask |= (URXD_FRMERR | URXD_PRERR);
+ - clocks : Must contain an entry for each entry in clock-names.
+   See ../clocks/clock-bindings.txt for details.
+@@ -37,7 +42,11 @@ Example:
+ 	uart0: serial@11006000 {
+ 		compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
+ 		reg = <0x11006000 0x400>;
+-		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>;
++		interrupts-extended = <&sysirq GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
++				      <&gpio 121 IRQ_TYPE_EDGE_FALLING>;
+ 		clocks = <&uart_clk>, <&bus_clk>;
+ 		clock-names = "baud", "bus";
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&uart_pin>;
++		pinctrl-1 = <&uart_pin_sleep>;
+ 	};
 -- 
-2.10.0.1.g57b01a3
+2.22.0.rc2.383.gf4fbbf30c2-goog
 
