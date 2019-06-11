@@ -2,43 +2,43 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 491403CB6A
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019623CB67
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389504AbfFKMZ4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 08:25:56 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:49129 "EHLO
+        id S2389649AbfFKM07 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 08:26:59 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:49093 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389224AbfFKMZz (ORCPT
+        by vger.kernel.org with ESMTP id S2389325AbfFKM0C (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 08:25:55 -0400
+        Tue, 11 Jun 2019 08:26:02 -0400
 Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BCLjBU023743;
-        Tue, 11 Jun 2019 14:25:41 +0200
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BCPmiL026689;
+        Tue, 11 Jun 2019 14:25:48 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-type; s=STMicroelectronics;
- bh=9gSGjqYoy+Fbf2xPESzbOyGUbO7HOvEvjLu/ZOx6/bE=;
- b=vfqyNEARQmrgEmlmrqcuJv1pPBpIuYiWyPUO4H+t3g7kW7GBkM+Aq9xLaoNVfJuL+/FB
- ruoP07PfJHd1IzS0Lx/NxijwEUgohe+fsAMp1MxiSLYBNsTUYTFojV0tkjxGjvahR7vH
- sIQarKE9Y86DZQWCdRC48035eIYq0niGvvanYAIxfenDSy3o0mfH0VL2/JwdB150onnZ
- 8xUFJx70ld4Z1neM67d1d6R5N3S2cra6bQ56GMAMKCDhZQ2UH9lZE97gfyX0p5HjCUXD
- FMOnxu0ae9/5cInaw44RNuaXBpIFgGD1W6/3A6LGycJwNV2Is1j3zguC97rW7SMbrDfk 1A== 
+ bh=Psif9qopZgVPe8dWo9XocFzMybtKO3gMouXdNYlMSBI=;
+ b=R7bSMphe5F7ioVle8OyoWIwgQ41esdzxVd5DveQWEPH5ED5EjP5eY82uxHp7rpkOOT5l
+ 7r5/oMMyr6Hp3c2qcGMnLqDVfjvQdWr0Uw9Lo+I2ZrFr5WCXZK7PiF5Be/QUviDSFheu
+ 6ihYgdzSkjy8T3d3nSN7DtLIIyVvG4TM/ExUuts+ymydjdLPSXqBSyQJA8wyy6rYlB40
+ 0rKeVifcFilL2511Ew4vBHGpdyOZ/kaadapV3DmWuD8Rk2l8ZanBlPsQx0qZKtixLZVQ
+ d/cEnYoPk8WkD38q5ubi38cDOndZN0iyccY4EMwmxJqxANmg3QtRm/DglZleM7So7ZFe xw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2t26rm9vbd-1
+        by mx07-00178001.pphosted.com with ESMTP id 2t26rm9vbv-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 11 Jun 2019 14:25:41 +0200
+        Tue, 11 Jun 2019 14:25:48 +0200
 Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A4E6D31;
-        Tue, 11 Jun 2019 12:25:40 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas23.st.com [10.75.90.46])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 80D442A2C;
-        Tue, 11 Jun 2019 12:25:40 +0000 (GMT)
-Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by SAFEX1HUBCAS23.st.com
- (10.75.90.46) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 11 Jun
- 2019 14:25:40 +0200
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 025DD3F;
+        Tue, 11 Jun 2019 12:25:43 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BD8B92A2C;
+        Tue, 11 Jun 2019 12:25:43 +0000 (GMT)
+Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by SAFEX1HUBCAS21.st.com
+ (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 11 Jun
+ 2019 14:25:43 +0200
 Received: from localhost (10.201.23.31) by Webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 11 Jun 2019 14:25:37
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 11 Jun 2019 14:25:42
  +0200
 From:   Erwan Le Ray <erwan.leray@st.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -54,9 +54,9 @@ CC:     <linux-serial@vger.kernel.org>,
         Erwan Le Ray <erwan.leray@st.com>,
         "Fabrice Gasnier" <fabrice.gasnier@st.com>,
         Bich Hemon <bich.hemon@st.com>
-Subject: [PATCH v2 01/10] dt-bindings: serial: stm32: add wakeup option
-Date:   Tue, 11 Jun 2019 14:25:21 +0200
-Message-ID: <1560255930-22554-2-git-send-email-erwan.leray@st.com>
+Subject: [PATCH v2 02/10] dt-bindings: serial: add optional pinctrl states
+Date:   Tue, 11 Jun 2019 14:25:22 +0200
+Message-ID: <1560255930-22554-3-git-send-email-erwan.leray@st.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1560255930-22554-1-git-send-email-erwan.leray@st.com>
 References: <1560255930-22554-1-git-send-email-erwan.leray@st.com>
@@ -70,27 +70,49 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add a note for enabling wakeup capabilities of usart
+From: Bich Hemon <bich.hemon@st.com>
+
+Add options for pinctrl states:
+- "sleep" for low power
+- "idle" for low power and wakeup capabilities enabled
+- "no_console_suspend" for enabling console messages in low power
 
 Signed-off-by: Bich Hemon <bich.hemon@st.com>
 Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
 
 diff --git a/Documentation/devicetree/bindings/serial/st,stm32-usart.txt b/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-index 9d3efed..5ec80c1 100644
+index 5ec80c1..64a5ea9 100644
 --- a/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
 +++ b/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-@@ -19,6 +19,11 @@ Optional properties:
-   linux,rs485-enabled-at-boot-time: see rs485.txt.
- - dmas: phandle(s) to DMA controller node(s). Refer to stm32-dma.txt
- - dma-names: "rx" and/or "tx"
-+- wakeup-source: bool flag to indicate this device has wakeup capabilities
-+- interrupt-names, if optional wake-up interrupt is used, should be:
-+  - "event": the name for the interrupt line of the USART instance
-+  - "wakeup" the name for the optional wake-up interrupt
-+
+@@ -13,7 +13,14 @@ Required properties:
+ - clocks: The input clock of the USART instance
  
- Examples:
- usart4: serial@40004c00 {
+ Optional properties:
+-- pinctrl: The reference on the pins configuration
++- pinctrl-names: Set to "default". An additional "sleep" state can be defined
++  to set pins in sleep state when in low power. In case the device is used as
++  a wakeup source, "idle" state is defined in order to keep RX pin active.
++  For a console device, an optional state "no_console_suspend" can be defined
++  to enable console messages during suspend. Typically, "no_console_suspend" and
++  "default" states can refer to the same pin configuration.
++- pinctrl-n: Phandle(s) pointing to pin configuration nodes.
++  For Pinctrl properties see ../pinctrl/pinctrl-bindings.txt
+ - st,hw-flow-ctrl: bool flag to enable hardware flow control.
+ - rs485-rts-delay, rs485-rx-during-tx, rs485-rts-active-low,
+   linux,rs485-enabled-at-boot-time: see rs485.txt.
+@@ -31,8 +38,11 @@ usart4: serial@40004c00 {
+ 	reg = <0x40004c00 0x400>;
+ 	interrupts = <52>;
+ 	clocks = <&clk_pclk1>;
+-	pinctrl-names = "default";
++	pinctrl-names = "default", "sleep", "idle", "no_console_suspend";
+ 	pinctrl-0 = <&pinctrl_usart4>;
++	pinctrl-1 = <&pinctrl_usart4_sleep>;
++	pinctrl-2 = <&pinctrl_usart4_idle>;
++	pinctrl-3 = <&pinctrl_usart4>;
+ };
+ 
+ usart2: serial@40004400 {
 -- 
 1.9.1
 
