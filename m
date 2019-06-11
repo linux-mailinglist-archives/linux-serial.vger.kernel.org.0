@@ -2,123 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 459033CF62
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 16:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491963D4ED
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 20:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390887AbfFKOsc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 10:48:32 -0400
-Received: from mga18.intel.com ([134.134.136.126]:14951 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389454AbfFKOsc (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 10:48:32 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jun 2019 07:48:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,579,1557212400"; 
-   d="scan'208";a="183821262"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Jun 2019 07:48:29 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hai4a-00065P-Ol; Tue, 11 Jun 2019 17:48:28 +0300
-Date:   Tue, 11 Jun 2019 17:48:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 2/2 v5] tty/serial/8250: use mctrl_gpio helpers
-Message-ID: <20190611144828.GX9224@smile.fi.intel.com>
-References: <20190611105603.4435-1-sr@denx.de>
- <20190611105603.4435-2-sr@denx.de>
- <20190611124415.GT9224@smile.fi.intel.com>
- <85f0d39c-e5d8-320b-e611-d956630a629f@denx.de>
+        id S2406736AbfFKSEK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 14:04:10 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:46953 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406724AbfFKSEK (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 11 Jun 2019 14:04:10 -0400
+Received: from [192.168.1.110] ([95.118.191.213]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MSKq0-1h838b1yQq-00Sce9 for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019
+ 20:04:09 +0200
+To:     linux-serial@vger.kernel.org
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Subject: RFC: can we get rid of ->request_port() boilerplate ?
+Organization: metux IT consult
+Message-ID: <999dbc29-8254-7168-1fa0-7caf03bb6d77@metux.net>
+Date:   Tue, 11 Jun 2019 20:04:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85f0d39c-e5d8-320b-e611-d956630a629f@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:DGYQ/R9Z0uzqTZQY1pZ3gx9t6gU5lr4TGTn3ERwpoAv0yc7yb/H
+ Sazk1jNOv4c04jQ6eWQAJcnMMquHRQ3rfONvGvUrPhuL/W6AjPf12ZGU0whsYDGbTarfoNW
+ 7XiO4O1LvJExoNV0UZZv8VT0GG5fWfT1nEnxmSFzDjlHgRfz6dJFJ9UpuTYIY+1l/L5NmyZ
+ ld3uyriGFjXdznlxssYow==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wIW+lumFlgs=:674Y7IfMPHyjG9J+1mos6/
+ 9BF7qWcoYj7xT7b+xq+hOX1MJPkx0Funfi+O3SGYgOjjlTB1RlDtjDCjOGQsT8KasXZWn8J3B
+ pSguIgPpOqV3lbesAdMl7k0T7VagkRPDjVTobBhzyAM1ziq5voyjkZrJ6LzUgZgvNYLHI76LW
+ HGifdWFO1nKWT97tR9UvTLy0ipZ9b9EZw81EndeD5IIrVJeX9oEBrnM6GJV3Ryu3hsw5csqZn
+ vsAfSk4ehrrcKbaWnqmnvxqt6VcxWKSm5IT19VAJdqKAgHZvUpX0yM2ESE+92rnKYmY2pKU98
+ HDT1LLO2JFzoWOtFOImW5ef45slmUiaP+y4id76wGXk9xX6N315vUnoLABoK9M4OGFMA2qejn
+ 30Pk0g0vmnm37S2iiSIfEM9CuzY6gxM2FKeq1GbIzBTnYj1Jxz4Gyc/c9zMu3QlPuzwd9j1rr
+ VTtn7ykm42nPPKOr8LjeBZ8Frj/cSuKqSmXSZSsB8mAVteFY83IEulDP3yx+ho7lQHyumZK2n
+ tYQvllIlQMiYcYZvzhIsL8anA7e/SbF4dx3+RgxcUT9hWCXIHYmv757BBjfQL9UBrk1t90aJW
+ IOK7zNG8r4V9SrtkR23+WBNqPw2TinGHRYFaz86fyacq3tuPxLS6LFw/OHkm4IeqmPHtDR9w9
+ zdTrGzkb27wUUflybQ4KkIO6fcny87PXbidklCjc0BBR5VcaVXSS3RFy82DW6APxeHc1oxoHN
+ jh7TgrZI3ovrOiDfDdU01izL0zhDT62jS3miV1Kz8/BRHIKWVVOGJ/ezNdg=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 04:02:54PM +0200, Stefan Roese wrote:
-> On 11.06.19 14:44, Andy Shevchenko wrote:
-> > On Tue, Jun 11, 2019 at 12:56:03PM +0200, Stefan Roese wrote:
+Hi folks,
 
-> > >   static inline void serial8250_out_MCR(struct uart_8250_port *up, int value)
-> > >   {
-> > >   	serial_out(up, UART_MCR, value);
-> > > +
-> > > +	if (up->gpios) {
-> > > +		int mctrl_gpio = 0;
-> > > +
-> > > +		if (value & UART_MCR_RTS)
-> > > +			mctrl_gpio |= TIOCM_RTS;
-> > > +		if (value & UART_MCR_DTR)
-> > > +			mctrl_gpio |= TIOCM_DTR;
-> > > +
-> > > +		mctrl_gpio_set(up->gpios, mctrl_gpio);
-> > > +	}
-> > >   }
 
-> > >   static inline int serial8250_in_MCR(struct uart_8250_port *up)
-> > >   {
-> > > -	return serial_in(up, UART_MCR);
-> > > +	int mctrl;
-> > > +
-> > > +	mctrl = serial_in(up, UART_MCR);
-> > > +
-> > > +	if (up->gpios) {
-> > > +		int mctrl_gpio = 0;
-> > > +
-> > > +		/* save current MCR values */
-> > > +		if (mctrl & UART_MCR_RTS)
-> > > +			mctrl_gpio |= TIOCM_RTS;
-> > > +		if (mctrl & UART_MCR_DTR)
-> > > +			mctrl_gpio |= TIOCM_DTR;
-> > > +
-> > > +		mctrl_gpio = mctrl_gpio_get_outputs(up->gpios, &mctrl_gpio);
-> > > +		if (mctrl_gpio & TIOCM_RTS)
-> > > +			mctrl |= UART_MCR_RTS;
-> > > +		else
-> > > +			mctrl &= ~UART_MCR_RTS;
-> > > +
-> > > +		if (mctrl_gpio & TIOCM_DTR)
-> > > +			mctrl |= UART_MCR_DTR;
-> > > +		else
-> > > +			mctrl &= ~UART_MCR_DTR;
-> > > +	}
-> > > +
-> > > +	return mctrl;
-> > >   }
-> > 
-> > These are using OR logic with potentially volatile data. Shouldn't we mask
-> > unused bits in UART_MCR in case of up->gpios != NULL?
-> 
-> Sorry, I don't see, which bits you are referring to? Could you please be
-> a bit more specific with the variable / macro meant (example)?
+we've got lots of cases, where ->request_port() / ->release_port()
+are just (request|release)_mem_region calls, where the parameter
+values are practicall known after the device is initialized (*1).
+The only preparation needed for that is changing the individual
+drivers to initialize mapsize field on probing (*2).
 
-I meant that we double write values in the out() which might have some
-consequences, though I hope nothing wrong with it happens.
+I see two practical options for that:
 
-In the in() we read the all bits in the register.
+a) introduce generic helpers, which are assigned as driver callbacks
+   instead of the currently used driver specific ones.
 
-As now I look at the implementation of mctrl_gpio_get_outputs(),
-I think we rather get helpers for conversion between TIOCM and UART_MCR values,
-so, they can be used in get_mctrl() / set_mctrl() and above.
+b) introduce a flag which tells the serial core to do that.
 
-The logic now is understandable to me (I was confused by the conversions here
-and there).
+
+What's your oppinion on that ?
+
+If you like, I can prepare some patches and post them here.
+
+
+--mtx
+
+*1) this also can be done w/ 8250, even though currently an extra
+function is called to compute the io size - I've already sent a
+patch for that some time ago.
+*2) already sent patches for that, a while go.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
