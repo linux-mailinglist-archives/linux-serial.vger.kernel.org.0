@@ -2,299 +2,151 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAED33CA55
-	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 13:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBA13CAB1
+	for <lists+linux-serial@lfdr.de>; Tue, 11 Jun 2019 14:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389953AbfFKLrd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 11 Jun 2019 07:47:33 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42836 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389881AbfFKLrd (ORCPT
+        id S2390115AbfFKMGT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 11 Jun 2019 08:06:19 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:41277 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387538AbfFKMGS (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 11 Jun 2019 07:47:33 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q10so7271777pff.9
-        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 04:47:32 -0700 (PDT)
+        Tue, 11 Jun 2019 08:06:18 -0400
+Received: by mail-lj1-f196.google.com with SMTP id s21so11363826lji.8
+        for <linux-serial@vger.kernel.org>; Tue, 11 Jun 2019 05:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=accesio-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=jzdTnYTIOXokO0oHOpiG94LWr0tBZSe7Na/PAAIVWWU=;
-        b=swMAmGfKlkdF+16Pdu9mHxKLf5emnnvCi9ZBC6nOq/em71n16zGcYtY2cj9omGVmUq
-         /nDZqyYtmTIHOcmW4vOm3BbkCWidAhQewq+XKkc/FeDcjJBcy4EFU7DcKUBLj0uaeFuf
-         rs/e4o6Aajn4mluMN5ZVsavIBBNdbRhMaw9j2mpi7KnsmfwVLIm2TG8FMWjSb6Fg4vkS
-         k4pbjhRm5DtpQYAtYfNk8MzWIOo+cT0bH6CrpmGi655atMRxCcHD3WYaM3d40jZZAfW0
-         AnfXcWUgjP6BrS4OC6ACml8Y0yGoQI/CmxaEJaxpBUDf7JvHF2nZU3MjO0J2BJus2mGu
-         3knA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7A8q3L9M+Q620jro/rcp0uqzd0O66Enq7x2/73E1cNU=;
+        b=H/c7NadWC2gvucHKBh3SHsh2NBJsoLUPFyHnbC/goL+NAscUNTUVtaHv5fR+RPMNLe
+         Yu2HDXX9FAvV8Q+yrU2Lr4buZvs04m/pNgmNsBfRW0vrE6BqfuUAhrdtCGSLs5zmEKh0
+         ucE7Q/K+M9WHEVfM04WVHj+GvHyCmNyiwP65817wHckWYR2k5dWJsb3EjWfJvw8s1dV3
+         fS7zEynYpIGurEzyUwlnzTa51LwXCv8EV8eE2NqJwjasFTttw6XYKhliqLHrNMmrzpb8
+         zZQ4qdkrFb0gLj8ppTdIEOaxOT3eMj/+JLPyD1Ek5g9TCrCJdsFZcZ/n/oyua4/Dtg/X
+         /HhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=jzdTnYTIOXokO0oHOpiG94LWr0tBZSe7Na/PAAIVWWU=;
-        b=TEZjKWV1EOJ/VObeHuhVFZnFsYaPmq18xdo8SBaAprjvM35S4bJZt2ZIj7jYpUu1CC
-         uDZXBOTjqulZjKGJdMDCZHZUx/O0qoZBqZOGl2o3MFZkC/61iYHlGb6HjqPGN3weq710
-         XJkFb9oD//DDCOI5Svqk5/fImRIhCwHFvn2f0OrtgL4TN5IXfPiqmCCiEnLhNd/N2/nv
-         YY5ybfbyApIMja+G01bCS8JjVGstpcPgLp+PipWvq32qjYPl6swo9AQsXZg0Sd60ZfQw
-         dGwxR7sRyH3iAbxhsT5oDbL4ki6KYQWJKCEDkxTZ6rroUWzgQTexhFVMYLNnZ3bO0NOV
-         rTuA==
-X-Gm-Message-State: APjAAAWchRSaSibOSR7FqkEFyZYNhY5OGc4Utwv7anX8+OB8GLobmr6j
-        6XU9xwyGlhrpINyPWOPwWIoCh1Rqw3OhaYynLvNDBuA+s/UVMx8ycpDwnuT8W/BV0eb94jBH1b0
-        fYFlc5lfZd7CiymhxjStqVWxD28j8CNUZ1oq+tUVktzGPEP4FOkYBp/EotG+k1aTLCGSmH7WasE
-        jF
-X-Google-Smtp-Source: APXvYqztgFlBXy5d13yLQQXW/pLqfG9wKIwpAPsgovlN9xEMB7g0cWFGvMw+wCrlzTLskGzIuCP/NQ==
-X-Received: by 2002:a63:4001:: with SMTP id n1mr18945148pga.382.1560253652080;
-        Tue, 11 Jun 2019 04:47:32 -0700 (PDT)
-Received: from acces-pc.dolannet.net (cpe-70-95-148-49.san.res.rr.com. [70.95.148.49])
-        by smtp.gmail.com with ESMTPSA id 25sm14174078pfp.76.2019.06.11.04.47.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 04:47:31 -0700 (PDT)
-From:   jay.dolan@accesio.com
+         :references:mime-version:content-transfer-encoding;
+        bh=7A8q3L9M+Q620jro/rcp0uqzd0O66Enq7x2/73E1cNU=;
+        b=MMAKui+SFDj24Nj2r42Aq4ojvt/g/VYoq2tdZulfygsG7ymiqmFrg/Lu++mOuBP5CN
+         OYVQ9YRpIFOPnVqHYCctxwP08LTtSpcp4x/N7IgSwJCtBFXVSg99+goTnG/97BvXyX3B
+         WidRs6tB2rECYljKpPnSm7rZehlCL4l5DP+Tb5ctW2TzTxSo9fsPOcaPtZL2QFTr/Q9y
+         sLec0jO5VUfTK7fuVh4NCX0o8p+4ulSIWsp8h28EQTp9enlD9E8jEY6NXmCc6tHS8Aal
+         vmQUGPJWpNSlKaDyhbBYt5YLw6KJ73IvQ6A09sr6elm8Ux9DTAkRmkAZu621tYGKtJZa
+         RxTA==
+X-Gm-Message-State: APjAAAV7ouu8uSOh1/C513IpBlP96u8LceZIepDBMkFDbJa06b02ERuV
+        GITG/XMSt8n39UJYB1R1I7LIjnek
+X-Google-Smtp-Source: APXvYqyR3s6wUopyfHTJMJFbw9CfA7bRTxK7hA0nJwMRbWFCfd/HOh4klWcZQ9xGZpLXySJ4sGD6wg==
+X-Received: by 2002:a2e:4e09:: with SMTP id c9mr27536052ljb.30.1560254775461;
+        Tue, 11 Jun 2019 05:06:15 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id o74sm2498806lff.46.2019.06.11.05.06.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 11 Jun 2019 05:06:14 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
 To:     linux-serial@vger.kernel.org
-Cc:     Jay Dolan <jay.dolan@accesio.com>
-Subject: [PATCH v4 1/1] serial: 8250: Add support for higher baud rates to Pericom chips
-Date:   Tue, 11 Jun 2019 04:47:15 -0700
-Message-Id: <20190611114715.31372-2-jay.dolan@accesio.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190611114715.31372-1-jay.dolan@accesio.com>
-References: <20190611114715.31372-1-jay.dolan@accesio.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: [PATCH v1] serial: imx: fix locking in set_termios()
+Date:   Tue, 11 Jun 2019 15:05:24 +0300
+Message-Id: <1560254724-5130-1-git-send-email-sorganov@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <1559807977-4598-1-git-send-email-sorganov@gmail.com>
+References: <1559807977-4598-1-git-send-email-sorganov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Jay Dolan <jay.dolan@accesio.com>
+imx_uart_set_termios() called imx_uart_rts_active(), or
+imx_uart_rts_inactive() before taking port->port.lock.
 
-The Pericom chips can achieve additional baud rates by programming the
-sample clock register. The baud rates can be described as
-921600 * 16 / (16 - scr) for scr values 5 to 15. The divisor is set to 1
-for these baud rates.
+As a consequence, sport->port.mctrl that these functions modify
+could have been changed without holding port->port.lock.
 
-Adds new quirk for Pericom chips other than the four port chips to use
-the
+Moved locking of port->port.lock above the calls to fix the issue.
 
-Signed-off-by: Jay Dolan <jay.dolan@accesio.com>
+Signed-off-by: Sergey Organov <sorganov@gmail.com>
 ---
- drivers/tty/serial/8250/8250_pci.c | 97 ++++++++++++++++++++++++------
- 1 file changed, 79 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index df41397de478..7ba1c3b2381d 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -1326,13 +1326,66 @@ static int pci_default_setup(struct serial_private *priv,
- 
- 	return setup_port(priv, port, bar, offset, board->reg_shift);
+ v1: Improve comments as suggested by
+     Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+ drivers/tty/serial/imx.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index dff75dc..1055124 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -383,6 +383,7 @@ static void imx_uart_ucrs_restore(struct imx_port *sport,
  }
--
-+void
-+pericom_do_set_divisor(struct uart_port *port, unsigned int baud,
-+			       unsigned int quot, unsigned int quot_frac)
-+{
-+	int scr;
-+	int lcr;
-+	int actual_baud;
-+	int tolerance;
-+
-+	for (scr = 5 ; scr <= 15 ; scr++) {
-+		actual_baud = 921600 * 16 / scr;
-+		tolerance = actual_baud / 50;
-+
-+		if ((baud < actual_baud + tolerance) &&
-+			(baud > actual_baud - tolerance)) {
-+
-+			lcr = serial_port_in(port, UART_LCR);
-+			serial_port_out(port, UART_LCR, lcr | 0x80);
-+
-+			serial_port_out(port, UART_DLL, 1);
-+			serial_port_out(port, UART_DLM, 0);
-+			serial_port_out(port, 2, 16 - scr);
-+			serial_port_out(port, UART_LCR, lcr);
-+			return;
-+		} else if (baud > actual_baud) {
-+			break;
-+		}
-+	}
-+	serial8250_do_set_divisor(port, baud, quot, quot_frac);
-+}
- static int pci_pericom_setup(struct serial_private *priv,
- 		  const struct pciserial_board *board,
- 		  struct uart_8250_port *port, int idx)
+ #endif
+ 
++/* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
  {
- 	unsigned int bar, offset = board->first_offset, maxnr;
- 
-+	bar = FL_GET_BASE(board->flags);
-+	if (board->flags & FL_BASE_BARS)
-+		bar += idx;
-+	else
-+		offset += idx * board->uart_offset;
-+
-+
-+	maxnr = (pci_resource_len(priv->dev, bar) - board->first_offset) >>
-+		(board->reg_shift + 3);
-+
-+	if (board->flags & FL_REGION_SZ_CAP && idx >= maxnr)
-+		return 1;
-+
-+	port->port.set_divisor = pericom_do_set_divisor;
-+
-+	return setup_port(priv, port, bar, offset, board->reg_shift);
-+}
-+
-+static int pci_pericom_setup_four_at_eight(struct serial_private *priv,
-+		  const struct pciserial_board *board,
-+		  struct uart_8250_port *port, int idx)
-+{
-+	unsigned int bar, offset = board->first_offset, maxnr;
-+
- 	bar = FL_GET_BASE(board->flags);
- 	if (board->flags & FL_BASE_BARS)
- 		bar += idx;
-@@ -1348,6 +1401,8 @@ static int pci_pericom_setup(struct serial_private *priv,
- 	if (board->flags & FL_REGION_SZ_CAP && idx >= maxnr)
- 		return 1;
- 
-+	port->port.set_divisor = pericom_do_set_divisor;
-+
- 	return setup_port(priv, port, bar, offset, board->reg_shift);
+ 	*ucr2 &= ~(UCR2_CTSC | UCR2_CTS);
+@@ -391,6 +392,7 @@ static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
+ 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
  }
  
-@@ -1995,7 +2050,7 @@ static struct pci_serial_quirk pci_serial_quirks[] __refdata = {
- 		.device		= PCI_DEVICE_ID_PERICOM_PI7C9X7954,
- 		.subvendor	= PCI_ANY_ID,
- 		.subdevice	= PCI_ANY_ID,
--		.setup		= pci_pericom_setup,
-+		.setup		= pci_pericom_setup_four_at_eight,
- 	},
- 	/*
- 	 * PLX
-@@ -2032,107 +2087,113 @@ static struct pci_serial_quirk pci_serial_quirks[] __refdata = {
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM_4SDB,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_MPCIE_COM_4S,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM232_4DB,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_MPCIE_COM232_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM_4SMDB,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_MPCIE_COM_4SM,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_MPCIE_ICM422_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_MPCIE_ICM485_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_DEVICE_ID_ACCESIO_PCIE_ICM_4S,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_ICM232_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_MPCIE_ICM232_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM422_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM485_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM232_4,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_COM_4SM,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
- 	{
- 		.vendor     = PCI_VENDOR_ID_ACCESIO,
- 		.device     = PCI_DEVICE_ID_ACCESIO_PCIE_ICM_4SM,
- 		.subvendor  = PCI_ANY_ID,
- 		.subdevice  = PCI_ANY_ID,
--		.setup      = pci_pericom_setup,
-+		.setup      = pci_pericom_setup_four_at_eight,
- 	},
++/* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+ {
+ 	*ucr2 &= ~UCR2_CTSC;
+@@ -400,6 +402,7 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+ 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
+ }
+ 
++/* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
+ {
+ 	*ucr2 |= UCR2_CTSC;
+@@ -1550,6 +1553,16 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 		old_csize = CS8;
+ 	}
+ 
++	del_timer_sync(&sport->timer);
++
++	/*
++	 * Ask the core to calculate the divisor for us.
++	 */
++	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
++	quot = uart_get_divisor(port, baud);
++
++	spin_lock_irqsave(&sport->port.lock, flags);
++
+ 	if ((termios->c_cflag & CSIZE) == CS8)
+ 		ucr2 = UCR2_WS | UCR2_SRST | UCR2_IRTS;
+ 	else
+@@ -1593,16 +1606,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 			ucr2 |= UCR2_PROE;
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
 -	/*
-+	{
-+		.vendor     = PCI_VENDOR_ID_ACCESIO,
-+		.device     = PCI_ANY_ID,
-+		.subvendor  = PCI_ANY_ID,
-+		.subdevice  = PCI_ANY_ID,
-+		.setup      = pci_pericom_setup,
-+	},	/*
- 	 * SBS Technologies, Inc., PMC-OCTALPRO 232
- 	 */
- 	{
+-	 * Ask the core to calculate the divisor for us.
+-	 */
+-	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
+-	quot = uart_get_divisor(port, baud);
+-
+-	spin_lock_irqsave(&sport->port.lock, flags);
+-
+ 	sport->port.read_status_mask = 0;
+ 	if (termios->c_iflag & INPCK)
+ 		sport->port.read_status_mask |= (URXD_FRMERR | URXD_PRERR);
 -- 
-2.17.1
+2.10.0.1.g57b01a3
 
