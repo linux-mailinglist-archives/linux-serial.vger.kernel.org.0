@@ -2,48 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6BC42088
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 11:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB69423B9
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 13:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730665AbfFLJSx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Jun 2019 05:18:53 -0400
-Received: from mx.socionext.com ([202.248.49.38]:16186 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726636AbfFLJSx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Jun 2019 05:18:53 -0400
-Received: from unknown (HELO iyokan-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 12 Jun 2019 18:18:51 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan-ex.css.socionext.com (Postfix) with ESMTP id 4152460629;
-        Wed, 12 Jun 2019 18:18:51 +0900 (JST)
-Received: from 172.31.9.53 (172.31.9.53) by m-FILTER with ESMTP; Wed, 12 Jun 2019 18:18:51 +0900
-Received: from yuzu.css.socionext.com (yuzu [172.31.8.45])
-        by iyokan.css.socionext.com (Postfix) with ESMTP id E9C9F40376;
-        Wed, 12 Jun 2019 18:18:50 +0900 (JST)
-Received: from [127.0.0.1] (unknown [10.213.119.83])
-        by yuzu.css.socionext.com (Postfix) with ESMTP id D2133120B25;
-        Wed, 12 Jun 2019 18:18:50 +0900 (JST)
-Subject: Re: [PATCH] serial: Fix an invalid comparing statement
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jslaby@suse.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Kazuhiro Kasai <kasai.kazuhiro@socionext.com>,
-        Shinji Kanematsu <kanematsu.shinji@socionext.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <1558933288-30023-1-git-send-email-sugaya.taichi@socionext.com>
- <20190610165655.GA397@kroah.com>
-From:   "Sugaya, Taichi" <sugaya.taichi@socionext.com>
-Message-ID: <3b075194-9cea-6de9-31ed-b6dda1e87e9a@socionext.com>
-Date:   Wed, 12 Jun 2019 18:18:50 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190610165655.GA397@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2438276AbfFLLOv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 Jun 2019 07:14:51 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40362 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438274AbfFLLOu (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 12 Jun 2019 07:14:50 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v19so6086424wmj.5
+        for <linux-serial@vger.kernel.org>; Wed, 12 Jun 2019 04:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=ty2XijTo8qzlvWIRg0ZCeFPnQ4bNV/bDxc1SRgb6iN0=;
+        b=kyP/eNBTAZVl7AnnqwObvvrM3tqayRsKb073Bm/hcEIyx7Ex2NgEMqajny0Y81CoDw
+         2ppIdkgB2jVGEdaggnB0DncQVLUlO59WMGp3pC/at+0e7ohsNLEJg1pdKtvtAXo3rj8n
+         tG+QbHxkmoiYkkNPI8RDGfkzOWwEm5phagzIQ4nslDn8D0RZU/gCt02Hl2/5eTdkeA68
+         ftTEchRVAKEVQKWNV7/NlonObf4V++ZFDwbP31kq1d+jieUGmrrwKESqrLh0PkHD46Jk
+         bFjWEU7K4Rrv+ud3KyGChSkal6qvGFhN3fcV/iD9k/K++QiN2D4dzmjP+73dO/zr49+4
+         sSmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=ty2XijTo8qzlvWIRg0ZCeFPnQ4bNV/bDxc1SRgb6iN0=;
+        b=aAahuYleI/XXz+96ojJj9SAxwa0RdSYOAtM/LdqHm2gGFGoe7ke+BbeSXH+b1R0/4y
+         8yt3K45Pc5Y7r9E1sH+6hy6cdoMEdCp0PKuLLVfLJ8/K+UALTZQ9KaB3bPdpN2jXcoCy
+         6YJ4wkl2ETsDBjlJUijRyX/E3Qc2gRnLC1Gg8n/Zne+zOF7btDZpVsSh4/AgU4dYIk7S
+         7h+5+x34p7ACiOaHsuHdi0/USL4P5hBafhcJfvDPZZdrs8rL1zUkeuKS8nHl2seV0aUr
+         WH4mnuegtXlFeFon82Lc6PIKRZuEOSpec2VvojFsujpiNRBetfABQGvks0sjQpFSazrm
+         AGFw==
+X-Gm-Message-State: APjAAAXgWAb/inmMyoMgw/R9qadbC2sZyvtATmLixRqP3W1fIsevFlkE
+        dm94VruqMfuVf0q7NTuFwExgGA==
+X-Google-Smtp-Source: APXvYqwZOCKItFssqrJwKk7MTTd0XJLNuRWwgIPMocmAo9N/2avS/g7Rf/iVxuLALuach9gSgPQ3nA==
+X-Received: by 2002:a7b:cf27:: with SMTP id m7mr22159144wmg.7.1560338088311;
+        Wed, 12 Jun 2019 04:14:48 -0700 (PDT)
+Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id y16sm14843742wru.28.2019.06.12.04.14.47
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 12 Jun 2019 04:14:47 -0700 (PDT)
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com
+Cc:     Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/6] serial: uartps:
+Date:   Wed, 12 Jun 2019 13:14:37 +0200
+Message-Id: <cover.1560338079.git.michal.simek@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
@@ -51,70 +60,54 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Hi,
 
-On 2019/06/11 1:56, Greg Kroah-Hartman wrote:
-> On Mon, May 27, 2019 at 02:01:27PM +0900, Sugaya Taichi wrote:
->> Drop the if-statement which refers to 8th bit field of u8 variable.
->> The bit field is no longer used.
->>
->> Fixes: ba44dc043004 ("serial: Add Milbeaut serial control")
->> Reported-by: Colin Ian King <colin.king@canonical.com>
->> Signed-off-by: Sugaya Taichi <sugaya.taichi@socionext.com>
->> ---
->>   drivers/tty/serial/milbeaut_usio.c | 15 +++++----------
->>   1 file changed, 5 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/tty/serial/milbeaut_usio.c b/drivers/tty/serial/milbeaut_usio.c
->> index 949ab7e..d7207ab 100644
->> --- a/drivers/tty/serial/milbeaut_usio.c
->> +++ b/drivers/tty/serial/milbeaut_usio.c
->> @@ -56,7 +56,6 @@
->>   #define MLB_USIO_SSR_FRE		BIT(4)
->>   #define MLB_USIO_SSR_PE			BIT(5)
->>   #define MLB_USIO_SSR_REC		BIT(7)
->> -#define MLB_USIO_SSR_BRK		BIT(8)
->>   #define MLB_USIO_FCR_FE1		BIT(0)
->>   #define MLB_USIO_FCR_FE2		BIT(1)
->>   #define MLB_USIO_FCR_FCL1		BIT(2)
->> @@ -180,18 +179,14 @@ static void mlb_usio_rx_chars(struct uart_port *port)
->>   		if (status & MLB_USIO_SSR_ORE)
->>   			port->icount.overrun++;
->>   		status &= port->read_status_mask;
->> -		if (status & MLB_USIO_SSR_BRK) {
->> -			flag = TTY_BREAK;
->> +		if (status & MLB_USIO_SSR_PE) {
->> +			flag = TTY_PARITY;
->>   			ch = 0;
->>   		} else
->> -			if (status & MLB_USIO_SSR_PE) {
->> -				flag = TTY_PARITY;
->> +			if (status & MLB_USIO_SSR_FRE) {
->> +				flag = TTY_FRAME;
->>   				ch = 0;
->> -			} else
->> -				if (status & MLB_USIO_SSR_FRE) {
->> -					flag = TTY_FRAME;
->> -					ch = 0;
->> -				}
->> +			}
->>   		if (flag)
->>   			uart_insert_char(port, status, MLB_USIO_SSR_ORE,
->>   					 ch, flag);
-> 
-> While the code never actually supported Break, you are explicitly
-> removing that logic now.  So shouldn't you instead _fix_ break handling?
-> The code before and after your change does not work any differently, so
-> this patch isn't really needed at this point.
-> 
+This patchset is fixing several issues reported by checkpatch but also
+major number handling for multiple allocated ports. For more information
+please look at the first patch which describes more details.
 
-According to research, MLB_USIO_SSR_BRK was a remnant of old HW.
-Since current one does not handle the Break, all logic related it should be
-removed. I try to make a new fix patch.
+When this patchset is applied driver only reports one checkpatch warning
+which should be fixed via console.h first.
+include/linux/console.h:147:    void    (*write)(struct console *, const char *, unsigned);
+
+WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
++				    unsigned n)
 
 Thanks,
-Sugaya Taichi
+Michal
 
-> thanks,
-> 
-> greg k-h
-> 
+v1
+ https://lkml.org/lkml/2019/6/10/186
+ https://lkml.org/lkml/2019/6/10/187
+
+
+Changes in v2:
+- Fix typo in subject line
+- Swap patches compare to previous series
+- Add Fixes tag
+- Split patch from v1
+- Fixes second S_IRUGO usage
+- Add Fixes tag
+- Split patch from v1
+- Add Fixes tag
+- Split patch from v1
+- Add Fixes tag
+- Split patch from v1
+- Add Fixes tag
+- Split patch from v1
+- Add Fixes tag
+
+Nava kishore Manne (5):
+  serial: uartps: Use octal permission for module_param()
+  serial: uartps: Fix multiple line dereference
+  serial: uartps: Fix long line over 80 chars
+  serial: uartps: Do not add a trailing semicolon to macro
+  serial: uartps: Remove useless return from cdns_uart_poll_put_char
+
+Shubhrajyoti Datta (1):
+  serial: uartps: Use the same dynamic major number for all ports
+
+ drivers/tty/serial/xilinx_uartps.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+-- 
+2.17.1
 
