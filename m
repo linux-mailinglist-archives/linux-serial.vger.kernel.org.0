@@ -2,152 +2,151 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B68F41EF9
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 10:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B044207F
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 11:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436956AbfFLIZL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Jun 2019 04:25:11 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46331 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731121AbfFLIZK (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Jun 2019 04:25:10 -0400
-Received: by mail-pl1-f193.google.com with SMTP id e5so6314653pls.13
-        for <linux-serial@vger.kernel.org>; Wed, 12 Jun 2019 01:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nBMA4cy81IvwlogUNVTSbkNxTIWioniCIzkx/8GVX+Q=;
-        b=a+wJjnuAGmyci01wUJwpOo66LfzQLqVmU/rrqkPsB3+Osld40BrLicEQEtRHLj3/qC
-         EZlN08bV7dBSutV/DWuhnaeLl99pieDgvwVhqLl7e4muSznARw3f8OB7w75ZVNc+D74f
-         6EdbLqHlmtygqDMpa1asruqhvOUlnPCdo4tBsXhAT+65UQDs0y3TNl9YSoPIRd/GVsFx
-         XmjVGdH64Mz7adJ1rRtE/3IIhYb0nEDeEKH8Oa+5FELjylx8AK8m9Pr1RY6z8UpX5/kR
-         OKJPRv9d4GhdHU/JZe5egfRf0LkDTKONpMhLBLNPl5rLGDpO4dfMwcsW4KM3IutaQ1ip
-         QDMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nBMA4cy81IvwlogUNVTSbkNxTIWioniCIzkx/8GVX+Q=;
-        b=d4HdlRJzR0KI3/HsbVozmeh3eg0P6vcHiV/Xyt4CFGHHsBn47uw0b3iHsTOxWth0HO
-         4cbhzJn+/Bv+hpob9EIuEreFhIkb8kMNdhFBT0GDlKkTL5oIz+XsCTn/XNVAKjYU11Ij
-         p56FRT/L5z2Onovq1avHvrEFFeKIXwbXXaxuQ+Bgh13bmP4G0e7tI9F4fF5o2nzWkeke
-         kpc3wVk+QDphRTAeyDyxHS83iCNdyyxmt3Ki0tbO/zSHOhOFFgf81iAFyVPTkR5PQyHB
-         kKHrAHGV/t7AXFC6JvvbPia9NnOGeJr9LeS+91DU7vPlJIrPDgr+YZ1y7L2AjERLW0M+
-         Ecgg==
-X-Gm-Message-State: APjAAAVAP1obt722RvW4iSiHPtw6KIPgTWhhr8WsXOpFel4efL2C7MCY
-        Cs8cqP55tHWvG164Ri2EZ0/ktA==
-X-Google-Smtp-Source: APXvYqybHOJE7k4tfvCUarMEbtrPs2q8NhhT6+odOFeOUT79YnY1t55lTWzVNvdYsbZaV/wXb2zhrA==
-X-Received: by 2002:a17:902:b705:: with SMTP id d5mr44986119pls.274.1560327909598;
-        Wed, 12 Jun 2019 01:25:09 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id s7sm1822824pgm.8.2019.06.12.01.25.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Jun 2019 01:25:08 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 13:55:06 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     swboyd@chromium.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-Message-ID: <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
- <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
- <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+        id S1730506AbfFLJQZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 Jun 2019 05:16:25 -0400
+Received: from mga06.intel.com ([134.134.136.31]:18157 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730353AbfFLJQZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 12 Jun 2019 05:16:25 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 02:16:24 -0700
+X-ExtLoop1: 1
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga006.jf.intel.com with ESMTP; 12 Jun 2019 02:16:21 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hazMj-00077D-8W; Wed, 12 Jun 2019 12:16:21 +0300
+Date:   Wed, 12 Jun 2019 12:16:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/2 v5] tty/serial/8250: use mctrl_gpio helpers
+Message-ID: <20190612091621.GA9224@smile.fi.intel.com>
+References: <20190611105603.4435-1-sr@denx.de>
+ <20190611105603.4435-2-sr@denx.de>
+ <20190611124415.GT9224@smile.fi.intel.com>
+ <85f0d39c-e5d8-320b-e611-d956630a629f@denx.de>
+ <20190611144828.GX9224@smile.fi.intel.com>
+ <12e5180e-b4a0-e5fa-bcad-ddc8103d644c@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <12e5180e-b4a0-e5fa-bcad-ddc8103d644c@denx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 12-06-19, 13:12, Rajendra Nayak wrote:
-> so the 'fmax' tables basically say what the max frequency the device can
-> operate at for a given performance state/voltage level.
+On Wed, Jun 12, 2019 at 10:13:05AM +0200, Stefan Roese wrote:
+> On 11.06.19 16:48, Andy Shevchenko wrote:
+> > On Tue, Jun 11, 2019 at 04:02:54PM +0200, Stefan Roese wrote:
+> > > On 11.06.19 14:44, Andy Shevchenko wrote:
+> > > > On Tue, Jun 11, 2019 at 12:56:03PM +0200, Stefan Roese wrote:
+> > 
+> > > > >    static inline void serial8250_out_MCR(struct uart_8250_port *up, int value)
+> > > > >    {
+> > > > >    	serial_out(up, UART_MCR, value);
+> > > > > +
+> > > > > +	if (up->gpios) {
+> > > > > +		int mctrl_gpio = 0;
+> > > > > +
+> > > > > +		if (value & UART_MCR_RTS)
+> > > > > +			mctrl_gpio |= TIOCM_RTS;
+> > > > > +		if (value & UART_MCR_DTR)
+> > > > > +			mctrl_gpio |= TIOCM_DTR;
+> > > > > +
+> > > > > +		mctrl_gpio_set(up->gpios, mctrl_gpio);
+> > > > > +	}
+> > > > >    }
+> > 
+> > > > >    static inline int serial8250_in_MCR(struct uart_8250_port *up)
+> > > > >    {
+> > > > > -	return serial_in(up, UART_MCR);
+> > > > > +	int mctrl;
+> > > > > +
+> > > > > +	mctrl = serial_in(up, UART_MCR);
+> > > > > +
+> > > > > +	if (up->gpios) {
+> > > > > +		int mctrl_gpio = 0;
+> > > > > +
+> > > > > +		/* save current MCR values */
+> > > > > +		if (mctrl & UART_MCR_RTS)
+> > > > > +			mctrl_gpio |= TIOCM_RTS;
+> > > > > +		if (mctrl & UART_MCR_DTR)
+> > > > > +			mctrl_gpio |= TIOCM_DTR;
+> > > > > +
+> > > > > +		mctrl_gpio = mctrl_gpio_get_outputs(up->gpios, &mctrl_gpio);
+> > > > > +		if (mctrl_gpio & TIOCM_RTS)
+> > > > > +			mctrl |= UART_MCR_RTS;
+> > > > > +		else
+> > > > > +			mctrl &= ~UART_MCR_RTS;
+> > > > > +
+> > > > > +		if (mctrl_gpio & TIOCM_DTR)
+> > > > > +			mctrl |= UART_MCR_DTR;
+> > > > > +		else
+> > > > > +			mctrl &= ~UART_MCR_DTR;
+> > > > > +	}
+> > > > > +
+> > > > > +	return mctrl;
+> > > > >    }
+> > > > 
+> > > > These are using OR logic with potentially volatile data. Shouldn't we mask
+> > > > unused bits in UART_MCR in case of up->gpios != NULL?
+> > > 
+> > > Sorry, I don't see, which bits you are referring to? Could you please be
+> > > a bit more specific with the variable / macro meant (example)?
+> > 
+> > I meant that we double write values in the out() which might have some
+> > consequences, though I hope nothing wrong with it happens.
 > 
-> so in your example it would be for instance
-> 
-> 500M, Perf state = 2
-> 1G, Perf state = 3
-> 1.2G, Perf state = 4
-> 
-> Now when the device wants to operate at say 800Mhz, you need to set the
-> Perf state to 3, so this patch basically avoids you having to put those additional
-> OPPs in the table which would otherwise look something like this
-> 
-> 500M, Perf state = 2
-> 800M, Perf state = 3 <-- redundant OPP
-> 1G, Perf state = 3
-> 1.2G, Perf state = 4
-> 
-> Your example had just 1 missing entry in the 'fmax' tables in reality its a lot more,
-> atleast on all qualcomm platforms.
+> Where is the double write to a register? Sorry, I fail to spot it.
 
-Okay, I have applied this patch (alone) to the OPP tree with minor
-modifications in commit log and diff.
+Not to the one register. From the functional point of view the same signal is
+set up twice: once per UART register, once per GPIO pins.
+
+> > In the in() we read the all bits in the register.
+> > 
+> > As now I look at the implementation of mctrl_gpio_get_outputs(),
+> > I think we rather get helpers for conversion between TIOCM and UART_MCR values,
+> > so, they can be used in get_mctrl() / set_mctrl() and above.
+> 
+> Do you something like this in mind?
+
+More likely
+
+static inline int serial8250_MCR_to_TIOCM(int mcr)
+{
+	int tiocm = 0;
+
+	if (mcr & ...)
+		tiocm |= ...;
+	...
+
+	return tiocm;
+}
+
+static inline int serial8250_TIOCM_to_MCR(int tiocm)
+{
+	... in a similar way ...
+}
+
+> Plus the use of these macros in this patch of course.
+
+No macros, please.
 
 -- 
-viresh
+With Best Regards,
+Andy Shevchenko
 
--------------------------8<-------------------------
 
-From: Stephen Boyd <swboyd@chromium.org>
-Date: Wed, 20 Mar 2019 15:19:08 +0530
-Subject: [PATCH] opp: Don't overwrite rounded clk rate
-
-Doing this allows us to call this API with any rate requested and have
-it no need to match in the OPP table. Instead, we'll round the rate up
-to the nearest OPP, so that we can get the voltage or performance level
-required for that OPP. This supports users of the OPP core that want to
-specify the possible 'fmax' values corresponding to the voltage or
-performance levels of each OPP. And for devices that required the exact
-frequency, we can rely on the clk framework to round the rate to the
-nearest supported frequency instead of the OPP framework to do so.
-
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-[ Viresh: Massaged changelog and use temp_opp variable instead ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 764e05a2fa66..0fbc77f05048 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -757,7 +757,7 @@ static int _set_required_opps(struct device *dev,
- int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- {
- 	struct opp_table *opp_table;
--	unsigned long freq, old_freq;
-+	unsigned long freq, old_freq, temp_freq;
- 	struct dev_pm_opp *old_opp, *opp;
- 	struct clk *clk;
- 	int ret;
-@@ -796,13 +796,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 		goto put_opp_table;
- 	}
- 
--	old_opp = _find_freq_ceil(opp_table, &old_freq);
-+	temp_freq = old_freq;
-+	old_opp = _find_freq_ceil(opp_table, &temp_freq);
- 	if (IS_ERR(old_opp)) {
- 		dev_err(dev, "%s: failed to find current OPP for freq %lu (%ld)\n",
- 			__func__, old_freq, PTR_ERR(old_opp));
- 	}
- 
--	opp = _find_freq_ceil(opp_table, &freq);
-+	temp_freq = freq;
-+	opp = _find_freq_ceil(opp_table, &temp_freq);
- 	if (IS_ERR(opp)) {
- 		ret = PTR_ERR(opp);
- 		dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
