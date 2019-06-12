@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8A7423C0
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 13:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE46423C4
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 13:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438325AbfFLLO7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Jun 2019 07:14:59 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:56003 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438314AbfFLLO6 (ORCPT
+        id S2438336AbfFLLPK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 Jun 2019 07:15:10 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:56007 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438324AbfFLLPA (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:14:58 -0400
-Received: by mail-wm1-f65.google.com with SMTP id a15so6118087wmj.5
-        for <linux-serial@vger.kernel.org>; Wed, 12 Jun 2019 04:14:57 -0700 (PDT)
+        Wed, 12 Jun 2019 07:15:00 -0400
+Received: by mail-wm1-f66.google.com with SMTP id a15so6118181wmj.5
+        for <linux-serial@vger.kernel.org>; Wed, 12 Jun 2019 04:14:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=monstr-eu.20150623.gappssmtp.com; s=20150623;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=JC6Q8CjmGdxzS1r/l1ugJJUHGuJAio4YE7r12Sbrm1Q=;
-        b=dfHnZnm/KeAKx0Y53W8U+Gve09GK0RsLcHKGzBp8skf8dieoVp+3rfiL2YnQayFHcb
-         Lkfz1A+SwK7w+BUs52YV74L3fZLP3J9loLnVg+o9gWVgFH0oSAU6JzR3FOXHo2SkklyO
-         s1WZEV1YfCDAmEPtAm3S/PpyLCfDN8f+/eiUzFsjKKNirIBLFta9bZocKUHJW3iuYWXk
-         Kvz+A4Ujf8PryyBkA08Z4eCmgbflrI4pyjgutp3y8C0zfcrFW2FNAaPnpCkrMY3Tw/ly
-         enYA/42NpbShVA/yMX21VKyJWtjCP4rreyRiWs0ec1wfiByCbkYA970s8PpE6ujeb/pq
-         wq5g==
+        bh=N7TfMirow0WLkJ8Qk5sTGDNuiXjkVvo5PhKfS+WN4/0=;
+        b=TvHkcos3aVvBmtDnRVLiF8pREYuprtIOehZYrLYdAyjZP7EdbPz6anRT6UL2bn+1lt
+         iRSNcVbOmYQ+kkQ3JbVs1+N1QXgzSkLX7YOg4L2t2XY70f8q+rjIVRsJ4twJwhJN5UVZ
+         5vJXv8Lim0Z9xob8xQk0ZvGfB+Z70kXkXVtj9Vo9sPNZX6nj6jRDgEYn1CZRGWviaBdS
+         8d2kZlRPWm/+iACF30dR/3uZm/5FVD9NxZ0mvNShAZQiO33Rxhr5EDslpWhYAWS2n20q
+         sZ86aP63QHnIW66uQRUQxsSNaaLrpUhja+T3uqyEQLfK6EbRGrP9SJ6Yvc6TpIiuxChN
+         7asQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:in-reply-to:references;
-        bh=JC6Q8CjmGdxzS1r/l1ugJJUHGuJAio4YE7r12Sbrm1Q=;
-        b=mNQYz4lGV1Tm4YnIx0an1pglVWpXBsbfQ5AqoqsTUoenFFaV71DJ1TlDIQm8jrlZ6D
-         4iznCAHalVXszqwo+htxdbqGvTlKLnWsIVR7xQEJcGnHRrJFfzprRZoCwREaNu7U07JC
-         12BGavymG0vAvrOtpVzYlPjesew0OPBw7kBqyu+EOqqtWH0Mmmw+49U1n0PplU9ziANa
-         S8WLnO7aqC5QvuJrypfBav/mEpe74qiOnLtFy4PLJTkC1BnOHZVw9m3401lD0MS89M+E
-         rHCYy2g8PZYJy78Rbo62EPeLWiNt6VhNlRFRgrNilG45t9wESd7ve/juvF8fZ/FoVgnj
-         9ljA==
-X-Gm-Message-State: APjAAAXP3Zso/aU4tv8kmXtuuUvJ7+9pXfaMKDzijl3SdGY36Uo0oLLA
-        6qun8MS/zWY07J3WH6VDEtvm+g==
-X-Google-Smtp-Source: APXvYqxhsrtt2KXOawEWbugdsCleP2uygG0LIu+9qXaDXVByC4OzGpQkIVhgSA12n1EyQRy68HBOsw==
-X-Received: by 2002:a1c:3d41:: with SMTP id k62mr19765359wma.61.1560338096902;
-        Wed, 12 Jun 2019 04:14:56 -0700 (PDT)
+        bh=N7TfMirow0WLkJ8Qk5sTGDNuiXjkVvo5PhKfS+WN4/0=;
+        b=a9n0T6c//80VTBxV8fyPoSfkTt4pqVLEL2N+fpcZ1GESvlJKyYphtNqh8n8KEUfWY8
+         fV5iD0LfWGsNze1re1RISoaR1RROsJeI/yAOsS0vn4L0nIPB9w0ep93VrwPnt9Wx5Kly
+         qxRcLaSE8vNhD3jElPDbAW6quD9iXdvF4u7SKjRL1va79yjZtvcyDQRFSUzZcu+mCH20
+         VpvPuafJvriEgRJxlB6fvQYox3mjqAmw/nxAPGqD9BlQfjUIXcTPpyjIGcmYPcU1oKx0
+         uOr6bYvnFqDmD3ksEr5V/43A01aNBbqmVrVRUvtKuWB0UkC39bfkIri651Mxrgqr7IH5
+         MGAA==
+X-Gm-Message-State: APjAAAX4bqX8Q/Zwt5cFLfjwbiQSyReFhn5xxiCkdsygK5bCyvcNZZCQ
+        dNjboywYBxFX5BWhUcKa16HX/stlCsaX8A==
+X-Google-Smtp-Source: APXvYqxDqteBduXIGovJOsGxQCU7BEXqUQmBQgzI25tvhIXaofsgXxbwQoEvBU7rTYV1bD0qZFpatw==
+X-Received: by 2002:a1c:1b81:: with SMTP id b123mr21041986wmb.144.1560338098580;
+        Wed, 12 Jun 2019 04:14:58 -0700 (PDT)
 Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id j16sm38159921wre.94.2019.06.12.04.14.56
+        by smtp.gmail.com with ESMTPSA id g19sm6514083wmg.10.2019.06.12.04.14.57
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Jun 2019 04:14:56 -0700 (PDT)
+        Wed, 12 Jun 2019 04:14:58 -0700 (PDT)
 From:   Michal Simek <michal.simek@xilinx.com>
 To:     johan@kernel.org, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, monstr@monstr.eu,
@@ -52,9 +52,9 @@ To:     johan@kernel.org, gregkh@linuxfoundation.org,
 Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
         Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 5/6] serial: uartps: Do not add a trailing semicolon to macro
-Date:   Wed, 12 Jun 2019 13:14:42 +0200
-Message-Id: <5d938d34c3c4710577df898dbf4b70c74d2e6730.1560338079.git.michal.simek@xilinx.com>
+Subject: [PATCH v2 6/6] serial: uartps: Remove useless return from cdns_uart_poll_put_char
+Date:   Wed, 12 Jun 2019 13:14:43 +0200
+Message-Id: <19a9f67770e1896dde57d94b093273b503610eef.1560338079.git.michal.simek@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1560338079.git.michal.simek@xilinx.com>
 References: <cover.1560338079.git.michal.simek@xilinx.com>
@@ -67,12 +67,15 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Nava kishore Manne <nava.manne@xilinx.com>
 
-This patch fixes this checkpatch warning:
-WARNING: macros should not use a trailing semicolon
-+#define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, \
-+		clk_rate_change_nb);
+There is no reason to call return at the end of function which should
+return void.
 
-Fixes: d9bb3fb12685 ("tty: xuartps: Rebrand driver as Cadence UART")
+The patch is also remove one checkpatch warning:
+WARNING: void function return statements are not generally useful
++	return;
++}
+
+Fixes: 6ee04c6c5488 ("tty: xuartps: Add polled mode support for xuartps")
 Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 ---
@@ -81,26 +84,22 @@ Changes in v2:
 - Split patch from v1
 - Add Fixes tag
 
-Origin patch which introduce this semicolon was
-c4b0510cc1571ff44e1 ("tty: xuartps: Dynamically adjust to input frequency
-changes")
----
- drivers/tty/serial/xilinx_uartps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/xilinx_uartps.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index c3949a323815..d4c1ae2ffca6 100644
+index d4c1ae2ffca6..bcef254fa03c 100644
 --- a/drivers/tty/serial/xilinx_uartps.c
 +++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -199,7 +199,7 @@ struct cdns_platform_data {
- 	u32 quirks;
- };
- #define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, \
--		clk_rate_change_nb);
-+		clk_rate_change_nb)
+@@ -1074,8 +1074,6 @@ static void cdns_uart_poll_put_char(struct uart_port *port, unsigned char c)
+ 		cpu_relax();
  
- /**
-  * cdns_uart_handle_rx - Handle the received bytes along with Rx errors.
+ 	spin_unlock_irqrestore(&port->lock, flags);
+-
+-	return;
+ }
+ #endif
+ 
 -- 
 2.17.1
 
