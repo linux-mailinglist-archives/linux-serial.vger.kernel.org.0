@@ -2,33 +2,30 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B82DF42CF5
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 19:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16D142CF7
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 19:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbfFLRGO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Jun 2019 13:06:14 -0400
-Received: from smtprelay0023.hostedemail.com ([216.40.44.23]:34430 "EHLO
+        id S1727321AbfFLRH3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 Jun 2019 13:07:29 -0400
+Received: from smtprelay0208.hostedemail.com ([216.40.44.208]:36559 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728324AbfFLRGO (ORCPT
+        by vger.kernel.org with ESMTP id S1726384AbfFLRH3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Jun 2019 13:06:14 -0400
-X-Greylist: delayed 571 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jun 2019 13:06:14 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id 236F718018052
-        for <linux-serial@vger.kernel.org>; Wed, 12 Jun 2019 16:56:44 +0000 (UTC)
+        Wed, 12 Jun 2019 13:07:29 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 186D02C33;
-        Wed, 12 Jun 2019 16:56:42 +0000 (UTC)
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 1C359C1DC85;
+        Wed, 12 Jun 2019 17:07:28 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:69:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1535:1544:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2553:2559:2562:2828:2904:2914:3138:3139:3140:3141:3142:3355:3622:3865:3866:3867:3868:3870:3871:3872:4250:4321:4605:5007:6119:7576:7875:8603:9592:10004:10848:11026:11232:11473:11658:11914:12043:12048:12296:12438:12555:12683:12740:12760:12895:12986:13439:13972:14181:14659:14721:21080:21433:21451:21627:30045:30054:30090:30091,0,RBL:error,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:28,LUA_SUMMARY:none
-X-HE-Tag: elbow51_57385ec3ca363
-X-Filterd-Recvd-Size: 5165
-Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2729:2828:2896:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3871:3872:4225:4321:5007:7576:7875:10004:10400:10848:11026:11232:11658:11914:12043:12048:12296:12438:12555:12679:12740:12760:12895:13439:14181:14659:14721:21080:21451:21627:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:27,LUA_SUMMARY:none
+X-HE-Tag: road25_23dc3a3c72a17
+X-Filterd-Recvd-Size: 3267
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
         (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 12 Jun 2019 16:56:39 +0000 (UTC)
-Message-ID: <183d192c4f3d0a8032bda73953ac8d1719590570.camel@perches.com>
-Subject: Re: [PATCH v2 3/6] serial: uartps: Fix multiple line dereference
+        by omf06.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 12 Jun 2019 17:07:26 +0000 (UTC)
+Message-ID: <fc69912c14ead80f371e2136d43db4af1f4b72aa.camel@perches.com>
+Subject: Re: [PATCH v2 5/6] serial: uartps: Do not add a trailing semicolon
+ to macro
 From:   Joe Perches <joe@perches.com>
 To:     Michal Simek <michal.simek@xilinx.com>, johan@kernel.org,
         gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
@@ -36,10 +33,10 @@ To:     Michal Simek <michal.simek@xilinx.com>, johan@kernel.org,
 Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
         Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Date:   Wed, 12 Jun 2019 09:56:32 -0700
-In-Reply-To: <3a5b27987c5b4fc5ec7dc7f58485db63057edbfe.1560338079.git.michal.simek@xilinx.com>
+Date:   Wed, 12 Jun 2019 10:07:25 -0700
+In-Reply-To: <5d938d34c3c4710577df898dbf4b70c74d2e6730.1560338079.git.michal.simek@xilinx.com>
 References: <cover.1560338079.git.michal.simek@xilinx.com>
-         <3a5b27987c5b4fc5ec7dc7f58485db63057edbfe.1560338079.git.michal.simek@xilinx.com>
+         <5d938d34c3c4710577df898dbf4b70c74d2e6730.1560338079.git.michal.simek@xilinx.com>
 Content-Type: text/plain; charset="ISO-8859-1"
 User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
@@ -52,125 +49,67 @@ X-Mailing-List: linux-serial@vger.kernel.org
 On Wed, 2019-06-12 at 13:14 +0200, Michal Simek wrote:
 > From: Nava kishore Manne <nava.manne@xilinx.com>
 > 
-> Trivial patch which fixes this checkpatch warning:
-> WARNING: Avoid multiple line dereference - prefer 'port->state->xmit.tail'
-> +				port->state->xmit.buf[port->state->xmit.
-> +				tail], port->membase + CDNS_UART_FIFO);
-> 
-> Fixes: c8dbdc842d30 ("serial: xuartps: Rewrite the interrupt handling logic")
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> ---
-> 
-> Changes in v2:
-> - Split patch from v1
-> - Add Fixes tag
-> 
->  drivers/tty/serial/xilinx_uartps.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+> This patch fixes this checkpatch warning:
+> WARNING: macros should not use a trailing semicolon
+> +#define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, \
+> +		clk_rate_change_nb);
 > diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-> index c84db82bdaab..4cd20c036750 100644
-> --- a/drivers/tty/serial/xilinx_uartps.c
-> +++ b/drivers/tty/serial/xilinx_uartps.c
-> @@ -319,8 +319,8 @@ static void cdns_uart_handle_tx(void *dev_id)
->  			 * register.
->  			 */
->  			writel(
-> -				port->state->xmit.buf[port->state->xmit.
-> -				tail], port->membase + CDNS_UART_FIFO);
-> +				port->state->xmit.buf[port->state->xmit.tail],
-> +					port->membase + CDNS_UART_FIFO);
+[]
+> @@ -199,7 +199,7 @@ struct cdns_platform_data {
+>  	u32 quirks;
+>  };
+>  #define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, \
+> -		clk_rate_change_nb);
+> +		clk_rate_change_nb)
 >  
->  			port->icount.tx++;
+>  /**
+>   * cdns_uart_handle_rx - Handle the received bytes along with Rx errors.
 
-Another way to rewrite this is to use a temporary for
-port->state->xmit and also return early on empty to
-avoid unnecessary indentation.
+trivia:
 
-Using a temporary can also reduce object size a bit by
-removing unnecessary dereferences: (defconfig x86-64)
+Perhaps this is easier for humans to read with the macro
+on two lines like:
 
-$ size drivers/tty/serial/xilinx_uartps.o*
-   text	   data	    bss	    dec	    hex	filename
-  26578	   4632	    320	  31530	   7b2a	drivers/tty/serial/xilinx_uartps.o.new
-  26642	   4632	    320	  31594	   7b6a	drivers/tty/serial/xilinx_uartps.o.old
+#define to_cdns_uart(_nb) \
+	container_of(_nb, struct cdns_uart, clk_rate_change_nb)
 
-i.e.:
+or just ignore the 80 column limit
 
+#define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, clk_rate_change_nb)
+
+or because the macro is only used in one place,
+just get rid of it and use container_of directly.
 ---
- drivers/tty/serial/xilinx_uartps.c | 54 ++++++++++++++++++--------------------
- 1 file changed, 25 insertions(+), 29 deletions(-)
+ drivers/tty/serial/xilinx_uartps.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 605354fd60b1..09b586aeeca3 100644
+index 605354fd60b1..ca5cec2b83ce 100644
 --- a/drivers/tty/serial/xilinx_uartps.c
 +++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -305,40 +305,36 @@ static void cdns_uart_handle_rx(void *dev_id, unsigned int isrstatus)
- static void cdns_uart_handle_tx(void *dev_id)
- {
- 	struct uart_port *port = (struct uart_port *)dev_id;
-+	struct circ_buf *xmit = &port->state->xmit;
- 	unsigned int numbytes;
- 
--	if (uart_circ_empty(&port->state->xmit)) {
-+	if (uart_circ_empty(xmit)) {
- 		writel(CDNS_UART_IXR_TXEMPTY, port->membase + CDNS_UART_IDR);
--	} else {
--		numbytes = port->fifosize;
--		while (numbytes && !uart_circ_empty(&port->state->xmit) &&
--		       !(readl(port->membase + CDNS_UART_SR) & CDNS_UART_SR_TXFULL)) {
--			/*
--			 * Get the data from the UART circular buffer
--			 * and write it to the cdns_uart's TX_FIFO
--			 * register.
--			 */
--			writel(
--				port->state->xmit.buf[port->state->xmit.
--				tail], port->membase + CDNS_UART_FIFO);
--
--			port->icount.tx++;
--
--			/*
--			 * Adjust the tail of the UART buffer and wrap
--			 * the buffer if it reaches limit.
--			 */
--			port->state->xmit.tail =
--				(port->state->xmit.tail + 1) &
--					(UART_XMIT_SIZE - 1);
--
--			numbytes--;
--		}
-+		return;
-+	}
+@@ -195,11 +195,10 @@ struct cdns_uart {
+ 	u32			quirks;
+ 	bool cts_override;
+ };
 +
-+	numbytes = port->fifosize;
-+	while (numbytes && !uart_circ_empty(xmit) &&
-+	       !(readl(port->membase + CDNS_UART_SR) & CDNS_UART_SR_TXFULL)) {
-+		/*
-+		 * Get the data from the UART circular buffer and write it
-+		 * to the cdns_uart's TX_FIFO register.
-+		 */
-+		writel(xmit->buf[xmit->tail], port->membase + CDNS_UART_FIFO);
-+
-+		port->icount.tx++;
-+
-+		/*
-+		 * Adjust the tail of the UART buffer and wrap the buffer
-+		 * if it reaches limit.
-+		 */
-+		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
- 
--		if (uart_circ_chars_pending(
--				&port->state->xmit) < WAKEUP_CHARS)
--			uart_write_wakeup(port);
-+		numbytes--;
- 	}
-+
-+	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-+		uart_write_wakeup(port);
- }
+ struct cdns_platform_data {
+ 	u32 quirks;
+ };
+-#define to_cdns_uart(_nb) container_of(_nb, struct cdns_uart, \
+-		clk_rate_change_nb);
  
  /**
+  * cdns_uart_handle_rx - Handle the received bytes along with Rx errors.
+@@ -489,8 +488,9 @@ static int cdns_uart_clk_notifier_cb(struct notifier_block *nb,
+ 	int locked = 0;
+ 	struct clk_notifier_data *ndata = data;
+ 	unsigned long flags = 0;
+-	struct cdns_uart *cdns_uart = to_cdns_uart(nb);
++	struct cdns_uart *cdns_uart;
  
++	cdns_uart = container_of(nb, struct cdns_uart, clk_rate_change_nb);
+ 	port = cdns_uart->port;
+ 	if (port->suspended)
+ 		return NOTIFY_OK;
+
 
