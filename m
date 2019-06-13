@@ -2,113 +2,149 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCA9437C6
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F6C43DDE
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732984AbfFMPBG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jun 2019 11:01:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52366 "EHLO mail.kernel.org"
+        id S1731840AbfFMPqB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jun 2019 11:46:01 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:14330 "EHLO mx1.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732566AbfFMOka (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jun 2019 10:40:30 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2389355AbfFMPqA (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:46:00 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 57D532175B;
-        Thu, 13 Jun 2019 14:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560436829;
-        bh=AMfYYiFDnSPplYQGWm8VdFubFiToLLjY7NKHWlMj/7Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YnLk7DLWFZz4W5tpbheLAhQBzjY5uDLN+9Uv+hxWIC0R+FMWbozryhgV8EhJX6bfL
-         4qhrMiGPmVxEhBQvpzFwOUOeEKf+M4rCIGazgenVj9yTrnf8FgPE3cFho3w5UApcxb
-         I2EvYzXkabni0m4zeSV/se3EChpj7AyJ37XTFztM=
-Received: by mail-qt1-f170.google.com with SMTP id p15so3437048qtl.3;
-        Thu, 13 Jun 2019 07:40:29 -0700 (PDT)
-X-Gm-Message-State: APjAAAUG0ltqFaZBLoqSUIIizFFuRmJmgY8hw6UL1MKHCezTv0dPjFl4
-        0W++mEPEcskTqTL1jVLpP7+T8YS+5OHmPLHX5Q==
-X-Google-Smtp-Source: APXvYqxctR3wbgWzXGF/JoJM/uXXh7dkhlI9vwjgxMVNu6wr1wBEMkkREu2EEkaC7/NyGasJGU/Mex5miLNVy6SnR4c=
-X-Received: by 2002:a0c:b627:: with SMTP id f39mr3981799qve.72.1560436828511;
- Thu, 13 Jun 2019 07:40:28 -0700 (PDT)
+        by mx1.mailbox.org (Postfix) with ESMTPS id E58784FF25;
+        Thu, 13 Jun 2019 17:45:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id 0S43kVFKKsZG; Thu, 13 Jun 2019 17:45:45 +0200 (CEST)
+From:   Stefan Roese <sr@denx.de>
+To:     linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>
+Subject: [PATCH 1/3 v6] serial: mctrl_gpio: Check if GPIO property exisits before requesting it
+Date:   Thu, 13 Jun 2019 17:45:40 +0200
+Message-Id: <20190613154542.32438-1-sr@denx.de>
 MIME-Version: 1.0
-References: <20190611121510.260188-1-tientzu@chromium.org>
-In-Reply-To: <20190611121510.260188-1-tientzu@chromium.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 13 Jun 2019 08:40:16 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKJMAhOLH_Y2rgbdWZ9f5CEVdMMEF8+bHfjxxtu-cBKdQ@mail.gmail.com>
-Message-ID: <CAL_JsqKJMAhOLH_Y2rgbdWZ9f5CEVdMMEF8+bHfjxxtu-cBKdQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: serial: add documentation for Rx in-band
- wakeup support
-To:     Claire Chang <tientzu@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        changqi.hu@mediatek.com,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 6:15 AM Claire Chang <tientzu@chromium.org> wrote:
->
-> To support Rx in-band wakeup, one must create an interrupt specifier with
-> edge sensitivity on Rx pin and an addtional pinctrl to reconfigure Rx pin
-> to normal GPIO in sleep state. Driver will switch to sleep mode pinctrl and
-> enable irq wake before suspend and restore to default settings when
-> resuming.
->
-> Signed-off-by: Claire Chang <tientzu@chromium.org>
-> ---
-> Resending this patch since I forgot to cc device tree maintainers/mailing list.
-> The 2/2 patch in this series[1] is already in tty-next[2].
->
-> [1] https://patchwork.kernel.org/patch/10962299/
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-testing
->
->  .../devicetree/bindings/serial/mtk-uart.txt         | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-> index bcfb13194f16..3488b6e24e0c 100644
-> --- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
-> +++ b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-> @@ -21,7 +21,12 @@ Required properties:
->
->  - reg: The base address of the UART register bank.
->
-> -- interrupts: A single interrupt specifier.
-> +- interrupts or interrupts-extended:
+This patch adds a check for the GPIOs property existence, before the
+GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+support is added (2nd patch in this patch series) on x86 platforms using
+ACPI.
 
-interrupts-extended support is implied as both are supported and the
-connection to the interrupt parent is outside the scope of the
-binding. So we just document 'interrupts'.
+Here Mika's comments from 2016-08-09:
 
-> +  index 0: an interrupt specifier for the UART controller itself
-> +  index 1: optional, an interrupt specifier with edge sensitivity on Rx pin to
-> +           support Rx in-band wake up. If one would like to use this feature,
-> +           one must create an addtional pinctrl to reconfigure Rx pin to normal
-> +           GPIO before suspend.
->
->  - clocks : Must contain an entry for each entry in clock-names.
->    See ../clocks/clock-bindings.txt for details.
-> @@ -37,7 +42,11 @@ Example:
->         uart0: serial@11006000 {
->                 compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
->                 reg = <0x11006000 0x400>;
-> -               interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>;
-> +               interrupts-extended = <&sysirq GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-> +                                     <&gpio 121 IRQ_TYPE_EDGE_FALLING>;
->                 clocks = <&uart_clk>, <&bus_clk>;
->                 clock-names = "baud", "bus";
-> +               pinctrl-names = "default", "sleep";
-> +               pinctrl-0 = <&uart_pin>;
-> +               pinctrl-1 = <&uart_pin_sleep>;
->         };
-> --
-> 2.22.0.rc2.383.gf4fbbf30c2-goog
->
+"
+I noticed that with v4.8-rc1 serial console of some of our Broxton
+systems does not work properly anymore. I'm able to see output but input
+does not work.
+
+I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+("tty/serial/8250: use mctrl_gpio helpers").
+
+The reason why it fails is that in ACPI we do not have names for GPIOs
+(except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+UART device in Broxton has following (simplified) ACPI description:
+
+    Device (URT4)
+    {
+        ...
+        Name (_CRS, ResourceTemplate () {
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003A
+            }
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003D
+            }
+        })
+
+In this case it finds the first GPIO (0x003A which happens to be RX pin
+for that UART), turns it into GPIO which then breaks input for the UART
+device. This also breaks systems with bluetooth connected to UART (those
+typically have some GPIOs in their _CRS).
+
+Any ideas how to fix this?
+
+We cannot just drop the _CRS index lookup fallback because that would
+break many existing machines out there so maybe we can limit this to
+only DT enabled machines. Or alternatively probe if the property first
+exists before trying to acquire the GPIOs (using
+device_property_present()).
+"
+
+This patch implements the fix suggested by Mika in his statement above.
+
+Signed-off-by: Stefan Roese <sr@denx.de>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+v6:
+- No change
+
+v5:
+- Simplified the code a bit (Andy)
+- Added gpio_str == NULL handling (Andy)
+
+v4:
+- Add missing free() calls (Johan)
+- Added Mika's reviewed by tag
+- Added Johan to Cc
+
+v3:
+- No change
+
+v2:
+- Include the problem description and analysis from Mika into the commit
+  text, as suggested by Greg.
+
+ drivers/tty/serial/serial_mctrl_gpio.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 39ed56214cd3..65348887a749 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -116,6 +116,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+ 
+ 	for (i = 0; i < UART_GPIO_MAX; i++) {
+ 		enum gpiod_flags flags;
++		char *gpio_str;
++		bool present;
++
++		/* Check if GPIO property exists and continue if not */
++		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
++				     mctrl_gpios_desc[i].name);
++		if (!gpio_str)
++			continue;
++
++		present = device_property_present(dev, gpio_str);
++		kfree(gpio_str);
++		if (!present)
++			continue;
+ 
+ 		if (mctrl_gpios_desc[i].dir_out)
+ 			flags = GPIOD_OUT_LOW;
+-- 
+2.22.0
+
