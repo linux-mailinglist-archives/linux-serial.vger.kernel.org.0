@@ -2,154 +2,109 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB3743D1D
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FC143BB8
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728721AbfFMPjf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jun 2019 11:39:35 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41952 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731920AbfFMJyY (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:54:24 -0400
-Received: by mail-pg1-f194.google.com with SMTP id 83so10650758pgg.8
-        for <linux-serial@vger.kernel.org>; Thu, 13 Jun 2019 02:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
-        b=WUhQgDpav09wCsvAut2BWW+R7sS7LtghDHpfI6v0bUGLZjzR+QUQRAULtuQ+dBOAS+
-         5B9NTVliKzqPVgFAQafRgRYnR51hBF4bFPqnp+SsVxb/s1dw527gW4ZdAD71YLZdwcQ0
-         kP0XOt6g2JH7P49I+eaVhp4nGWzzZa4kZC41fTHL4Dh4FeCF8y1xkbVGRNCVSFpZMYT1
-         seXbQTfhtWg/Y2ZFYMhZdfSkXlmqGNBTcy0L6z6YZU0v3YRzsY93irO3uxYz27fLorQY
-         xCaAv7PNE+Wc9gb1a0ZIBFgBoTFuvbNfAi4+vMKRTRmWIgoX9FjCYaWw5pHArsOCxWin
-         Y5wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
-        b=J4ljlghVIKSgyWdq5F+61sbDg3SPbsupGx0yLo5KmRqQGSoGKXT3XUDWmANiVLBawb
-         7uaxGdM+VR7vG8aMTE+6s2GUmudfDgm8KlgpG42ek6Vw+hRKhTWu6Gbp+csHqIs5PN3v
-         LAhxNRCa2Jl2bJH/vyDIFtHMk4biD/e+80JpE7xFLB9MBmnCBStTp8ujaSPmAGSiWayT
-         fU2mAm4nlFkSGMv5meSRCsLOnVKU/4p9PR8II5hpJu+NgeMdXnvdSkPQsSmfgTMlv5xs
-         +SQvCEj6VowC3qBgg39ht65c0SMZSbrTEGmGgB/npiSB38DRuu5rR5s1zj1qoCvrAc/J
-         Zeog==
-X-Gm-Message-State: APjAAAVAMSP1/qmcg5QjUVFKmJKywswjTQg5bAfMjZUsTKxA9t3tXjvI
-        1BIk8G4Ls9kiM46GwWI9/QeoAA==
-X-Google-Smtp-Source: APXvYqyRW+yesk5LbA1w8QMeFbdIKEhSaWce+1/TtkgKa+kMImAbjDmOqy9rTc27doz8KV05Ir4xXQ==
-X-Received: by 2002:a17:90a:3225:: with SMTP id k34mr4393711pjb.31.1560419663353;
-        Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id u97sm3965453pjb.26.2019.06.13.02.54.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 02:54:21 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 15:24:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        vincent.guittot@linaro.org, mturquette@baylibre.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-Message-ID: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
- <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
- <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
- <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
+        id S1729292AbfFMPbJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jun 2019 11:31:09 -0400
+Received: from mga05.intel.com ([192.55.52.43]:20387 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728631AbfFMLFd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Jun 2019 07:05:33 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 04:05:32 -0700
+X-ExtLoop1: 1
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga001.jf.intel.com with ESMTP; 13 Jun 2019 04:05:30 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hbNXt-0003ZP-BF; Thu, 13 Jun 2019 14:05:29 +0300
+Date:   Thu, 13 Jun 2019 14:05:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/2 v5] tty/serial/8250: use mctrl_gpio helpers
+Message-ID: <20190613110529.GR9224@smile.fi.intel.com>
+References: <20190611105603.4435-1-sr@denx.de>
+ <20190611105603.4435-2-sr@denx.de>
+ <20190611124415.GT9224@smile.fi.intel.com>
+ <85f0d39c-e5d8-320b-e611-d956630a629f@denx.de>
+ <20190611144828.GX9224@smile.fi.intel.com>
+ <12e5180e-b4a0-e5fa-bcad-ddc8103d644c@denx.de>
+ <20190612091621.GA9224@smile.fi.intel.com>
+ <6a4f1001-b023-c972-7b36-6d2f8f9a3fa8@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <6a4f1001-b023-c972-7b36-6d2f8f9a3fa8@denx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 12-06-19, 13:55, Viresh Kumar wrote:
-> Okay, I have applied this patch (alone) to the OPP tree with minor
-> modifications in commit log and diff.
+On Thu, Jun 13, 2019 at 07:32:39AM +0200, Stefan Roese wrote:
+> On 12.06.19 11:16, Andy Shevchenko wrote:
+> > On Wed, Jun 12, 2019 at 10:13:05AM +0200, Stefan Roese wrote:
+> > > On 11.06.19 16:48, Andy Shevchenko wrote:
 
-And I have removed it now :)
+> > > Do you something like this in mind?
+> > 
+> > More likely
+> > 
+> > static inline int serial8250_MCR_to_TIOCM(int mcr)
+> 
+> MSR_to_TIOCM (see below) ...
 
-I am confused as hell on what we should be doing and what we are doing
-right now. And if we should do better.
+Yes. true.
 
-Let me explain with an example.
+> > {
+> > 	int tiocm = 0;
+> > 
+> > 	if (mcr & ...)
+> > 		tiocm |= ...;
+> > 	...
+> > 
+> > 	return tiocm;
+> > }
+> > 
+> > static inline int serial8250_TIOCM_to_MCR(int tiocm)
+> > {
+> > 	... in a similar way ...
+> > }
+> 
+> While implementing such wrapper functions I noticed, that get_mctrl() /
+> set_mctrl() need TIOCM->MCR and MSR->TIOCM (notice MSR vs MCR here) but
+> serial8250_in_MCR() needs MCR->TIOCM. So there is not that much
+> overlay here.
 
-- The clock provider supports following frequencies: 500, 600, 700,
-  800, 900, 1000 MHz.
+It seems not only this driver is using such conversion. It's even possible to
+move it to serial level for all.
 
-- The OPP table contains/supports only a subset: 500, 700, 1000 MHz.
+> Additionally the wrappers would need to handle all bits
+> and only some of them are needed in serial8250_in/out_MCR(),
+> so I would
+> need to add masking here as well.
 
-Now, the request to change the frequency starts from cpufreq
-governors, like schedutil when they calls:
+I don't see this. You will get a value for exclusive bits only. No additional
+mask would be needed.
 
-__cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
+> For my taste its not really worth adding these wrappers as they won't
+> make things much clearer (if at all).
 
-CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
-I would expect the frequency to get set to 600MHz (if we look at clock
-driver) or 700MHz (if we look at OPP table). I think we should decide
-this thing from the OPP table only as that's what the platform guys
-want us to use. So, we should end up with 700 MHz.
-
-Then we land into dev_pm_opp_set_rate(), which does this (which is
-code copied from earlier version of cpufreq-dt driver):
-
-- clk_round_rate(clk, 599 MHz).
-
-  clk_round_rate() returns the highest frequency lower than target. So
-  it must return 500 MHz (I haven't tested this yet, all theoretical).
-
-- _find_freq_ceil(opp_table, 500 MHz).
-
-  This works like CPUFREQ_RELATION_L, so we find lowest frequency >=
-  target freq. And so we should get: 500 MHz itself as OPP table has
-  it.
-
-- clk_set_rate(clk, 500 MHz).
-
-  This must be doing round-rate again, but I think we will settle with
-  500 MHz eventually.
-
-
-Now the questionnaire:
-
-- Is this whole exercise correct ?
-- We shouldn't have landed on 500 MHz, right ?
-- Is there anything wrong with the above theory (I am going to test it soon though).
-- Why do we need to do the first clock_round_rate() ? Should we remove
-  it ?
-
-
-
-Now lets move to this patch, which makes it more confusing.
-
-The OPP tables for CPUs and GPUs should already be somewhat like fmax
-tables for particular voltage values and that's why both cpufreq and
-OPP core try to find a frequency higher than target so we choose the
-most optimum one power-efficiency wise.
-
-For cases where the OPP table is only a subset of the clk-providers
-table (almost always), if we let the clock provider to find the
-nearest frequency (which is lower) we will run the CPU/GPU at a
-not-so-optimal frequency. i.e. if 500, 600, 700 MHz all need voltage
-to be 1.2 V, we should be running at 700 always, while we may end up
-running at 500 MHz.
-
-This kind of behavior (introduced by this patch) is important for
-other devices which want to run at the nearest frequency to target
-one, but not for CPUs/GPUs. So, we need to tag these IO devices
-separately, maybe from DT ? So we select the closest match instead of
-most optimal one.
-
-But lets fix the existing issues first and then think about this
-patch.
+Hmm.. For me it would be quite clear if something with proposed name would be
+called in the code.
 
 -- 
-viresh
+With Best Regards,
+Andy Shevchenko
+
+
