@@ -2,62 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7292C44ABE
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 20:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3685E44D21
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 22:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbfFMSeJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jun 2019 14:34:09 -0400
-Received: from mga09.intel.com ([134.134.136.24]:21227 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727378AbfFMSeJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jun 2019 14:34:09 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 11:34:08 -0700
-X-ExtLoop1: 1
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 13 Jun 2019 11:34:05 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 13 Jun 2019 21:34:05 +0300
-Date:   Thu, 13 Jun 2019 21:34:05 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 3/3 v6] tty/serial/8250: use mctrl_gpio helpers
-Message-ID: <20190613183405.GT2640@lahna.fi.intel.com>
-References: <20190613154542.32438-1-sr@denx.de>
- <20190613154542.32438-3-sr@denx.de>
+        id S1729071AbfFMUNY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 13 Jun 2019 16:13:24 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33966 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727682AbfFMUNY (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Jun 2019 16:13:24 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y198so105517lfa.1;
+        Thu, 13 Jun 2019 13:13:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WyzKJThMrvfYdU5AiRz/a/lZbGM/BDuNcJRJenL7TFM=;
+        b=CKZJaXBb1KtJlFabyzzovT8D71vouF72S1FIqgt6UNEyaC4SE0HJYgbJ14gkYjE9Ga
+         pB7O7uayoJuZlElJq021JyPoydU3wc2A8oahm57E+6iJ/lQ2fYignJzpxCuvlmJHD2+n
+         9rsFppOnIWXEPvk234MeAALq1vHB1fa6tvfnTiU8D1FAM6KMri2B9u8SR9yGtBWjr1Sx
+         0X6x9CU+drxkBJ57Gm/Rr7gAbqrgNxrM3EdYDJlBBIMIn+34L8LLAka8xDxZ4vxAP0JC
+         k9JiN1zfqUCKC6nCJIjavBGmoGJ48Vf+gSuOJGeS1WBq2vjOAhiqfQiZDoWKOLYbacyP
+         zAcw==
+X-Gm-Message-State: APjAAAXV5D8BmPA2MWFSlYmca1hIgmytiF9DVu3vrGvBUYVEpYWMGW7y
+        kiWHU49Ux6zQ73fh6GijWemYDVfa6nhqkJtw+60=
+X-Google-Smtp-Source: APXvYqz0FHOGO7r59qR/V6uklYqF+Nt5DNTmVC4uhdi5vTG1EcR+FFpaX0vy5eaklu3BGnvQOrUHFKsK9/Q0h7NpaHY=
+X-Received: by 2002:ac2:597c:: with SMTP id h28mr7020435lfp.90.1560456801790;
+ Thu, 13 Jun 2019 13:13:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190613154542.32438-3-sr@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <20190613180824.6ajwjelzr5fmjnie@debie>
+In-Reply-To: <20190613180824.6ajwjelzr5fmjnie@debie>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Jun 2019 22:13:07 +0200
+Message-ID: <CAMuHMdWVbPVRp3tFMVA6HLLESMBp3qdEFUftPGK=Sd8pF_GorA@mail.gmail.com>
+Subject: Re: [PATCH] serial: sh-sci: fix uninitialized variable warning
+To:     Charles <18oliveira.charles@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rodrigosiqueiramelo@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 05:45:42PM +0200, Stefan Roese wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> This patch permits the usage for GPIOs to control
-> the CTS/RTS/DTR/DSR/DCD/RI signals.
-> 
-> Changed by Stefan:
-> Only call mctrl_gpio_init(), if the device has no ACPI companion device
-> to not break existing ACPI based systems. Also only use the mctrl_gpio_
-> functions when "gpios" is available.
-> 
-> Use MSR / MCR <-> TIOCM wrapper functions.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Stefan Roese <sr@denx.de>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Hi Charles,
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Thu, Jun 13, 2019 at 8:09 PM Charles <18oliveira.charles@gmail.com> wrote:
+> Avoid following compiler warning on uninitialized variable
+>
+> In file included from ./include/linux/rwsem.h:16:0,
+>                  from ./include/linux/notifier.h:15,
+>                  from ./include/linux/clk.h:17,
+>                  from drivers/tty/serial/sh-sci.c:24:
+> drivers/tty/serial/sh-sci.c: In function ‘sci_dma_rx_submit’:
+> ./include/linux/spinlock.h:288:3: warning: ‘flags’ may be used
+> uninitialized in this function [-Wmaybe-uninitialized]
+>    _raw_spin_unlock_irqrestore(lock, flags); \
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/tty/serial/sh-sci.c:1353:16: note: ‘flags’ was declared here
+>   unsigned long flags;
+>                 ^~~~~
+>
+> Signed-off-by: Charles Oliveira <18oliveira.charles@gmail.com>
+
+Thanks for your patch, but this is a false positive: the compiler is not
+smart enough to realize that both initialization and use depend on
+the same condition.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
