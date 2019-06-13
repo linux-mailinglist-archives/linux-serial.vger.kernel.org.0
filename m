@@ -2,109 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FC143BB8
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C1B4392F
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729292AbfFMPbJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jun 2019 11:31:09 -0400
-Received: from mga05.intel.com ([192.55.52.43]:20387 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728631AbfFMLFd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jun 2019 07:05:33 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 04:05:32 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by orsmga001.jf.intel.com with ESMTP; 13 Jun 2019 04:05:30 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hbNXt-0003ZP-BF; Thu, 13 Jun 2019 14:05:29 +0300
-Date:   Thu, 13 Jun 2019 14:05:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 2/2 v5] tty/serial/8250: use mctrl_gpio helpers
-Message-ID: <20190613110529.GR9224@smile.fi.intel.com>
-References: <20190611105603.4435-1-sr@denx.de>
- <20190611105603.4435-2-sr@denx.de>
- <20190611124415.GT9224@smile.fi.intel.com>
- <85f0d39c-e5d8-320b-e611-d956630a629f@denx.de>
- <20190611144828.GX9224@smile.fi.intel.com>
- <12e5180e-b4a0-e5fa-bcad-ddc8103d644c@denx.de>
- <20190612091621.GA9224@smile.fi.intel.com>
- <6a4f1001-b023-c972-7b36-6d2f8f9a3fa8@denx.de>
+        id S1733088AbfFMPMB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jun 2019 11:12:01 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:12784 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732289AbfFMNuW (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Jun 2019 09:50:22 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5DDkNs6010989;
+        Thu, 13 Jun 2019 15:50:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=5gqbigQzuPm78gX6OwWptVfTPVoyB0SK+37QgGiOQ8o=;
+ b=Ue87XHvD5ZKIXu6PdZuN239KmgTduC8gejRAYkFkvfwojL9J57hHlgZBKo5PsLmrW3j0
+ pcORKZuIIkSE0HQeNcsaAH2k0JakIIGhef2Xb8qblyKU+Qor45JuCUMdhp/Unv0NsPKI
+ xZKYTst+hHzM5S/TIMAbAS+QDqLVpG7nQ8zZsyPI4Bi/mOM7XmyBoz9EzDiySOBJVoO/
+ XWGY/IGjQ4hJaaibCL6PDrWS8B+Qp6yyRNN/qWG8dw6VKQN6EdbodfP14L7oWk27gsAT
+ aNOVid0gtvqUN7ppYoRfS22IvyFBF/GdZY+1CLzDnrgrbGAWlHgj956WjWKY3yPVMnmP dQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2t2f8ecgqn-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Thu, 13 Jun 2019 15:50:06 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B91BE34;
+        Thu, 13 Jun 2019 13:50:05 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 94B2F2BC0;
+        Thu, 13 Jun 2019 13:50:05 +0000 (GMT)
+Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by Safex1hubcas24.st.com
+ (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 13 Jun
+ 2019 15:50:05 +0200
+Received: from localhost (10.201.23.31) by Webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 13 Jun 2019 15:50:04
+ +0200
+From:   Erwan Le Ray <erwan.leray@st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Alexandre Torgue" <alexandre.torgue@st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Erwan Le Ray <erwan.leray@st.com>,
+        "Fabrice Gasnier" <fabrice.gasnier@st.com>
+Subject: [PATCH v3 00/10] STM32 usart power improvements
+Date:   Thu, 13 Jun 2019 15:49:50 +0200
+Message-ID: <1560433800-12255-1-git-send-email-erwan.leray@st.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a4f1001-b023-c972-7b36-6d2f8f9a3fa8@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.201.23.31]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-13_08:,,
+ signatures=0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 07:32:39AM +0200, Stefan Roese wrote:
-> On 12.06.19 11:16, Andy Shevchenko wrote:
-> > On Wed, Jun 12, 2019 at 10:13:05AM +0200, Stefan Roese wrote:
-> > > On 11.06.19 16:48, Andy Shevchenko wrote:
+This series delivers power improvements for stm32-usart driver.
 
-> > > Do you something like this in mind?
-> > 
-> > More likely
-> > 
-> > static inline int serial8250_MCR_to_TIOCM(int mcr)
-> 
-> MSR_to_TIOCM (see below) ...
+Changes in v3:
+Move pinctrl/consumer.h include from "add support for no_console_suspend"
+patch to "select pinctrl state" patch in order to solve a compilation 
+issue.
 
-Yes. true.
+Bich Hemon (3):
+  dt-bindings: serial: add optional pinctrl states
+  ARM: dts: stm32: Update pin states for uart4 on stm32mp157c-ed1
+  ARM: dts: stm32: Update UART4 pin states on stm32mp157a-dk1
 
-> > {
-> > 	int tiocm = 0;
-> > 
-> > 	if (mcr & ...)
-> > 		tiocm |= ...;
-> > 	...
-> > 
-> > 	return tiocm;
-> > }
-> > 
-> > static inline int serial8250_TIOCM_to_MCR(int tiocm)
-> > {
-> > 	... in a similar way ...
-> > }
-> 
-> While implementing such wrapper functions I noticed, that get_mctrl() /
-> set_mctrl() need TIOCM->MCR and MSR->TIOCM (notice MSR vs MCR here) but
-> serial8250_in_MCR() needs MCR->TIOCM. So there is not that much
-> overlay here.
+Erwan Le Ray (7):
+  dt-bindings: serial: stm32: add wakeup option
+  serial: stm32: select pinctrl state in each suspend/resume function
+  serial: stm32: add pm_runtime support
+  serial: stm32: Use __maybe_unused instead of #if CONFIG_PM_SLEEP
+  serial: stm32: add support for no_console_suspend
+  ARM: dts: stm32: update uart4 pin configurations for low power
+  ARM: dts: stm32: add wakeup capability on each usart/uart on
+    stm32mp157c
 
-It seems not only this driver is using such conversion. It's even possible to
-move it to serial level for all.
-
-> Additionally the wrappers would need to handle all bits
-> and only some of them are needed in serial8250_in/out_MCR(),
-> so I would
-> need to add masking here as well.
-
-I don't see this. You will get a value for exclusive bits only. No additional
-mask would be needed.
-
-> For my taste its not really worth adding these wrappers as they won't
-> make things much clearer (if at all).
-
-Hmm.. For me it would be quite clear if something with proposed name would be
-called in the code.
+ .../devicetree/bindings/serial/st,stm32-usart.txt  | 19 ++++-
+ arch/arm/boot/dts/stm32mp157-pinctrl.dtsi          | 17 +++++
+ arch/arm/boot/dts/stm32mp157a-dk1.dts              |  5 +-
+ arch/arm/boot/dts/stm32mp157c-ed1.dts              |  5 +-
+ arch/arm/boot/dts/stm32mp157c.dtsi                 | 40 ++++++++--
+ drivers/tty/serial/stm32-usart.c                   | 88 ++++++++++++++++++++--
+ drivers/tty/serial/stm32-usart.h                   |  1 +
+ 7 files changed, 155 insertions(+), 20 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+1.9.1
 
