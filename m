@@ -2,184 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1F443904
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCA9437C6
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 17:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732301AbfFMPLF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jun 2019 11:11:05 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:61223 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732299AbfFMNut (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:50:49 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5DDkN54026656;
-        Thu, 13 Jun 2019 15:50:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=Bc+KS/X3joAnx5lC8TCpo/aZhNkGuBuIX5CpxV56wqo=;
- b=gq4i08DOwlwSyQQAcJAADFPkS8X6ru1H9mDxHINRTP+nb3qtO7AnKbsYwjJqrzvcW5np
- gOiXUMOKziaAPWfUUHjQtyqd/QWM8AGgR0suEFyLkiBmRdUip4yNsSZeQLY+66N1Z/4A
- aVj2F20dULsj9o3jLnELfkiJ4KaFxoI2nSIFpp1VE4x5oDDwDwjuzWXtmgD3xZBLV5Qb
- 97IsgOocdSJYiHPc6IW3E9JP0JAXxStbl0Jr+/q5CHkIcG/G1GIXi2K5rLJOJdgGj6br
- 3pZULPju+85cgusd7QpeGlGi9k1K/ZZpSm5xl0ugQklNNMTYTZDcYkmhrukPObKpcWoZ Yg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2t2k3cb6fh-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Thu, 13 Jun 2019 15:50:34 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CDFAA3A;
-        Thu, 13 Jun 2019 13:50:33 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A584D2BC2;
-        Thu, 13 Jun 2019 13:50:33 +0000 (GMT)
-Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 13 Jun
- 2019 15:50:33 +0200
-Received: from localhost (10.201.23.31) by Webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 13 Jun 2019 15:50:24
- +0200
-From:   Erwan Le Ray <erwan.leray@st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Alexandre Torgue" <alexandre.torgue@st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Erwan Le Ray <erwan.leray@st.com>,
-        "Fabrice Gasnier" <fabrice.gasnier@st.com>
-Subject: [PATCH v3 10/10] ARM: dts: stm32: add wakeup capability on each usart/uart on stm32mp157c
-Date:   Thu, 13 Jun 2019 15:50:00 +0200
-Message-ID: <1560433800-12255-11-git-send-email-erwan.leray@st.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1560433800-12255-1-git-send-email-erwan.leray@st.com>
-References: <1560433800-12255-1-git-send-email-erwan.leray@st.com>
+        id S1732984AbfFMPBG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jun 2019 11:01:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52366 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732566AbfFMOka (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Jun 2019 10:40:30 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 57D532175B;
+        Thu, 13 Jun 2019 14:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560436829;
+        bh=AMfYYiFDnSPplYQGWm8VdFubFiToLLjY7NKHWlMj/7Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YnLk7DLWFZz4W5tpbheLAhQBzjY5uDLN+9Uv+hxWIC0R+FMWbozryhgV8EhJX6bfL
+         4qhrMiGPmVxEhBQvpzFwOUOeEKf+M4rCIGazgenVj9yTrnf8FgPE3cFho3w5UApcxb
+         I2EvYzXkabni0m4zeSV/se3EChpj7AyJ37XTFztM=
+Received: by mail-qt1-f170.google.com with SMTP id p15so3437048qtl.3;
+        Thu, 13 Jun 2019 07:40:29 -0700 (PDT)
+X-Gm-Message-State: APjAAAUG0ltqFaZBLoqSUIIizFFuRmJmgY8hw6UL1MKHCezTv0dPjFl4
+        0W++mEPEcskTqTL1jVLpP7+T8YS+5OHmPLHX5Q==
+X-Google-Smtp-Source: APXvYqxctR3wbgWzXGF/JoJM/uXXh7dkhlI9vwjgxMVNu6wr1wBEMkkREu2EEkaC7/NyGasJGU/Mex5miLNVy6SnR4c=
+X-Received: by 2002:a0c:b627:: with SMTP id f39mr3981799qve.72.1560436828511;
+ Thu, 13 Jun 2019 07:40:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.31]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-13_08:,,
- signatures=0
+References: <20190611121510.260188-1-tientzu@chromium.org>
+In-Reply-To: <20190611121510.260188-1-tientzu@chromium.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 13 Jun 2019 08:40:16 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKJMAhOLH_Y2rgbdWZ9f5CEVdMMEF8+bHfjxxtu-cBKdQ@mail.gmail.com>
+Message-ID: <CAL_JsqKJMAhOLH_Y2rgbdWZ9f5CEVdMMEF8+bHfjxxtu-cBKdQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: serial: add documentation for Rx in-band
+ wakeup support
+To:     Claire Chang <tientzu@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        changqi.hu@mediatek.com,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-- Mark all usart/uart devices as wakeup source.
-- Identify all dedicated interrupts with a specific interrupt name (either
- "event" or "wakeup").
-- add interrupts-extended wakeup interrupt
+On Tue, Jun 11, 2019 at 6:15 AM Claire Chang <tientzu@chromium.org> wrote:
+>
+> To support Rx in-band wakeup, one must create an interrupt specifier with
+> edge sensitivity on Rx pin and an addtional pinctrl to reconfigure Rx pin
+> to normal GPIO in sleep state. Driver will switch to sleep mode pinctrl and
+> enable irq wake before suspend and restore to default settings when
+> resuming.
+>
+> Signed-off-by: Claire Chang <tientzu@chromium.org>
+> ---
+> Resending this patch since I forgot to cc device tree maintainers/mailing list.
+> The 2/2 patch in this series[1] is already in tty-next[2].
+>
+> [1] https://patchwork.kernel.org/patch/10962299/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-testing
+>
+>  .../devicetree/bindings/serial/mtk-uart.txt         | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
+> index bcfb13194f16..3488b6e24e0c 100644
+> --- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
+> +++ b/Documentation/devicetree/bindings/serial/mtk-uart.txt
+> @@ -21,7 +21,12 @@ Required properties:
+>
+>  - reg: The base address of the UART register bank.
+>
+> -- interrupts: A single interrupt specifier.
+> +- interrupts or interrupts-extended:
 
-Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
+interrupts-extended support is implied as both are supported and the
+connection to the interrupt parent is outside the scope of the
+binding. So we just document 'interrupts'.
 
-diff --git a/arch/arm/boot/dts/stm32mp157c.dtsi b/arch/arm/boot/dts/stm32mp157c.dtsi
-index 2afeee6..de5b1bf 100644
---- a/arch/arm/boot/dts/stm32mp157c.dtsi
-+++ b/arch/arm/boot/dts/stm32mp157c.dtsi
-@@ -395,32 +395,44 @@
- 		usart2: serial@4000e000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x4000e000 0x400>;
--			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 27 1>;
- 			clocks = <&rcc USART2_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		usart3: serial@4000f000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x4000f000 0x400>;
--			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 28 1>;
- 			clocks = <&rcc USART3_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart4: serial@40010000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40010000 0x400>;
--			interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 30 1>;
- 			clocks = <&rcc UART4_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart5: serial@40011000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40011000 0x400>;
--			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 31 1>;
- 			clocks = <&rcc UART5_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -512,16 +524,22 @@
- 		uart7: serial@40018000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40018000 0x400>;
--			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 32 1>;
- 			clocks = <&rcc UART7_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart8: serial@40019000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40019000 0x400>;
--			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 33 1>;
- 			clocks = <&rcc UART8_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -588,8 +606,11 @@
- 		usart6: serial@44003000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x44003000 0x400>;
--			interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 29 1>;
- 			clocks = <&rcc USART6_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -1201,8 +1222,11 @@
- 		usart1: serial@5c000000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x5c000000 0x400>;
--			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "event", "wakeup";
-+			interrupts-extended = <&intc GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>,
-+					      <&exti 26 1>;
- 			clocks = <&rcc USART1_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
--- 
-1.9.1
-
+> +  index 0: an interrupt specifier for the UART controller itself
+> +  index 1: optional, an interrupt specifier with edge sensitivity on Rx pin to
+> +           support Rx in-band wake up. If one would like to use this feature,
+> +           one must create an addtional pinctrl to reconfigure Rx pin to normal
+> +           GPIO before suspend.
+>
+>  - clocks : Must contain an entry for each entry in clock-names.
+>    See ../clocks/clock-bindings.txt for details.
+> @@ -37,7 +42,11 @@ Example:
+>         uart0: serial@11006000 {
+>                 compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
+>                 reg = <0x11006000 0x400>;
+> -               interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>;
+> +               interrupts-extended = <&sysirq GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
+> +                                     <&gpio 121 IRQ_TYPE_EDGE_FALLING>;
+>                 clocks = <&uart_clk>, <&bus_clk>;
+>                 clock-names = "baud", "bus";
+> +               pinctrl-names = "default", "sleep";
+> +               pinctrl-0 = <&uart_pin>;
+> +               pinctrl-1 = <&uart_pin_sleep>;
+>         };
+> --
+> 2.22.0.rc2.383.gf4fbbf30c2-goog
+>
