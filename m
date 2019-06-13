@@ -2,79 +2,156 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 201CF42EBF
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Jun 2019 20:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F203445BE
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jun 2019 18:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726182AbfFLSdK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Jun 2019 14:33:10 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:43885 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbfFLSdK (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Jun 2019 14:33:10 -0400
-Received: from [192.168.1.110] ([95.115.5.111]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N2lzA-1ie8Ge2hga-013AP5; Wed, 12 Jun 2019 20:33:08 +0200
-Subject: Re: RFC: can we get rid of ->request_port() boilerplate ?
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-References: <999dbc29-8254-7168-1fa0-7caf03bb6d77@metux.net>
- <20190611185252.GA3951@kroah.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <4a26310b-13b6-180a-1b07-a94c1859a266@metux.net>
-Date:   Wed, 12 Jun 2019 20:33:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1730411AbfFMQqT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jun 2019 12:46:19 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:16972 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730307AbfFMFdS (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Jun 2019 01:33:18 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id AE6674FFC4;
+        Thu, 13 Jun 2019 07:33:14 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id x8XDMHiD5zbs; Thu, 13 Jun 2019 07:32:48 +0200 (CEST)
+Subject: Re: [PATCH 2/2 v5] tty/serial/8250: use mctrl_gpio helpers
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20190611105603.4435-1-sr@denx.de>
+ <20190611105603.4435-2-sr@denx.de> <20190611124415.GT9224@smile.fi.intel.com>
+ <85f0d39c-e5d8-320b-e611-d956630a629f@denx.de>
+ <20190611144828.GX9224@smile.fi.intel.com>
+ <12e5180e-b4a0-e5fa-bcad-ddc8103d644c@denx.de>
+ <20190612091621.GA9224@smile.fi.intel.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <6a4f1001-b023-c972-7b36-6d2f8f9a3fa8@denx.de>
+Date:   Thu, 13 Jun 2019 07:32:39 +0200
 MIME-Version: 1.0
-In-Reply-To: <20190611185252.GA3951@kroah.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190612091621.GA9224@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:yhxKkYpAbXahYoZFDnK8zIo/tFamugXqUgzJt5LG0vugCpHbJ/t
- gR81JlFSDAmQC0lzjPEjqnSTZhCaSoitaP9RIhzB1yIUzPrdb1FAskz3sO8IS5ky+gd/2uR
- cdyhoZhact0DzD08YFDeDDQUDoz/SXapjKWC8rxbTALXN3tp7KmJ6Kph1BM2ZEniFlRYTdQ
- klc78Ufcfx1jYrt4KvwxA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VkkYKDvQSSo=:/XoCDugq/2T7sBGgYX81wb
- WjlZ0qHb//Jjr9AShVWZi+O4cFzIvdCsivPnKsYsuFixAoQqpuCOs3qCc2VK2y38d6CeMujis
- MQOlO4+sAtoSwYY9ph6NniLotpTLNG2v7pX5NPGmRhvXdu97umQD52OucTWiV4e4a29QcDypi
- r7BLsb0M4ZaVOtgRbBwthW/5ihM5sUBPPnQIYiJwJoZA0Yo20/9lJpfpQfE2ydsLe4AzfC8CA
- M2YJtKl2Vj41ineSyUAT3QwFTn+jsvKclY1l7gWgbptKgwN1VX1OcBnB2qjktPAa7+Kbx0Vqu
- BAzXPRPm4WBypJhDNZYQPeKJQVIBX5DNzmJ6JTEx0IX2jz1gy0PyipKxIv0QfYfQ+UVMOZv/D
- AqiO9S8P10nV++7y+c9FXug3pWNa3gz6brguj2L4OqvdbkdzFLAx4f0OJ2oBrNxr0VuSgj0RE
- 0JZHiuB6LW6SAqA+Inzkq9GbkKeugyOeQGVxoWiZp37mcJq/TD9ESm2v1Fx/Qf9GJ4KaHkstb
- XNn5Ehuk1mscQAM6QB0SdLlJ0OzdcPACnDPoNoXotKTDSsY+oJ71L/Won8rJnXInG9Uk/IqWk
- jZPEJoclycQhwEqBnGPGMAxdo23+kaVCHGUe/SqXOnQxfqZtstIn7XTDmeHjxKDcUFkVfRall
- evt6zPmbAoM1gI/hjx758pWbW/YKggJOLqxh+6/OleoBtlO3lrnBd8untRHVJeGCropaF7o5F
- oLDEoPkr5sKrXIHvjbeaKOmxZod8PAbni640VDIppfgakhH+FJErowaezC0=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 11.06.19 20:52, Greg KH wrote:
+On 12.06.19 11:16, Andy Shevchenko wrote:
+> On Wed, Jun 12, 2019 at 10:13:05AM +0200, Stefan Roese wrote:
+>> On 11.06.19 16:48, Andy Shevchenko wrote:
+>>> On Tue, Jun 11, 2019 at 04:02:54PM +0200, Stefan Roese wrote:
+>>>> On 11.06.19 14:44, Andy Shevchenko wrote:
+>>>>> On Tue, Jun 11, 2019 at 12:56:03PM +0200, Stefan Roese wrote:
+>>>
+>>>>>>     static inline void serial8250_out_MCR(struct uart_8250_port *up, int value)
+>>>>>>     {
+>>>>>>     	serial_out(up, UART_MCR, value);
+>>>>>> +
+>>>>>> +	if (up->gpios) {
+>>>>>> +		int mctrl_gpio = 0;
+>>>>>> +
+>>>>>> +		if (value & UART_MCR_RTS)
+>>>>>> +			mctrl_gpio |= TIOCM_RTS;
+>>>>>> +		if (value & UART_MCR_DTR)
+>>>>>> +			mctrl_gpio |= TIOCM_DTR;
+>>>>>> +
+>>>>>> +		mctrl_gpio_set(up->gpios, mctrl_gpio);
+>>>>>> +	}
+>>>>>>     }
+>>>
+>>>>>>     static inline int serial8250_in_MCR(struct uart_8250_port *up)
+>>>>>>     {
+>>>>>> -	return serial_in(up, UART_MCR);
+>>>>>> +	int mctrl;
+>>>>>> +
+>>>>>> +	mctrl = serial_in(up, UART_MCR);
+>>>>>> +
+>>>>>> +	if (up->gpios) {
+>>>>>> +		int mctrl_gpio = 0;
+>>>>>> +
+>>>>>> +		/* save current MCR values */
+>>>>>> +		if (mctrl & UART_MCR_RTS)
+>>>>>> +			mctrl_gpio |= TIOCM_RTS;
+>>>>>> +		if (mctrl & UART_MCR_DTR)
+>>>>>> +			mctrl_gpio |= TIOCM_DTR;
+>>>>>> +
+>>>>>> +		mctrl_gpio = mctrl_gpio_get_outputs(up->gpios, &mctrl_gpio);
+>>>>>> +		if (mctrl_gpio & TIOCM_RTS)
+>>>>>> +			mctrl |= UART_MCR_RTS;
+>>>>>> +		else
+>>>>>> +			mctrl &= ~UART_MCR_RTS;
+>>>>>> +
+>>>>>> +		if (mctrl_gpio & TIOCM_DTR)
+>>>>>> +			mctrl |= UART_MCR_DTR;
+>>>>>> +		else
+>>>>>> +			mctrl &= ~UART_MCR_DTR;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	return mctrl;
+>>>>>>     }
+>>>>>
+>>>>> These are using OR logic with potentially volatile data. Shouldn't we mask
+>>>>> unused bits in UART_MCR in case of up->gpios != NULL?
+>>>>
+>>>> Sorry, I don't see, which bits you are referring to? Could you please be
+>>>> a bit more specific with the variable / macro meant (example)?
+>>>
+>>> I meant that we double write values in the out() which might have some
+>>> consequences, though I hope nothing wrong with it happens.
+>>
+>> Where is the double write to a register? Sorry, I fail to spot it.
+> 
+> Not to the one register. From the functional point of view the same signal is
+> set up twice: once per UART register, once per GPIO pins.
+> 
+>>> In the in() we read the all bits in the register.
+>>>
+>>> As now I look at the implementation of mctrl_gpio_get_outputs(),
+>>> I think we rather get helpers for conversion between TIOCM and UART_MCR values,
+>>> so, they can be used in get_mctrl() / set_mctrl() and above.
+>>
+>> Do you something like this in mind?
+> 
+> More likely
+> 
+> static inline int serial8250_MCR_to_TIOCM(int mcr)
 
-Hi,
+MSR_to_TIOCM (see below) ...
 
->> What's your oppinion on that ?> > Why would this help anything?
-I just had the naive idea that more compact code was easier to maintain.
-At least in other areas of the kernel, there seems to be a tendency of
-moving repeated code patterns into helpers.
+> {
+> 	int tiocm = 0;
+> 
+> 	if (mcr & ...)
+> 		tiocm |= ...;
+> 	...
+> 
+> 	return tiocm;
+> }
+> 
+> static inline int serial8250_TIOCM_to_MCR(int tiocm)
+> {
+> 	... in a similar way ...
+> }
 
->> If you like, I can prepare some patches and post them here.> > kernel development is done with actual patches, almost never with
-"would> this be a good idea", as you never know if it will or not until
-you> actually do the work.
+While implementing such wrapper functions I noticed, that get_mctrl() /
+set_mctrl() need TIOCM->MCR and MSR->TIOCM (notice MSR vs MCR here) but
+serial8250_in_MCR() needs MCR->TIOCM. So there is not that much
+overlay here. Additionally the wrappers would need to handle all bits
+and only some of them are needed in serial8250_in/out_MCR(), so I would
+need to add masking here as well.
 
-I've made the experience that certain maintainers seem to be quite
-reluctant of changing anything, if it doesn't fix any actual bug,
-so I've preferred to ask first, before wasting much time on something
-that won't be accepted anyways :o
+For my taste its not really worth adding these wrappers as they won't
+make things much clearer (if at all).
 
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Thanks,
+Stefan
