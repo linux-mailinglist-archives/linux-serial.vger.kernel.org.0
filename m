@@ -2,108 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3F345C4C
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 14:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D814D45DAD
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 15:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727217AbfFNMMA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Jun 2019 08:12:00 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:34027 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727730AbfFNMMA (ORCPT
+        id S1728049AbfFNNOa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 14 Jun 2019 09:14:30 -0400
+Received: from mailout02.agenturserver.de ([185.15.192.33]:49994 "EHLO
+        mailout02.agenturserver.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727983AbfFNNOa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Jun 2019 08:12:00 -0400
-Received: by mail-lf1-f67.google.com with SMTP id y198so1602857lfa.1
-        for <linux-serial@vger.kernel.org>; Fri, 14 Jun 2019 05:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Pvz4HiqActHfdiRpn2UDi2+QMjvhRluYztx0f3X9Mpg=;
-        b=ALprnGLKTGKIqLJ3QZLWDYLTuJaddVtQQM8XIhhQWPKi+WmSl1BLYvmCMjWMObXSWk
-         E2F7WblfXqBqllh9IRtujow7PcUcprDpME3bsE8aA70KNvyOsuK7uJGLoFyHd59F8OdA
-         Jp+KkN6U2p0+HElhlmfTJmDrC4Y/7CCnsbffBt+8PaIEzmtdzvYtJYHSnK63rCe3rTBl
-         /XicR+oanY9KVZs32ZP0FqWRnqGHxl2dQjLH8Cm8/K0vYJ6jZvGeIChZurZShL5Cjlyb
-         ngUiITPldNa92Dkh2gLfXmUnhkZtOV7pz9wOw40Z7NYbjemsvGVnit2vzn/qASLpfaHF
-         rOOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Pvz4HiqActHfdiRpn2UDi2+QMjvhRluYztx0f3X9Mpg=;
-        b=Bi9OVjCqvPI6BG6q/CB5nBBzB5B0IBSlekL6GzoEjVkB4Kbwnz+BJ6HMkQUx9cR69Q
-         OSgh00klQJOt1Kx9nGzo+Xliv4h1d1FNMwviV/VNNcwVlbs7Lo3FrAd998mh2kjsAZxw
-         X1/mvGgOwRpAvZgDKUYyzolvQUqU85kINam8Qe8Cx2rmlEjlzrEK2IEVujR2KAHjzoCR
-         SlaulLv4LvIZU9p++yKm2Xz6T8YqcPs/6sNM5L578Xk3l1DMVJwKZS+5KMjAriNK7tp6
-         FLJQWdrk225VfVg4yTbLbJit7Fjyg99hYq9ElkLwKw030GtyliaYCtcouzKm9ZTCyHzp
-         licg==
-X-Gm-Message-State: APjAAAXrqf6MVkYGzPqNWuSsqo+N4hcv12jWhTIz/IeaNGDbzAuO1Ygs
-        Pg3nySMg5bla3T5gfHOwk/k=
-X-Google-Smtp-Source: APXvYqy4Z/aRBglvdZ5tjtESTDHX1S/1sS3lr4b01PScZdlYvgVS908OnmwCYDrE/8k36xjHntXm9g==
-X-Received: by 2002:ac2:5981:: with SMTP id w1mr27213594lfn.48.1560514318592;
-        Fri, 14 Jun 2019 05:11:58 -0700 (PDT)
-Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id p27sm459683lfh.8.2019.06.14.05.11.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 14 Jun 2019 05:11:57 -0700 (PDT)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Fri, 14 Jun 2019 09:14:30 -0400
+X-Greylist: delayed 514 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 09:14:28 EDT
+Received: from mail02.agenturserver.de (mail02.internal [172.16.51.35])
+        by mailout02.agenturserver.de (Postfix) with ESMTP id 7B9BD12695E;
+        Fri, 14 Jun 2019 15:05:53 +0200 (CEST)
+Received: from localhost (ac02.internal [172.16.51.82])
+        by mail02.agenturserver.de (Postfix) with ESMTP id 6FA0580418;
+        Fri, 14 Jun 2019 15:05:53 +0200 (CEST)
+X-Spam-Level: 
+Received: from mail.agenturserver.de ([172.16.51.35])
+        by localhost (ac02.mittwald.de [172.16.51.82]) (amavisd-new, port 10026)
+        with ESMTP id 37aakGEqMV_7; Fri, 14 Jun 2019 15:05:53 +0200 (CEST)
+Received: from karo-electronics.de (unknown [89.1.81.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lw@karo-electronics.de)
+        by mail.agenturserver.de (Postfix) with ESMTPSA;
+        Fri, 14 Jun 2019 15:05:52 +0200 (CEST)
+Date:   Fri, 14 Jun 2019 15:05:51 +0200
+From:   Lothar =?UTF-8?B?V2HDn21hbm4=?= <LW@KARO-electronics.de>
+To:     Sergey Organov <sorganov@gmail.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH RFC 7/7] serial: imx: get rid of imx_uart_rts_auto()
-Date:   Fri, 14 Jun 2019 15:11:34 +0300
-Message-Id: <1560514294-29111-8-git-send-email-sorganov@gmail.com>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1560514294-29111-1-git-send-email-sorganov@gmail.com>
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH RFC 5/7] serial: imx: set_termios(): preserve RTS state
+Message-ID: <20190614150551.1472b154@karo-electronics.de>
+In-Reply-To: <1560514294-29111-6-git-send-email-sorganov@gmail.com>
 References: <20190614072801.3187-1-s.hauer@pengutronix.de>
- <1560514294-29111-1-git-send-email-sorganov@gmail.com>
+        <1560514294-29111-1-git-send-email-sorganov@gmail.com>
+        <1560514294-29111-6-git-send-email-sorganov@gmail.com>
+Organization: Ka-Ro electronics GmbH
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Called in only one place, for RS232, it only obscures things, as it
-doesn't go well with 2 similar named functions,
-imx_uart_rts_inactive() and imx_uart_rts_active(), that both are
-RS485-specific.
+Hi,
 
-Signed-off-by: Sergey Organov <sorganov@gmail.com>
----
- drivers/tty/serial/imx.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+On Fri, 14 Jun 2019 15:11:32 +0300 Sergey Organov wrote:
+> imx_set_termios() cleared RTS on every call, now fixed.
+> 
+> Signed-off-by: Sergey Organov <sorganov@gmail.com>
+> ---
+>  drivers/tty/serial/imx.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index 8ee910f..de23068 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -1564,6 +1564,13 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+>  
+>  	spin_lock_irqsave(&sport->port.lock, flags);
+>  
+> +	/*
+> +	 * Read current UCR2 and save it for future use, then clear all the bits
+> +	 * except those we will or may need to preserve.
+> +	 */
+> +	old_ucr2 = imx_uart_readl(sport, UCR2);
+> +	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTSC);
+> +
+>  	ucr2 = UCR2_SRST | UCR2_IRTS;
+s/=/|=/
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index bdb8b6a..cb28cff 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -402,13 +402,6 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
- 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
- }
- 
--/* called with port.lock taken and irqs caller dependent */
--static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
--{
--	if (*ucr2 & UCR2_CTS)
--		*ucr2 |= UCR2_CTSC;
--}
--
- /* called with port.lock taken and irqs off */
- static void imx_uart_start_rx(struct uart_port *port)
- {
-@@ -1598,8 +1591,10 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
- 		else
- 			imx_uart_rts_inactive(sport, &ucr2);
- 
--	} else if (termios->c_cflag & CRTSCTS)
--		imx_uart_rts_auto(sport, &ucr2);
-+	} else if (termios->c_cflag & CRTSCTS) {
-+		if (ucr2 & UCR2_CTS)
-+			ucr2 |= UCR2_CTSC;
-+	}
- 
- 	if (termios->c_cflag & CRTSCTS)
- 		ucr2 &= ~UCR2_IRTS;
--- 
-2.10.0.1.g57b01a3
 
+Lothar Waßmann
