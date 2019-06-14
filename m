@@ -2,142 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 322E8458E4
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 11:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A81D45C45
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 14:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbfFNJi4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Jun 2019 05:38:56 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:42409 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726083AbfFNJi4 (ORCPT
+        id S1727737AbfFNMLw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Jun 2019 08:11:52 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42764 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727217AbfFNMLw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Jun 2019 05:38:56 -0400
-Received: by mail-vs1-f68.google.com with SMTP id 190so1354646vsf.9;
-        Fri, 14 Jun 2019 02:38:55 -0700 (PDT)
+        Fri, 14 Jun 2019 08:11:52 -0400
+Received: by mail-lj1-f193.google.com with SMTP id t28so2135484lje.9
+        for <linux-serial@vger.kernel.org>; Fri, 14 Jun 2019 05:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wpkxjv4XdUH50VTIe3/++vbOXy7Mm8zVzt0/ZIHrPWk=;
-        b=Cjg9TXWK0MXbh3dVZzjbaoawkxwalweheGkXBUUBWY0/RY1JpQHqQKFMRrnwv5Uc1R
-         ycZrDGIKabqz9bsqun8Cf5rHEUJmrVxEKHGvLC1qmKWa/QqiwZGenOOaP5qGcfDiULiW
-         9wmzOzCwukfFdqmhTBvrOHNyZBYsSXZSwetDeeDb8EETXR0V0a7+THobGDO4UC/txrDy
-         jBbenpX/Wi9wBtaMqQxy7qg9B0GMRIA78MbMSNhA/fT+GmC9D30axPUP5yKCN7DVqirk
-         mlEKxLoVIdWBxL/Yf4IUITJMwIAI2i5MaMyD+jpwhyG3YvAmqEz0xmehnVUOdyBmnXLV
-         wdlg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=KAIoL/2xQexpZm/Cnc+ChufT79edLx8XlNo6sI2uttA=;
+        b=Q2ObjG3Sfe7OqoICYZqCx3s+htycwitu478+JM5YcIB7+HVMZAzHAQzYI+zKwVcGaa
+         deIsef7Va6FD4N2vt7gsDHyy3pQGDWk4OMv6tcWzSm6bJSRjvVShb29qIjOnsYkjAVTo
+         0mEl5LsUIDF9iTwqxawJ+/dG9/1w0963RUc8mIhvJ7GlJ9TiiaojbSPzHLW348zzHxIF
+         DVuKH9PsQtdDcawd8AJNiNf7B/K/gtBxyaOAdNhlfPI35gipTPjoyHDRecDN0R3wg4iw
+         1tt73WtrHzBwKbPVc7p9XJiGp7DEPLlO/S4K2KRmfcYoKzpghNs3yL4LqHJ/xvDvQob5
+         uv4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wpkxjv4XdUH50VTIe3/++vbOXy7Mm8zVzt0/ZIHrPWk=;
-        b=T+r1rfV4VB9Qz4TBGFwhhEJXD5Ge7ks269cGbVDsswXwjccWmnNOwfCGVEscGYWJf5
-         oSlq5FH0vAOLhApPB4+2ydevmnqGZnuYWWFd2geqBZOG2B1kby2CZoQy5zsN+KLyx1lz
-         hNobQQm4VEmV+jswvZX/2s+hiPoGv0xGwPN+snAAncOX1ZZ48kpdqQJVqacfY1oZDycZ
-         UY2lgGZuiNnVzUc1DExi1CURb/ifluQT+DmtK0cYNTOO5dV7Oys6gX3yWJAqm/ekXpjV
-         CsZxFFeZ/Ys+v0WbVFEmkRAsyWKm5I0zx+XOXJ/G8HLHWOo1bA00ZgQIIr8KCC4rGyyC
-         8GDw==
-X-Gm-Message-State: APjAAAW2srGGEfzNvFADKll2hqbvVAwIwglO7gTl5prgDDHX9kIVr85i
-        6uyKZYaf0uXKY6sc0WIExONLROqVls6QS+8LGbUiOA==
-X-Google-Smtp-Source: APXvYqycFYeuVamoJ2frnNZ5OkXlMTiZZJnH68rl+uObHD4HFVhTfhTgc2IJqkBs82RPih+Gf41vG38LJ9sqIZq/8IA=
-X-Received: by 2002:a05:6102:382:: with SMTP id m2mr40706013vsq.134.1560505135124;
- Fri, 14 Jun 2019 02:38:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190613154542.32438-1-sr@denx.de> <20190613170802.GE9224@smile.fi.intel.com>
- <CAGm1_ksNqh0ZVO+aHsdcS6XQHt3hfqWE3a=3waKWEp8Oc8HWcQ@mail.gmail.com> <0bf6629c-cedf-e1dd-b42b-989c6711d390@denx.de>
-In-Reply-To: <0bf6629c-cedf-e1dd-b42b-989c6711d390@denx.de>
-From:   Yegor Yefremov <yegorslists@googlemail.com>
-Date:   Fri, 14 Jun 2019 11:38:31 +0200
-Message-ID: <CAGm1_ktOJEzW9bkkUaVe2ioUBAV4hNoSbQSg+EUHz2sr4ppF+g@mail.gmail.com>
-Subject: Re: [PATCH 1/3 v6] serial: mctrl_gpio: Check if GPIO property exisits
- before requesting it
-To:     Stefan Roese <sr@denx.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=KAIoL/2xQexpZm/Cnc+ChufT79edLx8XlNo6sI2uttA=;
+        b=SbB0zNtJ9hOf/8ISszh2HCk3/9uho3KJAnbIYqGwnqQbMKUOKvVJpRy8m2V+qSWxvz
+         8tQItw5kuAyMbzD3EViUi0IdZe73mAdOKlewbnje+2/yWtCD2fWm8sVQ5tfZmqPYv2iF
+         oQIq+n+1wZCecUvJjYLL22Hhs1sVutkwoXpO4//jrEfDnGI/ai6koyYEBY7ILJF373pC
+         PKFS5Vc7XqbTqmySeycOYYELKeYMOy0hEwE9xzB0XsysKMxO2ElLEzAQ7gILU9jJQ0oT
+         UMtKPVhdxMObvlb54QRkYSdjFEsY0VlVWEeqdgY3nSjrSHn8gubKepcQuzfwpa/+X1sd
+         4gkQ==
+X-Gm-Message-State: APjAAAXumYoYSl6uwd91df0tLoBC5DyTE5J1GgKnZhBFfsS0o7YFSp46
+        gDcbbGwKKk2LeqybkZxUs2mE/VfX
+X-Google-Smtp-Source: APXvYqyrqJN7FoWGNCrX2uCsCtNC7FthgP3Vanzx9r8KGxWqdMRrUPgSCZxhUEbHHSo3EzI4wm8oqw==
+X-Received: by 2002:a2e:9d4e:: with SMTP id y14mr22449268ljj.199.1560514310517;
+        Fri, 14 Jun 2019 05:11:50 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id p27sm459683lfh.8.2019.06.14.05.11.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 14 Jun 2019 05:11:49 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PATCH RFC 0/7] serial: imx: fix RTS and RTS/CTS handling
+Date:   Fri, 14 Jun 2019 15:11:27 +0300
+Message-Id: <1560514294-29111-1-git-send-email-sorganov@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <20190614072801.3187-1-s.hauer@pengutronix.de>
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 11:29 AM Stefan Roese <sr@denx.de> wrote:
->
-> On 14.06.19 11:04, Yegor Yefremov wrote:
-> > On Thu, Jun 13, 2019 at 7:08 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> >>
-> >> On Thu, Jun 13, 2019 at 05:45:40PM +0200, Stefan Roese wrote:
-> >>> This patch adds a check for the GPIOs property existence, before the
-> >>> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
-> >>> support is added (2nd patch in this patch series) on x86 platforms using
-> >>> ACPI.
-> >>>
-> >>> Here Mika's comments from 2016-08-09:
-> >>>
-> >>> "
-> >>> I noticed that with v4.8-rc1 serial console of some of our Broxton
-> >>> systems does not work properly anymore. I'm able to see output but input
-> >>> does not work.
-> >>>
-> >>> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
-> >>> ("tty/serial/8250: use mctrl_gpio helpers").
-> >>>
-> >>> The reason why it fails is that in ACPI we do not have names for GPIOs
-> >>> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
-> >>> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
-> >>> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
-> >>> UART device in Broxton has following (simplified) ACPI description:
-> >>>
-> >>>      Device (URT4)
-> >>>      {
-> >>>          ...
-> >>>          Name (_CRS, ResourceTemplate () {
-> >>>              GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-> >>>                      "\\_SB.GPO0", 0x00, ResourceConsumer)
-> >>>              {
-> >>>                  0x003A
-> >>>              }
-> >>>              GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-> >>>                      "\\_SB.GPO0", 0x00, ResourceConsumer)
-> >>>              {
-> >>>                  0x003D
-> >>>              }
-> >>>          })
-> >>>
-> >>> In this case it finds the first GPIO (0x003A which happens to be RX pin
-> >>> for that UART), turns it into GPIO which then breaks input for the UART
-> >>> device. This also breaks systems with bluetooth connected to UART (those
-> >>> typically have some GPIOs in their _CRS).
-> >>>
-> >>> Any ideas how to fix this?
-> >>>
-> >>> We cannot just drop the _CRS index lookup fallback because that would
-> >>> break many existing machines out there so maybe we can limit this to
-> >>> only DT enabled machines. Or alternatively probe if the property first
-> >>> exists before trying to acquire the GPIOs (using
-> >>> device_property_present()).
-> >>> "
-> >>>
-> >>> This patch implements the fix suggested by Mika in his statement above.
-> >>>
-> >>
-> >> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >
-> > I cannot compile the driver without adding #include <linux/property.h>
-> > to drivers/tty/serial/serial_mctrl_gpio.c.
-> >
-> > My platform is AM335X (OMAP3). I've tried the patches both against the
-> > main repo and also tty-next.
-> >
-> > Other than that everything is working.
->
-> Thanks for reporting. I'll wait a bit for other review comments and
-> tests (thanks Andy) and will then send v7 with this header included
-> (and compile tested on OMAP3) later next week.
->
-> BTW: Could you please add a Tested-by-tag with the next version?
+Dear Sascha,
 
-Will do.
+I think these patches deliver simpler end result and are more complete
+than what you just posted. In particular, the
+
+  serial: imx: set_mctrl(): correctly restore autoRTS state
+
+addresses exactly the issue your patch is about, but in a slightly
+simpler manner.
+
+The patches are not tested yet, so I've put RFC in the header. Just my
+2 cents. I can obviously re-roll them on top of your work later, if
+required.
+
+Sergey Organov (7):
+  serial: imx: fix locking in set_termios()
+  serial: imx: set_termios(): factor-out 'ucr2' initial value
+  serial: imx: set_termios(): clarify RTS/CTS bits calculation
+  serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+  serial: imx: set_termios(): preserve RTS state
+  serial: imx: set_mctrl(): correctly restore autoRTS state
+  serial: imx: get rid of imx_uart_rts_auto()
+
+ drivers/tty/serial/imx.c | 93 ++++++++++++++++++++++++------------------------
+ 1 file changed, 47 insertions(+), 46 deletions(-)
+
+-- 
+2.10.0.1.g57b01a3
+
