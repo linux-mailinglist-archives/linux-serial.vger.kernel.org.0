@@ -2,48 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C0045C48
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 14:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5534045C49
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 14:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfFNML4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Jun 2019 08:11:56 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35118 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727730AbfFNML4 (ORCPT
+        id S1727776AbfFNML5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Jun 2019 08:11:57 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:39398 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727217AbfFNML5 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Jun 2019 08:11:56 -0400
-Received: by mail-lj1-f195.google.com with SMTP id x25so2186304ljh.2
-        for <linux-serial@vger.kernel.org>; Fri, 14 Jun 2019 05:11:54 -0700 (PDT)
+        Fri, 14 Jun 2019 08:11:57 -0400
+Received: by mail-lf1-f66.google.com with SMTP id p24so1576649lfo.6
+        for <linux-serial@vger.kernel.org>; Fri, 14 Jun 2019 05:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MnAE4r5Gl1VIMZviL9ksOeXJGJoVijEdryliB0x51XQ=;
-        b=WU87SO0rFdKL0jGGN3E6Yp4DQcPvigBLGDldakRZfF9oHXptATGbb3eOe65YT23hUd
-         dkf7UPpuSeYpi6DzYDXNoxAv/mWc8BepQwQVRO5NR6Xc+CaKDd6L/Sq6oCweq6YLldxE
-         A29Df0QutRTjnn1BG6/cz2jJovdwQGI3+JxTV0sLtr2CS8gr6sfFthAaaUuJnBQT07an
-         P+tJX6Lj5Lr4NDPk9RgIWe8h1nMMR2kqTT+xMnrfTeoRBEGZkF/kFczWQFQ2/lRPXbJL
-         rLCHCfKS9qmAouwI9qDFy5XqlHg8tj7DD0g6RGnJ3U2Z3oOJZ2vPNkZ0M9hBm3S8Jwih
-         MPyw==
+        bh=UYjsmUBIL6tntgGWQMmUG0zM7PGoxZJvICmLpEKuiKM=;
+        b=il7i9G1w3SX0Zw4vIbZTsQplXBvEBNZ+eNvDmLzsAFQexzjH9BwvOMZhALmT9Y5DA7
+         RVg6hUfJwzJoRyUpD2JtLUJevdCgwMplMPfNfdiiwzyY3BvMOqYmUj+NCQFP2zBQ9YFq
+         yJkcaArmW5G6cXeBfEObNJpRV29I+BC8bjnO0tNtniXG+fjo0rsHMPxy8NkFfaXMPaFX
+         AlUsdxlbXNi+wd6yNy7OtljKJzeUK+mfQESTfTJ2QXA+xtC1qnE8n1dLXXnqU02x5yna
+         ZlNnxlR0rpet7esPf7bPaEgP0kxMpnv+E+oYXmR/FmhlQmM8u2BG54xhpe8Ue2qv9Fsd
+         9rqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=MnAE4r5Gl1VIMZviL9ksOeXJGJoVijEdryliB0x51XQ=;
-        b=AOovTuA7ivAUFMp0Hng3OyJ0MhT2IvC5w1YnWX9qjNYVPrNG/7QGjxLKIo93U6tRdp
-         FWbAeNGAJn/IQsKQWntl0DzzdmcTA0LvipnHWVWEqGL8lcbN/Fe/hkssqvEN3uHsMBbb
-         wprTjr+yOOIC8Ue64G7+RZEK0r+aNKCVbI70iL8jVRJzLQNNWlftntvi6LpBdevfYjOf
-         V6FvA2vYKFSUc8ifLXul3vgZ7rLlJuPudkX8etAi/PT0aU+eQt9sSW5zbInq6QNemflh
-         2xO3tekVyJEQ/O5B0jX3+WOrb2OPbTvc30n6brVayF49JXWqXV+IU94YW88CevpTi0ka
-         FPkQ==
-X-Gm-Message-State: APjAAAWUxM55pzBSRs9ysUzJaWsHEEZ0QRSODP2b7zau112ZUGjMl6oK
-        YczxRFMJykU3zHJBzBpxjfSVFmKN
-X-Google-Smtp-Source: APXvYqxW2PF12BhUCKAQN98WEsRpNhDJrFTYunpAY6YNMydMQgm5z9W1FQbZS6qhN/xSK/JDxqUcHw==
-X-Received: by 2002:a2e:4a1a:: with SMTP id x26mr35479854lja.207.1560514314037;
-        Fri, 14 Jun 2019 05:11:54 -0700 (PDT)
+        bh=UYjsmUBIL6tntgGWQMmUG0zM7PGoxZJvICmLpEKuiKM=;
+        b=IautsfMwqWICOBWoMf15enviEn6je4o3pP6vX7qx2jghVHwQ06viRLaHVrlaUa7US2
+         mp1A6ddwrFnjdfPKMCNTEOnCFWT+WmaCfFvxyHj9Dk79IXa7lcpCIGGArR5ru2qPa3bw
+         jzI439IcrZ9gCYGfpaEcR+zFNfRq4cPldAhWM6anM+WIJN3ZlZVN7rcdyDdTSGaTLbXp
+         pLe6tGB1fQtbUt3MZD7fYlk6Z5w2mDBC0GwNskd657HLMJpGBG1wPlW1r3bIScfXrSS3
+         85pN54LiGbxnJCxwA/4VBrVI463A4gEQ2Fv5nwWqSdVw9gM02KkGI4mtwLdfQG7iaS+4
+         JmSw==
+X-Gm-Message-State: APjAAAUrhXAn/oPx8ZT/AgwfvMjZJAfXsP0FQ1f+I9PSZx/D7eOSdRll
+        LWQC5UQRk1/bkwxL0l2c+AY=
+X-Google-Smtp-Source: APXvYqwE0kQ3/SOZHOsiq+i5HI5BQIQVPxzNpqWa+XM9yTu3PSUfyxB/zEsW9U1o4rVYPTAAidt/xw==
+X-Received: by 2002:ac2:5382:: with SMTP id g2mr46735673lfh.92.1560514315029;
+        Fri, 14 Jun 2019 05:11:55 -0700 (PDT)
 Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id p27sm459683lfh.8.2019.06.14.05.11.52
+        by smtp.gmail.com with ESMTPSA id p27sm459683lfh.8.2019.06.14.05.11.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 14 Jun 2019 05:11:53 -0700 (PDT)
+        Fri, 14 Jun 2019 05:11:54 -0700 (PDT)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -51,9 +51,9 @@ Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=
         linux-arm-kernel@lists.infradead.org,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH RFC 3/7] serial: imx: set_termios(): clarify RTS/CTS bits calculation
-Date:   Fri, 14 Jun 2019 15:11:30 +0300
-Message-Id: <1560514294-29111-4-git-send-email-sorganov@gmail.com>
+Subject: [PATCH RFC 4/7] serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+Date:   Fri, 14 Jun 2019 15:11:31 +0300
+Message-Id: <1560514294-29111-5-git-send-email-sorganov@gmail.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1560514294-29111-1-git-send-email-sorganov@gmail.com>
 References: <20190614072801.3187-1-s.hauer@pengutronix.de>
@@ -63,71 +63,28 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Avoid repeating the same code for rs485 twice.
-
-Make it obvious we clear CRTSCTS bit in termios->c_cflag whenever
-sport->have_rtscts is false.
-
-Make it obvious we clear UCR2_IRTS whenever CRTSCTS is set.
+set_termios() shouldn't set UCR2_CTSC bit if UCR2_CTS (=TIOCM_RTS) is
+cleared. Added corresponding check in imx_uart_rts_auto() to fix this.
 
 Signed-off-by: Sergey Organov <sorganov@gmail.com>
 ---
- drivers/tty/serial/imx.c | 36 +++++++++++++-----------------------
- 1 file changed, 13 insertions(+), 23 deletions(-)
+ drivers/tty/serial/imx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 87802fd..17e2322 100644
+index 17e2322..8ee910f 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
-@@ -1567,35 +1567,25 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if ((termios->c_cflag & CSIZE) == CS8)
- 		ucr2 |= UCR2_WS;
+@@ -405,7 +405,8 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+ /* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
+ {
+-	*ucr2 |= UCR2_CTSC;
++	if (*ucr2 & UCR2_CTS)
++		*ucr2 |= UCR2_CTSC;
+ }
  
--	if (termios->c_cflag & CRTSCTS) {
--		if (sport->have_rtscts) {
--			ucr2 &= ~UCR2_IRTS;
-+	if (!sport->have_rtscts)
-+		termios->c_cflag &= ~CRTSCTS;
- 
--			if (port->rs485.flags & SER_RS485_ENABLED) {
--				/*
--				 * RTS is mandatory for rs485 operation, so keep
--				 * it under manual control and keep transmitter
--				 * disabled.
--				 */
--				if (port->rs485.flags &
--				    SER_RS485_RTS_AFTER_SEND)
--					imx_uart_rts_active(sport, &ucr2);
--				else
--					imx_uart_rts_inactive(sport, &ucr2);
--			} else {
--				imx_uart_rts_auto(sport, &ucr2);
--			}
--		} else {
--			termios->c_cflag &= ~CRTSCTS;
--		}
--	} else if (port->rs485.flags & SER_RS485_ENABLED) {
--		/* disable transmitter */
-+	if (port->rs485.flags & SER_RS485_ENABLED) {
-+		/*
-+		 * RTS is mandatory for rs485 operation, so keep
-+		 * it under manual control and keep transmitter
-+		 * disabled.
-+		 */
- 		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
- 			imx_uart_rts_active(sport, &ucr2);
- 		else
- 			imx_uart_rts_inactive(sport, &ucr2);
--	}
- 
-+	} else if (termios->c_cflag & CRTSCTS)
-+		imx_uart_rts_auto(sport, &ucr2);
-+
-+	if (termios->c_cflag & CRTSCTS)
-+		ucr2 &= ~UCR2_IRTS;
- 
- 	if (termios->c_cflag & CSTOPB)
- 		ucr2 |= UCR2_STPB;
+ /* called with port.lock taken and irqs off */
 -- 
 2.10.0.1.g57b01a3
 
