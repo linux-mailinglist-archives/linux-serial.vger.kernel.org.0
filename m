@@ -2,126 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA388454C3
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 08:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CB34564B
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 09:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725864AbfFNGcO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Jun 2019 02:32:14 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:43890 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725851AbfFNGcO (ORCPT
+        id S1725846AbfFNH2H (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Jun 2019 03:28:07 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46981 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725845AbfFNH2H (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Jun 2019 02:32:14 -0400
-Received: by mail-pl1-f196.google.com with SMTP id cl9so575166plb.10
-        for <linux-serial@vger.kernel.org>; Thu, 13 Jun 2019 23:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
-        b=IteYjWMcdrUIqBhhG5AEnX6ufnl4qdQ94/AhbuAqyXzyusOiHbjueExr31Z/7k3vK1
-         8qxjudR4xriHfmMP9c6US25vQWx1jXjkH8k/Mu3slZvFI70Hc9fpA4PC3oQ3cfq1GnBz
-         DfiY/Ib8YY5gn+P1ODVqEgVHY/OCOLDh+1M7OSwV8m1AeZ5bgYJrZvSrMPc7hH111ZRA
-         oE5TmKKmdmW3InOVhB9xPk5eSBVIU7YqJ2GCgHUCJMKB/rJVw1WSQxmqP9gSfpKZ/htO
-         va49FUHCzSBqKq6qVHw9WUMQZMZWYPylyZmguBUq1jqSAbUvDs/rqipmfDendsqMUjtu
-         zJtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
-        b=cMlzAQ2WUAKjl6tfv8gOpLzSWdk5Ij8jYTpVEQQ3zoRSVDfFf6QWmrBj3H+qPYCjDz
-         ZjTyNb7clmtQzGBFTuPzwi4TTSHgioPuuSNqJ5SxDfBPZR/mLjEBocxBF8gvS8AbWGRc
-         lSatLk1C7KQ+zmXr5gKz999JRaknuhfOMOdVss9GJSMLoOLtHGbAPsbqsrgMQ2x2BTVQ
-         lIntI3IITvYxtaM+ATNdhEQlaXRRHveF6kHYRQ2mk4aMHMlST3PYfhLc8wXAYS+ad6Id
-         r7LoyVGgfjTolF+ExmrJHB4k0eHvttA7e+UjtI4w1c/GGoiYdHP/LfqQrYIW+Wcl88qE
-         TvUQ==
-X-Gm-Message-State: APjAAAX8Qoe3SOPtcdFX3a6tdG6vwj0FkrIgDfKD4rIj9MFwaPlpIpZj
-        d6+Y/gQRkqBO9RbI1uNUiAK6Sw==
-X-Google-Smtp-Source: APXvYqwaUgWQWH6DKaYdF1Cdc9oLYapZi22Rqa6xAUqkllNSLwfCxqoVWtlD/qftHOdi36hhnvLW8A==
-X-Received: by 2002:a17:902:2ba9:: with SMTP id l38mr85574068plb.300.1560493933681;
-        Thu, 13 Jun 2019 23:32:13 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id x25sm1719091pfm.48.2019.06.13.23.32.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 23:32:12 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 12:02:10 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 02/11] OPP: Make dev_pm_opp_set_rate() with freq=0 as
- valid
-Message-ID: <20190614063210.lfsquoycronah3fe@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-3-rnayak@codeaurora.org>
+        Fri, 14 Jun 2019 03:28:07 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1hbgd3-0001vY-ER; Fri, 14 Jun 2019 09:28:05 +0200
+Received: from sha by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1hbgd1-0001Jk-UL; Fri, 14 Jun 2019 09:28:03 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-serial@vger.kernel.org
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH] serial: imx: fix RTS/CTS setting
+Date:   Fri, 14 Jun 2019 09:28:01 +0200
+Message-Id: <20190614072801.3187-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-3-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> For devices with performance state, we use dev_pm_opp_set_rate()
-> to set the appropriate clk rate and the performance state.
-> We do need a way to *remove* the performance state vote when
-> we idle the device and turn the clocks off. Use dev_pm_opp_set_rate()
-> with freq=0 to achieve this.
-> 
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/opp/core.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
+The correct setting of the RTS pin depends on the CRTSCTS termios setting:
 
-What about this instead ?
+- When CRTSCTS is disabled then RTS shall be controlled by the TIOCM_RTS
+  flag.
+- When CRTSCTS is enabled the expected behaviour of the RTS pin is:
+  - When TIOCM_RTS is set then let the receiver control RTS.
+  - When the TIOCM_RTS flag is cleared then RTS shall be deasserted (to let
+    the upper layers throttle the transfer even when the FIFO in the UART has
+    enough space).
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 2fe96c2363a3..9accf8bb6afc 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -711,7 +711,7 @@ static int _set_required_opps(struct device *dev,
+This patch fixes this behaviour. Previously the RTS pin has always been
+controlled by the receiver once the TIOCM_RTS flag was set and the CRTSCTS
+setting hasn't been taken into account.
+
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+ drivers/tty/serial/imx.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 8b752e895053..0eddca6455ad 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -216,6 +216,7 @@ struct imx_port {
+ 	unsigned int		dma_is_enabled:1;
+ 	unsigned int		dma_is_rxing:1;
+ 	unsigned int		dma_is_txing:1;
++	unsigned int		crtscts:1;
+ 	struct dma_chan		*dma_chan_rx, *dma_chan_tx;
+ 	struct scatterlist	rx_sgl, tx_sgl[2];
+ 	void			*rx_buf;
+@@ -967,9 +968,18 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ 		u32 ucr2;
  
-        /* Single genpd case */
-        if (!genpd_virt_devs) {
--               pstate = opp->required_opps[0]->pstate;
-+               pstate = likely(opp) ? opp->required_opps[0]->pstate : 0;
-                ret = dev_pm_genpd_set_performance_state(dev, pstate);
-                if (ret) {
-                        dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
-@@ -729,7 +729,7 @@ static int _set_required_opps(struct device *dev,
-        mutex_lock(&opp_table->genpd_virt_dev_lock);
- 
-        for (i = 0; i < opp_table->required_opp_count; i++) {
--               pstate = opp->required_opps[i]->pstate;
-+               pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
- 
-                if (!genpd_virt_devs[i])
-                        continue;
-@@ -770,14 +770,13 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 
-        if (unlikely(!target_freq)) {
-                if (opp_table->required_opp_tables) {
--                       /* drop the performance state vote */
--                       dev_pm_genpd_set_performance_state(dev, 0);
--                       return 0;
-+                       ret = _set_required_opps(dev, opp_table, NULL);
-                } else {
--                       dev_err(dev, "%s: Invalid target frequency %lu\n", __func__,
--                               target_freq);
--                       return -EINVAL;
-+                       dev_err(dev, "target frequency can't be 0\n");
-+                       ret = -EINVAL;
-                }
+ 		ucr2 = imx_uart_readl(sport, UCR2);
 +
-+               goto put_opp_table;
-        }
+ 		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+-		if (mctrl & TIOCM_RTS)
+-			ucr2 |= UCR2_CTS | UCR2_CTSC;
++
++		if (mctrl & TIOCM_RTS) {
++			if (sport->crtscts)
++				/* let the receiver control RTS */
++				ucr2 |= UCR2_CTSC;
++			else
++				/* Force RTS active */
++				ucr2 |= UCR2_CTS;
++		}
++
+ 		imx_uart_writel(sport, ucr2, UCR2);
+ 	}
  
-        clk = opp_table->clk;
+@@ -1554,6 +1564,11 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	else
+ 		ucr2 = UCR2_SRST | UCR2_IRTS;
+ 
++	if (termios->c_cflag & CRTSCTS)
++		sport->crtscts = true;
++	else
++		sport->crtscts = false;
++
+ 	if (termios->c_cflag & CRTSCTS) {
+ 		if (sport->have_rtscts) {
+ 			ucr2 &= ~UCR2_IRTS;
+-- 
+2.20.1
+
