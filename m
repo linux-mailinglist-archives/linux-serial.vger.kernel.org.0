@@ -2,90 +2,109 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 550DE46034
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 16:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC23E464BB
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2019 18:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728321AbfFNOL3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Jun 2019 10:11:29 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:38485 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728227AbfFNOL3 (ORCPT
+        id S1725869AbfFNQpb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Jun 2019 12:45:31 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:33825 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725808AbfFNQpa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Jun 2019 10:11:29 -0400
-X-Originating-IP: 90.88.23.150
-Received: from dell-desktop.home (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
-        (Authenticated sender: mylene.josserand@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id C3AD04001E;
-        Fri, 14 Jun 2019 14:11:17 +0000 (UTC)
-From:   =?UTF-8?q?Myl=C3=A8ne=20Josserand?= <mylene.josserand@bootlin.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mylene.josserand@bootlin.com,
-        thomas.petazzoni@bootlin.com
-Subject: [PATCH v1] tty: serial: max310x: Add optional reset gpio
-Date:   Fri, 14 Jun 2019 16:11:12 +0200
-Message-Id: <20190614141112.29962-1-mylene.josserand@bootlin.com>
-X-Mailer: git-send-email 2.11.0
+        Fri, 14 Jun 2019 12:45:30 -0400
+Received: by mail-qk1-f193.google.com with SMTP id t8so2101825qkt.1;
+        Fri, 14 Jun 2019 09:45:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VifAE9FDVkI31pZVAA2VI7QJ/Wx0IcW9fionB1xyoh0=;
+        b=f5gDBIMYOpL3op8T2idCcsZjhuqRrFx0P/ZgeCSQqH3xC/h09NVjjt6zG2TngeILQy
+         Dj5+HL9kmlMzL6+8P61jyDssRBrihL65Ja2j3j3caz7Ue7u2cIuByGSnF5UZ6OfLQxQy
+         xfjXPG7Onjkaolxa5ERrKWUUARMR0NUr/um+Is8sqN2Tjjgfp8QHY4sWZuYVziOWx2Bz
+         YU+indD86Tw5/OvMT6PkIM9vmwRjRoeEbtYNNS65yD99P+REatLzHNnPi//EA7tu9RH6
+         imXF+eU5Y+JIkjqyyzY5xXWn1UDd8RWGWSVOCAMLGxH+NbsCV0drSvKo9b9iO2RClEci
+         DOOg==
+X-Gm-Message-State: APjAAAXVSAYTIrNiflPFAG/v1z2k8mfJ5PlW5xhjzVAbXUT+dQz3lc9E
+        xpdSejiSbZ6BExrbzlprSQ==
+X-Google-Smtp-Source: APXvYqzFqW995e8sjoYb7nKrXgjhLY1KUnK5k7TGtKpruk3FzVi+niP+7rswSAogRaw59lDQ0hknHg==
+X-Received: by 2002:a37:9d1:: with SMTP id 200mr28663998qkj.306.1560530729677;
+        Fri, 14 Jun 2019 09:45:29 -0700 (PDT)
+Received: from localhost ([64.188.179.243])
+        by smtp.gmail.com with ESMTPSA id g54sm2554846qtc.61.2019.06.14.09.45.28
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 14 Jun 2019 09:45:28 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 10:45:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tero Kristo <t-kristo@ti.com>
+Subject: Re: [PATCH 1/6] dt-bindings: arm: ti: Add bindings for J721E SoC
+Message-ID: <20190614164526.GA14925@bogus>
+References: <20190522161921.20750-1-nm@ti.com>
+ <20190522161921.20750-2-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190522161921.20750-2-nm@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add the possibility to use a gpio as reset.
+On Wed, May 22, 2019 at 11:19:16AM -0500, Nishanth Menon wrote:
+> The J721E SoC belongs to the K3 Multicore SoC architecture platform,
+> providing advanced system integration to enable lower system costs
+> of automotive applications such as infotainment, cluster, premium
+> Audio, Gateway, industrial and a range of broad market applications.
+> This SoC is designed around reducing the system cost by eliminating
+> the need of an external system MCU and is targeted towards ASIL-B/C
+> certification/requirements in addition to allowing complex software
+> and system use-cases.
+> 
+> Some highlights of this SoC are:
+> * Dual Cortex-A72s in a single cluster, three clusters of lockstep
+>   capable dual Cortex-R5F MCUs, Deep-learning Matrix Multiply Accelerator(MMA),
+>   C7x floating point Vector DSP, Two C66x floating point DSPs.
+> * 3D GPU PowerVR Rogue 8XE GE8430
+> * Vision Processing Accelerator (VPAC) with image signal processor and Depth
+>   and Motion Processing Accelerator (DMPAC)
+> * Two Gigabit Industrial Communication Subsystems (ICSSG), each with dual
+>   PRUs and dual RTUs
+> * Two CSI2.0 4L RX plus one CSI2.0 4L TX, one eDP/DP, One DSI Tx, and
+>   up to two DPI interfaces.
+> * Integrated Ethernet switch supporting up to a total of 8 external ports in
+>   addition to legacy Ethernet switch of up to 2 ports.
+> * System MMU (SMMU) Version 3.0 and advanced virtualisation
+>   capabilities.
+> * Upto 4 PCIe-GEN3 controllers, 2 USB3.0 Dual-role device subsystems,
+>   16 MCANs, 12 McASP, eMMC and SD, UFS, OSPI/HyperBus memory controller, QSPI,
+>   I3C and I2C, eCAP/eQEP, eHRPWM, MLB among other peripherals.
+> * Two hardware accelerator block containing AES/DES/SHA/MD5 called SA2UL
+>   management.
+> * Configurable L3 Cache and IO-coherent architecture with high data throughput
+>   capable distributed DMA architecture under NAVSS
+> * Centralized System Controller for Security, Power, and Resource
+>   Management (DMSC)
+> 
+> See J721E Technical Reference Manual (SPRUIL1, May 2019)
+> for further details: http://www.ti.com/lit/pdf/spruil1
+> 
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>  Documentation/devicetree/bindings/arm/ti/k3.txt | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Signed-off-by: Mylène Josserand <mylene.josserand@bootlin.com>
----
- Documentation/devicetree/bindings/serial/maxim,max310x.txt | 1 +
- drivers/tty/serial/max310x.c                               | 7 +++++++
- 2 files changed, 8 insertions(+)
+Okay for now, but please convert K3 and other TI SoCs to schema soon.
 
-diff --git a/Documentation/devicetree/bindings/serial/maxim,max310x.txt b/Documentation/devicetree/bindings/serial/maxim,max310x.txt
-index 79e10a05a96a..1d7d8a0b4260 100644
---- a/Documentation/devicetree/bindings/serial/maxim,max310x.txt
-+++ b/Documentation/devicetree/bindings/serial/maxim,max310x.txt
-@@ -15,6 +15,7 @@ Required properties:
-   "osc" if an external clock source is used.
- 
- Optional properties:
-+- reset-gpios: Gpio to use for reset.
- - gpio-controller: Marks the device node as a GPIO controller.
- - #gpio-cells: Should be two. The first cell is the GPIO number and
-   the second cell is used to specify the GPIO polarity:
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index e5aebbf5f302..d056fa2eed1b 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -14,6 +14,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/gpio/driver.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-@@ -1413,12 +1414,18 @@ static int max310x_spi_probe(struct spi_device *spi)
- 		return ret;
- 
- 	if (spi->dev.of_node) {
-+		struct gpio_desc *reset_gpio;
- 		const struct of_device_id *of_id =
- 			of_match_device(max310x_dt_ids, &spi->dev);
- 		if (!of_id)
- 			return -ENODEV;
- 
- 		devtype = (struct max310x_devtype *)of_id->data;
-+		reset_gpio = devm_gpiod_get_optional(&spi->dev, "reset",
-+						     GPIOD_OUT_HIGH);
-+		if (IS_ERR(reset_gpio))
-+			return PTR_ERR(reset_gpio);
-+		gpiod_set_value_cansleep(reset_gpio, 0);
- 	} else {
- 		const struct spi_device_id *id_entry = spi_get_device_id(spi);
- 
--- 
-2.11.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
