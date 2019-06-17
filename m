@@ -2,121 +2,183 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D9D48312
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Jun 2019 14:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE244849F
+	for <lists+linux-serial@lfdr.de>; Mon, 17 Jun 2019 15:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726694AbfFQMvm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Jun 2019 08:51:42 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:41809 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbfFQMvl (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 17 Jun 2019 08:51:41 -0400
-Received: by mail-vs1-f65.google.com with SMTP id 2so2864413vso.8;
-        Mon, 17 Jun 2019 05:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=klPdjqqlVoeDREb75kQqStjinhVsI/mU0etQ6QnCaVA=;
-        b=Q7kHBLmkk8yeIcrJfSdKv0eDe8c6TIcykYfxeE+gtyxDGM7jTmWBX8X8LqO0Vz8wmh
-         l2H7Gj3rNds4mi0waYFOmJF58IVTdd8njCA3nt2QMsVA/in322QCir6CzFI8M8Jq+RI6
-         YLDvBk2D9gE6D8rmyfWqroIaIJxgFycHSyS4NRF7Zo2BY2Qag9JEILtsxLXUpFsVF9op
-         U3TVunfWmIcq5z0r1zZ3UousfHv+Y5FC10uYHhcLW+z/qmYV+1TCAl9OkJKcvx/K/+O1
-         zIAQ70uPMhRJ/QLvnR1n8XirV8I5X8DuBiVQLw5/I5wrY9+jsNdRYprh+F8aPtaKk29P
-         LX6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=klPdjqqlVoeDREb75kQqStjinhVsI/mU0etQ6QnCaVA=;
-        b=SWKhRB0NKz7Nz4os0WwEMufS3VRQ9nsvGuvM9dFiBCl7fhEtSff/DmWEBTgDCTB4+d
-         411tYMqXTLAXDKkyHgYFgpzlCxmFOxPxrhOpRDgNM6czejboJAwjcXOWH9fCX3DPr1EU
-         F4IAz1YN6guhNNxhB3OsiK5kbZ3hJNG48Du19k/eHjZUwlWfgRZlQ06luhw5D8ltKUJy
-         DSc6fFl99g54hhuQZTRvmDGQ+knYP79siKibnMO5Qrnk7eeaAE7KK5n3+ie3RV9mvXFy
-         Jd4PRJ/Ln6ZvW2kK6nXpXUCMndAndrWKIMVS72uo+e1QZ3t7uU5tml+Gm40FeLpRsykj
-         xm+g==
-X-Gm-Message-State: APjAAAUmIyGv6ILaDhOEArTk2Sc6cpANJbTZhb2AuYjGFGz1t3conkzg
-        DrhBfoKdEkyM8/NdxFIL+Ihfvd87B3Rjk1/vv/I=
-X-Google-Smtp-Source: APXvYqwFeWgFnNJblZqkjL2ae02IOcVqxIIBQrv40Ft1GMFRwdqN43eWUISS8RdMVxsuA8gLkKAFkvwqWO2Ghp/c13c=
-X-Received: by 2002:a67:de0b:: with SMTP id q11mr4656005vsk.134.1560775900716;
- Mon, 17 Jun 2019 05:51:40 -0700 (PDT)
+        id S1726065AbfFQNxY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 17 Jun 2019 09:53:24 -0400
+Received: from mga01.intel.com ([192.55.52.88]:16781 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726028AbfFQNxY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 17 Jun 2019 09:53:24 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 06:53:24 -0700
+X-ExtLoop1: 1
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Jun 2019 06:53:22 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 843BA177; Mon, 17 Jun 2019 16:53:21 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        Vignesh R <vigneshr@ti.com>, Ferry Toth <ftoth@exalondelft.nl>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] serial: 8250: factor out serial8250_{set,clear}_THRI() helpers
+Date:   Mon, 17 Jun 2019 16:53:20 +0300
+Message-Id: <20190617135320.14199-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190613154542.32438-1-sr@denx.de> <20190613154542.32438-3-sr@denx.de>
- <CAGm1_kuyt5ue_3CuvryXw8L0=z0Bti5BeQMA50yRYhFmffcJuQ@mail.gmail.com>
- <CAGm1_ksdQ5CNLGGNzHKBNKeLE3ByHvPyOkjYNoWWM+rw0q214Q@mail.gmail.com> <d62c1a2b-3e24-c109-a7fb-57190388d75f@denx.de>
-In-Reply-To: <d62c1a2b-3e24-c109-a7fb-57190388d75f@denx.de>
-From:   Yegor Yefremov <yegorslists@googlemail.com>
-Date:   Mon, 17 Jun 2019 14:51:15 +0200
-Message-ID: <CAGm1_ks0TWAkKGQ+k060hmwZi-i1jD2-KMqxex1QqrbujS00WQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v6] tty/serial/8250: use mctrl_gpio helpers
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 2:42 PM Stefan Roese <sr@denx.de> wrote:
->
-> On 17.06.19 11:51, Yegor Yefremov wrote:
->
-> <snip>
->
-> >>> @@ -1944,11 +1948,15 @@ unsigned int serial8250_do_get_mctrl(struct uart_port *port)
-> >>>   {
-> >>>          struct uart_8250_port *up = up_to_u8250p(port);
-> >>>          unsigned int status;
-> >>> +       unsigned int val = 0;
-> >>>
-> >>>          serial8250_rpm_get(up);
-> >>>          status = serial8250_modem_status(up);
-> >>>          serial8250_rpm_put(up);
-> >>>
-> >>> +       if (up->gpios)
-> >>> +               return mctrl_gpio_get(up->gpios, &val);
-> >>> +
-> >>
-> >> What happens when you have a mixed setup i.e. CTS controlled by UART
-> >> but other status pins controlled by GPIO? In this case CTS status
-> >> won't be returned. Do I see it right?
->
-> Yes, your analysis does seem to be correct. Please note that I did
-> not intentionally did change it this way. I was not thinking about
-> such a "mixed design".
->
-> > What about something like this:
-> >
-> > unsigned int serial8250_do_get_mctrl(struct uart_port *port)
-> >    {
-> >            struct uart_8250_port *up = up_to_u8250p(port);
-> >            unsigned int status;
-> >            unsigned int val;
-> >
-> >            serial8250_rpm_get(up);
-> >            status = serial8250_modem_status(up);
-> >            serial8250_rpm_put(up);
-> >
-> >            val = serial8250_MSR_to_TIOCM(status);
-> >            if (up->gpios)
-> >                    mctrl_gpio_get(up->gpios, &val);
-> >
-> >            return val;
-> >    }
->
-> Looks good to me, thanks. Do you have such a setup with some modem
-> control signal handled via GPIO and some via the UART? Could you
-> test such a change?
+Factor out similar code pieces that set or clear UART_IER_THRI bit to
+serial8250_{set,clear}_THRI() helpers.
 
-I already have :-)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250.h      | 18 ++++++++++++++++++
+ drivers/tty/serial/8250/8250_dma.c  | 11 +++--------
+ drivers/tty/serial/8250/8250_omap.c | 14 +++-----------
+ drivers/tty/serial/8250/8250_port.c | 10 ++--------
+ 4 files changed, 26 insertions(+), 27 deletions(-)
 
-This my DTS file:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/am335x-baltos-ir5221.dts#n38
+diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+index ebfb0bd5bef5..93756ea540d6 100644
+--- a/drivers/tty/serial/8250/8250.h
++++ b/drivers/tty/serial/8250/8250.h
+@@ -128,6 +128,24 @@ static inline void serial_dl_write(struct uart_8250_port *up, int value)
+ 	up->dl_write(up, value);
+ }
+ 
++static inline bool serial8250_set_THRI(struct uart_8250_port *up)
++{
++	if (up->ier & UART_IER_THRI)
++		return false;
++	up->ier |= UART_IER_THRI;
++	serial_out(up, UART_IER, up->ier);
++	return true;
++}
++
++static inline bool serial8250_clear_THRI(struct uart_8250_port *up)
++{
++	if (!(up->ier & UART_IER_THRI))
++		return false;
++	up->ier &= ~UART_IER_THRI;
++	serial_out(up, UART_IER, up->ier);
++	return true;
++}
++
+ struct uart_8250_port *serial8250_get_port(int line);
+ 
+ void serial8250_rpm_get(struct uart_8250_port *p);
+diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+index bfa1a857f3ff..890fa7ddaa7f 100644
+--- a/drivers/tty/serial/8250/8250_dma.c
++++ b/drivers/tty/serial/8250/8250_dma.c
+@@ -34,10 +34,8 @@ static void __dma_tx_complete(void *param)
+ 		uart_write_wakeup(&p->port);
+ 
+ 	ret = serial8250_tx_dma(p);
+-	if (ret) {
+-		p->ier |= UART_IER_THRI;
+-		serial_port_out(&p->port, UART_IER, p->ier);
+-	}
++	if (ret)
++		serial8250_set_THRI(p);
+ 
+ 	spin_unlock_irqrestore(&p->port.lock, flags);
+ }
+@@ -100,10 +98,7 @@ int serial8250_tx_dma(struct uart_8250_port *p)
+ 	dma_async_issue_pending(dma->txchan);
+ 	if (dma->tx_err) {
+ 		dma->tx_err = 0;
+-		if (p->ier & UART_IER_THRI) {
+-			p->ier &= ~UART_IER_THRI;
+-			serial_out(p, UART_IER, p->ier);
+-		}
++		serial8250_clear_THRI(p);
+ 	}
+ 	return 0;
+ err:
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 0a8316632d75..ed25cfc3be13 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -923,15 +923,13 @@ static void omap_8250_dma_tx_complete(void *param)
+ 		ret = omap_8250_tx_dma(p);
+ 		if (ret)
+ 			en_thri = true;
+-
+ 	} else if (p->capabilities & UART_CAP_RPM) {
+ 		en_thri = true;
+ 	}
+ 
+ 	if (en_thri) {
+ 		dma->tx_err = 1;
+-		p->ier |= UART_IER_THRI;
+-		serial_port_out(&p->port, UART_IER, p->ier);
++		serial8250_set_THRI(p);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&p->port.lock, flags);
+@@ -959,10 +957,7 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ 			ret = -EBUSY;
+ 			goto err;
+ 		}
+-		if (p->ier & UART_IER_THRI) {
+-			p->ier &= ~UART_IER_THRI;
+-			serial_out(p, UART_IER, p->ier);
+-		}
++		serial8250_clear_THRI(p);
+ 		return 0;
+ 	}
+ 
+@@ -1020,10 +1015,7 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ 	if (dma->tx_err)
+ 		dma->tx_err = 0;
+ 
+-	if (p->ier & UART_IER_THRI) {
+-		p->ier &= ~UART_IER_THRI;
+-		serial_out(p, UART_IER, p->ier);
+-	}
++	serial8250_clear_THRI(p);
+ 	if (skip_byte)
+ 		serial_out(p, UART_TX, xmit->buf[xmit->tail]);
+ 	return 0;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index fdb6fd084386..e0d66891d8df 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1502,11 +1502,8 @@ static void __stop_tx_rs485(struct uart_8250_port *p)
+ 
+ static inline void __do_stop_tx(struct uart_8250_port *p)
+ {
+-	if (p->ier & UART_IER_THRI) {
+-		p->ier &= ~UART_IER_THRI;
+-		serial_out(p, UART_IER, p->ier);
++	if (serial8250_clear_THRI(p))
+ 		serial8250_rpm_put_tx(p);
+-	}
+ }
+ 
+ static inline void __stop_tx(struct uart_8250_port *p)
+@@ -1555,10 +1552,7 @@ static inline void __start_tx(struct uart_port *port)
+ 	if (up->dma && !up->dma->tx_dma(up))
+ 		return;
+ 
+-	if (!(up->ier & UART_IER_THRI)) {
+-		up->ier |= UART_IER_THRI;
+-		serial_port_out(port, UART_IER, up->ier);
+-
++	if (serial8250_set_THRI(up)) {
+ 		if (up->bugs & UART_BUG_TXEN) {
+ 			unsigned char lsr;
+ 
+-- 
+2.20.1
 
-Yegor
