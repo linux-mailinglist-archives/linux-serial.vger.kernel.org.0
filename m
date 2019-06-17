@@ -2,33 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE244849F
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Jun 2019 15:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFB448656
+	for <lists+linux-serial@lfdr.de>; Mon, 17 Jun 2019 17:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbfFQNxY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Jun 2019 09:53:24 -0400
-Received: from mga01.intel.com ([192.55.52.88]:16781 "EHLO mga01.intel.com"
+        id S1726215AbfFQPAF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 17 Jun 2019 11:00:05 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:60066 "EHLO mx1.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbfFQNxY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 17 Jun 2019 09:53:24 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 06:53:24 -0700
-X-ExtLoop1: 1
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jun 2019 06:53:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 843BA177; Mon, 17 Jun 2019 16:53:21 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        Vignesh R <vigneshr@ti.com>, Ferry Toth <ftoth@exalondelft.nl>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] serial: 8250: factor out serial8250_{set,clear}_THRI() helpers
-Date:   Mon, 17 Jun 2019 16:53:20 +0300
-Message-Id: <20190617135320.14199-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726065AbfFQPAF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 17 Jun 2019 11:00:05 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 05CCB51D9E;
+        Mon, 17 Jun 2019 17:00:03 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id AUAwnw_0lkHo; Mon, 17 Jun 2019 16:59:53 +0200 (CEST)
+From:   Stefan Roese <sr@denx.de>
+To:     linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>
+Subject: [PATCH 1/3 v7] serial: mctrl_gpio: Check if GPIO property exisits before requesting it
+Date:   Mon, 17 Jun 2019 16:59:50 +0200
+Message-Id: <20190617145952.4848-1-sr@denx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -36,149 +38,125 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Factor out similar code pieces that set or clear UART_IER_THRI bit to
-serial8250_{set,clear}_THRI() helpers.
+This patch adds a check for the GPIOs property existence, before the
+GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+support is added (2nd patch in this patch series) on x86 platforms using
+ACPI.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Here Mika's comments from 2016-08-09:
+
+"
+I noticed that with v4.8-rc1 serial console of some of our Broxton
+systems does not work properly anymore. I'm able to see output but input
+does not work.
+
+I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+("tty/serial/8250: use mctrl_gpio helpers").
+
+The reason why it fails is that in ACPI we do not have names for GPIOs
+(except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+UART device in Broxton has following (simplified) ACPI description:
+
+    Device (URT4)
+    {
+        ...
+        Name (_CRS, ResourceTemplate () {
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003A
+            }
+            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+                    "\\_SB.GPO0", 0x00, ResourceConsumer)
+            {
+                0x003D
+            }
+        })
+
+In this case it finds the first GPIO (0x003A which happens to be RX pin
+for that UART), turns it into GPIO which then breaks input for the UART
+device. This also breaks systems with bluetooth connected to UART (those
+typically have some GPIOs in their _CRS).
+
+Any ideas how to fix this?
+
+We cannot just drop the _CRS index lookup fallback because that would
+break many existing machines out there so maybe we can limit this to
+only DT enabled machines. Or alternatively probe if the property first
+exists before trying to acquire the GPIOs (using
+device_property_present()).
+"
+
+This patch implements the fix suggested by Mika in his statement above.
+
+Signed-off-by: Stefan Roese <sr@denx.de>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- drivers/tty/serial/8250/8250.h      | 18 ++++++++++++++++++
- drivers/tty/serial/8250/8250_dma.c  | 11 +++--------
- drivers/tty/serial/8250/8250_omap.c | 14 +++-----------
- drivers/tty/serial/8250/8250_port.c | 10 ++--------
- 4 files changed, 26 insertions(+), 27 deletions(-)
+v7:
+- Include <linux/property.h> to fix compile breakage on OMAP
 
-diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-index ebfb0bd5bef5..93756ea540d6 100644
---- a/drivers/tty/serial/8250/8250.h
-+++ b/drivers/tty/serial/8250/8250.h
-@@ -128,6 +128,24 @@ static inline void serial_dl_write(struct uart_8250_port *up, int value)
- 	up->dl_write(up, value);
- }
+v6:
+- No change
+
+v5:
+- Simplified the code a bit (Andy)
+- Added gpio_str == NULL handling (Andy)
+
+v4:
+- Add missing free() calls (Johan)
+- Added Mika's reviewed by tag
+- Added Johan to Cc
+
+v3:
+- No change
+
+v2:
+- Include the problem description and analysis from Mika into the commit
+  text, as suggested by Greg.
+
+ drivers/tty/serial/serial_mctrl_gpio.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 39ed56214cd3..2b400189be91 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -12,6 +12,7 @@
+ #include <linux/termios.h>
+ #include <linux/serial_core.h>
+ #include <linux/module.h>
++#include <linux/property.h>
  
-+static inline bool serial8250_set_THRI(struct uart_8250_port *up)
-+{
-+	if (up->ier & UART_IER_THRI)
-+		return false;
-+	up->ier |= UART_IER_THRI;
-+	serial_out(up, UART_IER, up->ier);
-+	return true;
-+}
+ #include "serial_mctrl_gpio.h"
+ 
+@@ -116,6 +117,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+ 
+ 	for (i = 0; i < UART_GPIO_MAX; i++) {
+ 		enum gpiod_flags flags;
++		char *gpio_str;
++		bool present;
 +
-+static inline bool serial8250_clear_THRI(struct uart_8250_port *up)
-+{
-+	if (!(up->ier & UART_IER_THRI))
-+		return false;
-+	up->ier &= ~UART_IER_THRI;
-+	serial_out(up, UART_IER, up->ier);
-+	return true;
-+}
++		/* Check if GPIO property exists and continue if not */
++		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
++				     mctrl_gpios_desc[i].name);
++		if (!gpio_str)
++			continue;
 +
- struct uart_8250_port *serial8250_get_port(int line);
++		present = device_property_present(dev, gpio_str);
++		kfree(gpio_str);
++		if (!present)
++			continue;
  
- void serial8250_rpm_get(struct uart_8250_port *p);
-diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
-index bfa1a857f3ff..890fa7ddaa7f 100644
---- a/drivers/tty/serial/8250/8250_dma.c
-+++ b/drivers/tty/serial/8250/8250_dma.c
-@@ -34,10 +34,8 @@ static void __dma_tx_complete(void *param)
- 		uart_write_wakeup(&p->port);
- 
- 	ret = serial8250_tx_dma(p);
--	if (ret) {
--		p->ier |= UART_IER_THRI;
--		serial_port_out(&p->port, UART_IER, p->ier);
--	}
-+	if (ret)
-+		serial8250_set_THRI(p);
- 
- 	spin_unlock_irqrestore(&p->port.lock, flags);
- }
-@@ -100,10 +98,7 @@ int serial8250_tx_dma(struct uart_8250_port *p)
- 	dma_async_issue_pending(dma->txchan);
- 	if (dma->tx_err) {
- 		dma->tx_err = 0;
--		if (p->ier & UART_IER_THRI) {
--			p->ier &= ~UART_IER_THRI;
--			serial_out(p, UART_IER, p->ier);
--		}
-+		serial8250_clear_THRI(p);
- 	}
- 	return 0;
- err:
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 0a8316632d75..ed25cfc3be13 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -923,15 +923,13 @@ static void omap_8250_dma_tx_complete(void *param)
- 		ret = omap_8250_tx_dma(p);
- 		if (ret)
- 			en_thri = true;
--
- 	} else if (p->capabilities & UART_CAP_RPM) {
- 		en_thri = true;
- 	}
- 
- 	if (en_thri) {
- 		dma->tx_err = 1;
--		p->ier |= UART_IER_THRI;
--		serial_port_out(&p->port, UART_IER, p->ier);
-+		serial8250_set_THRI(p);
- 	}
- 
- 	spin_unlock_irqrestore(&p->port.lock, flags);
-@@ -959,10 +957,7 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
- 			ret = -EBUSY;
- 			goto err;
- 		}
--		if (p->ier & UART_IER_THRI) {
--			p->ier &= ~UART_IER_THRI;
--			serial_out(p, UART_IER, p->ier);
--		}
-+		serial8250_clear_THRI(p);
- 		return 0;
- 	}
- 
-@@ -1020,10 +1015,7 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
- 	if (dma->tx_err)
- 		dma->tx_err = 0;
- 
--	if (p->ier & UART_IER_THRI) {
--		p->ier &= ~UART_IER_THRI;
--		serial_out(p, UART_IER, p->ier);
--	}
-+	serial8250_clear_THRI(p);
- 	if (skip_byte)
- 		serial_out(p, UART_TX, xmit->buf[xmit->tail]);
- 	return 0;
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index fdb6fd084386..e0d66891d8df 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1502,11 +1502,8 @@ static void __stop_tx_rs485(struct uart_8250_port *p)
- 
- static inline void __do_stop_tx(struct uart_8250_port *p)
- {
--	if (p->ier & UART_IER_THRI) {
--		p->ier &= ~UART_IER_THRI;
--		serial_out(p, UART_IER, p->ier);
-+	if (serial8250_clear_THRI(p))
- 		serial8250_rpm_put_tx(p);
--	}
- }
- 
- static inline void __stop_tx(struct uart_8250_port *p)
-@@ -1555,10 +1552,7 @@ static inline void __start_tx(struct uart_port *port)
- 	if (up->dma && !up->dma->tx_dma(up))
- 		return;
- 
--	if (!(up->ier & UART_IER_THRI)) {
--		up->ier |= UART_IER_THRI;
--		serial_port_out(port, UART_IER, up->ier);
--
-+	if (serial8250_set_THRI(up)) {
- 		if (up->bugs & UART_BUG_TXEN) {
- 			unsigned char lsr;
- 
+ 		if (mctrl_gpios_desc[i].dir_out)
+ 			flags = GPIOD_OUT_LOW;
 -- 
-2.20.1
+2.22.0
 
