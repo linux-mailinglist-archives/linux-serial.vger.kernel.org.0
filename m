@@ -2,149 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 957834A434
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 16:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD0B4AB0D
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 21:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728881AbfFROmU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Jun 2019 10:42:20 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:44464 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727105AbfFROmT (ORCPT
+        id S1730451AbfFRTfn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Jun 2019 15:35:43 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:45858 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730189AbfFRTfm (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Jun 2019 10:42:19 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x5IEg1QA118051;
-        Tue, 18 Jun 2019 09:42:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1560868921;
-        bh=fHHIeoL6WrP+o42wBxL4d1KUkoVV62hUdcAiyBMH/XQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=gLGf7oP07AkblPP3ulwC9txJLKLwro1GDBXcIVluar7oyAlsYELqfH51VIgbo5Ppo
-         pO9S5r8OxfbKyjo1O+AUbknfIBdXie09X2HJYSUAUERgI52PzVI/6dGwob19QEGfVX
-         AN1BHbhjFQQt+1uphJfMnaKr9+TeuvKRbAVNV83Y=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x5IEg1d2096318
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Jun 2019 09:42:01 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 18
- Jun 2019 09:42:00 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 18 Jun 2019 09:42:00 -0500
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x5IEfvLs105464;
-        Tue, 18 Jun 2019 09:41:57 -0500
-Subject: Re: [PATCH 0/6] arm64: Initial support Texas Instrument's J721E
- Platform
-To:     Nishanth Menon <nm@ti.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>
-References: <20190522161921.20750-1-nm@ti.com>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <6ae8cfc9-5bf0-14ec-109f-bafbf2cb7eac@ti.com>
-Date:   Tue, 18 Jun 2019 17:41:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Tue, 18 Jun 2019 15:35:42 -0400
+Received: by mail-yw1-f68.google.com with SMTP id m16so7205977ywh.12;
+        Tue, 18 Jun 2019 12:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HvAlKbZbthljEj9Bm0P4V0wg057kcVpH5Gmt0eKeElg=;
+        b=buNrCnmOnWF/vLcHkE1GpZMXLD2A5UlUAPBqlUf7w5q2/wefEZvDdCD8yeT83hthXv
+         /55FKlOfCMMmB5bSMHWx0VPuqBqUaibrFDzQiHMuoVTa7n5+PJ/yX18EazSr+XG+iZel
+         aJJHJ/JjmBdjXoV3WsByjE3mJ37WeMvC2LD40Z7l2T+Jvrae9MZg3NieaTULHC3j0yQc
+         IBGPsW39YXeldJngQGOjFVFQkNUThbrdDxbVqSXqLBH2ymlgNhzsIdR+b2HOvIDa3TW2
+         WgvwN4hwaXcAvmfrazlz+50RC9F+VOWzU5Lg9V56XgynZkF4JWwvBANXhT4LziAJ08Ox
+         /34A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HvAlKbZbthljEj9Bm0P4V0wg057kcVpH5Gmt0eKeElg=;
+        b=tOHLxRFeT9DJubBg1ZIKO9dwJ0w2hjvka3uQZwu7Esf6G0m1Dsb8q6lem4S5KlDGN6
+         mvlVGEyToNaTONcFISi7fGS6iTrIrzDY56IGQa8oN/KyZm0agNWs9cw74R64BqPzyvjg
+         Tg/WRQdx7UdmEjZJnAbNjfMo49IucY91n2KwSZCG/OkYps0a+l1OAxodLrNTIIeMRFIc
+         k+ziCSR7O4t9wMo7Lv+bjR4vT6IaPaJTQ5bnw8h1YNn2I2mUtjyu3qpAbFoIfGo7IuAg
+         cEY2UPqF7VQ5RTNYLMgPOEIcAYnqkplIb+U9KhFprojaSrB8i6ws7FpTZ6kKpda6UuNt
+         xPcQ==
+X-Gm-Message-State: APjAAAVXmsi/mg3fOZyFfUyoQZ8mAY1sDzxoiRRJ/sx9+2EuyO75HqdW
+        qEmpUIKQoMQ98mG1BsakVaxrhRzGo6Zc1dkgzBwmJFPo
+X-Google-Smtp-Source: APXvYqwjK1U8YQPQcUnPpcbwzhDgtAhYLUw4HEluprGNc7HiOoBlL396q5Vx72UloQuB5/nFqqq+0DVHa2ud470V4nw=
+X-Received: by 2002:a81:92d3:: with SMTP id j202mr223539ywg.427.1560886541819;
+ Tue, 18 Jun 2019 12:35:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190522161921.20750-1-nm@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20190613180824.6ajwjelzr5fmjnie@debie> <20190618073853.GA25598@kroah.com>
+In-Reply-To: <20190618073853.GA25598@kroah.com>
+From:   Charles Oliveira <18oliveira.charles@gmail.com>
+Date:   Tue, 18 Jun 2019 16:35:30 -0300
+Message-ID: <CAD17tR9-xss+AkeBMv6XLTxQ=Hx13wYuRYEmoRauNVxFLqh27A@mail.gmail.com>
+Subject: Re: [PATCH] serial: sh-sci: fix uninitialized variable warning
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 22/05/2019 19:19, Nishanth Menon wrote:
-> Hi,
-> 
-> This series adds support for the latest new SoC, J721E, from Texas Instruments.
-> 
-> The series is an based off v5.2-rc1 and has the following driver
-> dependencies for a successful boot:
-> 1.  https://lore.kernel.org/lkml/20190429131533.25122-1-afd@ti.com (for newer firmware)
-> 2.  https://lore.kernel.org/linux-arm-kernel/1555093342-428-1-git-send-email-t-kristo@ti.com/
->      - Clock IDs cannot be guarenteed to be sequential, has to be
->        discovered from hardware description in dts
->      - Clock IDs on this massive chip also exceeds 255, so, the support
->        for the same is expected in follow on patches.
-> 
-> The full series is available here (including dependencies):
-> https://github.com/nmenon/linux-2.6-playground/commits/upstream/v5.2-rc1/j7es-base-v1
-> 
-> Boot Log: https://pastebin.ubuntu.com/p/j3NtfF8FQr/
-> 
-> NOTE:
->   - If Greg is ok, we can pick up the uart compatibility via the k3 tree,
->     else, I can spawn it off the series.
+On Tue, Jun 18, 2019 at 4:38 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jun 13, 2019 at 03:08:24PM -0300, Charles wrote:
+> > Avoid following compiler warning on uninitialized variable
+> >
+> > In file included from ./include/linux/rwsem.h:16:0,
+> >                  from ./include/linux/notifier.h:15,
+> >                  from ./include/linux/clk.h:17,
+> >                  from drivers/tty/serial/sh-sci.c:24:
+> > drivers/tty/serial/sh-sci.c: In function =E2=80=98sci_dma_rx_submit=E2=
+=80=99:
+> > ./include/linux/spinlock.h:288:3: warning: =E2=80=98flags=E2=80=99 may =
+be used
+> > uninitialized in this function [-Wmaybe-uninitialized]
+> >    _raw_spin_unlock_irqrestore(lock, flags); \
+> >    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/tty/serial/sh-sci.c:1353:16: note: =E2=80=98flags=E2=80=99 was =
+declared here
+> >   unsigned long flags;
+> >                 ^~~~~
+>
+> What version of gcc is doing this?  It should be smarter than that,
+> perhaps you should just upgrade.
 
-Assuming here that Greg is ok with me picking up patch #2.
+Yep, worked like a charm. I was running gcc 6.3.0, just updated to 8.3.0
+and got rid of that warning.
 
->   - I will resubmit patch 6 (defconfig update) separately once again once
->     patches 1-5 hit the next tree or for 5.3-rc2 which ever is convenient.
-> 
+Thanks, Greg
+>
+> thanks,
+>
+> greg k-h
 
-Seems it should be possible just to queue up everything, no need to 
-repost stuff.
 
-That said, queuing the whole series towards 5.3 with the mentioned fixes.
 
--Tero
-
-> The J721E SoC belongs to the K3 Multicore SoC architecture platform
-> for automotive applications such as infotainment, cluster, premium
-> Audio, Gateway, industrial and a range of broad market applications.
-> This SoC is designed around reducing the system cost by eliminating
-> the need of an external system MCU and is targeted towards ASIL-B/C
-> certification/requirements in addition to allowing complex software
-> and system use-cases.
-> 
-> The Linux development follows AM654 in most of the configurations, but
-> adds new capabilities (details in follow on patches).
-> 
-> See J721E Technical Reference Manual (SPRUIL1, May 2019)
-> for further details: http://www.ti.com/lit/pdf/spruil1
-> 
-> Nishanth Menon (6):
->    dt-bindings: arm: ti: Add bindings for J721E SoC
->    dt-bindings: serial: 8250_omap: Add compatible for J721E UART
->      controller
->    arm64: dts: ti: Add Support for J721E SoC
->    soc: ti: Add Support for J721E SoC config option
->    arm64: dts: ti: Add support for J721E Common Processor Board
->    arm64: defconfig: Enable TI's J721E SoC platform
-> 
->   .../devicetree/bindings/arm/ti/k3.txt         |   3 +
->   .../bindings/serial/omap_serial.txt           |   1 +
->   arch/arm64/boot/dts/ti/Makefile               |   2 +
->   .../dts/ti/k3-j721e-common-proc-board.dts     |  50 +++++
->   arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 202 ++++++++++++++++++
->   .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  72 +++++++
->   arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi   |  29 +++
->   arch/arm64/boot/dts/ti/k3-j721e.dtsi          | 176 +++++++++++++++
->   arch/arm64/configs/defconfig                  |   1 +
->   drivers/soc/ti/Kconfig                        |   5 +
->   10 files changed, 541 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
->   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> 
-
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+--=20
+Charles
