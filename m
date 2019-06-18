@@ -2,67 +2,159 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C285549F19
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 13:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B184A41E
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 16:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729528AbfFRLYF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Jun 2019 07:24:05 -0400
-Received: from mga02.intel.com ([134.134.136.20]:32112 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729690AbfFRLYE (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Jun 2019 07:24:04 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 04:24:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,389,1557212400"; 
-   d="scan'208";a="164671057"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2019 04:24:01 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hdCDY-000ApD-MO; Tue, 18 Jun 2019 19:24:00 +0800
-Date:   Tue, 18 Jun 2019 19:23:51 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Jay Dolan <jay.dolan@accesio.com>
-Cc:     kbuild-all@01.org, linux-serial@vger.kernel.org,
+        id S1729061AbfFROih (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Jun 2019 10:38:37 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:60602 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbfFROih (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 18 Jun 2019 10:38:37 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x5IEc0Su029368;
+        Tue, 18 Jun 2019 09:38:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1560868680;
+        bh=J02uedpBR7NPIOrz76nMqFBeliXH5fiqIuCezowfJ2o=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=MrPHjc8gMJyAwwPY12UBktbKEXRt0gUnOAwpWRAwqpcihUzEB9YLl86QLNMVoacTc
+         cHSbAZqziL4aEPp7XlBFwBqdTABEuraPNjIgKQPfErf8XjWrgz7jS19xEOzTe26RA7
+         1r7rDgUaQXzby0u8+zmcAzzyF8B6RNJI4dfiNC10=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x5IEbxL3037151
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Jun 2019 09:37:59 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 18
+ Jun 2019 09:37:59 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 18 Jun 2019 09:37:59 -0500
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x5IEbu2L008675;
+        Tue, 18 Jun 2019 09:37:56 -0500
+Subject: Re: [PATCH 3/6] arm64: dts: ti: Add Support for J721E SoC
+To:     Nishanth Menon <nm@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH tty] serial: 8250: pericom_do_set_divisor can be static
-Message-ID: <20190618112351.GA31802@lkp-kbuild18>
-References: <201906181948.HzE13NAX%lkp@intel.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>
+References: <20190522161921.20750-1-nm@ti.com>
+ <20190522161921.20750-4-nm@ti.com>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <327b6685-40fd-7333-e78e-af215f2d432b@ti.com>
+Date:   Tue, 18 Jun 2019 17:37:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201906181948.HzE13NAX%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190522161921.20750-4-nm@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On 22/05/2019 19:19, Nishanth Menon wrote:
+> The J721E SoC belongs to the K3 Multicore SoC architecture platform,
+> providing advanced system integration to enable lower system costs
+> of automotive applications such as infotainment, cluster, premium
+> Audio, Gateway, industrial and a range of broad market applications.
+> This SoC is designed around reducing the system cost by eliminating
+> the need of an external system MCU and is targeted towards ASIL-B/C
+> certification/requirements in addition to allowing complex software
+> and system use-cases.
+> 
+> Some highlights of this SoC are:
+> * Dual Cortex-A72s in a single cluster, three clusters of lockstep
+>    capable dual Cortex-R5F MCUs, Deep-learning Matrix Multiply Accelerator(MMA),
+>    C7x floating point Vector DSP, Two C66x floating point DSPs.
+> * 3D GPU PowerVR Rogue 8XE GE8430
+> * Vision Processing Accelerator (VPAC) with image signal processor and Depth
+>    and Motion Processing Accelerator (DMPAC)
+> * Two Gigabit Industrial Communication Subsystems (ICSSG), each with dual
+>    PRUs and dual RTUs
+> * Two CSI2.0 4L RX plus one CSI2.0 4L TX, one eDP/DP, One DSI Tx, and
+>    up to two DPI interfaces.
+> * Integrated Ethernet switch supporting up to a total of 8 external ports in
+>    addition to legacy Ethernet switch of up to 2 ports.
+> * System MMU (SMMU) Version 3.0 and advanced virtualisation
+>    capabilities.
+> * Upto 4 PCIe-GEN3 controllers, 2 USB3.0 Dual-role device subsystems,
+>    16 MCANs, 12 McASP, eMMC and SD, UFS, OSPI/HyperBus memory controller, QSPI,
+>    I3C and I2C, eCAP/eQEP, eHRPWM, MLB among other peripherals.
+> * Two hardware accelerator block containing AES/DES/SHA/MD5 called SA2UL
+>    management.
+> * Configurable L3 Cache and IO-coherent architecture with high data throughput
+>    capable distributed DMA architecture under NAVSS
+> * Centralized System Controller for Security, Power, and Resource
+>    Management (DMSC)
+> 
+> See J721E Technical Reference Manual (SPRUIL1, May 2019)
+> for further details: http://www.ti.com/lit/pdf/spruil1
+> 
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 202 ++++++++++++++++++
+>   .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  72 +++++++
+>   arch/arm64/boot/dts/ti/k3-j721e.dtsi          | 176 +++++++++++++++
+>   3 files changed, 450 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> new file mode 100644
+> index 000000000000..d42912044a5d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
 
-Fixes: 6bf4e42f1d19 ("serial: 8250: Add support for higher baud rates to Pericom chips")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- 8250_pci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<snip>
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index 7ba1c3b..7f740b3 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -1326,7 +1326,7 @@ static int pci_default_setup(struct serial_private *priv,
- 
- 	return setup_port(priv, port, bar, offset, board->reg_shift);
- }
--void
-+static void
- pericom_do_set_divisor(struct uart_port *port, unsigned int baud,
- 			       unsigned int quot, unsigned int quot_frac)
- {
+> +&cbass_mcu_wakeup {
+> +	dmsc: dmsc@44083000 {
+> +		compatible = "ti,k2g-sci";
+> +		ti,host-id = <12>;
+> +
+> +		mbox-names = "rx", "tx";
+> +
+> +		mboxes= <&secure_proxy_main 11>,
+> +			<&secure_proxy_main 13>;
+> +
+> +		reg-names = "debug_messages";
+> +		reg = <0x00 0x44083000 0x0 0x1000>;
+> +
+> +		k3_pds: power-controller {
+> +			compatible = "ti,sci-pm-domain";
+> +			#power-domain-cells = <1>;
+> +		};
+> +
+> +		k3_clks: clocks {
+> +			compatible = "ti,k2g-sci-clk";
+> +			#clock-cells = <2>;
+> +			ti,scan-clocks-from-dt;
+
+ti,scan-clocks-from-dt is an invalid DT property, it was NAK:ed a while 
+back. The same functionality is now going to be used by default, so the 
+property is not needed anyway.
+
+Fixed this locally by dropping the property.
+
+-Tero
+
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
