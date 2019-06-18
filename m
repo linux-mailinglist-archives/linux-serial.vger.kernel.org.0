@@ -2,127 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C5649DFA
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C0549F17
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 13:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725913AbfFRKDD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Jun 2019 06:03:03 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:27384 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726023AbfFRKDC (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Jun 2019 06:03:02 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5IA1kqT030835;
-        Tue, 18 Jun 2019 12:02:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=ZNwrI9/E19QXLogxcwXLV+/wtFzsSvuPA6hnm0JPcRM=;
- b=pKMdFCu6z9l+iNvnnuFWzm/ITOJ4O7pD3VwiAG1XRPj/EB74vBLEw9mGVCi62jp2V5X5
- RjADxoXBtw/U9b/GCXEAfxfHiMYwkJXGI5Gn6qLPyYbpQc+I0Qo6stg4MqxSDer2tBN5
- L4mqGeMTarLq8Kl/+5adGTt4SDB9/1dBIKMgdYNmSS870lUw+A8L2npVXeztPIxUIRmp
- 1cAEHe/3YSBft1VMmwYslw9wRl3BTvDm25TYlOGgdzrrYZGmU9CmzZs6zsFXvgM4Ec9x
- TIpUF7DcIxoi1jwFxLdZ1vc8OlxFpsDDMs5FplvHeTTLvb5lpfNAHiRdaXy4EmSC+oy3 HA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2t68n3nv0e-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 18 Jun 2019 12:02:45 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C84553A;
-        Tue, 18 Jun 2019 10:02:43 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A704725DD;
-        Tue, 18 Jun 2019 10:02:43 +0000 (GMT)
-Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 18 Jun
- 2019 12:02:43 +0200
-Received: from localhost (10.201.23.31) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 18 Jun 2019 12:02:43
- +0200
-From:   Erwan Le Ray <erwan.leray@st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1729589AbfFRLYD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Jun 2019 07:24:03 -0400
+Received: from mga05.intel.com ([192.55.52.43]:15523 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729528AbfFRLYD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 18 Jun 2019 07:24:03 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jun 2019 04:24:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,389,1557212400"; 
+   d="scan'208";a="160024862"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jun 2019 04:24:01 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hdCDY-000Aq5-Ng; Tue, 18 Jun 2019 19:24:00 +0800
+Date:   Tue, 18 Jun 2019 19:23:49 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Jay Dolan <jay.dolan@accesio.com>
+Cc:     kbuild-all@01.org, linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Alexandre Torgue" <alexandre.torgue@st.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Erwan Le Ray" <erwan.leray@st.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: [PATCH 5/5] serial: stm32: add RX and TX FIFO flush
-Date:   Tue, 18 Jun 2019 12:02:26 +0200
-Message-ID: <1560852146-3393-6-git-send-email-erwan.leray@st.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1560852146-3393-1-git-send-email-erwan.leray@st.com>
-References: <1560852146-3393-1-git-send-email-erwan.leray@st.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [tty:tty-testing 42/52] drivers/tty/serial/8250/8250_pci.c:1330:1:
+ sparse: sparse: symbol 'pericom_do_set_divisor' was not declared. Should it
+ be static?
+Message-ID: <201906181948.HzE13NAX%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.31]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-18_05:,,
- signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Adds a flush of RX and TX FIFOs, and fixes some errors:
-- adds RX FIFO flush in startup fonction
-- removes the useless transmitter enabling in startup fonction
-  (e.g. receiver only, see Documentation/serial/driver)
-- configures FIFO threshold before enabling it, rather than after
-- flushes both TX and RX in set_termios function
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+head:   13b18d35909707571af9539f7731389fbf0feb31
+commit: 6bf4e42f1d19de10800f4483b4bb7945aab283cb [42/52] serial: 8250: Add support for higher baud rates to Pericom chips
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
+        git checkout 6bf4e42f1d19de10800f4483b4bb7945aab283cb
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 4083145..21dc380 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -602,11 +602,11 @@ static int stm32_startup(struct uart_port *port)
- 	if (ret)
- 		return ret;
- 
--	val = stm32_port->cr1_irq | USART_CR1_TE | USART_CR1_RE;
--	if (stm32_port->fifoen)
--		val |= USART_CR1_FIFOEN;
--	stm32_set_bits(port, ofs->cr1, val);
-+	/* RX FIFO Flush */
-+	if (ofs->rqr != UNDEF_REG)
-+		stm32_set_bits(port, ofs->rqr, USART_RQR_RXFRQ);
- 
-+	/* Tx and RX FIFO configuration */
- 	if (stm32_port->fifoen) {
- 		val = readl_relaxed(port->membase + ofs->cr3);
- 		val &= ~(USART_CR3_TXFTCFG_MASK | USART_CR3_RXFTCFG_MASK);
-@@ -615,6 +615,12 @@ static int stm32_startup(struct uart_port *port)
- 		writel_relaxed(val, port->membase + ofs->cr3);
- 	}
- 
-+	/* RX FIFO enabling */
-+	val = stm32_port->cr1_irq | USART_CR1_RE;
-+	if (stm32_port->fifoen)
-+		val |= USART_CR1_FIFOEN;
-+	stm32_set_bits(port, ofs->cr1, val);
-+
- 	return 0;
- }
- 
-@@ -697,8 +703,12 @@ static void stm32_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/* Stop serial port and reset value */
- 	writel_relaxed(0, port->membase + ofs->cr1);
- 
--	cr1 = USART_CR1_TE | USART_CR1_RE;
-+	/* flush RX & TX FIFO */
-+	if (ofs->rqr != UNDEF_REG)
-+		stm32_set_bits(port, ofs->rqr,
-+			       USART_RQR_TXFRQ | USART_RQR_RXFRQ);
- 
-+	cr1 = USART_CR1_TE | USART_CR1_RE;
- 	if (stm32_port->fifoen)
- 		cr1 |= USART_CR1_FIFOEN;
- 	cr2 = 0;
--- 
-1.9.1
 
+sparse warnings: (new ones prefixed by >>)
+
+>> drivers/tty/serial/8250/8250_pci.c:1330:1: sparse: sparse: symbol 'pericom_do_set_divisor' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
