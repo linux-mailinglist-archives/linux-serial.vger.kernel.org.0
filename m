@@ -2,98 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD0B4AB0D
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Jun 2019 21:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD604B3EE
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Jun 2019 10:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730451AbfFRTfn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Jun 2019 15:35:43 -0400
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:45858 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730189AbfFRTfm (ORCPT
+        id S1731134AbfFSITe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Jun 2019 04:19:34 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43270 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731065AbfFSITe (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Jun 2019 15:35:42 -0400
-Received: by mail-yw1-f68.google.com with SMTP id m16so7205977ywh.12;
-        Tue, 18 Jun 2019 12:35:42 -0700 (PDT)
+        Wed, 19 Jun 2019 04:19:34 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p13so2283019wru.10
+        for <linux-serial@vger.kernel.org>; Wed, 19 Jun 2019 01:19:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HvAlKbZbthljEj9Bm0P4V0wg057kcVpH5Gmt0eKeElg=;
-        b=buNrCnmOnWF/vLcHkE1GpZMXLD2A5UlUAPBqlUf7w5q2/wefEZvDdCD8yeT83hthXv
-         /55FKlOfCMMmB5bSMHWx0VPuqBqUaibrFDzQiHMuoVTa7n5+PJ/yX18EazSr+XG+iZel
-         aJJHJ/JjmBdjXoV3WsByjE3mJ37WeMvC2LD40Z7l2T+Jvrae9MZg3NieaTULHC3j0yQc
-         IBGPsW39YXeldJngQGOjFVFQkNUThbrdDxbVqSXqLBH2ymlgNhzsIdR+b2HOvIDa3TW2
-         WgvwN4hwaXcAvmfrazlz+50RC9F+VOWzU5Lg9V56XgynZkF4JWwvBANXhT4LziAJ08Ox
-         /34A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ROT1dnVLPb+Jpsj/aZaMU+qvqhHlnAfctcDNJk6k84Q=;
+        b=bM2u8tYl4Fi42Ad/eq9UFF/UBgp2Bfle6CeXZMBewk/dMLbjpEvS1vA1VCiIbG/V1K
+         tNGUzf5W098Bo/AiTsQr1IBKz9npubHHBY3N4GQ7vDpv7Qcokpukpnd3VPnAAQiiOzGo
+         tQVNy+9PjNOfN6EPspzEaXPdSUceIOBAFTZyeEipYNmmD12PjasMN18zxar6lkXU2lc1
+         A/CdTDkk8+NCsh+NTcqxQiKEDzpv+vAtTt0vH5Eu+f5OFI+ivcO5tSpinpkuzHr4yI5e
+         IuN5nhOg/QzWYn6XXrBP2qUVjAwPzJfwC+Mw9CGNqxJhw5S3Q2hstHLOP0TemreGehxn
+         x/pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HvAlKbZbthljEj9Bm0P4V0wg057kcVpH5Gmt0eKeElg=;
-        b=tOHLxRFeT9DJubBg1ZIKO9dwJ0w2hjvka3uQZwu7Esf6G0m1Dsb8q6lem4S5KlDGN6
-         mvlVGEyToNaTONcFISi7fGS6iTrIrzDY56IGQa8oN/KyZm0agNWs9cw74R64BqPzyvjg
-         Tg/WRQdx7UdmEjZJnAbNjfMo49IucY91n2KwSZCG/OkYps0a+l1OAxodLrNTIIeMRFIc
-         k+ziCSR7O4t9wMo7Lv+bjR4vT6IaPaJTQ5bnw8h1YNn2I2mUtjyu3qpAbFoIfGo7IuAg
-         cEY2UPqF7VQ5RTNYLMgPOEIcAYnqkplIb+U9KhFprojaSrB8i6ws7FpTZ6kKpda6UuNt
-         xPcQ==
-X-Gm-Message-State: APjAAAVXmsi/mg3fOZyFfUyoQZ8mAY1sDzxoiRRJ/sx9+2EuyO75HqdW
-        qEmpUIKQoMQ98mG1BsakVaxrhRzGo6Zc1dkgzBwmJFPo
-X-Google-Smtp-Source: APXvYqwjK1U8YQPQcUnPpcbwzhDgtAhYLUw4HEluprGNc7HiOoBlL396q5Vx72UloQuB5/nFqqq+0DVHa2ud470V4nw=
-X-Received: by 2002:a81:92d3:: with SMTP id j202mr223539ywg.427.1560886541819;
- Tue, 18 Jun 2019 12:35:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ROT1dnVLPb+Jpsj/aZaMU+qvqhHlnAfctcDNJk6k84Q=;
+        b=jHgg//Ty6C5PkGBm9UTWaOluKJi6ihMiHwqJcb6oDo2CcoqbN8r4eqQ0sEFo7CPGKl
+         4ywsjbKAuiZuQ1uznmTaEiaiHylvMUm8FJ8qmkkoa+zl57L3kCUcO884J+babPwjkGZp
+         Ebu/KrN4IWQRxaz27+N0XJ3kfV7ZNbvKBQWvrAECzM2f/m5nN2dE9O0Ojc/hzsRueUBp
+         GqfU3uQZFFt1ONcYUuIIQ6uHOjxgbsQ4skEKkRrUgO9nih2GvCL39TkISNcez/S2SG3I
+         ldj8Tu6qtX3i06gzGRewSOMoDGm4a2dRe1ztGE32fDZUnbeYuJrap63va/qKcFo6lnLJ
+         pUeA==
+X-Gm-Message-State: APjAAAUQWXE/3d+gacY6il4l8xjqUMgkfQBwcp6hsnwPxlvEucS5V0to
+        3hvc4wRa1Yo24onVQ9zmRqYRB0pZ9cw=
+X-Google-Smtp-Source: APXvYqyeYCIT/BGv4NQOmdNgeTyEnaN5j6OA4vRxS4KgYek2fVF1j6cdfaFPDKTcdBecWEz519ksOw==
+X-Received: by 2002:adf:eb89:: with SMTP id t9mr28377716wrn.120.1560932371798;
+        Wed, 19 Jun 2019 01:19:31 -0700 (PDT)
+Received: from mpc.fritz.box (x5f741697.dyn.telefonica.de. [95.116.22.151])
+        by smtp.gmail.com with ESMTPSA id s10sm1217107wmf.8.2019.06.19.01.19.31
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 19 Jun 2019 01:19:31 -0700 (PDT)
+From:   Oliver Barta <o.barta89@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <alexander.levin@microsoft.com>,
+        Oliver Barta <o.barta89@gmail.com>
+Subject: [PATCH] Revert "serial: 8250: Don't service RX FIFO if interrupts are disabled"
+Date:   Wed, 19 Jun 2019 10:16:39 +0200
+Message-Id: <20190619081639.325-1-o.barta89@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190613180824.6ajwjelzr5fmjnie@debie> <20190618073853.GA25598@kroah.com>
-In-Reply-To: <20190618073853.GA25598@kroah.com>
-From:   Charles Oliveira <18oliveira.charles@gmail.com>
-Date:   Tue, 18 Jun 2019 16:35:30 -0300
-Message-ID: <CAD17tR9-xss+AkeBMv6XLTxQ=Hx13wYuRYEmoRauNVxFLqh27A@mail.gmail.com>
-Subject: Re: [PATCH] serial: sh-sci: fix uninitialized variable warning
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 4:38 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jun 13, 2019 at 03:08:24PM -0300, Charles wrote:
-> > Avoid following compiler warning on uninitialized variable
-> >
-> > In file included from ./include/linux/rwsem.h:16:0,
-> >                  from ./include/linux/notifier.h:15,
-> >                  from ./include/linux/clk.h:17,
-> >                  from drivers/tty/serial/sh-sci.c:24:
-> > drivers/tty/serial/sh-sci.c: In function =E2=80=98sci_dma_rx_submit=E2=
-=80=99:
-> > ./include/linux/spinlock.h:288:3: warning: =E2=80=98flags=E2=80=99 may =
-be used
-> > uninitialized in this function [-Wmaybe-uninitialized]
-> >    _raw_spin_unlock_irqrestore(lock, flags); \
-> >    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/tty/serial/sh-sci.c:1353:16: note: =E2=80=98flags=E2=80=99 was =
-declared here
-> >   unsigned long flags;
-> >                 ^~~~~
->
-> What version of gcc is doing this?  It should be smarter than that,
-> perhaps you should just upgrade.
+This reverts commit 2e9fe539108320820016f78ca7704a7342788380.
 
-Yep, worked like a charm. I was running gcc 6.3.0, just updated to 8.3.0
-and got rid of that warning.
+Reading LSR unconditionally but processing the error flags only if
+UART_IIR_RDI bit was set before in IIR may lead to a loss of transmission
+error information on UARTs where the transmission error flags are cleared
+by a read of LSR. Information are lost in case an error is detected right
+before the read of LSR while processing e.g. an UART_IIR_THRI interrupt.
 
-Thanks, Greg
->
-> thanks,
->
-> greg k-h
+Signed-off-by: Oliver Barta <o.barta89@gmail.com>
+---
+ drivers/tty/serial/8250/8250_port.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index d2f3310abe54..682300713be4 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1869,8 +1869,7 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
+ 
+ 	status = serial_port_in(port, UART_LSR);
+ 
+-	if (status & (UART_LSR_DR | UART_LSR_BI) &&
+-	    iir & UART_IIR_RDI) {
++	if (status & (UART_LSR_DR | UART_LSR_BI)) {
+ 		if (!up->dma || handle_rx_dma(up, iir))
+ 			status = serial8250_rx_chars(up, status);
+ 	}
+-- 
+2.20.1
 
-
---=20
-Charles
