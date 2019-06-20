@@ -2,48 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EF24D0B0
-	for <lists+linux-serial@lfdr.de>; Thu, 20 Jun 2019 16:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B5F4D0B1
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Jun 2019 16:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfFTOsK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Jun 2019 10:48:10 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:41157 "EHLO
+        id S1726798AbfFTOsL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Jun 2019 10:48:11 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:34934 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726654AbfFTOsJ (ORCPT
+        with ESMTP id S1726551AbfFTOsK (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Jun 2019 10:48:09 -0400
-Received: by mail-lj1-f194.google.com with SMTP id s21so2964003lji.8
-        for <linux-serial@vger.kernel.org>; Thu, 20 Jun 2019 07:48:08 -0700 (PDT)
+        Thu, 20 Jun 2019 10:48:10 -0400
+Received: by mail-lj1-f194.google.com with SMTP id x25so2991794ljh.2
+        for <linux-serial@vger.kernel.org>; Thu, 20 Jun 2019 07:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SMvfNXrBGoXH5Rlv9ONYJ/L8T8ix7gsLxKZmilMNxjo=;
-        b=aqRlB+88y7te1IyXTJCENFWgDaJpY4yVvKtbZbxKe26ehEh2Xo9cv16sRswEyd1jD3
-         DtKwsymBxxPKb1vvY8jYXdo6bo6sgsQFjIlwHGGgcsLOMEWMQW1b2kP/+VP8FQI24AKL
-         mbm54fHZ9EqlQC76uDpkj430XOanlM7xc1lxJQi81T+4l1SmY1bTj3yuW65KdPkJXD5I
-         5yvmA8XLP7qkEHuvHbm7XhJtPUQACMxxWUeIZ4KCTM/ktS61iRM+Jsnvggo0XHG1gczY
-         IiOYjKMOtcOrILvlt8XDH34ictcBvOi+O4R5oB6oFREYtUgiFxhLD7lO3RJsen1Gs25k
-         y3HQ==
+        bh=D4v0SFR2nHGdYcEZZKZiUTxqoD86zDefhBuvLG6SwpU=;
+        b=DUoQH5nzAMQkwMgDK92LnSpcbYkdUejrkX56/rNFbK//1UyTzgqlZZFF4DshEJOCmv
+         GBGf+9R9bZmt7SuPgQoCuh4epT0TSA267X+Y8C3Xz3P7Xt6PjtqesEBydf2QHv55oxna
+         824UwQN/3woBSubU7mBH4Z24yCD9/EFcycJBTUFj+wrbtfKauxbmqgY4TU6U2zTVoKsa
+         V5Yc+3dDUclTIkoTGudTdZTU9OqIU+svFs6JEIWZnY6f4zvu4ze092StynGqssiILxqJ
+         TbqjLLEvT5CgmFkn1oWwMXOkK90nKDWPDUw/XCUuIQO7xGQC2gi6Ae9sVpVD/v9NglzA
+         UchQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=SMvfNXrBGoXH5Rlv9ONYJ/L8T8ix7gsLxKZmilMNxjo=;
-        b=XtgvhIKuRHUqRIDqZDFOcPijOnkvuP23gQxqg5GFuHxAeYOuoJURJRfM/dst5SwWQs
-         siZ0mRuLNj1hTygUcWVSnHKChYJvynV4m+4bYRMG9tMk2AgtCce6AIyqo8MOBU/8glN8
-         fhNKCmu1Fa1W8PxaFlojzb01H3x82jCqdK8Q+o4hu9hxQovPKe791bK0802N4Ni5tE4f
-         JYJnXNg6n5WHcNBpLmdiN3TvCKIrks+uoibkGEG1GRvaL2g2K6nKbp8oc/18Em2ItJes
-         yVCLGRYxr3XuijCmNcuf3C+c5iYjGN3zBe/1AEa3mxejpSUztOukRWkh/l9uHo396LNs
-         Zq2Q==
-X-Gm-Message-State: APjAAAWpFX32EchHIbpSaXtmdu9dkFc9A0w+QKKcWbefDgEgCYFCMUuO
-        +G6MUDTKlqZ1cx69k5iG2SU=
-X-Google-Smtp-Source: APXvYqzDfRIywJKMMIfRolNAT3UYVW4ndj63y5PejziUGG/Me/WSmmsouEJI9FwyllAa+MIvX/MpGA==
-X-Received: by 2002:a2e:8559:: with SMTP id u25mr22892247ljj.224.1561042087903;
-        Thu, 20 Jun 2019 07:48:07 -0700 (PDT)
+        bh=D4v0SFR2nHGdYcEZZKZiUTxqoD86zDefhBuvLG6SwpU=;
+        b=lwwoQZkPT3jNREH5iWLxv/QYQNHELFDSh4HNvGZjDcCu7xXS+q48v4L3yQhDVoo3o+
+         rM2b32oWgDwkRQQyZrVfoGCazZ8qRkGnDKWdOEJPk+vzSGuuhs7zAqCXAM12Mw7pdywl
+         UBAZVS3LvLualZO/kCKfOXbZlnyT02/cLvTu9d8Q6lJTYC9AIRALvaJxoiitObBG4HGq
+         1BPp+JnWJ5g/NODrfedpnb/5D5Qsax2eQoxS337G2axS6aWdp9ikaxRUo/PdmR4L7dX4
+         dXI4fgPTZSS0tk6RTQJ8AZ2D4QjX82DqFazsCH3Ei6B/lJRY3cNVWE7hY9jTl3k7ga8s
+         nhFA==
+X-Gm-Message-State: APjAAAW9EwqFlKomgXeWtYqjs78Ueo3cDCQv5/o2dVgoCTovLJHlHy2h
+        157OxwU9T4hZMEeRBgvE7N8=
+X-Google-Smtp-Source: APXvYqx3FATvUJqLsAjONbNQN8PduHBc6uhH3sMNqzf2nFuoCLFoZo2UvsSlmbNL+Io14cpICWaaZA==
+X-Received: by 2002:a2e:5548:: with SMTP id j69mr23778346ljb.48.1561042088818;
+        Thu, 20 Jun 2019 07:48:08 -0700 (PDT)
 Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id f10sm3577768ljk.95.2019.06.20.07.48.06
+        by smtp.gmail.com with ESMTPSA id f10sm3577768ljk.95.2019.06.20.07.48.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 20 Jun 2019 07:48:07 -0700 (PDT)
+        Thu, 20 Jun 2019 07:48:08 -0700 (PDT)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -51,9 +51,9 @@ Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=
         linux-arm-kernel@lists.infradead.org,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH RFC v1 1/7] serial: imx: fix locking in set_termios()
-Date:   Thu, 20 Jun 2019 17:47:47 +0300
-Message-Id: <1561042073-617-2-git-send-email-sorganov@gmail.com>
+Subject: [PATCH RFC v1 2/7] serial: imx: set_termios(): factor-out 'ucr2' initial value
+Date:   Thu, 20 Jun 2019 17:47:48 +0300
+Message-Id: <1561042073-617-3-git-send-email-sorganov@gmail.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1561042073-617-1-git-send-email-sorganov@gmail.com>
 References: <20190614072801.3187-1-s.hauer@pengutronix.de>
@@ -63,81 +63,31 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-imx_uart_set_termios() called imx_uart_rts_active(), or
-imx_uart_rts_inactive() before taking port->port.lock.
-
-As a consequence, sport->port.mctrl that these functions modify
-could have been changed without holding port->port.lock.
-
-Moved locking of port->port.lock above the calls to fix the issue.
+Set common bits in a separate statement to make initialization
+explicit and not repeat the common part.
 
 Signed-off-by: Sergey Organov <sorganov@gmail.com>
 ---
- drivers/tty/serial/imx.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ drivers/tty/serial/imx.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index dff75dc..1055124 100644
+index 1055124..87802fd 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
-@@ -383,6 +383,7 @@ static void imx_uart_ucrs_restore(struct imx_port *sport,
- }
- #endif
+@@ -1563,10 +1563,9 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
  
-+/* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
- {
- 	*ucr2 &= ~(UCR2_CTSC | UCR2_CTS);
-@@ -391,6 +392,7 @@ static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
- 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
- }
+ 	spin_lock_irqsave(&sport->port.lock, flags);
  
-+/* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
- {
- 	*ucr2 &= ~UCR2_CTSC;
-@@ -400,6 +402,7 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
- 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
- }
- 
-+/* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
- {
- 	*ucr2 |= UCR2_CTSC;
-@@ -1550,6 +1553,16 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
- 		old_csize = CS8;
- 	}
- 
-+	del_timer_sync(&sport->timer);
-+
-+	/*
-+	 * Ask the core to calculate the divisor for us.
-+	 */
-+	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
-+	quot = uart_get_divisor(port, baud);
-+
-+	spin_lock_irqsave(&sport->port.lock, flags);
-+
++	ucr2 = UCR2_SRST | UCR2_IRTS;
  	if ((termios->c_cflag & CSIZE) == CS8)
- 		ucr2 = UCR2_WS | UCR2_SRST | UCR2_IRTS;
- 	else
-@@ -1593,16 +1606,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
- 			ucr2 |= UCR2_PROE;
- 	}
+-		ucr2 = UCR2_WS | UCR2_SRST | UCR2_IRTS;
+-	else
+-		ucr2 = UCR2_SRST | UCR2_IRTS;
++		ucr2 |= UCR2_WS;
  
--	del_timer_sync(&sport->timer);
--
--	/*
--	 * Ask the core to calculate the divisor for us.
--	 */
--	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
--	quot = uart_get_divisor(port, baud);
--
--	spin_lock_irqsave(&sport->port.lock, flags);
--
- 	sport->port.read_status_mask = 0;
- 	if (termios->c_iflag & INPCK)
- 		sport->port.read_status_mask |= (URXD_FRMERR | URXD_PRERR);
+ 	if (termios->c_cflag & CRTSCTS) {
+ 		if (sport->have_rtscts) {
 -- 
 2.10.0.1.g57b01a3
 
