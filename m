@@ -2,119 +2,117 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1294C865
-	for <lists+linux-serial@lfdr.de>; Thu, 20 Jun 2019 09:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910304CB0E
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Jun 2019 11:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725875AbfFTH3E (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Jun 2019 03:29:04 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:36965 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbfFTH3E (ORCPT
+        id S1726268AbfFTJhq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Jun 2019 05:37:46 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54007 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbfFTJhp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Jun 2019 03:29:04 -0400
-Received: by mail-ed1-f67.google.com with SMTP id w13so3243046eds.4
-        for <linux-serial@vger.kernel.org>; Thu, 20 Jun 2019 00:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=muFIBU04nedkMvW05G83il5jWwKX3i1QXu16v8H8Fxk=;
-        b=p8I9tcPC11GtW9EovVAar8TDLl6XYxD8sbn9kbpvqBNmfGCkXX4t5mNRpp2rcKvEOb
-         DhQOjxwlvFY/naFz/TG/p18EGM5flCdJZmegqonseBPL2XH8YXyR8VZV/PbVCVrAMqon
-         hz6V067gQOvzg6EexqsPhLZs9zt0pDlU6T/RfXAtSPGE4dSQYyIp9/TajPo8yVwGlMcl
-         L0WoZ94ISgldJ8zHC+0u0s/yrl0InjNxXHBrklbE+4O01jGk6sPYmXxIiTe5JGanwE8g
-         P8KradBKF8u2VlaZoLPf4et5p/m0IjRqZ9kXbWKteuXvESOtJQo+oi7RrMFm9NJquNI5
-         GAWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=muFIBU04nedkMvW05G83il5jWwKX3i1QXu16v8H8Fxk=;
-        b=sse9B8NDdygFDLGMnDbwtdWMqw0V1i9349gpND89e6es4hJwkmkvfKF0NW9SYgqpyq
-         CpKY7EnGtPn8C2HMbWPOzn+gJcBNzwvQZDJpt6eNeK7EqrDIDDid9Yao+pOd3hs0Xuf5
-         pY56Qreg+h9TtKJke95xk5jHB0HuNY0ORLg5KhbgmM1aOhLQpWH/dw2GiPyhlwOf665e
-         P9fYi+y3VD0B4/1+7JVBThTLg1GdZJs48/K1AWpZ3TRAvY4BPYGckXgf8lOYHC4sWGMI
-         WtWpEZrZVP9CJh3bx5nGAEqfrV8xAQWiCUT4BC8iXOV8pI1rUa4HWaRIyT+iGvg1gzEz
-         6pwA==
-X-Gm-Message-State: APjAAAXJ3l2Jt2m6D9Mt8T6fY/xEqKXDuTkKWTFD8eaSXm/bHkw0Azym
-        jSw3ZqAG7qzybGRUrgrsh4djK+NqpiUSg6vD9s4=
-X-Google-Smtp-Source: APXvYqynwu6mDH4i459p5hWpeH9ZcrZc4yf19+UNKayuPFwJMwnTi1sLA/SlUil8mlfJt8HDIP9qU/X+iX8edN6l7mk=
-X-Received: by 2002:a50:972a:: with SMTP id c39mr102495631edb.46.1561015742643;
- Thu, 20 Jun 2019 00:29:02 -0700 (PDT)
+        Thu, 20 Jun 2019 05:37:45 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1hdtVm-0000y0-PQ; Thu, 20 Jun 2019 11:37:42 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <sha@pengutronix.de>)
+        id 1hdtVl-0006tP-6J; Thu, 20 Jun 2019 11:37:41 +0200
+Date:   Thu, 20 Jun 2019 11:37:41 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Sergey Organov <sorganov@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        Uwe =?iso-8859-15?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH RFC 4/7] serial: imx: set_termios(): do not enable
+ autoRTS if RTS is unset
+Message-ID: <20190620093741.7wom6a475be2byob@pengutronix.de>
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
+ <1560514294-29111-1-git-send-email-sorganov@gmail.com>
+ <1560514294-29111-5-git-send-email-sorganov@gmail.com>
 MIME-Version: 1.0
-References: <20190619081639.325-1-o.barta89@gmail.com> <20190619112052.GD9224@smile.fi.intel.com>
-In-Reply-To: <20190619112052.GD9224@smile.fi.intel.com>
-From:   Oliver Barta <o.barta89@gmail.com>
-Date:   Thu, 20 Jun 2019 09:28:46 +0200
-Message-ID: <CALJK04OjK7=iQyH=1RnU9un=hZusMCbE-54-RMSdcRruE9j7Ow@mail.gmail.com>
-Subject: Re: [PATCH] Revert "serial: 8250: Don't service RX FIFO if interrupts
- are disabled"
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Sasha Levin <alexander.levin@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560514294-29111-5-git-send-email-sorganov@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 11:26:57 up 33 days, 15:45, 91 users,  load average: 0.07, 0.10,
+ 0.12
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jun 19, 2019 at 1:20 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Jun 19, 2019 at 10:16:39AM +0200, Oliver Barta wrote:
-> > This reverts commit 2e9fe539108320820016f78ca7704a7342788380.
-> >
-> > Reading LSR unconditionally but processing the error flags only if
-> > UART_IIR_RDI bit was set before in IIR may lead to a loss of transmission
-> > error information on UARTs where the transmission error flags are cleared
-> > by a read of LSR. Information are lost in case an error is detected right
-> > before the read of LSR while processing e.g. an UART_IIR_THRI interrupt.
-> >
->
-> Perhaps Fixes tag?
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
+Hi Sergey,
 
-Thank you for the review. I also thought about the Fixes tag but
-finally decided not to use it. It is a simple revert, i.e. the subject
-of the commit which would be mentioned by the Fixes tag is in the new
-subject anyway and the commit ID is referred in the first line of the
-commit message body. The Fixes tag would not add any additional
-information. I also checked a couple of recent revert commits in the
-kernel and noticed that many of them actually don't have this tag.
+On Fri, Jun 14, 2019 at 03:11:31PM +0300, Sergey Organov wrote:
+> set_termios() shouldn't set UCR2_CTSC bit if UCR2_CTS (=TIOCM_RTS) is
+> cleared. Added corresponding check in imx_uart_rts_auto() to fix this.
+> 
+> Signed-off-by: Sergey Organov <sorganov@gmail.com>
+> ---
+>  drivers/tty/serial/imx.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index 17e2322..8ee910f 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -405,7 +405,8 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+>  /* called with port.lock taken and irqs caller dependent */
+>  static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
+>  {
+> -	*ucr2 |= UCR2_CTSC;
+> +	if (*ucr2 & UCR2_CTS)
+> +		*ucr2 |= UCR2_CTSC;
+>  }
 
-> > Signed-off-by: Oliver Barta <o.barta89@gmail.com>
-> > ---
-> >  drivers/tty/serial/8250/8250_port.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > index d2f3310abe54..682300713be4 100644
-> > --- a/drivers/tty/serial/8250/8250_port.c
-> > +++ b/drivers/tty/serial/8250/8250_port.c
-> > @@ -1869,8 +1869,7 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
-> >
-> >       status = serial_port_in(port, UART_LSR);
-> >
-> > -     if (status & (UART_LSR_DR | UART_LSR_BI) &&
-> > -         iir & UART_IIR_RDI) {
-> > +     if (status & (UART_LSR_DR | UART_LSR_BI)) {
-> >               if (!up->dma || handle_rx_dma(up, iir))
-> >                       status = serial8250_rx_chars(up, status);
-> >       }
-> > --
-> > 2.20.1
-> >
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+*ucr2 is set like this in imx_uart_set_termios():
 
-Best regards,
-Oliver Barta
+	ucr2 = UCR2_SRST | UCR2_IRTS;
+	if ((termios->c_cflag & CSIZE) == CS8)
+		ucr2 |= UCR2_WS;
+	...
+	imx_uart_rts_auto(sport, &ucr2);
+
+So the UCR2_CTS bit is never set, hence UCR2_CTSC will never be set.
+You meant to pass in the actual register value of the UCR2 register.
+
+This is shifted around a bit in the following patches, as an end result
+we have:
+
+	old_ucr2 = imx_uart_readl(sport, UCR2);
+	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTSC);
+	...
+	if (ucr2 & UCR2_CTS)
+		ucr2 |= UCR2_CTSC;
+
+Again the test can never be true, it should probably be if (old_ucr2 &
+UCR2_CTS).
+
+With this issue and the one Lothar has found fixed this series works for
+me.
+
+With these issues fixed I'd be happy to test this series and apply it in
+favour of my patch.
+
+Sascha
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
