@@ -2,81 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6B44E1BD
-	for <lists+linux-serial@lfdr.de>; Fri, 21 Jun 2019 10:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501E74E6E5
+	for <lists+linux-serial@lfdr.de>; Fri, 21 Jun 2019 13:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726058AbfFUINh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 21 Jun 2019 04:13:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42308 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726057AbfFUINg (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 21 Jun 2019 04:13:36 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90350208C3;
-        Fri, 21 Jun 2019 08:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561104816;
-        bh=awoGjmxJjaFlKS1vjBcYTVKavhI3GbputRY/8qjR0p8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2JmllEoUecIJeApEkaNeCbpBRtUtqs3NmU5vLANpQDUoY91DXfw4bIyxuBDkma7Gx
-         6sju5goZxD+GnKu8X1eby2FeHAb2aZnxl/TiPf6u+I4/j+lmbkzuRS8M5Av2cruKiI
-         EmOPdvzvVaTMp92oVx8ud4JdP/rlzdzjgHnnsF1A=
-Date:   Fri, 21 Jun 2019 10:13:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Oliver Barta <o.barta89@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jiri Slaby <jslaby@suse.com>,
-        Sasha Levin <alexander.levin@microsoft.com>
-Subject: Re: [PATCH] Revert "serial: 8250: Don't service RX FIFO if
- interrupts are disabled"
-Message-ID: <20190621081333.GA28160@kroah.com>
-References: <20190619081639.325-1-o.barta89@gmail.com>
- <20190619112052.GD9224@smile.fi.intel.com>
- <CALJK04OjK7=iQyH=1RnU9un=hZusMCbE-54-RMSdcRruE9j7Ow@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALJK04OjK7=iQyH=1RnU9un=hZusMCbE-54-RMSdcRruE9j7Ow@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1726250AbfFULP4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 21 Jun 2019 07:15:56 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39792 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726229AbfFULP4 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 21 Jun 2019 07:15:56 -0400
+Received: by mail-pf1-f194.google.com with SMTP id j2so3442214pfe.6;
+        Fri, 21 Jun 2019 04:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=6Dz4Z+dmuRUi0NOnymZGvWj/MoeH9WQhV7Y+qJ24/00=;
+        b=SjRYDV0MkGpoVQrf6DKrSzISHxIt8y/kiuPlX5j3sK09B6aAzHi5CxPUXhs3+l4edL
+         BXNIVe4XRBry5jx6zib7eLlg495Ku11/2Hskk6W0FNs+JksUHNUK782wGrQ/3urknmHC
+         wMh0GL+DxFVt0sHutVHNzW2V6lh8jlsyy43fKe5AyJZWk4y8Y9yTwGofLgX2vFVMVPft
+         TCBCdfDB6Bk8vUj/wDkAdzUj7R9o4pSVAvPu/io/VJfSskVoM78a+4dDBDTgTIQ7cRTg
+         DCbnw/3wcDwcgI6cvTsXs5JKQaYOnPI9wEWrC9pO9roSEnnPHpqfy9F+f+XVVNamCae+
+         wT3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=6Dz4Z+dmuRUi0NOnymZGvWj/MoeH9WQhV7Y+qJ24/00=;
+        b=i1ThiM0ubki/IwY9D6v/U69EqJ2Xy3ERJ94hShG7vF2ScQx0GeExzl27WkWkSkxZYB
+         OT3F4F8/k988GumEr2lgJ8l5AGvBBtvMQ8YyuHWQZtgJYfM+AdV6KrwucMYRVIwWpx9E
+         1STqbvXpkwDC8jFKPRgYNfQcSoJo1DKBTh/RBqhpdeUf+5WoGhSu8yxGC6PkBKhRY3IQ
+         i0Rmd4iXK81eDUwUBtIkC7l1p8VBV/BpqBZGa9iM9+LTu9xEAwtA94OI8i4TQ5mcjf1X
+         vIn8fCf/iRy0WTcfndcpj8NeQySlkM07fJJnI4w/sUmP4Gl5viKfJdyo/NEodOunrAjL
+         tW8g==
+X-Gm-Message-State: APjAAAV3X06MAulBthhoz8fk+aOQGz2SVhXg6twubC6nuAmXxGaVZVBd
+        +CuCNeI0AcMWQCVXcwaCHgk=
+X-Google-Smtp-Source: APXvYqxb6mOFj/WG4GMZNsDDWZmPushL+3w5hnh8g2Y4/W0ZvCeDMNUmpcLN/zUJCAeyvoIW3mmUFQ==
+X-Received: by 2002:a65:4383:: with SMTP id m3mr17452043pgp.435.1561115755503;
+        Fri, 21 Jun 2019 04:15:55 -0700 (PDT)
+Received: from Pilot130.192.168.0.22 (211-20-114-70.HINET-IP.hinet.net. [211.20.114.70])
+        by smtp.googlemail.com with ESMTPSA id w4sm2405737pfw.97.2019.06.21.04.15.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 21 Jun 2019 04:15:54 -0700 (PDT)
+From:   "sudheer.v" <open.sudheer@gmail.com>
+To:     gregkh@linuxfoundation.org, jslaby@suse.com, joel@jms.id.au,
+        andrew@aj.id.au, benh@kernel.crashing.org, robh+dt@kernel.org,
+        mark.rutland@arm.com,
+        shivahshankar.shankarnarayanrao@aspeedtech.com,
+        shivahshankar@gmail.com, sudheer.veliseti@aspeedtech.com
+Cc:     sudheer veliseti <sudheer.open@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Subject: [patch 0/5] *** DMA based UART driver for AST2500 ***
+Date:   Fri, 21 Jun 2019 16:47:30 +0530
+Message-Id: <1561115855-4186-1-git-send-email-open.sudheer@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 09:28:46AM +0200, Oliver Barta wrote:
-> On Wed, Jun 19, 2019 at 1:20 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Wed, Jun 19, 2019 at 10:16:39AM +0200, Oliver Barta wrote:
-> > > This reverts commit 2e9fe539108320820016f78ca7704a7342788380.
-> > >
-> > > Reading LSR unconditionally but processing the error flags only if
-> > > UART_IIR_RDI bit was set before in IIR may lead to a loss of transmission
-> > > error information on UARTs where the transmission error flags are cleared
-> > > by a read of LSR. Information are lost in case an error is detected right
-> > > before the read of LSR while processing e.g. an UART_IIR_THRI interrupt.
-> > >
-> >
-> > Perhaps Fixes tag?
-> >
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >
-> 
-> Thank you for the review. I also thought about the Fixes tag but
-> finally decided not to use it. It is a simple revert, i.e. the subject
-> of the commit which would be mentioned by the Fixes tag is in the new
-> subject anyway and the commit ID is referred in the first line of the
-> commit message body. The Fixes tag would not add any additional
-> information. I also checked a couple of recent revert commits in the
-> kernel and noticed that many of them actually don't have this tag.
+From: sudheer veliseti <sudheer.open@gmail.com>
 
-fixes is needed, as I will backport this to the stable trees.  I'll add
-it...
+Hi,
+AST2500 has dedicated Uart DMA controller which has 12 sets of
+Tx and RX channels connected to UART controller directly.
+Since the DMA controller have dedicated buffers and registers,
+there would be little benifit in adding DMA framework overhead.
+So the software for DMA controller is included within the UART driver itself.
 
-thanks,
+Thanks and Regards
+Sudheer.V
 
-greg k-h
+sudheer veliseti (5):
+  AST2500 DMA UART driver
+  build configuration for AST2500 DMA UART driver
+  DT nodes for AST2500 DMA UART driver
+  defconfig and MAINTAINERS updated for AST2500 DMA UART driver
+  Documentation: DT bindings AST2500 DMA UART driver
+
+ .../bindings/serial/ast2500-dma-uart.txt      |   40 +
+ MAINTAINERS                                   |   13 +
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts      |   21 +
+ arch/arm/boot/dts/aspeed-g5.dtsi              |   71 +-
+ arch/arm/configs/aspeed_g5_defconfig          |    1 +
+ .../tty/serial/8250/8250_ast2500_uart_dma.c   | 1879 +++++++++++++++++
+ drivers/tty/serial/8250/Kconfig               |   35 +-
+ drivers/tty/serial/8250/Makefile              |    1 +
+ 8 files changed, 2056 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/serial/ast2500-dma-uart.txt
+ create mode 100644 drivers/tty/serial/8250/8250_ast2500_uart_dma.c
+
+-- 
+2.17.1
+
+
