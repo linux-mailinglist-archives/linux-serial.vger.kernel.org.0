@@ -2,132 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E997F4DE8C
-	for <lists+linux-serial@lfdr.de>; Fri, 21 Jun 2019 03:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6B44E1BD
+	for <lists+linux-serial@lfdr.de>; Fri, 21 Jun 2019 10:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726750AbfFUBUh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Jun 2019 21:20:37 -0400
-Received: from mail-vs1-f73.google.com ([209.85.217.73]:33309 "EHLO
-        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbfFUBUg (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Jun 2019 21:20:36 -0400
-Received: by mail-vs1-f73.google.com with SMTP id x140so1583381vsc.0
-        for <linux-serial@vger.kernel.org>; Thu, 20 Jun 2019 18:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=U3fhGq6r/NgiqaQQyES6rVTVBeVN4SZv/SOjn2ijb/0=;
-        b=mwxX56tGc5bdcrdp7LPWQyAEQAkbcg1Xa55uNakzWLnArZGhBBM8/YfLo+cMRh8DtX
-         vrRS8xRv6wDsAXxkkRDUDDVNLABwTIvD4/R8eu1g/4B6DSNeabRlbKD5wdkCofA6OqW5
-         o7rwM1e2Ldf/n4PStpf+Oap3yTX6pey52rRx0bREIBZQlH0Ww2HvIWgFDLUON8aYKoFf
-         cammmjj5lURN9Kg8tm6kUiGfHzhJos5AkiV7C8gf92EvHRMDyBjJSyrQ5ou0+kiCOfIx
-         k2fZHvDVdKvEIx5adFMh/J1O/CMWdgiKHgmxhucHEyq/Iu4snxTqdhosWJ74AdacIcvV
-         TaTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=U3fhGq6r/NgiqaQQyES6rVTVBeVN4SZv/SOjn2ijb/0=;
-        b=V/AE1mW+HqruggWUUK96gGqAZ/E1UAPNvyAKYEACg8xmKnlm31/ZPJb66KbTsgLpQJ
-         WbH4BHlyPBuiDIp56oK9/ilVQmNRFnX+9bK2foo1+Ae9wr70R2NpIhq0rQkFSnUeSv03
-         kPAgJCVsDv1t4TA5FPP75r+sd1Wj2juqFiS8Rs2DaG/KcPN/VmfNC0LPzuSoX24Rv4BP
-         d5FfcWPKQHUYCY1IxkMSj4v5BH2f/pH5z2Hj0vvHz7WuVK+KaziUkfQORO0hJjp28aIC
-         WJhiK6+AwnR9WWqU52cpHYV8WR500pFAMninjbDBMb+Sqf81jwTpi4sAwQW7H/4XADog
-         Ekrg==
-X-Gm-Message-State: APjAAAU8eoh/TJSohpw57uZu46xiZFri8yJps4ceMzflNBNeGZUi/Yjl
-        EZPVcWYEyoEiEZ6mFyhPbwqOVDlO5aSC0obYU+KsCA==
-X-Google-Smtp-Source: APXvYqzWE4EamSp5rpUPDi/0xpqKPoKydoH9Fwzwh6qKoNDL8d4i9gk8ozCNMFrubgA0TD2wFtuqZJkJZxR32Trr6G5AHw==
-X-Received: by 2002:ab0:2994:: with SMTP id u20mr5795117uap.114.1561080035406;
- Thu, 20 Jun 2019 18:20:35 -0700 (PDT)
-Date:   Thu, 20 Jun 2019 18:19:30 -0700
-In-Reply-To: <20190621011941.186255-1-matthewgarrett@google.com>
-Message-Id: <20190621011941.186255-20-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190621011941.186255-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH V33 19/30] Lock down TIOCSSERIAL
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726058AbfFUINh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 21 Jun 2019 04:13:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42308 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726057AbfFUINg (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 21 Jun 2019 04:13:36 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90350208C3;
+        Fri, 21 Jun 2019 08:13:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561104816;
+        bh=awoGjmxJjaFlKS1vjBcYTVKavhI3GbputRY/8qjR0p8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2JmllEoUecIJeApEkaNeCbpBRtUtqs3NmU5vLANpQDUoY91DXfw4bIyxuBDkma7Gx
+         6sju5goZxD+GnKu8X1eby2FeHAb2aZnxl/TiPf6u+I4/j+lmbkzuRS8M5Av2cruKiI
+         EmOPdvzvVaTMp92oVx8ud4JdP/rlzdzjgHnnsF1A=
+Date:   Fri, 21 Jun 2019 10:13:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Oliver Barta <o.barta89@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Sasha Levin <alexander.levin@microsoft.com>
+Subject: Re: [PATCH] Revert "serial: 8250: Don't service RX FIFO if
+ interrupts are disabled"
+Message-ID: <20190621081333.GA28160@kroah.com>
+References: <20190619081639.325-1-o.barta89@gmail.com>
+ <20190619112052.GD9224@smile.fi.intel.com>
+ <CALJK04OjK7=iQyH=1RnU9un=hZusMCbE-54-RMSdcRruE9j7Ow@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALJK04OjK7=iQyH=1RnU9un=hZusMCbE-54-RMSdcRruE9j7Ow@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+On Thu, Jun 20, 2019 at 09:28:46AM +0200, Oliver Barta wrote:
+> On Wed, Jun 19, 2019 at 1:20 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Wed, Jun 19, 2019 at 10:16:39AM +0200, Oliver Barta wrote:
+> > > This reverts commit 2e9fe539108320820016f78ca7704a7342788380.
+> > >
+> > > Reading LSR unconditionally but processing the error flags only if
+> > > UART_IIR_RDI bit was set before in IIR may lead to a loss of transmission
+> > > error information on UARTs where the transmission error flags are cleared
+> > > by a read of LSR. Information are lost in case an error is detected right
+> > > before the read of LSR while processing e.g. an UART_IIR_THRI interrupt.
+> > >
+> >
+> > Perhaps Fixes tag?
+> >
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >
+> 
+> Thank you for the review. I also thought about the Fixes tag but
+> finally decided not to use it. It is a simple revert, i.e. the subject
+> of the commit which would be mentioned by the Fixes tag is in the new
+> subject anyway and the commit ID is referred in the first line of the
+> commit message body. The Fixes tag would not add any additional
+> information. I also checked a couple of recent revert commits in the
+> kernel and noticed that many of them actually don't have this tag.
 
-Lock down TIOCSSERIAL as that can be used to change the ioport and irq
-settings on a serial port.  This only appears to be an issue for the serial
-drivers that use the core serial code.  All other drivers seem to either
-ignore attempts to change port/irq or give an error.
+fixes is needed, as I will backport this to the stable trees.  I'll add
+it...
 
-Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-serial@vger.kernel.org
----
- drivers/tty/serial/serial_core.c | 7 +++++++
- include/linux/security.h         | 1 +
- security/lockdown/lockdown.c     | 1 +
- 3 files changed, 9 insertions(+)
+thanks,
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 351843f847c0..2dbef7dc23f6 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -22,6 +22,7 @@
- #include <linux/serial_core.h>
- #include <linux/delay.h>
- #include <linux/mutex.h>
-+#include <linux/security.h>
- 
- #include <linux/irq.h>
- #include <linux/uaccess.h>
-@@ -852,6 +853,12 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
- 	new_flags = (__force upf_t)new_info->flags;
- 	old_custom_divisor = uport->custom_divisor;
- 
-+	if ((change_port || change_irq) &&
-+	    security_is_locked_down(LOCKDOWN_TIOCSSERIAL)) {
-+		retval = -EPERM;
-+		goto exit;
-+	}
-+
- 	if (!capable(CAP_SYS_ADMIN)) {
- 		retval = -EPERM;
- 		if (change_irq || change_port ||
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 87c433f1e7db..cb5d74f9b9ff 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -91,6 +91,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MSR,
- 	LOCKDOWN_ACPI_TABLES,
- 	LOCKDOWN_PCMCIA_CIS,
-+	LOCKDOWN_TIOCSSERIAL,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index ced4ddbb36b4..c6456f300220 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -27,6 +27,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MSR] = "raw MSR access",
- 	[LOCKDOWN_ACPI_TABLES] = "modified ACPI tables",
- 	[LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
-+	[LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
--- 
-2.22.0.410.gd8fdbe21b5-goog
-
+greg k-h
