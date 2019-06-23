@@ -2,65 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C70BA4F70E
-	for <lists+linux-serial@lfdr.de>; Sat, 22 Jun 2019 18:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A2C4F942
+	for <lists+linux-serial@lfdr.de>; Sun, 23 Jun 2019 02:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbfFVQ3Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 22 Jun 2019 12:29:16 -0400
-Received: from sonic316-11.consmr.mail.bf2.yahoo.com ([74.6.130.121]:38206
-        "EHLO sonic316-11.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726317AbfFVQ3J (ORCPT
+        id S1725844AbfFWABI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 22 Jun 2019 20:01:08 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45150 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726432AbfFWABH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 22 Jun 2019 12:29:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220948; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=Sqmma7rQCC9csXbuiUU3W2/3JNoNH7S8264Vtax3p6vjP/GOy3xpD3wbU2PRR9kt9Hpkf+FIWW9PMCnOCaw1O79buHof/+e4XCSgtAjG8InDhCml6NU6QqPjKJ3zDc6ntgnpVqWtJnbhtjoUqIbv1W6GU8NTi8qVdCcmhrTc1IZ6aiOxpvBar7FQmN3jAwZcqruMWVYBgbk1LAoNqGvQ8jjOiTjNhCDJjpcLi94EE60gk+qIfYgu1AQDdd9wVo7X6i3XlVR9KCYw0l7ikZmlDSVkcSrrmJBlognD3+QlW4wko0RiyOGAXy+sEMAa8UXhFfxEEhf+A0WfqKBKwkVQbg==
-X-YMail-OSG: 3TA6aNEVM1mHk4tfSNROwYxIcekGBuzt5YSl8uAf.0_HHQ2LGDBhX2FGT2.Do_z
- _0DV280q.YGRxDLoRDSJM82e2d5hsgoPZVcKxWsle6Z3oHX8Omo6hY9bu5QjJLY68zQNKFXygJQb
- l1z62dHRy69xOFvl6tq.81EbMsOh1_cirrcCk2fMX_Jmwx0sebG__1rhE6wzzo_NDP9VbvIqZ9bR
- 2icQk1E4jS_eT.9i5S8Sf0xsdShl9dMibpAXRU93yOYuHTQIa_P77tZTcStgCsIVxKiDvC3a0NxY
- 8gZtRhwFdS641nFzLb368UTov.mB4xMHIDhTJv9NazaTg1j8sw18ET29s.TqlBmXHg8vLU94qBpd
- 5PlUttniCcoNFEJpnLF3UUydECDiL8Z11cc18YJXwsIeDfFkYqHGX5XdA4jNj054mfKUIhoNEakn
- WUKps59xvPMOhDCVBujS9v_vJClG4fXrBtjl.W_LQqwsSCutxIcdvaqHEtURhc6MkAEPdp4bTGI.
- srA9smb.rYGHYAQmfGBYSrMpzCORaFwD3sLBOdwCdBjEVVdu.sBEOGddWsx2T8AZRYYy5nvR9Foz
- bPsz41tE4__SqGjxrktEJ2_s2wIQAUza2deZFDGXc6T62eXwgZpA4Pp2nGTmGbFQ6h4nAMd51HJh
- T3GzQn8s4GOn.0BKRwZDpwf7w10rv6JPk5nAgLZOaX7LfFs2yeq7fnFrg4OCOiG9MCMxrUNq6gf7
- VomHdE0MTMCDmL3Ebk4K0YUhXaCTht27MRDaoJusaRVRGavzgn0vj3Z4n7xxu27l7AAqrNZTRmUI
- n_b8fWLMzkIFoI7ZcmL_O5d2bYctv7x0WqIS4U6onMjRr4HtPSPFTejqwRtmzChG01EgeDt1Xu9J
- 3fp8ciCxthupmhAtFqCrukMze7VttucN.DpeM8bKmVw1EDgn.s_L.L9fVdDwg2umGkLNazDxoP0_
- dzbgtjASRdO1.JaxkowN5gRT6rna4oVoAmbHsjQ4rLTjBWSWz8ZqQDlV43apY.buigbJvn4Qmvf1
- GxhsPAlHlnnGfjZ9pr3BSAVXKd_Qs83vYaBOYxWdXDlwxBl9.1.bnCTqFBLXCTND1BZASE2pli5W
- fu842ttK3BMCdw5COU_fvmE4HTFnTUQ5tN2a6KHryWZiInkZpWdo8I9xFucw8IlPI3qY2rDSegZk
- LLEiGCawsrUj04Yg3uv6LVIzJaVvTytAzboyOeQVTgoj.0EfkvEtgpXm3
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:29:08 +0000
-Date:   Sat, 22 Jun 2019 16:29:03 +0000 (UTC)
-From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
-Reply-To: miss.fmayusuf11@gmail.com
-Message-ID: <1743094696.311303.1561220943310@mail.yahoo.com>
-Subject: From:Miss: Fatima Yusuf.
+        Sat, 22 Jun 2019 20:01:07 -0400
+Received: by mail-pl1-f195.google.com with SMTP id bi6so4792422plb.12
+        for <linux-serial@vger.kernel.org>; Sat, 22 Jun 2019 17:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Vf/VONB8kWORk0urEjqan+tCHppej7MXR/YXJUsa0HU=;
+        b=WV9AXB4HuwG5qKrUjJbnwhh8BSCKPbV5Z0WtpFH8X5nzh2pPb+ZkhbRV/35XoB6SoH
+         ZqjbO9lsU0HUrmJivU6eUH5DbGoKNp/N189leaZDPJXtSBb+Xvx73jS0eLV6u/Llki5/
+         vz1DCPihVMsK/F8zHKs4lENvWrufgq9tHdIIQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vf/VONB8kWORk0urEjqan+tCHppej7MXR/YXJUsa0HU=;
+        b=T8jLy70kUoSNp515h9/K8yE4ZNWm5Kw3y0dQLmvyd0jAtAPOckJOq8cEGHO1uINPsA
+         UpQdls7Msv808lUdHDy4pEUv3O1KgxQQwC6ez3z2jnT4ijhATaTE/jUXSunQJmiI2BIb
+         w2Oy4386SAo7RofgqOB8fuTAYkjtdjTzjjIcN8Dp08f/2hKlG434faLIKdpOPL9LJ5oF
+         2B2O4Qn6FqcQ1CkCXUBmBDYKjC6XROWRDkMHAlhWQzIFK2SnDGE9IoT5oC6pKG69ajXI
+         o8SFhZL6gRPSsFdpgcWHom3XuJXkHfWrfWfhr7vWEFk73DdWUJPVh7ox9yqezG67ygnI
+         fo6g==
+X-Gm-Message-State: APjAAAU5qpElXkWNHWLsZWoKMOr2rhDNKVZt91dP6/+dbAScaOH7PIEW
+        OJK6IvzXhCPyfTkfQhD6RL9j9w==
+X-Google-Smtp-Source: APXvYqy/H1YA0XpscCuzeJn2RleJeh2Z9FiCinQQRpYy6jfHXgSIp/NLTSI12WTjikye2YEYyZ7rXw==
+X-Received: by 2002:a17:902:d915:: with SMTP id c21mr73889826plz.335.1561248066891;
+        Sat, 22 Jun 2019 17:01:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o14sm6824350pjp.19.2019.06.22.17.01.05
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 22 Jun 2019 17:01:06 -0700 (PDT)
+Date:   Sat, 22 Jun 2019 17:01:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthew Garrett <matthewgarrett@google.com>
+Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
+Subject: Re: [PATCH V34 18/29] Lock down TIOCSSERIAL
+Message-ID: <201906221700.852B22FCE0@keescook>
+References: <20190622000358.19895-1-matthewgarrett@google.com>
+ <20190622000358.19895-19-matthewgarrett@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190622000358.19895-19-matthewgarrett@google.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Fri, Jun 21, 2019 at 05:03:47PM -0700, Matthew Garrett wrote:
+> From: David Howells <dhowells@redhat.com>
+> 
+> Lock down TIOCSSERIAL as that can be used to change the ioport and irq
+> settings on a serial port.  This only appears to be an issue for the serial
+> drivers that use the core serial code.  All other drivers seem to either
+> ignore attempts to change port/irq or give an error.
+> 
+> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
+> cc: Jiri Slaby <jslaby@suse.com>
+> Cc: linux-serial@vger.kernel.org
+> ---
+>  drivers/tty/serial/serial_core.c | 5 +++++
+>  include/linux/security.h         | 1 +
+>  security/lockdown/lockdown.c     | 1 +
+>  3 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 351843f847c0..a84f231a5df4 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/serial_core.h>
+>  #include <linux/delay.h>
+>  #include <linux/mutex.h>
+> +#include <linux/security.h>
+>  
+>  #include <linux/irq.h>
+>  #include <linux/uaccess.h>
+> @@ -852,6 +853,10 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
+>  	new_flags = (__force upf_t)new_info->flags;
+>  	old_custom_divisor = uport->custom_divisor;
+>  
+> +	retval = security_locked_down(LOCKDOWN_TIOCSSERIAL);
+> +	if (retval && (change_port || change_irq))
+> +		goto exit;
+> +
+>  	if (!capable(CAP_SYS_ADMIN)) {
+>  		retval = -EPERM;
+>  		if (change_irq || change_port ||
 
+This should be moved after the capable test. With that fixed:
 
-From:Miss: Fatima Yusuf.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
+-Kees
 
-I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 03c125b277ca..61e3f4a62d16 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -91,6 +91,7 @@ enum lockdown_reason {
+>  	LOCKDOWN_MSR,
+>  	LOCKDOWN_ACPI_TABLES,
+>  	LOCKDOWN_PCMCIA_CIS,
+> +	LOCKDOWN_TIOCSSERIAL,
+>  	LOCKDOWN_INTEGRITY_MAX,
+>  	LOCKDOWN_CONFIDENTIALITY_MAX,
+>  };
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index 7be3e8fb5847..c89046dc2155 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -27,6 +27,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+>  	[LOCKDOWN_MSR] = "raw MSR access",
+>  	[LOCKDOWN_ACPI_TABLES] = "modified ACPI tables",
+>  	[LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
+> +	[LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
+>  	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+>  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+>  };
+> -- 
+> 2.22.0.410.gd8fdbe21b5-goog
+> 
 
-Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
-
-I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
-
-I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
-
-My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
+-- 
+Kees Cook
