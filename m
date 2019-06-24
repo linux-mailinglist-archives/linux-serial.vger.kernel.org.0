@@ -2,105 +2,182 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BCC50DC9
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2019 16:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0585105E
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2019 17:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728204AbfFXOXW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 24 Jun 2019 10:23:22 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39776 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727170AbfFXOXW (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Jun 2019 10:23:22 -0400
-Received: by mail-lj1-f195.google.com with SMTP id v18so12794230ljh.6;
-        Mon, 24 Jun 2019 07:23:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hGHNzjTTkC7XSqkNKO0Dj0BBPmg9DOd1ASPbbQfSUIQ=;
-        b=a6mvrtETWDQIoQzNQzaG0r1m0wNREjXOUvKP8YgKSrXgH7IWnax57HEEUp6QnAX2Zw
-         0v28Crv6RfnaMnDg3wxi73ufOqCIu3IsGjifIiZ6WFyTOTN2pre4L6vIP30YyY4G2oJ/
-         Knt2HknmHYH+JfkbptJh4I51oNNWGxm9tKtWc0G9iGJx06qsjjWBf0Ty1vRkfiiT58/c
-         fTgToj6iRFdpPhKMVF3S59jMdRDBIvi8jDZlPQxXXEP1XDkjBt767vrDE3ftcEiT+5+O
-         t74HZargsBE4m49XNOB6CRoM75Pk3gOld8T4J2m+6fYXHV7NOMQs5pH9aFwIQJOzL6ie
-         RriQ==
-X-Gm-Message-State: APjAAAWzCuH7w4SBR5mGs7VPwYJnvLU0OnScdHnHXDoLQjODp3+Pr78p
-        5ObT8GUSsbSSkBMVXI1kJxg=
-X-Google-Smtp-Source: APXvYqxQFnqLSlWHbgblNv8zbvjH5AV2mWcwcU0h0Y8jlXvW2YH/P7kGeDL2xDiHxr1mKCDpUpmNMw==
-X-Received: by 2002:a2e:8793:: with SMTP id n19mr1094836lji.174.1561386199989;
-        Mon, 24 Jun 2019 07:23:19 -0700 (PDT)
-Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id m17sm1784222lfb.9.2019.06.24.07.23.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 07:23:19 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1hfPsN-0003Iw-QI; Mon, 24 Jun 2019 16:23:19 +0200
-Date:   Mon, 24 Jun 2019 16:23:19 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Shyam Saini <mayhs11saini@gmail.com>
-Cc:     linux-serial@vger.kernel.org,
-        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: junk character issue on minicom and screen
-Message-ID: <20190624142319.GB14667@localhost>
-References: <CAOfkYf4kCTWdjDJSG0=KgZZG7F+HpE+m+RbgLZ=NeczZ5uWPRw@mail.gmail.com>
+        id S1730468AbfFXP3e (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Jun 2019 11:29:34 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:34618 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726708AbfFXP3e (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 24 Jun 2019 11:29:34 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 86C8DA1240;
+        Mon, 24 Jun 2019 17:29:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id 2MhzBchGb8rw; Mon, 24 Jun 2019 17:29:26 +0200 (CEST)
+Subject: Re: [PATCH 1/2 v9] serial: mctrl_gpio: Check if GPIO property exisits
+ before requesting it
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+References: <20190620062420.11650-1-sr@denx.de>
+ <CAMuHMdXMpS_pg9N0qSW=Li0QavAMRG79RJcS4s0w6NTCxv_zzg@mail.gmail.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <24bfb52c-6f77-b7cd-7421-9e6e4b0aa7d3@denx.de>
+Date:   Mon, 24 Jun 2019 17:29:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOfkYf4kCTWdjDJSG0=KgZZG7F+HpE+m+RbgLZ=NeczZ5uWPRw@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <CAMuHMdXMpS_pg9N0qSW=Li0QavAMRG79RJcS4s0w6NTCxv_zzg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 02:57:34PM +0530, Shyam Saini wrote:
-> Hello everyone,
+On 24.06.19 10:42, Geert Uytterhoeven wrote:
+> CC gpio
 > 
-> I'm working on Rockchip rk3399 Nanopc t4 board and I'm trying get
-> serial output from board using minicom and my board has baudrate
-> 1500000.
+> This is now commit d99482673f950817 ("serial: mctrl_gpio: Check if GPIO
+> property exisits before requesting it") in tty-next.
 > 
-> I'm using a usb to serial converter. So, when i power on my board
-> minicom starts to give junk characters.
-> Minicom version:  2.7.1
-> USB driver probed : cp210x
+> On Thu, Jun 20, 2019 at 8:24 AM Stefan Roese <sr@denx.de> wrote:
+>> This patch adds a check for the GPIOs property existence, before the
+>> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+>> support is added (2nd patch in this patch series) on x86 platforms using
+>> ACPI.
+>>
+>> Here Mika's comments from 2016-08-09:
+>>
+>> "
+>> I noticed that with v4.8-rc1 serial console of some of our Broxton
+>> systems does not work properly anymore. I'm able to see output but input
+>> does not work.
+>>
+>> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+>> ("tty/serial/8250: use mctrl_gpio helpers").
+>>
+>> The reason why it fails is that in ACPI we do not have names for GPIOs
+>> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+>> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+>> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+>> UART device in Broxton has following (simplified) ACPI description:
+>>
+>>      Device (URT4)
+>>      {
+>>          ...
+>>          Name (_CRS, ResourceTemplate () {
+>>              GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+>>                      "\\_SB.GPO0", 0x00, ResourceConsumer)
+>>              {
+>>                  0x003A
+>>              }
+>>              GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+>>                      "\\_SB.GPO0", 0x00, ResourceConsumer)
+>>              {
+>>                  0x003D
+>>              }
+>>          })
+>>
+>> In this case it finds the first GPIO (0x003A which happens to be RX pin
+>> for that UART), turns it into GPIO which then breaks input for the UART
+>> device. This also breaks systems with bluetooth connected to UART (those
+>> typically have some GPIOs in their _CRS).
+>>
+>> Any ideas how to fix this?
+>>
+>> We cannot just drop the _CRS index lookup fallback because that would
+>> break many existing machines out there so maybe we can limit this to
+>> only DT enabled machines. Or alternatively probe if the property first
+>> exists before trying to acquire the GPIOs (using
+>> device_property_present()).
+>> "
+>>
+>> This patch implements the fix suggested by Mika in his statement above.
+>>
+>> Signed-off-by: Stefan Roese <sr@denx.de>
+>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>> v9:
+>> - Rebased on top of "tty-next", patch 2/3 dropped as its already applied
+>>
+>> v8:
+>> - Rebased on top of "tty-next"
+>>
+>> v7:
+>> - Include <linux/property.h> to fix compile breakage on OMAP
+>>
+>> v6:
+>> - No change
+>>
+>> v5:
+>> - Simplified the code a bit (Andy)
+>> - Added gpio_str == NULL handling (Andy)
+>>
+>> v4:
+>> - Add missing free() calls (Johan)
+>> - Added Mika's reviewed by tag
+>> - Added Johan to Cc
+>>
+>> v3:
+>> - No change
+>>
+>> v2:
+>> - Include the problem description and analysis from Mika into the commit
+>>    text, as suggested by Greg.
+>>
+>>   drivers/tty/serial/serial_mctrl_gpio.c | 14 ++++++++++++++
+>>   1 file changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+>> index 39ed56214cd3..2b400189be91 100644
+>> --- a/drivers/tty/serial/serial_mctrl_gpio.c
+>> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
+>> @@ -12,6 +12,7 @@
+>>   #include <linux/termios.h>
+>>   #include <linux/serial_core.h>
+>>   #include <linux/module.h>
+>> +#include <linux/property.h>
+>>
+>>   #include "serial_mctrl_gpio.h"
+>>
+>> @@ -116,6 +117,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+>>
+>>          for (i = 0; i < UART_GPIO_MAX; i++) {
+>>                  enum gpiod_flags flags;
+>> +               char *gpio_str;
+>> +               bool present;
+>> +
+>> +               /* Check if GPIO property exists and continue if not */
+>> +               gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
+>> +                                    mctrl_gpios_desc[i].name);
 > 
-> But when I use the same setup with my colleagues laptop it gives
-> correct output (kernel version 4.15.0-52-generic ).
-> 
-> Note that my colleague and i used same setup
-> Same usb driver probed
-> Same power adapter
-> same usb to serial converter wire
-> same minicom version.
-> same baudrate
-> 
-> Other thing which i tried is switching kernel version and it turns out
-> that one of the older distro kernel on my system (debian 4.9.0-5-amd64
-> ) is working fine and it seems like there is something changed in
-> newer kernel vesions.
-> Here is the quick summary
-> 4.19.0-4-amd64    -> not working
-> 4.15.0-52-generic -> working
-> 4.9.0-5-amd64      -> working
-> 5.2.0-rc4+             -> not working
+> This will silently break DTBs using "(cts|dsr|dcd|rng|rts|dtr)-gpio" instead
+> of "(cts|dsr|dcd|rng|rts|dtr)-gpios".
 
-Thanks for the report. There were some changes between 4.15 and 4.19
-related to the line speed handling which may have broken something in
-your setup.
+Should both options be supported ("cts-gpio" vs "cts-gpios")?
+Documentation/devicetree/bindings/serial/serial.txt only mentions
+the "-gpios" variant.
 
-Do you know which variant of cp210x you have? Can your provide the
-output of lsusb -v?
-
-Also if you can run driver with debugging enabled when connecting the
-device and setting the line speed, that may give a clue about what is
-going on. For example,
-
-	echo module cp210x =p > /sys/kernel/debug/dynamic_debug/control
-
-Does 115200 bps still work by the way?
-
-Johan
+Thanks,
+Stefan
