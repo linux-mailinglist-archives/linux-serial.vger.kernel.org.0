@@ -2,193 +2,203 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 379AB4FDC2
-	for <lists+linux-serial@lfdr.de>; Sun, 23 Jun 2019 21:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01871504BC
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2019 10:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfFWTBg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 23 Jun 2019 15:01:36 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:34110 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbfFWTBg (ORCPT
+        id S1727517AbfFXInD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Jun 2019 04:43:03 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:42400 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbfFXInD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 23 Jun 2019 15:01:36 -0400
-X-Greylist: delayed 2491 seconds by postgrey-1.27 at vger.kernel.org; Sun, 23 Jun 2019 15:01:34 EDT
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hf75q-000576-Hn; Sun, 23 Jun 2019 20:19:58 +0200
-Date:   Sun, 23 Jun 2019 20:19:56 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Michael Shych <michaelsh@mellanox.com>
-cc:     "Hodaszi, Robert" <Robert.Hodaszi@digi.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: RE: "No irq handler for vector" problem
-In-Reply-To: <AM6PR05MB61689A1EE1E6B31682A476FAD9E10@AM6PR05MB6168.eurprd05.prod.outlook.com>
-Message-ID: <alpine.DEB.2.21.1906231955420.32342@nanos.tec.linutronix.de>
-References: <dcc1febb-2afc-da9b-696e-3c9bf63f4b76@digi.com> <alpine.DEB.2.21.1906211858340.5503@nanos.tec.linutronix.de> <37433D8393E7AF43B0D856B93884DA9E4FD67B64@MTK-SMS-XCH02.digi.com>
- <AM6PR05MB61689A1EE1E6B31682A476FAD9E10@AM6PR05MB6168.eurprd05.prod.outlook.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Mon, 24 Jun 2019 04:43:03 -0400
+Received: by mail-oi1-f194.google.com with SMTP id s184so9141794oie.9;
+        Mon, 24 Jun 2019 01:43:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/c1meAnqJmzcYQFemk4BXY3H3LbuKNOUcsx8YXjSj/I=;
+        b=BF+J+K4JNo8bRJTYdazn563Ewix+T+Lz3S6bKm6xE5mqkbzsgKOvOd9WAlB3g3d/DP
+         VnMhlME0kEnfpD0bmrC64W+TeLLyjX3MH0KlBDi149zj9gkqC/DhhOxjpYbvn1/LKfeD
+         nktB/WBoVZg5OOhj3fSoVhnoZK5V7yExTBC6k26cnQ71HC8qqQvGkM60E4taaCTj2CQP
+         bNK91BgdDTVNBBP2eXmScZ2wYDA8ukRuTLdHZVbB+4b/ywUqzlW/b8R/ULL1r/py28Fc
+         jmtwBE0kMcFequfmHMimPPoKjide7kxztU2YdZLbxHiclXMTlrRW6hUkP8gesiMBm4ut
+         LvPg==
+X-Gm-Message-State: APjAAAVWHiL74avHLuz7/0GDy2CGZZ5rf7ZuFeN1wH45Rx/KNI9d02D6
+        Q5WWK2sdIsCy1jiJYfZUAWeZWxVtMPidnyOvVOI=
+X-Google-Smtp-Source: APXvYqw7uVRKxSXEhTujdrIedhEVP77/f0iFG4RBcTwvRyglA23qNfZl+H6IoVVC+4XnnDMgq9++Ma3MUrUn5rL4MQY=
+X-Received: by 2002:aca:bd43:: with SMTP id n64mr9417693oif.148.1561365781918;
+ Mon, 24 Jun 2019 01:43:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <20190620062420.11650-1-sr@denx.de>
+In-Reply-To: <20190620062420.11650-1-sr@denx.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Jun 2019 10:42:49 +0200
+Message-ID: <CAMuHMdXMpS_pg9N0qSW=Li0QavAMRG79RJcS4s0w6NTCxv_zzg@mail.gmail.com>
+Subject: Re: [PATCH 1/2 v9] serial: mctrl_gpio: Check if GPIO property exisits
+ before requesting it
+To:     Stefan Roese <sr@denx.de>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Michael,
+CC gpio
 
-On Sun, 23 Jun 2019, Michael Shych wrote:
-> 
-> > -----Original Message-----
-> > From: Hodaszi, Robert <Robert.Hodaszi@digi.com>
-> > Sent: Friday, June 21, 2019 8:47 PM
-> > To: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Michael Shych <michaelsh@mellanox.com>; x86@kernel.org; Vadim
-> > Pasternak <vadimp@mellanox.com>; Ido Schimmel
-> > <idosch@mellanox.com>; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; linux-serial@vger.kernel.org
-> > Subject: RE: "No irq handler for vector" problem
+This is now commit d99482673f950817 ("serial: mctrl_gpio: Check if GPIO
+property exisits before requesting it") in tty-next.
 
-can you please teach your mail client not to copy the full header into the
-reply. That's really not useful on a mailing list.
+On Thu, Jun 20, 2019 at 8:24 AM Stefan Roese <sr@denx.de> wrote:
+> This patch adds a check for the GPIOs property existence, before the
+> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
+> support is added (2nd patch in this patch series) on x86 platforms using
+> ACPI.
+>
+> Here Mika's comments from 2016-08-09:
+>
+> "
+> I noticed that with v4.8-rc1 serial console of some of our Broxton
+> systems does not work properly anymore. I'm able to see output but input
+> does not work.
+>
+> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
+> ("tty/serial/8250: use mctrl_gpio helpers").
+>
+> The reason why it fails is that in ACPI we do not have names for GPIOs
+> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
+> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
+> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
+> UART device in Broxton has following (simplified) ACPI description:
+>
+>     Device (URT4)
+>     {
+>         ...
+>         Name (_CRS, ResourceTemplate () {
+>             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+>                     "\\_SB.GPO0", 0x00, ResourceConsumer)
+>             {
+>                 0x003A
+>             }
+>             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
+>                     "\\_SB.GPO0", 0x00, ResourceConsumer)
+>             {
+>                 0x003D
+>             }
+>         })
+>
+> In this case it finds the first GPIO (0x003A which happens to be RX pin
+> for that UART), turns it into GPIO which then breaks input for the UART
+> device. This also breaks systems with bluetooth connected to UART (those
+> typically have some GPIOs in their _CRS).
+>
+> Any ideas how to fix this?
+>
+> We cannot just drop the _CRS index lookup fallback because that would
+> break many existing machines out there so maybe we can limit this to
+> only DT enabled machines. Or alternatively probe if the property first
+> exists before trying to acquire the GPIOs (using
+> device_property_present()).
+> "
+>
+> This patch implements the fix suggested by Mika in his statement above.
+>
+> Signed-off-by: Stefan Roese <sr@denx.de>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> v9:
+> - Rebased on top of "tty-next", patch 2/3 dropped as its already applied
+>
+> v8:
+> - Rebased on top of "tty-next"
+>
+> v7:
+> - Include <linux/property.h> to fix compile breakage on OMAP
+>
+> v6:
+> - No change
+>
+> v5:
+> - Simplified the code a bit (Andy)
+> - Added gpio_str == NULL handling (Andy)
+>
+> v4:
+> - Add missing free() calls (Johan)
+> - Added Mika's reviewed by tag
+> - Added Johan to Cc
+>
+> v3:
+> - No change
+>
+> v2:
+> - Include the problem description and analysis from Mika into the commit
+>   text, as suggested by Greg.
+>
+>  drivers/tty/serial/serial_mctrl_gpio.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+> index 39ed56214cd3..2b400189be91 100644
+> --- a/drivers/tty/serial/serial_mctrl_gpio.c
+> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/termios.h>
+>  #include <linux/serial_core.h>
+>  #include <linux/module.h>
+> +#include <linux/property.h>
+>
+>  #include "serial_mctrl_gpio.h"
+>
+> @@ -116,6 +117,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+>
+>         for (i = 0; i < UART_GPIO_MAX; i++) {
+>                 enum gpiod_flags flags;
+> +               char *gpio_str;
+> +               bool present;
+> +
+> +               /* Check if GPIO property exists and continue if not */
+> +               gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
+> +                                    mctrl_gpios_desc[i].name);
 
-> > On June 21, 2019 19:00:25 Thomas Gleixner <tglx@linutronix.de> wrote:
-> > >
-> > > Not freeing the vector would just paper over the problem. Can you try the
-> > > patch below?
-> > >
-> 
-> Tried patch on our system. The problem still exist:
->  [   49.802818] do_IRQ: 0.37 No irq handler for vector
+This will silently break DTBs using "(cts|dsr|dcd|rng|rts|dtr)-gpio" instead
+of "(cts|dsr|dcd|rng|rts|dtr)-gpios".
 
-Stared some more into the interrupt code. I think Robert was on the right
-track, but I did not see the tree in the forest.
+> +               if (!gpio_str)
+> +                       continue;
+> +
+> +               present = device_property_present(dev, gpio_str);
+> +               kfree(gpio_str);
+> +               if (!present)
+> +                       continue;
+>
+>                 if (mctrl_gpios_desc[i].dir_out)
+>                         flags = GPIOD_OUT_LOW;
 
-The scenario he described can actually happen and yes, we should deactivate
-the interrupt after the synchronize_hardirq() and not before. Tentative fix
-below.
+Gr{oetje,eeting}s,
 
-Thanks,
+                        Geert
 
-	tglx
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-8<-------------
---- a/kernel/irq/autoprobe.c
-+++ b/kernel/irq/autoprobe.c
-@@ -90,7 +90,7 @@ unsigned long probe_irq_on(void)
- 			/* It triggered already - consider it spurious. */
- 			if (!(desc->istate & IRQS_WAITING)) {
- 				desc->istate &= ~IRQS_AUTODETECT;
--				irq_shutdown(desc);
-+				irq_shutdown_and_deactivate(desc);
- 			} else
- 				if (i < 32)
- 					mask |= 1 << i;
-@@ -127,7 +127,7 @@ unsigned int probe_irq_mask(unsigned lon
- 				mask |= 1 << i;
- 
- 			desc->istate &= ~IRQS_AUTODETECT;
--			irq_shutdown(desc);
-+			irq_shutdown_and_deactivate(desc);
- 		}
- 		raw_spin_unlock_irq(&desc->lock);
- 	}
-@@ -169,7 +169,7 @@ int probe_irq_off(unsigned long val)
- 				nr_of_irqs++;
- 			}
- 			desc->istate &= ~IRQS_AUTODETECT;
--			irq_shutdown(desc);
-+			irq_shutdown_and_deactivate(desc);
- 		}
- 		raw_spin_unlock_irq(&desc->lock);
- 	}
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -314,6 +314,12 @@ void irq_shutdown(struct irq_desc *desc)
- 		}
- 		irq_state_clr_started(desc);
- 	}
-+}
-+
-+
-+void irq_shutdown_and_deactivate(struct irq_desc *desc)
-+{
-+	irq_shutdown(desc);
- 	/*
- 	 * This must be called even if the interrupt was never started up,
- 	 * because the activation can happen before the interrupt is
---- a/kernel/irq/cpuhotplug.c
-+++ b/kernel/irq/cpuhotplug.c
-@@ -116,7 +116,7 @@ static bool migrate_one_irq(struct irq_d
- 		 */
- 		if (irqd_affinity_is_managed(d)) {
- 			irqd_set_managed_shutdown(d);
--			irq_shutdown(desc);
-+			irq_shutdown_and_deactivate(desc);
- 			return false;
- 		}
- 		affinity = cpu_online_mask;
---- a/kernel/irq/internals.h
-+++ b/kernel/irq/internals.h
-@@ -82,6 +82,7 @@ extern int irq_activate_and_startup(stru
- extern int irq_startup(struct irq_desc *desc, bool resend, bool force);
- 
- extern void irq_shutdown(struct irq_desc *desc);
-+extern void irq_shutdown_and_deactivate(struct irq_desc *desc);
- extern void irq_enable(struct irq_desc *desc);
- extern void irq_disable(struct irq_desc *desc);
- extern void irq_percpu_enable(struct irq_desc *desc, unsigned int cpu);
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/random.h>
- #include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
- #include <linux/slab.h>
- #include <linux/sched.h>
- #include <linux/sched/rt.h>
-@@ -1699,6 +1700,7 @@ static struct irqaction *__free_irq(stru
- 	/* If this was the last handler, shut down the IRQ line: */
- 	if (!desc->action) {
- 		irq_settings_clr_disable_unlazy(desc);
-+		/* Only shutdown. Deactivate after synchronize_irq() */
- 		irq_shutdown(desc);
- 	}
- 
-@@ -1768,6 +1770,14 @@ static struct irqaction *__free_irq(stru
- 		 * require it to deallocate resources over the slow bus.
- 		 */
- 		chip_bus_lock(desc);
-+		/*
-+		 * There is no interrupt on the fly anymore. Deactivate it
-+		 * completely.
-+		 */
-+		raw_spin_lock_irqsave(&desc->lock, flags);
-+		irq_domain_deactivate_irq(&desc->irq_data);
-+		raw_spin_unlock_irqrestore(&desc->lock, flags);
-+
- 		irq_release_resources(desc);
- 		chip_bus_sync_unlock(desc);
- 		irq_remove_timings(desc);
-@@ -1855,7 +1865,7 @@ static const void *__cleanup_nmi(unsigne
- 	}
- 
- 	irq_settings_clr_disable_unlazy(desc);
--	irq_shutdown(desc);
-+	irq_shutdown_and_deactivate(desc);
- 
- 	irq_release_resources(desc);
- 
-
-
-
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
