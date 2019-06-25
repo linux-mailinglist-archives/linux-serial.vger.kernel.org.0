@@ -2,117 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFE554C77
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 12:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5FE54C7E
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 12:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727648AbfFYKkX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Tue, 25 Jun 2019 06:40:23 -0400
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.112]:52444 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726756AbfFYKkW (ORCPT
+        id S1728065AbfFYKmn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jun 2019 06:42:43 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45084 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbfFYKmn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jun 2019 06:40:22 -0400
-Received: from [67.219.247.53] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-6.bemta.az-d.us-east-1.aws.symcld.net id 1A/02-13972-41AF11D5; Tue, 25 Jun 2019 10:40:20 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNKsWRWlGSWpSXmKPExsXi5LtOQFfkl2C
-  swbnD6hbNi9ezWTw84GxxZnEvu8Wf/Q+ZLDZvmspscX79bhaLHxseszqwe2xa1cnm8e7cOXaP
-  /XPXsHs8m36YyePzJrkA1ijWzLyk/IoE1oznL54xFzxiq9hyeQ5rA+NW1i5GLg4hgdWMEgcvL
-  2eHcPYySnw9+Zaxi5GTg03AUGL1giPsILaIgIbExku3mEGKmAW6mSRWNG0GSwgLGEhsO/sPyO
-  YAKjKUWPmTC8Ksk/je5Q1SwSKgKrHl5FmwkbwC1hJT3s5iArGFBN6zSpzdrw5icwp4SUyZ9xl
-  sIqOArMSL9glgNcwC4hK3nswHsyUEBCSW7DnPDGGLSrx8/I8VZJWoQLjE9SuFEGEFiU+7/7BA
-  tOpJPDs1C8o2lzjW+AbK1pZYtvA1M8Q5ghInZz5hgThHRWLblG62CYzis5BsnoVk1Cwko2YhG
-  TULyagFjKyrGE2TijLTM0pyEzNzdA0NDHQNDY10LYGkXmKVbopeabFuamJxiS6QW16sV1yZm5
-  yTopeXWrKJERjvKQWc3DsYpx15rXeIUZKDSUmU16hDMFaILyk/pTIjsTgjvqg0J7X4EKMMB4e
-  SBK/UT6CcYFFqempFWmYOMPXApCU4eJREeItA0rzFBYm5xZnpEKlTjLocE17OXcQsxJKXn5cq
-  Jc5b9QOoSACkKKM0D24ELA1eYpSVEuZlZGBgEOIpSC3KzSxBlX/FKM7BqCTMGwWyiiczrwRu0
-  yugI5iAjtg8gQ/kiJJEhJRUA1NVwqyelpBLb5s2P7+wNyRqw881OhUxrYtWcXCFfnpxws21M3
-  V/w18zm63K6avmvOposzi890fk7Eqtq+2C09aHffVav2Btws64JevPfKjYPbWzYoXeVibdmzY
-  nHS3erff+1flt8Sv5mmmhHLPm/Mr/5v9Y1t13yyJzjVqF+WU9T/M99uRY+B564vbke9vJlVIi
-  S1Y5dGp9WXgy8biU6qfAPs831lV3w8+kxmhaztOy37Vg/al9/E9t7xS0vy4U8X8VGz11U8dG4
-  ymrj/QzzMp/qvNR8tXddQwl/FK/JDeE3puknPAzWDLi1pN3qw9vUlr2zVfWMfjiqq3W4kFZb7
-  JW7N/q+OZVkiL/A45mHrGtSizFGYmGWsxFxYkAzATEE/4DAAA=
-X-Env-Sender: Robert.Hodaszi@digi.com
-X-Msg-Ref: server-19.tower-425.messagelabs.com!1561459220!2325971!2
-X-Originating-IP: [66.77.174.16]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.43.9; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 24141 invoked from network); 25 Jun 2019 10:40:20 -0000
-Received: from owa.digi.com (HELO MCL-VMS-XCH01.digi.com) (66.77.174.16)
-  by server-19.tower-425.messagelabs.com with SMTP; 25 Jun 2019 10:40:20 -0000
-Received: from MTK-SMS-XCH03.digi.com (10.10.8.197) by MCL-VMS-XCH01.digi.com
- (10.5.8.49) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 25 Jun 2019
- 05:40:20 -0500
-Received: from MTK-SMS-XCH02.digi.com ([fe80::4960:cfbf:ad5e:3cdb]) by
- MTK-SMS-XCH03.digi.com ([fe80::484d:c326:e7f1:a9fd%16]) with mapi id
- 14.03.0439.000; Tue, 25 Jun 2019 05:40:19 -0500
-From:   "Hodaszi, Robert" <Robert.Hodaszi@digi.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     Michael Shych <michaelsh@mellanox.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: Re: "No irq handler for vector" problem
-Thread-Topic: "No irq handler for vector" problem
-Thread-Index: AQHVKDldOPMq6dwWv0y/P7fHdq3NuKamqPoA//+5LYeAAzhHgIAASXUAgAEJGYCAAC41AIAAFYCAgABOuACAAEL3AIAAt3SAgAAIm4CAAAWxgA==
-Date:   Tue, 25 Jun 2019 10:40:17 +0000
-Message-ID: <c7a830df-56ff-e03d-7634-7a6f1e45f9d9@digi.com>
-References: <dcc1febb-2afc-da9b-696e-3c9bf63f4b76@digi.com>
- <alpine.DEB.2.21.1906211858340.5503@nanos.tec.linutronix.de>
- <37433D8393E7AF43B0D856B93884DA9E4FD67B64@MTK-SMS-XCH02.digi.com>
- <AM6PR05MB61689A1EE1E6B31682A476FAD9E10@AM6PR05MB6168.eurprd05.prod.outlook.com>
- <alpine.DEB.2.21.1906231955420.32342@nanos.tec.linutronix.de>
- <AM6PR05MB6168265CCF44FBCAEBBD4EA8D9E00@AM6PR05MB6168.eurprd05.prod.outlook.com>
- <d40acbee-df87-1f4b-48c1-66fe31c841fd@digi.com>
- <alpine.DEB.2.21.1906241609080.32342@nanos.tec.linutronix.de>
- <c49e9454-d6d2-408c-8232-ee4c17d6975d@digi.com>
- <alpine.DEB.2.21.1906242335250.32342@nanos.tec.linutronix.de>
- <a1582e82-c2b3-95fd-0c92-e04765da0a59@digi.com>
- <alpine.DEB.2.21.1906251213021.32342@nanos.tec.linutronix.de>
-In-Reply-To: <alpine.DEB.2.21.1906251213021.32342@nanos.tec.linutronix.de>
-Accept-Language: en-US, hu-HU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-x-originating-ip: [172.27.2.174]
-Content-Type: text/plain; charset="iso-8859-2"
-Content-ID: <65EF5A0422749C42A121F1F2FD6FCF2B@digi.com>
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
+        Tue, 25 Jun 2019 06:42:43 -0400
+Received: by mail-pg1-f194.google.com with SMTP id z19so5815406pgl.12;
+        Tue, 25 Jun 2019 03:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=1uMFvdA9zD0TW36wu1ROblZoYCBPkNlkO2ia2DlAOOo=;
+        b=f0R/j+8cwVS5csLWk6p5Ykg9xNZW0+umrEPAJ3HxBV4gG9Bw2yhyhB9sn49qE5Zrv+
+         AGFN3ejYP8YtKwR7g8vgMWS3lRP/dY6SmujIakxV4B/gwq2fepV15w/4waWXzPY1qZfJ
+         Vk51rxlvmoCKoFn6zALdPIwIj24YqqeCKjywnR6ottpAP7NU1ndYJ4+kHvZkZTf1iL9+
+         /ElGY1TjxP0hHokScFuCqeW4Gvl+8Xxp2d/iwMKwIKu5VY0uaSoLu3ctv8IgDqoHP887
+         unK7l0vZ0ltcYjo+Rg86TIpmX6Wgn5rAYY2vujaTRmhqba2E5tRU01mGmHyNL31LZxxt
+         /DBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1uMFvdA9zD0TW36wu1ROblZoYCBPkNlkO2ia2DlAOOo=;
+        b=ThvHToR614SQdLTIVzuDENyr7potFUGv5ryZbtf1/5w3ZmIoMDbof4HS3Z+SJTR8H6
+         9TbX9Nrr5pIkAQN6hMZMeNm+LyaQ8s49rzrprAy53Dh9xA3JbyskxKmrjQgFCskJ70uF
+         q/rVtbrCqqZg9pArznLSUx/VLZhHw8mZ2eE/xXhBWcnrpqol7JqaU04HmwA3SL+Mt76J
+         cYvFFjZAGwO7m6dABCSwfRWFyp4rL6Ui3XAIbn3HeINqWp3NMwQb5u8Z+bAvVC1ul7eE
+         fPH0XrixFqhbbWtdyf9hw/O/ltTsgG+TqSKcLU6AdF+om7QranpoL3i829s/qRB+WPs+
+         VQ1w==
+X-Gm-Message-State: APjAAAUaRQtf8Xln+7MzVamCB04PTYxLkWF35lSl7+A3EQlPFb/Xn52k
+        WZIXH3o2k8+leHK9MzDgHzU=
+X-Google-Smtp-Source: APXvYqz07ytF5AwY9QhulPVIkFTT7bio8bpxCxvXzud/mQQUQXGy0FbUpYnn5JsBdLZntdfuj+fjHg==
+X-Received: by 2002:a63:f342:: with SMTP id t2mr35787408pgj.83.1561459362300;
+        Tue, 25 Jun 2019 03:42:42 -0700 (PDT)
+Received: from Pilot130.192.168.0.22 (211-20-114-70.HINET-IP.hinet.net. [211.20.114.70])
+        by smtp.googlemail.com with ESMTPSA id 14sm22026759pfj.36.2019.06.25.03.42.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 25 Jun 2019 03:42:41 -0700 (PDT)
+From:   "sudheer.v" <open.sudheer@gmail.com>
+To:     gregkh@linuxfoundation.org, jslaby@suse.com, joel@jms.id.au,
+        andrew@aj.id.au, benh@kernel.crashing.org, robh+dt@kernel.org,
+        mark.rutland@arm.com,
+        shivahshankar.shankarnarayanrao@aspeedtech.com,
+        shivahshankar@gmail.com, sudheer.veliseti@aspeedtech.com
+Cc:     sudheer veliseti <sudheer.open@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Subject: [patch v3 0/5] *** DMA based UART driver for AST2500 ***
+Date:   Tue, 25 Jun 2019 16:14:31 +0530
+Message-Id: <1561459476-14268-1-git-send-email-open.sudheer@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, 25 Jun 2019, Gleixner, Thomas wrote:
+From: sudheer veliseti <sudheer.open@gmail.com>
 
->
-> The thing is that the interrupt is in edge mode which my tried brain did
-> not notice yesterday evening.
->
-> In edge mode the remote-irr bit meaning is undefined and as the docs are
-> unclear it might eventually give the wrong answer. From a hardware view
-> this makes sense because edge will just fire and forget, while level needs
-> the explicit ack before sending it again (if still raised at the pin)
->
-> So for edge the issue is different. The spurious interrupt is harmless as
-> it does not leave stale state in the IO-APIC around.
->
-> I'm working on a clean fix for both the level and the edge problems. Just
-> at the point to start testing. Will post the result in a couple of hours.
->
-> Thanks,
->
-> 	tglx
->
->
-Hmm, good point. Checking the IO-APIC datasheet again, it's clearly written.
+Hi,
+AST2500 has dedicated Uart DMA controller which has 12 sets of
+Tx and RX channels connected to UART controller directly.
+Since the DMA controller have dedicated buffers and registers,
+there would be little benifit in adding DMA framework overhead.
+So the software for DMA controller is included within the UART driver itself.
 
-Thanks,
+Thanks and Regards
+Sudheer.V
 
-Robert
+changes in v3:
+- custom debugs replaced with pr_debug in 8250_ast2500_uart_dma.c
+- change logs added in patches
+
+sudheer veliseti (5):
+  AST2500 DMA UART driver
+  build configuration for AST2500 DMA UART driver
+  DT nodes for AST2500 DMA UART driver
+  defconfig and MAINTAINERS updated for AST2500 DMA UART driver
+  Documentation: DT bindings AST2500 DMA UART driver
+
+ .../bindings/serial/ast2500-dma-uart.txt      |   40 +
+ MAINTAINERS                                   |   13 +
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts      |   21 +
+ arch/arm/boot/dts/aspeed-g5.dtsi              |   71 +-
+ arch/arm/configs/aspeed_g5_defconfig          |    1 +
+ .../tty/serial/8250/8250_ast2500_uart_dma.c   | 1879 +++++++++++++++++
+ drivers/tty/serial/8250/Kconfig               |   35 +-
+ drivers/tty/serial/8250/Makefile              |    1 +
+ 8 files changed, 2056 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/serial/ast2500-dma-uart.txt
+ create mode 100644 drivers/tty/serial/8250/8250_ast2500_uart_dma.c
+
+-- 
+2.17.1
+
+
