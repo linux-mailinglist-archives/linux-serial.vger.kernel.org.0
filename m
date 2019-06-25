@@ -2,237 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 991AD54D86
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 13:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CF254D69
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 13:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730911AbfFYLYs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jun 2019 07:24:48 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:41871 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730838AbfFYLYn (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jun 2019 07:24:43 -0400
-Received: from localhost ([127.0.0.1] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtp (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hfjYy-0004rW-2D; Tue, 25 Jun 2019 13:24:36 +0200
-Message-Id: <20190625112405.945005272@linutronix.de>
-User-Agent: quilt/0.65
-Date:   Tue, 25 Jun 2019 13:13:58 +0200
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Robert Hodaszi <Robert.Hodaszi@digi.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
+        id S1730552AbfFYLTy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jun 2019 07:19:54 -0400
+Received: from mga14.intel.com ([192.55.52.115]:20382 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727138AbfFYLTx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 25 Jun 2019 07:19:53 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jun 2019 04:19:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,415,1557212400"; 
+   d="scan'208";a="155480989"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga008.jf.intel.com with ESMTP; 25 Jun 2019 04:19:50 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hfjUK-0001Ze-G7; Tue, 25 Jun 2019 14:19:48 +0300
+Date:   Tue, 25 Jun 2019 14:19:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stefan Roese <sr@denx.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Marc Zyngier <marc.zyngier@arm.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jan Beulich <jbeulich@suse.com>
-Subject: [patch 5/5] x86/irq: Seperate unused system vectors from spurious
- entry again
-References: <20190625111353.863718167@linutronix.de>
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH 1/2 v9] serial: mctrl_gpio: Check if GPIO property
+ exisits before requesting it
+Message-ID: <20190625111948.GV9224@smile.fi.intel.com>
+References: <20190620062420.11650-1-sr@denx.de>
+ <CAMuHMdXMpS_pg9N0qSW=Li0QavAMRG79RJcS4s0w6NTCxv_zzg@mail.gmail.com>
+ <24bfb52c-6f77-b7cd-7421-9e6e4b0aa7d3@denx.de>
+ <CAMuHMdWeX6=SuSPVUB=WaYMsUbrmg5sraM=APeXsqr_Yv6u4AA@mail.gmail.com>
+ <d8ae626b-e574-be33-f698-3cb992653683@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d8ae626b-e574-be33-f698-3cb992653683@denx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Quite some time ago the interrupt entry stubs for unused vectors in the
-system vector range got removed and directly mapped to the spurious
-interrupt vector entry point.
+On Tue, Jun 25, 2019 at 07:27:33AM +0200, Stefan Roese wrote:
+> On 24.06.19 17:35, Geert Uytterhoeven wrote:
+> > On Mon, Jun 24, 2019 at 5:29 PM Stefan Roese <sr@denx.de> wrote:
+> > > On 24.06.19 10:42, Geert Uytterhoeven wrote:
 
-Sounds reasonable, but it's subtly broken. The spurious interrupt vector
-entry point pushes vector number 0xFF on the stack which makes the whole
-logic in __smp_spurious_interrupt() pointless.
+> > > Should both options be supported ("cts-gpio" vs "cts-gpios")?
+> > > Documentation/devicetree/bindings/serial/serial.txt only mentions
+> > > the "-gpios" variant.
+> > 
+> > Well, the "-gpio" variant is deprecated, but still supported by
+> > devm_gpiod_get_index_optional(), and there are active users in upstream
+> > DTS files.
+> > 
+> > My main objection is (trying to) replicate the matching logic inside
+> > gpiolib.c, causing subtle semantic differences. And keeping it consistent,
+> > of course.
+> > 
+> > It would be nice if this could be fixed inside acpi_find_gpio(), so
+> > users don't need to be updated.  There may be other subsystems where
+> > the difference between DT and ACPI may cause issues, unbeknownst.
+> 
+> Sure, I can fix this. I would prefer to do this in a follow-up patch
+> though, if nobody objects.
 
-As a consequence any spurious interrupt which comes from a vector != 0xFF
-is treated as a real spurious interrupt (vector 0xFF) and not
-acknowledged. That subsequently stalls all interrupt vectors of equal and
-lower priority, which brings the system to a grinding halt.
+In case if you are going to do this, use approach from GPIO library. Perhaps,
+it may require to create something like for_each_gpio_suffix() helper.
 
-This can happen because even on 64-bit the system vector space is not
-guaranteed to be fully populated. A full compile time handling of the
-unused vectors is not possible because quite some of them are conditonally
-populated at runtime.
-
-Bring the entry stubs back, which wastes 160 bytes if all stubs are unused,
-but gains the proper handling back. There is no point to selectively spare
-some of the stubs which are known at compile time as the required code in
-the IDT management would be way larger and convoluted.
-
-Do not route the spurious entries through common_interrupt and do_IRQ() as
-the original code did. Route it to smp_spurious_interrupt() which evaluates
-the vector number and acts accordingly now that the real vector numbers are
-handed in.
-
-Fixup the pr_warn so the actual spurious vector (0xff) is clearly
-distiguished from the other vectors and also note for the vectored case
-whether it was pending in the ISR or not.
-
- "Spurious APIC interrupt (vector 0xFF) on CPU#0, should never happen."
- "Spurious interrupt vector 0xed on CPU#1. Acked."
- "Spurious interrupt vector 0xee on CPU#1. Not pending!."
-
-Fixes: 2414e021ac8d ("x86: Avoid building unused IRQ entry stubs")
-Reported-by: Jan Kiszka <jan.kiszka@siemens.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jan Beulich <jbeulich@suse.com>
----
- arch/x86/entry/entry_32.S     |   24 ++++++++++++++++++++++++
- arch/x86/entry/entry_64.S     |   30 ++++++++++++++++++++++++++----
- arch/x86/include/asm/hw_irq.h |    2 ++
- arch/x86/kernel/apic/apic.c   |   33 ++++++++++++++++++++++-----------
- arch/x86/kernel/idt.c         |    3 ++-
- 5 files changed, 76 insertions(+), 16 deletions(-)
-
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -1104,6 +1104,30 @@ ENTRY(irq_entries_start)
-     .endr
- END(irq_entries_start)
- 
-+#ifdef CONFIG_X86_LOCAL_APIC
-+	.align 8
-+ENTRY(spurious_entries_start)
-+    vector=FIRST_SYSTEM_VECTOR
-+    .rept (NR_VECTORS - FIRST_SYSTEM_VECTOR)
-+	pushl	$(~vector+0x80)			/* Note: always in signed byte range */
-+    vector=vector+1
-+	jmp	common_spurious
-+	.align	8
-+    .endr
-+END(spurious_entries_start)
-+
-+common_spurious:
-+	ASM_CLAC
-+	addl	$-0x80, (%esp)			/* Adjust vector into the [-256, -1] range */
-+	SAVE_ALL switch_stacks=1
-+	ENCODE_FRAME_POINTER
-+	TRACE_IRQS_OFF
-+	movl	%esp, %eax
-+	call	smp_spurious_interrupt
-+	jmp	ret_from_intr
-+ENDPROC(common_interrupt)
-+#endif
-+
- /*
-  * the CPU automatically disables interrupts when executing an IRQ vector,
-  * so IRQ-flags tracing has to follow that:
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -375,6 +375,18 @@ ENTRY(irq_entries_start)
-     .endr
- END(irq_entries_start)
- 
-+	.align 8
-+ENTRY(spurious_entries_start)
-+    vector=FIRST_SYSTEM_VECTOR
-+    .rept (NR_VECTORS - FIRST_SYSTEM_VECTOR)
-+	UNWIND_HINT_IRET_REGS
-+	pushq	$(~vector+0x80)			/* Note: always in signed byte range */
-+	jmp	common_spurious
-+	.align	8
-+	vector=vector+1
-+    .endr
-+END(spurious_entries_start)
-+
- .macro DEBUG_ENTRY_ASSERT_IRQS_OFF
- #ifdef CONFIG_DEBUG_ENTRY
- 	pushq %rax
-@@ -571,10 +583,20 @@ END(interrupt_entry)
- 
- /* Interrupt entry/exit. */
- 
--	/*
--	 * The interrupt stubs push (~vector+0x80) onto the stack and
--	 * then jump to common_interrupt.
--	 */
-+/*
-+ * The interrupt stubs push (~vector+0x80) onto the stack and
-+ * then jump to common_spurious/interrupt.
-+ */
-+common_spurious:
-+	addq	$-0x80, (%rsp)			/* Adjust vector to [-256, -1] range */
-+	call	interrupt_entry
-+	UNWIND_HINT_REGS indirect=1
-+	call	smp_spurious_interrupt		/* rdi points to pt_regs */
-+	jmp	ret_from_intr
-+END(common_spurious)
-+_ASM_NOKPROBE(common_spurious)
-+
-+/* common_interrupt is a hotpath. Align it */
- 	.p2align CONFIG_X86_L1_CACHE_SHIFT
- common_interrupt:
- 	addq	$-0x80, (%rsp)			/* Adjust vector to [-256, -1] range */
---- a/arch/x86/include/asm/hw_irq.h
-+++ b/arch/x86/include/asm/hw_irq.h
-@@ -150,6 +150,8 @@ extern char irq_entries_start[];
- #define trace_irq_entries_start irq_entries_start
- #endif
- 
-+extern char spurious_entries_start[];
-+
- #define VECTOR_UNUSED		NULL
- #define VECTOR_SHUTDOWN		((void *)~0UL)
- #define VECTOR_RETRIGGERED	((void *)~1UL)
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -2040,21 +2040,32 @@ void __init register_lapic_address(unsig
- 	entering_irq();
- 	trace_spurious_apic_entry(vector);
- 
-+	inc_irq_stat(irq_spurious_count);
-+
-+	/*
-+	 * If this is a spurious interrupt then do not acknowledge
-+	 */
-+	if (vector == SPURIOUS_APIC_VECTOR) {
-+		/* See SDM vol 3 */
-+		pr_info("Spurious APIC interrupt (vector 0xFF) on CPU#%d, should never happen.\n",
-+			smp_processor_id());
-+		goto out;
-+	}
-+
- 	/*
--	 * Check if this really is a spurious interrupt and ACK it
--	 * if it is a vectored one.  Just in case...
--	 * Spurious interrupts should not be ACKed.
-+	 * If it is a vectored one, verify it's set in the ISR. If set,
-+	 * acknowledge it.
- 	 */
- 	v = apic_read(APIC_ISR + ((vector & ~0x1f) >> 1));
--	if (v & (1 << (vector & 0x1f)))
-+	if (v & (1 << (vector & 0x1f))) {
-+		pr_info("Spurious interrupt (vector 0x%02x) on CPU#%d. Acked\n",
-+			vector, smp_processor_id());
- 		ack_APIC_irq();
--
--	inc_irq_stat(irq_spurious_count);
--
--	/* see sw-dev-man vol 3, chapter 7.4.13.5 */
--	pr_info("spurious APIC interrupt through vector %02x on CPU#%d, "
--		"should never happen.\n", vector, smp_processor_id());
--
-+	} else {
-+		pr_info("Spurious interrupt (vector 0x%02x) on CPU#%d. Not pending!\n",
-+			vector, smp_processor_id());
-+	}
-+out:
- 	trace_spurious_apic_exit(vector);
- 	exiting_irq();
- }
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -319,7 +319,8 @@ void __init idt_setup_apic_and_irq_gates
- #ifdef CONFIG_X86_LOCAL_APIC
- 	for_each_clear_bit_from(i, system_vectors, NR_VECTORS) {
- 		set_bit(i, system_vectors);
--		set_intr_gate(i, spurious_interrupt);
-+		entry = spurious_entries_start + 8 * (i - FIRST_SYSTEM_VECTOR);
-+		set_intr_gate(i, entry);
- 	}
- #endif
- }
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
