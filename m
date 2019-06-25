@@ -2,150 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BAA522CE
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 07:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F352524CC
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 09:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbfFYF1u (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jun 2019 01:27:50 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:13500 "EHLO mx1.mailbox.org"
+        id S1728421AbfFYHa4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jun 2019 03:30:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58182 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726009AbfFYF1u (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jun 2019 01:27:50 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        id S1728408AbfFYHaz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 25 Jun 2019 03:30:55 -0400
+Received: from localhost (f4.8f.5177.ip4.static.sl-reverse.com [119.81.143.244])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id 75AFD5000F;
-        Tue, 25 Jun 2019 07:27:47 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id Hz6CaGAM_QKI; Tue, 25 Jun 2019 07:27:41 +0200 (CEST)
-Subject: Re: [PATCH 1/2 v9] serial: mctrl_gpio: Check if GPIO property exisits
- before requesting it
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-References: <20190620062420.11650-1-sr@denx.de>
- <CAMuHMdXMpS_pg9N0qSW=Li0QavAMRG79RJcS4s0w6NTCxv_zzg@mail.gmail.com>
- <24bfb52c-6f77-b7cd-7421-9e6e4b0aa7d3@denx.de>
- <CAMuHMdWeX6=SuSPVUB=WaYMsUbrmg5sraM=APeXsqr_Yv6u4AA@mail.gmail.com>
-From:   Stefan Roese <sr@denx.de>
-Message-ID: <d8ae626b-e574-be33-f698-3cb992653683@denx.de>
-Date:   Tue, 25 Jun 2019 07:27:33 +0200
+        by mail.kernel.org (Postfix) with ESMTPSA id 954C720652;
+        Tue, 25 Jun 2019 07:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561447855;
+        bh=qOPMdAefONiiQtGyOnVHuNOQa95t20MqHBIrIkRKEUE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSQEnRsKS6ZadDbgY0eboH0YIJh21cGvWvGF2pMUwxQiFDuUq6eISTrpthg6uIoUZ
+         diWOwIoFZt7rST1C3aIR7UZ3yhcoTKhABAjNY1CEdfIi1g5E/6a8kMSr2jB2iZVwGd
+         48TdJfAWfbZ3qIHVtbPKg9UkpWY/ZnN50vuW3lRc=
+Date:   Tue, 25 Jun 2019 15:27:15 +0800
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     sudheer v <open.sudheer@gmail.com>
+Cc:     Jiri Slaby <jslaby@suse.com>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShivahShankar Shakarnarayan rao 
+        <shivahshankar.shankarnarayanrao@aspeedtech.com>,
+        Shiva shankar <shivahshankar@gmail.com>,
+        Sudheer V <sudheer.veliseti@aspeedtech.com>,
+        sudheer veliseti <sudheer.open@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Subject: Re: [patch 0/5] *** DMA based UART driver for AST2500 ***
+Message-ID: <20190625072715.GB18197@kroah.com>
+References: <1561115855-4186-1-git-send-email-open.sudheer@gmail.com>
+ <20190621131729.GA9997@kroah.com>
+ <CAE-5=DTdo4qDUPRw+Giu=bCcpqu7EdLDt5ddDvqLSgGbuqE1Fg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWeX6=SuSPVUB=WaYMsUbrmg5sraM=APeXsqr_Yv6u4AA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-5=DTdo4qDUPRw+Giu=bCcpqu7EdLDt5ddDvqLSgGbuqE1Fg@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Geert,
+On Tue, Jun 25, 2019 at 10:30:32AM +0530, sudheer v wrote:
+> Hi Greg,
+> When i last submitted patches, i have not added change-logs.
+> and also used custom debugs instead of kernel dynamic debugs.
+> So i have resubmitted the patches , considering you have discarded old set.
+> I want to send any changes suggested  from now on wards  with versioning
+> V1,V2...so on.
+> Is this acceptable for you? or should i submit the patches again as V1 once
+> again.?
 
-On 24.06.19 17:35, Geert Uytterhoeven wrote:
-> On Mon, Jun 24, 2019 at 5:29 PM Stefan Roese <sr@denx.de> wrote:
->> On 24.06.19 10:42, Geert Uytterhoeven wrote:
->>> On Thu, Jun 20, 2019 at 8:24 AM Stefan Roese <sr@denx.de> wrote:
->>>> This patch adds a check for the GPIOs property existence, before the
->>>> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
->>>> support is added (2nd patch in this patch series) on x86 platforms using
->>>> ACPI.
->>>>
->>>> Here Mika's comments from 2016-08-09:
->>>>
->>>> "
->>>> I noticed that with v4.8-rc1 serial console of some of our Broxton
->>>> systems does not work properly anymore. I'm able to see output but input
->>>> does not work.
->>>>
->>>> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
->>>> ("tty/serial/8250: use mctrl_gpio helpers").
->>>>
->>>> The reason why it fails is that in ACPI we do not have names for GPIOs
->>>> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
->>>> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
->>>> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
->>>> UART device in Broxton has following (simplified) ACPI description:
->>>>
->>>>       Device (URT4)
->>>>       {
->>>>           ...
->>>>           Name (_CRS, ResourceTemplate () {
->>>>               GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
->>>>                       "\\_SB.GPO0", 0x00, ResourceConsumer)
->>>>               {
->>>>                   0x003A
->>>>               }
->>>>               GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
->>>>                       "\\_SB.GPO0", 0x00, ResourceConsumer)
->>>>               {
->>>>                   0x003D
->>>>               }
->>>>           })
->>>>
->>>> In this case it finds the first GPIO (0x003A which happens to be RX pin
->>>> for that UART), turns it into GPIO which then breaks input for the UART
->>>> device. This also breaks systems with bluetooth connected to UART (those
->>>> typically have some GPIOs in their _CRS).
->>>>
->>>> Any ideas how to fix this?
->>>>
->>>> We cannot just drop the _CRS index lookup fallback because that would
->>>> break many existing machines out there so maybe we can limit this to
->>>> only DT enabled machines. Or alternatively probe if the property first
->>>> exists before trying to acquire the GPIOs (using
->>>> device_property_present()).
->>>> "
->>>>
->>>> This patch implements the fix suggested by Mika in his statement above.
->>>>
->>>> Signed-off-by: Stefan Roese <sr@denx.de>
-> 
->>>> --- a/drivers/tty/serial/serial_mctrl_gpio.c
->>>> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
-> 
->>>> @@ -116,6 +117,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
->>>>
->>>>           for (i = 0; i < UART_GPIO_MAX; i++) {
->>>>                   enum gpiod_flags flags;
->>>> +               char *gpio_str;
->>>> +               bool present;
->>>> +
->>>> +               /* Check if GPIO property exists and continue if not */
->>>> +               gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
->>>> +                                    mctrl_gpios_desc[i].name);
->>>
->>> This will silently break DTBs using "(cts|dsr|dcd|rng|rts|dtr)-gpio" instead
->>> of "(cts|dsr|dcd|rng|rts|dtr)-gpios".
->>
->> Should both options be supported ("cts-gpio" vs "cts-gpios")?
->> Documentation/devicetree/bindings/serial/serial.txt only mentions
->> the "-gpios" variant.
-> 
-> Well, the "-gpio" variant is deprecated, but still supported by
-> devm_gpiod_get_index_optional(), and there are active users in upstream
-> DTS files.
-> 
-> My main objection is (trying to) replicate the matching logic inside
-> gpiolib.c, causing subtle semantic differences. And keeping it consistent,
-> of course.
-> 
-> It would be nice if this could be fixed inside acpi_find_gpio(), so
-> users don't need to be updated.  There may be other subsystems where
-> the difference between DT and ACPI may cause issues, unbeknownst.
+No, please resend now as a v3 series, with the information that says
+what you changed from the previous versions.
 
-Sure, I can fix this. I would prefer to do this in a follow-up patch
-though, if nobody objects.
+thanks,
 
-Thanks,
-Stefan
+greg k-h
