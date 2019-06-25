@@ -2,65 +2,139 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1671551A6
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 16:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E657A554CD
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 18:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728155AbfFYO1o (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jun 2019 10:27:44 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:43391 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727070AbfFYO1o (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jun 2019 10:27:44 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hfmQ5-00016Q-1z; Tue, 25 Jun 2019 16:27:37 +0200
-Date:   Tue, 25 Jun 2019 16:27:35 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     "Hodaszi, Robert" <Robert.Hodaszi@digi.com>
-cc:     Michael Shych <michaelsh@mellanox.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: Re: "No irq handler for vector" problem
-In-Reply-To: <e1eda070-6326-ac1f-803f-917e0e1c1ee6@digi.com>
-Message-ID: <alpine.DEB.2.21.1906251625430.32342@nanos.tec.linutronix.de>
-References: <dcc1febb-2afc-da9b-696e-3c9bf63f4b76@digi.com> <alpine.DEB.2.21.1906211858340.5503@nanos.tec.linutronix.de> <37433D8393E7AF43B0D856B93884DA9E4FD67B64@MTK-SMS-XCH02.digi.com> <AM6PR05MB61689A1EE1E6B31682A476FAD9E10@AM6PR05MB6168.eurprd05.prod.outlook.com>
- <alpine.DEB.2.21.1906231955420.32342@nanos.tec.linutronix.de> <AM6PR05MB6168265CCF44FBCAEBBD4EA8D9E00@AM6PR05MB6168.eurprd05.prod.outlook.com> <d40acbee-df87-1f4b-48c1-66fe31c841fd@digi.com> <alpine.DEB.2.21.1906241609080.32342@nanos.tec.linutronix.de>
- <c49e9454-d6d2-408c-8232-ee4c17d6975d@digi.com> <alpine.DEB.2.21.1906242335250.32342@nanos.tec.linutronix.de> <a1582e82-c2b3-95fd-0c92-e04765da0a59@digi.com> <alpine.DEB.2.21.1906251213021.32342@nanos.tec.linutronix.de> <c7a830df-56ff-e03d-7634-7a6f1e45f9d9@digi.com>
- <e1eda070-6326-ac1f-803f-917e0e1c1ee6@digi.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1730170AbfFYQq0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jun 2019 12:46:26 -0400
+Received: from mx.cs.msu.ru ([188.44.42.42]:39899 "EHLO mail.cs.msu.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726397AbfFYQq0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 25 Jun 2019 12:46:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
+         s=dkim; h=Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=sAAsGr5aya7rHncrNbs1gvq6cIgrrMYiXY3ywGrXYhQ=; b=QMNp5d8cwIP5v16UkqgbU+KLuu
+        wtu37K7gscVrjsH7LuRWQ/hbTe8vpYlpwsgcJMlbLVirR3xZeTfuZcbgxFdt6KmMtq2gTDfVLs0nk
+        Ll7XMiZIl/h5j9O/aHcbA4p8gX0rhT7ad78w5CINqwHFuydSdyZWQRkOipGat9tdadYxi2R8lsyt4
+        T4MJBZJqldvndWZT1B61gl9pGAzEwEJgKYYniNDNLvg4bV1HM8b9waNBfqpFjErMldhpRb92UeEvP
+        tYWVb5t8rYkf5EjEik0q7oWCcY4/RTVtq8yZYVFmEayQHOJ+DtD9yatQP+wLFQKr6KDpK4nT9kjm9
+        yLzldqXQ==;
+Received: from [10.7.4.141] (port=44632 helo=cello.cs.msu.ru)
+        by mail.cs.msu.ru with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92 (FreeBSD))
+        (envelope-from <ar@cs.msu.ru>)
+        id 1hfo3E-0006Uf-70; Tue, 25 Jun 2019 19:12:08 +0300
+From:   Arseny Maslennikov <ar@cs.msu.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
+        Rob Landley <rob@landley.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Pavel Machek <pavel@ucw.cz>, Arseny Maslennikov <ar@cs.msu.ru>
+Date:   Tue, 25 Jun 2019 19:11:46 +0300
+Message-Id: <20190625161153.29811-1-ar@cs.msu.ru>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 10.7.4.141
+X-SA-Exim-Mail-From: ar@cs.msu.ru
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.cs.msu.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_ADSP_ALL autolearn=no autolearn_force=no version=3.4.2
+Subject: [PATCH v2 0/7] TTY Keyboard Status Request
+X-SA-Exim-Version: 4.2
+X-SA-Exim-Scanned: Yes (on mail.cs.msu.ru)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Robert,
+This patch series introduces TTY keyboard status request, a feature of
+the n_tty line discipline that reserves a character in struct termios
+(^T by default) and reacts to it by printing a short informational line
+to the terminal and sending a Unix signal to the tty's foreground
+process group. The processes may, in response to the signal, output a
+textual description of what they're doing.
 
-On Tue, 25 Jun 2019, Hodaszi, Robert wrote:
-> On Mon, 25 Jun 2019, Gleixner, Thomas wrote:
-> 
-> I'm working on a clean fix for both the level and the edge problems. Just
-> at the point to start testing. Will post the result in a couple of hours.
-> 
-> I checked the patch. That will obviously fix the "error message
-> appearing" problem. :) I assume, no need to test that, but just in case,
-> I applied all patches, and error message is gone. Which is probably more
-> useful feedback: interrupts, and everything seems working fine on my
-> side.
+The feature has been present in a similar form at least in
+Free/Open/NetBSD; it would be nice to have something like this in Linux
+as well. There is an LKML thread[1] where users have previously
+expressed the rationale for this.
 
-as I explained before this is legit and no harm done on edge type
-interrupts. Level type could get into wedged state.
+The current implementation does not break existing kernel API in any
+way, since, fortunately, all the architectures supported by the kernel
+happen to have at least 1 free byte in the termios control character
+array.
 
-Thanks a lot for debugging this and providing all the useful data!
+The series should cleanly apply to tty-next.
 
-       tglx
+To thoroughly test these, one might need at least a patched stty among
+other tools, so I've brought up a simple initrd generator[2] which can
+be used to create a lightweight environment to boot up in a VM and to
+fiddle with.
+
+[1] https://lore.kernel.org/lkml/1415200663.3247743.187387481.75CE9317@webmail.messagingengine.com/
+[2] https://github.com/porrided/tty-kb-status-userspace
+
+v2 <- v1: removed useless debugging bits.
+
+Discussion of v1:
+https://lore.kernel.org/lkml/20190605081906.28938-1-ar@cs.msu.ru/
+
+Arseny Maslennikov (7):
+  signal.h: Define SIGINFO on all architectures
+  tty: termios: Reserve space for VSTATUS in .c_cc
+  n_tty: Send SIGINFO to fg pgrp on status request character
+  linux/signal.h: Ignore SIGINFO by default in new tasks
+  tty: Add NOKERNINFO lflag to termios
+  n_tty: ->ops->write: Cut core logic out to a separate function
+  n_tty: Provide an informational line on VSTATUS receipt
+
+ arch/alpha/include/asm/termios.h         |   4 +-
+ arch/alpha/include/uapi/asm/termbits.h   |   2 +
+ arch/arm/include/uapi/asm/signal.h       |   1 +
+ arch/h8300/include/uapi/asm/signal.h     |   1 +
+ arch/ia64/include/asm/termios.h          |   4 +-
+ arch/ia64/include/uapi/asm/signal.h      |   1 +
+ arch/ia64/include/uapi/asm/termbits.h    |   2 +
+ arch/m68k/include/uapi/asm/signal.h      |   1 +
+ arch/mips/include/asm/termios.h          |   4 +-
+ arch/mips/include/uapi/asm/signal.h      |   1 +
+ arch/mips/include/uapi/asm/termbits.h    |   2 +
+ arch/parisc/include/asm/termios.h        |   4 +-
+ arch/parisc/include/uapi/asm/signal.h    |   1 +
+ arch/parisc/include/uapi/asm/termbits.h  |   2 +
+ arch/powerpc/include/asm/termios.h       |   4 +-
+ arch/powerpc/include/uapi/asm/signal.h   |   1 +
+ arch/powerpc/include/uapi/asm/termbits.h |   2 +
+ arch/s390/include/asm/termios.h          |   4 +-
+ arch/s390/include/uapi/asm/signal.h      |   1 +
+ arch/sparc/include/asm/termios.h         |   4 +-
+ arch/sparc/include/uapi/asm/signal.h     |   2 +
+ arch/sparc/include/uapi/asm/termbits.h   |   2 +
+ arch/x86/include/uapi/asm/signal.h       |   1 +
+ arch/xtensa/include/uapi/asm/signal.h    |   1 +
+ arch/xtensa/include/uapi/asm/termbits.h  |   2 +
+ drivers/tty/Makefile                     |   3 +-
+ drivers/tty/n_tty.c                      |  70 ++++-
+ drivers/tty/n_tty_status.c               | 337 +++++++++++++++++++++++
+ include/asm-generic/termios.h            |   4 +-
+ include/linux/sched.h                    |   7 +
+ include/linux/signal.h                   |   5 +-
+ include/linux/tty.h                      |   7 +-
+ include/uapi/asm-generic/signal.h        |   1 +
+ include/uapi/asm-generic/termbits.h      |   2 +
+ 34 files changed, 457 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/tty/n_tty_status.c
+
+-- 
+2.20.1
+
