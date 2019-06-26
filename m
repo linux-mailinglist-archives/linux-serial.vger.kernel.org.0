@@ -2,92 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E68755A00
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jun 2019 23:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC0A56294
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Jun 2019 08:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726396AbfFYVdu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jun 2019 17:33:50 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:54416 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726331AbfFYVdt (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jun 2019 17:33:49 -0400
-Received: from callcc.thunk.org (guestnat-104-133-0-109.corp.google.com [104.133.0.109] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x5PLWF3v023800
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jun 2019 17:32:16 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 59DBA42002B; Tue, 25 Jun 2019 17:32:15 -0400 (EDT)
-Date:   Tue, 25 Jun 2019 17:32:15 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Arseny Maslennikov <ar@cs.msu.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
-        Rob Landley <rob@landley.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v2 4/7] linux/signal.h: Ignore SIGINFO by default in new
- tasks
-Message-ID: <20190625213215.GB3116@mit.edu>
-Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
-        Arseny Maslennikov <ar@cs.msu.ru>,
+        id S1725797AbfFZGtK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Jun 2019 02:49:10 -0400
+Received: from verein.lst.de ([213.95.11.211]:40589 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725954AbfFZGtK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 26 Jun 2019 02:49:10 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 0462268B05; Wed, 26 Jun 2019 08:48:38 +0200 (CEST)
+Date:   Wed, 26 Jun 2019 08:48:37 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mark Greer <mgreer@animalcreek.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Dale Farnsworth <dale@farnsworth.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
-        Rob Landley <rob@landley.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Pavel Machek <pavel@ucw.cz>
-References: <20190625161153.29811-1-ar@cs.msu.ru>
- <20190625161153.29811-5-ar@cs.msu.ru>
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: DMA coherency in drivers/tty/serial/mpsc.c
+Message-ID: <20190626064837.GA24531@lst.de>
+References: <20190625122641.GA4421@lst.de> <20190625163722.GA18626@animalcreek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190625161153.29811-5-ar@cs.msu.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190625163722.GA18626@animalcreek.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 07:11:50PM +0300, Arseny Maslennikov wrote:
-> This matches the behaviour of other Unix-like systems that have SIGINFO
-> and causes less harm to processes that do not install handlers for this
-> signal, making the keyboard status character non-fatal for them.
+On Tue, Jun 25, 2019 at 09:37:22AM -0700, Mark Greer wrote:
+> Yeah, the mpsc driver had lots of ugly cache related hacks because of
+> cache coherency bugs in the early version of the MV64x60 bridge chips
+> that it was embedded in.  That chip is pretty much dead now and I've
+> removed core support for it from the powerpc tree.  Removing the mpsc
+> driver is on my todo list but I've been busy and lazy.  So, to sum it
+> up, don't spend any more time worrying about it as it should be removed.
 > 
-> This is implemented with the assumption that SIGINFO is defined
-> to be equivalent to SIGPWR; still, there is no reason for PWR to
-> result in termination of the signal recipient anyway — it does not
-> indicate there is a fatal problem with the recipient's execution
-> context (like e.g. FPE/ILL do), and we have TERM/KILL for explicit
-> termination requests.
+> I'll post a patch to do that tonight and I'm sorry for any time you've
+> spent looking at it so far.
 
-So this is a consequence of trying to overload SIGINFO with SIGPWR.
-At least on some legacy Unix systems, the way SIGPWR worked was that
-init would broadcast SIGPWR to all userspace process (with system
-daemons on an exception list so they could get shutdown last).
-Applications which didn't have a SIGPWR handler registered, would just
-exit.  Those that did, were expected to clean up in preparation with
-the impending shutdown.  After some period of time, then processes
-would get hard killed and then system daemons would get shut down and
-the system would cleanly shut itself down.
-
-So SIGPWR acted much like SIGHUP, and that's why the default behavior
-was "terminate".  Now, as far as I know, we've not actually used in
-that way, at least for most common distributions, but there is a sane
-reason why things are they way there are, and in there are people who
-have been using SIGPWR the way it had originally been intended, there
-is risk in overloading SIGINFO with SIGPWR --- in particular, typing
-^T might cause some enterprise database to start shutting itself down.  :-)
-
-(In particular it might be worth checking Linux ports of Oracle and
-DB2.)
-
-					- Ted
+No problem.  And if future such broken chips show up we now have
+support for per-device DMA coherency settings and could actually
+handle it in a reaѕonably clean way.
