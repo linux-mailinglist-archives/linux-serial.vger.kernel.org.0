@@ -2,147 +2,119 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1A256B35
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Jun 2019 15:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564B256B91
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Jun 2019 16:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725958AbfFZNuH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Jun 2019 09:50:07 -0400
-Received: from mx.cs.msu.ru ([188.44.42.42]:39415 "EHLO mail.cs.msu.ru"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726628AbfFZNuE (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Jun 2019 09:50:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
-         s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=q9rA/NfcGBQU65ajNFj9+Mg9uUBNenWP09+IQ0w822s=; b=JdbL0h3Qa5tGTc+cDi9syiZzmv
-        8hR5pwh81hv9AMS/ddTzfy+i0cfTRTquL0wz9rKm0AkH/8ibFfFtkMzrtwLyII5kkm6hf4BDc9SwS
-        yxZu72hIR4Uqf4p8T9j6W+IcpnYp9+Lqou4LXAFsFbYPKHSox/pcqzxSYQGCsP70qFkfl5E/ezUG8
-        TFBhpreLF5okYDNTgTRG8iQ7bfDGT08Px5Dr0J1J4264nBp8xxTjwkigmJTgU2RxCtA16zdVd0uad
-        x1p6X1HCE5fT0dF03i4OsAWym19br2LajYz2cMJ8/A1Hjsf3idDPIxD/H71gy5HBWuLWAtIp56rsD
-        zX+tFHAQ==;
-Received: from [37.204.119.143] (port=58022 helo=cello)
-        by mail.cs.msu.ru with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.92 (FreeBSD))
-        (envelope-from <ar@cs.msu.ru>)
-        id 1hg8J2-000KTm-6M; Wed, 26 Jun 2019 16:49:48 +0300
-Date:   Wed, 26 Jun 2019 16:49:41 +0300
-From:   Arseny Maslennikov <ar@cs.msu.ru>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
-        Rob Landley <rob@landley.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Pavel Machek <pavel@ucw.cz>
-Message-ID: <20190626134941.GA3668@cello>
-References: <20190625161153.29811-1-ar@cs.msu.ru>
- <20190625161153.29811-5-ar@cs.msu.ru>
- <20190625213215.GB3116@mit.edu>
+        id S1726723AbfFZOOR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Jun 2019 10:14:17 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46350 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726484AbfFZOOR (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 26 Jun 2019 10:14:17 -0400
+Received: by mail-lf1-f65.google.com with SMTP id z15so1664698lfh.13
+        for <linux-serial@vger.kernel.org>; Wed, 26 Jun 2019 07:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WJuUxIWdx7E9MvnriBAYHhzNHu31FVqwrxDDMgUFPw0=;
+        b=PSYYc0+B4QlGEKPAY87jv8oooLRF8PAi00CHSZQE0MfEwrUyM9o0TNWpiWUQdIiwRO
+         PYHviZTIn9/KBUdf6K2vzJ1ZjrHbi9guDWkTvVIxyaIOeqxMz2YnoQSDCWEg1acfynrq
+         mX+PIAw5nwfMip4Wr565dSk5slef8IMdM0Qy8bIxu2L1DDCWzCZvg6euplEJmUYfrNpY
+         K3BEXcUG6iS1aE98zAeVsVInm1gS+2a0W57uUZ31jLjvb93R0famcl/e3O0un/+/VzeR
+         PVGlSwH2/E/0368shAT8ticd1bPb7bUrenRSEvfaBB45PsGgkz26sYiDLG3UMJ+Blmti
+         8DZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WJuUxIWdx7E9MvnriBAYHhzNHu31FVqwrxDDMgUFPw0=;
+        b=jyUyMaGCm7BnIXaHh7qsEkD+TCQppMZl93tgHl+ePGlEBiC+nXywFfbxbg27b02Kip
+         gX6gduehVixFUIQBwGBuHTZmC06VR7RrBBSBi3mNaXNqRYQJnzpWQ5POT2r45p6g+dID
+         969GVU7rwNJg2dV9QPLiqEcXLpOAWSPgriy2m0lz+Zcq32WnxZSKRg3leo77MFL5kQ5g
+         uVN8tUWZenjssL7SFZ7rtjrOCtId68kFVdogfnry/SFCcK1gl1R37JIRnfZKYRLONm/H
+         92NISohVGt/zgRYEFUSZXgPOIoiq5+r6ngwMslhjKILtpeR7CmqGHHuNipR+d3dRwSd1
+         NvuQ==
+X-Gm-Message-State: APjAAAXvguoHTpztekJcUDpnVfsXeoW3wR7Fmqx5ar1e99Z9KAbKBNWb
+        B85YPgXPcRjdo8Xi9uDUvA8=
+X-Google-Smtp-Source: APXvYqxc0z9OHzQhclj4HTtvYUhemdP59UMHs9KiDRvAuNViDyUoAqE676dypmM/JJBHuhpYjYQe2A==
+X-Received: by 2002:a19:9156:: with SMTP id y22mr2707624lfj.43.1561558455172;
+        Wed, 26 Jun 2019 07:14:15 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id 25sm2863825ljn.62.2019.06.26.07.14.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 26 Jun 2019 07:14:14 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PATCH v2 0/7] serial: imx: fix RTS and RTS/CTS handling
+Date:   Wed, 26 Jun 2019 17:11:26 +0300
+Message-Id: <1561558293-7683-1-git-send-email-sorganov@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <20190614072801.3187-1-s.hauer@pengutronix.de>
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mYCpIKhGyMATD0i+"
-Content-Disposition: inline
-In-Reply-To: <20190625213215.GB3116@mit.edu>
-OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 37.204.119.143
-X-SA-Exim-Mail-From: ar@cs.msu.ru
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.cs.msu.ru
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_ADSP_ALL autolearn=no autolearn_force=no version=3.4.2
-Subject: Re: [PATCH v2 4/7] linux/signal.h: Ignore SIGINFO by default in new
- tasks
-X-SA-Exim-Version: 4.2
-X-SA-Exim-Scanned: Yes (on mail.cs.msu.ru)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+RTS signal and RTS/CTS handshake handling had a few problems these
+patches fix.
 
---mYCpIKhGyMATD0i+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In addition, minor cleanups are made to the involved code.
 
-On Tue, Jun 25, 2019 at 05:32:15PM -0400, Theodore Ts'o wrote:
-> On Tue, Jun 25, 2019 at 07:11:50PM +0300, Arseny Maslennikov wrote:
-> > This matches the behaviour of other Unix-like systems that have SIGINFO
-> > and causes less harm to processes that do not install handlers for this
-> > signal, making the keyboard status character non-fatal for them.
-> >=20
-> > This is implemented with the assumption that SIGINFO is defined
-> > to be equivalent to SIGPWR; still, there is no reason for PWR to
-> > result in termination of the signal recipient anyway =E2=80=94 it does =
-not
-> > indicate there is a fatal problem with the recipient's execution
-> > context (like e.g. FPE/ILL do), and we have TERM/KILL for explicit
-> > termination requests.
->=20
-> So this is a consequence of trying to overload SIGINFO with SIGPWR.
+Changelog:
 
-Pretty much.
+  v2:
+      * Appended: "Reviewed-by:" and "Tested-by:"
+        Sascha Hauer <s.hauer@pengutronix.de>
 
-> At least on some legacy Unix systems, the way SIGPWR worked was that
-> init would broadcast SIGPWR to all userspace process (with system
-> daemons on an exception list so they could get shutdown last).
-> Applications which didn't have a SIGPWR handler registered, would just
-> exit.  Those that did, were expected to clean up in preparation with
-> the impending shutdown.  After some period of time, then processes
-> would get hard killed and then system daemons would get shut down and
-> the system would cleanly shut itself down.
->=20
-> So SIGPWR acted much like SIGHUP, and that's why the default behavior
-> was "terminate".  Now, as far as I know, we've not actually used in
-> that way, at least for most common distributions, but there is a sane
-> reason why things are they way there are, and in there are people who
-> have been using SIGPWR the way it had originally been intended, there
-> is risk in overloading SIGINFO with SIGPWR --- in particular, typing
-> ^T might cause some enterprise database to start shutting itself down.  :=
--)
+      * Removed "RFC" from header
 
-Only if that enterprise database:
-1) has a controlling terminal (a strange condition for a daemon, IMHO)
-2) that terminal has the status character set in the struct termios.
+  v1:
 
->=20
-> (In particular it might be worth checking Linux ports of Oracle and
-> DB2.)
+      * Fixed in "serial: imx: set_termios(): preserve RTS state"
 
-A quick google got me this document:
-https://docs.oracle.com/cd/B28359_01/server.111/b32009.pdf
-It only ever mentions CHLD, CONT, INT, PIPE, TERM, URG and IO.
+-+	ucr2 = UCR2_SRST | UCR2_IRTS;
+++	ucr2 |= UCR2_SRST | UCR2_IRTS;
+      
+        as noticed by Lothar Waßmann <LW@KARO-electronics.de>
 
-I have no real experience with neither DB2 nor Oracle DB, though, and no
-way to get hold of that kind of software, so I don't know where to look
-further. If we'd like to be really sure no one's hurt we'll need someone
-with actual expertise here.
+      * Fixed in "serial: imx: set_termios(): preserve RTS state"
+      
+-+	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTSC);
+++	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTS);
 
+        as the fix for the problem found by Sascha Hauer
+        <s.hauer@pengutronix.de>
 
---mYCpIKhGyMATD0i+
-Content-Type: application/pgp-signature; name="signature.asc"
+      * Reordered:
 
------BEGIN PGP SIGNATURE-----
+        serial: imx: set_termios(): preserve RTS state
+        serial: imx: set_termios(): do not enable autoRTS if RTS is unset
 
-iQIzBAABCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAl0Td+cACgkQ9dQjyAYL
-01C+9Q//QnhdAMuhEYr16Lcyx+FX+ZuTVpxDBHa6pogsPcLTd0K+J4XxxPp2+jC/
-blxZ91l6mqNHkoESH7zXRyiZSHigh2HeFyymiE+89qtkf9ZO387f3vRjOtyu+UAz
-jOujhiWETPCrUb1Yfw6tzCHP4odH7mnTaIydNw7OYuWyyIvkRQXnv0HQJalouzqf
-F5hxr/1F0gMTomIr/dgc7bunQGFt3CzshZauHtdAPe7rainc3vbVvNqRHi9zJkL4
-rkqK+S9Z++l3+EP/K4rgFNU2sQ12wgOJKMR90cuRN+tnfEZp5hOZcsDlr6LWA6tD
-9BH7J5yCP8oNCecksvjDN49ZriS8aEoA/P6ojyjgVKDK5HipvCY+5LojaHjzDL23
-7PmWi7VY9JVHkmFM3bCoU1oX4iVTh5CnyBj593M96S+wcR0i+v7j9o8J8rtd4rwk
-Y9uM16BI4EcC+nNGefMS3e+qPVTn94WuzjH4myCTgGJPsO7wVZ4EYwBhioFT2tCs
-EeHXbVVcZiwlPVp+mb4ZDO71hhpVYsrxOFYAXPGHAyeXwtoXbYxIJoOUROqxN7LV
-qrZylTRi0ItP2NQpDMWbX9XcqOGcEs5+vlouLE/Hneoqkzx50xPFxdpjnthplCUN
-Dm7MxjPFqgdfHW4W0jfxITJrMX+vkxsrrSM1ClYE8lw06FHfV2A=
-=fn7K
------END PGP SIGNATURE-----
+        as the latter makes sense only provided the former is already applied.
+      
 
---mYCpIKhGyMATD0i+--
+Sergey Organov (7):
+  serial: imx: fix locking in set_termios()
+  serial: imx: set_termios(): factor-out 'ucr2' initial value
+  serial: imx: set_termios(): clarify RTS/CTS bits calculation
+  serial: imx: set_termios(): preserve RTS state
+  serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+  serial: imx: set_mctrl(): correctly restore autoRTS state
+  serial: imx: get rid of imx_uart_rts_auto()
+
+ drivers/tty/serial/imx.c | 93 ++++++++++++++++++++++++------------------------
+ 1 file changed, 47 insertions(+), 46 deletions(-)
+
+--
+2.10.0.1.g57b01a3
