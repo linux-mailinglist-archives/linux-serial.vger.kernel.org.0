@@ -2,49 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E11F56614
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Jun 2019 12:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED9B5666D
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Jun 2019 12:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbfFZKAo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Jun 2019 06:00:44 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36969 "EHLO
+        id S1726242AbfFZKQW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Jun 2019 06:16:22 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:52631 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726077AbfFZKAo (ORCPT
+        with ESMTP id S1726157AbfFZKQV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Jun 2019 06:00:44 -0400
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        Wed, 26 Jun 2019 06:16:21 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1hg4jK-0005JJ-7g; Wed, 26 Jun 2019 12:00:42 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
+        id 1hg4yC-00076d-5r; Wed, 26 Jun 2019 12:16:04 +0200
+Received: from sha by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1hg4jJ-0006vx-RB; Wed, 26 Jun 2019 12:00:41 +0200
-Date:   Wed, 26 Jun 2019 12:00:41 +0200
+        id 1hg4y7-0006s2-BF; Wed, 26 Jun 2019 12:15:59 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     Uwe =?iso-8859-15?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+To:     linux-serial@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
         NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH RFC v1 0/7] serial: imx: fix RTS and RTS/CTS handling
-Message-ID: <20190626100041.a7hyyhubun6y2r2z@pengutronix.de>
-References: <20190614072801.3187-1-s.hauer@pengutronix.de>
- <1561042073-617-1-git-send-email-sorganov@gmail.com>
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sergey Organov <sorganov@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH 0/2] serial: imx: use UPF_AUTO_CTS
+Date:   Wed, 26 Jun 2019 12:15:55 +0200
+Message-Id: <20190626101557.26299-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1561042073-617-1-git-send-email-sorganov@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:53:50 up 39 days, 16:12, 93 users,  load average: 0.04, 0.07,
- 0.08
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: sha@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-serial@vger.kernel.org
@@ -53,26 +42,27 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Sergey,
+This series eliminates a duplicate call to uart_handle_cts_change() and
+sets the UPF_AUTO_CTS flag for the i.MX UART driver.
 
-On Thu, Jun 20, 2019 at 05:47:46PM +0300, Sergey Organov wrote:
-> The patches are not tested yet, so the RFC in the header. I'll re-roll
-> without RFC once Sasha Hauer tests them.
-> 
-> Sasha, in addition to already discussed fixes, I've also reordered 2
-> patches so that the sequence makes sense.
-> 
+Normally setting the UPF_AUTO_CTS flag should only be a little
+optimization as the transmitter is no longer enabled/disabled with every
+CTS change, here it fixes an issue which initially brought me to
+implement this patch. I am working on uploading a firmware to a Marvell
+bluetooth chip. During download it often happened that a CTS interrupt
+was lost and the upload stalled forever. This patch fixes the issue
+(without knowing why we lost CTS interrupts in the first place)
 
-I reviewed and tested this series, so when resending you can add my:
+This series is based on Sergei Shtylyovs series "serial: imx: fix RTS
+and RTS/CTS handling" and should be applied ontop of it.
 
-Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
-Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
+Sascha Hauer (2):
+  serial: imx: remove duplicate handling of CTS change
+  serial: imx: use UPF_AUTO_CTS
 
-Thanks
- Sascha
+ drivers/tty/serial/imx.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.20.1
+
