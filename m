@@ -2,86 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB7F588D7
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Jun 2019 19:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E04C58E38
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Jun 2019 01:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbfF0Rln (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Jun 2019 13:41:43 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34959 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726543AbfF0Rln (ORCPT
+        id S1726574AbfF0XAZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 27 Jun 2019 19:00:25 -0400
+Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:3693 "EHLO
+        bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726567AbfF0XAZ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Jun 2019 13:41:43 -0400
-Received: by mail-pf1-f196.google.com with SMTP id d126so1591846pfd.2;
-        Thu, 27 Jun 2019 10:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=5CHqL3EBEcLGFr61w8Fbiglt4+Qtw+juW+E0F79bUSs=;
-        b=NM7Tf3kxJBT2upUU+pbABqaJLAjxI6Ms9o0eJv2QrYuvklzHK11o6kGy7Q8McL1vPq
-         MgYWuWCBZqZNoAnexFzEFBBdgbibCPCGf6+Lgy86Y68MK/6R5s9ZK7mc8XplYTbK2Oji
-         Hb0tMLHj9fwHiddVNbUaJZ1trObejkwRJi1L/IPyWUB+6lwIUoOzAXZwU67PtgsrxeXh
-         xSkB/ra4fQX7u8pW22kcqNB/NRbN3awoAmuG1h/z6Fc3JpF77hbRBVZZmeRPjdmgAO/S
-         lySUUWBD5b8nJHHTVmnDRIx1wYoatsNI5MtLg5ikI5GXBuafKODtPDu5Z/Ts5B0iLlyn
-         9pQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=5CHqL3EBEcLGFr61w8Fbiglt4+Qtw+juW+E0F79bUSs=;
-        b=k/Khw6lEou8vaZ9WgRAujpGsrun4qlNhYkk9U+OQSZz77q0Ky/68Q5ucVQtlhwSv/6
-         k/yvz80rc7/xpB9VIxQWcpRDV/fv5vU2gDM97BMYp0KTy9kE+cSJ57SUVbVREjbWP6e9
-         +cjnOen08tj8HRlDy5fU1Cjun9Y8voCvWZNb9tbvx+tH07DotWnfM7k6n0J2GJA0N/UO
-         lgzoYIORmnq7hkehW7g0byj1zZqMqNH13XR5/tFPForqtjtM152n/ba6IvBmalPU4Uum
-         W0a50bD1T1Kz9czi8myqcSkAJmgFoI72csIXuWuNKsQmDd7uF7FgseclMdctp8/qar/q
-         Z15Q==
-X-Gm-Message-State: APjAAAXDRXV3mhB5pZ+7MaSuVFxbt9R9ATecvYXCkVbQ+0S3klaP+j8C
-        XrjIBO+mO+ZdF4OYjN+Q+Io=
-X-Google-Smtp-Source: APXvYqygHbISHDdrpLXVbPOdsy6jcU8n8uSLL//hpP7O9so9tZGLN1fZ3SYPqRuoFVHEXuoxUnueYw==
-X-Received: by 2002:a17:90a:2506:: with SMTP id j6mr7654829pje.129.1561657302927;
-        Thu, 27 Jun 2019 10:41:42 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id e26sm3392164pfn.94.2019.06.27.10.41.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 10:41:42 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 47/87] tty: serial: remove memset after pci_alloc_consistent in icom.c
-Date:   Fri, 28 Jun 2019 01:41:35 +0800
-Message-Id: <20190627174136.4451-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        Thu, 27 Jun 2019 19:00:25 -0400
+X-Greylist: delayed 330 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Jun 2019 19:00:24 EDT
+X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 6BA5C8C2A7B
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jun 2019 22:54:53 +0000 (UTC)
+Received: from pdx1-sub0-mail-a29.g.dreamhost.com (100-96-85-75.trex.outbound.svc.cluster.local [100.96.85.75])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id DB9D08C2C4B
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jun 2019 22:54:52 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
+Received: from pdx1-sub0-mail-a29.g.dreamhost.com ([TEMPUNAVAIL].
+ [64.90.62.162])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:2500 (trex/5.17.2);
+        Thu, 27 Jun 2019 22:54:53 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|robert.middleton@rm5248.com
+X-MailChannels-Auth-Id: dreamhost
+X-Gusty-Plucky: 23c7d22b70da8e17_1561676093260_840197411
+X-MC-Loop-Signature: 1561676093260:1358747009
+X-MC-Ingress-Time: 1561676093260
+Received: from pdx1-sub0-mail-a29.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a29.g.dreamhost.com (Postfix) with ESMTP id 0053583032
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jun 2019 15:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=rm5248.com; h=mime-version
+        :from:date:message-id:subject:to:content-type; s=rm5248.com; bh=
+        iQp0m7k18LP5pvZFWqRJY3AOo2c=; b=mNATgSqH2GPLSgqCNKql6hZamPsXscnU
+        A6+gbdIOnyXBJQ2YAYfT49uuMCt39+o+sXYShka/rrX2LqW/H6EX7DLz2nnLhw9U
+        oZv3sDgkHug1r46FuQhgnmjxOtoZxWiQ7vepP8ttTFbsX2klG1595RtghLq7boGP
+        KqD6cGaV62o=
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: robert.middleton@rm5248.com)
+        by pdx1-sub0-mail-a29.g.dreamhost.com (Postfix) with ESMTPSA id A27D183026
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jun 2019 15:54:51 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id j6so8446173ioa.5
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jun 2019 15:54:51 -0700 (PDT)
+X-Gm-Message-State: APjAAAXYyiFiSX9o5C2iTK2AlXisFnZjpnES8uZxIgcyFR/2otL8C74Y
+        Sni78E1az1UL3Fe6l4vLH7RmhY134362xyUrgnk=
+X-Google-Smtp-Source: APXvYqwGQZrHAO8RNo9BmK7T/dcJQ96yp5nzoY4wZbHtj+k4iaqWqHVBj0SFhPf9KNSwpd/FxIA7XKpF4/QLosD6Wog=
+X-Received: by 2002:a02:5b05:: with SMTP id g5mr7394643jab.114.1561676090934;
+ Thu, 27 Jun 2019 15:54:50 -0700 (PDT)
+MIME-Version: 1.0
+X-DH-BACKEND: pdx1-sub0-mail-a29
+From:   Robert Middleton <robert.middleton@rm5248.com>
+Date:   Thu, 27 Jun 2019 18:54:39 -0400
+X-Gmail-Original-Message-ID: <CAKpcJVav5-_VdakmPYatZ5iZa38=_wN-gd4yhsx0Pfo+zR+2-Q@mail.gmail.com>
+Message-ID: <CAKpcJVav5-_VdakmPYatZ5iZa38=_wN-gd4yhsx0Pfo+zR+2-Q@mail.gmail.com>
+Subject: Issue with XR17V35X
+To:     linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-VR-OUT-STATUS: OK
+X-VR-OUT-SCORE: 0
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddrudelgdduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecunecujfgurhepggfhfffkuffvtgesthdtredttddtjeenucfhrhhomheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqnecukfhppedvtdelrdekhedrudeiiedrhedvnecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopehmrghilhdqihhouddqfhehvddrghhoohhglhgvrdgtohhmpdhinhgvthepvddtledrkeehrdduieeirdehvddprhgvthhurhhnqdhprghthheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqpdhmrghilhhfrhhomheprhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomhdpnhhrtghpthhtoheplhhinhhugidqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pci_alloc_consistent calls dma_alloc_coherent directly.
-In commit af7ddd8a627c
-("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
-dma_alloc_coherent has already zeroed the memory.
-So memset is not needed.
+Hi all,
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/tty/serial/icom.c | 2 --
- 1 file changed, 2 deletions(-)
+I've encountered a problem with the driver for the XR17V358
+PCIe-to-serial converter.  When I try to send data to the chip, it is
+only transmitted properly if I am also reading from the tty at the
+same point.  That is the following sequence in the terminal works:
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index ad374f7c476d..624f3d541c68 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -207,8 +207,6 @@ static int get_port_memory(struct icom_port *icom_port)
- 		return -ENOMEM;
- 	}
- 
--	memset(icom_port->statStg, 0, 4096);
--
- 	/* FODs: Frame Out Descriptor Queue, this is a FIFO queue that
-            indicates that frames are to be transmitted
- 	*/
--- 
-2.11.0
+cat /dev/ttyS13 &
+echo "this is a test" > /dev/ttyS13
 
+The data "this is a test" will be sent correctly out the serial port.
+However, if I don't cat it and do just the following:
+
+echo "this is a test" > /dev/ttyS13
+
+then I will occasionally get the first character('t'), occasionally
+nothing, but never the entire message and never more than one byte.
+
+I tried to track this down earlier today, but I haven't been able to
+figure out where exactly it is going wrong.  Has anybody else seen
+this?  Does anybody know what exactly to look for to fix this?  I was
+poking around alot in 8250_port.c, since that seems to be where most
+of this is happening, but I wasn't sure if this is an exar-specific
+thing or if it is a problem with all 16550-compatible UARTs.
+
+-Robert Middleton
