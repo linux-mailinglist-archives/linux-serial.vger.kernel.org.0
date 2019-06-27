@@ -2,84 +2,172 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D851857BA3
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Jun 2019 07:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A8057BAD
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Jun 2019 07:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725770AbfF0Frh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Jun 2019 01:47:37 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52699 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbfF0Frg (ORCPT
+        id S1726370AbfF0F6K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 27 Jun 2019 01:58:10 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:39553 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbfF0F6K (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Jun 2019 01:47:36 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hgNFu-000610-Ns; Thu, 27 Jun 2019 07:47:34 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hgNFt-0002e9-8v; Thu, 27 Jun 2019 07:47:33 +0200
-Date:   Thu, 27 Jun 2019 07:47:33 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
+        Thu, 27 Jun 2019 01:58:10 -0400
+Received: by mail-lj1-f195.google.com with SMTP id v18so1010412ljh.6
+        for <linux-serial@vger.kernel.org>; Wed, 26 Jun 2019 22:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Jg1u7BG7wu6GjScXMtGk/VeNhSa0IfS4GRE9+vAXXPE=;
+        b=DET1rfD5GeoeMSPoCV1yXNcu7VVU7oW0POg811KEjlSgnmdapJRNkkttJk89kMcYiF
+         WnbsQJWWzCz0Y8i0kx3GuC2e6VIQqS56JshveAdrTi+iQSID1E32SvB/5Q8oXT1KpNK+
+         s27Q1+PNO3bP17qDjm6F9szQYoiuBvvRwh746tu9dUeYO6iw6kckxda0fHW+XGu20cQ/
+         f88NJJSSNHGS2vc6Yl0QzjNK7UDin2RE9OQKj9YDqDDGyId1r4h/fpaPDcHlXNNDAaFe
+         +EPGCzMEdAJTusSS+n0wkk0C0kdzt1vMc5SNV98ivAMU+K/r6iM3lLoxtN3SB3XpFkLh
+         QCbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=Jg1u7BG7wu6GjScXMtGk/VeNhSa0IfS4GRE9+vAXXPE=;
+        b=YeETZS3E4Pq+xqg1JsnbOjT4bMYbGLaG8Ly/cbx3Yfn9i5S7/6HnUt3hJDZkBIsdu+
+         lzsPAuiikTqe3a7XqMxSRXKQ8/9003eV8tEBJnbVnzGq3l7MjmpEDpBQvJQ2QJnyJH5f
+         OI65S9Hg27AcuEJppgRyoctlEjBnTvp+ILy7G+AtlV1flVaW3HCXB1w0pduSCGh26l5k
+         79y86oT0SHsFGMkGLpBTQGrR10N8umKSyCwbXBhySXYo7LuYH2pcnHXT6hmrSD9PqUwW
+         LjaAWCvOtJDkKZTxJN4YzVDPJhuS3hqcHwq5nSmQ1R5bmIKyObuuoeWVl0+nMKgyF+WA
+         AjlQ==
+X-Gm-Message-State: APjAAAVlkBqKun8fMIhVsdFBobtAIEtwMXRwOvLHN/vDt+hqm5nlek6D
+        3qldCbnbqYjJdzX67k4kSsA=
+X-Google-Smtp-Source: APXvYqwo7atdj7D9mV8TXhVmxKQUQXt4DpXmXA+E3gMAlbvHsHaAURJGHEv8q2XZ0Nsl4ikV/6a2GA==
+X-Received: by 2002:a2e:854d:: with SMTP id u13mr1412795ljj.236.1561615088185;
+        Wed, 26 Jun 2019 22:58:08 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id c15sm172330lja.79.2019.06.26.22.58.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Jun 2019 22:58:07 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH v2 5/7] serial: imx: set_termios(): do not enable autoRTS
- if RTS is unset
-Message-ID: <20190627054733.wssatfb2i257737m@pengutronix.de>
+Subject: Re: [PATCH v2 3/7] serial: imx: set_termios(): clarify RTS/CTS bits calculation
 References: <20190614072801.3187-1-s.hauer@pengutronix.de>
- <1561558293-7683-1-git-send-email-sorganov@gmail.com>
- <1561558293-7683-6-git-send-email-sorganov@gmail.com>
+        <1561558293-7683-1-git-send-email-sorganov@gmail.com>
+        <1561558293-7683-4-git-send-email-sorganov@gmail.com>
+        <20190627052652.ey7cmzkztylfy7k3@pengutronix.de>
+Date:   Thu, 27 Jun 2019 08:58:06 +0300
+In-Reply-To: <20190627052652.ey7cmzkztylfy7k3@pengutronix.de> ("Uwe
+        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Thu, 27 Jun 2019 07:26:52
+ +0200")
+Message-ID: <87k1d7k1sh.fsf@osv.gnss.ru>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1561558293-7683-6-git-send-email-sorganov@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 05:11:31PM +0300, Sergey Organov wrote:
-> set_termios() shouldn't set UCR2_CTSC bit if UCR2_CTS (=TIOCM_RTS) is
-> cleared. Added corresponding check in imx_uart_rts_auto() to fix this.
-> 
-> Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Signed-off-by: Sergey Organov <sorganov@gmail.com>
-> ---
->  drivers/tty/serial/imx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index e0f5365..4867f80 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -405,7 +405,8 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
->  /* called with port.lock taken and irqs caller dependent */
->  static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
->  {
-> -	*ucr2 |= UCR2_CTSC;
-> +	if (*ucr2 & UCR2_CTS)
-> +		*ucr2 |= UCR2_CTSC;
->  }
+Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de> writes:
 
-I wonder if this patch is only correct in the presence of the previous
-patch. With the code currently in mainline imx_uart_rts_auto() is only
-called with UCR2_CTS unset.
+> On Wed, Jun 26, 2019 at 05:11:29PM +0300, Sergey Organov wrote:
+>> Avoid repeating the same code for rs485 twice.
+>> 
+>> Make it obvious we clear CRTSCTS bit in termios->c_cflag whenever
+>> sport->have_rtscts is false.
+>> 
+>> Make it obvious we clear UCR2_IRTS whenever CRTSCTS is set.
+>> 
+>> Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
+>> Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
+>> Signed-off-by: Sergey Organov <sorganov@gmail.com>
+>> ---
+>>  drivers/tty/serial/imx.c | 36 +++++++++++++-----------------------
+>>  1 file changed, 13 insertions(+), 23 deletions(-)
+>> 
+>> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+>> index 87802fd..17e2322 100644
+>> --- a/drivers/tty/serial/imx.c
+>> +++ b/drivers/tty/serial/imx.c
+>> @@ -1567,35 +1567,25 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+>>  	if ((termios->c_cflag & CSIZE) == CS8)
+>>  		ucr2 |= UCR2_WS;
+>>  
+>> -	if (termios->c_cflag & CRTSCTS) {
+>> -		if (sport->have_rtscts) {
+>> -			ucr2 &= ~UCR2_IRTS;
+>> +	if (!sport->have_rtscts)
+>> +		termios->c_cflag &= ~CRTSCTS;
+>>  
+>> -			if (port->rs485.flags & SER_RS485_ENABLED) {
+>> -				/*
+>> -				 * RTS is mandatory for rs485 operation, so keep
+>> -				 * it under manual control and keep transmitter
+>> -				 * disabled.
+>> -				 */
+>> -				if (port->rs485.flags &
+>> -				    SER_RS485_RTS_AFTER_SEND)
+>> -					imx_uart_rts_active(sport, &ucr2);
+>> -				else
+>> -					imx_uart_rts_inactive(sport, &ucr2);
+>> -			} else {
+>> -				imx_uart_rts_auto(sport, &ucr2);
+>> -			}
+>> -		} else {
+>> -			termios->c_cflag &= ~CRTSCTS;
+>> -		}
+>> -	} else if (port->rs485.flags & SER_RS485_ENABLED) {
+>> -		/* disable transmitter */
+>> +	if (port->rs485.flags & SER_RS485_ENABLED) {
+>> +		/*
+>> +		 * RTS is mandatory for rs485 operation, so keep
+>> +		 * it under manual control and keep transmitter
+>> +		 * disabled.
+>> +		 */
+>>  		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
+>>  			imx_uart_rts_active(sport, &ucr2);
+>>  		else
+>>  			imx_uart_rts_inactive(sport, &ucr2);
+>> -	}
+>>  
+>> +	} else if (termios->c_cflag & CRTSCTS)
+>> +		imx_uart_rts_auto(sport, &ucr2);
+>
+> Here a set of braces is needed even if the body has only a single
+> line.
 
-Best regards
-Uwe
+Really? scripts/checkpatch.pl didn't catch this.
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+If needed, is it essential enough to fix here, as final result has this
+chunk different anyway (and with braces)?
+
+>
+>> +
+>> +	if (termios->c_cflag & CRTSCTS)
+>> +		ucr2 &= ~UCR2_IRTS;
+>>  
+>>  	if (termios->c_cflag & CSTOPB)
+>>  		ucr2 |= UCR2_STPB;
+>
+> Is this patch intended to not change semantic? I wonder if it hides a
+> fix because if imx_uart_set_termios() was called with termios->c_cflag
+> & CRTSCTS and !sport->have_rtscts the rs485 block was not reached. Now
+> it is.
+
+As comment says "RTS is mandatory for rs485 operation", I assumed
+SER_RS485_ENABLED and !sport->have_rtscts are incompatible, so
+there should be no actual semantic change here. I mean:
+
+	if (port->rs485.flags & SER_RS485_ENABLED) {
+        	assert(sport->have_rtscts);
+
+should never fire.
+
+Do you think I rather need to put additional check for
+sport->have_rtscts inside the SER_RS485_ENABLED case?
+
+Thanks!
+
+-- Sergey
