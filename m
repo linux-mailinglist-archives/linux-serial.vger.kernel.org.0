@@ -2,122 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F5C57D92
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Jun 2019 09:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB7F588D7
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Jun 2019 19:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbfF0H7f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Jun 2019 03:59:35 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47261 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfF0H7f (ORCPT
+        id S1726712AbfF0Rln (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 27 Jun 2019 13:41:43 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:34959 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726543AbfF0Rln (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Jun 2019 03:59:35 -0400
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1hgPJd-0004tB-IH; Thu, 27 Jun 2019 09:59:33 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <sha@pengutronix.de>)
-        id 1hgPJd-0002eO-0L; Thu, 27 Jun 2019 09:59:33 +0200
-Date:   Thu, 27 Jun 2019 09:59:32 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Uwe =?iso-8859-15?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sergey Organov <sorganov@gmail.com>
-Subject: Re: [PATCH 1/2] serial: imx: remove duplicate handling of CTS change
-Message-ID: <20190627075932.4bs7dckal4np7u6n@pengutronix.de>
-References: <20190626101557.26299-1-s.hauer@pengutronix.de>
- <20190626101557.26299-2-s.hauer@pengutronix.de>
- <20190627061607.4ehhr6jj6vkfjorl@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190627061607.4ehhr6jj6vkfjorl@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:51:50 up 40 days, 14:10, 92 users,  load average: 0.08, 0.10,
- 0.16
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+        Thu, 27 Jun 2019 13:41:43 -0400
+Received: by mail-pf1-f196.google.com with SMTP id d126so1591846pfd.2;
+        Thu, 27 Jun 2019 10:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=5CHqL3EBEcLGFr61w8Fbiglt4+Qtw+juW+E0F79bUSs=;
+        b=NM7Tf3kxJBT2upUU+pbABqaJLAjxI6Ms9o0eJv2QrYuvklzHK11o6kGy7Q8McL1vPq
+         MgYWuWCBZqZNoAnexFzEFBBdgbibCPCGf6+Lgy86Y68MK/6R5s9ZK7mc8XplYTbK2Oji
+         Hb0tMLHj9fwHiddVNbUaJZ1trObejkwRJi1L/IPyWUB+6lwIUoOzAXZwU67PtgsrxeXh
+         xSkB/ra4fQX7u8pW22kcqNB/NRbN3awoAmuG1h/z6Fc3JpF77hbRBVZZmeRPjdmgAO/S
+         lySUUWBD5b8nJHHTVmnDRIx1wYoatsNI5MtLg5ikI5GXBuafKODtPDu5Z/Ts5B0iLlyn
+         9pQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5CHqL3EBEcLGFr61w8Fbiglt4+Qtw+juW+E0F79bUSs=;
+        b=k/Khw6lEou8vaZ9WgRAujpGsrun4qlNhYkk9U+OQSZz77q0Ky/68Q5ucVQtlhwSv/6
+         k/yvz80rc7/xpB9VIxQWcpRDV/fv5vU2gDM97BMYp0KTy9kE+cSJ57SUVbVREjbWP6e9
+         +cjnOen08tj8HRlDy5fU1Cjun9Y8voCvWZNb9tbvx+tH07DotWnfM7k6n0J2GJA0N/UO
+         lgzoYIORmnq7hkehW7g0byj1zZqMqNH13XR5/tFPForqtjtM152n/ba6IvBmalPU4Uum
+         W0a50bD1T1Kz9czi8myqcSkAJmgFoI72csIXuWuNKsQmDd7uF7FgseclMdctp8/qar/q
+         Z15Q==
+X-Gm-Message-State: APjAAAXDRXV3mhB5pZ+7MaSuVFxbt9R9ATecvYXCkVbQ+0S3klaP+j8C
+        XrjIBO+mO+ZdF4OYjN+Q+Io=
+X-Google-Smtp-Source: APXvYqygHbISHDdrpLXVbPOdsy6jcU8n8uSLL//hpP7O9so9tZGLN1fZ3SYPqRuoFVHEXuoxUnueYw==
+X-Received: by 2002:a17:90a:2506:: with SMTP id j6mr7654829pje.129.1561657302927;
+        Thu, 27 Jun 2019 10:41:42 -0700 (PDT)
+Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.googlemail.com with ESMTPSA id e26sm3392164pfn.94.2019.06.27.10.41.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 27 Jun 2019 10:41:42 -0700 (PDT)
+From:   Fuqian Huang <huangfq.daxian@gmail.com>
+Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 47/87] tty: serial: remove memset after pci_alloc_consistent in icom.c
+Date:   Fri, 28 Jun 2019 01:41:35 +0800
+Message-Id: <20190627174136.4451-1-huangfq.daxian@gmail.com>
+X-Mailer: git-send-email 2.11.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 08:16:07AM +0200, Uwe Kleine-König wrote:
-> On Wed, Jun 26, 2019 at 12:15:56PM +0200, Sascha Hauer wrote:
-> > We have an interrupt for the CTS input (RTS in FSL speech). Its handler
-> > calls uart_handle_cts_change(), so we shouldn't do this in
-> > imx_uart_mctrl_check() again.
-> > 
-> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> > ---
-> >  drivers/tty/serial/imx.c | 6 ------
-> >  1 file changed, 6 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > index a5e80a028e83..0419a084c0ed 100644
-> > --- a/drivers/tty/serial/imx.c
-> > +++ b/drivers/tty/serial/imx.c
-> > @@ -805,12 +805,8 @@ static void imx_uart_clear_rx_errors(struct imx_port *sport);
-> >  static unsigned int imx_uart_get_hwmctrl(struct imx_port *sport)
-> >  {
-> >  	unsigned int tmp = TIOCM_DSR;
-> > -	unsigned usr1 = imx_uart_readl(sport, USR1);
-> >  	unsigned usr2 = imx_uart_readl(sport, USR2);
-> >  
-> > -	if (usr1 & USR1_RTSS)
-> > -		tmp |= TIOCM_CTS;
-> > -
-> >  	/* in DCE mode DCDIN is always 0 */
-> >  	if (!(usr2 & USR2_DCDIN))
-> >  		tmp |= TIOCM_CAR;
-> 
-> Is this hunk supposed to be included in this patch? I think it's wrong.
+pci_alloc_consistent calls dma_alloc_coherent directly.
+In commit af7ddd8a627c
+("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
+dma_alloc_coherent has already zeroed the memory.
+So memset is not needed.
 
-The rationale was that when we do not evaluate the TIOCM_CTS anymore in
-the return value of imx_uart_get_hwmctrl() then there's no point in
-setting it in the first place. However, imx_uart_get_hwmctrl() also has
-another user which needs the flag, so right, this hunk shouldn't be
-here.
+Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+---
+ drivers/tty/serial/icom.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> 
-> > @@ -843,8 +839,6 @@ static void imx_uart_mctrl_check(struct imx_port *sport)
-> >  		sport->port.icount.dsr++;
-> >  	if (changed & TIOCM_CAR)
-> >  		uart_handle_dcd_change(&sport->port, status & TIOCM_CAR);
-> > -	if (changed & TIOCM_CTS)
-> > -		uart_handle_cts_change(&sport->port, status & TIOCM_CTS);
-> 
-> This doesn't hurt, does it?
-
-With this patch the number of CTS changes is correctly counted, I have
-verified this with a logic analyzer. Without it port->icount.cts has 978
-changes when it should be only 968 changes.
-
-> Also imx_uart_mctrl_check is called from
-> imx_uart_timeout which is supposed to catch missed interrupts and in
-> this case uart_handle_cts_change() must be called.
-
-Beginning with 2/2 uart_handle_cts_change() is needed for nothing else
-but statistic counting. There won't be any timeout due to missed
-interrupts as the hardware handles CTS itself.
-
-Sascha
-
+diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
+index ad374f7c476d..624f3d541c68 100644
+--- a/drivers/tty/serial/icom.c
++++ b/drivers/tty/serial/icom.c
+@@ -207,8 +207,6 @@ static int get_port_memory(struct icom_port *icom_port)
+ 		return -ENOMEM;
+ 	}
+ 
+-	memset(icom_port->statStg, 0, 4096);
+-
+ 	/* FODs: Frame Out Descriptor Queue, this is a FIFO queue that
+            indicates that frames are to be transmitted
+ 	*/
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.11.0
+
