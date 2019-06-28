@@ -2,131 +2,232 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CF359A13
-	for <lists+linux-serial@lfdr.de>; Fri, 28 Jun 2019 14:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A8F59B65
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Jun 2019 14:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbfF1MKP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 28 Jun 2019 08:10:15 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:41368 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726920AbfF1MKO (ORCPT
+        id S1727234AbfF1Mce (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 28 Jun 2019 08:32:34 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:39214 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726936AbfF1Mak (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 28 Jun 2019 08:10:14 -0400
-Received: by mail-ot1-f66.google.com with SMTP id o101so5408874ota.8;
-        Fri, 28 Jun 2019 05:10:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=inxAe6SbWa/+RmnCND7/C8+GZ6y+VHqo9LIxxdbUoME=;
-        b=tpf5cRqmU7ZBABjuKixaQc12K6vbIwoxWwk6KUbY1dqvU7NWNaB6j9lflH3KaJ0xyq
-         eQwniQQPUbGLuq+QXt6sgSimed54+b4yHDU4xTerZsa/37jvPhoEG3VaJ7C6E8wPo1BI
-         xFW/vGCpIegjK3NcXiERqZGORkSarxdc18lJwTwwV3oSvDfcj6qNnVbqsAsyNb5gGFA2
-         izS8w+/RrQ41q/TleTvr71s/6SlItgu984oIE3YQM3ZNArqsSar9VHp4lJ8Bhtcu6TSx
-         hSluUjMkS+Ey8S7HkP9oT++Yex/jNNdTXcLWry2Z3N2KBkyscPKk+7PbUuND9voU0E/8
-         Fvrg==
-X-Gm-Message-State: APjAAAUKbCv69fqF7JMLA2bT9LJDLdna9MywUz4qSgIQ1rd+gWCjOY7l
-        ay5miu08m8Um0OJilVQAn99z+KmtbSKoLLl8BUU=
-X-Google-Smtp-Source: APXvYqzeDMCw2GT1LfP0zffPcDxCF1ou2N+APCAbWLKnK1ivvfEQjzKho0R50iBDkfMOcaBX+W3HaDSWIWY12xAiDZA=
-X-Received: by 2002:a9d:2f03:: with SMTP id h3mr7560127otb.107.1561723813108;
- Fri, 28 Jun 2019 05:10:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190624123818.20919-1-geert+renesas@glider.be> <20190626181459.GA31913@x230>
-In-Reply-To: <20190626181459.GA31913@x230>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Jun 2019 14:10:01 +0200
-Message-ID: <CAMuHMdUpPEdz3aDXo90XQ7b-jP2ErxwqLKgmEFUhhuB-oBzrDA@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: rcar-dmac: Reject zero-length slave DMA requests
-To:     Eugeniu Rosca <roscaeugeniu@gmail.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
+        Fri, 28 Jun 2019 08:30:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=W01P5QS3uRV3PL5GrkuJuIMkN8UN/CJyWU+iu5QOvQA=; b=ByUoDHNg+0H8Qs/m1RN9jnjl/g
+        PhZlReBVQCQ3ubxdw/1nfki4i9C5SCMEmdI5EK0zLPc/vtAimnvml3RD5uzaSgL1ieLaEcBU5L9hh
+        WqE3AvSTzrPjsXctTwJgmEkewDkOHrMYoRPGlmnopzJnnnsHviXNLdbtpRRXKJpvQdnhsO8l4K9OR
+        zJCA5B68YSVtoweOX3wcUK7mtgCp50FtvkFedNESwqKroYKhsou4+04rIhVM4LpoXDRfFX1bLDYHP
+        3ujCWwkxnzB11zGX5d8rBGrRibdqgaCwlhGsiwHlbiwfAPHihY/JS6TrVuoWqHLc9mn/h1jU8QtS1
+        /T8MUoXA==;
+Received: from [186.213.242.156] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hgq1U-00055o-O0; Fri, 28 Jun 2019 12:30:36 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hgq1S-0005TR-PP; Fri, 28 Jun 2019 09:30:34 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        dmaengine@vger.kernel.org, Eugeniu Rosca <erosca@de.adit-jv.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jiri Slaby <jslaby@suse.com>, Timur Tabi <timur@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org
+Subject: [PATCH 32/39] docs: serial: move it to the driver-api
+Date:   Fri, 28 Jun 2019 09:30:25 -0300
+Message-Id: <98ded3b9747e187413aab3406da2d5e7c89f53cb.1561724493.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1561724493.git.mchehab+samsung@kernel.org>
+References: <cover.1561724493.git.mchehab+samsung@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Eugeniu,
+The contents of this directory is mostly driver-api stuff.
 
-On Wed, Jun 26, 2019 at 8:15 PM Eugeniu Rosca <roscaeugeniu@gmail.com> wrote:
-> On Mon, Jun 24, 2019 at 02:38:18PM +0200, Geert Uytterhoeven wrote:
-> [..]
-> > -     if (rchan->mid_rid < 0 || !sg_len) {
-> > +     if (rchan->mid_rid < 0 || !sg_len || !sg_dma_len(sgl)) {
-> >               dev_warn(chan->device->dev,
-> >                        "%s: bad parameter: len=%d, id=%d\n",
-> >                        __func__, sg_len, rchan->mid_rid);
->
-> Just wanted to share the WARN output proposed by Wolfram in
-> https://patchwork.kernel.org/patch/11012991/#22721733
-> in case the issue discussed in [1] is reproduced with this patch:
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/driver-api/index.rst                       | 1 +
+ Documentation/{ => driver-api}/serial/cyclades_z.rst     | 0
+ Documentation/{ => driver-api}/serial/driver.rst         | 2 +-
+ Documentation/{ => driver-api}/serial/index.rst          | 2 +-
+ Documentation/{ => driver-api}/serial/moxa-smartio.rst   | 0
+ Documentation/{ => driver-api}/serial/n_gsm.rst          | 0
+ Documentation/{ => driver-api}/serial/rocket.rst         | 0
+ Documentation/{ => driver-api}/serial/serial-iso7816.rst | 0
+ Documentation/{ => driver-api}/serial/serial-rs485.rst   | 0
+ Documentation/{ => driver-api}/serial/tty.rst            | 0
+ MAINTAINERS                                              | 6 +++---
+ drivers/tty/Kconfig                                      | 4 ++--
+ drivers/tty/serial/ucc_uart.c                            | 2 +-
+ include/linux/serial_core.h                              | 2 +-
+ 14 files changed, 10 insertions(+), 9 deletions(-)
+ rename Documentation/{ => driver-api}/serial/cyclades_z.rst (100%)
+ rename Documentation/{ => driver-api}/serial/driver.rst (99%)
+ rename Documentation/{ => driver-api}/serial/index.rst (90%)
+ rename Documentation/{ => driver-api}/serial/moxa-smartio.rst (100%)
+ rename Documentation/{ => driver-api}/serial/n_gsm.rst (100%)
+ rename Documentation/{ => driver-api}/serial/rocket.rst (100%)
+ rename Documentation/{ => driver-api}/serial/serial-iso7816.rst (100%)
+ rename Documentation/{ => driver-api}/serial/serial-rs485.rst (100%)
+ rename Documentation/{ => driver-api}/serial/tty.rst (100%)
 
-I'm not such a big fan of WARN()...
-
-> [    2.065337] ------------[ cut here ]------------
-> [    2.065346] rcar_dmac_prep_slave_sg: <here-comes-the-warning-message>
-> [    2.065394] WARNING: CPU: 2 PID: 252 at drivers/dma/sh/rcar-dmac.c:1169 rcar_dmac_prep_slave_sg+0x50/0xc4
-> [    2.065397] Modules linked in:
-> [    2.065407] CPU: 2 PID: 252 Comm: kworker/2:1 Not tainted 5.2.0-rc6-00016-g2bfb85ba1481-dirty #26
-> [    2.065410] Hardware name: Renesas H3ULCB Kingfisher board based on r8a7795 ES2.0+ (DT)
-> [    2.065420] Workqueue: events sci_dma_tx_work_fn
-> [    2.065425] pstate: 40000005 (nZcv daif -PAN -UAO)
-> [    2.065430] pc : rcar_dmac_prep_slave_sg+0x50/0xc4
-> [    2.065434] lr : rcar_dmac_prep_slave_sg+0x50/0xc4
-> [    2.065436] sp : ffff0000112ebd00
-> [    2.065438] x29: ffff0000112ebd00 x28: 0000000000000000
-> [    2.065443] x27: ffff8006fa367138 x26: ffff000010c5bce8
-> [    2.065447] x25: 0000000738b1d000 x24: 0000000000000000
-> [    2.065451] x23: ffff000010b76e00 x22: ffff000010a18000
-> [    2.065455] x21: 0000000000000001 x20: ffff8006f9b5a080
-> [    2.065459] x19: ffff0000107adc86 x18: 0000000000000000
-> [    2.065462] x17: 0000000000000000 x16: 0000000000000000
-> [    2.065466] x15: 0000000000000000 x14: 0000000000000000
-> [    2.065469] x13: 0000000000040000 x12: ffff000010a35000
-> [    2.065473] x11: ffff000010b12981 x10: 0000000000000040
-> [    2.065477] x9 : 000000000000013e x8 : ffff000010b1b73b
-> [    2.065481] x7 : 0000000000000000 x6 : 0000000000000001
-> [    2.065484] x5 : ffff8006ff72f7c0 x4 : 0000000000000001
-> [    2.065488] x3 : 0000000000000007 x2 : 0000000000000007
-> [    2.065491] x1 : 878c73041cedc400 x0 : 0000000000000000
-> [    2.065495] Call trace:
-> [    2.065500]  rcar_dmac_prep_slave_sg+0x50/0xc4
-> [    2.065504]  sci_dma_tx_work_fn+0xd8/0x1d4
-> [    2.065511]  process_one_work+0x1dc/0x394
-> [    2.065515]  worker_thread+0x21c/0x308
-> [    2.065520]  kthread+0x118/0x128
-> [    2.065527]  ret_from_fork+0x10/0x18
-> [    2.065530] ---[ end trace 75fc17d9000f1224 ]---
->
-> At first glance, it seems to give more details compared to:
-> rcar-dmac e7300000.dma-controller: rcar_dmac_prep_slave_sg: bad parameter: len=1, id=19
-
-Which would be followed by
-
-    sh-sci e6e88000.serial: Failed preparing Tx DMA descriptor
-
-pointing to the sh-sci driver, right?
-
-The id=19 points to channel 0x13, i.e. SCIF2, according to
-arch/arm64/boot/dts/renesas/r8a7795.dtsi.
-
-> [1] https://patchwork.kernel.org/cover/11012981/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+index f44a3140f95d..d6f532c8d824 100644
+--- a/Documentation/driver-api/index.rst
++++ b/Documentation/driver-api/index.rst
+@@ -88,6 +88,7 @@ available subsections can be seen below.
+    pti_intel_mid
+    pwm
+    rfkill
++   serial/index
+    sgi-ioc4
+    sm501
+    smsc_ece1099
+diff --git a/Documentation/serial/cyclades_z.rst b/Documentation/driver-api/serial/cyclades_z.rst
+similarity index 100%
+rename from Documentation/serial/cyclades_z.rst
+rename to Documentation/driver-api/serial/cyclades_z.rst
+diff --git a/Documentation/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
+similarity index 99%
+rename from Documentation/serial/driver.rst
+rename to Documentation/driver-api/serial/driver.rst
+index 4537119bf624..31bd4e16fb1f 100644
+--- a/Documentation/serial/driver.rst
++++ b/Documentation/driver-api/serial/driver.rst
+@@ -311,7 +311,7 @@ hardware.
+ 	This call must not sleep
+ 
+   set_ldisc(port,termios)
+-	Notifier for discipline change. See Documentation/serial/tty.rst.
++	Notifier for discipline change. See Documentation/driver-api/serial/tty.rst.
+ 
+ 	Locking: caller holds tty_port->mutex
+ 
+diff --git a/Documentation/serial/index.rst b/Documentation/driver-api/serial/index.rst
+similarity index 90%
+rename from Documentation/serial/index.rst
+rename to Documentation/driver-api/serial/index.rst
+index d0ba22ea23bf..33ad10d05b26 100644
+--- a/Documentation/serial/index.rst
++++ b/Documentation/driver-api/serial/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
+ 
+ ==========================
+ Support for Serial devices
+diff --git a/Documentation/serial/moxa-smartio.rst b/Documentation/driver-api/serial/moxa-smartio.rst
+similarity index 100%
+rename from Documentation/serial/moxa-smartio.rst
+rename to Documentation/driver-api/serial/moxa-smartio.rst
+diff --git a/Documentation/serial/n_gsm.rst b/Documentation/driver-api/serial/n_gsm.rst
+similarity index 100%
+rename from Documentation/serial/n_gsm.rst
+rename to Documentation/driver-api/serial/n_gsm.rst
+diff --git a/Documentation/serial/rocket.rst b/Documentation/driver-api/serial/rocket.rst
+similarity index 100%
+rename from Documentation/serial/rocket.rst
+rename to Documentation/driver-api/serial/rocket.rst
+diff --git a/Documentation/serial/serial-iso7816.rst b/Documentation/driver-api/serial/serial-iso7816.rst
+similarity index 100%
+rename from Documentation/serial/serial-iso7816.rst
+rename to Documentation/driver-api/serial/serial-iso7816.rst
+diff --git a/Documentation/serial/serial-rs485.rst b/Documentation/driver-api/serial/serial-rs485.rst
+similarity index 100%
+rename from Documentation/serial/serial-rs485.rst
+rename to Documentation/driver-api/serial/serial-rs485.rst
+diff --git a/Documentation/serial/tty.rst b/Documentation/driver-api/serial/tty.rst
+similarity index 100%
+rename from Documentation/serial/tty.rst
+rename to Documentation/driver-api/serial/tty.rst
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 055db86fdd77..856db8015edd 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10723,7 +10723,7 @@ F:	include/uapi/linux/meye.h
+ MOXA SMARTIO/INDUSTIO/INTELLIO SERIAL CARD
+ M:	Jiri Slaby <jirislaby@gmail.com>
+ S:	Maintained
+-F:	Documentation/serial/moxa-smartio.rst
++F:	Documentation/driver-api/serial/moxa-smartio.rst
+ F:	drivers/tty/mxser.*
+ 
+ MR800 AVERMEDIA USB FM RADIO DRIVER
+@@ -13637,7 +13637,7 @@ ROCKETPORT DRIVER
+ P:	Comtrol Corp.
+ W:	http://www.comtrol.com
+ S:	Maintained
+-F:	Documentation/serial/rocket.rst
++F:	Documentation/driver-api/serial/rocket.rst
+ F:	drivers/tty/rocket*
+ 
+ ROCKETPORT EXPRESS/INFINITY DRIVER
+@@ -16170,7 +16170,7 @@ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ M:	Jiri Slaby <jslaby@suse.com>
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
+-F:	Documentation/serial/
++F:	Documentation/driver-api/serial/
+ F:	drivers/tty/
+ F:	drivers/tty/serial/serial_core.c
+ F:	include/linux/serial_core.h
+diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
+index ee51b9514225..c7623f99ac0f 100644
+--- a/drivers/tty/Kconfig
++++ b/drivers/tty/Kconfig
+@@ -175,7 +175,7 @@ config ROCKETPORT
+ 	  This driver supports Comtrol RocketPort and RocketModem PCI boards.   
+           These boards provide 2, 4, 8, 16, or 32 high-speed serial ports or
+           modems.  For information about the RocketPort/RocketModem  boards
+-          and this driver read <file:Documentation/serial/rocket.rst>.
++          and this driver read <file:Documentation/driver-api/serial/rocket.rst>.
+ 
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rocket.
+@@ -193,7 +193,7 @@ config CYCLADES
+ 	  your Linux box, for instance in order to become a dial-in server.
+ 
+ 	  For information about the Cyclades-Z card, read
+-	  <file:Documentation/serial/cyclades_z.rst>.
++	  <file:Documentation/driver-api/serial/cyclades_z.rst>.
+ 
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called cyclades.
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index 6e3c66ab0e62..a0555ae2b1ef 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -1081,7 +1081,7 @@ static int qe_uart_verify_port(struct uart_port *port,
+ }
+ /* UART operations
+  *
+- * Details on these functions can be found in Documentation/serial/driver.rst
++ * Details on these functions can be found in Documentation/driver-api/serial/driver.rst
+  */
+ static const struct uart_ops qe_uart_pops = {
+ 	.tx_empty       = qe_uart_tx_empty,
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index 05b179015d6c..2b78cc734719 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -32,7 +32,7 @@ struct device;
+ 
+ /*
+  * This structure describes all the operations that can be done on the
+- * physical hardware.  See Documentation/serial/driver.rst for details.
++ * physical hardware.  See Documentation/driver-api/serial/driver.rst for details.
+  */
+ struct uart_ops {
+ 	unsigned int	(*tx_empty)(struct uart_port *);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.21.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
