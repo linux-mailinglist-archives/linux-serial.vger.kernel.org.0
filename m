@@ -2,86 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 384B7591AB
-	for <lists+linux-serial@lfdr.de>; Fri, 28 Jun 2019 04:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DD459468
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Jun 2019 08:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbfF1CuI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Jun 2019 22:50:08 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38152 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726441AbfF1CuI (ORCPT
+        id S1727217AbfF1GwB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 28 Jun 2019 02:52:01 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48218 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726827AbfF1GwB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Jun 2019 22:50:08 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y15so2197666pfn.5;
-        Thu, 27 Jun 2019 19:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=5CHqL3EBEcLGFr61w8Fbiglt4+Qtw+juW+E0F79bUSs=;
-        b=tVEavs6z2wplscnprKKaSAmCEe/4JHEpv3WbfQMHdn/Jvc3PBrTg7ZoSMpBov+2n4N
-         /1hrTfk55l/kskoKPOZnzn+fFkk8urwMsui0Ym4GM2EPsN6HkB8ghxz/yT0I4LJpoqO0
-         yy0ENzX7qm4rCZUzNU833gUNVMtHTpfizn3mfXg3esfYEFFOy+eb4T30Xel3bGQ1cHj8
-         TRd4mCEGxXIXiY2mGeScQPf5Vz0jUsUsntXDKSQFpY7VTcZz6R5Vo/9eq3jZQkGjuus9
-         +Bh9DA4aOfEXyIc19L6OegK6Hmt5MR/j2cnXMMVsBnEHzWy0O9nGETbAHUcDtM7s5D4U
-         +Fxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=5CHqL3EBEcLGFr61w8Fbiglt4+Qtw+juW+E0F79bUSs=;
-        b=X5BFN+EyeCagf5yiKPPSNsTvYBm3sNn7UIhPRIzJNV9jlKmFOmzP4dGD5vaIh4OK4V
-         18OnscF/Do+MZh2cXCJNKdIGaPWPvUb5Y/7VzFv7srv0m1bEWfNOO0kH8cGfGDt9wTqc
-         mp6FD2iPWKcvtvT+g1MdlE8C+mYFDmSrMTpgl7a35HnlQh2lR+oKAAjiBYnJlmw6N7n5
-         p2AB23NBUI6S2xZQgolJo/sO4uKZwb0lJgCNNwmKTM8jahkgVVH0QvJsO5PwNNECGWzN
-         ilU7dyM6BfwwxOsvDRIO4K4UbW73aGRuKf9vQkKRJUeulAlBWoj31ZZnwGTPxZdcX02T
-         oXfA==
-X-Gm-Message-State: APjAAAVd93eDg05A6W7A/xzREM9CV7OnGH28cp9DR/2IBF0nZHrcGi1h
-        lTfYYhW2Qc3C+8ndonM8UKc=
-X-Google-Smtp-Source: APXvYqzN0rpbKafbSvm5Mwr5gaE+z6gJ4inrKire9RmKAk+IJYMR0kqfrztirhlrbrAddYP9lBty5w==
-X-Received: by 2002:a17:90a:360b:: with SMTP id s11mr9960385pjb.51.1561690207932;
-        Thu, 27 Jun 2019 19:50:07 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id 137sm451516pfz.116.2019.06.27.19.50.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 19:50:07 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 21/27] tty: remove unneeded memset
-Date:   Fri, 28 Jun 2019 10:50:00 +0800
-Message-Id: <20190628025000.15922-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        Fri, 28 Jun 2019 02:52:01 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5S6maur056652;
+        Fri, 28 Jun 2019 06:51:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=FZoffX+D5xQsMUvbm3RMFTqFm9cTJgelJ/aG6LSGi8s=;
+ b=qKOE6oZqGcoi54n1G+UdN9TeES41sNzR4ZfdmvYgWAPWQnixbnG8dFktmhj+tyXPKieP
+ SXKBi3LDiUxqsIxa9GyYOAq732Bxhxxv0MBiJqjOYJZOT/LYmex+RvBv5LodtGZNiMCt
+ ZV8OXXM/dHOAHazdwix9S7GWnSKAYnMDzRWSW2kjLr/TOmua1aodV2L0B/JPb161xOM+
+ IB5vxt7NCT/WDEu34fHIiJDpTCVnwqBlgfu1D00xhw5s4Ixg+y4yd3w5pZllW5h7cCGz
+ 7oqUly8675GM2UJU3doWP88NpV0z1++gW/j2uxcDy3QZvya0x6hS41SW/zSTzfL2F4b+ /A== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2t9c9q3xfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Jun 2019 06:51:58 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5S6op6r023564;
+        Fri, 28 Jun 2019 06:51:58 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2t9p6vr234-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Jun 2019 06:51:57 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5S6pufd003971;
+        Fri, 28 Jun 2019 06:51:57 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 27 Jun 2019 23:51:56 -0700
+Date:   Fri, 28 Jun 2019 09:51:51 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     yegorslists@googlemail.com
+Cc:     linux-serial@vger.kernel.org
+Subject: [bug report] tty/serial/8250: use mctrl_gpio helpers
+Message-ID: <20190628065151.GA3159@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9301 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=855
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906280077
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9301 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=899 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906280077
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pci_alloc_consistent calls dma_alloc_coherent directly.
-In commit af7ddd8a627c
-("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
-dma_alloc_coherent has already zeroed the memory.
-So memset is not needed.
+Hello Yegor Yefremov,
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/tty/serial/icom.c | 2 --
- 1 file changed, 2 deletions(-)
+This is a semi-automatic email about new static checker warnings.
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index ad374f7c476d..624f3d541c68 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -207,8 +207,6 @@ static int get_port_memory(struct icom_port *icom_port)
- 		return -ENOMEM;
- 	}
- 
--	memset(icom_port->statStg, 0, 4096);
--
- 	/* FODs: Frame Out Descriptor Queue, this is a FIFO queue that
-            indicates that frames are to be transmitted
- 	*/
--- 
-2.11.0
+The patch 4a96895f74c9: "tty/serial/8250: use mctrl_gpio helpers" 
+from Jun 20, 2019, leads to the following Smatch complaint:
 
+    drivers/tty/serial/8250/8250_core.c:1026 serial8250_register_8250_port()
+    error: we previously assumed 'uart->port.dev' could be null (see line 988)
+
+drivers/tty/serial/8250/8250_core.c
+   987	
+   988			if (uart->port.dev)
+                            ^^^^^^^^^^^^^^
+There is an existing check for NULL here.
+
+   989				uart_remove_one_port(&serial8250_reg, &uart->port);
+   990	
+   991			uart->port.iobase       = up->port.iobase;
+   992			uart->port.membase      = up->port.membase;
+   993			uart->port.irq          = up->port.irq;
+   994			uart->port.irqflags     = up->port.irqflags;
+   995			uart->port.uartclk      = up->port.uartclk;
+   996			uart->port.fifosize     = up->port.fifosize;
+   997			uart->port.regshift     = up->port.regshift;
+   998			uart->port.iotype       = up->port.iotype;
+   999			uart->port.flags        = up->port.flags | UPF_BOOT_AUTOCONF;
+  1000			uart->bugs		= up->bugs;
+  1001			uart->port.mapbase      = up->port.mapbase;
+  1002			uart->port.mapsize      = up->port.mapsize;
+  1003			uart->port.private_data = up->port.private_data;
+  1004			uart->tx_loadsz		= up->tx_loadsz;
+  1005			uart->capabilities	= up->capabilities;
+  1006			uart->port.throttle	= up->port.throttle;
+  1007			uart->port.unthrottle	= up->port.unthrottle;
+  1008			uart->port.rs485_config	= up->port.rs485_config;
+  1009			uart->port.rs485	= up->port.rs485;
+  1010			uart->dma		= up->dma;
+  1011	
+  1012			/* Take tx_loadsz from fifosize if it wasn't set separately */
+  1013			if (uart->port.fifosize && !uart->tx_loadsz)
+  1014				uart->tx_loadsz = uart->port.fifosize;
+  1015	
+  1016			if (up->port.dev)
+  1017				uart->port.dev = up->port.dev;
+  1018	
+  1019			if (up->port.flags & UPF_FIXED_TYPE)
+  1020				uart->port.type = up->port.type;
+  1021	
+  1022			/*
+  1023			 * Only call mctrl_gpio_init(), if the device has no ACPI
+  1024			 * companion device
+  1025			 */
+  1026			if (!has_acpi_companion(uart->port.dev)) {
+                                                ^^^^^^^^^^^^^^
+This new code doesn't checked NULL.
+
+  1027				gpios = mctrl_gpio_init(&uart->port, 0);
+  1028				if (IS_ERR(gpios)) {
+
+regards,
+dan carpenter
