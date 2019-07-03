@@ -2,82 +2,68 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBEE5EBD3
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2019 20:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066BC5ECA5
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2019 21:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbfGCSo0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Jul 2019 14:44:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59240 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726430AbfGCSo0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Jul 2019 14:44:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6DCD921852;
-        Wed,  3 Jul 2019 18:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562179464;
-        bh=xfJSqYCJZU7KFgHNfEk7t4GstsgDfEzAzjhkWqbmweo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qRcKxKfUjUhJG5hzUEGxgY1AKbWzhWnm9fbGLJBHHgDO40ynHczf8Ai0cgAoqh20x
-         R6IvqsOtp/BJKwsnwtPrwDxpYTUvabfbkpJIzzKb8HKdP7DLybi+MZJ9u4JsxKHRmI
-         6mvldrw134P0jc3OwigWc+g3LryAdVRXcKV4e3yg=
-Date:   Wed, 3 Jul 2019 20:44:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Eugeniu Rosca <roscaeugeniu@gmail.com>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jiri Slaby <jslaby@suse.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "George G . Davis" <george_davis@mentor.com>
-Subject: Re: [PATCH 0/2] serial: sh-sci: Fix .flush_buffer() issues
-Message-ID: <20190703184422.GA14207@kroah.com>
-References: <20190624123540.20629-1-geert+renesas@glider.be>
- <20190626173434.GA24702@x230>
- <CAMuHMdWuk7CkfcUSX=706f8b6YMFio7iwZg32+uXsyOKL68fuQ@mail.gmail.com>
- <20190628123907.GA10962@vmlxhi-102.adit-jv.com>
- <20190628125534.GB1458@ninjato>
- <20190628130200.GA11231@vmlxhi-102.adit-jv.com>
- <20190703173050.GA11328@kroah.com>
- <20190703181519.ifrmycrsrohcc2gf@x230>
+        id S1726876AbfGCTQH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Jul 2019 15:16:07 -0400
+Received: from smtprelay0003.hostedemail.com ([216.40.44.3]:35678 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726581AbfGCTQH (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 3 Jul 2019 15:16:07 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 9890718021864;
+        Wed,  3 Jul 2019 19:16:05 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::::::::,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1593:1594:1711:1714:1730:1747:1777:1792:2194:2199:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3351:3622:3867:4250:4321:5007:6642:6742:7903:7904:10004:10400:10848:11026:11232:11473:11658:11914:12297:12740:12760:12895:13069:13311:13357:13439:14659:21080:21451:21627:30054:30090:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:23,LUA_SUMMARY:none
+X-HE-Tag: farm73_34d274a800e47
+X-Filterd-Recvd-Size: 1862
+Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf16.hostedemail.com (Postfix) with ESMTPA;
+        Wed,  3 Jul 2019 19:16:02 +0000 (UTC)
+Message-ID: <2f19693f2f720dcc037465d4ae517fb846c7eb4f.camel@perches.com>
+Subject: Re: [patch v3 1/5] AST2500 DMA UART driver
+From:   Joe Perches <joe@perches.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "sudheer.v" <open.sudheer@gmail.com>
+Cc:     jslaby@suse.com, joel@jms.id.au, andrew@aj.id.au,
+        benh@kernel.crashing.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        shivahshankar.shankarnarayanrao@aspeedtech.com,
+        shivahshankar@gmail.com, sudheer.veliseti@aspeedtech.com,
+        sudheer veliseti <sudheer.open@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Date:   Wed, 03 Jul 2019 12:16:01 -0700
+In-Reply-To: <20190703174926.GA12813@kroah.com>
+References: <1561459476-14268-1-git-send-email-open.sudheer@gmail.com>
+         <1561459476-14268-2-git-send-email-open.sudheer@gmail.com>
+         <20190703174926.GA12813@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190703181519.ifrmycrsrohcc2gf@x230>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 08:15:19PM +0200, Eugeniu Rosca wrote:
-> Hi Greg,
+On Wed, 2019-07-03 at 19:49 +0200, Greg KH wrote:
+> On Tue, Jun 25, 2019 at 04:14:32PM +0530, sudheer.v wrote:
+> > +#define UART_TX_R_POINT(x) (0x40 + (x * 0x20))
+> > +#define UART_TX_W_POINT(x) (0x44 + (x * 0x20))
+> > +#define UART_TX_SDMA_ADDR(x) (0x48 + (x * 0x20))
+> > +#define UART_RX_R_POINT(x) (0x50 + (x * 0x20))
+> > +#define UART_RX_W_POINT(x) (0x54 + (x * 0x20))
+> > +#define UART_RX_SDMA_ADDR(x) (0x58 + (x * 0x20))
 > 
-> On Wed, Jul 03, 2019 at 07:30:50PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Jun 28, 2019 at 03:02:00PM +0200, Eugeniu Rosca wrote:
-> [..]
-> > > I am doing this per-patch to allow patchwork to reflect the status of
-> > > each patch on the linux-renesas-soc front-page. AFAIK patchwork ignores
-> > > series-wide '*-by: Name <email>' signatures/tags.
-> > 
-> > I don't use patchwork :)
-> 
-> How do you then collect all the "{Reviewed,Tested,etc}-by:" signatures
-> (each of which means sometimes hours of effort) in the hairy ML threads?
-> Patchwork makes it a matter of one click.
+> Please use a tab to line these up.
 
-I've been doing this for a very long time now, before patchwork was even
-around.  It's pretty trivial to collect them on my own.
+Also x should be surrounded by parentheses
 
-thanks,
+#define UART_TX_R_POINT(x)	(0x40 + ((x) * 0x20))
 
-greg k-h
+etc...
+
+
