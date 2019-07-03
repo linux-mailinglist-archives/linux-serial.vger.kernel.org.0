@@ -2,74 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9040F5E570
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2019 15:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41145E713
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2019 16:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbfGCN1T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Jul 2019 09:27:19 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:50267 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbfGCN1S (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Jul 2019 09:27:18 -0400
-Received: from [192.168.1.110] ([95.114.150.241]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MBlpC-1ho7Kg0j64-00C8ca; Wed, 03 Jul 2019 15:27:14 +0200
+        id S1726635AbfGCOrr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Jul 2019 10:47:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726581AbfGCOrq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 3 Jul 2019 10:47:46 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C254D21871;
+        Wed,  3 Jul 2019 14:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562165266;
+        bh=OaP66Y8meIjVyoMTlK4IL7zpCxYdHt7BS8CN+dX8T/8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wjPtjxGQrs+VWxS/K1tF0Yec7uh0YVNYVfQY3/bcecKX/X4qa6WgF/X6ZzQxOgWuk
+         fOvsyqF2JNWWFvrAHAv2Ae0uDDhGgE9mOR6JJXlhHYLAhxWHqfR8aPYNGl4B0LusE9
+         681BP1CJKciS1c97HjiBucouxJTYixfFO4s4YUAs=
+Date:   Wed, 3 Jul 2019 16:47:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc:     jeyentam <je.yen.tam@ni.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V2 1/2] serial/8250: Add support for NI-Serial
  PXI/PXIe+485 devices
-To:     jeyentam <je.yen.tam@ni.com>, gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <20190703144744.GB24961@kroah.com>
 References: <20190703072435.34152-1-je.yen.tam@ni.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <63697b10-98a7-86b7-2513-3eb793ed03c5@metux.net>
-Date:   Wed, 3 Jul 2019 15:27:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+ <63697b10-98a7-86b7-2513-3eb793ed03c5@metux.net>
 MIME-Version: 1.0
-In-Reply-To: <20190703072435.34152-1-je.yen.tam@ni.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:88OtvEu5RKkHMkcjy/zKAH4e4olL3QESNrsVOKCIoavVk+OQ4lL
- KpwDF61skuRLCrX/plfmludB9ZchcZFssARMhG3gz3VLZEo2oqqxx4GLN/TEa0GWzHCwAfB
- NvHuzdGj0Q/P+5CSrKUIVYvJo3vfpckh4m4O9qePhyBq4aXAsgSlMDwAGwJkViO22AOMxmV
- 2R8QVA0PhgpA6y9ZBEepQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wz/rYjhdZS8=:+qQ6pl+Su62RMg4KobnxdG
- l7WrNMOIKWd+MP7OS4uoyWjMGtm7la73PmEdwywXhkzJPzKv8g6kUfQQgH7IfdXa3GFtLUBWu
- rGxuPvZpBIjoGLic7Xh1CeJZQjP2peXX/iMdcRXGLavCXfn/fih8TFLtQP0WjH9+Q0aBtyE76
- ETSxdMwmPGcmdRLcfGUZU842opcYwIdWLXqOcpnZfsgg+VeuvHGvLolGwkA9QAmD5/qR0ouQ6
- 92TBoqEr/x7jG+4XTl2+p1rz96/WLc03co17J0bmnRxe6sT/kffY8kSeL7cQzwCR4xYZwYa5Y
- AFMD+LrBmeUUQJCJIZnLGOvYdhx2IErKEpRPjyX4Hxqhlcb+KgP0uwwCeL9YjUkza1ujztM4r
- qTnHLV6JUfNLv1VnUf5bpbCYTeINMOtasU9uPVCEUVuDBw8UyWb8qCBKxczADNfXHvGq9XH/m
- /q0KlbJ4FEPhDwhqrhAxE1OnywTI6BOK3yQfbqS4CKK3jyJP25Qm8UmbHBzY1ibXnoSEqbOUU
- m1Nk73rOZzBCz3TJBN4FhhhSrK0ZwEKNBR7UsHytJyZE+3YHxiW2J5cIL8GnGAPs3MKF2zw7U
- RB0/UhSZIEf58K4eOqVtnog6mMeBXbQeFmTFL16mXtInmGQo/j/7EWvFj204BUGoz6RtA28+U
- ZsxZu3rNuIBzprggMZWz/Qy8KHZ86omOdPFBm1hC5FD3WwSrlMwOSLa6pBjqNOv9oI31ixr6X
- 2OavRLiynVWHeoiltf58xnH035jcsiT9QgQgY9/YqHoVIdAig4wYdgMaOQs=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63697b10-98a7-86b7-2513-3eb793ed03c5@metux.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 03.07.19 09:24, jeyentam wrote:
+On Wed, Jul 03, 2019 at 03:27:11PM +0200, Enrico Weigelt, metux IT consult wrote:
+> >  /* UART Port Control Register */> -#define NI8430_PORTCON	0x0f> -#define NI8430_PORTCON_TXVR_ENABLE	(1 << 3)
+> Can we have that renaming as a separate patch, to ease review ?
+> 
+> And what about introducing a config sym for the new device specific
+> stuff ? These devices seem to be pretty rare - never seen them in
+> embeded world, where we do need to care of kernel size.
 
-Hi,
+No, that's not the way this driver works, sorry.
 
-besides what Greg already said:
-
->  /* UART Port Control Register */> -#define NI8430_PORTCON	0x0f> -#define NI8430_PORTCON_TXVR_ENABLE	(1 << 3)
-Can we have that renaming as a separate patch, to ease review ?
-
-And what about introducing a config sym for the new device specific
-stuff ? These devices seem to be pretty rare - never seen them in
-embeded world, where we do need to care of kernel size.
-
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+greg k-h
