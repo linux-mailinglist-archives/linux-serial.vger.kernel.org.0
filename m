@@ -2,189 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B88A5E00F
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2019 10:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9040F5E570
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2019 15:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbfGCIm0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Jul 2019 04:42:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37696 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726400AbfGCIm0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Jul 2019 04:42:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3BAA7218A0;
-        Wed,  3 Jul 2019 08:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562143343;
-        bh=RkUibetf62ACzLFBPxDyavpMjq5OFxUImT7HOXl92Fo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QUVmWqwzGJEt+nkoh3V1lPWgiTwA+3qwJhUTaw5j6W5GkBhHVfleO5lSQvBnBd2Mk
-         4LuMP2s5b6GHyC43ztRAxTyGeL4CYixIFu+2T0HxAyQebTdxF9qtw1lDEovsxlxSTZ
-         IkzFZONaDXjPjPJcygLyG7wmttQUe/+90fGMQnRI=
-Date:   Wed, 3 Jul 2019 10:42:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     jeyentam <je.yen.tam@ni.com>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1726457AbfGCN1T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Jul 2019 09:27:19 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:50267 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbfGCN1S (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 3 Jul 2019 09:27:18 -0400
+Received: from [192.168.1.110] ([95.114.150.241]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MBlpC-1ho7Kg0j64-00C8ca; Wed, 03 Jul 2019 15:27:14 +0200
 Subject: Re: [PATCH V2 1/2] serial/8250: Add support for NI-Serial
  PXI/PXIe+485 devices
-Message-ID: <20190703084220.GD8996@kroah.com>
+To:     jeyentam <je.yen.tam@ni.com>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20190703072435.34152-1-je.yen.tam@ni.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <63697b10-98a7-86b7-2513-3eb793ed03c5@metux.net>
+Date:   Wed, 3 Jul 2019 15:27:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20190703072435.34152-1-je.yen.tam@ni.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:88OtvEu5RKkHMkcjy/zKAH4e4olL3QESNrsVOKCIoavVk+OQ4lL
+ KpwDF61skuRLCrX/plfmludB9ZchcZFssARMhG3gz3VLZEo2oqqxx4GLN/TEa0GWzHCwAfB
+ NvHuzdGj0Q/P+5CSrKUIVYvJo3vfpckh4m4O9qePhyBq4aXAsgSlMDwAGwJkViO22AOMxmV
+ 2R8QVA0PhgpA6y9ZBEepQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wz/rYjhdZS8=:+qQ6pl+Su62RMg4KobnxdG
+ l7WrNMOIKWd+MP7OS4uoyWjMGtm7la73PmEdwywXhkzJPzKv8g6kUfQQgH7IfdXa3GFtLUBWu
+ rGxuPvZpBIjoGLic7Xh1CeJZQjP2peXX/iMdcRXGLavCXfn/fih8TFLtQP0WjH9+Q0aBtyE76
+ ETSxdMwmPGcmdRLcfGUZU842opcYwIdWLXqOcpnZfsgg+VeuvHGvLolGwkA9QAmD5/qR0ouQ6
+ 92TBoqEr/x7jG+4XTl2+p1rz96/WLc03co17J0bmnRxe6sT/kffY8kSeL7cQzwCR4xYZwYa5Y
+ AFMD+LrBmeUUQJCJIZnLGOvYdhx2IErKEpRPjyX4Hxqhlcb+KgP0uwwCeL9YjUkza1ujztM4r
+ qTnHLV6JUfNLv1VnUf5bpbCYTeINMOtasU9uPVCEUVuDBw8UyWb8qCBKxczADNfXHvGq9XH/m
+ /q0KlbJ4FEPhDwhqrhAxE1OnywTI6BOK3yQfbqS4CKK3jyJP25Qm8UmbHBzY1ibXnoSEqbOUU
+ m1Nk73rOZzBCz3TJBN4FhhhSrK0ZwEKNBR7UsHytJyZE+3YHxiW2J5cIL8GnGAPs3MKF2zw7U
+ RB0/UhSZIEf58K4eOqVtnog6mMeBXbQeFmTFL16mXtInmGQo/j/7EWvFj204BUGoz6RtA28+U
+ ZsxZu3rNuIBzprggMZWz/Qy8KHZ86omOdPFBm1hC5FD3WwSrlMwOSLa6pBjqNOv9oI31ixr6X
+ 2OavRLiynVWHeoiltf58xnH035jcsiT9QgQgY9/YqHoVIdAig4wYdgMaOQs=
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jul 03, 2019 at 12:24:35AM -0700, jeyentam wrote:
-> Add support for NI-Serial PXIe-RS232, PXI-RS485 and PXIe-RS485 devices.
-> 
-> Signed-off-by: jeyentam <je.yen.tam@ni.com>
+On 03.07.19 09:24, jeyentam wrote:
 
-I need a "full" name here please.
+Hi,
 
-Also, this patch breaks the build, which is not allowed, and makes me
-wonder how you tested it :(
+besides what Greg already said:
 
-Please fix up properly and resend.
+>  /* UART Port Control Register */> -#define NI8430_PORTCON	0x0f> -#define NI8430_PORTCON_TXVR_ENABLE	(1 << 3)
+Can we have that renaming as a separate patch, to ease review ?
 
-Also, some comments below:
+And what about introducing a config sym for the new device specific
+stuff ? These devices seem to be pretty rare - never seen them in
+embeded world, where we do need to care of kernel size.
 
-> ---
->  drivers/tty/serial/8250/8250_pci.c | 293 ++++++++++++++++++++++++++++-
->  1 file changed, 289 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-> index df41397de478..ac8138adea9c 100644
-> --- a/drivers/tty/serial/8250/8250_pci.c
-> +++ b/drivers/tty/serial/8250/8250_pci.c
-> @@ -730,8 +730,16 @@ static int pci_ni8430_init(struct pci_dev *dev)
->  }
->  
->  /* UART Port Control Register */
-> -#define NI8430_PORTCON	0x0f
-> -#define NI8430_PORTCON_TXVR_ENABLE	(1 << 3)
 
-Why are you renaming these #defines?
+--mtx
 
-> +#define NI16550_PCR_OFFSET	0x0f
-> +#define NI16550_PCR_RS422	0x00
-> +#define NI16550_PCR_ECHO_RS485	0x01
-> +#define NI16550_PCR_DTR_RS485	0x02
-> +#define NI16550_PCR_AUTO_RS485	0x03
-> +#define NI16550_PCR_WIRE_MODE_MASK	0x03
-> +#define NI16550_PCR_TXVR_ENABLE_BIT	(1 << 3)
-
-BIT(3)?
-
-> +#define NI16550_PCR_RS485_TERMINATION_BIT	(1 << 6)
-
-BIT(6)?
-
-> +#define NI16550_ACR_DTR_AUTO_DTR	(0x2 << 3)
-> +#define NI16550_ACR_DTR_MANUAL_DTR	(0x0 << 3)
->  
->  static int
->  pci_ni8430_setup(struct serial_private *priv,
-> @@ -753,14 +761,127 @@ pci_ni8430_setup(struct serial_private *priv,
->  		return -ENOMEM;
->  
->  	/* enable the transceiver */
-> -	writeb(readb(p + offset + NI8430_PORTCON) | NI8430_PORTCON_TXVR_ENABLE,
-> -	       p + offset + NI8430_PORTCON);
-> +	writeb(readb(p + offset + NI16550_PCR_OFFSET) |
-> +			NI16550_PCR_TXVR_ENABLE_BIT,
-> +			p + offset + NI16550_PCR_OFFSET);
-
-Why indent like this?  Please follow the indentation that used to be
-there.
-
->  
->  	iounmap(p);
->  
->  	return setup_port(priv, port, bar, offset, board->reg_shift);
->  }
->  
-> +static int pci_ni8431_config_rs485(struct uart_port *port,
-> +	struct serial_rs485 *rs485)
-> +{
-> +	u8 pcr, acr;
-> +
-> +	struct uart_8250_port *up;
-> +
-> +	up = container_of(port, struct uart_8250_port, port);
-> +
-> +	acr = up->acr;
-> +
-> +	dev_dbg(port->dev, "ni16550_config_rs485\n");
-
-No need for debugging lines like this, use ftrace please.
-
-> +
-> +	/* "rs485" should be given to us non-NULL. */
-> +	WARN_ON(rs485 == NULL);
-
-Don't crash people's machines, if this can never happen, then no need
-for this line.  If it can happen, test and properly return an error.
-
-> +
-> +	pcr = port->serial_in(port, NI16550_PCR_OFFSET);
-> +	pcr &= ~NI16550_PCR_WIRE_MODE_MASK;
-> +
-> +	if (rs485->flags & SER_RS485_ENABLED) {
-> +		/* RS-485 */
-> +		if ((rs485->flags & SER_RS485_RX_DURING_TX) &&
-> +			(rs485->flags & SER_RS485_RTS_ON_SEND)) {
-> +			dev_dbg(port->dev, "Invalid 2-wire mode\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (rs485->flags & SER_RS485_RX_DURING_TX) {
-> +			/* Echo */
-> +			dev_vdbg(port->dev, "2-wire DTR with echo\n");
-> +			pcr |= NI16550_PCR_ECHO_RS485;
-> +			acr |= NI16550_ACR_DTR_MANUAL_DTR;
-> +		} else {
-> +			/* Auto or DTR */
-> +			if (rs485->flags & SER_RS485_RTS_ON_SEND) {
-> +				/* Auto */
-> +				dev_vdbg(port->dev, "2-wire Auto\n");
-> +				pcr |= NI16550_PCR_AUTO_RS485;
-> +				acr |= NI16550_ACR_DTR_AUTO_DTR;
-> +			} else {
-> +				/* DTR-controlled */
-> +				/* No Echo */
-> +				dev_vdbg(port->dev, "2-wire DTR no echo\n");
-> +				pcr |= NI16550_PCR_DTR_RS485;
-> +				acr |= NI16550_ACR_DTR_MANUAL_DTR;
-> +			}
-> +		}
-> +	} else {
-> +		/* RS-422 */
-> +		dev_vdbg(port->dev, "4-wire\n");
-> +		pcr |= NI16550_PCR_RS422;
-> +		acr |= NI16550_ACR_DTR_MANUAL_DTR;
-> +	}
-> +
-> +	dev_dbg(port->dev, "write pcr: 0x%08x\n", pcr);
-> +	port->serial_out(port, NI16550_PCR_OFFSET, pcr);
-> +
-> +	up->acr = acr;
-> +	port->serial_out(port, UART_SCR, UART_ACR);
-> +	port->serial_out(port, UART_ICR, up->acr);
-> +
-> +	/* Update the cache. */
-> +	port->rs485 = *rs485;
-> +
-> +	dev_dbg(port->dev, "ni16550_config_rs485\n");
-
-Again, use ftrace, not dev_dbg() for stuff like this.
-
-thanks,
-
-greg k-h
+-- 
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
