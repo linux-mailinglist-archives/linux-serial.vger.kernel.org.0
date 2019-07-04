@@ -2,109 +2,137 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F075F8AC
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2019 14:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969345F8B9
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2019 15:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbfGDM7Z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 4 Jul 2019 08:59:25 -0400
-Received: from mail-eopbgr130054.outbound.protection.outlook.com ([40.107.13.54]:54158
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725945AbfGDM7Z (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 4 Jul 2019 08:59:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b1r7olbOJzI+O0DgZwHCJ/4QMdoDu3qMbhgqioLsJwE=;
- b=cEzQiyJYq9Wczhc7KcJL1og2X2djWeHpou5cAG300IPUJirKrY2Lknt+yaVrCGvLFK2LannttAk7jkqmtw0zbT5dckzZap433mfeGAN5/zZmMzIBCIGpt5fIjYeh65BPX2iWwp3b65wKcPhfiwWC8RiAeGZXaOv4ZOyCX4XIEN0=
-Received: from VI1PR0402MB3600.eurprd04.prod.outlook.com (52.134.5.23) by
- VI1PR0402MB2943.eurprd04.prod.outlook.com (10.175.24.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.17; Thu, 4 Jul 2019 12:59:19 +0000
-Received: from VI1PR0402MB3600.eurprd04.prod.outlook.com
- ([fe80::cddf:10d0:7cb3:c4cc]) by VI1PR0402MB3600.eurprd04.prod.outlook.com
- ([fe80::cddf:10d0:7cb3:c4cc%4]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
- 12:59:19 +0000
-From:   Andy Duan <fugang.duan@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "jslaby@suse.com" <jslaby@suse.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Subject: RE: [EXT] Re: [PATCH tty/serial 2/2] dt-bindings: serial: lpuart: add
- the clock requirement for imx8qxp
-Thread-Topic: [EXT] Re: [PATCH tty/serial 2/2] dt-bindings: serial: lpuart:
- add the clock requirement for imx8qxp
-Thread-Index: AQHVMlCR4GzB5FciE0WEjqwgXxYLeaa6QCgAgAAHvVCAAAUWAIAAHr4A
-Date:   Thu, 4 Jul 2019 12:59:18 +0000
-Message-ID: <VI1PR0402MB360031C734CE53F3AF387966FFFA0@VI1PR0402MB3600.eurprd04.prod.outlook.com>
-References: <20190704100021.10859-1-fugang.duan@nxp.com>
- <20190704100021.10859-3-fugang.duan@nxp.com>
- <20190704102234.GA11348@kroah.com>
- <VI1PR0402MB3600709B910F30AB94C6AFEDFFFA0@VI1PR0402MB3600.eurprd04.prod.outlook.com>
- <20190704110828.GF1404@kroah.com>
-In-Reply-To: <20190704110828.GF1404@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=fugang.duan@nxp.com; 
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9a08e410-6746-4226-045b-08d7007f6d59
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB2943;
-x-ms-traffictypediagnostic: VI1PR0402MB2943:
-x-microsoft-antispam-prvs: <VI1PR0402MB29433F7F4B9B9C3CF9D4515BFFFA0@VI1PR0402MB2943.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 0088C92887
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(189003)(199004)(6246003)(6916009)(66556008)(66476007)(64756008)(53936002)(55016002)(2906002)(6116002)(3846002)(229853002)(4744005)(33656002)(74316002)(7736002)(68736007)(66946007)(305945005)(73956011)(66446008)(76116006)(14454004)(476003)(486006)(102836004)(6506007)(71200400001)(5660300002)(446003)(9686003)(14444005)(256004)(186003)(76176011)(52536014)(11346002)(71190400001)(7696005)(316002)(8936002)(99286004)(86362001)(6436002)(26005)(81156014)(81166006)(25786009)(54906003)(4326008)(478600001)(66066001)(8676002)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB2943;H:VI1PR0402MB3600.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 2rbeuCZsg0AbpUDUnCQhzIzzOCbeU/DuzWFEjITBdWtizmC/eu4u63A4vZAWKK+DnffNqRAR/JlHQiP9aWgsfQ/IqM6/NYwfSS5W+JyYTrxXsFcUMIkAqw2i37LgdYxrlZB30KXaQnncel4Cg9R6FafyZ0sRCyKLC6WLYK+a0MILMUNyMZj5tZ+VmXlYFzHvMjaa0g1OVmO5+wRzN8wedk6JK04TyU268pNCu9W7Qn5UCJ+DkmCzfRzq1on7Lli37+ArA5sYXnmPy01ldV6j7ZWzV0ChHCe1AdnARz5kiMnbtdjH9L+VGbwbE6ravkMbJrih7no0OPcnFjAu0a21oDXP0qA43e2VrDN8C0N4tEwObdIkZ69qL2vFUwvkpCpDVU8K+y/JkZ+nf4WSSOvAY8JW1T3f8XLZ2LgsqyTPGjQ=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727238AbfGDNBC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 4 Jul 2019 09:01:02 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:46829 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbfGDNBC (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 4 Jul 2019 09:01:02 -0400
+Received: by mail-lj1-f196.google.com with SMTP id v24so6072013ljg.13
+        for <linux-serial@vger.kernel.org>; Thu, 04 Jul 2019 06:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ra8RdVFYK5DBO8QxOB3FtDU0BA7sfZz2SeBlsVeKUKw=;
+        b=pHM+Vv2BkdQUcKnCaqTF40XNspUR/QDrEJbTzJhhUvDjETu77Bx0FCDoZKRTK7whJa
+         TechV/0jUexK/ONmNLVT8jJJi3usdA9m7HAtYEko7kw7IFB8k6odrG74zSeOAUx7UPDq
+         Cjgsb9NpQkzeyk/Q7hB11owH+BP7psfVbrRPjj7nPROZ76PhdYMxMd93qOm6TJTwUMum
+         pudnmiPpettfPypUUxA4XsHBZSBevpNFVPHNuhzFyp0wUaMpjxLdIBNRn0HBhi5akzRx
+         wJmRu9w4aosxVaj5nrrdaNnqfvHRp5otxc+LfXvvk4ZZPVTXm+4wEP6zL+bSEMCqKtSk
+         chKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ra8RdVFYK5DBO8QxOB3FtDU0BA7sfZz2SeBlsVeKUKw=;
+        b=dXT2BGYAD0HvmqVWWZVi7oxf2oUZ69ZL10jOfn2rHC/Uoa5GDY1kXO9rLJT1QwCwHj
+         fJ/ibayhBCXbLkN+roHVW42yvPu0zVcxoHssN676FU+bot0H5cpWbEYJmVi15AQd5G5U
+         TYjQ6irJ6iC3qhTBPBJsZNHJg3awFEyH8TyV4kBV1LYb3ruL6Sp2y3dsmkh7rEeA+V7J
+         uXjBPxir6nq5/VoDN1KbxPd9T+rvsiAfmvjCv9/pVr/0oTa69vgimCEF9E6/ZgOTBq52
+         /GwEgArovMsWaSKPKJ4mRMDeP0wYOsi5HdXa/vKJprVufbqo6RE3LvP+clac1bLA+Cno
+         v1ZA==
+X-Gm-Message-State: APjAAAUCsc4TBdeSLPtUpaLlpDcu5lAAz9OPnzCbrwKPjxbQ9nD+jSx8
+        hIAy4WUgBxVmFT8+i1nKyOW2cvzw
+X-Google-Smtp-Source: APXvYqzb8XllzW+5e3C12GZuMGbmsfh0gAivSO23lXyZdbBjGaQAK10G4UTz1E++PGtHB27u0ksKiA==
+X-Received: by 2002:a2e:a0d6:: with SMTP id f22mr2956590ljm.182.1562245259689;
+        Thu, 04 Jul 2019 06:00:59 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id h1sm485914lfj.21.2019.07.04.06.00.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 04 Jul 2019 06:00:58 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sergey Organov <sorganov@gmail.com>
+Subject: [PATCH v3 0/7] serial: imx: fix RTS and RTS/CTS handling
+Date:   Thu,  4 Jul 2019 16:00:22 +0300
+Message-Id: <1562245229-709-1-git-send-email-sorganov@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <20190614072801.3187-1-s.hauer@pengutronix.de>
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a08e410-6746-4226-045b-08d7007f6d59
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 12:59:18.5445
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fugang.duan@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2943
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Greg KH <gregkh@linuxfoundation.org> Sent: Thursday, July 4, 2019 7:0=
-8 PM
-> On Thu, Jul 04, 2019 at 10:55:06AM +0000, Andy Duan wrote:
-> > From: Greg KH <gregkh@linuxfoundation.org> Sent: Thursday, July 4,
-> > 2019 6:23 PM
-> > > On Thu, Jul 04, 2019 at 06:00:21PM +0800, fugang.duan@nxp.com wrote:
-> > > > From: Fugang Duan <fugang.duan@nxp.com>
-> > > >
-> > > > Add the baud clock requirement for imx8qxp.
-> > > >
-> > > > Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/serial/fsl-lpuart.txt | 5 ++++-
-> > > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > dt stuff needs to cc: the dt maintainers, right?
-> >
-> > Right, I will resend the binding doc patch and cc the maintainers.
-> > And does I need to resend the lpuart driver patch ?
->=20
-> Shouldn't the binding doc be 1/2 here anyway?  So please resend the whole
-> series.
->=20
-> thanks,
->=20
-> greg k-h
+RTS signal and RTS/CTS handshake handling had a few problems these
+patches fix.
 
-Okay, I will resend the whole patch, thanks very much!
+In addition, minor cleanups are made to the involved code.
+
+Changelog:
+
+  v3:
+
+      * Appended: "Reviewed-by:"
+        Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+        to the first 2 patches
+
+      * Added braces to one-line 'else if', to the "serial: imx:
+        set_termios(): clarify RTS/CTS bits calculation", as suggested
+        by Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+      * Improved comments in "serial: imx: set_mctrl(): correctly
+        restore autoRTS state", as suggested by Uwe Kleine-König
+        <u.kleine-koenig@pengutronix.de>
+
+  v2:
+
+      * Appended: "Reviewed-by:" and "Tested-by:"
+        Sascha Hauer <s.hauer@pengutronix.de>
+
+      * Removed "RFC" from header
+
+  v1:
+
+      * Fixed in "serial: imx: set_termios(): preserve RTS state"
+
+-+	ucr2 = UCR2_SRST | UCR2_IRTS;
+++	ucr2 |= UCR2_SRST | UCR2_IRTS;
+
+        as noticed by Lothar Waßmann <LW@KARO-electronics.de>
+
+      * Fixed in "serial: imx: set_termios(): preserve RTS state"
+
+-+	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTSC);
+++	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTS);
+
+        as the fix for the problem found by Sascha Hauer
+        <s.hauer@pengutronix.de>
+
+      * Reordered:
+
+        serial: imx: set_termios(): preserve RTS state
+        serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+
+        as the latter makes sense only provided the former is already applied.
+
+
+Sergey Organov (7):
+  serial: imx: fix locking in set_termios()
+  serial: imx: set_termios(): factor-out 'ucr2' initial value
+  serial: imx: set_termios(): clarify RTS/CTS bits calculation
+  serial: imx: set_termios(): preserve RTS state
+  serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+  serial: imx: set_mctrl(): correctly restore autoRTS state
+  serial: imx: get rid of imx_uart_rts_auto()
+
+ drivers/tty/serial/imx.c | 96 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 50 insertions(+), 46 deletions(-)
+
+--
+2.10.0.1.g57b01a3
