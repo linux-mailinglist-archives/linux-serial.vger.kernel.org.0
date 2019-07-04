@@ -2,65 +2,56 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D4B5F655
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2019 12:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525C35F683
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2019 12:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbfGDKJ3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 4 Jul 2019 06:09:29 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:47194 "EHLO inva021.nxp.com"
+        id S1727503AbfGDKWi (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 4 Jul 2019 06:22:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727249AbfGDKJ3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 4 Jul 2019 06:09:29 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9B06020059E;
-        Thu,  4 Jul 2019 12:09:27 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 2BB232005A7;
-        Thu,  4 Jul 2019 12:09:24 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 877FA402EB;
-        Thu,  4 Jul 2019 18:09:19 +0800 (SGT)
-From:   fugang.duan@nxp.com
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, jslaby@suse.com, fugang.duan@nxp.com,
+        id S1727303AbfGDKWi (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 4 Jul 2019 06:22:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49F1C21852;
+        Thu,  4 Jul 2019 10:22:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562235757;
+        bh=8g36ElRk5zNhfnSW7mukCxm2S+AdG6G8Zu7zPYGBlnI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dltovTzMRkQGwTf8XrJxLEX0D7Bmv6zlb4pWIWF9xkUH2rtXMzpu0Dvt+Pk5t6smr
+         8vYOuPJiuGP5C72SLmI3Dr0QQCAN58kY9unJVoLloaHv2Nx9fpQEjypq/etqS7u6fj
+         3EaVsmOQX5wWaak6hev34Z9Rj92zIsT5D58yPV/k=
+Date:   Thu, 4 Jul 2019 12:22:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     fugang.duan@nxp.com
+Cc:     linux-serial@vger.kernel.org, jslaby@suse.com,
         u.kleine-koenig@pengutronix.de, daniel.baluta@nxp.com
-Subject: [PATCH tty/serial 2/2] dt-bindings: serial: lpuart: add the clock requirement for imx8qxp
-Date:   Thu,  4 Jul 2019 18:00:21 +0800
-Message-Id: <20190704100021.10859-3-fugang.duan@nxp.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20190704100021.10859-1-fugang.duan@nxp.com>
+Subject: Re: [PATCH tty/serial 2/2] dt-bindings: serial: lpuart: add the
+ clock requirement for imx8qxp
+Message-ID: <20190704102234.GA11348@kroah.com>
 References: <20190704100021.10859-1-fugang.duan@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+ <20190704100021.10859-3-fugang.duan@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190704100021.10859-3-fugang.duan@nxp.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Fugang Duan <fugang.duan@nxp.com>
+On Thu, Jul 04, 2019 at 06:00:21PM +0800, fugang.duan@nxp.com wrote:
+> From: Fugang Duan <fugang.duan@nxp.com>
+> 
+> Add the baud clock requirement for imx8qxp.
+> 
+> Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/serial/fsl-lpuart.txt | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Add the baud clock requirement for imx8qxp.
-
-Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
----
- Documentation/devicetree/bindings/serial/fsl-lpuart.txt | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.txt b/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
-index 21483ba..3495eee 100644
---- a/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
-+++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
-@@ -13,7 +13,10 @@ Required properties:
- - reg : Address and length of the register set for the device
- - interrupts : Should contain uart interrupt
- - clocks : phandle + clock specifier pairs, one for each entry in clock-names
--- clock-names : should contain: "ipg" - the uart clock
-+- clock-names : For vf610/ls1021a/imx7ulp, "ipg" clock is for uart bus/baud
-+  clock. For imx8qxp lpuart, "ipg" clock is bus clock that is used to access
-+  lpuart controller registers, it also requires "baud" clock for module to
-+  receive/transmit data.
- 
- Optional properties:
- - dmas: A list of two dma specifiers, one for each entry in dma-names.
--- 
-2.7.4
+dt stuff needs to cc: the dt maintainers, right?
 
