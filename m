@@ -2,146 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4495F47D
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2019 10:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB205F4C5
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2019 10:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbfGDIUs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 4 Jul 2019 04:20:48 -0400
-Received: from mx0b-00010702.pphosted.com ([148.163.158.57]:33052 "EHLO
-        mx0b-00010702.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726908AbfGDIUs (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 4 Jul 2019 04:20:48 -0400
-Received: from pps.filterd (m0098779.ppops.net [127.0.0.1])
-        by mx0b-00010702.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x648KWZV011573;
-        Thu, 4 Jul 2019 03:20:46 -0500
-Received: from nam04-sn1-obe.outbound.protection.outlook.com (mail-sn1nam04lp2052.outbound.protection.outlook.com [104.47.44.52])
-        by mx0b-00010702.pphosted.com with ESMTP id 2thdc0g2vx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 04 Jul 2019 03:20:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nio365.onmicrosoft.com; s=selector1-nio365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uRcis37n7+dLs3PX9tKud5OqsphzZwKzbDOpYLBUhs4=;
- b=NwwvKMfFScqmZJT8WMlaSbgAhN46vIx2z94Bwzc54zUNi3ATV4oiuLtDwz4GZvvPnSb2nuHZGwNt1eT2Igsp9p4j7tilMQXOjZP0vcX9cIfCJj84UAdZQVQpsZbX060GRAVZeraR2ydbAaP2zjEcwRXFc6JQDxnRWybI39hCnb0=
-Received: from MN2PR04MB5920.namprd04.prod.outlook.com (20.179.21.161) by
- MN2PR04MB6014.namprd04.prod.outlook.com (20.178.249.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.20; Thu, 4 Jul 2019 08:20:44 +0000
-Received: from MN2PR04MB5920.namprd04.prod.outlook.com
- ([fe80::7ca2:1dbc:355d:64c7]) by MN2PR04MB5920.namprd04.prod.outlook.com
- ([fe80::7ca2:1dbc:355d:64c7%5]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
- 08:20:44 +0000
-From:   Je Yen Tam <je.yen.tam@ni.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Thread-Topic: [EXTERNAL] Re: Re: [PATCH V2 1/2] serial/8250: Add support for
- NI-Serial PXI/PXIe+485 devices
-Thread-Index: AQHVMkCXqHv3rulWzk6DDrimdUTooaa6Hg0g
-Date:   Thu, 4 Jul 2019 08:20:44 +0000
-Message-ID: <MN2PR04MB59200003FF168C024B90C3F0B7FA0@MN2PR04MB5920.namprd04.prod.outlook.com>
-References: <20190703072435.34152-1-je.yen.tam@ni.com>
- <20190703084220.GD8996@kroah.com>
- <MN2PR04MB59207BEC9DBAB5E69656DD42B7FA0@MN2PR04MB5920.namprd04.prod.outlook.com>
- <20190704081500.GA6438@kroah.com>
-In-Reply-To: <20190704081500.GA6438@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [130.164.75.17]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 70edffc9-eb2c-489c-4859-08d7005882c5
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR04MB6014;
-x-ms-traffictypediagnostic: MN2PR04MB6014:
-x-microsoft-antispam-prvs: <MN2PR04MB6014A8F00CBE226149CB65B8B7FA0@MN2PR04MB6014.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 0088C92887
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39860400002)(396003)(346002)(376002)(366004)(13464003)(189003)(199004)(53546011)(66556008)(64756008)(229853002)(54906003)(76176011)(66446008)(66476007)(76116006)(66946007)(316002)(6506007)(8936002)(186003)(6246003)(3846002)(7736002)(102836004)(486006)(74316002)(305945005)(66066001)(73956011)(476003)(11346002)(6436002)(33656002)(26005)(446003)(6116002)(8676002)(6916009)(2906002)(71190400001)(7696005)(9686003)(55016002)(81156014)(86362001)(71200400001)(256004)(478600001)(53936002)(99286004)(81166006)(14454004)(68736007)(5660300002)(52536014)(4326008)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR04MB6014;H:MN2PR04MB5920.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: ni.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: NxWlbkXA4//fhErZunFpwSaLWrYDNP3w2SdqWd58kyOZEWnMp8NR8fOSFaM3M32mS635+atK5ILL45dQYZKoAIp1JpkcOYinnHgN28yJ/z/elKqJvg2Wo7Sd4xjAljQ4IvxblswBmS4DZb6cKHoL68ivhF5EnSGVWG+jfigr0ysckNr3EbP+Z/Ea/QTa3bBcxTW6HyKNDnHALfEpDw7QUxX5vxYVDJn60Cdys9z+chG68uUzhxZlQLKy50CyaGtEywsS+LU/poGTlVJNQV8tRFYJd67GrlUPeEHZ4VVJHTOURR+nlkh2v9nX0rTkWSCH0gZtphWLf83O/2bRWpZZ8dQscq/a3Bql/pg3vcoymj1vBoVuSnz2AdaeQ2YQjoe8WXUshdCjD0kw5AHUODNqyiZ9MJ/4TasyrnRnMWwLx5A=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727209AbfGDIqb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 4 Jul 2019 04:46:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727046AbfGDIqb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 4 Jul 2019 04:46:31 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE44B2189E;
+        Thu,  4 Jul 2019 08:46:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562229990;
+        bh=tC7+gI4m6/FmoXDFgw+iYQurMimFbVLSYsLJZsEwswo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k1z/iZmhkgL1+r5CK+JywKsx41uolSAz0o6l9oruBRWsCwsK3uP7NC8yhwHmkRfmT
+         uYnpWBIafyLG3LbrauXyApoKrbN+r0LhrfsET7Ma07/BKj/2HPxh7h3pjP8QOCjSuk
+         V1ZrAdjygpzHO7Js27pZu/f0TdYw+0Cvmc/N3ge8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Slaby <jslaby@suse.com>,
+        Mans Rullgard <mans@mansr.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Gong <richard.gong@linux.intel.com>,
+        Romain Izard <romain.izard.pro@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-serial@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, x86@kernel.org
+Subject: [PATCH 00/11] Platform drivers, provide a way to add sysfs groups easily
+Date:   Thu,  4 Jul 2019 10:46:06 +0200
+Message-Id: <20190704084617.3602-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-OriginatorOrg: ni.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70edffc9-eb2c-489c-4859-08d7005882c5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 08:20:44.6404
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 87ba1f9a-44cd-43a6-b008-6fdb45a5204e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: je.yen.tam@ni.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6014
-Subject: RE: Re: Re: [PATCH V2 1/2] serial/8250: Add support for NI-Serial
- PXI/PXIe+485 devices
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-04_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=inbound_policy_notspam policy=inbound_policy score=30
- priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=30 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907040109
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+If a platform driver wants to add a sysfs group, it has to do so in a
+racy way, adding it after the driver is bound.  To resolve this issue,
+have the platform driver core do this for the driver, making the
+individual drivers logic smaller and simpler, and solving the race at
+the same time.
 
+All of these patches depend on the first patch.  I'll take the first one
+through my driver-core tree, and any subsystem maintainer can either ack
+their individul patch and I will be glad to also merge it, or they can
+wait until after 5.3-rc1 when the core patch hits Linus's tree and then
+take it, it's up to them.
 
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Thursday, July 4, 2019 4:15 PM
-> To: Je Yen Tam <je.yen.tam@ni.com>
-> Cc: linux-serial@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [EXTERNAL] Re: Re: [PATCH V2 1/2] serial/8250: Add support for N=
-I-Serial
-> PXI/PXIe+485 devices
->=20
-> On Thu, Jul 04, 2019 at 07:55:33AM +0000, Je Yen Tam wrote:
-> > > On Wed, Jul 03, 2019 at 12:24:35AM -0700, jeyentam wrote:
-> > > > Add support for NI-Serial PXIe-RS232, PXI-RS485 and PXIe-RS485 devi=
-ces.
-> > > >
-> > > > Signed-off-by: jeyentam <je.yen.tam@ni.com>
-> > >
-> > > I need a "full" name here please.
-> >
-> > Ok, will do so.
-> >
-> > >
-> > > Also, this patch breaks the build, which is not allowed, and makes me=
- wonder
-> how
-> > > you tested it :(
-> >
-> > I've tested my changes with the steps as follows, it did not break.
-> >
-> > 1. Clone the Linux repo, check out the source and work on my project.
-> > 2. Compile the kernel source with "make j4".
-> > 3. Build the kernel modules with "make modules_install".
-> > 4. Install the kernel with "make install".
-> > 5. Reboot into the newly built kernel.
-> > 6. The kernel worked well and able to fit my needs.
-> >
-> > Noted that my source is checked out from the latest Linux kernel 5.2.0-=
-rc6.
-> >
-> > Also, I checked my patch using checkpatch.pl, it did not show any error=
-s and
-> > warnings too.
-> >
-> > May I know what do you mean by breaking the build?
->=20
-> If you only apply patch 1/2, the build breaks as you add new device ids
-> in the second patch.  At every individual patch, you can not break the
-> build.
+Thank to Richard Gong for the idea and the testing of the platform
+driver patch.
 
-Understood, will move the #defines into this file which needed it.
+Greg Kroah-Hartman (11):
+  Platform: add a dev_groups pointer to struct platform_driver
+  uio: uio_fsl_elbc_gpcm: convert platform driver to use dev_groups
+  serial: sh-sci: use driver core functions, not sysfs ones.
+  firmware: arm_scpi: convert platform driver to use dev_groups
+  olpc: x01: convert platform driver to use dev_groups
+  platform: x86: hp-wmi: convert platform driver to use dev_groups
+  video: fbdev: wm8505fb: convert platform driver to use dev_groups
+  video: fbdev: w100fb: convert platform driver to use dev_groups
+  video: fbdev: sm501fb: convert platform driver to use dev_groups
+  input: keyboard: gpio_keys: convert platform driver to use dev_groups
+  input: axp20x-pek: convert platform driver to use dev_groups
 
->=20
-> thanks,
->=20
-> greg k-h
+ arch/x86/platform/olpc/olpc-xo1-sci.c | 17 ++++------
+ drivers/base/platform.c               | 40 +++++++++++++++--------
+ drivers/firmware/arm_scpi.c           |  5 +--
+ drivers/input/keyboard/gpio_keys.c    | 13 ++------
+ drivers/input/misc/axp20x-pek.c       | 15 ++-------
+ drivers/platform/x86/hp-wmi.c         | 47 +++++++--------------------
+ drivers/tty/serial/sh-sci.c           | 22 +++++--------
+ drivers/uio/uio_fsl_elbc_gpcm.c       | 23 +++++--------
+ drivers/video/fbdev/sm501fb.c         | 37 +++++----------------
+ drivers/video/fbdev/w100fb.c          | 23 ++++++-------
+ drivers/video/fbdev/wm8505fb.c        | 13 ++++----
+ include/linux/platform_device.h       |  1 +
+ 12 files changed, 94 insertions(+), 162 deletions(-)
+
+-- 
+2.22.0
+
