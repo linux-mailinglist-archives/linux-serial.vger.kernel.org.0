@@ -2,63 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C5D60D48
-	for <lists+linux-serial@lfdr.de>; Fri,  5 Jul 2019 23:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7837C61D81
+	for <lists+linux-serial@lfdr.de>; Mon,  8 Jul 2019 13:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbfGEVtg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 5 Jul 2019 17:49:36 -0400
-Received: from out176.e-adjacentdigital.co.uk ([178.156.202.12]:55670 "EHLO
-        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfGEVtf (ORCPT
+        id S1727543AbfGHLE4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 8 Jul 2019 07:04:56 -0400
+Received: from mail-qt1-f182.google.com ([209.85.160.182]:34638 "EHLO
+        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726175AbfGHLEz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 5 Jul 2019 17:49:35 -0400
-X-Greylist: delayed 622 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:49:34 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
- bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
- b=O4RK1DBam7QhixS740hX78+vxRdq5HRa91VsJCnMjxGPTWgDNV+lWt77ADKIqAop3DzZWHkexQHN
-   2kW/OKJ+Cc3GY/Q6Kkw5Kgsdkbj0OlbwhHfZmvktPB16B9y0lyA4KGHvZvPgJacY/+IpzN5jY/ya
-   Z4ioZ8ATKuyQc/ypmuMajQyI7uPJC+qkRNuiGKbPeu5gkwPyDPzKqRZhweAx/oXNr76WpUpHnRfz
-   +ydfO+FP8ry544/88g0mKcoJHAPzy1Sqnb7g0EkSafC1ubqiiOWGj+uPC5zbU909QUkVoHnuKRsG
-   YeqjAaeZlv5LYTVz6MtM2Uh4veDKwxetUF8bvw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
- b=k+3h8FYVamEQ3QWdbPwiKnwMtoTVun/Ni0bCO2OLQMm9kg4gpg4dYKP/ejwL4Nyk4Z9vJqLab0gV
-   iJOO9B1027TLAN1KjnS7pR/z50lQYW1tvnpQbAvFI/pXN5Ekbo10jbeZdmlI5l9fMcDqQjepn59x
-   GBl+vRNcayrxbae9kbO/SGo6z+3w685qIcuIDjLs9ino+5mmh7OFi9YbF6FQweVRiTZ2pckUA9cV
-   RBl4q9bBblsYGyScqkDzneNVwRzBATAkaXXrDSGO5FuJ89hv+a6X5td36Nt6t377oe0CK5gVo9mk
-   Bu04RrlYsgHDgM7OUdh1SHgwWoaFRV7b6VgMKg==;
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 8 Jul 2019 07:04:55 -0400
+Received: by mail-qt1-f182.google.com with SMTP id k10so9921252qtq.1
+        for <linux-serial@vger.kernel.org>; Mon, 08 Jul 2019 04:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kp23LTJPz/eUy3KAi5g/b/CIcmzamMaEiPQ+c6HxoVY=;
+        b=aeq6msnujeCPEJK27xnUjHXSK62m4D7EGwLjU8EGYyVz6AOw/ZP7U520jWvbZmHEu3
+         0FIKMnXbYvjtr4rNp59X3BAizblCKThkp7GKtSwxVtJmxxQX8KSPdRAtpVAVxFmaAv2G
+         itGjNu0/5DYeUnuDPGBD5txKuzcon7yKPHLKw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kp23LTJPz/eUy3KAi5g/b/CIcmzamMaEiPQ+c6HxoVY=;
+        b=izy3ib4DMOCQ/iaW7lxNIHdnQQ04vOXXkEexaPuK8MQ9sBHMZ6RdQwkpQyLId/Rpj7
+         Lkb2T9i31aSSTlN6q6HI2/AE83pt52DnuQk0poOpRf+RYYKcvMU/UmqpRaBuSBLjB5PV
+         YnoA6djiCnRH40DTVQWIjrCQsufNXC2b3i4Ym35iN7WNGxmZJXm+3eGPfl7djumlSKaT
+         0pku7SscYoPvKG6URpL/F1HgdcjBZjuL6Ow2Mn5hvGqL1wbX6/OF3AsnBqrTe5gKDtjx
+         FwQuGw7L/Jf07HHpQlv/NMFK+z5swXw1mlOSBY0/wFO+oHmiWbPmmWHPfl3X+A+0JIku
+         EBVg==
+X-Gm-Message-State: APjAAAVC7Xy4iMO/33eEXmL64aQPdg7zF3ZPgaqZGi8LPvb+LMvVDCUg
+        JZyur5gLFapQfDVxEvnSRABV0e0GYZA=
+X-Google-Smtp-Source: APXvYqyzrYpe8rttVoj6uOJjMy3Gpj0MHIysT/URdi5Z5nhi2kmjcpnMpQUrGJs99LNoswNLMpqQ+Q==
+X-Received: by 2002:ac8:290c:: with SMTP id y12mr13211986qty.141.1562583893264;
+        Mon, 08 Jul 2019 04:04:53 -0700 (PDT)
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com. [209.85.160.171])
+        by smtp.gmail.com with ESMTPSA id t80sm7510809qka.87.2019.07.08.04.04.51
+        for <linux-serial@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jul 2019 04:04:52 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id w17so14408082qto.10
+        for <linux-serial@vger.kernel.org>; Mon, 08 Jul 2019 04:04:51 -0700 (PDT)
+X-Received: by 2002:a0c:9608:: with SMTP id 8mr13983354qvx.98.1562583891554;
+ Mon, 08 Jul 2019 04:04:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Quotes needed For July Shipments
-To:     Recipients <purchase@mathewsons.ga>
-From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
-Date:   Sat, 06 Jul 2019 00:39:03 +0300
-Reply-To: jpexcc@aol.com
-Message-ID: <0.0.39.647.1D53379DEAE056C.0@slot0.mathewsons.ga>
+References: <20190619084110.136713-1-tientzu@chromium.org>
+In-Reply-To: <20190619084110.136713-1-tientzu@chromium.org>
+From:   Claire Chang <tientzu@chromium.org>
+Date:   Mon, 8 Jul 2019 19:04:40 +0800
+X-Gmail-Original-Message-ID: <CALiNf29kZ+PYx_jZQKRTcvJqOa6qOYpbXNQ9bryYMw6E0_pNfw@mail.gmail.com>
+Message-ID: <CALiNf29kZ+PYx_jZQKRTcvJqOa6qOYpbXNQ9bryYMw6E0_pNfw@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: serial: add documentation for Rx in-band
+ wakeup support
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        changqi.hu@mediatek.com,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello dear,
- =
-
-We are in the market for your products after meeting at your stand during l=
-ast expo.
- =
-
-Please kindly send us your latest catalog and price list so as to start a n=
-ew project/order as promised during the exhibition. =
-
- =
-
-I would appreciate your response about the above details required so we can=
- revert back to you asap.
- =
-
-Kind regards
- =
-
-Rhema Zoeh
+gentle ping, thanks
