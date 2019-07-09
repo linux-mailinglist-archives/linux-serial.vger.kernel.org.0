@@ -2,72 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7837C61D81
-	for <lists+linux-serial@lfdr.de>; Mon,  8 Jul 2019 13:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCA7637FE
+	for <lists+linux-serial@lfdr.de>; Tue,  9 Jul 2019 16:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727543AbfGHLE4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 8 Jul 2019 07:04:56 -0400
-Received: from mail-qt1-f182.google.com ([209.85.160.182]:34638 "EHLO
-        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbfGHLEz (ORCPT
+        id S1726055AbfGIOfa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 9 Jul 2019 10:35:30 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:45056 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfGIOfa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 8 Jul 2019 07:04:55 -0400
-Received: by mail-qt1-f182.google.com with SMTP id k10so9921252qtq.1
-        for <linux-serial@vger.kernel.org>; Mon, 08 Jul 2019 04:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kp23LTJPz/eUy3KAi5g/b/CIcmzamMaEiPQ+c6HxoVY=;
-        b=aeq6msnujeCPEJK27xnUjHXSK62m4D7EGwLjU8EGYyVz6AOw/ZP7U520jWvbZmHEu3
-         0FIKMnXbYvjtr4rNp59X3BAizblCKThkp7GKtSwxVtJmxxQX8KSPdRAtpVAVxFmaAv2G
-         itGjNu0/5DYeUnuDPGBD5txKuzcon7yKPHLKw=
+        Tue, 9 Jul 2019 10:35:30 -0400
+Received: by mail-io1-f66.google.com with SMTP id g20so22510604ioc.12;
+        Tue, 09 Jul 2019 07:35:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kp23LTJPz/eUy3KAi5g/b/CIcmzamMaEiPQ+c6HxoVY=;
-        b=izy3ib4DMOCQ/iaW7lxNIHdnQQ04vOXXkEexaPuK8MQ9sBHMZ6RdQwkpQyLId/Rpj7
-         Lkb2T9i31aSSTlN6q6HI2/AE83pt52DnuQk0poOpRf+RYYKcvMU/UmqpRaBuSBLjB5PV
-         YnoA6djiCnRH40DTVQWIjrCQsufNXC2b3i4Ym35iN7WNGxmZJXm+3eGPfl7djumlSKaT
-         0pku7SscYoPvKG6URpL/F1HgdcjBZjuL6Ow2Mn5hvGqL1wbX6/OF3AsnBqrTe5gKDtjx
-         FwQuGw7L/Jf07HHpQlv/NMFK+z5swXw1mlOSBY0/wFO+oHmiWbPmmWHPfl3X+A+0JIku
-         EBVg==
-X-Gm-Message-State: APjAAAVC7Xy4iMO/33eEXmL64aQPdg7zF3ZPgaqZGi8LPvb+LMvVDCUg
-        JZyur5gLFapQfDVxEvnSRABV0e0GYZA=
-X-Google-Smtp-Source: APXvYqyzrYpe8rttVoj6uOJjMy3Gpj0MHIysT/URdi5Z5nhi2kmjcpnMpQUrGJs99LNoswNLMpqQ+Q==
-X-Received: by 2002:ac8:290c:: with SMTP id y12mr13211986qty.141.1562583893264;
-        Mon, 08 Jul 2019 04:04:53 -0700 (PDT)
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com. [209.85.160.171])
-        by smtp.gmail.com with ESMTPSA id t80sm7510809qka.87.2019.07.08.04.04.51
-        for <linux-serial@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Jul 2019 04:04:52 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id w17so14408082qto.10
-        for <linux-serial@vger.kernel.org>; Mon, 08 Jul 2019 04:04:51 -0700 (PDT)
-X-Received: by 2002:a0c:9608:: with SMTP id 8mr13983354qvx.98.1562583891554;
- Mon, 08 Jul 2019 04:04:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190619084110.136713-1-tientzu@chromium.org>
-In-Reply-To: <20190619084110.136713-1-tientzu@chromium.org>
-From:   Claire Chang <tientzu@chromium.org>
-Date:   Mon, 8 Jul 2019 19:04:40 +0800
-X-Gmail-Original-Message-ID: <CALiNf29kZ+PYx_jZQKRTcvJqOa6qOYpbXNQ9bryYMw6E0_pNfw@mail.gmail.com>
-Message-ID: <CALiNf29kZ+PYx_jZQKRTcvJqOa6qOYpbXNQ9bryYMw6E0_pNfw@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: serial: add documentation for Rx in-band
- wakeup support
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lwKfxQYrNRix0RZpaeVKxAuscBcsaH2KK8rGZ1jsPCc=;
+        b=ocRzfiRgXIva0JauHKxvl0Qx4lxvrR0xCAKBGt//mP8ageVe/80cST9MYCFCplvhOV
+         H0VO1yuRgbruHYe7tqRsV7eO2SSKomX9bmC3Y6YukRyeHB7XM/npKs4jcOHNJqkoR7Su
+         BoS/pe0AFdEnLBOHeLEKQbGmBVX6P099jVa/n//lom9YA97T1G7YAXHt44zd6yAzpal6
+         HV5uZx/iUCWzlg+Sm1mqivE3tTOHalyGlizL1f3FNN7KBA1S70u9nY+t5ToMIB2xjta9
+         56V4HaflRlt8/Yg9jdz2CHRJDdSVUK6MOhUyWs2noBH9vh3WGu0yBf+k0M7o1ci/TyKC
+         AJCQ==
+X-Gm-Message-State: APjAAAU1qH2n6lfS2Dy9AhiuHHzrX0bTBsHlsji/HsJgz+QtMDd4uRB8
+        WN33mz39uAg69hJ5bL8yVg==
+X-Google-Smtp-Source: APXvYqxycFxWOrP0VFA297PFQw08U0eQrnQU3S4DTJhbrCNZVKI7ILJJDrcU1R51khX7qQdXozwvCg==
+X-Received: by 2002:a5e:8e4a:: with SMTP id r10mr6692177ioo.100.1562682929485;
+        Tue, 09 Jul 2019 07:35:29 -0700 (PDT)
+Received: from localhost ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n2sm14065735ioa.27.2019.07.09.07.35.28
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 09 Jul 2019 07:35:28 -0700 (PDT)
+Date:   Tue, 9 Jul 2019 08:35:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Erwan Le Ray <erwan.leray@st.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        changqi.hu@mediatek.com,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Erwan Le Ray <erwan.leray@st.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Bich Hemon <bich.hemon@st.com>
+Subject: Re: [PATCH v3 01/10] dt-bindings: serial: stm32: add wakeup option
+Message-ID: <20190709143527.GA5489@bogus>
+References: <1560433800-12255-1-git-send-email-erwan.leray@st.com>
+ <1560433800-12255-2-git-send-email-erwan.leray@st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560433800-12255-2-git-send-email-erwan.leray@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-gentle ping, thanks
+On Thu, 13 Jun 2019 15:49:51 +0200, Erwan Le Ray wrote:
+> Add a note for enabling wakeup capabilities of usart
+> 
+> Signed-off-by: Bich Hemon <bich.hemon@st.com>
+> Signed-off-by: Erwan Le Ray <erwan.leray@st.com>
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
