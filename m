@@ -2,106 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5D467C06
-	for <lists+linux-serial@lfdr.de>; Sat, 13 Jul 2019 23:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383DB67CC2
+	for <lists+linux-serial@lfdr.de>; Sun, 14 Jul 2019 05:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727968AbfGMVMj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 13 Jul 2019 17:12:39 -0400
-Received: from eddie.linux-mips.org ([148.251.95.138]:37654 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727553AbfGMVMj (ORCPT
+        id S1728126AbfGNDQM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Sat, 13 Jul 2019 23:16:12 -0400
+Received: from mail.iara.government.bg ([95.43.208.99]:43036 "EHLO
+        iara.government.bg" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728009AbfGNDQL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 13 Jul 2019 17:12:39 -0400
-Received: (from localhost user: 'ladis' uid#1021 fake: STDIN
-        (ladis@eddie.linux-mips.org)) by eddie.linux-mips.org
-        id S23992886AbfGMVMh6VykN (ORCPT
-        <rfc822;linux-serial@vger.kernel.org> + 1 other);
-        Sat, 13 Jul 2019 23:12:37 +0200
-Date:   Sat, 13 Jul 2019 23:12:33 +0200
-From:   Ladislav Michl <ladis@linux-mips.org>
-To:     linux-usb@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v2 5/5] usb: gadget: u_serial: Use bool for req_busy
-Message-ID: <20190713211233.GF25753@lenoch>
-References: <20190713210853.GA25753@lenoch>
+        Sat, 13 Jul 2019 23:16:11 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by iara.government.bg (Postfix) with ESMTP id CF98C2EEEF7;
+        Sat, 13 Jul 2019 05:11:58 +0300 (EEST)
+Received: from iara.government.bg ([127.0.0.1])
+        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id DmjfFEGDB9ad; Sat, 13 Jul 2019 05:11:58 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by iara.government.bg (Postfix) with ESMTP id 2E7ED32E266;
+        Sat, 13 Jul 2019 02:55:41 +0300 (EEST)
+X-Virus-Scanned: amavisd-new at iara.government.bg
+Received: from iara.government.bg ([127.0.0.1])
+        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Y8KkBbfCzOtV; Sat, 13 Jul 2019 02:55:41 +0300 (EEST)
+Received: from [10.108.11.57] (unknown [105.12.6.226])
+        by iara.government.bg (Postfix) with ESMTPSA id 5E5E8249DEE;
+        Sat, 13 Jul 2019 02:32:08 +0300 (EEST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190713210853.GA25753@lenoch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?b?RndkOiBSZTog4oKsIDIsMDAwLDAwMC4wMCBFdXJv?=
+To:     Recipients <silistra@iara.government.bg>
+From:   silistra@iara.government.bg
+Date:   Fri, 12 Jul 2019 16:31:52 -0700
+Reply-To: carfleon@gmail.com
+Message-Id: <20190712233209.5E5E8249DEE@iara.government.bg>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Let's make code more consistent by using bool for req_busy
-as it is done for similar variables in struct gs_port.
+Lieber Freund,
 
-Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
----
- Changes:
- - v2: None
+Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
 
- drivers/usb/gadget/function/u_serial.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 2dd6e1211d4a..1b1359a168e7 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -89,7 +89,7 @@ struct gscons_info {
- 	struct kfifo		con_buf;
- 	/* protect the buf and busy flag */
- 	spinlock_t		con_lock;
--	int			req_busy;
-+	bool			req_busy;
- 	struct usb_request	*console_req;
- };
- 
-@@ -918,7 +918,7 @@ static void gs_complete_out(struct usb_ep *ep, struct usb_request *req)
- 	case 0:
- 		/* normal completion */
- 		spin_lock(&info->con_lock);
--		info->req_busy = 0;
-+		info->req_busy = false;
- 		spin_unlock(&info->con_lock);
- 
- 		wake_up_process(info->console_thread);
-@@ -950,7 +950,6 @@ static int gs_console_connect(int port_num)
- 		return -ENOMEM;
- 	info->console_req->complete = gs_complete_out;
- 	info->port = port;
--	info->req_busy = 0;
- 	spin_unlock(&info->con_lock);
- 	pr_vdebug("port[%d] console connect!\n", port_num);
- 	return 0;
-@@ -989,13 +988,13 @@ static int gs_console_thread(void *data)
- 				size = len;
- 
- 			req->length = kfifo_out(&info->con_buf, req->buf, size);
--			info->req_busy = 1;
-+			info->req_busy = true;
- 
- 			spin_unlock_irq(&info->con_lock);
- 			status = usb_ep_queue(ep, req, GFP_ATOMIC);
- 			spin_lock_irq(&info->con_lock);
- 			if (status < 0)
--				info->req_busy = 0;
-+				info->req_busy = false;
- 		} else {
- sched:
- 			spin_unlock_irq(&info->con_lock);
-@@ -1019,7 +1018,7 @@ static int gs_console_setup(struct console *co, char *options)
- 
- 	info->port = NULL;
- 	info->console_req = NULL;
--	info->req_busy = 0;
-+	info->req_busy = false;
- 
- 	status = kfifo_alloc(&info->con_buf, GS_CONSOLE_BUF_SIZE, GFP_KERNEL);
- 	if (status) {
--- 
-2.22.0
+Das ist dein Spendencode: [DF00430342018]
 
+Antworten Sie mit dem Spendencode auf diese E-Mail: liezlnatashavanessa@gmail.com
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+
+Herr Richard Wahl
