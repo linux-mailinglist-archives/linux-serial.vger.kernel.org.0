@@ -2,59 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 383DB67CC2
-	for <lists+linux-serial@lfdr.de>; Sun, 14 Jul 2019 05:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD5267E6F
+	for <lists+linux-serial@lfdr.de>; Sun, 14 Jul 2019 12:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbfGNDQM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Sat, 13 Jul 2019 23:16:12 -0400
-Received: from mail.iara.government.bg ([95.43.208.99]:43036 "EHLO
-        iara.government.bg" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728009AbfGNDQL (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 13 Jul 2019 23:16:11 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by iara.government.bg (Postfix) with ESMTP id CF98C2EEEF7;
-        Sat, 13 Jul 2019 05:11:58 +0300 (EEST)
-Received: from iara.government.bg ([127.0.0.1])
-        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DmjfFEGDB9ad; Sat, 13 Jul 2019 05:11:58 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by iara.government.bg (Postfix) with ESMTP id 2E7ED32E266;
-        Sat, 13 Jul 2019 02:55:41 +0300 (EEST)
-X-Virus-Scanned: amavisd-new at iara.government.bg
-Received: from iara.government.bg ([127.0.0.1])
-        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Y8KkBbfCzOtV; Sat, 13 Jul 2019 02:55:41 +0300 (EEST)
-Received: from [10.108.11.57] (unknown [105.12.6.226])
-        by iara.government.bg (Postfix) with ESMTPSA id 5E5E8249DEE;
-        Sat, 13 Jul 2019 02:32:08 +0300 (EEST)
-Content-Type: text/plain; charset="utf-8"
+        id S1728106AbfGNKEb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 14 Jul 2019 06:04:31 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:32019 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726799AbfGNKEb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 14 Jul 2019 06:04:31 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 45mj0K1nkzz11;
+        Sun, 14 Jul 2019 12:03:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1563098593; bh=b55Smskg5DSJu0yatEPxdF1r5jieshPWzUTXl1Bc9Mw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g8WypDtgCWOpXSb9qWjkVUrZTJd/LvH4BnYikKeujMuOWrNPBZ6MTueNHKRprG1Xl
+         9Y96Gt4CPzAjrG2p1H8fGsPCM763aFolgSR53Yf1Y9U7ZQNXJmw+rWeXgBsldjI8xe
+         SJW1vNeeZzyGuaSmpTE8W2GYpnTHbU1HT2EsYelFP/z87ryiG5ZGhY1F3zGuhbjz5y
+         1e8BYAIqtrSI/osL9zm1UPDOM0S+x+3G37n7QeHnYeqGAEtr/z06JcCHQPs+KSnSol
+         l6pSx2Re6Ncby+1vUUer82PdISs7fFq+HpRsK/9BA1uYnXiWrno0QSipDlZfB66Ha9
+         5V+wpG49lHexQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.100.3 at mail
+Date:   Sun, 14 Jul 2019 12:04:26 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Ladislav Michl <ladis@linux-mips.org>
+Cc:     linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 0/5] usb: gadget: u_serial: Fix and cleanup
+Message-ID: <20190714100426.GA24183@qmqm.qmqm.pl>
+References: <20190713210853.GA25753@lenoch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?b?RndkOiBSZTog4oKsIDIsMDAwLDAwMC4wMCBFdXJv?=
-To:     Recipients <silistra@iara.government.bg>
-From:   silistra@iara.government.bg
-Date:   Fri, 12 Jul 2019 16:31:52 -0700
-Reply-To: carfleon@gmail.com
-Message-Id: <20190712233209.5E5E8249DEE@iara.government.bg>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190713210853.GA25753@lenoch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Lieber Freund,
+On Sat, Jul 13, 2019 at 11:08:53PM +0200, Ladislav Michl wrote:
+> Following patchset makes console work (patch 1 and 4) for an AT91SAM9G20
+> board connected to xhci_hcd and does some cleanup.
+> Tested with "console=ttyS0,115200n8 console=ttyGS0" on kernel command line
+> and following inittab:
+> console::respawn:/sbin/getty -L 115200 ttyS0 vt100
+> console::respawn:/sbin/getty -L 115200 ttyGS0 vt100
+> 
+> However there is an issue remaining:
+> Disconnect triggers WARN_ON in gs_close:
+[...]
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
+Hi,
 
-UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
+Can you try a patchset I sent some time ago [1] if it fixes your case?
 
-Das ist dein Spendencode: [DF00430342018]
+Best Regards,
+Micha� Miros�aw
 
-Antworten Sie mit dem Spendencode auf diese E-Mail: liezlnatashavanessa@gmail.com
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-
-Herr Richard Wahl
+[1] https://www.spinics.net/lists/linux-usb/msg177537.html
