@@ -2,78 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B868867F17
-	for <lists+linux-serial@lfdr.de>; Sun, 14 Jul 2019 15:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD1C682A9
+	for <lists+linux-serial@lfdr.de>; Mon, 15 Jul 2019 05:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728362AbfGNNWr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 14 Jul 2019 09:22:47 -0400
-Received: from eddie.linux-mips.org ([148.251.95.138]:52238 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728316AbfGNNWq (ORCPT
+        id S1729214AbfGODUI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 14 Jul 2019 23:20:08 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:36192 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727006AbfGODUI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 14 Jul 2019 09:22:46 -0400
-Received: (from localhost user: 'ladis' uid#1021 fake: STDIN
-        (ladis@eddie.linux-mips.org)) by eddie.linux-mips.org
-        id S23990429AbfGNNWoAUwkD (ORCPT
-        <rfc822;linux-serial@vger.kernel.org> + 1 other);
-        Sun, 14 Jul 2019 15:22:44 +0200
-Date:   Sun, 14 Jul 2019 15:22:42 +0200
-From:   Ladislav Michl <ladis@linux-mips.org>
-To:     =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 0/5] usb: gadget: u_serial: Fix and cleanup
-Message-ID: <20190714132242.GA17980@lenoch>
-References: <20190713210853.GA25753@lenoch>
- <20190714100426.GA24183@qmqm.qmqm.pl>
- <20190714113717.GA7399@qmqm.qmqm.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190714113717.GA7399@qmqm.qmqm.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Sun, 14 Jul 2019 23:20:08 -0400
+Received: by mail-pg1-f193.google.com with SMTP id l21so7005477pgm.3;
+        Sun, 14 Jul 2019 20:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=x9cx5daqiIQ1tM3rWp5IoFUTEpi0lqApKNh4MFAdUvE=;
+        b=YrK9lUHAxSclec2PcYrOeb8GCIzvTz83nYqWGUZVOEURLw26zIPDvWcqMaeCNLIcNX
+         ERI9NjxPCZqB1wDWWOY2dImu60zpk3CSXHLwccOoGN+45M5uI321JfDrG1llWg6K3FtF
+         HLsv/+vg8ECHgCLk8uxkYuMv4mm5c8LBz8W1nxTzkJ0M/orfsEXOd/EXIYEVLjhDKdC6
+         0Wx4CjW2UzUSlBSxeJI0hTP1zZCc9ABYSTzfZ6FoyQrnuZIlroaIEPvCUZjZkAGfCMym
+         ZA5rSHiausMHGmfdYkpnDHxUMCD7uVcC4LPGCQljs/+xDwD/65bou0ptIIj5wW1THX78
+         9eEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=x9cx5daqiIQ1tM3rWp5IoFUTEpi0lqApKNh4MFAdUvE=;
+        b=cCDJ0uQnE1Nswlob6w9XNXsALEFdl4g3fCKOv7y/Jbjf66henym+9HQvRNSpkgxh1d
+         16Jt7a7QgZOFbiB/ZAa+8rkVNwtwBe9EfYYCgIge9xtOn+tf3tevKyup441xA2fBKzCN
+         9lGzzNxS1KFKDN58qB3sKij9HvWNOn1T/Z+YbL8S1gctwShy377JqgcYNTWKl3zrjAkb
+         9IIwpO/UzqxfWzg1/m9qfZObAXd3RRcijoTUALD+6iJXaMC70hCcXRGDYTrw3erMwpIE
+         TBOVqud2k7EgD8/fQCg+SlHOxGb10hlMCmyoFmvZadib2aX10rzdjPrpakQ0Oga4ppyw
+         XKPg==
+X-Gm-Message-State: APjAAAWYgdNYUFVfeixsoIl9mZMPF9RWBYJSugieAyPAUrpRf7M40An/
+        roG5dXVjhOQP3nIfXPegTRM=
+X-Google-Smtp-Source: APXvYqz6WrWgHnKpYLCmjEBLzkrrWzLjGpYPQh8xh1axD3NA0KGrnPQwifOd3DkIlcnPSToCzvo/bw==
+X-Received: by 2002:a65:56c1:: with SMTP id w1mr24171680pgs.395.1563160807339;
+        Sun, 14 Jul 2019 20:20:07 -0700 (PDT)
+Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.googlemail.com with ESMTPSA id j13sm14841634pgh.44.2019.07.14.20.20.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 14 Jul 2019 20:20:06 -0700 (PDT)
+From:   Fuqian Huang <huangfq.daxian@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Fuqian Huang <huangfq.daxian@gmail.com>
+Subject: [PATCH v3 22/24] tty: serial: Remove call to memset after pci_alloc_consistent
+Date:   Mon, 15 Jul 2019 11:20:01 +0800
+Message-Id: <20190715032001.7212-1-huangfq.daxian@gmail.com>
+X-Mailer: git-send-email 2.11.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sun, Jul 14, 2019 at 01:37:17PM +0200, Micha³ Miros³aw wrote:
-> On Sun, Jul 14, 2019 at 12:04:26PM +0200, Micha³ Miros³aw wrote:
-> > On Sat, Jul 13, 2019 at 11:08:53PM +0200, Ladislav Michl wrote:
-> > > Following patchset makes console work (patch 1 and 4) for an AT91SAM9G20
-> > > board connected to xhci_hcd and does some cleanup.
-> > > Tested with "console=ttyS0,115200n8 console=ttyGS0" on kernel command line
-> > > and following inittab:
-> > > console::respawn:/sbin/getty -L 115200 ttyS0 vt100
-> > > console::respawn:/sbin/getty -L 115200 ttyGS0 vt100
-> > > 
-> > > However there is an issue remaining:
-> > > Disconnect triggers WARN_ON in gs_close:
-> > [...]
-> > 
-> > Hi,
-> > 
-> > Can you try a patchset I sent some time ago [1] if it fixes your case?
-> 
-> You can pull it from branch usb-console on https://rere.qmqm.pl/git/linux
-> (rebased on current usb-next tree).
+pci_alloc_consistent calls dma_alloc_coherent directly.
+In commit 518a2f1925c3
+("dma-mapping: zero memory returned from dma_alloc_*"),
+dma_alloc_coherent has already zeroed the memory.
+So memset is not needed.
 
-Thank you! I has just in the middle of pulling patches from mail archive.
+Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+---
+Changes in v3:
+  - Use actual commit rather than the merge commit in the commit message
 
-Your first two patches are definitely worth applying and I'll add my
-Tested-by after more testing. 3/5 is unfortunately "I do not care" as
-not having use case, 4/5 is something I do not see use case either, but
-I'm fine with that, except for #ifdefs, but 5/5 should be solved the
-other way around - just wait until everything is written out, of course
-only if USB is connected. That's what serial consoles does and that's
-what I expect from kernel console.
+ drivers/tty/serial/icom.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Your patch set does not attempt to solve tty write to unconnected USB
-and WARN_ON on gs_close, so I'll wait for comments to those two issues
-and redo fix on top of "reimplement console support" as getting rid of
-the kthread is definitely superior to fixing it :)
+diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
+index ad374f7c476d..624f3d541c68 100644
+--- a/drivers/tty/serial/icom.c
++++ b/drivers/tty/serial/icom.c
+@@ -207,8 +207,6 @@ static int get_port_memory(struct icom_port *icom_port)
+ 		return -ENOMEM;
+ 	}
+ 
+-	memset(icom_port->statStg, 0, 4096);
+-
+ 	/* FODs: Frame Out Descriptor Queue, this is a FIFO queue that
+            indicates that frames are to be transmitted
+ 	*/
+-- 
+2.11.0
 
-Best regards,
-	ladis
