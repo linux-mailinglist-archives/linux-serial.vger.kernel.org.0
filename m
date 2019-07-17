@@ -2,109 +2,191 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DCE6B5EB
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Jul 2019 07:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BF66BC9F
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Jul 2019 14:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbfGQF3B (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 17 Jul 2019 01:29:01 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:34776 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725856AbfGQF3B (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 17 Jul 2019 01:29:01 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0485420023F;
-        Wed, 17 Jul 2019 07:28:59 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 70E5B200349;
-        Wed, 17 Jul 2019 07:28:55 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id B230D402ED;
-        Wed, 17 Jul 2019 13:28:46 +0800 (SGT)
-From:   fugang.duan@nxp.com
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, jslaby@suse.com, fugang.duan@nxp.com,
-        u.kleine-koenig@pengutronix.de, festevam@gmail.com
-Subject: [PATCH tty/serial 5/5] tty: serial: fsl_lpuart: correct the FIFO depth size
-Date:   Wed, 17 Jul 2019 13:19:30 +0800
-Message-Id: <20190717051930.15514-6-fugang.duan@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190717051930.15514-1-fugang.duan@nxp.com>
-References: <20190717051930.15514-1-fugang.duan@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1725936AbfGQMyr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 17 Jul 2019 08:54:47 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:20099 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725873AbfGQMyr (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 17 Jul 2019 08:54:47 -0400
+X-UUID: 1bd4ee1fab2d47dd858a01cd016cad59-20190717
+X-UUID: 1bd4ee1fab2d47dd858a01cd016cad59-20190717
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        (envelope-from <changqi.hu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 896351659; Wed, 17 Jul 2019 20:54:44 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 17 Jul 2019 20:54:43 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 17 Jul 2019 20:54:42 +0800
+From:   Changqi Hu <changqi.hu@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Changqi Hu <changqi.hu@mediatek.com>,
+        Peter Shih <pihsun@chromium.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>
+Subject: [PATCH] modify mtk uart power and clock management
+Date:   Wed, 17 Jul 2019 20:54:39 +0800
+Message-ID: <1563368079-29684-1-git-send-email-changqi.hu@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Fugang Duan <fugang.duan@nxp.com>
+modify mtk uart runtime interface, add uart clock use count.
 
-VF610/LS1021a/i.MX7ULP/i.MX8QXP reference manual describe the
-TXFIFOSIZE/RXFIFOSIZE field as below.
-
-000b - FIFO/Buffer depth = 1 dataword.
-001b - FIFO/Buffer depth = 4 datawords.
-010b - FIFO/Buffer depth = 8 datawords.
-011b - FIFO/Buffer depth = 16 datawords.
-100b - FIFO/Buffer depth = 32 datawords.
-101b - FIFO/Buffer depth = 64 datawords.
-110b - FIFO/Buffer depth = 128 datawords.
-111b - FIFO/Buffer depth = 256 datawords. (Reserved for VF610)
-
-So the FIFO depth should be: 0x1 << (val ? (val + 1) : 0)
-
-Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
+Signed-off-by: Changqi Hu <changqi.hu@mediatek.com>
 ---
- drivers/tty/serial/fsl_lpuart.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/tty/serial/8250/8250_mtk.c | 65 ++++++++++++++++++++++++--------------
+ 1 file changed, 42 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index ba87b58..d15e65f 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -214,6 +214,7 @@
- #define UARTFIFO_TXSIZE_OFF	4
- #define UARTFIFO_RXFE		0x00000008
- #define UARTFIFO_RXSIZE_OFF	0
-+#define UARTFIFO_DEPTH(x)	(0x1 << ((x) ? ((x) + 1) : 0))
+diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
+index f470ded..b0113d1 100644
+--- a/drivers/tty/serial/8250/8250_mtk.c
++++ b/drivers/tty/serial/8250/8250_mtk.c
+@@ -31,6 +31,7 @@
+ #define MTK_UART_RXTRI_AD	0x14	/* RX Trigger address */
+ #define MTK_UART_FRACDIV_L	0x15	/* Fractional divider LSB address */
+ #define MTK_UART_FRACDIV_M	0x16	/* Fractional divider MSB address */
++#define MTK_UART_DEBUG0	0x18
+ #define MTK_UART_IER_XOFFI	0x20	/* Enable XOFF character interrupt */
+ #define MTK_UART_IER_RTSI	0x40	/* Enable RTS Modem status interrupt */
+ #define MTK_UART_IER_CTSI	0x80	/* Enable CTS Modem status interrupt */
+@@ -386,9 +387,18 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
+ static int __maybe_unused mtk8250_runtime_suspend(struct device *dev)
+ {
+ 	struct mtk8250_data *data = dev_get_drvdata(dev);
++	struct uart_8250_port *up = serial8250_get_port(data->line);
  
- #define UARTWATER_COUNT_MASK	0xff
- #define UARTWATER_TXCNT_OFF	8
-@@ -1380,13 +1381,12 @@ static int lpuart_startup(struct uart_port *port)
- 	/* determine FIFO size and enable FIFO mode */
- 	temp = readb(sport->port.membase + UARTPFIFO);
+-	clk_disable_unprepare(data->uart_clk);
+-	clk_disable_unprepare(data->bus_clk);
++	/*wait until UART in idle status*/
++	while
++		(serial_in(up, MTK_UART_DEBUG0));
++
++	if (data->clk_count == 0U) {
++		dev_dbg(dev, "%s clock count is 0\n", __func__);
++	} else {
++		clk_disable_unprepare(data->bus_clk);
++		data->clk_count--;
++	}
  
--	sport->txfifo_size = 0x1 << (((temp >> UARTPFIFO_TXSIZE_OFF) &
--		UARTPFIFO_FIFOSIZE_MASK) + 1);
+ 	return 0;
+ }
+@@ -398,16 +408,16 @@ static int __maybe_unused mtk8250_runtime_resume(struct device *dev)
+ 	struct mtk8250_data *data = dev_get_drvdata(dev);
+ 	int err;
+ 
+-	err = clk_prepare_enable(data->uart_clk);
+-	if (err) {
+-		dev_warn(dev, "Can't enable clock\n");
+-		return err;
+-	}
 -
-+	sport->txfifo_size = UARTFIFO_DEPTH((temp >> UARTPFIFO_TXSIZE_OFF) &
-+					    UARTPFIFO_FIFOSIZE_MASK);
- 	sport->port.fifosize = sport->txfifo_size;
+-	err = clk_prepare_enable(data->bus_clk);
+-	if (err) {
+-		dev_warn(dev, "Can't enable bus clock\n");
+-		return err;
++	if (data->clk_count > 0U) {
++		dev_dbg(dev, "%s clock count is %d\n", __func__,
++			data->clk_count);
++	} else {
++		err = clk_prepare_enable(data->bus_clk);
++		if (err) {
++			dev_warn(dev, "Can't enable bus clock\n");
++			return err;
++		}
++		data->clk_count++;
+ 	}
  
--	sport->rxfifo_size = 0x1 << (((temp >> UARTPFIFO_RXSIZE_OFF) &
--		UARTPFIFO_FIFOSIZE_MASK) + 1);
-+	sport->rxfifo_size = UARTFIFO_DEPTH((temp >> UARTPFIFO_RXSIZE_OFF) &
-+					    UARTPFIFO_FIFOSIZE_MASK);
+ 	return 0;
+@@ -416,13 +426,23 @@ static int __maybe_unused mtk8250_runtime_resume(struct device *dev)
+ static void
+ mtk8250_do_pm(struct uart_port *port, unsigned int state, unsigned int old)
+ {
+-	if (!state)
+-		pm_runtime_get_sync(port->dev);
++	struct uart_8250_port *up = up_to_u8250p(port);
++
++	if (!state) {
++		if (!(up->capabilities & UART_CAP_RPM))
++			mtk8250_runtime_resume(port->dev);
++		else
++			pm_runtime_get_sync(port->dev);
++	}
  
- 	spin_lock_irqsave(&sport->port.lock, flags);
+ 	serial8250_do_pm(port, state, old);
  
-@@ -1431,13 +1431,12 @@ static int lpuart32_startup(struct uart_port *port)
- 	/* determine FIFO size */
- 	temp = lpuart32_read(&sport->port, UARTFIFO);
+-	if (state)
+-		pm_runtime_put_sync_suspend(port->dev);
++	if (state) {
++		if (!(up->capabilities & UART_CAP_RPM))
++			mtk8250_runtime_suspend(port->dev);
++		else
++			pm_runtime_put_sync_suspend(port->dev);
++	}
+ }
  
--	sport->txfifo_size = 0x1 << (((temp >> UARTFIFO_TXSIZE_OFF) &
--		UARTFIFO_FIFOSIZE_MASK) - 1);
+ #ifdef CONFIG_SERIAL_8250_DMA
+@@ -499,6 +519,8 @@ static int mtk8250_probe(struct platform_device *pdev)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	data->clk_count = 0;
++
+ 	if (pdev->dev.of_node) {
+ 		err = mtk8250_probe_of(pdev, &uart.port, data);
+ 		if (err)
+@@ -531,17 +553,12 @@ static int mtk8250_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, data);
+ 
+-	err = mtk8250_runtime_resume(&pdev->dev);
+-	if (err)
+-		return err;
++	pm_runtime_enable(&pdev->dev);
+ 
+ 	data->line = serial8250_register_8250_port(&uart);
+ 	if (data->line < 0)
+ 		return data->line;
+ 
+-	pm_runtime_set_active(&pdev->dev);
+-	pm_runtime_enable(&pdev->dev);
 -
-+	sport->txfifo_size = UARTFIFO_DEPTH((temp >> UARTFIFO_TXSIZE_OFF) &
-+					    UARTFIFO_FIFOSIZE_MASK);
- 	sport->port.fifosize = sport->txfifo_size;
+ 	return 0;
+ }
  
--	sport->rxfifo_size = 0x1 << (((temp >> UARTFIFO_RXSIZE_OFF) &
--		UARTFIFO_FIFOSIZE_MASK) - 1);
-+	sport->rxfifo_size = UARTFIFO_DEPTH((temp >> UARTFIFO_RXSIZE_OFF) &
-+					    UARTFIFO_FIFOSIZE_MASK);
+@@ -552,11 +569,13 @@ static int mtk8250_remove(struct platform_device *pdev)
+ 	pm_runtime_get_sync(&pdev->dev);
  
- 	spin_lock_irqsave(&sport->port.lock, flags);
+ 	serial8250_unregister_port(data->line);
+-	mtk8250_runtime_suspend(&pdev->dev);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 
++	if (!pm_runtime_status_suspended(&pdev->dev))
++		mtk8250_runtime_suspend(&pdev->dev);
++
+ 	return 0;
+ }
  
 -- 
-2.7.4
+1.8.1.1.dirty
 
