@@ -2,111 +2,133 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BD16CE5F
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jul 2019 14:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969AE6D51F
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Jul 2019 21:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbfGRM6v (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jul 2019 08:58:51 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:45995 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726608AbfGRM6v (ORCPT
+        id S2403937AbfGRTpG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Jul 2019 15:45:06 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:54901 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403927AbfGRTpG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jul 2019 08:58:51 -0400
-X-UUID: a0ecc646d1484f3ebc25b94386ad14df-20190718
-X-UUID: a0ecc646d1484f3ebc25b94386ad14df-20190718
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <changqi.hu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1402023343; Thu, 18 Jul 2019 20:58:42 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 18 Jul 2019 20:58:41 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 18 Jul 2019 20:58:41 +0800
-From:   Changqi Hu <changqi.hu@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Changqi Hu <changqi.hu@mediatek.com>,
-        Peter Shih <pihsun@chromium.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>
-Subject: [PATCH v2] serial: 8250-mtk: modify mtk uart power and clock management
-Date:   Thu, 18 Jul 2019 20:58:36 +0800
-Message-ID: <1563454716-8355-1-git-send-email-changqi.hu@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        Thu, 18 Jul 2019 15:45:06 -0400
+Received: by mail-pl1-f202.google.com with SMTP id u10so14452658plq.21
+        for <linux-serial@vger.kernel.org>; Thu, 18 Jul 2019 12:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=1oQBZ5kAfw78ruR17gEno1cNC4m9jAFrzrAqQjxP+4s=;
+        b=bOCM6GL0Ngw8/0ygiEX9zoY9+UeVpwZrC+HYXZNlVCmCNmQeIDTdOr9n5sq3gWDm+B
+         si73WGz9FBMe21fi7q1cgUPVc6UKrNU5czhY45drBnT9fcda2oXVubTUpoYn7CB+THFG
+         NfxtWL3+bwAI+nFPpXR/XYuXylxs0bB6wzi1p59YteoWl4BMGvMhrbg4YA6PkAj+hyO6
+         JfNKoy8V2yjnRaFgKyjufj7DwMls0NaxqdhxPSGfjq1NGKNn9+15BYW4/frcFLB98ZE/
+         XmzoxkPX8bn/kJ30VxkaYuMDwmXXo+IAwglnrNTNcTBgbwGY81zwuHuZBABAhx6R/r1L
+         +KlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=1oQBZ5kAfw78ruR17gEno1cNC4m9jAFrzrAqQjxP+4s=;
+        b=sBUP5EUOViBhxZk14U/VKvxNqz6Un2/MI064J9s9FgxKfiCMHxRymBwd+2egM7KOS8
+         Idlu2Uc/DTkpzJLeJ9DyAHA0mRoHvtXngxWwE4j3TcCzFWfC4YjBn+Ba7q7qI/BgcTF4
+         iWk9ImFrQDZUv1FHa22K+s1X7P1R3M/jn5pMFQlXdfgiE1FhOijbIQm/HlTtn7KYxCa7
+         PO1B39H58SOq6d/82V86S1vGu+UHBHbAX4m6EQcPOtqiG6l+vqECQLlHy+C699yDQJfx
+         Auc6uinkGuNBdo+bEVLDkDcCHghlR9/iEwOeN9ccnyNOZo7uRGXGh1R1T0liLhuo2PBY
+         a+GQ==
+X-Gm-Message-State: APjAAAUSmc0rOQCr5bXSNuJhoboaGJ+Y/UA5Qu+75hvLwYaN/yrq2Ph5
+        8j88dVAb01vmE1eyFkJzWl+1g5aeCcYaFcbExNqP+A==
+X-Google-Smtp-Source: APXvYqxlQfzj0hot9XOlEEvXsk76ZdqvBcPQcFU/XkEmSUECO78P340Mt+UCgz76BE5DH0Pmt8Ux45GcQe6wETMsLvQxOQ==
+X-Received: by 2002:a63:2c8:: with SMTP id 191mr48832875pgc.139.1563479105018;
+ Thu, 18 Jul 2019 12:45:05 -0700 (PDT)
+Date:   Thu, 18 Jul 2019 12:44:04 -0700
+In-Reply-To: <20190718194415.108476-1-matthewgarrett@google.com>
+Message-Id: <20190718194415.108476-19-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190718194415.108476-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
+Subject: [PATCH V36 18/29] Lock down TIOCSSERIAL
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-modify mtk uart runtime interface, enable uart clock before register.
+From: David Howells <dhowells@redhat.com>
 
-Signed-off-by: Changqi Hu <changqi.hu@mediatek.com>
+Lock down TIOCSSERIAL as that can be used to change the ioport and irq
+settings on a serial port.  This only appears to be an issue for the serial
+drivers that use the core serial code.  All other drivers seem to either
+ignore attempts to change port/irq or give an error.
+
+Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+cc: Jiri Slaby <jslaby@suse.com>
+Cc: linux-serial@vger.kernel.org
 ---
- drivers/tty/serial/8250/8250_mtk.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ drivers/tty/serial/serial_core.c | 5 +++++
+ include/linux/security.h         | 1 +
+ security/lockdown/lockdown.c     | 1 +
+ 3 files changed, 7 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index b0113d1..a07c8ae 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -389,7 +389,7 @@ static int __maybe_unused mtk8250_runtime_suspend(struct device *dev)
- 	struct mtk8250_data *data = dev_get_drvdata(dev);
- 	struct uart_8250_port *up = serial8250_get_port(data->line);
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 4223cb496764..6e713be1d4e9 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -22,6 +22,7 @@
+ #include <linux/serial_core.h>
+ #include <linux/delay.h>
+ #include <linux/mutex.h>
++#include <linux/security.h>
  
--	/*wait until UART in idle status*/
-+	/* wait until UART in idle status */
- 	while
- 		(serial_in(up, MTK_UART_DEBUG0));
+ #include <linux/irq.h>
+ #include <linux/uaccess.h>
+@@ -862,6 +863,10 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
+ 		goto check_and_exit;
+ 	}
  
-@@ -426,23 +426,15 @@ static int __maybe_unused mtk8250_runtime_resume(struct device *dev)
- static void
- mtk8250_do_pm(struct uart_port *port, unsigned int state, unsigned int old)
- {
--	struct uart_8250_port *up = up_to_u8250p(port);
--
--	if (!state) {
--		if (!(up->capabilities & UART_CAP_RPM))
--			mtk8250_runtime_resume(port->dev);
--		else
-+	if (!state)
-+		if (!mtk8250_runtime_resume(port->dev))
- 			pm_runtime_get_sync(port->dev);
--	}
- 
- 	serial8250_do_pm(port, state, old);
- 
--	if (state) {
--		if (!(up->capabilities & UART_CAP_RPM))
-+	if (state)
-+		if (!pm_runtime_put_sync_suspend(port->dev))
- 			mtk8250_runtime_suspend(port->dev);
--		else
--			pm_runtime_put_sync_suspend(port->dev);
--	}
- }
- 
- #ifdef CONFIG_SERIAL_8250_DMA
-@@ -554,6 +546,9 @@ static int mtk8250_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, data);
- 
- 	pm_runtime_enable(&pdev->dev);
-+	err = mtk8250_runtime_resume(&pdev->dev);
-+	if (err)
-+		return err;
- 
- 	data->line = serial8250_register_8250_port(&uart);
- 	if (data->line < 0)
++	retval = security_locked_down(LOCKDOWN_TIOCSSERIAL);
++	if (retval && (change_irq || change_port))
++		goto exit;
++
+ 	/*
+ 	 * Ask the low level driver to verify the settings.
+ 	 */
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 3773ad09b831..8f7048395114 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -112,6 +112,7 @@ enum lockdown_reason {
+ 	LOCKDOWN_MSR,
+ 	LOCKDOWN_ACPI_TABLES,
+ 	LOCKDOWN_PCMCIA_CIS,
++	LOCKDOWN_TIOCSSERIAL,
+ 	LOCKDOWN_INTEGRITY_MAX,
+ 	LOCKDOWN_CONFIDENTIALITY_MAX,
+ };
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 22482e1b9a77..00a3a6438dd2 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -27,6 +27,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+ 	[LOCKDOWN_MSR] = "raw MSR access",
+ 	[LOCKDOWN_ACPI_TABLES] = "modifying ACPI tables",
+ 	[LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
++	[LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
+ 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+ 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+ };
 -- 
-1.8.1.1.dirty
+2.22.0.510.g264f2c817a-goog
 
