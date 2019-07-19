@@ -2,130 +2,180 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1816D933
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 04:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4A16D939
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 04:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbfGSCzD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jul 2019 22:55:03 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:34863 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726055AbfGSCzD (ORCPT
+        id S1726055AbfGSC74 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Jul 2019 22:59:56 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:58182 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726015AbfGSC74 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jul 2019 22:55:03 -0400
-Received: by mail-io1-f66.google.com with SMTP id m24so55436626ioo.2;
-        Thu, 18 Jul 2019 19:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=crPNB/o3Q9ur97XTicpVaP0d8OKmA3gf/e7Gr0NtXVI=;
-        b=RBYn8ZXdbWHoXyzyA8XGm7rnVL7fXfGksdzm0gEBYDzQuaaJTKc6kcuSwReTACcBxa
-         9S9P77ppW22THYr1tNjKxvaZwNJ+xvRgh5S1wRH2HgyTEIj+KXx2+yypqjvzEk3F7T97
-         sBrSVU6TBSGAMf9BmPpwtfC8UmEiSldTGl7BNPqPVwZybjStdjmayXr4YZz/UKl9A/I6
-         eTDh8KJbRW7/EoKBmuvtkkiR208r5RyvgBNYm15/qnd3ABFR09Czg36BigCcQBYMiOiv
-         2lv5b0eYUFFnHK57EnLyhZi6vbaobAgDVapbsqVSachfLtliiLYYVQ4SfgqgI4HtAMgx
-         z74A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=crPNB/o3Q9ur97XTicpVaP0d8OKmA3gf/e7Gr0NtXVI=;
-        b=TZKBJlRtYwnFQvX4RDJX5dMotXRNydg99BFF6yMBJjdx8NOIS5RQ2t7JO2el3KcAZX
-         y5vn80aTKugyBcyPqGEiocavJO83ObCbexP143pw4l3WA4ky+xwTVlcxgYntaMlFefL+
-         1+U1BgWHiZRTGfCqvOXyo2MlsARAbxAoRSmLGBB4de/pvi3dcxORtGv4f5bbn8lbof9S
-         YyoPPODoLy8uFzWq0+apxJQ3tzjQeub6twvNAR3JuvS1rOJtoU0UC2RMr9iuL29oOjIm
-         dpqAnvPzNBUEle2u+ftHf0lDehRxiFLKrNDIorxVn8gpw8fHPSG9EYrC/++nCtNvCaWF
-         UX3A==
-X-Gm-Message-State: APjAAAW4inz/am7bgYk9f4ZJIxm3Dt303sS5Ms406swpFGf1Z0ri4rjX
-        yu8+yRpW9LMHPT+gLJ3qlMEeY40K5KI=
-X-Google-Smtp-Source: APXvYqyOAUD6nqXzJRaSa0pX5RuWRnq7cn+ko1UHXJSLfWzgmz8O2awrjhkTbLF/bcietJ/DEKPgAQ==
-X-Received: by 2002:a5e:a708:: with SMTP id b8mr48249316iod.25.1563504902411;
-        Thu, 18 Jul 2019 19:55:02 -0700 (PDT)
-Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
-        by smtp.googlemail.com with ESMTPSA id u17sm25277038iob.57.2019.07.18.19.55.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Jul 2019 19:55:01 -0700 (PDT)
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-Cc:     emamd001@umn.edu, kjlu@umn.edu, smccaman@umn.edu,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 18 Jul 2019 22:59:56 -0400
+X-UUID: b46f2d8561aa45c9ae2e0868a59a8ce5-20190719
+X-UUID: b46f2d8561aa45c9ae2e0868a59a8ce5-20190719
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <changqi.hu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1746597379; Fri, 19 Jul 2019 10:59:47 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 19 Jul 2019 10:59:45 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 19 Jul 2019 10:59:45 +0800
+From:   Changqi Hu <changqi.hu@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] 8250_lpss: check null return when calling pci_ioremap_bar
-Date:   Thu, 18 Jul 2019 21:54:42 -0500
-Message-Id: <20190719025443.2368-1-navid.emamdoost@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Changqi Hu <changqi.hu@mediatek.com>,
+        Peter Shih <pihsun@chromium.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>
+Subject: [PATCH v3] serial: 8250-mtk: modify mtk uart power and clock management
+Date:   Fri, 19 Jul 2019 10:59:42 +0800
+Message-ID: <1563505182-2408-1-git-send-email-changqi.hu@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pci_ioremap_bar may return null. This is eventually de-referenced at 
-drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check is
- needed to prevent null de-reference. I am adding the check and in case of
- failure returning -ENOMEM (I am not sure this is the best errno, you may 
-consider it as a placeholder), and subsequently changing the caller’s 
-return type, and propagating the error.
+modify mtk uart runtime interface, add uart clock use count.
+merge patch v1 and patch v2 together.
 
-Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+Signed-off-by: Changqi Hu <changqi.hu@mediatek.com>
 ---
- drivers/tty/serial/8250/8250_lpss.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/tty/serial/8250/8250_mtk.c | 50 ++++++++++++++++++++++++--------------
+ 1 file changed, 32 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 53ca9ba6ab4b..5954b2e09b76 100644
---- a/drivers/tty/serial/8250/8250_lpss.c
-+++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -161,7 +161,7 @@ static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
- 	.multi_block = {0},
- };
- 
--static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
-+static int qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
+index f470ded..a07c8ae 100644
+--- a/drivers/tty/serial/8250/8250_mtk.c
++++ b/drivers/tty/serial/8250/8250_mtk.c
+@@ -31,6 +31,7 @@
+ #define MTK_UART_RXTRI_AD	0x14	/* RX Trigger address */
+ #define MTK_UART_FRACDIV_L	0x15	/* Fractional divider LSB address */
+ #define MTK_UART_FRACDIV_M	0x16	/* Fractional divider MSB address */
++#define MTK_UART_DEBUG0	0x18
+ #define MTK_UART_IER_XOFFI	0x20	/* Enable XOFF character interrupt */
+ #define MTK_UART_IER_RTSI	0x40	/* Enable RTS Modem status interrupt */
+ #define MTK_UART_IER_CTSI	0x80	/* Enable CTS Modem status interrupt */
+@@ -386,9 +387,18 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
+ static int __maybe_unused mtk8250_runtime_suspend(struct device *dev)
  {
- 	struct uart_8250_dma *dma = &lpss->dma;
- 	struct dw_dma_chip *chip = &lpss->dma_chip;
-@@ -172,12 +172,14 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
- 	chip->dev = &pdev->dev;
- 	chip->irq = pci_irq_vector(pdev, 0);
- 	chip->regs = pci_ioremap_bar(pdev, 1);
-+	if (!chip->regs)
-+		return -ENOMEM;
- 	chip->pdata = &qrk_serial_dma_pdata;
+ 	struct mtk8250_data *data = dev_get_drvdata(dev);
++	struct uart_8250_port *up = serial8250_get_port(data->line);
  
- 	/* Falling back to PIO mode if DMA probing fails */
- 	ret = dw_dma_probe(chip);
- 	if (ret)
--		return;
-+		return 0;
+-	clk_disable_unprepare(data->uart_clk);
+-	clk_disable_unprepare(data->bus_clk);
++	/* wait until UART in idle status */
++	while
++		(serial_in(up, MTK_UART_DEBUG0));
++
++	if (data->clk_count == 0U) {
++		dev_dbg(dev, "%s clock count is 0\n", __func__);
++	} else {
++		clk_disable_unprepare(data->bus_clk);
++		data->clk_count--;
++	}
  
- 	pci_try_set_mwi(pdev);
+ 	return 0;
+ }
+@@ -398,16 +408,16 @@ static int __maybe_unused mtk8250_runtime_resume(struct device *dev)
+ 	struct mtk8250_data *data = dev_get_drvdata(dev);
+ 	int err;
  
-@@ -191,6 +193,7 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
- 	param->hs_polarity = true;
+-	err = clk_prepare_enable(data->uart_clk);
+-	if (err) {
+-		dev_warn(dev, "Can't enable clock\n");
+-		return err;
+-	}
+-
+-	err = clk_prepare_enable(data->bus_clk);
+-	if (err) {
+-		dev_warn(dev, "Can't enable bus clock\n");
+-		return err;
++	if (data->clk_count > 0U) {
++		dev_dbg(dev, "%s clock count is %d\n", __func__,
++			data->clk_count);
++	} else {
++		err = clk_prepare_enable(data->bus_clk);
++		if (err) {
++			dev_warn(dev, "Can't enable bus clock\n");
++			return err;
++		}
++		data->clk_count++;
+ 	}
  
- 	lpss->dma_maxburst = 8;
-+	return 0;
+ 	return 0;
+@@ -417,12 +427,14 @@ static int __maybe_unused mtk8250_runtime_resume(struct device *dev)
+ mtk8250_do_pm(struct uart_port *port, unsigned int state, unsigned int old)
+ {
+ 	if (!state)
+-		pm_runtime_get_sync(port->dev);
++		if (!mtk8250_runtime_resume(port->dev))
++			pm_runtime_get_sync(port->dev);
+ 
+ 	serial8250_do_pm(port, state, old);
+ 
+ 	if (state)
+-		pm_runtime_put_sync_suspend(port->dev);
++		if (!pm_runtime_put_sync_suspend(port->dev))
++			mtk8250_runtime_suspend(port->dev);
  }
  
- static void qrk_serial_exit_dma(struct lpss8250 *lpss)
-@@ -219,7 +222,9 @@ static int qrk_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ #ifdef CONFIG_SERIAL_8250_DMA
+@@ -499,6 +511,8 @@ static int mtk8250_probe(struct platform_device *pdev)
+ 	if (!data)
+ 		return -ENOMEM;
  
- 	port->irq = pci_irq_vector(pdev, 0);
++	data->clk_count = 0;
++
+ 	if (pdev->dev.of_node) {
+ 		err = mtk8250_probe_of(pdev, &uart.port, data);
+ 		if (err)
+@@ -531,6 +545,7 @@ static int mtk8250_probe(struct platform_device *pdev)
  
--	qrk_serial_setup_dma(lpss, port);
-+	ret = qrk_serial_setup_dma(lpss, port);
-+	if (ret < 0)
-+		return ret;
+ 	platform_set_drvdata(pdev, data);
+ 
++	pm_runtime_enable(&pdev->dev);
+ 	err = mtk8250_runtime_resume(&pdev->dev);
+ 	if (err)
+ 		return err;
+@@ -539,9 +554,6 @@ static int mtk8250_probe(struct platform_device *pdev)
+ 	if (data->line < 0)
+ 		return data->line;
+ 
+-	pm_runtime_set_active(&pdev->dev);
+-	pm_runtime_enable(&pdev->dev);
+-
+ 	return 0;
+ }
+ 
+@@ -552,11 +564,13 @@ static int mtk8250_remove(struct platform_device *pdev)
+ 	pm_runtime_get_sync(&pdev->dev);
+ 
+ 	serial8250_unregister_port(data->line);
+-	mtk8250_runtime_suspend(&pdev->dev);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 
++	if (!pm_runtime_status_suspended(&pdev->dev))
++		mtk8250_runtime_suspend(&pdev->dev);
++
  	return 0;
  }
  
 -- 
-2.17.1
+1.8.1.1.dirty
 
