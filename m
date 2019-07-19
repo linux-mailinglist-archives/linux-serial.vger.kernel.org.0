@@ -2,105 +2,134 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC5F6E002
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D477C6E2D0
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 10:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728294AbfGSEiu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 00:38:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58580 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728393AbfGSD7H (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jul 2019 23:59:07 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 131CE21873;
-        Fri, 19 Jul 2019 03:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563508746;
-        bh=XkWoR1WdNSoPKYMa5BnU7RtzMmHrf4Tj7L5b4qPc+7k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q+DvJnk0gkTUUM2OHW9Qbc1HLA8qvedYI8NIqazWzfSiEMo3lyN5kRSQVJP2WkX8N
-         5r5kIv1WygIpoZBYfRwFTU0MOGJun35NWLyI0Am+7mGgQv7itLnO8UYiZ/YqqO++qY
-         DoLXw0Xmd/2LVVw06SL2BHgq9SX7bESRsrtjAF3A=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 067/171] serial: uartps: Use the same dynamic major number for all ports
-Date:   Thu, 18 Jul 2019 23:54:58 -0400
-Message-Id: <20190719035643.14300-67-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719035643.14300-1-sashal@kernel.org>
-References: <20190719035643.14300-1-sashal@kernel.org>
+        id S1726600AbfGSIsO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 04:48:14 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45024 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726036AbfGSIsO (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 04:48:14 -0400
+Received: by mail-lf1-f68.google.com with SMTP id r15so4201135lfm.11
+        for <linux-serial@vger.kernel.org>; Fri, 19 Jul 2019 01:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oto3ZKEBO7uNTBw2hLUMtLU481PxrOmlSNWwS+t8hHw=;
+        b=FmH8Mu9Y5vAHC3tsnVF2eOeEHybGQzFPYjcdPIEwX32vOGyLA4nJ4UTonXdC6YMts9
+         aLkHWeXi30ImsHqJPxS1sPaoXe1Jfmuybs3PqFDCMT/vMoa3Y7h7PK5sHzzRj8xaXPJe
+         hq95sK1wKAP1eZ5/t0aczLDoFL5nYFJpc9Y9FfYDDTxzNxH3wkxW5clm3dz0UA68GuAv
+         +9YkI922HYuDhl5QVeAqzsvjiJT6jdboYER6KVagiQ5S0FSAN9xD6boVzOziEZzhTpWi
+         Px/F4AHH8/OPfUuXDseFbFhcCFig3TVDEvbOtqCUZc5q2WWtPg6nyBIocxfthhq7xOND
+         44/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oto3ZKEBO7uNTBw2hLUMtLU481PxrOmlSNWwS+t8hHw=;
+        b=eaGepOmFJw+c5B1peSvvkHoDl5/YiW9Crjrqin0fzE2xVVTY0BQRzO3kcbusu5LyLm
+         gGpEiHWsWy7MXu2ZlCuZpt3zAPvLHFn24Fu9RhBuSg7U3mkVZ9K7eVyRFLksfOKLUJS2
+         osaDZInlwSRrzMr6XtwOlwJN1sEJN7swwo/5mcGKT+aCqlnass7RfrmkYHIsuwtn7Gaa
+         ugRUgOi9xSiqzM5tawl8KJS7F441KOhnloyJL8TUKOrFIYlbGlpeIkwOeG6hjqkAwwLb
+         7fXn6FXR0RVk0OJSRi7jnYZUuBYhJwgcXnCb8buiZesu1LzorvISEiy9nk3QmeI6x0Xz
+         jKZA==
+X-Gm-Message-State: APjAAAV0oEHtSJWJ19GrHfXJPRlzsUO5HaJeeQ7sRQ4njc4KkMips6Lb
+        XR+RBwgv3I4KLXXxVYQuysi3fTRc
+X-Google-Smtp-Source: APXvYqyP+aKWOpZc9wPTPESqYu90m/fOpcXXAVg3c5T/FoSA0Uyt5SPFiSS93ZR71XVNjYJjv8CFjg==
+X-Received: by 2002:ac2:465e:: with SMTP id s30mr9546033lfo.19.1563526091674;
+        Fri, 19 Jul 2019 01:48:11 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id s21sm5588742ljm.28.2019.07.19.01.48.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 19 Jul 2019 01:48:11 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sergey Organov <sorganov@gmail.com>
+Subject: [PATCH v4 0/3] serial: imx: fix RTS and RTS/CTS handling
+Date:   Fri, 19 Jul 2019 11:47:51 +0300
+Message-Id: <1563526074-20399-1-git-send-email-sorganov@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <20190614072801.3187-1-s.hauer@pengutronix.de>
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+This is rebase of v3 on top of 'tty-next', to get rid of commits that
+are already adopted to mainline.
 
-[ Upstream commit ab262666018de6f4e206b021386b93ed0c164316 ]
+RTS signal and RTS/CTS handshake handling had a few problems these
+patches fix.
 
-Let kernel to find out major number dynamically for the first device and
-then reuse it for other instances.
-This fixes the issue that each uart is registered with a
-different major number.
+In addition, minor cleanups are made to the involved code.
 
-After the patch:
-crw-------    1 root     root      253,   0 Jun 10 08:31 /dev/ttyPS0
-crw--w----    1 root     root      253,   1 Jan  1  1970 /dev/ttyPS1
+Changelog:
 
-Fixes: 024ca329bfb9 ("serial: uartps: Register own uart console and driver structures")
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/xilinx_uartps.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+  v4:
 
-diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 605354fd60b1..9dcc4d855ddd 100644
---- a/drivers/tty/serial/xilinx_uartps.c
-+++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -29,12 +29,12 @@
- 
- #define CDNS_UART_TTY_NAME	"ttyPS"
- #define CDNS_UART_NAME		"xuartps"
--#define CDNS_UART_MAJOR		0	/* use dynamic node allocation */
- #define CDNS_UART_FIFO_SIZE	64	/* FIFO size */
- #define CDNS_UART_REGISTER_SPACE	0x1000
- 
- /* Rx Trigger level */
- static int rx_trigger_level = 56;
-+static int uartps_major;
- module_param(rx_trigger_level, uint, S_IRUGO);
- MODULE_PARM_DESC(rx_trigger_level, "Rx trigger level, 1-63 bytes");
- 
-@@ -1517,7 +1517,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 	cdns_uart_uart_driver->owner = THIS_MODULE;
- 	cdns_uart_uart_driver->driver_name = driver_name;
- 	cdns_uart_uart_driver->dev_name	= CDNS_UART_TTY_NAME;
--	cdns_uart_uart_driver->major = CDNS_UART_MAJOR;
-+	cdns_uart_uart_driver->major = uartps_major;
- 	cdns_uart_uart_driver->minor = cdns_uart_data->id;
- 	cdns_uart_uart_driver->nr = 1;
- 
-@@ -1546,6 +1546,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 		goto err_out_id;
- 	}
- 
-+	uartps_major = cdns_uart_uart_driver->tty_driver->major;
- 	cdns_uart_data->cdns_uart_driver = cdns_uart_uart_driver;
- 
- 	/*
--- 
-2.20.1
+      * rebased on top of 'tty-next', to get rid of commits that
+        are already adopted to mainline.
+
+  v3:
+
+      * Improved comments in "serial: imx: set_mctrl(): correctly
+        restore autoRTS state", as suggested by Uwe Kleine-König
+        <u.kleine-koenig@pengutronix.de>
+
+  v2:
+
+      * Appended: "Reviewed-by:" and "Tested-by:"
+        Sascha Hauer <s.hauer@pengutronix.de>
+
+      * Removed "RFC" from header
+
+  v1:
+
+      * Fixed in "serial: imx: set_termios(): preserve RTS state"
+
+-+	ucr2 = UCR2_SRST | UCR2_IRTS;
+++	ucr2 |= UCR2_SRST | UCR2_IRTS;
+
+        as noticed by Lothar Waßmann <LW@KARO-electronics.de>
+
+      * Fixed in "serial: imx: set_termios(): preserve RTS state"
+
+-+	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTSC);
+++	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTS);
+
+        as the fix for the problem found by Sascha Hauer
+        <s.hauer@pengutronix.de>
+
+      * Reordered:
+
+        serial: imx: set_termios(): preserve RTS state
+        serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+
+        as the latter makes sense only provided the former is already
+        applied.
+
+Sergey Organov (3):
+  serial: imx: set_termios(): do not enable autoRTS if RTS is unset
+  serial: imx: set_mctrl(): correctly restore autoRTS state
+  serial: imx: get rid of imx_uart_rts_auto()
+
+ drivers/tty/serial/imx.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
+
+--
+2.10.0.1.g57b01a3
 
