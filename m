@@ -2,81 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2436E689
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 15:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2456E6A9
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 15:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728016AbfGSNgY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 09:36:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:43522 "EHLO foss.arm.com"
+        id S1727354AbfGSNhl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 09:37:41 -0400
+Received: from mga18.intel.com ([134.134.136.126]:35262 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727888AbfGSNgY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 09:36:24 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BC3D1509;
-        Fri, 19 Jul 2019 06:36:23 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 642693F71A;
-        Fri, 19 Jul 2019 06:36:22 -0700 (PDT)
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     linux-serial@vger.kernel.org
-Cc:     Russell King <linux@arm.linux.org.uk>,
-        Phil Elwell <phil@raspberrypi.org>,
-        Rogier Wolff <R.E.Wolff@BitWizard.nl>,
-        linux-arm-kernel@lists.infradead.org,
+        id S1728715AbfGSNhk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 09:37:40 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jul 2019 06:37:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,282,1559545200"; 
+   d="scan'208";a="179627372"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2019 06:37:37 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hoT4p-0003sx-PA; Fri, 19 Jul 2019 16:37:35 +0300
+Date:   Fri, 19 Jul 2019 16:37:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
+        Kangjie Lu <kjlu@umn.edu>, Aditya Pakki <pakki001@umn.edu>
+Cc:     emamd001@umn.edu, smccaman@umn.edu,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        linux-rpi-kernel@lists.infradead.org
-Subject: [RFC PATCH 2/2] serial: pl011: Don't bother pushing more TX data while TX irq is active
-Date:   Fri, 19 Jul 2019 14:35:25 +0100
-Message-Id: <1563543325-12463-3-git-send-email-Dave.Martin@arm.com>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1563543325-12463-1-git-send-email-Dave.Martin@arm.com>
-References: <1563543325-12463-1-git-send-email-Dave.Martin@arm.com>
+        Jiri Slaby <jslaby@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] 8250_lpss: check null return when calling pci_ioremap_bar
+Message-ID: <20190719133735.GM9224@smile.fi.intel.com>
+References: <20190719025443.2368-1-navid.emamdoost@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190719025443.2368-1-navid.emamdoost@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-When the TX irq is active, writing chars to the TX FIFO from
-anywhere except pl011_int() is pointless: the UART is already busy,
-and new chars will be picked up by pl011_int() as soon as there is
-FIFO space.
+On Thu, Jul 18, 2019 at 09:54:42PM -0500, Navid Emamdoost wrote:
+> pci_ioremap_bar may return null. This is eventually de-referenced at 
+> drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check is
+>  needed to prevent null de-reference. I am adding the check and in case of
+>  failure returning -ENOMEM (I am not sure this is the best errno, you may 
+> consider it as a placeholder), and subsequently changing the caller’s 
+> return type, and propagating the error.
 
-To reduce the scope for surprises, bail out of pl011_start_tx_pio()
-without attempting to write to the FIFO or start TX DMA if the TX FIFO
-interrupt is already in use.
+Thanks for the patch, my comments below.
 
-This should also avoid pointless overhead in some situations.
+>  	chip->irq = pci_irq_vector(pdev, 0);
+>  	chip->regs = pci_ioremap_bar(pdev, 1);
+> +	if (!chip->regs)
+> +		return -ENOMEM;
 
-Signed-off-by: Dave Martin <Dave.Martin@arm.com>
+This is the same case as below, it's fine to go on without DMA support.
 
----
+>  	chip->pdata = &qrk_serial_dma_pdata;
 
-Please test both with and without this patch.
+So, I would rather to put like this...
 
-I believe with the previous patch in place, this patch is not strictly
-necessary.  However, if the UART is actively transmitting in the
-background already, it does make sense not to waste time trying polling
-the FIFO fill status or setting up DMA etc.
----
- drivers/tty/serial/amba-pl011.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Hold on, I remember someone already tried to fix this [1].
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index e24bbc0..f28935a 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -1318,6 +1318,10 @@ static void pl011_start_tx(struct uart_port *port)
- 	struct uart_amba_port *uap =
- 	    container_of(port, struct uart_amba_port, port);
- 
-+	/* It's pointless to kick the UART if it's already transmitting... */
-+	if (uap->im & UART011_TXIM)
-+		return;
-+
- 	if (!pl011_dma_tx_start(uap))
- 		pl011_start_tx_pio(uap);
- }
+I dunno why it wasn't v5, due to [2].
+
+Also, similar to yours, but wrong [3].
+
+Thus, please, collaborate guys, and send one compiling solution  based on [1].
+
+>  	/* Falling back to PIO mode if DMA probing fails */
+>  	ret = dw_dma_probe(chip);
+>  	if (ret)
+> -		return;
+> +		return 0;
+
+[1]: https://www.spinics.net/lists/linux-serial/msg33965.html
+[2]: https://lists.01.org/pipermail/kbuild-all/2019-March/059215.html
+[3]: https://lore.kernel.org/patchwork/patch/1051000/
+
 -- 
-2.1.4
+With Best Regards,
+Andy Shevchenko
+
 
