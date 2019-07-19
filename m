@@ -2,37 +2,36 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D156DBC9
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207A46DBE9
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732988AbfGSELb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 00:11:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46458 "EHLO mail.kernel.org"
+        id S2388782AbfGSEMU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 00:12:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47618 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388459AbfGSELa (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 00:11:30 -0400
+        id S2388000AbfGSEMU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 00:12:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 88B68218BB;
-        Fri, 19 Jul 2019 04:11:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 72FE62189E;
+        Fri, 19 Jul 2019 04:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563509489;
-        bh=QoNhA/E3iRwdS19rm21kkSOAa3YfFVivd0airztDrc8=;
+        s=default; t=1563509539;
+        bh=B5BaCrDkd16abE/dgvJMTx+7Q+mR4c/bTrOyE51wWn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=suj/ALOMHKukokM9xpwiHu5br+71Wc78F/zKSUgQdGtsDMZ70fGyP0kbJBGyA3dZA
-         kgtU6gk24FVZ1Nw3POPO+oQefNyqOpgZb4sO5Bl5dM4j2KGV6j3ejVTyVYnbI8Sy/2
-         6hO8H83TXDfL/1l6OFLMqRllKp9/CrGY+NMyWJLw=
+        b=2Vc2rF3cpHy/TBEEbhUFl0FM+0iOkwQXqDXzHme/dVqUwjFLbtK0CVuireabqGitg
+         Ptne8qAxL50+MsCuEpCj/KjWVmLn+aL2q1hRkF7EKCjsrZKT1psL+knu5HL7JYVHGK
+         UI/d7Az9kbEAz9HSkIlQgzhDeOr/6m3grgYO/dwQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Baruch Siach <baruch@tkos.co.il>,
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 12/60] tty/serial: digicolor: Fix digicolor-usart already registered warning
-Date:   Fri, 19 Jul 2019 00:10:21 -0400
-Message-Id: <20190719041109.18262-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 39/60] serial: sh-sci: Terminate TX DMA during buffer flushing
+Date:   Fri, 19 Jul 2019 00:10:48 -0400
+Message-Id: <20190719041109.18262-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190719041109.18262-1-sashal@kernel.org>
 References: <20190719041109.18262-1-sashal@kernel.org>
@@ -45,44 +44,54 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit c7ad9ba0611c53cfe194223db02e3bca015f0674 ]
+[ Upstream commit 775b7ffd7d6d5db320d99b0a485c51e04dfcf9f1 ]
 
-When modprobe/rmmod/modprobe module, if platform_driver_register() fails,
-the kernel complained,
+While the .flush_buffer() callback clears sci_port.tx_dma_len since
+commit 1cf4a7efdc71cab8 ("serial: sh-sci: Fix race condition causing
+garbage during shutdown"), it does not terminate a transmit DMA
+operation that may be in progress.
 
-  proc_dir_entry 'driver/digicolor-usart' already registered
-  WARNING: CPU: 1 PID: 5636 at fs/proc/generic.c:360 proc_register+0x19d/0x270
+Fix this by terminating any pending DMA operations, and resetting the
+corresponding cookie.
 
-Fix this by adding uart_unregister_driver() when platform_driver_register() fails.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Acked-by: Baruch Siach <baruch@tkos.co.il>
+Link: https://lore.kernel.org/r/20190624123540.20629-3-geert+renesas@glider.be
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/digicolor-usart.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/tty/serial/sh-sci.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
-index 02ad6953b167..50ec5f1ac77f 100644
---- a/drivers/tty/serial/digicolor-usart.c
-+++ b/drivers/tty/serial/digicolor-usart.c
-@@ -545,7 +545,11 @@ static int __init digicolor_uart_init(void)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 66c8bbea06c4..dc0b36ab999a 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -1571,11 +1571,18 @@ static void sci_free_dma(struct uart_port *port)
  
--	return platform_driver_register(&digicolor_uart_platform);
-+	ret = platform_driver_register(&digicolor_uart_platform);
-+	if (ret)
-+		uart_unregister_driver(&digicolor_uart);
+ static void sci_flush_buffer(struct uart_port *port)
+ {
++	struct sci_port *s = to_sci_port(port);
 +
-+	return ret;
+ 	/*
+ 	 * In uart_flush_buffer(), the xmit circular buffer has just been
+-	 * cleared, so we have to reset tx_dma_len accordingly.
++	 * cleared, so we have to reset tx_dma_len accordingly, and stop any
++	 * pending transfers
+ 	 */
+-	to_sci_port(port)->tx_dma_len = 0;
++	s->tx_dma_len = 0;
++	if (s->chan_tx) {
++		dmaengine_terminate_async(s->chan_tx);
++		s->cookie_tx = -EINVAL;
++	}
  }
- module_init(digicolor_uart_init);
- 
+ #else /* !CONFIG_SERIAL_SH_SCI_DMA */
+ static inline void sci_request_dma(struct uart_port *port)
 -- 
 2.20.1
 
