@@ -2,35 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C6A6DE13
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85B16DE09
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733104AbfGSE0Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 00:26:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42748 "EHLO mail.kernel.org"
+        id S2387833AbfGSE0B (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 00:26:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733066AbfGSEIZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 00:08:25 -0400
+        id S1731586AbfGSEIm (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 00:08:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E96A8218A4;
-        Fri, 19 Jul 2019 04:08:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 80E62218BB;
+        Fri, 19 Jul 2019 04:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563509304;
-        bh=LZs241TmqQKk1XRktVEc3oe7vFsgqsPuD2FiKW8uBpw=;
+        s=default; t=1563509321;
+        bh=aWi9rIz4AJaQwurAsxogJDwcxZITH7kny+Y3CDGPLkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xiDgPLxNg7GahQUXl8XFucl6YCfBYAftuz2lL47QW1fdBLWxiHipspYf2Cr8I5tn3
-         T2LMe4WKVqpwx2iFE/SctMMCU1KFUfKAXWwdR0HX0cspfjKZOM1hxBIEfnM6u6BoIo
-         5rkc1JfTpZpVqjgadtOcUwROdVcEZpMY7s7PF71E=
+        b=ttY/ONZMFfHPudfZDJquw+yRUZ+kMI4OkEjGzh4PFxvg0QUeCw3MCgKMCLw4bNnLU
+         dt9Tmm6rH0uH2jfhSg1kT74Ak8lAUO9m3ly6XaoZTFAWloIMQCbd3AqmCvy8GsLC64
+         Z03KmxXi6eH/DjS4eCDR7kNZXUCN9lWRFOTJV55c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>,
+Cc:     Sergey Organov <sorganov@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 025/101] serial: 8250: Fix TX interrupt handling condition
-Date:   Fri, 19 Jul 2019 00:06:16 -0400
-Message-Id: <20190719040732.17285-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 033/101] serial: imx: fix locking in set_termios()
+Date:   Fri, 19 Jul 2019 00:06:24 -0400
+Message-Id: <20190719040732.17285-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190719040732.17285-1-sashal@kernel.org>
 References: <20190719040732.17285-1-sashal@kernel.org>
@@ -43,46 +43,87 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
+From: Sergey Organov <sorganov@gmail.com>
 
-[ Upstream commit db1b5bc047b3cadaedab3826bba82c3d9e023c4b ]
+[ Upstream commit 4e828c3e09201512be5ee162393f334321f7cf01 ]
 
-Interrupt handler checked THRE bit (transmitter holding register
-empty) in LSR to detect if TX fifo is empty.
-In case when there is only receive interrupts the TX handling
-got called because THRE bit in LSR is set when there is no
-transmission (FIFO empty). TX handling caused TX stop, which in
-RS-485 half-duplex mode actually resets receiver FIFO. This is not
-desired during reception because of possible data loss.
+imx_uart_set_termios() called imx_uart_rts_active(), or
+imx_uart_rts_inactive() before taking port->port.lock.
 
-The fix is to check if THRI is set in IER in addition of the TX
-fifo status. THRI in IER is set when TX is started and cleared
-when TX is stopped.
-This ensures that TX handling is only called when there is really
-transmission on going and an interrupt for THRE and not when there
-are only RX interrupts.
+As a consequence, sport->port.mctrl that these functions modify
+could have been changed without holding port->port.lock.
 
-Signed-off-by: Kimmo Rautkoski <ext-kimmo.rautkoski@vaisala.com>
+Moved locking of port->port.lock above the calls to fix the issue.
+
+Signed-off-by: Sergey Organov <sorganov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_port.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/imx.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index e26d87b6ffc5..aa4de6907f77 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1874,7 +1874,8 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
- 			status = serial8250_rx_chars(up, status);
- 	}
- 	serial8250_modem_status(up);
--	if ((!up->dma || up->dma->tx_err) && (status & UART_LSR_THRE))
-+	if ((!up->dma || up->dma->tx_err) && (status & UART_LSR_THRE) &&
-+		(up->ier & UART_IER_THRI))
- 		serial8250_tx_chars(up);
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 0f67197a3783..105de92b0b3b 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -382,6 +382,7 @@ static void imx_uart_ucrs_restore(struct imx_port *sport,
+ }
+ #endif
  
- 	spin_unlock_irqrestore(&port->lock, flags);
++/* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
+ {
+ 	*ucr2 &= ~(UCR2_CTSC | UCR2_CTS);
+@@ -390,6 +391,7 @@ static void imx_uart_rts_active(struct imx_port *sport, u32 *ucr2)
+ 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
+ }
+ 
++/* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+ {
+ 	*ucr2 &= ~UCR2_CTSC;
+@@ -399,6 +401,7 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+ 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
+ }
+ 
++/* called with port.lock taken and irqs caller dependent */
+ static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
+ {
+ 	*ucr2 |= UCR2_CTSC;
+@@ -1554,6 +1557,16 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 		old_csize = CS8;
+ 	}
+ 
++	del_timer_sync(&sport->timer);
++
++	/*
++	 * Ask the core to calculate the divisor for us.
++	 */
++	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
++	quot = uart_get_divisor(port, baud);
++
++	spin_lock_irqsave(&sport->port.lock, flags);
++
+ 	if ((termios->c_cflag & CSIZE) == CS8)
+ 		ucr2 = UCR2_WS | UCR2_SRST | UCR2_IRTS;
+ 	else
+@@ -1597,16 +1610,6 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 			ucr2 |= UCR2_PROE;
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
+-	/*
+-	 * Ask the core to calculate the divisor for us.
+-	 */
+-	baud = uart_get_baud_rate(port, termios, old, 50, port->uartclk / 16);
+-	quot = uart_get_divisor(port, baud);
+-
+-	spin_lock_irqsave(&sport->port.lock, flags);
+-
+ 	sport->port.read_status_mask = 0;
+ 	if (termios->c_iflag & INPCK)
+ 		sport->port.read_status_mask |= (URXD_FRMERR | URXD_PRERR);
 -- 
 2.20.1
 
