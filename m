@@ -2,137 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0796F6EB85
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 22:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08BA6EC8B
+	for <lists+linux-serial@lfdr.de>; Sat, 20 Jul 2019 00:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728636AbfGSUTy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 16:19:54 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58531 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728346AbfGSUTy (ORCPT
+        id S1728795AbfGSWgE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 18:36:04 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42724 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727344AbfGSWgD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 16:19:54 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hoZM8-0006aX-IH; Fri, 19 Jul 2019 22:19:52 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hoZM5-0005uR-7Z; Fri, 19 Jul 2019 22:19:49 +0200
-Date:   Fri, 19 Jul 2019 22:19:49 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] serial: imx: set_termios(): do not enable autoRTS
- if RTS is unset
-Message-ID: <20190719201949.ldqlcwjhcmt7wwhg@pengutronix.de>
-References: <20190614072801.3187-1-s.hauer@pengutronix.de>
- <1563526074-20399-1-git-send-email-sorganov@gmail.com>
- <1563526074-20399-2-git-send-email-sorganov@gmail.com>
- <20190719091143.uhjxeibtolgswq2l@pengutronix.de>
- <87h87idxq2.fsf@osv.gnss.ru>
- <20190719143151.gx43ndn2oy35h247@pengutronix.de>
- <87woge9hvz.fsf@osv.gnss.ru>
+        Fri, 19 Jul 2019 18:36:03 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t132so15038225pgb.9;
+        Fri, 19 Jul 2019 15:36:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ypddKFUJPSx+g8aH7xVUBGH+0NoLzqnJbZasoMteu7U=;
+        b=qJ8Zlv4Hrl9/b7uaDbUr4OAD/R96SKPaLPkTd/1o47NioB/CIQ4JKObmKomUG1+4eR
+         8cVdJbKImmezfyrZDxalFqvEwC/JuA+pJffbxnUcQ9E1w6J81XFzZiYbDAo571n0dQgg
+         rzVDXraDnQT6CfJdXRvHeyTnwkfX8YFdfXWg29bch16nvGtaQYXviFX/rvlQ1JNRrvm8
+         KCyQVe6or92iARGhSun/rKK7IhkVyW1WGITOb2kWNU/x0Umr8sRlFqO64KhikAsC18P9
+         Oy8h2HUas7ZM9ql7Fu+N/XvXTOZC6o1US8DTaf4MNUkWlH805gCwYPzIbWRnNhdYV+Ph
+         Nc4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ypddKFUJPSx+g8aH7xVUBGH+0NoLzqnJbZasoMteu7U=;
+        b=XD9i4I/bs6k1OnMq7+O7jcF7u76OsnkQZyyDoSJrPGaIid+ODXEePT+75xMYxLpujB
+         edbZdrBzJx3Z2cbdQYy9zeLIwNEYA8F/lr0RegTgCRbQ31gpGC4L2ZXX/oJnZ3Q+l4PZ
+         0JVG0gLWCY1E9zt7vfzfd9zm3pTDBiRPDYtSFz/QnWtCe8AZtDEWkg4M8edv/NuaI6Y0
+         g+bE5sD4dUFX0YspS/rstWBn5BFOYeZwMSogZ+rcDuKKlTWFOUuzpZnh9wqhtq9dBGYK
+         yOrnue3LQO28BZ/AlvV0Z4twJJhtDpPiaoBEdRXUdaX62LMutkbs+oA2tFVxHKh/pAQ9
+         L6CA==
+X-Gm-Message-State: APjAAAXFC+wgmTe3b2YeFGXJLMAS53Lt7eUCEkNxgV7dmlfbQnrPv/jK
+        SfFrbauzaXziGxD1tkdMfaUhLEMi8/Y+qX9WL8c=
+X-Google-Smtp-Source: APXvYqxG0c8/OtW4UytwNDFpf0p+JNeQE1OrFwx/7BkugCdrg3Y+tXmYmjrdSfwVStmHWRRPUiE5KzUnoxwPdBr+NPk=
+X-Received: by 2002:a63:e54f:: with SMTP id z15mr56417018pgj.4.1563575763050;
+ Fri, 19 Jul 2019 15:36:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87woge9hvz.fsf@osv.gnss.ru>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+References: <20190719181200.25607-1-navid.emamdoost@gmail.com>
+In-Reply-To: <20190719181200.25607-1-navid.emamdoost@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 20 Jul 2019 01:35:51 +0300
+Message-ID: <CAHp75VcRC0XA87N=cSFJnSZ31max1UxyB=tJmE++A_+-TxGX2Q@mail.gmail.com>
+Subject: Re: [PATCH] lpss8250_dma_setup: there is memory leak when second
+ allocation fails
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     emamd001@umn.edu, Kangjie Lu <kjlu@umn.edu>, smccaman@umn.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 06:13:52PM +0300, Sergey Organov wrote:
-> Hello Uwe,
-> 
-> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
-> > Hello Sergey,
-> >
-> > On Fri, Jul 19, 2019 at 03:18:13PM +0300, Sergey Organov wrote:
-> >> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
-> >> > On Fri, Jul 19, 2019 at 11:47:52AM +0300, Sergey Organov wrote:
-> >> >> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> >> >> index 57d6e6b..95d7984 100644
-> >> >> --- a/drivers/tty/serial/imx.c
-> >> >> +++ b/drivers/tty/serial/imx.c
-> >> >> @@ -405,7 +405,8 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
-> >> >>  /* called with port.lock taken and irqs caller dependent */
-> >> >>  static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
-> >> >>  {
-> >> >> -	*ucr2 |= UCR2_CTSC;
-> >> >> +	if (*ucr2 & UCR2_CTS)
-> >> >> +		*ucr2 |= UCR2_CTSC;
-> >> >
-> >> > I think this patch is wrong or the commit log is insufficient.
-> >> > imx_uart_rts_auto() has only a single caller and there ucr2 & UCR2_CTS is
-> >> > never true. And CTSC isn't restored anywhere, is it?
-> >> 
-> >> This is rebase to 'tty-next' branch, and you need to look at it in that
-> >> context. There, ucr2 & UCR2_CTS does already make sense, due to previous
-> >> fix that is already there.
-> >
-> > I looked at 57d6e6b which is the file you patched. And there
-> > imx_uart_rts_auto is only ever called with *ucr2 not having UCR2_CTS.
-> >
-> > If you still think I'm wrong, please improve the commit log
-> > accordingly.
-> 
-> I still think you are wrong, but I don't know how to improve commit log.
-> 
-> To check it once again, I just did:
-> 
-> $ git show 57d6e6b > imx.c
-> 
-> There, in imx_uart_set_termios(), I see:
-> 
-> 1569:	old_ucr2 = imx_uart_readl(sport, UCR2);
-> 1570:	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTS);
-> 
-> Here, current UCR2 value is read into 'old_ucr2' and then its /current/
-> UCR2_CTS bit is copied into 'ucr2' (along with 3 other bits).
-> 
-> Then, later in the same function:
-> 
-> 1591:		imx_uart_rts_auto(sport, &ucr2);
-> 
-> is called that can check /current/ state of UCR2_CTS bit in '*ucr2'.
-> 
-> That's what the patch does, checks this bit.
-> 
-> Sorry, I fail to see how you came to conclusion that "*ucr2 not having
-> UCR2_CTS". Do we maybe still read different versions of the file?
+On Sat, Jul 20, 2019 at 1:23 AM Navid Emamdoost
+<navid.emamdoost@gmail.com> wrote:
+>
+> in lpss8250_dma_setup, we need to release the first dma slave object
+> allocated in case of the second allocation failure.
+>
 
-No, it's just that I failed to see that UCR2_CTS is in the set of bits
-that are retained even when looking twice :-|
+This will bring a double free instead of fixing anything.
 
-So you convinced me that you are right and if you update the commit log
-as agreed already before and even add a comment in imx_uart_rts_auto
-along the lines of
+NAK.
 
-	/*
-	 * Only let the receiver control RTS output if we were not
-	 * requested to have RTS inactive (which then should take
-	 * precedence).
-	 */
+> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_lpss.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+> index d07e431110d9..6e1f86db88b2 100644
+> --- a/drivers/tty/serial/8250/8250_lpss.c
+> +++ b/drivers/tty/serial/8250/8250_lpss.c
+> @@ -259,8 +259,10 @@ static int lpss8250_dma_setup(struct lpss8250 *lpss, struct uart_8250_port *port
+>                 return -ENOMEM;
+>
+>         tx_param = devm_kzalloc(dev, sizeof(*tx_param), GFP_KERNEL);
+> -       if (!tx_param)
+> +       if (!tx_param) {
+> +               kfree(rx_param);
+>                 return -ENOMEM;
+> +       }
+>
+>         *rx_param = lpss->dma_param;
+>         dma->rxconf.src_maxburst = lpss->dma_maxburst;
+> --
+> 2.17.1
+>
 
-you can have my Ack.
-
-Best regards
-Uwe
 
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+With Best Regards,
+Andy Shevchenko
