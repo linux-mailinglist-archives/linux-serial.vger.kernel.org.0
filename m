@@ -2,36 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF88E6DFFC
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B8D6DFEC
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbfGSD64 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jul 2019 23:58:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58340 "EHLO mail.kernel.org"
+        id S1727295AbfGSD7J (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Jul 2019 23:59:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728348AbfGSD64 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jul 2019 23:58:56 -0400
+        id S1728509AbfGSD7J (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 18 Jul 2019 23:59:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B222B21851;
-        Fri, 19 Jul 2019 03:58:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3379121852;
+        Fri, 19 Jul 2019 03:59:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563508735;
-        bh=ESrqzieqi3LyW8vnKAIeIHKfzQXB44HReBLi5IaOldc=;
+        s=default; t=1563508747;
+        bh=cMkGSY6nHF8MaSprRbBJnM+U9bxKfqQFy7K21qB/h2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=klUOyINqefKtlLAjLYVaILf8/gy179a2wxVZScRitAddhvWkUJvuR+gwJMqy0QX/F
-         jEj6dOe6LyVfMqXlPEzYVm+dcohzxITmtmwOQXb36TqMsYgaK1kxUL/wmO79jei8HL
-         r9C+5dQiM8TVL04uAxXFzbxKCH36HyYVijdYsJ5E=
+        b=gvRWJGJRaHxZOVv1Yxsb3KyiL7wG5b4WuCvypfanRv+MIJu5my2FKOJjem8FYIg1h
+         R06XMZXI5jqjbV3i6vI4q175dZNOYnX1tlfvx34ctqlaAT870ha5xVxgTxcf3srM8Z
+         mHVuKwPs8xdG640hZs3eWsiRmKTAJVIUsbO/YKJA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 058/171] sunhv: Fix device naming inconsistency between sunhv_console and sunhv_reg
-Date:   Thu, 18 Jul 2019 23:54:49 -0400
-Message-Id: <20190719035643.14300-58-sashal@kernel.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 068/171] tty: serial_core: Set port active bit in uart_port_activate
+Date:   Thu, 18 Jul 2019 23:54:59 -0400
+Message-Id: <20190719035643.14300-68-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190719035643.14300-1-sashal@kernel.org>
 References: <20190719035643.14300-1-sashal@kernel.org>
@@ -44,64 +43,71 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+From: Serge Semin <fancer.lancer@gmail.com>
 
-[ Upstream commit 07a6d63eb1b54b5fb38092780fe618dfe1d96e23 ]
+[ Upstream commit 13b18d35909707571af9539f7731389fbf0feb31 ]
 
-In d5a2aa24, the name in struct console sunhv_console was changed from "ttyS"
-to "ttyHV" while the name in struct uart_ops sunhv_pops remained unchanged.
+A bug was introduced by commit b3b576461864 ("tty: serial_core: convert
+uart_open to use tty_port_open"). It caused a constant warning printed
+into the system log regarding the tty and port counter mismatch:
 
-This results in the hypervisor console device to be listed as "ttyHV0" under
-/proc/consoles while the device node is still named "ttyS0":
+[   21.644197] ttyS ttySx: tty_port_close_start: tty->count = 1 port count = 2
 
-root@osaka:~# cat /proc/consoles
-ttyHV0               -W- (EC p  )    4:64
-tty0                 -WU (E     )    4:1
-root@osaka:~# readlink /sys/dev/char/4:64
-../../devices/root/f02836f0/f0285690/tty/ttyS0
-root@osaka:~#
+in case if session hangup was detected so the warning is printed starting
+from the second open-close iteration.
 
-This means that any userland code which tries to determine the name of the
-device file of the hypervisor console device can not rely on the information
-provided by /proc/consoles. In particular, booting current versions of debian-
-installer inside a SPARC LDOM will fail with the installer unable to determine
-the console device.
+Particularly the problem was discovered in situation when there is a
+serial tty device without hardware back-end being setup. It is considered
+by the tty-serial subsystems as a hardware problem with session hang up.
+In this case uart_startup() will return a positive value with TTY_IO_ERROR
+flag set in corresponding tty_struct instance. The same value will get
+passed to be returned from the activate() callback and then being returned
+from tty_port_open(). But since in this case tty_port_block_til_ready()
+isn't called the TTY_PORT_ACTIVE flag isn't set (while the method had been
+called before tty_port_open conversion was introduced and the rest of the
+subsystem code expected the bit being set in this case), which prevents the
+uart_hangup() method to perform any cleanups including the tty port
+counter setting to zero. So the next attempt to open/close the tty device
+will discover the counters mismatch.
 
-After renaming the device in struct uart_ops sunhv_pops to "ttyHV" as well,
-the inconsistency is fixed and it is possible again to determine the name
-of the device file of the hypervisor console device by reading the contents
-of /proc/console:
+In order to fix the problem we need to manually set the TTY_PORT_ACTIVE
+flag in case if uart_startup() returned a positive value. In this case
+the hang up procedure will perform a full set of cleanup actions including
+the port ref-counter resetting.
 
-root@osaka:~# cat /proc/consoles
-ttyHV0               -W- (EC p  )    4:64
-tty0                 -WU (E     )    4:1
-root@osaka:~# readlink /sys/dev/char/4:64
-../../devices/root/f02836f0/f0285690/tty/ttyHV0
-root@osaka:~#
-
-With this change, debian-installer works correctly when installing inside
-a SPARC LDOM.
-
-Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b3b576461864 "tty: serial_core: convert uart_open to use tty_port_open"
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sunhv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/serial_core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/sunhv.c b/drivers/tty/serial/sunhv.c
-index 63e34d868de8..f8503f8fc44e 100644
---- a/drivers/tty/serial/sunhv.c
-+++ b/drivers/tty/serial/sunhv.c
-@@ -397,7 +397,7 @@ static const struct uart_ops sunhv_pops = {
- static struct uart_driver sunhv_reg = {
- 	.owner			= THIS_MODULE,
- 	.driver_name		= "sunhv",
--	.dev_name		= "ttyS",
-+	.dev_name		= "ttyHV",
- 	.major			= TTY_MAJOR,
- };
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 83f4dd0bfd74..4223cb496764 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1777,6 +1777,7 @@ static int uart_port_activate(struct tty_port *port, struct tty_struct *tty)
+ {
+ 	struct uart_state *state = container_of(port, struct uart_state, port);
+ 	struct uart_port *uport;
++	int ret;
  
+ 	uport = uart_port_check(state);
+ 	if (!uport || uport->flags & UPF_DEAD)
+@@ -1787,7 +1788,11 @@ static int uart_port_activate(struct tty_port *port, struct tty_struct *tty)
+ 	/*
+ 	 * Start up the serial port.
+ 	 */
+-	return uart_startup(tty, state, 0);
++	ret = uart_startup(tty, state, 0);
++	if (ret > 0)
++		tty_port_set_active(port, 1);
++
++	return ret;
+ }
+ 
+ static const char *uart_type(struct uart_port *port)
 -- 
 2.20.1
 
