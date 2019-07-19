@@ -2,35 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CC66DCD8
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9516DCDA
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389197AbfGSENZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 00:13:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49350 "EHLO mail.kernel.org"
+        id S2389245AbfGSENa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 00:13:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49448 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389181AbfGSENZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 00:13:25 -0400
+        id S2389233AbfGSENa (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 00:13:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD55521850;
-        Fri, 19 Jul 2019 04:13:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A012D21850;
+        Fri, 19 Jul 2019 04:13:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563509604;
-        bh=V7t//CdQTxgs7mOSserxTrv7xWMVDDEvG7FnxmcW7dU=;
+        s=default; t=1563509609;
+        bh=p6UHpgjwO37at5y0gpM2mNj68J9UQcIXBrNvevoVx4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1rRq4meUbZTUfKHc5Iha+KAbgedJmnQro06rh/DTQBsYzcEF1qXSdENz0j1rdF94g
-         R5Dfgy698lzvcIufOKOIk5VSEfvTi6C6fP9Trhg3P448lsJ6mlojtZakju7Z0YVLe8
-         iznPRg5J0mCNllEiBdK0s9udrPNIa8uydz4GP14M=
+        b=XXrUnPkGXt2uYNhUrUoLzhZebZE9kYX8My2tKHBcCjCS7COFoLHiD1AzkGZpVzTUt
+         YYhUkF18lER2kuSN39LLMWVmkw+e6D8aSt+UkBjF2nRzvpaYGKWvkJDyKaXIaPkMc6
+         6xLpooJn+SjxKnLNXuZSYIIdexQESj2tYh6Wownk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>,
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/45] serial: 8250: Fix TX interrupt handling condition
-Date:   Fri, 19 Jul 2019 00:12:31 -0400
-Message-Id: <20190719041304.18849-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 16/45] tty: serial_core: Set port active bit in uart_port_activate
+Date:   Fri, 19 Jul 2019 00:12:35 -0400
+Message-Id: <20190719041304.18849-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190719041304.18849-1-sashal@kernel.org>
 References: <20190719041304.18849-1-sashal@kernel.org>
@@ -43,46 +43,71 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Rautkoski Kimmo EXT <ext-kimmo.rautkoski@vaisala.com>
+From: Serge Semin <fancer.lancer@gmail.com>
 
-[ Upstream commit db1b5bc047b3cadaedab3826bba82c3d9e023c4b ]
+[ Upstream commit 13b18d35909707571af9539f7731389fbf0feb31 ]
 
-Interrupt handler checked THRE bit (transmitter holding register
-empty) in LSR to detect if TX fifo is empty.
-In case when there is only receive interrupts the TX handling
-got called because THRE bit in LSR is set when there is no
-transmission (FIFO empty). TX handling caused TX stop, which in
-RS-485 half-duplex mode actually resets receiver FIFO. This is not
-desired during reception because of possible data loss.
+A bug was introduced by commit b3b576461864 ("tty: serial_core: convert
+uart_open to use tty_port_open"). It caused a constant warning printed
+into the system log regarding the tty and port counter mismatch:
 
-The fix is to check if THRI is set in IER in addition of the TX
-fifo status. THRI in IER is set when TX is started and cleared
-when TX is stopped.
-This ensures that TX handling is only called when there is really
-transmission on going and an interrupt for THRE and not when there
-are only RX interrupts.
+[   21.644197] ttyS ttySx: tty_port_close_start: tty->count = 1 port count = 2
 
-Signed-off-by: Kimmo Rautkoski <ext-kimmo.rautkoski@vaisala.com>
+in case if session hangup was detected so the warning is printed starting
+from the second open-close iteration.
+
+Particularly the problem was discovered in situation when there is a
+serial tty device without hardware back-end being setup. It is considered
+by the tty-serial subsystems as a hardware problem with session hang up.
+In this case uart_startup() will return a positive value with TTY_IO_ERROR
+flag set in corresponding tty_struct instance. The same value will get
+passed to be returned from the activate() callback and then being returned
+from tty_port_open(). But since in this case tty_port_block_til_ready()
+isn't called the TTY_PORT_ACTIVE flag isn't set (while the method had been
+called before tty_port_open conversion was introduced and the rest of the
+subsystem code expected the bit being set in this case), which prevents the
+uart_hangup() method to perform any cleanups including the tty port
+counter setting to zero. So the next attempt to open/close the tty device
+will discover the counters mismatch.
+
+In order to fix the problem we need to manually set the TTY_PORT_ACTIVE
+flag in case if uart_startup() returned a positive value. In this case
+the hang up procedure will perform a full set of cleanup actions including
+the port ref-counter resetting.
+
+Fixes: b3b576461864 "tty: serial_core: convert uart_open to use tty_port_open"
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_port.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/serial_core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 5b54439a8a9b..b4d6fef83f65 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1820,7 +1820,8 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
- 			status = serial8250_rx_chars(up, status);
- 	}
- 	serial8250_modem_status(up);
--	if ((!up->dma || up->dma->tx_err) && (status & UART_LSR_THRE))
-+	if ((!up->dma || up->dma->tx_err) && (status & UART_LSR_THRE) &&
-+		(up->ier & UART_IER_THRI))
- 		serial8250_tx_chars(up);
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 680fb3f9be2d..04c023f7f633 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1725,6 +1725,7 @@ static int uart_port_activate(struct tty_port *port, struct tty_struct *tty)
+ {
+ 	struct uart_state *state = container_of(port, struct uart_state, port);
+ 	struct uart_port *uport;
++	int ret;
  
- 	spin_unlock_irqrestore(&port->lock, flags);
+ 	uport = uart_port_check(state);
+ 	if (!uport || uport->flags & UPF_DEAD)
+@@ -1735,7 +1736,11 @@ static int uart_port_activate(struct tty_port *port, struct tty_struct *tty)
+ 	/*
+ 	 * Start up the serial port.
+ 	 */
+-	return uart_startup(tty, state, 0);
++	ret = uart_startup(tty, state, 0);
++	if (ret > 0)
++		tty_port_set_active(port, 1);
++
++	return ret;
+ }
+ 
+ static const char *uart_type(struct uart_port *port)
 -- 
 2.20.1
 
