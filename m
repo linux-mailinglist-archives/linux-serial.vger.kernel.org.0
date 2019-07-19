@@ -2,42 +2,40 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EAC6DA1D
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA496DAC0
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728750AbfGSD7a (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jul 2019 23:59:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59074 "EHLO mail.kernel.org"
+        id S1730789AbfGSEEA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 00:04:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728729AbfGSD73 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jul 2019 23:59:29 -0400
+        id S1730781AbfGSED7 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 00:03:59 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F8E421873;
-        Fri, 19 Jul 2019 03:59:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F0FBF21873;
+        Fri, 19 Jul 2019 04:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563508768;
-        bh=ZQ3WWzSDhz3Qb1WmYN7C9YZY6kD2OJayrXx0bEgbiUo=;
+        s=default; t=1563509038;
+        bh=d3e4tqvNiIM0DHagGPl0Sq0p/6aSS+We4bM12lQE+Fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yfB1GatYlURKFt5r51m31XsyTry31v2XrT1qCC/h5Rxtp4ZYcWuZR70DDht2CU766
-         LS9783YYRl9njmzaTqtShLqTL8xIj9e9c+0Uc1c+UkoLYp0lfve5t+GD6mFGI+Q6WG
-         OesBbx+1ew8HeGfrdLqe3WV8IEBMjvt+0HqdpH64=
+        b=pv/y5dsJbVpjZIJE7xenwrfQ8+n+3kfQ8rweYWEkH6YK/dqriMKNrduyZrL7rE9tw
+         yuy5uaNS63QghGJAC4SRwgYNCMIIsAAyHBNNEPnFV7oGnf6zl1dIqZ87l/Mkl3WIDz
+         lO8J62cFgB0yuPAlvaeV3SSoZNo6Z36AaU/I+o78=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stefan Roese <sr@denx.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
+        Baruch Siach <baruch@tkos.co.il>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 079/171] serial: mctrl_gpio: Check if GPIO property exisits before requesting it
-Date:   Thu, 18 Jul 2019 23:55:10 -0400
-Message-Id: <20190719035643.14300-79-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 035/141] tty/serial: digicolor: Fix digicolor-usart already registered warning
+Date:   Fri, 19 Jul 2019 00:01:00 -0400
+Message-Id: <20190719040246.15945-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719035643.14300-1-sashal@kernel.org>
-References: <20190719035643.14300-1-sashal@kernel.org>
+In-Reply-To: <20190719040246.15945-1-sashal@kernel.org>
+References: <20190719040246.15945-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,110 +45,44 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Stefan Roese <sr@denx.de>
+From: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-[ Upstream commit d99482673f950817b30caf3fcdfb31179b050ce1 ]
+[ Upstream commit c7ad9ba0611c53cfe194223db02e3bca015f0674 ]
 
-This patch adds a check for the GPIOs property existence, before the
-GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
-support is added (2nd patch in this patch series) on x86 platforms using
-ACPI.
+When modprobe/rmmod/modprobe module, if platform_driver_register() fails,
+the kernel complained,
 
-Here Mika's comments from 2016-08-09:
+  proc_dir_entry 'driver/digicolor-usart' already registered
+  WARNING: CPU: 1 PID: 5636 at fs/proc/generic.c:360 proc_register+0x19d/0x270
 
-"
-I noticed that with v4.8-rc1 serial console of some of our Broxton
-systems does not work properly anymore. I'm able to see output but input
-does not work.
+Fix this by adding uart_unregister_driver() when platform_driver_register() fails.
 
-I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
-("tty/serial/8250: use mctrl_gpio helpers").
-
-The reason why it fails is that in ACPI we do not have names for GPIOs
-(except when _DSD is used) so we use the "idx" to index into _CRS GPIO
-resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
-calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
-UART device in Broxton has following (simplified) ACPI description:
-
-    Device (URT4)
-    {
-        ...
-        Name (_CRS, ResourceTemplate () {
-            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                    "\\_SB.GPO0", 0x00, ResourceConsumer)
-            {
-                0x003A
-            }
-            GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
-                    "\\_SB.GPO0", 0x00, ResourceConsumer)
-            {
-                0x003D
-            }
-        })
-
-In this case it finds the first GPIO (0x003A which happens to be RX pin
-for that UART), turns it into GPIO which then breaks input for the UART
-device. This also breaks systems with bluetooth connected to UART (those
-typically have some GPIOs in their _CRS).
-
-Any ideas how to fix this?
-
-We cannot just drop the _CRS index lookup fallback because that would
-break many existing machines out there so maybe we can limit this to
-only DT enabled machines. Or alternatively probe if the property first
-exists before trying to acquire the GPIOs (using
-device_property_present()).
-"
-
-This patch implements the fix suggested by Mika in his statement above.
-
-Signed-off-by: Stefan Roese <sr@denx.de>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Acked-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/serial_mctrl_gpio.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/tty/serial/digicolor-usart.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-index 39ed56214cd3..2b400189be91 100644
---- a/drivers/tty/serial/serial_mctrl_gpio.c
-+++ b/drivers/tty/serial/serial_mctrl_gpio.c
-@@ -12,6 +12,7 @@
- #include <linux/termios.h>
- #include <linux/serial_core.h>
- #include <linux/module.h>
-+#include <linux/property.h>
+diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
+index f460cca139e2..13ac36e2da4f 100644
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -541,7 +541,11 @@ static int __init digicolor_uart_init(void)
+ 	if (ret)
+ 		return ret;
  
- #include "serial_mctrl_gpio.h"
- 
-@@ -116,6 +117,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
- 
- 	for (i = 0; i < UART_GPIO_MAX; i++) {
- 		enum gpiod_flags flags;
-+		char *gpio_str;
-+		bool present;
+-	return platform_driver_register(&digicolor_uart_platform);
++	ret = platform_driver_register(&digicolor_uart_platform);
++	if (ret)
++		uart_unregister_driver(&digicolor_uart);
 +
-+		/* Check if GPIO property exists and continue if not */
-+		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
-+				     mctrl_gpios_desc[i].name);
-+		if (!gpio_str)
-+			continue;
-+
-+		present = device_property_present(dev, gpio_str);
-+		kfree(gpio_str);
-+		if (!present)
-+			continue;
++	return ret;
+ }
+ module_init(digicolor_uart_init);
  
- 		if (mctrl_gpios_desc[i].dir_out)
- 			flags = GPIOD_OUT_LOW;
 -- 
 2.20.1
 
