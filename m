@@ -2,39 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 207A46DBE9
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DBD6DCED
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 06:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388782AbfGSEMU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 00:12:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47618 "EHLO mail.kernel.org"
+        id S1729659AbfGSET2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 00:19:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48922 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388000AbfGSEMU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 00:12:20 -0400
+        id S2389027AbfGSENK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 00:13:10 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72FE62189E;
-        Fri, 19 Jul 2019 04:12:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1DE5E2082F;
+        Fri, 19 Jul 2019 04:13:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563509539;
-        bh=B5BaCrDkd16abE/dgvJMTx+7Q+mR4c/bTrOyE51wWn0=;
+        s=default; t=1563509589;
+        bh=EktuQV7plA5RuiTd9/ljWOKOcNLAz2goe0YyNbwP4cg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Vc2rF3cpHy/TBEEbhUFl0FM+0iOkwQXqDXzHme/dVqUwjFLbtK0CVuireabqGitg
-         Ptne8qAxL50+MsCuEpCj/KjWVmLn+aL2q1hRkF7EKCjsrZKT1psL+knu5HL7JYVHGK
-         UI/d7Az9kbEAz9HSkIlQgzhDeOr/6m3grgYO/dwQ=
+        b=QpXWQcqjFqIeTu4uq4o0xlCy3c0FdX6owCK4ic0TTpdx9Va7vhquVDo1+bJ7dfGgT
+         JQJC+ZfhSno1JSO4Ag13+d4M0FCEi6ypwh9eGQvZa5iT0gEfftJh+g6XAnRNMQW8TF
+         80QgY1J5y9y+XfHA+4uITS2s5WfWJn+1HUuX1rMw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 39/60] serial: sh-sci: Terminate TX DMA during buffer flushing
-Date:   Fri, 19 Jul 2019 00:10:48 -0400
-Message-Id: <20190719041109.18262-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 03/45] tty: max310x: Fix invalid baudrate divisors calculator
+Date:   Fri, 19 Jul 2019 00:12:22 -0400
+Message-Id: <20190719041304.18849-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190719041109.18262-1-sashal@kernel.org>
-References: <20190719041109.18262-1-sashal@kernel.org>
+In-Reply-To: <20190719041304.18849-1-sashal@kernel.org>
+References: <20190719041304.18849-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,54 +43,112 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Serge Semin <fancer.lancer@gmail.com>
 
-[ Upstream commit 775b7ffd7d6d5db320d99b0a485c51e04dfcf9f1 ]
+[ Upstream commit 35240ba26a932b279a513f66fa4cabfd7af55221 ]
 
-While the .flush_buffer() callback clears sci_port.tx_dma_len since
-commit 1cf4a7efdc71cab8 ("serial: sh-sci: Fix race condition causing
-garbage during shutdown"), it does not terminate a transmit DMA
-operation that may be in progress.
+Current calculator doesn't do it' job quite correct. First of all the
+max310x baud-rates generator supports the divisor being less than 16.
+In this case the x2/x4 modes can be used to double or quadruple
+the reference frequency. But the current baud-rate setter function
+just filters all these modes out by the first condition and setups
+these modes only if there is a clocks-baud division remainder. The former
+doesn't seem right at all, since enabling the x2/x4 modes causes the line
+noise tolerance reduction and should be only used as a last resort to
+enable a requested too high baud-rate.
 
-Fix this by terminating any pending DMA operations, and resetting the
-corresponding cookie.
+Finally the fraction is supposed to be calculated from D = Fref/(c*baud)
+formulae, but not from D % 16, which causes the precision loss. So to speak
+the current baud-rate calculator code works well only if the baud perfectly
+fits to the uart reference input frequency.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Lets fix the calculator by implementing the algo fully compliant with
+the fractional baud-rate generator described in the datasheet:
+D = Fref / (c*baud), where c={16,8,4} is the x1/x2/x4 rate mode
+respectively, Fref - reference input frequency. The divisor fraction is
+calculated from the same formulae, but making sure it is found with a
+resolution of 0.0625 (four bits).
 
-Link: https://lore.kernel.org/r/20190624123540.20629-3-geert+renesas@glider.be
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sh-sci.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/tty/serial/max310x.c | 51 ++++++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 66c8bbea06c4..dc0b36ab999a 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1571,11 +1571,18 @@ static void sci_free_dma(struct uart_port *port)
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index ec3db8d8306c..bacc7e284c0c 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -494,37 +494,48 @@ static bool max310x_reg_precious(struct device *dev, unsigned int reg)
  
- static void sci_flush_buffer(struct uart_port *port)
+ static int max310x_set_baud(struct uart_port *port, int baud)
  {
-+	struct sci_port *s = to_sci_port(port);
+-	unsigned int mode = 0, clk = port->uartclk, div = clk / baud;
++	unsigned int mode = 0, div = 0, frac = 0, c = 0, F = 0;
+ 
+-	/* Check for minimal value for divider */
+-	if (div < 16)
+-		div = 16;
+-
+-	if (clk % baud && (div / 16) < 0x8000) {
++	/*
++	 * Calculate the integer divisor first. Select a proper mode
++	 * in case if the requested baud is too high for the pre-defined
++	 * clocks frequency.
++	 */
++	div = port->uartclk / baud;
++	if (div < 8) {
++		/* Mode x4 */
++		c = 4;
++		mode = MAX310X_BRGCFG_4XMODE_BIT;
++	} else if (div < 16) {
+ 		/* Mode x2 */
++		c = 8;
+ 		mode = MAX310X_BRGCFG_2XMODE_BIT;
+-		clk = port->uartclk * 2;
+-		div = clk / baud;
+-
+-		if (clk % baud && (div / 16) < 0x8000) {
+-			/* Mode x4 */
+-			mode = MAX310X_BRGCFG_4XMODE_BIT;
+-			clk = port->uartclk * 4;
+-			div = clk / baud;
+-		}
++	} else {
++		c = 16;
+ 	}
+ 
+-	max310x_port_write(port, MAX310X_BRGDIVMSB_REG, (div / 16) >> 8);
+-	max310x_port_write(port, MAX310X_BRGDIVLSB_REG, div / 16);
+-	max310x_port_write(port, MAX310X_BRGCFG_REG, (div % 16) | mode);
++	/* Calculate the divisor in accordance with the fraction coefficient */
++	div /= c;
++	F = c*baud;
 +
- 	/*
- 	 * In uart_flush_buffer(), the xmit circular buffer has just been
--	 * cleared, so we have to reset tx_dma_len accordingly.
-+	 * cleared, so we have to reset tx_dma_len accordingly, and stop any
-+	 * pending transfers
- 	 */
--	to_sci_port(port)->tx_dma_len = 0;
-+	s->tx_dma_len = 0;
-+	if (s->chan_tx) {
-+		dmaengine_terminate_async(s->chan_tx);
-+		s->cookie_tx = -EINVAL;
-+	}
++	/* Calculate the baud rate fraction */
++	if (div > 0)
++		frac = (16*(port->uartclk % F)) / F;
++	else
++		div = 1;
++
++	max310x_port_write(port, MAX310X_BRGDIVMSB_REG, div >> 8);
++	max310x_port_write(port, MAX310X_BRGDIVLSB_REG, div);
++	max310x_port_write(port, MAX310X_BRGCFG_REG, frac | mode);
+ 
+-	return DIV_ROUND_CLOSEST(clk, div);
++	/* Return the actual baud rate we just programmed */
++	return (16*port->uartclk) / (c*(16*div + frac));
  }
- #else /* !CONFIG_SERIAL_SH_SCI_DMA */
- static inline void sci_request_dma(struct uart_port *port)
+ 
+ static int max310x_update_best_err(unsigned long f, long *besterr)
+ {
+ 	/* Use baudrate 115200 for calculate error */
+-	long err = f % (115200 * 16);
++	long err = f % (460800 * 16);
+ 
+ 	if ((*besterr < 0) || (*besterr > err)) {
+ 		*besterr = err;
 -- 
 2.20.1
 
