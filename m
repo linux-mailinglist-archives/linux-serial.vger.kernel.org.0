@@ -2,133 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 969AE6D51F
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jul 2019 21:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1816D933
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 04:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403937AbfGRTpG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jul 2019 15:45:06 -0400
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:54901 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403927AbfGRTpG (ORCPT
+        id S1726075AbfGSCzD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Jul 2019 22:55:03 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:34863 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbfGSCzD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jul 2019 15:45:06 -0400
-Received: by mail-pl1-f202.google.com with SMTP id u10so14452658plq.21
-        for <linux-serial@vger.kernel.org>; Thu, 18 Jul 2019 12:45:05 -0700 (PDT)
+        Thu, 18 Jul 2019 22:55:03 -0400
+Received: by mail-io1-f66.google.com with SMTP id m24so55436626ioo.2;
+        Thu, 18 Jul 2019 19:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=1oQBZ5kAfw78ruR17gEno1cNC4m9jAFrzrAqQjxP+4s=;
-        b=bOCM6GL0Ngw8/0ygiEX9zoY9+UeVpwZrC+HYXZNlVCmCNmQeIDTdOr9n5sq3gWDm+B
-         si73WGz9FBMe21fi7q1cgUPVc6UKrNU5czhY45drBnT9fcda2oXVubTUpoYn7CB+THFG
-         NfxtWL3+bwAI+nFPpXR/XYuXylxs0bB6wzi1p59YteoWl4BMGvMhrbg4YA6PkAj+hyO6
-         JfNKoy8V2yjnRaFgKyjufj7DwMls0NaxqdhxPSGfjq1NGKNn9+15BYW4/frcFLB98ZE/
-         XmzoxkPX8bn/kJ30VxkaYuMDwmXXo+IAwglnrNTNcTBgbwGY81zwuHuZBABAhx6R/r1L
-         +KlA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=crPNB/o3Q9ur97XTicpVaP0d8OKmA3gf/e7Gr0NtXVI=;
+        b=RBYn8ZXdbWHoXyzyA8XGm7rnVL7fXfGksdzm0gEBYDzQuaaJTKc6kcuSwReTACcBxa
+         9S9P77ppW22THYr1tNjKxvaZwNJ+xvRgh5S1wRH2HgyTEIj+KXx2+yypqjvzEk3F7T97
+         sBrSVU6TBSGAMf9BmPpwtfC8UmEiSldTGl7BNPqPVwZybjStdjmayXr4YZz/UKl9A/I6
+         eTDh8KJbRW7/EoKBmuvtkkiR208r5RyvgBNYm15/qnd3ABFR09Czg36BigCcQBYMiOiv
+         2lv5b0eYUFFnHK57EnLyhZi6vbaobAgDVapbsqVSachfLtliiLYYVQ4SfgqgI4HtAMgx
+         z74A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=1oQBZ5kAfw78ruR17gEno1cNC4m9jAFrzrAqQjxP+4s=;
-        b=sBUP5EUOViBhxZk14U/VKvxNqz6Un2/MI064J9s9FgxKfiCMHxRymBwd+2egM7KOS8
-         Idlu2Uc/DTkpzJLeJ9DyAHA0mRoHvtXngxWwE4j3TcCzFWfC4YjBn+Ba7q7qI/BgcTF4
-         iWk9ImFrQDZUv1FHa22K+s1X7P1R3M/jn5pMFQlXdfgiE1FhOijbIQm/HlTtn7KYxCa7
-         PO1B39H58SOq6d/82V86S1vGu+UHBHbAX4m6EQcPOtqiG6l+vqECQLlHy+C699yDQJfx
-         Auc6uinkGuNBdo+bEVLDkDcCHghlR9/iEwOeN9ccnyNOZo7uRGXGh1R1T0liLhuo2PBY
-         a+GQ==
-X-Gm-Message-State: APjAAAUSmc0rOQCr5bXSNuJhoboaGJ+Y/UA5Qu+75hvLwYaN/yrq2Ph5
-        8j88dVAb01vmE1eyFkJzWl+1g5aeCcYaFcbExNqP+A==
-X-Google-Smtp-Source: APXvYqxlQfzj0hot9XOlEEvXsk76ZdqvBcPQcFU/XkEmSUECO78P340Mt+UCgz76BE5DH0Pmt8Ux45GcQe6wETMsLvQxOQ==
-X-Received: by 2002:a63:2c8:: with SMTP id 191mr48832875pgc.139.1563479105018;
- Thu, 18 Jul 2019 12:45:05 -0700 (PDT)
-Date:   Thu, 18 Jul 2019 12:44:04 -0700
-In-Reply-To: <20190718194415.108476-1-matthewgarrett@google.com>
-Message-Id: <20190718194415.108476-19-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190718194415.108476-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH V36 18/29] Lock down TIOCSSERIAL
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=crPNB/o3Q9ur97XTicpVaP0d8OKmA3gf/e7Gr0NtXVI=;
+        b=TZKBJlRtYwnFQvX4RDJX5dMotXRNydg99BFF6yMBJjdx8NOIS5RQ2t7JO2el3KcAZX
+         y5vn80aTKugyBcyPqGEiocavJO83ObCbexP143pw4l3WA4ky+xwTVlcxgYntaMlFefL+
+         1+U1BgWHiZRTGfCqvOXyo2MlsARAbxAoRSmLGBB4de/pvi3dcxORtGv4f5bbn8lbof9S
+         YyoPPODoLy8uFzWq0+apxJQ3tzjQeub6twvNAR3JuvS1rOJtoU0UC2RMr9iuL29oOjIm
+         dpqAnvPzNBUEle2u+ftHf0lDehRxiFLKrNDIorxVn8gpw8fHPSG9EYrC/++nCtNvCaWF
+         UX3A==
+X-Gm-Message-State: APjAAAW4inz/am7bgYk9f4ZJIxm3Dt303sS5Ms406swpFGf1Z0ri4rjX
+        yu8+yRpW9LMHPT+gLJ3qlMEeY40K5KI=
+X-Google-Smtp-Source: APXvYqyOAUD6nqXzJRaSa0pX5RuWRnq7cn+ko1UHXJSLfWzgmz8O2awrjhkTbLF/bcietJ/DEKPgAQ==
+X-Received: by 2002:a5e:a708:: with SMTP id b8mr48249316iod.25.1563504902411;
+        Thu, 18 Jul 2019 19:55:02 -0700 (PDT)
+Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
+        by smtp.googlemail.com with ESMTPSA id u17sm25277038iob.57.2019.07.18.19.55.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Jul 2019 19:55:01 -0700 (PDT)
+From:   Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     emamd001@umn.edu, kjlu@umn.edu, smccaman@umn.edu,
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] 8250_lpss: check null return when calling pci_ioremap_bar
+Date:   Thu, 18 Jul 2019 21:54:42 -0500
+Message-Id: <20190719025443.2368-1-navid.emamdoost@gmail.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+pci_ioremap_bar may return null. This is eventually de-referenced at 
+drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check is
+ needed to prevent null de-reference. I am adding the check and in case of
+ failure returning -ENOMEM (I am not sure this is the best errno, you may 
+consider it as a placeholder), and subsequently changing the caller’s 
+return type, and propagating the error.
 
-Lock down TIOCSSERIAL as that can be used to change the ioport and irq
-settings on a serial port.  This only appears to be an issue for the serial
-drivers that use the core serial code.  All other drivers seem to either
-ignore attempts to change port/irq or give an error.
-
-Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-serial@vger.kernel.org
+Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
 ---
- drivers/tty/serial/serial_core.c | 5 +++++
- include/linux/security.h         | 1 +
- security/lockdown/lockdown.c     | 1 +
- 3 files changed, 7 insertions(+)
+ drivers/tty/serial/8250/8250_lpss.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 4223cb496764..6e713be1d4e9 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -22,6 +22,7 @@
- #include <linux/serial_core.h>
- #include <linux/delay.h>
- #include <linux/mutex.h>
-+#include <linux/security.h>
- 
- #include <linux/irq.h>
- #include <linux/uaccess.h>
-@@ -862,6 +863,10 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
- 		goto check_and_exit;
- 	}
- 
-+	retval = security_locked_down(LOCKDOWN_TIOCSSERIAL);
-+	if (retval && (change_irq || change_port))
-+		goto exit;
-+
- 	/*
- 	 * Ask the low level driver to verify the settings.
- 	 */
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 3773ad09b831..8f7048395114 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -112,6 +112,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MSR,
- 	LOCKDOWN_ACPI_TABLES,
- 	LOCKDOWN_PCMCIA_CIS,
-+	LOCKDOWN_TIOCSSERIAL,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
+diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+index 53ca9ba6ab4b..5954b2e09b76 100644
+--- a/drivers/tty/serial/8250/8250_lpss.c
++++ b/drivers/tty/serial/8250/8250_lpss.c
+@@ -161,7 +161,7 @@ static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
+ 	.multi_block = {0},
  };
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 22482e1b9a77..00a3a6438dd2 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -27,6 +27,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MSR] = "raw MSR access",
- 	[LOCKDOWN_ACPI_TABLES] = "modifying ACPI tables",
- 	[LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
-+	[LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
+ 
+-static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
++static int qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+ {
+ 	struct uart_8250_dma *dma = &lpss->dma;
+ 	struct dw_dma_chip *chip = &lpss->dma_chip;
+@@ -172,12 +172,14 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+ 	chip->dev = &pdev->dev;
+ 	chip->irq = pci_irq_vector(pdev, 0);
+ 	chip->regs = pci_ioremap_bar(pdev, 1);
++	if (!chip->regs)
++		return -ENOMEM;
+ 	chip->pdata = &qrk_serial_dma_pdata;
+ 
+ 	/* Falling back to PIO mode if DMA probing fails */
+ 	ret = dw_dma_probe(chip);
+ 	if (ret)
+-		return;
++		return 0;
+ 
+ 	pci_try_set_mwi(pdev);
+ 
+@@ -191,6 +193,7 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+ 	param->hs_polarity = true;
+ 
+ 	lpss->dma_maxburst = 8;
++	return 0;
+ }
+ 
+ static void qrk_serial_exit_dma(struct lpss8250 *lpss)
+@@ -219,7 +222,9 @@ static int qrk_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 
+ 	port->irq = pci_irq_vector(pdev, 0);
+ 
+-	qrk_serial_setup_dma(lpss, port);
++	ret = qrk_serial_setup_dma(lpss, port);
++	if (ret < 0)
++		return ret;
+ 	return 0;
+ }
+ 
 -- 
-2.22.0.510.g264f2c817a-goog
+2.17.1
 
