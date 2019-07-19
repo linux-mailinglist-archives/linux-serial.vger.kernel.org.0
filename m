@@ -2,330 +2,137 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 488F96EB37
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 21:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0796F6EB85
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 22:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730265AbfGSToV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 15:44:21 -0400
-Received: from xes-mad.com ([162.248.234.2]:45703 "EHLO mail.xes-mad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733029AbfGSToV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 15:44:21 -0400
-X-Greylist: delayed 489 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Jul 2019 15:44:20 EDT
-Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
-        by mail.xes-mad.com (Postfix) with ESMTP id 3982720FE7;
-        Fri, 19 Jul 2019 14:36:10 -0500 (CDT)
-Date:   Fri, 19 Jul 2019 14:36:08 -0500 (CDT)
-From:   Aaron Sierra <asierra@xes-inc.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        Rob Groner <rgroner@rtd.com>
-Message-ID: <1370607771.276118.1563564968480.JavaMail.zimbra@xes-inc.com>
-In-Reply-To: <20190719143052.67038-1-andriy.shevchenko@linux.intel.com>
-References: <20190719143052.67038-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2] serial: 8250_exar: Move the Exar bits from 8250_port
+        id S1728636AbfGSUTy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 16:19:54 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58531 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728346AbfGSUTy (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 16:19:54 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hoZM8-0006aX-IH; Fri, 19 Jul 2019 22:19:52 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hoZM5-0005uR-7Z; Fri, 19 Jul 2019 22:19:49 +0200
+Date:   Fri, 19 Jul 2019 22:19:49 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Sergey Organov <sorganov@gmail.com>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/3] serial: imx: set_termios(): do not enable autoRTS
+ if RTS is unset
+Message-ID: <20190719201949.ldqlcwjhcmt7wwhg@pengutronix.de>
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
+ <1563526074-20399-1-git-send-email-sorganov@gmail.com>
+ <1563526074-20399-2-git-send-email-sorganov@gmail.com>
+ <20190719091143.uhjxeibtolgswq2l@pengutronix.de>
+ <87h87idxq2.fsf@osv.gnss.ru>
+ <20190719143151.gx43ndn2oy35h247@pengutronix.de>
+ <87woge9hvz.fsf@osv.gnss.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.0.127]
-X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
-Thread-Topic: serial: 8250_exar: Move the Exar bits from 8250_port
-Thread-Index: LtPtulEvvufescumKWtK/vzJ3sqgTA==
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87woge9hvz.fsf@osv.gnss.ru>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
------ Original Message -----
-> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> Sent: Friday, July 19, 2019 9:30:52 AM
+On Fri, Jul 19, 2019 at 06:13:52PM +0300, Sergey Organov wrote:
+> Hello Uwe,
+> 
+> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
+> > Hello Sergey,
+> >
+> > On Fri, Jul 19, 2019 at 03:18:13PM +0300, Sergey Organov wrote:
+> >> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
+> >> > On Fri, Jul 19, 2019 at 11:47:52AM +0300, Sergey Organov wrote:
+> >> >> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> >> >> index 57d6e6b..95d7984 100644
+> >> >> --- a/drivers/tty/serial/imx.c
+> >> >> +++ b/drivers/tty/serial/imx.c
+> >> >> @@ -405,7 +405,8 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
+> >> >>  /* called with port.lock taken and irqs caller dependent */
+> >> >>  static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
+> >> >>  {
+> >> >> -	*ucr2 |= UCR2_CTSC;
+> >> >> +	if (*ucr2 & UCR2_CTS)
+> >> >> +		*ucr2 |= UCR2_CTSC;
+> >> >
+> >> > I think this patch is wrong or the commit log is insufficient.
+> >> > imx_uart_rts_auto() has only a single caller and there ucr2 & UCR2_CTS is
+> >> > never true. And CTSC isn't restored anywhere, is it?
+> >> 
+> >> This is rebase to 'tty-next' branch, and you need to look at it in that
+> >> context. There, ucr2 & UCR2_CTS does already make sense, due to previous
+> >> fix that is already there.
+> >
+> > I looked at 57d6e6b which is the file you patched. And there
+> > imx_uart_rts_auto is only ever called with *ucr2 not having UCR2_CTS.
+> >
+> > If you still think I'm wrong, please improve the commit log
+> > accordingly.
+> 
+> I still think you are wrong, but I don't know how to improve commit log.
+> 
+> To check it once again, I just did:
+> 
+> $ git show 57d6e6b > imx.c
+> 
+> There, in imx_uart_set_termios(), I see:
+> 
+> 1569:	old_ucr2 = imx_uart_readl(sport, UCR2);
+> 1570:	ucr2 = old_ucr2 & (UCR2_TXEN | UCR2_RXEN | UCR2_ATEN | UCR2_CTS);
+> 
+> Here, current UCR2 value is read into 'old_ucr2' and then its /current/
+> UCR2_CTS bit is copied into 'ucr2' (along with 3 other bits).
+> 
+> Then, later in the same function:
+> 
+> 1591:		imx_uart_rts_auto(sport, &ucr2);
+> 
+> is called that can check /current/ state of UCR2_CTS bit in '*ucr2'.
+> 
+> That's what the patch does, checks this bit.
+> 
+> Sorry, I fail to see how you came to conclusion that "*ucr2 not having
+> UCR2_CTS". Do we maybe still read different versions of the file?
 
-> There are Exar quirks in 8250_port which belong to 8250_exar module.
-> Move them to the correct module and do not contaminate generic code
-> with it.
-> 
-> Cc: Aaron Sierra <asierra@xes-inc.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> in v2:
-> - rebase on top of latest vanilla / serial-next
-> - move divisor callbacks
-> - drop RFC
-> - compile tested only on my side, please, who has a hardware, test it
+No, it's just that I failed to see that UCR2_CTS is in the set of bits
+that are retained even when looking twice :-|
 
-Andy,
+So you convinced me that you are right and if you update the commit log
+as agreed already before and even add a comment in imx_uart_rts_auto
+along the lines of
 
-I'll do some testing on v3 of this patch :P  See explanation below.
+	/*
+	 * Only let the receiver control RTS output if we were not
+	 * requested to have RTS inactive (which then should take
+	 * precedence).
+	 */
 
-> drivers/tty/serial/8250/8250_exar.c | 82 ++++++++++++++++++++++++++++-
-> drivers/tty/serial/8250/8250_port.c | 74 +-------------------------
-> 2 files changed, 81 insertions(+), 75 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_exar.c
-> b/drivers/tty/serial/8250/8250_exar.c
-> index edd6dfe055bf..b9ab17b5b32d 100644
-> --- a/drivers/tty/serial/8250/8250_exar.c
-> +++ b/drivers/tty/serial/8250/8250_exar.c
-> @@ -36,6 +36,8 @@
-> 
-> #define UART_EXAR_INT0		0x80
-> #define UART_EXAR_8XMODE	0x88	/* 8X sampling rate select */
-> +#define UART_EXAR_SLEEP		0x8b	/* Sleep mode */
-> +#define UART_EXAR_DVID		0x8d	/* Device identification */
-> 
-> #define UART_EXAR_FCTR		0x08	/* Feature Control Register */
-> #define UART_FCTR_EXAR_IRDA	0x10	/* IrDa data encode select */
-> @@ -127,18 +129,94 @@ struct exar8250 {
-> 	int			line[0];
-> };
-> 
-> +/*
-> + * These Exar UARTs have an extra interrupt indicator that could
-> + * fire for a few unimplemented interrupts.  One of which is a
-> + * wakeup event when coming out of sleep.  Put this here just
-> + * to be on the safe side that these interrupts don't go unhandled.
-> + */
-> +static int exar_handle_irq(struct uart_port *port)
-> +{
-> +	unsigned int iir = serial_port_in(port, UART_IIR);
-> +	int ret = 0;
-> +
-> +	if (serial_port_in(port, UART_EXAR_INT0) != 0)
-> +		ret = 1;
-> +
-> +	ret |= serial8250_handle_irq(port, iir);
-> +
-> +	return ret;
-> +}
+you can have my Ack.
 
-This seems to (accidentally) reintroduce the per-port INT0 clearing that was
-eliminated in c7e1b4059075 (tty: serial: exar: Relocate sleep wake-up handling)
-and further polished in 60ab0fafc4b6 (serial: 8250_exar: Read INT0 from slave device, too)
+Best regards
+Uwe
 
-The rest seems like harmless, but worthwhile cleanup as you suggest.
-
--Aaron
-
-> +
-> +static void exar_pm(struct uart_port *port, unsigned int state, unsigned int
-> old)
-> +{
-> +	/*
-> +	 * Exar UARTs have a SLEEP register that enables or disables each UART
-> +	 * to enter sleep mode separately. On the XR17V35x the register
-> +	 * is accessible to each UART at the UART_EXAR_SLEEP offset, but
-> +	 * the UART channel may only write to the corresponding bit.
-> +	 */
-> +	serial_port_out(port, UART_EXAR_SLEEP, state ? 0xff : 0);
-> +}
-> +
-> +/*
-> + * XR17V35x UARTs have an extra fractional divisor register (DLD)
-> + * Calculate divisor with extra 4-bit fractional portion
-> + */
-> +static unsigned int xr17v35x_get_divisor(struct uart_port *p, unsigned int
-> baud,
-> +					 unsigned int *frac)
-> +{
-> +	unsigned int quot_16;
-> +
-> +	quot_16 = DIV_ROUND_CLOSEST(p->uartclk, baud);
-> +	*frac = quot_16 & 0x0f;
-> +
-> +	return quot_16 >> 4;
-> +}
-> +
-> +static void xr17v35x_set_divisor(struct uart_port *p, unsigned int baud,
-> +				 unsigned int quot, unsigned int quot_frac)
-> +{
-> +	serial8250_do_set_divisor(p, baud, quot, quot_frac);
-> +
-> +	/* Preserve bits not related to baudrate; DLD[7:4]. */
-> +	quot_frac |= serial_port_in(p, 0x2) & 0xf0;
-> +	serial_port_out(p, 0x2, quot_frac);
-> +}
-> +
-> static int default_setup(struct exar8250 *priv, struct pci_dev *pcidev,
-> 			 int idx, unsigned int offset,
-> 			 struct uart_8250_port *port)
-> {
-> 	const struct exar8250_board *board = priv->board;
-> 	unsigned int bar = 0;
-> +	unsigned char status;
-> 
-> 	port->port.iotype = UPIO_MEM;
-> 	port->port.mapbase = pci_resource_start(pcidev, bar) + offset;
-> 	port->port.membase = priv->virt + offset;
-> 	port->port.regshift = board->reg_shift;
-> 
-> +	/*
-> +	 * XR17V35x UARTs have an extra divisor register, DLD that gets enabled
-> +	 * with when DLAB is set which will cause the device to incorrectly match
-> +	 * and assign port type to PORT_16650. The EFR for this UART is found
-> +	 * at offset 0x09. Instead check the Deice ID (DVID) register
-> +	 * for a 2, 4 or 8 port UART.
-> +	 */
-> +	status = readb(port->port.membase + UART_EXAR_DVID);
-> +	if (status == 0x82 || status == 0x84 || status == 0x88) {
-> +		port->port.type = PORT_XR17V35X;
-> +
-> +		port->port.get_divisor = xr17v35x_get_divisor;
-> +		port->port.set_divisor = xr17v35x_set_divisor;
-> +	} else {
-> +		port->port.type = PORT_XR17D15X;
-> +	}
-> +
-> +	port->port.handle_irq = exar_handle_irq;
-> +	port->port.pm = exar_pm;
-> +
-> 	return 0;
-> }
-> 
-> @@ -496,8 +574,8 @@ exar_pci_probe(struct pci_dev *pcidev, const struct
-> pci_device_id *ent)
-> 		return rc;
-> 
-> 	memset(&uart, 0, sizeof(uart));
-> -	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF | UPF_SHARE_IRQ
-> -			  | UPF_EXAR_EFR;
-> +	uart.port.flags = UPF_SHARE_IRQ | UPF_EXAR_EFR |
-> +			  UPF_FIXED_TYPE | UPF_FIXED_PORT;
-> 	uart.port.irq = pci_irq_vector(pcidev, 0);
-> 	uart.port.dev = &pcidev->dev;
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c
-> b/drivers/tty/serial/8250/8250_port.c
-> index c1cec808571b..3bf3b06fe0cb 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -44,8 +44,6 @@
->  * These are definitions for the Exar XR17V35X and XR17(C|D)15X
->  */
-> #define UART_EXAR_INT0		0x80
-> -#define UART_EXAR_SLEEP		0x8b	/* Sleep mode */
-> -#define UART_EXAR_DVID		0x8d	/* Device identification */
-> 
-> /* Nuvoton NPCM timeout register */
-> #define UART_NPCM_TOR          7
-> @@ -709,19 +707,8 @@ EXPORT_SYMBOL_GPL(serial8250_rpm_put_tx);
-> static void serial8250_set_sleep(struct uart_8250_port *p, int sleep)
-> {
-> 	unsigned char lcr = 0, efr = 0;
-> -	/*
-> -	 * Exar UARTs have a SLEEP register that enables or disables
-> -	 * each UART to enter sleep mode separately.  On the XR17V35x the
-> -	 * register is accessible to each UART at the UART_EXAR_SLEEP
-> -	 * offset but the UART channel may only write to the corresponding
-> -	 * bit.
-> -	 */
-> +
-> 	serial8250_rpm_get(p);
-> -	if ((p->port.type == PORT_XR17V35X) ||
-> -	   (p->port.type == PORT_XR17D15X)) {
-> -		serial_out(p, UART_EXAR_SLEEP, sleep ? 0xff : 0);
-> -		goto out;
-> -	}
-> 
-> 	if (p->capabilities & UART_CAP_SLEEP) {
-> 		if (p->capabilities & UART_CAP_EFR) {
-> @@ -1011,27 +998,6 @@ static void autoconfig_16550a(struct uart_8250_port *up)
-> 	up->port.type = PORT_16550A;
-> 	up->capabilities |= UART_CAP_FIFO;
-> 
-> -	/*
-> -	 * XR17V35x UARTs have an extra divisor register, DLD
-> -	 * that gets enabled with when DLAB is set which will
-> -	 * cause the device to incorrectly match and assign
-> -	 * port type to PORT_16650.  The EFR for this UART is
-> -	 * found at offset 0x09. Instead check the Deice ID (DVID)
-> -	 * register for a 2, 4 or 8 port UART.
-> -	 */
-> -	if (up->port.flags & UPF_EXAR_EFR) {
-> -		status1 = serial_in(up, UART_EXAR_DVID);
-> -		if (status1 == 0x82 || status1 == 0x84 || status1 == 0x88) {
-> -			DEBUG_AUTOCONF("Exar XR17V35x ");
-> -			up->port.type = PORT_XR17V35X;
-> -			up->capabilities |= UART_CAP_AFE | UART_CAP_EFR |
-> -						UART_CAP_SLEEP;
-> -
-> -			return;
-> -		}
-> -
-> -	}
-> -
-> 	/*
-> 	 * Check for presence of the EFR when DLAB is set.
-> 	 * Only ST16C650V1 UARTs pass this test.
-> @@ -1170,18 +1136,6 @@ static void autoconfig_16550a(struct uart_8250_port *up)
-> 	}
-> 	serial_out(up, UART_IER, iersave);
-> 
-> -	/*
-> -	 * Exar uarts have EFR in a weird location
-> -	 */
-> -	if (up->port.flags & UPF_EXAR_EFR) {
-> -		DEBUG_AUTOCONF("Exar XR17D15x ");
-> -		up->port.type = PORT_XR17D15X;
-> -		up->capabilities |= UART_CAP_AFE | UART_CAP_EFR |
-> -				    UART_CAP_SLEEP;
-> -
-> -		return;
-> -	}
-> -
-> 	/*
-> 	 * We distinguish between 16550A and U6 16550A by counting
-> 	 * how many bytes are in the FIFO.
-> @@ -2453,23 +2407,6 @@ static void serial8250_shutdown(struct uart_port *port)
-> 		serial8250_do_shutdown(port);
-> }
-> 
-> -/*
-> - * XR17V35x UARTs have an extra fractional divisor register (DLD)
-> - * Calculate divisor with extra 4-bit fractional portion
-> - */
-> -static unsigned int xr17v35x_get_divisor(struct uart_8250_port *up,
-> -					 unsigned int baud,
-> -					 unsigned int *frac)
-> -{
-> -	struct uart_port *port = &up->port;
-> -	unsigned int quot_16;
-> -
-> -	quot_16 = DIV_ROUND_CLOSEST(port->uartclk, baud);
-> -	*frac = quot_16 & 0x0f;
-> -
-> -	return quot_16 >> 4;
-> -}
-> -
-> /* Nuvoton NPCM UARTs have a custom divisor calculation */
-> static unsigned int npcm_get_divisor(struct uart_8250_port *up,
-> 		unsigned int baud)
-> @@ -2497,8 +2434,6 @@ static unsigned int serial8250_do_get_divisor(struct
-> uart_port *port,
-> 	else if ((port->flags & UPF_MAGIC_MULTIPLIER) &&
-> 		 baud == (port->uartclk/8))
-> 		quot = 0x8002;
-> -	else if (up->port.type == PORT_XR17V35X)
-> -		quot = xr17v35x_get_divisor(up, baud, frac);
-> 	else if (up->port.type == PORT_NPCM)
-> 		quot = npcm_get_divisor(up, baud);
-> 	else
-> @@ -2585,13 +2520,6 @@ void serial8250_do_set_divisor(struct uart_port *port,
-> unsigned int baud,
-> 		serial_port_out(port, UART_LCR, up->lcr | UART_LCR_DLAB);
-> 
-> 	serial_dl_write(up, quot);
-> -
-> -	/* XR17V35x UARTs have an extra fractional divisor register (DLD) */
-> -	if (up->port.type == PORT_XR17V35X) {
-> -		/* Preserve bits not related to baudrate; DLD[7:4]. */
-> -		quot_frac |= serial_port_in(port, 0x2) & 0xf0;
-> -		serial_port_out(port, 0x2, quot_frac);
-> -	}
-> }
-> EXPORT_SYMBOL_GPL(serial8250_do_set_divisor);
-> 
-> --
-> 2.20.1
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
