@@ -2,65 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D52746E7D9
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 17:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27FF6EA59
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2019 19:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbfGSPPY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 11:15:24 -0400
-Received: from mga04.intel.com ([192.55.52.120]:59214 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726711AbfGSPPY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 11:15:24 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jul 2019 08:15:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,282,1559545200"; 
-   d="scan'208";a="168581270"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2019 08:15:20 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hoUbP-0005PW-IC; Fri, 19 Jul 2019 18:15:19 +0300
-Date:   Fri, 19 Jul 2019 18:15:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
-        Kangjie Lu <kjlu@umn.edu>, Aditya Pakki <pakki001@umn.edu>
-Cc:     emamd001@umn.edu, smccaman@umn.edu,
+        id S1727577AbfGSRtZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Jul 2019 13:49:25 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:43864 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727497AbfGSRtZ (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 19 Jul 2019 13:49:25 -0400
+Received: by mail-io1-f67.google.com with SMTP id k20so60087920ios.10;
+        Fri, 19 Jul 2019 10:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=baGSXwBYZTXtADqKE2KAvtjQ3yUogk839fU/9Qnnaa0=;
+        b=uWNxUzxdc26FSrMI/dHfQmD/urraeYPJSBPgI7xG98vVg5wdzwRypXCXXmP/MBVUoj
+         rBSIdntkqQc355oewejCvlAXff8NHR83rsu4TEz7CDNALRw2vMSV/ddS6HwTMjDmqPHr
+         /esy6S+1eQ1G8uJOUGcCS5Z367dX/u5Pps9nbvfIO6LN8rGbruqMiI4kkN5aTjwF56xo
+         Bjngcr0+UdrY0OS8JnFCFCjjkbc9mae9AsHuEMYgzWEYT1MIj0haLTiMoYznkMG2NXAT
+         MdfvMwQeCuq5/vn2EOb58b1p/ID5l9ecIjiSWFIvb0F+Vo+hVxIOUpZBxzxlucdzz0dD
+         Wecw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=baGSXwBYZTXtADqKE2KAvtjQ3yUogk839fU/9Qnnaa0=;
+        b=o/mk4NQ21pEnN/+pyBdk2QQIfUX5ZgyGua67TqtUgdNnaYErGRCXHHRbhTPUscFk/e
+         r1RhLG8vINcW9mIO2C+KMHrYnc0cl8NDTdyFstPDIzUL72MwpAySJz+QJuRWUiaMXfIR
+         ytFbOcc1GRs+W+zIOFCwfMlMlorqPZTheeedY9pkPrz5zkMHlW3tpFPSHTdcJXqdAwM6
+         5bJQClmEtjp5h2Qhrn8ER1EvdXTtsezY/ZTMbW3JH3YKca8KaY/cpEAQwmfQzaAXxCZw
+         3VKu8BRkQsQy/aDZm47vofoodtKc87/elFV4C3wx/hbn+9tTziE+TuU/r86GpXkpA5vt
+         6/ng==
+X-Gm-Message-State: APjAAAVxa99Abm7GwJ2D74wAdSEHVv0P/4QRIuE45Nn/SQlZxGxvO0d+
+        nM95SsCtmE+loQXN41In8YI=
+X-Google-Smtp-Source: APXvYqxim4LXHBZC7WZuwyREL+ASYVopot2Kl4subWNIHwMo/q7MFV3JD3am6uhpSpx1WSv/Gam8CA==
+X-Received: by 2002:a6b:1ca:: with SMTP id 193mr52663297iob.264.1563558564836;
+        Fri, 19 Jul 2019 10:49:24 -0700 (PDT)
+Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
+        by smtp.googlemail.com with ESMTPSA id r24sm22957223ioc.76.2019.07.19.10.49.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Jul 2019 10:49:23 -0700 (PDT)
+From:   Navid Emamdoost <navid.emamdoost@gmail.com>
+To:     andriy.shevchenko@linux.intel.com
+Cc:     emamd001@umn.edu, kjlu@umn.edu, smccaman@umn.edu,
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, Vinod Koul <vkoul@kernel.org>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] 8250_lpss: check null return when calling pci_ioremap_bar
-Message-ID: <20190719151519.GO9224@smile.fi.intel.com>
-References: <20190719025443.2368-1-navid.emamdoost@gmail.com>
- <20190719133735.GM9224@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190719133735.GM9224@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Subject: [PATCH v2] 8250_lpss: check null return when calling pci_ioremap_bar
+Date:   Fri, 19 Jul 2019 12:48:45 -0500
+Message-Id: <20190719174848.24216-1-navid.emamdoost@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190719151519.GO9224@smile.fi.intel.com>
+References: <20190719151519.GO9224@smile.fi.intel.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 04:37:35PM +0300, Andy Shevchenko wrote:
-> On Thu, Jul 18, 2019 at 09:54:42PM -0500, Navid Emamdoost wrote:
+pci_ioremap_bar may return null. This is eventually de-referenced at 
+drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check 
+is needed to prevent null de-reference. I am adding the check and in case
+ of failure. Thanks to Andy Shevchenko for the hint on the necessity of 
+pci_iounmap when exiting.
 
-> Thus, please, collaborate guys, and send one compiling solution  based on [1].
-
-> [1]: https://www.spinics.net/lists/linux-serial/msg33965.html
-
-For your convenience (what has to be applied to v4):
+Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+---
+ drivers/tty/serial/8250/8250_lpss.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 53ca9ba6ab4b..6214da67e9b3 100644
+index 53ca9ba6ab4b..d07e431110d9 100644
 --- a/drivers/tty/serial/8250/8250_lpss.c
 +++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -195,11 +195,15 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+@@ -169,10 +169,12 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+ 	struct pci_dev *pdev = to_pci_dev(port->dev);
+ 	int ret;
+ 
++	chip->pdata = &qrk_serial_dma_pdata;
+ 	chip->dev = &pdev->dev;
+ 	chip->irq = pci_irq_vector(pdev, 0);
+ 	chip->regs = pci_ioremap_bar(pdev, 1);
+-	chip->pdata = &qrk_serial_dma_pdata;
++	if (!chip->regs)
++		return;
+ 
+ 	/* Falling back to PIO mode if DMA probing fails */
+ 	ret = dw_dma_probe(chip);
+@@ -195,11 +197,15 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
  
  static void qrk_serial_exit_dma(struct lpss8250 *lpss)
  {
@@ -77,9 +108,6 @@ index 53ca9ba6ab4b..6214da67e9b3 100644
  }
  #else	/* CONFIG_SERIAL_8250_DMA */
  static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port) {}
-
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
