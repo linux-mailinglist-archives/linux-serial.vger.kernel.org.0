@@ -2,42 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0723B6ED3F
-	for <lists+linux-serial@lfdr.de>; Sat, 20 Jul 2019 03:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95336F390
+	for <lists+linux-serial@lfdr.de>; Sun, 21 Jul 2019 15:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733078AbfGTB6O (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Jul 2019 21:58:14 -0400
-Received: from drosera-hb1.ehess.fr ([193.48.45.71]:35622 "HELO
-        drosera-hb1.ehess.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1733075AbfGTB6O (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Jul 2019 21:58:14 -0400
-X-Greylist: delayed 1592 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Jul 2019 21:58:03 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by drosera-hb1.ehess.fr (Postfix) with ESMTP id 4DDDD2681C1;
-        Sat, 20 Jul 2019 03:07:43 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at drosera-hb1.ehess.fr
-Received: from rosa.ehess.fr (rosa.ehess.fr [193.48.45.109])
-        by drosera-hb1.ehess.fr (Postfix) with ESMTP id E5BB1266FE5;
-        Sat, 20 Jul 2019 02:56:25 +0200 (CEST)
-Date:   Sat, 20 Jul 2019 02:56:25 +0200 (CEST)
-From:   Sheng Li Hung <fleur.beauvieux@ehess.fr>
-Reply-To: Sheng Li Hung <shengli119@outlook.com>
-Message-ID: <1033063806.16971409.1563584185860.JavaMail.zimbra@ehess.fr>
-Subject: 
+        id S1726326AbfGUNvw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 21 Jul 2019 09:51:52 -0400
+Received: from mga18.intel.com ([134.134.136.126]:16740 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726290AbfGUNvw (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 21 Jul 2019 09:51:52 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jul 2019 06:51:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,290,1559545200"; 
+   d="scan'208";a="252645136"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga001.jf.intel.com with ESMTP; 21 Jul 2019 06:51:24 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hpCFH-00049D-Dj; Sun, 21 Jul 2019 16:51:23 +0300
+Date:   Sun, 21 Jul 2019 16:51:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Aaron Sierra <asierra@xes-inc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
+        Rob Groner <rgroner@rtd.com>
+Subject: Re: [PATCH v2] serial: 8250_exar: Move the Exar bits from 8250_port
+Message-ID: <20190721135123.GQ9224@smile.fi.intel.com>
+References: <20190719143052.67038-1-andriy.shevchenko@linux.intel.com>
+ <1370607771.276118.1563564968480.JavaMail.zimbra@xes-inc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [154.70.153.206]
-X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
-Thread-Topic: 
-Thread-Index: mbs3mAQ2LNmogLrXbm6I+Rskdj4lXA==
-To:     undisclosed-recipients:;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1370607771.276118.1563564968480.JavaMail.zimbra@xes-inc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Fri, Jul 19, 2019 at 02:36:08PM -0500, Aaron Sierra wrote:
+> ----- Original Message -----
+> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+> > Sent: Friday, July 19, 2019 9:30:52 AM
+> 
+> > There are Exar quirks in 8250_port which belong to 8250_exar module.
+> > Move them to the correct module and do not contaminate generic code
+> > with it.
+> > 
+> > Cc: Aaron Sierra <asierra@xes-inc.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> > in v2:
+> > - rebase on top of latest vanilla / serial-next
+> > - move divisor callbacks
+> > - drop RFC
+> > - compile tested only on my side, please, who has a hardware, test it
+> 
+> Andy,
+> 
+> I'll do some testing on v3 of this patch :P  See explanation below.
+
+Thanks, v3 is on its way!
+
+> > +/*
+> > + * These Exar UARTs have an extra interrupt indicator that could
+> > + * fire for a few unimplemented interrupts.  One of which is a
+> > + * wakeup event when coming out of sleep.  Put this here just
+> > + * to be on the safe side that these interrupts don't go unhandled.
+> > + */
+> > +static int exar_handle_irq(struct uart_port *port)
+> > +{
+> > +	unsigned int iir = serial_port_in(port, UART_IIR);
+> > +	int ret = 0;
+> > +
+> > +	if (serial_port_in(port, UART_EXAR_INT0) != 0)
+> > +		ret = 1;
+> > +
+> > +	ret |= serial8250_handle_irq(port, iir);
+> > +
+> > +	return ret;
+> > +}
+> 
+> This seems to (accidentally) reintroduce the per-port INT0 clearing that was
+> eliminated in c7e1b4059075 (tty: serial: exar: Relocate sleep wake-up handling)
+> and further polished in 60ab0fafc4b6 (serial: 8250_exar: Read INT0 from slave device, too)
+
+Oh, what a nice catch! I forgot about the changes which you did and I reviewed :-)
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-You have a business deal worth $11 million from Mr.Sheng Li Hung
