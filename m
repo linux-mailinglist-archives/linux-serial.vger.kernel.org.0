@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC9E7099C
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Jul 2019 21:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BD37099D
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Jul 2019 21:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbfGVTWX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Jul 2019 15:22:23 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:34951 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726710AbfGVTWX (ORCPT
+        id S1726864AbfGVTWY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Jul 2019 15:22:24 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43099 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726665AbfGVTWY (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Jul 2019 15:22:23 -0400
-Received: by mail-lf1-f66.google.com with SMTP id p197so27461951lfa.2
+        Mon, 22 Jul 2019 15:22:24 -0400
+Received: by mail-lf1-f65.google.com with SMTP id c19so27480176lfm.10
         for <linux-serial@vger.kernel.org>; Mon, 22 Jul 2019 12:22:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hlO4j1hJuCOJd1h1Hw9Dr7/Fw6jxqbEeyEo5OnuF750=;
-        b=OBZ5VenYegly2ZmgB5apxAfAcbm+r7LzHEHc5zO9xF3ZIT2Nt/9Drpvjh6u0DKhL4X
-         pgioTplB7ujqb0Sh+fw20i11enadUzceNFnS2VbQqnfBKZR0jyba/W7o/dXFSCrD4IXl
-         ZSBK9kkwfBd8DYxsSQvOa8OGd70F+Afe+uPCwHniJDr7Nrqxc72SuJ1E6yZ6da0W807V
-         VuXWRFqzgl6qQZI7iOVtLeHgxdsKSeWU2EhmF3VsYjqS2T3PT5RDVLGUFsKjkcQ/83I9
-         oEMaYD+ZYZZcUB1bXJy1O4q/9i7UCZhZlvwCS4P6P+O9mivIu3ffWTgbCnSsE7x6/YM0
-         N7mg==
+        bh=wnit4p85ORmgfnZn4hAkBjNauy9f4K7ibUxB6LLunYI=;
+        b=OUXCvoenllByUjPJujE3BRthxEaq55rjTdMdDKZp1dI1QYrJTD2K8yttKXVEoegkQL
+         S5TEfmkT0MGc9WDr6KJrdjXGkCsrYMQDp9Z4/n8X7I4PNIdtNP0IW1v1q5HLSytSq/ME
+         c7+Hz9PGlgCvXv/XMZyoXv5XTIx0Z99iD9yGwJIQvDQ+Rh6DAf/9Kgn+jo/c0rLjhOFC
+         3ifUNZTT9BKarFYuliptX8RhH1F3Oz2hSge3fxjwKJIyANBBy2z1VHE/NRJ9d/td9H7w
+         +CdL0YySrgG8y3EXrz4n8d9JArm9kQ5VizLJXDawq1AbcZYduiTn0+avPqmNuhh/ZSZU
+         XmZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hlO4j1hJuCOJd1h1Hw9Dr7/Fw6jxqbEeyEo5OnuF750=;
-        b=Y2NlL2buStOkQFo0b3nzdW3VcoNZt806rm2d+1pjufkU/yH+FRMzOY1zd37CxFdkYT
-         SJBJQeccK530jBNrAaXVFTM3jGFDcDnB4uDn9s4T81Qx6KC/SLrM5C6/bsJJBR7oqAiY
-         MpMIjaofTO1OBtsub9lJPjSSJl3elSOhmV95yK3UbrCiLegJWt5u0az56b2/FbMJKN9+
-         acUkHu3cj6x+cPBtXebKTt6+BnxsOxl+DqQdIZr2q8x/6q5fGXFoGTDKVyTXz4AW5ajF
-         NOMttOtlR6h3z4EHr2zt8sb0SqSK4GeDZqxLGNgPr1lOlcnW6qb6k1HleGn3R0VpOGoN
-         6ERg==
-X-Gm-Message-State: APjAAAX52cQnMI+jYw+fH4JCAK5hhI1fnPx4c0Fh/IeAVKVzrNdr07ni
-        3CWSEeUkZyktseGC940wnK2d3Ygy
-X-Google-Smtp-Source: APXvYqwboXpIQejpdye+ead8X3EBEYoeyGI8KGKUyL2A6myeizX0W9lQ5Z68gTdkgvQR+MzbQJ3AiA==
-X-Received: by 2002:ac2:4644:: with SMTP id s4mr32318959lfo.158.1563823341083;
-        Mon, 22 Jul 2019 12:22:21 -0700 (PDT)
+        bh=wnit4p85ORmgfnZn4hAkBjNauy9f4K7ibUxB6LLunYI=;
+        b=JNxpIm0VJSE9UX/yrIk7wL8xRZHtV1sjC4NwZ8fIIMr91Ckww6dk34qxpYmxCRd9Rz
+         okOT7z3OQtPKfZFyuz0A5ewCsN9Z/pk91P+XX9qgwsxMIxyuRJYvbMSxtzqDvZcbJ5go
+         HOe9+7xyQl8wOJvxq4qU3/KNc7gpStmyVnvhSclMAuOYacUfCuCBFe5/BC8W5y2V8SFf
+         X3VGHgUpcDg0Ur6u2YWqlpzpB0XFl0bUf0+NqnuAou6MRxaCnnj5ezt8zb353VpvPQSq
+         doTm/8eIPhPEaTvxgJTGz1yDoodhC/mH8m1OEvkWmaF5dtE/DYIhNv3xW6svN4F0ccoJ
+         Nv2w==
+X-Gm-Message-State: APjAAAUQO+MJOc0khKP6KQ3Q3TgWKvmIXe20VfmASYgp9+3bgKYkxiqU
+        6pNawc1eC3/e1UAAy5SFkqAlokHZ
+X-Google-Smtp-Source: APXvYqzMcAxtvEzeZaLbMfwbcBn9qKi7e4zuAuT1RxXDnSo2B3PtPcOpAQp3OSoAIKssKwyHOq2Ljg==
+X-Received: by 2002:ac2:563c:: with SMTP id b28mr20156125lff.93.1563823342006;
+        Mon, 22 Jul 2019 12:22:22 -0700 (PDT)
 Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id n124sm6129307lfd.46.2019.07.22.12.22.20
+        by smtp.gmail.com with ESMTPSA id n124sm6129307lfd.46.2019.07.22.12.22.21
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 22 Jul 2019 12:22:20 -0700 (PDT)
+        Mon, 22 Jul 2019 12:22:21 -0700 (PDT)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     linux-serial@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -55,9 +55,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sergey Organov <sorganov@gmail.com>
-Subject: [PATCH v6 1/3] serial: imx: set_termios(): do not enable autoRTS if RTS is unset
-Date:   Mon, 22 Jul 2019 22:22:09 +0300
-Message-Id: <1563823331-5629-2-git-send-email-sorganov@gmail.com>
+Subject: [PATCH v6 2/3] serial: imx: set_mctrl(): correctly restore autoRTS state
+Date:   Mon, 22 Jul 2019 22:22:10 +0300
+Message-Id: <1563823331-5629-3-git-send-email-sorganov@gmail.com>
 X-Mailer: git-send-email 2.1.4
 In-Reply-To: <1563823331-5629-1-git-send-email-sorganov@gmail.com>
 References: <20190614072801.3187-1-s.hauer@pengutronix.de>
@@ -70,39 +70,47 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Don't let receiver hardware automatically control RTS output if it
-was requested to be inactive.
-
-To ensure this, set_termios() shouldn't set UCR2_CTSC bit if UCR2_CTS
-(=TIOCM_RTS) is cleared. Added corresponding check in imx_uart_rts_auto()
-to fix this.
+imx_uart_set_mctrl() happened to set UCR2_CTSC bit whenever TIOCM_RTS
+was set, no matter if RTS/CTS handshake is enabled or not. Now fixed by
+turning handshake on only when CRTSCTS bit for the port is set.
 
 Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
 Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
 Signed-off-by: Sergey Organov <sorganov@gmail.com>
 ---
- drivers/tty/serial/imx.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/tty/serial/imx.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 57d6e6b..32f36d8 100644
+index 32f36d8..059ba35 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
-@@ -405,7 +405,12 @@ static void imx_uart_rts_inactive(struct imx_port *sport, u32 *ucr2)
- /* called with port.lock taken and irqs caller dependent */
- static void imx_uart_rts_auto(struct imx_port *sport, u32 *ucr2)
- {
--	*ucr2 |= UCR2_CTSC;
-+	/*
-+	 * Only let receiver control RTS output if we were not requested to have
-+	 * RTS inactive (which then should take precedence).
-+	 */
-+	if (*ucr2 & UCR2_CTS)
-+		*ucr2 |= UCR2_CTSC;
- }
+@@ -974,10 +974,22 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ 	if (!(port->rs485.flags & SER_RS485_ENABLED)) {
+ 		u32 ucr2;
  
- /* called with port.lock taken and irqs off */
++		/*
++		 * Turn off autoRTS if RTS is lowered and restore autoRTS
++		 * setting if RTS is raised.
++		 */
+ 		ucr2 = imx_uart_readl(sport, UCR2);
+ 		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+-		if (mctrl & TIOCM_RTS)
+-			ucr2 |= UCR2_CTS | UCR2_CTSC;
++		if (mctrl & TIOCM_RTS) {
++			ucr2 |= UCR2_CTS;
++			/*
++			 * UCR2_IRTS is unset if and only if the port is
++			 * configured for CRTSCTS, so we use inverted UCR2_IRTS
++			 * to get the state to restore to.
++			 */
++			if (!(ucr2 & UCR2_IRTS))
++				ucr2 |= UCR2_CTSC;
++		}
+ 		imx_uart_writel(sport, ucr2, UCR2);
+ 	}
+ 
 -- 
 2.10.0.1.g57b01a3
 
