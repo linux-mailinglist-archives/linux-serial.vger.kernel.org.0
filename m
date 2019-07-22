@@ -2,58 +2,58 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 779B06F9AD
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Jul 2019 08:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABC16F9BD
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Jul 2019 08:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727409AbfGVGtr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Jul 2019 02:49:47 -0400
-Received: from mail-lf1-f43.google.com ([209.85.167.43]:40608 "EHLO
-        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbfGVGtr (ORCPT
+        id S1726440AbfGVGxw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Jul 2019 02:53:52 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39753 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725920AbfGVGxw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Jul 2019 02:49:47 -0400
-Received: by mail-lf1-f43.google.com with SMTP id b17so25792521lff.7
-        for <linux-serial@vger.kernel.org>; Sun, 21 Jul 2019 23:49:44 -0700 (PDT)
+        Mon, 22 Jul 2019 02:53:52 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v18so36408279ljh.6
+        for <linux-serial@vger.kernel.org>; Sun, 21 Jul 2019 23:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7GorqfFenCHSbEXPTY6FowLwvLmUu49vBPGDtzJcgzU=;
-        b=J5oiULkz5LB7+HBeE5Afu5uyFFibUbtEo0dbu5lMnyTofbt4hljHmvTgvPDC6oURE/
-         2tvJpLnxUAZQhoEv2qrCtlATgh2E6tBgPehJQEaMgQKxeXbTuUPaOXiSxOFrq8yHnu8a
-         EV5peQpTY6MGUi++z8F5tXWUEjqRCqGdlulPX8eyzN+/WFd7eqSfOdzdXZuOIqmDTBT6
-         BDnEj7LEIGWgm1lLqE5+zNkz+74psXfJ7+2RQtE/Kktw12UDy8CYAKpfGlcX7iDFfGSA
-         wPfWOAF/rnW8Pg6SZMqgnkwVdfGfubfNSP75syoFDOpueD4Gb/qWWRARbTBBqVzxaJ+i
-         HjXQ==
+        bh=LwLF82In7bsHKqLg2IPqa3lCzGDshcxlFU0D0U8su3I=;
+        b=hJDEXFnzArXhqJqxtaKByLuQMzeYkBdfUW11JqdKroRNc/rObLk4jE0+URH/zIvbxK
+         VxuC2ItHUt6SbfF6t53dg3Lup+b0uOq/rQLgySI2TS/SHPzi3iph6sYQ6s46leTTSPxF
+         ZsLTBxi53qPQsFZooWQdSMnNY0HcvAEwI+6OVuh4lWSWkALmC8FsRQjS5l2uNyUQTF75
+         ike/mMGfAWlH2Vy++vtvsoaiVt3p4mXN64fOETKlyhTSqXIApD+VSD42NdsHzz2egQaG
+         T91VMPn/nKilTU5w7SQww66IJljRxGnUVK0CFftPKcL6ueXNX6twNV/1DO2xF4PzZcPB
+         zSEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7GorqfFenCHSbEXPTY6FowLwvLmUu49vBPGDtzJcgzU=;
-        b=OaZMTmU+lZJrd/sALMKJmGhb2qoB3uTTZTOIbqeFwQ7xwi3AievzVJJh3641i8Kq+N
-         tXG81z2EOFfbvzEZSLZQV7x2DUJa/xBI+dd+SwE5wHcapHULu36VCxDfh0+SyqXZ+wic
-         srM3VNkmzz0PQOmXh/dRth5PlZvE8uJ+H10BriPeLWIKNCYPsustbjlDbQZRuCMYbXzL
-         zKVxQ91YYQLASLLToZgWsP+CDq89QYDbYUFdv2rI6c/MqQxIurtT/KHJ9qcbgjzyVm7D
-         3e+wc58cJjCaA/jUgBgTY/XTus+zd4FEyVmEfcV36zyToO8jkJVrbB4o0xdRijplcA+j
-         oKhA==
-X-Gm-Message-State: APjAAAUibXDBYRvCls+6N7IOTo+4rzViKg8mmzk9203u4mTeq1an8buJ
-        lPEkyIrjuQrpAydjo6ZUJ8gYbn68z1s=
-X-Google-Smtp-Source: APXvYqyTxWk2PfR87aM+Zf9sngWHiza+ZgWzVfh87DRNhlaNjluN4CLxjvGx06ltvhtKGgHjdSfFBA==
-X-Received: by 2002:a05:6512:51c:: with SMTP id o28mr32146341lfb.67.1563778183513;
-        Sun, 21 Jul 2019 23:49:43 -0700 (PDT)
+        bh=LwLF82In7bsHKqLg2IPqa3lCzGDshcxlFU0D0U8su3I=;
+        b=TYo2wCbLpWhNHfsQ2c1LzM0MK+pxfhNlblu4Xo79R4id2nLGXTcpC9hT0gyVlDcBHf
+         hKuoua1X5Y+WGcGgsoDyl1qXsKHZwoMlWgGfRTCi1tIrOFtZJGl2Tr73pt7NBz4eRFgz
+         r9t2lNhXkE2zKnPHdi024Ujy4sACM3xno7+AVOxmYvIUt/1ae4nmv0ck6bfOS6oiMfsp
+         OSN+NgrpDXEL+lwjrZfn3d6j6AK0Dkdi6WzgYF42Hir+CV1caNjiBZa3qweovWMvmjwc
+         XEX2VbXr0mAHtS52hxNHlYZqU8zgIPhBEhCPigmf5xyM8C9OSWiuU1ojKH5c0D0EFqDf
+         pXaw==
+X-Gm-Message-State: APjAAAVQb9pfBLjA1Jitxs87lCobwujGIUQ4c1s1yVufl2XPE+6HDgjJ
+        dZ1382RKCDhgx34uiByGvepqf5BehSY=
+X-Google-Smtp-Source: APXvYqz4QBOLb2MDhgROK1IViRXWkFmKJfweGKLDBBn6uhNw0W9qhbV2btKLzPwcGouwzSOnTQb8Zg==
+X-Received: by 2002:a2e:9bc6:: with SMTP id w6mr36366551ljj.156.1563778429294;
+        Sun, 21 Jul 2019 23:53:49 -0700 (PDT)
 Received: from localhost.localdomain (c-22cd225c.014-348-6c756e10.bbcust.telenor.se. [92.34.205.34])
-        by smtp.gmail.com with ESMTPSA id j23sm5923049lfb.93.2019.07.21.23.49.42
+        by smtp.gmail.com with ESMTPSA id v15sm5903028lfd.53.2019.07.21.23.53.47
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 21 Jul 2019 23:49:42 -0700 (PDT)
+        Sun, 21 Jul 2019 23:53:48 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Robert Schwebel <r.schwebel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH] tty: serial: netx: Delete driver
-Date:   Mon, 22 Jul 2019 08:47:33 +0200
-Message-Id: <20190722064733.4245-1-linus.walleij@linaro.org>
+Subject: [PATCH v2] tty: serial: netx: Delete driver
+Date:   Mon, 22 Jul 2019 08:51:46 +0200
+Message-Id: <20190722065146.4844-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,10 +69,14 @@ Cc: Robert Schwebel <r.schwebel@pengutronix.de>
 Cc: Sascha Hauer <s.hauer@pengutronix.de>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
+ChangeLog v1->v2:
+- Found a two-liner in the UAPI serial file that I forgot.
+---
  drivers/tty/serial/Kconfig       |  19 -
  drivers/tty/serial/Makefile      |   1 -
  drivers/tty/serial/netx-serial.c | 733 -------------------------------
- 3 files changed, 753 deletions(-)
+ include/uapi/linux/serial_core.h |   3 -
+ 4 files changed, 756 deletions(-)
  delete mode 100644 drivers/tty/serial/netx-serial.c
 
 diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
@@ -856,6 +860,20 @@ index b3556863491f..000000000000
 -MODULE_DESCRIPTION("NetX serial port driver");
 -MODULE_LICENSE("GPL");
 -MODULE_ALIAS("platform:" DRIVER_NAME);
+diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
+index 5642c05e0da0..3cc3af1c2ee1 100644
+--- a/include/uapi/linux/serial_core.h
++++ b/include/uapi/linux/serial_core.h
+@@ -150,9 +150,6 @@
+ 
+ #define PORT_PNX8XXX	70
+ 
+-/* Hilscher netx */
+-#define PORT_NETX	71
+-
+ /* SUN4V Hypervisor Console */
+ #define PORT_SUNHV	72
+ 
 -- 
 2.21.0
 
