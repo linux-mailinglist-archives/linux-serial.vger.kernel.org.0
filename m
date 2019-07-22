@@ -2,48 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 456E97097A
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Jul 2019 21:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175837098A
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Jul 2019 21:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731566AbfGVTNW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Jul 2019 15:13:22 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:48629 "EHLO
+        id S1730612AbfGVTQN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Jul 2019 15:16:13 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:45085 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727474AbfGVTNW (ORCPT
+        with ESMTP id S1729110AbfGVTQN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Jul 2019 15:13:22 -0400
+        Mon, 22 Jul 2019 15:16:13 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MEVJq-1he8Eg0SiY-00G40S; Mon, 22 Jul 2019 21:13:08 +0200
+ (mreue107 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1MoOty-1iE1J53yWW-00orvr; Mon, 22 Jul 2019 21:15:56 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     netdev@vger.kernel.org, linux-serial@vger.kernel.org,
         tglx@linutronix.de, gregkh@linuxfoundation.org,
         Sascha Hauer <s.hauer@pengutronix.de>,
+        Michael Trensch <MTrensch@hilscher.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Robert Schwebel <r.schwebel@pengutronix.de>,
         Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
 Subject: [PATCH 1/3] [net-next] net: remove netx ethernet driver
-Date:   Mon, 22 Jul 2019 21:12:31 +0200
-Message-Id: <20190722191304.164929-1-arnd@arndb.de>
+Date:   Mon, 22 Jul 2019 21:15:03 +0200
+Message-Id: <20190722191552.252805-1-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:bdLlHsdXouihsIwFcRuNGfMniOK5pOKRy5xFf/r1GkSk6kg1YUe
- XwjgnNwxvkx8USwI8CJYzLEX5sdIh9yKObSNRhdE5y/UUZ7NH23sSnwJ5KfIT7404Jq5AyT
- QaAlxmmdDELfe8moKGNxuEYMT7KTozRjd/gG6izsfLPq0ONKqR+Fy8Vs2c+Z+2b9kFvY+Q8
- qDyqAxb/m/6J11uZXiWKQ==
+X-Provags-ID: V03:K1:THfSje7TX/hTWLKdoJzi53l+VE4wOzd1ZOCnTQJXOEcjN0qrVf+
+ D3OadE3kBzjZlGGnidF8xtA4BDbpsJeMm63ZTHZK20at2RrlE23uiIDS81DdJ57X6uNhDDX
+ pSZ2Ef7EGuu2QUXROBbKaDywfNyzGu6MW2K1itDzf9x6jGKBgS+CfJ8dhVB+V57mtV88cTN
+ 2hktEmhvJAag/T2XYrUMQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:imHObeTLQXk=:cJejOznM9eJfeEylNK9i9I
- aPXFNnvzijYMDf3FWjH3iDG0sKo8USLFGM+1lXTCoil7KEU8cnCUQX4OeQvMBVxj5nWD969mT
- houylsq8HwJboQLBW2A96jZ2I2cXEC3ra5TwR+NLTn/R89dOE20BtX1o1Pp3vTwwCwu6qRKxf
- KsS4PnJa5/lm7A/kJsGDrlZR9dignKW8d3IXxQ4URiowmZhOAxiQpj03HxmjjmoAFQh2zeDN8
- S9Xekfy0kYVPVeCetMdkHpzsDn4wJu2k290jJ6U9yxIeXNrD9ramgsttn73bPKZA7wjyudAe+
- CCWq5yCFUcUxliO7/O2SXwP1ZPx1CddLHAFh7jAbgm3fjbqJXHz1DvuM9jQm3Fh475RpxtZbz
- rtLlguX90+5eRR/BpDZao0ON1+QjZ9WWPVI3UCjGS2iIxLspZDaBuNc6G/PpqnB7eW67hkl4q
- 0ZLb3zdh8OnbTzA0iYQ77nusN5/ttlZNrq2FtQZioLLQMbdgNtqSJgY0vs/1ORdTev2yPz2C5
- vS8nzVnn7ddjgiuYp5rfi4hY0cO9Sr0WEL+YMoEhQo9iGsBwXfI2bhqCrS1e9hrQIs2V9C6CX
- tqOXj4gtG7F5jJiQY6FSsx/IZgUcMuOJ3HFqKDQVsfSmpwlzuzVO0O38TdDrNJVYHeMa0gBdH
- 3IY86tkFbJC+ZgZY2Kx2JVdD0Ribjjzk51kHD0dIe98AtUcn4RfaUyfpLFG30FTMhoGf2+IIC
- 6ELJHIDuMiGBawCQDQJWsN+zGZwflWfs2VeZdQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1OCaGb3wbO4=:+E/d6lTzN77Ug1Eeaqihh+
+ 7s3fnRR9TKE8QtKnEVGSZArI9onhcWybr1MoHpAdpzJtT1eWqPfmUSmFD/PcGm+vickEm+f9E
+ 2KGzfRyxKq7ugRkdy/zSRK3rEaCsk/EgIvZcQA1TlRwT1dTEWmPiyyCxdDKRkmo6Fd6bsM5/M
+ dxR5OBNh1XF8L9le4JglVIBtFQoQ1om/uXa8p8/Jsc4f9RM5FUwCQ2H6FNTlm0fKJqsW4Ro2o
+ LeJazz2nQiQQyhJgXD8kb6sSUBsEJZn9mTbMGppYhqpDww1gtNIMJv1deOrzD24nczQgJ7nAr
+ PPjKSpTPBo8MC3h4vQY5dmDgwwbqaKpZ9yCinJweYRFGU7odZLPDMbN71VMuo1VZ16TGOEkgz
+ tqVMERtVpIbi0A8/BeOgpbmN6DrUcd9ywp3R4vXPlRjP5TwoiJdOxq7jsOU+j0TT2Na+E+90D
+ WbuaCkd1QHY6lu3qdgYWn8D3V4gUiXff7Ub1c+JM9BwF0YZFXmNxG3JFU59KX13yn7/RdO12W
+ ApLSjRCy7K2J37Ddpzb3tDb08sC2y16tG+1gOwQRjsfVFycrDYE4TC23a7wSCipFTiYuhQ1TJ
+ EBzceGJAKabQLkLJ6kdTTCCmWGBxSFQAq3JAVLLOH5vfrLlnEPDveNLpQdwdrW63ZM7e3YK/a
+ MmSPN8hx8/jxWp5MoJRrSPZNw/cDb4M+jant/U7aBUDTjqbh5xX7di7yX0pXvebpL4aRtp5TM
+ rEBSoYOexf2hcKr34AdR8HVW4flKntKhQ12P9A==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
