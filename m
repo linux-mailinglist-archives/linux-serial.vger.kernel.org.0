@@ -2,84 +2,201 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF917143F
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Jul 2019 10:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D5D714F2
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Jul 2019 11:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728957AbfGWInW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Jul 2019 04:43:22 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:33819 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728680AbfGWInW (ORCPT
+        id S1725848AbfGWJUm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Jul 2019 05:20:42 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33606 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728569AbfGWJUl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Jul 2019 04:43:22 -0400
-Received: by mail-qk1-f196.google.com with SMTP id t8so30537518qkt.1;
-        Tue, 23 Jul 2019 01:43:22 -0700 (PDT)
+        Tue, 23 Jul 2019 05:20:41 -0400
+Received: by mail-lf1-f65.google.com with SMTP id x3so28910306lfc.0
+        for <linux-serial@vger.kernel.org>; Tue, 23 Jul 2019 02:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=GRGRANQcmKxQudgDYzhBenNZAQ5yhd2GJzBykTOiWlc=;
+        b=JCWzpfkH01b78Yh0JrjweiSOPh+bIsEiO6HewQLqBDHtB7noDKKLCgShoD3sACjN9l
+         kwK3EgmdqL2wG+/Ote7IJKbYWb64D+Cqw8x/WB7/raxpoOhVPaTMyni+VIYABj6bPlvq
+         AtAhTSjskNsZD8ahRyiB45q9jew3TZvIvwR2w+GN9DIfDLREgOuiWS1S2OadvLdznD9x
+         a8NAqJRGqZTacnHKxrf6vdBehyzftQ3O66OluiqqmCd9r8dH+zdHu8R7x35V2wJL8uPi
+         iIZQHzZ0/W85VJ+rrHpsI6ri1VzoyRxP2CjDO24UOUJPW1tCAeMkop8EP9hcwqJJoth+
+         y9tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZKnC18HhPKwDPrI9FlnS+GlfmqXdEBTBkjh93zPpTQQ=;
-        b=bxCjL/oGUaWbQilfFX4Ekz99WOwtrca0pCnJpaOUPLIiYzHUXHjgLnfzzzVtMAdlN8
-         WBVr3tiYKUYAC4KZZ8R4xcrRN2MX57JrKbUU5V+yHixZw56IN249qWlyon7ZnuiJKx37
-         XjzhWWkVMCBgQa5YKNuSl9BQLD3pTsziMALmrRfEd3UBhedNk7neFlpCkdtc1J97mHWI
-         meXapJNA9ndjGpNu18YCgu3BwMMYchy/aQ99QY6CAHqY9trT1TD34aiN+uqysziONlTd
-         mhS6onm6vfMYZFgm+vCUHU6fZfJ43f4PLN4so4DUtmUw2QDZNDCkwDBJCuU8Vpy2lVJX
-         UpxQ==
-X-Gm-Message-State: APjAAAXrVMSy1ID7Bcx9sU3rKw+ZeqWMb10aY/jHGbbeUaSx+DtkyMVf
-        dH/0uUf2QuH1+wnYGpL+1YPjYCi8w4Siti/R1TwCHBqAuY8=
-X-Google-Smtp-Source: APXvYqzFoC+pPfbF0W3T1tn86l3nXu8u9mSRtjF5jSwBn0hO82qRogXGOHgeYRfVb3wPdUyOSONuGRUQqYAogzUAWBs=
-X-Received: by 2002:a37:76c5:: with SMTP id r188mr48846330qkc.394.1563871401482;
- Tue, 23 Jul 2019 01:43:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190722191552.252805-1-arnd@arndb.de> <20190722191552.252805-2-arnd@arndb.de>
- <CACRpkdbm5MpcNdm8EGTR=U8MpK2VPzEg=Us0-AxZzOZ=vVJSmQ@mail.gmail.com>
-In-Reply-To: <CACRpkdbm5MpcNdm8EGTR=U8MpK2VPzEg=Us0-AxZzOZ=vVJSmQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 23 Jul 2019 10:43:05 +0200
-Message-ID: <CAK8P3a1=Bnsxg-3RztGEL-c6muQjam-egyrsZfqc7_yjBzcGXA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] serial: remove netx serial driver
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev <netdev@vger.kernel.org>, linux-serial@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=GRGRANQcmKxQudgDYzhBenNZAQ5yhd2GJzBykTOiWlc=;
+        b=UdwnCOh/K2xIISL0EBdyhAaV/JpvDw8PTrYIvGXuHCQU3OVwVSrQu27O0BHXSbg+tt
+         RtYCzOaMzyU6SVJ/oqxwmnEfy07OgOBwRx0+VJ26LWpVYOm64gWM1cMasYTU9yx3zwvt
+         TsAvjiGJhzJ9gKshuo0NrL46X9jrimR8VRqzp/LNUBAKKz7jJzGyKLKoLTqygXQsraqv
+         nR6ippF6rON6S6+PsXHpkZwVt/85mh5bqdR6/ouS8P5IUvhW7tGMxCczV1MhfTkNCuhj
+         Ij2Qq2Ww5xb54SFrd6syQZX8hm6mJqDLldG/2/K1PEJuVguw7eSxNsOVy8EqyKHhPG1F
+         Go9g==
+X-Gm-Message-State: APjAAAWSGUut3PcSCAM5IlafAEJNTzIgm/nOT91VttTY9OCaNQGavGTp
+        3QUfU9K9UXTJxfAosOBc6yA=
+X-Google-Smtp-Source: APXvYqyyF6Gz9sQ6FmT6/DerWqAbxGfTSrr5WAQHrO/0w2uzSbvk8fyzH2NJbiX3x23WwqcZh1tXhA==
+X-Received: by 2002:a19:78e:: with SMTP id 136mr35480608lfh.48.1563873639783;
+        Tue, 23 Jul 2019 02:20:39 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id k4sm7920231ljj.41.2019.07.23.02.20.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 02:20:39 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Michael Trensch <MTrensch@hilscher.com>,
-        Robert Schwebel <r.schwebel@pengutronix.de>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v6 2/3] serial: imx: set_mctrl(): correctly restore autoRTS state
+References: <20190614072801.3187-1-s.hauer@pengutronix.de>
+        <1563823331-5629-1-git-send-email-sorganov@gmail.com>
+        <1563823331-5629-3-git-send-email-sorganov@gmail.com>
+        <20190722202406.hr74mg64sxoovah7@pengutronix.de>
+Date:   Tue, 23 Jul 2019 12:20:38 +0300
+In-Reply-To: <20190722202406.hr74mg64sxoovah7@pengutronix.de> ("Uwe
+        \=\?utf-8\?Q\?Kleine-K\=C3\=B6nig\=22's\?\= message of "Mon, 22 Jul 2019 22:24:06
+ +0200")
+Message-ID: <87h87d1509.fsf@osv.gnss.ru>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 10:26 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Mon, Jul 22, 2019 at 9:16 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> > The netx platform got removed, so this driver is now
-> > useless.
-> >
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> We seem so overlap :)
-> https://marc.info/?l=linux-serial&m=156377843325488&w=2
->
-> Anyways, the patches are identical except here:
->
-> > -/* Hilscher netx */
-> > +/* Hilscher netx (removed) */
-> >  #define PORT_NETX      71
->
-> Is there some reason for keeping the magical number around?
-> When I looked over the file there seemed to be more "holes"
-> in the list.
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
 
-I looked at the same list and though I saw more obsolete entries
-than holes. The last ones that I saw getting removed were
-PORT_MFD in 2017 and PORT_V850E_UART in 2008.
+> On Mon, Jul 22, 2019 at 10:22:10PM +0300, Sergey Organov wrote:
+>> imx_uart_set_mctrl() happened to set UCR2_CTSC bit whenever TIOCM_RTS
+>> was set, no matter if RTS/CTS handshake is enabled or not. Now fixed by
+>> turning handshake on only when CRTSCTS bit for the port is set.
+>>
+>> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>> Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
+>> Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
+>> Signed-off-by: Sergey Organov <sorganov@gmail.com>
+>> ---
+>>  drivers/tty/serial/imx.c | 16 ++++++++++++++--
+>>  1 file changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+>> index 32f36d8..059ba35 100644
+>> --- a/drivers/tty/serial/imx.c
+>> +++ b/drivers/tty/serial/imx.c
+>> @@ -974,10 +974,22 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>>  	if (!(port->rs485.flags & SER_RS485_ENABLED)) {
+>>  		u32 ucr2;
+>>
+>> +		/*
+>> +		 * Turn off autoRTS if RTS is lowered and restore autoRTS
+>> +		 * setting if RTS is raised.
+>
+> "lower" and "raising" are misleading here. I recommend sticking to
+> "active" and "inactive".
 
-It probably doesn't matter as we have precedence for both.
+This is copy-pasted from the 8250 driver. I'd prefer to leave it as is.
 
-       Arnd
+>
+>> +		 */
+>>  		ucr2 = imx_uart_readl(sport, UCR2);
+>>  		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+>> -		if (mctrl & TIOCM_RTS)
+>> -			ucr2 |= UCR2_CTS | UCR2_CTSC;
+>> +		if (mctrl & TIOCM_RTS) {
+>> +			ucr2 |= UCR2_CTS;
+>> +			/*
+>> +			 * UCR2_IRTS is unset if and only if the port is
+>> +			 * configured for CRTSCTS, so we use inverted UCR2_IRTS
+>> +			 * to get the state to restore to.
+>> +			 */
+>> +			if (!(ucr2 & UCR2_IRTS))
+>> +				ucr2 |= UCR2_CTSC;
+>> +		}
+>
+> If you teach imx_uart_rts_auto about IRTS this function could be reused
+> here I think.
+
+Yeah, but imx_uart_rts_auto_if_crtscts_and_rts_is_active() ? I feel
+somewhat uncomfortable about that mixing of different purposes.
+
+Besides, one of the purposes of these patch series was to get rid of
+imx_uart_rts_auto() as its name is confusing in the context of existing
+imx_uart_rts_active() and imx_uart_rts_inactive(), as I already
+explained before.
+
+We can rename the function to avoid confusion, add yet another check to
+it, and call it from 2 places, but it's still questionable if it's an
+improvement, and could be done as a follow-up step anyway. It will look
+something like this then:
+
+ -- >8 --
+
+    serial: imx: factor out common code into new imx_uart_set_auto_rts()
+
+	Modified   drivers/tty/serial/imx.c
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index d9a73c7..c8b847e 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -954,6 +954,20 @@ static unsigned int imx_uart_get_mctrl(struct uart_port *port)
+ 	return ret;
+ }
+
++/*
++ * Compute and set auto RTS in 'ucr2' according to the current state of RTS
++ * signal and CRTSCTS state of port configuration.
++ *
++ * Use inverted UCR2_IRTS to get the state of CRTSCTS, and don't let receiver
++ * control RTS output if RTS is inactive.
++ *
++ */
++static void imx_uart_set_auto_rts(u32 *ucr2)
++{
++	if ((*ucr2 & UCR2_CTS) && !(*ucr2 & UCR2_IRTS))
++		*ucr2 |= UCR2_CTSC;
++}
++
+ /* called with port.lock taken and irqs off */
+ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ {
+@@ -971,13 +985,7 @@ static void imx_uart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ 		ucr2 &= ~(UCR2_CTS | UCR2_CTSC);
+ 		if (mctrl & TIOCM_RTS) {
+ 			ucr2 |= UCR2_CTS;
+-			/*
+-			 * UCR2_IRTS is unset if and only if the port is
+-			 * configured for CRTSCTS, so we use inverted UCR2_IRTS
+-			 * to get the state to restore to.
+-			 */
+-			if (!(ucr2 & UCR2_IRTS))
+-				ucr2 |= UCR2_CTSC;
++			imx_uart_set_auto_rts(&ucr2);
+ 		}
+ 		imx_uart_writel(sport, ucr2, UCR2);
+ 	}
+@@ -1594,12 +1602,7 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 			imx_uart_rts_inactive(sport, &ucr2);
+
+ 	} else if (termios->c_cflag & CRTSCTS) {
+-		/*
+-		 * Only let receiver control RTS output if we were not requested
+-		 * to have RTS inactive (which then should take precedence).
+-		 */
+-		if (ucr2 & UCR2_CTS)
+-			ucr2 |= UCR2_CTSC;
++		imx_uart_set_auto_rts(&ucr2);
+ 	}
+
+ 	if (termios->c_cflag & CRTSCTS)
+
+
+
+-- Sergey
