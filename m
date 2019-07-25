@@ -2,906 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC7274B60
-	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 12:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D15D74C0C
+	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 12:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388090AbfGYKS4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 25 Jul 2019 06:18:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45796 "EHLO mail.kernel.org"
+        id S1727259AbfGYKpZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 25 Jul 2019 06:45:25 -0400
+Received: from svc.spearhead.de ([138.201.174.56]:48586 "EHLO mx.spearhead.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389931AbfGYKS4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 25 Jul 2019 06:18:56 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D3E7A2083B;
-        Thu, 25 Jul 2019 10:18:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564049930;
-        bh=8oWkoIvQdk8Xmi099URjj1pKrenPtqKDX+HIeH8SjkY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rlcu6k3AXpzfzdN/h8AtGX0Rn5WG1YNujWsszL9FvsXduRxG/s1rTc/P52K1eknWu
-         1+xvteKl/25YnBF+ycsJTmVkEWUnMLnTNB2jQRLqoqLqssdsiSKrhgR1tnxLBnhqKk
-         Hip5uAsD5AcPx/bbK1iTfhzHVPXcW5g/XInM21qI=
-Date:   Thu, 25 Jul 2019 12:18:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mike Bogdanov <mbogdanov@shtrih-m.ru>,
-        Nicos Gollan <gtdev@spearhead.de>
-Cc:     linux-serial@vger.kernel.org
+        id S1726513AbfGYKpZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 25 Jul 2019 06:45:25 -0400
+X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Jul 2019 06:45:24 EDT
+Received: from ks-ws-898.localnet (unknown [109.234.108.5])
+        (Authenticated sender: ngollan@spearhead.de)
+        by mx.spearhead.de (Postfix) with ESMTPSA id 6B01A1A0383;
+        Thu, 25 Jul 2019 12:38:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=spearhead.de;
+        s=20180801; t=1564051122;
+        bh=RQ05gSzkt4R7kWoLy4g1LDvDU/PmRYUYINChz0dD/sg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DLYivsPaqrP/d3XTztY58X4yO8mqRBkxdreOQuTkoLFRhwojlRz8PeEsmtpqe9FWl
+         a+UWxgXlraGsCocEsj7olUdU7jAjnk4FSTUk+6jhUCzUvLBY1EwFpzoAEZJJ+vAxl1
+         ZEztt0vA85/yf1anyTTDan8C2RTWYa8WTSGC07n4bEhkTofKoTP7eoDfBf/WOOXKRf
+         FZJdvRNx1O0t1hIR0kYRVZIEo9UTOxOlTkx8PtOMqKW8k9dYSKO+gJB2RpDv3xUw0P
+         ALMVJtT4JOb5LfWoKt8X+wxwgUdG7vI5bbo7lLw9lefDmXYzhmpigxBd7myqb81Fyx
+         Kb6oYtKGyCeEA==
+From:   Nicos Gollan <gtdev@spearhead.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Mike Bogdanov <mbogdanov@shtrih-m.ru>, linux-serial@vger.kernel.org
 Subject: Re: st-lab i-472 serial card problem
-Message-ID: <20190725101847.GB7550@kroah.com>
-References: <001e01d5415a$6c677800$45366800$@shtrih-m.ru>
+Date:   Thu, 25 Jul 2019 12:38:41 +0200
+Message-ID: <3789008.8O4pXQ00YW@ks-ws-898>
+In-Reply-To: <20190725101847.GB7550@kroah.com>
+References: <001e01d5415a$6c677800$45366800$@shtrih-m.ru> <20190725101847.GB7550@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <001e01d5415a$6c677800$45366800$@shtrih-m.ru>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 04:27:47PM +0300, Mike Bogdanov wrote:
-> Hi,
-> I have a problem with 6  serial port card st-lab i-472
-> (http://www.stlab.ru/catalog/kontrolleri/controller-st-lab-pci-e-x1-i-472-i-
-> 470-6-ext-6xcom9m-ret.html).
-> 
-> i have instaled debian 8.
-> >root@c000050:~# uname -a
-> >Linux c000050 4.9.0-0.bpo.9-686-pae #1 SMP Debian 4.9.168-1+deb9u3~deb8u1
-> (2019-06-17) i686 GNU/Linux
-> 
-> 
-> In dmesg i found the follow message with yuor email:
-> [ 2.180347] Serial: 8250/16550 driver, 10 ports, IRQ sharing enabled
-> [ 2.207661] 00:01: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a
-> 16550A
-> [ 2.237213] 0000:01:00.0: ttyS4 at I/O 0xe050 (irq = 16, base_baud = 115200)
-> is a ST16650V2
-> [ 2.266932] 0000:01:00.0: ttyS5 at I/O 0xe040 (irq = 16, base_baud = 115200)
-> is a ST16650V2
-> [ 2.296576] 0000:01:00.1: ttyS6 at I/O 0xe030 (irq = 17, base_baud = 115200)
-> is a ST16650V2
-> [ 2.326296] 0000:01:00.1: ttyS7 at I/O 0xe020 (irq = 17, base_baud = 115200)
-> is a ST16650V2
-> [ 2.334970] serial 0000:01:00.2: NetMos/Mostech serial driver ignoring port
-> on ambiguous config.
-> [ 2.343895] serial 0000:01:00.2: 0000:01:00.2: unknown NetMos/Mostech device
-> Please send the output of lspci -vv, this
-> message (0x9710,0x9900,0xa000,0x1000), the
-> manufacturer and name of serial board or
-> modem board to <linux-serial@vger.kernel.org>.
-> [ 2.371816] serial 0000:01:00.3: NetMos/Mostech serial driver ignoring port
-> on ambiguous config.
-> [ 2.380734] serial 0000:01:00.3: 0000:01:00.3: unknown NetMos/Mostech device
-> Please send the output of lspci -vv, this
-> message (0x9710,0x9900,0xa000,0x1000), the
-> manufacturer and name of serial board or
-> modem board to <linux-serial@vger.kernel.org>.
-> 
-> 
+Hello,
 
-Odd, this "should" work.  Nicos added support for this back in the 3.1
-kernel, but odds are something has changed in the hardware since then.
+On fimmtudagur, 25. j=C3=BAl=C3=AD 2019 12:18:47 CEST Greg KH wrote:
+> On Tue, Jul 23, 2019 at 04:27:47PM +0300, Mike Bogdanov wrote:
+>
+> > In dmesg i found the follow message with yuor email:
+> > [ 2.180347] Serial: 8250/16550 driver, 10 ports, IRQ sharing enabled
+> > [ 2.207661] 00:01: ttyS0 at I/O 0x3f8 (irq =3D 4, base_baud =3D 115200)=
+ is a
+> > 16550A
+> > [ 2.237213] 0000:01:00.0: ttyS4 at I/O 0xe050 (irq =3D 16, base_baud =3D
+> > 115200) is a ST16650V2
+> > [ 2.266932] 0000:01:00.0: ttyS5 at I/O 0xe040 (irq =3D 16, base_baud =3D
+> > 115200) is a ST16650V2
+> > [ 2.296576] 0000:01:00.1: ttyS6 at I/O 0xe030 (irq =3D 17, base_baud =3D
+> > 115200) is a ST16650V2
+> > [ 2.326296] 0000:01:00.1: ttyS7 at I/O 0xe020 (irq =3D 17, base_baud =3D
+> > 115200) is a ST16650V2
+> > [ 2.334970] serial 0000:01:00.2: NetMos/Mostech serial driver ignoring
+> > port
+> > on ambiguous config.
+> > [ 2.343895] serial 0000:01:00.2: 0000:01:00.2: unknown NetMos/Mostech
+> > device Please send the output of lspci -vv, this
+> > message (0x9710,0x9900,0xa000,0x1000), the
+> > manufacturer and name of serial board or
+> > modem board to <linux-serial@vger.kernel.org>.
 
-Does the device work properly even with these messages?
+This appears to be the case referenced by the "something" part of
 
-Nicos, any idea?
+/* two possibilities: 0x30ps encodes number of parallel and
+ * serial ports, or 0x1000 indicates *something*. This is not
+ * immediately obvious, since the 2s1p+4s configuration seems
+ * to offer all functionality on functions 0..2, while still
+ * advertising the same function 3 as the 4s+2s1p config.
+ */
 
-lspci-v output below for reference.
+in 8250_pci.c=E2=80=A6
 
-thanks,
+You have two serial ports each on the 0xa000 0x3002 subsystems seen in lspc=
+i=20
+output, and then presumably the remaining two on the mystery 0xa000 0x1000.
 
-greg k-h
+It's been 8 years since I scraped that information from documentation and=20
+experiments, and all I had at hand was a card with 2 serial ports and a=20
+parallel port (that I couldn't even test and that proved problematic since=
+=20
+then), so I'm afraid I cannot be of more help here.
 
-----------------------------------------------------------
+I could hunt around and see if I still have the reference material somewher=
+e=20
+if that'd be any help.
+
+Regards,
+Nicos=20
 
 
-> 
-> Can you give advice how can i start this board?
-> 
-> My lspci is below 
-> -----------------------------------------------
-> 00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen
-> Core Processor Host Bridge/DRAM Registers (rev 07)
-> 	Subsystem: Gigabyte Technology Co., Ltd Device 5000
-> 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort+ >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Capabilities: [e0] Vendor Specific Information: Len=10 <?>
-> 	Kernel driver in use: skl_uncore
-> 
-> 00:01.0 PCI bridge: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen
-> Core Processor PCIe Controller (x16) (rev 07) (prog-if 00 [Normal decode])
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Bus: primary=00, secondary=01, subordinate=01, sec-latency=0
-> 	I/O behind bridge: 0000e000-0000efff
-> 	Memory behind bridge: ef100000-ef1fffff
-> 	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort+ <SERR- <PERR-
-> 	BridgeCtl: Parity- SERR- NoISA- VGA- MAbort- >Reset- FastB2B-
-> 		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-> 	Capabilities: [88] Subsystem: Gigabyte Technology Co., Ltd Device
-> 5000
-> 	Capabilities: [80] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
-> PME(D0+,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [90] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> 		Address: fee0300c  Data: 4161
-> 	Capabilities: [a0] Express (v2) Root Port (Slot+), MSI 00
-> 		DevCap:	MaxPayload 256 bytes, PhantFunc 0
-> 			ExtTag- RBE+
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
-> 			MaxPayload 256 bytes, MaxReadReq 128 bytes
-> 		DevSta:	CorrErr- UncorrErr+ FatalErr- UnsuppReq+ AuxPwr-
-> TransPend-
-> 		LnkCap:	Port #2, Speed 8GT/s, Width x16, ASPM L0s L1, Exit
-> Latency L0s <1us, L1 <8us
-> 			ClockPM- Surprise- LLActRep- BwNot+
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk+
-> DLActive- BWMgmt+ ABWMgmt-
-> 		SltCap:	AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug-
-> Surprise-
-> 			Slot #1, PowerLimit 75.000W; Interlock- NoCompl+
-> 		SltCtl:	Enable: AttnBtn- PwrFlt- MRL- PresDet- CmdCplt-
-> HPIrq- LinkChg-
-> 			Control: AttnInd Unknown, PwrInd Unknown, Power-
-> Interlock-
-> 		SltSta:	Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet+
-> Interlock-
-> 			Changed: MRL- PresDet+ LinkState-
-> 		RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna-
-> CRSVisible-
-> 		RootCap: CRSVisible-
-> 		RootSta: PME ReqID 0000, PMEStatus- PMEPending-
-> 		DevCap2: Completion Timeout: Not Supported, TimeoutDis-,
-> LTR+, OBFF Via WAKE# ARIFwd-
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-,
-> LTR+, OBFF Via WAKE# ARIFwd-
-> 		LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance-
-> SpeedDis-
-> 			 Transmit Margin: Normal Operating Range,
-> EnterModifiedCompliance- ComplianceSOS-
-> 			 Compliance De-emphasis: -6dB
-> 		LnkSta2: Current De-emphasis Level: -6dB,
-> EqualizationComplete-, EqualizationPhase1-
-> 			 EqualizationPhase2-, EqualizationPhase3-,
-> LinkEqualizationRequest-
-> 	Capabilities: [100 v1] Virtual Channel
-> 		Caps:	LPEVC=0 RefClk=100ns PATEntryBits=1
-> 		Arb:	Fixed- WRR32- WRR64- WRR128-
-> 		Ctrl:	ArbSelect=Fixed
-> 		Status:	InProgress-
-> 		VC0:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
-> 			Arb:	Fixed+ WRR32- WRR64- WRR128- TWRR128-
-> WRR256-
-> 			Ctrl:	Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
-> 			Status:	NegoPending- InProgress-
-> 	Capabilities: [140 v1] Root Complex Link
-> 		Desc:	PortNumber=02 ComponentID=01 EltType=Config
-> 		Link0:	Desc:	TargetPort=00 TargetComponent=01 AssocRCRB-
-> LinkType=MemMapped LinkValid+
-> 			Addr:	00000000fed19000
-> 	Capabilities: [d94 v1] #19
-> 	Kernel driver in use: pcieport
-> 
-> 00:02.0 VGA compatible controller: Intel Corporation HD Graphics 510 (rev
-> 06) (prog-if 00 [VGA controller])
-> 	Subsystem: Gigabyte Technology Co., Ltd Device d000
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Interrupt: pin A routed to IRQ 125
-> 	Region 0: Memory at ee000000 (64-bit, non-prefetchable) [size=16M]
-> 	Region 2: Memory at d0000000 (64-bit, prefetchable) [size=256M]
-> 	Region 4: I/O ports at f000 [size=64]
-> 	[virtual] Expansion ROM at 000c0000 [disabled] [size=128K]
-> 	Capabilities: [40] Vendor Specific Information: Len=0c <?>
-> 	Capabilities: [70] Express (v2) Root Complex Integrated Endpoint,
-> MSI 00
-> 		DevCap:	MaxPayload 128 bytes, PhantFunc 0
-> 			ExtTag- RBE+
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
-> 			MaxPayload 128 bytes, MaxReadReq 128 bytes
-> 		DevSta:	CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr-
-> TransPend-
-> 		DevCap2: Completion Timeout: Not Supported, TimeoutDis-,
-> LTR-, OBFF Not Supported
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-,
-> LTR-, OBFF Disabled
-> 	Capabilities: [ac] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> 		Address: fee0300c  Data: 41e1
-> 	Capabilities: [d0] Power Management version 2
-> 		Flags: PMEClk- DSI+ D1- D2- AuxCurrent=0mA
-> PME(D0-,D1-,D2-,D3hot-,D3cold-)
-> 		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [100 v1] #1b
-> 	Capabilities: [200 v1] Address Translation Service (ATS)
-> 		ATSCap:	Invalidate Queue Depth: 00
-> 		ATSCtl:	Enable-, Smallest Translation Unit: 00
-> 	Capabilities: [300 v1] #13
-> 	Kernel driver in use: i915
-> 
-> 00:14.0 USB controller: Intel Corporation 100 Series/C230 Series Chipset
-> Family USB 3.0 xHCI Controller (rev 31) (prog-if 30 [XHCI])
-> 	Subsystem: Gigabyte Technology Co., Ltd Device 5007
-> 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Interrupt: pin A routed to IRQ 122
-> 	Region 0: Memory at ef210000 (64-bit, non-prefetchable) [size=64K]
-> 	Capabilities: [70] Power Management version 2
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [80] MSI: Enable+ Count=1/8 Maskable- 64bit+
-> 		Address: 00000000fee0300c  Data: 41b1
-> 	Kernel driver in use: xhci_hcd
-> 
-> 00:16.0 Communication controller: Intel Corporation 100 Series/C230 Series
-> Chipset Family MEI Controller #1 (rev 31)
-> 	Subsystem: Gigabyte Technology Co., Ltd Device 1c3a
-> 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Interrupt: pin A routed to IRQ 124
-> 	Region 0: Memory at ef22d000 (64-bit, non-prefetchable) [size=4K]
-> 	Capabilities: [50] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold-)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [8c] MSI: Enable+ Count=1/1 Maskable- 64bit+
-> 		Address: 00000000fee0300c  Data: 41d1
-> 	Kernel driver in use: mei_me
-> 
-> 00:17.0 SATA controller: Intel Corporation
-> Q170/Q150/B150/H170/H110/Z170/CM236 Chipset SATA Controller [AHCI Mode] (rev
-> 31) (prog-if 01 [AHCI 1.0])
-> 	Subsystem: Gigabyte Technology Co., Ltd Device b005
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz+ UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Interrupt: pin A routed to IRQ 123
-> 	Region 0: Memory at ef228000 (32-bit, non-prefetchable) [size=8K]
-> 	Region 1: Memory at ef22c000 (32-bit, non-prefetchable) [size=256]
-> 	Region 2: I/O ports at f090 [size=8]
-> 	Region 3: I/O ports at f080 [size=4]
-> 	Region 4: I/O ports at f060 [size=32]
-> 	Region 5: Memory at ef22b000 (32-bit, non-prefetchable) [size=2K]
-> 	Capabilities: [80] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> 		Address: fee0100c  Data: 41c1
-> 	Capabilities: [70] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold-)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [a8] SATA HBA v1.0 BAR4 Offset=00000004
-> 	Kernel driver in use: ahci
-> 
-> 00:1c.0 PCI bridge: Intel Corporation 100 Series/C230 Series Chipset Family
-> PCI Express Root Port #5 (rev f1) (prog-if 00 [Normal decode])
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Bus: primary=00, secondary=02, subordinate=02, sec-latency=0
-> 	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort+ <SERR- <PERR-
-> 	BridgeCtl: Parity- SERR- NoISA- VGA- MAbort- >Reset- FastB2B-
-> 		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-> 	Capabilities: [40] Express (v2) Root Port (Slot+), MSI 00
-> 		DevCap:	MaxPayload 256 bytes, PhantFunc 0
-> 			ExtTag- RBE+
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
-> 			MaxPayload 128 bytes, MaxReadReq 128 bytes
-> 		DevSta:	CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+
-> TransPend-
-> 		LnkCap:	Port #5, Speed 5GT/s, Width x4, ASPM not supported,
-> Exit Latency L0s unlimited, L1 <16us
-> 			ClockPM- Surprise- LLActRep+ BwNot+
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x0, TrErr- Train- SlotClk+
-> DLActive- BWMgmt- ABWMgmt-
-> 		SltCap:	AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug-
-> Surprise-
-> 			Slot #8, PowerLimit 25.000W; Interlock- NoCompl+
-> 		SltCtl:	Enable: AttnBtn- PwrFlt- MRL- PresDet- CmdCplt-
-> HPIrq- LinkChg-
-> 			Control: AttnInd Unknown, PwrInd Unknown, Power-
-> Interlock-
-> 		SltSta:	Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet-
-> Interlock-
-> 			Changed: MRL- PresDet- LinkState-
-> 		RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna-
-> CRSVisible-
-> 		RootCap: CRSVisible-
-> 		RootSta: PME ReqID 0000, PMEStatus- PMEPending-
-> 		DevCap2: Completion Timeout: Range ABC, TimeoutDis+, LTR+,
-> OBFF Not Supported ARIFwd+
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-,
-> LTR+, OBFF Disabled ARIFwd-
-> 		LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance-
-> SpeedDis-
-> 			 Transmit Margin: Normal Operating Range,
-> EnterModifiedCompliance- ComplianceSOS-
-> 			 Compliance De-emphasis: -6dB
-> 		LnkSta2: Current De-emphasis Level: -3.5dB,
-> EqualizationComplete-, EqualizationPhase1-
-> 			 EqualizationPhase2-, EqualizationPhase3-,
-> LinkEqualizationRequest-
-> 	Capabilities: [80] MSI: Enable- Count=1/1 Maskable- 64bit-
-> 		Address: 00000000  Data: 0000
-> 	Capabilities: [90] Subsystem: Gigabyte Technology Co., Ltd Device
-> 5001
-> 	Capabilities: [a0] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
-> PME(D0+,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D3 NoSoftRst- PME-Enable+ DSel=0 DScale=0 PME-
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt+
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr-
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 	Capabilities: [140 v1] Access Control Services
-> 		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+
-> UpstreamFwd- EgressCtrl- DirectTrans-
-> 		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir-
-> UpstreamFwd- EgressCtrl- DirectTrans-
-> 	Kernel driver in use: pcieport
-> 
-> 00:1d.0 PCI bridge: Intel Corporation 100 Series/C230 Series Chipset Family
-> PCI Express Root Port #9 (rev f1) (prog-if 00 [Normal decode])
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Bus: primary=00, secondary=03, subordinate=03, sec-latency=0
-> 	I/O behind bridge: 0000d000-0000dfff
-> 	Memory behind bridge: ef000000-ef0fffff
-> 	Prefetchable memory behind bridge: 00000000e0000000-00000000e00fffff
-> 	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort+ <SERR- <PERR-
-> 	BridgeCtl: Parity- SERR- NoISA- VGA- MAbort- >Reset- FastB2B-
-> 		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-> 	Capabilities: [40] Express (v2) Root Port (Slot+), MSI 00
-> 		DevCap:	MaxPayload 128 bytes, PhantFunc 0
-> 			ExtTag- RBE+
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
-> 			MaxPayload 128 bytes, MaxReadReq 128 bytes
-> 		DevSta:	CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+
-> TransPend-
-> 		LnkCap:	Port #9, Speed 5GT/s, Width x1, ASPM not supported,
-> Exit Latency L0s <1us, L1 <16us
-> 			ClockPM- Surprise- LLActRep+ BwNot+
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk+
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk+
-> DLActive+ BWMgmt+ ABWMgmt-
-> 		SltCap:	AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug-
-> Surprise-
-> 			Slot #12, PowerLimit 10.000W; Interlock- NoCompl+
-> 		SltCtl:	Enable: AttnBtn- PwrFlt- MRL- PresDet- CmdCplt-
-> HPIrq- LinkChg-
-> 			Control: AttnInd Unknown, PwrInd Unknown, Power-
-> Interlock-
-> 		SltSta:	Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet+
-> Interlock-
-> 			Changed: MRL- PresDet- LinkState+
-> 		RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna-
-> CRSVisible-
-> 		RootCap: CRSVisible-
-> 		RootSta: PME ReqID 0000, PMEStatus- PMEPending-
-> 		DevCap2: Completion Timeout: Range ABC, TimeoutDis+, LTR+,
-> OBFF Not Supported ARIFwd+
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-,
-> LTR+, OBFF Disabled ARIFwd-
-> 		LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance-
-> SpeedDis-
-> 			 Transmit Margin: Normal Operating Range,
-> EnterModifiedCompliance- ComplianceSOS-
-> 			 Compliance De-emphasis: -6dB
-> 		LnkSta2: Current De-emphasis Level: -3.5dB,
-> EqualizationComplete-, EqualizationPhase1-
-> 			 EqualizationPhase2-, EqualizationPhase3-,
-> LinkEqualizationRequest-
-> 	Capabilities: [80] MSI: Enable- Count=1/1 Maskable- 64bit-
-> 		Address: 00000000  Data: 0000
-> 	Capabilities: [90] Subsystem: Gigabyte Technology Co., Ltd Device
-> 5001
-> 	Capabilities: [a0] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
-> PME(D0+,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt+
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr-
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 	Capabilities: [140 v1] Access Control Services
-> 		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+
-> UpstreamFwd- EgressCtrl- DirectTrans-
-> 		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir-
-> UpstreamFwd- EgressCtrl- DirectTrans-
-> 	Kernel driver in use: pcieport
-> 
-> 00:1d.1 PCI bridge: Intel Corporation 100 Series/C230 Series Chipset Family
-> PCI Express Root Port #10 (rev f1) (prog-if 00 [Normal decode])
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Bus: primary=00, secondary=04, subordinate=04, sec-latency=0
-> 	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort+ <SERR- <PERR-
-> 	BridgeCtl: Parity- SERR- NoISA- VGA- MAbort- >Reset- FastB2B-
-> 		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-> 	Capabilities: [40] Express (v2) Root Port (Slot+), MSI 00
-> 		DevCap:	MaxPayload 256 bytes, PhantFunc 0
-> 			ExtTag- RBE+
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
-> 			MaxPayload 128 bytes, MaxReadReq 128 bytes
-> 		DevSta:	CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+
-> TransPend-
-> 		LnkCap:	Port #10, Speed 5GT/s, Width x1, ASPM not supported,
-> Exit Latency L0s unlimited, L1 <16us
-> 			ClockPM- Surprise- LLActRep+ BwNot+
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x0, TrErr- Train- SlotClk+
-> DLActive- BWMgmt- ABWMgmt-
-> 		SltCap:	AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug-
-> Surprise-
-> 			Slot #13, PowerLimit 10.000W; Interlock- NoCompl+
-> 		SltCtl:	Enable: AttnBtn- PwrFlt- MRL- PresDet- CmdCplt-
-> HPIrq- LinkChg-
-> 			Control: AttnInd Unknown, PwrInd Unknown, Power-
-> Interlock-
-> 		SltSta:	Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet-
-> Interlock-
-> 			Changed: MRL- PresDet- LinkState-
-> 		RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna-
-> CRSVisible-
-> 		RootCap: CRSVisible-
-> 		RootSta: PME ReqID 0000, PMEStatus- PMEPending-
-> 		DevCap2: Completion Timeout: Range ABC, TimeoutDis+, LTR+,
-> OBFF Not Supported ARIFwd+
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-,
-> LTR+, OBFF Disabled ARIFwd-
-> 		LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance-
-> SpeedDis-
-> 			 Transmit Margin: Normal Operating Range,
-> EnterModifiedCompliance- ComplianceSOS-
-> 			 Compliance De-emphasis: -6dB
-> 		LnkSta2: Current De-emphasis Level: -3.5dB,
-> EqualizationComplete-, EqualizationPhase1-
-> 			 EqualizationPhase2-, EqualizationPhase3-,
-> LinkEqualizationRequest-
-> 	Capabilities: [80] MSI: Enable- Count=1/1 Maskable- 64bit-
-> 		Address: 00000000  Data: 0000
-> 	Capabilities: [90] Subsystem: Gigabyte Technology Co., Ltd Device
-> 5001
-> 	Capabilities: [a0] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
-> PME(D0+,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D3 NoSoftRst- PME-Enable+ DSel=0 DScale=0 PME-
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt+
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr-
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 	Capabilities: [140 v1] Access Control Services
-> 		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+
-> UpstreamFwd- EgressCtrl- DirectTrans-
-> 		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir-
-> UpstreamFwd- EgressCtrl- DirectTrans-
-> 	Kernel driver in use: pcieport
-> 
-> 00:1f.0 ISA bridge: Intel Corporation H110 Chipset LPC/eSPI Controller (rev
-> 31)
-> 	Subsystem: Gigabyte Technology Co., Ltd Device 5001
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=medium >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 
-> 00:1f.2 Memory controller: Intel Corporation 100 Series/C230 Series Chipset
-> Family Power Management Controller (rev 31)
-> 	Subsystem: Gigabyte Technology Co., Ltd Device 5001
-> 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0
-> 	Region 0: Memory at ef224000 (32-bit, non-prefetchable) [size=16K]
-> 
-> 00:1f.3 Audio device: Intel Corporation 100 Series/C230 Series Chipset
-> Family HD Audio Controller (rev 31)
-> 	Subsystem: Gigabyte Technology Co., Ltd Device a182
-> 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 32, Cache Line Size: 64 bytes
-> 	Interrupt: pin A routed to IRQ 126
-> 	Region 0: Memory at ef220000 (64-bit, non-prefetchable) [size=16K]
-> 	Region 4: Memory at ef200000 (64-bit, non-prefetchable) [size=64K]
-> 	Capabilities: [50] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=55mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [60] MSI: Enable+ Count=1/1 Maskable- 64bit+
-> 		Address: 00000000fee0300c  Data: 4122
-> 	Kernel driver in use: snd_hda_intel
-> 
-> 00:1f.4 SMBus: Intel Corporation 100 Series/C230 Series Chipset Family SMBus
-> (rev 31)
-> 	Subsystem: Gigabyte Technology Co., Ltd Device 5001
-> 	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Interrupt: pin A routed to IRQ 16
-> 	Region 0: Memory at ef22a000 (64-bit, non-prefetchable) [size=256]
-> 	Region 4: I/O ports at f040 [size=32]
-> 	Kernel driver in use: i801_smbus
-> 
-> 01:00.0 Communication controller: MosChip Semiconductor Technology Ltd.
-> MCS9900 Multi-I/O Controller
-> 	Subsystem: Device a000:3002
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Interrupt: pin A routed to IRQ 16
-> 	Region 0: I/O ports at e050 [size=8]
-> 	Region 1: Memory at ef109000 (32-bit, non-prefetchable) [size=4K]
-> 	Region 3: I/O ports at e040 [size=8]
-> 	Region 4: Memory at ef108000 (32-bit, non-prefetchable) [size=4K]
-> 	Region 5: Memory at ef107000 (32-bit, non-prefetchable) [size=4K]
-> 	Capabilities: [50] MSI: Enable- Count=1/32 Maskable- 64bit+
-> 		Address: 0000000000000000  Data: 0000
-> 	Capabilities: [78] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [80] Express (v1) Legacy Endpoint, MSI 00
-> 		DevCap:	MaxPayload 512 bytes, PhantFunc 0, Latency L0s <1us,
-> L1 <2us
-> 			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
-> 			MaxPayload 256 bytes, MaxReadReq 512 bytes
-> 		DevSta:	CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr-
-> TransPend-
-> 		LnkCap:	Port #1, Speed 2.5GT/s, Width x1, ASPM L0s L1, Exit
-> Latency L0s <64ns, L1 <1us
-> 			ClockPM+ Surprise- LLActRep- BwNot-
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk-
-> DLActive- BWMgmt- ABWMgmt-
-> 	Capabilities: [100 v1] Virtual Channel
-> 		Caps:	LPEVC=0 RefClk=100ns PATEntryBits=1
-> 		Arb:	Fixed- WRR32- WRR64- WRR128-
-> 		Ctrl:	ArbSelect=Fixed
-> 		Status:	InProgress-
-> 		VC0:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
-> 			Arb:	Fixed- WRR32- WRR64- WRR128- TWRR128-
-> WRR256-
-> 			Ctrl:	Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
-> 			Status:	NegoPending- InProgress-
-> 		VC1:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
-> 			Arb:	Fixed- WRR32- WRR64- WRR128- TWRR128-
-> WRR256-
-> 			Ctrl:	Enable- ID=0 ArbSelect=Fixed TC/VC=00
-> 			Status:	NegoPending- InProgress-
-> 	Capabilities: [800 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 	Kernel driver in use: serial
-> 
-> 01:00.1 Communication controller: MosChip Semiconductor Technology Ltd.
-> MCS9900 Multi-I/O Controller
-> 	Subsystem: Device a000:3002
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Interrupt: pin B routed to IRQ 17
-> 	Region 0: I/O ports at e030 [size=8]
-> 	Region 1: Memory at ef106000 (32-bit, non-prefetchable) [size=4K]
-> 	Region 3: I/O ports at e020 [size=8]
-> 	Region 4: Memory at ef105000 (32-bit, non-prefetchable) [size=4K]
-> 	Region 5: Memory at ef104000 (32-bit, non-prefetchable) [size=4K]
-> 	Capabilities: [50] MSI: Enable- Count=1/32 Maskable- 64bit+
-> 		Address: 0000000000000000  Data: 0000
-> 	Capabilities: [78] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [80] Express (v1) Legacy Endpoint, MSI 00
-> 		DevCap:	MaxPayload 512 bytes, PhantFunc 0, Latency L0s <1us,
-> L1 <2us
-> 			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
-> 			MaxPayload 256 bytes, MaxReadReq 512 bytes
-> 		DevSta:	CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr-
-> TransPend-
-> 		LnkCap:	Port #1, Speed 2.5GT/s, Width x1, ASPM L0s L1, Exit
-> Latency L0s <64ns, L1 <1us
-> 			ClockPM+ Surprise- LLActRep- BwNot-
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk-
-> DLActive- BWMgmt- ABWMgmt-
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 	Kernel driver in use: serial
-> 
-> 01:00.2 Communication controller: MosChip Semiconductor Technology Ltd.
-> MCS9900 Multi-I/O Controller
-> 	Subsystem: Device a000:1000
-> 	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Interrupt: pin C routed to IRQ 18
-> 	Region 0: I/O ports at e010 [size=8]
-> 	Region 1: Memory at ef103000 (32-bit, non-prefetchable) [size=4K]
-> 	Region 5: Memory at ef102000 (32-bit, non-prefetchable) [size=4K]
-> 	Capabilities: [50] MSI: Enable- Count=1/32 Maskable- 64bit+
-> 		Address: 0000000000000000  Data: 0000
-> 	Capabilities: [78] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [80] Express (v1) Legacy Endpoint, MSI 00
-> 		DevCap:	MaxPayload 512 bytes, PhantFunc 0, Latency L0s <1us,
-> L1 <2us
-> 			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
-> 			MaxPayload 256 bytes, MaxReadReq 512 bytes
-> 		DevSta:	CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr-
-> TransPend-
-> 		LnkCap:	Port #1, Speed 2.5GT/s, Width x1, ASPM L0s L1, Exit
-> Latency L0s <64ns, L1 <1us
-> 			ClockPM+ Surprise- LLActRep- BwNot-
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk-
-> DLActive- BWMgmt- ABWMgmt-
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 
-> 01:00.3 Communication controller: MosChip Semiconductor Technology Ltd.
-> MCS9900 Multi-I/O Controller
-> 	Subsystem: Device a000:1000
-> 	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx-
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Interrupt: pin D routed to IRQ 19
-> 	Region 0: I/O ports at e000 [size=8]
-> 	Region 1: Memory at ef101000 (32-bit, non-prefetchable) [size=4K]
-> 	Region 5: Memory at ef100000 (32-bit, non-prefetchable) [size=4K]
-> 	Capabilities: [50] MSI: Enable- Count=1/32 Maskable- 64bit+
-> 		Address: 0000000000000000  Data: 0000
-> 	Capabilities: [78] Power Management version 3
-> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA
-> PME(D0-,D1-,D2-,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [80] Express (v1) Legacy Endpoint, MSI 00
-> 		DevCap:	MaxPayload 512 bytes, PhantFunc 0, Latency L0s <1us,
-> L1 <2us
-> 			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
-> 			MaxPayload 256 bytes, MaxReadReq 512 bytes
-> 		DevSta:	CorrErr+ UncorrErr- FatalErr- UnsuppReq+ AuxPwr-
-> TransPend-
-> 		LnkCap:	Port #1, Speed 2.5GT/s, Width x1, ASPM L0s L1, Exit
-> Latency L0s <64ns, L1 <1us
-> 			ClockPM+ Surprise- LLActRep- BwNot-
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk-
-> 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk-
-> DLActive- BWMgmt- ABWMgmt-
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap- CGenEn- ChkCap-
-> ChkEn-
-> 
-> 03:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd.
-> RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 0c)
-> 	Subsystem: Gigabyte Technology Co., Ltd Onboard Ethernet
-> 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
-> Stepping- SERR- FastB2B- DisINTx+
-> 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
-> <TAbort- <MAbort- >SERR- <PERR- INTx-
-> 	Latency: 0, Cache Line Size: 64 bytes
-> 	Interrupt: pin A routed to IRQ 121
-> 	Region 0: I/O ports at d000 [size=256]
-> 	Region 2: Memory at ef000000 (64-bit, non-prefetchable) [size=4K]
-> 	Region 4: Memory at e0000000 (64-bit, prefetchable) [size=16K]
-> 	Capabilities: [40] Power Management version 3
-> 		Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=375mA
-> PME(D0+,D1+,D2+,D3hot+,D3cold+)
-> 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-> 	Capabilities: [50] MSI: Enable+ Count=1/1 Maskable- 64bit+
-> 		Address: 00000000fee0200c  Data: 41a1
-> 	Capabilities: [70] Express (v2) Endpoint, MSI 01
-> 		DevCap:	MaxPayload 128 bytes, PhantFunc 0, Latency L0s
-> <512ns, L1 <64us
-> 			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset-
-> 		DevCtl:	Report errors: Correctable- Non-Fatal- Fatal-
-> Unsupported-
-> 			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop-
-> 			MaxPayload 128 bytes, MaxReadReq 4096 bytes
-> 		DevSta:	CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+
-> TransPend-
-> 		LnkCap:	Port #0, Speed 2.5GT/s, Width x1, ASPM L0s L1, Exit
-> Latency L0s unlimited, L1 <64us
-> 			ClockPM+ Surprise- LLActRep- BwNot-
-> 		LnkCtl:	ASPM Disabled; RCB 64 bytes Disabled- CommClk+
-> 			ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
-> 		LnkSta:	Speed 2.5GT/s, Width x1, TrErr- Train- SlotClk+
-> DLActive- BWMgmt- ABWMgmt-
-> 		DevCap2: Completion Timeout: Range ABCD, TimeoutDis+, LTR+,
-> OBFF Via message/WAKE#
-> 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-,
-> LTR+, OBFF Disabled
-> 		LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance-
-> SpeedDis-
-> 			 Transmit Margin: Normal Operating Range,
-> EnterModifiedCompliance- ComplianceSOS-
-> 			 Compliance De-emphasis: -6dB
-> 		LnkSta2: Current De-emphasis Level: -6dB,
-> EqualizationComplete-, EqualizationPhase1-
-> 			 EqualizationPhase2-, EqualizationPhase3-,
-> LinkEqualizationRequest-
-> 	Capabilities: [b0] MSI-X: Enable- Count=4 Masked-
-> 		Vector table: BAR=4 offset=00000000
-> 		PBA: BAR=4 offset=00000800
-> 	Capabilities: [d0] Vital Product Data
-> 		Not readable
-> 	Capabilities: [100 v1] Advanced Error Reporting
-> 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-> 		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-> RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-> 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr-
-> 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-> NonFatalErr+
-> 		AERCap:	First Error Pointer: 00, GenCap+ CGenEn- ChkCap+
-> ChkEn-
-> 	Capabilities: [140 v1] Virtual Channel
-> 		Caps:	LPEVC=0 RefClk=100ns PATEntryBits=1
-> 		Arb:	Fixed- WRR32- WRR64- WRR128-
-> 		Ctrl:	ArbSelect=Fixed
-> 		Status:	InProgress-
-> 		VC0:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
-> 			Arb:	Fixed- WRR32- WRR64- WRR128- TWRR128-
-> WRR256-
-> 			Ctrl:	Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
-> 			Status:	NegoPending- InProgress-
-> 	Capabilities: [160 v1] Device Serial Number 01-00-00-00-68-4c-e0-00
-> 	Capabilities: [170 v1] Latency Tolerance Reporting
-> 		Max snoop latency: 3145728ns
-> 		Max no snoop latency: 3145728ns
-> 	Kernel driver in use: r8169
-> -----------------------------------------------
-> 
-> 
-> Best Regards,
-> Bogdanov Mike
-> 
-> 
-> 
