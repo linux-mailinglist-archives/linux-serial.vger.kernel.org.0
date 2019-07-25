@@ -2,196 +2,162 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C2B74DCD
-	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 14:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498C874E44
+	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 14:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbfGYMKb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 25 Jul 2019 08:10:31 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44593 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbfGYMKb (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 25 Jul 2019 08:10:31 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hqcZp-00047K-JK; Thu, 25 Jul 2019 14:10:29 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hqcZn-0006oY-6i; Thu, 25 Jul 2019 14:10:27 +0200
-Date:   Thu, 25 Jul 2019 14:10:27 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>
-Subject: Re: [PATCH 1/2 v9] serial: mctrl_gpio: Check if GPIO property
- exisits before requesting it
-Message-ID: <20190725121027.xc52wshky74wgebt@pengutronix.de>
-References: <20190620062420.11650-1-sr@denx.de>
+        id S2388071AbfGYMka (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 25 Jul 2019 08:40:30 -0400
+Received: from mail.shtrih-m.ru ([46.28.88.60]:41428 "EHLO mail.shtrih-m.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387879AbfGYMka (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 25 Jul 2019 08:40:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=shtrih-m.ru
+        ; s=mail; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+        Date:Subject:In-Reply-To:References:Cc:To:From:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=BUOe9B7bZPThQYsOUc/81D6uhr1Y9Vm/MlvLicGnotw=; b=RloeNO1WQNmFCE079OwQKQlf96
+        9BpdB2eWjQJ0makq2CA7YFSobdVX79OEllGoOqLdhAwsPCtN9lpVq0eb4KaotRUWxfXiy1R1qIIB1
+        9wMxTrI8jW725Mx7uvYquBQASsJp9TBLOHk3UMSmTppm8UNiLedRRZaAf6sGEB7i20qK3+1DSe4cQ
+        hpTn62nZT9qEovqfhehnmRaUOIdXxTNrkUYUTI23IUgM4Z15ru8rBM8MUDWLnGmvnUYKsTpvndwW8
+        nGE2kcxykYU1wLafHQqL75IVy5kEsUuI1IhL4ca7YOiVWr1Qd57UT6ZSKRp/GTk2j+1m3miv2gW7P
+        ZMI+naNA==;
+Received: from [46.28.89.34] (helo=mbogdanovnb)
+        by mail.shtrih-m.ru with esmtpa (envelope-from <mbogdanov@shtrih-m.ru>)
+        id 1hqd2q-0001oi-Qu; Thu, 25 Jul 2019 15:40:29 +0300
+From:   "Mike Bogdanov" <mbogdanov@shtrih-m.ru>
+To:     "'Greg KH'" <gregkh@linuxfoundation.org>,
+        "'Nicos Gollan'" <gtdev@spearhead.de>
+Cc:     <linux-serial@vger.kernel.org>
+References: <001e01d5415a$6c677800$45366800$@shtrih-m.ru> <20190725101847.GB7550@kroah.com>
+In-Reply-To: <20190725101847.GB7550@kroah.com>
+Subject: RE: st-lab i-472 serial card problem
+Date:   Thu, 25 Jul 2019 15:40:29 +0300
+Message-ID: <001f01d542e6$263cfca0$72b6f5e0$@shtrih-m.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190620062420.11650-1-sr@denx.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 14.0
+Thread-Index: AQIKrhPb9icA+bgxJjOcW/U9Ff9dsAI/DTI8pl5vsWA=
+Content-Language: ru
+X-Authenticated-As: mbogdanov@shtrih-m.ru
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
 
-On Thu, Jun 20, 2019 at 08:24:19AM +0200, Stefan Roese wrote:
-> This patch adds a check for the GPIOs property existence, before the
-> GPIO is requested. This fixes an issue seen when the 8250 mctrl_gpio
-> support is added (2nd patch in this patch series) on x86 platforms using
-> ACPI.
-> 
-> Here Mika's comments from 2016-08-09:
-> 
-> "
-> I noticed that with v4.8-rc1 serial console of some of our Broxton
-> systems does not work properly anymore. I'm able to see output but input
-> does not work.
-> 
-> I bisected it down to commit 4ef03d328769eddbfeca1f1c958fdb181a69c341
-> ("tty/serial/8250: use mctrl_gpio helpers").
-> 
-> The reason why it fails is that in ACPI we do not have names for GPIOs
-> (except when _DSD is used) so we use the "idx" to index into _CRS GPIO
-> resources. Now mctrl_gpio_init_noauto() goes through a list of GPIOs
-> calling devm_gpiod_get_index_optional() passing "idx" of 0 for each. The
-> UART device in Broxton has following (simplified) ACPI description:
-> 
->     Device (URT4)
->     {
->         ...
->         Name (_CRS, ResourceTemplate () {
->             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
->                     "\\_SB.GPO0", 0x00, ResourceConsumer)
->             {
->                 0x003A
->             }
->             GpioIo (Exclusive, PullDefault, 0x0000, 0x0000, IoRestrictionOutputOnly,
->                     "\\_SB.GPO0", 0x00, ResourceConsumer)
->             {
->                 0x003D
->             }
->         })
-> 
-> In this case it finds the first GPIO (0x003A which happens to be RX pin
-> for that UART), turns it into GPIO which then breaks input for the UART
-> device. This also breaks systems with bluetooth connected to UART (those
-> typically have some GPIOs in their _CRS).
-> 
-> Any ideas how to fix this?
-> 
-> We cannot just drop the _CRS index lookup fallback because that would
-> break many existing machines out there so maybe we can limit this to
-> only DT enabled machines. Or alternatively probe if the property first
-> exists before trying to acquire the GPIOs (using
-> device_property_present()).
-> "
-> 
-> This patch implements the fix suggested by Mika in his statement above.
-> 
-> Signed-off-by: Stefan Roese <sr@denx.de>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
-> v9:
-> - Rebased on top of "tty-next", patch 2/3 dropped as its already applied
-> 
-> v8:
-> - Rebased on top of "tty-next"
-> 
-> v7:
-> - Include <linux/property.h> to fix compile breakage on OMAP
-> 
-> v6:
-> - No change
-> 
-> v5:
-> - Simplified the code a bit (Andy)
-> - Added gpio_str == NULL handling (Andy)
-> 
-> v4:
-> - Add missing free() calls (Johan)
-> - Added Mika's reviewed by tag
-> - Added Johan to Cc
-> 
-> v3:
-> - No change
-> 
-> v2:
-> - Include the problem description and analysis from Mika into the commit
->   text, as suggested by Greg.
-> 
->  drivers/tty/serial/serial_mctrl_gpio.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-> index 39ed56214cd3..2b400189be91 100644
-> --- a/drivers/tty/serial/serial_mctrl_gpio.c
-> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
-> @@ -12,6 +12,7 @@
->  #include <linux/termios.h>
->  #include <linux/serial_core.h>
->  #include <linux/module.h>
-> +#include <linux/property.h>
->  
->  #include "serial_mctrl_gpio.h"
->  
-> @@ -116,6 +117,19 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
->  
->  	for (i = 0; i < UART_GPIO_MAX; i++) {
->  		enum gpiod_flags flags;
-> +		char *gpio_str;
-> +		bool present;
-> +
-> +		/* Check if GPIO property exists and continue if not */
-> +		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
-> +				     mctrl_gpios_desc[i].name);
-> +		if (!gpio_str)
-> +			continue;
 
-Is it a good idea to handle a memory allocation problem with a continue?
+> From: Greg KH [mailto:gregkh@linuxfoundation.org]
+> Sent: Thursday, July 25, 2019 1:19 PM
+> To: Mike Bogdanov; Nicos Gollan
+> Cc: linux-serial@vger.kernel.org
+> Subject: Re: st-lab i-472 serial card problem
+> 
+> On Tue, Jul 23, 2019 at 04:27:47PM +0300, Mike Bogdanov wrote:
+> > Hi,
+> > I have a problem with 6  serial port card st-lab i-472
+> >
+(http://www.stlab.ru/catalog/kontrolleri/controller-st-lab-pci-e-x1-i-472-i-
+> > 470-6-ext-6xcom9m-ret.html).
+> >
+> > i have instaled debian 8.
+> > >root@c000050:~# uname -a
+> > >Linux c000050 4.9.0-0.bpo.9-686-pae #1 SMP Debian 4.9.168-
+> 1+deb9u3~deb8u1
+> > (2019-06-17) i686 GNU/Linux
+> >
+> >
+> > In dmesg i found the follow message with yuor email:
+> > [ 2.180347] Serial: 8250/16550 driver, 10 ports, IRQ sharing enabled
+> > [ 2.207661] 00:01: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a
+> > 16550A
+> > [ 2.237213] 0000:01:00.0: ttyS4 at I/O 0xe050 (irq = 16, base_baud =
+115200)
+> > is a ST16650V2
+> > [ 2.266932] 0000:01:00.0: ttyS5 at I/O 0xe040 (irq = 16, base_baud =
+115200)
+> > is a ST16650V2
+> > [ 2.296576] 0000:01:00.1: ttyS6 at I/O 0xe030 (irq = 17, base_baud =
+115200)
+> > is a ST16650V2
+> > [ 2.326296] 0000:01:00.1: ttyS7 at I/O 0xe020 (irq = 17, base_baud =
+115200)
+> > is a ST16650V2
+> > [ 2.334970] serial 0000:01:00.2: NetMos/Mostech serial driver ignoring
+port
+> > on ambiguous config.
+> > [ 2.343895] serial 0000:01:00.2: 0000:01:00.2: unknown NetMos/Mostech
+> device
+> > Please send the output of lspci -vv, this
+> > message (0x9710,0x9900,0xa000,0x1000), the
+> > manufacturer and name of serial board or
+> > modem board to <linux-serial@vger.kernel.org>.
+> > [ 2.371816] serial 0000:01:00.3: NetMos/Mostech serial driver ignoring
+port
+> > on ambiguous config.
+> > [ 2.380734] serial 0000:01:00.3: 0000:01:00.3: unknown NetMos/Mostech
+> device
+> > Please send the output of lspci -vv, this
+> > message (0x9710,0x9900,0xa000,0x1000), the
+> > manufacturer and name of serial board or
+> > modem board to <linux-serial@vger.kernel.org>.
+> >
+> >
+> 
+> Odd, this "should" work.  Nicos added support for this back in the 3.1
+> kernel, but odds are something has changed in the hardware since then.
+> Does the device work properly even with these messages?
 
-> +		present = device_property_present(dev, gpio_str);
-> +		kfree(gpio_str);
-> +		if (!present)
-> +			continue;
->  
+Before linux kernel 4.9 I work with 3.16 . Yes port was workable with
+similar message but without suggestion to write message to someone. 
 
-Assuming this fixes the situation on x86 this means that there
-device_property_present(...) returns false and
-devm_gpiod_get_index_optional returns an error code.
+> Nicos, any idea?
+> 
+> lspci-v output below for reference.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> ----------------------------------------------------------
+> >
+> > Can you give advice how can i start this board?
+> >
 
-I wonder what the problem is here. Is CONFIG_GPIOLIB on in the failing
-situation?
+I'm not shure I'm right.... especially if consider a comment in code I found
+near my error message:
+ //serial ports, or 0x1000 indicates *something*. This is not immediately
+obvious, since the 2s1p+4s ...
 
-I assume this will end in the usual discussion if gpiod_get_*_optional
-should return an error code if GPIOLIB is off.
+But I decide to make temporary solution for me witch work now:
+----------------------------------------------------------
+*** 8250_pci.old.c      
+--- 8250_pci.c  
+***************
+*** 810,819 ****
+--- 810,821 ----
+                 * advertising the same function 3 as the 4s+2s1p config.
+                 */
+                sub_serports = dev->subsystem_device & 0xf;
+                if (sub_serports > 0)
+                        return sub_serports;
++               if (dev->subsystem_vendor == 0xa000 && dev->subsystem_device
+== 0x1000)
++                       return 1;
+                dev_err(&dev->dev,
+                        "NetMos/Mostech serial driver ignoring port on
+ambiguous config.\n");
+                return 0;
+        }
+----------------------------------------------------------
 
-Best regards
-Uwe
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Best Regards,
+Bogdanov Mike
+
+
+
+
