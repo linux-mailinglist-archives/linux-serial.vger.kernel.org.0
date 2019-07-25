@@ -2,78 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D037405C
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Jul 2019 22:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389EF7471B
+	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 08:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbfGXUqX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 24 Jul 2019 16:46:23 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:44194 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbfGXUqX (ORCPT
+        id S1729505AbfGYGXW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 25 Jul 2019 02:23:22 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:35259 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728825AbfGYGXV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 24 Jul 2019 16:46:23 -0400
-Received: by mail-io1-f67.google.com with SMTP id s7so92377884iob.11;
-        Wed, 24 Jul 2019 13:46:22 -0700 (PDT)
+        Thu, 25 Jul 2019 02:23:21 -0400
+Received: by mail-pg1-f194.google.com with SMTP id s1so16164848pgr.2
+        for <linux-serial@vger.kernel.org>; Wed, 24 Jul 2019 23:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=SKeRVtWPpX2z2aupFYsAn/DuYt86HP/HmwWHClDFuVM=;
+        b=Wj/T7ChgzV4bhBgIVKnPIFJHBpzSf6kstrzU3AIGnPEXY5r3Ie+R4xa49Rsu7WeDLb
+         skksDmIENXbzU/hPc8VjsYFAx35SAmUucpgLjO+hWDTmYwZNVaqOfGQ+adk4HxoIZ9vx
+         D6nGFAyzi30qOVZx66t5vqGV04sT0rele/30LXyHZPlLL31aSG5QjXGAKs3aq5AfQqYQ
+         24h3m1AOHaHZYDrOzS7dKJcO8dG+iJG5aRLofIqLCM6MhFNbEaOsXFOqi2uZXaxxGkN/
+         DUnXeU7zn1hQjnVTdbPCYSf+7huNmvKrFElKO9f5GSxUm4DoZzjmIGSO9Ms94bqnFBaH
+         NjXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i/sPIhXsS6XIgPtbsRxAmrculmKk8MrSIf4t2TOmssc=;
-        b=uRzCyI0eHXSVobS0LTK5gAihSqpebCvjN+GrL80qhI5/0Z+P5/r7PcoLxHyO3XPQ6O
-         LFAf0Vc+C0ooSeXk67M+DMA44nPcxKcBmHDYHjNnP2lz9EiuCgpDTx5Bif8Ccoxo1ayJ
-         4hi1W7QKmHrUivOcM2pz8wH9fsH+LOHfgLcYmJvBM5aTxwG6XxAQDs/o9UXq0WDbtIhB
-         U06lxHcPv9U3uSoo5mm3ffx2rMisFMER+r7WyYahirTsReheYS3FVK8E7TSyWJlKwTSO
-         pB2G1vcIevX/Z4gO3dn9nH6nGHjGyacqX6oJ24yU8arSQyDI83oFMfWNkjlUC7BUwDoq
-         3f8Q==
-X-Gm-Message-State: APjAAAX2V5Fjdbr8J6/+aY5VnhNpI1bn7/RN7itf6PuBXjFMCwyIahYD
-        e+cTeWrfEhsX3sug0sTLRw==
-X-Google-Smtp-Source: APXvYqw9E2+Xf5qC0L6WngTKBG5qk+vwpnwnE3u6JWu5EifnJzjQKu0ViuEr6sIw7lDkl19v0HzYpQ==
-X-Received: by 2002:a02:b90e:: with SMTP id v14mr49286701jan.122.1564001182328;
-        Wed, 24 Jul 2019 13:46:22 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id x13sm35133832ioj.18.2019.07.24.13.46.21
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 24 Jul 2019 13:46:21 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 14:46:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Mars Cheng <mars.cheng@mediatek.com>,
-        Owen Chen <owen.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com, CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: Re: [PATCH v6 4/8] clk: mediatek: add mt6765 clock IDs
-Message-ID: <20190724204621.GA13063@bogus>
-References: <1562924653-10056-1-git-send-email-macpaul.lin@mediatek.com>
- <1562924653-10056-5-git-send-email-macpaul.lin@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1562924653-10056-5-git-send-email-macpaul.lin@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SKeRVtWPpX2z2aupFYsAn/DuYt86HP/HmwWHClDFuVM=;
+        b=TJtuzvxBjboEdb1dcodUo9I+Eq5ZFGVuI6wwLja8kngv1bRq8rU4lWeH9UmYu5sOWE
+         YaDxtoM09E+02JeaY1cnD/cX3Xs/lqai3vYbXlsK2zuhuNhpB1tucrQufg5KUuqA0rSz
+         KOsOQqJHhL5gYHM0M5v0xbXCgeQliY67Zi8JP+FV3FKyY63uIRj/YS/XIkCmlKIGagkt
+         0g9gApfwbouZDOaIoEhh2a+f51pF8PnP7uwNJA7myfSc1f8qNQuMtWXgnyQM9BvI/mbZ
+         dayyTVYzU+B7920N4fPyfpKrrTBZRBnso4tNi62v+Oyuf6qg8rUDLOX/ccM8s1ImD4D9
+         ziCQ==
+X-Gm-Message-State: APjAAAUjLDi4DFX+kcwDmDkg7WGIMwJMFknIAzLVpiubZdygev1hlBTG
+        tO19xf7TJ4JfJ/OGX7+aXbq3vtD2mMM=
+X-Google-Smtp-Source: APXvYqwyJx3vJ8qtdOwegK8SMHND3nRT9vcnE2cBLPneNCulfTmuM4z0CIfmu6pd8uzy46ubJkSGCw==
+X-Received: by 2002:a17:90a:970a:: with SMTP id x10mr92356112pjo.12.1564035800753;
+        Wed, 24 Jul 2019 23:23:20 -0700 (PDT)
+Received: from test-System-Product-Name.sunix.com.tw (114-36-237-209.dynamic-ip.hinet.net. [114.36.237.209])
+        by smtp.gmail.com with ESMTPSA id g11sm50550467pgu.11.2019.07.24.23.23.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 24 Jul 2019 23:23:20 -0700 (PDT)
+From:   Morris Ku <saumah@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, morris_ku@sunix.com,
+        kai.heng.feng@canonical.com, tiffany.wang@canonical.com,
+        Morris Ku <saumah@gmail.com>
+Subject: [PATCH] Add driver for SUNIX serial board
+Date:   Thu, 25 Jul 2019 14:23:08 +0800
+Message-Id: <20190725062308.7986-1-saumah@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 12 Jul 2019 17:43:40 +0800, Macpaul Lin wrote:
-> From: Mars Cheng <mars.cheng@mediatek.com>
-> 
-> Add MT6765 clock dt-bindings, include topckgen, apmixedsys,
-> infracfg, mcucfg and subsystem clocks.
-> 
-> Signed-off-by: Mars Cheng <mars.cheng@mediatek.com>
-> Signed-off-by: Owen Chen <owen.chen@mediatek.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->  include/dt-bindings/clock/mt6765-clk.h | 313 +++++++++++++++++++++++++
->  1 file changed, 313 insertions(+)
->  create mode 100644 include/dt-bindings/clock/mt6765-clk.h
-> 
+Hi,K-H,
+Thanks for review, my replies are inline:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Morris Ku <saumah@gmail.com>
+---
+ 0004-Add-driver-for-SUNIX-serial-board.patch | 36 ++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 0004-Add-driver-for-SUNIX-serial-board.patch
+
+diff --git a/0004-Add-driver-for-SUNIX-serial-board.patch b/0004-Add-driver-for-SUNIX-serial-board.patch
+new file mode 100644
+index 0000000..56909d2
+--- /dev/null
++++ b/0004-Add-driver-for-SUNIX-serial-board.patch
+@@ -0,0 +1,36 @@
+>On Wed, Jul 24, 2019 at 07:26:47PM +0800, morrisku wrote:
+>> This patch add support for SUNIX serial board.
+>> 
+>> Signed-off-by: morrisku <saumah@gmail.com>
+
+>I need a "real" name here, and on the From: line in order to ba able to
+>apply anything.  Use whatever you sign legal documents with please.
+
+I will fix it.
+
+>> ---
+>>  serial/Kconfig      |  11 ++
+>>  serial/Makefile     |   1 +
+>>  serial/sunix_uart.c | 357 ++++++++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 369 insertions(+)
+>>  create mode 100644 serial/sunix_uart.c
+
+>Why can't you just use the 8250_pci.c driver here instead of a whole
+>separate one?  What does this hardware need that is so different that
+>you can not just add to the normal pci_boards[] array in that code?
+
+>If you can not do that, then you need to explain in great detail why
+>that is in the changelog comment in order for us to be able to accept
+>this code.
+
+SUNIX uses a mixture of bars and offsets, 
+the first four ports use bar0,fifth to sixteenth ports use bar1,
+8025_pci.c using different bars and offsets,
+fist port use bar0,port two use use bar0 + offset,
+but three to four ports use bar1 ,after port use bar2~bar5,
+can not just use 8250 existing code to set up our hardware,
+the configure method is not suitable for us,
+therefore, we separate one driver for SUNIX serial board. 
+
+>thanks,
+
+>greg k-h
+-- 
+2.17.1
+
