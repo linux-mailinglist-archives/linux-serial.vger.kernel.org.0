@@ -2,76 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 490F7747A2
-	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 08:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08D574A46
+	for <lists+linux-serial@lfdr.de>; Thu, 25 Jul 2019 11:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387671AbfGYG7o (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 25 Jul 2019 02:59:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33674 "EHLO mail.kernel.org"
+        id S1726087AbfGYJrz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 25 Jul 2019 05:47:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59464 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387668AbfGYG7o (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 25 Jul 2019 02:59:44 -0400
+        id S1725808AbfGYJry (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 25 Jul 2019 05:47:54 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35B1622BEB;
-        Thu, 25 Jul 2019 06:59:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4AB9A2190F;
+        Thu, 25 Jul 2019 09:47:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564037983;
-        bh=E2j/LasuGChNhBPL7nZOjM5bTKvK21frj0b+CnvwhGo=;
+        s=default; t=1564048073;
+        bh=MhJw4d4ewEjprJObjjCY8FP2AVv98yCru+fqqnG/PHY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VXGyo32pk7nW6+h2qXg8kJHH02Zj5yXulbCQhzmZ/8X8lwhP4EMpIpEvy5w74QDoH
-         ANjIUr97FD8G6VWqIs7Iv2SPi87FILc6FdM2940cINnXJMVZ51DxNC4CwAet9mQgHp
-         FBMLGCKI3oxVtyiGRsPlptEoExIlhqJkrWFFvh7M=
-Date:   Thu, 25 Jul 2019 08:37:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Morris Ku <saumah@gmail.com>
-Cc:     linux-serial@vger.kernel.org, morris_ku@sunix.com,
-        kai.heng.feng@canonical.com, tiffany.wang@canonical.com
-Subject: Re: [PATCH] Add driver for SUNIX serial board
-Message-ID: <20190725063734.GF6723@kroah.com>
-References: <20190725062308.7986-1-saumah@gmail.com>
+        b=t6o12Ytv1Exhs1I28zrnl74wKI6nj20dIk4ddtdSkBZj82Q3hbBIzpXiEN2p9hcr8
+         4Lf6Kc3PtesJ7+rw9u0xR8M+zkG9aE6KRJv2iGAfKtndAT+rrAHXAc7x5xJaJpDqPO
+         taGI+2++x+7/eT/mcJJohNw9CUWwtKkrpgqf4mr8=
+Date:   Thu, 25 Jul 2019 11:47:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Changqi Hu <changqi.hu@mediatek.com>
+Cc:     Jiri Slaby <jslaby@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Shih <pihsun@chromium.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>
+Subject: Re: [PATCH v3] serial: 8250-mtk: modify mtk uart power and clock
+ management
+Message-ID: <20190725094751.GB31845@kroah.com>
+References: <1563505182-2408-1-git-send-email-changqi.hu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190725062308.7986-1-saumah@gmail.com>
+In-Reply-To: <1563505182-2408-1-git-send-email-changqi.hu@mediatek.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 02:23:08PM +0800, Morris Ku wrote:
-> >> ---
-> >>  serial/Kconfig      |  11 ++
-> >>  serial/Makefile     |   1 +
-> >>  serial/sunix_uart.c | 357 ++++++++++++++++++++++++++++++++++++++++++++
-> >>  3 files changed, 369 insertions(+)
-> >>  create mode 100644 serial/sunix_uart.c
+On Fri, Jul 19, 2019 at 10:59:42AM +0800, Changqi Hu wrote:
+> modify mtk uart runtime interface, add uart clock use count.
+> merge patch v1 and patch v2 together.
 > 
-> >Why can't you just use the 8250_pci.c driver here instead of a whole
-> >separate one?  What does this hardware need that is so different that
-> >you can not just add to the normal pci_boards[] array in that code?
-> 
-> >If you can not do that, then you need to explain in great detail why
-> >that is in the changelog comment in order for us to be able to accept
-> >this code.
-> 
-> SUNIX uses a mixture of bars and offsets, 
-> the first four ports use bar0,fifth to sixteenth ports use bar1,
-> 8025_pci.c using different bars and offsets,
-> fist port use bar0,port two use use bar0 + offset,
-> but three to four ports use bar1 ,after port use bar2~bar5,
-> can not just use 8250 existing code to set up our hardware,
-> the configure method is not suitable for us,
-> therefore, we separate one driver for SUNIX serial board. 
+> Signed-off-by: Changqi Hu <changqi.hu@mediatek.com>
+> ---
+>  drivers/tty/serial/8250/8250_mtk.c | 50 ++++++++++++++++++++++++--------------
+>  1 file changed, 32 insertions(+), 18 deletions(-)
 
-Ugh, really?  There's no way to fit this into the existing driver
-framework?  You are duplicating a lot of logic here so it really makes
-me question if all of this is needed or not.
+Always describe what changed from the previous versions in the area
+below the --- line.
 
-Are there other drivers in drivers/tty/serial/ that work more like yours
-do?
+Also, your changelog needs a lot more work.  Please read the section
+entitled "The canonical patch format" in the kernel file,
+Documentation/SubmittingPatches for a description of how to do this.
+
+thanks,
+
+greg k-h's patch email bot
 
 thanks,
 
