@@ -2,171 +2,470 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1536761A0
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 11:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5730076396
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 12:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbfGZJQe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 05:16:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725872AbfGZJQe (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 05:16:34 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3731D22BE8;
-        Fri, 26 Jul 2019 09:16:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564132592;
-        bh=M22FGrqUiUVbJYw83hVfiMWTGTB7z3Sop19Rh/k3yQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w5V9Sa7QYGpoYFof/S9w8GQzYz2xFsUt8uKCUi38+x0SsjSf6VdbYTRgv+QL3sfI6
-         xcFdnJicoebrTfBnYGaINMKeZFGXu2K6jilMkPJo64I4YNkNeBeE5wveTHcXYaVPAm
-         9sm6McbFzdDXlzyODtIQWrTMubvjAplqsfD/B4fc=
-Date:   Fri, 26 Jul 2019 11:16:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Jiri Slaby <jslaby@suse.com>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH] kgdboc: disable the console lock when in kgdb
-Message-ID: <20190726091630.GA20016@kroah.com>
-References: <20190725183551.169208-1-dianders@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190725183551.169208-1-dianders@chromium.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1726475AbfGZKcy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jul 2019 06:32:54 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46953 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbfGZKcy (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 26 Jul 2019 06:32:54 -0400
+Received: by mail-pg1-f196.google.com with SMTP id k189so5542796pgk.13
+        for <linux-serial@vger.kernel.org>; Fri, 26 Jul 2019 03:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=gREqkEE2wEeLPd5YXE86QxWdIQr0d1NV7QN4KwgAIxU=;
+        b=lptAwiypgnDlVuCRx2MbfeDPOsZlaY2X4Y4TJsucgTsMCfsUeLQcimjbLYZSkGOrZS
+         H4JzfXwETA06Q4NAELHiYD4redpGWqWWht5MHRWS3MkR1EImjQFuY03GQWTZzhwY9Gy1
+         d02f5zXFGXDgmOz5s9TU79SeogsewvFp/wHWiP3OlJpBEGb49ZS+2s4lLLY51mcLC3fR
+         YRkJIL9TJ6ry/KnzeF85xQCnqAfpONaMwVYrCBGnWqbQq4DArsXCw6Nai27XZ30mjSe1
+         jmE2JGmOK8DByqLN5d43sNKrQsELc9uebLqKxkGo3pgsAcqgpR5/1oYCAckAo70sR/0N
+         Y/hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gREqkEE2wEeLPd5YXE86QxWdIQr0d1NV7QN4KwgAIxU=;
+        b=ZpkC7yci/kA4jorHzoRlSbTURQbPJIUKHXOUC7GMwinh+TnS6T/8WG2cpgcf8/hogF
+         L4jlpFnJBY3enrcn0U80hUTu1EgH+KsafV/kNNhq404CoJiLldk9NBOAHgDLtdoKPzfC
+         y84HDk+avINc3GLl0VVojnQlxxFyq4cJyOQzH80uCT53F+FUNQ5RtsUXgo42T+KfX0sC
+         LkaP9wJgtmw6lu6PrWcdmTPcLFtXtauqINYurzips8O1jf0pm2oTByzXJjV3JGXYWoqt
+         +9WoBQmAsRYT+2UZnn2wTdAMMbIWu95sYSI5Q1z0NFe8rcVr/ZObSx8fc03BLbfWMan+
+         feng==
+X-Gm-Message-State: APjAAAUKXRUONIqSQrDKaYmzvDiFRWNNBgZUObfVu4bTP9D+0IjPa6qz
+        TW7MLx8UZj1/r3p9Ca/JUz+b2tBfxxA=
+X-Google-Smtp-Source: APXvYqwCQ6fTsivI6SH7l9QxTBdBW/6mJgoofbZYo+PfDti7dFs03TFpvXcMibq2F9NDZTQEbT/rJg==
+X-Received: by 2002:a63:f807:: with SMTP id n7mr93611074pgh.119.1564137172845;
+        Fri, 26 Jul 2019 03:32:52 -0700 (PDT)
+Received: from test-System-Product-Name.sunix.com.tw (114-36-241-134.dynamic-ip.hinet.net. [114.36.241.134])
+        by smtp.gmail.com with ESMTPSA id u16sm49989325pjb.2.2019.07.26.03.32.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 26 Jul 2019 03:32:52 -0700 (PDT)
+From:   Morris Ku <saumah@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, morris_ku@sunix.com,
+        kai.heng.feng@canonical.com, tiffany.wang@canonical.com,
+        kent.lin@canonical.com, debbie_liu@sunix.com,
+        Morris Ku <saumah@gmail.com>
+Subject: [PATCH] Add driver for SUNIX serial board
+Date:   Fri, 26 Jul 2019 18:32:42 +0800
+Message-Id: <20190726103242.6233-1-saumah@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 11:35:51AM -0700, Douglas Anderson wrote:
-> After commit ddde3c18b700 ("vt: More locking checks") kdb / kgdb has
-> become useless because my console is filled with spews of:
-> 
-> WARNING: CPU: 0 PID: 0 at .../drivers/tty/vt/vt.c:3846 con_is_visible+0x50/0x74
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.3.0-rc1+ #48
-> Hardware name: Rockchip (Device Tree)
-> Backtrace:
-> [<c020ce9c>] (dump_backtrace) from [<c020d188>] (show_stack+0x20/0x24)
-> [<c020d168>] (show_stack) from [<c0a8fc14>] (dump_stack+0xb0/0xd0)
-> [<c0a8fb64>] (dump_stack) from [<c0232c58>] (__warn+0xec/0x11c)
-> [<c0232b6c>] (__warn) from [<c0232dc4>] (warn_slowpath_null+0x4c/0x58)
-> [<c0232d78>] (warn_slowpath_null) from [<c06338a0>] (con_is_visible+0x50/0x74)
-> [<c0633850>] (con_is_visible) from [<c0634078>] (con_scroll+0x108/0x1ac)
-> [<c0633f70>] (con_scroll) from [<c0634160>] (lf+0x44/0x88)
-> [<c063411c>] (lf) from [<c06363ec>] (vt_console_print+0x1a4/0x2bc)
-> [<c0636248>] (vt_console_print) from [<c02f628c>] (vkdb_printf+0x420/0x8a4)
-> [<c02f5e6c>] (vkdb_printf) from [<c02f6754>] (kdb_printf+0x44/0x60)
-> [<c02f6714>] (kdb_printf) from [<c02fa6f4>] (kdb_main_loop+0xf4/0x6e0)
-> [<c02fa600>] (kdb_main_loop) from [<c02fd5f0>] (kdb_stub+0x268/0x398)
-> [<c02fd388>] (kdb_stub) from [<c02f3ba0>] (kgdb_cpu_enter+0x1f8/0x674)
-> [<c02f39a8>] (kgdb_cpu_enter) from [<c02f4330>] (kgdb_handle_exception+0x1c4/0x1fc)
-> [<c02f416c>] (kgdb_handle_exception) from [<c0210fe0>] (kgdb_compiled_brk_fn+0x30/0x3c)
-> [<c0210fb0>] (kgdb_compiled_brk_fn) from [<c020d7ac>] (do_undefinstr+0x180/0x1a0)
-> [<c020d62c>] (do_undefinstr) from [<c0201b44>] (__und_svc_finish+0x0/0x3c)
-> ...
-> [<c02f3224>] (kgdb_breakpoint) from [<c02f3310>] (sysrq_handle_dbg+0x58/0x6c)
-> [<c02f32b8>] (sysrq_handle_dbg) from [<c062abf0>] (__handle_sysrq+0xac/0x154)
-> 
-> Let's disable this warning when we're in kgdb to avoid the spew.  The
-> whole system is stopped when we're in kgdb so we can't exactly wait
-> for someone else to drop the lock.  Presumably the best we can do is
-> to disable the warning and hope for the best.
-> 
-> Fixes: ddde3c18b700 ("vt: More locking checks")
-> Cc: Daniel Vetter <daniel.vetter@intel.com>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
->  drivers/tty/serial/kgdboc.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-> index bfe5e9e034ec..c7d51b51898f 100644
-> --- a/drivers/tty/serial/kgdboc.c
-> +++ b/drivers/tty/serial/kgdboc.c
-> @@ -277,10 +277,14 @@ static void kgdboc_pre_exp_handler(void)
->  	/* Increment the module count when the debugger is active */
->  	if (!kgdb_connected)
->  		try_module_get(THIS_MODULE);
-> +
-> +	atomic_inc(&ignore_console_lock_warning);
->  }
->  
->  static void kgdboc_post_exp_handler(void)
->  {
-> +	atomic_dec(&ignore_console_lock_warning);
-> +
->  	/* decrement the module count when the debugger detaches */
->  	if (!kgdb_connected)
->  		module_put(THIS_MODULE);
-> -- 
-> 2.22.0.709.g102302147b-goog
+This patch add support for SUNIX serial board.
 
-I have the following patch in my tree to go to Linus that I think might
-fix this issue for you.  Can you test it instead?
-
-thanks,
-
-greg k-h
-
------------------
-
-
-From 61d51456f35760a09e8aa1e6ddd247f1547015d3 Mon Sep 17 00:00:00 2001
-From: Daniel Vetter <daniel.vetter@ffwll.ch>
-Date: Thu, 18 Jul 2019 10:09:03 +0200
-Subject: [PATCH] vt: Grab console_lock around con_is_bound in show_bind
-
-Not really harmful not to, but also not harm in grabbing the lock. And
-this shuts up a new WARNING I introduced in commit ddde3c18b700 ("vt:
-More locking checks").
-
-Reported-by: Jens Remus <jremus@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: linux-s390@vger.kernel.org
-Cc: Nicolas Pitre <nicolas.pitre@linaro.org>
-Cc: Martin Hostettler <textshell@uchuujin.de>
-Cc: Adam Borowski <kilobyte@angband.pl>
-Cc: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Fixes: ddde3c18b700 ("vt: More locking checks")
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Tested-by: Jens Remus <jremus@linux.ibm.com>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://lore.kernel.org/r/20190718080903.22622-1-daniel.vetter@ffwll.ch
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Morris Ku <saumah@gmail.com>
 ---
- drivers/tty/vt/vt.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ serial/Kconfig      |  11 ++
+ serial/Makefile     |   2 +-
+ serial/sunix_uart.c | 357 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 369 insertions(+), 1 deletion(-)
+ create mode 100644 serial/sunix_uart.c
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index ec92f36ab5c4..34aa39d1aed9 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -3771,7 +3771,11 @@ static ssize_t show_bind(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
- 	struct con_driver *con = dev_get_drvdata(dev);
--	int bind = con_is_bound(con->con);
-+	int bind;
-+
-+	console_lock();
-+	bind = con_is_bound(con->con);
-+	console_unlock();
+diff --git a/serial/Kconfig b/serial/Kconfig
+index 0d31251..f9ae108 100644
+--- a/serial/Kconfig
++++ b/serial/Kconfig
+@@ -1618,6 +1618,17 @@ config SERIAL_MILBEAUT_USIO_PORTS
+ 	depends on SERIAL_MILBEAUT_USIO
+ 	default "4"
  
- 	return snprintf(buf, PAGE_SIZE, "%i\n", bind);
- }
++config SERIAL_SUNIX
++	tristate "SUNIX pci serial port support"
++	depends on SERIAL_8250
++	select SERIAL_CORE
++	help
++	  Say Y here if you have a SUNIX serial card.
++	  If unsure, say N.
++
++	  This driver can also be built as a module. The module will be called
++	  sunix_pci_serial. If you want to do that, say M here.
++
+ config SERIAL_MILBEAUT_USIO_CONSOLE
+ 	bool "Support for console on MILBEAUT USIO/UART serial port"
+ 	depends on SERIAL_MILBEAUT_USIO=y
+diff --git a/serial/Makefile b/serial/Makefile
+index 58d5317..cecccc6 100644
+--- a/serial/Makefile
++++ b/serial/Makefile
+@@ -94,7 +94,7 @@ obj-$(CONFIG_SERIAL_OWL)	+= owl-uart.o
+ obj-$(CONFIG_SERIAL_RDA)	+= rda-uart.o
+ obj-$(CONFIG_SERIAL_MILBEAUT_USIO) += milbeaut_usio.o
+ obj-$(CONFIG_SERIAL_SIFIVE)	+= sifive.o
+-
++obj-$(CONFIG_SERIAL_SUNIX)	+= sunix_uart.o
+ 
+ # GPIOLIB helpers for modem control lines
+ obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
+diff --git a/serial/sunix_uart.c b/serial/sunix_uart.c
+new file mode 100644
+index 0000000..d227d7a
+--- /dev/null
++++ b/serial/sunix_uart.c
+@@ -0,0 +1,357 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *	Driver for SUNIX PCI serial board
++ *	Based on drivers/tty/serial/8250/8250_pci.c
++ *	by Linus Torvalds, Theodore Ts'o.
++ *
++ *	This program is free software; you can redistribute it and/or modify
++ *	it under the terms of the GNU General Public License as published by
++ *	the Free Software Foundation; either version 2 of the License.
++ */
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/string.h>
++#include <linux/kernel.h>
++#include <linux/slab.h>
++#include <linux/delay.h>
++#include <linux/tty.h>
++#include <linux/serial_8250.h>
++#include <linux/serial_reg.h>
++#include <linux/serial_core.h>
++#include <linux/8250_pci.h>
++#include <linux/bitops.h>
++#include <linux/dmaengine.h>
++
++#include <asm/byteorder.h>
++#include <asm/io.h>
++
++
++struct sunix_pci_board {
++	kernel_ulong_t driver_data;
++	struct pci_dev *pdev;
++	unsigned int num_ports;
++	int line[0];
++};
++
++
++enum {
++	sunix_pci_1s = 0,
++	sunix_pci_2s,
++	sunix_pci_4s,
++	sunix_pci_8s,
++	sunix_pci_16s
++};
++
++
++static struct sunix_pci_board sunix_pci_boards[] = {
++	[sunix_pci_1s] = {.num_ports = 1},
++	[sunix_pci_2s] = {.num_ports = 2},
++	[sunix_pci_4s] = {.num_ports = 4},
++	[sunix_pci_8s] = {.num_ports = 8},
++	[sunix_pci_16s] = {.num_ports = 16},
++};
++
++
++struct sunix_pci_board *snx_init_ports(struct pci_dev *pdev,
++				kernel_ulong_t driver_data)
++{
++	struct uart_8250_port uart;
++	struct sunix_pci_board *board;
++	unsigned int num_ports;
++	int i, bar, offset;
++
++	num_ports = sunix_pci_boards[driver_data].num_ports;
++
++	board = kzalloc(sizeof(struct sunix_pci_board) +
++			sizeof(unsigned int) * num_ports, GFP_KERNEL);
++	if (!board) {
++		board = ERR_PTR(-ENOMEM);
++		goto err_out;
++	}
++
++	board->driver_data = driver_data;
++	board->pdev = pdev;
++	board->num_ports = num_ports;
++
++	memset(&uart, 0, sizeof(uart));
++	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF |
++					UPF_SHARE_IRQ | UPF_FIXED_TYPE;
++	uart.port.uartclk = 921600 * 16;
++	uart.port.irq = pdev->irq;
++	uart.port.dev = &pdev->dev;
++	uart.port.type = PORT_16C950;
++	uart.port.fifosize = 128;
++
++	for (i = 0; i < num_ports; i++) {
++
++		switch (i) {
++		case 0:
++			bar = 0; offset = 0; break;
++		case 1:
++			bar = 0; offset = 8; break;
++		case 2:
++			bar = 0; offset = 16; break;
++		case 3:
++			bar = 0; offset = 24; break;
++		case 4:
++			bar = 1; offset = 0; break;
++		case 5:
++			bar = 1; offset = 8; break;
++		case 6:
++			bar = 1; offset = 16; break;
++		case 7:
++			bar = 1; offset = 24; break;
++		case 8:
++			bar = 1; offset = 64; break;
++		case 9:
++			bar = 1; offset = 72; break;
++		case 10:
++			bar = 1; offset = 80; break;
++		case 11:
++			bar = 1; offset = 88; break;
++		case 12:
++			bar = 1; offset = 128; break;
++		case 13:
++			bar = 1; offset = 136; break;
++		case 14:
++			bar = 1; offset = 144; break;
++		case 15:
++			bar = 1; offset = 152; break;
++		}
++
++		uart.port.iotype = UPIO_PORT;
++		uart.port.iobase = pci_resource_start(pdev, bar) + offset;
++		uart.port.mapbase = 0;
++		uart.port.membase = NULL;
++		uart.port.regshift = 0;
++
++		board->line[i] = serial8250_register_8250_port(&uart);
++		if (board->line[i] < 0) {
++			printk(KERN_INFO "sunix_pci_serial : Couldn't register serial port %s: %d\n",
++			pci_name(pdev), board->line[i]);
++			break;
++		}
++	}
++
++	return board;
++
++err_out:
++	return board;
++}
++
++
++void snx_detach_ports(struct sunix_pci_board *board)
++{
++
++	int i;
++
++	for (i = 0; i < board->num_ports; i++)
++		serial8250_unregister_port(board->line[i]);
++}
++
++
++void snx_remove_ports(struct sunix_pci_board *board)
++{
++	snx_detach_ports(board);
++	kfree(board);
++}
++
++
++void snx_suspend_ports(struct sunix_pci_board *board)
++{
++	int i;
++
++	for (i = 0; i < board->num_ports; i++) {
++		if (board->line[i] >= 0)
++			serial8250_suspend_port(board->line[i]);
++
++	}
++}
++
++
++void snx_resume_ports(struct sunix_pci_board *board)
++{
++
++	int i;
++
++	for (i = 0; i < board->num_ports; i++) {
++		if (board->line[i] >= 0)
++			serial8250_resume_port(board->line[i]);
++	}
++}
++
++
++#ifdef CONFIG_PM_SLEEP
++static int snx_suspend_one(struct device *dev)
++{
++
++	struct pci_dev *pdev = to_pci_dev(dev);
++	struct sunix_pci_board *board = pci_get_drvdata(pdev);
++
++	if (board)
++		snx_suspend_ports(board);
++
++	return  0;
++}
++
++
++static int snx_resume_one(struct device *dev)
++{
++
++	struct pci_dev *pdev = to_pci_dev(dev);
++	struct sunix_pci_board *board = pci_get_drvdata(pdev);
++	int err;
++
++	if (board) {
++		err = pci_enable_device(pdev);
++		if (err)
++			printk(KERN_INFO "sunix_pci_serial : Unable to re-enable ports\n");
++
++		snx_resume_ports(board);
++	}
++
++	return 0;
++}
++#endif
++
++
++static pci_ers_result_t snx_err_io_error_detected(struct pci_dev *pdev,
++		pci_channel_state_t state)
++{
++
++	struct sunix_pci_board *board = pci_get_drvdata(pdev);
++
++	if (state == pci_channel_io_perm_failure)
++		return PCI_ERS_RESULT_DISCONNECT;
++
++	if (board)
++		snx_detach_ports(board);
++
++	pci_disable_device(pdev);
++
++	return PCI_ERS_RESULT_NEED_RESET;
++}
++
++
++static pci_ers_result_t snx_err_io_slot_reset(struct pci_dev *pdev)
++{
++
++	int rc;
++
++	rc = pci_enable_device(pdev);
++	if (rc)
++		return PCI_ERS_RESULT_DISCONNECT;
++
++	pci_restore_state(pdev);
++	pci_save_state(pdev);
++
++	return PCI_ERS_RESULT_RECOVERED;
++}
++
++
++static void snx_err_io_resume(struct pci_dev *pdev)
++{
++	struct sunix_pci_board *board = pci_get_drvdata(pdev);
++	struct sunix_pci_board *new;
++
++	if (!board)
++		return;
++
++	new = snx_init_ports(pdev, board->driver_data);
++	if (!IS_ERR(new)) {
++		pci_set_drvdata(pdev, new);
++		kfree(board);
++	}
++}
++
++
++static int sunix_pci_serial_init_one(struct pci_dev *pdev,
++			const struct pci_device_id *ent)
++{
++
++	struct sunix_pci_board *board;
++	int rc;
++
++	if (ent->driver_data >= ARRAY_SIZE(sunix_pci_boards)) {
++		printk(KERN_INFO "sunix_pci_serial : Invalid driver_data:%ld\n",
++							ent->driver_data);
++		return -EINVAL;
++	}
++
++	rc = pci_enable_device(pdev);
++	pci_save_state(pdev);
++
++	if (rc)
++		return rc;
++
++	board = snx_init_ports(pdev, ent->driver_data);
++	if (IS_ERR(board)) {
++		rc = PTR_ERR(board);
++		return rc;
++	}
++
++	pci_set_drvdata(pdev, board);
++	return 0;
++}
++
++
++static void sunix_pci_serial_remove_one(struct pci_dev *pdev)
++{
++
++	struct sunix_pci_board *board = pci_get_drvdata(pdev);
++
++	snx_remove_ports(board);
++}
++
++
++static SIMPLE_DEV_PM_OPS(sunix_pci_serial_pm_ops,
++				snx_suspend_one, snx_resume_one);
++
++
++static struct pci_device_id sunix_pci_serial_id_tbl[] = {
++	// 5027A - 1S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0001, 0, 0, sunix_pci_1s },
++	// 5037A,P2102,CDK1037,DIO0802 - 2S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0002, 0, 0, sunix_pci_2s },
++	// 5056A,P2104,CDK1056,DIO1604,DIO3204 - 4S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0004, 0, 0, sunix_pci_4s },
++	// P3104 - 4S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0084, 0, 0, sunix_pci_4s },
++	// 5066A,P2108 - 8S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0008, 0, 0, sunix_pci_8s },
++	// P3108 - 8S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0088, 0, 0, sunix_pci_8s },
++	// 5016A,P2116 - 16S
++	{ 0x1fd4, 0x1999, 0x1fd4, 0x0010, 0, 0, sunix_pci_16s },
++	//
++	{0}
++};
++MODULE_DEVICE_TABLE(pci, sunix_pci_serial_id_tbl);
++
++
++static const struct pci_error_handlers sunix_pci_serial_err_handler = {
++	.error_detected = snx_err_io_error_detected,
++	.slot_reset		= snx_err_io_slot_reset,
++	.resume			= snx_err_io_resume,
++};
++
++
++static struct pci_driver sunix_pci_serial_driver = {
++	.name			= "sunix_pci_serial",
++	.probe			= sunix_pci_serial_init_one,
++	.remove			= sunix_pci_serial_remove_one,
++	.driver			= {
++		.pm			= &sunix_pci_serial_pm_ops,
++	},
++	.id_table		= sunix_pci_serial_id_tbl,
++	.err_handler	= &sunix_pci_serial_err_handler,
++};
++
++
++module_pci_driver(sunix_pci_serial_driver);
++
++MODULE_AUTHOR("SUNIX Co., Ltd.<info@sunix.com.tw>");
++MODULE_DESCRIPTION("SUNIX PCI serial board driver");
++MODULE_LICENSE("GPL");
++
++
 -- 
-2.22.0
+2.17.1
 
