@@ -2,470 +2,166 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5730076396
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 12:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EBD7649E
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 13:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726475AbfGZKcy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 06:32:54 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46953 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfGZKcy (ORCPT
+        id S1726265AbfGZLc3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jul 2019 07:32:29 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:58982 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbfGZLc1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 06:32:54 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k189so5542796pgk.13
-        for <linux-serial@vger.kernel.org>; Fri, 26 Jul 2019 03:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=gREqkEE2wEeLPd5YXE86QxWdIQr0d1NV7QN4KwgAIxU=;
-        b=lptAwiypgnDlVuCRx2MbfeDPOsZlaY2X4Y4TJsucgTsMCfsUeLQcimjbLYZSkGOrZS
-         H4JzfXwETA06Q4NAELHiYD4redpGWqWWht5MHRWS3MkR1EImjQFuY03GQWTZzhwY9Gy1
-         d02f5zXFGXDgmOz5s9TU79SeogsewvFp/wHWiP3OlJpBEGb49ZS+2s4lLLY51mcLC3fR
-         YRkJIL9TJ6ry/KnzeF85xQCnqAfpONaMwVYrCBGnWqbQq4DArsXCw6Nai27XZ30mjSe1
-         jmE2JGmOK8DByqLN5d43sNKrQsELc9uebLqKxkGo3pgsAcqgpR5/1oYCAckAo70sR/0N
-         Y/hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=gREqkEE2wEeLPd5YXE86QxWdIQr0d1NV7QN4KwgAIxU=;
-        b=ZpkC7yci/kA4jorHzoRlSbTURQbPJIUKHXOUC7GMwinh+TnS6T/8WG2cpgcf8/hogF
-         L4jlpFnJBY3enrcn0U80hUTu1EgH+KsafV/kNNhq404CoJiLldk9NBOAHgDLtdoKPzfC
-         y84HDk+avINc3GLl0VVojnQlxxFyq4cJyOQzH80uCT53F+FUNQ5RtsUXgo42T+KfX0sC
-         LkaP9wJgtmw6lu6PrWcdmTPcLFtXtauqINYurzips8O1jf0pm2oTByzXJjV3JGXYWoqt
-         +9WoBQmAsRYT+2UZnn2wTdAMMbIWu95sYSI5Q1z0NFe8rcVr/ZObSx8fc03BLbfWMan+
-         feng==
-X-Gm-Message-State: APjAAAUKXRUONIqSQrDKaYmzvDiFRWNNBgZUObfVu4bTP9D+0IjPa6qz
-        TW7MLx8UZj1/r3p9Ca/JUz+b2tBfxxA=
-X-Google-Smtp-Source: APXvYqwCQ6fTsivI6SH7l9QxTBdBW/6mJgoofbZYo+PfDti7dFs03TFpvXcMibq2F9NDZTQEbT/rJg==
-X-Received: by 2002:a63:f807:: with SMTP id n7mr93611074pgh.119.1564137172845;
-        Fri, 26 Jul 2019 03:32:52 -0700 (PDT)
-Received: from test-System-Product-Name.sunix.com.tw (114-36-241-134.dynamic-ip.hinet.net. [114.36.241.134])
-        by smtp.gmail.com with ESMTPSA id u16sm49989325pjb.2.2019.07.26.03.32.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jul 2019 03:32:52 -0700 (PDT)
-From:   Morris Ku <saumah@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, morris_ku@sunix.com,
-        kai.heng.feng@canonical.com, tiffany.wang@canonical.com,
-        kent.lin@canonical.com, debbie_liu@sunix.com,
-        Morris Ku <saumah@gmail.com>
-Subject: [PATCH] Add driver for SUNIX serial board
-Date:   Fri, 26 Jul 2019 18:32:42 +0800
-Message-Id: <20190726103242.6233-1-saumah@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 26 Jul 2019 07:32:27 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190726113224euoutp01b32915cfb9e7bd187e6905b8822c4cdf~08bhfQwi11083810838euoutp01Z
+        for <linux-serial@vger.kernel.org>; Fri, 26 Jul 2019 11:32:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190726113224euoutp01b32915cfb9e7bd187e6905b8822c4cdf~08bhfQwi11083810838euoutp01Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1564140744;
+        bh=3a9StrmoLxBMCfA62EA5ywia7Z262Mo1dxDYKM6yA9Y=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Ttn9zXgKXW5G1VX0p2/cG4mTdBpaJahcx95O1ecR2+n9WTBVZ0w4g+ZESHWAtx2ij
+         kDUJ58Q8JVZS6IgTh8Zp44erdZbCIJdSH+4iwLRMpkbWuY7OhLFHMfM7dC/Kcyo6hG
+         G9xUI9HpHGgGnR2UYiCsyrQD5EYXZBXW76qr5oSw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190726113223eucas1p25be80fa835db8d7082e0576449fdf9b5~08bgt5BuZ1700717007eucas1p2s;
+        Fri, 26 Jul 2019 11:32:23 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id ED.C1.04377.7C4EA3D5; Fri, 26
+        Jul 2019 12:32:23 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190726113223eucas1p287f8f2df03f66658bd492c592fd426e6~08bgB68XN1777617776eucas1p2d;
+        Fri, 26 Jul 2019 11:32:23 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190726113222eusmtrp20a2682aebebcebbe316bf09a2c75cb71~08bfz1fo42686026860eusmtrp2V;
+        Fri, 26 Jul 2019 11:32:22 +0000 (GMT)
+X-AuditID: cbfec7f4-113ff70000001119-1c-5d3ae4c73668
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 8E.34.04146.6C4EA3D5; Fri, 26
+        Jul 2019 12:32:22 +0100 (BST)
+Received: from [106.120.51.71] (unknown [106.120.51.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190726113222eusmtip259fd6f809de77f2426c2f522cb28c5fe~08bfGHCve2293222932eusmtip2g;
+        Fri, 26 Jul 2019 11:32:22 +0000 (GMT)
+Subject: Re: [PATCH v2] 8250_lpss: check null return when calling
+ pci_ioremap_bar
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     andriy.shevchenko@linux.intel.com, emamd001@umn.edu, kjlu@umn.edu,
+        smccaman@umn.edu, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Message-ID: <afc360b9-6d05-72a6-4933-2fc0b84a7cf7@samsung.com>
+Date:   Fri, 26 Jul 2019 13:32:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190719174848.24216-1-navid.emamdoost@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRjG+3bOdo7LI5/T8tXCalSalGYKnczMomjRP10tKrOVB+9TNrXU
+        JDPQNVHMpOGYt1ZqUjmG9yBLwUtqFqnFNBWUEsEQVNQwze0o+d/D8/7e73le+GhC0iJ0oSMU
+        8ZxSIY+WisRkbetCz762Mb/g/VVGNzY7XStgfz7QCtmHhioRm2+cErDtRd0U+7VRL2K7DNkU
+        m91RT7BPZ55RbMNgOxEoljXoflAyU+Ujkayo45ysqfAVJauq7iNlfaXplGza5HqWuir2D+Wi
+        IxI5pVfATXG4cfG3IG4K39WOzhJpaJbRIBsasC/UmBZIDRLTElyBYOGzWWgZSPAMgpEmZ34w
+        jSCjO51a2yidbSV5qByB5rkPD00iGM0yWiEHfAFMar31JUfsBSUjowILROBMAQy+G7FCIuwH
+        jzMrkUUzOAB61L+smsS7YKhDb03YhK/AcKtRyDP20FEwZvVt8FEoGDCILJrATmAeKxbwehvU
+        TeoJSxjgfgpalodXa5+AoYoCgtcOMNFWvepvheWGYgG/8AbBX/X46nYdgvInSyKeOgwtbV9W
+        atArEXugqtGLt49BRet70mIDtoPvk/Z8CTvIq9USvM2AOkPC07vBWGYUrcVqGl4SuUiqW3ea
+        bt05unXn6P7nliCyEjlxCaqYME51QMHd8VTJY1QJijDP27ExJrTytTqX2mbqUePirWaEaSS1
+        ZdwrDwVLhPJEVVJMMwKakDoyNfUrFhMqT0rmlLEhyoRoTtWMttCk1IlJ2TByTYLD5PFcFMfF
+        ccq1qYC2cUlD1YaE8IG0cj/99eS9ktyc1wcHSk4qb1zx1vxxnqvZzPTSnTmLH8LnUmX+2Df4
+        /Oyp2vnA+/GGS0Hb85eDLscxn7zdCiIzxo+cdncJMSm+9WRW153vMt9TM/5lGwsdsoRpHnFv
+        L85PnHFN2enT/7F/p23vZPdxc0lk/tWoHdq8VPcXUlIVLvf2IJQq+T/INZGVVgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCIsWRmVeSWpSXmKPExsVy+t/xe7rHnljFGkz7bmLR2zSdyeJZ43RW
+        i+bF69kspmz4wGRxYt5ZdovLu+awWZxZ3Mtu0XtyB7PFtC+L2C123jnB7MDlsXPWXXaPTas6
+        2TzmnQz02D93DbvH+i1XWTyuLmxi9/i8SS6APUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jE
+        Us/Q2DzWyshUSd/OJiU1J7MstUjfLkEvY8Ofd0wFHwQqpj/+ytzA+JW3i5GTQ0LARGLh12Ms
+        XYxcHEICSxklrm89ytbFyAGUkJE4vr4MokZY4s+1LjaImteMEov33GYDSQgLBEts6pjDCmKL
+        COhLLHjwmAnEZhZoZ5LofGYPYgsJZEv8bfgBVsMmYCUxsX0VI4jNK2Ancb7jOZjNIqAqce/k
+        HBYQW1QgQuLM+xUsEDWCEidnPgGzOQXsJWbeXswGMV9d4s+8S8wQtrjErSfzofbKS2x/O4d5
+        AqPQLCTts5C0zELSMgtJywJGllWMIqmlxbnpucWGesWJucWleel6yfm5mxiBMbrt2M/NOxgv
+        bQw+xCjAwajEw3thuWWsEGtiWXFl7iFGCQ5mJRHerTuAQrwpiZVVqUX58UWlOanFhxhNgZ6b
+        yCwlmpwPTB95JfGGpobmFpaG5sbmxmYWSuK8HQIHY4QE0hNLUrNTUwtSi2D6mDg4pRoYUyOL
+        v8rv+P7mqubDm+Icqy9PN49/dGr+uh6WhvantovE2NZyhnHxT0o6zZ2oI+E9w1/xgUrHzWVr
+        mSO/3FzxsyPVyTy663HIqzf1FmXfp+8vzrcLr2DbPzva3rhp6l3BzQoL9J63efPutpsxOarh
+        aLh67xIz7qqp01+vY3ZtaTXoTz2ZHiatxFKckWioxVxUnAgAMexjsOcCAAA=
+X-CMS-MailID: 20190726113223eucas1p287f8f2df03f66658bd492c592fd426e6
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190726113223eucas1p287f8f2df03f66658bd492c592fd426e6
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190726113223eucas1p287f8f2df03f66658bd492c592fd426e6
+References: <20190719151519.GO9224@smile.fi.intel.com>
+        <20190719174848.24216-1-navid.emamdoost@gmail.com>
+        <CGME20190726113223eucas1p287f8f2df03f66658bd492c592fd426e6@eucas1p2.samsung.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This patch add support for SUNIX serial board.
 
-Signed-off-by: Morris Ku <saumah@gmail.com>
----
- serial/Kconfig      |  11 ++
- serial/Makefile     |   2 +-
- serial/sunix_uart.c | 357 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 369 insertions(+), 1 deletion(-)
- create mode 100644 serial/sunix_uart.c
+Hi,
 
-diff --git a/serial/Kconfig b/serial/Kconfig
-index 0d31251..f9ae108 100644
---- a/serial/Kconfig
-+++ b/serial/Kconfig
-@@ -1618,6 +1618,17 @@ config SERIAL_MILBEAUT_USIO_PORTS
- 	depends on SERIAL_MILBEAUT_USIO
- 	default "4"
- 
-+config SERIAL_SUNIX
-+	tristate "SUNIX pci serial port support"
-+	depends on SERIAL_8250
-+	select SERIAL_CORE
-+	help
-+	  Say Y here if you have a SUNIX serial card.
-+	  If unsure, say N.
-+
-+	  This driver can also be built as a module. The module will be called
-+	  sunix_pci_serial. If you want to do that, say M here.
-+
- config SERIAL_MILBEAUT_USIO_CONSOLE
- 	bool "Support for console on MILBEAUT USIO/UART serial port"
- 	depends on SERIAL_MILBEAUT_USIO=y
-diff --git a/serial/Makefile b/serial/Makefile
-index 58d5317..cecccc6 100644
---- a/serial/Makefile
-+++ b/serial/Makefile
-@@ -94,7 +94,7 @@ obj-$(CONFIG_SERIAL_OWL)	+= owl-uart.o
- obj-$(CONFIG_SERIAL_RDA)	+= rda-uart.o
- obj-$(CONFIG_SERIAL_MILBEAUT_USIO) += milbeaut_usio.o
- obj-$(CONFIG_SERIAL_SIFIVE)	+= sifive.o
--
-+obj-$(CONFIG_SERIAL_SUNIX)	+= sunix_uart.o
- 
- # GPIOLIB helpers for modem control lines
- obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
-diff --git a/serial/sunix_uart.c b/serial/sunix_uart.c
-new file mode 100644
-index 0000000..d227d7a
---- /dev/null
-+++ b/serial/sunix_uart.c
-@@ -0,0 +1,357 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *	Driver for SUNIX PCI serial board
-+ *	Based on drivers/tty/serial/8250/8250_pci.c
-+ *	by Linus Torvalds, Theodore Ts'o.
-+ *
-+ *	This program is free software; you can redistribute it and/or modify
-+ *	it under the terms of the GNU General Public License as published by
-+ *	the Free Software Foundation; either version 2 of the License.
-+ */
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/string.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/delay.h>
-+#include <linux/tty.h>
-+#include <linux/serial_8250.h>
-+#include <linux/serial_reg.h>
-+#include <linux/serial_core.h>
-+#include <linux/8250_pci.h>
-+#include <linux/bitops.h>
-+#include <linux/dmaengine.h>
-+
-+#include <asm/byteorder.h>
-+#include <asm/io.h>
-+
-+
-+struct sunix_pci_board {
-+	kernel_ulong_t driver_data;
-+	struct pci_dev *pdev;
-+	unsigned int num_ports;
-+	int line[0];
-+};
-+
-+
-+enum {
-+	sunix_pci_1s = 0,
-+	sunix_pci_2s,
-+	sunix_pci_4s,
-+	sunix_pci_8s,
-+	sunix_pci_16s
-+};
-+
-+
-+static struct sunix_pci_board sunix_pci_boards[] = {
-+	[sunix_pci_1s] = {.num_ports = 1},
-+	[sunix_pci_2s] = {.num_ports = 2},
-+	[sunix_pci_4s] = {.num_ports = 4},
-+	[sunix_pci_8s] = {.num_ports = 8},
-+	[sunix_pci_16s] = {.num_ports = 16},
-+};
-+
-+
-+struct sunix_pci_board *snx_init_ports(struct pci_dev *pdev,
-+				kernel_ulong_t driver_data)
-+{
-+	struct uart_8250_port uart;
-+	struct sunix_pci_board *board;
-+	unsigned int num_ports;
-+	int i, bar, offset;
-+
-+	num_ports = sunix_pci_boards[driver_data].num_ports;
-+
-+	board = kzalloc(sizeof(struct sunix_pci_board) +
-+			sizeof(unsigned int) * num_ports, GFP_KERNEL);
-+	if (!board) {
-+		board = ERR_PTR(-ENOMEM);
-+		goto err_out;
-+	}
-+
-+	board->driver_data = driver_data;
-+	board->pdev = pdev;
-+	board->num_ports = num_ports;
-+
-+	memset(&uart, 0, sizeof(uart));
-+	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF |
-+					UPF_SHARE_IRQ | UPF_FIXED_TYPE;
-+	uart.port.uartclk = 921600 * 16;
-+	uart.port.irq = pdev->irq;
-+	uart.port.dev = &pdev->dev;
-+	uart.port.type = PORT_16C950;
-+	uart.port.fifosize = 128;
-+
-+	for (i = 0; i < num_ports; i++) {
-+
-+		switch (i) {
-+		case 0:
-+			bar = 0; offset = 0; break;
-+		case 1:
-+			bar = 0; offset = 8; break;
-+		case 2:
-+			bar = 0; offset = 16; break;
-+		case 3:
-+			bar = 0; offset = 24; break;
-+		case 4:
-+			bar = 1; offset = 0; break;
-+		case 5:
-+			bar = 1; offset = 8; break;
-+		case 6:
-+			bar = 1; offset = 16; break;
-+		case 7:
-+			bar = 1; offset = 24; break;
-+		case 8:
-+			bar = 1; offset = 64; break;
-+		case 9:
-+			bar = 1; offset = 72; break;
-+		case 10:
-+			bar = 1; offset = 80; break;
-+		case 11:
-+			bar = 1; offset = 88; break;
-+		case 12:
-+			bar = 1; offset = 128; break;
-+		case 13:
-+			bar = 1; offset = 136; break;
-+		case 14:
-+			bar = 1; offset = 144; break;
-+		case 15:
-+			bar = 1; offset = 152; break;
-+		}
-+
-+		uart.port.iotype = UPIO_PORT;
-+		uart.port.iobase = pci_resource_start(pdev, bar) + offset;
-+		uart.port.mapbase = 0;
-+		uart.port.membase = NULL;
-+		uart.port.regshift = 0;
-+
-+		board->line[i] = serial8250_register_8250_port(&uart);
-+		if (board->line[i] < 0) {
-+			printk(KERN_INFO "sunix_pci_serial : Couldn't register serial port %s: %d\n",
-+			pci_name(pdev), board->line[i]);
-+			break;
-+		}
-+	}
-+
-+	return board;
-+
-+err_out:
-+	return board;
-+}
-+
-+
-+void snx_detach_ports(struct sunix_pci_board *board)
-+{
-+
-+	int i;
-+
-+	for (i = 0; i < board->num_ports; i++)
-+		serial8250_unregister_port(board->line[i]);
-+}
-+
-+
-+void snx_remove_ports(struct sunix_pci_board *board)
-+{
-+	snx_detach_ports(board);
-+	kfree(board);
-+}
-+
-+
-+void snx_suspend_ports(struct sunix_pci_board *board)
-+{
-+	int i;
-+
-+	for (i = 0; i < board->num_ports; i++) {
-+		if (board->line[i] >= 0)
-+			serial8250_suspend_port(board->line[i]);
-+
-+	}
-+}
-+
-+
-+void snx_resume_ports(struct sunix_pci_board *board)
-+{
-+
-+	int i;
-+
-+	for (i = 0; i < board->num_ports; i++) {
-+		if (board->line[i] >= 0)
-+			serial8250_resume_port(board->line[i]);
-+	}
-+}
-+
-+
-+#ifdef CONFIG_PM_SLEEP
-+static int snx_suspend_one(struct device *dev)
-+{
-+
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	struct sunix_pci_board *board = pci_get_drvdata(pdev);
-+
-+	if (board)
-+		snx_suspend_ports(board);
-+
-+	return  0;
-+}
-+
-+
-+static int snx_resume_one(struct device *dev)
-+{
-+
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	struct sunix_pci_board *board = pci_get_drvdata(pdev);
-+	int err;
-+
-+	if (board) {
-+		err = pci_enable_device(pdev);
-+		if (err)
-+			printk(KERN_INFO "sunix_pci_serial : Unable to re-enable ports\n");
-+
-+		snx_resume_ports(board);
-+	}
-+
-+	return 0;
-+}
-+#endif
-+
-+
-+static pci_ers_result_t snx_err_io_error_detected(struct pci_dev *pdev,
-+		pci_channel_state_t state)
-+{
-+
-+	struct sunix_pci_board *board = pci_get_drvdata(pdev);
-+
-+	if (state == pci_channel_io_perm_failure)
-+		return PCI_ERS_RESULT_DISCONNECT;
-+
-+	if (board)
-+		snx_detach_ports(board);
-+
-+	pci_disable_device(pdev);
-+
-+	return PCI_ERS_RESULT_NEED_RESET;
-+}
-+
-+
-+static pci_ers_result_t snx_err_io_slot_reset(struct pci_dev *pdev)
-+{
-+
-+	int rc;
-+
-+	rc = pci_enable_device(pdev);
-+	if (rc)
-+		return PCI_ERS_RESULT_DISCONNECT;
-+
-+	pci_restore_state(pdev);
-+	pci_save_state(pdev);
-+
-+	return PCI_ERS_RESULT_RECOVERED;
-+}
-+
-+
-+static void snx_err_io_resume(struct pci_dev *pdev)
-+{
-+	struct sunix_pci_board *board = pci_get_drvdata(pdev);
-+	struct sunix_pci_board *new;
-+
-+	if (!board)
-+		return;
-+
-+	new = snx_init_ports(pdev, board->driver_data);
-+	if (!IS_ERR(new)) {
-+		pci_set_drvdata(pdev, new);
-+		kfree(board);
-+	}
-+}
-+
-+
-+static int sunix_pci_serial_init_one(struct pci_dev *pdev,
-+			const struct pci_device_id *ent)
-+{
-+
-+	struct sunix_pci_board *board;
-+	int rc;
-+
-+	if (ent->driver_data >= ARRAY_SIZE(sunix_pci_boards)) {
-+		printk(KERN_INFO "sunix_pci_serial : Invalid driver_data:%ld\n",
-+							ent->driver_data);
-+		return -EINVAL;
-+	}
-+
-+	rc = pci_enable_device(pdev);
-+	pci_save_state(pdev);
-+
-+	if (rc)
-+		return rc;
-+
-+	board = snx_init_ports(pdev, ent->driver_data);
-+	if (IS_ERR(board)) {
-+		rc = PTR_ERR(board);
-+		return rc;
-+	}
-+
-+	pci_set_drvdata(pdev, board);
-+	return 0;
-+}
-+
-+
-+static void sunix_pci_serial_remove_one(struct pci_dev *pdev)
-+{
-+
-+	struct sunix_pci_board *board = pci_get_drvdata(pdev);
-+
-+	snx_remove_ports(board);
-+}
-+
-+
-+static SIMPLE_DEV_PM_OPS(sunix_pci_serial_pm_ops,
-+				snx_suspend_one, snx_resume_one);
-+
-+
-+static struct pci_device_id sunix_pci_serial_id_tbl[] = {
-+	// 5027A - 1S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0001, 0, 0, sunix_pci_1s },
-+	// 5037A,P2102,CDK1037,DIO0802 - 2S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0002, 0, 0, sunix_pci_2s },
-+	// 5056A,P2104,CDK1056,DIO1604,DIO3204 - 4S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0004, 0, 0, sunix_pci_4s },
-+	// P3104 - 4S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0084, 0, 0, sunix_pci_4s },
-+	// 5066A,P2108 - 8S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0008, 0, 0, sunix_pci_8s },
-+	// P3108 - 8S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0088, 0, 0, sunix_pci_8s },
-+	// 5016A,P2116 - 16S
-+	{ 0x1fd4, 0x1999, 0x1fd4, 0x0010, 0, 0, sunix_pci_16s },
-+	//
-+	{0}
-+};
-+MODULE_DEVICE_TABLE(pci, sunix_pci_serial_id_tbl);
-+
-+
-+static const struct pci_error_handlers sunix_pci_serial_err_handler = {
-+	.error_detected = snx_err_io_error_detected,
-+	.slot_reset		= snx_err_io_slot_reset,
-+	.resume			= snx_err_io_resume,
-+};
-+
-+
-+static struct pci_driver sunix_pci_serial_driver = {
-+	.name			= "sunix_pci_serial",
-+	.probe			= sunix_pci_serial_init_one,
-+	.remove			= sunix_pci_serial_remove_one,
-+	.driver			= {
-+		.pm			= &sunix_pci_serial_pm_ops,
-+	},
-+	.id_table		= sunix_pci_serial_id_tbl,
-+	.err_handler	= &sunix_pci_serial_err_handler,
-+};
-+
-+
-+module_pci_driver(sunix_pci_serial_driver);
-+
-+MODULE_AUTHOR("SUNIX Co., Ltd.<info@sunix.com.tw>");
-+MODULE_DESCRIPTION("SUNIX PCI serial board driver");
-+MODULE_LICENSE("GPL");
-+
-+
--- 
-2.17.1
+On 7/19/19 7:48 PM, Navid Emamdoost wrote:
+> pci_ioremap_bar may return null. This is eventually de-referenced at 
+> drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check 
+> is needed to prevent null de-reference. I am adding the check and in case
+>  of failure. Thanks to Andy Shevchenko for the hint on the necessity of 
+> pci_iounmap when exiting.
+> 
+> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_lpss.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+> index 53ca9ba6ab4b..d07e431110d9 100644
+> --- a/drivers/tty/serial/8250/8250_lpss.c
+> +++ b/drivers/tty/serial/8250/8250_lpss.c
+> @@ -169,10 +169,12 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+>  	struct pci_dev *pdev = to_pci_dev(port->dev);
+>  	int ret;
+>  
+> +	chip->pdata = &qrk_serial_dma_pdata;
+>  	chip->dev = &pdev->dev;
+>  	chip->irq = pci_irq_vector(pdev, 0);
+>  	chip->regs = pci_ioremap_bar(pdev, 1);
+> -	chip->pdata = &qrk_serial_dma_pdata;
+> +	if (!chip->regs)
+> +		return;
+>  
+>  	/* Falling back to PIO mode if DMA probing fails */
+>  	ret = dw_dma_probe(chip);
 
+pci_iounmap() should also be called on dw_dma_probe() failure (in such
+case param->dma_dev is NULL so pci_iounmap() in qrk_serial_exit_dma()
+won't be called during exit).
+
+> @@ -195,11 +197,15 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+>  pci_iounmap
+>  static void qrk_serial_exit_dma(struct lpss8250 *lpss)
+>  {
+> +	struct dw_dma_chip *chip = &lpss->dma_chip;
+>  	struct dw_dma_slave *param = &lpss->dma_param;
+>  
+>  	if (!param->dma_dev)
+>  		return;
+> -	dw_dma_remove(&lpss->dma_chip);
+> +
+> +	dw_dma_remove(chip);
+> +
+> +	pci_iounmap(to_pci_dev(chip->dev), chip->regs);
+>  }
+>  #else	/* CONFIG_SERIAL_8250_DMA */
+>  static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port) {}
+
+Best regards,
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
+Samsung Electronics
