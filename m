@@ -2,116 +2,437 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A219775F8B
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 09:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3FA75FB3
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 09:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbfGZHR5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 03:17:57 -0400
-Received: from mx0b-00010702.pphosted.com ([148.163.158.57]:56262 "EHLO
-        mx0b-00010702.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725864AbfGZHR5 (ORCPT
+        id S1726001AbfGZHWg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jul 2019 03:22:36 -0400
+Received: from mx0a-00010702.pphosted.com ([148.163.156.75]:5570 "EHLO
+        mx0b-00010702.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725955AbfGZHWg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 03:17:57 -0400
-Received: from pps.filterd (m0098778.ppops.net [127.0.0.1])
-        by mx0b-00010702.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6Q7FpgN016678;
-        Fri, 26 Jul 2019 02:17:56 -0500
-Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2057.outbound.protection.outlook.com [104.47.38.57])
-        by mx0b-00010702.pphosted.com with ESMTP id 2tx62ha42r-1
+        Fri, 26 Jul 2019 03:22:36 -0400
+Received: from pps.filterd (m0098780.ppops.net [127.0.0.1])
+        by mx0a-00010702.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6Q7KjlS020976;
+        Fri, 26 Jul 2019 02:22:34 -0500
+Received: from ni.com (skprod3.natinst.com [130.164.80.24])
+        by mx0a-00010702.pphosted.com with ESMTP id 2tx62hk999-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jul 2019 02:17:56 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cxF4VEVlyRAIXPRJwKOwaEmJvUukrnI6mOS6byLwMZ5587ClYlQ+cUV8yxYp8gbWUhRn9IofjklNvrXmKDwF8Mna2Q7+VVXxYTeoeb68rJjR1J5IsN2daPDgbZXELaFfv4UsSG34mc1cPb7zs2Ne1oKyMD+7wmnBxO/piFuegDLl3UYL+R83jq5zpTGopnBMDrH2v6IRS+bT1UhDywbZma98AXD86k9yEOVjPlF3cHuthTM5o18vTpD2KAVZ7ss3XjoYUNqQVxl66gzlYZkpM0Zd9JDZX6NOTJRVWqDPpGsQCtiR3Ovbdg4x+r7WVsrAHp/WfSAe5TZAG1phTlIeDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YKwp8CjaeUvz3CiHVkGBr3l5I2skOP7r0GetkhMolY4=;
- b=Lh6SRFQVGAkoZ0BukXSbxiASqlExXjRzU6TAWVwTKEtNK4Ch6E3N8BApd6szBiu68Kj5G328gEwskWrZS6cv6FUxQSanakXUtOcLDf97jY9XUNXd/6bhcXGMdb7RoiIjjyC2dJA+93yMkmgeBLvX6rWcKmAbo7kZ10GMYOrCvCDUou8y7hGRYLTJGQhmfVSyLJUDV0aoHRHr5B9AzXyWfZsV4cI1PQrktaIOOxV5DhH85A7tJdhW9DejXchrYJf0WJ2sWD+kTT6Ye6vBqQke+3tGxI6I44o5HLSGgygk8OopY59rMc+0BsJcxtBUk7MEynA5dDHbH2Oziqu7WzVAlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=ni.com;dmarc=pass action=none header.from=ni.com;dkim=pass
- header.d=ni.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nio365.onmicrosoft.com; s=selector1-nio365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YKwp8CjaeUvz3CiHVkGBr3l5I2skOP7r0GetkhMolY4=;
- b=eIzy3l+o+D/V8cKRpStNLDVAnfpWC8XCvgWhXqWvMEyTwYqAZgMtGkB92inEfaqNHHR+kA1fMQDNbIfAu8vJYGyYH/T2i9h7KiB28Duhlw2osGZd1UGFjqidN7ybdLPW2EbMKW9mmRGs05ThX1Kop0Tp/Fck2kPHUzgdBc9Dr44=
-Received: from MN2PR04MB5920.namprd04.prod.outlook.com (20.179.21.161) by
- MN2PR04MB5679.namprd04.prod.outlook.com (20.179.20.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.10; Fri, 26 Jul 2019 07:17:54 +0000
-Received: from MN2PR04MB5920.namprd04.prod.outlook.com
- ([fe80::584f:77e7:16ee:ba8]) by MN2PR04MB5920.namprd04.prod.outlook.com
- ([fe80::584f:77e7:16ee:ba8%7]) with mapi id 15.20.2115.005; Fri, 26 Jul 2019
- 07:17:54 +0000
-From:   Je Yen Tam <je.yen.tam@ni.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Thread-Topic: [EXTERNAL] Re: [PATCH v5] serial/8250: Add support for NI-Serial
- PXI/PXIe+485 devices
-Thread-Index: AQHVQ1uO9G2waROnik6RFS2RainSUqbcfTwAgAAAZPA=
-Date:   Fri, 26 Jul 2019 07:17:54 +0000
-Message-ID: <MN2PR04MB59205704D8A670ECBF5ABA81B7C00@MN2PR04MB5920.namprd04.prod.outlook.com>
-References: <20190726024046.5873-1-je.yen.tam@ni.com>
- <20190726071600.GA12610@kroah.com>
-In-Reply-To: <20190726071600.GA12610@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [130.164.74.17]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 75575433-d01c-40b1-f950-08d7119960db
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR04MB5679;
-x-ms-traffictypediagnostic: MN2PR04MB5679:
-x-microsoft-antispam-prvs: <MN2PR04MB5679924CBA246E137BA96B3DB7C00@MN2PR04MB5679.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2803;
-x-forefront-prvs: 01106E96F6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(376002)(39850400004)(396003)(366004)(199004)(189003)(33656002)(4326008)(71190400001)(229853002)(7736002)(446003)(11346002)(71200400001)(6436002)(14454004)(8676002)(81156014)(81166006)(68736007)(52536014)(86362001)(6916009)(66066001)(6246003)(53936002)(74316002)(5660300002)(4744005)(3846002)(6116002)(66946007)(8936002)(66476007)(66446008)(64756008)(66556008)(25786009)(186003)(9686003)(55016002)(102836004)(26005)(2906002)(476003)(99286004)(6506007)(76176011)(7696005)(76116006)(54906003)(256004)(305945005)(316002)(486006)(478600001);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR04MB5679;H:MN2PR04MB5920.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: ni.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 2PhXXhkc0r8rLOb4OikOTlEiuvvwFRIdvpOWvQTaz2otPvjEUlqvs7smByxB2zS+hBbGH0eSZ/s2Ypys9s4p3uzVX40z1aIKJLsMzvhHbDHpZynxolx/DshZLgX74f3fSWwjqaumu7c3lncqj2mapRqoVwACmo2g95NFHG58gvLLxcupICTzR4gj6mGaPb/KjUvo2Qq04LAtPhKMT6BSPaOiywMNu9Few/wfALro1J872RxAfT+NelHBcpTaGpvauKQOG8/LiiEfQREbINBW41VJj/mS0wl0NVd3pYKu0KBKbk6J0oVhZ+x0gzA/B4DF60mg0NFyTGpWniilxzHqDjBSORvILXhwDXaRBlOxR3j4RRBgzgUc17w+4CuRh8HLV1bSbCbtO6PUuNaegHIGmkOie6T5/QUldRP8Q+XMszo=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 26 Jul 2019 02:22:34 -0500
+Received: from us-aus-exhub2.ni.corp.natinst.com (us-aus-exhub2.ni.corp.natinst.com [130.164.68.32])
+        by us-aus-skprod3.natinst.com (8.16.0.27/8.16.0.27) with ESMTPS id x6Q7MXNB009272
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jul 2019 02:22:33 -0500
+Received: from us-aus-exhub1.ni.corp.natinst.com (130.164.68.41) by
+ us-aus-exhub2.ni.corp.natinst.com (130.164.68.32) with Microsoft SMTP Server
+ (TLS) id 15.0.1395.4; Fri, 26 Jul 2019 02:22:32 -0500
+Received: from my-pen-rd9.apac.corp.natinst.com (130.164.49.7) by
+ us-aus-exhub1.ni.corp.natinst.com (130.164.68.41) with Microsoft SMTP Server
+ id 15.0.1395.4 via Frontend Transport; Fri, 26 Jul 2019 02:22:31 -0500
+From:   jeyentam <je.yen.tam@ni.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        jeyentam <je.yen.tam@ni.com>
+Subject: [PATCH v6] serial/8250: Add support for NI-Serial PXI/PXIe+485 devices
+Date:   Fri, 26 Jul 2019 15:22:26 +0800
+Message-ID: <20190726072226.6357-1-je.yen.tam@ni.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: ni.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75575433-d01c-40b1-f950-08d7119960db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2019 07:17:54.7023
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 87ba1f9a-44cd-43a6-b008-6fdb45a5204e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: je.yen.tam@ni.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5679
-Subject: RE: Re: [PATCH v5] serial/8250: Add support for NI-Serial PXI/PXIe+485
- devices
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
  definitions=2019-07-26_04:2019-07-26,2019-07-26 signatures=0
-X-Proofpoint-Spam-Details: rule=inbound_policy_notspam policy=inbound_policy score=30 malwarescore=0
- clxscore=1015 suspectscore=0 mlxscore=0 spamscore=0 adultscore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 lowpriorityscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=30 reason=mlx
- scancount=1 engine=8.12.0-1906280000 definitions=main-1907260095
+X-Proofpoint-Spam-Reason: safe
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-> Subject: [EXTERNAL] Re: [PATCH v5] serial/8250: Add support for NI-Serial
-> PXI/PXIe+485 devices
->=20
-> On Fri, Jul 26, 2019 at 10:40:46AM +0800, jeyentam wrote:
-> > Add support for NI-Serial PXIe-RS232, PXI-RS485 and PXIe-RS485 devices.
-> >
-> > Signed-off-by: jeyentam <je.yen.tam@ni.com>
->=20
-> You messed up the From: and signed-off-by: lines this time :(
->=20
-> v4 had it "correct", please fix up and send v6.
+Add support for NI-Serial PXIe-RS232, PXI-RS485 and PXIe-RS485 devices.
 
-Oh snap, will fix it in v6.
+Signed-off-by: Je Yen Tam <je.yen.tam@ni.com>
+---
 
->=20
-> thanks,
->=20
-> greg k-h
+v5 -> v6
+- Fix author full name.
+
+v4 -> v5
+- Remove blank lines between variable definitions.
+- Remove trace_printk().
+
+v3 -> v4:
+- Add changes description.
+
+v2 -> v3:
+- Add "full" name for author
+- Use BIT() macro for bits definition
+- Remove unnecessary WARN_ON()
+- Change debugging interface to ftrace
+- Fix indentation
+- Add NI PXIe-RS232 and PXI/PXIe-RS485 device IDs #defines
+
+v1 -> v2:
+- Fix unintended indentation
+
+v1:
+- Add and rename #defines for 16550 UART Port Control Register
+- Add configuration for RS485 port.
+- Add device setup for NI PXI/PXIe-RS485 family.
+- Add PCI board attributes for NI PXIe-RS232 and PXI/PXIe-RS485 devices.
+
+ drivers/tty/serial/8250/8250_pci.c | 292 ++++++++++++++++++++++++++++-
+ 1 file changed, 288 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+index df41397de478..a675069571b2 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -730,8 +730,16 @@ static int pci_ni8430_init(struct pci_dev *dev)
+ }
+ 
+ /* UART Port Control Register */
+-#define NI8430_PORTCON	0x0f
+-#define NI8430_PORTCON_TXVR_ENABLE	(1 << 3)
++#define NI16550_PCR_OFFSET	0x0f
++#define NI16550_PCR_RS422	0x00
++#define NI16550_PCR_ECHO_RS485	0x01
++#define NI16550_PCR_DTR_RS485	0x02
++#define NI16550_PCR_AUTO_RS485	0x03
++#define NI16550_PCR_WIRE_MODE_MASK	0x03
++#define NI16550_PCR_TXVR_ENABLE_BIT	BIT(3)
++#define NI16550_PCR_RS485_TERMINATION_BIT	BIT(6)
++#define NI16550_ACR_DTR_AUTO_DTR	(0x2 << 3)
++#define NI16550_ACR_DTR_MANUAL_DTR	(0x0 << 3)
+ 
+ static int
+ pci_ni8430_setup(struct serial_private *priv,
+@@ -753,14 +761,117 @@ pci_ni8430_setup(struct serial_private *priv,
+ 		return -ENOMEM;
+ 
+ 	/* enable the transceiver */
+-	writeb(readb(p + offset + NI8430_PORTCON) | NI8430_PORTCON_TXVR_ENABLE,
+-	       p + offset + NI8430_PORTCON);
++	writeb(readb(p + offset + NI16550_PCR_OFFSET) | NI16550_PCR_TXVR_ENABLE_BIT,
++	       p + offset + NI16550_PCR_OFFSET);
+ 
+ 	iounmap(p);
+ 
+ 	return setup_port(priv, port, bar, offset, board->reg_shift);
+ }
+ 
++static int pci_ni8431_config_rs485(struct uart_port *port,
++	struct serial_rs485 *rs485)
++{
++	u8 pcr, acr;
++	struct uart_8250_port *up;
++
++	up = container_of(port, struct uart_8250_port, port);
++	acr = up->acr;
++	pcr = port->serial_in(port, NI16550_PCR_OFFSET);
++	pcr &= ~NI16550_PCR_WIRE_MODE_MASK;
++
++	if (rs485->flags & SER_RS485_ENABLED) {
++		/* RS-485 */
++		if ((rs485->flags & SER_RS485_RX_DURING_TX) &&
++			(rs485->flags & SER_RS485_RTS_ON_SEND)) {
++			dev_dbg(port->dev, "Invalid 2-wire mode\n");
++			return -EINVAL;
++		}
++
++		if (rs485->flags & SER_RS485_RX_DURING_TX) {
++			/* Echo */
++			dev_vdbg(port->dev, "2-wire DTR with echo\n");
++			pcr |= NI16550_PCR_ECHO_RS485;
++			acr |= NI16550_ACR_DTR_MANUAL_DTR;
++		} else {
++			/* Auto or DTR */
++			if (rs485->flags & SER_RS485_RTS_ON_SEND) {
++				/* Auto */
++				dev_vdbg(port->dev, "2-wire Auto\n");
++				pcr |= NI16550_PCR_AUTO_RS485;
++				acr |= NI16550_ACR_DTR_AUTO_DTR;
++			} else {
++				/* DTR-controlled */
++				/* No Echo */
++				dev_vdbg(port->dev, "2-wire DTR no echo\n");
++				pcr |= NI16550_PCR_DTR_RS485;
++				acr |= NI16550_ACR_DTR_MANUAL_DTR;
++			}
++		}
++	} else {
++		/* RS-422 */
++		dev_vdbg(port->dev, "4-wire\n");
++		pcr |= NI16550_PCR_RS422;
++		acr |= NI16550_ACR_DTR_MANUAL_DTR;
++	}
++
++	dev_dbg(port->dev, "write pcr: 0x%08x\n", pcr);
++	port->serial_out(port, NI16550_PCR_OFFSET, pcr);
++
++	up->acr = acr;
++	port->serial_out(port, UART_SCR, UART_ACR);
++	port->serial_out(port, UART_ICR, up->acr);
++
++	/* Update the cache. */
++	port->rs485 = *rs485;
++
++	return 0;
++}
++
++static int pci_ni8431_setup(struct serial_private *priv,
++		 const struct pciserial_board *board,
++		 struct uart_8250_port *uart, int idx)
++{
++	u8 pcr, acr;
++	struct pci_dev *dev = priv->dev;
++	void __iomem *addr;
++	unsigned int bar, offset = board->first_offset;
++
++	if (idx >= board->num_ports)
++		return 1;
++
++	bar = FL_GET_BASE(board->flags);
++	offset += idx * board->uart_offset;
++
++	addr = pci_ioremap_bar(dev, bar);
++	if (!addr)
++		return -ENOMEM;
++
++	/* enable the transceiver */
++	writeb(readb(addr + NI16550_PCR_OFFSET) | NI16550_PCR_TXVR_ENABLE_BIT,
++		addr + NI16550_PCR_OFFSET);
++
++	pcr = readb(addr + NI16550_PCR_OFFSET);
++	pcr &= ~NI16550_PCR_WIRE_MODE_MASK;
++
++	/* set wire mode to default RS-422 */
++	pcr |= NI16550_PCR_RS422;
++	acr = NI16550_ACR_DTR_MANUAL_DTR;
++
++	/* write port configuration to register */
++	writeb(pcr, addr + NI16550_PCR_OFFSET);
++
++	/* access and write to UART acr register */
++	writeb(UART_ACR, addr + UART_SCR);
++	writeb(acr, addr + UART_ICR);
++
++	uart->port.rs485_config = &pci_ni8431_config_rs485;
++
++	iounmap(addr);
++
++	return setup_port(priv, uart, bar, offset, board->reg_shift);
++}
++
+ static int pci_netmos_9900_setup(struct serial_private *priv,
+ 				const struct pciserial_board *board,
+ 				struct uart_8250_port *port, int idx)
+@@ -1731,6 +1842,15 @@ pci_wch_ch38x_setup(struct serial_private *priv,
+ #define PCI_DEVICE_ID_ACCESIO_PCIE_COM_8SM	0x10E9
+ #define PCI_DEVICE_ID_ACCESIO_PCIE_ICM_4SM	0x11D8
+ 
++#define PCIE_DEVICE_ID_NI_PXIE8430_2328	0x74C2
++#define PCIE_DEVICE_ID_NI_PXIE8430_23216	0x74C1
++#define PCI_DEVICE_ID_NI_PXI8431_4852	0x7081
++#define PCI_DEVICE_ID_NI_PXI8431_4854	0x70DE
++#define PCI_DEVICE_ID_NI_PXI8431_4858	0x70E3
++#define PCI_DEVICE_ID_NI_PXI8433_4852	0x70E9
++#define PCI_DEVICE_ID_NI_PXI8433_4854	0x70ED
++#define PCIE_DEVICE_ID_NI_PXIE8431_4858	0x74C4
++#define PCIE_DEVICE_ID_NI_PXIE8431_48516	0x74C3
+ 
+ 
+ /* Unknown vendors/cards - this should not be in linux/pci_ids.h */
+@@ -1956,6 +2076,87 @@ static struct pci_serial_quirk pci_serial_quirks[] __refdata = {
+ 		.setup		= pci_ni8430_setup,
+ 		.exit		= pci_ni8430_exit,
+ 	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCIE_DEVICE_ID_NI_PXIE8430_2328,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8430_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCIE_DEVICE_ID_NI_PXIE8430_23216,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8430_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCI_DEVICE_ID_NI_PXI8431_4852,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCI_DEVICE_ID_NI_PXI8431_4854,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCI_DEVICE_ID_NI_PXI8431_4858,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCI_DEVICE_ID_NI_PXI8433_4852,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCI_DEVICE_ID_NI_PXI8433_4854,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCIE_DEVICE_ID_NI_PXIE8431_4858,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
++	{
++		.vendor		= PCI_VENDOR_ID_NI,
++		.device		= PCIE_DEVICE_ID_NI_PXIE8431_48516,
++		.subvendor	= PCI_ANY_ID,
++		.subdevice	= PCI_ANY_ID,
++		.init		= pci_ni8430_init,
++		.setup		= pci_ni8431_setup,
++		.exit		= pci_ni8430_exit,
++	},
+ 	/* Quatech */
+ 	{
+ 		.vendor		= PCI_VENDOR_ID_QUATECH,
+@@ -2679,6 +2880,13 @@ enum pci_board_num_t {
+ 	pbn_ni8430_4,
+ 	pbn_ni8430_8,
+ 	pbn_ni8430_16,
++	pbn_ni8430_pxie_8,
++	pbn_ni8430_pxie_16,
++	pbn_ni8431_2,
++	pbn_ni8431_4,
++	pbn_ni8431_8,
++	pbn_ni8431_pxie_8,
++	pbn_ni8431_pxie_16,
+ 	pbn_ADDIDATA_PCIe_1_3906250,
+ 	pbn_ADDIDATA_PCIe_2_3906250,
+ 	pbn_ADDIDATA_PCIe_4_3906250,
+@@ -3320,6 +3528,55 @@ static struct pciserial_board pci_boards[] = {
+ 		.uart_offset	= 0x10,
+ 		.first_offset	= 0x800,
+ 	},
++	[pbn_ni8430_pxie_16] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 16,
++		.base_baud	= 3125000,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
++	[pbn_ni8430_pxie_8] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 8,
++		.base_baud	= 3125000,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
++	[pbn_ni8431_8] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 8,
++		.base_baud	= 3686400,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
++	[pbn_ni8431_4] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 4,
++		.base_baud	= 3686400,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
++	[pbn_ni8431_2] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 2,
++		.base_baud	= 3686400,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
++	[pbn_ni8431_pxie_16] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 16,
++		.base_baud	= 3125000,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
++	[pbn_ni8431_pxie_8] = {
++		.flags		= FL_BASE0,
++		.num_ports	= 8,
++		.base_baud	= 3125000,
++		.uart_offset	= 0x10,
++		.first_offset	= 0x800,
++	},
+ 	/*
+ 	 * ADDI-DATA GmbH PCI-Express communication cards <info@addi-data.com>
+ 	 */
+@@ -5003,6 +5260,33 @@ static const struct pci_device_id serial_pci_tbl[] = {
+ 	{	PCI_VENDOR_ID_NI, PCI_DEVICE_ID_NI_PCI8432_2324,
+ 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
+ 		pbn_ni8430_4 },
++	{	PCI_VENDOR_ID_NI, PCIE_DEVICE_ID_NI_PXIE8430_2328,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8430_pxie_8 },
++	{	PCI_VENDOR_ID_NI, PCIE_DEVICE_ID_NI_PXIE8430_23216,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8430_pxie_16 },
++	{	PCI_VENDOR_ID_NI, PCI_DEVICE_ID_NI_PXI8431_4852,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_2 },
++	{	PCI_VENDOR_ID_NI, PCI_DEVICE_ID_NI_PXI8431_4854,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_4 },
++	{	PCI_VENDOR_ID_NI, PCI_DEVICE_ID_NI_PXI8431_4858,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_8 },
++	{	PCI_VENDOR_ID_NI, PCIE_DEVICE_ID_NI_PXIE8431_4858,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_pxie_8 },
++	{	PCI_VENDOR_ID_NI, PCIE_DEVICE_ID_NI_PXIE8431_48516,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_pxie_16 },
++	{	PCI_VENDOR_ID_NI, PCI_DEVICE_ID_NI_PXI8433_4852,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_2 },
++	{	PCI_VENDOR_ID_NI, PCI_DEVICE_ID_NI_PXI8433_4854,
++		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
++		pbn_ni8431_4 },
+ 
+ 	/*
+ 	* ADDI-DATA GmbH communication cards <info@addi-data.com>
+-- 
+2.17.1
+
