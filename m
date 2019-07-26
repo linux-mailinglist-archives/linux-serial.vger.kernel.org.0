@@ -2,101 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B7D76F3E
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 18:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A547702C
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 19:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728549AbfGZQp3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 12:45:29 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39252 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728610AbfGZQp2 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 12:45:28 -0400
-Received: by mail-qt1-f193.google.com with SMTP id l9so53176690qtu.6
-        for <linux-serial@vger.kernel.org>; Fri, 26 Jul 2019 09:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=qaOWGs23G49TWwws7WjjdoCv06+sXW9upizbWmsREGM=;
-        b=MBKJbuMrs9FSTsgDbpfMEC2iM+Mgo/gNYAa3SM3aaQ8NIBY6v4rD+MmM6UONYqYX8y
-         fV6WIXzbBAtiC04TwawPu+avmWl7u6cCkPHfj7xZ7EBr3sjoSW9pLTlEWMwG4I9nEBuB
-         kbcCDp0IYhpUBF9aQOgKEjOHuISU6K21Q/KE9/ocl8zP/tfnDZYWpUKHH4fwMyEo1IVp
-         Ex0vqVhpapA0o+umQN6+Mh/SRg/Ff8VCFCxkyc6aHlXs2QQ89RTq1BaWvSq3RxCyQgBl
-         QnyScmmox2OYfEA5SrYaInW8kG1ozHCMQxHZWV3Vz8yXtGI4WanKuJwTW8cQPAjXIO9j
-         pUVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=qaOWGs23G49TWwws7WjjdoCv06+sXW9upizbWmsREGM=;
-        b=BQ1kfQvTwuuL/YVzp7d46mKC9fiwdGReNV+tK79nWNwzXv2e9xHtN8Kfnh67hGK3xM
-         PjSz+Rqy3EGLaVaWIFeuwffMKJ9uTTq3jQJgF9QL8J1F6AgsLZ4axJVYsjbczsCWykbM
-         x0ZK1YTpPZAkmGQTfqkDU2oVQ5QoD4GOkHodRZREZ/SMY4L6GlgD/GUkDrvnBxWEi7Ab
-         eC7PHKhAaz+sKGv/8Npp73vCjnNgdIl71mlLieoOig5Px2vaV14QuZ2xejpN1/fF9MwL
-         8MVj+Uitbn883/BEoJ65GPdLsX7Q82LEaah/eE8I/s4lJJ5iEshH6DC3pcS1ZzCWTq/x
-         gpJA==
-X-Gm-Message-State: APjAAAVncb6Ttt9X29KZV20N7TUp6KmZWjXqPlukhCZ7qWwh7z5kUy93
-        BdmoyFdmzUIMogRptiDDUL19SynCEjKLJcD5miQ=
-X-Google-Smtp-Source: APXvYqyRqfPcz7rcgMGQO0a1Xg8BgrG0FA5d73BKM93l8ujPyfPbiSSGVebQirNV9WxwZB6CZnlKxYXOzdXOIou0f1E=
-X-Received: by 2002:ac8:4252:: with SMTP id r18mr6404984qtm.357.1564159527359;
- Fri, 26 Jul 2019 09:45:27 -0700 (PDT)
+        id S1728605AbfGZR2V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jul 2019 13:28:21 -0400
+Received: from mga01.intel.com ([192.55.52.88]:18259 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728279AbfGZR2U (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 26 Jul 2019 13:28:20 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jul 2019 10:28:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,311,1559545200"; 
+   d="scan'208";a="161367836"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 26 Jul 2019 10:28:19 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 24C00130; Fri, 26 Jul 2019 20:28:18 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] serial: 8250_pnp: Move to struct dev_pm_ops
+Date:   Fri, 26 Jul 2019 20:28:17 +0300
+Message-Id: <20190726172817.73253-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Fri, 26 Jul 2019 09:45:26
- -0700 (PDT)
-Reply-To: dhl.benin2019@outlook.com
-From:   "DR, MOHAMMED BUHARI, PRESIDENT OF NIGERIA" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 26 Jul 2019 17:45:26 +0100
-Message-ID: <CAP=nHBKv0J2KVfmfnQs7YrrDs_VuL_F5x-ghM0J6qN3=fYF1qA@mail.gmail.com>
-Subject: Attn Dear Atm Card beneficiary. GOOD NEWS,Shipment number:
- 4Z69536197319960 Content Packages: ATM Visa Card, amount of $18.5Million
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Attn Dear Atm Card beneficiary.
+The established way to provide PM callbacks is through struct dev_pm_ops
+which is more generic.
 
-GOOD NEWS,
-This is to inform you that i have paid the delivery fees for your ATM
-Master Card
-I paid it because our bank director stated that before, they
-So contact Dr. William Roberts, Director DHL Courier
-Company Benin to receive your delivery ATM Visa Card amount of $18.5m US Dollars
-It is shipment was registered to your addres.
-Contact the office now to know when they will delivery arrive to your country
+Convert driver to use it instead of legacy approach.
 
-Email id: dhl.benin2019@outlook.com
-Tel/mobile, +229 99652699
-Contact the office now to know when they will delivery arrive to your
-country today
-Shipment Details
------------------------------------------------------
-Shipment number: 4Z69536197319960
-Content Packages: ATM Visa Card amount of $18.5Million
-Scheduled Delivery
-Remember I have paid the insurance and Security Keeping fees for you
-But the only money you are required to send to this company is $125.00
-been your accurate ATM Visa Card clearance Fee before they will effect
-the delivery to you.
-Send the required delivery fee $125.00 only to the DHL Office on this
-information
-Payment is to be made via Western Union or Money Gram transfer for
-security purposes.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_pnp.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-Receive's Name---------------------Alan Ude
-Country-------------------------------------Benin
-City-----------------------------------Cotonou
-Quest-------------------------------Honest
-Answer----------------------------------Trust
-Amount---------------------------$125.00 only
-Let me know once you send the fee today okay.
+diff --git a/drivers/tty/serial/8250/8250_pnp.c b/drivers/tty/serial/8250/8250_pnp.c
+index dfca33141fcc..de90d681b64c 100644
+--- a/drivers/tty/serial/8250/8250_pnp.c
++++ b/drivers/tty/serial/8250/8250_pnp.c
+@@ -498,10 +498,9 @@ static void serial_pnp_remove(struct pnp_dev *dev)
+ 		serial8250_unregister_port(line - 1);
+ }
+ 
+-#ifdef CONFIG_PM
+-static int serial_pnp_suspend(struct pnp_dev *dev, pm_message_t state)
++static int __maybe_unused serial_pnp_suspend(struct device *dev)
+ {
+-	long line = (long)pnp_get_drvdata(dev);
++	long line = (long)dev_get_drvdata(dev);
+ 
+ 	if (!line)
+ 		return -ENODEV;
+@@ -509,26 +508,25 @@ static int serial_pnp_suspend(struct pnp_dev *dev, pm_message_t state)
+ 	return 0;
+ }
+ 
+-static int serial_pnp_resume(struct pnp_dev *dev)
++static int __maybe_unused serial_pnp_resume(struct device *dev)
+ {
+-	long line = (long)pnp_get_drvdata(dev);
++	long line = (long)dev_get_drvdata(dev);
+ 
+ 	if (!line)
+ 		return -ENODEV;
+ 	serial8250_resume_port(line - 1);
+ 	return 0;
+ }
+-#else
+-#define serial_pnp_suspend NULL
+-#define serial_pnp_resume NULL
+-#endif /* CONFIG_PM */
++
++static SIMPLE_DEV_PM_OPS(serial_pnp_pm_ops, serial_pnp_suspend, serial_pnp_resume);
+ 
+ static struct pnp_driver serial_pnp_driver = {
+ 	.name		= "serial",
+ 	.probe		= serial_pnp_probe,
+ 	.remove		= serial_pnp_remove,
+-	.suspend	= serial_pnp_suspend,
+-	.resume		= serial_pnp_resume,
++	.driver         = {
++		.pm     = &serial_pnp_pm_ops,
++	},
+ 	.id_table	= pnp_dev_table,
+ };
+ 
+-- 
+2.20.1
 
-Blessing upon, blessing upon, blessing upon blessing upon,God has
-chosen you for testimony time,
-I wait for your urgent reply
-
-Sincerely
-DR, MOHAMMED BUHARI, PRESIDENT OF NIGERIA
