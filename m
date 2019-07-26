@@ -2,102 +2,121 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BD4764F4
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 13:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA02764F6
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 13:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbfGZL5w (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 07:57:52 -0400
-Received: from mga07.intel.com ([134.134.136.100]:18066 "EHLO mga07.intel.com"
+        id S1726364AbfGZL6i (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jul 2019 07:58:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726816AbfGZL5v (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 07:57:51 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jul 2019 04:57:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,310,1559545200"; 
-   d="scan'208";a="181843620"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jul 2019 04:57:48 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hqyr4-0001Sf-QX; Fri, 26 Jul 2019 14:57:46 +0300
-Date:   Fri, 26 Jul 2019 14:57:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc:     Navid Emamdoost <navid.emamdoost@gmail.com>, emamd001@umn.edu,
-        kjlu@umn.edu, smccaman@umn.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] 8250_lpss: check null return when calling
- pci_ioremap_bar
-Message-ID: <20190726115746.GT9224@smile.fi.intel.com>
-References: <20190719151519.GO9224@smile.fi.intel.com>
- <20190719174848.24216-1-navid.emamdoost@gmail.com>
- <CGME20190726113223eucas1p287f8f2df03f66658bd492c592fd426e6@eucas1p2.samsung.com>
- <afc360b9-6d05-72a6-4933-2fc0b84a7cf7@samsung.com>
+        id S1726005AbfGZL6i (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 26 Jul 2019 07:58:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D278D218DA;
+        Fri, 26 Jul 2019 11:58:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564142317;
+        bh=fVn4+kswuU6S8WBTywNSNm5DjkloXeamWKxd5Wvh4S8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K4+wAWzBDNWtzYtPcPXx8zZUyckB70TkfacEXGhL++X9MaHmYJDpNGVdHzqJXIL9j
+         GaTbvqc9O8bONAyUIgkc+Ciqpzzk5kTz9aKZmwScULFTPQqQiU/LJLSm98CGu4wAvv
+         O+3xdtTZVrcW68tHAdkiorfCsUwwQD+NHanl5MP4=
+Date:   Fri, 26 Jul 2019 13:58:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Morris Ku <saumah@gmail.com>
+Cc:     linux-serial@vger.kernel.org, morris_ku@sunix.com,
+        kai.heng.feng@canonical.com, tiffany.wang@canonical.com,
+        kent.lin@canonical.com, debbie_liu@sunix.com
+Subject: Re: [PATCH] Add driver for SUNIX serial board
+Message-ID: <20190726115834.GB18727@kroah.com>
+References: <20190726103242.6233-1-saumah@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <afc360b9-6d05-72a6-4933-2fc0b84a7cf7@samsung.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190726103242.6233-1-saumah@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 01:32:21PM +0200, Bartlomiej Zolnierkiewicz wrote:
-> On 7/19/19 7:48 PM, Navid Emamdoost wrote:
-> > pci_ioremap_bar may return null. This is eventually de-referenced at 
-> > drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check 
-> > is needed to prevent null de-reference. I am adding the check and in case
-> >  of failure. Thanks to Andy Shevchenko for the hint on the necessity of 
-> > pci_iounmap when exiting.
+On Fri, Jul 26, 2019 at 06:32:42PM +0800, Morris Ku wrote:
+> This patch add support for SUNIX serial board.
 
-> > @@ -169,10 +169,12 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
-> >  	struct pci_dev *pdev = to_pci_dev(port->dev);
-> >  	int ret;
-> >  
-> > +	chip->pdata = &qrk_serial_dma_pdata;
-> >  	chip->dev = &pdev->dev;
-> >  	chip->irq = pci_irq_vector(pdev, 0);
-> >  	chip->regs = pci_ioremap_bar(pdev, 1);
-> > -	chip->pdata = &qrk_serial_dma_pdata;
-> > +	if (!chip->regs)
-> > +		return;
-> >  
-> >  	/* Falling back to PIO mode if DMA probing fails */
-> >  	ret = dw_dma_probe(chip);
+Again, I asked for a lot of documentation as to why this can not be a
+small patch to the 8250 pci code and why it needs to be a separate
+driver.
+
+Please provide that.
+
+Also please properly version your patches, saying what changed from
+previous ones.  THe kernel documentation says how to do this correctly.
+
 > 
-> pci_iounmap() should also be called on dw_dma_probe() failure (in such
-> case param->dma_dev is NULL so pci_iounmap() in qrk_serial_exit_dma()
-> won't be called during exit).
+> Signed-off-by: Morris Ku <saumah@gmail.com>
+> ---
+>  serial/Kconfig      |  11 ++
+>  serial/Makefile     |   2 +-
+>  serial/sunix_uart.c | 357 ++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 369 insertions(+), 1 deletion(-)
+>  create mode 100644 serial/sunix_uart.c
+> 
+> diff --git a/serial/Kconfig b/serial/Kconfig
+> index 0d31251..f9ae108 100644
+> --- a/serial/Kconfig
+> +++ b/serial/Kconfig
+> @@ -1618,6 +1618,17 @@ config SERIAL_MILBEAUT_USIO_PORTS
+>  	depends on SERIAL_MILBEAUT_USIO
+>  	default "4"
+>  
+> +config SERIAL_SUNIX
+> +	tristate "SUNIX pci serial port support"
+> +	depends on SERIAL_8250
+> +	select SERIAL_CORE
+> +	help
+> +	  Say Y here if you have a SUNIX serial card.
+> +	  If unsure, say N.
+> +
+> +	  This driver can also be built as a module. The module will be called
+> +	  sunix_pci_serial. If you want to do that, say M here.
+> +
+>  config SERIAL_MILBEAUT_USIO_CONSOLE
+>  	bool "Support for console on MILBEAUT USIO/UART serial port"
+>  	depends on SERIAL_MILBEAUT_USIO=y
+> diff --git a/serial/Makefile b/serial/Makefile
+> index 58d5317..cecccc6 100644
+> --- a/serial/Makefile
+> +++ b/serial/Makefile
+> @@ -94,7 +94,7 @@ obj-$(CONFIG_SERIAL_OWL)	+= owl-uart.o
+>  obj-$(CONFIG_SERIAL_RDA)	+= rda-uart.o
+>  obj-$(CONFIG_SERIAL_MILBEAUT_USIO) += milbeaut_usio.o
+>  obj-$(CONFIG_SERIAL_SIFIVE)	+= sifive.o
+> -
+> +obj-$(CONFIG_SERIAL_SUNIX)	+= sunix_uart.o
+>  
+>  # GPIOLIB helpers for modem control lines
+>  obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
+> diff --git a/serial/sunix_uart.c b/serial/sunix_uart.c
+> new file mode 100644
+> index 0000000..d227d7a
+> --- /dev/null
+> +++ b/serial/sunix_uart.c
+> @@ -0,0 +1,357 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + *	Driver for SUNIX PCI serial board
+> + *	Based on drivers/tty/serial/8250/8250_pci.c
+> + *	by Linus Torvalds, Theodore Ts'o.
+> + *
+> + *	This program is free software; you can redistribute it and/or modify
+> + *	it under the terms of the GNU General Public License as published by
+> + *	the Free Software Foundation; either version 2 of the License.
 
-Oh, yes, good catch!
-Navid, can you send a follow up fix?
+This sentence does not make any sense.  Please just remove it entirely
+as the SPDX notifier should say what you mean here, right?
 
-> > @@ -195,11 +197,15 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
-> >  pci_iounmap
-> >  static void qrk_serial_exit_dma(struct lpss8250 *lpss)
-> >  {
-> > +	struct dw_dma_chip *chip = &lpss->dma_chip;
-> >  	struct dw_dma_slave *param = &lpss->dma_param;
-> >  
-> >  	if (!param->dma_dev)
-> >  		return;
-> > -	dw_dma_remove(&lpss->dma_chip);
-> > +
-> > +	dw_dma_remove(chip);
-> > +
-> > +	pci_iounmap(to_pci_dev(chip->dev), chip->regs);
-> >  }
+thanks,
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
