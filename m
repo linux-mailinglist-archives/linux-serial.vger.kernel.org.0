@@ -2,74 +2,122 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 256777722A
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 21:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842AD7726D
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 21:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbfGZT3o (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 15:29:44 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50483 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725320AbfGZT3o (ORCPT
+        id S1727796AbfGZTyK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jul 2019 15:54:10 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:45575 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbfGZTyK (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 15:29:44 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hr5uP-0003Qy-W9; Fri, 26 Jul 2019 21:29:42 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hr5uO-0005ZH-Vj; Fri, 26 Jul 2019 21:29:40 +0200
-Date:   Fri, 26 Jul 2019 21:29:40 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH v7 3/3] serial: imx: get rid of imx_uart_rts_auto()
-Message-ID: <20190726192940.jy4frulgbetf5d2v@pengutronix.de>
-References: <20190614072801.3187-1-s.hauer@pengutronix.de>
- <1564167161-3972-1-git-send-email-sorganov@gmail.com>
- <1564167161-3972-4-git-send-email-sorganov@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1564167161-3972-4-git-send-email-sorganov@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+        Fri, 26 Jul 2019 15:54:10 -0400
+Received: by mail-io1-f68.google.com with SMTP id g20so107184020ioc.12;
+        Fri, 26 Jul 2019 12:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ezA9Ps8nViOZ8mYc2cpbVmIgOKvkwYtjIOsIWc7EGfk=;
+        b=o/frdd0+nm23NHcNjEQzvT7T63nqe9YJq0v0DG10vP3KavmGlCZjE8mATEDvzhoMof
+         TEAeKoMewMBC6uv1o/gjU/EddEU1giUApMNd8J7MWWstqdl/uAfn3/qomm1TwsDcKBWd
+         NDe3idrW1+SaSYCads/JWYwLLD8zlxzK6XrRZWSGm5dFK4r+n8vhmBB/Eqt4o6AvbfvO
+         A3iI3mZTNImMASwb8mL4FQ4/zkfgbSzk+WPW0qg2bsy6NdCk3EEm1sCrOSNUNSueO0RE
+         OBl2tELHV9RLJW4kV/dnoDarQTa1BAF+vJPplu9pVDuQHMRfGkiO+H6d/yBBnKaN+aW8
+         h7sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ezA9Ps8nViOZ8mYc2cpbVmIgOKvkwYtjIOsIWc7EGfk=;
+        b=uEV5Hr0i0JYURL43CGR6k2XZuQraKramllIkDJonCe7fj+1AYPawdg2Jv/Ib/cb90E
+         KpPx2VDfrEI98TpdVYiXqo5bKSmel1zB0hj4JBiMOBDlmL0OKh/UeodVLdo9UzoVW2ZK
+         2Ge1eaD6QqpWgQ++5vnDfqGVxxm9iHxYh11j0qornKP+csRwqGRuKucnIlo1t+WBriEV
+         PsdOGwDTWHVAuE47cc4MGHqvlgVJWpTEYSylTj41F1gffvemhNM6J6JVycPzxU+Y3wyI
+         QKtTTC+XBAc8CrEyoA3+pTjKpzdrg+/BpWZfi0oJmHvuTDKnukjWMfWTR36Flfam2Tz7
+         bSnA==
+X-Gm-Message-State: APjAAAUAkc6fHP0Xq2adDPIFdvA9vnTp+y7r5c2W4i+DcJMLzy2zbD6/
+        V634qkIg1yXR1kpCpn1rfZ8=
+X-Google-Smtp-Source: APXvYqyj8frAH6Ich5+1VmdLT/Oqx5Wnz5zjLFYXtxxLYRg/h6/e/fn1rms9PPtqe+gFa/65cULO9w==
+X-Received: by 2002:a6b:bc42:: with SMTP id m63mr73942380iof.189.1564170849575;
+        Fri, 26 Jul 2019 12:54:09 -0700 (PDT)
+Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
+        by smtp.googlemail.com with ESMTPSA id c17sm40157359ioo.82.2019.07.26.12.54.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 26 Jul 2019 12:54:08 -0700 (PDT)
+From:   Navid Emamdoost <navid.emamdoost@gmail.com>
+To:     andriy.shevchenko@linux.intel.com
+Cc:     emamd001@umn.edu, kjlu@umn.edu, b.zolnierkie@samsung.com,
+        gregkh@linuxfoundation.org, smccaman@umn.edu, secalert@redhat.com,
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
+        Jiri Slaby <jslaby@suse.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] 8250_lpss: check null return when calling pci_ioremap_bar
+Date:   Fri, 26 Jul 2019 14:53:43 -0500
+Message-Id: <20190726195345.30294-1-navid.emamdoost@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190726115746.GT9224@smile.fi.intel.com>
+References: <20190726115746.GT9224@smile.fi.intel.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 09:52:41PM +0300, Sergey Organov wrote:
-> Called in only one place, for RS232, it only obscures things, as it
-> doesn't go well with 2 similar named functions,
-> imx_uart_rts_inactive() and imx_uart_rts_active(), that both are
-> RS485-specific.
+pci_ioremap_bar may return null. This is eventually de-referenced at
+drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check
+is needed to prevent null de-reference. I am adding the check and in case
+ of failure. Thanks to Andy Shevchenko for the hint on the necessity of
+pci_iounmap when exiting.
+Update: also covered the dw_dma_probe() failure.
 
-I don't share the critic. IMHO the name is fine. imx_uart_rts_inactive
-sets rts to its inactive level, imx_uart_rts_active() to its active
-level and imx_uart_rts_auto() lets the output drive automatically by the
-receiver.
+Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+---
+ drivers/tty/serial/8250/8250_lpss.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-The name started to be a bit wrong in patch 1 of the series however.
-
-And I still object removing this function because with the semantic this
-function got in patch 1 it is suiteable to be used in
-imx_uart_set_mctrl().
-
-Best regards
-Uwe
-
+diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+index 53ca9ba6ab4b..19b356119ef6 100644
+--- a/drivers/tty/serial/8250/8250_lpss.c
++++ b/drivers/tty/serial/8250/8250_lpss.c
+@@ -169,15 +169,20 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+ 	struct pci_dev *pdev = to_pci_dev(port->dev);
+ 	int ret;
+ 
++	chip->pdata = &qrk_serial_dma_pdata;
+ 	chip->dev = &pdev->dev;
+ 	chip->irq = pci_irq_vector(pdev, 0);
+ 	chip->regs = pci_ioremap_bar(pdev, 1);
+-	chip->pdata = &qrk_serial_dma_pdata;
++	if (!chip->regs)
++		return;
+ 
+ 	/* Falling back to PIO mode if DMA probing fails */
+ 	ret = dw_dma_probe(chip);
+-	if (ret)
++	if (ret) {
++		dw_dma_remove(chip);
++		pci_iounmap(to_pci_dev(chip->dev), chip->regs);
+ 		return;
++	}
+ 
+ 	pci_try_set_mwi(pdev);
+ 
+@@ -195,11 +200,15 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
+ 
+ static void qrk_serial_exit_dma(struct lpss8250 *lpss)
+ {
++	struct dw_dma_chip *chip = &lpss->dma_chip;
+ 	struct dw_dma_slave *param = &lpss->dma_param;
+ 
+ 	if (!param->dma_dev)
+ 		return;
+-	dw_dma_remove(&lpss->dma_chip);
++
++	dw_dma_remove(chip);
++
++	pci_iounmap(to_pci_dev(chip->dev), chip->regs);
+ }
+ #else	/* CONFIG_SERIAL_8250_DMA */
+ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port) {}
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+2.17.1
+
