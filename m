@@ -2,122 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 842AD7726D
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jul 2019 21:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489FF77854
+	for <lists+linux-serial@lfdr.de>; Sat, 27 Jul 2019 12:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbfGZTyK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jul 2019 15:54:10 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45575 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbfGZTyK (ORCPT
+        id S1728080AbfG0K66 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 27 Jul 2019 06:58:58 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:47775 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725875AbfG0K66 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jul 2019 15:54:10 -0400
-Received: by mail-io1-f68.google.com with SMTP id g20so107184020ioc.12;
-        Fri, 26 Jul 2019 12:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ezA9Ps8nViOZ8mYc2cpbVmIgOKvkwYtjIOsIWc7EGfk=;
-        b=o/frdd0+nm23NHcNjEQzvT7T63nqe9YJq0v0DG10vP3KavmGlCZjE8mATEDvzhoMof
-         TEAeKoMewMBC6uv1o/gjU/EddEU1giUApMNd8J7MWWstqdl/uAfn3/qomm1TwsDcKBWd
-         NDe3idrW1+SaSYCads/JWYwLLD8zlxzK6XrRZWSGm5dFK4r+n8vhmBB/Eqt4o6AvbfvO
-         A3iI3mZTNImMASwb8mL4FQ4/zkfgbSzk+WPW0qg2bsy6NdCk3EEm1sCrOSNUNSueO0RE
-         OBl2tELHV9RLJW4kV/dnoDarQTa1BAF+vJPplu9pVDuQHMRfGkiO+H6d/yBBnKaN+aW8
-         h7sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ezA9Ps8nViOZ8mYc2cpbVmIgOKvkwYtjIOsIWc7EGfk=;
-        b=uEV5Hr0i0JYURL43CGR6k2XZuQraKramllIkDJonCe7fj+1AYPawdg2Jv/Ib/cb90E
-         KpPx2VDfrEI98TpdVYiXqo5bKSmel1zB0hj4JBiMOBDlmL0OKh/UeodVLdo9UzoVW2ZK
-         2Ge1eaD6QqpWgQ++5vnDfqGVxxm9iHxYh11j0qornKP+csRwqGRuKucnIlo1t+WBriEV
-         PsdOGwDTWHVAuE47cc4MGHqvlgVJWpTEYSylTj41F1gffvemhNM6J6JVycPzxU+Y3wyI
-         QKtTTC+XBAc8CrEyoA3+pTjKpzdrg+/BpWZfi0oJmHvuTDKnukjWMfWTR36Flfam2Tz7
-         bSnA==
-X-Gm-Message-State: APjAAAUAkc6fHP0Xq2adDPIFdvA9vnTp+y7r5c2W4i+DcJMLzy2zbD6/
-        V634qkIg1yXR1kpCpn1rfZ8=
-X-Google-Smtp-Source: APXvYqyj8frAH6Ich5+1VmdLT/Oqx5Wnz5zjLFYXtxxLYRg/h6/e/fn1rms9PPtqe+gFa/65cULO9w==
-X-Received: by 2002:a6b:bc42:: with SMTP id m63mr73942380iof.189.1564170849575;
-        Fri, 26 Jul 2019 12:54:09 -0700 (PDT)
-Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
-        by smtp.googlemail.com with ESMTPSA id c17sm40157359ioo.82.2019.07.26.12.54.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jul 2019 12:54:08 -0700 (PDT)
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-To:     andriy.shevchenko@linux.intel.com
-Cc:     emamd001@umn.edu, kjlu@umn.edu, b.zolnierkie@samsung.com,
-        gregkh@linuxfoundation.org, smccaman@umn.edu, secalert@redhat.com,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        Jiri Slaby <jslaby@suse.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] 8250_lpss: check null return when calling pci_ioremap_bar
-Date:   Fri, 26 Jul 2019 14:53:43 -0500
-Message-Id: <20190726195345.30294-1-navid.emamdoost@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190726115746.GT9224@smile.fi.intel.com>
-References: <20190726115746.GT9224@smile.fi.intel.com>
+        Sat, 27 Jul 2019 06:58:58 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id E6C1B471;
+        Sat, 27 Jul 2019 06:58:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Sat, 27 Jul 2019 06:58:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=szwEeWdTqY4dEKk9Z63jyjEiCaO
+        tx3ARQ8/K9O89API=; b=efIE9QnH6tAiJ/Cp8lLE92rMQj0S5buXf3RJOk8wJ7y
+        d1xybCQYgQua9GcbAsNSeYgsxYdYve1JQwNWS7EMsOwNepILHFjkpE4bRT+ok+lt
+        VdHrvThO5aArbzGJO4xhptLhuWkY5JYXz2fIjgK7T8/pYSteIv6W+uBrxTSBHTzS
+        1RV7w1hoXqbholKY9quNuJCnO8j2noPvwQlYS13qgWqv/P/duxbcY7WjCuK8b8sz
+        PJaJAw3KXjlEeURHQONvWtAkuc2lWeCF0pEipFKBlkfJWXbcz0YnaR3Ovz2mSvyb
+        GKd7ibXAJCC9F2+Y0TuvBJMK8HpxbeaQbxiETsq7hKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=szwEeW
+        dTqY4dEKk9Z63jyjEiCaOtx3ARQ8/K9O89API=; b=vJkrm2pskRXxusXi62fTqX
+        k2yjyjPbkBXG9h3wxsVmm/BPD34BFHu94gBG4O9FCl3WbNCd/fOGqWan2s5Wsx1E
+        U30Ta1kbyX2Gp3taeEqkcZFqGoPpFgxLGMZ9MYzC479lttuRxwBdVB0Vz6T1djc9
+        E7UxnOxesQRJU/dHE4EB5RGuO/iuef0oeXwZjUMtF+2NT22X8ug4hMevEqYahj3D
+        SI78bTqd6LDMHq8kiM4oa5Mk2ghYXYyy09Lx4buNNPbovVG5rj7pGY7GznD/M5Ka
+        l1yeoA+dhshhVzmZ8HmlXkloJ6pxZDkKAB3DKDuuNftZJU2IjdKBo/ne1fnIYK5w
+        ==
+X-ME-Sender: <xms:bi48Xf0R76qJgOH1yzt9NUEo87antQ5IRHvbxSCSaBTy_c4KbkcPzg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrkeeigdefjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
+    lhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:bi48XZn9B-SrEn7nAsNX6K-RxKYCMcg_WL-2MlUQCuswTgEobs60VA>
+    <xmx:bi48XV4n-6MolJGgBeK8dzO9VZzm-691hbH4fJwJucU80m9F5y3yWg>
+    <xmx:bi48XSkMfnzK4kiVoyrHCJkF9y6h5-fCqLeZv4wagXJOluKOmknZxQ>
+    <xmx:bi48XUYDrljIxkWWPKrhgW-M1V4JCFOFZclwG0cvmrWoraUf2dzbGQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id E5A8A380074;
+        Sat, 27 Jul 2019 06:58:53 -0400 (EDT)
+Date:   Sat, 27 Jul 2019 12:58:51 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Robert Middleton <robert.middleton@rm5248.com>
+Cc:     linux-serial@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_exar: Clear buffer before shutdown
+Message-ID: <20190727105851.GD458@kroah.com>
+References: <20190723143632.22427-1-robert.middleton@rm5248.com>
+ <20190725100229.GB20445@kroah.com>
+ <CAKpcJVZpB-b=Z9r-q9fxoN-asiLnde3ea+8G=XGmyigWOWXmgQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKpcJVZpB-b=Z9r-q9fxoN-asiLnde3ea+8G=XGmyigWOWXmgQ@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pci_ioremap_bar may return null. This is eventually de-referenced at
-drivers/dma/dw/core.c:1154 and drivers/dma/dw/core.c:1168. A null check
-is needed to prevent null de-reference. I am adding the check and in case
- of failure. Thanks to Andy Shevchenko for the hint on the necessity of
-pci_iounmap when exiting.
-Update: also covered the dw_dma_probe() failure.
+On Fri, Jul 26, 2019 at 12:02:06PM -0400, Robert Middleton wrote:
+> > What if the hardware is locked up?  Will this sit and spin forever?
+> 
+> I assume so; what is the correct way to do this?  The
+> manufacturer-provided drivers do something similar but with a counter
+> that will count up to 1000 before exiting the loop so as to not lock
+> up.
 
-Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
----
- drivers/tty/serial/8250/8250_lpss.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+1000 sounds good to me :)
 
-diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 53ca9ba6ab4b..19b356119ef6 100644
---- a/drivers/tty/serial/8250/8250_lpss.c
-+++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -169,15 +169,20 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
- 	struct pci_dev *pdev = to_pci_dev(port->dev);
- 	int ret;
- 
-+	chip->pdata = &qrk_serial_dma_pdata;
- 	chip->dev = &pdev->dev;
- 	chip->irq = pci_irq_vector(pdev, 0);
- 	chip->regs = pci_ioremap_bar(pdev, 1);
--	chip->pdata = &qrk_serial_dma_pdata;
-+	if (!chip->regs)
-+		return;
- 
- 	/* Falling back to PIO mode if DMA probing fails */
- 	ret = dw_dma_probe(chip);
--	if (ret)
-+	if (ret) {
-+		dw_dma_remove(chip);
-+		pci_iounmap(to_pci_dev(chip->dev), chip->regs);
- 		return;
-+	}
- 
- 	pci_try_set_mwi(pdev);
- 
-@@ -195,11 +200,15 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
- 
- static void qrk_serial_exit_dma(struct lpss8250 *lpss)
- {
-+	struct dw_dma_chip *chip = &lpss->dma_chip;
- 	struct dw_dma_slave *param = &lpss->dma_param;
- 
- 	if (!param->dma_dev)
- 		return;
--	dw_dma_remove(&lpss->dma_chip);
-+
-+	dw_dma_remove(chip);
-+
-+	pci_iounmap(to_pci_dev(chip->dev), chip->regs);
- }
- #else	/* CONFIG_SERIAL_8250_DMA */
- static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port) {}
--- 
-2.17.1
+> > Shouldn't you also have a timeout for the flush?
+> 
+> Flush from the system?  The problem that I have been seeing is that
+> when you do something like "echo text > /dev/ttyS1", only the first
+> character will be printed out.  This (should) be waiting for that to
+> happen, since it checks the hardware to ensure that the hardware
+> buffers are clear and that there are no more characters waiting to be
+> written to the hardware buffer.
+> 
+> I'm also not sure if the above means that there is a problem with the
+> serial_8250 driver in general, as I don't have another piece of
+> hardware available that uses that driver.
 
+If you time out after 1000 iterations of the loop, that should solve my
+worries here, please fix it up that way and I'll be glad to take the
+change.
+
+thanks,
+
+greg k-h
