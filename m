@@ -2,53 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0217968A
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 21:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C0079689
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 21:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390796AbfG2Tww (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S2390685AbfG2Tww (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Mon, 29 Jul 2019 15:52:52 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42556 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403808AbfG2Twt (ORCPT
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42557 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390669AbfG2Twv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:52:49 -0400
-Received: by mail-pg1-f195.google.com with SMTP id t132so28763559pgb.9;
-        Mon, 29 Jul 2019 12:52:48 -0700 (PDT)
+        Mon, 29 Jul 2019 15:52:51 -0400
+Received: by mail-pg1-f193.google.com with SMTP id t132so28763614pgb.9;
+        Mon, 29 Jul 2019 12:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uSaHP0QqkD0s9itI8zThvuVWmdKrdr4qQiU1/5TRtVY=;
-        b=KLl5ZrY+FHLEnaKKmPNzNyRaXomnJvIlw5WwWHtjyFMT3Em1Sf+5n4R84/NetDIyZc
-         nBj6tmZ+q6nz2ff7EtN+W3ZVMT6lbaIDPN/soMcRG777RJm9G9Yxi0W9GHU01/chwaXu
-         SD3X37AmZ9P9xvlFUv+QIPKC8akkJ/oEZEVgWA6c/tXpn4Go79aAkojC7csVd6cRhUtz
-         8MQ4cAAGFSMjXAYldJnyz0de6asyFctxu5mYG0rbswk/RfN2h5nmyErWnkIum/GfdSxC
-         GitLjKNvnV3j9qb6OebkqQWOD+jqS/KNHW0IFGqEtbe813XRpN6UKWzyztu9xPC0dvcc
-         5irA==
+        bh=ITELl99aXbX87R9cYxa6vyymZoJe5+3YlMPTPeLvD60=;
+        b=rD/hzx6J7gjwuRcEDs+iMh/ovpV+g6m/XFz4YNv0sKJM9qWvqK9qhdQE6S1Wg/KJ20
+         jOGZrTnWXtr7eRiOepTuMhd1xfPQjuCIBkspEuceQbb1rvYLSnKTTgkgh/rP+sYpADRK
+         9DQk0NMUK2uQYJR3g6+hZzWRfVNdJffQyAIcLb5Gji99kYAmpu7PCDhhCfL+RV7EQzzf
+         2DJPnLLlq4TtB4esGgrnIcfERC0bNHOXIjec9rwm5aVmH7sC3/OdmsSlbixDEZ5FbLIa
+         aRmkhTLt6gGn7pUqXhffsP2jeXECMzFMPCIvxonbfgyt9DcFynBI9JFnaVJHa6exbAwW
+         eVvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uSaHP0QqkD0s9itI8zThvuVWmdKrdr4qQiU1/5TRtVY=;
-        b=JkVcvrJW8xhxkvwVQwlPukLanoan8eVvkKVpzn+El2lsOCPgjzyZrXm5kMqYaiBYlS
-         /mjw4MbzBZwQX1XZEfeVWX3Fc0ILnxfv9H0nPxH/8yrL32nIsei87hAsIwfCqcb/ISMf
-         5A8Mhcy5fqdZiyYb2YBtHbLOnYgkwReUMSw77EcFcfbsWIsOpIeTMciVeT49xJUpcEv5
-         G0OmyWOWRXO9hwntQRoE+Davs8tC/Jed+Ezs7ZC4+AsAZwFDXnB0w/KKwC324DgGQWlc
-         9/nj2ksTO5lVnWD0aURAuqjZV0JtYjQprYcY6nnnZvPbWnxczaJCX5uOUUoqe5OPSwVV
-         AAHA==
-X-Gm-Message-State: APjAAAWKLe6Z1tQtBhrIuhjULkCrr5CQbdW/mN903K6OqOraD9t04sjy
-        w+aIKX9+/DIuFN+Ife7451/dTPqS
-X-Google-Smtp-Source: APXvYqwK+8MFBJYhqU57T1JP6Eg7Bn/WXrT3D67wHlKHTUcyE6NiMd/0soZIJqdj7gB8RTNU9kbTug==
-X-Received: by 2002:a63:1f1b:: with SMTP id f27mr10071440pgf.233.1564429967729;
-        Mon, 29 Jul 2019 12:52:47 -0700 (PDT)
+        bh=ITELl99aXbX87R9cYxa6vyymZoJe5+3YlMPTPeLvD60=;
+        b=PThReCnIETCylk2wb0LBsmzd2nyVVUocYor1cJV01oSzOzLOBpTkEXo3SircR5us6A
+         5vhU5FoEGkZQyokeivl+ko3vZliLkdqgl5gRWx0n1VGeVT7VrFLOB8koH6rEV9pbY6E5
+         oXV558SFuuik5kqqmP8Bwr8GxRy08KF03Eb9+upfEnbDYcKbrWiwVzqLSZiYTQYiXHeA
+         VNXkBFWXLl43j1XKkM0JCDBET5l+Z3Tuk+VGRSoX5tIlak/msPqJCutMw2Bztllfra35
+         Dn52qcQFR9pd7DorCT2AX8O1q3RoxGXRaTod5L5XoFd/zHzY4FgZ/mp/HK6xbvi6fhtC
+         +FUw==
+X-Gm-Message-State: APjAAAVRMJCg8w0EswtY/R8Lv67nEZwEDSexBhP+pC+MDDxrzRc4I5TL
+        5Jp16Y+VU1D1+4t2tYN+suHNcTOZ
+X-Google-Smtp-Source: APXvYqzdi9Zqa9fwsbUiNynMCG/YC59cNG99C8LbD6MQj1FbcUApc1NE7Roo4R4jCfYm2+jQ2CGZww==
+X-Received: by 2002:a17:90a:cb01:: with SMTP id z1mr112484030pjt.93.1564429970329;
+        Mon, 29 Jul 2019 12:52:50 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.46
+        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.49
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 12:52:47 -0700 (PDT)
+        Mon, 29 Jul 2019 12:52:49 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-serial@vger.kernel.org
-Cc:     Stefan Agner <stefan.agner@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Stefan Agner <stefan@agner.ch>,
         Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>,
         Chris Healy <cphealy@gmail.com>,
@@ -57,9 +56,9 @@ Cc:     Stefan Agner <stefan.agner@toradex.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 02/24] tty: serial: fsl_lpuart: flush receive FIFO after overruns
-Date:   Mon, 29 Jul 2019 12:52:04 -0700
-Message-Id: <20190729195226.8862-3-andrew.smirnov@gmail.com>
+Subject: [PATCH 04/24] tty: serial: fsl_lpuart: Simplify RX/TX IRQ handlers
+Date:   Mon, 29 Jul 2019 12:52:06 -0700
+Message-Id: <20190729195226.8862-5-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190729195226.8862-1-andrew.smirnov@gmail.com>
 References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
@@ -70,26 +69,15 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Stefan Agner <stefan.agner@toradex.com>
+It appears that lpuart_rxint, lpuart_txint and lpuart32_rxint were
+modelled after identical function found in UART driver for
+i.MX. However, while said functions are used as individual IRQ
+handlers in i.MX driver (in case of i.MX1), it is not the case for
+LPUART. Given that, there's no need for us to restrict the prototype
+of the handler to irqreturn_t foo(int, void *) and we can drop all of
+uneened boilerplate code by changing it void foo(struct lpuart_port *).
 
-After overruns the FIFO pointers become misaligned. This
-typically shows by characters still being stuck in the FIFO
-despite the empty flag being asserted. After the first
-assertion of the overrun flag the empty flag still seems to
-indicate FIFO state correctly and all data can be read.
-However, after another overrun assertion the FIFO seems to
-be off by one such that the last received character is still
-in the FIFO (despite the empty flag being asserted).
-
-Flushing the receive FIFO reinitializes pointers. Hence it
-is recommended to flush the FIFO after overruns, see also:
-https://community.nxp.com/thread/321175
-
-Hence, on assertion of the overrun flag read the remaining
-data from the FIFO and flush buffers.
-
-Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
-Acked-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Stefan Agner <stefan@agner.ch>
 Cc: Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>
 Cc: Chris Healy <cphealy@gmail.com>
@@ -101,49 +89,86 @@ Cc: linux-imx@nxp.com
 Cc: linux-serial@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/tty/serial/fsl_lpuart.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 586b3513a6b0..edb1a9425fac 100644
+index 56423ad02f0f..3e38970a444e 100644
 --- a/drivers/tty/serial/fsl_lpuart.c
 +++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -798,7 +798,7 @@ static irqreturn_t lpuart_txint(int irq, void *dev_id)
- static irqreturn_t lpuart_rxint(int irq, void *dev_id)
+@@ -770,9 +770,8 @@ static unsigned int lpuart32_tx_empty(struct uart_port *port)
+ 	return 0;
+ }
+ 
+-static irqreturn_t lpuart_txint(int irq, void *dev_id)
++static void lpuart_txint(struct lpuart_port *sport)
  {
- 	struct lpuart_port *sport = dev_id;
--	unsigned int flg, ignored = 0;
-+	unsigned int flg, ignored = 0, overrun = 0;
- 	struct tty_port *port = &sport->port.state->port;
+-	struct lpuart_port *sport = dev_id;
+ 	struct circ_buf *xmit = &sport->port.state->xmit;
  	unsigned long flags;
- 	unsigned char rx, sr;
-@@ -825,7 +825,7 @@ static irqreturn_t lpuart_rxint(int irq, void *dev_id)
- 				sport->port.icount.frame++;
  
- 			if (sr & UARTSR1_OR)
--				sport->port.icount.overrun++;
-+				overrun++;
- 
- 			if (sr & sport->port.ignore_status_mask) {
- 				if (++ignored > 100)
-@@ -852,6 +852,17 @@ static irqreturn_t lpuart_rxint(int irq, void *dev_id)
- 	}
+@@ -803,12 +802,10 @@ static irqreturn_t lpuart_txint(int irq, void *dev_id)
  
  out:
-+	if (overrun) {
-+		sport->port.icount.overrun += overrun;
-+
-+		/*
-+		 * Overruns cause FIFO pointers to become missaligned.
-+		 * Flushing the receive FIFO reinitializes the pointers.
-+		 */
-+		writeb(UARTCFIFO_RXFLUSH, sport->port.membase + UARTCFIFO);
-+		writeb(UARTSFIFO_RXOF, sport->port.membase + UARTSFIFO);
-+	}
-+
+ 	spin_unlock_irqrestore(&sport->port.lock, flags);
+-	return IRQ_HANDLED;
+ }
+ 
+-static irqreturn_t lpuart_rxint(int irq, void *dev_id)
++static void lpuart_rxint(struct lpuart_port *sport)
+ {
+-	struct lpuart_port *sport = dev_id;
+ 	unsigned int flg, ignored = 0, overrun = 0;
+ 	struct tty_port *port = &sport->port.state->port;
+ 	unsigned long flags;
+@@ -877,12 +874,10 @@ static irqreturn_t lpuart_rxint(int irq, void *dev_id)
  	spin_unlock_irqrestore(&sport->port.lock, flags);
  
  	tty_flip_buffer_push(port);
+-	return IRQ_HANDLED;
+ }
+ 
+-static irqreturn_t lpuart32_rxint(int irq, void *dev_id)
++static void lpuart32_rxint(struct lpuart_port *sport)
+ {
+-	struct lpuart_port *sport = dev_id;
+ 	unsigned int flg, ignored = 0;
+ 	struct tty_port *port = &sport->port.state->port;
+ 	unsigned long flags;
+@@ -941,7 +936,6 @@ static irqreturn_t lpuart32_rxint(int irq, void *dev_id)
+ 	spin_unlock_irqrestore(&sport->port.lock, flags);
+ 
+ 	tty_flip_buffer_push(port);
+-	return IRQ_HANDLED;
+ }
+ 
+ static irqreturn_t lpuart_int(int irq, void *dev_id)
+@@ -952,10 +946,10 @@ static irqreturn_t lpuart_int(int irq, void *dev_id)
+ 	sts = readb(sport->port.membase + UARTSR1);
+ 
+ 	if (sts & UARTSR1_RDRF)
+-		lpuart_rxint(irq, dev_id);
++		lpuart_rxint(sport);
+ 
+ 	if (sts & UARTSR1_TDRE)
+-		lpuart_txint(irq, dev_id);
++		lpuart_txint(sport);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -970,10 +964,10 @@ static irqreturn_t lpuart32_int(int irq, void *dev_id)
+ 	rxcount = rxcount >> UARTWATER_RXCNT_OFF;
+ 
+ 	if ((sts & UARTSTAT_RDRF || rxcount > 0) && !sport->lpuart_dma_rx_use)
+-		lpuart32_rxint(irq, dev_id);
++		lpuart32_rxint(sport);
+ 
+ 	if ((sts & UARTSTAT_TDRE) && !sport->lpuart_dma_tx_use)
+-		lpuart_txint(irq, dev_id);
++		lpuart_txint(sport);
+ 
+ 	lpuart32_write(&sport->port, sts, UARTSTAT);
+ 	return IRQ_HANDLED;
 -- 
 2.21.0
 
