@@ -2,176 +2,127 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4288789F3
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 12:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F61478B38
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 14:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387463AbfG2K4X (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 06:56:23 -0400
-Received: from mx.cs.msu.ru ([188.44.42.42]:42647 "EHLO mail.cs.msu.ru"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387424AbfG2K4W (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 06:56:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
-         s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KhDc0y3uqAsWa5PYel9fH/ttSxd0IlvtLtCn7+kzD+g=; b=hIUQiUYJS6l8mNK6X1i6x9OtN7
-        nlKtUuF0eBYFegEIhnp3w9scJf/FCDoFi66i4Mw0yTB2XylZj6filLde44+goR1fcyFDonKn8zEOs
-        kFsKCs67vmLoll+xmvAJ//cql/KwTfQ3RhPzh97o5kkNlflrTA1DXCQRTBS5iF7ROY8mXT/8EO6Ja
-        pBrme3KTIF5wLlsx3nxlj2a7xslxVurx/5NQW53nkjiiv8kVrA95SGhwbPSsVB9NuDa2eY/+1tDip
-        beKZnZtiED0JuQPvb3E+nXC0Jrnl88G37fCyfN1gzDL30Y5nYr4T+Knkt1rRbG+Gac2QZNHxsVhVF
-        ja7jngmQ==;
-Received: from [37.204.119.143] (port=58278 helo=cello)
-        by mail.cs.msu.ru with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.92 (FreeBSD))
-        (envelope-from <ar@cs.msu.ru>)
-        id 1hs3KA-0008RA-78; Mon, 29 Jul 2019 13:56:14 +0300
-Date:   Mon, 29 Jul 2019 13:56:12 +0300
-From:   Arseny Maslennikov <ar@cs.msu.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
-        Rob Landley <rob@landley.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Pavel Machek <pavel@ucw.cz>
-Message-ID: <20190729105612.GB25742@cello>
-References: <20190625161153.29811-1-ar@cs.msu.ru>
+        id S2387665AbfG2MBD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 08:01:03 -0400
+Received: from mga01.intel.com ([192.55.52.88]:42527 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387398AbfG2MBD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Jul 2019 08:01:03 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 05:01:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,322,1559545200"; 
+   d="scan'208";a="162158693"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga007.jf.intel.com with ESMTP; 29 Jul 2019 05:01:00 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hs4Kp-0006Se-8q; Mon, 29 Jul 2019 15:00:59 +0300
+Date:   Mon, 29 Jul 2019 15:00:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Aaron Sierra <asierra@xes-inc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
+ 8250_port
+Message-ID: <20190729120059.GD23480@smile.fi.intel.com>
+References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com>
+ <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZoaI/ZTpAVc4A5k6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190625161153.29811-1-ar@cs.msu.ru>
-OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
+In-Reply-To: <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 37.204.119.143
-X-SA-Exim-Mail-From: ar@cs.msu.ru
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.cs.msu.ru
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_ADSP_ALL autolearn=no autolearn_force=no version=3.4.2
-Subject: Re: [PATCH v2 0/7] TTY Keyboard Status Request
-X-SA-Exim-Version: 4.2
-X-SA-Exim-Scanned: Yes (on mail.cs.msu.ru)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Sun, Jul 28, 2019 at 05:12:09PM -0500, Aaron Sierra wrote:
+> ----- Original Message -----
+> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+> > Sent: Sunday, July 21, 2019 9:26:59 AM
+> 
+> > There are Exar quirks in 8250_port which belong to 8250_exar module.
+> > Move out them to the correct module and do not contaminate generic code
+> > with it.
+> 
+> Andy,
+> 
+> Your changes seem functionally equivalent based on my review and testing.
 
---ZoaI/ZTpAVc4A5k6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for testing, my answers below.
 
-On Tue, Jun 25, 2019 at 07:11:46PM +0300, Arseny Maslennikov wrote:
-> This patch series introduces TTY keyboard status request, a feature of
-> the n_tty line discipline that reserves a character in struct termios
-> (^T by default) and reacts to it by printing a short informational line
-> to the terminal and sending a Unix signal to the tty's foreground
-> process group. The processes may, in response to the signal, output a
-> textual description of what they're doing.
->=20
-> The feature has been present in a similar form at least in
-> Free/Open/NetBSD; it would be nice to have something like this in Linux
-> as well. There is an LKML thread[1] where users have previously
-> expressed the rationale for this.
->=20
-> The current implementation does not break existing kernel API in any
-> way, since, fortunately, all the architectures supported by the kernel
-> happen to have at least 1 free byte in the termios control character
-> array.
->=20
-> The series should cleanly apply to tty-next.
->=20
-> To thoroughly test these, one might need at least a patched stty among
-> other tools, so I've brought up a simple initrd generator[2] which can
-> be used to create a lightweight environment to boot up in a VM and to
-> fiddle with.
->=20
-> [1] https://lore.kernel.org/lkml/1415200663.3247743.187387481.75CE9317@we=
-bmail.messagingengine.com/
-> [2] https://github.com/porrided/tty-kb-status-userspace
->=20
-> v2 <- v1: removed useless debugging bits.
->=20
-> Discussion of v1:
-> https://lore.kernel.org/lkml/20190605081906.28938-1-ar@cs.msu.ru/
->=20
-> Arseny Maslennikov (7):
->   signal.h: Define SIGINFO on all architectures
->   tty: termios: Reserve space for VSTATUS in .c_cc
->   n_tty: Send SIGINFO to fg pgrp on status request character
->   linux/signal.h: Ignore SIGINFO by default in new tasks
->   tty: Add NOKERNINFO lflag to termios
->   n_tty: ->ops->write: Cut core logic out to a separate function
->   n_tty: Provide an informational line on VSTATUS receipt
->=20
->  arch/alpha/include/asm/termios.h         |   4 +-
->  arch/alpha/include/uapi/asm/termbits.h   |   2 +
->  arch/arm/include/uapi/asm/signal.h       |   1 +
->  arch/h8300/include/uapi/asm/signal.h     |   1 +
->  arch/ia64/include/asm/termios.h          |   4 +-
->  arch/ia64/include/uapi/asm/signal.h      |   1 +
->  arch/ia64/include/uapi/asm/termbits.h    |   2 +
->  arch/m68k/include/uapi/asm/signal.h      |   1 +
->  arch/mips/include/asm/termios.h          |   4 +-
->  arch/mips/include/uapi/asm/signal.h      |   1 +
->  arch/mips/include/uapi/asm/termbits.h    |   2 +
->  arch/parisc/include/asm/termios.h        |   4 +-
->  arch/parisc/include/uapi/asm/signal.h    |   1 +
->  arch/parisc/include/uapi/asm/termbits.h  |   2 +
->  arch/powerpc/include/asm/termios.h       |   4 +-
->  arch/powerpc/include/uapi/asm/signal.h   |   1 +
->  arch/powerpc/include/uapi/asm/termbits.h |   2 +
->  arch/s390/include/asm/termios.h          |   4 +-
->  arch/s390/include/uapi/asm/signal.h      |   1 +
->  arch/sparc/include/asm/termios.h         |   4 +-
->  arch/sparc/include/uapi/asm/signal.h     |   2 +
->  arch/sparc/include/uapi/asm/termbits.h   |   2 +
->  arch/x86/include/uapi/asm/signal.h       |   1 +
->  arch/xtensa/include/uapi/asm/signal.h    |   1 +
->  arch/xtensa/include/uapi/asm/termbits.h  |   2 +
->  drivers/tty/Makefile                     |   3 +-
->  drivers/tty/n_tty.c                      |  70 ++++-
->  drivers/tty/n_tty_status.c               | 337 +++++++++++++++++++++++
->  include/asm-generic/termios.h            |   4 +-
->  include/linux/sched.h                    |   7 +
->  include/linux/signal.h                   |   5 +-
->  include/linux/tty.h                      |   7 +-
->  include/uapi/asm-generic/signal.h        |   1 +
->  include/uapi/asm-generic/termbits.h      |   2 +
->  34 files changed, 457 insertions(+), 33 deletions(-)
->  create mode 100644 drivers/tty/n_tty_status.c
->=20
+> However, based on this commit description, I was expecting more of the
+> Exar-specific code to be moved from 8250_port.c to 8250_exar.c. I think that
+> can reasonably be achieved without too much additional effort.
+> 
+> There are two pieces of Exar-specific support in serial8250_do_startup():
 
-> Date: Tue, 25 Jun 2019 19:11:46 +0300
-Ping.
+Actually three.
 
-The series should cleanly apply to 5.3-rc2 and to tty-next as of writing
-this email.
+> 1. The two reads to clear INT0, could be boiled down to a single read in
+>    exar_pci_probe(), immediately after registering the common IRQ handler.
+>    What do you think?
 
---ZoaI/ZTpAVc4A5k6
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm not so familiar with the hardware, will it not give any side-effects?
 
------BEGIN PGP SIGNATURE-----
+> 2. The following block could be moved to a new exar_startup() function:
+> 
+> 	if (port->type == PORT_XR17V35X) {
+> 		/*
+> 		 * First enable access to IER [7:5], ISR [5:4], FCR [5:4],
+> 		 * MCR [7:5] and MSR [7:0]
+> 		 */
+> 		serial_port_out(port, UART_XR_EFR, UART_EFR_ECB);
+> 
+> 		/*
+> 		 * Make sure all interrups are masked until initialization is
+> 		 * complete and the FIFOs are cleared
+> 		 */
+> 		serial_port_out(port, UART_IER, 0);
+> 	}
+> 
+>    Do you agree?
 
-iQIzBAABCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAl0+0MwACgkQ9dQjyAYL
-01CceRAAxHmrLCcZw6xWtjgyTLTvK2ktb1A5NKNpAErfPmBihjA7Vn5k9QBBegyL
-uRv95D/Hoz1LSXP7rwaQvKdH00S/ZlkHFHdw6hH7Q4gE6lN9L3jJoFY+lX9/9Oqw
-BCa94zOedislJIgRqPfs/OicYaSpHndNStfej9tFvhk43q0eULS+f9jxDsrO85BY
-nFbV2ECs3rd6ujT7tZj1Wc/NhViz0BsPDpfwassNov8Ik/L1UA5KPh2N8ezapGr4
-uP0K6YbDXfxQI2ivI2wB4d9BwNlAunDw0reVK2ENKw8vhWrsMbj9mLUexcaEJBbs
-nXxh4x7QdviSFmlgV0Jl/8Jwih4tijDuCcakV5IG2WPDSy04rKGJZeNvKDrVn2By
-GhHIqy7YTo7WLkRRM/Q24pG9wM5XX3TKemN4wIfkBsB+ZalxWtkWqsuOo1ftMBxk
-OUPl7PR25wUpKXGXVVzNB1rSvUHNaZNEe5tUSeOpMuhSNrI31EylxJOBNtm0yNsc
-lEpNNERaEo3hBWt4PCbXZk7J1xSAPMUsTnzz3ClwBGcLsd8DovajnRLNeN56ar00
-uS/iSwCug8f45CQy99KsCbQfw0vpO1IPAIkmse7uYrERxSMmRCqkksBAcOmgJzoV
-i67Klay9PfUBNJyX3OLEAuOadYXdi7a4b0G7/BNMo7VH7IM4yq8=
-=hAzz
------END PGP SIGNATURE-----
+I thought about this, but didn't come to a conclusion to move it right now.
+It's not so straight forward. In the ->startup() we setup IO accessors in some
+cases (perhaps doesn't apply to Exar case) and do some testing.
 
---ZoaI/ZTpAVc4A5k6--
+So, I prefer do this in a separate change, so we may see how it goes.
+
+> The only thing that seems to need to stay put is UART_XR_EFR support in
+> serial8250_do_set_termios().
+
+Yes, though ideally it should be moved to 8250_exar as well.
+
+> There are a couple additional notes below for you to find. One involves a
+> compile warning.
+
+> > #define UART_EXAR_INT0		0x80
+> 
+> My note above about cleaning up serial8250_do_startup() would eliminate
+> the need for UART_EXAR_INT0 to be defined here, too.
+
+I see.
+
+> > -		goto out;
+> 
+> Take the "out" label as well to avoid introducing a compile warning.
+
+Thanks, I missed it somehow.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
