@@ -2,54 +2,53 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C297977B
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 22:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2CA7976D
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 22:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390968AbfG2UAH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 16:00:07 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:42911 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403942AbfG2Twr (ORCPT
+        id S2390798AbfG2Tww (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 15:52:52 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:39051 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388511AbfG2Twu (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:52:47 -0400
-Received: by mail-pl1-f195.google.com with SMTP id ay6so27945661plb.9;
-        Mon, 29 Jul 2019 12:52:46 -0700 (PDT)
+        Mon, 29 Jul 2019 15:52:50 -0400
+Received: by mail-pg1-f194.google.com with SMTP id u17so28772476pgi.6;
+        Mon, 29 Jul 2019 12:52:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AW6LMocj5hW2ma4xyQWGmJ4mCwXZHVoAaKb26+6JOqU=;
-        b=R2IbrWF+DWj6Lm+yjxhSXwPkwYhCeoZ3XjJpiJwOXmMXScwneZ8iFaQTPTCtSAnTJg
-         l2ChGDs3Jx8GSDYqbi+VBxbONHRI0JfZYWmjCgGOI0Nhyasb3/Ratc6S8rr4oElIcJc3
-         4qneIgG/5Iq7y7L2NFwh/6C99Bl8auwsJCI4A23txlBIadIvnqFx0UqZ3Df/nu4unm4H
-         mYIiD+RE2XYfRd4mk6lNCqnke+mVvcOX90TQgDFphhp77NSt3QyoqBQGww0WaSsT50Lm
-         Y4yT2IKho0wlqCb36V5YUUzbzf5tMyw7KozhTICSt6Be5f9aQPJICNAFPKD40/yQ7MhK
-         zFlQ==
+        bh=ZybvyzKqpU4oPoCBYrIT2ASoiu315DqUEs+msQVN1Wk=;
+        b=XgrBHmVxvkxSNwoaWTbONdqzHFMbWr4AH98Y51n2MJNbmeKLWsT/HnL58yeWNO7/RE
+         2DqduHNgp4tSdgQEvauyEW9T5LED27uwDzxqSwu/TVHAkbHZ+26RPM1TGzWwN3mi1Ss6
+         a7jRTdpKsKIqG+OBjdOkywGIsie8RIem9rOJPsVgcUiMueyMdv0hS5TVbCmInt1HqUDb
+         N8QVanNINk5nXSlDA9cs77zylZRXaciGF2w60QaIOBc9wTG1ZP0P3zwjAjSS5kHCLpn6
+         ljGOQCfVg0rcmO5rM7WlkGU4DmtYcUeGGuuFp4Wf3CMvkkpIEfGhW4ykeHVzMiBJXe+E
+         1sjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AW6LMocj5hW2ma4xyQWGmJ4mCwXZHVoAaKb26+6JOqU=;
-        b=F5ypR2DpNT45hp2Ns/cb/FtbNeoTlJ8dyWbzGjQas5ipA346xgNcb1U5coL7bx1S4q
-         W12+urmXITDSX98nM1Yfx2j+AzpPXrkfmeYZlbpR48xVboyx6yi6TAJ5OdvpJDJ48mbd
-         Mq97tqBx5JR3SuhlmpCvbeAG3sQTBoAmPXIjzFlmvft7eKA8qEUxfbItB19IbIaSLuGT
-         cIyyFabtQHUqCX3TC5F2OvIE/hqf9JMXicftx3kG+kIuXluHAW/4NRPLHzvappZgih42
-         vY2TOmZRfWIuVGGla93cAvfyn+0/MkhaEz4irgmM4sPXvpPNgnMC7UXfhiNeLgkMpaqG
-         fBaQ==
-X-Gm-Message-State: APjAAAWE/KfeIW9aCpuMA/Tw7LLDxMsIsS+hUoxQNaFCPteK28wjrHjY
-        i9cM+9NZGzKuF7dppQ5Q21k/Q4hC
-X-Google-Smtp-Source: APXvYqx7eyZEQtwcnz8KsGTMp8ScnAvPm9o4n/MSu85csalV4FSCwTzLWhUP+PTw+bZopJjuKTtHqA==
-X-Received: by 2002:a17:902:8205:: with SMTP id x5mr113404804pln.279.1564429966178;
-        Mon, 29 Jul 2019 12:52:46 -0700 (PDT)
+        bh=ZybvyzKqpU4oPoCBYrIT2ASoiu315DqUEs+msQVN1Wk=;
+        b=J2SzIYQ4B73SAq3pVhabl/kzjTvS/pqXjxd9BkJTPDT6jmXf7cOZTorbshustkkHJm
+         m7g36yr1ANZaOsqYGgZEuTkYdnJunl6ssRIB71AwwVvQwTb5D7IRhJtTGmFjqpYMnKpd
+         Zj43iq1INNlsl2AeAE1UXRHisJi/EJjb6P93GAmUUd4PEq8XKy+3NSClXAyLQtNOXkRD
+         B7/kgpV45wzU/gcRhzD3hf0g3IhfoyUDFHP72lswfZp4XoLw/KaG1w5BhW7rdRR5obSs
+         nmteEPqk20/VDlJNa/kUu/HeYlQv43ewKNuMBFUHisQ6Pp0HBxMQekfbAxk1IZy9nB7f
+         9jLw==
+X-Gm-Message-State: APjAAAU3XHp+G6ifK4FiiFUzNl0cp44BHUVikWyo6dtI46wOSXp1bOS+
+        JHI+vZjfDTJiqzL0A64hW9+YqJsi
+X-Google-Smtp-Source: APXvYqyOFZOFmd+OGrpceXnPd85a571mancWj08pkt/QlosqHQmGMlPOqgYQkcTJKjZoW1lBA15lVg==
+X-Received: by 2002:a63:2364:: with SMTP id u36mr102326172pgm.449.1564429969160;
+        Mon, 29 Jul 2019 12:52:49 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.44
+        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.47
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 12:52:45 -0700 (PDT)
+        Mon, 29 Jul 2019 12:52:48 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-serial@vger.kernel.org
-Cc:     Stefan Agner <stefan.agner@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Fugang Duan <fugang.duan@nxp.com>,
         Stefan Agner <stefan@agner.ch>,
         Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>,
         Chris Healy <cphealy@gmail.com>,
@@ -58,9 +57,9 @@ Cc:     Stefan Agner <stefan.agner@toradex.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 01/24] tty: serial: fsl_lpuart: fix framing error handling when using DMA
-Date:   Mon, 29 Jul 2019 12:52:03 -0700
-Message-Id: <20190729195226.8862-2-andrew.smirnov@gmail.com>
+Subject: [PATCH 03/24] tty: serial: fsl_lpuart: Flush HW FIFOs in .flush_buffer
+Date:   Mon, 29 Jul 2019 12:52:05 -0700
+Message-Id: <20190729195226.8862-4-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190729195226.8862-1-andrew.smirnov@gmail.com>
 References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
@@ -71,19 +70,11 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Stefan Agner <stefan.agner@toradex.com>
+Switching baud rate might cause bogus data to appear in HW
+FIFO. Add code to do a HW FIFO flush to .flush_buffer callback to
+avoid that.
 
-When using DMA framing error get cleared properly. However, due
-to the additional read from the data register, an underflow in
-the receive FIFO buffer occurs (the FIFO pointer gets out of
-sync).
-
-Clear the FIFO in case an underflow has occurred. Also disable the
-receiver during this operation and when reading the data register to
-minimize potential interference.
-
-Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
-Acked-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Stefan Agner <stefan@agner.ch>
 Cc: Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>
@@ -96,53 +87,60 @@ Cc: linux-imx@nxp.com
 Cc: linux-serial@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/tty/serial/fsl_lpuart.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/tty/serial/fsl_lpuart.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 92dad2b4ec36..586b3513a6b0 100644
+index edb1a9425fac..56423ad02f0f 100644
 --- a/drivers/tty/serial/fsl_lpuart.c
 +++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -982,6 +982,13 @@ static void lpuart_copy_rx_to_tty(struct lpuart_port *sport)
- 		unsigned char sr = readb(sport->port.membase + UARTSR1);
+@@ -517,9 +517,16 @@ static int lpuart_dma_tx_request(struct uart_port *port)
+ 	return 0;
+ }
  
- 		if (sr & (UARTSR1_PE | UARTSR1_FE)) {
-+			unsigned char cr2;
++static bool lpuart_is_32(struct lpuart_port *sport)
++{
++	return sport->port.iotype == UPIO_MEM32 ||
++	       sport->port.iotype ==  UPIO_MEM32BE;
++}
 +
-+			/* Disable receiver during this operation... */
-+			cr2 = readb(sport->port.membase + UARTCR2);
-+			cr2 &= ~UARTCR2_RE;
-+			writeb(cr2, sport->port.membase + UARTCR2);
-+
- 			/* Read DR to clear the error flags */
- 			readb(sport->port.membase + UARTDR);
+ static void lpuart_flush_buffer(struct uart_port *port)
+ {
+ 	struct lpuart_port *sport = container_of(port, struct lpuart_port, port);
++	u32 val;
  
-@@ -989,6 +996,25 @@ static void lpuart_copy_rx_to_tty(struct lpuart_port *sport)
- 				sport->port.icount.parity++;
- 			else if (sr & UARTSR1_FE)
- 				sport->port.icount.frame++;
-+			/*
-+			 * At this point parity/framing error is
-+			 * cleared However, since the DMA already read
-+			 * the data register and we had to read it
-+			 * again after reading the status register to
-+			 * properly clear the flags, the FIFO actually
-+			 * underflowed... This requires a clearing of
-+			 * the FIFO...
-+			 */
-+			if (readb(sport->port.membase + UARTSFIFO) &
-+			    UARTSFIFO_RXUF) {
-+				writeb(UARTSFIFO_RXUF,
-+				       sport->port.membase + UARTSFIFO);
-+				writeb(UARTCFIFO_RXFLUSH,
-+				       sport->port.membase + UARTCFIFO);
-+			}
-+
-+			cr2 |= UARTCR2_RE;
-+			writeb(cr2, sport->port.membase + UARTCR2);
+ 	if (sport->lpuart_dma_tx_use) {
+ 		if (sport->dma_tx_in_progress) {
+@@ -529,6 +536,16 @@ static void lpuart_flush_buffer(struct uart_port *port)
  		}
+ 		dmaengine_terminate_all(sport->dma_tx_chan);
  	}
++
++	if (lpuart_is_32(sport)) {
++		val = lpuart32_read(&sport->port, UARTFIFO);
++		val |= UARTFIFO_TXFLUSH | UARTFIFO_RXFLUSH;
++		lpuart32_write(&sport->port, val, UARTFIFO);
++	} else {
++		val = readb(sport->port.membase + UARTPFIFO);
++		val |= UARTCFIFO_TXFLUSH | UARTCFIFO_RXFLUSH;
++		writeb(val, sport->port.membase + UARTCFIFO);
++	}
+ }
  
+ #if defined(CONFIG_CONSOLE_POLL)
+@@ -753,12 +770,6 @@ static unsigned int lpuart32_tx_empty(struct uart_port *port)
+ 	return 0;
+ }
+ 
+-static bool lpuart_is_32(struct lpuart_port *sport)
+-{
+-	return sport->port.iotype == UPIO_MEM32 ||
+-	       sport->port.iotype ==  UPIO_MEM32BE;
+-}
+-
+ static irqreturn_t lpuart_txint(int irq, void *dev_id)
+ {
+ 	struct lpuart_port *sport = dev_id;
 -- 
 2.21.0
 
