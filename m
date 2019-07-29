@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6071D79759
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 21:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3952279754
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 21:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388446AbfG2T7j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 15:59:39 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46463 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728882AbfG2TxB (ORCPT
+        id S2403849AbfG2T7a (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 15:59:30 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36194 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403808AbfG2TxD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:53:01 -0400
-Received: by mail-pg1-f195.google.com with SMTP id k189so9730240pgk.13;
-        Mon, 29 Jul 2019 12:53:00 -0700 (PDT)
+        Mon, 29 Jul 2019 15:53:03 -0400
+Received: by mail-pl1-f196.google.com with SMTP id k8so27923646plt.3;
+        Mon, 29 Jul 2019 12:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=txBFEA0p0mencL2FMZffTtTBfxW3XrDp/4JH32LKLg4=;
-        b=duEiWJqAE4UPSZq/9tzAYpc+uL61VBt4tJ1ePuEtIn+sKgLJgKuO88g+UOLkEHty+a
-         H+e80AqYmT2zulzRH3YmpyzB+wiNa9wpbKqzcU/tm5VK11dTgzYRwSZLFE3gXkQ0kstB
-         81ikjiImNRIF09o2tFebG6wcs0h5InIqWz+5hN5L31xlSn0dljW0q99WMOYwnMrJOtSQ
-         8ZzSjwZVNE4TJjD1SXynbxEY6YEeL5PbsHqC3/z9ZZOQn2Mlvvoj2yb0yjNbdQbzWQAY
-         UHdmjKEEzvmq1Pq2/1K5dc31I/Ubt1fjDBsZcDMWpEt+LNHz1MRiScHBwLT5n6sH/Q/Q
-         45Pg==
+        bh=XiIa9lXs8v+pYOtT7URPOSD4VArWS1Smglfft6t1XIg=;
+        b=esaCnLO1sT9NJGBg3xQAwvQ26OUBBftQ03MkyOb5d1KiKtZXlji6iRGCYCMv4jQfwg
+         CEdGXMSJgfKmnLvN8ZNXuXTBrUCK/lDIUJeGTSsJSzf4fGVnPCh5cHAwwfjsyu2Qa8bp
+         es1CDdog/4Ib7Gedb1Uwv2dc1b5KlU/KTKjutfmj1IgF88xky4vU20opwlWaBqzRPuwA
+         RTARCivQXv/oEd1sdwq5wRHBf4j/RLFarpZZRzvU65uuG1XeF7zjNS0aD/A8HZW3SjqE
+         wSCwYtrAJOO6mYjUcCvKRnOjp2Kngco5q12DLPhZiRSIa9ycO9lIyYyfG5yQV+o2r8hY
+         oG4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=txBFEA0p0mencL2FMZffTtTBfxW3XrDp/4JH32LKLg4=;
-        b=XQicbLnfMCDjlXO5kQgt6iQIJo+jNJ+RCQHqpHp/n2ApeUfrkbCTRL0/hEb8SGoFPO
-         aK077GXl4YHjgAqr9GMxvsdCq74+1IvFHrjt/KkVk4w5YQBabXCpNiTMN+Ufi5ABYbHY
-         xE/apzkSztTHWxAZJkylGuh/sZwFwjktgEbTvZHyO5J+QPwj6hyR82D7hjYRS/0fFZfH
-         tdxLER1Ae7jhwUC6j9M6JqSE7OFDTS0id0b5va14s6pIMkQtTBzd6MISaSlmkbcRKhAN
-         vrvRhy7Ae3C9u96AV5+JC/6DIslVNv5vBoJnSrPFTC/VwkCE493Xmom425QfwatTdM/h
-         avIw==
-X-Gm-Message-State: APjAAAVbGxT+UiX9iFQituVilmw5Fqo5h7mtzL+FB9uGA5tt0vqZnPx5
-        S2B2yggV1pqY/TsLiVnoBEQ7Oq4o
-X-Google-Smtp-Source: APXvYqyZA64AdyyRDDWjGksnRFKzgAF1EPZGhkMHmGHI/TUqw1qcy2bpBGj83iyyUVhQS7SaG9cWFQ==
-X-Received: by 2002:a17:90a:360c:: with SMTP id s12mr115325049pjb.30.1564429979746;
-        Mon, 29 Jul 2019 12:52:59 -0700 (PDT)
+        bh=XiIa9lXs8v+pYOtT7URPOSD4VArWS1Smglfft6t1XIg=;
+        b=ho+FJcsLVHgnDmYea72xA8iMOiZsanX+zCaidzTjf+tUs0Ey1R1twFaLmhP3aXTGV5
+         tiJSg/0LZskas3JKuGkAsQWeqmvT3ceZ3sFz5hv6fnb3PzWU1/xt5rQpL4ycumOjHaly
+         HjPVQuuHIFDiWXFnTHgreTzNinbJmIIJGjsm9lVlsrIgczQhxmrdOxcseinu2QbTvgqY
+         eVUxy5GnKFcmt7nKrRpT9jZvo7sf7S+3Ochh/HeQdXVwpD1UUGxZcc3x3wvShBV2aIHs
+         MoEwOKDqGaILdYR4/V/oH5+v2WCtY60jthtay8bz/LxW3IxsXJx/MXWxijYw1q/MD4nu
+         29lA==
+X-Gm-Message-State: APjAAAXGbe1+S08BnrLErT7y2OoCK+Rvn7sB5SW59iYKz5Ejgum5tVf0
+        zE3G91zhtqjgE6rlpiVTUeu4E4ll
+X-Google-Smtp-Source: APXvYqztZGUNuIrsL3tAAmpY9hr8MQkaVsR2ZXjk3dHrsBzizrgnpfjidEzOs61cKmbmbVdK0yiJuA==
+X-Received: by 2002:a17:902:7d8b:: with SMTP id a11mr58106268plm.306.1564429982286;
+        Mon, 29 Jul 2019 12:53:02 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.58
+        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.53.00
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 12:52:59 -0700 (PDT)
+        Mon, 29 Jul 2019 12:53:01 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-serial@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -56,9 +56,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 10/24] tty: serial: fsl_lpuart: Drop no-op bit opearation
-Date:   Mon, 29 Jul 2019 12:52:12 -0700
-Message-Id: <20190729195226.8862-11-andrew.smirnov@gmail.com>
+Subject: [PATCH 12/24] tty: serial: fsl_lpuart: Clear CSTOPB unconditionally
+Date:   Mon, 29 Jul 2019 12:52:14 -0700
+Message-Id: <20190729195226.8862-13-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190729195226.8862-1-andrew.smirnov@gmail.com>
 References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
@@ -69,9 +69,8 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The check for termios->c_cflag & CRTSCTS ensure that if we reach else
-branch, CRTSCTS in termios->c_cflag is already going to be
-cleard. Doing so explicitly there is not necessary. Drop it.
+Clearing CSTOPB bit if it is set is functionally equivalent to jsut
+clearing it unconditionally. Drop unnecessary check.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Stefan Agner <stefan@agner.ch>
@@ -85,28 +84,23 @@ Cc: linux-imx@nxp.com
 Cc: linux-serial@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/tty/serial/fsl_lpuart.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index f87ea889ff86..5181ba5d8f71 100644
+index 5a1e19733353..10f1af51c58d 100644
 --- a/drivers/tty/serial/fsl_lpuart.c
 +++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1651,12 +1651,10 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if (sport->port.rs485.flags & SER_RS485_ENABLED)
- 		termios->c_cflag &= ~CRTSCTS;
- 
--	if (termios->c_cflag & CRTSCTS) {
-+	if (termios->c_cflag & CRTSCTS)
- 		modem |= (UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
--	} else {
--		termios->c_cflag &= ~CRTSCTS;
-+	else
+@@ -1656,8 +1656,7 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	else
  		modem &= ~(UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
--	}
  
- 	if (termios->c_cflag & CSTOPB)
- 		termios->c_cflag &= ~CSTOPB;
+-	if (termios->c_cflag & CSTOPB)
+-		termios->c_cflag &= ~CSTOPB;
++	termios->c_cflag &= ~CSTOPB;
+ 
+ 	/* parity must be enabled when CS7 to match 8-bits format */
+ 	if ((termios->c_cflag & CSIZE) == CS7)
 -- 
 2.21.0
 
