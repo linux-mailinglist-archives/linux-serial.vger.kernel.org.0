@@ -2,127 +2,123 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F61478B38
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 14:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCECE78E46
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 16:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387665AbfG2MBD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 08:01:03 -0400
-Received: from mga01.intel.com ([192.55.52.88]:42527 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387398AbfG2MBD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 08:01:03 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 05:01:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,322,1559545200"; 
-   d="scan'208";a="162158693"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jul 2019 05:01:00 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hs4Kp-0006Se-8q; Mon, 29 Jul 2019 15:00:59 +0300
-Date:   Mon, 29 Jul 2019 15:00:59 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Aaron Sierra <asierra@xes-inc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
- 8250_port
-Message-ID: <20190729120059.GD23480@smile.fi.intel.com>
-References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com>
- <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727624AbfG2OoJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 10:44:09 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:40217 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727579AbfG2OoI (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Jul 2019 10:44:08 -0400
+Received: from orion.localdomain ([77.4.29.213]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M4bA0-1hqSBc3r9S-001lLn; Mon, 29 Jul 2019 16:44:07 +0200
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org
+Subject: [PATCH] drivers: tty: serial: amba-pl011: use generic ops request/release port
+Date:   Mon, 29 Jul 2019 16:44:05 +0200
+Message-Id: <1564411445-26933-1-git-send-email-info@metux.net>
+X-Mailer: git-send-email 1.9.1
+X-Provags-ID: V03:K1:jdPTzVwFCUfxy3QU+2kLmfIUT55orwVaxqJ69PmQw5UfU9KZzDw
+ wql5XfmsTe/VCPW2xY1keE8jypSgxOHsIecar5nuXnHzQo745zmKsI4Zz7zngr6CsGqAOe8
+ elVBX0FMHSSsUBADOSdUrlqxsfgPWCPRTLejjsm4+BUt+9rL9/bDammMcXAEPhcvjIsumvz
+ awr1hOF+fOYzcBtyX0oIw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9/NGNk0UAT4=:O+Zbg9s8HYxFwidTY8c++4
+ hCXMfmBMvffdecKzVGu72HF5tbKcwcWgxJrHbJ46mFcdXOenVp9sbFFXEkjzOzQlDeQocyZAd
+ hHicgGZtqNOLuTVOAwMHYyxPQvxilgkWdesUB8hGhGNb1MolZqameOV+Ag2mh1QC/D+pP/yUa
+ lsZIgi6PGSeZMWE+9MDyzEFyaUkaJ3J5OdsePMRrbuvsuZwl+LVziPdu/3Nmmf6dGE6BHvnhY
+ mGyTUjLpOQ1Qg8Zltw4UKSomZf5e4BtGhmCg1bQ4DwpWOBQozIpECogDmsHF6F9p56FLVVCEx
+ O3l+f1ImxRb6abCb3iRXNo8Z6YSp2stKb37sfKQ7u+SlGZq8Cm08IAHZWqZohhAk2P48HCKzP
+ fmCTeArQIXYdsydsRlyosyQ7jMnId1FAxET84WFyFpLkdEWn8Wcf1dsI4nzPUX4HruVKYQu9O
+ PZX8bkzA3htkoBGCdfaJlypqpVVPyGCPDlBK241cltAe9Rlf+UIOT1c1Bjqlzk+IPUSiDaVum
+ L/cTv5aQEDcPZ8qogoEQ0zD8KokMxPN9NCD/M4dm3z7ax6lg+3IDrwoI77SbHIcOTBmcRgL32
+ gXAKRBIEfve2IopX9SPZW+jtLq5m4IuAR4p50GFruPWyhzRJCwtpMrAAPkTGQ71e9vVag+LGr
+ C8ab6EF4qllV7Y8d7t1KoAuexqYfK0/gvzSpDl5QpKq5qFEx02QMtDL5cEfr6lcAUnavSkZtN
+ HQbdaBonZMWd9XpBJ+k6V3v7YRFeh28PF+EvDw==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sun, Jul 28, 2019 at 05:12:09PM -0500, Aaron Sierra wrote:
-> ----- Original Message -----
-> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> > Sent: Sunday, July 21, 2019 9:26:59 AM
-> 
-> > There are Exar quirks in 8250_port which belong to 8250_exar module.
-> > Move out them to the correct module and do not contaminate generic code
-> > with it.
-> 
-> Andy,
-> 
-> Your changes seem functionally equivalent based on my review and testing.
+From: Enrico Weigelt <info@metux.net>
 
-Thank you for testing, my answers below.
+Reduce boilerplate by using generic implementation of the trivial
+request_port/release_port operations. For that to work, we have to
+set the mapsize field accordingly.
+---
+ drivers/tty/serial/amba-pl011.c | 28 ++++++----------------------
+ 1 file changed, 6 insertions(+), 22 deletions(-)
 
-> However, based on this commit description, I was expecting more of the
-> Exar-specific code to be moved from 8250_port.c to 8250_exar.c. I think that
-> can reasonably be achieved without too much additional effort.
-> 
-> There are two pieces of Exar-specific support in serial8250_do_startup():
-
-Actually three.
-
-> 1. The two reads to clear INT0, could be boiled down to a single read in
->    exar_pci_probe(), immediately after registering the common IRQ handler.
->    What do you think?
-
-I'm not so familiar with the hardware, will it not give any side-effects?
-
-> 2. The following block could be moved to a new exar_startup() function:
-> 
-> 	if (port->type == PORT_XR17V35X) {
-> 		/*
-> 		 * First enable access to IER [7:5], ISR [5:4], FCR [5:4],
-> 		 * MCR [7:5] and MSR [7:0]
-> 		 */
-> 		serial_port_out(port, UART_XR_EFR, UART_EFR_ECB);
-> 
-> 		/*
-> 		 * Make sure all interrups are masked until initialization is
-> 		 * complete and the FIFOs are cleared
-> 		 */
-> 		serial_port_out(port, UART_IER, 0);
-> 	}
-> 
->    Do you agree?
-
-I thought about this, but didn't come to a conclusion to move it right now.
-It's not so straight forward. In the ->startup() we setup IO accessors in some
-cases (perhaps doesn't apply to Exar case) and do some testing.
-
-So, I prefer do this in a separate change, so we may see how it goes.
-
-> The only thing that seems to need to stay put is UART_XR_EFR support in
-> serial8250_do_set_termios().
-
-Yes, though ideally it should be moved to 8250_exar as well.
-
-> There are a couple additional notes below for you to find. One involves a
-> compile warning.
-
-> > #define UART_EXAR_INT0		0x80
-> 
-> My note above about cleaning up serial8250_do_startup() would eliminate
-> the need for UART_EXAR_INT0 to be defined here, too.
-
-I see.
-
-> > -		goto out;
-> 
-> Take the "out" label as well to avoid introducing a compile warning.
-
-Thanks, I missed it somehow.
-
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index 5921a33..6b7c3c7 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -2094,30 +2094,13 @@ static const char *pl011_type(struct uart_port *port)
+ }
+ 
+ /*
+- * Release the memory region(s) being used by 'port'
+- */
+-static void pl011_release_port(struct uart_port *port)
+-{
+-	release_mem_region(port->mapbase, SZ_4K);
+-}
+-
+-/*
+- * Request the memory region(s) being used by 'port'
+- */
+-static int pl011_request_port(struct uart_port *port)
+-{
+-	return request_mem_region(port->mapbase, SZ_4K, "uart-pl011")
+-			!= NULL ? 0 : -EBUSY;
+-}
+-
+-/*
+  * Configure/autoconfigure the port.
+  */
+ static void pl011_config_port(struct uart_port *port, int flags)
+ {
+ 	if (flags & UART_CONFIG_TYPE) {
+ 		port->type = PORT_AMBA;
+-		pl011_request_port(port);
++		uart_defops_request_port(port);
+ 	}
+ }
+ 
+@@ -2150,8 +2133,8 @@ static int pl011_verify_port(struct uart_port *port, struct serial_struct *ser)
+ 	.flush_buffer	= pl011_dma_flush_buffer,
+ 	.set_termios	= pl011_set_termios,
+ 	.type		= pl011_type,
+-	.release_port	= pl011_release_port,
+-	.request_port	= pl011_request_port,
++	.release_port	= uart_defops_release_port,
++	.request_port	= uart_defops_request_port,
+ 	.config_port	= pl011_config_port,
+ 	.verify_port	= pl011_verify_port,
+ #ifdef CONFIG_CONSOLE_POLL
+@@ -2181,8 +2164,8 @@ static unsigned int sbsa_uart_get_mctrl(struct uart_port *port)
+ 	.shutdown	= sbsa_uart_shutdown,
+ 	.set_termios	= sbsa_uart_set_termios,
+ 	.type		= pl011_type,
+-	.release_port	= pl011_release_port,
+-	.request_port	= pl011_request_port,
++	.release_port	= uart_defops_release_port,
++	.request_port	= uart_defops_request_port,
+ 	.config_port	= pl011_config_port,
+ 	.verify_port	= pl011_verify_port,
+ #ifdef CONFIG_CONSOLE_POLL
+@@ -2584,6 +2567,7 @@ static int pl011_setup_port(struct device *dev, struct uart_amba_port *uap,
+ 	uap->port.dev = dev;
+ 	uap->port.mapbase = mmiobase->start;
+ 	uap->port.membase = base;
++	uap->port.mapsize = SZ_4K;
+ 	uap->port.fifosize = uap->fifosize;
+ 	uap->port.flags = UPF_BOOT_AUTOCONF;
+ 	uap->port.line = index;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+1.9.1
 
