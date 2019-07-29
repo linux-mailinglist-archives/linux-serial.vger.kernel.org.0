@@ -2,106 +2,181 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC96478866
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 11:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C78789F1
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 12:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbfG2J3h (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 05:29:37 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52293 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726496AbfG2J3g (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 05:29:36 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hs1yI-0000BO-N4; Mon, 29 Jul 2019 11:29:34 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1hs1yI-0000UK-3J; Mon, 29 Jul 2019 11:29:34 +0200
-Date:   Mon, 29 Jul 2019 11:29:34 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH v7 3/3] serial: imx: get rid of imx_uart_rts_auto()
-Message-ID: <20190729092934.4gjeqtj3q4wkgt6j@pengutronix.de>
-References: <20190614072801.3187-1-s.hauer@pengutronix.de>
- <1564167161-3972-1-git-send-email-sorganov@gmail.com>
- <1564167161-3972-4-git-send-email-sorganov@gmail.com>
- <20190726192940.jy4frulgbetf5d2v@pengutronix.de>
- <87wog1xlf8.fsf@osv.gnss.ru>
+        id S2387436AbfG2Kzt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 06:55:49 -0400
+Received: from mx.cs.msu.ru ([188.44.42.42]:42485 "EHLO mail.cs.msu.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387424AbfG2Kzs (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Jul 2019 06:55:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
+         s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qJwhLMPSe3C9YgLvBSNOGorf/nwsbbvmT2Y7mbu5aMI=; b=FMBVGqlJlkL5BslLpwdm3U0Yer
+        e16bQoNK6my/0tSlydt6gNRBMs5Iua7+FIDR9C/QBoSFbYEl1sbamXLgvrkSW3ps6kerNy0CmUJvE
+        ghUW/WxBWGrBw1jzhlcpjVq6De7XGFWJN0avJ7eLijcn/74D5NEzTUQdp49P7EqJ6O2ELbQgM/kVK
+        UIXux3+igNhEDPlTX2CRZZ6DAmzjyZuj59+O1tFQ5ZCBK/v5t4HnD7gjCSHoqgdTSudm5Cujvq7XC
+        peFWhFSSvj9bmddcrdlaL9VUOIhXrgqRQhEVCaPAbimQvu1vbTC9V4i8NWRLfKkJ+ePnVAmQX2PVw
+        djYGvaPA==;
+Received: from [37.204.119.143] (port=58276 helo=cello)
+        by mail.cs.msu.ru with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92 (FreeBSD))
+        (envelope-from <ar@cs.msu.ru>)
+        id 1hs3JS-0008Jg-Rr; Mon, 29 Jul 2019 13:55:31 +0300
+Date:   Mon, 29 Jul 2019 13:55:21 +0300
+From:   Arseny Maslennikov <ar@cs.msu.ru>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
+        Rob Landley <rob@landley.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Pavel Machek <pavel@ucw.cz>
+Message-ID: <20190729105520.GA25742@cello>
+References: <20190625161153.29811-1-ar@cs.msu.ru>
+ <20190625161153.29811-5-ar@cs.msu.ru>
+ <20190625213215.GB3116@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jI8keyz6grp/JLjh"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87wog1xlf8.fsf@osv.gnss.ru>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+In-Reply-To: <20190625213215.GB3116@mit.edu>
+OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 37.204.119.143
+X-SA-Exim-Mail-From: ar@cs.msu.ru
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.cs.msu.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_ADSP_ALL autolearn=no autolearn_force=no version=3.4.2
+Subject: Re: [PATCH v2 4/7] linux/signal.h: Ignore SIGINFO by default in new
+ tasks
+X-SA-Exim-Version: 4.2
+X-SA-Exim-Scanned: Yes (on mail.cs.msu.ru)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 12:03:07PM +0300, Sergey Organov wrote:
-> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
-> 
-> > On Fri, Jul 26, 2019 at 09:52:41PM +0300, Sergey Organov wrote:
-> >> Called in only one place, for RS232, it only obscures things, as it
-> >> doesn't go well with 2 similar named functions,
-> >> imx_uart_rts_inactive() and imx_uart_rts_active(), that both are
-> >> RS485-specific.
-> >
-> > I don't share the critic. IMHO the name is fine. imx_uart_rts_inactive
-> > sets rts to its inactive level,
-> > imx_uart_rts_active() to its active level
-> 
-> Not exactly, in fact both do more than that, in a similar manner.
 
-They both handle mctrl-gpio, the autorts stuff isn't available for that,
-so we could fix that by letting rts-auto set the RTS gpio to active.
+--jI8keyz6grp/JLjh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > imx_uart_rts_auto() lets the output drive automatically by the
-> > receiver.
-> 
-> And this one was different and it was rather confusing when I've tried
-> to grok the logic of the driver.
-> 
-> > The name started to be a bit wrong in patch 1 of the series however.
-> 
-> The function was different from first two even before the patch, as it
-> does not do any of those additional things the first two do.
-> 
-> > And I still object removing this function because with the semantic
-> > this function got in patch 1 it is suiteable to be used in
-> > imx_uart_set_mctrl().
-> 
-> It is not, as it does require change to be used there, as we've already
-> seen, and then it becomes very different function from what it was at
-> the beginning.
-> 
-> Even then, the end result I've shown you when attempting to somehow preserve
-> some re-incarnation of this function still seems more cumbersome to me
-> than the end result of these patches.
-> 
-> That said, this a matter of taste and style, not correctness, and could
-> be changed as a follow-up, not to risk breaking already tested patch
-> series.
+On Tue, Jun 25, 2019 at 05:32:15PM -0400, Theodore Ts'o wrote:
+> <...>
+>=20
+> (In particular it might be worth checking Linux ports of Oracle and
+> DB2.)
 
-*shrug* I stop caring here.
+A couple of weeks of asking around got me to have a look at a DB2 9.7
+instance.
 
-Best regards
-Uwe
+sn1:~ # uname -a
+Linux sn1 2.6.16.60-0.54.5-ppc64 #1 SMP Fri Sep 4 01:28:03 UTC 2009 ppc64 p=
+pc64 ppc64 GNU/Linux
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+That particular deployment used the following set of processes:
+
+sn1:~ # ps -eo user,ppid,pid,pgid,sid,tty,state,cmd | grep db2 | grep -v ja=
+va
+bgpsysdb  8505   672  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,171fc0,0x110000000,0x110000000,1600000,18002,2,384f00b7
+bgpsysdb  8505   687  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,191fc0,0x110000000,0x110000000,1600000,18002,2,384f80b9
+bgpsysdb  8505  4309  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,151fc0,0x110000000,0x110000000,1600000,18002,2,6f5080c5
+root         1  8505  8504  7146 ?        S db2wdog 0
+bgpsysdb  8505  8511  8511  7146 ?        S db2sysc 0
+root      8511  8512  8511  7146 ?        S db2ckpwd 0
+root      8511  8513  8511  7146 ?        S db2ckpwd 0
+root      8511  8514  8511  7146 ?        S db2ckpwd 0
+bgpsysdb  8505  8630  8504  7146 ?        S db2acd 0 ,0,0,0,1,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,11fc0,0x110000000,0x110000000,1600000,18002,2,398072
+bgpsysdb  8505 15280  8504  7146 ?        S db2fmp ( ,1,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,31fc0,0x110000000,0x110000000,1600000,18002,2,bd80bb
+bgpsysdb  8505 16032  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,b1fc0,0x110000000,0x110000000,1600000,18002,2,81980ba
+bgpsysdb  8505 16073  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,91fc0,0x110000000,0x110000000,1600000,18002,2,12300c0
+bgpsysdb  8505 17683  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,131fc0,0x110000000,0x110000000,1600000,18002,2,248600db
+bgpsysdb  8505 30731  8504  7146 ?        S db2fmp ( ,0,0,0,0,0,0,0,1,0,8a6=
+678,14,1e014,2,0,1,f1fc0,0x110000000,0x110000000,1600000,18002,2,370080d1
+
+None of them has a controlling tty, so ^T pressed at any tty won't send
+them a signal.
+
+To get an idea on how do they handle signals, we can look at
+/proc/*/status:
+
+sn1:~ # cat /proc/{8512,8505,687,8511}/status | egrep '^(Pid|Sig|Shd)'
+Pid:    687
+SigQ:   0/128000
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: 0000000000000000
+SigIgn: fffffffe2bbaf007
+SigCgt: 00000001c44004f8
+Pid:    8505
+SigQ:   0/128000
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: fffffffe7ffbfeff
+SigIgn: fffffffe2fbaf007
+SigCgt: 00000001c0410ef8
+Pid:    8511
+SigQ:   0/128000
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: fffffffe7ffbfeff
+SigIgn: fffffffe23b3c005
+SigCgt: 00000001dc483efa
+Pid:    8512
+SigQ:   0/128000
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: 0000000000000000
+SigIgn: fffffffe2fbbf007
+SigCgt: 00000001c0400ef8
+
+It can be seen from the above that SIGPWR in particular is always
+ignored and sometimes blocked, which means its default disposition has
+no effect.
+
+This leads me to think that DB2 in particular would be unaffected by the
+patch set.
+
+p.s.: I do not have shell access to the machine, and never did; the commands
+cited in this email were executed by a person who does, and the output
+was handed back to me.
+
+--jI8keyz6grp/JLjh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAl0+0JAACgkQ9dQjyAYL
+01CzdRAAu38njim8DW61okHfX3GyhvxAvUy7Fg7QPJfoLIgFRrW+s6MB1myRyem+
+rvn+XScQaSlpH5a+aa50V3l3bxRuD38WF1+hU6USyjl4Jpv+DBFH5aNmYqkQIFJ1
+4yKySdyOVF+jFCIpdCihoT3nfRhim7rhd4sjlYX6zWzLEvnmsYe7zPm7BZMcNPTV
+wgEz/AwLXjtKCoa/W6EHQUiylutWcs0TLqMCQhYpt9p9FSg2/GmCczYGc1/SZ4en
+Fvjp7BMYg9Ha2rNnVHkd3QbJu6S+1eyKx5srz5x2CEuAwR3Q/ojw0f4kMJgUXqCk
+fqj81B9hxwXoV8f3gfhLUTmZO9tmt2hP9J9aLDFfETNxzhTs0hPdPW+7Vg3CsUQ/
+/WbGu6riGUsRQkUjvRoiisIVRHthxO2g6MD0taEJx3ZBfUFEtnNfzzP6xCrrKaHY
+LQ59yngfVUTVkHFlK+WYEHlhLXqrRHS1Kt9LFR/k7N6o7h2RspJoEOFzTZwlwV9+
+A2o4xAuUeg+3frmbUC3aWljzfet5FmSZ9And6QhtD1C40DQWVtZpitI6xWULcj1i
+UgLFd+/02Nu1jeDnfV1r5dWGdn1K7B1TmNJ8E0xZPwPQ+d8r3bN4Cg6lwVuz7wUp
+tba+wUzDoTqvjmJ6sHz5qwjBfzi+OKwBR2ip4AbkWMtY843R5lQ=
+=6Ez9
+-----END PGP SIGNATURE-----
+
+--jI8keyz6grp/JLjh--
