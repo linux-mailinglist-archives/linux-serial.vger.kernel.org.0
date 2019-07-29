@@ -2,155 +2,122 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B94FE78EC9
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 17:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878A579355
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 20:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387904AbfG2PLz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 11:11:55 -0400
-Received: from xes-mad.com ([162.248.234.2]:45894 "EHLO mail.xes-mad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387402AbfG2PLy (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 11:11:54 -0400
-Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
-        by mail.xes-mad.com (Postfix) with ESMTP id 2C18C2029F;
-        Mon, 29 Jul 2019 10:11:53 -0500 (CDT)
-Date:   Mon, 29 Jul 2019 10:11:51 -0500 (CDT)
-From:   Aaron Sierra <asierra@xes-inc.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Message-ID: <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com>
-In-Reply-To: <20190729120059.GD23480@smile.fi.intel.com>
-References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com> <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com> <20190729120059.GD23480@smile.fi.intel.com>
-Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
- 8250_port
-MIME-Version: 1.0
+        id S2387528AbfG2SqA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Mon, 29 Jul 2019 14:46:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54436 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387512AbfG2SqA (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Jul 2019 14:46:00 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 2C7F0AE62;
+        Mon, 29 Jul 2019 18:45:58 +0000 (UTC)
+Date:   Mon, 29 Jul 2019 20:45:57 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-Id: <20190729204557.468db2153efefda96dd41ec0@suse.de>
+In-Reply-To: <20190725114716.GB23883@dell>
+References: <20190613170636.6647-1-tbogendoerfer@suse.de>
+        <20190613170636.6647-6-tbogendoerfer@suse.de>
+        <20190725114716.GB23883@dell>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.0.127]
-X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
-Thread-Topic: serial: 8250_exar: Move the Exar bits out from 8250_port
-Thread-Index: LKY8uapdw0TXHEg8gX9LDd25a6BSiQ==
+Content-Transfer-Encoding: 8BIT
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
------ Original Message -----
-> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> To: "Aaron Sierra" <asierra@xes-inc.com>
-> Sent: Monday, July 29, 2019 7:00:59 AM
+On Thu, 25 Jul 2019 12:47:16 +0100
+Lee Jones <lee.jones@linaro.org> wrote:
 
-> On Sun, Jul 28, 2019 at 05:12:09PM -0500, Aaron Sierra wrote:
->> ----- Original Message -----
->> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
->> > Sent: Sunday, July 21, 2019 9:26:59 AM
->> 
->> > There are Exar quirks in 8250_port which belong to 8250_exar module.
->> > Move out them to the correct module and do not contaminate generic code
->> > with it.
->> 
->> Andy,
->> 
->> Your changes seem functionally equivalent based on my review and testing.
+> On Thu, 13 Jun 2019, Thomas Bogendoerfer wrote:
+> > +/*
+> > + * On IP30 the RTC (a DS1687) is behind the IOC3 on the generic
+> > + * ByteBus regions. We have to write the RTC address of interest to
+> > + * IOC3_BYTEBUS_DEV1, then read the data from IOC3_BYTEBUS_DEV2.
+> > + * rtc->regs already points to IOC3_BYTEBUS_DEV1.
+> > + */
+> > +#define IP30_RTC_ADDR(rtc) (rtc->regs)
+> > +#define IP30_RTC_DATA(rtc) ((rtc->regs) + IOC3_BYTEBUS_DEV2 - IOC3_BYTEBUS_DEV1)
+> > +
+> > +static u8 ip30_rtc_read(struct ds1685_priv *rtc, int reg)
+> > +{
+> > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > +	return readb(IP30_RTC_DATA(rtc));
+> > +}
+> > +
+> > +static void ip30_rtc_write(struct ds1685_priv *rtc, int reg, u8 value)
+> > +{
+> > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > +	writeb(value, IP30_RTC_DATA(rtc));
+> > +}
 > 
-> Thank you for testing, my answers below.
-> 
->> However, based on this commit description, I was expecting more of the
->> Exar-specific code to be moved from 8250_port.c to 8250_exar.c. I think that
->> can reasonably be achieved without too much additional effort.
->> 
->> There are two pieces of Exar-specific support in serial8250_do_startup():
-> 
-> Actually three.
+> Why is this not in the RTC driver?
 
-Andy,
+because rtc1685 is used in different systems and accessing the chip
+differs between those systems. 
 
-Were you counting "areas" of Exar code? I was counting "classes" of Exar code.
-Did I miss something?
- 
->> 1. The two reads to clear INT0, could be boiled down to a single read in
->>    exar_pci_probe(), immediately after registering the common IRQ handler.
->>    What do you think?
+> > +static struct ds1685_rtc_platform_data ip30_rtc_platform_data = {
+> > +	.bcd_mode = false,
+> > +	.no_irq = false,
+> > +	.uie_unsupported = true,
+> > +	.alloc_io_resources = true,
 > 
-> I'm not so familiar with the hardware, will it not give any side-effects?
-
-Clearing INT0 prevents PCI interrupts from getting stuck, either on in the
-case of level-sensitive interrupts (e.g. INTx) or apparently-off in the case
-of edge-sensitive interrupts (e.g. MSI), due to sources outside of the
-typical 8250 serial port scope. Interrupts due to port wake-up after
-idle/sleep are the best documented problem case.
-
-I do not think it was ever ideal that each port cleared INT0 multiple times
-during startup. Clearing INT0 after we register the interrupt handler
-responsible for INT0 should be enough to ensure that we won't run into either
-case. The handler runs even if no ports are "up", so individual ports don't
-have to worry so much.
-
-My original suggestion was incomplete in its handling of PCI device
-suspense/resume. A complete solution would read INT0 in exar_resume(), too.
-
->> 2. The following block could be moved to a new exar_startup() function:
->> 
->> 	if (port->type == PORT_XR17V35X) {
->> 		/*
->> 		 * First enable access to IER [7:5], ISR [5:4], FCR [5:4],
->> 		 * MCR [7:5] and MSR [7:0]
->> 		 */
->> 		serial_port_out(port, UART_XR_EFR, UART_EFR_ECB);
->> 
->> 		/*
->> 		 * Make sure all interrups are masked until initialization is
->> 		 * complete and the FIFOs are cleared
->> 		 */
->> 		serial_port_out(port, UART_IER, 0);
->> 	}
->> 
->>    Do you agree?
+> > +	.plat_read = ip30_rtc_read,
+> > +	.plat_write = ip30_rtc_write,
 > 
-> I thought about this, but didn't come to a conclusion to move it right now.
-> It's not so straight forward. In the ->startup() we setup IO accessors in some
-> cases (perhaps doesn't apply to Exar case) and do some testing.
-> 
-> So, I prefer do this in a separate change, so we may see how it goes.
+> Call-backs in a non-subsystem API is pretty ugly IMHO.
 
-I think it's fine to defer this change to a later patch, but I would like to
-see the commit message body for the current patch be more explicit that it is
-not moving *all* Exar quirks. I wonder, too, if these should be broken
-down into separate patches for the three classes of quirks that you move:
+I agree
 
-  * autoconfig_16550a()
-  * serial8250_do_[get|set]_divisor()
-  * serial8250_set_sleep()
+> Where are these called from?
 
--Aaron
+drivers/rtc/rtc-ds1685.c
 
->> The only thing that seems to need to stay put is UART_XR_EFR support in
->> serial8250_do_set_termios().
-> 
-> Yes, though ideally it should be moved to 8250_exar as well.
+I could do the same as done for serial8250 and add an additional .c file
+in  drivers/rtc which handles this for SGI-IP30. Alexandre would this work
+for you as well ?
 
-Yes, ideally.
+> > +#define IOC3_SID(_name, _sid, _setup) \
+> > +	{								   \
+> > +		.name = _name,						   \
+> > +		.sid = (PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_ ## _sid,   \
+> > +		.setup = _setup,					   \
+> > +	}
+> > +
+> > +static struct {
+> > +	const char *name;
+> > +	u32 sid;
+> > +	int (*setup)(struct ioc3_priv_data *ipd);
+> > +} ioc3_infos[] = {
+> 
+> IMHO it's neater if you separate the definition and static data part.
 
-> 
->> There are a couple additional notes below for you to find. One involves a
->> compile warning.
-> 
->> > #define UART_EXAR_INT0		0x80
->> 
->> My note above about cleaning up serial8250_do_startup() would eliminate
->> the need for UART_EXAR_INT0 to be defined here, too.
-> 
-> I see.
-> 
->> > -		goto out;
->> 
->> Take the "out" label as well to avoid introducing a compile warning.
-> 
-> Thanks, I missed it somehow.
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
+I don't quite understand what you mean here. Should I move the #define at
+the beginning of the file ? Why is it neater ?
+
+Thomas.
+
+-- 
+SUSE Linux GmbH
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
