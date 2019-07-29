@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 129877968F
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 21:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6071D79759
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 21:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390817AbfG2Tw6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 15:52:58 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:40173 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403948AbfG2Tw6 (ORCPT
+        id S2388446AbfG2T7j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 15:59:39 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46463 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728882AbfG2TxB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:52:58 -0400
-Received: by mail-pl1-f195.google.com with SMTP id a93so27859149pla.7;
-        Mon, 29 Jul 2019 12:52:57 -0700 (PDT)
+        Mon, 29 Jul 2019 15:53:01 -0400
+Received: by mail-pg1-f195.google.com with SMTP id k189so9730240pgk.13;
+        Mon, 29 Jul 2019 12:53:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=L2GrFCc9D3WL/PNzooHGzzSvpdiTmwdSbMUKxvJZPzY=;
-        b=pmOThawuup9vu+NIc6QrzGlWCDKMPYBsStynBNWXUhIY7Mt3YY3d0/SpEmPXcqSF4u
-         wcx23kMNoksa4Zle7wqxMAUZlDAO8Lsbkd3/9jZ6sJuBJ/I2GJmS63zA783CLHntnhg5
-         MZJIiZ+Or1DKeb4c5EUZVAjqY+KOoBMZ3ded+BIWnytuX/OsZYK6mNqHZfC9XH3avx0S
-         595E9zrGsXpz9PpKk3K9Yut3JvJbFbyZTQuQybJXHrfmcXcTbxunuPv4+loKyzXU49pL
-         E6nxDKAKHnS9YPTyZGG+d2qrNuZWNz6mwb5ANq4nymUc9M3h64poldklV3M3x2HFz1zf
-         egEw==
+        bh=txBFEA0p0mencL2FMZffTtTBfxW3XrDp/4JH32LKLg4=;
+        b=duEiWJqAE4UPSZq/9tzAYpc+uL61VBt4tJ1ePuEtIn+sKgLJgKuO88g+UOLkEHty+a
+         H+e80AqYmT2zulzRH3YmpyzB+wiNa9wpbKqzcU/tm5VK11dTgzYRwSZLFE3gXkQ0kstB
+         81ikjiImNRIF09o2tFebG6wcs0h5InIqWz+5hN5L31xlSn0dljW0q99WMOYwnMrJOtSQ
+         8ZzSjwZVNE4TJjD1SXynbxEY6YEeL5PbsHqC3/z9ZZOQn2Mlvvoj2yb0yjNbdQbzWQAY
+         UHdmjKEEzvmq1Pq2/1K5dc31I/Ubt1fjDBsZcDMWpEt+LNHz1MRiScHBwLT5n6sH/Q/Q
+         45Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=L2GrFCc9D3WL/PNzooHGzzSvpdiTmwdSbMUKxvJZPzY=;
-        b=T7FPJl3XKqbREHUQA0GfvXgGcAH1JXKjo0ss7X7w3VczOMii/D8paPjE36U8YmCRDL
-         j613b8rpKyJ8ejKUc093RDTFvBckN48pd9ssSpfAmbyiOku+Y1gmv/AmBvaCvc8slrf+
-         YNrWFoBYqNcl5gJZ3GOEY90N+OU5lu0X0jJpPZQXbO5wobMie5QuFn+gyEfCJnKZZbih
-         b4XQdlbRQ89OQmLKd0ryQpT2Idiuy05Zqp/rL29aTNAIPgZPe0hXcL7JOIlW2MmxIX3A
-         NVMAn+odNIzvZdwgT4IaKRNqjnRazvzTZczvLCFwSxuAY4M7haSkwnhkFuO7Vzdmy12Q
-         6wtg==
-X-Gm-Message-State: APjAAAUqyaovzudP+Hc0Uezt1PzltUsDbE5HZA/nIigq02SvLkDROR2C
-        LlwP49i1YEWcEBOokYnDbQjhyPHb
-X-Google-Smtp-Source: APXvYqzfMcWYQWOxnlxTQ1J+bdjC0AgbaZIqDH/Ml8Q3qfUlazI90HaUcabsMKqEr622Zitj1T8LDg==
-X-Received: by 2002:a17:902:2ac7:: with SMTP id j65mr112694634plb.242.1564429976844;
-        Mon, 29 Jul 2019 12:52:56 -0700 (PDT)
+        bh=txBFEA0p0mencL2FMZffTtTBfxW3XrDp/4JH32LKLg4=;
+        b=XQicbLnfMCDjlXO5kQgt6iQIJo+jNJ+RCQHqpHp/n2ApeUfrkbCTRL0/hEb8SGoFPO
+         aK077GXl4YHjgAqr9GMxvsdCq74+1IvFHrjt/KkVk4w5YQBabXCpNiTMN+Ufi5ABYbHY
+         xE/apzkSztTHWxAZJkylGuh/sZwFwjktgEbTvZHyO5J+QPwj6hyR82D7hjYRS/0fFZfH
+         tdxLER1Ae7jhwUC6j9M6JqSE7OFDTS0id0b5va14s6pIMkQtTBzd6MISaSlmkbcRKhAN
+         vrvRhy7Ae3C9u96AV5+JC/6DIslVNv5vBoJnSrPFTC/VwkCE493Xmom425QfwatTdM/h
+         avIw==
+X-Gm-Message-State: APjAAAVbGxT+UiX9iFQituVilmw5Fqo5h7mtzL+FB9uGA5tt0vqZnPx5
+        S2B2yggV1pqY/TsLiVnoBEQ7Oq4o
+X-Google-Smtp-Source: APXvYqyZA64AdyyRDDWjGksnRFKzgAF1EPZGhkMHmGHI/TUqw1qcy2bpBGj83iyyUVhQS7SaG9cWFQ==
+X-Received: by 2002:a17:90a:360c:: with SMTP id s12mr115325049pjb.30.1564429979746;
+        Mon, 29 Jul 2019 12:52:59 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.55
+        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.58
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 12:52:56 -0700 (PDT)
+        Mon, 29 Jul 2019 12:52:59 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-serial@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -56,9 +56,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 08/24] tty: serial: fsl_lpuart: Fix issue in software flow control
-Date:   Mon, 29 Jul 2019 12:52:10 -0700
-Message-Id: <20190729195226.8862-9-andrew.smirnov@gmail.com>
+Subject: [PATCH 10/24] tty: serial: fsl_lpuart: Drop no-op bit opearation
+Date:   Mon, 29 Jul 2019 12:52:12 -0700
+Message-Id: <20190729195226.8862-11-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190729195226.8862-1-andrew.smirnov@gmail.com>
 References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
@@ -69,23 +69,9 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Although I haven't observed this bug in practice, it seems that the
-code for handling x_char of LPUART is pretty much identical to that of
-i.MX. So the fix found in commit 7e2fb5aa8d81 ("serial: imx: Fix issue
-in software flow control"):
-
-    serial: imx: Fix issue in software flow control
-
-    After send out x_char in UART driver, x_char needs to be cleared
-    by UART driver itself, otherwise data in TXFIFO can no longer be
-    sent out.
-    Also tx counter needs to be increased to keep track of correct
-    number of transmitted data.
-
-    Signed-off-by: Jiada Wang <jiada_wang@mentor.com>
-    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-should apply here as well.
+The check for termios->c_cflag & CRTSCTS ensure that if we reach else
+branch, CRTSCTS in termios->c_cflag is already going to be
+cleard. Doing so explicitly there is not necessary. Drop it.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Stefan Agner <stefan@agner.ch>
@@ -99,22 +85,28 @@ Cc: linux-imx@nxp.com
 Cc: linux-serial@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/tty/serial/fsl_lpuart.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/fsl_lpuart.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 840dcbb27e5a..1fe9b1b29a46 100644
+index f87ea889ff86..5181ba5d8f71 100644
 --- a/drivers/tty/serial/fsl_lpuart.c
 +++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -781,6 +781,8 @@ static void lpuart_txint(struct lpuart_port *sport)
- 			lpuart32_write(&sport->port, sport->port.x_char, UARTDATA);
- 		else
- 			writeb(sport->port.x_char, sport->port.membase + UARTDR);
-+		sport->port.icount.tx++;
-+		sport->port.x_char = 0;
- 		goto out;
- 	}
+@@ -1651,12 +1651,10 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	if (sport->port.rs485.flags & SER_RS485_ENABLED)
+ 		termios->c_cflag &= ~CRTSCTS;
  
+-	if (termios->c_cflag & CRTSCTS) {
++	if (termios->c_cflag & CRTSCTS)
+ 		modem |= (UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
+-	} else {
+-		termios->c_cflag &= ~CRTSCTS;
++	else
+ 		modem &= ~(UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
+-	}
+ 
+ 	if (termios->c_cflag & CSTOPB)
+ 		termios->c_cflag &= ~CSTOPB;
 -- 
 2.21.0
 
