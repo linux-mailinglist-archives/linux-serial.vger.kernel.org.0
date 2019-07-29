@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0BD7976E
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 22:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C1B79776
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 22:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390812AbfG2Twx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 15:52:53 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46456 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390810AbfG2Twx (ORCPT
+        id S2404153AbfG2T7z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jul 2019 15:59:55 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40172 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403793AbfG2Tw4 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:52:53 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k189so9730081pgk.13;
-        Mon, 29 Jul 2019 12:52:52 -0700 (PDT)
+        Mon, 29 Jul 2019 15:52:56 -0400
+Received: by mail-pl1-f195.google.com with SMTP id a93so27859131pla.7;
+        Mon, 29 Jul 2019 12:52:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3ZUYQjsQOSoF7cnt3apJdVFojNnNOlP5fhhY2kvbOSU=;
-        b=DeaGhFXMF9XdWQknLV+nN6xPae5Jm2cRHRe9s3LxJE3nLYEehp5BhGyWsomktzRz3P
-         CEXnkZtiAP3ERhQpGE+tfuPugVDQ48ftruowp0g0Fm9947/JEfTihdGndH3B7dUqyEc4
-         2InRiWkyyDcB5OQIC5XtqQD5eKv77T4il7IVVyh3JqOYxnt8uWh+DiJFkxfCpAQInuJu
-         2LdxkuYWDE/Yznp4sTNVQ0JF6qwFMYNXOHDmdUOo/NlbFJJkxSf8UiMl0a7Ma/OLA3tE
-         Sk1fXJLCG9hKbx9rk37pdVm0bSKp0YdK8M/lMi7xUosB2CBQdXaeJAuTg76Hd2/KBNgN
-         5q7Q==
+        bh=KotmfPrwT18RHgM88KlaX3lPR9Sm0I4P1BxMeCf6KdI=;
+        b=LVIQeW2VeA0efJol8LrqUzmEf0utzN3AOjeQeB9t1szJZOpODsTxqEbWnfHqDW1cB2
+         MrCd36Xq4UznZnhkNn9jgFGgTvuzPQB9x1k2d2FRFGuTDr+pSXZ2yWS+jL7epTDS9ePg
+         WqBjXTYodrqrANY68cAPoN16Xq/rvawhHH0kawm9ET72JJphKLkS8GRgFRCXcnSPCgwU
+         yUM974AIOp0s64eby11dkrxUKBoNGSXaLEjKyYYfDGK+fw25NoinBTS9F9Vt+kyurp2z
+         gcdE3AMcttSYiMsm1z3df3gvdD0JmMF27Mt7N0R5tTU5SGUhucOqGtzcC1vPAM8b/+ZP
+         TRyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3ZUYQjsQOSoF7cnt3apJdVFojNnNOlP5fhhY2kvbOSU=;
-        b=GMIVabYn4OBm8vx3CtNM62T6OvYp7BGy/9SMW8l+qa7b/EKUvAAf+vg841C3YFe/8U
-         ibooNrq9ho/P/xvVZ5nnRFVvmp9ESBgh0/2ZRT9d2wYbbHhqGOj0ChZRUVsMnhy+sl3i
-         3Ib3TVM0lKpi8xRrald9mIbcEapHP1BryYNAYIA5HmlwWeooG9ICMohtwzJl+2fNJceR
-         o+2gyXJTBj9F3EWPIh1lcKnnrW2VxRN7OBq8w9/WoaObD2qIxbBOeWVmh6uNDH+N+IS7
-         /UkM5t94ACRQjXGB/bN2YPi24e/yvYNb/vfuvoeTiFcn1sdf0gZjmySUbphhmXga0IdX
-         54jg==
-X-Gm-Message-State: APjAAAVDVtMylOiM5Znp8eEIS3hIDrsIh1HMStW59Z8VJNbW/Bv94lAd
-        jB1nsl7pkxS9xGC6dMHLKfQg1ioq
-X-Google-Smtp-Source: APXvYqyV1Z0Sf8gr+Uz6USWetj3sLpLYNqGuQS1ggbcha6KBTqCIdDTFsxSatObzdcPEsQtAEJcPCg==
-X-Received: by 2002:aa7:957c:: with SMTP id x28mr38078342pfq.42.1564429972121;
-        Mon, 29 Jul 2019 12:52:52 -0700 (PDT)
+        bh=KotmfPrwT18RHgM88KlaX3lPR9Sm0I4P1BxMeCf6KdI=;
+        b=GDQmDvHwLw+OVRQOLZgg6SjbLry0oUfgfvwnok68IS7llp5mKmHvk65Sxk/P9Hnt34
+         nBMix+yy7c+p1t6cnrQWeXtCYnV8Eyn5SpGd6/vPB11LKaaz0L92TdtF3ue1fSLGDiXV
+         eRp/GYtmM9WiasOuqnlCoJTeoPTng9JlZLjHRDhEeysA1Z6znrs+BzTz3aelwNoLRusO
+         iFw464tdiisPmodUvUyoShmvkEwtg02ZtAW6sUD+RNJ7IRxi0AJj/Tudf2YpJ/DOwBcK
+         y510LG5ReFNzhRwfD33ymFQkL6z3FjUbZ1c0wxE4iJW5nE69SS3JM7k4MzmBtLtqfy8i
+         Nwdg==
+X-Gm-Message-State: APjAAAWGBzrWKIXKE9xYb4izeLr6avSfi/g8wfaumcpulTm4e3535I5u
+        wGpdAZOPqeLG3Mn04ls028uylilv
+X-Google-Smtp-Source: APXvYqxbZNbG0lxeegJkXnpkYbLAbiklpenVntDNCT/iKbMk8JxHM4gxErpSK9AfuG2eW1ecLEwx3g==
+X-Received: by 2002:a17:902:7791:: with SMTP id o17mr113082092pll.27.1564429975198;
+        Mon, 29 Jul 2019 12:52:55 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.50
+        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.53
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 12:52:51 -0700 (PDT)
+        Mon, 29 Jul 2019 12:52:54 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-serial@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -56,9 +56,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 05/24] tty: serial: fsl_lpuart: Fix bogus indentation
-Date:   Mon, 29 Jul 2019 12:52:07 -0700
-Message-Id: <20190729195226.8862-6-andrew.smirnov@gmail.com>
+Subject: [PATCH 07/24] tty: serial: fsl_lpuart: Drop unnecessary uart_write_wakeup()
+Date:   Mon, 29 Jul 2019 12:52:09 -0700
+Message-Id: <20190729195226.8862-8-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190729195226.8862-1-andrew.smirnov@gmail.com>
 References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
@@ -69,7 +69,15 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Fix bogus indentation in rx_dma_timer_init().
+Uart_write_wakeup() will already be called as a part of
+lpuart*_transmit_buffer() call, so there doesn't seem to be a reason
+to call it again right after.
+
+It also appears that second uart_write_wakeup() might potentially
+cause unwanted write wakeup when transmitting an x_char. See commit
+5e42e9a30cda ("serial: imx: Fix x_char handling and tx flow control")
+where this problem was fixed in a very similarly structured i.MX UART
+driver.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Stefan Agner <stefan@agner.ch>
@@ -83,26 +91,23 @@ Cc: linux-imx@nxp.com
 Cc: linux-serial@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/tty/serial/fsl_lpuart.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 3e38970a444e..1b3f2a87e558 100644
+index b600f591c8c2..840dcbb27e5a 100644
 --- a/drivers/tty/serial/fsl_lpuart.c
 +++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1409,9 +1409,9 @@ static void lpuart32_setup_watermark(struct lpuart_port *sport)
+@@ -797,9 +797,6 @@ static void lpuart_txint(struct lpuart_port *sport)
+ 	else
+ 		lpuart_transmit_buffer(sport);
  
- static void rx_dma_timer_init(struct lpuart_port *sport)
- {
--		timer_setup(&sport->lpuart_timer, lpuart_timer_func, 0);
--		sport->lpuart_timer.expires = jiffies + sport->dma_rx_timeout;
--		add_timer(&sport->lpuart_timer);
-+	timer_setup(&sport->lpuart_timer, lpuart_timer_func, 0);
-+	sport->lpuart_timer.expires = jiffies + sport->dma_rx_timeout;
-+	add_timer(&sport->lpuart_timer);
+-	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+-		uart_write_wakeup(&sport->port);
+-
+ out:
+ 	spin_unlock_irqrestore(&sport->port.lock, flags);
  }
- 
- static int lpuart_startup(struct uart_port *port)
 -- 
 2.21.0
 
