@@ -2,124 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDAA7B580
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 00:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E9B7B5F7
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 00:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728897AbfG3WNg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Jul 2019 18:13:36 -0400
-Received: from aye.elm.relay.mailchannels.net ([23.83.212.6]:10031 "EHLO
-        aye.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726253AbfG3WNf (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Jul 2019 18:13:35 -0400
-X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6CDE9141A8F;
-        Tue, 30 Jul 2019 22:13:33 +0000 (UTC)
-Received: from pdx1-sub0-mail-a39.g.dreamhost.com (100-96-88-209.trex.outbound.svc.cluster.local [100.96.88.209])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id C4899141191;
-        Tue, 30 Jul 2019 22:13:32 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
-Received: from pdx1-sub0-mail-a39.g.dreamhost.com ([TEMPUNAVAIL].
- [64.90.62.162])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
-        by 0.0.0.0:2500 (trex/5.17.5);
-        Tue, 30 Jul 2019 22:13:33 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|robert.middleton@rm5248.com
-X-MailChannels-Auth-Id: dreamhost
-X-Macabre-Well-Made: 3e7b8f7f35d4d77f_1564524813264_2293073126
-X-MC-Loop-Signature: 1564524813264:4152673415
-X-MC-Ingress-Time: 1564524813264
-Received: from pdx1-sub0-mail-a39.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a39.g.dreamhost.com (Postfix) with ESMTP id 3496F82F55;
-        Tue, 30 Jul 2019 15:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=rm5248.com; h=from:to:cc
-        :subject:date:message-id; s=rm5248.com; bh=++2BeHmIz8mhIX1wJzYDl
-        byprCs=; b=RyLFJm01XNHbvI4Zs0Df6wZSTN0Mo37gLtW+oS3L/sRcWPpHdOoPI
-        mRSNvIoh8ikqZI5fVXmPc79gTbFnMfwoLOjkEmNAUg26e8iD4iF3CC0ROa7kmGqh
-        PsncYpLfc1eKIsNe8QMvzWxyr9IYDmiO//NiEWNsdd8p7JMSGevzgk=
-Received: from localhost.localdomain (50-195-76-73-static.hfc.comcastbusiness.net [50.195.76.73])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: robert.middleton@rm5248.com)
-        by pdx1-sub0-mail-a39.g.dreamhost.com (Postfix) with ESMTPSA id 79AEE82F54;
-        Tue, 30 Jul 2019 15:13:28 -0700 (PDT)
-X-DH-BACKEND: pdx1-sub0-mail-a39
-From:   Robert Middleton <robert.middleton@rm5248.com>
-To:     linux-serial@vger.kernel.org
-Cc:     Robert Middleton <robert.middleton@rm5248.com>
-Subject: [PATCH v2] serial: 8250_exar: Clear buffer before shutdown
-Date:   Tue, 30 Jul 2019 18:13:08 -0400
-Message-Id: <20190730221308.6929-1-robert.middleton@rm5248.com>
-X-Mailer: git-send-email 2.11.0
-X-VR-OUT-STATUS: OK
-X-VR-OUT-SCORE: 0
-X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddrleeggddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffosedttdertdertddtnecuhfhrohhmpeftohgsvghrthcuofhiuggulhgvthhonhcuoehrohgsvghrthdrmhhiuggulhgvthhonhesrhhmhedvgeekrdgtohhmqeenucffohhmrghinhepphhorhhtrdguvghvnecukfhppeehtddrudelhedrjeeirdejfeenucfrrghrrghmpehmohguvgepshhmthhppdhhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeehtddrudelhedrjeeirdejfedprhgvthhurhhnqdhprghthheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqpdhmrghilhhfrhhomheprhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomhdpnhhrtghpthhtoheprhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomhenucevlhhushhtvghrufhiiigvpedt
+        id S1726716AbfG3W6v (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Jul 2019 18:58:51 -0400
+Received: from xes-mad.com ([162.248.234.2]:1210 "EHLO mail.xes-mad.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726722AbfG3W6v (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Jul 2019 18:58:51 -0400
+Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
+        by mail.xes-mad.com (Postfix) with ESMTP id 4413F2024D;
+        Tue, 30 Jul 2019 17:58:44 -0500 (CDT)
+Date:   Tue, 30 Jul 2019 17:58:42 -0500 (CDT)
+From:   Aaron Sierra <asierra@xes-inc.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Message-ID: <1516192036.531051.1564527522157.JavaMail.zimbra@xes-inc.com>
+In-Reply-To: <20190730090159.GH23480@smile.fi.intel.com>
+References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com> <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com> <20190729120059.GD23480@smile.fi.intel.com> <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com> <20190730090159.GH23480@smile.fi.intel.com>
+Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
+ 8250_port
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.0.127]
+X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
+Thread-Topic: serial: 8250_exar: Move the Exar bits out from 8250_port
+Thread-Index: DyR+zYHS+AAS+nzmx3EHBjj0SPflQg==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-When closing and shutting down the exar serial port, if the chip
-has not finished sending all of the data in its buffer, the
-remaining bytes will be lost.  Hold off on the shutdown until the
-bytes have all been sent.
+----- Original Message -----
+> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+> To: "Aaron Sierra" <asierra@xes-inc.com>
+> Sent: Tuesday, July 30, 2019 4:01:59 AM
 
-Signed-off-by: Robert Middleton <robert.middleton@rm5248.com>
----
- drivers/tty/serial/8250/8250_exar.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+> On Mon, Jul 29, 2019 at 10:11:51AM -0500, Aaron Sierra wrote:
+>> ----- Original Message -----
+>> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+>> > To: "Aaron Sierra" <asierra@xes-inc.com>
+>> > Sent: Monday, July 29, 2019 7:00:59 AM
+>> > On Sun, Jul 28, 2019 at 05:12:09PM -0500, Aaron Sierra wrote:
+>> >> ----- Original Message -----
+>> >> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+>> >> > Sent: Sunday, July 21, 2019 9:26:59 AM
+> 
+>> > I'm not so familiar with the hardware, will it not give any side-effects?
+>> 
+>> Clearing INT0 prevents PCI interrupts from getting stuck, either on in the
+>> case of level-sensitive interrupts (e.g. INTx) or apparently-off in the case
+>> of edge-sensitive interrupts (e.g. MSI), due to sources outside of the
+>> typical 8250 serial port scope. Interrupts due to port wake-up after
+>> idle/sleep are the best documented problem case.
+>> 
+>> I do not think it was ever ideal that each port cleared INT0 multiple times
+>> during startup. Clearing INT0 after we register the interrupt handler
+>> responsible for INT0 should be enough to ensure that we won't run into either
+>> case. The handler runs even if no ports are "up", so individual ports don't
+>> have to worry so much.
+>> 
+>> My original suggestion was incomplete in its handling of PCI device
+>> suspense/resume. A complete solution would read INT0 in exar_resume(), too.
+> 
+> Thanks for explanation, perhaps you can prepare a follow up on top on my series.
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index edd6dfe055bf..f0eb49113b6a 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -19,6 +19,7 @@
- #include <linux/string.h>
- #include <linux/tty.h>
- #include <linux/8250_pci.h>
-+#include <linux/delay.h>
- 
- #include <asm/byteorder.h>
- 
-@@ -457,6 +458,27 @@ static irqreturn_t exar_misc_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static void
-+exar_shutdown(struct uart_port *port)
-+{
-+	unsigned char lsr;
-+	bool tx_complete = 0;
-+	struct uart_8250_port *up = up_to_u8250p(port);
-+	struct circ_buf *xmit = &port->state->xmit;
-+	int i = 0;
-+
-+	do {
-+		lsr = serial_in(up, UART_LSR);
-+		if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
-+			tx_complete = 1;
-+		else
-+			tx_complete = 0;
-+		msleep(1);
-+	} while (!uart_circ_empty(xmit) && !tx_complete && i++ < 1000);
-+
-+	serial8250_do_shutdown(port);
-+}
-+
- static int
- exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
- {
-@@ -500,6 +522,7 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
- 			  | UPF_EXAR_EFR;
- 	uart.port.irq = pci_irq_vector(pcidev, 0);
- 	uart.port.dev = &pcidev->dev;
-+	uart.port.shutdown = exar_shutdown;
- 
- 	rc = devm_request_irq(&pcidev->dev, uart.port.irq, exar_misc_handler,
- 			 IRQF_SHARED, "exar_uart", priv);
--- 
-2.11.0
+Andy,
 
+Sure, I can do that. You're saying that you'd submit a patch for the INT0
+removal as the last patch in your series?
+
+>> > So, I prefer do this in a separate change, so we may see how it goes.
+>> 
+>> I think it's fine to defer this change to a later patch, but I would like to
+>> see the commit message body for the current patch be more explicit that it is
+>> not moving *all* Exar quirks. I wonder, too, if these should be broken
+>> down into separate patches for the three classes of quirks that you move:
+>> 
+>>   * autoconfig_16550a()
+>>   * serial8250_do_[get|set]_divisor()
+>>   * serial8250_set_sleep()
+> 
+> Yes, this will be better in case if some problems would be discovered in the
+> future, hope none.
+> 
+> So, let me split this to three, and then, if you have a chance to provide the
+> one described above, I will chain it to the series.
+
+I'll send it to you privately.
+
+Aaron
+
+> --
+> With Best Regards,
+> Andy Shevchenko
