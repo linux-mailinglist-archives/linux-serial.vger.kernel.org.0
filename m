@@ -2,184 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3BC79774
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jul 2019 22:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D85B7A397
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Jul 2019 11:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388820AbfG2T7u (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jul 2019 15:59:50 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36192 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403951AbfG2TxB (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:53:01 -0400
-Received: by mail-pl1-f196.google.com with SMTP id k8so27923618plt.3;
-        Mon, 29 Jul 2019 12:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xSR8UIuJtUSfE1z/aFnKt2Qtqi8QrJMV4/6voBg3yuM=;
-        b=sTghtoQ07flTgSh7Epjme4BrL1GNyPeXeHeX7d+kreZhh0eug8TbMG1el8na/8S4iK
-         xSnmylVtUtcDC2Z8NHPpn8TsFhLlAGoYSMd40rg/brQ/qvnWiP7PHMd5NElKleX1up4X
-         S96Dkrwc19E40ZqN+XB6ZbioTJcpWgGrJWdoogufTcmbiHKvydAoDIG4wjhcXu1N0Rws
-         qIQNVFWmqJTWO4JyYY0BU+y0GGUvOG0pvrQh/KHl09pd6wOxUNnytpaq8E/I0UVZ72+Q
-         Hmrg/oloTwUp7l2sVTy2wel1NCoGDpPbD89fImiVluqebqo/CkOjDM58dULGsZdNPymO
-         Dlwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xSR8UIuJtUSfE1z/aFnKt2Qtqi8QrJMV4/6voBg3yuM=;
-        b=KywXcZ0CdP6MO9mAU5RrvxNWKld4yncuL0QDe92ach+bI7kx5JDsl2zfhnbBS6aVzp
-         nCk9+A4QyylGDT5CBAsSIYfoiiRfFiYIR08S9HYBMj/1o5ty6nb0dYGw42OdfU1+mAqM
-         I6G3MWpswKeDSNnfrM5OdbZ6HFQ2A3F5J3TdMuGrNeh+032NfKnRj5CioCJR/hf/FhsT
-         QJ9iwgpXvDXZV7SDSXtcUk6vYUBGAYz3Oi4uvaS48wJSLareJhml3xrzqAKOIwYAsF5o
-         QHh4a4SqoMS0Xa74jbsr6BQ5hGJf+9fXhc8seYHgmIDcHHTeCLEnV6tFavOmDcMKojTt
-         qUyA==
-X-Gm-Message-State: APjAAAWHI7GwgIlfXy+no77azn//6YzkzjlOP7eLRn/zQE1ZcikUmXk2
-        1YJofPViWTPphbxyxkRhLZcxsVQ4
-X-Google-Smtp-Source: APXvYqwAkcJ5VuqJJYKnj+U/FYuNG6xkJZ2V+u3k5VljLDWmRkMRJfyfXhePf/M4hly0tmPNiQu+Nw==
-X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr104225220plk.73.1564429980871;
-        Mon, 29 Jul 2019 12:53:00 -0700 (PDT)
-Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id z12sm43983750pfn.29.2019.07.29.12.52.59
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 12:53:00 -0700 (PDT)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     linux-serial@vger.kernel.org
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Cory Tusar <cory.tusar@zii.aero>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/24] tty: serial: fsl_lpuart: Drop unnecessary extra parenthesis
-Date:   Mon, 29 Jul 2019 12:52:13 -0700
-Message-Id: <20190729195226.8862-12-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190729195226.8862-1-andrew.smirnov@gmail.com>
-References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
+        id S1726951AbfG3JCD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Jul 2019 05:02:03 -0400
+Received: from mga01.intel.com ([192.55.52.88]:59151 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726557AbfG3JCC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Jul 2019 05:02:02 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 02:02:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,326,1559545200"; 
+   d="scan'208";a="371474320"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Jul 2019 02:02:00 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hsO19-0000xH-3p; Tue, 30 Jul 2019 12:01:59 +0300
+Date:   Tue, 30 Jul 2019 12:01:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Aaron Sierra <asierra@xes-inc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
+ 8250_port
+Message-ID: <20190730090159.GH23480@smile.fi.intel.com>
+References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com>
+ <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com>
+ <20190729120059.GD23480@smile.fi.intel.com>
+ <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Drop unnecessary extra parenthesis in the driver.
+On Mon, Jul 29, 2019 at 10:11:51AM -0500, Aaron Sierra wrote:
+> ----- Original Message -----
+> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+> > To: "Aaron Sierra" <asierra@xes-inc.com>
+> > Sent: Monday, July 29, 2019 7:00:59 AM
+> > On Sun, Jul 28, 2019 at 05:12:09PM -0500, Aaron Sierra wrote:
+> >> ----- Original Message -----
+> >> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+> >> > Sent: Sunday, July 21, 2019 9:26:59 AM
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc: Stefan Agner <stefan@agner.ch>
-Cc: Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>
-Cc: Chris Healy <cphealy@gmail.com>
-Cc: Cory Tusar <cory.tusar@zii.aero>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-imx@nxp.com
-Cc: linux-serial@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/tty/serial/fsl_lpuart.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+> > I'm not so familiar with the hardware, will it not give any side-effects?
+> 
+> Clearing INT0 prevents PCI interrupts from getting stuck, either on in the
+> case of level-sensitive interrupts (e.g. INTx) or apparently-off in the case
+> of edge-sensitive interrupts (e.g. MSI), due to sources outside of the
+> typical 8250 serial port scope. Interrupts due to port wake-up after
+> idle/sleep are the best documented problem case.
+> 
+> I do not think it was ever ideal that each port cleared INT0 multiple times
+> during startup. Clearing INT0 after we register the interrupt handler
+> responsible for INT0 should be enough to ensure that we won't run into either
+> case. The handler runs even if no ports are "up", so individual ports don't
+> have to worry so much.
+> 
+> My original suggestion was incomplete in its handling of PCI device
+> suspense/resume. A complete solution would read INT0 in exar_resume(), too.
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 5181ba5d8f71..5a1e19733353 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1443,7 +1443,7 @@ static int lpuart_startup(struct uart_port *port)
- 	lpuart_setup_watermark(sport);
- 
- 	temp = readb(sport->port.membase + UARTCR2);
--	temp |= (UARTCR2_RIE | UARTCR2_TIE | UARTCR2_RE | UARTCR2_TE);
-+	temp |= UARTCR2_RIE | UARTCR2_TIE | UARTCR2_RE | UARTCR2_TE;
- 	writeb(temp, sport->port.membase + UARTCR2);
- 
- 	if (sport->dma_rx_chan && !lpuart_start_rx_dma(sport)) {
-@@ -1652,7 +1652,7 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
- 		termios->c_cflag &= ~CRTSCTS;
- 
- 	if (termios->c_cflag & CRTSCTS)
--		modem |= (UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
-+		modem |= UARTMODEM_RXRTSE | UARTMODEM_TXCTSE;
- 	else
- 		modem &= ~(UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
- 
-@@ -1663,7 +1663,7 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if ((termios->c_cflag & CSIZE) == CS7)
- 		termios->c_cflag |= PARENB;
- 
--	if ((termios->c_cflag & PARENB)) {
-+	if (termios->c_cflag & PARENB) {
- 		if (termios->c_cflag & CMSPAR) {
- 			cr1 &= ~UARTCR1_PE;
- 			if (termios->c_cflag & PARODD)
-@@ -1702,7 +1702,7 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
- 
- 	sport->port.read_status_mask = 0;
- 	if (termios->c_iflag & INPCK)
--		sport->port.read_status_mask |=	(UARTSR1_FE | UARTSR1_PE);
-+		sport->port.read_status_mask |= UARTSR1_FE | UARTSR1_PE;
- 	if (termios->c_iflag & (IGNBRK | BRKINT | PARMRK))
- 		sport->port.read_status_mask |= UARTSR1_FE;
- 
-@@ -1816,7 +1816,7 @@ lpuart32_serial_setbrg(struct lpuart_port *sport, unsigned int baudrate)
- 		tmp |= UARTBAUD_BOTHEDGE;
- 
- 	tmp &= ~(UARTBAUD_OSR_MASK << UARTBAUD_OSR_SHIFT);
--	tmp |= (((osr-1) & UARTBAUD_OSR_MASK) << UARTBAUD_OSR_SHIFT);
-+	tmp |= ((osr-1) & UARTBAUD_OSR_MASK) << UARTBAUD_OSR_SHIFT;
- 
- 	tmp &= ~UARTBAUD_SBR_MASK;
- 	tmp |= sbr & UARTBAUD_SBR_MASK;
-@@ -1869,7 +1869,7 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
- 	}
- 
- 	if (termios->c_cflag & CRTSCTS) {
--		modem |= (UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
-+		modem |= UARTMODEM_RXRTSE | UARTMODEM_TXCTSE;
- 	} else {
- 		termios->c_cflag &= ~CRTSCTS;
- 		modem &= ~(UARTMODEM_RXRTSE | UARTMODEM_TXCTSE);
-@@ -1918,7 +1918,7 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
- 
- 	sport->port.read_status_mask = 0;
- 	if (termios->c_iflag & INPCK)
--		sport->port.read_status_mask |=	(UARTSTAT_FE | UARTSTAT_PE);
-+		sport->port.read_status_mask |= UARTSTAT_FE | UARTSTAT_PE;
- 	if (termios->c_iflag & (IGNBRK | BRKINT | PARMRK))
- 		sport->port.read_status_mask |= UARTSTAT_FE;
- 
-@@ -2085,7 +2085,7 @@ lpuart_console_write(struct console *co, const char *s, unsigned int count)
- 
- 	/* first save CR2 and then disable interrupts */
- 	cr2 = old_cr2 = readb(sport->port.membase + UARTCR2);
--	cr2 |= (UARTCR2_TE |  UARTCR2_RE);
-+	cr2 |= UARTCR2_TE | UARTCR2_RE;
- 	cr2 &= ~(UARTCR2_TIE | UARTCR2_TCIE | UARTCR2_RIE);
- 	writeb(cr2, sport->port.membase + UARTCR2);
- 
-@@ -2116,7 +2116,7 @@ lpuart32_console_write(struct console *co, const char *s, unsigned int count)
- 
- 	/* first save CR2 and then disable interrupts */
- 	cr = old_cr = lpuart32_read(&sport->port, UARTCTRL);
--	cr |= (UARTCTRL_TE |  UARTCTRL_RE);
-+	cr |= UARTCTRL_TE | UARTCTRL_RE;
- 	cr &= ~(UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_RIE);
- 	lpuart32_write(&sport->port, cr, UARTCTRL);
- 
-@@ -2574,7 +2574,7 @@ static int lpuart_resume(struct device *dev)
- 	} else {
- 		lpuart_setup_watermark(sport);
- 		temp = readb(sport->port.membase + UARTCR2);
--		temp |= (UARTCR2_RIE | UARTCR2_TIE | UARTCR2_RE | UARTCR2_TE);
-+		temp |= UARTCR2_RIE | UARTCR2_TIE | UARTCR2_RE | UARTCR2_TE;
- 		writeb(temp, sport->port.membase + UARTCR2);
- 	}
- 
+Thanks for explanation, perhaps you can prepare a follow up on top on my series.
+
+> > So, I prefer do this in a separate change, so we may see how it goes.
+> 
+> I think it's fine to defer this change to a later patch, but I would like to
+> see the commit message body for the current patch be more explicit that it is
+> not moving *all* Exar quirks. I wonder, too, if these should be broken
+> down into separate patches for the three classes of quirks that you move:
+> 
+>   * autoconfig_16550a()
+>   * serial8250_do_[get|set]_divisor()
+>   * serial8250_set_sleep()
+
+Yes, this will be better in case if some problems would be discovered in the
+future, hope none.
+
+So, let me split this to three, and then, if you have a chance to provide the
+one described above, I will chain it to the series.
+
 -- 
-2.21.0
+With Best Regards,
+Andy Shevchenko
+
 
