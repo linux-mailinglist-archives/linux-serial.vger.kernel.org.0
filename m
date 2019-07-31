@@ -2,60 +2,121 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5B27CA10
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0A57CA52
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfGaRNx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 13:13:53 -0400
-Received: from xes-mad.com ([162.248.234.2]:30951 "EHLO mail.xes-mad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727348AbfGaRNx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:13:53 -0400
-Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
-        by mail.xes-mad.com (Postfix) with ESMTP id 1DF252026D;
-        Wed, 31 Jul 2019 12:13:52 -0500 (CDT)
-Date:   Wed, 31 Jul 2019 12:13:50 -0500 (CDT)
-From:   Aaron Sierra <asierra@xes-inc.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Message-ID: <161836634.223880.1564593230004.JavaMail.zimbra@xes-inc.com>
-In-Reply-To: <20190731170511.GQ23480@smile.fi.intel.com>
-References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com> <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com> <20190729120059.GD23480@smile.fi.intel.com> <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com> <20190730090159.GH23480@smile.fi.intel.com> <1516192036.531051.1564527522157.JavaMail.zimbra@xes-inc.com> <20190731170511.GQ23480@smile.fi.intel.com>
-Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
- 8250_port
+        id S1730012AbfGaRbI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 13:31:08 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:47003 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729993AbfGaRbH (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 13:31:07 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c3so9116723pfa.13;
+        Wed, 31 Jul 2019 10:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x4Cxze/2AoCEdIVtmKyfx00YEVCCPhrKcLTbzIqdhqs=;
+        b=h4I+L0DYy2DtXITuV4j3M6QG+NIg4/sM96sMojAb8xJYFOiJLYhM8arvGI0ZWx0+F9
+         ZGFCGIzgtK3eqQmjMsovU1l3AH/9W6E554sH/v1+R1eqVMW8Rgjfvk8UbinxKYidrkp+
+         HV0IbotKA1woVHxfz2YNxZ6ZiOSjvyp9AjnEsAx/TrkYr6KI3K0c+tadlFjfUsYNIIB+
+         t47st0/8J4MfgnREQjFp7NXq9yuLrAKANjQXLM0/MPbUNzo4JUZ0UyLsq3VOt9vNon70
+         Jl88CNeADc+XT1rK6+HRwp8qLBWk63MY7GVnvoDVI4X0ucFXnQfBkYaK/t3OF0MzZgk6
+         n7eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x4Cxze/2AoCEdIVtmKyfx00YEVCCPhrKcLTbzIqdhqs=;
+        b=JH0UNa/5ixL8rppvBKvloNX2HCp9T2EYr0ezlkzrgciu2OijDJumNjDZrXPhqVymir
+         sMxMRW2LsgsEXI8Y+Si/nLhHKgyWCuVce/g5vuF+5JLjX5O7hrtPn2zyTWJr1aFN+H64
+         t0vd7JWClJ+2XgogipYdmFLCxWfyh4ok7+rBtpBvqjmv3JVSB4hOd4i6ns35WUyVIamu
+         Y8cKb68Q/OL+iEUKXqTxR1yucECLrI/cUewrqz+8aTk+jCmyCiMHjKtzRVbuCtr5UCNk
+         3oaNUyrrA+h23UDSvsusZvN76INjp9BNUU6kK5M8LGDFqhaey8rxIGdmCd3v+mA+LvWp
+         N3Cg==
+X-Gm-Message-State: APjAAAUgYTu+lKihR1Zl6uJScWNqmp3fFZBbhzdKLt5XFpyy2QPFAUZr
+        RE6G44pq1PtDM1F8TPMJTSTGhdeh
+X-Google-Smtp-Source: APXvYqyP29U2AOQQ2Y/jna+STO7GT5Is/2e234+zYo0pCApeM36vEyWB+q5P5mIMy+/eroOMQKgenA==
+X-Received: by 2002:a63:6eca:: with SMTP id j193mr39128359pgc.74.1564594266330;
+        Wed, 31 Jul 2019 10:31:06 -0700 (PDT)
+Received: from localhost.localdomain ([2607:fb90:4ad:5a0b:2aff:6e0f:8973:5a26])
+        by smtp.gmail.com with ESMTPSA id bo20sm2089617pjb.23.2019.07.31.10.31.04
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 31 Jul 2019 10:31:05 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Chris Healy <cphealy@gmail.com>,
+        Cory Tusar <cory.tusar@zii.aero>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/23] LPUART fixes and improvements
+Date:   Wed, 31 Jul 2019 10:30:22 -0700
+Message-Id: <20190731173045.11718-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.0.127]
-X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
-Thread-Topic: serial: 8250_exar: Move the Exar bits out from 8250_port
-Thread-Index: 2HhVXydau/Z6IvQFscH7Lfgbx5U6bA==
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
------ Original Message -----
-> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> To: "Aaron Sierra" <asierra@xes-inc.com>
-> Sent: Wednesday, July 31, 2019 12:05:11 PM
+Everyone:
 
-> On Tue, Jul 30, 2019 at 05:58:42PM -0500, Aaron Sierra wrote:
-> 
->> Sure, I can do that. You're saying that you'd submit a patch for the INT0
->> removal as the last patch in your series?
-> 
-> I meant to add to the bunch, but since I'm about to send a new version and
-> didn't see anything from you it can be sent separately with dependency
-> reference.
+This series contains fixes/improvements to LPUART dirver I came up
+with recently as well as fixes picked up from Toradex and NXP Vybrid
+repos.
 
-Andy,
+Feedback is welcome!
 
-No problem. I had a patch ready yesterday, but had a last minute question
-for Sudip about suspend/resume. I got his answer this morning and I just
-completed my testing.
+Changes since [v1]:
 
-Aaron
+ - Dropped "tty: serial: fsl_lpuart: Drop unnecessary sg_set_buf()
+   call" due to being a duplicate of "tty: serial: fsl_lpuart: remove
+   sg_set_buf() for sport->rx_sgl"
+   
+ - Fixed build break in "tty: serial: fsl_lpuart: Introduce
+   lpuart_tx_dma_startup()"
+
+Thanks,
+Andrey Smirnov
+
+
+Andrey Smirnov (21):
+  tty: serial: fsl_lpuart: Flush HW FIFOs in .flush_buffer
+  tty: serial: fsl_lpuart: Simplify RX/TX IRQ handlers
+  tty: serial: fsl_lpuart: Fix bogus indentation
+  tty: serial: fsl_lpuart: Drop unnecessary uart_write_wakeup()
+  tty: serial: fsl_lpuart: Fix issue in software flow control
+  tty: serial: fls_lpuart: Split shared TX IRQ handler into two
+  tty: serial: fsl_lpuart: Drop no-op bit opearation
+  tty: serial: fsl_lpuart: Drop unnecessary extra parenthesis
+  tty: serial: fsl_lpuart: Clear CSTOPB unconditionally
+  tty: serial: fsl_lpuart: Use appropriate lpuart32_* I/O funcs
+  tty: serial: fsl_lpuart: Introduce lpuart_wait_bit_set()
+  tty: serial: fsl_lpuart: Use cpu_relax() instead of barrier()
+  tty: serial: fsl_lpuart: Introduce lpuart_stopped_or_empty()
+  tty: serial: fsl_lpuart: Drop unnecessary lpuart*_stop_tx()
+  tty: serial: fsl_lpuart: Introduce lpuart_dma_shutdown()
+  tty: serial: fsl_lpuart: Introduce lpuart_tx_dma_startup()
+  tty: serial: fsl_lpuart: Introduce lpuart_rx_dma_startup()
+  tty: serial: fsl_lpuart: Introduce lpuart32_configure()
+  tty: serial: fsl_lpuart: Introduce lpuart*_setup_watermark_enable()
+  tty: serial: fsl_lpuart: Don't enable TIE in .startup() or .resume()
+  tty: serial: fsl_lpuart: Ignore TX/RX interrupts if DMA is enabled
+
+Stefan Agner (2):
+  tty: serial: fsl_lpuart: fix framing error handling when using DMA
+  tty: serial: fsl_lpuart: flush receive FIFO after overruns
+
+ drivers/tty/serial/fsl_lpuart.c | 493 +++++++++++++++++---------------
+ 1 file changed, 261 insertions(+), 232 deletions(-)
+
+-- 
+2.21.0
+
