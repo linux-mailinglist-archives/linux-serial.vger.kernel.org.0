@@ -2,156 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C43247C9E7
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5B27CA10
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729488AbfGaRGD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 13:06:03 -0400
-Received: from mga14.intel.com ([192.55.52.115]:60491 "EHLO mga14.intel.com"
+        id S1727729AbfGaRNx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 13:13:53 -0400
+Received: from xes-mad.com ([162.248.234.2]:30951 "EHLO mail.xes-mad.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729121AbfGaRGC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:06:02 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 10:06:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,330,1559545200"; 
-   d="scan'208";a="323808228"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 31 Jul 2019 10:06:00 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 87C2E254; Wed, 31 Jul 2019 20:05:59 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Aaron Sierra <asierra@xes-inc.com>,
+        id S1727348AbfGaRNx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 13:13:53 -0400
+Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
+        by mail.xes-mad.com (Postfix) with ESMTP id 1DF252026D;
+        Wed, 31 Jul 2019 12:13:52 -0500 (CDT)
+Date:   Wed, 31 Jul 2019 12:13:50 -0500 (CDT)
+From:   Aaron Sierra <asierra@xes-inc.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Subject: [PATCH v4 3/3] serial: 8250_exar: Move custom divisor support out from 8250_port
-Date:   Wed, 31 Jul 2019 20:05:58 +0300
-Message-Id: <20190731170558.52897-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190731170558.52897-1-andriy.shevchenko@linux.intel.com>
-References: <20190731170558.52897-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <161836634.223880.1564593230004.JavaMail.zimbra@xes-inc.com>
+In-Reply-To: <20190731170511.GQ23480@smile.fi.intel.com>
+References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com> <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com> <20190729120059.GD23480@smile.fi.intel.com> <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com> <20190730090159.GH23480@smile.fi.intel.com> <1516192036.531051.1564527522157.JavaMail.zimbra@xes-inc.com> <20190731170511.GQ23480@smile.fi.intel.com>
+Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
+ 8250_port
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.0.127]
+X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
+Thread-Topic: serial: 8250_exar: Move the Exar bits out from 8250_port
+Thread-Index: 2HhVXydau/Z6IvQFscH7Lfgbx5U6bA==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-There are Exar custom divisor support in 8250_port which belongs to
-8250_exar module. Move it out to the correct module and do not contaminate
-generic code with it.
+----- Original Message -----
+> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+> To: "Aaron Sierra" <asierra@xes-inc.com>
+> Sent: Wednesday, July 31, 2019 12:05:11 PM
 
-Cc: Aaron Sierra <asierra@xes-inc.com>
-Cc: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_exar.c | 28 ++++++++++++++++++++++++++++
- drivers/tty/serial/8250/8250_port.c | 26 --------------------------
- 2 files changed, 28 insertions(+), 26 deletions(-)
+> On Tue, Jul 30, 2019 at 05:58:42PM -0500, Aaron Sierra wrote:
+> 
+>> Sure, I can do that. You're saying that you'd submit a patch for the INT0
+>> removal as the last patch in your series?
+> 
+> I meant to add to the bunch, but since I'm about to send a new version and
+> didn't see anything from you it can be sent separately with dependency
+> reference.
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index 1bf9adea2e61..3a39368e6e47 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -140,6 +140,31 @@ static void exar_pm(struct uart_port *port, unsigned int state, unsigned int old
- 	serial_port_out(port, UART_EXAR_SLEEP, state ? 0xff : 0);
- }
- 
-+/*
-+ * XR17V35x UARTs have an extra fractional divisor register (DLD)
-+ * Calculate divisor with extra 4-bit fractional portion
-+ */
-+static unsigned int xr17v35x_get_divisor(struct uart_port *p, unsigned int baud,
-+					 unsigned int *frac)
-+{
-+	unsigned int quot_16;
-+
-+	quot_16 = DIV_ROUND_CLOSEST(p->uartclk, baud);
-+	*frac = quot_16 & 0x0f;
-+
-+	return quot_16 >> 4;
-+}
-+
-+static void xr17v35x_set_divisor(struct uart_port *p, unsigned int baud,
-+				 unsigned int quot, unsigned int quot_frac)
-+{
-+	serial8250_do_set_divisor(p, baud, quot, quot_frac);
-+
-+	/* Preserve bits not related to baudrate; DLD[7:4]. */
-+	quot_frac |= serial_port_in(p, 0x2) & 0xf0;
-+	serial_port_out(p, 0x2, quot_frac);
-+}
-+
- static int default_setup(struct exar8250 *priv, struct pci_dev *pcidev,
- 			 int idx, unsigned int offset,
- 			 struct uart_8250_port *port)
-@@ -163,6 +188,9 @@ static int default_setup(struct exar8250 *priv, struct pci_dev *pcidev,
- 	status = readb(port->port.membase + UART_EXAR_DVID);
- 	if (status == 0x82 || status == 0x84 || status == 0x88) {
- 		port->port.type = PORT_XR17V35X;
-+
-+		port->port.get_divisor = xr17v35x_get_divisor;
-+		port->port.set_divisor = xr17v35x_set_divisor;
- 	} else {
- 		port->port.type = PORT_XR17D15X;
- 	}
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index c3ba4c794fee..995a7e8b7839 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2407,23 +2407,6 @@ static void serial8250_shutdown(struct uart_port *port)
- 		serial8250_do_shutdown(port);
- }
- 
--/*
-- * XR17V35x UARTs have an extra fractional divisor register (DLD)
-- * Calculate divisor with extra 4-bit fractional portion
-- */
--static unsigned int xr17v35x_get_divisor(struct uart_8250_port *up,
--					 unsigned int baud,
--					 unsigned int *frac)
--{
--	struct uart_port *port = &up->port;
--	unsigned int quot_16;
--
--	quot_16 = DIV_ROUND_CLOSEST(port->uartclk, baud);
--	*frac = quot_16 & 0x0f;
--
--	return quot_16 >> 4;
--}
--
- /* Nuvoton NPCM UARTs have a custom divisor calculation */
- static unsigned int npcm_get_divisor(struct uart_8250_port *up,
- 		unsigned int baud)
-@@ -2451,8 +2434,6 @@ static unsigned int serial8250_do_get_divisor(struct uart_port *port,
- 	else if ((port->flags & UPF_MAGIC_MULTIPLIER) &&
- 		 baud == (port->uartclk/8))
- 		quot = 0x8002;
--	else if (up->port.type == PORT_XR17V35X)
--		quot = xr17v35x_get_divisor(up, baud, frac);
- 	else if (up->port.type == PORT_NPCM)
- 		quot = npcm_get_divisor(up, baud);
- 	else
-@@ -2539,13 +2520,6 @@ void serial8250_do_set_divisor(struct uart_port *port, unsigned int baud,
- 		serial_port_out(port, UART_LCR, up->lcr | UART_LCR_DLAB);
- 
- 	serial_dl_write(up, quot);
--
--	/* XR17V35x UARTs have an extra fractional divisor register (DLD) */
--	if (up->port.type == PORT_XR17V35X) {
--		/* Preserve bits not related to baudrate; DLD[7:4]. */
--		quot_frac |= serial_port_in(port, 0x2) & 0xf0;
--		serial_port_out(port, 0x2, quot_frac);
--	}
- }
- EXPORT_SYMBOL_GPL(serial8250_do_set_divisor);
- 
--- 
-2.20.1
+Andy,
 
+No problem. I had a patch ready yesterday, but had a last minute question
+for Sudip about suspend/resume. I got his answer this morning and I just
+completed my testing.
+
+Aaron
