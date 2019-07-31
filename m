@@ -2,63 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B94E07C046
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 13:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A2D7C20E
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 14:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbfGaLmN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 07:42:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44518 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbfGaLmN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 07:42:13 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1443D2089E;
-        Wed, 31 Jul 2019 11:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564573332;
-        bh=HB7/0BwaEc6sX68xTXz1CtQQ7wV3B9leYzhMeTEKT8w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lhsywEioejSN00UEopG6RZRGpzzCtCGjepv2uh53EF9BpHvvQIyBGdy3fHP1UU0yy
-         H9otRSi1/0tKJpm+pfrYIX8g3foOmml8DJbaSMyjch0n2y3c+WL2S5TSZtkK+iV/nd
-         2t84fxrvm6bBirJ3Tnb6mD7gD9GaVNkcHNIld+I0=
-Date:   Wed, 31 Jul 2019 13:42:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     sudheer v <open.sudheer@gmail.com>
-Cc:     Jiri Slaby <jslaby@suse.com>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShivahShankar Shakarnarayan rao 
-        <shivahshankar.shankarnarayanrao@aspeedtech.com>,
-        Sudheer V <sudheer.veliseti@aspeedtech.com>,
-        sudheer veliseti <sudheer.open@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-Subject: Re: [patch v4 1/5] AST2500 DMA UART driver
-Message-ID: <20190731114210.GA18474@kroah.com>
-References: <1564147640-30753-1-git-send-email-open.sudheer@gmail.com>
- <1564147640-30753-2-git-send-email-open.sudheer@gmail.com>
- <20190730154759.GA26425@kroah.com>
- <CAE-5=DQ8p9WAhjrmZ8ye8GjoHrcxkHkjJPRNRFtvgeF5SdqwVQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-5=DQ8p9WAhjrmZ8ye8GjoHrcxkHkjJPRNRFtvgeF5SdqwVQ@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1727200AbfGaMqB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 08:46:01 -0400
+Received: from xavier.telenet-ops.be ([195.130.132.52]:58900 "EHLO
+        xavier.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726276AbfGaMqB (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 08:46:01 -0400
+Received: from ramsan ([84.194.98.4])
+        by xavier.telenet-ops.be with bizsmtp
+        id jQly2000K05gfCL01Qlypx; Wed, 31 Jul 2019 14:45:58 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hsnzS-0000QG-DY; Wed, 31 Jul 2019 14:45:58 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hsnzS-0003kB-B0; Wed, 31 Jul 2019 14:45:58 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
+        linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] serial: sh-sci: Use DEVICE_ATTR_RW() for rx_fifo_trigger
+Date:   Wed, 31 Jul 2019 14:45:55 +0200
+Message-Id: <20190731124555.14349-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 05:06:08PM +0530, sudheer v wrote:
-> Hi  Greg,
->  After modifying [ patch v4 1/5 ] , should i submit whole patchset as  v5 ?
+While commit b6b996b6cdeecf7e ("treewide: Use DEVICE_ATTR_RW") converted
+the rx_fifo_timeout attribute, it forgot to convert rx_fifo_trigger due
+to a slightly different function naming.
 
-Yes please.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/tty/serial/sh-sci.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-thanks,
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index d18c680aa64b3427..57638175639e0f3f 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -1092,9 +1092,8 @@ static void rx_fifo_timer_fn(struct timer_list *t)
+ 	scif_set_rtrg(port, 1);
+ }
+ 
+-static ssize_t rx_trigger_show(struct device *dev,
+-			       struct device_attribute *attr,
+-			       char *buf)
++static ssize_t rx_fifo_trigger_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
+ {
+ 	struct uart_port *port = dev_get_drvdata(dev);
+ 	struct sci_port *sci = to_sci_port(port);
+@@ -1102,10 +1101,9 @@ static ssize_t rx_trigger_show(struct device *dev,
+ 	return sprintf(buf, "%d\n", sci->rx_trigger);
+ }
+ 
+-static ssize_t rx_trigger_store(struct device *dev,
+-				struct device_attribute *attr,
+-				const char *buf,
+-				size_t count)
++static ssize_t rx_fifo_trigger_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
+ {
+ 	struct uart_port *port = dev_get_drvdata(dev);
+ 	struct sci_port *sci = to_sci_port(port);
+@@ -1123,7 +1121,7 @@ static ssize_t rx_trigger_store(struct device *dev,
+ 	return count;
+ }
+ 
+-static DEVICE_ATTR(rx_fifo_trigger, 0644, rx_trigger_show, rx_trigger_store);
++static DEVICE_ATTR_RW(rx_fifo_trigger);
+ 
+ static ssize_t rx_fifo_timeout_show(struct device *dev,
+ 			       struct device_attribute *attr,
+-- 
+2.17.1
 
-greg k-h
