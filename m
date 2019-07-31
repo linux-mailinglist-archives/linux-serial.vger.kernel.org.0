@@ -2,102 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E9B7B5F7
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 00:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8027B7EB
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 04:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbfG3W6v (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Jul 2019 18:58:51 -0400
-Received: from xes-mad.com ([162.248.234.2]:1210 "EHLO mail.xes-mad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726722AbfG3W6v (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Jul 2019 18:58:51 -0400
-Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
-        by mail.xes-mad.com (Postfix) with ESMTP id 4413F2024D;
-        Tue, 30 Jul 2019 17:58:44 -0500 (CDT)
-Date:   Tue, 30 Jul 2019 17:58:42 -0500 (CDT)
-From:   Aaron Sierra <asierra@xes-inc.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Message-ID: <1516192036.531051.1564527522157.JavaMail.zimbra@xes-inc.com>
-In-Reply-To: <20190730090159.GH23480@smile.fi.intel.com>
-References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com> <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com> <20190729120059.GD23480@smile.fi.intel.com> <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com> <20190730090159.GH23480@smile.fi.intel.com>
-Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
- 8250_port
+        id S1728082AbfGaCIq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Jul 2019 22:08:46 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:43404 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727300AbfGaCIq (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Jul 2019 22:08:46 -0400
+Received: by mail-io1-f68.google.com with SMTP id k20so132782644ios.10;
+        Tue, 30 Jul 2019 19:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DVKzHn3AiDgjL2TSg70JGryYa6JNjz51534bP69c4bo=;
+        b=OeaMkMEsI0c0wtZUN+ae2Xn9kjhZ9iycRduxtwit3OvqnZ7+66zbECfBpwh9M5583+
+         5YSqKnM4g351WOoqyE5uJr+IgWqaSgSRAOlY6wG13/K2Z9sAC1Tq3ODYJU9WYDuaJ+AP
+         4R0PzIW1WVCOiX/6mm2LjHL9uDhwWOAnheTwmJK9sQjRsK35ohqiccygKWdkMYRc9N6M
+         Oqp34wdkpLCiQiFGICLfACjNLAD/h2tu3JAzUI07NigSijAHzYHj968PXbLngpTRd5BG
+         222nfDSZoFysH3qAdwjghAMXz6eeaDNJQYuehGiATicDemBv1HbnS/ykAEI9zSGLRjhl
+         bjqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DVKzHn3AiDgjL2TSg70JGryYa6JNjz51534bP69c4bo=;
+        b=b5i//Az+jubxFqihP8RfUzrfAY7lrJOzwwf9itz8f7v2v4vQvU+NZlw+F9O2iDa8ud
+         Bul4vMq4HMSJIv86mzfFgx8OSfuH41zG/PATDTlwtpZ4ep4aFbJGdZ1iPoffbdZcZ555
+         1EXzZGSADkeL/B+tKIR+jdkJtwoKt+j/cvOA/NmIlmrfQMGpfLd0Lvtqv/3ntjhZvivZ
+         kcQDs6M97k4ukF4AqNceaASgtehIo0aeBcb6HcPgAFewIcf6pQBanUnXNpwbhZkTOg2y
+         2B2lX3gWZtwK3fL0A28JXoqv05xukWNieFonjHuiz/7h54uY4gZ59nFUZAYKAZC2uERI
+         HxWw==
+X-Gm-Message-State: APjAAAUAArcIkeOZpC/Db8rQn5Ss+ifcLrLUQxmXQToc31BsFCP3DCPw
+        6FqPu9DGZZqb5hRcjDVR1Vr8OvfDd0KLcX6vFOY=
+X-Google-Smtp-Source: APXvYqwzQGth7oDH1CzaOi1cJBfASBrA30/A2aXvOg9sbA1+0FSzmDX0r4QTTBczMvKibOuiCz07Lx32jw0WvFyrjbM=
+X-Received: by 2002:a02:3b62:: with SMTP id i34mr126559340jaf.91.1564538925626;
+ Tue, 30 Jul 2019 19:08:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.0.127]
-X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
-Thread-Topic: serial: 8250_exar: Move the Exar bits out from 8250_port
-Thread-Index: DyR+zYHS+AAS+nzmx3EHBjj0SPflQg==
+References: <20190729195226.8862-1-andrew.smirnov@gmail.com>
+ <20190729195226.8862-7-andrew.smirnov@gmail.com> <20190730155112.GA11837@kroah.com>
+In-Reply-To: <20190730155112.GA11837@kroah.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Tue, 30 Jul 2019 19:08:34 -0700
+Message-ID: <CAHQ1cqHhjj5UO=J1YahN8T0uav7BQ05Wsqr1esHR8nhZhsygeA@mail.gmail.com>
+Subject: Re: [PATCH 06/24] tty: serial: fsl_lpuart: Drop unnecessary
+ sg_set_buf() call
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
+        Chris Healy <cphealy@gmail.com>,
+        Cory Tusar <cory.tusar@zii.aero>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Jiri Slaby <jslaby@suse.com>, dl-linux-imx <linux-imx@nxp.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
------ Original Message -----
-> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> To: "Aaron Sierra" <asierra@xes-inc.com>
-> Sent: Tuesday, July 30, 2019 4:01:59 AM
+On Tue, Jul 30, 2019 at 8:51 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 29, 2019 at 12:52:08PM -0700, Andrey Smirnov wrote:
+> > Sg_init_one() will already call sg_set_buf(), so another explicit call
+> > right after it is unnecessary. Drop it.
+> >
+> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> > Cc: Stefan Agner <stefan@agner.ch>
+> > Cc: Bhuvanchandra DV <bhuvanchandra.dv@toradex.com>
+> > Cc: Chris Healy <cphealy@gmail.com>
+> > Cc: Cory Tusar <cory.tusar@zii.aero>
+> > Cc: Lucas Stach <l.stach@pengutronix.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Jiri Slaby <jslaby@suse.com>
+> > Cc: linux-imx@nxp.com
+> > Cc: linux-serial@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > ---
+> >  drivers/tty/serial/fsl_lpuart.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> > index 1b3f2a87e558..b600f591c8c2 100644
+> > --- a/drivers/tty/serial/fsl_lpuart.c
+> > +++ b/drivers/tty/serial/fsl_lpuart.c
+> > @@ -1144,7 +1144,6 @@ static inline int lpuart_start_rx_dma(struct lpuart_port *sport)
+> >               return -ENOMEM;
+> >
+> >       sg_init_one(&sport->rx_sgl, ring->buf, sport->rx_dma_rng_buf_len);
+> > -     sg_set_buf(&sport->rx_sgl, ring->buf, sport->rx_dma_rng_buf_len);
+> >       nent = dma_map_sg(sport->port.dev, &sport->rx_sgl, 1, DMA_FROM_DEVICE);
+> >
+> >       if (!nent) {
+>
+> This patch doesn't apply, is it already in the tree from someone else?
+>
 
-> On Mon, Jul 29, 2019 at 10:11:51AM -0500, Aaron Sierra wrote:
->> ----- Original Message -----
->> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
->> > To: "Aaron Sierra" <asierra@xes-inc.com>
->> > Sent: Monday, July 29, 2019 7:00:59 AM
->> > On Sun, Jul 28, 2019 at 05:12:09PM -0500, Aaron Sierra wrote:
->> >> ----- Original Message -----
->> >> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
->> >> > Sent: Sunday, July 21, 2019 9:26:59 AM
-> 
->> > I'm not so familiar with the hardware, will it not give any side-effects?
->> 
->> Clearing INT0 prevents PCI interrupts from getting stuck, either on in the
->> case of level-sensitive interrupts (e.g. INTx) or apparently-off in the case
->> of edge-sensitive interrupts (e.g. MSI), due to sources outside of the
->> typical 8250 serial port scope. Interrupts due to port wake-up after
->> idle/sleep are the best documented problem case.
->> 
->> I do not think it was ever ideal that each port cleared INT0 multiple times
->> during startup. Clearing INT0 after we register the interrupt handler
->> responsible for INT0 should be enough to ensure that we won't run into either
->> case. The handler runs even if no ports are "up", so individual ports don't
->> have to worry so much.
->> 
->> My original suggestion was incomplete in its handling of PCI device
->> suspense/resume. A complete solution would read INT0 in exar_resume(), too.
-> 
-> Thanks for explanation, perhaps you can prepare a follow up on top on my series.
+Yeah, looks like d9aa9ab4fe6b5c43b9ccb8a0811dadcfe40ea27f from your
+tty tree already covered this and I didn't have it in my tree. Will
+drop in v2.
 
-Andy,
-
-Sure, I can do that. You're saying that you'd submit a patch for the INT0
-removal as the last patch in your series?
-
->> > So, I prefer do this in a separate change, so we may see how it goes.
->> 
->> I think it's fine to defer this change to a later patch, but I would like to
->> see the commit message body for the current patch be more explicit that it is
->> not moving *all* Exar quirks. I wonder, too, if these should be broken
->> down into separate patches for the three classes of quirks that you move:
->> 
->>   * autoconfig_16550a()
->>   * serial8250_do_[get|set]_divisor()
->>   * serial8250_set_sleep()
-> 
-> Yes, this will be better in case if some problems would be discovered in the
-> future, hope none.
-> 
-> So, let me split this to three, and then, if you have a chance to provide the
-> one described above, I will chain it to the series.
-
-I'll send it to you privately.
-
-Aaron
-
-> --
-> With Best Regards,
-> Andy Shevchenko
+Thanks,
+Andrey Smirnov
