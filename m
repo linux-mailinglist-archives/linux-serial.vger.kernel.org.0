@@ -2,108 +2,148 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BCB7CA8E
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF987CACF
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728789AbfGaRdb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 13:33:31 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33956 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726382AbfGaRdb (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:33:31 -0400
-Received: by mail-pg1-f195.google.com with SMTP id n9so26165585pgc.1;
-        Wed, 31 Jul 2019 10:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Q/lI9Y+iuMqu0/88TVov6DxL4UL/ibIqCQWpqsUjgQE=;
-        b=c9qTtjApobnJnkUtjbZgrCEe6ORor1BWYjjLIf8kYPgyf+wi1mZOOA3SAge2YRRyvN
-         wFaY8eFQX600DnVGw4dgTqQjUtK/JwzzwyQqs2x565q/vWnhHwKtEXUK9vDEXpzfeGpU
-         XoXdIOkRam2Dzpz5I8vDf1YzMu1Ldq2cX3FCJRkBKoJ+TfSc5lx46jItuvmnuEPU8ZXJ
-         eclEKsjvJ36fbFp5/mAh4LHsYoCJ5opDbknF/V86258DRF7IPJB1DkNqhCuWlLW+w3OU
-         Kun8dDIOWIPTI3kmTE7Mr2YSPdzI5c6MPHa8IBJe4ccna0L/rydBPvHufgoJvDdVzKb7
-         YsJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Q/lI9Y+iuMqu0/88TVov6DxL4UL/ibIqCQWpqsUjgQE=;
-        b=gzc2/rTiSaTY4el/EdR8/921ihGXrbBDgNykISzMphiKjYcdjfG+MVlIl9vQH8Ir9q
-         bQ5BiHwneds2EP1wms1vAaTnoEOail20N5RiG7jREuVvzIAVaICU747f9xXMfyvE+NSD
-         QO1rr/NcOlu2t/WAFyhJb6gUJ9HCzWcUcBTYBwrdj9I6+9rNsORHoC85+d9clUvoZWBm
-         UVjHybTXyAfNrV2EaF4Zp6X/6zd/gu6c6zXGkP0aPF9q3O5Aqeyf/bNHuknfEcSxMVc6
-         qvmgTXYT1dGyyVshXaGel09n1npeJZC8Arg+cg8WNP7ivr08zKaNA9PE7eZVo+RFTBJj
-         sEkQ==
-X-Gm-Message-State: APjAAAUd65dkLnParsYCIvvcoU1K02ejbjkkzYsbTjGfZTS/tyB2Qugy
-        C9Kv/y1gQW+CW8c5HLAbrOWxia43
-X-Google-Smtp-Source: APXvYqx89nO0ID4KvdGJWas//BKX6lntSQr/4mYrYUB6MdCKX7JIiBzf3RxdLx1pxlXA5a7FqOeUqQ==
-X-Received: by 2002:a62:1616:: with SMTP id 22mr49470661pfw.120.1564594410026;
-        Wed, 31 Jul 2019 10:33:30 -0700 (PDT)
-Received: from localhost.localdomain ([2607:fb90:4ad:5a0b:2aff:6e0f:8973:5a26])
-        by smtp.gmail.com with ESMTPSA id bo20sm2089617pjb.23.2019.07.31.10.33.27
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 10:33:29 -0700 (PDT)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     linux-serial@vger.kernel.org
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Chris Healy <cphealy@gmail.com>,
-        Cory Tusar <cory.tusar@zii.aero>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 23/23] tty: serial: fsl_lpuart: Ignore TX/RX interrupts if DMA is enabled
-Date:   Wed, 31 Jul 2019 10:30:45 -0700
-Message-Id: <20190731173045.11718-24-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190731173045.11718-1-andrew.smirnov@gmail.com>
-References: <20190731173045.11718-1-andrew.smirnov@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727502AbfGaRpq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 13:45:46 -0400
+Received: from xes-mad.com ([162.248.234.2]:2764 "EHLO mail.xes-mad.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726382AbfGaRpq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 13:45:46 -0400
+Received: from asierra1.xes-mad.com (asierra1.xes-mad.com [10.52.16.65])
+        by mail.xes-mad.com (Postfix) with ESMTP id 9B6382026D;
+        Wed, 31 Jul 2019 12:45:45 -0500 (CDT)
+From:   Aaron Sierra <asierra@xes-inc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH] serial: 8250_exar: Absorb remaining 8250_port INT0 support
+Date:   Wed, 31 Jul 2019 12:45:45 -0500
+Message-Id: <20190731174545.8192-1-asierra@xes-inc.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-In a mixed DMA/IRQ use-case (e.g.: DMA for TX, IRQ for RX), interrupt
-handler might try to handle Rx/Tx condition it shouldn't. Change the
-code to only handle TX/RX event if corresponding path isn't being
-handled by DMA.
+Move INT0 clearing out of common, per-port serial8250_do_startup()
+into PCI device probe/resume.
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc: Stefan Agner <stefan@agner.ch>
-Cc: Chris Healy <cphealy@gmail.com>
-Cc: Cory Tusar <cory.tusar@zii.aero>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-imx@nxp.com
-Cc: linux-serial@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+As described in commit 2c0ac5b48a35 ("serial: exar: Fix stuck MSIs"),
+the purpose of clearing INT0 is to prevent the PCI interrupt line from
+becoming stuck asserted, "which is fatal with edge-triggered MSIs".
+
+Like the clearing via interrupt handler that moved from common code in
+commit c7e1b4059075 ("tty: serial: exar: Relocate sleep wake-up
+handling"), this clearing at startup can be better handled at the PCI
+device level.
+
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Aaron Sierra <asierra@xes-inc.com>
 ---
- drivers/tty/serial/fsl_lpuart.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 237690a6e80a..e758ca57113f 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -967,10 +967,10 @@ static irqreturn_t lpuart_int(int irq, void *dev_id)
+The embedded patch is written to follow this patch from Andy Shevchenko:
+[PATCH v4 3/3] serial: 8250_exar: Move custom divisor support out from 8250_port
+
+ drivers/tty/serial/8250/8250_exar.c | 24 ++++++++++++++++--------
+ drivers/tty/serial/8250/8250_port.c |  9 ---------
+ 2 files changed, 16 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 4f8f45e2fc1d..248be217f528 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -492,6 +492,16 @@ static void pci_xr17v35x_exit(struct pci_dev *pcidev)
+ 	port->port.private_data = NULL;
+ }
  
- 	sts = readb(sport->port.membase + UARTSR1);
- 
--	if (sts & UARTSR1_RDRF)
-+	if (sts & UARTSR1_RDRF && !sport->lpuart_dma_rx_use)
- 		lpuart_rxint(sport);
- 
--	if (sts & UARTSR1_TDRE)
-+	if (sts & UARTSR1_TDRE && !sport->lpuart_dma_tx_use)
- 		lpuart_txint(sport);
++static inline void exar_misc_clear(struct exar8250 *priv)
++{
++	/* Clear all PCI interrupts by reading INT0. No effect on IIR */
++	readb(priv->virt + UART_EXAR_INT0);
++
++	/* Clear INT0 for Expansion Interface slave ports, too */
++	if (priv->board->num_ports > 8)
++		readb(priv->virt + 0x2000 + UART_EXAR_INT0);
++}
++
+ /*
+  * These Exar UARTs have an extra interrupt indicator that could fire for a
+  * few interrupts that are not presented/cleared through IIR.  One of which is
+@@ -503,14 +513,7 @@ static void pci_xr17v35x_exit(struct pci_dev *pcidev)
+  */
+ static irqreturn_t exar_misc_handler(int irq, void *data)
+ {
+-	struct exar8250 *priv = data;
+-
+-	/* Clear all PCI interrupts by reading INT0. No effect on IIR */
+-	readb(priv->virt + UART_EXAR_INT0);
+-
+-	/* Clear INT0 for Expansion Interface slave ports, too */
+-	if (priv->board->num_ports > 8)
+-		readb(priv->virt + 0x2000 + UART_EXAR_INT0);
++	exar_misc_clear(data);
  
  	return IRQ_HANDLED;
+ }
+@@ -563,6 +566,9 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
+ 	if (rc)
+ 		return rc;
+ 
++	/* Clear interrupts */
++	exar_misc_clear(priv);
++
+ 	for (i = 0; i < nr_ports && i < maxnr; i++) {
+ 		rc = board->setup(priv, pcidev, &uart, i);
+ 		if (rc) {
+@@ -622,6 +628,8 @@ static int __maybe_unused exar_resume(struct device *dev)
+ 	struct exar8250 *priv = pci_get_drvdata(pcidev);
+ 	unsigned int i;
+ 
++	exar_misc_clear(priv);
++
+ 	for (i = 0; i < priv->nr; i++)
+ 		if (priv->line[i] >= 0)
+ 			serial8250_resume_port(priv->line[i]);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 995a7e8b7839..706645f89132 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -40,11 +40,6 @@
+ 
+ #include "8250.h"
+ 
+-/*
+- * These are definitions for the Exar XR17V35X and XR17(C|D)15X
+- */
+-#define UART_EXAR_INT0		0x80
+-
+ /* Nuvoton NPCM timeout register */
+ #define UART_NPCM_TOR          7
+ #define UART_NPCM_TOIE         BIT(7)  /* Timeout Interrupt Enable */
+@@ -2138,8 +2133,6 @@ int serial8250_do_startup(struct uart_port *port)
+ 	serial_port_in(port, UART_RX);
+ 	serial_port_in(port, UART_IIR);
+ 	serial_port_in(port, UART_MSR);
+-	if ((port->type == PORT_XR17V35X) || (port->type == PORT_XR17D15X))
+-		serial_port_in(port, UART_EXAR_INT0);
+ 
+ 	/*
+ 	 * At this point, there's no way the LSR could still be 0xff;
+@@ -2297,8 +2290,6 @@ int serial8250_do_startup(struct uart_port *port)
+ 	serial_port_in(port, UART_RX);
+ 	serial_port_in(port, UART_IIR);
+ 	serial_port_in(port, UART_MSR);
+-	if ((port->type == PORT_XR17V35X) || (port->type == PORT_XR17D15X))
+-		serial_port_in(port, UART_EXAR_INT0);
+ 	up->lsr_saved_flags = 0;
+ 	up->msr_saved_flags = 0;
+ 
 -- 
-2.21.0
+2.17.1
 
