@@ -2,133 +2,173 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1C67D0A3
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 00:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE3F7D11B
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 00:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730465AbfGaWRN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 18:17:13 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:47971 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731330AbfGaWRN (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 18:17:13 -0400
-Received: by mail-pg1-f201.google.com with SMTP id l11so22343307pgc.14
-        for <linux-serial@vger.kernel.org>; Wed, 31 Jul 2019 15:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=AYLtZ41z1RHlFpOZnl+JGLaHaK4EJ2Av6xB01tUKIjQ=;
-        b=vvpeXRKyc5OhHv4Gr/tukOYbwIwjOYYXtqIP/Io9iIGtPO3Kve6jw/W7bz2rF/pLv1
-         RlW5o4cGWbTXLPdROo8nSoKA3X7rpN7sDIwV1d/Fkm3vpj5fFKlODN732XeUwRiYz3Ke
-         TW9ChBbAGCWNTBdcbOZ73xw4f5kes2Emo/1AT/+3MfhQ8BoEcrnKZHlAFFwFtqt85uMv
-         Hrp+989qk4cKlnGSLSV1ao/ObzrMwaeocP0iHhwU4p9uXakErgQiaqLm3O0VzWsyNNyY
-         9CqLjrTvWM8AjYlNkYT/fe066FOTrmczakFGWc6cjFSFGLsLIYYWVoFByBrYFECbZTDO
-         MNew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=AYLtZ41z1RHlFpOZnl+JGLaHaK4EJ2Av6xB01tUKIjQ=;
-        b=POIy+y5PkYm8LSvp95nX0UCaUUNdPEYVTHjHyWSP+CWBrPS9Pg9lDzzPQ95zqlJh1D
-         IIgh6nz5fq/kO8Ayg9L7AjcMtK1PoZ9XgU2yA7WiwvHgY4cuE/wom1cy62q+zZBKUgsn
-         Im36FC5/udxpRl6cI/5v5u1WI5uHhLsT3sZI8jq3HBaA0ODiQQJOvtENenLAavCJKbP8
-         oM9TcAZWRuf9dUNszuwknmtsG76lf9jWUrHeBHClwrkUoke5vWghHZDtWWMMq6LcBkdm
-         BTtawaZapXZlfIVGjH6Cd8KBg2wIzaMatePzS9lf4gOp0AUmklNdB8NftDd7wMpS34S5
-         FMDw==
-X-Gm-Message-State: APjAAAXANg9hZeHdFk4zrH2ODNTGDZrOU7XxcBNYIToqTjQFQ5jALYgD
-        n21yXefC9uzBpVvc2nI/y4jPdQXugHyK8x3USNcPWw==
-X-Google-Smtp-Source: APXvYqzkiW7uEdQQUtaZ0YHcWPNEQQcr9wR/H4mTJIlJ8xEUbv8Q5RP5zNIsLLGkfkAO0eul945srgorH4QzlUVn11pgkg==
-X-Received: by 2002:a63:5402:: with SMTP id i2mr88751122pgb.414.1564611431661;
- Wed, 31 Jul 2019 15:17:11 -0700 (PDT)
-Date:   Wed, 31 Jul 2019 15:16:06 -0700
-In-Reply-To: <20190731221617.234725-1-matthewgarrett@google.com>
-Message-Id: <20190731221617.234725-19-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190731221617.234725-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-Subject: [PATCH V37 18/29] Lock down TIOCSSERIAL
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726641AbfGaWY2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 18:24:28 -0400
+Received: from mx.cs.msu.ru ([188.44.42.42]:23250 "EHLO mail.cs.msu.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726224AbfGaWY2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 18:24:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
+         s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SPd8apfUYZVCnIi/Qc0E+qyDYynrYSaPFQpmCkuOmoA=; b=iIe+D6ly9RD4ffMiNe9NrcJc7V
+        q+auwEEccW4InPR8qNybRQTfVT7evJVUhzyYCyqmSfcWZPuPsLwPlMrMDIQNz10WTJJXThmusP6LJ
+        RYxkFn4ErfD2tps5EsufDVghhnHqnaVD3NP+pNF55tfTyHqNZcjII33xK45i6CfLT0413+lRa2BNK
+        0fSfEAqcAuGXsavv53NT0FAkN8c2WIxZi7zdDnXB9fA2tkU6CqMLnM40UPNGwyaGPzj0KNGMhq8ij
+        oOZ1LM1jOrf/nOglARY1l9tRAeXDDAoB+snC5PScfYiN9g7Yr/AjbNcUNqi+6DFVSLaHYducX+P24
+        ZOgLsftA==;
+Received: from [37.204.119.143] (port=57780 helo=cello)
+        by mail.cs.msu.ru with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92 (FreeBSD))
+        (envelope-from <ar@cs.msu.ru>)
+        id 1hsx11-0009nm-8p; Thu, 01 Aug 2019 01:24:11 +0300
+Date:   Thu, 1 Aug 2019 01:23:59 +0300
+From:   Arseny Maslennikov <ar@cs.msu.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jslaby@suse.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Vladimir D. Seleznev" <vseleznv@altlinux.org>,
+        Rob Landley <rob@landley.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Pavel Machek <pavel@ucw.cz>
+Message-ID: <20190731222359.GA20574@cello>
+References: <20190625161153.29811-1-ar@cs.msu.ru>
+ <20190625161153.29811-8-ar@cs.msu.ru>
+ <20190730161940.GA15798@kroah.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IS0zKkzwUGydFO0o"
+Content-Disposition: inline
+In-Reply-To: <20190730161940.GA15798@kroah.com>
+OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 37.204.119.143
+X-SA-Exim-Mail-From: ar@cs.msu.ru
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.cs.msu.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_ADSP_ALL autolearn=no autolearn_force=no version=3.4.2
+Subject: Re: [PATCH v2 7/7] n_tty: Provide an informational line on VSTATUS
+ receipt
+X-SA-Exim-Version: 4.2
+X-SA-Exim-Scanned: Yes (on mail.cs.msu.ru)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
 
-Lock down TIOCSSERIAL as that can be used to change the ioport and irq
-settings on a serial port.  This only appears to be an issue for the serial
-drivers that use the core serial code.  All other drivers seem to either
-ignore attempts to change port/irq or give an error.
+--IS0zKkzwUGydFO0o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-serial@vger.kernel.org
----
- drivers/tty/serial/serial_core.c | 5 +++++
- include/linux/security.h         | 1 +
- security/lockdown/lockdown.c     | 1 +
- 3 files changed, 7 insertions(+)
+On Tue, Jul 30, 2019 at 06:19:40PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 25, 2019 at 07:11:53PM +0300, Arseny Maslennikov wrote:
+> > If the three termios local flags isig, icanon, iexten are enabled
+> > and the local flag nokerninfo is disabled for a tty governed
+> > by the n_tty line discipline, then on receiving the keyboard status
+> > character n_tty will generate a status message and write it out to
+> > the tty before sending SIGINFO to the tty's foreground process group.
+> >=20
+> > This kerninfo line contains information about the current system load
+> > as well as some properties of "the most interesting" process in the
+> > tty's current foreground process group, namely:
+> >  - its PID as seen inside its deepest PID namespace;
+> >    * the whole process group ought to be in a single PID namespace,
+> >      so this is actually deterministic
+> >  - its saved command name truncated to 16 bytes (task_struct::comm);
+> >    * at the time of writing TASK_COMM_LEN =3D=3D 16
+> >  - its state and some related bits, procps-style;
+> >  - for S and D: its symbolic wait channel, if available; or a short
+> >    description for other process states instead;
+> >  - its user, system and real rusage time values;
+> >  - its resident set size (as well as the high watermark) in kilobytes.
+>=20
+> Why is this really all needed as we have the SysRq handlers that report
+> all of this today?
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 4223cb496764..6e713be1d4e9 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -22,6 +22,7 @@
- #include <linux/serial_core.h>
- #include <linux/delay.h>
- #include <linux/mutex.h>
-+#include <linux/security.h>
- 
- #include <linux/irq.h>
- #include <linux/uaccess.h>
-@@ -862,6 +863,10 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
- 		goto check_and_exit;
- 	}
- 
-+	retval = security_locked_down(LOCKDOWN_TIOCSSERIAL);
-+	if (retval && (change_irq || change_port))
-+		goto exit;
-+
- 	/*
- 	 * Ask the low level driver to verify the settings.
- 	 */
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 3773ad09b831..8f7048395114 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -112,6 +112,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MSR,
- 	LOCKDOWN_ACPI_TABLES,
- 	LOCKDOWN_PCMCIA_CIS,
-+	LOCKDOWN_TIOCSSERIAL,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 22482e1b9a77..00a3a6438dd2 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -27,6 +27,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MSR] = "raw MSR access",
- 	[LOCKDOWN_ACPI_TABLES] = "modifying ACPI tables",
- 	[LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
-+	[LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
--- 
-2.22.0.770.g0f2c4a37fd-goog
+Different use-cases have different needs; SysRq is targeted at a different
+audience; see below.
 
+> > The "most interesting" process is chosen as follows:
+> >  - runnables over everything
+> >  - uninterruptibles over everything else
+> >  - among 2 runnables pick the biggest utime + stime
+> >  - any unresolved ties are decided in favour of greatest PID.
+>=20
+> This does not feel like something that the tty core code should be doing
+> at all.
+
+Yes, this selection part is quite clumsy. In defense of it, one could
+argue that we already have the whole n_tty implemented in kernel-space.
+
+One way we could get rid of this is to display a summarized statistic
+for the whole pgrp: pgid, oldest real time, cumulative utime and stime,
+cumulative memory usage. Would this be more acceptable? Are there any
+other ideas?
+
+> > While the kerninfo line is not very useful for debugging the kernel
+> > itself, since we have much more powerful debugging tools, it still gives
+> > the user behind the terminal some meaningful feedback to a VSTATUS that
+> > works even if no processes respond.
+>=20
+> That's what SysRq is for.  If there's a specific set of values that we
+> don't currently report in that facility, why not just add the
+> information there?  It's much simpler and "safer" that way.
+
+SysRq is intended for the person either administrating the system to be use=
+d in
+emergency (e.g. f for the oom kill, the famous s-u-b combo also comes to
+mind) or debugging the kernel, and it indeed does a much better job for
+those purposes.  In both use-cases mentioned the person has access to
+the system console, where the sysrq button handlers produce all their
+output, if any, and to either a physical keyboard / serial console or to
+/proc/sysrq-trigger, whose mode is 0200 (writable by uid 0 only).
+
+The use-case for this is different: the ^T-line as proposed by this
+patch is for the user that interacts with a system through a terminal, who
+wants to be informed not about the whole system (sort of what SysRq-t
+tells you), but about what they run on that particular tty.
+This is much less about "why does my system/kernel seem to hang?" or
+exposing low-level internals (registers, hrtimers, locks, ...), and more
+about "is my SSH terminal session unresponsive?" and "I ran a command,
+it doesn't finish, how's it doing?".
+e.g. A user might want to know if their SSH connection is alive without
+interrupting anything, while having no access both to SysRq and console,
+and no one in fg pgrp actually handles SIGINFO.
+
+SysRq is system-wide, whereas this is per-terminal and only cares about
+one tty which the status char is pressed at and its foreground pgrp
+(most likely it's the foreground shell job).
+
+I hope this is clear enough.
+
+--IS0zKkzwUGydFO0o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAl1CFPcACgkQ9dQjyAYL
+01AcOA/9HXsK7LNkhYfAWqTgVMkfOaFgAp9Y1KYIpmWJ58Nuy/FM5ukUWkM+JL75
+ro8cVOmRYv3+foTkJ0perwlswgivYV8dEq3KtGi8lu/OOmwZzip4TTaxC4Imc+Yz
+RTjCZTtzR1RvFJyV1im5yuBdKaa4iO6nEYl7uQFnLnhI4xP0qShHTusHihA2vrxI
+2uP9+6RNcS7fcNcfYHFyPVLHwf0iARgeQtsrlGSdakjURCqfBvuw37q/K2nHXXDs
+SqfJNVnFABcd3h2RbfTKsnHSxcURHbtE+dRyFOTuFumQcKGznOO46goqPEkVp1ly
+0TuJOasObAOk0PQr1bfebKkqmtakLfl6vySFSJjuDbp+waui1PwxOy3VUXp+tqu/
+qBgJo4JArdmFTR9jRPe5Q7rhtR6GStJBFPTmoXsoJ3TZGBp4oCptfRN4V78rHY8u
+Ii+Y35SkbFHAtEtUKG4lpskS7iGsDXL7DTsjFrduMh3ZvSU9hyoiLQ2g2HzikJ3D
++hujuMpTrDM7FoGviSWO6wbtxlnXmvcZYasKvuT13GMYJvnXb1EM81laTpePIMzj
+Q7MhqZTx9B88AeqmkM5kFZEBh+hYXCpcJ1AIMjkTDDjmbbpfc4wYp2hkSmeV9iHU
+kZWOlWODSzTh+BCFjPSHERpLI+FDp05xgY4RHAjT8N/9NeUqIiU=
+=h84y
+-----END PGP SIGNATURE-----
+
+--IS0zKkzwUGydFO0o--
