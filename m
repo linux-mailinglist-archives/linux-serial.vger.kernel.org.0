@@ -2,60 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 917207B8FF
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 07:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39117B971
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 08:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbfGaFQS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 01:16:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50418 "EHLO mail.kernel.org"
+        id S1726305AbfGaGGF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 02:06:05 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56271 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725970AbfGaFQS (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 01:16:18 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725209AbfGaGGF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 02:06:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29952206A3;
-        Wed, 31 Jul 2019 05:16:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564550177;
-        bh=h1eAdPg/SKvR0UJP/5rfurweIeToXs/7LvFSH8DF9Y0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1GiQSyjtSzDviOunwNz4zA8OZ3/+CND6xoLqnc2nfrBR44j/Ji3OUf9BYlFPaMWpY
-         HwUE4Fih0B5B5bOujJrWx7fZuj8jc9zr54NGM2sXTIeANblAtXMv7Rtqge+RgOcmrQ
-         2NbZB5g9HD0gkIB4QiWUMkjAmzKEBQ2CuKFBvO6g=
-Date:   Wed, 31 Jul 2019 07:16:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Robert Middleton <robert.middleton@rm5248.com>
-Cc:     linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2] serial: 8250_exar: Clear buffer before shutdown
-Message-ID: <20190731051615.GB20809@kroah.com>
-References: <20190730221308.6929-1-robert.middleton@rm5248.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45z2wk3Zllz9sBF;
+        Wed, 31 Jul 2019 16:05:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1564553158;
+        bh=G789WvqxZoZpdQOOwYke+JrWvQfQevv9ZWAFnS+sSZA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ULZcEMP1hbsL5PEMQRd9ipkccZJUqRzkZp64i6ZQ5vtXe2QcvKUtekLFQPvAolbo9
+         oJvGVBUic1MX6EU2caJ4j9lymGFyd9dAcu+3zr64qlojxOe+0uTj4dVyzsAKC7LZ5p
+         DLwhp+HJS6GxDvZUOMzIlII0ZqBkf9wB/M1WYj66OIilpxUxip10vbZrXrK5Ld4RS/
+         myT81Db2yteC5mvo+gSefQYdNh1Q7ZLNrqY93qw8gt//QKVreCMM7g8DL3u/BhFxWd
+         Gd2Rrq1lFAWoD36Kg18Iqp3GJ2ejlNRwNA/AQKJz3bxsRuKhy3fOHXFtuFeeSVjo9p
+         bOhNMiTTv6mOQ==
+Date:   Wed, 31 Jul 2019 16:05:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux PPC Development List <linuxppc-dev@lists.ozlabs.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux Serial List <linux-serial@vger.kernel.org>,
+        Linus ARM List <linux-arm-kernel@lists.infradead.org>
+Subject: xilinx_uartps.c: suppress "may be used uninitialised" warning
+Message-ID: <20190731160557.6a09c3e1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190730221308.6929-1-robert.middleton@rm5248.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: multipart/signed; boundary="Sig_/oMq6rKwzq4yIYumawKzTc/R";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 06:13:08PM -0400, Robert Middleton wrote:
-> When closing and shutting down the exar serial port, if the chip
-> has not finished sending all of the data in its buffer, the
-> remaining bytes will be lost.  Hold off on the shutdown until the
-> bytes have all been sent.
-> 
-> Signed-off-by: Robert Middleton <robert.middleton@rm5248.com>
-> ---
->  drivers/tty/serial/8250/8250_exar.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+--Sig_/oMq6rKwzq4yIYumawKzTc/R
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-What changed from v1?
+=46rom 31753a44c62c4fdf6e8a72994ae6861dbde49c11 Mon Sep 17 00:00:00 2001
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 31 Jul 2019 16:00:52 +1000
+Subject: [PATCH] xilinx_uartps.c: suppress "may be used uninitialised" warn=
+ing
 
-Always put that below the --- line, like the kernel documentation asks
-you to do.  Please fix up and send a v3.
+A powerpc allyesconfig build produces this warning:
 
-thanks,
+In file included from include/linux/radix-tree.h:16,
+                 from include/linux/idr.h:15,
+                 from include/linux/kernfs.h:13,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from include/linux/device.h:16,
+                 from include/linux/platform_device.h:13,
+                 from drivers/tty/serial/xilinx_uartps.c:16:
+drivers/tty/serial/xilinx_uartps.c: In function 'cdns_uart_console_write':
+include/linux/spinlock.h:288:3: warning: 'flags' may be used uninitialized =
+in this function [-Wmaybe-uninitialized]
+   _raw_spin_unlock_irqrestore(lock, flags); \
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/tty/serial/xilinx_uartps.c:1197:16: note: 'flags' was declared here
+  unsigned long flags;
+                ^~~~~
 
-greg k-h
+It looks like gcc just can't track the relationship between "locked"
+and "flags", and it is obvious that "flags" won't be used when "locked"
+is zero, so the simplest thing is to initialise flags.
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/tty/serial/xilinx_uartps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+This has been like this for a very long time, but this is now one of
+the few remaining warnings produced by the powerpc allyesconfig build,
+so it would be good to get rid of it.
+
+diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx=
+_uartps.c
+index f145946f659b..da4563aaaf5c 100644
+--- a/drivers/tty/serial/xilinx_uartps.c
++++ b/drivers/tty/serial/xilinx_uartps.c
+@@ -1194,7 +1194,7 @@ static void cdns_uart_console_write(struct console *c=
+o, const char *s,
+ 				unsigned int count)
+ {
+ 	struct uart_port *port =3D console_port;
+-	unsigned long flags;
++	unsigned long flags =3D 0;
+ 	unsigned int imr, ctrl;
+ 	int locked =3D 1;
+=20
+--=20
+2.22.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/oMq6rKwzq4yIYumawKzTc/R
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1BL8UACgkQAVBC80lX
+0Gx3MAf+NgUfGWvdNoyBkiRwgAqA7uddSSYmPi/mZ/JfJp7uN+yVTM4AAaDJmkaI
+lu52irRBVHp6J20zZjIrF0Nm1taHmDxNoyJacpkM1Za5klHa8DOxvLx01xLUGd7G
+91gq2/j2oJYC+pJ3CBkRgt9Vj5GpOwiH+Sirmt71H+Hyno3pyQhQKasUXByHiMtr
+RHLewYnj6OgEiU7aVh1Zy+w4JBpnycEETfeONFrI/WWDBsMupTBgeyhqilPsTh9C
+hqZx4uJmKwmVsuxOc8We0+HTNCGPEbDV6GrX4hHCzn0EguoAyMjKNOCY11ZSy6SV
+esnxLc4sHMDqCMAE4EWD5niCLtNxuQ==
+=M6BN
+-----END PGP SIGNATURE-----
+
+--Sig_/oMq6rKwzq4yIYumawKzTc/R--
