@@ -2,91 +2,120 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A2D7C20E
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 14:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65ECF7C3AF
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 15:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727200AbfGaMqB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 08:46:01 -0400
-Received: from xavier.telenet-ops.be ([195.130.132.52]:58900 "EHLO
-        xavier.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfGaMqB (ORCPT
+        id S1728567AbfGaNgo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 09:36:44 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:18443 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728030AbfGaNgo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 08:46:01 -0400
-Received: from ramsan ([84.194.98.4])
-        by xavier.telenet-ops.be with bizsmtp
-        id jQly2000K05gfCL01Qlypx; Wed, 31 Jul 2019 14:45:58 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hsnzS-0000QG-DY; Wed, 31 Jul 2019 14:45:58 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hsnzS-0003kB-B0; Wed, 31 Jul 2019 14:45:58 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 31 Jul 2019 09:36:44 -0400
+X-Greylist: delayed 729 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Jul 2019 09:36:43 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564580202;
+        s=strato-dkim-0002; d=fpond.eu;
+        h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=lEAIrBddVvJRByIxjH9Ll8q09EpZFx/70n2AETy6e/g=;
+        b=pLbiraYfYv0k9PWvyS1mxOlkYf13IzwTHXKBil4T7V7wlVosXxaYyzAaVkROEA6qPV
+        htgYLt+QnOgBw+dR8nMffoLN+Bp4GhRTZOxXJD+YDNap7cnLT/LeTk6C+mL2Mg7DgAg/
+        KGRc9rQ5ctaTd1KxKTEjwA0eh+4dMnNlcYngXmS0paNWArx3jI/GuiVuL7ayMvY2Y1lK
+        chIqfiTvq5BaDY+KcJUuwIx/X0uelbE1WF4yhHzXYcKeIJjeWbsDQ0dBffEiIKJLk3KD
+        l2ePnJkSCmoVrbHBbVAH5HPTjQ3ihCANtbANZXFHjoLhSdE+KprRR7dWQ1dyHY+DkAL7
+        b1ig==
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzmt2bYDnKIKaws6YXTsc4="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp06-03.back.ox.d0m.de
+        by smtp-ox.front (RZmta 44.24 AUTH)
+        with ESMTPSA id h0a328v6VDOWZRD
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Wed, 31 Jul 2019 15:24:32 +0200 (CEST)
+Date:   Wed, 31 Jul 2019 15:24:32 +0200 (CEST)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>
 Cc:     Joe Perches <joe@perches.com>,
         Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
         linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] serial: sh-sci: Use DEVICE_ATTR_RW() for rx_fifo_trigger
-Date:   Wed, 31 Jul 2019 14:45:55 +0200
-Message-Id: <20190731124555.14349-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        linux-kernel@vger.kernel.org
+Message-ID: <625990202.318842.1564579472697@webmail.strato.com>
+In-Reply-To: <20190731124555.14349-1-geert+renesas@glider.be>
+References: <20190731124555.14349-1-geert+renesas@glider.be>
+Subject: Re: [PATCH] serial: sh-sci: Use DEVICE_ATTR_RW() for
+ rx_fifo_trigger
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.10.1-Rev16
+X-Originating-IP: 85.212.153.30
+X-Originating-Client: open-xchange-appsuite
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-While commit b6b996b6cdeecf7e ("treewide: Use DEVICE_ATTR_RW") converted
-the rx_fifo_timeout attribute, it forgot to convert rx_fifo_trigger due
-to a slightly different function naming.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/tty/serial/sh-sci.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+> On July 31, 2019 at 2:45 PM Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+> 
+> 
+> While commit b6b996b6cdeecf7e ("treewide: Use DEVICE_ATTR_RW") converted
+> the rx_fifo_timeout attribute, it forgot to convert rx_fifo_trigger due
+> to a slightly different function naming.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/tty/serial/sh-sci.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> index d18c680aa64b3427..57638175639e0f3f 100644
+> --- a/drivers/tty/serial/sh-sci.c
+> +++ b/drivers/tty/serial/sh-sci.c
+> @@ -1092,9 +1092,8 @@ static void rx_fifo_timer_fn(struct timer_list *t)
+>  	scif_set_rtrg(port, 1);
+>  }
+>  
+> -static ssize_t rx_trigger_show(struct device *dev,
+> -			       struct device_attribute *attr,
+> -			       char *buf)
+> +static ssize_t rx_fifo_trigger_show(struct device *dev,
+> +				    struct device_attribute *attr, char *buf)
+>  {
+>  	struct uart_port *port = dev_get_drvdata(dev);
+>  	struct sci_port *sci = to_sci_port(port);
+> @@ -1102,10 +1101,9 @@ static ssize_t rx_trigger_show(struct device *dev,
+>  	return sprintf(buf, "%d\n", sci->rx_trigger);
+>  }
+>  
+> -static ssize_t rx_trigger_store(struct device *dev,
+> -				struct device_attribute *attr,
+> -				const char *buf,
+> -				size_t count)
+> +static ssize_t rx_fifo_trigger_store(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     const char *buf, size_t count)
+>  {
+>  	struct uart_port *port = dev_get_drvdata(dev);
+>  	struct sci_port *sci = to_sci_port(port);
+> @@ -1123,7 +1121,7 @@ static ssize_t rx_trigger_store(struct device *dev,
+>  	return count;
+>  }
+>  
+> -static DEVICE_ATTR(rx_fifo_trigger, 0644, rx_trigger_show, rx_trigger_store);
+> +static DEVICE_ATTR_RW(rx_fifo_trigger);
+>  
+>  static ssize_t rx_fifo_timeout_show(struct device *dev,
+>  			       struct device_attribute *attr,
+> -- 
+> 2.17.1
+>
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index d18c680aa64b3427..57638175639e0f3f 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1092,9 +1092,8 @@ static void rx_fifo_timer_fn(struct timer_list *t)
- 	scif_set_rtrg(port, 1);
- }
- 
--static ssize_t rx_trigger_show(struct device *dev,
--			       struct device_attribute *attr,
--			       char *buf)
-+static ssize_t rx_fifo_trigger_show(struct device *dev,
-+				    struct device_attribute *attr, char *buf)
- {
- 	struct uart_port *port = dev_get_drvdata(dev);
- 	struct sci_port *sci = to_sci_port(port);
-@@ -1102,10 +1101,9 @@ static ssize_t rx_trigger_show(struct device *dev,
- 	return sprintf(buf, "%d\n", sci->rx_trigger);
- }
- 
--static ssize_t rx_trigger_store(struct device *dev,
--				struct device_attribute *attr,
--				const char *buf,
--				size_t count)
-+static ssize_t rx_fifo_trigger_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
- {
- 	struct uart_port *port = dev_get_drvdata(dev);
- 	struct sci_port *sci = to_sci_port(port);
-@@ -1123,7 +1121,7 @@ static ssize_t rx_trigger_store(struct device *dev,
- 	return count;
- }
- 
--static DEVICE_ATTR(rx_fifo_trigger, 0644, rx_trigger_show, rx_trigger_store);
-+static DEVICE_ATTR_RW(rx_fifo_trigger);
- 
- static ssize_t rx_fifo_timeout_show(struct device *dev,
- 			       struct device_attribute *attr,
--- 
-2.17.1
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
+CU
+Uli
