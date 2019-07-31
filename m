@@ -2,120 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ECF7C3AF
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 15:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC097C9DE
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Jul 2019 19:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728567AbfGaNgo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Jul 2019 09:36:44 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:18443 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728030AbfGaNgo (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Jul 2019 09:36:44 -0400
-X-Greylist: delayed 729 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Jul 2019 09:36:43 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564580202;
-        s=strato-dkim-0002; d=fpond.eu;
-        h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=lEAIrBddVvJRByIxjH9Ll8q09EpZFx/70n2AETy6e/g=;
-        b=pLbiraYfYv0k9PWvyS1mxOlkYf13IzwTHXKBil4T7V7wlVosXxaYyzAaVkROEA6qPV
-        htgYLt+QnOgBw+dR8nMffoLN+Bp4GhRTZOxXJD+YDNap7cnLT/LeTk6C+mL2Mg7DgAg/
-        KGRc9rQ5ctaTd1KxKTEjwA0eh+4dMnNlcYngXmS0paNWArx3jI/GuiVuL7ayMvY2Y1lK
-        chIqfiTvq5BaDY+KcJUuwIx/X0uelbE1WF4yhHzXYcKeIJjeWbsDQ0dBffEiIKJLk3KD
-        l2ePnJkSCmoVrbHBbVAH5HPTjQ3ihCANtbANZXFHjoLhSdE+KprRR7dWQ1dyHY+DkAL7
-        b1ig==
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzmt2bYDnKIKaws6YXTsc4="
-X-RZG-CLASS-ID: mo00
-Received: from oxapp06-03.back.ox.d0m.de
-        by smtp-ox.front (RZmta 44.24 AUTH)
-        with ESMTPSA id h0a328v6VDOWZRD
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 31 Jul 2019 15:24:32 +0200 (CEST)
-Date:   Wed, 31 Jul 2019 15:24:32 +0200 (CEST)
-From:   Ulrich Hecht <uli@fpond.eu>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
-        linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-ID: <625990202.318842.1564579472697@webmail.strato.com>
-In-Reply-To: <20190731124555.14349-1-geert+renesas@glider.be>
-References: <20190731124555.14349-1-geert+renesas@glider.be>
-Subject: Re: [PATCH] serial: sh-sci: Use DEVICE_ATTR_RW() for
- rx_fifo_trigger
+        id S1726582AbfGaRFQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Jul 2019 13:05:16 -0400
+Received: from mga02.intel.com ([134.134.136.20]:16919 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726491AbfGaRFP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Jul 2019 13:05:15 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 10:05:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,330,1559545200"; 
+   d="scan'208";a="172514936"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by fmsmga008.fm.intel.com with ESMTP; 31 Jul 2019 10:05:14 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hss2J-0002PA-PC; Wed, 31 Jul 2019 20:05:11 +0300
+Date:   Wed, 31 Jul 2019 20:05:11 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Aaron Sierra <asierra@xes-inc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Subject: Re: [PATCH v3] serial: 8250_exar: Move the Exar bits out from
+ 8250_port
+Message-ID: <20190731170511.GQ23480@smile.fi.intel.com>
+References: <20190721142659.60773-1-andriy.shevchenko@linux.intel.com>
+ <1785128142.57495.1564351929356.JavaMail.zimbra@xes-inc.com>
+ <20190729120059.GD23480@smile.fi.intel.com>
+ <708985591.123086.1564413111128.JavaMail.zimbra@xes-inc.com>
+ <20190730090159.GH23480@smile.fi.intel.com>
+ <1516192036.531051.1564527522157.JavaMail.zimbra@xes-inc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Medium
-X-Mailer: Open-Xchange Mailer v7.10.1-Rev16
-X-Originating-IP: 85.212.153.30
-X-Originating-Client: open-xchange-appsuite
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1516192036.531051.1564527522157.JavaMail.zimbra@xes-inc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Tue, Jul 30, 2019 at 05:58:42PM -0500, Aaron Sierra wrote:
 
-> On July 31, 2019 at 2:45 PM Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> 
-> 
-> While commit b6b996b6cdeecf7e ("treewide: Use DEVICE_ATTR_RW") converted
-> the rx_fifo_timeout attribute, it forgot to convert rx_fifo_trigger due
-> to a slightly different function naming.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/tty/serial/sh-sci.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> index d18c680aa64b3427..57638175639e0f3f 100644
-> --- a/drivers/tty/serial/sh-sci.c
-> +++ b/drivers/tty/serial/sh-sci.c
-> @@ -1092,9 +1092,8 @@ static void rx_fifo_timer_fn(struct timer_list *t)
->  	scif_set_rtrg(port, 1);
->  }
->  
-> -static ssize_t rx_trigger_show(struct device *dev,
-> -			       struct device_attribute *attr,
-> -			       char *buf)
-> +static ssize_t rx_fifo_trigger_show(struct device *dev,
-> +				    struct device_attribute *attr, char *buf)
->  {
->  	struct uart_port *port = dev_get_drvdata(dev);
->  	struct sci_port *sci = to_sci_port(port);
-> @@ -1102,10 +1101,9 @@ static ssize_t rx_trigger_show(struct device *dev,
->  	return sprintf(buf, "%d\n", sci->rx_trigger);
->  }
->  
-> -static ssize_t rx_trigger_store(struct device *dev,
-> -				struct device_attribute *attr,
-> -				const char *buf,
-> -				size_t count)
-> +static ssize_t rx_fifo_trigger_store(struct device *dev,
-> +				     struct device_attribute *attr,
-> +				     const char *buf, size_t count)
->  {
->  	struct uart_port *port = dev_get_drvdata(dev);
->  	struct sci_port *sci = to_sci_port(port);
-> @@ -1123,7 +1121,7 @@ static ssize_t rx_trigger_store(struct device *dev,
->  	return count;
->  }
->  
-> -static DEVICE_ATTR(rx_fifo_trigger, 0644, rx_trigger_show, rx_trigger_store);
-> +static DEVICE_ATTR_RW(rx_fifo_trigger);
->  
->  static ssize_t rx_fifo_timeout_show(struct device *dev,
->  			       struct device_attribute *attr,
-> -- 
-> 2.17.1
->
+> Sure, I can do that. You're saying that you'd submit a patch for the INT0
+> removal as the last patch in your series?
 
-Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+I meant to add to the bunch, but since I'm about to send a new version and
+didn't see anything from you it can be sent separately with dependency
+reference.
 
-CU
-Uli
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
