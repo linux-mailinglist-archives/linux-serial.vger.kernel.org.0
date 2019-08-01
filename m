@@ -2,75 +2,141 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F68E7E034
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 18:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16117E280
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 20:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731936AbfHAQbI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Aug 2019 12:31:08 -0400
-Received: from xes-mad.com ([162.248.234.2]:11915 "EHLO mail.xes-mad.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730790AbfHAQbI (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Aug 2019 12:31:08 -0400
-Received: from zimbra.xes-mad.com (zimbra.xes-mad.com [10.52.0.127])
-        by mail.xes-mad.com (Postfix) with ESMTP id E4BD3202C3;
-        Thu,  1 Aug 2019 11:31:07 -0500 (CDT)
-Date:   Thu, 1 Aug 2019 11:31:05 -0500 (CDT)
-From:   Aaron Sierra <asierra@xes-inc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Message-ID: <206899620.184134.1564677065784.JavaMail.zimbra@xes-inc.com>
-In-Reply-To: <20190801151202.GA24347@kroah.com>
-References: <20190731174545.8192-1-asierra@xes-inc.com> <20190801151202.GA24347@kroah.com>
-Subject: Re: [PATCH] serial: 8250_exar: Absorb remaining 8250_port INT0
- support
+        id S1726409AbfHASpZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 1 Aug 2019 14:45:25 -0400
+Received: from skedge04.snt-world.com ([91.208.41.69]:44556 "EHLO
+        skedge04.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbfHASpY (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 1 Aug 2019 14:45:24 -0400
+Received: from sntmail14r.snt-is.com (unknown [10.203.32.184])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by skedge04.snt-world.com (Postfix) with ESMTPS id ED90367A7B0;
+        Thu,  1 Aug 2019 20:45:21 +0200 (CEST)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail14r.snt-is.com
+ (10.203.32.184) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Thu, 1 Aug 2019
+ 20:45:21 +0200
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1713.004; Thu, 1 Aug 2019 20:45:21 +0200
+From:   Schrempf Frieder <frieder.schrempf@kontron.de>
+To:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/3] serial: mctrl_gpio: Avoid probe failures in case of
+ missing gpiolib
+Thread-Topic: [PATCH v2 1/3] serial: mctrl_gpio: Avoid probe failures in case
+ of missing gpiolib
+Thread-Index: AQHVSJlF+cJCIhOOZEmFG6rcowK4DA==
+Date:   Thu, 1 Aug 2019 18:45:21 +0000
+Message-ID: <20190801184505.17239-1-frieder.schrempf@kontron.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.0.127]
-X-Mailer: Zimbra 8.7.5_GA_1764 (ZimbraWebClient - GC75 (Linux)/8.7.5_GA_1764)
-Thread-Topic: serial: 8250_exar: Absorb remaining 8250_port INT0 support
-Thread-Index: 6E3km9d404fvblDarSrp021IOXq3YQ==
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: ED90367A7B0.AF516
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: frieder.schrempf@kontron.de
+X-SnT-MailScanner-To: festevam@gmail.com, geert+renesas@glider.be,
+        gregkh@linuxfoundation.org, jslaby@suse.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        u.kleine-koenig@pengutronix.de
+X-Spam-Status: No
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
------ Original Message -----
-> From: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-> To: "Aaron Sierra" <asierra@xes-inc.com>
-> Sent: Thursday, August 1, 2019 10:12:02 AM
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-> On Wed, Jul 31, 2019 at 12:45:45PM -0500, Aaron Sierra wrote:
->> Move INT0 clearing out of common, per-port serial8250_do_startup()
->> into PCI device probe/resume.
->> 
->> As described in commit 2c0ac5b48a35 ("serial: exar: Fix stuck MSIs"),
->> the purpose of clearing INT0 is to prevent the PCI interrupt line from
->> becoming stuck asserted, "which is fatal with edge-triggered MSIs".
->> 
->> Like the clearing via interrupt handler that moved from common code in
->> commit c7e1b4059075 ("tty: serial: exar: Relocate sleep wake-up
->> handling"), this clearing at startup can be better handled at the PCI
->> device level.
->> 
->> Cc: Jan Kiszka <jan.kiszka@siemens.com>
->> Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
->> Signed-off-by: Aaron Sierra <asierra@xes-inc.com>
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> ---
->> 
->> The embedded patch is written to follow this patch from Andy Shevchenko:
->> [PATCH v4 3/3] serial: 8250_exar: Move custom divisor support out from 8250_port
-> 
-> It does not apply to my tree after that patch, are you sure about this?
-> 
-> Please rebase against my tty-testing branch and resend.
+If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
+mctrl_gpio_init_noauto() will currently return an error pointer with
+-ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
+check for this condition to allow continue probing.
 
-Greg,
+To avoid the need for this check in each driver, we return NULL
+instead, as all the mctrl_gpio_*() functions are skipped anyway.
+We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
 
-Sorry about that. I'm running through testing now. I'll submit v2 shortly.
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes in v2
+=============
+* Move the sh_sci changes to a separate patch
+* Add a patch for the 8250 driver
+* Add Fabio's R-b tag
+---
+ drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
+ drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Aaron
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 2b400189be91..54c43e02e375 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -61,6 +61,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
+ struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+ 				      enum mctrl_gpio_idx gidx)
+ {
++	if (gpios == NULL)
++		return NULL;
++
+ 	return gpios->gpio[gidx];
+ }
+ EXPORT_SYMBOL_GPL(mctrl_gpio_to_gpiod);
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.h b/drivers/tty/serial/serial_mctrl_gpio.h
+index b7d3cca48ede..1b2ff503b2c2 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.h
++++ b/drivers/tty/serial/serial_mctrl_gpio.h
+@@ -114,19 +114,19 @@ static inline
+ struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+ 				      enum mctrl_gpio_idx gidx)
+ {
+-	return ERR_PTR(-ENOSYS);
++	return NULL;
+ }
+ 
+ static inline
+ struct mctrl_gpios *mctrl_gpio_init(struct uart_port *port, unsigned int idx)
+ {
+-	return ERR_PTR(-ENOSYS);
++	return NULL;
+ }
+ 
+ static inline
+ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+ {
+-	return ERR_PTR(-ENOSYS);
++	return NULL;
+ }
+ 
+ static inline
+-- 
+2.17.1
