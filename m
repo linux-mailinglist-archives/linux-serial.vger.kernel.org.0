@@ -2,72 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 631EC7DE82
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 17:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C267DE89
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 17:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731548AbfHAPMG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Aug 2019 11:12:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37726 "EHLO mail.kernel.org"
+        id S1729989AbfHAPOM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Aug 2019 11:14:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727853AbfHAPMF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Aug 2019 11:12:05 -0400
+        id S1727853AbfHAPOL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 1 Aug 2019 11:14:11 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A33BE206B8;
-        Thu,  1 Aug 2019 15:12:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E9EBE206B8;
+        Thu,  1 Aug 2019 15:14:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564672325;
-        bh=Ic5iqDoAqfcWirJY/0YZF55fRUiswE0+4gbzSTJUdIk=;
+        s=default; t=1564672451;
+        bh=abPguqKEOMLTrCcU2P2/jVixA9k9aQ63IoisxRSIwBg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T6SvSbKcgAtb70BEB67Hqok+5QSefhpBR3l3B7l/4/Pg/zjAk6VbDaNHoUpvDf3rZ
-         /HEPuzux820piLbox02gNiJaAz89phsyQXyLtozIs0kbg26TWP5t39gDoDOhpXC4DF
-         3Kq39goFzyq8fypOcBwUzo0OaVaAd5SM3YuzZtzE=
-Date:   Thu, 1 Aug 2019 17:12:02 +0200
+        b=Z49Q/dNnsW4m/Vs0lHcUASw5PJAlp8W6hfuITfIg0qpsCoo61kxziMx4EKLRiS8Y+
+         MzLxDr4ItWUbUotJgD6iWxhOa5FrJouUedzlKPOyoBj6bJ08i9j1APCM3tx22vGWBP
+         MqFH5lmLUbfbU13MnZ/Ik45s4tAkr37DSNfI2PcU=
+Date:   Thu, 1 Aug 2019 17:14:09 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Aaron Sierra <asierra@xes-inc.com>
-Cc:     linux-serial@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] serial: 8250_exar: Absorb remaining 8250_port INT0
- support
-Message-ID: <20190801151202.GA24347@kroah.com>
-References: <20190731174545.8192-1-asierra@xes-inc.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-serial@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
+        Chris Healy <cphealy@gmail.com>,
+        Cory Tusar <cory.tusar@zii.aero>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Jiri Slaby <jslaby@suse.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 00/23] LPUART fixes and improvements
+Message-ID: <20190801151409.GA4508@kroah.com>
+References: <20190731173045.11718-1-andrew.smirnov@gmail.com>
+ <CAOMZO5BL1BO7XGNgwqZRRCeWNURemZEVzP26kVBacyw__0=RBA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190731174545.8192-1-asierra@xes-inc.com>
+In-Reply-To: <CAOMZO5BL1BO7XGNgwqZRRCeWNURemZEVzP26kVBacyw__0=RBA@mail.gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 12:45:45PM -0500, Aaron Sierra wrote:
-> Move INT0 clearing out of common, per-port serial8250_do_startup()
-> into PCI device probe/resume.
+On Wed, Jul 31, 2019 at 02:59:59PM -0300, Fabio Estevam wrote:
+> Hi Andrey,
 > 
-> As described in commit 2c0ac5b48a35 ("serial: exar: Fix stuck MSIs"),
-> the purpose of clearing INT0 is to prevent the PCI interrupt line from
-> becoming stuck asserted, "which is fatal with edge-triggered MSIs".
+> On Wed, Jul 31, 2019 at 2:53 PM Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+> >
+> > Everyone:
+> >
+> > This series contains fixes/improvements to LPUART dirver I came up
+> > with recently as well as fixes picked up from Toradex and NXP Vybrid
+> > repos.
+> >
+> > Feedback is welcome!
+> >
+> > Changes since [v1]:
 > 
-> Like the clearing via interrupt handler that moved from common code in
-> commit c7e1b4059075 ("tty: serial: exar: Relocate sleep wake-up
-> handling"), this clearing at startup can be better handled at the PCI
-> device level.
+> Greg has already applied some of these patches:
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-testing
 > 
-> Cc: Jan Kiszka <jan.kiszka@siemens.com>
-> Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-> Signed-off-by: Aaron Sierra <asierra@xes-inc.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> 
-> The embedded patch is written to follow this patch from Andy Shevchenko:
-> [PATCH v4 3/3] serial: 8250_exar: Move custom divisor support out from 8250_port
+> Please rebase on his tree and send the remaining ones.
 
-It does not apply to my tree after that patch, are you sure about this?
-
-Please rebase against my tty-testing branch and resend.
+Yes, I can't drop patches I have already applied.  Andrey, just resend
+the ones that I have not applied.
 
 thanks,
 
