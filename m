@@ -2,147 +2,158 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6382B7DBD1
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 14:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A097DC68
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 15:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730334AbfHAMrJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Thu, 1 Aug 2019 08:47:09 -0400
-Received: from skedge04.snt-world.com ([91.208.41.69]:41592 "EHLO
-        skedge04.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731511AbfHAMrI (ORCPT
+        id S1728916AbfHANTf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Aug 2019 09:19:35 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:39913 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728592AbfHANTf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:47:08 -0400
-Received: from sntmail10s.snt-is.com (unknown [10.203.32.183])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by skedge04.snt-world.com (Postfix) with ESMTPS id 56C7667A6F0;
-        Thu,  1 Aug 2019 14:46:43 +0200 (CEST)
-Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail10s.snt-is.com
- (10.203.32.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Thu, 1 Aug 2019
- 14:46:42 +0200
-Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
- sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
- 15.01.1713.004; Thu, 1 Aug 2019 14:46:42 +0200
-From:   Schrempf Frieder <frieder.schrempf@kontron.de>
-To:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        Thu, 1 Aug 2019 09:19:35 -0400
+Received: by mail-lj1-f195.google.com with SMTP id v18so69309236ljh.6;
+        Thu, 01 Aug 2019 06:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RC6wKO1Isy8ssplnFFBZCldnnaBxZKmxUbojPji9Nn8=;
+        b=KUu2NGVrF3CsroBiTb6xu1ZVx93LkXrT1peKf0dykpEFlk4TXLXA7TsWvS53RT4lTo
+         K4juM7BZMtb6SDbbYkdwqh1AgseBQOTuTLGUQqm1vROI5EC+TR9avlR+2A/5WE/Qx8Qb
+         XWc6+IL5OyWftImZreXB9VDAxlRk4GhtGSuE3eShxQ5CmYP7YV9SFJpsposFOODrqH/M
+         XMddEgfFPqbmw+rwydtEpbADNt+2pztRm/8V4eNqKyDwtpRXa1tsw0GhJtxeCoHvevVw
+         4YUexJXuE2KX2Dta84W+JPUzjl0DL9dlC4VnMLXsFy/fq4RrYFWAzwMLTM+5t4+IXl/5
+         9EYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RC6wKO1Isy8ssplnFFBZCldnnaBxZKmxUbojPji9Nn8=;
+        b=CSKL8XS6jDHXd4EmHUCbRSaKztj9GgwGYsbcTpDUDE7Fmzr+gWCX0oDtItNyrEaJ7p
+         viZX0ZH0/5MwOHxmE8oZfTet0VSdHrV+DqKEzCSvlgvPqe2O1wYBFV1fwwd2d1lRKkWI
+         Tui2n8uWrh5O8j11irt9YnlNxwYBXPUDZWu6Nr/ZxOd3hOruZcZPdO73DB5zYB89rSN0
+         2DElOtIIBb8xz4ccwDAqB4k58qicqR54OkX7kKN7yzuhgv75JeDu/7HJMqP8xnmhvZmn
+         9qL4Mfxm+qIdN0pFteXhzlbxhY4r8Y/f09KhsoGwXDUWbeuEfYoX03NqpVgd45d3IItg
+         Ob7Q==
+X-Gm-Message-State: APjAAAW47cSuq3ZVqeG72r1XtsqXbo9upphDgey+1VXvARSat0gNSEnJ
+        7znu4ma4t/zaUSW/TaR8KsjBtwpjFSVhGpDBsjw=
+X-Google-Smtp-Source: APXvYqxUbh1cL9LgQJwJqmT3uKcr+dkk4jgpEBFMs3ohuwPYtfrWNXPxJw2IeNHF6fA+Gt5UlsJw2+1zolwkPA+X8KM=
+X-Received: by 2002:a2e:5d1:: with SMTP id 200mr68535653ljf.10.1564665573273;
+ Thu, 01 Aug 2019 06:19:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190801124446.15703-1-frieder.schrempf@kontron.de>
+In-Reply-To: <20190801124446.15703-1-frieder.schrempf@kontron.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 1 Aug 2019 10:19:45 -0300
+Message-ID: <CAOMZO5BPRNDQG_6PunUTxK7P=NF1DqjxvM+xEVMzX+rGd=h9hA@mail.gmail.com>
+Subject: Re: [PATCH] serial: mctrl_gpio: Avoid probe failures in case of
+ missing gpiolib
+To:     Schrempf Frieder <frieder.schrempf@kontron.de>
+Cc:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
         "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
         "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
         Jiri Slaby <jslaby@suse.com>,
         "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] serial: mctrl_gpio: Avoid probe failures in case of missing
- gpiolib
-Thread-Topic: [PATCH] serial: mctrl_gpio: Avoid probe failures in case of
- missing gpiolib
-Thread-Index: AQHVSGcrNWPx0fgcHUyq9EomzdiefQ==
-Date:   Thu, 1 Aug 2019 12:46:42 +0000
-Message-ID: <20190801124446.15703-1-frieder.schrempf@kontron.de>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.17.1
-x-originating-ip: [172.25.9.193]
-x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-SnT-MailScanner-Information: Please contact the ISP for more information
-X-SnT-MailScanner-ID: 56C7667A6F0.AF21B
-X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
-X-SnT-MailScanner-SpamCheck: 
-X-SnT-MailScanner-From: frieder.schrempf@kontron.de
-X-SnT-MailScanner-To: festevam@gmail.com, gregkh@linuxfoundation.org,
-        jslaby@suse.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        s.hauer@pengutronix.de, shawnguo@kernel.org,
-        u.kleine-koenig@pengutronix.de
-X-Spam-Status: No
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+Hi Schrempf,
 
-If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
-mctrl_gpio_init_noauto() will currently return an error pointer with
--ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
-check for this condition to allow continue probing.
+On Thu, Aug 1, 2019 at 9:47 AM Schrempf Frieder
+<frieder.schrempf@kontron.de> wrote:
+>
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>
+> If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
+> mctrl_gpio_init_noauto() will currently return an error pointer with
+> -ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
+> check for this condition to allow continue probing.
+>
+> To avoid the need for this check in each driver, we return NULL
+> instead, as all the mctrl_gpio_*() functions are skipped anyway.
+> We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
+>
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-To avoid the need for this check in each driver, we return NULL
-instead, as all the mctrl_gpio_*() functions are skipped anyway.
-We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
+Looks good to me:
 
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
- drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
- drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
- drivers/tty/serial/sh-sci.c            | 2 +-
- 3 files changed, 7 insertions(+), 4 deletions(-)
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-index 2b400189be91..54c43e02e375 100644
---- a/drivers/tty/serial/serial_mctrl_gpio.c
-+++ b/drivers/tty/serial/serial_mctrl_gpio.c
-@@ -61,6 +61,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
- struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
- 				      enum mctrl_gpio_idx gidx)
- {
-+	if (gpios == NULL)
-+		return NULL;
-+
- 	return gpios->gpio[gidx];
- }
- EXPORT_SYMBOL_GPL(mctrl_gpio_to_gpiod);
-diff --git a/drivers/tty/serial/serial_mctrl_gpio.h b/drivers/tty/serial/serial_mctrl_gpio.h
-index b7d3cca48ede..1b2ff503b2c2 100644
---- a/drivers/tty/serial/serial_mctrl_gpio.h
-+++ b/drivers/tty/serial/serial_mctrl_gpio.h
-@@ -114,19 +114,19 @@ static inline
- struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
- 				      enum mctrl_gpio_idx gidx)
- {
--	return ERR_PTR(-ENOSYS);
-+	return NULL;
- }
- 
- static inline
- struct mctrl_gpios *mctrl_gpio_init(struct uart_port *port, unsigned int idx)
- {
--	return ERR_PTR(-ENOSYS);
-+	return NULL;
- }
- 
- static inline
- struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
- {
--	return ERR_PTR(-ENOSYS);
-+	return NULL;
- }
- 
- static inline
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index d18c680aa64b..249325b65ee0 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -3287,7 +3287,7 @@ static int sci_probe_single(struct platform_device *dev,
- 		return ret;
- 
- 	sciport->gpios = mctrl_gpio_init(&sciport->port, 0);
--	if (IS_ERR(sciport->gpios) && PTR_ERR(sciport->gpios) != -ENOSYS)
-+	if (IS_ERR(sciport->gpios))
- 		return PTR_ERR(sciport->gpios);
- 
- 	if (sciport->has_rtscts) {
--- 
-2.17.1
+Also adding Geert on Cc as the patch touches sh-sci.
+
+Thanks
+
+
+> ---
+>  drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
+>  drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
+>  drivers/tty/serial/sh-sci.c            | 2 +-
+>  3 files changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+> index 2b400189be91..54c43e02e375 100644
+> --- a/drivers/tty/serial/serial_mctrl_gpio.c
+> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
+> @@ -61,6 +61,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
+>  struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+>                                       enum mctrl_gpio_idx gidx)
+>  {
+> +       if (gpios == NULL)
+> +               return NULL;
+> +
+>         return gpios->gpio[gidx];
+>  }
+>  EXPORT_SYMBOL_GPL(mctrl_gpio_to_gpiod);
+> diff --git a/drivers/tty/serial/serial_mctrl_gpio.h b/drivers/tty/serial/serial_mctrl_gpio.h
+> index b7d3cca48ede..1b2ff503b2c2 100644
+> --- a/drivers/tty/serial/serial_mctrl_gpio.h
+> +++ b/drivers/tty/serial/serial_mctrl_gpio.h
+> @@ -114,19 +114,19 @@ static inline
+>  struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+>                                       enum mctrl_gpio_idx gidx)
+>  {
+> -       return ERR_PTR(-ENOSYS);
+> +       return NULL;
+>  }
+>
+>  static inline
+>  struct mctrl_gpios *mctrl_gpio_init(struct uart_port *port, unsigned int idx)
+>  {
+> -       return ERR_PTR(-ENOSYS);
+> +       return NULL;
+>  }
+>
+>  static inline
+>  struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+>  {
+> -       return ERR_PTR(-ENOSYS);
+> +       return NULL;
+>  }
+>
+>  static inline
+> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> index d18c680aa64b..249325b65ee0 100644
+> --- a/drivers/tty/serial/sh-sci.c
+> +++ b/drivers/tty/serial/sh-sci.c
+> @@ -3287,7 +3287,7 @@ static int sci_probe_single(struct platform_device *dev,
+>                 return ret;
+>
+>         sciport->gpios = mctrl_gpio_init(&sciport->port, 0);
+> -       if (IS_ERR(sciport->gpios) && PTR_ERR(sciport->gpios) != -ENOSYS)
+> +       if (IS_ERR(sciport->gpios))
+>                 return PTR_ERR(sciport->gpios);
+>
+>         if (sciport->has_rtscts) {
+> --
+> 2.17.1
