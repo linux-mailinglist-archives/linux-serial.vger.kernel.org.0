@@ -2,177 +2,115 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD1A7DA98
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 13:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F697DB03
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 14:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729316AbfHALw0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Aug 2019 07:52:26 -0400
-Received: from mga17.intel.com ([192.55.52.151]:5466 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730514AbfHALw0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Aug 2019 07:52:26 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 04:52:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,334,1559545200"; 
-   d="scan'208";a="191607664"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Aug 2019 04:52:24 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ht9d9-0002we-9k; Thu, 01 Aug 2019 14:52:23 +0300
-Date:   Thu, 1 Aug 2019 14:52:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Aaron Sierra <asierra@xes-inc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Subject: Re: [PATCH] serial: 8250_exar: Absorb remaining 8250_port INT0
- support
-Message-ID: <20190801115223.GR23480@smile.fi.intel.com>
-References: <20190731174545.8192-1-asierra@xes-inc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190731174545.8192-1-asierra@xes-inc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729708AbfHAMMH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Aug 2019 08:12:07 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:37740 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728060AbfHAMMG (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:12:06 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 0635B60E40; Thu,  1 Aug 2019 12:12:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564661526;
+        bh=/Uh0/D+m6kv8+YXdEyt+v1OkXzm8Qmlq1aKxE0Tu1jM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kJGfQtm2ju01E9JUxixAeNcBZaTChFZb0F+ZXb6OmSv6fSBYYCTyu6XhuPdtQfRd7
+         3TNe7iZwbY4in6sKzI0u9TPRks832x8Bo89M5yKucypNPZUerCknExileJUWzKFjKa
+         V/IDMn3jsiQ/CkM11/fzFLnVD4ETOAlKBtDhrLsM=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from blr-ubuntu-41.ap.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vivek.gautam@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2AED860A97;
+        Thu,  1 Aug 2019 12:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564661525;
+        bh=/Uh0/D+m6kv8+YXdEyt+v1OkXzm8Qmlq1aKxE0Tu1jM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SaorWJN2VqM3pGx1QTKwRzujfhsCyHXwPgUokmyAfnGoUzf1mrXM+j8s+6TU+wcX+
+         qAqnFVma+W6I7wMzSzJOxwMCT5+Ttka8O3SzOzmxBwLIaBLxEIHCcpRc95IiPkhaXF
+         8FJIA+3M9y9KzfNrbGMNcqmVG1YZNi1pO/wsQgzE=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2AED860A97
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=vivek.gautam@codeaurora.org
+From:   Vivek Gautam <vivek.gautam@codeaurora.org>
+To:     agross@kernel.org, gregkh@linuxfoundation.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     jslaby@suse.com, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org,
+        Vivek Gautam <vivek.gautam@codeaurora.org>
+Subject: [PATCH 1/1] tty: serial: qcom_geni_serial: Update the oversampling rate
+Date:   Thu,  1 Aug 2019 17:41:53 +0530
+Message-Id: <20190801121153.10613-1-vivek.gautam@codeaurora.org>
+X-Mailer: git-send-email 2.16.1.72.g5be1f00a9a70
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 12:45:45PM -0500, Aaron Sierra wrote:
-> Move INT0 clearing out of common, per-port serial8250_do_startup()
-> into PCI device probe/resume.
-> 
-> As described in commit 2c0ac5b48a35 ("serial: exar: Fix stuck MSIs"),
-> the purpose of clearing INT0 is to prevent the PCI interrupt line from
-> becoming stuck asserted, "which is fatal with edge-triggered MSIs".
-> 
-> Like the clearing via interrupt handler that moved from common code in
-> commit c7e1b4059075 ("tty: serial: exar: Relocate sleep wake-up
-> handling"), this clearing at startup can be better handled at the PCI
-> device level.
-> 
+For QUP IP versions 2.5 and above the oversampling rate is halved
+from 32 to 16. Update this rate after reading hardware version
+register, so that the clock divider value is correctly set to
+achieve required baud rate.
 
-Looks good to me,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Vivek Gautam <vivek.gautam@codeaurora.org>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-P.S. When you have a chance to test my series, please, give a tag.
-
-> Cc: Jan Kiszka <jan.kiszka@siemens.com>
-> Cc: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Aaron Sierra <asierra@xes-inc.com>
-> ---
-> 
-> The embedded patch is written to follow this patch from Andy Shevchenko:
-> [PATCH v4 3/3] serial: 8250_exar: Move custom divisor support out from 8250_port
-> 
->  drivers/tty/serial/8250/8250_exar.c | 24 ++++++++++++++++--------
->  drivers/tty/serial/8250/8250_port.c |  9 ---------
->  2 files changed, 16 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-> index 4f8f45e2fc1d..248be217f528 100644
-> --- a/drivers/tty/serial/8250/8250_exar.c
-> +++ b/drivers/tty/serial/8250/8250_exar.c
-> @@ -492,6 +492,16 @@ static void pci_xr17v35x_exit(struct pci_dev *pcidev)
->  	port->port.private_data = NULL;
->  }
->  
-> +static inline void exar_misc_clear(struct exar8250 *priv)
-> +{
-> +	/* Clear all PCI interrupts by reading INT0. No effect on IIR */
-> +	readb(priv->virt + UART_EXAR_INT0);
-> +
-> +	/* Clear INT0 for Expansion Interface slave ports, too */
-> +	if (priv->board->num_ports > 8)
-> +		readb(priv->virt + 0x2000 + UART_EXAR_INT0);
-> +}
-> +
->  /*
->   * These Exar UARTs have an extra interrupt indicator that could fire for a
->   * few interrupts that are not presented/cleared through IIR.  One of which is
-> @@ -503,14 +513,7 @@ static void pci_xr17v35x_exit(struct pci_dev *pcidev)
->   */
->  static irqreturn_t exar_misc_handler(int irq, void *data)
->  {
-> -	struct exar8250 *priv = data;
-> -
-> -	/* Clear all PCI interrupts by reading INT0. No effect on IIR */
-> -	readb(priv->virt + UART_EXAR_INT0);
-> -
-> -	/* Clear INT0 for Expansion Interface slave ports, too */
-> -	if (priv->board->num_ports > 8)
-> -		readb(priv->virt + 0x2000 + UART_EXAR_INT0);
-> +	exar_misc_clear(data);
->  
->  	return IRQ_HANDLED;
->  }
-> @@ -563,6 +566,9 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
->  	if (rc)
->  		return rc;
->  
-> +	/* Clear interrupts */
-> +	exar_misc_clear(priv);
-> +
->  	for (i = 0; i < nr_ports && i < maxnr; i++) {
->  		rc = board->setup(priv, pcidev, &uart, i);
->  		if (rc) {
-> @@ -622,6 +628,8 @@ static int __maybe_unused exar_resume(struct device *dev)
->  	struct exar8250 *priv = pci_get_drvdata(pcidev);
->  	unsigned int i;
->  
-> +	exar_misc_clear(priv);
-> +
->  	for (i = 0; i < priv->nr; i++)
->  		if (priv->line[i] >= 0)
->  			serial8250_resume_port(priv->line[i]);
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 995a7e8b7839..706645f89132 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -40,11 +40,6 @@
->  
->  #include "8250.h"
->  
-> -/*
-> - * These are definitions for the Exar XR17V35X and XR17(C|D)15X
-> - */
-> -#define UART_EXAR_INT0		0x80
-> -
->  /* Nuvoton NPCM timeout register */
->  #define UART_NPCM_TOR          7
->  #define UART_NPCM_TOIE         BIT(7)  /* Timeout Interrupt Enable */
-> @@ -2138,8 +2133,6 @@ int serial8250_do_startup(struct uart_port *port)
->  	serial_port_in(port, UART_RX);
->  	serial_port_in(port, UART_IIR);
->  	serial_port_in(port, UART_MSR);
-> -	if ((port->type == PORT_XR17V35X) || (port->type == PORT_XR17D15X))
-> -		serial_port_in(port, UART_EXAR_INT0);
->  
->  	/*
->  	 * At this point, there's no way the LSR could still be 0xff;
-> @@ -2297,8 +2290,6 @@ int serial8250_do_startup(struct uart_port *port)
->  	serial_port_in(port, UART_RX);
->  	serial_port_in(port, UART_IIR);
->  	serial_port_in(port, UART_MSR);
-> -	if ((port->type == PORT_XR17V35X) || (port->type == PORT_XR17D15X))
-> -		serial_port_in(port, UART_EXAR_INT0);
->  	up->lsr_saved_flags = 0;
->  	up->msr_saved_flags = 0;
->  
-> -- 
-> 2.17.1
-> 
-
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 35e5f9c5d5be..318f811585cc 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -920,12 +920,13 @@ static unsigned long get_clk_cfg(unsigned long clk_freq)
+ 	return 0;
+ }
+ 
+-static unsigned long get_clk_div_rate(unsigned int baud, unsigned int *clk_div)
++static unsigned long get_clk_div_rate(unsigned int baud,
++			unsigned int sampling_rate, unsigned int *clk_div)
+ {
+ 	unsigned long ser_clk;
+ 	unsigned long desired_clk;
+ 
+-	desired_clk = baud * UART_OVERSAMPLING;
++	desired_clk = baud * sampling_rate;
+ 	ser_clk = get_clk_cfg(desired_clk);
+ 	if (!ser_clk) {
+ 		pr_err("%s: Can't find matching DFS entry for baud %d\n",
+@@ -951,12 +952,20 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 	u32 ser_clk_cfg;
+ 	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
+ 	unsigned long clk_rate;
++	u32 ver, sampling_rate;
+ 
+ 	qcom_geni_serial_stop_rx(uport);
+ 	/* baud rate */
+ 	baud = uart_get_baud_rate(uport, termios, old, 300, 4000000);
+ 	port->baud = baud;
+-	clk_rate = get_clk_div_rate(baud, &clk_div);
++
++	sampling_rate = UART_OVERSAMPLING;
++	/* Sampling rate is halved for IP versions >= 2.5 */
++	ver = geni_se_get_qup_hw_version(&port->se);
++	if (GENI_SE_VERSION_MAJOR(ver) >= 2 && GENI_SE_VERSION_MINOR(ver) >= 5)
++		sampling_rate /= 2;
++
++	clk_rate = get_clk_div_rate(baud, sampling_rate, &clk_div);
+ 	if (!clk_rate)
+ 		goto out_restart_rx;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
