@@ -2,51 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 720767DD73
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 16:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41487DE2E
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 16:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731817AbfHAOIb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Aug 2019 10:08:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39036 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731756AbfHAOIa (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Aug 2019 10:08:30 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB90F216C8;
-        Thu,  1 Aug 2019 14:08:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564668510;
-        bh=1JyIuK4+07z6r13siyUfFBNIhbSOLStvyEv7aTDiL0A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=StxsIr6kJab04Mv9+dIISaCW/YlcJEl4jG36/0vq1ghI0VDL1estEscC9HdwV7Ryo
-         lk253CwRrVHhvp6pmUpMEXKeRisNnD72x1zxZCVk8dMlisZ/99kbMUJ2x51u9S8p4e
-         lhSfUxcSOKqPQQmWavnemeulitgk4N1O8AktIVtA=
-Date:   Thu, 1 Aug 2019 16:08:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     robh+dt@kernel.org, linux-amlogic@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [RFC 8/9] dt-bindings: serial: meson-uart: convert to yaml
-Message-ID: <20190801140825.GC31375@kroah.com>
-References: <20190801135644.12843-1-narmstrong@baylibre.com>
- <20190801135644.12843-9-narmstrong@baylibre.com>
+        id S1726756AbfHAOrR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Aug 2019 10:47:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37671 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725804AbfHAOrR (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 1 Aug 2019 10:47:17 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1htCMH-0004AW-6g; Thu, 01 Aug 2019 16:47:09 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1htCMF-0007GR-9E; Thu, 01 Aug 2019 16:47:07 +0200
+Date:   Thu, 1 Aug 2019 16:47:07 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Schrempf Frieder <frieder.schrempf@kontron.de>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: mctrl_gpio: Avoid probe failures in case of
+ missing gpiolib
+Message-ID: <20190801144707.vprfi4yy2shxmtyw@pengutronix.de>
+References: <20190801124446.15703-1-frieder.schrempf@kontron.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190801135644.12843-9-narmstrong@baylibre.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190801124446.15703-1-frieder.schrempf@kontron.de>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Aug 01, 2019 at 03:56:43PM +0200, Neil Armstrong wrote:
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+On Thu, Aug 01, 2019 at 12:46:42PM +0000, Schrempf Frieder wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
+> mctrl_gpio_init_noauto() will currently return an error pointer with
+> -ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
+> check for this condition to allow continue probing.
+> 
+> To avoid the need for this check in each driver, we return NULL
+> instead, as all the mctrl_gpio_*() functions are skipped anyway.
+> We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
+> 
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 > ---
+>  drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
+>  drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
+>  drivers/tty/serial/sh-sci.c            | 2 +-
 
-I can't take patches without any changelog text, sorry.
+I'd split the sh-sci change in a separate patch. And there is another
+instance in drivers/tty/serial/8250/8250_core.c that should be dropped.
 
-greg k-h
+Other than that looks good.
+
+Best regards
+Uwe
+
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
