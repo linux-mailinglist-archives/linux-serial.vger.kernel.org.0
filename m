@@ -2,158 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A097DC68
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 15:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDAD7DCEB
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Aug 2019 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728916AbfHANTf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Aug 2019 09:19:35 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39913 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728592AbfHANTf (ORCPT
+        id S1730544AbfHAN4u (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Aug 2019 09:56:50 -0400
+Received: from mail-wm1-f46.google.com ([209.85.128.46]:40335 "EHLO
+        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730502AbfHAN4u (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Aug 2019 09:19:35 -0400
-Received: by mail-lj1-f195.google.com with SMTP id v18so69309236ljh.6;
-        Thu, 01 Aug 2019 06:19:34 -0700 (PDT)
+        Thu, 1 Aug 2019 09:56:50 -0400
+Received: by mail-wm1-f46.google.com with SMTP id v19so63322266wmj.5
+        for <linux-serial@vger.kernel.org>; Thu, 01 Aug 2019 06:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RC6wKO1Isy8ssplnFFBZCldnnaBxZKmxUbojPji9Nn8=;
-        b=KUu2NGVrF3CsroBiTb6xu1ZVx93LkXrT1peKf0dykpEFlk4TXLXA7TsWvS53RT4lTo
-         K4juM7BZMtb6SDbbYkdwqh1AgseBQOTuTLGUQqm1vROI5EC+TR9avlR+2A/5WE/Qx8Qb
-         XWc6+IL5OyWftImZreXB9VDAxlRk4GhtGSuE3eShxQ5CmYP7YV9SFJpsposFOODrqH/M
-         XMddEgfFPqbmw+rwydtEpbADNt+2pztRm/8V4eNqKyDwtpRXa1tsw0GhJtxeCoHvevVw
-         4YUexJXuE2KX2Dta84W+JPUzjl0DL9dlC4VnMLXsFy/fq4RrYFWAzwMLTM+5t4+IXl/5
-         9EYA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lIm81eDhukyw6fbCl/+3h+QPFrHXYcRhnM9vCZm0FBU=;
+        b=13O0vL5DX2cs4dd++hzfRHv1CPifo+nEBZIfEK/xPAm8LBOTVk9bmKI2ZMbRTH1Qny
+         gGc5Etb+oieTHOJzEcqzxWDGO6QQqX8ZqANnbyLDBv2TvisCVoaDgG+Sk1kHTmon4u7p
+         23GDtno64u2hTvVK4IASbns2pDTl99MQ9lBi+m6sVEXUkUpyjOdGM2BNfLvVc5T/fqbP
+         9RYMi1RBDw8zjzxwomGDcNw8yXfmP3fnwqKgmxCfWTSa6c7Ru6292ZJe91J3mLvVO1do
+         1LdLqXyr4MpjfSurQz0trb5nuP2J9ZMxqd5XwmuOpZpWwQRuERRQeyL/kh7Wen7RuCof
+         AwZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RC6wKO1Isy8ssplnFFBZCldnnaBxZKmxUbojPji9Nn8=;
-        b=CSKL8XS6jDHXd4EmHUCbRSaKztj9GgwGYsbcTpDUDE7Fmzr+gWCX0oDtItNyrEaJ7p
-         viZX0ZH0/5MwOHxmE8oZfTet0VSdHrV+DqKEzCSvlgvPqe2O1wYBFV1fwwd2d1lRKkWI
-         Tui2n8uWrh5O8j11irt9YnlNxwYBXPUDZWu6Nr/ZxOd3hOruZcZPdO73DB5zYB89rSN0
-         2DElOtIIBb8xz4ccwDAqB4k58qicqR54OkX7kKN7yzuhgv75JeDu/7HJMqP8xnmhvZmn
-         9qL4Mfxm+qIdN0pFteXhzlbxhY4r8Y/f09KhsoGwXDUWbeuEfYoX03NqpVgd45d3IItg
-         Ob7Q==
-X-Gm-Message-State: APjAAAW47cSuq3ZVqeG72r1XtsqXbo9upphDgey+1VXvARSat0gNSEnJ
-        7znu4ma4t/zaUSW/TaR8KsjBtwpjFSVhGpDBsjw=
-X-Google-Smtp-Source: APXvYqxUbh1cL9LgQJwJqmT3uKcr+dkk4jgpEBFMs3ohuwPYtfrWNXPxJw2IeNHF6fA+Gt5UlsJw2+1zolwkPA+X8KM=
-X-Received: by 2002:a2e:5d1:: with SMTP id 200mr68535653ljf.10.1564665573273;
- Thu, 01 Aug 2019 06:19:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lIm81eDhukyw6fbCl/+3h+QPFrHXYcRhnM9vCZm0FBU=;
+        b=lQ7dsL4rqvl3Cczjr6J3pNMuPYDID4ZlanzfsZOVdZEWJEnPuc9W6fSP71J6W1H4ds
+         ybtY76H6U1z+4VvtNrKnylSj4YXlIFb5ADcaFEgzdEGF7oPEIeLGmahe2gzgGsU3ydIm
+         nKu2jFy+UM5FUJg/ZRrp9TBYT2Gs4Onyu2b2RNGjdTTzZrpc2Ds6fdnOmS4aXRtntCQ6
+         tFv3tkYMPuVpJ9t111JNwQ0CRNEKtDxqg4VWYv/fDXBSVivWUqO/GHJp8yjufxLUkA3h
+         vPwMMgrgBDUEPvwnz7o8vrxFCMA+U6tcdRP8on1m/xG9cgdedh0j+iKzRMS/rZ/QE3RN
+         xgJQ==
+X-Gm-Message-State: APjAAAXYVwQaUEBDtPnJfwCSAzfat2CyWDFZTRFesRj0aQfAgsYJ7vZz
+        ctNNx2o7p52dMerAzbokEFsK0g==
+X-Google-Smtp-Source: APXvYqz463HiGivdjA4sUX+UrCKICPNW2Wd+t3590qMCqsuXMkM9GjxeAukrBa4PObzWj+jGQXbYjg==
+X-Received: by 2002:a1c:ef0c:: with SMTP id n12mr111159574wmh.132.1564667808166;
+        Thu, 01 Aug 2019 06:56:48 -0700 (PDT)
+Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u6sm69659952wml.9.2019.08.01.06.56.47
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 01 Aug 2019 06:56:47 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robh+dt@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        jassisinghbrar@gmail.com, kishon@ti.com, p.zabel@pengutronix.de
+Subject: [RFC 0/9] dt-bindings: first tentative of conversion to yaml format
+Date:   Thu,  1 Aug 2019 15:56:35 +0200
+Message-Id: <20190801135644.12843-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190801124446.15703-1-frieder.schrempf@kontron.de>
-In-Reply-To: <20190801124446.15703-1-frieder.schrempf@kontron.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 1 Aug 2019 10:19:45 -0300
-Message-ID: <CAOMZO5BPRNDQG_6PunUTxK7P=NF1DqjxvM+xEVMzX+rGd=h9hA@mail.gmail.com>
-Subject: Re: [PATCH] serial: mctrl_gpio: Avoid probe failures in case of
- missing gpiolib
-To:     Schrempf Frieder <frieder.schrempf@kontron.de>
-Cc:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Schrempf,
+This is a first tentative to convert some of the simplest Amlogic
+dt-bindings to the yaml format.
 
-On Thu, Aug 1, 2019 at 9:47 AM Schrempf Frieder
-<frieder.schrempf@kontron.de> wrote:
->
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->
-> If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
-> mctrl_gpio_init_noauto() will currently return an error pointer with
-> -ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
-> check for this condition to allow continue probing.
->
-> To avoid the need for this check in each driver, we return NULL
-> instead, as all the mctrl_gpio_*() functions are skipped anyway.
-> We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
->
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+All have been tested using :
+$ make ARCH=arm64 dtbs_check
 
-Looks good to me:
+Issues with the amlogic arm64 DTs has already been identified thanks
+to the validation scripts. The DT fixes will be pushed once these yaml
+bindings are acked.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Neil Armstrong (9):
+  dt-bindings: mailbox: meson-mhu: convert to yaml
+  dt-bindings: rng: amlogic,meson-rng: convert to yaml
+  dt-bindings: spi: meson: convert to yaml
+  dt-bindings: reset: amlogic,meson-reset: convert to yaml
+  dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
+  dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
+  dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
+  dt-bindings: serial: meson-uart: convert to yaml
+  dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
 
-Also adding Geert on Cc as the patch touches sh-sci.
+ .../amlogic/amlogic,meson-gx-ao-secure.txt    | 28 -------
+ .../amlogic/amlogic,meson-gx-ao-secure.yaml   | 42 +++++++++++
+ .../devicetree/bindings/mailbox/meson-mhu.txt | 34 ---------
+ .../bindings/mailbox/meson-mhu.yaml           | 53 +++++++++++++
+ .../bindings/phy/meson-g12a-usb2-phy.txt      | 22 ------
+ .../bindings/phy/meson-g12a-usb2-phy.yaml     | 67 +++++++++++++++++
+ .../bindings/phy/meson-g12a-usb3-pcie-phy.txt | 22 ------
+ .../phy/meson-g12a-usb3-pcie-phy.yaml         | 61 +++++++++++++++
+ .../bindings/reset/amlogic,meson-reset.txt    | 19 -----
+ .../bindings/reset/amlogic,meson-reset.yaml   | 40 ++++++++++
+ .../bindings/rng/amlogic,meson-rng.txt        | 21 ------
+ .../bindings/rng/amlogic,meson-rng.yaml       | 37 +++++++++
+ .../bindings/serial/amlogic,meson-uart.txt    | 38 ----------
+ .../bindings/serial/amlogic,meson-uart.yaml   | 75 +++++++++++++++++++
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 74 ++++++++++++++++++
+ .../bindings/spi/amlogic,meson6-spifc.yaml    | 57 ++++++++++++++
+ .../devicetree/bindings/spi/spi-meson.txt     | 55 --------------
+ .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 ----
+ .../bindings/watchdog/meson-gxbb-wdt.yaml     | 37 +++++++++
+ 19 files changed, 543 insertions(+), 255 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.txt
+ create mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-meson.txt
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.yaml
 
-Thanks
+-- 
+2.22.0
 
-
-> ---
->  drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
->  drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
->  drivers/tty/serial/sh-sci.c            | 2 +-
->  3 files changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-> index 2b400189be91..54c43e02e375 100644
-> --- a/drivers/tty/serial/serial_mctrl_gpio.c
-> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
-> @@ -61,6 +61,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
->  struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
->                                       enum mctrl_gpio_idx gidx)
->  {
-> +       if (gpios == NULL)
-> +               return NULL;
-> +
->         return gpios->gpio[gidx];
->  }
->  EXPORT_SYMBOL_GPL(mctrl_gpio_to_gpiod);
-> diff --git a/drivers/tty/serial/serial_mctrl_gpio.h b/drivers/tty/serial/serial_mctrl_gpio.h
-> index b7d3cca48ede..1b2ff503b2c2 100644
-> --- a/drivers/tty/serial/serial_mctrl_gpio.h
-> +++ b/drivers/tty/serial/serial_mctrl_gpio.h
-> @@ -114,19 +114,19 @@ static inline
->  struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
->                                       enum mctrl_gpio_idx gidx)
->  {
-> -       return ERR_PTR(-ENOSYS);
-> +       return NULL;
->  }
->
->  static inline
->  struct mctrl_gpios *mctrl_gpio_init(struct uart_port *port, unsigned int idx)
->  {
-> -       return ERR_PTR(-ENOSYS);
-> +       return NULL;
->  }
->
->  static inline
->  struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
->  {
-> -       return ERR_PTR(-ENOSYS);
-> +       return NULL;
->  }
->
->  static inline
-> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> index d18c680aa64b..249325b65ee0 100644
-> --- a/drivers/tty/serial/sh-sci.c
-> +++ b/drivers/tty/serial/sh-sci.c
-> @@ -3287,7 +3287,7 @@ static int sci_probe_single(struct platform_device *dev,
->                 return ret;
->
->         sciport->gpios = mctrl_gpio_init(&sciport->port, 0);
-> -       if (IS_ERR(sciport->gpios) && PTR_ERR(sciport->gpios) != -ENOSYS)
-> +       if (IS_ERR(sciport->gpios))
->                 return PTR_ERR(sciport->gpios);
->
->         if (sciport->has_rtscts) {
-> --
-> 2.17.1
