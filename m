@@ -2,76 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD097F6C6
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 14:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735587FAC7
+	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 15:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729422AbfHBM00 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Aug 2019 08:26:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36320 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388599AbfHBM00 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Aug 2019 08:26:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BC0FE216C8;
-        Fri,  2 Aug 2019 12:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564748785;
-        bh=kIIZtblZbuCqo9WjiJ5UtNU7pGxfSPAyt6llS1XpeDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1i6+doQ/3AOnD2X9uXKlqS4o84ghqoa7PcKwYwDLDHYODITX9nuK5skmW84+YeBUY
-         X+OnOcBA3HtRVTfvUMIQmdCA0VxUiCbWGwhxlewdEGFsp6g9WXI7KcjdG4uVWn7Tzr
-         E2mU+rqr8v4Xrfrch4f+GW7oJJlFWcqm7yNG3x6U=
-Date:   Fri, 2 Aug 2019 14:26:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Schrempf Frieder <frieder.schrempf@kontron.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 4/4] serial: 8250: Don't check for mctrl_gpio_init()
- returning -ENOSYS
-Message-ID: <20190802122623.GA25281@kroah.com>
-References: <20190802100349.8659-1-frieder.schrempf@kontron.de>
- <20190802100349.8659-4-frieder.schrempf@kontron.de>
- <20190802121555.dl6rpjphgaxdvcke@pengutronix.de>
+        id S2393614AbfHBNVs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 2 Aug 2019 09:21:48 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:42092 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2393419AbfHBNUk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 2 Aug 2019 09:20:40 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 97FAC797D353143E0C00;
+        Fri,  2 Aug 2019 21:20:36 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 2 Aug 2019
+ 21:20:28 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <agross@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jslaby@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] tty: serial: qcom_geni_serial: use devm_platform_ioremap_resource() to simplify code
+Date:   Fri, 2 Aug 2019 21:08:17 +0800
+Message-ID: <20190802130817.16220-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190802121555.dl6rpjphgaxdvcke@pengutronix.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 02, 2019 at 02:15:55PM +0200, Uwe Kleine-König wrote:
-> On Fri, Aug 02, 2019 at 10:04:11AM +0000, Schrempf Frieder wrote:
-> > From: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > 
-> > Now that the mctrl_gpio code returns NULL instead of ERR_PTR(-ENOSYS)
-> > if CONFIG_GPIOLIB is disabled, we can safely remove this check.
-> > 
-> > Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> 
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> @greg: This patch doesn't depend on patch 2; ditto for patch 3. So only
-> taking patches 1, 3 and 4 should be fine. This way Frieder's v4 only
-> have to care for patch 2. (Assuming noone objects to 1, 3 and 4 of
-> course.)
+Use devm_platform_ioremap_resource() to simplify the code a bit.
+This is detected by coccinelle.
 
-Sounds good, I'll do that, thanks.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-greg k-h
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index f879710..af695b6 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -198,10 +198,8 @@ static int qcom_geni_serial_request_port(struct uart_port *uport)
+ {
+ 	struct platform_device *pdev = to_platform_device(uport->dev);
+ 	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
+-	struct resource *res;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	uport->membase = devm_ioremap_resource(&pdev->dev, res);
++	uport->membase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(uport->membase))
+ 		return PTR_ERR(uport->membase);
+ 	port->se.base = uport->membase;
+-- 
+2.7.4
+
+
