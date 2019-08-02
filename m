@@ -2,98 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4DF7EF23
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 10:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E677F461
+	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 12:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728885AbfHBIYu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Aug 2019 04:24:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54833 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726164AbfHBIYt (ORCPT
+        id S2407265AbfHBKEv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 2 Aug 2019 06:04:51 -0400
+Received: from skedge03.snt-world.com ([91.208.41.68]:58060 "EHLO
+        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390117AbfHBKEN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Aug 2019 04:24:49 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1htSrk-0001JP-AM; Fri, 02 Aug 2019 10:24:44 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1htSrh-0000NT-R6; Fri, 02 Aug 2019 10:24:41 +0200
-Date:   Fri, 2 Aug 2019 10:24:41 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Schrempf Frieder <frieder.schrempf@kontron.de>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        Fri, 2 Aug 2019 06:04:13 -0400
+Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by skedge03.snt-world.com (Postfix) with ESMTPS id 7EEE7603D28;
+        Fri,  2 Aug 2019 12:04:10 +0200 (CEST)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
+ (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 2 Aug 2019
+ 12:04:10 +0200
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1713.004; Fri, 2 Aug 2019 12:04:10 +0200
+From:   Schrempf Frieder <frieder.schrempf@kontron.de>
+To:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
         "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/3] serial: mctrl_gpio: Avoid probe failures in case
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 1/4] serial: mctrl_gpio: Avoid probe failures in case of
+ missing gpiolib
+Thread-Topic: [PATCH v3 1/4] serial: mctrl_gpio: Avoid probe failures in case
  of missing gpiolib
-Message-ID: <20190802082441.udsrc5ev4nwj7abz@pengutronix.de>
-References: <20190801184505.17239-1-frieder.schrempf@kontron.de>
- <20190801203316.7ntlv6hequmddfxu@pengutronix.de>
- <011ac0ac-571e-b898-2b2d-89b9a771b0c1@kontron.de>
+Thread-Index: AQHVSRmgIMto6YABN0CHGANRcY/fqA==
+Date:   Fri, 2 Aug 2019 10:04:09 +0000
+Message-ID: <20190802100349.8659-1-frieder.schrempf@kontron.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <011ac0ac-571e-b898-2b2d-89b9a771b0c1@kontron.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: 7EEE7603D28.AEAF5
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: frieder.schrempf@kontron.de
+X-SnT-MailScanner-To: festevam@gmail.com, geert+renesas@glider.be,
+        gregkh@linuxfoundation.org, jslaby@suse.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        u.kleine-koenig@pengutronix.de
+X-Spam-Status: No
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-On Fri, Aug 02, 2019 at 07:56:54AM +0000, Schrempf Frieder wrote:
-> On 01.08.19 22:33, Uwe Kleine-König wrote:
-> > On Thu, Aug 01, 2019 at 06:45:21PM +0000, Schrempf Frieder wrote:
-> >> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-> >> index 2b400189be91..54c43e02e375 100644
-> >> --- a/drivers/tty/serial/serial_mctrl_gpio.c
-> >> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
-> >> @@ -61,6 +61,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
-> >>   struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
-> >>   				      enum mctrl_gpio_idx gidx)
-> >>   {
-> >> +	if (gpios == NULL)
-> >> +		return NULL;
-> >> +
-> > 
-> > I wonder why you need this. If GPIOLIB is off this code isn't active and
-> > with GPIOLIB calling mctrl_gpio_to_gpiod with a gpios == NULL is a bug
-> > that IMHO should not be silently ignored.
-> > 
-> > Am I missing something (again)?
-> 
-> No, you're right. My thoughts were, that if the mctrl_gpio functions are 
-> allowed to be passed a NULL pointer in general, they all should have a 
-> NULL check, even if in the current context (GPIOLIB disabled) this code 
-> is not active. Apparently there are other cases when a NULL pointer is 
-> passed, see [1]. So you can't really consider gpios == NULL to be a bug 
-> as this seems to be allowed in general.
+If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
+mctrl_gpio_init_noauto() will currently return an error pointer with
+-ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
+check for this condition to allow continue probing.
 
-OK, then this is another separate commit, right? Preferably with a
-comment pointing to drivers that use mctrl_gpio before being
-initialized.
+To avoid the need for this check in each driver, we return NULL
+instead, as all the mctrl_gpio_*() functions are skipped anyway.
+We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
 
-Best regards
-Uwe
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+---
+Changes in v3
+=============
+* Move the changes in mctrl_gpio_to_gpiod() to a separate patch
+* Reorder tags
 
+Changes in v2
+=============
+* Move the sh_sci changes to a separate patch
+* Add Fabio's R-b tag
+---
+ drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.h b/drivers/tty/serial/serial_mctrl_gpio.h
+index b7d3cca48ede..1b2ff503b2c2 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.h
++++ b/drivers/tty/serial/serial_mctrl_gpio.h
+@@ -114,19 +114,19 @@ static inline
+ struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+ 				      enum mctrl_gpio_idx gidx)
+ {
+-	return ERR_PTR(-ENOSYS);
++	return NULL;
+ }
+ 
+ static inline
+ struct mctrl_gpios *mctrl_gpio_init(struct uart_port *port, unsigned int idx)
+ {
+-	return ERR_PTR(-ENOSYS);
++	return NULL;
+ }
+ 
+ static inline
+ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+ {
+-	return ERR_PTR(-ENOSYS);
++	return NULL;
+ }
+ 
+ static inline
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+2.17.1
