@@ -2,67 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F6C7FD9F
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 17:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8EE7FE07
+	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 18:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733253AbfHBPeZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Aug 2019 11:34:25 -0400
-Received: from mga05.intel.com ([192.55.52.43]:63230 "EHLO mga05.intel.com"
+        id S2388743AbfHBQCq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 2 Aug 2019 12:02:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727198AbfHBPeZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Aug 2019 11:34:25 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Aug 2019 08:34:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,338,1559545200"; 
-   d="scan'208";a="257009881"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2019 08:34:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E425716A; Fri,  2 Aug 2019 18:34:22 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 3/3] serial: 8250_exar: Replace msleep(1) with usleep_range()
-Date:   Fri,  2 Aug 2019 18:34:22 +0300
-Message-Id: <20190802153422.11131-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190802153422.11131-1-andriy.shevchenko@linux.intel.com>
-References: <20190802153422.11131-1-andriy.shevchenko@linux.intel.com>
+        id S2388512AbfHBQCq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 2 Aug 2019 12:02:46 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CBAA216C8;
+        Fri,  2 Aug 2019 16:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564761765;
+        bh=Mfej1gsF5s5LDrrvRClXBvNNFTeMEaTN4dRVcQmNCyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AS7/8i9RSdN8bU4WAPWxwk1bzPeAX3fwadmTZ1GBF3d6XKiiEWtPep5S4095XmhUR
+         JLSqY+mLW1C4fq/z16vInoVfEMgd3UUqT0OR60C706QrlJm1su9felp/0E+WG2jKR/
+         lXm639h72rLL+0pysOTCQxy7V79+l2Hx0mlkLnxs=
+Date:   Fri, 2 Aug 2019 18:02:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-serial@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Donald Buczek <buczek@molgen.mpg.de>
+Subject: Re: Device to write to all (serial) consoles
+Message-ID: <20190802160243.GA15484@kroah.com>
+References: <32c2d26f-ec4a-b9a6-b42c-07b27f99ea28@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32c2d26f-ec4a-b9a6-b42c-07b27f99ea28@molgen.mpg.de>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-As explained in Documentation/timers/timers-howto.rst
-the small amount of milliseconds sometimes produces
-much longer delays.
+On Fri, Aug 02, 2019 at 03:23:08PM +0200, Paul Menzel wrote:
+> Dear Linux folks,
+> 
+> 
+> On a lot of devices, like servers, you have more than one serial console,
+> and you do not always know, how they are numbered. Therefore, we start a
+> console on ttyS0 and ttyS1.
+> 
+> In user space, we also would like to write to both consoles to not worry
+> about the numbering. Writing to `/dev/console` only write to the active
+> console.
 
-Replace msleep(1) with usleep_range(1000, 1100).
+So the same data to multiple console devices with just one userspace
+call?  Why?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_exar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>     $ more /proc/consoles # I think
+>     tty0                 -WU (EC p  )    4:1
+>     ttyS0                -W- (E  p a)    4:65
+>     ttyS1                -W- (E  p a)    4:65
+> 
+> Does a device exist, or can a device be configured so you can write to
+> all (serial) consoles from user space?
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index f81d5c4fa232..1a3b27d1bd61 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -177,7 +177,7 @@ static void exar_shutdown(struct uart_port *port)
- 		lsr = serial_in(up, UART_LSR);
- 		if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
- 			break;
--		msleep(1);
-+		usleep_range(1000, 1100);
- 	} while (!uart_circ_empty(xmit) && --i);
- 
- 	serial8250_do_shutdown(port);
--- 
-2.20.1
+With one syscall, not that I know of, sorry.
 
+greg k-h
