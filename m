@@ -2,23 +2,23 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E677F461
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 12:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AA17F454
+	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 12:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407265AbfHBKEv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Fri, 2 Aug 2019 06:04:51 -0400
-Received: from skedge03.snt-world.com ([91.208.41.68]:58060 "EHLO
+        id S2405023AbfHBKEZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 2 Aug 2019 06:04:25 -0400
+Received: from skedge03.snt-world.com ([91.208.41.68]:58098 "EHLO
         skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390117AbfHBKEN (ORCPT
+        with ESMTP id S2390359AbfHBKEN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Fri, 2 Aug 2019 06:04:13 -0400
-Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
+Received: from sntmail14r.snt-is.com (unknown [10.203.32.184])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by skedge03.snt-world.com (Postfix) with ESMTPS id 7EEE7603D28;
+        by skedge03.snt-world.com (Postfix) with ESMTPS id D95F5603D2C;
         Fri,  2 Aug 2019 12:04:10 +0200 (CEST)
-Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
- (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail14r.snt-is.com
+ (10.203.32.184) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 2 Aug 2019
  12:04:10 +0200
 Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
@@ -39,13 +39,15 @@ CC:     "linux-arm-kernel@lists.infradead.org"
         Jiri Slaby <jslaby@suse.com>,
         "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 1/4] serial: mctrl_gpio: Avoid probe failures in case of
- missing gpiolib
-Thread-Topic: [PATCH v3 1/4] serial: mctrl_gpio: Avoid probe failures in case
- of missing gpiolib
-Thread-Index: AQHVSRmgIMto6YABN0CHGANRcY/fqA==
-Date:   Fri, 2 Aug 2019 10:04:09 +0000
-Message-ID: <20190802100349.8659-1-frieder.schrempf@kontron.de>
+Subject: [PATCH v3 2/4] serial: mctrl_gpio: Add a NULL check to
+ mctrl_gpio_to_gpiod()
+Thread-Topic: [PATCH v3 2/4] serial: mctrl_gpio: Add a NULL check to
+ mctrl_gpio_to_gpiod()
+Thread-Index: AQHVSRmhj6XM1Buz9UqFmvYk2hHNCA==
+Date:   Fri, 2 Aug 2019 10:04:10 +0000
+Message-ID: <20190802100349.8659-2-frieder.schrempf@kontron.de>
+References: <20190802100349.8659-1-frieder.schrempf@kontron.de>
+In-Reply-To: <20190802100349.8659-1-frieder.schrempf@kontron.de>
 Accept-Language: de-DE, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -57,7 +59,7 @@ Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 X-SnT-MailScanner-Information: Please contact the ISP for more information
-X-SnT-MailScanner-ID: 7EEE7603D28.AEAF5
+X-SnT-MailScanner-ID: D95F5603D2C.AF9B6
 X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
 X-SnT-MailScanner-SpamCheck: 
 X-SnT-MailScanner-From: frieder.schrempf@kontron.de
@@ -75,57 +77,34 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
-mctrl_gpio_init_noauto() will currently return an error pointer with
--ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
-check for this condition to allow continue probing.
+As it is allowed to use the mctrl_gpio_* functions before
+initialization (as the 8250 driver does according to 434be0ae7aa7),
+it seems appropriate to have a NULL check in all of the functions.
+Otherwise the mctrl_gpio_to_gpiod() function is prone to be used
+in a context that can lead to a NULL pointer dereference.
 
-To avoid the need for this check in each driver, we return NULL
-instead, as all the mctrl_gpio_*() functions are skipped anyway.
-We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
-
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
 Changes in v3
 =============
 * Move the changes in mctrl_gpio_to_gpiod() to a separate patch
-* Reorder tags
-
-Changes in v2
-=============
-* Move the sh_sci changes to a separate patch
-* Add Fabio's R-b tag
 ---
- drivers/tty/serial/serial_mctrl_gpio.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/serial_mctrl_gpio.h b/drivers/tty/serial/serial_mctrl_gpio.h
-index b7d3cca48ede..1b2ff503b2c2 100644
---- a/drivers/tty/serial/serial_mctrl_gpio.h
-+++ b/drivers/tty/serial/serial_mctrl_gpio.h
-@@ -114,19 +114,19 @@ static inline
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 2b400189be91..54c43e02e375 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -61,6 +61,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
  struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
  				      enum mctrl_gpio_idx gidx)
  {
--	return ERR_PTR(-ENOSYS);
-+	return NULL;
++	if (gpios == NULL)
++		return NULL;
++
+ 	return gpios->gpio[gidx];
  }
- 
- static inline
- struct mctrl_gpios *mctrl_gpio_init(struct uart_port *port, unsigned int idx)
- {
--	return ERR_PTR(-ENOSYS);
-+	return NULL;
- }
- 
- static inline
- struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
- {
--	return ERR_PTR(-ENOSYS);
-+	return NULL;
- }
- 
- static inline
+ EXPORT_SYMBOL_GPL(mctrl_gpio_to_gpiod);
 -- 
 2.17.1
