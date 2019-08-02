@@ -2,318 +2,121 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 440227ED2B
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 09:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A4A7EE22
+	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 09:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389353AbfHBHKe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Aug 2019 03:10:34 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45185 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389213AbfHBHKe (ORCPT
+        id S2388771AbfHBH45 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 2 Aug 2019 03:56:57 -0400
+Received: from skedge03.snt-world.com ([91.208.41.68]:52600 "EHLO
+        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733079AbfHBH45 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Aug 2019 03:10:34 -0400
-Received: by mail-ot1-f66.google.com with SMTP id x21so11626417otq.12
-        for <linux-serial@vger.kernel.org>; Fri, 02 Aug 2019 00:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aNOLjBPNnUmcQmvMToyFYssE9sARnDQ/c4luMj7emy0=;
-        b=ZByTvhWD45O5rbMJPm0e9wEVpnT9SZtPM8zMbVnlxfFzaGij7Mj9bLuhtDht6DumSV
-         X5+C/GbAojg2ZBuUa5sh+8yA7FU1/KNRmsztInjo9N3dLnWybMcoWDKeEPiB/ebLeZpq
-         91Vk7RjNwrJr3eX6fiW47RfyqivZcb8JLML4cHZmY3c+1BeBv+eXMAQCcWw/gg9bjuBU
-         vrss9yRxsUc1EFDB7ltk7uXcIFO5XrA7a28dWbscRQ7BYTq4viqVO6KIP4MaiEk1LZv+
-         c2Zjlzg2tQB2PTRRKAU228AWlqLZlrisj3ViQ0NKdyQApwjMNgsi0fcbZSR27jzLqADe
-         W3lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aNOLjBPNnUmcQmvMToyFYssE9sARnDQ/c4luMj7emy0=;
-        b=fN9PZPGU/HGCMxISrpvDoKsVWmc+AdPPZJOIkeRAkcqfBebvQv3YcXsAX5FsMdjUqV
-         DtFbgx3JbETDGMy3VdwOpWc6+Djp6/Z8aN1Mqc1Ww88XIgW8Nj50ZEeQpR3XP1DEU1fw
-         /maXhL3e64gGbdzCKdwJdtNPYWsQ2bPaJWgwJktmDDTxPAMPaLUdWS9/iumEcEGhEs4A
-         ALVHDjqPnkThyLkS/nex3DcQr2r5nCHbWMo6gKWIBUiQBqlRq3YkNXp9niBpm6HFpiE0
-         vnvpITghvqq0irO06eUbjsj4ycY1BpNSM28PzCZJVYmXNMQevzyspWEz4rKisbSxQSFZ
-         K4Lg==
-X-Gm-Message-State: APjAAAWdX4cDR+bbH6Q7c0BVZCThiGfcvy7yDtuKF1sjQbAV5+CaeMc9
-        Syr7OzXt6qZDjw63j3e/uZtwApBVysFoGf+/uGUdIg==
-X-Google-Smtp-Source: APXvYqy4/Lk5jHB+v/1ocPg4upl5VRCkigymsxVJ4zA98u/jV3IYeAA2bS1N1TLTswamOCy90HSvHyGFfqUcSTl0o9w=
-X-Received: by 2002:a9d:7352:: with SMTP id l18mr37662907otk.292.1564729833627;
- Fri, 02 Aug 2019 00:10:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-6-arnd@arndb.de>
-In-Reply-To: <20190731195713.3150463-6-arnd@arndb.de>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Fri, 2 Aug 2019 09:10:22 +0200
-Message-ID: <CAMpxmJWFfT_vrDas2fzW5tnxskk9kmgHQpGnGQ-_C20UaS_jhA@mail.gmail.com>
-Subject: Re: [PATCH 05/14] gpio: lpc32xx: allow building on non-lpc32xx targets
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     soc@kernel.org, arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 2 Aug 2019 03:56:57 -0400
+Received: from sntmail12r.snt-is.com (unknown [10.203.32.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by skedge03.snt-world.com (Postfix) with ESMTPS id 903086274D3;
+        Fri,  2 Aug 2019 09:56:54 +0200 (CEST)
+Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail12r.snt-is.com
+ (10.203.32.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 2 Aug 2019
+ 09:56:54 +0200
+Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
+ sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
+ 15.01.1713.004; Fri, 2 Aug 2019 09:56:54 +0200
+From:   Schrempf Frieder <frieder.schrempf@kontron.de>
+To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] serial: mctrl_gpio: Avoid probe failures in case
+ of missing gpiolib
+Thread-Topic: [PATCH v2 1/3] serial: mctrl_gpio: Avoid probe failures in case
+ of missing gpiolib
+Thread-Index: AQHVSJlF+cJCIhOOZEmFG6rcowK4DKbmnfgAgAC/AIA=
+Date:   Fri, 2 Aug 2019 07:56:54 +0000
+Message-ID: <011ac0ac-571e-b898-2b2d-89b9a771b0c1@kontron.de>
+References: <20190801184505.17239-1-frieder.schrempf@kontron.de>
+ <20190801203316.7ntlv6hequmddfxu@pengutronix.de>
+In-Reply-To: <20190801203316.7ntlv6hequmddfxu@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.25.9.193]
+x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A210968F3B3FF3419F4E28B9062075B3@snt-world.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SnT-MailScanner-Information: Please contact the ISP for more information
+X-SnT-MailScanner-ID: 903086274D3.ACEE6
+X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-SnT-MailScanner-SpamCheck: 
+X-SnT-MailScanner-From: frieder.schrempf@kontron.de
+X-SnT-MailScanner-To: festevam@gmail.com, geert+renesas@glider.be,
+        gregkh@linuxfoundation.org, jslaby@suse.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        s.hauer@pengutronix.de, shawnguo@kernel.org,
+        u.kleine-koenig@pengutronix.de
+X-Spam-Status: No
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-=C5=9Br., 31 lip 2019 o 22:06 Arnd Bergmann <arnd@arndb.de> napisa=C5=82(a)=
-:
->
-> The driver uses hardwire MMIO addresses instead of the data
-> that is passed in device tree. Change it over to only
-> hardcode the register offset values and allow compile-testing.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Hi Arnd,
-
-thanks for working on this.
-
-> ---
->  drivers/gpio/Kconfig        |  8 +++++
->  drivers/gpio/Makefile       |  2 +-
->  drivers/gpio/gpio-lpc32xx.c | 63 ++++++++++++++++++++++++-------------
->  3 files changed, 50 insertions(+), 23 deletions(-)
->
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index bb13c266c329..ae86ee963eae 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -311,6 +311,14 @@ config GPIO_LPC18XX
->           Select this option to enable GPIO driver for
->           NXP LPC18XX/43XX devices.
->
-> +config GPIO_LPC32XX
-> +       tristate "NXP LPC32XX GPIO support"
-> +       default ARCH_LPC32XX
-> +       depends on OF_GPIO && (ARCH_LPC32XX || COMPILE_TEST)
-> +       help
-> +         Select this option to enable GPIO driver for
-> +         NXP LPC32XX devices.
-> +
->  config GPIO_LYNXPOINT
->         tristate "Intel Lynxpoint GPIO support"
->         depends on ACPI && X86
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index a4e91175c708..87d659ae95eb 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -74,7 +74,7 @@ obj-$(CONFIG_GPIO_LP3943)             +=3D gpio-lp3943.=
-o
->  obj-$(CONFIG_GPIO_LP873X)              +=3D gpio-lp873x.o
->  obj-$(CONFIG_GPIO_LP87565)             +=3D gpio-lp87565.o
->  obj-$(CONFIG_GPIO_LPC18XX)             +=3D gpio-lpc18xx.o
-> -obj-$(CONFIG_ARCH_LPC32XX)             +=3D gpio-lpc32xx.o
-> +obj-$(CONFIG_GPIO_LPC32XX)             +=3D gpio-lpc32xx.o
->  obj-$(CONFIG_GPIO_LYNXPOINT)           +=3D gpio-lynxpoint.o
->  obj-$(CONFIG_GPIO_MADERA)              +=3D gpio-madera.o
->  obj-$(CONFIG_GPIO_MAX3191X)            +=3D gpio-max3191x.o
-> diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
-> index 24885b3db3d5..548f7cb69386 100644
-> --- a/drivers/gpio/gpio-lpc32xx.c
-> +++ b/drivers/gpio/gpio-lpc32xx.c
-> @@ -16,8 +16,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/module.h>
->
-> -#include <mach/hardware.h>
-> -#include <mach/platform.h>
-> +#define _GPREG(x)                              (x)
-
-What purpose does this macro serve?
-
->
->  #define LPC32XX_GPIO_P3_INP_STATE              _GPREG(0x000)
->  #define LPC32XX_GPIO_P3_OUTP_SET               _GPREG(0x004)
-> @@ -72,12 +71,12 @@
->  #define LPC32XX_GPO_P3_GRP     (LPC32XX_GPI_P3_GRP + LPC32XX_GPI_P3_MAX)
->
->  struct gpio_regs {
-> -       void __iomem *inp_state;
-> -       void __iomem *outp_state;
-> -       void __iomem *outp_set;
-> -       void __iomem *outp_clr;
-> -       void __iomem *dir_set;
-> -       void __iomem *dir_clr;
-> +       unsigned long inp_state;
-> +       unsigned long outp_state;
-> +       unsigned long outp_set;
-> +       unsigned long outp_clr;
-> +       unsigned long dir_set;
-> +       unsigned long dir_clr;
->  };
->
->  /*
-> @@ -167,14 +166,26 @@ struct lpc32xx_gpio_chip {
->         struct gpio_regs        *gpio_grp;
->  };
->
-> +void __iomem *gpio_reg_base;
-
-Any reason why this can't be made part of struct lpc32xx_gpio_chip?
-
-> +
-> +static inline u32 gpreg_read(unsigned long offset)
-
-Here and elsewhere: could you please keep the lpc32xx_gpio prefix for
-all symbols?
-
-> +{
-> +       return __raw_readl(gpio_reg_base + offset);
-> +}
-> +
-> +static inline void gpreg_write(u32 val, unsigned long offset)
-> +{
-> +       __raw_writel(val, gpio_reg_base + offset);
-> +}
-> +
->  static void __set_gpio_dir_p012(struct lpc32xx_gpio_chip *group,
->         unsigned pin, int input)
->  {
->         if (input)
-> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
-> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
->                         group->gpio_grp->dir_clr);
->         else
-> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
-> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
->                         group->gpio_grp->dir_set);
->  }
->
-> @@ -184,19 +195,19 @@ static void __set_gpio_dir_p3(struct lpc32xx_gpio_c=
-hip *group,
->         u32 u =3D GPIO3_PIN_TO_BIT(pin);
->
->         if (input)
-> -               __raw_writel(u, group->gpio_grp->dir_clr);
-> +               gpreg_write(u, group->gpio_grp->dir_clr);
->         else
-> -               __raw_writel(u, group->gpio_grp->dir_set);
-> +               gpreg_write(u, group->gpio_grp->dir_set);
->  }
->
->  static void __set_gpio_level_p012(struct lpc32xx_gpio_chip *group,
->         unsigned pin, int high)
->  {
->         if (high)
-> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
-> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
->                         group->gpio_grp->outp_set);
->         else
-> -               __raw_writel(GPIO012_PIN_TO_BIT(pin),
-> +               gpreg_write(GPIO012_PIN_TO_BIT(pin),
->                         group->gpio_grp->outp_clr);
->  }
->
-> @@ -206,31 +217,31 @@ static void __set_gpio_level_p3(struct lpc32xx_gpio=
-_chip *group,
->         u32 u =3D GPIO3_PIN_TO_BIT(pin);
->
->         if (high)
-> -               __raw_writel(u, group->gpio_grp->outp_set);
-> +               gpreg_write(u, group->gpio_grp->outp_set);
->         else
-> -               __raw_writel(u, group->gpio_grp->outp_clr);
-> +               gpreg_write(u, group->gpio_grp->outp_clr);
->  }
->
->  static void __set_gpo_level_p3(struct lpc32xx_gpio_chip *group,
->         unsigned pin, int high)
->  {
->         if (high)
-> -               __raw_writel(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_=
-set);
-> +               gpreg_write(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_s=
-et);
->         else
-> -               __raw_writel(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_=
-clr);
-> +               gpreg_write(GPO3_PIN_TO_BIT(pin), group->gpio_grp->outp_c=
-lr);
->  }
->
->  static int __get_gpio_state_p012(struct lpc32xx_gpio_chip *group,
->         unsigned pin)
->  {
-> -       return GPIO012_PIN_IN_SEL(__raw_readl(group->gpio_grp->inp_state)=
-,
-> +       return GPIO012_PIN_IN_SEL(gpreg_read(group->gpio_grp->inp_state),
->                 pin);
->  }
->
->  static int __get_gpio_state_p3(struct lpc32xx_gpio_chip *group,
->         unsigned pin)
->  {
-> -       int state =3D __raw_readl(group->gpio_grp->inp_state);
-> +       int state =3D gpreg_read(group->gpio_grp->inp_state);
->
->         /*
->          * P3 GPIO pin input mapping is not contiguous, GPIOP3-0..4 is ma=
-pped
-> @@ -242,13 +253,13 @@ static int __get_gpio_state_p3(struct lpc32xx_gpio_=
-chip *group,
->  static int __get_gpi_state_p3(struct lpc32xx_gpio_chip *group,
->         unsigned pin)
->  {
-> -       return GPI3_PIN_IN_SEL(__raw_readl(group->gpio_grp->inp_state), p=
-in);
-> +       return GPI3_PIN_IN_SEL(gpreg_read(group->gpio_grp->inp_state), pi=
-n);
->  }
->
->  static int __get_gpo_state_p3(struct lpc32xx_gpio_chip *group,
->         unsigned pin)
->  {
-> -       return GPO3_PIN_IN_SEL(__raw_readl(group->gpio_grp->outp_state), =
-pin);
-> +       return GPO3_PIN_IN_SEL(gpreg_read(group->gpio_grp->outp_state), p=
-in);
->  }
->
->  /*
-> @@ -498,6 +509,10 @@ static int lpc32xx_gpio_probe(struct platform_device=
- *pdev)
->  {
->         int i;
->
-> +       gpio_reg_base =3D devm_platform_ioremap_resource(pdev, 0);
-> +       if (gpio_reg_base)
-> +               return -ENXIO;
-> +
->         for (i =3D 0; i < ARRAY_SIZE(lpc32xx_gpiochip); i++) {
->                 if (pdev->dev.of_node) {
->                         lpc32xx_gpiochip[i].chip.of_xlate =3D lpc32xx_of_=
-xlate;
-> @@ -527,3 +542,7 @@ static struct platform_driver lpc32xx_gpio_driver =3D=
- {
->  };
->
->  module_platform_driver(lpc32xx_gpio_driver);
-> +
-> +MODULE_AUTHOR("Kevin Wells <kevin.wells@nxp.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("GPIO driver for LPC32xx SoC");
-> --
-> 2.20.0
->
-
-Bart
+T24gMDEuMDguMTkgMjI6MzMsIFV3ZSBLbGVpbmUtS8O2bmlnIHdyb3RlOg0KPiBPbiBUaHUsIEF1
+ZyAwMSwgMjAxOSBhdCAwNjo0NToyMVBNICswMDAwLCBTY2hyZW1wZiBGcmllZGVyIHdyb3RlOg0K
+Pj4gRnJvbTogRnJpZWRlciBTY2hyZW1wZiA8ZnJpZWRlci5zY2hyZW1wZkBrb250cm9uLmRlPg0K
+Pj4NCj4+IElmIENPTkZJR19HUElPTElCIGlzIG5vdCBlbmFibGVkLCBtY3RybF9ncGlvX2luaXQo
+KSBhbmQNCj4+IG1jdHJsX2dwaW9faW5pdF9ub2F1dG8oKSB3aWxsIGN1cnJlbnRseSByZXR1cm4g
+YW4gZXJyb3IgcG9pbnRlciB3aXRoDQo+PiAtRU5PU1lTLiBBcyB0aGUgbWN0cmwgR1BJT3MgYXJl
+IHVzdWFsbHkgb3B0aW9uYWwsIGRyaXZlcnMgbmVlZCB0bw0KPj4gY2hlY2sgZm9yIHRoaXMgY29u
+ZGl0aW9uIHRvIGFsbG93IGNvbnRpbnVlIHByb2JpbmcuDQo+Pg0KPj4gVG8gYXZvaWQgdGhlIG5l
+ZWQgZm9yIHRoaXMgY2hlY2sgaW4gZWFjaCBkcml2ZXIsIHdlIHJldHVybiBOVUxMDQo+PiBpbnN0
+ZWFkLCBhcyBhbGwgdGhlIG1jdHJsX2dwaW9fKigpIGZ1bmN0aW9ucyBhcmUgc2tpcHBlZCBhbnl3
+YXkuDQo+PiBXZSBhbHNvIGFkYXB0IG1jdHJsX2dwaW9fdG9fZ3Bpb2QoKSB0byBiZSBpbiBsaW5l
+IHdpdGggdGhpcyBjaGFuZ2UuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogRnJpZWRlciBTY2hyZW1w
+ZiA8ZnJpZWRlci5zY2hyZW1wZkBrb250cm9uLmRlPg0KPj4gUmV2aWV3ZWQtYnk6IEZhYmlvIEVz
+dGV2YW0gPGZlc3RldmFtQGdtYWlsLmNvbT4NCj4gDQo+IG5pdHBpY2s6IHB1dCB5b3VyIFMtby1i
+IGxhc3QuDQoNCk9rLg0KDQo+PiAtLS0NCj4+IENoYW5nZXMgaW4gdjINCj4+ID09PT09PT09PT09
+PT0NCj4+ICogTW92ZSB0aGUgc2hfc2NpIGNoYW5nZXMgdG8gYSBzZXBhcmF0ZSBwYXRjaA0KPj4g
+KiBBZGQgYSBwYXRjaCBmb3IgdGhlIDgyNTAgZHJpdmVyDQo+PiAqIEFkZCBGYWJpbydzIFItYiB0
+YWcNCj4+IC0tLQ0KPj4gICBkcml2ZXJzL3R0eS9zZXJpYWwvc2VyaWFsX21jdHJsX2dwaW8uYyB8
+IDMgKysrDQo+PiAgIGRyaXZlcnMvdHR5L3NlcmlhbC9zZXJpYWxfbWN0cmxfZ3Bpby5oIHwgNiAr
+KystLS0NCj4+ICAgMiBmaWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25z
+KC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdHR5L3NlcmlhbC9zZXJpYWxfbWN0cmxf
+Z3Bpby5jIGIvZHJpdmVycy90dHkvc2VyaWFsL3NlcmlhbF9tY3RybF9ncGlvLmMNCj4+IGluZGV4
+IDJiNDAwMTg5YmU5MS4uNTRjNDNlMDJlMzc1IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy90dHkv
+c2VyaWFsL3NlcmlhbF9tY3RybF9ncGlvLmMNCj4+ICsrKyBiL2RyaXZlcnMvdHR5L3NlcmlhbC9z
+ZXJpYWxfbWN0cmxfZ3Bpby5jDQo+PiBAQCAtNjEsNiArNjEsOSBAQCBFWFBPUlRfU1lNQk9MX0dQ
+TChtY3RybF9ncGlvX3NldCk7DQo+PiAgIHN0cnVjdCBncGlvX2Rlc2MgKm1jdHJsX2dwaW9fdG9f
+Z3Bpb2Qoc3RydWN0IG1jdHJsX2dwaW9zICpncGlvcywNCj4+ICAgCQkJCSAgICAgIGVudW0gbWN0
+cmxfZ3Bpb19pZHggZ2lkeCkNCj4+ICAgew0KPj4gKwlpZiAoZ3Bpb3MgPT0gTlVMTCkNCj4+ICsJ
+CXJldHVybiBOVUxMOw0KPj4gKw0KPiANCj4gSSB3b25kZXIgd2h5IHlvdSBuZWVkIHRoaXMuIElm
+IEdQSU9MSUIgaXMgb2ZmIHRoaXMgY29kZSBpc24ndCBhY3RpdmUgYW5kDQo+IHdpdGggR1BJT0xJ
+QiBjYWxsaW5nIG1jdHJsX2dwaW9fdG9fZ3Bpb2Qgd2l0aCBhIGdwaW9zID09IE5VTEwgaXMgYSBi
+dWcNCj4gdGhhdCBJTUhPIHNob3VsZCBub3QgYmUgc2lsZW50bHkgaWdub3JlZC4NCj4gDQo+IEFt
+IEkgbWlzc2luZyBzb21ldGhpbmcgKGFnYWluKT8NCg0KTm8sIHlvdSdyZSByaWdodC4gTXkgdGhv
+dWdodHMgd2VyZSwgdGhhdCBpZiB0aGUgbWN0cmxfZ3BpbyBmdW5jdGlvbnMgYXJlIA0KYWxsb3dl
+ZCB0byBiZSBwYXNzZWQgYSBOVUxMIHBvaW50ZXIgaW4gZ2VuZXJhbCwgdGhleSBhbGwgc2hvdWxk
+IGhhdmUgYSANCk5VTEwgY2hlY2ssIGV2ZW4gaWYgaW4gdGhlIGN1cnJlbnQgY29udGV4dCAoR1BJ
+T0xJQiBkaXNhYmxlZCkgdGhpcyBjb2RlIA0KaXMgbm90IGFjdGl2ZS4gQXBwYXJlbnRseSB0aGVy
+ZSBhcmUgb3RoZXIgY2FzZXMgd2hlbiBhIE5VTEwgcG9pbnRlciBpcyANCnBhc3NlZCwgc2VlIFsx
+XS4gU28geW91IGNhbid0IHJlYWxseSBjb25zaWRlciBncGlvcyA9PSBOVUxMIHRvIGJlIGEgYnVn
+IA0KYXMgdGhpcyBzZWVtcyB0byBiZSBhbGxvd2VkIGluIGdlbmVyYWwuDQoNClsxXSANCmh0dHBz
+Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4
+LmdpdC9jb21taXQ/aWQ9NDM0YmUwYWU3YWE3NDZmNDgxYzNhMjIxMzllNDcyZGJjM2Y0ZjgxNw0K
+DQo+IA0KPj4gICAJcmV0dXJuIGdwaW9zLT5ncGlvW2dpZHhdOw0KPj4gICB9DQo+IA0KPiBCZXN0
+IHJlZ2FyZHMNCj4gVXdlDQo+IA==
