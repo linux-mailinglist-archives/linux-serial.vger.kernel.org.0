@@ -2,78 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0965B8017B
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Aug 2019 21:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD45F802E0
+	for <lists+linux-serial@lfdr.de>; Sat,  3 Aug 2019 00:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406877AbfHBT7I (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Aug 2019 15:59:08 -0400
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:44747 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2406868AbfHBT7I (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Aug 2019 15:59:08 -0400
-Received: from [10.0.101.109] (unknown [62.214.191.65])
+        id S1730707AbfHBWia (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 2 Aug 2019 18:38:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45884 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729980AbfHBWia (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 2 Aug 2019 18:38:30 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 90CDF201A3C39;
-        Fri,  2 Aug 2019 21:59:06 +0200 (CEST)
-Subject: Re: Device to write to all (serial) consoles
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Donald Buczek <buczek@molgen.mpg.de>
-References: <32c2d26f-ec4a-b9a6-b42c-07b27f99ea28@molgen.mpg.de>
- <20190802160243.GA15484@kroah.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <cab1fe06-0dc7-e7c1-50ac-cc01773c5ef5@molgen.mpg.de>
-Date:   Fri, 2 Aug 2019 21:59:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        by mail.kernel.org (Postfix) with ESMTPSA id BB68521783;
+        Fri,  2 Aug 2019 22:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564785508;
+        bh=XfJixi4xuzcnFxHwrFJTVHUtmkreXUi87OxBiFEUMKo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aSn893t31UbGBbwVOIjEJFzyTo05qyeU8Z1mVQoWKRKN/V8SKHEt7p8lcu4bhQdoI
+         LGazNnJJ3nnOiQMaYlF+4ZZ7UFOSPAr/X86UuwCexuT9qWvzpaVVgUfRtpyhc82OrR
+         U8FhSJeICQX8MDSwmuXnFtbftTCZliA7haLbg9/w=
+Received: by mail-qk1-f178.google.com with SMTP id t187so3363444qke.8;
+        Fri, 02 Aug 2019 15:38:28 -0700 (PDT)
+X-Gm-Message-State: APjAAAWrXcuNdN7JIox/L4oU/gpgxEq3RXYRhrvJaS23x+LiFkxsFhm4
+        yIMIVuIKesfgmZgJZzGFWnJsz1xd0jbfd4YpRg==
+X-Google-Smtp-Source: APXvYqzvziBgm/niAlkvKF2WYa8Hbu7XGWy01L47nrb5nZ3ZHKliqGHMB7nfWXJln2n9jPWHICNYT9LuhALcS/C0eLI=
+X-Received: by 2002:a37:a48e:: with SMTP id n136mr94788423qke.223.1564785507833;
+ Fri, 02 Aug 2019 15:38:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190802160243.GA15484@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com> <20190802194702.30249-2-stefan-gabriel.mirea@nxp.com>
+In-Reply-To: <20190802194702.30249-2-stefan-gabriel.mirea@nxp.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 2 Aug 2019 16:38:16 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL++GZBxczxePni9ysNq06kObB4EzJEi1e4M=PurPZFgQ@mail.gmail.com>
+Message-ID: <CAL_JsqL++GZBxczxePni9ysNq06kObB4EzJEi1e4M=PurPZFgQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: arm: fsl: Add the S32V234-EVB board
+To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Eddy Petrisor <eddy.petrisor@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Greg,
+On Fri, Aug 2, 2019 at 1:47 PM Stefan-gabriel Mirea
+<stefan-gabriel.mirea@nxp.com> wrote:
+>
+> From: Eddy Petri=C8=99or <eddy.petrisor@nxp.com>
+>
+> Add entry for the NXP S32V234 Customer Evaluation Board to the board/SoC
+> bindings.
+>
+> Signed-off-by: Eddy Petri=C8=99or <eddy.petrisor@nxp.com>
+> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentati=
+on/devicetree/bindings/arm/fsl.yaml
+> index 7294ac36f4c0..104d60a11177 100644
+> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> @@ -309,4 +309,10 @@ properties:
+>                - fsl,ls2088a-rdb
+>            - const: fsl,ls2088a
+>
+> +      - description: S32V234 Customer Evaluation Board
 
+Most of the entries in this file are for all the boards for an SoC.
 
-On 02.08.19 18:02, Greg Kroah-Hartman wrote:
-> On Fri, Aug 02, 2019 at 03:23:08PM +0200, Paul Menzel wrote:
+> +        items:
+> +          - enum:
+> +              - fsl,s32v234-evb
 
->> On a lot of devices, like servers, you have more than one serial console,
->> and you do not always know, how they are numbered. Therefore, we start a
->> console on ttyS0 and ttyS1.
->>
->> In user space, we also would like to write to both consoles to not worry
->> about the numbering. Writing to `/dev/console` only write to the active
->> console.
-> 
-> So the same data to multiple console devices with just one userspace
-> call?  Why?
+If that's not going to be the case here, you can use 'const' here.
 
-Because the cable is always connected to the port on the back side, and 
-sometimes the port in the front has ID 0, and the one in the back 1, and 
-other times vice versa. We do not want to track that, and it would be 
-convenient to just write to both ports.
-
->>      $ more /proc/consoles # I think
->>      tty0                 -WU (EC p  )    4:1
->>      ttyS0                -W- (E  p a)    4:65
->>      ttyS1                -W- (E  p a)    4:65
->>
->> Does a device exist, or can a device be configured so you can write to
->> all (serial) consoles from user space?
-> 
-> With one syscall, not that I know of, sorry.
-
-Can such a device be created with udev or so?
-
-
-Kind regards,
-
-Paul
+> +          - const: fsl,s32v234
+> +
+>  ...
+> --
+> 2.22.0
+>
