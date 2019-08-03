@@ -2,101 +2,131 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD45F802E0
-	for <lists+linux-serial@lfdr.de>; Sat,  3 Aug 2019 00:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDF280396
+	for <lists+linux-serial@lfdr.de>; Sat,  3 Aug 2019 02:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730707AbfHBWia (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Aug 2019 18:38:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45884 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729980AbfHBWia (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Aug 2019 18:38:30 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        id S2387650AbfHCAwl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 2 Aug 2019 20:52:41 -0400
+Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:22500 "EHLO
+        bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387633AbfHCAwl (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 2 Aug 2019 20:52:41 -0400
+X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 4A4795E1A5E
+        for <linux-serial@vger.kernel.org>; Sat,  3 Aug 2019 00:52:39 +0000 (UTC)
+Received: from pdx1-sub0-mail-a28.g.dreamhost.com (100-96-84-65.trex.outbound.svc.cluster.local [100.96.84.65])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id A5C585E1209
+        for <linux-serial@vger.kernel.org>; Sat,  3 Aug 2019 00:52:38 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
+Received: from pdx1-sub0-mail-a28.g.dreamhost.com ([TEMPUNAVAIL].
+ [64.90.62.162])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:2500 (trex/5.17.5);
+        Sat, 03 Aug 2019 00:52:39 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|robert.middleton@rm5248.com
+X-MailChannels-Auth-Id: dreamhost
+X-Skirt-Bubble: 4f784cdd65a8a810_1564793559123_327339892
+X-MC-Loop-Signature: 1564793559122:2727512266
+X-MC-Ingress-Time: 1564793559122
+Received: from pdx1-sub0-mail-a28.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a28.g.dreamhost.com (Postfix) with ESMTP id 10D9883A16
+        for <linux-serial@vger.kernel.org>; Fri,  2 Aug 2019 17:52:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=rm5248.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=rm5248.com; bh=GkS9vutrTvPrDu94PEWu/XRKolI=; b=
+        Mq7g1yZPkiVpBFUm5WxUrKTM6t+eJREc8R0YJHhIwYNY2IE+4aP25wzUDUi2DdYD
+        RD0iDnYBBJd/QN+U5bksUTCwoBdU5dtMx7wKuHZp7zBh7obV6WzVM4rqG83NjkBk
+        gK33XJjmyH1AxxmQv6r6FrLXrpBZtVNFo5uq0n87y4g=
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB68521783;
-        Fri,  2 Aug 2019 22:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564785508;
-        bh=XfJixi4xuzcnFxHwrFJTVHUtmkreXUi87OxBiFEUMKo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aSn893t31UbGBbwVOIjEJFzyTo05qyeU8Z1mVQoWKRKN/V8SKHEt7p8lcu4bhQdoI
-         LGazNnJJ3nnOiQMaYlF+4ZZ7UFOSPAr/X86UuwCexuT9qWvzpaVVgUfRtpyhc82OrR
-         U8FhSJeICQX8MDSwmuXnFtbftTCZliA7haLbg9/w=
-Received: by mail-qk1-f178.google.com with SMTP id t187so3363444qke.8;
-        Fri, 02 Aug 2019 15:38:28 -0700 (PDT)
-X-Gm-Message-State: APjAAAWrXcuNdN7JIox/L4oU/gpgxEq3RXYRhrvJaS23x+LiFkxsFhm4
-        yIMIVuIKesfgmZgJZzGFWnJsz1xd0jbfd4YpRg==
-X-Google-Smtp-Source: APXvYqzvziBgm/niAlkvKF2WYa8Hbu7XGWy01L47nrb5nZ3ZHKliqGHMB7nfWXJln2n9jPWHICNYT9LuhALcS/C0eLI=
-X-Received: by 2002:a37:a48e:: with SMTP id n136mr94788423qke.223.1564785507833;
- Fri, 02 Aug 2019 15:38:27 -0700 (PDT)
+        (Authenticated sender: robert.middleton@rm5248.com)
+        by pdx1-sub0-mail-a28.g.dreamhost.com (Postfix) with ESMTPSA id D8BF283A11
+        for <linux-serial@vger.kernel.org>; Fri,  2 Aug 2019 17:52:36 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id j5so151862701ioj.8
+        for <linux-serial@vger.kernel.org>; Fri, 02 Aug 2019 17:52:36 -0700 (PDT)
+X-Gm-Message-State: APjAAAVRj/wKSU+GZrZ3GPCAWwOL/9NTcABFHh2zdBoVZGGpZVm+dYiM
+        G2lnze5qe0m8ztt/rOoja78WCpsuLIjNzlG2+f0=
+X-Google-Smtp-Source: APXvYqxBmQG4pw2wpyIQmjjZ8WhDUiYNQPU2ru5lgHPf27/r2Yur7dpK4iMKYIh7OQ1xM+MByMTf2Wo+r+yEqvAjuO4=
+X-Received: by 2002:a5d:8411:: with SMTP id i17mr99617884ion.83.1564793556104;
+ Fri, 02 Aug 2019 17:52:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com> <20190802194702.30249-2-stefan-gabriel.mirea@nxp.com>
-In-Reply-To: <20190802194702.30249-2-stefan-gabriel.mirea@nxp.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 2 Aug 2019 16:38:16 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL++GZBxczxePni9ysNq06kObB4EzJEi1e4M=PurPZFgQ@mail.gmail.com>
-Message-ID: <CAL_JsqL++GZBxczxePni9ysNq06kObB4EzJEi1e4M=PurPZFgQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: arm: fsl: Add the S32V234-EVB board
-To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        "jslaby@suse.com" <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Eddy Petrisor <eddy.petrisor@nxp.com>
+References: <20190802153422.11131-1-andriy.shevchenko@linux.intel.com> <20190802153422.11131-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20190802153422.11131-2-andriy.shevchenko@linux.intel.com>
+X-DH-BACKEND: pdx1-sub0-mail-a28
+From:   Robert Middleton <robert.middleton@rm5248.com>
+Date:   Fri, 2 Aug 2019 20:52:25 -0400
+X-Gmail-Original-Message-ID: <CAKpcJVb6W+_VbPdYVB6fNpy5h=u=Dv_-AwZLuFZ8=Ypj=620rw@mail.gmail.com>
+Message-ID: <CAKpcJVb6W+_VbPdYVB6fNpy5h=u=Dv_-AwZLuFZ8=Ypj=620rw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] serial: 8250_exar: Refactor exar_shutdown()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-VR-OUT-STATUS: OK
+X-VR-OUT-SCORE: -100
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddruddttddggedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuggftfghnshhusghstghrihgsvgdpffftgfetoffjqffuvfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepgghfjgfhfffkuffvtgesthdtredttddtjeenucfhrhhomheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqnecukfhppedvtdelrdekhedrudeiiedrgeefnecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopehmrghilhdqihhouddqfhegfedrghhoohhglhgvrdgtohhmpdhinhgvthepvddtledrkeehrdduieeirdegfedprhgvthhurhhnqdhprghthheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqpdhmrghilhhfrhhomheprhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomhdpnhhrtghpthhtoheplhhinhhugidqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 2, 2019 at 1:47 PM Stefan-gabriel Mirea
-<stefan-gabriel.mirea@nxp.com> wrote:
+Andy,
+
+Correct me if I'm wrong here, but will that still work correctly?
+That will break once the buffer on the exar chip is clear, but there
+could potentially be characters still in the kernel
+buffer(uart_circ_empty would not be true)
+
+-Robert Middleton
+
+On Fri, Aug 2, 2019 at 11:34 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> From: Eddy Petri=C8=99or <eddy.petrisor@nxp.com>
+> First of all, boolean variable should be assigned with boolean values.
+> Second, it's not needed at all in this case.
 >
-> Add entry for the NXP S32V234 Customer Evaluation Board to the board/SoC
-> bindings.
+> Drop unneeded boolean variable and use 'break' statement instead.
 >
-> Signed-off-by: Eddy Petri=C8=99or <eddy.petrisor@nxp.com>
-> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+> While here, change iterations to be more visible by moving the number of them
+> to the variable definition block.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/tty/serial/8250/8250_exar.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentati=
-on/devicetree/bindings/arm/fsl.yaml
-> index 7294ac36f4c0..104d60a11177 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -309,4 +309,10 @@ properties:
->                - fsl,ls2088a-rdb
->            - const: fsl,ls2088a
+> diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+> index 873aa6b0c2f3..f81d5c4fa232 100644
+> --- a/drivers/tty/serial/8250/8250_exar.c
+> +++ b/drivers/tty/serial/8250/8250_exar.c
+> @@ -169,19 +169,16 @@ static void xr17v35x_set_divisor(struct uart_port *p, unsigned int baud,
+>  static void exar_shutdown(struct uart_port *port)
+>  {
+>         unsigned char lsr;
+> -       bool tx_complete = 0;
+>         struct uart_8250_port *up = up_to_u8250p(port);
+>         struct circ_buf *xmit = &port->state->xmit;
+> -       int i = 0;
+> +       unsigned int i = 1000;
 >
-> +      - description: S32V234 Customer Evaluation Board
-
-Most of the entries in this file are for all the boards for an SoC.
-
-> +        items:
-> +          - enum:
-> +              - fsl,s32v234-evb
-
-If that's not going to be the case here, you can use 'const' here.
-
-> +          - const: fsl,s32v234
-> +
->  ...
+>         do {
+>                 lsr = serial_in(up, UART_LSR);
+>                 if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
+> -                       tx_complete = 1;
+> -               else
+> -                       tx_complete = 0;
+> +                       break;
+>                 msleep(1);
+> -       } while (!uart_circ_empty(xmit) && !tx_complete && i++ < 1000);
+> +       } while (!uart_circ_empty(xmit) && --i);
+>
+>         serial8250_do_shutdown(port);
+>  }
 > --
-> 2.22.0
+> 2.20.1
 >
