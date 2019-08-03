@@ -2,65 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAD480666
-	for <lists+linux-serial@lfdr.de>; Sat,  3 Aug 2019 15:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71982806F9
+	for <lists+linux-serial@lfdr.de>; Sat,  3 Aug 2019 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbfHCNzl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 3 Aug 2019 09:55:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726340AbfHCNzk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 3 Aug 2019 09:55:40 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A3EBA2166E;
-        Sat,  3 Aug 2019 13:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564840540;
-        bh=4UmoDoYVdrWFjZ2tni2H5YosvR67LNdT3rchHwiQHEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DSjAwHm8J2w5ILHJh27mU4VqH+sajLtPJ20zxB9s76nP2Ha6J94z3zv0xJS/WtJ5J
-         kukH2u6JKnBx0MhQQg+ExnlhH0JgM6jJ4GXbhbqPWgiZEMNQ0M/5LSBldpxxI3YqZa
-         EhReTiKjhnDzuG+ZTDUzuJMRzBads4uKtCNU4YGc=
-Date:   Sat, 3 Aug 2019 15:55:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Adam Borowski <kilobyte@angband.pl>
+        id S1727919AbfHCPQA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 3 Aug 2019 11:16:00 -0400
+Received: from tartarus.angband.pl ([54.37.238.230]:33818 "EHLO
+        tartarus.angband.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725844AbfHCPQA (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 3 Aug 2019 11:16:00 -0400
+Received: from kilobyte by tartarus.angband.pl with local (Exim 4.92)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1htvlE-0002YB-QL; Sat, 03 Aug 2019 17:15:56 +0200
+Date:   Sat, 3 Aug 2019 17:15:56 +0200
+From:   Adam Borowski <kilobyte@angband.pl>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Paul Menzel <pmenzel@molgen.mpg.de>, linux-serial@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Donald Buczek <buczek@molgen.mpg.de>
 Subject: Re: Device to write to all (serial) consoles
-Message-ID: <20190803135537.GA1743@kroah.com>
+Message-ID: <20190803151556.GA9187@angband.pl>
 References: <32c2d26f-ec4a-b9a6-b42c-07b27f99ea28@molgen.mpg.de>
  <20190802160243.GA15484@kroah.com>
  <cab1fe06-0dc7-e7c1-50ac-cc01773c5ef5@molgen.mpg.de>
  <20190803132323.GB6703@angband.pl>
+ <20190803135537.GA1743@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190803132323.GB6703@angband.pl>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190803135537.GA1743@kroah.com>
+X-Junkbait: aaron@angband.pl, zzyx@angband.pl
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: kilobyte@angband.pl
+X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Aug 03, 2019 at 03:23:23PM +0200, Adam Borowski wrote:
-> On Fri, Aug 02, 2019 at 09:59:06PM +0200, Paul Menzel wrote:
-> > On 02.08.19 18:02, Greg Kroah-Hartman wrote:
-> > > On Fri, Aug 02, 2019 at 03:23:08PM +0200, Paul Menzel wrote:
-> > > > On a lot of devices, like servers, you have more than one serial console,
-> > > > and you do not always know, how they are numbered. Therefore, we start a
-> > > > console on ttyS0 and ttyS1.
+On Sat, Aug 03, 2019 at 03:55:37PM +0200, Greg Kroah-Hartman wrote:
+> On Sat, Aug 03, 2019 at 03:23:23PM +0200, Adam Borowski wrote:
+> > On Fri, Aug 02, 2019 at 09:59:06PM +0200, Paul Menzel wrote:
+> > > Because the cable is always connected to the port on the back side, and
+> > > sometimes the port in the front has ID 0, and the one in the back 1, and
+> > > other times vice versa. We do not want to track that, and it would be
+> > > convenient to just write to both ports.
 > > 
-> > Because the cable is always connected to the port on the back side, and
-> > sometimes the port in the front has ID 0, and the one in the back 1, and
-> > other times vice versa. We do not want to track that, and it would be
-> > convenient to just write to both ports.
+> > Sounds like an XY problem then: what you want is not writing to all ports,
+> > but to have the port assignments stable (see also: disk device reordering).
 > 
-> Sounds like an XY problem then: what you want is not writing to all ports,
-> but to have the port assignments stable (see also: disk device reordering).
+> You can get that information from the symlinks in /dev/serial/ which
+> udev creates.
 
-You can get that information from the symlinks in /dev/serial/ which
-udev creates.
+Doesn't seem to work for me, for any ttyS0 ttyS1 ttySAC1 device:
 
+Box one, PCIe card + one USB dongle:
+07:00.0 Serial controller: MosChip Semiconductor Technology Ltd. MCS9922 PCIe Multi-I/O Controller
+07:00.1 Serial controller: MosChip Semiconductor Technology Ltd. MCS9922 PCIe Multi-I/O Controller
+Bus 003 Device 004: ID 1a86:7523 QinHeng Electronics HL-340 USB-Serial adapter
+
+/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0
+/dev/serial/by-path/pci-0000:0b:00.3-usb-0:4:1.0-port0
+
+Only ttyUSB0 is there.
+
+
+Box two, on-board + one USB dongle:
+[    3.404340] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    3.431287] 00:01: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+Bus 001 Device 002: ID 10c4:ea60 Cygnal Integrated Products, Inc. CP2102/CP2109 UART Bridge Controller [CP210x family]
+
+/dev/serial/by-id/usb-Silicon_Labs_CP2104_USB_to_UART_Bridge_Controller_00DB1604-if00-port0
+/dev/serial/by-path/pci-0000:00:14.0-usb-0:1:1.0-port0
+
+
+Box three: RockPro64, euler + USB dongle, kernel 4.4.
+Box four: Pine64, euler.
+Box five: Odroid-U2, something GPIOish (ttySAC1), kernel 5.0.
+
+
+Most are running kernel 5.2, Debian unstable.
+
+And indeed, in /lib/udev/rules.d/60-serial.rules :
+# /dev/serial/by-path/, /dev/serial/by-id/ for USB devices
+KERNEL!="ttyUSB[0-9]*|ttyACM[0-9]*", GOTO="serial_end"
+
+
+Like me, Paul is using ttyS0 for server-side.
+
+
+Meow!
+-- 
+⢀⣴⠾⠻⢶⣦⠀ 
+⣾⠁⢰⠒⠀⣿⡁ 10 people enter a bar: 1 who understands binary,
+⢿⡄⠘⠷⠚⠋⠀ 1 who doesn't, D who prefer to write it as hex,
+⠈⠳⣄⠀⠀⠀⠀ and 1 who narrowly avoided an off-by-one error.
