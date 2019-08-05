@@ -2,96 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5644381F17
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 16:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BD682043
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 17:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728701AbfHEO2q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Aug 2019 10:28:46 -0400
-Received: from mga02.intel.com ([134.134.136.20]:12152 "EHLO mga02.intel.com"
+        id S1729240AbfHEPbR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Aug 2019 11:31:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42870 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728686AbfHEO2q (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Aug 2019 10:28:46 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 07:27:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,350,1559545200"; 
-   d="scan'208";a="257741471"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by orsmga001.jf.intel.com with ESMTP; 05 Aug 2019 07:27:56 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hudxq-0000pf-SG; Mon, 05 Aug 2019 17:27:54 +0300
-Date:   Mon, 5 Aug 2019 17:27:54 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robert Middleton <robert.middleton@rm5248.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] serial: 8250_exar: Refactor exar_shutdown()
-Message-ID: <20190805142754.GL23480@smile.fi.intel.com>
-References: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com>
- <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
- <CAKpcJVZTy963y3TOXSYSBFVOpVTWEOyJKUYxv1pHNGz3Y1aPTA@mail.gmail.com>
- <20190805142147.GK23480@smile.fi.intel.com>
+        id S1728939AbfHEPbR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 5 Aug 2019 11:31:17 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 057C420B1F;
+        Mon,  5 Aug 2019 15:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565019076;
+        bh=y8L//hv2R/Pi809Zmzfpp6fRa1jI4pzYB3nkMg4sydI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rUKDSVHg9HnaOhD2TupB99U5IdxxP5qH6i594ab+s6deFE1gbTosAuSistJGp66Bc
+         H3Xmup9XmW0GxFyJQHdiXl+p1b9DJN5R5Dx3CX08d3/eXJ1izCP34qsij4780ori8C
+         rdehG2m3FWLghwWlpm31hEEXTrz6jxGS83plepvQ=
+Date:   Mon, 5 Aug 2019 17:31:14 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>
+Subject: Re: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Message-ID: <20190805153114.GA16836@kroah.com>
+References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com>
+ <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190805142147.GK23480@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 05:21:47PM +0300, Andy Shevchenko wrote:
-> On Mon, Aug 05, 2019 at 09:49:24AM -0400, Robert Middleton wrote:
-> 
-> Thanks for testing, my comments below.
-> 
-> > Unfortunately this will re-introduce the bug that it was attempting to
-> > solve, that is ensuring that the buffer in the kernel and the buffer
-> > on the chip are clear before going into shutdown on the chip.
-> > Breaking at the beginning of the loop means that the kernel has
-> > written everything to the internal buffer on the chip, but until the
-> > LSR bits are clear the bytes have not been transmitted yet.
-> 
-> So, the difference here, that you have a long delay with mdelay(1) which
-> "fixes" your issue.
+On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:
+> --- a/include/uapi/linux/serial_core.h
+> +++ b/include/uapi/linux/serial_core.h
+> @@ -293,4 +293,7 @@
+>  /* SiFive UART */
+>  #define PORT_SIFIVE_V0	120
+>  
+> +/* Freescale Linflex UART */
+> +#define PORT_LINFLEXUART	121
 
-s/mdelay/msleep
+Do you really need this modified?
 
-> 
-> I guess the third patch in this series makes it again not-working.
-> Can you check and confirm that?
-> 
-> Or even better, replace entire loop with one usleep_range() call and play with
-> numbers there, like (10, 20), (100, 150), (1000, 1100). Probably you can start
-> with udelay(2) followed up by above list.
-> 
-> If my theory is correct you will see at some point the problem will disappear.
-> 
-> > I'm not positive that the uart_circ_empty needs to be checked in the
-> > first place; I had put it in because the serial8250_tx_chars does that
-> > before stopping the tx, and I assume that there could be a potential
-> > race condition where the kernel has not yet written all the data to
-> > the exar, but the exar has finished transmitting all the data in its
-> > transmit buffer(I am not sure how likely this is to happen).
-> 
-> tty gets uninitialized before ->shutdown() happen, it also set's TTY IO error
-> condition, which has been checked in tty_write(). I'm sure new data will not
-> come at this point.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+thanks,
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
