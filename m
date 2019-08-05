@@ -2,72 +2,111 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BD682043
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 17:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400C78241A
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 19:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729240AbfHEPbR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Aug 2019 11:31:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42870 "EHLO mail.kernel.org"
+        id S1728843AbfHERjJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Aug 2019 13:39:09 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:51470 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728939AbfHEPbR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Aug 2019 11:31:17 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726779AbfHERjI (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 5 Aug 2019 13:39:08 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 057C420B1F;
-        Mon,  5 Aug 2019 15:31:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565019076;
-        bh=y8L//hv2R/Pi809Zmzfpp6fRa1jI4pzYB3nkMg4sydI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rUKDSVHg9HnaOhD2TupB99U5IdxxP5qH6i594ab+s6deFE1gbTosAuSistJGp66Bc
-         H3Xmup9XmW0GxFyJQHdiXl+p1b9DJN5R5Dx3CX08d3/eXJ1izCP34qsij4780ori8C
-         rdehG2m3FWLghwWlpm31hEEXTrz6jxGS83plepvQ=
-Date:   Mon, 5 Aug 2019 17:31:14 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        "jslaby@suse.com" <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
-        Larisa Ileana Grigore <larisa.grigore@nxp.com>
-Subject: Re: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
-Message-ID: <20190805153114.GA16836@kroah.com>
-References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com>
- <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
+        by mx1.redhat.com (Postfix) with ESMTPS id 74DB8C056807;
+        Mon,  5 Aug 2019 17:39:06 +0000 (UTC)
+Received: from rt4.app.eng.rdu2.redhat.com (rt4.app.eng.rdu2.redhat.com [10.10.161.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D7C3E5DA60;
+        Mon,  5 Aug 2019 17:39:01 +0000 (UTC)
+Received: from rt4.app.eng.rdu2.redhat.com (localhost [127.0.0.1])
+        by rt4.app.eng.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id x75Hd0BJ023399;
+        Mon, 5 Aug 2019 13:39:00 -0400
+Received: (from apache@localhost)
+        by rt4.app.eng.rdu2.redhat.com (8.14.4/8.14.4/Submit) id x75Hcnwa023396;
+        Mon, 5 Aug 2019 13:38:49 -0400
+From:   Red Hat Product Security <secalert@redhat.com>
+X-PGP-Public-Key: https://www.redhat.com/security/650d5882.txt
+Subject: [engineering.redhat.com #494100] Question on submitting patch for a security bug
+Reply-To: secalert@redhat.com
+In-Reply-To: <CAJ7L_Gp2HJoFOVxTgakCJw3LMuiPY0+60-giOtw3OwRD6zyNTQ@mail.gmail.com>
+References: <RT-Ticket-494100@engineering.redhat.com>
+ <CAJ7L_Gp2HJoFOVxTgakCJw3LMuiPY0+60-giOtw3OwRD6zyNTQ@mail.gmail.com>
+Message-ID: <rt-4.0.13-23214-1565026728-1358.494100-5-0@engineering.redhat.com>
+X-RT-Loop-Prevention: engineering.redhat.com
+RT-Ticket: engineering.redhat.com #494100
+Managed-BY: RT 4.0.13 (http://www.bestpractical.com/rt/)
+RT-Originator: pjp@redhat.com
+To:     b.zolnierkie@samsung.com, bob.liu@oracle.com,
+        chuck.lever@oracle.com, davem@davemloft.net, emamd001@umn.edu,
+        gregkh@linuxfoundation.org, kubakici@wp.pl, kvalo@codeaurora.org,
+        navid.emamdoost@gmail.com, sam@ravnborg.org
+CC:     airlied@linux.ie, alexandre.belloni@bootlin.com,
+        alexandre.torgue@st.com, allison@lohutok.net,
+        andriy.shevchenko@linux.intel.com, anna.schumaker@netapp.com,
+        axboe@kernel.dk, bfields@fieldses.org, colin.king@canonical.com,
+        daniel@ffwll.ch, devel@driverdev.osuosl.org,
+        dri-devel@lists.freedesktop.org, joabreu@synopsys.com,
+        johnfwhitmore@gmail.com, josef@toxicpanda.com, jslaby@suse.com,
+        kjlu@umn.edu, kstewart@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-wireless@vger.kernel.org, matthias.bgg@gmail.com,
+        matthias@redhat.com, mcoquelin.stm32@gmail.com,
+        nbd@other.debian.org, netdev@vger.kernel.org,
+        nishkadg.linux@gmail.com, peppe.cavallaro@st.com, smccaman@umn.edu,
+        tglx@linutronix.de, thierry.reding@gmail.com,
+        trond.myklebust@hammerspace.com, unglinuxdriver@microchip.com,
+        vishal@chelsio.com, vkoul@kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+X-RT-Original-Encoding: utf-8
+Date:   Mon, 5 Aug 2019 13:38:48 -0400
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Mon, 05 Aug 2019 17:39:08 +0000 (UTC)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:
-> --- a/include/uapi/linux/serial_core.h
-> +++ b/include/uapi/linux/serial_core.h
-> @@ -293,4 +293,7 @@
->  /* SiFive UART */
->  #define PORT_SIFIVE_V0	120
->  
-> +/* Freescale Linflex UART */
-> +#define PORT_LINFLEXUART	121
+Hello Navid,
 
-Do you really need this modified?
+On Thu, 18 Jul 2019 01:30:20 GMT, emamd001@umn.edu wrote:
+> I've found a null dereference bug in the Linux kernel source code. I was
+> wondering should I cc the patch to you as well (along with the
+> maintainers)?
 
-thanks,
+No. Please do not cc <secalert@redhat.com> on the upstream kernel patches.
+It is meant for reporting security issues only.
 
-greg k-h
+Going through the patches here
+
+1. Issues in ../staging/ drivers are not considered for CVE, they are not to be
+used
+in production environment.
+
+2. Many of the patches listed fix NULL pointer dereference when memory
+allocation
+fails and returns NULL.
+
+3. Do you happen to have reproducers for these issues? Could an unprivileged
+user trigger them?
+
+> Also, I was wondering what are the steps to get CVE for the bug (this is
+> the first time I am reporting a bug)?
+
+Generally CVE is assigned after confirming that a given issue really is a
+security issue. And it may
+have impact ranging from information leakage, DoS to privilege escalation or
+maybe arbitrary code
+execution. Every NULL pointer dereference is not security issue.
+
+
+Hope it helps. Thank you.
+---
+Prasad J Pandit / Red Hat Product Security Team
+
