@@ -2,111 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 400C78241A
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 19:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AB882524
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 20:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728843AbfHERjJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Aug 2019 13:39:09 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:51470 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726779AbfHERjI (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Aug 2019 13:39:08 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 74DB8C056807;
-        Mon,  5 Aug 2019 17:39:06 +0000 (UTC)
-Received: from rt4.app.eng.rdu2.redhat.com (rt4.app.eng.rdu2.redhat.com [10.10.161.56])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D7C3E5DA60;
-        Mon,  5 Aug 2019 17:39:01 +0000 (UTC)
-Received: from rt4.app.eng.rdu2.redhat.com (localhost [127.0.0.1])
-        by rt4.app.eng.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id x75Hd0BJ023399;
-        Mon, 5 Aug 2019 13:39:00 -0400
-Received: (from apache@localhost)
-        by rt4.app.eng.rdu2.redhat.com (8.14.4/8.14.4/Submit) id x75Hcnwa023396;
-        Mon, 5 Aug 2019 13:38:49 -0400
-From:   Red Hat Product Security <secalert@redhat.com>
-X-PGP-Public-Key: https://www.redhat.com/security/650d5882.txt
-Subject: [engineering.redhat.com #494100] Question on submitting patch for a security bug
-Reply-To: secalert@redhat.com
-In-Reply-To: <CAJ7L_Gp2HJoFOVxTgakCJw3LMuiPY0+60-giOtw3OwRD6zyNTQ@mail.gmail.com>
-References: <RT-Ticket-494100@engineering.redhat.com>
- <CAJ7L_Gp2HJoFOVxTgakCJw3LMuiPY0+60-giOtw3OwRD6zyNTQ@mail.gmail.com>
-Message-ID: <rt-4.0.13-23214-1565026728-1358.494100-5-0@engineering.redhat.com>
-X-RT-Loop-Prevention: engineering.redhat.com
-RT-Ticket: engineering.redhat.com #494100
-Managed-BY: RT 4.0.13 (http://www.bestpractical.com/rt/)
-RT-Originator: pjp@redhat.com
-To:     b.zolnierkie@samsung.com, bob.liu@oracle.com,
-        chuck.lever@oracle.com, davem@davemloft.net, emamd001@umn.edu,
-        gregkh@linuxfoundation.org, kubakici@wp.pl, kvalo@codeaurora.org,
-        navid.emamdoost@gmail.com, sam@ravnborg.org
-CC:     airlied@linux.ie, alexandre.belloni@bootlin.com,
-        alexandre.torgue@st.com, allison@lohutok.net,
-        andriy.shevchenko@linux.intel.com, anna.schumaker@netapp.com,
-        axboe@kernel.dk, bfields@fieldses.org, colin.king@canonical.com,
-        daniel@ffwll.ch, devel@driverdev.osuosl.org,
-        dri-devel@lists.freedesktop.org, joabreu@synopsys.com,
-        johnfwhitmore@gmail.com, josef@toxicpanda.com, jslaby@suse.com,
-        kjlu@umn.edu, kstewart@linuxfoundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-wireless@vger.kernel.org, matthias.bgg@gmail.com,
-        matthias@redhat.com, mcoquelin.stm32@gmail.com,
-        nbd@other.debian.org, netdev@vger.kernel.org,
-        nishkadg.linux@gmail.com, peppe.cavallaro@st.com, smccaman@umn.edu,
-        tglx@linutronix.de, thierry.reding@gmail.com,
-        trond.myklebust@hammerspace.com, unglinuxdriver@microchip.com,
-        vishal@chelsio.com, vkoul@kernel.org
+        id S1729383AbfHES51 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Aug 2019 14:57:27 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46931 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730222AbfHES50 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 5 Aug 2019 14:57:26 -0400
+Received: by mail-pl1-f196.google.com with SMTP id c2so36792132plz.13;
+        Mon, 05 Aug 2019 11:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cnQ6cgNtIaI+0LNE/I4I7al7W7oYkecPwVLfFtCA+eQ=;
+        b=Bo3LX1z+8ICC8BSWstNpcx1mu3CkcjEdX445gLNwG9yTHyhTNKY/+/nhx7dUOdHjs7
+         5d1h8wezEZ9R0r5e9Rt2lNwvNuVaOqwr3TPU+6PiwFOIGW0VWKgH8te9YGWwwAHfgaBD
+         q4O3HH0gOWpnz94lSbtF5wkEfu2EKfD9hrFrTvB0Ahg782leok1stx5U9LjCqKedqAFJ
+         Dyepc5JdslwTB8h1otTKpCtEV/Nhbak+mEKltPkI9mBlOoHeS7ONytl5To9L7wgy6qcc
+         x6EIv4VAZU3ZQLGdu1U5W3K6jYbscy+Ye2OBomxWV8hW8GmfEKYx8Uekok1G8GlaMuDV
+         HGkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cnQ6cgNtIaI+0LNE/I4I7al7W7oYkecPwVLfFtCA+eQ=;
+        b=gSnxgl7rvI40u3Ns9iKUZJHsp7Jabu71eYJq5tV3nCpEHgjojtP805kIn5q3PTcZgi
+         n5pp6b4wT5Jwyi3qGnsUS3IkzpKGwKyy8Hc0Kx8rcF1n62gPW1uyN/0l+O2t+2LJdjwq
+         j1o7srSDVHwgGZZwsHOrVWa1RQV2cF2kpD/w5KDwkbHeEIk+fuzOEg4P2BfxUOGUtXtb
+         JRWqrSf7565/xL67BzhlEwWYvOU1hMyQ+yZSoTpiQkG89lhGowNFmhF3BOE8JAL6YZU/
+         BDfb2aChTaaKbP0LxiGqEe5dfuw4ids5SUwjl+9oQT5GD+J/bvmmr1mYBnJSzIVpRzy5
+         t21A==
+X-Gm-Message-State: APjAAAU1y4IHASSUM741lLiYKVNscdaEOb7hfpSt/SONy7y2B0yo50uw
+        8D/df/J/zNl7kZU+PYQxGE9TXNCt
+X-Google-Smtp-Source: APXvYqw+nHsVIxmaF9zejqrnhLn77hw3t4858ifFHn0wW30q2SfFwXdbqRT2jIayzJLLeBmK/jVI0A==
+X-Received: by 2002:a17:902:1e9:: with SMTP id b96mr14848028plb.277.1565031445444;
+        Mon, 05 Aug 2019 11:57:25 -0700 (PDT)
+Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
+        by smtp.gmail.com with ESMTPSA id k64sm16037959pgk.74.2019.08.05.11.57.24
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 05 Aug 2019 11:57:24 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Chris Healy <cphealy@gmail.com>,
+        Cory Tusar <cory.tusar@zii.aero>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/6] LPUART fixes and improvements
+Date:   Mon,  5 Aug 2019 11:56:55 -0700
+Message-Id: <20190805185701.22863-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-X-RT-Original-Encoding: utf-8
-Date:   Mon, 5 Aug 2019 13:38:48 -0400
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Mon, 05 Aug 2019 17:39:08 +0000 (UTC)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Navid,
+Everyone:
 
-On Thu, 18 Jul 2019 01:30:20 GMT, emamd001@umn.edu wrote:
-> I've found a null dereference bug in the Linux kernel source code. I was
-> wondering should I cc the patch to you as well (along with the
-> maintainers)?
+This series contains fixes/improvements to LPUART dirver I came up
+with recently as well as fixes picked up from Toradex and NXP Vybrid
+repos.
 
-No. Please do not cc <secalert@redhat.com> on the upstream kernel patches.
-It is meant for reporting security issues only.
+Feedback is welcome!
 
-Going through the patches here
+Changes since [v2]:
 
-1. Issues in ../staging/ drivers are not considered for CVE, they are not to be
-used
-in production environment.
+ - Series rebased on Greg's tty-testing branch
 
-2. Many of the patches listed fix NULL pointer dereference when memory
-allocation
-fails and returns NULL.
+Changes since [v1]:
 
-3. Do you happen to have reproducers for these issues? Could an unprivileged
-user trigger them?
+ - Dropped "tty: serial: fsl_lpuart: Drop unnecessary sg_set_buf()
+   call" due to being a duplicate of "tty: serial: fsl_lpuart: remove
+   sg_set_buf() for sport->rx_sgl"
+   
+ - Fixed build break in "tty: serial: fsl_lpuart: Introduce
+   lpuart_tx_dma_startup()"
 
-> Also, I was wondering what are the steps to get CVE for the bug (this is
-> the first time I am reporting a bug)?
+Thanks,
+Andrey Smirnov
 
-Generally CVE is assigned after confirming that a given issue really is a
-security issue. And it may
-have impact ranging from information leakage, DoS to privilege escalation or
-maybe arbitrary code
-execution. Every NULL pointer dereference is not security issue.
+[v2] lore.kernel.org/r/20190731173045.11718-1-andrew.smirnov@gmail.com
+[v1] lore.kernel.org/r/20190729195226.8862-1-andrew.smirnov@gmail.com
 
+Andrey Smirnov (6):
+  tty: serial: fsl_lpuart: Introduce lpuart_tx_dma_startup()
+  tty: serial: fsl_lpuart: Introduce lpuart_rx_dma_startup()
+  tty: serial: fsl_lpuart: Introduce lpuart32_configure()
+  tty: serial: fsl_lpuart: Introduce lpuart*_setup_watermark_enable()
+  tty: serial: fsl_lpuart: Don't enable TIE in .startup() or .resume()
+  tty: serial: fsl_lpuart: Ignore TX/RX interrupts if DMA is enabled
 
-Hope it helps. Thank you.
----
-Prasad J Pandit / Red Hat Product Security Team
+ drivers/tty/serial/fsl_lpuart.c | 195 +++++++++++++++-----------------
+ 1 file changed, 91 insertions(+), 104 deletions(-)
+
+-- 
+2.21.0
 
