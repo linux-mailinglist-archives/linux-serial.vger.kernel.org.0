@@ -2,93 +2,143 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB74819EF
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 14:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD2281DDD
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 15:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727357AbfHEMrR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Aug 2019 08:47:17 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35051 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbfHEMrR (ORCPT
+        id S1728797AbfHENtc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Aug 2019 09:49:32 -0400
+Received: from egyptian.birch.relay.mailchannels.net ([23.83.209.56]:5962 "EHLO
+        egyptian.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726620AbfHENtc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Aug 2019 08:47:17 -0400
-Received: by mail-io1-f67.google.com with SMTP id m24so167021337ioo.2;
-        Mon, 05 Aug 2019 05:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aNRu8d6P0l9UPeO2XHPUBXtwBghX09sN9CzqbrlIoh0=;
-        b=j/bAgWAil3mRiYky6AnRqLeM8V1zdbGU/zoXCwNDELkUqbe57Wb3Rqul+Yp7KZYmnp
-         /pXsxz4Ec1Ja6QFaBuqCCTyu4IjNEWuXjoThkG+AEQ3Th8XgyCwagIqsWbWYPl+qLynY
-         W81J2gSa/MLIwFXNv3zKXUKIu5+D6qnfW8TKgghA/61gAyF195B5MtLkiuE6PG8N0NnQ
-         /jqsrHJ7xyMicdJQmRxfBJG7YG5IsqcncR8/nnzSg6vU/sfnl9j+NaGJwjiVoItP7UVP
-         EROiUjX4A8VVYEfbXRhf/BX2VbQyKxkP3acsT18XJ41Jp698vRCg2ZZbbeGLgnFHmK/y
-         HpwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aNRu8d6P0l9UPeO2XHPUBXtwBghX09sN9CzqbrlIoh0=;
-        b=mJz9CU045Tvh6I/fIkeLnimMLsV/ZiIYruMmtModtZwQHS9xztZhMzMJjxiZ3o+toF
-         YmjsEhTrSPxZaa/UjlfaP+f1pkh7HrlTw0fKZwjuo2PpuOJ2plehJ1YhGIuum1n9W8DE
-         1kjc9RTlNAqYxT2dcpi7wWrx7E4NuRbxm6dJgKwt7y1mKOGSh8gAGbdtmvo8wBLcyNCx
-         ccjyBPjzAM7FrHRf8r5JFWJBXR7uRoXxItscZBaGw76K/UPLSRa/W5LZDnL0WFH+3Fhc
-         b3jtyylqqOD59RDnjWtvQI63It3GXi7o1u68UI9YAFI3bkIzAto1UIu9zfXBmW0ot2dR
-         pJMQ==
-X-Gm-Message-State: APjAAAXMEPukTE20sldkFSovfHUr+8vXoqM9C8WvSVogKZ9pK/yCRuUb
-        VjM+c7IZQk2OkrUArP9TvRdDpa6OH9hB8IJg2jw=
-X-Google-Smtp-Source: APXvYqzXL2hkLoxBzy0mGaLH2PFh9enoPkAIlPHpx/CXR2e8aI0nWFKy0Tu9frhpX5sT1w1c87ndw7D6azKbKOfDYYg=
-X-Received: by 2002:a02:cb4b:: with SMTP id k11mr152797148jap.109.1565009236799;
- Mon, 05 Aug 2019 05:47:16 -0700 (PDT)
+        Mon, 5 Aug 2019 09:49:32 -0400
+X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 7D03F1A2A98
+        for <linux-serial@vger.kernel.org>; Mon,  5 Aug 2019 13:49:30 +0000 (UTC)
+Received: from pdx1-sub0-mail-a97.g.dreamhost.com (100-96-4-69.trex.outbound.svc.cluster.local [100.96.4.69])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id C7FAA1A2C8A
+        for <linux-serial@vger.kernel.org>; Mon,  5 Aug 2019 13:49:29 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|robert.middleton@rm5248.com
+Received: from pdx1-sub0-mail-a97.g.dreamhost.com ([TEMPUNAVAIL].
+ [64.90.62.162])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:2500 (trex/5.17.5);
+        Mon, 05 Aug 2019 13:49:30 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|robert.middleton@rm5248.com
+X-MailChannels-Auth-Id: dreamhost
+X-Continue-Name: 6566a0b640f81211_1565012970294_2588290853
+X-MC-Loop-Signature: 1565012970294:2775304319
+X-MC-Ingress-Time: 1565012970293
+Received: from pdx1-sub0-mail-a97.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a97.g.dreamhost.com (Postfix) with ESMTP id 3B6877F7EB
+        for <linux-serial@vger.kernel.org>; Mon,  5 Aug 2019 06:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=rm5248.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=rm5248.com; bh=hXrTs7NXfGAX4YqQeo1d7UNZS3k=; b=
+        Hsgii4MMNwJzByWjbo7yoq0zsZJhtL1Gch1/7MHViH6Vz/Ue1Nuz9stiFTyrdETO
+        Mp6c9izQw/QsHIvD0ATEy9T5pfCIHxXm6Vgzgg4KwLQd6x9cncWgyvHP+DGF8xp3
+        2GiS6B40u+sN2LeHBW3kRb4hzVOPpfrGt8keUmstdTg=
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: robert.middleton@rm5248.com)
+        by pdx1-sub0-mail-a97.g.dreamhost.com (Postfix) with ESMTPSA id 046D27F682
+        for <linux-serial@vger.kernel.org>; Mon,  5 Aug 2019 06:49:26 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id k8so167462673iot.1
+        for <linux-serial@vger.kernel.org>; Mon, 05 Aug 2019 06:49:26 -0700 (PDT)
+X-Gm-Message-State: APjAAAXOZEzwA3hzNvIWQuckbuwTZ9fO8zYa6ln/60yy+Eda9l0O5SCg
+        iYfBy2wPwNyot43wlmGpV74Eu0I2Zud3modyx/4=
+X-Google-Smtp-Source: APXvYqycF+5chysjqGNCKWDb68GxI+mL8MhIflFlcgeQFjziuKFUabhWi7OCBS023J2NZObMpwFjS+5GU6R118BECPw=
+X-Received: by 2002:a6b:ec06:: with SMTP id c6mr14940010ioh.198.1565012966219;
+ Mon, 05 Aug 2019 06:49:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-3-arnd@arndb.de>
- <20190801055821.GB24607@kroah.com>
-In-Reply-To: <20190801055821.GB24607@kroah.com>
-From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
-Date:   Mon, 5 Aug 2019 08:47:05 -0400
-Message-ID: <CA+rxa6rJE2R7R_r8nx7HyHu4xc8ujQB1rRG+0Yx2XzwtoiD5CQ@mail.gmail.com>
-Subject: Re: [PATCH 02/14] usb: udc: lpc32xx: allow compile-testing
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com> <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
+X-DH-BACKEND: pdx1-sub0-mail-a97
+From:   Robert Middleton <robert.middleton@rm5248.com>
+Date:   Mon, 5 Aug 2019 09:49:24 -0400
+X-Gmail-Original-Message-ID: <CAKpcJVZTy963y3TOXSYSBFVOpVTWEOyJKUYxv1pHNGz3Y1aPTA@mail.gmail.com>
+Message-ID: <CAKpcJVZTy963y3TOXSYSBFVOpVTWEOyJKUYxv1pHNGz3Y1aPTA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] serial: 8250_exar: Refactor exar_shutdown()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+X-VR-OUT-STATUS: OK
+X-VR-OUT-SCORE: -100
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduvddruddtjedgieekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuggftfghnshhusghstghrihgsvgdpffftgfetoffjqffuvfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepgghfjgfhfffkuffvtgesthdtredttddtjeenucfhrhhomheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqnecukfhppedvtdelrdekhedrudeiiedrgeefnecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopehmrghilhdqihhouddqfhegfedrghhoohhglhgvrdgtohhmpdhinhgvthepvddtledrkeehrdduieeirdegfedprhgvthhurhhnqdhprghthheptfhosggvrhhtucfoihguughlvghtohhnuceorhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomheqpdhmrghilhhfrhhomheprhhosggvrhhtrdhmihguughlvghtohhnsehrmhehvdegkedrtghomhdpnhhrtghpthhtoheplhhinhhugidqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Andy,
 
-On Thu, Aug 1, 2019 at 1:58 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Unfortunately this will re-introduce the bug that it was attempting to
+solve, that is ensuring that the buffer in the kernel and the buffer
+on the chip are clear before going into shutdown on the chip.
+Breaking at the beginning of the loop means that the kernel has
+written everything to the internal buffer on the chip, but until the
+LSR bits are clear the bytes have not been transmitted yet.
+
+I'm not positive that the uart_circ_empty needs to be checked in the
+first place; I had put it in because the serial8250_tx_chars does that
+before stopping the tx, and I assume that there could be a potential
+race condition where the kernel has not yet written all the data to
+the exar, but the exar has finished transmitting all the data in its
+transmit buffer(I am not sure how likely this is to happen).
+
+-Robert Middleton
+
+On Mon, Aug 5, 2019 at 6:05 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Wed, Jul 31, 2019 at 09:56:44PM +0200, Arnd Bergmann wrote:
-> > The only thing that prevents building this driver on other
-> > platforms is the mach/hardware.h include, which is not actually
-> > used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
-> >
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/usb/gadget/udc/Kconfig       | 3 ++-
-> >  drivers/usb/gadget/udc/lpc32xx_udc.c | 2 --
-> >  2 files changed, 2 insertions(+), 3 deletions(-)
+> First of all, boolean variable should be assigned with boolean values.
+> Second, it's not needed at all in this case.
 >
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Drop unneeded boolean variable and use 'break' statement instead.
+>
+> While here, change iterations to be more visible by moving the number of them
+> to the variable definition block.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: Check kernel buffer first as in the original conditional (Robert)
+>  drivers/tty/serial/8250/8250_exar.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+> index 873aa6b0c2f3..8f9baae92831 100644
+> --- a/drivers/tty/serial/8250/8250_exar.c
+> +++ b/drivers/tty/serial/8250/8250_exar.c
+> @@ -169,19 +169,18 @@ static void xr17v35x_set_divisor(struct uart_port *p, unsigned int baud,
+>  static void exar_shutdown(struct uart_port *port)
+>  {
+>         unsigned char lsr;
+> -       bool tx_complete = 0;
+>         struct uart_8250_port *up = up_to_u8250p(port);
+>         struct circ_buf *xmit = &port->state->xmit;
+> -       int i = 0;
+> +       unsigned int retries = 1000;
+>
+>         do {
+> +               if (uart_circ_empty(xmit))
+> +                       break;
+>                 lsr = serial_in(up, UART_LSR);
+>                 if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
+> -                       tx_complete = 1;
+> -               else
+> -                       tx_complete = 0;
+> +                       break;
+>                 msleep(1);
+> -       } while (!uart_circ_empty(xmit) && !tx_complete && i++ < 1000);
+> +       } while (--retries);
+>
+>         serial8250_do_shutdown(port);
+>  }
+> --
+> 2.20.1
+>
