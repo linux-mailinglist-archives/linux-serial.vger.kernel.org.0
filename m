@@ -2,61 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C789F818B3
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A148E818C1
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 14:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728667AbfHEMD2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Aug 2019 08:03:28 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41499 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728556AbfHEMD2 (ORCPT
+        id S1728683AbfHEMDe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Aug 2019 08:03:34 -0400
+Received: from mail-wm1-f41.google.com ([209.85.128.41]:38943 "EHLO
+        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728685AbfHEMDe (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Aug 2019 08:03:28 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c2so80924780wrm.8
-        for <linux-serial@vger.kernel.org>; Mon, 05 Aug 2019 05:03:26 -0700 (PDT)
+        Mon, 5 Aug 2019 08:03:34 -0400
+Received: by mail-wm1-f41.google.com with SMTP id u25so62379832wmc.4
+        for <linux-serial@vger.kernel.org>; Mon, 05 Aug 2019 05:03:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=25vkHl8TD36SDkWAHJSebVeUcYzajPzPyvWuGyvsAhE=;
-        b=YsSmtNhPFyHUW78r8S8MLbZSVSttppTiKSHIpoTXSYeR5QcxdpBE3Ufjq7uEYjXEgI
-         dmPita3jsLeyX+7v624q99DrW+MmNpmWYsEAhy89ozWnEx7jAS7THW7DoJIvKpHLU4Nz
-         9aFASsRrlhEZoc2qAjHVR99E+wveNzGFLrFxWo3EKEAk2bNQp8yreK7u4jhnjkQAuZfa
-         XWPp8sUcX0TsIg8hykvT+yfFktlIFBGwJluuut+8sWQHkWbrYWSxUl2wwgOseujOmnAW
-         4CqAO3UiS22yAK6aVqzOSY60m2gG31BbRwJ4Pq51qzxLNJAVlt43AJ2iVFH8qg/vO1PP
-         0Wmg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=03cjrsP0RDgNB463NC5l+ar2rIPSWRGFuDWfbzKJer4=;
+        b=bvHJb3/6rwm4ri0PWxAXqnx3tGsomLKgntrlR6roxjbfUP6TEBJURIDqmlmcSRxvPl
+         fimBqtk8WQSAlH9LrMqsF9EmNosdDF36A800TTFj/lVL6VodbYKGqPaHntux/YWADAa7
+         Ei33K9eY8iK/Thb3RpTv/AU3l8LkQRen5fAEJUshRIcPclZw4Cu7Q9+N3YBZTibaRDhK
+         ljuJoHKVDwCteZkH+J8kAfOHTENu+wOVpDYIslaHSJ21GRdB82HSYhNqgaDvZ9SPtSdK
+         gHjYtUsui5gFXpHlmnn3t1844q+M2rAKUkkMsRdl2cA3TLV7sGLHF6Yk+IcM+zwiWjw5
+         DBxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=25vkHl8TD36SDkWAHJSebVeUcYzajPzPyvWuGyvsAhE=;
-        b=Lz0MCUuFHS9f5pi2EOkVp9mTZyNjlSQsa3AsFB0KbNLMxf7gFis3oBfA2CnIVv0LBe
-         lZPR2wLDMYzn1Jy5h36bHnuVwMeCBoS8OwEu7qK9PzPuBD6XquUoNDtAb2ul+SO7H9cg
-         jT3hRSPmVG5RvDM2dA8Z/c2EeKU9XLV+dLxXLyUNY/fUfVnps4GDc/OcFNNzFcQ4jTMw
-         tYCO/z+4+pHHvfCRZLwDKyhEt4joteDHHhnFOZzqD1AnmJZbfu4Xfs99tPYEDGymxNYb
-         9oJ5TU59ibZPhQa/3r3yptB92f/6xN0Vli0QNv31D+yV+fcDxY4cGvQKjzmDzfi6LJmS
-         HaYQ==
-X-Gm-Message-State: APjAAAWjoxctow0O6rOAPGKLz4dZPcp9yd+IG94SPYd5AlfhwlkwvA8H
-        hoMDV/ypY2ZBO/ow1gyNHuqPlA==
-X-Google-Smtp-Source: APXvYqzWNv12kSRQOLPMH0DQ/Rtt60lADy18oRMLOjwk/7REfS0XxZobWQLA74rD/m007PEBCxIPPQ==
-X-Received: by 2002:a05:6000:1148:: with SMTP id d8mr4777553wrx.354.1565006605620;
-        Mon, 05 Aug 2019 05:03:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=03cjrsP0RDgNB463NC5l+ar2rIPSWRGFuDWfbzKJer4=;
+        b=X4mjnQI0tskXTBjhFk8T1gjwWkgV8X2QpH48PI8KHzAWE5c0DhRtxm0gbIvtz7uSM2
+         pkmRcmSVqN9DD2jZ2rAAHcU2fdvtggz+aEP4hmd1+jSnY+MuMqfi4FfEY2bJb60Ft60c
+         2yRl0kFa8IZeBgcN7NQDacFkWm8uS7mjk/7B9hIbxT/fkbpoyuKyU+v94Wjjwfv6TM92
+         y0EKUR7RdxMwCqLb2OSwai2hxDXV9GOapQnZoqQgFaDQIJnjg/nCmW7mqAW//5Hjxn0p
+         QYsDA6VEbCcimno61lSYaulN5nxtgAHeiGCynRLru8LhvTS6J7g0mu0JqFq0fP1sDRj1
+         zlDw==
+X-Gm-Message-State: APjAAAUzSEgFszVbmZqW/xM6pLlwEbeutMoYDFE6C9M1+QRs7jip5gXj
+        gtL1mpVhThorMvee8/0/vmJBgA==
+X-Google-Smtp-Source: APXvYqywE8Dp7JVC/Lpdsu06qvWsy2pnvNdftrd1iabEJoCm13l1U9u7UmUh513R4CWlvucD+q1S+A==
+X-Received: by 2002:a7b:cd9a:: with SMTP id y26mr19568536wmj.44.1565006611348;
+        Mon, 05 Aug 2019 05:03:31 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id x6sm88683668wrt.63.2019.08.05.05.03.24
+        by smtp.gmail.com with ESMTPSA id x6sm88683668wrt.63.2019.08.05.05.03.30
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 05:03:25 -0700 (PDT)
+        Mon, 05 Aug 2019 05:03:30 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     robh+dt@kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        jassisinghbrar@gmail.com, kishon@ti.com, p.zabel@pengutronix.de
-Subject: [RFCv2 0/9] dt-bindings: first tentative of conversion to yaml format
-Date:   Mon,  5 Aug 2019 14:03:11 +0200
-Message-Id: <20190805120320.32282-1-narmstrong@baylibre.com>
+        linux-amlogic@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [RFCv2 8/9] dt-bindings: serial: meson-uart: convert to yaml
+Date:   Mon,  5 Aug 2019 14:03:19 +0200
+Message-Id: <20190805120320.32282-9-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190805120320.32282-1-narmstrong@baylibre.com>
+References: <20190805120320.32282-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -64,72 +63,140 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This is a first tentative to convert some of the simplest Amlogic
-dt-bindings to the yaml format.
+Now that we have the DT validation in place, let's convert the device tree
+bindings for the Amlogic UART Serial controller over to a YAML schemas.
 
-All have been tested using :
-$ make ARCH=arm64 dtbs_check
-
-Issues with the amlogic arm64 DTs has already been identified thanks
-to the validation scripts. The DT fixes will be pushed once these yaml
-bindings are acked.
-
-Changes since rfc v1:
-- Fixed bindings according to Rob's comments
-- Added commit log
-- renamed yaml files using amlogic prefix
-
-Neil Armstrong (9):
-  dt-bindings: mailbox: meson-mhu: convert to yaml
-  dt-bindings: rng: amlogic,meson-rng: convert to yaml
-  dt-bindings: spi: meson: convert to yaml
-  dt-bindings: reset: amlogic,meson-reset: convert to yaml
-  dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
-  dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
-  dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
-  dt-bindings: serial: meson-uart: convert to yaml
-  dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
-
- .../amlogic/amlogic,meson-gx-ao-secure.txt    | 28 -------
- .../amlogic/amlogic,meson-gx-ao-secure.yaml   | 52 +++++++++++++
- .../mailbox/amlogic,meson-gxbb-mhu.yaml       | 53 ++++++++++++++
- .../devicetree/bindings/mailbox/meson-mhu.txt | 34 ---------
- .../phy/amlogic,meson-g12a-usb2-phy.yaml      | 63 ++++++++++++++++
- .../phy/amlogic,meson-g12a-usb3-pcie-phy.yaml | 57 +++++++++++++++
- .../bindings/phy/meson-g12a-usb2-phy.txt      | 22 ------
- .../bindings/phy/meson-g12a-usb3-pcie-phy.txt | 22 ------
- .../bindings/reset/amlogic,meson-reset.txt    | 19 -----
- .../bindings/reset/amlogic,meson-reset.yaml   | 37 ++++++++++
- .../bindings/rng/amlogic,meson-rng.txt        | 21 ------
- .../bindings/rng/amlogic,meson-rng.yaml       | 37 ++++++++++
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
  .../bindings/serial/amlogic,meson-uart.txt    | 38 ----------
  .../bindings/serial/amlogic,meson-uart.yaml   | 73 +++++++++++++++++++
- .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 67 +++++++++++++++++
- .../bindings/spi/amlogic,meson6-spifc.yaml    | 53 ++++++++++++++
- .../devicetree/bindings/spi/spi-meson.txt     | 55 --------------
- .../watchdog/amlogic,meson-gxbb-wdt.yaml      | 37 ++++++++++
- .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 ----
- 19 files changed, 529 insertions(+), 255 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.txt
- create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
- create mode 100644 Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml
- delete mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.txt
- create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb3-pcie-phy.yaml
- delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
- delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
- delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.txt
- create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.yaml
- delete mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.txt
- create mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml
+ 2 files changed, 73 insertions(+), 38 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
  create mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-meson.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
 
+diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
+deleted file mode 100644
+index c06c045126fc..000000000000
+--- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
++++ /dev/null
+@@ -1,38 +0,0 @@
+-Amlogic Meson SoC UART Serial Interface
+-=======================================
+-
+-The Amlogic Meson SoC UART Serial Interface is present on a large range
+-of SoCs, and can be present either in the "Always-On" power domain or the
+-"Everything-Else" power domain.
+-
+-The particularity of the "Always-On" Serial Interface is that the hardware
+-is active since power-on and does not need any clock gating and is usable
+-as very early serial console.
+-
+-Required properties:
+-- compatible : compatible: value should be different for each SoC family as :
+-	- Meson6 : "amlogic,meson6-uart"
+-	- Meson8 : "amlogic,meson8-uart"
+-	- Meson8b : "amlogic,meson8b-uart"
+-	- GX (GXBB, GXL, GXM) : "amlogic,meson-gx-uart"
+-	eventually followed by : "amlogic,meson-ao-uart" if this UART interface
+-	is in the "Always-On" power domain.
+-- reg : offset and length of the register set for the device.
+-- interrupts : identifier to the device interrupt
+-- clocks : a list of phandle + clock-specifier pairs, one for each
+-	   entry in clock names.
+-- clock-names :
+-   * "xtal" for external xtal clock identifier
+-   * "pclk" for the bus core clock, either the clk81 clock or the gate clock
+-   * "baud" for the source of the baudrate generator, can be either the xtal
+-	or the pclk.
+-
+-e.g.
+-uart_A: serial@84c0 {
+-	compatible = "amlogic,meson-gx-uart";
+-	reg = <0x0 0x84c0 0x0 0x14>;
+-	interrupts = <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
+-	/* Use xtal as baud rate clock source */
+-	clocks = <&xtal>, <&clkc CLKID_UART0>, <&xtal>;
+-	clock-names = "xtal", "pclk", "baud";
+-};
+diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+new file mode 100644
+index 000000000000..5d48a8c04aa9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2019 BayLibre, SAS
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/serial/amlogic,meson-uart.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Amlogic Meson SoC UART Serial Interface
++
++maintainers:
++  - Neil Armstrong <narmstrong@baylibre.com>
++
++description: |
++  The Amlogic Meson SoC UART Serial Interface is present on a large range
++  of SoCs, and can be present either in the "Always-On" power domain or the
++  "Everything-Else" power domain.
++
++  The particularity of the "Always-On" Serial Interface is that the hardware
++  is active since power-on and does not need any clock gating and is usable
++  as very early serial console.
++
++properties:
++  compatible:
++    oneOf:
++      - description: Allways-on power domain UART controller
++        items:
++        - enum:
++          - amlogic,meson6-uart
++          - amlogic,meson8-uart
++          - amlogic,meson8b-uart
++          - amlogic,meson-gx-uart
++        - const: amlogic,meson-ao-uart
++      - description: Everything-Else power domain UART controller
++        enum:
++        - amlogic,meson6-uart
++        - amlogic,meson8-uart
++        - amlogic,meson8b-uart
++        - amlogic,meson-gx-uart
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: external xtal clock identifier
++      - description: the bus core clock, either the clk81 clock or the gate clock
++      - description: the source of the baudrate generator, can be either the xtal or the pclk
++
++  clock-names:
++    items:
++      - const: xtal
++      - const: pclk
++      - const: baud
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++examples:
++  - |
++    serial@84c0 {
++          compatible = "amlogic,meson-gx-uart";
++          reg = <0x84c0 0x14>;
++          interrupts = <26>;
++          clocks = <&xtal>, <&pclk>, <&xtal>;
++          clock-names = "xtal", "pclk", "baud";
++    };
 -- 
 2.22.0
 
