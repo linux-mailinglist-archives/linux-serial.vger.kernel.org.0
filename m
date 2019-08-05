@@ -2,35 +2,37 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6C28165D
+	by mail.lfdr.de (Postfix) with ESMTP id 751088165E
 	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 12:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbfHEKFW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S1727802AbfHEKFW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Mon, 5 Aug 2019 06:05:22 -0400
-Received: from mga02.intel.com ([134.134.136.20]:56837 "EHLO mga02.intel.com"
+Received: from mga01.intel.com ([192.55.52.88]:11295 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727802AbfHEKFW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        id S1726454AbfHEKFW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
         Mon, 5 Aug 2019 06:05:22 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 03:05:21 -0700
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 03:05:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,349,1559545200"; 
-   d="scan'208";a="373654828"
+   d="scan'208";a="325272105"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Aug 2019 03:05:19 -0700
+  by orsmga004.jf.intel.com with ESMTP; 05 Aug 2019 03:05:20 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2A448FF; Mon,  5 Aug 2019 13:05:19 +0300 (EEST)
+        id 37E936A; Mon,  5 Aug 2019 13:05:19 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org,
         Robert Middleton <robert.middleton@rm5248.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/3] serial: 8250_exar: Consolidate callback assignments in default_setup()
-Date:   Mon,  5 Aug 2019 13:05:16 +0300
-Message-Id: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 2/3] serial: 8250_exar: Refactor exar_shutdown()
+Date:   Mon,  5 Aug 2019 13:05:17 +0300
+Message-Id: <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com>
+References: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -38,89 +40,49 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-For better maintenance consolidate port callbacks in default_setup().
+First of all, boolean variable should be assigned with boolean values.
+Second, it's not needed at all in this case.
+
+Drop unneeded boolean variable and use 'break' statement instead.
+
+While here, change iterations to be more visible by moving the number of them
+to the variable definition block.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v2: no change
- drivers/tty/serial/8250/8250_exar.c | 43 ++++++++++++++---------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+v2: Check kernel buffer first as in the original conditional (Robert)
+ drivers/tty/serial/8250/8250_exar.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index 3e93bd2326c9..873aa6b0c2f3 100644
+index 873aa6b0c2f3..8f9baae92831 100644
 --- a/drivers/tty/serial/8250/8250_exar.c
 +++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -166,6 +166,26 @@ static void xr17v35x_set_divisor(struct uart_port *p, unsigned int baud,
- 	serial_port_out(p, 0x2, quot_frac);
- }
- 
-+static void exar_shutdown(struct uart_port *port)
-+{
-+	unsigned char lsr;
-+	bool tx_complete = 0;
-+	struct uart_8250_port *up = up_to_u8250p(port);
-+	struct circ_buf *xmit = &port->state->xmit;
-+	int i = 0;
-+
-+	do {
-+		lsr = serial_in(up, UART_LSR);
-+		if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
-+			tx_complete = 1;
-+		else
-+			tx_complete = 0;
-+		msleep(1);
-+	} while (!uart_circ_empty(xmit) && !tx_complete && i++ < 1000);
-+
-+	serial8250_do_shutdown(port);
-+}
-+
- static int default_setup(struct exar8250 *priv, struct pci_dev *pcidev,
- 			 int idx, unsigned int offset,
- 			 struct uart_8250_port *port)
-@@ -197,6 +217,7 @@ static int default_setup(struct exar8250 *priv, struct pci_dev *pcidev,
- 	}
- 
- 	port->port.pm = exar_pm;
-+	port->port.shutdown = exar_shutdown;
- 
- 	return 0;
- }
-@@ -519,27 +540,6 @@ static irqreturn_t exar_misc_handler(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--static void
--exar_shutdown(struct uart_port *port)
--{
--	unsigned char lsr;
+@@ -169,19 +169,18 @@ static void xr17v35x_set_divisor(struct uart_port *p, unsigned int baud,
+ static void exar_shutdown(struct uart_port *port)
+ {
+ 	unsigned char lsr;
 -	bool tx_complete = 0;
--	struct uart_8250_port *up = up_to_u8250p(port);
--	struct circ_buf *xmit = &port->state->xmit;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct circ_buf *xmit = &port->state->xmit;
 -	int i = 0;
--
--	do {
--		lsr = serial_in(up, UART_LSR);
--		if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
++	unsigned int retries = 1000;
+ 
+ 	do {
++		if (uart_circ_empty(xmit))
++			break;
+ 		lsr = serial_in(up, UART_LSR);
+ 		if (lsr & (UART_LSR_TEMT | UART_LSR_THRE))
 -			tx_complete = 1;
 -		else
 -			tx_complete = 0;
--		msleep(1);
++			break;
+ 		msleep(1);
 -	} while (!uart_circ_empty(xmit) && !tx_complete && i++ < 1000);
--
--	serial8250_do_shutdown(port);
--}
--
- static int
- exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
- {
-@@ -580,7 +580,6 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
- 	uart.port.flags = UPF_SHARE_IRQ | UPF_EXAR_EFR | UPF_FIXED_TYPE | UPF_FIXED_PORT;
- 	uart.port.irq = pci_irq_vector(pcidev, 0);
- 	uart.port.dev = &pcidev->dev;
--	uart.port.shutdown = exar_shutdown;
++	} while (--retries);
  
- 	rc = devm_request_irq(&pcidev->dev, uart.port.irq, exar_misc_handler,
- 			 IRQF_SHARED, "exar_uart", priv);
+ 	serial8250_do_shutdown(port);
+ }
 -- 
 2.20.1
 
