@@ -2,70 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AE381F01
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 16:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5644381F17
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Aug 2019 16:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727802AbfHEOZm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Aug 2019 10:25:42 -0400
-Received: from mga02.intel.com ([134.134.136.20]:11914 "EHLO mga02.intel.com"
+        id S1728701AbfHEO2q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Aug 2019 10:28:46 -0400
+Received: from mga02.intel.com ([134.134.136.20]:12152 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727830AbfHEOZm (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Aug 2019 10:25:42 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1728686AbfHEO2q (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 5 Aug 2019 10:28:46 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 07:25:42 -0700
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 07:27:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,350,1559545200"; 
-   d="scan'208";a="349124474"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 05 Aug 2019 07:25:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CF37011C; Mon,  5 Aug 2019 17:25:39 +0300 (EEST)
+   d="scan'208";a="257741471"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga001.jf.intel.com with ESMTP; 05 Aug 2019 07:27:56 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hudxq-0000pf-SG; Mon, 05 Aug 2019 17:27:54 +0300
+Date:   Mon, 5 Aug 2019 17:27:54 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org,
-        Robert Middleton <robert.middleton@rm5248.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v3 2/2] serial: 8250_exar: Replace msleep(1) with usleep_range()
-Date:   Mon,  5 Aug 2019 17:25:35 +0300
-Message-Id: <20190805142535.21948-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190805142535.21948-1-andriy.shevchenko@linux.intel.com>
-References: <20190805142535.21948-1-andriy.shevchenko@linux.intel.com>
+To:     Robert Middleton <robert.middleton@rm5248.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] serial: 8250_exar: Refactor exar_shutdown()
+Message-ID: <20190805142754.GL23480@smile.fi.intel.com>
+References: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com>
+ <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
+ <CAKpcJVZTy963y3TOXSYSBFVOpVTWEOyJKUYxv1pHNGz3Y1aPTA@mail.gmail.com>
+ <20190805142147.GK23480@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190805142147.GK23480@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-As explained in Documentation/timers/timers-howto.rst
-the small amount of milliseconds sometimes produces
-much longer delays.
+On Mon, Aug 05, 2019 at 05:21:47PM +0300, Andy Shevchenko wrote:
+> On Mon, Aug 05, 2019 at 09:49:24AM -0400, Robert Middleton wrote:
+> 
+> Thanks for testing, my comments below.
+> 
+> > Unfortunately this will re-introduce the bug that it was attempting to
+> > solve, that is ensuring that the buffer in the kernel and the buffer
+> > on the chip are clear before going into shutdown on the chip.
+> > Breaking at the beginning of the loop means that the kernel has
+> > written everything to the internal buffer on the chip, but until the
+> > LSR bits are clear the bytes have not been transmitted yet.
+> 
+> So, the difference here, that you have a long delay with mdelay(1) which
+> "fixes" your issue.
 
-Replace msleep(1) with usleep_range(1000, 1100).
+s/mdelay/msleep
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v3: previous patch in the series has been dropped for now, thus,
-    this one reconstructed accordingly
- drivers/tty/serial/8250/8250_exar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> I guess the third patch in this series makes it again not-working.
+> Can you check and confirm that?
+> 
+> Or even better, replace entire loop with one usleep_range() call and play with
+> numbers there, like (10, 20), (100, 150), (1000, 1100). Probably you can start
+> with udelay(2) followed up by above list.
+> 
+> If my theory is correct you will see at some point the problem will disappear.
+> 
+> > I'm not positive that the uart_circ_empty needs to be checked in the
+> > first place; I had put it in because the serial8250_tx_chars does that
+> > before stopping the tx, and I assume that there could be a potential
+> > race condition where the kernel has not yet written all the data to
+> > the exar, but the exar has finished transmitting all the data in its
+> > transmit buffer(I am not sure how likely this is to happen).
+> 
+> tty gets uninitialized before ->shutdown() happen, it also set's TTY IO error
+> condition, which has been checked in tty_write(). I'm sure new data will not
+> come at this point.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index 873aa6b0c2f3..597eb9d16f21 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -180,7 +180,7 @@ static void exar_shutdown(struct uart_port *port)
- 			tx_complete = 1;
- 		else
- 			tx_complete = 0;
--		msleep(1);
-+		usleep_range(1000, 1100);
- 	} while (!uart_circ_empty(xmit) && !tx_complete && i++ < 1000);
- 
- 	serial8250_do_shutdown(port);
 -- 
-2.20.1
+With Best Regards,
+Andy Shevchenko
+
 
