@@ -2,33 +2,33 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CC582EEC
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 11:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FE682EF2
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 11:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730068AbfHFJn0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Aug 2019 05:43:26 -0400
-Received: from mga17.intel.com ([192.55.52.151]:8860 "EHLO mga17.intel.com"
+        id S1730068AbfHFJoK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Aug 2019 05:44:10 -0400
+Received: from mga07.intel.com ([134.134.136.100]:10177 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726713AbfHFJn0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Aug 2019 05:43:26 -0400
+        id S1726713AbfHFJoK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 6 Aug 2019 05:44:10 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Aug 2019 02:43:25 -0700
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Aug 2019 02:43:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,353,1559545200"; 
-   d="scan'208";a="257988330"
+   d="scan'208";a="373364934"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 06 Aug 2019 02:43:24 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 06 Aug 2019 02:43:25 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 6B3822E1; Tue,  6 Aug 2019 12:43:23 +0300 (EEST)
+        id 7581639A; Tue,  6 Aug 2019 12:43:23 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 5/9] serial: 8250_lpss: switch to use 8250_dwlib library
-Date:   Tue,  6 Aug 2019 12:43:18 +0300
-Message-Id: <20190806094322.64987-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 6/9] serial: 8250_lpss: add fractional divisor support
+Date:   Tue,  6 Aug 2019 12:43:19 +0300
+Message-Id: <20190806094322.64987-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190806094322.64987-1-andriy.shevchenko@linux.intel.com>
 References: <20190806094322.64987-1-andriy.shevchenko@linux.intel.com>
@@ -39,114 +39,52 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Since we have a common library module for Synopsys DesignWare UART,
-let us use it.
+For Synopsys DesignWare 8250 uart which version >= 4.00a, there's a
+valid divisor latch fraction register.
+
+Now the preparation is done, it's easy to add the feature support.
+This patch firstly tries to get the fractional divisor width during
+probe, then setups specific get_divisor() and set_divisor() hook.
+
+Among other changes the FIFO size is now retrieved from the hardware.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_lpss.c | 22 +++++++++++++---------
- drivers/tty/serial/8250/Kconfig     |  1 +
- 2 files changed, 14 insertions(+), 9 deletions(-)
+ drivers/tty/serial/8250/8250_lpss.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index d07e431110d9..3bf23770c188 100644
+index 3bf23770c188..0c6aa990db3d 100644
 --- a/drivers/tty/serial/8250/8250_lpss.c
 +++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -14,7 +14,7 @@
- #include <linux/dmaengine.h>
- #include <linux/dma/dw.h>
- 
--#include "8250.h"
-+#include "8250_dwlib.h"
- 
- #define PCI_DEVICE_ID_INTEL_QRK_UARTx	0x0936
- 
-@@ -48,21 +48,25 @@ struct lpss8250_board {
- };
- 
- struct lpss8250 {
--	int line;
-+	struct dw8250_port_data data;
- 	struct lpss8250_board *board;
- 
- 	/* DMA parameters */
--	struct uart_8250_dma dma;
- 	struct dw_dma_chip dma_chip;
- 	struct dw_dma_slave dma_param;
- 	u8 dma_maxburst;
- };
- 
-+static inline struct lpss8250 *to_lpss8250(struct dw8250_port_data *data)
-+{
-+	return container_of(data, struct lpss8250, data);
-+}
-+
- static void byt_set_termios(struct uart_port *p, struct ktermios *termios,
- 			    struct ktermios *old)
+@@ -113,7 +113,6 @@ static unsigned int byt_get_mctrl(struct uart_port *port)
+ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
  {
- 	unsigned int baud = tty_termios_baud_rate(termios);
--	struct lpss8250 *lpss = p->private_data;
-+	struct lpss8250 *lpss = to_lpss8250(p->private_data);
- 	unsigned long fref = lpss->board->freq, fuart = baud * 16;
- 	unsigned long w = BIT(15) - 1;
- 	unsigned long m, n;
-@@ -163,7 +167,7 @@ static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
- 
- static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
- {
--	struct uart_8250_dma *dma = &lpss->dma;
-+	struct uart_8250_dma *dma = &lpss->data.dma;
- 	struct dw_dma_chip *chip = &lpss->dma_chip;
  	struct dw_dma_slave *param = &lpss->dma_param;
+-	struct uart_8250_port *up = up_to_u8250p(port);
  	struct pci_dev *pdev = to_pci_dev(port->dev);
-@@ -247,7 +251,7 @@ static bool lpss8250_dma_filter(struct dma_chan *chan, void *param)
+ 	unsigned int dma_devfn = PCI_DEVFN(PCI_SLOT(pdev->devfn), 0);
+ 	struct pci_dev *dma_dev = pci_get_slot(pdev->bus, dma_devfn);
+@@ -139,10 +138,6 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 	param->m_master = 0;
+ 	param->p_master = 1;
  
- static int lpss8250_dma_setup(struct lpss8250 *lpss, struct uart_8250_port *port)
- {
--	struct uart_8250_dma *dma = &lpss->dma;
-+	struct uart_8250_dma *dma = &lpss->data.dma;
- 	struct dw_dma_slave *rx_param, *tx_param;
- 	struct device *dev = port->port.dev;
+-	/* TODO: Detect FIFO size automaticaly for DesignWare 8250 */
+-	port->fifosize = 64;
+-	up->tx_loadsz = 64;
+-
+ 	lpss->dma_maxburst = 16;
  
-@@ -296,7 +300,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	port->set_termios = byt_set_termios;
+@@ -316,6 +311,8 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (ret)
+ 		return ret;
  
- 	uart.port.dev = &pdev->dev;
- 	uart.port.irq = pdev->irq;
--	uart.port.private_data = lpss;
-+	uart.port.private_data = &lpss->data;
- 	uart.port.type = PORT_16550A;
- 	uart.port.iotype = UPIO_MEM;
- 	uart.port.regshift = 2;
-@@ -320,7 +324,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (ret < 0)
++	dw8250_setup_port(&uart.port);
++
+ 	ret = lpss8250_dma_setup(lpss, &uart);
+ 	if (ret)
  		goto err_exit;
- 
--	lpss->line = ret;
-+	lpss->data.line = ret;
- 
- 	pci_set_drvdata(pdev, lpss);
- 	return 0;
-@@ -335,7 +339,7 @@ static void lpss8250_remove(struct pci_dev *pdev)
- {
- 	struct lpss8250 *lpss = pci_get_drvdata(pdev);
- 
--	serial8250_unregister_port(lpss->line);
-+	serial8250_unregister_port(lpss->data.line);
- 
- 	if (lpss->board->exit)
- 		lpss->board->exit(lpss);
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index 90abf97b378d..ff5d142bbd70 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -444,6 +444,7 @@ config SERIAL_8250_LPSS
- 	default SERIAL_8250
- 	depends on SERIAL_8250 && PCI
- 	depends on X86 || COMPILE_TEST
-+	select SERIAL_8250_DWLIB
- 	select DW_DMAC_CORE if SERIAL_8250_DMA
- 	select DW_DMAC_PCI if (SERIAL_8250_DMA && X86_INTEL_LPSS)
- 	select RATIONAL
 -- 
 2.20.1
 
