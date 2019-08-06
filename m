@@ -2,41 +2,31 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DFD837AD
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 19:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB44838BA
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 20:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729898AbfHFRLW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Aug 2019 13:11:22 -0400
-Received: from mail-eopbgr70089.outbound.protection.outlook.com ([40.107.7.89]:5470
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726783AbfHFRLW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Aug 2019 13:11:22 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vxm5RE49shRV2hTcUfrFMQoRotGSb6PkbQT1WNJMZAd9po1Gp8MmWxb2/eVHVpfpy4Eqk+IH9ym4KNmWK+xABzpEngtwUm3v8cUTTYxUHBEHUckxFJ/go1Y1ZWicHy10YiR+dB45y1SnscaXvYSuBH6yCeYhtf3GGC88N/14m/9uWq6IK9M1Pc4zklfBjZFaCpCmYfdhulNu61U4Bkb0kSs49CFvwZGT1GzLINp9f2tQvvNfLp1urj8uE7uRsCtYkJSxt9LicmT7ZxwP7D1RVcrQseECMsjQNYK3Ym3l6TqtxBDDhAnfFMoNQdnlUokZHCxXOuMCBsxJNxmqfCoLAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YHe2KIGn3QBQdyBwIdd9a0pE6v/FfkYw/l0ipDDlpnQ=;
- b=IaYk/Ll+4Xi9OD7JXJ1eAWP9C0r8kZ8d6j11WYXi3TtUz2rw+56W6JikhuPOsN3bt6fe9kMi5qzgZbB254H5WRtdIqfpjjtYyzTndwZHaQHBEK2KlYjJH9r6s3Vi7hpinZVA3xxhrLf2eriYjKydc1ia3HOJu+YB6WJkRd15b95r2YvxuHPL8uSEyCsbEVG0uXWOmY1Vrf5ThXxo6SvvdI9M0Sc38IIeoFOvGXQ21rQoDC94+EdJcNqg1zqS/eN+QZDMGM0i0c57zkYJRqmfTQ40QMpEqWJN/7SAdQZr9HO+gB0mp5Jr4wAIlQCIa8HMqgsJwrtxUGTV3berCrQoWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YHe2KIGn3QBQdyBwIdd9a0pE6v/FfkYw/l0ipDDlpnQ=;
- b=sMWtBIw4VlMf/+movomvq7ogx5MFv3Sb6MXtGtFgPpPWS3cfYOY7yy5V2qXWcs+aadz7ngzk8JGGOvqZ529bBKOGm1b/gEuDGGbW2RJV6mwg4bHgHdKkxHG7lidZw4WQVPd1vjJAq3gvn0eYndLqtM1Bjy83lbrszl9Ez23Ps2Q=
-Received: from HE1PR0402MB2857.eurprd04.prod.outlook.com (10.175.29.135) by
- HE1PR0402MB3578.eurprd04.prod.outlook.com (10.167.126.140) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.17; Tue, 6 Aug 2019 17:11:17 +0000
-Received: from HE1PR0402MB2857.eurprd04.prod.outlook.com
- ([fe80::1ced:9626:a551:ec5f]) by HE1PR0402MB2857.eurprd04.prod.outlook.com
- ([fe80::1ced:9626:a551:ec5f%11]) with mapi id 15.20.2136.018; Tue, 6 Aug 2019
- 17:11:17 +0000
-From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        id S1726009AbfHFSkt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Aug 2019 14:40:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37458 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725973AbfHFSkp (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 6 Aug 2019 14:40:45 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B2C1120818;
+        Tue,  6 Aug 2019 18:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565116844;
+        bh=u1x4R5iUanTwInCID5PwGTrmyW23jOXOmyoOOvc4ERA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K3bxmHgVSZOVnoqiuGhDKNBmuYYh0uuCp6Y1rh99th1Z9FIUYrg5RIIvgqAUNT2KI
+         ZS2B2vSpvb845Qx10KpHQAtMMTHeYD1Mp/YQ1cIff7Gn79tPvtnPj/Yb7hQVHCMtVD
+         K0NCzYURphpm5+cWg0U71eUEriCKwUDCdL6mBrcY=
+Date:   Tue, 6 Aug 2019 20:40:42 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
@@ -53,84 +43,62 @@ CC:     "corbet@lwn.net" <corbet@lwn.net>,
         Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
         Larisa Ileana Grigore <larisa.grigore@nxp.com>
 Subject: Re: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
-Thread-Topic: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
-Thread-Index: AQHVTHn1y10az0N8mUWM4VNvSHKzDA==
-Date:   Tue, 6 Aug 2019 17:11:17 +0000
-Message-ID: <HE1PR0402MB28579034C09EB49A76A4F8E7DFD50@HE1PR0402MB2857.eurprd04.prod.outlook.com>
+Message-ID: <20190806184042.GA26041@kroah.com>
 References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com>
  <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
  <20190805153114.GA16836@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
-x-originating-ip: [212.146.100.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 703609ad-10c5-439b-4f88-08d71a911843
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:HE1PR0402MB3578;
-x-ms-traffictypediagnostic: HE1PR0402MB3578:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <HE1PR0402MB357893B470A4A40CA87426C0DFD50@HE1PR0402MB3578.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0121F24F22
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(396003)(346002)(39860400002)(136003)(189003)(199004)(2351001)(99286004)(6436002)(91956017)(6306002)(2501003)(33656002)(55016002)(5640700003)(8676002)(66556008)(64756008)(9686003)(66446008)(66476007)(229853002)(66946007)(4326008)(5660300002)(53936002)(1730700003)(81156014)(81166006)(478600001)(14444005)(6916009)(52536014)(256004)(8936002)(76116006)(966005)(6246003)(71200400001)(7416002)(25786009)(71190400001)(3846002)(6116002)(7736002)(486006)(7696005)(316002)(186003)(26005)(14454004)(74316002)(86362001)(446003)(476003)(305945005)(68736007)(53546011)(6506007)(54906003)(66066001)(2906002)(102836004)(76176011);DIR:OUT;SFP:1101;SCL:1;SRVR:HE1PR0402MB3578;H:HE1PR0402MB2857.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 3vvQvASBOmKksFhtBOAUw/ZnPoA734mnfKfv3o0JIuvo+qT/vAbO8iHS8lxFAXQagLuwqvE7BFGKIr3bG8kLPCX5wT6tDEzWCTSrZvwV17hFSUTqFF7slT/9Ul4sf2Tv+Y6sqFhtRVfC+mya9ON2w2ePK9lwwdu3CynO+lEKXLYwxMg7bcATaY2Kbo2UnhbVzIf7bvFGr33KrUJcADmPIFCNTmQ21Jc/uI9JKThneuEkDl+VSBLixsKSUVCTjtTHWYBXfc7QNR0H82cnFLAQfouDbFhwgVzIpttWlMA8VAMI5ABh+opDjoLI3zcqiOGArj4og71LYXDw7hyU4RWgm9t78MSL4z5dfha9y42xJZV7eh5diA3/MM4iJRpWOhNVv7tuxNOGC95mt13/QU4kYsBQYhM7gITZ8rtfZx00VbM=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <HE1PR0402MB28579034C09EB49A76A4F8E7DFD50@HE1PR0402MB2857.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 703609ad-10c5-439b-4f88-08d71a911843
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Aug 2019 17:11:17.4749
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: stefan-gabriel.mirea@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0402MB3578
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HE1PR0402MB28579034C09EB49A76A4F8E7DFD50@HE1PR0402MB2857.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 8/5/2019 6:31 PM, gregkh@linuxfoundation.org wrote:=0A=
-> On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:=0A=
->>=0A=
->> +/* Freescale Linflex UART */=0A=
->> +#define PORT_LINFLEXUART     121=0A=
-> =0A=
-> Do you really need this modified?=0A=
-=0A=
-Hello Greg,=0A=
-=0A=
-This macro is meant to be assigned to port->type in the config_port=0A=
-method from uart_ops, in order for verify_port to know if the received=0A=
-serial_struct structure was really targeted for a LINFlex port. It=0A=
-needs to be defined outside, to avoid "collisions" with other drivers.=0A=
-=0A=
-As far as I see, uart_set_info() will actually fail at the=0A=
-"baud_base < 9600" check[1], right after calling verify_port(), when=0A=
-performing an ioctl() on "/dev/console" with TIOCSSERIAL using a=0A=
-serial_struct obtained with TIOCGSERIAL. This happens because this=0A=
-reduced version of the LINFlex UART driver will not touch the uartclk=0A=
-field of the uart_port (as there is currently no clock support).=0A=
-Therefore, the linflex_config/verify_port() functions, along with the=0A=
-PORT_LINFLEXUART macro, may be indeed unnecessary at this point (and=0A=
-should be added later). Is this what you mean?=0A=
-=0A=
-Other than that, I do not see anything wrong with the addition of a=0A=
-define in serial_core.h for this purpose (which is also what most of the=0A=
-serial drivers do, including amba-pl011.c, mentioned in=0A=
-Documentation/driver-api/serial/driver.rst as providing the reference=0A=
-implementation), so please be more specific.=0A=
-=0A=
-Regards,=0A=
-Stefan=0A=
-=0A=
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/tty/serial/serial_core.c?h=3Dv5.3-rc1#n872=0A=
+On Tue, Aug 06, 2019 at 05:11:17PM +0000, Stefan-gabriel Mirea wrote:
+> On 8/5/2019 6:31 PM, gregkh@linuxfoundation.org wrote:
+> > On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:
+> >>
+> >> +/* Freescale Linflex UART */
+> >> +#define PORT_LINFLEXUART     121
+> > 
+> > Do you really need this modified?
+> 
+> Hello Greg,
+> 
+> This macro is meant to be assigned to port->type in the config_port
+> method from uart_ops, in order for verify_port to know if the received
+> serial_struct structure was really targeted for a LINFlex port. It
+> needs to be defined outside, to avoid "collisions" with other drivers.
+
+Yes, I know what it goes to, but does anyone in userspace actually use
+it?
+
+> As far as I see, uart_set_info() will actually fail at the
+> "baud_base < 9600" check[1], right after calling verify_port(), when
+> performing an ioctl() on "/dev/console" with TIOCSSERIAL using a
+> serial_struct obtained with TIOCGSERIAL. This happens because this
+> reduced version of the LINFlex UART driver will not touch the uartclk
+> field of the uart_port (as there is currently no clock support).
+> Therefore, the linflex_config/verify_port() functions, along with the
+> PORT_LINFLEXUART macro, may be indeed unnecessary at this point (and
+> should be added later). Is this what you mean?
+
+No, see below.
+
+> Other than that, I do not see anything wrong with the addition of a
+> define in serial_core.h for this purpose (which is also what most of the
+> serial drivers do, including amba-pl011.c, mentioned in
+> Documentation/driver-api/serial/driver.rst as providing the reference
+> implementation), so please be more specific.
+
+I am getting tired of dealing with merge issues with that list, and no
+one seems to be able to find where they are really needed for userspace,
+especially for new devices.  What happens if you do not have use it?
+
+thanks,
+
+greg k-h
