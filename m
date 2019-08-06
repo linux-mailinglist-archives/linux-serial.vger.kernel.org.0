@@ -2,103 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 174CE82D55
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 10:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C298E82D8A
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 10:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730952AbfHFICQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Aug 2019 04:02:16 -0400
-Received: from skedge03.snt-world.com ([91.208.41.68]:50128 "EHLO
-        skedge03.snt-world.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbfHFICP (ORCPT
+        id S1728918AbfHFIJ3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Aug 2019 04:09:29 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45007 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727259AbfHFIJ3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Aug 2019 04:02:15 -0400
-Received: from sntmail11s.snt-is.com (unknown [10.203.32.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by skedge03.snt-world.com (Postfix) with ESMTPS id BCCFC626313;
-        Tue,  6 Aug 2019 10:02:04 +0200 (CEST)
-Received: from sntmail12r.snt-is.com (10.203.32.182) by sntmail11s.snt-is.com
- (10.203.32.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 6 Aug 2019
- 10:02:04 +0200
-Received: from sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305]) by
- sntmail12r.snt-is.com ([fe80::e551:8750:7bba:3305%3]) with mapi id
- 15.01.1713.004; Tue, 6 Aug 2019 10:02:04 +0200
-From:   Schrempf Frieder <frieder.schrempf@kontron.de>
-To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Tue, 6 Aug 2019 04:09:29 -0400
+Received: by mail-ot1-f65.google.com with SMTP id b7so40188330otl.11;
+        Tue, 06 Aug 2019 01:09:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xqMzHVpDgAOeonwqolEAexQrNRkRWUmsMZx6uc5Di+U=;
+        b=ncTnZ643a6F6/xp7C4uOVK+6KbeNgPn9gNgcJf7vG+uXSvns3V5UXQsVE89o+4nJ0B
+         ej7lG5JEgwrvEuEK/MGRpgOX8pW7BF/cQ7oEbQnIZQOEvLP31VZPK2DRAml4bSOmRgL0
+         NTi0wE7rRWNeFg+sV1kzZRFLb9a5QK12C2tyOVNVbP4aCv0HLeo/GsOtSKPxVCgdKAlC
+         nUhMRvKafaDansoPNHHNHQYRJTZc42izS7PRqLCo3mhmguFHt0ELsBkdf1ZVH8+YuUG3
+         9TXRtJ/ChZXKInqaSsFZ5FPsIohuz0oi+zK4RKxLZsCn0iQusa86iIdKCKCVIGFymjCT
+         h2bA==
+X-Gm-Message-State: APjAAAVXi/GWjde0GnCJY1G4fBLrKzpJzCtxPEJr7S/e1VHcKqmiuvQC
+        +IkAyhkHvfHVfKYFMgph2cD5aeHIxTajxJtc/0mH3A==
+X-Google-Smtp-Source: APXvYqyxyt+Zm9XpZFQ3yabtEsQoWuW6uuAYo0QQEQY3CgXVLXrqXiHwww1RAwfouKG1y4E2IuOgL/omHPxmr9xrqjg=
+X-Received: by 2002:a9d:5c11:: with SMTP id o17mr1832302otk.107.1565078968223;
+ Tue, 06 Aug 2019 01:09:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190802100349.8659-1-frieder.schrempf@kontron.de>
+In-Reply-To: <20190802100349.8659-1-frieder.schrempf@kontron.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Aug 2019 10:09:17 +0200
+Message-ID: <CAMuHMdXp9GAgWE7Ea_oA08PdPc8+J_wGVhM7L5B466OSbr7D_A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] serial: mctrl_gpio: Avoid probe failures in case
+ of missing gpiolib
+To:     Schrempf Frieder <frieder.schrempf@kontron.de>
+Cc:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "festevam@gmail.com" <festevam@gmail.com>,
         "linux-imx@nxp.com" <linux-imx@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jslaby@suse.com>,
         "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 2/4] serial: mctrl_gpio: Add a NULL check to
- mctrl_gpio_to_gpiod()
-Thread-Topic: [PATCH v3 2/4] serial: mctrl_gpio: Add a NULL check to
- mctrl_gpio_to_gpiod()
-Thread-Index: AQHVSRmhj6XM1Buz9UqFmvYk2hHNCKbno2OAgASBqgCAAX0UAIAABJuA
-Date:   Tue, 6 Aug 2019 08:02:04 +0000
-Message-ID: <3672939d-183d-f844-c44c-c70a77931c72@kontron.de>
-References: <20190802100349.8659-1-frieder.schrempf@kontron.de>
- <20190802100349.8659-2-frieder.schrempf@kontron.de>
- <20190802121231.wk6yg5mkyivs3rni@pengutronix.de>
- <f866213b-fd3b-8602-6c11-56cb65a1ea05@kontron.de>
- <20190806074534.5w773nltywxyiljz@pengutronix.de>
-In-Reply-To: <20190806074534.5w773nltywxyiljz@pengutronix.de>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.25.9.193]
-x-c2processedorg: 51b406b7-48a2-4d03-b652-521f56ac89f3
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <44F6FF28ECA0604BAC78178DAA15EB46@snt-world.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-SnT-MailScanner-Information: Please contact the ISP for more information
-X-SnT-MailScanner-ID: BCCFC626313.A0B69
-X-SnT-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
-X-SnT-MailScanner-SpamCheck: 
-X-SnT-MailScanner-From: frieder.schrempf@kontron.de
-X-SnT-MailScanner-To: festevam@gmail.com, geert+renesas@glider.be,
-        gregkh@linuxfoundation.org, jslaby@suse.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        s.hauer@pengutronix.de, shawnguo@kernel.org,
-        u.kleine-koenig@pengutronix.de
-X-Spam-Status: No
+        <linux-arm-kernel@lists.infradead.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-T24gMDYuMDguMTkgMDk6NDUsIFV3ZSBLbGVpbmUtS8O2bmlnIHdyb3RlOg0KPiBIZWxsbyBGcmll
-ZGVyLA0KPiANCj4gT24gTW9uLCBBdWcgMDUsIDIwMTkgYXQgMDk6MDE6MzlBTSArMDAwMCwgU2No
-cmVtcGYgRnJpZWRlciB3cm90ZToNCj4+IE9uIDAyLjA4LjE5IDE0OjEyLCBVd2UgS2xlaW5lLUvD
-tm5pZyB3cm90ZToNCj4+PiBPbiBGcmksIEF1ZyAwMiwgMjAxOSBhdCAxMDowNDoxMEFNICswMDAw
-LCBTY2hyZW1wZiBGcmllZGVyIHdyb3RlOg0KPj4+PiBGcm9tOiBGcmllZGVyIFNjaHJlbXBmIDxm
-cmllZGVyLnNjaHJlbXBmQGtvbnRyb24uZGU+DQo+Pj4+DQo+Pj4+IEFzIGl0IGlzIGFsbG93ZWQg
-dG8gdXNlIHRoZSBtY3RybF9ncGlvXyogZnVuY3Rpb25zIGJlZm9yZQ0KPj4+PiBpbml0aWFsaXph
-dGlvbiAoYXMgdGhlIDgyNTAgZHJpdmVyIGRvZXMgYWNjb3JkaW5nIHRvIDQzNGJlMGFlN2FhNyks
-DQo+Pj4NCj4+PiBBY3R1YWxseSBJIHdhcyBzdXJwcmlzZWQgc29tZSB0aW1lIGFnbyB0aGF0IDgy
-NTAgdXNlZCBzZXJpYWxfbWN0cmwNCj4+PiB3aXRob3V0IGZpcnN0IGluaXRpYWxpemluZyBpdCBh
-bmQgZXhwZWN0aW5nIGl0IHRvIHdvcmsuIEkgZGlkbid0IGxvb2sgaW4NCj4+PiBkZXRhaWwsIGJ1
-dCBJIHdvdWxkbid0IGdvIHNvIGZhciB0byBjYWxsIHRoaXMgImFsbG93ZWQiLiBUaGUgY29tbWl0
-DQo+Pj4gaXRzZWxmIGNhbGxzIGl0ICJ3b3JrYXJvdW5kIiB3aGljaCBzZWVtcyBhIGJldHRlciBt
-YXRjaC4NCj4+DQo+PiBPaywgYnV0IGlmIHRoaXMgaXMgY29uc2lkZXJlZCB0byBiZSBhIHdvcmth
-cm91bmQgYW5kIGFzIHRoZSA4MjUwIGRyaXZlcg0KPj4gZG9lcyBub3QgdXNlIG1jdHJsX2dwaW9f
-dG9fZ3Bpb2QoKSwgd2Ugc2hvdWxkIG1heWJlIGp1c3QgZHJvcCB0aGlzIHBhdGNoDQo+PiBpbnN0
-ZWFkIG9mIGVuY291cmFnaW5nIG90aGVycyB0byB1c2UgbWN0cmxfZ3BpbyBiZWZvcmUgaW5pdGlh
-bGl6YXRpb24uDQo+Pg0KPj4gSSdtIHJlYWxseSBub3Qgc3VyZSB3aGF0J3MgYmVzdCwgc28gZGVw
-ZW5kaW5nIG9uIHdoYXQgeW91IHdpbGwgcHJvcG9zZSwNCj4+IEknbGwgc2VuZCBhIG5ldyB2ZXJz
-aW9uIG9mIHRoaXMgcGF0Y2ggd2l0aCBhZGp1c3RlZCBjb21taXQgbWVzc2FnZSBvciBub3QuDQo+
-IA0KPiBJIHdvdWxkbid0IGVuY291cmFnZSB1c2FnZSBvZiBtY3RybC1ncGlvIGJlZm9yZSBpdCdz
-IGluaXRpYWxpemVkLiBTbyBJDQo+IHN1Z2dlc3QgdG8gZHJvcCB0aGlzIHBhdGNoLg0KDQpPaywg
-dGhhbmtzLg==
+On Fri, Aug 2, 2019 at 12:04 PM Schrempf Frieder
+<frieder.schrempf@kontron.de> wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+>
+> If CONFIG_GPIOLIB is not enabled, mctrl_gpio_init() and
+> mctrl_gpio_init_noauto() will currently return an error pointer with
+> -ENOSYS. As the mctrl GPIOs are usually optional, drivers need to
+> check for this condition to allow continue probing.
+>
+> To avoid the need for this check in each driver, we return NULL
+> instead, as all the mctrl_gpio_*() functions are skipped anyway.
+> We also adapt mctrl_gpio_to_gpiod() to be in line with this change.
+>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
