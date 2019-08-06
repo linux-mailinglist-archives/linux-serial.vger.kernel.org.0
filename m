@@ -2,80 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC1682D8E
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 10:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6199482EEF
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2019 11:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731735AbfHFIJ7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Aug 2019 04:09:59 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:45192 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbfHFIJ7 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Aug 2019 04:09:59 -0400
-Received: by mail-oi1-f193.google.com with SMTP id m206so65316807oib.12;
-        Tue, 06 Aug 2019 01:09:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HI/+7QvjOEEoVFOc4ETmV3V160VHifVAi0bhs8u9DNc=;
-        b=UYwidAN0xHPrmfsQe1KwrXow2KnQBEm63yvsRL61+T4QMyWhjbpPiyYx4A55H/kdt8
-         Kd7zZb2TIzbbjQR/jsjkaHA0su3r1DaKvNEyav0SEaaaWIMKgxRafbIj0UV3UPyFGidE
-         shnBgAxpCSBtT6NhZDfb2OVwFD3/nzYnZ4P7ifab0W+NYF8ARlI2QmnPjCQCrCn/nInd
-         jS/4K5IodgOd6yoFIuvnv3QGcMAT/1SBuJg7KMjbpwrW+vRiZhiqDp6TVZF2sALfYquW
-         rhuSsnCORkDKdpkW6u1p4tRodr35h4eqI9uvzy6tZvOoXHXQ05t6oPSBIznWgwmQnzta
-         Gz9g==
-X-Gm-Message-State: APjAAAVQz1KgaPOzxOGq93ik4lF/m4nS6tQNvJ59cVbWjwkBoImSPKn8
-        py7N0bjI/BCcp7EFNcGBRye4v5+R4LuS/VCGGLA=
-X-Google-Smtp-Source: APXvYqz1js8z8HnmSWxxKzsp2msa061pGX5lcuBT8TeExknala5sT01XRBUZ9FPRw+Q+arpqH93gKXBN9yl3l+BsKBw=
-X-Received: by 2002:a05:6808:3c5:: with SMTP id o5mr1824672oie.102.1565078998482;
- Tue, 06 Aug 2019 01:09:58 -0700 (PDT)
+        id S1732254AbfHFJnh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Aug 2019 05:43:37 -0400
+Received: from mga02.intel.com ([134.134.136.20]:42923 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726713AbfHFJng (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 6 Aug 2019 05:43:36 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Aug 2019 02:43:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,353,1559545200"; 
+   d="scan'208";a="349375879"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 06 Aug 2019 02:43:24 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3D452FF; Tue,  6 Aug 2019 12:43:22 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v1 1/9] serial: 8250_dw: Use a unified new dev variable in remove
+Date:   Tue,  6 Aug 2019 12:43:14 +0300
+Message-Id: <20190806094322.64987-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190802100349.8659-1-frieder.schrempf@kontron.de> <20190802100349.8659-3-frieder.schrempf@kontron.de>
-In-Reply-To: <20190802100349.8659-3-frieder.schrempf@kontron.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Aug 2019 10:09:47 +0200
-Message-ID: <CAMuHMdWoyfkyytRz8BJztpeAKLRY45UKLuy5hNU0e7QYYQYJ9Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] serial: sh-sci: Don't check for mctrl_gpio_init()
- returning -ENOSYS
-To:     Schrempf Frieder <frieder.schrempf@kontron.de>
-Cc:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 2, 2019 at 12:04 PM Schrempf Frieder
-<frieder.schrempf@kontron.de> wrote:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->
-> Now that the mctrl_gpio code returns NULL instead of ERR_PTR(-ENOSYS)
-> if CONFIG_GPIOLIB is disabled, we can safely remove this check.
->
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+The commit 2cb78eab2376 ("serial: 8250_dw: Use a unified new dev variable in
+probe") introduced a local dev variable in ->probe(). Do the same in ->remove()
+in order to prepare for sequential patches.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_dw.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index 284e8d052fc3..7b559f969f61 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -667,8 +667,9 @@ static int dw8250_probe(struct platform_device *pdev)
+ static int dw8250_remove(struct platform_device *pdev)
+ {
+ 	struct dw8250_data *data = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
+ 
+-	pm_runtime_get_sync(&pdev->dev);
++	pm_runtime_get_sync(dev);
+ 
+ 	serial8250_unregister_port(data->line);
+ 
+@@ -680,8 +681,8 @@ static int dw8250_remove(struct platform_device *pdev)
+ 	if (!IS_ERR(data->clk))
+ 		clk_disable_unprepare(data->clk);
+ 
+-	pm_runtime_disable(&pdev->dev);
+-	pm_runtime_put_noidle(&pdev->dev);
++	pm_runtime_disable(dev);
++	pm_runtime_put_noidle(dev);
+ 
+ 	return 0;
+ }
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.20.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
