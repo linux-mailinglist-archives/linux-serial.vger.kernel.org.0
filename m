@@ -2,88 +2,157 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A53084F66
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Aug 2019 17:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1977E85148
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Aug 2019 18:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbfHGPE2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 7 Aug 2019 11:04:28 -0400
-Received: from mga09.intel.com ([134.134.136.24]:53877 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729942AbfHGPE2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 7 Aug 2019 11:04:28 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 08:04:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,357,1559545200"; 
-   d="scan'208";a="325989167"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by orsmga004.jf.intel.com with ESMTP; 07 Aug 2019 08:04:27 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hvNUH-0003pw-Ei; Wed, 07 Aug 2019 18:04:25 +0300
-Date:   Wed, 7 Aug 2019 18:04:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robert Middleton <robert.middleton@rm5248.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] serial: 8250_exar: Refactor exar_shutdown()
-Message-ID: <20190807150425.GC30120@smile.fi.intel.com>
-References: <20190805100518.9818-1-andriy.shevchenko@linux.intel.com>
- <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
- <CAKpcJVZTy963y3TOXSYSBFVOpVTWEOyJKUYxv1pHNGz3Y1aPTA@mail.gmail.com>
- <20190805142147.GK23480@smile.fi.intel.com>
- <CAKpcJVYfcVAmoB63EbmJaix6v+2JJ5BujAcdduQLcw-ES+f3ZQ@mail.gmail.com>
- <20190806152407.GF30120@smile.fi.intel.com>
- <20190806153110.GG30120@smile.fi.intel.com>
- <CAKpcJVYTC8MN6A51iip=cyvkfXVy2NS-c3FyhAi9qcxsgJkQRw@mail.gmail.com>
- <CAKpcJVaL-BqL0G=_hT6WHz6kCr05sHS1jDQnaM0s_WFWCb6n_A@mail.gmail.com>
+        id S1730010AbfHGQme (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 7 Aug 2019 12:42:34 -0400
+Received: from mail-eopbgr150043.outbound.protection.outlook.com ([40.107.15.43]:6812
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729944AbfHGQme (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 7 Aug 2019 12:42:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gfAljpL4mDeHv1c01nX+b263TsuhBnaCPk6bau3xOig870qeMTo8G6tIQxcgRonMcKdSnOBpYWF5yQF4+a73QAV9TTpsAfjdHZzb1yQQTcJKdtbszpLPMytIojmNkU7nYHA19v4QFV8FvpbKVtgV9+UW8T3woBysHKfWSKZjWyr76XRU8twIJgvY/NNUKBkuZim19IdmpsjaArfxQdLaYHWTRdvfVp2OItGXTCbOlcI6YjUfkuPnA+1MGpumDj3gUm5miDBASF2YcoZffY3V9jmWW4T5QxZKF5mPNp/C1FjIQEDADzszVq0xuYt0UHFV3FGL/lbiiP3g6xT4Hqd7Dg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6jJTcLgr82saZwMm28KzgPFSz4hKbfPLg6K4ApOKkpc=;
+ b=amdC7UKWon0p0k3wQNfde3iaieSHJyUOGKdl6dXr+EBXoaVIyxfPRPaHEIh+Or2SI6TrL178L/jYzpE5BOfvbtGJ5vMTOn6Tm8oZ941lLadTyHi0av8yiHHkRv6id7XK4nnVgTw7bdqk9IeDGcgEXGBuNaa1LL7xn4IYSgAh1653fdXZfqxSGrjpoh222hsYqbbMNpI5jyatA/GmiUjCFQpvX9+xAHEbx6L/s8tDzZV5UZ42EkPiMVVwKOc3btrXYn7IllL8zeLZF4LaD3prXPPBGL5+yiTPKkfWcCmnjm/Hv4CTzR2aCHmJ3vB3qDQXNOj4h5MImlYFO+PKLjSHOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
+ header.d=nxp.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6jJTcLgr82saZwMm28KzgPFSz4hKbfPLg6K4ApOKkpc=;
+ b=sfzje78jJjGyjs1WyPTn1B8FUohKh6C4m3hPMkH6NmMoL+cUpcz2wMqSkH0rX7MHiCxdHmBuSw+gG1ZLlL0SkdN5M17L+gw9Cywp7ALuwBFPU6LRnc+XvsxJGjKKbhYkzzRbV/3hc/laYOxgip2ivfznWqJsJqAPp+lkzsdwYaE=
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
+ VI1PR0402MB3360.eurprd04.prod.outlook.com (52.134.1.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2136.17; Wed, 7 Aug 2019 16:42:17 +0000
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023%7]) with mapi id 15.20.2157.015; Wed, 7 Aug 2019
+ 16:42:17 +0000
+From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>
+Subject: Re: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Thread-Topic: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Thread-Index: AQHVTT8SPpHUwU0eqkG6Gc3hvK3zpw==
+Date:   Wed, 7 Aug 2019 16:42:17 +0000
+Message-ID: <VI1PR0402MB2863C4406C06B0BDA3581822DFD40@VI1PR0402MB2863.eurprd04.prod.outlook.com>
+References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com>
+ <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
+ <20190805153114.GA16836@kroah.com>
+ <HE1PR0402MB28579034C09EB49A76A4F8E7DFD50@HE1PR0402MB2857.eurprd04.prod.outlook.com>
+ <20190806184042.GA26041@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
+x-originating-ip: [212.146.100.6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8145bb2a-2585-4321-0549-08d71b563581
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3360;
+x-ms-traffictypediagnostic: VI1PR0402MB3360:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <VI1PR0402MB33602720EF1857360F9CB3CADFD40@VI1PR0402MB3360.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01221E3973
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(376002)(136003)(366004)(346002)(199004)(189003)(8936002)(66476007)(66556008)(64756008)(81166006)(66446008)(81156014)(86362001)(305945005)(2351001)(14454004)(5660300002)(25786009)(446003)(4326008)(26005)(229853002)(8676002)(1730700003)(6916009)(476003)(66946007)(486006)(53936002)(74316002)(186003)(99286004)(316002)(33656002)(76116006)(55016002)(256004)(66066001)(6116002)(6246003)(6506007)(53546011)(54906003)(6306002)(3846002)(7696005)(52536014)(6436002)(2501003)(7416002)(966005)(7736002)(478600001)(68736007)(9686003)(71190400001)(5640700003)(91956017)(102836004)(14444005)(2906002)(76176011)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3360;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: h1B8WoIjgsnF79fvyEQ1n4NmqEch+dB3lEqkI2xGzlxWPQPNupewKqV+Xhp5WcSP2v118qP4R9e/LuQmomJQ3HOmXFWHnNkemlBiRJePKVBmnTcQR5S2g8DVrop5+6/o7UKCTA/imi9JATIqhB5LC2xnNHTkjHulZu6QeLGvUtOGw3+eaAIF3yBJvjf8nJsnCuwj/wogAU4MV6LPbnWM9X2jrM+PoOknNleyuUXk5ucJJGtzhviGwJsRjGOLPu6JqZXNfakls0ahaHd4NjJ6Af/T9/M9OWg3MAsxymFhYZoXYKdcaDiISsiNTddERv1IDoHRfjDtxmY6pnl1jRqELVWZeCz22tl4EGN4b8JFqCXAoLzX9ttJ4RQvAfuZPmAs35UTySdJUgGM3q1KSA5rRnL9W3vC4krbNMF5mcZpG4c=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKpcJVaL-BqL0G=_hT6WHz6kCr05sHS1jDQnaM0s_WFWCb6n_A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8145bb2a-2585-4321-0549-08d71b563581
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2019 16:42:17.3610
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: U6GzYRrtpcRqs+n1j0gsN24F+HBDXkxk3cxeQva7VvvCf4QNQf3wpU8xEGYbqVSp+7SejmBo4s+DrUpWW999wMM5vLWPLiyWpr6+/+ZCqA0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3360
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 09:48:03AM -0400, Robert Middleton wrote:
-> > I'll try to get some firm results in the morning; otherwise I won't be
-> > able to check until early next week as I will be away from the
-> > hardware.
-> 
-> After doing more testing, I think that I finally have something that
-> is working fully at all baud rates.  I've tested this at
-> 115200,9600,and 4800, testing via: echo "the quick brown fox jumps
-> over the lazy dog" > /dev/ttySx
-> 
-> Removing the check to uart_circ_empty in the while loop makes it more
-> reliable, however it will occasionally fail and only transmit the
-> first part of the message(at 4800, it will transmit only "t", at
-> 115200 it will transmit "the quick bro").
-
-I'm not sure about the loop for uart_circ_empty(). Can you try 2-3 kB of text
-at lower baud rate, let's say 2400 or so?
-
-> I've found that breaking it
-> into two loops, one checking the uart_circ_empty and the other doing
-> the LSR check is reliable at all baud rates.
-
-If my suspicion is correct, the shutdown of the port will take ages which is
-inappropriate.
-
-> I can do a formal patch later, but I just wanted to see if this made
-> sense first.  The second loop is now much simpler, and does not do the
-> buffer check at the same time, which was probably causing some
-> problems with the previous version.
-
-Thank you for this wise move, I appreciate.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On 8/6/2019 9:40 PM, gregkh@linuxfoundation.org wrote:=0A=
+> On Tue, Aug 06, 2019 at 05:11:17PM +0000, Stefan-gabriel Mirea wrote:=0A=
+>> On 8/5/2019 6:31 PM, gregkh@linuxfoundation.org wrote:=0A=
+>>> On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:=
+=0A=
+>>>>=0A=
+>>>> +/* Freescale Linflex UART */=0A=
+>>>> +#define PORT_LINFLEXUART     121=0A=
+>>>=0A=
+>>> Do you really need this modified?=0A=
+>>=0A=
+>> Hello Greg,=0A=
+>>=0A=
+>> This macro is meant to be assigned to port->type in the config_port=0A=
+>> method from uart_ops, in order for verify_port to know if the received=
+=0A=
+>> serial_struct structure was really targeted for a LINFlex port. It=0A=
+>> needs to be defined outside, to avoid "collisions" with other drivers.=
+=0A=
+> =0A=
+> Yes, I know what it goes to, but does anyone in userspace actually use=0A=
+> it?=0A=
+=0A=
+No, we do not use it from userspace, but kept the pattern only for=0A=
+conformance.=0A=
+=0A=
+>> Other than that, I do not see anything wrong with the addition of a=0A=
+>> define in serial_core.h for this purpose (which is also what most of the=
+=0A=
+>> serial drivers do, including amba-pl011.c, mentioned in=0A=
+>> Documentation/driver-api/serial/driver.rst as providing the reference=0A=
+>> implementation), so please be more specific.=0A=
+> =0A=
+> I am getting tired of dealing with merge issues with that list, and no=0A=
+> one seems to be able to find where they are really needed for userspace,=
+=0A=
+> especially for new devices.  What happens if you do not have use it?=0A=
+=0A=
+I see. If I drop its usage completely and leave 'type' from the=0A=
+uart_port as 0, uart_port_startup() will fail when finding that=0A=
+uport->type =3D=3D PORT_UNKNOWN at [1] (there may be other effects as well,=
+=0A=
+e.g. due to the check in uart_configure_port[2]).=0A=
+=0A=
+So I suppose that I need to define some nonzero 'PORT_KNOWN' macro in=0A=
+the driver and use that one internally for 'type'. Is my understanding=0A=
+correct? Will there be any problems if I define it to a positive integer=0A=
+which is already assigned to another driver, according to serial_core.h?=0A=
+=0A=
+Regards,=0A=
+Stefan=0A=
+=0A=
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/tty/serial/serial_core.c?h=3Dv5.3-rc1#n188=0A=
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/tty/serial/serial_core.c?h=3Dv5.3-rc1#n2348=0A=
