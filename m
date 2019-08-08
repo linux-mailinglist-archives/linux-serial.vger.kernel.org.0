@@ -2,110 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D61C08630E
-	for <lists+linux-serial@lfdr.de>; Thu,  8 Aug 2019 15:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F5F86310
+	for <lists+linux-serial@lfdr.de>; Thu,  8 Aug 2019 15:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732882AbfHHNZ6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 8 Aug 2019 09:25:58 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:59202 "EHLO mx2.mailbox.org"
+        id S1732886AbfHHN0B (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 8 Aug 2019 09:26:01 -0400
+Received: from mga18.intel.com ([134.134.136.126]:23513 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732643AbfHHNZ6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 8 Aug 2019 09:25:58 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id DCFF0A1749;
-        Thu,  8 Aug 2019 15:25:56 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
-        with ESMTP id UthFW26DoSIi; Thu,  8 Aug 2019 15:25:45 +0200 (CEST)
-From:   Stefan Roese <sr@denx.de>
-To:     linux-serial@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pavel Machek <pavel@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 2/2] serial: mctrl_gpio: Support all GPIO suffixes (gpios vs gpio)
-Date:   Thu,  8 Aug 2019 15:25:43 +0200
-Message-Id: <20190808132543.26274-2-sr@denx.de>
-In-Reply-To: <20190808132543.26274-1-sr@denx.de>
-References: <20190808132543.26274-1-sr@denx.de>
+        id S1732643AbfHHN0B (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 8 Aug 2019 09:26:01 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 06:26:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,361,1559545200"; 
+   d="scan'208";a="193156376"
+Received: from kuha.fi.intel.com ([10.237.72.189])
+  by fmsmga001.fm.intel.com with SMTP; 08 Aug 2019 06:25:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Aug 2019 16:25:57 +0300
+Date:   Thu, 8 Aug 2019 16:25:57 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v1 8/9] serial: 8250_lpss: Get rid of custom
+ LPSS_DEVICE() macro
+Message-ID: <20190808132557.GG8938@kuha.fi.intel.com>
+References: <20190806094322.64987-1-andriy.shevchenko@linux.intel.com>
+ <20190806094322.64987-8-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190806094322.64987-8-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This patch fixes a backward compatibility issue, when boards use the
-old style GPIO suffix "-gpio" instead of the new "-gpios". This
-potential problem has been introduced by commit d99482673f95 ("serial:
-mctrl_gpio: Check if GPIO property exisits before requesting it").
+On Tue, Aug 06, 2019 at 12:43:21PM +0300, Andy Shevchenko wrote:
+> Since PCI core provides a generic PCI_DEVICE_DATA() macro,
+> replace LPSS_DEVICE() with former one.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-This patch now fixes this issue by iterating over all supported GPIO
-suffixes by using the newly introduced for_each_gpio_suffix() helper.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Also, the string buffer is now allocated on the stack to avoid the
-problem of allocation in a loop and its potential failure.
+> ---
+>  drivers/tty/serial/8250/8250_lpss.c | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+> index 2bb30e688433..cfe0ab443250 100644
+> --- a/drivers/tty/serial/8250/8250_lpss.c
+> +++ b/drivers/tty/serial/8250/8250_lpss.c
+> @@ -356,17 +356,15 @@ static const struct lpss8250_board qrk_board = {
+>  	.exit = qrk_serial_exit,
+>  };
+>  
+> -#define LPSS_DEVICE(id, board) { PCI_VDEVICE(INTEL, id), (kernel_ulong_t)&board }
+> -
+>  static const struct pci_device_id pci_ids[] = {
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_QRK_UARTx, qrk_board),
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_BYT_UART1, byt_board),
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_BYT_UART2, byt_board),
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_BSW_UART1, byt_board),
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_BSW_UART2, byt_board),
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_BDW_UART1, byt_board),
+> -	LPSS_DEVICE(PCI_DEVICE_ID_INTEL_BDW_UART2, byt_board),
+> -	{ },
+> +	{ PCI_DEVICE_DATA(INTEL, QRK_UARTx, &qrk_board) },
+> +	{ PCI_DEVICE_DATA(INTEL, BYT_UART1, &byt_board) },
+> +	{ PCI_DEVICE_DATA(INTEL, BYT_UART2, &byt_board) },
+> +	{ PCI_DEVICE_DATA(INTEL, BSW_UART1, &byt_board) },
+> +	{ PCI_DEVICE_DATA(INTEL, BSW_UART2, &byt_board) },
+> +	{ PCI_DEVICE_DATA(INTEL, BDW_UART1, &byt_board) },
+> +	{ PCI_DEVICE_DATA(INTEL, BDW_UART2, &byt_board) },
+> +	{ }
+>  };
+>  MODULE_DEVICE_TABLE(pci, pci_ids);
+>  
+> -- 
+> 2.20.1
 
-Signed-off-by: Stefan Roese <sr@denx.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Pavel Machek <pavel@denx.de>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/tty/serial/serial_mctrl_gpio.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-index 2b400189be91..d444fdaa280a 100644
---- a/drivers/tty/serial/serial_mctrl_gpio.c
-+++ b/drivers/tty/serial/serial_mctrl_gpio.c
-@@ -15,6 +15,7 @@
- #include <linux/property.h>
- 
- #include "serial_mctrl_gpio.h"
-+#include "../../gpio/gpiolib.h"
- 
- struct mctrl_gpios {
- 	struct uart_port *port;
-@@ -117,17 +118,24 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
- 
- 	for (i = 0; i < UART_GPIO_MAX; i++) {
- 		enum gpiod_flags flags;
--		char *gpio_str;
-+		const char *suffix;
-+		char gpio_str[32];	/* 32 is max size of property name */
- 		bool present;
-+		int k;
-+
-+		/*
-+		 * Check if GPIO property exists and continue if not. Iterate
-+		 * over all supported GPIO suffixes (foo-gpios vs. foo-gpio).
-+		 */
-+		for_each_gpio_suffix(k, suffix) {
-+			snprintf(gpio_str, sizeof(gpio_str), "%s-%s",
-+				 mctrl_gpios_desc[i].name, suffix);
-+
-+			present = device_property_present(dev, gpio_str);
-+			if (present)
-+				break;
-+		}
- 
--		/* Check if GPIO property exists and continue if not */
--		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
--				     mctrl_gpios_desc[i].name);
--		if (!gpio_str)
--			continue;
--
--		present = device_property_present(dev, gpio_str);
--		kfree(gpio_str);
- 		if (!present)
- 			continue;
- 
 -- 
-2.22.0
-
+heikki
