@@ -2,76 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6208630B
-	for <lists+linux-serial@lfdr.de>; Thu,  8 Aug 2019 15:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3984A8630D
+	for <lists+linux-serial@lfdr.de>; Thu,  8 Aug 2019 15:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733047AbfHHNYd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 8 Aug 2019 09:24:33 -0400
-Received: from mga04.intel.com ([192.55.52.120]:28833 "EHLO mga04.intel.com"
+        id S1732375AbfHHNZw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 8 Aug 2019 09:25:52 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:58686 "EHLO mx2.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733046AbfHHNYd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 8 Aug 2019 09:24:33 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 06:24:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,361,1559545200"; 
-   d="scan'208";a="193156178"
-Received: from kuha.fi.intel.com ([10.237.72.189])
-  by fmsmga001.fm.intel.com with SMTP; 08 Aug 2019 06:24:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Aug 2019 16:24:30 +0300
-Date:   Thu, 8 Aug 2019 16:24:30 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v1 7/9] serial: 8250_lpss: register DMA IRQ and pool with
- instance ID
-Message-ID: <20190808132430.GF8938@kuha.fi.intel.com>
-References: <20190806094322.64987-1-andriy.shevchenko@linux.intel.com>
- <20190806094322.64987-7-andriy.shevchenko@linux.intel.com>
+        id S2389561AbfHHNZw (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 8 Aug 2019 09:25:52 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id D7266A177B;
+        Thu,  8 Aug 2019 15:25:49 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id XI5cvFhH_S4H; Thu,  8 Aug 2019 15:25:44 +0200 (CEST)
+From:   Stefan Roese <sr@denx.de>
+To:     linux-serial@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pavel Machek <pavel@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 1/2] gpiolib: Add for_each_gpio_suffix() helper
+Date:   Thu,  8 Aug 2019 15:25:42 +0200
+Message-Id: <20190808132543.26274-1-sr@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190806094322.64987-7-andriy.shevchenko@linux.intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 12:43:20PM +0300, Andy Shevchenko wrote:
-> It is really useful not only for debugging to have an DMA IRQ line and
-> pool being mapped to the corresponding IP by using its instance ID.
-> 
-> Provide PCI device and function as instance ID for Intel Quark UART DMA.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Add a helper macro to enable the interation over all supported GPIO
+suffixes (currently "gpios" & "gpio"). This will be used by the serial
+mctrl code to check, if a GPIO property exists before requesting it.
 
-FWIW:
+Signed-off-by: Stefan Roese <sr@denx.de>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Pavel Machek <pavel@denx.de>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/gpio/gpiolib.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/tty/serial/8250/8250_lpss.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-> index 0c6aa990db3d..2bb30e688433 100644
-> --- a/drivers/tty/serial/8250/8250_lpss.c
-> +++ b/drivers/tty/serial/8250/8250_lpss.c
-> @@ -170,6 +170,7 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
->  
->  	chip->pdata = &qrk_serial_dma_pdata;
->  	chip->dev = &pdev->dev;
-> +	chip->id = pdev->devfn;
->  	chip->irq = pci_irq_vector(pdev, 0);
->  	chip->regs = pci_ioremap_bar(pdev, 1);
->  	if (!chip->regs)
-> -- 
-> 2.20.1
-
+diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
+index 7c52c2442173..a3add73f99d6 100644
+--- a/drivers/gpio/gpiolib.h
++++ b/drivers/gpio/gpiolib.h
+@@ -92,6 +92,12 @@ struct acpi_gpio_info {
+ /* gpio suffixes used for ACPI and device tree lookup */
+ static __maybe_unused const char * const gpio_suffixes[] = { "gpios", "gpio" };
+ 
++#define for_each_gpio_suffix(idx, suffix)				\
++	for (idx = 0;							\
++	     idx < ARRAY_SIZE(gpio_suffixes) &&				\
++		     (suffix = gpio_suffixes[idx]) != NULL;		\
++	     idx++)
++
+ #ifdef CONFIG_OF_GPIO
+ struct gpio_desc *of_find_gpio(struct device *dev,
+ 			       const char *con_id,
 -- 
-heikki
+2.22.0
+
