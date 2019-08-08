@@ -2,131 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E63C986166
-	for <lists+linux-serial@lfdr.de>; Thu,  8 Aug 2019 14:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AB28622A
+	for <lists+linux-serial@lfdr.de>; Thu,  8 Aug 2019 14:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbfHHMLx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 8 Aug 2019 08:11:53 -0400
-Received: from mga12.intel.com ([192.55.52.136]:65046 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727096AbfHHMLx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 8 Aug 2019 08:11:53 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 05:11:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,361,1559545200"; 
-   d="scan'208";a="374831655"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Aug 2019 05:11:50 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hvhGm-0002bH-36; Thu, 08 Aug 2019 15:11:48 +0300
-Date:   Thu, 8 Aug 2019 15:11:48 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robert Middleton <robert.middleton@rm5248.com>,
-        Aaron Sierra <asierra@xes-inc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Subject: Re: [PATCH v2 2/3] serial: 8250_exar: Refactor exar_shutdown()
-Message-ID: <20190808121148.GT30120@smile.fi.intel.com>
-References: <20190805100518.9818-2-andriy.shevchenko@linux.intel.com>
- <CAKpcJVZTy963y3TOXSYSBFVOpVTWEOyJKUYxv1pHNGz3Y1aPTA@mail.gmail.com>
- <20190805142147.GK23480@smile.fi.intel.com>
- <CAKpcJVYfcVAmoB63EbmJaix6v+2JJ5BujAcdduQLcw-ES+f3ZQ@mail.gmail.com>
- <20190806152407.GF30120@smile.fi.intel.com>
- <20190806153110.GG30120@smile.fi.intel.com>
- <CAKpcJVYTC8MN6A51iip=cyvkfXVy2NS-c3FyhAi9qcxsgJkQRw@mail.gmail.com>
- <CAKpcJVaL-BqL0G=_hT6WHz6kCr05sHS1jDQnaM0s_WFWCb6n_A@mail.gmail.com>
- <20190807150425.GC30120@smile.fi.intel.com>
- <CAKpcJVYmTK-kw5eZJtcMWBSMmOk4ijqu-1oh9cEswi4q98QHAg@mail.gmail.com>
+        id S1732635AbfHHMrE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 8 Aug 2019 08:47:04 -0400
+Received: from mail-eopbgr00086.outbound.protection.outlook.com ([40.107.0.86]:32241
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732239AbfHHMrE (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 8 Aug 2019 08:47:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TNofIBclOGjZiXi3zMwFSX8lLdnjzZE4cD5xRNxZfBNxUMmmMJWwlkOdOCQbjHaUO710cidFl24zh5wxvruBA/8L4rKjvN5Kn8loyzWm5EafFTA6KBjKOXLQ45fMXyA1lLkMwVuJtnb86lGLLMxvHh/pGSyKBbAmrw5OtaC9+nJZGeVhu9h+B8xv4Mierz8CDvk7AmiVx0S37kNOEgC8a3X+Y3Ma6hw1qBaV0QUVrhvLGRtW4t87y22EPbQ4+wQTXFas94OaQRwR4gHS8LMhzSvbm150tGAgoRGO5Q6fn0fAFzyHKuzn08Dik3xgCuFKVhIAQ+fOkCIcg+F0ic1q2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UmyIWJg3VCBHJyFHlAwXSgvEbQflGmrOz9toDxtGAHw=;
+ b=OApBa7ySvx+ImOgf8GJ1z717S4qp8S741d23BvgOiEwpRoTLS5UPOBpd9/zGyhpmWDTx81hJVh8gGGCL5rze3Zx0AUC06uhRGe0fs0pVq10aK1HcX54+eSLitUQ0UrJ3j1B3Ydp9UZJ9zCJO2148WwAp3hN58iqFLOsyQcVBiWy+js1c5kELnbbJ3xUzZb3wGv4IS0/xtiNQf+n2pcWMewL8M8nGLhV3d9UtQoOFSX2dJivdbx9aHyrbxN4X30jFtcwIvXqKV7m4Cp157nJIvuHRVB3BRoSckxFxT1UFz2P+ZrTXJ7h4wLX8qQyjTs8VdgoWHO8JaBiqQ/EUKlW/fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UmyIWJg3VCBHJyFHlAwXSgvEbQflGmrOz9toDxtGAHw=;
+ b=NDj84d3Xl3VtQEyDeH3JLW9yz78V8v0Y6QZ9xEH+1+sGmQ9VAcuy711cq2WbIQBgaiatKZQo+FIhpi2QAq3kRqpl0M5ax1cZON/5wstjLSZBwR11WXp/O/yrbwjkjnIDqCA2pKPbtVQ7HopL8Fq8fpW0DwroESQ65h695BJWq68=
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
+ VI1PR0402MB3486.eurprd04.prod.outlook.com (52.134.4.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2157.15; Thu, 8 Aug 2019 12:47:00 +0000
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023%7]) with mapi id 15.20.2157.015; Thu, 8 Aug 2019
+ 12:47:00 +0000
+From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+To:     Will Deacon <will@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>
+Subject: Re: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Thread-Topic: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Thread-Index: AQHVTedeF3dhRXLcj0y74YIrrBcLXw==
+Date:   Thu, 8 Aug 2019 12:47:00 +0000
+Message-ID: <VI1PR0402MB28635661A4A294EC6F01095EDFD70@VI1PR0402MB2863.eurprd04.prod.outlook.com>
+References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com>
+ <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
+ <20190808080832.nleult5bknmzr3ze@willie-the-truck>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
+x-originating-ip: [212.146.100.6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7c582575-b651-4513-b70c-08d71bfe8191
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3486;
+x-ms-traffictypediagnostic: VI1PR0402MB3486:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0402MB348633D1EBEE64E92FB040FADFD70@VI1PR0402MB3486.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3513;
+x-forefront-prvs: 012349AD1C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(366004)(136003)(39860400002)(376002)(199004)(189003)(64756008)(66946007)(91956017)(229853002)(66556008)(6436002)(66476007)(76116006)(7736002)(99286004)(2906002)(4744005)(186003)(26005)(8936002)(476003)(52536014)(5660300002)(14454004)(54906003)(316002)(33656002)(6916009)(25786009)(4326008)(7696005)(256004)(6246003)(53546011)(66066001)(478600001)(6506007)(305945005)(3846002)(66446008)(71190400001)(81156014)(7416002)(9686003)(86362001)(446003)(486006)(74316002)(81166006)(76176011)(8676002)(55016002)(102836004)(6116002)(71200400001)(53936002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3486;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: BgjKTf/kBsvFpTpJggHinQVW9X0pBbFxTEFxaBiDL+1S9EjqYa/wAEIfe+e4NmF3QJl4sP9wuhAnNwG9r0BQuzoJjUADaCiugUsYqE9rhjmW3hezxzMn/9pGocHuBRP6LmzUWsQ07nxG7YdJe8Ud8YA26JzVJzyvfY/fIFI5wI7P9fJwSMTWmb3UOvqwMX827tid436dT2K2tuXxS4hsXpPMXbrL+iKmw1X6d+OAoSy6gZ/1YppqxO/nyMxJfO4CzJY5A/Tl+sTFxWzKewRCQsigjZuE/JVPyKLQjvt+xOaqpbiwY34RPcIKqO27WllOvaGpmcKPAAqq9UCM1an5DaCROsqhamfcK+q/tymyWvFPbQOeIgM3PwJ3asjP9GkCsB3FdQ0yfwktAXJYDh3NLmjJ4EilZVQQZYvv/ge38pA=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKpcJVYmTK-kw5eZJtcMWBSMmOk4ijqu-1oh9cEswi4q98QHAg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c582575-b651-4513-b70c-08d71bfe8191
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2019 12:47:00.3988
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CerixfyV5LJpr6/SlEDA8FuQ0eFQyh0hZwmmAtDDISjSZIKHYnPowRjT3Zmg3Hm7ug7rQuUS9g5QlCqsQjP8X791RdSC5bEf7cZsV3WEj3k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3486
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 02:41:47PM -0400, Robert Middleton wrote:
-> On Wed, Aug 7, 2019 at 11:04 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Wed, Aug 07, 2019 at 09:48:03AM -0400, Robert Middleton wrote:
-> > > > I'll try to get some firm results in the morning; otherwise I won't be
-> > > > able to check until early next week as I will be away from the
-> > > > hardware.
-> > >
-> > > After doing more testing, I think that I finally have something that
-> > > is working fully at all baud rates.  I've tested this at
-> > > 115200,9600,and 4800, testing via: echo "the quick brown fox jumps
-> > > over the lazy dog" > /dev/ttySx
-> > >
-> > > Removing the check to uart_circ_empty in the while loop makes it more
-> > > reliable, however it will occasionally fail and only transmit the
-> > > first part of the message(at 4800, it will transmit only "t", at
-> > > 115200 it will transmit "the quick bro").
-> >
-> > I'm not sure about the loop for uart_circ_empty(). Can you try 2-3 kB of text
-> > at lower baud rate, let's say 2400 or so?
-> 
-> So at the lower baud rate, it does not transmit all of the data,
-> probably because the timeout eventually stops it.  However, it does
-> get back into a very weird state that I have seen before, where
-> opening up the port again will cause it to transmit some of the
-> previously-buffered data.  See below for some more details.
-> 
-> > > I've found that breaking it
-> > > into two loops, one checking the uart_circ_empty and the other doing
-> > > the LSR check is reliable at all baud rates.
-> >
-> > If my suspicion is correct, the shutdown of the port will take ages which is
-> > inappropriate.
-> 
-> The shutdown probably does take a while, but the fact that not all of
-> the data is transmitted is what tripped me up in the first place and
-> sent me down this track trying to figure out why all of the data was
-> not being transmitted out of the serial port properly.
-> 
-> The previous hardware used an FTDI USB to serial converter to send
-> serial data, and changing to the exar caused some of our applications
-> to stop working. They do a similar thing to echoing from the terminal,
-> that is they come up, send a command, and then exit.  I tried just now
-> with an FTDI cable and got some interesting results vs. using the
-> exar.  The data(3kB) gets fully transmitted when I do 'cat
-> lorem-ipsum.txt > /dev/ttyUSB0', but when I do it via 'cat
-> lorem-ipsum.txt > /dev/exar-serial' it will timeout after a second.
-> Doing an 'echo "" > /dev/exar-serial' will send more of the text,
-> until it stops again.  I have to do this about 5 times before all of
-> the data gets transmitted over the serial port.  This is also at 2400
-> baud on both the exar and the FTDI.
-
-8250 driver has device nodes like /dev/ttySxxx. Just to be sure are you really
-using kernel's native driver?
-
-> At this point, this leads me to believe that there is actually a more
-> fundamental problem with the 8250 driver and flushing data.  I was
-> focusing more on the exar, since that is the only hardware that I have
-> available that uses the 8250 driver.
-
-Hmm... It's weird that no-one else had noticed so far an issue.
-
-In any case I would recommend to include Exar driver related people in case of
-specific behaviour of the hardware you are testing on.
-
-I'm Cc'ing them now.
-
-Sorry guys, I forgot to do this earlier, nevertheless I left the text of
-Robert's last mail untouched.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Hello Will,=0A=
+=0A=
+On 8/8/2019 11:08 AM, Will Deacon wrote:=0A=
+> On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:=0A=
+>> +             linflex,<addr>=0A=
+>> +                     Use early console provided by Freescale LinFlex UA=
+RT=0A=
+>> +                     serial driver for NXP S32V234 SoCs. A valid base=
+=0A=
+>> +                     address must be provided, and the serial port must=
+=0A=
+>> +                     already be setup and configured.=0A=
+> =0A=
+> Why isn't earlycon=3D sufficient for this?=0A=
+=0A=
+"earlycon=3D" is not actually supported. I will fix this in the next=0A=
+version by adding a /chosen/stdout-path to the dts. The compatible=0A=
+string provided to OF_EARLYCON_DECLARE will also be changed from=0A=
+"fsl,s32v234-linflexuart" to "fsl,s32-linflexuart" to match the one in=0A=
+the device tree nodes. I missed this after importing a rename from our=0A=
+codebase.=0A=
+=0A=
+Should I remove this addition from kernel-parameters.txt after that?=0A=
+=0A=
+Regards,=0A=
+Stefan=0A=
