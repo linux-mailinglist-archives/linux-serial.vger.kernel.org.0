@@ -2,19 +2,19 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E92687CF1
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2019 16:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216F887D16
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2019 16:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406923AbfHIOmu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Aug 2019 10:42:50 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:37719 "EHLO
+        id S1726157AbfHIOqE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Aug 2019 10:46:04 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:58941 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHIOmu (ORCPT
+        with ESMTP id S2406127AbfHIOqE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Aug 2019 10:42:50 -0400
+        Fri, 9 Aug 2019 10:46:04 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MkW10-1ibFDP1DAM-00m6H3; Fri, 09 Aug 2019 16:42:37 +0200
+ 1N79Ey-1iNaIe1kU8-017V2R; Fri, 09 Aug 2019 16:45:20 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     soc@kernel.org
 Cc:     Vladimir Zapolskiy <vz@mleia.com>,
@@ -23,75 +23,178 @@ Cc:     Vladimir Zapolskiy <vz@mleia.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
-Subject: [PATCH v2 04/13] serial: lpc32xx_hs: allow compile-testing
-Date:   Fri,  9 Aug 2019 16:40:30 +0200
-Message-Id: <20190809144043.476786-5-arnd@arndb.de>
+Subject: [PATCH v2 11/13] serial: lpc32xx: allow compile testing
+Date:   Fri,  9 Aug 2019 16:40:37 +0200
+Message-Id: <20190809144043.476786-12-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190809144043.476786-1-arnd@arndb.de>
 References: <20190809144043.476786-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:SC8nZDGE2BL9UiO9/Fozk5OqQl67V4vDebpaMMEW86kY+4HNvMj
- YKeoq6THCo5lQcI4cDrmklhCT+LWmfdbFN6lCLqNDdUHBRLIJebF4mmnJGvh7mNxIv3ZCwT
- VRRC/RLTDmubB2Xi0BWRSw3kyzrdd4XxldtbAohamPuPtyOMkYMk/BGepJUSdUSyZ8xWeQ/
- KNc6Ys+WF0CLgaVoQH5wA==
+X-Provags-ID: V03:K1:QSyZAIrEK0tisvxeshqXx4Yf121VPR+VVNYcnXCO8jzU+Wj3Ush
+ I/ukpTsjSD50wlu5mlErjvyyjoC7r5ZaE9gO6Bzq5JQB8kvQN/7/3zM8Bih+zpxqpE1wyo4
+ T5ehI8/mM/L7wAgH4tcbxV4iEiOQijuNX2En16g/UAdInN5IC+HSJHS6z7Tyg1No1B2si8l
+ 19wPbeSZDJ1CNo4wggS2A==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4Hc4IEz+FE8=:Bi1ycoD9jmGxicFoUUXqr5
- 9b/29dRCFDWcYEgVD78D6DLLA8oYjJi1HM1kwFtqAW9rJ0UNlrn1TzbQ9jHY9o3Z2zVS/NOkb
- JqK8vcIejal4Piu9/08+X/Nw8SCu87wa05jNNtjOqbR/YqHPLSKvJ1S3AsnT5xNke/viiMiM0
- FhC2pDBEnDvz2FH+LmvyZLQrjExv9w+hh6KrINZe2YCSIJqPIjz+90LR2WZePDsZVMvvIZVY3
- AofLb7Y85aBRVeQ5SqHLtQwmF+Wdrk/6sNqiOUm44Eo6oUmJLJURRmO9KmiNZYeWF8tE1+8Fg
- 2hU2uS0MJuE6ztejja1tqp7zlMck0fN4puh+1AeDr9/h+JAR8FnRGwBiHfVOKXmZRy+WuZkYd
- 0WdEdfDDydRMZqM1RM9wkoSx+4l2f6bQsuPe52787AdY6XNEumOIJYB884hCm0zFkxczbXKgh
- VaJ9be149nYemxn0IGfZcdtR52mA1GE9LaiBcCyLWYI2jewdF+Iulw86wDRAt4sUkOEY3gKrm
- 2K/0jBKfJ3oDH0hKOJ2W6OKBX6J9NGuhiLgMMf8P79Utgi5f/E2PXnwhO3hAjtrqVVTyh7td9
- 80eTZhPkz9J6xoMjACEo+WsPBu4mk0neKFetIC7rib1R82Y/41wT86pbHoE1la6xROckMdSNF
- dZvNS2PHw0GDMRxSFCC5kbRqbD6/wZXPpELBuyE3X0Ot9gCtoP2vjaW1urOioW7W9aaCtQXKy
- NWMoDJ45quKlhemjbD/l8qhcV2xrgjPMTROlJw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VJCyh49joGQ=:hiDrY4RgZVRXKwVAgZwTaF
+ zd/yvwV5BTZewhK51/lohRaZMa4Ns09MbbfjiVlXLr5F+LAzi3ITNBjb79lgUU0Y3zS5zA0Gg
+ 6fMw1KccRDUHKbZ7nR5vc3++tNjZAY8jtUo8K1uTy7g7c8fU29PKEi1rzwGZofnn7OUmhCK9/
+ +SoDdtlr/BCbvIO8lImCdQ6JUpVEhWW2ZW6skW9CBes3Aud4FKEi2N/AEreZqioOOYxOxVVbC
+ E7ZXajHg0vvQvFwqJKTMEHyssG8oGufrB2rl2mltwc/9AyeWX5gLPnrgwwGKAYieJgrHBKd90
+ 2hdrZOhAt6ju6w3H7zepU+DH3gSl8nopfVfESIfOH708xGNuc9p3bDTiq61nsIza3PM7gCmGs
+ w44mJQY5PlsPIGTFdlzKnJy+xhElyaG3CbTYGUBn0lngXe6pEAah6teBvuIhbhe9z2KbBoVae
+ xL6OnSGYwiKhBS2tq0YmF+AN4Cvv6dq7t68dsK24GOgio4AyGLVg7DLrJhguVowEXjR3qAqSU
+ vyvia2c9x7tzYcRE2DvRfP7km8GnHCORRT34OKCUqNiMD5pwREOpwFiU0AO86WFKuZhxzydlG
+ uheyaIfuS+5sTAUwai+7fYv+NvzQ5wIxwI/1kz6tLkzmBBAQVrvXoHqxhfqmgJAcwNoa3YLnr
+ Ok37nwVz4h+iJIXlt6wzL8C3QHsoOhlH4hXBTMxqosmMvDo5Skz356oB7K+CDQDhQAaVW9Kuu
+ C3BZGQW5BFpJC6DTSfIJQyquZnDaMZQUeE0TuA==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The only thing that prevents building this driver on other
-platforms is the mach/hardware.h include, which is not actually
-used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
+The lpc32xx_loopback_set() function in hte lpc32xx_hs driver is the
+one thing that relies on platform header files. Move that into the
+core platform code so we only need a variable declaration for it,
+and enable COMPILE_TEST building.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/tty/serial/Kconfig      | 3 ++-
- drivers/tty/serial/lpc32xx_hs.c | 2 --
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ arch/arm/mach-lpc32xx/serial.c       | 30 ++++++++++++++++++++++++
+ drivers/tty/serial/lpc32xx_hs.c      | 35 ++++------------------------
+ include/linux/soc/nxp/lpc32xx-misc.h |  4 ++++
+ 3 files changed, 38 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 3083dbae35f7..518aac902e4b 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -739,7 +739,8 @@ config SERIAL_PNX8XXX_CONSOLE
+diff --git a/arch/arm/mach-lpc32xx/serial.c b/arch/arm/mach-lpc32xx/serial.c
+index 3f9b30df9f0e..cfb35e5691cd 100644
+--- a/arch/arm/mach-lpc32xx/serial.c
++++ b/arch/arm/mach-lpc32xx/serial.c
+@@ -60,6 +60,36 @@ static struct uartinit uartinit_data[] __initdata = {
+ 	},
+ };
  
- config SERIAL_HS_LPC32XX
- 	tristate "LPC32XX high speed serial port support"
--	depends on ARCH_LPC32XX && OF
-+	depends on ARCH_LPC32XX || COMPILE_TEST
-+	depends on OF
- 	select SERIAL_CORE
- 	help
- 	  Support for the LPC32XX high speed serial ports (up to 900kbps).
++/* LPC3250 Errata HSUART.1: Hang workaround via loopback mode on inactivity */
++void lpc32xx_loopback_set(resource_size_t mapbase, int state)
++{
++	int bit;
++	u32 tmp;
++
++	switch (mapbase) {
++	case LPC32XX_HS_UART1_BASE:
++		bit = 0;
++		break;
++	case LPC32XX_HS_UART2_BASE:
++		bit = 1;
++		break;
++	case LPC32XX_HS_UART7_BASE:
++		bit = 6;
++		break;
++	default:
++		WARN(1, "lpc32xx_hs: Warning: Unknown port at %08x\n", mapbase);
++		return;
++	}
++
++	tmp = readl(LPC32XX_UARTCTL_CLOOP);
++	if (state)
++		tmp |= (1 << bit);
++	else
++		tmp &= ~(1 << bit);
++	writel(tmp, LPC32XX_UARTCTL_CLOOP);
++}
++EXPORT_SYMBOL_GPL(lpc32xx_loopback_set);
++
+ void __init lpc32xx_serial_init(void)
+ {
+ 	u32 tmp, clkmodes = 0;
 diff --git a/drivers/tty/serial/lpc32xx_hs.c b/drivers/tty/serial/lpc32xx_hs.c
-index f4e27d0ad947..7f14cd8fac47 100644
+index 7f14cd8fac47..d3843f722182 100644
 --- a/drivers/tty/serial/lpc32xx_hs.c
 +++ b/drivers/tty/serial/lpc32xx_hs.c
-@@ -25,8 +25,6 @@
+@@ -25,6 +25,8 @@
  #include <linux/irq.h>
  #include <linux/gpio.h>
  #include <linux/of.h>
--#include <mach/platform.h>
--#include <mach/hardware.h>
++#include <linux/sizes.h>
++#include <linux/soc/nxp/lpc32xx-misc.h>
  
  /*
   * High Speed UART register offsets
+@@ -79,6 +81,8 @@
+ #define LPC32XX_HSU_TX_TL8B			(0x2 << 0)
+ #define LPC32XX_HSU_TX_TL16B			(0x3 << 0)
+ 
++#define LPC32XX_MAIN_OSC_FREQ			13000000
++
+ #define MODNAME "lpc32xx_hsuart"
+ 
+ struct lpc32xx_hsuart_port {
+@@ -149,8 +153,6 @@ static void lpc32xx_hsuart_console_write(struct console *co, const char *s,
+ 	local_irq_restore(flags);
+ }
+ 
+-static void lpc32xx_loopback_set(resource_size_t mapbase, int state);
+-
+ static int __init lpc32xx_hsuart_console_setup(struct console *co,
+ 					       char *options)
+ {
+@@ -437,35 +439,6 @@ static void serial_lpc32xx_break_ctl(struct uart_port *port,
+ 	spin_unlock_irqrestore(&port->lock, flags);
+ }
+ 
+-/* LPC3250 Errata HSUART.1: Hang workaround via loopback mode on inactivity */
+-static void lpc32xx_loopback_set(resource_size_t mapbase, int state)
+-{
+-	int bit;
+-	u32 tmp;
+-
+-	switch (mapbase) {
+-	case LPC32XX_HS_UART1_BASE:
+-		bit = 0;
+-		break;
+-	case LPC32XX_HS_UART2_BASE:
+-		bit = 1;
+-		break;
+-	case LPC32XX_HS_UART7_BASE:
+-		bit = 6;
+-		break;
+-	default:
+-		WARN(1, "lpc32xx_hs: Warning: Unknown port at %08x\n", mapbase);
+-		return;
+-	}
+-
+-	tmp = readl(LPC32XX_UARTCTL_CLOOP);
+-	if (state)
+-		tmp |= (1 << bit);
+-	else
+-		tmp &= ~(1 << bit);
+-	writel(tmp, LPC32XX_UARTCTL_CLOOP);
+-}
+-
+ /* port->lock is not held.  */
+ static int serial_lpc32xx_startup(struct uart_port *port)
+ {
+diff --git a/include/linux/soc/nxp/lpc32xx-misc.h b/include/linux/soc/nxp/lpc32xx-misc.h
+index af4f82f6cf3b..699c6f1e3aab 100644
+--- a/include/linux/soc/nxp/lpc32xx-misc.h
++++ b/include/linux/soc/nxp/lpc32xx-misc.h
+@@ -14,6 +14,7 @@
+ #ifdef CONFIG_ARCH_LPC32XX
+ extern u32 lpc32xx_return_iram(void __iomem **mapbase, dma_addr_t *dmaaddr);
+ extern void lpc32xx_set_phy_interface_mode(phy_interface_t mode);
++extern void lpc32xx_loopback_set(resource_size_t mapbase, int state);
+ #else
+ static inline u32 lpc32xx_return_iram(void __iomem **mapbase, dma_addr_t *dmaaddr)
+ {
+@@ -24,6 +25,9 @@ static inline u32 lpc32xx_return_iram(void __iomem **mapbase, dma_addr_t *dmaadd
+ static inline void lpc32xx_set_phy_interface_mode(phy_interface_t mode)
+ {
+ }
++static inline void lpc32xx_loopback_set(resource_size_t mapbase, int state)
++{
++}
+ #endif
+ 
+ #endif  /* __SOC_LPC32XX_MISC_H */
 -- 
 2.20.0
 
