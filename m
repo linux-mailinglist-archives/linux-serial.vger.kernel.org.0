@@ -2,825 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 386BF883DD
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2019 22:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F638848B
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2019 23:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbfHIU2e (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Aug 2019 16:28:34 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:48153 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727637AbfHIU2d (ORCPT
+        id S1728202AbfHIVW1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Aug 2019 17:22:27 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:36458 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728045AbfHIVW1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Aug 2019 16:28:33 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MekvV-1iTrge0p2z-00ajkH; Fri, 09 Aug 2019 22:28:21 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     soc@kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Fri, 9 Aug 2019 17:22:27 -0400
+Received: by mail-qt1-f195.google.com with SMTP id z4so97292520qtc.3
+        for <linux-serial@vger.kernel.org>; Fri, 09 Aug 2019 14:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=Ug4MTgi2ueZfqMA4+FWSQr133wSyuN+mgZsk4RxY5I8=;
+        b=T0xdr3m2vk1dRABuDHdagNOsvCUEuquJMDDxB4gyWa18mibI8q1Vl2M6UddZGZuoWW
+         bVUPPg4jkfLa01tuKqceOyPnbi9/T9qyxZo8eXdnZjta40CecwXDLsVLjSwlIwd8TnCx
+         aSKa6IzN3mnKHnng1qTOazZiG7hYxV8s5NDQ5gg57ii+DIvjBI4EAo8h2D1ctIrW7Ogy
+         wb3138VaA4Hi8b6nhh8BQ8xYtUBvPhH2REMBZQlFJw+frygxw/RvqwrnBeusxiEt/6gG
+         V0YnG6ULca5e8RNwu3ogTlbKFOwvOjbG6CzJrOvQ4VB0+sSAdwpat07fvTDXm//+YTms
+         RyAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=Ug4MTgi2ueZfqMA4+FWSQr133wSyuN+mgZsk4RxY5I8=;
+        b=M3P39LXAXWWQwu41NoRsIQ4Ea07bfO0pD75FF0naUEjIrwdW41KEGxvyTthYqtI0+d
+         jgdygmh/5DFHFfk0UGY44tnI32xWnzUiDoGmzm3ZVdNqY+wbS/rtXkL10hT0/e42V7S8
+         2S8xDd4Y9/nQoYiuZgaaXN3n2A/yM926YxKqHqvkiJYHbNW1V2DBr1e0T/RrZfk81IkG
+         QLq7KfbFcpIy3Tyd3ixpB3G+YoW47K/XAqDqF1e/LwdJFhmZex4w0+AitEvEtsCKKZMQ
+         uTWqiLzt6sdqh+XkCtbH0VRtAcA6MTpsMpJ065GX64+F7xdJ6y28Q4/ASKovyIon0sCM
+         +xAg==
+X-Gm-Message-State: APjAAAVla85x6XPhnGJ8Uws+7CKm6KrlVZ+HBj/x9aCZqEztbK0Ilb4y
+        kf5iEGMqCWCQMkEo/zISUltB7w==
+X-Google-Smtp-Source: APXvYqxHJ16TPbArOOObvex2qGMXiPYuuTyPvcouM0eg7EGKkUFhFNbpUw6MquRPUl6SIdbH5N+5zQ==
+X-Received: by 2002:ac8:252e:: with SMTP id 43mr19908152qtm.61.1565385745973;
+        Fri, 09 Aug 2019 14:22:25 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id p3sm63655473qta.12.2019.08.09.14.22.24
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 09 Aug 2019 14:22:25 -0700 (PDT)
+Date:   Fri, 9 Aug 2019 14:22:22 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-serial@vger.kernel.org
-Subject: [PATCH 02/16] serial: remove ks8695 driver
-Date:   Fri,  9 Aug 2019 22:27:30 +0200
-Message-Id: <20190809202749.742267-3-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190809202749.742267-1-arnd@arndb.de>
-References: <20190809202749.742267-1-arnd@arndb.de>
+Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20190809142222.4558691e@cakuba.netronome.com>
+In-Reply-To: <20190809103235.16338-8-tbogendoerfer@suse.de>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+        <20190809103235.16338-8-tbogendoerfer@suse.de>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:18prRhZpOvljCx3Yx42GGLEx5W+ldaLQBNVrcIlZkFwwM8qGZk/
- c0404FhHcC1WCk25PjEz4KM3KCMpNkmiJ184e+dCoDcMRYxQl3GfOpKA6MrCf5k7+Zt51GP
- g4vgr9HeEhR7G/s1C8Fw1HHdKZH4B6dbbrGIL6wKe8FN3VMY9UlR4XXcq260r/zd/0ChXX5
- /PuPaNAix3fBqVUjBUfKQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9Pa3bRw2ZcY=:bCuSdvUQMlJclZKx3sz1oL
- 93oRpY81kz96iPxQd3aQrRoEfj4QAw+gdX1AvWfnWhXxNPpLc696UStu0+6D33j2GR3BeD4+/
- fc7UgfbabVFWflhCH8dN1xL4+99flBFpAKCst2BMeHENvWSGAc5Za8+3ywCoP6/d9RsW6x9d+
- laP7WAjBPpkmHucVYlwkwpUeiSLD6WcIR2ylORa/g6cWcMNGo4XWbmki0AaMl1YJ/ubP7JMi9
- R1fUa8I1lmPTjYxcurvpuNIwdlVXUIdX1VdPwXmVUeTBiy8OcF/a8sYp+rmdhXRS+N4OLk3KR
- vkJcBmFfWNbksecvbHWZET+HmsqWF5okY2k0Vczs6ZrbvLdmlPujlL2jSLfPJezJn1zNFquHN
- eCG31477LTmklCVdcLLiHZ6fzF+tumKTf9MtQUd8Dr7VdH4eEIJqdvIcPtZY83CJ7Nk1b2AKe
- tT5UabnAvwE8VTi0f6yVBdjubDkLGLDrH1sFkS20XKSBt1Lsp/t2OnU8qPelTVyxDdI5BWwtw
- ZAOpikea8uVdBxNpCCUP+wSC/DqfsKwa32J8nYhVq1j5lI5BO8DqZ5XF0r0g7dwfNo+j2bNrc
- 0k9HdHLMG7c6EORhHKkgLKhm+6gRPvIutImTBAJKZrWmUZ/z92H1/IYGYZ+Drc9H5Ym+yhhDJ
- OChIREHxR81jfSIpYNAZvqOQIOKnm+gxaO1N2FRAgd43/CNDNL3URqCMxi378WkvuXz62XkYU
- KiEoOZaiDFE7n7AmYgmCgkQ9X+81RpvEkRFhuQ==
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The platform is getting removed, so there are no more users
-of this driver.
+On Fri,  9 Aug 2019 12:32:29 +0200, Thomas Bogendoerfer wrote:
+> SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
+> It also supports connecting a SuperIO chip for serial and parallel
+> interfaces. IOC3 is used inside various SGI systemboards and add-on
+> cards with different equipped external interfaces.
+> 
+> Support for ethernet and serial interfaces were implemented inside
+> the network driver. This patchset moves out the not network related
+> parts to a new MFD driver, which takes care of card detection,
+> setup of platform devices and interrupt distribution for the subdevices.
+> 
+> Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/tty/serial/Kconfig         |  17 -
- drivers/tty/serial/Makefile        |   1 -
- drivers/tty/serial/serial_ks8695.c | 698 -----------------------------
- include/uapi/linux/serial_core.h   |   3 -
- 4 files changed, 719 deletions(-)
- delete mode 100644 drivers/tty/serial/serial_ks8695.c
+There are a lot of changes in the ethernet part which are not easy to
+explain by the introduction of the other MFD parts.. Could you possibly
+break this change up into smaller chunks?
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 3083dbae35f7..7041107ea78d 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -197,23 +197,6 @@ config SERIAL_KGDB_NMI
- 
- 	  If unsure, say N.
- 
--config SERIAL_KS8695
--	bool "Micrel KS8695 (Centaur) serial port support"
--	depends on ARCH_KS8695
--	select SERIAL_CORE
--	help
--	  This selects the Micrel Centaur KS8695 UART.  Say Y here.
--
--config SERIAL_KS8695_CONSOLE
--	bool "Support for console on KS8695 (Centaur) serial port"
--	depends on SERIAL_KS8695=y
--	select SERIAL_CORE_CONSOLE
--	help
--	  Say Y here if you wish to use a KS8695 (Centaur) UART as the
--	  system console (the system console is the device which
--	  receives all kernel messages and warnings and which allows
--	  logins in single user mode).
--
- config SERIAL_MESON
- 	tristate "Meson serial port support"
- 	depends on ARCH_MESON
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index 15a0fccadf7e..7f744136489e 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -59,7 +59,6 @@ obj-$(CONFIG_SERIAL_ATMEL) += atmel_serial.o
- obj-$(CONFIG_SERIAL_UARTLITE) += uartlite.o
- obj-$(CONFIG_SERIAL_MSM) += msm_serial.o
- obj-$(CONFIG_SERIAL_QCOM_GENI) += qcom_geni_serial.o
--obj-$(CONFIG_SERIAL_KS8695) += serial_ks8695.o
- obj-$(CONFIG_SERIAL_OMAP) += omap-serial.o
- obj-$(CONFIG_SERIAL_ALTERA_UART) += altera_uart.o
- obj-$(CONFIG_SERIAL_ST_ASC) += st-asc.o
-diff --git a/drivers/tty/serial/serial_ks8695.c b/drivers/tty/serial/serial_ks8695.c
-deleted file mode 100644
-index b461d791188c..000000000000
---- a/drivers/tty/serial/serial_ks8695.c
-+++ /dev/null
-@@ -1,698 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/*
-- *  Driver for KS8695 serial ports
-- *
-- *  Based on drivers/serial/serial_amba.c, by Kam Lee.
-- *
-- *  Copyright 2002-2005 Micrel Inc.
-- */
--#include <linux/module.h>
--#include <linux/tty.h>
--#include <linux/tty_flip.h>
--#include <linux/ioport.h>
--#include <linux/init.h>
--#include <linux/serial.h>
--#include <linux/console.h>
--#include <linux/sysrq.h>
--#include <linux/device.h>
--
--#include <asm/io.h>
--#include <asm/irq.h>
--#include <asm/mach/irq.h>
--
--#include <mach/regs-uart.h>
--#include <mach/regs-irq.h>
--
--#if defined(CONFIG_SERIAL_KS8695_CONSOLE) && defined(CONFIG_MAGIC_SYSRQ)
--#define SUPPORT_SYSRQ
--#endif
--
--#include <linux/serial_core.h>
--
--
--#define SERIAL_KS8695_MAJOR	204
--#define SERIAL_KS8695_MINOR	16
--#define SERIAL_KS8695_DEVNAME	"ttyAM"
--
--#define SERIAL_KS8695_NR	1
--
--/*
-- * Access macros for the KS8695 UART
-- */
--#define UART_GET_CHAR(p)	(__raw_readl((p)->membase + KS8695_URRB) & 0xFF)
--#define UART_PUT_CHAR(p, c)	__raw_writel((c), (p)->membase + KS8695_URTH)
--#define UART_GET_FCR(p)		__raw_readl((p)->membase + KS8695_URFC)
--#define UART_PUT_FCR(p, c)	__raw_writel((c), (p)->membase + KS8695_URFC)
--#define UART_GET_MSR(p)		__raw_readl((p)->membase + KS8695_URMS)
--#define UART_GET_LSR(p)		__raw_readl((p)->membase + KS8695_URLS)
--#define UART_GET_LCR(p)		__raw_readl((p)->membase + KS8695_URLC)
--#define UART_PUT_LCR(p, c)	__raw_writel((c), (p)->membase + KS8695_URLC)
--#define UART_GET_MCR(p)		__raw_readl((p)->membase + KS8695_URMC)
--#define UART_PUT_MCR(p, c)	__raw_writel((c), (p)->membase + KS8695_URMC)
--#define UART_GET_BRDR(p)	__raw_readl((p)->membase + KS8695_URBD)
--#define UART_PUT_BRDR(p, c)	__raw_writel((c), (p)->membase + KS8695_URBD)
--
--#define KS8695_CLR_TX_INT()	__raw_writel(1 << KS8695_IRQ_UART_TX, KS8695_IRQ_VA + KS8695_INTST)
--
--#define UART_DUMMY_LSR_RX	0x100
--#define UART_PORT_SIZE		(KS8695_USR - KS8695_URRB + 4)
--
--static inline int tx_enabled(struct uart_port *port)
--{
--	return port->unused[0] & 1;
--}
--
--static inline int rx_enabled(struct uart_port *port)
--{
--	return port->unused[0] & 2;
--}
--
--static inline int ms_enabled(struct uart_port *port)
--{
--	return port->unused[0] & 4;
--}
--
--static inline void ms_enable(struct uart_port *port, int enabled)
--{
--	if(enabled)
--		port->unused[0] |= 4;
--	else
--		port->unused[0] &= ~4;
--}
--
--static inline void rx_enable(struct uart_port *port, int enabled)
--{
--	if(enabled)
--		port->unused[0] |= 2;
--	else
--		port->unused[0] &= ~2;
--}
--
--static inline void tx_enable(struct uart_port *port, int enabled)
--{
--	if(enabled)
--		port->unused[0] |= 1;
--	else
--		port->unused[0] &= ~1;
--}
--
--
--#ifdef SUPPORT_SYSRQ
--static struct console ks8695_console;
--#endif
--
--static void ks8695uart_stop_tx(struct uart_port *port)
--{
--	if (tx_enabled(port)) {
--		/* use disable_irq_nosync() and not disable_irq() to avoid self
--		 * imposed deadlock by not waiting for irq handler to end,
--		 * since this ks8695uart_stop_tx() is called from interrupt context.
--		 */
--		disable_irq_nosync(KS8695_IRQ_UART_TX);
--		tx_enable(port, 0);
--	}
--}
--
--static void ks8695uart_start_tx(struct uart_port *port)
--{
--	if (!tx_enabled(port)) {
--		enable_irq(KS8695_IRQ_UART_TX);
--		tx_enable(port, 1);
--	}
--}
--
--static void ks8695uart_stop_rx(struct uart_port *port)
--{
--	if (rx_enabled(port)) {
--		disable_irq(KS8695_IRQ_UART_RX);
--		rx_enable(port, 0);
--	}
--}
--
--static void ks8695uart_enable_ms(struct uart_port *port)
--{
--	if (!ms_enabled(port)) {
--		enable_irq(KS8695_IRQ_UART_MODEM_STATUS);
--		ms_enable(port,1);
--	}
--}
--
--static void ks8695uart_disable_ms(struct uart_port *port)
--{
--	if (ms_enabled(port)) {
--		disable_irq(KS8695_IRQ_UART_MODEM_STATUS);
--		ms_enable(port,0);
--	}
--}
--
--static irqreturn_t ks8695uart_rx_chars(int irq, void *dev_id)
--{
--	struct uart_port *port = dev_id;
--	unsigned int status, ch, lsr, flg, max_count = 256;
--
--	status = UART_GET_LSR(port);		/* clears pending LSR interrupts */
--	while ((status & URLS_URDR) && max_count--) {
--		ch = UART_GET_CHAR(port);
--		flg = TTY_NORMAL;
--
--		port->icount.rx++;
--
--		/*
--		 * Note that the error handling code is
--		 * out of the main execution path
--		 */
--		lsr = UART_GET_LSR(port) | UART_DUMMY_LSR_RX;
--		if (unlikely(lsr & (URLS_URBI | URLS_URPE | URLS_URFE | URLS_URROE))) {
--			if (lsr & URLS_URBI) {
--				lsr &= ~(URLS_URFE | URLS_URPE);
--				port->icount.brk++;
--				if (uart_handle_break(port))
--					goto ignore_char;
--			}
--			if (lsr & URLS_URPE)
--				port->icount.parity++;
--			if (lsr & URLS_URFE)
--				port->icount.frame++;
--			if (lsr & URLS_URROE)
--				port->icount.overrun++;
--
--			lsr &= port->read_status_mask;
--
--			if (lsr & URLS_URBI)
--				flg = TTY_BREAK;
--			else if (lsr & URLS_URPE)
--				flg = TTY_PARITY;
--			else if (lsr & URLS_URFE)
--				flg = TTY_FRAME;
--		}
--
--		if (uart_handle_sysrq_char(port, ch))
--			goto ignore_char;
--
--		uart_insert_char(port, lsr, URLS_URROE, ch, flg);
--
--ignore_char:
--		status = UART_GET_LSR(port);
--	}
--	tty_flip_buffer_push(&port->state->port);
--
--	return IRQ_HANDLED;
--}
--
--
--static irqreturn_t ks8695uart_tx_chars(int irq, void *dev_id)
--{
--	struct uart_port *port = dev_id;
--	struct circ_buf *xmit = &port->state->xmit;
--	unsigned int count;
--
--	if (port->x_char) {
--		KS8695_CLR_TX_INT();
--		UART_PUT_CHAR(port, port->x_char);
--		port->icount.tx++;
--		port->x_char = 0;
--		return IRQ_HANDLED;
--	}
--
--	if (uart_tx_stopped(port) || uart_circ_empty(xmit)) {
--		ks8695uart_stop_tx(port);
--		return IRQ_HANDLED;
--	}
--
--	count = 16;	/* fifo size */
--	while (!uart_circ_empty(xmit) && (count-- > 0)) {
--		KS8695_CLR_TX_INT();
--		UART_PUT_CHAR(port, xmit->buf[xmit->tail]);
--
--		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
--		port->icount.tx++;
--	}
--
--	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
--		uart_write_wakeup(port);
--
--	if (uart_circ_empty(xmit))
--		ks8695uart_stop_tx(port);
--
--	return IRQ_HANDLED;
--}
--
--static irqreturn_t ks8695uart_modem_status(int irq, void *dev_id)
--{
--	struct uart_port *port = dev_id;
--	unsigned int status;
--
--	/*
--	 * clear modem interrupt by reading MSR
--	 */
--	status = UART_GET_MSR(port);
--
--	if (status & URMS_URDDCD)
--		uart_handle_dcd_change(port, status & URMS_URDDCD);
--
--	if (status & URMS_URDDST)
--		port->icount.dsr++;
--
--	if (status & URMS_URDCTS)
--		uart_handle_cts_change(port, status & URMS_URDCTS);
--
--	if (status & URMS_URTERI)
--		port->icount.rng++;
--
--	wake_up_interruptible(&port->state->port.delta_msr_wait);
--
--	return IRQ_HANDLED;
--}
--
--static unsigned int ks8695uart_tx_empty(struct uart_port *port)
--{
--	return (UART_GET_LSR(port) & URLS_URTE) ? TIOCSER_TEMT : 0;
--}
--
--static unsigned int ks8695uart_get_mctrl(struct uart_port *port)
--{
--	unsigned int result = 0;
--	unsigned int status;
--
--	status = UART_GET_MSR(port);
--	if (status & URMS_URDCD)
--		result |= TIOCM_CAR;
--	if (status & URMS_URDSR)
--		result |= TIOCM_DSR;
--	if (status & URMS_URCTS)
--		result |= TIOCM_CTS;
--	if (status & URMS_URRI)
--		result |= TIOCM_RI;
--
--	return result;
--}
--
--static void ks8695uart_set_mctrl(struct uart_port *port, u_int mctrl)
--{
--	unsigned int mcr;
--
--	mcr = UART_GET_MCR(port);
--	if (mctrl & TIOCM_RTS)
--		mcr |= URMC_URRTS;
--	else
--		mcr &= ~URMC_URRTS;
--
--	if (mctrl & TIOCM_DTR)
--		mcr |= URMC_URDTR;
--	else
--		mcr &= ~URMC_URDTR;
--
--	UART_PUT_MCR(port, mcr);
--}
--
--static void ks8695uart_break_ctl(struct uart_port *port, int break_state)
--{
--	unsigned int lcr;
--
--	lcr = UART_GET_LCR(port);
--
--	if (break_state == -1)
--		lcr |= URLC_URSBC;
--	else
--		lcr &= ~URLC_URSBC;
--
--	UART_PUT_LCR(port, lcr);
--}
--
--static int ks8695uart_startup(struct uart_port *port)
--{
--	int retval;
--
--	irq_modify_status(KS8695_IRQ_UART_TX, IRQ_NOREQUEST, IRQ_NOAUTOEN);
--	tx_enable(port, 0);
--	rx_enable(port, 1);
--	ms_enable(port, 1);
--
--	/*
--	 * Allocate the IRQ
--	 */
--	retval = request_irq(KS8695_IRQ_UART_TX, ks8695uart_tx_chars, 0, "UART TX", port);
--	if (retval)
--		goto err_tx;
--
--	retval = request_irq(KS8695_IRQ_UART_RX, ks8695uart_rx_chars, 0, "UART RX", port);
--	if (retval)
--		goto err_rx;
--
--	retval = request_irq(KS8695_IRQ_UART_LINE_STATUS, ks8695uart_rx_chars, 0, "UART LineStatus", port);
--	if (retval)
--		goto err_ls;
--
--	retval = request_irq(KS8695_IRQ_UART_MODEM_STATUS, ks8695uart_modem_status, 0, "UART ModemStatus", port);
--	if (retval)
--		goto err_ms;
--
--	return 0;
--
--err_ms:
--	free_irq(KS8695_IRQ_UART_LINE_STATUS, port);
--err_ls:
--	free_irq(KS8695_IRQ_UART_RX, port);
--err_rx:
--	free_irq(KS8695_IRQ_UART_TX, port);
--err_tx:
--	return retval;
--}
--
--static void ks8695uart_shutdown(struct uart_port *port)
--{
--	/*
--	 * Free the interrupt
--	 */
--	free_irq(KS8695_IRQ_UART_RX, port);
--	free_irq(KS8695_IRQ_UART_TX, port);
--	free_irq(KS8695_IRQ_UART_MODEM_STATUS, port);
--	free_irq(KS8695_IRQ_UART_LINE_STATUS, port);
--
--	/* disable break condition and fifos */
--	UART_PUT_LCR(port, UART_GET_LCR(port) & ~URLC_URSBC);
--	UART_PUT_FCR(port, UART_GET_FCR(port) & ~URFC_URFE);
--}
--
--static void ks8695uart_set_termios(struct uart_port *port, struct ktermios *termios, struct ktermios *old)
--{
--	unsigned int lcr, fcr = 0;
--	unsigned long flags;
--	unsigned int baud, quot;
--
--	/*
--	 * Ask the core to calculate the divisor for us.
--	 */
--	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16);
--	quot = uart_get_divisor(port, baud);
--
--	switch (termios->c_cflag & CSIZE) {
--	case CS5:
--		lcr = URCL_5;
--		break;
--	case CS6:
--		lcr = URCL_6;
--		break;
--	case CS7:
--		lcr = URCL_7;
--		break;
--	default:
--		lcr = URCL_8;
--		break;
--	}
--
--	/* stop bits */
--	if (termios->c_cflag & CSTOPB)
--		lcr |= URLC_URSB;
--
--	/* parity */
--	if (termios->c_cflag & PARENB) {
--		if (termios->c_cflag & CMSPAR) {	/* Mark or Space parity */
--			if (termios->c_cflag & PARODD)
--				lcr |= URPE_MARK;
--			else
--				lcr |= URPE_SPACE;
--		}
--		else if (termios->c_cflag & PARODD)
--			lcr |= URPE_ODD;
--		else
--			lcr |= URPE_EVEN;
--	}
--
--	if (port->fifosize > 1)
--		fcr = URFC_URFRT_8 | URFC_URTFR | URFC_URRFR | URFC_URFE;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	/*
--	 * Update the per-port timeout.
--	 */
--	uart_update_timeout(port, termios->c_cflag, baud);
--
--	port->read_status_mask = URLS_URROE;
--	if (termios->c_iflag & INPCK)
--		port->read_status_mask |= (URLS_URFE | URLS_URPE);
--	if (termios->c_iflag & (IGNBRK | BRKINT | PARMRK))
--		port->read_status_mask |= URLS_URBI;
--
--	/*
--	 * Characters to ignore
--	 */
--	port->ignore_status_mask = 0;
--	if (termios->c_iflag & IGNPAR)
--		port->ignore_status_mask |= (URLS_URFE | URLS_URPE);
--	if (termios->c_iflag & IGNBRK) {
--		port->ignore_status_mask |= URLS_URBI;
--		/*
--		 * If we're ignoring parity and break indicators,
--		 * ignore overruns too (for real raw support).
--		 */
--		if (termios->c_iflag & IGNPAR)
--			port->ignore_status_mask |= URLS_URROE;
--	}
--
--	/*
--	 * Ignore all characters if CREAD is not set.
--	 */
--	if ((termios->c_cflag & CREAD) == 0)
--		port->ignore_status_mask |= UART_DUMMY_LSR_RX;
--
--	/* first, disable everything */
--	if (UART_ENABLE_MS(port, termios->c_cflag))
--		ks8695uart_enable_ms(port);
--	else
--		ks8695uart_disable_ms(port);
--
--	/* Set baud rate */
--	UART_PUT_BRDR(port, quot);
--
--	UART_PUT_LCR(port, lcr);
--	UART_PUT_FCR(port, fcr);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static const char *ks8695uart_type(struct uart_port *port)
--{
--	return port->type == PORT_KS8695 ? "KS8695" : NULL;
--}
--
--/*
-- * Release the memory region(s) being used by 'port'
-- */
--static void ks8695uart_release_port(struct uart_port *port)
--{
--	release_mem_region(port->mapbase, UART_PORT_SIZE);
--}
--
--/*
-- * Request the memory region(s) being used by 'port'
-- */
--static int ks8695uart_request_port(struct uart_port *port)
--{
--	return request_mem_region(port->mapbase, UART_PORT_SIZE,
--			"serial_ks8695") != NULL ? 0 : -EBUSY;
--}
--
--/*
-- * Configure/autoconfigure the port.
-- */
--static void ks8695uart_config_port(struct uart_port *port, int flags)
--{
--	if (flags & UART_CONFIG_TYPE) {
--		port->type = PORT_KS8695;
--		ks8695uart_request_port(port);
--	}
--}
--
--/*
-- * verify the new serial_struct (for TIOCSSERIAL).
-- */
--static int ks8695uart_verify_port(struct uart_port *port, struct serial_struct *ser)
--{
--	int ret = 0;
--
--	if (ser->type != PORT_UNKNOWN && ser->type != PORT_KS8695)
--		ret = -EINVAL;
--	if (ser->irq != port->irq)
--		ret = -EINVAL;
--	if (ser->baud_base < 9600)
--		ret = -EINVAL;
--	return ret;
--}
--
--static struct uart_ops ks8695uart_pops = {
--	.tx_empty	= ks8695uart_tx_empty,
--	.set_mctrl	= ks8695uart_set_mctrl,
--	.get_mctrl	= ks8695uart_get_mctrl,
--	.stop_tx	= ks8695uart_stop_tx,
--	.start_tx	= ks8695uart_start_tx,
--	.stop_rx	= ks8695uart_stop_rx,
--	.enable_ms	= ks8695uart_enable_ms,
--	.break_ctl	= ks8695uart_break_ctl,
--	.startup	= ks8695uart_startup,
--	.shutdown	= ks8695uart_shutdown,
--	.set_termios	= ks8695uart_set_termios,
--	.type		= ks8695uart_type,
--	.release_port	= ks8695uart_release_port,
--	.request_port	= ks8695uart_request_port,
--	.config_port	= ks8695uart_config_port,
--	.verify_port	= ks8695uart_verify_port,
--};
--
--static struct uart_port ks8695uart_ports[SERIAL_KS8695_NR] = {
--	{
--		.membase	= KS8695_UART_VA,
--		.mapbase	= KS8695_UART_PA,
--		.iotype		= SERIAL_IO_MEM,
--		.irq		= KS8695_IRQ_UART_TX,
--		.uartclk	= KS8695_CLOCK_RATE * 16,
--		.fifosize	= 16,
--		.ops		= &ks8695uart_pops,
--		.flags		= UPF_BOOT_AUTOCONF,
--		.line		= 0,
--	}
--};
--
--#ifdef CONFIG_SERIAL_KS8695_CONSOLE
--static void ks8695_console_putchar(struct uart_port *port, int ch)
--{
--	while (!(UART_GET_LSR(port) & URLS_URTHRE))
--		barrier();
--
--	UART_PUT_CHAR(port, ch);
--}
--
--static void ks8695_console_write(struct console *co, const char *s, u_int count)
--{
--	struct uart_port *port = ks8695uart_ports + co->index;
--
--	uart_console_write(port, s, count, ks8695_console_putchar);
--}
--
--static void __init ks8695_console_get_options(struct uart_port *port, int *baud, int *parity, int *bits)
--{
--	unsigned int lcr;
--
--	lcr = UART_GET_LCR(port);
--
--	switch (lcr & URLC_PARITY) {
--		case URPE_ODD:
--			*parity = 'o';
--			break;
--		case URPE_EVEN:
--			*parity = 'e';
--			break;
--		default:
--			*parity = 'n';
--	}
--
--	switch (lcr & URLC_URCL) {
--		case URCL_5:
--			*bits = 5;
--			break;
--		case URCL_6:
--			*bits = 6;
--			break;
--		case URCL_7:
--			*bits = 7;
--			break;
--		default:
--			*bits = 8;
--	}
--
--	*baud = port->uartclk / (UART_GET_BRDR(port) & 0x0FFF);
--	*baud /= 16;
--	*baud &= 0xFFFFFFF0;
--}
--
--static int __init ks8695_console_setup(struct console *co, char *options)
--{
--	struct uart_port *port;
--	int baud = 115200;
--	int bits = 8;
--	int parity = 'n';
--	int flow = 'n';
--
--	/*
--	 * Check whether an invalid uart number has been specified, and
--	 * if so, search for the first available port that does have
--	 * console support.
--	 */
--	port = uart_get_console(ks8695uart_ports, SERIAL_KS8695_NR, co);
--
--	if (options)
--		uart_parse_options(options, &baud, &parity, &bits, &flow);
--	else
--		ks8695_console_get_options(port, &baud, &parity, &bits);
--
--	return uart_set_options(port, co, baud, parity, bits, flow);
--}
--
--static struct uart_driver ks8695_reg;
--
--static struct console ks8695_console = {
--	.name		= SERIAL_KS8695_DEVNAME,
--	.write		= ks8695_console_write,
--	.device		= uart_console_device,
--	.setup		= ks8695_console_setup,
--	.flags		= CON_PRINTBUFFER,
--	.index		= -1,
--	.data		= &ks8695_reg,
--};
--
--static int __init ks8695_console_init(void)
--{
--	add_preferred_console(SERIAL_KS8695_DEVNAME, 0, NULL);
--	register_console(&ks8695_console);
--	return 0;
--}
--
--console_initcall(ks8695_console_init);
--
--#define KS8695_CONSOLE	&ks8695_console
--#else
--#define KS8695_CONSOLE	NULL
--#endif
--
--static struct uart_driver ks8695_reg = {
--	.owner			= THIS_MODULE,
--	.driver_name		= "serial_ks8695",
--	.dev_name		= SERIAL_KS8695_DEVNAME,
--	.major			= SERIAL_KS8695_MAJOR,
--	.minor			= SERIAL_KS8695_MINOR,
--	.nr			= SERIAL_KS8695_NR,
--	.cons			= KS8695_CONSOLE,
--};
--
--static int __init ks8695uart_init(void)
--{
--	int i, ret;
--
--	printk(KERN_INFO "Serial: Micrel KS8695 UART driver\n");
--
--	ret = uart_register_driver(&ks8695_reg);
--	if (ret)
--		return ret;
--
--	for (i = 0; i < SERIAL_KS8695_NR; i++)
--		uart_add_one_port(&ks8695_reg, &ks8695uart_ports[0]);
--
--	return 0;
--}
--
--static void __exit ks8695uart_exit(void)
--{
--	int i;
--
--	for (i = 0; i < SERIAL_KS8695_NR; i++)
--		uart_remove_one_port(&ks8695_reg, &ks8695uart_ports[0]);
--	uart_unregister_driver(&ks8695_reg);
--}
--
--module_init(ks8695uart_init);
--module_exit(ks8695uart_exit);
--
--MODULE_DESCRIPTION("KS8695 serial port driver");
--MODULE_AUTHOR("Micrel Inc.");
--MODULE_LICENSE("GPL");
-diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-index 3cc3af1c2ee1..e8dc1787c3c6 100644
---- a/include/uapi/linux/serial_core.h
-+++ b/include/uapi/linux/serial_core.h
-@@ -161,9 +161,6 @@
- /* Blackfin bf5xx */
- #define PORT_BFIN	75
- 
--/* Micrel KS8695 */
--#define PORT_KS8695	76
--
- /* Broadcom SB1250, etc. SOC */
- #define PORT_SB1250_DUART	77
- 
--- 
-2.20.0
-
+Also please don't use stdint types in the kernel, please try checkpatch
+to catch coding style issues.
