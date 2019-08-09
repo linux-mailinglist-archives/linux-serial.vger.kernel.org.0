@@ -2,151 +2,148 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 341C2875A4
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2019 11:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0528767E
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2019 11:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405999AbfHIJSv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Aug 2019 05:18:51 -0400
-Received: from mail-eopbgr1300100.outbound.protection.outlook.com ([40.107.130.100]:11786
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        id S2406163AbfHIJpr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Aug 2019 05:45:47 -0400
+Received: from mail-eopbgr50057.outbound.protection.outlook.com ([40.107.5.57]:32389
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2405988AbfHIJSv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Aug 2019 05:18:51 -0400
+        id S2406138AbfHIJpr (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 9 Aug 2019 05:45:47 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UeAImKffHo10OaGvgf0/CLvgd9VwIG2jIH4VBz4sw0vLgKjrzN0V1Unnv8dBw7bYUJ224orkRwM2nkgpPR0kRIIt68+mdMk1VU/SXVWKWUDSaBF2QhKtTwizda3bRLogSC07SDbrc9HQmVfMPKp3uqcnf5vNAJoQgTjEPfN5dcGLG7KP68ds82IsZTpSU7ePKl/QoukPWLEpezBVU+BwlYWBPYDSwVtZVbBlLgfIMcz79INvmce0hwte9jQwf/BbHoiYLOM+2RH2QiaeEKPPE5VBD5PBwRVQcd2cRpuiAmAb1HcrpO6xsINEUptisQPUrqfcyLiwlj5189Ww28mGbw==
+ b=HwvhAU50FVGmkGJlGxmEfjXrhh366das8yim7aUT5TWeCPqTwUVRK15Yg/FTXKQXkmEsJfU68vp1fV1v68OqaLy01MBJX4mbUs3ToMaoiTMFfsYQpHDOnXznqAGsOvYdCEyahrjCRRPbCZpy0LeSeoWOdDAui6sKCUEOiisjSDGUlanDvO5TCTOOB1RF5U1M6rvCbJLhw69tK2esM6WDCFgN8cuTzS/f59wQyvCqH1D+i/5CkLbfUtcOZKsAqXM04MbtZoNW+K0+Y+HKTh2kLtQqPsrslRfDiVLM6J5y5hmyxLw5uSVxYGT8Zs1IAS3lpVHoymyXJ/U57Zgh3LHPhQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W94HbXo147DSr08idC/7sI5WzYMqXX82EvgEem2ij2A=;
- b=VLXWRT9nbA+ZsKiHSATOy4STjVUHVtDD7ZAlbIKFnYPXCuVr8s3d57fhMsLwBgpX4RBChYvPspx1yOStKSdZKDI7WHXeaByDUEZTo+K73zS53OycBgiipIGRM4VrjmDWHf4bpoGqrX/M928tKg9u05Ik++mJPjyYAJhdoQyHw1wk++0VBDYb+7+yZCjWqeZ0+jJE0Bqv2dZwUWEzonnaMddWvqOFUpalj3WQUf4BNegkKvW/dw7L41pt6ZUU06+xgAWf0yU6BhXts+Kz3C28pxXrZh0OQCGgc6ETd0yB3bp0Q6RWVREQVuGrFzJnOgo660PNm0ne+A/nTNKaUCE48A==
+ bh=Hg3Gp8dptVuK+uaY9Ye8x7ZbYCrF0v/JWUmNUsOlG64=;
+ b=YNlLLt5xj/UAP/6fYQrlDFDh1XuJU12PLZto+vEPpoG+cD9jPmNLWFIacN7eqAVIcdXkqoKXQJA7Jpeh9EtCBxD8Se1OOox8dAZIHrXjiHBg0D19+IzII/bI9/5kyaFWbLybn5bstZEJ156vutzSW6CuJHOHCt2wQ4dTkFyEaSt7G1fcWfdjb526UkWnfonWMFN6eCTOjpopm4sQ0+gkQu8QLOuODet5Pdyt9qY4mgRmV2ZNpWYllfgOdxp4WwgtdHwqz6Yfz7nBYzjFDNkluKSUjFfDqO0Zkw32E9k9nC1HRCREHBMN7w6CgNYT/RNKN//+h3zkHbCjeGwnmDz/tA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sunix.com; dmarc=pass action=none header.from=sunix.com;
- dkim=pass header.d=sunix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sunix.onmicrosoft.com;
- s=selector2-sunix-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W94HbXo147DSr08idC/7sI5WzYMqXX82EvgEem2ij2A=;
- b=n+pnMjV2qRutAyR5YeTyNa3KuFLO8qC8uWUbdxK+W00Ynh2rhu4rIyMRRRtibUPFNhvs2JwwDctnJkrklEChzUn4ecOx3glsafVyYK5QgiNm9exEecSG8pPmiIrNingcU2MAvgwJDQQJMYhqZB4w39vaS2EWlJGhU+Q4T8KCHCU=
-Received: from HK0PR03MB3377.apcprd03.prod.outlook.com (52.133.215.13) by
- HK0PR03MB4657.apcprd03.prod.outlook.com (52.132.236.18) with Microsoft SMTP
+ bh=Hg3Gp8dptVuK+uaY9Ye8x7ZbYCrF0v/JWUmNUsOlG64=;
+ b=LfazChVs4fqY/yHq4h9uqKcMB3Cpi28fmljijeOYaihTEl1nFmqJ4JRB6qtrOIdsdGCmYNDpSgsOeSc4dwQkdRr6jYuUhAz5I1yPz7FKQLYkVHS0DlhiHX2cppeYFeQ0fPx9yVzFnyqk8UUcpSkJx1lPcXvWyzVCG+ThwapwBmQ=
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
+ VI1PR0402MB3487.eurprd04.prod.outlook.com (52.134.4.12) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.11; Fri, 9 Aug 2019 09:18:45 +0000
-Received: from HK0PR03MB3377.apcprd03.prod.outlook.com
- ([fe80::dca2:722c:9e19:9df4]) by HK0PR03MB3377.apcprd03.prod.outlook.com
- ([fe80::dca2:722c:9e19:9df4%4]) with mapi id 15.20.2157.011; Fri, 9 Aug 2019
- 09:18:45 +0000
-From:   =?big5?B?RGViYmllIExpdSC8QrJRtdg=?= <debbie_liu@sunix.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ 15.20.2157.18; Fri, 9 Aug 2019 09:45:40 +0000
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023%7]) with mapi id 15.20.2157.020; Fri, 9 Aug 2019
+ 09:45:40 +0000
+From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+To:     Will Deacon <will@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?big5?B?TW9ycmlzIEt1IKVqpOWrVA==?= <morris_ku@sunix.com>
-Subject: RE: [PATCH 2/2] parport: parport_serial: Add support for Sunix Multi
- I/O boards
-Thread-Topic: [PATCH 2/2] parport: parport_serial: Add support for Sunix Multi
- I/O boards
-Thread-Index: AQHVThi8kouMLaMo/0qL9o+xj0+TOKbyiqUg
-Date:   Fri, 9 Aug 2019 09:18:45 +0000
-Message-ID: <HK0PR03MB337716592BB6E476F01417E5EED60@HK0PR03MB3377.apcprd03.prod.outlook.com>
-References: <20190808184004.20162-1-kai.heng.feng@canonical.com>
- <20190808184004.20162-2-kai.heng.feng@canonical.com>
-In-Reply-To: <20190808184004.20162-2-kai.heng.feng@canonical.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>
+Subject: Re: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Thread-Topic: [PATCH 5/6] tty: serial: Add linflexuart driver for S32V234
+Thread-Index: AQHVTpc0N7PGKATl60WX/HSnUpERYA==
+Date:   Fri, 9 Aug 2019 09:45:40 +0000
+Message-ID: <VI1PR0402MB2863B3E3E2F93CBA8ADB96E5DFD60@VI1PR0402MB2863.eurprd04.prod.outlook.com>
+References: <20190802194702.30249-1-stefan-gabriel.mirea@nxp.com>
+ <20190802194702.30249-6-stefan-gabriel.mirea@nxp.com>
+ <20190808080832.nleult5bknmzr3ze@willie-the-truck>
+ <VI1PR0402MB28635661A4A294EC6F01095EDFD70@VI1PR0402MB2863.eurprd04.prod.outlook.com>
+ <20190808171711.nk7ljqkugtketu4q@willie-the-truck>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=debbie_liu@sunix.com; 
-x-originating-ip: [118.160.160.250]
+ smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
+x-originating-ip: [212.146.100.6]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0bfe2ec7-95a4-4239-8817-08d71caa949a
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:HK0PR03MB4657;
-x-ms-traffictypediagnostic: HK0PR03MB4657:
+x-ms-office365-filtering-correlation-id: b1ce9e63-d687-4377-7fc5-08d71cae56dd
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3487;
+x-ms-traffictypediagnostic: VI1PR0402MB3487:
+x-ms-exchange-purlcount: 1
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <HK0PR03MB465719B50FB10C22F01C4E04EED60@HK0PR03MB4657.apcprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1148;
+x-microsoft-antispam-prvs: <VI1PR0402MB3487A57EC47CF9CC1DCD49EBDFD60@VI1PR0402MB3487.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
 x-forefront-prvs: 01244308DF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(366004)(376002)(396003)(39840400004)(13464003)(199004)(189003)(316002)(74316002)(5660300002)(7736002)(76176011)(6436002)(9686003)(55016002)(64756008)(66556008)(66476007)(66946007)(66446008)(52536014)(54906003)(305945005)(478600001)(76116006)(2906002)(11346002)(7696005)(6506007)(55236004)(446003)(86362001)(26005)(53546011)(186003)(14454004)(99286004)(476003)(102836004)(2201001)(110136005)(6246003)(486006)(107886003)(81166006)(71200400001)(71190400001)(81156014)(8676002)(3846002)(256004)(6116002)(53936002)(33656002)(66066001)(25786009)(4326008)(85182001)(2501003)(8936002)(229853002)(14444005);DIR:OUT;SFP:1102;SCL:1;SRVR:HK0PR03MB4657;H:HK0PR03MB3377.apcprd03.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: sunix.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(136003)(366004)(39860400002)(396003)(189003)(199004)(14454004)(9686003)(66066001)(478600001)(25786009)(6246003)(66446008)(91956017)(64756008)(99286004)(966005)(66476007)(7416002)(76116006)(476003)(81156014)(446003)(486006)(52536014)(4326008)(5660300002)(229853002)(256004)(33656002)(81166006)(6916009)(8676002)(86362001)(66556008)(6436002)(66946007)(74316002)(54906003)(8936002)(53936002)(6506007)(3846002)(186003)(26005)(7696005)(6116002)(2906002)(76176011)(6306002)(102836004)(7736002)(55016002)(305945005)(53546011)(71190400001)(71200400001)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3487;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: of/fOf+l0JTz5i6VPZ32elap8M3Hg9eaJbUhJDWPEnfnBRRWwE/eVif0++whDTfio+P6CMuRpgbo1b4sh4nM2lKhsKBlWT0qq7xVxyS2JBzzNZjDsao1blaCvWgIctXqZ+PfJqFwXDBsnSAfb4+fKDFH+w2qQZOj3891ysAHz3PheE9PM1Gdh3lcRv8H/MFOsRz3NOhOxEqFv/iyj8dB+5QdQJMNVbHge5DSzDJFT5qq5Q5m0dXBryf9giLHUdlFvKu9SEq7puFFY/BGg0UftK6ZhQcxbnOXXOtuxp9e15zDPwygYDw8u9ARAneeqIky1dSLmjN3Wp6c97Xi2EFpbR7W5bU0kB0531wL0L+lvTCOa9u1rzn0Z6OGwZnS59lnGHZuEDqQG35Nzmuckf0/1dIKTNFtbypaIBXevCxZVT8=
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: VyyhMslZwBvsUnmwB6TSMV9voZEpehOg1viKRnTsBSlMEttEi66M5sogjcHRrhNeThzg5UuxOTh01aLizkypE8lSec88QvBZoLI/SLJa7eF1MQGUjuHH4raKtWsbBncL5xSvUfrPww3q8z+bGz3hVwblZY2qvuctjhxofq7LVkWMN8+6ITj7T5lp9aPSpEvweOt7dybZ7z8FzRiUF0rHHnQVEA3o6WZ8cBXWuHYf66M8wNQSWn/3lrhqgZ8Cr9tYUNlGwsjcQ2XAVZSf2S7DERRaS5+Dm+uQGx4aAIdVT2fL6t4T6YIugeNHAxxVBi89alw0PMoVZbY4B43KNfSdRqmqBM21pReMQ78Gujw3BkjShkkZBSPiNLeEbEA6kKipIc5t8xHjzNYHMWutbZHhFjMZVuZxkfWBwVNE2sY6YLs=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: sunix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bfe2ec7-95a4-4239-8817-08d71caa949a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2019 09:18:45.7568
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1ce9e63-d687-4377-7fc5-08d71cae56dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2019 09:45:40.2418
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c514a174-545b-4e85-8600-4eaceff17490
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: S4mgF+W5gYWCswzsfSsnUePinPncMiBmvqYx2Eeli2KOTqXN6j110tDS6uwgmjbb9Twx+qfe/DzmE8obzVDfEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR03MB4657
+X-MS-Exchange-CrossTenant-userprincipalname: mQTYDFCG5FWbj/6dT0j0JlhWuLrK/tfyIhrltz1ZxBCa0EY/7PVgvAkHY1XrM+gcgsCUj1yFevooUHTaefHnohN++xPwd9OHH3B5rjhTQTE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3487
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-VGVzdGVkLWJ5OiBEZWJiaWUgTGl1ICA8ZGViYmllX2xpdUBzdW5peC5jb20+DQoNCk5pY2UgZGF5
-LA0KRGViYmllIExpdSAvIFN1bml4IFdXIFNhbGVzIERlcHQuDQpUZWwgoUcrODg2LTItODkxMy0x
-OTg3oUBleHQuMjc2OSANCg0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogS2Fp
-LUhlbmcgRmVuZyA8a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPiANClNlbnQ6IEZyaWRheSwg
-QXVndXN0IDA5LCAyMDE5IDI6NDAgQU0NClRvOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZzsg
-c3VkaXBtLm11a2hlcmplZUBnbWFpbC5jb20NCkNjOiBsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwu
-b3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBLYWktSGVuZyBGZW5nIDxrYWkuaGVu
-Zy5mZW5nQGNhbm9uaWNhbC5jb20+OyBNb3JyaXMgS3UgpWqk5atUIDxtb3JyaXNfa3VAc3VuaXgu
-Y29tPjsgRGViYmllIExpdSC8QrJRtdggPGRlYmJpZV9saXVAc3VuaXguY29tPg0KU3ViamVjdDog
-W1BBVENIIDIvMl0gcGFycG9ydDogcGFycG9ydF9zZXJpYWw6IEFkZCBzdXBwb3J0IGZvciBTdW5p
-eCBNdWx0aSBJL08gYm9hcmRzDQoNClN1bml4IE11bHRpIEkvTyBib2FyZHMgYXJlIGRpZmZlcmVu
-dCB0byBUaW1lZGlhJ3MuDQoNClRoaXMgcGF0Y2ggYWRkcyBwcm9wZXIgc3VwcG9ydCBmb3IgU3Vu
-aXggTUlPIGJvYXJkcyB3aXRoIDEgcGFyYWxsZWwgYW5kIHVwIHRvIDQgc2VyaWFsIHBvcnRzLg0K
-DQpDYzogTW9ycmlzIEt1IDxtb3JyaXNfa3VAc3VuaXguY29tPg0KQ2M6IERlYmJpZSBMaXUgPGRl
-YmJpZV9saXVAc3VuaXguY29tPg0KU2lnbmVkLW9mZi1ieTogS2FpLUhlbmcgRmVuZyA8a2FpLmhl
-bmcuZmVuZ0BjYW5vbmljYWwuY29tPg0KLS0tDQogZHJpdmVycy9wYXJwb3J0L3BhcnBvcnRfc2Vy
-aWFsLmMgfCA0NCArKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLQ0KIDEgZmlsZSBjaGFu
-Z2VkLCAzMiBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvcGFycG9ydC9wYXJwb3J0X3NlcmlhbC5jIGIvZHJpdmVycy9wYXJwb3J0L3BhcnBvcnRf
-c2VyaWFsLmMNCmluZGV4IDQ2MWZkOGEyNDI3OC4uNjBkNWQ5ODUxMTNjIDEwMDY0NA0KLS0tIGEv
-ZHJpdmVycy9wYXJwb3J0L3BhcnBvcnRfc2VyaWFsLmMNCisrKyBiL2RyaXZlcnMvcGFycG9ydC9w
-YXJwb3J0X3NlcmlhbC5jDQpAQCAtNjEsNyArNjEsMTAgQEAgZW51bSBwYXJwb3J0X3BjX3BjaV9j
-YXJkcyB7DQogCXdjaF9jaDM4Ml8wczFwLA0KIAl3Y2hfY2gzODJfMnMxcCwNCiAJYnJhaW5ib3hl
-c181czFwLA0KLQlzdW5peF8yczFwLA0KKwlzdW5peF80MDA4YSwNCisJc3VuaXhfNTA2OWEsDQor
-CXN1bml4XzUwNzlhLA0KKwlzdW5peF81MDk5YSwNCiB9Ow0KIA0KIC8qIGVhY2ggZWxlbWVudCBk
-aXJlY3RseSBpbmRleGVkIGZyb20gZW51bSBsaXN0LCBhYm92ZSAqLyBAQCAtMTUxLDcgKzE1NCwx
-MCBAQCBzdGF0aWMgc3RydWN0IHBhcnBvcnRfcGNfcGNpIGNhcmRzW10gPSB7DQogCS8qIHdjaF9j
-aDM4Ml8wczFwKi8JCXsgMSwgeyB7IDIsIC0xfSwgfSB9LA0KIAkvKiB3Y2hfY2gzODJfMnMxcCov
-ICAgICAgICAgICAgIHsgMSwgeyB7IDIsIC0xfSwgfSB9LA0KIAkvKiBicmFpbmJveGVzXzVzMXAg
-Ki8gICAgICAgICAgIHsgMSwgeyB7IDMsIC0xIH0sIH0gfSwNCi0JLyogc3VuaXhfMnMxcCAqLyAg
-ICAgICAgICAgICAgICB7IDEsIHsgeyAzLCAtMSB9LCB9IH0sDQorCS8qIHN1bml4XzQwMDhhICov
-CQl7IDEsIHsgeyAxLCAyIH0sIH0gfSwNCisJLyogc3VuaXhfNTA2OWEgKi8JCXsgMSwgeyB7IDEs
-IDIgfSwgfSB9LA0KKwkvKiBzdW5peF81MDc5YSAqLwkJeyAxLCB7IHsgMSwgMiB9LCB9IH0sDQor
-CS8qIHN1bml4XzUwOTlhICovCQl7IDEsIHsgeyAxLCAyIH0sIH0gfSwNCiB9Ow0KIA0KIHN0YXRp
-YyBzdHJ1Y3QgcGNpX2RldmljZV9pZCBwYXJwb3J0X3NlcmlhbF9wY2lfdGJsW10gPSB7IEBAIC0y
-NjEsMTMgKzI2NywxNSBAQCBzdGF0aWMgc3RydWN0IHBjaV9kZXZpY2VfaWQgcGFycG9ydF9zZXJp
-YWxfcGNpX3RibFtdID0gew0KIAl7IFBDSV9WRU5ET1JfSURfSU5UQVNISUVMRCwgMHg0MTAwLA0K
-IAkgIFBDSV9BTllfSUQsIFBDSV9BTllfSUQsIDAsIDAsIGJyYWluYm94ZXNfNXMxcCB9LA0KIA0K
-LQkvKg0KLQkgKiBNb3JlIFNVTklYIHZhcmlhdGlvbnMuIEF0IGxlYXN0IG9uZSBvZiB0aGVzZSBo
-YXMgcGFydCBudW1iZXINCi0JICogJzUwNzlBIGJ1dCBzdWJkZXZpY2UgMHgxMDIuIFRoYXQgYm9h
-cmQgcmVwb3J0cyAweDA3MDggYXMNCi0JICogaXRzIFBDSSBDbGFzcy4NCi0JICovDQorCS8qIFN1
-bml4IGJvYXJkcyAqLw0KIAl7IFBDSV9WRU5ET1JfSURfU1VOSVgsIFBDSV9ERVZJQ0VfSURfU1VO
-SVhfMTk5OSwgUENJX1ZFTkRPUl9JRF9TVU5JWCwNCi0JICAweDAxMDIsIDAsIDAsIHN1bml4XzJz
-MXAgfSwNCisJICAweDAxMDAsIDAsIDAsIHN1bml4XzQwMDhhIH0sDQorCXsgUENJX1ZFTkRPUl9J
-RF9TVU5JWCwgUENJX0RFVklDRV9JRF9TVU5JWF8xOTk5LCBQQ0lfVkVORE9SX0lEX1NVTklYLA0K
-KwkgIDB4MDEwMSwgMCwgMCwgc3VuaXhfNTA2OWEgfSwNCisJeyBQQ0lfVkVORE9SX0lEX1NVTklY
-LCBQQ0lfREVWSUNFX0lEX1NVTklYXzE5OTksIFBDSV9WRU5ET1JfSURfU1VOSVgsDQorCSAgMHgw
-MTAyLCAwLCAwLCBzdW5peF81MDc5YSB9LA0KKwl7IFBDSV9WRU5ET1JfSURfU1VOSVgsIFBDSV9E
-RVZJQ0VfSURfU1VOSVhfMTk5OSwgUENJX1ZFTkRPUl9JRF9TVU5JWCwNCisJICAweDAxMDQsIDAs
-IDAsIHN1bml4XzUwOTlhIH0sDQogDQogCXsgMCwgfSAvKiB0ZXJtaW5hdGUgbGlzdCAqLw0KIH07
-DQpAQCAtNTE2LDExICs1MjQsMjMgQEAgc3RhdGljIHN0cnVjdCBwY2lzZXJpYWxfYm9hcmQgcGNp
-X3BhcnBvcnRfc2VyaWFsX2JvYXJkc1tdID0gew0KIAkJLmJhc2VfYmF1ZAk9IDkyMTYwMCwNCiAJ
-CS51YXJ0X29mZnNldAk9IDgsDQogCX0sDQotCVtzdW5peF8yczFwXSA9IHsNCi0JCS5mbGFncwkJ
-PSBGTF9CQVNFMHxGTF9CQVNFX0JBUlMsDQorCVtzdW5peF80MDA4YV0gPSB7DQorCQkubnVtX3Bv
-cnRzCT0gMCwNCisJfSwNCisJW3N1bml4XzUwNjlhXSA9IHsNCisJCS5udW1fcG9ydHMJPSAxLA0K
-KwkJLmJhc2VfYmF1ZCAgICAgID0gOTIxNjAwLA0KKwkJLnVhcnRfb2Zmc2V0CT0gMHg4LA0KKwl9
-LA0KKwlbc3VuaXhfNTA3OWFdID0gew0KIAkJLm51bV9wb3J0cwk9IDIsDQotCQkuYmFzZV9iYXVk
-CT0gOTIxNjAwLA0KLQkJLnVhcnRfb2Zmc2V0CT0gOCwNCisJCS5iYXNlX2JhdWQgICAgICA9IDky
-MTYwMCwNCisJCS51YXJ0X29mZnNldAk9IDB4OCwNCisJfSwNCisJW3N1bml4XzUwOTlhXSA9IHsN
-CisJCS5udW1fcG9ydHMJPSA0LA0KKwkJLmJhc2VfYmF1ZCAgICAgID0gOTIxNjAwLA0KKwkJLnVh
-cnRfb2Zmc2V0CT0gMHg4LA0KIAl9LA0KIH07DQogDQotLQ0KMi4xNy4xDQoNCg==
+On 8/8/2019 8:17 PM, Will Deacon wrote:=0A=
+> On Thu, Aug 08, 2019 at 12:47:00PM +0000, Stefan-gabriel Mirea wrote:=0A=
+>> On 8/8/2019 11:08 AM, Will Deacon wrote:=0A=
+>>> On Fri, Aug 02, 2019 at 07:47:23PM +0000, Stefan-gabriel Mirea wrote:=
+=0A=
+>>>> +             linflex,<addr>=0A=
+>>>> +                     Use early console provided by Freescale LinFlex =
+UART=0A=
+>>>> +                     serial driver for NXP S32V234 SoCs. A valid base=
+=0A=
+>>>> +                     address must be provided, and the serial port mu=
+st=0A=
+>>>> +                     already be setup and configured.=0A=
+>>>=0A=
+>>> Why isn't earlycon=3D sufficient for this?=0A=
+>>=0A=
+>> "earlycon=3D" is not actually supported. I will fix this in the next=0A=
+>> version by adding a /chosen/stdout-path to the dts. The compatible=0A=
+>> string provided to OF_EARLYCON_DECLARE will also be changed from=0A=
+>> "fsl,s32v234-linflexuart" to "fsl,s32-linflexuart" to match the one in=
+=0A=
+>> the device tree nodes. I missed this after importing a rename from our=
+=0A=
+>> codebase.=0A=
+>>=0A=
+>> Should I remove this addition from kernel-parameters.txt after that?=0A=
+> =0A=
+> Yes, if you can use earlycon instead, then you can drop your custom optio=
+n=0A=
+> entirely and therefore there's no need to document it either.=0A=
+=0A=
+Can you please clarify what you mean by "drop your custom option"? The=0A=
+"linflex" option documented in the paragraph is the name of the=0A=
+earlycon_id declared via "OF_EARLYCON_DECLARE(linflex, ...)". We have=0A=
+not done anything particular to accept it in the parameter value.=0A=
+=0A=
+We do use earlycon (e.g. "earlycon=3Dlinflex,0x40053000"), we just do not=
+=0A=
+support an empty value after "=3D", which needs to be fixed as I=0A=
+understand, because it does not respect the comment[1] about ARM64.=0A=
+=0A=
+Regards,=0A=
+Stefan=0A=
+=0A=
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/admin-guide/kernel-parameters.txt?h=3Dv5.3-rc3#n980=0A=
