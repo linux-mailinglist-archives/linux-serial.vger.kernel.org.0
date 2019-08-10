@@ -2,67 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B19688921
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Aug 2019 09:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1D088A01
+	for <lists+linux-serial@lfdr.de>; Sat, 10 Aug 2019 10:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725601AbfHJH3E (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 10 Aug 2019 03:29:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725468AbfHJH3E (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 10 Aug 2019 03:29:04 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A8F5A208C3;
-        Sat, 10 Aug 2019 07:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565422143;
-        bh=6VbgVATIK8gQ19RGol0s4sZQa5UMwCh4OTfTrF86+S8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lBqrC7ohyxzl6vsNis9zlpMAhEi70L2WIqFNi8DDBsBBNwByj5leAHxmTIVNndq9s
-         TmKlDe4pOaS0AZ1mw/6SXmBx+J4FF6/e2v1l5HTChKEx5JJo8ey/k96tf5JfLLG90A
-         9Xpmz9DaBhJLkh1c//sGGMllxdkZ23lOJlyBP2UE=
-Date:   Sat, 10 Aug 2019 09:29:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     soc@kernel.org, "Wanzongshun (Vincent)" <wanzongshun@huawei.com>,
-        Greg Ungerer <gerg@kernel.org>, linux-serial@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-fbdev@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] ARM: remove ks8695 and w90x900 platforms
-Message-ID: <20190810072900.GA16359@kroah.com>
-References: <20190809202749.742267-1-arnd@arndb.de>
+        id S1725858AbfHJI1l (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 10 Aug 2019 04:27:41 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:41133 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725763AbfHJI1k (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 10 Aug 2019 04:27:40 -0400
+Received: by mail-lj1-f193.google.com with SMTP id d24so94116204ljg.8
+        for <linux-serial@vger.kernel.org>; Sat, 10 Aug 2019 01:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hTVqGxAe7lslqUt42gHEXLSjhA4Akjn51TmLM5R2veA=;
+        b=JI9Dvi/BijOYXxUOHjAy8vv0lxIEQS5DBnOTLOY13QpjloVihhx5wJarjIB9sBhr3n
+         EDrUca+Ns8mxxV53zyqsgh6rrr/vt//V+6XXTiZqYa+m/feDcsAQnyggkMjR+WDw3Eur
+         wEprnJIk42VeNuCNyol49a8QIEpXzRGq3WuRTyahrCxFm7r6qmWmlEwuwO/+/3jBoqW3
+         bOFP6dQ96qzWxAEzFEc0L9s7/Ehtv40g3UdlU1s6IhpaVUU5ACKSaVPH00bipLies1Tu
+         LVRTUG93tqZKcpkgndnSgyj1qmvOZbX8OQsbdTo3O63RW0tuGbKislQKeIXvC5PTxpMj
+         mUmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hTVqGxAe7lslqUt42gHEXLSjhA4Akjn51TmLM5R2veA=;
+        b=aDCBnECZ85FMRO0r94z0CVgBlNtnfkwuqMuf+Whd5JzUrJwVy66nRSA5zA09Xj9Min
+         Rl+928r4uZ02h7pVXfij5eRhiEvXIjeaGLsbyyFfTxCLnKpH5NZ4PqWZO43qehOoFJq4
+         phfjyLXjdr7PDW0Nepf6JAWct85gJh+gty0XexF/UoV6LJy8/qLtJh4NjbaxoKNTgXVv
+         PVUEzfxuA/iLxO7R7In11LPrxZTD5M8fmN24HN1Og4Slogbxzs7xsvMNveqkgwl8Yoix
+         i6v9+c/AEyjNUTl1ZwgnYRPhV2NUwesyyKatPetGS2UiVScnZTgTSivIaRL+MC+LPCEI
+         le6w==
+X-Gm-Message-State: APjAAAX/18UHsJ85H7sF+MDvWi2bB/VVBLoglwvBWcDD+I2K+YorOsWN
+        3lMH61Ln5B3HrSVyV3OqmTUkZoukqMGNOI4ofPi/CIMCMwE=
+X-Google-Smtp-Source: APXvYqzjGxI8uNtXooWBa90whrdvf1kkuE6WbE17TAUjWmxFtAkE7CW9RTvVNl9VllXR3jrBV6Fow6JyxDQS1q4xHxo=
+X-Received: by 2002:a2e:8195:: with SMTP id e21mr13018340ljg.62.1565425658753;
+ Sat, 10 Aug 2019 01:27:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190809202749.742267-1-arnd@arndb.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190808132543.26274-1-sr@denx.de>
+In-Reply-To: <20190808132543.26274-1-sr@denx.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 10 Aug 2019 10:27:27 +0200
+Message-ID: <CACRpkdYzg0At4qf1Nv5_+SzgqQ-iLU1ND9Svhj47=pXJf9E7Mg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] gpiolib: Add for_each_gpio_suffix() helper
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-serial@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 10:27:28PM +0200, Arnd Bergmann wrote:
-> As discussed previously, these two ARM platforms have no
-> known remaining users, let's remove them completely.
-> 
-> Subsystem maintainers: feel free to take the driver removals
-> through your respective trees, they are all independent of
-> one another. We can merge any remaining patches through the
-> soc tree.
+On Thu, Aug 8, 2019 at 3:25 PM Stefan Roese <sr@denx.de> wrote:
 
-Serial and USB host controller driver patches applied, thanks!
+> Add a helper macro to enable the interation over all supported GPIO
+> suffixes (currently "gpios" & "gpio"). This will be used by the serial
+> mctrl code to check, if a GPIO property exists before requesting it.
+>
+> Signed-off-by: Stefan Roese <sr@denx.de>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Pavel Machek <pavel@denx.de>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-greg k-h
+I really like this patch, it makes things so much more readable.
+
+Do you want me to apply both patches to the GPIO tree when
+we agreed on the final version? I need some ACK from some
+serial maintainer.
+
+Yours,
+Linus Walleij
