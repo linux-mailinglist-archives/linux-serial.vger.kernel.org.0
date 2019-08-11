@@ -2,55 +2,100 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B42888CEA
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Aug 2019 21:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B17D89020
+	for <lists+linux-serial@lfdr.de>; Sun, 11 Aug 2019 09:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbfHJTaP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 10 Aug 2019 15:30:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37608 "EHLO mail.kernel.org"
+        id S1725990AbfHKH3N (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 11 Aug 2019 03:29:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726024AbfHJTaL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 10 Aug 2019 15:30:11 -0400
-Subject: Re: [GIT PULL] TTY/Serial fixes for 5.3-rc4
+        id S1725776AbfHKH3M (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 11 Aug 2019 03:29:12 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECADB208C2;
+        Sun, 11 Aug 2019 07:29:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565465410;
-        bh=/uwnN9ol/pvVpE+zhTo00NNtMbmXhGzJs1kngjeKvxM=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=twZBSf7VgCDpq4HSYYzax+jhRO9Y3f7FPMcfr9l7hF5BZl3xVEXoN7HwbTY1qkE9N
-         2uNBLrF8y7ZxLqd7SkxA6rHOONgmuWt6/vKQUev8VO1+RDPZaYpqHw/pXdzfKLVhFB
-         4YhFRBlooPZlqrC4aueVlLiEUTxCv9CTkNbvvATU=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190810115235.GA5930@kroah.com>
-References: <20190810115235.GA5930@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190810115235.GA5930@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.3-rc4
-X-PR-Tracked-Commit-Id: 81eaadcae81b4c1bf01649a3053d1f54e2d81cf1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c13f86701e1e03fa3f94165d46425ead51a191c8
-Message-Id: <156546541092.17840.18172607320518046045.pr-tracker-bot@kernel.org>
-Date:   Sat, 10 Aug 2019 19:30:10 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+        s=default; t=1565508551;
+        bh=a18vG4RFaJ1WnQTrQP/A7Fv6lll+Bd1t6q3Pb5dEzII=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xU+1adYVSI0rMNnzRsoaowKdWgU0WokCNDwfBQFfhdWcc0YLPAbaxq7M1xbn75oiY
+         5odMmCfDZPXgCz+VwOJ5EV3UWRBqLembaQb7hDHGqkUEY77vH66CWdV0Pi84Rnz0AR
+         0br1/8rebHmNysYMMg97eMbkughzY/rR4olgmZ3k=
+Date:   Sun, 11 Aug 2019 09:29:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v4 8/9] MIPS: SGI-IP27: fix readb/writeb addressing
+Message-ID: <20190811072907.GA1416@kroah.com>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+ <20190809103235.16338-9-tbogendoerfer@suse.de>
+ <CAHp75Vd_083R9sRsspVuJ3ZMTxpVR79PF5Lg-bpnMxRfN+b7wA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vd_083R9sRsspVuJ3ZMTxpVR79PF5Lg-bpnMxRfN+b7wA@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The pull request you sent on Sat, 10 Aug 2019 13:52:35 +0200:
+On Sat, Aug 10, 2019 at 04:22:23PM +0300, Andy Shevchenko wrote:
+> On Fri, Aug 9, 2019 at 1:34 PM Thomas Bogendoerfer
+> <tbogendoerfer@suse.de> wrote:
+> >
+> > Our chosen byte swapping, which is what firmware already uses, is to
+> > do readl/writel by normal lw/sw intructions (data invariance). This
+> > also means we need to mangle addresses for u8 and u16 accesses. The
+> > mangling for 16bit has been done aready, but 8bit one was missing.
+> > Correcting this causes different addresses for accesses to the
+> > SuperIO and local bus of the IOC3 chip. This is fixed by changing
+> > byte order in ioc3 and m48rtc_rtc structs.
+> 
+> >  /* serial port register map */
+> >  struct ioc3_serialregs {
+> > -       uint32_t        sscr;
+> > -       uint32_t        stpir;
+> > -       uint32_t        stcir;
+> > -       uint32_t        srpir;
+> > -       uint32_t        srcir;
+> > -       uint32_t        srtr;
+> > -       uint32_t        shadow;
+> > +       u32     sscr;
+> > +       u32     stpir;
+> > +       u32     stcir;
+> > +       u32     srpir;
+> > +       u32     srcir;
+> > +       u32     srtr;
+> > +       u32     shadow;
+> >  };
+> 
+> Isn't it a churn? AFAIU kernel documentation the uint32_t is okay to
+> use, just be consistent inside one module / driver.
+> Am I mistaken?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.3-rc4
+No, but really it uint* shouldn't be used anywhere in the kernel source
+as it does not make sense.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c13f86701e1e03fa3f94165d46425ead51a191c8
+thanks,
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+greg k-h
