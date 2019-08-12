@@ -2,101 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B01A89BFC
-	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 12:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E1989C7A
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 13:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727917AbfHLKxL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 12 Aug 2019 06:53:11 -0400
-Received: from mga03.intel.com ([134.134.136.65]:29582 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727235AbfHLKxL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 12 Aug 2019 06:53:11 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 03:53:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,377,1559545200"; 
-   d="scan'208";a="183521892"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2019 03:53:09 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hx7wp-0005aM-Bp; Mon, 12 Aug 2019 13:53:07 +0300
-Date:   Mon, 12 Aug 2019 13:53:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1727995AbfHLLR6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 12 Aug 2019 07:17:58 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35318 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727961AbfHLLR6 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 12 Aug 2019 07:17:58 -0400
+Received: by mail-ot1-f67.google.com with SMTP id g17so6356698otl.2;
+        Mon, 12 Aug 2019 04:17:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T98EYVXZVYsv6oIQenn9IjYx/y91OWwX/ZZNufzUEaQ=;
+        b=U/ukrcHUZbDXp6krKJmXEg7Faak/9sO5m4CshXdv3AnAmQlIKQd6EBV7pLHdupZp0s
+         CvRRmnDJwyHMept5fzsdPqlgxDIe63JJ0Jq2a/0acbszBHXNFOJpkS+Wclp+PmOlQ35x
+         qiJSKfMeMd8uQw8x/2yniKOhA0bMaiiCCR0bsIrnHGD+Ac0rXfE4ujawWKOuunhTWN/s
+         17KiUzZoVRcdJX90c4MuNXTpdYA152Qz5MIwspggMrEzxXuCKkf4gff+Ln2u5whmFvfe
+         uMBe+/4Bw8MQ+EeENP7m9ErRNEy/fJmp+IG+7uU5ZfB2QnGHvR+ZN118WJnTk/rWT6Vl
+         j3OA==
+X-Gm-Message-State: APjAAAUzFugaM8HvOXY0jQ6FmhSXiL27AwjcQdgMgZ72F+4Efd/MkJq5
+        PunWVzITnOdN9LqDay2oJvC1lC72TKxLjjuHN/p+rF57
+X-Google-Smtp-Source: APXvYqywrLlTNCi7rWgLUTPrwd7Kyr0xMBgwRDItBqJgUbRJaCxpQqgUxztpPiUsBIUKcI8W1MXjZGy8DCJGbvUeJ6g=
+X-Received: by 2002:aca:bd43:: with SMTP id n64mr12842065oif.148.1565608676826;
+ Mon, 12 Aug 2019 04:17:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190808132543.26274-1-sr@denx.de> <20190808132543.26274-2-sr@denx.de>
+In-Reply-To: <20190808132543.26274-2-sr@denx.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 12 Aug 2019 13:17:45 +0200
+Message-ID: <CAMuHMdUzry6f_AqcjevgSRgJ2Q8Nqr_kEyYz+1QEVft6BTrC2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] serial: mctrl_gpio: Support all GPIO suffixes (gpios
+ vs gpio)
 To:     Stefan Roese <sr@denx.de>
-Cc:     linux-serial@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Pavel Machek <pavel@denx.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 2/2] serial: mctrl_gpio: Support all GPIO suffixes (gpios
- vs gpio)
-Message-ID: <20190812105307.GA30120@smile.fi.intel.com>
-References: <20190808132543.26274-1-sr@denx.de>
- <20190808132543.26274-2-sr@denx.de>
- <20190808134859.GY30120@smile.fi.intel.com>
- <c4d14b64-6c2f-7e87-ea45-aa780dca85b8@denx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c4d14b64-6c2f-7e87-ea45-aa780dca85b8@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 03:59:36PM +0200, Stefan Roese wrote:
-> On 08.08.19 15:48, Andy Shevchenko wrote:
-> > On Thu, Aug 08, 2019 at 03:25:43PM +0200, Stefan Roese wrote:
-> > > This patch fixes a backward compatibility issue, when boards use the
-> > > old style GPIO suffix "-gpio" instead of the new "-gpios". This
-> > > potential problem has been introduced by commit d99482673f95 ("serial:
-> > > mctrl_gpio: Check if GPIO property exisits before requesting it").
-> > > 
-> > > This patch now fixes this issue by iterating over all supported GPIO
-> > > suffixes by using the newly introduced for_each_gpio_suffix() helper.
-> > > 
-> > > Also, the string buffer is now allocated on the stack to avoid the
-> > > problem of allocation in a loop and its potential failure.
-> > 
-> > >   	for (i = 0; i < UART_GPIO_MAX; i++) {
-> > >   		enum gpiod_flags flags;
-> > > -		char *gpio_str;
-> > > +		const char *suffix;
-> > > +		char gpio_str[32];	/* 32 is max size of property name */
-> > 
-> > Hmm... don't we have some define for the maximum length of property?
-> 
-> I've come up with this assumption from this code (identical comment):
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib-of.c#L293
-> 
-> (and other places in drivers/gpio/*)
+Hi Stefan,
 
-I tried hard to find an evidence of this in Linux kernel, I assume that comes
-from DT compiler or something, but fail. Linux kernel OF properties handling is
-written in the assumption of arbitrary length of the property name.
+On Thu, Aug 8, 2019 at 3:25 PM Stefan Roese <sr@denx.de> wrote:
+> This patch fixes a backward compatibility issue, when boards use the
+> old style GPIO suffix "-gpio" instead of the new "-gpios". This
+> potential problem has been introduced by commit d99482673f95 ("serial:
+> mctrl_gpio: Check if GPIO property exisits before requesting it").
+>
+> This patch now fixes this issue by iterating over all supported GPIO
+> suffixes by using the newly introduced for_each_gpio_suffix() helper.
+>
+> Also, the string buffer is now allocated on the stack to avoid the
+> problem of allocation in a loop and its potential failure.
+>
+> Signed-off-by: Stefan Roese <sr@denx.de>
 
-It might be that my hard was not hard at all and I missed something.
+Do we really need to spread this *-gpio" legacy support all over the kernel?
 
-> > Or maybe we can still continue using kasprintf() approach?
-> 
-> Frankly, I was feeling a bit uncomfortable with this memory allocation
-> in a loop. And Pavel also commented on this:
-> 
-> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2066286.html
+Seeing the only in-kernel users of legacy "rts-gpio" are
 
-If memory allocator fails, it's a big issue, and what will happen next probably
-much less important.
+    arch/arm/boot/dts/am335x-nano.dts:      rts-gpio = <&gpio0 13
+GPIO_ACTIVE_HIGH>;
+    arch/arm/boot/dts/am335x-nano.dts:      rts-gpio = <&gpio2 15
+GPIO_ACTIVE_HIGH>;
+    arch/arm/boot/dts/am335x-pdu001.dts:    rts-gpio = <&gpio1 9
+GPIO_ACTIVE_HIGH>;
 
-> So I would really prefer to move this buffer to the stack instead.
+and this is handled by omap-serial.c, predating mctrl_gpio, I'd like to
+reconsider.
+
+Documentation/devicetree/bindings/serial/serial.txt always described
+the "*-gpios"
+variants, so there should be no users of the legacy "*-gpio" variants.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
