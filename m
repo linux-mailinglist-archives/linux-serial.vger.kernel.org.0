@@ -2,106 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0C289CE1
-	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 13:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D8089CE5
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 13:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728197AbfHLL2g (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 12 Aug 2019 07:28:36 -0400
-Received: from mtaout.hs-regensburg.de ([194.95.104.10]:57194 "EHLO
-        mtaout.hs-regensburg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728002AbfHLL2g (ORCPT
+        id S1728226AbfHLL2h (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 12 Aug 2019 07:28:37 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:18368 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728002AbfHLL2h (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 12 Aug 2019 07:28:36 -0400
-X-Greylist: delayed 395 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Aug 2019 07:28:34 EDT
-Received: from pluto.lfdr (im-mob-039.hs-regensburg.de [172.20.37.154])
-        by mtaout.hs-regensburg.de (Postfix) with ESMTP id 466YMn249Qzy5p;
-        Mon, 12 Aug 2019 13:21:57 +0200 (CEST)
-From:   Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        jailhouse-dev@googlegroups.com
-Cc:     Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
-        Jay Dolan <jay.dolan@accesio.com>
-Subject: [PATCH] serial: 8250_pci: Implement MSI(-X) support
-Date:   Mon, 12 Aug 2019 13:21:52 +0200
-Message-Id: <20190812112152.693622-1-ralf.ramsauer@oth-regensburg.de>
-X-Mailer: git-send-email 2.22.0
+        Mon, 12 Aug 2019 07:28:37 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d514d6f0000>; Mon, 12 Aug 2019 04:28:47 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 12 Aug 2019 04:28:36 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 12 Aug 2019 04:28:36 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 12 Aug
+ 2019 11:28:36 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 12 Aug 2019 11:28:36 +0000
+Received: from kyarlagadda-linux.nvidia.com (Not Verified[10.19.64.169]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d514d610000>; Mon, 12 Aug 2019 04:28:36 -0700
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <jslaby@suse.com>
+CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [PATCH 00/14] serial: tegra: Tegra186 support and fixes
+Date:   Mon, 12 Aug 2019 16:58:09 +0530
+Message-ID: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-PMX-Version: 6.3.3.2656215, Antispam-Engine: 2.7.2.2107409, Antispam-Data: 2019.8.12.110917, AntiVirus-Engine: 5.63.0, AntiVirus-Data: 2019.8.12.5630000
-X-PMX-Spam: Gauge=IIIIIIIII, Probability=9%, Report='
- MULTIPLE_RCPTS 0.1, HTML_00_01 0.05, HTML_00_10 0.05, LINES_OF_YELLING_3 0.05, BODYTEXTP_SIZE_3000_LESS 0, BODY_SIZE_2000_2999 0, BODY_SIZE_5000_LESS 0, BODY_SIZE_7000_LESS 0, LEGITIMATE_SIGNS 0, MULTIPLE_REAL_RCPTS 0, NO_URI_HTTPS 0, __ANY_URI 0, __BODY_NO_MAILTO 0, __CC_NAME 0, __CC_NAME_DIFF_FROM_ACC 0, __CC_REAL_NAMES 0, __CTE 0, __HAS_CC_HDR 0, __HAS_FROM 0, __HAS_MSGID 0, __HAS_X_MAILER 0, __LINES_OF_YELLING 0, __MIME_TEXT_ONLY 0, __MIME_TEXT_P 0, __MIME_TEXT_P1 0, __MIME_VERSION 0, __MULTIPLE_RCPTS_CC_X2 0, __NO_HTML_TAG_RAW 0, __PHISH_SPEAR_SUBJ_TEAM 0, __SANE_MSGID 0, __SUBJ_ALPHA_END 0, __TO_MALFORMED_2 0, __TO_NAME 0, __TO_NAME_DIFF_FROM_ACC 0, __TO_REAL_NAMES 0, __URI_NO_WWW 0, __URI_NS '
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1565609327; bh=IeA7TVzSY/j/yQ40dk+G66W/AzCRieQzDfzgCyYzZDQ=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=IHRRCekEJxQVEHEPjVwHWrMYSE2xITl1tZJ+fVOcsBXDaMq9ir5j7CBYN9mClJODW
+         fgCxOPgjLhyuIVZB895aXlibIggpvR6kYCg19gfKA3XUaxs6HiAgwoGpTAM1GH4vVC
+         Mz+4TGI8SfptcwqLvV1Gc5t1npuOADlk4eqfo63vTY0F6a3xVM4Zxhdj5EgYTKIGlO
+         +UqfCTKaNwqLxory4XZaR46jDp50fSrMrKuB+dvh3T3E5AgdVpN8bAiOADiDvMxEUU
+         afbeI5ClCp7Rtj9klAwn4qeV6rRr+itQunwTaKdxfvw2IH2kbQPJw1aUQS5FVTG1bN
+         KTgYE2kXQq8kA==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-There may be setups, where legacy interrupts are not available. This is
-the caese, e.g., when Linux runs as guest (aka. non-root cell) of the
-partitioning hypervisor Jailhouse. There, only MSI(-X) interrupts are
-available for guests.
+Series of patches adding enhancements to exising UART driver and adding
+support for new chip Tegra186 and Tegra194.
 
-But the 8250_pci driver currently only supports legacy ints. So let's
-enable MSI(-X) interrupts.
+Tegra186 uses GPCDMA for dma transfers which is still not available in
+mainstream. However, it can work in PIO/FIFO mode and support added for it.
+Also Tegra186 has a hardware issue where it does not meet tolernace +/-4% and
+to work around it, device tree entries provided to adjust baud rate for a
+particular range.
 
-Nevertheless, this needs to handled with care: while many 8250 devices
-actually claim to support MSI(-X) interrupts it should not be enabled be
-default. I had at least one device in my hands with broken MSI
-implementation.
+Ahung Cheng (2):
+  serial: tegra: avoid reg access when clk disabled
+  serial: tegra: protect IER against LCR.DLAB
 
-So better introduce a whitelist with devices that are known to support
-MSI(-X) interrupts. I tested all devices mentioned in the patch.
+Andreas Abel (1):
+  serial: tegra: add internal loopback functionality
 
-Signed-off-by: Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>
----
- drivers/tty/serial/8250/8250_pci.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+Krishna Yarlagadda (7):
+  serial: tegra: report error to upper tty layer
+  serial: tegra: add compatible for new chips
+  serial: tegra: check for FIFO mode enabled status
+  serial: tegra: DT for Adjusted baud rates
+  serial: tegra: add support to adjust baud rate
+  serial: tegra: report clk rate errors
+  serial: tegra: Add PIO mode support
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index bbe5cba21522..97992884c0ee 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -53,6 +53,16 @@ struct serial_private {
- 	int			line[0];
- };
- 
-+static const struct pci_device_id pci_use_msi[] = {
-+	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_NETMOS, PCI_DEVICE_ID_NETMOS_9900,
-+			 0xA000, 0x1000) },
-+	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_NETMOS, PCI_DEVICE_ID_NETMOS_9912,
-+			 0xA000, 0x1000) },
-+	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_NETMOS, PCI_DEVICE_ID_NETMOS_9922,
-+			 0xA000, 0x1000) },
-+	{ }
-+};
-+
- static int pci_default_setup(struct serial_private*,
- 	  const struct pciserial_board*, struct uart_8250_port *, int);
- 
-@@ -3643,7 +3653,22 @@ pciserial_init_ports(struct pci_dev *dev, const struct pciserial_board *board)
- 	memset(&uart, 0, sizeof(uart));
- 	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF | UPF_SHARE_IRQ;
- 	uart.port.uartclk = board->base_baud * 16;
--	uart.port.irq = get_pci_irq(dev, board);
-+
-+	if (pci_match_id(pci_use_msi, dev)) {
-+		dev_dbg(&dev->dev, "Using MSI(-X) interrupts\n");
-+		pci_set_master(dev);
-+		rc = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_ALL_TYPES);
-+	} else {
-+		dev_dbg(&dev->dev, "Using legacy interrupts\n");
-+		rc = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_LEGACY);
-+	}
-+	if (rc < 0) {
-+		kfree(priv);
-+		priv = ERR_PTR(rc);
-+		goto err_deinit;
-+	}
-+
-+	uart.port.irq = pci_irq_vector(dev, 0);
- 	uart.port.dev = &dev->dev;
- 
- 	for (i = 0; i < nr_ports; i++) {
+Shardar Shariff Md (4):
+  serial: tegra: add support to ignore read
+  serial: tegra: flush the RX fifo on frame error
+  serial: tegra: set maximum num of uart ports to 8
+  serial: tegra: add support to use 8 bytes trigger
+
+ .../bindings/serial/nvidia,tegra20-hsuart.txt      |  35 +-
+ drivers/tty/serial/serial-tegra.c                  | 405 ++++++++++++++++++---
+ 2 files changed, 385 insertions(+), 55 deletions(-)
+
 -- 
-2.22.0
+2.7.4
 
