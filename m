@@ -2,87 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 447E289025
-	for <lists+linux-serial@lfdr.de>; Sun, 11 Aug 2019 09:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B01A89BFC
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 12:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbfHKHcS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Sun, 11 Aug 2019 03:32:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56438 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725810AbfHKHcS (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 11 Aug 2019 03:32:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A6A50AD73;
-        Sun, 11 Aug 2019 07:32:15 +0000 (UTC)
-Date:   Sun, 11 Aug 2019 09:32:12 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
-In-Reply-To: <20190809142222.4558691e@cakuba.netronome.com>
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
-        <20190809103235.16338-8-tbogendoerfer@suse.de>
-        <20190809142222.4558691e@cakuba.netronome.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S1727917AbfHLKxL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 12 Aug 2019 06:53:11 -0400
+Received: from mga03.intel.com ([134.134.136.65]:29582 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727235AbfHLKxL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:53:11 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 03:53:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,377,1559545200"; 
+   d="scan'208";a="183521892"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2019 03:53:09 -0700
+Received: from andy by smile with local (Exim 4.92.1)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hx7wp-0005aM-Bp; Mon, 12 Aug 2019 13:53:07 +0300
+Date:   Mon, 12 Aug 2019 13:53:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-serial@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pavel Machek <pavel@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/2] serial: mctrl_gpio: Support all GPIO suffixes (gpios
+ vs gpio)
+Message-ID: <20190812105307.GA30120@smile.fi.intel.com>
+References: <20190808132543.26274-1-sr@denx.de>
+ <20190808132543.26274-2-sr@denx.de>
+ <20190808134859.GY30120@smile.fi.intel.com>
+ <c4d14b64-6c2f-7e87-ea45-aa780dca85b8@denx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4d14b64-6c2f-7e87-ea45-aa780dca85b8@denx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 9 Aug 2019 14:22:22 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
-
-> On Fri,  9 Aug 2019 12:32:29 +0200, Thomas Bogendoerfer wrote:
-> > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> > It also supports connecting a SuperIO chip for serial and parallel
-> > interfaces. IOC3 is used inside various SGI systemboards and add-on
-> > cards with different equipped external interfaces.
+On Thu, Aug 08, 2019 at 03:59:36PM +0200, Stefan Roese wrote:
+> On 08.08.19 15:48, Andy Shevchenko wrote:
+> > On Thu, Aug 08, 2019 at 03:25:43PM +0200, Stefan Roese wrote:
+> > > This patch fixes a backward compatibility issue, when boards use the
+> > > old style GPIO suffix "-gpio" instead of the new "-gpios". This
+> > > potential problem has been introduced by commit d99482673f95 ("serial:
+> > > mctrl_gpio: Check if GPIO property exisits before requesting it").
+> > > 
+> > > This patch now fixes this issue by iterating over all supported GPIO
+> > > suffixes by using the newly introduced for_each_gpio_suffix() helper.
+> > > 
+> > > Also, the string buffer is now allocated on the stack to avoid the
+> > > problem of allocation in a loop and its potential failure.
 > > 
-> > Support for ethernet and serial interfaces were implemented inside
-> > the network driver. This patchset moves out the not network related
-> > parts to a new MFD driver, which takes care of card detection,
-> > setup of platform devices and interrupt distribution for the subdevices.
+> > >   	for (i = 0; i < UART_GPIO_MAX; i++) {
+> > >   		enum gpiod_flags flags;
+> > > -		char *gpio_str;
+> > > +		const char *suffix;
+> > > +		char gpio_str[32];	/* 32 is max size of property name */
 > > 
-> > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> > Hmm... don't we have some define for the maximum length of property?
 > 
-> There are a lot of changes in the ethernet part which are not easy to
-> explain by the introduction of the other MFD parts.. Could you possibly
-> break this change up into smaller chunks?
+> I've come up with this assumption from this code (identical comment):
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/gpio/gpiolib-of.c#L293
+> 
+> (and other places in drivers/gpio/*)
 
-working on it
+I tried hard to find an evidence of this in Linux kernel, I assume that comes
+from DT compiler or something, but fail. Linux kernel OF properties handling is
+written in the assumption of arbitrary length of the property name.
 
-> Also please don't use stdint types in the kernel, please try checkpatch
-> to catch coding style issues.
+It might be that my hard was not hard at all and I missed something.
 
-my patch already reduces them and checkpatch only warns about usage of printk
-for the network part. Changing that to dev_warn/dev_err in the mfd patch didn't
-seem the right thing to do. As I'm splitting the conversion patch into a few
-steps I could also replace the printks.
+> > Or maybe we can still continue using kasprintf() approach?
+> 
+> Frankly, I was feeling a bit uncomfortable with this memory allocation
+> in a loop. And Pavel also commented on this:
+> 
+> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2066286.html
 
-Thomas.
+If memory allocator fails, it's a big issue, and what will happen next probably
+much less important.
+
+> So I would really prefer to move this buffer to the stack instead.
 
 -- 
-SUSE Linux GmbH
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+With Best Regards,
+Andy Shevchenko
+
+
