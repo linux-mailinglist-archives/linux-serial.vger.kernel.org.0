@@ -2,315 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5FF89D21
-	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 13:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF9F89D5D
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2019 13:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728231AbfHLL3c (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 12 Aug 2019 07:29:32 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:18504 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728688AbfHLL3c (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 12 Aug 2019 07:29:32 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d514da40001>; Mon, 12 Aug 2019 04:29:40 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 12 Aug 2019 04:29:29 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 12 Aug 2019 04:29:29 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 12 Aug
- 2019 11:29:29 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 12 Aug 2019 11:29:29 +0000
-Received: from kyarlagadda-linux.nvidia.com (Not Verified[10.19.64.169]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d514d950004>; Mon, 12 Aug 2019 04:29:28 -0700
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <jslaby@suse.com>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Shardar Shariff Md <smohammed@nvidia.com>
-Subject: [PATCH 14/14] serial: tegra: Add PIO mode support
-Date:   Mon, 12 Aug 2019 16:58:23 +0530
-Message-ID: <1565609303-27000-15-git-send-email-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
-References: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+        id S1728239AbfHLLyG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 12 Aug 2019 07:54:06 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:18160 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728196AbfHLLyG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 12 Aug 2019 07:54:06 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id CF956A3267;
+        Mon, 12 Aug 2019 13:54:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id NAsPxTcQt1xs; Mon, 12 Aug 2019 13:53:53 +0200 (CEST)
+Subject: Re: [PATCH 2/2] serial: mctrl_gpio: Support all GPIO suffixes (gpios
+ vs gpio)
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20190808132543.26274-1-sr@denx.de>
+ <20190808132543.26274-2-sr@denx.de>
+ <CAMuHMdUzry6f_AqcjevgSRgJ2Q8Nqr_kEyYz+1QEVft6BTrC2g@mail.gmail.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <ad77e973-912f-5ff3-9dd4-610695ec57eb@denx.de>
+Date:   Mon, 12 Aug 2019 13:53:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565609380; bh=Vxzh1OPXEktqHUn/3Dn+GZxJZNYtPAod90S85gBFsSM=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=q7Q97fr7oHygJNXR9ZXtYtgeHND0m/QWtdVf8r+nzw61DZek/GGTPN3d3gYn6bt5W
-         BZgY87TOlBP9qnc0QqEKcLRQpnZ7XCKruhs8pt0MtWr0h+XF7R2MFZKs+QQZ1wXg9Y
-         Oy0MTAyj7jvS/TJjNXNjjwSPdumbXMpb/4zSLod6fPZvW1Z7/q7Tr6kzJhJJ3fDOeL
-         xZ5FyUlq7jxZhijVDpIhvAUPQYAJeIfD50vOVrM8dv3p4U9nO1jaarnRfHyqSqylvQ
-         mZbvp2lH1EliW1y4RAVeesVZBcRmo9ZTbVULbB9qXshfYzXY/ePydolMcI0hp9Ph5q
-         R7ujtqWVi6Bhg==
+In-Reply-To: <CAMuHMdUzry6f_AqcjevgSRgJ2Q8Nqr_kEyYz+1QEVft6BTrC2g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add PIO mode support in receive and transmit path with RX interrupt
-trigger of 16 bytes for Tegra194 and older chips.
+Hi Geert,
 
-Signed-off-by: Shardar Shariff Md <smohammed@nvidia.com>
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- drivers/tty/serial/serial-tegra.c | 117 ++++++++++++++++++++++++++++----------
- 1 file changed, 86 insertions(+), 31 deletions(-)
+On 12.08.19 13:17, Geert Uytterhoeven wrote:
+> Hi Stefan,
+> 
+> On Thu, Aug 8, 2019 at 3:25 PM Stefan Roese <sr@denx.de> wrote:
+>> This patch fixes a backward compatibility issue, when boards use the
+>> old style GPIO suffix "-gpio" instead of the new "-gpios". This
+>> potential problem has been introduced by commit d99482673f95 ("serial:
+>> mctrl_gpio: Check if GPIO property exisits before requesting it").
+>>
+>> This patch now fixes this issue by iterating over all supported GPIO
+>> suffixes by using the newly introduced for_each_gpio_suffix() helper.
+>>
+>> Also, the string buffer is now allocated on the stack to avoid the
+>> problem of allocation in a loop and its potential failure.
+>>
+>> Signed-off-by: Stefan Roese <sr@denx.de>
+> 
+> Do we really need to spread this *-gpio" legacy support all over the kernel?
+> 
+> Seeing the only in-kernel users of legacy "rts-gpio" are
+> 
+>      arch/arm/boot/dts/am335x-nano.dts:      rts-gpio = <&gpio0 13
+> GPIO_ACTIVE_HIGH>;
+>      arch/arm/boot/dts/am335x-nano.dts:      rts-gpio = <&gpio2 15
+> GPIO_ACTIVE_HIGH>;
+>      arch/arm/boot/dts/am335x-pdu001.dts:    rts-gpio = <&gpio1 9
+> GPIO_ACTIVE_HIGH>;
+> 
+> and this is handled by omap-serial.c, predating mctrl_gpio, I'd like to
+> reconsider.
+> 
+> Documentation/devicetree/bindings/serial/serial.txt always described
+> the "*-gpios"
+> variants, so there should be no users of the legacy "*-gpio" variants.
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index 3e02f27..6e5b418 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -139,6 +139,8 @@ struct tegra_uart_port {
- 	int					n_adjustable_baud_rates;
- 	int					required_rate;
- 	int					configured_rate;
-+	bool					use_rx_pio;
-+	bool					use_tx_pio;
- };
- 
- static void tegra_uart_start_next_tx(struct tegra_uart_port *tup);
-@@ -569,7 +571,7 @@ static void tegra_uart_start_next_tx(struct tegra_uart_port *tup)
- 	if (!count)
- 		return;
- 
--	if (count < TEGRA_UART_MIN_DMA)
-+	if (tup->use_tx_pio || count < TEGRA_UART_MIN_DMA)
- 		tegra_uart_start_pio_tx(tup, count);
- 	else if (BYTES_TO_ALIGN(tail) > 0)
- 		tegra_uart_start_pio_tx(tup, BYTES_TO_ALIGN(tail));
-@@ -802,6 +804,18 @@ static void tegra_uart_handle_modem_signal_change(struct uart_port *u)
- 		uart_handle_cts_change(&tup->uport, msr & UART_MSR_CTS);
- }
- 
-+static void do_handle_rx_pio(struct tegra_uart_port *tup)
-+{
-+	struct tty_struct *tty = tty_port_tty_get(&tup->uport.state->port);
-+	struct tty_port *port = &tup->uport.state->port;
-+
-+	tegra_uart_handle_rx_pio(tup, port);
-+	if (tty) {
-+		tty_flip_buffer_push(port);
-+		tty_kref_put(tty);
-+	}
-+}
-+
- static irqreturn_t tegra_uart_isr(int irq, void *data)
- {
- 	struct tegra_uart_port *tup = data;
-@@ -815,7 +829,7 @@ static irqreturn_t tegra_uart_isr(int irq, void *data)
- 	while (1) {
- 		iir = tegra_uart_read(tup, UART_IIR);
- 		if (iir & UART_IIR_NO_INT) {
--			if (is_rx_int) {
-+			if (!tup->use_rx_pio && is_rx_int) {
- 				tegra_uart_handle_rx_dma(tup);
- 				if (tup->rx_in_progress) {
- 					ier = tup->ier_shadow;
-@@ -843,7 +857,7 @@ static irqreturn_t tegra_uart_isr(int irq, void *data)
- 		case 4: /* End of data */
- 		case 6: /* Rx timeout */
- 		case 2: /* Receive */
--			if (!is_rx_int) {
-+			if (!tup->use_rx_pio && !is_rx_int) {
- 				is_rx_int = true;
- 				/* Disable Rx interrupts */
- 				ier = tup->ier_shadow;
-@@ -853,6 +867,8 @@ static irqreturn_t tegra_uart_isr(int irq, void *data)
- 					UART_IER_RTOIE | TEGRA_UART_IER_EORD);
- 				tup->ier_shadow = ier;
- 				tegra_uart_write(tup, ier, UART_IER);
-+			} else {
-+				do_handle_rx_pio(tup);
- 			}
- 			break;
- 
-@@ -871,6 +887,7 @@ static irqreturn_t tegra_uart_isr(int irq, void *data)
- static void tegra_uart_stop_rx(struct uart_port *u)
- {
- 	struct tegra_uart_port *tup = to_tegra_uport(u);
-+	struct tty_port *port = &tup->uport.state->port;
- 	struct dma_tx_state state;
- 	unsigned long ier;
- 
-@@ -888,9 +905,13 @@ static void tegra_uart_stop_rx(struct uart_port *u)
- 	tup->ier_shadow = ier;
- 	tegra_uart_write(tup, ier, UART_IER);
- 	tup->rx_in_progress = 0;
--	dmaengine_terminate_all(tup->rx_dma_chan);
--	dmaengine_tx_status(tup->rx_dma_chan, tup->rx_cookie, &state);
--	tegra_uart_rx_buffer_push(tup, state.residue);
-+	if (tup->rx_dma_chan && !tup->use_rx_pio) {
-+		dmaengine_terminate_all(tup->rx_dma_chan);
-+		dmaengine_tx_status(tup->rx_dma_chan, tup->rx_cookie, &state);
-+		tegra_uart_rx_buffer_push(tup, state.residue);
-+	} else {
-+		tegra_uart_handle_rx_pio(tup, port);
-+	}
- }
- 
- static void tegra_uart_hw_deinit(struct tegra_uart_port *tup)
-@@ -941,8 +962,10 @@ static void tegra_uart_hw_deinit(struct tegra_uart_port *tup)
- 	tup->rx_in_progress = 0;
- 	tup->tx_in_progress = 0;
- 
--	tegra_uart_dma_channel_free(tup, true);
--	tegra_uart_dma_channel_free(tup, false);
-+	if (!tup->use_rx_pio)
-+		tegra_uart_dma_channel_free(tup, true);
-+	if (!tup->use_tx_pio)
-+		tegra_uart_dma_channel_free(tup, false);
- 
- 	clk_disable_unprepare(tup->uart_clk);
- }
-@@ -987,10 +1010,14 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
- 	 */
- 	tup->fcr_shadow = UART_FCR_ENABLE_FIFO;
- 
--	if (tup->cdata->dma_burst_bytes == 8)
--		tup->fcr_shadow |= UART_FCR_R_TRIG_10;
--	else
--		tup->fcr_shadow |= UART_FCR_R_TRIG_01;
-+	if (tup->use_rx_pio) {
-+		tup->fcr_shadow |= UART_FCR_R_TRIG_11;
-+	} else {
-+		if (tup->cdata->dma_burst_bytes == 8)
-+			tup->fcr_shadow |= UART_FCR_R_TRIG_10;
-+		else
-+			tup->fcr_shadow |= UART_FCR_R_TRIG_01;
-+	}
- 
- 	tup->fcr_shadow |= TEGRA_UART_TX_TRIG_16B;
- 	tegra_uart_write(tup, tup->fcr_shadow, UART_FCR);
-@@ -1017,19 +1044,23 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
- 	 * (115200, N, 8, 1) so that the receive DMA buffer may be
- 	 * enqueued
- 	 */
--	tup->lcr_shadow = TEGRA_UART_DEFAULT_LSR;
- 	ret = tegra_set_baudrate(tup, TEGRA_UART_DEFAULT_BAUD);
- 	if (ret < 0) {
- 		dev_err(tup->uport.dev, "Failed to set baud rate\n");
- 		return ret;
- 	}
--	tup->fcr_shadow |= UART_FCR_DMA_SELECT;
--	tegra_uart_write(tup, tup->fcr_shadow, UART_FCR);
-+	if (!tup->use_rx_pio) {
-+		tup->lcr_shadow = TEGRA_UART_DEFAULT_LSR;
-+		tup->fcr_shadow |= UART_FCR_DMA_SELECT;
-+		tegra_uart_write(tup, tup->fcr_shadow, UART_FCR);
- 
--	ret = tegra_uart_start_rx_dma(tup);
--	if (ret < 0) {
--		dev_err(tup->uport.dev, "Not able to start Rx DMA\n");
--		return ret;
-+		ret = tegra_uart_start_rx_dma(tup);
-+		if (ret < 0) {
-+			dev_err(tup->uport.dev, "Not able to start Rx DMA\n");
-+			return ret;
-+		}
-+	} else {
-+		tegra_uart_write(tup, tup->fcr_shadow, UART_FCR);
- 	}
- 	tup->rx_in_progress = 1;
- 
-@@ -1051,7 +1082,12 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
- 	 * both the EORD as well as RX_TIMEOUT - SW sees RX_TIMEOUT first
- 	 * then the EORD.
- 	 */
--	tup->ier_shadow = UART_IER_RLSI | UART_IER_RTOIE | TEGRA_UART_IER_EORD;
-+	if (!tup->use_rx_pio)
-+		tup->ier_shadow = UART_IER_RLSI | UART_IER_RTOIE |
-+			TEGRA_UART_IER_EORD;
-+	else
-+		tup->ier_shadow = UART_IER_RLSI | UART_IER_RTOIE | UART_IER_RDI;
-+
- 	tegra_uart_write(tup, tup->ier_shadow, UART_IER);
- 	return 0;
- }
-@@ -1146,16 +1182,22 @@ static int tegra_uart_startup(struct uart_port *u)
- 	struct tegra_uart_port *tup = to_tegra_uport(u);
- 	int ret;
- 
--	ret = tegra_uart_dma_channel_allocate(tup, false);
--	if (ret < 0) {
--		dev_err(u->dev, "Tx Dma allocation failed, err = %d\n", ret);
--		return ret;
-+	if (!tup->use_tx_pio) {
-+		ret = tegra_uart_dma_channel_allocate(tup, false);
-+		if (ret < 0) {
-+			dev_err(u->dev, "Tx Dma allocation failed, err = %d\n",
-+				ret);
-+			return ret;
-+		}
- 	}
- 
--	ret = tegra_uart_dma_channel_allocate(tup, true);
--	if (ret < 0) {
--		dev_err(u->dev, "Rx Dma allocation failed, err = %d\n", ret);
--		goto fail_rx_dma;
-+	if (!tup->use_rx_pio) {
-+		ret = tegra_uart_dma_channel_allocate(tup, true);
-+		if (ret < 0) {
-+			dev_err(u->dev, "Rx Dma allocation failed, err = %d\n",
-+				ret);
-+			goto fail_rx_dma;
-+		}
- 	}
- 
- 	ret = tegra_uart_hw_init(tup);
-@@ -1173,9 +1215,11 @@ static int tegra_uart_startup(struct uart_port *u)
- 	return 0;
- 
- fail_hw_init:
--	tegra_uart_dma_channel_free(tup, true);
-+	if (!tup->use_rx_pio)
-+		tegra_uart_dma_channel_free(tup, true);
- fail_rx_dma:
--	tegra_uart_dma_channel_free(tup, false);
-+	if (!tup->use_tx_pio)
-+		tegra_uart_dma_channel_free(tup, false);
- 	return ret;
- }
- 
-@@ -1379,7 +1423,6 @@ static int tegra_uart_parse_dt(struct platform_device *pdev,
- 	int count;
- 	int n_entries;
- 
--
- 	port = of_alias_get_id(np, "serial");
- 	if (port < 0) {
- 		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", port);
-@@ -1389,6 +1432,18 @@ static int tegra_uart_parse_dt(struct platform_device *pdev,
- 
- 	tup->enable_modem_interrupt = of_property_read_bool(np,
- 					"nvidia,enable-modem-interrupt");
-+
-+	index = of_property_match_string(np, "dma-names", "rx");
-+	if (index < 0) {
-+		tup->use_rx_pio = true;
-+		dev_info(&pdev->dev, "RX in PIO mode\n");
-+	}
-+	index = of_property_match_string(np, "dma-names", "tx");
-+	if (index < 0) {
-+		tup->use_tx_pio = true;
-+		dev_info(&pdev->dev, "TX in PIO mode\n");
-+	}
-+
- 	n_entries = of_property_count_u32_elems(np, "nvidia,adjust-baud-rates");
- 	if (n_entries > 0) {
- 		tup->n_adjustable_baud_rates = n_entries / 3;
--- 
-2.7.4
+Hmmm, you were the one to comment about supporting (not breaking) the
+"-gpio" variant:
 
+https://lkml.org/lkml/2019/6/24/248
+
+That was my main motivation to work on this patch.
+
+If we all agree, that only the documented "-gpios" variant needs to
+be supported, then we can drop this patch.
+
+Thanks,
+Stefan
