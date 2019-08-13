@@ -2,67 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2088B4A2
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 11:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D68E8B4B0
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 11:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727818AbfHMJwY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Aug 2019 05:52:24 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41189 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727298AbfHMJwY (ORCPT
+        id S1728515AbfHMJzh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Aug 2019 05:55:37 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34207 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728504AbfHMJzg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Aug 2019 05:52:24 -0400
-Received: by mail-wr1-f67.google.com with SMTP id j16so4893293wrr.8;
-        Tue, 13 Aug 2019 02:52:22 -0700 (PDT)
+        Tue, 13 Aug 2019 05:55:36 -0400
+Received: by mail-wm1-f68.google.com with SMTP id e8so694388wme.1;
+        Tue, 13 Aug 2019 02:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=oH9CVh9gmVeJHcvQJ/Os+97M33Mq/JlC7yYO0dPPriA=;
-        b=ounGMCCtFmxbo256LzcETIMFc6e0TWnudwVu1O7cSATGIbcJyadK9KbnNLZRTgixRw
-         vQJKT5eOprVrrqnRF/iUMAqdyPMjdfWg66949imUdt5E9/BB2ohw2kKYFa1IOAorVQqE
-         /XPo1Lw7REL5Efhe6ULC/KK7miOhTnJzQVVlc8nk++EO0j01w4LRDji/ursGTotF2j0m
-         ClCs3b4Wdx8kPmFJ+XTsh804XzjzpkgotqRNdKq+avFC1jMACLLnxeBH5EW5OviFWGEc
-         K1GJDt12tUofkEiQeqmYXfW7+dMJspi3ANixq0U4J9cQPT4n09SdxSKX9zJYnvp6c+27
-         +4yg==
+        bh=pli52NBy/OMsSqsnASCGrhls+/JLogpdAS1ylOATsQU=;
+        b=dWT81dlFP1Rz6wHB1smXEGLQ7bSN0BUlypMEnVI66yLgTlDL6gjgprLvmOsuxPDfJv
+         Z8TTmuHwe7J+VSGwmxzMLGgVyEq7lkAXfKsEMBYPkFVFFDQjyPg+RkWACR18IhByJwRs
+         OJfaAaww2Iqf5auoVMKuB0kPctNYaIHJ+e63LgkUGtjexJLbcZ7zOm1/G02bQR+qoJlT
+         F2jPzLaVQ+KPHjUAXI/tshf5ziZutIwTAY7QTVMQjF3LaXMyRX1zmOKh1WTPNPZk+dLc
+         ctYbcBfnWoxlddFw7MtFS6+sSMfZk0HrN7W1lqSA9gRFNnT3TOivQhQRyBctJfJkU63y
+         GY1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oH9CVh9gmVeJHcvQJ/Os+97M33Mq/JlC7yYO0dPPriA=;
-        b=OJZhkV0GwC+NZbQLxeVFvibKCGKNGlKVVHzXy0g1dgAbJqoQcqFx+LuYuquS0R3jn0
-         bqqAj3KxElKjoPRyUDgwZrN0zgxQUKQLEYpq/AAhsN85maoWFb+8ZNkre+hkw2vOwer4
-         hVSSmxjq1Hrjco2syupkp5sdme+05UO+BdwmeohF2GSItj2/PMtsjyL6CjcBYYpuvvDR
-         EuyzVCRUkrGew/qscXw0WTAIHDaZDoGigbSJwrJtp++G8JsKVuQXpbTwkdoM0DqwveKL
-         JlEQIrna5rkXRwEKr5lV0r9muQ3MMFnC5xEAH0GhkkzErHXAFME0IfOhCKZZdQPPfBXq
-         ohdw==
-X-Gm-Message-State: APjAAAVNq0sllrIYAxJT1Lqas+fu/7e8OLeVhqPaZwzWUgJAaX9k4I4o
-        7b7+ZYyMdjTTFXA1BWneEZ0=
-X-Google-Smtp-Source: APXvYqz07B6svSsW51U9prMIdXC+G8MdU4xSpnQW0LRESapxwEuzy56nVqI37LSm7cYN/FR9GKZrIw==
-X-Received: by 2002:adf:ee45:: with SMTP id w5mr12189040wro.148.1565689941503;
-        Tue, 13 Aug 2019 02:52:21 -0700 (PDT)
+        bh=pli52NBy/OMsSqsnASCGrhls+/JLogpdAS1ylOATsQU=;
+        b=oZqA8LDxqvz3y63wBY4+3OLx+B/87WXX0SoWmIiksW+WWUVsQVvtgq1yLQHUyf0bSF
+         S2h9MQ8NRU1+fYnxFPdTsTata9hm3fpARCoVWgmH8RA9TSJYShJZa8n+IwVwoIrCu3Yo
+         UvpFPPWfV1nMm5ZZcYkhA4aTxKqKAA8wHUkGtD+iK5rrHistWwoAeE4forAgZ2K1Yb6H
+         dXqD6JRwlhxBOOvX5CwwHBi0893a16zod6jAwZovTOV3cfkLj8M6zoMA8X/H4omBuo7p
+         xq53WFzAekduPR+2S4EWps24fvVHmEw5lipqPnnHCJq/5uz3cEEWxa3tzudI4OONA2Pc
+         WfjQ==
+X-Gm-Message-State: APjAAAXqK7B2S1UHObO9vcjJk8I8u8aZGxtCm1WfGuCxszCj3qFwpcHi
+        eUdMnLxONK7GROZM1+mMq4M=
+X-Google-Smtp-Source: APXvYqxIhr3gIFWeFwigD1Tmfv24IOqVfVxzCMUsomct0kWqMTUD5Wo5Ln3bt360aD3DZ5s5yuTH1g==
+X-Received: by 2002:a7b:c933:: with SMTP id h19mr2063842wml.177.1565690133459;
+        Tue, 13 Aug 2019 02:55:33 -0700 (PDT)
 Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id j15sm7689063wrn.70.2019.08.13.02.52.20
+        by smtp.gmail.com with ESMTPSA id t19sm955025wmi.29.2019.08.13.02.55.31
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 13 Aug 2019 02:52:20 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 11:52:19 +0200
+        Tue, 13 Aug 2019 02:55:32 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 11:55:31 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
 Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         mark.rutland@arm.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
         jslaby@suse.com, linux-serial@vger.kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shardar Shariff Md <smohammed@nvidia.com>
-Subject: Re: [PATCH 06/14] serial: tegra: report error to upper tty layer
-Message-ID: <20190813095219.GK1137@ulmo>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/14] serial: tegra: add compatible for new chips
+Message-ID: <20190813095531.GL1137@ulmo>
 References: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
- <1565609303-27000-7-git-send-email-kyarlagadda@nvidia.com>
+ <1565609303-27000-8-git-send-email-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mGCtrYeZ202LI9ZG"
+        protocol="application/pgp-signature"; boundary="TnYVF1hk1c8rpHiF"
 Content-Disposition: inline
-In-Reply-To: <1565609303-27000-7-git-send-email-kyarlagadda@nvidia.com>
+In-Reply-To: <1565609303-27000-8-git-send-email-kyarlagadda@nvidia.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
@@ -70,101 +69,77 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 
---mGCtrYeZ202LI9ZG
+--TnYVF1hk1c8rpHiF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 12, 2019 at 04:58:15PM +0530, Krishna Yarlagadda wrote:
-> Report overrun/parity/frame/break errors to top tty layer. Add support
-> to ignore break character if IGNBRK is set.
+On Mon, Aug 12, 2019 at 04:58:16PM +0530, Krishna Yarlagadda wrote:
+> Add new compatible string for Tegra186. It differs from earlier chips
+> as it has fifo mode enable check and 8 byte dma buffer.
+> Add new compatible string for Tegra194. Tegra194 has different error
+> tolerance levels for baud rate compared to older chips.
 >=20
-> Signed-off-by: Shardar Shariff Md <smohammed@nvidia.com>
 > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  drivers/tty/serial/serial-tegra.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/seria=
-l-tegra.c
-> index f6a3f4e..7ab81bb 100644
-> --- a/drivers/tty/serial/serial-tegra.c
-> +++ b/drivers/tty/serial/serial-tegra.c
-> @@ -374,13 +374,21 @@ static char tegra_uart_decode_rx_error(struct tegra=
-_uart_port *tup,
->  			tup->uport.icount.frame++;
->  			dev_err(tup->uport.dev, "Got frame errors\n");
->  		} else if (lsr & UART_LSR_BI) {
-> -			dev_err(tup->uport.dev, "Got Break\n");
-> -			tup->uport.icount.brk++;
-> -			/* If FIFO read error without any data, reset Rx FIFO */
-> +			/*
-> +			 * Break error
-> +			 * If FIFO read error without any data, reset Rx FIFO
-> +			 */
->  			if (!(lsr & UART_LSR_DR) && (lsr & UART_LSR_FIFOE))
->  				tegra_uart_fifo_reset(tup, UART_FCR_CLEAR_RCVR);
-> +			if (tup->uport.ignore_status_mask & UART_LSR_BI)
-> +				return TTY_BREAK;
-> +			flag =3D TTY_BREAK;
-> +			tup->uport.icount.brk++;
-> +			dev_err(tup->uport.dev, "Got Break\n");
+>  Documentation/devicetree/bindings/serial/nvidia,tegra20-hsuart.txt | 3 +=
++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-I know this is preexisting, but why do we want to output an error
-message in these cases. Isn't it perfectly legal for this to happen?
+I think device tree binding patches are supposed to start with
+"dt-binding: ...".
+
+Also: "fifo" -> "FIFO" and "dma" -> "DMA" in the commit message.
+
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/nvidia,tegra20-hsua=
+rt.txt b/Documentation/devicetree/bindings/serial/nvidia,tegra20-hsuart.txt
+> index d7edf73..187ec78 100644
+> --- a/Documentation/devicetree/bindings/serial/nvidia,tegra20-hsuart.txt
+> +++ b/Documentation/devicetree/bindings/serial/nvidia,tegra20-hsuart.txt
+> @@ -1,7 +1,8 @@
+>  NVIDIA Tegra20/Tegra30 high speed (DMA based) UART controller driver.
+> =20
+>  Required properties:
+> -- compatible : should be "nvidia,tegra30-hsuart", "nvidia,tegra20-hsuart=
+".
+> +- compatible : should be "nvidia,tegra30-hsuart", "nvidia,tegra20-hsuart=
+",
+> +  nvidia,tegra186-hsuart, nvidia,tegra194-hsuart.
+
+Please use quotes around the compatible strings like the existing ones.
+Also, I think it might be better to list these explicitly rather than
+just give a list of potential values. As it is right now, it's
+impossible to tell whether this is meant to say "should be all of these"
+or whether it is meant to say "should be one of these".
 
 Thierry
 
->  		}
-> +		uart_insert_char(&tup->uport, lsr, UART_LSR_OE, 0, flag);
->  	}
-> +
->  	return flag;
->  }
-> =20
-> @@ -562,6 +570,9 @@ static void tegra_uart_handle_rx_pio(struct tegra_uar=
-t_port *tup,
->  			break;
-> =20
->  		flag =3D tegra_uart_decode_rx_error(tup, lsr);
-> +		if (flag !=3D TTY_NORMAL)
-> +			continue;
-> +
->  		ch =3D (unsigned char) tegra_uart_read(tup, UART_RX);
->  		tup->uport.icount.rx++;
-> =20
-> @@ -1224,6 +1235,8 @@ static void tegra_uart_set_termios(struct uart_port=
- *u,
->  	/* Ignore all characters if CREAD is not set */
->  	if ((termios->c_cflag & CREAD) =3D=3D 0)
->  		tup->uport.ignore_status_mask |=3D UART_LSR_DR;
-> +	if (termios->c_iflag & IGNBRK)
-> +		tup->uport.ignore_status_mask |=3D UART_LSR_BI;
-> =20
->  	spin_unlock_irqrestore(&u->lock, flags);
->  }
+>  - reg: Should contain UART controller registers location and length.
+>  - interrupts: Should contain UART controller interrupts.
+>  - clocks: Must contain one entry, for the module clock.
 > --=20
 > 2.7.4
 >=20
 
---mGCtrYeZ202LI9ZG
+--TnYVF1hk1c8rpHiF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1SiFMACgkQ3SOs138+
-s6GvUg//Z9O5WEPe9rTu+9sjypaZEmAIc3UQ0IqGTCFG5787p+iokxU/hFJceWHB
-8dinTSHuRtj0h+Oohj0vrmuduDEV9PpeXJq/3DChXFkv/FXnp9TXmwUAIz/d4vll
-73X3Q0YIhdad3rQKAbaN8sAoNZM6Sem7GiXxwgbBwdEWOfboXHJ6+B4DCaPWggAI
-smLYQaTkLGhaP6nxCjFTDxlOa64ogcsQ8UBBAmtuunYuHlnZhSXZNw6+hx6DLq2A
-96ySRNVMRzdR0SAqwv0zNm2CxgxJbd8li1r46jLo9od6oTB+mGgrGL6QIT+HY3Rx
-VRVEsA9dXpzARh7jucVelOZt7Jne2vWPgnZachYCDuuOL1XdjuSy+I8f90YS2eaX
-cjg+U1l9lVoBWy5s8BQWRRaQd8Fv6Prmurw6Y2EwfUHebNAuSIj8bBoDg7KImd+j
-OBnp2i/eZweGMJs29SmHZJCkKrKq2f33mlRCfPrni9fMtFtuyv/3CHr4Dq0ktCHz
-LtIYvyLo3PX7xdZxni5TilP9i0VGsRmXaRzSAhKAwl5+IZQeJl22tE1z2Fwbxvf7
-2W8lxpJsP6ccwCvFry0r4Gx0FAEVRS7QNuf556xzDqO0dN0pY4kzYlGy2vUkcDkB
-dQBCiMtdS8huuJMz3rGCDZLr/NUwbnjrDkpcvZK2nIu5gzsH5Hg=
-=CqDS
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1SiRMACgkQ3SOs138+
+s6EJYw//YTnH42F/vn19weuxjELgdmwZkWjkvGeZf5gO2hiWgy5oR6J74ACsr87G
+7IK6eQxszcqOsXXu/f5bX3XiTG8Xpz/6dyfutm9xP0/slRtpHJSLHHKuUofs8HQL
+bHBAf9/ZG2mnrkWxm9q18AcZX4b9S7jAqnTI1gxMMZ+FvS2I8jL61dx+2S5bH9Jw
+mp4JErcdf+ofxhM7o39q6jHlWhZBRj/3KwauW9sKyiQCKm4b/Lj9JePyeXjiz0Bv
+Qs/H/k5GMqo5PqP6G1rw8m40V6hJtkUIdzKskOZJt94he1ULdMAFnXMlYwnK0OJU
+MlSfuEhbJajQ4yOSXH+ShUw2j+p/zn+fXpPyWGH/4ckhNQS03T5QRedmpTGUYrkV
+XlUyB9V26mYdyMtlNgozoWCHrkhSrmOCkPWDe0j9+F0LcoDNQGj4xvDT2wTAtmSu
+wEMQQ47JmPP2rZ5dJi+rEeEVEOBv6VOBiwNgywL+aXV6o/jV71gHICKe6c6PFGnU
+vqiRYWedvDtPhSFR9r6JCn7mZ77vgJfnkpSyQON1zupTAGXY+9dy/2m7no835gxe
+7nvl072qH3b8GRytLuETp7sAcKNvJvL9Zb1Zjsa4XlJJZ/5M9xKPOVXfajXxLtQU
+iEFehu7/BaMdggncN67Kb4s76xszM435j02l5m7aCxGM7eB65PU=
+=/lhB
 -----END PGP SIGNATURE-----
 
---mGCtrYeZ202LI9ZG--
+--TnYVF1hk1c8rpHiF--
