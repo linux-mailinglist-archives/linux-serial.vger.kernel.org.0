@@ -2,61 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C758AFB8
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 08:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8FF8B14E
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 09:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727269AbfHMGN4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Aug 2019 02:13:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48094 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727160AbfHMGN4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:13:56 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A7A720578;
-        Tue, 13 Aug 2019 06:13:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565676835;
-        bh=rGzT4MhKwakUGdTMTEcOkbIXp0hWQNwP5MypgQuJsIs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SVwKOG9r8ypIhK++8Aa5+RdbVadNcgASQxH8gJAp2wcWDhI3qiyj0o0o2x6+ePNi9
-         eFe4QkgX6oAO30XlaZGhgM2UG43tRu+R4ihPnhre/H5S8iPpK7o0b/WcI7dOXs4Vva
-         GHkMeAeGkuWnPlLvXqvdhiyJxGidvwW7c0V/r8Y4=
-Date:   Tue, 13 Aug 2019 08:13:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Suji Velupillai <suji.velupillai@broadcom.com>
-Cc:     linux-serial@vger.kernel.org
-Subject: Re: Serial to shared memory
-Message-ID: <20190813061353.GI6670@kroah.com>
-References: <CAJHBTCAiUoRwXq=ZNKfSKbdoAXCe8KSiqcL3iv510jseB8s6mA@mail.gmail.com>
+        id S1727342AbfHMHkg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Aug 2019 03:40:36 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:48101 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbfHMHkg (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 13 Aug 2019 03:40:36 -0400
+Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
+  Razvan.Stefanescu@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Razvan.Stefanescu@microchip.com";
+  x-sender="Razvan.Stefanescu@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa2.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Razvan.Stefanescu@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Razvan.Stefanescu@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: cxXL8660C9M6aAGH2Uluy4pcamff96/clUOJXI9w+01rqmasY0c+Z3YC/5KrXvVwTnoGGDOOVM
+ svl2t9PlHw9U1CtHEd0w3eW9usRPRTPaAXTFitv4XA3ciqUFsPScxeMd276tteDf/SLCimGAY7
+ Z2373lX/AjNYX5vjjc0HkI8NmHwRvTp4wiQcvpLNUKUId8H5iuREpjnjyc8ZeB99oLsuZGxQ/6
+ dLBeW1QwY7/pZzzlaJRq52j6YWpzVn6RRsgHX6AGJ8NZ035bbgIflK/VpoNiClDiewbJuqkswk
+ Z0c=
+X-IronPort-AV: E=Sophos;i="5.64,380,1559545200"; 
+   d="scan'208";a="44893566"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Aug 2019 00:40:29 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 13 Aug 2019 00:40:29 -0700
+Received: from rob-ult-m50855.microchip.com (10.10.85.251) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Tue, 13 Aug 2019 00:40:26 -0700
+From:   Razvan Stefanescu <razvan.stefanescu@microchip.com>
+To:     Richard Genoud <richard.genoud@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tty/serial: atmel: reschedule TX after RX was started
+Date:   Tue, 13 Aug 2019 10:40:25 +0300
+Message-ID: <20190813074025.16218-1-razvan.stefanescu@microchip.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJHBTCAiUoRwXq=ZNKfSKbdoAXCe8KSiqcL3iv510jseB8s6mA@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 05:14:19PM -0700, Suji Velupillai wrote:
-> Hello,
-> 
-> We have client which is running Linux and it is connected to host over
-> PCIe. Both shares PCIe bar space as shared memory. Currently we only
-> have one UART for debug, but this can't be used by the client, thus we
-> need a virtual serial console running on a client side, which can
-> read/write from PCIe mapped shared memory. The host can open the tty
-> port seamlessly for communication.
-> 
-> I looked into the kernel tty/serial/ tree, and did not find any sample
-> one. Is there a sample code?
+When half-duplex RS485 communication is used, after RX is started, TX
+tasklet still needs to be  scheduled tasklet. This avoids console freezing
+when more data is to be transmitted, if the serial communication is not
+closed.
 
-Not for just this single thing, but there are a number of existing
-busses and implementations that communicate across PCIe shared memory
-between systems.  I suggest looking into them.
+Fixes: 69646d7a3689 ("tty/serial: atmel: RS485 HD w/DMA: enable RX after TX is stopped")
 
-good luck!
+Signed-off-by: Razvan Stefanescu <razvan.stefanescu@microchip.com>
+---
+ drivers/tty/serial/atmel_serial.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 0b4f36905321..8e667967928a 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -1400,7 +1400,6 @@ atmel_handle_transmit(struct uart_port *port, unsigned int pending)
+ 
+ 			atmel_port->hd_start_rx = false;
+ 			atmel_start_rx(port);
+-			return;
+ 		}
+ 
+ 		atmel_tasklet_schedule(atmel_port, &atmel_port->tasklet_tx);
+-- 
+2.20.1
+
