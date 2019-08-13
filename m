@@ -2,67 +2,297 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B388ABDA
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 02:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CD88ADD1
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 06:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbfHMAOd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 12 Aug 2019 20:14:33 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37919 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbfHMAOc (ORCPT
+        id S1725903AbfHMEgs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Aug 2019 00:36:48 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35577 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725786AbfHMEgs (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 12 Aug 2019 20:14:32 -0400
-Received: by mail-lj1-f196.google.com with SMTP id r9so99899109ljg.5
-        for <linux-serial@vger.kernel.org>; Mon, 12 Aug 2019 17:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=VZPiwW9mQpjfyb0bK/U+vbA36fSfXE95Zq0lecUQxuQ=;
-        b=Nqxnu8pajWwpItmbKjK4yxP92y7unlCkUTLjcmyKDvufZjl7eZ/f+y0BwTZJFED5KF
-         XiFjVYT/SyyIfgRAqFUDggZ28BQUgYi9j+Afy8QhZrWD6Nno7qJQRxUvSHQYHnJ17agC
-         f3WRkEqunWVR51lhBbkRQWkKNIbYIr3DKhtFI=
+        Tue, 13 Aug 2019 00:36:48 -0400
+Received: from mail-pg1-f197.google.com ([209.85.215.197])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hxOY9-00046p-Pq
+        for linux-serial@vger.kernel.org; Tue, 13 Aug 2019 04:36:46 +0000
+Received: by mail-pg1-f197.google.com with SMTP id h5so65858740pgq.23
+        for <linux-serial@vger.kernel.org>; Mon, 12 Aug 2019 21:36:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=VZPiwW9mQpjfyb0bK/U+vbA36fSfXE95Zq0lecUQxuQ=;
-        b=etaXSDmSwWlFIUCvazX20qxB2bZQ1YQYuGFHgOiWm9RYdXMhZ1wpXAKQhqwyxcwaX9
-         QtVi1Y5agKE6lxhrFRPgT1u+eJr0kqdY+0sbOVfpkYA5Jvh5AKv03DxnoJjNUH+49YyB
-         Ap6MtsdOxJXEJYKOT8ncgADC0ir7b7q0NDrvcozhpY99l/fZIKr32cpff4VJ5VIpkHVO
-         fK1RbHyV/6CuBy0Lt9G8TwjPDSwZDdsF/vG9pJGNLGXgJtAXcDWAhiBQxgP0uO2VmhkR
-         0u8okSva9JPHPnl/nEoHJiSpY+k/CnfwbePX476dRTnQTjCZ+V4N5m5FwNAbmIENtarx
-         Uh7A==
-X-Gm-Message-State: APjAAAVsh7c1ozZo83bnNCBsd+QaJ6hTw4CD8WLUyfH4IOeDY1XucGuA
-        FCN9GgToTQe2mOc2xNmi2G8CiblcpwuVqRA6sCnh2Q6YTqBMsQ==
-X-Google-Smtp-Source: APXvYqz6jAcOH6jmWnG3fF0hhfN6lhRfW9tzKBM1QXyHd7e1HkPQRavXoZtSmO1ftEshN1t6P15tf56orcxmGKZKsNA=
-X-Received: by 2002:a2e:6e0c:: with SMTP id j12mr20312821ljc.123.1565655270589;
- Mon, 12 Aug 2019 17:14:30 -0700 (PDT)
-MIME-Version: 1.0
-From:   Suji Velupillai <suji.velupillai@broadcom.com>
-Date:   Mon, 12 Aug 2019 17:14:19 -0700
-Message-ID: <CAJHBTCAiUoRwXq=ZNKfSKbdoAXCe8KSiqcL3iv510jseB8s6mA@mail.gmail.com>
-Subject: Serial to shared memory
-To:     linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zFNNqzXjQ0yjbObjfHqjVXuP+2T5AGKqC2ATOQC3yys=;
+        b=UMGMXQjZx1/0OM9WLgIOlVmSspriLV6dWN/vk10Kjf0LCMlQTqcfF00hTKdKELcBBa
+         Rlva2t+ENY8ahU8Q0VdPDwhNBq+r/TcjZHo+sYgFL6pkUMBb2JAJIaQd5+IZOPqRZOO2
+         le6XhBoXSNWfsV81rXzhIvmIt/YXHRdaH0KJgoS9UZHYL/pE5iRnrFOtzzIwBe1KLpPk
+         v0td3rumcKfh8tDZYrfgx4CixPzDrcN5LIPXd8YmIufqomj2HJgQAN5BtkRz4uWpNoGt
+         Orn8KtRoDV5gRlnSiGdwCftXK0GSqLEBq3x5FJPKqfvcyHvGik+JCr7I08ni+WTr5DtO
+         oxrw==
+X-Gm-Message-State: APjAAAUtmo3jNyJ+7m6jan2AUButpfHGoxMxWD1YgGa8a3qO3Wck3Jg8
+        IdBqcYKcijPAL7tAn7QN4rt2p+B6KBjE42GuB/5d/8fB7UnniKX00gs1ujB40qBjOl7aA0S2Oef
+        LS3C81ZtSK+PJq4PdudjJIYPT/6Fs70Mhjfi5+04O/w==
+X-Received: by 2002:a17:902:f46:: with SMTP id 64mr36333906ply.235.1565671004417;
+        Mon, 12 Aug 2019 21:36:44 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxla4PiCTVvYhmEKMk4sIAAd11RYUGdMyaNFy6ansYHhuWuja0N7Am8eKBWb9ui4mmQBOiUmg==
+X-Received: by 2002:a17:902:f46:: with SMTP id 64mr36333891ply.235.1565671004182;
+        Mon, 12 Aug 2019 21:36:44 -0700 (PDT)
+Received: from 2001-b011-380f-37d3-69dc-5ce4-19b8-561b.dynamic-ip6.hinet.net (2001-b011-380f-37d3-69dc-5ce4-19b8-561b.dynamic-ip6.hinet.net. [2001:b011:380f:37d3:69dc:5ce4:19b8:561b])
+        by smtp.gmail.com with ESMTPSA id z13sm110842857pfa.94.2019.08.12.21.36.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Aug 2019 21:36:43 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v2 1/2] serial: 8250_pci: Add support for Sunix serial
+ boards
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <CAHp75VeGs8K+da+4CaqNjm_ci86KoLcmhY8GaJO7jm__J0TcSQ@mail.gmail.com>
+Date:   Tue, 13 Aug 2019 12:36:40 +0800
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Morris Ku <morris_ku@sunix.com>,
+        Debbie Liu <debbie_liu@sunix.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <93860D98-9CB7-4D3D-8917-E15591BD1EC4@canonical.com>
+References: <20190809190130.30773-1-kai.heng.feng@canonical.com>
+ <CAHp75VeGs8K+da+4CaqNjm_ci86KoLcmhY8GaJO7jm__J0TcSQ@mail.gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
+Hi Andy,
 
-We have client which is running Linux and it is connected to host over
-PCIe. Both shares PCIe bar space as shared memory. Currently we only
-have one UART for debug, but this can't be used by the client, thus we
-need a virtual serial console running on a client side, which can
-read/write from PCIe mapped shared memory. The host can open the tty
-port seamlessly for communication.
+at 21:18, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-I looked into the kernel tty/serial/ tree, and did not find any sample
-one. Is there a sample code?
-Do you have any suggestions on implementation that would be acceptable
-into mainline?
+> On Fri, Aug 9, 2019 at 10:05 PM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+>> Add support to Sunix serial boards with up to 16 ports.
+>>
+>> Sunix board need its own setup callback instead of using Timedia's, to
+>> properly support more than 4 ports.
+>
+> Can you, please, split out the Sunix quirk driver to a separate module
+> (see examples like: 8250_exar, 8250_lpss, 8250_mid)?
+> And then with a fewer LOCs add a new boards.
 
-Appreciate your help
+Greg asked Sunix to use existing 8250_pci.c instead of its own module.
+It only needs a special setup function, other parts are just 8250_pci.
 
-Thank you
-Suji
+Why does split them a better idea? I even think of squashing 8250_moxa into  
+8250_pci.
+
+Kai-Heng
+
+>
+>> Cc: Morris Ku <morris_ku@sunix.com>
+>> Cc: Debbie Liu <debbie_liu@sunix.com>
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>> ---
+>> v2:
+>>  use div64_s64() instead of do_div()
+>>
+>>  drivers/tty/serial/8250/8250_pci.c  | 93 +++++++++++++++++++++++------
+>>  drivers/tty/serial/8250/8250_port.c |  8 +++
+>>  include/uapi/linux/serial_core.h    |  3 +
+>>  3 files changed, 87 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_pci.c  
+>> b/drivers/tty/serial/8250/8250_pci.c
+>> index 7f740b37700b..b2a5c2228858 100644
+>> --- a/drivers/tty/serial/8250/8250_pci.c
+>> +++ b/drivers/tty/serial/8250/8250_pci.c
+>> @@ -1692,6 +1692,30 @@ pci_wch_ch38x_setup(struct serial_private *priv,
+>>         return pci_default_setup(priv, board, port, idx);
+>>  }
+>>
+>> +static int
+>> +pci_sunix_setup(struct serial_private *priv,
+>> +               const struct pciserial_board *board,
+>> +               struct uart_8250_port *port, int idx)
+>> +{
+>> +       int bar;
+>> +       int offset;
+>> +
+>> +       port->port.flags |= UPF_FIXED_TYPE;
+>> +       port->port.type = PORT_SUNIX;
+>> +
+>> +       if (idx < 4) {
+>> +               bar = 0;
+>> +               offset = idx * board->uart_offset;
+>> +       } else {
+>> +               bar = 1;
+>> +               idx -= 4;
+>> +               idx = div_s64_rem(idx, 4, &offset);
+>> +               offset = idx * 64 + offset * board->uart_offset;
+>> +       }
+>> +
+>> +       return setup_port(priv, port, bar, offset, 0);
+>> +}
+>> +
+>>  #define PCI_VENDOR_ID_SBSMODULARIO     0x124B
+>>  #define PCI_SUBVENDOR_ID_SBSMODULARIO  0x124B
+>>  #define PCI_DEVICE_ID_OCTPRO           0x0001
+>> @@ -2289,21 +2313,14 @@ static struct pci_serial_quirk  
+>> pci_serial_quirks[] __refdata = {
+>>                 .setup          = pci_timedia_setup,
+>>         },
+>>         /*
+>> -        * SUNIX (Timedia) cards
+>> -        * Do not "probe" for these cards as there is at least one  
+>> combination
+>> -        * card that should be handled by parport_pc that doesn't match  
+>> the
+>> -        * rule in pci_timedia_probe.
+>> -        * It is part number is MIO5079A but its subdevice ID is 0x0102.
+>> -        * There are some boards with part number SER5037AL that report
+>> -        * subdevice ID 0x0002.
+>> +        * Sunix PCI serial boards
+>>          */
+>>         {
+>>                 .vendor         = PCI_VENDOR_ID_SUNIX,
+>>                 .device         = PCI_DEVICE_ID_SUNIX_1999,
+>>                 .subvendor      = PCI_VENDOR_ID_SUNIX,
+>>                 .subdevice      = PCI_ANY_ID,
+>> -               .init           = pci_timedia_init,
+>> -               .setup          = pci_timedia_setup,
+>> +               .setup          = pci_sunix_setup,
+>>         },
+>>         /*
+>>          * Xircom cards
+>> @@ -2757,6 +2774,11 @@ enum pci_board_num_t {
+>>         pbn_pericom_PI7C9X7952,
+>>         pbn_pericom_PI7C9X7954,
+>>         pbn_pericom_PI7C9X7958,
+>> +       pbn_sunix_pci_1s,
+>> +       pbn_sunix_pci_2s,
+>> +       pbn_sunix_pci_4s,
+>> +       pbn_sunix_pci_8s,
+>> +       pbn_sunix_pci_16s,
+>>  };
+>>
+>>  /*
+>> @@ -3494,6 +3516,31 @@ static struct pciserial_board pci_boards[] = {
+>>                 .base_baud      = 921600,
+>>                 .uart_offset    = 0x8,
+>>         },
+>> +       [pbn_sunix_pci_1s] = {
+>> +               .num_ports      = 1,
+>> +               .base_baud      = 921600,
+>> +               .uart_offset    = 0x8,
+>> +       },
+>> +       [pbn_sunix_pci_2s] = {
+>> +               .num_ports      = 2,
+>> +               .base_baud      = 921600,
+>> +               .uart_offset    = 0x8,
+>> +       },
+>> +       [pbn_sunix_pci_4s] = {
+>> +               .num_ports      = 4,
+>> +               .base_baud      = 921600,
+>> +               .uart_offset    = 0x8,
+>> +       },
+>> +       [pbn_sunix_pci_8s] = {
+>> +               .num_ports      = 8,
+>> +               .base_baud      = 921600,
+>> +               .uart_offset    = 0x8,
+>> +       },
+>> +       [pbn_sunix_pci_16s] = {
+>> +               .num_ports      = 16,
+>> +               .base_baud      = 921600,
+>> +               .uart_offset    = 0x8,
+>> +       },
+>>  };
+>>
+>>  static const struct pci_device_id blacklist[] = {
+>> @@ -4532,17 +4579,29 @@ static const struct pci_device_id  
+>> serial_pci_tbl[] = {
+>>                 pbn_b0_bt_1_921600 },
+>>
+>>         /*
+>> -        * SUNIX (TIMEDIA)
+>> +        * Sunix PCI serial boards
+>>          */
+>>         {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> -               PCI_VENDOR_ID_SUNIX, PCI_ANY_ID,
+>> -               PCI_CLASS_COMMUNICATION_SERIAL << 8, 0xffff00,
+>> -               pbn_b0_bt_1_921600 },
+>> -
+>> +               PCI_VENDOR_ID_SUNIX, 0x0001, 0, 0,
+>> +               pbn_sunix_pci_1s },
+>>         {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> -               PCI_VENDOR_ID_SUNIX, PCI_ANY_ID,
+>> -               PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
+>> -               pbn_b0_bt_1_921600 },
+>> +               PCI_VENDOR_ID_SUNIX, 0x0002, 0, 0,
+>> +               pbn_sunix_pci_2s },
+>> +       {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> +               PCI_VENDOR_ID_SUNIX, 0x0004, 0, 0,
+>> +               pbn_sunix_pci_4s },
+>> +       {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> +               PCI_VENDOR_ID_SUNIX, 0x0084, 0, 0,
+>> +               pbn_sunix_pci_4s },
+>> +       {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> +               PCI_VENDOR_ID_SUNIX, 0x0008, 0, 0,
+>> +               pbn_sunix_pci_8s },
+>> +       {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> +               PCI_VENDOR_ID_SUNIX, 0x0088, 0, 0,
+>> +               pbn_sunix_pci_8s },
+>> +       {       PCI_VENDOR_ID_SUNIX, PCI_DEVICE_ID_SUNIX_1999,
+>> +               PCI_VENDOR_ID_SUNIX, 0x0010, 0, 0,
+>> +               pbn_sunix_pci_16s },
+>>
+>>         /*
+>>          * AFAVLAB serial card, from Harald Welte <laforge@gnumonks.org>
+>> diff --git a/drivers/tty/serial/8250/8250_port.c  
+>> b/drivers/tty/serial/8250/8250_port.c
+>> index c1cec808571b..8900112ed232 100644
+>> --- a/drivers/tty/serial/8250/8250_port.c
+>> +++ b/drivers/tty/serial/8250/8250_port.c
+>> @@ -308,6 +308,14 @@ static const struct serial8250_config uart_config[]  
+>> = {
+>>                 .rxtrig_bytes   = {1, 4, 8, 14},
+>>                 .flags          = UART_CAP_FIFO,
+>>         },
+>> +       [PORT_SUNIX] = {
+>> +               .name           = "Sunix",
+>> +               .fifo_size      = 128,
+>> +               .tx_loadsz      = 128,
+>> +               .fcr            = UART_FCR_ENABLE_FIFO |  
+>> UART_FCR_R_TRIG_10,
+>> +               .rxtrig_bytes   = {1, 32, 64, 112},
+>> +               .flags          = UART_CAP_FIFO | UART_CAP_SLEEP,
+>> +       },
+>>  };
+>>
+>>  /* Uart divisor latch read */
+>> diff --git a/include/uapi/linux/serial_core.h  
+>> b/include/uapi/linux/serial_core.h
+>> index 3cc3af1c2ee1..055626ca0a40 100644
+>> --- a/include/uapi/linux/serial_core.h
+>> +++ b/include/uapi/linux/serial_core.h
+>> @@ -290,4 +290,7 @@
+>>  /* SiFive UART */
+>>  #define PORT_SIFIVE_V0 120
+>>
+>> +/* Sunix UART */
+>> +#define PORT_SUNIX     121
+>> +
+>>  #endif /* _UAPILINUX_SERIAL_CORE_H */
+>> --
+>> 2.17.1
+>
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+
+
