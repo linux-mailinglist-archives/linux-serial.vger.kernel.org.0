@@ -2,97 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8FF8B14E
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 09:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580BE8B243
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 10:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727342AbfHMHkg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Aug 2019 03:40:36 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:48101 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbfHMHkg (ORCPT
+        id S1727508AbfHMIXs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Aug 2019 04:23:48 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34379 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727099AbfHMIXr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Aug 2019 03:40:36 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Razvan.Stefanescu@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Razvan.Stefanescu@microchip.com";
-  x-sender="Razvan.Stefanescu@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Razvan.Stefanescu@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Razvan.Stefanescu@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: cxXL8660C9M6aAGH2Uluy4pcamff96/clUOJXI9w+01rqmasY0c+Z3YC/5KrXvVwTnoGGDOOVM
- svl2t9PlHw9U1CtHEd0w3eW9usRPRTPaAXTFitv4XA3ciqUFsPScxeMd276tteDf/SLCimGAY7
- Z2373lX/AjNYX5vjjc0HkI8NmHwRvTp4wiQcvpLNUKUId8H5iuREpjnjyc8ZeB99oLsuZGxQ/6
- dLBeW1QwY7/pZzzlaJRq52j6YWpzVn6RRsgHX6AGJ8NZ035bbgIflK/VpoNiClDiewbJuqkswk
- Z0c=
-X-IronPort-AV: E=Sophos;i="5.64,380,1559545200"; 
-   d="scan'208";a="44893566"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Aug 2019 00:40:29 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 13 Aug 2019 00:40:29 -0700
-Received: from rob-ult-m50855.microchip.com (10.10.85.251) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Tue, 13 Aug 2019 00:40:26 -0700
-From:   Razvan Stefanescu <razvan.stefanescu@microchip.com>
-To:     Richard Genoud <richard.genoud@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] tty/serial: atmel: reschedule TX after RX was started
-Date:   Tue, 13 Aug 2019 10:40:25 +0300
-Message-ID: <20190813074025.16218-1-razvan.stefanescu@microchip.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 13 Aug 2019 04:23:47 -0400
+Received: by mail-pl1-f193.google.com with SMTP id i2so49016934plt.1;
+        Tue, 13 Aug 2019 01:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=stvogd1hkvJXZgKB6OLWaibDhlbVIThoBJwPFux4Mto=;
+        b=csYbmlqBYBEZ0wo+pfsMfUVQxz+qxIomUn5IJJkfYIkRteILtiwvkfJ5KgtAgolKfj
+         dTmRf7+7kNPKW5D12vAlPjC5UBhUcnByJGuXHBMiaU15rs3vdFAZNGP9OGd8rFYrt/TN
+         c2jKPh8BGoFdGNOjUt3nPt11HgCJA/AMwWhSH3F2n0lLiFx7zHM04VTEWgCSiy2v6nvh
+         BqlUlQTdh7JGSEIOpOrJJHK/9nVMlvsORaLEwnUpM2GbpmctOcpPD6cXNIwpPUapryqG
+         fQq3+6AvZiCMT9IgtUiNCxZrWs2WaWzPQTKLGOJCtPGJoWiM2C5bGNE+aPnMamA2U0im
+         qehQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=stvogd1hkvJXZgKB6OLWaibDhlbVIThoBJwPFux4Mto=;
+        b=dJZJ419CteXCz2H6w5YGuKrNAeLklswOI6sbWlf4ZZSn0qwob47Qy/Oq9ys9nVSoO0
+         hOE1cA0MUgnYpMTXYMC3qybNd8zA5Un1GfMrdjjlOJqYC42b0SkKesE9HyeifcrlM6m8
+         wXwm0LZsF6sQw7vm2lbeTd5YkUtIJ9UaRbeI1/yJhamqJI06KTV+o4RGF1DUbaUqTiXW
+         TXNxVJ1dq5LFA1IJ1EUEPtiBmrGXdROCM6Ze9tSOagAqrTJWtPLp6Dh1VqwCkXIzxLoS
+         HWv/E1XrLlgb6V/opyFI3o0xt5RUGloikTlgbYmvO9Wr5NClcF6bllRjZCDa5DuUJ1dt
+         fbFw==
+X-Gm-Message-State: APjAAAVZp0QxybN8PZcD8r16qQUpYcpDN+WmMROdjPymZCL5ql3mQCkJ
+        Enpu0oq+gzmeB66Z/Dyj+A3u5rS4zJI3AOxSFgs=
+X-Google-Smtp-Source: APXvYqzV4aOqpDg5RTevHTInlk7N9+aOJl0HMiG38aQT8avNQkmUWiiBAbGJuiJTqjQrPn1S9id3aDivQM87fQCyJTE=
+X-Received: by 2002:a17:902:9348:: with SMTP id g8mr3815480plp.18.1565684627093;
+ Tue, 13 Aug 2019 01:23:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+References: <20190809190130.30773-1-kai.heng.feng@canonical.com>
+ <CAHp75VeGs8K+da+4CaqNjm_ci86KoLcmhY8GaJO7jm__J0TcSQ@mail.gmail.com>
+ <93860D98-9CB7-4D3D-8917-E15591BD1EC4@canonical.com> <20190813061228.GH6670@kroah.com>
+In-Reply-To: <20190813061228.GH6670@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 13 Aug 2019 11:23:35 +0300
+Message-ID: <CAHp75VedrnJDOoJGuYJiFAx3ODGAMFx7nTKuoErNn3NWYSn_gA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] serial: 8250_pci: Add support for Sunix serial boards
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Morris Ku <morris_ku@sunix.com>,
+        Debbie Liu <debbie_liu@sunix.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-When half-duplex RS485 communication is used, after RX is started, TX
-tasklet still needs to be  scheduled tasklet. This avoids console freezing
-when more data is to be transmitted, if the serial communication is not
-closed.
+On Tue, Aug 13, 2019 at 9:12 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Tue, Aug 13, 2019 at 12:36:40PM +0800, Kai-Heng Feng wrote:
+> > at 21:18, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > On Fri, Aug 9, 2019 at 10:05 PM Kai-Heng Feng
+> > > <kai.heng.feng@canonical.com> wrote:
 
-Fixes: 69646d7a3689 ("tty/serial: atmel: RS485 HD w/DMA: enable RX after TX is stopped")
+> > > Can you, please, split out the Sunix quirk driver to a separate module
+> > > (see examples like: 8250_exar, 8250_lpss, 8250_mid)?
+> > > And then with a fewer LOCs add a new boards.
+> >
+> > Greg asked Sunix to use existing 8250_pci.c instead of its own module.
+> > It only needs a special setup function, other parts are just 8250_pci.
+>
+> Agreed.  And this patch is already in my tree :)
+>
+> If people really worry about size issues, start carving this up by
+> different configuration options, or yes, split it up into tiny modules
+> (but note the overhead there when things get too tiny, it's a
+> diminishing return).
 
-Signed-off-by: Razvan Stefanescu <razvan.stefanescu@microchip.com>
----
- drivers/tty/serial/atmel_serial.c | 1 -
- 1 file changed, 1 deletion(-)
+It's always a trade off and associative pros and cons. If Sunix is a
+simple one, I tend to agree that 8250_pci is a good place. For rather
+big quirk modules, like Exar one, the separate sounds better (and as
+we can see from retrospective of maintenance).
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 0b4f36905321..8e667967928a 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -1400,7 +1400,6 @@ atmel_handle_transmit(struct uart_port *port, unsigned int pending)
- 
- 			atmel_port->hd_start_rx = false;
- 			atmel_start_rx(port);
--			return;
- 		}
- 
- 		atmel_tasklet_schedule(atmel_port, &atmel_port->tasklet_tx);
+>
+> > Why does split them a better idea? I even think of squashing 8250_moxa into
+> > 8250_pci.
+>
+> I would agree with you, I bet you save space if you do that.
+
+
+
 -- 
-2.20.1
-
+With Best Regards,
+Andy Shevchenko
