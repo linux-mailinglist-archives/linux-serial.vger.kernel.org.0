@@ -2,101 +2,134 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 580BE8B243
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 10:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632738B2D4
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 10:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727508AbfHMIXs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Aug 2019 04:23:48 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:34379 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727099AbfHMIXr (ORCPT
+        id S1726184AbfHMIrU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Aug 2019 04:47:20 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:54024 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbfHMIrU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Aug 2019 04:23:47 -0400
-Received: by mail-pl1-f193.google.com with SMTP id i2so49016934plt.1;
-        Tue, 13 Aug 2019 01:23:47 -0700 (PDT)
+        Tue, 13 Aug 2019 04:47:20 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 10so718262wmp.3;
+        Tue, 13 Aug 2019 01:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=stvogd1hkvJXZgKB6OLWaibDhlbVIThoBJwPFux4Mto=;
-        b=csYbmlqBYBEZ0wo+pfsMfUVQxz+qxIomUn5IJJkfYIkRteILtiwvkfJ5KgtAgolKfj
-         dTmRf7+7kNPKW5D12vAlPjC5UBhUcnByJGuXHBMiaU15rs3vdFAZNGP9OGd8rFYrt/TN
-         c2jKPh8BGoFdGNOjUt3nPt11HgCJA/AMwWhSH3F2n0lLiFx7zHM04VTEWgCSiy2v6nvh
-         BqlUlQTdh7JGSEIOpOrJJHK/9nVMlvsORaLEwnUpM2GbpmctOcpPD6cXNIwpPUapryqG
-         fQq3+6AvZiCMT9IgtUiNCxZrWs2WaWzPQTKLGOJCtPGJoWiM2C5bGNE+aPnMamA2U0im
-         qehQ==
+        h=sender:subject:to:cc:references:from:openpgp:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=03y8Wjx7U11up3+RZThjfaMw+lLqPQBXDguRRoaN+LY=;
+        b=ncyhB6mKip2BS/qeyhDZu6RAVH1K5U/lFzQFg8QnqpsTWcpkVsPxr+kmH2ffSwT9K2
+         0/5kneH0Mq6WT76DYFZPQqo7MmWMKVRIDdBkGCt+Sq1P7e+L8k8oGLGFF+0OmG8MW8ol
+         zmQSfu84WwQdwqcA7nGEhMoTsW16bxKbYbM3nD276Fq9NQ6ITTik5JEqPzyvz1TuC6go
+         +1rLOz5eLjWQuCKaRcCSIRR/glitHrjOXvy6GxDfdSCi3a/qts0EbLmu/P2ZHlizWoPD
+         sJfSdBUYZMD7ps5PR6ttZS0GaaFIoqCGfev3H2HCNZ8G0cv+sIbcgZwJdlDi5v7Ux95z
+         P1yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=stvogd1hkvJXZgKB6OLWaibDhlbVIThoBJwPFux4Mto=;
-        b=dJZJ419CteXCz2H6w5YGuKrNAeLklswOI6sbWlf4ZZSn0qwob47Qy/Oq9ys9nVSoO0
-         hOE1cA0MUgnYpMTXYMC3qybNd8zA5Un1GfMrdjjlOJqYC42b0SkKesE9HyeifcrlM6m8
-         wXwm0LZsF6sQw7vm2lbeTd5YkUtIJ9UaRbeI1/yJhamqJI06KTV+o4RGF1DUbaUqTiXW
-         TXNxVJ1dq5LFA1IJ1EUEPtiBmrGXdROCM6Ze9tSOagAqrTJWtPLp6Dh1VqwCkXIzxLoS
-         HWv/E1XrLlgb6V/opyFI3o0xt5RUGloikTlgbYmvO9Wr5NClcF6bllRjZCDa5DuUJ1dt
-         fbFw==
-X-Gm-Message-State: APjAAAVZp0QxybN8PZcD8r16qQUpYcpDN+WmMROdjPymZCL5ql3mQCkJ
-        Enpu0oq+gzmeB66Z/Dyj+A3u5rS4zJI3AOxSFgs=
-X-Google-Smtp-Source: APXvYqzV4aOqpDg5RTevHTInlk7N9+aOJl0HMiG38aQT8avNQkmUWiiBAbGJuiJTqjQrPn1S9id3aDivQM87fQCyJTE=
-X-Received: by 2002:a17:902:9348:: with SMTP id g8mr3815480plp.18.1565684627093;
- Tue, 13 Aug 2019 01:23:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190809190130.30773-1-kai.heng.feng@canonical.com>
- <CAHp75VeGs8K+da+4CaqNjm_ci86KoLcmhY8GaJO7jm__J0TcSQ@mail.gmail.com>
- <93860D98-9CB7-4D3D-8917-E15591BD1EC4@canonical.com> <20190813061228.GH6670@kroah.com>
-In-Reply-To: <20190813061228.GH6670@kroah.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 13 Aug 2019 11:23:35 +0300
-Message-ID: <CAHp75VedrnJDOoJGuYJiFAx3ODGAMFx7nTKuoErNn3NWYSn_gA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] serial: 8250_pci: Add support for Sunix serial boards
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=03y8Wjx7U11up3+RZThjfaMw+lLqPQBXDguRRoaN+LY=;
+        b=C16hToflD/IQ7z+TsArz7I91f6z6F36d6qpke6GCID45O4xyxxgA1Le1Pnek9dTTxj
+         kfUQ9HsIdbvmbvh7a3s2mLakdpNEBu8wZW/53fEEJFRhw+prv6TkWweDFSvsgVKsg9L8
+         4tKkiIqw8cZPquWciferwsLNlAJcFdXMwmtVGgk1CbknEenTjj/DKkZs4PyaxEKmC6g6
+         +QwXilgjW8oP4UTauWbz+2ocSm/NXbZJBSkt3hkRx2rdgFDuM6n7k2tvnSlENTYHK2nm
+         kLrFREo20h0P9ERhXgyMNrM0LuHXBE5eJ7Tj1MJL+ffJQYR1a2MByO+7QBUUGzes0tH3
+         tjVQ==
+X-Gm-Message-State: APjAAAWqIc6ciH9j4dZ28a/q5k2tNCNKrH5Yj0EpIX8bXde2e1Owc2e+
+        bFRo9tm6n8RXdKsIjG3QSxkqMsP7
+X-Google-Smtp-Source: APXvYqxydKntiX7YOVouyRug41eCWhL/ILs06ZTeA7wcYl2JOaFWwyH2oVevfaDyH3m518OCqkWTDQ==
+X-Received: by 2002:a1c:18a:: with SMTP id 132mr1842163wmb.15.1565686036157;
+        Tue, 13 Aug 2019 01:47:16 -0700 (PDT)
+Received: from [192.168.1.35] (251.red-88-10-102.dynamicip.rima-tde.net. [88.10.102.251])
+        by smtp.gmail.com with ESMTPSA id q18sm134573625wrw.36.2019.08.13.01.47.14
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 01:47:15 -0700 (PDT)
+Subject: Re: [PATCH v4 8/9] MIPS: SGI-IP27: fix readb/writeb addressing
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Morris Ku <morris_ku@sunix.com>,
-        Debbie Liu <debbie_liu@sunix.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-input <linux-input@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+ <20190809103235.16338-9-tbogendoerfer@suse.de>
+ <CAHp75Vd_083R9sRsspVuJ3ZMTxpVR79PF5Lg-bpnMxRfN+b7wA@mail.gmail.com>
+ <20190811072907.GA1416@kroah.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
+Message-ID: <90129235-58c2-aeed-a9d3-96f4a8f45709@amsat.org>
+Date:   Tue, 13 Aug 2019 10:47:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20190811072907.GA1416@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 9:12 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Tue, Aug 13, 2019 at 12:36:40PM +0800, Kai-Heng Feng wrote:
-> > at 21:18, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > On Fri, Aug 9, 2019 at 10:05 PM Kai-Heng Feng
-> > > <kai.heng.feng@canonical.com> wrote:
+Hi Thomas,
 
-> > > Can you, please, split out the Sunix quirk driver to a separate module
-> > > (see examples like: 8250_exar, 8250_lpss, 8250_mid)?
-> > > And then with a fewer LOCs add a new boards.
-> >
-> > Greg asked Sunix to use existing 8250_pci.c instead of its own module.
-> > It only needs a special setup function, other parts are just 8250_pci.
->
-> Agreed.  And this patch is already in my tree :)
->
-> If people really worry about size issues, start carving this up by
-> different configuration options, or yes, split it up into tiny modules
-> (but note the overhead there when things get too tiny, it's a
-> diminishing return).
+On 8/11/19 9:29 AM, Greg Kroah-Hartman wrote:
+> On Sat, Aug 10, 2019 at 04:22:23PM +0300, Andy Shevchenko wrote:
+>> On Fri, Aug 9, 2019 at 1:34 PM Thomas Bogendoerfer
+>> <tbogendoerfer@suse.de> wrote:
+>>>
+>>> Our chosen byte swapping, which is what firmware already uses, is to
+>>> do readl/writel by normal lw/sw intructions (data invariance). This
+>>> also means we need to mangle addresses for u8 and u16 accesses. The
+>>> mangling for 16bit has been done aready, but 8bit one was missing.
+>>> Correcting this causes different addresses for accesses to the
+>>> SuperIO and local bus of the IOC3 chip. This is fixed by changing
+>>> byte order in ioc3 and m48rtc_rtc structs.
+>>
+>>>  /* serial port register map */
+>>>  struct ioc3_serialregs {
+>>> -       uint32_t        sscr;
+>>> -       uint32_t        stpir;
+>>> -       uint32_t        stcir;
+>>> -       uint32_t        srpir;
+>>> -       uint32_t        srcir;
+>>> -       uint32_t        srtr;
+>>> -       uint32_t        shadow;
+>>> +       u32     sscr;
+>>> +       u32     stpir;
+>>> +       u32     stcir;
+>>> +       u32     srpir;
+>>> +       u32     srcir;
+>>> +       u32     srtr;
+>>> +       u32     shadow;
+>>>  };
+>>
+>> Isn't it a churn? AFAIU kernel documentation the uint32_t is okay to
+>> use, just be consistent inside one module / driver.
+>> Am I mistaken?
+> 
+> No, but really it uint* shouldn't be used anywhere in the kernel source
+> as it does not make sense.
 
-It's always a trade off and associative pros and cons. If Sunix is a
-simple one, I tend to agree that 8250_pci is a good place. For rather
-big quirk modules, like Exar one, the separate sounds better (and as
-we can see from retrospective of maintenance).
+If you respin your series, please send this cleanup as a separate patch.
 
->
-> > Why does split them a better idea? I even think of squashing 8250_moxa into
-> > 8250_pci.
->
-> I would agree with you, I bet you save space if you do that.
+Thanks,
 
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Phil.
