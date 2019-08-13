@@ -2,67 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 134278B468
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 11:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31F18B474
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Aug 2019 11:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbfHMJmO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Aug 2019 05:42:14 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:32812 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726282AbfHMJmO (ORCPT
+        id S1727409AbfHMJqC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Aug 2019 05:46:02 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:40483 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726650AbfHMJqC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Aug 2019 05:42:14 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n9so107240895wru.0;
-        Tue, 13 Aug 2019 02:42:11 -0700 (PDT)
+        Tue, 13 Aug 2019 05:46:02 -0400
+Received: by mail-wm1-f68.google.com with SMTP id v19so870899wmj.5;
+        Tue, 13 Aug 2019 02:45:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=WREN+U1ZBJtkCx6rZxLMPYPtq8iC0/1y5O5MBNsQ1KM=;
-        b=My6DqltMM12YPnxB0MAoyuQSR0gEHqgIg8Vn3uc+eKTeWMDjUeVINKqtHJHo54Lda9
-         32m9BF+G78qhswVZxsvLL/pNmSFHO8ge8GeS79yTD/uq4odLUyS+wYTYwo0bsavMFoNs
-         OYaCVj3ili7cuOpHlgovXy680Bh0hohoWcU2CPRtSwx1WexIhltjx2tHF8ZIDG7IXLIm
-         wTeYMdLVMR7w7a8j1OKvCcVYQMqtuR5fH/6PQ+8YVG6HgNJJhFE5+wk3vtQ1pSva0Iq6
-         IutnBpjKJmC3iE/onxqKnQ6JkRSNeJF45T6W+zH4DgY9Jbz6Q0otwNp19cS7eXNmEMMg
-         qR0g==
+        bh=pGE6nIvpaiVVUhX7DZmNiG2nOp+x8acceL+iSBstYcM=;
+        b=rYVuKFPNGEkiAI4mAdwIrZAqYYlRg74LGzP/FqfN3KRAl04BgU2LDT0ooN+gBehQmj
+         /l555e8cWWNK2goT9sBbT5EqhMP1gLF7vgQ/M6fIb9cC3HPE3TRJm/ml/knktUZ40/N3
+         4h9ky+wG42pMu6BBsQhqdCLFA+gh4ntX24glERcmofvadd05+p7ov7/qT5d/nL6c1DFS
+         oARFLO3fyE74qLu2zOIDbaxWz9FlS1JHWV5vZCYFaM2Ix9/shAInEsAiEInAWGxfTtIF
+         u7J1EG5iz8GpIPvHdCtROpkX+htWW2BRqgVVqpHCWYYkNm1MmE7BldGOm6R/YeyadjEs
+         HmMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WREN+U1ZBJtkCx6rZxLMPYPtq8iC0/1y5O5MBNsQ1KM=;
-        b=Ye+PE1fBfmc1yeyPA61LYdbQbIf2K2okS8JTMCGiI8UTXUVNg14ymAtZfhF2Qdulh2
-         9veERCosoqGTf8T2g6VlLD+Z+H5SAU2kp2XuTwu77tzPEuuErS4SGNEtFQxhMT3yEVQW
-         kJCLzyOqtC7OHa4suyyIWtxCbLiWCGgqKTOL7sQI1ardI33hL+q2LLmfyJ3o/k/F4DT/
-         WFuGKfO92BO7xXhgRfVCNb9QTmXTWKKLyR+QsHcoKp2cal2DQwTs2J63+ln8NM4ijJid
-         qW8x/3WB7w4WIxey8MmpXIWNk8e+9Hbb902fKu2iRRgbC4xgRW+0onO1jIVuFyqiOAgY
-         PtxA==
-X-Gm-Message-State: APjAAAW0avRBX8N2eUobucwSNm2q0R3bjipMmwfWFuqVr4IN/EOKT8JH
-        7W8BcgUJfaiw9Deb/NjAnxQ=
-X-Google-Smtp-Source: APXvYqyu80loLBQ+pQU4CrxlM8ctJymubjJiPfnmpnRRC68p3OdSIMXFPPCyzEyrdm6rpEcoF8izZA==
-X-Received: by 2002:a5d:55cf:: with SMTP id i15mr4069396wrw.151.1565689331175;
-        Tue, 13 Aug 2019 02:42:11 -0700 (PDT)
+        bh=pGE6nIvpaiVVUhX7DZmNiG2nOp+x8acceL+iSBstYcM=;
+        b=nLsbpxTkwzlU5L+pZXPvj6leXl9eCj3kGZCpoU0fOQuf59JXzF/vHNfeYm9dhI0ZHF
+         GzP1dEEXarSnMPC1geeFI3CL0Ue/MYFccCVzFc6afsveMnALQxikIUUCKRH3joGa6KXc
+         GUOa2w+g8MvH6QhoS6bsOdcz/3aKio2nL0qBWhWPfYZvk3d8USl0RrUGOjGOYZcwSjNt
+         RWAVVmULdC79sIyft6pkTofc9IUYk4xM5vAAGt7GxAdZBrK3nC4Nmry97AF0eWPw5fsd
+         afM09cEHs0/CY8Yfs6zRaEkX9D6e0Vcy0Y3nOF5jxj+FXvgg0FxlWeopnoK/z5+Q8Vn3
+         2hPg==
+X-Gm-Message-State: APjAAAXvQzJRfT1YXRzZc51DDzMDd0a7GRtJtb/YdldfbNPb1SXF63W2
+        ZGdkI2d4GxB+HSu4zoncX3s=
+X-Google-Smtp-Source: APXvYqzhJJDCDXaJoe7rhIv2x2LqEgsTUkJsLp0JppFAlMb3kN6r7l0DIjFcWeNZxnkdZJ02PqNuRQ==
+X-Received: by 2002:a1c:ed0a:: with SMTP id l10mr2131266wmh.156.1565689558447;
+        Tue, 13 Aug 2019 02:45:58 -0700 (PDT)
 Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id n16sm762043wmk.12.2019.08.13.02.42.09
+        by smtp.gmail.com with ESMTPSA id 6sm867244wmf.23.2019.08.13.02.45.57
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 13 Aug 2019 02:42:09 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 11:42:08 +0200
+        Tue, 13 Aug 2019 02:45:57 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 11:45:56 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
 Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         mark.rutland@arm.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
         jslaby@suse.com, linux-serial@vger.kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shardar Shariff Md <smohammed@nvidia.com>
-Subject: Re: [PATCH 02/14] serial: tegra: add support to ignore read
-Message-ID: <20190813094208.GG1137@ulmo>
+        linux-kernel@vger.kernel.org, Ahung Cheng <ahcheng@nvidia.com>,
+        Shardar Mohammed <smohammed@nvidia.com>
+Subject: Re: [PATCH 03/14] serial: tegra: avoid reg access when clk disabled
+Message-ID: <20190813094556.GH1137@ulmo>
 References: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
- <1565609303-27000-3-git-send-email-kyarlagadda@nvidia.com>
+ <1565609303-27000-4-git-send-email-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="w/VI3ydZO+RcZ3Ux"
+        protocol="application/pgp-signature"; boundary="SdvjNjn6lL3tIsv0"
 Content-Disposition: inline
-In-Reply-To: <1565609303-27000-3-git-send-email-kyarlagadda@nvidia.com>
+In-Reply-To: <1565609303-27000-4-git-send-email-kyarlagadda@nvidia.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
@@ -70,95 +70,123 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 
---w/VI3ydZO+RcZ3Ux
+--SdvjNjn6lL3tIsv0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 12, 2019 at 04:58:11PM +0530, Krishna Yarlagadda wrote:
-> From: Shardar Shariff Md <smohammed@nvidia.com>
+On Mon, Aug 12, 2019 at 04:58:12PM +0530, Krishna Yarlagadda wrote:
+> From: Ahung Cheng <ahcheng@nvidia.com>
 >=20
-> Add support to ignore read characters if CREAD flag is not set.
+> This avoids two race conditions from the UART shutdown sequence both
+> leading to 'Machine check error in AXI2APB' and kernel oops.
 >=20
-> Signed-off-by: Shardar Shariff Md <smohammed@nvidia.com>
+> One was that the clock was disabled before the DMA was terminated making
+> it possible for the DMA callbacks to be called after the clock was
+> disabled. These callbacks could write to the UART registers causing
+> timeout.
+>=20
+> The second was that the clock was disabled before the UART was
+> completely flagged as closed. This is done after the shutdown is called
+> and a new write could be started after the clock was disabled.
+> tegra_uart_start_pio_tx could be called causing timeout.
+>=20
+> Given that the baud rate is reset at the end of shutdown sequence, this
+> fix is to examine the baud rate to avoid register access from both race
+> conditions.
+>=20
+> Besides, terminate the DMA before disabling the clock.
+>=20
+> Signed-off-by: Ahung Cheng <ahcheng@nvidia.com>
+> Signed-off-by: Shardar Mohammed <smohammed@nvidia.com>
 > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  drivers/tty/serial/serial-tegra.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  drivers/tty/serial/serial-tegra.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
 >=20
 > diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/seria=
 l-tegra.c
-> index 19f4c24..93d299e 100644
+> index 93d299e..d908465 100644
 > --- a/drivers/tty/serial/serial-tegra.c
 > +++ b/drivers/tty/serial/serial-tegra.c
-> @@ -542,6 +542,9 @@ static void tegra_uart_handle_rx_pio(struct tegra_uar=
-t_port *tup,
->  		ch =3D (unsigned char) tegra_uart_read(tup, UART_RX);
->  		tup->uport.icount.rx++;
+> @@ -126,6 +126,8 @@ struct tegra_uart_port {
 > =20
-> +		if (tup->uport.ignore_status_mask & UART_LSR_DR)
-> +			continue;
-> +
->  		if (!uart_handle_sysrq_char(&tup->uport, ch) && tty)
->  			tty_insert_flip_char(tty, ch, flag);
+>  static void tegra_uart_start_next_tx(struct tegra_uart_port *tup);
+>  static int tegra_uart_start_rx_dma(struct tegra_uart_port *tup);
+> +static void tegra_uart_dma_channel_free(struct tegra_uart_port *tup,
+> +					bool dma_to_memory);
+> =20
+>  static inline unsigned long tegra_uart_read(struct tegra_uart_port *tup,
+>  		unsigned long reg)
+> @@ -458,6 +460,9 @@ static void tegra_uart_start_next_tx(struct tegra_uar=
+t_port *tup)
+>  	unsigned long count;
+>  	struct circ_buf *xmit =3D &tup->uport.state->xmit;
+> =20
+> +	if (WARN_ON(!tup->current_baud))
+> +		return;
 
-Is it a good idea to ignore even sysrq characters if CREAD is not set?
-According to termios, CREAD enables the receiver, so technically if it
-isn't set you can't even receive sysrq characters. But I don't know if
-there are any rules regarding this.
-
-Is this the same way that other drivers work?
+Are the race conditions that you are describing something which can be
+triggered by the user? If so, it's not a good idea to use a WARN_ON,
+because that could lead to some userspace spamming the log with these,
+potentially on purpose.
 
 Thierry
 
->  	} while (1);
-> @@ -562,6 +565,10 @@ static void tegra_uart_copy_rx_to_tty(struct tegra_u=
-art_port *tup,
->  		dev_err(tup->uport.dev, "No tty port\n");
->  		return;
->  	}
 > +
-> +	if (tup->uport.ignore_status_mask & UART_LSR_DR)
-> +		return;
-> +
->  	dma_sync_single_for_cpu(tup->uport.dev, tup->rx_dma_buf_phys,
->  				TEGRA_UART_RX_DMA_BUFFER_SIZE, DMA_FROM_DEVICE);
->  	copied =3D tty_insert_flip_string(tty,
-> @@ -1190,6 +1197,11 @@ static void tegra_uart_set_termios(struct uart_por=
-t *u,
->  	tegra_uart_write(tup, tup->ier_shadow, UART_IER);
->  	tegra_uart_read(tup, UART_IER);
+>  	tail =3D (unsigned long)&xmit->buf[xmit->tail];
+>  	count =3D CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
+>  	if (!count)
+> @@ -829,6 +834,12 @@ static void tegra_uart_hw_deinit(struct tegra_uart_p=
+ort *tup)
+>  	tup->current_baud =3D 0;
+>  	spin_unlock_irqrestore(&tup->uport.lock, flags);
 > =20
-> +	tup->uport.ignore_status_mask =3D 0;
-> +	/* Ignore all characters if CREAD is not set */
-> +	if ((termios->c_cflag & CREAD) =3D=3D 0)
-> +		tup->uport.ignore_status_mask |=3D UART_LSR_DR;
+> +	tup->rx_in_progress =3D 0;
+> +	tup->tx_in_progress =3D 0;
 > +
->  	spin_unlock_irqrestore(&u->lock, flags);
+> +	tegra_uart_dma_channel_free(tup, true);
+> +	tegra_uart_dma_channel_free(tup, false);
+> +
+>  	clk_disable_unprepare(tup->uart_clk);
+>  }
+> =20
+> @@ -1066,12 +1077,6 @@ static void tegra_uart_shutdown(struct uart_port *=
+u)
+>  	struct tegra_uart_port *tup =3D to_tegra_uport(u);
+> =20
+>  	tegra_uart_hw_deinit(tup);
+> -
+> -	tup->rx_in_progress =3D 0;
+> -	tup->tx_in_progress =3D 0;
+> -
+> -	tegra_uart_dma_channel_free(tup, true);
+> -	tegra_uart_dma_channel_free(tup, false);
+>  	free_irq(u->irq, tup);
 >  }
 > =20
 > --=20
 > 2.7.4
 >=20
 
---w/VI3ydZO+RcZ3Ux
+--SdvjNjn6lL3tIsv0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1ShfAACgkQ3SOs138+
-s6FVpg/9GPeTbw/45dZ/HWvsmLm2iaqKG106inOD5HVGDZXJKkwDQOSrqGMMriL4
-4P5s43rU58YErMzCly57ETyrADsZQbyI0N+/Bsk2kuN138RzhplzSFwad8K/J/V3
-QMtXJQ5jHoaSi97NjGBVmSApgg2i3BT9Ro8vVEG1aje4KAswACcR+WZS9tTQ4u69
-8TR1A5skZ5BSWrXz0gbxEKcrmlfHtLiqTtAtvRNNyqoSaspUETEv4LV1WywlkX/1
-7xqwYm0RkuPuMoQnuGv2zH40ZPZPrnRj3OeEoAXYN42XauihHjcVfvVguvjSdObd
-EmFyZQiseCVm07vLImYFXkh4kbSUAIYtO2RVBF9mbSiYsfJKjdGDgfCCvNpnUzbA
-BKbgWBQAM1vsvdMenhZvISdtPNTO9bLpffHPydEwLFMLAecAfJyAzmUw6XNxW0k4
-QVYlH49a5+V6C2cgoqzttMKyx9AbCxiGIAxYTOeqRJxLRAYy/eNFpvGdRml0S9tf
-ZyUCysOxM413iZ+tRlbGWy3DI+lmDyqJEw/VE6I7CVfa44aRrdkzKTvHCgISRAEt
-5BzVQw0yWrcXaDBdG7QnR8Wl0Gk/apezX3KL723FV0vUdYcX3ejIyWaBo4ijukG8
-InudQyl4SNS25B8RknOJ9uJkrYfG7x0eC+0lFoV7xx6ojPif8oc=
-=eDP7
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1ShtQACgkQ3SOs138+
+s6GjFQ/+LK+5YJjV2isYgf+/bdshv1sa/XjzklRGk/Dq00ZXUlB6lCF01Ajx6wkG
+UEqJL37x8g8/qYI955SLMnppmTYgp8d/te7PAsAjjQ43fWpo/rrmdceeAldVTJwi
+C3BAuz/vy2lfZZSuqrQoo9Q6YaT7k/fBnDYARHPn2iVaAPygcRdy87D/cTJJE9OA
+L/RYQI/lYVrxh6G+mSTv+AqmRV7HytQ9EZqCYOXP9Vbzj83s4i88z0DB6SkTOOjb
+xXCzqJ9xN7hN6COzjVrx2j1Kh7x+FJoj/LcETaxfFbTEKJSQxUaQN9SWOW7khp2V
+dnbRogc+Ic1TsTZj3J4+ckmbjz0kDzRhFzw1W2x+6R+dwfLzRtNAxEXD9QH9F3e2
+u+vixUfT7ysEpxZ1LSVDga78kSd6N81WHcxiuwwry5T6pSLVEVf0WF7lkf2gPhNC
+qnCTVCYjYlaWbTSIgINmKn6By/gmSfOTEJ+98SSaomBSBh/NkiD75WO8YNyqRdMd
+17eNRiMeztA+h4yjxky/yq9ip7Jd2mq2s0GyikwfcIULBU6FE80LDKJgT5x5lh8J
+j0bNWRHIlJLICgAEPfJ0wYG/m9Pdx8YcBubjwudYbIKUkV5zeXOSYqITxMV/tieC
+ppmhsxevWB0gQ2ZhI3ZgJ4kyrqSZq9zo4Gs/+yV0MJTGSNcxw8Y=
+=vzYG
 -----END PGP SIGNATURE-----
 
---w/VI3ydZO+RcZ3Ux--
+--SdvjNjn6lL3tIsv0--
