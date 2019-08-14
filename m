@@ -2,77 +2,41 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 005D68D3C7
-	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 14:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F12E8D470
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 15:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727304AbfHNMx1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 14 Aug 2019 08:53:27 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53835 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727650AbfHNMwy (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 14 Aug 2019 08:52:54 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 10so4507720wmp.3
-        for <linux-serial@vger.kernel.org>; Wed, 14 Aug 2019 05:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XIHHUQTAaIkQq930LD3yLZeWwpYYGbLuLhq5EB1INAo=;
-        b=Z6QBXPko9enURCdOuojsl2mrFx6CcB2vG7I4NrV7pWhMXnozW9rpsIycZp1r3kxBuO
-         sLvwMTXlFBfA6bMxhsB7rit33gWgaQXIHBcDQ/AiHoG4MjAxYFJY733hCAndbkehnNsS
-         w+yGA77hRsXFvS9BQZW19ND+wQ/PmgUWLf+2mGTHEhrHUdFZd3Z/fyUIr3jXzGYikL6H
-         cnc3Z7n3dff+b1A3NSHkMXC5xrQkX0wQeewprGdLX2u1q6wfe3iPM6AQA3MNYn1dnzAi
-         rM8YJiK2+cyWQP/2PwnoEe+kdxRLFxBSUte2ASTvoxdcQ2ZVK5fcrclqgjvcJ6rAIybX
-         MxVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XIHHUQTAaIkQq930LD3yLZeWwpYYGbLuLhq5EB1INAo=;
-        b=Zga04T9ESwZ1lEkIGuIFEyAdnA5YOT4AGwsC5SL1/FuIdYg+8MOOoQw1h87E5TCE15
-         JgeqTsQ7d/itws+BwJXw7p7isQEaXOMWWCHtMb1ZQ9+1rg2aNo47eQ1Ln3wlL1FhGNEW
-         LEDOqbGlQ/EViWx7W4HcD/5BgkjEdKRLq1+uYnJz5KgOJD7wytxvH90kCNyasl8OYsCi
-         3yj+FRXEFPXhyZUgvw+KxFQl6U9i6YrEKDtbUS3ouBh8Eu2kSL4Rclhsx+FUfS0IIUuo
-         v/nS+DamIMr+7YjbJBnQb8L3g2Zx+3SeK921q/c6Lj2YN3hyl4F8bq/oMEra2l9RARH6
-         En3A==
-X-Gm-Message-State: APjAAAUN3OF6K/8niLg+b3DVqywWc+pkLKsUiY+1LtRp8IN2W2WlWUMO
-        nTYXyEnrd30ihLmEjUmnCvP7S+HGdps=
-X-Google-Smtp-Source: APXvYqz5OnlzK877Zfa7M3b8ex6TlTS3w6rPOJiIdXueCVSQhbqCUfs6RFSomk9pcdM3HZlrq0+58Q==
-X-Received: by 2002:a1c:1d4f:: with SMTP id d76mr8818760wmd.127.1565787171596;
-        Wed, 14 Aug 2019 05:52:51 -0700 (PDT)
-Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
-        by smtp.googlemail.com with ESMTPSA id v3sm14272434wrq.34.2019.08.14.05.52.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Aug 2019 05:52:50 -0700 (PDT)
-Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-4-tbogendoerfer@suse.de>
- <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
- <20190814134616.b4dab3c0aa6ac913d78edb6a@suse.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <31d680ee-ddb3-8536-c915-576222d263e1@linaro.org>
-Date:   Wed, 14 Aug 2019 13:52:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727890AbfHNNRx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 14 Aug 2019 09:17:53 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:36620 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726263AbfHNNRx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:17:53 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 01163A1A26;
+        Wed, 14 Aug 2019 15:17:49 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id 7e36EJC2uQid; Wed, 14 Aug 2019 15:17:45 +0200 (CEST)
+Subject: Re: [PATCH 1/2] gpiolib: Add for_each_gpio_suffix() helper
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20190808132543.26274-1-sr@denx.de>
+ <CACRpkdYzg0At4qf1Nv5_+SzgqQ-iLU1ND9Svhj47=pXJf9E7Mg@mail.gmail.com>
+ <CAMuHMdXP8K+yvUHrjnegnNuViG3YsCAD=PxTsDHJcTLRRjJguQ@mail.gmail.com>
+ <CACRpkdZqFGyZETZBoo6xSE9FSMpsbinLquX=4M=2FghdLMxWKw@mail.gmail.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <2f78c3f4-08a4-480e-ff70-8526d0a671ba@denx.de>
+Date:   Wed, 14 Aug 2019 15:17:44 +0200
 MIME-Version: 1.0
-In-Reply-To: <20190814134616.b4dab3c0aa6ac913d78edb6a@suse.de>
+In-Reply-To: <CACRpkdZqFGyZETZBoo6xSE9FSMpsbinLquX=4M=2FghdLMxWKw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -81,52 +45,37 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-
-
-On 14/08/2019 12:46, Thomas Bogendoerfer wrote:
-> On Tue, 13 Aug 2019 10:40:34 +0100
-> Srinivas Kandagatla <srinivas.kandagatla@linaro.org> wrote:
-> 
->>
->>
->> On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
->>> nvmem_device_find provides a way to search for nvmem devices with
->>> the help of a match function simlair to bus_find_device.
+On 14.08.19 10:48, Linus Walleij wrote:
+> On Mon, Aug 12, 2019 at 1:18 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>> On Sat, Aug 10, 2019 at 10:27 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>>> On Thu, Aug 8, 2019 at 3:25 PM Stefan Roese <sr@denx.de> wrote:
+>>>> Add a helper macro to enable the interation over all supported GPIO
+>>>> suffixes (currently "gpios" & "gpio"). This will be used by the serial
+>>>> mctrl code to check, if a GPIO property exists before requesting it.
+>>>>
+>>>> Signed-off-by: Stefan Roese <sr@denx.de>
+>>>> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+>>>> Cc: Pavel Machek <pavel@denx.de>
+>>>> Cc: Linus Walleij <linus.walleij@linaro.org>
+>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 >>>
->>> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->>> ---
->>>    drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
->>>    include/linux/nvmem-consumer.h |  9 ++++++
->>>    2 files changed, 41 insertions(+), 30 deletions(-)
+>>> I really like this patch, it makes things so much more readable.
 >>
->> Have you considered using nvmem_register_notifier() ?
+>> Do we really need to spread this *-gpio" legacy support all over the kernel?
 > 
-> yes, that was the first idea. But then I realized I need to build up
-> a private database of information already present in nvmem bus. So I
-> looked for a way to retrieve it from there. Unfortunately I couldn't
-> use bus_find_device directly, because nvmem_bus_type and struct nvmem_device
-> is hidden. So I refactured the lookup code and added a more universal
-> lookup function, which fits my needs and should be usable for more.
-I see your point.
-
-overall the patch as it is look good, but recently we added more generic 
-lookups for DT node, looks like part of your patch is un-doing generic 
-device name lookup.
-
-DT node match lookup is in 
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/log/?h=generic_lookup_helpers
-
-of_nvmem_match and nvmem_match_name are duplicating the code here.
-Looks like its possible to use generic lookups along with custom match 
-by splitting __nvmem_device_get() to two functions, one for lookup and 
-other for refcounting.
-
-Other missing bit is adding this api to documentation in 
-./Documentation/driver-api/nvmem.rst
-
-
-thanks,
-srini
+> Not really :/
 > 
-> Thomas.
-> 
+> Isn't it possible to use something like gpiod_count(dev, "foo") to
+> check for any GPIOs instead?
+
+Good idea. I can rework my patch to use gpiod_count() to check if the
+GPIO exists before requesting it. This way, we're not spreading the
+legacy "-gpio" support any more.
+
+But I'm unsure, if I should change the string malloc (kasprintf) to the
+fixed length string on the stack as I've done in this patch version.
+
+Thanks,
+Stefan
