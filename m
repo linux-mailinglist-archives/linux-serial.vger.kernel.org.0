@@ -2,47 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 070268CDBD
-	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 10:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFF68CE43
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 10:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727184AbfHNIL6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Wed, 14 Aug 2019 04:11:58 -0400
-Received: from slot0.abamarket.ga ([178.156.202.135]:60151 "EHLO
-        slot0.abamarket.ga" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbfHNIL5 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 14 Aug 2019 04:11:57 -0400
-X-Greylist: delayed 674 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Aug 2019 04:11:56 EDT
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: PLEASE CONFIRM PURCHASE ORDER
-To:     Recipients <mscarolynsmtih@gmail.com>
-From:   "Mr NARESH KUMAR" <mscarolynsmtih@gmail.com>
-Date:   Wed, 14 Aug 2019 15:50:50 +0800
-Reply-To: saiapex09@outlook.com
-Message-ID: <0.0.3.418.1D55274B5D25CF0.0@slot0.abamarket.ga>
+        id S1726604AbfHNIWl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 14 Aug 2019 04:22:41 -0400
+Received: from mga02.intel.com ([134.134.136.20]:61546 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725265AbfHNIWl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 14 Aug 2019 04:22:41 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 01:22:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,384,1559545200"; 
+   d="scan'208";a="170668862"
+Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
+  by orsmga008.jf.intel.com with ESMTP; 14 Aug 2019 01:22:38 -0700
+From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org, robh@kernel.org,
+        mark.rutland@arm.com, linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com,
+        rahul.tanwar@intel.com, Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Subject: [PATCH 0/2] dt-bindings: serial: lantiq: Convert to YAML & add support for new SoC
+Date:   Wed, 14 Aug 2019 16:22:33 +0800
+Message-Id: <cover.1565770074.git.rahul.tanwar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Could you please confirm if your recieved our purchase order last week.
+Patch 1 converts existing dt bindings txt file to YAML schema.
 
-If no please confirm let me resend it to you.
+Patch 2 updates the dt bindings YAML contents to add support for newly supported
+Intel Lightning Mountain(LGM) SoC.
 
+These patches are baselined upon Linux 5.3-rc4 at below Git tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
 
+Rahul Tanwar (2):
+  dt-bindings: serial: lantiq: Convert to YAML schema
+  dt-bindings: lantiq: Update for new SoC
 
+ .../devicetree/bindings/serial/lantiq_asc.txt      | 31 --------
+ .../devicetree/bindings/serial/lantiq_asc.yaml     | 87 ++++++++++++++++++++++
+ 2 files changed, 87 insertions(+), 31 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/serial/lantiq_asc.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/lantiq_asc.yaml
 
-NARESH KUMAR
+-- 
+2.11.0
 
-Executive Purchase Saiapextrading Ltd
-
-Dubai, KSA.
-
-(T/F): +96-2667-264 777 / 778
-
-(Mo): +96 94284 02803
-
-Website - http://www.saiapexgeneraltrading.com
