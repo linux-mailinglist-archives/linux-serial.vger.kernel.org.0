@@ -2,129 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE30B8DCAA
-	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 20:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E808E072
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 00:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729021AbfHNSEU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 14 Aug 2019 14:04:20 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:32993 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbfHNSET (ORCPT
+        id S1729924AbfHNWOV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 14 Aug 2019 18:14:21 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:39791 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729293AbfHNWOV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 14 Aug 2019 14:04:19 -0400
-Received: by mail-pl1-f196.google.com with SMTP id c14so50923457plo.0;
-        Wed, 14 Aug 2019 11:04:19 -0700 (PDT)
+        Wed, 14 Aug 2019 18:14:21 -0400
+Received: by mail-qt1-f196.google.com with SMTP id l9so368646qtu.6
+        for <linux-serial@vger.kernel.org>; Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i65TMBvSXi6h25YTw/qjPwCNbGJI3tR/idiaX47L8Ck=;
-        b=oDgz7DWIxwNG9Rs8Av0aGQCb4Y4zM1LQ1tAIMtpGam4wL/8Gxup4y2oPyAmIxWlcIU
-         kFLQtS/AH/pC6D3MgtHWR9wg4hJ8t7xgrFUhclrPwzaVA5FyFlC0I/QalhEl2xy39Ffo
-         eSuQi/eiDx0fZE+0aJqR9uDc+19OfkJ3osRSnctH5h8O/aOk9KsZZRg/A1/+0Tw2jl1a
-         +CwRtB5bOqJvNipwLJ31AP3rI2NRvqwMQvjjVBoOhKueYR/6UdtBYuQgyj/AkrOQao2w
-         gkwPUGt/gn4vewJtfXhQp0BRvUYwhtL3OjR11guj+ZKxR5BlILFL/gYphITtDECXwsJV
-         4zQg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
+        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
+         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
+         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
+         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
+         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
+         sSPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i65TMBvSXi6h25YTw/qjPwCNbGJI3tR/idiaX47L8Ck=;
-        b=JQJdFqrg73K4bOsDiRvK/+npZVbRPJe+3vK6v4sO7goRjG8JPG9ALLItbJjG/XNCZR
-         /hXeTJcd2knfhMQCftdI2mWsRAYqUIe1YfJQCPQJrvFuOS8tZXH4GgHM/uQfJ2P4V5fA
-         AFzsVqECfgCTsGS3cKe2auXkNo9MAaB5avOBz2lRNvLVmkAT6Orh2UiQXRoeUoeb7FJr
-         +lpeNXK3l0F3oOlr/Cko05/NIpUzWCoyX7tckl9GhP8YTdr9fh5wR0YJiyQXR2QZnFXY
-         1VpDxW1UuH71OAgUfTKVz7Optpg7fB+NgQVsZhCDaLlDmC54gRSFkVGH7hvzAKVIae25
-         nUKw==
-X-Gm-Message-State: APjAAAX33uVnppEVISY4+XWuJUTkFsd4A+34vTUf8dLgN0Ns0GWzowa+
-        D9KMcFLTwA7coN4cSWFYtBk=
-X-Google-Smtp-Source: APXvYqzbRZiUS7F/Q9f8KdCAGzOCl81uvnwp5gpKSitriEyE233/ryC3fENXJCdawVK1SUb1JeKNVA==
-X-Received: by 2002:a17:902:b105:: with SMTP id q5mr596304plr.81.1565805858657;
-        Wed, 14 Aug 2019 11:04:18 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id i126sm540372pfb.32.2019.08.14.11.04.16
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 14 Aug 2019 11:04:17 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 11:04:15 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
-Message-ID: <20190814180415.GC121898@dtor-ws>
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-10-tbogendoerfer@suse.de>
- <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com>
- <20190814163733.82f624e342d061866ba8ff87@suse.de>
- <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
+        b=Ae8VhEZJG7JSFzmxdmW8pdUgVn8gjPuQ255isF0ozV/u1AZZGiTxYVjm/WJQa3pC/H
+         7ADghv5LD1npLLeJgT8ZUClbQ11SsawQc6L6iDBAiMfpBoa2cffk60dHqPdefQ1BNQXY
+         mzrG5Bez9Oy/1LhS/riKdW1SEwEwm4c+T912r1pV5Dn4E6TVMfSCOjxbdxgosoHGo27y
+         kIprsEWWtooIuMdR810TL1nU+/nnWgU9xMyO8pCGJBopPrtNGFPSIjfT/sDtRWd8i5Qh
+         gp7vexCb4es0rGGqootGe20/34DPhj8sxZcA7Z/qj6dkPDJ+Z/I0TFEnT9OpQPPC3B+x
+         b7tw==
+X-Gm-Message-State: APjAAAVZbxS1RlzX20WDQ/3WsA3Ji+EeBHsHzVMojiVWOMHfPE6F7uuw
+        iteiax7bybcP5+LQPcM1mIN6zKhcHWtKHuonQxs=
+X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
+X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
+ Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
+ -0700 (PDT)
+Reply-To: Katerinejones19@gmail.com
+From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
+Date:   Wed, 14 Aug 2019 23:14:19 +0100
+Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
+Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
+ THIS ATM CARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 06:57:55PM +0200, Jonas Gorski wrote:
-> On Wed, 14 Aug 2019 at 16:37, Thomas Bogendoerfer <tbogendoerfer@suse.de> wrote:
-> >
-> > On Wed, 14 Aug 2019 15:20:14 +0200
-> > Jonas Gorski <jonas.gorski@gmail.com> wrote:
-> >
-> > > > +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
-> > >
-> > > &pdev->dev => dev
-> >
-> > will change.
-> >
-> > >
-> > > > +       if (!d)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
-> > >
-> > > any reason not to devm_kzalloc this as well? Then you won't need to
-> > > manually free it in the error cases.
-> >
-> > it has different life time than the device, so it may not allocated
-> > via devm_kzalloc
-> >
-> > > > +static int ioc3kbd_remove(struct platform_device *pdev)
-> > > > +{
-> > > > +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
-> > > > +
-> > > > +       devm_free_irq(&pdev->dev, d->irq, d);
-> > > > +       serio_unregister_port(d->kbd);
-> > > > +       serio_unregister_port(d->aux);
-> > > > +       return 0;
-> > > > +}
-> > >
-> > > and on that topic, won't you need to kfree d->kbd and d->aux here?
-> >
-> > that's done in serio_release_port() by the serio core.
-> 
-> i see. But in that case, don't the kfree's after the
-> serio_unregister_port's in the error path of the .probe function cause
-> a double free?
+ATTN DEAR PARCEL BENEFICIARY.
 
-Yes they do, we need to drop kfree()s from there. Nicely spotted.
+I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
+CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
+YORK.
+TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
+THIS ATM CARD, So before i deliver I want you to send me.
+official diplomatic agent delivery fee sum of $150.00 us
+ only. I am here at JFK Airport,Florida. USA
 
-Thanks.
+SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
 
--- 
-Dmitry
+RECEIVER'S NAME-----------------ERROL PRINGLE
+ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
+COUNTRY----------------USA
+AMOUNT--------------------$150.00 ONLY
+TEST QUESTION----------------WHO IS THE CREATOR
+ANSWER------------------GOD
+ meanwhile this $150.00 is required by the Custom Service,USA Homeland
+Security,for protection of your delivery, it will make the ATM CARD
+and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
+word, remark my word,you will receive your delivery from me, Mrs.
+Cathy Jones once you send this only $150.00 today.
+I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
+FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
+THANKS AND MAY GOD BLESS  YOU
+CATHY JONES,DIPLOMATIC AGENT
+EMAIL; katerinejones19@gmail.com
+CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
+Phone Number; (408) 650-6103,
