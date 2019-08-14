@@ -2,91 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCEB8CE47
-	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 10:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3248CECA
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Aug 2019 10:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727383AbfHNIWv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 14 Aug 2019 04:22:51 -0400
-Received: from mga17.intel.com ([192.55.52.151]:61816 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725265AbfHNIWu (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 14 Aug 2019 04:22:50 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Aug 2019 01:22:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,384,1559545200"; 
-   d="scan'208";a="194453103"
-Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Aug 2019 01:22:47 -0700
-From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org, robh@kernel.org,
-        mark.rutland@arm.com, linux-serial@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@intel.com,
-        qi-ming.wu@intel.com, cheol.yong.kim@intel.com,
-        rahul.tanwar@intel.com, Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Subject: [PATCH 2/2] dt-bindings: lantiq: Update for new SoC
-Date:   Wed, 14 Aug 2019 16:22:35 +0800
-Message-Id: <f901ea1aaf6272b1e538772c3c6bb17adad5d003.1565770074.git.rahul.tanwar@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <cover.1565770074.git.rahul.tanwar@linux.intel.com>
-References: <cover.1565770074.git.rahul.tanwar@linux.intel.com>
-In-Reply-To: <cover.1565770074.git.rahul.tanwar@linux.intel.com>
-References: <cover.1565770074.git.rahul.tanwar@linux.intel.com>
+        id S1726119AbfHNIsz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 14 Aug 2019 04:48:55 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:44056 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725888AbfHNIsz (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 14 Aug 2019 04:48:55 -0400
+Received: by mail-lj1-f193.google.com with SMTP id e24so7361839ljg.11
+        for <linux-serial@vger.kernel.org>; Wed, 14 Aug 2019 01:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AaXXXJyoRix4ci7hEwut2qc9UXNgLOAwJXuK5aHAjno=;
+        b=QFmd1l1ZbeAWnxu46lwnT+tGjxGDvgauGe76FXrPjgMTzAof5eg4lgP3Vx+eylh+tq
+         MGldTRkYbDyDXk4rPfvSWWOk4caLcPHHLYomaksYEesHbO83AMK64X+hTW98NwDcBReh
+         76aqgPbArHQesF2KyFSX6EdAmA5JxRAZ05W2b0HeUknGbH10PEEpmX3NV4ZTCgh5hU9p
+         WJcacsA8ffuH4gxKQqyegZ2O3DVI42SUe3GnfMfr0KEavpNFTwHn1q1Pks6uJoL8FD90
+         EFkUbMkTlTInDVoqoZozZjQfXkcbPXEgFvoJpu2YNVhMlnkzyla5BSneHw2IMiE72bvb
+         4aoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AaXXXJyoRix4ci7hEwut2qc9UXNgLOAwJXuK5aHAjno=;
+        b=JUbzU/OH71DVZSf1R3EDqut4WDYeQkXjNpmYGEsYfmCPU+Ppx/BZCfGAdb2i4vhkks
+         Bnh4D4B0ZKQZlzLn29tOPRci67Blk8p50D7umqY8zHJq7x0elvMAjqSEXjUh1Tgw6KOW
+         xYxLRzGawaU8y6o8TYdo7DJUzJf/zb1Zed5kKHW35wA6pzRmOrU8G8/kSpcBypiW1Yfe
+         nF7kvtvMA4W2wl96wuxnW+NcovRqIRNbJ82IdWRv2JeGXYDQUgBGGXTNC3zVbB17CEXA
+         n0WznlV7jSnvwp8hLVdhUAlJD+oOjzvttWaIEV1BCmH/go1qausyIicIaeeaz+/icRLP
+         dRtQ==
+X-Gm-Message-State: APjAAAWkFtkVryBcpzb05R8Nz0ZLNFpLUXmwX1J9Oqr3Ud1ONIUwzFkp
+        e99lEo5UzcA6nRQw9hrMoWGiXJ6ylhBajtXLgpp5wg==
+X-Google-Smtp-Source: APXvYqxYtukqY2v01INeb/yow8UvGVlTOeiUie13T4PU1HPjHvFqbbFTMWwmN9WngAAJzyw4VsZgq3FLqy0pudhxhk4=
+X-Received: by 2002:a2e:9f0f:: with SMTP id u15mr14760601ljk.54.1565772533555;
+ Wed, 14 Aug 2019 01:48:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190808132543.26274-1-sr@denx.de> <CACRpkdYzg0At4qf1Nv5_+SzgqQ-iLU1ND9Svhj47=pXJf9E7Mg@mail.gmail.com>
+ <CAMuHMdXP8K+yvUHrjnegnNuViG3YsCAD=PxTsDHJcTLRRjJguQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdXP8K+yvUHrjnegnNuViG3YsCAD=PxTsDHJcTLRRjJguQ@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 14 Aug 2019 10:48:42 +0200
+Message-ID: <CACRpkdZqFGyZETZBoo6xSE9FSMpsbinLquX=4M=2FghdLMxWKw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] gpiolib: Add for_each_gpio_suffix() helper
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stefan Roese <sr@denx.de>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Intel Lightning Mountain(LGM) SoC reuses Lantiq ASC serial controller IP.
-This patch updates the dt bindings to support LGM as well.
+On Mon, Aug 12, 2019 at 1:18 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Sat, Aug 10, 2019 at 10:27 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Thu, Aug 8, 2019 at 3:25 PM Stefan Roese <sr@denx.de> wrote:
+> > > Add a helper macro to enable the interation over all supported GPIO
+> > > suffixes (currently "gpios" & "gpio"). This will be used by the serial
+> > > mctrl code to check, if a GPIO property exists before requesting it.
+> > >
+> > > Signed-off-by: Stefan Roese <sr@denx.de>
+> > > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > Cc: Pavel Machek <pavel@denx.de>
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >
+> > I really like this patch, it makes things so much more readable.
+>
+> Do we really need to spread this *-gpio" legacy support all over the kernel?
 
-Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
----
- .../devicetree/bindings/serial/lantiq_asc.yaml          | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Not really :/
 
-diff --git a/Documentation/devicetree/bindings/serial/lantiq_asc.yaml b/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-index 9757f0a24232..d552fd31c16c 100644
---- a/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-+++ b/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-@@ -17,6 +17,7 @@ properties:
-     oneOf:
-       items:
-         - const: lantiq,asc
-+        - const: intel,lgm-asc
- 
-   reg:
-     maxItems: 1
-@@ -28,6 +29,12 @@ properties:
-       - description: tx or combined interrupt
-       - description: rx interrupt
-       - description: err interrupt
-+    description:
-+      For lantiq,asc compatible, it supports 3 separate
-+      interrupts for tx rx & err. Whereas, for intel,lgm-asc
-+      compatible, it supports combined single interrupt for 
-+      all of tx, rx & err interrupts.
-+
- 
-   clocks:
-     description:
-@@ -67,4 +74,14 @@ examples:
-             interrupts = <112 113 114>;
-     };
- 
-+  - |
-+    asc0: serial@e0a00000 {
-+            compatible = "intel,lgm-asc";
-+            reg = <0xe0a00000 0x1000>;
-+            interrupt-parent = <&ioapic1>;
-+            interrupts = <128 1>;
-+            clocks = <&cgu0 LGM_CLK_NOC4>, <&cgu0 LGM_GCLK_ASC0>;
-+            clock-names = "freq", "asc";
-+    };
-+
- ...
--- 
-2.11.0
+Isn't it possible to use something like gpiod_count(dev, "foo") to
+check for any GPIOs instead?
 
+Yours,
+Linus Walleij
