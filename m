@@ -2,77 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC3D8F4D3
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 21:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A412D8F4EB
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 21:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732964AbfHOTjE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Aug 2019 15:39:04 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:44148 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731211AbfHOTjD (ORCPT
+        id S1731487AbfHOTnC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Aug 2019 15:43:02 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:42575 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730148AbfHOTnC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Aug 2019 15:39:03 -0400
-Received: by mail-qt1-f196.google.com with SMTP id 44so3547879qtg.11;
-        Thu, 15 Aug 2019 12:39:03 -0700 (PDT)
+        Thu, 15 Aug 2019 15:43:02 -0400
+Received: by mail-qk1-f196.google.com with SMTP id 201so2778429qkm.9
+        for <linux-serial@vger.kernel.org>; Thu, 15 Aug 2019 12:43:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E1uPy8KdAoiEgff6O2fYBXQ3Fn6UlM0L6zfIpxvfPBI=;
-        b=WxI5DxIJVTUdx4BwaWNEVdTI3ReLWi0O3QnQ/xWqnWlLB/yW8fPQmxO+IL7K2gqgNU
-         UsTKIKzDby0KalTlUJfv60UTvLgScfIYGeroKTEmxNG9dmhuvqmftOMAsUoDhMyu4atk
-         g8pS44ImAJNN1WyNJHdq9D2BbSZg0yoNiUD6UWtzHN0+G7G5ML2JJwIs/4Xz7EmfU9ru
-         35uprNN/J1Om8fdV+ooe1b4BGyFYAEDyXjfm0hq6zSfTTw4Csl29aGfnJir2Xn+s1CXx
-         98aKJ2Dqmi/zYcXE1EcsT9G++Zp+lVrjmIc5UNrglrfkk2qXreQBPZF6jlfXMuVcOnLe
-         +VBQ==
-X-Gm-Message-State: APjAAAUQY62CuNCwFdZbK8/mQzJxFI8NY2DsjxpgUylCloqHZdU4xsNf
-        d0h1L7L57XEphjGsDIMA80mDdRhkgnM527DYA+A=
-X-Google-Smtp-Source: APXvYqxqTY8ftYo1EUWFqO+wE8ZQTXXaXX7aeplKk/nDWAyNr8WQSB0twRkA82A5Gyv2tMBQ6tV5GMhK78egWxkdSCU=
-X-Received: by 2002:ac8:f99:: with SMTP id b25mr5374344qtk.142.1565897942632;
- Thu, 15 Aug 2019 12:39:02 -0700 (PDT)
+        bh=Nqku9j7PFIyYJaH3H6X7cyTOKpVgC7neN3eCM3hiIg4=;
+        b=V3T7Deak33iGbNb1DYwF5+R3dkMKQfKCVPdMG/M3ZX5ehVTTfb422KjfjNx1UPQoEv
+         wY/DsE32DTDJJ3lNTpxEMyqaN8L1bjo63kPmDLIFBKouBrdz2l1aRDrJw5FZSaUc7m25
+         oFb5WMXYxnHXHyQa37mgHoHb6DipYFUYI+3bUJMWVay1xCedBdG1HrAJwGEb0Tn0QgKO
+         NhCSF1zI31alH0Eyke7BCDoanJVg8MdGXRvadKvvSrQZB33PhHQcecE7e5qySeR1ZFWc
+         kkyzfb2w5sfUAHIHq5NuXN+rsaY4g8FuLN7+4sODkzKo6gSnmyF/pU4sfa+rmhCgS64Y
+         +ywA==
+X-Gm-Message-State: APjAAAWjtniE+Yyget7b6kJ3MQfm7oyS9KgGZ9/7IlIybYPD8yhLM6xE
+        lAzkmvna9uiMRDImjsUmSPolg/se6Gvt9hrti2k=
+X-Google-Smtp-Source: APXvYqwIC7ylDlx6oFt32w5GNE9QqCZXG4mqi0E+ejX4xxOCaTqv1RNNMB5OF5VQ+fn8iQep/KsCAH9fHbv8vklbQ3k=
+X-Received: by 2002:a37:4ac3:: with SMTP id x186mr5500643qka.138.1565898181627;
+ Thu, 15 Aug 2019 12:43:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731225303.GC1330@shell.armlinux.org.uk>
- <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
- <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com> <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
-In-Reply-To: <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
+References: <201908160045.ql5LACNr%lkp@intel.com> <20190815193157.GE30437@kroah.com>
+In-Reply-To: <20190815193157.GE30437@kroah.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 15 Aug 2019 21:38:46 +0200
-Message-ID: <CAK8P3a3ry0S-yhE75hZx1SawYuVzY=NgnNBei101F6+HxBfE3g@mail.gmail.com>
-Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
-To:     Sylvain Lemieux <slemieux.tyco@gmail.com>
-Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Date:   Thu, 15 Aug 2019 21:42:45 +0200
+Message-ID: <CAK8P3a3mi9wmWmDiwo52oOOeFhCnbnLppEGK5vcwbOpyv_wZ=w@mail.gmail.com>
+Subject: Re: [tty:tty-testing 84/90] drivers/tty/serial/lpc32xx_hs.c:447:14:
+ sparse: sparse: incompatible types for 'case' statement
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@01.org,
+        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 8:32 PM Sylvain Lemieux <slemieux.tyco@gmail.com> wrote:
-> On 8/15/19 9:11 AM, Arnd Bergmann wrote:
-> > On Thu, Aug 1, 2019 at 9:33 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > I applied patches 12 and 13 into the soc tree now. There are some
-> > other pending multiplatform conversions (iop32x, ep93xx, lpc32xx,
-> > omap1), but it looks like none of those will be complete for 5.4.
+On Thu, Aug 15, 2019 at 9:32 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> I think the patchset (v2) for the LPC32xx is ready for 5.4
-> ([PATCH v2 00/13] v2: ARM: move lpc32xx to multiplatform)
+> On Fri, Aug 16, 2019 at 12:21:48AM +0800, kbuild test robot wrote:
+> > Hi Arnd,
+> >
+> > First bad commit (maybe != root cause):
+> >
+> > tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+> > head:   92770c07234fb9e097ceb512e4bb29aca750075c
+> > commit: 5dce8eccb54355ea42918b651f1085e54b2c5f2f [84/90] serial: lpc32xx_hs: allow compile-testing
+> > reproduce:
+> >         # apt-get install sparse
+> >         # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
+> >         git checkout 5dce8eccb54355ea42918b651f1085e54b2c5f2f
+> >         make ARCH=x86_64 allmodconfig
+> >         make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+> >
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kbuild test robot <lkp@intel.com>
+>
+> Given that there are at least 3 issues with this patch, I'll go drop it
+> from my tty-testing branch now :(
 
-Good point. I've merged these into the arm/soc branch now.
+Sorry about that. In version 1 of the lpc32xx series I had explained that
+they would have to get merged in sequence because of the dependencies.
 
-     Arnd
+I've applied all 13 to the arm/soc branch now after Sylvain confirmed
+that he considers the series ready.
+
+       Arnd
