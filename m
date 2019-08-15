@@ -2,54 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 430BF8ED1C
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 15:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3488ED34
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 15:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732314AbfHONkx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Aug 2019 09:40:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36890 "EHLO mail.kernel.org"
+        id S1732460AbfHONo5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Aug 2019 09:44:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732267AbfHONkx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Aug 2019 09:40:53 -0400
+        id S1732183AbfHONo5 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 15 Aug 2019 09:44:57 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF5F7206C1;
-        Thu, 15 Aug 2019 13:40:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D6F2206C1;
+        Thu, 15 Aug 2019 13:44:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565876452;
-        bh=8fkos3bJ03vfzr91v3bkBePjiTgQUfL0AC+nbnlTyX4=;
+        s=default; t=1565876696;
+        bh=xHL7U8LXby2GE5m/PlxhS+xac8sl0iPOcUeQV/Pjz8E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GaOhF6vbyf+T7aulWg92TMC6bUDvEbaPxwD2xqLBCY4CHHdPDRWT9gjWEDCpwNFt7
-         QWxfcdLHp1h0+mTzJ+LulblqiIx4HaWbkhXARaJs2a3K06CdvLBjy+BiEDHMruilXF
-         YsizqWrmueY4Bb4qqkAyMln60GbfTZ1pf47HE0k0=
-Date:   Thu, 15 Aug 2019 15:40:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     soc@kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        b=PC8WAXp92zjaBty293YVJecMMUweIDE44Ugt7uH6Ok00/bCvU/kaX/egbrfVo8Y2G
+         TqmCpDRcVrh9mwsSxAK7qiKnJos1VQeqo+G79BDcXQvLGfRXaM51eImoxPckfn/E28
+         ayIZtg3YeTpUm6x8H+7AC3z8TQ5SScTNPBO6leqc=
+Date:   Thu, 15 Aug 2019 15:44:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mars Cheng <mars.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Owen Chen <owen.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 11/13] serial: lpc32xx: allow compile testing
-Message-ID: <20190815134049.GA3372@kroah.com>
-References: <20190809144043.476786-1-arnd@arndb.de>
- <20190809144043.476786-12-arnd@arndb.de>
+        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v6 5/8] clk: mediatek: Add MT6765 clock support
+Message-ID: <20190815134453.GB3372@kroah.com>
+References: <1562924653-10056-1-git-send-email-macpaul.lin@mediatek.com>
+ <1562924653-10056-6-git-send-email-macpaul.lin@mediatek.com>
+ <20190815002721.A71C72083B@mail.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190809144043.476786-12-arnd@arndb.de>
+In-Reply-To: <20190815002721.A71C72083B@mail.kernel.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 04:40:37PM +0200, Arnd Bergmann wrote:
-> The lpc32xx_loopback_set() function in hte lpc32xx_hs driver is the
-> one thing that relies on platform header files. Move that into the
-> core platform code so we only need a variable declaration for it,
-> and enable COMPILE_TEST building.
+On Wed, Aug 14, 2019 at 05:27:20PM -0700, Stephen Boyd wrote:
+> Quoting Macpaul Lin (2019-07-12 02:43:41)
+> > diff --git a/drivers/clk/mediatek/clk-mt6765-audio.c b/drivers/clk/mediatek/clk-mt6765-audio.c
+> > new file mode 100644
+> > index 000000000000..41f19343dfb9
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-mt6765-audio.c
+> > @@ -0,0 +1,109 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2018 MediaTek Inc.
+> > + * Author: Owen Chen <owen.chen@mediatek.com>
+> > + *
+> > + * This program is free software; you can redistribute it and/or modify
+> > + * it under the terms of the GNU General Public License version 2 as
+> > + * published by the Free Software Foundation.
+> > + *
+> > + * This program is distributed in the hope that it will be useful,
+> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> > + * GNU General Public License for more details.
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Please use SPDX tags.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To be specific, _only_ the SPDX tag.  There is an SPDX tag on this file,
+and the others, it's just that the license text is no longer needed with
+that.
+
+thanks,
+
+greg k-h
