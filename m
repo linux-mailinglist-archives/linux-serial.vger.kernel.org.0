@@ -2,87 +2,417 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E808E072
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 00:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA598E1CF
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 02:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729924AbfHNWOV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 14 Aug 2019 18:14:21 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:39791 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729293AbfHNWOV (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 14 Aug 2019 18:14:21 -0400
-Received: by mail-qt1-f196.google.com with SMTP id l9so368646qtu.6
-        for <linux-serial@vger.kernel.org>; Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
-         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
-         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
-         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
-         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
-         sSPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=Ae8VhEZJG7JSFzmxdmW8pdUgVn8gjPuQ255isF0ozV/u1AZZGiTxYVjm/WJQa3pC/H
-         7ADghv5LD1npLLeJgT8ZUClbQ11SsawQc6L6iDBAiMfpBoa2cffk60dHqPdefQ1BNQXY
-         mzrG5Bez9Oy/1LhS/riKdW1SEwEwm4c+T912r1pV5Dn4E6TVMfSCOjxbdxgosoHGo27y
-         kIprsEWWtooIuMdR810TL1nU+/nnWgU9xMyO8pCGJBopPrtNGFPSIjfT/sDtRWd8i5Qh
-         gp7vexCb4es0rGGqootGe20/34DPhj8sxZcA7Z/qj6dkPDJ+Z/I0TFEnT9OpQPPC3B+x
-         b7tw==
-X-Gm-Message-State: APjAAAVZbxS1RlzX20WDQ/3WsA3Ji+EeBHsHzVMojiVWOMHfPE6F7uuw
-        iteiax7bybcP5+LQPcM1mIN6zKhcHWtKHuonQxs=
-X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
-X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
- Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
+        id S1727300AbfHOA1X (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 14 Aug 2019 20:27:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35206 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726490AbfHOA1X (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 14 Aug 2019 20:27:23 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A71C72083B;
+        Thu, 15 Aug 2019 00:27:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565828841;
+        bh=4QD7Yk9ya09l1BYXkFzaH6f/MQAdtDiTlU/hy2yf93s=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GWEev4ti/zpH5NkWvdRHWHVC5rtGnCFwG9y0sBVYQBJp6ooktPmxhpe9Lvyd9C5dj
+         ORtsiqRQ/hl+Q//gM3NuYjiRF/V6lDE7d8o0a4hGuTY3mGZCGhxENp0572tM7+mePH
+         kcvE2LJVBvyBLaLD6Hhj0BSxxvxQOQwo08dN1r2c=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
- -0700 (PDT)
-Reply-To: Katerinejones19@gmail.com
-From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
-Date:   Wed, 14 Aug 2019 23:14:19 +0100
-Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
-Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
- THIS ATM CARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1562924653-10056-6-git-send-email-macpaul.lin@mediatek.com>
+References: <1562924653-10056-1-git-send-email-macpaul.lin@mediatek.com> <1562924653-10056-6-git-send-email-macpaul.lin@mediatek.com>
+Subject: Re: [PATCH v6 5/8] clk: mediatek: Add MT6765 clock support
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     wsd_upstream@mediatek.com, CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mars Cheng <mars.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Owen Chen <owen.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+User-Agent: alot/0.8.1
+Date:   Wed, 14 Aug 2019 17:27:20 -0700
+Message-Id: <20190815002721.A71C72083B@mail.kernel.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ATTN DEAR PARCEL BENEFICIARY.
+Quoting Macpaul Lin (2019-07-12 02:43:41)
+> diff --git a/drivers/clk/mediatek/clk-mt6765-audio.c b/drivers/clk/mediat=
+ek/clk-mt6765-audio.c
+> new file mode 100644
+> index 000000000000..41f19343dfb9
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt6765-audio.c
+> @@ -0,0 +1,109 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2018 MediaTek Inc.
+> + * Author: Owen Chen <owen.chen@mediatek.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
 
-I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
-CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
-YORK.
-TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
-THIS ATM CARD, So before i deliver I want you to send me.
-official diplomatic agent delivery fee sum of $150.00 us
- only. I am here at JFK Airport,Florida. USA
+Please use SPDX tags.
 
-SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "clk-mtk.h"
+> +#include "clk-gate.h"
+> +
+> diff --git a/drivers/clk/mediatek/clk-mt6765-vcodec.c b/drivers/clk/media=
+tek/clk-mt6765-vcodec.c
+> new file mode 100644
+> index 000000000000..eb9ae1c2c99c
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt6765-vcodec.c
+> @@ -0,0 +1,79 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2018 MediaTek Inc.
+> + * Author: Owen Chen <owen.chen@mediatek.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + */
 
-RECEIVER'S NAME-----------------ERROL PRINGLE
-ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
-COUNTRY----------------USA
-AMOUNT--------------------$150.00 ONLY
-TEST QUESTION----------------WHO IS THE CREATOR
-ANSWER------------------GOD
- meanwhile this $150.00 is required by the Custom Service,USA Homeland
-Security,for protection of your delivery, it will make the ATM CARD
-and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
-word, remark my word,you will receive your delivery from me, Mrs.
-Cathy Jones once you send this only $150.00 today.
-I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
-FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
-THANKS AND MAY GOD BLESS  YOU
-CATHY JONES,DIPLOMATIC AGENT
-EMAIL; katerinejones19@gmail.com
-CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
-Phone Number; (408) 650-6103,
+SPDX tags.
+
+> diff --git a/drivers/clk/mediatek/clk-mt6765.c b/drivers/clk/mediatek/clk=
+-mt6765.c
+> new file mode 100644
+> index 000000000000..f716a48a926d
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt6765.c
+> @@ -0,0 +1,961 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2018 MediaTek Inc.
+> + * Author: Owen Chen <owen.chen@mediatek.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+
+SPDX tags.
+
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/slab.h>
+> +#include <linux/mfd/syscon.h>
+
+Is this used? Maybe I deleted it.
+
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+[...]
+> +
+> +static const char * const axi_parents[] =3D {
+> +       "clk26m",
+> +       "syspll_d7",
+> +       "syspll1_d4",
+> +       "syspll3_d2"
+> +};
+> +
+> +static const char * const mem_parents[] =3D {
+> +       "clk26m",
+> +       "dmpll_ck",
+> +       "apll1_ck"
+> +};
+> +
+> +static const char * const mm_parents[] =3D {
+> +       "clk26m",
+> +       "mmpll_ck",
+> +       "syspll1_d2",
+> +       "syspll_d5",
+> +       "syspll1_d4",
+> +       "univpll_d5",
+> +       "univpll1_d2",
+> +       "mmpll_d2"
+> +};
+> +
+> +static const char * const scp_parents[] =3D {
+> +       "clk26m",
+> +       "syspll4_d2",
+> +       "univpll2_d2",
+> +       "syspll1_d2",
+> +       "univpll1_d2",
+> +       "syspll_d3",
+> +       "univpll_d3"
+> +};
+> +
+> +static const char * const mfg_parents[] =3D {
+> +       "clk26m",
+> +       "mfgpll_ck",
+> +       "syspll_d3",
+> +       "univpll_d3"
+> +};
+> +
+> +static const char * const atb_parents[] =3D {
+> +       "clk26m",
+> +       "syspll1_d4",
+> +       "syspll1_d2"
+> +};
+> +
+> +static const char * const camtg_parents[] =3D {
+> +       "clk26m",
+> +       "usb20_192m_d8",
+> +       "univpll2_d8",
+> +       "usb20_192m_d4",
+> +       "univpll2_d32",
+> +       "usb20_192m_d16",
+> +       "usb20_192m_d32"
+> +};
+> +
+> +static const char * const uart_parents[] =3D {
+> +       "clk26m",
+> +       "univpll2_d8"
+> +};
+> +
+> +static const char * const spi_parents[] =3D {
+> +       "clk26m",
+> +       "syspll3_d2",
+> +       "syspll4_d2",
+> +       "syspll2_d4"
+> +};
+> +
+> +static const char * const msdc5hclk_parents[] =3D {
+> +       "clk26m",
+> +       "syspll1_d2",
+> +       "univpll1_d4",
+> +       "syspll2_d2"
+> +};
+> +
+> +static const char * const msdc50_0_parents[] =3D {
+> +       "clk26m",
+> +       "msdcpll_ck",
+> +       "syspll2_d2",
+> +       "syspll4_d2",
+> +       "univpll1_d2",
+> +       "syspll1_d2",
+> +       "univpll_d5",
+> +       "univpll1_d4"
+> +};
+> +
+> +static const char * const msdc30_1_parents[] =3D {
+> +       "clk26m",
+> +       "msdcpll_d2",
+> +       "univpll2_d2",
+> +       "syspll2_d2",
+> +       "syspll1_d4",
+> +       "univpll1_d4",
+> +       "usb20_192m_d4",
+> +       "syspll2_d4"
+> +};
+> +
+> +static const char * const audio_parents[] =3D {
+> +       "clk26m",
+> +       "syspll3_d4",
+> +       "syspll4_d4",
+> +       "syspll1_d16"
+> +};
+> +
+> +static const char * const aud_intbus_parents[] =3D {
+> +       "clk26m",
+> +       "syspll1_d4",
+> +       "syspll4_d2"
+> +};
+> +
+> +static const char * const aud_1_parents[] =3D {
+> +       "clk26m",
+> +       "apll1_ck"
+> +};
+> +
+> +static const char * const aud_engen1_parents[] =3D {
+> +       "clk26m",
+> +       "apll1_d2",
+> +       "apll1_d4",
+> +       "apll1_d8"
+> +};
+> +
+> +static const char * const disp_pwm_parents[] =3D {
+> +       "clk26m",
+> +       "univpll2_d4",
+> +       "ulposc1_d2",
+> +       "ulposc1_d8"
+> +};
+> +
+> +static const char * const sspm_parents[] =3D {
+> +       "clk26m",
+> +       "syspll1_d2",
+> +       "syspll_d3"
+> +};
+> +
+> +static const char * const dxcc_parents[] =3D {
+> +       "clk26m",
+> +       "syspll1_d2",
+> +       "syspll1_d4",
+> +       "syspll1_d8"
+> +};
+> +
+> +static const char * const usb_top_parents[] =3D {
+> +       "clk26m",
+> +       "univpll3_d4"
+> +};
+> +
+> +static const char * const spm_parents[] =3D {
+> +       "clk26m",
+> +       "syspll1_d8"
+> +};
+> +
+> +static const char * const i2c_parents[] =3D {
+> +       "clk26m",
+> +       "univpll3_d4",
+> +       "univpll3_d2",
+> +       "syspll1_d8",
+> +       "syspll2_d8"
+> +};
+> +
+> +static const char * const pwm_parents[] =3D {
+> +       "clk26m",
+> +       "univpll3_d4",
+> +       "syspll1_d8"
+> +};
+> +
+> +static const char * const seninf_parents[] =3D {
+> +       "clk26m",
+> +       "univpll1_d4",
+> +       "univpll1_d2",
+> +       "univpll2_d2"
+> +};
+> +
+> +static const char * const aes_fde_parents[] =3D {
+> +       "clk26m",
+> +       "msdcpll_ck",
+> +       "univpll_d3",
+> +       "univpll2_d2",
+> +       "univpll1_d2",
+> +       "syspll1_d2"
+> +};
+> +
+> +static const char * const ulposc_parents[] =3D {
+> +       "clk26m",
+> +       "ulposc1_d4",
+> +       "ulposc1_d8",
+> +       "ulposc1_d16",
+> +       "ulposc1_d32"
+> +};
+> +
+> +static const char * const camtm_parents[] =3D {
+> +       "clk26m",
+> +       "univpll1_d4",
+> +       "univpll1_d2",
+> +       "univpll2_d2"
+> +};
+> +
+
+Can you migrate this driver to the new way of specifying clk parents?
+That way we don't just have lists of strings.
+
+> +#define INVALID_UPDATE_REG 0xFFFFFFFF
+> +#define INVALID_UPDATE_SHIFT -1
+> +#define INVALID_MUX_GATE -1
+> +
+> +static const struct mtk_mux top_muxes[] =3D {
+> +       /* CLK_CFG_0 */
+> +       MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_AXI_SEL, "axi_sel", axi_parent=
+s,
+> +                             CLK_CFG_0, CLK_CFG_0_SET, CLK_CFG_0_CLR,
+> +                             0, 2, 7, CLK_CFG_UPDATE, 0, CLK_IS_CRITICAL=
+),
+
+Please add a comment why CLK_IS_CRITICAL flag is used in each place.
+
+> +       MUX_GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MEM_SEL, "mem_sel", mem_parent=
+s,
+> +                             CLK_CFG_0, CLK_CFG_0_SET, CLK_CFG_0_CLR,
+> +                             8, 2, 15, CLK_CFG_UPDATE, 1, CLK_IS_CRITICA=
+L),
+> +       MUX_GATE_CLR_SET_UPD(CLK_TOP_MM_SEL, "mm_sel", mm_parents, CLK_CF=
+G_0,
+> +                       CLK_CFG_0_SET, CLK_CFG_0_CLR, 16, 3, 23,
+> +                       CLK_CFG_UPDATE, 2),
+> +       MUX_GATE_CLR_SET_UPD(CLK_TOP_SCP_SEL, "scp_sel", scp_parents, CLK=
+_CFG_0,
+> +                       CLK_CFG_0_SET, CLK_CFG_0_CLR, 24, 3, 31,
+> +                       CLK_CFG_UPDATE, 3),
+[...]
+> +       }, {
+> +               .compatible =3D "mediatek,mt6765-topckgen",
+> +               .data =3D clk_mt6765_top_probe,
+> +       }, {
+> +               .compatible =3D "mediatek,mt6765-infracfg",
+> +               .data =3D clk_mt6765_ifr_probe,
+> +       }, {
+> +               /* sentinel */
+> +       }
+> +};
+> +
+> +static int clk_mt6765_probe(struct platform_device *pdev)
+> +{
+> +       int (*clk_probe)(struct platform_device *d);
+> +       int r;
+> +
+> +       clk_probe =3D of_device_get_match_data(&pdev->dev);
+> +       if (!clk_probe)
+> +               return -EINVAL;
+> +
+> +       r =3D clk_probe(pdev);
+> +       if (r)
+> +               dev_err(&pdev->dev,
+> +                       "could not register clock provider: %s: %d\n",
+> +                       pdev->name, r);
+> +
+> +       return r;
+> +}
+> +
+> +static struct platform_driver clk_mt6765_drv =3D {
+> +       .probe =3D clk_mt6765_probe,
+> +       .driver =3D {
+> +               .name =3D "clk-mt6765",
+> +               .owner =3D THIS_MODULE,
+
+Remove this line, platform_driver_register() should take care of it.
+
+> +               .of_match_table =3D of_match_clk_mt6765,
+> +       },
+> +};
+> +
