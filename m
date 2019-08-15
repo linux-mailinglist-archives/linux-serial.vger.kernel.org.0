@@ -2,93 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F34BB8E775
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 10:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19F78E790
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 11:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730122AbfHOIxs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Aug 2019 04:53:48 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:13182 "EHLO mx2.mailbox.org"
+        id S1730762AbfHOJBP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Aug 2019 05:01:15 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:42290 "EHLO mx2.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730004AbfHOIxs (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Aug 2019 04:53:48 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        id S1730204AbfHOJBP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 15 Aug 2019 05:01:15 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
         (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id CB9C1A110F;
-        Thu, 15 Aug 2019 10:53:45 +0200 (CEST)
+        by mx2.mailbox.org (Postfix) with ESMTPS id EC1F3A1527;
+        Thu, 15 Aug 2019 11:01:12 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
-        with ESMTP id bKwNenchx4uj; Thu, 15 Aug 2019 10:53:42 +0200 (CEST)
-From:   Stefan Roese <sr@denx.de>
-To:     linux-serial@vger.kernel.org
-Cc:     linux-gpio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id wg0lXCnK0Cr1; Thu, 15 Aug 2019 11:01:08 +0200 (CEST)
+Subject: Re: [PATCH v1] serial: mctrl_gpio: Use gpiod flags directly
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pavel Machek <pavel@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2] serial: mctrl_gpio: Support all GPIO suffixes (gpios vs gpio)
-Date:   Thu, 15 Aug 2019 10:53:41 +0200
-Message-Id: <20190815085341.28088-1-sr@denx.de>
+References: <20190814140759.17486-1-andriy.shevchenko@linux.intel.com>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <9afdf2e4-332b-4dc0-a2fd-def472dbb9b7@denx.de>
+Date:   Thu, 15 Aug 2019 11:01:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190814140759.17486-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This patch fixes a backward compatibility issue, when boards use the
-old style GPIO suffix "-gpio" instead of the new "-gpios". This
-potential problem has been introduced by commit d99482673f95 ("serial:
-mctrl_gpio: Check if GPIO property exisits before requesting it").
+On 14.08.19 16:07, Andy Shevchenko wrote:
+> Description of the modem line control GPIOs contain a boolean type to set
+> direction of the line. Since GPIO library provides an enumerator type of flags,
+> we may utilize it and allow a bit more flexibility on the choice of the type of
+> the line parameters. It also removes an additional layer of value conversion.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-This patch now fixes this issue by using gpiod_count() which iterates
-over all supported GPIO suffixes (thanks to Linus for suggesting this).
+Reviewed-by: Stefan Roese <sr@denx.de>
 
-With this change, the local string is not needed any more. This way
-we can remove the allocation in the loop.
-
-Signed-off-by: Stefan Roese <sr@denx.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Pavel Machek <pavel@denx.de>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-v2
-- Use gpiod_count() to check if the GPIO exists (Linus)
-- Remove the now unnecessary malloc in the loop (kasprintf)
-
- drivers/tty/serial/serial_mctrl_gpio.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
-index 2b400189be91..ce73b142c66b 100644
---- a/drivers/tty/serial/serial_mctrl_gpio.c
-+++ b/drivers/tty/serial/serial_mctrl_gpio.c
-@@ -117,18 +117,11 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
- 
- 	for (i = 0; i < UART_GPIO_MAX; i++) {
- 		enum gpiod_flags flags;
--		char *gpio_str;
--		bool present;
-+		int count;
- 
- 		/* Check if GPIO property exists and continue if not */
--		gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
--				     mctrl_gpios_desc[i].name);
--		if (!gpio_str)
--			continue;
--
--		present = device_property_present(dev, gpio_str);
--		kfree(gpio_str);
--		if (!present)
-+		count = gpiod_count(dev, mctrl_gpios_desc[i].name);
-+		if (count <= 0)
- 			continue;
- 
- 		if (mctrl_gpios_desc[i].dir_out)
--- 
-2.22.1
-
+Thanks,
+Stefan
