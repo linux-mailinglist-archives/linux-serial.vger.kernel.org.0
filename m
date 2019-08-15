@@ -2,52 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E19F78E790
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 11:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CB38E87B
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 11:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730762AbfHOJBP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Aug 2019 05:01:15 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:42290 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730204AbfHOJBP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Aug 2019 05:01:15 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id EC1F3A1527;
-        Thu, 15 Aug 2019 11:01:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id wg0lXCnK0Cr1; Thu, 15 Aug 2019 11:01:08 +0200 (CEST)
-Subject: Re: [PATCH v1] serial: mctrl_gpio: Use gpiod flags directly
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20190814140759.17486-1-andriy.shevchenko@linux.intel.com>
-From:   Stefan Roese <sr@denx.de>
-Message-ID: <9afdf2e4-332b-4dc0-a2fd-def472dbb9b7@denx.de>
-Date:   Thu, 15 Aug 2019 11:01:07 +0200
+        id S1726105AbfHOJoe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Aug 2019 05:44:34 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:46605 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730363AbfHOJoe (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 15 Aug 2019 05:44:34 -0400
+Received: by mail-lj1-f193.google.com with SMTP id f9so1676596ljc.13
+        for <linux-serial@vger.kernel.org>; Thu, 15 Aug 2019 02:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zVViL1XgqHp7M9lme5Kz3G83dTHvuIv0xjCWlHINQ2M=;
+        b=sPWwf/e8SaUdyWodO+SKVC6mpDgq9KXONxYEUSEg+AaL4Z/Afo2b9X2PICjrtmLQHY
+         Ly5/hCN3hzJlDfIg4QbZ5FhSpny9an25jvNX8vJDdfwOu38L+giCXj3hUpnmlfDbTmgF
+         /HNDNTgR8bZvW+f5DoNWhVsvOTHU+mw36q9XV3J16bQW0Z2vFasQG0AwmdXTGrKrwpag
+         CgSgguucbi9g5TIOHReiUneL63Nr0zKIWG7Sf/sC7ng3RCAg3eYGGQajA8JoUMDF7ZVR
+         nqH3fVo53h8MT9BsmV8h/73if4X8pxFXGlJvBI4Br6dHVJul4uQshS779psb3yKPV1Hv
+         PFwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zVViL1XgqHp7M9lme5Kz3G83dTHvuIv0xjCWlHINQ2M=;
+        b=pOG3yXMABXYp1tcJkg7KaRZI+bWPSh54rRD8t4/q15tkD5ZeRN7SWec0MHvkoToeRq
+         /5i7XqSSzdAu3FOAWUdSESsCsDquOujMWACYRHe9DnKGgAyTnsrbqMKNdu0UMnPS6s0C
+         QeGClkAYI5MyEvGIWpiUTXhOHol/MaxrX2HWqc5XyMwgF5DUH920CJ7hpeRRGw3oYqbd
+         nny91zeRgtk9vqotBwjavN+fRZBuXwFaYR161FoXeyIys6hNnZP6a3g0MrK3NCSFRQdh
+         gHTI6wCZUXum9SHH+1tYYG2l+D3RuydTzaEYI5f8l+zcINnOCA362NWgo7oJmmGwXufL
+         ltKw==
+X-Gm-Message-State: APjAAAVA+zK9B7yhumuaPXvgul3V5pY+8CLHVq7fpAU7p7hX+Ye0qcIX
+        eLH061TjQL9WvXOrwu/CZWztMxU65xxGi3kPPPeC2A==
+X-Google-Smtp-Source: APXvYqx4kUUzJzn+bO3SE9xy3kp49njXjmI1KvCyFfMqdhmc8UIrRDyA8sjbNbStWoE6qrQZPZclwlaLM54oG3NUtWc=
+X-Received: by 2002:a05:651c:28c:: with SMTP id b12mr2227564ljo.69.1565862272633;
+ Thu, 15 Aug 2019 02:44:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190814140759.17486-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190815085341.28088-1-sr@denx.de>
+In-Reply-To: <20190815085341.28088-1-sr@denx.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 15 Aug 2019 11:44:21 +0200
+Message-ID: <CACRpkdaOjfg3gsf+Ybp0+3cE_op6dTRexWhZq2KVdcS85g8vhQ@mail.gmail.com>
+Subject: Re: [PATCH v2] serial: mctrl_gpio: Support all GPIO suffixes (gpios
+ vs gpio)
+To:     Stefan Roese <sr@denx.de>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 14.08.19 16:07, Andy Shevchenko wrote:
-> Description of the modem line control GPIOs contain a boolean type to set
-> direction of the line. Since GPIO library provides an enumerator type of flags,
-> we may utilize it and allow a bit more flexibility on the choice of the type of
-> the line parameters. It also removes an additional layer of value conversion.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thu, Aug 15, 2019 at 10:53 AM Stefan Roese <sr@denx.de> wrote:
 
-Reviewed-by: Stefan Roese <sr@denx.de>
+> This patch fixes a backward compatibility issue, when boards use the
+> old style GPIO suffix "-gpio" instead of the new "-gpios". This
+> potential problem has been introduced by commit d99482673f95 ("serial:
+> mctrl_gpio: Check if GPIO property exisits before requesting it").
+>
+> This patch now fixes this issue by using gpiod_count() which iterates
+> over all supported GPIO suffixes (thanks to Linus for suggesting this).
+>
+> With this change, the local string is not needed any more. This way
+> we can remove the allocation in the loop.
+>
+> Signed-off-by: Stefan Roese <sr@denx.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Pavel Machek <pavel@denx.de>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> v2
+> - Use gpiod_count() to check if the GPIO exists (Linus)
+> - Remove the now unnecessary malloc in the loop (kasprintf)
 
-Thanks,
-Stefan
+Pretty neat!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
