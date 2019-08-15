@@ -2,41 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 805C28F061
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 18:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBE08F372
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Aug 2019 20:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730004AbfHOQVw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Aug 2019 12:21:52 -0400
-Received: from mga12.intel.com ([192.55.52.136]:53107 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729895AbfHOQVw (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Aug 2019 12:21:52 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 09:21:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,389,1559545200"; 
-   d="scan'208";a="260861724"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 15 Aug 2019 09:21:50 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hyIVa-0007PW-8A; Fri, 16 Aug 2019 00:21:50 +0800
-Date:   Fri, 16 Aug 2019 00:21:48 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@01.org, linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [tty:tty-testing 84/90] drivers/tty/serial/lpc32xx_hs.c:447:14:
- sparse: sparse: incompatible types for 'case' statement
-Message-ID: <201908160045.ql5LACNr%lkp@intel.com>
+        id S1732158AbfHOScU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Aug 2019 14:32:20 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39759 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729204AbfHOScT (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 15 Aug 2019 14:32:19 -0400
+Received: by mail-oi1-f195.google.com with SMTP id 16so2950593oiq.6;
+        Thu, 15 Aug 2019 11:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zr7m4pwTZtuvjpeiIC/jYJKmr4TJLJV4XhMln9ZPv+4=;
+        b=QhoIDVYdejOyWyiUAfCz1XWolONEWbCa4OOpGFtUQnKIGhnLyEC0/WGR5DefUSe1mR
+         i3zN3r2Q/fvJSZDwrKzaRdvzv43fsSPU0X21BNHiS2Yqh+NKiqKBv6Ii+RH2I3llRllE
+         byC/IWheGYP6LEWHOEThfHTWTKIJJf+uR547l94H3w3AmvHSXHgGTk25MdOCZrvH2vOm
+         xHVEnRuf1yAPoEGvBmZTWcabaDcqGkwohIXbc60Uis39tG3aq01SVHfE16g3nGRTQp5j
+         fFt/E1AjMR0bRMXf2g86K2ujhMJd+JgLRDunGS64polTLVj9Z+V7jNNFV0rN5tUK+OI4
+         jJgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zr7m4pwTZtuvjpeiIC/jYJKmr4TJLJV4XhMln9ZPv+4=;
+        b=mRk2Py5RXG0x+J5XW4uglBrbSbg6w7YZi9/0oskyu+QClR6NckM6uY+xh2RN9tNWJ4
+         DaHoU2lYVR26VuTzaL3knj6gqIip/Xh0/rpMTlLomiNGSAbRQrdl0GndLZrfb/7UJvjt
+         6Cy3GdAJnMlFfikMepXq8IQFDANqXU2nL2r/sE5OW/bHhBLLZmRvcfLq/Q1hd//5y9Fy
+         0T98Y2UP4Fah1loE5P+WsmiTQzjfrJq8IPrZNP3N4tmWg3IHTaW3gQFlLXEqvBIPnr6n
+         jXfeSnyPNYa/VGlxxC/2wzZbQ2V86zsROBQaS4TnCvqq7b/DkVq5UkPGy6iAaKYqAt8Y
+         MPVg==
+X-Gm-Message-State: APjAAAWM64D/q3FyD9DFamwKmlbXeV5/T+islOhyNL3i9ObIGMKzjwhz
+        LQKUOHVK54i4UoyKlXNPT+Jvu0NiI5Q=
+X-Google-Smtp-Source: APXvYqyUNRL91dzBCJhtveiCufmLdZI/X5yNhmzj2dzOWTVqlPUlee32crL4pNFIQyUM9g4pdq2Yow==
+X-Received: by 2002:a05:6808:49a:: with SMTP id z26mr2630733oid.177.1565893938759;
+        Thu, 15 Aug 2019 11:32:18 -0700 (PDT)
+Received: from [10.15.211.16] ([74.51.240.241])
+        by smtp.gmail.com with ESMTPSA id t81sm686205oie.48.2019.08.15.11.32.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Aug 2019 11:32:18 -0700 (PDT)
+Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+References: <20190731195713.3150463-1-arnd@arndb.de>
+ <20190731225303.GC1330@shell.armlinux.org.uk>
+ <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
+ <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Message-ID: <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
+Date:   Thu, 15 Aug 2019 14:32:15 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
@@ -44,84 +86,50 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Hi Arnd,
 
-First bad commit (maybe != root cause):
+On 8/15/19 9:11 AM, Arnd Bergmann wrote:
+> On Thu, Aug 1, 2019 at 9:33 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Thu, Aug 1, 2019 at 12:53 AM Russell King - ARM Linux admin
+>> <linux@armlinux.org.uk> wrote:
+>>>
+>>> On Wed, Jul 31, 2019 at 09:56:42PM +0200, Arnd Bergmann wrote:
+>>>> For dove, the patches are basically what I had proposed back in
+>>>> 2015 when all other ARMv6/ARMv7 machines became part of a single
+>>>> kernel build. I don't know what the state is mach-dove support is,
+>>>> compared to the DT based support in mach-mvebu for the same
+>>>> hardware. If they are functionally the same, we could also just
+>>>> remove mach-dove rather than applying my patches.
+>>>
+>>> Well, the good news is that I'm down to a small board support file
+>>> for the Dove Cubox now - but the bad news is, that there's still a
+>>> board support file necessary to support everything the Dove SoC has
+>>> to offer.
+>>>
+>>> Even for a DT based Dove Cubox, I'm still using mach-dove, but it
+>>> may be possible to drop most of mach-dove now.  Without spending a
+>>> lot of time digging through it, it's impossible to really know.
+>>
+>> Ok, so we won't remove it then, but I'd like to merge my patches to
+>> at least get away from the special case of requiring a separate kernel
+>> image for it.
+>>
+>> Can you try if applying patches 12 and 14 from my series causes
+>> problems for you? (it may be easier to apply the entire set
+>> or pull from [1] to avoid rebase conflicts).
+> 
+> I applied patches 12 and 13 into the soc tree now. There are some
+> other pending multiplatform conversions (iop32x, ep93xx, lpc32xx,
+> omap1), but it looks like none of those will be complete for 5.4.
 
-tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-head:   92770c07234fb9e097ceb512e4bb29aca750075c
-commit: 5dce8eccb54355ea42918b651f1085e54b2c5f2f [84/90] serial: lpc32xx_hs: allow compile-testing
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
-        git checkout 5dce8eccb54355ea42918b651f1085e54b2c5f2f
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
-
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-
-   include/linux/sched.h:609:43: sparse: sparse: bad integer constant expression
-   include/linux/sched.h:609:73: sparse: sparse: invalid named zero-width bitfield `value'
-   include/linux/sched.h:610:43: sparse: sparse: bad integer constant expression
-   include/linux/sched.h:610:67: sparse: sparse: invalid named zero-width bitfield `bucket_id'
-   drivers/tty/serial/lpc32xx_hs.c:447:14: sparse: sparse: undefined identifier 'LPC32XX_HS_UART1_BASE'
-   drivers/tty/serial/lpc32xx_hs.c:450:14: sparse: sparse: undefined identifier 'LPC32XX_HS_UART2_BASE'
-   drivers/tty/serial/lpc32xx_hs.c:453:14: sparse: sparse: undefined identifier 'LPC32XX_HS_UART7_BASE'
->> drivers/tty/serial/lpc32xx_hs.c:447:14: sparse: sparse: incompatible types for 'case' statement
-   drivers/tty/serial/lpc32xx_hs.c:450:14: sparse: sparse: incompatible types for 'case' statement
-   drivers/tty/serial/lpc32xx_hs.c:453:14: sparse: sparse: incompatible types for 'case' statement
-   drivers/tty/serial/lpc32xx_hs.c:461:21: sparse: sparse: undefined identifier 'LPC32XX_UARTCTL_CLOOP'
-   drivers/tty/serial/lpc32xx_hs.c:466:21: sparse: sparse: undefined identifier 'LPC32XX_UARTCTL_CLOOP'
-   drivers/tty/serial/lpc32xx_hs.c:580:17: sparse: sparse: undefined identifier 'SZ_4K'
-   drivers/tty/serial/lpc32xx_hs.c:591:22: sparse: sparse: undefined identifier 'SZ_4K'
-   drivers/tty/serial/lpc32xx_hs.c:594:64: sparse: sparse: undefined identifier 'SZ_4K'
-   drivers/tty/serial/lpc32xx_hs.c:596:33: sparse: sparse: undefined identifier 'SZ_4K'
-   drivers/tty/serial/lpc32xx_hs.c:693:27: sparse: sparse: undefined identifier 'LPC32XX_MAIN_OSC_FREQ'
-   drivers/tty/serial/lpc32xx_hs.c:447:14: sparse: sparse: Expected constant expression in case statement
-   drivers/tty/serial/lpc32xx_hs.c:450:14: sparse: sparse: Expected constant expression in case statement
-   drivers/tty/serial/lpc32xx_hs.c:453:14: sparse: sparse: Expected constant expression in case statement
-
-vim +/case +447 drivers/tty/serial/lpc32xx_hs.c
-
-596f93f50e2d1a Roland Stigge 2012-06-11  439  
-596f93f50e2d1a Roland Stigge 2012-06-11  440  /* LPC3250 Errata HSUART.1: Hang workaround via loopback mode on inactivity */
-596f93f50e2d1a Roland Stigge 2012-06-11  441  static void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-596f93f50e2d1a Roland Stigge 2012-06-11  442  {
-596f93f50e2d1a Roland Stigge 2012-06-11  443  	int bit;
-596f93f50e2d1a Roland Stigge 2012-06-11  444  	u32 tmp;
-596f93f50e2d1a Roland Stigge 2012-06-11  445  
-596f93f50e2d1a Roland Stigge 2012-06-11  446  	switch (mapbase) {
-596f93f50e2d1a Roland Stigge 2012-06-11 @447  	case LPC32XX_HS_UART1_BASE:
-596f93f50e2d1a Roland Stigge 2012-06-11  448  		bit = 0;
-596f93f50e2d1a Roland Stigge 2012-06-11  449  		break;
-596f93f50e2d1a Roland Stigge 2012-06-11  450  	case LPC32XX_HS_UART2_BASE:
-596f93f50e2d1a Roland Stigge 2012-06-11  451  		bit = 1;
-596f93f50e2d1a Roland Stigge 2012-06-11  452  		break;
-596f93f50e2d1a Roland Stigge 2012-06-11  453  	case LPC32XX_HS_UART7_BASE:
-596f93f50e2d1a Roland Stigge 2012-06-11  454  		bit = 6;
-596f93f50e2d1a Roland Stigge 2012-06-11  455  		break;
-596f93f50e2d1a Roland Stigge 2012-06-11  456  	default:
-596f93f50e2d1a Roland Stigge 2012-06-11  457  		WARN(1, "lpc32xx_hs: Warning: Unknown port at %08x\n", mapbase);
-596f93f50e2d1a Roland Stigge 2012-06-11  458  		return;
-596f93f50e2d1a Roland Stigge 2012-06-11  459  	}
-596f93f50e2d1a Roland Stigge 2012-06-11  460  
-596f93f50e2d1a Roland Stigge 2012-06-11  461  	tmp = readl(LPC32XX_UARTCTL_CLOOP);
-596f93f50e2d1a Roland Stigge 2012-06-11  462  	if (state)
-596f93f50e2d1a Roland Stigge 2012-06-11  463  		tmp |= (1 << bit);
-596f93f50e2d1a Roland Stigge 2012-06-11  464  	else
-596f93f50e2d1a Roland Stigge 2012-06-11  465  		tmp &= ~(1 << bit);
-596f93f50e2d1a Roland Stigge 2012-06-11  466  	writel(tmp, LPC32XX_UARTCTL_CLOOP);
-596f93f50e2d1a Roland Stigge 2012-06-11  467  }
-596f93f50e2d1a Roland Stigge 2012-06-11  468  
-
-:::::: The code at line 447 was first introduced by commit
-:::::: 596f93f50e2d1a926bbb6c73aa7ee7fd862b7062 serial: Add driver for LPC32xx High Speed UARTs
-
-:::::: TO: Roland Stigge <stigge@antcom.de>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+I think the patchset (v2) for the LPC32xx is ready for 5.4
+([PATCH v2 00/13] v2: ARM: move lpc32xx to multiplatform)
+ >
+> I now expect that we can get most of the preparation into 5.4,
+> and maybe move them all over together in 5.5 after some more
+> testing. If someone finds a problem with the one of the
+> preparation steps, that we can revert the individual patches
+> more easily.
+> 
+>        Arnd
+> 
+Sylvain
