@@ -2,61 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 612D1900B3
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Aug 2019 13:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FBE90477
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Aug 2019 17:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727094AbfHPL1P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 16 Aug 2019 07:27:15 -0400
-Received: from mga03.intel.com ([134.134.136.65]:16195 "EHLO mga03.intel.com"
+        id S1727409AbfHPPOQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 16 Aug 2019 11:14:16 -0400
+Received: from elvis.franken.de ([193.175.24.41]:35094 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727092AbfHPL1P (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 16 Aug 2019 07:27:15 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Aug 2019 04:26:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,393,1559545200"; 
-   d="scan'208";a="377387511"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Aug 2019 04:26:46 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hyaNY-0008EG-8g; Fri, 16 Aug 2019 14:26:44 +0300
-Date:   Fri, 16 Aug 2019 14:26:44 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Cc:     gregkh@linuxfoundation.org, jslaby@suse.com, jay.dolan@accesio.com,
-        hslester96@gmail.com, je.yen.tam@ni.com, lkp@intel.com,
-        kai.heng.feng@canonical.com, heikki.krogerus@linux.intel.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH V1 1/1] serial: 8250_pci: Add F81504A series Support
-Message-ID: <20190816112644.GF30120@smile.fi.intel.com>
-References: <1565933249-23076-1-git-send-email-hpeter+linux_kernel@gmail.com>
+        id S1727388AbfHPPOP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 16 Aug 2019 11:14:15 -0400
+X-Greylist: delayed 2654 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 11:14:14 EDT
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1hydEn-0007f5-00; Fri, 16 Aug 2019 16:29:53 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 00486C25F1; Fri, 16 Aug 2019 16:09:42 +0200 (CEST)
+Date:   Fri, 16 Aug 2019 16:09:42 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
+Message-ID: <20190816140942.GA15050@alpha.franken.de>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+ <20190809103235.16338-4-tbogendoerfer@suse.de>
+ <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
+ <20190814134616.b4dab3c0aa6ac913d78edb6a@suse.de>
+ <31d680ee-ddb3-8536-c915-576222d263e1@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1565933249-23076-1-git-send-email-hpeter+linux_kernel@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <31d680ee-ddb3-8536-c915-576222d263e1@linaro.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 01:27:29PM +0800, Ji-Ze Hong (Peter Hong) wrote:
-> Fintek F81504A/508A/512A is PCIE to 4/8/12 UARTs device. It's support
-> IO/MMIO/PCIE conf to access all functions. The old F81504/508/512 is
-> only support IO.
+On Wed, Aug 14, 2019 at 01:52:49PM +0100, Srinivas Kandagatla wrote:
+> On 14/08/2019 12:46, Thomas Bogendoerfer wrote:
+> >On Tue, 13 Aug 2019 10:40:34 +0100
+> >Srinivas Kandagatla <srinivas.kandagatla@linaro.org> wrote:
+> >>On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
+> >>>nvmem_device_find provides a way to search for nvmem devices with
+> >>>the help of a match function simlair to bus_find_device.
+> >>>
+> >>>Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> >>>---
+> >>>   drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
+> >>>   include/linux/nvmem-consumer.h |  9 ++++++
+> >>>   2 files changed, 41 insertions(+), 30 deletions(-)
+> >>
+> >>Have you considered using nvmem_register_notifier() ?
+> >
+> >yes, that was the first idea. But then I realized I need to build up
+> >a private database of information already present in nvmem bus. So I
+> >looked for a way to retrieve it from there. Unfortunately I couldn't
+> >use bus_find_device directly, because nvmem_bus_type and struct nvmem_device
+> >is hidden. So I refactured the lookup code and added a more universal
+> >lookup function, which fits my needs and should be usable for more.
+> I see your point.
+> 
+> overall the patch as it is look good, but recently we added more generic
+> lookups for DT node, looks like part of your patch is un-doing generic
+> device name lookup.
+> 
+> DT node match lookup is in https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/log/?h=generic_lookup_helpers
 
-We have 8250_fintek.
-Isn't it a right place to add these?
+these patches are not in Linus tree, yet. I guess they will show up
+in 5.4. No idea how to deal with it right now, do you ?
+
+> Other missing bit is adding this api to documentation in
+> ./Documentation/driver-api/nvmem.rst
+
+ok, will do.
+
+Thomas.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
