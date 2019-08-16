@@ -2,241 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D33AE8FA64
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Aug 2019 07:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A838FBEF
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Aug 2019 09:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbfHPF1s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 16 Aug 2019 01:27:48 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39098 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbfHPF1s (ORCPT
+        id S1726765AbfHPHQv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 16 Aug 2019 03:16:51 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38496 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726604AbfHPHQu (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 16 Aug 2019 01:27:48 -0400
-Received: by mail-pg1-f193.google.com with SMTP id u17so2364235pgi.6;
-        Thu, 15 Aug 2019 22:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=9KwKvFVOTDLDa3dTif1y9TmO/iIOdliqAkfkI7vRl7U=;
-        b=rn3g5UVE5rddEyKxk3Lr3p0eZ6IRRzjW8bP/SArD/P0Jc2mLuTLW/yVeiqORdti1eD
-         ozh+4rZjPP4AWo8Sd7uibvDFjJ9Ni6dZRgTlRfXWUuGTjozOKELRa9rW76n3iS7Wr7UH
-         xvuDzk00rAgsWVe1ARiIrgBc92WkqT527T48ZwccFp1MjNkBpVKdsbE6rmIXN6FBwVHA
-         tKvmD+qJxWVjNs9GMh/mQ5BglhA9zVkRib99C47Z3p+VHH8fn2GymwISGmuMBB+mG5kK
-         Zy48Wj91XvrlHtPz/KfA6OOVsZ++QxyGWTmQhy3PcWiHHps8u8PSc4hTPo66SKLLX1g5
-         EVMw==
+        Fri, 16 Aug 2019 03:16:50 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r20so8805178ota.5;
+        Fri, 16 Aug 2019 00:16:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9KwKvFVOTDLDa3dTif1y9TmO/iIOdliqAkfkI7vRl7U=;
-        b=Hj+5ahpS04FB5ufF5qxnAk2xoXMsc9656qWrQOAjUkmEgNhXYbhiXoQAFbVF/AiSWg
-         N23a+TtK3Cgu0rbRABBe27Jn5NivT1fLJvYFNh+Zm9SH2Y+/bmOmCzycA6LQ4cro5m/J
-         8/yiBJhPJtVSrS0y8uKm8d3HTjgBvw+Jr1pHoDUE7KjGg9+cTipKg+KX/5nUD95e3LZT
-         66rEmmhKzacSTatjvV6a3BVZIi2OQYgrv3XI4aS7dhIuzGr8BKeMpdYdwZuZYFLm1ZKP
-         syaGs7B0pvUUbT9OU9WfN4AGmU3zXh14lCuD3/KPcj0LNDAS+ZI0np4WJlgLFhFMqLLN
-         EPGw==
-X-Gm-Message-State: APjAAAXk4g4p4FkIiX01FBv4Glw/5p9OvrBv5FS5/BzB6o9LvKKqsMnb
-        HtFzhTwCniKqyvdzcpPgPko=
-X-Google-Smtp-Source: APXvYqyrgzhsmOMqVDZcKIx1w7FWNNnsTAfhDylS0OZWrVVVECOI7ke3zvkAqbm0h8V839IXlSZc3Q==
-X-Received: by 2002:a63:ec03:: with SMTP id j3mr6472743pgh.325.1565933266656;
-        Thu, 15 Aug 2019 22:27:46 -0700 (PDT)
-Received: from localhost (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id s5sm4734461pfm.97.2019.08.15.22.27.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 22:27:45 -0700 (PDT)
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jslaby@suse.com, jay.dolan@accesio.com,
-        andriy.shevchenko@linux.intel.com, hslester96@gmail.com,
-        je.yen.tam@ni.com, lkp@intel.com, kai.heng.feng@canonical.com,
-        heikki.krogerus@linux.intel.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: [PATCH V1 1/1] serial: 8250_pci: Add F81504A series Support
-Date:   Fri, 16 Aug 2019 13:27:29 +0800
-Message-Id: <1565933249-23076-1-git-send-email-hpeter+linux_kernel@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bXpDqfJClvWxOUOcU12TDdqXCxVH2IPM0Zi2QEc01lk=;
+        b=OipSLBandzQZqt7D7xb74hPnz6cqH2ZJNJmROyxPoxx41c4en8PJ1PFrUiQ8iNS/xH
+         Cx6klZSHntoRUK8m9aqYrT48qID7culJIduhdkFak3eEUxyMLnwWJd0QT8tyTzu7lieI
+         uLvqwM6suqsxZBlqUlm+IFctlyF+5TVk4X2kroBAUQ8OvRK2QAWr6nMlgywy37CqggnU
+         IxkxEYVeQlkdfRHhZN07+i79R1Cw4t5GqoLGPD1dZFSVczG3LP/tgDKwWN8Uar4Jes17
+         bsVbBq1K8OJt0/Q0EzjGze14/gLJ28Word/FBKUSkqBMx4gSlfinoewVIN11Q6BNTmR9
+         k3Gg==
+X-Gm-Message-State: APjAAAX7BRMdt+I6aJ2sTthm66VqCHVRYgggX7RcJgtlI5tnOVAzvUYR
+        bhz2XpcC9c6tDp35xLfSqTpQtLGBfdylHke5b7X2RBWi
+X-Google-Smtp-Source: APXvYqyzBK8lbM0XtJlylaIgzwq7el+4ERBBXhXH8xLvH6jCTgbjXceYtri2d9D+gGx37sCMxh0Nu/xlbqgpj1bn0jc=
+X-Received: by 2002:a9d:5c0c:: with SMTP id o12mr6547455otk.145.1565939810078;
+ Fri, 16 Aug 2019 00:16:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190815085341.28088-1-sr@denx.de>
+In-Reply-To: <20190815085341.28088-1-sr@denx.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 16 Aug 2019 09:16:39 +0200
+Message-ID: <CAMuHMdXYLB1UShMjoZi6gzyxx=uOeLdVsZmhWZO5J+=As-5gdw@mail.gmail.com>
+Subject: Re: [PATCH v2] serial: mctrl_gpio: Support all GPIO suffixes (gpios
+ vs gpio)
+To:     Stefan Roese <sr@denx.de>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Fintek F81504A/508A/512A is PCIE to 4/8/12 UARTs device. It's support
-IO/MMIO/PCIE conf to access all functions. The old F81504/508/512 is
-only support IO.
+CC Mika, who reported the initial issue
 
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
----
- drivers/tty/serial/8250/8250_pci.c | 121 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 121 insertions(+)
+On Thu, Aug 15, 2019 at 10:53 AM Stefan Roese <sr@denx.de> wrote:
+>
+> This patch fixes a backward compatibility issue, when boards use the
+> old style GPIO suffix "-gpio" instead of the new "-gpios". This
+> potential problem has been introduced by commit d99482673f95 ("serial:
+> mctrl_gpio: Check if GPIO property exisits before requesting it").
+>
+> This patch now fixes this issue by using gpiod_count() which iterates
+> over all supported GPIO suffixes (thanks to Linus for suggesting this).
+>
+> With this change, the local string is not needed any more. This way
+> we can remove the allocation in the loop.
+>
+> Signed-off-by: Stefan Roese <sr@denx.de>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Pavel Machek <pavel@denx.de>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> v2
+> - Use gpiod_count() to check if the GPIO exists (Linus)
+> - Remove the now unnecessary malloc in the loop (kasprintf)
+>
+>  drivers/tty/serial/serial_mctrl_gpio.c | 13 +++----------
+>  1 file changed, 3 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+> index 2b400189be91..ce73b142c66b 100644
+> --- a/drivers/tty/serial/serial_mctrl_gpio.c
+> +++ b/drivers/tty/serial/serial_mctrl_gpio.c
+> @@ -117,18 +117,11 @@ struct mctrl_gpios *mctrl_gpio_init_noauto(struct device *dev, unsigned int idx)
+>
+>         for (i = 0; i < UART_GPIO_MAX; i++) {
+>                 enum gpiod_flags flags;
+> -               char *gpio_str;
+> -               bool present;
+> +               int count;
+>
+>                 /* Check if GPIO property exists and continue if not */
+> -               gpio_str = kasprintf(GFP_KERNEL, "%s-gpios",
+> -                                    mctrl_gpios_desc[i].name);
+> -               if (!gpio_str)
+> -                       continue;
+> -
+> -               present = device_property_present(dev, gpio_str);
+> -               kfree(gpio_str);
+> -               if (!present)
+> +               count = gpiod_count(dev, mctrl_gpios_desc[i].name);
+> +               if (count <= 0)
+>                         continue;
+>
+>                 if (mctrl_gpios_desc[i].dir_out)
 
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index c0d10a35bf70..80737862bbef 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -43,6 +43,11 @@ struct pci_serial_quirk {
- 	void	(*exit)(struct pci_dev *dev);
- };
- 
-+struct f815xxa_data {
-+	spinlock_t lock;
-+	int idx;
-+};
-+
- #define PCI_NUM_BAR_RESOURCES	6
- 
- struct serial_private {
-@@ -1707,6 +1712,77 @@ static int pci_fintek_init(struct pci_dev *dev)
- 	return max_port;
- }
- 
-+static void f815xxa_mem_serial_out(struct uart_port *p, int offset, int value)
-+{
-+	struct f815xxa_data *data = p->private_data;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&data->lock, flags);
-+	writeb(value, p->membase + offset);
-+	readb(p->membase + UART_SCR); /* Dummy read for flush pcie tx queue */
-+	spin_unlock_irqrestore(&data->lock, flags);
-+}
-+
-+static int pci_fintek_f815xxa_setup(struct serial_private *priv,
-+			    const struct pciserial_board *board,
-+			    struct uart_8250_port *port, int idx)
-+{
-+	struct pci_dev *pdev = priv->dev;
-+	struct f815xxa_data *data;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->idx = idx;
-+	spin_lock_init(&data->lock);
-+
-+	port->port.private_data = data;
-+	port->port.iotype = UPIO_MEM;
-+	port->port.flags |= UPF_IOREMAP;
-+	port->port.mapbase = pci_resource_start(pdev, 0) + 8 * idx;
-+	port->port.serial_out = f815xxa_mem_serial_out;
-+
-+	return 0;
-+}
-+
-+static int pci_fintek_f815xxa_init(struct pci_dev *dev)
-+{
-+	u32 max_port, i;
-+	int config_base;
-+
-+	if (!(pci_resource_flags(dev, 0) & IORESOURCE_MEM))
-+		return -ENODEV;
-+
-+	switch (dev->device) {
-+	case 0x1204: /* 4 ports */
-+	case 0x1208: /* 8 ports */
-+		max_port = dev->device & 0xff;
-+		break;
-+	case 0x1212: /* 12 ports */
-+		max_port = 12;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	/* Set to mmio decode */
-+	pci_write_config_byte(dev, 0x209, 0x40);
-+
-+	for (i = 0; i < max_port; ++i) {
-+		/* UART0 configuration offset start from 0x2A0 */
-+		config_base = 0x2A0 + 0x08 * i;
-+
-+		/* Select 128-byte FIFO and 8x FIFO threshold */
-+		pci_write_config_byte(dev, config_base + 0x01, 0x33);
-+
-+		/* Enable UART I/O port */
-+		pci_write_config_byte(dev, config_base + 0, 0x01);
-+	}
-+
-+	return max_port;
-+}
-+
- static int skip_tx_en_setup(struct serial_private *priv,
- 			const struct pciserial_board *board,
- 			struct uart_8250_port *port, int idx)
-@@ -2781,6 +2857,30 @@ static struct pci_serial_quirk pci_serial_quirks[] __refdata = {
- 		.setup		= pci_fintek_setup,
- 		.init		= pci_fintek_init,
- 	},
-+	{
-+		.vendor		= 0x1c29,
-+		.device		= 0x1204,
-+		.subvendor	= PCI_ANY_ID,
-+		.subdevice	= PCI_ANY_ID,
-+		.setup		= pci_fintek_f815xxa_setup,
-+		.init		= pci_fintek_f815xxa_init,
-+	},
-+	{
-+		.vendor		= 0x1c29,
-+		.device		= 0x1208,
-+		.subvendor	= PCI_ANY_ID,
-+		.subdevice	= PCI_ANY_ID,
-+		.setup		= pci_fintek_f815xxa_setup,
-+		.init		= pci_fintek_f815xxa_init,
-+	},
-+	{
-+		.vendor		= 0x1c29,
-+		.device		= 0x1212,
-+		.subvendor	= PCI_ANY_ID,
-+		.subdevice	= PCI_ANY_ID,
-+		.setup		= pci_fintek_f815xxa_setup,
-+		.init		= pci_fintek_f815xxa_init,
-+	},
- 
- 	/*
- 	 * Default "match everything" terminator entry
-@@ -2976,6 +3076,9 @@ enum pci_board_num_t {
- 	pbn_fintek_4,
- 	pbn_fintek_8,
- 	pbn_fintek_12,
-+	pbn_fintek_F81504A,
-+	pbn_fintek_F81508A,
-+	pbn_fintek_F81512A,
- 	pbn_wch382_2,
- 	pbn_wch384_4,
- 	pbn_pericom_PI7C9X7951,
-@@ -3732,6 +3835,21 @@ static struct pciserial_board pci_boards[] = {
- 		.base_baud	= 115200,
- 		.first_offset	= 0x40,
- 	},
-+	[pbn_fintek_F81504A] = {
-+		.num_ports	= 4,
-+		.uart_offset	= 8,
-+		.base_baud	= 115200,
-+	},
-+	[pbn_fintek_F81508A] = {
-+		.num_ports	= 8,
-+		.uart_offset	= 8,
-+		.base_baud	= 115200,
-+	},
-+	[pbn_fintek_F81512A] = {
-+		.num_ports	= 12,
-+		.uart_offset	= 8,
-+		.base_baud	= 115200,
-+	},
- 	[pbn_wch382_2] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 2,
-@@ -5634,6 +5752,9 @@ static const struct pci_device_id serial_pci_tbl[] = {
- 	{ PCI_DEVICE(0x1c29, 0x1104), .driver_data = pbn_fintek_4 },
- 	{ PCI_DEVICE(0x1c29, 0x1108), .driver_data = pbn_fintek_8 },
- 	{ PCI_DEVICE(0x1c29, 0x1112), .driver_data = pbn_fintek_12 },
-+	{ PCI_DEVICE(0x1c29, 0x1204), .driver_data = pbn_fintek_F81504A },
-+	{ PCI_DEVICE(0x1c29, 0x1208), .driver_data = pbn_fintek_F81508A },
-+	{ PCI_DEVICE(0x1c29, 0x1212), .driver_data = pbn_fintek_F81512A },
- 
- 	/* MKS Tenta SCOM-080x serial cards */
- 	{ PCI_DEVICE(0x1601, 0x0800), .driver_data = pbn_b0_4_1250000 },
--- 
-2.7.4
+Seems like both device_property_present() and gpiod_count()
+eventually call into acpi_data_get_property().
 
+However, given
+commit 6fe9da42f1d98fdb4be1598e230aca97e66cf35d
+Author: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date:   Tue May 23 20:03:20 2017 +0300
+
+    gpio: acpi: Synchronize acpi_find_gpio() and acpi_gpio_count()
+
+    If we pass connection ID to the both functions and at the same time
+    acpi_can_fallback_to_crs() returns false we will get different results,
+    i.e. the number of GPIO resources returned by acpi_gpio_count() might be
+    not correct.
+
+    Fix this by calling acpi_can_fallback_to_crs() in acpi_gpio_count()
+    before trying to fallback.
+
+acpi_find_gpio() and acpi_gpio_count() are supposed to use the exact
+same logic, so this patch is not gonna work as intended?!?
+
+Note that I still find it strange that acpi_find_gpio() falls back to
+unnamed gpios if con_id != NULL, causing the problem in the first place.
+This is gonna bite us again later...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
