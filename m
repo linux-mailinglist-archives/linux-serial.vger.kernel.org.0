@@ -2,408 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F09BE9062D
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Aug 2019 18:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43774912AC
+	for <lists+linux-serial@lfdr.de>; Sat, 17 Aug 2019 21:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726941AbfHPQvf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 16 Aug 2019 12:51:35 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:60045 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727167AbfHPQvf (ORCPT
+        id S1726163AbfHQTXq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 17 Aug 2019 15:23:46 -0400
+Received: from castor.sanantonio.cl ([164.77.200.51]:43524 "EHLO
+        castor.sanantonio.cl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725929AbfHQTXq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 16 Aug 2019 12:51:35 -0400
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hyfRq-0006rx-NA; Fri, 16 Aug 2019 16:51:31 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH] serial: 8250_pci: Merge 8250_moxa to 8250_pci
-Date:   Sat, 17 Aug 2019 00:51:24 +0800
-Message-Id: <20190816165124.16942-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 17 Aug 2019 15:23:46 -0400
+X-Greylist: delayed 900 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Aug 2019 15:23:46 EDT
+DKIM-Signature: v=1; a=rsa-sha256; d=sanantonio.cl; s=default; c=relaxed/simple;
+        q=dns/txt; i=@sanantonio.cl; t=1566068896; x=1568660896;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RKsJJiN0pMYulWbDWfm7WUzIUW/UCZmSOFm0xHEfrw4=;
+        b=L4kYj0QhRNJXSj9XDbp4KnDBm95PiFQKUgpABHafLUtTF/9sfTqfnjLFfbBemk2r
+        acohsOvMTxASBbZO2IDDGE8VXUhPdssps+2RpcZl3q7JIqN+MkLrQvLzAgJLzEsR
+        uO6Rtg1NzaTxwdYzj/dJKWP5mDl/vYa8X10ybrm6NNM=;
+X-AuditID: c0a80004-ff933a8000006fd4-fb-5d585084cf06
+Received: from Tyche.sanantonio.cl ( [192.168.0.21])
+        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        by castor.sanantonio.cl (Symantec Messaging Gateway) with SMTP id B5.91.28628.480585D5; Sat, 17 Aug 2019 15:07:50 -0400 (-04)
+To:     undisclosed-recipients:;
+Received: from TYCHE.sanantonio.cl ([fe80::909e:b2f0:3cf5:374c]) by
+ Tyche.sanantonio.cl ([fe80::909e:b2f0:3cf5:374c%15]) with mapi id
+ 14.03.0439.000; Thu, 15 Aug 2019 21:06:19 -0400
+From:   Juan Carlos Chavarria Maldonado <jchavarria@sanantonio.cl>
+CC:     "vikm@gmail.com" <vikm@gmail.com>
+Subject: contacto
+Thread-Topic: contacto
+Thread-Index: AdVTzs8o0UaYoMt6SPOrEx/shHuSqQ==
+Date:   Fri, 16 Aug 2019 01:06:18 +0000
+Message-ID: <FEC091A7C1C16F49B776F3E1F967FC16243B61C4@Tyche.sanantonio.cl>
+Accept-Language: es-ES, es-CL, en-US
+Content-Language: es-ES
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [197.210.45.238]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTVxzGOffclwojqwjzBP3gyJapieCyZf6XKSExMXdLyEz2YehGuqs2
+        gJJi2rpMky1Qtk6wUMOaUcsQBnWxUF4i1lIpU8uobIJ0q0psgbWWDgVWpyki0JHd0i3j25Pz
+        PL/nvPyPBKdNs5mSEoVarlQIpVlsMn39YlLGDv3+gsKd/mgG3J/xcGCo/pOCxpsWDFp3OQtn
+        NHsh9m0PBX8vI/jtvo4FfXUHDY1VZg6cYy0I7MEvWfhG38vCs+87KHD7XRiiGjcF5v4qBtzW
+        MQ7s1z0UtBkqMFi0CwguR/oZ8AemaLj2wxAHNZU2Djou3MNwe0xUnUs6Bq56tBTEHn/NwOz5
+        aQwRr4OBJnMdBXZrPQu/XNGwsDSox9BumqGg0rXIQGv0AQO1/aVgNfUheB4V+Tvt3Rh85w0s
+        OI0iNb6yG5533ELwXc0DDIv6EQS2xmcYpuabaOi+q0HgC7bT0DNgo6CzIoBhoEbc2v6wFYPh
+        YRUGs3OWg8mwTnydxxEGppbF6zl7Kym41PUE5w0h3tjmwbzvno3i/5r3M3y/7xjvmLyJeK//
+        LMd3TrzBW+ebOX6wzUrxDtMEx5uCrSzvmzYy/HzYxPEh3TDLt4wO0vzIjQV6/46DKbsPCepP
+        PygpUuTkfpJS3DlnoY9r8Wd9P0XochSjqtE6CZG+SSpmukWdLEmTNlBkbiBIx4106WbS2BBi
+        EoYDEdvK0CrBSvPI3Zh+NYSlr5KY8TSO6w3S9cThrsEJ+CXirRvjEjqbDLX8sZqnxbwm0Lfa
+        kyp9jzSExtm4RtJXSJd2ESU6N5JJg45JnE5KzM5RnNAZ5FFo5d/1LKJfmBU7JWJ+G+m6mpNA
+        XyaGM0EuUb+e/Hxuij6LNpjWtJr+J0xrCNMaohnRbSj9sKBSlymzVYJCUKjLFCVl2YdLL6HE
+        j6d7Ub1lrwtREuRCRIKz0lNrdxYUpqUeEU6ekivLZMoTpXKVC22S0FkbU794yhWmSYsEtfyY
+        XH5crvzPpSTr4nRyZrpKrjgiVwon1MWy+MBkKnFimeWoYbusPTK8dGCuT/32W3m39n14Lmd5
+        7s6W2yfzm2T5zYJxk+lHw9KuaOTJOzmf2y++uOfdWllSeGVzUui1iX1Fni3RXY+StlVrfl0e
+        3vo0XJhcO3It8P7CuDL3suV0/ilO0TOqJEeFlNyWg1t/9050f3W0bo83Gvj4o7zJyAt19Qdu
+        FISzaFWx8Pp2rFQJ/wCVo/mW+gMAAA==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Moxa serial boards only need a special setup function, we can use
-generic 8250 framework for other parts.
-
-So let's merge 8250_moxa to 8250_pci.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/tty/serial/8250/8250_moxa.c | 155 ----------------------------
- drivers/tty/serial/8250/8250_pci.c  | 113 +++++++++++++++++---
- drivers/tty/serial/8250/Kconfig     |  10 --
- drivers/tty/serial/8250/Makefile    |   1 -
- 4 files changed, 99 insertions(+), 180 deletions(-)
- delete mode 100644 drivers/tty/serial/8250/8250_moxa.c
-
-diff --git a/drivers/tty/serial/8250/8250_moxa.c b/drivers/tty/serial/8250/8250_moxa.c
-deleted file mode 100644
-index 1ee4cd94d4fa..000000000000
---- a/drivers/tty/serial/8250/8250_moxa.c
-+++ /dev/null
-@@ -1,155 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * 8250_moxa.c - MOXA Smartio/Industio MUE multiport serial driver.
-- *
-- * Author: Mathieu OTHACEHE <m.othacehe@gmail.com>
-- */
--
--#include <linux/module.h>
--#include <linux/pci.h>
--
--#include "8250.h"
--
--#define	PCI_DEVICE_ID_MOXA_CP102E	0x1024
--#define	PCI_DEVICE_ID_MOXA_CP102EL	0x1025
--#define	PCI_DEVICE_ID_MOXA_CP104EL_A	0x1045
--#define	PCI_DEVICE_ID_MOXA_CP114EL	0x1144
--#define	PCI_DEVICE_ID_MOXA_CP116E_A_A	0x1160
--#define	PCI_DEVICE_ID_MOXA_CP116E_A_B	0x1161
--#define	PCI_DEVICE_ID_MOXA_CP118EL_A	0x1182
--#define	PCI_DEVICE_ID_MOXA_CP118E_A_I	0x1183
--#define	PCI_DEVICE_ID_MOXA_CP132EL	0x1322
--#define	PCI_DEVICE_ID_MOXA_CP134EL_A	0x1342
--#define	PCI_DEVICE_ID_MOXA_CP138E_A	0x1381
--#define	PCI_DEVICE_ID_MOXA_CP168EL_A	0x1683
--
--#define MOXA_BASE_BAUD 921600
--#define MOXA_UART_OFFSET 0x200
--#define MOXA_BASE_BAR 1
--
--struct moxa8250_board {
--	unsigned int num_ports;
--	int line[0];
--};
--
--enum {
--	moxa8250_2p = 0,
--	moxa8250_4p,
--	moxa8250_8p
--};
--
--static struct moxa8250_board moxa8250_boards[] = {
--	[moxa8250_2p] = { .num_ports = 2},
--	[moxa8250_4p] = { .num_ports = 4},
--	[moxa8250_8p] = { .num_ports = 8},
--};
--
--static int moxa8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
--{
--	struct uart_8250_port uart;
--	struct moxa8250_board *brd;
--	void __iomem *ioaddr;
--	resource_size_t baseaddr;
--	unsigned int i, nr_ports;
--	unsigned int offset;
--	int ret;
--
--	brd = &moxa8250_boards[id->driver_data];
--	nr_ports = brd->num_ports;
--
--	ret = pcim_enable_device(pdev);
--	if (ret)
--		return ret;
--
--	brd = devm_kzalloc(&pdev->dev, sizeof(struct moxa8250_board) +
--			   sizeof(unsigned int) * nr_ports, GFP_KERNEL);
--	if (!brd)
--		return -ENOMEM;
--	brd->num_ports = nr_ports;
--
--	memset(&uart, 0, sizeof(struct uart_8250_port));
--
--	uart.port.dev = &pdev->dev;
--	uart.port.irq = pdev->irq;
--	uart.port.uartclk = MOXA_BASE_BAUD * 16;
--	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF | UPF_SHARE_IRQ;
--
--	baseaddr = pci_resource_start(pdev, MOXA_BASE_BAR);
--	ioaddr = pcim_iomap(pdev, MOXA_BASE_BAR, 0);
--	if (!ioaddr)
--		return -ENOMEM;
--
--	for (i = 0; i < nr_ports; i++) {
--
--		/*
--		 * MOXA Smartio MUE boards with 4 ports have
--		 * a different offset for port #3
--		 */
--		if (nr_ports == 4 && i == 3)
--			offset = 7 * MOXA_UART_OFFSET;
--		else
--			offset = i * MOXA_UART_OFFSET;
--
--		uart.port.iotype = UPIO_MEM;
--		uart.port.iobase = 0;
--		uart.port.mapbase = baseaddr + offset;
--		uart.port.membase = ioaddr + offset;
--		uart.port.regshift = 0;
--
--		dev_dbg(&pdev->dev, "Setup PCI port: port %lx, irq %d, type %d\n",
--			uart.port.iobase, uart.port.irq, uart.port.iotype);
--
--		brd->line[i] = serial8250_register_8250_port(&uart);
--		if (brd->line[i] < 0) {
--			dev_err(&pdev->dev,
--				"Couldn't register serial port %lx, irq %d, type %d, error %d\n",
--				uart.port.iobase, uart.port.irq,
--				uart.port.iotype, brd->line[i]);
--			break;
--		}
--	}
--
--	pci_set_drvdata(pdev, brd);
--	return 0;
--}
--
--static void moxa8250_remove(struct pci_dev *pdev)
--{
--	struct moxa8250_board *brd = pci_get_drvdata(pdev);
--	unsigned int i;
--
--	for (i = 0; i < brd->num_ports; i++)
--		serial8250_unregister_port(brd->line[i]);
--}
--
--#define MOXA_DEVICE(id, data) { PCI_VDEVICE(MOXA, id), (kernel_ulong_t)data }
--
--static const struct pci_device_id pci_ids[] = {
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP102E, moxa8250_2p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP102EL, moxa8250_2p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP104EL_A, moxa8250_4p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP114EL, moxa8250_4p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP116E_A_A, moxa8250_8p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP116E_A_B, moxa8250_8p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP118EL_A, moxa8250_8p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP118E_A_I, moxa8250_8p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP132EL, moxa8250_2p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP134EL_A, moxa8250_4p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP138E_A, moxa8250_8p),
--	MOXA_DEVICE(PCI_DEVICE_ID_MOXA_CP168EL_A, moxa8250_8p),
--	{0}
--};
--MODULE_DEVICE_TABLE(pci, pci_ids);
--
--static struct pci_driver moxa8250_pci_driver = {
--	.name           = "8250_moxa",
--	.id_table       = pci_ids,
--	.probe          = moxa8250_probe,
--	.remove         = moxa8250_remove,
--};
--
--module_pci_driver(moxa8250_pci_driver);
--
--MODULE_AUTHOR("Mathieu OTHACEHE");
--MODULE_DESCRIPTION("MOXA SmartIO MUE driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index c0d10a35bf70..76d58bddeb06 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -1827,6 +1827,22 @@ pci_sunix_setup(struct serial_private *priv,
- 	return setup_port(priv, port, bar, offset, 0);
- }
- 
-+static int
-+pci_moxa_setup(struct serial_private *priv,
-+		const struct pciserial_board *board,
-+		struct uart_8250_port *port, int idx)
-+{
-+	unsigned int bar = FL_GET_BASE(board->flags);
-+	int offset;
-+
-+	if (board->num_ports == 4 && idx == 3)
-+		offset = 7 * board->uart_offset;
-+	else
-+		offset = idx * board->uart_offset;
-+
-+	return setup_port(priv, port, bar, offset, 0);
-+}
-+
- #define PCI_VENDOR_ID_SBSMODULARIO	0x124B
- #define PCI_SUBVENDOR_ID_SBSMODULARIO	0x124B
- #define PCI_DEVICE_ID_OCTPRO		0x0001
-@@ -1931,6 +1947,18 @@ pci_sunix_setup(struct serial_private *priv,
- #define PCIE_DEVICE_ID_NI_PXIE8431_4858	0x74C4
- #define PCIE_DEVICE_ID_NI_PXIE8431_48516	0x74C3
- 
-+#define	PCI_DEVICE_ID_MOXA_CP102E	0x1024
-+#define	PCI_DEVICE_ID_MOXA_CP102EL	0x1025
-+#define	PCI_DEVICE_ID_MOXA_CP104EL_A	0x1045
-+#define	PCI_DEVICE_ID_MOXA_CP114EL	0x1144
-+#define	PCI_DEVICE_ID_MOXA_CP116E_A_A	0x1160
-+#define	PCI_DEVICE_ID_MOXA_CP116E_A_B	0x1161
-+#define	PCI_DEVICE_ID_MOXA_CP118EL_A	0x1182
-+#define	PCI_DEVICE_ID_MOXA_CP118E_A_I	0x1183
-+#define	PCI_DEVICE_ID_MOXA_CP132EL	0x1322
-+#define	PCI_DEVICE_ID_MOXA_CP134EL_A	0x1342
-+#define	PCI_DEVICE_ID_MOXA_CP138E_A	0x1381
-+#define	PCI_DEVICE_ID_MOXA_CP168EL_A	0x1683
- 
- /* Unknown vendors/cards - this should not be in linux/pci_ids.h */
- #define PCI_SUBDEVICE_ID_UNKNOWN_0x1584	0x1584
-@@ -2781,6 +2809,16 @@ static struct pci_serial_quirk pci_serial_quirks[] __refdata = {
- 		.setup		= pci_fintek_setup,
- 		.init		= pci_fintek_init,
- 	},
-+	/*
-+	 * MOXA
-+	 */
-+	{
-+		.vendor		= PCI_VENDOR_ID_MOXA,
-+		.device		= PCI_ANY_ID,
-+		.subvendor	= PCI_ANY_ID,
-+		.subdevice	= PCI_ANY_ID,
-+		.setup		= pci_moxa_setup,
-+	},
- 
- 	/*
- 	 * Default "match everything" terminator entry
-@@ -2987,6 +3025,9 @@ enum pci_board_num_t {
- 	pbn_sunix_pci_4s,
- 	pbn_sunix_pci_8s,
- 	pbn_sunix_pci_16s,
-+	pbn_moxa8250_2p,
-+	pbn_moxa8250_4p,
-+	pbn_moxa8250_8p,
- };
- 
- /*
-@@ -3798,6 +3839,24 @@ static struct pciserial_board pci_boards[] = {
- 		.base_baud      = 921600,
- 		.uart_offset	= 0x8,
- 	},
-+	[pbn_moxa8250_2p] = {
-+		.flags		= FL_BASE1,
-+		.num_ports      = 2,
-+		.base_baud      = 921600,
-+		.uart_offset	= 0x200,
-+	},
-+	[pbn_moxa8250_4p] = {
-+		.flags		= FL_BASE1,
-+		.num_ports      = 4,
-+		.base_baud      = 921600,
-+		.uart_offset	= 0x200,
-+	},
-+	[pbn_moxa8250_8p] = {
-+		.flags		= FL_BASE1,
-+		.num_ports      = 8,
-+		.base_baud      = 921600,
-+		.uart_offset	= 0x200,
-+	},
- };
- 
- static const struct pci_device_id blacklist[] = {
-@@ -3811,20 +3870,6 @@ static const struct pci_device_id blacklist[] = {
- 	{ PCI_DEVICE(0x4348, 0x5053), }, /* WCH CH353 1S1P */
- 	{ PCI_DEVICE(0x1c00, 0x3250), }, /* WCH CH382 2S1P */
- 
--	/* Moxa Smartio MUE boards handled by 8250_moxa */
--	{ PCI_VDEVICE(MOXA, 0x1024), },
--	{ PCI_VDEVICE(MOXA, 0x1025), },
--	{ PCI_VDEVICE(MOXA, 0x1045), },
--	{ PCI_VDEVICE(MOXA, 0x1144), },
--	{ PCI_VDEVICE(MOXA, 0x1160), },
--	{ PCI_VDEVICE(MOXA, 0x1161), },
--	{ PCI_VDEVICE(MOXA, 0x1182), },
--	{ PCI_VDEVICE(MOXA, 0x1183), },
--	{ PCI_VDEVICE(MOXA, 0x1322), },
--	{ PCI_VDEVICE(MOXA, 0x1342), },
--	{ PCI_VDEVICE(MOXA, 0x1381), },
--	{ PCI_VDEVICE(MOXA, 0x1683), },
--
- 	/* Intel platforms with MID UART */
- 	{ PCI_VDEVICE(INTEL, 0x081b), },
- 	{ PCI_VDEVICE(INTEL, 0x081c), },
-@@ -5407,6 +5452,46 @@ static const struct pci_device_id serial_pci_tbl[] = {
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
- 		pbn_ni8431_4 },
- 
-+	/*
-+	 * MOXA
-+	 */
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP102E,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_2p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP102EL,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_2p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP104EL_A,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_4p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP114EL,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_4p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP116E_A_A,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_8p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP116E_A_B,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_8p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP118EL_A,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_8p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP118E_A_I,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_8p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP132EL,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_2p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP134EL_A,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_4p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP138E_A,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_8p },
-+	{	PCI_VENDOR_ID_MOXA, PCI_DEVICE_ID_MOXA_CP168EL_A,
-+		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-+		pbn_moxa8250_8p },
-+
- 	/*
- 	* ADDI-DATA GmbH communication cards <info@addi-data.com>
- 	*/
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index ff5d142bbd70..7ef60f8b6e2c 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -468,16 +468,6 @@ config SERIAL_8250_MID
- 	  present on the UART found on Intel Medfield SOC and various other
- 	  Intel platforms.
- 
--config SERIAL_8250_MOXA
--	tristate "MOXA SmartIO MUE support"
--	depends on SERIAL_8250 && PCI
--	help
--	  Say Y here if you have a Moxa SmartIO MUE multiport serial card.
--	  If unsure, say N.
--
--	  This driver can also be built as a module. The module will be called
--	  8250_moxa. If you want to do that, say M here.
--
- config SERIAL_8250_PXA
- 	tristate "PXA serial port support"
- 	depends on SERIAL_8250
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index 9b451d81588b..08c1d8117506 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -35,7 +35,6 @@ obj-$(CONFIG_SERIAL_8250_UNIPHIER)	+= 8250_uniphier.o
- obj-$(CONFIG_SERIAL_8250_INGENIC)	+= 8250_ingenic.o
- obj-$(CONFIG_SERIAL_8250_LPSS)		+= 8250_lpss.o
- obj-$(CONFIG_SERIAL_8250_MID)		+= 8250_mid.o
--obj-$(CONFIG_SERIAL_8250_MOXA)		+= 8250_moxa.o
- obj-$(CONFIG_SERIAL_8250_PXA)		+= 8250_pxa.o
- obj-$(CONFIG_SERIAL_OF_PLATFORM)	+= 8250_of.o
- 
--- 
-2.17.1
-
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVGVuZ28gdW4gcHJveWVjdG8gZGUgY2Fy
+aWRhZCBwYXJhIHRpLiBlbiBjb250YWN0byBjb24gbWkgY29ycmVvIGVsZWN0csOzbmljbyBwcml2
+YWRvIHBhcmEgbcOhcyBkZXRhbGxlcy4gKHZpa21yY2MyMUBvdXRsb29rLmNvbTxodHRwczovL21h
+aWwuZ29vZ2xlLmNvbS9tYWlsL3UvMC9oLzEzM2Q1aGFucXNnanIvPyZjcz13aCZ2PWImdG89dmlr
+bXJjYzIxQG91dGxvb2suY29tPuKAiynigIvigIvigIvigIvigIvigIvigIvigIvigIsuLi4uDQo=
