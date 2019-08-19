@@ -2,257 +2,128 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 579DA94A0C
-	for <lists+linux-serial@lfdr.de>; Mon, 19 Aug 2019 18:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722D094EFE
+	for <lists+linux-serial@lfdr.de>; Mon, 19 Aug 2019 22:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727808AbfHSQc1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 19 Aug 2019 12:32:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55432 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728036AbfHSQcK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 19 Aug 2019 12:32:10 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 011DDB632;
-        Mon, 19 Aug 2019 16:32:08 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v5 17/17] Input: add IOC3 serio driver
-Date:   Mon, 19 Aug 2019 18:31:40 +0200
-Message-Id: <20190819163144.3478-18-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20190819163144.3478-1-tbogendoerfer@suse.de>
-References: <20190819163144.3478-1-tbogendoerfer@suse.de>
+        id S1728430AbfHSU3U (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 19 Aug 2019 16:29:20 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:4862 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727988AbfHSU3S (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 19 Aug 2019 16:29:18 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d5b069d0000>; Mon, 19 Aug 2019 13:29:17 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 19 Aug 2019 13:29:18 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 19 Aug 2019 13:29:18 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 19 Aug
+ 2019 20:29:17 +0000
+Received: from [10.2.167.147] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 19 Aug
+ 2019 20:29:16 +0000
+Subject: Re: [PATCH 10/14] serial: tegra: add support to use 8 bytes trigger
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <thierry.reding@gmail.com>,
+        <ldewangan@nvidia.com>, <jslaby@suse.com>
+CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Shardar Shariff Md" <smohammed@nvidia.com>
+References: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
+ <1565609303-27000-11-git-send-email-kyarlagadda@nvidia.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <dda0d866-ae7a-8655-7b26-4c28249c0be8@nvidia.com>
+Date:   Mon, 19 Aug 2019 21:29:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <1565609303-27000-11-git-send-email-kyarlagadda@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1566246557; bh=WyjGFMCx57IDIkIARHgc/p/3DlhW1CTKBnwe7XnjJY8=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=MWtSopOR49l87pUtrMYz3a1WgQUITI3/vrtW8PIEM/d5lyR+MgP4+2FviE+v2getX
+         wwB9d+NUWSNlhdaU2fl9UMMKBbvYsVUmUvwx8LZX/J8UIlUXZs9wegKw6spKfCrNTm
+         /j8xTB3QrqedefG4bJivLueowAphXQWodyuHfeCOaL34j1Hc/OuPqDveB+mu0pL8Bg
+         mjhkk8FX0vGA8SjBFN8Op5/wgpFAyU+j3k0suK9tqWDoSSzXht1dSqIrvtG9UjVBi4
+         tuxb4KWAWcEvJxuNDnumqfJ8oVUVcW0DOPjS2qvwP36OQOh4YNfn/piFxOabaEHYfc
+         uUtxMU13PRwCw==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This patch adds a platform driver for supporting keyboard and mouse
-interface of SGI IOC3 chips.
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- drivers/input/serio/Kconfig   |  10 +++
- drivers/input/serio/Makefile  |   1 +
- drivers/input/serio/ioc3kbd.c | 160 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 171 insertions(+)
- create mode 100644 drivers/input/serio/ioc3kbd.c
+On 12/08/2019 12:28, Krishna Yarlagadda wrote:
+> From: Shardar Shariff Md <smohammed@nvidia.com>
+> 
+> Add support to use 8 bytes trigger for Tegra186 SOC.
+> 
+> Signed-off-by: Shardar Shariff Md <smohammed@nvidia.com>
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  drivers/tty/serial/serial-tegra.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
+> index 329923c..03d1d20 100644
+> --- a/drivers/tty/serial/serial-tegra.c
+> +++ b/drivers/tty/serial/serial-tegra.c
+> @@ -88,6 +88,7 @@ struct tegra_uart_chip_data {
+>  	bool	support_clk_src_div;
+>  	bool	fifo_mode_enable_status;
+>  	int	uart_max_port;
+> +	int	dma_burst_bytes;
 
-diff --git a/drivers/input/serio/Kconfig b/drivers/input/serio/Kconfig
-index f3e18f8ef9ca..373a1646019e 100644
---- a/drivers/input/serio/Kconfig
-+++ b/drivers/input/serio/Kconfig
-@@ -165,6 +165,16 @@ config SERIO_MACEPS2
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called maceps2.
- 
-+config SERIO_SGI_IOC3
-+	tristate "SGI IOC3 PS/2 controller"
-+	depends on SGI_MFD_IOC3
-+	help
-+	  Say Y here if you have an SGI Onyx2, SGI Octane or IOC3 PCI card
-+	  and you want to attach and use a keyboard, mouse, or both.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called ioc3kbd.
-+
- config SERIO_LIBPS2
- 	tristate "PS/2 driver library"
- 	depends on SERIO_I8042 || SERIO_I8042=n
-diff --git a/drivers/input/serio/Makefile b/drivers/input/serio/Makefile
-index 67950a5ccb3f..6d97bad7b844 100644
---- a/drivers/input/serio/Makefile
-+++ b/drivers/input/serio/Makefile
-@@ -20,6 +20,7 @@ obj-$(CONFIG_HIL_MLC)		+= hp_sdc_mlc.o hil_mlc.o
- obj-$(CONFIG_SERIO_PCIPS2)	+= pcips2.o
- obj-$(CONFIG_SERIO_PS2MULT)	+= ps2mult.o
- obj-$(CONFIG_SERIO_MACEPS2)	+= maceps2.o
-+obj-$(CONFIG_SERIO_SGI_IOC3)	+= ioc3kbd.o
- obj-$(CONFIG_SERIO_LIBPS2)	+= libps2.o
- obj-$(CONFIG_SERIO_RAW)		+= serio_raw.o
- obj-$(CONFIG_SERIO_AMS_DELTA)	+= ams_delta_serio.o
-diff --git a/drivers/input/serio/ioc3kbd.c b/drivers/input/serio/ioc3kbd.c
-new file mode 100644
-index 000000000000..32df2743c27f
---- /dev/null
-+++ b/drivers/input/serio/ioc3kbd.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SGI IOC3 PS/2 controller driver for linux
-+ *
-+ * Copyright (C) 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
-+ *
-+ * Based on code Copyright (C) 2005 Stanislaw Skowronek <skylark@unaligned.org>
-+ *               Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/serio.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#include <asm/sn/ioc3.h>
-+
-+struct ioc3kbd_data {
-+	struct ioc3_serioregs __iomem *regs;
-+	struct serio *kbd, *aux;
-+	int irq;
-+};
-+
-+static int ioc3kbd_write(struct serio *dev, u8 val)
-+{
-+	struct ioc3kbd_data *d = dev->port_data;
-+	unsigned long timeout = 0;
-+	u32 mask;
-+
-+	mask = (dev == d->aux) ? KM_CSR_M_WRT_PEND : KM_CSR_K_WRT_PEND;
-+	while ((readl(&d->regs->km_csr) & mask) && (timeout < 1000)) {
-+		udelay(100);
-+		timeout++;
-+	}
-+
-+	if (timeout >= 1000)
-+		return -ETIMEDOUT;
-+
-+	writel(val, dev == d->aux ? &d->regs->m_wd : &d->regs->k_wd);
-+
-+	return 0;
-+}
-+
-+static irqreturn_t ioc3kbd_intr(int itq, void *dev_id)
-+{
-+	struct ioc3kbd_data *d = dev_id;
-+	u32 data_k, data_m;
-+
-+	data_k = readl(&d->regs->k_rd);
-+	data_m = readl(&d->regs->m_rd);
-+
-+	if (data_k & KM_RD_VALID_0)
-+		serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_0_SHIFT) & 0xff,
-+				0);
-+	if (data_k & KM_RD_VALID_1)
-+		serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_1_SHIFT) & 0xff,
-+				0);
-+	if (data_k & KM_RD_VALID_2)
-+		serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_2_SHIFT) & 0xff,
-+				0);
-+	if (data_m & KM_RD_VALID_0)
-+		serio_interrupt(d->aux, (data_m >> KM_RD_DATA_0_SHIFT) & 0xff,
-+				0);
-+	if (data_m & KM_RD_VALID_1)
-+		serio_interrupt(d->aux, (data_m >> KM_RD_DATA_1_SHIFT) & 0xff,
-+				0);
-+	if (data_m & KM_RD_VALID_2)
-+		serio_interrupt(d->aux, (data_m >> KM_RD_DATA_2_SHIFT) & 0xff,
-+				0);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ioc3kbd_probe(struct platform_device *pdev)
-+{
-+	struct ioc3_serioregs __iomem *regs;
-+	struct device *dev = &pdev->dev;
-+	struct ioc3kbd_data *d;
-+	struct serio *sk, *sa;
-+	int irq, ret;
-+
-+	regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(regs))
-+		return PTR_ERR(regs);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return -ENXIO;
-+
-+	d = devm_kzalloc(dev, sizeof(*d), GFP_KERNEL);
-+	if (!d)
-+		return -ENOMEM;
-+
-+	sk = kzalloc(sizeof(*sk), GFP_KERNEL);
-+	if (!sk)
-+		return -ENOMEM;
-+
-+	sa = kzalloc(sizeof(*sa), GFP_KERNEL);
-+	if (!sa) {
-+		kfree(sk);
-+		return -ENOMEM;
-+	}
-+
-+	sk->id.type = SERIO_8042;
-+	sk->write = ioc3kbd_write;
-+	snprintf(sk->name, sizeof(sk->name), "IOC3 keyboard %d", pdev->id);
-+	snprintf(sk->phys, sizeof(sk->phys), "ioc3/serio%dkbd", pdev->id);
-+	sk->port_data = d;
-+	sk->dev.parent = dev;
-+
-+	sa->id.type = SERIO_8042;
-+	sa->write = ioc3kbd_write;
-+	snprintf(sa->name, sizeof(sa->name), "IOC3 auxiliary %d", pdev->id);
-+	snprintf(sa->phys, sizeof(sa->phys), "ioc3/serio%daux", pdev->id);
-+	sa->port_data = d;
-+	sa->dev.parent = dev;
-+
-+	d->regs = regs;
-+	d->kbd = sk;
-+	d->aux = sa;
-+	d->irq = irq;
-+
-+	platform_set_drvdata(pdev, d);
-+	serio_register_port(d->kbd);
-+	serio_register_port(d->aux);
-+
-+	ret = request_irq(irq, ioc3kbd_intr, IRQF_SHARED, "ioc3-kbd", d);
-+	if (ret) {
-+		dev_err(dev, "could not request IRQ %d\n", irq);
-+		serio_unregister_port(d->kbd);
-+		serio_unregister_port(d->aux);
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+static int ioc3kbd_remove(struct platform_device *pdev)
-+{
-+	struct ioc3kbd_data *d = platform_get_drvdata(pdev);
-+
-+	free_irq(d->irq, d);
-+	serio_unregister_port(d->kbd);
-+	serio_unregister_port(d->aux);
-+	return 0;
-+}
-+
-+static struct platform_driver ioc3kbd_driver = {
-+	.probe          = ioc3kbd_probe,
-+	.remove         = ioc3kbd_remove,
-+	.driver = {
-+		.name = "ioc3-kbd",
-+	},
-+};
-+module_platform_driver(ioc3kbd_driver);
-+
-+MODULE_AUTHOR("Thomas Bogendoerfer <tbogendoerfer@suse.de>");
-+MODULE_DESCRIPTION("SGI IOC3 serio driver");
-+MODULE_LICENSE("GPL");
+I assume that this is a maximum, so why not say max_dma_burst_bytes?
+
+>  };
+>  
+>  struct tegra_uart_port {
+> @@ -933,7 +934,12 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
+>  	 * programmed in the DMA registers.
+>  	 */
+>  	tup->fcr_shadow = UART_FCR_ENABLE_FIFO;
+> -	tup->fcr_shadow |= UART_FCR_R_TRIG_01;
+> +
+> +	if (tup->cdata->dma_burst_bytes == 8)
+> +		tup->fcr_shadow |= UART_FCR_R_TRIG_10;
+> +	else
+> +		tup->fcr_shadow |= UART_FCR_R_TRIG_01;
+> +
+>  	tup->fcr_shadow |= TEGRA_UART_TX_TRIG_16B;
+>  	tegra_uart_write(tup, tup->fcr_shadow, UART_FCR);
+>  
+> @@ -1046,7 +1052,7 @@ static int tegra_uart_dma_channel_allocate(struct tegra_uart_port *tup,
+>  		}
+>  		dma_sconfig.src_addr = tup->uport.mapbase;
+>  		dma_sconfig.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+> -		dma_sconfig.src_maxburst = 4;
+> +		dma_sconfig.src_maxburst = tup->cdata->dma_burst_bytes;
+>  		tup->rx_dma_chan = dma_chan;
+>  		tup->rx_dma_buf_virt = dma_buf;
+>  		tup->rx_dma_buf_phys = dma_phys;
+> @@ -1325,6 +1331,7 @@ static struct tegra_uart_chip_data tegra20_uart_chip_data = {
+>  	.support_clk_src_div		= false,
+>  	.fifo_mode_enable_status	= false,
+>  	.uart_max_port			= 5,
+> +	.dma_burst_bytes		= 4,
+
+Isn't it simpler to store the TRIG value here?
+
+Jon
+
 -- 
-2.13.7
-
+nvpublic
