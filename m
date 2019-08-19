@@ -2,128 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 722D094EFE
-	for <lists+linux-serial@lfdr.de>; Mon, 19 Aug 2019 22:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D49951EA
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 01:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728430AbfHSU3U (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 19 Aug 2019 16:29:20 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:4862 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727988AbfHSU3S (ORCPT
+        id S1728758AbfHSXwC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 19 Aug 2019 19:52:02 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:44840 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728578AbfHSXwC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 19 Aug 2019 16:29:18 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d5b069d0000>; Mon, 19 Aug 2019 13:29:17 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 19 Aug 2019 13:29:18 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 19 Aug 2019 13:29:18 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 19 Aug
- 2019 20:29:17 +0000
-Received: from [10.2.167.147] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 19 Aug
- 2019 20:29:16 +0000
-Subject: Re: [PATCH 10/14] serial: tegra: add support to use 8 bytes trigger
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <thierry.reding@gmail.com>,
-        <ldewangan@nvidia.com>, <jslaby@suse.com>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Shardar Shariff Md" <smohammed@nvidia.com>
-References: <1565609303-27000-1-git-send-email-kyarlagadda@nvidia.com>
- <1565609303-27000-11-git-send-email-kyarlagadda@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <dda0d866-ae7a-8655-7b26-4c28249c0be8@nvidia.com>
-Date:   Mon, 19 Aug 2019 21:29:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 19 Aug 2019 19:52:02 -0400
+Received: by mail-qk1-f195.google.com with SMTP id d79so3007256qke.11
+        for <linux-serial@vger.kernel.org>; Mon, 19 Aug 2019 16:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=a/2XLdHfSdB0b6RIPrdy3mFXWwjPe+7l5bCqv2Lo3ZU=;
+        b=mXpS0Puu27Rc54x05eebbDC0TGOxOcF7pPi9XLEJQiWepOTmboPHwcQutctjuE40SV
+         0vOgp8/QSdSXeBFFS97m7rsH3qEZpkzmX9p/PGQIxU3bHembgxm4G8aoq49hGpkHYbuB
+         fAo1Y5lgdMQn00YqCCJSGNFeAC+3IW7qj7JueJ2s2hYsplYGuPquLdsDCiZlg6nflUYS
+         QKBnReyxrhpMPgaJtFUjqoXxZkCn02tA+QzvbR9x8qBKQMcTiM7CjkH8jWM2V5iTkpdM
+         wovjXVvFfFP4VWCDNZiYXCLexf+qZsD03+XmfJZzxsd8qOCXvyVBC1VOMorVC8HSTAAr
+         i5rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=a/2XLdHfSdB0b6RIPrdy3mFXWwjPe+7l5bCqv2Lo3ZU=;
+        b=F6Pa7p42Ab3e4nfcnMk/rCYYOgOu139PSUlyyW+fgT1wVXr8HM3wzBfxEkY6E10DpH
+         35HVBh1BVJgDtcNom2HtZgXNMPxEMmo9t0rBZ+PNhlRQMMNJDha7yOEGR0lM87WbCtKl
+         sTtv/WYSsStKRmKz4t/XLxvHIO7vgJ49PmzIZjRTe4UsBCll0BrX0/eGvG5kcrluFFE8
+         nXo3OqU3xvhEsKDQLopYLjExGsXtgdebhE5VWLoHIxT3nYPfkCnCFvgkHilrNS9nkJJs
+         ckPrKzDIsjgGFZUxH6tfgwKoHeetZGbctYC1aqGwf4e/QLc03pOqWPbj2Ck/Mm8Ee6Ux
+         iUSA==
+X-Gm-Message-State: APjAAAVJn5+0qgTMcXgQ5IZMOdymKpJE2DJzcfpZLxWcYzZZQBwH3qpc
+        CTx57tMM7GjPG2ZqS+hAzwX1dw==
+X-Google-Smtp-Source: APXvYqwGNe8Ex149O1rS0+k/zybKrFzFtdGIiowvDePNSIyU8GYvbJ3wuW4uS2CwSOOrujZstu9ViA==
+X-Received: by 2002:a05:620a:1590:: with SMTP id d16mr23669201qkk.18.1566258721246;
+        Mon, 19 Aug 2019 16:52:01 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id r14sm8007255qke.47.2019.08.19.16.51.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2019 16:52:01 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 16:51:51 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v5 00/17] Use MFD framework for SGI IOC3 drivers
+Message-ID: <20190819165151.6ebd3063@cakuba.netronome.com>
+In-Reply-To: <20190819163144.3478-1-tbogendoerfer@suse.de>
+References: <20190819163144.3478-1-tbogendoerfer@suse.de>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-In-Reply-To: <1565609303-27000-11-git-send-email-kyarlagadda@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1566246557; bh=WyjGFMCx57IDIkIARHgc/p/3DlhW1CTKBnwe7XnjJY8=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=MWtSopOR49l87pUtrMYz3a1WgQUITI3/vrtW8PIEM/d5lyR+MgP4+2FviE+v2getX
-         wwB9d+NUWSNlhdaU2fl9UMMKBbvYsVUmUvwx8LZX/J8UIlUXZs9wegKw6spKfCrNTm
-         /j8xTB3QrqedefG4bJivLueowAphXQWodyuHfeCOaL34j1Hc/OuPqDveB+mu0pL8Bg
-         mjhkk8FX0vGA8SjBFN8Op5/wgpFAyU+j3k0suK9tqWDoSSzXht1dSqIrvtG9UjVBi4
-         tuxb4KWAWcEvJxuNDnumqfJ8oVUVcW0DOPjS2qvwP36OQOh4YNfn/piFxOabaEHYfc
-         uUtxMU13PRwCw==
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Mon, 19 Aug 2019 18:31:23 +0200, Thomas Bogendoerfer wrote:
+>  - requested by Jakub I've splitted ioc3 ethernet driver changes into
+>    more steps to make the transition more visible; 
 
-On 12/08/2019 12:28, Krishna Yarlagadda wrote:
-> From: Shardar Shariff Md <smohammed@nvidia.com>
-> 
-> Add support to use 8 bytes trigger for Tegra186 SOC.
-> 
-> Signed-off-by: Shardar Shariff Md <smohammed@nvidia.com>
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  drivers/tty/serial/serial-tegra.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-> index 329923c..03d1d20 100644
-> --- a/drivers/tty/serial/serial-tegra.c
-> +++ b/drivers/tty/serial/serial-tegra.c
-> @@ -88,6 +88,7 @@ struct tegra_uart_chip_data {
->  	bool	support_clk_src_div;
->  	bool	fifo_mode_enable_status;
->  	int	uart_max_port;
-> +	int	dma_burst_bytes;
-
-I assume that this is a maximum, so why not say max_dma_burst_bytes?
-
->  };
->  
->  struct tegra_uart_port {
-> @@ -933,7 +934,12 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
->  	 * programmed in the DMA registers.
->  	 */
->  	tup->fcr_shadow = UART_FCR_ENABLE_FIFO;
-> -	tup->fcr_shadow |= UART_FCR_R_TRIG_01;
-> +
-> +	if (tup->cdata->dma_burst_bytes == 8)
-> +		tup->fcr_shadow |= UART_FCR_R_TRIG_10;
-> +	else
-> +		tup->fcr_shadow |= UART_FCR_R_TRIG_01;
-> +
->  	tup->fcr_shadow |= TEGRA_UART_TX_TRIG_16B;
->  	tegra_uart_write(tup, tup->fcr_shadow, UART_FCR);
->  
-> @@ -1046,7 +1052,7 @@ static int tegra_uart_dma_channel_allocate(struct tegra_uart_port *tup,
->  		}
->  		dma_sconfig.src_addr = tup->uport.mapbase;
->  		dma_sconfig.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-> -		dma_sconfig.src_maxburst = 4;
-> +		dma_sconfig.src_maxburst = tup->cdata->dma_burst_bytes;
->  		tup->rx_dma_chan = dma_chan;
->  		tup->rx_dma_buf_virt = dma_buf;
->  		tup->rx_dma_buf_phys = dma_phys;
-> @@ -1325,6 +1331,7 @@ static struct tegra_uart_chip_data tegra20_uart_chip_data = {
->  	.support_clk_src_div		= false,
->  	.fifo_mode_enable_status	= false,
->  	.uart_max_port			= 5,
-> +	.dma_burst_bytes		= 4,
-
-Isn't it simpler to store the TRIG value here?
-
-Jon
-
--- 
-nvpublic
+Thanks a lot for doing that!
