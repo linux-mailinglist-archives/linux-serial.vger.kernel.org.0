@@ -2,76 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43774912AC
-	for <lists+linux-serial@lfdr.de>; Sat, 17 Aug 2019 21:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0B191A88
+	for <lists+linux-serial@lfdr.de>; Mon, 19 Aug 2019 02:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbfHQTXq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 17 Aug 2019 15:23:46 -0400
-Received: from castor.sanantonio.cl ([164.77.200.51]:43524 "EHLO
-        castor.sanantonio.cl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725929AbfHQTXq (ORCPT
+        id S1726120AbfHSAt7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 18 Aug 2019 20:49:59 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36105 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbfHSAt6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 17 Aug 2019 15:23:46 -0400
-X-Greylist: delayed 900 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Aug 2019 15:23:46 EDT
-DKIM-Signature: v=1; a=rsa-sha256; d=sanantonio.cl; s=default; c=relaxed/simple;
-        q=dns/txt; i=@sanantonio.cl; t=1566068896; x=1568660896;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RKsJJiN0pMYulWbDWfm7WUzIUW/UCZmSOFm0xHEfrw4=;
-        b=L4kYj0QhRNJXSj9XDbp4KnDBm95PiFQKUgpABHafLUtTF/9sfTqfnjLFfbBemk2r
-        acohsOvMTxASBbZO2IDDGE8VXUhPdssps+2RpcZl3q7JIqN+MkLrQvLzAgJLzEsR
-        uO6Rtg1NzaTxwdYzj/dJKWP5mDl/vYa8X10ybrm6NNM=;
-X-AuditID: c0a80004-ff933a8000006fd4-fb-5d585084cf06
-Received: from Tyche.sanantonio.cl ( [192.168.0.21])
-        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        by castor.sanantonio.cl (Symantec Messaging Gateway) with SMTP id B5.91.28628.480585D5; Sat, 17 Aug 2019 15:07:50 -0400 (-04)
-To:     undisclosed-recipients:;
-Received: from TYCHE.sanantonio.cl ([fe80::909e:b2f0:3cf5:374c]) by
- Tyche.sanantonio.cl ([fe80::909e:b2f0:3cf5:374c%15]) with mapi id
- 14.03.0439.000; Thu, 15 Aug 2019 21:06:19 -0400
-From:   Juan Carlos Chavarria Maldonado <jchavarria@sanantonio.cl>
-CC:     "vikm@gmail.com" <vikm@gmail.com>
-Subject: contacto
-Thread-Topic: contacto
-Thread-Index: AdVTzs8o0UaYoMt6SPOrEx/shHuSqQ==
-Date:   Fri, 16 Aug 2019 01:06:18 +0000
-Message-ID: <FEC091A7C1C16F49B776F3E1F967FC16243B61C4@Tyche.sanantonio.cl>
-Accept-Language: es-ES, es-CL, en-US
-Content-Language: es-ES
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [197.210.45.238]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 18 Aug 2019 20:49:58 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l21so124891pgm.3;
+        Sun, 18 Aug 2019 17:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cucRnTBKV3jSYKkerT+mfhm7morlK8lS/0IZL03R4iw=;
+        b=MMn2e5txwGSFG2EmCGNY6tqxfbyLy+gJc1fqVeiVPtdJUB24aStD2qEwmQQYkw4h23
+         y7B9kdge30sjdM/gVDQEgkElS01Qqv3XkfCCqWolWp3mBBUyvlQy5+8DENSOIydFnPu5
+         6wDxlr89RtapNbRKFh6IdUATJ85tCM+kYx0knnFc9bayczkoyiVrW/PULp17OvyM1Mhi
+         /fzB56TwSqVL6LEX7NftPSmdlsyuaSguEgbAbTf1QaM7Iuh+Hfi/A8Gwm+aSnzA8GhB+
+         DM7M7Zel3mtHwA+0tFBoXjsqXlDDFd62vYDlWNjKHsPdeFvfS1adpfmnnX8Pq4tS18Hl
+         BG1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cucRnTBKV3jSYKkerT+mfhm7morlK8lS/0IZL03R4iw=;
+        b=qiDlV+L+cxfqTwiKGFDKspdcotZlRWXrQUydVQofb+0W1om7UlrPvQVb28pL2Ah9E4
+         9dr1QAQ7weq8pvp+yKv277t29fxpR6TNRujDvj8tf+uj/AXKiMpMQ5ay/rWd64roF4FH
+         GCuKLqXIJklqMnwZYZLBKmYhPFEhKZiinYqsD7bdSxlXPckWPBDpJVdi63awTeddVoF5
+         yn2ytAFvxq2vKmflU3vckyPcCisxg1GP953dWvS8t6J1a1rTOEtyNFrvjaxyyzWzJSv/
+         /FVrps68feILyKeevPv/Zzy2ONbWJaBBfJwSN2WzrhbNnoLiQEDSUnFbu1SNAOeoxbl1
+         biog==
+X-Gm-Message-State: APjAAAVpUVdkADemScEVdr0ERjbVhNzFWYXCaZURoRLLooUZpL5UG5Y0
+        MvkvvoJZTqBHdqd5O8mRqoo=
+X-Google-Smtp-Source: APXvYqwiKMA2YPLoYxJt2c5rD+Q9gp3S9SetoSaaV3CDHf2/V5tH+9zFrhVgTyG6ujQ0r0GCqXhf/A==
+X-Received: by 2002:a17:90a:3465:: with SMTP id o92mr17801177pjb.20.1566175797963;
+        Sun, 18 Aug 2019 17:49:57 -0700 (PDT)
+Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id z4sm12913675pgp.80.2019.08.18.17.49.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 18 Aug 2019 17:49:56 -0700 (PDT)
+Subject: Re: [PATCH V1 1/1] serial: 8250_pci: Add F81504A series Support
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, jslaby@suse.com, jay.dolan@accesio.com,
+        hslester96@gmail.com, je.yen.tam@ni.com, lkp@intel.com,
+        kai.heng.feng@canonical.com, heikki.krogerus@linux.intel.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+References: <1565933249-23076-1-git-send-email-hpeter+linux_kernel@gmail.com>
+ <20190816112644.GF30120@smile.fi.intel.com>
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Message-ID: <8e052919-b012-ff3f-f108-380d1ce5f7e7@gmail.com>
+Date:   Mon, 19 Aug 2019 08:49:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTVxzGOffclwojqwjzBP3gyJapieCyZf6XKSExMXdLyEz2YehGuqs2
-        gJJi2rpMky1Qtk6wUMOaUcsQBnWxUF4i1lIpU8uobIJ0q0psgbWWDgVWpyki0JHd0i3j25Pz
-        PL/nvPyPBKdNs5mSEoVarlQIpVlsMn39YlLGDv3+gsKd/mgG3J/xcGCo/pOCxpsWDFp3OQtn
-        NHsh9m0PBX8vI/jtvo4FfXUHDY1VZg6cYy0I7MEvWfhG38vCs+87KHD7XRiiGjcF5v4qBtzW
-        MQ7s1z0UtBkqMFi0CwguR/oZ8AemaLj2wxAHNZU2Djou3MNwe0xUnUs6Bq56tBTEHn/NwOz5
-        aQwRr4OBJnMdBXZrPQu/XNGwsDSox9BumqGg0rXIQGv0AQO1/aVgNfUheB4V+Tvt3Rh85w0s
-        OI0iNb6yG5533ELwXc0DDIv6EQS2xmcYpuabaOi+q0HgC7bT0DNgo6CzIoBhoEbc2v6wFYPh
-        YRUGs3OWg8mwTnydxxEGppbF6zl7Kym41PUE5w0h3tjmwbzvno3i/5r3M3y/7xjvmLyJeK//
-        LMd3TrzBW+ebOX6wzUrxDtMEx5uCrSzvmzYy/HzYxPEh3TDLt4wO0vzIjQV6/46DKbsPCepP
-        PygpUuTkfpJS3DlnoY9r8Wd9P0XochSjqtE6CZG+SSpmukWdLEmTNlBkbiBIx4106WbS2BBi
-        EoYDEdvK0CrBSvPI3Zh+NYSlr5KY8TSO6w3S9cThrsEJ+CXirRvjEjqbDLX8sZqnxbwm0Lfa
-        kyp9jzSExtm4RtJXSJd2ESU6N5JJg45JnE5KzM5RnNAZ5FFo5d/1LKJfmBU7JWJ+G+m6mpNA
-        XyaGM0EuUb+e/Hxuij6LNpjWtJr+J0xrCNMaohnRbSj9sKBSlymzVYJCUKjLFCVl2YdLL6HE
-        j6d7Ub1lrwtREuRCRIKz0lNrdxYUpqUeEU6ekivLZMoTpXKVC22S0FkbU794yhWmSYsEtfyY
-        XH5crvzPpSTr4nRyZrpKrjgiVwon1MWy+MBkKnFimeWoYbusPTK8dGCuT/32W3m39n14Lmd5
-        7s6W2yfzm2T5zYJxk+lHw9KuaOTJOzmf2y++uOfdWllSeGVzUui1iX1Fni3RXY+StlVrfl0e
-        3vo0XJhcO3It8P7CuDL3suV0/ilO0TOqJEeFlNyWg1t/9050f3W0bo83Gvj4o7zJyAt19Qdu
-        FISzaFWx8Pp2rFQJ/wCVo/mW+gMAAA==
+In-Reply-To: <20190816112644.GF30120@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVGVuZ28gdW4gcHJveWVjdG8gZGUgY2Fy
-aWRhZCBwYXJhIHRpLiBlbiBjb250YWN0byBjb24gbWkgY29ycmVvIGVsZWN0csOzbmljbyBwcml2
-YWRvIHBhcmEgbcOhcyBkZXRhbGxlcy4gKHZpa21yY2MyMUBvdXRsb29rLmNvbTxodHRwczovL21h
-aWwuZ29vZ2xlLmNvbS9tYWlsL3UvMC9oLzEzM2Q1aGFucXNnanIvPyZjcz13aCZ2PWImdG89dmlr
-bXJjYzIxQG91dGxvb2suY29tPuKAiynigIvigIvigIvigIvigIvigIvigIvigIvigIsuLi4uDQo=
+Hi,
+
+Andy Shevchenko 於 2019/8/16 下午 07:26 寫道:
+> On Fri, Aug 16, 2019 at 01:27:29PM +0800, Ji-Ze Hong (Peter Hong) wrote:
+>> Fintek F81504A/508A/512A is PCIE to 4/8/12 UARTs device. It's support
+>> IO/MMIO/PCIE conf to access all functions. The old F81504/508/512 is
+>> only support IO.
+> 
+> We have 8250_fintek.
+> Isn't it a right place to add these?
+> 
+
+The 8250_fintek implements PNP device with id PNP0501.
+Should I also implements PCIe device in this file?
+
+-- 
+With Best Regards,
+Peter Hong
