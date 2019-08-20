@@ -2,101 +2,134 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB919522C
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 02:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3136495268
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 02:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728758AbfHTAHq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 19 Aug 2019 20:07:46 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39003 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728554AbfHTAHp (ORCPT
+        id S1729106AbfHTATA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 19 Aug 2019 20:19:00 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:45029 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729104AbfHTAS6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 19 Aug 2019 20:07:45 -0400
-Received: by mail-qt1-f193.google.com with SMTP id l9so4010192qtu.6
-        for <linux-serial@vger.kernel.org>; Mon, 19 Aug 2019 17:07:44 -0700 (PDT)
+        Mon, 19 Aug 2019 20:18:58 -0400
+Received: by mail-pg1-f202.google.com with SMTP id i134so3478083pgd.11
+        for <linux-serial@vger.kernel.org>; Mon, 19 Aug 2019 17:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=XAiAnlHmkO+0jIPS0nCrMqFBgMcioHrpGQSObqqyeas=;
-        b=dfIUq6ddf9ulKASU6Bv2+Z+qverPNdci02k7EuMkUVkCz1tzrPT2V+peCQB1mSaYn2
-         WbClo3aQBa1BfkNHVrbwUW9+4yBrOVVxNn+YsIKbgq6VUxYvdz73CgyNgwAxj6PZS5OJ
-         6JYvvcuEX9N1qMJfiar986WkawCYWvo4FHiHy7AiM8/0h9oRftPVOhvBxSTeWF4NwtEi
-         PWVsa8m13KOJVYNQbzKp+bw38O/l8m3ATDg0lpwP+LdWw3PIL2Oo7j/osajOs2aBlh+6
-         gS4HOs3nx2YT+WIXvckHc35hK3uAI84RgRaechcT/wEOcLH2DzcowDvWNTiqJIvmRT4W
-         l0Lg==
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=lNoz89i9XS2jvvI1H04tt6HZt6/wgDBv5mdC4YvRgGk=;
+        b=FBD5OFSBztcf1k/51yy5DB86+s8rw9puUZD6jZa+gn00sbyPgW3Ca0yt76jHjBLaWd
+         PPeVOeQ8TwSoDnE0dwd+ZCKNK6cOwphc74rNO9sgjC1iQZI1Jl92bGpvNWtFi4fuKOj2
+         6Rngiw0Sz76EbPcal0USv8Nw1V0Agsl9zSKmPyCM0oBA95rkaoEQV+e1VO2kt3P2/yJL
+         jGoxg4yUtoUfeEgJ4B14T8lvK9E+mdU7C8r+d6ONqm3EwVORHnkHlFIClokihAxqgJEm
+         xpSmqe1PBlBbPE65vrjUiLRVfmhAZPPx3GYV6c+daZ2BsdAq6TrSrf/295j/9pfAAiPu
+         SWgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=XAiAnlHmkO+0jIPS0nCrMqFBgMcioHrpGQSObqqyeas=;
-        b=Yz4uheBAasQqYKE7A7oc8QAPE1qsw5J24ZErnfNTJUZQsxMP/ffVTNbRcGzTroSWRq
-         3h62Ipt/qJM0sob2p4qSy1SeDSK/JX97u4Z7QwIp+H25DrT3SJvax3zFZo57zNHvmRtO
-         INVjiuA4bIp0Oa/D2s42OasDc6FHnpnrUKswXywO7Qr1C71vE8ohNNXirTMfKKsrl+n4
-         6CUH9/AxElO4OMTQkhlnK6Q+kjfzpaJCV0So69Gk6DGh6YIjvtMsCjNm90YiwvYAmaXJ
-         CyVxK1YnlCnzxTpnr9mPfUsICTBv6HEB29+lqD14CJcenJ5VorXzxKTpdykOB+3Csynd
-         dF6Q==
-X-Gm-Message-State: APjAAAWesxVSi033OycqURzZRme4FanbgUrB/1c/KvDq7NEmt+k5eNRI
-        VboynHchdsovxSgbOtaOkrR+ug==
-X-Google-Smtp-Source: APXvYqwGcLBdZK3nU6pGDNftkfkgJPgtpG1aXGPnvYkUGNtX/j6WJIJu/+V0scfWhhEsSLdQ4n5dfw==
-X-Received: by 2002:aed:27c9:: with SMTP id m9mr23137596qtg.322.1566259664507;
-        Mon, 19 Aug 2019 17:07:44 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id a23sm1283772qtj.5.2019.08.19.17.07.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 17:07:44 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 17:07:35 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=lNoz89i9XS2jvvI1H04tt6HZt6/wgDBv5mdC4YvRgGk=;
+        b=QrgrI7k8pQIzDMErylmD7QOIdMmpKkK0EZnW0MaAMRJIFk+eRgt9fKNpb3IY3XJVJx
+         yJvkUWyWf7uc/1rcAeRS3xkg0CcZ/hNKfm/K8XyJkvBy9F4uVBTDR36N0WiHmc2ERCDT
+         DBkpc7BgvrUPfbZUrD96um0a+FlawYAcq883pWyVxq7QDbL1u4EFq31KKo9e4MooQ1XM
+         qunCNWNj1DXPqybrunijDV1ou3SGGzrK7XO1XOeQbhupK4p9Oec7AiH4JJ1T6XijmiR1
+         uN/HCUpdu8kf227GO56CyPneesdkj0mUCk4Tgl4ARmroXJvYyAz2I8hlygRvO1Sj4vEC
+         FAQQ==
+X-Gm-Message-State: APjAAAU4PqLGMdhTHKmlHDNPfr0/+aQEiJj+ezuZZkiBxnB9CjqyMszI
+        CCreBjUl0QwvF2igrxy/ypGqOFOes+rvpcnuItblpA==
+X-Google-Smtp-Source: APXvYqyRhFezZNSXJG5OpUUhtCC25DNBxb85NXjeRB6HBisse3eGGLJPKPWqBnxx3Uyiq9HJIm5R+9lMNqD79ydspAYUxQ==
+X-Received: by 2002:a63:6888:: with SMTP id d130mr21330152pgc.197.1566260336938;
+ Mon, 19 Aug 2019 17:18:56 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 17:17:54 -0700
+In-Reply-To: <20190820001805.241928-1-matthewgarrett@google.com>
+Message-Id: <20190820001805.241928-19-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190820001805.241928-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [PATCH V40 18/29] lockdown: Lock down TIOCSSERIAL
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v5 12/17] net: sgi: ioc3-eth: use dma-direct for dma
- allocations
-Message-ID: <20190819170735.13884ec9@cakuba.netronome.com>
-In-Reply-To: <20190819163144.3478-13-tbogendoerfer@suse.de>
-References: <20190819163144.3478-1-tbogendoerfer@suse.de>
-        <20190819163144.3478-13-tbogendoerfer@suse.de>
-Organization: Netronome Systems, Ltd.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Matthew Garrett <mjg59@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, 19 Aug 2019 18:31:35 +0200, Thomas Bogendoerfer wrote:
-> @@ -1386,18 +1427,24 @@ static netdev_tx_t ioc3_start_xmit(struct sk_buff *skb, struct net_device *dev)
->  		unsigned long b2 = (data | 0x3fffUL) + 1UL;
->  		unsigned long s1 = b2 - data;
->  		unsigned long s2 = data + len - b2;
-> +		dma_addr_t d;
->  
->  		desc->cmd    = cpu_to_be32(len | ETXD_INTWHENDONE |
->  					   ETXD_B1V | ETXD_B2V | w0);
->  		desc->bufcnt = cpu_to_be32((s1 << ETXD_B1CNT_SHIFT) |
->  					   (s2 << ETXD_B2CNT_SHIFT));
-> -		desc->p1     = cpu_to_be64(ioc3_map(skb->data, 1));
-> -		desc->p2     = cpu_to_be64(ioc3_map((void *)b2, 1));
-> +		d = dma_map_single(ip->dma_dev, skb->data, s1, DMA_TO_DEVICE);
+From: David Howells <dhowells@redhat.com>
 
-You'll need to check the DMA address with dma_mapping_error(dev, addr),
-otherwise static checkers will get upset.
+Lock down TIOCSSERIAL as that can be used to change the ioport and irq
+settings on a serial port.  This only appears to be an issue for the serial
+drivers that use the core serial code.  All other drivers seem to either
+ignore attempts to change port/irq or give an error.
 
-> +		desc->p1     = cpu_to_be64(ioc3_map(d, PCI64_ATTR_PREF));
-> +		d = dma_map_single(ip->dma_dev, (void *)b2, s1, DMA_TO_DEVICE);
-> +		desc->p2     = cpu_to_be64(ioc3_map(d, PCI64_ATTR_PREF));
+Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+cc: Jiri Slaby <jslaby@suse.com>
+Cc: linux-serial@vger.kernel.org
+Signed-off-by: James Morris <jmorris@namei.org>
+---
+ drivers/tty/serial/serial_core.c | 5 +++++
+ include/linux/security.h         | 1 +
+ security/lockdown/lockdown.c     | 1 +
+ 3 files changed, 7 insertions(+)
+
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 83f4dd0bfd74..bbad407557b9 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -22,6 +22,7 @@
+ #include <linux/serial_core.h>
+ #include <linux/delay.h>
+ #include <linux/mutex.h>
++#include <linux/security.h>
+ 
+ #include <linux/irq.h>
+ #include <linux/uaccess.h>
+@@ -862,6 +863,10 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
+ 		goto check_and_exit;
+ 	}
+ 
++	retval = security_locked_down(LOCKDOWN_TIOCSSERIAL);
++	if (retval && (change_irq || change_port))
++		goto exit;
++
+ 	/*
+ 	 * Ask the low level driver to verify the settings.
+ 	 */
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 683f0607e6f2..b4a85badb03a 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -112,6 +112,7 @@ enum lockdown_reason {
+ 	LOCKDOWN_MSR,
+ 	LOCKDOWN_ACPI_TABLES,
+ 	LOCKDOWN_PCMCIA_CIS,
++	LOCKDOWN_TIOCSSERIAL,
+ 	LOCKDOWN_INTEGRITY_MAX,
+ 	LOCKDOWN_CONFIDENTIALITY_MAX,
+ };
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index db3477585972..771c77f9c04a 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -27,6 +27,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+ 	[LOCKDOWN_MSR] = "raw MSR access",
+ 	[LOCKDOWN_ACPI_TABLES] = "modifying ACPI tables",
+ 	[LOCKDOWN_PCMCIA_CIS] = "direct PCMCIA CIS storage",
++	[LOCKDOWN_TIOCSSERIAL] = "reconfiguration of serial port IO",
+ 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+ 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+ };
+-- 
+2.23.0.rc1.153.gdeed80330f-goog
+
