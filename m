@@ -2,92 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F0F95992
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 10:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A1895EEF
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 14:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729538AbfHTI3R (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 20 Aug 2019 04:29:17 -0400
-Received: from mga03.intel.com ([134.134.136.65]:48912 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729522AbfHTI3Q (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 20 Aug 2019 04:29:16 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Aug 2019 01:29:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,408,1559545200"; 
-   d="scan'208";a="353508425"
-Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
-  by orsmga005.jf.intel.com with ESMTP; 20 Aug 2019 01:29:13 -0700
-From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com,
-        linux-serial@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@intel.com,
-        qi-ming.wu@intel.com, cheol.yong.kim@intel.com,
-        rahul.tanwar@intel.com, Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Subject: [PATCH v2 2/2] dt-bindings: lantiq: Update for new SoC
-Date:   Tue, 20 Aug 2019 16:29:02 +0800
-Message-Id: <fa6b20015dc6bfe247e1b2a07bdc5c727595a04b.1566288689.git.rahul.tanwar@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <cover.1566288689.git.rahul.tanwar@linux.intel.com>
-References: <cover.1566288689.git.rahul.tanwar@linux.intel.com>
-In-Reply-To: <cover.1566288689.git.rahul.tanwar@linux.intel.com>
-References: <cover.1566288689.git.rahul.tanwar@linux.intel.com>
+        id S1730152AbfHTMgg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 20 Aug 2019 08:36:36 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4734 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730042AbfHTMgf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 20 Aug 2019 08:36:35 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 657D8505C93C0B5FABDC;
+        Tue, 20 Aug 2019 20:36:31 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
+ 14.3.439.0; Tue, 20 Aug 2019 20:36:24 +0800
+From:   Mao Wenan <maowenan@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <jslaby@suse.com>,
+        <linux-serial@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        "Mao Wenan" <maowenan@huawei.com>
+Subject: [PATCH linux-next] tty: serial: add dependence for CONFIG_SERIAL_FSL_LINFLEXUART
+Date:   Tue, 20 Aug 2019 20:40:15 +0800
+Message-ID: <20190820124015.28409-1-maowenan@huawei.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Intel Lightning Mountain(LGM) SoC reuses Lantiq ASC serial controller IP.
-Update the dt bindings to support LGM as well.
+When CONFIG_SERIAL_FSL_LINFLEXUART=y and CONFIG_PRINTK is not set,
+one compilation error is found as below:
+drivers/tty/serial/fsl_linflexuart.c: In function linflex_earlycon_putchar:
+drivers/tty/serial/fsl_linflexuart.c:608:31: error: CONFIG_LOG_BUF_SHIFT undeclared
+(first use in this function); did you mean CONFIG_ISA_BUS_API?
+  if (earlycon_buf.len >= 1 << CONFIG_LOG_BUF_SHIFT)
+                               ^~~~~~~~~~~~~~~~~~~~
+                               CONFIG_ISA_BUS_API
+This because CONFIG_LOG_BUF_SHIFT is depended on CONFIG_PRINTK, fix this
+by adding dependence for CONFIG_SERIAL_FSL_LINFLEXUART.
 
-Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Fixes: b953815b819b ("tty: serial: Add linflexuart driver for S32V234")
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
 ---
- .../devicetree/bindings/serial/lantiq_asc.yaml          | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/tty/serial/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/lantiq_asc.yaml b/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-index 54b90490f4fb..92807b59b024 100644
---- a/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-+++ b/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-@@ -17,6 +17,7 @@ properties:
-     oneOf:
-       items:
-         - const: lantiq,asc
-+        - const: intel,lgm-asc
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index d9caf3242b25..4789b5d62f63 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -1392,6 +1392,7 @@ config SERIAL_FSL_LPUART_CONSOLE
  
-   reg:
-     maxItems: 1
-@@ -28,6 +29,12 @@ properties:
-       - description: tx or combined interrupt
-       - description: rx interrupt
-       - description: err interrupt
-+    description:
-+      For lantiq,asc compatible, it supports 3 separate
-+      interrupts for tx rx & err. Whereas, for intel,lgm-asc
-+      compatible, it supports combined single interrupt for
-+      all of tx, rx & err interrupts.
-+
- 
-   clocks:
-     description:
-@@ -67,4 +74,14 @@ examples:
-             interrupts = <112 113 114>;
-     };
- 
-+  - |
-+    asc0: serial@e0a00000 {
-+            compatible = "intel,lgm-asc";
-+            reg = <0xe0a00000 0x1000>;
-+            interrupt-parent = <&ioapic1>;
-+            interrupts = <128 1>;
-+            clocks = <&cgu0 LGM_CLK_NOC4>, <&cgu0 LGM_GCLK_ASC0>;
-+            clock-names = "freq", "asc";
-+    };
-+
- ...
+ config SERIAL_FSL_LINFLEXUART
+ 	tristate "Freescale linflexuart serial port support"
++	depends on PRINTK
+ 	select SERIAL_CORE
+ 	help
+ 	  Support for the on-chip linflexuart on some Freescale SOCs.
 -- 
-2.11.0
+2.20.1
 
