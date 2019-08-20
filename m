@@ -2,42 +2,42 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EED41965CB
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 18:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD4C965E2
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Aug 2019 18:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730141AbfHTQBE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 20 Aug 2019 12:01:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36770 "EHLO mail.kernel.org"
+        id S1727272AbfHTQID (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 20 Aug 2019 12:08:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40392 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727006AbfHTQBE (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 20 Aug 2019 12:01:04 -0400
+        id S1726981AbfHTQID (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 20 Aug 2019 12:08:03 -0400
 Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EAC572070B;
-        Tue, 20 Aug 2019 16:01:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 053612332B;
+        Tue, 20 Aug 2019 16:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566316863;
-        bh=nV5YN+hmMYKRrONNn5xNuCElpNdG1gIN8RzDCyYXJ+c=;
+        s=default; t=1566317282;
+        bh=9WiZS4Vb8Ltws2vpFt/lV9v4TuNFvLwVNuFhWS8JWWs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p4ggRT+LXmFWLmCmW75AlCneVYEg4PSEY3RLFQ2CBVr5Olub9Fo3MtE+90qPcaNUT
-         S0aIj+QEAnVigb1RCG2PtNyCIjol2FilotWn7w9RIjAAdDlcfSwY8rPBOFHrntQHDQ
-         hw7CqMEz2DUQXgrGESH8AQSle1APxJFjuU7LNR+4=
-Received: by mail-qt1-f170.google.com with SMTP id t12so6601176qtp.9;
-        Tue, 20 Aug 2019 09:01:02 -0700 (PDT)
-X-Gm-Message-State: APjAAAVav/4tGMkn3Dct1O/9fxz8/jaPVKIjULYVLZ7qb7r5VLjK59n0
-        hpa1X8cReNki7gFRJzr/LyNRbIzv6o5G1VCH0g==
-X-Google-Smtp-Source: APXvYqz2zveglNg8JwmfSLq5hdaazZoQ5IFKBOJiEArUfGI9j75aOKNBEA55KOZ26U75HZiyOnkCY/yfaMokX0z7Qqg=
-X-Received: by 2002:ad4:4301:: with SMTP id c1mr12131156qvs.138.1566316862075;
- Tue, 20 Aug 2019 09:01:02 -0700 (PDT)
+        b=f0UI6Me//nMcbhpY/1VIE6yXpoOfj51QMxH5WYLwkmb78PLlzJKPOuBsOQ/cU6cz4
+         JHR/Ufw/jK0MEpP9gt65qbqI1N9q1+AGZHz9UBfn7xH4T2OqMRASkP9fRq4L9ouyhH
+         bLhBl9UzL21MQxE92yA+XgPgWFrKZR17jFcJDaG4=
+Received: by mail-qt1-f170.google.com with SMTP id i4so6620210qtj.8;
+        Tue, 20 Aug 2019 09:08:01 -0700 (PDT)
+X-Gm-Message-State: APjAAAV3AQ5di5Ipd4I3hvH3Mnc4EwIHnwlpHQML41t54azEzqdAFQRO
+        mpXHG56WyGjNM48a+rvOhH0hfz7sfq+Y8Pk2eA==
+X-Google-Smtp-Source: APXvYqxi7X5KSPGWS1tX55hqWrzn1uK9qAR/aLHczfkXbFTdQfyUBOdUxk8O2lQB/mrEohl+2PCkQDlDTnSbCXv69k4=
+X-Received: by 2002:a0c:eb92:: with SMTP id x18mr15040300qvo.39.1566317281129;
+ Tue, 20 Aug 2019 09:08:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1566288689.git.rahul.tanwar@linux.intel.com> <fa6b20015dc6bfe247e1b2a07bdc5c727595a04b.1566288689.git.rahul.tanwar@linux.intel.com>
-In-Reply-To: <fa6b20015dc6bfe247e1b2a07bdc5c727595a04b.1566288689.git.rahul.tanwar@linux.intel.com>
+References: <cover.1566288689.git.rahul.tanwar@linux.intel.com> <772527bd87da45eeef905d9b9d46a8d99915a116.1566288689.git.rahul.tanwar@linux.intel.com>
+In-Reply-To: <772527bd87da45eeef905d9b9d46a8d99915a116.1566288689.git.rahul.tanwar@linux.intel.com>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 20 Aug 2019 11:00:50 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJK=TFsAt4kegGs2ymnWpY4tuDXNJF0RFpvZJmuPHJMYA@mail.gmail.com>
-Message-ID: <CAL_JsqJK=TFsAt4kegGs2ymnWpY4tuDXNJF0RFpvZJmuPHJMYA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: lantiq: Update for new SoC
+Date:   Tue, 20 Aug 2019 11:07:49 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKmyEn5iXuibmZGcvRpaiyUjVoi4-2e9NKY9eYnWLL7iQ@mail.gmail.com>
+Message-ID: <CAL_JsqKmyEn5iXuibmZGcvRpaiyUjVoi4-2e9NKY9eYnWLL7iQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: serial: lantiq: Convert to YAML schema
 To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>
 Cc:     devicetree@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -56,66 +56,112 @@ X-Mailing-List: linux-serial@vger.kernel.org
 On Tue, Aug 20, 2019 at 3:29 AM Rahul Tanwar
 <rahul.tanwar@linux.intel.com> wrote:
 >
-> Intel Lightning Mountain(LGM) SoC reuses Lantiq ASC serial controller IP.
-> Update the dt bindings to support LGM as well.
+> Convert the existing DT binding document for Lantiq SoC ASC serial controller
+> from txt format to YAML format.
 >
 > Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
 > ---
->  .../devicetree/bindings/serial/lantiq_asc.yaml          | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
+>  .../devicetree/bindings/serial/lantiq_asc.txt      | 31 ----------
+>  .../devicetree/bindings/serial/lantiq_asc.yaml     | 70 ++++++++++++++++++++++
+
+Use the compatible name: lantiq,asc.yaml
+
+Don't forget the $id value too.
+
+>  2 files changed, 70 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/lantiq_asc.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/lantiq_asc.yaml
+
+
 > diff --git a/Documentation/devicetree/bindings/serial/lantiq_asc.yaml b/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-> index 54b90490f4fb..92807b59b024 100644
-> --- a/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
+> new file mode 100644
+> index 000000000000..54b90490f4fb
+> --- /dev/null
 > +++ b/Documentation/devicetree/bindings/serial/lantiq_asc.yaml
-> @@ -17,6 +17,7 @@ properties:
->      oneOf:
->        items:
->          - const: lantiq,asc
-> +        - const: intel,lgm-asc
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/serial/lantiq_asc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lantiq SoC ASC serial controller
+> +
+> +maintainers:
+> +  - Rahul Tanwar <rahul.tanwar@intel.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/serial.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      items:
+> +        - const: lantiq,asc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
 
-Better expressed as:
+Technically, 1 item is not allowed until patch 2 (or the old doc was wrong).
 
-compatible:
-  enum:
-    - intel,lgm-asc
-    - lantiq,asc
-
->
->    reg:
->      maxItems: 1
-> @@ -28,6 +29,12 @@ properties:
->        - description: tx or combined interrupt
->        - description: rx interrupt
->        - description: err interrupt
+> +    maxItems: 3
+> +    items:
+> +      - description: tx or combined interrupt
+> +      - description: rx interrupt
+> +      - description: err interrupt
+> +
+> +  clocks:
 > +    description:
-> +      For lantiq,asc compatible, it supports 3 separate
-> +      interrupts for tx rx & err. Whereas, for intel,lgm-asc
-> +      compatible, it supports combined single interrupt for
-> +      all of tx, rx & err interrupts.
+> +      When present, first entry listed should contain phandle
+> +      to the frequency clock and second entry should contain
+> +      phandle to the gate clock.
 
-This can be expressed with an if/then schema. There's some examples in
-the tree how to do that.
+Schema needs to define how many entries:
+
+items:
+  - description: ...
+  - description: ...
 
 > +
->
->    clocks:
->      description:
-> @@ -67,4 +74,14 @@ examples:
->              interrupts = <112 113 114>;
->      };
->
+> +  clock-names:
+> +    items:
+> +      - const: freq
+> +      - const: asc
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +
+> +examples:
 > +  - |
-> +    asc0: serial@e0a00000 {
-> +            compatible = "intel,lgm-asc";
-> +            reg = <0xe0a00000 0x1000>;
-> +            interrupt-parent = <&ioapic1>;
-> +            interrupts = <128 1>;
-> +            clocks = <&cgu0 LGM_CLK_NOC4>, <&cgu0 LGM_GCLK_ASC0>;
+> +    asc0: serial@16600000 {
+> +            compatible = "lantiq,asc";
+> +            reg = <0x16600000 0x100000>;
+> +            interrupt-parent = <&gic>;
+> +            interrupts = <GIC_SHARED 103 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SHARED 105 IRQ_TYPE_LEVEL_HIGH>,
+> +                         <GIC_SHARED 106 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&cgu CLK_SSX4>, <&cgu GCLK_UART>;
 > +            clock-names = "freq", "asc";
 > +    };
 > +
->  ...
+> +  - |
+> +    asc1: serial@e100c00 {
+
+I don't think this 2nd example adds anything.
+
+> +            compatible = "lantiq,asc";
+> +            reg = <0xE100C00 0x400>;
+> +            interrupt-parent = <&icu0>;
+> +            interrupts = <112 113 114>;
+> +    };
+> +
+> +...
 > --
 > 2.11.0
 >
