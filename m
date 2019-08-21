@@ -2,97 +2,135 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFD3985B7
-	for <lists+linux-serial@lfdr.de>; Wed, 21 Aug 2019 22:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48EA98674
+	for <lists+linux-serial@lfdr.de>; Wed, 21 Aug 2019 23:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730275AbfHUUiG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 21 Aug 2019 16:38:06 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34963 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbfHUUiG (ORCPT
+        id S1727862AbfHUVSo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 21 Aug 2019 17:18:44 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37693 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727136AbfHUVSn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 21 Aug 2019 16:38:06 -0400
-Received: by mail-qt1-f196.google.com with SMTP id u34so4778853qte.2
-        for <linux-serial@vger.kernel.org>; Wed, 21 Aug 2019 13:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=KBkBS4T8hAWzkfNP3gQHnK1bQ8RpJnciYJrpqq3rMf8=;
-        b=NGNASHAt0aPooyP8CTgYOtb0t3kgtdGLqJ/VHFyFTEdgiE7gvblv2PrEwXcwoLyfxI
-         ccDsl3wj3dinhEivqLgnXhnjdMvz9SYxIr9fpo4xGRV7gSPqHBr6rxbt2u8iEjVZdgpw
-         7AE+NjJy/4oGhxrVjvzRnstX2xG3qMkv8QBUgrw6BgXzyLRd9Q1gQlOhegN3181ZOKWQ
-         hisqrpXmlhJPtYveRNEhyFqUIVvw2jXBRTKqiPYR1tNoVElMJ3Vgs77iGpC9g9m12/JU
-         /PQ7v6S2UdmdJ+RxLBjBRRYTkQgr4jOXbD0hugqQzNfBaj2Xn77PLl4Vddgkb4PP6FlG
-         yMBQ==
+        Wed, 21 Aug 2019 17:18:43 -0400
+Received: by mail-ot1-f67.google.com with SMTP id f17so3471574otq.4;
+        Wed, 21 Aug 2019 14:18:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=KBkBS4T8hAWzkfNP3gQHnK1bQ8RpJnciYJrpqq3rMf8=;
-        b=iQA486YCoGzGEuErX1R96haDtb0oclfzddvLEPtY8HV67CXMr52LXY2eGLhOaBtEsS
-         T/Qb6UWGtDBalF3cFtwfCIa0Fe/y8MmAppx6GX0rCfYhGhY0WRnGKKmANS6rbgciVb6u
-         rngQ+6ZPW7+16z+9/OOHipNdFcjMGzE1Sms5WyjHO+m6sRH8GXrHEBqnxfzu5nBg01O7
-         PsSCBOVXE3zk/bindBCnYr8yTWbgXGmGBsxizoayz94UGvFIMwHXS++CBD0erOa7zL0i
-         3Ylx0X3Eu69nKvPw7bFiKwVDRCyJ4bRLeUnCcAEJEN0hNn5/vQrcOFKmrpzMf7e+fZ4j
-         H88A==
-X-Gm-Message-State: APjAAAUmzOV0Y9GpsQAwtrqFoNhTFbHnH5+HJ/TRakgEy1KAG4o5vyoZ
-        +H2+9AuaY5RSX/0gG7fFkSpVew==
-X-Google-Smtp-Source: APXvYqwe9lERHFY9Jt1Z7JNSvqvEYMbh8DR6XD7zaGMsKCtoXCi/P5AunlMu5Ut2t+UrTpcRunsngQ==
-X-Received: by 2002:ac8:739a:: with SMTP id t26mr33575094qtp.65.1566419884839;
-        Wed, 21 Aug 2019 13:38:04 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id e15sm9805954qtr.51.2019.08.21.13.38.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0BysGlcLSnXeBZ1pv0mPCj6ITlGQ3QNXjoyF2Ap0RJY=;
+        b=hQ18nXsiPm8wqzfq38jJ8lQCu2q87OuXaZnysQLVlm9K/LZO0fxuRq+Ai+Sdhco7Un
+         fqP9b6yfqiZX7LCIZ4EbqVIEG6YkMLAQ7V3Oqqoas7o7Y/uhdyvhQ8Ra/4D9GfH1yeKH
+         JrU8oWEirm2LVXC+22RKxiZAFoZFBvPLUA5Mm/kIb4RCYMAg0PJWNBHXRbH6cYtsCZG+
+         gg+MH3jESDgnjwl76sXZsqwodkNrIe54hB+LxVOls4gP6Zl1CeduPswL2eQZEH+EGiSh
+         NaLydsc4XFU+gy+vZE+JghXCafCR3zS1FcNr0sbQGuGsoQuFTgWW17mTox5Gy7mn1vxG
+         UslA==
+X-Gm-Message-State: APjAAAUQp6p5H2CPCwRFiGhlurGLJMQjZASfA2XSCDMOGmUIN3xfDeX+
+        hqUFdBmSHe+iye+d/Dk5VA==
+X-Google-Smtp-Source: APXvYqwyCdp9o8YTLQuqlTyT5OIepCOx0aazVgW8orqSC0e9+vmRZf4pQjus03+ay0tw1yhN7gQitQ==
+X-Received: by 2002:a05:6830:54:: with SMTP id d20mr25800639otp.225.1566422322638;
+        Wed, 21 Aug 2019 14:18:42 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o26sm7711687otl.34.2019.08.21.14.18.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 13:38:04 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 13:37:57 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH v5 10/17] net: sgi: ioc3-eth: rework skb rx handling
-Message-ID: <20190821133757.4fb5253c@cakuba.netronome.com>
-In-Reply-To: <20190821162847.479c9967d4dc8026fe65fa0e@suse.de>
-References: <20190819163144.3478-1-tbogendoerfer@suse.de>
-        <20190819163144.3478-11-tbogendoerfer@suse.de>
-        <20190819165522.451f2ea2@cakuba.netronome.com>
-        <20190821162847.479c9967d4dc8026fe65fa0e@suse.de>
-Organization: Netronome Systems, Ltd.
+        Wed, 21 Aug 2019 14:18:42 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 16:18:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>
+Subject: Re: [PATCH v2 4/6] dt-bindings: serial: Document Freescale LINFlex
+ UART
+Message-ID: <20190821211841.GA16627@bogus>
+References: <20190809112853.15846-1-stefan-gabriel.mirea@nxp.com>
+ <20190809112853.15846-5-stefan-gabriel.mirea@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190809112853.15846-5-stefan-gabriel.mirea@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 21 Aug 2019 16:28:47 +0200, Thomas Bogendoerfer wrote:
-> > This looks like a DMA engine alignment requirement, more than an
-> > optimization.  
+On Fri, Aug 09, 2019 at 11:29:14AM +0000, Stefan-gabriel Mirea wrote:
+> From: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
 > 
-> that true, there are two constraints for the rx buffers, start must be aligned
-> to 128 bytes and a buffer must not cross a 16kbyte boundary. I was already
-> thinking of allocating pages and chop them up. Is there a Linux API available,
-> which could help for implementing this ?
+> Add documentation for the serial communication interface module (LINFlex),
+> found in two instances on S32V234.
 > 
-> I'll probably drop this patch or only change the skb_put stuff plus RX_BUF_SIZE
-> define.
+> Signed-off-by: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
+> Signed-off-by: Larisa Grigore <Larisa.Grigore@nxp.com>
+> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+> ---
+>  .../bindings/serial/fsl,s32-linflexuart.txt   | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt b/Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt
+> new file mode 100644
+> index 000000000000..957ffeaca9f1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt
+> @@ -0,0 +1,24 @@
+> +* Freescale Linflex UART
 
-Sounds a little like frag allocator (napi_alloc_frag()/
-netdev_alloc_frag()), but I'm not sure you'd have sufficient control
-to skip over the 16k boundary.. Perhaps others have better suggestions.
+Be consistent with the name: LINFlexD?
+
+> +
+> +The LINFlexD controller implements several LIN protocol versions, as well as
+> +support for full-duplex UART communication through 8-bit and 9-bit frames. The
+> +Linflex UART driver enables operation only in UART mode.
+
+What the driver supports or not is independent of the binding.
+
+> +
+> +See chapter 47 ("LINFlexD") in the reference manual[1].
+> +
+> +Required properties:
+> +- compatible :
+> +  - "fsl,s32-linflexuart" for linflex configured in uart mode which
+
+LINFlexD?
+
+> +  is compatible with the one integrated on S32V234 SoC
+
+Compatibles should be SoC specific. Is 's32' specific enough to account 
+for any differences or future bugs found?
+
+> +- reg : Address and length of the register set for the device
+> +- interrupts : Should contain uart interrupt
+> +
+> +Example:
+> +uart0:serial@40053000 {
+
+space    ^
+
+> +	compatible = "fsl,s32-linflexuart";
+> +	reg = <0x0 0x40053000 0x0 0x1000>;
+> +	interrupts = <0 59 4>;
+> +	status = "disabled";
+
+Don't show status in examples.
+
+> +};
+> +
+> +[1] https://www.nxp.com/webapp/Download?colCode=S32V234RM
+> -- 
+> 2.22.0
+> 
