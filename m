@@ -2,135 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E48EA98674
-	for <lists+linux-serial@lfdr.de>; Wed, 21 Aug 2019 23:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8D1993D2
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Aug 2019 14:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727862AbfHUVSo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 21 Aug 2019 17:18:44 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37693 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727136AbfHUVSn (ORCPT
+        id S2388661AbfHVMeM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 22 Aug 2019 08:34:12 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44077 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388646AbfHVMeM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 21 Aug 2019 17:18:43 -0400
-Received: by mail-ot1-f67.google.com with SMTP id f17so3471574otq.4;
-        Wed, 21 Aug 2019 14:18:43 -0700 (PDT)
+        Thu, 22 Aug 2019 08:34:12 -0400
+Received: by mail-lf1-f68.google.com with SMTP id v16so4381047lfg.11
+        for <linux-serial@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
+         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
+         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
+         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
+         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
+         unaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0BysGlcLSnXeBZ1pv0mPCj6ITlGQ3QNXjoyF2Ap0RJY=;
-        b=hQ18nXsiPm8wqzfq38jJ8lQCu2q87OuXaZnysQLVlm9K/LZO0fxuRq+Ai+Sdhco7Un
-         fqP9b6yfqiZX7LCIZ4EbqVIEG6YkMLAQ7V3Oqqoas7o7Y/uhdyvhQ8Ra/4D9GfH1yeKH
-         JrU8oWEirm2LVXC+22RKxiZAFoZFBvPLUA5Mm/kIb4RCYMAg0PJWNBHXRbH6cYtsCZG+
-         gg+MH3jESDgnjwl76sXZsqwodkNrIe54hB+LxVOls4gP6Zl1CeduPswL2eQZEH+EGiSh
-         NaLydsc4XFU+gy+vZE+JghXCafCR3zS1FcNr0sbQGuGsoQuFTgWW17mTox5Gy7mn1vxG
-         UslA==
-X-Gm-Message-State: APjAAAUQp6p5H2CPCwRFiGhlurGLJMQjZASfA2XSCDMOGmUIN3xfDeX+
-        hqUFdBmSHe+iye+d/Dk5VA==
-X-Google-Smtp-Source: APXvYqwyCdp9o8YTLQuqlTyT5OIepCOx0aazVgW8orqSC0e9+vmRZf4pQjus03+ay0tw1yhN7gQitQ==
-X-Received: by 2002:a05:6830:54:: with SMTP id d20mr25800639otp.225.1566422322638;
-        Wed, 21 Aug 2019 14:18:42 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id o26sm7711687otl.34.2019.08.21.14.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 14:18:42 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 16:18:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Leo Li <leoyang.li@nxp.com>,
-        "jslaby@suse.com" <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
-        Larisa Ileana Grigore <larisa.grigore@nxp.com>
-Subject: Re: [PATCH v2 4/6] dt-bindings: serial: Document Freescale LINFlex
- UART
-Message-ID: <20190821211841.GA16627@bogus>
-References: <20190809112853.15846-1-stefan-gabriel.mirea@nxp.com>
- <20190809112853.15846-5-stefan-gabriel.mirea@nxp.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=RS2I8gXfSvWkBGfPXU3M0G+R0LVfege/2OWcZ+Fm8pcmJ7bVx1QhpRIhknrllhgDbZ
+         ebWYml+IvVAdONlSZfNg5MDh4oJcwlidgyxeKUoVz4QrN77ew1SD02KJ9xB3GJco4Yto
+         PE5zqoQhjF9OLbs4Twft45uTj7V+NHPs8rBWnU6LcehSdNTRYhkhpMPDZp2vkuu203aM
+         z6c0f2+zqnHFvyLa0jJ8Eqbab2h9B2B3Ok5wniuD1k1YgaFHeQ45igm6gBN9y964dSAS
+         JYjzwqYaGtfrKad56VwIRwNiWkrONmSPoFF2XyjHXcAa9JluBbilLUialcW1taUaic2T
+         rDYQ==
+X-Gm-Message-State: APjAAAUBjNX8UvVUW0g4wV7EGeugdA8Zm4Ol9gDTuPv0g+Ir9y8PH/SY
+        TN18xDvnwUvXsgafpjjehKLnFfiT0ar9c0XzMsE=
+X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
+X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
+ Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190809112853.15846-5-stefan-gabriel.mirea@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:34:10 +0000
+Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 11:29:14AM +0000, Stefan-gabriel Mirea wrote:
-> From: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
-> 
-> Add documentation for the serial communication interface module (LINFlex),
-> found in two instances on S32V234.
-> 
-> Signed-off-by: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
-> Signed-off-by: Larisa Grigore <Larisa.Grigore@nxp.com>
-> Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-> ---
->  .../bindings/serial/fsl,s32-linflexuart.txt   | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt b/Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt
-> new file mode 100644
-> index 000000000000..957ffeaca9f1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/serial/fsl,s32-linflexuart.txt
-> @@ -0,0 +1,24 @@
-> +* Freescale Linflex UART
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-Be consistent with the name: LINFlexD?
-
-> +
-> +The LINFlexD controller implements several LIN protocol versions, as well as
-> +support for full-duplex UART communication through 8-bit and 9-bit frames. The
-> +Linflex UART driver enables operation only in UART mode.
-
-What the driver supports or not is independent of the binding.
-
-> +
-> +See chapter 47 ("LINFlexD") in the reference manual[1].
-> +
-> +Required properties:
-> +- compatible :
-> +  - "fsl,s32-linflexuart" for linflex configured in uart mode which
-
-LINFlexD?
-
-> +  is compatible with the one integrated on S32V234 SoC
-
-Compatibles should be SoC specific. Is 's32' specific enough to account 
-for any differences or future bugs found?
-
-> +- reg : Address and length of the register set for the device
-> +- interrupts : Should contain uart interrupt
-> +
-> +Example:
-> +uart0:serial@40053000 {
-
-space    ^
-
-> +	compatible = "fsl,s32-linflexuart";
-> +	reg = <0x0 0x40053000 0x0 0x1000>;
-> +	interrupts = <0 59 4>;
-> +	status = "disabled";
-
-Don't show status in examples.
-
-> +};
-> +
-> +[1] https://www.nxp.com/webapp/Download?colCode=S32V234RM
-> -- 
-> 2.22.0
-> 
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
