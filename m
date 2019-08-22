@@ -2,92 +2,159 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8D1993D2
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Aug 2019 14:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9549E99D4D
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Aug 2019 19:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388661AbfHVMeM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 22 Aug 2019 08:34:12 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:44077 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388646AbfHVMeM (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 22 Aug 2019 08:34:12 -0400
-Received: by mail-lf1-f68.google.com with SMTP id v16so4381047lfg.11
-        for <linux-serial@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
-         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
-         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
-         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
-         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
-         unaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=RS2I8gXfSvWkBGfPXU3M0G+R0LVfege/2OWcZ+Fm8pcmJ7bVx1QhpRIhknrllhgDbZ
-         ebWYml+IvVAdONlSZfNg5MDh4oJcwlidgyxeKUoVz4QrN77ew1SD02KJ9xB3GJco4Yto
-         PE5zqoQhjF9OLbs4Twft45uTj7V+NHPs8rBWnU6LcehSdNTRYhkhpMPDZp2vkuu203aM
-         z6c0f2+zqnHFvyLa0jJ8Eqbab2h9B2B3Ok5wniuD1k1YgaFHeQ45igm6gBN9y964dSAS
-         JYjzwqYaGtfrKad56VwIRwNiWkrONmSPoFF2XyjHXcAa9JluBbilLUialcW1taUaic2T
-         rDYQ==
-X-Gm-Message-State: APjAAAUBjNX8UvVUW0g4wV7EGeugdA8Zm4Ol9gDTuPv0g+Ir9y8PH/SY
-        TN18xDvnwUvXsgafpjjehKLnFfiT0ar9c0XzMsE=
-X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
-X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
- Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
-Date:   Thu, 22 Aug 2019 12:34:10 +0000
-Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S2405133AbfHVRlS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 22 Aug 2019 13:41:18 -0400
+Received: from mail-eopbgr130075.outbound.protection.outlook.com ([40.107.13.75]:48711
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2404016AbfHVRlN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 22 Aug 2019 13:41:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RRO13rnjSIjTHGYsKEDMKg3KPFXx3kTR0AUuQMibmM7UTe6FXRJXTjJevRKd0334f4wUns0HETj3wcxCgSrd1Lg2SjSTW8mH1Ew9TLRnCFRsAkio7SmCfmyU5Iz0ap8vZhOBc2LlTv26eXVJl+Ve0ygzurLTL9B3T7fwZvWswfYvkXz4IfuqKFftsTEE4ENsOfqPEibxNppPfa8Lk6mrsCoIqSaEAOrWPgdBnrF/u79NWwhYHImEcAfNN3LwbLvAxNDG/c/2VuuQb9uzfjLFR+2b2RF0eGGYGNIq35t7Qe6U5BakLy5bFNALBv2WROAjgtFKQkneaA89pd++Pr/gfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/zfdWFxc4tpZG96O621XPEKPsObJSpnKSPyO1MZrjq0=;
+ b=gehJhQIQxY3Rs9rLNb9llDaJWfbDRTQ+S6/F0zhPDkuovcGYfmIi+8ITtIki0df1+Rpfs7joRTHXmZ5XQfEC4zOMaoInp03MgYrBvorjnhxTo8a645bfoJSXhBr+N88VqyB52i96nHzYIuQcFpkZiUxW3l4l4GHA+3SDJKqJzWWBXL8qjUanRoeTvFWe18zMugN+5tsUe7JrqH7ivUfLMfw+U3IQ5Qvsf78Ie990g4IwRemCaaQ5Vb2pN0A3UoUOsCpyKpa1DgUGhqScrBwcJiMbP9GgDbvpzaxraKWm8T73mWEykqN8zf9rHaIiJP0fkaTBEE4VKeW9rydW78k/RQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/zfdWFxc4tpZG96O621XPEKPsObJSpnKSPyO1MZrjq0=;
+ b=phHoiSnJfk4Hz8FzdHvpb4q9gPjrJRWoM5G1CyvgfFHXjHxsRGqMxtU/PoNxG06QdiB7W7pPJfHXSLbxT6a6d2m8U8nysTHo1gmdKGE4yx62KwjaIEmkq+CoinEcuR/217BJgewXQ56P3Nx/i8mgvqingloRKtSnubYgL5Cnhag=
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
+ VI1PR0402MB2751.eurprd04.prod.outlook.com (10.175.22.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.16; Thu, 22 Aug 2019 17:41:08 +0000
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::7de6:ea4b:9b5d:d023%7]) with mapi id 15.20.2178.020; Thu, 22 Aug 2019
+ 17:41:07 +0000
+From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>
+Subject: Re: [PATCH v2 4/6] dt-bindings: serial: Document Freescale LINFlex
+ UART
+Thread-Topic: [PATCH v2 4/6] dt-bindings: serial: Document Freescale LINFlex
+ UART
+Thread-Index: AQHVWRDHP6fOISb7w0aVGXW7bCPQGg==
+Date:   Thu, 22 Aug 2019 17:41:07 +0000
+Message-ID: <VI1PR0402MB28638ABB58605D7D2ADBA852DFA50@VI1PR0402MB2863.eurprd04.prod.outlook.com>
+References: <20190809112853.15846-1-stefan-gabriel.mirea@nxp.com>
+ <20190809112853.15846-5-stefan-gabriel.mirea@nxp.com>
+ <20190821211841.GA16627@bogus>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
+x-originating-ip: [212.146.100.6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e0a54dba-d65e-4f29-468b-08d72727ea08
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600166)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR0402MB2751;
+x-ms-traffictypediagnostic: VI1PR0402MB2751:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0402MB27517C66A4C1434073E29715DFA50@VI1PR0402MB2751.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 01371B902F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(199004)(189003)(6916009)(7736002)(64756008)(74316002)(26005)(305945005)(53936002)(9686003)(446003)(102836004)(53546011)(8936002)(8676002)(81156014)(81166006)(6436002)(6506007)(71190400001)(71200400001)(99286004)(478600001)(55016002)(7696005)(66066001)(33656002)(2906002)(14454004)(486006)(476003)(186003)(229853002)(91956017)(3846002)(25786009)(86362001)(76116006)(52536014)(316002)(4326008)(54906003)(6246003)(7416002)(66476007)(256004)(14444005)(5660300002)(6116002)(76176011)(66556008)(66946007)(66446008);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB2751;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Io097fQC7Ehuhlrt/4r6BpzqzQcg+H2ojIFFuV/OBOUM4nOCxRddY2oJs/GUzGlpIq0IfG9OQPVgO3cyH0bpYBj3I3eCU/TD8VhEiSpow8uWNqhX2EC0YdSoDJ5Wl5omRIICNoz1E9Fi44yVXoe/Q4jcbPakb7K2KZyCXvAh6OhtfdGhEBit11uzQHQm/Pv4anXBqksiUaD+rPMkF+TU74SA0rzDtNHbTOfBPQAyRRC48JZV0cCL3Rm3re/ExMrEyyOQKrVU6lbqYiwQsQCz6Ho4/QFgCMH2v75XItDAyTZ+u8v/rPDoaiC/lJ0xvIm1yjkqGdiMsAJxX5fvWBcF/UoanmFDwNYUlnbhRbtr+BJVOJGcguusiFOkkE82BEz96QuZxx1ASahXQl6pNVdP9jeUrhfqFg/UdhsJqz2hPyI=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0a54dba-d65e-4f29-468b-08d72727ea08
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2019 17:41:07.8693
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hFneZf9hWykGZqhkuCaYHRVjyOvl1eoNbIVc/ITkpuB1CCHEyX7wV/9odSealHu3HtexqIuBtqUJWdiiiAGPJeJz+vRBJEAJOml/DUbJOpo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2751
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
-
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+Hello Rob,=0A=
+=0A=
+Thank you for the review.=0A=
+=0A=
+On 8/22/2019 12:18 AM, Rob Herring wrote:=0A=
+> On Fri, Aug 09, 2019 at 11:29:14AM +0000, Stefan-gabriel Mirea wrote:=0A=
+>> +* Freescale Linflex UART=0A=
+> =0A=
+> Be consistent with the name: LINFlexD?=0A=
+=0A=
+This was also brought up in our internal review. However, the reference=0A=
+manual is also inconsistent, using LINFlexD, LINflexD, LinFlexD,=0A=
+LINFlex, LINFLEX, LinFlex and Linflex. I will switch to 'LINFlexD'=0A=
+everywhere, though.=0A=
+=0A=
+>> +The LINFlexD controller implements several LIN protocol versions, as we=
+ll as=0A=
+>> +support for full-duplex UART communication through 8-bit and 9-bit fram=
+es. The=0A=
+>> +Linflex UART driver enables operation only in UART mode.=0A=
+> =0A=
+> What the driver supports or not is independent of the binding.=0A=
+=0A=
+Ok, I will remove the last sentence ("The Linflex UART driver enables=0A=
+operation only in UART mode").=0A=
+=0A=
+>> +  - "fsl,s32-linflexuart" for linflex configured in uart mode which=0A=
+> =0A=
+> LINFlexD?=0A=
+=0A=
+Will fix; I agree that the all lowercase version has no occurrence in=0A=
+the reference manual.=0A=
+=0A=
+>> +  is compatible with the one integrated on S32V234 SoC=0A=
+> =0A=
+> Compatibles should be SoC specific. Is 's32' specific enough to account=
+=0A=
+> for any differences or future bugs found?=0A=
+=0A=
+It is probably not. I will change it to "fsl,s32v234-linflexuart" (as=0A=
+well as in the device tree and driver).=0A=
+=0A=
+>> +Example:=0A=
+>> +uart0:serial@40053000 {=0A=
+> =0A=
+> space    ^=0A=
+> =0A=
+>> +     compatible =3D "fsl,s32-linflexuart";=0A=
+>> +     reg =3D <0x0 0x40053000 0x0 0x1000>;=0A=
+>> +     interrupts =3D <0 59 4>;=0A=
+>> +     status =3D "disabled";=0A=
+> =0A=
+> Don't show status in examples.=0A=
+=0A=
+Will fix these too.=0A=
+=0A=
+Regards,=0A=
+Stefan=0A=
