@@ -2,98 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF209A4E1
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2019 03:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A799AFDD
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2019 14:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388060AbfHWB1C (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 22 Aug 2019 21:27:02 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35348 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730588AbfHWB1B (ORCPT
+        id S2394451AbfHWMq0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 23 Aug 2019 08:46:26 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:40650 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394409AbfHWMq0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 22 Aug 2019 21:27:01 -0400
-Received: by mail-pf1-f196.google.com with SMTP id d85so5250532pfd.2;
-        Thu, 22 Aug 2019 18:27:01 -0700 (PDT)
+        Fri, 23 Aug 2019 08:46:26 -0400
+Received: by mail-qk1-f193.google.com with SMTP id s145so8019668qke.7
+        for <linux-serial@vger.kernel.org>; Fri, 23 Aug 2019 05:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8+8yuYK16262CDN+ZxtmlGEgmLpOhgOgpMGr9koQfx8=;
-        b=EQzDM+EZm1n/3JRPSqgy65MO96XftGB13VIxawHZ8R/y+psdgvGf12uisksVlwfFtY
-         g7GrJuBmwiLyZcOJYF78I8+0dW22xtcyBW+ACcdmc1Dmc9ZIyHpCr1OetLffwCWCl7a1
-         MlHNj5MPLTTcyPOLiaMUlM5S/deBQ2dd//kcZshhkhQSg6rgMVAxYd7JJyYsqFqeS+8D
-         Y7xOw1IVEYg6IeQZHwLkmSiQyVAastek2k9gERMv7Y5JEzqzZcwgfhPmq6JntHWL+E3Z
-         VZjZwQ4CNc184I3JgVIIBMOoR5UWQxf6t47h9XaYjz8hC6lIjGG/UmJ7VpX+kC8gMHmA
-         5+Tw==
+        d=googlemail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zXK8wSxYeU6mTfAA+o9q9brcj/U7vzDk9wL4rKw+72U=;
+        b=huKZZ4POd9oGNIf154cX8OkhY1BZkUXyM/wHgwrskECom+bBIKCS8xu/ylm4iM7QIV
+         eogEVwnrbv2hYwmXkYbixytBWFC6QHDmYMYDsJ6F7DETQbK1byviARNOXxbukjKWnCYK
+         4G237kicNQMqsK6kMLVRYH5v/xQwm0DTMywt5IiyJEL9rUkvbxhLeBrXKli0Mufe8Qx8
+         BYAMyCTuP9l7XAvjV5ewLwhi5337SWGnTJ7FUPyQS6Zvx7xa16cvfzbIQlT8V2Q1Rjy4
+         hORmMSdl7Gdjb3kuM1ETCPvVYa9/Tsq6oVFbEVx2IwQsxbYqU/SPYXL0rSpSBiKjE0BX
+         xtxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8+8yuYK16262CDN+ZxtmlGEgmLpOhgOgpMGr9koQfx8=;
-        b=QsyLGzOLzc0VCE3EbJjHtLBI/PfjxAIU5mUZtq+dT1nhuyugqI3FZzRwkMKKT2vOvu
-         /zjwjVNEzlhqK8QGoMOtngXqGNszo05S+Eyu9hkl11ifs3wA4kcuJfU53F24fs3KexBt
-         NpMxKgaVQhoDvfRek/WqNgusJok3fz7DvosZF7gqw4dsUoP51MZlJZfP9QBRnW5UCE6s
-         pIZuF48uHycUrbE5iU6/MDZnIQLwERnvXrfezjfFfSlyhU5WL7dROhNJSPT/SRoo8txT
-         GXqDK+f7OrlPsZqrmBytBajAvcCI41UsbkGQRbCs/DDCBqnzFXUNLxgex4gRZZB9M2dd
-         cd4w==
-X-Gm-Message-State: APjAAAW+JJnLaRLDmyzOHm7RzE5KqMk3A6wTsJVbSLj/r72CsCwBIMwJ
-        0pa0eGYKAXSXM7YG++sgdO8=
-X-Google-Smtp-Source: APXvYqygq8tpOYst9vMC8OsAqYaTJOmKvYD0sAW96IJYY1wDP41IeA29GN2x3ng8cgd5KkwIskpr9Q==
-X-Received: by 2002:a63:4e05:: with SMTP id c5mr1715430pgb.396.1566523620683;
-        Thu, 22 Aug 2019 18:27:00 -0700 (PDT)
-Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id k3sm702449pfg.23.2019.08.22.18.26.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Aug 2019 18:26:59 -0700 (PDT)
-Subject: Re: [PATCH V1 1/1] serial: 8250_pci: Add F81504A series Support
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        jslaby@suse.com, jay.dolan@accesio.com, hslester96@gmail.com,
-        je.yen.tam@ni.com, lkp@intel.com, kai.heng.feng@canonical.com,
-        heikki.krogerus@linux.intel.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-References: <1565933249-23076-1-git-send-email-hpeter+linux_kernel@gmail.com>
- <20190816112644.GF30120@smile.fi.intel.com>
- <8e052919-b012-ff3f-f108-380d1ce5f7e7@gmail.com>
- <20190822211511.GA11893@kroah.com>
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Message-ID: <b15b0504-91d3-a147-0613-5c8a4749e74d@gmail.com>
-Date:   Fri, 23 Aug 2019 09:26:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zXK8wSxYeU6mTfAA+o9q9brcj/U7vzDk9wL4rKw+72U=;
+        b=Z3LGrhZA/UUYqv2MUHPu5VJxegiPDrwJNcj2hoOesZQWR3//NciGNxsnPxDAt+B1MY
+         kXI+o03GjwlDVRvhFOV2gnWt+R9JhH0skMJCgz4Pqa4qp7s1KAExoR4aNQj0puFTXPqx
+         CjTQFedAHskMjPePDKgMmjsBz60F7BkCBpQ3JvGiC64ha1uMBrnP2jDUkBqBeeNl0r6Y
+         R10zWhD+VxtYS6fap6S0PlutdVfMMO+ANYsw9UhZJJ4X0aY5lAn9FcjQdSeVG2veThLg
+         GG0DGn1ShvOwm5F8q1XUp7TOdlEFfrjPoQLFxq1ls40b1Ktwb+xMPqIxkJsmRV/uhs9m
+         mKmg==
+X-Gm-Message-State: APjAAAU7cRsXOjoBDjSte4bMVESh5o+Poaqi56ClMgesMZpIxeYgn3AX
+        cZAR4arrrp25bXYSnRlQBDXMRCmWb5/ydss8kyk=
+X-Google-Smtp-Source: APXvYqwTtgJ0b4v2N1iG2eAj2ET9qJsxABPAQ97C4+6lkVM3Om2VKNiwag0A9lz3Gg4SNGfNzUZpEmnSqUjv3zDyvOE=
+X-Received: by 2002:a37:86c4:: with SMTP id i187mr3780600qkd.464.1566564385533;
+ Fri, 23 Aug 2019 05:46:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190822211511.GA11893@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ac8:1401:0:0:0:0:0 with HTTP; Fri, 23 Aug 2019 05:46:25
+ -0700 (PDT)
+Reply-To: linelink008@gmail.com
+From:   AZIM HASHIM PREMJI <davisfundinginc1@googlemail.com>
+Date:   Fri, 23 Aug 2019 05:46:25 -0700
+Message-ID: <CADmRoGO3-sWYMd_PkNyVQYTJS704KkRQ_cHf_f=GwdX7S6iY_A@mail.gmail.com>
+Subject: =?UTF-8?Q?HERZLICHEN_GL=C3=9CCKWUNSCH_=E2=82=AC_1=2C000=2E000=2C00_wurde_an_Si?=
+        =?UTF-8?Q?e_gespendet?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
-
-Greg KH 於 2019/8/23 上午 05:15 寫道:
->> Andy Shevchenko 於 2019/8/16 下午 07:26 寫道:
->>> We have 8250_fintek.
->>> Isn't it a right place to add these?
->>>
->>
->> The 8250_fintek implements PNP device with id PNP0501.
->> Should I also implements PCIe device in this file?
-> 
-> Does it use the same logic?  If so, that makes sense, but if you can not
-> share anything, then no, it does not make sense.
-> 
-
-It's same with old series F81504/508/512 and the old series had
-implement in 8250_pci.c (pbn_fintek_4/pbn_fintek_8/pbn_fintek_12).
-So I decide implements the new series in 8250_pci.c
-
-
-Thanks
--- 
-With Best Regards,
-Peter Hong
+Ich bin der Vorsitzende von Wipro Limited. Ich habe 25 Prozent meines
+pers=C3=B6nlichen Verm=C3=B6gens verschenkt
+f=C3=BCr die Wohlfahrt. Und ich habe zugesagt, den Rest von 25% dieses Jahr
+2019 an zu vergeben
+Privatpersonen .. Ich habe mich entschieden, Ihnen =E2=82=AC1.000.000,00 zu
+spenden. Wenn du bist
+Interesse an meiner Spende, kontaktieren Sie mich f=C3=BCr weitere Informat=
+ionen.
