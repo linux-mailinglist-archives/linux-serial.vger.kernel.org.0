@@ -2,67 +2,153 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A799AFDD
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2019 14:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CD19B11D
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2019 15:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394451AbfHWMq0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 23 Aug 2019 08:46:26 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:40650 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394409AbfHWMq0 (ORCPT
+        id S2388149AbfHWNlo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 23 Aug 2019 09:41:44 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39640 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731976AbfHWNln (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 23 Aug 2019 08:46:26 -0400
-Received: by mail-qk1-f193.google.com with SMTP id s145so8019668qke.7
-        for <linux-serial@vger.kernel.org>; Fri, 23 Aug 2019 05:46:25 -0700 (PDT)
+        Fri, 23 Aug 2019 09:41:43 -0400
+Received: by mail-wr1-f65.google.com with SMTP id t16so8688323wra.6;
+        Fri, 23 Aug 2019 06:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zXK8wSxYeU6mTfAA+o9q9brcj/U7vzDk9wL4rKw+72U=;
-        b=huKZZ4POd9oGNIf154cX8OkhY1BZkUXyM/wHgwrskECom+bBIKCS8xu/ylm4iM7QIV
-         eogEVwnrbv2hYwmXkYbixytBWFC6QHDmYMYDsJ6F7DETQbK1byviARNOXxbukjKWnCYK
-         4G237kicNQMqsK6kMLVRYH5v/xQwm0DTMywt5IiyJEL9rUkvbxhLeBrXKli0Mufe8Qx8
-         BYAMyCTuP9l7XAvjV5ewLwhi5337SWGnTJ7FUPyQS6Zvx7xa16cvfzbIQlT8V2Q1Rjy4
-         hORmMSdl7Gdjb3kuM1ETCPvVYa9/Tsq6oVFbEVx2IwQsxbYqU/SPYXL0rSpSBiKjE0BX
-         xtxQ==
+        bh=Aj3B45jhtEZcmQmilM9V1gT63YSrO/49VbhmaZmMCl0=;
+        b=FNKapKXyOkxQI4mV1jhF+IKzzz2Ev7anaoQseA+F0oPOhfgN9+GMVuSt1k9/Z+jhX6
+         YYI3jY0/MCSqyOWUch37iepC6VMUvLEGw8ncSM5djTCgM4Gg5nMHhC0+5TZEIoiLs+2w
+         q3Cl8TD8JQ/nxICQM8/twFIwGrm7+Lp+a+3nMb1kLQxkpFLFl4B5YF+WvOOPOmA9lkeV
+         dhAkQ8ZAwJVhZXmKjj68mPVlPIV8V3Kv5hne0l3axycLtdYnhOBBTrnlFXF0cryeHHRr
+         PQ2sBcdWaxJyGB7h3c29nN9OhH3PEutRCnBij68a4Y3HUaT3fiXJBgt6QA4a3xkNtIY2
+         aJgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zXK8wSxYeU6mTfAA+o9q9brcj/U7vzDk9wL4rKw+72U=;
-        b=Z3LGrhZA/UUYqv2MUHPu5VJxegiPDrwJNcj2hoOesZQWR3//NciGNxsnPxDAt+B1MY
-         kXI+o03GjwlDVRvhFOV2gnWt+R9JhH0skMJCgz4Pqa4qp7s1KAExoR4aNQj0puFTXPqx
-         CjTQFedAHskMjPePDKgMmjsBz60F7BkCBpQ3JvGiC64ha1uMBrnP2jDUkBqBeeNl0r6Y
-         R10zWhD+VxtYS6fap6S0PlutdVfMMO+ANYsw9UhZJJ4X0aY5lAn9FcjQdSeVG2veThLg
-         GG0DGn1ShvOwm5F8q1XUp7TOdlEFfrjPoQLFxq1ls40b1Ktwb+xMPqIxkJsmRV/uhs9m
-         mKmg==
-X-Gm-Message-State: APjAAAU7cRsXOjoBDjSte4bMVESh5o+Poaqi56ClMgesMZpIxeYgn3AX
-        cZAR4arrrp25bXYSnRlQBDXMRCmWb5/ydss8kyk=
-X-Google-Smtp-Source: APXvYqwTtgJ0b4v2N1iG2eAj2ET9qJsxABPAQ97C4+6lkVM3Om2VKNiwag0A9lz3Gg4SNGfNzUZpEmnSqUjv3zDyvOE=
-X-Received: by 2002:a37:86c4:: with SMTP id i187mr3780600qkd.464.1566564385533;
- Fri, 23 Aug 2019 05:46:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Aj3B45jhtEZcmQmilM9V1gT63YSrO/49VbhmaZmMCl0=;
+        b=Y4EGx0eweVEIOARLHvtjXQCAuAvbEdg3UuifoVwc1LHT1ZdNMe4h/AaR6jb6XJ4kN8
+         WEaEx+AoKenX63GKDiiD76lqxURQ7HKPN0ZTt+J+07wfI2ZpaaK87OWwdHRCcwPb/iYG
+         PHvKR7FXT3KWCqotIx2zFNsYb0PILAdf8wBqnaOYjyw/f0ZlsTbfo/2lbeQkXwJ1PGuc
+         YpC9j7cshpuPXkeYeAS852AXkS2RYlp9vjJTL4KeXUEuvDx3WNFWZs8fmWgRk4afhE2i
+         WTOJgvogNwTOKhXjJNtA5bn0yGAmRYYN5cRs3Zi7nNl3d7+6PtPRMJqBZ+ExA7AmLgmT
+         l5Qw==
+X-Gm-Message-State: APjAAAVCYpA+lx+On9Ac4ZAMfTXtLgeQLmgUfONGBMSyt9fQNRy05SG+
+        PVW5unRupUPpgor/88QEJ2M=
+X-Google-Smtp-Source: APXvYqznbduO48damzNK/nFcez8ZSj9B4TeoJy109j6Q06iG+oQZq2N46/8vb1yP/spS+dr7tM0RIw==
+X-Received: by 2002:a5d:4b8b:: with SMTP id b11mr5489728wrt.294.1566567701297;
+        Fri, 23 Aug 2019 06:41:41 -0700 (PDT)
+Received: from localhost ([46.227.18.67])
+        by smtp.gmail.com with ESMTPSA id l62sm5236104wml.13.2019.08.23.06.41.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 23 Aug 2019 06:41:40 -0700 (PDT)
+From:   Richard Genoud <richard.genoud@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Richard Genoud <richard.genoud@gmail.com>
+Subject: [PATCH] tty/serial: atmel: remove unneeded atmel_get_lines_status function
+Date:   Fri, 23 Aug 2019 15:41:09 +0200
+Message-Id: <20190823134109.12402-1-richard.genoud@gmail.com>
+X-Mailer: git-send-email 2.19.2
 MIME-Version: 1.0
-Received: by 2002:ac8:1401:0:0:0:0:0 with HTTP; Fri, 23 Aug 2019 05:46:25
- -0700 (PDT)
-Reply-To: linelink008@gmail.com
-From:   AZIM HASHIM PREMJI <davisfundinginc1@googlemail.com>
-Date:   Fri, 23 Aug 2019 05:46:25 -0700
-Message-ID: <CADmRoGO3-sWYMd_PkNyVQYTJS704KkRQ_cHf_f=GwdX7S6iY_A@mail.gmail.com>
-Subject: =?UTF-8?Q?HERZLICHEN_GL=C3=9CCKWUNSCH_=E2=82=AC_1=2C000=2E000=2C00_wurde_an_Si?=
-        =?UTF-8?Q?e_gespendet?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Ich bin der Vorsitzende von Wipro Limited. Ich habe 25 Prozent meines
-pers=C3=B6nlichen Verm=C3=B6gens verschenkt
-f=C3=BCr die Wohlfahrt. Und ich habe zugesagt, den Rest von 25% dieses Jahr
-2019 an zu vergeben
-Privatpersonen .. Ich habe mich entschieden, Ihnen =E2=82=AC1.000.000,00 zu
-spenden. Wenn du bist
-Interesse an meiner Spende, kontaktieren Sie mich f=C3=BCr weitere Informat=
-ionen.
+Since commit ce59e48fdbad ("serial: mctrl_gpio: implement interrupt
+handling"), the GPIOs interrupts are handled by mctrl_gpio_irq_handle().
+So, atmel_get_lines_status() can be completely killed and replaced by :
+atmel_uart_readl(port, ATMEL_US_CSR);
+
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+---
+ drivers/tty/serial/atmel_serial.c | 48 ++-----------------------------
+ 1 file changed, 2 insertions(+), 46 deletions(-)
+
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 9a54c9e6d36e..a8dc8af83f39 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -294,50 +294,6 @@ static void atmel_tasklet_schedule(struct atmel_uart_port *atmel_port,
+ 		tasklet_schedule(t);
+ }
+ 
+-static unsigned int atmel_get_lines_status(struct uart_port *port)
+-{
+-	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
+-	unsigned int status, ret = 0;
+-
+-	status = atmel_uart_readl(port, ATMEL_US_CSR);
+-
+-	mctrl_gpio_get(atmel_port->gpios, &ret);
+-
+-	if (!IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(atmel_port->gpios,
+-						UART_GPIO_CTS))) {
+-		if (ret & TIOCM_CTS)
+-			status &= ~ATMEL_US_CTS;
+-		else
+-			status |= ATMEL_US_CTS;
+-	}
+-
+-	if (!IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(atmel_port->gpios,
+-						UART_GPIO_DSR))) {
+-		if (ret & TIOCM_DSR)
+-			status &= ~ATMEL_US_DSR;
+-		else
+-			status |= ATMEL_US_DSR;
+-	}
+-
+-	if (!IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(atmel_port->gpios,
+-						UART_GPIO_RI))) {
+-		if (ret & TIOCM_RI)
+-			status &= ~ATMEL_US_RI;
+-		else
+-			status |= ATMEL_US_RI;
+-	}
+-
+-	if (!IS_ERR_OR_NULL(mctrl_gpio_to_gpiod(atmel_port->gpios,
+-						UART_GPIO_DCD))) {
+-		if (ret & TIOCM_CD)
+-			status &= ~ATMEL_US_DCD;
+-		else
+-			status |= ATMEL_US_DCD;
+-	}
+-
+-	return status;
+-}
+-
+ /* Enable or disable the rs485 support */
+ static int atmel_config_rs485(struct uart_port *port,
+ 			      struct serial_rs485 *rs485conf)
+@@ -1453,7 +1409,7 @@ static irqreturn_t atmel_interrupt(int irq, void *dev_id)
+ 	spin_lock(&atmel_port->lock_suspended);
+ 
+ 	do {
+-		status = atmel_get_lines_status(port);
++		status = atmel_uart_readl(port, ATMEL_US_CSR);
+ 		mask = atmel_uart_readl(port, ATMEL_US_IMR);
+ 		pending = status & mask;
+ 		if (!pending)
+@@ -2002,7 +1958,7 @@ static int atmel_startup(struct uart_port *port)
+ 	}
+ 
+ 	/* Save current CSR for comparison in atmel_tasklet_func() */
+-	atmel_port->irq_status_prev = atmel_get_lines_status(port);
++	atmel_port->irq_status_prev = atmel_uart_readl(port, ATMEL_US_CSR);
+ 
+ 	/*
+ 	 * Finally, enable the serial port
+-- 
+2.19.2
+
