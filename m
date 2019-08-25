@@ -2,54 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3275B9BFA6
-	for <lists+linux-serial@lfdr.de>; Sat, 24 Aug 2019 21:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB0D9C29B
+	for <lists+linux-serial@lfdr.de>; Sun, 25 Aug 2019 10:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728023AbfHXTAm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Sat, 24 Aug 2019 15:00:42 -0400
-Received: from smtp2.osep.mendoza.gov.ar ([200.16.135.145]:52984 "HELO
-        smtp2.osep.mendoza.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728118AbfHXTAm (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 24 Aug 2019 15:00:42 -0400
-X-Greylist: delayed 9990 seconds by postgrey-1.27 at vger.kernel.org; Sat, 24 Aug 2019 15:00:41 EDT
-Received: (qmail 402 invoked from network); 24 Aug 2019 14:14:38 -0000
-Received: from unknown (HELO zimbra.servers.dg.intranet) (10.10.195.224)
-  by smtp2.osep.mendoza.gov.ar with SMTP; 24 Aug 2019 14:14:38 -0000
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id DB8B3CF7CC66;
-        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from zimbra.servers.dg.intranet ([127.0.0.1])
-        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RViPrJdL95bg; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id 877BBCF7CC58;
-        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-X-Virus-Scanned: amavisd-new at osep.mendoza.gov.ar
-Received: from zimbra.servers.dg.intranet ([127.0.0.1])
-        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9n2-6F1Dy9XD; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
-Received: from zimbra.servers.dg.intranet (zimbra.servers.dg.intranet [10.10.195.224])
-        by zimbra.servers.dg.intranet (Postfix) with ESMTP id BAAEBCF7CC40;
-        Sat, 24 Aug 2019 11:14:36 -0300 (ART)
-Date:   Sat, 24 Aug 2019 11:14:36 -0300 (ART)
-From:   "Herr.Robert Jackson" <liliana.marinero@osep.mendoza.gov.ar>
-Reply-To: SKY GROUP FINANCIAL <skygroupfinancial0@gmail.com>
-Message-ID: <1268244548.24999093.1566656076742.JavaMail.zimbra@osep.mendoza.gov.ar>
-Subject: 
+        id S1726159AbfHYIpz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 25 Aug 2019 04:45:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60518 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725809AbfHYIpz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 25 Aug 2019 04:45:55 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C19DF20674;
+        Sun, 25 Aug 2019 08:45:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566722754;
+        bh=WhC5/28ETdw1zHu/U8GXGLVf86Y7kQ1/vFDlTzHznVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ngTDXY/R4lbOrcL6Ki1KaMIXH+eIptR8DJMC4ix4ea3kQ+SHBJxRRLWNDXgyeDf/J
+         SiH5HiP+nGy+mh1oWVWzbyDJH+Yo5M2xfL+lnZ7tq/urwABjn2vAEYO9+vqP0fkE4N
+         CCRFuoXGH5/rkwfnZMzsdyxo5IqnMxDAUFVubFpE=
+Date:   Sun, 25 Aug 2019 10:45:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Richard Genoud <richard.genoud@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-serial@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tty/serial: atmel: remove unneeded
+ atmel_get_lines_status function
+Message-ID: <20190825084551.GA6458@kroah.com>
+References: <20190823134109.12402-1-richard.genoud@gmail.com>
+ <20190823143241.zixdsnwrtzhgkig7@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [172.16.3.2]
-X-Mailer: Zimbra 8.6.0_GA_1153 (zclient/8.6.0_GA_1153)
-Thread-Topic: 
-Thread-Index: 9gdTMQJ8JBu8cvpzdFVmtKjzn0qahQ==
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190823143241.zixdsnwrtzhgkig7@pengutronix.de>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Fri, Aug 23, 2019 at 04:32:41PM +0200, Uwe Kleine-K�nig wrote:
+> On Fri, Aug 23, 2019 at 03:41:09PM +0200, Richard Genoud wrote:
+> > Since commit ce59e48fdbad ("serial: mctrl_gpio: implement interrupt
+> > handling"), the GPIOs interrupts are handled by mctrl_gpio_irq_handle().
+> 
+> Well no, since ce59e48fdbad the mctrl_gpio helper can do all that
+> interrupt stuff. You want to reference
+> 18dfef9c7f87b75bbb0fb66a634f7c13a45b9f8d here.
 
+Richard, can you resend with this changed?
 
-Wir sind zuverlässige, vertrauenswürdige Kreditgeber, leihen wir Unternehmen und Einzelpersonen zu einem niedrigen Zinssatz von 2%, Sind Sie auf der Suche nach einem Geschäftskredit, Privatkredite, Schuldenkonsolidierung, unbesicherte Kredite, Risikokapital, wenn ja Kontaktieren Sie uns jetzt für weitere Einzelheiten.
+thanks
+
+greg k-h
