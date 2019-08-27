@@ -2,71 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F013F9E6F0
-	for <lists+linux-serial@lfdr.de>; Tue, 27 Aug 2019 13:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788EF9F164
+	for <lists+linux-serial@lfdr.de>; Tue, 27 Aug 2019 19:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727683AbfH0Lmz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 27 Aug 2019 07:42:55 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5223 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725912AbfH0Lmz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 27 Aug 2019 07:42:55 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 308CF158C85466B87F03;
-        Tue, 27 Aug 2019 19:42:52 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.439.0; Tue, 27 Aug 2019 19:42:42 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <linux-serial@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: [PATCH -next] tty: serial: linflexuart: Use DEFINE_SPINLOCK() for spinlock
-Date:   Tue, 27 Aug 2019 11:46:14 +0000
-Message-ID: <20190827114614.102037-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1730260AbfH0RVZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 27 Aug 2019 13:21:25 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40659 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbfH0RVZ (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 27 Aug 2019 13:21:25 -0400
+Received: by mail-oi1-f195.google.com with SMTP id h21so15575869oie.7;
+        Tue, 27 Aug 2019 10:21:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TzlJDZhfydcuzWtj1D7/gRqYXuI2l2jfwe/r2X4rP3M=;
+        b=OvSbg1yT/HuD8oA+hIa0M8/+MdEpQZbyQcBcNq52Rxmouti1Lfo0sabuvuWjg+Ef6Q
+         vicggjHmw+kV/TeiUI/CgbkZeizFJu2YAqd5Oy4mB8c1sCzeOOpheUXmHMLnXHXjms4t
+         ZYmDWwy0BeEwL7Z99+7BZG5EmaTfjKuzRmuj4f5vtma2A4zwCxa+mJgG83VlFr//KSCC
+         sOmcL9yVGGFTzYEfV75Ml1HG53fmAPofV0oTwLDLP5tlwPyFru6cvawS8vtL+hb8T5VW
+         u6VEvZdCQMCUFZ/4mxfZ7y8Ie3YBnbCq0PDS/KDeTxisvakQFj8x2zH+7v530qlD9qbx
+         jPHA==
+X-Gm-Message-State: APjAAAXcXu0Kp+f8fRNG3kGcCSMht0VqFj5zfYAvWSOHxea6//dYx6Ut
+        az2kw6d0IRgQwS6pNHl08w==
+X-Google-Smtp-Source: APXvYqy+H7o5a8N4vxEpSqDTDlgH+Ol5wAX4ZBBqVE7CxT5zNQaPDyao/XH6eHuHK9kVhBPiUlnqBw==
+X-Received: by 2002:aca:b808:: with SMTP id i8mr11296oif.68.1566926484296;
+        Tue, 27 Aug 2019 10:21:24 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d27sm5476692otf.25.2019.08.27.10.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 10:21:23 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 12:21:23 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com, rahul.tanwar@intel.com,
+        Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: serial: lantiq: Convert to YAML
+ schema
+Message-ID: <20190827172123.GA9417@bogus>
+References: <cover.1566370151.git.rahul.tanwar@linux.intel.com>
+ <b8e0fa2981176dba29cd8e29f14532501cf962b4.1566370151.git.rahul.tanwar@linux.intel.com>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8e0fa2981176dba29cd8e29f14532501cf962b4.1566370151.git.rahul.tanwar@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-spinlock can be initialized automatically with DEFINE_SPINLOCK()
-rather than explicitly calling spin_lock_init().
+On Wed, 21 Aug 2019 15:06:51 +0800, Rahul Tanwar wrote:
+> Convert the existing DT binding document for Lantiq SoC ASC serial controller
+> from txt format to YAML format.
+> 
+> Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/serial/lantiq,asc.yaml     | 55 ++++++++++++++++++++++
+>  .../devicetree/bindings/serial/lantiq_asc.txt      | 31 ------------
+>  2 files changed, 55 insertions(+), 31 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/serial/lantiq,asc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/serial/lantiq_asc.txt
+> 
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/tty/serial/fsl_linflexuart.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
-index 26b9601a0952..8aea7822b731 100644
---- a/drivers/tty/serial/fsl_linflexuart.c
-+++ b/drivers/tty/serial/fsl_linflexuart.c
-@@ -136,7 +136,7 @@ MODULE_DEVICE_TABLE(of, linflex_dt_ids);
- #ifdef CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE
- static struct uart_port *earlycon_port;
- static bool linflex_earlycon_same_instance;
--static spinlock_t init_lock;
-+static DEFINE_SPINLOCK(init_lock);
- static bool during_init;
- 
- static struct {
-@@ -922,10 +922,6 @@ static int __init linflex_serial_init(void)
- 	if (ret)
- 		uart_unregister_driver(&linflex_reg);
- 
--#ifdef CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE
--	spin_lock_init(&init_lock);
--#endif
--
- 	return ret;
- }
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
