@@ -2,93 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB549F7B2
-	for <lists+linux-serial@lfdr.de>; Wed, 28 Aug 2019 03:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D10A09BB
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Aug 2019 20:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbfH1BOg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 27 Aug 2019 21:14:36 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59134 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726091AbfH1BOg (ORCPT
+        id S1727174AbfH1SiH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 28 Aug 2019 14:38:07 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44615 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726663AbfH1SiG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 27 Aug 2019 21:14:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:Cc:From:References:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=hfSx8v0zhIV+bXC+CodQztxjQ/b6g4dcxtBZrzRlWPs=; b=kxL5f0dWo7sB0WNPrB0IaSLY7
-        MbNT2c+q6KEjvIRj65dBT3HQu0J0qW2J+yuxyG93K/X1w6GQYhWFiPDwTrlwGDIUhnpoXDKMhvKNh
-        G7keMO2VEKiqAmLzL1v0r3lUDWwvnxe3F/H2LTPH7MCTOE0WGt0F4b+sHbwkaLfLcoPSaA5Uvs6Sx
-        X/7vpKszkDmVggCa7+U58gqc2KS2enuH4tRmyaZjeVU0ObU1qsqmO0gl5TQf1edJhcqJ0MnvSTvK7
-        MreUZ+Ucmf+3ez2qvttBxfq8782KE01IEy+gsHiBcoqkRGj+kkaeVulwpjNrFKxEhZuo04pzKqX0u
-        w4QUJsD/g==;
-Received: from [2601:1c0:6200:6e8::4f71]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i2mXh-0001yi-EV; Wed, 28 Aug 2019 01:14:33 +0000
-Subject: Re: mmotm 2019-08-24-16-02 uploaded
- (drivers/tty/serial/fsl_linflexuart.c:)
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20190824230323.REILuVBbY%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Cc:     Fugang Duan <fugang.duan@nxp.com>
-Message-ID: <b082b200-7298-6cd5-6981-44439bc2d788@infradead.org>
-Date:   Tue, 27 Aug 2019 18:14:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190824230323.REILuVBbY%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 28 Aug 2019 14:38:06 -0400
+Received: by mail-lf1-f68.google.com with SMTP id v16so358220lfg.11
+        for <linux-serial@vger.kernel.org>; Wed, 28 Aug 2019 11:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=xCaK1ced0ulZ5Oi9MjTSpYNGY2zdz0BpkWuSplpvYpM=;
+        b=DLDXIOeukCSaR4ozFwatuOZ0GeW1Fdfn4XiPmOgxc+Htze5r+wmOShGgoki8kTD5dL
+         RpLUyDw6fgLbP5W9jBazIJRLTJfLaEzmDrqCWslsN+DHvQAH2MpRpmPJzN1gqyIRfv0h
+         teXXeWouWgOUsWdbsbcu1BvN0MeB/DD2aUrB+DcNeX9bueneDq1EN6cBNbdTQS4fDhdx
+         r1LMrh6kEH5ICvnfgshJvOnKmJJXsZTXpRgAH3UPp7iG21wTL35XSIHpURAQSJyuOwIb
+         FazZFZrgskbu3HMsijJfKtNwcgxfh2pM0M755q+1vKr3QYM9WSYRo+SCv/gAqxG4ynAB
+         2MLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=xCaK1ced0ulZ5Oi9MjTSpYNGY2zdz0BpkWuSplpvYpM=;
+        b=kHAJ97i3CyRcc+r48WI7lnlhBh/f8TJaL+Zkyii056i3g4QUwx7KDF33l5UHebTB1R
+         eewa4sDRZI41FM7qSAwbsQWvoQ6NVFf4TavwjZzIKz38PXnxJqhVpuVvK/y9lExBW27v
+         vUyOnOgFA7HmXnExWfxCo7TOxg7TF/AFloqeAOlxUITsgGrAPok+62pxihx/hXaz1EiZ
+         Q10eZOEMacC43gKbO2PZ8c2k7AfAfr+NDmybJ5ToEZtUD5p9L1wRrby+N1MtoWZmF2Q3
+         avFMvAQAsdP9dxRp0b1yFYxgA6oXAfo/4XU0+EhobffyIAeV9WLyD7I+4HJdSB0d4tfX
+         3QHg==
+X-Gm-Message-State: APjAAAUh2NUldJVbTvhInlTvOrC+SySUyq3lwPU5zBCiket1tf6kil6G
+        THOFIQP8iB2lqNlyJFHGPkACWvOT
+X-Google-Smtp-Source: APXvYqxZcQaMXFbFrhwlGpA29oI6ZlxWY2I7KCR8fOMirHvzdALnfMPFwVHc24srptHbofDqkM/lEQ==
+X-Received: by 2002:ac2:4558:: with SMTP id j24mr3364247lfm.54.1567017484096;
+        Wed, 28 Aug 2019 11:38:04 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id f6sm9226lja.16.2019.08.28.11.38.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 28 Aug 2019 11:38:03 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sergey Organov <sorganov@gmail.com>
+Subject: [PATCH v2 0/5] Serial: imx: various fixes
+Date:   Wed, 28 Aug 2019 21:37:50 +0300
+Message-Id: <1567017475-11919-1-git-send-email-sorganov@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <20190530152950.25377-1-sorganov@gmail.com>
+References: <20190530152950.25377-1-sorganov@gmail.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 8/24/19 4:03 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2019-08-24-16-02 has been uploaded to
-> 
->    http://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
-> 
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
+The original problem that caused these changes was broken bytes being
+sent/received at random on RTS/CTS handshake switch (i.e., on
+setting/clearing termios CRTSCTS bit).
 
-on i386:
-when CONFIG_PRINTK is not set/enabled:
+As it went, a few other problems were found and fixed, and then the
+fix for original issue has been split into multiple patches that seem
+to make sense by themselves. Thus, the "serial: imx: fix data breakage
+on termios change", that finally fixes the issue, depends on 2
+preceding patches.
 
-../drivers/tty/serial/fsl_linflexuart.c: In function ‘linflex_earlycon_putchar’:
-../drivers/tty/serial/fsl_linflexuart.c:608:31: error: ‘CONFIG_LOG_BUF_SHIFT’ undeclared (first use in this function); did you mean ‘CONFIG_DEBUG_SHIRQ’?
-  if (earlycon_buf.len >= 1 << CONFIG_LOG_BUF_SHIFT)
-                               ^~~~~~~~~~~~~~~~~~~~
-                               CONFIG_DEBUG_SHIRQ
+The last patch in the series, "serial: imx: use Tx ready rather than
+Tx empty irq" is independent of the rest and doesn't fix any serious
+issue, but it should get rid of holes in continuous output,
+specifically in PIO mode.
 
+Changes in v2:
+  - Removed wrong [PATCH 1/8] serial: imx: fix DTR inversion
+  - Rebased on top of "tty-next"
+
+Sergey Organov (5):
+  serial: imx: get rid of unbounded busy-waiting loop
+  serial: imx: do not stop Rx/Tx on termios change
+  serial: imx: do not disable individual irqs during termios change
+  serial: imx: fix data breakage on termios change
+  serial: imx: use Tx ready rather than Tx empty irq
+
+ drivers/tty/serial/imx.c | 56 ++++++++++++++++++++++--------------------------
+ 1 file changed, 26 insertions(+), 30 deletions(-)
 
 -- 
-~Randy
+2.10.0.1.g57b01a3
+
