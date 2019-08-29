@@ -2,103 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 639EBA0C5B
-	for <lists+linux-serial@lfdr.de>; Wed, 28 Aug 2019 23:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9914A107E
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Aug 2019 06:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbfH1V2C (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 28 Aug 2019 17:28:02 -0400
-Received: from office2.cesnet.cz ([195.113.144.244]:40750 "EHLO
-        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726787AbfH1V2C (ORCPT
+        id S1725810AbfH2Eh0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 29 Aug 2019 00:37:26 -0400
+Received: from antares.kleine-koenig.org ([94.130.110.236]:55084 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfH2EhZ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 28 Aug 2019 17:28:02 -0400
-Received: from localhost (unknown [IPv6:2001:718:1:2c:a5b5:770:4491:af45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 3FE10400093;
-        Wed, 28 Aug 2019 23:21:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2; t=1567027315;
-        bh=nYlT2H1UO2l0oo6Lh4ihSsFyuxCxXdiwIzdAqxvSaF4=;
-        h=Resent-Date:Resent-From:Resent-To:Resent-Cc:In-Reply-To:
-         References:From:Date:Subject:To:Cc;
-        b=k9Qegsg1PK8yGqQ513ozYN6FQFdzt7nQxQ3avTHuHsoCG0B0VvcPRNKPjNJSWyeIH
-         JRxbY9nXbTODTGC17wfaeyx68JPdwupVRaADRV5Uv+ZZeWGx0P0altzTCVv9EZ3qxm
-         soOorvYD03qxJL+4m4OKUqzxMPfZXNz5adD0jDhg=
-Message-Id: <7b65026af26581722b37347b4557057ba86504a8.1567027079.git.jan.kundrat@cesnet.cz>
-In-Reply-To: <13ea227620aaad8a7231d42ed03a8508297d4eb3.1567027079.git.jan.kundrat@cesnet.cz>
-References: <13ea227620aaad8a7231d42ed03a8508297d4eb3.1567027079.git.jan.kundrat@cesnet.cz>
-From:   =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date:   Wed, 28 Aug 2019 22:29:30 +0200
-Subject: [PATCH 2/2] tty: max310x: Fail probe when external clock crystal is
- not stable
+        Thu, 29 Aug 2019 00:37:25 -0400
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id D512B7891D8; Thu, 29 Aug 2019 06:37:22 +0200 (CEST)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Cc:     kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Enrico Weigelt <lkml@metux.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [RFC] tty/serial: imx: make use of format specifier %dE
+Date:   Thu, 29 Aug 2019 06:37:16 +0200
+Message-Id: <20190829043716.5223-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To:     linux-serial@vger.kernel.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On (some) of my boards, it appears that it takes up to three *checks* of
-this register's value for the external crystal to settle so that it is
-reported as "ready" by the chip. For example, on one of these boards it
-always succeeds upon a third try no matter if the individual waits are
-for 1ms or for 10ms. The original timeout of 10ms is therefore not ideal
-as it was generating false warnings on working HW for me. Let's solve
-this by retrying up to 20 times (i.e., 200ms).
+I created a patch that teaches printk et al to emit a symbolic error
+name for an error valued integer[1]. With that applied
 
-With this retrying in place, it is now also possible to fail device
-initialization altogether. A stable clock is really required in order to
-use this UART, so log an error message and bail out if the chip keeps
-saying "nope".
+	dev_err(&pdev->dev, "failed to get ipg clk: %dE\n", ret);
 
-Tested on several MAX14830 PCBs.
+emits
 
-Signed-off-by: Jan Kundrát <jan.kundrat@cesnet.cz>
+	... failed to get ipg clk: EPROBE_DEFER
+
+if ret is -EPROBE_DEFER. Petr Mladek (i.e. one of the printk
+maintainers) had concerns if this would be well received and worth the
+effort. He asked to present it to a few subsystems. So for now, this
+patch converting the imx UART driver shouldn't be applied yet but it
+would be great to get some feedback about if you think that being able
+to easily printk (for example) "EIO" instead of "-5" is a good idea.
+Would it help you? Do you think it helps your users?
+
+Thanks
+Uwe
+
+[1] https://lkml.org/lkml/2019/8/27/1456
 ---
- drivers/tty/serial/max310x.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/tty/serial/imx.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index 0e0c2740ec7e..e8cd09d3e86f 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -610,11 +610,14 @@ static int max310x_set_ref_clk(struct device *dev, struct max310x_port *s,
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 57d6e6ba556e..a3dbb9378e8b 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -2143,7 +2143,7 @@ static int imx_uart_probe_dt(struct imx_port *sport,
  
- 	/* Wait for crystal */
- 	if (xtal) {
--		unsigned int val;
--		msleep(10);
--		regmap_read(s->regmap, MAX310X_STS_IRQSTS_REG, &val);
-+		unsigned int val, i;
-+		for (i = 0; i < 20 && !(val & MAX310X_STS_CLKREADY_BIT); ++i) {
-+			msleep(10);
-+			regmap_read(s->regmap, MAX310X_STS_IRQSTS_REG, &val);
-+		}
- 		if (!(val & MAX310X_STS_CLKREADY_BIT)) {
--			dev_warn(dev, "clock is not stable yet\n");
-+			dev_err(dev, "clock is not stable\n");
-+			return -EAGAIN;
+ 	ret = of_alias_get_id(np, "serial");
+ 	if (ret < 0) {
+-		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
++		dev_err(&pdev->dev, "failed to get alias id, error %dE\n", ret);
+ 		return ret;
+ 	}
+ 	sport->port.line = ret;
+@@ -2236,14 +2236,14 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 	sport->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
+ 	if (IS_ERR(sport->clk_ipg)) {
+ 		ret = PTR_ERR(sport->clk_ipg);
+-		dev_err(&pdev->dev, "failed to get ipg clk: %d\n", ret);
++		dev_err(&pdev->dev, "failed to get ipg clk: %dE\n", ret);
+ 		return ret;
+ 	}
+ 
+ 	sport->clk_per = devm_clk_get(&pdev->dev, "per");
+ 	if (IS_ERR(sport->clk_per)) {
+ 		ret = PTR_ERR(sport->clk_per);
+-		dev_err(&pdev->dev, "failed to get per clk: %d\n", ret);
++		dev_err(&pdev->dev, "failed to get per clk: %dE\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -2252,7 +2252,7 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 	/* For register access, we only need to enable the ipg clock. */
+ 	ret = clk_prepare_enable(sport->clk_ipg);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to enable per clk: %d\n", ret);
++		dev_err(&pdev->dev, "failed to enable per clk: %dE\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -2330,7 +2330,7 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 		ret = devm_request_irq(&pdev->dev, rxirq, imx_uart_rxint, 0,
+ 				       dev_name(&pdev->dev), sport);
+ 		if (ret) {
+-			dev_err(&pdev->dev, "failed to request rx irq: %d\n",
++			dev_err(&pdev->dev, "failed to request rx irq: %dE\n",
+ 				ret);
+ 			return ret;
+ 		}
+@@ -2338,7 +2338,7 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 		ret = devm_request_irq(&pdev->dev, txirq, imx_uart_txint, 0,
+ 				       dev_name(&pdev->dev), sport);
+ 		if (ret) {
+-			dev_err(&pdev->dev, "failed to request tx irq: %d\n",
++			dev_err(&pdev->dev, "failed to request tx irq: %dE\n",
+ 				ret);
+ 			return ret;
+ 		}
+@@ -2346,7 +2346,7 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 		ret = devm_request_irq(&pdev->dev, rtsirq, imx_uart_rtsint, 0,
+ 				       dev_name(&pdev->dev), sport);
+ 		if (ret) {
+-			dev_err(&pdev->dev, "failed to request rts irq: %d\n",
++			dev_err(&pdev->dev, "failed to request rts irq: %dE\n",
+ 				ret);
+ 			return ret;
+ 		}
+@@ -2354,7 +2354,7 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 		ret = devm_request_irq(&pdev->dev, rxirq, imx_uart_int, 0,
+ 				       dev_name(&pdev->dev), sport);
+ 		if (ret) {
+-			dev_err(&pdev->dev, "failed to request irq: %d\n", ret);
++			dev_err(&pdev->dev, "failed to request irq: %dE\n", ret);
+ 			return ret;
  		}
  	}
- 
-@@ -1301,6 +1304,10 @@ static int max310x_probe(struct device *dev, struct max310x_devtype *devtype,
- 	}
- 
- 	uartclk = max310x_set_ref_clk(dev, s, freq, xtal);
-+	if (uartclk < 0) {
-+		ret = uartclk;
-+		goto out_uart;
-+	}
- 	dev_dbg(dev, "Reference clock set to %i Hz\n", uartclk);
- 
- 	for (i = 0; i < devtype->nr; i++) {
 -- 
-2.21.0
-
+2.23.0
 
