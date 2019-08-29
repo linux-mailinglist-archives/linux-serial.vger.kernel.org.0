@@ -2,144 +2,107 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9914A107E
-	for <lists+linux-serial@lfdr.de>; Thu, 29 Aug 2019 06:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6755BA1437
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Aug 2019 10:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725810AbfH2Eh0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 29 Aug 2019 00:37:26 -0400
-Received: from antares.kleine-koenig.org ([94.130.110.236]:55084 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbfH2EhZ (ORCPT
+        id S1726038AbfH2I45 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 29 Aug 2019 04:56:57 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:34413 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfH2I45 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 29 Aug 2019 00:37:25 -0400
-Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
-        id D512B7891D8; Thu, 29 Aug 2019 06:37:22 +0200 (CEST)
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Cc:     kernel@pengutronix.de, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Enrico Weigelt <lkml@metux.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [RFC] tty/serial: imx: make use of format specifier %dE
-Date:   Thu, 29 Aug 2019 06:37:16 +0200
-Message-Id: <20190829043716.5223-1-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.23.0
+        Thu, 29 Aug 2019 04:56:57 -0400
+Received: by mail-lf1-f66.google.com with SMTP id z21so1914941lfe.1
+        for <linux-serial@vger.kernel.org>; Thu, 29 Aug 2019 01:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=FfP7mAa0BrormMJe3e64jyxstRSj+yfPmV3zDoXdQGg=;
+        b=A/1wNtvKJVsGvzlTY7oZX4q3ZfLYJGU4zdXvHMbPAq+7zMDUSIVwLM9XslTv1tr2y7
+         yObXKk2KzhOfxq+r64V58TA2EUmbDqPdugSgGYIDVimVmByTHqWPGpA4K1efwr+02kUQ
+         3j/VLTJGZ5vx+CXpPLxO0k+cqZBhYLuWBXNJHRvXFaisaK9v769OsvGta0vJo6MlaQgf
+         ihxS5sq1uP9NildYBC3pNjS1LveSmvlSLNkyJpqczkqVtrkKnDP1A77yMxNw+W5zVCrl
+         D4rn2iXdX0fBrkvlfyt+b6nn2Gq/kAXrXdfcFZipaKJdxhsE1q8MXtyCg+m0t8739d4W
+         YH6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=FfP7mAa0BrormMJe3e64jyxstRSj+yfPmV3zDoXdQGg=;
+        b=OERxY+xEElbjisixzqrQqlxTDdivzxPOetwIHE+2R51hMU0ui5B8qpfIIk0oii6i/t
+         tYdEBNYZ/cXFiKhxdcY/UxtKavfjbESqxIJCogBW4ayOU8RwwXkBdOCKmLXDmED7U8/V
+         Zwp3QDcobGoJ6CA9gfRIl3L2vgYCYOeNadObSBVUenA61L3hCE+LMCcqA7/ll3ivI/GA
+         4+FR3yz06kG0NIjeYhm2NAUSOx3DIBe3oBHQHC5+f4rK46l8lei1FebONmBfLxp5W0f8
+         LjDwE64Ud1BrycY3aLS4uapEkyhTqhDeTNwPjU7ffgOYAaiopKwNlVcQxQrXB4+CnwMk
+         yykg==
+X-Gm-Message-State: APjAAAW+NwL7CZEzQ/JpuFVCEGh6D+4XfVcuqvsE/towGMKWdK2edOf/
+        eUZdtQ9VBEzbUL938ia1Q+0=
+X-Google-Smtp-Source: APXvYqzLOU6PpV0+8LPZZvF7OG1riddARCSrJr1EerHtsU+mdxpToJZPLf1K9c0+FNpsAggsFjcDmA==
+X-Received: by 2002:a19:8c14:: with SMTP id o20mr5413383lfd.158.1567069015709;
+        Thu, 29 Aug 2019 01:56:55 -0700 (PDT)
+Received: from mobilestation (mail.baikalelectronics.com. [87.245.175.226])
+        by smtp.gmail.com with ESMTPSA id s7sm254739lji.26.2019.08.29.01.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2019 01:56:55 -0700 (PDT)
+Date:   Thu, 29 Aug 2019 11:56:54 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jan =?utf-8?Q?Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+Cc:     linux-serial@vger.kernel.org,
+        Joe Burmeister <joe.burmeister@devtank.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] tty: max310x: fix off-by-one buffer access when
+ storing overrun
+Message-ID: <20190829085653.kc5rlzwev4552d73@mobilestation>
+References: <13ea227620aaad8a7231d42ed03a8508297d4eb3.1567027079.git.jan.kundrat@cesnet.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <13ea227620aaad8a7231d42ed03a8508297d4eb3.1567027079.git.jan.kundrat@cesnet.cz>
+User-Agent: NeoMutt/20180716
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-I created a patch that teaches printk et al to emit a symbolic error
-name for an error valued integer[1]. With that applied
+Hello Jan,
 
-	dev_err(&pdev->dev, "failed to get ipg clk: %dE\n", ret);
+On Wed, Aug 28, 2019 at 07:56:26PM +0200, Jan Kundrát wrote:
+> A recent change split the insertion loop into two parts. The first part
+> accessed bytes 0, 1, ... (rxlen - 2), and the second part by mistake
+> took offset `rxlen` instead of the correct `rxlen - 1`. So one byte was
+> not stored, and the final access wrote past the end of the rx_buf.
+> 
+> Fixes: 9c12d739d69b (tty: max310x: Split uart characters insertion loop)
+> Signed-off-by: Jan Kundrát <jan.kundrat@cesnet.cz>
 
-emits
+Good catch, thank you!
 
-	... failed to get ipg clk: EPROBE_DEFER
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
-if ret is -EPROBE_DEFER. Petr Mladek (i.e. one of the printk
-maintainers) had concerns if this would be well received and worth the
-effort. He asked to present it to a few subsystems. So for now, this
-patch converting the imx UART driver shouldn't be applied yet but it
-would be great to get some feedback about if you think that being able
-to easily printk (for example) "EIO" instead of "-5" is a good idea.
-Would it help you? Do you think it helps your users?
+-Sergey
 
-Thanks
-Uwe
-
-[1] https://lkml.org/lkml/2019/8/27/1456
----
- drivers/tty/serial/imx.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 57d6e6ba556e..a3dbb9378e8b 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -2143,7 +2143,7 @@ static int imx_uart_probe_dt(struct imx_port *sport,
- 
- 	ret = of_alias_get_id(np, "serial");
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
-+		dev_err(&pdev->dev, "failed to get alias id, error %dE\n", ret);
- 		return ret;
- 	}
- 	sport->port.line = ret;
-@@ -2236,14 +2236,14 @@ static int imx_uart_probe(struct platform_device *pdev)
- 	sport->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
- 	if (IS_ERR(sport->clk_ipg)) {
- 		ret = PTR_ERR(sport->clk_ipg);
--		dev_err(&pdev->dev, "failed to get ipg clk: %d\n", ret);
-+		dev_err(&pdev->dev, "failed to get ipg clk: %dE\n", ret);
- 		return ret;
- 	}
- 
- 	sport->clk_per = devm_clk_get(&pdev->dev, "per");
- 	if (IS_ERR(sport->clk_per)) {
- 		ret = PTR_ERR(sport->clk_per);
--		dev_err(&pdev->dev, "failed to get per clk: %d\n", ret);
-+		dev_err(&pdev->dev, "failed to get per clk: %dE\n", ret);
- 		return ret;
- 	}
- 
-@@ -2252,7 +2252,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 	/* For register access, we only need to enable the ipg clock. */
- 	ret = clk_prepare_enable(sport->clk_ipg);
- 	if (ret) {
--		dev_err(&pdev->dev, "failed to enable per clk: %d\n", ret);
-+		dev_err(&pdev->dev, "failed to enable per clk: %dE\n", ret);
- 		return ret;
- 	}
- 
-@@ -2330,7 +2330,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 		ret = devm_request_irq(&pdev->dev, rxirq, imx_uart_rxint, 0,
- 				       dev_name(&pdev->dev), sport);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to request rx irq: %d\n",
-+			dev_err(&pdev->dev, "failed to request rx irq: %dE\n",
- 				ret);
- 			return ret;
- 		}
-@@ -2338,7 +2338,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 		ret = devm_request_irq(&pdev->dev, txirq, imx_uart_txint, 0,
- 				       dev_name(&pdev->dev), sport);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to request tx irq: %d\n",
-+			dev_err(&pdev->dev, "failed to request tx irq: %dE\n",
- 				ret);
- 			return ret;
- 		}
-@@ -2346,7 +2346,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 		ret = devm_request_irq(&pdev->dev, rtsirq, imx_uart_rtsint, 0,
- 				       dev_name(&pdev->dev), sport);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to request rts irq: %d\n",
-+			dev_err(&pdev->dev, "failed to request rts irq: %dE\n",
- 				ret);
- 			return ret;
- 		}
-@@ -2354,7 +2354,7 @@ static int imx_uart_probe(struct platform_device *pdev)
- 		ret = devm_request_irq(&pdev->dev, rxirq, imx_uart_int, 0,
- 				       dev_name(&pdev->dev), sport);
- 		if (ret) {
--			dev_err(&pdev->dev, "failed to request irq: %d\n", ret);
-+			dev_err(&pdev->dev, "failed to request irq: %dE\n", ret);
- 			return ret;
- 		}
- 	}
--- 
-2.23.0
-
+> ---
+>  drivers/tty/serial/max310x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+> index e6c48a99bd85..0e0c2740ec7e 100644
+> --- a/drivers/tty/serial/max310x.c
+> +++ b/drivers/tty/serial/max310x.c
+> @@ -689,7 +689,7 @@ static void max310x_handle_rx(struct uart_port *port, unsigned int rxlen)
+>  		 * tail.
+>  		 */
+>  		uart_insert_char(port, sts, MAX310X_LSR_RXOVR_BIT,
+> -				 one->rx_buf[rxlen], flag);
+> +				 one->rx_buf[rxlen-1], flag);
+>  
+>  	} else {
+>  		if (unlikely(rxlen >= port->fifosize)) {
+> -- 
+> 2.21.0
+> 
+> 
