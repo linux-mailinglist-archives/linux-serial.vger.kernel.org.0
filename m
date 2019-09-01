@@ -2,108 +2,182 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C644EA349E
-	for <lists+linux-serial@lfdr.de>; Fri, 30 Aug 2019 12:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6CFA4809
+	for <lists+linux-serial@lfdr.de>; Sun,  1 Sep 2019 09:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbfH3KId convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Fri, 30 Aug 2019 06:08:33 -0400
-Received: from is-comm2.is-ol.de ([159.69.231.212]:59856 "EHLO
-        is-comm2.is-ol.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727328AbfH3KIc (ORCPT
+        id S1728790AbfIAHMC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 1 Sep 2019 03:12:02 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:41793 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728786AbfIAHMC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 30 Aug 2019 06:08:32 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by is-comm2.is-ol.de (Postfix) with ESMTP id 4935D15F57F;
-        Fri, 30 Aug 2019 09:59:21 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at is-comm2.is-ol.de
-Received: from SSSDEEX.i.sigma-surface-science.com (p50937f79.dip0.t-ipconnect.de [80.147.127.121])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by is-comm2.is-ol.de (Postfix) with ESMTPS;
-        Fri, 30 Aug 2019 11:59:02 +0200 (CEST)
-Received: from SSSDEEX.i.sigma-surface-science.com (172.27.0.81) by
- SSSDEEX.i.sigma-surface-science.com (172.27.0.81) with Microsoft SMTP Server
- (TLS) id 15.0.913.22; Fri, 30 Aug 2019 11:58:42 +0200
-Received: from SSSDEEX.i.sigma-surface-science.com ([::1]) by
- SSSDEEX.i.sigma-surface-science.com ([::1]) with mapi id 15.00.0913.011; Fri,
- 30 Aug 2019 11:58:42 +0200
-From:   =?iso-8859-1?Q?Christoph_Vogtl=E4nder?= 
-        <Christoph.Vogtlaender@sigma-surface-science.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Christoph_Vogtl=E4nder?= 
-        <Christoph.Vogtlaender@sigma-surface-science.com>
-Subject: [PATCH] serial: max310x: turn off transmitter before activating
- AutoCTS or auto transmitter flow control
-Thread-Topic: [PATCH] serial: max310x: turn off transmitter before
- activating AutoCTS or auto transmitter flow control
-Thread-Index: AdVfGB6E5SXElxQNQ2i0pQLfeo3BQw==
-Date:   Fri, 30 Aug 2019 09:58:41 +0000
-Message-ID: <bd9fb8e75d0e45218eb110c25bb539ef@SSSDEEX.i.sigma-surface-science.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.27.0.74]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-To:     unlisted-recipients:; (no To-header on input)
+        Sun, 1 Sep 2019 03:12:02 -0400
+Received: by mail-pl1-f195.google.com with SMTP id m9so5181723pls.8
+        for <linux-serial@vger.kernel.org>; Sun, 01 Sep 2019 00:12:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=vKTwNtpfVl/ofq1lszN6uNSXidoJKzu+EuY1m89tIBg=;
+        b=nkBdHU1bLcqhB0Pu13xor/HRU8pRbyHtm401VWyDRE09OfgA47ny3+8CsXdIm62QgZ
+         6sHuK8HnBmweVy81dP9vA2W6dmBiqC1Wb2mwfWlx3HwjwizUmBrxbTuqmLrYh5IQwUOg
+         IeW4PL+tq0zAmAdoH6vgWAyB2sWk8xxbWIW1BwIQWmrP6XANhXQsPToLBlSxOdm11P/L
+         TzcS/bG13nyF32qDIcsfaZk/QGb96vFzNz5+5Sno225zTqGNgLp80wKsvaWlFFr1wYY+
+         xpoqw0Ig04OhxhMkl+ckQhegRFM6pm1FtEXAlVhDyqCnen3hY4gdIqwBMcg3kQMN082o
+         tX7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=vKTwNtpfVl/ofq1lszN6uNSXidoJKzu+EuY1m89tIBg=;
+        b=Fe7BA+EZLLSDhMvSbETDdUmbnfRtwTp8REMUv9wgpFG+cK3Ug5FnnGvrlr04PQiGB7
+         ziiExVms9/P8919L93f1xbNcW0tA1rTlceJ1uTQyLA3vBlPlcB/ljhev6UYNXocTVNyo
+         BDY3FNN3xLq+xObnBAbztVLm7S3xuPTdWdE7xY0u8uFX4fGAoIBWhK+ukl5r9UrncB8C
+         SYo+ngnqwlAcho4DwYv01muUgqr3LnuEPUxojPZrCgevEiAsAQEC3p3XK9/4ABdQtTkE
+         N6SnEsZ5bL3Hs7fI6NZArm/9RtxnRajDmJiZyM5EMiELahojEYbE/g/1iF6Lp5Y7DudQ
+         QOiA==
+X-Gm-Message-State: APjAAAUntdPZxBvkXlVMxS4v298xDUWAWno/rAJwEA2E7J31XKWxbU6B
+        WNSgI0Ipb2WolczHCcZh4TGmEA==
+X-Google-Smtp-Source: APXvYqwQny1Nmrz/C5sgtbnJWlSSGimvrNW83Dy1il6BLDq9WjeTfmJnQVGgEdpz2lT6oF5Pw/kQ/g==
+X-Received: by 2002:a17:902:f216:: with SMTP id gn22mr25329995plb.59.1567321921847;
+        Sun, 01 Sep 2019 00:12:01 -0700 (PDT)
+Received: from localhost.localdomain ([103.81.243.14])
+        by smtp.gmail.com with ESMTPSA id b185sm6968998pfg.14.2019.09.01.00.11.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 01 Sep 2019 00:12:01 -0700 (PDT)
+From:   Pragnesh Patel <pragnesh.patel@sifive.com>
+To:     palmer@sifive.com, paul.walmsley@sifive.com
+Cc:     Pragnesh Patel <pragnesh.patel@sifive.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: serial: Convert riscv,sifive-serial to json-schema
+Date:   Sun,  1 Sep 2019 12:39:21 +0530
+Message-Id: <1567321765-3738-1-git-send-email-pragnesh.patel@sifive.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-As documented in the data-sheet, the transmitter must be disabled before
-activating AutoCTS or auto transmitter flow control. Accordingly, the
-transmitter must be enabled after AutoCTS or auto transmitter flow
-control gets deactivated.
+Convert the riscv,sifive-serial binding to DT schema using json-schema.
 
-Signed-off-by: Christoph Vogtländer <c.vogtlaender@sigma-surface-science.com>
+Signed-off-by: Pragnesh Patel <pragnesh.patel@sifive.com>
 ---
- drivers/tty/serial/max310x.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../devicetree/bindings/serial/sifive-serial.txt   | 33 ------------
+ .../devicetree/bindings/serial/sifive-serial.yaml  | 62 ++++++++++++++++++++++
+ 2 files changed, 62 insertions(+), 33 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/serial/sifive-serial.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/sifive-serial.yaml
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index fb5a7e0e58e9..adfef6dae4a7 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -860,6 +860,15 @@ static void max310x_set_termios(struct uart_port *port,
- max310x_port_write(port, MAX310X_XON1_REG, termios->c_cc[VSTART]);
- max310x_port_write(port, MAX310X_XOFF1_REG, termios->c_cc[VSTOP]);
-
-+/* Disable transmitter before enabling AutoCTS or auto transmitter
-+ * flow control
-+ */
-+if (termios->c_cflag & CRTSCTS || termios->c_iflag & IXOFF) {
-+max310x_port_update(port, MAX310X_MODE1_REG,
-+    MAX310X_MODE1_TXDIS_BIT,
-+    MAX310X_MODE1_TXDIS_BIT);
-+}
+diff --git a/Documentation/devicetree/bindings/serial/sifive-serial.txt b/Documentation/devicetree/bindings/serial/sifive-serial.txt
+deleted file mode 100644
+index c86b1e5..0000000
+--- a/Documentation/devicetree/bindings/serial/sifive-serial.txt
++++ /dev/null
+@@ -1,33 +0,0 @@
+-SiFive asynchronous serial interface (UART)
+-
+-Required properties:
+-
+-- compatible: should be something similar to
+-	      "sifive,<chip>-uart" for the UART as integrated
+-	      on a particular chip, and "sifive,uart<version>" for the
+-	      general UART IP block programming model.	Supported
+-	      compatible strings as of the date of this writing are:
+-	      "sifive,fu540-c000-uart" for the SiFive UART v0 as
+-	      integrated onto the SiFive FU540 chip, or "sifive,uart0"
+-	      for the SiFive UART v0 IP block with no chip integration
+-	      tweaks (if any)
+-- reg: address and length of the register space
+-- interrupts: Should contain the UART interrupt identifier
+-- clocks: Should contain a clock identifier for the UART's parent clock
+-
+-
+-UART HDL that corresponds to the IP block version numbers can be found
+-here:
+-
+-https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/uart
+-
+-
+-Example:
+-
+-uart0: serial@10010000 {
+-	compatible = "sifive,fu540-c000-uart", "sifive,uart0";
+-	interrupt-parent = <&plic0>;
+-	interrupts = <80>;
+-	reg = <0x0 0x10010000 0x0 0x1000>;
+-	clocks = <&prci PRCI_CLK_TLCLK>;
+-};
+diff --git a/Documentation/devicetree/bindings/serial/sifive-serial.yaml b/Documentation/devicetree/bindings/serial/sifive-serial.yaml
+new file mode 100644
+index 0000000..56fa935
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/sifive-serial.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/serial/sifive-serial.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- port->status &= ~(UPSTAT_AUTOCTS | UPSTAT_AUTORTS | UPSTAT_AUTOXOFF);
-
- if (termios->c_cflag & CRTSCTS) {
-@@ -878,6 +887,15 @@ static void max310x_set_termios(struct uart_port *port,
- }
- max310x_port_write(port, MAX310X_FLOWCTRL_REG, flow);
-
-+/* Enable transmitter after disabling AutoCTS and auto transmitter
-+ * flow control
-+ */
-+if (!(termios->c_cflag & CRTSCTS) && !(termios->c_iflag & IXOFF)) {
-+max310x_port_update(port, MAX310X_MODE1_REG,
-+    MAX310X_MODE1_TXDIS_BIT,
-+    0);
-+}
++title: SiFive asynchronous serial interface (UART)
 +
- /* Get baud rate generator configuration */
- baud = uart_get_baud_rate(port, termios, old,
-   port->uartclk / 16 / 0xffff,
---
-2.22.1
++maintainers:
++  - Pragnesh Patel <pragnesh.patel@sifive.com>
++  - Paul Walmsley  <paul.walmsley@sifive.com>
++  - Palmer Dabbelt <palmer@sifive.com>
++
++allOf:
++  - $ref: /schemas/serial.yaml#
++
++properties:
++  compatible:
++    enum:
++      - sifive,fu540-c000-uart
++      - sifive,uart0
++
++    description:
++      Should be something similar to "sifive,<chip>-uart"
++      for the UART as integrated on a particular chip,
++      and "sifive,uart<version>" for the general UART IP
++      block programming model.
++
++      UART HDL that corresponds to the IP block version
++      numbers can be found here -
++
++      https://github.com/sifive/sifive-blocks/tree/master/src/main/scala/devices/uart
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++      #include <dt-bindings/clock/sifive-fu540-prci.h>
++      serial@10010000 {
++        compatible = "sifive,fu540-c000-uart", "sifive,uart0";
++        interrupt-parent = <&plic0>;
++        interrupts = <80>;
++        reg = <0x0 0x10010000 0x0 0x1000>;
++        clocks = <&prci PRCI_CLK_TLCLK>;
++      };
++
++...
+-- 
+2.7.4
 
-
-Sigma Surface Science GmbH, Idsteiner Str. 78, 65232 Taunusstein. Amtsgericht Wiesbaden, HRB 27422. Geschäftsführer: Norbert Nold
