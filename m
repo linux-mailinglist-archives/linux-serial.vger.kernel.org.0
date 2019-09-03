@@ -2,91 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40514A6509
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Sep 2019 11:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4684DA6682
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Sep 2019 12:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbfICJVG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 3 Sep 2019 05:21:06 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:44007 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbfICJVG (ORCPT
+        id S1727969AbfICKZs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 3 Sep 2019 06:25:48 -0400
+Received: from mail-vs1-f41.google.com ([209.85.217.41]:35786 "EHLO
+        mail-vs1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbfICKZq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 3 Sep 2019 05:21:06 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t84so2453838oih.10
-        for <linux-serial@vger.kernel.org>; Tue, 03 Sep 2019 02:21:06 -0700 (PDT)
+        Tue, 3 Sep 2019 06:25:46 -0400
+Received: by mail-vs1-f41.google.com with SMTP id b11so5401182vsq.2
+        for <linux-serial@vger.kernel.org>; Tue, 03 Sep 2019 03:25:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=glcXCjwyqn+HnwC7gVzkRUcxL2AdvVixrYcSTi4w1PU=;
-        b=mcK3nweohShcW2LEUMICZbVwxHtOCjxDYckZO4FfQk37KTz/3nkpuLr77dDXYzZxz4
-         or6nYv7Vg04A1VkSOntYcSGuOqoqBc18fkMHF5EOKyAIqXvwp60PwkudRRdzqpEHTOFk
-         JLUS6thW/ybzyOX6jTAyx3Unl97exqbMOO6GeRaRFWf1SY5GCKm30eGiO8rfMkr3asm9
-         n9ZKT/aUSiJNjGdOwETM2FY7y6I/HELN4jGiEPOdSvReA9SfLXUItg4zcRumbYr8rFLS
-         AISiYddP9X8DEDcdhNBOCX3wfjYOsXuM5YhVNqcg7RQCwdHTaQXTkVVoWXBZTuA8RhFS
-         X7Ig==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=A/FqgofbgK2/f1LqZLQTR0v29nbaGE4CV//5hAzs3aQ=;
+        b=pCwMXyPkb53hQiGL6qsG0t9hIY8oGTosbgqvUxl3FS3qegUqnPZjbW0F9tBKZ868P+
+         uwv8amR41s3OhkiIAChcS1StphNtO2YYhxP5g41PI6FqILI00bDRVskdR91KLRbDFcvM
+         Z2kzxTTOnvDDUxKBItXJUAIQ+2wAkszSkVDg3tqXH1Kf47x2df+zZMwlda4f/KvKK+dh
+         xtieOXRoMyPaOPEurSUR72WuSFdD+fLUN5EG5SOhu9OI+gdUwjChN2UDsJT6Xjwoj2M5
+         fXCky49AzBC0+OJp+JskMsZl5MYJ6Ax/LUCVp4wiCda+hyReo8gr/wXi0h0gs+KZmOOP
+         bm+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=glcXCjwyqn+HnwC7gVzkRUcxL2AdvVixrYcSTi4w1PU=;
-        b=ddt/d8xssBT5qycMDKgFuLexUV5IVuEullco2nRZSIUnVjfRGWK9l1W5n5E0htmQD1
-         f0vp8fQv5wiP5F+9wjWA0bLM0sxPb2+HkmI0pDvqO1iPkDHmvObWNp9k3Jb0+e7R6ZbB
-         WS+FPsxELpZfHN39s5VaFzBO/xv3/TaHXKuoRQxTMrtKfXPDqnzJBjg1T2hCfDT+ph0f
-         3WE7iS3YU7EwTmwk5b2szIJQ2vGAj38s1xj18vlcsyk24QWeaDddE/u6xww+dnkLwzz8
-         28Jbn+IDaYG8S/nDtDva4aSjCILP427diu8xzkjaFeZZEv/V90G2jtp9vE4hAOgvXQ8J
-         fFUA==
-X-Gm-Message-State: APjAAAWk+xArp1B1VOKw7BzOxtexJXYNCaRw+nQ2MtedX7iNGY98FZWM
-        +TVjk29pyiAlslmSN4uGmARY1BWQjxMLRFtdYmmOXA==
-X-Google-Smtp-Source: APXvYqzo2nUjiHesbwnB0H1Z1h3L+spUHg2mts+oMbRKV6XXnJiqEYS55mFoFRlt4i5wbRS3LbqfxQhk9ndU172nJWQ=
-X-Received: by 2002:aca:e183:: with SMTP id y125mr14148339oig.27.1567502465778;
- Tue, 03 Sep 2019 02:21:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=A/FqgofbgK2/f1LqZLQTR0v29nbaGE4CV//5hAzs3aQ=;
+        b=WfXB1Bg1xruvV9FuR1ZnqaCtfIKKV9zhm34aS8Uucf4Eei2UDMa2zOivBlpPkd52QV
+         VElhMBTlWPjPkGXTx05Bgx/SC/Gq275xR4YT1I4FjfGwFfucaiPbhDAPH+bbRniK62bp
+         H7Kx9EVN4voIBKvC179TfTk/cDiiKtnlg/wxGZm+hLyXHp8NvmZ7vuakuTsbd7yvulfo
+         CfcFwPT/zJTYEsYoDOkbJybCHbo/eGhrWeJQOTWB73/zv9gZlDkiXuQsJVEX+3eAyVrs
+         R/d4zTPZ7i4BatStLL4uyy9u5ClkEz4cN4Z34Anw31nTw26Ord0nmt103TvGknbMJCEW
+         ZpwA==
+X-Gm-Message-State: APjAAAWNQXLbWCznP5FUCHz6MaaYnF4059P0Y6wU90y5QYNMdRhckAlQ
+        jg0474TjKQNfHmRNa78b9NPlz+mLJUm1LL4EMCWd9LTC
+X-Google-Smtp-Source: APXvYqzC38QiAaTGhskbG++x/TT/APdo1ExewooIX5mfN4VlK8LR4utP8WEQILaBKrA21DUxAJ0GRg0E9n/20n2V50w=
+X-Received: by 2002:a67:dd97:: with SMTP id i23mr1824376vsk.131.1567506345119;
+ Tue, 03 Sep 2019 03:25:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190826072929.7696-1-zhang.lyra@gmail.com>
-In-Reply-To: <20190826072929.7696-1-zhang.lyra@gmail.com>
-From:   Baolin Wang <baolin.wang@linaro.org>
-Date:   Tue, 3 Sep 2019 17:20:54 +0800
-Message-ID: <CAMz4ku+j-pSnfp1SJ4WN5seYe=vXxLGH+khaGNrseXi8+WKkoA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] keep console alive even if missing the 'enable' clock
-To:     Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Orson Zhai <orsonzhai@gmail.com>,
-        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+From:   Temp Sha <temp.sha@gmail.com>
+Date:   Tue, 3 Sep 2019 15:55:32 +0530
+Message-ID: <CANe=CUka=VPOQSyvu5pS8oe9hV3acjdp7OZXVB=TZMCyKeQy5g@mail.gmail.com>
+Subject: tty_ldisc_lock hangs at reboot
+To:     linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, 26 Aug 2019 at 15:29, Chunyan Zhang <zhang.lyra@gmail.com> wrote:
->
-> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
->
-> After the commit 4007098f4ce4 (serial: sprd: Add power management for the Spreadtrum serial controller),
-> the 'enable' clock was forced to be configured in device tree, otherwise the uart devices couldn't be
-> probed successfully.
->
-> With this patch-set, the uart device which is used as console would be allowed to register even without
-> any clock configured in device tree, this will make debug easier.
+Hi,
 
-Tested on my board, works well and looks good to me. So for the whole series:
-Reviewed-by: Baolin Wang <baolin.wang@linaro.org>
-Tested-by: Baolin Wang <baolin.wang@linaro.org>
-
->
-> Chunyan Zhang (3):
->   serial: sprd: check the right port and membase
->   serial: sprd: add console_initcall in sprd's uart driver
->   serial: sprd: keep console alive even if missing the 'enable' clock
->
->  drivers/tty/serial/sprd_serial.c | 42 ++++++++++++++++++++++++++------
->  1 file changed, 34 insertions(+), 8 deletions(-)
->
-> --
-> 2.20.1
->
+My linux box with kernel version 4.14.30 gets hung at  tty_ldisc_lock
+while executing reboot command. The terminal freezes from where I have
+executed reboot, however other terminals are still accessible via ssh.
+Following is the stack trace of tty_ldisc_lock. Can any one help me in
+fixing this?
 
 
--- 
-Baolin Wang
-Best Regards
+/root # cat /proc/2725/stack
+
+[<ffffffffb533318d>] tty_ldisc_lock+0xd/0x30
+[<ffffffffb5333568>] tty_ldisc_hangup+0xa8/0x1d0
+[<ffffffffb532b950>] __tty_hangup+0x130/0x290
+[<ffffffffb5335486>] disassociate_ctty.part.3+0x36/0x230
+[<ffffffffb504d225>] do_exit+0x6f5/0xa60
+[<ffffffffb504e17e>] do_group_exit+0x2e/0xa0
+[<ffffffffb504e1fb>] SyS_exit_group+0xb/0x10
+[<ffffffffb5001797>] do_syscall_64+0x57/0x240
+[<ffffffffb5600071>] entry_SYSCALL_64_after_hwframe+0x3d/0xa2
+[<ffffffffffffffff>] 0xffffffffffffffff
+
+
+Thanks,
+Ravi
