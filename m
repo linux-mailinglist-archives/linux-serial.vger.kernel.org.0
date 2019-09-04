@@ -2,72 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7B3A805C
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2019 12:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1F3A83FE
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2019 15:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729269AbfIDKaD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Sep 2019 06:30:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727351AbfIDKaC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Sep 2019 06:30:02 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BFC1E22CF7;
-        Wed,  4 Sep 2019 10:30:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567593001;
-        bh=amI1d8yBvn/2nQ7SmkYLPb5JPFI1OXVPx3baApwdu8w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xXG3NamgpFpa7gcnPc4QyAtk7YZUkfh/zMJImAfcZyYdHdyELG/2eiBW6+o8FZwu0
-         /Pkw3JsLwiMQIq9fhpUhoC7+NsZN14qmm5haKM5JBM3iK2vY+T1nVBBlqYHO+YkVkp
-         38x5ALAStfAInaeaRplFYrEI0M/eiEdsVzxpGIFk=
-Received: by mail-qt1-f169.google.com with SMTP id t12so23711566qtp.9;
-        Wed, 04 Sep 2019 03:30:01 -0700 (PDT)
-X-Gm-Message-State: APjAAAXgbVWrZgTZAyBW49R8AdsG0jE7Dfq2WwOST7kz7lRqW6FOylX4
-        2V4uzll/0ajcP6mNCisss07u6Iz3w+wzzy+gpg==
-X-Google-Smtp-Source: APXvYqzTP+mgbJl6qP03BXMD1qIfb+4LM4ULeWNvke171DdGIssPz0kzGCRX9eANVeuAuu1eEKJVX3ie/ck0yCk5VC0=
-X-Received: by 2002:ac8:44c4:: with SMTP id b4mr38455056qto.224.1567593000985;
- Wed, 04 Sep 2019 03:30:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <1567592383-8920-1-git-send-email-pragnesh.patel@sifive.com>
-In-Reply-To: <1567592383-8920-1-git-send-email-pragnesh.patel@sifive.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 4 Sep 2019 11:29:49 +0100
-X-Gmail-Original-Message-ID: <CAL_JsqK8UpZ1Nn4CbcKgW7xgezy20JtdJ6=niyJK_aV3as6Jxg@mail.gmail.com>
-Message-ID: <CAL_JsqK8UpZ1Nn4CbcKgW7xgezy20JtdJ6=niyJK_aV3as6Jxg@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: serial: Convert riscv,sifive-serial to json-schema
-To:     Pragnesh Patel <pragnesh.patel@sifive.com>
-Cc:     Palmer Dabbelt <palmer@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S1730185AbfIDMy7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Sep 2019 08:54:59 -0400
+Received: from wp498.webpack.hosteurope.de ([80.237.130.20]:46938 "EHLO
+        wp498.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725965AbfIDMy7 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 4 Sep 2019 08:54:59 -0400
+Received: from p50937f79.dip0.t-ipconnect.de ([80.147.127.121] helo=ubuntu-VirtualBox.i.sigma-surface-science.com); authenticated
+        by wp498.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_CBC_SHA1:128)
+        id 1i5UDv-00012K-Ss; Wed, 04 Sep 2019 14:17:19 +0200
+From:   =?UTF-8?q?Christoph=20Vogtl=C3=A4nder?= 
+        <c.vogtlaender@sigma-surface-science.com>
+Cc:     c.vogtlaender@sigma-surface-science.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: max310x: Properly set flags in AutoCTS mode
+Date:   Wed,  4 Sep 2019 14:11:41 +0200
+Message-Id: <20190904121141.4570-1-c.vogtlaender@sigma-surface-science.com>
+X-Mailer: git-send-email 2.22.1
+In-Reply-To: <20190904073009.GA9729@kroah.com>
+References: <20190904073009.GA9729@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;c.vogtlaender@sigma-surface-science.com;1567601698;785e2d79;
+X-HE-SMSGID: 1i5UDv-00012K-Ss
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 11:20 AM Pragnesh Patel
-<pragnesh.patel@sifive.com> wrote:
->
-> Convert the riscv,sifive-serial binding to DT schema using json-schema.
->
-> Signed-off-by: Pragnesh Patel <pragnesh.patel@sifive.com>
-> ---
->
-> Changes in v2:
-> - Replace enum with items in compatible property
->
->  .../devicetree/bindings/serial/sifive-serial.txt   | 33 ------------
->  .../devicetree/bindings/serial/sifive-serial.yaml  | 62 ++++++++++++++++++++++
->  2 files changed, 62 insertions(+), 33 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/serial/sifive-serial.txt
->  create mode 100644 Documentation/devicetree/bindings/serial/sifive-serial.yaml
+Commit 391f93f2ec9f ("serial: core: Rework hw-assisted flow control
+support") has changed the way the AutoCTS mode is handled.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+According to that change, serial drivers which enable H/W AutoCTS mode must
+set UPSTAT_AUTORTS, UPSTAT_AUTOCTS and UPSTAT_AUTOXOFF to prevent the
+serial core from inadvertently disabling RX or TX. This patch adds proper
+handling of UPSTAT_AUTORTS, UPSTAT_AUTOCTS and UPSTAT_AUTOXOFF flags.
+
+Signed-off-by: Christoph Vogtländer <c.vogtlaender@sigma-surface-science.com>
+---
+ drivers/tty/serial/max310x.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index 0e24235..fb5a7e0 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -859,15 +859,23 @@ static void max310x_set_termios(struct uart_port *port,
+ 	/* Configure flow control */
+ 	max310x_port_write(port, MAX310X_XON1_REG, termios->c_cc[VSTART]);
+ 	max310x_port_write(port, MAX310X_XOFF1_REG, termios->c_cc[VSTOP]);
+-	if (termios->c_cflag & CRTSCTS)
++
++	port->status &= ~(UPSTAT_AUTOCTS | UPSTAT_AUTORTS | UPSTAT_AUTOXOFF);
++
++	if (termios->c_cflag & CRTSCTS) {
++		/* Enable AUTORTS and AUTOCTS */
++		port->status |= UPSTAT_AUTOCTS | UPSTAT_AUTORTS;
+ 		flow |= MAX310X_FLOWCTRL_AUTOCTS_BIT |
+ 			MAX310X_FLOWCTRL_AUTORTS_BIT;
++	}
+ 	if (termios->c_iflag & IXON)
+ 		flow |= MAX310X_FLOWCTRL_SWFLOW3_BIT |
+ 			MAX310X_FLOWCTRL_SWFLOWEN_BIT;
+-	if (termios->c_iflag & IXOFF)
++	if (termios->c_iflag & IXOFF) {
++		port->status |= UPSTAT_AUTOXOFF;
+ 		flow |= MAX310X_FLOWCTRL_SWFLOW1_BIT |
+ 			MAX310X_FLOWCTRL_SWFLOWEN_BIT;
++	}
+ 	max310x_port_write(port, MAX310X_FLOWCTRL_REG, flow);
+ 
+ 	/* Get baud rate generator configuration */
+-- 
+2.7.4
+
