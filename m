@@ -2,90 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB49BA83FC
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2019 15:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A450A98AD
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2019 05:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730020AbfIDMy4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Sep 2019 08:54:56 -0400
-Received: from wp498.webpack.hosteurope.de ([80.237.130.20]:46840 "EHLO
-        wp498.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725965AbfIDMy4 (ORCPT
+        id S1729877AbfIEDFs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Sep 2019 23:05:48 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45625 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730251AbfIEDFs (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Sep 2019 08:54:56 -0400
-X-Greylist: delayed 2250 seconds by postgrey-1.27 at vger.kernel.org; Wed, 04 Sep 2019 08:54:56 EDT
-Received: from p50937f79.dip0.t-ipconnect.de ([80.147.127.121] helo=ubuntu-VirtualBox.i.sigma-surface-science.com); authenticated
-        by wp498.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_CBC_SHA1:128)
-        id 1i5UEh-0001JK-N9; Wed, 04 Sep 2019 14:18:07 +0200
-From:   =?UTF-8?q?Christoph=20Vogtl=C3=A4nder?= 
-        <c.vogtlaender@sigma-surface-science.com>
-Cc:     =?UTF-8?q?Christoph=20Vogtl=C3=A4nder?= 
-        <c.vogtlaender@sigma-surface-science.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: max310x: turn off transmitter before activating AutoCTS or auto transmitter flow control
-Date:   Wed,  4 Sep 2019 14:17:46 +0200
-Message-Id: <20190904121746.4641-1-c.vogtlaender@sigma-surface-science.com>
-X-Mailer: git-send-email 2.22.1
-In-Reply-To: <20190904073022.GB9729@kroah.com>
-References: <20190904073022.GB9729@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;c.vogtlaender@sigma-surface-science.com;1567601696;333f7ae9;
-X-HE-SMSGID: 1i5UEh-0001JK-N9
-To:     unlisted-recipients:; (no To-header on input)
+        Wed, 4 Sep 2019 23:05:48 -0400
+Received: by mail-pl1-f195.google.com with SMTP id x3so543737plr.12
+        for <linux-serial@vger.kernel.org>; Wed, 04 Sep 2019 20:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=LeRnFkCkMBcGZ5PE2AX045vU+t/z+Mh9Iis8KFnVK34=;
+        b=YssohchZvGx19/YD9qDr9FKNorWv8ge7xcRcxMroT0Em375aRGQxpz1UApKthij/dQ
+         RR08hv1hMWzLHtx431Ru+YRmbw8uM3Wm8a8v2J5ZvsgJEq8jq0J8Vt0XKEmIQtmzwG2L
+         PqKS4SCLY/gNN3nG4YYnR4IQ5AQwQLQzX5JygGDUCBScptFQcE3uI1ZgVGuoUv6xcS/4
+         Nx418BiqkGEcdbYuMHEOg5HAXiJC1IU3Tm6UzULr9j8e/qJLkqJAg1AQkbeZmV9eqjS3
+         729wdCeXzFivEUv/ksYRE4zxVcQwLvbSeAj01Cr8Ye+f3h55o/f9ZHkxpX6tkqfOZW3w
+         Ck5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LeRnFkCkMBcGZ5PE2AX045vU+t/z+Mh9Iis8KFnVK34=;
+        b=TBZEmC4hss9ZDWPA5W8M65iquXKZp6V3Z2wVKZMUTEyAc6VlL6w2BIybu3G9LMjwiu
+         3M/ll77xkIfUOa+Mt9C6QVJZ43FD9B5PHU3X7LAE8hpUEghN8xIXHmTVdofYOb+TWMCn
+         IFZehY4mcBJF32HmQb1khtRfKQm/JcI6ucJUzckAHadynSYfuwG/gy+8iXYyODqAVmjX
+         JBH/0933MCbnxBI8CIPy1UgkErKreassW2F7EZwjH5uwe4vNj01FfjGyKVTiyaYmipVA
+         inKUpCH9DK2ypGUaQBiiGnboxf4xoy0ERcXJkv9UCmXT8TH1xR8vUHsotn7UD7d4w6av
+         0k0w==
+X-Gm-Message-State: APjAAAVlZI00uov7D4HVB0v6FrtxTM50aZVlfdpFHJjJCzZzZszkKst5
+        /OHue0Gy69kkSsFeRFCGuhYo2A==
+X-Google-Smtp-Source: APXvYqwF/B6Fv6rynYjc4aoz0HpuKRLUOBb10pA1gDu1IfehSXhqxMdvOgRtb8P8EEKiBOs0N729vg==
+X-Received: by 2002:a17:902:b604:: with SMTP id b4mr1035768pls.197.1567652747501;
+        Wed, 04 Sep 2019 20:05:47 -0700 (PDT)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id z68sm403810pgz.88.2019.09.04.20.05.40
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 04 Sep 2019 20:05:46 -0700 (PDT)
+From:   Baolin Wang <baolin.wang@linaro.org>
+To:     stable@vger.kernel.org, davem@davemloft.net, kuznet@ms2.inr.ac.ru,
+        yoshfuji@linux-ipv6.org, peterz@infradead.org, mingo@redhat.com,
+        linus.walleij@linaro.org, natechancellor@gmail.com, sre@kernel.org,
+        paulus@samba.org, gregkh@linuxfoundation.org
+Cc:     edumazet@google.com, netdev@vger.kernel.org, longman@redhat.com,
+        linux-gpio@vger.kernel.org, david@lechnology.com,
+        linux-pm@vger.kernel.org, ebiggers@google.com,
+        linux-ppp@vger.kernel.org, lanqing.liu@unisoc.com,
+        linux-serial@vger.kernel.org, arnd@arndb.de,
+        baolin.wang@linaro.org, orsonzhai@gmail.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
+Subject: [BACKPORT 4.14.y v2 0/6] Candidates from Spreadtrum 4.14 product kernel
+Date:   Thu,  5 Sep 2019 11:05:07 +0800
+Message-Id: <cover.1567649728.git.baolin.wang@linaro.org>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-As documented in the data-sheet, the transmitter must be disabled before
-activating AutoCTS or auto transmitter flow control. Accordingly, the
-transmitter must be enabled after AutoCTS or auto transmitter flow
-control gets deactivated.
+With Arnd's script [1] help, I found some bugfixes in Spreadtrum 4.14 product
+kernel, but missing in v4.14.141:
 
-Signed-off-by: Christoph Vogtländer <c.vogtlaender@sigma-surface-science.com>
----
- drivers/tty/serial/max310x.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+25a09ce79639 ppp: mppe: Revert "ppp: mppe: Add softdep to arc4"
+47d3d7fdb10a ip6: fix skb leak in ip6frag_expire_frag_queue()
+5b9cea15a3de serial: sprd: Modify the baud rate calculation formula
+513e1073d52e locking/lockdep: Add debug_locks check in __lock_downgrade()
+957063c92473 pinctrl: sprd: Use define directive for sprd_pinconf_params values
+87a2b65fc855 power: supply: sysfs: ratelimit property read error message
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index fb5a7e0e58e9..adfef6dae4a7 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -860,6 +860,15 @@ static void max310x_set_termios(struct uart_port *port,
- 	max310x_port_write(port, MAX310X_XON1_REG, termios->c_cc[VSTART]);
- 	max310x_port_write(port, MAX310X_XOFF1_REG, termios->c_cc[VSTOP]);
- 
-+	/* Disable transmitter before enabling AutoCTS or auto transmitter
-+	 * flow control
-+	 */
-+	if (termios->c_cflag & CRTSCTS || termios->c_iflag & IXOFF) {
-+		max310x_port_update(port, MAX310X_MODE1_REG,
-+				    MAX310X_MODE1_TXDIS_BIT,
-+				    MAX310X_MODE1_TXDIS_BIT);
-+	}
-+
- 	port->status &= ~(UPSTAT_AUTOCTS | UPSTAT_AUTORTS | UPSTAT_AUTOXOFF);
- 
- 	if (termios->c_cflag & CRTSCTS) {
-@@ -878,6 +887,15 @@ static void max310x_set_termios(struct uart_port *port,
- 	}
- 	max310x_port_write(port, MAX310X_FLOWCTRL_REG, flow);
- 
-+	/* Enable transmitter after disabling AutoCTS and auto transmitter
-+	 * flow control
-+	 */
-+	if (!(termios->c_cflag & CRTSCTS) && !(termios->c_iflag & IXOFF)) {
-+		max310x_port_update(port, MAX310X_MODE1_REG,
-+				    MAX310X_MODE1_TXDIS_BIT,
-+				    0);
-+	}
-+
- 	/* Get baud rate generator configuration */
- 	baud = uart_get_baud_rate(port, termios, old,
- 				  port->uartclk / 16 / 0xffff,
+[1] https://lore.kernel.org/lkml/20190322154425.3852517-19-arnd@arndb.de/T/
+
+Changes from v1:
+ - Drop 2 unnecessary patches (patch 1 and patch 4) from v1 patch set.
+ - Add upstream commit id in change log for each stable patch.
+
+David Lechner (1):
+  power: supply: sysfs: ratelimit property read error message
+
+Eric Biggers (1):
+  ppp: mppe: Revert "ppp: mppe: Add softdep to arc4"
+
+Eric Dumazet (1):
+  ip6: fix skb leak in ip6frag_expire_frag_queue()
+
+Lanqing Liu (1):
+  serial: sprd: Modify the baud rate calculation formula
+
+Nathan Chancellor (1):
+  pinctrl: sprd: Use define directive for sprd_pinconf_params values
+
+Waiman Long (1):
+  locking/lockdep: Add debug_locks check in __lock_downgrade()
+
+ drivers/net/ppp/ppp_mppe.c                |    1 -
+ drivers/pinctrl/sprd/pinctrl-sprd.c       |    6 ++----
+ drivers/power/supply/power_supply_sysfs.c |    3 ++-
+ drivers/tty/serial/sprd_serial.c          |    2 +-
+ include/net/ipv6_frag.h                   |    1 -
+ kernel/locking/lockdep.c                  |    3 +++
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+
 -- 
-2.22.1
+1.7.9.5
 
