@@ -2,98 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1D1A98C9
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2019 05:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF92A9C20
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2019 09:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730780AbfIEDL5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Sep 2019 23:11:57 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36491 "EHLO
+        id S1731008AbfIEHm2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Sep 2019 03:42:28 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42437 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730651AbfIEDL5 (ORCPT
+        with ESMTP id S1732148AbfIEHm1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Sep 2019 23:11:57 -0400
-Received: by mail-pl1-f195.google.com with SMTP id f19so585576plr.3
-        for <linux-serial@vger.kernel.org>; Wed, 04 Sep 2019 20:11:57 -0700 (PDT)
+        Thu, 5 Sep 2019 03:42:27 -0400
+Received: by mail-pl1-f195.google.com with SMTP id y1so865040plp.9;
+        Thu, 05 Sep 2019 00:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MfYJlRyMu0jxdb95Tor8jXonvcKSRTtOHygj9lvQK5Q=;
-        b=V/XN2SYWaXgG95UKQOBazHPQNX4yF9rbsyhWfaiJO99o1PFJCJ5ExV+iHPhe9gWcfb
-         d+gnfF/jUCXjFp++dpHXIT9atOwaB+ufdY+uF7aCm8FKCGoI+yC0EHbmB5Fh2Mx4+lvl
-         T245rf0maHvVK/nbjVWbI/P61i52O+QMwd1i74b1ymoo7taCm2Wy9r3OxWAV30aSZ57+
-         GeVWWE/l3GcqdCpnQVsvvWGWdOValI6PD020pKQJUTLQH002e2khBy7i2qALZlHCFbOe
-         Pnj4lckDukWO/UZusJMceMmP8zxrnw1e3V6kcUtpQQCsojsREAuChcgA5w5GJOmbOhy/
-         HceQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rBvvS8Ifgerj64qNxAVniHlq7uYFZXu02QIX7Pp36ko=;
+        b=hl8cg9pclBKf75yEQ+msalibhdyY9q5LWoTXIs+1N7KckJ3pGTQedG4HmXLAvSYKgS
+         FpfPBCyrHLVc7T+hCJyyC/PQgOxGhloNN3OrR9zlp87irsupRrcp1oq6V49Eflq1c+6C
+         SWyJVdfn91hYcXTorcIpiBmaJyyRhtYyv9RHlJ0beXH4JZXm1NDLAY+FnoX2hZjd2ggp
+         7tYsWeAMSw0P3UxSPXfcfkzR3daB7Ze9HjrG/aNW+d8Jsc5LuXjZt2WuBTeINpxxt1Ks
+         WfDrZZTqkFP2VQaVhULP9RoXJtLvsqhCtqvslirdlYcGIznFwik1/GL0LNbEvrg5e4ds
+         wO9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MfYJlRyMu0jxdb95Tor8jXonvcKSRTtOHygj9lvQK5Q=;
-        b=TYCX3FbiCzjgKqRGL30sGczzLPROKMIhIEHf8HiYLP3p/AKymcgelOK9u4sihRVPIO
-         LBprQU1DcAG8fwWc3ng1PY/TyO5BUt8hqTPKTvILcc8gmm+nIY4bu5bTNtwzhigTMOJc
-         5S4vGCQRoOejxZAALe7hB20cTkjikS54EJq7v5aQxpzW19dRbqrafr2YbsXa2lTregTS
-         jV6p9ZtoJsn2v13Hkf0KGp3IVKF/Tdpkfdn+G/Gb072gp8RmsXKFKo0lnk8aP5mfeBGb
-         OdbAW8/B5dYU19HU/sd6NXXG+Tl4NRxCXD0trvBQZeeIyvRjWPxzNOSd6cuG0taRd6In
-         DsAA==
-X-Gm-Message-State: APjAAAUHk+sr4dn4mSaGYj+mRshW1DEkm9yow4IyzDQ1ml9hJxl6YTCB
-        aaDSLyi+IycPO25i4eiZ9wDbdQ==
-X-Google-Smtp-Source: APXvYqx8CvoNCXmIQapd4vaSC1RjBFGwshNhzXClze6ABO47k+de81CYFeVSeXYgKCLX/qJs1PjfPg==
-X-Received: by 2002:a17:902:33c1:: with SMTP id b59mr1094665plc.104.1567653116718;
-        Wed, 04 Sep 2019 20:11:56 -0700 (PDT)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id 15sm530957pfh.188.2019.09.04.20.11.53
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 04 Sep 2019 20:11:56 -0700 (PDT)
-From:   Baolin Wang <baolin.wang@linaro.org>
-To:     stable@vger.kernel.org, gregkh@linuxfoundation.org
-Cc:     lanqing.liu@unisoc.com, linux-serial@vger.kernel.org,
-        arnd@arndb.de, baolin.wang@linaro.org, orsonzhai@gmail.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
-Subject: [BACKPORT 4.14.y v2 6/6] serial: sprd: Modify the baud rate calculation formula
-Date:   Thu,  5 Sep 2019 11:11:26 +0800
-Message-Id: <4fe6ec82960301126b9f4be52dd6083c30e17420.1567649729.git.baolin.wang@linaro.org>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1567649728.git.baolin.wang@linaro.org>
-References: <cover.1567649728.git.baolin.wang@linaro.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rBvvS8Ifgerj64qNxAVniHlq7uYFZXu02QIX7Pp36ko=;
+        b=dDvZOIMOFzmxv4S+cjsv/TK+D7Eg2ETjazVhoK3275N5ynoAMgQw+/c8vmPNBXhRff
+         hDU8KwdCelYb+snf9NRXuMOx5UiWU0Bwh/5FnMnD6S/hvXuZlJVe9aL17Obw3t+nja2c
+         PIdfomRUfn60F2r2bmn96QUhySrWd1vWoygtdsODhouTJ73swlGPZYBaYazVmMGzwpU7
+         J+oOkTEaH46kHoUjvxA/ki4NT/pBPgaYGlR6UdplsT/IiCWT88DEHJ3ibB6X00g8IiX+
+         B56nDLXo6v/Nmpyg2YlUvI0n3xu/Znxx80rQ1TRSCOxVkSjNfnl+00n3r4mLEc8okKb7
+         obbA==
+X-Gm-Message-State: APjAAAUNP4Cva0EiOwXcoE0jExiB8mRCYbeBVgysZusoYBa6DLS9jJ7A
+        JOYp9ZZiRT5f6HT8qqrG9es=
+X-Google-Smtp-Source: APXvYqxdmtveZ3KQEVhgFRZfS/cuFePwXE7S0QmrtMkNGj3TaeJ8XraBevqCTwyIF+IRKVC7nyXtMQ==
+X-Received: by 2002:a17:902:7449:: with SMTP id e9mr1980377plt.242.1567669347125;
+        Thu, 05 Sep 2019 00:42:27 -0700 (PDT)
+Received: from ubt.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id k5sm1058919pjs.1.2019.09.05.00.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2019 00:42:26 -0700 (PDT)
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linaro.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Subject: [PATCH] serial: sprd: correct the wrong sequence of arguments
+Date:   Thu,  5 Sep 2019 15:41:51 +0800
+Message-Id: <20190905074151.5268-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Lanqing Liu <lanqing.liu@unisoc.com>
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-[Upstream commit 5b9cea15a3de5d65000d49f626b71b00d42a0577]
+The sequence of arguments which was passed to handle_lsr_errors() didn't
+match the parameters defined in that function, &lsr was passed to flag
+and &flag was passed to lsr, this patch fixed that.
 
-When the source clock is not divisible by the expected baud rate and
-the remainder is not less than half of the expected baud rate, the old
-formular will round up the frequency division coefficient. This will
-make the actual baud rate less than the expected value and can not meet
-the external transmission requirements.
-
-Thus this patch modifies the baud rate calculation formula to support
-the serial controller output the maximum baud rate.
-
-Signed-off-by: Lanqing Liu <lanqing.liu@unisoc.com>
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
+Fixes: b7396a38fb28 ("tty/serial: Add Spreadtrum sc9836-uart driver support")
+Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Signed-off-by: Chunyan Zhang <zhang.lyra@gmail.com>
 ---
- drivers/tty/serial/sprd_serial.c |    2 +-
+ drivers/tty/serial/sprd_serial.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
-index e902494..72e96ab8 100644
+index c4d8c77c1261..4eb5dbfbc46d 100644
 --- a/drivers/tty/serial/sprd_serial.c
 +++ b/drivers/tty/serial/sprd_serial.c
-@@ -380,7 +380,7 @@ static void sprd_set_termios(struct uart_port *port,
- 	/* ask the core to calculate the divisor for us */
- 	baud = uart_get_baud_rate(port, termios, old, 0, SPRD_BAUD_IO_LIMIT);
+@@ -609,7 +609,7 @@ static inline void sprd_rx(struct uart_port *port)
  
--	quot = (unsigned int)((port->uartclk + baud / 2) / baud);
-+	quot = port->uartclk / baud;
- 
- 	/* set data length */
- 	switch (termios->c_cflag & CSIZE) {
+ 		if (lsr & (SPRD_LSR_BI | SPRD_LSR_PE |
+ 			   SPRD_LSR_FE | SPRD_LSR_OE))
+-			if (handle_lsr_errors(port, &lsr, &flag))
++			if (handle_lsr_errors(port, &flag, &lsr))
+ 				continue;
+ 		if (uart_handle_sysrq_char(port, ch))
+ 			continue;
 -- 
-1.7.9.5
+2.20.1
 
