@@ -2,139 +2,244 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 887C0AA23C
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2019 14:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094F8AA617
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2019 16:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388895AbfIEL6z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Sep 2019 07:58:55 -0400
-Received: from mail-eopbgr80057.outbound.protection.outlook.com ([40.107.8.57]:16451
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388280AbfIEL6y (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Sep 2019 07:58:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bKAoDb2zCK7Q+bzXXcqOeTtYELoM9zyY0OBmTaVI1ymAl51JZzKb1/IPHtE2I5WNp/018V4LuBtbLZbzP9nOaBlNFqEUHF8H1M3y22nxbZ/jD1NXy4oFse2laMIyWP8CJEcA2E4IRyCL9wbaGJlnjunZl1iZ6ogR+U+OX/4vAeKArUQXygnYNIWzaLHaPyogxY26a+2jgGuue4XZTXrIkEn5rUNJUnbDp3mbPqIiUkWWzeRIEfJLlHfD6dspM/XxDxvSclLx0kdmtEyzwgrmRe3h6U6i8ZyaX+94uB8ydmfpJSG9gGkN3UcX4rMSIirLNbok2siyFFv2MadHQw2wWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=egAmLLcYxNc+vNg4VL0BrjM1fDO0l7UPG3LF2prGCGY=;
- b=RiDFctgqIYUCOM0NAqMrspLlcu0fS4GgrqkZaq3w/RQUFhxN5UK4D3ZjKxK6EBK4iSf/JYCOG/eawSsJlSnReaQ0WwD9YCJzkHtdms+/MZf9HO7f8gmvGZ0HR37aTFvlBgSLsFqj2seZ1/lPHpA9hm/17PxXn6IsnWffDZuwYuMLOuZQMut8nBC0iRcFWYidPo0PydRHepUJ8YEdvdXMEcrIjkxomcWvlyFNrfMZzbBd3hVqE7ACBf7OUojsrZln7lgh4k+3R5/jU/ogC80nBIC07qotpxgs/SyCgluN8SpxdIP8b/c8ecbWMk83d01eZqd0+u1r3+Lil9ghEuIluw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=egAmLLcYxNc+vNg4VL0BrjM1fDO0l7UPG3LF2prGCGY=;
- b=Tqkrqu4rOsAEd5J1ezYDkXwvgxLUPExymw50TUmtBgVMh4kjKv2k2ndYq+776jm4TGSyRFasSSkJe/ppQUTN+r3CDL5Q3tEJrxOp782X9aI5kUYg48udTudLbEj45U5A6qEcnGavqG8edkj/gfKC5VVQxf4bXVmFquo5tpgpjLE=
-Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
- VI1PR0402MB3805.eurprd04.prod.outlook.com (52.134.16.26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.18; Thu, 5 Sep 2019 11:58:41 +0000
-Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
- ([fe80::19cd:9f82:31ce:fbbb]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
- ([fe80::19cd:9f82:31ce:fbbb%8]) with mapi id 15.20.2220.022; Thu, 5 Sep 2019
- 11:58:41 +0000
-From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-To:     "corbet@lwn.net" <corbet@lwn.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Leo Li <leoyang.li@nxp.com>
-CC:     "jslaby@suse.com" <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>
-Subject: [PATCH v4 6/6] arm64: defconfig: Enable configs for S32V234
-Thread-Topic: [PATCH v4 6/6] arm64: defconfig: Enable configs for S32V234
-Thread-Index: AQHVY+FC12rG9yn4iU2MzSxKohFhxg==
-Date:   Thu, 5 Sep 2019 11:58:41 +0000
-Message-ID: <20190905115803.19565-7-stefan-gabriel.mirea@nxp.com>
-References: <20190905115803.19565-1-stefan-gabriel.mirea@nxp.com>
-In-Reply-To: <20190905115803.19565-1-stefan-gabriel.mirea@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.22.0
-x-clientproxiedby: AM6P193CA0005.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:209:3e::18) To VI1PR0402MB2863.eurprd04.prod.outlook.com
- (2603:10a6:800:af::18)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [212.146.100.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 52e9e927-a1d5-45cf-0cf4-08d731f8650b
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3805;
-x-ms-traffictypediagnostic: VI1PR0402MB3805:|VI1PR0402MB3805:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0402MB38052310A176976C1AE777F8DFBB0@VI1PR0402MB3805.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3044;
-x-forefront-prvs: 015114592F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(366004)(396003)(376002)(136003)(199004)(189003)(476003)(81156014)(81166006)(446003)(2616005)(486006)(71190400001)(11346002)(6436002)(1076003)(54906003)(71200400001)(110136005)(53936002)(8676002)(7416002)(102836004)(478600001)(36756003)(14454004)(6512007)(25786009)(2501003)(2201001)(86362001)(256004)(66556008)(64756008)(66446008)(186003)(66946007)(26005)(4326008)(4744005)(3846002)(7736002)(316002)(6506007)(52116002)(99286004)(8936002)(76176011)(2906002)(305945005)(6486002)(5660300002)(50226002)(66066001)(6116002)(66476007)(6636002)(386003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3805;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: P2/Ou2M7NRa69+jdpisdTjUDtNnjQhQZwee+CQ+3DhmyPHbsqQZ2jYVvx+uW7DrZateik+4GOLdgaAG+ixIbRehEKZYSNH/3VSqgTyevI17mJVY1oMoypbTXSQ42ZhOfbMTwQqr4ijStR6nyX5uy/q7yMU9XV3Jm2jnNpgeGFU9cvTRozMXYhhJdZu+wphb8n1vjfzHoUMV1N9/UYl7uR5h+GbmH/9T/TMXHsYRJ1qeTJ/ySdZeUeLYsbMRr1qXGi+mLSKFGYqV7kYjfSYdKHE0uDmzeivRmhF9m/tgTmmIwnAde097htu7/aXbwhhSOMcSlXg+KloThczCLXGJNViFnTtYpGNUNQh9l5cWn+USDAaFz4jj/MZMckHYu6jbjYRSqaSx7Gnyvl3xu7Peod4g8ctJu2WCU31h4Jy6MoHE=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52e9e927-a1d5-45cf-0cf4-08d731f8650b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 11:58:41.5936
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: H5mWGBWRf+jmJM9z5sDNk/Rpm21pcY6qpcMUrrIKi46x4+3xOozdj8zvb9BF6wDGoh1eoSMa9ms/axi3R03KD48JWdeLX+uCVDZ+0PCqj1c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3805
+        id S2389492AbfIEOlm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Sep 2019 10:41:42 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:56342 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730867AbfIEOlm (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 5 Sep 2019 10:41:42 -0400
+Received: by mail-vk1-f201.google.com with SMTP id d10so1010087vkl.23
+        for <linux-serial@vger.kernel.org>; Thu, 05 Sep 2019 07:41:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=LFWsK2QZ8bVXSHheMKtLsdY0S0oitbaw2viAl6b9YRQ=;
+        b=nToKRiBCwB6R+Wv2qaPXm7X9v1PLvu8s3PL/XUsIGgq6IDiAmrB0JDTPMaBhi9lmkA
+         2PRGQPF6JcBtbEWUC4B2kvXeGUFnzpsMEB1QoAdqIJGHqL1DX0xZThcZr2nqM0zafeCB
+         mGasaJtCwA1BB6n6iodDP/y/5me8ncb8w+QP0EA5hFg41AgEHF1qq5IcZXyq6RHv9mg2
+         KGPOZW5VAa0EsSfSKgh8XepycO2GKD/U7DoPLJNm3GN1P9/Z2GJmVm9rNYrF3B7Ocxlw
+         /JrakuhfbQXfb9N20paa1tiJ7p2oZ56kjiYS1ecJ0GHE+D+9J4OTgQ2Ep69UMYpvNyAQ
+         WNVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=LFWsK2QZ8bVXSHheMKtLsdY0S0oitbaw2viAl6b9YRQ=;
+        b=tM44vZNmkEqpUEyS7tjS0wxX8VI6tFksAdA0DJfS60cQpycz+OCAgklCqFSXryLd5g
+         YARhLdnJ0YEzsBOZdkOpAUIRVDMkux9iutj0paRGE0QVani9kAEHisudNNcVNfgM9lF2
+         55hdP/shT6nigIDIMzuT5+7aDuRwkgNd1BSLvSiO3sPf7F03RvLj9+DivtZNhqCmkxS8
+         o1P+XhFN5mrZ+uG96PCLI7BpFwN7LCEL60Ib42PidLwpqJCB8ZposV1FDIcPi/r4svbe
+         Nc3E59QP6KM652cGNUHe8yRc/fPfEJ9YTEi0ZT5rV8tLFAUF+3qjjEb8syGpLNQyaKEq
+         KhzA==
+X-Gm-Message-State: APjAAAUtykc/vmaZ9hs6XVN+bGb+4zdENmvj6HZBsG3UptQ26vnpnroj
+        q1pIHuK49vUZ9SFLFd9VcG+6Fj4=
+X-Google-Smtp-Source: APXvYqxeIMwEoSy2MaWbECwQxT+FzZFA/C0q7vBr3W8SzYyTQvFCaPXQyOq5yue5Qew81uUEEcJFFso=
+X-Received: by 2002:a1f:410f:: with SMTP id o15mr1715102vka.82.1567694500426;
+ Thu, 05 Sep 2019 07:41:40 -0700 (PDT)
+Date:   Thu,  5 Sep 2019 10:41:28 -0400
+Message-Id: <20190905144130.220713-1-osk@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
+Subject: [PATCH v3 1/3] drivers/tty/serial/8250: Make Aspeed VUART SIRQ
+ polarity configurable
+From:   Oskar Senft <osk@google.com>
+To:     joel@jms.id.au, andrew@aj.id.au, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, jk@ozlabs.org
+Cc:     openbmc@lists.ozlabs.org, linux-aspeed@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        Oskar Senft <osk@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Mihaela Martinas <Mihaela.Martinas@freescale.com>
+Make the SIRQ polarity for Aspeed AST24xx/25xx VUART configurable via
+sysfs. This setting need to be changed on specific host platforms
+depending on the selected host interface (LPC / eSPI).
 
-Enable support for the S32V234 SoC, including the previously added UART
-driver.
+The setting is configurable via sysfs rather than device-tree to stay in
+line with other related configurable settings.
 
-Signed-off-by: Mihaela Martinas <Mihaela.Martinas@freescale.com>
-Signed-off-by: Adrian.Nitu <adrian.nitu@freescale.com>
-Signed-off-by: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
-Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+On AST2500 the VUART SIRQ polarity can be auto-configured by reading a
+bit from a configuration register, e.g. the LPC/eSPI interface
+configuration bit.
+
+Tested: Verified on TYAN S7106 mainboard.
+Signed-off-by: Oskar Senft <osk@google.com>
 ---
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ .../ABI/stable/sysfs-driver-aspeed-vuart      | 11 ++-
+ drivers/tty/serial/8250/8250_aspeed_vuart.c   | 84 +++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig               |  1 +
+ 3 files changed, 95 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0e58ef02880c..bb5aa95a8455 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -48,6 +48,7 @@ CONFIG_ARCH_MXC=3Dy
- CONFIG_ARCH_QCOM=3Dy
- CONFIG_ARCH_RENESAS=3Dy
- CONFIG_ARCH_ROCKCHIP=3Dy
-+CONFIG_ARCH_S32=3Dy
- CONFIG_ARCH_SEATTLE=3Dy
- CONFIG_ARCH_STRATIX10=3Dy
- CONFIG_ARCH_SYNQUACER=3Dy
-@@ -347,6 +348,8 @@ CONFIG_SERIAL_XILINX_PS_UART=3Dy
- CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=3Dy
- CONFIG_SERIAL_FSL_LPUART=3Dy
- CONFIG_SERIAL_FSL_LPUART_CONSOLE=3Dy
-+CONFIG_SERIAL_FSL_LINFLEXUART=3Dy
-+CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE=3Dy
- CONFIG_SERIAL_MVEBU_UART=3Dy
- CONFIG_SERIAL_DEV_BUS=3Dy
- CONFIG_VIRTIO_CONSOLE=3Dy
---=20
-2.22.0
+diff --git a/Documentation/ABI/stable/sysfs-driver-aspeed-vuart b/Documentation/ABI/stable/sysfs-driver-aspeed-vuart
+index 8062953ce77b..950cafc9443a 100644
+--- a/Documentation/ABI/stable/sysfs-driver-aspeed-vuart
++++ b/Documentation/ABI/stable/sysfs-driver-aspeed-vuart
+@@ -6,10 +6,19 @@ Description:	Configures which IO port the host side of the UART
+ Users:		OpenBMC.  Proposed changes should be mailed to
+ 		openbmc@lists.ozlabs.org
+ 
+-What:		/sys/bus/platform/drivers/aspeed-vuart*/sirq
++What:		/sys/bus/platform/drivers/aspeed-vuart/*/sirq
+ Date:		April 2017
+ Contact:	Jeremy Kerr <jk@ozlabs.org>
+ Description:	Configures which interrupt number the host side of
+ 		the UART will appear on the host <-> BMC LPC bus.
+ Users:		OpenBMC.  Proposed changes should be mailed to
+ 		openbmc@lists.ozlabs.org
++
++What:		/sys/bus/platform/drivers/aspeed-vuart/*/sirq_polarity
++Date:		July 2019
++Contact:	Oskar Senft <osk@google.com>
++Description:	Configures the polarity of the serial interrupt to the
++		host via the BMC LPC bus.
++		Set to 0 for active-low or 1 for active-high.
++Users:		OpenBMC.  Proposed changes should be mailed to
++		openbmc@lists.ozlabs.org
+diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+index 0438d9a905ce..6e67fd89445a 100644
+--- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
++++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+@@ -14,6 +14,8 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
++#include <linux/regmap.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
+ #include <linux/clk.h>
+@@ -22,6 +24,7 @@
+ 
+ #define ASPEED_VUART_GCRA		0x20
+ #define ASPEED_VUART_GCRA_VUART_EN		BIT(0)
++#define ASPEED_VUART_GCRA_HOST_SIRQ_POLARITY	BIT(1)
+ #define ASPEED_VUART_GCRA_DISABLE_HOST_TX_DISCARD BIT(5)
+ #define ASPEED_VUART_GCRB		0x24
+ #define ASPEED_VUART_GCRB_HOST_SIRQ_MASK	GENMASK(7, 4)
+@@ -131,8 +134,53 @@ static ssize_t sirq_store(struct device *dev, struct device_attribute *attr,
+ 
+ static DEVICE_ATTR_RW(sirq);
+ 
++static ssize_t sirq_polarity_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct aspeed_vuart *vuart = dev_get_drvdata(dev);
++	u8 reg;
++
++	reg = readb(vuart->regs + ASPEED_VUART_GCRA);
++	reg &= ASPEED_VUART_GCRA_HOST_SIRQ_POLARITY;
++
++	return snprintf(buf, PAGE_SIZE - 1, "%u\n", reg ? 1 : 0);
++}
++
++static void aspeed_vuart_set_sirq_polarity(struct aspeed_vuart *vuart,
++					   bool polarity)
++{
++	u8 reg = readb(vuart->regs + ASPEED_VUART_GCRA);
++
++	if (polarity)
++		reg |= ASPEED_VUART_GCRA_HOST_SIRQ_POLARITY;
++	else
++		reg &= ~ASPEED_VUART_GCRA_HOST_SIRQ_POLARITY;
++
++	writeb(reg, vuart->regs + ASPEED_VUART_GCRA);
++}
++
++static ssize_t sirq_polarity_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	struct aspeed_vuart *vuart = dev_get_drvdata(dev);
++	unsigned long val;
++	int err;
++
++	err = kstrtoul(buf, 0, &val);
++	if (err)
++		return err;
++
++	aspeed_vuart_set_sirq_polarity(vuart, val != 0);
++
++	return count;
++}
++
++static DEVICE_ATTR_RW(sirq_polarity);
++
+ static struct attribute *aspeed_vuart_attrs[] = {
+ 	&dev_attr_sirq.attr,
++	&dev_attr_sirq_polarity.attr,
+ 	&dev_attr_lpc_address.attr,
+ 	NULL,
+ };
+@@ -302,8 +350,30 @@ static int aspeed_vuart_handle_irq(struct uart_port *port)
+ 	return 1;
+ }
+ 
++static void aspeed_vuart_auto_configure_sirq_polarity(
++	struct aspeed_vuart *vuart, struct device_node *syscon_np,
++	u32 reg_offset, u32 reg_mask)
++{
++	struct regmap *regmap;
++	u32 value;
++
++	regmap = syscon_node_to_regmap(syscon_np);
++	if (IS_ERR(regmap)) {
++		dev_warn(vuart->dev,
++			 "could not get regmap for aspeed,sirq-polarity-sense\n");
++		return;
++	}
++	if (regmap_read(regmap, reg_offset, &value)) {
++		dev_warn(vuart->dev, "could not read hw strap table\n");
++		return;
++	}
++
++	aspeed_vuart_set_sirq_polarity(vuart, (value & reg_mask) == 0);
++}
++
+ static int aspeed_vuart_probe(struct platform_device *pdev)
+ {
++	struct of_phandle_args sirq_polarity_sense_args;
+ 	struct uart_8250_port port;
+ 	struct aspeed_vuart *vuart;
+ 	struct device_node *np;
+@@ -402,6 +472,20 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+ 
+ 	vuart->line = rc;
+ 
++	rc = of_parse_phandle_with_fixed_args(
++		np, "aspeed,sirq-polarity-sense", 2, 0,
++		&sirq_polarity_sense_args);
++	if (rc < 0) {
++		dev_dbg(&pdev->dev,
++			"aspeed,sirq-polarity-sense property not found\n");
++	} else {
++		aspeed_vuart_auto_configure_sirq_polarity(
++			vuart, sirq_polarity_sense_args.np,
++			sirq_polarity_sense_args.args[0],
++			BIT(sirq_polarity_sense_args.args[1]));
++		of_node_put(sirq_polarity_sense_args.np);
++	}
++
+ 	aspeed_vuart_set_enabled(vuart, true);
+ 	aspeed_vuart_set_host_tx_discard(vuart, true);
+ 	platform_set_drvdata(pdev, vuart);
+diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+index 509f6a3bb9ff..98e25781a293 100644
+--- a/drivers/tty/serial/8250/Kconfig
++++ b/drivers/tty/serial/8250/Kconfig
+@@ -243,6 +243,7 @@ config SERIAL_8250_ASPEED_VUART
+ 	tristate "Aspeed Virtual UART"
+ 	depends on SERIAL_8250
+ 	depends on OF
++	depends on REGMAP && MFD_SYSCON
+ 	help
+ 	  If you want to use the virtual UART (VUART) device on Aspeed
+ 	  BMC platforms, enable this option. This enables the 16550A-
+-- 
+2.23.0.187.g17f5b7556c-goog
 
