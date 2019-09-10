@@ -2,68 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AADAE360
-	for <lists+linux-serial@lfdr.de>; Tue, 10 Sep 2019 07:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84189AE41A
+	for <lists+linux-serial@lfdr.de>; Tue, 10 Sep 2019 08:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390776AbfIJF73 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 10 Sep 2019 01:59:29 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:43756 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730117AbfIJF72 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 10 Sep 2019 01:59:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=fIGfMlrxJV5LsPD/0GOyEkA6JJ43g2NcxaloY4HpG0M=; b=Pms1SD+dyyIaw6SRkOF4c6iO4
-        lcMmT2URpL21DKmeVp6SfzrfceFPYvotTK/2UWo7RXWv89qtZDTgIMhvdF34xf1WIEZAgnRwcPRJw
-        USkGPbRn3gJns6zoyz5NgYHUgJoNiy1PHjEDs/WDlXaKQI0sMvfc/LkGPndJV/H76pBOtlR2clFb/
-        g49DsmWumNLCDUBsf943t7H9dourO/VKW09emXKV7o690l9PKRgyry2oOUr8rb+KvTCV5BQFtnNdp
-        9YCjEphyWjA2VMHowPV+UI3jeAQZludF+ZSTUkzsYOzwsYzwpGak0zuuOOuoEO7LV/wlPyXCrwPrN
-        D8nSf690g==;
-Received: from [2001:4bb8:180:57ff:412:4333:4bf9:9db2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i7ZBV-0001Vn-4L; Tue, 10 Sep 2019 05:59:25 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     gregkh@linuxfoundation.org, jslaby@suse.com
-Cc:     paul.walmsley@sifive.com, linux-serial@vger.kernel.org,
+        id S2406537AbfIJG5l (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 10 Sep 2019 02:57:41 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56886 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2406535AbfIJG5k (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 10 Sep 2019 02:57:40 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id CE142AC18;
+        Tue, 10 Sep 2019 06:57:38 +0000 (UTC)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     gregkh@linuxfoundation.org, jslaby@suse.com,
+        paul.walmsley@sifive.com, linux-serial@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial/sifive: select SERIAL_EARLYCON
-Date:   Tue, 10 Sep 2019 07:59:23 +0200
-Message-Id: <20190910055923.28384-1-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] serial/sifive: select SERIAL_EARLYCON
+References: <20190910055923.28384-1-hch@lst.de>
+X-Yow:  My EARS are GONE!!
+Date:   Tue, 10 Sep 2019 08:57:37 +0200
+In-Reply-To: <20190910055923.28384-1-hch@lst.de> (Christoph Hellwig's message
+        of "Tue, 10 Sep 2019 07:59:23 +0200")
+Message-ID: <mvm4l1kskny.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The sifive serial driver implements earlycon support, but unless
-another driver is built in that supports earlycon support it won't
-be usable.  Explicitly select SERIAL_EARLYCON instead.
+On Sep 10 2019, Christoph Hellwig <hch@lst.de> wrote:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/tty/serial/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+> The sifive serial driver implements earlycon support,
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 530cb966092f..6b77a72278e3 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1075,6 +1075,7 @@ config SERIAL_SIFIVE_CONSOLE
- 	bool "Console on SiFive UART"
- 	depends on SERIAL_SIFIVE=y
- 	select SERIAL_CORE_CONSOLE
-+	select SERIAL_EARLYCON
- 	help
- 	  Select this option if you would like to use a SiFive UART as the
- 	  system console.
+It should probably be documented in admin-guide/kernel-parameters.txt.
+
+Andreas.
+
 -- 
-2.20.1
-
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
