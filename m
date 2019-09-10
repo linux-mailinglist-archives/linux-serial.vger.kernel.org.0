@@ -2,62 +2,29 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF38AAED75
-	for <lists+linux-serial@lfdr.de>; Tue, 10 Sep 2019 16:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65055AEFB4
+	for <lists+linux-serial@lfdr.de>; Tue, 10 Sep 2019 18:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbfIJOmf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 10 Sep 2019 10:42:35 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42654 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732767AbfIJOmf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 10 Sep 2019 10:42:35 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CD812B742;
-        Tue, 10 Sep 2019 14:42:33 +0000 (UTC)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     gregkh@linuxfoundation.org, jslaby@suse.com,
-        paul.walmsley@sifive.com, linux-serial@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial/sifive: select SERIAL_EARLYCON
-References: <20190910055923.28384-1-hch@lst.de> <mvm4l1kskny.fsf@suse.de>
-        <20190910070503.GA31743@lst.de> <mvmzhjcr2d4.fsf@suse.de>
-        <20190910143630.GA6794@lst.de>
-X-Yow:  I'm in DISGUISE as a BAGGAGE CHECKER....I can watch the house, if it's
- ORANGE...
-Date:   Tue, 10 Sep 2019 16:42:33 +0200
-In-Reply-To: <20190910143630.GA6794@lst.de> (Christoph Hellwig's message of
-        "Tue, 10 Sep 2019 16:36:30 +0200")
-Message-ID: <mvmftl4p606.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        id S2436791AbfIJQhm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 10 Sep 2019 12:37:42 -0400
+Received: from [112.85.168.95] ([112.85.168.95]:38662 "EHLO
+        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2436774AbfIJQhm (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 10 Sep 2019 12:37:42 -0400
+X-Greylist: delayed 4407 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Sep 2019 12:37:41 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by localhost.localdomain (Postfix) with SMTP id C0DF311DD785;
+        Tue, 10 Sep 2019 11:30:24 +0800 (CST)
+From:   128128linux-serial@vger.kernel.org
+Reply-To: prodawez@cuvox.de
+To:     linux-serial@vger.kernel.org
+Subject: Zdravstvujte! Vas interesujut klientskie bazy dannyh?
+Message-Id: <20190910033024.C0DF311DD785@localhost.localdomain>
+Date:   Tue, 10 Sep 2019 11:30:24 +0800 (CST)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sep 10 2019, Christoph Hellwig <hch@lst.de> wrote:
-
-> On Tue, Sep 10, 2019 at 10:18:15AM +0200, Andreas Schwab wrote:
->> > How so?  Wіth OF and a stdout path you just set earlycon on the
->> > command line without any arguments and it will be found.
->> 
->> Doesn't work for me.
->> 
->> [    0.000000] Malformed early option 'earlycon'
->
-> That functionality is implemented by param_setup_earlycon and
-> early_init_dt_scan_chosen_stdout.  Check why those aren't built into
-> your kernel.
-
-They are.
-
-Andreas.
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+Zdravstvujte! Vas interesujut klientskie bazy dannyh?
