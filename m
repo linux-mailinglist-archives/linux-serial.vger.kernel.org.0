@@ -2,51 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05593B121D
-	for <lists+linux-serial@lfdr.de>; Thu, 12 Sep 2019 17:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B905B145F
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Sep 2019 20:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733005AbfILPbQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 12 Sep 2019 11:31:16 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:36229 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733001AbfILPbQ (ORCPT
+        id S1727007AbfILSXr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Sep 2019 14:23:47 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38294 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726754AbfILSXr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 12 Sep 2019 11:31:16 -0400
-Received: by mail-lf1-f67.google.com with SMTP id x80so19750837lff.3;
-        Thu, 12 Sep 2019 08:31:14 -0700 (PDT)
+        Thu, 12 Sep 2019 14:23:47 -0400
+Received: by mail-lj1-f194.google.com with SMTP id y23so24211339ljn.5;
+        Thu, 12 Sep 2019 11:23:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NLThGLGX2luBPY/V3tzpyvjSzQN5EJNand59KMNVjgc=;
-        b=gkG2975pwBiCBXaPE6eTjd/T6v/glmnTKg3B5kK4SOVJDsDgKIGQa1k18m9BcBs9VS
-         bAO7rcjTbL5EVUOf1frETZsAHAoEXE7QPTHaIkBFLZn39bQ2PSgPKEGbTIEce8MaImDp
-         wPbQIRdRURaivJt2WWrFc/NBYU+wUAcBFczFFGuzXiTVCe7vCvJ9tBxeX7zmaH3BTT3k
-         pe+x8odbQtrIXAhdSKSM3t9rP/1oF2vADV4q3300DjrKHBGEAlWD+d24H49Chk7L2xzT
-         IxbuEjWlEnx4tcdExp98Wrlhz6qxyS5Brp72oqRne2wOEwkOLOXbxidzW0McZ3W8M7H3
-         7H0Q==
+        bh=IzpHMPyEAs7qHXeC8+PI+k8EjPmSxRwc5lCuYXRCv54=;
+        b=UZ3qHTaVrczrYkLqCzFJel3IMA/0c7kf0uAfHAAJOzbYtfQv5ist1ZHOa4QlmfW8Y8
+         1AccvRFP+4hzmqF/mVoOwGA4l8o5DpECcGgLYz2jE77VlFvAgE+zB30oFDvBEvN4+qN7
+         b2KB42vYdwZpch/CRMGMfR6lyFLUvffEYJGADc/Aaexis9rTRYC+WyV2vz2TYvVvKYIN
+         /Hj7Z7dhOQ9iBUcmPP31o62k891bi3/x4FEzaOJz5n6DkNAttTbJv+jeqdrBpWk4Jcvj
+         /DcBW3x7lGouxlUi484qAfkGHAmC3hpvwfD4UqKFSlkAZsAwUOfj9fqzmF3WTw8wZ4Om
+         a/Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NLThGLGX2luBPY/V3tzpyvjSzQN5EJNand59KMNVjgc=;
-        b=KIFi6XjudEB6+RaCJ/QEvQ2sk+sxeZG23M5f11ipKeAMF2CoaBK8vcsDyJqERHO1Ct
-         WeETe8llH8zMdptU2H0N7EBpVtoHh7Jbjg54KP/yiqVP1eUlTXeOuv3qLAVIN1J5vbuX
-         g7IKGZagW5IBv2BO6dm1a6eQquxhNeesY0vjC/jhvLoBjYTUjO+RfCkSzWP8Xjej3Pfd
-         73Y1jLluUWkOnhsMFurUE69n6stebsIbRDO4oOBYrz0gncQybVHWRAmGp+H5I7qsumb2
-         PgQWcLdt6qO5UMvjCqV70De+pvfUNm9w4E0OwX5iad3Mw2MRNsWxXt84RxCnoJ2UoNVY
-         7qhg==
-X-Gm-Message-State: APjAAAWLZ10ZzyCChwA73DAtOTuoNWea8eMYTYXiesAH37bzUnRa4JGL
-        VEmHsLMCSIqKTjq7wNyDYSCeJb/SboAItrOoUh4=
-X-Google-Smtp-Source: APXvYqwUhkAPW9D2SkLS1McuAXKVB3YjfihtVnFvJQvIuEmwcKR9GEFxQHz+6tPz/KYnEI/dqNUstw+dR+4k3wO1i98=
-X-Received: by 2002:a19:2207:: with SMTP id i7mr28348579lfi.185.1568302273356;
- Thu, 12 Sep 2019 08:31:13 -0700 (PDT)
+        bh=IzpHMPyEAs7qHXeC8+PI+k8EjPmSxRwc5lCuYXRCv54=;
+        b=JRwC4ULFD3YzgYjRc3mRYRMNbFOqT7+3F540P6kPU5dpz8MMLd/7w/94jp9LDz+TxB
+         E9JrUmThS+A6ZMY9PVJMhouhT2K9kr3KBinkb8GHvdfAlRY9prpboY6WhCy//8eWd1l2
+         ypMdG9+bOfai4BLA2iPn6jVvgVgYRPMr33FssriSpL1cm7jTKvvySGwLcWV7gZKvsKr4
+         xZuO9VC5k6KdcsQtuGth0vKeSpC71xQ7sYKBffqTryNpWmYUATkTSW+SiOBfifHdM9MC
+         rKQOnOO5gaz+sJmRzJrbPmgnaU9jTzfo4hP3csfbTFz6+klFcuBBECS5xRJ0MLp0BX2E
+         63UA==
+X-Gm-Message-State: APjAAAU5dWgKpoYtku40273+jElO3UxLKqFD8HRgh5V24tn8K/45fIeb
+        kW1gXO53K+ljtC97gN9AtHu1Swx1/C1Vqs7x0PE=
+X-Google-Smtp-Source: APXvYqyg3z0rmVB8MqaYGii3kSi/ffw+EZze6khxHsFFAgdyRAoLKz5Agii/j7bEpQw09ybFOM96bJvWRrgLf56KWoY=
+X-Received: by 2002:a2e:3e0d:: with SMTP id l13mr27406384lja.10.1568312624761;
+ Thu, 12 Sep 2019 11:23:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190911144943.21554-1-philipp.puschmann@emlix.com>
 In-Reply-To: <20190911144943.21554-1-philipp.puschmann@emlix.com>
 From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 12 Sep 2019 12:31:02 -0300
-Message-ID: <CAOMZO5Bxks8709gEA+8OFH2b0LYqJd1EmpSbKEgPJo+64Pf3EA@mail.gmail.com>
+Date:   Thu, 12 Sep 2019 15:23:34 -0300
+Message-ID: <CAOMZO5BKiZGF=iR071DaWLp-_7wTVJKLbOn3ihwPeVVSNF6nCg@mail.gmail.com>
 Subject: Re: [PATCH 0/4] Fix UART DMA freezes for iMX6
 To:     Philipp Puschmann <philipp.puschmann@emlix.com>,
         Robin Gong <yibin.gong@nxp.com>,
@@ -69,7 +69,9 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-[Adding Robin and Andy]
+Hi Philipp,
+
+Thanks for submitting these fixes.
 
 On Wed, Sep 11, 2019 at 11:50 AM Philipp Puschmann
 <philipp.puschmann@emlix.com> wrote:
@@ -102,11 +104,14 @@ On Wed, Sep 11, 2019 at 11:50 AM Philipp Puschmann
 >   dmaengine: imx-sdma: fix dma freezes
 >   serial: imx: adapt rx buffer and dma periods
 >   dmaengine: imx-sdma: drop redundant variable
->
->  drivers/dma/imx-sdma.c   | 32 ++++++++++++++++++++++----------
->  drivers/tty/serial/imx.c |  5 ++---
->  2 files changed, 24 insertions(+), 13 deletions(-)
->
-> --
-> 2.23.0
->
+
+I have some suggestions:
+
+1. Please split this in two series: one for dmaengine and other one for serial
+
+2. Please add Fixes tag when appropriate, so that the fixes can be
+backported to stable kernels.
+
+3. Please Cc Robin and Andy
+
+Thanks
