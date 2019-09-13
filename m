@@ -2,111 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B177B18EA
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2019 09:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D08AB1B83
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2019 12:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfIMH2h (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 13 Sep 2019 03:28:37 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35306 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726266AbfIMH2e (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 13 Sep 2019 03:28:34 -0400
-Received: by mail-wr1-f66.google.com with SMTP id g7so31063395wrx.2
-        for <linux-serial@vger.kernel.org>; Fri, 13 Sep 2019 00:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=HBeSnnaknF8l50flmejOlPoMNRFfD6iWBsjsOqPj+d0=;
-        b=iBcZbYKS9kEIsmLFLKGgi8dVQynqqARBR3pZUlHdw07+qkP+mM4JaljCPnbXn29WcU
-         Wh8LDkQnK2mCu9b3RDxj0kWUysIuRRgYoEDDOLPO3FT4NiWRNj5JpNcZ9W/k8me1dS+o
-         y9WEV5ebefC0wyCmSEA2QymG5/UX5qoliD8t6bQ5XVFMgMVuj1h1r49nDIY41AOoFGSb
-         g803a8MH9wPQdfuzIfHdYv4N7Xci2NoqYxcdxITcXmjjgB8FEHGqM/o8vRY6ZH8nV9Bj
-         1a+T/u268RHPM1a+6HmbgOR5iycHdMktQUA+0JVDx0e+M8khwS+Zk1/Bsk5V6eR9YLcZ
-         iYGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=HBeSnnaknF8l50flmejOlPoMNRFfD6iWBsjsOqPj+d0=;
-        b=WESXCzuXc0L/MgUsdvQ0c66sl2dlt3phFb/Y3AhdM2mGVPWxYIFo0tE5QHONJekUwP
-         Cfv5KMf3EXPXQASSOceFF0N3k3tkTKtbRDsKmS3G2S0KQkwF358FbwFI5ETkZsbnve8j
-         vRSESwVm13WnHSZHoEvL9FXID7BZlE3rVndYMtBvHxcXHH4VGBgNHcY4sHvuFAK4fbIN
-         NtWFocnAAB1K5fTpyAsKOfubZ/SgXeZo7ddJvz0GkGVUzGfWaHtXZ7tVbuauzadsY+M5
-         A7OqQnRShhOL4i3/eJ/jOP6VA0IMeurvqugOo4MMpP3nHqXOtWZdjILKsjMFFIfXbBs1
-         HhKA==
-X-Gm-Message-State: APjAAAXTru6RfL/x1c302CZLbQGUdVAKkMIgf0MUQci8bWXV8Y/Pp9aU
-        VHf/GocwNIYQ2GR3Vh3dVoWv8Q==
-X-Google-Smtp-Source: APXvYqxHBtSh+/6IJVUafbfXSPoUImAQ5IbkQ1l66MjQy8e3RUYc28sXyCP+8jS6lFV9j9YqfpKiRA==
-X-Received: by 2002:adf:ce04:: with SMTP id p4mr3773130wrn.130.1568359711768;
-        Fri, 13 Sep 2019 00:28:31 -0700 (PDT)
-Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id w8sm1798031wmc.1.2019.09.13.00.28.30
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 13 Sep 2019 00:28:31 -0700 (PDT)
-From:   Michal Simek <michal.simek@xilinx.com>
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Paul Thomas <pthomas8589@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1727037AbfIMKYO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 13 Sep 2019 06:24:14 -0400
+Received: from mga01.intel.com ([192.55.52.88]:25166 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725775AbfIMKYO (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 13 Sep 2019 06:24:14 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 03:24:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,500,1559545200"; 
+   d="scan'208";a="210309025"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2019 03:24:11 -0700
+Received: from andy by smile with local (Exim 4.92.1)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1i8ikL-0001lD-Qu; Fri, 13 Sep 2019 13:24:09 +0300
+Date:   Fri, 13 Sep 2019 13:24:09 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Heiko Schocher <hs@denx.de>
+Cc:     linux-serial@vger.kernel.org,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: [PATCH] serial: uartps: Fix uartps_major handling
-Date:   Fri, 13 Sep 2019 09:28:29 +0200
-Message-Id: <00a269bc15c4f8c0a73c14958c5d7a5d37ff70ce.1568359707.git.michal.simek@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        John Garry <john.garry@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tty: 8250_of: Use software emulated RS485 direction
+ control
+Message-ID: <20190913102409.GF2680@smile.fi.intel.com>
+References: <20190913050105.1132080-1-hs@denx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190913050105.1132080-1-hs@denx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-There are two parts which should be fixed. The first one is to assigned
-uartps_major at the end of probe() to avoid complicated logic when
-something fails.
-The second part is initialized uartps_major number to 0 when last device is
-removed. This will ensure that on next probe driver will ask for new
-dynamic major number.
+On Fri, Sep 13, 2019 at 07:01:05AM +0200, Heiko Schocher wrote:
+> Use software emulated RS485 direction control to provide RS485 API
+> 
+> Currently it is not possible to use rs485 as pointer to
+> rs485_config struct in struct uart_port is NULL in case we
+> configure the port through device tree.
 
-Fixes: c9712e333809 ("serial: uartps: Use the same dynamic major number for all ports")
-Reported-by: Paul Thomas <pthomas8589@gmail.com>
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
+Thank you for the patch, few recommendations for the future submissions.
 
- drivers/tty/serial/xilinx_uartps.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> Patch is based on:
+> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> commit:
+> 505a8ec7e11a - Revert "drm/i915/userptr: Acquire the page lock around set_page_dirty()"
 
-diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index f145946f659b..92df0c4f1c7a 100644
---- a/drivers/tty/serial/xilinx_uartps.c
-+++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -1550,7 +1550,6 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 		goto err_out_id;
- 	}
- 
--	uartps_major = cdns_uart_uart_driver->tty_driver->major;
- 	cdns_uart_data->cdns_uart_driver = cdns_uart_uart_driver;
- 
- 	/*
-@@ -1680,6 +1679,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 		console_port = NULL;
- #endif
- 
-+	uartps_major = cdns_uart_uart_driver->tty_driver->major;
- 	cdns_uart_data->cts_override = of_property_read_bool(pdev->dev.of_node,
- 							     "cts-override");
- 	return 0;
-@@ -1741,6 +1741,12 @@ static int cdns_uart_remove(struct platform_device *pdev)
- 		console_port = NULL;
- #endif
- 
-+	/* If this is last instance major number should be initialized */
-+	mutex_lock(&bitmap_lock);
-+	if (bitmap_empty(bitmap, MAX_UART_INSTANCES))
-+		uartps_major = 0;
-+	mutex_unlock(&bitmap_lock);
-+
- 	uart_unregister_driver(cdns_uart_data->cdns_uart_driver);
- 	return rc;
- }
+More reliably is to base on corresponding subsystem tree, i.e. tty-next for
+this case.
+
+> checkpatch output:
+> $ ./scripts/checkpatch.pl 0001-tty-8250_of-Use-software-emulated-RS485-direction-co.patch
+> total: 0 errors, 0 warnings, 43 lines checked
+> 
+> 0001-tty-8250_of-Use-software-emulated-RS485-direction-co.patch has no obvious style problems and is ready for submission.
+
+There is no need to mention this. It's supposed that submitter did that
+themselves.
+
+When you gather people to send the patch to, I recommend to use some threshold,
+e.g. `scripts/get_maintainer.pl --git --git-min-percent=67 ...`
+
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
