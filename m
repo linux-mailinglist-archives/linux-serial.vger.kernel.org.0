@@ -2,77 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E470B22F3
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2019 17:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99576B26C5
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2019 22:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390549AbfIMPF6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 13 Sep 2019 11:05:58 -0400
-Received: from mga11.intel.com ([192.55.52.93]:58087 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390046AbfIMPF6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 13 Sep 2019 11:05:58 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 08:05:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
-   d="scan'208";a="176307356"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 13 Sep 2019 08:05:52 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1i8n8w-0005YA-OY; Fri, 13 Sep 2019 18:05:50 +0300
-Date:   Fri, 13 Sep 2019 18:05:50 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Heiko Schocher <hs@denx.de>
-Cc:     linux-serial@vger.kernel.org,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tty: 8250_of: Use software emulated RS485 direction
- control
-Message-ID: <20190913150550.GS2680@smile.fi.intel.com>
-References: <20190913050105.1132080-1-hs@denx.de>
- <20190913102409.GF2680@smile.fi.intel.com>
- <51a21dde-a471-6e8e-8048-50437d740f7f@denx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51a21dde-a471-6e8e-8048-50437d740f7f@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2389519AbfIMUkb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 13 Sep 2019 16:40:31 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43262 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387461AbfIMUka (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 13 Sep 2019 16:40:30 -0400
+Received: by mail-pf1-f196.google.com with SMTP id d15so18778252pfo.10
+        for <linux-serial@vger.kernel.org>; Fri, 13 Sep 2019 13:40:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=qU9A6qb+veDWW9PC+1djL9KV1hH5r1qd0AwYGNHfhBY=;
+        b=qQfWhLaxdHO56wvcR9Qf45O/iRGdDzLrhWNNEHOAD8FLxZrx43uHB1JkXSNvfAX5Uu
+         Nm/FqXabI6cFop7b0tcYOVahRasguNjah2hzRR3UNPKu3bjYDXR8DL7G1hzjTFBrBca0
+         3j6GJxyf5WuUDdd35g6POG0Zs2YLNnpPqG1bLqRmJXLlxYdNMB+TKFADsHuROgS7jZT3
+         sH4xjRF0Wbtclswv55K3Gu/ab78cBSLOrsGfZKqf/IN9vAuLKEFfzAa9Rr5rG5pqYOZt
+         LKocfmKhUfQithdiz29xuh89yTdcGFQ5hfBSK15qltHxybVebBOZypwouYDyUwhAIwfD
+         Hg7A==
+X-Gm-Message-State: APjAAAVXLeqzZwx5opfa/V/1cpuwFVWOnzLVgWbOfyjg3cRTazhBTuQR
+        jCDIY1cAyZAz6HCxVBb9ocr7HQ==
+X-Google-Smtp-Source: APXvYqwRwn0c+PmiWsgzZC28IXBATIqtHCXXHGwwyRxHek1xZzURFPAkB8G4vkaL2qShC9KYKXBgYA==
+X-Received: by 2002:a63:f357:: with SMTP id t23mr45980721pgj.421.1568407227922;
+        Fri, 13 Sep 2019 13:40:27 -0700 (PDT)
+Received: from localhost (amx-tls3.starhub.net.sg. [203.116.164.13])
+        by smtp.gmail.com with ESMTPSA id u65sm33355649pfu.104.2019.09.13.13.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2019 13:40:27 -0700 (PDT)
+Date:   Fri, 13 Sep 2019 13:40:27 -0700 (PDT)
+X-Google-Original-Date: Fri, 13 Sep 2019 13:39:43 PDT (-0700)
+Subject:     Re: [PATCH] serial/sifive: select SERIAL_EARLYCON
+In-Reply-To: <20190910143630.GA6794@lst.de>
+CC:     schwab@suse.de, Greg KH <gregkh@linuxfoundation.org>,
+        jslaby@suse.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, Christoph Hellwig <hch@lst.de>
+From:   Palmer Dabbelt <palmer@sifive.com>
+To:     schwab@suse.de, Christoph Hellwig <hch@lst.de>
+Message-ID: <mhng-218f6b9f-bfd8-4adb-8147-298989494bcf@palmer-si-x1e>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 04:51:30PM +0200, Heiko Schocher wrote:
-> Am 13.09.2019 um 12:24 schrieb Andy Shevchenko:
-> > On Fri, Sep 13, 2019 at 07:01:05AM +0200, Heiko Schocher wrote:
+On Tue, 10 Sep 2019 07:36:30 PDT (-0700), Christoph Hellwig wrote:
+> On Tue, Sep 10, 2019 at 10:18:15AM +0200, Andreas Schwab wrote:
+>> > How so?  Wіth OF and a stdout path you just set earlycon on the
+>> > command line without any arguments and it will be found.
+>> 
+>> Doesn't work for me.
+>> 
+>> [    0.000000] Malformed early option 'earlycon'
+>
+> That functionality is implemented by param_setup_earlycon and
+> early_init_dt_scan_chosen_stdout.  Check why those aren't built into
+> your kernel.
 
-> > > Patch is based on:
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > commit:
-> > > 505a8ec7e11a - Revert "drm/i915/userptr: Acquire the page lock around set_page_dirty()"
-> > 
-> > More reliably is to base on corresponding subsystem tree, i.e. tty-next for
-> > this case.
-> 
-> Ok, should I send a rebased v2 (I tend to wait for other comments)?
-
-I didn't give any comments WRT patch itself, so, I don't see any needs to send
-v2 right now.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+OpenEmbedded passes "earlycon=sbi", which I can find in the doumentation.  I 
+can't find anything about just "earlycon".  I've sent a patch adding sbi to the 
+list of earlycon arguments.
