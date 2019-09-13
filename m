@@ -2,31 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D08AB1B83
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2019 12:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E809CB229F
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2019 16:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbfIMKYO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 13 Sep 2019 06:24:14 -0400
-Received: from mga01.intel.com ([192.55.52.88]:25166 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbfIMKYO (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 13 Sep 2019 06:24:14 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 03:24:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,500,1559545200"; 
-   d="scan'208";a="210309025"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2019 03:24:11 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1i8ikL-0001lD-Qu; Fri, 13 Sep 2019 13:24:09 +0300
-Date:   Fri, 13 Sep 2019 13:24:09 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Heiko Schocher <hs@denx.de>
+        id S2389143AbfIMOvm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 13 Sep 2019 10:51:42 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:41603 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388958AbfIMOvm (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 13 Sep 2019 10:51:42 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 46VJVz0cMsz1rQBD;
+        Fri, 13 Sep 2019 16:51:34 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 46VJVt04K9z1qqkR;
+        Fri, 13 Sep 2019 16:51:34 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id pn63FZNt3yCi; Fri, 13 Sep 2019 16:51:32 +0200 (CEST)
+X-Auth-Info: es9SV5MCsNKuZE81a1bCK7kQgeIbSZlFROOU+XfNAiQ=
+Received: from [192.168.1.106] (82-131-128-245.pool.digikabel.hu [82.131.128.245])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 13 Sep 2019 16:51:31 +0200 (CEST)
+Subject: Re: [PATCH] tty: 8250_of: Use software emulated RS485 direction
+ control
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-serial@vger.kernel.org,
         Alexander Sverdlin <alexander.sverdlin@nokia.com>,
         Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
@@ -37,52 +41,65 @@ Cc:     linux-serial@vger.kernel.org,
         Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh@kernel.org>,
         Thierry Reding <treding@nvidia.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tty: 8250_of: Use software emulated RS485 direction
- control
-Message-ID: <20190913102409.GF2680@smile.fi.intel.com>
 References: <20190913050105.1132080-1-hs@denx.de>
+ <20190913102409.GF2680@smile.fi.intel.com>
+Reply-To: hs@denx.de
+From:   Heiko Schocher <hs@denx.de>
+Message-ID: <51a21dde-a471-6e8e-8048-50437d740f7f@denx.de>
+Date:   Fri, 13 Sep 2019 16:51:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190913050105.1132080-1-hs@denx.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190913102409.GF2680@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 07:01:05AM +0200, Heiko Schocher wrote:
-> Use software emulated RS485 direction control to provide RS485 API
+Hello Andy,
+
+Am 13.09.2019 um 12:24 schrieb Andy Shevchenko:
+> On Fri, Sep 13, 2019 at 07:01:05AM +0200, Heiko Schocher wrote:
+>> Use software emulated RS485 direction control to provide RS485 API
+>>
+>> Currently it is not possible to use rs485 as pointer to
+>> rs485_config struct in struct uart_port is NULL in case we
+>> configure the port through device tree.
 > 
-> Currently it is not possible to use rs485 as pointer to
-> rs485_config struct in struct uart_port is NULL in case we
-> configure the port through device tree.
-
-Thank you for the patch, few recommendations for the future submissions.
-
-> Patch is based on:
-> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> commit:
-> 505a8ec7e11a - Revert "drm/i915/userptr: Acquire the page lock around set_page_dirty()"
-
-More reliably is to base on corresponding subsystem tree, i.e. tty-next for
-this case.
-
-> checkpatch output:
-> $ ./scripts/checkpatch.pl 0001-tty-8250_of-Use-software-emulated-RS485-direction-co.patch
-> total: 0 errors, 0 warnings, 43 lines checked
+> Thank you for the patch, few recommendations for the future submissions.
 > 
-> 0001-tty-8250_of-Use-software-emulated-RS485-direction-co.patch has no obvious style problems and is ready for submission.
+>> Patch is based on:
+>> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> commit:
+>> 505a8ec7e11a - Revert "drm/i915/userptr: Acquire the page lock around set_page_dirty()"
+> 
+> More reliably is to base on corresponding subsystem tree, i.e. tty-next for
+> this case.
 
-There is no need to mention this. It's supposed that submitter did that
-themselves.
+Ok, should I send a rebased v2 (I tend to wait for other comments)?
 
-When you gather people to send the patch to, I recommend to use some threshold,
-e.g. `scripts/get_maintainer.pl --git --git-min-percent=67 ...`
+>> checkpatch output:
+>> $ ./scripts/checkpatch.pl 0001-tty-8250_of-Use-software-emulated-RS485-direction-co.patch
+>> total: 0 errors, 0 warnings, 43 lines checked
+>>
+>> 0001-tty-8250_of-Use-software-emulated-RS485-direction-co.patch has no obvious style problems and is ready for submission.
+> 
+> There is no need to mention this. It's supposed that submitter did that
+> themselves.
 
+Hmm... ok.
+
+> When you gather people to send the patch to, I recommend to use some threshold,
+> e.g. `scripts/get_maintainer.pl --git --git-min-percent=67 ...`
+
+Ah, good tip, thanks!
+
+bye,
+Heiko
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
