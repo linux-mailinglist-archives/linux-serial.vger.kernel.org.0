@@ -2,72 +2,46 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FD9B39DA
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2019 14:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82F4B3A0F
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2019 14:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732007AbfIPMAm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Sep 2019 08:00:42 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54400 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731514AbfIPMAl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Sep 2019 08:00:41 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 340B9AFF3;
-        Mon, 16 Sep 2019 12:00:40 +0000 (UTC)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Christoph Hellwig <hch@lst.de>, gregkh@linuxfoundation.org,
+        id S1727753AbfIPMPX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 16 Sep 2019 08:15:23 -0400
+Received: from verein.lst.de ([213.95.11.211]:44492 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726875AbfIPMPW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 16 Sep 2019 08:15:22 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id B1F0E68B05; Mon, 16 Sep 2019 14:15:18 +0200 (CEST)
+Date:   Mon, 16 Sep 2019 14:15:18 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andreas Schwab <schwab@suse.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Christoph Hellwig <hch@lst.de>, gregkh@linuxfoundation.org,
         jslaby@suse.com, linux-serial@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] serial/sifive: select SERIAL_EARLYCON
-References: <20190910055923.28384-1-hch@lst.de> <mvm4l1kskny.fsf@suse.de>
-        <20190910070503.GA31743@lst.de> <mvmzhjcr2d4.fsf@suse.de>
-        <alpine.DEB.2.21.9999.1909160456010.7214@viisi.sifive.com>
-X-Yow:  I need to discuss BUY-BACK PROVISIONS with at least
- six studio SLEAZEBALLS!!
-Date:   Mon, 16 Sep 2019 14:00:39 +0200
-In-Reply-To: <alpine.DEB.2.21.9999.1909160456010.7214@viisi.sifive.com> (Paul
-        Walmsley's message of "Mon, 16 Sep 2019 04:57:14 -0700 (PDT)")
-Message-ID: <mvm7e68fo2g.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+Message-ID: <20190916121518.GA29881@lst.de>
+References: <20190910055923.28384-1-hch@lst.de> <mvm4l1kskny.fsf@suse.de> <20190910070503.GA31743@lst.de> <mvmzhjcr2d4.fsf@suse.de> <alpine.DEB.2.21.9999.1909160456010.7214@viisi.sifive.com> <mvm7e68fo2g.fsf@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mvm7e68fo2g.fsf@suse.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sep 16 2019, Paul Walmsley <paul.walmsley@sifive.com> wrote:
+On Mon, Sep 16, 2019 at 02:00:39PM +0200, Andreas Schwab wrote:
+> > Try:
+> >
+> >     earlycon=sifive,0x10010000
+> 
+> That's not what Christoph wants.
 
-> On Tue, 10 Sep 2019, Andreas Schwab wrote:
->
->> On Sep 10 2019, Christoph Hellwig <hch@lst.de> wrote:
->> 
->> > On Tue, Sep 10, 2019 at 08:57:37AM +0200, Andreas Schwab wrote:
->> >> On Sep 10 2019, Christoph Hellwig <hch@lst.de> wrote:
->> >> 
->> >> > The sifive serial driver implements earlycon support,
->> >> 
->> >> It should probably be documented in admin-guide/kernel-parameters.txt.
->> >
->> > How so?  Wіth OF and a stdout path you just set earlycon on the
->> > command line without any arguments and it will be found.
->> 
->> Doesn't work for me.
->> 
->> [    0.000000] Malformed early option 'earlycon'
->
-> Try:
->
->     earlycon=sifive,0x10010000
-
-That's not what Christoph wants.
-
-Andreas.
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+Well, what I want is auto selection if the device tree uses the
+stdout-path.  My Kendryte DT uses that and it works like a charm.  If
+it doesn't work for you on the U54 board chances are that your DT
+doesn't have the right settings and you have to use the line that
+Paul posted.
