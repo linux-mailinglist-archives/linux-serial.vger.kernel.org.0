@@ -2,35 +2,43 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B9EB2E9F
-	for <lists+linux-serial@lfdr.de>; Sun, 15 Sep 2019 08:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008AEB34C6
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2019 08:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbfIOGXa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 15 Sep 2019 02:23:30 -0400
-Received: from [163.204.244.78] ([163.204.244.78]:57052 "EHLO
-        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726210AbfIOGX3 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 15 Sep 2019 02:23:29 -0400
-X-Greylist: delayed 1092 seconds by postgrey-1.27 at vger.kernel.org; Sun, 15 Sep 2019 02:23:29 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by localhost.localdomain (Postfix) with SMTP id 06D4111E6E51
-        for <linux-serial@vger.kernel.org>; Sun, 15 Sep 2019 14:05:15 +0800 (CST)
-From:   linux-serial@vger.kernel.org
-Reply-To: prodawez@cuvox.de
-To:     linux-serial@vger.kernel.org
-Subject: =?utf-8?B?0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1ISDQktCw0YEg?=
-        =?utf-8?B?0LjQvdGC0LXRgNC10YHRg9GO0YIg0LrQu9C40LXQvdGC?=
-        =?utf-8?B?0YHQutC40LUg0LHQsNC30Ysg0LTQsNC90L3Ri9GFPw==?=
+        id S1729949AbfIPGm6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 16 Sep 2019 02:42:58 -0400
+Received: from verein.lst.de ([213.95.11.211]:42531 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729950AbfIPGm6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 16 Sep 2019 02:42:58 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2B61668B05; Mon, 16 Sep 2019 08:42:54 +0200 (CEST)
+Date:   Mon, 16 Sep 2019 08:42:53 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Palmer Dabbelt <palmer@sifive.com>
+Cc:     schwab@suse.de, Christoph Hellwig <hch@lst.de>,
+        Greg KH <gregkh@linuxfoundation.org>, jslaby@suse.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] serial/sifive: select SERIAL_EARLYCON
+Message-ID: <20190916064253.GA24654@lst.de>
+References: <20190910143630.GA6794@lst.de> <mhng-218f6b9f-bfd8-4adb-8147-298989494bcf@palmer-si-x1e>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8";
-Content-Transfer-Encoding: base64
-Message-Id: <20190915060516.06D4111E6E51@localhost.localdomain>
-Date:   Sun, 15 Sep 2019 14:05:15 +0800 (CST)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mhng-218f6b9f-bfd8-4adb-8147-298989494bcf@palmer-si-x1e>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1ISDQktCw0YEg0LjQvdGC0LXRgNC10YHRg9GO0YIg0LrQ
-u9C40LXQvdGC0YHQutC40LUg0LHQsNC30Ysg0LTQsNC90L3Ri9GFPw0K
+On Fri, Sep 13, 2019 at 01:40:27PM -0700, Palmer Dabbelt wrote:
+> OpenEmbedded passes "earlycon=sbi", which I can find in the doumentation.  
+> I can't find anything about just "earlycon".  I've sent a patch adding sbi 
+> to the list of earlycon arguments.
+
+earlycon without arguments is documented, although just for ARM64.
+I can send a patch to update it to properly cover all DT platforms
+in addition.
