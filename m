@@ -2,84 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7ADB4EFF
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Sep 2019 15:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0B0B55CF
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Sep 2019 20:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbfIQNTM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 17 Sep 2019 09:19:12 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:45873 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfIQNTM (ORCPT
+        id S1729763AbfIQS7m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 17 Sep 2019 14:59:42 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:35636 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725927AbfIQS7m (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 17 Sep 2019 09:19:12 -0400
-Received: by mail-qk1-f193.google.com with SMTP id z67so3884446qkb.12
-        for <linux-serial@vger.kernel.org>; Tue, 17 Sep 2019 06:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=y9WGLrKKo8Mkmz25tH5PKr+ryw2VCq/9Rb24CinmnPc=;
-        b=G4742H6+c5HXp7NKayVefS8q9iEn3EZcdnSAYjvT9MLpnzHJKBAEHq7dSd2tiGREvn
-         QxbQUPEHbiWMJVtV1rzefcVnQJeRC+12Ciys2cR2qNVuAqtBuQIZSme9J6lojTxsxZcs
-         WmGUA/gGbhxE17e2YsL069WNjJcUuPoYQ+UigYJ0gJQcp+7v0HxFiTDXsnDNwpsRK2ow
-         EPTb3ZQ58M8MCWD5wghHSLIbHWWLc+dqg0b+GkEfrTWuuhviSs/4IHuLfInYXsIFsvWm
-         y0PkI+J3kSAjPyWi9yE/2JjfssmqlSyQIL+rW0JHmwDZvSlQhCekDlhbk5MH8D2u0Zms
-         75Gg==
+        Tue, 17 Sep 2019 14:59:42 -0400
+Received: by mail-ot1-f68.google.com with SMTP id z6so4064280otb.2;
+        Tue, 17 Sep 2019 11:59:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=y9WGLrKKo8Mkmz25tH5PKr+ryw2VCq/9Rb24CinmnPc=;
-        b=R3dwMpPsigxsoWL8cwNq+trp7VF59nAREyogsS8P5J7ozt+i3OCC/Y3Ddgf5KMvExG
-         QTpsJJJjhVWesrN4d5Wo+Fog9L0sJuWwLahrDYWSipt+OSQPsj9vUbo84+RfY8r4Eq0L
-         r/3gRnRHHPVeoQFl32fw9EHdym0XMQZC0r1QgBAK+mWt/kWRg83cITVudZYD3jUfN5hj
-         yF1D1sdwepiXd6mRQCNTut83BAFKROXCY9hwfQprv4ekcvrOYPgPESAkutGiaW+ZQy6j
-         ypgwo0QUJ++m0zT7bpzSz2JUIiFzkPpgyxbvVKs2NaqWZLkZWAqOPgzhC4zHG2mD618A
-         KY1w==
-X-Gm-Message-State: APjAAAUq44HpzJ5GvOh2poaRRaJV46dZxJIgnlmYkZW3eQIQbr2W5icF
-        mld3w/U45ApyfSz7nvXyZRvK9A==
-X-Google-Smtp-Source: APXvYqxrJy4rG5OBkjx64ujR31ERVUX+Ep+FcVymYk+DtsTFlFvsmfXl3LXDJ4xE/5Uhk7FWLrNA+g==
-X-Received: by 2002:ae9:d885:: with SMTP id u127mr3575112qkf.109.1568726351778;
-        Tue, 17 Sep 2019 06:19:11 -0700 (PDT)
-Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id m19sm1074152qke.22.2019.09.17.06.19.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 Sep 2019 06:19:10 -0700 (PDT)
-From:   Qian Cai <cai@lca.pw>
-To:     linux@armlinux.org.uk, gregkh@linuxfoundation.org
-Cc:     jslaby@suse.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qian Cai <cai@lca.pw>
-Subject: [PATCH] tty/amba-pl011: fix a -Wunused-function warning
-Date:   Tue, 17 Sep 2019 09:19:00 -0400
-Message-Id: <1568726340-4518-1-git-send-email-cai@lca.pw>
-X-Mailer: git-send-email 1.8.3.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OGt11jcTV4+nEwNY8mFGWxFr7o7axon1ADE+8rl/MVY=;
+        b=HoB6IlYt/NZr9FEpxKjunsJx4qB1EmU7q8/zknxsOUIojSUF92a9Fsui4JCphZ/8Ve
+         1S2d1dsNumB+G4AxtmnP29/vG4f9GLzJ3O8GfXF/6r3W87IsSpTSaeEVrvGxPHaC7pVS
+         8n71fxjZq5ZfXTlVrHhnJkDmc1GbUTSs+KE6yaFbXiXuJ5kJWbHWKOAadn2ZkkP2Nl5y
+         LnLKBTIk0/qzHqQY5R5DELRCYAM0ymqSEFZOi0JMA3LfDewmcFD98ZHkcOJ5a8hYilcy
+         +qVnjgw/utUtIzw0gOWx7PABB3zLV3+1C9VYY+cM5gvGR+0GMVqmkZIZvVFJ/Sx3bSRK
+         wr9w==
+X-Gm-Message-State: APjAAAX3GiGDvH5LNAQKOlw5CNdyoajaZJ14VkuqjAbo/xnolWOuz4kQ
+        xfqs/c6JNGDy1FlTKWxiIA==
+X-Google-Smtp-Source: APXvYqzRk2LhCglVMO/W5uafIlAuiwWW96jddRxz2JFxKqZkzHLQP9MO0dW7aSqfvaH7/hTZGTVnmg==
+X-Received: by 2002:a9d:30c8:: with SMTP id r8mr316477otg.158.1568746781626;
+        Tue, 17 Sep 2019 11:59:41 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 109sm963555otc.52.2019.09.17.11.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Sep 2019 11:59:41 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 13:59:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Oskar Senft <osk@google.com>
+Cc:     joel@jms.id.au, andrew@aj.id.au, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, jk@ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-aspeed@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        Oskar Senft <osk@google.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: serial: 8250: Add
+ aspeed,sirq-polarity-sense.
+Message-ID: <20190917185940.GA4964@bogus>
+References: <20190905144130.220713-1-osk@google.com>
+ <20190905144130.220713-2-osk@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190905144130.220713-2-osk@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pl011_dma_probe() is only used in pl011_dma_startup() which does only
-exist when CONFIG_DMA_ENGINE=y, so remove the unused dummy version to
-silence the warning.
+On Thu,  5 Sep 2019 10:41:29 -0400, Oskar Senft wrote:
+> Add documentation for 8250_aspeed_vuart's aspeed,sirq-polarity-sense
+> property that enables to auto-configure the VUART's SIRQ polarity.
+> 
+> Signed-off-by: Oskar Senft <osk@google.com>
+> ---
+>  Documentation/devicetree/bindings/serial/8250.txt | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-Signed-off-by: Qian Cai <cai@lca.pw>
----
- drivers/tty/serial/amba-pl011.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 5921a33b2a07..91b59f1cd3e6 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -1236,10 +1236,6 @@ static inline bool pl011_dma_rx_running(struct uart_amba_port *uap)
- 
- #else
- /* Blank functions if the DMA engine is not available */
--static inline void pl011_dma_probe(struct uart_amba_port *uap)
--{
--}
--
- static inline void pl011_dma_remove(struct uart_amba_port *uap)
- {
- }
--- 
-1.8.3.1
-
+Acked-by: Rob Herring <robh@kernel.org>
