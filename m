@@ -2,80 +2,61 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 136DEB4478
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Sep 2019 01:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0056B472B
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Sep 2019 08:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730424AbfIPXM2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Sep 2019 19:12:28 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:43436 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728357AbfIPXM2 (ORCPT
+        id S2391264AbfIQGII convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Tue, 17 Sep 2019 02:08:08 -0400
+Received: from mail.11d03.mspz7.gob.ec ([190.214.23.250]:51362 "EHLO
+        mail.11d03.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390980AbfIQGII (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Sep 2019 19:12:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=qx7q94gHn7s/YPwIKyrM9DaRifGENyYAu1Q/ylcesgo=; b=MnecJI64GA945xjMzZdduzvGT
-        yaDTLrHBsKJHFgzY5zrVwfwsT4jZtM5dT/xm7ln5wxgt4iSsVYtWWpAloUsj6yaGmlWnZlU0rWxsu
-        Pu7d1fJwHlqBaDPzmCInsX7w0uCSBCcjs9AoG7da2UMSa/sOFaCSoNtN11Skx7LtlstyuGDz4z6r/
-        ELvW6dAt6xgW8+g2iZ0kGQX5c4RTUwYdT+7i29CKcCLwkX2fntQuw5kVc0xqQcfrK1fuivOCln89Z
-        m8kGkDdDUfnLcjc8wub1U2otNqKaS2EVNk1fR+0HAWCAQFc6whVncNqrXIcRJTEJRhhT4MZ2zHa31
-        S/8tSVxRQ==;
-Received: from [2601:1c0:6280:3f0::9a1f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iA0AT-0003b1-9U; Mon, 16 Sep 2019 23:12:25 +0000
-To:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Korsgaard <jacmet@sunsite.dk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] serial: uartlite: fix exit path null pointer
-Message-ID: <9c8e6581-6fcc-a595-0897-4d90f5d710df@infradead.org>
-Date:   Mon, 16 Sep 2019 16:12:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 17 Sep 2019 02:08:08 -0400
+X-Greylist: delayed 6093 seconds by postgrey-1.27 at vger.kernel.org; Tue, 17 Sep 2019 02:08:08 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id 4F71F40526C43;
+        Mon, 16 Sep 2019 23:11:41 -0500 (-05)
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id BnZWEhmW5CyB; Mon, 16 Sep 2019 23:11:41 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id E25ED40526702;
+        Mon, 16 Sep 2019 23:11:40 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 11d03.mspz7.gob.ec
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id f2UDEmBoEgyx; Mon, 16 Sep 2019 23:11:40 -0500 (-05)
+Received: from [10.33.79.142] (unknown [105.4.0.133])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTPSA id C7F0E40526C48;
+        Mon, 16 Sep 2019 23:11:31 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <vicenta.sinche@11d03.mspz7.gob.ec>
+From:   ''Tayeb souami'' <vicenta.sinche@11d03.mspz7.gob.ec>
+Date:   Tue, 17 Sep 2019 06:11:21 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20190917041131.C7F0E40526C48@mail.11d03.mspz7.gob.ec>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+Lieber Freund,
 
-Call uart_unregister_driver() conditionally instead of
-unconditionally, only if it has been previously registered.
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
-This uses driver.state, just as the sh-sci.c driver does.
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Fixes this null pointer dereference in tty_unregister_driver(),
-since the 'driver' argument is null:
+Das ist dein Spendencode: [TS530342018]
 
-  general protection fault: 0000 [#1] PREEMPT SMP KASAN PTI
-  RIP: 0010:tty_unregister_driver+0x25/0x1d0
+Antworten Sie mit dem SPENDE-CODE an diese 
 
-Fixes: 238b8721a554 ("serial uartlite driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
----
- drivers/tty/serial/uartlite.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+E-Mail:Tayebsouam.spende@gmail.com
 
---- lnx-53.orig/drivers/tty/serial/uartlite.c
-+++ lnx-53/drivers/tty/serial/uartlite.c
-@@ -897,7 +897,8 @@ static int __init ulite_init(void)
- static void __exit ulite_exit(void)
- {
- 	platform_driver_unregister(&ulite_platform_driver);
--	uart_unregister_driver(&ulite_uart_driver);
-+	if (ulite_uart_driver.state)
-+		uart_unregister_driver(&ulite_uart_driver);
- }
- 
- module_init(ulite_init);
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
+Grüße
+Herr Tayeb Souami
