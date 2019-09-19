@@ -2,232 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B76B73DD
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 09:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A96B7621
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 11:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387977AbfISHQq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Sep 2019 03:16:46 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:32814 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387581AbfISHQp (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Sep 2019 03:16:45 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 666B6611FA; Thu, 19 Sep 2019 07:16:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1568877404;
-        bh=JQFYoyaucG2ekfkOC+K2lUvFy2Dt5IjOp18MuT/FXpU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QvR5NE7LmYhesJ4MhM/hqv2GpBl4bXbhGKxTuFXcUIzh3rwuo/4AJIzUrx3RwJaBH
-         0XH4map/kbHPtcug11jxFJY5VFkhHBC7GJ/1oCN4mlP83+GvZudIW4G3mathReJQRl
-         Nwy+sg7e5C1wVAghJA08iTPBCLPy9MrvAxvRNxhc=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from akashast-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1725887AbfISJUU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Sep 2019 05:20:20 -0400
+Received: from mx1.emlix.com ([188.40.240.192]:57352 "EHLO mx1.emlix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730839AbfISJUU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 19 Sep 2019 05:20:20 -0400
+Received: from mailer.emlix.com (unknown [81.20.119.6])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: akashast@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 65DFD602F0;
-        Thu, 19 Sep 2019 07:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1568877403;
-        bh=JQFYoyaucG2ekfkOC+K2lUvFy2Dt5IjOp18MuT/FXpU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OXiEGMl5BmhPi1+W+BXFhB74wyPL/3fJrGgAGs6Ff4WpCEC/C9I9UsUfMIgN9/F4V
-         8iXMoUfRpkXaY0upk18SpnvvB24hc1oGJZ5wDYnQ4hpJ+gWLwpdY6y9lp1Le+jsXAz
-         03otDG0F4gGiCi4QW/RcDvliHQaHXSrrseCMUDgA=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 65DFD602F0
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-From:   Akash Asthana <akashast@codeaurora.org>
-To:     agross@kernel.org, gregkh@linuxfoundation.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     mgautam@codeaurora.org, jslaby@suse.com,
-        bjorn.andersson@linaro.org, Akash Asthana <akashast@codeaurora.org>
-Subject: [PATCH] tty: serial: qcom_geni_serial: Wakeup over UART RX
-Date:   Thu, 19 Sep 2019 12:46:06 +0530
-Message-Id: <1568877366-1758-1-git-send-email-akashast@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        by mx1.emlix.com (Postfix) with ESMTPS id 3D96C603BE;
+        Thu, 19 Sep 2019 11:20:17 +0200 (CEST)
+Subject: Re: [PATCH 1/4] dmaengine: imx-sdma: fix buffer ownership
+To:     Lucas Stach <l.stach@pengutronix.de>, linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, jslaby@suse.com, vkoul@kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        gregkh@linuxfoundation.org, dmaengine@vger.kernel.org,
+        dan.j.williams@intel.com, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20190911144943.21554-1-philipp.puschmann@emlix.com>
+ <20190911144943.21554-2-philipp.puschmann@emlix.com>
+ <9bcf315369449a025828410396935b679aae14bf.camel@pengutronix.de>
+From:   Philipp Puschmann <philipp.puschmann@emlix.com>
+Openpgp: preference=signencrypt
+Message-ID: <bd6ff4fb-0cbd-675e-a4f2-d311cfe2c62d@emlix.com>
+Date:   Thu, 19 Sep 2019 11:20:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <9bcf315369449a025828410396935b679aae14bf.camel@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add system wakeup capability over UART RX line for wakeup capable UART.
-When system is suspended, RX line act as an interrupt to wakeup system
-for any communication requests from peer.
+Am 16.09.19 um 16:17 schrieb Lucas Stach:
+> On Mi, 2019-09-11 at 16:49 +0200, Philipp Puschmann wrote:
+>> BD_DONE flag marks ownership of the buffer. When 1 SDMA owns the buffer,
+>> when 0 ARM owns it. When processing the buffers in
+>> sdma_update_channel_loop the ownership of the currently processed buffer
+>> was set to SDMA again before running the callback function of the the
+>> buffer and while the sdma script may be running in parallel. So there was
+>> the possibility to get the buffer overwritten by SDMA before it has been
+>> processed by kernel leading to kind of random errors in the upper layers,
+>> e.g. bluetooth.
+>>
+>> It may be further a good idea to make the status struct member volatile or
+>> access it using writel or similar to rule out that the compiler sets the
+>> BD_DONE flag before the callback routine has finished.
+>>
+>> Signed-off-by: Philipp Puschmann <philipp.puschmann@emlix.com>
+>> ---
+>>  drivers/dma/imx-sdma.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+>> index a01f4b5d793c..1abb14ff394d 100644
+>> --- a/drivers/dma/imx-sdma.c
+>> +++ b/drivers/dma/imx-sdma.c
+>> @@ -802,7 +802,6 @@ static void sdma_update_channel_loop(struct sdma_channel *sdmac)
+>>  		*/
+>>  
+>>  		desc->chn_real_count = bd->mode.count;
+>> -		bd->mode.status |= BD_DONE;
+>>  		bd->mode.count = desc->period_len;
+>>  		desc->buf_ptail = desc->buf_tail;
+>>  		desc->buf_tail = (desc->buf_tail + 1) % desc->num_bd;
+>> @@ -817,6 +816,8 @@ static void sdma_update_channel_loop(struct sdma_channel *sdmac)
+>>  		dmaengine_desc_get_callback_invoke(&desc->vd.tx, NULL);
+>>  		spin_lock(&sdmac->vc.lock);
+> 
+> To address your comment from the second paragraph of the commit message
+> there should be a dma_wmb() here before changing the status flag.
+> 
+> Regards,
+> Lucas
 
-Cleanup of IRQ registration, moving it to probe from startup function.
+Hi Lucas,
 
-Signed-off-by: Akash Asthana <akashast@codeaurora.org>
----
- drivers/tty/serial/qcom_geni_serial.c | 73 +++++++++++++++++++++++++++++------
- 1 file changed, 62 insertions(+), 11 deletions(-)
+thanks for your feedback. I will apply the hints to v2 of the patches.
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 35e5f9c..43d1da4 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -19,6 +19,8 @@
- #include <linux/slab.h>
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
-+#include <linux/pm_wakeirq.h>
-+#include <linux/irq.h>
- 
- /* UART specific GENI registers */
- #define SE_UART_LOOPBACK_CFG		0x22c
-@@ -98,6 +100,8 @@
- #define CONSOLE_RX_BYTES_PW 4
- #endif
- 
-+#define WAKEUP_EVENT_MSEC   2000
-+
- struct qcom_geni_serial_port {
- 	struct uart_port uport;
- 	struct geni_se se;
-@@ -115,6 +119,7 @@ struct qcom_geni_serial_port {
- 	bool brk;
- 
- 	unsigned int tx_remaining;
-+	int wakeup_irq;
- };
- 
- static const struct uart_ops qcom_geni_console_pops;
-@@ -756,6 +761,15 @@ static void qcom_geni_serial_handle_tx(struct uart_port *uport, bool done,
- 		uart_write_wakeup(uport);
- }
- 
-+static irqreturn_t qcom_geni_serial_wakeup_isr(int isr, void *dev)
-+{
-+	struct uart_port *uport = dev;
-+
-+	pm_wakeup_event(uport->dev, WAKEUP_EVENT_MSEC);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
- {
- 	u32 m_irq_en;
-@@ -832,7 +846,7 @@ static void qcom_geni_serial_shutdown(struct uart_port *uport)
- 	if (uart_console(uport))
- 		console_stop(uport->cons);
- 
--	free_irq(uport->irq, uport);
-+	disable_irq(uport->irq);
- 	spin_lock_irqsave(&uport->lock, flags);
- 	qcom_geni_serial_stop_tx(uport);
- 	qcom_geni_serial_stop_rx(uport);
-@@ -892,21 +906,14 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
- 	int ret;
- 	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
- 
--	scnprintf(port->name, sizeof(port->name),
--		  "qcom_serial_%s%d",
--		(uart_console(uport) ? "console" : "uart"), uport->line);
--
- 	if (!port->setup) {
- 		ret = qcom_geni_serial_port_setup(uport);
- 		if (ret)
- 			return ret;
- 	}
-+	enable_irq(uport->irq);
- 
--	ret = request_irq(uport->irq, qcom_geni_serial_isr, IRQF_TRIGGER_HIGH,
--							port->name, uport);
--	if (ret)
--		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
--	return ret;
-+	return 0;
- }
- 
- static unsigned long get_clk_cfg(unsigned long clk_freq)
-@@ -1290,6 +1297,8 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
- 	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
- 
-+	scnprintf(port->name, sizeof(port->name), "qcom_geni_serial_%s%d",
-+		(uart_console(uport) ? "console" : "uart"), uport->line);
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
- 		dev_err(&pdev->dev, "Failed to get IRQ %d\n", irq);
-@@ -1297,6 +1306,39 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	}
- 	uport->irq = irq;
- 
-+	irq_set_status_flags(uport->irq, IRQ_NOAUTOEN);
-+	ret = devm_request_irq(uport->dev, uport->irq, qcom_geni_serial_isr,
-+				IRQF_TRIGGER_HIGH, port->name, uport);
-+	if (ret) {
-+		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (!console) {
-+		port->wakeup_irq = platform_get_irq(pdev, 1);
-+		if (port->wakeup_irq < 0) {
-+			dev_err(&pdev->dev, "Failed to get wakeup IRQ %d\n",
-+							port->wakeup_irq);
-+		} else {
-+			dev_info(&pdev->dev, "wakeup_irq =%d\n",
-+				port->wakeup_irq);
-+			irq_set_status_flags(port->wakeup_irq, IRQ_NOAUTOEN);
-+			ret = devm_request_irq(uport->dev, port->wakeup_irq,
-+				qcom_geni_serial_wakeup_isr,
-+				IRQF_TRIGGER_FALLING, "uart_wakeup", uport);
-+			if (ret) {
-+				dev_err(uport->dev, "Failed to register wakeup "
-+					"IRQ ret %d\n", ret);
-+				return ret;
-+			}
-+
-+			device_init_wakeup(&pdev->dev, true);
-+			ret = enable_irq_wake(port->wakeup_irq);
-+			if (unlikely(ret))
-+				dev_err(uport->dev, "%s:Failed to set IRQ "
-+					"wake:%d\n", __func__, ret);
-+		}
-+	}
- 	uport->private_data = drv;
- 	platform_set_drvdata(pdev, port);
- 	port->handle_rx = console ? handle_rx_console : handle_rx_uart;
-@@ -1311,6 +1353,7 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
- 	struct uart_driver *drv = port->uport.private_data;
- 
- 	uart_remove_one_port(drv, &port->uport);
-+
- 	return 0;
- }
- 
-@@ -1319,7 +1362,12 @@ static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
- 
--	return uart_suspend_port(uport->private_data, uport);
-+	uart_suspend_port(uport->private_data, uport);
-+
-+	if (port->wakeup_irq > 0)
-+		enable_irq(port->wakeup_irq);
-+
-+	return 0;
- }
- 
- static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
-@@ -1327,6 +1375,9 @@ static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
- 	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
- 	struct uart_port *uport = &port->uport;
- 
-+	if (port->wakeup_irq > 0)
-+		disable_irq(port->wakeup_irq);
-+
- 	return uart_resume_port(uport->private_data, uport);
- }
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
-
+Regards,
+Philipp
+> 
+>> +		bd->mode.status |= BD_DONE;
+>> +
+>>  		if (error)
+>>  			sdmac->status = old_status;
+>>  	}
+> 
