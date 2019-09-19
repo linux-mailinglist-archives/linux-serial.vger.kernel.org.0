@@ -2,100 +2,219 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 154D5B7D3A
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 16:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334B4B80B6
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 20:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389184AbfISOvU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Sep 2019 10:51:20 -0400
-Received: from mx1.emlix.com ([188.40.240.192]:58704 "EHLO mx1.emlix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388551AbfISOvU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Sep 2019 10:51:20 -0400
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 213045FD85;
-        Thu, 19 Sep 2019 16:51:18 +0200 (CEST)
-From:   Philipp Puschmann <philipp.puschmann@emlix.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        yibin.gong@nxp.com, fugang.duan@nxp.com, l.stach@pengutronix.de,
-        jslaby@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Philipp Puschmann <philipp.puschmann@emlix.com>
-Subject: [PATCH v3] serial: imx: adapt rx buffer and dma periods
-Date:   Thu, 19 Sep 2019 16:51:14 +0200
-Message-Id: <20190919145114.13006-1-philipp.puschmann@emlix.com>
-X-Mailer: git-send-email 2.23.0
+        id S2391394AbfISSV0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Sep 2019 14:21:26 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44289 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391334AbfISSV0 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 19 Sep 2019 14:21:26 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q21so2818988pfn.11
+        for <linux-serial@vger.kernel.org>; Thu, 19 Sep 2019 11:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:to:from:subject:user-agent:date;
+        bh=fUmoOPRZi5RQiXCOcrZadGCPanGs+taMVA4xIJYeTgg=;
+        b=N09/JqMAQarJVy2xmqV240gl6fF8H83MxMa8AjZ9kEym9VaFg1ipQCdLbtTFsw5j8A
+         GW80sjHDG6HTMfli4Qm5dc5KEu4lHu2/EF+Ok11Tgh+hcLPn6rkMuZ4xV6PuE+j93JeM
+         c98SS59abcRYXnjg/teYhDL923Graq2z7Axxk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:date;
+        bh=fUmoOPRZi5RQiXCOcrZadGCPanGs+taMVA4xIJYeTgg=;
+        b=d09fLtJCO0uTQlf8L/lYPdFst0hA7Rl9GqOzv6CHbl72RkyiFtyhkGCU3RjkGgcN+4
+         ygj2Eyy9LNMYWHRLYyi9WUc8ibXG8ETJzVFHKyz94S/dTtN2bxET9HK+mqxJphAu8Rjt
+         13+jdnjdFpFEdyucH79qUCwhwAvPpLwcooj6SmDbiFXqzPf7o2iXY/LWcreoL9MZQBG5
+         /EbHRk2JJjKFhdAHsacOcea/B1wODB5CfCN/YobEp1DyzpeR9PPETnk6iRw4ixjstQ7G
+         3MuWShvrXoccPo9YXMf//Lup6TUQoNMXhWKcVHynYv9aO//tnY6y2MbmaPeOWX3JOMmo
+         B/vA==
+X-Gm-Message-State: APjAAAXIgkK1rOaReH1Olf3xaFjUxbDc146lCXl04qPBG9b0jnbsmAmb
+        Xo5vB8KTh6Saufby9Wc8fVIlTw==
+X-Google-Smtp-Source: APXvYqwX4XRr0BR0BlJpeELolzq0P57QnpLZaD991bS3iCQGI89+yUHTZAfC3EblSUmWDONI04skKw==
+X-Received: by 2002:a65:4002:: with SMTP id f2mr10533562pgp.447.1568917285625;
+        Thu, 19 Sep 2019 11:21:25 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id s1sm19647733pjs.31.2019.09.19.11.21.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 11:21:25 -0700 (PDT)
+Message-ID: <5d83c725.1c69fb81.9e57a.5569@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1568877366-1758-1-git-send-email-akashast@codeaurora.org>
+References: <1568877366-1758-1-git-send-email-akashast@codeaurora.org>
+Cc:     mgautam@codeaurora.org, jslaby@suse.com,
+        bjorn.andersson@linaro.org, Akash Asthana <akashast@codeaurora.org>
+To:     Akash Asthana <akashast@codeaurora.org>, agross@kernel.org,
+        gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org
+From:   Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH] tty: serial: qcom_geni_serial: Wakeup over UART RX
+User-Agent: alot/0.8.1
+Date:   Thu, 19 Sep 2019 11:21:24 -0700
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Using only 4 DMA periods for UART RX is very few if we have a high
-frequency of small transfers - like in our case using Bluetooth with
-many small packets via UART - causing many dma transfers but in each
-only filling a fraction of a single buffer. Such a case may lead to
-the situation that DMA RX transfer is triggered but no free buffer is
-available. When this happens dma channel ist stopped - with the patch
-"dmaengine: imx-sdma: fix dma freezes" temporarily only - with the
-possible consequences that:
-with disabled hw flow control:
-  If enough data is incoming on UART port the RX FIFO runs over and
-  characters will be lost. What then happens depends on upper layer.
+Quoting Akash Asthana (2019-09-19 00:16:06)
+> Add system wakeup capability over UART RX line for wakeup capable UART.
+> When system is suspended, RX line act as an interrupt to wakeup system
+> for any communication requests from peer.
+>=20
+> Cleanup of IRQ registration, moving it to probe from startup function.
 
-with enabled hw flow control:
-  If enough data is incoming on UART port the RX FIFO reaches a level
-  where CTS is deasserted and remote device sending the data stops.
-  If it fails to stop timely the i.MX' RX FIFO may run over and data
-  get lost. Otherwise it's internal TX buffer may getting filled to
-  a point where it runs over and data is again lost. It depends on
-  the remote device how this case is handled and if it is recoverable.
+Probably should be a different patch than the one that adds wakeup irq
+handling.
 
-Obviously we want to avoid having no free buffers available. So we
-decrease the size of the buffers and increase their number and the
-total buffer size.
+>=20
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 73 +++++++++++++++++++++++++++++=
+------
+>  1 file changed, 62 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/q=
+com_geni_serial.c
+> index 35e5f9c..43d1da4 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -19,6 +19,8 @@
+>  #include <linux/slab.h>
+>  #include <linux/tty.h>
+>  #include <linux/tty_flip.h>
+> +#include <linux/pm_wakeirq.h>
+> +#include <linux/irq.h>
 
-Signed-off-by: Philipp Puschmann <philipp.puschmann@emlix.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
----
+Can you sort these includes alphabetically? Or at least attempt to place
+this somewhere in there alphabetically?
 
-Changelog v3:
- - enhance description
+> =20
+>  /* UART specific GENI registers */
+>  #define SE_UART_LOOPBACK_CFG           0x22c
+> @@ -98,6 +100,8 @@
+>  #define CONSOLE_RX_BYTES_PW 4
+>  #endif
+> =20
+> +#define WAKEUP_EVENT_MSEC   2000
 
-Changelog v2:
- - split this patch from series "Fix UART DMA freezes for iMX6"
- - add Reviewed-by tag
+This is used one place. Just inline it and drop this define.
 
- drivers/tty/serial/imx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> +
+>  struct qcom_geni_serial_port {
+>         struct uart_port uport;
+>         struct geni_se se;
+> @@ -115,6 +119,7 @@ struct qcom_geni_serial_port {
+>         bool brk;
+> =20
+>         unsigned int tx_remaining;
+> +       int wakeup_irq;
+>  };
+> =20
+>  static const struct uart_ops qcom_geni_console_pops;
+> @@ -756,6 +761,15 @@ static void qcom_geni_serial_handle_tx(struct uart_p=
+ort *uport, bool done,
+>                 uart_write_wakeup(uport);
+>  }
+> =20
+> +static irqreturn_t qcom_geni_serial_wakeup_isr(int isr, void *dev)
+> +{
+> +       struct uart_port *uport =3D dev;
+> +
+> +       pm_wakeup_event(uport->dev, WAKEUP_EVENT_MSEC);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+>  static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
+>  {
+>         u32 m_irq_en;
+> @@ -1290,6 +1297,8 @@ static int qcom_geni_serial_probe(struct platform_d=
+evice *pdev)
+>         port->rx_fifo_depth =3D DEF_FIFO_DEPTH_WORDS;
+>         port->tx_fifo_width =3D DEF_FIFO_WIDTH_BITS;
+> =20
+> +       scnprintf(port->name, sizeof(port->name), "qcom_geni_serial_%s%d",
+> +               (uart_console(uport) ? "console" : "uart"), uport->line);
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 87c58f9f6390..51dc19833eab 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -1034,8 +1034,6 @@ static void imx_uart_timeout(struct timer_list *t)
- 	}
- }
- 
--#define RX_BUF_SIZE	(PAGE_SIZE)
--
- /*
-  * There are two kinds of RX DMA interrupts(such as in the MX6Q):
-  *   [1] the RX DMA buffer is full.
-@@ -1118,7 +1116,8 @@ static void imx_uart_dma_rx_callback(void *data)
- }
- 
- /* RX DMA buffer periods */
--#define RX_DMA_PERIODS 4
-+#define RX_DMA_PERIODS	16
-+#define RX_BUF_SIZE	(PAGE_SIZE / 4)
- 
- static int imx_uart_start_rx_dma(struct imx_port *sport)
- {
--- 
-2.23.0
+This looks like an unrelated change?
+
+>         irq =3D platform_get_irq(pdev, 0);
+>         if (irq < 0) {
+>                 dev_err(&pdev->dev, "Failed to get IRQ %d\n", irq);
+> @@ -1297,6 +1306,39 @@ static int qcom_geni_serial_probe(struct platform_=
+device *pdev)
+>         }
+>         uport->irq =3D irq;
+> =20
+> +       irq_set_status_flags(uport->irq, IRQ_NOAUTOEN);
+> +       ret =3D devm_request_irq(uport->dev, uport->irq, qcom_geni_serial=
+_isr,
+> +                               IRQF_TRIGGER_HIGH, port->name, uport);
+> +       if (ret) {
+> +               dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       if (!console) {
+> +               port->wakeup_irq =3D platform_get_irq(pdev, 1);
+
+Can you use dev_pm_set_wake_irq() instead?
+
+> +               if (port->wakeup_irq < 0) {
+> +                       dev_err(&pdev->dev, "Failed to get wakeup IRQ %d\=
+n",
+> +                                                       port->wakeup_irq);
+> +               } else {
+> +                       dev_info(&pdev->dev, "wakeup_irq =3D%d\n",
+> +                               port->wakeup_irq);
+
+Please no dev_info() messages like this.
+
+> +                       irq_set_status_flags(port->wakeup_irq, IRQ_NOAUTO=
+EN);
+> +                       ret =3D devm_request_irq(uport->dev, port->wakeup=
+_irq,
+> +                               qcom_geni_serial_wakeup_isr,
+> +                               IRQF_TRIGGER_FALLING, "uart_wakeup", upor=
+t);
+> +                       if (ret) {
+> +                               dev_err(uport->dev, "Failed to register w=
+akeup "
+> +                                       "IRQ ret %d\n", ret);
+
+Don't split format strings across many lines. The arguments can go to a
+different line, but the string can be on a single line.
+
+> +                               return ret;
+> +                       }
+> +
+> +                       device_init_wakeup(&pdev->dev, true);
+> +                       ret =3D enable_irq_wake(port->wakeup_irq);
+> +                       if (unlikely(ret))
+> +                               dev_err(uport->dev, "%s:Failed to set IRQ=
+ "
+> +                                       "wake:%d\n", __func__, ret);
+> +               }
+> +       }
+>         uport->private_data =3D drv;
+>         platform_set_drvdata(pdev, port);
+>         port->handle_rx =3D console ? handle_rx_console : handle_rx_uart;
+> @@ -1311,6 +1353,7 @@ static int qcom_geni_serial_remove(struct platform_=
+device *pdev)
+>         struct uart_driver *drv =3D port->uport.private_data;
+> =20
+>         uart_remove_one_port(drv, &port->uport);
+> +
+>         return 0;
+>  }
+> =20
+
+This hunk shouldn't be here. Please drop
 
