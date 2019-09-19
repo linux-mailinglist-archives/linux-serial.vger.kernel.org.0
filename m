@@ -2,99 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A96B7621
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 11:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DC5B7766
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 12:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbfISJUU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Sep 2019 05:20:20 -0400
-Received: from mx1.emlix.com ([188.40.240.192]:57352 "EHLO mx1.emlix.com"
+        id S1728984AbfISK0t (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Sep 2019 06:26:49 -0400
+Received: from mx1.emlix.com ([188.40.240.192]:57624 "EHLO mx1.emlix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730839AbfISJUU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Sep 2019 05:20:20 -0400
+        id S2388156AbfISK0t (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 19 Sep 2019 06:26:49 -0400
 Received: from mailer.emlix.com (unknown [81.20.119.6])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 3D96C603BE;
-        Thu, 19 Sep 2019 11:20:17 +0200 (CEST)
-Subject: Re: [PATCH 1/4] dmaengine: imx-sdma: fix buffer ownership
-To:     Lucas Stach <l.stach@pengutronix.de>, linux-kernel@vger.kernel.org
-Cc:     linux-serial@vger.kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, jslaby@suse.com, vkoul@kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        gregkh@linuxfoundation.org, dmaengine@vger.kernel.org,
-        dan.j.williams@intel.com, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20190911144943.21554-1-philipp.puschmann@emlix.com>
- <20190911144943.21554-2-philipp.puschmann@emlix.com>
- <9bcf315369449a025828410396935b679aae14bf.camel@pengutronix.de>
+        by mx1.emlix.com (Postfix) with ESMTPS id EF3CC603CA;
+        Thu, 19 Sep 2019 12:26:46 +0200 (CEST)
 From:   Philipp Puschmann <philipp.puschmann@emlix.com>
-Openpgp: preference=signencrypt
-Message-ID: <bd6ff4fb-0cbd-675e-a4f2-d311cfe2c62d@emlix.com>
-Date:   Thu, 19 Sep 2019 11:20:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, yibin.gong@nxp.com,
+        fugang.duan@nxp.com, l.stach@pengutronix.de, jslaby@suse.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Philipp Puschmann <philipp.puschmann@emlix.com>
+Subject: [PATCH v2] serial: imx: adapt rx buffer and dma periods
+Date:   Thu, 19 Sep 2019 12:26:28 +0200
+Message-Id: <20190919102628.23621-1-philipp.puschmann@emlix.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <9bcf315369449a025828410396935b679aae14bf.camel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Am 16.09.19 um 16:17 schrieb Lucas Stach:
-> On Mi, 2019-09-11 at 16:49 +0200, Philipp Puschmann wrote:
->> BD_DONE flag marks ownership of the buffer. When 1 SDMA owns the buffer,
->> when 0 ARM owns it. When processing the buffers in
->> sdma_update_channel_loop the ownership of the currently processed buffer
->> was set to SDMA again before running the callback function of the the
->> buffer and while the sdma script may be running in parallel. So there was
->> the possibility to get the buffer overwritten by SDMA before it has been
->> processed by kernel leading to kind of random errors in the upper layers,
->> e.g. bluetooth.
->>
->> It may be further a good idea to make the status struct member volatile or
->> access it using writel or similar to rule out that the compiler sets the
->> BD_DONE flag before the callback routine has finished.
->>
->> Signed-off-by: Philipp Puschmann <philipp.puschmann@emlix.com>
->> ---
->>  drivers/dma/imx-sdma.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
->> index a01f4b5d793c..1abb14ff394d 100644
->> --- a/drivers/dma/imx-sdma.c
->> +++ b/drivers/dma/imx-sdma.c
->> @@ -802,7 +802,6 @@ static void sdma_update_channel_loop(struct sdma_channel *sdmac)
->>  		*/
->>  
->>  		desc->chn_real_count = bd->mode.count;
->> -		bd->mode.status |= BD_DONE;
->>  		bd->mode.count = desc->period_len;
->>  		desc->buf_ptail = desc->buf_tail;
->>  		desc->buf_tail = (desc->buf_tail + 1) % desc->num_bd;
->> @@ -817,6 +816,8 @@ static void sdma_update_channel_loop(struct sdma_channel *sdmac)
->>  		dmaengine_desc_get_callback_invoke(&desc->vd.tx, NULL);
->>  		spin_lock(&sdmac->vc.lock);
-> 
-> To address your comment from the second paragraph of the commit message
-> there should be a dma_wmb() here before changing the status flag.
-> 
-> Regards,
-> Lucas
+Using only 4 DMA periods for UART RX is very few if we have a high
+frequency of small transfers - like in our case using Bluetooth with
+many small packets via UART - causing many dma transfers but in each
+only filling a fraction of a single buffer. Such a case may lead to
+the situation that DMA RX transfer is triggered but no free buffer is
+available. While we have addressed the dma handling already with
+"dmaengine: imx-sdma: fix dma freezes" we still want to avoid
+UART RX FIFO overrun. So we decrease the size of the buffers and
+increase their number and the total buffer size.
 
-Hi Lucas,
+Signed-off-by: Philipp Puschmann <philipp.puschmann@emlix.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+---
 
-thanks for your feedback. I will apply the hints to v2 of the patches.
+Changelog v2:
+ - split this patch from series "Fix UART DMA freezes for iMX6"
+ - add Reviewed-by tag
 
-Regards,
-Philipp
-> 
->> +		bd->mode.status |= BD_DONE;
->> +
->>  		if (error)
->>  			sdmac->status = old_status;
->>  	}
-> 
+ drivers/tty/serial/imx.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 87c58f9f6390..51dc19833eab 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -1034,8 +1034,6 @@ static void imx_uart_timeout(struct timer_list *t)
+ 	}
+ }
+ 
+-#define RX_BUF_SIZE	(PAGE_SIZE)
+-
+ /*
+  * There are two kinds of RX DMA interrupts(such as in the MX6Q):
+  *   [1] the RX DMA buffer is full.
+@@ -1118,7 +1116,8 @@ static void imx_uart_dma_rx_callback(void *data)
+ }
+ 
+ /* RX DMA buffer periods */
+-#define RX_DMA_PERIODS 4
++#define RX_DMA_PERIODS	16
++#define RX_BUF_SIZE	(PAGE_SIZE / 4)
+ 
+ static int imx_uart_start_rx_dma(struct imx_port *sport)
+ {
+-- 
+2.23.0
+
