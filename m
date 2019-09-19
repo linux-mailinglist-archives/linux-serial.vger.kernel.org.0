@@ -2,143 +2,124 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A24AB716F
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 04:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2661B71CA
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 05:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730839AbfISCOo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 18 Sep 2019 22:14:44 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36158 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730815AbfISCOn (ORCPT
+        id S1730553AbfISDKv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 18 Sep 2019 23:10:51 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:43521 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730490AbfISDKv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 18 Sep 2019 22:14:43 -0400
-Received: by mail-oi1-f196.google.com with SMTP id k20so1417803oih.3;
-        Wed, 18 Sep 2019 19:14:43 -0700 (PDT)
+        Wed, 18 Sep 2019 23:10:51 -0400
+Received: by mail-pf1-f193.google.com with SMTP id a2so1253573pfo.10;
+        Wed, 18 Sep 2019 20:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VBY2TI6sW6pflJ0u8FX5HSLEQmM9vGWsPIQFvfeaCg0=;
-        b=tvnklaXjNaHa33RKFV4OXLDIp1FMx55Ui99DXIXTmVOtzCUVmWMy6v1nlgEYcNkWu5
-         TLe0FO4yrqp5bUYF79iUDoKG2cHgtXljobj4Nh+l6f+6H85d1r119wyfspuhw3aqYG9d
-         U3uWBTB9jQMKxzfxoZyrcmmpmiRil4HBLfsDyi4RD6Ca/zHnAgjhqvFHNBwNFDj/BXel
-         fBB/RP4rsK8vnjF03qc8FKro0/9exEcAmuUmQtA3wJ/kp1+74AKs2E4fw5mx3nzQsWMA
-         Do1c5sbBYvc7cAVrXnTVg3JIRH8oK0m+AtGxdM7+69eWAnFbeexHiT0sanPs4/3Bu7fb
-         eizg==
+        h=from:to:cc:subject:date:message-id;
+        bh=stmOjL/c/ExaFL4SdKPgQAdlTh6GvwhfkrAMYKUCxGQ=;
+        b=LKjd4wKV1Xg37mwBYmhkZq+3qE2dBemA3DYutLccscjp/M7E19G/L0otcN+62N6aYW
+         z15Vkr4iZLxpLcHLobz52s+HwjxSw0BCXgJ+LJvGLFIExjN08u/mxJZVYZJzAwIXcjmg
+         iN8rL7IU7fZp8yNjgGEwj6rEZPMEz8I6OVPSYlh26Vx3K1kWXCIyre1dxUxw0QHrmxjv
+         EpCVrWbbNiXr4abM01WWIQ1bDBgn7geCHJcBUEz6qwb9tUe8gx/exKujMFSzCut6NNiS
+         if6JGTLMoyvCXHA+8Q7DMVc1eU6zRHiJf35SAapOE5dLTPdqApcvCwfj9u/Ai654Nits
+         8T5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VBY2TI6sW6pflJ0u8FX5HSLEQmM9vGWsPIQFvfeaCg0=;
-        b=JQnUDu9VMk0HWJx61PMB+6UZwQbtbx80HmE4KqLo+Raj7k54e07P6dPyCoDCKnUn+Q
-         18fz5VPJ6tyCvRWDchxlZq+OArUTJwsFBYAGDxImZkdhl1OZbtsh1sOr31gajCis7mNt
-         iy434rbuc1kS6U/CqsTHHqZJeT8QBI5SLJuUiTmpHo+NANoO3laREWRSP0OKBCFKgTQM
-         RZtFTPqvSCMf2LnsTCHSVwrWmJVg5XL7YoAvC7e4rmRFYH4qLbathAM8N911BHk0Aqlh
-         sTIP0bcm1oYDMqxAwHGLfuZYrJuWERx/1OF4t3BzduRUpkF+ieC5WXEzg48PUh5RKw+J
-         E49A==
-X-Gm-Message-State: APjAAAXWZmm7j2JMknDGRHeaWrsWQsCwqvXztnuyZsUScoW/NOmogbpB
-        b30/4rRy16Fhgo9cviNJFHJeJCk0gM8SIYwwMvQ=
-X-Google-Smtp-Source: APXvYqz/wLAfImMW8PcbBtFygbL4scAqfazjrUNtzu7d6rj4w0qiO0yq38R1fI9Q5nWMvkFp8qU38no2eCldZqsitvw=
-X-Received: by 2002:aca:4988:: with SMTP id w130mr654511oia.108.1568859282707;
- Wed, 18 Sep 2019 19:14:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <a634860d9194cc235298d6d8bbd2282bf6f853c4.1568793195.git.liuhhome@gmail.com>
- <CAMz4kuLrAWDaZj2Am452BX+aVO0yCQB_cCiNUx4FAamoX6KWtA@mail.gmail.com>
-In-Reply-To: <CAMz4kuLrAWDaZj2Am452BX+aVO0yCQB_cCiNUx4FAamoX6KWtA@mail.gmail.com>
-From:   hhome liu <liuhhome@gmail.com>
-Date:   Thu, 19 Sep 2019 10:14:31 +0800
-Message-ID: <CAHshu7PoJriq6R+rNzqAVrEy=mSWvu6k=83=pkRo0dNhrS1xhw@mail.gmail.com>
-Subject: Re: [PATCH] serial: sprd: Add polling IO support
-To:     Baolin Wang <baolin.wang@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>,
-        =?UTF-8?B?5YiY5bKa5riFIChMYW5xaW5nIExpdSk=?= 
-        <lanqing.liu@unisoc.com>, linux-serial@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=stmOjL/c/ExaFL4SdKPgQAdlTh6GvwhfkrAMYKUCxGQ=;
+        b=CIsrqCeleDqg8jD6Tzmfi7GpTI3LSNr9BRDCsvQUJR8vumgUIjL7pl8IMVTE1jC9vC
+         mBZqXqgkK2KLMszAvI/PGmemaf9lNJITS7uS7DsZciARyO8/byRe1RKLUffCInNRFPUG
+         6kt83MGWR05uGqUmrft/8jxS49GhPr5JC1AIkV1+RskoxN+7y3X9lUJA7Ce0ol4Iqtkr
+         FI0krGoYavHvqIr+KGENzAmwkQgKGRmrZ6L5/u8D+dBZyJziGyis9BQQWWDXFsefKRgQ
+         mH+QIeC6MJf+/3Mf/bjoWDnfE3P74ZDCG1xoGOnwvNl5B81Ft3v+q1RRt7ZP+5ib/v56
+         uPJQ==
+X-Gm-Message-State: APjAAAXxy2zIqfoqM5lcrfZpPUtEFJUeqfL1a6XT+y/fGVNyOTeXPwFK
+        dMY640vtWDsPqH/9Q3JuafA=
+X-Google-Smtp-Source: APXvYqyTjLTkA7SH5GnNQ4Wud8vajVQPBtuyE+Ba9ndyvrXg7XVj8VRgnW62qffqDBPJ2nHUU0hpOg==
+X-Received: by 2002:aa7:851a:: with SMTP id v26mr8067420pfn.11.1568862649036;
+        Wed, 18 Sep 2019 20:10:49 -0700 (PDT)
+Received: from sh04182tmp293.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id e127sm11182440pfe.37.2019.09.18.20.10.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 18 Sep 2019 20:10:48 -0700 (PDT)
+From:   Lanqing Liu <liuhhome@gmail.com>
+To:     gregkh@linuxfoundation.org, jslaby@suse.com
+Cc:     baolin.wang@linaro.org, lanqing.liu@unisoc.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        orsonzhai@gmail.com, zhang.lyra@gmail.com
+Subject: [PATCH v2] serial: sprd: Add polling IO support
+Date:   Thu, 19 Sep 2019 11:10:37 +0800
+Message-Id: <f112a741c053ac5fb0637e2f058be81e17f78ccc.1568862391.git.liuhhome@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Baolin Wang <baolin.wang@linaro.org> =E4=BA=8E2019=E5=B9=B49=E6=9C=8818=E6=
-=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=888:10=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Lanqing,
->
-> On Wed, 18 Sep 2019 at 16:16, Lanqing Liu <liuhhome@gmail.com> wrote:
-> >
-> > In order to access the UART without the interrupts, the kernel uses
-> > the basic polling methods for IO with the device. With these methods
-> > implemented, it is now possible to enable kgdb during early boot over s=
-erial.
-> >
-> > Signed-off-by: Lanqing Liu <liuhhome@gmail.com>
-> > ---
-> >  drivers/tty/serial/sprd_serial.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd=
-_serial.c
-> > index 73d71a4..579ab41 100644
-> > --- a/drivers/tty/serial/sprd_serial.c
-> > +++ b/drivers/tty/serial/sprd_serial.c
-> > @@ -911,6 +911,24 @@ static void sprd_pm(struct uart_port *port, unsign=
-ed int state,
-> >         }
-> >  }
-> >
-> > +#ifdef CONFIG_CONSOLE_POLL
-> > +static int sprd_poll_get_char(struct uart_port *port)
-> > +{
-> > +       while (!(serial_in(port, SPRD_STS1) & SPRD_RX_FIFO_CNT_MASK))
-> > +               cpu_relax();
-> > +
-> > +       return serial_in(port, SPRD_RXD);
-> > +}
-> > +
-> > +static void sprd_poll_put_char(struct uart_port *port, unsigned char c=
-h)
-> > +{
-> > +       while (serial_in(port, SPRD_STS1) & SPRD_TX_FIFO_CNT_MASK)
-> > +               cpu_relax();
-> > +
-> > +       serial_out(port, SPRD_TXD, ch);
-> > +}
-> > +#endif
->
-> When I tested your patch, I found only one case can work if the port
-> used by KGDB is same with the port selected as console, which means
-> this port will be powered on all the time. We had implemented the
-> power management for the UART ports, so I think you should enable the
-> clock for the port used by KGDB in poll_init(), then other ports can
-> be used by KGDB.
->
-Yes, agree with you. I will add poll_init()  support.  Thanks for your
-comments.
-> > +
-> >  static const struct uart_ops serial_sprd_ops =3D {
-> >         .tx_empty =3D sprd_tx_empty,
-> >         .get_mctrl =3D sprd_get_mctrl,
-> > @@ -928,6 +946,10 @@ static void sprd_pm(struct uart_port *port, unsign=
-ed int state,
-> >         .config_port =3D sprd_config_port,
-> >         .verify_port =3D sprd_verify_port,
-> >         .pm =3D sprd_pm,
-> > +#ifdef CONFIG_CONSOLE_POLL
-> > +       .poll_get_char  =3D sprd_poll_get_char,
-> > +       .poll_put_char  =3D sprd_poll_put_char,
-> > +#endif
-> >  };
-> >
-> >  #ifdef CONFIG_SERIAL_SPRD_CONSOLE
-> > --
-> > 1.9.1
-> >
->
->
-> --
-> Baolin Wang
-> Best Regards
+In order to access the UART without the interrupts, the kernel uses
+the basic polling methods for IO with the device. With these methods
+implemented, it is now possible to enable kgdb during early boot over serial.
+
+Signed-off-by: Lanqing Liu <liuhhome@gmail.com>
+---
+Change from v1:
+ - Add poll_init() support.
+---
+ drivers/tty/serial/sprd_serial.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+index 73d71a4..d833160 100644
+--- a/drivers/tty/serial/sprd_serial.c
++++ b/drivers/tty/serial/sprd_serial.c
+@@ -911,6 +911,34 @@ static void sprd_pm(struct uart_port *port, unsigned int state,
+ 	}
+ }
+ 
++#ifdef CONFIG_CONSOLE_POLL
++static int sprd_poll_init(struct uart_port *port)
++{
++	if (port->state->pm_state != UART_PM_STATE_ON) {
++		sprd_pm(port, UART_PM_STATE_ON, 0);
++		port->state->pm_state = UART_PM_STATE_ON;
++	}
++
++	return 0;
++}
++
++static int sprd_poll_get_char(struct uart_port *port)
++{
++	while (!(serial_in(port, SPRD_STS1) & SPRD_RX_FIFO_CNT_MASK))
++		cpu_relax();
++
++	return serial_in(port, SPRD_RXD);
++}
++
++static void sprd_poll_put_char(struct uart_port *port, unsigned char ch)
++{
++	while (serial_in(port, SPRD_STS1) & SPRD_TX_FIFO_CNT_MASK)
++		cpu_relax();
++
++	serial_out(port, SPRD_TXD, ch);
++}
++#endif
++
+ static const struct uart_ops serial_sprd_ops = {
+ 	.tx_empty = sprd_tx_empty,
+ 	.get_mctrl = sprd_get_mctrl,
+@@ -928,6 +956,11 @@ static void sprd_pm(struct uart_port *port, unsigned int state,
+ 	.config_port = sprd_config_port,
+ 	.verify_port = sprd_verify_port,
+ 	.pm = sprd_pm,
++#ifdef CONFIG_CONSOLE_POLL
++	.poll_init	= sprd_poll_init,
++	.poll_get_char	= sprd_poll_get_char,
++	.poll_put_char	= sprd_poll_put_char,
++#endif
+ };
+ 
+ #ifdef CONFIG_SERIAL_SPRD_CONSOLE
+-- 
+1.9.1
+
