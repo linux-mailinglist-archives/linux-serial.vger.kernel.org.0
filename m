@@ -2,219 +2,210 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 334B4B80B6
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 20:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1FFB8200
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 21:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391394AbfISSV0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Sep 2019 14:21:26 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44289 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391334AbfISSV0 (ORCPT
+        id S2390329AbfIST4q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Sep 2019 15:56:46 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40753 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387854AbfIST4q (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Sep 2019 14:21:26 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q21so2818988pfn.11
-        for <linux-serial@vger.kernel.org>; Thu, 19 Sep 2019 11:21:26 -0700 (PDT)
+        Thu, 19 Sep 2019 15:56:46 -0400
+Received: by mail-wr1-f66.google.com with SMTP id l3so4384440wru.7;
+        Thu, 19 Sep 2019 12:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:to:from:subject:user-agent:date;
-        bh=fUmoOPRZi5RQiXCOcrZadGCPanGs+taMVA4xIJYeTgg=;
-        b=N09/JqMAQarJVy2xmqV240gl6fF8H83MxMa8AjZ9kEym9VaFg1ipQCdLbtTFsw5j8A
-         GW80sjHDG6HTMfli4Qm5dc5KEu4lHu2/EF+Ok11Tgh+hcLPn6rkMuZ4xV6PuE+j93JeM
-         c98SS59abcRYXnjg/teYhDL923Graq2z7Axxk=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KrhHWVyRHuQgUbyMmguMXRSYml5yBV9Jt6pBfOObHPo=;
+        b=EgziUIECg9S5aRxVwIEHUQnmDkMIbeSwGZ+d8k1yqttlnKcQcB8980x4AZ02t+GPW2
+         b4XEvPBepb0wGdJkppcF3lZn2aLBtI+sGAiEwn9P6ARdwmHFRTBEfw5EJ4oIR55poIIl
+         HjUs2F0o33/r2Ohgr3JeZgInr5W9i87fspSHrWfYXw8VOqOL2PYx+7wj765jyP8HPKlh
+         msNGb/yi7vJQMnpbq5vLKgJZypkZbyN+eBB1I4x2Y4QlshsJBgCsBJx22UhttVk+fHCq
+         1GPLt7r7hoQEa3B8d5Oi9A1IjbEVG6N0KgwwsV+feFjQ9jtAV+tleh/mUandVGuWkqsN
+         aDbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:date;
-        bh=fUmoOPRZi5RQiXCOcrZadGCPanGs+taMVA4xIJYeTgg=;
-        b=d09fLtJCO0uTQlf8L/lYPdFst0hA7Rl9GqOzv6CHbl72RkyiFtyhkGCU3RjkGgcN+4
-         ygj2Eyy9LNMYWHRLYyi9WUc8ibXG8ETJzVFHKyz94S/dTtN2bxET9HK+mqxJphAu8Rjt
-         13+jdnjdFpFEdyucH79qUCwhwAvPpLwcooj6SmDbiFXqzPf7o2iXY/LWcreoL9MZQBG5
-         /EbHRk2JJjKFhdAHsacOcea/B1wODB5CfCN/YobEp1DyzpeR9PPETnk6iRw4ixjstQ7G
-         3MuWShvrXoccPo9YXMf//Lup6TUQoNMXhWKcVHynYv9aO//tnY6y2MbmaPeOWX3JOMmo
-         B/vA==
-X-Gm-Message-State: APjAAAXIgkK1rOaReH1Olf3xaFjUxbDc146lCXl04qPBG9b0jnbsmAmb
-        Xo5vB8KTh6Saufby9Wc8fVIlTw==
-X-Google-Smtp-Source: APXvYqwX4XRr0BR0BlJpeELolzq0P57QnpLZaD991bS3iCQGI89+yUHTZAfC3EblSUmWDONI04skKw==
-X-Received: by 2002:a65:4002:: with SMTP id f2mr10533562pgp.447.1568917285625;
-        Thu, 19 Sep 2019 11:21:25 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id s1sm19647733pjs.31.2019.09.19.11.21.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KrhHWVyRHuQgUbyMmguMXRSYml5yBV9Jt6pBfOObHPo=;
+        b=K8UiDsEiLta76995f+7IrfiVmm/qFaTAuS7iFt2wAix2ynK3igwrMSI+KsjLh1fvYQ
+         5zq206+X9xzihqerDuJTkRzSJ73yNH9reJC6YbnrTkdiR9Bb1rg3AYH9gG94WVKu90ns
+         c9HZoV2YRN1vHaiTVIsEYpge2bobMn6govMzrYcVrEfLLmOfthxawjorzCkF4IBkeXTG
+         4R/jNSPXDgdlbnhga6jM3sfOdSa0u08BJNYN6EIc4FDbwv8QyOQ9RArLtzHdsLTntGuM
+         30aGJZTN+pJoFnQnGuMJlPmM4p30R8kuqlnoMoqti65CKmnlIfV5qpU/zLeDl1Qzxnsc
+         KyJA==
+X-Gm-Message-State: APjAAAVpQwLV8j6px2LB8wajfKmequPRSAk+wyJYNRxxa7G6Z7yhTxg5
+        DrnAEbT/4GiDFtDVl6mHy3g=
+X-Google-Smtp-Source: APXvYqys2In+Oqd9HfyjYuY9xLlWMZng1jIJEYABpKBowJXuIUF91l5q4lModrLVq/MPIt/bpfUCFQ==
+X-Received: by 2002:a5d:66cb:: with SMTP id k11mr7967835wrw.174.1568923003769;
+        Thu, 19 Sep 2019 12:56:43 -0700 (PDT)
+Received: from xws.fritz.box (pD9E5AB20.dip0.t-ipconnect.de. [217.229.171.32])
+        by smtp.gmail.com with ESMTPSA id f143sm12311104wme.40.2019.09.19.12.56.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2019 11:21:25 -0700 (PDT)
-Message-ID: <5d83c725.1c69fb81.9e57a.5569@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 19 Sep 2019 12:56:43 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Johan Hovold <johan@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-serial@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Subject: [PATCH] serdev: Add ACPI devices by ResourceSource field
+Date:   Thu, 19 Sep 2019 21:56:24 +0200
+Message-Id: <20190919195624.1140941-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1568877366-1758-1-git-send-email-akashast@codeaurora.org>
-References: <1568877366-1758-1-git-send-email-akashast@codeaurora.org>
-Cc:     mgautam@codeaurora.org, jslaby@suse.com,
-        bjorn.andersson@linaro.org, Akash Asthana <akashast@codeaurora.org>
-To:     Akash Asthana <akashast@codeaurora.org>, agross@kernel.org,
-        gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org
-From:   Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH] tty: serial: qcom_geni_serial: Wakeup over UART RX
-User-Agent: alot/0.8.1
-Date:   Thu, 19 Sep 2019 11:21:24 -0700
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Quoting Akash Asthana (2019-09-19 00:16:06)
-> Add system wakeup capability over UART RX line for wakeup capable UART.
-> When system is suspended, RX line act as an interrupt to wakeup system
-> for any communication requests from peer.
->=20
-> Cleanup of IRQ registration, moving it to probe from startup function.
+When registering a serdev controller, ACPI needs to be checked for
+devices attached to it. Currently, all immediate children of the ACPI
+node of the controller are assumed to be UART client devices for this
+controller. Furthermore, these devices are not searched elsewhere.
 
-Probably should be a different patch than the one that adds wakeup irq
-handling.
+This is incorrect: Similar to SPI and I2C devices, the UART client
+device definition (via UARTSerialBusV2) can reside anywhere in the ACPI
+namespace as resource definition inside the _CRS method and points to
+the controller via its ResourceSource field. This field may either
+contain a fully qualified or relative path, indicating the controller
+device. To address this, we need to walk over the whole ACPI namespace,
+looking at each resource definition, and match the client device to the
+controller via this field.
 
->=20
-> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 73 +++++++++++++++++++++++++++++=
-------
->  1 file changed, 62 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/q=
-com_geni_serial.c
-> index 35e5f9c..43d1da4 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -19,6 +19,8 @@
->  #include <linux/slab.h>
->  #include <linux/tty.h>
->  #include <linux/tty_flip.h>
-> +#include <linux/pm_wakeirq.h>
-> +#include <linux/irq.h>
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+This patch is similar to the the implementations in drivers/spi/spi.c
+(see commit 4c3c59544f33e97cf8557f27e05a9904ead16363) and
+drivers/i2c/i2c-core-acpi.c. However, I think that there may be an
+issues with these two implementations: Both walk over the whole ACPI
+namespace, but only match the first SPI or I2C resource (respectively),
+so I think there may be problems when multiple SPI or I2C resources are
+defined under the same ACPI device node (as in second or third SPI/I2C
+resource definitions being ignored). Please note, however, that I am by
+no means qualified with regards to this, and this might be totally fine.
+Nevertheless I'd appreciate if anyone with more knowledge on the subject
+could have a look at it. This patch would avoid this problem (for UART)
+by simply walking all resource definitions via acpi_walk_resources.
 
-Can you sort these includes alphabetically? Or at least attempt to place
-this somewhere in there alphabetically?
+There is a further issue in the serdev ACPI implementation that this
+patch does not address: ACPI UART resource definitions contain things
+like the initial baud-rate, parity, flow-control, etc. As far as I know,
+these things can currently only be set once the device is opened.
+Furthermore, some option values, such as ParityTypeMark, are not (yet)
+supported. I'd be willing to try and implement setting the currently
+supported values based on ACPI for a future patch, if anyone can provide
+me with some pointers on how to do that.
 
-> =20
->  /* UART specific GENI registers */
->  #define SE_UART_LOOPBACK_CFG           0x22c
-> @@ -98,6 +100,8 @@
->  #define CONSOLE_RX_BYTES_PW 4
->  #endif
-> =20
-> +#define WAKEUP_EVENT_MSEC   2000
+I have personally tested this patch on a Microsoft Surface Book 2, which
+like all newer MS Surface devices has a UART EC, and it has been in use
+(in some form or another) for a couple of months on other Surface
+devices via a patched kernel [1, 2, 3]. I can, however, not speak for
+any non-Microsoft devices or potential Apple ACPI quirks.
 
-This is used one place. Just inline it and drop this define.
+[1]: https://github.com/jakeday/linux-surface/
+[2]: https://github.com/qzed/linux-surface/
+[3]: https://github.com/qzed/linux-surfacegen5-acpi/
 
-> +
->  struct qcom_geni_serial_port {
->         struct uart_port uport;
->         struct geni_se se;
-> @@ -115,6 +119,7 @@ struct qcom_geni_serial_port {
->         bool brk;
-> =20
->         unsigned int tx_remaining;
-> +       int wakeup_irq;
->  };
-> =20
->  static const struct uart_ops qcom_geni_console_pops;
-> @@ -756,6 +761,15 @@ static void qcom_geni_serial_handle_tx(struct uart_p=
-ort *uport, bool done,
->                 uart_write_wakeup(uport);
->  }
-> =20
-> +static irqreturn_t qcom_geni_serial_wakeup_isr(int isr, void *dev)
-> +{
-> +       struct uart_port *uport =3D dev;
-> +
-> +       pm_wakeup_event(uport->dev, WAKEUP_EVENT_MSEC);
-> +
-> +       return IRQ_HANDLED;
-> +}
-> +
->  static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
->  {
->         u32 m_irq_en;
-> @@ -1290,6 +1297,8 @@ static int qcom_geni_serial_probe(struct platform_d=
-evice *pdev)
->         port->rx_fifo_depth =3D DEF_FIFO_DEPTH_WORDS;
->         port->tx_fifo_width =3D DEF_FIFO_WIDTH_BITS;
-> =20
-> +       scnprintf(port->name, sizeof(port->name), "qcom_geni_serial_%s%d",
-> +               (uart_console(uport) ? "console" : "uart"), uport->line);
+ drivers/tty/serdev/core.c | 64 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 56 insertions(+), 8 deletions(-)
 
-This looks like an unrelated change?
-
->         irq =3D platform_get_irq(pdev, 0);
->         if (irq < 0) {
->                 dev_err(&pdev->dev, "Failed to get IRQ %d\n", irq);
-> @@ -1297,6 +1306,39 @@ static int qcom_geni_serial_probe(struct platform_=
-device *pdev)
->         }
->         uport->irq =3D irq;
-> =20
-> +       irq_set_status_flags(uport->irq, IRQ_NOAUTOEN);
-> +       ret =3D devm_request_irq(uport->dev, uport->irq, qcom_geni_serial=
-_isr,
-> +                               IRQF_TRIGGER_HIGH, port->name, uport);
-> +       if (ret) {
-> +               dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       if (!console) {
-> +               port->wakeup_irq =3D platform_get_irq(pdev, 1);
-
-Can you use dev_pm_set_wake_irq() instead?
-
-> +               if (port->wakeup_irq < 0) {
-> +                       dev_err(&pdev->dev, "Failed to get wakeup IRQ %d\=
-n",
-> +                                                       port->wakeup_irq);
-> +               } else {
-> +                       dev_info(&pdev->dev, "wakeup_irq =3D%d\n",
-> +                               port->wakeup_irq);
-
-Please no dev_info() messages like this.
-
-> +                       irq_set_status_flags(port->wakeup_irq, IRQ_NOAUTO=
-EN);
-> +                       ret =3D devm_request_irq(uport->dev, port->wakeup=
-_irq,
-> +                               qcom_geni_serial_wakeup_isr,
-> +                               IRQF_TRIGGER_FALLING, "uart_wakeup", upor=
-t);
-> +                       if (ret) {
-> +                               dev_err(uport->dev, "Failed to register w=
-akeup "
-> +                                       "IRQ ret %d\n", ret);
-
-Don't split format strings across many lines. The arguments can go to a
-different line, but the string can be on a single line.
-
-> +                               return ret;
-> +                       }
-> +
-> +                       device_init_wakeup(&pdev->dev, true);
-> +                       ret =3D enable_irq_wake(port->wakeup_irq);
-> +                       if (unlikely(ret))
-> +                               dev_err(uport->dev, "%s:Failed to set IRQ=
- "
-> +                                       "wake:%d\n", __func__, ret);
-> +               }
-> +       }
->         uport->private_data =3D drv;
->         platform_set_drvdata(pdev, port);
->         port->handle_rx =3D console ? handle_rx_console : handle_rx_uart;
-> @@ -1311,6 +1353,7 @@ static int qcom_geni_serial_remove(struct platform_=
-device *pdev)
->         struct uart_driver *drv =3D port->uport.private_data;
-> =20
->         uart_remove_one_port(drv, &port->uport);
-> +
->         return 0;
->  }
-> =20
-
-This hunk shouldn't be here. Please drop
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index a0ac16ee6575..1c8360deea77 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -582,18 +582,64 @@ static acpi_status acpi_serdev_register_device(struct serdev_controller *ctrl,
+ 	return AE_OK;
+ }
+ 
+-static acpi_status acpi_serdev_add_device(acpi_handle handle, u32 level,
+-				       void *data, void **return_value)
++struct acpi_serdev_resource_context {
++	struct serdev_controller *controller;
++	struct acpi_device *device;
++};
++
++static acpi_status
++acpi_serdev_add_device_from_resource(struct acpi_resource *resource, void *data)
+ {
+-	struct serdev_controller *ctrl = data;
+-	struct acpi_device *adev;
++	struct acpi_serdev_resource_context *ctx
++		= (struct acpi_serdev_resource_context *)data;
++	struct acpi_resource_source *ctrl_name;
++	acpi_handle ctrl_handle;
++
++	if (resource->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
++		return AE_OK;
+ 
+-	if (acpi_bus_get_device(handle, &adev))
++	if (resource->data.common_serial_bus.type
++	    != ACPI_RESOURCE_SERIAL_TYPE_UART)
+ 		return AE_OK;
+ 
+-	return acpi_serdev_register_device(ctrl, adev);
++	ctrl_name = &resource->data.common_serial_bus.resource_source;
++	if (ctrl_name->string_length == 0 || !ctrl_name->string_ptr)
++		return AE_OK;
++
++	if (acpi_get_handle(ctx->device->handle, ctrl_name->string_ptr,
++			    &ctrl_handle))
++		return AE_OK;
++
++	if (ctrl_handle == ACPI_HANDLE(ctx->controller->dev.parent))
++		return acpi_serdev_register_device(ctx->controller,
++						   ctx->device);
++
++	return AE_OK;
+ }
+ 
++static acpi_status
++acpi_serdev_add_devices_from_resources(acpi_handle handle, u32 level,
++				       void *data, void **return_value)
++{
++	struct acpi_serdev_resource_context ctx;
++	acpi_status status;
++
++	ctx.controller = (struct serdev_controller *)data;
++	status = acpi_bus_get_device(handle, &ctx.device);
++	if (status)
++		return AE_OK;		// ignore device if not present
++
++	status = acpi_walk_resources(handle, METHOD_NAME__CRS,
++				     acpi_serdev_add_device_from_resource,
++				     &ctx);
++	if (status == AE_NOT_FOUND)
++		return AE_OK;		// ignore if _CRS is not found
++	else
++		return status;
++}
++
++#define SERDEV_ACPI_ENUMERATE_MAX_DEPTH		32
++
+ static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
+ {
+ 	acpi_status status;
+@@ -603,8 +649,10 @@ static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
+ 	if (!handle)
+ 		return -ENODEV;
+ 
+-	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, handle, 1,
+-				     acpi_serdev_add_device, NULL, ctrl, NULL);
++	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT,
++				     SERDEV_ACPI_ENUMERATE_MAX_DEPTH,
++				     acpi_serdev_add_devices_from_resources,
++				     NULL, ctrl, NULL);
+ 	if (ACPI_FAILURE(status))
+ 		dev_dbg(&ctrl->dev, "failed to enumerate serdev slaves\n");
+ 
+-- 
+2.23.0
 
