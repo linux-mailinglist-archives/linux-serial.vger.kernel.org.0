@@ -2,210 +2,182 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1FFB8200
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2019 21:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D41B89C9
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2019 05:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390329AbfIST4q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Sep 2019 15:56:46 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40753 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387854AbfIST4q (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Sep 2019 15:56:46 -0400
-Received: by mail-wr1-f66.google.com with SMTP id l3so4384440wru.7;
-        Thu, 19 Sep 2019 12:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KrhHWVyRHuQgUbyMmguMXRSYml5yBV9Jt6pBfOObHPo=;
-        b=EgziUIECg9S5aRxVwIEHUQnmDkMIbeSwGZ+d8k1yqttlnKcQcB8980x4AZ02t+GPW2
-         b4XEvPBepb0wGdJkppcF3lZn2aLBtI+sGAiEwn9P6ARdwmHFRTBEfw5EJ4oIR55poIIl
-         HjUs2F0o33/r2Ohgr3JeZgInr5W9i87fspSHrWfYXw8VOqOL2PYx+7wj765jyP8HPKlh
-         msNGb/yi7vJQMnpbq5vLKgJZypkZbyN+eBB1I4x2Y4QlshsJBgCsBJx22UhttVk+fHCq
-         1GPLt7r7hoQEa3B8d5Oi9A1IjbEVG6N0KgwwsV+feFjQ9jtAV+tleh/mUandVGuWkqsN
-         aDbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KrhHWVyRHuQgUbyMmguMXRSYml5yBV9Jt6pBfOObHPo=;
-        b=K8UiDsEiLta76995f+7IrfiVmm/qFaTAuS7iFt2wAix2ynK3igwrMSI+KsjLh1fvYQ
-         5zq206+X9xzihqerDuJTkRzSJ73yNH9reJC6YbnrTkdiR9Bb1rg3AYH9gG94WVKu90ns
-         c9HZoV2YRN1vHaiTVIsEYpge2bobMn6govMzrYcVrEfLLmOfthxawjorzCkF4IBkeXTG
-         4R/jNSPXDgdlbnhga6jM3sfOdSa0u08BJNYN6EIc4FDbwv8QyOQ9RArLtzHdsLTntGuM
-         30aGJZTN+pJoFnQnGuMJlPmM4p30R8kuqlnoMoqti65CKmnlIfV5qpU/zLeDl1Qzxnsc
-         KyJA==
-X-Gm-Message-State: APjAAAVpQwLV8j6px2LB8wajfKmequPRSAk+wyJYNRxxa7G6Z7yhTxg5
-        DrnAEbT/4GiDFtDVl6mHy3g=
-X-Google-Smtp-Source: APXvYqys2In+Oqd9HfyjYuY9xLlWMZng1jIJEYABpKBowJXuIUF91l5q4lModrLVq/MPIt/bpfUCFQ==
-X-Received: by 2002:a5d:66cb:: with SMTP id k11mr7967835wrw.174.1568923003769;
-        Thu, 19 Sep 2019 12:56:43 -0700 (PDT)
-Received: from xws.fritz.box (pD9E5AB20.dip0.t-ipconnect.de. [217.229.171.32])
-        by smtp.gmail.com with ESMTPSA id f143sm12311104wme.40.2019.09.19.12.56.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2019 12:56:43 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Johan Hovold <johan@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-serial@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH] serdev: Add ACPI devices by ResourceSource field
-Date:   Thu, 19 Sep 2019 21:56:24 +0200
-Message-Id: <20190919195624.1140941-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.23.0
+        id S2404284AbfITDnm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Sep 2019 23:43:42 -0400
+Received: from mail-eopbgr20067.outbound.protection.outlook.com ([40.107.2.67]:48405
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2404239AbfITDnl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 19 Sep 2019 23:43:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NGiNSfxfU+wOUd4Rn473Qg+arjHI03bflNiD7gmHEp279Q2/XHX8EjY+Rs36nBN07YvumoBcL+gxVeleD66y00jYReM4Ks4rV15C5CZA5NY6Rka/D3l9fq7yDMMf8n8ft7+qr14mwsxYAFynkE19SYH9vs3ZWNEWlk2Yrb87L6C2OBzhsAR/QakT/fzQPGxBuK3Lr2QYBPXxaK6lByG+aEs/MxEw8qjPn4v1H+ExcS+rxRf+zDQj5wZnvyLa5mvi85OQPAnIQYpmzuttOzawq8SYu/+fEdarskRhAIBK3b/PfVMk94ESTykiT15MsaTmaPBdhTW7Ep5jvFVfjbOYtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5NTKtOxZwLGgRy2Vq2+o/CsJYcRu0n9V+GGGCgvXd74=;
+ b=MyMZX6swhpA5GDpbscfoqBG0U11gTXMpb/zyxWarmWm7QgU9Gvp0abXJvfbLqYRkpIBtQZ5DyX/+SZfcU2FCF43mkojTaH9daJL95ty5lryEZiPey44kcfKrglfqYH33jovgLXTDClCiUup4gaZEanIQ87swvdOv3U34s0hHiD1KXnW1wlsf+YWdltB3cOrGtEsR8RrFWSWU1oycucs6UmYzZ/cIHNdcrwgS7ONVOtQ2QaxeC4Sm1SD+QRGan91HkJgWecS6YFR3W8zXkjlTz69KwgwNQTrzzeWIzeqkrjP9SK4G/RSLbVvk3xWZzzemJoD4Nqth9pqEnVd3i02+Fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5NTKtOxZwLGgRy2Vq2+o/CsJYcRu0n9V+GGGCgvXd74=;
+ b=MEtubqVgQ8uGTjGPVdIeeoOLskk/BpwN8KhisIJicNVlJTD6ghaR2uP+eVpLwtfFcqfvhwPjj7MF5M4H0/ew2cMzvMjZ2eZ0EDfhMiMer4KzreR9VvLGCiLPQA7MasyAkFBHDcnn7IcntzLf9dYwLgSd/nXewpYHcLD0C7ykxHU=
+Received: from VI1PR0402MB3600.eurprd04.prod.outlook.com (52.134.5.23) by
+ VI1PR0402MB3376.eurprd04.prod.outlook.com (52.134.1.25) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.15; Fri, 20 Sep 2019 03:42:58 +0000
+Received: from VI1PR0402MB3600.eurprd04.prod.outlook.com
+ ([fe80::f919:a62a:998c:6e9a]) by VI1PR0402MB3600.eurprd04.prod.outlook.com
+ ([fe80::f919:a62a:998c:6e9a%6]) with mapi id 15.20.2284.009; Fri, 20 Sep 2019
+ 03:42:58 +0000
+From:   Andy Duan <fugang.duan@nxp.com>
+To:     Philipp Puschmann <philipp.puschmann@emlix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Robin Gong <yibin.gong@nxp.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [EXT] [PATCH v3] serial: imx: adapt rx buffer and dma periods
+Thread-Topic: [EXT] [PATCH v3] serial: imx: adapt rx buffer and dma periods
+Thread-Index: AQHVbvmzoURW9oife0iGKep4oJxlpacz42bg
+Date:   Fri, 20 Sep 2019 03:42:57 +0000
+Message-ID: <VI1PR0402MB3600CA068AEBAC63D3CE6A4CFF880@VI1PR0402MB3600.eurprd04.prod.outlook.com>
+References: <20190919145114.13006-1-philipp.puschmann@emlix.com>
+In-Reply-To: <20190919145114.13006-1-philipp.puschmann@emlix.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=fugang.duan@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e25efc45-fd56-452d-c054-08d73d7ca0dd
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3376;
+x-ms-traffictypediagnostic: VI1PR0402MB3376:|VI1PR0402MB3376:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0402MB33764E00A8A96B8462167FCAFF880@VI1PR0402MB3376.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0166B75B74
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(136003)(39860400002)(346002)(366004)(199004)(189003)(54534003)(7696005)(66476007)(66556008)(5660300002)(66946007)(6246003)(66446008)(64756008)(99286004)(2906002)(76176011)(102836004)(6506007)(4326008)(52536014)(25786009)(229853002)(55016002)(9686003)(7736002)(7416002)(305945005)(6436002)(74316002)(316002)(76116006)(54906003)(3846002)(110136005)(81156014)(8936002)(81166006)(6116002)(8676002)(71190400001)(14444005)(71200400001)(256004)(14454004)(476003)(446003)(11346002)(66066001)(86362001)(486006)(26005)(2501003)(478600001)(186003)(33656002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3376;H:VI1PR0402MB3600.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: NyqFIHVPRJq0WkJj1eMKBBLqkAqSE5gKzVToOIpfvFXyZGq12FiZ+F+PEOfntiHcc0LFG/1HODQmcqhOgb0ElWpVYFG/cElUe8sKD1lFMN6vf1vlG8OOoGQyLgY0oLAffhDB3Udo3VplBySzQcUoFux16xCTn7Je3AsIf8qbyCAK30SIs+sCxjNeEazPuBKj+GpjytOSpF/+A3nBUff4+x2GT2x0tfDUOWmToBePYxrhOgdZDXTdkv6bns6b+H3JQ7afgovyV0Y2Kd1c8CwdrOL/fuyW13JoLzxqiC+21XOuGJ3OzeLHxQM1r4WVaKdz1EAI6hLnEF5OeiunctbiTMHCWzvTCvWym6ft7ulXMlgR7s1wIe0PvyC8qOPSa6ecBwoLunEIGXUr0lwYpBiPbXB4QvfNVIQNDahYUbYLCVo=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e25efc45-fd56-452d-c054-08d73d7ca0dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2019 03:42:57.9501
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BmY5dXgVuWXDsl4yRLB/dazZDvTpuERCF+TZAwMfz8Yo7urt24WYFgIp3bLNz9K2IPyd48u45oKk3PJWGlrglQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3376
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-When registering a serdev controller, ACPI needs to be checked for
-devices attached to it. Currently, all immediate children of the ACPI
-node of the controller are assumed to be UART client devices for this
-controller. Furthermore, these devices are not searched elsewhere.
+From: Philipp Puschmann <philipp.puschmann@emlix.com> Sent: Thursday, Septe=
+mber 19, 2019 10:51 PM
+> Using only 4 DMA periods for UART RX is very few if we have a high freque=
+ncy
+> of small transfers - like in our case using Bluetooth with many small pac=
+kets
+> via UART - causing many dma transfers but in each only filling a fraction=
+ of a
+> single buffer. Such a case may lead to the situation that DMA RX transfer=
+ is
+> triggered but no free buffer is available. When this happens dma channel =
+ist
+> stopped - with the patch
+> "dmaengine: imx-sdma: fix dma freezes" temporarily only - with the possib=
+le
+> consequences that:
+> with disabled hw flow control:
+>   If enough data is incoming on UART port the RX FIFO runs over and
+>   characters will be lost. What then happens depends on upper layer.
+>=20
+> with enabled hw flow control:
+>   If enough data is incoming on UART port the RX FIFO reaches a level
+>   where CTS is deasserted and remote device sending the data stops.
+>   If it fails to stop timely the i.MX' RX FIFO may run over and data
+>   get lost. Otherwise it's internal TX buffer may getting filled to
+>   a point where it runs over and data is again lost. It depends on
+>   the remote device how this case is handled and if it is recoverable.
+>=20
+> Obviously we want to avoid having no free buffers available. So we decrea=
+se
+> the size of the buffers and increase their number and the total buffer si=
+ze.
+>=20
+> Signed-off-by: Philipp Puschmann <philipp.puschmann@emlix.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+>=20
+> Changelog v3:
+>  - enhance description
+>=20
+> Changelog v2:
+>  - split this patch from series "Fix UART DMA freezes for iMX6"
+>  - add Reviewed-by tag
+>=20
+>  drivers/tty/serial/imx.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c index
+> 87c58f9f6390..51dc19833eab 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -1034,8 +1034,6 @@ static void imx_uart_timeout(struct timer_list *t)
+>         }
+>  }
+>=20
+> -#define RX_BUF_SIZE    (PAGE_SIZE)
+> -
+>  /*
+>   * There are two kinds of RX DMA interrupts(such as in the MX6Q):
+>   *   [1] the RX DMA buffer is full.
+> @@ -1118,7 +1116,8 @@ static void imx_uart_dma_rx_callback(void
+> *data)  }
+>=20
+>  /* RX DMA buffer periods */
+> -#define RX_DMA_PERIODS 4
+> +#define RX_DMA_PERIODS 16
+> +#define RX_BUF_SIZE    (PAGE_SIZE / 4)
+>=20
+Why to decrease the DMA RX buffer size here ?
 
-This is incorrect: Similar to SPI and I2C devices, the UART client
-device definition (via UARTSerialBusV2) can reside anywhere in the ACPI
-namespace as resource definition inside the _CRS method and points to
-the controller via its ResourceSource field. This field may either
-contain a fully qualified or relative path, indicating the controller
-device. To address this, we need to walk over the whole ACPI namespace,
-looking at each resource definition, and match the client device to the
-controller via this field.
+The current DMA implementation support DMA cyclic mode, one SDMA BD receive=
+ one Bluetooth frame can
+bring better performance.
+As you know, for L2CAP, a maximum transmission unit (MTU) associated with t=
+he largest Baseband payload
+is 341 bytes for DH5 packets.
 
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
-This patch is similar to the the implementations in drivers/spi/spi.c
-(see commit 4c3c59544f33e97cf8557f27e05a9904ead16363) and
-drivers/i2c/i2c-core-acpi.c. However, I think that there may be an
-issues with these two implementations: Both walk over the whole ACPI
-namespace, but only match the first SPI or I2C resource (respectively),
-so I think there may be problems when multiple SPI or I2C resources are
-defined under the same ACPI device node (as in second or third SPI/I2C
-resource definitions being ignored). Please note, however, that I am by
-no means qualified with regards to this, and this might be totally fine.
-Nevertheless I'd appreciate if anyone with more knowledge on the subject
-could have a look at it. This patch would avoid this problem (for UART)
-by simply walking all resource definitions via acpi_walk_resources.
+So I suggest to increase RX_BUF_SIZE along with RX_DMA_PERIODS to feasible =
+value.
 
-There is a further issue in the serdev ACPI implementation that this
-patch does not address: ACPI UART resource definitions contain things
-like the initial baud-rate, parity, flow-control, etc. As far as I know,
-these things can currently only be set once the device is opened.
-Furthermore, some option values, such as ParityTypeMark, are not (yet)
-supported. I'd be willing to try and implement setting the currently
-supported values based on ACPI for a future patch, if anyone can provide
-me with some pointers on how to do that.
+Andy
 
-I have personally tested this patch on a Microsoft Surface Book 2, which
-like all newer MS Surface devices has a UART EC, and it has been in use
-(in some form or another) for a couple of months on other Surface
-devices via a patched kernel [1, 2, 3]. I can, however, not speak for
-any non-Microsoft devices or potential Apple ACPI quirks.
-
-[1]: https://github.com/jakeday/linux-surface/
-[2]: https://github.com/qzed/linux-surface/
-[3]: https://github.com/qzed/linux-surfacegen5-acpi/
-
- drivers/tty/serdev/core.c | 64 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 56 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index a0ac16ee6575..1c8360deea77 100644
---- a/drivers/tty/serdev/core.c
-+++ b/drivers/tty/serdev/core.c
-@@ -582,18 +582,64 @@ static acpi_status acpi_serdev_register_device(struct serdev_controller *ctrl,
- 	return AE_OK;
- }
- 
--static acpi_status acpi_serdev_add_device(acpi_handle handle, u32 level,
--				       void *data, void **return_value)
-+struct acpi_serdev_resource_context {
-+	struct serdev_controller *controller;
-+	struct acpi_device *device;
-+};
-+
-+static acpi_status
-+acpi_serdev_add_device_from_resource(struct acpi_resource *resource, void *data)
- {
--	struct serdev_controller *ctrl = data;
--	struct acpi_device *adev;
-+	struct acpi_serdev_resource_context *ctx
-+		= (struct acpi_serdev_resource_context *)data;
-+	struct acpi_resource_source *ctrl_name;
-+	acpi_handle ctrl_handle;
-+
-+	if (resource->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
-+		return AE_OK;
- 
--	if (acpi_bus_get_device(handle, &adev))
-+	if (resource->data.common_serial_bus.type
-+	    != ACPI_RESOURCE_SERIAL_TYPE_UART)
- 		return AE_OK;
- 
--	return acpi_serdev_register_device(ctrl, adev);
-+	ctrl_name = &resource->data.common_serial_bus.resource_source;
-+	if (ctrl_name->string_length == 0 || !ctrl_name->string_ptr)
-+		return AE_OK;
-+
-+	if (acpi_get_handle(ctx->device->handle, ctrl_name->string_ptr,
-+			    &ctrl_handle))
-+		return AE_OK;
-+
-+	if (ctrl_handle == ACPI_HANDLE(ctx->controller->dev.parent))
-+		return acpi_serdev_register_device(ctx->controller,
-+						   ctx->device);
-+
-+	return AE_OK;
- }
- 
-+static acpi_status
-+acpi_serdev_add_devices_from_resources(acpi_handle handle, u32 level,
-+				       void *data, void **return_value)
-+{
-+	struct acpi_serdev_resource_context ctx;
-+	acpi_status status;
-+
-+	ctx.controller = (struct serdev_controller *)data;
-+	status = acpi_bus_get_device(handle, &ctx.device);
-+	if (status)
-+		return AE_OK;		// ignore device if not present
-+
-+	status = acpi_walk_resources(handle, METHOD_NAME__CRS,
-+				     acpi_serdev_add_device_from_resource,
-+				     &ctx);
-+	if (status == AE_NOT_FOUND)
-+		return AE_OK;		// ignore if _CRS is not found
-+	else
-+		return status;
-+}
-+
-+#define SERDEV_ACPI_ENUMERATE_MAX_DEPTH		32
-+
- static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
- {
- 	acpi_status status;
-@@ -603,8 +649,10 @@ static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
- 	if (!handle)
- 		return -ENODEV;
- 
--	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, handle, 1,
--				     acpi_serdev_add_device, NULL, ctrl, NULL);
-+	status = acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT,
-+				     SERDEV_ACPI_ENUMERATE_MAX_DEPTH,
-+				     acpi_serdev_add_devices_from_resources,
-+				     NULL, ctrl, NULL);
- 	if (ACPI_FAILURE(status))
- 		dev_dbg(&ctrl->dev, "failed to enumerate serdev slaves\n");
- 
--- 
-2.23.0
+>  static int imx_uart_start_rx_dma(struct imx_port *sport)  {
+> --
+> 2.23.0
 
