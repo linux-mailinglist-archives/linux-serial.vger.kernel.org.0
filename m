@@ -2,74 +2,259 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAC2B912E
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2019 15:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82E4B939D
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2019 17:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728236AbfITNxN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 20 Sep 2019 09:53:13 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:35685 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727481AbfITNxN (ORCPT
+        id S2389094AbfITPAl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 20 Sep 2019 11:00:41 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:20800 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388789AbfITPAk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 20 Sep 2019 09:53:13 -0400
-Received: by mail-oi1-f193.google.com with SMTP id x3so1815111oig.2;
-        Fri, 20 Sep 2019 06:53:12 -0700 (PDT)
+        Fri, 20 Sep 2019 11:00:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1568991639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eU6kqPiujW1B3w1mQlqkIqX0q06KEXv+uqjn+5HJvNc=;
+        b=SzP2WGPNPvQoryGxm8PoMR3Pjrwyc8yeAlg6cSOjqQvU5ysh7V+9Cc6N/fXhpwzN8m0Vqm
+        qfUOavpw6QsFPUq/36tiopmpXVE97oM9LXMeJufLzsI0raMp5DwrB5zm8zusi6v+7lvr0q
+        U4L31PxfXTJUITZf3i8TqNHCmjVuq/U=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-165-Hx1JfqpGOpe8lSvCaW2ZUg-1; Fri, 20 Sep 2019 11:00:33 -0400
+Received: by mail-ed1-f72.google.com with SMTP id n12so4351694edr.22
+        for <linux-serial@vger.kernel.org>; Fri, 20 Sep 2019 08:00:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ew6nG7uE2nCglBGvtLTGWDJ9g6OFEZPeUvSfGAO1CvA=;
-        b=IAU/mk6WiSwaigieZcQpajVAoiautaBfkbsIPHVW4hGPEFuXnHqB179zLx6SpOjYgV
-         m/zaJqvWiioFLB7GaQnwAHVL6raQj58qK0R4/BvvDMKeLPqUaV48G4maj+pUqjEiYnFA
-         8s+ljXNFEEMt1Yc1gKdAsnzLQLmeXlHdV45aaViP5Lfh2rgSjTqA12bIKAYEnL4oAr4H
-         Ej2xvfSAkoVduhhrUxcpMauA0F8fzS+iXSBgGCvG6vi8aOk5wIBQlzUo9YGhzFq18h+R
-         UQMICcAsxYpZbJfofc2t6GbdstvqULXL1ZdiZibrRA3DEg0MT5wdHO/i5xZWcXauuJfd
-         Ktcg==
-X-Gm-Message-State: APjAAAXCJquuXUedhfXd2Bk8ILTLhKQl+UYkEGLk+rUYqg/IXdNPW1u7
-        u+bkOcQGNLki+VItC+cA8JoUDdr5wqxP2msdoAo=
-X-Google-Smtp-Source: APXvYqxyoTNvKH7T458ph8kh+7/xWwRdrE5jz5zjyMR4oIb1jJD/RFwuE2RDNv0DtrqX2JS96ax+IqIjH9IvJiK/VZw=
-X-Received: by 2002:aca:dad4:: with SMTP id r203mr3113597oig.102.1568987591649;
- Fri, 20 Sep 2019 06:53:11 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LIEvaHWl+TgVQ81gN9syCKlW+rXjlPdhuPqlnIXrkVA=;
+        b=odhY8tfS7vxC8jCD0NCOtjezkdX6/+7/YSdyRfk9XDsLygshjStg3NzN+dqQFRWRhb
+         mH/zmtJssYxIqwAPxDqBP4Cf+1sEYiQzUbxau2I5+sQUr6HfgM55BwdIL3A3xK4U4HWd
+         0Il8eyLwyn3i4+cMFDfX0Z3t5cLUIWvRi/TiGetyZDrR+pycAWnglFIqopjkQPh+BvA9
+         NIBOAzeVJNJnKm1z5d40Knp8ySDAFmKSIohF3+bAh5d8QGw3RtTGSj/+juJcaybG/1oQ
+         fh++a9CL1GVHmifHVANoPU+L7EzwQtD1Um+usJgG6cE5aRctig4ZdoVydRrCEutMJbO4
+         oB6A==
+X-Gm-Message-State: APjAAAVe2jTrobUTz60+fNr80r90YywK3LKknAsvxwv87CYIRaXOxvYM
+        KOkh+sJ/W8HaZJo2e+AVjIRErL13nyAssjlY6olCnQIBNCFLz5/JniO2y7V83I2ph7KxUHJaJIv
+        dG8tlLlRdIS31iKh3mTrAERM6
+X-Received: by 2002:a17:906:4d58:: with SMTP id b24mr18592041ejv.263.1568991632680;
+        Fri, 20 Sep 2019 08:00:32 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyoFOPw5hvUocXOrNuPY0ea52dYYJ7Fm2ithxt7/2Ck81TNLtAlq5H1WkBixjYklFhIo2uaOA==
+X-Received: by 2002:a17:906:4d58:: with SMTP id b24mr18591948ejv.263.1568991631923;
+        Fri, 20 Sep 2019 08:00:31 -0700 (PDT)
+Received: from dhcp-44-196.space.revspace.nl ([2a0e:5700:4:11:6eb:1143:b8be:2b8])
+        by smtp.gmail.com with ESMTPSA id y5sm368389edr.94.2019.09.20.08.00.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Sep 2019 08:00:31 -0700 (PDT)
+Subject: Re: [PATCH] serdev: Add ACPI devices by ResourceSource field
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Johan Hovold <johan@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, linux-serial@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190919195624.1140941-1-luzmaximilian@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <50b016a1-ed4a-b848-4658-a05731727d7e@redhat.com>
+Date:   Fri, 20 Sep 2019 17:00:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <1568724324-26995-1-git-send-email-biju.das@bp.renesas.com>
-In-Reply-To: <1568724324-26995-1-git-send-email-biju.das@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 20 Sep 2019 15:53:00 +0200
-Message-ID: <CAMuHMdXOicpnUC7UNHT+P1bMsTKgm2oVsewnzjo4MmznwnNahA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: serial: sh-sci: Document r8a774b1 bindings
-To:     Biju Das <biju.das@bp.renesas.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms@verge.net.au>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190919195624.1140941-1-luzmaximilian@gmail.com>
+Content-Language: en-US
+X-MC-Unique: Hx1JfqpGOpe8lSvCaW2ZUg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 2:52 PM Biju Das <biju.das@bp.renesas.com> wrote:
-> RZ/G2N (R8A774B1) SoC also has the R-Car Gen3 compatible SCIF and
-> HSCIF ports, so document the SoC specific bindings.
->
-> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 9/19/19 9:56 PM, Maximilian Luz wrote:
+> When registering a serdev controller, ACPI needs to be checked for
+> devices attached to it. Currently, all immediate children of the ACPI
+> node of the controller are assumed to be UART client devices for this
+> controller. Furthermore, these devices are not searched elsewhere.
+>=20
+> This is incorrect: Similar to SPI and I2C devices, the UART client
+> device definition (via UARTSerialBusV2) can reside anywhere in the ACPI
+> namespace as resource definition inside the _CRS method and points to
+> the controller via its ResourceSource field. This field may either
+> contain a fully qualified or relative path, indicating the controller
+> device. To address this, we need to walk over the whole ACPI namespace,
+> looking at each resource definition, and match the client device to the
+> controller via this field.
+>=20
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 
-Gr{oetje,eeting}s,
+So as promised I've given this patch a try, unfortunately it breaks
+existing users of ACPI serdev device instantation.
 
-                        Geert
+After adding this patch "ls /sys/bus/serial/devices" is empty,
+where as before it gives:
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[root@dhcp-45-50 ~]# ls -l /sys/bus/serial/devices/
+total 0
+lrwxrwxrwx. 1 root root 0 Sep 20 16:43 serial0 -> ../../../devices/pci0000:=
+00/8086228A:00/serial0
+lrwxrwxrwx. 1 root root 0 Sep 20 16:43 serial0-0 -> ../../../devices/pci000=
+0:00/8086228A:00/serial0/serial0-0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+And since the serdev is missing bluetooth does not work.
+
+(ACPI instantiated serdev is used for UART attached Blueooth HCI-s on
+many Cherry Trail devices).
+
+I haven't looked why your patch is breakig things, I have a large backlog
+so I do not have time for that.
+
+But if you can provide me with a version of the patch with a bunch of
+debug printk-s added I'm happy to run that for you.
+
+I'll also send you the DSDT of the device I tested on off-list.
+
+Regards,
+
+Hans
+
+
+
+
+> ---
+> This patch is similar to the the implementations in drivers/spi/spi.c
+> (see commit 4c3c59544f33e97cf8557f27e05a9904ead16363) and
+> drivers/i2c/i2c-core-acpi.c. However, I think that there may be an
+> issues with these two implementations: Both walk over the whole ACPI
+> namespace, but only match the first SPI or I2C resource (respectively),
+> so I think there may be problems when multiple SPI or I2C resources are
+> defined under the same ACPI device node (as in second or third SPI/I2C
+> resource definitions being ignored). Please note, however, that I am by
+> no means qualified with regards to this, and this might be totally fine.
+> Nevertheless I'd appreciate if anyone with more knowledge on the subject
+> could have a look at it. This patch would avoid this problem (for UART)
+> by simply walking all resource definitions via acpi_walk_resources.
+>=20
+> There is a further issue in the serdev ACPI implementation that this
+> patch does not address: ACPI UART resource definitions contain things
+> like the initial baud-rate, parity, flow-control, etc. As far as I know,
+> these things can currently only be set once the device is opened.
+> Furthermore, some option values, such as ParityTypeMark, are not (yet)
+> supported. I'd be willing to try and implement setting the currently
+> supported values based on ACPI for a future patch, if anyone can provide
+> me with some pointers on how to do that.
+>=20
+> I have personally tested this patch on a Microsoft Surface Book 2, which
+> like all newer MS Surface devices has a UART EC, and it has been in use
+> (in some form or another) for a couple of months on other Surface
+> devices via a patched kernel [1, 2, 3]. I can, however, not speak for
+> any non-Microsoft devices or potential Apple ACPI quirks.
+>=20
+> [1]: https://github.com/jakeday/linux-surface/
+> [2]: https://github.com/qzed/linux-surface/
+> [3]: https://github.com/qzed/linux-surfacegen5-acpi/
+>=20
+>   drivers/tty/serdev/core.c | 64 ++++++++++++++++++++++++++++++++++-----
+>   1 file changed, 56 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+> index a0ac16ee6575..1c8360deea77 100644
+> --- a/drivers/tty/serdev/core.c
+> +++ b/drivers/tty/serdev/core.c
+> @@ -582,18 +582,64 @@ static acpi_status acpi_serdev_register_device(stru=
+ct serdev_controller *ctrl,
+>   =09return AE_OK;
+>   }
+>  =20
+> -static acpi_status acpi_serdev_add_device(acpi_handle handle, u32 level,
+> -=09=09=09=09       void *data, void **return_value)
+> +struct acpi_serdev_resource_context {
+> +=09struct serdev_controller *controller;
+> +=09struct acpi_device *device;
+> +};
+> +
+> +static acpi_status
+> +acpi_serdev_add_device_from_resource(struct acpi_resource *resource, voi=
+d *data)
+>   {
+> -=09struct serdev_controller *ctrl =3D data;
+> -=09struct acpi_device *adev;
+> +=09struct acpi_serdev_resource_context *ctx
+> +=09=09=3D (struct acpi_serdev_resource_context *)data;
+> +=09struct acpi_resource_source *ctrl_name;
+> +=09acpi_handle ctrl_handle;
+> +
+> +=09if (resource->type !=3D ACPI_RESOURCE_TYPE_SERIAL_BUS)
+> +=09=09return AE_OK;
+>  =20
+> -=09if (acpi_bus_get_device(handle, &adev))
+> +=09if (resource->data.common_serial_bus.type
+> +=09    !=3D ACPI_RESOURCE_SERIAL_TYPE_UART)
+>   =09=09return AE_OK;
+>  =20
+> -=09return acpi_serdev_register_device(ctrl, adev);
+> +=09ctrl_name =3D &resource->data.common_serial_bus.resource_source;
+> +=09if (ctrl_name->string_length =3D=3D 0 || !ctrl_name->string_ptr)
+> +=09=09return AE_OK;
+> +
+> +=09if (acpi_get_handle(ctx->device->handle, ctrl_name->string_ptr,
+> +=09=09=09    &ctrl_handle))
+> +=09=09return AE_OK;
+> +
+> +=09if (ctrl_handle =3D=3D ACPI_HANDLE(ctx->controller->dev.parent))
+> +=09=09return acpi_serdev_register_device(ctx->controller,
+> +=09=09=09=09=09=09   ctx->device);
+> +
+> +=09return AE_OK;
+>   }
+>  =20
+> +static acpi_status
+> +acpi_serdev_add_devices_from_resources(acpi_handle handle, u32 level,
+> +=09=09=09=09       void *data, void **return_value)
+> +{
+> +=09struct acpi_serdev_resource_context ctx;
+> +=09acpi_status status;
+> +
+> +=09ctx.controller =3D (struct serdev_controller *)data;
+> +=09status =3D acpi_bus_get_device(handle, &ctx.device);
+> +=09if (status)
+> +=09=09return AE_OK;=09=09// ignore device if not present
+> +
+> +=09status =3D acpi_walk_resources(handle, METHOD_NAME__CRS,
+> +=09=09=09=09     acpi_serdev_add_device_from_resource,
+> +=09=09=09=09     &ctx);
+> +=09if (status =3D=3D AE_NOT_FOUND)
+> +=09=09return AE_OK;=09=09// ignore if _CRS is not found
+> +=09else
+> +=09=09return status;
+> +}
+> +
+> +#define SERDEV_ACPI_ENUMERATE_MAX_DEPTH=09=0932
+> +
+>   static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
+>   {
+>   =09acpi_status status;
+> @@ -603,8 +649,10 @@ static int acpi_serdev_register_devices(struct serde=
+v_controller *ctrl)
+>   =09if (!handle)
+>   =09=09return -ENODEV;
+>  =20
+> -=09status =3D acpi_walk_namespace(ACPI_TYPE_DEVICE, handle, 1,
+> -=09=09=09=09     acpi_serdev_add_device, NULL, ctrl, NULL);
+> +=09status =3D acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT,
+> +=09=09=09=09     SERDEV_ACPI_ENUMERATE_MAX_DEPTH,
+> +=09=09=09=09     acpi_serdev_add_devices_from_resources,
+> +=09=09=09=09     NULL, ctrl, NULL);
+>   =09if (ACPI_FAILURE(status))
+>   =09=09dev_dbg(&ctrl->dev, "failed to enumerate serdev slaves\n");
+>  =20
+>=20
+
