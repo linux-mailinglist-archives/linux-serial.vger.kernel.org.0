@@ -2,259 +2,151 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E82E4B939D
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2019 17:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D5FB96C3
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2019 19:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389094AbfITPAl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 20 Sep 2019 11:00:41 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:20800 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388789AbfITPAk (ORCPT
+        id S2405017AbfITRv0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 20 Sep 2019 13:51:26 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:33551 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404970AbfITRv0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 20 Sep 2019 11:00:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1568991639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eU6kqPiujW1B3w1mQlqkIqX0q06KEXv+uqjn+5HJvNc=;
-        b=SzP2WGPNPvQoryGxm8PoMR3Pjrwyc8yeAlg6cSOjqQvU5ysh7V+9Cc6N/fXhpwzN8m0Vqm
-        qfUOavpw6QsFPUq/36tiopmpXVE97oM9LXMeJufLzsI0raMp5DwrB5zm8zusi6v+7lvr0q
-        U4L31PxfXTJUITZf3i8TqNHCmjVuq/U=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-165-Hx1JfqpGOpe8lSvCaW2ZUg-1; Fri, 20 Sep 2019 11:00:33 -0400
-Received: by mail-ed1-f72.google.com with SMTP id n12so4351694edr.22
-        for <linux-serial@vger.kernel.org>; Fri, 20 Sep 2019 08:00:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        Fri, 20 Sep 2019 13:51:26 -0400
+Received: by mail-pl1-f193.google.com with SMTP id d22so2207979pls.0;
+        Fri, 20 Sep 2019 10:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LIEvaHWl+TgVQ81gN9syCKlW+rXjlPdhuPqlnIXrkVA=;
-        b=odhY8tfS7vxC8jCD0NCOtjezkdX6/+7/YSdyRfk9XDsLygshjStg3NzN+dqQFRWRhb
-         mH/zmtJssYxIqwAPxDqBP4Cf+1sEYiQzUbxau2I5+sQUr6HfgM55BwdIL3A3xK4U4HWd
-         0Il8eyLwyn3i4+cMFDfX0Z3t5cLUIWvRi/TiGetyZDrR+pycAWnglFIqopjkQPh+BvA9
-         NIBOAzeVJNJnKm1z5d40Knp8ySDAFmKSIohF3+bAh5d8QGw3RtTGSj/+juJcaybG/1oQ
-         fh++a9CL1GVHmifHVANoPU+L7EzwQtD1Um+usJgG6cE5aRctig4ZdoVydRrCEutMJbO4
-         oB6A==
-X-Gm-Message-State: APjAAAVe2jTrobUTz60+fNr80r90YywK3LKknAsvxwv87CYIRaXOxvYM
-        KOkh+sJ/W8HaZJo2e+AVjIRErL13nyAssjlY6olCnQIBNCFLz5/JniO2y7V83I2ph7KxUHJaJIv
-        dG8tlLlRdIS31iKh3mTrAERM6
-X-Received: by 2002:a17:906:4d58:: with SMTP id b24mr18592041ejv.263.1568991632680;
-        Fri, 20 Sep 2019 08:00:32 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyoFOPw5hvUocXOrNuPY0ea52dYYJ7Fm2ithxt7/2Ck81TNLtAlq5H1WkBixjYklFhIo2uaOA==
-X-Received: by 2002:a17:906:4d58:: with SMTP id b24mr18591948ejv.263.1568991631923;
-        Fri, 20 Sep 2019 08:00:31 -0700 (PDT)
-Received: from dhcp-44-196.space.revspace.nl ([2a0e:5700:4:11:6eb:1143:b8be:2b8])
-        by smtp.gmail.com with ESMTPSA id y5sm368389edr.94.2019.09.20.08.00.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Sep 2019 08:00:31 -0700 (PDT)
-Subject: Re: [PATCH] serdev: Add ACPI devices by ResourceSource field
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
+        bh=3CrXeC4LhwNob4cmLLTWLe1VRgX4UE5/WFGL96oHNLk=;
+        b=TrQNrlHGD2A6CG6toILqFSZ+vNbuGpDD/qERbwPB8t5QRwLcdiplvDxV4lzNQLRwET
+         47GVkU+rIxZ9EoekBlMcThpKURaResIfGQC7CIHckq/I+DhHlbSjCPfLqJWv7509wMLD
+         c2K201WjGbH7tD8rbzS+3jkRH7QLjwB5usBxfzkOR3mFRcCM0mTgQU7BbVKutJHral3a
+         +tDjEEKGmSAhXO3deGZjqlp14chLHoTiE36Htisrl3l+WFjUoXUja14QfYZ3j5076rI2
+         swIOFK9yQFsA1cuNQK3Im0puhGz5lmWUokedz6jQzr1e8Co/QTvbU5kbHhTahllNE+08
+         xTLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=3CrXeC4LhwNob4cmLLTWLe1VRgX4UE5/WFGL96oHNLk=;
+        b=nXTZuHDxvdH0K3zNzzDpDc0ZxfffSaFBGzD0EN6iniC6O/zKaWZzZFRUJXwp0HnQuS
+         Y4edOK1Q4fAit7JLThrSX48A3/qN6dnalghT8Y7lQx/Vcx4oUI9nw+sqvOgO+SpGUOCp
+         v2C2vA75P31ecWoBgulM85b+p2Ua22/HIuiaydn5V2kHoEz6HrsT/qkNcCXCEuk4W62a
+         l/BUiazaPt1zE5CYhUdnj0xPAcW/sBuejhlDX5vCWURvhuwn6g07qCk0sr102kNij5to
+         qAcelZepfggB2Tt2x4a/0bq+WcK1mhpweUGpqLDWY538DZ5YdmQ4beCNjRr1cTMFI0Gp
+         mucQ==
+X-Gm-Message-State: APjAAAVDA6jly+XSBcjpR9CRuYdBAx6/3jvTwb+2UsuN9hnFJ/nMwuYv
+        069tJEu/u0hmTroma9j9+8I=
+X-Google-Smtp-Source: APXvYqzk73FAfuUXnbLbApgqtdj/qWIfb3TIp7RRMyrJcUHPLOSc3v7s5M1snaWsK4U+Ym9vSNWe1A==
+X-Received: by 2002:a17:902:b617:: with SMTP id b23mr17802447pls.184.1569001883457;
+        Fri, 20 Sep 2019 10:51:23 -0700 (PDT)
+Received: from [10.67.50.53] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c128sm2840117pfc.166.2019.09.20.10.51.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 20 Sep 2019 10:51:22 -0700 (PDT)
+Subject: Re: [PATCH] serial: bcm2835: Use devm_platform_ioremap_resource() in
+ bcm2835aux_serial_probe()
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        linux-serial@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Eric Anholt <eric@anholt.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Johan Hovold <johan@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-serial@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190919195624.1140941-1-luzmaximilian@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <50b016a1-ed4a-b848-4658-a05731727d7e@redhat.com>
-Date:   Fri, 20 Sep 2019 17:00:29 +0200
+        Jiri Slaby <jslaby@suse.com>,
+        Martin Sperl <kernel@martin.sperl.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Himanshu Jha <himanshujha199640@gmail.com>
+References: <fcb34c72-89c7-9993-fc0a-ba3a61708bec@web.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
+ xGlkaOSDuu09rxuW+69Y2f1TzjFuGpBk4ysWOR85O2Nx8AJ6fYGCoeTbovrNlGT1M9obSFGQ
+ X3IzRnWoqlfudjTO5TKoqkbOgpYqIo5n1QbEjCCwCwCg3DOH/4ug2AUUlcIT9/l3pGvoRJ0E
+ AICDzi3l7pmC5IWn2n1mvP5247urtHFs/uusE827DDj3K8Upn2vYiOFMBhGsxAk6YKV6IP0d
+ ZdWX6fqkJJlu9cSDvWtO1hXeHIfQIE/xcqvlRH783KrihLcsmnBqOiS6rJDO2x1eAgC8meAX
+ SAgsrBhcgGl2Rl5gh/jkeA5ykwbxA/9u1eEuL70Qzt5APJmqVXR+kWvrqdBVPoUNy/tQ8mYc
+ nzJJ63ng3tHhnwHXZOu8hL4nqwlYHRa9eeglXYhBqja4ZvIvCEqSmEukfivk+DlIgVoOAJbh
+ qIWgvr3SIEuR6ayY3f5j0f2ejUMYlYYnKdiHXFlF9uXm1ELrb0YX4GMHz7QnRmxvcmlhbiBG
+ YWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5jb20+iGYEExECACYCGyMGCwkIBwMCBBUCCAME
+ FgIDAQIeAQIXgAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2DvCVAJ4u4/bPF4P3jxb4qEY8I2gS
+ 6hG0gACffNWlqJ2T4wSSn+3o7CCZNd7SLSC5BA0ESM+4EhAQAL/o09boR9D3Vk1Tt7+gpYr3
+ WQ6hgYVON905q2ndEoA2J0dQxJNRw3snabHDDzQBAcqOvdi7YidfBVdKi0wxHhSuRBfuOppu
+ pdXkb7zxuPQuSveCLqqZWRQ+Cc2QgF7SBqgznbe6Ngout5qXY5Dcagk9LqFNGhJQzUGHAsIs
+ hap1f0B1PoUyUNeEInV98D8Xd/edM3mhO9nRpUXRK9Bvt4iEZUXGuVtZLT52nK6Wv2EZ1TiT
+ OiqZlf1P+vxYLBx9eKmabPdm3yjalhY8yr1S1vL0gSA/C6W1o/TowdieF1rWN/MYHlkpyj9c
+ Rpc281gAO0AP3V1G00YzBEdYyi0gaJbCEQnq8Vz1vDXFxHzyhgGz7umBsVKmYwZgA8DrrB0M
+ oaP35wuGR3RJcaG30AnJpEDkBYHznI2apxdcuTPOHZyEilIRrBGzDwGtAhldzlBoBwE3Z3MY
+ 31TOpACu1ZpNOMysZ6xiE35pWkwc0KYm4hJA5GFfmWSN6DniimW3pmdDIiw4Ifcx8b3mFrRO
+ BbDIW13E51j9RjbO/nAaK9ndZ5LRO1B/8Fwat7bLzmsCiEXOJY7NNpIEpkoNoEUfCcZwmLrU
+ +eOTPzaF6drw6ayewEi5yzPg3TAT6FV3oBsNg3xlwU0gPK3v6gYPX5w9+ovPZ1/qqNfOrbsE
+ FRuiSVsZQ5s3AAMFD/9XjlnnVDh9GX/r/6hjmr4U9tEsM+VQXaVXqZuHKaSmojOLUCP/YVQo
+ 7IiYaNssCS4FCPe4yrL4FJJfJAsbeyDykMN7wAnBcOkbZ9BPJPNCbqU6dowLOiy8AuTYQ48m
+ vIyQ4Ijnb6GTrtxIUDQeOBNuQC/gyyx3nbL/lVlHbxr4tb6YkhkO6shjXhQh7nQb33FjGO4P
+ WU11Nr9i/qoV8QCo12MQEo244RRA6VMud06y/E449rWZFSTwGqb0FS0seTcYNvxt8PB2izX+
+ HZA8SL54j479ubxhfuoTu5nXdtFYFj5Lj5x34LKPx7MpgAmj0H7SDhpFWF2FzcC1bjiW9mjW
+ HaKaX23Awt97AqQZXegbfkJwX2Y53ufq8Np3e1542lh3/mpiGSilCsaTahEGrHK+lIusl6mz
+ Joil+u3k01ofvJMK0ZdzGUZ/aPMZ16LofjFA+MNxWrZFrkYmiGdv+LG45zSlZyIvzSiG2lKy
+ kuVag+IijCIom78P9jRtB1q1Q5lwZp2TLAJlz92DmFwBg1hyFzwDADjZ2nrDxKUiybXIgZp9
+ aU2d++ptEGCVJOfEW4qpWCCLPbOT7XBr+g/4H3qWbs3j/cDDq7LuVYIe+wchy/iXEJaQVeTC
+ y5arMQorqTFWlEOgRA8OP47L9knl9i4xuR0euV6DChDrguup2aJVU4hPBBgRAgAPAhsMBQJU
+ X9LxBQkeXB3fAAoJEGFXmRW1Y3YOj4UAn3nrFLPZekMeqX5aD/aq/dsbXSfyAKC45Go0YyxV
+ HGuUuzv+GKZ6nsysJ7kCDQRXG8fwARAA6q/pqBi5PjHcOAUgk2/2LR5LjjesK50bCaD4JuNc
+ YDhFR7Vs108diBtsho3w8WRd9viOqDrhLJTroVckkk74OY8r+3t1E0Dd4wHWHQZsAeUvOwDM
+ PQMqTUBFuMi6ydzTZpFA2wBR9x6ofl8Ax+zaGBcFrRlQnhsuXLnM1uuvS39+pmzIjasZBP2H
+ UPk5ifigXcpelKmj6iskP3c8QN6x6GjUSmYx+xUfs/GNVSU1XOZn61wgPDbgINJd/THGdqiO
+ iJxCLuTMqlSsmh1+E1dSdfYkCb93R/0ZHvMKWlAx7MnaFgBfsG8FqNtZu3PCLfizyVYYjXbV
+ WO1A23riZKqwrSJAATo5iTS65BuYxrFsFNPrf7TitM8E76BEBZk0OZBvZxMuOs6Z1qI8YKVK
+ UrHVGFq3NbuPWCdRul9SX3VfOunr9Gv0GABnJ0ET+K7nspax0xqq7zgnM71QEaiaH17IFYGS
+ sG34V7Wo3vyQzsk7qLf9Ajno0DhJ+VX43g8+AjxOMNVrGCt9RNXSBVpyv2AMTlWCdJ5KI6V4
+ KEzWM4HJm7QlNKE6RPoBxJVbSQLPd9St3h7mxLcne4l7NK9eNgNnneT7QZL8fL//s9K8Ns1W
+ t60uQNYvbhKDG7+/yLcmJgjF74XkGvxCmTA1rW2bsUriM533nG9gAOUFQjURkwI8jvMAEQEA
+ AYkCaAQYEQIACQUCVxvH8AIbAgIpCRBhV5kVtWN2DsFdIAQZAQIABgUCVxvH8AAKCRCH0Jac
+ RAcHBIkHD/9nmfog7X2ZXMzL9ktT++7x+W/QBrSTCTmq8PK+69+INN1ZDOrY8uz6htfTLV9+
+ e2W6G8/7zIvODuHk7r+yQ585XbplgP0V5Xc8iBHdBgXbqnY5zBrcH+Q/oQ2STalEvaGHqNoD
+ UGyLQ/fiKoLZTPMur57Fy1c9rTuKiSdMgnT0FPfWVDfpR2Ds0gpqWePlRuRGOoCln5GnREA/
+ 2MW2rWf+CO9kbIR+66j8b4RUJqIK3dWn9xbENh/aqxfonGTCZQ2zC4sLd25DQA4w1itPo+f5
+ V/SQxuhnlQkTOCdJ7b/mby/pNRz1lsLkjnXueLILj7gNjwTabZXYtL16z24qkDTI1x3g98R/
+ xunb3/fQwR8FY5/zRvXJq5us/nLvIvOmVwZFkwXc+AF+LSIajqQz9XbXeIP/BDjlBNXRZNdo
+ dVuSU51ENcMcilPr2EUnqEAqeczsCGpnvRCLfVQeSZr2L9N4svNhhfPOEscYhhpHTh0VPyxI
+ pPBNKq+byuYPMyk3nj814NKhImK0O4gTyCK9b+gZAVvQcYAXvSouCnTZeJRrNHJFTgTgu6E0
+ caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
+ 6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9Za0Dx0yyp44iD1OvHtkEI
+ M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
+Message-ID: <b874901f-8dc2-e0ec-b2da-26b37e75ec26@gmail.com>
+Date:   Fri, 20 Sep 2019 10:51:20 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190919195624.1140941-1-luzmaximilian@gmail.com>
+In-Reply-To: <fcb34c72-89c7-9993-fc0a-ba3a61708bec@web.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-MC-Unique: Hx1JfqpGOpe8lSvCaW2ZUg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
+On 9/18/19 1:12 PM, Markus Elfring wrote:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Wed, 18 Sep 2019 22:00:14 +0200
+> 
+> Simplify this function implementation by using a known wrapper function.
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-On 9/19/19 9:56 PM, Maximilian Luz wrote:
-> When registering a serdev controller, ACPI needs to be checked for
-> devices attached to it. Currently, all immediate children of the ACPI
-> node of the controller are assumed to be UART client devices for this
-> controller. Furthermore, these devices are not searched elsewhere.
->=20
-> This is incorrect: Similar to SPI and I2C devices, the UART client
-> device definition (via UARTSerialBusV2) can reside anywhere in the ACPI
-> namespace as resource definition inside the _CRS method and points to
-> the controller via its ResourceSource field. This field may either
-> contain a fully qualified or relative path, indicating the controller
-> device. To address this, we need to walk over the whole ACPI namespace,
-> looking at each resource definition, and match the client device to the
-> controller via this field.
->=20
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-
-So as promised I've given this patch a try, unfortunately it breaks
-existing users of ACPI serdev device instantation.
-
-After adding this patch "ls /sys/bus/serial/devices" is empty,
-where as before it gives:
-
-[root@dhcp-45-50 ~]# ls -l /sys/bus/serial/devices/
-total 0
-lrwxrwxrwx. 1 root root 0 Sep 20 16:43 serial0 -> ../../../devices/pci0000:=
-00/8086228A:00/serial0
-lrwxrwxrwx. 1 root root 0 Sep 20 16:43 serial0-0 -> ../../../devices/pci000=
-0:00/8086228A:00/serial0/serial0-0
-
-And since the serdev is missing bluetooth does not work.
-
-(ACPI instantiated serdev is used for UART attached Blueooth HCI-s on
-many Cherry Trail devices).
-
-I haven't looked why your patch is breakig things, I have a large backlog
-so I do not have time for that.
-
-But if you can provide me with a version of the patch with a bunch of
-debug printk-s added I'm happy to run that for you.
-
-I'll also send you the DSDT of the device I tested on off-list.
-
-Regards,
-
-Hans
-
-
-
-
-> ---
-> This patch is similar to the the implementations in drivers/spi/spi.c
-> (see commit 4c3c59544f33e97cf8557f27e05a9904ead16363) and
-> drivers/i2c/i2c-core-acpi.c. However, I think that there may be an
-> issues with these two implementations: Both walk over the whole ACPI
-> namespace, but only match the first SPI or I2C resource (respectively),
-> so I think there may be problems when multiple SPI or I2C resources are
-> defined under the same ACPI device node (as in second or third SPI/I2C
-> resource definitions being ignored). Please note, however, that I am by
-> no means qualified with regards to this, and this might be totally fine.
-> Nevertheless I'd appreciate if anyone with more knowledge on the subject
-> could have a look at it. This patch would avoid this problem (for UART)
-> by simply walking all resource definitions via acpi_walk_resources.
->=20
-> There is a further issue in the serdev ACPI implementation that this
-> patch does not address: ACPI UART resource definitions contain things
-> like the initial baud-rate, parity, flow-control, etc. As far as I know,
-> these things can currently only be set once the device is opened.
-> Furthermore, some option values, such as ParityTypeMark, are not (yet)
-> supported. I'd be willing to try and implement setting the currently
-> supported values based on ACPI for a future patch, if anyone can provide
-> me with some pointers on how to do that.
->=20
-> I have personally tested this patch on a Microsoft Surface Book 2, which
-> like all newer MS Surface devices has a UART EC, and it has been in use
-> (in some form or another) for a couple of months on other Surface
-> devices via a patched kernel [1, 2, 3]. I can, however, not speak for
-> any non-Microsoft devices or potential Apple ACPI quirks.
->=20
-> [1]: https://github.com/jakeday/linux-surface/
-> [2]: https://github.com/qzed/linux-surface/
-> [3]: https://github.com/qzed/linux-surfacegen5-acpi/
->=20
->   drivers/tty/serdev/core.c | 64 ++++++++++++++++++++++++++++++++++-----
->   1 file changed, 56 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-> index a0ac16ee6575..1c8360deea77 100644
-> --- a/drivers/tty/serdev/core.c
-> +++ b/drivers/tty/serdev/core.c
-> @@ -582,18 +582,64 @@ static acpi_status acpi_serdev_register_device(stru=
-ct serdev_controller *ctrl,
->   =09return AE_OK;
->   }
->  =20
-> -static acpi_status acpi_serdev_add_device(acpi_handle handle, u32 level,
-> -=09=09=09=09       void *data, void **return_value)
-> +struct acpi_serdev_resource_context {
-> +=09struct serdev_controller *controller;
-> +=09struct acpi_device *device;
-> +};
-> +
-> +static acpi_status
-> +acpi_serdev_add_device_from_resource(struct acpi_resource *resource, voi=
-d *data)
->   {
-> -=09struct serdev_controller *ctrl =3D data;
-> -=09struct acpi_device *adev;
-> +=09struct acpi_serdev_resource_context *ctx
-> +=09=09=3D (struct acpi_serdev_resource_context *)data;
-> +=09struct acpi_resource_source *ctrl_name;
-> +=09acpi_handle ctrl_handle;
-> +
-> +=09if (resource->type !=3D ACPI_RESOURCE_TYPE_SERIAL_BUS)
-> +=09=09return AE_OK;
->  =20
-> -=09if (acpi_bus_get_device(handle, &adev))
-> +=09if (resource->data.common_serial_bus.type
-> +=09    !=3D ACPI_RESOURCE_SERIAL_TYPE_UART)
->   =09=09return AE_OK;
->  =20
-> -=09return acpi_serdev_register_device(ctrl, adev);
-> +=09ctrl_name =3D &resource->data.common_serial_bus.resource_source;
-> +=09if (ctrl_name->string_length =3D=3D 0 || !ctrl_name->string_ptr)
-> +=09=09return AE_OK;
-> +
-> +=09if (acpi_get_handle(ctx->device->handle, ctrl_name->string_ptr,
-> +=09=09=09    &ctrl_handle))
-> +=09=09return AE_OK;
-> +
-> +=09if (ctrl_handle =3D=3D ACPI_HANDLE(ctx->controller->dev.parent))
-> +=09=09return acpi_serdev_register_device(ctx->controller,
-> +=09=09=09=09=09=09   ctx->device);
-> +
-> +=09return AE_OK;
->   }
->  =20
-> +static acpi_status
-> +acpi_serdev_add_devices_from_resources(acpi_handle handle, u32 level,
-> +=09=09=09=09       void *data, void **return_value)
-> +{
-> +=09struct acpi_serdev_resource_context ctx;
-> +=09acpi_status status;
-> +
-> +=09ctx.controller =3D (struct serdev_controller *)data;
-> +=09status =3D acpi_bus_get_device(handle, &ctx.device);
-> +=09if (status)
-> +=09=09return AE_OK;=09=09// ignore device if not present
-> +
-> +=09status =3D acpi_walk_resources(handle, METHOD_NAME__CRS,
-> +=09=09=09=09     acpi_serdev_add_device_from_resource,
-> +=09=09=09=09     &ctx);
-> +=09if (status =3D=3D AE_NOT_FOUND)
-> +=09=09return AE_OK;=09=09// ignore if _CRS is not found
-> +=09else
-> +=09=09return status;
-> +}
-> +
-> +#define SERDEV_ACPI_ENUMERATE_MAX_DEPTH=09=0932
-> +
->   static int acpi_serdev_register_devices(struct serdev_controller *ctrl)
->   {
->   =09acpi_status status;
-> @@ -603,8 +649,10 @@ static int acpi_serdev_register_devices(struct serde=
-v_controller *ctrl)
->   =09if (!handle)
->   =09=09return -ENODEV;
->  =20
-> -=09status =3D acpi_walk_namespace(ACPI_TYPE_DEVICE, handle, 1,
-> -=09=09=09=09     acpi_serdev_add_device, NULL, ctrl, NULL);
-> +=09status =3D acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT,
-> +=09=09=09=09     SERDEV_ACPI_ENUMERATE_MAX_DEPTH,
-> +=09=09=09=09     acpi_serdev_add_devices_from_resources,
-> +=09=09=09=09     NULL, ctrl, NULL);
->   =09if (ACPI_FAILURE(status))
->   =09=09dev_dbg(&ctrl->dev, "failed to enumerate serdev slaves\n");
->  =20
->=20
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
