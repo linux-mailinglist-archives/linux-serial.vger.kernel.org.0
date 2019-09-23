@@ -2,205 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E92F3BB30C
-	for <lists+linux-serial@lfdr.de>; Mon, 23 Sep 2019 13:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781C2BB5E8
+	for <lists+linux-serial@lfdr.de>; Mon, 23 Sep 2019 15:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501876AbfIWLqz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 23 Sep 2019 07:46:55 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54780 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729982AbfIWLqx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 23 Sep 2019 07:46:53 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 51009B152;
-        Mon, 23 Sep 2019 11:46:51 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v6 4/4] MIPS: SGI-IP27: fix readb/writeb addressing
-Date:   Mon, 23 Sep 2019 13:46:34 +0200
-Message-Id: <20190923114636.6748-5-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20190923114636.6748-1-tbogendoerfer@suse.de>
-References: <20190923114636.6748-1-tbogendoerfer@suse.de>
+        id S2408323AbfIWN6p (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 23 Sep 2019 09:58:45 -0400
+Received: from mx1.emlix.com ([188.40.240.192]:42148 "EHLO mx1.emlix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408320AbfIWN6o (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 23 Sep 2019 09:58:44 -0400
+Received: from mailer.emlix.com (unknown [81.20.119.6])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.emlix.com (Postfix) with ESMTPS id 476D85FBA6;
+        Mon, 23 Sep 2019 15:58:43 +0200 (CEST)
+From:   Philipp Puschmann <philipp.puschmann@emlix.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        yibin.gong@nxp.com, fugang.duan@nxp.com, l.stach@pengutronix.de,
+        jslaby@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Philipp Puschmann <philipp.puschmann@emlix.com>
+Subject: [PATCH v3] serial: imx: adapt rx buffer and dma periods
+Date:   Mon, 23 Sep 2019 15:58:42 +0200
+Message-Id: <20190923135842.956-1-philipp.puschmann@emlix.com>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Our chosen byte swapping, which is what firmware already uses, is to
-do readl/writel by normal lw/sw intructions (data invariance). This
-also means we need to mangle addresses for u8 and u16 accesses. The
-mangling for 16bit has been done aready, but 8bit one was missing.
-Correcting this causes different addresses for accesses to the
-SuperIO and local bus of the IOC3 chip. This is fixed by changing
-byte order in ioc3 and m48rtc_rtc structs.
+Using only 4 DMA periods for UART RX is very few if we have a high
+frequency of small transfers - like in our case using Bluetooth with
+many small packets via UART - causing many dma transfers but in each
+only filling a fraction of a single buffer. Such a case may lead to
+the situation that DMA RX transfer is triggered but no free buffer is
+available. When this happens dma channel ist stopped - with the patch
+"dmaengine: imx-sdma: fix dma freezes" temporarily only - with the
+possible consequences that:
+with disabled hw flow control:
+  If enough data is incoming on UART port the RX FIFO runs over and
+  characters will be lost. What then happens depends on upper layer.
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+with enabled hw flow control:
+  If enough data is incoming on UART port the RX FIFO reaches a level
+  where CTS is deasserted and remote device sending the data stops.
+  If it fails to stop timely the i.MX' RX FIFO may run over and data
+  get lost. Otherwise it's internal TX buffer may getting filled to
+  a point where it runs over and data is again lost. It depends on
+  the remote device how this case is handled and if it is recoverable.
+
+Obviously we want to avoid having no free buffers available. So we
+decrease the size of the buffers and increase their number and the
+total buffer size.
+
+Signed-off-by: Philipp Puschmann <philipp.puschmann@emlix.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 ---
- arch/mips/include/asm/mach-ip27/mangle-port.h |  4 +--
- arch/mips/include/asm/sn/ioc3.h               | 38 +++++++++++++--------------
- drivers/rtc/rtc-m48t35.c                      | 11 ++++++++
- drivers/tty/serial/8250/8250_ioc3.c           |  4 +--
- 4 files changed, 34 insertions(+), 23 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-ip27/mangle-port.h b/arch/mips/include/asm/mach-ip27/mangle-port.h
-index f6e4912ea062..27c56efa519f 100644
---- a/arch/mips/include/asm/mach-ip27/mangle-port.h
-+++ b/arch/mips/include/asm/mach-ip27/mangle-port.h
-@@ -8,7 +8,7 @@
- #ifndef __ASM_MACH_IP27_MANGLE_PORT_H
- #define __ASM_MACH_IP27_MANGLE_PORT_H
- 
--#define __swizzle_addr_b(port)	(port)
-+#define __swizzle_addr_b(port)	((port) ^ 3)
- #define __swizzle_addr_w(port)	((port) ^ 2)
- #define __swizzle_addr_l(port)	(port)
- #define __swizzle_addr_q(port)	(port)
-@@ -20,6 +20,6 @@
- # define ioswabl(a, x)		(x)
- # define __mem_ioswabl(a, x)	cpu_to_le32(x)
- # define ioswabq(a, x)		(x)
--# define __mem_ioswabq(a, x)	cpu_to_le32(x)
-+# define __mem_ioswabq(a, x)	cpu_to_le64(x)
- 
- #endif /* __ASM_MACH_IP27_MANGLE_PORT_H */
-diff --git a/arch/mips/include/asm/sn/ioc3.h b/arch/mips/include/asm/sn/ioc3.h
-index 78ef760ddde4..3865d3225780 100644
---- a/arch/mips/include/asm/sn/ioc3.h
-+++ b/arch/mips/include/asm/sn/ioc3.h
-@@ -21,50 +21,50 @@ struct ioc3_serialregs {
- 
- /* SUPERIO uart register map */
- struct ioc3_uartregs {
-+	u8	iu_lcr;
- 	union {
--		u8	iu_rbr;	/* read only, DLAB == 0 */
--		u8	iu_thr;	/* write only, DLAB == 0 */
--		u8	iu_dll;	/* DLAB == 1 */
-+		u8	iu_iir;	/* read only */
-+		u8	iu_fcr;	/* write only */
- 	};
- 	union {
- 		u8	iu_ier;	/* DLAB == 0 */
- 		u8	iu_dlm;	/* DLAB == 1 */
- 	};
- 	union {
--		u8	iu_iir;	/* read only */
--		u8	iu_fcr;	/* write only */
-+		u8	iu_rbr;	/* read only, DLAB == 0 */
-+		u8	iu_thr;	/* write only, DLAB == 0 */
-+		u8	iu_dll;	/* DLAB == 1 */
- 	};
--	u8	iu_lcr;
--	u8	iu_mcr;
--	u8	iu_lsr;
--	u8	iu_msr;
- 	u8	iu_scr;
-+	u8	iu_msr;
-+	u8	iu_lsr;
-+	u8	iu_mcr;
- };
- 
- struct ioc3_sioregs {
- 	u8	fill[0x141];	/* starts at 0x141 */
- 
--	u8	uartc;
- 	u8	kbdcg;
-+	u8	uartc;
- 
--	u8	fill0[0x150 - 0x142 - 1];
-+	u8	fill0[0x151 - 0x142 - 1];
- 
--	u8	pp_data;
--	u8	pp_dsr;
- 	u8	pp_dcr;
-+	u8	pp_dsr;
-+	u8	pp_data;
- 
--	u8	fill1[0x158 - 0x152 - 1];
-+	u8	fill1[0x159 - 0x153 - 1];
- 
--	u8	pp_fifa;
--	u8	pp_cfgb;
- 	u8	pp_ecr;
-+	u8	pp_cfgb;
-+	u8	pp_fifa;
- 
--	u8	fill2[0x168 - 0x15a - 1];
-+	u8	fill2[0x16a - 0x15b - 1];
- 
--	u8	rtcad;
- 	u8	rtcdat;
-+	u8	rtcad;
- 
--	u8	fill3[0x170 - 0x169 - 1];
-+	u8	fill3[0x170 - 0x16b - 1];
- 
- 	struct ioc3_uartregs	uartb;	/* 0x20170  */
- 	struct ioc3_uartregs	uarta;	/* 0x20178  */
-diff --git a/drivers/rtc/rtc-m48t35.c b/drivers/rtc/rtc-m48t35.c
-index d3a75d447fce..e8194f1f01a8 100644
---- a/drivers/rtc/rtc-m48t35.c
-+++ b/drivers/rtc/rtc-m48t35.c
-@@ -20,6 +20,16 @@
- 
- struct m48t35_rtc {
- 	u8	pad[0x7ff8];    /* starts at 0x7ff8 */
-+#ifdef CONFIG_SGI_IP27
-+	u8	hour;
-+	u8	min;
-+	u8	sec;
-+	u8	control;
-+	u8	year;
-+	u8	month;
-+	u8	date;
-+	u8	day;
-+#else
- 	u8	control;
- 	u8	sec;
- 	u8	min;
-@@ -28,6 +38,7 @@ struct m48t35_rtc {
- 	u8	date;
- 	u8	month;
- 	u8	year;
-+#endif
- };
- 
- #define M48T35_RTC_SET		0x80
-diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
-index 2be6ed2967e0..4c405f1b9c67 100644
---- a/drivers/tty/serial/8250/8250_ioc3.c
-+++ b/drivers/tty/serial/8250/8250_ioc3.c
-@@ -23,12 +23,12 @@ struct ioc3_8250_data {
- 
- static unsigned int ioc3_serial_in(struct uart_port *p, int offset)
- {
--	return readb(p->membase + offset);
-+	return readb(p->membase + (offset ^ 3));
+Changelog v4:
+ - fix total buffer size
+
+Changelog v3:
+ - enhance description
+
+Changelog v2:
+ - split this patch from series "Fix UART DMA freezes for iMX6"
+ - add Reviewed-by tag
+
+ drivers/tty/serial/imx.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 87c58f9f6390..51dc19833eab 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -1034,8 +1034,6 @@ static void imx_uart_timeout(struct timer_list *t)
+ 	}
  }
  
- static void ioc3_serial_out(struct uart_port *p, int offset, int value)
- {
--	writeb(value, p->membase + offset);
-+	writeb(value, p->membase + (offset ^ 3));
+-#define RX_BUF_SIZE	(PAGE_SIZE)
+-
+ /*
+  * There are two kinds of RX DMA interrupts(such as in the MX6Q):
+  *   [1] the RX DMA buffer is full.
+@@ -1118,7 +1116,8 @@ static void imx_uart_dma_rx_callback(void *data)
  }
  
- static int serial8250_ioc3_probe(struct platform_device *pdev)
+ /* RX DMA buffer periods */
+-#define RX_DMA_PERIODS 4
++#define RX_DMA_PERIODS	16
++#define RX_BUF_SIZE	(RX_DMA_PERIODS * PAGE_SIZE / 4)
+ 
+ static int imx_uart_start_rx_dma(struct imx_port *sport)
+ {
 -- 
-2.13.7
+2.23.0
 
