@@ -2,20 +2,20 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 781C2BB5E8
-	for <lists+linux-serial@lfdr.de>; Mon, 23 Sep 2019 15:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF64BB5FB
+	for <lists+linux-serial@lfdr.de>; Mon, 23 Sep 2019 15:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408323AbfIWN6p (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 23 Sep 2019 09:58:45 -0400
-Received: from mx1.emlix.com ([188.40.240.192]:42148 "EHLO mx1.emlix.com"
+        id S2437571AbfIWN7V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 23 Sep 2019 09:59:21 -0400
+Received: from mx1.emlix.com ([188.40.240.192]:42162 "EHLO mx1.emlix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408320AbfIWN6o (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 23 Sep 2019 09:58:44 -0400
+        id S2437346AbfIWN7V (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 23 Sep 2019 09:59:21 -0400
 Received: from mailer.emlix.com (unknown [81.20.119.6])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 476D85FBA6;
-        Mon, 23 Sep 2019 15:58:43 +0200 (CEST)
+        by mx1.emlix.com (Postfix) with ESMTPS id 081BB5FBA6;
+        Mon, 23 Sep 2019 15:59:19 +0200 (CEST)
 From:   Philipp Puschmann <philipp.puschmann@emlix.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
@@ -24,9 +24,9 @@ Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
         kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Philipp Puschmann <philipp.puschmann@emlix.com>
-Subject: [PATCH v3] serial: imx: adapt rx buffer and dma periods
-Date:   Mon, 23 Sep 2019 15:58:42 +0200
-Message-Id: <20190923135842.956-1-philipp.puschmann@emlix.com>
+Subject: [PATCH v4] serial: imx: adapt rx buffer and dma periods
+Date:   Mon, 23 Sep 2019 15:59:16 +0200
+Message-Id: <20190923135916.1212-1-philipp.puschmann@emlix.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
