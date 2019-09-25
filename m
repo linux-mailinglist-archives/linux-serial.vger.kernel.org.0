@@ -2,196 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DD6BE205
-	for <lists+linux-serial@lfdr.de>; Wed, 25 Sep 2019 18:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A33BE23B
+	for <lists+linux-serial@lfdr.de>; Wed, 25 Sep 2019 18:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387824AbfIYQMA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 25 Sep 2019 12:12:00 -0400
-Received: from mga05.intel.com ([192.55.52.43]:5888 "EHLO mga05.intel.com"
+        id S2502017AbfIYQRV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 Sep 2019 12:17:21 -0400
+Received: from mga06.intel.com ([134.134.136.31]:4914 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732807AbfIYQMA (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 25 Sep 2019 12:12:00 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S2501946AbfIYQRV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 25 Sep 2019 12:17:21 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 09:11:59 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 09:17:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,548,1559545200"; 
-   d="scan'208";a="273012624"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 25 Sep 2019 09:11:58 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id AEA0A1A1; Wed, 25 Sep 2019 19:11:57 +0300 (EEST)
+   d="scan'208";a="203636618"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Sep 2019 09:17:10 -0700
+Received: from andy by smile with local (Exim 4.92.1)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1iD9yY-0007H7-2E; Wed, 25 Sep 2019 19:17:10 +0300
+Date:   Wed, 25 Sep 2019 19:17:10 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] serial: 8250_dw: Use devm_clk_get_optional() to get the input clock
-Date:   Wed, 25 Sep 2019 19:11:55 +0300
-Message-Id: <20190925161155.55735-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
+Subject: Re: [PATCH v1] serial: 8250_dw: Use devm_clk_get_optional() to get
+ the input clock
+Message-ID: <20190925161710.GW5933@smile.fi.intel.com>
+References: <20190925161155.55735-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190925161155.55735-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Simplify the code which fetches the input clock by using
-devm_clk_get_optional(). This comes with a small functional change: previously
-all errors were ignored except deferred probe. Now all errors are
-treated as errors. If no input clock is present devm_clk_get_optional() will
-return NULL instead of an error which matches the behavior of the old code.
+On Wed, Sep 25, 2019 at 07:11:55PM +0300, Andy Shevchenko wrote:
+> Simplify the code which fetches the input clock by using
+> devm_clk_get_optional(). This comes with a small functional change: previously
+> all errors were ignored except deferred probe. Now all errors are
+> treated as errors. If no input clock is present devm_clk_get_optional() will
+> return NULL instead of an error which matches the behavior of the old code.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dw.c | 77 ++++++++++++++-----------------
- 1 file changed, 34 insertions(+), 43 deletions(-)
+Please, ignore this one, it will break the systems where more than one clock
+defined.
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 1c72fdc2dd37..74fa984107cb 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -280,9 +280,6 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 	long rate;
- 	int ret;
- 
--	if (IS_ERR(d->clk))
--		goto out;
--
- 	clk_disable_unprepare(d->clk);
- 	rate = clk_round_rate(d->clk, baud * 16);
- 	if (rate < 0)
-@@ -293,8 +290,10 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 		ret = clk_set_rate(d->clk, rate);
- 	clk_prepare_enable(d->clk);
- 
--	if (!ret)
--		p->uartclk = rate;
-+	if (ret)
-+		goto out;
-+
-+	p->uartclk = rate;
- 
- out:
- 	p->status &= ~UPSTAT_AUTOCTS;
-@@ -472,19 +471,20 @@ static int dw8250_probe(struct platform_device *pdev)
- 	device_property_read_u32(dev, "clock-frequency", &p->uartclk);
- 
- 	/* If there is separate baudclk, get the rate from it. */
--	data->clk = devm_clk_get(dev, "baudclk");
--	if (IS_ERR(data->clk) && PTR_ERR(data->clk) != -EPROBE_DEFER)
--		data->clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(data->clk) && PTR_ERR(data->clk) == -EPROBE_DEFER)
--		return -EPROBE_DEFER;
--	if (!IS_ERR_OR_NULL(data->clk)) {
--		err = clk_prepare_enable(data->clk);
--		if (err)
--			dev_warn(dev, "could not enable optional baudclk: %d\n",
--				 err);
--		else
--			p->uartclk = clk_get_rate(data->clk);
--	}
-+	data->clk = devm_clk_get_optional(dev, "baudclk");
-+	if (IS_ERR(data->clk))
-+		return PTR_ERR(data->clk);
-+
-+	data->clk = devm_clk_get_optional(dev, NULL);
-+	if (IS_ERR(data->clk))
-+		return PTR_ERR(data->clk);
-+
-+	err = clk_prepare_enable(data->clk);
-+	if (err)
-+		dev_warn(dev, "could not enable optional baudclk: %d\n", err);
-+
-+	if (data->clk)
-+		p->uartclk = clk_get_rate(data->clk);
- 
- 	/* If no clock rate is defined, fail. */
- 	if (!p->uartclk) {
-@@ -493,17 +493,16 @@ static int dw8250_probe(struct platform_device *pdev)
- 		goto err_clk;
- 	}
- 
--	data->pclk = devm_clk_get(dev, "apb_pclk");
--	if (IS_ERR(data->pclk) && PTR_ERR(data->pclk) == -EPROBE_DEFER) {
--		err = -EPROBE_DEFER;
-+	data->pclk = devm_clk_get_optional(dev, "apb_pclk");
-+	if (IS_ERR(data->pclk)) {
-+		err = PTR_ERR(data->pclk);
- 		goto err_clk;
- 	}
--	if (!IS_ERR(data->pclk)) {
--		err = clk_prepare_enable(data->pclk);
--		if (err) {
--			dev_err(dev, "could not enable apb_pclk\n");
--			goto err_clk;
--		}
-+
-+	err = clk_prepare_enable(data->pclk);
-+	if (err) {
-+		dev_err(dev, "could not enable apb_pclk\n");
-+		goto err_clk;
- 	}
- 
- 	data->rst = devm_reset_control_get_optional_exclusive(dev, NULL);
-@@ -546,12 +545,10 @@ static int dw8250_probe(struct platform_device *pdev)
- 	reset_control_assert(data->rst);
- 
- err_pclk:
--	if (!IS_ERR(data->pclk))
--		clk_disable_unprepare(data->pclk);
-+	clk_disable_unprepare(data->pclk);
- 
- err_clk:
--	if (!IS_ERR(data->clk))
--		clk_disable_unprepare(data->clk);
-+	clk_disable_unprepare(data->clk);
- 
- 	return err;
- }
-@@ -567,11 +564,9 @@ static int dw8250_remove(struct platform_device *pdev)
- 
- 	reset_control_assert(data->rst);
- 
--	if (!IS_ERR(data->pclk))
--		clk_disable_unprepare(data->pclk);
-+	clk_disable_unprepare(data->pclk);
- 
--	if (!IS_ERR(data->clk))
--		clk_disable_unprepare(data->clk);
-+	clk_disable_unprepare(data->clk);
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
-@@ -604,11 +599,9 @@ static int dw8250_runtime_suspend(struct device *dev)
- {
- 	struct dw8250_data *data = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(data->clk))
--		clk_disable_unprepare(data->clk);
-+	clk_disable_unprepare(data->clk);
- 
--	if (!IS_ERR(data->pclk))
--		clk_disable_unprepare(data->pclk);
-+	clk_disable_unprepare(data->pclk);
- 
- 	return 0;
- }
-@@ -617,11 +610,9 @@ static int dw8250_runtime_resume(struct device *dev)
- {
- 	struct dw8250_data *data = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(data->pclk))
--		clk_prepare_enable(data->pclk);
-+	clk_prepare_enable(data->pclk);
- 
--	if (!IS_ERR(data->clk))
--		clk_prepare_enable(data->clk);
-+	clk_prepare_enable(data->clk);
- 
- 	return 0;
- }
 -- 
-2.23.0
+With Best Regards,
+Andy Shevchenko
+
 
