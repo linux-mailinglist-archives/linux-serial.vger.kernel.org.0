@@ -2,195 +2,318 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00879BE26D
-	for <lists+linux-serial@lfdr.de>; Wed, 25 Sep 2019 18:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B8FBE9F8
+	for <lists+linux-serial@lfdr.de>; Thu, 26 Sep 2019 03:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732878AbfIYQ0V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 25 Sep 2019 12:26:21 -0400
-Received: from mga06.intel.com ([134.134.136.31]:5710 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732803AbfIYQ0V (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 25 Sep 2019 12:26:21 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 09:26:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,548,1559545200"; 
-   d="scan'208";a="193826029"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 25 Sep 2019 09:26:19 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2A7EA1A1; Wed, 25 Sep 2019 19:26:18 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2] serial: 8250_dw: Use devm_clk_get_optional() to get the input clock
-Date:   Wed, 25 Sep 2019 19:26:17 +0300
-Message-Id: <20190925162617.30368-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
+        id S1728479AbfIZBQa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 Sep 2019 21:16:30 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:37044 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725768AbfIZBQa (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 25 Sep 2019 21:16:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=g7hM0r0bMD0BgN+JATGrsCucBwjqorf/LYLvbK/kUDw=; b=pIgSEOcvzxCabotRna08r9quI
+        LzPp+RtjR+natbGl1bXi8bjHXcDHysbqHAsEOsETf9vt3fLnuV5MTiMUrEbrbEVPmGYzaJluxxgJm
+        li6n8JyROVQs68dJFuem0fjmEn/LVuc1EJ3VWpMCc73emF5u8SYmqZ11Dw2mRFdTSqHptF9vugHLX
+        2Ik/p8cnjkGkoyOz53ojRi2Ovr5lndrz2F6j02gPk+J6+xlr3/fTCCPWyPlnxrAttsHVsk0CVzP0o
+        5XwpOzkV4Rmhc8W7nOi8Ptj6pNNOMHwLKaigUqu6Mu0Iy0ESuosbr+oGIORQuM/l8TuQrSoBGLn3T
+        UMY+WJlNQ==;
+Received: from [2601:1c0:6280:3f0::9a1f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iDIOT-0006bH-B7; Thu, 26 Sep 2019 01:16:29 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] serial: move Non-standard serial drivers menu to the Serial
+ drivers menu
+Message-ID: <8e583967-4453-368b-6be5-a24df9b2b5dc@infradead.org>
+Date:   Wed, 25 Sep 2019 18:16:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Simplify the code which fetches the input clock by using
-devm_clk_get_optional(). This comes with a small functional change: previously
-all errors were ignored except deferred probe. Now all errors are
-treated as errors. If no input clock is present devm_clk_get_optional() will
-return NULL instead of an error which matches the behavior of the old code.
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Since Non-standard serial port drivers are also Serial drivers,
+move the "Non-standard serial port support" menu to be under/in
+the "Serial drivers" menu. With this move, the "Serial drivers"
+menu contains (a) 8250/16550 support, (b) non-8250 support, and
+(c) non-standard serial port support.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 ---
-v2: conditionally try to get a NULL clock
- drivers/tty/serial/8250/8250_dw.c | 75 +++++++++++++------------------
- 1 file changed, 32 insertions(+), 43 deletions(-)
+ drivers/tty/Kconfig        |  119 -----------------------------------
+ drivers/tty/serial/Kconfig |  119 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 119 insertions(+), 119 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 1c72fdc2dd37..acbf23b3e300 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -280,9 +280,6 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 	long rate;
- 	int ret;
+--- lnx-53.orig/drivers/tty/Kconfig
++++ lnx-53/drivers/tty/Kconfig
+@@ -151,125 +151,6 @@ config LEGACY_PTY_COUNT
+ 	  When not in use, each legacy PTY occupies 12 bytes on 32-bit
+ 	  architectures and 24 bytes on 64-bit architectures.
  
--	if (IS_ERR(d->clk))
--		goto out;
+-config SERIAL_NONSTANDARD
+-	bool "Non-standard serial port support"
+-	depends on HAS_IOMEM
+-	---help---
+-	  Say Y here if you have any non-standard serial boards -- boards
+-	  which aren't supported using the standard "dumb" serial driver.
+-	  This includes intelligent serial boards such as Cyclades,
+-	  Digiboards, etc. These are usually used for systems that need many
+-	  serial ports because they serve many terminals or dial-in
+-	  connections.
 -
- 	clk_disable_unprepare(d->clk);
- 	rate = clk_round_rate(d->clk, baud * 16);
- 	if (rate < 0)
-@@ -293,8 +290,10 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 		ret = clk_set_rate(d->clk, rate);
- 	clk_prepare_enable(d->clk);
+-	  Note that the answer to this question won't directly affect the
+-	  kernel: saying N will just cause the configurator to skip all
+-	  the questions about non-standard serial boards.
+-
+-	  Most people can say N here.
+-
+-config ROCKETPORT
+-	tristate "Comtrol RocketPort support"
+-	depends on SERIAL_NONSTANDARD && (ISA || EISA || PCI)
+-	help
+-	  This driver supports Comtrol RocketPort and RocketModem PCI boards.   
+-          These boards provide 2, 4, 8, 16, or 32 high-speed serial ports or
+-          modems.  For information about the RocketPort/RocketModem  boards
+-          and this driver read <file:Documentation/driver-api/serial/rocket.rst>.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called rocket.
+-
+-	  If you want to compile this driver into the kernel, say Y here.  If
+-          you don't have a Comtrol RocketPort/RocketModem card installed, say N.
+-
+-config CYCLADES
+-	tristate "Cyclades async mux support"
+-	depends on SERIAL_NONSTANDARD && (PCI || ISA)
+-	select FW_LOADER
+-	---help---
+-	  This driver supports Cyclades Z and Y multiserial boards.
+-	  You would need something like this to connect more than two modems to
+-	  your Linux box, for instance in order to become a dial-in server.
+-
+-	  For information about the Cyclades-Z card, read
+-	  <file:Documentation/driver-api/serial/cyclades_z.rst>.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called cyclades.
+-
+-	  If you haven't heard about it, it's safe to say N.
+-
+-config CYZ_INTR
+-	bool "Cyclades-Z interrupt mode operation"
+-	depends on CYCLADES && PCI
+-	help
+-	  The Cyclades-Z family of multiport cards allows 2 (two) driver op
+-	  modes: polling and interrupt. In polling mode, the driver will check
+-	  the status of the Cyclades-Z ports every certain amount of time
+-	  (which is called polling cycle and is configurable). In interrupt
+-	  mode, it will use an interrupt line (IRQ) in order to check the
+-	  status of the Cyclades-Z ports. The default op mode is polling. If
+-	  unsure, say N.
+-
+-config MOXA_INTELLIO
+-	tristate "Moxa Intellio support"
+-	depends on SERIAL_NONSTANDARD && (ISA || EISA || PCI)
+-	select FW_LOADER
+-	help
+-	  Say Y here if you have a Moxa Intellio multiport serial card.
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called moxa.
+-
+-config MOXA_SMARTIO
+-	tristate "Moxa SmartIO support v. 2.0"
+-	depends on SERIAL_NONSTANDARD && (PCI || EISA || ISA)
+-	help
+-	  Say Y here if you have a Moxa SmartIO multiport serial card and/or
+-	  want to help develop a new version of this driver.
+-
+-	  This is upgraded (1.9.1) driver from original Moxa drivers with
+-	  changes finally resulting in PCI probing.
+-
+-	  This driver can also be built as a module. The module will be called
+-	  mxser. If you want to do that, say M here.
+-
+-config SYNCLINK
+-	tristate "Microgate SyncLink card support"
+-	depends on SERIAL_NONSTANDARD && PCI && ISA_DMA_API
+-	help
+-	  Provides support for the SyncLink ISA and PCI multiprotocol serial
+-	  adapters. These adapters support asynchronous and HDLC bit
+-	  synchronous communication up to 10Mbps (PCI adapter).
+-
+-	  This driver can only be built as a module ( = code which can be
+-	  inserted in and removed from the running kernel whenever you want).
+-	  The module will be called synclink.  If you want to do that, say M
+-	  here.
+-
+-config SYNCLINKMP
+-	tristate "SyncLink Multiport support"
+-	depends on SERIAL_NONSTANDARD && PCI
+-	help
+-	  Enable support for the SyncLink Multiport (2 or 4 ports)
+-	  serial adapter, running asynchronous and HDLC communications up
+-	  to 2.048Mbps. Each ports is independently selectable for
+-	  RS-232, V.35, RS-449, RS-530, and X.21
+-
+-	  This driver may be built as a module ( = code which can be
+-	  inserted in and removed from the running kernel whenever you want).
+-	  The module will be called synclinkmp.  If you want to do that, say M
+-	  here.
+-
+-config SYNCLINK_GT
+-	tristate "SyncLink GT/AC support"
+-	depends on SERIAL_NONSTANDARD && PCI
+-	help
+-	  Support for SyncLink GT and SyncLink AC families of
+-	  synchronous and asynchronous serial adapters
+-	  manufactured by Microgate Systems, Ltd. (www.microgate.com)
+-
+ config NOZOMI
+ 	tristate "HSDPA Broadband Wireless Data Card - Globe Trotter"
+ 	depends on PCI
+--- lnx-53.orig/drivers/tty/serial/Kconfig
++++ lnx-53/drivers/tty/serial/Kconfig
+@@ -1598,6 +1598,125 @@ config SERIAL_MILBEAUT_USIO_CONSOLE
+ 	  receives all kernel messages and warnings and which allows logins in
+ 	  single user mode).
  
--	if (!ret)
--		p->uartclk = rate;
-+	if (ret)
-+		goto out;
++config SERIAL_NONSTANDARD
++	bool "Non-standard serial port support"
++	depends on HAS_IOMEM
++	---help---
++	  Say Y here if you have any non-standard serial boards -- boards
++	  which aren't supported using the standard "dumb" serial driver.
++	  This includes intelligent serial boards such as Cyclades,
++	  Digiboards, etc. These are usually used for systems that need many
++	  serial ports because they serve many terminals or dial-in
++	  connections.
 +
-+	p->uartclk = rate;
- 
- out:
- 	p->status &= ~UPSTAT_AUTOCTS;
-@@ -472,19 +471,18 @@ static int dw8250_probe(struct platform_device *pdev)
- 	device_property_read_u32(dev, "clock-frequency", &p->uartclk);
- 
- 	/* If there is separate baudclk, get the rate from it. */
--	data->clk = devm_clk_get(dev, "baudclk");
--	if (IS_ERR(data->clk) && PTR_ERR(data->clk) != -EPROBE_DEFER)
--		data->clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(data->clk) && PTR_ERR(data->clk) == -EPROBE_DEFER)
--		return -EPROBE_DEFER;
--	if (!IS_ERR_OR_NULL(data->clk)) {
--		err = clk_prepare_enable(data->clk);
--		if (err)
--			dev_warn(dev, "could not enable optional baudclk: %d\n",
--				 err);
--		else
--			p->uartclk = clk_get_rate(data->clk);
--	}
-+	data->clk = devm_clk_get_optional(dev, "baudclk");
-+	if (data->clk == NULL)
-+		data->clk = devm_clk_get_optional(dev, NULL);
-+	if (IS_ERR(data->clk))
-+		return PTR_ERR(data->clk);
++	  Note that the answer to this question won't directly affect the
++	  kernel: saying N will just cause the configurator to skip all
++	  the questions about non-standard serial boards.
 +
-+	err = clk_prepare_enable(data->clk);
-+	if (err)
-+		dev_warn(dev, "could not enable optional baudclk: %d\n", err);
++	  Most people can say N here.
 +
-+	if (data->clk)
-+		p->uartclk = clk_get_rate(data->clk);
- 
- 	/* If no clock rate is defined, fail. */
- 	if (!p->uartclk) {
-@@ -493,17 +491,16 @@ static int dw8250_probe(struct platform_device *pdev)
- 		goto err_clk;
- 	}
- 
--	data->pclk = devm_clk_get(dev, "apb_pclk");
--	if (IS_ERR(data->pclk) && PTR_ERR(data->pclk) == -EPROBE_DEFER) {
--		err = -EPROBE_DEFER;
-+	data->pclk = devm_clk_get_optional(dev, "apb_pclk");
-+	if (IS_ERR(data->pclk)) {
-+		err = PTR_ERR(data->pclk);
- 		goto err_clk;
- 	}
--	if (!IS_ERR(data->pclk)) {
--		err = clk_prepare_enable(data->pclk);
--		if (err) {
--			dev_err(dev, "could not enable apb_pclk\n");
--			goto err_clk;
--		}
++config ROCKETPORT
++	tristate "Comtrol RocketPort support"
++	depends on SERIAL_NONSTANDARD && (ISA || EISA || PCI)
++	help
++	  This driver supports Comtrol RocketPort and RocketModem PCI boards.   
++          These boards provide 2, 4, 8, 16, or 32 high-speed serial ports or
++          modems.  For information about the RocketPort/RocketModem  boards
++          and this driver read <file:Documentation/driver-api/serial/rocket.rst>.
 +
-+	err = clk_prepare_enable(data->pclk);
-+	if (err) {
-+		dev_err(dev, "could not enable apb_pclk\n");
-+		goto err_clk;
- 	}
++	  To compile this driver as a module, choose M here: the
++	  module will be called rocket.
++
++	  If you want to compile this driver into the kernel, say Y here.  If
++          you don't have a Comtrol RocketPort/RocketModem card installed, say N.
++
++config CYCLADES
++	tristate "Cyclades async mux support"
++	depends on SERIAL_NONSTANDARD && (PCI || ISA)
++	select FW_LOADER
++	---help---
++	  This driver supports Cyclades Z and Y multiserial boards.
++	  You would need something like this to connect more than two modems to
++	  your Linux box, for instance in order to become a dial-in server.
++
++	  For information about the Cyclades-Z card, read
++	  <file:Documentation/driver-api/serial/cyclades_z.rst>.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called cyclades.
++
++	  If you haven't heard about it, it's safe to say N.
++
++config CYZ_INTR
++	bool "Cyclades-Z interrupt mode operation"
++	depends on CYCLADES && PCI
++	help
++	  The Cyclades-Z family of multiport cards allows 2 (two) driver op
++	  modes: polling and interrupt. In polling mode, the driver will check
++	  the status of the Cyclades-Z ports every certain amount of time
++	  (which is called polling cycle and is configurable). In interrupt
++	  mode, it will use an interrupt line (IRQ) in order to check the
++	  status of the Cyclades-Z ports. The default op mode is polling. If
++	  unsure, say N.
++
++config MOXA_INTELLIO
++	tristate "Moxa Intellio support"
++	depends on SERIAL_NONSTANDARD && (ISA || EISA || PCI)
++	select FW_LOADER
++	help
++	  Say Y here if you have a Moxa Intellio multiport serial card.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called moxa.
++
++config MOXA_SMARTIO
++	tristate "Moxa SmartIO support v. 2.0"
++	depends on SERIAL_NONSTANDARD && (PCI || EISA || ISA)
++	help
++	  Say Y here if you have a Moxa SmartIO multiport serial card and/or
++	  want to help develop a new version of this driver.
++
++	  This is upgraded (1.9.1) driver from original Moxa drivers with
++	  changes finally resulting in PCI probing.
++
++	  This driver can also be built as a module. The module will be called
++	  mxser. If you want to do that, say M here.
++
++config SYNCLINK
++	tristate "Microgate SyncLink card support"
++	depends on SERIAL_NONSTANDARD && PCI && ISA_DMA_API
++	help
++	  Provides support for the SyncLink ISA and PCI multiprotocol serial
++	  adapters. These adapters support asynchronous and HDLC bit
++	  synchronous communication up to 10Mbps (PCI adapter).
++
++	  This driver can only be built as a module ( = code which can be
++	  inserted in and removed from the running kernel whenever you want).
++	  The module will be called synclink.  If you want to do that, say M
++	  here.
++
++config SYNCLINKMP
++	tristate "SyncLink Multiport support"
++	depends on SERIAL_NONSTANDARD && PCI
++	help
++	  Enable support for the SyncLink Multiport (2 or 4 ports)
++	  serial adapter, running asynchronous and HDLC communications up
++	  to 2.048Mbps. Each ports is independently selectable for
++	  RS-232, V.35, RS-449, RS-530, and X.21
++
++	  This driver may be built as a module ( = code which can be
++	  inserted in and removed from the running kernel whenever you want).
++	  The module will be called synclinkmp.  If you want to do that, say M
++	  here.
++
++config SYNCLINK_GT
++	tristate "SyncLink GT/AC support"
++	depends on SERIAL_NONSTANDARD && PCI
++	help
++	  Support for SyncLink GT and SyncLink AC families of
++	  synchronous and asynchronous serial adapters
++	  manufactured by Microgate Systems, Ltd. (www.microgate.com)
++
+ endmenu
  
- 	data->rst = devm_reset_control_get_optional_exclusive(dev, NULL);
-@@ -546,12 +543,10 @@ static int dw8250_probe(struct platform_device *pdev)
- 	reset_control_assert(data->rst);
- 
- err_pclk:
--	if (!IS_ERR(data->pclk))
--		clk_disable_unprepare(data->pclk);
-+	clk_disable_unprepare(data->pclk);
- 
- err_clk:
--	if (!IS_ERR(data->clk))
--		clk_disable_unprepare(data->clk);
-+	clk_disable_unprepare(data->clk);
- 
- 	return err;
- }
-@@ -567,11 +562,9 @@ static int dw8250_remove(struct platform_device *pdev)
- 
- 	reset_control_assert(data->rst);
- 
--	if (!IS_ERR(data->pclk))
--		clk_disable_unprepare(data->pclk);
-+	clk_disable_unprepare(data->pclk);
- 
--	if (!IS_ERR(data->clk))
--		clk_disable_unprepare(data->clk);
-+	clk_disable_unprepare(data->clk);
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
-@@ -604,11 +597,9 @@ static int dw8250_runtime_suspend(struct device *dev)
- {
- 	struct dw8250_data *data = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(data->clk))
--		clk_disable_unprepare(data->clk);
-+	clk_disable_unprepare(data->clk);
- 
--	if (!IS_ERR(data->pclk))
--		clk_disable_unprepare(data->pclk);
-+	clk_disable_unprepare(data->pclk);
- 
- 	return 0;
- }
-@@ -617,11 +608,9 @@ static int dw8250_runtime_resume(struct device *dev)
- {
- 	struct dw8250_data *data = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(data->pclk))
--		clk_prepare_enable(data->pclk);
-+	clk_prepare_enable(data->pclk);
- 
--	if (!IS_ERR(data->clk))
--		clk_prepare_enable(data->clk);
-+	clk_prepare_enable(data->clk);
- 
- 	return 0;
- }
--- 
-2.23.0
+ config SERIAL_MCTRL_GPIO
 
