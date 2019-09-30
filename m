@@ -2,96 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CA7C1ADD
-	for <lists+linux-serial@lfdr.de>; Mon, 30 Sep 2019 07:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60933C2141
+	for <lists+linux-serial@lfdr.de>; Mon, 30 Sep 2019 15:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729487AbfI3FRd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 Sep 2019 01:17:33 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51905 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbfI3FRd (ORCPT
+        id S1731184AbfI3NED (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 Sep 2019 09:04:03 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:34463 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730802AbfI3NEC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 Sep 2019 01:17:33 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 7so11771717wme.1
-        for <linux-serial@vger.kernel.org>; Sun, 29 Sep 2019 22:17:31 -0700 (PDT)
+        Mon, 30 Sep 2019 09:04:02 -0400
+Received: by mail-lf1-f67.google.com with SMTP id r22so6980703lfm.1
+        for <linux-serial@vger.kernel.org>; Mon, 30 Sep 2019 06:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=tBn/gbnB4105qxYqqNyBUGFgkHvTZYe46a7LXvOTj08=;
-        b=flVakslhs5+KhpRCod1EB4eNh5rAfNpbpsUR5Sluc2ArbaUuXyEDiUPHdJvv+zGGd3
-         ykdhBm9wfyOMGHXIcK7s0nYrSR/tA4AH6nBTwnxTOACEbMQTLvgfkU/GZ7A+O5WUmofj
-         3heegeG3d1jdmfnEtRpD9W4Wz/KcnKy0rmsjHBonfejDs7S6g6bnjG2lUZiQRn90HciH
-         qKx4In/tT1NB+yELzom59I3rh80f2IW3uKV/KCkTWk+Ok/DzD+O4Drzjh+U5GKzkctYl
-         5G8mCUpUYMcXwhnBWUeCbwaLzNGgj6H3FXgKHabcDv5vcGDczFezF1cWMODRFk7kqdDP
-         KBwQ==
+        d=antmicro-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=NKz061ZKrfKpmulUXMfGM39xSIQHkJ/qfJErKxufWTs=;
+        b=Et0O9/tGHYkgEKZtIGpCcrr6TOROMY5wZ7ALUslSNVg39r1XOCZMKomLMfcH3uf3B0
+         xz/WiE0S/yexoIOk0AC9NqaNvBNPiEDC/rvvm4LOhFU5fOFQJb9pSYD/h80DeicEjkLr
+         NBcHoNV03AGP8s5x3LHa2Kh80NJLv9U049I8U0H3F1K0A6torSBtsWAYizr1SGifdh6+
+         GMFWfoXAPEpIHtVoMz6JPUQOm1XlzGfql0LM/YNnyF5CZYsrYtX8vOJXKT5fa4qmxBdr
+         dBnGYVnKR4uulhidzNqkHG9o2Vt49/UssWx3sAhNimhrTLuryWGb2pMJks51PKwL1ju5
+         cJqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=tBn/gbnB4105qxYqqNyBUGFgkHvTZYe46a7LXvOTj08=;
-        b=T3T+ED+YRFJ5XSbr+XoTiGSm1nMG6bguQpOjiqvb07BlY7yK8pKAtNonnngNYgZYvk
-         JAKRLna5AQ2UBmVs+ACauZdfGlbSm/IgpZNblhHXgEZ0gV2UlhAfgvcrX2JnpTp1AueK
-         KPG9b5qyCbOrqMS4ZKKt3BrFnwlV+hYLTyENDlB3MKadgxAiMHh1dLJIfhWNfNEy1YIH
-         DbZ+Bz12GPvYRnVu+bNvLpzVbIZbeNph1BouMpD+Rss1wh0BAd84lPDHk1lGDQ6mJbLt
-         0cFmdVKypsFpZMIsm6X1t82Y0X5HB39FXZSE5WdwipYnfFdOsD6aVNgbb5sCx3WnFOB0
-         TEMQ==
-X-Gm-Message-State: APjAAAXe2O9O0tpaSfT5h+yiFlxkqNCW9tTaNZq/r/iM0Aj8iGZdbE8p
-        WbOrs4kFztfTfezPiR7WktTdCBZT7Dhh+Qcgi0E=
-X-Google-Smtp-Source: APXvYqzWW26jkI7oeZ1pjxpt6Se2UEM1DWkv6tNMZVuF5XzElc1My7DtgXozCN92DNmxEFMX7B1VgeXVmjEypi77BXs=
-X-Received: by 2002:a7b:cb08:: with SMTP id u8mr16534584wmj.6.1569820651152;
- Sun, 29 Sep 2019 22:17:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=NKz061ZKrfKpmulUXMfGM39xSIQHkJ/qfJErKxufWTs=;
+        b=CBiWsz/lj5Ajd8k8sGEHugsbBTkDFxor2c2BbTA1unq1kwfxYaor12fdUZKYdCBwMZ
+         SQH/ejpoPE9rFrLqFQlYbLIJ+7vzPkmvCm80oYnxaCRTOXcaljAcARce3niw3sL9euxS
+         j+CpiLQ1iYNGoQQmLxVjW9cKNMwoy4KnLrJo5lKsSFHIsDogXB1awjE4mTVfg32C+t3u
+         5bTrEHMD1YcZg2xSNMMAAODfpmiJuC4RkgrF7BkoI6jb/NqAr+ms9LlTNR/VSNM4+pcF
+         op2WnGrQ54W/trP4SEtZtxwJrI/mju8d0HBBBcn3AEcW+uK0sNRShC4fl+iKsGaaJ7Kc
+         ScfA==
+X-Gm-Message-State: APjAAAXrSkoX5GWTLDxQQP5sNmf6U995GA9aCufiZeowaPhbYONWe+J3
+        yqxxXJUem5iAPn2klgt3nUEQdQ==
+X-Google-Smtp-Source: APXvYqzDz/EV5ey9sKE1NK4jYT+12yoR14i2vO/m28H9eOEdKF9EPYknV1nV56KgFRg+yVNgqwUEhQ==
+X-Received: by 2002:a19:c709:: with SMTP id x9mr11722949lff.20.1569848640277;
+        Mon, 30 Sep 2019 06:04:00 -0700 (PDT)
+Received: from localhost.localdomain (d79-196.icpnet.pl. [77.65.79.196])
+        by smtp.gmail.com with ESMTPSA id 4sm3315620ljv.87.2019.09.30.06.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Sep 2019 06:03:59 -0700 (PDT)
+Date:   Mon, 30 Sep 2019 15:03:52 +0200
+From:   Mateusz Holenko <mholenko@antmicro.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Jiri Slaby <jslaby@suse.com>, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>
+Subject: [PATCH 0/3] LiteUART serial driver
+Message-ID: <20190930130352.GA5898@localhost.localdomain>
 MIME-Version: 1.0
-Received: by 2002:a1c:f415:0:0:0:0:0 with HTTP; Sun, 29 Sep 2019 22:17:30
- -0700 (PDT)
-Reply-To: christabelfundinginc2@gmail.com
-From:   Mrs Christabel <linelink006@gmail.com>
-Date:   Sun, 29 Sep 2019 22:17:30 -0700
-Message-ID: <CAG4TvbTeCgve1MyQNb01FFXJxxZ2H32txu5fX8kEMBQmQyr2sw@mail.gmail.com>
-Subject: Darlehen
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Gr=C3=BC=C3=9Fe dich.
+This patchset introduces support for LiteUART
+- serial device from LiteX SoC builder
+(https://github.com/enjoy-digital/litex).
 
-Willkommen bei Frau Christabel als Teil ihres Wohlfahrtspaketes
-Anbieten eines Floating Loans mit 2% Zinssatz ohne jegliche Sicherheiten
-Sicherheit. Dies soll Einzelpersonen und Unternehmen helfen, ihre
-Finanzen zu erreichen
-Ziele.
+In the following patchset I will add
+a new mor1kx-based (OpenRISC) platform that
+uses this device.
 
-* Pers=C3=B6nlicher Kredit (ungesichert)
-* Business-Darlehen (ungesichert)
-* Schuldenkonsolidierungsdarlehen
-* Verbessere dein Zuhause
+Later I plan to extend this platform by
+adding support for more devices from LiteX suite.
 
-Bitte geben Sie uns folgendes an:
-Vollst=C3=A4ndiger Name.......
-Heimatadresse....
-Telefon:..........
-Handy, Mobiltelefon..........
-Land...........
-Besetzung:........
-Sex:...............
-Alter:..............
-Monatliches Einkommen......
-Ben=C3=B6tigte Menge ......
-Darlehensdauer: ...........
-Notwendigkeit f=C3=BCr Darlehensantrag .....
-Hast du dich vorher beworben? .........
+Filip Kokosinski (3):
+  dt-bindings: vendor: add vendor prefix for LiteX
+  dt-bindings: serial: document LiteUART bindings
+  drivers/tty/serial: add LiteUART driver
 
-Alle Antworten sollten an weitergeleitet werden
+ .../bindings/serial/litex,liteuart.txt        |  12 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ drivers/tty/serial/Kconfig                    |  30 ++
+ drivers/tty/serial/Makefile                   |   1 +
+ drivers/tty/serial/liteuart.c                 | 382 ++++++++++++++++++
+ include/uapi/linux/serial_core.h              |   3 +
+ 7 files changed, 437 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/litex,liteuart.txt
+ create mode 100644 drivers/tty/serial/liteuart.c
 
-  Frau Christabel
-Darlehensoffizier
-E-Mail: christabelfundinginc2@gmail.com
+-- 
+2.23.0
 
-Sobald wir den Antrag erhalten haben, werden wir Ihren Kredit bearbeiten
-Antrag auf Genehmigung
-
-Danke und viele Gr=C3=BC=C3=9Fe.
