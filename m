@@ -2,137 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E70C8934
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Oct 2019 15:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE730C8B16
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Oct 2019 16:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727399AbfJBNFL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 2 Oct 2019 09:05:11 -0400
-Received: from mail-eopbgr80051.outbound.protection.outlook.com ([40.107.8.51]:20989
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727223AbfJBNFK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 2 Oct 2019 09:05:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R0VO+dE5keItSvoYa8jaTAFpT6oy92bKck6GNLU6Mb56vTkE/TPIi8/ozQNrnc9XanByg0p3jy0Pb5prgux9Z2CqwKSddhQbXGxANtZdz1oZfgx7TPtarLIKyJwTOr9m829cxwjovBdzENA3JRvPeBcATNXdxG5hX+b6F2vkxHLNr/oC5N5qpMNC6aoKjgsMPUxd6ndcWg4I97KiXUTUvHtbVRkJkXn0GtTSjst+oni2as3tNYHTyRva345TDsEkO5XDI8pGqyd+HksOTxjcnarXnJsevTWxJ0YbVlurWAYYC4/L1xMh6hOvUGPf3ETX/DcuRET+M7AOFnGvrMEaEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ehS3UndgXagzpEGqEcWAELDP6S0hrQKp/xr8x06uuPw=;
- b=J3Rop2Wh+g8PauF3xtjXaP38m8YojmMzf2GdQlig7hGCux4qvodRit2ZwN7UX43lcgcYaRmEOANU6djAqLWkHHvf1WkH9AMfmW8W+9O7h08FqsOivgG/s+g5uIGUzFZT8iNhf8v65K7+FKDEDbU5M+EkCkMRa7XmQnBeTEhz8xfOeCfglILH4BK+0mIyNuqnCXLfaBGS8OuJaPg0/uRtS+YMTi6jBXajRT0CRyuhOxZ3D4rCBe4TbecpUL7UvqSzwK+BXFKNpvPdyK4MS/MQ9/+yGWbvUULyGSfCMBFCZJyvxKMuU5NNN9IhBH/afzc0Uq21Whzh7XoOGHmHzxo1UQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ehS3UndgXagzpEGqEcWAELDP6S0hrQKp/xr8x06uuPw=;
- b=JdSKrh8278foev69L1XU0WS5eE4xqVk6RYxjP+hS7fQ/2iLTZkZSKyHXbskR71TYWl/qeCtxUULbZu9ukO8Cf89V0TW/W5ZqKDxpeI90GcPd7P8h5i/oBnRC0hmqVkNqXvo1cg2LngbEhhS14dtbXk7IFCedP0CAouaTkQl6CEU=
-Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
- VI1PR0402MB3918.eurprd04.prod.outlook.com (52.134.17.31) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.15; Wed, 2 Oct 2019 13:04:48 +0000
-Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
- ([fe80::fd33:c447:3cab:c36]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
- ([fe80::fd33:c447:3cab:c36%7]) with mapi id 15.20.2305.023; Wed, 2 Oct 2019
- 13:04:48 +0000
-From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-To:     "corbet@lwn.net" <corbet@lwn.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>
-CC:     "jslaby@suse.com" <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Cosmin Stefan Stoica <cosmin.stoica@nxp.com>
-Subject: [PATCH v5 5/5] arm64: defconfig: Enable configs for S32V234
-Thread-Topic: [PATCH v5 5/5] arm64: defconfig: Enable configs for S32V234
-Thread-Index: AQHVeSH29CXEj60aakehEbe1lYsBFQ==
-Date:   Wed, 2 Oct 2019 13:04:46 +0000
-Message-ID: <20191002130425.28905-6-stefan-gabriel.mirea@nxp.com>
-References: <20191002130425.28905-1-stefan-gabriel.mirea@nxp.com>
-In-Reply-To: <20191002130425.28905-1-stefan-gabriel.mirea@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.22.0
-x-clientproxiedby: PR0P264CA0194.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:100:1f::14) To VI1PR0402MB2863.eurprd04.prod.outlook.com
- (2603:10a6:800:af::18)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [86.120.240.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 58e9b192-ccec-46e1-81d3-08d747391934
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: VI1PR0402MB3918:|VI1PR0402MB3918:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0402MB3918D7C0FEC766F7D3286A62DF9C0@VI1PR0402MB3918.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3044;
-x-forefront-prvs: 0178184651
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(136003)(396003)(376002)(346002)(189003)(199004)(102836004)(2201001)(5660300002)(26005)(478600001)(76176011)(486006)(386003)(14454004)(50226002)(8676002)(8936002)(81156014)(305945005)(81166006)(6506007)(7736002)(7416002)(64756008)(6436002)(66556008)(66446008)(476003)(66066001)(2906002)(11346002)(2616005)(66476007)(6486002)(66946007)(25786009)(52116002)(2501003)(186003)(256004)(446003)(6512007)(6116002)(3846002)(36756003)(71190400001)(71200400001)(4744005)(4326008)(1076003)(86362001)(54906003)(99286004)(110136005)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3918;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MHSjtRb7FhMw7vTwUbEDpLXXl/NRHtlx60XhVmVRyBLDdWKgfpH0tSrdYvFoa9QNzpCpWWt4qX5/pUAZBr6DwEsG4HaGX/LGo479uxTZzFWMqfSHs80TsraYZGDBrXMTrtRIJdOtG0PyqA6xDPNAHBW79x+JlHe2x38uyMv8yglbbWySa9n3rFg1UhqUjqD+C2piQKdZZgLQ3811vLgiDtQ9RwKHl72F3FTPGlAXiO9AOjYWgYfhBMm6hC7tW7ildZA0upxv3A5XRz7Fce2xQyDMX9sOVszdeFOr69N91jZAGK9wW+xer3/MMeYLFzh3D973fvJLQ129iwnUmywZXyc+R2HJKVvkxhe+7BtkLRiqdGt1WnUblYHDj49h4b+OmxVlnqdpRs+kH5+SnzloX2jSlQ9bSl8d73ruA9DY2Yo=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726902AbfJBOU6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 2 Oct 2019 10:20:58 -0400
+Received: from mga07.intel.com ([134.134.136.100]:36612 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726214AbfJBOU6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 2 Oct 2019 10:20:58 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Oct 2019 07:20:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,574,1559545200"; 
+   d="scan'208";a="391592758"
+Received: from zhizhuan-mobl.ccr.corp.intel.com (HELO [10.255.28.55]) ([10.255.28.55])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Oct 2019 07:20:53 -0700
+Subject: Re: [kbuild-all] Re: [PATCH] serial: sh-sci: Use
+ platform_get_irq_optional() for optional interrupts
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        kbuild test robot <lkp@intel.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>, kbuild-all@01.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20191001180743.1041-1-geert+renesas@glider.be>
+ <201910021701.JBV8khAI%lkp@intel.com>
+ <CAMuHMdWQhvWOMjEpJrXV0nuKUc=wT6Zi_ZLjKco0Lkgeis8NyQ@mail.gmail.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <26cf2dd9-2788-bc23-03c4-beb8ed68ef97@intel.com>
+Date:   Wed, 2 Oct 2019 22:20:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58e9b192-ccec-46e1-81d3-08d747391934
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 13:04:46.0122
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yS4gFjWeaAgDuVAHKrmSWZR8GP2UYk+QXFPUn1Cn/X1illIIxH6DtJs+Fut1RBeHld0+bVnQ8bKM1BRxYHpLSiCIoIZGEWsOlM49BSEDUhw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3918
+In-Reply-To: <CAMuHMdWQhvWOMjEpJrXV0nuKUc=wT6Zi_ZLjKco0Lkgeis8NyQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Mihaela Martinas <Mihaela.Martinas@freescale.com>
+Hi Geert,
 
-Enable support for the S32V234 SoC, including the previously added UART
-driver.
+Thanks for your clarification. we are on vacation this week, and we'll 
+take a look asap.
 
-Signed-off-by: Mihaela Martinas <Mihaela.Martinas@freescale.com>
-Signed-off-by: Adrian.Nitu <adrian.nitu@freescale.com>
-Signed-off-by: Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>
-Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+Best Regards,
+Rong Chen
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8e05c39eab08..aa59450557b8 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -48,6 +48,7 @@ CONFIG_ARCH_MXC=3Dy
- CONFIG_ARCH_QCOM=3Dy
- CONFIG_ARCH_RENESAS=3Dy
- CONFIG_ARCH_ROCKCHIP=3Dy
-+CONFIG_ARCH_S32=3Dy
- CONFIG_ARCH_SEATTLE=3Dy
- CONFIG_ARCH_STRATIX10=3Dy
- CONFIG_ARCH_SYNQUACER=3Dy
-@@ -352,6 +353,8 @@ CONFIG_SERIAL_XILINX_PS_UART=3Dy
- CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=3Dy
- CONFIG_SERIAL_FSL_LPUART=3Dy
- CONFIG_SERIAL_FSL_LPUART_CONSOLE=3Dy
-+CONFIG_SERIAL_FSL_LINFLEXUART=3Dy
-+CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE=3Dy
- CONFIG_SERIAL_MVEBU_UART=3Dy
- CONFIG_SERIAL_DEV_BUS=3Dy
- CONFIG_VIRTIO_CONSOLE=3Dy
---=20
-2.22.0
+On 10/2/2019 7:28 PM, Geert Uytterhoeven wrote:
+> Hi Kbuild test robot,
+>
+> On Wed, Oct 2, 2019 at 11:53 AM kbuild test robot <lkp@intel.com> wrote:
+>> I love your patch! Yet something to improve:
+>>
+>> [auto build test ERROR on tty/tty-testing]
+>> [cannot apply to v5.4-rc1 next-20191001]
+> Strange, this patch applies to all of v5.4-rc1, tty/tty-testing, and
+> next-20191001?
+>
+>> url:    https://github.com/0day-ci/linux/commits/Geert-Uytterhoeven/serial-sh-sci-Use-platform_get_irq_optional-for-optional-interrupts/20191002-171547
+> Oh, this is still the old tty/tty-testing before it was rebased to v5.4-rc1,
+> i.e. still based on v5.3-rc4.  That explains the build failure.
+>
+> That does not explain why you couldn't apply this patch to v5.4-rc1 and
+> next-20191001, though.
+>
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+>> config: sparc64-allmodconfig (attached as .config)
+>> compiler: sparc64-linux-gcc (GCC) 7.4.0
+>> reproduce:
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # save the attached .config to linux build tree
+>>          GCC_VERSION=7.4.0 make.cross ARCH=sparc64
+>>
+>> If you fix the issue, kindly add following tag
+>> Reported-by: kbuild test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     drivers/tty/serial/sh-sci.c: In function 'sci_init_single':
+>>>> drivers/tty/serial/sh-sci.c:2899:24: error: implicit declaration of function 'platform_get_irq_optional'; did you mean 'platform_get_irq_byname'? [-Werror=implicit-function-declaration]
+>>         sci_port->irqs[i] = platform_get_irq_optional(dev, i);
+>>                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>                             platform_get_irq_byname
+>>     cc1: some warnings being treated as errors
+> FTR, not reproducible on sparc on v5.4-rc1, current tty/tty-testing, and
+> next-20191001.
+>
+> Gr{oetje,eeting}s,
+>
+>                          Geert
+>
 
