@@ -2,90 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0207C9B3E
-	for <lists+linux-serial@lfdr.de>; Thu,  3 Oct 2019 11:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106DBCAC73
+	for <lists+linux-serial@lfdr.de>; Thu,  3 Oct 2019 19:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729265AbfJCJxR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 3 Oct 2019 05:53:17 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37474 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729472AbfJCJwy (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 3 Oct 2019 05:52:54 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DAE5CB163;
-        Thu,  3 Oct 2019 09:52:51 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1730215AbfJCQKT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 3 Oct 2019 12:10:19 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46756 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732585AbfJCQKS (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 3 Oct 2019 12:10:18 -0400
+Received: by mail-pl1-f196.google.com with SMTP id q24so1718841plr.13
+        for <linux-serial@vger.kernel.org>; Thu, 03 Oct 2019 09:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:from:to:cc:subject:user-agent:date;
+        bh=v9Xix4ukYpxBHBe1n3DXedqcwTHB0Vaz/YT0zLakIIo=;
+        b=EvjKgRekrDRXydliKainNvs1EDKpTaQC9hbAsmM3L4SgVhnCamPwwGeWgzLCmD/6ZN
+         YJihKrj4Aua03JcGiXSnnv9gCPNFzimjX/dj6do1v8Tarr4QDToU5Y7qaBlDo7r0dOjB
+         7MqZGdDBTEaz9H1tW70rmHCyl63UhJarLzgIk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
+         :user-agent:date;
+        bh=v9Xix4ukYpxBHBe1n3DXedqcwTHB0Vaz/YT0zLakIIo=;
+        b=UxAF6jLyXpMyCioczwmyyKtGrGHKwgnwYDyUk34jOfANdGoibdt4p+KIeuXEC0W/mi
+         WH4IC/M5yQqyMTo3V0Mw6vok1nsO2OQdi+sohhJo2mrKxPaSlsAQk/3s1uIQEkx+qpuF
+         WuC4Aby53vw7vCNKffl/jmLYFqvSX6izYf+M/oE0vZlVq3ZkrGcLV90xycuS7oeEEY31
+         eDqw2sF+PDBzPUbDx0NsWa2DMQeZHPiNiV0Ng1cvmT6a42keTP2l5zunabuAeVD69VwO
+         kfymHdbWlkZMgiEeWEjnFzNVQ93wwF0UWCGBf5kZzcy+LcYdtuPhsoTxW5xk9BowKAJo
+         sXsA==
+X-Gm-Message-State: APjAAAXTPO5XGADlEiLRH8CsaKQPcjCqstxWE25YDqxhHCGyBsY6iiqO
+        NxTmWksg77t5fUZGYc24PMAVMw==
+X-Google-Smtp-Source: APXvYqwv9TynoMmQOqZjRuUUV4/ZHjd2t53y5sK2b6fAukPfOM6uRj4H5n6IfZmi7UusPIcmhIpQeQ==
+X-Received: by 2002:a17:902:ba82:: with SMTP id k2mr9926433pls.293.1570119017817;
+        Thu, 03 Oct 2019 09:10:17 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id b69sm3516011pfb.132.2019.10.03.09.10.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2019 09:10:17 -0700 (PDT)
+Message-ID: <5d961d69.1c69fb81.43b1b.addf@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191001180743.1041-1-geert+renesas@glider.be>
+References: <20191001180743.1041-1-geert+renesas@glider.be>
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v7 5/5] MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
-Date:   Thu,  3 Oct 2019 11:52:33 +0200
-Message-Id: <20191003095235.5158-6-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191003095235.5158-1-tbogendoerfer@suse.de>
-References: <20191003095235.5158-1-tbogendoerfer@suse.de>
+        Jiri Slaby <jslaby@suse.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH] serial: sh-sci: Use platform_get_irq_optional() for optional interrupts
+User-Agent: alot/0.8.1
+Date:   Thu, 03 Oct 2019 09:10:16 -0700
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-PROM only enables ethernet PHY on first Origin 200 module, so we must
-do it ourselves for the second module.
+Quoting Geert Uytterhoeven (2019-10-01 11:07:43)
+> As platform_get_irq() now prints an error when the interrupt does not
+> exist, scary warnings may be printed for optional interrupts:
+>=20
+>     sh-sci e6550000.serial: IRQ index 1 not found
+>     sh-sci e6550000.serial: IRQ index 2 not found
+>     sh-sci e6550000.serial: IRQ index 3 not found
+>     sh-sci e6550000.serial: IRQ index 4 not found
+>     sh-sci e6550000.serial: IRQ index 5 not found
+>=20
+> Fix this by calling platform_get_irq_optional() instead for all but the
+> first interrupts, which are optional.
+>=20
+> Fixes: 7723f4c5ecdb8d83 ("driver core: platform: Add an error message to =
+platform_get_irq*()")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- arch/mips/pci/pci-ip27.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
-index 441eb9383b20..7cc784cb299b 100644
---- a/arch/mips/pci/pci-ip27.c
-+++ b/arch/mips/pci/pci-ip27.c
-@@ -7,6 +7,11 @@
-  * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-  */
-+#include <asm/sn/addrs.h>
-+#include <asm/sn/types.h>
-+#include <asm/sn/klconfig.h>
-+#include <asm/sn/hub.h>
-+#include <asm/sn/ioc3.h>
- #include <asm/pci/bridge.h>
- 
- dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
-@@ -31,3 +36,20 @@ int pcibus_to_node(struct pci_bus *bus)
- }
- EXPORT_SYMBOL(pcibus_to_node);
- #endif /* CONFIG_NUMA */
-+
-+static void ip29_fixup_phy(struct pci_dev *dev)
-+{
-+	int nasid = pcibus_to_node(dev->bus);
-+	u32 sid;
-+
-+	if (nasid != 1)
-+		return; /* only needed on second module */
-+
-+	/* enable ethernet PHY on IP29 systemboard */
-+	pci_read_config_dword(dev, PCI_SUBSYSTEM_VENDOR_ID, &sid);
-+	if (sid == ((PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_IP29_SYSBOARD))
-+		REMOTE_HUB_S(nasid, MD_LED0, 0x09);
-+}
-+
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_SGI, PCI_DEVICE_ID_SGI_IOC3,
-+			ip29_fixup_phy);
--- 
-2.16.4
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
