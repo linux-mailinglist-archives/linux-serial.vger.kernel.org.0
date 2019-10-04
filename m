@@ -2,105 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D54CBE51
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Oct 2019 16:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1157CBECB
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Oct 2019 17:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389113AbfJDO6m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Oct 2019 10:58:42 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39732 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389043AbfJDO6m (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Oct 2019 10:58:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=EebPJjW7CeMsMN24rCmsXR+EUlCGm5eTWQTWMlbNyOI=; b=EHastvM3Dx7teNQpDnI37EMHZ
-        jfh/ASOsqy2kGpoFmIfP6I2Qn4YVXVYEvmsbc8ZiYUAcJ1v1xd68LIktDTiv9r9POsdc7piBaqMaV
-        NrVt+uPa2cqe+xOoFy7donO6RGd7NfEJWjs8B43aFlN//Et0OkExQOrmyF5k6+q516T0go6IuaMEg
-        1o75bPkdB+cUuxH/b0tKo0FNB3WiyVsihijkd+XIu2z2FHihXv7Z6Mt38DT2PPsBjmSBJ+YOX+IDe
-        m4UGCmjDr6RVtySsi/0Cqzq+yrjVkkuOxXDiPTQpAZaaM6FpMZzrwwTy9U2p5N/VioyTmwtRLejYy
-        Jmc3j0MIw==;
-Received: from [2601:1c0:6280:3f0::9ef4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iGP2X-0008Ow-T4; Fri, 04 Oct 2019 14:58:41 +0000
-Subject: Re: [PATCH] serial: move Non-standard serial drivers menu to the
- Serial drivers menu
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-References: <8e583967-4453-368b-6be5-a24df9b2b5dc@infradead.org>
- <20191004125446.GB583048@kroah.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d28e9315-a42d-fbea-e03f-1da7158d30a8@infradead.org>
-Date:   Fri, 4 Oct 2019 07:58:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20191004125446.GB583048@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2389586AbfJDPO0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Oct 2019 11:14:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52010 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389086AbfJDPOZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 4 Oct 2019 11:14:25 -0400
+Received: from localhost.localdomain (unknown [194.230.155.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4017F207FF;
+        Fri,  4 Oct 2019 15:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570202065;
+        bh=At7Vw3YFrrg3TOqKMg8f1TsgKNBKoiEKL7wq9XiiUKk=;
+        h=From:To:Subject:Date:From;
+        b=BeGHmF7Rbd6pkfOjo2uCfn8OcrdTdcDJynBCXDiHZNqmgwIE1+aRy4wZQW23eUGGP
+         U+RHRG2J0ZC+B7hAvb/Ik0Nsr00FdebTvb84NysQA4HHgL8yfGWaQ2VW+9bCdu7zMd
+         kUWdVsOOM75RFDTU0Ja0JGS5R4l69pzZnlhyyzYs=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maciej Falkowski <m.falkowski@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: arm: samsung: Force clkoutN names to be unique in PMU
+Date:   Fri,  4 Oct 2019 17:14:12 +0200
+Message-Id: <20191004151414.8458-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 10/4/19 5:54 AM, Greg Kroah-Hartman wrote:
-> On Wed, Sep 25, 2019 at 06:16:28PM -0700, Randy Dunlap wrote:
->> From: Randy Dunlap <rdunlap@infradead.org>
->>
->> Since Non-standard serial port drivers are also Serial drivers,
->> move the "Non-standard serial port support" menu to be under/in
->> the "Serial drivers" menu. With this move, the "Serial drivers"
->> menu contains (a) 8250/16550 support, (b) non-8250 support, and
->> (c) non-standard serial port support.
->>
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> ---
->>  drivers/tty/Kconfig        |  119 -----------------------------------
->>  drivers/tty/serial/Kconfig |  119 +++++++++++++++++++++++++++++++++++
->>  2 files changed, 119 insertions(+), 119 deletions(-)
->>
->> --- lnx-53.orig/drivers/tty/Kconfig
->> +++ lnx-53/drivers/tty/Kconfig
->> @@ -151,125 +151,6 @@ config LEGACY_PTY_COUNT
->>  	  When not in use, each legacy PTY occupies 12 bytes on 32-bit
->>  	  architectures and 24 bytes on 64-bit architectures.
->>  
->> -config SERIAL_NONSTANDARD
->> -	bool "Non-standard serial port support"
->> -	depends on HAS_IOMEM
->> -	---help---
->> -	  Say Y here if you have any non-standard serial boards -- boards
->> -	  which aren't supported using the standard "dumb" serial driver.
->> -	  This includes intelligent serial boards such as Cyclades,
->> -	  Digiboards, etc. These are usually used for systems that need many
->> -	  serial ports because they serve many terminals or dial-in
->> -	  connections.
->> -
->> -	  Note that the answer to this question won't directly affect the
->> -	  kernel: saying N will just cause the configurator to skip all
->> -	  the questions about non-standard serial boards.
->> -
->> -	  Most people can say N here.
->> -
->> -config ROCKETPORT
->> -	tristate "Comtrol RocketPort support"
->> -	depends on SERIAL_NONSTANDARD && (ISA || EISA || PCI)
-> 
-> I would agree with the move, but the files are not in
-> drivers/tty/serial/ for the drivers you are asking to configure in that
-> directory.
-> 
-> So unless we want to move these drivers (and it's not really worth it,
-> unless we want to create drivers/tty/serial/obsolete/ or something like
-> that), I would just leave this alone.
+The clkoutN names of clocks must be unique because they represent
+unique inputs of clock multiplexer.
 
-ack that.  Thanks.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/samsung/pmu.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/arm/samsung/pmu.yaml b/Documentation/devicetree/bindings/arm/samsung/pmu.yaml
+index 73b56fc5bf58..d8e03716f5d2 100644
+--- a/Documentation/devicetree/bindings/arm/samsung/pmu.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/pmu.yaml
+@@ -53,8 +53,10 @@ properties:
+       List of clock names for particular CLKOUT mux inputs
+     minItems: 1
+     maxItems: 32
+-    items:
+-      pattern: '^clkout([0-9]|[12][0-9]|3[0-1])$'
++    allOf:
++      - items:
++          pattern: '^clkout([0-9]|[12][0-9]|3[0-1])$'
++      - uniqueItems: true
+ 
+   clocks:
+     minItems: 1
 -- 
-~Randy
+2.17.1
+
