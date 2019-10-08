@@ -2,131 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3432D01A5
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Oct 2019 21:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D84D0257
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Oct 2019 22:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730851AbfJHTz3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Oct 2019 15:55:29 -0400
-Received: from mail-ed1-f53.google.com ([209.85.208.53]:34583 "EHLO
-        mail-ed1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730723AbfJHTzX (ORCPT
+        id S1730720AbfJHUqz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Oct 2019 16:46:55 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:57462 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730523AbfJHUqz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Oct 2019 15:55:23 -0400
-Received: by mail-ed1-f53.google.com with SMTP id p10so16865162edq.1
-        for <linux-serial@vger.kernel.org>; Tue, 08 Oct 2019 12:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
-         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
-         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
-         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
-         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
-         wXZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=uXuwhnSc4GnOEjWTzCcTMJeIPfE/Weh9C3aIRs6R9+txlOoRPFa/rn+9yQADAW01L9
-         RyQL1+8HYIjCrZVmuVC9YrRhayGmMhJhkX5NKgEugMZ4ju3pMkXKSB1lPOQ1XZcbdIiX
-         RjRJql47+ilOrJlO5lA9sjg2HnNP1KzK9L5KzBytI3DJ9MH/hAwiqaR6/3p1FdZhUYaV
-         +CfuoJAD2hZjX2LGmVoZucAp3YZN/XstkC+t1tmNujIT1rJ4lRm2p5Edmvk/l85GPOmh
-         H4J1FJAaj18rGjewnit+BSctBlfT0A8GlLSdabvfgPhj/oUr0KNV8M/oNpmkqp4lWi42
-         D1RQ==
-X-Gm-Message-State: APjAAAU0fph79DB5t7BaIA4ha0+pwwa4dXc1WKQ6PlZ+UZe5kix3XwJV
-        dpsayivBzCtnh3Z37zZg1Fw6Tu0EXmf2ji94iFM=
-X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
-X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
- Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
+        Tue, 8 Oct 2019 16:46:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=LKj/7Fff1CfpZBnq21VwwwS/cCFdn8vI3qeat/yQhkQ=; b=h3ds8DwrjR8pC8djYU7u6u5ry
+        RGpLR1VdaW3vUz4bWpHmdEuekoZM4OBGPGui3MwcCYcgX2d+zd47Ypqc1eRkeCBEdbq1GrFN5c9ww
+        mt9IEZcBaBng03XjMcPtOunGHtMu6j98wEwQ86dv606XbUjKqw6h5X35Mon3SY9+k1wnIA+MbbE7D
+        zKYChpFJikxDtSpf06eULy37EwIT8sODU61JhiipTropkiV7/M0U15+ma5bRL2aZQq6j61VaHo/Z8
+        JcL7zmxXIG7Hm0I7rSIX6MP/4k5q8XXiDJLah5RDXqqUEdMoGdgxPxBR9TbOCJdGJQoBWIDR7HoxT
+        t2bmNVVtQ==;
+Received: from [2601:1c0:6280:3f0::9ef4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iHwNh-0006Gq-Qv; Tue, 08 Oct 2019 20:46:54 +0000
+To:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Hurley <peter@hurleysoftware.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] serial: fix kernel-doc warning in comments
+Message-ID: <e989641c-224a-1090-e596-e7cc800bed44@infradead.org>
+Date:   Tue, 8 Oct 2019 13:46:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
- -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   MONEY GRAM <currency1000000@gmail.com>
-Date:   Tue, 8 Oct 2019 20:55:16 +0100
-Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
-Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
-M.T.C.N:78393135
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Attn: Beneficiary,
+Fix Sphinx warning in serial_core.c:
 
-This is to inform you that the America Embassy office was instructed
-to transfer your fund $980,000.00 U.S Dollars compensating all the
-SCAM VICTIMS and your email was found as one of the VICTIMS. by
-America security leading team and America representative officers so
-between today the 8th of October till 1ST Of December 2019 you will
-be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
-that we have already sent the $6,000 dollars this morning to avoid
-cancellation of your payment, remain the total sum of $980,000.00.
+../drivers/tty/serial/serial_core.c:1969: WARNING: Definition list ends without a blank line; unexpected unindent.
 
-You have only six hours to call this office upon the receipt of this
-email the maximum amount you will be receiving per a day starting from
-today's $6,000 and the Money Transfer Control Number of today is
-below.
+Fixes: 73abaf87f01b ("serial: earlycon: Refactor parse_options into serial core")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Peter Hurley <peter@hurleysoftware.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/tty/serial/serial_core.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-NOTE; The sent $6,000 is on hold because of the instruction from IMF
-office, they asked us to place it on hold by requesting the (Clean
-Bill Record Certificate) which will cost you $25 in order to fulfill
-all the necessary obligation to avoid any hitches while sending you
-the payment through MONEY GRAM money transfer, the necessary
-obligation I mean here is to obtain the (Clean Bill Record
-Certificate)
+--- linux-next-20191008.orig/drivers/tty/serial/serial_core.c
++++ linux-next-20191008/drivers/tty/serial/serial_core.c
+@@ -1964,8 +1964,10 @@ uart_get_console(struct uart_port *ports
+  *	   console=<name>,io|mmio|mmio16|mmio32|mmio32be|mmio32native,<addr>,<options>
+  *
+  *	The optional form
++ *
+  *	   earlycon=<name>,0x<addr>,<options>
+  *	   console=<name>,0x<addr>,<options>
++ *
+  *	is also accepted; the returned @iotype will be UPIO_MEM.
+  *
+  *	Returns 0 on success or -EINVAL on failure
 
-Below is the information of today track it in our
-
-websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
-to see is available to pick up by the receiver, but if we didn't here
-from you soon we'll pickup it up from line for security reason to
-avoid hackers stealing the money online.
-
-Money Transfer Control Number M.T.C.N)::78393135
-SENDERS FIRST NAME: John
-SENDERS LAST NAME: Chun
-SENDERS COUNTRY...BENIN REPUBLIC
-TEXT QUESTION: A
-ANSWER: B
-AMOUNT: $6,000
-
-We need the below details from you, to enable us place the payment to
-your name and transfer the fund to you.
-
-(Full Receivers name)...................
-(You're Country)................................
-(Address)......................................
-(Phone NuMBER-...............................
-(You're Age)............................
-(OCCUPATION)..REAL ESTATE..................
-(A Copy of Your ID CARD).SEE ATTACHMENTS.............
-
-HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
-AND THAT IS ALL YOU HAVE TO DO ASAP.
-
-The payment will be sending to below information, such as:
-
-Receiver.............. ALAN UDE
-Country................Benin Republic
-Amount: ....................$25
-Question: .....................A
-Answer:................... B
-Sender...............Name:
-MTCN :..............
-
-According to the instruction and order we received from IMF the their
-requested $25 must be made directly to the above info's.
-
-Furthermore you are advised to call us as the instruction was passed
-that within 6hours without hearing from you, Count your payment
-canceled. Number to call is below listed manager director office of
-release order:
-DR.ALAN UDE
-Director MONEY GRAM-Benin
