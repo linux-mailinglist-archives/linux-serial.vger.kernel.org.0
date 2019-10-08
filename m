@@ -2,87 +2,131 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15940CFD36
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Oct 2019 17:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3432D01A5
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Oct 2019 21:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbfJHPKe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Oct 2019 11:10:34 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:36468 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfJHPKd (ORCPT
+        id S1730851AbfJHTz3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Oct 2019 15:55:29 -0400
+Received: from mail-ed1-f53.google.com ([209.85.208.53]:34583 "EHLO
+        mail-ed1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730723AbfJHTzX (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Oct 2019 11:10:33 -0400
-Received: by mail-wr1-f65.google.com with SMTP id y19so19868009wrd.3;
-        Tue, 08 Oct 2019 08:10:32 -0700 (PDT)
+        Tue, 8 Oct 2019 15:55:23 -0400
+Received: by mail-ed1-f53.google.com with SMTP id p10so16865162edq.1
+        for <linux-serial@vger.kernel.org>; Tue, 08 Oct 2019 12:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
+        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
+         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
+         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
+         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
+         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
+         wXZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jDr1BzlICCTlwhp3uNGJEPl314YzfcfD31Fib2fRNSo=;
-        b=fxrRLXHiFr9wcrSrK69zhEYSFeedRkodUXLrs8Mdsd9rpVEY2kgpk2ejmAw/e7rmgt
-         xptxfzSJ3cnZ+qQRsGc16l/NOy8dx2N5/tLvFAGCOqEUZ3ApVRgxixCZlTJ4//jj/UPf
-         LsKWfifF/8HrsB9OYukj+kJWFLNO27319nuP1QtlmAFs4C1/UFWKsKNShl4AFgtjHfc6
-         +kIK9YxqwjqsCHihiUKi+KL88Goqkljx/Urh0UbFQvoRisHpnqj+uDys63LST1/ah9F4
-         XUZVEdBXDAuytgkq14CvU9nikhppnqLv1oodvsk9oFMJTZyxGWBcSa3s+5UU7xI5EKcY
-         W2LA==
-X-Gm-Message-State: APjAAAWKgsBa4WPakrimhevEwSuh0IMCRgT+U7XUNeu6Qec40HqWm6aK
-        UPS1jVyDrRw2Ckbqec+Xa8QfimiI
-X-Google-Smtp-Source: APXvYqzX4ka2psn6HEE8SlAx19V028jaUxy26b9V7r9ws/He1WJtNpQAY+Uuwiz4uo5g6s4xsd7i9w==
-X-Received: by 2002:adf:ecc1:: with SMTP id s1mr19736353wro.223.1570547431457;
-        Tue, 08 Oct 2019 08:10:31 -0700 (PDT)
-Received: from pi3 ([194.230.155.145])
-        by smtp.googlemail.com with ESMTPSA id 90sm26487496wrr.1.2019.10.08.08.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2019 08:10:30 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 17:10:28 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Kukjin Kim <kgene@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: arm: samsung: Force clkoutN names to be
- unique in PMU
-Message-ID: <20191008151028.GA2720@pi3>
-References: <20191004151414.8458-1-krzk@kernel.org>
- <CAL_JsqJDTcHu5oXG6zszGHCBhTE6EW94AANUjyMV78SkKcn5yA@mail.gmail.com>
- <20191008125038.GA2550@pi3>
- <CAL_Jsq+GcsUWN6kjBLkyr1rHGh6_4=w6JL6+k7DBXkBcvHcSBw@mail.gmail.com>
- <CAL_JsqKBzZCShxx99aB4z15XYNbUionVicmfNNXEfq=iohWLCA@mail.gmail.com>
- <20191008142900.GA2635@pi3>
- <CAL_Jsq+ObMD=inkMFqkZbKFoKZUxw53gUMnjsC1pU5GwumK8LQ@mail.gmail.com>
- <20191008150456.GA2683@pi3>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
+        b=uXuwhnSc4GnOEjWTzCcTMJeIPfE/Weh9C3aIRs6R9+txlOoRPFa/rn+9yQADAW01L9
+         RyQL1+8HYIjCrZVmuVC9YrRhayGmMhJhkX5NKgEugMZ4ju3pMkXKSB1lPOQ1XZcbdIiX
+         RjRJql47+ilOrJlO5lA9sjg2HnNP1KzK9L5KzBytI3DJ9MH/hAwiqaR6/3p1FdZhUYaV
+         +CfuoJAD2hZjX2LGmVoZucAp3YZN/XstkC+t1tmNujIT1rJ4lRm2p5Edmvk/l85GPOmh
+         H4J1FJAaj18rGjewnit+BSctBlfT0A8GlLSdabvfgPhj/oUr0KNV8M/oNpmkqp4lWi42
+         D1RQ==
+X-Gm-Message-State: APjAAAU0fph79DB5t7BaIA4ha0+pwwa4dXc1WKQ6PlZ+UZe5kix3XwJV
+        dpsayivBzCtnh3Z37zZg1Fw6Tu0EXmf2ji94iFM=
+X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
+X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
+ Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191008150456.GA2683@pi3>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
+ -0700 (PDT)
+Reply-To: moneygram.1820@outlook.fr
+From:   MONEY GRAM <currency1000000@gmail.com>
+Date:   Tue, 8 Oct 2019 20:55:16 +0100
+Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
+Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 05:04:56PM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Oct 08, 2019 at 09:38:15AM -0500, Rob Herring wrote:
-> > Are you running using DT_SCHEMA_FILES? If so, you won't get the core schema.
-> 
-> Ah, yes, now I see proper errors. Thanks for pointing this.
-> 
-> I'll send next version of this patch only (if others are ok).
-> 
+HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
+M.T.C.N:78393135
 
-Of course, there will be no v2, this patch can be just skipped.
+Attn: Beneficiary,
 
-Best regards,
-Krzysztof
+This is to inform you that the America Embassy office was instructed
+to transfer your fund $980,000.00 U.S Dollars compensating all the
+SCAM VICTIMS and your email was found as one of the VICTIMS. by
+America security leading team and America representative officers so
+between today the 8th of October till 1ST Of December 2019 you will
+be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
+that we have already sent the $6,000 dollars this morning to avoid
+cancellation of your payment, remain the total sum of $980,000.00.
 
+You have only six hours to call this office upon the receipt of this
+email the maximum amount you will be receiving per a day starting from
+today's $6,000 and the Money Transfer Control Number of today is
+below.
+
+NOTE; The sent $6,000 is on hold because of the instruction from IMF
+office, they asked us to place it on hold by requesting the (Clean
+Bill Record Certificate) which will cost you $25 in order to fulfill
+all the necessary obligation to avoid any hitches while sending you
+the payment through MONEY GRAM money transfer, the necessary
+obligation I mean here is to obtain the (Clean Bill Record
+Certificate)
+
+Below is the information of today track it in our
+
+websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
+to see is available to pick up by the receiver, but if we didn't here
+from you soon we'll pickup it up from line for security reason to
+avoid hackers stealing the money online.
+
+Money Transfer Control Number M.T.C.N)::78393135
+SENDERS FIRST NAME: John
+SENDERS LAST NAME: Chun
+SENDERS COUNTRY...BENIN REPUBLIC
+TEXT QUESTION: A
+ANSWER: B
+AMOUNT: $6,000
+
+We need the below details from you, to enable us place the payment to
+your name and transfer the fund to you.
+
+(Full Receivers name)...................
+(You're Country)................................
+(Address)......................................
+(Phone NuMBER-...............................
+(You're Age)............................
+(OCCUPATION)..REAL ESTATE..................
+(A Copy of Your ID CARD).SEE ATTACHMENTS.............
+
+HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
+AND THAT IS ALL YOU HAVE TO DO ASAP.
+
+The payment will be sending to below information, such as:
+
+Receiver.............. ALAN UDE
+Country................Benin Republic
+Amount: ....................$25
+Question: .....................A
+Answer:................... B
+Sender...............Name:
+MTCN :..............
+
+According to the instruction and order we received from IMF the their
+requested $25 must be made directly to the above info's.
+
+Furthermore you are advised to call us as the instruction was passed
+that within 6hours without hearing from you, Count your payment
+canceled. Number to call is below listed manager director office of
+release order:
+DR.ALAN UDE
+Director MONEY GRAM-Benin
