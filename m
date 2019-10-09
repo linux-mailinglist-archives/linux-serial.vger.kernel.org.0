@@ -2,91 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FE9D0C6F
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2019 12:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3BED0D3F
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2019 12:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730871AbfJIKRg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 9 Oct 2019 06:17:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:32892 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730734AbfJIKRd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 9 Oct 2019 06:17:33 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 18FC8AE48;
-        Wed,  9 Oct 2019 10:17:29 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        id S1730954AbfJIKzu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 9 Oct 2019 06:55:50 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36375 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727035AbfJIKzu (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 9 Oct 2019 06:55:50 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 67so1325901oto.3;
+        Wed, 09 Oct 2019 03:55:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x3unWFkcJpXKNb8dXSk7twjyfVkZd7Gwb6TQxf0CzFw=;
+        b=lAmUTsQY/CZlaq/zouJspiWWkWjppJp7Bz40rl8QTVpeci1l9iUh513qoiNsMcTl5O
+         zkOubDZRouSluts+9nyFP19B14ky/wnw8CwyC+KidIood94Zmw1TSeZUghnbjfeLJ2tx
+         GiYQFLGGXnz6X0l6fB3I8sX9vSmSMHj+UaYI2y/rkhEqOsfDrKY7eR+kRGthVwLbrcKP
+         AKlw3LBXhjHk7Xdm4sfBWKOskixf9Q6zw/EBvRo7tmLrKlrVtt/tOoEP7HRd46gjjs8Z
+         m0ES2RYkxcwW2jLtqolMu36gPd6RxRJhE6eM1FAVp+gEz8yisG/pFYWWnoLti1OwxTyK
+         hP3w==
+X-Gm-Message-State: APjAAAU0ymdXheYJJlU3ePFOKE4EgWvZZPUhkbU7PhNLEc/a11LBi0Jx
+        VMBE3f7nTsiC9Ocg2KT1IHcN0BB1jbSm1UIz+bU=
+X-Google-Smtp-Source: APXvYqw5IAzTjVBhlc8iRLqf+cdJpgzj6zNsVffXtkNnQdcMdYKmNwxtMA0YZ+q29ei9YF0gwMf5pwNvdwDZQVDcfXk=
+X-Received: by 2002:a9d:70d0:: with SMTP id w16mr2140239otj.107.1570618548788;
+ Wed, 09 Oct 2019 03:55:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <alpine.DEB.2.21.9999.1910081606370.11044@viisi.sifive.com>
+ <CAMuHMdVdPFSU_3VEtO=P73kqLezV5Dmki=N3nxsKibzy-U5pBg@mail.gmail.com> <mvmv9syz10h.fsf@suse.de>
+In-Reply-To: <mvmv9syz10h.fsf@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Oct 2019 12:55:37 +0200
+Message-ID: <CAMuHMdVh=CUXKwnXee067cRccVBDVuwWpo1wP7crAaCFA=y2Tw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: admin-guide: add earlycon documentation
+ for the sifive serial driver
+To:     Andreas Schwab <schwab@suse.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v8 5/5] MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
-Date:   Wed,  9 Oct 2019 12:17:12 +0200
-Message-Id: <20191009101713.12238-6-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191009101713.12238-1-tbogendoerfer@suse.de>
-References: <20191009101713.12238-1-tbogendoerfer@suse.de>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-PROM only enables ethernet PHY on first Origin 200 module, so we must
-do it ourselves for the second module.
+Hi Andreas,
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- arch/mips/pci/pci-ip27.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+On Wed, Oct 9, 2019 at 12:06 PM Andreas Schwab <schwab@suse.de> wrote:
+> On Okt 09 2019, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > I believe risc-v is DT-only, so if chosen/stdout-path is set up
+>
+> If.  Currently, it isn't.
 
-diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
-index 441eb9383b20..7cc784cb299b 100644
---- a/arch/mips/pci/pci-ip27.c
-+++ b/arch/mips/pci/pci-ip27.c
-@@ -7,6 +7,11 @@
-  * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-  */
-+#include <asm/sn/addrs.h>
-+#include <asm/sn/types.h>
-+#include <asm/sn/klconfig.h>
-+#include <asm/sn/hub.h>
-+#include <asm/sn/ioc3.h>
- #include <asm/pci/bridge.h>
- 
- dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
-@@ -31,3 +36,20 @@ int pcibus_to_node(struct pci_bus *bus)
- }
- EXPORT_SYMBOL(pcibus_to_node);
- #endif /* CONFIG_NUMA */
-+
-+static void ip29_fixup_phy(struct pci_dev *dev)
-+{
-+	int nasid = pcibus_to_node(dev->bus);
-+	u32 sid;
-+
-+	if (nasid != 1)
-+		return; /* only needed on second module */
-+
-+	/* enable ethernet PHY on IP29 systemboard */
-+	pci_read_config_dword(dev, PCI_SUBSYSTEM_VENDOR_ID, &sid);
-+	if (sid == ((PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_IP29_SYSBOARD))
-+		REMOTE_HUB_S(nasid, MD_LED0, 0x09);
-+}
-+
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_SGI, PCI_DEVICE_ID_SGI_IOC3,
-+			ip29_fixup_phy);
+IC. So isn't it better to fix that, instead of pointing people to more obscure
+legacy solutions?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.16.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
