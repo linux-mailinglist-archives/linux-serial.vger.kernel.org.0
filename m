@@ -2,131 +2,141 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9374ED2C5F
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Oct 2019 16:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0305D2D1A
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Oct 2019 17:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfJJOZW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 10 Oct 2019 10:25:22 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41319 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbfJJOZW (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 10 Oct 2019 10:25:22 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q7so4008990pfh.8
-        for <linux-serial@vger.kernel.org>; Thu, 10 Oct 2019 07:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:from:to:cc:subject:user-agent:date;
-        bh=YAcuX9sdYOddUPgFNugc5Dj+a9XzYn2J9DA/qBs9moA=;
-        b=kCQusiDpXLFqPztUgrKD36WQ2tqWdsow+SYKMnfNNazMyEFA4NpOC7riHKCLi6vLEW
-         2LOTFQtt89ARZVd0OfUR6tDysoN73HA+ZAR4DoH0WaNXJUJ4B95q5Etxyoug06o1qIJX
-         +Tab4oP8YqmdfgxrpTKDOir48GdkuaZa9cdj4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
-         :user-agent:date;
-        bh=YAcuX9sdYOddUPgFNugc5Dj+a9XzYn2J9DA/qBs9moA=;
-        b=V/3j+usZwArhlkTtU5O1ZB7qN/IEzY9q/ZmWDYdq9LS+w5k8BwWQHrwpJqQB2aTpQG
-         z0cDhKfrHsS7uVvz1JH3i4uz7fSIukCfvklWP4t/KGzXvA/U/e42CS/2EHELWQeIfKI8
-         scZKqDJbKqSs5DqOx0YrQfRlgDtSWCbI0dXkjJ9gv4mKncBCGEgGJxUZMTE4JN7Rs3Rc
-         Ki5kyMBWKTw3+AGPCfaOVJABiblEKgXEEjU1YCxd2tKQ6SpyUEbDCcCzWQwa6S9EmBaV
-         gNFTBQXWl06AH5pkrgiaMg7n8c4aYSEYnDnn4ZSR9Gq6J9nDXJbAIcrwi0SZ2HBuM2mz
-         58MQ==
-X-Gm-Message-State: APjAAAXEAwkgHUt1QKC9CPRKp41qUNZV6u4L6j9fZ0eVgvp+H9HWfBjT
-        OMyDUb7NWFQWu3aREx+vw2mb7w==
-X-Google-Smtp-Source: APXvYqyMxxvMlXGdvXkq0FvqPJxREczTm3WwKvf3Usyb8IoOIIKQFlLZC3zO6iUoypX0NHIakZBlew==
-X-Received: by 2002:a17:90a:bb0a:: with SMTP id u10mr12007008pjr.14.1570717520153;
-        Thu, 10 Oct 2019 07:25:20 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id f14sm9577813pfq.187.2019.10.10.07.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 07:25:19 -0700 (PDT)
-Message-ID: <5d9f3f4f.1c69fb81.5120f.b90e@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1570700803-17566-1-git-send-email-akashast@codeaurora.org>
-References: <1570700803-17566-1-git-send-email-akashast@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Akash Asthana <akashast@codeaurora.org>, gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        mgautam@codeaurora.org, bjorn.andersson@linaro.org,
-        Akash Asthana <akashast@codeaurora.org>
-Subject: Re: [PATCH V2 2/2] tty: serial: qcom_geni_serial: Wakeup over UART RX
-User-Agent: alot/0.8.1
-Date:   Thu, 10 Oct 2019 07:25:18 -0700
+        id S1726174AbfJJPAD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 10 Oct 2019 11:00:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46754 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726088AbfJJPAD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 10 Oct 2019 11:00:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 55639AEB3;
+        Thu, 10 Oct 2019 15:00:00 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v9 0/5] Use MFD framework for SGI IOC3 drivers
+Date:   Thu, 10 Oct 2019 16:59:46 +0200
+Message-Id: <20191010145953.21327-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Quoting Akash Asthana (2019-10-10 02:46:43)
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/q=
-com_geni_serial.c
-> index 5180cd8..ff63728 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1306,6 +1317,29 @@ static int qcom_geni_serial_probe(struct platform_=
-device *pdev)
->                 return ret;
->         }
-> =20
-> +       if (!console) {
-> +               port->wakeup_irq =3D platform_get_irq(pdev, 1);
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-Should use platform_get_irq_optional() it seems.
+Changes in v9:
+ - remove generated MFD devices, when driver is removed or in case
+   of a mfd device setup error
+ - remove irq domain, if setup of mfd devices failed
+ - pci_iounmap on exit/error cases
+ - added irq domain unmap function
 
-> +               if (port->wakeup_irq < 0) {
-> +                       dev_err(&pdev->dev, "Failed to get wakeup IRQ %d\=
-n",
-> +                                       port->wakeup_irq);
-> +               } else {
-> +                       irq_set_status_flags(port->wakeup_irq, IRQ_NOAUTO=
-EN);
-> +                       ret =3D devm_request_irq(uport->dev, port->wakeup=
-_irq,
-> +                               qcom_geni_serial_wakeup_isr,
-> +                               IRQF_TRIGGER_FALLING, "uart_wakeup", upor=
-t);
-> +                       if (ret) {
-> +                               dev_err(uport->dev, "Failed to register w=
-akeup IRQ ret %d\n",
-> +                                               ret);
-> +                               return ret;
-> +                       }
-> +
-> +                       device_init_wakeup(&pdev->dev, true);
-> +                       ret =3D dev_pm_set_wake_irq(&pdev->dev, port->wak=
-eup_irq);
+Changes in v8:
+ - Re-worked comments in drivers/mfd/ioc3.c
+ - Added select CRC16 to ioc3-eth.c
+ - Patches 1 and 2 are already taken to mips-next, but
+   for completeness of the series they are still included.
+   What's missing to get the remaining 3 patches via the MIPS
+   tree is an ack from a network maintainer
 
-Why can't we use dev_pm_set_dedicated_wake_irq() here?
+Changes in v7:
+ - added patch to enable ethernet phy for Origin 200 systems
+ - depend on 64bit for ioc3 mfd driver
 
-> +                       if (unlikely(ret))
-> +                               dev_err(uport->dev, "%s:Failed to set IRQ=
- wake:%d\n",
-> +                                               __func__, ret);
-> +               }
-> +       }
->         uport->private_data =3D drv;
->         platform_set_drvdata(pdev, port);
->         port->handle_rx =3D console ? handle_rx_console : handle_rx_uart;
-> @@ -1328,7 +1362,12 @@ static int __maybe_unused qcom_geni_serial_sys_sus=
-pend(struct device *dev)
->         struct qcom_geni_serial_port *port =3D dev_get_drvdata(dev);
->         struct uart_port *uport =3D &port->uport;
-> =20
-> -       return uart_suspend_port(uport->private_data, uport);
-> +       uart_suspend_port(uport->private_data, uport);
-> +
-> +       if (port->wakeup_irq > 0)
-> +               enable_irq(port->wakeup_irq);
-> +
+Changes in v6:
+ - dropped patches accepted for v5.4-rc1
+ - moved serio patch to ip30 patch series
+ - adapted nvmem patch
 
-Then this is hopefully done automatically?
+Changes in v5:
+ - requested by Jakub I've splited ioc3 ethernet driver changes into
+   more steps to make the transition more visible; on the way there 
+   I've "checkpatched" the driver and reduced code reorderings
+ - dropped all uint16_t and uint32_t
+ - added nvmem API extension to the documenation file
+ - changed to use request_irq/free_irq in serio driver
+ - removed wrong kfree() in serio error path
 
-> +       return 0;
->  }
-> =20
->  static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
+
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (5):
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
+
+ Documentation/driver-api/nvmem.rst            |   2 +
+ arch/mips/include/asm/mach-ip27/mangle-port.h |   4 +-
+ arch/mips/include/asm/pci/bridge.h            |   1 +
+ arch/mips/include/asm/sn/ioc3.h               |  47 +-
+ arch/mips/pci/pci-ip27.c                      |  22 +
+ arch/mips/pci/pci-xtalk-bridge.c              | 135 +++++-
+ arch/mips/sgi-ip27/ip27-timer.c               |  20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |  38 +-
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ioc3.c                            | 605 ++++++++++++++++++++++++++
+ drivers/net/ethernet/sgi/Kconfig              |   5 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 561 +++++-------------------
+ drivers/nvmem/core.c                          |  61 ++-
+ drivers/rtc/rtc-m48t35.c                      |  11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |  98 +++++
+ drivers/tty/serial/8250/Kconfig               |  11 +
+ drivers/tty/serial/8250/Makefile              |   1 +
+ include/linux/nvmem-consumer.h                |   9 +
+ 19 files changed, 1097 insertions(+), 548 deletions(-)
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+
+-- 
+2.16.4
+
