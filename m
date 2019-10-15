@@ -2,91 +2,237 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D697BD75F2
-	for <lists+linux-serial@lfdr.de>; Tue, 15 Oct 2019 14:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7F6D781B
+	for <lists+linux-serial@lfdr.de>; Tue, 15 Oct 2019 16:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731579AbfJOMKW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 15 Oct 2019 08:10:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58236 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730682AbfJOMKG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 15 Oct 2019 08:10:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C75F6B3BE;
-        Tue, 15 Oct 2019 12:10:01 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1732545AbfJOONk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 15 Oct 2019 10:13:40 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:41256 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732543AbfJOONk (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 15 Oct 2019 10:13:40 -0400
+Received: by mail-vs1-f67.google.com with SMTP id l2so13216878vsr.8
+        for <linux-serial@vger.kernel.org>; Tue, 15 Oct 2019 07:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b/eFKQ/v4cr/yPgp0izVLyHlXJnLa4HICmgwi01lXvc=;
+        b=y1zTKzdTdmsrc43HicE1W4OcK2myObdXuvjFUiN6jPSz0v4CsQcuh/7ktoHHvscwUe
+         WAwmr+69J8UQWkzDEau4wVhaYHdaO4IdBaGAc7OY4t7+8gjIaturNOu7H8P+woacKeaX
+         Q2AZx29vX20cH0G+wE6lGHbjFqhEgd6TDQt5NFwoEMYBFVyy98pBTsVcCU/gKEmrlJdN
+         kXucwpHKaYU3S/aY7SwELglpgMrbYVpYBXYvalu8VW/Qx9KsRMtEKMtH8+zawqcSiAaB
+         Tm6cWyWtdfchVHsvvoCwiwb379LpR2fZ0vwCzFIUCU3Atp7GrKAl4d9J2wJ6rvb4hXrN
+         eWsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b/eFKQ/v4cr/yPgp0izVLyHlXJnLa4HICmgwi01lXvc=;
+        b=r+aXKOwBYR4jGr+0YkGAcf8U7Ri2M9DmDCdQF1Pysv94JEHrdxrQW5DAuOSn6yLVhG
+         CD73FWZxY2DKYAnC1Au+Warflnx9VC/BAuhqqgCk+5goJtEl5cdDGI5T78sqBn0OnyCW
+         Zj4pnc7Iq/Q+N0/MQ9lvgXgA+IsX2ZuJ5DV91Xu8fj9MeEXhWXkfWGN7g6gDAPpyOfkK
+         27Q+9vVzcBCWH1bkhF37XzsBeDYjdw9yi73BjgV3+tDCpmIRctNVHh/zSTXlfF9wwSA3
+         SQWCChlQKC6PfsQflmifWdN46MQhB2mtZLf6hOAG0vH4/vUJPFFzkHfauVKZSsXCXOkI
+         glLg==
+X-Gm-Message-State: APjAAAXxmWT+J7X3qZL0R6jTfchbtT+CtufCJw2v5I4ge2tpyLzO7+Az
+        L/UZzV6fsoGZPqcjlLfdU9KqLKxinlzgwHWDR4DZ4WcL
+X-Google-Smtp-Source: APXvYqxluszvLcVxMEdWdPelTTF58EOAxfZDkgM4jA/rH5H2Cc2i74AuIVwFlZIgVdMLDs2o7gG3CCQM2jc+SegK0h8=
+X-Received: by 2002:a05:6102:5e1:: with SMTP id w1mr4153604vsf.191.1571148818927;
+ Tue, 15 Oct 2019 07:13:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191010203043.1241612-1-arnd@arndb.de>
+ <20191010203043.1241612-11-arnd@arndb.de>
+In-Reply-To: <20191010203043.1241612-11-arnd@arndb.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 15 Oct 2019 16:13:02 +0200
+Message-ID: <CAPDyKFqkRApT-q4ssi1Hn2cmLY=0K7bKXdo-D42q+xACFcC9dQ@mail.gmail.com>
+Subject: Re: [PATCH 11/36] ARM: s5pv210: split from plat-samsung
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v10 6/6] MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
-Date:   Tue, 15 Oct 2019 14:09:51 +0200
-Message-Id: <20191015120953.2597-7-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191015120953.2597-1-tbogendoerfer@suse.de>
-References: <20191015120953.2597-1-tbogendoerfer@suse.de>
+        Jiri Slaby <jslaby@suse.com>,
+        Sangbeom Kim <sbkim73@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-pwm@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Faiz Abbas <faiz_abbas@ti.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        linux-serial@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Olof Johansson <olof@lixom.net>,
+        linux-spi@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-PROM only enables ethernet PHY on first Origin 200 module, so we must
-do it ourselves for the second module.
+On Thu, 10 Oct 2019 at 22:38, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> These can be build completely independently, so split
+> the two Kconfig symbols.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/Kconfig.debug        | 6 +++---
+>  arch/arm/Makefile             | 1 -
+>  arch/arm/plat-samsung/Kconfig | 2 +-
+>  drivers/mmc/host/Kconfig      | 2 +-
+>  drivers/pwm/Kconfig           | 2 +-
+>  drivers/spi/Kconfig           | 2 +-
+>  drivers/tty/serial/Kconfig    | 2 +-
+>  sound/soc/samsung/Kconfig     | 2 +-
+>  8 files changed, 9 insertions(+), 10 deletions(-)
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- arch/mips/pci/pci-ip27.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+For the mmc parts:
 
-diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
-index 441eb9383b20..0d2eb86e8a1e 100644
---- a/arch/mips/pci/pci-ip27.c
-+++ b/arch/mips/pci/pci-ip27.c
-@@ -7,6 +7,11 @@
-  * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-  */
-+#include <asm/sn/addrs.h>
-+#include <asm/sn/types.h>
-+#include <asm/sn/klconfig.h>
-+#include <asm/sn/hub.h>
-+#include <asm/sn/ioc3.h>
- #include <asm/pci/bridge.h>
- 
- dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
-@@ -31,3 +36,20 @@ int pcibus_to_node(struct pci_bus *bus)
- }
- EXPORT_SYMBOL(pcibus_to_node);
- #endif /* CONFIG_NUMA */
-+
-+static void ip29_fixup_phy(struct pci_dev *dev)
-+{
-+	int nasid = pcibus_to_node(dev->bus);
-+	u32 sid;
-+
-+	if (nasid != 1)
-+		return; /* only needed on second module */
-+
-+	/* enable ethernet PHY on IP29 systemboard */
-+	pci_read_config_dword(dev, PCI_SUBSYSTEM_VENDOR_ID, &sid);
-+	if (sid == (PCI_VENDOR_ID_SGI | (IOC3_SUBSYS_IP29_SYSBOARD) << 16))
-+		REMOTE_HUB_S(nasid, MD_LED0, 0x09);
-+}
-+
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_SGI, PCI_DEVICE_ID_SGI_IOC3,
-+			ip29_fixup_phy);
--- 
-2.16.4
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+Kind regards
+Uffe
+
+
+>
+> diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
+> index 9c4f2d6deb06..4c4e97ae4fcb 100644
+> --- a/arch/arm/Kconfig.debug
+> +++ b/arch/arm/Kconfig.debug
+> @@ -998,7 +998,7 @@ choice
+>                   via SCIFA4 on Renesas SH-Mobile AG5 (SH73A0).
+>
+>         config DEBUG_S3C_UART0
+> -               depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +               depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>                 select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>                 select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>                 select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> @@ -1010,7 +1010,7 @@ choice
+>                   by the boot-loader before use.
+>
+>         config DEBUG_S3C_UART1
+> -               depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +               depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>                 select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>                 select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>                 select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> @@ -1022,7 +1022,7 @@ choice
+>                   by the boot-loader before use.
+>
+>         config DEBUG_S3C_UART2
+> -               depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +               depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>                 select DEBUG_EXYNOS_UART if ARCH_EXYNOS
+>                 select DEBUG_S3C24XX_UART if ARCH_S3C24XX
+>                 select DEBUG_S3C64XX_UART if ARCH_S3C64XX
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index f492d7c338fe..a1bc15cda751 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -235,7 +235,6 @@ machine-$(CONFIG_PLAT_SPEAR)                += spear
+>  # by CONFIG_* macro name.
+>  plat-$(CONFIG_ARCH_OMAP)       += omap
+>  plat-$(CONFIG_ARCH_S3C64XX)    += samsung
+> -plat-$(CONFIG_ARCH_S5PV210)    += samsung
+>  plat-$(CONFIG_PLAT_ORION)      += orion
+>  plat-$(CONFIG_PLAT_PXA)                += pxa
+>  plat-$(CONFIG_PLAT_S3C24XX)    += samsung
+> diff --git a/arch/arm/plat-samsung/Kconfig b/arch/arm/plat-samsung/Kconfig
+> index 740bdb23f38a..1530946cc672 100644
+> --- a/arch/arm/plat-samsung/Kconfig
+> +++ b/arch/arm/plat-samsung/Kconfig
+> @@ -4,7 +4,7 @@
+>
+>  config PLAT_SAMSUNG
+>         bool
+> -       depends on PLAT_S3C24XX || ARCH_S3C64XX || ARCH_S5PV210
+> +       depends on PLAT_S3C24XX || ARCH_S3C64XX
+>         default y
+>         select GENERIC_IRQ_CHIP
+>         select NO_IOPORT_MAP
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 400a581c918c..16a0e5430b44 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -275,7 +275,7 @@ config MMC_SDHCI_TEGRA
+>
+>  config MMC_SDHCI_S3C
+>         tristate "SDHCI support on Samsung S3C SoC"
+> -       depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_EXYNOS)
+> +       depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS)
+>         help
+>           This selects the Secure Digital Host Controller Interface (SDHCI)
+>           often referrered to as the HSMMC block in some of the Samsung S3C
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index e3a2518503ed..8eb738cac0c7 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -394,7 +394,7 @@ config PWM_ROCKCHIP
+>
+>  config PWM_SAMSUNG
+>         tristate "Samsung PWM support"
+> -       depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>         help
+>           Generic PWM framework driver for Samsung.
+>
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 6f7fdcbb9151..355391ee643d 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -625,7 +625,7 @@ config SPI_S3C24XX_FIQ
+>
+>  config SPI_S3C64XX
+>         tristate "Samsung S3C64XX series type SPI"
+> -       depends on (PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST)
+> +       depends on (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST)
+>         help
+>           SPI driver for Samsung S3C64XX and newer SoCs.
+>
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 4789b5d62f63..17f01cf3009c 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -237,7 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
+>
+>  config SERIAL_SAMSUNG
+>         tristate "Samsung SoC serial support"
+> -       depends on PLAT_SAMSUNG || ARCH_EXYNOS
+> +       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS
+>         select SERIAL_CORE
+>         help
+>           Support for the on-chip UARTs on the Samsung S3C24XX series CPUs,
+> diff --git a/sound/soc/samsung/Kconfig b/sound/soc/samsung/Kconfig
+> index 638983123d8f..7a0035dd9995 100644
+> --- a/sound/soc/samsung/Kconfig
+> +++ b/sound/soc/samsung/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig SND_SOC_SAMSUNG
+>         tristate "ASoC support for Samsung"
+> -       depends on PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST
+> +       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+>         depends on COMMON_CLK
+>         select SND_SOC_GENERIC_DMAENGINE_PCM
+>         ---help---
+> --
+> 2.20.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
