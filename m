@@ -2,212 +2,148 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF4DD9558
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Oct 2019 17:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ADED97FC
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Oct 2019 18:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389491AbfJPPTH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Oct 2019 11:19:07 -0400
-Received: from mail-eopbgr00099.outbound.protection.outlook.com ([40.107.0.99]:40845
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        id S2406528AbfJPQzD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Oct 2019 12:55:03 -0400
+Received: from mail-eopbgr80042.outbound.protection.outlook.com ([40.107.8.42]:6094
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731530AbfJPPTG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Oct 2019 11:19:06 -0400
+        id S1725294AbfJPQzD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 16 Oct 2019 12:55:03 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kQQ7jBb6T7ERy7cUJeedMUF6prKueudVqhRh3mGbv2YI2CEExm97zBFh1+MpLoZLTf4m+MExFDh9UOfV+BDWhkh15MM1mb4a4ZdTCVZGsU2eEEhIuxeh/9TvU9cvZJoZr2cvKmgPmsVm/45+SJfA7awGzPvGQBSCjGlHVtJ0VeDcJzoTbvnJPkSmKUbxeg6sP8jw5x2soV8T2hrSL4QWD1pCKxoZsrqnGwB5MEs/ENqhO9uyo5OrU9fidktXyWidBY7FBwHpbtp11blyneVlzVH63AphZ27YpurYAVny+wbzaZWPoireKrnlw7Li05LVqvphiGiLHdceDxsEW6du4Q==
+ b=QZGn4HYg5xVf7q1Pp60OxKjn1sJSzELUn+hv5yZPP/3BSo1Y8FyTgRvSaD4K+LhkvU3hhc3KRplnG2myl3z5Tq7Bbd06hKGP8tuSiO7Qf2yiewFsl2CCSBTZhPgsoGdYwRGONxBsM44EGLZj9jT0MEicGjI0SG/BrixAJH9pyA/2231hokY5GMb6fKsHejsRHz5pM++bgRQkzQKmxfRYQWesBVytjaFYGb29riR8NAqGcB3eD7KMrPGnpIbdOR1YerWcRP9KfvWY6+mdp1nEldRhSv/nMJjn6pD01D6tiFigYWbgY5Q924TcwJ2ZOrHkBOJIbN7hOANiMda4hagCGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GDm+/bdZ5hrRWzWjd4+UurSMQLTa+6xmywdZ+rIqjUw=;
- b=RlNvDou9Jmz5btpmfxd89TgAMNYYc+wRT8+ljXuyZawR+UQTzAuLwEM2KDxYbEktzKEYXfMEPgKDUfPXGI5BpnG526fyLGb3KW++oekRPaPKSvjlSb9YnutywtdGiSLj6ANt+T2ymy1KKPZpEu7WgTwgRYMarz+9D1UtMImWPMIjhbUIJNJX3T7RjVCcqxpDJ6YnpD5ySGm8568medsoyTSgVM5T1D+cnlfxpyqy09+ud2f+O/azIIi3uyw0D7kBi56XF2Gcwj3AmO69cV2mtYEUl4/1WvWBiA+FRZzNdDcrKDWxXG7YiFP1WFQm28LTC+h1CLc0tezeiQFv5SNpbw==
+ bh=rcCgJyMBiqPHKqrZGOlXSDdvK5KezEqHCFjVXYRJCgA=;
+ b=GtMGrAdfFPfgUYoNuvh0Lu4E/H8MNh3Frqqp5FBPpcPPaRTUAn9E9fPiszamilzQgvPZcEn/Is/Z/hQrvzPClW97QcAudw9b/I/kX7txtzKRFFa9B/Ht0ZsiD8FkytiqKeuHi/oHhteSV20AO+81bfLihgp8UfSh7KJ21wk6/Q7a2W/nIzj3YVMwAIAb7ZcZkG2Cg6AM40DewsVDMZwTP6T5LKw93iGCGsKTemxdffXYQkhCli2zu3bGF5WsLa8sbivhKCsyfGeKs0XMMFz+Cv3corVgrJ77gtnScqyIGyqmymxfJx18XQo5zT+N8P/7+NYsnzBEStXnvhPzMIJ6Hg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GDm+/bdZ5hrRWzWjd4+UurSMQLTa+6xmywdZ+rIqjUw=;
- b=YxbnrAFjc0tcbeKObKvRugjE3Tt7QE7CthDZ99ixvV1c3AQlPra0bSLmxj6o/QqBdkHOGfCnPuEvczNQcUKYd9LolvN+oaUgcFG/c+vjUZRsvcrOpMYcxgj2aPqmdWwbeXvfaQAUGuGQddLaX4FafvEJgFS6Cv1ITlSyFG/bPZM=
-Received: from VI1PR0502MB3965.eurprd05.prod.outlook.com (52.134.19.20) by
- VI1PR0502MB2989.eurprd05.prod.outlook.com (10.175.21.15) with Microsoft SMTP
+ bh=rcCgJyMBiqPHKqrZGOlXSDdvK5KezEqHCFjVXYRJCgA=;
+ b=T8byuSSMyiPkC0bKUQ77/1e6pm3ym7FnZPN3oril6Pl02oxaiSRrHODPeSW1DhkSGGdb2TZSZMTYEilYjkVUq36QaMUorcixdnJMUsxEPaKqILaI2d8DeeqhcdFS+YCuDPzSosuVQPJ0FP6xlQnAIzaAHArCh0chY35wsEA/Bfg=
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com (10.175.20.18) by
+ VI1PR0402MB3454.eurprd04.prod.outlook.com (52.134.5.23) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.21; Wed, 16 Oct 2019 15:18:59 +0000
-Received: from VI1PR0502MB3965.eurprd05.prod.outlook.com
- ([fe80::f427:26bb:85cf:abad]) by VI1PR0502MB3965.eurprd05.prod.outlook.com
- ([fe80::f427:26bb:85cf:abad%7]) with mapi id 15.20.2347.023; Wed, 16 Oct 2019
- 15:18:59 +0000
-From:   Philippe Schenker <philippe.schenker@toradex.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-CC:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Jiri Slaby <jslaby@suse.com>,
+ 15.20.2347.22; Wed, 16 Oct 2019 16:54:58 +0000
+Received: from VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::d0fc:54d4:86f4:b1d2]) by VI1PR0402MB2863.eurprd04.prod.outlook.com
+ ([fe80::d0fc:54d4:86f4:b1d2%7]) with mapi id 15.20.2347.023; Wed, 16 Oct 2019
+ 16:54:58 +0000
+From:   Stefan-gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Fugang Duan <fugang.duan@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Subject: [PATCH v1 3/3] tty: serial: lpuart: Add RS485 support for 32-bit uart
- flavour
-Thread-Topic: [PATCH v1 3/3] tty: serial: lpuart: Add RS485 support for 32-bit
- uart flavour
-Thread-Index: AQHVhDUIydsEsSxrwEmSYx3VY636Fw==
-Date:   Wed, 16 Oct 2019 15:18:59 +0000
-Message-ID: <20191016151845.15859-3-philippe.schenker@toradex.com>
-References: <20191016151845.15859-1-philippe.schenker@toradex.com>
-In-Reply-To: <20191016151845.15859-1-philippe.schenker@toradex.com>
-Accept-Language: en-GB, en-US
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v7 0/5] Add initial support for S32V234-EVB
+Thread-Topic: [PATCH v7 0/5] Add initial support for S32V234-EVB
+Thread-Index: AQHVhEJxhWIy0zctjEGFbT7T+YZTUw==
+Date:   Wed, 16 Oct 2019 16:54:58 +0000
+Message-ID: <VI1PR0402MB28630943CC0820644D26919CDF920@VI1PR0402MB2863.eurprd04.prod.outlook.com>
+References: <1571230107-8493-1-git-send-email-stefan-gabriel.mirea@nxp.com>
+ <20191016131728.GA56859@kroah.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM0PR10CA0029.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:17c::39) To VI1PR0502MB3965.eurprd05.prod.outlook.com
- (2603:10a6:803:26::20)
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=philippe.schenker@toradex.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.23.0
-x-originating-ip: [46.140.72.82]
+ smtp.mailfrom=stefan-gabriel.mirea@nxp.com; 
+x-originating-ip: [64.157.242.222]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 576d8b2d-f401-4803-4bd6-08d7524c2b55
-x-ms-traffictypediagnostic: VI1PR0502MB2989:
+x-ms-office365-filtering-correlation-id: 5444904f-63ba-4061-13fd-08d7525993e4
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: VI1PR0402MB3454:|VI1PR0402MB3454:
+x-ms-exchange-purlcount: 1
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0502MB2989ACE8A410EEC9D5F25077F4920@VI1PR0502MB2989.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-microsoft-antispam-prvs: <VI1PR0402MB34543956D2811F68673D26EADF920@VI1PR0402MB3454.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-forefront-prvs: 0192E812EC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(396003)(376002)(39850400004)(136003)(366004)(189003)(199004)(81156014)(2906002)(5660300002)(44832011)(476003)(486006)(8936002)(14454004)(110136005)(50226002)(2501003)(2616005)(8676002)(66066001)(11346002)(1076003)(446003)(54906003)(316002)(81166006)(86362001)(3846002)(478600001)(6116002)(25786009)(66556008)(6436002)(66946007)(66476007)(66446008)(26005)(6512007)(36756003)(107886003)(6486002)(305945005)(14444005)(52116002)(71200400001)(71190400001)(99286004)(64756008)(4326008)(186003)(7736002)(76176011)(386003)(102836004)(256004)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0502MB2989;H:VI1PR0502MB3965.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: toradex.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(189003)(199004)(51444003)(8936002)(52536014)(229853002)(86362001)(71200400001)(66946007)(66476007)(66556008)(33656002)(6246003)(66446008)(64756008)(76116006)(486006)(14454004)(8676002)(476003)(91956017)(4326008)(71190400001)(6916009)(81156014)(81166006)(6116002)(3846002)(25786009)(5660300002)(316002)(7696005)(256004)(55016002)(66066001)(7416002)(53546011)(6506007)(6306002)(54906003)(305945005)(446003)(76176011)(2906002)(9686003)(6436002)(74316002)(99286004)(966005)(7736002)(186003)(102836004)(26005)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3454;H:VI1PR0402MB2863.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JWIb/To7xsWzgHo+EBqt1XdSF/0g/8+Lf2qKySKwc8VAydT3h4XX6WfpmSG1H12iKM65czSx+9PSlLLHvN6ZuJh77EhntXmFiGjn0CpzLkVCiV94Q6jcO35Z2N049JJV++t1KbIGlMqyHk6DWCOt/81t6Yq2ZmrxjI1TBIoIfs/L4gnzBjEgxnNQ/wN8yQ5I/+43jiNbfv2OR+KBtv+v/FijiFhz9X5R0lYPqCPeSe9Ntw3246UpfE7ICJuRmpxSgsTmvFF6Datq5lK12sBp42q5pLj6/1p2LDt9Uf9k6OTaHp4vOcY4Ru73aFy4miDeIJN92oe5hNTrdfYeKqU437axu/pjQ3U0ejNizb+E1xose+nmE/LlIZVD8oQCuJLxHOKyVoJukYBuBPiiNlIKiBc3u4V7rUBM+x+m7Wegb6w=
-Content-Type: text/plain; charset="iso-8859-1"
+x-microsoft-antispam-message-info: svQ0xbvfl/cn2xG251K/b8bnCw3uNr/vVnGzmwoCqg1UKt0ZblliOUiJlG/lQLA3czpuJyx4JTTu+3Y2zWUQ4DBsysmFjdbxNwq4o9aHFjVGtna3P1AgLm9Q8zb1wC0cvMOmBJNYp6gNpZcVDRQ8BFXlKS0pKBs6TqF+x7q6AvyFy1RKzMyvthGf3rRJRiRvcY4iucZxsqmlG3gH7cPCsbc/p5QOKCy/18y1bsfyqi/Q19nyvJYGTe7B9UWUOar+5N0VDyYKIkvkhbgVWTeibhcMf7VfCRDXn62YkWUglUe8EMRTUrUVJY6AqfotLhpONjITVATexHNDQtVkAaIbrhTCVbLnlcRJ3R0/2KjYZCKoqMtS32eGiWQy9cIJ4H3dGa5IgDkOKeZ/rNK6XJOt51TVjP/c0FA5bJQlY5mHAcdGZAk4G4teXfwoR9kbo3633e8Zy4reQvEBU36+bomWXQ==
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 576d8b2d-f401-4803-4bd6-08d7524c2b55
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2019 15:18:59.6725
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5444904f-63ba-4061-13fd-08d7525993e4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2019 16:54:58.1830
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IPrz2ElIsboFqW8vK6o5d8UpzQv4o6E4hlv4CSBJFcZx5kVVjveB7Vo1Gd+dqyXSRwTu7uSyp3+QKu43WGDIzW62Z9i6ZbajXGXAj71hUtY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0502MB2989
+X-MS-Exchange-CrossTenant-userprincipalname: hTlUKMQqrRtiCM1jh8lUsS26CwhIwrfKQDEY5Yf6WcEhfuNZgkHKLTVIhoPQANdUc5ZRFJgWWvJW7dzICxS3Eswglxnw9X+3joHiaL97/Dc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3454
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This commits adds RS485 support for LPUART hardware that uses 32-bit
-registers. These are typically found in i.MX8 processors.
-
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-
----
-
- drivers/tty/serial/fsl_lpuart.c | 65 ++++++++++++++++++++++++++++++++-
- 1 file changed, 63 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuar=
-t.c
-index 346b4a070ce9..22df5f8f48b6 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1280,6 +1280,57 @@ static int lpuart_config_rs485(struct uart_port *por=
-t,
- 	return 0;
- }
-=20
-+static int lpuart32_config_rs485(struct uart_port *port,
-+			struct serial_rs485 *rs485)
-+{
-+	struct lpuart_port *sport =3D container_of(port,
-+			struct lpuart_port, port);
-+
-+	unsigned long modem =3D lpuart32_read(&sport->port, UARTMODIR)
-+				& ~(UARTMODEM_TXRTSPOL | UARTMODEM_TXRTSE);
-+	lpuart32_write(&sport->port, modem, UARTMODIR);
-+
-+	/* clear unsupported configurations */
-+	rs485->delay_rts_before_send =3D 0;
-+	rs485->delay_rts_after_send =3D 0;
-+	rs485->flags &=3D ~SER_RS485_RX_DURING_TX;
-+
-+	if (rs485->flags & SER_RS485_ENABLED) {
-+		/* Enable auto RS-485 RTS mode */
-+		modem |=3D UARTMODEM_TXRTSE;
-+
-+		/*
-+		 * RTS needs to be logic HIGH either during transer _or_ after
-+		 * transfer, other variants are not supported by the hardware.
-+		 */
-+
-+		if (!(rs485->flags & (SER_RS485_RTS_ON_SEND |
-+				SER_RS485_RTS_AFTER_SEND)))
-+			rs485->flags |=3D SER_RS485_RTS_ON_SEND;
-+
-+		if (rs485->flags & SER_RS485_RTS_ON_SEND &&
-+				rs485->flags & SER_RS485_RTS_AFTER_SEND)
-+			rs485->flags &=3D ~SER_RS485_RTS_AFTER_SEND;
-+
-+		/*
-+		 * The hardware defaults to RTS logic HIGH while transfer.
-+		 * Switch polarity in case RTS shall be logic HIGH
-+		 * after transfer.
-+		 * Note: UART is assumed to be active high.
-+		 */
-+		if (rs485->flags & SER_RS485_RTS_ON_SEND)
-+			modem &=3D ~UARTMODEM_TXRTSPOL;
-+		else if (rs485->flags & SER_RS485_RTS_AFTER_SEND)
-+			modem |=3D UARTMODEM_TXRTSPOL;
-+	}
-+
-+	/* Store the new configuration */
-+	sport->port.rs485 =3D *rs485;
-+
-+	lpuart32_write(&sport->port, modem, UARTMODIR);
-+	return 0;
-+}
-+
- static unsigned int lpuart_get_mctrl(struct uart_port *port)
- {
- 	unsigned int temp =3D 0;
-@@ -1878,6 +1929,13 @@ lpuart32_set_termios(struct uart_port *port, struct =
-ktermios *termios,
- 		ctrl |=3D UARTCTRL_M;
- 	}
-=20
-+	/*
-+	 * When auto RS-485 RTS mode is enabled,
-+	 * hardware flow control need to be disabled.
-+	 */
-+	if (sport->port.rs485.flags & SER_RS485_ENABLED)
-+		termios->c_cflag &=3D ~CRTSCTS;
-+
- 	if (termios->c_cflag & CRTSCTS) {
- 		modem |=3D (UARTMODIR_RXRTSE | UARTMODIR_TXCTSE);
- 	} else {
-@@ -2405,7 +2463,10 @@ static int lpuart_probe(struct platform_device *pdev=
-)
- 		sport->port.ops =3D &lpuart_pops;
- 	sport->port.flags =3D UPF_BOOT_AUTOCONF;
-=20
--	sport->port.rs485_config =3D lpuart_config_rs485;
-+	if (lpuart_is_32(sport))
-+		sport->port.rs485_config =3D lpuart32_config_rs485;
-+	else
-+		sport->port.rs485_config =3D lpuart_config_rs485;
-=20
- 	sport->ipg_clk =3D devm_clk_get(&pdev->dev, "ipg");
- 	if (IS_ERR(sport->ipg_clk)) {
-@@ -2459,7 +2520,7 @@ static int lpuart_probe(struct platform_device *pdev)
- 	    sport->port.rs485.delay_rts_after_send)
- 		dev_err(&pdev->dev, "driver doesn't support RTS delays\n");
-=20
--	lpuart_config_rs485(&sport->port, &sport->port.rs485);
-+	sport->port.rs485_config(&sport->port, &sport->port.rs485);
-=20
- 	sport->dma_tx_chan =3D dma_request_slave_channel(sport->port.dev, "tx");
- 	if (!sport->dma_tx_chan)
---=20
-2.23.0
-
+On 10/16/2019 4:17 PM, Greg KH wrote:=0A=
+> =0A=
+> I've taken patch 3 in my tty-next tree.  The others should probably go=0A=
+> through an arm-specific tree, right?=0A=
+=0A=
+Thank you very much, Greg! That was all for the tty tree.=0A=
+=0A=
+I think that the other patches should go to the following trees:=0A=
+* git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git:=0A=
+    patches #1 and possibly #4 (as it covers arch/*/boot/dts/);=0A=
+* git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git:=0A=
+    patches #2, #5 and possibly #4 (as it covers arch/arm64/boot/dts/)=0A=
+* git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git=0A=
+    possibly patch #4 (as it covers arch/arm64/boot/dts/freescale/fsl-*)=0A=
+=0A=
+As a general question, would it be any chance to have the device tree=0A=
+included in v5.4 (along with its compatible documentation and config=0A=
+definition, without enablement)? That is, only the patches #1, #2 and=0A=
+#4, because #3 is a cosmetic change and #5 enables the new configs by=0A=
+default. That would complete a minimal support for S32V234-EVB, together=0A=
+with the LINFlexD UART driver which was accepted.=0A=
+=0A=
+From the development process documentation[1]: "An occasional exception=0A=
+is made for drivers for previously-unsupported hardware; if they touch=0A=
+no in-tree code, they cannot cause regressions and should be safe to add=0A=
+at any time".=0A=
+=0A=
+I know that it mentions only drivers and not device trees, but from the=0A=
+history is seems that there have also been dts/dtsi files added outside=0A=
+of merge windows, such as:=0A=
+* arch/riscv/boot/dts/sifive/fu540-c000.dtsi;=0A=
+* arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts;=0A=
+* arch/arm64/boot/dts/arm/vexpress-v2f-1xv7-ca53x2.dts;=0A=
+* arch/xtensa/boot/dts/lx200mx.dts;=0A=
+* arch/xtensa/boot/dts/kc705.dts;=0A=
+* arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi;=0A=
+* arch/arm/boot/dts/omap3-beagle-xm-ab.dts;=0A=
+* arch/arm/boot/dts/at91-sama5d3_xplained.dts;=0A=
+* arch/arm/boot/dts/am335x-boneblack.dts;=0A=
+* arch/powerpc/boot/dts/charon.dts.=0A=
+=0A=
+I am sorry if my question is inopportune, I am definitely not trying to=0A=
+rush anyone. I just ask because this has been under review for some=0A=
+time and all the feedback has been addressed. We would really appreciate=0A=
+to have this SoC and board supported in the following LTS release if=0A=
+there are no other issues.=0A=
+=0A=
+Regards,=0A=
+Stefan=0A=
+=0A=
+[1] https://www.kernel.org/doc/html/v5.3/process/2.Process.html=0A=
