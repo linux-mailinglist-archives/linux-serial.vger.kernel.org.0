@@ -2,35 +2,36 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E060DD1C3
-	for <lists+linux-serial@lfdr.de>; Sat, 19 Oct 2019 00:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433F9DD1F6
+	for <lists+linux-serial@lfdr.de>; Sat, 19 Oct 2019 00:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729835AbfJRWFe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 18 Oct 2019 18:05:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37370 "EHLO mail.kernel.org"
+        id S1732602AbfJRWHO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 18 Oct 2019 18:07:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39328 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729753AbfJRWFb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:05:31 -0400
+        id S1732589AbfJRWHN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:07:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9DFEE222C6;
-        Fri, 18 Oct 2019 22:05:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F31A205F4;
+        Fri, 18 Oct 2019 22:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436330;
-        bh=+M+LtQ7619JfQt8bc0AZRjq6lrXojmBffMf8SjsXDK0=;
+        s=default; t=1571436433;
+        bh=PJ5hXRwrgYrYHaEEGmsGB+1AUSpUsi2UyKzb8WBrn5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RGMBZ0bsOUx1KG89+wpaUJR/9SXqg6WXybhZZk7/EDiCxJhu3rURLvHMscCek3LaI
-         W+lCVrBwpr13Entlvw+HVgOGXuvv0SPeKEmQuVSeIteECY/2qUHvXmnn+PfL+OsHBe
-         4Ic3i61+Bb+B5afC4kfnJYgr3rpKNPhFCiNzCekI=
+        b=sVszIXGYYmjMznDQoJ9VLPmn9eFre5F4gOfTK2tk8eKCZMey66JH5tHz97OP0AizR
+         ZRG9CNY8iR4KxUqhw2DMr06v+glm1ETZFZkh0zBMkUm9+2CCmn9Mdd+u8NpcmanxSC
+         V3ttu8oGoTwRjC9bwZnuFg41Tovtnc8YUQBj/Ycs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Phil Elwell <phil@raspberrypi.org>,
+Cc:     Adam Ford <aford173@gmail.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 004/100] sc16is7xx: Fix for "Unexpected interrupt: 8"
-Date:   Fri, 18 Oct 2019 18:03:49 -0400
-Message-Id: <20191018220525.9042-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 074/100] serial: mctrl_gpio: Check for NULL pointer
+Date:   Fri, 18 Oct 2019 18:04:59 -0400
+Message-Id: <20191018220525.9042-74-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191018220525.9042-1-sashal@kernel.org>
 References: <20191018220525.9042-1-sashal@kernel.org>
@@ -43,119 +44,38 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Phil Elwell <phil@raspberrypi.org>
+From: Adam Ford <aford173@gmail.com>
 
-[ Upstream commit 30ec514d440cf2c472c8e4b0079af2c731f71a3e ]
+[ Upstream commit 37e3ab00e4734acc15d96b2926aab55c894f4d9c ]
 
-The SC16IS752 has an Enhanced Feature Register which is aliased at the
-same address as the Interrupt Identification Register; accessing it
-requires that a magic value is written to the Line Configuration
-Register. If an interrupt is raised while the EFR is mapped in then
-the ISR won't be able to access the IIR, leading to the "Unexpected
-interrupt" error messages.
+When using mctrl_gpio_to_gpiod, it dereferences gpios into a single
+requested GPIO.  This dereferencing can break if gpios is NULL,
+so this patch adds a NULL check before dereferencing it.  If
+gpios is NULL, this function will also return NULL.
 
-Avoid the problem by claiming a mutex around accesses to the EFR
-register, also claiming the mutex in the interrupt handler work
-item (this is equivalent to disabling interrupts to interlock against
-a non-threaded interrupt handler).
-
-See: https://github.com/raspberrypi/linux/issues/2529
-
-Signed-off-by: Phil Elwell <phil@raspberrypi.org>
+Signed-off-by: Adam Ford <aford173@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Link: https://lore.kernel.org/r/20191006163314.23191-1-aford173@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sc16is7xx.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/tty/serial/serial_mctrl_gpio.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 372cc7ff228fc..ebea4a9d8e694 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -328,6 +328,7 @@ struct sc16is7xx_port {
- 	struct kthread_worker		kworker;
- 	struct task_struct		*kworker_task;
- 	struct kthread_work		irq_work;
-+	struct mutex			efr_lock;
- 	struct sc16is7xx_one		p[0];
- };
- 
-@@ -499,6 +500,21 @@ static int sc16is7xx_set_baud(struct uart_port *port, int baud)
- 		div /= 4;
- 	}
- 
-+	/* In an amazing feat of design, the Enhanced Features Register shares
-+	 * the address of the Interrupt Identification Register, and is
-+	 * switched in by writing a magic value (0xbf) to the Line Control
-+	 * Register. Any interrupt firing during this time will see the EFR
-+	 * where it expects the IIR to be, leading to "Unexpected interrupt"
-+	 * messages.
-+	 *
-+	 * Prevent this possibility by claiming a mutex while accessing the
-+	 * EFR, and claiming the same mutex from within the interrupt handler.
-+	 * This is similar to disabling the interrupt, but that doesn't work
-+	 * because the bulk of the interrupt processing is run as a workqueue
-+	 * job in thread context.
-+	 */
-+	mutex_lock(&s->efr_lock);
-+
- 	lcr = sc16is7xx_port_read(port, SC16IS7XX_LCR_REG);
- 
- 	/* Open the LCR divisors for configuration */
-@@ -514,6 +530,8 @@ static int sc16is7xx_set_baud(struct uart_port *port, int baud)
- 	/* Put LCR back to the normal mode */
- 	sc16is7xx_port_write(port, SC16IS7XX_LCR_REG, lcr);
- 
-+	mutex_unlock(&s->efr_lock);
-+
- 	sc16is7xx_port_update(port, SC16IS7XX_MCR_REG,
- 			      SC16IS7XX_MCR_CLKSEL_BIT,
- 			      prescaler);
-@@ -696,6 +714,8 @@ static void sc16is7xx_ist(struct kthread_work *ws)
+diff --git a/drivers/tty/serial/serial_mctrl_gpio.c b/drivers/tty/serial/serial_mctrl_gpio.c
+index 07f318603e740..af0412a784d27 100644
+--- a/drivers/tty/serial/serial_mctrl_gpio.c
++++ b/drivers/tty/serial/serial_mctrl_gpio.c
+@@ -60,6 +60,9 @@ EXPORT_SYMBOL_GPL(mctrl_gpio_set);
+ struct gpio_desc *mctrl_gpio_to_gpiod(struct mctrl_gpios *gpios,
+ 				      enum mctrl_gpio_idx gidx)
  {
- 	struct sc16is7xx_port *s = to_sc16is7xx_port(ws, irq_work);
- 
-+	mutex_lock(&s->efr_lock);
++	if (gpios == NULL)
++		return NULL;
 +
- 	while (1) {
- 		bool keep_polling = false;
- 		int i;
-@@ -705,6 +725,8 @@ static void sc16is7xx_ist(struct kthread_work *ws)
- 		if (!keep_polling)
- 			break;
- 	}
-+
-+	mutex_unlock(&s->efr_lock);
+ 	return gpios->gpio[gidx];
  }
- 
- static irqreturn_t sc16is7xx_irq(int irq, void *dev_id)
-@@ -899,6 +921,9 @@ static void sc16is7xx_set_termios(struct uart_port *port,
- 	if (!(termios->c_cflag & CREAD))
- 		port->ignore_status_mask |= SC16IS7XX_LSR_BRK_ERROR_MASK;
- 
-+	/* As above, claim the mutex while accessing the EFR. */
-+	mutex_lock(&s->efr_lock);
-+
- 	sc16is7xx_port_write(port, SC16IS7XX_LCR_REG,
- 			     SC16IS7XX_LCR_CONF_MODE_B);
- 
-@@ -920,6 +945,8 @@ static void sc16is7xx_set_termios(struct uart_port *port,
- 	/* Update LCR register */
- 	sc16is7xx_port_write(port, SC16IS7XX_LCR_REG, lcr);
- 
-+	mutex_unlock(&s->efr_lock);
-+
- 	/* Get baud rate generator configuration */
- 	baud = uart_get_baud_rate(port, termios, old,
- 				  port->uartclk / 16 / 4 / 0xffff,
-@@ -1185,6 +1212,7 @@ static int sc16is7xx_probe(struct device *dev,
- 	s->regmap = regmap;
- 	s->devtype = devtype;
- 	dev_set_drvdata(dev, s);
-+	mutex_init(&s->efr_lock);
- 
- 	kthread_init_worker(&s->kworker);
- 	kthread_init_work(&s->irq_work, sc16is7xx_ist);
+ EXPORT_SYMBOL_GPL(mctrl_gpio_to_gpiod);
 -- 
 2.20.1
 
