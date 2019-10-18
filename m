@@ -2,74 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F0CDBAAA
-	for <lists+linux-serial@lfdr.de>; Fri, 18 Oct 2019 02:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE3CDC27E
+	for <lists+linux-serial@lfdr.de>; Fri, 18 Oct 2019 12:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503954AbfJRAU2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 17 Oct 2019 20:20:28 -0400
-Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 17 Oct 2019 20:20:27 -0400
-X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id E44FB186481;
-        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
-Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
-Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     linux-nvme@lists.infradead.org
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 10:59:51 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        id S2391183AbfJRKQa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 18 Oct 2019 06:16:30 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:46964 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732465AbfJRKQa (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 18 Oct 2019 06:16:30 -0400
+Received: from 79.184.255.51.ipv4.supernova.orange.pl (79.184.255.51) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.292)
+ id 6845964ed128a594; Fri, 18 Oct 2019 12:16:27 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jslaby@suse.com>, Len Brown <lenb@kernel.org>,
+        linux-serial@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] serdev: Add ACPI devices by ResourceSource field
+Date:   Fri, 18 Oct 2019 12:16:27 +0200
+Message-ID: <2257692.4kSTgpFGC2@kreacher>
+In-Reply-To: <84883ba0-ec01-9114-5c4a-e468cf85dfec@gmail.com>
+References: <20190924162226.1493407-1-luzmaximilian@gmail.com> <03d11e04-aaad-4851-c7d6-feaf62793670@redhat.com> <84883ba0-ec01-9114-5c4a-e468cf85dfec@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Thursday, October 10, 2019 3:18:58 PM CEST Maximilian Luz wrote:
+> Hi,
+> 
+> On 10/10/19 12:22 PM, Hans de Goede wrote:
+> > This patch looks good to me and it works on my test hw with serial
+> > attached BT HCI:
+> > 
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > Tested-by: Hans de Goede <hdegoede@redhat.com>
+> > 
+> > Regards,
+> > 
+> > Hans
+> 
+> Awesome, thank you!
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
-
-Dear Sir / Madam
-
-
-
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
+Is anyone taking care of this patch, or should I do that?
 
 
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
 
