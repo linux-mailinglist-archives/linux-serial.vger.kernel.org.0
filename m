@@ -2,91 +2,107 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E22EDD498
-	for <lists+linux-serial@lfdr.de>; Sat, 19 Oct 2019 00:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28F2DDB13
+	for <lists+linux-serial@lfdr.de>; Sat, 19 Oct 2019 23:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbfJRWEY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 18 Oct 2019 18:04:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36026 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728132AbfJRWEX (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:04:23 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6AC5D222C3;
-        Fri, 18 Oct 2019 22:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436263;
-        bh=vOxgA07gZhgreIxvC378VR7YjrXYnrjkGDXa/aPtFWM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SZ9MqoHAbQFXjrsFXiixRxE8S/iFEzbJd990tTRgDnnmXM0MAeVUoijPD5UurRO8g
-         foD7XOrpjjvom9I8ypiBHe0M8fXzGZ0fs5UCRolfpKfGQTS2tKem5T20gqSwvAp7lv
-         fPeFW9kaSdWjE2Xd1I+MfzzUluepzEPGctPK9Zow=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adam Ford <aford173@gmail.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 45/89] serial: 8250_omap: Fix gpio check for auto RTS/CTS
-Date:   Fri, 18 Oct 2019 18:02:40 -0400
-Message-Id: <20191018220324.8165-45-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220324.8165-1-sashal@kernel.org>
-References: <20191018220324.8165-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1726152AbfJSVG2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 19 Oct 2019 17:06:28 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:33212 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726129AbfJSVG2 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 19 Oct 2019 17:06:28 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d22so4590683pls.0;
+        Sat, 19 Oct 2019 14:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=RtlAkYH1/9Xe5FbxpSbJIDnr8807L6EpWQnr1xtse+w=;
+        b=lhkpCh9CuYWOsq9d3aTSAtzipZvirVyxX0zPNo/N7hJX4p8fJ+c9zBn8ZF7TP98AWR
+         q+vJIBjBDaxUpmq821AsRxbn7iewOyVMXjv+OM90EOIMlnXTQ8QQ1n4zlWUiIklimZ7P
+         lSzObmDBAAbZs+Uc02iHSUvEDdSlakmr0Gn8udrDPb+L9R89eQqujxEtZlyh6RzBPD1f
+         3/sVLSyTd7CIemnTxsCL6zItewx0e2zXfjwABkzT3I38FreJfT3m29Y+EXmQtilphLcm
+         Iv6NfVgdhf1CzIs0oy4E5LKJwZdlDJKGEcv+SZmAQ/d9cI/edBZ2xNIo2346ZB/l4mck
+         XZ+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RtlAkYH1/9Xe5FbxpSbJIDnr8807L6EpWQnr1xtse+w=;
+        b=cl9+ZGyfLjt980DTxdsAb3Dg0FmwzgtATHp/G97SJyBaSbiX9pibf2OpuhEeqU8ikC
+         FdcYEeEnLlXSxHWORCZobgS1nhXBlPmQH1KGsuCMCj8dTwpwG8xaSrXDx1R5zSn6s8L3
+         KMP3XL+0sAHPH+XKc8BlJ0JZxLmiPlfSOXbxGAtU96FroZ8DSASc/DmlKl5m1oY0uS8q
+         h5R0W+KeDpSgihGfvoCioeY63A0Jm5aV4a+/bPVCOCuBWOJfNje9thhs90vdkgxA0OXT
+         ItkuXuuLthZWrpKw/Fugpq7TBXp1NICiGGsV0vXKnyUpWYTjEwLRRePAd3u8ONHEk0Cx
+         4Hag==
+X-Gm-Message-State: APjAAAUpzEMeoe2M5zJ+4A8wC+SCBdBokyud2iqyCahqBNHbYsFRT8mh
+        cD5JZnw51qGcdIgDkC2wDxM=
+X-Google-Smtp-Source: APXvYqyeavuYSW6adRkMes3cIdvD+qtvameT2H6Hm82W9gIn4yNRrxd5lvc0t80fx3uvEosdSCISnQ==
+X-Received: by 2002:a17:902:848e:: with SMTP id c14mr16729221plo.217.1571519187859;
+        Sat, 19 Oct 2019 14:06:27 -0700 (PDT)
+Received: from aw-bldr-10.qualcomm.com (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id w14sm12588476pge.56.2019.10.19.14.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2019 14:06:27 -0700 (PDT)
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, jslaby@suse.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Subject: [PATCH] tty: serial: msm_serial: Fix flow control
+Date:   Sat, 19 Oct 2019 14:06:16 -0700
+Message-Id: <20191019210616.41199-1-jeffrey.l.hugo@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+hci_qca interfaces to the wcn3990 via a uart_dm on the msm8998 mtp and
+Lenovo Miix 630 laptop.  As part of initializing the wcn3990, hci_qca
+disables flow, configures the uart baudrate, and then reenables flow - at
+which point an event is expected to be received over the uart from the
+wcn3990.  It is observed that this event comes after the baudrate change
+but before hci_qca re-enables flow. This is unexpected, and is a result of
+msm_reset() being broken.
 
-[ Upstream commit fc64f7abbef2dae7ee4c94702fb3cf9a2be5431a ]
+According to the uart_dm hardware documentation, it is recommended that
+automatic hardware flow control be enabled by setting RX_RDY_CTL.  Auto
+hw flow control will manage RFR based on the configured watermark.  When
+there is space to receive data, the hw will assert RFR.  When the watermark
+is hit, the hw will de-assert RFR.
 
-There are two checks to see if the manual gpio is configured, but
-these the check is seeing if the structure is NULL instead it
-should check to see if there are CTS and/or RTS pins defined.
+The hardware documentation indicates that RFR can me manually managed via
+CR when RX_RDY_CTL is not set.  SET_RFR asserts RFR, and RESET_RFR
+de-asserts RFR.
 
-This patch uses checks for those individual pins instead of
-checking for the structure itself to restore auto RTS/CTS.
+msm_reset() is broken because after resetting the hardware, it
+unconditionally asserts RFR via SET_RFR.  This enables flow regardless of
+the current configuration, and would undo a previous flow disable
+operation.  It should instead de-assert RFR via RESET_RFR to block flow
+until the hardware is reconfigured.  msm_serial should rely on the client
+to specify that flow should be enabled, either via mctrl() or the termios
+structure, and only assert RFR in response to those triggers.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Link: https://lore.kernel.org/r/20191006163314.23191-2-aford173@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 04896a77a97b ("msm_serial: serial driver for MSM7K onboard serial peripheral.")
+Signed-off-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
 ---
- drivers/tty/serial/8250/8250_omap.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/tty/serial/msm_serial.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 3ef65cbd2478a..e4b08077f8757 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -141,7 +141,7 @@ static void omap8250_set_mctrl(struct uart_port *port, unsigned int mctrl)
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 3657a24913fc..aedabf7646f1 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -987,7 +987,7 @@ static void msm_reset(struct uart_port *port)
+ 	msm_write(port, UART_CR_CMD_RESET_ERR, UART_CR);
+ 	msm_write(port, UART_CR_CMD_RESET_BREAK_INT, UART_CR);
+ 	msm_write(port, UART_CR_CMD_RESET_CTS, UART_CR);
+-	msm_write(port, UART_CR_CMD_SET_RFR, UART_CR);
++	msm_write(port, UART_CR_CMD_RESET_RFR, UART_CR);
  
- 	serial8250_do_set_mctrl(port, mctrl);
- 
--	if (!up->gpios) {
-+	if (!mctrl_gpio_to_gpiod(up->gpios, UART_GPIO_RTS)) {
- 		/*
- 		 * Turn off autoRTS if RTS is lowered and restore autoRTS
- 		 * setting if RTS is raised
-@@ -456,7 +456,8 @@ static void omap_8250_set_termios(struct uart_port *port,
- 	up->port.status &= ~(UPSTAT_AUTOCTS | UPSTAT_AUTORTS | UPSTAT_AUTOXOFF);
- 
- 	if (termios->c_cflag & CRTSCTS && up->port.flags & UPF_HARD_FLOW &&
--	    !up->gpios) {
-+	    !mctrl_gpio_to_gpiod(up->gpios, UART_GPIO_RTS) &&
-+	    !mctrl_gpio_to_gpiod(up->gpios, UART_GPIO_CTS)) {
- 		/* Enable AUTOCTS (autoRTS is enabled when RTS is raised) */
- 		up->port.status |= UPSTAT_AUTOCTS | UPSTAT_AUTORTS;
- 		priv->efr |= UART_EFR_CTS;
+ 	/* Disable DM modes */
+ 	if (msm_port->is_uartdm)
 -- 
-2.20.1
+2.17.1
 
