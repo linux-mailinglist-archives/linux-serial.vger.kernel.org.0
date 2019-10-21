@@ -2,80 +2,163 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28463DE151
-	for <lists+linux-serial@lfdr.de>; Mon, 21 Oct 2019 01:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D813BDE6D8
+	for <lists+linux-serial@lfdr.de>; Mon, 21 Oct 2019 10:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfJTXw5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 20 Oct 2019 19:52:57 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:39588 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726200AbfJTXw5 (ORCPT
+        id S1726987AbfJUIo2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 21 Oct 2019 04:44:28 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33462 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbfJUIo1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 20 Oct 2019 19:52:57 -0400
-Received: by mail-io1-f65.google.com with SMTP id a1so13741612ioc.6
-        for <linux-serial@vger.kernel.org>; Sun, 20 Oct 2019 16:52:56 -0700 (PDT)
+        Mon, 21 Oct 2019 04:44:27 -0400
+Received: by mail-lf1-f67.google.com with SMTP id y127so9407645lfc.0
+        for <linux-serial@vger.kernel.org>; Mon, 21 Oct 2019 01:44:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=3rw1DewHxluyubSe8F4VxhPdMk2b8nrOQjV5qzC5PIw=;
-        b=m4b416nIBuexcZCnBfGzST0Bal1DrOszVxv2Uut2lUUHDe4MPWN2Lzhapeyh+mFsW+
-         g9PpRI1+zsUiSoKOvk81MsFmlqSw1Qvy3f5955/j2VncnnEeXg7KYcr6GGeaxGUmZwLa
-         lvRSA+O5a96ok8m3UyAj8EowRy9VqES5ABLfPG7T4DWkEmkBpSWcDEB+/7IqScYfweBV
-         RLTpH1bYRxcu4MgVdU1GltpIUJEb4Sjq1xCFD0s3M31u+qstXRSzd2YeqrP1+0DB3rEW
-         DpnW8vbd0DmFXIUsrIRErA5aLXXAndu/tOMKktOxeaRmXyUXt62Igoa1D1SgM0o8gS+w
-         VQ4Q==
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8/hi6STco3BJnKtkPIQo5XB037qXP/mO2OC/fnkWZ4g=;
+        b=AmvxbgxZ1nqplWkvkmvLg1S+3doHd3O+FoFnUODtx947C7JXyxKZdKzXZ54IPTFKwQ
+         lk2r4Bw8JpfwR6ikz4X5Wx9JXMLQ4My9AM4ZPqlvln3zkn5qfMycvc54l/mKvx6Oid2k
+         1GATkH6tw5bojR5GlUqxoIyfDpGcdFMFrqv/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=3rw1DewHxluyubSe8F4VxhPdMk2b8nrOQjV5qzC5PIw=;
-        b=i2lOPo1E2kCKoC4XP6puvUXCucEBVb4O3aht3i8ErYjaShrDVeynhtpJUsKZ6rTRZR
-         tOAfENZYsq132gHqU3KXDacys0KdUenfVdnhT5U0A+OzssmhnUuflz5+6kBhFZ7cTq2m
-         wePYZG/OUwu66YkxIrYVly6L+3Lbhac62spb8wP+REh/CqfoHTlcOqXKD3JUGVJH5n48
-         rkNYb74I6rdMWqig+629A/849c0y5H0fBgxHYUxDUK3N9Svr8gOTpw5GWexl719H3L5k
-         n8Oou+TmyT2v465nA4fF7C11nzOmPdJzAWxc2cOx6m4gdrMU1P7bO410W3iKw7CrL9wQ
-         4CIw==
-X-Gm-Message-State: APjAAAUerqgq2rUwL4YqoV7c821fahOUX7C3QFevPFvOhM5wKpmkFw8D
-        gby5VaAXaZOv1LX38ifdGwjiNG0KNC4zES2dxV0=
-X-Google-Smtp-Source: APXvYqyCD/IjVHn8ov0fb6lkNCggj2UjTVf2Mvp9YMudwpRulMvfdLEikch11kmUwefZm9E2eN0c9NqhI8AJA5nuUeA=
-X-Received: by 2002:a5e:d813:: with SMTP id l19mr8072965iok.74.1571615576248;
- Sun, 20 Oct 2019 16:52:56 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8/hi6STco3BJnKtkPIQo5XB037qXP/mO2OC/fnkWZ4g=;
+        b=VVQ401ljIPGh02u6tN7ibH9MXbHG4wVp96LswrIyctbLqirc9WZBZEpp3KiVCY5yI6
+         Ysy+mrk7WnBarWnUYqQ4hxe/JYol/RV/nEyVB3ZOj+scCYoJMmY9cJHTI/9pQ4+SlCYH
+         ejLRgUFXmxUcXiiqWRstGoUFg4HgHcbsTaC33JVTD86NI9prDPQILkDFk3UkxekZsRcp
+         /T24NJltdnBy57VLORs75weq/JSWeJtu016lPAuUTfNC5NIpBciuwwoJb+QjCKE+8iHD
+         ikdlMlhnX1G5EwnN4P4y5Q6I7aYe7kMgu1E//TQ7datcytOUmkk9bhXwjxnJgHOfRIoT
+         KIBg==
+X-Gm-Message-State: APjAAAWjKb/AW+/EmscZspyHqpircKmBj2A5Q9J2n9UylqJVXdoIT6L9
+        Eh0OBAi0db54L+4llmVB6A6bHYdorbKClWHo
+X-Google-Smtp-Source: APXvYqyrWDcNM6SJ9gZHhTTWqc+blLcYki76oV/4j/OJ5eLQE2mSnwjUq8i2SjuIjDI2gDLu/mZSSg==
+X-Received: by 2002:a19:c518:: with SMTP id w24mr14768885lfe.14.1571647464949;
+        Mon, 21 Oct 2019 01:44:24 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id i190sm11001603lfi.45.2019.10.21.01.44.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Oct 2019 01:44:24 -0700 (PDT)
+Subject: Re: [PATCH 0/7] towards QE support on ARM
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Qiang Zhao <qiang.zhao@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Timur Tabi <timur@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+References: <20191018125234.21825-1-linux@rasmusvillemoes.dk>
+ <VE1PR04MB6687DA0268FAF03D3E77A23B8F6C0@VE1PR04MB6687.eurprd04.prod.outlook.com>
+ <e02fa027-9c78-3272-d2d7-7ad2b0ed3ab0@rasmusvillemoes.dk>
+ <CADRPPNREUK1SVxO4P5qb2COn+T04dtYgpVEzrveKUt16hBqAtQ@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <679bf33b-8c05-b77a-0cb2-d79dc5bfbe75@rasmusvillemoes.dk>
+Date:   Mon, 21 Oct 2019 10:44:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Reply-To: afringawa@outlook.com
-Received: by 2002:a02:ce91:0:0:0:0:0 with HTTP; Sun, 20 Oct 2019 16:52:55
- -0700 (PDT)
-From:   Afrin Gawa <afringawa@gmail.com>
-Date:   Sun, 20 Oct 2019 23:52:55 +0000
-X-Google-Sender-Auth: aYXUEteieDgXmmQpE7qd_gHWcLk
-Message-ID: <CAGnbCm8=H=g2_jFEY0cfuWMc+hXh94KQuEYm=A9O+LQu0Wi1Mw@mail.gmail.com>
-Subject: With Due Respect!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CADRPPNREUK1SVxO4P5qb2COn+T04dtYgpVEzrveKUt16hBqAtQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings,
+On 18/10/2019 23.52, Li Yang wrote:
+> On Fri, Oct 18, 2019 at 3:54 PM Rasmus Villemoes
+> <linux@rasmusvillemoes.dk> wrote:
+>>
+>> On 18/10/2019 22.16, Leo Li wrote:
+>>>
+>>>>
+>>>> There have been several attempts in the past few years to allow building the
+>>>> QUICC engine drivers for platforms other than PPC. This is (the beginning of)
+>>>> yet another attempt. I hope I can get someone to pick up these relatively
+>>>> trivial patches (I _think_ they shouldn't change functionality at all), and then
+>>>> I'll continue slowly working towards removing the PPC32 dependency for
+>>>> CONFIG_QUICC_ENGINE.
+>>>
+>>> Hi Rasmus,
+>>>
+>>> I don't fully understand the motivation of this work.  As far as I know the QUICC ENGINE is only used on PowerPC based SoCs.
+>>
+>> Hm, you're not the Leo Li that participated in this thread
+>> <https://lore.kernel.org/lkml/AM3PR04MB11857AE8D2B0BE56121B97D391C90@AM3PR04MB1185.eurprd04.prod.outlook.com/T/#u>?
+> 
+> Oops, I totally forgot about this discussion which is just three years
+> ago.  :)  The QE-HDLC on LS1021a is kind of a special case.
+> 
+>>
+>>
+>>  Can you give an example on how is it used on ARM system?
+>>
+>> LS1021A, for example, which is the one I'm aiming for getting fully
+>> supported in mainline.
+>> <https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/layerscape-communication-process/qoriq-layerscape-1021a-dual-core-communications-processor-with-lcd-controller:LS1021A>
+>>
+>> The forks at https://github.com/qoriq-open-source/linux.git have various
+>> degrees of support (grep for commits saying stuff like "remove PPCisms"
+>> - some versions can be found on
+>> <https://lore.kernel.org/lkml/?q=remove+ppcisms>). Our current kernel is
+>> based on commits from the now-vanished 4.1 branch, and unfortunately at
+>> least the 4.14 branch (LSDK-18.06-V4.14) trivially doesn't build on ARM,
+>> despite the PPC32 dependency having been removed from CONFIG_QUICC_ENGINE.
+> 
+> Can you try the 4.14 branch from a newer LSDK release?  LS1021a should
+> be supported platform on LSDK.  If it is broken, something is wrong.
 
-I know that this mail will come to you as a surprise as we have never
-met before, but need not to worry as I am contacting you independently
-of my investigation and no one is informed of this communication. I
-need your urgent assistance in transferring the sum of $11,300,000.00
-USD immediately to your private account.The money has been here in our
-Bank lying dormant for years now without anybody coming for the claim
-of it.
+What newer release? LSDK-18.06-V4.14 is the latest -V4.14 tag at
+https://github.com/qoriq-open-source/linux.git, and identical to the
+linux-4.14 branch. And despite commit 4c33e2d0576b removing the PPC32
+dependency from QUICC_ENGINE, it clearly hasn't been built on arm, since
+back around v4.12, mainline's qe.c grew a call to pvr_version_is which
+is ppc-only. So from that I sort of assumed that NXP had dropped trying
+to support the LS1021A even in their own kernels.
 
-I want to release the money to you as the relative to our deceased
-customer (the account owner) who died a long with his supposed NEXT OF
-KIN since 16th October 2005. The Banking laws here does not allow such
-money to stay more than 14 years, because the money will be recalled
-to the Bank treasury account as unclaimed fund.
+In any case, we have zero interest in running an NXP kernel. Maybe I
+should clarify what I meant by "based on commits from" above: We're
+currently running a mainline 4.14 kernel on LS1021A, with a few patches
+inspired from the NXP 4.1 branch applied on top - but also with some
+manual fixes for e.g. the pvr_version_is() issue. Now we want to move
+that to a 4.19-based kernel (so that it aligns with our MPC8309 platform).
 
-By indicating your interest I will send you the full details on how
-the business will be executed.
+>> This is just some first few steps, and I'm not claiming
+>> that this is sufficient to make the QE drivers build on ARM yet. But I
+>> have a customer with both mpc8309-based and ls1021a-based platforms, and
+>> they want to run the same, as-close-to-mainline-as-possible, kernel on
+>> both. So I will take a piecemeal approach, and try to make sure I don't
+>> break the ppc boards in the process (just building and booting one board
+>> is of course not sufficient, but better than nothing). Once I get to
+>> actually build some of the QE drivers for ARM, I'll of course also test
+>> them.
+> 
+> Understood.  Zhao Qiang also maintains some patches similar to your
+> patchset and I think they are tested on ARM.  But the review of these
+> patches from last submission didn't finish.  It looks like your
+> patches are better divided but not really verified on ARM.  Zhao
+> Qiang's patches are tested but maybe need some final touch for
+> cleaning up.  I will let you guys decide what is the best approach to
+> make this upstreamed.
 
-Please respond urgently and delete if you are not interested.
+Yes, as I said, I wanted to try a fresh approach since Zhao
+Qiang's patches seemed to be getting nowhere. Splitting the patches into
+smaller pieces is definitely part of that - for example, the completely
+trivial whitespace fix in patch 1 is to make sure the later coccinelle
+generated patch is precisely that (i.e., a later respin can just rerun
+the coccinelle script, with zero manual fixups). I also want to avoid
+mixing the ppcism cleanups with other things (e.g. replacing some
+of_get_property() by of_property_read_u32()). And the "testing on ARM"
+part comes once I get to actually building on ARM. But there's not much
+point doing all that unless there's some indication that this can be
+applied to some tree that actually feeds into Linus', which is why I
+started with a few trivial patches and precisely to start this discussion.
 
-Best Regards,
-Mr. Afrin Gawa
+Rasmus
