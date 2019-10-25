@@ -2,89 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3ABE4B53
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2019 14:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDDCE4B9F
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2019 14:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504519AbfJYMmG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 25 Oct 2019 08:42:06 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:38060 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504545AbfJYMlc (ORCPT
+        id S2439483AbfJYM4u (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 25 Oct 2019 08:56:50 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39448 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438960AbfJYM4u (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 25 Oct 2019 08:41:32 -0400
-Received: by mail-lf1-f66.google.com with SMTP id q28so1629554lfa.5
-        for <linux-serial@vger.kernel.org>; Fri, 25 Oct 2019 05:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iGJonh7VqgV4Y1nWqTZdSXnTXxbR6q5lO30wl6/it2Q=;
-        b=E1hiJE/N8uyirc34yldY8uoOKyp6Aafi6pTD1KNMz37l7ZxFuQTs1ly4mphyCyeoLm
-         BIfJpTGn7JnPGMw2F/xN60qCJErNEMevmCpDy0g8zwOdSCaqJCYYVHT4CQPIamvwj2L3
-         MdqAsCo4b5XqddEjICpt0BEm/DeSmy611x/Z8=
+        Fri, 25 Oct 2019 08:56:50 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s22so2006038otr.6;
+        Fri, 25 Oct 2019 05:56:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iGJonh7VqgV4Y1nWqTZdSXnTXxbR6q5lO30wl6/it2Q=;
-        b=t0RGHfR4oYwk5X3PDuF2Tj7EZ49CmYKBuUKSajju4QvpwpCcC+zfCisn6NlYUSEhSt
-         rlcic1KYo6ANEDMmw/PEXQO4TC/yjMjyANHS4gwgtvMI8b++puDO/OaOfEGG4xSYeHmQ
-         vVMdDxDWfuL+5dg0jiRIub99kBBN8HftFBJPUaOnd1xSOq5o8yvIn5hD2G1Ln2FlHxn/
-         VsYgqFuimqyaWAhZFUL9lJt5FP58gvGHiObSYk8h+XkpUm3IitxJM+Wqr6stZ35QTzQR
-         qevX9WxjDqGmbq8/1Z1DZsy3XOhnh2dg9PgH5WEeK/lxvz2nIUr6MUHynK63qTrPbW4Q
-         4YdQ==
-X-Gm-Message-State: APjAAAWCTLq8or9CDQxMnG9Th5umthEpGhJsgoypFLf6U/YrXjtrNx90
-        v+n/S5C4SFqysFLrKZVU1Na7iQ==
-X-Google-Smtp-Source: APXvYqzWdgjzit8ixR4YnUZ9xLOIPsZHRAlHxEezNI3JzgRLGEBgrKtCg1284a/7LWYjFvAyXUS6gA==
-X-Received: by 2002:ac2:4c15:: with SMTP id t21mr2581867lfq.7.1572007290172;
-        Fri, 25 Oct 2019 05:41:30 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id 10sm821028lfy.57.2019.10.25.05.41.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 05:41:29 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Scott Wood <oss@buserror.net>,
-        Valentin Longchamp <valentin.longchamp@keymile.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v2 21/23] serial: ucc_uart.c: explicitly include asm/cpm.h
-Date:   Fri, 25 Oct 2019 14:40:56 +0200
-Message-Id: <20191025124058.22580-22-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191025124058.22580-1-linux@rasmusvillemoes.dk>
-References: <20191018125234.21825-1-linux@rasmusvillemoes.dk>
- <20191025124058.22580-1-linux@rasmusvillemoes.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hj0kvi+vVbyfIJI30UL1Cpmnr3zPIpRpeA9rzCxH54U=;
+        b=i4grp6CEYmePOU1teGRTNDyM9fK1TwP6tYXBDB42ixbJv13HBSaq/HFy009r3uSHwx
+         m0ekoivF8mqUvLu4J3A1sOldaUxEa5ApHVpmLESwt538mP1ukX8mWgRQ4pxunTeqmW/8
+         CoWy2Q6VSgooWr3TfYk+DWpYxP0PcjD1HyKvE4M9XwRlOTS2WpIQG+y41cBPL6B8piMT
+         TxEnaHdPGSX92ijd4f5VC8RMOrkLv1QdUaVl5BXkP1l6QSqhKfeJ7R7cJcy50W93Z8xH
+         kNYfSNrIpBiYnpQXesGynQNBkp44CG2g/2Rw4470hGmwC5gKkxaDfxsgoMjrAOVQ0rDw
+         5sZA==
+X-Gm-Message-State: APjAAAU1Ubs1KWk8brAjVr3bgfyEwrWdR+P753sznOEpLUwZ0rwB/Xuj
+        Lg+VP8lPJPIGu6OEQttEyAUuzgC825SpEPCzNk4=
+X-Google-Smtp-Source: APXvYqyGZIlyFoM/7awbc2SMmvfFJP+ChjfvSdn1k5oIzBGk3fKsfPhFJ49DQVrqFikAaFR6J0W278qfnN/Mt4JoFLk=
+X-Received: by 2002:a9d:422:: with SMTP id 31mr2544652otc.107.1572008208146;
+ Fri, 25 Oct 2019 05:56:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190114172930.7508-1-robh@kernel.org> <20190114172930.7508-2-robh@kernel.org>
+In-Reply-To: <20190114172930.7508-2-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 25 Oct 2019 14:56:36 +0200
+Message-ID: <CAMuHMdVnPREgPmn5TAmiqXSxuAYKv_AkQ6StZiDH79vKMRuBGg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: serial: Move renesas,rzn1-uart into
+ the snps-dw-apb-uart binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Simon Horman <horms+renesas@verge.net.au>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This driver uses #defines from asm/cpm.h, so instead of relying on
-some other header pulling that in, do that explicitly.
+Hi Rob,
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/tty/serial/ucc_uart.c | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Jan 14, 2019 at 6:30 PM Rob Herring <robh@kernel.org> wrote:
+> The renesas,rzn1-uart binding only differs in compatible string from the
+> snps-dw-apb-uart binding. Move it there, converting it to json-schema in
+> the process.
+>
+> Cc: Phil Edworthy <phil.edworthy@renesas.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-serial@vger.kernel.org
+> Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
-index a0555ae2b1ef..e2c998badf81 100644
---- a/drivers/tty/serial/ucc_uart.c
-+++ b/drivers/tty/serial/ucc_uart.c
-@@ -33,6 +33,7 @@
- 
- #include <linux/firmware.h>
- #include <asm/reg.h>
-+#include <asm/cpm.h>
- 
- /*
-  * The GUMR flag for Soft UART.  This would normally be defined in qe.h,
+> --- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+> @@ -15,6 +15,11 @@ allOf:
+>  properties:
+>    compatible:
+>      oneOf:
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a06g032-uart
+> +              - renesas,r9a06g033-uart
+> +          - const: renesas,rzn1-uart
+>        - items:
+>            - enum:
+>                - rockchip,px30-uart
+
+With ARCH=arm and shmobile_defconfig, "make dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml"
+complains:
+
+arch/arm/boot/dts/r9a06g032-rzn1d400-db.dt.yaml: compatible:
+['renesas,r9a06g032-uart', 'renesas,rzn1-uart', 'snps,dw-apb-uart'] is
+not valid under any of the given schemas
+arch/arm/boot/dts/r9a06g032-rzn1d400-db.dt.yaml: compatible:
+['renesas,r9a06g032-uart', 'renesas,rzn1-uart', 'snps,dw-apb-uart'] is
+not valid under any of the given schemas
+arch/arm/boot/dts/r9a06g032-rzn1d400-db.dt.yaml: compatible:
+['renesas,r9a06g032-uart', 'renesas,rzn1-uart', 'snps,dw-apb-uart'] is
+not valid under any of the given schemas
+
+Do you know what's wrong?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.23.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
