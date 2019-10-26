@@ -2,83 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 752E0E5F83
-	for <lists+linux-serial@lfdr.de>; Sat, 26 Oct 2019 22:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F84E5F98
+	for <lists+linux-serial@lfdr.de>; Sat, 26 Oct 2019 22:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbfJZUbE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 26 Oct 2019 16:31:04 -0400
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:40479 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726409AbfJZUbE (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 26 Oct 2019 16:31:04 -0400
-Received: by mail-lf1-f50.google.com with SMTP id i15so4807441lfo.7;
-        Sat, 26 Oct 2019 13:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C3Bnj79/MdmyOPceI8w6ogw+VOwoEwR2LfbvEH8/Jt8=;
-        b=ocEA2/UpEZub4FfzrES/35kLEEgf+iuM14yuJDnzueb3oicjVf5VjH8yPNzykDM3CI
-         0ySJFqTK5wy/ITLl5r/AeF199mbKYCUlQe1acfJZ5OhvbURawEi5O+XvdN9rqYmKETtf
-         IC4fsanTSIIn0AuZ928OzFys+/+zrqPd7vALXtU348vu0tp9fVZM93c8V5ZMRvOv6k3O
-         zF08+RBUuiBLGBuqG0409jY8ynGQnCTTBp7hGXvgGTKWkIWQmOEDqYk2MMIl0mIF7Pld
-         TI0erEKwKnwVhZpDN3Se0CJNro3iFgZ84BgBVQI0u1n2a2vvUQ2YIqlEi/FFJJE1r/uF
-         9BBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C3Bnj79/MdmyOPceI8w6ogw+VOwoEwR2LfbvEH8/Jt8=;
-        b=J3tEuV4nZRnxkmo5nLd9c+w0k1CF7cYyJxDF/Xmgk+/FWJKw+MU4+JSBa4RitC2z5U
-         pzD0kkmEgBpjNtG8Rfso+mfTLzPeh8NMHHMYJ/7xluO9uS+ZsLbta6wF/CTxGn1WtZhp
-         f5V87Zvfzf4PzG045SFKeNoHhzByu2lrFCai/fGq48oRj1miYFypxM7sitnpHYvwWVzf
-         OqJOhb1RW/+fD/FBcV00nwnTtQMpjwqqNqvkGnLoGl4H0Rys/cXrjWKoW+228b71V6GP
-         ms7SnazSSfH90ZgzuZzG4V3uRYn+FA/CKWiDdUKUE6N9CJSKyTtridDAtURfukKi6HRM
-         lq1g==
-X-Gm-Message-State: APjAAAUY74g2DJDdrIXbNEGlPKJ1XI0Cxf638ICfrOznzYL2n7UZz/li
-        qmcEul1R1QdVnjqOTVNBASSEDwgp1KkuE3CeqFA=
-X-Google-Smtp-Source: APXvYqxEG+sO1ju1+zh7t26iFYHaqIQbdb0pBFNYp8W2WOu8r2gmg1A+zmEJq4oiggzRPaPkW5vjk856OE6jCWTnw7E=
-X-Received: by 2002:ac2:4c29:: with SMTP id u9mr6709818lfq.90.1572121861966;
- Sat, 26 Oct 2019 13:31:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191026194522.28293-1-frank-w@public-files.de>
-In-Reply-To: <20191026194522.28293-1-frank-w@public-files.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sat, 26 Oct 2019 17:31:03 -0300
-Message-ID: <CAOMZO5Bb=1CUpw__xxS2N0w+ZP0+LnBBW9+JLVr03x6TC2Z7=g@mail.gmail.com>
-Subject: Re: [PATCH, RESEND] serial: 8250-mtk: Ask for IRQ-count before
- request one
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726489AbfJZUpI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 26 Oct 2019 16:45:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38004 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726707AbfJZUpI (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 26 Oct 2019 16:45:08 -0400
+Subject: Re: [GIT PULL] TTY/Serial fix for 5.4-rc5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572122707;
+        bh=DoiqC5n4O5p1SIvWDN9Zgky/N1zlFWTAwnTl3K+Rlmg=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=s8SP9CaoYcmphAUMSYNk/RgsKxGWHPIoz7Wmv1ALQeEUMGiOgkWIixtMFC5eSF4r1
+         K6ujHRMGRIq14MgAWJbJPMlaMld8MY6LGSnF9frruEvFl7ib9k8H4bqKo3GPYXnW7d
+         EXU4VrBJxQIABl7R9oxeQcFqxTZPH6I4V/DEenXQ=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20191026181903.GA649190@kroah.com>
+References: <20191026181903.GA649190@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20191026181903.GA649190@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.4-rc5
+X-PR-Tracked-Commit-Id: f50b6805dbb993152025ec04dea094c40cc93a0c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 297689545916c40b65a86d4871e5610a024c8993
+Message-Id: <157212270769.6077.12928537949082949893.pr-tracker-bot@kernel.org>
+Date:   Sat, 26 Oct 2019 20:45:07 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Oct 26, 2019 at 4:46 PM Frank Wunderlich
-<frank-w@public-files.de> wrote:
->
-> at least on bananapi-r2 we have only 1 IRQ and need to
-> check for IRQ-count to fix following Errors during probe:
->
-> [    4.935780] mt6577-uart 11004000.serial: IRQ index 1 not found
-> [    4.962589] 11002000.serial: ttyS1 at MMIO 0x11002000 (irq = 202, base_baud = 1625000) is a ST16650V2
-> [    4.972127] mt6577-uart 11002000.serial: IRQ index 1 not found
-> [    4.998927] 11003000.serial: ttyS2 at MMIO 0x11003000 (irq = 203, base_baud = 1625000) is a ST16650V2
-> [    5.008474] mt6577-uart 11003000.serial: IRQ index 1 not found
->
-> based on Patch from Anson Huang
-> https://patchwork.ozlabs.org/patch/1164500/
+The pull request you sent on Sat, 26 Oct 2019 20:19:03 +0200:
 
-The solution that was accepted for this case was to use
-platform_get_irq_optional() instead.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.4-rc5
 
-You could try using platform_get_irq_optional() here as well.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/297689545916c40b65a86d4871e5610a024c8993
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
