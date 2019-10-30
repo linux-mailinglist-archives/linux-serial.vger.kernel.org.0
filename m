@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A653EA0C5
-	for <lists+linux-serial@lfdr.de>; Wed, 30 Oct 2019 17:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1833EA147
+	for <lists+linux-serial@lfdr.de>; Wed, 30 Oct 2019 17:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbfJ3PxU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 30 Oct 2019 11:53:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54560 "EHLO mail.kernel.org"
+        id S1726836AbfJ3QAm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 30 Oct 2019 12:00:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56722 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728145AbfJ3PxU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:53:20 -0400
+        id S1728512AbfJ3PzK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:55:10 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 065BF208C0;
-        Wed, 30 Oct 2019 15:53:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 041B820874;
+        Wed, 30 Oct 2019 15:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450799;
-        bh=Jcyg7XjWUAWVTdX7CZVkV0MKQtcJLFsqCZ9uBBB3WFE=;
+        s=default; t=1572450909;
+        bh=9CtT65Z849232WiDVbFzdI/KWnr+z2wOnr7nMlIbsiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H2IKo0ffFhpbgm1ctSs7kwdvw2IQe7hLsFA9ItSN6uGk5Tsu/mxu5Q0TJYAK+OIQP
-         WZU/+SmwVa9Q3P+fAkxQ5Q3rl3KdbL3t9td/znJy/B/T85rwDcjSL+LtQD/cqXko97
-         P8Pr9dED8+y+UAaGBvHeQyk2NHkOP2bOhZjTHzEw=
+        b=hyPM7l8POtF+SjWMhCGgfLWBZSzLp9U3bpEE15kvGDSZMbfxPdVexDD6OD5rhAPMp
+         wxjaPsOFImmIn/XoTqK1YLRsW0rWyNbRbSJYXUTHc0vPdgjLoR3M/M0v+a17ne/kYz
+         OBl/ED+cLw6MVp/WozwOM2NkVlNiWzkkqKffi3FI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Colin Ian King <colin.king@canonical.com>,
         Michael Moese <mmoese@suse.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 52/81] 8250-men-mcb: fix error checking when get_num_ports returns -ENODEV
-Date:   Wed, 30 Oct 2019 11:48:58 -0400
-Message-Id: <20191030154928.9432-52-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 22/38] 8250-men-mcb: fix error checking when get_num_ports returns -ENODEV
+Date:   Wed, 30 Oct 2019 11:53:50 -0400
+Message-Id: <20191030155406.10109-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030154928.9432-1-sashal@kernel.org>
-References: <20191030154928.9432-1-sashal@kernel.org>
+In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
+References: <20191030155406.10109-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -66,10 +66,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/tty/serial/8250/8250_men_mcb.c b/drivers/tty/serial/8250/8250_men_mcb.c
-index 02c5aff58a740..8df89e9cd2542 100644
+index 127017cc41d92..057b1eaf6d2eb 100644
 --- a/drivers/tty/serial/8250/8250_men_mcb.c
 +++ b/drivers/tty/serial/8250/8250_men_mcb.c
-@@ -72,8 +72,8 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
+@@ -71,8 +71,8 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
  {
  	struct serial_8250_men_mcb_data *data;
  	struct resource *mem;
@@ -80,7 +80,7 @@ index 02c5aff58a740..8df89e9cd2542 100644
  	void __iomem *membase;
  
  	mem = mcb_get_resource(mdev, IORESOURCE_MEM);
-@@ -88,7 +88,7 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
+@@ -87,7 +87,7 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
  	dev_dbg(&mdev->dev, "found a 16z%03u with %u ports\n",
  		mdev->id, num_ports);
  
@@ -89,7 +89,7 @@ index 02c5aff58a740..8df89e9cd2542 100644
  		dev_err(&mdev->dev, "unexpected number of ports: %u\n",
  			num_ports);
  		return -ENODEV;
-@@ -133,7 +133,7 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
+@@ -132,7 +132,7 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
  
  static void serial_8250_men_mcb_remove(struct mcb_device *mdev)
  {
