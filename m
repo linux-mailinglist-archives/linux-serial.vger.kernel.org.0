@@ -2,106 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10849F4C82
-	for <lists+linux-serial@lfdr.de>; Fri,  8 Nov 2019 14:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A349F4E5B
+	for <lists+linux-serial@lfdr.de>; Fri,  8 Nov 2019 15:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727205AbfKHNDb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 8 Nov 2019 08:03:31 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41270 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730065AbfKHNCM (ORCPT
+        id S1726200AbfKHOll (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 8 Nov 2019 09:41:41 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:34646 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726036AbfKHOll (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 8 Nov 2019 08:02:12 -0500
-Received: by mail-lj1-f196.google.com with SMTP id m9so6114352ljh.8
-        for <linux-serial@vger.kernel.org>; Fri, 08 Nov 2019 05:02:10 -0800 (PST)
+        Fri, 8 Nov 2019 09:41:41 -0500
+Received: by mail-ed1-f68.google.com with SMTP id b72so5231262edf.1;
+        Fri, 08 Nov 2019 06:41:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Rl5uwkPm7ODgb0mKXC73DMWhjRD0JTB3vFmrVrN5ZB0=;
-        b=iVy3OBxWjNuefDddBNbhbl7Cs/NtWVdjCC/od1h2NY+gSnjfqrNC9xMyzWE6JCHadL
-         meWz1TdGa1kFUaFe1LBV/jM67MkOrHyRosHmDMbLKH/YlGIs4KIFUjA0IRlMr2sAmplm
-         OZODn39ovzWFKJB/jcopkfA5Ou+HMW8/g56bE=
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=jqgQDUtm5ZOLrV45scC6kMe64FlNahXYE/bDngjFUZw=;
+        b=ITi9UzucKgQ1HuPWbpe8EAo1deMMiEl8oKfI+o9mgtgjXwQHHh/2R976vBIpAhAH1n
+         Vq0S/5rrJ0kW26K5JLBelf9FSZLfL5OkTOeCG2Jmh41IrMpS4ELyxQYuXaIQsrsScjoi
+         fbnzcaGTpm4HCGwWW5UDoVBNRjaQbad8ZwESeuxO12aqrb4qc5A6e95GUlY0WjNPCMdK
+         1eEMW70/S982VwjANZUxElmlJgp3ywyn738OCZjboauYjb0LWzVCPH6FKoGkGiBIMy4s
+         xPUDrNcV2JG4ZkhOaqQl8K6+ijY6e5yutx917Yb1ZfASxIImMWwkleIgMiOYjjjYfuHu
+         +LXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Rl5uwkPm7ODgb0mKXC73DMWhjRD0JTB3vFmrVrN5ZB0=;
-        b=m8JcYvebxFu+ciiHIvg63Ik9P7kGMwCuD4ipKIHn7eAlkBhFcDodTCZ53vwqQh0tDf
-         zXwEPTyEIM+2Fe5TCU2/RG/RNSdaHCxlePp7wD08xtZF6vofXvqEf7W86hYqJfw3lgfv
-         Ag/8VghoPLfYiR2tmITy34JNCTJLFeWGxJ5GYFF/20lnG40PWUcrf5U2sinzX3OCOBO2
-         Aj7YxQf2XQRttKify2q5dGbWKA0jq7z3m/tOLLJwk7NK9l0sO5ov6G/jnwa7vQzV1bcf
-         YI44cF2cO1EtJjxQonTSkRLqJS0+3Gcx0jtOirAcDxYYAPnfpDnzYKm9xeHLwce7nXT5
-         +OIA==
-X-Gm-Message-State: APjAAAW/7KFz62NQlY1/SbmPXaTeqgtuyntqEI28YpIt6VlIqtK+t6wI
-        Jj5PRKBlZ0l0wXooZWqI+13ZlQ==
-X-Google-Smtp-Source: APXvYqzZa5jEsgyjO4bjCEsZXjRtgdus6spNSgtKC++GgbqHCKBa6/dHZb1FcDGJ/haiGgd6jr0bwA==
-X-Received: by 2002:a05:651c:1124:: with SMTP id e4mr6831944ljo.52.1573218130055;
-        Fri, 08 Nov 2019 05:02:10 -0800 (PST)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id d28sm2454725lfn.33.2019.11.08.05.02.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2019 05:02:09 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Scott Wood <oss@buserror.net>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v4 33/47] serial: ucc_uart: access __be32 field using be32_to_cpu
-Date:   Fri,  8 Nov 2019 14:01:09 +0100
-Message-Id: <20191108130123.6839-34-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191108130123.6839-1-linux@rasmusvillemoes.dk>
-References: <20191108130123.6839-1-linux@rasmusvillemoes.dk>
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=jqgQDUtm5ZOLrV45scC6kMe64FlNahXYE/bDngjFUZw=;
+        b=o/9EZO00GGwiBDU4XYhQsh1+89updf6Gh2Dk7yXgDZ33oDUu2RDmZlZg8COo1SxEKk
+         QtJ1csXaQk1yD5sIem425QfzokDiHpS4xGRuiDBNJrkAzhFIJciJhmnaLpgSmBNz55cS
+         3Cy8JZEsQCasKwYX7ataPEtp/YE3kdD30Rb0Sm1czIJJk7UTFgkLoJuo8vkA7erUxWMx
+         3wCn50bhMBWVbvD80by5OvgM4KWsiBvo+bLGfG1v0AAJPiKFivRa/n8Yi9T1Bwxm8NvR
+         2Eutud3Qogdxnt+p8oguYYYTUVSvQJIfHq7qqtUfXgiKjVWNk2L5E2sJ2Fo+mB38DlLX
+         QpSA==
+X-Gm-Message-State: APjAAAVJUrI+4F0PWaO86gysVaAxMJ6A/n1z2SvHzgKukWv58NrjQKr8
+        pbsvNdyq6WSJ67a4l+Qdww0=
+X-Google-Smtp-Source: APXvYqyxtV365f42zsFfcSTopr12wL9MbJ4YIALG+KXvuffgmRNBclLxPcr1SkPPGJ9PFY1nH+BaEw==
+X-Received: by 2002:a50:950a:: with SMTP id u10mr10789135eda.68.1573224099885;
+        Fri, 08 Nov 2019 06:41:39 -0800 (PST)
+Received: from [192.168.1.145] (mail.visionsystems.de. [213.209.99.202])
+        by smtp.gmail.com with ESMTPSA id c93sm163534edf.92.2019.11.08.06.41.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Nov 2019 06:41:39 -0800 (PST)
+From:   Falco Hyfing <hyfinglists@gmail.com>
+Subject: Minimal patch against TI AM335x UART swallowing the first byte using
+ the 8250_omap driver in RS485 mode
+To:     linux-omap@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, giulio.benetti@benettiengineering.com,
+        aford173@gmail.com, andrej.skvortzov@gmail.com, sr@denx.de,
+        rafael.gago@gmail.com, avistel@gmail.com,
+        matwey.kornilov@gmail.com, yegorslists@gmail.com
+Message-ID: <249e4532-e7a6-a1f3-499f-8a2beef82f41@gmail.com>
+Date:   Fri, 8 Nov 2019 15:41:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The buf member of struct qe_bd is a __be32, so to make this work on
-little-endian hosts, use be32_to_cpu when reading it.
+I stumbled upon this unresolved issue where the TI AM335x UART is 
+sporadically swallowing the first byte using the 8250_omap driver in 
+RS485 mode.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/tty/serial/ucc_uart.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Previous discussions of the issue ended on Christmas Eve last year. For 
+reference:
+https://marc.info/?w=2&r=1&s=fix+clearing+fifos+rs485+mode+again&q=t
 
-diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
-index f5ea84928a3b..a5330582b610 100644
---- a/drivers/tty/serial/ucc_uart.c
-+++ b/drivers/tty/serial/ucc_uart.c
-@@ -343,7 +343,7 @@ static int qe_uart_tx_pump(struct uart_qe_port *qe_port)
- 		/* Pick next descriptor and fill from buffer */
- 		bdp = qe_port->tx_cur;
- 
--		p = qe2cpu_addr(bdp->buf, qe_port);
-+		p = qe2cpu_addr(be32_to_cpu(bdp->buf), qe_port);
- 
- 		*p++ = port->x_char;
- 		qe_iowrite16be(1, &bdp->length);
-@@ -371,7 +371,7 @@ static int qe_uart_tx_pump(struct uart_qe_port *qe_port)
- 	while (!(qe_ioread16be(&bdp->status) & BD_SC_READY) &&
- 	       (xmit->tail != xmit->head)) {
- 		count = 0;
--		p = qe2cpu_addr(bdp->buf, qe_port);
-+		p = qe2cpu_addr(be32_to_cpu(bdp->buf), qe_port);
- 		while (count < qe_port->tx_fifosize) {
- 			*p++ = xmit->buf[xmit->tail];
- 			xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
-@@ -491,7 +491,7 @@ static void qe_uart_int_rx(struct uart_qe_port *qe_port)
- 		}
- 
- 		/* get pointer */
--		cp = qe2cpu_addr(bdp->buf, qe_port);
-+		cp = qe2cpu_addr(be32_to_cpu(bdp->buf), qe_port);
- 
- 		/* loop through the buffer */
- 		while (i-- > 0) {
--- 
-2.23.0
+As our company plans to move our serial device servers' firmware to an 
+upstream kernel version we need a solution for this problem.
+
+I appended a small patch that seems to resolve the issue for our products.
+
+I would like to kindly ask whether you could test this patch with 
+various serial hardware that would be affected by this driver.
+
+Kind regards,
+
+     Falco Hyfing
+     Software Engineer at VisionSystems GmbH
+
+
+diff --git a/drivers/tty/serial/8250/8250_port.c 
+b/drivers/tty/serial/8250/8250_port.c
+index 8407166610ce..25dd44d5f6ff 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1405,7 +1405,8 @@ static void __do_stop_tx_rs485(struct 
+uart_8250_port *p)
+          * Enable previously disabled RX interrupts.
+          */
+         if (!(p->port.rs485.flags & SER_RS485_RX_DURING_TX)) {
+-               serial8250_clear_and_reinit_fifos(p);
++               serial_port_out(&p->port, UART_FCR, p->fcr |
++                               UART_FCR_CLEAR_RCVR | UART_FCR_CLEAR_XMIT);
+
+                 p->ier |= UART_IER_RLSI | UART_IER_RDI;
+                 serial_port_out(&p->port, UART_IER, p->ier);
 
