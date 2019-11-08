@@ -2,87 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF16F64DF
-	for <lists+linux-serial@lfdr.de>; Sun, 10 Nov 2019 04:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86448F6732
+	for <lists+linux-serial@lfdr.de>; Sun, 10 Nov 2019 05:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729340AbfKJCsv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 9 Nov 2019 21:48:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729327AbfKJCsv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:48:51 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 760CC22583;
-        Sun, 10 Nov 2019 02:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354130;
-        bh=kL6FU9R5156ffI4nRNa+Oy0TifVNeORlwgtnvFjve3M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KxyDu0MZ57EF4QLeITtSXLiTVnxXkbS5qMg9N6GGhMtDYWz00eo/B1sFFooXMaxq5
-         K3+lfhG3bETRnqde4JTIIOUqPFr63hpOuig6KqVBmq4Koiqiik8AICirFCJ5Ytyw4R
-         g1mtqQLxzQjd/fDl7V/E2HqTV2YwH1CU6wDBxgXA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anton Vasilyev <vasilyev@ispras.ru>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 03/66] serial: mxs-auart: Fix potential infinite loop
-Date:   Sat,  9 Nov 2019 21:47:42 -0500
-Message-Id: <20191110024846.32598-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024846.32598-1-sashal@kernel.org>
-References: <20191110024846.32598-1-sashal@kernel.org>
+        id S1726730AbfKJEYq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 9 Nov 2019 23:24:46 -0500
+Received: from static-dsl-170.87-197-152.telecom.sk ([87.197.152.170]:50734
+        "EHLO sldom.sldom" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726723AbfKJEYq (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 9 Nov 2019 23:24:46 -0500
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by sldom.sldom (Postfix) with SMTP id D526024C3C1;
+        Fri,  8 Nov 2019 16:03:04 +0100 (CET)
+Received: from (HELO 8qtfp3) [136.72.72.250] by 127.0.0.1 with ESMTP id A99CFF80D9D; Fri, 08 Nov 2019 18:59:21 +0400
+Message-ID: <z$5$$uh9$5l0$e@a9756>
+From:   "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
+Reply-To: "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
+To:     ares@sunforson.com
+Subject: Seeking Investment Opportunities
+Date:   Fri, 08 Nov 19 18:59:21 GMT
+X-Mailer: Microsoft Outlook, Build 10.0.2627
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+        boundary="6B8._C..3_EBFAF.B_20"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Anton Vasilyev <vasilyev@ispras.ru>
 
-[ Upstream commit 5963e8a3122471cadfe0eba41c4ceaeaa5c8bb4d ]
+--6B8._C..3_EBFAF.B_20
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-On the error path of mxs_auart_request_gpio_irq() is performed
-backward iterating with index i of enum type. Underline enum type
-may be unsigned char. In this case check (--i >= 0) will be always
-true and error handling goes into infinite loop.
+I consider it very important to introduce to you my client who is interest=
+ed to invest $250 million to $500 million dollars in a reputable project  =
+investment, She is well known in her country holding a political office .
 
-The patch changes the check so that it is valid for signed and unsigned
-types.
+She deserve a secret investment outside her country without direct involve=
+ment.  she needs an experience individual or company that can profitably i=
+nvestment and manage the above funds for the period of 15 years or more.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+Forward your details to me for further discussion (e.g)  Your name, Teleph=
+one number and Occupation.
 
-Signed-off-by: Anton Vasilyev <vasilyev@ispras.ru>
-Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/mxs-auart.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thank you
+Oliver Simon
 
-diff --git a/drivers/tty/serial/mxs-auart.c b/drivers/tty/serial/mxs-auart.c
-index 1d9d778828bae..515bf18c82943 100644
---- a/drivers/tty/serial/mxs-auart.c
-+++ b/drivers/tty/serial/mxs-auart.c
-@@ -1635,8 +1635,9 @@ static int mxs_auart_request_gpio_irq(struct mxs_auart_port *s)
- 
- 	/*
- 	 * If something went wrong, rollback.
-+	 * Be careful: i may be unsigned.
- 	 */
--	while (err && (--i >= 0))
-+	while (err && (i-- > 0))
- 		if (irq[i] >= 0)
- 			free_irq(irq[i], s);
- 
--- 
-2.20.1
+--6B8._C..3_EBFAF.B_20--
 
