@@ -2,151 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C478BFA9C5
-	for <lists+linux-serial@lfdr.de>; Wed, 13 Nov 2019 06:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD904FAD72
+	for <lists+linux-serial@lfdr.de>; Wed, 13 Nov 2019 10:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbfKMFhr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 13 Nov 2019 00:37:47 -0500
-Received: from mail-eopbgr60045.outbound.protection.outlook.com ([40.107.6.45]:57092
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725976AbfKMFhq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 13 Nov 2019 00:37:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aW8wtznXREUs/Ygyhka3sW5q2i3+BtqCh40xlgBTjV7uHMRNCqugHLBTyxII3wr8OEMC7DbzDUc95RsR4JA127uycERh1hfhctFR0eoTwHFzgJzjPi9dr6k9YUcwJl5NPwaXhTzmN1vOaI7BktfH2+Bba5yPJbl/5FKahsJxU7wv4Cc2liFeYBdd/2luW7wrV+mabB9/CtxJi9vGnOLIGhurPU5hwF8SARf7BOtAXa9KzqHmuMjqkARKffSmbfn57QTPYnhOH4Mf5NIK/xfEjznXl6pKT3UUs6KITY0/a64p9vJhWHKHVZBL80tgZKofPPDl0Q15wfyB87yNlwyYCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e6PtIXSsYvouOqYN0ds2rqcCpo6/VmIB1E7V3gwciIA=;
- b=SwJX9O+Tpfv13rdGUakpXGaCsYQdS1msS6YROj0ADTJ60KLWPtsEiBn0TbvA+9KvG8EzZwLuGY3R9hRAol5+Km2P5xKTmBT1RiYBVMZHX7QVcSEnmLcCxL3rEYifECTTs7mJUN4HUxWSSnM02tmLTWNSqW30q44VeMRSgUXKSQ/xWp3XyTw7RJjZVNztch2FJfmwikD8DNelxBcCMteCp9wExZIKeJnLW9rWU453ynM50GdnXDgqFU6TYgdc4dBvgAjtWhQQymhopFzsayr7pRfFJnmyzXekxB08mPYezB6YdO0CZ1bVaNgS66fr2Lu7eDLI7PGuNsypYjrlAnAaaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e6PtIXSsYvouOqYN0ds2rqcCpo6/VmIB1E7V3gwciIA=;
- b=bQ9ZLmeWFSteem4oEswZTtn8hpJIhCBtBZWQeRckddXVAPS35UN3LZ9xh5vAyz7zMKcR4cvXb+N4nGIJe1nhuEjghmpjKGeK+nRxamRJclsLQ1sVSAR40mFfcKXu4bXQBi+scViesE87WSFjzGn/vnPRjM8OYqy5rNqKucktzU4=
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
- DB7PR04MB5209.eurprd04.prod.outlook.com (20.176.232.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.23; Wed, 13 Nov 2019 05:37:43 +0000
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::115f:1e4f:9ceb:2a2c]) by DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::115f:1e4f:9ceb:2a2c%7]) with mapi id 15.20.2430.028; Wed, 13 Nov 2019
- 05:37:43 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jslaby@suse.com" <jslaby@suse.com>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] tty: serial: pch_uart: correct usage of dma_unmap_sg
-Thread-Topic: [PATCH] tty: serial: pch_uart: correct usage of dma_unmap_sg
-Thread-Index: AQHVmeR4JqxDQDN/nUWmBR6Ye0wD+Q==
-Date:   Wed, 13 Nov 2019 05:37:42 +0000
-Message-ID: <1573623259-6339-1-git-send-email-peng.fan@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.7.4
-x-clientproxiedby: HK2PR02CA0180.apcprd02.prod.outlook.com (10.171.31.16) To
- DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 00b42073-9f51-49b5-4974-08d767fb9acd
-x-ms-traffictypediagnostic: DB7PR04MB5209:|DB7PR04MB5209:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB5209D4AE714FC6E2A576D1F488760@DB7PR04MB5209.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-forefront-prvs: 0220D4B98D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(366004)(39860400002)(376002)(396003)(189003)(199004)(386003)(66946007)(36756003)(6436002)(110136005)(26005)(50226002)(316002)(66556008)(6116002)(66476007)(3846002)(64756008)(66446008)(6506007)(25786009)(99286004)(186003)(66066001)(102836004)(2906002)(44832011)(52116002)(54906003)(86362001)(14444005)(6512007)(486006)(71200400001)(2616005)(476003)(71190400001)(5660300002)(478600001)(14454004)(8676002)(6486002)(4326008)(81156014)(81166006)(7736002)(305945005)(8936002)(256004)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5209;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0DaytV1m6f2J4zBFmtkr3+dzV+PoxKDEHRgwv5AjuSLXBtNGR+adyKWj8CnYJvChY+GwFzVwN7viJO6m5jBOwtTs2v2l8aEQrDtVmQAv488NdFZwGspECjWbKjsVyVGuniTjp4FW6csWVOWHvmD7zeTvy/qL+g/4ToVZSbdJo8VX36DPfTuFPSYcjGgPePM86Lt88mpAFHs+J6zBIRq0RYoGHfBblBCMb24QwYjbQUgSiR/o33gzAP9NBoWRNBfQcFjaFkBEprxYFKvZTrZZwFCB78bR6EDNLllYPRFBp4R94Lbn4lfV8hMksIJebbsix9sHAuof2BBXESfirfBjVdFSOtG4jVOPvqSvmA5gtzPiDqFdOJFmmBbHBwTZYbsHqZkNkovOqt5LP9UdIH4f3FrlakMFtETdUPnA+rQsrUZisutm2OgQBzwLyuxr28GQ
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1727394AbfKMJqh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 13 Nov 2019 04:46:37 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:57768 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbfKMJqg (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 13 Nov 2019 04:46:36 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAD9j6pL064778;
+        Wed, 13 Nov 2019 03:45:06 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573638306;
+        bh=oyPsIbZi0qnZFmN2PaTCXCyTAhZJdbqDlEEeX5wsMno=;
+        h=From:To:CC:Subject:Date;
+        b=MCvja4NFv9U1J76VG9/k7hm/UT+ME2Uj3gh5QLA6DokBvw9uALLeGYsG0pB0xGSl8
+         qxkI1qR4I9OExzvzIjQjKlHWn7wGfLE/Tqhgtt1LtEb0evY288Z/5a9r47HQ39V6wU
+         cFlk29GDVtLLFMqW01eVQzMCcStoQKeO4s0fCA6k=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAD9j6aB085225
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Nov 2019 03:45:06 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 13
+ Nov 2019 03:44:48 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 13 Nov 2019 03:44:48 -0600
+Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAD9j2KA078225;
+        Wed, 13 Nov 2019 03:45:02 -0600
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+To:     <gregkh@linuxfoundation.org>, <linux@armlinux.org.uk>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <ldewangan@nvidia.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <vkoul@kernel.org>, <jslaby@suse.com>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+Subject: [PATCH 0/3] tty: serial: Use dma_request_chan() directly for channel request
+Date:   Wed, 13 Nov 2019 11:46:15 +0200
+Message-ID: <20191113094618.1725-1-peter.ujfalusi@ti.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00b42073-9f51-49b5-4974-08d767fb9acd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 05:37:43.0310
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B0p/lUoEFRMeI5h2tAB3wwRmu/3q21SptO093O+/zU43tWlOWigibkf2CqnMt4feYZ7l4vJHn6SGzqegzS/7Mw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5209
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Per Documentation/DMA-API-HOWTO.txt,
-To unmap a scatterlist, just call:
-	dma_unmap_sg(dev, sglist, nents, direction);
+Hi,
 
-.. note::
+I'm going through the tree to remove dma_request_slave_channel_reason() as it
+is just:
+#define dma_request_slave_channel_reason(dev, name) \
+	dma_request_chan(dev, name)
 
-	The 'nents' argument to the dma_unmap_sg call must be
-	the _same_ one you passed into the dma_map_sg call,
-	it should _NOT_ be the 'count' value _returned_ from the
-	dma_map_sg call.
-
-However in the driver, priv->nent is directly assigned with value
-returned from dma_map_sg, and dma_unmap_sg use priv->nent for unmap,
-this breaks the API usage.
-
-So introduce a new entry orig_nent to remember 'nents'.
-
-Fixes: da3564ee027e("pch_uart: add multi-scatter processing")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Regards,
+Peter
 ---
+Peter Ujfalusi (3):
+  tty: serial: amba-pl011: Use dma_request_chan() directly for channel
+    request
+  tty: serial: msm_serial: Use dma_request_chan() directly for channel
+    request
+  tty: serial: tegra: Use dma_request_chan() directly for channel
+    request
 
-V1:
- Code inspection, not tested.
+ drivers/tty/serial/amba-pl011.c   | 2 +-
+ drivers/tty/serial/msm_serial.c   | 4 ++--
+ drivers/tty/serial/serial-tegra.c | 3 +--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
- drivers/tty/serial/pch_uart.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+-- 
+Peter
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index 6157213a8359..c16234bca78f 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -233,6 +233,7 @@ struct eg20t_port {
- 	struct dma_chan			*chan_rx;
- 	struct scatterlist		*sg_tx_p;
- 	int				nent;
-+	int				orig_nent;
- 	struct scatterlist		sg_rx;
- 	int				tx_dma_use;
- 	void				*rx_buf_virt;
-@@ -787,9 +788,10 @@ static void pch_dma_tx_complete(void *arg)
- 	}
- 	xmit->tail &=3D UART_XMIT_SIZE - 1;
- 	async_tx_ack(priv->desc_tx);
--	dma_unmap_sg(port->dev, sg, priv->nent, DMA_TO_DEVICE);
-+	dma_unmap_sg(port->dev, sg, priv->orig_nent, DMA_TO_DEVICE);
- 	priv->tx_dma_use =3D 0;
- 	priv->nent =3D 0;
-+	priv->orig_nent =3D 0;
- 	kfree(priv->sg_tx_p);
- 	pch_uart_hal_enable_interrupt(priv, PCH_UART_HAL_TX_INT);
- }
-@@ -1010,6 +1012,7 @@ static unsigned int dma_handle_tx(struct eg20t_port *=
-priv)
- 		dev_err(priv->port.dev, "%s:dma_map_sg Failed\n", __func__);
- 		return 0;
- 	}
-+	priv->orig_nent =3D num;
- 	priv->nent =3D nent;
-=20
- 	for (i =3D 0; i < nent; i++, sg++) {
---=20
-2.16.4
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
