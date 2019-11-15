@@ -2,78 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFDEFD5F4
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Nov 2019 07:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD47FD76C
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Nov 2019 08:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbfKOGTm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 15 Nov 2019 01:19:42 -0500
-Received: from mail.hgs.gob.ec ([190.214.19.83]:52180 "HELO mail.hgs.gob.ec"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
-        id S1725774AbfKOGTm (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 15 Nov 2019 01:19:42 -0500
-X-Greylist: delayed 23887 seconds by postgrey-1.27 at vger.kernel.org; Fri, 15 Nov 2019 01:19:32 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hgs.gob.ec (Postfix) with ESMTP id C811AA12150;
-        Thu, 14 Nov 2019 16:04:54 -0500 (-05)
-Received: from mail.hgs.gob.ec ([127.0.0.1])
-        by localhost (mail.hgs.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kUuhLN-EvW6W; Thu, 14 Nov 2019 16:04:54 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hgs.gob.ec (Postfix) with ESMTP id 593A3A1233A;
-        Thu, 14 Nov 2019 16:04:08 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.hgs.gob.ec 593A3A1233A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hgs.gob.ec;
-        s=DD120D66-D63F-11E9-9729-9452E74E1CB4; t=1573765448;
-        bh=oYeOwTtTK4mcRNNK0JGL7ZOgP8mm7StpJG1pujYq4Z0=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=UHodgle43tC0tCmdKJ5T6csRCiC7EtlENZtQ7aocLflABSQ159Lpyn0OsOS2lSHK1
-         Z9YRVhyuBkj+bybtPeoJ0lF6fDf/ga+aUFQV7XxXCn6csPI603GSKOr2qpRY2LrkdP
-         8cfNkId5ctDNdeafz66NWhp/ZQAGKW7h6Mar2jrV+btPkP/Jvxgx+rY9mEzN6LIGzT
-         l4mizLlog4HqBnHe5nCCIznJVM2hOni5+A9sxoCQpWkGpjcTHr1j44g9tWQLl+yiVu
-         aplHdg0hMCANsiYvlMlexQ6PbCmJKPN125AnQr27JwkQl57ZSiMiyyN101Nsm89D+u
-         afmEVGpf2uNrQ==
-X-Virus-Scanned: amavisd-new at hgs.gob.ec
-Received: from mail.hgs.gob.ec ([127.0.0.1])
-        by localhost (mail.hgs.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xhn7N29Wfnpl; Thu, 14 Nov 2019 16:04:08 -0500 (-05)
-Received: from [10.32.142.65] (unknown [105.4.7.6])
-        by mail.hgs.gob.ec (Postfix) with ESMTPSA id 83A429FA4D5;
-        Thu, 14 Nov 2019 16:03:17 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726196AbfKOH5G (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 15 Nov 2019 02:57:06 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:34322 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfKOH5G (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 15 Nov 2019 02:57:06 -0500
+Received: by mail-lf1-f65.google.com with SMTP id y186so7311243lfa.1
+        for <linux-serial@vger.kernel.org>; Thu, 14 Nov 2019 23:57:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zLHtq3yfrffU9o2nF0X7zoTmdgeT+a2HOFrUz+0J25Q=;
+        b=BjHqHXiGMgpJVRBuo+lq+sEes/L+3Pgkfq4t22+sAm3ZkEfNZJjCgNxK0Lq2+SC82z
+         q4IiSNGldEN1uq+0oO7YsbEQj/jG8NjDGr2TQGUPclpVxjdT+bLba2JJiXE7NvHKORtO
+         xVd6o/D+7FumLWsNsyWQxMok7BRgJFk6bpv/4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zLHtq3yfrffU9o2nF0X7zoTmdgeT+a2HOFrUz+0J25Q=;
+        b=HXonGrLK4sVKhQrHwoN2Q1wHZKHUR6xqkwfCzID3LXVQTaVuzbKg9OiUWe43rEI1CS
+         hrMWGOzyhmg1atBJ2pVkVA5f1zE2RLlU8A5NuM4UGXmfFY0Dok90rdn89/z/+NUVV/WU
+         OY2CSiHmaq7EfFQYferQnCbNecIiuVz0tZ4FwKX5ajIWGvLaGVDnTQHKilkFDsmFTUCr
+         z9y/2wEeaMN0/XALLaoY12ZRWNGsGbHGRiJNkMlt83dcW8ox15ofiAHUfb6gv5Cav4w7
+         iBXJ7JaKUsBBC5Uwu3GcybbEnTR7ETWE6aKnAWRLIGnNjn9UnPB3HgOy6OtsZJDicmmy
+         bA3g==
+X-Gm-Message-State: APjAAAWRZ2Y7Fhz4ndu2b/EVnJm7I9D/eaocIixnXBN91hf13DUrrmcp
+        xWiGEODCEbRWkqoQjHAwJOyMIBNnB0AERICB
+X-Google-Smtp-Source: APXvYqzS4mGv0Td6lhMx6P1LJw0rbb74jK3Vo5agUi9HiQO2P985F1jTJV8/p7ydSoDXjafwq0X1nQ==
+X-Received: by 2002:ac2:5236:: with SMTP id i22mr10287608lfl.19.1573804623889;
+        Thu, 14 Nov 2019 23:57:03 -0800 (PST)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id z21sm4888837lfg.0.2019.11.14.23.57.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Nov 2019 23:57:03 -0800 (PST)
+Subject: Re: [PATCH v4 32/47] serial: ucc_uart: use of_property_read_u32() in
+ ucc_uart_probe()
+To:     Timur Tabi <timur@kernel.org>
+Cc:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Scott Wood <oss@buserror.net>, linux-serial@vger.kernel.org
+References: <20191108130123.6839-1-linux@rasmusvillemoes.dk>
+ <20191108130123.6839-33-linux@rasmusvillemoes.dk>
+ <CAOZdJXVpDSk2AWT7pYjrsk5HUmAeosCNf8zWX1CEEtZshAh9Sw@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <f584ea71-694f-3d3a-7228-9232531e3918@rasmusvillemoes.dk>
+Date:   Fri, 15 Nov 2019 08:57:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000=2E000_Euro?=
-To:     Recipients <dietetica@hgs.gob.ec>
-From:   ''Charles jackson'' <dietetica@hgs.gob.ec>
-Date:   Thu, 14 Nov 2019 23:03:07 +0200
-Reply-To: charlesjacksonjr001@gmail.com
-Message-Id: <20191114210317.83A429FA4D5@mail.hgs.gob.ec>
+In-Reply-To: <CAOZdJXVpDSk2AWT7pYjrsk5HUmAeosCNf8zWX1CEEtZshAh9Sw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Lieber Freund,
+On 15/11/2019 05.25, Timur Tabi wrote:
+> On Fri, Nov 8, 2019 at 7:03 AM Rasmus Villemoes
+> <linux@rasmusvillemoes.dk> wrote:
+>>
+>> +       if (of_property_read_u32(np, "cell-index", &val) &&
+>> +           of_property_read_u32(np, "device-id", &val)) {
+> 
+> I know that this is technically correct, but it's obfuscated IMHO.
+> 'val' is set correctly only when of_property_read_u32(...) is "false",
+> which is doubly-weird because of_property_read_u32(...) doesn't
+> actually return a boolean.
+> 
+> I would rather you break this into two if-statements like the original code.
+> 
 
-Ich bin Herr Charles W Jackson, North Carolina, Vereinigte Staaten von Amer=
-ika, der Mega-Gewinner von 344 Millionen US-Dollar. Beim Mega-Millions-Jack=
-pot spende ich an 5 zuf&auml;llige Personen. Wenn Sie diese E-Mail erhalten=
-, wurde Ihre E-Mail zu einem Spinball, den ich am h&auml;ufigsten verteilt =
-habe von meinem Verm&ouml;gen an eine Reihe von Wohlt&auml;tigkeitsorganisa=
-tionen. Ich habe mich freiwillig entschlossen, Ihnen als einer der ausgew&a=
-uml;hlten 5 einen Betrag von &euro; 2.000.000,00 zu spenden, um meine Gewin=
-ne zu &uuml;berpr&uuml;fen.
-Dies ist Ihr Spendencode: [CJ530342019]
-
-www.youtube.com/watch?v=3DBSr8myiLPMQ
-
-Antworten Sie auf diese E-Mail mit dem SPENDER-CODE: =
-
-
-charlesjacksonjr001@gmail.com
-
-Ich hoffe, Sie und Ihre Familie gl&uuml;cklich zu machen
-
-Sch&ouml;ne Gr&uuml;&szlig;e
-Mr. Charles Jackson
+Sure, I can do that.
