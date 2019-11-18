@@ -2,35 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B409100154
-	for <lists+linux-serial@lfdr.de>; Mon, 18 Nov 2019 10:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9207E1003FD
+	for <lists+linux-serial@lfdr.de>; Mon, 18 Nov 2019 12:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbfKRJd3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 18 Nov 2019 04:33:29 -0500
-Received: from smtp2.axis.com ([195.60.68.18]:34531 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726464AbfKRJd3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 18 Nov 2019 04:33:29 -0500
-X-Greylist: delayed 432 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 Nov 2019 04:33:28 EST
-IronPort-SDR: /ZR5xX+73d/C8ro/l/i8tfrG/O4pT9ZCbVHflRFTpnylxq8+Qpgra+nV9eGfx1ngB/G5XziGfW
- +HcDcr3mGC5AwP3aDQLe3IE6pC+5SPJIqljZAymuL5qPdRWDxsJYfK2iuza5RBkvUwQM0jog6Q
- oj0/Bk42qrkA63XsowN8VcCTyFatGZhwP3Ro6O6+RvOcw99SEec6Vi9eRmVRRwUPTfYwkTSGdC
- Aqtwk9d7ETdnLJOaXRMasCWFNUeLgn058RHzk2qwwl2dtKQzxjOqkUN4S417VKPaVuLdtHg+F3
- ccU=
-X-IronPort-AV: E=Sophos;i="5.68,319,1569276000"; 
-   d="scan'208";a="2531062"
-X-Axis-User: NO
-X-Axis-NonUser: YES
-X-Virus-Scanned: Debian amavisd-new at bes.se.axis.com
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     linux@armlinux.org.uk, gregkh@linuxfoundation.org
-Cc:     jslaby@suse.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        Vincent Whitchurch <rabinv@axis.com>
-Subject: [PATCH] serial: pl011: Fix DMA ->flush_buffer()
-Date:   Mon, 18 Nov 2019 10:25:47 +0100
-Message-Id: <20191118092547.32135-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.20.0
+        id S1727675AbfKRLZl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 18 Nov 2019 06:25:41 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:33021 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727250AbfKRLYJ (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 18 Nov 2019 06:24:09 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a17so15756505wmb.0
+        for <linux-serial@vger.kernel.org>; Mon, 18 Nov 2019 03:24:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=skc4BB3FfJVhrMQufim0pPb5lTLStBal+/ZiI3PgHrk=;
+        b=bIXhboGAOfHEuhy5XNvLSkt/v8AbF7er8M7+DnbVSRGu/nfzVD9BIZMY9lvVjK01yq
+         x4OwM95DdJqvHHmAn2AEIZpahfvZGZTl5VI+0W8Nii1hH0oJGGfoxnKmw/9+dD48TPoO
+         1EZMF/DjpiyKhwbirwHabUH+m5MatGIRUQD+Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=skc4BB3FfJVhrMQufim0pPb5lTLStBal+/ZiI3PgHrk=;
+        b=XN7t9vfNvwqF1UfMFg5lB2P7Onph6zciPfwyID92mP+jAgXj6wUg6wJAYnlsaDBPQB
+         lCAcsR4sdilqnym/s0R1yee8uQjFbQOgihfjOl4gF2uH+6S8Sv1wCVRFTmonTGoPHm85
+         tQabSQ2/2481FcgZEaPntSNQsCTSU6SjfGdUogP0KnT/bQTzAzIRaz3IsOdpPzMXYT07
+         Tpa6+XQelNYqk6Y2PKCD+8W8sEXTPQrV+sFAqyktXsaR2oNym8NoP7JIg2HJusKABBK7
+         BwSDwBgSHdjYnaTIBOhmrTTWe+c/XgiDPxjUaxSPCfGB/CRdxyT/HnzZXSIbT5KzsPUP
+         ZwBg==
+X-Gm-Message-State: APjAAAXSKuEYiYiWy3rIxaO00kHMCTCT8FTOlGn25YuuqS8MG3BMpO7q
+        lWFnm20RAMO3u5rVJ8tE4Bs2Eg==
+X-Google-Smtp-Source: APXvYqzv/wXIsjaRbMxH9N3IlxmKxJic89M7wV8bzm0V/mj0kc0XrptcV3zjVvdAWMEcHYldq3xfjg==
+X-Received: by 2002:a7b:c768:: with SMTP id x8mr29728216wmk.26.1574076247328;
+        Mon, 18 Nov 2019 03:24:07 -0800 (PST)
+Received: from prevas-ravi.prevas.se (ip-5-186-115-54.cgn.fibianet.dk. [5.186.115.54])
+        by smtp.gmail.com with ESMTPSA id y2sm21140815wmy.2.2019.11.18.03.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2019 03:24:07 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Scott Wood <oss@buserror.net>, Timur Tabi <timur@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v5 28/48] serial: ucc_uart: explicitly include soc/fsl/cpm.h
+Date:   Mon, 18 Nov 2019 12:23:04 +0100
+Message-Id: <20191118112324.22725-29-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191118112324.22725-1-linux@rasmusvillemoes.dk>
+References: <20191118112324.22725-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -38,68 +63,27 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-PL011's ->flush_buffer() implementation releases and reacquires the port
-lock.  Due to a race condition here, data can end up being added to the
-circular buffer but neither being discarded nor being sent out.  This
-leads to, for example, tcdrain(2) waiting indefinitely.
+This driver uses #defines from soc/fsl/cpm.h, so instead of relying on
+some other header pulling that in, do that explicitly. This is
+preparation for allowing this driver to build on ARM.
 
-Process A                       Process B
-
-uart_flush_buffer()
- - acquire lock
- - circ_clear
- - pl011_flush_buffer()
- -- release lock
- -- dmaengine_terminate_all()
-
-                                uart_write()
-                                - acquire lock
-                                - add chars to circ buffer
-                                - start_tx()
-                                -- start DMA
-                                - release lock
-
- -- acquire lock
- -- turn off DMA
- -- release lock
-
-                                // Data in circ buffer but DMA is off
-
-According to the comment in the code, the releasing of the lock around
-dmaengine_terminate_all() is to avoid a deadlock with the DMA engine
-callback.  However, since the time this code was written, the DMA engine
-API documentation seems to have been clarified to say that
-dmaengine_terminate_all() (in the identically implemented but
-differently named dmaengine_terminate_async() variant) does not wait for
-any running complete callback to be completed and can even be called
-from a complete callback.  So there is no possibility of deadlock if the
-DMA engine driver implements this API correctly.
-
-So we should be able to just remove this release and reacquire of the
-lock to prevent the aforementioned race condition.
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- drivers/tty/serial/amba-pl011.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/tty/serial/ucc_uart.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 3a7d1a66f79c..b0b689546395 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -813,10 +813,8 @@ __acquires(&uap->port.lock)
- 	if (!uap->using_tx_dma)
- 		return;
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index a0555ae2b1ef..7e802616cba8 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -32,6 +32,7 @@
+ #include <soc/fsl/qe/ucc_slow.h>
  
--	/* Avoid deadlock with the DMA engine callback */
--	spin_unlock(&uap->port.lock);
--	dmaengine_terminate_all(uap->dmatx.chan);
--	spin_lock(&uap->port.lock);
-+	dmaengine_terminate_async(uap->dmatx.chan);
-+
- 	if (uap->dmatx.queued) {
- 		dma_unmap_sg(uap->dmatx.chan->device->dev, &uap->dmatx.sg, 1,
- 			     DMA_TO_DEVICE);
+ #include <linux/firmware.h>
++#include <soc/fsl/cpm.h>
+ #include <asm/reg.h>
+ 
+ /*
 -- 
-2.20.0
+2.23.0
 
