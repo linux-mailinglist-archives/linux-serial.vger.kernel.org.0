@@ -2,35 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEF91065FD
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 07:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB854106584
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 07:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbfKVG1D (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Nov 2019 01:27:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55218 "EHLO mail.kernel.org"
+        id S1728068AbfKVFvQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Nov 2019 00:51:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727783AbfKVFuf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:50:35 -0500
+        id S1728064AbfKVFvP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:51:15 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F77C20731;
-        Fri, 22 Nov 2019 05:50:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5089520726;
+        Fri, 22 Nov 2019 05:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574401835;
-        bh=efje1ZhyiC3VPDJkQ01pBKauyaU20c2yrRgBi42Ebhw=;
+        s=default; t=1574401875;
+        bh=El87W87gUKdjkEIOxGKkTeim2N3L71k5D8CTxcsCHFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kOsvhJjT8IB25ffALcA12OHJF7PWJMIoIzaT7jwr+Y/9+OSoTfvbV5KjXYQq2P6l4
-         nUdZxb90Jgf357s+awqDLkzoWWw0zcKVTLZ/CvTcZ2vRo2BgnNP9aFHycsFwLJU1An
-         mxseKc/6dwDmBF1HGBK3pdZ/2khS885r0xlvFaLU=
+        b=avvIwrxFIydr4B/XC+5jVyws4fvaKrr67//slw3Pd5wSzi/SQZ44xz54JSbabvfn5
+         UgCaF32KupFjR7NvyOgbPr5Jh3LQhXxE0j2VvXDRmnOtR0cRdzsUNpGLI0lnPsMTHY
+         yj0OWJhIkTN6um24B7vWDlwKNAWKShW9lSoystMc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+Cc:     Alexander Shiyan <shc_work@mail.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 076/219] serial: sh-sci: Fix crash in rx_timer_fn() on PIO fallback
-Date:   Fri, 22 Nov 2019 00:46:48 -0500
-Message-Id: <20191122054911.1750-69-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 110/219] serial: max310x: Fix tx_empty() callback
+Date:   Fri, 22 Nov 2019 00:47:22 -0500
+Message-Id: <20191122054911.1750-103-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
 References: <20191122054911.1750-1-sashal@kernel.org>
@@ -43,37 +43,41 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Alexander Shiyan <shc_work@mail.ru>
 
-[ Upstream commit 2e948218b7c1262a3830823d6620eb227e3d4e3a ]
+[ Upstream commit a8da3c7873ea57acb8f9cea58c0af477522965aa ]
 
-When falling back to PIO, active_rx must be set to a different value
-than cookie_rx[i], else sci_dma_rx_find_active() will incorrectly find a
-match, leading to a NULL pointer dereference in rx_timer_fn() later.
+Function max310x_tx_empty() accesses the IRQSTS register, which is
+cleared by IC when reading, so if there is an interrupt status, we
+will lose it. This patch implement the transmitter check only by
+the current FIFO level.
 
-Use zero instead, which is the same value as after driver
-initialization.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Alexander Shiyan <shc_work@mail.ru>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sh-sci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/max310x.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 5550289e6678b..9e1a6af23ca2b 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1359,7 +1359,7 @@ static int sci_submit_rx(struct sci_port *s, bool port_lock_held)
- 		dmaengine_terminate_async(chan);
- 	for (i = 0; i < 2; i++)
- 		s->cookie_rx[i] = -EINVAL;
--	s->active_rx = -EINVAL;
-+	s->active_rx = 0;
- 	s->chan_rx = NULL;
- 	sci_start_rx(port);
- 	if (!port_lock_held)
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index bd3e6cf81af5c..0c35c3c5e3734 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -844,12 +844,9 @@ static void max310x_wq_proc(struct work_struct *ws)
+ 
+ static unsigned int max310x_tx_empty(struct uart_port *port)
+ {
+-	unsigned int lvl, sts;
++	u8 lvl = max310x_port_read(port, MAX310X_TXFIFOLVL_REG);
+ 
+-	lvl = max310x_port_read(port, MAX310X_TXFIFOLVL_REG);
+-	sts = max310x_port_read(port, MAX310X_IRQSTS_REG);
+-
+-	return ((sts & MAX310X_IRQ_TXEMPTY_BIT) && !lvl) ? TIOCSER_TEMT : 0;
++	return lvl ? 0 : TIOCSER_TEMT;
+ }
+ 
+ static unsigned int max310x_get_mctrl(struct uart_port *port)
 -- 
 2.20.1
 
