@@ -2,38 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E15210609F
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 06:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774C5106162
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 06:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbfKVFum (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Nov 2019 00:50:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55320 "EHLO mail.kernel.org"
+        id S1729127AbfKVF4Y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Nov 2019 00:56:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727816AbfKVFuk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:50:40 -0500
+        id S1729122AbfKVF4X (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:56:23 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F06ED20726;
-        Fri, 22 Nov 2019 05:50:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B4A982072D;
+        Fri, 22 Nov 2019 05:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574401838;
-        bh=VvhhZrywDZUEE5Wva2ZTjgLplEjrDFba8pD+RLwlyD0=;
+        s=default; t=1574402182;
+        bh=yswybrNRsWsvoHS/VoCxngFKHac2PIA2wYGZakRfmRY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uDzMLXff+yTD9nYTmCCiJaPq9AG3Kllr4ZG9jKAKr0o+k28K95lkVHN1lEolvmRtU
-         ZTI5NCW+zkkFbYAlZt7sS7ck7P5Ai530H4Z0/m+NWctLO0z5InMDnvUXsQjc/b/ZeM
-         0P46AxkBOa7BnreN9xQibZXXGe2tlqvalxexUE8s=
+        b=t+q+2/Glb6WU8ZwFmsNg6I5xhV4s9ySSqyHWo/FTXSizJQYC29G3EW0Wc6XYPKeX4
+         58vWNq37wQdFdSwiHZn5qVqsPsGSKO836PUTRdV4KXE5GZOIoDWG5/LCLAAYIK3NBv
+         jbtNzHQ6Cg0NClDmhLw1DARYURFEE0gyADeIIm0U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 079/219] serial: 8250: Rate limit serial port rx interrupts during input overruns
-Date:   Fri, 22 Nov 2019 00:46:51 -0500
-Message-Id: <20191122054911.1750-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 033/127] serial: 8250: Rate limit serial port rx interrupts during input overruns
+Date:   Fri, 22 Nov 2019 00:54:11 -0500
+Message-Id: <20191122055544.3299-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
-References: <20191122054911.1750-1-sashal@kernel.org>
+In-Reply-To: <20191122055544.3299-1-sashal@kernel.org>
+References: <20191122055544.3299-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  4 files changed, 56 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 8fe3d0ed229ed..0e65d4261f94c 100644
+index d29b512a7d9fa..ceeea4b159c4b 100644
 --- a/drivers/tty/serial/8250/8250_core.c
 +++ b/drivers/tty/serial/8250/8250_core.c
-@@ -946,6 +946,21 @@ static struct uart_8250_port *serial8250_find_match_or_unused(struct uart_port *
+@@ -953,6 +953,21 @@ static struct uart_8250_port *serial8250_find_match_or_unused(struct uart_port *
  	return NULL;
  }
  
@@ -97,7 +97,7 @@ index 8fe3d0ed229ed..0e65d4261f94c 100644
  /**
   *	serial8250_register_8250_port - register a serial port
   *	@up: serial port template
-@@ -1060,6 +1075,16 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
+@@ -1063,6 +1078,16 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
  			ret = 0;
  		}
  	}
@@ -115,10 +115,10 @@ index 8fe3d0ed229ed..0e65d4261f94c 100644
  
  	return ret;
 diff --git a/drivers/tty/serial/8250/8250_fsl.c b/drivers/tty/serial/8250/8250_fsl.c
-index 6640a4c7ddd1d..bb9571eed275d 100644
+index 910bfee5a88b7..cc138c24ae889 100644
 --- a/drivers/tty/serial/8250/8250_fsl.c
 +++ b/drivers/tty/serial/8250/8250_fsl.c
-@@ -45,8 +45,29 @@ int fsl8250_handle_irq(struct uart_port *port)
+@@ -48,8 +48,29 @@ int fsl8250_handle_irq(struct uart_port *port)
  
  	lsr = orig_lsr = up->port.serial_in(&up->port, UART_LSR);
  
@@ -150,10 +150,10 @@ index 6640a4c7ddd1d..bb9571eed275d 100644
  	serial8250_modem_status(up);
  
 diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-index 98125de2f0a6c..2488de1c4bc4b 100644
+index ec510e342e06c..c51044ba503c3 100644
 --- a/drivers/tty/serial/8250/8250_of.c
 +++ b/drivers/tty/serial/8250/8250_of.c
-@@ -244,6 +244,11 @@ static int of_platform_serial_probe(struct platform_device *ofdev)
+@@ -232,6 +232,11 @@ static int of_platform_serial_probe(struct platform_device *ofdev)
  	if (of_property_read_bool(ofdev->dev.of_node, "auto-flow-control"))
  		port8250.capabilities |= UART_CAP_AFE;
  
@@ -166,7 +166,7 @@ index 98125de2f0a6c..2488de1c4bc4b 100644
  	if (ret < 0)
  		goto err_dispose;
 diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
-index 18e21427bce43..5a655ba8d2730 100644
+index a27ef5f564317..791a6be0e3949 100644
 --- a/include/linux/serial_8250.h
 +++ b/include/linux/serial_8250.h
 @@ -134,6 +134,10 @@ struct uart_8250_port {
