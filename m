@@ -2,38 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F136F1062EC
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 07:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33C91063E0
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 07:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727493AbfKVGGz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Nov 2019 01:06:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40730 "EHLO mail.kernel.org"
+        id S1729437AbfKVGNj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Nov 2019 01:13:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729639AbfKVGCN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Nov 2019 01:02:13 -0500
+        id S1729435AbfKVGNj (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 22 Nov 2019 01:13:39 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0087F20715;
-        Fri, 22 Nov 2019 06:02:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE9342071B;
+        Fri, 22 Nov 2019 06:13:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402532;
-        bh=d0ntVbZyiTVQFUBkfKqRFVdd7wKYeRXw4kRDxXAxktk=;
+        s=default; t=1574403218;
+        bh=jzremZJt9uCCXqYmgSJYucLdl1Qtl9dFmP4sQefk5tQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iABZwBkib8v1bRpr+uPWNhit+pknhoR5F+BxAiHFnMk0diSINCTu7JizEuVGqCVjA
-         zQdPhetjP0i5aWm1pD9wPlb0Kh8uHZixyBHt30LonKphGPcdp6AIVZJAsBzVGklNYS
-         uD9j4Hr9zm1jB1srMBVXTATDPhnx2ZEnIILmUuWM=
+        b=uV2o5U8moDA+/lOoxmKGCrzFZNapG4SAPvnu73nwbwM8oo/WUl2/yqvnCyAQramt+
+         JvxTI3lkW5ayNblsHH3CVUQ7qyEQAK63y+8YjUSYZZKwNLvLRMl6iqv4ez1XnE8tKk
+         E3qwYU/q6aY9Q2ULa3AHfOaNHAYul966vSSChREU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alexander Shiyan <shc_work@mail.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 40/91] serial: max310x: Fix tx_empty() callback
-Date:   Fri, 22 Nov 2019 01:00:38 -0500
-Message-Id: <20191122060129.4239-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 33/68] serial: max310x: Fix tx_empty() callback
+Date:   Fri, 22 Nov 2019 01:12:26 -0500
+Message-Id: <20191122061301.4947-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122060129.4239-1-sashal@kernel.org>
-References: <20191122060129.4239-1-sashal@kernel.org>
+In-Reply-To: <20191122061301.4947-1-sashal@kernel.org>
+References: <20191122061301.4947-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,10 +60,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index bacc7e284c0c1..80ab672d61cc4 100644
+index a66fb7afecc71..e13e95733fa3c 100644
 --- a/drivers/tty/serial/max310x.c
 +++ b/drivers/tty/serial/max310x.c
-@@ -769,12 +769,9 @@ static void max310x_start_tx(struct uart_port *port)
+@@ -763,12 +763,9 @@ static void max310x_start_tx(struct uart_port *port)
  
  static unsigned int max310x_tx_empty(struct uart_port *port)
  {
