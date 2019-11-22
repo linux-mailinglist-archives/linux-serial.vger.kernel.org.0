@@ -2,35 +2,36 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9485010636A
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 07:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DAF1061E7
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Nov 2019 07:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbfKVGKe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Nov 2019 01:10:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34688 "EHLO mail.kernel.org"
+        id S1727782AbfKVF5o (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Nov 2019 00:57:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728653AbfKVF4t (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:56:49 -0500
+        id S1728497AbfKVF5n (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:57:43 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2879A207FA;
-        Fri, 22 Nov 2019 05:56:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC6742072E;
+        Fri, 22 Nov 2019 05:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402208;
-        bh=1kQsmX0swMTAzM23lP+WYgI3kFE27ittERjogfKgQlA=;
+        s=default; t=1574402262;
+        bh=M3ojh6xd7Sh422K7jc7cJuoAtbq2AUgs1fVwY82uxaM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XyFmQbY/EY4iSCweSscBFS0TkszOyuD7TFCe4O7nDwlVyRX/Sj0gE5ml2l1RlUerh
-         HJacqICi/+IefxHctTe3SMeHRauPvcO1OdCNcUgmrMcC554QNCapZB9Qk1aZA8txDM
-         3WfpSMTHXigq0L6153OkFfFy/q4yLUCXHPm7GYUM=
+        b=C2QE73mXs52s2cO8AP91bh1tt970N23g5r2+nJUbG6swyB7qOeWQp17CEHC7hAqIP
+         QHPfdtwHV/GuMt2Mnxjov2Gq1zyCK5VJqu9wY1ocuS2lNDv5rAP4MyZDgIfELHRl26
+         UVqRrLMFvwYCYjCYDeF6iqLpMq+oyCn1OmdzeA6w=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexander Shiyan <shc_work@mail.ru>,
+Cc:     He Zhe <zhe.he@windriver.com>,
+        Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 057/127] serial: max310x: Fix tx_empty() callback
-Date:   Fri, 22 Nov 2019 00:54:35 -0500
-Message-Id: <20191122055544.3299-56-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 103/127] serial: 8250: Fix serial8250 initialization crash
+Date:   Fri, 22 Nov 2019 00:55:21 -0500
+Message-Id: <20191122055544.3299-102-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191122055544.3299-1-sashal@kernel.org>
 References: <20191122055544.3299-1-sashal@kernel.org>
@@ -43,41 +44,70 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Alexander Shiyan <shc_work@mail.ru>
+From: He Zhe <zhe.he@windriver.com>
 
-[ Upstream commit a8da3c7873ea57acb8f9cea58c0af477522965aa ]
+[ Upstream commit 352c4cf40c4a7d439fa5d30aa2160f54b394da82 ]
 
-Function max310x_tx_empty() accesses the IRQSTS register, which is
-cleared by IC when reading, so if there is an interrupt status, we
-will lose it. This patch implement the transmitter check only by
-the current FIFO level.
+The initialization code of interrupt backoff work might reference NULL
+pointer and cause the following crash, if no port was found.
 
-Signed-off-by: Alexander Shiyan <shc_work@mail.ru>
+[   10.017727] CPU 0 Unable to handle kernel paging request at virtual address 000001b0, epc == 807088e0, ra == 8070863c
+---- snip ----
+[   11.704470] [<807088e0>] serial8250_register_8250_port+0x318/0x4ac
+[   11.747251] [<80708d74>] serial8250_probe+0x148/0x1c0
+[   11.789301] [<80728450>] platform_drv_probe+0x40/0x94
+[   11.830515] [<807264f8>] really_probe+0xf8/0x318
+[   11.870876] [<80726b7c>] __driver_attach+0x110/0x12c
+[   11.910960] [<80724374>] bus_for_each_dev+0x78/0xcc
+[   11.951134] [<80725958>] bus_add_driver+0x200/0x234
+[   11.989756] [<807273d8>] driver_register+0x84/0x148
+[   12.029832] [<80d72f84>] serial8250_init+0x138/0x198
+[   12.070447] [<80100e6c>] do_one_initcall+0x5c/0x2a0
+[   12.110104] [<80d3a208>] kernel_init_freeable+0x370/0x484
+[   12.150722] [<80a49420>] kernel_init+0x10/0xf8
+[   12.191517] [<8010756c>] ret_from_kernel_thread+0x14/0x1c
+
+This patch makes sure the initialization code can be reached only if a port
+is found.
+
+Fixes: 6d7f677a2afa ("serial: 8250: Rate limit serial port rx interrupts during input overruns")
+Signed-off-by: He Zhe <zhe.he@windriver.com>
+Reviewed-by: Darwin Dingel <darwin.dingel@alliedtelesis.co.nz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/max310x.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/tty/serial/8250/8250_core.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index 0969a0d97b2be..cec995ec11eab 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -769,12 +769,9 @@ static void max310x_start_tx(struct uart_port *port)
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+index ceeea4b159c4b..c698ebab6d3bd 100644
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -1077,15 +1077,16 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
  
- static unsigned int max310x_tx_empty(struct uart_port *port)
- {
--	unsigned int lvl, sts;
-+	u8 lvl = max310x_port_read(port, MAX310X_TXFIFOLVL_REG);
+ 			ret = 0;
+ 		}
+-	}
  
--	lvl = max310x_port_read(port, MAX310X_TXFIFOLVL_REG);
--	sts = max310x_port_read(port, MAX310X_IRQSTS_REG);
--
--	return ((sts & MAX310X_IRQ_TXEMPTY_BIT) && !lvl) ? TIOCSER_TEMT : 0;
-+	return lvl ? 0 : TIOCSER_TEMT;
- }
+-	/* Initialise interrupt backoff work if required */
+-	if (up->overrun_backoff_time_ms > 0) {
+-		uart->overrun_backoff_time_ms = up->overrun_backoff_time_ms;
+-		INIT_DELAYED_WORK(&uart->overrun_backoff,
+-				  serial_8250_overrun_backoff_work);
+-	} else {
+-		uart->overrun_backoff_time_ms = 0;
++		/* Initialise interrupt backoff work if required */
++		if (up->overrun_backoff_time_ms > 0) {
++			uart->overrun_backoff_time_ms =
++				up->overrun_backoff_time_ms;
++			INIT_DELAYED_WORK(&uart->overrun_backoff,
++					serial_8250_overrun_backoff_work);
++		} else {
++			uart->overrun_backoff_time_ms = 0;
++		}
+ 	}
  
- static unsigned int max310x_get_mctrl(struct uart_port *port)
+ 	mutex_unlock(&serial_mutex);
 -- 
 2.20.1
 
