@@ -2,60 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B6210C269
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Nov 2019 03:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAF010CAE9
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Nov 2019 15:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727838AbfK1Cdi (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 27 Nov 2019 21:33:38 -0500
-Received: from sonic311-15.consmr.mail.bf2.yahoo.com ([74.6.131.125]:45283
-        "EHLO sonic311-15.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727297AbfK1Cdi (ORCPT
+        id S1727453AbfK1O5p (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 28 Nov 2019 09:57:45 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42301 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727436AbfK1O5p (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 27 Nov 2019 21:33:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1574908416; bh=DOqWrmWu+W/KYtKDjlRQpFhjO+zjISRSE9Z3sCAfAt0=; h=Date:From:Reply-To:Subject:From:Subject; b=SYcwNOFiUwn+j9DB5zrXDubeerQAoOTwXSCklZCXjR/MrKp+0dBIT1RajAbzz4BBWXda5oq1SP6G2UW1APsnRRU1h9tbfdPAE79Xq/mgwVx66GVhdegCZ0kRDqY60LsNAw3mbldcONCmS0K8dvD8FUOjkcChWyswuglJDX2fkTnDO3fyTVRxko3m0e3LMiFg77Nimojm/yLFzRYmIMc/VePCWuLjL+yYEouKJznvu84sBPfLUaV0DgzQIjCJJHIzSqqB3K3Y9RYo1hf7Tftr65GU2OFDRj6z5/PsZ0xByXcNWOh6Xi9osB1w55dnhC7mZd8dyCvOxPb+qo5d2rg96A==
-X-YMail-OSG: qRpcQkYVM1lxCe10Iou49dFvCfm5zA8hYP6q_amzQMX1QcbgLsb3v3J1zrQLYK6
- lAfkrzk547IyAgQlrqGFZTtwB81ipxRYi9ZKYYuXQIDyxaTOng1mp1phPrM4MpKzF4y.d9Tr2qxv
- ZqL7Ilddv4MLqebNkXFYFTpPPD.dNaJQFeK1Ui1iEi8vQuKls3fHvdTjE_FsVrxI4qnyLFUjmrjv
- 17NXTQXwXv2DZG3P4nZ9mKCa9gns0tkGYlJ4omMvBlT4Yc93Q3UkbwuhBpbm9z7PD_dQ0nT7IUda
- GXH7CiB63L1rBhVctIERpMSukK1VqaPaN7vY1f8Qz89VVyqWRpiIuNaUCVBlrVOJUKUfFaN_lkIY
- B66tuSoUW5i.HJs3z1lidWNFrZkMOXJLbby_MybyL6.lxCar_M9YNanCZYOafl6JD31obmjyknRl
- t8iGgeqLLxyV8BNPgK2RxWGfJpDVe2AVsY62TG3EA5SSbNSulg5C1EDM_uIf9MiQwwG9fVppFtn_
- rQK.9G.duNn.vioagbWO1UDV0al_0ca8QmDi30lDN729kWx2JSmWz4_.ZS63RqUdhCLLs2ZVt61Y
- CrWAmi5pbvfg7Q3y2hXJNahLFQPLXVAZZmLMy_rSzJDlBrxIY6CyRnFIwQk9btHopgY5PWqQaw.H
- BZKHxzu.DlvNhk3ombncDLb3sm2HbBYxa.nYn8kOwdvYUdombIaZ9mCnfXN.X2T.esuzQ7ZV4aii
- xavexKE7bkZoicQvv.4Y50KAxXvbXTAoSIfPQZQpbEizKbVmxXDsDzRJEuArWQ_lLQPqWAC.kBIc
- cDhqX742T13ZE0wV7RdZoqgclfNszkIcCzdWAIlJMaVZePthmgqbnWs9KAIRKw7tn9Kr_.M1_0cT
- Ls35RbqMfKbd8x4xsGbAMFl7KcLaQyy7ug2vMvB1EyDeR9cPpgNzluRhjT6ueMKlU6ebsOz.pswA
- 863lJH.eHN2_tRBeGaxFUdGnwv26pDdMhn4GtmizLHfyKqddkzjtoTPzuzdT_BqmksTvKLqyipqH
- .ffiPEHeVpDLqUPyJjSapPYNg1YImkpIckgOfYdu58uLifhMjpjAscz.TNUFzt14TyK7xV8ZPvPQ
- HN4WwB0wIyRlWrmdOTNFkGpIxkXnsPSHJuonJSLbHyQLxshJuIDccBzY9YzolgP9icHYoUfQQvBW
- PYUnG9yvdxeyeJ7jIBZ2nVrofZlhUPq9sEp9vNp_hvc6gxsXZ7xV9DzmellmG98d930o.QXAuDF4
- FlpAbljrS1GQM2h_0.1UO.bLvCzcjq5qPamX9X6LApAouWGVKTovh1U.vyFouoM2juLyo3HTuqw-
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.bf2.yahoo.com with HTTP; Thu, 28 Nov 2019 02:33:36 +0000
-Date:   Thu, 28 Nov 2019 02:33:33 +0000 (UTC)
-From:   United Nations <iespd54440135@gmail.com>
-Reply-To: united.nation-finance@yandex.com
-Message-ID: <1251465704.4135354.1574908413337@mail.yahoo.com>
-Subject: Congratulation,
+        Thu, 28 Nov 2019 09:57:45 -0500
+Received: by mail-lf1-f68.google.com with SMTP id y19so20246788lfl.9
+        for <linux-serial@vger.kernel.org>; Thu, 28 Nov 2019 06:57:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+/uGhuZC6bGDe/vY5pHErjTk2s243PKPkhdUERJxYak=;
+        b=DA9W24cKzldoyLYNRJ2Y6/1zVnkA1lJTOnZNVCGLnBtLy9SDw6v1MH1Lm6m8gUytky
+         c/CaDP3iN1dNJBfmYpol42g9n5EFLkk812cLsAvU7B2qNvOG91C4+6uQAfeMnsMVXDe4
+         rOJD9KS0Hi/+zmyHdu2abRIo6OPt5+3pur4ws=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+/uGhuZC6bGDe/vY5pHErjTk2s243PKPkhdUERJxYak=;
+        b=t2sWoPxFMAECBW0Gta9WTznjbNIbskP/x4sEfmL9aWrWyXpiVdSFMCfuWz8Bu4q5Pn
+         YHSn7tt2WKe9tqONkk2OyRRNqoLxpUI6rvOsTNGo896LJC7mZoYUh3tKJv997QrGDS1A
+         PviMHchv/8XZCpg8IPjLd8N9dTO7OG1ilolrpUfPy6I+dKYVqO7Y3f4H+UjJoy7D2O5t
+         5oos8SMv5QQlayG8hGYu3o8yDvTC1PHyuPpyCqBJHFFF2/QlJ8OTAR0ENwjhltsBU9yz
+         89rsM/8rmQZWBzL6K70/TcGW+5sLB8frjeJVVJK3Tq0sbzRacrkED9VC4nnTNmKJaO5e
+         3bjg==
+X-Gm-Message-State: APjAAAWdr+2Ay/8HaiuKiBfuXpRRyx95Ja9oWsZuQnK0dKVD49Ttqxwm
+        Uba355+ReqG76mv3i+LQ4heoKQ==
+X-Google-Smtp-Source: APXvYqzw/jYuIoVJsHxaPiDPkjZLXx2+FnqCB2evJQRnfVYU2j3q8zmQHgBLElskKwZbaunbylGJGw==
+X-Received: by 2002:a19:756:: with SMTP id 83mr6610746lfh.173.1574953061494;
+        Thu, 28 Nov 2019 06:57:41 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id u2sm2456803lfl.18.2019.11.28.06.57.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Nov 2019 06:57:41 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Scott Wood <oss@buserror.net>, Timur Tabi <timur@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v6 28/49] serial: ucc_uart: explicitly include soc/fsl/cpm.h
+Date:   Thu, 28 Nov 2019 15:55:33 +0100
+Message-Id: <20191128145554.1297-29-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191128145554.1297-1-linux@rasmusvillemoes.dk>
+References: <20191128145554.1297-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+This driver uses #defines from soc/fsl/cpm.h, so instead of relying on
+some other header pulling that in, do that explicitly. This is
+preparation for allowing this driver to build on ARM.
 
+Reviewed-by: Timur Tabi <timur@kernel.org>
+Acked-by: Timur Tabi <timur@kernel.org>
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/tty/serial/ucc_uart.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Attention!!! your E-mail was selected as a Lucky winner of =E2=82=AC1,700.0=
-00.00 Euro Only. Under the Spanish Government. the European Union Throw Lot=
-tery of the year 2019 and you won. That is why we contact you for you Claim=
-. meanwhile your fund sum =E2=82=AC1,700.000.00 Euros will be Credit in ATM=
- Card and send to you the choice is yours. Congratulation!
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index a0555ae2b1ef..7e802616cba8 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -32,6 +32,7 @@
+ #include <soc/fsl/qe/ucc_slow.h>
+ 
+ #include <linux/firmware.h>
++#include <soc/fsl/cpm.h>
+ #include <asm/reg.h>
+ 
+ /*
+-- 
+2.23.0
 
-Yours Faithfully.
-
-Ant=C3=B3nio Manuel de Oliveira Guterres
-UN Secretary General
