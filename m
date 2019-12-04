@@ -2,89 +2,111 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E1B112AD6
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2019 13:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0CB112B40
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2019 13:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727469AbfLDMA6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Dec 2019 07:00:58 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:36475 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbfLDMA6 (ORCPT
+        id S1727831AbfLDMWS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Dec 2019 07:22:18 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:38231 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727811AbfLDMWS (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Dec 2019 07:00:58 -0500
-Received: by mail-pf1-f195.google.com with SMTP id b19so3559617pfd.3;
-        Wed, 04 Dec 2019 04:00:58 -0800 (PST)
+        Wed, 4 Dec 2019 07:22:18 -0500
+Received: by mail-ed1-f68.google.com with SMTP id s10so6456834edi.5
+        for <linux-serial@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=JOUqYzaT4SrBpN3BgEAhNCOV53RcRoe9+46FLwrQlpE=;
-        b=vVL5UBDjqC05ZC78IzTlCjRUT5vi7Utrv2LbE7JtNclsuVH6w/hRWdFAsV3rw4SqWW
-         cOR8JQpnI6DnomMtt70ml+E38AsZu7MUSivGuTInzfGwwBkuoKefrhxRQ7xwzJTGX8ch
-         7ylUGu46qOfJS80jsQO+tQzlKRqr80aRexpCrzKZS0Xo8PzFph93VpYnHhIbUHkRNEV/
-         drj1Zld5ifKoxaRNYT7CeAqamqTWWlb/UKyyVmyeFiTwXz7Gqp6jDlsai1X0gE0R4KYJ
-         u6F3d6mWyS8Ubam99uWP2VTgQpKW2Nq85uh3cSRrCosBWr/SgtLFsECYo4wLzipOsJlK
-         r+0Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
+         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
+         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
+         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
+         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
+         4SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=JOUqYzaT4SrBpN3BgEAhNCOV53RcRoe9+46FLwrQlpE=;
-        b=H80bm+ZtbG3Da1kGRctRLx8LFgJQ/Oaetk50NNK2i1fO6AUPl5ylQBxaJho7IBNjfj
-         xmYkgCMiYqTpMTR7gLsF/Hfo+vEGr1zSs9EHjaP8SFGNpc7A9+HLY7qUbWc5ZJpHvHu2
-         /O0P+S2UHPgGkCcg5dom5WnXg3qoqHo/wwloONMBfjFf8f4CufqXVqQyiudIHu/RW/Q0
-         cTpXSbEiF28Gvzs8xTTUXf7ib2qCk77118fyRm4jZhxjbqJVI/BmoaXGVz/ZgdoYhiD1
-         ONxqEYkTnVfDyX71Dzxu9iYfXArEFauPc7/feinHoNfVcfV+5dwc1zkHitWP/3ZRSoLG
-         /clw==
-X-Gm-Message-State: APjAAAWemxvKJCubPOAI6SD0LyM+/yWNC6dr5LkbUIvQFoTBwUOsnjkt
-        SVMklPCxZiDImjOtX0wI/zw=
-X-Google-Smtp-Source: APXvYqzP9f9lsXxYUVaiQg/am2hRFTLDIm2bfMw6fHcfymyfqnLO5h3JJeO8Fjs2E1234WjteM2iAQ==
-X-Received: by 2002:a63:5612:: with SMTP id k18mr3153813pgb.345.1575460857985;
-        Wed, 04 Dec 2019 04:00:57 -0800 (PST)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id q200sm8311893pfq.87.2019.12.04.04.00.54
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 04 Dec 2019 04:00:57 -0800 (PST)
-From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     gregkh@linuxfoundation.org, jslaby@suse.com
-Cc:     orsonzhai@gmail.com, zhang.lyra@gmail.com, yonghan.ye@unisoc.com,
-        lanqing.liu@unisoc.com, baolin.wang7@gmail.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: sprd: Add clearing break interrupt operation
-Date:   Wed,  4 Dec 2019 20:00:07 +0800
-Message-Id: <925e51b73099c90158e080b8f5bed9b3b38c4548.1575460601.git.baolin.wang7@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=ZSGQrODczszlAWqkWXuLo1qizDIhFt+5j7PPN2FYd0X4zlat5/YOruBm+o3azsSZ3r
+         JAl0HSREFicWseGavcT0eMwdYSiu8/lUSEkW9Skh6tqTyfpUEeoU+ZC0nKkOHTNvxqoi
+         jmyQ6E+lLLuh0sRVSkMJSaA2UgzcdLeO/hjZZxykQNlDNJILC26NkK24yNapezZ0SiSF
+         vJuooVNDHrgkD1WCNhUUlN0f0orQKeEM4scAogSpnpvjuaiUj724FKn7AGLhA8AQj1N7
+         XKHii1wdu8349AZjFNbktiZ4JnTdKIPIstiX8UuIh9oefEK7ins31lsbrT2gsDUhdHJt
+         KElg==
+X-Gm-Message-State: APjAAAXroS7nDSAEqR+SYEsuHFW92lBgdmRnyWX+ScCncPBUqD7V7s9N
+        d14Xjc1b6MrkfEWi5ezf17AhFmWe4pLPuFPkJpY=
+X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
+ Wed, 04 Dec 2019 04:22:16 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
+ -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
+Date:   Wed, 4 Dec 2019 13:22:15 +0100
+Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Yonghan Ye <yonghan.ye@unisoc.com>
+Attn, dear Beneficiary.
 
-A break interrupt will be generated if the RX line was pulled low, which
-means some abnomal behaviors occurred of the UART. In this case, we still
-need to clear this break interrupt status, otherwise it will cause irq
-storm to crash the whole system.
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
-Fixes: b7396a38fb28 ("tty/serial: Add Spreadtrum sc9836-uart driver support")
-Signed-off-by: Yonghan Ye <yonghan.ye@unisoc.com>
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
- drivers/tty/serial/sprd_serial.c |    3 +++
- 1 file changed, 3 insertions(+)
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
-diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
-index 31df235..f60a59d 100644
---- a/drivers/tty/serial/sprd_serial.c
-+++ b/drivers/tty/serial/sprd_serial.c
-@@ -679,6 +679,9 @@ static irqreturn_t sprd_handle_irq(int irq, void *dev_id)
- 	if (ims & SPRD_IMSR_TIMEOUT)
- 		serial_out(port, SPRD_ICLR, SPRD_ICLR_TIMEOUT);
- 
-+	if (ims & SPRD_IMSR_BREAK_DETECT)
-+		serial_out(port, SPRD_ICLR, SPRD_IMSR_BREAK_DETECT);
-+
- 	if (ims & (SPRD_IMSR_RX_FIFO_FULL | SPRD_IMSR_BREAK_DETECT |
- 		   SPRD_IMSR_TIMEOUT))
- 		sprd_rx(port);
--- 
-1.7.9.5
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
 
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
+
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
+
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
+
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
+
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
