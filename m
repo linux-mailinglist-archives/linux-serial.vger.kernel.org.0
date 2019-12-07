@@ -2,80 +2,62 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08622114D3C
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Dec 2019 09:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CB9115A38
+	for <lists+linux-serial@lfdr.de>; Sat,  7 Dec 2019 01:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbfLFIJm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 6 Dec 2019 03:09:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45400 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726203AbfLFIJl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 6 Dec 2019 03:09:41 -0500
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C0A982468B;
-        Fri,  6 Dec 2019 08:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575619781;
-        bh=TDuu0Z/gwUKku+CQHKdwFINeazvbar/bioj3SRhqow0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WyQ0utPmaHsbG/wVzoc8um4JCFfVNkNJeJXexTOXDXU2rx8i7Xn2P5IhTq67SJBlY
-         I6nvJ6SnYuKOfLbPc0dM4mtxZ58xlCpEXiDpEssuSlVmpSlnD/O5r+ryX1sas1b4ti
-         tiYm6EiBqArZoWLvpSJ6wr3Aq2SPTGfNo+mDyrJc=
-Received: by mail-lf1-f42.google.com with SMTP id 203so4533714lfa.12;
-        Fri, 06 Dec 2019 00:09:40 -0800 (PST)
-X-Gm-Message-State: APjAAAWcrC4BPRR/CCYRL5a2LYWYPUYitLrW2CBZblOA+DKdidmODTJ/
-        /8rab6LdFgb3L2sarzrPxO7lccbBrrOOygp2DCc=
-X-Google-Smtp-Source: APXvYqwoeGeFzHRQk9JV8pweuDAJo5lmepN12sLK3MbpE8KCoo3haMb9sxXnMb7tL+YQqRDTj60eqjt12aJqaaWMbJ0=
-X-Received: by 2002:a19:c205:: with SMTP id l5mr7254976lfc.159.1575619778968;
- Fri, 06 Dec 2019 00:09:38 -0800 (PST)
+        id S1726669AbfLGA34 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 6 Dec 2019 19:29:56 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46240 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbfLGA3z (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 6 Dec 2019 19:29:55 -0500
+Received: by mail-wr1-f68.google.com with SMTP id z7so9559317wrl.13
+        for <linux-serial@vger.kernel.org>; Fri, 06 Dec 2019 16:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
+        b=LXxoS6Ed7of6jWaofmDfQc8/u3Mg9Maolmr3Vpf9Rmy6M9EqjFAuvGQ8h9p7LhnwAL
+         J2FbblgdkGgZHafRFxx28eRdV2u28AyUlEZcVvHuYvVm3rtf1quwzUCMSvqmMRhzvXWg
+         Lr2BVgHFftpJuxoM6FIG7HwvD6NJoH8mvEjpjvV8POe7OxPQSgcaMvRkWz9Uiu2DLDQI
+         zLbCM6eF/2UqhYCC9SzqWLAqDFWNhNPH2Mzqdx7SMOIQYQVzi+r4mUYfVbZ4zkg6G/Rf
+         GMyYZz2zxEAODyOdyEtKF6h6LvlYj6nQy3cPNK/qqQ+yOafhqpdxqfrrNrKMk4+XdZU4
+         ueNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
+        b=mUTwoiQrZA/uoiFJlAJdsUYxS/dZxpi1a5uC4eQtOCrvos1CH8FI8QJ+WkKlyx6E0w
+         8BZFJTlTHGMe8Jnvp0ZR9vpWQnQfpf7F4dHphdckWGLMR3X/9kNpye4PR1ZtuLzYc2GK
+         dtL+Z93htFshJ/sBVWoknQIdeRjGPA0ZE/AssNRu0eJLXCrLEd5ONc6YkAfM688sELL/
+         zqy9Hd+0APZybYuU9DCCCFLsPbIRsk2OHs3o3EWN87wu8eW9qtK7Y9511Zfhq+pxb+qu
+         v6BHlcLr7ippMkBFSFKn6fAGEV4RsUo4Wp/Pqw4/3jX0BiVGh60pBnr4soYD9rYDczDh
+         ANhw==
+X-Gm-Message-State: APjAAAUzHkfExmUSqKCKlwObjhavnvkgwyFIUfWdcnBNDo+ZP/55Jz4+
+        rw4TKib8Ilo3QrJMD3ffKE26fmCfTQJmTARHrtg=
+X-Google-Smtp-Source: APXvYqwrh3pZjAB0r+TmXxbhmAM/apODdHlIT+82DMPTCRz8CUTTqPzcZB7T3FAp1SOvDrWQKKNsT0CStxod+O7hBLs=
+X-Received: by 2002:adf:e591:: with SMTP id l17mr16654604wrm.139.1575678594023;
+ Fri, 06 Dec 2019 16:29:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20191201075914.23512-1-kkoos00@naver.com> <20191201080314.GA3716559@kroah.com>
- <CAJKOXPet=RyJ3nrcOooHdN0GSO33Ce82-9L_X0oYC2MjN7nOig@mail.gmail.com>
- <CGME20191205160249epcas2p3c1dcb24aba71f6b4264e76ebea36348c@epcas2p3.samsung.com>
- <20191205160243.GA757198@kroah.com> <000001d5abd6$ae5a6b50$0b0f41f0$@samsung.com>
-In-Reply-To: <000001d5abd6$ae5a6b50$0b0f41f0$@samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 6 Dec 2019 09:09:27 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPddtiVVsCd-RUB=HboxSRxmN86uwRYuR_-JZYSYd=cJQg@mail.gmail.com>
-Message-ID: <CAJKOXPddtiVVsCd-RUB=HboxSRxmN86uwRYuR_-JZYSYd=cJQg@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial: samsung: support driver modulization
-To:     =?UTF-8?B?6rWs7ZiE6riwL0hZVU4tS0kgS09P?= <hyunki00.koo@samsung.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Hyunki Koo <kkoos00@naver.com>, jslaby@suse.com,
-        linux-serial@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kkoos00@gmail.com, Shinbeom Choi <sbeom.choi@samsung.com>
+Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:53 -0800 (PST)
+Reply-To: mrs.aalia.ahmed@gmail.com
+From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
+Date:   Sat, 7 Dec 2019 00:29:53 +0000
+Message-ID: <CAOGreO=8t36s1Mau26bRqTQErHsnOf5ki10AJ6EA4tNedNUo8g@mail.gmail.com>
+Subject: OK
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 6 Dec 2019 at 02:44, =EA=B5=AC=ED=98=84=EA=B8=B0/HYUN-KI KOO <hyunk=
-i00.koo@samsung.com> wrote:
->
-> To support module for Samsung serial driver,
-> I would like to split the file into 2 files.
-> Because it cannot be supported in one file both early console and
-> module driver
-> Thus some function need to change to EXPORT_SYMBOL to use in module
-> driver file.
-> I'm not pushed yet for module driver.
+Greetings My Dearest One.
 
-Hi,
-
-You sent few patches independently of each other. If we did not ask,
-we would not get the idea why you need them. This is not how the Linux
-kernel development works. Instead, start preparing a proper patchset
-to achieve your goal. This patchset will contain multiple patches. It
-should go with a cover letter (see git format-patch) explaining why
-you do it. This way reviewers will know the big picture. The entire
-work should not break existing systems (see comments for IRQ combiner
-or pinctrl). You should consider how your change will affect existing
-systems.
-
-Best regards,
-Krzysztof
+My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
+in you, please contact me through my email address
+(mrs.aalia.ahmed@gmail.com) to know each other and i have something
+very important to tell you, i wait for your response to my email ID.
+(mrs.aalia.ahmed@gmail.com
