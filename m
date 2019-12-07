@@ -2,62 +2,153 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CB9115A38
-	for <lists+linux-serial@lfdr.de>; Sat,  7 Dec 2019 01:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43768115B53
+	for <lists+linux-serial@lfdr.de>; Sat,  7 Dec 2019 07:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbfLGA34 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 6 Dec 2019 19:29:56 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:46240 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbfLGA3z (ORCPT
+        id S1725923AbfLGGZJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 7 Dec 2019 01:25:09 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:43981 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725869AbfLGGZJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 6 Dec 2019 19:29:55 -0500
-Received: by mail-wr1-f68.google.com with SMTP id z7so9559317wrl.13
-        for <linux-serial@vger.kernel.org>; Fri, 06 Dec 2019 16:29:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=LXxoS6Ed7of6jWaofmDfQc8/u3Mg9Maolmr3Vpf9Rmy6M9EqjFAuvGQ8h9p7LhnwAL
-         J2FbblgdkGgZHafRFxx28eRdV2u28AyUlEZcVvHuYvVm3rtf1quwzUCMSvqmMRhzvXWg
-         Lr2BVgHFftpJuxoM6FIG7HwvD6NJoH8mvEjpjvV8POe7OxPQSgcaMvRkWz9Uiu2DLDQI
-         zLbCM6eF/2UqhYCC9SzqWLAqDFWNhNPH2Mzqdx7SMOIQYQVzi+r4mUYfVbZ4zkg6G/Rf
-         GMyYZz2zxEAODyOdyEtKF6h6LvlYj6nQy3cPNK/qqQ+yOafhqpdxqfrrNrKMk4+XdZU4
-         ueNQ==
+        Sat, 7 Dec 2019 01:25:09 -0500
+Received: by mail-il1-f200.google.com with SMTP id j17so7031227ilc.10
+        for <linux-serial@vger.kernel.org>; Fri, 06 Dec 2019 22:25:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=mUTwoiQrZA/uoiFJlAJdsUYxS/dZxpi1a5uC4eQtOCrvos1CH8FI8QJ+WkKlyx6E0w
-         8BZFJTlTHGMe8Jnvp0ZR9vpWQnQfpf7F4dHphdckWGLMR3X/9kNpye4PR1ZtuLzYc2GK
-         dtL+Z93htFshJ/sBVWoknQIdeRjGPA0ZE/AssNRu0eJLXCrLEd5ONc6YkAfM688sELL/
-         zqy9Hd+0APZybYuU9DCCCFLsPbIRsk2OHs3o3EWN87wu8eW9qtK7Y9511Zfhq+pxb+qu
-         v6BHlcLr7ippMkBFSFKn6fAGEV4RsUo4Wp/Pqw4/3jX0BiVGh60pBnr4soYD9rYDczDh
-         ANhw==
-X-Gm-Message-State: APjAAAUzHkfExmUSqKCKlwObjhavnvkgwyFIUfWdcnBNDo+ZP/55Jz4+
-        rw4TKib8Ilo3QrJMD3ffKE26fmCfTQJmTARHrtg=
-X-Google-Smtp-Source: APXvYqwrh3pZjAB0r+TmXxbhmAM/apODdHlIT+82DMPTCRz8CUTTqPzcZB7T3FAp1SOvDrWQKKNsT0CStxod+O7hBLs=
-X-Received: by 2002:adf:e591:: with SMTP id l17mr16654604wrm.139.1575678594023;
- Fri, 06 Dec 2019 16:29:54 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=j9m3lrvCXCpzSxM+tW4QOf6zVSZBLzxbD4R9FIlfwe8=;
+        b=clTfx/coMYB8mywRfKfbp1aPzWH+T5lhfr1sDcOCybS6JhfdWhVIeyhBBAymHwKl1P
+         IHzvrmbZYtU8FS2y/7m1XFeyno5VomLTRAhigKAOr3r2GZT8n8pu26jFRRnnxfI8XAGg
+         AQtOqDnMMJjYKP2sVSjCTDFm7mdwKyaWl2yA8s6yqVWG+tjn25TN/MLyfyktISsGEsv5
+         0ibxwmWMrCqoEECSNSI0ucv3l3Asp0+MqqxsazKNaJPDnDNtjEvQmuodQAMo8yxoP2+y
+         SfaLax/WUpnBNg+zqTrgjtnOL3IoZYajQY+jL2MoWFt0QXc6gtf38tAkwgg8gq2M4VSR
+         ywJg==
+X-Gm-Message-State: APjAAAVukPrkV2HWD6WRiPJEsuxC0zSnQVVIK7auHTZBH3wzlFJ9Clfb
+        P1yAz2n61BdhW6I6FZItDKDtHV8SU8aclyIFmQPqm+XnNFPI
+X-Google-Smtp-Source: APXvYqzcbP1i5iXtWa0x3COTXPqct38u54GHio/056rYZdiiYwd85nUttqGVNSnG+wxuaygr4c8dTn2O91+AImlAt7jLwipkZ4GK
 MIME-Version: 1.0
-Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:53 -0800 (PST)
-Reply-To: mrs.aalia.ahmed@gmail.com
-From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
-Date:   Sat, 7 Dec 2019 00:29:53 +0000
-Message-ID: <CAOGreO=8t36s1Mau26bRqTQErHsnOf5ki10AJ6EA4tNedNUo8g@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a05:6638:a2c:: with SMTP id 12mr17810458jao.60.1575699908609;
+ Fri, 06 Dec 2019 22:25:08 -0800 (PST)
+Date:   Fri, 06 Dec 2019 22:25:08 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000053539a0599173973@google.com>
+Subject: BUG: unable to handle kernel NULL pointer dereference in mem_serial_out
+From:   syzbot <syzbot+f4f1e871965064ae689e@syzkaller.appspotmail.com>
+To:     andriy.shevchenko@linux.intel.com, asierra@xes-inc.com,
+        ext-kimmo.rautkoski@vaisala.com, gregkh@linuxfoundation.org,
+        jslaby@suse.com, kai.heng.feng@canonical.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        mika.westerberg@linux.intel.com, o.barta89@gmail.com,
+        paulburton@kernel.org, sr@denx.de, syzkaller-bugs@googlegroups.com,
+        yegorslists@googlemail.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings My Dearest One.
+Hello,
 
-My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
-in you, please contact me through my email address
-(mrs.aalia.ahmed@gmail.com) to know each other and i have something
-very important to tell you, i wait for your response to my email ID.
-(mrs.aalia.ahmed@gmail.com
+syzbot found the following crash on:
+
+HEAD commit:    7ada90eb Merge tag 'drm-next-2019-12-06' of git://anongit...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=123ec282e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f07a23020fd7d21a
+dashboard link: https://syzkaller.appspot.com/bug?extid=f4f1e871965064ae689e
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17ab090ee00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f127f2e00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+f4f1e871965064ae689e@syzkaller.appspotmail.com
+
+BUG: kernel NULL pointer dereference, address: 0000000000000002
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+PGD 9764a067 P4D 9764a067 PUD 9f995067 PMD 0
+Oops: 0002 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 9687 Comm: syz-executor433 Not tainted 5.4.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:writeb arch/x86/include/asm/io.h:65 [inline]
+RIP: 0010:mem_serial_out+0x70/0x90 drivers/tty/serial/8250/8250_port.c:408
+Code: e9 00 00 00 49 8d 7c 24 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48  
+c1 ea 03 d3 e3 80 3c 02 00 75 19 48 63 db 49 03 5c 24 40 <44> 88 2b 5b 41  
+5c 41 5d 5d c3 e8 81 ed cf fd eb c0 e8 da ed cf fd
+RSP: 0018:ffffc90001de78e8 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: 1ffffffff181f40e RSI: ffffffff83e28776 RDI: ffffffff8c0fa070
+RBP: ffffc90001de7900 R08: ffff8880919dc340 R09: ffffed10431ee1c6
+R10: ffffed10431ee1c5 R11: ffff888218f70e2b R12: ffffffff8c0fa030
+R13: 0000000000000001 R14: ffffc90001de7a40 R15: ffffffff8c0fa188
+FS:  0000000001060880(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 000000009e6b8000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  serial_out drivers/tty/serial/8250/8250.h:118 [inline]
+  serial8250_clear_fifos.part.0+0x3a/0xb0  
+drivers/tty/serial/8250/8250_port.c:557
+  serial8250_clear_fifos drivers/tty/serial/8250/8250_port.c:556 [inline]
+  serial8250_do_startup+0x426/0x1cf0 drivers/tty/serial/8250/8250_port.c:2121
+  serial8250_startup+0x62/0x80 drivers/tty/serial/8250/8250_port.c:2329
+  uart_port_startup drivers/tty/serial/serial_core.c:219 [inline]
+  uart_startup drivers/tty/serial/serial_core.c:258 [inline]
+  uart_startup+0x452/0x980 drivers/tty/serial/serial_core.c:249
+  uart_set_info drivers/tty/serial/serial_core.c:998 [inline]
+  uart_set_info_user+0x13b4/0x1cf0 drivers/tty/serial/serial_core.c:1023
+  tty_tiocsserial drivers/tty/tty_io.c:2506 [inline]
+  tty_ioctl+0xf60/0x14f0 drivers/tty/tty_io.c:2648
+  vfs_ioctl fs/ioctl.c:47 [inline]
+  file_ioctl fs/ioctl.c:545 [inline]
+  do_vfs_ioctl+0x977/0x14e0 fs/ioctl.c:732
+  ksys_ioctl+0xab/0xd0 fs/ioctl.c:749
+  __do_sys_ioctl fs/ioctl.c:756 [inline]
+  __se_sys_ioctl fs/ioctl.c:754 [inline]
+  __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:754
+  do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x440219
+Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 fb 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffced648c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440219
+RDX: 0000000020000240 RSI: 000000000000541f RDI: 0000000000000003
+RBP: 00000000006ca018 R08: 0000000000000000 R09: 00000000004002c8
+R10: 0000000000401b30 R11: 0000000000000246 R12: 0000000000401aa0
+R13: 0000000000401b30 R14: 0000000000000000 R15: 0000000000000000
+Modules linked in:
+CR2: 0000000000000002
+---[ end trace eaa11ffe82f3a763 ]---
+RIP: 0010:writeb arch/x86/include/asm/io.h:65 [inline]
+RIP: 0010:mem_serial_out+0x70/0x90 drivers/tty/serial/8250/8250_port.c:408
+Code: e9 00 00 00 49 8d 7c 24 40 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48  
+c1 ea 03 d3 e3 80 3c 02 00 75 19 48 63 db 49 03 5c 24 40 <44> 88 2b 5b 41  
+5c 41 5d 5d c3 e8 81 ed cf fd eb c0 e8 da ed cf fd
+RSP: 0018:ffffc90001de78e8 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: 1ffffffff181f40e RSI: ffffffff83e28776 RDI: ffffffff8c0fa070
+RBP: ffffc90001de7900 R08: ffff8880919dc340 R09: ffffed10431ee1c6
+R10: ffffed10431ee1c5 R11: ffff888218f70e2b R12: ffffffff8c0fa030
+R13: 0000000000000001 R14: ffffc90001de7a40 R15: ffffffff8c0fa188
+FS:  0000000001060880(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 000000009e6b8000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
