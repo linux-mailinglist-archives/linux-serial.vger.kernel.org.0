@@ -2,61 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9937D118C27
-	for <lists+linux-serial@lfdr.de>; Tue, 10 Dec 2019 16:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2E7118C3A
+	for <lists+linux-serial@lfdr.de>; Tue, 10 Dec 2019 16:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727223AbfLJPML (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 10 Dec 2019 10:12:11 -0500
-Received: from ns.iliad.fr ([212.27.33.1]:35636 "EHLO ns.iliad.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727518AbfLJPMK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 10 Dec 2019 10:12:10 -0500
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 2CE1E20714;
-        Tue, 10 Dec 2019 16:12:08 +0100 (CET)
-Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id 085FF20425;
-        Tue, 10 Dec 2019 16:12:08 +0100 (CET)
-Subject: Re: [PATCH 08/10] tty: serial: samsung_tty: use 'unsigned int' not
- 'unsigned'
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>
-Cc:     Jiri Slaby <jslaby@suse.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        id S1727380AbfLJPNv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 10 Dec 2019 10:13:51 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:34350 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727330AbfLJPNv (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 10 Dec 2019 10:13:51 -0500
+Received: by mail-ed1-f68.google.com with SMTP id cx19so16314333edb.1;
+        Tue, 10 Dec 2019 07:13:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+WKlQUPo72dT+6gRaE8wTfxIyY3yTGzZswBT0iRb62I=;
+        b=AtA0+9FtKwNy37TEJqJRheXr4kAtb1vFijuq7jqnbL2x9OXNpjP/6I7EvV6pvbfSn/
+         p/pvddkzNCRfGKdp6RAKAvBVo1Zazr0YqdlnPJq5KVEMuADPYrHudoZTgxCNKWR9PJta
+         amykV68QTo81gWEf/w4XgOoGfcvP5x8QZ6Adcm3WEHfKKCW2XAesTQ6x7ZdP0ieCNCsr
+         CCgQz3TKuRrknUcs6fIQQFwbFlS/VltzuF8Nuqug8DkpvxhEUN6T3IbF065M6Y3gdSVl
+         B1DLt/ooRJt1LpxpSitE0jjbORvWjqRMe7o9lUX34ChDlTbEL8QlNqJq8HFJ56kWA/f/
+         LHvQ==
+X-Gm-Message-State: APjAAAVpQCpaSQHSQcdjukReIaWyvmX6Bw0t/08+9ZFJyngI8Vy7XDiL
+        4wmfxQPKDNogMTkJbM5Wjjk=
+X-Google-Smtp-Source: APXvYqyHYKpKtamdeJS3QNFEyTBoL2rxQ9sXdvJZCyjpdDzv+arjgS3g0x4xyx8CWZsUYi2fp7VhMQ==
+X-Received: by 2002:aa7:d78b:: with SMTP id s11mr40051088edq.240.1575990828937;
+        Tue, 10 Dec 2019 07:13:48 -0800 (PST)
+Received: from pi3 ([194.230.155.234])
+        by smtp.googlemail.com with ESMTPSA id y17sm70501edq.69.2019.12.10.07.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 07:13:48 -0800 (PST)
+Date:   Tue, 10 Dec 2019 16:13:45 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
+        Hyunki Koo <kkoos00@naver.com>,
+        HYUN-KI KOO <hyunki00.koo@samsung.com>,
+        Shinbeom Choi <sbeom.choi@samsung.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/10] tty: serial: samsung_tty: fix blank line
+ checkpatch warning
+Message-ID: <20191210151345.GI11222@pi3>
 References: <20191210143706.3928480-1-gregkh@linuxfoundation.org>
- <20191210143706.3928480-8-gregkh@linuxfoundation.org>
-From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-Message-ID: <eb3cf8f9-3606-c2d6-ad90-4388a52c320b@free.fr>
-Date:   Tue, 10 Dec 2019 16:12:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+ <20191210143706.3928480-10-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20191210143706.3928480-8-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Tue Dec 10 16:12:08 2019 +0100 (CET)
+Content-Disposition: inline
+In-Reply-To: <20191210143706.3928480-10-gregkh@linuxfoundation.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-[ Trim recipients list ]
+On Tue, Dec 10, 2019 at 03:37:06PM +0100, Greg Kroah-Hartman wrote:
+> checkpatch is giving a bunch of:
+> 	WARNING: Missing a blank line after declarations
+> messages on this file, so fix up all instances of that issue.
 
-On 10/12/2019 15:37, Greg Kroah-Hartman wrote:
+I would prefer to squash it with previous. These are not bugs, just
+minor coding style violations so there is no point to split it per
+patch. Too much churn.
 
-> The function uart_console_write() expects an unsigned int, so use that
-> variable type, not 'unsigned', which is generally frowned apon in the
-> kernel now.
-
-"frowned upon"
-
-Wait, what?!
-
-'unsigned' and 'unsigned int' are the same type, if I remember my C
-lessons correctly.
-
-Is this a uniformization issue?
-
-Regards.
+Best regards,
+Krzysztof
