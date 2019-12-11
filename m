@@ -2,74 +2,47 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E4711AA85
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Dec 2019 13:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB7511B44A
+	for <lists+linux-serial@lfdr.de>; Wed, 11 Dec 2019 16:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729077AbfLKMNj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Dec 2019 07:13:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727365AbfLKMNi (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Dec 2019 07:13:38 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBBE620836;
-        Wed, 11 Dec 2019 12:13:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576066418;
-        bh=Xb2LGz2eTWzVl5uyo4dQX6iViMnhQ99Qr/UakTyz5ks=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wS6Hac2ka68LJuY+urNJ7+TrhlmTCBY5xL+AA+llIbqf2M33Ffqik8jPjVZn/54bF
-         hun7b58MV5IkBsHOBvcmhySsVO9QPQ7wGHH2x1+SlmfYSO2H16B+tUYcsIKZ/citOH
-         Rd+DoVV05ECek/dMk6YYOsdNJJCK6Of5FT1ClazU=
-Date:   Wed, 11 Dec 2019 13:13:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Cc:     linux-serial@vger.kernel.org, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Hyunki Koo <kkoos00@naver.com>,
-        HYUN-KI KOO <hyunki00.koo@samsung.com>,
-        Shinbeom Choi <sbeom.choi@samsung.com>,
-        Jiri Slaby <jslaby@suse.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/10] tty: serial: samsung_tty: fix build warning
-Message-ID: <20191211121335.GA513966@kroah.com>
-References: <20191210143706.3928480-1-gregkh@linuxfoundation.org>
- <20191210143706.3928480-2-gregkh@linuxfoundation.org>
- <181db297-2865-5b34-6ef1-e410babaf3bb@metux.net>
+        id S1732909AbfLKP0y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Wed, 11 Dec 2019 10:26:54 -0500
+Received: from mailout02.3bbmail.com ([110.164.252.195]:33956 "EHLO
+        mailout03.3bb.co.th" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1732996AbfLKP0y (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:26:54 -0500
+X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 10:26:49 EST
+Authentication-Results: 3bb.co.th;
+        spf=fail smtp.mailfrom=infoccfoundation@amazon.com
+Received: from appserv (mx-ll-110.164.149-9.static.3bb.co.th [110.164.149.9] (may be forged))
+        by mailout03.3bb.co.th (8.16.0.27/8.16.0.27) with ESMTP id xBBFF3Lr020977;
+        Wed, 11 Dec 2019 22:15:03 +0700
+Message-ID: <41448-2201912311151513293@appserv>
+To:     "a" <skyteamsbiz@gmail.com>
+Reply-To: "CCULVERT FOUNDATION" <skyteamsbiz@gmail.com>
+From:   "CCULVERT FOUNDATION" <infoccfoundation@amazon.com>
+Subject: Mein letzter Wunsch.
+Date:   Wed, 11 Dec 2019 22:15:13 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <181db297-2865-5b34-6ef1-e410babaf3bb@metux.net>
+Content-type: text/plain; charset=windows-874
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf1.amazon.com include:spf2.amazon.com
+ include:amazonses.com -all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-25_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=40 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=250
+ adultscore=0 classifier=spam adjust=40 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1911260048
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 12:01:28PM +0100, Enrico Weigelt, metux IT consult wrote:
-> On 10.12.19 15:36, Greg Kroah-Hartman wrote:
-> 
-> Hi,
-> 
-> > diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> > index 83fd51607741..67c5a84d0a26 100644
-> > --- a/drivers/tty/serial/samsung_tty.c
-> > +++ b/drivers/tty/serial/samsung_tty.c
-> > @@ -1851,7 +1851,10 @@ static int s3c24xx_serial_init_port(struct s3c24xx_uart_port *ourport,
-> >  
-> >  /* Device driver serial port probe */
-> >  
-> > +#ifdef CONFIG_OF
-> >  static const struct of_device_id s3c24xx_uart_dt_match[];
-> > +#endif
-> > +
-> 
-> By the way: I've got some patch for conditionally declaring of match
-> tables (including MODULE_DEVICE_TABE() call), so such ifdef's aren't
-> needed anymore.
+Wenn Sie sich für die Finanzierung der STIFTUNG interessieren, schreiben Sie bitte heute über meinen Anwalt zurück
+Grüße,
+Mrs. Cindy Culvert.
+skyteamsbiz@gmail.com
 
-That's not why this #ifdef is needed.
-
-greg k-h
