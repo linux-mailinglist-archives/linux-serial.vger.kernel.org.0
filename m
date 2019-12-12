@@ -2,65 +2,68 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0D411B8FF
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Dec 2019 17:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4E411CA5E
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Dec 2019 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729912AbfLKQj2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Dec 2019 11:39:28 -0500
-Received: from mail.sysgo.com ([176.9.12.79]:56120 "EHLO mail.sysgo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729880AbfLKQj2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Dec 2019 11:39:28 -0500
-X-Greylist: delayed 546 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 11:39:27 EST
-From:   David Engraf <david.engraf@sysgo.com>
-To:     richard.genoud@gmail.com, gregkh@linuxfoundation.org,
-        jslaby@suse.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, David Engraf <david.engraf@sysgo.com>
-Subject: [PATCH] tty/serial: atmel: fix out of range clock divider handling
-Date:   Wed, 11 Dec 2019 17:29:54 +0100
-Message-Id: <20191211162954.8393-1-david.engraf@sysgo.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728548AbfLLKRA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Dec 2019 05:17:00 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:38055 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728489AbfLLKRA (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 12 Dec 2019 05:17:00 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ifLWi-0007bh-8o; Thu, 12 Dec 2019 11:16:56 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ifLWg-00082s-Nf; Thu, 12 Dec 2019 11:16:54 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 1/2] serdev: simplify Makefile
+Date:   Thu, 12 Dec 2019 11:16:48 +0100
+Message-Id: <20191212101649.18126-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Use MCK_DIV8 when the clock divider is > 65535. Unfortunately the mode
-register was already written thus the clock selection is ignored.
+drivers/tty/Makefile has:
+	obj-$(CONFIG_SERIAL_DEV_BUS)    += serdev/
 
-Fix by writing the mode register after calculating the baudrate.
+so in drivers/tty/serdev/Makefile CONFIG_SERIAL_DEV_BUS is always =y.
 
-Signed-off-by: David Engraf <david.engraf@sysgo.com>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/atmel_serial.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serdev/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index a8dc8af83f39..9983e2fabbac 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -2270,9 +2270,6 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 		mode |= ATMEL_US_USMODE_NORMAL;
- 	}
+diff --git a/drivers/tty/serdev/Makefile b/drivers/tty/serdev/Makefile
+index 078417e5b068..f71bb931735b 100644
+--- a/drivers/tty/serdev/Makefile
++++ b/drivers/tty/serdev/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ serdev-objs := core.o
  
--	/* set the mode, clock divisor, parity, stop bits and data size */
--	atmel_uart_writel(port, ATMEL_US_MR, mode);
--
- 	/*
- 	 * when switching the mode, set the RTS line state according to the
- 	 * new mode, otherwise keep the former state
-@@ -2315,6 +2312,9 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 	}
- 	quot = cd | fp << ATMEL_US_FP_OFFSET;
+-obj-$(CONFIG_SERIAL_DEV_BUS) += serdev.o
++obj-y += serdev.o
  
-+	/* set the mode, clock divisor, parity, stop bits and data size */
-+	atmel_uart_writel(port, ATMEL_US_MR, mode);
-+
- 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
- 		atmel_uart_writel(port, ATMEL_US_BRGR, quot);
- 	atmel_uart_writel(port, ATMEL_US_CR, ATMEL_US_RSTSTA | ATMEL_US_RSTRX);
+ obj-$(CONFIG_SERIAL_DEV_CTRL_TTYPORT) += serdev-ttyport.o
 -- 
-2.17.1
+2.24.0
 
