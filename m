@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB8911DA96
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Dec 2019 01:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019BD11DADF
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Dec 2019 01:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731731AbfLMAIo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 12 Dec 2019 19:08:44 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38536 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731729AbfLMAIn (ORCPT
+        id S1731746AbfLMAIy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Dec 2019 19:08:54 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44134 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731405AbfLMAIr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 12 Dec 2019 19:08:43 -0500
-Received: by mail-pl1-f193.google.com with SMTP id a17so387469pls.5
-        for <linux-serial@vger.kernel.org>; Thu, 12 Dec 2019 16:08:43 -0800 (PST)
+        Thu, 12 Dec 2019 19:08:47 -0500
+Received: by mail-pl1-f196.google.com with SMTP id az3so374163plb.11
+        for <linux-serial@vger.kernel.org>; Thu, 12 Dec 2019 16:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=googlenew;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Er5nAZa0dzjPGmbpRmr/URcdpkFHKxX1ZKta5byo+BA=;
-        b=pBO83T+3pLGQIG/lo6bFoz3CUjfvRFotL/CE9Az3B2XbEMhTbp5PLKYjAfoPEB59vG
-         2O/Zb2NN55/9N+nZmWeNlYp6Oe8nfM6fsSMmX8PTAhDYuqlPfhNP4mKs72qMKmPPrbIx
-         FroUhUeinf4yNuUDSVTwcyDaHsbQsmcKQHadhavR4Q/K4Ythj3VCPcDC2t/lX+djVWGb
-         FJvI5rWb9ge9+7O5dOjCdbau4XrTsCJqZhcPniOAiTcyOXRklo0qM2XUVtqr7yEl2jwF
-         e0oa/s10DoYmA7d/8PvJ4sP5ApdnsU35p4NUC4vRnyOX5JMGGyKH9dHSmHZjr6QvqiaG
-         2VBA==
+        bh=oFqw+HPsj+UvL3ErVQQmLmN+s/+CgB/NwHLHlutjOiw=;
+        b=EajhwHVdE3viF6OTqFPMh/mMhJda3aVHtZVSvDfWNRga5xkSjsM3jyQK1O7FKTOWKp
+         FA9x5OeKeLVn7IZoFwXwdis4MujSaLsdJFTb4AIJD23KP+5XJC2e3yD1aqBCz0iP9Pix
+         3ziyudM3CqRn6mEK9owgMvbHihbvnA8MwB331cPepfB1KWUAkq/5dflShGPRrQUAUb0W
+         FWWV8Bq8N6vgVXZCkMJrET3VPLaG5o/goCy9AMbnVa6bpGtq0IHlQw0W1ByEHiqG749V
+         W0E5uCm68XlrEo4WAWw77o8nYomafrEjUNyszlsN7japK9WeUqT4aHzWeauSRydNtSRT
+         p/Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Er5nAZa0dzjPGmbpRmr/URcdpkFHKxX1ZKta5byo+BA=;
-        b=CqAVjYUSgySPGOEMC9L4dPe2RzXGM4Is0v/YEIJHbJDDLirt8dTSmfsLLAE4tDrm+H
-         jB99tArPmLvn2Qpg1cYj26Kcit16Oyt6Odpslu7y/X9+HeQ/Tm88eE9mPyQkog2EUf2r
-         qv34O2fQIktkeYe44jhYfEhTo138YDSkYfjAK0bIRlVvSYITFefyVObvvjErXPkGgv4v
-         7XPgP5kOtobYYTU4nLs9BSipck32GSU5zhhcUz4G97omctaEiVDUO95fLmNjhSsHpucF
-         huJAYsjk4farYWqdUi+D2WnkNBq9ffVfw2qXbpzeecr5iW+u3vxDBJCGnBDIMDfz9Hkp
-         DuxA==
-X-Gm-Message-State: APjAAAVpqhNhBHh1KAki+SiEj7NpWJPIn7Ap15ViShCTWI8gLZCjqS9c
-        /KsiwH/jPUxi1QHC5GxWa+ZPBg==
-X-Google-Smtp-Source: APXvYqwB3D0kINS7nIHxvaSLTZkj+rB5xcPZkkmxepOINemcjk0j3BsedcI0tT2o8OES5EGFzhUJVw==
-X-Received: by 2002:a17:90a:8989:: with SMTP id v9mr13191061pjn.119.1576195723176;
-        Thu, 12 Dec 2019 16:08:43 -0800 (PST)
+        bh=oFqw+HPsj+UvL3ErVQQmLmN+s/+CgB/NwHLHlutjOiw=;
+        b=mDYa9VKdTVFz06qFJHQ4MguJcrwG4uv6ei/MRsoTEVesHTzJraNSpfHn2/Aqp/wdlZ
+         L4Lw/nJy8vf/5V4rRynQJJpc36P3aCtZEbJd/spe8b4/mwbDondaKfmSynwt638rNJFC
+         zUFZt9rJJxgm0EEG+8jqMdVbKZbB933v6gkE8mqr3OTyNiNgfxoprWFAjPoSkdsJuSqZ
+         PKXjGYKC5Bze0EUKqcX7d5lY3PR+d5Kdlb5zECZ+UdVlvDO9Yp7bIrNhry7PK5LtJaBk
+         X64nmtAPCskPM5JKZsilehVbkHrOKgGs2EmO1myxAjdOAG86hUcx6Tyh0BZnV2KXeKjs
+         YzmQ==
+X-Gm-Message-State: APjAAAWuVNIdI9Rg2F9CMxisPWKx2KIK66ep7MRNwy/zmRrK5hTLJirX
+        wek6DYN66hRLcMYcPoz3CZvDEg==
+X-Google-Smtp-Source: APXvYqyF6KmCyw2+4DGZMs1GewyAV9nRslaYtpLZSwxmJE8Eo7U1bhbKpvG5tJ/6K6I51waBc+InfQ==
+X-Received: by 2002:a17:90a:2223:: with SMTP id c32mr13646956pje.15.1576195726336;
+        Thu, 12 Dec 2019 16:08:46 -0800 (PST)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id j38sm8317647pgj.27.2019.12.12.16.08.40
+        by smtp.gmail.com with ESMTPSA id j38sm8317647pgj.27.2019.12.12.16.08.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 16:08:42 -0800 (PST)
+        Thu, 12 Dec 2019 16:08:45 -0800 (PST)
 From:   Dmitry Safonov <dima@arista.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
@@ -52,10 +52,14 @@ Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         Vasiliy Khoruzhick <vasilykh@arista.com>,
-        linux-serial@vger.kernel.org
-Subject: [PATCH 30/58] tty/serial: Don't check port->sysrq
-Date:   Fri, 13 Dec 2019 00:06:29 +0000
-Message-Id: <20191213000657.931618-31-dima@arista.com>
+        linux-serial@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 31/58] tty/serial: Migrate pmac_zilog to use has_sysrq
+Date:   Fri, 13 Dec 2019 00:06:30 +0000
+Message-Id: <20191213000657.931618-32-dima@arista.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191213000657.931618-1-dima@arista.com>
 References: <20191213000657.931618-1-dima@arista.com>
@@ -66,30 +70,47 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-uart_handle_sysrq_char() already handles it.
+The SUPPORT_SYSRQ ifdeffery is not nice as:
+- May create misunderstanding about sizeof(struct uart_port) between
+  different objects
+- Prevents moving functions from serial_core.h
+- Reduces readability (well, it's ifdeffery - it's hard to follow)
 
+In order to remove SUPPORT_SYSRQ, has_sysrq variable has been added.
+Initialise it in driver's probe and remove ifdeffery.
+
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linuxppc-dev@lists.ozlabs.org
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- drivers/tty/serial/pch_uart.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/tty/serial/pmac_zilog.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index c625bf7b8a92..0a96217dba67 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -584,10 +584,8 @@ static int pch_uart_hal_read(struct eg20t_port *priv, unsigned char *buf,
- 			if (uart_handle_break(port))
- 				continue;
- 		}
--		if (port->sysrq) {
--			if (uart_handle_sysrq_char(port, rbr))
--				continue;
--		}
-+		if (uart_handle_sysrq_char(port, rbr))
-+			continue;
+diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
+index bcb5bf70534e..ba65a3bbd72a 100644
+--- a/drivers/tty/serial/pmac_zilog.c
++++ b/drivers/tty/serial/pmac_zilog.c
+@@ -61,10 +61,6 @@
+ #define of_machine_is_compatible(x) (0)
+ #endif
  
- 		buf[i++] = rbr;
- 	}
+-#if defined (CONFIG_SERIAL_PMACZILOG_CONSOLE) && defined(CONFIG_MAGIC_SYSRQ)
+-#define SUPPORT_SYSRQ
+-#endif
+-
+ #include <linux/serial.h>
+ #include <linux/serial_core.h>
+ 
+@@ -1721,6 +1717,7 @@ static int __init pmz_init_port(struct uart_pmac_port *uap)
+ 	uap->control_reg   = uap->port.membase;
+ 	uap->data_reg      = uap->control_reg + 4;
+ 	uap->port_type     = 0;
++	uap->port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_PMACZILOG_CONSOLE);
+ 
+ 	pmz_convert_to_zs(uap, CS8, 0, 9600);
+ 
 -- 
 2.24.0
 
