@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F8311DA90
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Dec 2019 01:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154B211DAE2
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Dec 2019 01:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731707AbfLMAIg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 12 Dec 2019 19:08:36 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:36924 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731702AbfLMAIf (ORCPT
+        id S1731716AbfLMAIj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Dec 2019 19:08:39 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:39245 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731712AbfLMAIi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 12 Dec 2019 19:08:35 -0500
-Received: by mail-pf1-f194.google.com with SMTP id p14so394526pfn.4
-        for <linux-serial@vger.kernel.org>; Thu, 12 Dec 2019 16:08:35 -0800 (PST)
+        Thu, 12 Dec 2019 19:08:38 -0500
+Received: by mail-pj1-f65.google.com with SMTP id v93so341714pjb.6
+        for <linux-serial@vger.kernel.org>; Thu, 12 Dec 2019 16:08:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=googlenew;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JPHcF1Ac92GQc/SsDP7K+Yij8n5Op4P4c8xwvHBjRY0=;
-        b=Fv4cQwiBepW2yfuVGe2bIGqgW8ota1ovR0Oqsbc4sPC1d1OUjKvZ6vQ1b4a/simvRZ
-         hkt4QOw7eTenbSMFVj0LK6GV8yxReJromH9baY2pKzNpgT++N5JSrcQVJDe15ur6qMTK
-         9aX4+KJQ5J3uFZQPd9WZgF0qk80Oa7uLkWC3MVX1R3A13K01fiCyDuP4hhWHh/TKLc1q
-         +KjX4QkipD5ktT3q7JwEvS9TWquf/p9mTa6BPOsC//gM9+Nww7x0Zoo6pDayI7ACHyix
-         wenEXpUU+010mB06MpA8ofbbIn25EJifvYxxvyKkWeZSh6sd3IQq2btODsElDw4xyqEq
-         iSbA==
+        bh=XEE0LGDV1J/8PNdfM5R+G2BENKuEh6gWNO7Fuw2PlT8=;
+        b=QdO6faUQ9IU/Iu3hc9HssBIFSyYwL1wjx6YLW1AGrFNfD1NEqfQWLvBbb7cncEUgM4
+         kQNSs1EkyzWRVaSAXzHHvTGkZAPoKwhyDXu97A+VZwti2nj1I5pWHpnFM9QWA/lxoZ13
+         VrknhWKh1KzguA6nOSPPffDORtX3W7EhuGtzagBADUGjmlbzM7Q2UqoXF5G8fEDSrm2A
+         svAskRSke+8ffBqi9jrnIhsH4v8M/CIzFCAlcXKFmeVGJQARdG2tS0Gk8GQrUY4fyGJu
+         jQ00/4sNwNy20ADchZObQ4QB5SV3L17th2C9opjauWqVn7y0oaboxFBUdzXe2K6GG6wn
+         1L7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JPHcF1Ac92GQc/SsDP7K+Yij8n5Op4P4c8xwvHBjRY0=;
-        b=UDNWEnnGZBzxfjpY5uX/3NKkRXeNo0k7YBsOl8JqocHnXrhL8M+NFP1KswxpCvbKvF
-         Ya//X/D4pcdW6LlZ+ZXhpRvpx+x5vCtYJbdAARDJZRke/87EEguME0ACu9nl/291MLpq
-         6DvfP3IHOUMjD3Ax1EtFuwSJxjkNTNJZBA957giTsdfZtaLTxmusa5zDoY6E70f/HXTO
-         F778MPIgHZ5UXMeiIUIzbH6QDacKmMSEbq8VjrdexSBADWZTajla2JulmQIVoIXDQ1n9
-         zkS9q2TKRCIc28KqnrSpgL5Xz/xOZHxzOUXqtDnCOhLCHihFhswSR6dJhqYu/DdjdI/S
-         rcGA==
-X-Gm-Message-State: APjAAAUuJwomrmDXUVdPXm6DXx67HovY39awPMD5ERZsKzNtrxPP1fC9
-        iPbHw1k3IhsvcnMHCCbIyaSn1Q==
-X-Google-Smtp-Source: APXvYqyqFKCBWTIp8TYm3kDEts6GcpTPEPycbAbyvkwK3IpCwgEnNSAd2DdwsYCBcerQjSs5m25png==
-X-Received: by 2002:a62:b60c:: with SMTP id j12mr13123896pff.8.1576195714876;
-        Thu, 12 Dec 2019 16:08:34 -0800 (PST)
+        bh=XEE0LGDV1J/8PNdfM5R+G2BENKuEh6gWNO7Fuw2PlT8=;
+        b=QDt+2nOsWFCp2+i2rOEEw1xPtYOjp5f+7XoK8sfZYh6gbIIHd+eKSDuWsBgqZzGVDE
+         a4qkKzjE2xwwOsc2VStv0LRTR8WZhPez0jI61vD9E1mSM/r8Y3+XMNvuE9LEOPnHW8gP
+         r6prd3fvrKAVV8DBmRv7i8tX+cYM/hdZuR+OQJ6t9LpnBudytmcOcNJOkGL2mi5vQAcl
+         nd1uqyZ/XSwO76N6unKxIKIQ94OoP0U3UGIOZqqyr6iCu8SQT3bLzw/QiYa8W1MWKinz
+         dSXsqW3EPIbaYGqi+J2cQkhKOIrcqd+J8IL/HonGn8IWsawAmhuzNrca+rbg02sfTlM7
+         Gglg==
+X-Gm-Message-State: APjAAAWWEktQLCsdivZfxgbXvqev8OYO1qdL2OAN9wU4RXv9qpkV8buH
+        diF1ZnY7YFXiEnCWGumUm6aeJQ==
+X-Google-Smtp-Source: APXvYqzcYT0DHwWe/kfTwr+RdnsOlzCzNojd3O1sghIDf52D2BkxpgOg5Y3f2CLhLhsf0d2pnd8l+w==
+X-Received: by 2002:a17:90b:4391:: with SMTP id in17mr13218028pjb.33.1576195717651;
+        Thu, 12 Dec 2019 16:08:37 -0800 (PST)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id j38sm8317647pgj.27.2019.12.12.16.08.31
+        by smtp.gmail.com with ESMTPSA id j38sm8317647pgj.27.2019.12.12.16.08.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 16:08:33 -0800 (PST)
+        Thu, 12 Dec 2019 16:08:36 -0800 (PST)
 From:   Dmitry Safonov <dima@arista.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
@@ -52,15 +52,10 @@ Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         Vasiliy Khoruzhick <vasilykh@arista.com>,
-        linux-serial@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 27/58] tty/serial: Migrate mxs-auart to use has_sysrq
-Date:   Fri, 13 Dec 2019 00:06:26 +0000
-Message-Id: <20191213000657.931618-28-dima@arista.com>
+        linux-serial@vger.kernel.org
+Subject: [PATCH 28/58] tty/serial: Migrate omap-serial to use has_sysrq
+Date:   Fri, 13 Dec 2019 00:06:27 +0000
+Message-Id: <20191213000657.931618-29-dima@arista.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191213000657.931618-1-dima@arista.com>
 References: <20191213000657.931618-1-dima@arista.com>
@@ -80,40 +75,34 @@ The SUPPORT_SYSRQ ifdeffery is not nice as:
 In order to remove SUPPORT_SYSRQ, has_sysrq variable has been added.
 Initialise it in driver's probe and remove ifdeffery.
 
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: linux-arm-kernel@lists.infradead.org
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- drivers/tty/serial/mxs-auart.c | 5 +----
+ drivers/tty/serial/omap-serial.c | 5 +----
  1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/mxs-auart.c b/drivers/tty/serial/mxs-auart.c
-index e34525970682..b4f835e7de23 100644
---- a/drivers/tty/serial/mxs-auart.c
-+++ b/drivers/tty/serial/mxs-auart.c
-@@ -12,10 +12,6 @@
-  * Copyright 2008 Embedded Alley Solutions, Inc All Rights Reserved.
+diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
+index 6420ae581a80..53b38a226f26 100644
+--- a/drivers/tty/serial/omap-serial.c
++++ b/drivers/tty/serial/omap-serial.c
+@@ -16,10 +16,6 @@
+  * this driver as required for the omap-platform.
   */
  
--#if defined(CONFIG_SERIAL_MXS_AUART_CONSOLE) && defined(CONFIG_MAGIC_SYSRQ)
+-#if defined(CONFIG_SERIAL_OMAP_CONSOLE) && defined(CONFIG_MAGIC_SYSRQ)
 -#define SUPPORT_SYSRQ
 -#endif
 -
- #include <linux/kernel.h>
- #include <linux/errno.h>
+ #include <linux/module.h>
  #include <linux/init.h>
-@@ -1693,6 +1689,7 @@ static int mxs_auart_probe(struct platform_device *pdev)
- 	s->port.fifosize = MXS_AUART_FIFO_SIZE;
- 	s->port.uartclk = clk_get_rate(s->clk);
- 	s->port.type = PORT_IMX;
-+	s->port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_MXS_AUART_CONSOLE);
+ #include <linux/console.h>
+@@ -1680,6 +1676,7 @@ static int serial_omap_probe(struct platform_device *pdev)
+ 	up->port.regshift = 2;
+ 	up->port.fifosize = 64;
+ 	up->port.ops = &serial_omap_pops;
++	up->port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_OMAP_CONSOLE);
  
- 	mxs_init_regs(s);
- 
+ 	if (pdev->dev.of_node)
+ 		ret = of_alias_get_id(pdev->dev.of_node, "serial");
 -- 
 2.24.0
 
