@@ -2,97 +2,230 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 937F911FB0E
-	for <lists+linux-serial@lfdr.de>; Sun, 15 Dec 2019 21:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F4111FCE8
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Dec 2019 03:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfLOU1v (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 15 Dec 2019 15:27:51 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40567 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726470AbfLOU1v (ORCPT
+        id S1726426AbfLPCeE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 15 Dec 2019 21:34:04 -0500
+Received: from regular1.263xmail.com ([211.150.70.205]:36250 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbfLPCeE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 15 Dec 2019 15:27:51 -0500
-Received: by mail-pl1-f196.google.com with SMTP id g6so3536853plp.7
-        for <linux-serial@vger.kernel.org>; Sun, 15 Dec 2019 12:27:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=Dx8PGzua2mEFts+NSIP1exfPCn9I/ZJAV+I6JDILguU=;
-        b=jqTvciCpe69MWOynmw9mRNNWp46FsXRXmGoeOGldki/igzCDhEYgbRBwYIzrQdiVu4
-         scGEg/HEtpCBgcePMWjtShmd5Zko2SpRrVgXJ+lwdUA3bLeK3qKKrg21t9Yq/lysJpNj
-         bd7ZzJXjwh9mfLknw6b/0mnh78sOoxR55SC3F2Di9wtMCV7syC5mF8XRkCrn0cTDFpll
-         4Vi4d93MtuqSKCEvPp/+UBCvbyO+tcG0on69xZRjf72yWwtl1q/hvfSW6sFgPEdwPoZ7
-         FIeKdNqR1/r6NG+Nb0YVzdGkDd6xLL19hH2MxGA7Ji8KAQ7lP4nktFxvJK6NkqBEfenY
-         npRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Dx8PGzua2mEFts+NSIP1exfPCn9I/ZJAV+I6JDILguU=;
-        b=miD19TqFKwmHxOgY27rHfGKBfP+u23OKruhJsX7GDyu5cfwNx5hBqApmSL67S/MSfr
-         BMhYe+wH+j1hEER4NygVMGCkZLO2/y9BsrvwGT5q9MZzOXMD0z5M3FwOc5LQK9Y+iy21
-         97uQufSYGNpS+prdC+cBUXadSIOV+SQXVKNSnaaJXpu3hoxqQVtNIXpQSL8FrwfVgcnT
-         I964CES88cMz/67gyU0hurSz6xGLfBraf+gZN+yHGJYyoU2Hn+CF0jxPapWARIadWHRW
-         KbAzZRrk4GDpXoZTWaepqJZkg1g/4ry405wS163RWCWYr1QhNsu70qjyLR5+mur2GNiI
-         5ppQ==
-X-Gm-Message-State: APjAAAVXHX43BJQTHl2mffjyw5v2TDPLSrrJwDWJZLzGWXoIsd8rQOGO
-        HEw2XvUb2O9sKJORqmbL52WFDw==
-X-Google-Smtp-Source: APXvYqz0AuBYtAFMOje12kZHJsE8Pbr1nw4xMXUdzQdINfu39wu+UVyYzAST8FeTYTNTqr3419aSnw==
-X-Received: by 2002:a17:90a:250a:: with SMTP id j10mr13861013pje.134.1576441669294;
-        Sun, 15 Dec 2019 12:27:49 -0800 (PST)
-Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
-        by smtp.gmail.com with ESMTPSA id d2sm16762068pja.1.2019.12.15.12.27.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Dec 2019 12:27:49 -0800 (PST)
-Date:   Sun, 15 Dec 2019 12:27:45 -0800
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v11 net-next 2/2] mfd: ioc3: Add driver for SGI IOC3
- chip
-Message-ID: <20191215122745.219fa951@cakuba.netronome.com>
-In-Reply-To: <20191213124221.25775-3-tbogendoerfer@suse.de>
-References: <20191213124221.25775-1-tbogendoerfer@suse.de>
-        <20191213124221.25775-3-tbogendoerfer@suse.de>
-Organization: Netronome Systems, Ltd.
+        Sun, 15 Dec 2019 21:34:04 -0500
+X-Greylist: delayed 371 seconds by postgrey-1.27 at vger.kernel.org; Sun, 15 Dec 2019 21:34:02 EST
+Received: from localhost (unknown [192.168.167.8])
+        by regular1.263xmail.com (Postfix) with ESMTP id D931830B;
+        Mon, 16 Dec 2019 10:27:27 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+Received: from [192.168.30.14] (42.17.110.36.static.bjtelecom.net [36.110.17.42])
+        by smtp.263.net (postfix) whith ESMTP id P17319T140438588901120S1576463244936062_;
+        Mon, 16 Dec 2019 10:27:28 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <342511b45ad3cafeca5a7222a80a4930>
+X-RL-SENDER: chengang@emindsoft.com.cn
+X-SENDER: chengang@emindsoft.com.cn
+X-LOGIN-NAME: chengang@emindsoft.com.cn
+X-FST-TO: lvlisong@emindsoft.com.cn
+X-SENDER-IP: 36.110.17.42
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 5
+Subject: Re: [PATCH] drivers: tty: serial: 8250: fintek: Can enable or disable
+ irq sharing based on isa or pci bus
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, jslaby@suse.com, sr@denx.de,
+        mika.westerberg@linux.intel.com, yegorslists@googlemail.com,
+        yuehaibing@huawei.com, haolee.swjtu@gmail.com, dsterba@suse.com,
+        mojha@codeaurora.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lv Li-song <lvlisong@emindsoft.com.cn>
+References: <20191213051717.2058-1-chengang@emindsoft.com.cn>
+ <20191213105033.GT32742@smile.fi.intel.com>
+From:   Chen Gang <chengang@emindsoft.com.cn>
+Message-ID: <758a0ca9-8f81-1a10-d9e1-11f86fac3de1@emindsoft.com.cn>
+Date:   Mon, 16 Dec 2019 10:27:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20191213105033.GT32742@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 13 Dec 2019 13:42:20 +0100, Thomas Bogendoerfer wrote:
-> SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> It also supports connecting a SuperIO chip for serial and parallel
-> interfaces. IOC3 is used inside various SGI systemboards and add-on
-> cards with different equipped external interfaces.
-> 
-> Support for ethernet and serial interfaces were implemented inside
-> the network driver. This patchset moves out the not network related
-> parts to a new MFD driver, which takes care of card detection,
-> setup of platform devices and interrupt distribution for the subdevices.
-> 
-> Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Thank you for your reply.
 
-For networking:
+I guess, this patch has to be refactored to match the related linux
+versions. And excuse me, my orignal hardware environments has been gone,
+so I can not give the new refactored patch additional test.
 
-Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+It is necessary to continue discussing and reviewing this patch to let
+it be known completely, but I guess I am not the suitable persion to
+refactor the patch.
 
-I think you wanted this to go via the MIPS tree, so consider this an
-ack.
+After finish discussing and reviewing, if anyone still wants me to
+refactor the patch, please let me know, I shall try.
+
+The contents below are my reply, pelease check, thanks.
+
+On 2019/12/13 下午6:50, Andy Shevchenko wrote:
+> On Fri, Dec 13, 2019 at 01:17:17PM +0800, chengang@emindsoft.com.cn wrote:
+>> From: Chen Gang <chengang@emindsoft.com.cn>
+>> Sorry for this patch being too late, which is for linux-next 20151127 (
+>> about linux 4.4-rc2).  After 4 years, much things have been changed. But
+>> I think it might be still valuable for some old versions. Welcome anyone
+>> to refact this patch for their own.
+> 
+> This part should go after '---' line below.
+> 
+>> Fintek serial ports can share irq, but they need be enabled firstly, so
+>> enable or disable irq sharing based on isa or pci bus. From kconfig, it
+> 
+> irq -> IRQ
+> isa -> ISA
+> pci -> PCI
+> kconfig -> Kconfig
+> 
+>> can be configured.
+>>
+>> For integrated 8250 drivers, kernel always calls pnp driver, which will
+>> not use integrated fintek driver for ever. So let pnp driver try the
+> 
+> fintek -> Fintek or Fintek 8250
+> 
+>> other drivers firstly (e.g. fintek), if fail, try pnp driver its own.
+> 
+> Ditto.
+> 
+
+OK, thanks.
+
+> 
+>> --- a/drivers/tty/serial/8250/8250.h
+>> +++ b/drivers/tty/serial/8250/8250.h
+>> @@ -14,6 +14,7 @@
+>>  #include <linux/serial_8250.h>
+>>  #include <linux/serial_reg.h>
+>>  #include <linux/dmaengine.h>
+> 
+>> +#include <linux/pnp.h>
+> 
+> The changes below doesn't require a header.
+> Pointers are known to the compiler. Names of data structures can be forward
+> declared. Moreover, these declarations may go inside respective #ifdef.
+> 
+
+OK. I guess, originally, I forgot to remove it.
+
+> 
+>> +#if IS_ENABLED(CONFIG_SERIAL_8250_FINTEK_IRQ_SHARING)
+>> +
+>> +static void set_icsr(u16 base_port, u8 index)
+>> +{
+>> +	uint8_t icsr = 0;
+>> +
+>> +	outb(LDN, base_port + ADDR_PORT);
+>> +	outb(index, base_port + DATA_PORT);
+>> +	outb(ICSR, base_port + ADDR_PORT);
+>> +	icsr = inb(base_port + DATA_PORT);
+>> +
+>> +	if (icsr != 0xff) {
+> 
+> 	if (icsr == 0xff)
+> 		return;
+> 
+
+It'll be OK.
+
+> 
+>> +		icsr |= IRQ_SHARING_MOD;
+>> +#if IS_ENABLED(CONFIG_SERIAL_8250_FINTEK_IRQ_SHARING_ISA)
+>> +		icsr |= ISA_IRQ_SHARING;
+>> +#else
+>> +		icsr |= PCI_IRQ_SHARING;
+>> +#endif
+>> +		outb(ICSR, base_port + ADDR_PORT);
+>> +		outb(icsr, base_port + DATA_PORT);
+>> +	}
+>> +}
+>> +
+>> +#endif
+> 
+> ..
+> 
+>>  				aux |= inb(addr[i] + DATA_PORT) << 8;
+>>  				if (aux != io_address)
+>>  					continue;
+> 
+>> -
+> 
+> What the point?
+> 
+>> +#if IS_ENABLED(CONFIG_SERIAL_8250_FINTEK_IRQ_SHARING)
+>> +				set_icsr(addr[i], k);
+>> +#endif
+>>  				fintek_8250_exit_key(addr[i]);
+>>  				*key = keys[j];
+>>  				*index = k;
+>> @@ -179,53 +212,6 @@ static int fintek_8250_base_port(u16 io_address, u8 *key, u8 *index)
+>>  	return -ENODEV;
+>>  }
+>>  
+
+In my case at that time, for fintex irq sharing, it needed additional
+initinalization, or it could not work well. I wrote the related code
+based on the fintek data-sheet which was downloaded from internet.
+
+>> -static int
+>> -fintek_8250_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
+> 
+> Why did you move this function?
+> It's now not only hard to follow what has been changed, and to review.
+> 
+>> --- a/drivers/tty/serial/8250/8250_pnp.c
+>> +++ b/drivers/tty/serial/8250/8250_pnp.c
+>> @@ -438,8 +438,13 @@ static int
+>>  serial_pnp_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
+>>  {
+>>  	struct uart_8250_port uart, *port;
+>> -	int ret, line, flags = dev_id->driver_data;
+>> +	int ret, line, flags;
+>>  
+> 
+
+I thought locating the main probe function at the end of the source file
+was better for normal code reading (maybe it need be a seperate patch).
+But if we don't mind, we can still remain its orignal position.
+
+>> +#if IS_BUILTIN(CONFIG_SERIAL_8250_FINTEK)
+>> +	if (!fintek_8250_probe(dev, dev_id))
+>> +		return 0;
+>> +#endif
+>> +	flags = dev_id->driver_data;
+> 
+> Oh, I don't like this.
+> It needs a bit more refactoring done first.
+> 
+> The idea that we are not going to pollute generic driver(s) with quirks anymore
+> (only when it's really unavoidable).
+> 
+
+At that time, for me, I could not get any new better ways in a short
+time, and the issue had to be fixed in time, so the code was not good
+engough.
+
+At present, Linux version has been changed much, welcome any one to
+refactor it for current linux version or another related old linux
+versions if this patch is valuable more or less.
+
+
+Thanks.
+
+
