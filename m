@@ -2,71 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F571295D2
-	for <lists+linux-serial@lfdr.de>; Mon, 23 Dec 2019 13:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F2A129F91
+	for <lists+linux-serial@lfdr.de>; Tue, 24 Dec 2019 10:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfLWMGx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 23 Dec 2019 07:06:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726798AbfLWMGx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 23 Dec 2019 07:06:53 -0500
-Received: from localhost (50-198-241-253-static.hfc.comcastbusiness.net [50.198.241.253])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 963112063A;
-        Mon, 23 Dec 2019 12:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577102812;
-        bh=UJGipIs3R0eAFs/+vxP9hO/yM5VYdXO2adysSDweAhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fz2yc8cDetWe4VFTEb9zU418nJ8+h2ixEHwK4M1+tCvv5q0EELvft/sEOBf9OgdBR
-         g0fKDmEZbkFl2tFeMH9BQ1G7px1JKNKQDztlyAmvqszPwo/LkD3g/nqrzqTVfXE/rK
-         hrYisPKy4oJF9GfEm80pUeULbSfvMr+fxK55XIWY=
-Date:   Mon, 23 Dec 2019 07:06:51 -0500
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [GIT PULL] TTY/Serial driver fixes for 5.5-rc3
-Message-ID: <20191223120651.GC114474@kroah.com>
-References: <20191220070747.GA2190169@kroah.com>
- <CAHk-=whcLH7EXVZbD0g1Bw7McrofQ-7vwiL2GAeMn=z9PP4VEQ@mail.gmail.com>
+        id S1726237AbfLXJEo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 24 Dec 2019 04:04:44 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:44820 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726251AbfLXJEj (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 24 Dec 2019 04:04:39 -0500
+Received: by mail-qv1-f66.google.com with SMTP id n8so7249726qvg.11
+        for <linux-serial@vger.kernel.org>; Tue, 24 Dec 2019 01:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=T+/t7noVmCnipzpx0EipiuoSs8D3VSnUxNHRKwid9CC0wiDbW+X/7ifkYeunyqedwQ
+         BGdMrKiSqKnqF0r8Ye2KwFtk0h3GLL39TxNb3CHAu3bXzv5AN/Kgu5ag8P+iBs/MQlQV
+         uiWtOeIaQkWcLsKNf6KZJnk5gu30Oe2Wb5W5ckfQ5559XhNTvEvyadD8dkI5XOU8pCG3
+         aEK2B3iE+wm7bJkjfR7s8BrUNiVlj+YT1q1jfY76M++ddXl3Ujhw972TMvRh6ukNAwlj
+         XJqSDAmeFoGE6A8arcoUtdb2DZEBYbduX+OXcqMJa9a6fPb761KxhkI0pSMZmZbjw+/9
+         dW5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=SxES91FUIg4Aw0bAftqt1T3a1DWhYrU2Yy3/b4bKWgVHD9VI+4NAyfiC1B94hBrPPS
+         h0WP7vOT+ei3NPcUdjUOhS7yLe8AIEWWn++8MWt/uxd3xYbBFAyrgZMknY0tF/cQwg2z
+         vXVlUh3HcWMI5IdQ1bcdfY504wHewjDftBRgbuiKI6NheZS48wzQn0bLBmDoOVqNVomw
+         EvjrlxE23O7naGPtaxOjw8ufv5xmZMpEaY4a+zDWoBH0VxQa3XRUEq+ihtfwlbuYK82D
+         AWMVX53gn49MP2wZyW+3GA7KsNAtmFNB9z8nZMxz+Z47VEqCjSPSROkCageP3DcA3ahT
+         lE6g==
+X-Gm-Message-State: APjAAAVXVORhFaPMeOpDvo2CKVA1BE7bGVgxsacYkKMJS3y1X6WBLEia
+        +YmHm2gZF1ctEetc5KH01k9DCAc8IpCqFne+V+Y=
+X-Google-Smtp-Source: APXvYqxVGVmKHh36H3FtCwgzZ5FU95JoblzpuCw5SoZ9RS/aHnMUAQsP+TIBYVHkaxqYCJ5qeKl56QyyoiPTbeZ5we0=
+X-Received: by 2002:a0c:fac7:: with SMTP id p7mr27888544qvo.46.1577178276846;
+ Tue, 24 Dec 2019 01:04:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whcLH7EXVZbD0g1Bw7McrofQ-7vwiL2GAeMn=z9PP4VEQ@mail.gmail.com>
+Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 01:04:36
+ -0800 (PST)
+Reply-To: bethnatividad9@gmail.com
+From:   Beth Nat <anthonymoore105@gmail.com>
+Date:   Tue, 24 Dec 2019 09:04:36 +0000
+Message-ID: <CAKqrdYCodJzPTTHz6kph8Sgthe6xHddAUidHBCggQaKHYA7ZUw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 10:08:03AM -0800, Linus Torvalds wrote:
-> On Thu, Dec 19, 2019 at 11:07 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > The last tty core fix should resolve a long-standing bug with a race
-> > at port creation time that some people would see, and Sudip finally
-> > tracked down.
-> 
-> Hmm, looks good. But it makes me wonder if we should now try to remove
-> the second call to tty_port_link_device()?
-> 
-> Now we have a number of helpers that do that tty_port_link_device()
-> call for the driver (eg tty_port_register_device_attr_serdev(),
-> tty_port_register_device_attr(), and the just added
-> uart_add_one_port()).
-> 
-> But we also have drivers doing it by hand, and presumably we now have
-> drivers that do it through multiple paths? I guess it's harmless, but
-> it feels a bit odd. No?
-
-It does.  I'll try to look at this after the holidays unless Sudip beats
-me to it.
-
-thanks,
-
-greg k-h
+How are you today my dear? i saw your profile and it interests me, i
+am a Military nurse from USA. Can we be friend? I want to know more
+about you.
