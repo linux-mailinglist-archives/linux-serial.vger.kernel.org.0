@@ -2,59 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F2A129F91
-	for <lists+linux-serial@lfdr.de>; Tue, 24 Dec 2019 10:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF6E12A7DA
+	for <lists+linux-serial@lfdr.de>; Wed, 25 Dec 2019 13:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbfLXJEo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 24 Dec 2019 04:04:44 -0500
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:44820 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbfLXJEj (ORCPT
+        id S1726185AbfLYMxL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 Dec 2019 07:53:11 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46801 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726106AbfLYMxL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 24 Dec 2019 04:04:39 -0500
-Received: by mail-qv1-f66.google.com with SMTP id n8so7249726qvg.11
-        for <linux-serial@vger.kernel.org>; Tue, 24 Dec 2019 01:04:38 -0800 (PST)
+        Wed, 25 Dec 2019 07:53:11 -0500
+Received: by mail-ot1-f68.google.com with SMTP id k8so12108879otl.13;
+        Wed, 25 Dec 2019 04:53:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=T+/t7noVmCnipzpx0EipiuoSs8D3VSnUxNHRKwid9CC0wiDbW+X/7ifkYeunyqedwQ
-         BGdMrKiSqKnqF0r8Ye2KwFtk0h3GLL39TxNb3CHAu3bXzv5AN/Kgu5ag8P+iBs/MQlQV
-         uiWtOeIaQkWcLsKNf6KZJnk5gu30Oe2Wb5W5ckfQ5559XhNTvEvyadD8dkI5XOU8pCG3
-         aEK2B3iE+wm7bJkjfR7s8BrUNiVlj+YT1q1jfY76M++ddXl3Ujhw972TMvRh6ukNAwlj
-         XJqSDAmeFoGE6A8arcoUtdb2DZEBYbduX+OXcqMJa9a6fPb761KxhkI0pSMZmZbjw+/9
-         dW5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vFjlEPTID7+wvGwi4O8XdLzo/j62NZIF2USQQuU9w9M=;
+        b=Sc2pcOF3376eDsOqdpUZbNhwMHJsdgAMfozUlSuD6ku9yG13IU7vB9T4F17TxAr+jU
+         sM4c1XJutX/HfdzNb6hZngn6BUv8N6t0MbC4zZDYBWHicMXSh0t3H2Us2M584PKQ6KYz
+         Ihjky+LaFbgI1PoXYsmAC2EIcuTefPzWuqtKroZkgxf5qyyb6YwRgjVAsKxywY5frAW1
+         DoYhEgrx1U6FkRHwrLqR5/rAGnL6tj7FwqS465r6uczIeLbn++cqF/XOCYiiZcUa4afI
+         JzDd88jutE7hMVOtNV7dvd1KrDdk0gsQ/IEqCLQhaFSnweFG2IqR63DiBOGWgRNvjL2z
+         yHng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=SxES91FUIg4Aw0bAftqt1T3a1DWhYrU2Yy3/b4bKWgVHD9VI+4NAyfiC1B94hBrPPS
-         h0WP7vOT+ei3NPcUdjUOhS7yLe8AIEWWn++8MWt/uxd3xYbBFAyrgZMknY0tF/cQwg2z
-         vXVlUh3HcWMI5IdQ1bcdfY504wHewjDftBRgbuiKI6NheZS48wzQn0bLBmDoOVqNVomw
-         EvjrlxE23O7naGPtaxOjw8ufv5xmZMpEaY4a+zDWoBH0VxQa3XRUEq+ihtfwlbuYK82D
-         AWMVX53gn49MP2wZyW+3GA7KsNAtmFNB9z8nZMxz+Z47VEqCjSPSROkCageP3DcA3ahT
-         lE6g==
-X-Gm-Message-State: APjAAAVXVORhFaPMeOpDvo2CKVA1BE7bGVgxsacYkKMJS3y1X6WBLEia
-        +YmHm2gZF1ctEetc5KH01k9DCAc8IpCqFne+V+Y=
-X-Google-Smtp-Source: APXvYqxVGVmKHh36H3FtCwgzZ5FU95JoblzpuCw5SoZ9RS/aHnMUAQsP+TIBYVHkaxqYCJ5qeKl56QyyoiPTbeZ5we0=
-X-Received: by 2002:a0c:fac7:: with SMTP id p7mr27888544qvo.46.1577178276846;
- Tue, 24 Dec 2019 01:04:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vFjlEPTID7+wvGwi4O8XdLzo/j62NZIF2USQQuU9w9M=;
+        b=Lj9UMKbUriqrEo2D2x8Gt0LF1zzf+8r1QKScknlLMOAHKLVbhA9zzKbnY5kDkILYJU
+         narKR/S/1cLp0nX2B3TWHkkzkzucbCi1Et4zFM6aaA71R5ubwE8HbE2C7Ue8WZMgiAOO
+         Xw0VKRvCItgtR+bwNOy09/30RNj+bWbOS+uM9dCYyM27At1It+LFstSDG+xAaMXibj9R
+         e/UK8has4/Rk40lMNzdlmJ68ZVztUYCbPEhkJpOg5kREEjcWZMjsMCU847WUNO7UOoUL
+         0eTSzP++HahkayHmH21iiU40Wy2F1PIh2LWyNu7qBW9Vmv+f1tJcJ8SSwLXTYbfxB2S8
+         Bgxw==
+X-Gm-Message-State: APjAAAXn64TUUWAShcdt1+wKX8KfJliFLEwRAmpfjpFg3TH9bRtltwQ/
+        zHDuEXzTXZ8sQvcNjZQLXAA88J6ljvXhIYSteyA1wXRA6II=
+X-Google-Smtp-Source: APXvYqz835znKdLdeEWba5fSr4HZoY649al6kisLYRQz09swIr5xk2ZSY1c0KFjwM7tIWRyIihSVPBSspeBWhs6w2oE=
+X-Received: by 2002:a9d:3f61:: with SMTP id m88mr28771702otc.56.1577278390716;
+ Wed, 25 Dec 2019 04:53:10 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 01:04:36
- -0800 (PST)
-Reply-To: bethnatividad9@gmail.com
-From:   Beth Nat <anthonymoore105@gmail.com>
-Date:   Tue, 24 Dec 2019 09:04:36 +0000
-Message-ID: <CAKqrdYCodJzPTTHz6kph8Sgthe6xHddAUidHBCggQaKHYA7ZUw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20191220070747.GA2190169@kroah.com> <CAHk-=whcLH7EXVZbD0g1Bw7McrofQ-7vwiL2GAeMn=z9PP4VEQ@mail.gmail.com>
+ <20191223120651.GC114474@kroah.com>
+In-Reply-To: <20191223120651.GC114474@kroah.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Wed, 25 Dec 2019 12:52:34 +0000
+Message-ID: <CADVatmPA-eYzzTQoOkgVSyi0D0PQo78oQjWJFmWMuMJ4HeU_qg@mail.gmail.com>
+Subject: Re: [GIT PULL] TTY/Serial driver fixes for 5.5-rc3
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-How are you today my dear? i saw your profile and it interests me, i
-am a Military nurse from USA. Can we be friend? I want to know more
-about you.
+On Mon, Dec 23, 2019 at 12:06 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Dec 20, 2019 at 10:08:03AM -0800, Linus Torvalds wrote:
+> > On Thu, Dec 19, 2019 at 11:07 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > The last tty core fix should resolve a long-standing bug with a race
+> > > at port creation time that some people would see, and Sudip finally
+> > > tracked down.
+> >
+> > Hmm, looks good. But it makes me wonder if we should now try to remove
+> > the second call to tty_port_link_device()?
+> >
+> > Now we have a number of helpers that do that tty_port_link_device()
+> > call for the driver (eg tty_port_register_device_attr_serdev(),
+> > tty_port_register_device_attr(), and the just added
+> > uart_add_one_port()).
+> >
+> > But we also have drivers doing it by hand, and presumably we now have
+> > drivers that do it through multiple paths? I guess it's harmless, but
+> > it feels a bit odd. No?
+>
+> It does.  I'll try to look at this after the holidays unless Sudip beats
+> me to it.
+
+A regression reported by Kenny for this change. I have sent him a patch to test.
+I think that has to go in rc4. Will remove the second call after he has tested.
+
+
+--
+Regards
+Sudip
