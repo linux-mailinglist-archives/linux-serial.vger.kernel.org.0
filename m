@@ -2,98 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1D812F2AB
-	for <lists+linux-serial@lfdr.de>; Fri,  3 Jan 2020 02:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA5A12FB5F
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Jan 2020 18:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgACBUz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Jan 2020 20:20:55 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39964 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbgACBUz (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Jan 2020 20:20:55 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q8so22833317pfh.7;
-        Thu, 02 Jan 2020 17:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=iPY8DonFEvaslZITm1PPK8VeIN05fhFDyPqLfWySPpI=;
-        b=jXRjaTQwgRDYEVu8ADx9goMMyad9kCOAIf4eUg61yAVUcLwjnjGNBDBdK/eFHOy4qH
-         hJov6B6ndqk+qNScsR9poV+FXGN8zh5L2yxQJIfB0fpLo5VRxBADw0AwpIZ5fnT+Hz38
-         wvIOWK8aqUCCdh6jNg449gb7xfJv0ppdbP32xULiMZ9ymmdhlQAYH6pzm/yp1JItJye/
-         1Rk+rR2aUB2o4OEMF9UYNrY2zZckoB2LMZZALfHWJJNvu6362qKLWC5Blq4lWOqncJOO
-         4erFENLSObRkafLTaS5EcQf+WEsPdmNH0Eki6WDL3ygsI42KeF0N9IGp/MpAozHtIUfz
-         RR/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=iPY8DonFEvaslZITm1PPK8VeIN05fhFDyPqLfWySPpI=;
-        b=ChUICEPsBFrG4k1aSHmUMUWVFOwGu6xo9ycJ3GNKFY6TanjFZTdTOE5d5ylSUdbHSD
-         SFRQdjgmuzXl0M/C2Or2ncgvSAd99DuwVjkEqZNaTs1FbcJ+/H7vq70zAq99TbHcC7zJ
-         ESLIA+x7QuOqq0cpsA4CV3NVBgogWPtJIRYVGMM5IFPzL4vaT2j21XN99Q8GH0G5v2Yz
-         yz+Ikcvv8X9NWj2cccwNdVoigsMpcts7EoIl9v+Qr38SyEVoPlcaTtjX8xwC5xBbf0ks
-         7BdtjDRGIx16buWEXrDmyZY+C3fJHtA4g+D06DlDw5r01V3rDmK3If8hQrjKvlIuO3lO
-         zY+w==
-X-Gm-Message-State: APjAAAUsBoQkad3oGF0UiKbKWqh2ntd30sGe2RrajdUZCeiIga+a/XQw
-        JUYTeqeKNrfUNRP7qnNlyEA=
-X-Google-Smtp-Source: APXvYqxd6ZxVhx9DaLcQylwATIY8jZP4Z3jP43AFyDvRtje352jdjg8y/Sjwo4w70QrE7otE6EFQ1w==
-X-Received: by 2002:a65:6794:: with SMTP id e20mr92694645pgr.152.1578014454937;
-        Thu, 02 Jan 2020 17:20:54 -0800 (PST)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id r37sm12215963pjb.7.2020.01.02.17.20.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 17:20:54 -0800 (PST)
-Date:   Thu, 2 Jan 2020 17:20:53 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Patrice Chotard <patrice.chotard@st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jslaby@suse.com>, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tty: st-asc: switch to using devm_fwnode_gpiod_get()
-Message-ID: <20200103012053.GA1968@dtor-ws>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728242AbgACRNR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Jan 2020 12:13:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48566 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728344AbgACRM5 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 3 Jan 2020 12:12:57 -0500
+Received: from localhost.localdomain (unknown [194.230.155.149])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CECFA22522;
+        Fri,  3 Jan 2020 17:12:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578071576;
+        bh=dFWlPdvaj+HyEUx1AlXxNrrcbYfk6tTvTj6iCncs5hE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vYEVh82ouqc43hnKtYs0K9dsD65KilrWNTEVR5RgV2F/cBRMSzT1O/LogQv4Dasgc
+         9NoK7/DOmU/VsIp2I1k+xmTheuxOu5mnW3cbCjl3NGXp4TbVfygkM8BKxuqqk8C2bx
+         t2KG3WHx9w2bqgG/83b6XOhcH04eaTUxRAm/FYeg=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH 16/19] serial: samsung: Rename Exynos to lowercase
+Date:   Fri,  3 Jan 2020 18:11:28 +0100
+Message-Id: <20200103171131.9900-17-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200103171131.9900-1-krzk@kernel.org>
+References: <20200103171131.9900-1-krzk@kernel.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-devm_fwnode_get_gpiod_from_child() is going away as the name is too
-unwieldy, let's switch to using the new devm_fwnode_gpiod_get().
+Fix up inconsistent usage of upper and lowercase letters in "Exynos"
+name.
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+"EXYNOS" is not an abbreviation but a regular trademarked name.
+Therefore it should be written with lowercase letters starting with
+capital letter.
+
+The lowercase "Exynos" name is promoted by its manufacturer Samsung
+Electronics Co., Ltd., in advertisement materials and on website.
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/tty/serial/st-asc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/tty/serial/samsung_tty.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index fb6bbb5e22344..3a533a0f172bd 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -566,11 +566,11 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
- 			pinctrl_select_state(ascport->pinctrl,
- 					     ascport->states[NO_HW_FLOWCTRL]);
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 4762c74dbc35..73f951d65b93 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -2665,7 +2665,7 @@ OF_EARLYCON_DECLARE(s3c2440, "samsung,s3c2440-uart",
+ OF_EARLYCON_DECLARE(s3c6400, "samsung,s3c6400-uart",
+ 			s3c2440_early_console_setup);
  
--			gpiod = devm_fwnode_get_gpiod_from_child(port->dev,
--								 "rts",
--								 &np->fwnode,
--								 GPIOD_OUT_LOW,
--								 np->name);
-+			gpiod = devm_fwnode_gpiod_get(port->dev,
-+						      of_fwhandle_node(np),
-+						      "rts",
-+						      GPIOD_OUT_LOW,
-+						      np->name);
- 			if (!IS_ERR(gpiod))
- 				ascport->rts = gpiod;
- 		}
+-/* S5PV210, EXYNOS */
++/* S5PV210, Exynos */
+ static struct samsung_early_console_data s5pv210_early_console_data = {
+ 	.txfull_mask = S5PV210_UFSTAT_TXFULL,
+ };
 -- 
-2.24.1.735.g03f4e72817-goog
+2.17.1
 
-
--- 
-Dmitry
