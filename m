@@ -2,140 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A70132C67
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2020 18:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FF3132FE9
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2020 20:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728369AbgAGRCW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Jan 2020 12:02:22 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:36765 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728366AbgAGRCW (ORCPT
+        id S1728651AbgAGTyV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Jan 2020 14:54:21 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:38891 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728634AbgAGTyU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Jan 2020 12:02:22 -0500
-Received: by mail-qt1-f195.google.com with SMTP id q20so357701qtp.3
-        for <linux-serial@vger.kernel.org>; Tue, 07 Jan 2020 09:02:21 -0800 (PST)
+        Tue, 7 Jan 2020 14:54:20 -0500
+Received: by mail-ed1-f65.google.com with SMTP id i16so621372edr.5
+        for <linux-serial@vger.kernel.org>; Tue, 07 Jan 2020 11:54:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o8VDYNz3D8dzr8Paverc5SjU9MC05Ui8WU/rBztnqAI=;
-        b=HnbD9TgpM1gX8/yRRcibYGO3YaJoMfAeK9M7RCCQ0MlaLha3X6NaZSAWW3HgddClRb
-         n0qcgRfMHAYSdNg08AemgGd2qXtJtLTMOumHMhz+5a4acHL7osi0nrjKd3wRNdo3i4Ix
-         X/Z3F6AqBA+4Qt0LupTfAThBFaIGZpqMpEWjxy6Ps9eKd8Ur7scj6em3JSTDqOfdfhGG
-         uBDJSM+MRyFsqCzZMvt5HPR4WZ8E7eNDKTwW+TiZROg4Bd7ighfCaI4sP0Z6A8mI7B2c
-         xAIfHs2ji+odU9V+F9FZ5xtt8I+v2vLRgZHZxj74raQZh4XIuO0p4qmSxISS5x4QOOuG
-         JisA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
+         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
+         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
+         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
+         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
+         86YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o8VDYNz3D8dzr8Paverc5SjU9MC05Ui8WU/rBztnqAI=;
-        b=DpL3/eSgvUx8j20cLSBp9sjIQhg1YkYGk5sYPw4mUVFZsL4L/H6TITdTRQwfqdyzLJ
-         WJtmksGlpDhb6spbqi5MiifQAyRiGFbftgtTO0rfriXTzdiLjPPpWQu75d2Dl0ZKzOJP
-         RMVwtqmVaD+Wl9X2bVDCOoGJeR1Ro37a9iSnI4NQ3apr6bTQ7mB06/qdz6FY+bARIBsr
-         JTeqMxdbzRr514xm17AVq/T3E9UrdBOUB3rvmMj/syP1LmH6ix8/Ls0JxmJfs+X+UxmS
-         T9jvNnvGmgFabDa3jiT8EP7SDwMnSYQ9mN9Xkh9Hw8MybwWFtdBo5tQqaqPCTKp5S9FU
-         aQ6Q==
-X-Gm-Message-State: APjAAAXJOeIwag/dBg+J/PVUTX34mJMJiZqxG18gjy3g84ZGetaXbrZ8
-        7O+xcAGhJZwrZUJ+grwK6RI+yKkF7mQhBJk1otpT/A==
-X-Google-Smtp-Source: APXvYqzpUiVk7KT8Gp/mQaZeAy1KjNia+efSxzvYBnoxAmHInYKLRwGZcy/W2SG1L66erDvVET+jWUaqNY7zhusmYkY=
-X-Received: by 2002:ac8:71d7:: with SMTP id i23mr81437675qtp.50.1578416540765;
- Tue, 07 Jan 2020 09:02:20 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=HvTjLbG47v/BNnf1aNK6C4TYUPl5qBiOyKE2JWsSwPO4iyPPuSIBMenpVtt+W1050W
+         fUi1fBVw89ExViKXhoWf+t70GqKNBCdBrzn0vmes3nGfH3beUQuhE7/+idcw1FoBGHT3
+         OerBZXeLQAaZrD2/gnPSIIrrT96hfI6yh/cHHGsi5x+3BxRNm+MgzSCUYuuyAcnov7mE
+         DzD/w+ycfP1m4sziFJMwP0JyVskofPkR4dd8pU/uID3c6AJnAjHvdZ+uCc2bBYmlDOd1
+         NyHawv4CPjFQFWvDPgAl9c03jCsSr/OumLXGrgnTITaUBIMjbSGK6BdvqFRbnuIqooKr
+         uXbA==
+X-Gm-Message-State: APjAAAX2zbs2j8LaU7UjTlx2itYziuVJDgJs/IDYi0qvdspRu1HRbetg
+        qvBqssPopythRghfjTGWM0M+bejlhg6v537J5PE=
+X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
+X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
+ Tue, 07 Jan 2020 11:54:19 -0800 (PST)
 MIME-Version: 1.0
-References: <00000000000053539a0599173973@google.com> <20191212105701.GB1476206@kroah.com>
- <CACT4Y+ZeR=z-3CSXFazmngUhs9DqfxgZLKBNhzvfg49Nrw=EzA@mail.gmail.com>
- <20191213093357.GB2135612@kroah.com> <CACT4Y+beoeY9XwbQX7nDY_5EPMQwK+j3JZ9E-k6vhiZudEA1LA@mail.gmail.com>
- <20191213101021.GA2141429@kroah.com> <CACT4Y+ZW8oLfupDbQuk-Q-J=WtsXPEXTsqeZAPGhXXPu4gGrmg@mail.gmail.com>
- <20191213112648.GA2257852@kroah.com> <CACT4Y+aC+Phfj91wdWJPH+zKcHLXPXQE9Ycn--qKboFHPnMW+g@mail.gmail.com>
-In-Reply-To: <CACT4Y+aC+Phfj91wdWJPH+zKcHLXPXQE9Ycn--qKboFHPnMW+g@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 7 Jan 2020 18:02:09 +0100
-Message-ID: <CACT4Y+YigHSLOM-e1O0bxf_8D4jkM51jQW4ReWRZgcp9xfqp_w@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in mem_serial_out
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzbot <syzbot+f4f1e871965064ae689e@syzkaller.appspotmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        asierra@xes-inc.com, ext-kimmo.rautkoski@vaisala.com,
-        Jiri Slaby <jslaby@suse.com>,
-        kai heng feng <kai.heng.feng@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        mika.westerberg@linux.intel.com, o.barta89@gmail.com,
-        paulburton@kernel.org, sr@denx.de,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        yegorslists@googlemail.com
+Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
+ -0800 (PST)
+Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
+From:   "Dr. William Johnson" <currency1000000@gmail.com>
+Date:   Tue, 7 Jan 2020 20:54:18 +0100
+Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
+Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
+ worth $15.8Million US DOLLARS now.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 11:48 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Fri, Dec 13, 2019 at 10:48 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Dec 13, 2019 at 11:39:54AM +0100, Dmitry Vyukov wrote:
-> > > On Fri, Dec 13, 2019 at 11:10 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > > > > You set up a dubious memory base for your uart and then get upset when
-> > > > > > > > you write to that location.
-> > > > > > > >
-> > > > > > > > I don't know what to really do about this, this is a root-only operation
-> > > > > > > > and you are expected to know what you are doing when you attempt this.
-> > > > > > >
-> > > > > > > Hi Greg,
-> > > > > > >
-> > > > > > > Thanks for looking into this!
-> > > > > > > Should we restrict the fuzzer from accessing /dev/ttyS* entirely?
-> > > > > >
-> > > > > > No, not at all.
-> > > > > >
-> > > > > > > Or only restrict TIOCSSERIAL on them? Something else?
-> > > > > >
-> > > > > > Try running not as root.  if you have CAP_SYS_ADMIN you can do a lot of
-> > > > > > pretty bad things with tty ports, as you see here.  There's a reason the
-> > > > > > LOCKDOWN_TIOCSSERIAL "security lockdown" check was added :)
-> > > > > >
-> > > > > > The TIOCSSERIAL ioctl is a nice one for a lot of things that are able to
-> > > > > > be done as a normal user (baud rate changes, etc.), but there are also
-> > > > > > things like setting io port memory locations that can cause random
-> > > > > > hardware accesses and kernel crashes, as you instantly found out here :)
-> > > > > >
-> > > > > > So restrict the fuzzer to only run as a "normal" user of the serial
-> > > > > > port, and if you find problems there, I'll be glad to look at them.
-> > > > >
-> > > > > Easier said than done. "normal user of the serial port" is not really
-> > > > > a thing in Linux, right? You either have CAP_SYS_ADMIN or not, that's
-> > > > > not per-device...
-> > > >
-> > > > Not true, there's lots of users of serial port devices that do not have
-> > > > CAP_SYS_ADMIN set.  That's why we have groups :)
-> > > >
-> > > > You can change the baud rate of your usb-serial device without root
-> > > > permissions, right?  That's a "normal" user right there.
-> > >
-> > > Yes, but this requires dropping CAP_SYS_ADMIN. And one can't drop
-> > > CAP_SYS_ADMIN only for ttyS. If it would be a separate capability, we
-> > > could drop just that, but not CAP_SYS_ADMIN.
-> >
-> > Ok, I think we are talking past each other here.  I am saying that it is
-> > fine to talk to a serial port without CAP_SYS_ADMIN.  That should be
-> > "safe" and not cause bad things to happen.
-> >
-> > But if you do have CAP_SYS_ADMIN, you can do a lot more "bad" things
-> > with a serial port (like setting memory addresses).
-> >
-> > Your tool always has this capability, which is fine, but does not mean
-> > that serial port accesses by everyone has to have that capability, which
-> > is what I thought you were saying.
->
-> I mean that I don't see a realistic way to apply your "Try running not
-> as root" suggestion.
-> We can drop root, but that will dramatic effect on lots of other
-> things that has nothing to do with serial console.
-
-I've disabled testing of TIOCSSERIAL in syzkaller:
-https://github.com/google/syzkaller/commit/af9047c60a3db32d5e43c29321f8f531db051a63
-
-#syz invalid
+ATTN Dear Beneficiary.
+Goodnews
+I have Registered your Prepaid ATM Master Card
+worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
+to you today.
+So contact Dhl office New York to receive your Prepaid ATM Master Card
+worth $15.8Million US DOLLARS now.
+Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
+Email. dhlexpresscouriercompany.nyusa@gmail.com
+Call the office +(202) 890-8752
+Rec-Confirmed your mailing address to the office as I listed below.
+Your Full Name--------------
+House Address-----------
+Your working Phone Number----------------
+ID copy-------------------------
+Sex-----------------------------
+Note,delivery fee to your address is only $50.00. send it to this
+company urgent on itunes card today so that DHL will deliver this
+Prepaid ATM Master Card to you today according to our finally
+agreement.
+Thanks for coperations,
+Dr. William Johnson
