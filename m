@@ -2,98 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B55CA131B94
-	for <lists+linux-serial@lfdr.de>; Mon,  6 Jan 2020 23:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57117131CF9
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2020 02:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbgAFWit (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 Jan 2020 17:38:49 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35160 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726721AbgAFWit (ORCPT
+        id S1727363AbgAGBDR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 Jan 2020 20:03:17 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:36891 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727367AbgAGBDR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 Jan 2020 17:38:49 -0500
-Received: by mail-pg1-f194.google.com with SMTP id l24so27524988pgk.2;
-        Mon, 06 Jan 2020 14:38:49 -0800 (PST)
+        Mon, 6 Jan 2020 20:03:17 -0500
+Received: by mail-pj1-f65.google.com with SMTP id m13so8481129pjb.2
+        for <linux-serial@vger.kernel.org>; Mon, 06 Jan 2020 17:03:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=S1FEEE6cCiUhglrJpwPJZH4zxshLjsGK5hYscNFBnAI=;
-        b=sP0b+kqIgs0Wa01Ipe9vAxhjDci+QsIELt4Jxx3GKyj3kkoogjMroLTcTLoZGuzM06
-         mcW7i8waLEOVEIet/Ye76nn5octXd9nntk0g25HRxSNdHGDW1tnZ81JNY415TaFdos2D
-         MCOZQJikcAznKooB1G+TpbIcS9Z3ly1lH8XjbpetKzLOxgmrQUxlJvp3oeKbRkD2mvmW
-         oxQH7yi7x+Hs254uljZlC1GiLQ7ZmgeChjbceYlBRG2BP+qdI7p8836mThhJT3yqS0Vu
-         Q4MZ1yyewwbfkq37wEuYjld1cm824RztHw9m3lh+uwzu7tFa8g0DYsDV397O4TmdAs/k
-         5CbA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=UgFg1/ut7QmIumbn1uU+fVt69KUfyjkEA95WzaJYXK0=;
+        b=FQpBpE9ygbqx/N8KjD17p2R+ZIlx4O9I5XTpKq0lvNLP65RPv2ZCdaQ1WY6W6w07Pz
+         nPrQ0zPZ0iVq7G0F8XO872IPKa0MfnTdhNi1IaArRzoYJfHVAMSEmOZ91DDyh5xo318P
+         2dLr+WXhYDkmFbCwf/AzPGp1ByLJxT1zaKcTbJthK+8S1t++o4k7VtmJoBYFmsFhlJbw
+         12KGzBd6bagKaeeYhJ/NMOVhZ7vQXkXeyL0YeYKD/iCvkjEwWf2HPeFwr8HeZS2Pj6GY
+         Nzphvqy3kqCXveS9kb+/hpQKn45t2q4NaJlZ+/5HyAvhfeb8NuzV9NnevgwvRdUR9ssC
+         ed8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=S1FEEE6cCiUhglrJpwPJZH4zxshLjsGK5hYscNFBnAI=;
-        b=mI9jZzP3VXwe9O8d6GzL+SQtfsnfGA2UTpHLYyeRr1/FSVLVqGZAz84AMdZvPadLfx
-         UMZG2RMTRdj1wLg787DxatNjsxzQgUkSKxMdvxtcLcIMG8q9xvBKkgcSaOffE05MRRVX
-         uUPDqzRQlGSAMLe88toTZh4RuF3wYFRHHSA39mN0STHNXO/NeycWZGbt+s6RYcZChPVs
-         gieSOL63Bd9knAde7rTq7sOZOQN7s49mO5RIEM7Vg/uOik9iPQZ7XpykdAXnROhSC31d
-         x/Xockk32kcaFWh/dLtitUkNiZu0JSr3ezG/FSM9NkTwpCG20d3nYBvsFsSmPTJAMwrk
-         soSQ==
-X-Gm-Message-State: APjAAAVNIA6Ajm5w82rfv0EoJox0y6Zwsp+UB+oF3Z93Uy6cTHlhQZ80
-        EhxVOHQlqqsKrlYAg7Gs0y4FiVUp
-X-Google-Smtp-Source: APXvYqyYMmJhcA1k5o0TuMxSxjZ9wt+SVCos6N/y/ApdDFDvdAdsTi6M/W6N+SOmLCd5twlY4rfB9Q==
-X-Received: by 2002:a63:a508:: with SMTP id n8mr109588547pgf.278.1578350328970;
-        Mon, 06 Jan 2020 14:38:48 -0800 (PST)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id v8sm77416353pff.151.2020.01.06.14.38.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=UgFg1/ut7QmIumbn1uU+fVt69KUfyjkEA95WzaJYXK0=;
+        b=UFeQs3qmIGfxiz1l5Qfc08Zo/FUqcDjpOquWwcbg9nT1g6eCFvAzyiPbzNkm/SDSdA
+         VayrG7BeUqs0XT+jjdlPiVLvGBW9YDOW9b3aySVgvBvuhC79tNrfe7P4tWiguHwyZ2hi
+         umsQJ79pE/tKWqWgYxeTn1PYA+UmvgfGxCVSG0DsISHltLK2ZMDYLp42/u49wylTvyJ0
+         kKKMnoqsVHTyYqb5zxRsKWO6HY49KXIo0SssRy0+FSpucqdTNcKvsp5DNrNrqGgKgBhC
+         wOCnXDULZ6wW2Jag7K0/j18ZCajSW0VTp5ZYoMgRgDB2bLuY8Eem96c9JznlDXn4GMAz
+         u45A==
+X-Gm-Message-State: APjAAAVfho++cwMRN2Lck/T94w4aa1cyS7LJPVVk5h0nmilEC2soTfNa
+        ugV0QRMd3aRdAAVGYRedzp6N3A==
+X-Google-Smtp-Source: APXvYqxJUhj7mmU7o7z8CZx/SlWy4uSKMEdT7kW4bx36vqKVdtainUKGfO1+HyhEMarbxgKqDeMAzQ==
+X-Received: by 2002:a17:90a:8a8f:: with SMTP id x15mr46917582pjn.87.1578358996582;
+        Mon, 06 Jan 2020 17:03:16 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id d21sm25361304pjs.25.2020.01.06.17.03.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 14:38:48 -0800 (PST)
-Date:   Mon, 6 Jan 2020 14:38:46 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Patrice Chotard <patrice.chotard@st.com>,
-        Jiri Slaby <jslaby@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tty: st-asc: switch to using devm_gpiod_get()
-Message-ID: <20200106223846.GH8314@dtor-ws>
-References: <20200104202314.GA13591@dtor-ws>
- <20200106185816.GA597279@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200106185816.GA597279@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Mon, 06 Jan 2020 17:03:16 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>, Todd Kjos <tkjos@google.com>,
+        Alistair Delva <adelva@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
+Subject: [PATCH 1/2] tty: serial_core: Export uart_console_device so it can be used by modules
+Date:   Tue,  7 Jan 2020 01:03:10 +0000
+Message-Id: <20200107010311.58584-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jan 06, 2020 at 07:58:16PM +0100, Greg Kroah-Hartman wrote:
-> On Sat, Jan 04, 2020 at 12:23:14PM -0800, Dmitry Torokhov wrote:
-> > The node pointer in question is not a child node, but the node assigned
-> > to the port device itself, so we should not be using
-> > devm_fwnode_get_gpiod_from_child() [that is going away], but standard
-> > devm_gpiod_get().
-> > 
-> > To maintain the previous labeling we use gpiod_set_consumer_name() after
-> > we acquire the GPIO.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
-> >  drivers/tty/serial/st-asc.c | 12 +++++-------
-> >  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> What changed from v1 of this patch?  Please put that below the --- line
-> and versino your patches.
+In order to support serial console w/ SERIAL_QCOM_GENI=m,
+we need to export the uart_console_device() symbol so things
+will build
 
-I did not add a version or changelog because I believe this is
-essentially a different patch, with different justification and
-different API that is being used.
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Alistair Delva <adelva@google.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Amit Pundir <amit.pundir@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: linux-serial@vger.kernel.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+ drivers/tty/serial/serial_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-The first one was a simple switch to devm_fwnode_gpiod_get(), the new
-one is abandoning the use of explicit node reference, and instead uses
-standard devm_gpiod_get() to get a GPIO assigned to a device +
-gpiod_set_consumer_name() to maintain the naming.
-
-Thanks.
-
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 7c2782785736..7b87c08f5bcb 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2603,6 +2603,7 @@ struct tty_driver *uart_console_device(struct console *co, int *index)
+ 	*index = co->index;
+ 	return p->tty_driver;
+ }
++EXPORT_SYMBOL_GPL(uart_console_device);
+ 
+ static ssize_t uart_get_attr_uartclk(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
 -- 
-Dmitry
+2.17.1
+
