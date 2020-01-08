@@ -2,53 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FF3132FE9
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2020 20:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2019133E47
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Jan 2020 10:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728651AbgAGTyV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Jan 2020 14:54:21 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:38891 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728634AbgAGTyU (ORCPT
+        id S1727585AbgAHJZy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 8 Jan 2020 04:25:54 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:37539 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727200AbgAHJZy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Jan 2020 14:54:20 -0500
-Received: by mail-ed1-f65.google.com with SMTP id i16so621372edr.5
-        for <linux-serial@vger.kernel.org>; Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+        Wed, 8 Jan 2020 04:25:54 -0500
+Received: by mail-qt1-f193.google.com with SMTP id w47so2239598qtk.4
+        for <linux-serial@vger.kernel.org>; Wed, 08 Jan 2020 01:25:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
-         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
-         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
-         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
-         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
-         86YA==
+        bh=fRFOinAO4N9dX5DotLS7iFbJrG8nFqN9gCj1vzfuoVs=;
+        b=IG2cHFmUDWGpT8KPFqac8A4sivejZFJfIt6QMcXPxOZW6R0brJE6CwxelQcOwin5cU
+         aZZzdHA6Lav4aWPqFZwNeY4FZuLRDuSpFHK6NDOeH0x9noy7WINGU8PNyTI+tnFiv44O
+         95pzFl120cw4KAiyQIdCw47ydCewJLtIhGq3bkNpyeno2d7zLwswWRF9pVio2gyD3tKn
+         4glkamwMBGYZjBtPDD2U1XAcQl8uFRmWla7iUpqHdtaA/rfP6Le8R5EPE0uvoZNC6FoE
+         WbfOQ9APqMiWzV97aaUTDsaf/igrlSedJ+8VvVGW4TI/nwAsvD1FJLwvo+3IWj8uM1qD
+         pL+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=HvTjLbG47v/BNnf1aNK6C4TYUPl5qBiOyKE2JWsSwPO4iyPPuSIBMenpVtt+W1050W
-         fUi1fBVw89ExViKXhoWf+t70GqKNBCdBrzn0vmes3nGfH3beUQuhE7/+idcw1FoBGHT3
-         OerBZXeLQAaZrD2/gnPSIIrrT96hfI6yh/cHHGsi5x+3BxRNm+MgzSCUYuuyAcnov7mE
-         DzD/w+ycfP1m4sziFJMwP0JyVskofPkR4dd8pU/uID3c6AJnAjHvdZ+uCc2bBYmlDOd1
-         NyHawv4CPjFQFWvDPgAl9c03jCsSr/OumLXGrgnTITaUBIMjbSGK6BdvqFRbnuIqooKr
-         uXbA==
-X-Gm-Message-State: APjAAAX2zbs2j8LaU7UjTlx2itYziuVJDgJs/IDYi0qvdspRu1HRbetg
-        qvBqssPopythRghfjTGWM0M+bejlhg6v537J5PE=
-X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
-X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
- Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+        bh=fRFOinAO4N9dX5DotLS7iFbJrG8nFqN9gCj1vzfuoVs=;
+        b=nebHlaSXTRcnKwZ3exUI/WO0UkZqcZBENYaBkHy27zIER/h6YUOJbym7bCMQWi9dLV
+         HUcTv2Ov8qsoApVEnUPng66KBd1JkzAld5FZ+BWArgngo3fJ0YIM2sQcJCdDaQdkOv7T
+         zVsKspz7X302SFmEQ5I2NdKNqDNzbIJImcT/pwbiVwnWdZbdhpmBDUFaBYomZc8A7dl/
+         usXI2XYjwkv7OrK6hAI+OEmhE4GGhBerfClj5YDM2Oyqnpd3K5GhYVL/hmPp+0fGg40X
+         WaFqIjk7bmJAUcKjnJ9lyKWZiN4pjRHsTdatjcsJW5+QQj4gu0xxpY4TuqxsR74K/NCa
+         yt6A==
+X-Gm-Message-State: APjAAAXvv6dN0lUug/zofyR99dWedcg9r4BKFVv7c2DNVy536PnjDuK6
+        0CDYOFd//MR8nWYUDV7uv4T4Z7poPTbv61oLSzk=
+X-Google-Smtp-Source: APXvYqy/PeQPtRVyvs0Fl6HMnG7XUtNQp/h6QPr1WuJo1J4ZZqd6zf4MoE0Dx/AYAsKISH8oF+JgzcSDeMNnD6GU8hc=
+X-Received: by 2002:ac8:7b4f:: with SMTP id m15mr2785652qtu.48.1578475553536;
+ Wed, 08 Jan 2020 01:25:53 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
+Received: by 2002:a05:6214:2a9:0:0:0:0 with HTTP; Wed, 8 Jan 2020 01:25:53
  -0800 (PST)
-Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
-From:   "Dr. William Johnson" <currency1000000@gmail.com>
-Date:   Tue, 7 Jan 2020 20:54:18 +0100
-Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
-Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
- worth $15.8Million US DOLLARS now.
+Reply-To: kone.compaore20@gmail.com
+From:   Kone Compaore <abbttnbn10@gmail.com>
+Date:   Wed, 8 Jan 2020 01:25:53 -0800
+Message-ID: <CAG2DQwJWSSCjPCcJ2=ac+tXspgZB9jZAykFLpr=4EO4dj9KhLA@mail.gmail.com>
+Subject: Greetings from Kone
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
@@ -56,25 +55,44 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ATTN Dear Beneficiary.
-Goodnews
-I have Registered your Prepaid ATM Master Card
-worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
-to you today.
-So contact Dhl office New York to receive your Prepaid ATM Master Card
-worth $15.8Million US DOLLARS now.
-Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
-Email. dhlexpresscouriercompany.nyusa@gmail.com
-Call the office +(202) 890-8752
-Rec-Confirmed your mailing address to the office as I listed below.
-Your Full Name--------------
-House Address-----------
-Your working Phone Number----------------
-ID copy-------------------------
-Sex-----------------------------
-Note,delivery fee to your address is only $50.00. send it to this
-company urgent on itunes card today so that DHL will deliver this
-Prepaid ATM Master Card to you today according to our finally
-agreement.
-Thanks for coperations,
-Dr. William Johnson
+Greetings to you and your family.
+
+My name is Mr. Kone Compaore, the director general with the bank,
+Africa Develop bank (ADB) Ouagadougou, Burkina Faso, in West Africa. I
+am contacting you to seek our honesty and sincere cooperation in
+confidential manner to transfer the sum of 10.5 (Ten million five
+hundred thousand Dollars) to your existing or new bank account.
+
+This money belongs to one of our bank client, a Libyan oil exporter
+who was working with the former Libyan government; I learn t that he
+was killed by the revolutionary forces since October 2011. Our bank is
+planning to transfer this entire fund into the government public
+treasury as unclaimed fund if nobody comes to claim the money from our
+bank after four years without account activities .
+
+We did not know each other before, but due to the fact that the
+deceased is a foreigner, the bank will welcome any claim from a
+foreigner without any suspect, that is why I decided to look for
+someone whim I can trust to come and claim the fund from our bank.
+
+I will endorse your name in the deceased client file here in my office
+which will indicate to that the deceased is your legal joint account
+business partner or family member next of kin to the deceased and
+officially the bank will transfer the fund to your bank account within
+seven working days in accordance to our banking inheritance rules and
+fund claim regulation.
+
+I will share 40% for you and 60% for me after the fund is transferred
+to your bank account, we need to act fast to complete this transaction
+within seven days. I will come to your country to collect my share
+after the fund is transferred to your bank account in your country. I
+hope that you will not disappoint me after the fund is transferred to
+your bank account in your country.
+
+Please I want you to send me your private phone number so that I can
+call you to discuss more details on how we can proceed on this project
+
+Waiting for your urgent response today
+Yours sincerely
+
+Kone Compaore
