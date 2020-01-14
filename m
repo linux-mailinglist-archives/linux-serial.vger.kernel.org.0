@@ -2,32 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7639B13B118
+	by mail.lfdr.de (Postfix) with ESMTP id 0347813B117
 	for <lists+linux-serial@lfdr.de>; Tue, 14 Jan 2020 18:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbgANRhI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 Jan 2020 12:37:08 -0500
-Received: from smtprelay0045.hostedemail.com ([216.40.44.45]:42062 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726270AbgANRhH (ORCPT
+        id S1728882AbgANRhF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 Jan 2020 12:37:05 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41109 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728880AbgANRhE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 Jan 2020 12:37:07 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 2813D182CF665;
-        Tue, 14 Jan 2020 17:37:06 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:355:379:599:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:2896:3138:3139:3140:3141:3142:3350:3622:3865:3867:3870:3871:3872:3874:4321:5007:10004:10400:10848:11232:11658:11914:12296:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30029:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: cent53_3dc9e911f6f34
-X-Filterd-Recvd-Size: 1584
-Received: from XPS-9350.home (unknown [47.151.135.224])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 14 Jan 2020 17:37:04 +0000 (UTC)
-Message-ID: <e1b3cccb0814ba4b0c99592715776ed48f343795.camel@perches.com>
-Subject: Re: [PATCHv2-next 3/3] serial_core: Remove unused member in
- uart_port
-From:   Joe Perches <joe@perches.com>
-To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org
+        Tue, 14 Jan 2020 12:37:04 -0500
+Received: by mail-pg1-f193.google.com with SMTP id x8so6705582pgk.8
+        for <linux-serial@vger.kernel.org>; Tue, 14 Jan 2020 09:37:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=googlenew;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EC1V31kkUKO1e4THTwUpln5DsH8XNb9uCr/r/2oHaQg=;
+        b=foRWn/SxPpwzIYpPv9YpeG9HklGuam9AgV1o5mwQsvaYNVZJ8JxscJsD7TgVtkbQob
+         oRlJfldyaUDAJdT3dKT75Hb9FuALBQMR4mgZUCpHxptwaK6YPnezeRhYMO0JlZCOA+X9
+         TgbTcUIKzmtIO7/aLb5aPmJ4MMyoGS3nicS8HxyAQAJDNEh03y4LWuuG5mzqFblUr5Oo
+         vxCvNyYHDUu4/33/3Nb+XPCa62GAN7cG1NsYjuH0WsWPpBWpsLOY7n6iwdsaXy1EIhCI
+         KE+O9mWenc4TyeytPTsn2vW4RTofbvX0t6XJIkqfvyAyMfqYtZKgUaD3AAONtpynBVYR
+         a8Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EC1V31kkUKO1e4THTwUpln5DsH8XNb9uCr/r/2oHaQg=;
+        b=ZCdjtPJOpOEE00lBrba1aoQipiQNHX9pRweP3P1EPqxYcivKOVT0dMgDWVgmh+QHOr
+         z0ki0IQZHRlAfnKEdt5aITeU6Z6WywMbAxePAVYAWqglk2Lm3dtMpkGBpdsi7SJYKZPa
+         VG/lg7tKHxsAhkuM5Fs+EtckricLh/rYLdPbLXu9ApssI5KJoG5N/0IBXobf5iJ27zSG
+         vguigwcOLa7BGLtSMhrVsb1d3g57H/jrWvjtoNhNl5IFWzRKpV6H4qyqtOkGdNfyTd0V
+         CKycS/H7jO6rX3m6Sd7+7J812ApHG6Pca6aZKLL9h74ZFSskseKUPk+FVDX2VedpwNsf
+         AfjA==
+X-Gm-Message-State: APjAAAWgm82FruFMAU7fITS8yHAMF/qpPvr2iCPJqyu/e/FvNyesu2Lo
+        Ep7ioGPkcVcTk/TzpsehjOdKhg==
+X-Google-Smtp-Source: APXvYqyzpnXWDZlOjta8/q0rFUjicssGmDGoJZEC4U64CAy+P3MaBYClXvzSbj7vwaK72Y0QxRVj4Q==
+X-Received: by 2002:a62:b508:: with SMTP id y8mr26409909pfe.251.1579023423632;
+        Tue, 14 Jan 2020 09:37:03 -0800 (PST)
+Received: from [10.83.36.153] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id z11sm19621730pfk.96.2020.01.14.09.37.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jan 2020 09:37:02 -0800 (PST)
+Subject: Re: [PATCHv2-next 2/3] serial/sysrq: Add MAGIC_SYSRQ_SERIAL_SEQUENCE
+To:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
 Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Iurii Zaikin <yzaikin@google.com>,
@@ -35,32 +55,65 @@ Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Vasiliy Khoruzhick <vasilykh@arista.com>,
         linux-serial@vger.kernel.org
-Date:   Tue, 14 Jan 2020 09:36:09 -0800
-In-Reply-To: <20200114171912.261787-4-dima@arista.com>
 References: <20200114171912.261787-1-dima@arista.com>
-         <20200114171912.261787-4-dima@arista.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+ <20200114171912.261787-3-dima@arista.com>
+ <24455cb643415cf9379bb8343525b844ead4236b.camel@perches.com>
+From:   Dmitry Safonov <dima@arista.com>
+Message-ID: <a8d1a5df-8c72-049f-3bb4-5fae0166d760@arista.com>
+Date:   Tue, 14 Jan 2020 17:36:59 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <24455cb643415cf9379bb8343525b844ead4236b.camel@perches.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 2020-01-14 at 17:19 +0000, Dmitry Safonov wrote:
-> It should remove the align-padding before @name.
-[]
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-[]
-> @@ -247,7 +247,6 @@ struct uart_port {
->  
->  	unsigned char		hub6;			/* this should be in the 8250 driver */
->  	unsigned char		suspended;
-> -	unsigned char		unused;
+Hi Joe,
 
-I suggest this not be applied as this is just to let
-readers know that there is an unused 1 byte alignment
-hole here that could be used for something else.
+On 1/14/20 5:30 PM, Joe Perches wrote:
+> On Tue, 2020-01-14 at 17:19 +0000, Dmitry Safonov wrote:
+>> Many embedded boards have a disconnected TTL level serial which can
+>> generate some garbage that can lead to spurious false sysrq detects.
+> 
+> Hi again Dmitry.  trivia:
+> 
+>> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> []
+>> +/**
+>> + *	uart_try_toggle_sysrq - Enables SysRq from serial line
+>> + *	@port: uart_port structure where char(s) after BREAK met
+>> + *	@ch: new character in the sequence after received BREAK
+>> + *
+>> + *	Enables magic SysRq when the required sequence is met on port
+>> + *	(see CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE).
+>> + *
+>> + *	Returns 0 if @ch is out of enabling sequence and should be
+>> + *	handled some other way, 1 if @ch was consumed.
+>> + */
+> 
+> Normally bool functions return values are true/false not 1/0.
 
+I agree. Though, somehow it seems to me that `return 1` is a bit closer
+to "one character consumed" than "return true".
+Again, no hard feelings, just a preference.
+I can change those returns to bools if you insist :)
 
+> 
+>> +static bool uart_try_toggle_sysrq(struct uart_port *port, unsigned int ch)
+>> +{
+>> +	if (ARRAY_SIZE(sysrq_toggle_seq) <= 1)
+>> +		return 0;
+> 
+> 		return false;
+> 
+> etc...
+> 
+> 
+
+Thanks,
+          Dmitry
