@@ -2,27 +2,27 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0179E13DABB
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Jan 2020 13:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFD013DB07
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Jan 2020 14:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726160AbgAPM6m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Jan 2020 07:58:42 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58406 "EHLO mx2.suse.de"
+        id S1726329AbgAPNC3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Jan 2020 08:02:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33050 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726018AbgAPM6m (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Jan 2020 07:58:42 -0500
+        id S1726018AbgAPNC3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Jan 2020 08:02:29 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1BA46B514;
-        Thu, 16 Jan 2020 12:58:39 +0000 (UTC)
-Subject: Re: [PATCH 3/6] serial: 8250_bcm2835aux: Suppress register_port error
- on -EPROBE_DEFER
+        by mx2.suse.de (Postfix) with ESMTP id 731C9B001;
+        Thu, 16 Jan 2020 13:02:26 +0000 (UTC)
+Subject: Re: [PATCH 6/6] serial: 8250_bcm2835aux: Document struct
+ bcm2835aux_data
 To:     Lukas Wunner <lukas@wunner.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-rpi-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
         Jiri Slaby <jslaby@suse.com>
 References: <cover.1579175223.git.lukas@wunner.de>
- <6aea0eacf3bfa73fe2d81082cc723265413410c8.1579175223.git.lukas@wunner.de>
+ <aea363c27fd541dba96d2ebfeee4f596c6d34932.1579175223.git.lukas@wunner.de>
 From:   Matthias Brugger <mbrugger@suse.com>
 Autocrypt: addr=mbrugger@suse.com; prefer-encrypt=mutual; keydata=
  mQINBFP1zgUBEAC21D6hk7//0kOmsUrE3eZ55kjc9DmFPKIz6l4NggqwQjBNRHIMh04BbCMY
@@ -98,12 +98,12 @@ Autocrypt: addr=mbrugger@suse.com; prefer-encrypt=mutual; keydata=
  UHUEIsTwPWs2Q87k7vjYyrcyAOarX2X5pvMQvpAMADGf2Z3wrCsDdG25w2HztweUNd9QEprt
  JG8GNNzMOD4cQ82Ta7eGvPWPeXauWJDLVR9jHtWT9Ot3BQgmApLxACvwvD1a69jaFKov28SP
  HxUCQ9Y1Y/Ct
-Message-ID: <2c4eb91b-cf1d-b89a-90dc-2ef10d60e40d@suse.com>
-Date:   Thu, 16 Jan 2020 13:58:38 +0100
+Message-ID: <38e446cd-a04f-6f20-3368-7a386d331930@suse.com>
+Date:   Thu, 16 Jan 2020 14:02:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <6aea0eacf3bfa73fe2d81082cc723265413410c8.1579175223.git.lukas@wunner.de>
+In-Reply-To: <aea363c27fd541dba96d2ebfeee4f596c6d34932.1579175223.git.lukas@wunner.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -115,31 +115,31 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 
 On 16/01/2020 13:14, Lukas Wunner wrote:
-> Suppress a gratuitous error message if serial8250_register_8250_port()
-> returns -EPROBE_DEFER.
+> Document the driver private data of the BCM2835 auxiliary UART so that
+> upcoming commits may add further members with proper kerneldoc.
 > 
 > Signed-off-by: Lukas Wunner <lukas@wunner.de>
 
 Reviewed-by: Matthias Brugger <mbrugger@suse.com>
 
 > ---
->  drivers/tty/serial/8250/8250_bcm2835aux.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/tty/serial/8250/8250_bcm2835aux.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 > diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
-> index 33da68341c3a..fb850d0ad643 100644
+> index d21460c9ef4b..e70e3cc30050 100644
 > --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
 > +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
-> @@ -95,8 +95,9 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
->  	/* register the port */
->  	ret = serial8250_register_8250_port(&data->uart);
->  	if (ret < 0) {
-> -		dev_err(&pdev->dev, "unable to register 8250 port - %d\n",
-> -			ret);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(&pdev->dev,
-> +				"unable to register 8250 port - %d\n", ret);
->  		goto dis_clk;
->  	}
->  	data->line = ret;
+> @@ -16,6 +16,11 @@
+>  
+>  #include "8250.h"
+>  
+> +/**
+> + * struct bcm2835aux_data - driver private data of BCM2835 auxiliary UART
+> + * @clk: clock producer of the port's uartclk
+> + * @line: index of the port's serial8250_ports[] entry
+> + */
+>  struct bcm2835aux_data {
+>  	struct clk *clk;
+>  	int line;
 > 
