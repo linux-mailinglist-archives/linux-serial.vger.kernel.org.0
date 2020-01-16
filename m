@@ -2,40 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A711A13E845
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Jan 2020 18:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FABC13EB07
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Jan 2020 18:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404745AbgAPRbU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Jan 2020 12:31:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44472 "EHLO mail.kernel.org"
+        id S2406797AbgAPRqs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Jan 2020 12:46:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39884 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404713AbgAPRbT (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:31:19 -0500
+        id S2406792AbgAPRqs (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:46:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C64FC246CC;
-        Thu, 16 Jan 2020 17:31:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3D4E246D3;
+        Thu, 16 Jan 2020 17:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195878;
-        bh=rNEdYtx4AyblOlb0zrQkR8wIdxh7NLZf6zh2ptUtJ2E=;
+        s=default; t=1579196807;
+        bh=r2LL/2/2lUsullAeDJ8187zMNzBeZGcVFifgpmuK+S8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xsW8TlTIiezsK3Zkn0iXsaLfL4kOnc7io+STR0hFNuU3JWwPEjWyB6hqSxCmsxmuC
-         +BDHtiuuNvUglHOp0oNAOlASL5g4KvKyJIG0Lf8BFv3zoS3gvCOk+yTnvDPW9zKoAk
-         vW9RXcizy7lm46ydgFwdenp4kEMepYiAWU0Fv0Mc=
+        b=WmIlgMsN2+cAKHzFPeKG6Opk8RHvQ3k18dVHxFNGVUAESBRqtIMvauWm+8L/bVuZ5
+         qd19DPnA8WKMVbjQyIhb6ji2gV+PAGsDiWeWbkRHGuc4OHYooZ/MBr1T/RbUXhJZlw
+         rGlAC9LNGfnSzBAmoE0msozW73Z66AUUHUc7CWR0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fabrice Gasnier <fabrice.gasnier@st.com>,
+Cc:     Peng Fan <peng.fan@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 371/371] serial: stm32: fix clearing interrupt error flags
-Date:   Thu, 16 Jan 2020 12:24:03 -0500
-Message-Id: <20200116172403.18149-314-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 165/174] tty: serial: imx: use the sg count from dma_map_sg
+Date:   Thu, 16 Jan 2020 12:42:42 -0500
+Message-Id: <20200116174251.24326-165-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
+References: <20200116174251.24326-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,50 +44,36 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Fabrice Gasnier <fabrice.gasnier@st.com>
+From: Peng Fan <peng.fan@nxp.com>
 
-[ Upstream commit 1250ed7114a977cdc2a67a0c09d6cdda63970eb9 ]
+[ Upstream commit 596fd8dffb745afcebc0ec6968e17fe29f02044c ]
 
-The interrupt clear flag register is a "write 1 to clear" register.
-So, only writing ones allows to clear flags:
-- Replace buggy stm32_clr_bits() by a simple write to clear error flags
-- Replace useless read/modify/write stm32_set_bits() routine by a
-  simple write to clear TC (transfer complete) flag.
+The dmaengine_prep_slave_sg needs to use sg count returned
+by dma_map_sg, not use sport->dma_tx_nents, because the return
+value of dma_map_sg is not always same with "nents".
 
-Fixes: 4f01d833fdcd ("serial: stm32: fix rx error handling")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1574323849-1909-1-git-send-email-fabrice.gasnier@st.com
+Fixes: b4cdc8f61beb ("serial: imx: add DMA support for imx6q")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/1573108875-26530-1-git-send-email-peng.fan@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/stm32-usart.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serial/imx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index f8f3f8fafd9f..1e854e1851fb 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -132,8 +132,8 @@ static void stm32_receive_chars(struct uart_port *port, bool threaded)
- 		 * cleared by the sequence [read SR - read DR].
- 		 */
- 		if ((sr & USART_SR_ERR_MASK) && ofs->icr != UNDEF_REG)
--			stm32_clr_bits(port, ofs->icr, USART_ICR_ORECF |
--				       USART_ICR_PECF | USART_ICR_FECF);
-+			writel_relaxed(sr & USART_SR_ERR_MASK,
-+				       port->membase + ofs->icr);
- 
- 		c = stm32_get_char(port, &sr, &stm32_port->last_res);
- 		port->icount.rx++;
-@@ -302,7 +302,7 @@ static void stm32_transmit_chars(struct uart_port *port)
- 	if (ofs->icr == UNDEF_REG)
- 		stm32_clr_bits(port, ofs->isr, USART_SR_TC);
- 	else
--		stm32_set_bits(port, ofs->icr, USART_ICR_TCCF);
-+		writel_relaxed(USART_ICR_TCCF, port->membase + ofs->icr);
- 
- 	if (stm32_port->tx_ch)
- 		stm32_transmit_chars_dma(port);
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index d607cb2eb64e..b59d0dafefab 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -545,7 +545,7 @@ static void imx_dma_tx(struct imx_port *sport)
+ 		dev_err(dev, "DMA mapping error for TX.\n");
+ 		return;
+ 	}
+-	desc = dmaengine_prep_slave_sg(chan, sgl, sport->dma_tx_nents,
++	desc = dmaengine_prep_slave_sg(chan, sgl, ret,
+ 					DMA_MEM_TO_DEV, DMA_PREP_INTERRUPT);
+ 	if (!desc) {
+ 		dma_unmap_sg(dev, sgl, sport->dma_tx_nents,
 -- 
 2.20.1
 
