@@ -2,109 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A48613F91B
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Jan 2020 20:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E811400FB
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Jan 2020 01:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730782AbgAPQxV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Jan 2020 11:53:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37184 "EHLO mail.kernel.org"
+        id S1731036AbgAQAcF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Jan 2020 19:32:05 -0500
+Received: from mail.prewas.sk ([212.5.209.170]:49349 "EHLO mail.prewas.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730774AbgAPQxV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:53:21 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 094392176D;
-        Thu, 16 Jan 2020 16:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193600;
-        bh=v75bXRMSKTL3NICTqvXximu6+JREaJsiI69ut9tXW18=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=smcTOp4RAgHBixHFooBJP8ZFA7l8DzLzcr3eW5wUWWcjweUiqmqB22zQDMpHjebTu
-         SE4qzyB9MVMxqjYI1Ax7sjBfOk76DK06AqIRWNKX8BcLdS7rzad+wn8Qx0srVw+4Vq
-         hXzZsf+GQISr9hEuZfd3RT+usmHGWLSLr8UwZF+0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 139/205] tty: serial: pch_uart: correct usage of dma_unmap_sg
-Date:   Thu, 16 Jan 2020 11:41:54 -0500
-Message-Id: <20200116164300.6705-139-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
+        id S1730487AbgAQAcF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Jan 2020 19:32:05 -0500
+dkim-signature: v=1; a=rsa-sha256; d=3ksolutions.sk; s=mail.prewas.sk;
+        c=relaxed/relaxed; q=dns/txt; h=From:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:References;
+        bh=/ufg4YOpQeSX7cHfO6yjVhqqe1zoV2RAyfuHFpGADIk=;
+        b=TkBU61dQOLsmC1C6opABH7EfcFHApUscqlJRZ39KvqiJMLdBy9gZAcE1Jim9nPqJMBop8CDciT17nbvKUTjAaPGQVBkeOAcNkSm2lF5k7G9hD+S96I29nZtl+3XbufAcC2vuyJQAxQvUkqZOYv4ApGF9pySPSF6LJ94NhTgQs3uGkjAjuQ5qt9+dyyWBGsO8ehklAECOExbDLkIy7E3NuzSGzh93eZT8oP7mkDGdy/JuhapHCOVtnG6+N1
+        /rt7Q4IOKZLWWek0HAN6zJdQPny+zwD9TRd4pedc4+q++gVvCOqeoZWij0TIOsocFbnihgdfGmaXp3YF/kfLKe6Ghb2w==
+Received: from [10.0.1.61] (pcfilo.vital.sk [10.0.1.61])
+        by mail.prewas.sk with ESMTPSA
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128)
+        ; Fri, 17 Jan 2020 01:31:48 +0100
+Subject: Re: [PATCH] tty: serial: amba-pl011: added RS485 support
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Eric Anholt <eric@anholt.net>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20200106235203.27256-1-sistik@3ksolutions.sk>
+ <20200107072748.GA1014453@kroah.com>
+From:   "Ivan Sistik - 3K Solutions, s. r. o." <sistik@3ksolutions.sk>
+Message-ID: <f6deeb06-39b7-f140-c6bd-c977c5ad2b5a@3ksolutions.sk>
+Date:   Fri, 17 Jan 2020 01:31:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200107072748.GA1014453@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On 7. 1. 2020 at 8:27 Greg Kroah-Hartman wrote:
 
-[ Upstream commit 74887542fdcc92ad06a48c0cca17cdf09fc8aa00 ]
+>> +config SERIAL_AMBA_PL011_SOFT_RS485
+>> +	bool "RS485 software direction switching for ARM AMBA PL011 serial"
+>> +	depends on SERIAL_AMBA_PL011=y
+> 
+> Why "=y" here?  Shouldn't this just read:
+> 	depends on SERIAL_AMBA_PL011?
+> 
+>> +	select SERIAL_CORE
+> 
+> Is this needed?  SERIAL_AMBA_PL011 already selects this.
 
-Per Documentation/DMA-API-HOWTO.txt,
-To unmap a scatterlist, just call:
-	dma_unmap_sg(dev, sglist, nents, direction);
+I am not sure. I found this few lines above:
 
-.. note::
+> config SERIAL_AMBA_PL010_CONSOLE
+> 	bool "Support for console on AMBA serial port"
+> 	depends on SERIAL_AMBA_PL010=y
+> 	select SERIAL_CORE_CONSOLE
 
-	The 'nents' argument to the dma_unmap_sg call must be
-	the _same_ one you passed into the dma_map_sg call,
-	it should _NOT_ be the 'count' value _returned_ from the
-	dma_map_sg call.
+and modified it for my purpose.
 
-However in the driver, priv->nent is directly assigned with value
-returned from dma_map_sg, and dma_unmap_sg use priv->nent for unmap,
-this breaks the API usage.
 
-So introduce a new entry orig_nent to remember 'nents'.
+Thanks,
 
-Fixes: da3564ee027e ("pch_uart: add multi-scatter processing")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
-Link: https://lore.kernel.org/r/1573623259-6339-1-git-send-email-peng.fan@nxp.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/pch_uart.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index 6157213a8359..c16234bca78f 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -233,6 +233,7 @@ struct eg20t_port {
- 	struct dma_chan			*chan_rx;
- 	struct scatterlist		*sg_tx_p;
- 	int				nent;
-+	int				orig_nent;
- 	struct scatterlist		sg_rx;
- 	int				tx_dma_use;
- 	void				*rx_buf_virt;
-@@ -787,9 +788,10 @@ static void pch_dma_tx_complete(void *arg)
- 	}
- 	xmit->tail &= UART_XMIT_SIZE - 1;
- 	async_tx_ack(priv->desc_tx);
--	dma_unmap_sg(port->dev, sg, priv->nent, DMA_TO_DEVICE);
-+	dma_unmap_sg(port->dev, sg, priv->orig_nent, DMA_TO_DEVICE);
- 	priv->tx_dma_use = 0;
- 	priv->nent = 0;
-+	priv->orig_nent = 0;
- 	kfree(priv->sg_tx_p);
- 	pch_uart_hal_enable_interrupt(priv, PCH_UART_HAL_TX_INT);
- }
-@@ -1010,6 +1012,7 @@ static unsigned int dma_handle_tx(struct eg20t_port *priv)
- 		dev_err(priv->port.dev, "%s:dma_map_sg Failed\n", __func__);
- 		return 0;
- 	}
-+	priv->orig_nent = num;
- 	priv->nent = nent;
- 
- 	for (i = 0; i < nent; i++, sg++) {
--- 
-2.20.1
+Ivan
 
