@@ -2,63 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C656D141F58
-	for <lists+linux-serial@lfdr.de>; Sun, 19 Jan 2020 19:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5201422FC
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Jan 2020 07:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbgASSoU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:20 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:44889 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727243AbgASSoT (ORCPT
+        id S1725788AbgATGGX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Jan 2020 01:06:23 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:32932 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgATGGX (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 19 Jan 2020 13:44:19 -0500
-Received: by mail-il1-f194.google.com with SMTP id z12so25472728iln.11
-        for <linux-serial@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        Mon, 20 Jan 2020 01:06:23 -0500
+Received: by mail-lj1-f193.google.com with SMTP id y6so32572778lji.0;
+        Sun, 19 Jan 2020 22:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
-         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
-         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
-         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
-         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
-         Gp1A==
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=W1JIXHfXLk3MBN8q4UB67xLKe5M2gcb3jjoZNOy3eF0=;
+        b=qL9ZWFcf+4HeLzNH7LM35cH3xyLKfqouiP0N7ADEgLutGwj/F6KgEPYH0qxNILY4e9
+         u8oUU+gmeU8UrHuv0mdsVczsqjGHpAjuwHGwvxuMWUpw9M6XjAYKTUSkMR477Wkzldio
+         /egzxQq5zQtt3T8qlGCm9bWX5mPW01QOWMfKERZCk8aVaVpdzpl7bOEqh7xskuplJGig
+         kNMluUCW6WOc1jntYPZK5TsuprW0c+xDDIRa6b2uw5pKkTnc4RcdR8Ib0bRc++9xAJa4
+         pGUM1Xl0mFvqXvKE9iwC9cSQ6vlxiJGsLsRcM6XKG6Iamc0TVmgNBqjRO6+FN0q8FjDA
+         8QRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=qY37owPH5CVVHn8tJGUt1TU+s0ac+5B4+A63T8d+wQQD3BRg5JpOp7GaNDZS2+CL01
-         bKIFHi+XpqIsRDLpUwTnI3p/pGEKy6RaFC3XEP2GtIupdsN3GvBNKzzEUMDmPMG16u0d
-         GW8wUvpsb2XQP9/r1TjGLZ3Ee2KhJOigOWwygYLIYzO6gG2Wm/RdIUljfRs3YbfhUHS+
-         9XLXoSlx/jYxGmGj6gVvo1yLbiG/6rbhA0El1BKIWvZA062URXOdNE1d6yk5vlF/QopB
-         UIO9TzCzHeXG9ymyJjzlfhyid8g5a5IraDnru2MAfrLFNzcu8b0YN0BpbmzBbqvwHRL2
-         lLHQ==
-X-Gm-Message-State: APjAAAUnCbzoh0CpGkgz+2gDniHO3U3Y/sqVIHBWPII3W4/v4qfyRbgh
-        hyi+XF9MzvzABgL81S3t77yFUrlQ5mxuqgLyVsM=
-X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
-X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
- Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=W1JIXHfXLk3MBN8q4UB67xLKe5M2gcb3jjoZNOy3eF0=;
+        b=SIIaRwGSL0eTEtnbFeaZvA2Lt1G/jD63XTM7mgMIbeC70myIZgHLfvBbwzMw2Z1QxV
+         cfEq+nZF6cd95AvJpE8bvWMlVo8cvmJTTVos3KHmBw8sCm7Bea5UhE7RGI8HB7o3Lh87
+         I3tkqhHS2GIlCJcuxFwyZ/d6umFx8msow3HMIWrEId1FNR5ejJ49WFhGq2TpC14rdsre
+         D6SOVOjNOgNnjbn3L3a0n8zFKd792YJ9JITFfBTfweTSTYnVSHa3vGOiRE2Fzpom9nyk
+         8DyTpzdHaw4Ri3YpLKEN8WPcr8U+0w+f0heZqddzsoQFHHeG+3bzJwWWgThnXEjujjqL
+         miwg==
+X-Gm-Message-State: APjAAAWVow6gI/O84rbGehpurjHMkbqFCSSj4b9Yux8v5UWP7esmvhmV
+        z8SXaBGznJpHabG9wkea5AGDSIrL
+X-Google-Smtp-Source: APXvYqzb7u+VwESHZIjk53+KBPWZ4kZVTJDCITTX6FCnpS8abU6CP4IJMxROoyBdDTL1aZEQHvCn5Q==
+X-Received: by 2002:a2e:918c:: with SMTP id f12mr12845605ljg.66.1579500380449;
+        Sun, 19 Jan 2020 22:06:20 -0800 (PST)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id t1sm16092908lji.98.2020.01.19.22.06.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 Jan 2020 22:06:19 -0800 (PST)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
+References: <87pnfi8xc2.fsf@osv.gnss.ru> <20200117203414.GA11783@qmqm.qmqm.pl>
+Date:   Mon, 20 Jan 2020 09:06:18 +0300
+In-Reply-To: <20200117203414.GA11783@qmqm.qmqm.pl> (=?utf-8?Q?=22Micha?=
+ =?utf-8?Q?=C5=82_Miros=C5=82aw=22's?=
+        message of "Fri, 17 Jan 2020 21:34:14 +0100")
+Message-ID: <87sgkak6g5.fsf@osv.gnss.ru>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:18 +0000
-Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+Michał Mirosław <mirq-linux@rere.qmqm.pl> writes:
+
+> On Fri, Jan 17, 2020 at 08:29:33AM +0300, Sergey Organov wrote:
+> [...]
+>> NOTE: current version of the driver leaks data from one connection to
+>> another through its internal circular buffer. It might be a good idea
+>> to clear the buffer on open/close/connect/disconnect, in which case
+>> the problem this patch solves would have been fixed in a different
+>> manner. However, not only that's a more dramatic change, but to do it
+>> right TTY-layer buffers are to be considered as well.
+>
+> This is normal for serial devices, as they don't have any means to
+> signal connection and will usually transmit anyway when not connected.
+> In case of a console on the USB gadget-emulated serial port, it might
+> actually be convenient that the data is kept until connection.
+
+Yeah, just wanted to make sure I did select the right way of fixing the
+issue.
+
+>
+>> --- a/drivers/usb/gadget/function/u_serial.c
+>> +++ b/drivers/usb/gadget/function/u_serial.c
+>> @@ -563,6 +563,8 @@ static int gs_start_io(struct gs_port *port)
+>>  
+>>         /* unblock any pending writes into our circular buffer */
+>>         if (started) {
+>> +               pr_debug("gs_start_tx: ttyGS%d\n", port->port_num);
+>> +               gs_start_tx(port);
+>>                 tty_wakeup(port->port.tty);
+>
+> The tty_wakeup() will be called from gs_start_tx(), so should be removed
+> from here.
+
+Not exactly. tty_wakeup() will be called from gs_start_tx() only when
+there has been something actually transferred from the buffer. I didn't
+want to change behavior when the buffer is empty, so I kept the explicit
+tty_wakeup() call in place, intentionally. Please let me know if you
+still think it should be removed.
+
+> The pr_debug() in other callers of gs_start_tx() say:
+> "caller: start ttyGS%d".
+
+???
+
+$ git co gregkh/tty-next && grep -r 'caller: start tty' .
+HEAD is now at 7788f54... serial_core: Remove unused member in uart_port
+$ 
+
+-- Sergey
