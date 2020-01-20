@@ -2,95 +2,235 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC969143260
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Jan 2020 20:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BFC143346
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Jan 2020 22:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbgATTcn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Jan 2020 14:32:43 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:38985 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727130AbgATTcn (ORCPT
+        id S1726586AbgATVMp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Jan 2020 16:12:45 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39765 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726607AbgATVMp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Jan 2020 14:32:43 -0500
-Received: by mail-ed1-f66.google.com with SMTP id t17so597678eds.6
-        for <linux-serial@vger.kernel.org>; Mon, 20 Jan 2020 11:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=I1roYPqxBJzWtUK/EbeI6Kt4sZi+JdSJm6qJbGHrPRZYvHUSh5jIrCeNC6L/G/f0o1
-         SOUBr7y32ZptFoyqXLV46mqkCVXIPksz6dHNenBfKH5ZmZaxgtbXfnD4DPiQngFU9XCO
-         yyR3xavKr41v/xLWwuSw91WJb2uX+wjZFxyyrAuDZ+hvXvCheAMdiLqD+HrlaysRfXCL
-         GNNQRcxyOsqzXo4wRH2J/upuPpeDO5ZRhzNY4HfuYgHfElCshp5fZYHSWkrBX0jAzQvX
-         wM9NfRj8QHz6JxUFOI+rZ3wcUi7Ikp+pHr28kaxr4n7py/KC1H5pYclpR4JTvoTIZ7Jv
-         h8rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=BUMDMjqM18h+Z5f5IoRU905qEvQUIml00TfsHqhXfYyD4R2Lvyhk09EhHDPN1/rVD4
-         6JKKKFJ3Uj35IhPEjLnL4iBU0LasOwrUqSBw72oDXReY697JGxkQvO9DVC5QtoOGuyro
-         l1VMFi4jdTrlNYRUVvMdRnaHDwx+HjPMvU87yrIP7ym5YNZ+Dops7ExIUma9Xs73XTEB
-         NfAimImwA2G1M6FBqDJGWiIp/IB1XT6lPuufDRD09MJay3ugsGls2XogSDUo6mqtE6/D
-         UbVMn/n2u7Blq2c3KqRlWjtRzegAiBDkAOfMCEPk/eAn5LsQZdkM89o6ZztlXavCO3MJ
-         mdEQ==
-X-Gm-Message-State: APjAAAVVcAfcc5oGqxEz6m2PB9PstnGvaj0m61Eyo1/TWNQ1GoZn62lZ
-        peJluwfO/V4DshiyRKJxaKiD9NT2IzvJrlmx9Ow=
-X-Google-Smtp-Source: APXvYqwKjCT5QnfvXWtJkO29cRmoOGR1uhIhw9Ol6eYz9VuYzVaqX/o8Ejt2WLDxZ+bl2CebXLO8AWZ4Emn93SBTQws=
-X-Received: by 2002:a17:906:1fcd:: with SMTP id e13mr898516ejt.333.1579548761316;
- Mon, 20 Jan 2020 11:32:41 -0800 (PST)
+        Mon, 20 Jan 2020 16:12:45 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iteLh-0006um-7f; Mon, 20 Jan 2020 22:12:41 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iteLc-0002MJ-EP; Mon, 20 Jan 2020 22:12:36 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andre Renaud <arenaud@designa-electronics.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Andy Duan <fugang.duan@nxp.com>
+Cc:     linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] serial: imx: fix a race condition in receive path
+Date:   Mon, 20 Jan 2020 22:12:32 +0100
+Message-Id: <20200120211232.21329-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:32:40
- -0800 (PST)
-Reply-To: mcclainejohn.13@gmail.com
-From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
-Date:   Mon, 20 Jan 2020 20:32:40 +0100
-Message-ID: <CAOE+jABpcHQWZWhtskhDFbtTqfBe7h065WE2kC1G+jQD+tQiTA@mail.gmail.com>
-Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
- valued the sum of $12.8Million United States Dollars
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Attn: Dear Beneficiary,
+The main irq handler function starts by first masking disabled
+interrupts in the status register values to ensure to only handle
+enabled interrupts. This is important as when the RX path in the
+hardware is disabled reading the RX fifo results in an external abort.
 
-I wish to inform you that the diplomatic agent conveying your ATM CARD
-valued the sum of $12.8Million United States Dollars has misplaced
-your address and he is currently stranded at (George Bush
-International Airport) Houston Texas USA now
-We required you to reconfirm the following information's below to him
-so that he can deliver your Payment CARD to you today or tomorrow
-morning as information provided with open communications via email and
-telephone for security reasons.
-HERE IS THE DETAILS  HE NEED FROM YOU URGENT
-YOUR FULL NAME:========
-ADDRESS:========
-MOBILE NO:========
-NAME OF YOUR NEAREST AIRPORT:========
-A COPY OF YOUR IDENTIFICATION :========
+This checking must be done under the port lock, otherwise the following
+can happen:
 
-Note; do contact the diplomatic agent immediately through the
-information's listed below
-Contact Person: Diplomatic Agent, Mr. Mcclaine John
-EMAIL: mcclainejohn.13@gmail.com
-Tel:(223) 777-7518
+     CPU1                            | CPU2
+                                     |
+     irq triggers as there are chars |
+     in the RX fifo                  |
+				     | grab port lock
+     imx_uart_int finds RRDY enabled |
+     and calls imx_uart_rxint which  |
+     has to wait for port lock       |
+                                     | disable RX (e.g. because we're
+                                     | using RS485 with !RX_DURING_TX)
+                                     |
+                                     | release port lock
+     read from RX fifo with RX       |
+     disabled => exception           |
 
-Contact the diplomatic agent immediately
-because he is waiting to hear from you today with the needed information's.
+So take the port lock only once in imx_uart_int() instead of in the
+functions called from there.
 
-NOTE: The Diplomatic agent does not know that the content of the
-consignment box is $12.800,000,00 Million United States Dollars and on
-no circumstances should you let him know the content. The consignment
-was moved from here as family treasures, so never allow him to open
-the box. Please I have paid delivery fees for you but the only money
-you must send to Mcclaine John is your ATM CARD delivery fee $25.00
-only. text Him as you contact Him Immediately
+Reported-by: Andre Renaud <arenaud@designa-electronics.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-Thanks,
-with Regards.
-Prof, William Roberts
-Director DHL COURIER SERVICES-Benin
+this problem type was addressed already in commits
+
+	437768962f75 ("serial: imx: Only handle irqs that are actually enabled")
+	76821e222c18 ("serial: imx: ensure that RX irqs are off if RX is off")
+
+that entered 4.17-rc1. Backporting to older versions would require to
+backport these two, too. I didn't try that, but I think this gets messy,
+so I'd recommend to only backport to 4.19.x and 5.4.x (and 5.5.x
+assuming this patch won't make it into 5.5).
+
+Andre Renaud tested this patch and confirmed it to fix the problem, he
+didn't provide a Tested-by tag, so I didn't add that here.
+
+Best regards
+Uwe
+
+ drivers/tty/serial/imx.c | 52 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 39 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index a9e20e6c63ad..679b2de27c4d 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -700,22 +700,33 @@ static void imx_uart_start_tx(struct uart_port *port)
+ 	}
+ }
+ 
+-static irqreturn_t imx_uart_rtsint(int irq, void *dev_id)
++static irqreturn_t __imx_uart_rtsint(int irq, void *dev_id)
+ {
+ 	struct imx_port *sport = dev_id;
+ 	u32 usr1;
+ 
+-	spin_lock(&sport->port.lock);
+-
+ 	imx_uart_writel(sport, USR1_RTSD, USR1);
+ 	usr1 = imx_uart_readl(sport, USR1) & USR1_RTSS;
+ 	uart_handle_cts_change(&sport->port, !!usr1);
+ 	wake_up_interruptible(&sport->port.state->port.delta_msr_wait);
+ 
+-	spin_unlock(&sport->port.lock);
+ 	return IRQ_HANDLED;
+ }
+ 
++static irqreturn_t imx_uart_rtsint(int irq, void *dev_id)
++{
++	struct imx_port *sport = dev_id;
++	irqreturn_t ret;
++
++	spin_lock(&sport->port.lock);
++
++	ret = __imx_uart_rtsint(irq, dev_id);
++
++	spin_unlock(&sport->port.lock);
++
++	return ret;
++}
++
+ static irqreturn_t imx_uart_txint(int irq, void *dev_id)
+ {
+ 	struct imx_port *sport = dev_id;
+@@ -726,14 +737,12 @@ static irqreturn_t imx_uart_txint(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static irqreturn_t imx_uart_rxint(int irq, void *dev_id)
++static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
+ {
+ 	struct imx_port *sport = dev_id;
+ 	unsigned int rx, flg, ignored = 0;
+ 	struct tty_port *port = &sport->port.state->port;
+ 
+-	spin_lock(&sport->port.lock);
+-
+ 	while (imx_uart_readl(sport, USR2) & USR2_RDR) {
+ 		u32 usr2;
+ 
+@@ -792,11 +801,26 @@ static irqreturn_t imx_uart_rxint(int irq, void *dev_id)
+ 	}
+ 
+ out:
+-	spin_unlock(&sport->port.lock);
+ 	tty_flip_buffer_push(port);
++
+ 	return IRQ_HANDLED;
+ }
+ 
++static irqreturn_t imx_uart_rxint(int irq, void *dev_id)
++{
++	struct imx_port *sport = dev_id;
++	struct tty_port *port = &sport->port.state->port;
++	irqreturn_t ret;
++
++	spin_lock(&sport->port.lock);
++
++	ret = __imx_uart_rxint(irq, dev_id);
++
++	spin_unlock(&sport->port.lock);
++
++	return ret;
++}
++
+ static void imx_uart_clear_rx_errors(struct imx_port *sport);
+ 
+ /*
+@@ -855,6 +879,8 @@ static irqreturn_t imx_uart_int(int irq, void *dev_id)
+ 	unsigned int usr1, usr2, ucr1, ucr2, ucr3, ucr4;
+ 	irqreturn_t ret = IRQ_NONE;
+ 
++	spin_lock(&sport->port.lock);
++
+ 	usr1 = imx_uart_readl(sport, USR1);
+ 	usr2 = imx_uart_readl(sport, USR2);
+ 	ucr1 = imx_uart_readl(sport, UCR1);
+@@ -888,27 +914,25 @@ static irqreturn_t imx_uart_int(int irq, void *dev_id)
+ 		usr2 &= ~USR2_ORE;
+ 
+ 	if (usr1 & (USR1_RRDY | USR1_AGTIM)) {
+-		imx_uart_rxint(irq, dev_id);
++		__imx_uart_rxint(irq, dev_id);
+ 		ret = IRQ_HANDLED;
+ 	}
+ 
+ 	if ((usr1 & USR1_TRDY) || (usr2 & USR2_TXDC)) {
+-		imx_uart_txint(irq, dev_id);
++		imx_uart_transmit_buffer(sport);
+ 		ret = IRQ_HANDLED;
+ 	}
+ 
+ 	if (usr1 & USR1_DTRD) {
+ 		imx_uart_writel(sport, USR1_DTRD, USR1);
+ 
+-		spin_lock(&sport->port.lock);
+ 		imx_uart_mctrl_check(sport);
+-		spin_unlock(&sport->port.lock);
+ 
+ 		ret = IRQ_HANDLED;
+ 	}
+ 
+ 	if (usr1 & USR1_RTSD) {
+-		imx_uart_rtsint(irq, dev_id);
++		__imx_uart_rtsint(irq, dev_id);
+ 		ret = IRQ_HANDLED;
+ 	}
+ 
+@@ -923,6 +947,8 @@ static irqreturn_t imx_uart_int(int irq, void *dev_id)
+ 		ret = IRQ_HANDLED;
+ 	}
+ 
++	spin_unlock(&sport->port.lock);
++
+ 	return ret;
+ }
+ 
+-- 
+2.24.0
+
