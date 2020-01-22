@@ -2,133 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6064F144C7A
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Jan 2020 08:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336501451C7
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Jan 2020 10:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbgAVHb5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Jan 2020 02:31:57 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:44355 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgAVHb5 (ORCPT
+        id S1730066AbgAVJ4N (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Jan 2020 04:56:13 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:9582 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729991AbgAVJ4M (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Jan 2020 02:31:57 -0500
-Received: by mail-oi1-f193.google.com with SMTP id d62so5187162oia.11;
-        Tue, 21 Jan 2020 23:31:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RqVNk/s/kihSN6HM/Xmr4Y73WPhhKATV/QFQjnujpGg=;
-        b=nJRSl2fSm18QROdiFpbHUDOaYyDmK8vbbYkRZUGkbHC9Ybn7U22QmcJrsPYOfZhM1F
-         U18hf5/hAtdgeHh7x/+jb6Af7u431VGhT+/KH7FYrYcPAu3BooWbMxESMYcSo/2FkiXY
-         nSKFNPEBWO+oudG6FG6qINt0DXzQqFsILmnOvw5GNt+HmeY/H5nnKUSjhBtjlOL9VWxI
-         UiIyIq0RBMDGfbE13o5FeUMj75hv7WYB+HjkERu43AcyZHNgeKDvaK6FUV+HqGbMPq+Z
-         lLeN74uwKQ4qia7kmeK06JGw9KZNIQr0eXqs2n7gwhI/bzJfZMqkWMhympN+7uXN6iiN
-         Q1oA==
-X-Gm-Message-State: APjAAAULh8+p3VgMlXxQtQBTn/nXuTAuxah7uDSwWoyvOoHw2sP3uJrh
-        CBfjnqnqqNOvrevyl1vfCZ6IicKi7jKVFN62Rqo=
-X-Google-Smtp-Source: APXvYqy6HgiLyUhCyYc9fYH8fE1+mOcTDNClquSwMdkOlnTVa3GkzPfrnfP2otxXLIHVLiOx/a+6DUa2KS2lgphvxTs=
-X-Received: by 2002:a05:6808:292:: with SMTP id z18mr5610666oic.131.1579678316554;
- Tue, 21 Jan 2020 23:31:56 -0800 (PST)
+        Wed, 22 Jan 2020 04:56:12 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00M9sCgL016050;
+        Wed, 22 Jan 2020 10:56:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=T7e1eVxP0lShk3STvXZZuobRd1gVWOJ0YD2b4TZoSp0=;
+ b=Yo2nCzTjAokO5nSSlGrBJ2y0My66c9Q7y1UjojgXAYHvipy1cnox4qXUNVWQ9g0zTdha
+ bYYF0DMuKZsyXvrbb25zXFwj2zl52QC33dmEPAja8nZGKeJcvadcyCh0oUxoD8JXH6Mc
+ maRZtdoBF2HFFlO6ORFBNkUzm0WLD2TmEb/+xKCFsPl3Bfkv6zYv4V6+kSLU5pkdkVjG
+ D99mrtE4RyVJZPCBJL3+2vNcIPNcdL602EklMh7nJ4QStc4SebKOX0hzNaUV+FA9sqoU
+ zztakSZvE/l7yxFhDlrGy+tHc6fm8PNmsi9qGFOKUIJVw/Bf3XmDf7LwvUj4WYxQTLHU fg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2xkr1e3rmn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jan 2020 10:56:01 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 87251100034;
+        Wed, 22 Jan 2020 10:56:00 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 75ACA2AD14D;
+        Wed, 22 Jan 2020 10:56:00 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 22 Jan 2020 10:55:59
+ +0100
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@st.com>
+CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <fabrice.gasnier@st.com>,
+        <erwan.leray@st.com>, Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [PATCH v2 0/2] Convert STM32 UART bindings to yaml
+Date:   Wed, 22 Jan 2020 10:55:56 +0100
+Message-ID: <20200122095558.22553-1-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-References: <20190212143003.48446-1-john.ogness@linutronix.de>
- <20200120230522.GA23636@lxhi-065.adit-jv.com> <87v9p4mkhr.fsf@linutronix.de> <20200122023422.GA926@lxhi-065.adit-jv.com>
-In-Reply-To: <20200122023422.GA926@lxhi-065.adit-jv.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 Jan 2020 08:31:44 +0100
-Message-ID: <CAMuHMdXT9USuHw15nA1mLXsh7RKK68eN0phevC_Jauaa7FnW0Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 00/25] printk: new implementation
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Sanjeev Chugh <sanjeev_chugh@mentor.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Wang <wonderfly@google.com>,
-        Dean Jenkins <dean_jenkins@mentor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
-        Jiri Slaby <jslaby@suse.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-17_05:2020-01-16,2020-01-17 signatures=0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Eugeniu,
+The goal of this series is to convert STM32 UART bindings to json-schema.
+Since STM32 UART bindings use rs485 bindings it is also the opportunity
+to convert them to json-schema.
 
-On Wed, Jan 22, 2020 at 3:34 AM Eugeniu Rosca <erosca@de.adit-jv.com> wrote:
-> On Wed, Jan 22, 2020 at 12:56:48AM +0100, John Ogness wrote:
-> > On 2020-01-21, Eugeniu Rosca <erosca@de.adit-jv.com> wrote:
-> > > This [1] is a fairly old thread, but I only recently stumbled upon it,
-> > > while co-investigating below audio distortions [2] on R-Car3 ARM64
-> > > boards, which can be reproduced by stressing [3] the serial console.
-> > >
-> > > The investigation started a few months ago, when users reported audio
-> > > drops during the first seconds of system startup. Only after a few
-> > > weeks it became clear (thanks to some people in Cc) that the
-> > > distortions were contributed by the above-average serial console load
-> > > during the early boot. Once understood, we were able to come up with a
-> > > synthetic test [2-3].
-> > >
-> > > I thought it would be interesting to share below reproduction matrix,
-> > > in order to contrast vanilla to linux-rt-devel [4], as well as to
-> > > compare various preemption models.
-> > >
-> > >                            | Ser.console  Ser.console
-> > >                            | stressed     at rest or disabled
-> > >       --------------------------------------------
-> > >       v5.5-rc6 (PREEMPT=y) | distorted    clean
-> > >     v5.4.5-rt3 (PREEMPT=y) | distorted    clean
-> > >  v5.4.5-rt3 (PREEMPT_RT=y) | clean        clean
-> > >
-> > > My feeling is that the results probably do not surprise linux-rt
-> > > people.
-> > >
-> > > My first question is, should there be any improvement in the case of
-> > > v5.4.5-rt3 (PREEMPT=y), which I do not sense? I would expect so, based
-> > > on the cover letter of this series (pointing out the advantages of the
-> > > redesigned printk mechanism).
-> >
-> > The problem you are reporting is not the problem that the printk rework
-> > is trying to solve.
->
-> In general, agreed. But there are some quirks and peculiarities in how
-> the issue (increased audio latency) manifests itself on R-Car3, which
-> might create some room for a (relatively simple) loophole solution in
-> the printk mechanism.
->
-> With that said, I need to diverge a bit from the platform-agnostic
-> scope of this series.
->
-> So, what's specific to R-Car3, based on my testing, is that the issue
-> can only be reproduced if the printk storm originates on CPU0 (it does
-> not matter if from interrupt or task context, both have been tested). If
-> the printk storm is initiated on any other CPU (there are 7 secondary
-> ones on R-Car H3), there is no regression in the audio quality/latency.
+version 2:
+- remove types inside rs485-rts-delay property and add a maximum for delay
+  values
 
-The secure stuff is running on CPU0, isn't it?
-Is that a coincidence?
+Benjamin Gaignard (2):
+  dt-bindings: serial: Convert rs485 bindings to json-schema
+  dt-bindings: serial: Convert STM32 UART to json-schema
 
-Gr{oetje,eeting}s,
-
-                        Geert
+ Documentation/devicetree/bindings/serial/rs485.txt | 32 +--------
+ .../devicetree/bindings/serial/rs485.yaml          | 45 ++++++++++++
+ .../devicetree/bindings/serial/st,stm32-uart.yaml  | 80 ++++++++++++++++++++++
+ .../devicetree/bindings/serial/st,stm32-usart.txt  | 57 ---------------
+ 4 files changed, 126 insertions(+), 88 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/serial/rs485.yaml
+ create mode 100644 Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/st,stm32-usart.txt
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.15.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
