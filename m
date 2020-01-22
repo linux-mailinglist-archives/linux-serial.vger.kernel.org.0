@@ -2,227 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCD31451C2
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Jan 2020 10:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364271452AD
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Jan 2020 11:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730529AbgAVJ4R (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Jan 2020 04:56:17 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:9594 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730926AbgAVJ4Q (ORCPT
+        id S1729277AbgAVKdn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Jan 2020 05:33:43 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:37255 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728931AbgAVKdn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Jan 2020 04:56:16 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00M9sCjs016045;
-        Wed, 22 Jan 2020 10:56:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=4Zw+r/mcuIQdGav3Gfbbdj8AtLqPaIWXCkURYNpxfY4=;
- b=jovkYIDF5w42n6yi9h5hqtYgncgDMBFtXMDqDAKoZWG5gk/amI0xeFx7zKKaAPavLGPY
- gMivTPoH9IuaAbh3JiNmEZqJssrE7n5YFraGuy0ba9BerZGNMtHUZUAm+9MBUQG6rUrc
- CDo+9y6I4cdzx6ANYGq17BBoPsDIokpN261FYFrEa9XEJE3aBM39ULnvYZP6fMdaUH6U
- U7d0zD8bFb//IRQ4P8aeIR9F7uw+IfrQeTCqdJbDDWibfoBld5i6OWBtR7PK8FMZM49j
- MMg4y/F6i5SJGsyowSHfr9vVd968H25TOrPPQtYTbPPPcBanpAnFpKc2lpfGCZyw3u2t Nw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2xkr1e3rmt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Jan 2020 10:56:02 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D2B6A100034;
-        Wed, 22 Jan 2020 10:56:01 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C61982AD14D;
-        Wed, 22 Jan 2020 10:56:01 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 22 Jan 2020 10:56:01
- +0100
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@st.com>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <fabrice.gasnier@st.com>,
-        <erwan.leray@st.com>, Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v2 2/2] dt-bindings: serial: Convert STM32 UART to json-schema
-Date:   Wed, 22 Jan 2020 10:55:58 +0100
-Message-ID: <20200122095558.22553-3-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200122095558.22553-1-benjamin.gaignard@st.com>
-References: <20200122095558.22553-1-benjamin.gaignard@st.com>
+        Wed, 22 Jan 2020 05:33:43 -0500
+Received: from localhost ([127.0.0.1] helo=vostro.local)
+        by Galois.linutronix.de with esmtp (Exim 4.80)
+        (envelope-from <john.ogness@linutronix.de>)
+        id 1iuDJy-00005h-JH; Wed, 22 Jan 2020 11:33:14 +0100
+From:   John Ogness <john.ogness@linutronix.de>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Sanjeev Chugh <sanjeev_chugh@mentor.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Wang <wonderfly@google.com>,
+        Dean Jenkins <dean_jenkins@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
+        Jiri Slaby <jslaby@suse.com>,
+        Peter Feiner <pfeiner@google.com>,
+        <linux-serial@vger.kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [RFC PATCH v1 00/25] printk: new implementation
+References: <20190212143003.48446-1-john.ogness@linutronix.de>
+        <20200120230522.GA23636@lxhi-065.adit-jv.com>
+        <87v9p4mkhr.fsf@linutronix.de>
+        <20200122023422.GA926@lxhi-065.adit-jv.com>
+Date:   Wed, 22 Jan 2020 11:33:12 +0100
+In-Reply-To: <20200122023422.GA926@lxhi-065.adit-jv.com> (Eugeniu Rosca's
+        message of "Wed, 22 Jan 2020 03:34:22 +0100")
+Message-ID: <87zhefu6fr.fsf@linutronix.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/23.4 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-17_05:2020-01-16,2020-01-17 signatures=0
+Content-Type: text/plain; charset=us-ascii
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Convert STM32 UART bindings to json-schema.
+On 2020-01-22, Eugeniu Rosca <erosca@de.adit-jv.com> wrote:
+> So, what's specific to R-Car3, based on my testing, is that the issue
+> can only be reproduced if the printk storm originates on CPU0 (it does
+> not matter if from interrupt or task context, both have been
+> tested). If the printk storm is initiated on any other CPU (there are
+> 7 secondary ones on R-Car H3), there is no regression in the audio
+> quality/latency.
+>
+> I cannot fully explain this empirical observation, but it directs my
+> mind to the following workaround, for which I have a PoC:
+>  - employ vprintk_safe() any time CPU0 is the owner/caller of printk
+>  - tie CPU0-private printk internal IRQ workers to another CPU
+>
+> The above makes sure nothing is printed to the serial console on
+> behalf of CPU0. I don't even hope this to be accepted by community,
+> but can you please share your opinion the idea itself is sane?
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- .../devicetree/bindings/serial/st,stm32-uart.yaml  | 80 ++++++++++++++++++++++
- .../devicetree/bindings/serial/st,stm32-usart.txt  | 57 ---------------
- 2 files changed, 80 insertions(+), 57 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
- delete mode 100644 Documentation/devicetree/bindings/serial/st,stm32-usart.txt
+It is a problem-specific hack. You will need to be certain that CPU1-7
+will never have problems with console printing storms.
 
-diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-new file mode 100644
-index 000000000000..238c44192d31
---- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/serial/st,stm32-uart.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+maintainers:
-+  - Erwan Le Ray <erwan.leray@st.com>
-+
-+title: STMicroelectronics STM32 USART bindings
-+
-+allOf:
-+  - $ref: rs485.yaml
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stm32-uart
-+      - st,stm32f7-uart
-+      - st,stm32h7-uart
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  label:
-+    description: label associated with this uart
-+
-+  st,hw-flow-ctrl:
-+    description: enable hardware flow control
-+    $ref: /schemas/types.yaml#/definitions/flag
-+
-+  dmas:
-+    minItems: 1
-+    maxItems: 2
-+
-+  dma-names:
-+    items:
-+      enum: [ rx, tx ]
-+    minItems: 1
-+    maxItems: 2
-+
-+  wakeup-source: true
-+
-+  rs485-rts-delay: true
-+  rs485-rts-active-low: true
-+  linux,rs485-enabled-at-boot-time: true
-+  rs485-rx-during-tx: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/stm32mp1-clks.h>
-+    usart1: serial@40011000 {
-+      compatible = "st,stm32-uart";
-+      reg = <0x40011000 0x400>;
-+      interrupts = <37>;
-+      clocks = <&rcc 0 164>;
-+      dmas = <&dma2 2 4 0x414 0x0>,
-+             <&dma2 7 4 0x414 0x0>;
-+      dma-names = "rx", "tx";
-+      rs485-rts-active-low;
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/serial/st,stm32-usart.txt b/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-deleted file mode 100644
-index 8620f7fcbd50..000000000000
---- a/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-+++ /dev/null
-@@ -1,57 +0,0 @@
--* STMicroelectronics STM32 USART
--
--Required properties:
--- compatible: can be either:
--  - "st,stm32-uart",
--  - "st,stm32f7-uart",
--  - "st,stm32h7-uart".
--  depending is compatible with stm32(f4), stm32f7 or stm32h7.
--- reg: The address and length of the peripheral registers space
--- interrupts:
--  - The interrupt line for the USART instance,
--  - An optional wake-up interrupt.
--- clocks: The input clock of the USART instance
--
--Optional properties:
--- resets: Must contain the phandle to the reset controller.
--- pinctrl: The reference on the pins configuration
--- st,hw-flow-ctrl: bool flag to enable hardware flow control.
--- rs485-rts-delay, rs485-rx-during-tx, rs485-rts-active-low,
--  linux,rs485-enabled-at-boot-time: see rs485.txt.
--- dmas: phandle(s) to DMA controller node(s). Refer to stm32-dma.txt
--- dma-names: "rx" and/or "tx"
--- wakeup-source: bool flag to indicate this device has wakeup capabilities
--- interrupt-names, if optional wake-up interrupt is used, should be:
--  - "event": the name for the interrupt line of the USART instance
--  - "wakeup" the name for the optional wake-up interrupt
--
--
--Examples:
--usart4: serial@40004c00 {
--	compatible = "st,stm32-uart";
--	reg = <0x40004c00 0x400>;
--	interrupts = <52>;
--	clocks = <&clk_pclk1>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_usart4>;
--};
--
--usart2: serial@40004400 {
--	compatible = "st,stm32-uart";
--	reg = <0x40004400 0x400>;
--	interrupts = <38>;
--	clocks = <&clk_pclk1>;
--	st,hw-flow-ctrl;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_usart2 &pinctrl_usart2_rtscts>;
--};
--
--usart1: serial@40011000 {
--	compatible = "st,stm32-uart";
--	reg = <0x40011000 0x400>;
--	interrupts = <37>;
--	clocks = <&rcc 0 164>;
--	dmas = <&dma2 2 4 0x414 0x0>,
--	       <&dma2 7 4 0x414 0x0>;
--	dma-names = "rx", "tx";
--};
--- 
-2.15.0
+Be aware that vprintk_safe() is not particularly reliable in many crash
+scenarios. If seeing oops output on the console is important, this can
+be a risky hack.
 
+Also, be aware that it has its own config option for the safe buffer
+size: PRINTK_SAFE_LOG_BUF_SHIFT
+
+>> The printk rework focusses on making printk non-interfering by
+>> decoupling console printing from printk() callers. However, the
+>> console printing itself will still do just as much interrupt
+>> disabling as before. That is driver-related, not printk-related.
+>
+> I didn't dive into the internals of this series, but decoupling the
+> execution context of the serial driver from the execution context of
+> the printk callers sounds very good to me (this is what i try to
+> achieve via vanilla vprintk_safe). I wonder if it's easier to remove
+> CPU0 from equation with this series applied.
+
+Yes, it would be quite easy. The console printers run as dedicated
+kthreads. It is only a matter of setting the CPU affinity for the
+related kthread.
+
+>> The linux-rt patches (which include this printk rework) *are* being
+>> ported to mainline now. My recommendation is to continue using the
+>> linux-rt patches (with PREEMPT_RT=y) until PREEMPT_RT is available
+>> mainline.
+>
+> If there is any roadmap publicly available, I would appreciate a
+> reference.
+
+I am only aware of the quilt "series" file [0] that is roughly
+documenting the status of the effort.
+
+John Ogness
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/tree/patches/series?h=linux-5.4.y-rt-patches
