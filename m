@@ -2,91 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B68A7149A8D
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Jan 2020 13:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C45149AAF
+	for <lists+linux-serial@lfdr.de>; Sun, 26 Jan 2020 14:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387404AbgAZMdX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Jan 2020 07:33:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45482 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387403AbgAZMdX (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Jan 2020 07:33:23 -0500
-Received: from ziggy.de (unknown [95.169.235.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF5AA2071A;
-        Sun, 26 Jan 2020 12:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580042002;
-        bh=jiPyg4xMYng3XTyef+gtnfbqk1VNKvF8MyDPzuNMtWU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oY/V6N+Bk295aS5GBBQ4hYmTuZJaC2Ikx3wC+D4nFi0kXAvZTX1gTtF0TS0ljn4r0
-         Rhw8kURC/bEaPBnvaduzUuX751qYa/n9Dacm6ArLhMp+CYfDfnMbwZdqwmWbJoKqV3
-         BJgFkNHZb6mcfOsRROAYBekXYeC0mxv6U2x4NQmE=
-From:   matthias.bgg@kernel.org
-To:     gregkh@linuxfoundation.org, jslaby@suse.com, nsaenzjulienne@suse.de
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, matthias.bgg@kernel.org,
+        id S1726323AbgAZNMl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Jan 2020 08:12:41 -0500
+Received: from bmailout3.hostsharing.net ([176.9.242.62]:38231 "EHLO
+        bmailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbgAZNMl (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 26 Jan 2020 08:12:41 -0500
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id D71B6100CF15C;
+        Sun, 26 Jan 2020 14:12:38 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 7C4D01D7C59; Sun, 26 Jan 2020 14:12:38 +0100 (CET)
+Date:   Sun, 26 Jan 2020 14:12:38 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     matthias.bgg@kernel.org
+Cc:     gregkh@linuxfoundation.org, jslaby@suse.com,
+        nsaenzjulienne@suse.de, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
         Matthias Brugger <mbrugger@suse.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         Stephen Boyd <swboyd@chromium.org>,
         bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH] serial: 8250_early: Add earlycon for BCM2835 aux uart
-Date:   Sun, 26 Jan 2020 13:33:14 +0100
-Message-Id: <20200126123314.3558-1-matthias.bgg@kernel.org>
-X-Mailer: git-send-email 2.24.1
+Subject: Re: [PATCH] serial: 8250_early: Add earlycon for BCM2835 aux uart
+Message-ID: <20200126131238.c65zj3wo3srafa7z@wunner.de>
+References: <20200126123314.3558-1-matthias.bgg@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200126123314.3558-1-matthias.bgg@kernel.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Matthias Brugger <mbrugger@suse.com>
+On Sun, Jan 26, 2020 at 01:33:14PM +0100, matthias.bgg@kernel.org wrote:
+> +#ifdef CONFIG_SERIAL_8250_CONSOLE
+> +
+> +static int __init early_bcm2835aux_setup(struct earlycon_device *device,
+> +					const char *options)
+> +{
+> +	if (!device->port.membase)
+> +		return -ENODEV;
+> +
+> +	device->port.iotype = UPIO_MEM32;
+> +	device->port.regshift = 2;
+> +
+> +	return early_serial8250_setup(device, NULL);
+> +}
+> +
+> +OF_EARLYCON_DECLARE(bcm2835aux, "brcm,bcm2835-aux-uart",
+> +		    early_bcm2835aux_setup);
+> +#endif
 
-Define the OF early console for BCM2835 aux UART, which can be enabled
-by passing "earlycon" on the boot command line. This UART is found on
-BCM283x and BCM27xx SoCs, a.k.a. Raspberry Pi in its variants.
+Does this really work?  I also tried to get it working recently and
+the system just hung on boot.  Looking at it with a JTAG debugger
+showed that the bcm2835aux registers were inaccessible because
+the mini UART wasn't enabled in the AUXENB register.
 
-Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+Maybe if you use OF_EARLYCON_DECLARE, the firmware recognizes that
+serial1 is set as stdout-path and performs enablement of the mini UART?
+Or are you using U-Boot which perhaps does the enablement?
 
----
+I also saw in the JTAG debugger that the uartclk member contained
+an incorrect value, so I'd expect that it has to be set as well in
+early_bcm2835aux_setup().
 
- drivers/tty/serial/8250/8250_bcm2835aux.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+I'll see to it that I give this patch a whirl when I return to the
+office next week.
 
-diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
-index 8ce700c1a7fc..6769cea2964a 100644
---- a/drivers/tty/serial/8250/8250_bcm2835aux.c
-+++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
-@@ -135,6 +135,24 @@ static struct platform_driver bcm2835aux_serial_driver = {
- };
- module_platform_driver(bcm2835aux_serial_driver);
- 
-+#ifdef CONFIG_SERIAL_8250_CONSOLE
-+
-+static int __init early_bcm2835aux_setup(struct earlycon_device *device,
-+					const char *options)
-+{
-+	if (!device->port.membase)
-+		return -ENODEV;
-+
-+	device->port.iotype = UPIO_MEM32;
-+	device->port.regshift = 2;
-+
-+	return early_serial8250_setup(device, NULL);
-+}
-+
-+OF_EARLYCON_DECLARE(bcm2835aux, "brcm,bcm2835-aux-uart",
-+		    early_bcm2835aux_setup);
-+#endif
-+
- MODULE_DESCRIPTION("BCM2835 auxiliar UART driver");
- MODULE_AUTHOR("Martin Sperl <kernel@martin.sperl.org>");
- MODULE_LICENSE("GPL v2");
--- 
-2.24.1
+Thanks,
 
+Lukas
