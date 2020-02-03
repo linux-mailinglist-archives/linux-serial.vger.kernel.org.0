@@ -2,94 +2,121 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0209B1503C2
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Feb 2020 11:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AB0151022
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Feb 2020 20:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727407AbgBCKBI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Feb 2020 05:01:08 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35129 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbgBCKBI (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Feb 2020 05:01:08 -0500
-Received: by mail-pg1-f195.google.com with SMTP id l24so7548843pgk.2
-        for <linux-serial@vger.kernel.org>; Mon, 03 Feb 2020 02:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=52LKly4I/06lXfcJFtdMnMF93D7j0fEQtz6/eHGU+Gs=;
-        b=C8IJ3DD/gA7N2tWcI7cVIzv4xHS7PN57131IkW4XEmMiKfoqL76qpJ0nwTr8ZO9mGH
-         71QCsxjlrjwfwmzP48fHozkpOD5z3lUzvPN/ArLnTj1FVvCiH1HS1R670y9ieZGMtCg9
-         EbgVuU6QuSZgweSBvXMURFNbgeqYICOL3eTvD4xWvUsm9N4+Na1tyOM3SupTvCyYLNF+
-         WJ7XvBuGYMLa201CnYYU8MO9SwC4Akb1Oyd8qkCa6o13c7wrxWcE1l0uJAgRwJ8yx459
-         L1iLTkkSpaBxEyEEgNCkU4cbNezOGUD48uXpVFIJcsbDN3BXmaduFzOExxx3T15wy6qy
-         sSKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=52LKly4I/06lXfcJFtdMnMF93D7j0fEQtz6/eHGU+Gs=;
-        b=Z6c8vUcPusokfH8Hwd6kWo6Ra+HI0BStK88UTdXmW0R+W75Gape5BzlNPXsWDt+ezP
-         jjYResGmA6Exy0Wflo9rWTRJgY35yGhiMf3tL1c5wcljnyCuO+2Jg08gJk+aOujhcWIE
-         60kEOWYoZG7F3+ik6ZL3I7IW97Dv3zlEgomT5Xb5WRS63U7cBpaIta2BabLGGuYloRNX
-         8X+iV3fss6rNCjGxzaIizoq5ymVLR9OFALoOhuxAz/zsiwVPhrMfqQyXFvaEpZiq7gqN
-         IybUcvDfQmzm5peNt9Y8xGN+PqwtJus5XuNHRg5DTVn1UhHsKJemcLNJBhlZmVC47IY5
-         Kz1g==
-X-Gm-Message-State: APjAAAXIjwXvpeNnxjlwhS+1xlYllCWovne3sm82iGQJa3lMC6VQBR63
-        UEGdo2Qq0rEouIo74deKiv/ueG3IVQ9t+zzmMSo=
-X-Google-Smtp-Source: APXvYqyztN6vBapb8zTq3vRMhbXWkQ+Vq64UK9aTOlrPKB9EbT+BC0nhIFt4ooB6fZZ6WNhv0G501Joby+TeCyk5LVM=
-X-Received: by 2002:a63:515d:: with SMTP id r29mr16565423pgl.265.1580724065863;
- Mon, 03 Feb 2020 02:01:05 -0800 (PST)
+        id S1726369AbgBCTKZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Feb 2020 14:10:25 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47770 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726287AbgBCTKZ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 3 Feb 2020 14:10:25 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 056FFB061;
+        Mon,  3 Feb 2020 19:10:23 +0000 (UTC)
+Message-ID: <dfbe2c94dd52a31826be751f8dd9afc4ed08ec6d.camel@suse.de>
+Subject: Re: [PATCH] serial: 8250_early: Add earlycon for BCM2835 aux uart
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>, matthias.bgg@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        jslaby@suse.com
+Date:   Mon, 03 Feb 2020 20:10:21 +0100
+In-Reply-To: <20200131152414.73tgwsfhzgu4apkx@wunner.de>
+References: <20200128141958.vwbxoqglt5gw4xj5@wunner.de>
+         <C099APQHQAHB.3Q9UVYJYT98TN@linux-9qgx>
+         <20200131152414.73tgwsfhzgu4apkx@wunner.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-rxZ/SqVaphyyjrFeqQty"
+User-Agent: Evolution 3.34.3 
 MIME-Version: 1.0
-Received: by 2002:a17:90b:34e:0:0:0:0 with HTTP; Mon, 3 Feb 2020 02:01:05
- -0800 (PST)
-Reply-To: suleman1945mohammed@gmail.com
-From:   "Mr.Suleman Mohammed" <djamiladoro@gmail.com>
-Date:   Mon, 3 Feb 2020 02:01:05 -0800
-Message-ID: <CAO34-w-Lx9+LXUYYkVKNKb7ZN9WXwzXT3D6DguQpOGw3ws5rKA@mail.gmail.com>
-Subject: I am Mr.Suleman Mohammed
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Hello Dear,
 
-I am Mr.Suleman Mohammed and I work with UNITED BANK OF AFRICA. Please
-Can you use ATM Visa card to withdraw money at ATM cash machine in
-your country? I want to transfer money to you from my country; it=E2=80=99s
-part of money taken by some old politician that was forced out of
-power.
+--=-rxZ/SqVaphyyjrFeqQty
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I will change the account details to yours, and apply for a visa card
-with your details in our bank, they will send the visa card to you and
-you will be withdrawing money with it and always send my own
-percentage of the money, and the money we are talking about is
-$6.5Million us dollars.
+On Fri, 2020-01-31 at 16:24 +0100, Lukas Wunner wrote:
+> On Thu, Jan 30, 2020 at 05:11:55PM +0100, Nicolas Saenz Julienne wrote:
+> > BTW did you had the oportunity to have a go at the patch?
+>=20
+> I've just performed a quick test and it doesn't work for me.
+> If I add stdout-path =3D "serial1:115200n8"; to the chosen node,
+> I only get a regular console with this patch, not an earlycon.
 
-Whatever amount you withdraw daily, you will send 50% to me and you
-will take 50%, the visa card and the bank account will be on your
-name, I will be waiting for your information as soon as possible.
-Your name...........................................
+That's surprising, you're using u-boot isn't it? and the upstream device tr=
+ee?
 
-Age.................................................
+> > > The problem is that in mainline, bcm2835_defconfig contains:
+> > > CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE=3Dy
+> > >=20
+> > > Likewise in the Foundation's downstream tree, bcmrpi_defconfig as wel=
+l
+> > > as bcm2711_defconfig and bcm2709_defconfig contain:
+> > > CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE=3Dy
+> > >=20
+> > > In contrast to this, we set the following on Revolution Pi devices:
+> > > CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=3Dy
+> > >=20
+> > > Downclocking influences not only the uart1 baud rate but also the
+> > > spi0 clock. We attach Ethernet chips to spi0, throughput was
+> > > significantly worse with the ondemand governor (which is what we
+> > > used previously). We felt that maximum Ethernet performance
+> > > outweighs the relatively small powersaving gains.
+> >=20
+> > In that regard I suggest you use the upstream cpufreq driver which
+> > behaves properly in that regard. It disables GPU freq scaling, so as to
+> > change CPU frequencies without SPI/I2C/UART issues.
+>=20
+> Okay, I'll take a look.  But the uart1 baudrate will still be wrong
+> if the firmware downclocks because of overheating, right?
 
-Sex.................................................
+You're right, it might happen. The way I understand it you're bound to leav=
+e
+the GPU at it's lower frequency if you want to use those peripherals and fo=
+r
+them to be reliable. You could technically try to empirically fine tune the=
+ CPU
+thermal trip point so as to make sure the upstream kernel cpufreq downclock
+always kicks in before videocore's one. I'd actually like to see someone tr=
+y
+that. However short of using an RT kernel It think you'll never be 100% sur=
+e it
+can never happen.
 
-Country.............................................
-
-Occupation..........................................
-
-Phone number........................................
+Regards,
+Nicolas
 
 
-Best Regards.
+--=-rxZ/SqVaphyyjrFeqQty
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Mr.Suleman Mohammed
+-----BEGIN PGP SIGNATURE-----
 
-MAIL.....suleman1945mohammed@gmail.com
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl44cB0ACgkQlfZmHno8
+x/4OKwf+KvsKB8pRgfFS6tQGkcjn5+7rl7qXYEndk80sawqCUn4/ZHkxPdoqD5cO
+bU8iTyaNfFQQb9uq8RoWcJrFMKQJhxGe8sjDNkZNqvbTUr3oM8ltCrjVWX7D5wfG
+eDSxB7hZqwE+BkdJaK3G5kicCfPl21opnQwZUn7R/0e0bYIuzMu/hq1xk7XiRaLU
+hL30AwUY3DLZtOVEeNIeVW9TVuVdnbu219TXZjtwuD+iZ9u2xbkh83fne8s0nW7O
+79/Gejgu/e5PDH3CTnbheLNpl9Fws8fGiERnwXNbAD2XSj2kOfTitCVVNK2Efup5
+txMswkwfPEC1JsGHkHgANzz5Z5UOVQ==
+=AW10
+-----END PGP SIGNATURE-----
+
+--=-rxZ/SqVaphyyjrFeqQty--
+
