@@ -2,152 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F0314FF64
-	for <lists+linux-serial@lfdr.de>; Sun,  2 Feb 2020 22:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0209B1503C2
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Feb 2020 11:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726971AbgBBVaR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 2 Feb 2020 16:30:17 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42082 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726967AbgBBVaQ (ORCPT
+        id S1727407AbgBCKBI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Feb 2020 05:01:08 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35129 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727445AbgBCKBI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 2 Feb 2020 16:30:16 -0500
-Received: by mail-lf1-f67.google.com with SMTP id y19so8296568lfl.9;
-        Sun, 02 Feb 2020 13:30:13 -0800 (PST)
+        Mon, 3 Feb 2020 05:01:08 -0500
+Received: by mail-pg1-f195.google.com with SMTP id l24so7548843pgk.2
+        for <linux-serial@vger.kernel.org>; Mon, 03 Feb 2020 02:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=ksD2PJRkb52M0/uH1lv8CPBMGBMZornu7c/r2Oi94wE=;
-        b=URsjV6xkgonCaoi+/ZKtmJIgWHog0hZZn0TRuOqMEFv30Sx8AfdweKXYqcEeQo8Waa
-         mIvdSAG91QelmxL8fm/6Ocp7TuRA8Q/kdUpRIDvwTpWFu3pVp/p6QjjevozMs0PivC8Z
-         bVfI1u/pxe57MEHXy5pDXKhhEtXnaAFAFyL+FXdKuFgV/Oo9Jw7wzlS/g2xIFcgIwX+4
-         lYZtjWPWz+Nipxg0UuMqpU278/M7UfzHmbn4z/JzglBaiAMyyMYaA9WuOIUydmF5DIsD
-         cUghRlpyM6WWT4NaUNfbAik3rWW/Og8eDcbEvnpMBL5VXh7YqTf/OgKwm4UDrGMqvzy4
-         qT7A==
+        bh=52LKly4I/06lXfcJFtdMnMF93D7j0fEQtz6/eHGU+Gs=;
+        b=C8IJ3DD/gA7N2tWcI7cVIzv4xHS7PN57131IkW4XEmMiKfoqL76qpJ0nwTr8ZO9mGH
+         71QCsxjlrjwfwmzP48fHozkpOD5z3lUzvPN/ArLnTj1FVvCiH1HS1R670y9ieZGMtCg9
+         EbgVuU6QuSZgweSBvXMURFNbgeqYICOL3eTvD4xWvUsm9N4+Na1tyOM3SupTvCyYLNF+
+         WJ7XvBuGYMLa201CnYYU8MO9SwC4Akb1Oyd8qkCa6o13c7wrxWcE1l0uJAgRwJ8yx459
+         L1iLTkkSpaBxEyEEgNCkU4cbNezOGUD48uXpVFIJcsbDN3BXmaduFzOExxx3T15wy6qy
+         sSKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ksD2PJRkb52M0/uH1lv8CPBMGBMZornu7c/r2Oi94wE=;
-        b=DsTvi0fxrC+IsCO98QdiPHdk42gsx6t5lnZo082mtRnyq7Kv/wlPJW6LtYoVipw4w0
-         IcG5mYsOnG98ATbC3d2IYp0oEFbeRiQgXwGRBCNEOAfSyLa8hLGTELjvIOiEUu+J4cWC
-         xn+96Kr98gWn0xbcMQdmL2skNSw5Uf/NrJtf5IwgllQYtnOGy+1nocf7Ka4Zt3sU7cMg
-         1cdvEtr0gadqUA8UlzAXv+4WWZckicTMkkEg6BeQT0FvL6AtKMMrgrLOXiee/bDe28fi
-         mRVNyj6yHFFxw3APuF8qz1wLD8OROoUeB+ZQ5cR81iXxUkQP4SS0Pp6ru1H3BAeur71v
-         LoTg==
-X-Gm-Message-State: APjAAAUCyJscD+1MS3ruhzKE7L+KWR7d+Ib+Kgt8fGUnnUv8CzB9nWB5
-        F7iEIWWqG8GJCJe1IwvT1MI=
-X-Google-Smtp-Source: APXvYqxpd/0zWkiP7/aoIoJkgjU/MVBmwR/6VUrTded9q2edoc0+TiKxYGsjaZ5tUkQP7d/jUt+szQ==
-X-Received: by 2002:ac2:5c4b:: with SMTP id s11mr10492652lfp.133.1580679013061;
-        Sun, 02 Feb 2020 13:30:13 -0800 (PST)
-Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id u25sm8586833ljj.70.2020.02.02.13.30.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Feb 2020 13:30:12 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH for 5.6 v1] tty: serial: Handle RX transfer in PIO mode if DMA wasn't started
-Date:   Mon,  3 Feb 2020 00:28:44 +0300
-Message-Id: <20200202212844.11592-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.24.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=52LKly4I/06lXfcJFtdMnMF93D7j0fEQtz6/eHGU+Gs=;
+        b=Z6c8vUcPusokfH8Hwd6kWo6Ra+HI0BStK88UTdXmW0R+W75Gape5BzlNPXsWDt+ezP
+         jjYResGmA6Exy0Wflo9rWTRJgY35yGhiMf3tL1c5wcljnyCuO+2Jg08gJk+aOujhcWIE
+         60kEOWYoZG7F3+ik6ZL3I7IW97Dv3zlEgomT5Xb5WRS63U7cBpaIta2BabLGGuYloRNX
+         8X+iV3fss6rNCjGxzaIizoq5ymVLR9OFALoOhuxAz/zsiwVPhrMfqQyXFvaEpZiq7gqN
+         IybUcvDfQmzm5peNt9Y8xGN+PqwtJus5XuNHRg5DTVn1UhHsKJemcLNJBhlZmVC47IY5
+         Kz1g==
+X-Gm-Message-State: APjAAAXIjwXvpeNnxjlwhS+1xlYllCWovne3sm82iGQJa3lMC6VQBR63
+        UEGdo2Qq0rEouIo74deKiv/ueG3IVQ9t+zzmMSo=
+X-Google-Smtp-Source: APXvYqyztN6vBapb8zTq3vRMhbXWkQ+Vq64UK9aTOlrPKB9EbT+BC0nhIFt4ooB6fZZ6WNhv0G501Joby+TeCyk5LVM=
+X-Received: by 2002:a63:515d:: with SMTP id r29mr16565423pgl.265.1580724065863;
+ Mon, 03 Feb 2020 02:01:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:90b:34e:0:0:0:0 with HTTP; Mon, 3 Feb 2020 02:01:05
+ -0800 (PST)
+Reply-To: suleman1945mohammed@gmail.com
+From:   "Mr.Suleman Mohammed" <djamiladoro@gmail.com>
+Date:   Mon, 3 Feb 2020 02:01:05 -0800
+Message-ID: <CAO34-w-Lx9+LXUYYkVKNKb7ZN9WXwzXT3D6DguQpOGw3ws5rKA@mail.gmail.com>
+Subject: I am Mr.Suleman Mohammed
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-It is possible to get an instant RX timeout or end-of-transfer interrupt
-before RX DMA was started, if transaction is less than 16 bytes. Transfer
-should be handled in PIO mode in this case because DMA can't handle it.
-This patch brings back the original behaviour of the driver that was
-changed by accident by a previous commit, it fixes occasional Bluetooth HW
-initialization failures which I started to notice recently.
+--=20
+Hello Dear,
 
-Fixes: d5e3fadb7012 ("tty: serial: tegra: Activate RX DMA transfer by request")
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/tty/serial/serial-tegra.c | 35 ++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 19 deletions(-)
+I am Mr.Suleman Mohammed and I work with UNITED BANK OF AFRICA. Please
+Can you use ATM Visa card to withdraw money at ATM cash machine in
+your country? I want to transfer money to you from my country; it=E2=80=99s
+part of money taken by some old politician that was forced out of
+power.
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index 33034b852a51..8de8bac9c6c7 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -692,11 +692,22 @@ static void tegra_uart_copy_rx_to_tty(struct tegra_uart_port *tup,
- 				   count, DMA_TO_DEVICE);
- }
- 
-+static void do_handle_rx_pio(struct tegra_uart_port *tup)
-+{
-+	struct tty_struct *tty = tty_port_tty_get(&tup->uport.state->port);
-+	struct tty_port *port = &tup->uport.state->port;
-+
-+	tegra_uart_handle_rx_pio(tup, port);
-+	if (tty) {
-+		tty_flip_buffer_push(port);
-+		tty_kref_put(tty);
-+	}
-+}
-+
- static void tegra_uart_rx_buffer_push(struct tegra_uart_port *tup,
- 				      unsigned int residue)
- {
- 	struct tty_port *port = &tup->uport.state->port;
--	struct tty_struct *tty = tty_port_tty_get(port);
- 	unsigned int count;
- 
- 	async_tx_ack(tup->rx_dma_desc);
-@@ -705,11 +716,7 @@ static void tegra_uart_rx_buffer_push(struct tegra_uart_port *tup,
- 	/* If we are here, DMA is stopped */
- 	tegra_uart_copy_rx_to_tty(tup, port, count);
- 
--	tegra_uart_handle_rx_pio(tup, port);
--	if (tty) {
--		tty_flip_buffer_push(port);
--		tty_kref_put(tty);
--	}
-+	do_handle_rx_pio(tup);
- }
- 
- static void tegra_uart_rx_dma_complete(void *args)
-@@ -749,8 +756,10 @@ static void tegra_uart_terminate_rx_dma(struct tegra_uart_port *tup)
- {
- 	struct dma_tx_state state;
- 
--	if (!tup->rx_dma_active)
-+	if (!tup->rx_dma_active) {
-+		do_handle_rx_pio(tup);
- 		return;
-+	}
- 
- 	dmaengine_terminate_all(tup->rx_dma_chan);
- 	dmaengine_tx_status(tup->rx_dma_chan, tup->rx_cookie, &state);
-@@ -816,18 +825,6 @@ static void tegra_uart_handle_modem_signal_change(struct uart_port *u)
- 		uart_handle_cts_change(&tup->uport, msr & UART_MSR_CTS);
- }
- 
--static void do_handle_rx_pio(struct tegra_uart_port *tup)
--{
--	struct tty_struct *tty = tty_port_tty_get(&tup->uport.state->port);
--	struct tty_port *port = &tup->uport.state->port;
--
--	tegra_uart_handle_rx_pio(tup, port);
--	if (tty) {
--		tty_flip_buffer_push(port);
--		tty_kref_put(tty);
--	}
--}
--
- static irqreturn_t tegra_uart_isr(int irq, void *data)
- {
- 	struct tegra_uart_port *tup = data;
--- 
-2.24.0
+I will change the account details to yours, and apply for a visa card
+with your details in our bank, they will send the visa card to you and
+you will be withdrawing money with it and always send my own
+percentage of the money, and the money we are talking about is
+$6.5Million us dollars.
 
+Whatever amount you withdraw daily, you will send 50% to me and you
+will take 50%, the visa card and the bank account will be on your
+name, I will be waiting for your information as soon as possible.
+Your name...........................................
+
+Age.................................................
+
+Sex.................................................
+
+Country.............................................
+
+Occupation..........................................
+
+Phone number........................................
+
+
+Best Regards.
+
+Mr.Suleman Mohammed
+
+MAIL.....suleman1945mohammed@gmail.com
