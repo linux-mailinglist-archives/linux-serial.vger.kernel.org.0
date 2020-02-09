@@ -2,72 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B38155FFF
-	for <lists+linux-serial@lfdr.de>; Fri,  7 Feb 2020 21:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 287421568D9
+	for <lists+linux-serial@lfdr.de>; Sun,  9 Feb 2020 05:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbgBGUoK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 7 Feb 2020 15:44:10 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:47020 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727032AbgBGUoJ (ORCPT
+        id S1727613AbgBIExC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 8 Feb 2020 23:53:02 -0500
+Received: from mx137-tc.baidu.com ([61.135.168.137]:55291 "EHLO
+        tc-sys-mailedm03.tc.baidu.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727604AbgBIExC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 7 Feb 2020 15:44:09 -0500
-Received: by mail-ot1-f66.google.com with SMTP id g64so553643otb.13
-        for <linux-serial@vger.kernel.org>; Fri, 07 Feb 2020 12:44:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=WJgFJ9PR0yBQ+ciD08Pby60OVZzn3dTgtieZ17slfRQssKmPnwQmAwZPgDIpR6heck
-         dDY9m0nAiR73dL1CtCDLlqWI9lV6barO9i6phYUUcmMyI9lhyUunotwwGjtLNjZZXHps
-         B+ZJy7kS8IDHqb+LatDXLkBcGkPTiMku+kX9Fb92ZmFsnK1n3liOHkc4TmrSz2VBzqpm
-         gOXxQUuwBna/l8aq9nu864h1RGE/T5vMQdJwoV4IagKfmqrsTX7n4WpDLnLJobosvK0X
-         9Z7fBUirFx02ZREq+PBFhuGxFcksAi/eOnsjoHpvtfcuXe3k+tw0qtyYWnKvHtkX+Drl
-         CMWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=CEgO8BpPk4nLqAECKx3ud7ZVd0/rtJV1Beco9VtAhaCFo0Y5rjTIjnXGtUQr+WjGg0
-         TNUvUtimGg5E8Eslikbwrfwrl7GtYKwAt0GaoFXs5xmSraeS2btFJXCPtOI6izgLgfHE
-         W/1a0BPuLQSVAOQsiOvx4nLmbnkocdUo3vv6x4Gmm2BiVN8XhopZ6u3dcFS+iywrJA3F
-         H0OzHD4eh81al6i2+HVKlEYGHKpGv8miuRjNZIPuHu6XgYh20lobZpBvud16AGuWEDmr
-         aA8eu3h6/aGFY0VeELgxe7vLABSn0ItTk8FqRlsGvyaFZs/sM1jQtiiSanNdtr29JbSQ
-         rReg==
-X-Gm-Message-State: APjAAAV0bqSf2uBrScC9j0iFOa2/3G+sJYzFd/ixJzSJYzaWbQXVnOqV
-        4GlRnz8JjU3JmDwX3Jj/16U1KcS3Ooe5iEJJ19I=
-X-Google-Smtp-Source: APXvYqxZ0BHxezvYatUCwR5ujJY2IO6fZCUlpHww8WEnDHAAAY+0VvtiMdEe6JnWZWwDRH8AP8uVvx3q0Y+IviYPdhQ=
-X-Received: by 2002:a9d:7305:: with SMTP id e5mr948882otk.64.1581108248790;
- Fri, 07 Feb 2020 12:44:08 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:44:08 -0800 (PST)
-Reply-To: auch197722@gmail.com
-From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
-Date:   Fri, 7 Feb 2020 15:44:08 -0500
-Message-ID: <CAPNvSTj-8q7w5QPmnH26+_3xCKjEWyE+9xcb8QyQs9Xie+iYgg@mail.gmail.com>
-Subject: LETTER OF INQUIRY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 8 Feb 2020 23:53:02 -0500
+X-Greylist: delayed 615 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Feb 2020 23:53:01 EST
+Received: from localhost (cp01-cos-dev01.cp01.baidu.com [10.92.119.46])
+        by tc-sys-mailedm03.tc.baidu.com (Postfix) with ESMTP id 84AF3450002B;
+        Sun,  9 Feb 2020 12:42:27 +0800 (CST)
+From:   Li RongQing <lirongqing@baidu.com>
+To:     gregkh@linuxfoundation.org, jslaby@suse.com,
+        haolee.swjtu@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux-serial@vger.kernel.org
+Subject: [PATCH] serial: 8250_pnp: pass IRQ shared flag to UART ports
+Date:   Sun,  9 Feb 2020 12:42:27 +0800
+Message-Id: <1581223347-31534-1-git-send-email-lirongqing@baidu.com>
+X-Mailer: git-send-email 1.7.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Good Day,
+On some systems IRQ lines might be shared between multiple devices.
+If so, the irqflags have to be configured accordingly. The reason is:
+The 8250 port startup code performs IRQ tests *before* the IRQ handler
+for that particular port is registered.
 
-I work as a clerk in a Bank here in Nigeria, I have a very
-confidential Business Proposition for you. There is a said amount of
-money floating in the bank unclaimed, belonging to the bank Foreign
-customer who die with his family in the Ethiopian Airline crash of
-March 11, 2019.
+This commit fixed the below issue:
+[  973.782131] 8250 request irq 00000000f5a0e2ae 00000000f5a0e2ae 0
+[  973.785414] genirq: Flags mismatch irq 16. 00000004 (ttyS0) vs. 00000084 (ipmi_si)
+[  973.788741] CPU: 0 PID: 1 Comm: systemd Tainted: G            E     4.19.0-1.0.0.1.rc2 #5
+[  973.792112] Hardware name: Huawei TaiShan 2280 V2/BC82AMDDA, BIOS 0.18 06/10/2019
+[  973.795577] Call trace:
+[  973.799018]  dump_backtrace+0x0/0x198
+[  973.802493]  show_stack+0x24/0x30
+[  973.805965]  dump_stack+0x9c/0xbc
+[  973.809357]  __setup_irq+0x150/0x6c0
+[  973.812663]  request_threaded_irq+0xe8/0x180
+[  973.815891]  univ8250_setup_irq+0x278/0x2a0
+[  973.819007]  serial8250_do_startup+0x468/0x818
+[  973.822060]  serial8250_startup+0x38/0x48
+[  973.825099]  uart_startup.part.9+0x11c/0x270
+[  973.828156]  uart_port_activate+0x64/0x98
+[  973.831247]  tty_port_open+0xac/0x110
+[  973.834349]  uart_open+0x2c/0x40
+[  973.837415]  tty_open+0x110/0x3f8
+[  973.840464]  chrdev_open+0xc8/0x248
+[  973.843584]  do_dentry_open+0x118/0x358
+[  973.846615]  vfs_open+0x38/0x48
+[  973.849621]  do_last+0x23c/0x808
+[  973.852610]  path_openat+0x88/0x260
+[  973.855596]  do_filp_open+0x88/0x100
+[  973.858582]  do_sys_open+0x188/0x218
+[  973.861564]  __arm64_sys_openat+0x2c/0x38
+[  973.864575]  el0_svc_common+0xac/0x178
+[  973.867592]  el0_svc_handler+0x38/0x78
+[  973.870570]  el0_svc+0x8/0xc
 
-I seek your good collaboration to move the fund for our benefit. we
-have agreed that 40% be yours once you help claim.
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+---
+ drivers/tty/serial/8250/8250_pnp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Do get back to with 1) Your Full Name: (2) Residential Address: (3)
-Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
-funds.
+diff --git a/drivers/tty/serial/8250/8250_pnp.c b/drivers/tty/serial/8250/8250_pnp.c
+index de90d681b64c..10c260928952 100644
+--- a/drivers/tty/serial/8250/8250_pnp.c
++++ b/drivers/tty/serial/8250/8250_pnp.c
+@@ -476,6 +476,7 @@ serial_pnp_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
+ 		uart.port.flags |= UPF_SHARE_IRQ;
+ 	uart.port.uartclk = 1843200;
+ 	uart.port.dev = &dev->dev;
++	uart.port.irqflags |= IRQF_SHARED;
+ 
+ 	line = serial8250_register_8250_port(&uart);
+ 	if (line < 0 || (flags & CIR_PORT))
+-- 
+2.16.2
 
-Regards
-Theophilus Odadudu
