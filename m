@@ -2,36 +2,27 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9845B156E4E
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Feb 2020 05:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E41157043
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Feb 2020 09:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727634AbgBJEBa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 9 Feb 2020 23:01:30 -0500
-Received: from muru.com ([72.249.23.125]:54134 "EHLO muru.com"
+        id S1727420AbgBJILe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Feb 2020 03:11:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40974 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727602AbgBJEB3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 9 Feb 2020 23:01:29 -0500
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 340AC8139;
-        Mon, 10 Feb 2020 04:02:12 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Cox <gnomes@lxorguk.ukuu.org.uk>, Jiri Slaby <jslaby@suse.cz>,
-        Johan Hovold <johan@kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Rob Herring <robh@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] ARM: dts: omap4-droid4: Enable basic modem support
-Date:   Sun,  9 Feb 2020 20:01:06 -0800
-Message-Id: <20200210040107.10306-5-tony@atomide.com>
+        id S1725468AbgBJILe (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 10 Feb 2020 03:11:34 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 5B319AF4E;
+        Mon, 10 Feb 2020 08:11:32 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 1/2] vt: selection, handle pending signals in paste_selection
+Date:   Mon, 10 Feb 2020 09:11:30 +0100
+Message-Id: <20200210081131.23572-1-jslaby@suse.cz>
 X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200210040107.10306-1-tony@atomide.com>
-References: <20200210040107.10306-1-tony@atomide.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -39,31 +30,68 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This allows apps to use /dev/motmdm1 for voice call AT commands,
-/dev/motmdm3 for sending SMS, and /dev/motmdm9 for reading SMS.
+When pasting a selection to a vt, the task is set as INTERRUPTIBLE while
+waiting for a tty to unthrottle. But signals are not handled at all.
+Normally, this is not a problem as tty_ldisc_receive_buf receives all
+the goods and a user has no reason to interrupt the task.
 
-Voice call audio mixer and GNSS are not yet supported.
+There are two scenarios where this matters:
+1) when the tty is throttled and a signal is sent to the process, it
+   spins on a CPU until the tty is unthrottled. schedule() does not
+   really echedule, but returns immediately, of course.
+2) when the sel_buffer becomes invalid, KASAN prevents any reads from it
+   and the loop simply does not proceed and spins forever (causing the
+   tty to throttle, but the code never sleeps, the same as above). This
+   sometimes happens as there is a race in the sel_buffer handling code.
 
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+So add signal handling to this ioctl (TIOCL_PASTESEL) and return -EINTR
+in case a signal is pending.
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- arch/arm/boot/dts/motorola-mapphone-common.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/vt/selection.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/motorola-mapphone-common.dtsi b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
---- a/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-+++ b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-@@ -689,6 +689,12 @@ &uart1 {
- 	pinctrl-0 = <&uart1_pins>;
- 	interrupts-extended = <&wakeupgen GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH
- 			       &omap4_pmx_core 0xfc>;
-+
-+	modem {
-+		compatible = "motorola,mapphone-mdm6600-serial";
-+		phys = <&fsusb1_phy>;
-+		phy-names = "usb";
-+	};
- };
+diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+index 78732feaf65b..44d974d4159f 100644
+--- a/drivers/tty/vt/selection.c
++++ b/drivers/tty/vt/selection.c
+@@ -29,6 +29,8 @@
+ #include <linux/console.h>
+ #include <linux/tty_flip.h>
  
- &uart3 {
++#include <linux/sched/signal.h>
++
+ /* Don't take this from <ctype.h>: 011-015 on the screen aren't spaces */
+ #define isspace(c)	((c) == ' ')
+ 
+@@ -350,6 +352,7 @@ int paste_selection(struct tty_struct *tty)
+ 	unsigned int count;
+ 	struct  tty_ldisc *ld;
+ 	DECLARE_WAITQUEUE(wait, current);
++	int ret = 0;
+ 
+ 	console_lock();
+ 	poke_blanked_console();
+@@ -363,6 +366,10 @@ int paste_selection(struct tty_struct *tty)
+ 	add_wait_queue(&vc->paste_wait, &wait);
+ 	while (sel_buffer && sel_buffer_lth > pasted) {
+ 		set_current_state(TASK_INTERRUPTIBLE);
++		if (signal_pending(current)) {
++			ret = -EINTR;
++			break;
++		}
+ 		if (tty_throttled(tty)) {
+ 			schedule();
+ 			continue;
+@@ -378,6 +385,6 @@ int paste_selection(struct tty_struct *tty)
+ 
+ 	tty_buffer_unlock_exclusive(&vc->port);
+ 	tty_ldisc_deref(ld);
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(paste_selection);
 -- 
 2.25.0
+
