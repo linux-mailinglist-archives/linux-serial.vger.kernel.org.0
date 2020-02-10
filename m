@@ -2,181 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C00C157044
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Feb 2020 09:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80D8157293
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Feb 2020 11:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727507AbgBJILf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 10 Feb 2020 03:11:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40980 "EHLO mx2.suse.de"
+        id S1727061AbgBJKJp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Feb 2020 05:09:45 -0500
+Received: from mga09.intel.com ([134.134.136.24]:44107 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727056AbgBJILf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 10 Feb 2020 03:11:35 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 0133FB019;
-        Mon, 10 Feb 2020 08:11:33 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        syzbot+59997e8d5cbdc486e6f6@syzkaller.appspotmail.com
-Subject: [PATCH 2/2] vt: selection, close sel_buffer race
-Date:   Mon, 10 Feb 2020 09:11:31 +0100
-Message-Id: <20200210081131.23572-2-jslaby@suse.cz>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200210081131.23572-1-jslaby@suse.cz>
-References: <20200210081131.23572-1-jslaby@suse.cz>
+        id S1727045AbgBJKJo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 10 Feb 2020 05:09:44 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Feb 2020 02:09:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,424,1574150400"; 
+   d="scan'208";a="221504846"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2020 02:09:42 -0800
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1j160d-000XHT-RW; Mon, 10 Feb 2020 12:09:43 +0200
+Date:   Mon, 10 Feb 2020 12:09:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Li RongQing <lirongqing@baidu.com>
+Cc:     gregkh@linuxfoundation.org, jslaby@suse.com,
+        haolee.swjtu@gmail.com, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_pnp: pass IRQ shared flag to UART ports
+Message-ID: <20200210100943.GR10400@smile.fi.intel.com>
+References: <1581223347-31534-1-git-send-email-lirongqing@baidu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1581223347-31534-1-git-send-email-lirongqing@baidu.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-syzkaller reported this UAF:
-BUG: KASAN: use-after-free in n_tty_receive_buf_common+0x2481/0x2940 drivers/tty/n_tty.c:1741
-Read of size 1 at addr ffff8880089e40e9 by task syz-executor.1/13184
+On Sun, Feb 09, 2020 at 12:42:27PM +0800, Li RongQing wrote:
+> On some systems IRQ lines might be shared between multiple devices.
+> If so, the irqflags have to be configured accordingly. The reason is:
+> The 8250 port startup code performs IRQ tests *before* the IRQ handler
+> for that particular port is registered.
 
-CPU: 0 PID: 13184 Comm: syz-executor.1 Not tainted 5.4.7 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Call Trace:
-...
- kasan_report+0xe/0x20 mm/kasan/common.c:634
- n_tty_receive_buf_common+0x2481/0x2940 drivers/tty/n_tty.c:1741
- tty_ldisc_receive_buf+0xac/0x190 drivers/tty/tty_buffer.c:461
- paste_selection+0x297/0x400 drivers/tty/vt/selection.c:372
- tioclinux+0x20d/0x4e0 drivers/tty/vt/vt.c:3044
- vt_ioctl+0x1bcf/0x28d0 drivers/tty/vt/vt_ioctl.c:364
- tty_ioctl+0x525/0x15a0 drivers/tty/tty_io.c:2657
- vfs_ioctl fs/ioctl.c:47 [inline]
+Thanks for the report.
 
-It is due to a race between parallel paste_selection (TIOCL_PASTESEL)
-and set_selection_user (TIOCL_SETSEL) invocations. One uses sel_buffer,
-while the other frees it and reallocates a new one for another
-selection. Add a mutex to close this race.
+Before we proceed with it, can we have more information about the device in question?
+How is it enumerated? What is in resources (ACPI / or ...?) for this device?
+Also how IPMI is being involved to all this and why?
 
-The mutex takes care properly of sel_buffer and sel_buffer_lth only. The
-other selection global variables (like sel_start, sel_end, and sel_cons)
-are protected only in set_selection_user. The other functions need quite
-some more work to close the races of the variables there. This is going
-to happen later.
+> This commit fixed the below issue:
+> [  973.782131] 8250 request irq 00000000f5a0e2ae 00000000f5a0e2ae 0
+> [  973.785414] genirq: Flags mismatch irq 16. 00000004 (ttyS0) vs. 00000084 (ipmi_si)
+> [  973.788741] CPU: 0 PID: 1 Comm: systemd Tainted: G            E     4.19.0-1.0.0.1.rc2 #5
+> [  973.792112] Hardware name: Huawei TaiShan 2280 V2/BC82AMDDA, BIOS 0.18 06/10/2019
+> [  973.795577] Call trace:
+> [  973.799018]  dump_backtrace+0x0/0x198
+> [  973.802493]  show_stack+0x24/0x30
+> [  973.805965]  dump_stack+0x9c/0xbc
+> [  973.809357]  __setup_irq+0x150/0x6c0
+> [  973.812663]  request_threaded_irq+0xe8/0x180
+> [  973.815891]  univ8250_setup_irq+0x278/0x2a0
+> [  973.819007]  serial8250_do_startup+0x468/0x818
+> [  973.822060]  serial8250_startup+0x38/0x48
 
-This likely fixes (I am unsure as there is no reproducer provided) bug
-206361 too. It was marked as CVE-2020-8648.
+Nit: no need to put entire stack for this.
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Reported-by: syzbot+59997e8d5cbdc486e6f6@syzkaller.appspotmail.com
-References: https://bugzilla.kernel.org/show_bug.cgi?id=206361
----
- drivers/tty/vt/selection.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+> --- a/drivers/tty/serial/8250/8250_pnp.c
+> +++ b/drivers/tty/serial/8250/8250_pnp.c
+> @@ -476,6 +476,7 @@ serial_pnp_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
+>  		uart.port.flags |= UPF_SHARE_IRQ;
+>  	uart.port.uartclk = 1843200;
+>  	uart.port.dev = &dev->dev;
+> +	uart.port.irqflags |= IRQF_SHARED;
 
-diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
-index 44d974d4159f..0c50d7410b31 100644
---- a/drivers/tty/vt/selection.c
-+++ b/drivers/tty/vt/selection.c
-@@ -16,6 +16,7 @@
- #include <linux/tty.h>
- #include <linux/sched.h>
- #include <linux/mm.h>
-+#include <linux/mutex.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- 
-@@ -45,6 +46,7 @@ static volatile int sel_start = -1; 	/* cleared by clear_selection */
- static int sel_end;
- static int sel_buffer_lth;
- static char *sel_buffer;
-+static DEFINE_MUTEX(sel_lock);
- 
- /* clear_selection, highlight and highlight_pointer can be called
-    from interrupt (via scrollback/front) */
-@@ -186,7 +188,7 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 	char *bp, *obp;
- 	int i, ps, pe, multiplier;
- 	u32 c;
--	int mode;
-+	int mode, ret = 0;
- 
- 	poke_blanked_console();
- 
-@@ -212,6 +214,7 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 	if (ps > pe)	/* make sel_start <= sel_end */
- 		swap(ps, pe);
- 
-+	mutex_lock(&sel_lock);
- 	if (sel_cons != vc_cons[fg_console].d) {
- 		clear_selection();
- 		sel_cons = vc_cons[fg_console].d;
-@@ -257,9 +260,10 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 			break;
- 		case TIOCL_SELPOINTER:
- 			highlight_pointer(pe);
--			return 0;
-+			goto unlock;
- 		default:
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto unlock;
- 	}
- 
- 	/* remove the pointer */
-@@ -281,7 +285,7 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 	else if (new_sel_start == sel_start)
- 	{
- 		if (new_sel_end == sel_end)	/* no action required */
--			return 0;
-+			goto unlock;
- 		else if (new_sel_end > sel_end)	/* extend to right */
- 			highlight(sel_end + 2, new_sel_end);
- 		else				/* contract from right */
-@@ -309,7 +313,8 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 	if (!bp) {
- 		printk(KERN_WARNING "selection: kmalloc() failed\n");
- 		clear_selection();
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto unlock;
- 	}
- 	kfree(sel_buffer);
- 	sel_buffer = bp;
-@@ -334,7 +339,9 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 		}
- 	}
- 	sel_buffer_lth = bp - sel_buffer;
--	return 0;
-+unlock:
-+	mutex_unlock(&sel_lock);
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(set_selection_kernel);
- 
-@@ -364,6 +371,7 @@ int paste_selection(struct tty_struct *tty)
- 	tty_buffer_lock_exclusive(&vc->port);
- 
- 	add_wait_queue(&vc->paste_wait, &wait);
-+	mutex_lock(&sel_lock);
- 	while (sel_buffer && sel_buffer_lth > pasted) {
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		if (signal_pending(current)) {
-@@ -371,7 +379,9 @@ int paste_selection(struct tty_struct *tty)
- 			break;
- 		}
- 		if (tty_throttled(tty)) {
-+			mutex_unlock(&sel_lock);
- 			schedule();
-+			mutex_lock(&sel_lock);
- 			continue;
- 		}
- 		__set_current_state(TASK_RUNNING);
-@@ -380,6 +390,7 @@ int paste_selection(struct tty_struct *tty)
- 					      count);
- 		pasted += count;
- 	}
-+	mutex_unlock(&sel_lock);
- 	remove_wait_queue(&vc->paste_wait, &wait);
- 	__set_current_state(TASK_RUNNING);
- 
+Why not to use UPF_SHARE_IRQ flags instead?
+
 -- 
-2.25.0
+With Best Regards,
+Andy Shevchenko
+
 
