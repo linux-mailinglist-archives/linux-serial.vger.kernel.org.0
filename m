@@ -2,57 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E786015AD7C
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Feb 2020 17:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6DF15AD80
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Feb 2020 17:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728624AbgBLQfz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Feb 2020 11:35:55 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:43173 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727372AbgBLQfy (ORCPT
+        id S1728575AbgBLQf4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 Feb 2020 11:35:56 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:45700 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727372AbgBLQfz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Feb 2020 11:35:54 -0500
-Received: by mail-ot1-f65.google.com with SMTP id p8so2501165oth.10
-        for <linux-serial@vger.kernel.org>; Wed, 12 Feb 2020 08:35:54 -0800 (PST)
+        Wed, 12 Feb 2020 11:35:55 -0500
+Received: by mail-ot1-f68.google.com with SMTP id 59so2500093otp.12
+        for <linux-serial@vger.kernel.org>; Wed, 12 Feb 2020 08:35:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kopismobile-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zl2PlEEW/OcqeGW2B9HrUYrTRB6X4SONJGCgCc3XydE=;
-        b=zxAs9Y/gHCE9rA3PhVYSee+bSf/vDErJTHnsi4TLl056W99fYxhof0SJ/zZUquU5S1
-         ojQ9y8T4sgzIG1miea81KwehcDg6BbRQgjIKXx2bb51zUXvz9SQU2ksxOTDz8V5PYRuT
-         abvTk1BzlOgUAmblvKjrFJuoDYy/zbqemwfOfsZY3mu8ZkpsUK02SrspKGK5Ouomzx88
-         AnwRjEyzLoaboqRs5SDYG8JvITRELEetfGuHuifn2m3fYVYV9OeJll/1YIfNaFmS3yyO
-         jcMERpmcgtZmzPvmy5Wh3x20GENoPqg2v1YJkJ6+C5KLvJWPe3KjLSixl+5h5CQkZmqD
-         JzBA==
+        bh=tY7FM+YqUS7N2tNsyLMK7x5uFSGC0ioulbSnD6rcjEg=;
+        b=BWrwfjKX4OmgBlSq1N2hFgW9Yy/rb0UJaINhspqVJEfz5VfaKjRNKTf3hclkA0sNph
+         /0dYfmCUUfuXtYwzs/jcRLInMp6NHZChrb+5c8ZBwGb+ehHNpdRXbPFdFf97MsER/aBZ
+         w9/H9WsK57gpj55vIKkxyFpaVNVmyF9ONmQSWcdFoLDVy0oHbKMgPefn3eExj5ykCR3b
+         ImbIee5/wdzn8s7SswBiUYJTwh/Ag0yHtxy0InHxguKOA919MKMremkKVQPWRj02HUp+
+         BhlECMOKSzGTc5nsvw5Z4yzd/Q9vNZ1O9CAaWALLSUEZON4W8LRjD9K1+Xn0rVkw5P4z
+         Rn8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zl2PlEEW/OcqeGW2B9HrUYrTRB6X4SONJGCgCc3XydE=;
-        b=enKQ0+Keujqb4OEN8LausJWOVAZLc7kSaCcdYixEX7YFkscjBI/03oo3JCmfs8vXvi
-         uh+CssgUqgZHb+D0TitpNSrM7utdRo/7M9lNw98MplbRw7pp/ZVWeO7fa8o1Rsn3T+e3
-         8OxOrU1wG90M9HPc9A9G9o0jYdQfC3ICsM89vG7uYmwf+2ObXJ1NiCsoo+7jc2bRhMZ9
-         cfuwfQafv7X6rdlSNlDyqPLud/i/FJuQ0JdY8vxTVVSo6vYueRMFdGpSVP9cWtUAkI9e
-         ocHtgIYQoFRba0vptQmLxzcVC2YH3rD0o4HphmB6N3XOvJwbnVwmCDwXWDoMbS+DmZO5
-         lDNA==
-X-Gm-Message-State: APjAAAVonqdQr8WcOt75TlQ5/T5XVuy8IQgouyLpLTO8UvPaQxS+tPyW
-        nAlBoG56qS8rkLJYd7inFeVLng==
-X-Google-Smtp-Source: APXvYqzuRwLgt8dIAgf5ikkNeGR7ZlyM7mSLTFEJEEgXBP99P7Bw+Hz5dawOuL4/UOoKHiMvni4r6g==
-X-Received: by 2002:a05:6830:1184:: with SMTP id u4mr9442246otq.221.1581525354081;
-        Wed, 12 Feb 2020 08:35:54 -0800 (PST)
+        bh=tY7FM+YqUS7N2tNsyLMK7x5uFSGC0ioulbSnD6rcjEg=;
+        b=CVa9UA6leLFlekuj03eFWSBPKo5rDMoJmSUU2CidLo1lUACI4L2PiwW44jdX7xzeju
+         qOemZmOZQ9SeA+KJqIejRzc//v4j0+YWnl0K56ggYwgMR14F66iqqVlpwvkAOckBwlKI
+         YczY/TPZoCGPJ8M9pdJUQBIN/nI4IfJ7JQ4xRHHbtXQ4viLqaf9ATDJZlRG5G0G+etak
+         5xSldFd+GBm70wd9RvLAaLZ33o2GWDrRKHmsXRWlzwkOXav/1JQqlEhApnwLIHKR2630
+         PJZcNba88Fkgbqj8WCIQuEn1yq5ll0hx6UVdduNT5QURwcda0Z+2Gl7/3YM4chdgeb1W
+         fkug==
+X-Gm-Message-State: APjAAAVFNpeyrQm2JG3Ck8Bugn+GlBoEX2yfrQAh/P0F5XFwlZBCUCjp
+        uzQk+Lxmpv+L9PFJz4+4CZP4kA==
+X-Google-Smtp-Source: APXvYqy2lwhBxBYy5tU3gd4qcznyANtPRwbQkRXqeIfmvAUYGs0MvBHz5kTUBQ3grn9T5/EGMx/Wqw==
+X-Received: by 2002:a9d:5786:: with SMTP id q6mr9558964oth.164.1581525355005;
+        Wed, 12 Feb 2020 08:35:55 -0800 (PST)
 Received: from farregard-ubuntu.kopismobile.org (c-73-177-17-21.hsd1.ms.comcast.net. [73.177.17.21])
-        by smtp.gmail.com with ESMTPSA id q22sm321034otf.17.2020.02.12.08.35.53
+        by smtp.gmail.com with ESMTPSA id q22sm321034otf.17.2020.02.12.08.35.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 08:35:53 -0800 (PST)
+        Wed, 12 Feb 2020 08:35:54 -0800 (PST)
 From:   George Hilliard <ghilliard@kopismobile.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     George Hilliard <ghilliard@kopismobile.com>,
         linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         NXP Linux Team <linux-imx@nxp.com>, kernel@pengutronix.de
-Subject: [PATCH v3 1/2] dt-bindings: serial: document fsl,inverted-tx and -rx options
-Date:   Wed, 12 Feb 2020 10:35:37 -0600
-Message-Id: <20200212163538.3006-2-ghilliard@kopismobile.com>
+Subject: [PATCH v3 2/2] tty: imx serial: Implement support for reversing TX and RX polarity
+Date:   Wed, 12 Feb 2020 10:35:38 -0600
+Message-Id: <20200212163538.3006-3-ghilliard@kopismobile.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200212163538.3006-1-ghilliard@kopismobile.com>
 References: <20200212163538.3006-1-ghilliard@kopismobile.com>
@@ -63,31 +63,89 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add a description for the new fsl,inverted-tx and fsl,inverted-rx
-options for the i.MX UART peripheral.
+The peripheral has support for inverting its input and/or output
+signals.  This is useful if the hardware flips polarity of the
+peripheral's signal, such as swapped +/- pins on an RS-422 transceiver,
+or an inverting level shifter.  Add support for these control registers
+via the device tree binding.
 
 Signed-off-by: George Hilliard <ghilliard@kopismobile.com>
 ---
-v1..v2: Removed confidentiality spam
+v1..v2: Remove confidentiality spam
+v2..v3: Set *and* clear register, and do it before TX enable
 
- Documentation/devicetree/bindings/serial/fsl-imx-uart.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/tty/serial/imx.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-imx-uart.txt b/Documentation/devicetree/bindings/serial/fsl-imx-uart.txt
-index 35957cbf1571..c8d677f9491f 100644
---- a/Documentation/devicetree/bindings/serial/fsl-imx-uart.txt
-+++ b/Documentation/devicetree/bindings/serial/fsl-imx-uart.txt
-@@ -8,6 +8,10 @@ Required properties:
- Optional properties:
- - fsl,dte-mode : Indicate the uart works in DTE mode. The uart works
-                   in DCE mode by default.
-+- fsl,inverted-tx , fsl,inverted-rx : Indicate that the hardware attached
-+  to the peripheral inverts the signal transmitted or received,
-+  respectively, and that the peripheral should invert its output/input
-+  using the INVT/INVR registers.
- - rs485-rts-delay, rs485-rts-active-low, rs485-rx-during-tx,
-   linux,rs485-enabled-at-boot-time: see rs485.txt. Note that for RS485
-   you must enable either the "uart-has-rtscts" or the "rts-gpios"
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 0c6c63166250..205627bcad66 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -195,6 +195,8 @@ struct imx_port {
+ 	unsigned int		have_rtscts:1;
+ 	unsigned int		have_rtsgpio:1;
+ 	unsigned int		dte_mode:1;
++	unsigned int		inverted_tx:1;
++	unsigned int		inverted_rx:1;
+ 	struct clk		*clk_ipg;
+ 	struct clk		*clk_per;
+ 	const struct imx_uart_data *devdata;
+@@ -1335,7 +1337,7 @@ static int imx_uart_startup(struct uart_port *port)
+ 	int retval, i;
+ 	unsigned long flags;
+ 	int dma_is_inited = 0;
+-	u32 ucr1, ucr2, ucr4;
++	u32 ucr1, ucr2, ucr3, ucr4;
+ 
+ 	retval = clk_prepare_enable(sport->clk_per);
+ 	if (retval)
+@@ -1390,8 +1392,22 @@ static int imx_uart_startup(struct uart_port *port)
+ 	ucr4 = imx_uart_readl(sport, UCR4) & ~UCR4_OREN;
+ 	if (!sport->dma_is_enabled)
+ 		ucr4 |= UCR4_OREN;
++	if (sport->inverted_rx)
++		ucr4 |= UCR4_INVR;
++	else
++		ucr4 &= ~UCR4_INVR;
+ 	imx_uart_writel(sport, ucr4, UCR4);
+ 
++	/*
++	 * configure tx polarity before enabling tx
++	 */
++	ucr3 = imx_uart_readl(sport, UCR3);
++	if (sport->inverted_tx)
++		ucr3 |= UCR3_INVT;
++	else
++		ucr3 &= ~UCR3_INVT;
++	imx_uart_writel(sport, ucr3, UCR3);
++
+ 	ucr2 = imx_uart_readl(sport, UCR2) & ~UCR2_ATEN;
+ 	ucr2 |= (UCR2_RXEN | UCR2_TXEN);
+ 	if (!sport->have_rtscts)
+@@ -1405,10 +1421,6 @@ static int imx_uart_startup(struct uart_port *port)
+ 	imx_uart_writel(sport, ucr2, UCR2);
+ 
+ 	if (!imx_uart_is_imx1(sport)) {
+-		u32 ucr3;
+-
+-		ucr3 = imx_uart_readl(sport, UCR3);
+-
+ 		ucr3 |= UCR3_DTRDEN | UCR3_RI | UCR3_DCD;
+ 
+ 		if (sport->dte_mode)
+@@ -2184,6 +2196,12 @@ static int imx_uart_probe_dt(struct imx_port *sport,
+ 	if (of_get_property(np, "rts-gpios", NULL))
+ 		sport->have_rtsgpio = 1;
+ 
++	if (of_get_property(np, "fsl,inverted-tx", NULL))
++		sport->inverted_tx = 1;
++
++	if (of_get_property(np, "fsl,inverted-rx", NULL))
++		sport->inverted_rx = 1;
++
+ 	return 0;
+ }
+ #else
 -- 
 2.25.0
 
