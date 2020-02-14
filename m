@@ -2,59 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F98215F65B
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 20:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E684615F754
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 21:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387753AbgBNTGG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Feb 2020 14:06:06 -0500
-Received: from muru.com ([72.249.23.125]:55378 "EHLO muru.com"
+        id S2389461AbgBNUCW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Feb 2020 15:02:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387398AbgBNTGG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Feb 2020 14:06:06 -0500
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 6B90C80E7;
-        Fri, 14 Feb 2020 19:06:50 +0000 (UTC)
-Date:   Fri, 14 Feb 2020 11:06:03 -0800
-From:   Tony Lindgren <tony@atomide.com>
+        id S2389437AbgBNUCR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 14 Feb 2020 15:02:17 -0500
+Received: from localhost (unknown [12.246.51.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 65DB124673;
+        Fri, 14 Feb 2020 20:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581710536;
+        bh=NDlZpEFzQFI5oTbPtjB57GN93k87n94Y6gYiKbZfEFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OUOB4vdBEvvN7QFve5totDd+oZ9uSVQAIZztoPgap2sgYViUKAedsGEfNfZ2fyOEQ
+         ELqNYkpZ86ANMrOqj/GP/9pSXeFoZ51/kpFYjb1ELVyiM4fluri5xCTIa25C8J1PZF
+         pqoX2IcjhIm9X8nLqTRIVivAPC2rerLCKtCAssFQ=
+Date:   Fri, 14 Feb 2020 08:27:19 -0800
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH v2 5/8] serial: 8250_port: Don't use power management for
- kernel console
-Message-ID: <20200214190603.GT16391@atomide.com>
+Cc:     Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH v2 3/8] serial: core: use octal permissions on module
+ param
+Message-ID: <20200214162719.GA3987177@kroah.com>
 References: <20200214114339.53897-1-andriy.shevchenko@linux.intel.com>
- <20200214114339.53897-6-andriy.shevchenko@linux.intel.com>
- <20200214133918.GP25745@shell.armlinux.org.uk>
- <20200214171348.GP16391@atomide.com>
- <20200214180935.GP10400@smile.fi.intel.com>
- <20200214184251.GR16391@atomide.com>
+ <20200214114339.53897-4-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200214184251.GR16391@atomide.com>
+In-Reply-To: <20200214114339.53897-4-andriy.shevchenko@linux.intel.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [200214 10:42]:
-> OK. So far no luck getting console UART idled after detaching the
-> console with:
+On Fri, Feb 14, 2020 at 01:43:34PM +0200, Andy Shevchenko wrote:
+> Symbolic permissions 'S_IRUSR | S_IRGRP' are not preferred.
+> Use octal permissions '0440'. This also makes code shorter.
 > 
-> # echo N > /sys/class/tty/ttyS2/console
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/tty/serial/serial_core.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
 > 
-> Any ideas what might be missing still?
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index bb2287048108..7564bbd3061c 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -2749,19 +2749,19 @@ static ssize_t uart_get_attr_iomem_reg_shift(struct device *dev,
+>  	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.iomem_reg_shift);
+>  }
+>  
+> -static DEVICE_ATTR(type, S_IRUSR | S_IRGRP, uart_get_attr_type, NULL);
+> -static DEVICE_ATTR(line, S_IRUSR | S_IRGRP, uart_get_attr_line, NULL);
+> -static DEVICE_ATTR(port, S_IRUSR | S_IRGRP, uart_get_attr_port, NULL);
+> -static DEVICE_ATTR(irq, S_IRUSR | S_IRGRP, uart_get_attr_irq, NULL);
+> -static DEVICE_ATTR(flags, S_IRUSR | S_IRGRP, uart_get_attr_flags, NULL);
+> -static DEVICE_ATTR(xmit_fifo_size, S_IRUSR | S_IRGRP, uart_get_attr_xmit_fifo_size, NULL);
+> -static DEVICE_ATTR(uartclk, S_IRUSR | S_IRGRP, uart_get_attr_uartclk, NULL);
+> -static DEVICE_ATTR(close_delay, S_IRUSR | S_IRGRP, uart_get_attr_close_delay, NULL);
+> -static DEVICE_ATTR(closing_wait, S_IRUSR | S_IRGRP, uart_get_attr_closing_wait, NULL);
+> -static DEVICE_ATTR(custom_divisor, S_IRUSR | S_IRGRP, uart_get_attr_custom_divisor, NULL);
+> -static DEVICE_ATTR(io_type, S_IRUSR | S_IRGRP, uart_get_attr_io_type, NULL);
+> -static DEVICE_ATTR(iomem_base, S_IRUSR | S_IRGRP, uart_get_attr_iomem_base, NULL);
+> -static DEVICE_ATTR(iomem_reg_shift, S_IRUSR | S_IRGRP, uart_get_attr_iomem_reg_shift, NULL);
+> +static DEVICE_ATTR(type, 0440, uart_get_attr_type, NULL);
+> +static DEVICE_ATTR(line, 0440, uart_get_attr_line, NULL);
+> +static DEVICE_ATTR(port, 0440, uart_get_attr_port, NULL);
+> +static DEVICE_ATTR(irq, 0440, uart_get_attr_irq, NULL);
+> +static DEVICE_ATTR(flags, 0440, uart_get_attr_flags, NULL);
+> +static DEVICE_ATTR(xmit_fifo_size, 0440, uart_get_attr_xmit_fifo_size, NULL);
+> +static DEVICE_ATTR(uartclk, 0440, uart_get_attr_uartclk, NULL);
+> +static DEVICE_ATTR(close_delay, 0440, uart_get_attr_close_delay, NULL);
+> +static DEVICE_ATTR(closing_wait, 0440, uart_get_attr_closing_wait, NULL);
+> +static DEVICE_ATTR(custom_divisor, 0440, uart_get_attr_custom_divisor, NULL);
+> +static DEVICE_ATTR(io_type, 0440, uart_get_attr_io_type, NULL);
+> +static DEVICE_ATTR(iomem_base, 0440, uart_get_attr_iomem_base, NULL);
+> +static DEVICE_ATTR(iomem_reg_shift, 0440, uart_get_attr_iomem_reg_shift, NULL);
 
-Looks like echo Y keeps increasing the usage count while
-echo N will never decrease it currently. Is port->dev
-maybe already NULL in serial8250_console_exit() or something?
+I'll take these, but we should move them all to DEVICE_ATTR_RO() as that
+would make things a lot more "obvious" what is happening here.
 
-This is still without the series you listed as a dependency
-though. I need to test with that later on today when I get
-a chance.
+thanks,
 
-Regards,
-
-Tony
+greg k-h
