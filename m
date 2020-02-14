@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 559EC15E424
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 17:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EC015E9FC
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 18:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393597AbgBNQeU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Feb 2020 11:34:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34482 "EHLO mail.kernel.org"
+        id S2389118AbgBNRKk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Feb 2020 12:10:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393370AbgBNQZN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:25:13 -0500
+        id S2391840AbgBNQNg (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:13:36 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2DC0247A5;
-        Fri, 14 Feb 2020 16:25:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BC51A246C1;
+        Fri, 14 Feb 2020 16:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697512;
-        bh=azyiPdDBdQLKWqvIW8+yA4aTJcpbSiRnzzlzZGQROnA=;
+        s=default; t=1581696815;
+        bh=TAJQ3d5LQOTkR0u/zgFlmI/5rfKu3+mGs9qTStlSToU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DE0FSaFuESsXyrCukxgkJKeWVya3IiBQp0f8hxaVncY9kXouj7veu32AUBgKkRSRG
-         r9bcnOhiISbqn0cKXKX4Mwa9yz8XPWDF2+mJQgivhPnHVfnS/ELi6ca/a7JLjqEQVC
-         R49/KdARho1Mlak1fAGQVzCFCJx5z9Kln8pKskZY=
+        b=jAPn1FrHr87eZ67gYRaykgPGvp50GCr7Z3dkJ7W7zZZG5QIx97HEzF+zYNiUzLh6r
+         FtSEz59hxjovYdHzPKvK0k+j5Kb4r5KWSjClSInoZpAroliMEPdSMVs8tZxkD0gFmC
+         95llIZ80bsBv5JrYCtX+Y66apfzs2jE0hTH2s5DA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
         Hulk Robot <hulkci@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 038/100] tty: omap-serial: remove set but unused variable
-Date:   Fri, 14 Feb 2020 11:23:22 -0500
-Message-Id: <20200214162425.21071-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 084/252] tty: omap-serial: remove set but unused variable
+Date:   Fri, 14 Feb 2020 11:08:59 -0500
+Message-Id: <20200214161147.15842-84-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162425.21071-1-sashal@kernel.org>
-References: <20200214162425.21071-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
-index 21fc9b3a27cfa..debd2c93ca3c9 100644
+index 6420ae581a802..5f808d8dfcd5c 100644
 --- a/drivers/tty/serial/omap-serial.c
 +++ b/drivers/tty/serial/omap-serial.c
-@@ -497,10 +497,13 @@ static unsigned int check_modem_status(struct uart_omap_port *up)
+@@ -493,10 +493,13 @@ static unsigned int check_modem_status(struct uart_omap_port *up)
  static void serial_omap_rlsi(struct uart_omap_port *up, unsigned int lsr)
  {
  	unsigned int flag;
