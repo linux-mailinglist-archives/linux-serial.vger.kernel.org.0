@@ -2,80 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF3D15E9C1
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 18:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3EC15EA6F
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 18:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391876AbgBNRJA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Feb 2020 12:09:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43164 "EHLO mail.kernel.org"
+        id S2403841AbgBNRNx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Feb 2020 12:13:53 -0500
+Received: from muru.com ([72.249.23.125]:55290 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403982AbgBNQN6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:13:58 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6FB77246CF;
-        Fri, 14 Feb 2020 16:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696838;
-        bh=WozPa1qStD4LufFFl3Dl7fGjdGPOMv7Wj8JbkNrLvLo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iRlTn9eC3WGD6A6/+qehpcs41joCo32z+U7napNfMsaDwGUzwDytNKLS8YKsquIJ7
-         EY9SNg66PWUMPHllvsy8aK8yvGVxooMGEjKHo1CriOBLxrmD37PwSQsjxH2Xza7wOH
-         mjaOWHasokNHbwOW9leHupk655fYjyFo6EvbgbXw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Engraf <david.engraf@sysgo.com>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 102/252] Revert "tty/serial: atmel: fix out of range clock divider handling"
-Date:   Fri, 14 Feb 2020 11:09:17 -0500
-Message-Id: <20200214161147.15842-102-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
-References: <20200214161147.15842-1-sashal@kernel.org>
+        id S2390150AbgBNRNw (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 14 Feb 2020 12:13:52 -0500
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id E04578160;
+        Fri, 14 Feb 2020 17:14:35 +0000 (UTC)
+Date:   Fri, 14 Feb 2020 09:13:48 -0800
+From:   Tony Lindgren <tony@atomide.com>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2 5/8] serial: 8250_port: Don't use power management for
+ kernel console
+Message-ID: <20200214171348.GP16391@atomide.com>
+References: <20200214114339.53897-1-andriy.shevchenko@linux.intel.com>
+ <20200214114339.53897-6-andriy.shevchenko@linux.intel.com>
+ <20200214133918.GP25745@shell.armlinux.org.uk>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200214133918.GP25745@shell.armlinux.org.uk>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+* Russell King - ARM Linux admin <linux@armlinux.org.uk> [200214 13:40]:
+> On Fri, Feb 14, 2020 at 01:43:36PM +0200, Andy Shevchenko wrote:
+> > Doing any kind of power management for kernel console is really bad idea.
+> > 
+> > First of all, it runs in poll and atomic mode. This fact attaches a limitation
+> > on the functions that might be called. For example, pm_runtime_get_sync() might
+> > sleep and thus can't be used. This call needs, for example, to bring the device
+> > to powered on state on the system, where the power on sequence may require
+> > on-atomic operations, such as Intel Cherrytrail with ACPI enumerated UARTs.
+> > That said, on ACPI enabled platforms it might even call firmware for a job.
+> > 
+> > On the other hand pm_runtime_get() doesn't guarantee that device will become
+> > powered on fast enough.
+> > 
+> > Besides that, imagine the case when console is about to print a kernel Oops and
+> > it's powered off. In such an emergency case calling the complex functions is
+> > not the best what we can do, taking into consideration that user wants to see
+> > at least something of the last kernel word before it passes away.
+> > 
+> > Here we modify the 8250 console code to prevent runtime power management.
+> 
+> It's probably also worth noting (and documenting) that this will likely
+> cause a PM regression for OMAP platforms since the serial port will no
+> longer be idled, and therefore the power domains will not hit retention
+> state.  Please wait for Tony to confirm.
 
-[ Upstream commit 6dbd54e4154dfe386b3333687de15be239576617 ]
+Well with patch 4 in this series we can now attach and detach the serial
+console as we've discussed earlier.
 
-This reverts commit 751d0017334db9c4d68a8909c59f662a6ecbcec6.
+This should remove the need for PM during serial console use hopefully :)
 
-The wrong commit got added to the tty-next tree, the correct one is in
-the tty-linus branch.
+I'll try to test this series ASAP.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Engraf <david.engraf@sysgo.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/atmel_serial.c | 3 +++
- 1 file changed, 3 insertions(+)
+Regards,
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index f34520e9ad6e5..19b926b44cc1e 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -2154,6 +2154,9 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 		mode |= ATMEL_US_USMODE_NORMAL;
- 	}
- 
-+	/* set the mode, clock divisor, parity, stop bits and data size */
-+	atmel_uart_writel(port, ATMEL_US_MR, mode);
-+
- 	/*
- 	 * Set the baud rate:
- 	 * Fractional baudrate allows to setup output frequency more
--- 
-2.20.1
+Tony
+
 
