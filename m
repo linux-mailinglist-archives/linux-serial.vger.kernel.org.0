@@ -2,35 +2,35 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6403815D6B4
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 12:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A2F15D6B3
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 12:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727805AbgBNLnr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S1728264AbgBNLnr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Fri, 14 Feb 2020 06:43:47 -0500
-Received: from mga09.intel.com ([134.134.136.24]:11576 "EHLO mga09.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:64404 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727754AbgBNLnq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        id S1728173AbgBNLnq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
         Fri, 14 Feb 2020 06:43:46 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Feb 2020 03:43:45 -0800
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Feb 2020 03:43:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,440,1574150400"; 
-   d="scan'208";a="234434014"
+   d="scan'208";a="434768795"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 14 Feb 2020 03:43:44 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 14 Feb 2020 03:43:43 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B6C954AB; Fri, 14 Feb 2020 13:43:40 +0200 (EET)
+        id BF0394DC; Fri, 14 Feb 2020 13:43:40 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Tony Lindgren <tony@atomide.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 7/8] serial: 8250_mtk: Remove duplicating code to disable DMA
-Date:   Fri, 14 Feb 2020 13:43:38 +0200
-Message-Id: <20200214114339.53897-8-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 8/8] serial: 8250_omap: Remove duplicating code to disable DMA
+Date:   Fri, 14 Feb 2020 13:43:39 +0200
+Message-Id: <20200214114339.53897-9-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200214114339.53897-1-andriy.shevchenko@linux.intel.com>
 References: <20200214114339.53897-1-andriy.shevchenko@linux.intel.com>
@@ -48,24 +48,24 @@ Thus, remove duplicating code to disable DMA for kernel console.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_mtk.c | 4 ----
+ drivers/tty/serial/8250/8250_omap.c | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index 4d067f515f74..3edd5791ada8 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -183,10 +183,6 @@ static int mtk8250_startup(struct uart_port *port)
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 	struct mtk8250_data *data = port->private_data;
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 6f343ca08440..4f07fe8093a3 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -620,10 +620,6 @@ static int omap_8250_startup(struct uart_port *port)
+ 	up->lsr_saved_flags = 0;
+ 	up->msr_saved_flags = 0;
  
--	/* disable DMA for console */
+-	/* Disable DMA for console UART */
 -	if (uart_console(port))
 -		up->dma = NULL;
 -
  	if (up->dma) {
- 		data->rx_status = DMA_RX_START;
- 		uart_circ_clear(&port->state->xmit);
+ 		ret = serial8250_request_dma(up);
+ 		if (ret) {
 -- 
 2.25.0
 
