@@ -2,85 +2,42 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCC415F914
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Feb 2020 22:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D67E15FC21
+	for <lists+linux-serial@lfdr.de>; Sat, 15 Feb 2020 02:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387933AbgBNVyp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Feb 2020 16:54:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59848 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388314AbgBNVyn (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Feb 2020 16:54:43 -0500
-Received: from localhost (unknown [65.119.211.164])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8341E222C4;
-        Fri, 14 Feb 2020 21:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581717282;
-        bh=D5P4kvvPGXWzS41Um5m7v8Cms+3z0uV0f+EbWgL/Wac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BB12WRc3qPtAPbIc12JSTy1L7iFcbp9ZU7UL830LMJffofRJI2Bz9tmaW0OAfA7g0
-         rbxk1RVn4X6tWo1wAeMx0EMhLGzKlEOmvfJxIJiruvNP7+xIEuo86hKDvZciEiCWry
-         +71k6EfbhLtyIMVmeayjhVab7J+TvD0OmIKuyPpE=
-Date:   Fri, 14 Feb 2020 16:51:34 -0500
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Engraf <david.engraf@sysgo.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.5 222/542] Revert "tty/serial: atmel: fix out
- of range clock divider handling"
-Message-ID: <20200214215134.GK4193448@kroah.com>
-References: <20200214154854.6746-1-sashal@kernel.org>
- <20200214154854.6746-222-sashal@kernel.org>
+        id S1727684AbgBOBlG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 14 Feb 2020 20:41:06 -0500
+Received: from l37-192-35-170.novotelecom.ru ([37.192.35.170]:20455 "EHLO
+        glpak.ru" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727639AbgBOBlG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 14 Feb 2020 20:41:06 -0500
+X-Greylist: delayed 1691 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Feb 2020 20:41:05 EST
+Received: from alex.glpak.ru (localhost [127.0.0.1])
+        by glpak.ru (Postfix) with ESMTP id A690DA32461
+        for <linux-serial@vger.kernel.org>; Sat, 15 Feb 2020 08:08:49 +0700 (NOVT)
+X-Virus-Scanned: amavisd-new at glpak.ru
+Received: from glpak.ru ([127.0.0.1])
+        by alex.glpak.ru (glpak.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JTxs+q+l4hhb for <linux-serial@vger.kernel.org>;
+        Sat, 15 Feb 2020 08:08:49 +0700 (NOVT)
+Received: from [192.168.88.250] (unknown [185.248.13.181])
+        by glpak.ru (Postfix) with ESMTPA id 30F3BA32388
+        for <linux-serial@vger.kernel.org>; Sat, 15 Feb 2020 08:08:49 +0700 (NOVT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200214154854.6746-222-sashal@kernel.org>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: zionitld3@gmail.com
+To:     linux-serial@vger.kernel.org
+From:   anna@glpak.ru
+Date:   Fri, 14 Feb 2020 17:10:33 -0800
+Reply-To: zionitld3@gmail.com
+X-Antivirus: Avast (VPS 200214-0, 02/14/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20200215010849.A690DA32461@glpak.ru>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 10:43:34AM -0500, Sasha Levin wrote:
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> [ Upstream commit 6dbd54e4154dfe386b3333687de15be239576617 ]
-> 
-> This reverts commit 751d0017334db9c4d68a8909c59f662a6ecbcec6.
-> 
-> The wrong commit got added to the tty-next tree, the correct one is in
-> the tty-linus branch.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: David Engraf <david.engraf@sysgo.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/tty/serial/atmel_serial.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-> index 1ba9bc667e136..ab4d4a0b36497 100644
-> --- a/drivers/tty/serial/atmel_serial.c
-> +++ b/drivers/tty/serial/atmel_serial.c
-> @@ -2270,6 +2270,9 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
->  		mode |= ATMEL_US_USMODE_NORMAL;
->  	}
->  
-> +	/* set the mode, clock divisor, parity, stop bits and data size */
-> +	atmel_uart_writel(port, ATMEL_US_MR, mode);
-> +
->  	/*
->  	 * Set the baud rate:
->  	 * Fractional baudrate allows to setup output frequency more
-> -- 
-> 2.20.1
-> 
-
-Are you sure this is correct to be added?  This was the result of some
-fun merge problems, I don't think it's needed anywhere else...
-
-greg k-h
+Hello, We from Zion Finance Group currently offers loans to customers at a low interest rate of 3%. This is an opportunity that you cannot miss. We have a few questions to ask; Do you have debts? Do you want to pay off your debts? Do you want to be financially equipped? If so, request a loan today from Zion Finance Group. Interested, customers are expected to contact zionitld3@gmail.com for more information. We wish to assist you with a loan. Greetings, Mr. Bernard.
