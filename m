@@ -2,38 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B83161142
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Feb 2020 12:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A00B16113E
+	for <lists+linux-serial@lfdr.de>; Mon, 17 Feb 2020 12:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728504AbgBQLkV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Feb 2020 06:40:21 -0500
-Received: from mga05.intel.com ([192.55.52.43]:26496 "EHLO mga05.intel.com"
+        id S1728683AbgBQLkU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 17 Feb 2020 06:40:20 -0500
+Received: from mga07.intel.com ([134.134.136.100]:21719 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728901AbgBQLkU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        id S1728688AbgBQLkU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
         Mon, 17 Feb 2020 06:40:20 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Feb 2020 03:40:19 -0800
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Feb 2020 03:40:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,452,1574150400"; 
-   d="scan'208";a="228394915"
+   d="scan'208";a="382163694"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 17 Feb 2020 03:40:17 -0800
+  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2020 03:40:17 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9B66F2BA; Mon, 17 Feb 2020 13:40:16 +0200 (EET)
+        id AAF78211; Mon, 17 Feb 2020 13:40:16 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Tony Lindgren <tony@atomide.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 0/6] serial: Disable DMA and PM on kernel console
-Date:   Mon, 17 Feb 2020 13:40:10 +0200
-Message-Id: <20200217114016.49856-1-andriy.shevchenko@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 1/6] serial: core: Switch to use DEVICE_ATTR_RO()
+Date:   Mon, 17 Feb 2020 13:40:11 +0200
+Message-Id: <20200217114016.49856-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200217114016.49856-1-andriy.shevchenko@linux.intel.com>
+References: <20200217114016.49856-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -41,62 +41,182 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This is third version to get rid of problematic DMA and PM calls in
-the serial kernel console code.
+Move device attributes to DEVICE_ATTR_RO() as that would make things
+a lot more "obvious" what is happening here.
 
-Patches 1, 3 and 4 are preparatory ones.
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/serial_core.c | 57 ++++++++++++++++----------------
+ 1 file changed, 28 insertions(+), 29 deletions(-)
 
-After previous discussion Tony suggested to add a possibility to detach
-and attach back kernel console from user space. It's done in the patch 2.
-
-Kernel console is sensitive to any kind of complex work needed to print
-out anything on it. One such case is emergency print during Oops.
-
-More details on topic are in the commit messages of the patches 5 and 6.
-
-The series has been tested on few Intel platforms.
-
-Note, it depends to recently submitted and applied patches in
-the core console code [2, 3]. Petr, may you confirm that [3] is
-immutable or even send Greg KH a PR?
-
-Greg, see above note before applying, thanks!
-
-[1]: https://lore.kernel.org/patchwork/cover/905632/
-[2]: https://lore.kernel.org/lkml/20200203133130.11591-1-andriy.shevchenko@linux.intel.com/
-[3]: https://git.kernel.org/pub/scm/linux/kernel/git/pmladek/printk.git/log/?h=for-5.7-console-exit
-
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: Petr Mladek <pmladek@suse.com>
-
-Changelog v3:
-- dropped applied patches
-- dropped "cleanup" DMA patches, that they were not tested and actually are regressions
-- added DEVICE_ATTR_RO/_RW conversion patches (Greg)
-- added pr_*() to dev_*() conversion patch (Greg)
-- updated commit message to note OMAP behaviour change (Russell)
-- replace run-time PM callbacks to be _sync() (Tony)
-
-Changelog v2:
-- added possibility to detach and attach back console from userspace (Tony)
-- reworded commit messages in patches 5 and 6 (Sebastian)
-- dropped console patch (it had been pushed separately [2])
-
-Andy Shevchenko (6):
-  serial: core: Switch to use DEVICE_ATTR_RO()
-  serial: core: Allow detach and attach serial device for console
-  serial: 8250_port: Switch to use DEVICE_ATTR_RW()
-  serial: 8250_port: Use dev_*() instead of pr_*()
-  serial: 8250_port: Don't use power management for kernel console
-  serial: 8250_port: Disable DMA operations for kernel console
-
- Documentation/ABI/testing/sysfs-tty |   7 ++
- drivers/tty/serial/8250/8250_core.c |   9 +++
- drivers/tty/serial/8250/8250_port.c |  64 +++++++++------
- drivers/tty/serial/serial_core.c    | 117 ++++++++++++++++++++--------
- include/linux/serial_8250.h         |   1 +
- 5 files changed, 141 insertions(+), 57 deletions(-)
-
---
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 7564bbd3061c..5444293fe2e8 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2614,7 +2614,7 @@ struct tty_driver *uart_console_device(struct console *co, int *index)
+ }
+ EXPORT_SYMBOL_GPL(uart_console_device);
+ 
+-static ssize_t uart_get_attr_uartclk(struct device *dev,
++static ssize_t uartclk_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2624,7 +2624,7 @@ static ssize_t uart_get_attr_uartclk(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.baud_base * 16);
+ }
+ 
+-static ssize_t uart_get_attr_type(struct device *dev,
++static ssize_t type_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2633,7 +2633,8 @@ static ssize_t uart_get_attr_type(struct device *dev,
+ 	uart_get_info(port, &tmp);
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.type);
+ }
+-static ssize_t uart_get_attr_line(struct device *dev,
++
++static ssize_t line_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2643,7 +2644,7 @@ static ssize_t uart_get_attr_line(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.line);
+ }
+ 
+-static ssize_t uart_get_attr_port(struct device *dev,
++static ssize_t port_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2657,7 +2658,7 @@ static ssize_t uart_get_attr_port(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "0x%lX\n", ioaddr);
+ }
+ 
+-static ssize_t uart_get_attr_irq(struct device *dev,
++static ssize_t irq_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2667,7 +2668,7 @@ static ssize_t uart_get_attr_irq(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.irq);
+ }
+ 
+-static ssize_t uart_get_attr_flags(struct device *dev,
++static ssize_t flags_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2677,7 +2678,7 @@ static ssize_t uart_get_attr_flags(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "0x%X\n", tmp.flags);
+ }
+ 
+-static ssize_t uart_get_attr_xmit_fifo_size(struct device *dev,
++static ssize_t xmit_fifo_size_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2687,8 +2688,7 @@ static ssize_t uart_get_attr_xmit_fifo_size(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.xmit_fifo_size);
+ }
+ 
+-
+-static ssize_t uart_get_attr_close_delay(struct device *dev,
++static ssize_t close_delay_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2698,8 +2698,7 @@ static ssize_t uart_get_attr_close_delay(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.close_delay);
+ }
+ 
+-
+-static ssize_t uart_get_attr_closing_wait(struct device *dev,
++static ssize_t closing_wait_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2709,7 +2708,7 @@ static ssize_t uart_get_attr_closing_wait(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.closing_wait);
+ }
+ 
+-static ssize_t uart_get_attr_custom_divisor(struct device *dev,
++static ssize_t custom_divisor_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2719,7 +2718,7 @@ static ssize_t uart_get_attr_custom_divisor(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.custom_divisor);
+ }
+ 
+-static ssize_t uart_get_attr_io_type(struct device *dev,
++static ssize_t io_type_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2729,7 +2728,7 @@ static ssize_t uart_get_attr_io_type(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.io_type);
+ }
+ 
+-static ssize_t uart_get_attr_iomem_base(struct device *dev,
++static ssize_t iomem_base_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2739,7 +2738,7 @@ static ssize_t uart_get_attr_iomem_base(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "0x%lX\n", (unsigned long)tmp.iomem_base);
+ }
+ 
+-static ssize_t uart_get_attr_iomem_reg_shift(struct device *dev,
++static ssize_t iomem_reg_shift_show(struct device *dev,
+ 	struct device_attribute *attr, char *buf)
+ {
+ 	struct serial_struct tmp;
+@@ -2749,28 +2748,28 @@ static ssize_t uart_get_attr_iomem_reg_shift(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", tmp.iomem_reg_shift);
+ }
+ 
+-static DEVICE_ATTR(type, 0440, uart_get_attr_type, NULL);
+-static DEVICE_ATTR(line, 0440, uart_get_attr_line, NULL);
+-static DEVICE_ATTR(port, 0440, uart_get_attr_port, NULL);
+-static DEVICE_ATTR(irq, 0440, uart_get_attr_irq, NULL);
+-static DEVICE_ATTR(flags, 0440, uart_get_attr_flags, NULL);
+-static DEVICE_ATTR(xmit_fifo_size, 0440, uart_get_attr_xmit_fifo_size, NULL);
+-static DEVICE_ATTR(uartclk, 0440, uart_get_attr_uartclk, NULL);
+-static DEVICE_ATTR(close_delay, 0440, uart_get_attr_close_delay, NULL);
+-static DEVICE_ATTR(closing_wait, 0440, uart_get_attr_closing_wait, NULL);
+-static DEVICE_ATTR(custom_divisor, 0440, uart_get_attr_custom_divisor, NULL);
+-static DEVICE_ATTR(io_type, 0440, uart_get_attr_io_type, NULL);
+-static DEVICE_ATTR(iomem_base, 0440, uart_get_attr_iomem_base, NULL);
+-static DEVICE_ATTR(iomem_reg_shift, 0440, uart_get_attr_iomem_reg_shift, NULL);
++static DEVICE_ATTR_RO(uartclk);
++static DEVICE_ATTR_RO(type);
++static DEVICE_ATTR_RO(line);
++static DEVICE_ATTR_RO(port);
++static DEVICE_ATTR_RO(irq);
++static DEVICE_ATTR_RO(flags);
++static DEVICE_ATTR_RO(xmit_fifo_size);
++static DEVICE_ATTR_RO(close_delay);
++static DEVICE_ATTR_RO(closing_wait);
++static DEVICE_ATTR_RO(custom_divisor);
++static DEVICE_ATTR_RO(io_type);
++static DEVICE_ATTR_RO(iomem_base);
++static DEVICE_ATTR_RO(iomem_reg_shift);
+ 
+ static struct attribute *tty_dev_attrs[] = {
++	&dev_attr_uartclk.attr,
+ 	&dev_attr_type.attr,
+ 	&dev_attr_line.attr,
+ 	&dev_attr_port.attr,
+ 	&dev_attr_irq.attr,
+ 	&dev_attr_flags.attr,
+ 	&dev_attr_xmit_fifo_size.attr,
+-	&dev_attr_uartclk.attr,
+ 	&dev_attr_close_delay.attr,
+ 	&dev_attr_closing_wait.attr,
+ 	&dev_attr_custom_divisor.attr,
+-- 
 2.25.0
 
