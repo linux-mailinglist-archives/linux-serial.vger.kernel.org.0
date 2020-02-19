@@ -2,74 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7712163E5D
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 09:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5507B163F4E
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 09:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgBSIBl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Feb 2020 03:01:41 -0500
-Received: from [167.172.186.51] ([167.172.186.51]:35440 "EHLO shell.v3.sk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726156AbgBSIBl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Feb 2020 03:01:41 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 9DE79DFF72;
-        Wed, 19 Feb 2020 08:01:55 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id wFbC0oxnXs5M; Wed, 19 Feb 2020 08:01:55 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id F15E1DFFFE;
-        Wed, 19 Feb 2020 08:01:54 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id UlSuSspOoMA7; Wed, 19 Feb 2020 08:01:54 +0000 (UTC)
-Received: from furthur.lan (unknown [109.183.109.54])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id ACCCEDFF72;
-        Wed, 19 Feb 2020 08:01:54 +0000 (UTC)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1726667AbgBSIlW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Feb 2020 03:41:22 -0500
+Received: from mx2.suse.de ([195.135.220.15]:44236 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726480AbgBSIlW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 19 Feb 2020 03:41:22 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 4A135ADA1;
+        Wed, 19 Feb 2020 08:41:19 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH] serial: 8250_pxa: avoid autodetecting the port type
-Date:   Wed, 19 Feb 2020 09:01:30 +0100
-Message-Id: <20200219080130.4334-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.24.1
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 01/24] n_hdlc: remove tracing debug prints
+Date:   Wed, 19 Feb 2020 09:40:55 +0100
+Message-Id: <20200219084118.26491-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-If we're unlucky enough that this drivers binds to a mrvl,mmp-uart device
-on a MMP3, the port type gets detected as 16550A instead of XScale, and i=
-t
-won't work. Other drivers that may bind to the same hardware are 8250_of
-and, god forbid, serial_pxa.
+We can trace functions using ftrace, so there is no need for this
+additional prints. Remove them.
 
-Force the port type, we know it's a PORT_XSCALE.
+We keep only those which print some additional info, not only function
+name & "entry"/"exit".
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- drivers/tty/serial/8250/8250_pxa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/n_hdlc.c | 32 ++------------------------------
+ 1 file changed, 2 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_pxa.c b/drivers/tty/serial/8250=
-/8250_pxa.c
-index c47188860e325..11612d174716f 100644
---- a/drivers/tty/serial/8250/8250_pxa.c
-+++ b/drivers/tty/serial/8250/8250_pxa.c
-@@ -123,7 +123,7 @@ static int serial_pxa_probe(struct platform_device *p=
-dev)
- 	uart.port.regshift =3D 2;
- 	uart.port.irq =3D irqres->start;
- 	uart.port.fifosize =3D 64;
--	uart.port.flags =3D UPF_IOREMAP | UPF_SKIP_TEST;
-+	uart.port.flags =3D UPF_IOREMAP | UPF_SKIP_TEST | UPF_FIXED_TYPE;
- 	uart.port.dev =3D &pdev->dev;
- 	uart.port.uartclk =3D clk_get_rate(data->clk);
- 	uart.port.pm =3D serial_pxa_pm;
---=20
-2.24.1
+diff --git a/drivers/tty/n_hdlc.c b/drivers/tty/n_hdlc.c
+index 27b506bf03ce..9e115ecf920d 100644
+--- a/drivers/tty/n_hdlc.c
++++ b/drivers/tty/n_hdlc.c
+@@ -232,10 +232,7 @@ static void n_hdlc_release(struct n_hdlc *n_hdlc)
+ {
+ 	struct tty_struct *tty = n_hdlc2tty (n_hdlc);
+ 	struct n_hdlc_buf *buf;
+-	
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_release() called\n",__FILE__,__LINE__);
+-		
++
+ 	/* Ensure that the n_hdlcd process is not hanging on select()/poll() */
+ 	wake_up_interruptible (&tty->read_wait);
+ 	wake_up_interruptible (&tty->write_wait);
+@@ -287,9 +284,6 @@ static void n_hdlc_tty_close(struct tty_struct *tty)
+ {
+ 	struct n_hdlc *n_hdlc = tty2n_hdlc (tty);
+ 
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_tty_close() called\n",__FILE__,__LINE__);
+-		
+ 	if (n_hdlc != NULL) {
+ 		if (n_hdlc->magic != HDLC_MAGIC) {
+ 			printk (KERN_WARNING"n_hdlc: trying to close unopened tty!\n");
+@@ -309,10 +303,6 @@ static void n_hdlc_tty_close(struct tty_struct *tty)
+ 			n_hdlc_release (n_hdlc);
+ 		}
+ 	}
+-	
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_tty_close() success\n",__FILE__,__LINE__);
+-		
+ }	/* end of n_hdlc_tty_close() */
+ 
+ /**
+@@ -353,10 +343,7 @@ static int n_hdlc_tty_open (struct tty_struct *tty)
+ 	
+ 	/* flush receive data from driver */
+ 	tty_driver_flush_buffer(tty);
+-		
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_tty_open() success\n",__FILE__,__LINE__);
+-		
++
+ 	return 0;
+ 	
+ }	/* end of n_tty_hdlc_open() */
+@@ -376,8 +363,6 @@ static void n_hdlc_send_frames(struct n_hdlc *n_hdlc, struct tty_struct *tty)
+ 	unsigned long flags;
+ 	struct n_hdlc_buf *tbuf;
+ 
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_send_frames() called\n",__FILE__,__LINE__);
+  check_again:
+ 		
+  	spin_lock_irqsave(&n_hdlc->tx_buf_list.spinlock, flags);
+@@ -447,10 +432,6 @@ static void n_hdlc_send_frames(struct n_hdlc *n_hdlc, struct tty_struct *tty)
+ 	
+         if (n_hdlc->woke_up)
+ 	  goto check_again;
+-
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_send_frames() exit\n",__FILE__,__LINE__);
+-		
+ }	/* end of n_hdlc_send_frames() */
+ 
+ /**
+@@ -463,9 +444,6 @@ static void n_hdlc_tty_wakeup(struct tty_struct *tty)
+ {
+ 	struct n_hdlc *n_hdlc = tty2n_hdlc(tty);
+ 
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_tty_wakeup() called\n",__FILE__,__LINE__);
+-		
+ 	if (!n_hdlc)
+ 		return;
+ 
+@@ -564,9 +542,6 @@ static ssize_t n_hdlc_tty_read(struct tty_struct *tty, struct file *file,
+ 	struct n_hdlc_buf *rbuf;
+ 	DECLARE_WAITQUEUE(wait, current);
+ 
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_tty_read() called\n",__FILE__,__LINE__);
+-		
+ 	/* Validate the pointers */
+ 	if (!n_hdlc)
+ 		return -EIO;
+@@ -802,9 +777,6 @@ static __poll_t n_hdlc_tty_poll(struct tty_struct *tty, struct file *filp,
+ 	struct n_hdlc *n_hdlc = tty2n_hdlc (tty);
+ 	__poll_t mask = 0;
+ 
+-	if (debuglevel >= DEBUG_LEVEL_INFO)	
+-		printk("%s(%d)n_hdlc_tty_poll() called\n",__FILE__,__LINE__);
+-		
+ 	if (n_hdlc && n_hdlc->magic == HDLC_MAGIC && tty == n_hdlc->tty) {
+ 		/* queue current process into any wait queue that */
+ 		/* may awaken in the future (read and write) */
+-- 
+2.25.0
 
