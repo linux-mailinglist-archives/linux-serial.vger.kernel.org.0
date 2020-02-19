@@ -2,74 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BE6163FB9
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 09:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B8F16424E
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 11:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgBSItz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Feb 2020 03:49:55 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49786 "EHLO mx2.suse.de"
+        id S1726514AbgBSKkP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Feb 2020 05:40:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726784AbgBSItz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Feb 2020 03:49:55 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 5EF81AC69;
-        Wed, 19 Feb 2020 08:49:53 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 10/10] n_gsm: switch escape to bool
-Date:   Wed, 19 Feb 2020 09:49:49 +0100
-Message-Id: <20200219084949.28074-10-jslaby@suse.cz>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200219084949.28074-1-jslaby@suse.cz>
-References: <20200219084949.28074-1-jslaby@suse.cz>
+        id S1726270AbgBSKkP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 19 Feb 2020 05:40:15 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A68B321D56;
+        Wed, 19 Feb 2020 10:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582108815;
+        bh=8JYFzGZHQl9Mlj4BlcdpdXsjdg+HCV5duko0Ww+/3ts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D+fmuPcnBwAiKMYnQrNvzuGYOjb2KTjyX5HfTG0lNs3In6g0cemEDq808Ew9cEW4k
+         ByqighL55iGXWuJat2cl6WrbwVQJ4wOiXP5/u8Ea8AeB8aaWFB+0M3WKQGb9X8jAcN
+         TQS56FeVzpSYqk586vJhfvbluu0CEb7qtB2yhsas=
+Date:   Wed, 19 Feb 2020 11:40:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v6 0/4] leds: trigger: implement a tty trigger
+Message-ID: <20200219104012.GA2814125@kroah.com>
+References: <20200213091600.554-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200213091600.554-1-uwe@kleine-koenig.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-gsm_mux->escape is used as a bool, so treat it as such.
+On Thu, Feb 13, 2020 at 10:15:56AM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> Hello,
+> 
+> This is v6 of my quest to introduce ledtriggers for UARTs. The previous
+> series is available at
+> 
+> 	http://lore.kernel.org/r/20191219093947.15502-1-u.kleine-koenig@pengutronix.de
+> 
+> The changes compared to that are that parsing of the dev parameter is
+> more strict and that I set brightness directly from the kworker instead
+> of using led_blink_set_oneshot which makes use of another kworker. (Both
+> requested by Pavel Machek.)
+> 
+> For the former I introduced a new helper kstrtodev_t() in the spirit of
+> kstrtoul() to implement the stricter parsing (instead of the lax one
+> using plain sscanf() in v5).
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/n_gsm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Looks good to me, Pavel, any objection to me merging this through the
+tty tree?
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index e0283bb24bb5..d77ed82a4840 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -215,7 +215,7 @@ struct gsm_mux {
- 	unsigned int len;
- 	unsigned int address;
- 	unsigned int count;
--	int escape;
-+	bool escape;
- 	int encoding;
- 	u8 control;
- 	u8 fcs;
-@@ -1976,7 +1976,7 @@ static void gsm1_receive(struct gsm_mux *gsm, unsigned char c)
- 	}
- 
- 	if (c == GSM1_ESCAPE) {
--		gsm->escape = 1;
-+		gsm->escape = true;
- 		return;
- 	}
- 
-@@ -1986,7 +1986,7 @@ static void gsm1_receive(struct gsm_mux *gsm, unsigned char c)
- 
- 	if (gsm->escape) {
- 		c ^= GSM1_ESCAPE_BITS;
--		gsm->escape = 0;
-+		gsm->escape = false;
- 	}
- 	switch (gsm->state) {
- 	case GSM_START:		/* First byte after SOF */
--- 
-2.25.0
+thanks,
 
+greg k-h
