@@ -2,129 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB37163DED
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 08:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7712163E5D
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 09:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbgBSHkC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Feb 2020 02:40:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41582 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726939AbgBSHj4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Feb 2020 02:39:56 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 5CFABAEA8;
-        Wed, 19 Feb 2020 07:39:54 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
+        id S1726260AbgBSIBl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Feb 2020 03:01:41 -0500
+Received: from [167.172.186.51] ([167.172.186.51]:35440 "EHLO shell.v3.sk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726156AbgBSIBl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 19 Feb 2020 03:01:41 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 9DE79DFF72;
+        Wed, 19 Feb 2020 08:01:55 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id wFbC0oxnXs5M; Wed, 19 Feb 2020 08:01:55 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id F15E1DFFFE;
+        Wed, 19 Feb 2020 08:01:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UlSuSspOoMA7; Wed, 19 Feb 2020 08:01:54 +0000 (UTC)
+Received: from furthur.lan (unknown [109.183.109.54])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id ACCCEDFF72;
+        Wed, 19 Feb 2020 08:01:54 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 9/9] vt: selection, indent switch-case properly
-Date:   Wed, 19 Feb 2020 08:39:51 +0100
-Message-Id: <20200219073951.16151-9-jslaby@suse.cz>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200219073951.16151-1-jslaby@suse.cz>
-References: <20200219073951.16151-1-jslaby@suse.cz>
+        Lubomir Rintel <lkundrak@v3.sk>
+Subject: [PATCH] serial: 8250_pxa: avoid autodetecting the port type
+Date:   Wed, 19 Feb 2020 09:01:30 +0100
+Message-Id: <20200219080130.4334-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Shift the cases one level left as this is how we are supposed to write
-the switch-case code according to the CodingStyle.
+If we're unlucky enough that this drivers binds to a mrvl,mmp-uart device
+on a MMP3, the port type gets detected as 16550A instead of XScale, and i=
+t
+won't work. Other drivers that may bind to the same hardware are 8250_of
+and, god forbid, serial_pxa.
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Force the port type, we know it's a PORT_XSCALE.
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- drivers/tty/vt/selection.c | 72 ++++++++++++++++++--------------------
- 1 file changed, 35 insertions(+), 37 deletions(-)
+ drivers/tty/serial/8250/8250_pxa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
-index eaf11729ef9e..b9c517463efa 100644
---- a/drivers/tty/vt/selection.c
-+++ b/drivers/tty/vt/selection.c
-@@ -226,45 +226,43 @@ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
- 	}
- 	unicode = vt_do_kdgkbmode(fg_console) == K_UNICODE;
- 
--	switch (v->sel_mode)
--	{
--		case TIOCL_SELCHAR:	/* character-by-character selection */
-+	switch (v->sel_mode) {
-+	case TIOCL_SELCHAR:	/* character-by-character selection */
-+		new_sel_start = ps;
-+		new_sel_end = pe;
-+		break;
-+	case TIOCL_SELWORD:	/* word-by-word selection */
-+		spc = isspace(sel_pos(ps, unicode));
-+		for (new_sel_start = ps; ; ps -= 2) {
-+			if ((spc && !isspace(sel_pos(ps, unicode))) ||
-+			    (!spc && !inword(sel_pos(ps, unicode))))
-+				break;
- 			new_sel_start = ps;
-+			if (!(ps % vc->vc_size_row))
-+				break;
-+		}
-+
-+		spc = isspace(sel_pos(pe, unicode));
-+		for (new_sel_end = pe; ; pe += 2) {
-+			if ((spc && !isspace(sel_pos(pe, unicode))) ||
-+			    (!spc && !inword(sel_pos(pe, unicode))))
-+				break;
- 			new_sel_end = pe;
--			break;
--		case TIOCL_SELWORD:	/* word-by-word selection */
--			spc = isspace(sel_pos(ps, unicode));
--			for (new_sel_start = ps; ; ps -= 2)
--			{
--				if ((spc && !isspace(sel_pos(ps, unicode))) ||
--				    (!spc && !inword(sel_pos(ps, unicode))))
--					break;
--				new_sel_start = ps;
--				if (!(ps % vc->vc_size_row))
--					break;
--			}
--			spc = isspace(sel_pos(pe, unicode));
--			for (new_sel_end = pe; ; pe += 2)
--			{
--				if ((spc && !isspace(sel_pos(pe, unicode))) ||
--				    (!spc && !inword(sel_pos(pe, unicode))))
--					break;
--				new_sel_end = pe;
--				if (!((pe + 2) % vc->vc_size_row))
--					break;
--			}
--			break;
--		case TIOCL_SELLINE:	/* line-by-line selection */
--			new_sel_start = ps - ps % vc->vc_size_row;
--			new_sel_end = pe + vc->vc_size_row
--				    - pe % vc->vc_size_row - 2;
--			break;
--		case TIOCL_SELPOINTER:
--			highlight_pointer(pe);
--			goto unlock;
--		default:
--			ret = -EINVAL;
--			goto unlock;
-+			if (!((pe + 2) % vc->vc_size_row))
-+				break;
-+		}
-+		break;
-+	case TIOCL_SELLINE:	/* line-by-line selection */
-+		new_sel_start = ps - ps % vc->vc_size_row;
-+		new_sel_end = pe + vc->vc_size_row
-+			    - pe % vc->vc_size_row - 2;
-+		break;
-+	case TIOCL_SELPOINTER:
-+		highlight_pointer(pe);
-+		goto unlock;
-+	default:
-+		ret = -EINVAL;
-+		goto unlock;
- 	}
- 
- 	/* remove the pointer */
--- 
-2.25.0
+diff --git a/drivers/tty/serial/8250/8250_pxa.c b/drivers/tty/serial/8250=
+/8250_pxa.c
+index c47188860e325..11612d174716f 100644
+--- a/drivers/tty/serial/8250/8250_pxa.c
++++ b/drivers/tty/serial/8250/8250_pxa.c
+@@ -123,7 +123,7 @@ static int serial_pxa_probe(struct platform_device *p=
+dev)
+ 	uart.port.regshift =3D 2;
+ 	uart.port.irq =3D irqres->start;
+ 	uart.port.fifosize =3D 64;
+-	uart.port.flags =3D UPF_IOREMAP | UPF_SKIP_TEST;
++	uart.port.flags =3D UPF_IOREMAP | UPF_SKIP_TEST | UPF_FIXED_TYPE;
+ 	uart.port.dev =3D &pdev->dev;
+ 	uart.port.uartclk =3D clk_get_rate(data->clk);
+ 	uart.port.pm =3D serial_pxa_pm;
+--=20
+2.24.1
 
