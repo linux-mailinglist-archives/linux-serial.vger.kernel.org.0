@@ -2,122 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D707164424
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 13:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C79A1644A0
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Feb 2020 13:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgBSMZx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Feb 2020 07:25:53 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40994 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbgBSMZx (ORCPT
+        id S1727103AbgBSMtI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Feb 2020 07:49:08 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39937 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgBSMtH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Feb 2020 07:25:53 -0500
-Received: by mail-lf1-f66.google.com with SMTP id m30so17269291lfp.8;
-        Wed, 19 Feb 2020 04:25:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vym7cnw2UswPy4mXXSErcySNdTESMC8KufR8ycUGU5w=;
-        b=oez3uqjO4V62x8YIYF5vSrd4T0ApecZAop66yE0oWlbRoOBzXF14svDpFD/Ng2lwwh
-         MCkn1LskfRITwXoyRp0xOmwHk67ybaAX4EciOuyLfZGtHWFWI9bjcJmRUxZRCeNltUtI
-         5002JRuke/Egc6Lp8iyOvY9JiSvbiuEdHqpyVfEF/WsPcfn4ClYnIZtUpyRO35QkyiGu
-         f7xtL1pRRS+lqqShdssORi9j3o3WiJExuAoe5pWnl++josbuHO3HzwcpIP1NDkV6aaxH
-         2+mbI6l985QaghxEZZgLMN5bsB/fAuh8pRSj4ATC6llE7H4pbDDy4QaVswKus/ta6d4A
-         vE1A==
+        Wed, 19 Feb 2020 07:49:07 -0500
+Received: by mail-lf1-f67.google.com with SMTP id c23so17347623lfi.7;
+        Wed, 19 Feb 2020 04:49:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vym7cnw2UswPy4mXXSErcySNdTESMC8KufR8ycUGU5w=;
-        b=hr3VgRbzK5OdJ87WDDe8ilLlbq2LUEPDkllwrR5X5OYIjsYYQq+Xh7cheKDGiN3NBr
-         lIrZ2TnUVnIfQ0MCmlbA/pdeHgBEo+9iRGwKlDGMdjW1aDNs0QS0w2Uyjz2DFSunEcHG
-         sHXtZoGARCkk+vChtAbusGxsF3dCW0laCijH6W5R93MaR1F91Xn6XDTDyurtTZi7vv+D
-         TtJHYVDfYCnj6+zJuv8A2A0D5hqfGihKsTWJJo+xJcQYLN7BYKiRGEGC4tSnjaO0aM8z
-         Dt9LW1K3ekTOD3fFsvphiChBL57KfZnyTAvHn4KoXquYut2VswUPjsTvtoP03YtKyT22
-         oCgQ==
-X-Gm-Message-State: APjAAAU5dW+/iEjvfJMO2n0oc7yhHOMqmL3JcGCUJ25umX07ycURO0tM
-        /UJSxQySyzo1ICN0if/A+/CIfmWZ
-X-Google-Smtp-Source: APXvYqwOXJJ7XlulCRTxrAdarKdKzkJYyE1YSvY/srBtjmnhMW4P80vG9t1erIHkDK0fASgisa/SAA==
-X-Received: by 2002:a05:6512:407:: with SMTP id u7mr12956722lfk.146.1582115150261;
-        Wed, 19 Feb 2020 04:25:50 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id a9sm1236930lfk.23.2020.02.19.04.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Feb 2020 04:25:49 -0800 (PST)
-Subject: Re: [PATCH for 5.6 v2] tty: serial: tegra: Handle RX transfer in PIO
- mode if DMA wasn't started
-To:     Jiri Slaby <jslaby@suse.cz>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=c4IZGpTAiNI/MqpzST2+IXgvoSC5bM5KD7bSza2xjkg=;
+        b=NAICxQe2DIF/hLG5UTYxHPxbC+XLDC4ccO4b+4UZ5aY58C/SnY3tYe/oSHMxgdv/CU
+         s69En5N61+WCGdSL9YrcIBsMHoMBJB4Q/THE7jd9JARwgsYXvUXA/TRmQqEvh5n5/j4Y
+         5IJdHI2/rgNghRyMvSrlrhOU2U97jlknXvaoYlwgJbP1tCqgzUYlT1T6avrboFZpiWJW
+         qq0C7k12iiI8X1AKSfigmXd5Y/i10B9lw8c3uEw1ufHhLsC2ZVzNlJnQWuQUc3oaeMEj
+         Pmlv0CfcDeUOXLpaSC9UzoVMKJh5BLYt35SgjoPciS3GcXyTWK1aaLt8puRPmILmg3PR
+         L7PQ==
+X-Gm-Message-State: APjAAAXUwW1FxSW7abEzkdhEqwyP79WRcTuHwZmQ9zLHl12xXERulYLi
+        LXBRLkFmpQD5ThMbt05tgnw=
+X-Google-Smtp-Source: APXvYqx7jMm3SXNV5f1xhHX5oxfd9Wq+q/tT0PPzUs29Vkrs1MRxvQ83Ykbc8URnUGMar9i54Q/j0w==
+X-Received: by 2002:a19:f519:: with SMTP id j25mr13281499lfb.41.1582116544565;
+        Wed, 19 Feb 2020 04:49:04 -0800 (PST)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id o188sm1235568lfa.50.2020.02.19.04.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 04:49:03 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1j4Omh-00021O-RY; Wed, 19 Feb 2020 13:48:59 +0100
+Date:   Wed, 19 Feb 2020 13:48:59 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200209164415.9632-1-digetx@gmail.com>
- <15b01f79-007d-09bb-03be-050c009ceff6@suse.cz>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4d9a2352-6daa-4dcc-376b-175b1398ff6a@gmail.com>
-Date:   Wed, 19 Feb 2020 15:25:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        Jiri Slaby <jslaby@suse.com>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] leds: trigger: implement a tty trigger
+Message-ID: <20200219124859.GC32540@localhost>
+References: <20200213091600.554-1-uwe@kleine-koenig.org>
+ <20200213091600.554-5-uwe@kleine-koenig.org>
+ <20200219105239.GA32540@localhost>
+ <20200219110306.k5jndutalll64esu@pengutronix.de>
+ <20200219111913.GB32540@localhost>
 MIME-Version: 1.0
-In-Reply-To: <15b01f79-007d-09bb-03be-050c009ceff6@suse.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200219111913.GB32540@localhost>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-17.02.2020 10:37, Jiri Slaby пишет:
-> On 09. 02. 20, 17:44, Dmitry Osipenko wrote:
->> It is possible to get an instant RX timeout or end-of-transfer interrupt
->> before RX DMA was started, if transaction is less than 16 bytes. Transfer
->> should be handled in PIO mode in this case because DMA can't handle it.
->> This patch brings back the original behaviour of the driver that was
->> changed by accident by a previous commit, it fixes occasional Bluetooth HW
->> initialization failures which I started to notice recently.
->>
->> Fixes: d5e3fadb7012 ("tty: serial: tegra: Activate RX DMA transfer by request")
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>
->> Changelog:
->>
->> v2: - Corrected commit's title by adding the accidentally missed "tegra: "
->>       to the prefix.
->>
->>  drivers/tty/serial/serial-tegra.c | 35 ++++++++++++++-----------------
->>  1 file changed, 16 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
->> index 33034b852a51..8de8bac9c6c7 100644
->> --- a/drivers/tty/serial/serial-tegra.c
->> +++ b/drivers/tty/serial/serial-tegra.c
->> @@ -692,11 +692,22 @@ static void tegra_uart_copy_rx_to_tty(struct tegra_uart_port *tup,
->>  				   count, DMA_TO_DEVICE);
->>  }
->>  
->> +static void do_handle_rx_pio(struct tegra_uart_port *tup)
->> +{
->> +	struct tty_struct *tty = tty_port_tty_get(&tup->uport.state->port);
->> +	struct tty_port *port = &tup->uport.state->port;
->> +
->> +	tegra_uart_handle_rx_pio(tup, port);
->> +	if (tty) {
+On Wed, Feb 19, 2020 at 12:19:13PM +0100, Johan Hovold wrote:
+> On Wed, Feb 19, 2020 at 12:03:06PM +0100, Uwe Kleine-K�nig wrote:
+> > On Wed, Feb 19, 2020 at 11:52:39AM +0100, Johan Hovold wrote:
+
+> > If I understand correctly calling tty_kopen_shared() doesn't open the
+> > device, just keep it referenced which prevents it to disappear. Unless I
+> > miss something it doesn't result in the tty's .open() being called.
 > 
-> What's the tty good for here, actually?
-> 
->> +		tty_flip_buffer_push(port);
->> +		tty_kref_put(tty);
->> +	}
->> +}
+> So tty_kopen_shared() is something you added. Judging from a quick look
+> it seems you can only attach a trigger to an already open port, but the
+> trigger will then keep the port open (again, consider modem control,
+> power).
 
-I'm not really a TTY expert..
+Sorry, my bad; this reference shouldn't prevent the port from being
+closed.
 
-Jon, maybe you have any clue whether TTY could disappear while port is
-opened?
+The fact that you need the port to be open before you can attach a
+trigger does sound like a problem though (e.g. consider udev rules).
 
+Johan
