@@ -2,156 +2,135 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA4B16657B
+	by mail.lfdr.de (Postfix) with ESMTP id 69981166579
 	for <lists+linux-serial@lfdr.de>; Thu, 20 Feb 2020 18:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbgBTRxo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Feb 2020 12:53:44 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:36805 "EHLO
+        id S1728685AbgBTRxp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Feb 2020 12:53:45 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:50563 "EHLO
         ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728685AbgBTRxo (ORCPT
+        with ESMTP id S1728855AbgBTRxp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Feb 2020 12:53:44 -0500
+        Thu, 20 Feb 2020 12:53:45 -0500
 Received: from mwalle01.sab.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9890223E5E;
-        Thu, 20 Feb 2020 18:43:54 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id A0AFB23E3C;
+        Thu, 20 Feb 2020 18:46:14 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1582220634;
+        t=1582220774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vo4eabfDiU5MAlK7m5sK1wPAUvsnHzowKf/DJBK9M+Q=;
-        b=AcfzjqavTlY6+PDzgIl2PH9++YzTtNvI3obaIk7y6bg/0SCZpTTI0yJfIqplpKvAqSBqr9
-        lDAoNusvzqMO12HEisI3ByCqYQbi9dmBaFr6U5QKBZfxS26+/eSF/HjoVpPADVYtk2jdlk
-        os2A33Bej4vBjTfCEchEqqnCAWZwVaI=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xj3LA1zTH4SsCJX7PLfeOExLfpbX8EjlKGUE5mqKsd8=;
+        b=MEukQMfiV14G/weO9PYFD4BkGkrXnCEd2ZGUufJFPC/3g9i9Wgvp5KMzva/nz1O0qvYQFY
+        qHO724Q8somCA5+jvxOdR3ToH3slHjS/S8HoxcXn4D5HRV7TIXDLrzIt4KMmhWqo3113Js
+        LV5oZGkmGyFeeusdSuvsXjvdmMFmRDQ=
 From:   Michael Walle <michael@walle.cc>
-To:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Jiri Slaby <jslaby@suse.com>, Peng Fan <peng.fan@nxp.com>,
-        Yuan Yao <yao.yuan@nxp.com>,
-        Vabhav Sharma <vabhav.sharma@nxp.com>,
+To:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jslaby@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH 7/7] arm64: dts: ls1028a: add missing LPUART nodes
-Date:   Thu, 20 Feb 2020 18:43:34 +0100
-Message-Id: <20200220174334.23322-7-michael@walle.cc>
+Subject: [PATCH] serial: earlycon: prefer EARLYCON_DECLARE() variant
+Date:   Thu, 20 Feb 2020 18:46:07 +0100
+Message-Id: <20200220174607.24285-1-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200220174334.23322-1-michael@walle.cc>
-References: <20200220174334.23322-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++
-X-Spam-Level: ******
+X-Spamd-Bar: ++++
+X-Spam-Level: ****
 X-Rspamd-Server: web
-X-Spam-Status: Yes, score=6.40
-X-Spam-Score: 6.40
-X-Rspamd-Queue-Id: 9890223E5E
-X-Spamd-Result: default: False [6.40 / 15.00];
+X-Spam-Status: No, score=4.90
+X-Spam-Score: 4.90
+X-Rspamd-Queue-Id: A0AFB23E3C
+X-Spamd-Result: default: False [4.90 / 15.00];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
          R_MISSING_CHARSET(2.50)[];
          TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
          MIME_GOOD(-0.10)[text/plain];
+         NEURAL_SPAM(0.00)[0.411];
          BROKEN_CONTENT_TYPE(1.50)[];
-         NEURAL_SPAM(0.00)[0.487];
+         RCPT_COUNT_FIVE(0.00)[5];
          DKIM_SIGNED(0.00)[];
-         DBL_PROHIBIT(0.00)[0.34.241.80:email,0.34.124.32:email,0.34.202.64:email,0.34.163.48:email];
-         RCPT_COUNT_TWELVE(0.00)[14];
          MID_CONTAINS_FROM(1.00)[];
          RCVD_COUNT_ZERO(0.00)[0];
          FROM_EQ_ENVFROM(0.00)[];
          MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:12941, ipnet:213.135.0.0/19, country:DE];
-         SUSPICIOUS_RECIPS(1.50)[]
-X-Spam: Yes
+         ASN(0.00)[asn:12941, ipnet:213.135.0.0/19, country:DE]
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The LS1028A has six LPUART controllers. Add the nodes.
+If a driver exposes early consoles with EARLYCON_DECLARE() and
+OF_EARLYCON_DECLARE(), pefer the non-OF variant if the user specifies it
+by
+  earlycon=<driver>,<options>
 
-This was tested on a custom board.
+The rationale behind this is that some drivers register multiple setup
+functions under the same driver name. Eg.
+
+OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", lpuart_early_console_setup);
+OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup);
+OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
+EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
+EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
+
+It depends on the order of the entries which console_setup() actually
+gets called. To make things worse, I guess it also depends on the
+compiler how these are ordered. Thus always prefer the EARLYCON_DECLARE()
+ones.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/tty/serial/earlycon.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-index 40d82c49b174..f30ffc46063d 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-@@ -390,6 +390,61 @@
- 			status = "disabled";
- 		};
+diff --git a/drivers/tty/serial/earlycon.c b/drivers/tty/serial/earlycon.c
+index c14873b67803..2ae9190b64bb 100644
+--- a/drivers/tty/serial/earlycon.c
++++ b/drivers/tty/serial/earlycon.c
+@@ -170,6 +170,7 @@ static int __init register_earlycon(char *buf, const struct earlycon_id *match)
+ int __init setup_earlycon(char *buf)
+ {
+ 	const struct earlycon_id **p_match;
++	bool empty_compatible = true;
  
+ 	if (!buf || !buf[0])
+ 		return -EINVAL;
+@@ -177,6 +178,7 @@ int __init setup_earlycon(char *buf)
+ 	if (early_con.flags & CON_ENABLED)
+ 		return -EALREADY;
+ 
++again:
+ 	for (p_match = __earlycon_table; p_match < __earlycon_table_end;
+ 	     p_match++) {
+ 		const struct earlycon_id *match = *p_match;
+@@ -185,6 +187,10 @@ int __init setup_earlycon(char *buf)
+ 		if (strncmp(buf, match->name, len))
+ 			continue;
+ 
++		/* prefer entries with empty compatible */
++		if (empty_compatible && *match->compatible)
++			continue;
 +
-+		lpuart0: serial@2260000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2260000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
+ 		if (buf[len]) {
+ 			if (buf[len] != ',')
+ 				continue;
+@@ -195,6 +201,11 @@ int __init setup_earlycon(char *buf)
+ 		return register_earlycon(buf, match);
+ 	}
+ 
++	if (empty_compatible) {
++		empty_compatible = false;
++		goto again;
++	}
 +
-+		lpuart1: serial@2270000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2270000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 233 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
-+
-+		lpuart2: serial@2280000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2280000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 234 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
-+
-+		lpuart3: serial@2290000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2290000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
-+
-+		lpuart4: serial@22a0000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x22a0000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
-+
-+		lpuart5: serial@22b0000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x22b0000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			status = "disabled";
-+		};
-+
- 		edma0: dma-controller@22c0000 {
- 			#dma-cells = <2>;
- 			compatible = "fsl,ls1028a-edma";
+ 	return -ENOENT;
+ }
+ 
 -- 
 2.20.1
 
