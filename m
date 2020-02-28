@@ -2,35 +2,34 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A2617387D
-	for <lists+linux-serial@lfdr.de>; Fri, 28 Feb 2020 14:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D20173898
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Feb 2020 14:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgB1NiL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 28 Feb 2020 08:38:11 -0500
-Received: from mailout1.hostsharing.net ([83.223.95.204]:41073 "EHLO
-        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbgB1NiL (ORCPT
+        id S1726880AbgB1Nn2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 28 Feb 2020 08:43:28 -0500
+Received: from mailout2.hostsharing.net ([83.223.78.233]:50607 "EHLO
+        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgB1Nn2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 28 Feb 2020 08:38:11 -0500
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Feb 2020 08:38:10 EST
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        Fri, 28 Feb 2020 08:43:28 -0500
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id CF9511003DBEC;
-        Fri, 28 Feb 2020 14:31:00 +0100 (CET)
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id CF59910189AC1;
+        Fri, 28 Feb 2020 14:36:51 +0100 (CET)
 Received: from localhost (unknown [87.130.102.138])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 8E22161249E4;
-        Fri, 28 Feb 2020 14:31:00 +0100 (CET)
-X-Mailbox-Line: From 65edffce4670a19e598015c03cbe46f1ffd93e43 Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1582895077.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 8222161249E4;
+        Fri, 28 Feb 2020 14:36:51 +0100 (CET)
+X-Mailbox-Line: From b1ce34ca9bc4d7bdc6e9852fcf30b1f4e37c8a80 Mon Sep 17 00:00:00 2001
+Message-Id: <b1ce34ca9bc4d7bdc6e9852fcf30b1f4e37c8a80.1582895077.git.lukas@wunner.de>
+In-Reply-To: <cover.1582895077.git.lukas@wunner.de>
+References: <cover.1582895077.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Fri, 28 Feb 2020 14:31:00 +0100
-Subject: [PATCH 0/8] rs485 support for Raspberry Pi aux uart
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date:   Fri, 28 Feb 2020 14:31:01 +0100
+Subject: [PATCH 1/8] serial: 8250: Don't touch RTS modem control while in
+ rs485 mode
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         "Nicolas Saenz Julienne" <nsaenzjulienne@suse.de>
@@ -47,38 +46,39 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The objective of this series is to add rs485 support for the
-Raspberry Pi auxiliary uart (patch [6/8] and [7/8]).
+serial8250_do_set_mctrl() currently allows modifying the RTS modem
+control line even when RTS is used as an rs485 Transmit Enable signal.
+It is thus possible for user space to interfere with rs485 communication
+by invoking a TIOCMSET ioctl().
 
-But I'm taking the opportunity to improve rs485 support for any
-8250-compatible uart:
+Ignore such change requests and retain the current RTS polarity when in
+rs485 mode.  Note that serial8250_set_mctrl() is always called with
+port->lock held, so there's no risk that RTS is changed concurrently.
 
-* rs485 devicetree properties support (patch [2/8]).
-* rs485 serial console support (patch [8/8]).
-* various fixes and cleanups.
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: Matwey V. Kornilov <matwey@sai.msu.ru>
+---
+ drivers/tty/serial/8250/8250_port.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Please review and test.  Thanks!
-
-
-Lukas Wunner (8):
-  serial: 8250: Don't touch RTS modem control while in rs485 mode
-  serial: 8250: Support rs485 devicetree properties
-  serial: 8250: Deduplicate ->rs485_config() callback
-  serial: 8250: Sanitize rs485 config harder
-  serial: 8250: Deduplicate rs485 active_timer assignment
-  serial: 8250: Generalize rs485 software emulation
-  serial: 8250_bcm2835aux: Support rs485 software emulation
-  serial: 8250: Support console on software emulated rs485 ports
-
- drivers/tty/serial/8250/8250.h            |   4 +-
- drivers/tty/serial/8250/8250_bcm2835aux.c |  62 ++++++++-
- drivers/tty/serial/8250/8250_core.c       |   6 +-
- drivers/tty/serial/8250/8250_of.c         |  39 +-----
- drivers/tty/serial/8250/8250_omap.c       |  34 +----
- drivers/tty/serial/8250/8250_port.c       | 157 +++++++++++++++++-----
- include/linux/serial_8250.h               |   3 +
- 7 files changed, 204 insertions(+), 101 deletions(-)
-
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index f398f162a1fd..a8f4cedde4dc 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1924,6 +1924,13 @@ void serial8250_do_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	unsigned char mcr;
+ 
++	if (port->rs485.flags & SER_RS485_ENABLED) {
++		if (serial8250_in_MCR(up) & UART_MCR_RTS)
++			mctrl |= TIOCM_RTS;
++		else
++			mctrl &= ~TIOCM_RTS;
++	}
++
+ 	mcr = serial8250_TIOCM_to_MCR(mctrl);
+ 
+ 	mcr = (mcr & up->mcr_mask) | up->mcr_force | up->mcr;
 -- 
 2.24.0
 
