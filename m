@@ -2,34 +2,36 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D20173898
-	for <lists+linux-serial@lfdr.de>; Fri, 28 Feb 2020 14:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1C5173880
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Feb 2020 14:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgB1Nn2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 28 Feb 2020 08:43:28 -0500
-Received: from mailout2.hostsharing.net ([83.223.78.233]:50607 "EHLO
-        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbgB1Nn2 (ORCPT
+        id S1726151AbgB1Nii (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 28 Feb 2020 08:38:38 -0500
+Received: from mailout3.hostsharing.net ([176.9.242.54]:36527 "EHLO
+        mailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgB1Nih (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 28 Feb 2020 08:43:28 -0500
+        Fri, 28 Feb 2020 08:38:37 -0500
 Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout2.hostsharing.net (Postfix) with ESMTPS id CF59910189AC1;
-        Fri, 28 Feb 2020 14:36:51 +0100 (CET)
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 8A2FC101E69E8;
+        Fri, 28 Feb 2020 14:38:35 +0100 (CET)
 Received: from localhost (unknown [87.130.102.138])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 8222161249E4;
-        Fri, 28 Feb 2020 14:36:51 +0100 (CET)
-X-Mailbox-Line: From b1ce34ca9bc4d7bdc6e9852fcf30b1f4e37c8a80 Mon Sep 17 00:00:00 2001
-Message-Id: <b1ce34ca9bc4d7bdc6e9852fcf30b1f4e37c8a80.1582895077.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 2307C61249E4;
+        Fri, 28 Feb 2020 14:38:35 +0100 (CET)
+X-Mailbox-Line: From 5908ea89b7f9da54872d6634b606d83db032297a Mon Sep 17 00:00:00 2001
+Message-Id: <5908ea89b7f9da54872d6634b606d83db032297a.1582895077.git.lukas@wunner.de>
 In-Reply-To: <cover.1582895077.git.lukas@wunner.de>
 References: <cover.1582895077.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Fri, 28 Feb 2020 14:31:01 +0100
-Subject: [PATCH 1/8] serial: 8250: Don't touch RTS modem control while in
- rs485 mode
+Date:   Fri, 28 Feb 2020 14:31:02 +0100
+Subject: [PATCH 2/8] serial: 8250: Support rs485 devicetree properties
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         "Nicolas Saenz Julienne" <nsaenzjulienne@suse.de>
@@ -46,39 +48,51 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-serial8250_do_set_mctrl() currently allows modifying the RTS modem
-control line even when RTS is used as an rs485 Transmit Enable signal.
-It is thus possible for user space to interfere with rs485 communication
-by invoking a TIOCMSET ioctl().
+Retrieve rs485 devicetree properties on registration of 8250 ports in
+case they are attached to an rs485 transceiver.
 
-Ignore such change requests and retain the current RTS polarity when in
-rs485 mode.  Note that serial8250_set_mctrl() is always called with
-port->lock held, so there's no risk that RTS is changed concurrently.
+If the property "linux,rs485-enabled-at-boot-time" is present, invoke
+the ->rs485_config() callback to immediately deassert RTS, thereby
+ceasing control of the bus.
 
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: Matwey V. Kornilov <matwey@sai.msu.ru>
+Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/8250/8250_port.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/tty/serial/8250/8250_core.c | 4 +++-
+ drivers/tty/serial/8250/8250_port.c | 3 +++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+index f2a33c9082a6..9a1d09fbb836 100644
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -1013,8 +1013,10 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
+ 		if (uart->port.fifosize && !uart->tx_loadsz)
+ 			uart->tx_loadsz = uart->port.fifosize;
+ 
+-		if (up->port.dev)
++		if (up->port.dev) {
+ 			uart->port.dev = up->port.dev;
++			uart_get_rs485_mode(uart->port.dev, &uart->port.rs485);
++		}
+ 
+ 		if (up->port.flags & UPF_FIXED_TYPE)
+ 			uart->port.type = up->port.type;
 diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index f398f162a1fd..a8f4cedde4dc 100644
+index a8f4cedde4dc..40efcea8c6e7 100644
 --- a/drivers/tty/serial/8250/8250_port.c
 +++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1924,6 +1924,13 @@ void serial8250_do_set_mctrl(struct uart_port *port, unsigned int mctrl)
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 	unsigned char mcr;
+@@ -2989,6 +2989,9 @@ static void serial8250_config_port(struct uart_port *port, int flags)
+ 	if (flags & UART_CONFIG_TYPE)
+ 		autoconfig(up);
  
-+	if (port->rs485.flags & SER_RS485_ENABLED) {
-+		if (serial8250_in_MCR(up) & UART_MCR_RTS)
-+			mctrl |= TIOCM_RTS;
-+		else
-+			mctrl &= ~TIOCM_RTS;
-+	}
++	if (port->rs485.flags & SER_RS485_ENABLED)
++		port->rs485_config(port, &port->rs485);
 +
- 	mcr = serial8250_TIOCM_to_MCR(mctrl);
- 
- 	mcr = (mcr & up->mcr_mask) | up->mcr_force | up->mcr;
+ 	/* if access method is AU, it is a 16550 with a quirk */
+ 	if (port->type == PORT_16550A && port->iotype == UPIO_AU)
+ 		up->bugs |= UART_BUG_NOMSR;
 -- 
 2.24.0
 
