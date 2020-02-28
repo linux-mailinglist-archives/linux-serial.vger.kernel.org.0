@@ -2,89 +2,146 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B25172BD7
-	for <lists+linux-serial@lfdr.de>; Fri, 28 Feb 2020 00:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BC3173549
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Feb 2020 11:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729796AbgB0XDz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Feb 2020 18:03:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729738AbgB0XDz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Feb 2020 18:03:55 -0500
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726892AbgB1K0j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 28 Feb 2020 05:26:39 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:41257 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgB1K0j (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 28 Feb 2020 05:26:39 -0500
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8E5212469F;
-        Thu, 27 Feb 2020 23:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582844634;
-        bh=ujUq05vTwgp4zfCZVaURWqd3tAcJ6/JW0KDXhNHLdnM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oEH/uiuZrTAbwGQzcL4TRZqtyLXCPzURXZ7AHmOcxlmfYjQxq8rjuEdMVllcYhdBA
-         r7vHN9Gx+mjeyXpcJvnCi/j/XpUPPTDYDDhBIhlPMPTNLSwWLfJpKrxBmJMnUuslRN
-         E9StyYr4S9lGrNRtvAcH59YGWPIVrmUjaPMsrTaM=
-Received: by mail-qk1-f176.google.com with SMTP id e16so1232157qkl.6;
-        Thu, 27 Feb 2020 15:03:54 -0800 (PST)
-X-Gm-Message-State: APjAAAXCRJrWYKKXHXKqmcqE0vZ6ANB+mUlRpcinZqSAvLp879oV+p5q
-        ArJEtsOC1WWAEwr9m94WSnVeLbslAeHF2PKsaQ==
-X-Google-Smtp-Source: APXvYqw/laX46RozAEZMxyINIQG8FYK9/JT0+//1/HbN8AUu5jHbA+IM4E9RvA5ctlGhNnas4Rvy8UDtCHXj2DZ9xA4=
-X-Received: by 2002:a05:620a:12a3:: with SMTP id x3mr1989416qki.254.1582844633702;
- Thu, 27 Feb 2020 15:03:53 -0800 (PST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B719023EC4;
+        Fri, 28 Feb 2020 11:26:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1582885596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JD2GcxRcyRHyxJNPoNSaMvwCSde4eO14BTyUP9NZW6w=;
+        b=SToHZC4OE6rvse39oPJXX2Q9inJgFheKTK5P+jjZYtrWoqBplO97oBYw7O3csPrOuXuIEN
+        0aUtunNDkM7fZwg4F86/l8vEE+e/YXW2eTnA9ZzR3KFZNlQwgxNg/DL/TsvmjF0kFKR/Cx
+        NqxUCp95i52VS0OVn/dMrfSnJ0UR81A=
 MIME-Version: 1.0
-References: <20200221174754.5295-1-michael@walle.cc> <20200221174754.5295-4-michael@walle.cc>
- <CAL_JsqL8QGKARtRAfjCMyk4Pp7EWhFMV8JQpveHoJ2OyH5kBPA@mail.gmail.com> <CADRPPNR1n1sviJnhq_zuUFJcMYqsVKy0O7NOF1pxF_4VH+dasg@mail.gmail.com>
-In-Reply-To: <CADRPPNR1n1sviJnhq_zuUFJcMYqsVKy0O7NOF1pxF_4VH+dasg@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 27 Feb 2020 17:03:42 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKMNFFG5H4gPQwRdcTpfHynqZWo2A2db-oL7EmvTNqNkQ@mail.gmail.com>
-Message-ID: <CAL_JsqKMNFFG5H4gPQwRdcTpfHynqZWo2A2db-oL7EmvTNqNkQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/9] tty: serial: fsl_lpuart: handle EPROBE_DEFER for DMA
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jiri Slaby <jslaby@suse.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Vabhav Sharma <vabhav.sharma@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 28 Feb 2020 11:26:36 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: earlycon: prefer EARLYCON_DECLARE() variant
+In-Reply-To: <20200220174607.24285-1-michael@walle.cc>
+References: <20200220174607.24285-1-michael@walle.cc>
+Message-ID: <ba54e9c14d4e0947df964964c020bc71@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: /
+X-Spam-Status: No, score=-0.10
+X-Rspamd-Server: web
+X-Spam-Score: -0.10
+X-Rspamd-Queue-Id: B719023EC4
+X-Spamd-Result: default: False [-0.10 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         RCPT_COUNT_THREE(0.00)[4];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         MID_RHS_MATCH_FROM(0.00)[]
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 4:49 PM Li Yang <leoyang.li@nxp.com> wrote:
->
-> On Thu, Feb 27, 2020 at 4:35 PM Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Fri, Feb 21, 2020 at 11:48 AM Michael Walle <michael@walle.cc> wrote:
-> > >
-> > > The DMA channel might not be available at the first probe time. This is
-> > > esp. the case if the DMA controller has an IOMMU mapping.
-> > >
-> > > Use the new dma_request_chan() API and handle EPROBE_DEFER errors. Also
-> > > reorder the code a bit, so that we don't prepare the whole UART just to
-> > > determine that the DMA channel is not ready yet and we have to undo all
-> > > the stuff. Try to map the DMA channels earlier.
-> >
-> > Changing this means you never probe successfully if you boot a kernel
-> > with the DMA driver disabled (or it's IOMMU disabled). Some other
-> > drivers request DMA in open() and can work either way.
->
-> We got this exact issue previously with another driver.  When the
-> required DMA driver is disabled, the DMA framework cannot figure out
-> this situation and keeps returning EPROBE_DEFER.  I'm wondering if we
-> should update the DMA framework to use your deferred probe timeout
-> mechanism.  Is it still only used for debug purpose?
+Hi Greg,
 
-It's undergoing some rework ATM to not just be for debug. However,
-it's not really going to help you if you care about the console
-because waiting for the timeout will be too late to register the
-console.
 
-Rob
+Am 2020-02-20 18:46, schrieb Michael Walle:
+> If a driver exposes early consoles with EARLYCON_DECLARE() and
+> OF_EARLYCON_DECLARE(), pefer the non-OF variant if the user specifies 
+> it
+> by
+>   earlycon=<driver>,<options>
+> 
+> The rationale behind this is that some drivers register multiple setup
+> functions under the same driver name. Eg.
+> 
+> OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", 
+> lpuart_early_console_setup);
+> OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart",
+> lpuart32_early_console_setup);
+> OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart",
+> lpuart32_imx_early_console_setup);
+> EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
+> EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
+> 
+> It depends on the order of the entries which console_setup() actually
+> gets called. To make things worse, I guess it also depends on the
+> compiler how these are ordered. Thus always prefer the 
+> EARLYCON_DECLARE()
+> ones.
+
+Do you have an opinon on this proposal?
+
+-michael
+
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/tty/serial/earlycon.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/earlycon.c 
+> b/drivers/tty/serial/earlycon.c
+> index c14873b67803..2ae9190b64bb 100644
+> --- a/drivers/tty/serial/earlycon.c
+> +++ b/drivers/tty/serial/earlycon.c
+> @@ -170,6 +170,7 @@ static int __init register_earlycon(char *buf,
+> const struct earlycon_id *match)
+>  int __init setup_earlycon(char *buf)
+>  {
+>  	const struct earlycon_id **p_match;
+> +	bool empty_compatible = true;
+> 
+>  	if (!buf || !buf[0])
+>  		return -EINVAL;
+> @@ -177,6 +178,7 @@ int __init setup_earlycon(char *buf)
+>  	if (early_con.flags & CON_ENABLED)
+>  		return -EALREADY;
+> 
+> +again:
+>  	for (p_match = __earlycon_table; p_match < __earlycon_table_end;
+>  	     p_match++) {
+>  		const struct earlycon_id *match = *p_match;
+> @@ -185,6 +187,10 @@ int __init setup_earlycon(char *buf)
+>  		if (strncmp(buf, match->name, len))
+>  			continue;
+> 
+> +		/* prefer entries with empty compatible */
+> +		if (empty_compatible && *match->compatible)
+> +			continue;
+> +
+>  		if (buf[len]) {
+>  			if (buf[len] != ',')
+>  				continue;
+> @@ -195,6 +201,11 @@ int __init setup_earlycon(char *buf)
+>  		return register_earlycon(buf, match);
+>  	}
+> 
+> +	if (empty_compatible) {
+> +		empty_compatible = false;
+> +		goto again;
+> +	}
+> +
+>  	return -ENOENT;
+>  }
