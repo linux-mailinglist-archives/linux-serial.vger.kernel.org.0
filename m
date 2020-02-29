@@ -2,168 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E984A174329
-	for <lists+linux-serial@lfdr.de>; Sat, 29 Feb 2020 00:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82656174808
+	for <lists+linux-serial@lfdr.de>; Sat, 29 Feb 2020 17:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbgB1XdE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 28 Feb 2020 18:33:04 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:35874 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726046AbgB1XdD (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 28 Feb 2020 18:33:03 -0500
-Received: by mail-pj1-f66.google.com with SMTP id gv17so1910963pjb.1
-        for <linux-serial@vger.kernel.org>; Fri, 28 Feb 2020 15:33:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sn5GXMIGwl26J0A2bH2+Hj/TmmTI1dt3PT8+BN12Qxo=;
-        b=U2w15Sqi1qH+a7S8nZw4/e2p+gCc4zjYUDd4jOc/HPLwMtw84S907xCHmri8NFC5xu
-         QiIZ9MHbeNvAKizc8u1i/WjHnSjjHi1KkGuKaYwNr5neRxuNtFiNG6j9tuP5s7HwT1+N
-         nA+oDth3pH3yszaxls9HKLLlAQ2MXmapyP0vc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sn5GXMIGwl26J0A2bH2+Hj/TmmTI1dt3PT8+BN12Qxo=;
-        b=kCZL3Ti9Ph/GOTI259eyr6koyU9/dmF42XKORUWMWfLuLZTS8UUBh/whu2VAEiOYcB
-         fnU1mZzrtpuYk7v3GiSYmFX675yZaPWaVTNO3Cpm6qriBlmKs8i7T9qmwDznLa6c+FOn
-         bSJPPStF5Dj3d5oV9VHtIK8QduKHj4udl3d2XAP4mbMsXFuFKMptuoa1xtUW/Y0uQxu/
-         DDb5fatJHe24mB3OTAF41ChMms+0QvKzg5u2KpGfKjDD9w4QnwwT1y4o0zSzTT9Rj0VC
-         NXDWbux3r0z3fpsd5d5uhUX+yz29ZR9aQrzTj43gvBzVh+QxZIlAD3COPDHeQlxvpXCI
-         O6aQ==
-X-Gm-Message-State: APjAAAXATUJP3q6xdXrPCgeFTSXphxdhDYwdgtgXhjrxnWuNqJ4yz1ZP
-        G+/Lcn/TGu6XXjFccEwNLe8i5w==
-X-Google-Smtp-Source: APXvYqzD0VVHoZHU8BvAHy/7+a/mWne3NJuZdgZCDcRMHEXt6xKMiMfEFDXHCuKZl3oTBviA6+Zg7A==
-X-Received: by 2002:a17:90b:3c9:: with SMTP id go9mr7170956pjb.7.1582932782453;
-        Fri, 28 Feb 2020 15:33:02 -0800 (PST)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id t189sm12356006pfd.168.2020.02.28.15.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Feb 2020 15:33:01 -0800 (PST)
-Date:   Fri, 28 Feb 2020 15:33:00 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Roja Rani Yarubandi <rojay@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, akashast@codeaurora.org,
-        skakit@codeaurora.org, msavaliy@qti.qualcomm.com
-Subject: Re: [PATCH V3] tty: serial: qcom_geni_serial: Support pin swapping
-Message-ID: <20200228233300.GO24720@google.com>
-References: <20200228124810.31543-1-rojay@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200228124810.31543-1-rojay@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727323AbgB2QaI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 29 Feb 2020 11:30:08 -0500
+Received: from ms9.eaxlabs.cz ([147.135.177.209]:33614 "EHLO ms9.eaxlabs.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727119AbgB2QaI (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 29 Feb 2020 11:30:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=eaxlabs.cz; s=mail;
+        h=Message-Id:Date:Subject:Cc:To:From; bh=Ckgfb+tZ4UayimR7ATmjnhS6EOieCUCK3o2mRGl5D0k=;
+        b=NkxIiuTkB7rHeUHTFzQ7/Guyj4/QwnLwBusq91zKwUl1NgwFnwEKxYW/yZ7r7f17urT6PP6bkyrUgqGcFcEssp0wR0gN49vFfEDPV+SP1orpR+bsrCORGoOchWPOT/CQ/8LM59e90KbPeBXjhNzNJoLzRgZ0HZ36scpn5WpNERw=;
+Received: from [82.99.129.6] (helo=localhost.localdomain)
+        by ms9.eaxlabs.cz with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <devik@eaxlabs.cz>)
+        id 1j84cV-000150-TL; Sat, 29 Feb 2020 17:05:42 +0100
+From:   Martin Devera <devik@eaxlabs.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-serial@vger.kernel.org (open list:SERIAL DRIVERS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
+        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Cc:     Martin Devera <devik@eaxlabs.cz>
+Subject: [PATCH 1/2] tty/serial: Add st,swap OF option to stm32-usart
+Date:   Sat, 29 Feb 2020 17:05:06 +0100
+Message-Id: <20200229160507.31309-1-devik@eaxlabs.cz>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 06:18:10PM +0530, Roja Rani Yarubandi wrote:
-> Add capability to supoort RX-TX, CTS-RTS pins swap in HW.
-> 
-> Configure UART_IO_MACRO_CTRL register accordingly if RX-TX pair
-> or CTS-RTS pair or both pairs swapped.
-> 
-> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-> ---
-> Changes in V2:
-> - As per Greg's comment removed the change id.
-> 
-> Changes in V3:
-> - As per Bjorn's comment using of_property_read_bool() to read dtsi entries.
-> - As per Matthias's comment add capability to support individual pairs swap,
->   that is, only RX-TX swap and only CTS-RTS swap cases.
-> 
-> Dt-bindings support for this is posted at
-> https://patchwork.kernel.org/patch/11385969/
-> 
->  drivers/tty/serial/qcom_geni_serial.c | 30 +++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 191abb18fc2a..2ad041cde4d7 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -21,6 +21,7 @@
->  
->  /* UART specific GENI registers */
->  #define SE_UART_LOOPBACK_CFG		0x22c
-> +#define SE_UART_IO_MACRO_CTRL		0x240
->  #define SE_UART_TX_TRANS_CFG		0x25c
->  #define SE_UART_TX_WORD_LEN		0x268
->  #define SE_UART_TX_STOP_BIT_LEN		0x26c
-> @@ -95,6 +96,12 @@
->  #define CTS_RTS_SORTED	BIT(1)
->  #define RX_TX_CTS_RTS_SORTED	(RX_TX_SORTED | CTS_RTS_SORTED)
->  
-> +/* UART pin swap value */
-> +#define DEFAULT_IO_MACRO_IO0_IO1_MASK		GENMASK(3, 0)
-> +#define IO_MACRO_IO0_SEL		GENMASK(1, 0)
+STM32 F7/H7 usarts supports RX & TX pin swapping.
+Add option to turn it on.
+Tested on STM32MP157.
 
-not sure the use of GENMASK adds value here since it's not a mask, I
-rather find it obfuscating, IMO just 0x03 / 0x3 would be clearer.
+Signed-off-by: Martin Devera <devik@eaxlabs.cz>
+---
+ drivers/tty/serial/stm32-usart.c | 3 ++-
+ drivers/tty/serial/stm32-usart.h | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-> +#define DEFAULT_IO_MACRO_IO2_IO3_MASK		GENMASK(15, 4)
-> +#define IO_MACRO_IO2_IO3_SWAP		0x4640
-> +
->  #ifdef CONFIG_CONSOLE_POLL
->  #define CONSOLE_RX_BYTES_PW 1
->  #else
-> @@ -119,6 +126,8 @@ struct qcom_geni_serial_port {
->  
->  	unsigned int tx_remaining;
->  	int wakeup_irq;
-> +	bool rx_tx_swap;
-> +	bool cts_rts_swap;
->  };
->  
->  static const struct uart_ops qcom_geni_console_pops;
-> @@ -826,6 +835,7 @@ static int qcom_geni_serial_port_setup(struct uart_port *uport)
->  	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
->  	u32 rxstale = DEFAULT_BITS_PER_CHAR * STALE_TIMEOUT;
->  	u32 proto;
-> +	u32 pin_swap;
->  
->  	if (uart_console(uport)) {
->  		port->tx_bytes_pw = 1;
-> @@ -846,6 +856,20 @@ static int qcom_geni_serial_port_setup(struct uart_port *uport)
->  	get_tx_fifo_size(port);
->  
->  	writel(rxstale, uport->membase + SE_UART_RX_STALE_CNT);
-> +
-> +	pin_swap = readl(uport->membase + SE_UART_IO_MACRO_CTRL);
-> +	if (port->rx_tx_swap) {
-> +		pin_swap &= ~DEFAULT_IO_MACRO_IO2_IO3_MASK;
-> +		pin_swap |= IO_MACRO_IO2_IO3_SWAP;
-> +	}
-> +	if (port->cts_rts_swap) {
-> +		pin_swap &= ~DEFAULT_IO_MACRO_IO0_IO1_MASK;
-> +		pin_swap |= IO_MACRO_IO0_SEL;
-> +	}
-> +	/* Configure this register if RX-TX, CTS-RTS pins are swapped */
-> +	if (port->rx_tx_swap || port->cts_rts_swap)
-> +		writel(pin_swap, uport->membase + SE_UART_IO_MACRO_CTRL);
-> +
->  	/*
->  	 * Make an unconditional cancel on the main sequencer to reset
->  	 * it else we could end up in data loss scenarios.
-> @@ -1289,6 +1313,12 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->  	if (!console)
->  		port->wakeup_irq = platform_get_irq_optional(pdev, 1);
->  
-> +	if (of_property_read_bool(pdev->dev.of_node, "rx-tx-swap"))
-> +		port->rx_tx_swap = true;
-> +
-> +	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
-> +		port->cts_rts_swap = true;
-> +
->  	uport->private_data = drv;
->  	platform_set_drvdata(pdev, port);
->  	port->handle_rx = console ? handle_rx_console : handle_rx_uart;
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index fdcc2142aa79..8d25869a02eb 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -780,7 +780,7 @@ static void stm32_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	cr1 = USART_CR1_TE | USART_CR1_RE;
+ 	if (stm32_port->fifoen)
+ 		cr1 |= USART_CR1_FIFOEN;
+-	cr2 = 0;
++	cr2 = stm32_port->swap ? USART_CR2_SWAP : 0;
+ 
+ 	/* Tx and RX FIFO configuration */
+ 	cr3 = readl_relaxed(port->membase + ofs->cr3);
+@@ -1097,6 +1097,7 @@ static struct stm32_port *stm32_of_get_stm32_port(struct platform_device *pdev)
+ 
+ 	stm32_ports[id].hw_flow_control = of_property_read_bool(np,
+ 							"st,hw-flow-ctrl");
++	stm32_ports[id].swap = of_property_read_bool(np, "st,swap");
+ 	stm32_ports[id].port.line = id;
+ 	stm32_ports[id].cr1_irq = USART_CR1_RXNEIE;
+ 	stm32_ports[id].cr3_irq = 0;
+diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
+index 2a68bc48652e..2503a91b890c 100644
+--- a/drivers/tty/serial/stm32-usart.h
++++ b/drivers/tty/serial/stm32-usart.h
+@@ -275,6 +275,7 @@ struct stm32_port {
+ 	enum dma_cb rx_dma_cb;	 /* dma rx callback status    */
+ 	bool tx_dma_busy;	 /* dma tx busy               */
+ 	bool hw_flow_control;
++	bool swap;		 /* swap RX & TX pins */
+ 	bool fifoen;
+ 	int wakeirq;
+ 	struct pinctrl_state *console_pins;
+-- 
+2.11.0
 
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
-(TX/RX swap)
