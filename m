@@ -2,66 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9D0174806
-	for <lists+linux-serial@lfdr.de>; Sat, 29 Feb 2020 17:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E66174985
+	for <lists+linux-serial@lfdr.de>; Sat, 29 Feb 2020 22:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727291AbgB2QaF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 29 Feb 2020 11:30:05 -0500
-Received: from ms9.eaxlabs.cz ([147.135.177.209]:33612 "EHLO ms9.eaxlabs.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727119AbgB2QaF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 29 Feb 2020 11:30:05 -0500
-X-Greylist: delayed 1456 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Feb 2020 11:30:04 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=eaxlabs.cz; s=mail;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From; bh=0sL7frbHX+9iov4VRw0n07dyNagmVgH6U/A+xu41NOk=;
-        b=U7FACzCGC/KpiyvYGzuV/ssi7fk91JfFx3sPnZIDuDGZDcVFCc5/dLoE37026ZTSmjgiwKDe1kC7W1Mw7wn1lkqRmS4lynTk0j80KGn67sWnqOgYfSiHTbnBbxunDOAwu4LipcXyTZf1a1qmFClCUKIDkVj2Tjrnilv4aiwc+zg=;
-Received: from [82.99.129.6] (helo=localhost.localdomain)
-        by ms9.eaxlabs.cz with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <devik@eaxlabs.cz>)
-        id 1j84ca-000150-MZ; Sat, 29 Feb 2020 17:05:46 +0100
-From:   Martin Devera <devik@eaxlabs.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-serial@vger.kernel.org (open list:SERIAL DRIVERS),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
-        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Cc:     Martin Devera <devik@eaxlabs.cz>
-Subject: [PATCH 2/2] dt-bindings: serial: Add st,swap to stm32-usart
-Date:   Sat, 29 Feb 2020 17:05:07 +0100
-Message-Id: <20200229160507.31309-2-devik@eaxlabs.cz>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200229160507.31309-1-devik@eaxlabs.cz>
-References: <20200229160507.31309-1-devik@eaxlabs.cz>
+        id S1727370AbgB2VZh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 29 Feb 2020 16:25:37 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:44097 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727170AbgB2VZh (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 29 Feb 2020 16:25:37 -0500
+Received: by mail-lf1-f67.google.com with SMTP id 7so4735221lfz.11
+        for <linux-serial@vger.kernel.org>; Sat, 29 Feb 2020 13:25:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kky8mfhPQ8KKnNkQyA3CeK4eo/7P5j0q3GN68omEw6s=;
+        b=WZ1cGsOmsZw91k0RVSwT/sBOUz5juQmU/1iilMzZyXAEdcK45K/oi6UWrcqAtTZ+Uy
+         YShmab1i0FIzCQBrnmLa6y6z2+bIk4K3UsbG2A/pQR+EF4Tm9Uwl6ztDGEqKB23luE08
+         vS17pN24Dh0KIWZsCBEjtIzhZBMrhrRqjr40858qljZ0AGhYoXXbYPTDeMAleDtNDQ5X
+         r2eQwa2sn8DFgKhofE+Vv1vth46NxkCDfokCx4fLcSWg74/KLmahw9dZ21U2Uv4SzPB8
+         2yF2m/GaqgF7LjE/+WQ/C1v8LDIor9wUwUxAin2y/3iMjVHhswdQk8gO6Q3m0SCHyBW9
+         QaGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kky8mfhPQ8KKnNkQyA3CeK4eo/7P5j0q3GN68omEw6s=;
+        b=ZJgXwWmuTiJdKRvjCnSIBM+k/RqBq7ZRKLu0P7Tpzx8b3p5raUW88UvS222RHMPwfT
+         mY1nR9YYNNCqJhMw1qLjKq1gk+pn2tsdd4drlYX30eF6xkciUYLu+lP/Q5Fwr7OYsOgN
+         7wFsoKMRDDnL54jbhacpt6/i1xd9xaEraUc1ezIQ6KjoEX6Gr680mxyqH3enS8HRjIRN
+         OuiMjI89P/7ud3n6I/h6RFmCkXkw+gOCKkaAhtG+EdlGzN1AVEKueDTxtligEK94g3jK
+         B9kCjDVnT6UtdheKcYj2cNtgs7tV8CxrWqYcoft+Q3G0Ew91TfPY2ruzNBpRRln81Qu3
+         Vgiw==
+X-Gm-Message-State: ANhLgQ3u1p72k+Bvc79nvLg/Gb5AE5gAjX+dGb2IUyeRs2DF54q4HdXD
+        wLOpecQmkX1VdTes9y3r6GG4KAeTx6M=
+X-Google-Smtp-Source: ADFU+vvI+UlnwM0gPuh9Jk+ov9u3vCu5fQSGi9QpDsw0+Kgl3JMGxS8smlJoXsQvDY3+k6wGG66+FQ==
+X-Received: by 2002:ac2:4c82:: with SMTP id d2mr4454926lfl.78.1583011535172;
+        Sat, 29 Feb 2020 13:25:35 -0800 (PST)
+Received: from localhost.localdomain (c-5ac9225c.014-348-6c756e10.bbcust.telenor.se. [92.34.201.90])
+        by smtp.gmail.com with ESMTPSA id r15sm8505465ljh.11.2020.02.29.13.25.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Feb 2020 13:25:34 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        Songjun Wu <songjun.wu@linux.intel.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        John Crispin <john@phrozen.org>
+Subject: [PATCH] tty: serial: lantiq: Drop GPIO include
+Date:   Sat, 29 Feb 2020 22:23:31 +0100
+Message-Id: <20200229212331.174946-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add new st,swap property to allow for RX & TX pin swapping.
+Nothing in this driver uses the symbols from <linux/gpio.h>
+so drop this include.
 
-Signed-off-by: Martin Devera <devik@eaxlabs.cz>
+Cc: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Cc: Songjun Wu <songjun.wu@linux.intel.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: John Crispin <john@phrozen.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- Documentation/devicetree/bindings/serial/st,stm32-usart.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/lantiq.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/st,stm32-usart.txt b/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-index 08b499045a38..cbfa1f9f4b17 100644
---- a/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-+++ b/Documentation/devicetree/bindings/serial/st,stm32-usart.txt
-@@ -24,6 +24,7 @@ Optional properties:
- - pinctrl-n: Phandle(s) pointing to pin configuration nodes.
-   For Pinctrl properties see ../pinctrl/pinctrl-bindings.txt
- - st,hw-flow-ctrl: bool flag to enable hardware flow control.
-+- st,swap: bool flag to swap RX and TX pins.
- - rs485-rts-delay, rs485-rx-during-tx, rs485-rts-active-low,
-   linux,rs485-enabled-at-boot-time: see rs485.txt.
- - dmas: phandle(s) to DMA controller node(s). Refer to stm32-dma.txt
+diff --git a/drivers/tty/serial/lantiq.c b/drivers/tty/serial/lantiq.c
+index f67226df30d4..c5e46ff972e4 100644
+--- a/drivers/tty/serial/lantiq.c
++++ b/drivers/tty/serial/lantiq.c
+@@ -11,7 +11,6 @@
+ #include <linux/clk.h>
+ #include <linux/console.h>
+ #include <linux/device.h>
+-#include <linux/gpio.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/ioport.h>
 -- 
-2.11.0
+2.24.1
 
