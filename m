@@ -2,192 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E74C177799
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2020 14:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A72177A16
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2020 16:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbgCCNn4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 3 Mar 2020 08:43:56 -0500
-Received: from michel.telenet-ops.be ([195.130.137.88]:37122 "EHLO
-        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727576AbgCCNn4 (ORCPT
+        id S1729800AbgCCPJk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 3 Mar 2020 10:09:40 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42705 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729605AbgCCPJk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 3 Mar 2020 08:43:56 -0500
-Received: from ramsan ([84.195.182.253])
-        by michel.telenet-ops.be with bizsmtp
-        id 9pjt2200z5USYZQ06pjtH2; Tue, 03 Mar 2020 14:43:54 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1j97px-0001GY-RS; Tue, 03 Mar 2020 14:43:53 +0100
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1j97px-0005oC-QY; Tue, 03 Mar 2020 14:43:53 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
+        Tue, 3 Mar 2020 10:09:40 -0500
+Received: by mail-oi1-f193.google.com with SMTP id l12so3301826oil.9;
+        Tue, 03 Mar 2020 07:09:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zclMu55pOEbtJ5KEkFvG4eYtDTAQiBFtjRyibvrv2jA=;
+        b=FeUQKiA9yVZ+yF/F65raOKbarvNcQPl2RJ3tKGJBQXNEYDUMWngvlbulpZIOFULexx
+         /HDIsnDLHyZRERCUeIkkrFzagQyW5hw7/pRGqADRv/EojCmKldrvImEwdBT/z+x9m7XM
+         w2sQ1GpcfmRQWJApag/fPiBWVV1qgR9CdKhku23mVjYtVrQ0CwMbmQGcwvp2mxkJ8b09
+         zUN7wD4XCXINg6PYhcxirQynL/rTfFzzbLHc019q+ISt5Er4PCh5X9kbguC/viP/uiXF
+         1PQ6oLRB1g2DO4MZ66YzltqrT6ahrvcUgH8by9Zko9GyiiDXy6GwaR84DhWex7HlsU8L
+         ig2Q==
+X-Gm-Message-State: ANhLgQ02OMt5Bm6wY/Jz6Und+p547fcZ6rCKjgBFpyizmHFBXBbXgaaW
+        OtlgcBlRBR4PG7N+4cggfaDMwZ1HNap2PGJ4Lmo=
+X-Google-Smtp-Source: ADFU+vvF5cyBy3Mj/JGSTRJ4KUYjVjpIJvvzrSNL5lKharapSjyQoSa/pwNf3BU5ywQoBS5GNl8MzNZoUy2WptJa1IA=
+X-Received: by 2002:aca:b4c3:: with SMTP id d186mr2672596oif.131.1583248179287;
+ Tue, 03 Mar 2020 07:09:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20200303134351.22270-1-geert+renesas@glider.be> <20200303134351.22270-2-geert+renesas@glider.be>
+In-Reply-To: <20200303134351.22270-2-geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 Mar 2020 16:09:28 +0100
+Message-ID: <CAMuHMdWFDLEnwm7cMMLF6a_vc8U24aGEh3hO33gA=TFgBDGoCA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: serial: Convert generic bindings to json-schema
 To:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 2/2] dt-bindings: serial: Convert slave-device bindings to json-schema
-Date:   Tue,  3 Mar 2020 14:43:51 +0100
-Message-Id: <20200303134351.22270-3-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200303134351.22270-1-geert+renesas@glider.be>
-References: <20200303134351.22270-1-geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Convert the serial slave-device Device Tree binding documentation to
-json-schema, and incorporate it into the generic serial bindings.
+On Tue, Mar 3, 2020 at 2:44 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> Convert the generic serial interface Device Tree binding documentation
+> to json-schema.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  .../devicetree/bindings/serial/serial.txt     | 56 -----------
+>  .../devicetree/bindings/serial/serial.yaml    | 95 +++++++++++++++++++
+>  2 files changed, 95 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/serial.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/serial.yaml
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- .../devicetree/bindings/serial/serial.yaml    | 53 +++++++++++++++++++
- .../bindings/serial/slave-device.txt          | 45 ----------------
- MAINTAINERS                                   |  2 +-
- 3 files changed, 54 insertions(+), 46 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/serial/slave-device.txt
+There are a few references to serial.txt that need to be updated.
 
-diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
-index d408335319f00215..7381966449b62deb 100644
---- a/Documentation/devicetree/bindings/serial/serial.yaml
-+++ b/Documentation/devicetree/bindings/serial/serial.yaml
-@@ -7,6 +7,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: Serial Interface Generic DT Bindings
- 
- maintainers:
-+  - Rob Herring <robh@kernel.org>
-   - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- 
- description:
-@@ -59,6 +60,45 @@ properties:
-       "rts-gpios" above, unless support is provided to switch between modes
-       dynamically.
- 
-+patternProperties:
-+  "^(bluetooth|ethernet|gnss|nfc|wifi)$":
-+    type: object
-+
-+    description:
-+      Serial attached devices shall be a child node of the host UART device the
-+      slave device is attached to. It is expected that the attached device is
-+      the only child node of the UART device. The slave device node name shall
-+      reflect the generic type of device for the node.
-+
-+    properties:
-+      compatible:
-+        description:
-+          Compatible of the device connnected to the serial port.
-+
-+      max-speed:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description:
-+          The maximum baud rate the device operates at. This should only be
-+          present if the maximum is less than the slave device can support. For
-+          example, a particular board has some signal quality issue or the host
-+          processor can't support higher baud rates.
-+
-+      current-speed:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: |
-+          The current baud rate the device operates at. This should only be
-+          present in case a driver has no chance to know the baud rate of the
-+          slave device.
-+          Examples:
-+            * device supports auto-baud
-+            * the rate is setup by a bootloader and there is no way to reset
-+              the device
-+            * device baud rate is configured by its firmware but there is no
-+              way to request the actual settings
-+
-+    required:
-+      - compatible
-+
- examples:
-   - |
-     #include <dt-bindings/gpio/gpio.h>
-@@ -93,3 +133,16 @@ examples:
-             power-domains = <&pd_a3sp>;
-             uart-has-rtscts;
-     };
-+
-+  - |
-+    serial@1234 {
-+            compatible = "ns16550a";
-+            reg = <0x1234 0x20>;
-+            interrupts = <1>;
-+
-+            bluetooth {
-+                    compatible = "brcm,bcm43341-bt";
-+                    interrupt-parent = <&gpio>;
-+                    interrupts = <10>;
-+            };
-+    };
-diff --git a/Documentation/devicetree/bindings/serial/slave-device.txt b/Documentation/devicetree/bindings/serial/slave-device.txt
-deleted file mode 100644
-index 40110e0196209fde..0000000000000000
---- a/Documentation/devicetree/bindings/serial/slave-device.txt
-+++ /dev/null
-@@ -1,45 +0,0 @@
--Serial Slave Device DT binding
--
--This documents the binding structure and common properties for serial
--attached devices. Common examples include Bluetooth, WiFi, NFC and GPS
--devices.
--
--Serial attached devices shall be a child node of the host UART device the
--slave device is attached to. It is expected that the attached device is
--the only child node of the UART device. The slave device node name shall
--reflect the generic type of device for the node.
--
--Required Properties:
--
--- compatible 	: A string reflecting the vendor and specific device the node
--		  represents.
--
--Optional Properties:
--
--- max-speed	: The maximum baud rate the device operates at. This should
--		  only be present if the maximum is less than the slave device
--		  can support. For example, a particular board has some signal
--		  quality issue or the host processor can't support higher
--		  baud rates.
--- current-speed	: The current baud rate the device operates at. This should
--		  only be present in case a driver has no chance to know
--		  the baud rate of the slave device.
--		  Examples:
--		    * device supports auto-baud
--		    * the rate is setup by a bootloader and there is no
--		      way to reset the device
--		    * device baud rate is configured by its firmware but
--		      there is no way to request the actual settings
--
--Example:
--
--serial@1234 {
--	compatible = "ns16550a";
--	interrupts = <1>;
--
--	bluetooth {
--		compatible = "brcm,bcm43341-bt";
--		interrupt-parent = <&gpio>;
--		interrupts = <10>;
--	};
--};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 59c14ee9a917a794..5f5d074c7b3927a5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15034,7 +15034,7 @@ SERIAL DEVICE BUS
- M:	Rob Herring <robh@kernel.org>
- L:	linux-serial@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/serial/slave-device.txt
-+F:	Documentation/devicetree/bindings/serial/serial.yaml
- F:	drivers/tty/serdev/
- F:	include/linux/serdev.h
- 
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.17.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
