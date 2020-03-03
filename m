@@ -2,67 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F5A17824D
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2020 20:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1F517829A
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2020 20:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732115AbgCCSKV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 3 Mar 2020 13:10:21 -0500
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:44370 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732353AbgCCSKU (ORCPT
+        id S1729049AbgCCSrm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 3 Mar 2020 13:47:42 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39430 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726899AbgCCSrl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 3 Mar 2020 13:10:20 -0500
-Received: by mail-vk1-f195.google.com with SMTP id x62so1154464vkg.11
-        for <linux-serial@vger.kernel.org>; Tue, 03 Mar 2020 10:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=bHeBUSPiHoUbrBV+hl3+/vpnoyGyVGSAGueX0QFcdi3uMApLQ7CuiJU5Bu9vmrpLdq
-         5uO14T88cO9jN5exI5ip7DxCm/83Z8cp64nJK80AXsLt1IdmyRn2hWQ2R6yjaMoXEmtW
-         h9oOreSdUs44J9o2yZfH/UBLYISyBcfx6kflVWUIkgIN1VhIBOpnC0M/KTU/5yWJSAGz
-         fGG5i5rBuqC/+1ZbFdQB02YRytYOH5ooqY4vFwMYyVA4+buWbNObDEiboewJEpe1nonK
-         OFpOqLrPH7zWtF7AOxB6DMwTP4+/voHMipJjn9qbUZ+6EoklRF1iUY5IEpjKgoV1LQCF
-         QvUg==
+        Tue, 3 Mar 2020 13:47:41 -0500
+Received: by mail-ot1-f65.google.com with SMTP id x97so4082438ota.6;
+        Tue, 03 Mar 2020 10:47:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=c07bKfP3aQPa/F+woZ+0wccBIvHRbS60D8hbBnJ/z1JgB2L86XOvErq2ZWUmTVxfwt
-         RdzAgySbbGvYfPNmlNC6scs0KhDwPUYE/OXVUrTTO7jPf3g98ka/j6gHRWKGS2yQ4QSd
-         eoi1L1IddGl6FJtXMRWZWa2++GEfhkMySB8rJv8LWl7fuaHlFiL2i297939TzK/QoxeS
-         W/GnuYfQ2dEXrNJ27wmGXA+ZhklsmuIIw1EtiZ31Ifh0ErcOKgEvbea1ESSD8Ds34xwE
-         C/i7a2pF+DmHI5TxUrVho4/tPbRN4r9nD9Ua51sqrvt7KdqU1qFEipe7d1GPcTken3WE
-         fLkA==
-X-Gm-Message-State: ANhLgQ07HCWQ9SJpY4IDYHN2kSgyrv1Efau4QBrqC3uurMxNdmsKRjaF
-        9ctYYTcQ9pDJE3bM1XS64wyujETn1Xeb4jWcnFA=
-X-Google-Smtp-Source: ADFU+vu5KpUHXjnd3JvQt09wp+JnXyWVLMBY2VsdsFUzmqBVcWzpHFB7U23a/bK39LvY/cjRBQlqVApXxvE2pbFCtDk=
-X-Received: by 2002:a1f:8d0f:: with SMTP id p15mr3652760vkd.100.1583259019551;
- Tue, 03 Mar 2020 10:10:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=V16aal7zag3kMsr09Mn6Pwm+yaS63ymnYzw5shFWl8o=;
+        b=hPPd8kp79gKGNtyGE61o3kO8/xGa4wfSN3K9mSGqWCAuX5YjJl9JxKZfNSNkQyukGY
+         xmoawkOIa7R97kUou2yF+hYqHRU++xU90KvpDYN/dxDT+MbOX/vsd0VJOvwSQYjUkwI2
+         tx8y0lc1kRM/D/GIBr8ee/0I6XcnnlldgpUEZisVaPo3cFDeTB2/bdVowCP56XtZUlHT
+         y7jHymiZFOK1/DDA0ocsUTQoEgzm9gcadgyVZ59bx363QHN6luHtiKoPffFuzk+ZMruA
+         iJWySNHhe/SkbvfwAQZJKNGOWDK0hX5FiIbjtZ5b7VmNnqY1lL2W/QuB/UNqZlww+fGr
+         87CQ==
+X-Gm-Message-State: ANhLgQ1tXVTvr/fMzxrTM9KbRV4BLFvw+oKAuhSO688q+kSWOl83ID3Y
+        s8LH3NfOTG2F9l1auIoeyQ==
+X-Google-Smtp-Source: ADFU+vtZ2kBjLYMbCupGtxnCYEydzNp//c2n2ytmjC5DrFRFmsm+XNsR1sLMnsSr9bp4FbQOOdzObw==
+X-Received: by 2002:a9d:5e82:: with SMTP id f2mr4317186otl.240.1583261259115;
+        Tue, 03 Mar 2020 10:47:39 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s2sm766013otp.35.2020.03.03.10.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2020 10:47:38 -0800 (PST)
+Received: (nullmailer pid 20625 invoked by uid 1000);
+        Tue, 03 Mar 2020 18:47:37 -0000
+Date:   Tue, 3 Mar 2020 12:47:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Jiri Slaby <jslaby@suse.com>, Peng Fan <peng.fan@nxp.com>,
+        Vabhav Sharma <vabhav.sharma@nxp.com>,
+        Yuan Yao <yao.yuan@nxp.com>
+Subject: Re: [PATCH v3 3/9] tty: serial: fsl_lpuart: handle EPROBE_DEFER for
+ DMA
+Message-ID: <20200303184737.GD26191@bogus>
+References: <20200303174306.6015-1-michael@walle.cc>
+ <20200303174306.6015-4-michael@walle.cc>
 MIME-Version: 1.0
-Received: by 2002:ab0:2a59:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:10:18 -0800 (PST)
-Reply-To: dr.challynoah@gmail.com
-From:   DR CHALLY NOAH <official.dhlexpress@gmail.com>
-Date:   Tue, 3 Mar 2020 19:10:18 +0100
-Message-ID: <CAJ-5BZEDKvaazVaTzGQXA-vgBjBwA7RM2DE4ZKgMm4iDYhx9aw@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200303174306.6015-4-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Dear,
-What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
-This said fund was issued out by the UNITED NATIONS To compensate
-you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
-at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
-fund (award)release to you or better still reply back Immediately You
-Receive This Information For An Urgent Confirmation And Release Of Your
-Fund To You Without Delays, as your email was listed among those to be
-compensated this year.Congratulations..
-Best Regards,
-Dr Chally Noah.
-Minister Of Finance On Foreign Remittance:
+On Tue, Mar 03, 2020 at 06:43:00PM +0100, Michael Walle wrote:
+> The DMA channel might not be available at probe time. This is esp. the
+> case if the DMA controller has an IOMMU mapping.
+
+The subject should be updated as this doesn't involve deferred probe any 
+more. 
+
+> There is also another caveat. If there is no DMA controller at all,
+> dma_request_chan() will also return -EPROBE_DEFER. Thus we cannot test
+> for -EPROBE_DEFER in probe(). Otherwise the lpuart driver will fail to
+> probe if, for example, the DMA driver is not enabled in the kernel
+> configuration.
+> 
+> To workaround this, we request the DMA channel in _startup(). Other
+> serial drivers do it the same way.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/tty/serial/fsl_lpuart.c | 84 +++++++++++++++++++++------------
+>  1 file changed, 53 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index c31b8f3db6bf..0b8c477b32a3 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -1493,36 +1493,63 @@ static void rx_dma_timer_init(struct lpuart_port *sport)
+>  static void lpuart_tx_dma_startup(struct lpuart_port *sport)
+>  {
+>  	u32 uartbaud;
+> +	int ret;
+>  
+> -	if (sport->dma_tx_chan && !lpuart_dma_tx_request(&sport->port)) {
+> -		init_waitqueue_head(&sport->dma_wait);
+> -		sport->lpuart_dma_tx_use = true;
+> -		if (lpuart_is_32(sport)) {
+> -			uartbaud = lpuart32_read(&sport->port, UARTBAUD);
+> -			lpuart32_write(&sport->port,
+> -				       uartbaud | UARTBAUD_TDMAE, UARTBAUD);
+> -		} else {
+> -			writeb(readb(sport->port.membase + UARTCR5) |
+> -				UARTCR5_TDMAS, sport->port.membase + UARTCR5);
+> -		}
+> +	sport->dma_tx_chan = dma_request_slave_channel(sport->port.dev, "tx");
+> +	if (!sport->dma_tx_chan) {
+> +		dev_info_once(sport->port.dev,
+> +			      "DMA tx channel request failed, operating without tx DMA\n");
+
+Might be useful to print the errno too.
+
+Rob
