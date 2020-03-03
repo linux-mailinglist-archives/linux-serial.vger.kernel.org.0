@@ -2,37 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15665176BA2
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2020 03:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C2F176D5A
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2020 04:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729154AbgCCCuX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 2 Mar 2020 21:50:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47222 "EHLO mail.kernel.org"
+        id S1727234AbgCCCqV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 2 Mar 2020 21:46:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729152AbgCCCuX (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:50:23 -0500
+        id S1727053AbgCCCqU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:46:20 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48827246E7;
-        Tue,  3 Mar 2020 02:50:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 310EA24680;
+        Tue,  3 Mar 2020 02:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203823;
-        bh=sOAGFuQmdWeLvsjXjqeTg71nvzmjKCDHQHCRceyd3eA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jz0ckZ9vLUlabOubgMhvIFGtOn5QIGAIs1KwDesnACf/NBQolSisQIIwL/DnRuvWE
-         O7BkPBzZPA8B05ksPxU17VkDWKLlOVk8+W4qzzgMWO7157LQxGWN7tDOfjtB/OfmRg
-         5V62PMS8gtvocm/5t1+Zy0dqaTejcakBvoW8bbPU=
+        s=default; t=1583203579;
+        bh=YKfdWWef2XAP+GCkkOxxFSr7TtbFVlNDiZybrdw5O7M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MmrnbpyhahB09gzJEO19QwVjJ4HFbQ8Xxz3F/sCz/1Ml9P4UM3L2W+d7LFBC0XhiI
+         OUVlB6a0mT7eJtx7+4ks3aO3b3dIxsq9dEA8bsx1ShAQwR8K4DGLF0fvd+ZLibW0Dx
+         LbAQmf8tyuO1vqOENfO2FoLgOSM2GgLgyt9HA9yI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Daniel Golle <daniel@makrotopia.org>,
         Chuanhong Guo <gch981213@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 01/11] serial: ar933x_uart: set UART_CS_{RX,TX}_READY_ORIDE
-Date:   Mon,  2 Mar 2020 21:50:11 -0500
-Message-Id: <20200303025021.10754-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 03/66] serial: ar933x_uart: set UART_CS_{RX,TX}_READY_ORIDE
+Date:   Mon,  2 Mar 2020 21:45:12 -0500
+Message-Id: <20200303024615.8889-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200303024615.8889-1-sashal@kernel.org>
+References: <20200303024615.8889-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+)
 
 diff --git a/drivers/tty/serial/ar933x_uart.c b/drivers/tty/serial/ar933x_uart.c
-index 1519d2ca7705f..40194791cde0b 100644
+index 3bdd56a1021b2..ea12f10610b64 100644
 --- a/drivers/tty/serial/ar933x_uart.c
 +++ b/drivers/tty/serial/ar933x_uart.c
-@@ -294,6 +294,10 @@ static void ar933x_uart_set_termios(struct uart_port *port,
+@@ -286,6 +286,10 @@ static void ar933x_uart_set_termios(struct uart_port *port,
  	ar933x_uart_rmw_set(up, AR933X_UART_CS_REG,
  			    AR933X_UART_CS_HOST_INT_EN);
  
@@ -81,7 +83,7 @@ index 1519d2ca7705f..40194791cde0b 100644
  	/* reenable the UART */
  	ar933x_uart_rmw(up, AR933X_UART_CS_REG,
  			AR933X_UART_CS_IF_MODE_M << AR933X_UART_CS_IF_MODE_S,
-@@ -426,6 +430,10 @@ static int ar933x_uart_startup(struct uart_port *port)
+@@ -418,6 +422,10 @@ static int ar933x_uart_startup(struct uart_port *port)
  	ar933x_uart_rmw_set(up, AR933X_UART_CS_REG,
  			    AR933X_UART_CS_HOST_INT_EN);
  
