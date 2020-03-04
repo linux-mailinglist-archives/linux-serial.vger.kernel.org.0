@@ -2,127 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 274D51792A7
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Mar 2020 15:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98CD17959B
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Mar 2020 17:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727656AbgCDOok (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Mar 2020 09:44:40 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:45265 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727436AbgCDOok (ORCPT
+        id S1729752AbgCDQrN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Mar 2020 11:47:13 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:32892 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729573AbgCDQrN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Mar 2020 09:44:40 -0500
-Received: by mail-oi1-f196.google.com with SMTP id v19so2270533oic.12;
-        Wed, 04 Mar 2020 06:44:39 -0800 (PST)
+        Wed, 4 Mar 2020 11:47:13 -0500
+Received: by mail-pf1-f195.google.com with SMTP id n7so1248119pfn.0
+        for <linux-serial@vger.kernel.org>; Wed, 04 Mar 2020 08:47:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=570LeX+h0QI/CfDWXttZgUJ8HCBiGXke7deYDlYUr4Y=;
+        b=IN7purPgQ8N64rGTHVjT4ja2mH4kYQM27CjHKxyZkxZiRf0brOCjyUY862YeXhv9Xv
+         CeFbSlnkumXNoKAEtA+NRez0L26WHQnbhuFJXs5OWKWch1komOl+pp0LPkhDaS90VcEQ
+         vz3px3xKVCInINF88z4OBfS0U1+UcswXskS20=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6XOyEFLox1SQQtJ8fAzmf4z4RXvxyAgTDWTn6WDDXb0=;
-        b=NoPtP+2rFup78yuWoFf2plZRQ8RE2qI8qzLRaLxyOaM2hLSZTILq9rBfpZaThK1Aj6
-         92dZC7RZu1P4684lxgQ3MlhNkSWmC/MBj0kq8PT/qqhM34ftz5vWVAmZ3zWYYr8tsAFM
-         vI0degjA5cMoRSJRUDJWAjBzuN4z90wHxUHtJNlup73itPLAf8NXV1ACnkUiPbg7cR5L
-         tstxEpfY9CAw4h9UUilDyhhZZu1vUBpOIoiY0cJ2XHEOvY7uQQfTsI+WY2SJ1boOyYc2
-         gdRO5OGJGljc2qQn+Y29R4Gyyv2kXhJDx2dHJiJ+2M5TofDLCs5ZbMongCKMx4lWxSwW
-         V2hA==
-X-Gm-Message-State: ANhLgQ3iMUF4VOt3Pyl/WqXuQNv8EK01ZznywCSA/AE3kRcuyXrRbEbU
-        38cTk6aUayBg3t7oyis5JphxB7Bg11ohkSj77NLPtA==
-X-Google-Smtp-Source: ADFU+vsNbazIxFcBqKAFb1GPMqJOgG0BnyAB/010ZqCwEoOiw2M0os0lbMfyWVyaKYil1kGEVzObhyVfS3zKdPxdGpo=
-X-Received: by 2002:aca:b4c3:: with SMTP id d186mr1916382oif.131.1583333079104;
- Wed, 04 Mar 2020 06:44:39 -0800 (PST)
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=570LeX+h0QI/CfDWXttZgUJ8HCBiGXke7deYDlYUr4Y=;
+        b=QKyVlC4WUAAOfDXX1uI+SQCGM6n+IQlgIcg4A0uKAPfY8kQ9GI0Q2Kd4KdDaB50y9T
+         Cs1F9dpanwpMmCldg5JHJ/mu+NGoZTyuUJR+4S8Bify/EwKwsePLUAGokFWpdHxlissY
+         3+z9RiiwthpTz7NtoIg4fyK08Oy9tsXbfd3L7Bj6elTKZi125Xr8rMfxqn7A/oXapcP+
+         E/5DwE81u/1TK5wyyKz4kIUU+KIVTHI7Gp469jcaXi7Z0VXa3lVcfjdHwEwfb1eFI+MS
+         l2kznBN0C/vBZBbRkj7U8wKX1qBaPf7C4/HNedvcJDoaPdu0niOCjwQoiHCMnFsyFd/e
+         T3Kg==
+X-Gm-Message-State: ANhLgQ2NwYU0RyO+V5p00kDDmBkVGxwb90GrKUAdaL2RW8FKmzc4izYy
+        cmk3ZhG1Xy++BrPkpTH/BYL9Nw==
+X-Google-Smtp-Source: ADFU+vsbsy4KwjftRfu3c64Y4ez2ZG6ys4FKlLIkAg1gF0reXC73oRO0et0606w6YB7a5GpAJygtOQ==
+X-Received: by 2002:a63:1e4f:: with SMTP id p15mr3439813pgm.28.1583340432484;
+        Wed, 04 Mar 2020 08:47:12 -0800 (PST)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id i6sm3218494pjt.3.2020.03.04.08.47.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 08:47:12 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200303134351.22270-1-geert+renesas@glider.be>
- <20200303134351.22270-2-geert+renesas@glider.be> <CAL_JsqL7x-XevypLxUUksOCyezbn8=NpL9rMfo0rCQyYzrUxmw@mail.gmail.com>
-In-Reply-To: <CAL_JsqL7x-XevypLxUUksOCyezbn8=NpL9rMfo0rCQyYzrUxmw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Mar 2020 15:44:28 +0100
-Message-ID: <CAMuHMdUh-NBSDhO7A_HU54S7X920PUj8ScAZUWh8uMqZnjE2xA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: serial: Convert generic bindings to json-schema
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200304112203.408-1-rojay@codeaurora.org>
+References: <20200304112203.408-1-rojay@codeaurora.org>
+Subject: Re: [PATCH V4] tty: serial: qcom_geni_serial: Fix GPIO swapping with workaround
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, akashast@codeaurora.org,
+        rojay@codeaurora.org, msavaliy@qti.qualcomm.com
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>,
+        gregkh@linuxfoundation.org
+Date:   Wed, 04 Mar 2020 08:47:11 -0800
+Message-ID: <158334043115.7173.15372150537228946372@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Rob,
+Quoting Roja Rani Yarubandi (2020-03-04 03:22:03)
+> Add capability to support RX-TX, CTS-RTS pins swap in HW.
+>=20
+> Configure UART_IO_MACRO_CTRL register accordingly if RX-TX pair
+> or CTS-RTS pair or both pairs swapped.
+>=20
+> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+> ---
 
-On Wed, Mar 4, 2020 at 3:03 PM Rob Herring <robh+dt@kernel.org> wrote:
-> On Tue, Mar 3, 2020 at 7:43 AM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > Convert the generic serial interface Device Tree binding documentation
-> > to json-schema.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> > +  cts-gpios:
-> > +    description:
-> > +      Must contain a GPIO specifier, referring to the GPIO pin to be used as
-> > +      the UART's CTS line.
-
-> > +  rts-gpios:
-> > +    description:
-> > +      Must contain a GPIO specifier, referring to the GPIO pin to be used as
-> > +      the UART's RTS line.
-> > +
-> > +  uart-has-rtscts:
-> > +    $ref: /schemas/types.yaml#/definitions/flag
-> > +    description:
-> > +      The presence of this property indicates that the UART has dedicated lines
-> > +      for RTS/CTS hardware flow control, and that they are available for use
-> > +      (wired and enabled by pinmux configuration).  This depends on both the
-> > +      UART hardware and the board wiring.
-> > +      Note that this property is mutually-exclusive with "cts-gpios" and
-> > +      "rts-gpios" above, unless support is provided to switch between modes
-> > +      dynamically.
->
-> This can be expressed as:
->
-> oneOf:
->   - {} # None of the properties present
->   - required:
->       - uart-has-rtscts
->   - anyOf:
->       - required:
->           - cts-gpios
->       - required:
->           - rts-gpios
->
-> Or probably more clearly:
->
-> if:
->   required:
->     - uart-has-rtscts
-> then:
->   properties:
->     rts-gpios: false
->     cts-gpios: false
->
-> (Untested)
-
-Thanks. Note that when adding this, the note above must be removed.
-
->
-> > +
-> > +examples:
->
-> Personally, I'd just drop examples from schemas that aren't complete.
-
-OK.
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
