@@ -2,77 +2,235 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 038FD178FCF
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Mar 2020 12:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BF217915A
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Mar 2020 14:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387925AbgCDLuX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Mar 2020 06:50:23 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43782 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387904AbgCDLuW (ORCPT
+        id S1729175AbgCDNeX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Mar 2020 08:34:23 -0500
+Received: from mail27.static.mailgun.info ([104.130.122.27]:30235 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728244AbgCDNeX (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Mar 2020 06:50:22 -0500
-Received: by mail-lj1-f194.google.com with SMTP id e3so1652902lja.10
-        for <linux-serial@vger.kernel.org>; Wed, 04 Mar 2020 03:50:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=WTBczowU/Nsod2w33lz16yranT9oF8yu5BlEgmgClk0=;
-        b=Rr/8r6WMOlCNoZw8K9AxgT2YscUmA9StRx65b+jyMOsPhLbQJkO/LFTU2JsKh/gjmS
-         3NczcRl8Vmmf7eV4/LLgdzQxAspHzGn4R57m4trBT3yX9Pjq3tne/S6uTPqGElEKuMhX
-         FDOvcgCOZPUOtBaEUM/6oNtIywzmsmzWzFYl95AZPlGMQUcEKV2d0/5x+bIJmu++6nP4
-         e5S14ThhE1VG5LwpD0RrIutszsAA8EQITKFOEDDY0qkIlfrwgW9iajBAha7U+0eAuFkk
-         yNfl/2UTnLl5OwYsYbYPXa8dkV6hpdl1dnetoiMNHJ0qblX3vb5+qgh1c+v73dBAXHWT
-         gFsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=WTBczowU/Nsod2w33lz16yranT9oF8yu5BlEgmgClk0=;
-        b=TxKiP1wKFUHhNYT7QHmP8Mv/kOTxrTaVFjSEuaXKCm0KDe5j9WHsS/rem+bVWYsLpu
-         kjXG31mpHE3+OXDSnr4HQKdNXJTlvJyquH/K2zHdj9XQgjovN6PBiTJdREzvaPzMr5D/
-         tSHeTLIdX683N8FeMPysYMHPkQJ4wtVxGd+GRY46W3jn9d8MahjjIUWNG0Ul+F6pmI6U
-         TzaeckCyIXLI7vnBM1OfcROobo5iUF2T462hCYpTgGSXldxrZ5qJcyYuSx60/7AMVAdP
-         we71SZuQUxSkvz+ZuoXkI0RoiHlaJ0ZrzEjTzidp/VYuIBuRnUOIIqBLtNsQSVJULo2K
-         mEXA==
-X-Gm-Message-State: ANhLgQ2Cc6+TqY0wAHBfUrXpXI3itA2RuHip7SZ1iSiaDs9e03DpVOmY
-        fhWT0yzQ0UFJIgGX4n/7PiHDpOSfvGvTvCXA6ZM=
-X-Google-Smtp-Source: ADFU+vsxsgkDDJ3DNPKaE9J4ICZM3n919qQzycdC8qg9l+4XsmJ0kMX0QwwwCw3tidQUb8nALZgpzZ4v+reoy0iYvZI=
-X-Received: by 2002:a05:651c:545:: with SMTP id q5mr1715881ljp.139.1583322620980;
- Wed, 04 Mar 2020 03:50:20 -0800 (PST)
+        Wed, 4 Mar 2020 08:34:23 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1583328862; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=xv6MFMlXOagU3QnPD0NNvJ0Ra8WTeSkwaEz39tcnliI=;
+ b=IcL9LScWLh1tGr/c3u698qNb/BorH+qFuuB+h+EVGe9fiojFBnpWZlQnwOcpqC4ykwGDzcYk
+ o3pW9qjVb01US2B1ggtwqFYH3LnJl9MyETWqFUbRFApI9A9UYmiKcn2z4tcTxBTOj+GBk/Xx
+ LZMIBdmMlEVFCdVldFx3d410Zy8=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzZmY0MiIsICJsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e5fae5d.7f0c635c2d88-smtp-out-n01;
+ Wed, 04 Mar 2020 13:34:21 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6F9C8C4479D; Wed,  4 Mar 2020 13:34:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: skakit)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D18D1C43383;
+        Wed,  4 Mar 2020 13:34:20 +0000 (UTC)
 MIME-Version: 1.0
-Received: by 2002:ac2:5446:0:0:0:0:0 with HTTP; Wed, 4 Mar 2020 03:50:20 -0800 (PST)
-Reply-To: brianjesse343@gmail.com
-From:   brianjesse <westernu288@gmail.com>
-Date:   Wed, 4 Mar 2020 11:50:20 +0000
-Message-ID: <CAD1j+E_a33xnEbmPygbSLVwdaP=HO_oLwcgGQ5OiZfw=5Z+adQ@mail.gmail.com>
-Subject: Hl
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 04 Mar 2020 19:04:20 +0530
+From:   skakit@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     gregkh@linuxfoundation.org, mgautam@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        akashast@codeaurora.org, rojay@codeaurora.org,
+        msavaliy@qti.qualcomm.com
+Subject: Re: [PATCH V2 1/2] tty: serial: qcom_geni_serial: Allocate
+ port->rx_fifo buffer in probe
+In-Reply-To: <158293088963.112031.11417422453396901116@swboyd.mtv.corp.google.com>
+References: <1582638862-9344-1-git-send-email-skakit@codeaurora.org>
+ <1582638862-9344-2-git-send-email-skakit@codeaurora.org>
+ <158293088963.112031.11417422453396901116@swboyd.mtv.corp.google.com>
+Message-ID: <f7cfe1e4101af5133cc8b70753d20beb@codeaurora.org>
+X-Sender: skakit@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Witaj, Uprzejmie informujemy, =C5=BCe ten e-mail, kt=C3=B3ry dotar=C5=82 do=
- Twojej
-skrzynki pocztowej, nie jest
-b=C5=82=C4=85d, ale zosta=C5=82 specjalnie skierowany do rozpatrzenia. ja
-mam propozycj=C4=99 (7,500.000,00 $) pozostawion=C4=85 przez mojego zmar=C5=
-=82ego
-klienta in=C5=BCyniera Carlosa
-kt=C3=B3ry nosi przy tobie to samo imi=C4=99, kt=C3=B3ry pracowa=C5=82 i mi=
-eszka=C5=82 tutaj w Lom=C3=A9
-I=C5=9B=C4=87. M=C3=B3j zmar=C5=82y klient i rodzina uczestniczyli w wypadk=
-u samochodowym,
-kt=C3=B3ry mia=C5=82 miejsce
-ich =C5=BCycia. Kontaktuj=C4=99 si=C4=99 z tob=C4=85 jako najbli=C5=BCszym =
-krewnym zmar=C5=82ego, wi=C4=99c ty
-mo=C5=BCe otrzyma=C4=87 =C5=9Brodki na roszczenia. Zrobi=C4=99 to po twojej=
- szybkiej odpowiedzi
-poinformuj=C4=99 ci=C4=99 o sposobach wykonania tego przymierza. skontaktuj=
- si=C4=99
-ze mn=C4=85 w tej sprawie
-e-maile (brianjesse343@gmail.com)
+On 2020-02-29 04:31, Stephen Boyd wrote:
+> Quoting satya priya (2020-02-25 05:54:21)
+>> To fix the RX cancel command failure, rx_fifo buffer needs to be
+>> flushed in stop_rx() by calling handle_rx().
+>> 
+>> If set_termios is called before startup, by this time memory is not
+>> allocated to port->rx_fifo buffer, which leads to a NULL pointer
+>> dereference.
+> 
+> Also, clearly set_termios() isn't being called in the warning stack 
+> that
+> I sent last round:
+> 
+>      pc : handle_rx_uart+0x64/0x278
+> 
+> 
+>      lr : qcom_geni_serial_handle_rx+0x84/0x90
+> 
+> 
+>      sp : ffffff814348f960
+> 
+> 
+>      x29: ffffff814348f960 x28: ffffffd01ac24288
+> 
+> 
+>      x27: 0000000000000018 x26: 0000000000000002
+> 
+> 
+>      x25: 0000000000000001 x24: ffffff8146341348
+> 
+> 
+>      x23: ffffff8146341000 x22: ffffffd01accc978
+> 
+> 
+>      x21: ffffff8146341000 x20: 0000000000000001
+> 
+> 
+>      x19: 0000000000000001 x18: ffffffd01b22d000
+> 
+> 
+>      x17: 0000000000008000 x16: 00000000000000b0
+> 
+> 
+>      x15: ffffffd01afdbdd0 x14: ffffffd01b3edde0
+> 
+> 
+>      x13: ffffffd01b7fb000 x12: 0000000000000001
+> 
+> 
+>      x11: 0000000000000000 x10: 0000000000000000
+> 
+> 
+>      x9 : ffffffd010344780 x8 : 0000000000000000
+> 
+> 
+>      x7 : ffffffd019d8e768 x6 : 0000000000000000
+> 
+> 
+>      x5 : ffffffd01adbb000 x4 : 0000000000008004
+> 
+> 
+>      x3 : 0000000000000001 x2 : 0000000000000001
+> 
+> 
+>      x1 : 0000000000000001 x0 : ffffffd01accc978
+> 
+> 
+>      Call trace:
+> 
+> 
+>       handle_rx_uart+0x64/0x278
+> 
+> 
+>       qcom_geni_serial_handle_rx+0x84/0x90
+> 
+> 
+>       qcom_geni_serial_stop_rx+0x110/0x180
+> 
+> 
+>       qcom_geni_serial_port_setup+0x68/0x1b0
+> 
+> 
+>       qcom_geni_serial_startup+0x24/0x70
+> 
+> 
+>       uart_startup+0x164/0x28c
+> 
+> 
+>       uart_port_activate+0x6c/0xbc
+> 
+> 
+>       tty_port_open+0xa8/0x114
+> 
+> 
+>       uart_open+0x28/0x38
+> 
+> 
+>       ttyport_open+0x7c/0x164
+> 
+> 
+>       serdev_device_open+0x38/0xe4
+> 
+> 
+>       hci_uart_register_device+0x54/0x2e8 [hci_uart]
+> 
+> 
+>       qca_serdev_probe+0x1c4/0x374 [hci_uart]
+> 
+> 
+>       serdev_drv_probe+0x3c/0x64
+> 
+> 
+>       really_probe+0x144/0x3f8
+> 
+> 
+>       driver_probe_device+0x70/0x140
+> 
+> 
+>       __driver_attach_async_helper+0x7c/0xa8
+> 
+> 
+>       async_run_entry_fn+0x60/0x178
+> 
+> 
+>       process_one_work+0x33c/0x640
+> 
+> 
+>       worker_thread+0x2a0/0x470
+> 
+> 
+>       kthread+0x128/0x138
+> 
+> 
+>       ret_from_fork+0x10/0x18
+> 
+> 
+>      Code: 1aca096a 911e0129 b940012b 7100054a (b800450b)
+> 
+> 
+> This shows that uart_startup() is the one that is calling
+> qcom_geni_serial_startup() and that's running the newly added cancel
+> path. So even if we allocate the buffer in probe vs. in startup we're
+> going to flip a buffer full of junk that we're trying to cancel out of
+> the fifo into the tty layer. That seems wrong. We should have a
+> different qcom_geni_serial_stop_rx() function that knows we're starting
+> up vs. handling a normal rx event and call something besides 
+> handle_rx()
+> because that pushes bytes up into the tty layer.
+> 
+
+As we mentioned in the V1 patch, we are passing drop="true" to handle_rx 
+function so it will read and discard whatever data present in RX FIFO, 
+it won't send to upper layers.
+static int handle_rx_uart(struct uart_port *uport, u32 bytes, bool drop)
+{
+           ....
+       ioread32_rep(uport->membase + SE_GENI_RX_FIFOn, port->rx_fifo, 
+words);
+         if (drop)
+                 return 0;
+           ....
+}
+In general uart_startup() is called before set_termios() ,but as per the 
+crash logs shared, it seems RX engine is active(which can only happen 
+from set_termios) before startup() is called.So, if we allocate 
+port->rx_fifo in probe we can overcome this crash.
+
+>> 
+>> To avoid this NULL pointer dereference allocate memory to 
+>> port->rx_fifo
+>> in probe itself.
+>> 
