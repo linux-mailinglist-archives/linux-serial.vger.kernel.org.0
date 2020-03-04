@@ -2,137 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74982178F7E
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Mar 2020 12:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 038FD178FCF
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Mar 2020 12:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgCDLWZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Mar 2020 06:22:25 -0500
-Received: from alexa-out-blr-02.qualcomm.com ([103.229.18.198]:4424 "EHLO
-        alexa-out-blr-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726137AbgCDLWZ (ORCPT
+        id S2387925AbgCDLuX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Mar 2020 06:50:23 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:43782 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387904AbgCDLuW (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Mar 2020 06:22:25 -0500
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by alexa-out-blr-02.qualcomm.com with ESMTP/TLS/AES256-SHA; 04 Mar 2020 16:52:22 +0530
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 04 Mar 2020 16:52:07 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id 387A71753; Wed,  4 Mar 2020 16:52:06 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     gregkh@linuxfoundation.org
-Cc:     swboyd@chromium.org, mgautam@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        akashast@codeaurora.org, rojay@codeaurora.org,
-        msavaliy@qti.qualcomm.com
-Subject: [PATCH V4] tty: serial: qcom_geni_serial: Fix GPIO swapping with workaround
-Date:   Wed,  4 Mar 2020 16:52:03 +0530
-Message-Id: <20200304112203.408-1-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 4 Mar 2020 06:50:22 -0500
+Received: by mail-lj1-f194.google.com with SMTP id e3so1652902lja.10
+        for <linux-serial@vger.kernel.org>; Wed, 04 Mar 2020 03:50:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=WTBczowU/Nsod2w33lz16yranT9oF8yu5BlEgmgClk0=;
+        b=Rr/8r6WMOlCNoZw8K9AxgT2YscUmA9StRx65b+jyMOsPhLbQJkO/LFTU2JsKh/gjmS
+         3NczcRl8Vmmf7eV4/LLgdzQxAspHzGn4R57m4trBT3yX9Pjq3tne/S6uTPqGElEKuMhX
+         FDOvcgCOZPUOtBaEUM/6oNtIywzmsmzWzFYl95AZPlGMQUcEKV2d0/5x+bIJmu++6nP4
+         e5S14ThhE1VG5LwpD0RrIutszsAA8EQITKFOEDDY0qkIlfrwgW9iajBAha7U+0eAuFkk
+         yNfl/2UTnLl5OwYsYbYPXa8dkV6hpdl1dnetoiMNHJ0qblX3vb5+qgh1c+v73dBAXHWT
+         gFsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=WTBczowU/Nsod2w33lz16yranT9oF8yu5BlEgmgClk0=;
+        b=TxKiP1wKFUHhNYT7QHmP8Mv/kOTxrTaVFjSEuaXKCm0KDe5j9WHsS/rem+bVWYsLpu
+         kjXG31mpHE3+OXDSnr4HQKdNXJTlvJyquH/K2zHdj9XQgjovN6PBiTJdREzvaPzMr5D/
+         tSHeTLIdX683N8FeMPysYMHPkQJ4wtVxGd+GRY46W3jn9d8MahjjIUWNG0Ul+F6pmI6U
+         TzaeckCyIXLI7vnBM1OfcROobo5iUF2T462hCYpTgGSXldxrZ5qJcyYuSx60/7AMVAdP
+         we71SZuQUxSkvz+ZuoXkI0RoiHlaJ0ZrzEjTzidp/VYuIBuRnUOIIqBLtNsQSVJULo2K
+         mEXA==
+X-Gm-Message-State: ANhLgQ2Cc6+TqY0wAHBfUrXpXI3itA2RuHip7SZ1iSiaDs9e03DpVOmY
+        fhWT0yzQ0UFJIgGX4n/7PiHDpOSfvGvTvCXA6ZM=
+X-Google-Smtp-Source: ADFU+vsxsgkDDJ3DNPKaE9J4ICZM3n919qQzycdC8qg9l+4XsmJ0kMX0QwwwCw3tidQUb8nALZgpzZ4v+reoy0iYvZI=
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr1715881ljp.139.1583322620980;
+ Wed, 04 Mar 2020 03:50:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ac2:5446:0:0:0:0:0 with HTTP; Wed, 4 Mar 2020 03:50:20 -0800 (PST)
+Reply-To: brianjesse343@gmail.com
+From:   brianjesse <westernu288@gmail.com>
+Date:   Wed, 4 Mar 2020 11:50:20 +0000
+Message-ID: <CAD1j+E_a33xnEbmPygbSLVwdaP=HO_oLwcgGQ5OiZfw=5Z+adQ@mail.gmail.com>
+Subject: Hl
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add capability to support RX-TX, CTS-RTS pins swap in HW.
-
-Configure UART_IO_MACRO_CTRL register accordingly if RX-TX pair
-or CTS-RTS pair or both pairs swapped.
-
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
-Changes in V2:
-- As per Greg's comment removed the change id.
-
-Changes in V3:
-- As per Bjorn's comment using of_property_read_bool() to read dtsi entries.
-- As per Matthias's comment add capability to support individual pairs swap,
-  that is, only RX-TX swap and only CTS-RTS swap cases.
-
-Changes in V4:
-- As per Matthias's comment changed IO_MACRO_IO0_SEL definition.
-
- drivers/tty/serial/qcom_geni_serial.c | 30 +++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
-
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 191abb18fc2a..34d7aaf163bd 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -21,6 +21,7 @@
- 
- /* UART specific GENI registers */
- #define SE_UART_LOOPBACK_CFG		0x22c
-+#define SE_UART_IO_MACRO_CTRL		0x240
- #define SE_UART_TX_TRANS_CFG		0x25c
- #define SE_UART_TX_WORD_LEN		0x268
- #define SE_UART_TX_STOP_BIT_LEN		0x26c
-@@ -95,6 +96,12 @@
- #define CTS_RTS_SORTED	BIT(1)
- #define RX_TX_CTS_RTS_SORTED	(RX_TX_SORTED | CTS_RTS_SORTED)
- 
-+/* UART pin swap value */
-+#define DEFAULT_IO_MACRO_IO0_IO1_MASK		GENMASK(3, 0)
-+#define IO_MACRO_IO0_SEL		0x3
-+#define DEFAULT_IO_MACRO_IO2_IO3_MASK		GENMASK(15, 4)
-+#define IO_MACRO_IO2_IO3_SWAP		0x4640
-+
- #ifdef CONFIG_CONSOLE_POLL
- #define CONSOLE_RX_BYTES_PW 1
- #else
-@@ -119,6 +126,8 @@ struct qcom_geni_serial_port {
- 
- 	unsigned int tx_remaining;
- 	int wakeup_irq;
-+	bool rx_tx_swap;
-+	bool cts_rts_swap;
- };
- 
- static const struct uart_ops qcom_geni_console_pops;
-@@ -826,6 +835,7 @@ static int qcom_geni_serial_port_setup(struct uart_port *uport)
- 	struct qcom_geni_serial_port *port = to_dev_port(uport, uport);
- 	u32 rxstale = DEFAULT_BITS_PER_CHAR * STALE_TIMEOUT;
- 	u32 proto;
-+	u32 pin_swap;
- 
- 	if (uart_console(uport)) {
- 		port->tx_bytes_pw = 1;
-@@ -846,6 +856,20 @@ static int qcom_geni_serial_port_setup(struct uart_port *uport)
- 	get_tx_fifo_size(port);
- 
- 	writel(rxstale, uport->membase + SE_UART_RX_STALE_CNT);
-+
-+	pin_swap = readl(uport->membase + SE_UART_IO_MACRO_CTRL);
-+	if (port->rx_tx_swap) {
-+		pin_swap &= ~DEFAULT_IO_MACRO_IO2_IO3_MASK;
-+		pin_swap |= IO_MACRO_IO2_IO3_SWAP;
-+	}
-+	if (port->cts_rts_swap) {
-+		pin_swap &= ~DEFAULT_IO_MACRO_IO0_IO1_MASK;
-+		pin_swap |= IO_MACRO_IO0_SEL;
-+	}
-+	/* Configure this register if RX-TX, CTS-RTS pins are swapped */
-+	if (port->rx_tx_swap || port->cts_rts_swap)
-+		writel(pin_swap, uport->membase + SE_UART_IO_MACRO_CTRL);
-+
- 	/*
- 	 * Make an unconditional cancel on the main sequencer to reset
- 	 * it else we could end up in data loss scenarios.
-@@ -1289,6 +1313,12 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	if (!console)
- 		port->wakeup_irq = platform_get_irq_optional(pdev, 1);
- 
-+	if (of_property_read_bool(pdev->dev.of_node, "rx-tx-swap"))
-+		port->rx_tx_swap = true;
-+
-+	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
-+		port->cts_rts_swap = true;
-+
- 	uport->private_data = drv;
- 	platform_set_drvdata(pdev, port);
- 	port->handle_rx = console ? handle_rx_console : handle_rx_uart;
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+Witaj, Uprzejmie informujemy, =C5=BCe ten e-mail, kt=C3=B3ry dotar=C5=82 do=
+ Twojej
+skrzynki pocztowej, nie jest
+b=C5=82=C4=85d, ale zosta=C5=82 specjalnie skierowany do rozpatrzenia. ja
+mam propozycj=C4=99 (7,500.000,00 $) pozostawion=C4=85 przez mojego zmar=C5=
+=82ego
+klienta in=C5=BCyniera Carlosa
+kt=C3=B3ry nosi przy tobie to samo imi=C4=99, kt=C3=B3ry pracowa=C5=82 i mi=
+eszka=C5=82 tutaj w Lom=C3=A9
+I=C5=9B=C4=87. M=C3=B3j zmar=C5=82y klient i rodzina uczestniczyli w wypadk=
+u samochodowym,
+kt=C3=B3ry mia=C5=82 miejsce
+ich =C5=BCycia. Kontaktuj=C4=99 si=C4=99 z tob=C4=85 jako najbli=C5=BCszym =
+krewnym zmar=C5=82ego, wi=C4=99c ty
+mo=C5=BCe otrzyma=C4=87 =C5=9Brodki na roszczenia. Zrobi=C4=99 to po twojej=
+ szybkiej odpowiedzi
+poinformuj=C4=99 ci=C4=99 o sposobach wykonania tego przymierza. skontaktuj=
+ si=C4=99
+ze mn=C4=85 w tej sprawie
+e-maile (brianjesse343@gmail.com)
