@@ -2,94 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4066E17A32D
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Mar 2020 11:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EC517A3EB
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Mar 2020 12:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbgCEKc7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Mar 2020 05:32:59 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36728 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbgCEKc7 (ORCPT
+        id S1727405AbgCELQS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Mar 2020 06:16:18 -0500
+Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
+        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Mar 2020 05:32:59 -0500
-Received: by mail-pl1-f196.google.com with SMTP id g12so2465461plo.3;
-        Thu, 05 Mar 2020 02:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vsmWfQHYKO+IuisE4zoMrrWqQil3RoLQ09NM/R4vXz8=;
-        b=PnfP0bOcQb6PjDSK6KH7VyFI6lPRcbRKxQXVVwlFjpqKwUREnrvNYwuGVOOeteK46l
-         +ziFUEWNEhZ4HH1r5D4yvLldZTqLP1B2uxtlFvEFbevqxE6Q4PWw4Z0APOak1KTgfX6U
-         hxzlSAPkg/84vnQwYAIdOSZr9isyzANmrggt0Yn8ZrmbqAilHz1ctIexj6h3qljDRYgn
-         SrJhXCHML0kTVTJQCkBTiF3orv1usOgLZbXjj82UJBqjpho02d0GIUNX6w7cLLFdtpIV
-         ln3u6zd2iGo7YHWIlXYb4wBvy/339xHyTqYqRlQEi/0djWXaw8YHz1QSS5ERq1mG5x4z
-         5MwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vsmWfQHYKO+IuisE4zoMrrWqQil3RoLQ09NM/R4vXz8=;
-        b=sgKtQ4NInQR02M+Aa+/FOdE3oti94Y8ZU4jA5EsoBwj/movIPdf6KXGmc+5O9Wa5oa
-         vstb20e4CK4TgQxbFUxFmdA2DfpzCfn347C7JbYY61loXg3PJ/BYKuYUKPGjcEoCvv/L
-         CEzVvpY6PhvNIxkqrHTaTj3pz+driULzWFwSu6RkTJASggUlF6lWC9xWJBAZaWVRX1u1
-         LgvJcz+HgIIZ7GdQGUeBc864FD5mf3qNJ1/Tua0qSAW4Tq7ZymbJwkxziJVlpD6KWynG
-         X6Yhe3b16xHyg3in/fkUbs438lTwJzu44ezBLwI5EOkCn/ogYw3bOI/HUenl5gzv8Zra
-         Y6Mw==
-X-Gm-Message-State: ANhLgQ0JX0T9kdQ+LPtJ0MtbdVBfN5w59uySXoscSKcYpisuA5oJOxG9
-        SJTu99Vry5MqUWnDjmxtezuDv8nr
-X-Google-Smtp-Source: ADFU+vuvup2OQ+LkXonFteqL3x/Q3zHIPTB1pvus9Rdsa06vHb/D3yAFoir8AtziitgcAYM/Iw/3Pg==
-X-Received: by 2002:a17:90a:e654:: with SMTP id ep20mr8005006pjb.60.1583404378204;
-        Thu, 05 Mar 2020 02:32:58 -0800 (PST)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id t17sm31540145pgn.94.2020.03.05.02.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 02:32:57 -0800 (PST)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Jiri Slaby <jslaby@suse.com>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-Subject: [PATCH 2/2] tty: serial: make SERIAL_SPRD not depend on ARCH_SPRD
-Date:   Thu,  5 Mar 2020 18:32:28 +0800
-Message-Id: <20200305103228.9686-2-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305103228.9686-1-zhang.lyra@gmail.com>
-References: <20200305103228.9686-1-zhang.lyra@gmail.com>
+        Thu, 5 Mar 2020 06:16:16 -0500
+X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
+Received: from webmail.pagasa.dost.int ([10.10.11.8])
+        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 5 Mar 2020 18:54:40 +0800
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
+        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
+        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
+        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
+        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
+         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
+         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
+X-Virus-Scanned: amavisd-new at pagasa.dost.int
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
+Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
+        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
+Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
+From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
+Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
+Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
+Thread-Topic: 
+X-FEAS-DKIM: Valid
+Authentication-Results: mailgw.pagasa.dost.gov.ph;
+        dkim=pass header.i=@pagasa.dost.gov.ph
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Remove the dependency with ARCH_SPRD from sprd serial/console Kconfig-s,
-since we want them can be built-in when ARCH_SPRD is set as 'm'.
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/tty/serial/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 52eaac21ff9f..2b9addc0afb5 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1452,7 +1452,6 @@ config SERIAL_MEN_Z135
- 
- config SERIAL_SPRD
- 	tristate "Support for Spreadtrum serial"
--	depends on ARCH_SPRD
- 	select SERIAL_CORE
- 	help
- 	  This enables the driver for the Spreadtrum's serial.
--- 
-2.20.1
-
+Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
+ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
+ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
+rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
+nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
+ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
+=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
+Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
+en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
+o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
+inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
+tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
+eptisch sind
+Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
+f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
+ YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
+ ) gesendet werden, damit wir das k=C3=B6nnen
+Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
+obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
+Powerball Jackpot Gewinner
