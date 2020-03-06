@@ -2,171 +2,240 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4360E17C771
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Mar 2020 21:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E859917C7A5
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Mar 2020 22:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbgCFU5S (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 6 Mar 2020 15:57:18 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:37907 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgCFU5R (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 6 Mar 2020 15:57:17 -0500
-Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5CF4723E5E;
-        Fri,  6 Mar 2020 21:57:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1583528233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EPJLmz2DVWGgqqk8cwT2mreLOHFxvMmL1XrOvX71qAI=;
-        b=Up+IQO/dIx5xfdGvrpdGA/47mOW93sr6WH4rbOilIZpVtl1u02kYUzCQf7aDWOkZzttYsc
-        K9LmX/wYkDwPBuL3FVUlGs09aqanIfRAuaVGJ4XH7M7CFpSsHtYEHOCPNZAPvt7AWdUiJi
-        rKFkR1cJ7/jAUJTvk/TNdbDfOlfpwAw=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH 2/2] arm64: dts: ls1028a: add missing LPUART nodes
-Date:   Fri,  6 Mar 2020 21:57:03 +0100
-Message-Id: <20200306205703.30634-2-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200306205703.30634-1-michael@walle.cc>
-References: <20200306205703.30634-1-michael@walle.cc>
+        id S1726231AbgCFVLM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 6 Mar 2020 16:11:12 -0500
+Received: from mga09.intel.com ([134.134.136.24]:30711 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726185AbgCFVLL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 6 Mar 2020 16:11:11 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 13:11:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,523,1574150400"; 
+   d="scan'208";a="275691082"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Mar 2020 13:11:09 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jAKFQ-000AAD-RL; Sat, 07 Mar 2020 05:11:08 +0800
+Date:   Sat, 07 Mar 2020 05:11:03 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD REGRESSION
+ 8434c477300896e50907650a7476116249030b16
+Message-ID: <5e62bc67.L5nVVFXwiuJE2P3O%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++
-X-Spam-Level: ******
-X-Rspamd-Server: web
-X-Spam-Status: Yes, score=6.40
-X-Spam-Score: 6.40
-X-Rspamd-Queue-Id: 5CF4723E5E
-X-Spamd-Result: default: False [6.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         R_MISSING_CHARSET(2.50)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         BROKEN_CONTENT_TYPE(1.50)[];
-         NEURAL_SPAM(0.00)[0.520];
-         DKIM_SIGNED(0.00)[];
-         DBL_PROHIBIT(0.00)[0.34.202.64:email,0.34.124.32:email,0.34.241.80:email,0.34.163.48:email];
-         RCPT_COUNT_SEVEN(0.00)[10];
-         MID_CONTAINS_FROM(1.00)[];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:31334, ipnet:2a02:810c:8000::/33, country:DE];
-         SUSPICIOUS_RECIPS(1.50)[]
-X-Spam: Yes
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The LS1028A has six LPUART controllers. Add the nodes.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git  tty-testing
+branch HEAD: 8434c477300896e50907650a7476116249030b16  tty: mips_ejtag_fdc: Mark expected switch fall-through
 
-This was tested on a custom board.
+Regressions in current branch:
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+drivers/tty/serial/sifive.c:904:19: error: 'sifive_serial_poll_get_char' undeclared here (not in a function); did you mean 'sifive_serial_clk_notifier'?
+drivers/tty/serial/sifive.c:905:19: error: 'sifive_serial_poll_put_char' undeclared here (not in a function); did you mean 'sifive_serial_poll_get_char'?
+
+Error ids grouped by kconfigs:
+
+recent_errors
+|-- arm-allmodconfig
+|   |-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_get_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_clk_notifier
+|   `-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_put_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_poll_get_char
+|-- arm64-allmodconfig
+|   |-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_get_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_clk_notifier
+|   `-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_put_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_poll_get_char
+|-- i386-allmodconfig
+|   |-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_get_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_clk_notifier
+|   `-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_put_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_poll_get_char
+|-- mips-allmodconfig
+|   |-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_get_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_clk_notifier
+|   `-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_put_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_poll_get_char
+|-- sh-allmodconfig
+|   |-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_get_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_clk_notifier
+|   `-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_put_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_poll_get_char
+`-- sparc64-allmodconfig
+    |-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_get_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_clk_notifier
+    `-- drivers-tty-serial-sifive.c:error:sifive_serial_poll_put_char-undeclared-here-(not-in-a-function)-did-you-mean-sifive_serial_poll_get_char
+
+elapsed time: 482m
+
+configs tested: 161
+configs skipped: 0
+
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+h8300                    h8300h-sim_defconfig
+alpha                               defconfig
+ia64                             allmodconfig
+csky                                defconfig
+ia64                             allyesconfig
+i386                             alldefconfig
+c6x                        evmc6678_defconfig
+m68k                          multi_defconfig
+s390                       zfcpdump_defconfig
+h8300                     edosk2674_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             alldefconfig
+c6x                              allyesconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                generic-32bit_defconfig
+parisc                generic-64bit_defconfig
+x86_64               randconfig-a001-20200305
+x86_64               randconfig-a002-20200305
+x86_64               randconfig-a003-20200305
+i386                 randconfig-a001-20200305
+i386                 randconfig-a002-20200305
+i386                 randconfig-a003-20200305
+riscv                randconfig-a001-20200306
+alpha                randconfig-a001-20200306
+m68k                 randconfig-a001-20200306
+nds32                randconfig-a001-20200306
+mips                 randconfig-a001-20200306
+csky                 randconfig-a001-20200305
+openrisc             randconfig-a001-20200305
+s390                 randconfig-a001-20200305
+sh                   randconfig-a001-20200305
+xtensa               randconfig-a001-20200305
+x86_64               randconfig-b001-20200306
+x86_64               randconfig-b002-20200306
+x86_64               randconfig-b003-20200306
+i386                 randconfig-b001-20200306
+i386                 randconfig-b002-20200306
+i386                 randconfig-b003-20200306
+x86_64               randconfig-b001-20200305
+x86_64               randconfig-b002-20200305
+x86_64               randconfig-b003-20200305
+i386                 randconfig-b001-20200305
+i386                 randconfig-b002-20200305
+i386                 randconfig-b003-20200305
+i386                 randconfig-c002-20200305
+x86_64               randconfig-c003-20200305
+i386                 randconfig-c001-20200305
+x86_64               randconfig-c002-20200305
+i386                 randconfig-c003-20200305
+x86_64               randconfig-c001-20200305
+x86_64               randconfig-d003-20200306
+i386                 randconfig-d001-20200306
+x86_64               randconfig-d001-20200306
+i386                 randconfig-d003-20200306
+i386                 randconfig-d002-20200306
+x86_64               randconfig-d002-20200306
+i386                 randconfig-e001-20200305
+i386                 randconfig-e003-20200305
+x86_64               randconfig-e002-20200305
+x86_64               randconfig-e001-20200305
+x86_64               randconfig-e003-20200305
+i386                 randconfig-e002-20200305
+i386                 randconfig-f003-20200305
+x86_64               randconfig-f001-20200305
+i386                 randconfig-f001-20200305
+i386                 randconfig-f002-20200305
+x86_64               randconfig-f002-20200305
+x86_64               randconfig-f003-20200305
+x86_64               randconfig-f001-20200306
+x86_64               randconfig-f002-20200306
+x86_64               randconfig-f003-20200306
+i386                 randconfig-f001-20200306
+i386                 randconfig-f002-20200306
+i386                 randconfig-f003-20200306
+arc                  randconfig-a001-20200307
+arm                  randconfig-a001-20200307
+arm64                randconfig-a001-20200307
+ia64                 randconfig-a001-20200307
+powerpc              randconfig-a001-20200307
+sparc                randconfig-a001-20200307
+arc                  randconfig-a001-20200306
+ia64                 randconfig-a001-20200306
+sparc                randconfig-a001-20200306
+arm                  randconfig-a001-20200306
+arm64                randconfig-a001-20200306
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                                  defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
 ---
- .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-index 41c9633293fb..b152fa90cf5c 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-@@ -372,6 +372,79 @@
- 			status = "disabled";
- 		};
- 
-+
-+		lpuart0: serial@2260000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2260000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			dma-names = "rx","tx";
-+			dmas = <&edma0 1 32>,
-+			       <&edma0 1 33>;
-+			status = "disabled";
-+		};
-+
-+		lpuart1: serial@2270000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2270000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 233 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			dma-names = "rx","tx";
-+			dmas = <&edma0 1 30>,
-+			       <&edma0 1 31>;
-+			status = "disabled";
-+		};
-+
-+		lpuart2: serial@2280000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2280000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 234 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			dma-names = "rx","tx";
-+			dmas = <&edma0 1 28>,
-+			       <&edma0 1 29>;
-+			status = "disabled";
-+		};
-+
-+		lpuart3: serial@2290000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x2290000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			dma-names = "rx","tx";
-+			dmas = <&edma0 1 26>,
-+			       <&edma0 1 27>;
-+			status = "disabled";
-+		};
-+
-+		lpuart4: serial@22a0000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x22a0000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			dma-names = "rx","tx";
-+			dmas = <&edma0 1 24>,
-+			       <&edma0 1 25>;
-+			status = "disabled";
-+		};
-+
-+		lpuart5: serial@22b0000 {
-+			compatible = "fsl,ls1028a-lpuart";
-+			reg = <0x0 0x22b0000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clockgen 4 1>;
-+			clock-names = "ipg";
-+			dma-names = "rx","tx";
-+			dmas = <&edma0 1 22>,
-+			       <&edma0 1 23>;
-+			status = "disabled";
-+		};
-+
- 		edma0: dma-controller@22c0000 {
- 			#dma-cells = <2>;
- 			compatible = "fsl,ls1028a-edma";
--- 
-2.20.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
