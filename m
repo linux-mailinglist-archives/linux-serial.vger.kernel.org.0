@@ -2,132 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3C917C519
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Mar 2020 19:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C49617C773
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Mar 2020 21:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726231AbgCFSN7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 6 Mar 2020 13:13:59 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45449 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgCFSN7 (ORCPT
+        id S1726185AbgCFU5P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 6 Mar 2020 15:57:15 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:39199 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgCFU5P (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 6 Mar 2020 13:13:59 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 2so1468304pfg.12
-        for <linux-serial@vger.kernel.org>; Fri, 06 Mar 2020 10:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A5r22t8RnPQzcWCsNYP4RTrGIgpLaK+HmX8FXjmos5o=;
-        b=Lx0/Y/2XKX+4LtXUw0A4wEuvdCD+qugK+BGtJQx+9itY0fWPwP5PGJ72gD6ncOWLP4
-         JyQ83kBDrv9iq6Aj3JgTf9T4aMuyDPuuwclqMd4o/sefJ/3lPnw3MGaXKxDkIXdBsw6c
-         ZBwgxI7SbT5tGnCLEGhCusPeUMyS3mqymS5nDLWflMC57+tI0CcQlBJyzwOely5Mhbv0
-         eBAobp3LLa+KjUERm9aqPzAGEdnHrP+jP6yPDPjRhKhGpzOXwV3hS6GIiTTSpmhCxc7H
-         VObppcLeVc1011OEhvzhy8krjr1o5OT4kzBZNuC/muf7615oInfitSv7NHXNPVEgh0ML
-         iUVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=A5r22t8RnPQzcWCsNYP4RTrGIgpLaK+HmX8FXjmos5o=;
-        b=R1bEgkDkmVoHkdjAQlbMRnReQQcRrLRK/hlx0Zjyl70+KDrG7EfnqlJSslkGNQ0YzU
-         wLNiHlykZ9Bdt0t72xKOgRaVH9DpKrz6XhFKqbfKhjAR3J/bZSYvGU7qLjtgIqcazOJs
-         ROKDJUZVt4vbM2p2XBSm0hoW+ofXOjcCoKYBcSHPG9RTNMziaD6w8BJ4G2KJw6oSuT1h
-         bDpWMCaraNMtnqm4wv4KJvz+Ohau3eh3dQNo3FkRkDS+Y7oPMbrQWhug/nk3lnk8DOnv
-         5Q8oqCieFa7LZg4VwN0ogsyrU/hjiVHW4FQ9hckU8SGRIfKXWjk/ouHzzafvI5sfjoei
-         uNNQ==
-X-Gm-Message-State: ANhLgQ2HvJrSmH/9uwbC179/V3m4TBD4lesTv75C0X6DxMWSQU0N84WJ
-        wibTChdFA0BpdDON476u9YJFifYyx28=
-X-Google-Smtp-Source: ADFU+vtQNo1LEfG6NL1KkIdn1s/hz7jQfYK5hgLju3hox6x8NaKZkqXyn1/AZ5jC2+nAqOmDUEMMzg==
-X-Received: by 2002:aa7:96c7:: with SMTP id h7mr4809574pfq.211.1583518437534;
-        Fri, 06 Mar 2020 10:13:57 -0800 (PST)
-Received: from localhost ([2620:0:1000:2514:23a5:d584:6a92:3e3c])
-        by smtp.gmail.com with ESMTPSA id d10sm9821948pjc.34.2020.03.06.10.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2020 10:13:56 -0800 (PST)
-Date:   Fri, 06 Mar 2020 10:13:56 -0800 (PST)
-X-Google-Original-Date: Fri, 06 Mar 2020 10:13:55 PST (-0800)
-Subject:     Re: [PATCH] tty: serial: Add CONSOLE_POLL support to SiFive UART
-In-Reply-To: <1583224900-25824-1-git-send-email-vincent.chen@sifive.com>
-CC:     linux-serial@vger.kernel.org, linux-riscv@lists.infradead.org,
-        vincent.chen@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     vincent.chen@sifive.com, Greg KH <gregkh@linuxfoundation.org>,
-        jslaby@suse.com, Paul Walmsley <paul.walmsley@sifive.com>
-Message-ID: <mhng-cf4b7d3b-9841-44a1-9ffd-ac7f4cdeb75d@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Fri, 6 Mar 2020 15:57:15 -0500
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B4FAE23E5A;
+        Fri,  6 Mar 2020 21:57:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1583528233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q71VaiFL5GD6eAxeUMfKSm1S1jRZh0ImWHYLWUEuk7M=;
+        b=U6Vuut1gkukNxqHcH3uDUmvg/44I6feqkj5Vzwckf3+eWRtxjpPeW0Y4EDCm1yNRI/htNf
+        7xBkb+CYeGTnMrzwVyPU8dzck8TulnOhsNpKVA+M5cMBba05stpsvvQr5a/RBsCoub8YoZ
+        6lmXyyBTqMWmEW1tg+hbgbR0rZdjqv8=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Michael Walle <michael@walle.cc>, Rob Herring <robh@kernel.org>
+Subject: [PATCH 1/2] dt-bindings: serial: lpuart: add ls1028a compatibility
+Date:   Fri,  6 Mar 2020 21:57:02 +0100
+Message-Id: <20200306205703.30634-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++++
+X-Spam-Level: ******
+X-Rspamd-Server: web
+X-Spam-Status: Yes, score=6.40
+X-Spam-Score: 6.40
+X-Rspamd-Queue-Id: B4FAE23E5A
+X-Spamd-Result: default: False [6.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         NEURAL_SPAM(0.00)[0.535];
+         TO_MATCH_ENVRCPT_SOME(0.00)[];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[11];
+         MID_CONTAINS_FROM(1.00)[];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:31334, ipnet:2a02:810c:8000::/33, country:DE];
+         SUSPICIOUS_RECIPS(1.50)[]
+X-Spam: Yes
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 03 Mar 2020 00:41:40 PST (-0800), vincent.chen@sifive.com wrote:
-> Add CONSOLE_POLL support for future KGDB porting.
->
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> ---
->  drivers/tty/serial/sifive.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
-> index d5f81b98e4d7..acdbaca4de36 100644
-> --- a/drivers/tty/serial/sifive.c
-> +++ b/drivers/tty/serial/sifive.c
-> @@ -818,6 +818,29 @@ static int __init sifive_serial_console_setup(struct console *co, char *options)
->  	return uart_set_options(&ssp->port, co, baud, parity, bits, flow);
->  }
->
-> +#ifdef CONFIG_CONSOLE_POLL
-> +static int sifive_serial_poll_get_char(struct uart_port *port)
-> +{
-> +	struct sifive_serial_port *ssp = port_to_sifive_serial_port(port);
-> +	char is_empty, ch;
-> +
-> +	ch = __ssp_receive_char(ssp, &is_empty);
-> +	if (is_empty)
-> +		return NO_POLL_CHAR;
-> +
-> +	return ch;
-> +}
-> +
-> +static void sifive_serial_poll_put_char(struct uart_port *port,
-> +					unsigned char c)
-> +{
-> +	struct sifive_serial_port *ssp = port_to_sifive_serial_port(port);
-> +
-> +	sifive_serial_console_putchar(port, c);
-> +	__ssp_wait_for_xmitr(ssp);
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/serial/fsl-lpuart.txt          | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-So we still have that TX watermark bug in the SiFive UARTs.  If this function
-is supposed to wait until the word is actually out on the line then this isn't
-sufficient, but if it's just supposed to wait until the next write won't block
-then this is fine.
+diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.txt b/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
+index c904e2e68332..e7448b92dd9d 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
++++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
+@@ -6,6 +6,8 @@ Required properties:
+     on Vybrid vf610 SoC with 8-bit register organization
+   - "fsl,ls1021a-lpuart" for lpuart compatible with the one integrated
+     on LS1021A SoC with 32-bit big-endian register organization
++  - "fsl,ls1028a-lpuart" for lpuart compatible with the one integrated
++    on LS1028A SoC with 32-bit little-endian register organization
+   - "fsl,imx7ulp-lpuart" for lpuart compatible with the one integrated
+     on i.MX7ULP SoC with 32-bit little-endian register organization
+   - "fsl,imx8qxp-lpuart" for lpuart compatible with the one integrated
+@@ -15,10 +17,10 @@ Required properties:
+ - reg : Address and length of the register set for the device
+ - interrupts : Should contain uart interrupt
+ - clocks : phandle + clock specifier pairs, one for each entry in clock-names
+-- clock-names : For vf610/ls1021a/imx7ulp, "ipg" clock is for uart bus/baud
+-  clock. For imx8qxp lpuart, "ipg" clock is bus clock that is used to access
+-  lpuart controller registers, it also requires "baud" clock for module to
+-  receive/transmit data.
++- clock-names : For vf610/ls1021a/ls1028a/imx7ulp, "ipg" clock is for uart
++  bus/baud clock. For imx8qxp lpuart, "ipg" clock is bus clock that is used
++  to access lpuart controller registers, it also requires "baud" clock for
++  module to receive/transmit data.
+ 
+ Optional properties:
+ - dmas: A list of two dma specifiers, one for each entry in dma-names.
+-- 
+2.20.1
 
-I'm not really a serial person, so mabye someone else knows?  For those
-unfamiliar with the issue, there's a pretty good description in the patch to
-fix it
-
-    https://github.com/sifive/sifive-blocks/pull/90
-
-Poking around we don't have any PRE_RATE_CHANGE hook, so I'm going to take a
-whack at adding one -- not really related to this patch, though.
-
-> +}
-> +#endif /* CONFIG_CONSOLE_POLL */
-> +
->  static struct uart_driver sifive_serial_uart_driver;
->
->  static struct console sifive_serial_console = {
-> @@ -877,6 +900,10 @@ static const struct uart_ops sifive_serial_uops = {
->  	.request_port	= sifive_serial_request_port,
->  	.config_port	= sifive_serial_config_port,
->  	.verify_port	= sifive_serial_verify_port,
-> +#ifdef CONFIG_CONSOLE_POLL
-> +	.poll_get_char	= sifive_serial_poll_get_char,
-> +	.poll_put_char	= sifive_serial_poll_put_char,
-> +#endif
->  };
->
->  static struct uart_driver sifive_serial_uart_driver = {
