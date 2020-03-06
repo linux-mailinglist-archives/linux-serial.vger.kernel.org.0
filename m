@@ -2,96 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 668D417BCB0
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Mar 2020 13:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA3417BCAA
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Mar 2020 13:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbgCFM3M (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 6 Mar 2020 07:29:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45862 "EHLO mail.kernel.org"
+        id S1726300AbgCFMYe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 6 Mar 2020 07:24:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726194AbgCFM3M (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 6 Mar 2020 07:29:12 -0500
+        id S1726231AbgCFMYe (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 6 Mar 2020 07:24:34 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAB152072A;
-        Fri,  6 Mar 2020 12:29:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ADBC42072A;
+        Fri,  6 Mar 2020 12:24:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583497752;
-        bh=d17V1gYzsp+fRg5i888PyT+fPs0MnH0tdgO0t6VHh5c=;
+        s=default; t=1583497474;
+        bh=/FSzxNHEnCPZySFaU9lI5MLlJSdhT8iNMhpx4383pGA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t8BQ8YdbCK8NYU8ae8N+ekQAjgvaSQzA7GVKOg+FTl8RTt2VhDRHXrOS8WVRJe5Qs
-         VKqUVw49sgIRfZ+yXYduMabcWYcoW/+Z16RanU9qF4gjAdeZ9POw8jLj/Nyaw+lLN1
-         d+jW+ooS7YNAzqqMGQgAS8GB1DZJ+4fEGz9EpTWY=
-Date:   Fri, 6 Mar 2020 11:36:52 +0100
+        b=020cwxwgAROwGjqiUTqmyCxFnLEImYPB3d6xWnMeYAYQZAnUd+1HH6MYu5jUWPBaB
+         lcj1hk+zfxybcpWnXL0NUgp0zorIlc7NoYTwav+GzS8p1ik5ql/cJIo0f+PcliY8/N
+         +XEMm7+k9exCBE7Dud0/ZNKZnBktX3SYiXV0dT5I=
+Date:   Fri, 6 Mar 2020 13:24:30 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Jiri Slaby <jslaby@suse.com>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] Revert "tty: serial: samsung_tty: build it for any
- platform"
-Message-ID: <20200306103652.GA3634389@kroah.com>
-References: <20200306102301.16870-1-geert+renesas@glider.be>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-serial@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Russ Gorby <russ.gorby@intel.com>
+Subject: Re: [PATCH] tty: serial: ifx6x60: Convert to GPIO descriptors
+Message-ID: <20200306122430.GA3654291@kroah.com>
+References: <20200302101117.331005-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200306102301.16870-1-geert+renesas@glider.be>
+In-Reply-To: <20200302101117.331005-1-linus.walleij@linaro.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Mar 06, 2020 at 11:23:01AM +0100, Geert Uytterhoeven wrote:
-> This reverts commit 175b558d0efb8b4f33aa7bd2c1b5389b912d3019.
+On Mon, Mar 02, 2020 at 11:11:17AM +0100, Linus Walleij wrote:
+> This driver for the Intel MID never seems to have been properly
+> integrated upstream: the platform data in <linux/spi/ifx_modem.h>
+> is not used anywhere in the kernel and haven't been since it was
+> merged into the kernel in 2010.
 > 
-> When the user configures a kernel without support for Samsung SoCs, it
-> makes no sense to ask the user about enabling "Samsung SoC serial
-> support", as Samsung serial ports can only be found on Samsung SoCs.
+> There might be out-of-tree users, so I don't want to delete the
+> driver, but I will refactor it to use GPIO descriptors, which
+> means that out-of-tree users will need to adapt.
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> There are several examples in the kernel of how to provide the
+> resources necessary for using GPIO descriptors to pass in the
+> GPIO lines, for the MID platform in particular, it will suffice
+> to inspect the code in files like:
+> arch/x86/platform/intel-mid/device_libs/platform_bt.c
+> 
+> This refactoring transfers all GPIOs in the driver, including
+> a hard-coded "PMU reset" in the driver to use GPIO descriptors
+> instead.
+> 
+> The following named GPIO descriptors need to be supplied:
+> - reset
+> - power
+> - mrdy
+> - srdy
+> - rst_out
+> - pmu_reset
+> 
+> Cc: Russ Gorby <russ.gorby@intel.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/tty/serial/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index 880b962015302dca..932ad51099deae7d 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -237,6 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
->  
->  config SERIAL_SAMSUNG
->  	tristate "Samsung SoC serial support"
-> +	depends on PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST
->  	select SERIAL_CORE
->  	help
->  	  Support for the on-chip UARTs on the Samsung S3C24XX series CPUs,
+>  drivers/tty/serial/ifx6x60.c  | 170 ++++++++++++----------------------
+>  drivers/tty/serial/ifx6x60.h  |  13 ++-
+>  include/linux/spi/ifx_modem.h |   5 -
+>  3 files changed, 65 insertions(+), 123 deletions(-)
 
-{sigh}
-
-No, I don't want this.  My "goal" is to be able to get rid of all of the
-crazy "PLAT_*" symbols as they make it impossible to build a single
-kernel that supports multiple ARM64 systems.
-
-As an example of just such a system, see the 5.4 tree here:
-	https://android.googlesource.com/kernel/common/+/refs/heads/android-5.4
-it is now building and booting on multiple SoCs.
-
-But yes, it still does have to enable some PLAT_* config options, but
-the goal is to not have to do that eventually.
-
-There is no reason that we need vendor-specific config options just to
-lump random drivers into, like serial drivers.  If the hardware is not
-present, the driver will just not bind to the hardware, and all is fine.
-
-Just like x86, we don't have this issue there, and ARM64 should also not
-have this.
-
-Sorry for delay in writing this back to the original thread where you
-objected to the original patch, it's still in my review queue along with
-a ton of other serial patches.
+This fails to apply to my tty-next branch, can you rebase and resend?
 
 thanks,
 
