@@ -2,77 +2,45 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2060F17D961
-	for <lists+linux-serial@lfdr.de>; Mon,  9 Mar 2020 07:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1439B17DA31
+	for <lists+linux-serial@lfdr.de>; Mon,  9 Mar 2020 09:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725796AbgCIGlu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 9 Mar 2020 02:41:50 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46356 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbgCIGlu (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 9 Mar 2020 02:41:50 -0400
-Received: by mail-pg1-f194.google.com with SMTP id y30so4242879pga.13
-        for <linux-serial@vger.kernel.org>; Sun, 08 Mar 2020 23:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=RrX9EtA3zn4u15vVccJeX3aDhJuOUHVdQao27RU5nys=;
-        b=ZlPvOTfYg8ORIBsXty84bD0rRJ/90K8uIO/uB/zt/ADLmUgqnZSsvJa7qD5c12Wnmi
-         twF97bZmvCFfxUcO6sEehkFpu0ixFanK2imweMwyQbM+gjb3XtggIwWiX35PVRGvz/nA
-         a5/oOPSK9KvI4Bkc5tDFy9cfr1VFsoh2VFnyY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=RrX9EtA3zn4u15vVccJeX3aDhJuOUHVdQao27RU5nys=;
-        b=XmrhTq23qWRnwL81JZlr+b3X7safaoRuKZjQqrTsNLLUJUcum2k4TbEGhYFvcnNjr0
-         k5h6mlWvQXj2lgdkleNZRQXfgK0nDbCUlb5vyY1tgq6tWypgUji6QgBkOv+JvyWMnWQA
-         gEshLg9edKhL8Rb4pydRuONHQygo7LAovdUu5VvXLnWVHnf3x6K0a5kRA8iFGZrborVx
-         AsxKbQ31bl7dyy6j1Cr0BjWKeU+kouZ1uaj0ePh9QdgSR7WWfEZD3BVygE4DV98PDthP
-         jPq/YvFMxJ0GQsghtor7eBu5WjUW+EbPV0Oomm+cnQXJ+946eI+QB0Msg83yM9B6ng1j
-         ui5g==
-X-Gm-Message-State: ANhLgQ20smqO7y2le54jRHGyESJEcxlX1T8jfhYy/yVXoNxYn1oYp/fm
-        HPMh5GJKP3PNjjgaCGX4pF1tLw==
-X-Google-Smtp-Source: ADFU+vuFj92YnT2uVcGJAjBivqhd2E2e1bNOkvmP+cAyeV4G04fBNTjyHqM1P5aYSHvLJ2i/lJqlkA==
-X-Received: by 2002:a63:f311:: with SMTP id l17mr15183521pgh.142.1583736107615;
-        Sun, 08 Mar 2020 23:41:47 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id nh4sm3207636pjb.39.2020.03.08.23.41.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2020 23:41:46 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726449AbgCIIE6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 9 Mar 2020 04:04:58 -0400
+Received: from paleo.ru ([195.178.204.132]:36161 "EHLO mail.paleo.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725796AbgCIIE6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 9 Mar 2020 04:04:58 -0400
+X-Greylist: delayed 816 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Mar 2020 04:04:57 EDT
+Received: from mail.paleo.ru (paleo.ru [195.178.204.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.paleo.ru (Postfix) with ESMTPSA id 52B1D1D5680;
+        Mon,  9 Mar 2020 07:37:34 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1583477228-32231-3-git-send-email-skakit@codeaurora.org>
-References: <1583477228-32231-1-git-send-email-skakit@codeaurora.org> <1583477228-32231-3-git-send-email-skakit@codeaurora.org>
-Subject: Re: [PATCH V3 2/2] tty: serial: qcom_geni_serial: Fix RX cancel command failure
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, akashast@codeaurora.org,
-        rojay@codeaurora.org, msavaliy@qti.qualcomm.com,
-        satya priya <skakit@codeaurora.org>
-To:     gregkh@linuxfoundation.org, satya priya <skakit@codeaurora.org>
-Date:   Sun, 08 Mar 2020 23:41:45 -0700
-Message-ID: <158373610593.66766.7767101522459278381@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 09 Mar 2020 09:37:34 +0200
+From:   "Michael J. Weirsky" <mikhailov@paleo.ru>
+To:     undisclosed-recipients:;
+Reply-To: micjsky@aol.com
+Mail-Reply-To: micjsky@aol.com
+Message-ID: <22d3f1c8a8f8fa6edd5766409b5d052a@paleo.ru>
+X-Sender: mikhailov@paleo.ru
+User-Agent: Roundcube Webmail/1.3.9
+X-Spam: Yes
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Quoting satya priya (2020-03-05 22:47:08)
-> RX cancel command fails when BT is switched on and off multiple times.
->=20
-> To handle this, poll for the cancel bit in SE_GENI_S_IRQ_STATUS register
-> instead of SE_GENI_S_CMD_CTRL_REG.
->=20
-> As per the HPG update, handle the RX last bit after cancel command
-> and flush out the RX FIFO buffer.
->=20
-> Signed-off-by: satya priya <skakit@codeaurora.org>
-> ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+-- 
+My name is Michael J. Weirsky, I'm an unemployed Handy man , winner of 
+$273million Jackpot in March 8, 2019. I donate $1.000.000,00 to you. 
+Contact me via email: micjsky@aol.com for info / claim.
+Continue reading: 
+https://abcnews.go.com/WNT/video/jersey-handyman-forward-273m-lottery-winner-61544244
