@@ -2,45 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1439B17DA31
-	for <lists+linux-serial@lfdr.de>; Mon,  9 Mar 2020 09:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58D017DA22
+	for <lists+linux-serial@lfdr.de>; Mon,  9 Mar 2020 09:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgCIIE6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 9 Mar 2020 04:04:58 -0400
-Received: from paleo.ru ([195.178.204.132]:36161 "EHLO mail.paleo.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbgCIIE6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 9 Mar 2020 04:04:58 -0400
-X-Greylist: delayed 816 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Mar 2020 04:04:57 EDT
-Received: from mail.paleo.ru (paleo.ru [195.178.204.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.paleo.ru (Postfix) with ESMTPSA id 52B1D1D5680;
-        Mon,  9 Mar 2020 07:37:34 +0000 (UTC)
+        id S1726027AbgCIIBO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 9 Mar 2020 04:01:14 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44557 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgCIIBN (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 9 Mar 2020 04:01:13 -0400
+Received: by mail-ot1-f68.google.com with SMTP id v22so8624001otq.11;
+        Mon, 09 Mar 2020 01:01:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5KNQrDe0l6oCFPtPg6ftsB3rjrTR1HyU2LsJupipGE8=;
+        b=QMBcEx6xHAL00m9ofm9CCbYJYgdp+E0JA7ZDV//TxPyQk7kV7wNZRt/BUNyOIF/Cx8
+         /A2ifIqGoapZ5mZcC+4Zf0fI7Z/KQkvSQbWDDU60pp1WTSzmDWEDR9bV0BfgeX4Zrxn6
+         Db8M7TEc2UGD7BHScMjWWSsFkxvx8z4Q5K3hMjmBuFcup8nMldv5pjKouy1CuEIqe2ng
+         7mwLgC4RT1iHhOLF7oVGHMhT2tF9FKNI8eFwvodLDTALrmFtCve92ERwKyVzimoBHxqX
+         qNmHBjnmiSp680vOSs0U7Rh/WeVKtEJrMDB1tk9BwaQ8uqnk0l/Q5wXWnmUzpihk/BjD
+         cmWw==
+X-Gm-Message-State: ANhLgQ0Ps40Fe10oKeBXSrzNB3AQZ/rnkr+D0nfNkxadALnZL2tYrB61
+        +nQ5jx5k8tb9z/FIDR57gzxijDwRzQZsKsorhks=
+X-Google-Smtp-Source: ADFU+vsDTCa3jjZ1zeDrCbvPHrDJy5j6vGE23gbOBny//ko/4PRaNwTR9xHABVzOcF6wEE35AvzQODCVrLJwiijRM9I=
+X-Received: by 2002:a9d:5c0c:: with SMTP id o12mr12090100otk.145.1583740871801;
+ Mon, 09 Mar 2020 01:01:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 09 Mar 2020 09:37:34 +0200
-From:   "Michael J. Weirsky" <mikhailov@paleo.ru>
-To:     undisclosed-recipients:;
-Reply-To: micjsky@aol.com
-Mail-Reply-To: micjsky@aol.com
-Message-ID: <22d3f1c8a8f8fa6edd5766409b5d052a@paleo.ru>
-X-Sender: mikhailov@paleo.ru
-User-Agent: Roundcube Webmail/1.3.9
-X-Spam: Yes
+References: <20200305103228.9686-1-zhang.lyra@gmail.com> <20200305103228.9686-2-zhang.lyra@gmail.com>
+ <CAMuHMdU-gAhupHotQTHAZfopkGF_jQc-VrVxb24caw_BfzWd6g@mail.gmail.com> <CAAfSe-sonfA=6x9uvQXaHniQaXR8hWZa4uOcWxoo+Z_XT9QNhw@mail.gmail.com>
+In-Reply-To: <CAAfSe-sonfA=6x9uvQXaHniQaXR8hWZa4uOcWxoo+Z_XT9QNhw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 9 Mar 2020 09:01:00 +0100
+Message-ID: <CAMuHMdUBkS+pPyPid2K=40jaTOSnAE_L-vJP5knmyVr8Fr5_hg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tty: serial: make SERIAL_SPRD not depend on ARCH_SPRD
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Jiri Slaby <jslaby@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hi Chunyan,
 
+On Mon, Mar 9, 2020 at 2:18 AM Chunyan Zhang <zhang.lyra@gmail.com> wrote:
+> On Fri, 6 Mar 2020 at 20:41, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, Mar 5, 2020 at 11:33 AM Chunyan Zhang <zhang.lyra@gmail.com> wrote:
+> > > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > >
+> > > Remove the dependency with ARCH_SPRD from sprd serial/console Kconfig-s,
+> > > since we want them can be built-in when ARCH_SPRD is set as 'm'.
+> >
+> > Why would you want a serial driver for a specific platform to be builtin,
+> > while all other platform support is modular?
+>
+> Oh, that's not this patch means.
+>
+> We just want serial driver can be builtin for any platform, so it
 
--- 
-My name is Michael J. Weirsky, I'm an unemployed Handy man , winner of 
-$273million Jackpot in March 8, 2019. I donate $1.000.000,00 to you. 
-Contact me via email: micjsky@aol.com for info / claim.
-Continue reading: 
-https://abcnews.go.com/WNT/video/jersey-handyman-forward-273m-lottery-winner-61544244
+What would be the benefit of the user to be able to have the SPRD serial
+driver built-in on any platform?  AFAIU, it supports only Spreadtrum
+platforms.
+
+> should not depend on a config which can be set as 'm' (i.e. ARCH_SPRD)
+> , otherwise if the config was set as 'm', the serial driver can't be
+> selected as 'y' then.
+
+I ask about that as a reply to PATCH 1/2.
+
+> That's what I mean.
+
+> > > --- a/drivers/tty/serial/Kconfig
+> > > +++ b/drivers/tty/serial/Kconfig
+> > > @@ -1452,7 +1452,6 @@ config SERIAL_MEN_Z135
+> > >
+> > >  config SERIAL_SPRD
+> > >         tristate "Support for Spreadtrum serial"
+> > > -       depends on ARCH_SPRD
+> > >         select SERIAL_CORE
+> > >         help
+> > >           This enables the driver for the Spreadtrum's serial.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
