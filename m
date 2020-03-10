@@ -2,75 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3739517F6C1
-	for <lists+linux-serial@lfdr.de>; Tue, 10 Mar 2020 12:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A5817FC49
+	for <lists+linux-serial@lfdr.de>; Tue, 10 Mar 2020 14:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbgCJLxo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 10 Mar 2020 07:53:44 -0400
-Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:45718 "EHLO
-        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726205AbgCJLxo (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 10 Mar 2020 07:53:44 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id A8E222F6515F;
-        Tue, 10 Mar 2020 03:46:24 -0500 (-05)
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OixAedb6G0Nd; Tue, 10 Mar 2020 03:46:24 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 0A5112F6E31B;
-        Tue, 10 Mar 2020 03:16:06 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec 0A5112F6E31B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
-        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1583828166;
-        bh=o+H3O7n1+zJcXo0FhJs7spyf8HmE4ClnBa/Y2Gk0DL0=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=YaNkV3ZwgXSHi7E5cuklAADU9l2K6ksfqC5j18i9QFClsswEsJposqatXp+4BG02u
-         Kn7i7zTZU4HoaAyc3Uz7/ULzy10OEcd8BecXsItNZ0EdxebW8OKT/07JOso7swOZWz
-         Sv06s1XkM2wWET/jCLGu3e2yawE8T68a42jcer5c=
-X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xqF7YYb6Q-uK; Tue, 10 Mar 2020 03:16:05 -0500 (-05)
-Received: from [10.19.167.32] (unknown [105.0.4.171])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id CF4052F6B649;
-        Tue, 10 Mar 2020 02:43:26 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S1729148AbgCJNUL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 10 Mar 2020 09:20:11 -0400
+Received: from mga12.intel.com ([192.55.52.136]:54416 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728821AbgCJNUK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:20:10 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 06:20:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,537,1574150400"; 
+   d="scan'208";a="289036350"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Mar 2020 06:20:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 86A8A193; Tue, 10 Mar 2020 15:20:05 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/4] serial: core: Use string length for SysRq magic sequence
+Date:   Tue, 10 Mar 2020 15:20:01 +0200
+Message-Id: <20200310132004.86367-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <ronald.pena@11d01.mspz7.gob.ec>
-From:   ''Michael weirsky'' <ronald.pena@11d01.mspz7.gob.ec>
-Date:   Tue, 10 Mar 2020 10:12:54 +0200
-Reply-To: mikeweirskyspende@gmail.com
-Message-Id: <20200310074327.CF4052F6B649@mail.11d01.mspz7.gob.ec>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Lieber Freund,
+Compiler is not happy about using ARRAY_SIZE() in comparison to smaller type:
 
-Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der =
-Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zu=
-f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
-il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
-meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
-und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
-Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
- spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen.
-Das ist dein Spendencode: [MW530342019]
-www.youtube.com/watch?v=3Dun8yRTmrYMY
+  CC      drivers/tty/serial/serial_core.o
+.../serial_core.c: In function ‘uart_try_toggle_sysrq’:
+.../serial_core.c:3222:24: warning: comparison is always false due to limited range of data type [-Wtype-limits]
+ 3222 |  if (++port->sysrq_seq < (ARRAY_SIZE(sysrq_toggle_seq) - 1)) {
+      |                        ^
 
-Antworten Sie mit dem SPENDE-CODE an diese =
+Looking at the code it appears that there is an additional weirdness,
+i.e. use ARRAY_SIZE() against simple string literal. Yes, the idea probably
+was to allow '\0' in the sequence, but it's impractical: kernel configuration
+won't accept it to begin with followed by a comment about '\0' before
+comparison in question.
 
+Drop all these by switching to strlen() and convert code accordingly.
 
-E-Mail:mikeweirskyspende@gmail.com
+Fixes: 68af43173d3f ("serial/sysrq: Add MAGIC_SYSRQ_SERIAL_SEQUENCE")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/serial_core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index aec98db45406..ec3b833e9f22 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -3209,7 +3209,9 @@ static DECLARE_WORK(sysrq_enable_work, uart_sysrq_on);
+  */
+ static bool uart_try_toggle_sysrq(struct uart_port *port, unsigned int ch)
+ {
+-	if (ARRAY_SIZE(sysrq_toggle_seq) <= 1)
++	int sysrq_toggle_seq_len = strlen(sysrq_toggle_seq);
++
++	if (!sysrq_toggle_seq_len)
+ 		return false;
+ 
+ 	BUILD_BUG_ON(ARRAY_SIZE(sysrq_toggle_seq) >= U8_MAX);
+@@ -3218,8 +3220,7 @@ static bool uart_try_toggle_sysrq(struct uart_port *port, unsigned int ch)
+ 		return false;
+ 	}
+ 
+-	/* Without the last \0 */
+-	if (++port->sysrq_seq < (ARRAY_SIZE(sysrq_toggle_seq) - 1)) {
++	if (++port->sysrq_seq < sysrq_toggle_seq_len) {
+ 		port->sysrq = jiffies + SYSRQ_TIMEOUT;
+ 		return true;
+ 	}
+-- 
+2.25.1
 
-Gr=C3=BC=C3=9Fe
-Herr Mike Weirsky
