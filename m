@@ -2,115 +2,256 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A95F180FA2
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Mar 2020 06:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F15E1812F2
+	for <lists+linux-serial@lfdr.de>; Wed, 11 Mar 2020 09:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725976AbgCKFQI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Mar 2020 01:16:08 -0400
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:63734 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725813AbgCKFQH (ORCPT
+        id S1726198AbgCKIbr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 Mar 2020 04:31:47 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35726 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728122AbgCKIbr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Mar 2020 01:16:07 -0400
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 02B5FkZZ020142;
-        Wed, 11 Mar 2020 14:15:47 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 02B5FkZZ020142
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1583903747;
-        bh=AfcAhhaYncg48rG2V8lvHQMNiBncmFjUl9msHr0LZLM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KvW0KXepxAE2RCGteQEv1YSqRNHr0J2XMAXuIYCj1s+nNf63JyYw/9OC9czBm81xE
-         clTtP0F838rdSrlae7fdZfuzjmaW0k88pzKs1nbAHtt3Uyh7o4zAnMyop6uGwQMinE
-         NUBaWFVGEx5beaInaYhJb4d+us0M18Nqvb1KiMlrWdMedpw91/J8E1PkpEXG7Ht7zT
-         rVUpsbRqkZkR22fGL28i63NHiw+bHariqNs76uyEyY8rldbzsX0Sk34pYYQb0u70Nz
-         ULCMR1b9jSK/sN8ZGBLFycql4/3VhoWvwXQ13Iufs7qQd+LmBIQEq4ymjyhFCl2QBq
-         HF1nFpJqD1/Zg==
-X-Nifty-SrcIP: [209.85.217.50]
-Received: by mail-vs1-f50.google.com with SMTP id o24so526334vsp.4;
-        Tue, 10 Mar 2020 22:15:46 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ1iS79NXyHGjr5Ln4CBuy9C5hQ1nfkb0VZG1E7q4wBgFYqfNZEX
-        MP3pryAH7yS5gil8kKLCes5O8O84eMHvsF2wTA0=
-X-Google-Smtp-Source: ADFU+vueM9zpX/w41+7KRQJKMve2nE9ggiD45SMOr/dEVd886cFoVN80tyg4r4qMFhRNb5dCuud4jNxETWUlZpLQMEc=
-X-Received: by 2002:a05:6102:8f:: with SMTP id t15mr878244vsp.215.1583903745980;
- Tue, 10 Mar 2020 22:15:45 -0700 (PDT)
+        Wed, 11 Mar 2020 04:31:47 -0400
+Received: by mail-lj1-f194.google.com with SMTP id u12so1338416ljo.2
+        for <linux-serial@vger.kernel.org>; Wed, 11 Mar 2020 01:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pYl8lkFpCTdsyEU1fcSE3XpffBLroxs6O2eSQD2SgcY=;
+        b=JNs8JD2TvyR3SwZVj7IUpof+sgLl1mZr2XHFE6A+RHO4Vl7+f9xd9Mp6B1P8tQboMm
+         JeVbyvrA7SgesikCFIRVbf4xRuqF/SL/rWx3s2RANrSAm47w1gC4po/7SzpzPFlz1l9M
+         UI9UWqUf1qifejvkdvQ1TJl97w0Z9rZX2dcla97737b01L/xcHGSOW1Ou2ERvlMvwA40
+         WKOQw3p6NIw9RimXN7wdYZi5YdLAeXZ4wbEKkVdFyVTyPwdYnocaORQ4zeQCSrjcWlzC
+         lPcIAfAWzFvZI1Ole7SJbjfS2WCgXYD7Vh8uDMqlGMBQo38+QRFH1+FC2XMTC7FBZrtA
+         AS6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pYl8lkFpCTdsyEU1fcSE3XpffBLroxs6O2eSQD2SgcY=;
+        b=a71UHLSZvJmYonG5eRKG1DyQuezAf9U+43sqd+9Oyqk794mgjCttqa3gkACFBOYP1u
+         j1tQ0mAUkiKBH7arRQZhy+yLQfDEH/O620VLq2OqXVu2Zn4/8QZZQpKSnMFOk+bmLtd5
+         0ZXY820Pi9fqbpMpYWfa3Sglwo2F0/7Sl+CYFzl4KMo+To7rghRu0ukDOrK0nR4DxgiA
+         uwigaBlheGQWuiBtvZqZtetVBL5Ce+Jwx4UPqRwuKPOgPha7xEISDLP4XokWrLHWgrFf
+         jsiWK/CNasUp0Y4vCiIFhEKjwZcRRAgKdt6H42Av7hqA/sJjw1ZWrXJB2wLso6LPEZ5u
+         rs6w==
+X-Gm-Message-State: ANhLgQ0FFv8lignoKhm4427RUpRCkwvtLHumyNhMetHAMzmOU6B6cAT4
+        qXpY1piREMlrz/xIlUg39DehKG6o4g0G8w==
+X-Google-Smtp-Source: ADFU+vszKJhOr75nuh1GNId+/OEF3m4NP6gwHL3mQCZcJOrBl8wsv9qtqWnofuBUQyl1AO8VW5zsQA==
+X-Received: by 2002:a2e:b892:: with SMTP id r18mr1492961ljp.252.1583915501445;
+        Wed, 11 Mar 2020 01:31:41 -0700 (PDT)
+Received: from genomnajs.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id z84sm6315339lfa.6.2020.03.11.01.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2020 01:31:40 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 1/2 v2] tty: serial: ifx6x60: Use helper variable for dev
+Date:   Wed, 11 Mar 2020 09:31:30 +0100
+Message-Id: <20200311083131.693908-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <cover.1583896344.git.joe@perches.com> <dae0878058223a42c77d725b8d7c5845a7ef9dc0.1583896348.git.joe@perches.com>
-In-Reply-To: <dae0878058223a42c77d725b8d7c5845a7ef9dc0.1583896348.git.joe@perches.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 11 Mar 2020 14:15:10 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS7GAk9yXkPhbS3ByU+n9Gb-rk0PeLcXLCNwpW1B22aeg@mail.gmail.com>
-Message-ID: <CAK7LNAS7GAk9yXkPhbS3ByU+n9Gb-rk0PeLcXLCNwpW1B22aeg@mail.gmail.com>
-Subject: Re: [PATCH -next 005/491] ARM/UNIPHIER ARCHITECTURE: Use fallthrough;
-To:     Joe Perches <joe@perches.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 2:07 PM Joe Perches <joe@perches.com> wrote:
->
-> Convert the various uses of fallthrough comments to fallthrough;
->
-> Done via script
-> Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.1582230379.git.joe.com/
->
-> Signed-off-by: Joe Perches <joe@perches.com>
+The &spi->dev is used so many times that the code gets
+visibly better by introducing a simple dev helper variable.
 
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Include this preparation patch. Sorry for missing it.
+---
+ drivers/tty/serial/ifx6x60.c | 45 ++++++++++++++++++------------------
+ 1 file changed, 23 insertions(+), 22 deletions(-)
 
-Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-
-
-But, I think the patch subject should be prefixed:
-"serial: 8250_uniphier:"
-
-
-
-> ---
->  drivers/tty/serial/8250/8250_uniphier.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/tty/serial/8250/8250_uniphier.c b/drivers/tty/serial/8250/8250_uniphier.c
-> index e0b73a5..a2978ab 100644
-> --- a/drivers/tty/serial/8250/8250_uniphier.c
-> +++ b/drivers/tty/serial/8250/8250_uniphier.c
-> @@ -75,7 +75,7 @@ static unsigned int uniphier_serial_in(struct uart_port *p, int offset)
->                 break;
->         case UART_LCR:
->                 valshift = 8;
-> -               /* fall through */
-> +               fallthrough;
->         case UART_MCR:
->                 offset = UNIPHIER_UART_LCR_MCR;
->                 break;
-> @@ -101,7 +101,7 @@ static void uniphier_serial_out(struct uart_port *p, int offset, int value)
->         case UART_SCR:
->                 /* No SCR for this hardware.  Use CHAR as a scratch register */
->                 valshift = 8;
-> -               /* fall through */
-> +               fallthrough;
->         case UART_FCR:
->                 offset = UNIPHIER_UART_CHAR_FCR;
->                 break;
-> @@ -109,7 +109,7 @@ static void uniphier_serial_out(struct uart_port *p, int offset, int value)
->                 valshift = 8;
->                 /* Divisor latch access bit does not exist. */
->                 value &= ~UART_LCR_DLAB;
-> -               /* fall through */
-> +               fallthrough;
->         case UART_MCR:
->                 offset = UNIPHIER_UART_LCR_MCR;
->                 break;
-> --
-> 2.24.0
->
-
-
+diff --git a/drivers/tty/serial/ifx6x60.c b/drivers/tty/serial/ifx6x60.c
+index 31033d517e82..32a0ccef9339 100644
+--- a/drivers/tty/serial/ifx6x60.c
++++ b/drivers/tty/serial/ifx6x60.c
+@@ -992,22 +992,23 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 	int srdy;
+ 	struct ifx_modem_platform_data *pl_data;
+ 	struct ifx_spi_device *ifx_dev;
++	struct device *dev = &spi->dev;
+ 
+ 	if (saved_ifx_dev) {
+-		dev_dbg(&spi->dev, "ignoring subsequent detection");
++		dev_dbg(dev, "ignoring subsequent detection");
+ 		return -ENODEV;
+ 	}
+ 
+-	pl_data = dev_get_platdata(&spi->dev);
++	pl_data = dev_get_platdata(dev);
+ 	if (!pl_data) {
+-		dev_err(&spi->dev, "missing platform data!");
++		dev_err(dev, "missing platform data!");
+ 		return -ENODEV;
+ 	}
+ 
+ 	/* initialize structure to hold our device variables */
+ 	ifx_dev = kzalloc(sizeof(struct ifx_spi_device), GFP_KERNEL);
+ 	if (!ifx_dev) {
+-		dev_err(&spi->dev, "spi device allocation failed");
++		dev_err(dev, "spi device allocation failed");
+ 		return -ENOMEM;
+ 	}
+ 	saved_ifx_dev = ifx_dev;
+@@ -1026,7 +1027,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 	spi->bits_per_word = spi_bpw;
+ 	ret = spi_setup(spi);
+ 	if (ret) {
+-		dev_err(&spi->dev, "SPI setup wasn't successful %d", ret);
++		dev_err(dev, "SPI setup wasn't successful %d", ret);
+ 		kfree(ifx_dev);
+ 		return -ENODEV;
+ 	}
+@@ -1049,7 +1050,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 				&ifx_dev->tx_bus,
+ 				GFP_KERNEL);
+ 	if (!ifx_dev->tx_buffer) {
+-		dev_err(&spi->dev, "DMA-TX buffer allocation failed");
++		dev_err(dev, "DMA-TX buffer allocation failed");
+ 		ret = -ENOMEM;
+ 		goto error_ret;
+ 	}
+@@ -1058,7 +1059,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 				&ifx_dev->rx_bus,
+ 				GFP_KERNEL);
+ 	if (!ifx_dev->rx_buffer) {
+-		dev_err(&spi->dev, "DMA-RX buffer allocation failed");
++		dev_err(dev, "DMA-RX buffer allocation failed");
+ 		ret = -ENOMEM;
+ 		goto error_ret;
+ 	}
+@@ -1075,7 +1076,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 	/* create our tty port */
+ 	ret = ifx_spi_create_port(ifx_dev);
+ 	if (ret != 0) {
+-		dev_err(&spi->dev, "create default tty port failed");
++		dev_err(dev, "create default tty port failed");
+ 		goto error_ret;
+ 	}
+ 
+@@ -1085,21 +1086,21 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 	ifx_dev->gpio.srdy = pl_data->srdy;
+ 	ifx_dev->gpio.reset_out = pl_data->rst_out;
+ 
+-	dev_info(&spi->dev, "gpios %d, %d, %d, %d, %d",
++	dev_info(dev, "gpios %d, %d, %d, %d, %d",
+ 		 ifx_dev->gpio.reset, ifx_dev->gpio.po, ifx_dev->gpio.mrdy,
+ 		 ifx_dev->gpio.srdy, ifx_dev->gpio.reset_out);
+ 
+ 	/* Configure gpios */
+ 	ret = gpio_request(ifx_dev->gpio.reset, "ifxModem");
+ 	if (ret < 0) {
+-		dev_err(&spi->dev, "Unable to allocate GPIO%d (RESET)",
++		dev_err(dev, "Unable to allocate GPIO%d (RESET)",
+ 			ifx_dev->gpio.reset);
+ 		goto error_ret;
+ 	}
+ 	ret += gpio_direction_output(ifx_dev->gpio.reset, 0);
+ 	ret += gpio_export(ifx_dev->gpio.reset, 1);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to configure GPIO%d (RESET)",
++		dev_err(dev, "Unable to configure GPIO%d (RESET)",
+ 			ifx_dev->gpio.reset);
+ 		ret = -EBUSY;
+ 		goto error_ret2;
+@@ -1109,7 +1110,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 	ret += gpio_direction_output(ifx_dev->gpio.po, 0);
+ 	ret += gpio_export(ifx_dev->gpio.po, 1);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to configure GPIO%d (ON)",
++		dev_err(dev, "Unable to configure GPIO%d (ON)",
+ 			ifx_dev->gpio.po);
+ 		ret = -EBUSY;
+ 		goto error_ret3;
+@@ -1117,14 +1118,14 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 
+ 	ret = gpio_request(ifx_dev->gpio.mrdy, "ifxModem");
+ 	if (ret < 0) {
+-		dev_err(&spi->dev, "Unable to allocate GPIO%d (MRDY)",
++		dev_err(dev, "Unable to allocate GPIO%d (MRDY)",
+ 			ifx_dev->gpio.mrdy);
+ 		goto error_ret3;
+ 	}
+ 	ret += gpio_export(ifx_dev->gpio.mrdy, 1);
+ 	ret += gpio_direction_output(ifx_dev->gpio.mrdy, 0);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to configure GPIO%d (MRDY)",
++		dev_err(dev, "Unable to configure GPIO%d (MRDY)",
+ 			ifx_dev->gpio.mrdy);
+ 		ret = -EBUSY;
+ 		goto error_ret4;
+@@ -1132,7 +1133,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 
+ 	ret = gpio_request(ifx_dev->gpio.srdy, "ifxModem");
+ 	if (ret < 0) {
+-		dev_err(&spi->dev, "Unable to allocate GPIO%d (SRDY)",
++		dev_err(dev, "Unable to allocate GPIO%d (SRDY)",
+ 			ifx_dev->gpio.srdy);
+ 		ret = -EBUSY;
+ 		goto error_ret4;
+@@ -1140,7 +1141,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 	ret += gpio_export(ifx_dev->gpio.srdy, 1);
+ 	ret += gpio_direction_input(ifx_dev->gpio.srdy);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to configure GPIO%d (SRDY)",
++		dev_err(dev, "Unable to configure GPIO%d (SRDY)",
+ 			ifx_dev->gpio.srdy);
+ 		ret = -EBUSY;
+ 		goto error_ret5;
+@@ -1148,14 +1149,14 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 
+ 	ret = gpio_request(ifx_dev->gpio.reset_out, "ifxModem");
+ 	if (ret < 0) {
+-		dev_err(&spi->dev, "Unable to allocate GPIO%d (RESET_OUT)",
++		dev_err(dev, "Unable to allocate GPIO%d (RESET_OUT)",
+ 			ifx_dev->gpio.reset_out);
+ 		goto error_ret5;
+ 	}
+ 	ret += gpio_export(ifx_dev->gpio.reset_out, 1);
+ 	ret += gpio_direction_input(ifx_dev->gpio.reset_out);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to configure GPIO%d (RESET_OUT)",
++		dev_err(dev, "Unable to configure GPIO%d (RESET_OUT)",
+ 			ifx_dev->gpio.reset_out);
+ 		ret = -EBUSY;
+ 		goto error_ret6;
+@@ -1166,7 +1167,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 			  IRQF_TRIGGER_RISING|IRQF_TRIGGER_FALLING, DRVNAME,
+ 			  ifx_dev);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to get irq %x\n",
++		dev_err(dev, "Unable to get irq %x\n",
+ 			gpio_to_irq(ifx_dev->gpio.reset_out));
+ 		goto error_ret6;
+ 	}
+@@ -1177,14 +1178,14 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
+ 			  ifx_spi_srdy_interrupt, IRQF_TRIGGER_RISING, DRVNAME,
+ 			  ifx_dev);
+ 	if (ret) {
+-		dev_err(&spi->dev, "Unable to get irq %x",
++		dev_err(dev, "Unable to get irq %x",
+ 			gpio_to_irq(ifx_dev->gpio.srdy));
+ 		goto error_ret7;
+ 	}
+ 
+ 	/* set pm runtime power state and register with power system */
+-	pm_runtime_set_active(&spi->dev);
+-	pm_runtime_enable(&spi->dev);
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
+ 
+ 	/* handle case that modem is already signaling SRDY */
+ 	/* no outgoing tty open at this point, this just satisfies the
 -- 
-Best Regards
-Masahiro Yamada
+2.24.1
+
