@@ -2,60 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35005185C89
-	for <lists+linux-serial@lfdr.de>; Sun, 15 Mar 2020 14:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1106E186392
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Mar 2020 04:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728576AbgCONMQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 15 Mar 2020 09:12:16 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:34745 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728541AbgCONMQ (ORCPT
+        id S1729544AbgCPDOB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 15 Mar 2020 23:14:01 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:33728 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729632AbgCPDOB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 15 Mar 2020 09:12:16 -0400
-Received: by mail-vs1-f68.google.com with SMTP id t10so9444702vsp.1
-        for <linux-serial@vger.kernel.org>; Sun, 15 Mar 2020 06:12:16 -0700 (PDT)
+        Sun, 15 Mar 2020 23:14:01 -0400
+Received: by mail-pj1-f66.google.com with SMTP id dw20so3502263pjb.0;
+        Sun, 15 Mar 2020 20:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w7F5C8EgmrEQ8AsYpQXMBCTNGKLdMIf9of8fPPaBg98=;
-        b=dT1BAx+wqAGnUB60pYEQRApqr+0E1Jhhzjy47b1ZA5m93EMghwd0CNjPyT7qrMQn2H
-         30jqXb0ghDazB9lf8m/WJLDQ3FbEX+mHEMPGTycCTh6bCNBDi02SbUvg+oZhhZH7ZNXL
-         /5AYaKyhdB/TmmmdJpgvDzFZvXxLU8Yr0qUlT82/0fGdMnyGZutmAsluXCwNcmAzr4KA
-         OoYq/nk8mj18rEJuIqAD9oMQVujOWHWfGSvSMsdUe4rnoMnz9BSihPRQC7lFsgEWKfv/
-         Qw0BFuYFprGQj2PwikSgzlVSomqZpvXRwClRmNo3Q35XHsNAYtRRJ6+I7fv0IABiOiM5
-         4phA==
+        h=from:to:cc:subject:date:message-id;
+        bh=khBuxhsfLtwkJbdKTmDzOvFGTSeMlV30RfTjpZu731w=;
+        b=kn1rmJdjTdsBvzi0LDTmK5qUEfCtK9WakHtxi8Ap5Saruk4TTWNmKOmoPYgpPVoNRe
+         iIRKrkxEN2QDuUJG4CFdNmzkRQsyQzwPqKknfvHnuG+0eN3QHTzcbCwPJz+i2BxtYgUB
+         zOC4qwr3yAiRPQXOms9hObGNg6ADVyucZmWHM9UACsF2q56OzzyCr/gE9DoOEKBUbkWu
+         LgBWJDNLwqm4LvFFn7BhIB77ylx4VbE8y0IuvX580kYEzYZ24N2EYbUDK5jEldiGVhbi
+         H6bpFd5Dglggsk0HZJHwRu/Lk+Dlk0K28Obr/9sBfCjoPVUr57WAepWNmRHhibIep5nV
+         hCnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w7F5C8EgmrEQ8AsYpQXMBCTNGKLdMIf9of8fPPaBg98=;
-        b=pfvbCDvwCMzqphh8+CB03/cd6VRCocv+ME1PSG/ctB0mQ6iMgwOFVh3cQTV7vqtlYl
-         reAhBttolOK5Q8FtWFXedxqjgFckhTE0ExySlG3eY2GAN+wxHMYksCtFT43gXpYnimCk
-         6oYNSsc7fN3xVAaw5+jolQ7sKZiVlm7ip60hm6LxsOOEzQ6Dswz8Pm5m5RuunmhS8A5f
-         /AAXbD9uFwSL3U2adZX0+0KjEn8rRbKOA1ACsSHYNkL/jKXQNAJ2bKQuTWoNfn7uAQKy
-         7DZCOaA5x1+rWH9krmM+eg43KOWq0WnW8SLCPcId+MN/zlA04bE3aEK03MI7b9mOaMCB
-         wPjA==
-X-Gm-Message-State: ANhLgQ0CbCFWQzK+TfLfaCY/vKrNiyRZigJT02SPgVFpZQ0Nw3tR0QCY
-        SjXda6/S3loqUq5wbJT2ptZydB0qe01t60IMzxs=
-X-Google-Smtp-Source: ADFU+vsd4jcC0rg1xyfI1CLdNdsow/pe8oTKV8XRKXbrZ9UGf7cb32He3UjPkfGMI9MQw1vNzGfgPwTdA2txYTzTNcw=
-X-Received: by 2002:a67:62c7:: with SMTP id w190mr14710630vsb.205.1584277935404;
- Sun, 15 Mar 2020 06:12:15 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a67:1c42:0:0:0:0:0 with HTTP; Sun, 15 Mar 2020 06:12:14
- -0700 (PDT)
-Reply-To: mr_williamsthony@hotmail.com
-From:   "Mr. Williams Thony." <mrabdullahal.thani@gmail.com>
-Date:   Sun, 15 Mar 2020 06:12:14 -0700
-Message-ID: <CAN7bEURiGrJWBShisbwjRD2x=PCnLA78PSq3E_DGmq2jQ+CdgQ@mail.gmail.com>
-Subject: Assistance
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=khBuxhsfLtwkJbdKTmDzOvFGTSeMlV30RfTjpZu731w=;
+        b=MqAoleXMFtLa1CfWdi3AT+14pExXkfPXyuIzQWU4zexb74Pu3eNGn6QbPiWICPvpvc
+         q6Zj7Ihu36NSAl8mnrE3qcHMDNogpoc8TU837qVej9m83orqDyd8svq1VeM8WTH+334r
+         mO10MZ0xqN8CCTfzgsxwmltT9RwXd/Ae357ymS0M4NnNRcUJOO30d82RWbNJiIZ0lmDm
+         6wmvlcH37rriqrxMD2zoclKBUObkKWXNkqF0atkgWfkTEJ9xmhlZctN36g8wTEXszYsM
+         7z5vVNwlnoEAv1J/jgDb6JjaJjEwUEt1sLtZM/pEcIaGfkzcWhkV8gTRRl/hctpKeJYT
+         SpLg==
+X-Gm-Message-State: ANhLgQ3Oi6259ZPqCA/vNiMlTRKblblDhQrSy/+3WL13o14FkGKvQOjZ
+        dcsPKSFuglfP/U2C1joKKGaleZ50
+X-Google-Smtp-Source: ADFU+vv0iMVJ6y997gl0WDsAS6Y7kFlu0SMT8wzHsJdz8FAeQKpXwcBhpv7tTWGIevKbzy+hwlxqjA==
+X-Received: by 2002:a17:902:9886:: with SMTP id s6mr25001838plp.100.1584328440119;
+        Sun, 15 Mar 2020 20:14:00 -0700 (PDT)
+Received: from sh04182tmp293.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id e9sm5143392pjt.23.2020.03.15.20.13.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 15 Mar 2020 20:13:59 -0700 (PDT)
+From:   Lanqing Liu <liuhhome@gmail.com>
+To:     dan.carpenter@oracle.com, gregkh@linuxfoundation.org,
+        jslaby@suse.com
+Cc:     baolin.wang@linaro.org, lanqing.liu@unisoc.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        orsonzhai@gmail.com, zhang.lyra@gmail.com
+Subject: [PATCH] serial: sprd: Fix a dereference warning
+Date:   Mon, 16 Mar 2020 11:13:33 +0800
+Message-Id: <e2bd92691538e95b04a2c2a728f3292e1617018f.1584325957.git.liuhhome@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Friend
+We should validate if the 'sup' is NULL or not before freeing DMA
+memory, to fix below warning.
 
-I need your partnership for an important business and i will
-appreciate your urgent reply for details.
+"drivers/tty/serial/sprd_serial.c:1141 sprd_remove()
+ error: we previously assumed 'sup' could be null (see line 1132)"
+
+Fixes: f4487db58eb7 ("serial: sprd: Add DMA mode support")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Lanqing Liu <liuhhome@gmail.com>
+---
+ drivers/tty/serial/sprd_serial.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+index 3d3c706..a223e93 100644
+--- a/drivers/tty/serial/sprd_serial.c
++++ b/drivers/tty/serial/sprd_serial.c
+@@ -1132,14 +1132,13 @@ static int sprd_remove(struct platform_device *dev)
+ 	if (sup) {
+ 		uart_remove_one_port(&sprd_uart_driver, &sup->port);
+ 		sprd_port[sup->port.line] = NULL;
++		sprd_rx_free_buf(sup);
+ 		sprd_ports_num--;
+ 	}
+ 
+ 	if (!sprd_ports_num)
+ 		uart_unregister_driver(&sprd_uart_driver);
+ 
+-	sprd_rx_free_buf(sup);
+-
+ 	return 0;
+ }
+ 
+-- 
+1.9.1
+
