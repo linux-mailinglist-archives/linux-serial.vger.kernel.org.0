@@ -2,92 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 147701884C0
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 14:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3311618852A
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 14:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbgCQNHw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 17 Mar 2020 09:07:52 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:38174 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726130AbgCQNHv (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 17 Mar 2020 09:07:51 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584450471; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=OzBinwjasneXX1n8YD6svwHCtiwmcexTJOEThjdgLII=; b=JmEXU7KQGqHmQzY872IGsm4/JjL5vYtM2FYKbzcPYSH5WsY74h2OT+kKSAETYqiUeGlDgLpy
- DnrHArIYBmAYzuxEl4OI/oS8cFjsF5V9R0Dg1Jx0X+j26f0kfV4f4Qjp9B1QOCe2AoRyEjqY
- YOR9toxcxP7HLoLiXL/mbJX8lmQ=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIzZmY0MiIsICJsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e70cb94.7f8b3efc2e30-smtp-out-n05;
- Tue, 17 Mar 2020 13:07:32 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 33F58C44788; Tue, 17 Mar 2020 13:07:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.8] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8B656C433D2;
-        Tue, 17 Mar 2020 13:07:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8B656C433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH 2/2] tty: serial: qcom_geni_serial: Don't try to manually
- disable the console
-To:     Douglas Anderson <dianders@chromium.org>,
-        gregkh@linuxfoundation.org
-Cc:     mka@chromium.org, swboyd@chromium.org, ryandcase@chromium.org,
-        bjorn.andersson@linaro.org, skakit@codeaurora.org,
-        rojay@codeaurora.org, mgautam@codeaurora.org,
-        Andy Gross <agross@kernel.org>,
-        Doug Anderson <dianders@google.com>,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Karthikeyan Ramasubramanian <kramasub@codeaurora.org>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20200313134635.1.Icf54c533065306b02b880c46dfd401d8db34e213@changeid>
- <20200313134635.2.I3648fac6c98b887742934146ac2729ecb7232eb1@changeid>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <7663863d-3f38-2ad9-d544-370064695aef@codeaurora.org>
-Date:   Tue, 17 Mar 2020 18:37:22 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726775AbgCQNTK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 17 Mar 2020 09:19:10 -0400
+Received: from foss.arm.com ([217.140.110.172]:38088 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726082AbgCQNTJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 17 Mar 2020 09:19:09 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CCF330E;
+        Tue, 17 Mar 2020 06:19:08 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B9523F534;
+        Tue, 17 Mar 2020 06:19:08 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 13:19:06 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 00/28] DT: Improve validation for Marvell SoCs
+Message-ID: <20200317131906.GF3971@sirena.org.uk>
+References: <20200317093922.20785-1-lkundrak@v3.sk>
 MIME-Version: 1.0
-In-Reply-To: <20200313134635.2.I3648fac6c98b887742934146ac2729ecb7232eb1@changeid>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="A9z/3b/E4MkkD+7G"
+Content-Disposition: inline
+In-Reply-To: <20200317093922.20785-1-lkundrak@v3.sk>
+X-Cookie: There's only one everything.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 
-On 3/14/2020 2:16 AM, Douglas Anderson wrote:
-> The geni serial driver's shutdown code had a special case to call
-> console_stop().  Grepping through the code, it was the only serial
-> driver doing something like this (the only other caller of
-> console_stop() was in serial_core.c).
->
-> As far as I can tell there's no reason to call console_stop() in the
-> geni code.  ...and a good reason _not_ to call it.  Specifically if
-> you have an agetty running on the same serial port as the console then
-> killing the agetty kills your console and if you start the agetty
-> again the console doesn't come back.
->
-> Fixes: c4f528795d1a ("tty: serial: msm_geni_serial: Add serial driver support for GENI based QUP")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-Reviewed-by: Akash Asthana <akashast@codeaurora.org>
+--A9z/3b/E4MkkD+7G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+On Tue, Mar 17, 2020 at 10:38:54AM +0100, Lubomir Rintel wrote:
+
+> None of the patches depends on any other and they can be applied in any
+> order.
+
+For future reference since this is a large set of mostly unrelated
+changes it'd be as well to split it up via subsystem or something so
+that the CC lists get reduced.
+
+--A9z/3b/E4MkkD+7G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5wzkkACgkQJNaLcl1U
+h9B6lQf+JamIVdYxjeWpJEdZLraQ2ZAnjCDDODoguz6v4CAvK8mbvceAlz/ugLsK
+mjNdEb4Z3nOWKxnpII99UfKyDb0s1EhYcovC0vJ71uSHJA9fIFxtnvxk9YSEP2Cd
+nfXaYzDl1OJJ3DRJXCrudH/j2dwtX2hGBFjIx/havnLkr2dwzfUzsI3uUSFAWwgt
+mv2uHQwNP6rR230/NWLqUPNN6/Gal8/4Pj2cAimegQOFW7493PQQKHoG9JttRQgC
+PGbYFjB/JV+gk9Sg4R+afcEFHQN7D17H/Lb+HwFPu6+jWqgUEdLgSTOyELAXnamE
+me5/+eb94GmNyA3atUU9W4Ju5o+joQ==
+=WksN
+-----END PGP SIGNATURE-----
+
+--A9z/3b/E4MkkD+7G--
