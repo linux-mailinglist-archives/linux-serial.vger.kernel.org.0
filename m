@@ -2,85 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0E11886B7
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 15:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB59518876A
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 15:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgCQOAM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 17 Mar 2020 10:00:12 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:40808 "EHLO vps0.lunn.ch"
+        id S1726761AbgCQOY7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 17 Mar 2020 10:24:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35402 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgCQOAL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 17 Mar 2020 10:00:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=FrLx3+zGH3oU0Jo8/lq72eF8fifQc3xB2bQg8gY6tl8=; b=cGnLnBuVsp6fkYfQcJ+N0lP7Zi
-        1CQ0257uMP73Zssq480GqtOsiT6dtz3j4jFY4auOWYouzd6Noyy4GBuZ2grQ+9xBQnBkb7o8JyQgO
-        LYVpPM0bbhZnw1Ygcjk+w5hK1jV6VmA0mj+VI2m8UsxHjo1atAFpbrGsSPzlUpACujao=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
-        (envelope-from <andrew@lunn.ch>)
-        id 1jEClA-0006j0-3H; Tue, 17 Mar 2020 14:59:56 +0100
-Date:   Tue, 17 Mar 2020 14:59:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/28] DT: Improve validation for Marvell SoCs
-Message-ID: <20200317135956.GQ24270@lunn.ch>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317134609.GN24270@lunn.ch>
- <20200317135551.GE3448@piout.net>
+        id S1726759AbgCQOY7 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 17 Mar 2020 10:24:59 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88C9B20714;
+        Tue, 17 Mar 2020 14:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584455099;
+        bh=C+AKJMmNIOocGHrWI82rVJ/uLijcqWjxmUwAQWgQXsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mkuH2+AJVm0PYaV0xFguzu5XRYGkMuefz9EXYjBydnSVQ2JIGw/sN26yP170tbrlB
+         TSFZmJPcb1e+rlUlGHJOpru+TZGwHAwCTBq2V+gvMgglXMMcPDa5WKeQLC4aWfMy/P
+         o/HSL4xa9KL0JRZYv9jUlZ+LypO2O8u+/n+EwmX8=
+Date:   Tue, 17 Mar 2020 15:22:06 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Jiri Slaby <jslaby@suse.com>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] Revert "tty: serial: samsung_tty: build it for any
+ platform"
+Message-ID: <20200317142206.GA1391636@kroah.com>
+References: <20200306102301.16870-1-geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200317135551.GE3448@piout.net>
+In-Reply-To: <20200306102301.16870-1-geert+renesas@glider.be>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 02:55:59PM +0100, Alexandre Belloni wrote:
-> On 17/03/2020 14:46:09+0100, Andrew Lunn wrote:
-> > On Tue, Mar 17, 2020 at 10:38:54AM +0100, Lubomir Rintel wrote:
-> > > Hello World,
-> > 
-> > Yah, that is an issue here. Marvell have a few different SoC families,
-> > each with there own maintainers. Gregory and I tend to look after
-> > 'mvebu', aka orion5x, kirkwood, dove, berlin and a few others. All the
-> > others are 'Somebody elses' problem'.
-> > 
+On Fri, Mar 06, 2020 at 11:23:01AM +0100, Geert Uytterhoeven wrote:
+> This reverts commit 175b558d0efb8b4f33aa7bd2c1b5389b912d3019.
 > 
-> Hum, berlin is not mvebu, it was the same BU as the MMP and it has been
-> sold to synopsys a while ago.
+> When the user configures a kernel without support for Samsung SoCs, it
+> makes no sense to ask the user about enabling "Samsung SoC serial
+> support", as Samsung serial ports can only be found on Samsung SoCs.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/tty/serial/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 880b962015302dca..932ad51099deae7d 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -237,6 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
+>  
+>  config SERIAL_SAMSUNG
+>  	tristate "Samsung SoC serial support"
+> +	depends on PLAT_SAMSUNG || ARCH_EXYNOS || COMPILE_TEST
+>  	select SERIAL_CORE
+>  	help
+>  	  Support for the on-chip UARTs on the Samsung S3C24XX series CPUs,
+> -- 
+> 2.17.1
+> 
 
-Yes, the boundaries are a bit fluffy. At least the early work by
-Sebastian was merged via the mvebu maintainers, even if it is not
-technically part of mvebu.
+Ok, I really don't like the PLAT_* stuff, but I'll go apply this now and
+push to remove that instead...
 
-This is also part of the discussion about how this lot actually gets
-merged.
+thanks,
 
-	   Andrew
+greg k-h
