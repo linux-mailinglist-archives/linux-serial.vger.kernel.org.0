@@ -2,74 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E53187690
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 01:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFD3187970
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 07:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733095AbgCQALo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Mar 2020 20:11:44 -0400
-Received: from mail.uic.edu.hk ([61.143.62.86]:48979 "EHLO umgp.uic.edu.hk"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1733047AbgCQALn (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Mar 2020 20:11:43 -0400
-X-IronPort-AV: E=Sophos;i="5.43,368,1503331200"; 
-   d="scan'208";a="17243176"
-Received: from unknown (HELO zpmail.uic.edu.hk) ([192.168.111.249])
-  by umgp.uic.edu.hk with ESMTP; 17 Mar 2020 08:11:35 +0800
-Received: from zpmail.uic.edu.hk (localhost [127.0.0.1])
-        by zpmail.uic.edu.hk (Postfix) with ESMTPS id D96D941C05A3;
-        Tue, 17 Mar 2020 08:11:32 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by zpmail.uic.edu.hk (Postfix) with ESMTP id D554341C0957;
-        Tue, 17 Mar 2020 08:11:31 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zpmail.uic.edu.hk D554341C0957
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uic.edu.hk;
-        s=6465647E-9D7B-11E8-B17B-42130C7FA3B9; t=1584403892;
-        bh=Wn2BcVyAdGxyDvB/5AnVfCr/iJTzisyuX4dwKssec6E=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=N1pNhkd2l8zz69kDtEsPH5n7SDL70Ak/Rgb/NYqC0+ZCBZFg/G0QkldxXmMRPmztz
-         HwkJ6HHAibMur3rytYhnqKeG349hpGDQCbhvoJdZWkvkFCa93STWbitRqMynzR+Wj5
-         wLEdN7i9CyVDDhspocQMykx6lSGq645dTckJSCrsFHg+uR95rTW6kz2/3F5tST7+Uo
-         ELvvW8oTRw+C3DdE82L8ao85KfwNAx6BRhhB+sNBssPbo3CqQ69/PO1/J9gy3aGO+s
-         FwDrxpCEm2RIo68N7oaYrAjY/FUGCbKk/MsqrV+VDqizldOqfTDFamlvQc82rVkjYy
-         rx6v80NBgwdtg==
-Received: from zpmail.uic.edu.hk ([127.0.0.1])
-        by localhost (zpmail.uic.edu.hk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gCmMIXxwS0HE; Tue, 17 Mar 2020 08:11:31 +0800 (CST)
-Received: from zpmail.uic.edu.hk (zpmail.uic.edu.hk [192.168.111.249])
-        by zpmail.uic.edu.hk (Postfix) with ESMTP id 1549641C058D;
-        Tue, 17 Mar 2020 08:11:27 +0800 (CST)
-Date:   Tue, 17 Mar 2020 08:11:26 +0800 (CST)
-From:   David Ibe <ylawrence@uic.edu.hk>
-Reply-To: David Ibe <davidibe718@gmail.com>
-Message-ID: <2065446646.63699156.1584403886963.JavaMail.zimbra@uic.edu.hk>
-Subject: 
+        id S1725783AbgCQGKo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 17 Mar 2020 02:10:44 -0400
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:39943 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725837AbgCQGKo (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 17 Mar 2020 02:10:44 -0400
+Received: by mail-qv1-f68.google.com with SMTP id cy12so4367866qvb.7;
+        Mon, 16 Mar 2020 23:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sy+DCV3/0mPLOUw1l/ZG4OHi5SIhsD6Awhdy6a09qv4=;
+        b=Z/aa7ZXefa7STGooR0UMVDDrLiuznSwp9ClLGQb4w44ZTJ4VDE9rxNn+0+61dxBxfC
+         QRKTFrnWpbYd/LbvQM2RPM0+BGQfixyz3+WsHJ02AbTAIhldbu1Qt83gXpZqX3QueIRb
+         VT43t7csfWYoY8PEwY/D5l6pE1hSQY2j3ZcdpXcRCFgnqa1yAffYwlwMVj1MQavsTxBX
+         oVbYO7TlNkuX+zFkiVRGJOzbt6zqhS1JIoxiolYz+ky7bshpClnBkFkepaemW0dN6yIk
+         hlNkiAyGWl7kCZPk/ib7AnLX0HH2G6N40oJXgSdZXHpOaR5MevoPxk6MX2wNUdKPxv5D
+         i7XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sy+DCV3/0mPLOUw1l/ZG4OHi5SIhsD6Awhdy6a09qv4=;
+        b=s4HCryzbe7Slj/loG5fYtvXZRc7HxrJWM1zWmFvPsuTzB6gKG2ynsS/eCHPYUEPk/s
+         k+so5cqR+nLNihkUNk1i+U6JrBoVZj03y7uAYniT+871orCQTQgMQPc1zuqk96U74gj5
+         R/aPoGFHok8zXSU1S/xYoCOeBJzKADnNieYRctZPnsDErLlmwSVjl9Ukzz5bHaY5yOe5
+         iXIW2l5hSHF891YMLXti8WZSoTP4HxIErWsd5dhk6QOWTXjvyad4iaahM6fxp8OR3jkM
+         AYOztzoEFDxEADA7TGO7amPViv9kWDrlj/LSZ1lQP52xn5BFmdsGFCCFt9l+6BTcSkii
+         DtuQ==
+X-Gm-Message-State: ANhLgQ3VPgSYvzk7gFSKFty2J2K/DxW7cInFc//6ERV4Uzlaq8F/aVGB
+        /Ub5psia7it0ynO+6kftATWC0QVMlOUnOUzJW2Y=
+X-Google-Smtp-Source: ADFU+vvQn6S+icWNa0p5pq0pCDCa3nQI7Y9nT0qRSMa/unA/NzqZGMqTuX84zZRTaYpt9L7OFyy6gF8nkVewV1S9vA0=
+X-Received: by 2002:ad4:44b3:: with SMTP id n19mr3424543qvt.65.1584425443690;
+ Mon, 16 Mar 2020 23:10:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.111.160]
-X-Mailer: Zimbra 8.8.15_GA_3829 (ZimbraWebClient - GC80 (Win)/8.8.15_GA_3829)
-Thread-Index: 8IMjdxPQWBZshE+F+QJEttpRaFVxcQ==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200316101930.9962-1-zhang.lyra@gmail.com> <20200316101930.9962-2-zhang.lyra@gmail.com>
+In-Reply-To: <20200316101930.9962-2-zhang.lyra@gmail.com>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Tue, 17 Mar 2020 14:10:32 +0800
+Message-ID: <CADBw62q8AqwMjnnVfwGxecn=UUQYGrfQ8Ry6OxgA2iXH1_Lnkw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] serial: sprd: check console via stdout-path in addition
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Mon, Mar 16, 2020 at 6:19 PM Chunyan Zhang <zhang.lyra@gmail.com> wrote:
+>
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+>
+> The SPRD serial driver need to know which serial port would be used as
+> console in an early period during initialization, the purpose is to
+> keep the console port alive as possible even if there's some error
+> caused by no clock configured under serial devicetree nodes. But with
+> the patch [1], the console port couldn't be identified if missing
+> console command line.
+>
+> So this patch adds using another interface to do check by reading
+> stdout-path.
+>
+> [1] https://lore.kernel.org/lkml/20190826072929.7696-4-zhang.lyra@gmail.com/
+>
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+
+> ---
+>  drivers/tty/serial/sprd_serial.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+> index 3d3c70634589..18706333f146 100644
+> --- a/drivers/tty/serial/sprd_serial.c
+> +++ b/drivers/tty/serial/sprd_serial.c
+> @@ -1147,7 +1147,8 @@ static bool sprd_uart_is_console(struct uart_port *uport)
+>  {
+>         struct console *cons = sprd_uart_driver.cons;
+>
+> -       if (cons && cons->index >= 0 && cons->index == uport->line)
+> +       if ((cons && cons->index >= 0 && cons->index == uport->line) ||
+> +           of_console_check(uport->dev->of_node, SPRD_TTY_NAME, uport->line))
+>                 return true;
+>
+>         return false;
+> --
+> 2.20.1
+>
 
 
-Good Day,                
-
-I am Mr. David Ibe, I work with the International Standards on Auditing, I have seen on records, that several times people has divert your funds into their own personal accounts.
-
-Now I am writing to you in respect of the amount which I have been able to send to you through our International United Nations accredited and approved Diplomat, who has arrived Africa, I want you to know that the diplomat would deliver the funds which I have packaged as a diplomatic compensation to you and the amount in the consignment is  $10,000,000.00 United State Dollars.
-
-I did not disclose the contents to the diplomat, but I told him that it is your compensation from the Auditing Corporate Governance and Stewardship, Auditing and Assurance Standards Board. I want you to know that these funds would help with your financial status as I have seen in records that you have spent a lot trying to receive these funds and I am not demanding so much from you but only 30% for my stress and logistics.
-
-I would like you to get back to me with your personal contact details, so that I can give you the contact information's of the diplomat who has arrived Africa and has been waiting to get your details so that he can proceed with the delivery to you.
-
-Yours Sincerely,
-Kindly forward your details to: mrdavidibe966@gmail.com
-Mr. David Ibe
-International Auditor,
-Corporate Governance and Stewardship
+-- 
+Baolin Wang
