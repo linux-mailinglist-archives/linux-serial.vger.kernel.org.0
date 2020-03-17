@@ -2,91 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C52CD1871B9
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Mar 2020 18:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E53187690
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Mar 2020 01:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732240AbgCPR5n (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Mar 2020 13:57:43 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40134 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732194AbgCPR5n (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Mar 2020 13:57:43 -0400
-Received: by mail-pf1-f196.google.com with SMTP id l184so10357327pfl.7
-        for <linux-serial@vger.kernel.org>; Mon, 16 Mar 2020 10:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=qzjhnEh9awmU+RBLsPJfUtIGXyo+sxpVoHpWwJojqHM=;
-        b=Mae18Uql7k0fuNuBwKeTa3aya4TlMJ8Bnb3SF8fYMzvl7LahzL0mNnpeGiy1V2F8JD
-         HQhfDLVrqTKT4gth8nfzq7OSO/Gv5wdjtSjStu1wuHrp8a5N1aLG2CApAeqa0D8Dn+8m
-         b+YIGkqGOscsoP/NXEHOkLgLYwXqO0OIUARrI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=qzjhnEh9awmU+RBLsPJfUtIGXyo+sxpVoHpWwJojqHM=;
-        b=ZEhoR0D9NWoZe3doZgA/2Zzdk4fzJIoMJF1sRUuZ84hEK3y/GcO/uNcYmLAUIJlG6H
-         YZ2Tc81kS4/5MY3r0TiHXrvQk6IRINN60YsRwSOW/uv03EIdjuTNXFgNdGb0iRAtN6jk
-         Akfwrlw7XFqZB8q2OaRvEm31cDSMqdZVxQPkIvGlmjIuV0TksIFWVGUQdlLMYF1pVOYB
-         zbX8DggU8SmhOcwnEhS29nTlidarZET67+lWmCKnOrjDuuYSt3ikNKMUpD/N10PbXsnv
-         uNWcXN+uRQrkX0Dj7Z0eBoE0fCXqj87pOLD+8413fui+OJio31z4Edn+j3gV5Ojs+4t4
-         EtNg==
-X-Gm-Message-State: ANhLgQ10mWUZExI6L9S1iwd/wt4hnQT+HV/IqxhLc8OLK12pa6jGzwVU
-        GOhqbNvFq0krQdfIG8fJt7huwQ==
-X-Google-Smtp-Source: ADFU+vuoaQW5kuoGcEmnavFL3M27jIDZjKhgkcUDdspNxwRdrlBO2/VRoWJmnMfGfUnR6PY3km8Exg==
-X-Received: by 2002:a63:ce42:: with SMTP id r2mr1071355pgi.106.1584381462395;
-        Mon, 16 Mar 2020 10:57:42 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id r8sm423697pjo.22.2020.03.16.10.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2020 10:57:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1733095AbgCQALo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 16 Mar 2020 20:11:44 -0400
+Received: from mail.uic.edu.hk ([61.143.62.86]:48979 "EHLO umgp.uic.edu.hk"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1733047AbgCQALn (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 16 Mar 2020 20:11:43 -0400
+X-IronPort-AV: E=Sophos;i="5.43,368,1503331200"; 
+   d="scan'208";a="17243176"
+Received: from unknown (HELO zpmail.uic.edu.hk) ([192.168.111.249])
+  by umgp.uic.edu.hk with ESMTP; 17 Mar 2020 08:11:35 +0800
+Received: from zpmail.uic.edu.hk (localhost [127.0.0.1])
+        by zpmail.uic.edu.hk (Postfix) with ESMTPS id D96D941C05A3;
+        Tue, 17 Mar 2020 08:11:32 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by zpmail.uic.edu.hk (Postfix) with ESMTP id D554341C0957;
+        Tue, 17 Mar 2020 08:11:31 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zpmail.uic.edu.hk D554341C0957
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uic.edu.hk;
+        s=6465647E-9D7B-11E8-B17B-42130C7FA3B9; t=1584403892;
+        bh=Wn2BcVyAdGxyDvB/5AnVfCr/iJTzisyuX4dwKssec6E=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=N1pNhkd2l8zz69kDtEsPH5n7SDL70Ak/Rgb/NYqC0+ZCBZFg/G0QkldxXmMRPmztz
+         HwkJ6HHAibMur3rytYhnqKeG349hpGDQCbhvoJdZWkvkFCa93STWbitRqMynzR+Wj5
+         wLEdN7i9CyVDDhspocQMykx6lSGq645dTckJSCrsFHg+uR95rTW6kz2/3F5tST7+Uo
+         ELvvW8oTRw+C3DdE82L8ao85KfwNAx6BRhhB+sNBssPbo3CqQ69/PO1/J9gy3aGO+s
+         FwDrxpCEm2RIo68N7oaYrAjY/FUGCbKk/MsqrV+VDqizldOqfTDFamlvQc82rVkjYy
+         rx6v80NBgwdtg==
+Received: from zpmail.uic.edu.hk ([127.0.0.1])
+        by localhost (zpmail.uic.edu.hk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gCmMIXxwS0HE; Tue, 17 Mar 2020 08:11:31 +0800 (CST)
+Received: from zpmail.uic.edu.hk (zpmail.uic.edu.hk [192.168.111.249])
+        by zpmail.uic.edu.hk (Postfix) with ESMTP id 1549641C058D;
+        Tue, 17 Mar 2020 08:11:27 +0800 (CST)
+Date:   Tue, 17 Mar 2020 08:11:26 +0800 (CST)
+From:   David Ibe <ylawrence@uic.edu.hk>
+Reply-To: David Ibe <davidibe718@gmail.com>
+Message-ID: <2065446646.63699156.1584403886963.JavaMail.zimbra@uic.edu.hk>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200313134635.2.I3648fac6c98b887742934146ac2729ecb7232eb1@changeid>
-References: <20200313134635.1.Icf54c533065306b02b880c46dfd401d8db34e213@changeid> <20200313134635.2.I3648fac6c98b887742934146ac2729ecb7232eb1@changeid>
-Subject: Re: [PATCH 2/2] tty: serial: qcom_geni_serial: Don't try to manually disable the console
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     mka@chromium.org, ryandcase@chromium.org,
-        bjorn.andersson@linaro.org, akashast@codeaurora.org,
-        skakit@codeaurora.org, rojay@codeaurora.org,
-        mgautam@codeaurora.org, Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Doug Anderson <dianders@google.com>,
-        Girish Mahadevan <girishm@codeaurora.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Karthikeyan Ramasubramanian <kramasub@codeaurora.org>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-To:     Douglas Anderson <dianders@chromium.org>,
-        gregkh@linuxfoundation.org
-Date:   Mon, 16 Mar 2020 10:57:40 -0700
-Message-ID: <158438146097.88485.15022185893506227094@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.111.160]
+X-Mailer: Zimbra 8.8.15_GA_3829 (ZimbraWebClient - GC80 (Win)/8.8.15_GA_3829)
+Thread-Index: 8IMjdxPQWBZshE+F+QJEttpRaFVxcQ==
+Thread-Topic: 
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Quoting Douglas Anderson (2020-03-13 13:46:52)
-> The geni serial driver's shutdown code had a special case to call
-> console_stop().  Grepping through the code, it was the only serial
-> driver doing something like this (the only other caller of
-> console_stop() was in serial_core.c).
->=20
-> As far as I can tell there's no reason to call console_stop() in the
-> geni code.  ...and a good reason _not_ to call it.  Specifically if
-> you have an agetty running on the same serial port as the console then
-> killing the agetty kills your console and if you start the agetty
-> again the console doesn't come back.
->=20
-> Fixes: c4f528795d1a ("tty: serial: msm_geni_serial: Add serial driver sup=
-port for GENI based QUP")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+Good Day,                
+
+I am Mr. David Ibe, I work with the International Standards on Auditing, I have seen on records, that several times people has divert your funds into their own personal accounts.
+
+Now I am writing to you in respect of the amount which I have been able to send to you through our International United Nations accredited and approved Diplomat, who has arrived Africa, I want you to know that the diplomat would deliver the funds which I have packaged as a diplomatic compensation to you and the amount in the consignment is  $10,000,000.00 United State Dollars.
+
+I did not disclose the contents to the diplomat, but I told him that it is your compensation from the Auditing Corporate Governance and Stewardship, Auditing and Assurance Standards Board. I want you to know that these funds would help with your financial status as I have seen in records that you have spent a lot trying to receive these funds and I am not demanding so much from you but only 30% for my stress and logistics.
+
+I would like you to get back to me with your personal contact details, so that I can give you the contact information's of the diplomat who has arrived Africa and has been waiting to get your details so that he can proceed with the delivery to you.
+
+Yours Sincerely,
+Kindly forward your details to: mrdavidibe966@gmail.com
+Mr. David Ibe
+International Auditor,
+Corporate Governance and Stewardship
