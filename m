@@ -2,161 +2,80 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34713189D44
-	for <lists+linux-serial@lfdr.de>; Wed, 18 Mar 2020 14:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B76189DCE
+	for <lists+linux-serial@lfdr.de>; Wed, 18 Mar 2020 15:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbgCRNse (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 18 Mar 2020 09:48:34 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:50983 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726893AbgCRNse (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 18 Mar 2020 09:48:34 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584539313; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=e7D++PiZS2wNSyjtok+pyoNm2YTmDPQke/rQXBiRN5U=; b=mgYBw/jlC+571FLLsb3q5fQ2JCKTfFmjsuh2/rVjkOu94Itqs0j+RSQuXFrWdIJA3L/W/kJI
- iDxJFYkG02z0E3+GPgMhJRDG/m9Dkxsxb8WT5THI/FnobrUHXEuXLeA0N5egIf5cXEAjtCO2
- Syz8M39+jcjyuf9NsITd7aDr5lw=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIzZmY0MiIsICJsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7226a2.7f4612e53730-smtp-out-n03;
- Wed, 18 Mar 2020 13:48:18 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 29F15C43636; Wed, 18 Mar 2020 13:48:18 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.8] (unknown [183.83.138.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AB192C433CB;
-        Wed, 18 Mar 2020 13:48:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AB192C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH V2 7/8] spi: spi-qcom-qspi: Add interconnect support
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wsa@the-dreams.de, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-References: <1584105134-13583-1-git-send-email-akashast@codeaurora.org>
- <1584105134-13583-8-git-send-email-akashast@codeaurora.org>
- <20200314005817.GN144492@google.com>
- <3aeb3083-2a31-b269-510d-eb608ff14ce5@codeaurora.org>
- <CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <e2ee1a60-a379-5c78-355a-64aad451a944@codeaurora.org>
-Date:   Wed, 18 Mar 2020 19:18:07 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1727101AbgCRO1A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 18 Mar 2020 10:27:00 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:37352 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726893AbgCRO1A (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 18 Mar 2020 10:27:00 -0400
+Received: from [94.134.91.63] (helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <heiko@sntech.de>)
+        id 1jEZem-0004YX-T9; Wed, 18 Mar 2020 15:26:52 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     gregkh@linuxfoundation.org
+Cc:     jslaby@suse.com, andriy.shevchenko@linux.intel.com,
+        matwey.kornilov@gmail.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, heiko@sntech.de
+Subject: [PATCH 0/7] serial: 8250: Add rs485 emulation to 8250_dw
+Date:   Wed, 18 Mar 2020 15:26:33 +0100
+Message-Id: <20200318142640.982763-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-In-Reply-To: <CAE=gft58QsgTCUHMHKJhcM9ZxAeMiY16CrbNv2HaTCRqwtmt7A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Evan,
+This series tries to revive the work of Giulio Benetti from 2018 [0]
+which seemed to have stalled at that time.
 
-On 3/18/2020 12:38 AM, Evan Green wrote:
-> On Tue, Mar 17, 2020 at 5:13 AM Akash Asthana <akashast@codeaurora.org> wrote:
->> Hi Matthias,
->>
->> On 3/14/2020 6:28 AM, Matthias Kaehlcke wrote:
->>> Hi,
->>>
->>> On Fri, Mar 13, 2020 at 06:42:13PM +0530, Akash Asthana wrote:
->>>> Get the interconnect paths for QSPI device and vote according to the
->>>> current bus speed of the driver.
->>>>
->>>> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
->>>> ---
->>>>    - As per Bjorn's comment, introduced and using devm_of_icc_get API for getting
->>>>      path handle
->>>>    - As per Matthias comment, added error handling for icc_set_bw call
->>>>
->>>>    drivers/spi/spi-qcom-qspi.c | 46 ++++++++++++++++++++++++++++++++++++++++++++-
->>>>    1 file changed, 45 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
->>>> index 3c4f83b..ad48f43 100644
->>>> --- a/drivers/spi/spi-qcom-qspi.c
->>>> +++ b/drivers/spi/spi-qcom-qspi.c
->>>> @@ -2,6 +2,7 @@
->>>>    // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->>>>
->>>>    #include <linux/clk.h>
->>>> +#include <linux/interconnect.h>
->>>>    #include <linux/interrupt.h>
->>>>    #include <linux/io.h>
->>>>    #include <linux/module.h>
->>>> @@ -139,7 +140,10 @@ struct qcom_qspi {
->>>>       struct device *dev;
->>>>       struct clk_bulk_data *clks;
->>>>       struct qspi_xfer xfer;
->>>> -    /* Lock to protect xfer and IRQ accessed registers */
->>>> +    struct icc_path *icc_path_cpu_to_qspi;
->>>> +    unsigned int avg_bw_cpu;
->>>> +    unsigned int peak_bw_cpu;
->>> This triplet is a recurring pattern, and is probably not limited to geni SE/QSPI.
->>> On https://patchwork.kernel.org/patch/11436889/#23221925 I suggested the creation
->>> of a geni SE specific struct, however adding a generic convenience struct to
->>> 'linux/interconnect.h' might be the better solution:
->>>
->>> struct icc_client {
->>>        struct icc_path *path;
->>>        unsigned int avg_bw;
->>>        unsigned int peak_bw;
->>> };
->>>
->>> I'm sure there are better names for it, but this would be the idea.
->> Yeah, I think introducing this to ICC header would be better solution.
-> +Georgi
->
-> I'm not as convinced this structure is generally useful and belongs in
-> the interconnect core. The thing that strikes me as weird with putting
-> it in the core is now we're saving these values both inside and
-> outside the interconnect core.
-IIUC, you meant to say struct icc_req(inside icc_path) will be saving 
-avg_bw and peak_bw so no need to save it outside icc_path?
->   In the GENI case here, we only really
-> need them to undo the 0 votes we cast during suspend. If "vote for 0
-> in suspend and whatever it was before at resume" is a recurring theme,
-> maybe the core should give us path_disable() and path_enable() calls
-> instead. I'm thinking out loud, maybe Georgi has some thoughts.
->
-> Akash, for now if you want to avoid wading into a larger discussion
-> maybe just refactor to a common structure local to GENI.
+The board I needed that on also had the additional caveat that it
+uses non-standard pins for DE/RE so needed gpio mctrl layer as well
+and even more special needed to control the RE pin manually not as
+part of it being connected to the DE signal as seems to be the standard.
 
-Ok
+So I've marked the patch doing this as DTR pin as RFC but that patch
+isn't needed for the other core functionality, so could also be left out.
 
-Thanks,
+Changes from the 2018 submission include:
+- add timeout when waiting for fifos to clear using a new helper
+- move on-boot enablement of the rs485 mode to after registering
+  the port. This saves having to copy the em485 struct as done
+  originally, which also ran into spinlock-debug warnings when testing
+  and also makes it actually possible to use the mctrl gpio layer
+  for non-standard gpios.
 
-Akash
+[0] Link: https://lore.kernel.org/linux-serial/20180601124021.102970-1-giulio.benetti@micronovasrl.com/
 
->
->
-> -Evan
+Giulio Benetti (4):
+  serial: 8250: Make em485_rts_after_send() set mctrl according to rts
+    state.
+  serial: 8250: Handle case port doesn't have TEMT interrupt using
+    em485.
+  serial: 8250_dw: add em485 support
+  serial: 8250_dw: allow enable rs485 at boot time
+
+Heiko Stuebner (3):
+  serial: 8250: add serial_in_poll_timeout helper
+  serial: 8250: Start rs485 after registering port if rs485 is enabled
+    in probe
+  serial: 8250: handle DTR in rs485 emulation
+
+ drivers/tty/serial/8250/8250.h      | 36 ++++++++++++++++++++-
+ drivers/tty/serial/8250/8250_core.c |  9 ++++++
+ drivers/tty/serial/8250/8250_dw.c   | 35 +++++++++++++++++++-
+ drivers/tty/serial/8250/8250_of.c   |  2 +-
+ drivers/tty/serial/8250/8250_omap.c |  2 +-
+ drivers/tty/serial/8250/8250_port.c | 50 +++++++++++++++++++++++------
+ include/linux/serial_8250.h         |  1 +
+ 7 files changed, 121 insertions(+), 14 deletions(-)
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+2.24.1
+
