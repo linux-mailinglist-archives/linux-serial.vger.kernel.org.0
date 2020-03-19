@@ -2,86 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 177DE18BD0E
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Mar 2020 17:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2415118BE38
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Mar 2020 18:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728268AbgCSQvx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Mar 2020 12:51:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43790 "EHLO mail.kernel.org"
+        id S1727269AbgCSRiB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Mar 2020 13:38:01 -0400
+Received: from muru.com ([72.249.23.125]:60920 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727146AbgCSQvx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Mar 2020 12:51:53 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CEEA208D6;
-        Thu, 19 Mar 2020 16:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584636712;
-        bh=2ze8n/wWhmgGRIbVHJ5udG/S1t4TMsDq+0bbeXYtPok=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QyKov4bFHWG3H4hqZq/lODVKCwb4/xh/+2s+wxcX/FYj+zjf13+HhN7+F6mOULrBB
-         vmZMrFP/4fhhqc/NBLvzJF3B7n4gPr2AM+J7JrT/cEV9I4gCg0kQxBKbTnjmTJlCeg
-         FutoxiHKgH9se4LVod9K+eTPSF/xdCCBH2IwvFms=
-Received: by mail-qk1-f170.google.com with SMTP id d11so3815434qko.3;
-        Thu, 19 Mar 2020 09:51:52 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3sI98XCdliM+lwcqbN3kpkqfwrS002EuDto4BH875pyfycAn+9
-        iBAPvg/lZRa7XLf61TZRptPu3D0XOgMCq+IsUA==
-X-Google-Smtp-Source: ADFU+vsvey+cEo1Zx1LSphcQZh7dQXaoi8CO+gHGsvltymHnmg94ayjCcsPJFezmZufjX/oGzMXW4LGH8CCJv+tB70E=
-X-Received: by 2002:a37:aa92:: with SMTP id t140mr3544418qke.119.1584636711194;
- Thu, 19 Mar 2020 09:51:51 -0700 (PDT)
+        id S1726867AbgCSRiB (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 19 Mar 2020 13:38:01 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 1278180A5;
+        Thu, 19 Mar 2020 17:38:44 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
+        Lee Jones <lee.jones@linaro.org>, Jiri Slaby <jslaby@suse.cz>,
+        Johan Hovold <johan@kernel.org>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: [PATCHv5 0/4] n_gsm serdev support and protocol driver for droid4 modem
+Date:   Thu, 19 Mar 2020 10:37:51 -0700
+Message-Id: <20200319173755.65082-1-tony@atomide.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-13-lkundrak@v3.sk>
-In-Reply-To: <20200317093922.20785-13-lkundrak@v3.sk>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 19 Mar 2020 10:51:39 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKMHyDeToZfHpkXEQySoUk=pM+B3+VrpkY4WO2hrJP6SQ@mail.gmail.com>
-Message-ID: <CAL_JsqKMHyDeToZfHpkXEQySoUk=pM+B3+VrpkY4WO2hrJP6SQ@mail.gmail.com>
-Subject: Re: [PATCH 12/28] spi: dt-bindings: spi-controller: Slaves have no
- address cells
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
->
-> SPI controllers in slave mode have a single child node that has no
-> address. Enforce #address-cells of zero instead of one.
+Hi all,
 
-Geert has fixed this making 'spi-slave' and '#address-cells' mutually exclusive.
+Here's v4 set of n_gsm serdev support patches, and the related protocol
+driver for the modem found on Motorola Mapphone phones and tablets
+like droid4.
 
-https://lore.kernel.org/linux-devicetree/20200306085038.8111-2-geert+renesas@glider.be/
+This series only adds basic character device support for the serdev
+driver. Other serdev consumer drivers for specific devices will be
+posted separately.
 
-Rob
+The patches are against v5.6-rc series.
+
+Regards,
+
+Tony
+
+Changes since v4:
+- Use drivers/tty/serdev/protocol directory for the driver instead of
+  drivers/mfd as discussed on the lists for v3 set of patches
+- Fix remove to call kfree only after removing device from the list
+
+Changes since v3:
+- Update list of folks in Cc, looks like I sent v3 only to Lee and lkml
+- Init privdata before motmdm_register_dlci calls gsm_serdev_register_dlci
+- Update binding based on Rob's comments for license and "allOf"
+
+Changes since v2:
+- Drop useless send_command indirection, use static motmdm_send_command
+
+Changes since v1:
+
+- Simplified usage and got rid of few pointless inline functions
+- Added consumer MFD driver, devicetree binding, and dts changes
+
+
+Tony Lindgren (4):
+  tty: n_gsm: Add support for serdev drivers
+  serdev: ngsm-motmdm: Add Motorola TS 27.010 serdev modem driver for
+    droid4
+  dt-bindings: mfd: motmdm: Add binding for motorola-mdm
+  ARM: dts: omap4-droid4: Enable basic modem support
+
+ .../serdev/motorola,mapphone-mdm6600.yaml     |   34 +
+ .../boot/dts/motorola-mapphone-common.dtsi    |    6 +
+ drivers/tty/n_gsm.c                           |  372 +++++
+ drivers/tty/serdev/Kconfig                    |    3 +
+ drivers/tty/serdev/Makefile                   |    2 +
+ drivers/tty/serdev/protocol/Kconfig           |   14 +
+ drivers/tty/serdev/protocol/Makefile          |    3 +
+ .../tty/serdev/protocol/serdev-ngsm-motmdm.c  | 1200 +++++++++++++++++
+ include/linux/serdev-gsm.h                    |  168 +++
+ 9 files changed, 1802 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serdev/motorola,mapphone-mdm6600.yaml
+ create mode 100644 drivers/tty/serdev/protocol/Kconfig
+ create mode 100644 drivers/tty/serdev/protocol/Makefile
+ create mode 100644 drivers/tty/serdev/protocol/serdev-ngsm-motmdm.c
+ create mode 100644 include/linux/serdev-gsm.h
+
+-- 
+2.25.1
