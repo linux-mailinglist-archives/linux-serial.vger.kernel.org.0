@@ -2,52 +2,50 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EEA18B182
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Mar 2020 11:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472C918B201
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Mar 2020 12:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbgCSKcR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Mar 2020 06:32:17 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:32888 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727239AbgCSKcQ (ORCPT
+        id S1726892AbgCSLDU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Mar 2020 07:03:20 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:55636 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726663AbgCSLDU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Mar 2020 06:32:16 -0400
+        Thu, 19 Mar 2020 07:03:20 -0400
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02JAWDfJ036939;
-        Thu, 19 Mar 2020 05:32:13 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02JB3FlX032613;
+        Thu, 19 Mar 2020 06:03:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584613933;
-        bh=DFHgPDVeDYbr4SySedqf8GsAsYiExrc0b8I1wlri5aI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=uwRgoTgVxWqX7m8lO59pfH7R7sYXbJHmSVvVdGTHZrumbzzO2UqPX2h3DS52OQDOv
-         QYPfAsasLCfZkNwDGjTbxRPqufkcmIBA/lQHJDzB1Iqoe3q7C8K2Rx0Y7xhTQyPNsX
-         7iAEWLtSnoWMXieimut/KTOwwxkaphUjFXxJoSTI=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JAWDlj126883;
-        Thu, 19 Mar 2020 05:32:13 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+        s=ti-com-17Q1; t=1584615795;
+        bh=n8cOACPz24iLv+TXfntFcziSsLRS8NmLUcjVq/avlzY=;
+        h=From:To:CC:Subject:Date;
+        b=iwJJp6PIyhPtChWN5Sx5TQOCEnOKQ4gioUUBRDkEBVQ5ogwYjrIPwvw6yXmpz/SBJ
+         1b2OQlE8mM+p4jBcSyUOmzS8PbpZREytxBVl3mMKdUo7M7jEOdGF3+niosimmvifAV
+         BCWf/yFQ/br9OMSl8xjIiEK8hq8DZ0qvv3hxlbBE=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JB3F2S038774;
+        Thu, 19 Mar 2020 06:03:15 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 19
- Mar 2020 05:32:13 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ Mar 2020 06:03:15 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
  (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 19 Mar 2020 05:32:13 -0500
+ Frontend Transport; Thu, 19 Mar 2020 06:03:14 -0500
 Received: from a0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JAW6Aj068234;
-        Thu, 19 Mar 2020 05:32:11 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JB3C7l119908;
+        Thu, 19 Mar 2020 06:03:13 -0500
 From:   Vignesh Raghavendra <vigneshr@ti.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>
 CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Oliver Barta <o.barta89@gmail.com>
-Subject: [PATCH 2/2] serial: 8250: 8250_omap: Fix throttle to call stop_rx()
-Date:   Thu, 19 Mar 2020 16:02:30 +0530
-Message-ID: <20200319103230.16867-3-vigneshr@ti.com>
+        <linux-serial@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/6] 8250_omap: Add DMA for AM654/J721e type UARTs
+Date:   Thu, 19 Mar 2020 16:33:38 +0530
+Message-ID: <20200319110344.21348-1-vigneshr@ti.com>
 X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200319103230.16867-1-vigneshr@ti.com>
-References: <20200319103230.16867-1-vigneshr@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -57,42 +55,33 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Call stop_rx() to halt reception when throttle is requested. Update
-unthrottle callback to restart reception.
+This series add DMA support for UARTs on AM654 and J721e SoCs. These
+UARTs are modified version of older generation UARTs on OMAP SoCs.
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- drivers/tty/serial/8250/8250_omap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+With new version of IP, it is possible to support longer DMA bursts per
+request. There are also differences wrt DMA integration.
 
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 449f1519e70f..82fca112409c 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -699,14 +699,12 @@ static void omap_8250_shutdown(struct uart_port *port)
- static void omap_8250_throttle(struct uart_port *port)
- {
- 	struct omap8250_priv *priv = port->private_data;
--	struct uart_8250_port *up = up_to_u8250p(port);
- 	unsigned long flags;
- 
- 	pm_runtime_get_sync(port->dev);
- 
- 	spin_lock_irqsave(&port->lock, flags);
--	up->ier &= ~(UART_IER_RLSI | UART_IER_RDI);
--	serial_out(up, UART_IER, up->ier);
-+	port->ops->stop_rx(port);
- 	priv->throttled = true;
- 	spin_unlock_irqrestore(&port->lock, flags);
- 
-@@ -727,6 +725,7 @@ static void omap_8250_unthrottle(struct uart_port *port)
- 	if (up->dma)
- 		up->dma->rx_dma(up);
- 	up->ier |= UART_IER_RLSI | UART_IER_RDI;
-+	port->read_status_mask |= UART_LSR_DR;
- 	serial_out(up, UART_IER, up->ier);
- 	spin_unlock_irqrestore(&port->lock, flags);
- 
+First 4 patches update driver to work with AM654 DMA differences. Patch
+5 implements errata workaround and Patch 6 adds the actual support for
+DMA.
+
+
+Peter Ujfalusi (1):
+  serial: 8250: 8250_omap: Move locking out from __dma_rx_do_complete()
+
+Vignesh Raghavendra (5):
+  serial: 8250: 8250_omap: Terminate DMA before pushing data on RX
+    timeout
+  serial: 8250: 8250_omap: Account for data in flight during DMA
+    teardown
+  serial: 8250: 8250_omap: Extend driver data to pass FIFO trigger info
+  serial: 8250: 8250_omap: Work around errata causing spurious IRQs with
+    DMA
+  serial: 8250: 8250_omap: Add DMA support for UARTs on K3 SoCs
+
+ drivers/tty/serial/8250/8250_omap.c | 222 ++++++++++++++++++++++------
+ 1 file changed, 176 insertions(+), 46 deletions(-)
+
 -- 
 2.25.2
 
