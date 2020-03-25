@@ -2,216 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FACF193008
-	for <lists+linux-serial@lfdr.de>; Wed, 25 Mar 2020 19:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1431C19345F
+	for <lists+linux-serial@lfdr.de>; Thu, 26 Mar 2020 00:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727357AbgCYSFV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 25 Mar 2020 14:05:21 -0400
-Received: from mail-eopbgr80088.outbound.protection.outlook.com ([40.107.8.88]:10820
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726820AbgCYSFV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 25 Mar 2020 14:05:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hYy6NGgMo5zdFkWJNdwDC/8x/SqAT0xaF2NDXrn7HPPL3Yactvs7P+YBnl0S6EbUjMewPZrPEBeyyNwKpUTQAsIn+eMX2lyoKVKRqubsNfl4VBE2qr3iR8bkwOVm6zj/MQVPczdxSJs9Ojk6IkmBsl6WktflAvGtll5zWXzaJCy5zgql3Vvbu8+0RozAyEmCxqzje4Io39qkInzNcKz2hhnbAMuHLsuqGe0zUP/bG8b/7eXXDnyRXQ6AxETuGO8O4VIJz7JECpITXRNVzghKQjYaGRheodFs2q/OJvP9Wy8c6g+xg48RL1la/21kGfJw3cCpf8N6zsjh8B85e/lE9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=33L7n3k3VOyDkqvUXSTxOX1m7iM9sAgG2Z/83s4lI1U=;
- b=fzJVU6Uj8/HUsjOtU+qvHwOeDeJh9MAICH6AwfVfV3arjbkoQBwJsYy907j/NfDo+OGuAzEEUK582QcpJvGJH1dexhtCNW/ZWDxHYarBP+wrLqk/p4rXMqEFXMot6VKKqT+dtthOq0Ah9z6ADfu9Wq9qygE0gKiov/vnUDnvFbanHPwOQm1bjk599yvVdt2qYR8ivUZ4j00rBVgZiiEr4negTOZJAIoGtcaYzwDmb54cVPj7+FOaaHB4gbpZyLzix1JykYZ7NW8grLQ/gNkMp+egTmAUOcF08UrQiWmE906CgYkbQsI8vxk7ytGxskBhYK88rtsNsQQjCYNzmvRq/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=33L7n3k3VOyDkqvUXSTxOX1m7iM9sAgG2Z/83s4lI1U=;
- b=EpcEsU6sOVm9WvvZjNE5lcVsnVphpv0WTQPHmjjaXu+fuxokSsQ6c7CvXM9IXT3+n9DdJ3ErjcwVCU+hv9Zv3iaC1wP5AJQ4nhpLiwhYERMyKNtmhV89al6qYbehTtmUtAaiUOgC3/qEE09Pizrv0jDy+XczLn7cw/oqfDM7MOc=
-Received: from VI1PR04MB6941.eurprd04.prod.outlook.com (52.133.244.87) by
- VI1PR04MB5565.eurprd04.prod.outlook.com (20.178.121.90) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2835.20; Wed, 25 Mar 2020 18:05:16 +0000
-Received: from VI1PR04MB6941.eurprd04.prod.outlook.com
- ([fe80::289c:fdf8:faf0:3200]) by VI1PR04MB6941.eurprd04.prod.outlook.com
- ([fe80::289c:fdf8:faf0:3200%2]) with mapi id 15.20.2835.023; Wed, 25 Mar 2020
- 18:05:16 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Michael Walle <michael@walle.cc>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jslaby@suse.com>, Andy Duan <fugang.duan@nxp.com>
-Subject: Re: [PATCH v2 1/2] tty: serial: fsl_lpuart: move dma_request_chan()
-Thread-Topic: [PATCH v2 1/2] tty: serial: fsl_lpuart: move dma_request_chan()
-Thread-Index: AQHWAoTFxHV8sVlM60KMfOo/y+nDDA==
-Date:   Wed, 25 Mar 2020 18:05:16 +0000
-Message-ID: <VI1PR04MB69417B19A6FFF0AA22585884EECE0@VI1PR04MB6941.eurprd04.prod.outlook.com>
-References: <20200325090658.25967-1-michael@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [92.121.36.198]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d8bd0b62-f53b-4581-2b47-08d7d0e712a8
-x-ms-traffictypediagnostic: VI1PR04MB5565:|VI1PR04MB5565:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB55657722641D3DCE6344E6A6EECE0@VI1PR04MB5565.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:626;
-x-forefront-prvs: 0353563E2B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(396003)(346002)(376002)(366004)(53546011)(6506007)(4326008)(8676002)(110136005)(54906003)(7696005)(44832011)(33656002)(316002)(8936002)(81166006)(81156014)(478600001)(66946007)(76116006)(91956017)(66476007)(5660300002)(186003)(66446008)(64756008)(86362001)(2906002)(71200400001)(66556008)(52536014)(26005)(9686003)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5565;H:VI1PR04MB6941.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tkMGksVvVh1C0tsnfOTdsUj0BXs1f6FbN+vJDF8QD5s4n4LFTnwGssvuyzPLHxkCRg2yQWgjHklIn9AYn3LFrbbHEMNbzKhD/jsB8neGdRcwfZpBa/MkCnBrJ8fHv06FkIhuH59rxgEWmFFNaqUV+PpwrgrVzpgN5WmKsOq58Qqqckj71SNipdFJw8gSoIZExWG3wQCgurA9lqds/Tw5H3ejSQjEyoKH3Pu3pmDJE7VKTWt7Mw91p1VeqjSq+7fMmGkIfSfgUdikMKVc8AxcoyMli05RnXqmWAsusHIlPoaSZrnoHrd9pUVMPcMtFkW1QCmSuy4dlmR6rMhJJTHsvRz4740M1aEwRLWMDcH1QQeL8ZqqoFDaIVyvmGXObE5j8diHnVI8KEmhmJYUvfIMAEwPENBqXGneDwKoz0XWGHEnAMcJr5KIE84pgoFpNdss
-x-ms-exchange-antispam-messagedata: 0XAINS6k1TmDHUU4L3Wq/fmSQfUhb88meLdq77bq9k+AMkP6lud0mmiAHGMv0rNFZEkOEwVzyLrC4R8a/oROtdnpot4MIB1ptcYkgj3UvvfOwIEp/20hMlZo9pki0FSq3/1hsWCHURbaWd/5HU4XPQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727560AbgCYXOp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 Mar 2020 19:14:45 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:40192 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727550AbgCYXOn (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 25 Mar 2020 19:14:43 -0400
+Received: from ip5f5a5d2f.dynamic.kabel-deutschland.de ([95.90.93.47] helo=phil.sntech)
+        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <heiko@sntech.de>)
+        id 1jHFEH-0007ug-1O; Thu, 26 Mar 2020 00:14:33 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     gregkh@linuxfoundation.org
+Cc:     jslaby@suse.com, andriy.shevchenko@linux.intel.com,
+        matwey.kornilov@gmail.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, heiko@sntech.de, lukas@wunner.de,
+        christoph.muellner@theobroma-systems.com,
+        giulio.benetti@micronovasrl.com
+Subject: [PATCH RFC v2 0/7] serial: 8250: Add rs485 emulation to 8250_dw
+Date:   Thu, 26 Mar 2020 00:14:15 +0100
+Message-Id: <20200325231422.1502366-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8bd0b62-f53b-4581-2b47-08d7d0e712a8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2020 18:05:16.4860
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kkl2xzxZzgoxq2RHR8oNAzzw63NrMtkly7S3Tc8kuG+qAMPx82UrgfEGpOV6I3+62/HXSYtrce1BK2GRVNc5Ig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5565
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2020-03-25 11:07 AM, Michael Walle wrote:=0A=
-> Move dma_request_chan() out of the atomic context. First this call=0A=
-> should not be in the atomic context at all and second the=0A=
-> dev_info_once() may cause a hang because because the console takes this=
-=0A=
-> spinlock, too.=0A=
-> =0A=
-> Fixes: 159381df1442f ("tty: serial: fsl_lpuart: fix DMA operation when us=
-ing IOMMU")=0A=
-> Reported-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
-> Signed-off-by: Michael Walle <michael@walle.cc>=0A=
-> ---=0A=
-> changes since v1:=0A=
->   - instead of just moving the dev_info_once() out of the spinlock protec=
-ted=0A=
->     section, move the whole dma_request_chan(). Thanks Andy!=0A=
-> =0A=
-> I've tested this on my board. Andy, Leonard, can you double check it? For=
-=0A=
-> all which are not aware, this deadlock happens only if you have the kerne=
-l=0A=
-> console output on the lpuart, so if someone wants to test it, make sure y=
-ou=0A=
-> have something like console=3DttyLP0,115200.=0A=
-> =0A=
->   drivers/tty/serial/fsl_lpuart.c | 36 +++++++++++++++++++++------------=
-=0A=
->   1 file changed, 23 insertions(+), 13 deletions(-)=0A=
-=0A=
-Tested-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
-=0A=
-Since the original commit only made it into next it might make sense to =0A=
-squash the commits in the tty tree.=0A=
-=0A=
-This way future bisections won't get stuck on a boot failure.=0A=
-=0A=
-> =0A=
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpu=
-art.c=0A=
-> index 9c6a018b1390..131018979b77 100644=0A=
-> --- a/drivers/tty/serial/fsl_lpuart.c=0A=
-> +++ b/drivers/tty/serial/fsl_lpuart.c=0A=
-> @@ -1510,20 +1510,33 @@ static void rx_dma_timer_init(struct lpuart_port =
-*sport)=0A=
->   	add_timer(&sport->lpuart_timer);=0A=
->   }=0A=
->   =0A=
-> -static void lpuart_tx_dma_startup(struct lpuart_port *sport)=0A=
-> +static void lpuart_request_dma(struct lpuart_port *sport)=0A=
->   {=0A=
-> -	u32 uartbaud;=0A=
-> -	int ret;=0A=
-> -=0A=
->   	sport->dma_tx_chan =3D dma_request_chan(sport->port.dev, "tx");=0A=
->   	if (IS_ERR(sport->dma_tx_chan)) {=0A=
->   		dev_info_once(sport->port.dev,=0A=
->   			      "DMA tx channel request failed, operating without tx DMA (%ld)=
-\n",=0A=
->   			      PTR_ERR(sport->dma_tx_chan));=0A=
->   		sport->dma_tx_chan =3D NULL;=0A=
-> -		goto err;=0A=
->   	}=0A=
->   =0A=
-> +	sport->dma_rx_chan =3D dma_request_chan(sport->port.dev, "rx");=0A=
-> +	if (IS_ERR(sport->dma_rx_chan)) {=0A=
-> +		dev_info_once(sport->port.dev,=0A=
-> +			      "DMA rx channel request failed, operating without rx DMA (%ld)\=
-n",=0A=
-> +			      PTR_ERR(sport->dma_rx_chan));=0A=
-> +		sport->dma_rx_chan =3D NULL;=0A=
-> +	}=0A=
-> +}=0A=
-> +=0A=
-> +static void lpuart_tx_dma_startup(struct lpuart_port *sport)=0A=
-> +{=0A=
-> +	u32 uartbaud;=0A=
-> +	int ret;=0A=
-> +=0A=
-> +	if (!sport->dma_tx_chan)=0A=
-> +		goto err;=0A=
-> +=0A=
->   	ret =3D lpuart_dma_tx_request(&sport->port);=0A=
->   	if (!ret)=0A=
->   		goto err;=0A=
-> @@ -1549,14 +1562,8 @@ static void lpuart_rx_dma_startup(struct lpuart_po=
-rt *sport)=0A=
->   {=0A=
->   	int ret;=0A=
->   =0A=
-> -	sport->dma_rx_chan =3D dma_request_chan(sport->port.dev, "rx");=0A=
-> -	if (IS_ERR(sport->dma_rx_chan)) {=0A=
-> -		dev_info_once(sport->port.dev,=0A=
-> -			      "DMA rx channel request failed, operating without rx DMA (%ld)\=
-n",=0A=
-> -			      PTR_ERR(sport->dma_rx_chan));=0A=
-> -		sport->dma_rx_chan =3D NULL;=0A=
-> +	if (!sport->dma_rx_chan)=0A=
->   		goto err;=0A=
-> -	}=0A=
->   =0A=
->   	ret =3D lpuart_start_rx_dma(sport);=0A=
->   	if (ret)=0A=
-> @@ -1592,6 +1599,8 @@ static int lpuart_startup(struct uart_port *port)=
-=0A=
->   	sport->rxfifo_size =3D UARTFIFO_DEPTH((temp >> UARTPFIFO_RXSIZE_OFF) &=
-=0A=
->   					    UARTPFIFO_FIFOSIZE_MASK);=0A=
->   =0A=
-> +	lpuart_request_dma(sport);=0A=
-> +=0A=
->   	spin_lock_irqsave(&sport->port.lock, flags);=0A=
->   =0A=
->   	lpuart_setup_watermark_enable(sport);=0A=
-> @@ -1649,11 +1658,12 @@ static int lpuart32_startup(struct uart_port *por=
-t)=0A=
->   		sport->port.fifosize =3D sport->txfifo_size;=0A=
->   	}=0A=
->   =0A=
-> +	lpuart_request_dma(sport);=0A=
-> +=0A=
->   	spin_lock_irqsave(&sport->port.lock, flags);=0A=
->   =0A=
->   	lpuart32_setup_watermark_enable(sport);=0A=
->   =0A=
-> -=0A=
->   	lpuart_rx_dma_startup(sport);=0A=
->   	lpuart_tx_dma_startup(sport);=0A=
->   =0A=
-> =0A=
-=0A=
+This series tries to revive the work of Giulio Benetti from 2018 [0]
+which seemed to have stalled at that time.
+
+The board I needed that on also had the additional caveat that it
+uses non-standard pins for DE/RE so needed gpio mctrl layer as well
+and even more special needed to control the RE pin manually not as
+part of it being connected to the DE signal as seems to be the standard.
+
+The first 3 patches are taken from Lukas Wunner's repository
+with work he wants to submit after 5.7-rc1.
+Patches needed adaptions from their 4.19 base of course,
+so no guarantes I did that correctly ;-) .
+I just need the change in the rs485_mode handling as base.
+
+So as suggested by Andy this series is meant as a base for discussions
+to show how my 8250_dw rs485 support fits onto the more recent codebase
+and find more issues earlier.
+
+
+Changes in v2:
+- move to recent rs485 improvements in tty-next
+- added a capability for TEMT interrupt presence
+- external gpio for optional receiver-enable handling
+- timeout polling via the generic readx_poll_timeout
+
+Changes from the 2018 submission include:
+- add timeout when waiting for fifos to clear using a new helper
+- move on-boot enablement of the rs485 mode to after registering
+  the port. This saves having to copy the em485 struct as done
+  originally, which also ran into spinlock-debug warnings when testing
+  and also makes it actually possible to use the mctrl gpio layer
+  for non-standard gpios.
+
+
+*** BLURB HERE ***
+
+Giulio Benetti (2):
+  serial: 8250: Handle implementations not having TEMT interrupt using
+    em485
+  serial: 8250_dw: add em485 support
+
+Heiko Stuebner (2):
+  dt-bindings: serial: Add binding for rs485 receiver enable GPIO
+  serial: 8250: Support separate rs485 rx-enable GPIO
+
+Lukas Wunner (3):
+  serial: Allow uart_get_rs485_mode() to return errno
+  dt-bindings: serial: Add binding for rs485 bus termination GPIO
+  serial: 8250: Support rs485 bus termination GPIO
+
+ .../devicetree/bindings/serial/rs485.yaml     |  8 ++++
+ drivers/tty/serial/8250/8250.h                |  1 +
+ drivers/tty/serial/8250/8250_bcm2835aux.c     |  2 +-
+ drivers/tty/serial/8250/8250_core.c           |  4 +-
+ drivers/tty/serial/8250/8250_dw.c             |  3 ++
+ drivers/tty/serial/8250/8250_of.c             |  2 +
+ drivers/tty/serial/8250/8250_omap.c           |  2 +-
+ drivers/tty/serial/8250/8250_port.c           | 41 +++++++++++++++---
+ drivers/tty/serial/ar933x_uart.c              |  6 ++-
+ drivers/tty/serial/atmel_serial.c             |  6 ++-
+ drivers/tty/serial/fsl_lpuart.c               |  5 ++-
+ drivers/tty/serial/imx.c                      |  6 ++-
+ drivers/tty/serial/omap-serial.c              |  4 +-
+ drivers/tty/serial/serial_core.c              | 43 ++++++++++++++++++-
+ drivers/tty/serial/stm32-usart.c              |  8 ++--
+ include/linux/serial_core.h                   |  4 +-
+ 16 files changed, 124 insertions(+), 21 deletions(-)
+
+-- 
+2.24.1
+
