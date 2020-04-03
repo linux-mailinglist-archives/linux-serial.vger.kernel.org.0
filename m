@@ -2,58 +2,58 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3754519D37C
-	for <lists+linux-serial@lfdr.de>; Fri,  3 Apr 2020 11:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEDD19D386
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Apr 2020 11:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390570AbgDCJYt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S2390512AbgDCJYt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Fri, 3 Apr 2020 05:24:49 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45390 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727860AbgDCJYs (ORCPT
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:37174 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390553AbgDCJYs (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Fri, 3 Apr 2020 05:24:48 -0400
-Received: by mail-wr1-f65.google.com with SMTP id t7so7606070wrw.12
-        for <linux-serial@vger.kernel.org>; Fri, 03 Apr 2020 02:24:46 -0700 (PDT)
+Received: by mail-wm1-f66.google.com with SMTP id j19so6899406wmi.2
+        for <linux-serial@vger.kernel.org>; Fri, 03 Apr 2020 02:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=monstr-eu.20150623.gappssmtp.com; s=20150623;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ew63BkEv/kfxHpMMNdikCR0PEHDgqdNqoqdmac2PSKA=;
-        b=nqXDAcA18svfS3jZNCR7amAzTEV4XFdGl7xmK2DqvINR+SkL1t+v8YLTMfgVloHqWn
-         E2/RWW/BQ2XYUiz4jg7loCIE4ACzMxBNacaqILqfCpg6CWfUmNCSvbwQ2nJHKIOD4EaC
-         IE1IazZ8GWvVKNxBNCCeSqwDwqBgFI5W/NGHcR1txkEN2m2pIK/JQtar5bhcNw3foAZc
-         GJ4WVmIXES9AVisyyi5zFCgUO2nfSx5d+cd6dTJ+ZW10LD7lqG3W+E38k/F2t966o4+v
-         oRFbOvLLnMqcSkC63jPYy888YjYcM+ZdkthQDRmWDXqMmIpwKo5ZM6Gd1yuGEs/rnz/r
-         /zHg==
+        bh=UaJ/lm5B5irKRGuIGTcEW0nphrhQofKG2JxuS3fPTck=;
+        b=f28+6tql43/Og7YGE8QTKNY9YPKkmPSkA+oKKSYv9PYyJk6WLaNxmW+YlH3qxlDr/Y
+         NwnNRpNUWshiEO1F2NA9HHwJlKRUO8nEh+aOlZmS+LrNiLbjIT7ufQZHrX4TvhpHfZkI
+         eM6vAJMjRTP2Yw1s7oqpT7/+9L3SokP2UXtfrN9ctVvWISHTB8D+4nQeNDu4HxTCuetr
+         t9dBAJLDPx6kxzJNAhM9musdk4HAzpV7+ks6Zk9I3tASV6va7WiUVtiVT29gQvATkI6G
+         MbVaLSngt0wG/uPQh8uWWdtqvbBBp397PfEIF8+UldkSINWALAXe/VGA9pJGvL5pD4vy
+         neAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Ew63BkEv/kfxHpMMNdikCR0PEHDgqdNqoqdmac2PSKA=;
-        b=gccQGiZn1PofVE+hjdfGcP0yGQyVO7kmX9WHNcnPScOkm2rMB3oXBFMi5hpKauuMGe
-         TcHu4aCuPqCXSLt5LOP3yYBeXsV4KVwDHDiLpDTB+5N1XZLrWb5mDps2HGVO2yDJMNTR
-         9h8FwP7NR6x/vq+1OS1WppXPNZSkB/Ax1sU74TXXfEZvw+LvdNqKkflETAgu8k4gxW9K
-         eurYP1x7WnUo36ePW/6AaN2YX6ADCK3EaxnFzABaXCCHkfHOTCPaxGk8aYzHuYbXcije
-         KlqQUTiqYeCGFwaridEh8+2byJ6GjIBR3fBSxMVSgn3I+5fnFAsOmI5Pm3ma1cGUCAsQ
-         evXQ==
-X-Gm-Message-State: AGi0PubQnPp5aWBcEFCAuZLIBvRN5jsneTPXkspdAK47xMfA2OMpuRue
-        G488plXd3EvNxvvQOCQ7Tq0Eqg==
-X-Google-Smtp-Source: APiQypKUEmHsm1YoMsvpKAQDoaPcz47Ucobj2J3VmxgQorhw8miHjx4iVotM1xfJKqJqgSaSIvlvDA==
-X-Received: by 2002:adf:e445:: with SMTP id t5mr8138163wrm.352.1585905885230;
-        Fri, 03 Apr 2020 02:24:45 -0700 (PDT)
+        bh=UaJ/lm5B5irKRGuIGTcEW0nphrhQofKG2JxuS3fPTck=;
+        b=oYd6nhgGI/pD+Sh/zts1Hg5rAYr8s8vAHPQgHGmdPFtGafEyNLGPh6yr7cmtgS0fTP
+         +lHZvNlz1YcH5UIFeiCjD0B/15Lde2u56Nx7yfRmqKUaK07UHxvYPbRgm0tABSN9rcMW
+         pLMAsJ6BZTIdpLKTYw+2VEOkcN9O7S3b9l4P+j8ExMu21+ItpYdyayBphZhzbdz2AA6l
+         viG8h6UDGXg4UK2X/60g4ENij1ye7giycPW0uL9e6sXN2FzBynCNueXeHgt6RNsk/q+p
+         X0rpNH/eu2MH2XweIk2xeCNgOQe+9e7x8qwOANFHsfxMqJb5Lmkc4Vxkz3oYlbEcZrqH
+         +f1w==
+X-Gm-Message-State: AGi0Pube+nZ8yfP3u5ZuT3Tcgp2W6cIp0pJ87YQ4K6WqBfMZsXuGXhR9
+        XShRfEkN3luRFMUc093fXw8bQA==
+X-Google-Smtp-Source: APiQypKIfR0UUqDSY/h923iNyVZubvQ21RncjnJGFJLtdFqhHyi/SNSGNn8LFm3qvKctOPC0FGERzw==
+X-Received: by 2002:a1c:c3c3:: with SMTP id t186mr8070012wmf.118.1585905886912;
+        Fri, 03 Apr 2020 02:24:46 -0700 (PDT)
 Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id b6sm11508761wrp.59.2020.04.03.02.24.44
+        by smtp.gmail.com with ESMTPSA id z3sm10332947wma.22.2020.04.03.02.24.46
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 03 Apr 2020 02:24:44 -0700 (PDT)
+        Fri, 03 Apr 2020 02:24:46 -0700 (PDT)
 From:   Michal Simek <michal.simek@xilinx.com>
 To:     johan@kernel.org, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, monstr@monstr.eu,
         michal.simek@xilinx.com, git@xilinx.com
 Cc:     Jiri Slaby <jslaby@suse.com>, linux-arm-kernel@lists.infradead.org,
         linux-serial@vger.kernel.org
-Subject: [PATCH 2/7] Revert "serial: uartps: Use the same dynamic major number for all ports"
-Date:   Fri,  3 Apr 2020 11:24:31 +0200
-Message-Id: <14a565fc1e14a5ec6cc6a6710deb878ae8305f22.1585905873.git.michal.simek@xilinx.com>
+Subject: [PATCH 3/7] Revert "serial: uartps: Fix error path when alloc failed"
+Date:   Fri,  3 Apr 2020 11:24:32 +0200
+Message-Id: <46cd7f039db847c08baa6508edd7854f7c8ff80f.1585905873.git.michal.simek@xilinx.com>
 X-Mailer: git-send-email 2.26.0
 In-Reply-To: <cover.1585905873.git.michal.simek@xilinx.com>
 References: <cover.1585905873.git.michal.simek@xilinx.com>
@@ -64,7 +64,7 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This reverts commit ab262666018de6f4e206b021386b93ed0c164316.
+This reverts commit 32cf21ac4edd6c0d5b9614368a83bcdc68acb031.
 
 As Johan says, this driver needs a lot more work and these changes are
 only going in the wrong direction:
@@ -74,45 +74,26 @@ Reported-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 ---
 
- drivers/tty/serial/xilinx_uartps.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/serial/xilinx_uartps.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index b858fb14833d..4e3fefa70b56 100644
+index 4e3fefa70b56..412bfc51f546 100644
 --- a/drivers/tty/serial/xilinx_uartps.c
 +++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -26,13 +26,13 @@
+@@ -1542,10 +1542,8 @@ static int cdns_uart_probe(struct platform_device *pdev)
+ #ifdef CONFIG_SERIAL_XILINX_PS_UART_CONSOLE
+ 	cdns_uart_console = devm_kzalloc(&pdev->dev, sizeof(*cdns_uart_console),
+ 					 GFP_KERNEL);
+-	if (!cdns_uart_console) {
+-		rc = -ENOMEM;
+-		goto err_out_id;
+-	}
++	if (!cdns_uart_console)
++		return -ENOMEM;
  
- #define CDNS_UART_TTY_NAME	"ttyPS"
- #define CDNS_UART_NAME		"xuartps"
-+#define CDNS_UART_MAJOR		0	/* use dynamic node allocation */
- #define CDNS_UART_FIFO_SIZE	64	/* FIFO size */
- #define CDNS_UART_REGISTER_SPACE	0x1000
- #define TX_TIMEOUT		500000
- 
- /* Rx Trigger level */
- static int rx_trigger_level = 56;
--static int uartps_major;
- module_param(rx_trigger_level, uint, 0444);
- MODULE_PARM_DESC(rx_trigger_level, "Rx trigger level, 1-63 bytes");
- 
-@@ -1535,7 +1535,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 	cdns_uart_uart_driver->owner = THIS_MODULE;
- 	cdns_uart_uart_driver->driver_name = driver_name;
- 	cdns_uart_uart_driver->dev_name	= CDNS_UART_TTY_NAME;
--	cdns_uart_uart_driver->major = uartps_major;
-+	cdns_uart_uart_driver->major = CDNS_UART_MAJOR;
- 	cdns_uart_uart_driver->minor = cdns_uart_data->id;
- 	cdns_uart_uart_driver->nr = 1;
- 
-@@ -1564,7 +1564,6 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 		goto err_out_id;
- 	}
- 
--	uartps_major = cdns_uart_uart_driver->tty_driver->major;
- 	cdns_uart_data->cdns_uart_driver = cdns_uart_uart_driver;
- 
- 	/*
+ 	strncpy(cdns_uart_console->name, CDNS_UART_TTY_NAME,
+ 		sizeof(cdns_uart_console->name));
 -- 
 2.26.0
 
