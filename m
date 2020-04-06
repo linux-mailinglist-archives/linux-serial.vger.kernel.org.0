@@ -2,98 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A002119F823
-	for <lists+linux-serial@lfdr.de>; Mon,  6 Apr 2020 16:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7319F836
+	for <lists+linux-serial@lfdr.de>; Mon,  6 Apr 2020 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728566AbgDFOm6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 Apr 2020 10:42:58 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:33656 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728668AbgDFOm6 (ORCPT
+        id S1728697AbgDFOsd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 Apr 2020 10:48:33 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:35993 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728699AbgDFOsd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 Apr 2020 10:42:58 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 036Edp26187573;
-        Mon, 6 Apr 2020 14:42:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=VphygEHsVVyEJ7NmbUpBq72yHsE60+NHTngXDge3pv8=;
- b=A8K9S9a6Wy9kXvrrLF2+Dy1ifr60p4L8OXvdwf6n18sV3wPXjIrrSkz2UrYByjjTe0NI
- XYaJAovPgdwPb87V0mTcZqhg6ybFkd+05ZVdwrB5N+5hhcCqOdmLDk7fGXTj5n1HV0Lj
- 8X5l4KVsqCdN0WMJCMYGQtYgtlQCUOF8o3oYhVKOuZl8ut1Iz0Np99TTfkvNBPLR0B7Z
- 6Cgt/JFyyUnVRWzBygBUPfMRpvzM1SMNWk5QWok8Aoa+EyXnbXoh/rJHSV5CKFIlrjJv
- jAWFIjNZfOaprJfhRraw11H0QYIF5cQ9YR7ypcbFLD5nlM7N5M39bsb32n8pEffq+Ped AA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 306hnqy9v3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Apr 2020 14:42:56 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 036EfN8U035038;
-        Mon, 6 Apr 2020 14:42:55 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 30741arefg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Apr 2020 14:42:55 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 036EgolD022744;
-        Mon, 6 Apr 2020 14:42:54 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 06 Apr 2020 07:42:49 -0700
-Date:   Mon, 6 Apr 2020 17:42:43 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     michael@walle.cc
-Cc:     linux-serial@vger.kernel.org
-Subject: [bug report] tty: serial: fsl_lpuart: fix DMA mapping
-Message-ID: <20200406144243.GB68494@mwanda>
+        Mon, 6 Apr 2020 10:48:33 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 90FB322ED5;
+        Mon,  6 Apr 2020 16:48:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1586184511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZsGeQd5LtxyyegUv3kXe2CTCf6ymiwjb/Rg6AcLBqYg=;
+        b=Hd3902wuRwba3PtE6yErTa/Px4FQ+6x67tZncT1VdNJkjR/PZKaNlP2Ak3xZqoG6JjqBJN
+        aCAxqd/a0xdTzigC1vfJQGrLu3CZAMF9WLqNleb1hGZ+ukKr0AcIFrzlSI5iiOsoqjwFoi
+        GZXGMZcl+J3ry4q3QEP2UzzBTa340PI=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9582 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=10 phishscore=0
- malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=987
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004060122
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9582 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 impostorscore=0 suspectscore=10
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004060121
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 06 Apr 2020 16:48:31 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-serial@vger.kernel.org
+Subject: Re: [bug report] tty: serial: fsl_lpuart: fix DMA mapping
+In-Reply-To: <20200406144243.GB68494@mwanda>
+References: <20200406144243.GB68494@mwanda>
+Message-ID: <6a2d4108095bafbd1a1f5580ddf97a4b@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: /
+X-Spam-Status: No, score=-0.10
+X-Rspamd-Server: web
+X-Spam-Score: -0.10
+X-Rspamd-Queue-Id: 90FB322ED5
+X-Spamd-Result: default: False [-0.10 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWO(0.00)[2];
+         NEURAL_HAM(-0.00)[-0.788];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         MID_RHS_MATCH_FROM(0.00)[]
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Michael Walle,
+Am 2020-04-06 16:42, schrieb Dan Carpenter:
+> Hello Michael Walle,
+> 
+> This is a semi-automatic email about new static checker warnings.
 
-This is a semi-automatic email about new static checker warnings.
+Thanks, fix is pending, see here:
+   
+https://lore.kernel.org/linux-serial/20200403174942.9594-1-michael@walle.cc/
 
-The patch a092ab25fdaa: "tty: serial: fsl_lpuart: fix DMA mapping" 
-from Mar 6, 2020, leads to the following Smatch complaint:
+-michael
 
-    drivers/tty/serial/fsl_lpuart.c:1237 lpuart_dma_rx_free()
-    error: we previously assumed 'chan' could be null (see line 1234)
-
-drivers/tty/serial/fsl_lpuart.c
-  1228  static void lpuart_dma_rx_free(struct uart_port *port)
-  1229  {
-  1230          struct lpuart_port *sport = container_of(port,
-  1231                                          struct lpuart_port, port);
-  1232          struct dma_chan *chan = sport->dma_rx_chan;
-  1233	
-  1234		if (chan)
-                    ^^^^
-The patch adds a check
-
-  1235			dmaengine_terminate_all(chan);
-  1236	
-  1237		dma_unmap_sg(chan->device->dev, &sport->rx_sgl, 1, DMA_FROM_DEVICE);
-                             ^^^^^^
-and an unchecked dereference.
-
-  1238		kfree(sport->rx_ring.buf);
-  1239		sport->rx_ring.tail = 0;
-
-regards,
-dan carpenter
+> 
+> The patch a092ab25fdaa: "tty: serial: fsl_lpuart: fix DMA mapping"
+> from Mar 6, 2020, leads to the following Smatch complaint:
+> 
+>     drivers/tty/serial/fsl_lpuart.c:1237 lpuart_dma_rx_free()
+>     error: we previously assumed 'chan' could be null (see line 1234)
+> 
+> drivers/tty/serial/fsl_lpuart.c
+>   1228  static void lpuart_dma_rx_free(struct uart_port *port)
+>   1229  {
+>   1230          struct lpuart_port *sport = container_of(port,
+>   1231                                          struct lpuart_port, 
+> port);
+>   1232          struct dma_chan *chan = sport->dma_rx_chan;
+>   1233
+>   1234		if (chan)
+>                     ^^^^
+> The patch adds a check
+> 
+>   1235			dmaengine_terminate_all(chan);
+>   1236
+>   1237		dma_unmap_sg(chan->device->dev, &sport->rx_sgl, 1, 
+> DMA_FROM_DEVICE);
+>                              ^^^^^^
+> and an unchecked dereference.
+> 
+>   1238		kfree(sport->rx_ring.buf);
+>   1239		sport->rx_ring.tail = 0;
+> 
+> regards,
+> dan carpenter
