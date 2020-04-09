@@ -2,134 +2,470 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E791A2F29
-	for <lists+linux-serial@lfdr.de>; Thu,  9 Apr 2020 08:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75191A3067
+	for <lists+linux-serial@lfdr.de>; Thu,  9 Apr 2020 09:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbgDIG1F (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 9 Apr 2020 02:27:05 -0400
-Received: from mail-co1nam11on2048.outbound.protection.outlook.com ([40.107.220.48]:25249
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725828AbgDIG1F (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 9 Apr 2020 02:27:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GbEmVxRo2uLPkOhFq4SeDWAcxvgXHp2xggZIuPKOeSf5uW3FNF+nYWYmSZuPlwSzWM/qOcUc7xEZBPre8YrcXwbLsJFO7taC0liAg+dN5oHC+mO/AIc1cPtloSpS9Vfh/x2m9M3yxW2BbgMifW3PZ6D6s6n0YdVxNfe3QnMKu+J519x05fAdNKBEBiGiE9K3Yi1AIvrhxPXE5u/SoqaaUg+ss0B4TfHhOcvcZtZZpqUXd6P8xJpRK/4XEQ4LC91RoYBhAPPIVNaHRI9qCI3vm/Fj7pHe+W9q29ebnJ/s2fjEvnfG89TPS9q34O6AL+2soSciTjSwRn13AU9GSdd3SA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fE4EPTUvwRkWpdok9e5fRR5hwdY6Vz7h0vKa9MyQC58=;
- b=Sw8+ft9VEqIheSIxOnx+chx2MwS/jhyRPKHQUvKM95uAaaLlW23gMzv5V76HeA+S1gNDpKv4x/SkGIME64OKVTgknlZKOVR60vbjKx1Yb/QGQaz1bDpquuDf5lsgESYxSxJF6dZmbqG7MOFoZ+EFY1isiSWevH8ocOHR0F14KtArbnns34ColGQ8ftMMfWeAY2l+IQ1gPVnVvZqdVdOfk/dUeB+albPLnEkbOoigmNWF0tSme3HUitcFE2c4w1PfToNKn/9dAQDbHymJ4xm/rRqjD4x4ceZJML0BzUqkkfFNMaq++GArp7NgK7eBMHQURxlSK7sM3k8NJFHmMh6uag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fE4EPTUvwRkWpdok9e5fRR5hwdY6Vz7h0vKa9MyQC58=;
- b=KeiGpunmN3w/EviQO3BE6kuhiHbcyV6kctJfwyacylv/gdfBgMQLAD/PzzzV/l02s/PJx5ZnYESiu3cVMHNd8zmGLB8mvf3DE9COObZC0xWIHhgGLa8uwv/jJB3tDjmSTWmHLh6+CxZbvVUqiltlzgmGdK2DE2uDAMBBhl+juEc=
-Received: from CY4PR08CA0035.namprd08.prod.outlook.com (2603:10b6:903:151::21)
- by DM5PR02MB3321.namprd02.prod.outlook.com (2603:10b6:4:6a::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2878.20; Thu, 9 Apr
- 2020 06:27:03 +0000
-Received: from CY1NAM02FT064.eop-nam02.prod.protection.outlook.com
- (2603:10b6:903:151:cafe::e0) by CY4PR08CA0035.outlook.office365.com
- (2603:10b6:903:151::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.15 via Frontend
- Transport; Thu, 9 Apr 2020 06:27:03 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT064.mail.protection.outlook.com (10.152.74.64) with Microsoft SMTP
- Server id 15.20.2900.15 via Frontend Transport; Thu, 9 Apr 2020 06:27:03
- +0000
-Received: from [149.199.38.66] (port=46784 helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
-        (envelope-from <raviteja.narayanam@xilinx.com>)
-        id 1jMQe6-000876-7Z; Wed, 08 Apr 2020 23:26:38 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <raviteja.narayanam@xilinx.com>)
-        id 1jMQeV-0004bN-4n; Wed, 08 Apr 2020 23:27:03 -0700
-Received: from xsj-pvapsmtp01 (mailman.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 0396QqC8027519;
-        Wed, 8 Apr 2020 23:26:52 -0700
-Received: from [10.140.6.6] (helo=xhdappanad40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <raviteja.narayanam@xilinx.com>)
-        id 1jMQeK-00046h-91; Wed, 08 Apr 2020 23:26:52 -0700
-From:   Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-To:     linux-serial@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, jslaby@suse.com,
-        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-Subject: [PATCH v2 2/2] serial: uartps: Use cdns_uart_tx_empty in console_write
-Date:   Thu,  9 Apr 2020 11:56:03 +0530
-Message-Id: <1586413563-29125-3-git-send-email-raviteja.narayanam@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1586413563-29125-1-git-send-email-raviteja.narayanam@xilinx.com>
-References: <1586413563-29125-1-git-send-email-raviteja.narayanam@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(346002)(396003)(136003)(39860400002)(376002)(46966005)(47076004)(70206006)(356004)(6666004)(8676002)(316002)(4326008)(36756003)(478600001)(44832011)(2906002)(186003)(107886003)(81166007)(81156014)(2616005)(5660300002)(82740400003)(4744005)(70586007)(336012)(9786002)(426003)(7696005)(6916009)(8936002)(26005);DIR:OUT;SFP:1101;
+        id S1726137AbgDIHp0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 9 Apr 2020 03:45:26 -0400
+Received: from asavdk3.altibox.net ([109.247.116.14]:44662 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgDIHp0 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 9 Apr 2020 03:45:26 -0400
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk3.altibox.net (Postfix) with ESMTPS id C927020029;
+        Thu,  9 Apr 2020 09:45:13 +0200 (CEST)
+Date:   Thu, 9 Apr 2020 09:45:07 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Mateusz Holenko <mholenko@antmicro.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, Stafford Horne <shorne@gmail.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Filip Kokosinski <fkokosinski@antmicro.com>,
+        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/5] drivers/soc/litex: add LiteX SoC Controller driver
+Message-ID: <20200409074507.GA15724@ravnborg.org>
+References: <20200402084513.4173306-0-mholenko@antmicro.com>
+ <20200402084513.4173306-3-mholenko@antmicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a18bb384-b73b-4a9e-1681-08d7dc4f049e
-X-MS-TrafficTypeDiagnostic: DM5PR02MB3321:
-X-Microsoft-Antispam-PRVS: <DM5PR02MB33213F2E3DFC01F4E59DBA0DCAC10@DM5PR02MB3321.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:272;
-X-Forefront-PRVS: 0368E78B5B
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: F8UDQdxZL2mu7BeS+H+mul1PCbHGmSSVXPoc3R8Aeuq+Ei3/s+winiK4/61h0HKJNtjtTYcWtHsYAfxhrtzkfjvlycvofoNfsogOFPFeu7f+Zhb1E65oYru8rMDBZv7M5QkJz1FMyVl2/2EBgrIqdsyw+7O9PToyCBej79VgZ/j0japPeX1plUO6Ph1zvPLI/3Q8HaryM9tkrplerew5W3gYkxrzBGr4ucZ4wagUXFHEAU3ayp3SW/Ny1XYj0NdIcziYteJ8umr+Kk1uydH8IfPvrK2/YlorEtnkj/ftzWr4v8lRBNitKj26mPfTCv6VR6EsZVJOhmyplU+LRpxvJpo5QdSzqZ9U9ZZCVZh49TcwsZaFU9BAPKW4Zj+orYnjDHsWasKJJFYpj1aWTax1cxN8pKkJ3RKHDpA+uCTcxNJB+vmXLOirfGNFCEgrkTzZ7XzVTCa+78KwMoa1yIIhQKv/LOl8J0XKRnqtejuvqgekGJbfC9BNmQpnXH5pOyob+tMzGOr6Gn9rKZMlI4Slkw==
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2020 06:27:03.4130
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a18bb384-b73b-4a9e-1681-08d7dc4f049e
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3321
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200402084513.4173306-3-mholenko@antmicro.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=eMA9ckh1 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=ZX33tajJAAAA:8
+        a=20KFwNOVAAAA:8 a=coVbaYRRAAAA:20 a=RabjGhs-xBbIAaBAO2wA:9
+        a=CjuIK1q_8ugA:10 a=L5i5bogn6ywA:10 a=n1A84ZsOX-pFaLrW-s9c:22
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Instead of accessing the registers and checking for tx_empty,
-use cdns_uart_tx_empty in cdns_uart_console_write function.
+Hi Mateusz
 
-Signed-off-by: Raviteja Narayanam <raviteja.narayanam@xilinx.com>
----
- drivers/tty/serial/xilinx_uartps.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+A few drive-by comments - the soc area is not something I am well
+versed in.
 
-diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 0bf946b..042aa6f 100644
---- a/drivers/tty/serial/xilinx_uartps.c
-+++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -1233,9 +1233,7 @@ static void cdns_uart_console_write(struct console *co, const char *s,
- 	writel(ctrl, port->membase + CDNS_UART_CR);
- 
- 	uart_console_write(port, s, count, cdns_uart_console_putchar);
--	while ((readl(port->membase + CDNS_UART_SR) &
--			(CDNS_UART_SR_TXEMPTY | CDNS_UART_SR_TACTIVE)) !=
--			CDNS_UART_SR_TXEMPTY)
-+	while (cdns_uart_tx_empty(port) != TIOCSER_TEMT)
- 		cpu_relax();
- 
- 	/* restore interrupt state */
--- 
-2.7.4
+	Sam
 
+On Thu, Apr 02, 2020 at 08:46:10AM +0200, Mateusz Holenko wrote:
+> From: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
+> 
+> This commit adds driver for the FPGA-based LiteX SoC
+> Controller from LiteX SoC builder.
+> 
+> Co-developed-by: Mateusz Holenko <mholenko@antmicro.com>
+> Signed-off-by: Mateusz Holenko <mholenko@antmicro.com>
+> Signed-off-by: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
+> ---
+> 
+> Notes:
+>     Changes in v4:
+>     - fixed indent in Kconfig's help section
+>     - fixed copyright header
+>     - changed compatible to "litex,soc-controller"
+>     - simplified litex_soc_ctrl_probe
+>     - removed unnecessary litex_soc_ctrl_remove
+> 
+>     This commit has been introduced in v3 of the patchset.
+> 
+>     It includes a simplified version of common 'litex.h'
+>     header introduced in v2 of the patchset.
+> 
+>  MAINTAINERS                        |   2 +
+>  drivers/soc/Kconfig                |   1 +
+>  drivers/soc/Makefile               |   1 +
+>  drivers/soc/litex/Kconfig          |  14 ++
+>  drivers/soc/litex/Makefile         |   3 +
+>  drivers/soc/litex/litex_soc_ctrl.c | 217 +++++++++++++++++++++++++++++
+>  include/linux/litex.h              |  45 ++++++
+>  7 files changed, 283 insertions(+)
+>  create mode 100644 drivers/soc/litex/Kconfig
+>  create mode 100644 drivers/soc/litex/Makefile
+>  create mode 100644 drivers/soc/litex/litex_soc_ctrl.c
+>  create mode 100644 include/linux/litex.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2f5ede8a08aa..a35be1be90d5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9729,6 +9729,8 @@ M:	Karol Gugala <kgugala@antmicro.com>
+>  M:	Mateusz Holenko <mholenko@antmicro.com>
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/*/litex,*.yaml
+> +F:	drivers/soc/litex/litex_soc_ctrl.c
+> +F:	include/linux/litex.h
+>  
+>  LIVE PATCHING
+>  M:	Josh Poimboeuf <jpoimboe@redhat.com>
+> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+> index 1778f8c62861..78add2a163be 100644
+> --- a/drivers/soc/Kconfig
+> +++ b/drivers/soc/Kconfig
+> @@ -9,6 +9,7 @@ source "drivers/soc/bcm/Kconfig"
+>  source "drivers/soc/fsl/Kconfig"
+>  source "drivers/soc/imx/Kconfig"
+>  source "drivers/soc/ixp4xx/Kconfig"
+> +source "drivers/soc/litex/Kconfig"
+>  source "drivers/soc/mediatek/Kconfig"
+>  source "drivers/soc/qcom/Kconfig"
+>  source "drivers/soc/renesas/Kconfig"
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index 8b49d782a1ab..fd016b51cddd 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -14,6 +14,7 @@ obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
+>  obj-$(CONFIG_ARCH_MXC)		+= imx/
+>  obj-$(CONFIG_ARCH_IXP4XX)	+= ixp4xx/
+>  obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+> +obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
+>  obj-y				+= mediatek/
+>  obj-y				+= amlogic/
+>  obj-y				+= qcom/
+> diff --git a/drivers/soc/litex/Kconfig b/drivers/soc/litex/Kconfig
+> new file mode 100644
+> index 000000000000..71264c0e1d6c
+> --- /dev/null
+> +++ b/drivers/soc/litex/Kconfig
+> @@ -0,0 +1,14 @@
+> +# SPDX-License_Identifier: GPL-2.0
+> +
+> +menu "Enable LiteX SoC Builder specific drivers"
+> +
+> +config LITEX_SOC_CONTROLLER
+> +	tristate "Enable LiteX SoC Controller driver"
+> +	help
+> +	  This option enables the SoC Controller Driver which verifies
+> +	  LiteX CSR access and provides common litex_get_reg/litex_set_reg
+> +	  accessors.
+> +	  All drivers that use functions from litex.h must depend on
+> +	  LITEX_SOC_CONTROLLER.
+> +
+> +endmenu
+> diff --git a/drivers/soc/litex/Makefile b/drivers/soc/litex/Makefile
+> new file mode 100644
+> index 000000000000..98ff7325b1c0
+> --- /dev/null
+> +++ b/drivers/soc/litex/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License_Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_LITEX_SOC_CONTROLLER)	+= litex_soc_ctrl.o
+> diff --git a/drivers/soc/litex/litex_soc_ctrl.c b/drivers/soc/litex/litex_soc_ctrl.c
+> new file mode 100644
+> index 000000000000..5defba000fd4
+> --- /dev/null
+> +++ b/drivers/soc/litex/litex_soc_ctrl.c
+> @@ -0,0 +1,217 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * LiteX SoC Controller Driver
+> + *
+> + * Copyright (C) 2020 Antmicro <www.antmicro.com>
+> + *
+> + */
+> +
+> +#include <linux/litex.h>
+> +#include <linux/device.h>
+> +#include <linux/errno.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/printk.h>
+> +#include <linux/module.h>
+> +#include <linux/errno.h>
+> +#include <linux/io.h>
+> +
+> +/*
+> + * The parameters below are true for LiteX SoC
+> + * configured for 8-bit CSR Bus, 32-bit aligned.
+> + *
+> + * Supporting other configurations will require
+> + * extending the logic in this header.
+> + */
+> +#define LITEX_REG_SIZE             0x4
+> +#define LITEX_SUBREG_SIZE          0x1
+> +#define LITEX_SUBREG_SIZE_BIT      (LITEX_SUBREG_SIZE * 8)
+> +
+> +static DEFINE_SPINLOCK(csr_lock);
+> +
+> +static inline unsigned long read_pointer_with_barrier(
+> +	const volatile void __iomem *addr)
+> +{
+> +	unsigned long val;
+> +
+> +	__io_br();
+> +	val = *(const volatile unsigned long __force *)addr;
+> +	__io_ar();
+> +	return val;
+> +}
+This looks like an open-oced version of readl()
+See include/asm-generic/io.h
+
+> +
+> +static inline void write_pointer_with_barrier(
+> +	volatile void __iomem *addr, unsigned long val)
+> +{
+> +	__io_br();
+> +	*(volatile unsigned long __force *)addr = val;
+> +	__io_ar();
+> +}
+Likewise.
+
+> +
+> +/*
+> + * LiteX SoC Generator, depending on the configuration,
+> + * can split a single logical CSR (Control & Status Register)
+> + * into a series of consecutive physical registers.
+> + *
+> + * For example, in the configuration with 8-bit CSR Bus,
+> + * 32-bit aligned (the default one for 32-bit CPUs) a 32-bit
+> + * logical CSR will be generated as four 32-bit physical registers,
+> + * each one containing one byte of meaningful data.
+> + *
+> + * For details see: https://github.com/enjoy-digital/litex/issues/314
+> + *
+> + * The purpose of `litex_set_reg`/`litex_get_reg` is to implement
+> + * the logic of writing to/reading from the LiteX CSR in a single
+> + * place that can be then reused by all LiteX drivers.
+> + */
+> +void litex_set_reg(
+> +	void __iomem *reg, unsigned long reg_size, unsigned long val)
+> +{
+
+The typical linux style is:
+
+void litex_set_reg(void __iomem *reg, unsigned long reg_size, unsigned long val)
+{
+
+And if the line is too long, then aling with tabs+spaces right after
+first opening paranthese.
+
+General comment for the remaining of the file.
+
+> +	unsigned long shifted_data, shift, i;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&csr_lock, flags);
+> +
+> +	for (i = 0; i < reg_size; ++i) {
+> +		shift = ((reg_size - i - 1) * LITEX_SUBREG_SIZE_BIT);
+> +		shifted_data = val >> shift;
+> +		write_pointer_with_barrier(
+> +			reg + (LITEX_REG_SIZE * i), shifted_data);
+> +	}
+> +
+> +	spin_unlock_irqrestore(&csr_lock, flags);
+> +}
+> +
+> +unsigned long litex_get_reg(
+> +	void __iomem *reg, unsigned long reg_size)
+> +{
+> +	unsigned long shifted_data, shift, i;
+> +	unsigned long result = 0;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&csr_lock, flags);
+> +
+> +	for (i = 0; i < reg_size; ++i) {
+> +		shifted_data = read_pointer_with_barrier(
+> +			reg + (LITEX_REG_SIZE * i));
+> +		shift = ((reg_size - i - 1) * LITEX_SUBREG_SIZE_BIT);
+> +		result |= (shifted_data << shift);
+> +	}
+> +
+> +	spin_unlock_irqrestore(&csr_lock, flags);
+> +
+> +	return result;
+> +}
+> +
+> +static int accessors_ok;
+> +
+> +/*
+> + * Check if accessors are safe to be used by other drivers
+> + * returns true if yes - false if not
+> + */
+> +int litex_check_accessors(void)
+> +{
+> +	return accessors_ok;
+> +}
+> +
+> +#define SCRATCH_REG_OFF         0x04
+> +#define SCRATCH_REG_SIZE        4
+> +#define SCRATCH_REG_VALUE       0x12345678
+> +#define SCRATCH_TEST_VALUE      0xdeadbeef
+> +
+> +/*
+> + * Check LiteX CSR read/write access
+> + *
+> + * This function reads and writes a scratch register in order
+> + * to verify if CSR access works.
+> + *
+> + * In case any problems are detected, the driver should panic
+> + * and not set `accessors_ok` flag. As a result no other
+> + * LiteX driver should access CSR bus.
+> + *
+> + * Access to the LiteX CSR is, by design, done in CPU native
+> + * endianness. The driver should not dynamically configure
+> + * access functions when the endianness mismatch is detected.
+> + * Such situation indicates problems in the soft SoC design
+> + * and should be solved at the LiteX generator level,
+> + * not in the software.
+> + */
+> +static int litex_check_csr_access(void __iomem *reg_addr)
+> +{
+> +	unsigned long reg;
+> +
+> +	reg = litex_get_reg(reg_addr + SCRATCH_REG_OFF, SCRATCH_REG_SIZE);
+> +
+> +	if (reg != SCRATCH_REG_VALUE) {
+> +		panic("Scratch register read error! Expected: 0x%x but got: 0x%lx",
+> +			SCRATCH_REG_VALUE, reg);
+> +		return -EINVAL;
+> +	}
+> +
+> +	litex_set_reg(reg_addr + SCRATCH_REG_OFF,
+> +		SCRATCH_REG_SIZE, SCRATCH_TEST_VALUE);
+> +	reg = litex_get_reg(reg_addr + SCRATCH_REG_OFF, SCRATCH_REG_SIZE);
+> +
+> +	if (reg != SCRATCH_TEST_VALUE) {
+> +		panic("Scratch register write error! Expected: 0x%x but got: 0x%lx",
+> +			SCRATCH_TEST_VALUE, reg);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* restore original value of the SCRATCH register */
+> +	litex_set_reg(reg_addr + SCRATCH_REG_OFF,
+> +		SCRATCH_REG_SIZE, SCRATCH_REG_VALUE);
+> +
+> +	/* Set flag for other drivers */
+> +	accessors_ok = 1;
+> +	pr_info("LiteX SoC Controller driver initialized");
+> +
+> +	return 0;
+> +}
+> +
+> +struct litex_soc_ctrl_device {
+> +	void __iomem *base;
+> +};
+> +
+> +static const struct of_device_id litex_soc_ctrl_of_match[] = {
+> +	{.compatible = "litex,soc-controller"},
+> +	{},
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, litex_soc_ctrl_of_match);
+> +
+> +static int litex_soc_ctrl_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev;
+> +	struct device_node *node;
+> +	struct litex_soc_ctrl_device *soc_ctrl_dev;
+> +
+> +	dev = &pdev->dev;
+> +	node = dev->of_node;
+> +	if (!node)
+> +		return -ENODEV;
+> +
+> +	soc_ctrl_dev = devm_kzalloc(dev, sizeof(*soc_ctrl_dev), GFP_KERNEL);
+> +	if (IS_ERR_OR_NULL(soc_ctrl_dev))
+> +		return -ENOMEM;
+devm_kzalloc() either return NULL or allocated memory.
+No need to do IS_ERR_OR_NULL()
+
+> +
+> +	soc_ctrl_dev->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR_OR_NULL(soc_ctrl_dev->base))
+> +		return -EIO;
+devm_platform_ioremap_resource does not return NUL on error.
+So you loose the original error code here.
+
+	Sam
+
+> +
+> +	return litex_check_csr_access(soc_ctrl_dev->base);
+> +}
+> +
+> +static struct platform_driver litex_soc_ctrl_driver = {
+> +	.driver = {
+> +		.name = "litex-soc-controller",
+> +		.of_match_table = of_match_ptr(litex_soc_ctrl_of_match)
+> +	},
+> +	.probe = litex_soc_ctrl_probe,
+> +};
+> +
+> +module_platform_driver(litex_soc_ctrl_driver);
+> +MODULE_DESCRIPTION("LiteX SoC Controller driver");
+> +MODULE_AUTHOR("Antmicro <www.antmicro.com>");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/litex.h b/include/linux/litex.h
+> new file mode 100644
+> index 000000000000..f31062436273
+> --- /dev/null
+> +++ b/include/linux/litex.h
+> @@ -0,0 +1,45 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Common LiteX header providing
+> + * helper functions for accessing CSRs.
+> + *
+> + * Implementation of the functions is provided by
+> + * the LiteX SoC Controller driver.
+> + *
+> + * Copyright (C) 2019-2020 Antmicro <www.antmicro.com>
+> + */
+> +
+> +#ifndef _LINUX_LITEX_H
+> +#define _LINUX_LITEX_H
+> +
+> +#include <linux/io.h>
+> +#include <linux/types.h>
+> +#include <linux/compiler_types.h>
+> +
+> +/*
+> + * litex_check_accessors is a function implemented in
+> + * drivers/soc/litex/litex_soc_controller.c
+> + * checking if the common LiteX CSR accessors
+> + * are safe to be used by the drivers;
+> + * returns true (1) if yes - false (0) if not
+> + *
+> + * Important: All drivers that use litex_set_reg/litex_get_reg
+> + * functions should make sure that LiteX SoC Controller driver
+> + * has verified LiteX CSRs read and write operations before
+> + * issuing any read/writes to the LiteX peripherals.
+> + *
+> + * Exemplary snippet that can be used at the beginning
+> + * of the driver's probe() function to ensure that LiteX
+> + * SoC Controller driver is properely initialized:
+> + *
+> + * if (!litex_check_accessors())
+> + *     return -EPROBE_DEFER;
+> + */
+> +int litex_check_accessors(void);
+> +
+> +void litex_set_reg(void __iomem *reg, unsigned long reg_sz, unsigned long val);
+> +
+> +unsigned long litex_get_reg(void __iomem *reg, unsigned long reg_sz);
+> +
+> +
+> +#endif /* _LINUX_LITEX_H */
+> -- 
+> 2.25.1
