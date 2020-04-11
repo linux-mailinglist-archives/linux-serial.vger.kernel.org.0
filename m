@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0E81A55FC
-	for <lists+linux-serial@lfdr.de>; Sun, 12 Apr 2020 01:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E77D1A56B7
+	for <lists+linux-serial@lfdr.de>; Sun, 12 Apr 2020 01:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730475AbgDKXNe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 11 Apr 2020 19:13:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54792 "EHLO mail.kernel.org"
+        id S1730698AbgDKXOS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 11 Apr 2020 19:14:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730461AbgDKXNe (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:13:34 -0400
+        id S1730003AbgDKXOR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:14:17 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CA3F20757;
-        Sat, 11 Apr 2020 23:13:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C64F92166E;
+        Sat, 11 Apr 2020 23:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646813;
-        bh=+qGv5Q1VFQ4gBXlpmxKWjo47qbbWmBlB9TeCR6vZrVI=;
+        s=default; t=1586646857;
+        bh=VvQd+tj3uTHlKY1SGES39RT8WMf9mUvSjdMBNaes3Fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M8ehra4h8MOjBA5jYpuxNW9hP7TKvy2MS2g0naH2FpSCvC5WKHZkK3d85aZSjuo4e
-         k+aJzQvxNMQPxJ/8U8tj/COnQ+AVUhduaYyZi5kfzX4hWmMyDCN5a07QyQf6FLo4ds
-         u6r7j1c7fsuCh2CeTEbhaY+j9KAvudYmyxIbnx8A=
+        b=08ZwWWocyUyY1mF/eT8oNjLsG9wPvj32o7wkSV18vl+fNiRKU6Sb9t1EtSULatGs2
+         /qaw/nd+SfQ8L4MabM/ZnNsTXbdNJpBvLm+DyK6ONlqGbQdyJFFTxbq752Izw5jDf0
+         wRbm31+6MuuVtCWhcqMTFkJLYQnA0rwPfnIXUKSY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 05/37] serial: 8250_omap: Fix sleeping function called from invalid context during probe
-Date:   Sat, 11 Apr 2020 19:12:54 -0400
-Message-Id: <20200411231327.26550-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 03/26] serial: 8250_omap: Fix sleeping function called from invalid context during probe
+Date:   Sat, 11 Apr 2020 19:13:50 -0400
+Message-Id: <20200411231413.26911-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411231327.26550-1-sashal@kernel.org>
-References: <20200411231327.26550-1-sashal@kernel.org>
+In-Reply-To: <20200411231413.26911-1-sashal@kernel.org>
+References: <20200411231413.26911-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -107,10 +107,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index da04ba1ecf68a..33df33a9e646a 100644
+index a3adf21f9dcec..7d4680ef5307d 100644
 --- a/drivers/tty/serial/8250/8250_omap.c
 +++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -1216,11 +1216,11 @@ static int omap8250_probe(struct platform_device *pdev)
+@@ -1194,11 +1194,11 @@ static int omap8250_probe(struct platform_device *pdev)
  	spin_lock_init(&priv->rx_dma_lock);
  
  	device_init_wakeup(&pdev->dev, true);
