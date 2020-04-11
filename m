@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1477D1A5531
-	for <lists+linux-serial@lfdr.de>; Sun, 12 Apr 2020 01:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD60C1A55C3
+	for <lists+linux-serial@lfdr.de>; Sun, 12 Apr 2020 01:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729015AbgDKXJy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 11 Apr 2020 19:09:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47838 "EHLO mail.kernel.org"
+        id S1730095AbgDKXML (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 11 Apr 2020 19:12:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727273AbgDKXJy (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:09:54 -0400
+        id S1730080AbgDKXML (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:12:11 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48D09215A4;
-        Sat, 11 Apr 2020 23:09:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A7BD2166E;
+        Sat, 11 Apr 2020 23:12:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646594;
-        bh=Txgz4lOrhJ5uaiOxVZfhkWtIl+jiHFZS5RGWrb+HtJs=;
+        s=default; t=1586646730;
+        bh=FtLy8Tniy+M2Hgs7mjmu2CaCJ5hEYHU7fid2zP1d+uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PAMRe42Rzd8cOuB4WaLIhm+iS311cZ+h/oEhxptCDv4n5Louir52rmfYSqcGnA8Ps
-         vTOhZb8WcHJEUP8vh8S8WlHToPt/66JZ6YS8u7Vka4oDOYxgeDi1/ovyv5+1zBceKb
-         JWsw4tO+o6ikB0l7P8CxKcPMqRwH5Wklz1hISJ7c=
+        b=OcgsoCHw1yd7iT77AuOQ4mGumHTABpqKgoLmE1qKBej0LUigPK7eRhbMgJVfANaBB
+         L9KreXUAbiN6M+rYKSCzE+++6RKqyUQcC9MTR00Q89Ha6ETn0NJvBwKMT6Wibx0dEL
+         xcEJKJqYsBmm9PGvhlERCHTuCOLt3WDsBzmFQvIQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
         Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 008/108] serial: 8250_omap: Fix sleeping function called from invalid context during probe
-Date:   Sat, 11 Apr 2020 19:08:03 -0400
-Message-Id: <20200411230943.24951-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 05/66] serial: 8250_omap: Fix sleeping function called from invalid context during probe
+Date:   Sat, 11 Apr 2020 19:11:02 -0400
+Message-Id: <20200411231203.25933-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
-References: <20200411230943.24951-1-sashal@kernel.org>
+In-Reply-To: <20200411231203.25933-1-sashal@kernel.org>
+References: <20200411231203.25933-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -107,19 +107,16 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 836e736ae188b..2624b5d083366 100644
+index a019286f8bb65..a7e555e413a69 100644
 --- a/drivers/tty/serial/8250/8250_omap.c
 +++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -1234,6 +1234,7 @@ static int omap8250_probe(struct platform_device *pdev)
+@@ -1227,11 +1227,11 @@ static int omap8250_probe(struct platform_device *pdev)
  	spin_lock_init(&priv->rx_dma_lock);
  
  	device_init_wakeup(&pdev->dev, true);
 +	pm_runtime_enable(&pdev->dev);
  	pm_runtime_use_autosuspend(&pdev->dev);
- 
- 	/*
-@@ -1247,7 +1248,6 @@ static int omap8250_probe(struct platform_device *pdev)
- 		pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
  
  	pm_runtime_irq_safe(&pdev->dev);
 -	pm_runtime_enable(&pdev->dev);
