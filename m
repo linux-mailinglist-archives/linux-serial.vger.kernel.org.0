@@ -2,97 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 072571A5213
-	for <lists+linux-serial@lfdr.de>; Sat, 11 Apr 2020 14:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836261A5B75
+	for <lists+linux-serial@lfdr.de>; Sun, 12 Apr 2020 01:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726679AbgDKMeF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 11 Apr 2020 08:34:05 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:45175 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726162AbgDKMeE (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 11 Apr 2020 08:34:04 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w11so2156848pga.12;
-        Sat, 11 Apr 2020 05:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NQZjjDOSKI1dwPpV3FbOsZ5gJfjZttSefQqUm/3OBQg=;
-        b=X+PpyUVoxb34SkOZe94dRXLLKOaf/NrlBDFCW/7o6fXNq6i1hGOIJanRVeohvhYa5S
-         qFjX3RvoAdheJHZg36gzcnJSMZHMOhMzGxW46UjPdtjO5hMo4Rylv3rlBQBlh2XjRVue
-         PT31xvZg5K/9JFYiqOhRpmz66+IgarSSUjJvkX8/kdSbBjYgmuGOHhFJOue5+nVvLFDV
-         i4rb3uQtBr4331ZUYcszXbpYRb6sLU6FdAvm0PVTVKF3iW55PdbcP44pNWnC304Pm+Ad
-         7a17EqGIDc34Yu24z+qxlDZlZEylr/9wRrpQ9zFHlaZgi2BiTEyaWze4e9RGpX9ympJo
-         Qjeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=NQZjjDOSKI1dwPpV3FbOsZ5gJfjZttSefQqUm/3OBQg=;
-        b=fmCvpnHneFLzXnq/wwrNC6/fY9AEnF6+PYzT9C4N8TQoHIv5Yrk9zZxB6Dpt76O2FP
-         7tyz2JVRuZUYzrxdI8k8XU7Vevi7Qfqvy7p9ISWgCjDWVqKBT+fWV6t01PICS1yiPYem
-         nErEaeXWTM/m5QZIEQKL4MBr45/oCKme23mXY2Y8NacujtoY5WksJ43PZQGIHbPvK5bI
-         oPqdbJ2vfLQFUnl5Z8hGFnbLIMmguJwuwEemZg+FCNX/eMGG5jpWYLOcff3ICjNaQn8F
-         cSJt5iJHAwhEKoghS+n5uyijp0u8VKTlFynX32MOOZOoyZbHK/KDs2GxTL2EOAhvvmim
-         ZWbw==
-X-Gm-Message-State: AGi0Pubn00pmPIgjGw5o+Wcy1QOJKtXPd32DWxsIHTPeVMbvmHR8alBV
-        ArB91rmFnPeRZTMGC199zwk=
-X-Google-Smtp-Source: APiQypKwguyuODBP4CsjPnGILxlyGR6I8n0khzaIAffSmN952rST7qQadqSzM2F6GTqMUEORbi9vWg==
-X-Received: by 2002:a63:2cd5:: with SMTP id s204mr8547295pgs.71.1586608443019;
-        Sat, 11 Apr 2020 05:34:03 -0700 (PDT)
-Received: from localhost.localdomain ([211.243.117.64])
-        by smtp.gmail.com with ESMTPSA id g2sm4117641pfh.193.2020.04.11.05.34.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2020 05:34:02 -0700 (PDT)
-From:   Hyunki Koo <hyunki00.koo@gmail.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org, krzk@kernel.org
-Cc:     Hyunki Koo <hyunki00.koo@samsung.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 1/2] dt-bindings: serial: add reg-io-width compatible
-Date:   Sat, 11 Apr 2020 21:33:25 +0900
-Message-Id: <20200411123325.30501-2-hyunki00.koo@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200411123325.30501-1-hyunki00.koo@gmail.com>
-References: <20200411123325.30501-1-hyunki00.koo@gmail.com>
+        id S1726973AbgDKXEB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 11 Apr 2020 19:04:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36804 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726955AbgDKXEA (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:04:00 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E82FF20787;
+        Sat, 11 Apr 2020 23:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586646239;
+        bh=VGMX2JZdxn3VGh4KvPjOqmJObZXODeTcPwHj39y31io=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YZGbHx6L+HA3K66lVoMZvPuuF16Gro/Olx4enF/P5P3gQgmrroNiSvjV9lXkeCtj8
+         c/WoxCt4gScrrQ0fws2WgfpaU42HvOdx43mcnfBxrbPDQr1uM7BiRJkBY64+NZi6AJ
+         lvLSbFHN+fZ52bNXKrnBtDUZ3qnTPljTZl72s2I8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 009/149] serial: 8250_omap: Fix sleeping function called from invalid context during probe
+Date:   Sat, 11 Apr 2020 19:01:26 -0400
+Message-Id: <20200411230347.22371-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200411230347.22371-1-sashal@kernel.org>
+References: <20200411230347.22371-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Hyunki Koo <hyunki00.koo@samsung.com>
+From: Peter Ujfalusi <peter.ujfalusi@ti.com>
 
-Add reg-io-width compatible
+[ Upstream commit 4ce35a3617c0ac758c61122b2218b6c8c9ac9398 ]
 
-Signed-off-by: Hyunki Koo <hyunki00.koo@samsung.com>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+When booting j721e the following bug is printed:
+
+[    1.154821] BUG: sleeping function called from invalid context at kernel/sched/completion.c:99
+[    1.154827] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 12, name: kworker/0:1
+[    1.154832] 3 locks held by kworker/0:1/12:
+[    1.154836]  #0: ffff000840030728 ((wq_completion)events){+.+.}, at: process_one_work+0x1d4/0x6e8
+[    1.154852]  #1: ffff80001214fdd8 (deferred_probe_work){+.+.}, at: process_one_work+0x1d4/0x6e8
+[    1.154860]  #2: ffff00084060b170 (&dev->mutex){....}, at: __device_attach+0x38/0x138
+[    1.154872] irq event stamp: 63096
+[    1.154881] hardirqs last  enabled at (63095): [<ffff800010b74318>] _raw_spin_unlock_irqrestore+0x70/0x78
+[    1.154887] hardirqs last disabled at (63096): [<ffff800010b740d8>] _raw_spin_lock_irqsave+0x28/0x80
+[    1.154893] softirqs last  enabled at (62254): [<ffff800010080c88>] _stext+0x488/0x564
+[    1.154899] softirqs last disabled at (62247): [<ffff8000100fdb3c>] irq_exit+0x114/0x140
+[    1.154906] CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.6.0-rc6-next-20200318-00094-g45e4089b0bd3 #221
+[    1.154911] Hardware name: Texas Instruments K3 J721E SoC (DT)
+[    1.154917] Workqueue: events deferred_probe_work_func
+[    1.154923] Call trace:
+[    1.154928]  dump_backtrace+0x0/0x190
+[    1.154933]  show_stack+0x14/0x20
+[    1.154940]  dump_stack+0xe0/0x148
+[    1.154946]  ___might_sleep+0x150/0x1f0
+[    1.154952]  __might_sleep+0x4c/0x80
+[    1.154957]  wait_for_completion_timeout+0x40/0x140
+[    1.154964]  ti_sci_set_device_state+0xa0/0x158
+[    1.154969]  ti_sci_cmd_get_device_exclusive+0x14/0x20
+[    1.154977]  ti_sci_dev_start+0x34/0x50
+[    1.154984]  genpd_runtime_resume+0x78/0x1f8
+[    1.154991]  __rpm_callback+0x3c/0x140
+[    1.154996]  rpm_callback+0x20/0x80
+[    1.155001]  rpm_resume+0x568/0x758
+[    1.155007]  __pm_runtime_resume+0x44/0xb0
+[    1.155013]  omap8250_probe+0x2b4/0x508
+[    1.155019]  platform_drv_probe+0x50/0xa0
+[    1.155023]  really_probe+0xd4/0x318
+[    1.155028]  driver_probe_device+0x54/0xe8
+[    1.155033]  __device_attach_driver+0x80/0xb8
+[    1.155039]  bus_for_each_drv+0x74/0xc0
+[    1.155044]  __device_attach+0xdc/0x138
+[    1.155049]  device_initial_probe+0x10/0x18
+[    1.155053]  bus_probe_device+0x98/0xa0
+[    1.155058]  deferred_probe_work_func+0x74/0xb0
+[    1.155063]  process_one_work+0x280/0x6e8
+[    1.155068]  worker_thread+0x48/0x430
+[    1.155073]  kthread+0x108/0x138
+[    1.155079]  ret_from_fork+0x10/0x18
+
+To fix the bug we need to first call pm_runtime_enable() prior to any
+pm_runtime calls.
+
+Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+Link: https://lore.kernel.org/r/20200320125200.6772-1-peter.ujfalusi@ti.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-v5: first added in this series
-v6: clean description of reg-io-width
-v7: correct build error on running 'make dt_binding_check' 
----
- .../devicetree/bindings/serial/samsung_uart.yaml          | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/tty/serial/8250/8250_omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-index 9d2ce347875b..a57b1233c691 100644
---- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-@@ -29,6 +29,14 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 6f343ca08440f..c066cf37778f8 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1231,6 +1231,7 @@ static int omap8250_probe(struct platform_device *pdev)
+ 	spin_lock_init(&priv->rx_dma_lock);
  
-+  reg-io-width:
-+    description: |
-+      The size (in bytes) of the IO accesses that should be performed
-+      on the device.
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32
-+      - enum: [ 1, 4 ]
-+
-   clocks:
-     minItems: 2
-     maxItems: 5
+ 	device_init_wakeup(&pdev->dev, true);
++	pm_runtime_enable(&pdev->dev);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 
+ 	/*
+@@ -1244,7 +1245,6 @@ static int omap8250_probe(struct platform_device *pdev)
+ 		pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
+ 
+ 	pm_runtime_irq_safe(&pdev->dev);
+-	pm_runtime_enable(&pdev->dev);
+ 
+ 	pm_runtime_get_sync(&pdev->dev);
+ 
 -- 
-2.17.1
+2.20.1
 
