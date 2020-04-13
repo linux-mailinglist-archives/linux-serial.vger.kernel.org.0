@@ -2,76 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 724DF1A6492
-	for <lists+linux-serial@lfdr.de>; Mon, 13 Apr 2020 11:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8786E1A6504
+	for <lists+linux-serial@lfdr.de>; Mon, 13 Apr 2020 12:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgDMJXu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 13 Apr 2020 05:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S1728101AbgDMKJr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 13 Apr 2020 06:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727796AbgDMJXu (ORCPT
+        by vger.kernel.org with ESMTP id S1728131AbgDMKJl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 13 Apr 2020 05:23:50 -0400
-X-Greylist: delayed 375 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 05:23:50 EDT
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A017CC008617;
-        Mon, 13 Apr 2020 02:23:48 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id q16so3061867pje.1;
-        Mon, 13 Apr 2020 02:23:48 -0700 (PDT)
+        Mon, 13 Apr 2020 06:09:41 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5299C00861B;
+        Mon, 13 Apr 2020 03:00:48 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id t11so8045311ils.1;
+        Mon, 13 Apr 2020 03:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LgPdHxZlhSC4v+zs/0AEa3wK9zKFB/PRFiLsEr99XBA=;
-        b=qm7THPT1ebhpY0cu+H+IZfi8W0+nhCKo3W1RJY2zgd2FkXZd8v+BUqMZ8UGgG1wXZD
-         TOk0XAG9IcwzpyneHCH7cIZSLewQsmgN4hTvX96TJnGDrACrYtvhM8YS6cn0cNP+paBc
-         rAvU+Li8dzTLEBewh9L0HYVYte1l1g1G33mW977AyZlDvHL4aTuBHBAOBihSo8zSBGQx
-         gZNbgnDW3bwke9d8k96T4XZXpeeCVS+zbQAPFSiIpryo3EeOZZi7P5B4TfFpYkwUzJFR
-         AaOmRFTy/5JvZwPehJlN9Mw7ckiuTLc501sCk84fZOEz68JUi8f21dolYx/gnLgtuQdC
-         bv2A==
+        bh=5Fh+7I1nkl6E4OzdC/8Kb7+iYk/dpPtFFiLYTuSRlqc=;
+        b=MQYKaPXnXdR08uDLBNJFXCoLmScqfdF0zA5PJ9vcgwyZlaMidV2d5DvAgSLiECYamH
+         nqkzukGFfZb6nwSiKPltyngON8ChcHHxbDj1Xmc7z7ds2wQZmpjZaP300cu3Nt+NpLdo
+         8vNcURIBBdgW7+9gSpidTL1u5rGK/6vKS3PWj0yay+qJBt56MKoKhCWIOIUBleY1uBrP
+         WnIR/CHcM5Y4IJjWKhspbmT5FCj4eTwPYff8t9WecyA9q2i+sN+sniv1iu/Yyy0bYVGn
+         8T9AVS8OMSB3TLs6HTREIICo6XQf9AcB88xOE4sD6Oki4vx42Cov8M/Jr0W69DOJtscE
+         0rXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LgPdHxZlhSC4v+zs/0AEa3wK9zKFB/PRFiLsEr99XBA=;
-        b=ST9MBvKQ6QA9t4pmeSdWKNQcDsRt3SidaN/nixo3igfle240Wqa1nf9rIQjMzrRYmc
-         RhMEFB3bV9NkRbmJdLDudZv0P9f+FjpKbbsBzU1l+PWz4X3MNG4O6Y1NnUBK8OBrVGh+
-         6SAI59w8dWraJJP07aP733yfd7UjDHsQvRpv4Afx4MOGWfs2elSJlzTflxcCZ1PR7SMA
-         qNKIxb5IkBiWM2Z1mQfAgyEd8A9y6GmoyqHiMTL5wWpabfcgQZF2j6ABSz8Ucw+gBzDd
-         EozrXrne8+bqcNOnLkAroEv/Y3V6uN4LAv9jafzerktII4UuY11yk3YVtEPN+Fl8IRCA
-         gUDQ==
-X-Gm-Message-State: AGi0PubWtCXtKWgx271E3OCVnwjqxkU9qrdOari2hr3tE+JnzCbU0U91
-        i0kmnIbfYME4/9BpPqzt4tHXfQTVBtZirHqKYwI=
-X-Google-Smtp-Source: APiQypLL/Wfg4Lp/+ohZlO4zV3KFFCVU24f2uryhyiPohL3pUIEuiUaUmKAr6opmbdZ8UEzmiQy3c2aNzlj8pcl0vZE=
-X-Received: by 2002:a17:90a:e982:: with SMTP id v2mr21162774pjy.1.1586769827768;
- Mon, 13 Apr 2020 02:23:47 -0700 (PDT)
+        bh=5Fh+7I1nkl6E4OzdC/8Kb7+iYk/dpPtFFiLYTuSRlqc=;
+        b=GfzacWdfGmxsXEj8WepKP9jQlWPAz/kFwdm56RmfHhzaH66C/jtUWd2ELKP3MX3I+U
+         JQE8j+NRSGz32faeyw3WsSiPSU2+BENSE+7orKQMnc0BPQwV2geruhIQIsDnmJY18WuA
+         ZY9mqIc9Gl3+fwz6//uyId/mgGDG9CQI+1aScwd77+sQzkqUahwK3bjGBY8eSZhAJseY
+         Rb4IAy+kQ/CsbwF+NklhvQn+ZFfghwiKJhgYx2k7e+YkFqiiHiYzKPLRkXnqlPy8cV7R
+         A5Ox06S9pnJWBRvgK2QK8RyLJt2f9Qlk3d59dBwqgwwoyhGnPCWl4/T9i/2F73hLz/Jf
+         IwOw==
+X-Gm-Message-State: AGi0PuaJD8mxuYARnwyL46MYtFZ/JET7t80ML4LMB2iKJxzh+eZB41Ja
+        G8fKY+RY2LLVTG3HuYrgPsrEcBjkPcuov88V1EkHs5i0
+X-Google-Smtp-Source: APiQypIA0oldmzxseP+rUre/aNgrThAcSTbX3lATEBnJG6MdpbCZKGbma9DopJXmarexktqodGEFAslUUE+SAesQ2MI=
+X-Received: by 2002:a92:a312:: with SMTP id a18mr16124853ili.249.1586772048130;
+ Mon, 13 Apr 2020 03:00:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <1581789069-5232-1-git-send-email-gupt21@gmail.com>
- <1581789069-5232-2-git-send-email-gupt21@gmail.com> <CALUj-gvM+mupR6qhh=ruyFzY7VL8zGHpcJ9N0oLk4mT-UG_r6A@mail.gmail.com>
-In-Reply-To: <CALUj-gvM+mupR6qhh=ruyFzY7VL8zGHpcJ9N0oLk4mT-UG_r6A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 13 Apr 2020 12:23:36 +0300
-Message-ID: <CAHp75VdDnUTbPJOjF7btQeaog+_Ni7Zon-bbBB0hNuQRZ8Vt2g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] tty/serial: ttvys: add null modem driver for emulation
-To:     rishi gupta <gupt21@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, Jiri Slaby <jslaby@suse.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <1586413563-29125-1-git-send-email-raviteja.narayanam@xilinx.com>
+In-Reply-To: <1586413563-29125-1-git-send-email-raviteja.narayanam@xilinx.com>
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+Date:   Mon, 13 Apr 2020 15:30:36 +0530
+Message-ID: <CAKfKVtFHhz-wD-2fiJVRMXxupe=YRZQ4SV-VU+u=Yxe3gfmvrg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] serial: uartps: Add tx_empty checks
+To:     Raviteja Narayanam <raviteja.narayanam@xilinx.com>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        jslaby@suse.com, Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, git@xilinx.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Apr 8, 2020 at 10:23 PM rishi gupta <gupt21@gmail.com> wrote:
+Hi Raviteja,
+thanks for the patch.
+
+On Thu, Apr 9, 2020 at 11:59 AM Raviteja Narayanam
+<raviteja.narayanam@xilinx.com> wrote:
 >
-> Humble ping for feedback please!
+> This patch series does the following:
+> Use cdns_uart_tx_empty function in the driver.
+> Wait for empty.
+>
+> v2:
+> Modified the wait in console setup and used cdns_uart_tx_empty function
+> in console_write as suggested by Maarten.
+>
+Reviewed-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
-No top-posting, please.
-
-Rebase your series on top of v5.7-rc1 and resend as v3.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> Raviteja Narayanam (2):
+>   serial: uartps: Wait for tx_empty in console setup
+>   serial: uartps: Use cdns_uart_tx_empty in console_write
+>
+>  drivers/tty/serial/xilinx_uartps.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> --
+> 2.7.4
+>
