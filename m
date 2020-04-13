@@ -2,111 +2,149 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AA61A65DA
-	for <lists+linux-serial@lfdr.de>; Mon, 13 Apr 2020 13:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A74A1A6764
+	for <lists+linux-serial@lfdr.de>; Mon, 13 Apr 2020 15:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgDMLuE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 13 Apr 2020 07:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729166AbgDMLuA (ORCPT
+        id S1730189AbgDMN6v (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 13 Apr 2020 09:58:51 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:54732 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730185AbgDMN6u (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 13 Apr 2020 07:50:00 -0400
-X-Greylist: delayed 493 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 07:49:44 EDT
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BC8C03BC85
-        for <linux-serial@vger.kernel.org>; Mon, 13 Apr 2020 04:41:30 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id c17so4437327ilk.6
-        for <linux-serial@vger.kernel.org>; Mon, 13 Apr 2020 04:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
-        b=prjS9vX1/lBHBQnmn8S5eSRPyVAkL53RoKQzE5AAHbxvNYI4a2v2cjTji7kXTppOEc
-         z/YC5TVvRJiGk2ecDbuxQbDezIHvoL12TwU8A8MoLDqkPTvq0EUKN12xVXuoac5P5vPG
-         CDxQUahEZp79myUg0SW4XqnobzWbEdaMDOCEcwJOYEkU2vBAFQtTx1QiAdzIaX9heUrh
-         wXqF9HmIVWbzu+LjtyhWb9YxG3jDJu9H0/2YRuWHtIWQg0GYyRRf+7+N2+T4/5hNzYkA
-         0Td5bmAVNGOZBhXtNLv8DRN8PKs1LisEF6odwJbW1cWSeUhqmMnZAT2UKZl4iJ1E/PV6
-         qofQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
-        b=AZPTGmqR/bL1gYc5pV0CDxqmN53GvNjg5NbLkHC5s41rwi5BGv09ciOOwOM6XfYCC4
-         qSi+fF9Njwc5L9BFclXAaDC5XcsHM19GQAaYJ03hU/64GcGdA5gtJIFlx9MOWBY3eEv9
-         YfmkguAcWnGujkp3aE6kPMB2vFpZAPWxF7/ss5B5ScrezgrxerOuSb8XWv9qIq29VOJ9
-         c0dDGCrakb2uoBNHvVQWMDWcfp6XoCPbxrTTEBSXFYFjLGU9XksjetsaQ0XAUlmHdoR+
-         SP09qKswoBs7pUZp8bxHyGALGblAoAw6SOWSF8GB0H0lYq7zrudRF8PjK5/lvxDxsi4b
-         nrvQ==
-X-Gm-Message-State: AGi0PubW05NMy3wQa09WJWK5giOcq0RAAu/9+cKRbGFsZy3sNUO3/lYH
-        H/RDKcLaYcd/bnKFL3zNz/HIDmUgSv5f6h6PrZynhZs=
-X-Google-Smtp-Source: APiQypL8TqJIeu3sv8q1i+SGhGHI+g2m6cjavfj0dEc+5JPmC3aVP4wfZgyktqWXbHy6/UF7VoKUuS2YyJ3E1gwa7Hs=
-X-Received: by 2002:a92:cccb:: with SMTP id u11mr9656514ilq.8.1586778089638;
- Mon, 13 Apr 2020 04:41:29 -0700 (PDT)
+        Mon, 13 Apr 2020 09:58:50 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1586786328; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Y/gdVVe6BVm6JgYV9eCeY9S+PgE2k5W+l+hDimM0Yso=; b=GYder3mcikefBVmagln+TyPRzgqLmSsfHM2gLXqWHg7l/prUvgf2lJHnJ1apHwqqX1u2knFZ
+ 7khhLCXACfS36n1kwlbbfkm/YGPvzFkTXY4UXN18e0HL6kOMnpnid+9KKQr6PCTxGqjDVl/D
+ XgHjGnC2FDaT32oHQ/FPxU728Ys=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzZmY0MiIsICJsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e947017.7f6220e1cd18-smtp-out-n01;
+ Mon, 13 Apr 2020 13:58:47 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id BB972C433F2; Mon, 13 Apr 2020 13:58:47 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.111.193.245] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id EF2DFC433CB;
+        Mon, 13 Apr 2020 13:58:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EF2DFC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH 02/21] tty: serial: qcom_geni_serial: Use OPP API to set
+ clk/perf state
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-serial@vger.kernel.org
+References: <1586353607-32222-1-git-send-email-rnayak@codeaurora.org>
+ <1586353607-32222-3-git-send-email-rnayak@codeaurora.org>
+ <20200409174511.GS199755@google.com>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <e3aa9e6f-14f5-de51-7087-094b5089d16b@codeaurora.org>
+Date:   Mon, 13 Apr 2020 19:28:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Received: by 2002:a02:5e49:0:0:0:0:0 with HTTP; Mon, 13 Apr 2020 04:41:28
- -0700 (PDT)
-Reply-To: mgbenin903@gmail.com
-From:   Barrister Robert Richter UN-Attorney at Law Court-Benin 
-        <info.zennitbankplcnigerian@gmail.com>
-Date:   Mon, 13 Apr 2020 13:41:28 +0200
-Message-ID: <CABHzvrngm=rA5Ct9h+JGdbyDfHJmnfntceDPoyJToo8PZn+YZg@mail.gmail.com>
-Subject: I have already sent you first payment US$5000.00 this morning through
- MONEY Gram service.it is available to pick up in address now.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200409174511.GS199755@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ATTN DEAR BENEFICIARY.
+Hi Matthias,
 
-GOOD NEWS.
+On 4/9/2020 11:15 PM, Matthias Kaehlcke wrote:
+> Hi Rajendra,
+> 
+> On Wed, Apr 08, 2020 at 07:16:28PM +0530, Rajendra Nayak wrote:
+>> geni serial needs to express a perforamnce state requirement on CX
+>> depending on the frequency of the clock rates. Use OPP table from
+>> DT to register with OPP framework and use dev_pm_opp_set_rate() to
+>> set the clk/perf state.
+>>
+>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+>> Cc: Akash Asthana <akashast@codeaurora.org>
+>> Cc: linux-serial@vger.kernel.org
+>> ---
+>>   drivers/tty/serial/qcom_geni_serial.c | 20 +++++++++++++++-----
+>>   include/linux/qcom-geni-se.h          |  2 ++
+>>   2 files changed, 17 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+>> index 6119090..754eaf6 100644
+>> --- a/drivers/tty/serial/qcom_geni_serial.c
+>> +++ b/drivers/tty/serial/qcom_geni_serial.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/module.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_device.h>
+>> +#include <linux/pm_opp.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/pm_runtime.h>
+>>   #include <linux/pm_wakeirq.h>
+>> @@ -961,7 +962,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+>>   		goto out_restart_rx;
+>>   
+>>   	uport->uartclk = clk_rate;
+>> -	clk_set_rate(port->se.clk, clk_rate);
+>> +	dev_pm_opp_set_rate(uport->dev, clk_rate);
+>>   	ser_clk_cfg = SER_CLK_EN;
+>>   	ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
+>>   
+>> @@ -1198,8 +1199,10 @@ static void qcom_geni_serial_pm(struct uart_port *uport,
+>>   	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF)
+>>   		geni_se_resources_on(&port->se);
+>>   	else if (new_state == UART_PM_STATE_OFF &&
+>> -			old_state == UART_PM_STATE_ON)
+>> +			old_state == UART_PM_STATE_ON) {
+>> +		dev_pm_opp_set_rate(uport->dev, 0);
+>>   		geni_se_resources_off(&port->se);
+>> +	}
+>>   }
+>>   
+>>   static const struct uart_ops qcom_geni_console_pops = {
+>> @@ -1318,13 +1321,16 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>>   	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
+>>   		port->cts_rts_swap = true;
+>>   
+>> +	port->se.opp = dev_pm_opp_set_clkname(&pdev->dev, "se");
+> 
+> dev_pm_opp_set_clkname() can fail for multiple reasons, it seems an error
+> check would be warranted.
 
-I have already sent you first payment US$5000.00 this morning through
-MONEY Gram service.it is available to pick up in address now.
+right, looks like I should put some error check there
 
-So we advise you to Contact This Money Gram office to pick up your
-transfer $US5000.00 today.
+> Is it actually necessary to save the OPP table in 'struct geni_se'? Both
+> the serial and the SPI driver save the table, but don't use it later (nor
+> does the SE driver).
 
+I think I did that initially because I wanted to use that to call into
+dev_pm_opp_put_clkname during cleanup. That however never worked since
+the way the clk_put is done in dev_pm_opp_put_clkname() and _opp_table_kref_release()
+seems buggy. I kind of forgot about fixing it up, I will figure our whats the right
+way to do it, and either not call dev_pm_opp_put_clkname() or not store the
+opp table returned by it.
 
-Note that your compensation payment funds is total amount $US2.800,000
-Million Dollars.We have instructed the Money Gram Agent,Mr. James
-Gadner to keep sending the transfer to you daily, but the maximum
-amount you will be receiving everyday is US$5000.00. Contact Agent now
-to pick up your first payment $US5000.00 immediately.
+thanks for taking time to review.
 
-Contact Person, Mr. James Gadner, Dir. Money Gram Benin.
-Email: mgbenin903@gmail.com
-Telephone Numbers: +229 62819378/ +229 98477762
+- Rajendra
+  
 
-HERE IS YOUR PAYMENT DETAILS FOR THE FIRST =C2=A3US5000.00 SENT TODAY.
-
-Track View Website link:
-https://secure.moneygram.com/track
-Sender=E2=80=99s First name: David
-Sender=E2=80=99s Last Name: Joiner
-Money Transfer Control Number (MTCN) (REFERENCE)# 26046856
-
-Contact the Mmoney Gram Urgent and reconfirm your address to the
-office before, they will allow you to pick up the transfer today.
-
-HERE IS WHAT REQUIRED OF YOU.
-
-YOUR FULL NAME---------
-ADDRESS--------------
-COUNTRY-----------------------------
-TELEPHONE NUMBERS-----------------
-
-Note, I paid the transfer fee for you, but only you are required to
-send to the office is $75 only,Been Your Payment File activation fee,
-Send once you contact the office,before you can able to pick up your
-transfer today.
-
-Let me know once you pick up first payment today.
-
-Barrister Robert Richter UN-Attorney at Law Court-Benin
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
