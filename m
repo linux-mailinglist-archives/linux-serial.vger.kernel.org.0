@@ -1,299 +1,114 @@
 Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CE81A5FB0
-	for <lists+linux-serial@lfdr.de>; Sun, 12 Apr 2020 20:15:11 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5EE1A649B
+	for <lists+linux-serial@lfdr.de>; Mon, 13 Apr 2020 11:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727523AbgDLSPJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 12 Apr 2020 14:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:41442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727474AbgDLSPG (ORCPT
+        id S1728281AbgDMJYx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 13 Apr 2020 05:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728234AbgDMJYn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 12 Apr 2020 14:15:06 -0400
-Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653DAC008749;
-        Sun, 12 Apr 2020 11:10:04 -0700 (PDT)
-Received: from localhost.localdomain (unknown [157.50.0.25])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 77BF8206DA;
-        Sun, 12 Apr 2020 18:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586715004;
-        bh=A+Q5c8ZprAFrfX84bhRceoLh8P6URdK3TI6udATXaeU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SyBPTZnFOwIDwpsYtkOw7Qy+ac1zBbq9NVN381s6JiZJBtWE6ghCNgedOeQijthQi
-         sVXQJBFdHR75itQlQoFAaNMoqlKkJvIL16yAE01TgViQcPVxKxDT0J5rb+S1oDh9Dw
-         jM5oOyqjSUWE7WCoBYS81KvmYFw6NvPSzXKYF5nQ=
-From:   mani@kernel.org
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: [PATCH 2/2] tty: serial: Add software flow control support for STM32 USART
-Date:   Sun, 12 Apr 2020 23:39:23 +0530
-Message-Id: <20200412180923.30774-3-mani@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200412180923.30774-1-mani@kernel.org>
+        Mon, 13 Apr 2020 05:24:43 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41023C0A3BDC;
+        Mon, 13 Apr 2020 02:17:34 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id o1so2742367pjs.4;
+        Mon, 13 Apr 2020 02:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Es/1kSX+2DTfIEl11xOgF+dKXSLyBYadIDMkf6JWRY=;
+        b=uD88jc+H5svxYWnFnmOVmZGhizFVGLAqr3CGeRWDO71LcsasJpC+gS6bTbGRjKJPM3
+         oZ9POJtkVxjLCFTbcL+p8nnQySxbLL31W4FoXcAJX3ZzjWVGDARV0SImqIOX2W/pEOon
+         VNWH55nNVoBjMsIDFb8wwRfiKr0nqmZqI1/dBsNbIj2R9CC6u/yGTisg10eG5ytX8cMI
+         EvG8HXr+df/G5G78N96KOfukqqYSuC0n4PXJR38NSI3N1XwImkZhSlFym87QkkP6mlcN
+         uuEiLWJ+0805c7VirFoRpj+kz8ZQJXGK5w90D5bDCpywG0dKP5HsHGALfFUSO/gVPw4l
+         oR6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Es/1kSX+2DTfIEl11xOgF+dKXSLyBYadIDMkf6JWRY=;
+        b=PboJL/GaMRxuS+S8dzjyhq521H20gI6TkBUiQMEji9oHiBj4QZpVYjzPnxXl8qlgv4
+         pqxbLhIMs4qFm2b25pN7s2HgCtsV0NWTDaihxesL08L+UvW4kVQ73Q7L3XneLwryOy1W
+         +4Ym2qLLxCwHCi4sZeMSL7GRErWrB/Xvxkmu9R+8WlNKg4TnDlU/e5yfHGLd1DURtNnv
+         uCsH9V62WouYdHsfpLZg04IqKP7/Q65MDm3T4Sw1Mwt8s7HrH4MtR4KTT4FLsv4sy3wq
+         0Quob7c2CmDPk+kj7V7dmeBYSB1bbqZF/ctLZPfeDDUmVBKWRnCeS2isnKDG0p3vJnVb
+         erZw==
+X-Gm-Message-State: AGi0PuYxMGyNCL9mX62yKq5PU84rOFXNbLT3ydVduh8gf4i2IWv+jzAb
+        AUSr5CfINISJ55BMDHzvmKPbYAkd27E19LNj5CY=
+X-Google-Smtp-Source: APiQypKrhwIBdb9K5xK6+BTvgkhgXaWgjvsbqf2WCnQLazfGOFLVhIlgZpBJQNARmhWX7ScRLGvI/AGMLB5ktOM49e0=
+X-Received: by 2002:a17:902:9306:: with SMTP id bc6mr16330033plb.255.1586769453549;
+ Mon, 13 Apr 2020 02:17:33 -0700 (PDT)
+MIME-Version: 1.0
 References: <20200412180923.30774-1-mani@kernel.org>
+In-Reply-To: <20200412180923.30774-1-mani@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 13 Apr 2020 12:17:21 +0300
+Message-ID: <CAHp75VfDUoFMWg42OFHZtKQ972eoR3UDLVAs+BQjJm3h3-fOGw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add software flow control support for STM32 UART
+To:     mani@kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Manivannan Sadhasivam <mani@kernel.org>
+On Mon, Apr 13, 2020 at 7:06 AM <mani@kernel.org> wrote:
+>
+> From: Manivannan Sadhasivam <mani@kernel.org>
+>
+> Hello,
+>
+> This patchset adds software flow control support for STM32 UART controller.
+> This is necessary for the upcoming STM32MP1 based board called Stinger96
+> IoT-Box. On that board, a bluetooth chip is connected to one of the UART
+> controller but the CTS/RTS lines got swapped mistakenly. So in order to
+> workaround that hardware bug and also to support the usecase of using only
+> Tx/Rx pins, this patchset adds software flow control support.
+>
+> This patchset has been validated w/ Stinger96 IoT-Box connected to Murata
+> WiFi-BT combo chip.
+>
 
-Add software flow control support for STM32 USART controller. This could
-be useful when the hardware RTS/CTS pins are not available in the
-design.
+I think it's a mix of terminology or so. Looking into the patches I
+found that it's required to have GPIOs for SW flow control.
+No, SW flow control does not require any additional signals, except RxD/TxD.
 
-Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
----
- drivers/tty/serial/stm32-usart.c | 143 +++++++++++++++++++++++++++++--
- drivers/tty/serial/stm32-usart.h |   4 +
- 2 files changed, 141 insertions(+), 6 deletions(-)
+On top of that, it seems you adding mctrl-gpio functionality. Why
+can't you use that one? And thus no bindings needs to be updated.
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 5e93e8d40f59..f8adc108ae19 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -19,6 +19,7 @@
- #include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_gpio.h>
- #include <linux/of_platform.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-@@ -94,6 +95,20 @@ static void stm32_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
- 	*cr1 |= rs485_deat_dedt;
- }
- 
-+static irqreturn_t stm32_cts_handler(int irq, void *dev_id)
-+{
-+	struct stm32_port *stm32port = (struct stm32_port *)dev_id;
-+	struct uart_port *port = &stm32port->port;
-+
-+	spin_lock(&port->lock);
-+	if (gpio_is_valid(stm32port->cts_gpio) && stm32port->ms_enabled)
-+		uart_handle_cts_change(port,
-+				!gpio_get_value(stm32port->cts_gpio));
-+	spin_unlock(&port->lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int stm32_config_rs485(struct uart_port *port,
- 			      struct serial_rs485 *rs485conf)
- {
-@@ -506,16 +521,39 @@ static void stm32_set_mctrl(struct uart_port *port, unsigned int mctrl)
- 	struct stm32_port *stm32_port = to_stm32_port(port);
- 	struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
- 
--	if ((mctrl & TIOCM_RTS) && (port->status & UPSTAT_AUTORTS))
--		stm32_set_bits(port, ofs->cr3, USART_CR3_RTSE);
--	else
--		stm32_clr_bits(port, ofs->cr3, USART_CR3_RTSE);
-+	if (stm32_port->hw_flow_control) {
-+		if ((mctrl & TIOCM_RTS) && (port->status & UPSTAT_AUTORTS))
-+			stm32_set_bits(port, ofs->cr3, USART_CR3_RTSE);
-+		else
-+			stm32_clr_bits(port, ofs->cr3, USART_CR3_RTSE);
-+	} else if (stm32_port->sw_flow_control) {
-+		if ((mctrl & TIOCM_RTS))
-+			gpio_set_value(stm32_port->rts_gpio, 0);
-+		else
-+			gpio_set_value(stm32_port->rts_gpio, 1);
-+	}
- }
- 
-+/* This routine is used to get signals of: DCD, DSR, RI, and CTS */
- static unsigned int stm32_get_mctrl(struct uart_port *port)
- {
--	/* This routine is used to get signals of: DCD, DSR, RI, and CTS */
-+	struct stm32_port *stm32_port = to_stm32_port(port);
-+
-+	if (!stm32_port->ms_enabled)
-+		goto cts_asserted;
-+
-+	if (stm32_port->sw_flow_control) {
-+		if (!gpio_get_value(stm32_port->cts_gpio))
-+			goto cts_asserted;
-+		else
-+			goto cts_deasserted;
-+	}
-+
-+cts_asserted:
- 	return TIOCM_CAR | TIOCM_DSR | TIOCM_CTS;
-+
-+cts_deasserted:
-+	return TIOCM_CAR | TIOCM_DSR;
- }
- 
- /* Transmit stop */
-@@ -582,6 +620,28 @@ static void stm32_break_ctl(struct uart_port *port, int break_state)
- {
- }
- 
-+static void stm32_enable_ms(struct uart_port *port)
-+{
-+	struct stm32_port *stm32_port = to_stm32_port(port);
-+
-+	if (!stm32_port->sw_flow_control)
-+		return;
-+
-+	stm32_port->ms_enabled = true;
-+	enable_irq(gpio_to_irq(stm32_port->cts_gpio));
-+}
-+
-+static void stm32_disable_ms(struct uart_port *port)
-+{
-+	struct stm32_port *stm32_port = to_stm32_port(port);
-+
-+	if (!stm32_port->sw_flow_control)
-+		return;
-+
-+	stm32_port->ms_enabled = false;
-+	disable_irq(gpio_to_irq(stm32_port->cts_gpio));
-+}
-+
- static int stm32_startup(struct uart_port *port)
- {
- 	struct stm32_port *stm32_port = to_stm32_port(port);
-@@ -615,6 +675,19 @@ static int stm32_startup(struct uart_port *port)
- 		val |= USART_CR1_FIFOEN;
- 	stm32_set_bits(port, ofs->cr1, val);
- 
-+	stm32_port->ms_enabled = false;
-+	if (stm32_port->sw_flow_control) {
-+		irq_modify_status(gpio_to_irq(stm32_port->cts_gpio),
-+				  IRQ_NOREQUEST, IRQ_NOAUTOEN);
-+		ret = request_irq(gpio_to_irq(stm32_port->cts_gpio),
-+			stm32_cts_handler, IRQF_TRIGGER_FALLING |
-+			IRQF_TRIGGER_RISING, "stm32_cts_irq", stm32_port);
-+		if (ret != 0) {
-+			dev_err(port->dev, "request gpio irq fail\n");
-+			return ret;
-+		}
-+	}
-+
- 	return 0;
- }
- 
-@@ -642,6 +715,14 @@ static void stm32_shutdown(struct uart_port *port)
- 	stm32_clr_bits(port, ofs->cr1, val);
- 
- 	free_irq(port->irq, port);
-+
-+	if (stm32_port->ms_enabled)
-+		stm32_disable_ms(port);
-+
-+	if (stm32_port->sw_flow_control) {
-+		gpio_set_value(stm32_port->rts_gpio, 1);
-+		free_irq(gpio_to_irq(stm32_port->cts_gpio), stm32_port);
-+	}
- }
- 
- static unsigned int stm32_get_databits(struct ktermios *termios)
-@@ -812,6 +893,14 @@ static void stm32_set_termios(struct uart_port *port, struct ktermios *termios,
- 	if ((termios->c_cflag & CREAD) == 0)
- 		port->ignore_status_mask |= USART_SR_DUMMY_RX;
- 
-+	if (UART_ENABLE_MS(port, termios->c_cflag)) {
-+		if (!stm32_port->ms_enabled)
-+			stm32_enable_ms(port);
-+	} else {
-+		if (stm32_port->ms_enabled)
-+			stm32_disable_ms(port);
-+	}
-+
- 	if (stm32_port->rx_ch)
- 		cr3 |= USART_CR3_DMAR;
- 
-@@ -898,6 +987,7 @@ static const struct uart_ops stm32_uart_ops = {
- 	.throttle	= stm32_throttle,
- 	.unthrottle	= stm32_unthrottle,
- 	.stop_rx	= stm32_stop_rx,
-+	.enable_ms	= stm32_enable_ms,
- 	.break_ctl	= stm32_break_ctl,
- 	.startup	= stm32_startup,
- 	.shutdown	= stm32_shutdown,
-@@ -970,7 +1060,7 @@ static int stm32_init_port(struct stm32_port *stm32port,
- static struct stm32_port *stm32_of_get_stm32_port(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
--	int id;
-+	int id, ret;
- 
- 	if (!np)
- 		return NULL;
-@@ -990,6 +1080,47 @@ static struct stm32_port *stm32_of_get_stm32_port(struct platform_device *pdev)
- 	stm32_ports[id].cr1_irq = USART_CR1_RXNEIE;
- 	stm32_ports[id].cr3_irq = 0;
- 	stm32_ports[id].last_res = RX_BUF_L;
-+
-+	stm32_ports[id].sw_flow_control = of_property_read_bool(np,
-+							"st,sw-flow-ctrl");
-+	if (stm32_ports[id].sw_flow_control) {
-+		if (of_find_property(np, "cts-gpios", NULL))
-+			stm32_ports[id].cts_gpio =
-+				of_get_named_gpio(np, "cts-gpios", 0);
-+		else
-+			stm32_ports[id].cts_gpio = -1;
-+
-+		if (of_find_property(np, "rts-gpios", NULL))
-+			stm32_ports[id].rts_gpio =
-+				of_get_named_gpio(np, "rts-gpios", 0);
-+		else
-+			stm32_ports[id].rts_gpio = -1;
-+
-+		if ((!gpio_is_valid(stm32_ports[id].cts_gpio)) ||
-+			(!gpio_is_valid(stm32_ports[id].rts_gpio))) {
-+				dev_err(&pdev->dev,
-+					"SW flow control must have cts and rts gpio");
-+				return NULL;
-+		}
-+
-+		ret = devm_gpio_request(&pdev->dev, stm32_ports[id].cts_gpio,
-+				"st-cts-gpio");
-+		if (ret) {
-+			dev_err(&pdev->dev, "Unable request cts gpio");
-+			return NULL;
-+		}
-+
-+		gpio_direction_input(stm32_ports[id].cts_gpio);
-+		ret = devm_gpio_request(&pdev->dev, stm32_ports[id].rts_gpio,
-+				"st-rts-gpio");
-+		if (ret) {
-+			dev_err(&pdev->dev, "Unable request rts gpio");
-+			return NULL;
-+		}
-+
-+		gpio_direction_output(stm32_ports[id].rts_gpio, 1);
-+	}
-+
- 	return &stm32_ports[id];
- }
- 
-diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
-index a175c1094dc8..87b30f514e15 100644
---- a/drivers/tty/serial/stm32-usart.h
-+++ b/drivers/tty/serial/stm32-usart.h
-@@ -274,6 +274,10 @@ struct stm32_port {
- 	bool fifoen;
- 	int wakeirq;
- 	int rdr_mask;		/* receive data register mask */
-+	bool sw_flow_control;
-+	unsigned int cts_gpio;
-+	unsigned int rts_gpio;
-+	bool ms_enabled;
- };
- 
- static struct stm32_port stm32_ports[STM32_MAX_PORTS];
+> Thanks,
+> Mani
+>
+> Manivannan Sadhasivam (2):
+>   dt-bindings: serial: Add binding for software flow control in STM32
+>     UART
+>   tty: serial: Add software flow control support for STM32 USART
+>
+>  .../bindings/serial/st,stm32-uart.yaml        |  15 +-
+>  drivers/tty/serial/stm32-usart.c              | 143 +++++++++++++++++-
+>  drivers/tty/serial/stm32-usart.h              |   4 +
+>  3 files changed, 155 insertions(+), 7 deletions(-)
+>
+> --
+> 2.17.1
+>
+
+
 -- 
-2.17.1
-
+With Best Regards,
+Andy Shevchenko
