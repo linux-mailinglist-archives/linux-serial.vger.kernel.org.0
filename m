@@ -2,89 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6981AB13E
-	for <lists+linux-serial@lfdr.de>; Wed, 15 Apr 2020 21:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ABF1AB41B
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Apr 2020 01:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411779AbgDOTIP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 15 Apr 2020 15:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1416850AbgDOSpG (ORCPT
+        id S2387914AbgDOXPM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 Apr 2020 19:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388352AbgDOXPI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 15 Apr 2020 14:45:06 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5CBC061A0C
-        for <linux-serial@vger.kernel.org>; Wed, 15 Apr 2020 11:45:05 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id h6so3507713lfc.0
-        for <linux-serial@vger.kernel.org>; Wed, 15 Apr 2020 11:45:05 -0700 (PDT)
+        Wed, 15 Apr 2020 19:15:08 -0400
+Received: from mail-oo1-xc41.google.com (mail-yw1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6243EC061A0F
+        for <linux-serial@vger.kernel.org>; Wed, 15 Apr 2020 16:15:08 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id y131so262781ooa.2
+        for <linux-serial@vger.kernel.org>; Wed, 15 Apr 2020 16:15:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q2DhW19F5pMEECv7CQj1MOdLm5s6TFmrwq5m6p9uEbQ=;
-        b=mGtbPPdiDEvHBdOFRyf6r9msqXIjJa8ORhZJYQwbHpaa55v0yt+KzBUY8n2AEhRUOZ
-         +h4MJxCPm8j6B78dtVB9KdYgdzHoLiOg/lWU7saQSPfWEFEuzTJChJUv6CXnl5qSPKp0
-         pG56jWsN1GjJh1KH9EdJ8fn76XW2ICxVQT7Q9+b+9cQW0Mu8Kxixo8GNv7dgxd26xppG
-         vT3j3DkVSBPtDPqMIs/YfCOAEmmt/vIdOS3UudGHwTI/bIZV4ZYOPPqGLYlOmE1SU7V5
-         Z4HCIRQhFUqL928Y//wUwu7Go0n8HZaO4VcRaKuqzJHuAbefNP2orqZ/oF/T5uxe1EPb
-         KwAQ==
+        d=landley-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3OjUG2BuSmqAZb0WXRtXD4dSg3ZpvowTxplHgaVM3Q8=;
+        b=F35xhtgPpx/jIbkJJBdV5g5+ruNOIXKelQQyX5bbrTqVnC7gIyw7HrbOzu3enHe323
+         sFh/bnS27E/omhCaw3SCfbMWoJSFeUQFPCmwybIdj/Q6kAkzUGA5GqDzLPUCYJkgaK60
+         YUzH1qXFrk8Hl+LTNeS1g3snqHA6YPHoqMUETupiyQq6He/GVwNeYMbC/+XOUEjIheHx
+         prQCsPkvd5m7qWUcj9ByTl9O+MQYBgcDHCdvJF0ifM2LIRt7ZUQEBF+XifKq05a0jumF
+         Z59n5r7F1PhddLmxE5Nb8oZa2Xj6Bd+y2gvlnhlQOzm9foLtxRLQ07xOLRDmBpBVoTc/
+         L8pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Q2DhW19F5pMEECv7CQj1MOdLm5s6TFmrwq5m6p9uEbQ=;
-        b=EmezkkuKMEwu9qd6CKAlpM+5mwc7r8fw+PNAtMNJars25qS+cJ5AS0Z48Gku0LhFDq
-         V5dnKV2mSDjkBv0NsjV+E+CxSha2mlJ5HGv5c0neqJm0ZnfTB6i8tAeNmjgwerny5HQb
-         QweFj/kIiRk+VdSPZ+lSMP28Xuzn58n2jlaPLa6aQkNGWBbox4QRIqVz88zsVznOoamy
-         hFQQjXfr8D6mVw6M5NAhY8UHRy31ySC4UohvnyT5YnCnhOYKFwrPsMyaG4r9FgNGoD+q
-         5AC3FVb/ebGPIBKimGPMjjj0/sfWCnMfLOLmFJQwEYnZaxICfcAjBTN7uBnRqrZ/E8cn
-         a9hg==
-X-Gm-Message-State: AGi0PuaiaH3ipfDcf0Vc76a7eIZFCceaZOJAKrjq3BiZClAtb196UlTK
-        PbFGafdKoZp2RK3lypE/Cp0TgjXP0/Q=
-X-Google-Smtp-Source: APiQypLJy6DCsG92z5VSfTC9R/Tmy7DQHk81PyZk9ryQeeEGHaxQzbeE3YjKK+5DApyQdl8ZzGxmGg==
-X-Received: by 2002:a05:6512:31c1:: with SMTP id j1mr3919775lfe.14.1586976303837;
-        Wed, 15 Apr 2020 11:45:03 -0700 (PDT)
-Received: from localhost.localdomain (c-f3d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.243])
-        by smtp.gmail.com with ESMTPSA id q26sm2965571ljg.47.2020.04.15.11.45.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2020 11:45:03 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Roland Stigge <stigge@antcom.de>
-Subject: [PATCH] serial: lpc32xx_hs: Drop surplus include
-Date:   Wed, 15 Apr 2020 20:43:00 +0200
-Message-Id: <20200415184300.269889-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.25.2
+        bh=3OjUG2BuSmqAZb0WXRtXD4dSg3ZpvowTxplHgaVM3Q8=;
+        b=W6V7pYZbJszWikwnwhbkkLy+QA4UaGzjaH5mNRqEnNO0i/m3b6No8vllRQn7KO6T5n
+         /c010NiusAGQ5H1Lwm1YNroG6wu0gPn3slwXasS5SkRM6iKX3NgB20zhJJ/qXzTZ3QMC
+         aPpeMZkCFqIcV87Zfiu5ytzhQc4ck01K5HPoFvlW7O+Qa2SD5HxPkzVdnMRVxWJR4BHc
+         /l6wyxlwhYgX2AHPrRq0cyPGK68xCX8PfEXAF5u4FCt2HNbqbzQtf5cISTMgLOqGHvUo
+         qRSnuYlZSq4Uer7FhxOlfwEBwv9GSJwERBqeih2TZLI38TXt/Hmp5DalJnJ2vzWMsSXd
+         /URQ==
+X-Gm-Message-State: AGi0PuZZFM+iSPg5ZEqcVb7xZ9M8zVH70+au9QyFs8CQZbchuGRzu0GA
+        08lU3y3JeLzkxKR6qIN0uV5p+Q==
+X-Google-Smtp-Source: APiQypJX4BQ8dde+gIq4uYB2s5OItvEplprtWtCefc9av8Gy6HUjt41wXcWpqBb6biLoaS77Egd/0g==
+X-Received: by 2002:a4a:874f:: with SMTP id a15mr14836132ooi.8.1586992507739;
+        Wed, 15 Apr 2020 16:15:07 -0700 (PDT)
+Received: from [192.168.86.21] ([136.62.4.88])
+        by smtp.googlemail.com with ESMTPSA id o23sm7330628oos.36.2020.04.15.16.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2020 16:15:07 -0700 (PDT)
+Subject: Re: [PATCH] serial: sh-sci: Make sure status register SCxSR is read
+ in correct sequence
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kazuhiro Fujita <kazuhiro.fujita.jg@renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hao Bui <hao.bui.yg@renesas.com>,
+        KAZUMI HARADA <kazumi.harada.rh@renesas.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Chris Brandt <Chris.Brandt@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+References: <1585333048-31828-1-git-send-email-kazuhiro.fujita.jg@renesas.com>
+ <CAMuHMdW+u5r6zyxFJsVzj21BYDrKCr=Q6Ojk5VeN+mkhvXX9Jw@mail.gmail.com>
+ <OSBPR01MB3590E3D12546BC6711CEB542AAC80@OSBPR01MB3590.jpnprd01.prod.outlook.com>
+ <CAMuHMdXmfQ0x7mCZ-E7OPQFv2z-=mFDT20hJ2_JKax=OePB8eA@mail.gmail.com>
+ <CA+V-a8vPn_z_j1Vwr_1F=dCw8H=g5UMWvWxgRqBeVR7dzHPz8Q@mail.gmail.com>
+ <CAMuHMdWc9q9NjQuAuy5M=v_x=i8XxVg5JZHswjvPsgNzhHfO0w@mail.gmail.com>
+ <CAMuHMdUyV58t3eihBJv2xex5gW1Oef37Jo3FHoJstU=SspmpHA@mail.gmail.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <67d1a3a0-a160-f707-b7c5-ba610a3f76c8@landley.net>
+Date:   Wed, 15 Apr 2020 18:21:01 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdUyV58t3eihBJv2xex5gW1Oef37Jo3FHoJstU=SspmpHA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The driver includes <linux/gpio.h> but does not use any symbols
-from the file so drop this include.
+On 4/15/20 7:36 AM, Geert Uytterhoeven wrote:
+>> Let's wait a bit, we're in the middle of the merge window anyway.
+>> Probably we can get it tested on SuperH during the coming weeks.
+> 
+> Anyone with a real (not qemu) SuperH system who can do the basic "stty evenp"
+> tests above, and report back to us?
+> Thanks a lot!
+The j-core boards use either uartlite or 16550a for serial, and neither of my
+legacy sh4 boxes is easily accessible right now. But if nobody manages to test
+this before next merge window poke me and I can set one up.
 
-Cc: Roland Stigge <stigge@antcom.de>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/tty/serial/lpc32xx_hs.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/tty/serial/lpc32xx_hs.c b/drivers/tty/serial/lpc32xx_hs.c
-index 9a836dcac157..b5898c932036 100644
---- a/drivers/tty/serial/lpc32xx_hs.c
-+++ b/drivers/tty/serial/lpc32xx_hs.c
-@@ -23,7 +23,6 @@
- #include <linux/nmi.h>
- #include <linux/io.h>
- #include <linux/irq.h>
--#include <linux/gpio.h>
- #include <linux/of.h>
- #include <linux/sizes.h>
- #include <linux/soc/nxp/lpc32xx-misc.h>
--- 
-2.25.2
-
+Rob
