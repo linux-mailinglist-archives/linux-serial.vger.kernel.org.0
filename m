@@ -2,100 +2,161 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722441A868C
-	for <lists+linux-serial@lfdr.de>; Tue, 14 Apr 2020 19:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FA01A9916
+	for <lists+linux-serial@lfdr.de>; Wed, 15 Apr 2020 11:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388070AbgDNRDu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 Apr 2020 13:03:50 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46593 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728549AbgDNRDk (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:03:40 -0400
-Received: by mail-ot1-f65.google.com with SMTP id w12so292990otm.13;
-        Tue, 14 Apr 2020 10:03:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jaXxYQ2FYpSVQsJaEvJ0tlJfoyPl68Crc2WxdCdXIYU=;
-        b=T51wxXppjDfrn19kOTet2iKoIIax3Lvy7J2tfyYErQUs+ptzGw3teNlRyst2v6pCu2
-         xRsEtgeLzSLWq7us729b+lMu7DKfqneVydKzZNJ96VRTlMnhyadM5opWIQZCRYXYJAb/
-         ygMx6Su0biE/1qYB5sheh1yz9lENdKolmyKaMFiBfr31lMJfePOg6byZAEX0YYJJKPtH
-         rqNtfnbNAk25sIZwus5XlJSNVT4XFNKVXPafMZagkDn//7iupBy/EvtitKKvVOMjSSqc
-         OLk/xEep9pooENBWno03epvwwZBBYsPYddYQHQ6jmfgnMMfcLfl79ilTAJrLaYrLV2vD
-         Wy9A==
-X-Gm-Message-State: AGi0PuZftsD04c7TZ7DC4MxXzSw0cGntOhq/wfnBY7NFigEeR3zJAjVM
-        vww4MBKrHneK/FREPZJC3g==
-X-Google-Smtp-Source: APiQypJLVVe9ZYo0KcdXWrYnv+be8t6aET3lPXMMKhLrbG6rm1kd16c0H9/OvnOO9p4vB30IOLnDaw==
-X-Received: by 2002:a4a:c408:: with SMTP id y8mr19491246oop.42.1586883819021;
-        Tue, 14 Apr 2020 10:03:39 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s73sm1275570oih.14.2020.04.14.10.03.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 10:03:37 -0700 (PDT)
-Received: (nullmailer pid 6695 invoked by uid 1000);
-        Tue, 14 Apr 2020 17:03:36 -0000
-Date:   Tue, 14 Apr 2020 12:03:36 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mateusz Holenko <mholenko@antmicro.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, Stafford Horne <shorne@gmail.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Filip Kokosinski <fkokosinski@antmicro.com>,
-        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] dt-bindings: soc: document LiteX SoC Controller
-  bindings
-Message-ID: <20200414170336.GA6657@bogus>
-References: <20200402084513.4173306-0-mholenko@antmicro.com>
- <20200402084513.4173306-2-mholenko@antmicro.com>
+        id S2895654AbgDOJgO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 Apr 2020 05:36:14 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52868 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2895653AbgDOJgL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 15 Apr 2020 05:36:11 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 8EEC0AE48;
+        Wed, 15 Apr 2020 09:36:08 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 1/2] vt: selection, split __set_selection_kernel
+Date:   Wed, 15 Apr 2020 11:36:07 +0200
+Message-Id: <20200415093608.10348-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200402084513.4173306-2-mholenko@antmicro.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, 2 Apr 2020 08:45:54 +0200, Mateusz Holenko wrote:
-> From: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
-> 
-> Add documentation for LiteX SoC Controller bindings.
-> 
-> Signed-off-by: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
-> Signed-off-by: Mateusz Holenko <mholenko@antmicro.com>
-> ---
-> 
-> Notes:
->     Changes in v4:
->     - changes compatible to "litex,soc-controller"
->     - fixed yaml's header
->     - removed unnecessary sections from yaml
->     - fixed indentation in yaml
-> 
->     This commit has been introduced in v3 of the patchset.
-> 
->  .../soc/litex/litex,soc-controller.yaml       | 39 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/litex/litex,soc-controller.yaml
-> 
+Handle these actions:
+* poking console
+* TIOCL_SELCLEAR
+* TIOCL_SELMOUSEREPORT
+* start/end precomputation
+* clear_selection if the console changed
+in a separate function, thus making __set_selection_kernel way shorter
+and more readable. The function still needs dissection, but we are
+approaching.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This includes introduction of vc_selection and renaming
+__set_selection_kernel to vc_do_selection.
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ drivers/tty/vt/selection.c | 80 ++++++++++++++++++++------------------
+ 1 file changed, 43 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+index d54a549c5892..a9693c0e8d04 100644
+--- a/drivers/tty/vt/selection.c
++++ b/drivers/tty/vt/selection.c
+@@ -185,47 +185,16 @@ int set_selection_user(const struct tiocl_selection __user *sel,
+ 	return set_selection_kernel(&v, tty);
+ }
+ 
+-static int __set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
++static int vc_do_selection(struct vc_data *vc, unsigned short mode, int ps,
++		int pe)
+ {
+-	struct vc_data *vc = vc_cons[fg_console].d;
+ 	int new_sel_start, new_sel_end, spc;
+ 	char *bp, *obp;
+-	int i, ps, pe;
+ 	u32 c;
+-	int ret = 0;
+-	bool unicode;
+-
+-	poke_blanked_console();
+-
+-	v->xs = min_t(u16, v->xs - 1, vc->vc_cols - 1);
+-	v->ys = min_t(u16, v->ys - 1, vc->vc_rows - 1);
+-	v->xe = min_t(u16, v->xe - 1, vc->vc_cols - 1);
+-	v->ye = min_t(u16, v->ye - 1, vc->vc_rows - 1);
+-	ps = v->ys * vc->vc_size_row + (v->xs << 1);
+-	pe = v->ye * vc->vc_size_row + (v->xe << 1);
+-
+-	if (v->sel_mode == TIOCL_SELCLEAR) {
+-		/* useful for screendump without selection highlights */
+-		clear_selection();
+-		return 0;
+-	}
+-
+-	if (mouse_reporting() && (v->sel_mode & TIOCL_SELMOUSEREPORT)) {
+-		mouse_report(tty, v->sel_mode & TIOCL_SELBUTTONMASK, v->xs,
+-			     v->ys);
+-		return 0;
+-	}
++	int i, ret = 0;
++	bool unicode = vt_do_kdgkbmode(fg_console) == K_UNICODE;
+ 
+-	if (ps > pe)	/* make vc_sel.start <= vc_sel.end */
+-		swap(ps, pe);
+-
+-	if (vc_sel.cons != vc_cons[fg_console].d) {
+-		clear_selection();
+-		vc_sel.cons = vc_cons[fg_console].d;
+-	}
+-	unicode = vt_do_kdgkbmode(fg_console) == K_UNICODE;
+-
+-	switch (v->sel_mode) {
++	switch (mode) {
+ 	case TIOCL_SELCHAR:	/* character-by-character selection */
+ 		new_sel_start = ps;
+ 		new_sel_end = pe;
+@@ -339,13 +308,50 @@ static int __set_selection_kernel(struct tiocl_selection *v, struct tty_struct *
+ 	return ret;
+ }
+ 
++static int vc_selection(struct vc_data *vc, struct tiocl_selection *v,
++		struct tty_struct *tty)
++{
++	int ps, pe;
++
++	poke_blanked_console();
++
++	if (v->sel_mode == TIOCL_SELCLEAR) {
++		/* useful for screendump without selection highlights */
++		clear_selection();
++		return 0;
++	}
++
++	v->xs = min_t(u16, v->xs - 1, vc->vc_cols - 1);
++	v->ys = min_t(u16, v->ys - 1, vc->vc_rows - 1);
++	v->xe = min_t(u16, v->xe - 1, vc->vc_cols - 1);
++	v->ye = min_t(u16, v->ye - 1, vc->vc_rows - 1);
++
++	if (mouse_reporting() && (v->sel_mode & TIOCL_SELMOUSEREPORT)) {
++		mouse_report(tty, v->sel_mode & TIOCL_SELBUTTONMASK, v->xs,
++			     v->ys);
++		return 0;
++	}
++
++	ps = v->ys * vc->vc_size_row + (v->xs << 1);
++	pe = v->ye * vc->vc_size_row + (v->xe << 1);
++	if (ps > pe)	/* make vc_sel.start <= vc_sel.end */
++		swap(ps, pe);
++
++	if (vc_sel.cons != vc) {
++		clear_selection();
++		vc_sel.cons = vc;
++	}
++
++	return vc_do_selection(vc, v->sel_mode, ps, pe);
++}
++
+ int set_selection_kernel(struct tiocl_selection *v, struct tty_struct *tty)
+ {
+ 	int ret;
+ 
+ 	mutex_lock(&vc_sel.lock);
+ 	console_lock();
+-	ret = __set_selection_kernel(v, tty);
++	ret = vc_selection(vc_cons[fg_console].d, v, tty);
+ 	console_unlock();
+ 	mutex_unlock(&vc_sel.lock);
+ 
+-- 
+2.26.1
+
