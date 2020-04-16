@@ -2,58 +2,63 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 283701AD33D
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Apr 2020 01:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7285F1AD146
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Apr 2020 22:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727883AbgDPXfG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Apr 2020 19:35:06 -0400
-Received: from mail.dsns.gov.ua ([194.0.148.99]:37970 "EHLO mail.dsns.gov.ua"
+        id S1726543AbgDPUiV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Apr 2020 16:38:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbgDPXfD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Apr 2020 19:35:03 -0400
-X-Greylist: delayed 9287 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 19:34:56 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 6223A1EC85AF;
-        Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ekdCUR6pZ0Aa; Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 67C3E1EC85F9;
-        Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 67C3E1EC85F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
-        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1587069326;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=BFrHb0sdI6ttGZUrYrU3NgniYtd1aDAhnXXb2vKIb2B9styAswbm0NbzZRAHiMp0y
-         hUE3veWMbUD+qTP/VmiRFig+sJh7tgrjRSipmI8jEPDH4mLyVFQtPdyPojLkpu/SlT
-         y/CjSPHdIqozfsh/zyWU9aeO41yKuuO77HTVyT/eVGDUtLYGTijz0IeETvwB1Yur4I
-         5RegLOWC96rliENvAjVU5IoM4JfcadYa95Q959RRtGyCSnevHOMfGycVhDjkxX/p7G
-         0gUYzq9GdO73hW8YI3AV2m5dSWB1tPfsxP4FJUwoBTp88jIZZeY7uAiDenSeAUtBdj
-         PKl/BScyij7GQ==
-X-Virus-Scanned: amavisd-new at dsns.gov.ua
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id U4DcK3mdlYyf; Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
-Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 9BAF81EC8118;
-        Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
-Date:   Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
-From:   Saleem Netanyahu <duchenko@dsns.gov.ua>
-Reply-To: Saleem Netanyahu <saleemnetu@gmail.com>
-Message-ID: <1255292802.718114.1587069315574.JavaMail.zimbra@dsns.gov.ua>
-Subject: Hey, how are u, can we talk?
+        id S1726114AbgDPUiV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Apr 2020 16:38:21 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7557E2220A;
+        Thu, 16 Apr 2020 20:38:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587069500;
+        bh=9i3CfymeGe/NEpMGnyUqethDDHOzRWWGJhLiiXR7+QU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AtYRlm3JeEbYNmK1uFVhGVztI222HVj0FYwHr9mzeclmUYYZuRqTLCpQSm86Z7sc+
+         Du0qNp5IZ0S8HL2Hch2Cqk9T6fxX/q4QaM3OPYLhsccpaNS9nI9FuK8u3ZO5VRHeaJ
+         coliPMrSFWdwbUFi9HGRYwz/F4taGg50ckffHISM=
+Received: by mail-qt1-f171.google.com with SMTP id b10so59049qtt.9;
+        Thu, 16 Apr 2020 13:38:20 -0700 (PDT)
+X-Gm-Message-State: AGi0PuaYL/mneGQ4+9jemTNYXirtiDM9x2OzMejLLG9mlMOsFyMhLqoP
+        Ah2DSLuRgPp9Y4nQnTfDnI7eBAzH4pclhikF0Q==
+X-Google-Smtp-Source: APiQypINcM/3te3/8Ff4YCoykqXgpcs+an4Ryq2/zxonzK/oqiiErlVLJql23/90o1z0HIyweV5zlL9XqTC+jP72nKw=
+X-Received: by 2002:ac8:4907:: with SMTP id e7mr28608227qtq.300.1587069499594;
+ Thu, 16 Apr 2020 13:38:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [45.82.223.36, 172.69.54.54]
-X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
-Thread-Index: oV9MZN6+Sh4gFPdsGziQ2IngcJhATw==
-Thread-Topic: Hey, how are u, can we talk?
-To:     unlisted-recipients:; (no To-header on input)
+References: <1587012974-21219-1-git-send-email-gupt21@gmail.com>
+In-Reply-To: <1587012974-21219-1-git-send-email-gupt21@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 16 Apr 2020 15:38:07 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLWMTpHG=bOmWgy1kg6d7vxRGbCda+febq=FnqbuRbPyQ@mail.gmail.com>
+Message-ID: <CAL_JsqLWMTpHG=bOmWgy1kg6d7vxRGbCda+febq=FnqbuRbPyQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: ttyvs: document serial null modem
+ driver bindings
+To:     Rishi Gupta <gupt21@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Wed, Apr 15, 2020 at 11:56 PM Rishi Gupta <gupt21@gmail.com> wrote:
+>
+> The ttyvs driver creates virtual tty devices. These devices can
+> also be created through device tree. This commit document this.
+
+Device tree is for real h/w devices. You have a configfs interface to
+set these up. I don't think we need both.
+
+Rob
