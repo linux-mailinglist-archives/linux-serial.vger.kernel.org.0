@@ -2,79 +2,259 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 044B71AC4B1
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Apr 2020 16:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531311AC626
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Apr 2020 16:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730789AbgDPODI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Apr 2020 10:03:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50630 "EHLO mail.kernel.org"
+        id S2442281AbgDPOSn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Apr 2020 10:18:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59918 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2633481AbgDPOCz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Apr 2020 10:02:55 -0400
+        id S2442133AbgDPOSf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Apr 2020 10:18:35 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AFA9722250;
-        Thu, 16 Apr 2020 14:02:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FD4D2063A;
+        Thu, 16 Apr 2020 14:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587045775;
-        bh=zbL0A8afOYEvdEVbqQo3xydp13RhWQj9s/P/zr+aQNs=;
+        s=default; t=1587046714;
+        bh=bi7/m79MnrOcKtz1yNvD6Frj0cbUVGLU7NJgSHvxF2I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0xeOsGUiZnA/j4Ccbn5JNZspM5sNoEks9lsD2WrADpzK0aYtzYuydh+2EWBXl/clf
-         AUwxou8rj/tOHzZyM0kxAE/54TYvI06Vr4Y0BUzL0PQyuon4uv7q1Csf8TbKZi2A0R
-         xgo6tIp+HVKlLoJKoX4gDLdMt16j8FuOH/y5k0rM=
-Date:   Thu, 16 Apr 2020 15:58:36 +0200
+        b=Yi9hpirh1VtMlOGs0kGvX5fXAQAutpS3AwXEDY0pBvWzLHPLsyr9y6rTT+mlhSexI
+         8mZW2a3+sS9h7wpZPaT2ju6Ag4XCy7zSEByC0Z99bGfZjuqR83ehFJbjEgpiUCX/WG
+         5L0sH/InBOfdRrcHB/wO9rF1b/29CQLo7xeW3gFM=
+Date:   Thu, 16 Apr 2020 16:18:32 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jules Irenge <jbi.octave@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com,
-        Jiri Slaby <jslaby@suse.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH 7/7] tty: serial_core: Add missing annotation for
- _unlock_and_check_sysrq()
-Message-ID: <20200416135836.GB1295013@kroah.com>
-References: <0/7>
- <20200331204643.11262-1-jbi.octave@gmail.com>
- <20200331204643.11262-8-jbi.octave@gmail.com>
+To:     Mateusz Holenko <mholenko@antmicro.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Slaby <jslaby@suse.com>, devicetree@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Filip Kokosinski <fkokosinski@antmicro.com>,
+        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/5] drivers/soc/litex: add LiteX SoC Controller driver
+Message-ID: <20200416141832.GA1356374@kroah.com>
+References: <20200402084513.4173306-0-mholenko@antmicro.com>
+ <20200402084513.4173306-3-mholenko@antmicro.com>
+ <CAPk366QLHbR9cnLs244VbOXOLAg56yhG7O-DEAc1x1ZTvthiig@mail.gmail.com>
+ <20200402074259.GC2755501@kroah.com>
+ <CAPk366Qm62TtwM7xNUSUT4L+7MwWDSPXyGCWXrXHYPjLeVf9OA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200331204643.11262-8-jbi.octave@gmail.com>
+In-Reply-To: <CAPk366Qm62TtwM7xNUSUT4L+7MwWDSPXyGCWXrXHYPjLeVf9OA@mail.gmail.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 09:46:43PM +0100, Jules Irenge wrote:
-> Sparse reports a warning at _unlock_and_check_sysrq()
+On Thu, Apr 02, 2020 at 03:50:34PM +0200, Mateusz Holenko wrote:
+> On Thu, Apr 2, 2020 at 9:43 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Apr 02, 2020 at 08:50:40AM +0200, Mateusz Holenko wrote:
+> > > On Thu, Apr 2, 2020 at 8:46 AM Mateusz Holenko <mholenko@antmicro.com> wrote:
+> > > >
+> > > > From: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
+> > > >
+> > > > This commit adds driver for the FPGA-based LiteX SoC
+> > > > Controller from LiteX SoC builder.
+> > > >
+> > > > Co-developed-by: Mateusz Holenko <mholenko@antmicro.com>
+> > > > Signed-off-by: Mateusz Holenko <mholenko@antmicro.com>
+> > > > Signed-off-by: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
+> > > > ---
+> > > >
+> > > > Notes:
+> > > >     Changes in v4:
+> > > >     - fixed indent in Kconfig's help section
+> > > >     - fixed copyright header
+> > > >     - changed compatible to "litex,soc-controller"
+> > > >     - simplified litex_soc_ctrl_probe
+> > > >     - removed unnecessary litex_soc_ctrl_remove
+> > > >
+> > > >     This commit has been introduced in v3 of the patchset.
+> > > >
+> > > >     It includes a simplified version of common 'litex.h'
+> > > >     header introduced in v2 of the patchset.
+> > > >
+> > > >  MAINTAINERS                        |   2 +
+> > > >  drivers/soc/Kconfig                |   1 +
+> > > >  drivers/soc/Makefile               |   1 +
+> > > >  drivers/soc/litex/Kconfig          |  14 ++
+> > > >  drivers/soc/litex/Makefile         |   3 +
+> > > >  drivers/soc/litex/litex_soc_ctrl.c | 217 +++++++++++++++++++++++++++++
+> > > >  include/linux/litex.h              |  45 ++++++
+> > > >  7 files changed, 283 insertions(+)
+> > > >  create mode 100644 drivers/soc/litex/Kconfig
+> > > >  create mode 100644 drivers/soc/litex/Makefile
+> > > >  create mode 100644 drivers/soc/litex/litex_soc_ctrl.c
+> > > >  create mode 100644 include/linux/litex.h
+> > > >
+> > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > index 2f5ede8a08aa..a35be1be90d5 100644
+> > > > --- a/MAINTAINERS
+> > > > +++ b/MAINTAINERS
+> > > > @@ -9729,6 +9729,8 @@ M:        Karol Gugala <kgugala@antmicro.com>
+> > > >  M:     Mateusz Holenko <mholenko@antmicro.com>
+> > > >  S:     Maintained
+> > > >  F:     Documentation/devicetree/bindings/*/litex,*.yaml
+> > > > +F:     drivers/soc/litex/litex_soc_ctrl.c
+> > > > +F:     include/linux/litex.h
+> > > >
+> > > >  LIVE PATCHING
+> > > >  M:     Josh Poimboeuf <jpoimboe@redhat.com>
+> > > > diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+> > > > index 1778f8c62861..78add2a163be 100644
+> > > > --- a/drivers/soc/Kconfig
+> > > > +++ b/drivers/soc/Kconfig
+> > > > @@ -9,6 +9,7 @@ source "drivers/soc/bcm/Kconfig"
+> > > >  source "drivers/soc/fsl/Kconfig"
+> > > >  source "drivers/soc/imx/Kconfig"
+> > > >  source "drivers/soc/ixp4xx/Kconfig"
+> > > > +source "drivers/soc/litex/Kconfig"
+> > > >  source "drivers/soc/mediatek/Kconfig"
+> > > >  source "drivers/soc/qcom/Kconfig"
+> > > >  source "drivers/soc/renesas/Kconfig"
+> > > > diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> > > > index 8b49d782a1ab..fd016b51cddd 100644
+> > > > --- a/drivers/soc/Makefile
+> > > > +++ b/drivers/soc/Makefile
+> > > > @@ -14,6 +14,7 @@ obj-$(CONFIG_ARCH_GEMINI)     += gemini/
+> > > >  obj-$(CONFIG_ARCH_MXC)         += imx/
+> > > >  obj-$(CONFIG_ARCH_IXP4XX)      += ixp4xx/
+> > > >  obj-$(CONFIG_SOC_XWAY)         += lantiq/
+> > > > +obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
+> > > >  obj-y                          += mediatek/
+> > > >  obj-y                          += amlogic/
+> > > >  obj-y                          += qcom/
+> > > > diff --git a/drivers/soc/litex/Kconfig b/drivers/soc/litex/Kconfig
+> > > > new file mode 100644
+> > > > index 000000000000..71264c0e1d6c
+> > > > --- /dev/null
+> > > > +++ b/drivers/soc/litex/Kconfig
+> > > > @@ -0,0 +1,14 @@
+> > > > +# SPDX-License_Identifier: GPL-2.0
+> > > > +
+> > > > +menu "Enable LiteX SoC Builder specific drivers"
+> > > > +
+> > > > +config LITEX_SOC_CONTROLLER
+> > > > +       tristate "Enable LiteX SoC Controller driver"
+> > > > +       help
+> > > > +         This option enables the SoC Controller Driver which verifies
+> > > > +         LiteX CSR access and provides common litex_get_reg/litex_set_reg
+> > > > +         accessors.
+> > > > +         All drivers that use functions from litex.h must depend on
+> > > > +         LITEX_SOC_CONTROLLER.
+> > > > +
+> > > > +endmenu
+> > > > diff --git a/drivers/soc/litex/Makefile b/drivers/soc/litex/Makefile
+> > > > new file mode 100644
+> > > > index 000000000000..98ff7325b1c0
+> > > > --- /dev/null
+> > > > +++ b/drivers/soc/litex/Makefile
+> > > > @@ -0,0 +1,3 @@
+> > > > +# SPDX-License_Identifier: GPL-2.0
+> > > > +
+> > > > +obj-$(CONFIG_LITEX_SOC_CONTROLLER)     += litex_soc_ctrl.o
+> > > > diff --git a/drivers/soc/litex/litex_soc_ctrl.c b/drivers/soc/litex/litex_soc_ctrl.c
+> > > > new file mode 100644
+> > > > index 000000000000..5defba000fd4
+> > > > --- /dev/null
+> > > > +++ b/drivers/soc/litex/litex_soc_ctrl.c
+> > > > @@ -0,0 +1,217 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +/*
+> > > > + * LiteX SoC Controller Driver
+> > > > + *
+> > > > + * Copyright (C) 2020 Antmicro <www.antmicro.com>
+> > > > + *
+> > > > + */
+> > > > +
+> > > > +#include <linux/litex.h>
+> > > > +#include <linux/device.h>
+> > > > +#include <linux/errno.h>
+> > > > +#include <linux/of.h>
+> > > > +#include <linux/of_platform.h>
+> > > > +#include <linux/platform_device.h>
+> > > > +#include <linux/printk.h>
+> > > > +#include <linux/module.h>
+> > > > +#include <linux/errno.h>
+> > > > +#include <linux/io.h>
+> > > > +
+> > > > +/*
+> > > > + * The parameters below are true for LiteX SoC
+> > > > + * configured for 8-bit CSR Bus, 32-bit aligned.
+> > > > + *
+> > > > + * Supporting other configurations will require
+> > > > + * extending the logic in this header.
+> > > > + */
+> > > > +#define LITEX_REG_SIZE             0x4
+> > > > +#define LITEX_SUBREG_SIZE          0x1
+> > > > +#define LITEX_SUBREG_SIZE_BIT      (LITEX_SUBREG_SIZE * 8)
+> > > > +
+> > > > +static DEFINE_SPINLOCK(csr_lock);
+> > > > +
+> > > > +static inline unsigned long read_pointer_with_barrier(
+> > > > +       const volatile void __iomem *addr)
+> > > > +{
+> > > > +       unsigned long val;
+> > > > +
+> > > > +       __io_br();
+> > > > +       val = *(const volatile unsigned long __force *)addr;
+> > > > +       __io_ar();
+> > > > +       return val;
+> > > > +}
+> > > > +
+> > > > +static inline void write_pointer_with_barrier(
+> > > > +       volatile void __iomem *addr, unsigned long val)
+> > > > +{
+> > > > +       __io_br();
+> > > > +       *(volatile unsigned long __force *)addr = val;
+> > > > +       __io_ar();
+> > > > +}
+> > > > +
+> > >
+> > > I'm defining read_pointer_with_barrier/write_pointer_with_barrier in
+> > > order to make sure that a series of reads/writes to a single CSR
+> > > register will not be reordered by the compiler.
+> >
+> > Please do not do this, there are core kernel calls for this, otherwise
+> > this would be required by every individual driver, which would be crazy.
+> >
+> > > Does __raw_readl/__raw_writel guarantee this property? If so, I could
+> > > drop my functions and use the system ones instead.
+> >
+> > Try it and see.
 > 
-> warning: context imbalance in uart_unlock_and_check_sysrq()
-> 	- unexpected unlock
-> 
-> The root cause is the missing annotation at _unlock_and_check_sysrq()
-> Add the missing __releases(&port->lock) annotation.
-> 
-> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> ---
->  drivers/tty/serial/serial_core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 76e506ee335c..32f93f03efce 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -3121,6 +3121,7 @@ int uart_prepare_sysrq_char(struct uart_port *port, unsigned int ch)
->  EXPORT_SYMBOL_GPL(uart_prepare_sysrq_char);
->  
->  void uart_unlock_and_check_sysrq(struct uart_port *port, unsigned long irqflags)
-> +	__releases(&port->lock)
->  {
->  	int sysrq_ch;
->  
-> -- 
-> 2.24.1
-> 
+> Since I want to avoid read/write reordering caused by the compiler
+> optimizations I don't want to rely on a single manual test.
+> What I mean is that even if it works now for me, it does not guarantee
+> that it will in the future version of the compiler/using different
+> compilation flags/etc, right?
 
-This is already in the tree, are you sure you are not working from an
-older one?
+No, if the common functions stop working, then they will be fixed.  If
+you try to roll your own and they stop working in the future, no one
+will notice.
+
+Please use the common in-kernel functions for this, it's not ok for
+drivers to try to do it themselves for basic things like this, no matter
+what platform they think they are designed for :)
+
+thanks,
 
 greg k-h
