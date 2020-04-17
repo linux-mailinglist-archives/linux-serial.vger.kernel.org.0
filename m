@@ -2,122 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A911AD1E2
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Apr 2020 23:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A1B1AD598
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Apr 2020 07:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726361AbgDPVao (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Apr 2020 17:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725843AbgDPVal (ORCPT
+        id S1726713AbgDQFSS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 17 Apr 2020 01:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbgDQFSR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Apr 2020 17:30:41 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E227C061A0C;
-        Thu, 16 Apr 2020 14:30:41 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id e12so14990pgj.6;
-        Thu, 16 Apr 2020 14:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F59MCAy9LQ39t9b94uz/vF55cBc/ty5ftnkMrjUeMVI=;
-        b=F+76JoX2R7sUagBs5MiZtTABq0cgtV+vyQR+Pq0aOKntIcRM+e75S9VZPbYgX+4O35
-         r2iDAKA9feHsDg2oq2V8HbPB7rb1IbMWWnV91YEmvAeuS/wb00lNv8S/b59cVyCbNmoI
-         v0qg2uie9OZvu/aEKifWzzNGkDiYsvXl/ebCuzDMJyooHo9v9plc0T5enusQhD1HRJhQ
-         NCib4b4yxg03NdKVXBqT7s7sudY8OZINEnlICKS38rHSiBGGhrFq0m2JNNfJ7smKua9c
-         uMwPAEVQOM/3xroHC415fZ323fbfwaGmYwSIWFfIdLZdinMSTPCmG5svP9sswxgVc2Wx
-         QHkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F59MCAy9LQ39t9b94uz/vF55cBc/ty5ftnkMrjUeMVI=;
-        b=fzWv5GWkjlU65LKtulrmQiwM3hluoVFKmTRsJ/pb/SkJ681FYflzWwPBWrOzY9kpL3
-         3XUqu+eMgqadwiP9DqhcNTIe62roDF6NhrBdRPhEAgr2WSYp1qux6eyhW99gp19o+Svo
-         5qVdk9ZS1Dg0Bsq4+SR5FpXJQPJ6JQCUo5j7uEGD4uhaHcOSUyuhZqvauMb6Kw82iFxN
-         N2KGjmVX3aZJVlLVirW+H+Pjs6kkPFCXFInhE93+5tpXieCUyZO4XTzJb16KoCFifVlm
-         HsebLmm/4mb344/p68TAVQy/ZACGeqoO1C991PC7iqnIRBxwK59Bln9HnT0kH04inFDE
-         D6lw==
-X-Gm-Message-State: AGi0PuaTBrzEPQoTwBm7Ud6Wdy7qLEUWwkaqKSHDsFkWfJtXqTL9hu8a
-        joHdgEDcv9DEWM0rlRmB8q9mYJ/w6aysLUDCdvqmocPXGYA=
-X-Google-Smtp-Source: APiQypKbsEwv7dyMRMPJoBQNj/KvDFB5w7W5P0FHGG1weQUmw4bO5gMc9e2umvdhLDeoCPYVHjIesY8EPzX4ASZJHQA=
-X-Received: by 2002:a63:5511:: with SMTP id j17mr17300739pgb.4.1587072641114;
- Thu, 16 Apr 2020 14:30:41 -0700 (PDT)
+        Fri, 17 Apr 2020 01:18:17 -0400
+X-Greylist: delayed 1527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Apr 2020 22:18:17 PDT
+Received: from fbk21.megaegg.ne.jp (fbk21.megaegg.ne.jp [IPv6:2402:bc00:0:a216::19:131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B797AC061A0C;
+        Thu, 16 Apr 2020 22:18:17 -0700 (PDT)
+Received: from zmta22.megaegg.ne.jp (zmta22-snat.megaegg.ne.jp.internal [10.62.19.122])
+        by fbk21.megaegg.ne.jp (Postfix) with ESMTP id 550CB686575;
+        Fri, 17 Apr 2020 13:52:55 +0900 (JST)
+Received: from vss21.megaegg.ne.jp.internal (vss21-snat.megaegg.ne.jp.internal [10.62.19.91])
+        by zmta22.megaegg.ne.jp.internal (Postfix) with ESMTP id DBFAFE0395;
+        Fri, 17 Apr 2020 13:51:58 +0900 (JST)
+Received: from smtp22.megaegg.ne.jp (smtp22-snat.megaegg.ne.jp.internal [10.62.19.102])
+        by vss21.megaegg.ne.jp.internal (Postfix) with ESMTP id AB547DF947;
+        Fri, 17 Apr 2020 13:51:58 +0900 (JST)
+Received: from zmbs22.megaegg.ne.jp.internal (zmbs22-snat.megaegg.ne.jp.internal [10.62.19.152])
+        by smtp22.megaegg.ne.jp (Postfix) with ESMTP id EC84CC0055;
+        Fri, 17 Apr 2020 13:51:57 +0900 (JST)
+Date:   Fri, 17 Apr 2020 13:51:57 +0900 (JST)
+From:   Bill Lawrence <w2u42su8@ene.megaegg.ne.jp>
+Reply-To: Bill Lawrence <bill_lawrence01@aol.com>
+Message-ID: <215788864.53429917.1587099117909.JavaMail.zimbra@ene.megaegg.ne.jp>
+Subject: Re: I HAVE $2MILLION DONATION FOR YOU.
 MIME-Version: 1.0
-References: <20200416175729.5550-1-mani@kernel.org>
-In-Reply-To: <20200416175729.5550-1-mani@kernel.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 17 Apr 2020 00:30:28 +0300
-Message-ID: <CAHp75Ve6V+gm_KXqMpG8bn7KtHjOctomZwk8n_6xwtx6cFdKfw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Add CTS/RTS gpio support to STM32 UART
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [::ffff:105.163.128.152]
+X-Mailer: Zimbra 8.0.4_GA_5740 (ZimbraWebClient - GC55 (Win)/8.0.4_GA_5737)
+Thread-Topic: I HAVE $2MILLION DONATION FOR YOU.
+Thread-Index: AU/QbHitqecFaTbNB3qJcGhuz0tt7Q==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 8:58 PM <mani@kernel.org> wrote:
->
-> From: Manivannan Sadhasivam <mani@kernel.org>
->
-> Hello,
->
-> This patchset adds CTS/RTS gpio support to STM32 UART controller.
-> Eventhough the UART controller supports using dedicated CTS/RTS gpios,
-> sometimes we need to use different set of gpios for flow control.
->
-> This is necessary for the upcoming STM32MP1 based board called Stinger96
-> IoT-Box. On that board, a bluetooth chip is connected to one of the UART
-> controller but the CTS/RTS lines got swapped mistakenly. So this patchset
-> serves as a workaround for that hardware bug and also supports the
-> usecase of using any gpio for CTS/RTS functionality. As per the sugggestion
-> provided by Andy for v1, I've now switched to mctrl_gpio driver.
->
-> This patchset has been validated with Stinger96 IoT-Box connected to Murata
-> WiFi-BT combo chip.
->
-
-Looks good to me,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Thanks,
-> Mani
->
-> Changes in v2:
->
-> As per the review by Andy:
->
-> * Switched to mctrl_gpio driver instead of using custom CTS/RTS
->   implementation
-> * Removed the use of software flow control terminology.
->
-> Manivannan Sadhasivam (2):
->   tty: serial: Add modem control gpio support for STM32 UART
->   dt-bindings: serial: Document CTS/RTS gpios in STM32 UART
->
->  .../bindings/serial/st,stm32-uart.yaml        | 14 ++++++
->  drivers/tty/serial/Kconfig                    |  1 +
->  drivers/tty/serial/stm32-usart.c              | 43 ++++++++++++++++++-
->  drivers/tty/serial/stm32-usart.h              |  1 +
->  4 files changed, 58 insertions(+), 1 deletion(-)
->
-> --
-> 2.17.1
->
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+We bring greetings to you in the name of the lord. This message is sent to you as a notification that you have been chosen to benefit from our charity project aimed at touching lives and helping those that we can across the world as God has blessed us.
+
+I won the Powerball lottery of $150Million on December 16, 2019 and I have voluntarily decided to donate the sum of $10Million to charity, I try to reach people randomly from different sources and modes so as to touch lives from different angles, Hence you are getting a message here.
+
+You have been listed as one of the lucky recipients to receive $2M This donation is made out to you so to enable you strengthen your personal issues and mostly to generously help us extend hands of giving to the less privileged, orphans and charity organizations within your locality
+
+To verify
+https://www.powerball.com/winner-story/150-million-powerball-ticket-claimed
+
+Get back to me on how to receive the donation
+
+Thanks
+Bill Lawrence
+
+
