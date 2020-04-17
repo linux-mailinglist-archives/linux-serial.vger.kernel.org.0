@@ -2,64 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A1B1AD598
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Apr 2020 07:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28A71AD590
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Apr 2020 07:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgDQFSS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 17 Apr 2020 01:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        id S1726664AbgDQFOr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 17 Apr 2020 01:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgDQFSR (ORCPT
+        with ESMTP id S1726026AbgDQFOr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 17 Apr 2020 01:18:17 -0400
-X-Greylist: delayed 1527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Apr 2020 22:18:17 PDT
-Received: from fbk21.megaegg.ne.jp (fbk21.megaegg.ne.jp [IPv6:2402:bc00:0:a216::19:131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B797AC061A0C;
-        Thu, 16 Apr 2020 22:18:17 -0700 (PDT)
-Received: from zmta22.megaegg.ne.jp (zmta22-snat.megaegg.ne.jp.internal [10.62.19.122])
-        by fbk21.megaegg.ne.jp (Postfix) with ESMTP id 550CB686575;
-        Fri, 17 Apr 2020 13:52:55 +0900 (JST)
-Received: from vss21.megaegg.ne.jp.internal (vss21-snat.megaegg.ne.jp.internal [10.62.19.91])
-        by zmta22.megaegg.ne.jp.internal (Postfix) with ESMTP id DBFAFE0395;
-        Fri, 17 Apr 2020 13:51:58 +0900 (JST)
-Received: from smtp22.megaegg.ne.jp (smtp22-snat.megaegg.ne.jp.internal [10.62.19.102])
-        by vss21.megaegg.ne.jp.internal (Postfix) with ESMTP id AB547DF947;
-        Fri, 17 Apr 2020 13:51:58 +0900 (JST)
-Received: from zmbs22.megaegg.ne.jp.internal (zmbs22-snat.megaegg.ne.jp.internal [10.62.19.152])
-        by smtp22.megaegg.ne.jp (Postfix) with ESMTP id EC84CC0055;
-        Fri, 17 Apr 2020 13:51:57 +0900 (JST)
-Date:   Fri, 17 Apr 2020 13:51:57 +0900 (JST)
-From:   Bill Lawrence <w2u42su8@ene.megaegg.ne.jp>
-Reply-To: Bill Lawrence <bill_lawrence01@aol.com>
-Message-ID: <215788864.53429917.1587099117909.JavaMail.zimbra@ene.megaegg.ne.jp>
-Subject: Re: I HAVE $2MILLION DONATION FOR YOU.
+        Fri, 17 Apr 2020 01:14:47 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B75C061A0C;
+        Thu, 16 Apr 2020 22:14:46 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id w24so1006650qts.11;
+        Thu, 16 Apr 2020 22:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5imWM9PoUe4cCDhSNWS0fi5ZUgYX+BEu4b7csjsffI8=;
+        b=vFUkBxR5NlxOV5IXDdLmtqx87H2oMA2w3wcEN59Rqfc06684oOpJtSlsa+NofreCbF
+         OAwE6Q1ZAnO3GVV5wTwI5Y6E93CLK6XkywEVRbEE/++JxMwhyFFmLfo3INTXqPo/xRn/
+         94IGlkS3zGC55fZtxbMop1+hIbCzaxjlXih+ra83OIWP8D5YEFGBN8EyfbHyJiqQh5Ah
+         fcjd/AtZ4GH+hTzb1QUev0X6uaOd+iM3WSaLGm/0CTrvUzaje7HeW2+brY6b78nB46wg
+         JjdltRKPPA3pA0OEOz6De6UnODpPK5S3fQCDIkCn6JRHTDiQOlJGd3NMc9dxOKYPMQ+u
+         ta9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5imWM9PoUe4cCDhSNWS0fi5ZUgYX+BEu4b7csjsffI8=;
+        b=FNLGnfMqXfjHAH81xLzxSQf/yf6vD5bcBLilnjEeXDFu419VVefpL7weF5tbx1jDxg
+         n+kA0VQ/PwbcqxDQzCGd2bj3HVJo4qTXep05B6rN3e6VQND9dmO2A5lXPd8bPXC12QQq
+         8aG3GuS/1T1ZVl+Eq8jskAQapGZLg2e6bdfPQblbnBITqoVf3w991AwM0Qn3elORaZJn
+         KXksoK9MpDbg81G1xVDEOpE7nSEIjh7LljZVSoDp5kFKoLymwSPZYW6mKCxy8ldvU+r8
+         gY9g8a8FlLUV1GVVGmuXaKz6X6H1bnNrlhJC0yQWae3XR5V3d7f5Jka3iAzyqnFD+7bg
+         JWVw==
+X-Gm-Message-State: AGi0PuZXFtBAEZJnYCAyDQvoL0yxBW7MIGZyTVNSD2G14cQR+9cdJm/a
+        47OETp46VhqR6iR/eLSsMIkrWDPjs+iYcyi/BP7cJhEA
+X-Google-Smtp-Source: APiQypKiXsh891oZUSO2SmIKvGzEThVHpuLi5ba2n9Mea29s5pn1nJGPyHRhkcNPWl3+TX7/+WBgUD6P+3RfOUgyryg=
+X-Received: by 2002:aed:20e3:: with SMTP id 90mr1267488qtb.142.1587100485803;
+ Thu, 16 Apr 2020 22:14:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [::ffff:105.163.128.152]
-X-Mailer: Zimbra 8.0.4_GA_5740 (ZimbraWebClient - GC55 (Win)/8.0.4_GA_5737)
-Thread-Topic: I HAVE $2MILLION DONATION FOR YOU.
-Thread-Index: AU/QbHitqecFaTbNB3qJcGhuz0tt7Q==
-To:     unlisted-recipients:; (no To-header on input)
+References: <1587012974-21219-1-git-send-email-gupt21@gmail.com> <CAL_JsqLWMTpHG=bOmWgy1kg6d7vxRGbCda+febq=FnqbuRbPyQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqLWMTpHG=bOmWgy1kg6d7vxRGbCda+febq=FnqbuRbPyQ@mail.gmail.com>
+From:   rishi gupta <gupt21@gmail.com>
+Date:   Fri, 17 Apr 2020 10:44:34 +0530
+Message-ID: <CALUj-gsuUFQbRLKX=nTbA+y6oTyEAnX7OaxkAX375rBBgNc44g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: ttyvs: document serial null modem
+ driver bindings
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Initially there was no DT support but later it was added as CONFIGFS
+is optional.
 
+DT is giving flexibility to use the driver.
 
-We bring greetings to you in the name of the lord. This message is sent to you as a notification that you have been chosen to benefit from our charity project aimed at touching lives and helping those that we can across the world as God has blessed us.
-
-I won the Powerball lottery of $150Million on December 16, 2019 and I have voluntarily decided to donate the sum of $10Million to charity, I try to reach people randomly from different sources and modes so as to touch lives from different angles, Hence you are getting a message here.
-
-You have been listed as one of the lucky recipients to receive $2M This donation is made out to you so to enable you strengthen your personal issues and mostly to generously help us extend hands of giving to the less privileged, orphans and charity organizations within your locality
-
-To verify
-https://www.powerball.com/winner-story/150-million-powerball-ticket-claimed
-
-Get back to me on how to receive the donation
-
-Thanks
-Bill Lawrence
-
-
+On Fri, Apr 17, 2020 at 2:08 AM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Wed, Apr 15, 2020 at 11:56 PM Rishi Gupta <gupt21@gmail.com> wrote:
+> >
+> > The ttyvs driver creates virtual tty devices. These devices can
+> > also be created through device tree. This commit document this.
+>
+> Device tree is for real h/w devices. You have a configfs interface to
+> set these up. I don't think we need both.
+>
+> Rob
