@@ -2,65 +2,34 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F16FB1B31AE
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Apr 2020 23:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134671B3311
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Apr 2020 01:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgDUVPe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 Apr 2020 17:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726407AbgDUVPb (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 Apr 2020 17:15:31 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258A5C0610D6
-        for <linux-serial@vger.kernel.org>; Tue, 21 Apr 2020 14:15:31 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id w65so7184353pfc.12
-        for <linux-serial@vger.kernel.org>; Tue, 21 Apr 2020 14:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=to0u/Jn7Js4VPZOuXqA43IyX5Na3y9BiQIqtXkvA+lM=;
-        b=Fi7GhO/HIQuePgWWr4CAwtD3Nm2BO9549F2xy6Ify+xWUhksu4HNmc2cI7/51GU+Ch
-         L/n5ai+tI4jzrDDdPfty2/gS+I7isrdFl83WaL/FlfxsVbFv0gdgZJthH5iQcYAQHTC5
-         QDlYrK8x4Xkir0fVq0MFu0g741PDRv9AznrbA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=to0u/Jn7Js4VPZOuXqA43IyX5Na3y9BiQIqtXkvA+lM=;
-        b=Ep/133T9mqYgMQAowpt8tPFrm6H6sxKx9AuJ6Q79GeE3mhRE27hIjMk7NNPvmtulez
-         Uuq6G2Hn+BxRTssjwjPwudTyRxnMwnEGhvDVjSsAZPKnyJjnwMGs1daYAo7FMR4N0Gtu
-         gR2vta3EXmnicQvabZ9IlMVdV47+PSv0D49EU/dYayD547jxc2x7ZEfl+ZvqKFrOP7Gu
-         iOjppW4OCPWBRe/snuOMjkO/CCWH6FWuhwgSLgaWrCM8XFObFGWPf/B2ATONXq6jtiTN
-         iJ55N0daqxemeRjqSqjSwb1sUekzZDCMw5YWMDeRFbdY4wr5Yte0ROWm0VnndxYbsirj
-         Vy+g==
-X-Gm-Message-State: AGi0PuZJnmi6gDdEVlthfaGWKfGFhKMgjBEQTXei/Hzzpm/vWm06QUOK
-        oXl4k2ZlrmaiWbMbmylB3y9XBA==
-X-Google-Smtp-Source: APiQypJ7dM3c1Vl/KOkONz1GC46IExu+/RPzPNDHW1csvMJmR81uQd7VsO5+P57/5ygsNzFb3hkAUw==
-X-Received: by 2002:a63:de4b:: with SMTP id y11mr8602658pgi.23.1587503730684;
-        Tue, 21 Apr 2020 14:15:30 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id c1sm3287880pfo.152.2020.04.21.14.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2020 14:15:30 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        gregkh@linuxfoundation.org
-Cc:     kgdb-bugreport@lists.sourceforge.net, mingo@redhat.com,
-        hpa@zytor.com, bp@alien8.de, linux-serial@vger.kernel.org,
-        agross@kernel.org, tglx@linutronix.de, frowand.list@gmail.com,
-        bjorn.andersson@linaro.org, jslaby@suse.com,
-        catalin.marinas@arm.com, corbet@lwn.net, will@kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 9/9] serial: 8250_early: Support earlycon_kgdboc
-Date:   Tue, 21 Apr 2020 14:14:47 -0700
-Message-Id: <20200421141234.v2.9.I8f668556c244776523320a95b09373a86eda11b7@changeid>
-X-Mailer: git-send-email 2.26.1.301.g55bc3eb7cb9-goog
-In-Reply-To: <20200421211447.193860-1-dianders@chromium.org>
-References: <20200421211447.193860-1-dianders@chromium.org>
+        id S1726284AbgDUX2A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 Apr 2020 19:28:00 -0400
+Received: from muru.com ([72.249.23.125]:50810 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725850AbgDUX2A (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 21 Apr 2020 19:28:00 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id A6D8B8081;
+        Tue, 21 Apr 2020 23:28:45 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
+        Lee Jones <lee.jones@linaro.org>, Jiri Slaby <jslaby@suse.cz>,
+        Johan Hovold <johan@kernel.org>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: [PATCHv6 0/4] n_gsm serdev support and protocol driver for droid4 modem
+Date:   Tue, 21 Apr 2020 16:27:48 -0700
+Message-Id: <20200421232752.3070-1-tony@atomide.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -68,62 +37,67 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Implement the read() function in the early console driver.  With
-recent kgdb patches this allows you to use kgdb to debug fairly early
-into the system boot.
+Hi all,
 
-We only bother implementing this if polling is enabled since kgdb
-can't be enabled without that.
+Here's v4 set of n_gsm serdev support patches, and the related protocol
+driver for the modem found on Motorola Mapphone phones and tablets
+like droid4.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+This series only adds basic character device support for the serdev
+driver. Other serdev consumer drivers for specific devices will be
+posted separately.
 
-Changes in v2: None
+The patches are against v5.6-rc series.
 
- drivers/tty/serial/8250/8250_early.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Regards,
 
-diff --git a/drivers/tty/serial/8250/8250_early.c b/drivers/tty/serial/8250/8250_early.c
-index 5cd8c36c8fcc..70d7826788f5 100644
---- a/drivers/tty/serial/8250/8250_early.c
-+++ b/drivers/tty/serial/8250/8250_early.c
-@@ -109,6 +109,28 @@ static void early_serial8250_write(struct console *console,
- 	uart_console_write(port, s, count, serial_putc);
- }
- 
-+#ifdef CONFIG_CONSOLE_POLL
-+static int early_serial8250_read(struct console *console,
-+				 char *s, unsigned int count)
-+{
-+	struct earlycon_device *device = console->data;
-+	struct uart_port *port = &device->port;
-+	unsigned int status;
-+	int num_read = 0;
-+
-+	while (num_read < count) {
-+		status = serial8250_early_in(port, UART_LSR);
-+		if (!(status & UART_LSR_DR))
-+			break;
-+		s[num_read++] = serial8250_early_in(port, UART_RX);
-+	}
-+
-+	return num_read;
-+}
-+#else
-+#define early_serial8250_read NULL
-+#endif
-+
- static void __init init_port(struct earlycon_device *device)
- {
- 	struct uart_port *port = &device->port;
-@@ -149,6 +171,7 @@ int __init early_serial8250_setup(struct earlycon_device *device,
- 		init_port(device);
- 
- 	device->con->write = early_serial8250_write;
-+	device->con->read = early_serial8250_read;
- 	return 0;
- }
- EARLYCON_DECLARE(uart8250, early_serial8250_setup);
+Tony
+
+
+Changes since v5:
+- Cosmetic fixes for issues noted by Pavel
+
+Changes since v4:
+- Use drivers/tty/serdev/protocol directory for the driver instead of
+  drivers/mfd as discussed on the lists for v3 set of patches
+- Fix remove to call kfree only after removing device from the list
+
+Changes since v3:
+- Update list of folks in Cc, looks like I sent v3 only to Lee and lkml
+- Init privdata before motmdm_register_dlci calls gsm_serdev_register_dlci
+- Update binding based on Rob's comments for license and "allOf"
+
+Changes since v2:
+- Drop useless send_command indirection, use static motmdm_send_command
+
+Changes since v1:
+
+- Simplified usage and got rid of few pointless inline functions
+- Added consumer MFD driver, devicetree binding, and dts changes
+
+
+Tony Lindgren (4):
+  tty: n_gsm: Add support for serdev drivers
+  serdev: ngsm-motmdm: Add Motorola TS 27.010 serdev modem driver for
+    droid4
+  dt-bindings: serdev: motmdm: Add binding for motorola-mdm
+  ARM: dts: omap4-droid4: Enable basic modem support
+
+ .../serdev/motorola,mapphone-mdm6600.yaml     |   34 +
+ .../boot/dts/motorola-mapphone-common.dtsi    |    6 +
+ drivers/tty/n_gsm.c                           |  372 +++++
+ drivers/tty/serdev/Kconfig                    |    2 +
+ drivers/tty/serdev/Makefile                   |    2 +
+ drivers/tty/serdev/protocol/Kconfig           |   14 +
+ drivers/tty/serdev/protocol/Makefile          |    3 +
+ .../tty/serdev/protocol/serdev-ngsm-motmdm.c  | 1191 +++++++++++++++++
+ include/linux/serdev-gsm.h                    |  168 +++
+ 9 files changed, 1792 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serdev/motorola,mapphone-mdm6600.yaml
+ create mode 100644 drivers/tty/serdev/protocol/Kconfig
+ create mode 100644 drivers/tty/serdev/protocol/Makefile
+ create mode 100644 drivers/tty/serdev/protocol/serdev-ngsm-motmdm.c
+ create mode 100644 include/linux/serdev-gsm.h
+
 -- 
-2.26.1.301.g55bc3eb7cb9-goog
-
+2.26.2
