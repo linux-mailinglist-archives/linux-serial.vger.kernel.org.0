@@ -2,70 +2,100 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7078B1B3323
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Apr 2020 01:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240431B3B15
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Apr 2020 11:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbgDUX2P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 Apr 2020 19:28:15 -0400
-Received: from muru.com ([72.249.23.125]:50880 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725850AbgDUX2K (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 Apr 2020 19:28:10 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 9543081BA;
-        Tue, 21 Apr 2020 23:28:56 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
-        Lee Jones <lee.jones@linaro.org>, Jiri Slaby <jslaby@suse.cz>,
-        Johan Hovold <johan@kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: [PATCH 4/4] ARM: dts: omap4-droid4: Enable basic modem support
-Date:   Tue, 21 Apr 2020 16:27:52 -0700
-Message-Id: <20200421232752.3070-5-tony@atomide.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200421232752.3070-1-tony@atomide.com>
-References: <20200421232752.3070-1-tony@atomide.com>
+        id S1725810AbgDVJWs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Apr 2020 05:22:48 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:47563 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725968AbgDVJWs (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 22 Apr 2020 05:22:48 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1587547367; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=QtrH0jI6pxLYTskWegU/r5ueqBUsmiWERsTkHhoNS2A=; b=AbfUa61cSWks7VJ3hXMiltpGEtyGj7Msg+bP2cTUnGsobTBkjQUNkmPwMLZpW5tahTsmkJcw
+ xH7syrvVPFi2tPzkkc0dnH4yA4Z3TpMmRGZL+E8291wBWt/aUnI72VQJAeC+u9Zfa8u9OMd0
+ Eb/Mo7ISC+n8Cykx0mjKQM45GPI=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIzZmY0MiIsICJsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5ea00cde.7f2b72109960-smtp-out-n03;
+ Wed, 22 Apr 2020 09:22:38 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 38304C43637; Wed, 22 Apr 2020 09:22:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.79.162.214] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9C594C433CB;
+        Wed, 22 Apr 2020 09:22:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9C594C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH v2 01/17] tty: serial: qcom_geni_serial: Use OPP API to
+ set clk/perf state
+To:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-serial@vger.kernel.org
+References: <1587132279-27659-1-git-send-email-rnayak@codeaurora.org>
+ <1587132279-27659-2-git-send-email-rnayak@codeaurora.org>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <0c9dcb67-5742-ce13-50a5-41c29bbbff51@codeaurora.org>
+Date:   Wed, 22 Apr 2020 14:52:21 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1587132279-27659-2-git-send-email-rnayak@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This allows apps to use /dev/motmdm1 for voice call AT commands,
-/dev/motmdm3 for sending SMS, and /dev/motmdm9 for reading SMS.
+Hey Bjorn,
 
-Voice call audio mixer and GNSS are not yet supported.
+> diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
+> index dd46494..737e713 100644
+> --- a/include/linux/qcom-geni-se.h
+> +++ b/include/linux/qcom-geni-se.h
+> @@ -24,6 +24,7 @@ enum geni_se_protocol_type {
+>   
+>   struct geni_wrapper;
+>   struct clk;
+> +struct opp_table;
+>   
+>   /**
+>    * struct geni_se - GENI Serial Engine
+> @@ -39,6 +40,7 @@ struct geni_se {
+>   	struct device *dev;
+>   	struct geni_wrapper *wrapper;
+>   	struct clk *clk;
+> +	struct opp_table *opp;
 
-Reviewed-by: Pavel Machek <pavel@ucw.cz>
-Tested-by: Pavel Machek <pavel@ucw.cz>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- arch/arm/boot/dts/motorola-mapphone-common.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+I just realized this is going to cause merge issues across geni serial and geni spi
+driver (PATCH 02/17 in this series) unless all of this goes via your tree.
+I see this is also an issue with the ongoing ICC patch series [1]
 
-diff --git a/arch/arm/boot/dts/motorola-mapphone-common.dtsi b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
---- a/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-+++ b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-@@ -698,6 +698,12 @@ &uart1 {
- 	pinctrl-0 = <&uart1_pins>;
- 	interrupts-extended = <&wakeupgen GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH
- 			       &omap4_pmx_core 0xfc>;
-+
-+	modem {
-+		compatible = "motorola,mapphone-mdm6600-serial";
-+		phys = <&fsusb1_phy>;
-+		phy-names = "usb";
-+	};
- };
- 
- &uart3 {
+Do you or Greg have any thoughts on how this common header across various drivers
+issue should be resolved to avoid conflicts while merging?
+
+- Rajendra
+
+[1] https://patchwork.kernel.org/patch/11491015/
+
 -- 
-2.26.2
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
