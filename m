@@ -2,113 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6119D1B8F17
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Apr 2020 12:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA9A1B92C7
+	for <lists+linux-serial@lfdr.de>; Sun, 26 Apr 2020 20:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbgDZKsp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Apr 2020 06:48:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36394 "EHLO mail.kernel.org"
+        id S1726362AbgDZSZR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Apr 2020 14:25:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbgDZKsp (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Apr 2020 06:48:45 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E44D6206BF;
-        Sun, 26 Apr 2020 10:48:43 +0000 (UTC)
+        id S1726152AbgDZSZQ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 26 Apr 2020 14:25:16 -0400
+Subject: Re: [GIT PULL] TTY/Serial driver fixes for 5.7-rc3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587898124;
-        bh=V/k/v4aEozm/UfTFRAq6lXU0NttaDGGoCLBsiXSAQpQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=B79o5DK7DQNJezJ9r2oNG2PXCiG7+lCua8Hl7j6XvHYISXeKko1TadRUoJWc8KxHY
-         //cXKef35fTwj4KSHRX4zzFaR0KbUcmi+oYEKXprl3MCwRfmlTcUk/UTUPwojdG6me
-         zSnb1TZyKMOVdejtROOso9GUhwDOMwQ1TBEijMi4=
-Date:   Sun, 26 Apr 2020 12:48:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
+        s=default; t=1587925516;
+        bh=eEJsBl8MzyjMo9IFqxWtu6Dz5EiPFRx76TAO8Yh2VBc=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=HBoA4mW5s4KKg1BPbyxQKqlwRrdnjb7R+bzuaPDU5kQobSGlAc7BcBPKBwNobdL1B
+         A89xLbkfZej9pEiUqcJoHBm+yrDWmGX8l53csPJAlrBGVHF/n1Lc1g+wvgG/gc5P3C
+         +7auITuxAhzmmnNX5PQIacnAGDHNOAuqEvnGvPKA=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200426104842.GA2121011@kroah.com>
+References: <20200426104842.GA2121011@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200426104842.GA2121011@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.7-rc3
+X-PR-Tracked-Commit-Id: 9a9fc42b86c06120744555fea43fdcabe297c656
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c5f33785719596047b0bb9df98d39fab9d1c51da
+Message-Id: <158792551598.16875.6467921451635160771.pr-tracker-bot@kernel.org>
+Date:   Sun, 26 Apr 2020 18:25:15 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jiri Slaby <jslaby@suse.cz>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver fixes for 5.7-rc3
-Message-ID: <20200426104842.GA2121011@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+The pull request you sent on Sun, 26 Apr 2020 12:48:42 +0200:
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.7-rc3
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c5f33785719596047b0bb9df98d39fab9d1c51da
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.7-rc3
+Thank you!
 
-for you to fetch changes up to 9a9fc42b86c06120744555fea43fdcabe297c656:
-
-  tty: hvc: fix buffer overflow during hvc_alloc(). (2020-04-23 16:02:07 +0200)
-
-----------------------------------------------------------------
-TTY/Serial fixes for 5.7-rc3
-
-Here are some tty and serial driver fixes for 5.7-rc3.
-
-The "largest" in here are a number of reverts for previous changes to
-the uartps serial driver that turned out to not be a good idea at all.
-
-The others are just small fixes found by people and tools.  Included in
-here is a much-reported symbol export needed by previous changes that
-happened in 5.7-rc1.  All of these have been in linux-next for a while
-with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Amit Singh Tomar (1):
-      tty: serial: owl: add "much needed" clk_prepare_enable()
-
-Andrew Melnychenko (1):
-      tty: hvc: fix buffer overflow during hvc_alloc().
-
-Andy Shevchenko (1):
-      serial: sunhv: Initialize lock for non-registered console
-
-Dmitry Safonov (1):
-      tty/sysrq: Export sysrq_mask(), sysrq_toggle_support()
-
-Jiri Slaby (1):
-      tty: rocket, avoid OOB access
-
-Kazuhiro Fujita (1):
-      serial: sh-sci: Make sure status register SCxSR is read in correct sequence
-
-Michal Simek (7):
-      Revert "serial: uartps: Fix uartps_major handling"
-      Revert "serial: uartps: Use the same dynamic major number for all ports"
-      Revert "serial: uartps: Fix error path when alloc failed"
-      Revert "serial: uartps: Do not allow use aliases >= MAX_UART_INSTANCES"
-      Revert "serial: uartps: Change uart ID port allocation"
-      Revert "serial: uartps: Move Port ID to device data structure"
-      Revert "serial: uartps: Register own uart console and driver structures"
-
-Nicolas Pitre (2):
-      vt: don't use kmalloc() for the unicode screen buffer
-      vt: don't hardcode the mem allocation upper bound
-
-Zou Wei (1):
-      tty: serial: bcm63xx: fix missing clk_put() in bcm63xx_uart
-
- drivers/tty/hvc/hvc_console.c      |  23 ++--
- drivers/tty/rocket.c               |  25 +++--
- drivers/tty/serial/bcm63xx_uart.c  |   4 +-
- drivers/tty/serial/owl-uart.c      |   7 ++
- drivers/tty/serial/sh-sci.c        |  13 ++-
- drivers/tty/serial/sunhv.c         |   3 +
- drivers/tty/serial/xilinx_uartps.c | 211 +++++++++----------------------------
- drivers/tty/sysrq.c                |   2 +
- drivers/tty/vt/vt.c                |   7 +-
- 9 files changed, 106 insertions(+), 189 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
