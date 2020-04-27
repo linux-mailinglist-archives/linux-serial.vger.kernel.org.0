@@ -2,63 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA491BA2A0
-	for <lists+linux-serial@lfdr.de>; Mon, 27 Apr 2020 13:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E39B1BA4DD
+	for <lists+linux-serial@lfdr.de>; Mon, 27 Apr 2020 15:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbgD0Lli (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 Apr 2020 07:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S1726821AbgD0Nkn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 Apr 2020 09:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727088AbgD0Llg (ORCPT
+        with ESMTP id S1726539AbgD0Nkn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 Apr 2020 07:41:36 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2A9C0A3BFB
-        for <linux-serial@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id c2so3621407iow.7
-        for <linux-serial@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
+        Mon, 27 Apr 2020 09:40:43 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0899CC0610D5
+        for <linux-serial@vger.kernel.org>; Mon, 27 Apr 2020 06:40:42 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id t14so20569903wrw.12
+        for <linux-serial@vger.kernel.org>; Mon, 27 Apr 2020 06:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=uI1U3pP4FazEZaTfkDGgaf1Qyb1hL6AlgZB9tozzlJtw0tc2p0xAeW9BNdbY4A2XuL
-         JYn8lE6gg3HqjBgRaTT8CTSOLDZ9E79yDyBM0EGnWldSdHyzrk+BT/7frJGn/PAhMIrE
-         VCZdq7yfljhgiOOYhIeLP2AIIFXvLFMREe3IREMgf/Wimn5okrCaqK4gkS0+n2Tqfq3c
-         EFYh4cYLyK3nIET0YOm2adzDe5W5QN3hsgSvwW72euh+PRPDs3oxC82+7cfg/ZGTOz8/
-         eTagf6SblJMWIJeJ59y/zg3//EVOq9RPByBfKkQCDUJB6vE62XJLcx9qUgZNIxoYrz8S
-         JAeA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+SvAEnjQGoKRVavmP97K2vdMEb3EEIWTHohY4rQOeno=;
+        b=XvQ7Y9+hzU5EcfSQ86a6hv1PtqRh31M16VH/0xSAl6+mg4VcTWdI6ztirNiiq99XDR
+         fT1BYBCDOFu8V8lTkW8P4YOZ8+RNhxPNDgCw7xQgRWeAXBnWWprsLFTIbPnslLv34xia
+         LiSH/pEG//lcwOInyXULQDISTZEmyHdkTlSC1C3nHUpRAeWQaOFO30SbTtDvawGBlf4h
+         nz3IPr3vkEFhAlImlaxwqh/zYO8X2i9Jla84ye4f1rC+KQpT7ausyxtw87dLM0Ehvmaq
+         /yQm0VVw2UKpaO3xQc2pgJY7MQvjHpSXCL1zcHEC06ZZ13DBV9jfyiYANAJ7UmVAob7w
+         U3HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=ggj4rrycBh8edG89feKWKy/KaSXr9UCBhb3azgoqz98QUppucSC6eWo5kibg1TuR9S
-         XgPZYijd/6jqztMAaJXHZsZ26CDXzaX2/mtOpHTVnCvpQLUAHFZJkcgzcGCU8GFsALMz
-         JfoCzzLLzXCyflkhWSEtjwO7sxYOabhlbBnjXCXixHic64eScaj/YqeEpTyyHdP6vaRn
-         tfySxSEM5vBmmyAjcl8vVv3FoZaL4jR+H4m93M4Cbt61xdF2j8N6G6C76VsR29eAa8d9
-         uDBAFyy/uj69LDQgf4Z3J27esP/zPcFbqgbQMM+DRqPjYDy382/XQUZAwWE9nNsxOL73
-         HEtg==
-X-Gm-Message-State: AGi0PuYao61vzYkzAkMn4dcdlZRhbulRzq27M2iF6jJO1PlN4nj6pzJH
-        0x732KTeSK1R3LHI259BkOWfWZn+YdT0r5O5WBfcuYvMawU=
-X-Google-Smtp-Source: APiQypJWdjzUZMbeRoAX94bUJV0IgwyoF5kUG7iPo3CBzKxW8lStFNsM/6tz3An/TyzRuH2Qw14DtavsVumw6JVLls0=
-X-Received: by 2002:a6b:7d4a:: with SMTP id d10mr4072296ioq.70.1587987694042;
- Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+SvAEnjQGoKRVavmP97K2vdMEb3EEIWTHohY4rQOeno=;
+        b=MPblPj+HpLeSMeUCIqie4ZeBNskUnvCbsB0hA0i0kevm8saFQPDnH8PMtvmvgtAdyo
+         cTn81IsKOB1oEbiUMbRW1VUCxnIHtJlJEUFBuhq3pzH1Lf5nZ79GntRWHfhHA0XuUsHf
+         Yko+3lJ47ymT/IyqnFOaaQmGh67y57QSGFQOycmSG1TzEfAEfJycqxQSefdWUgB4UgVa
+         QonBEMxuKfwVGkSV+0yDzuBwoLYJzkGfhhzLp4gfhcLrX2VwseOY/5cjmNG/dgieTt14
+         sMsZYJASwiNFBeUOq0XnhfUm3cnVgOsp9Cnq5VF98wM9UR6z8S4dfJKVIXkP9qNWa2OJ
+         y6fw==
+X-Gm-Message-State: AGi0PuZzx76z2d/ulZ2vSGC4KbLiNjRsJKOL/4EpECOSPjN6vJIiRnan
+        grLG3fQpVkTsvWw461Xw9no/YQ==
+X-Google-Smtp-Source: APiQypKLt4Y3AQbKJxyRs7ev6STdRbv1Vx2RggZUFm2SboBwevpwPw7zspoBeZRz/dvMXUz+5GsOfQ==
+X-Received: by 2002:a5d:5081:: with SMTP id a1mr29784146wrt.81.1587994841629;
+        Mon, 27 Apr 2020 06:40:41 -0700 (PDT)
+Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
+        by smtp.gmail.com with ESMTPSA id h137sm88954wme.0.2020.04.27.06.40.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2020 06:40:40 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 14:40:39 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     jason.wessel@windriver.com, gregkh@linuxfoundation.org,
+        kgdb-bugreport@lists.sourceforge.net, mingo@redhat.com,
+        hpa@zytor.com, bp@alien8.de, linux-serial@vger.kernel.org,
+        agross@kernel.org, tglx@linutronix.de, frowand.list@gmail.com,
+        bjorn.andersson@linaro.org, jslaby@suse.com,
+        catalin.marinas@arm.com, corbet@lwn.net, will@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb
+Message-ID: <20200427134039.vog2eloyad55cww5@holly.lan>
+References: <20200421211447.193860-1-dianders@chromium.org>
+ <20200421141234.v2.1.Ied2b058357152ebcc8bf68edd6f20a11d98d7d4e@changeid>
 MIME-Version: 1.0
-Received: by 2002:a5d:8f89:0:0:0:0:0 with HTTP; Mon, 27 Apr 2020 04:41:33
- -0700 (PDT)
-Reply-To: convy0090@gmail.com
-From:   Ruben CONVY <andrewboccc@gmail.com>
-Date:   Mon, 27 Apr 2020 12:41:33 +0100
-Message-ID: <CAHVC0+Ag87TMCmfNNwWbxXOFxn5166q8GG5wEfPjwtixj9=EXQ@mail.gmail.com>
-Subject: Why continued silence 2
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200421141234.v2.1.Ied2b058357152ebcc8bf68edd6f20a11d98d7d4e@changeid>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Did you receive my previous email regarding your family inheritance?
-Reply strictly through: convy0090@gmail.com
-Best Regards,
-Ruben CONVY
+On Tue, Apr 21, 2020 at 02:14:39PM -0700, Douglas Anderson wrote:
+> In commit 81eaadcae81b ("kgdboc: disable the console lock when in
+> kgdb") we avoided the WARN_CONSOLE_UNLOCKED() yell when we were in
+> kgdboc.  That still works fine, but it turns out that we get a similar
+> yell when using other I/O drivers.  One example is the "I/O driver"
+> for the kgdb test suite (kgdbts).  When I enabled that I again got the
+> same yells.
+> 
+> Even though "kgdbts" doesn't actually interact with the user over the
+> console, using it still causes kgdb to print to the consoles.  That
+> trips the same warning:
+>   con_is_visible+0x60/0x68
+>   con_scroll+0x110/0x1b8
+>   lf+0x4c/0xc8
+>   vt_console_print+0x1b8/0x348
+>   vkdb_printf+0x320/0x89c
+>   kdb_printf+0x68/0x90
+>   kdb_main_loop+0x190/0x860
+>   kdb_stub+0x2cc/0x3ec
+>   kgdb_cpu_enter+0x268/0x744
+>   kgdb_handle_exception+0x1a4/0x200
+>   kgdb_compiled_brk_fn+0x34/0x44
+>   brk_handler+0x7c/0xb8
+>   do_debug_exception+0x1b4/0x228
+> 
+> Let's increment/decrement the "ignore_console_lock_warning" variable
+> all the time when we enter the debugger.
+> 
+> This will allow us to later revert commit 81eaadcae81b ("kgdboc:
+> disable the console lock when in kgdb").
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
