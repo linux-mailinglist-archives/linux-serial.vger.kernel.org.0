@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C651BCE6B
-	for <lists+linux-serial@lfdr.de>; Tue, 28 Apr 2020 23:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0501BCE5E
+	for <lists+linux-serial@lfdr.de>; Tue, 28 Apr 2020 23:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbgD1VOt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 28 Apr 2020 17:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
+        id S1726877AbgD1VOd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 28 Apr 2020 17:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726853AbgD1VOc (ORCPT
+        by vger.kernel.org with ESMTP id S1726864AbgD1VOd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 28 Apr 2020 17:14:32 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5DAC03C1AE
-        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:31 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id a7so55338pju.2
-        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:31 -0700 (PDT)
+        Tue, 28 Apr 2020 17:14:33 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6761C03C1AD
+        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:32 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t9so161192pjw.0
+        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/OLrWf8x1qLHrBr/Q6vF9daUHKkS3VqdNLwPQBuWJDU=;
-        b=ceR7s4QLjCxcwBopolOS/b+gt1XS1V44hpA4RaLu3U7xz4gbiad0ZwvuUfq2zoDgWW
-         LUxBaQE0WU7cVAqQaq42UbdsZLHipbJutBdwwdZhBMU9LwbKFUAMsXICh1j8qxyF2HLT
-         XNOSxdPCyaFKmbg5uLtxCtuq/CZhkE8K72skM=
+        bh=4oGO5v8y9nak8k9DrQPglFtrPLstpeIPrguWZ4LmKLk=;
+        b=lC/o9/g0QvPZPmlrzukJy8za454JFvMQ6cfQQiPCvEmJqP5U7RtcGoNEEmRqQ2yyve
+         +ZhWGOuIAj/7XknaXTCzgBgpD/pS6Zwjx/MibXjHKLZBX/Sl5fdjL9PZrqow6aRDfNPH
+         OUPD0gdA3c10zoXT8G662DiHJbzogg3+7fv+M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/OLrWf8x1qLHrBr/Q6vF9daUHKkS3VqdNLwPQBuWJDU=;
-        b=sgyfIoQGsMkN0b04mvKKODdHcnaNHlW1x7RP+zl/lAUCdU1rtsLCnE6D2aHQOrS/h3
-         ylH1+FLK6oYM4ksv0gDOeYOBrrMasfGy4LHebS4xbjgJhNLfVzb+ji2MYP2Hr+eeKGkC
-         Ohi9H8ZuhY5GOKULErFI2HtwsbGeWDFfvRURdhDTG7BomZIy9cSZIll7IuFTZyHXBOUD
-         ECIRlktooGvW2C0UHibs7iMYPv6b4xdYSJP0jfDGybnk9BvUMnD4mvBbuFJjU4DtIguI
-         RXBU8BkEc6SY70dmm/15AAwKWrbHRQoBNS1VCFCO7+07QbIQUb1sxWIP6TQxc9tv9Tsy
-         2tkw==
-X-Gm-Message-State: AGi0PuYEys+UNkxehTy/NmRQJu9OCFy3Y/o2/VPkwd4fwt+bNflGKqlb
-        7LKVOyjXO6bLcOnbf4iDfrlN9Q==
-X-Google-Smtp-Source: APiQypImFZwATzuEOLMe75yAljMn4Bd02aw2txf/8JfWQMe0c5vUhr/j2Svo3I7xFuBIbvpRPemi7A==
-X-Received: by 2002:a17:902:904a:: with SMTP id w10mr16025829plz.17.1588108471172;
-        Tue, 28 Apr 2020 14:14:31 -0700 (PDT)
+        bh=4oGO5v8y9nak8k9DrQPglFtrPLstpeIPrguWZ4LmKLk=;
+        b=A1j2ZIc7lCcjFj9uvxJeNj2sAUbne9r9pi7Qs3m+999qDJrAeTLuT/8HbE7/iZJyB9
+         D664Le8bWGMCLS3nnEwGyxdB2aR/6TTrWrGNdsfQeim5YwR3uPm3/booVMUq4S0T0CwJ
+         0BisDkgb5v6YFPFK2XwncEOy/OyIkoCDGYv/5/CV7TETjqCkcLc79qWXtICEPTjkl3f1
+         eCld6UTwLv6Z4yYDw0zCe06NQD7CnQUoZm2yMuTUK3xPlGghDARqdkgvqTR4B9TeEJ9K
+         JTZHd9BPX5+o4DccF8rR1Y1scpVSyKiuKFw+t3Z9R3xToO18U261wLyvNRQyFaN7p+M1
+         2QsQ==
+X-Gm-Message-State: AGi0PuYEwWbCefPnu07scIOSkQ1Z4t36p5Kdt0W+Pn+Vtx3GQ2aeQyMl
+        kJTwfgEtVxRgPRh0H//MG5aSKQ==
+X-Google-Smtp-Source: APiQypKmcFNHvVmZs0bdmlo52tOJ+MEJoSuTxzLb+JRrva27+RdyqI9eP6g8PWVNuKP/HyPbfr2aUA==
+X-Received: by 2002:a17:902:784c:: with SMTP id e12mr30329731pln.191.1588108472393;
+        Tue, 28 Apr 2020 14:14:32 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id 18sm2988202pjf.30.2020.04.28.14.14.30
+        by smtp.gmail.com with ESMTPSA id 18sm2988202pjf.30.2020.04.28.14.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 14:14:30 -0700 (PDT)
+        Tue, 28 Apr 2020 14:14:32 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
         gregkh@linuxfoundation.org
@@ -54,10 +54,10 @@ Cc:     agross@kernel.org, kgdb-bugreport@lists.sourceforge.net,
         will@kernel.org, hpa@zytor.com, tglx@linutronix.de,
         frowand.list@gmail.com, bp@alien8.de, bjorn.andersson@linaro.org,
         jslaby@suse.com, Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 09/11] serial: qcom_geni_serial: Support kgdboc_earlycon
-Date:   Tue, 28 Apr 2020 14:13:49 -0700
-Message-Id: <20200428141218.v3.9.If2deff9679a62c1ce1b8f2558a8635dc837adf8c@changeid>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 10/11] serial: 8250_early: Support kgdboc_earlycon
+Date:   Tue, 28 Apr 2020 14:13:50 -0700
+Message-Id: <20200428141218.v3.10.I8f668556c244776523320a95b09373a86eda11b7@changeid>
 X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
 In-Reply-To: <20200428211351.85055-1-dianders@chromium.org>
 References: <20200428211351.85055-1-dianders@chromium.org>
@@ -77,67 +77,58 @@ can't be enabled without that.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 ---
 
 Changes in v3:
 - Renamed earlycon_kgdboc to kgdboc_earlycon.
-- { ; } ==> { }
 
 Changes in v2: None
 
- drivers/tty/serial/qcom_geni_serial.c | 32 +++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/tty/serial/8250/8250_early.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 6119090ce045..6bace1c6bb09 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1090,6 +1090,36 @@ static void qcom_geni_serial_earlycon_write(struct console *con,
- 	__qcom_geni_serial_console_write(&dev->port, s, n);
+diff --git a/drivers/tty/serial/8250/8250_early.c b/drivers/tty/serial/8250/8250_early.c
+index 5cd8c36c8fcc..70d7826788f5 100644
+--- a/drivers/tty/serial/8250/8250_early.c
++++ b/drivers/tty/serial/8250/8250_early.c
+@@ -109,6 +109,28 @@ static void early_serial8250_write(struct console *console,
+ 	uart_console_write(port, s, count, serial_putc);
  }
  
 +#ifdef CONFIG_CONSOLE_POLL
-+static int qcom_geni_serial_earlycon_read(struct console *con,
-+					  char *s, unsigned int n)
++static int early_serial8250_read(struct console *console,
++				 char *s, unsigned int count)
 +{
-+	struct earlycon_device *dev = con->data;
-+	struct uart_port *uport = &dev->port;
++	struct earlycon_device *device = console->data;
++	struct uart_port *port = &device->port;
++	unsigned int status;
 +	int num_read = 0;
-+	int ch;
 +
-+	while (num_read < n) {
-+		ch = qcom_geni_serial_get_char(uport);
-+		if (ch == NO_POLL_CHAR)
++	while (num_read < count) {
++		status = serial8250_early_in(port, UART_LSR);
++		if (!(status & UART_LSR_DR))
 +			break;
-+		s[num_read++] = ch;
++		s[num_read++] = serial8250_early_in(port, UART_RX);
 +	}
 +
 +	return num_read;
 +}
-+
-+static void __init qcom_geni_serial_enable_early_read(struct geni_se *se,
-+						      struct console *con)
-+{
-+	geni_se_setup_s_cmd(se, UART_START_READ, 0);
-+	con->read = qcom_geni_serial_earlycon_read;
-+}
 +#else
-+static inline void qcom_geni_serial_enable_early_read(struct geni_se *se,
-+						      struct console *con) { }
++#define early_serial8250_read NULL
 +#endif
 +
- static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
- 								const char *opt)
+ static void __init init_port(struct earlycon_device *device)
  {
-@@ -1136,6 +1166,8 @@ static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
+ 	struct uart_port *port = &device->port;
+@@ -149,6 +171,7 @@ int __init early_serial8250_setup(struct earlycon_device *device,
+ 		init_port(device);
  
- 	dev->con->write = qcom_geni_serial_earlycon_write;
- 	dev->con->setup = NULL;
-+	qcom_geni_serial_enable_early_read(&se, dev->con);
-+
+ 	device->con->write = early_serial8250_write;
++	device->con->read = early_serial8250_read;
  	return 0;
  }
- OF_EARLYCON_DECLARE(qcom_geni, "qcom,geni-debug-uart",
+ EARLYCON_DECLARE(uart8250, early_serial8250_setup);
 -- 
 2.26.2.303.gf8c07b1a785-goog
 
