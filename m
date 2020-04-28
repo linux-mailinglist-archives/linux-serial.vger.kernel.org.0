@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2201BCE79
-	for <lists+linux-serial@lfdr.de>; Tue, 28 Apr 2020 23:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC631BCE68
+	for <lists+linux-serial@lfdr.de>; Tue, 28 Apr 2020 23:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbgD1VQV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 28 Apr 2020 17:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S1726683AbgD1VOW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 28 Apr 2020 17:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726689AbgD1VOU (ORCPT
+        by vger.kernel.org with ESMTP id S1726698AbgD1VOV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 28 Apr 2020 17:14:20 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8A0C035495
-        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:20 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id y6so51090pjc.4
-        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:20 -0700 (PDT)
+        Tue, 28 Apr 2020 17:14:21 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F127C03C1AC
+        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:21 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id u22so1161330plq.12
+        for <linux-serial@vger.kernel.org>; Tue, 28 Apr 2020 14:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=krkKzlTv0evl7XtOBkWytpIaTxy+LxvUFfaqcuSVgrw=;
-        b=jBJu27+X8D4yb2SJa0NENEq+yawHvCLl+udLKszJlfSZ5PVvIKoPqAvpvqME6MW9Mj
-         qtD10jrVnoJisHmxdd2orvAtNEb08FdDeHufUZ6AIp0gEc/tKDo9VwzsZGvXCXUpkg1M
-         G5IqiMT138ZbVoT57BPyqAsumzgYR5TeUCKng=
+        bh=0OVNvnisfgkYu5LPJfO/kG/+xFAcsPKgHoSUZfW5y90=;
+        b=h/doTU1qG1diDauaG4awPo0siVlKxs5d3hJ4lnA8tM0J401L3v3bBQmJoeyedEqXwb
+         51qxQobOPjOp0YRYa5DgkvyAUSbSbtN8u8KC6zK6J0bnGAluamUTpb+thPIv8ZnZ6hHp
+         Agc3yHDWqkGWoApmfRi9iFjYsxh8LUGVylncM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=krkKzlTv0evl7XtOBkWytpIaTxy+LxvUFfaqcuSVgrw=;
-        b=XJFa2rJ40064o0c+js1f9MbZlLYcXjZZnNwGnoALEGkFsHI3V0+HzoBv/FIdWqm+sX
-         i32gcpunu3B5inlX1KkmdqFkMjpQO4z+jy3MOxKkaqwSRdcs1cQ1CmJ025RtbqLnOsrW
-         sCZfFws8nA39PWSX7VGN7ic8OlbydmbPrvg/QD5VVEeR08ljuYK+w8M4hJHb1rMrrw7l
-         N6E7SZCESuksO87eBTx/P9q6JhI9VgHL/GQ8+/Fde+dfhXCZCBMbTvJ96HH5ezgVQY70
-         qCF6a9r17ibH6TkLxOOtTHzyxQdeNjVJFDVKVUniwG78+wfPbdGNCbUs4dX4NsnorvLJ
-         Ia0Q==
-X-Gm-Message-State: AGi0PubSJUv2K1HByYRCgB7whzEYMYj7d4lw42k1kJBL1Zp6Sr26GjNO
-        TzFEh8Khn32io1QyiwKzahDmIg==
-X-Google-Smtp-Source: APiQypJr4LN15nTjffPKEvXDknvrivQ2C51b5dr29r1bWEMRSzhey9PsKy/AkanMbmobrgXqkvk/qQ==
-X-Received: by 2002:a17:902:8f90:: with SMTP id z16mr14622246plo.216.1588108459461;
-        Tue, 28 Apr 2020 14:14:19 -0700 (PDT)
+        bh=0OVNvnisfgkYu5LPJfO/kG/+xFAcsPKgHoSUZfW5y90=;
+        b=G38iulB8zpFdICZGFevbJfO0bQgqhROy98XwJorppPJa7ET6lhY3i8PGVe06gTHyIi
+         rDrIcVReMahaI4LX7VkEtJR6Ea17bVkWnZrdj1IC0QqhXDY8eiVducUBUsdiFujq5elm
+         6YDxBLJ2AKgrxK2/YBIQ23qM2l8Du5l9Yl55EmvhPiZZLq46aRhxtU0+4rHlVb4yFGFv
+         4CWbMwrh2LZYg6uLY5sWHs/F1LHRg45hLX7QuE7Q1v7aZKYIUYGsqijTCsRlsQNc8+4U
+         RD96kP6tXrACtmx41dzLbvvDEg7r3n4xFR0kV4IwUBFZx69RDhEFDtqHKXQg0bOtDcK+
+         qIfA==
+X-Gm-Message-State: AGi0PubZsICiFo/BOroR7yvXQgnT8Zd6BzpLZlckKXeATa6g5I0DoV5S
+        jTpTRSzsYLiyZVPswlGsbScaew==
+X-Google-Smtp-Source: APiQypICBO33ruUlGkSJaFNPeFlv0L/gbSK0rXL8fq3M4//PGxHAL3DVuuFb8F/+QnhjSj2tyQD97w==
+X-Received: by 2002:a17:902:bd09:: with SMTP id p9mr18601373pls.214.1588108460637;
+        Tue, 28 Apr 2020 14:14:20 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id 18sm2988202pjf.30.2020.04.28.14.14.18
+        by smtp.gmail.com with ESMTPSA id 18sm2988202pjf.30.2020.04.28.14.14.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 14:14:19 -0700 (PDT)
+        Tue, 28 Apr 2020 14:14:20 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
         gregkh@linuxfoundation.org
@@ -55,9 +55,9 @@ Cc:     agross@kernel.org, kgdb-bugreport@lists.sourceforge.net,
         frowand.list@gmail.com, bp@alien8.de, bjorn.andersson@linaro.org,
         jslaby@suse.com, Douglas Anderson <dianders@chromium.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 01/11] kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb
-Date:   Tue, 28 Apr 2020 14:13:41 -0700
-Message-Id: <20200428141218.v3.1.Ied2b058357152ebcc8bf68edd6f20a11d98d7d4e@changeid>
+Subject: [PATCH v3 02/11] Revert "kgdboc: disable the console lock when in kgdb"
+Date:   Tue, 28 Apr 2020 14:13:42 -0700
+Message-Id: <20200428141218.v3.2.I02258eee1497e55bcbe8dc477de90369c7c7c2c5@changeid>
 X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
 In-Reply-To: <20200428211351.85055-1-dianders@chromium.org>
 References: <20200428211351.85055-1-dianders@chromium.org>
@@ -68,35 +68,11 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-In commit 81eaadcae81b ("kgdboc: disable the console lock when in
-kgdb") we avoided the WARN_CONSOLE_UNLOCKED() yell when we were in
-kgdboc.  That still works fine, but it turns out that we get a similar
-yell when using other I/O drivers.  One example is the "I/O driver"
-for the kgdb test suite (kgdbts).  When I enabled that I again got the
-same yells.
+This reverts commit 81eaadcae81b4c1bf01649a3053d1f54e2d81cf1.
 
-Even though "kgdbts" doesn't actually interact with the user over the
-console, using it still causes kgdb to print to the consoles.  That
-trips the same warning:
-  con_is_visible+0x60/0x68
-  con_scroll+0x110/0x1b8
-  lf+0x4c/0xc8
-  vt_console_print+0x1b8/0x348
-  vkdb_printf+0x320/0x89c
-  kdb_printf+0x68/0x90
-  kdb_main_loop+0x190/0x860
-  kdb_stub+0x2cc/0x3ec
-  kgdb_cpu_enter+0x268/0x744
-  kgdb_handle_exception+0x1a4/0x200
-  kgdb_compiled_brk_fn+0x34/0x44
-  brk_handler+0x7c/0xb8
-  do_debug_exception+0x1b4/0x228
-
-Let's increment/decrement the "ignore_console_lock_warning" variable
-all the time when we enter the debugger.
-
-This will allow us to later revert commit 81eaadcae81b ("kgdboc:
-disable the console lock when in kgdb").
+Commit 81eaadcae81b ("kgdboc: disable the console lock when in kgdb")
+is no longer needed now that we have the patch ("kgdb: Disable
+WARN_CONSOLE_UNLOCKED for all kgdb").  Revert it.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -105,33 +81,30 @@ Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 Changes in v3: None
 Changes in v2:
-- ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb") new for v2.
+- ("Revert "kgdboc: disable the console lock when in kgdb"") new for v2.
 
- kernel/debug/debug_core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/tty/serial/kgdboc.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
-index 2b7c9b67931d..950dc667c823 100644
---- a/kernel/debug/debug_core.c
-+++ b/kernel/debug/debug_core.c
-@@ -668,6 +668,8 @@ static int kgdb_cpu_enter(struct kgdb_state *ks, struct pt_regs *regs,
- 	if (kgdb_skipexception(ks->ex_vector, ks->linux_regs))
- 		goto kgdb_restore;
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index c9f94fa82be4..8a1a4d1b6768 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -275,14 +275,10 @@ static void kgdboc_pre_exp_handler(void)
+ 	/* Increment the module count when the debugger is active */
+ 	if (!kgdb_connected)
+ 		try_module_get(THIS_MODULE);
+-
+-	atomic_inc(&ignore_console_lock_warning);
+ }
  
-+	atomic_inc(&ignore_console_lock_warning);
-+
- 	/* Call the I/O driver's pre_exception routine */
- 	if (dbg_io_ops->pre_exception)
- 		dbg_io_ops->pre_exception();
-@@ -740,6 +742,8 @@ static int kgdb_cpu_enter(struct kgdb_state *ks, struct pt_regs *regs,
- 	if (dbg_io_ops->post_exception)
- 		dbg_io_ops->post_exception();
- 
-+	atomic_dec(&ignore_console_lock_warning);
-+
- 	if (!kgdb_single_step) {
- 		raw_spin_unlock(&dbg_slave_lock);
- 		/* Wait till all the CPUs have quit from the debugger. */
+ static void kgdboc_post_exp_handler(void)
+ {
+-	atomic_dec(&ignore_console_lock_warning);
+-
+ 	/* decrement the module count when the debugger detaches */
+ 	if (!kgdb_connected)
+ 		module_put(THIS_MODULE);
 -- 
 2.26.2.303.gf8c07b1a785-goog
 
