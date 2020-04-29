@@ -2,195 +2,208 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9075F1BDAAF
-	for <lists+linux-serial@lfdr.de>; Wed, 29 Apr 2020 13:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E4A1BE4C3
+	for <lists+linux-serial@lfdr.de>; Wed, 29 Apr 2020 19:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726662AbgD2LcT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 29 Apr 2020 07:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S1726858AbgD2RIQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 29 Apr 2020 13:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726556AbgD2LcS (ORCPT
+        by vger.kernel.org with ESMTP id S1726524AbgD2RIP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 29 Apr 2020 07:32:18 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EA3C03C1AD;
-        Wed, 29 Apr 2020 04:32:18 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id k12so1489280qtm.4;
-        Wed, 29 Apr 2020 04:32:18 -0700 (PDT)
+        Wed, 29 Apr 2020 13:08:15 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E32C03C1AE
+        for <linux-serial@vger.kernel.org>; Wed, 29 Apr 2020 10:08:15 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id x4so2889416wmj.1
+        for <linux-serial@vger.kernel.org>; Wed, 29 Apr 2020 10:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TN8Zd1ovr5Y9BIds5efwwQrWI/OoatX8UM2U2pugr28=;
-        b=fIb8uPmC7LFx407+LbeeHnYbvSHQtjF9vnz94PIwVwVZDJNPzaG/dBejgW3ehEd8w7
-         uUtyVU/3pRfmPXZlCrHRj4rt1Kv+WbluYZXxCJ3kRBUC8I3REHwq6RvSQmyYXGIOGygH
-         AJUp458zCPtLy0h2Zs8xuHGdlcOtC/GcvV83qTEwtf4p26CzLAMlKdT/T/VHFI8xTM+m
-         K29DmIuZvweUUJIRm+u6bJdcDklh9m+gPIUJnPhXETEcl/B6zNLx/0i0WCl4P/ci2yG6
-         j1vIHmtawEOOvFxG0NkwQsalj3bITQKosMRU5kcFFJ7OlEelVGO0Q3b2RThaDy8mcLEV
-         Q3sg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OmhWnXth/1A2zdJKsZMj2+vlFmsDfxZsIDA5SZ6zP3o=;
+        b=mzGwcRnuuGEc7QpRyskmYXkErO6T7vAvIGVnIg2n7qW04qEnZvx5oUzAJ5Gxh4vBjs
+         NorLXIbNm5dyb1Tfp8dSoFvfTHmmsLKQPPnx7WmFOpJ2SykBQwQcLZCWN3p9R1HZY4bz
+         8g3guOwAnkNKtPtK3s6xABdVtRK1RU4i2n5oin5JlOZ5bm4gsUJx/kJmtmgWmbbLCFos
+         xc+R1s1ojy9dIdQOU7wv/znqlefvErzD9jXK/7HCZa2uXGrHKUTktAt3li0+cJOqDFy4
+         vGTLaZ9beopEtHUxD7TS3jhipT5yYSD1nJo5COJn1l5HUTI9Pa8XJvwJFO3A+mVJ5JYT
+         ncbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TN8Zd1ovr5Y9BIds5efwwQrWI/OoatX8UM2U2pugr28=;
-        b=I/Hsa0aUSXhpzk0fxyTmLto64UPovBlQp9C93TlN3mg58ksKOc+2kZJY0zHDDwo9R9
-         U/4ylf2FZV9NqFkERMTBIgpcyr0ybuYjK6CdVDtLW2hluYwPhJnaPMYasWDF5mDc+6Kp
-         5jW4ki3NEfhi/lUZLJy+Usuqon+hYFyQ+iHqjRqJP/i/IWDDCDpzGMz1CaTpOKwHPSsL
-         4Txnmp1ckI5Mm/CH+IWqKr4g67NL39Oa4pE7fg4x5eNwNTIqOGX8oZ+1XJjqAW25WsSt
-         RqlEz30hTuWx7WpkyJ8czkXi9o/cBXSYlfmuYGWBwDZ3+51MOroS38pv+h1j/hd4l+LK
-         1/cw==
-X-Gm-Message-State: AGi0PubN+FsGEID8udwtM4eEXd1Jtae3lN9zzguA6jLKK0wyji7YVgTq
-        M+j+qTwGGUI3as94VhwnWXE=
-X-Google-Smtp-Source: APiQypKCa4PTP6G9UvwU/CMzNX267N/00FQqAzAdRG+V6IYPHso19QLnZmCbPHdXiRnrp9SI2urHyA==
-X-Received: by 2002:ac8:37e6:: with SMTP id e35mr33836338qtc.19.1588159937031;
-        Wed, 29 Apr 2020 04:32:17 -0700 (PDT)
-Received: from errol.ini.cmu.edu (pool-71-112-157-130.pitbpa.fios.verizon.net. [71.112.157.130])
-        by smtp.gmail.com with ESMTPSA id z26sm15734754qkg.39.2020.04.29.04.32.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OmhWnXth/1A2zdJKsZMj2+vlFmsDfxZsIDA5SZ6zP3o=;
+        b=TC1gDkJ8c2NtD+b01bPt6vjOMQ+N8btwIoPtjRQbuvalbgCK3+VawYLy7J7HE3uB0T
+         eCT3+1jyOYdwpL3PSwnvt86lB79wBBeA13cPCkmpvol/ktida9oJ7ug2Kd/urns63Bb5
+         SHzfwsoM9m8jyc+b0vstCJ05iimvMDwzzcV0HjE7DDSZ/N07gHjh/kkXq3gIBCNZ2CjN
+         uAqYTh0Q3Cs3dXqYEfdHNWLcoWPFdV9ZMevEAqAh+xyA5yzhlN280jaY5qkSF78yFMYx
+         LUEFGjlt7JyVAaLiVwcfIPHoFRnoFERwNdgfI5bidfmmJOI/AfeQ4VDrUWUCKpy/CMWG
+         pr3Q==
+X-Gm-Message-State: AGi0PuYbqoVatZw48mxySsI0u+GJPLM7F9q1A40L+ZJivzDN/TtnOuGq
+        bsetgMPhW9jy+S2d86xI6VVraAgwNHtUrQ==
+X-Google-Smtp-Source: APiQypJ6SJj9JFl0Ap0o8f53q6YJ5wKK2xElS/MI2R0BRSXQfNfPFjCqOYRypDRwwlXhYHQgp2OREw==
+X-Received: by 2002:a05:600c:2c47:: with SMTP id r7mr4272520wmg.50.1588180093830;
+        Wed, 29 Apr 2020 10:08:13 -0700 (PDT)
+Received: from wychelm.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
+        by smtp.gmail.com with ESMTPSA id x18sm8502940wmi.29.2020.04.29.10.08.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 04:32:16 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 07:32:09 -0400
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Mateusz Holenko <mholenko@antmicro.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, devicetree@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Filip Kokosinski <fkokosinski@antmicro.com>,
-        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/5] drivers/soc/litex: add LiteX SoC Controller driver
-Message-ID: <20200429113209.GB23743@errol.ini.cmu.edu>
-References: <20200425133939.3508912-0-mholenko@antmicro.com>
- <20200425133939.3508912-3-mholenko@antmicro.com>
- <CAPk366REVxz7qRfJ0dJOVPRey6+01q1JRvqANDNffYV8Lvh73g@mail.gmail.com>
- <55e1e941457cd596c4273e9c55dc2cfc9027c5ba.camel@kernel.crashing.org>
+        Wed, 29 Apr 2020 10:08:13 -0700 (PDT)
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@linaro.org
+Subject: [PATCH] serial: kgdboc: Allow earlycon initialization to be deferred
+Date:   Wed, 29 Apr 2020 18:08:04 +0100
+Message-Id: <20200429170804.880720-1-daniel.thompson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55e1e941457cd596c4273e9c55dc2cfc9027c5ba.camel@kernel.crashing.org>
-X-Clacks-Overhead: GNU Terry Pratchett
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Ben,
+As described in the big comment in the patch, earlycon initialization
+can be deferred if, a) earlycon was supplied without arguments and, b)
+the ACPI SPCR table hasn't yet been parsed.
 
-On Wed, Apr 29, 2020 at 01:21:11PM +1000, Benjamin Herrenschmidt wrote:
-> On Mon, 2020-04-27 at 11:13 +0200, Mateusz Holenko wrote:
-> > As Gabriel Somlo <gsomlo@gmail.com> suggested to me, I could still use
-> > readl/writel/ioread/iowrite() standard functions providing memory
-> > barriers *and* have values in CPU native endianness by using the
-> > following constructs:
-> > 
-> > `le32_to_cpu(readl(addr))`
-> > 
-> > and
-> > 
-> > `writel(cpu_to_le32(value), addr)`
-> > 
-> > as le32_to_cpu/cpu_to_le32():
-> > - does nothing on LE CPUs and
-> > - reorders bytes on BE CPUs which in turn reverts swapping made by
-> > readl() resulting in returning the original value.
-> 
-> It's a bit sad... I don't understand why you need this. The HW has a
-> fied endian has you have mentioned earlier (and that is a good design).
-> 
-> The fact that you are trying to shove things into a "smaller pipe" than
-> the actual register shouldn't affect at what address the MSB and LSB
-> reside. And readl/writel (or ioread32/iowrite32) will always be LE as
-> well, so will match the HW layout. Thus I don't see why you need to
-> play swapping games here.
-> 
-> This however would be avoided completely if the HW was a tiny bit
-> smarter and would do the multi-beat access for you which shouldn't be
-> terribly hard to implement.
-> 
-> That said, it would be even clearer if you just open coded the 2 or 3
-> useful cases: 32/8, 32/16 and 32/32. The loop with calculated shifts
-> (and no masks) makes the code hard to understand.
+Unfortunately, if deferred, then the earlycon is not ready during early
+parameter parsing so kgdboc cannot use it. This patch mitigates the
+problem by giving kgdboc_earlycon a second chance during
+dbg_late_init(). Adding a special purpose interface slightly increase
+the intimacy between kgdboc and debug-core but this seems better than
+adding kgdb specific hooks into the arch code (and much, much better
+than faking non-intimacy with function pointers).
 
-A "compound" LiteX MMIO register of 32 bits total, starting at address
-0x80000004, containing value 0x12345678, is spread across 4 8-bit
-subregisters aligned at ulong in the MMIO space like this on LE:
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+---
 
-0x82000000  00 00 00 00 12 00 00 00 34 00 00 00 56 00 00 00  ........4...V...
-                        ^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^
-0x82000010  78 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  x...............
-            ^^^^^^^^^^^
+Notes:
+    Hi Doug,
+    
+    This patch extends your patch set to make it easier to deploy on ACPI
+    systems[1]:
+      earlycon kgdboc_earlycon kgdboc=ttyAMA0
+    
+    I have mixed feeling about it because it adds calls from debug-core
+    into kgdboc and I don't think there are other examples of this.
+    However earlycon auto-configuration is so awesome I'd like to
+    be able to keep using it and this is the best I have come up with
+    so far ;-).
+    
+    
+    Daniel.
+    
+    
+    [1] And also on DT based arm64 systems that have ACPI support
+        enabled at compile time because such systems don't decide
+        whether to adopt DT or ACPI until after early parameter
+        parsing.
 
-and like this on BE:
+ drivers/tty/serial/kgdboc.c | 26 +++++++++++++++++++++++++-
+ include/linux/kgdb.h        |  2 ++
+ kernel/debug/debug_core.c   |  4 ++++
+ 3 files changed, 31 insertions(+), 1 deletion(-)
 
-0x82000000  00 00 00 00 00 00 00 12 00 00 00 34 00 00 00 56  ...........4...V
-                        ^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^
-0x82000010  00 00 00 78 00 00 00 00 00 00 00 00 00 00 00 00  ...x............
-            ^^^^^^^^^^^
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index 7aca0a67fc0b..a7a079ce2c5d 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -509,6 +509,8 @@ static struct kgdb_io kgdboc_earlycon_io_ops = {
+ 	.is_console		= true,
+ };
 
-LiteX can be optionally built to use larger than 8-bit subregisters,
-here's an example with 16-bit subregisters (also aligned at ulong),
-for the same "compound" register:
++static bool kgdboc_earlycon_late_enable __initdata;
++
+ static int __init kgdboc_earlycon_init(char *opt)
+ {
+ 	struct console *con;
+@@ -529,7 +531,23 @@ static int __init kgdboc_earlycon_init(char *opt)
+ 	console_unlock();
 
-on LE:
-0x82000000  00 00 00 00 34 12 00 00 78 56 00 00 00 00 00 00  ....4...xV......
-                        ^^^^^^^^^^^ ^^^^^^^^^^^
+ 	if (!con) {
+-		pr_info("Couldn't find kgdb earlycon\n");
++		/*
++		 * If earlycon deferred its initialization then we also need to
++		 * do that since there is no console at this point. We will
++		 * only defer ourselves when kgdboc_earlycon has no arguments.
++		 * This is because earlycon init is only deferred if there are
++		 * no arguments to earlycon (we assume that a user who doesn't
++		 * specify an earlycon driver won't know the right console name
++		 * to put into kgdboc_earlycon and will let that auto-configure
++		 * too).
++		 */
++		if (!kgdboc_earlycon_late_enable &&
++		    earlycon_acpi_spcr_enable && (!opt || !opt[0])) {
++			earlycon_kgdboc_late_enable = true;
++			pr_info("No suitable earlycon yet, will try later\n");
++		} else {
++			pr_info("Couldn't find kgdb earlycon\n");
++		}
+ 		return 0;
+ 	}
 
-and on BE:
-0x82000000  00 00 00 00 00 00 12 34 00 00 56 78 00 00 00 00  .......4..Vx....
-                        ^^^^^^^^^^^ ^^^^^^^^^^^
+@@ -545,6 +563,12 @@ static int __init kgdboc_earlycon_init(char *opt)
+ }
 
-Essentially (back to the more common 8-bit subregister size), a compound
-register foo = 0x12345678 is stored as
+ early_param("kgdboc_earlycon", kgdboc_earlycon_init);
++
++void __init kgdb_earlycon_late_init(void)
++{
++	if (kgdboc_earlycon_late_enable)
++		earlycon_kgdboc_init(NULL);
++}
+ #endif /* CONFIG_KGDB_SERIAL_CONSOLE */
 
-	ulong foo[4] = {0x12, 0x34, 0x56, 0x78};
+ module_init(init_kgdboc);
+diff --git a/include/linux/kgdb.h b/include/linux/kgdb.h
+index 77a3c519478a..02867a2f0eb4 100644
+--- a/include/linux/kgdb.h
++++ b/include/linux/kgdb.h
+@@ -227,6 +227,8 @@ extern int kgdb_arch_remove_breakpoint(struct kgdb_bkpt *bpt);
+ extern void kgdb_arch_late(void);
 
-in the CPU's native endianness, aligned at the CPU's native word width
-(hence "ulong").
 
-With 16-bit subregisters that would then be:
++extern void __init kgdb_earlycon_late_init(void);
++
+ /**
+  * struct kgdb_arch - Describe architecture specific values.
+  * @gdb_bpt_instr: The instruction to trigger a breakpoint.
+diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
+index 2d74dcbca477..f066ef2bc615 100644
+--- a/kernel/debug/debug_core.c
++++ b/kernel/debug/debug_core.c
+@@ -963,11 +963,15 @@ void __weak kgdb_arch_late(void)
+ {
+ }
 
-	ulong foo[2] = {0x1234, 0x5678};
++void __init __weak kgdb_earlycon_late_init(void)
++
+ void __init dbg_late_init(void)
+ {
+ 	dbg_is_early = false;
+ 	if (kgdb_io_module_registered)
+ 		kgdb_arch_late();
++	else
++		kgdb_earlycon_late_init();
+ 	kdb_init(KDB_INIT_FULL);
 
-Trouble with readl() and writel() is that they convert everything to LE
-internally, which on BE would get us something different *within* each
-subregister (i.e., 0x12000000 instead of 0x12, or 0x34120000 instead of
-0x1234).
+ 	if (kgdb_io_module_registered && kgdb_break_asap)
 
-The cleanest way (IMHO) to accomplish an endian-agnostic readl() (that
-preserves both barriers AND native endianness) is to undo the internal
-__le32_to_cpu() using:
+base-commit: 6a8b55ed4056ea5559ebe4f6a4b247f627870d4c
+prerequisite-patch-id: cbaa70eb783f1f34aec7f5839d1fecbc7616a9f6
+prerequisite-patch-id: d7543cdd19fb194ded3361d52818970083efdb06
+prerequisite-patch-id: 2238d976451dac9e3ee1bf02a077d633e342aa0c
+prerequisite-patch-id: 9e4296261b608ee172060d04b3de431a5e370096
+prerequisite-patch-id: 2b008e0e14a212072874ecb483d9c6844d161b08
+prerequisite-patch-id: f5b692b89c997d828832e3ab27fffb8f770d7b6f
+prerequisite-patch-id: 851d6f4874aa24540db9d765275ae736e8b2955b
+prerequisite-patch-id: d3969c2fb7cd320eafebe63d7da270dac5a82fc9
+prerequisite-patch-id: e1fc1478b7f75094d263ffc64a9f3528151831cf
+prerequisite-patch-id: 45fb53996a9f5993e03673c10eebf2834c58307f
+prerequisite-patch-id: 50ac1ddb52c3cce8b712036f212fdd67d7493112
+--
+2.25.1
 
-	cpu_to_le32(readl(addr))
-
-This keeps us away from using any '__' internals directly (e.g.,
-__raw_readl()), or open-coding our own `litex_readl()`, e.g.:
-
-	static inline u32 litex_readl(const volatile void __iomem *addr)
-	{
-		u32 val;
-		__io_br();
-		val = __raw_readl(addr)); /* No le32 byteswap here! */
-		__io_ar(val);
-		return val;
-	}
-
-... which is something that was strongly advised against in earlier
-revisions of this series.
-
-Cheers,
---Gabriel
