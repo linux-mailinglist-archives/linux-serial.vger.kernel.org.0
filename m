@@ -2,156 +2,139 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F10A1BED08
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Apr 2020 02:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3226F1BF11C
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Apr 2020 09:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgD3AkZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 29 Apr 2020 20:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726279AbgD3AkZ (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 29 Apr 2020 20:40:25 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3686C035494
-        for <linux-serial@vger.kernel.org>; Wed, 29 Apr 2020 17:40:24 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id z1so2687793vsn.11
-        for <linux-serial@vger.kernel.org>; Wed, 29 Apr 2020 17:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=49/GUq/fltLJWqVhbL7UqtJO8rowbFsOO5SNzjwHTOY=;
-        b=i2TyRdk3Tqw4h5DLb1A3tKoVpg6kPPWMN84oMR/sl9QzBxxG57S94enQkwZ8kWGyDV
-         tzwy8lrWGZ5glKqDug98HzSRlI/YWxPBTgkGtapyACJT9Q7CD0mJ1M+mRSABCl9EdY8i
-         qce3QsW8VvVCYeQp7Cbb/dZQ7uMdN1f7TZLaE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=49/GUq/fltLJWqVhbL7UqtJO8rowbFsOO5SNzjwHTOY=;
-        b=K01pBsgiwIgmhlVND23uitJ6D6OTc0BaVyTz7ytixx+lZY9Mwn1gNvr0oyuOP0ND/l
-         cT1C90lp4tP/dKohdn2Kym54HBwb/Cb14iah2TXwnzToerIfuJvdL6djNBmzMoB6RbG2
-         0W68LwLjemC6kTQ2NQZrxQ61uLJmL5OR6qgWIbdC7r1m4Ebc6TUl8vlEcs5fF+QTBfXD
-         xb6wA+kZsacmOjeoD0Kx76apha0qHVNc50XCasF30K73+1q6A0+kRa7de9TvDUFyn9RR
-         O4VfhClkuDGrV5InAYiuRbVb2hE7aK7+jRF55Y5W6HCxHHTCAuPyUCTEMLOH4h/OUmsX
-         AkFA==
-X-Gm-Message-State: AGi0PuYDbpHs9iJlhdrIinnZEhaxWxjK+9yQvKonosNstU2NJanxqjNK
-        GSscZutb4eypBXbbgPI4ruYkvyNgt+I=
-X-Google-Smtp-Source: APiQypK2TlCbYi4WbFXu0w8n6e93muhaVT0pOSgVfirxnIcMj66OBmGABpgHhUGBFd2CilzfrH4uqQ==
-X-Received: by 2002:a67:32c4:: with SMTP id y187mr969697vsy.120.1588207223709;
-        Wed, 29 Apr 2020 17:40:23 -0700 (PDT)
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
-        by smtp.gmail.com with ESMTPSA id d184sm365892vkf.37.2020.04.29.17.40.22
-        for <linux-serial@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2020 17:40:22 -0700 (PDT)
-Received: by mail-vk1-f172.google.com with SMTP id i185so1235745vki.12
-        for <linux-serial@vger.kernel.org>; Wed, 29 Apr 2020 17:40:22 -0700 (PDT)
-X-Received: by 2002:a1f:9645:: with SMTP id y66mr643020vkd.40.1588207222154;
- Wed, 29 Apr 2020 17:40:22 -0700 (PDT)
+        id S1726903AbgD3HRL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 30 Apr 2020 03:17:11 -0400
+Received: from mail.cs.msu.ru ([188.44.42.39]:50569 "EHLO mail.cs.msu.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726859AbgD3HRH (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 30 Apr 2020 03:17:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
+         s=dkim; h=Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=tEDmyAeTVaJQAXX/tYgqsMG0JAQjwAQDWEMYp2A5wz8=; b=UXFgYcPfBdCPbu9QN9j6amzDOi
+        nzdFHFvnQijp9FPzaHzPqFmcPjCevt6mYGNsTTyOqt1FwWZ8PY/BqCKlsGgNH4ibEtdcSbfVOXTAG
+        1zG5uzQh2ehgpFQwiM0oAD24Y7yHM8rUlYnZgefnua/RH2Gt0TyoLVt0zoO1MUESwiB6bXYHOwCOr
+        IKPOvHTgZfVnvvh2UoZEkxLIIF5TNlAb9k7Xu9E9EZ3nAnke8Z6PMjmvieXYGMAUlil67PRKBTDuk
+        IZlXFcsD854UcFTTniBiY6nrbIxBPyDgoWqdYQGS8WVdLPe54qKdgG90qpcKRyZ9QPZAI2A/l275l
+        oQapGwcA==;
+Received: from [37.204.119.143] (port=42272 helo=localhost.localdomain)
+        by mail.cs.msu.ru with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93.0.4 (FreeBSD))
+        (envelope-from <ar@cs.msu.ru>)
+        id 1jU2ut-000B4I-SG; Thu, 30 Apr 2020 09:43:28 +0300
+From:   Arseny Maslennikov <ar@cs.msu.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arseny Maslennikov <ar@cs.msu.ru>, Rob Landley <rob@landley.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-api@vger.kernel.org,
+        "Vladimir D. Seleznev" <vseleznv@altlinux.org>
+Date:   Thu, 30 Apr 2020 09:42:54 +0300
+Message-Id: <20200430064301.1099452-1-ar@cs.msu.ru>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20200428162227.687978-1-daniel.thompson@linaro.org>
-In-Reply-To: <20200428162227.687978-1-daniel.thompson@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 29 Apr 2020 17:40:10 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VTkO5AULJe1ksyhKLLxpywqX-RLC_T4ENyDf3ONJNMKg@mail.gmail.com>
-Message-ID: <CAD=FV=VTkO5AULJe1ksyhKLLxpywqX-RLC_T4ENyDf3ONJNMKg@mail.gmail.com>
-Subject: Re: [PATCH] serial: earlycon: Allow earlier DT scan is acpi=off
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Patch Tracking <patches@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 37.204.119.143
+X-SA-Exim-Mail-From: ar@cs.msu.ru
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.cs.msu.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_ADSP_ALL autolearn=no autolearn_force=no version=3.4.4
+Subject: [PATCH v3 0/7] TTY Keyboard Status Request
+X-SA-Exim-Version: 4.2.1
+X-SA-Exim-Scanned: Yes (on mail.cs.msu.ru)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
+This patch series introduces TTY keyboard status request, a feature of
+the n_tty line discipline that reserves a character in struct termios
+(^T by default) and reacts to it by printing a short informational line
+to the terminal and sending a Unix signal to the tty's foreground
+process group. The processes may, in response to the signal, output a
+textual description of what they're doing.
 
-On Tue, Apr 28, 2020 at 9:22 AM Daniel Thompson
-<daniel.thompson@linaro.org> wrote:
->
-> Currently if the kernel has support for ACPI SPCR parsing then earlycon
-> without arguments is processed later than the full earlycon=...
-> alternative.
->
-> If ACPI has been explicitly disabled on the kernel command line then
-> there is not need to defer since the ACPI code (both x86 and arm64)
-> will never actually run.
->
-> Or, put another way it allows lazy people to throw "acpi=off earlycon"
-> onto the command line of a DT systems and be confident the console will
-> start as early as possible without them having to lookup the driver
-> and address needed for a specific platform.
->
-> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> ---
->  drivers/tty/serial/earlycon.c | 28 +++++++++++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
+The feature has been present in a similar form at least in
+Free/Open/NetBSD; it would be nice to have something like this in Linux
+as well. There is an LKML thread[1] where users have previously
+expressed the rationale for this.
 
-I wonder if a cleaner option is to just add a special "earlycon" value
-like "earlycon=not_acpi".  This wouldn't require any special peeking
-and would just be a sentinel that just says "you should autodetect the
-earlycon, but don't worry about waiting for ACPI".  ...that in itself
-is a bit of a hack, but at least it's more self contained in the
-earlycon driver and maybe more discoverable when someone is figuring
-out how to setup earlycon?
+The current implementation does not break existing kernel API in any
+way, since, fortunately, all the architectures supported by the kernel
+happen to have at least 1 free byte in the termios control character
+array.
 
--Doug
+Patches 1-4 implement the semantics of the new signal and VSTATUS cc;
+patches 5-7 implement the kerninfo line written to the terminal by n_tty.
 
+The series should cleanly apply to tty-next and 5.7-rc3.
 
+[1] https://lore.kernel.org/lkml/1415200663.3247743.187387481.75CE9317@webmail.messagingengine.com/
 
->
-> diff --git a/drivers/tty/serial/earlycon.c b/drivers/tty/serial/earlycon.c
-> index 2ae9190b64bb..ebb648aacb47 100644
-> --- a/drivers/tty/serial/earlycon.c
-> +++ b/drivers/tty/serial/earlycon.c
-> @@ -215,6 +215,31 @@ int __init setup_earlycon(char *buf)
->   */
->  bool earlycon_acpi_spcr_enable __initdata;
->
-> +/*
-> + * This takes a sneaky peek at other boot arguments (which may not have
-> + * been parsed at this point in the boot) to check whether ACPI has
-> + * been explicitly disabled. If it is explicitly disabled then there is
-> + * no reason to defer initialization of the early console.
-> + */
-> +static bool earlycon_check_for_acpi_off(void)
-> +{
-> +       static const char token[] = "acpi=off";
-> +       const char *arg;
-> +       char before, after;
-> +
-> +       arg = strstr(boot_command_line, token);
-> +       while (arg) {
-> +               before = arg == boot_command_line ? ' ' : arg[-1];
-> +               after = arg[sizeof(token)-1];
-> +               if (isspace(before) && (isspace(after) || after == '\0'))
-> +                       return true;
-> +
-> +               arg = strstr(arg+1, token);
-> +       }
-> +
-> +       return false;
-> +}
-> +
->  /* early_param wrapper for setup_earlycon() */
->  static int __init param_setup_earlycon(char *buf)
->  {
-> @@ -222,7 +247,8 @@ static int __init param_setup_earlycon(char *buf)
->
->         /* Just 'earlycon' is a valid param for devicetree and ACPI SPCR. */
->         if (!buf || !buf[0]) {
-> -               if (IS_ENABLED(CONFIG_ACPI_SPCR_TABLE)) {
-> +               if (IS_ENABLED(CONFIG_ACPI_SPCR_TABLE) &&
-> +                   !earlycon_check_for_acpi_off()) {
->                         earlycon_acpi_spcr_enable = true;
->                         return 0;
->                 } else if (!buf) {
-> --
-> 2.25.1
->
+v2 <- v1: removed useless debugging bits.
+v3 <- v2: made commit message clarifications sparked by previous
+discussion, adapted 7/7 for y2038, re-Cc linux-api@.
+
+Discussion of v1:
+https://lore.kernel.org/lkml/20190605081906.28938-1-ar@cs.msu.ru/
+Discussion of v2:
+https://lore.kernel.org/lkml/20190625161153.29811-1-ar@cs.msu.ru/
+
+Arseny Maslennikov (7):
+  signal.h: Define SIGINFO on all architectures
+  tty: termios: Reserve space for VSTATUS in .c_cc
+  n_tty: Send SIGINFO to fg pgrp on status request character
+  linux/signal.h: Ignore SIGINFO by default in new tasks
+  tty: Add NOKERNINFO lflag to termios
+  n_tty: ->ops->write: Cut core logic out to a separate function
+  n_tty: Provide an informational line on VSTATUS receipt
+
+ arch/alpha/include/asm/termios.h         |   4 +-
+ arch/alpha/include/uapi/asm/termbits.h   |   2 +
+ arch/arm/include/uapi/asm/signal.h       |   1 +
+ arch/h8300/include/uapi/asm/signal.h     |   1 +
+ arch/ia64/include/asm/termios.h          |   4 +-
+ arch/ia64/include/uapi/asm/signal.h      |   1 +
+ arch/ia64/include/uapi/asm/termbits.h    |   2 +
+ arch/m68k/include/uapi/asm/signal.h      |   1 +
+ arch/mips/include/asm/termios.h          |   4 +-
+ arch/mips/include/uapi/asm/signal.h      |   1 +
+ arch/mips/include/uapi/asm/termbits.h    |   2 +
+ arch/parisc/include/asm/termios.h        |   4 +-
+ arch/parisc/include/uapi/asm/signal.h    |   1 +
+ arch/parisc/include/uapi/asm/termbits.h  |   2 +
+ arch/powerpc/include/asm/termios.h       |   4 +-
+ arch/powerpc/include/uapi/asm/signal.h   |   1 +
+ arch/powerpc/include/uapi/asm/termbits.h |   2 +
+ arch/s390/include/asm/termios.h          |   4 +-
+ arch/s390/include/uapi/asm/signal.h      |   1 +
+ arch/sparc/include/asm/termios.h         |   4 +-
+ arch/sparc/include/uapi/asm/signal.h     |   2 +
+ arch/sparc/include/uapi/asm/termbits.h   |   2 +
+ arch/x86/include/uapi/asm/signal.h       |   1 +
+ arch/xtensa/include/uapi/asm/signal.h    |   1 +
+ arch/xtensa/include/uapi/asm/termbits.h  |   2 +
+ drivers/tty/Makefile                     |   3 +-
+ drivers/tty/n_tty.c                      |  70 ++++-
+ drivers/tty/n_tty_status.c               | 338 +++++++++++++++++++++++
+ include/asm-generic/termios.h            |   4 +-
+ include/linux/sched.h                    |   7 +
+ include/linux/signal.h                   |   5 +-
+ include/linux/tty.h                      |   7 +-
+ include/uapi/asm-generic/signal.h        |   1 +
+ include/uapi/asm-generic/termbits.h      |   2 +
+ 34 files changed, 458 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/tty/n_tty_status.c
+
+-- 
+2.26.2
+
