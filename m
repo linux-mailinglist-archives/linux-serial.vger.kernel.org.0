@@ -2,135 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A261C0BC7
-	for <lists+linux-serial@lfdr.de>; Fri,  1 May 2020 03:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B54A1C23DE
+	for <lists+linux-serial@lfdr.de>; Sat,  2 May 2020 09:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgEABo6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 30 Apr 2020 21:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727114AbgEABo5 (ORCPT
+        id S1726488AbgEBHcX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Sat, 2 May 2020 03:32:23 -0400
+Received: from mail.30tageserver.de ([46.38.251.90]:34588 "EHLO
+        v220120211527745399.yourvserver.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726468AbgEBHcV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 30 Apr 2020 21:44:57 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7B6C035494;
-        Thu, 30 Apr 2020 18:44:57 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id n24so3120957plp.13;
-        Thu, 30 Apr 2020 18:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BJDB9lPyIL7yqfOmHsy2HCj6CJV5Y/ygJ4a/Yt4ueRw=;
-        b=Tcshg76Y97lKweEKu4Gzgm583bqlkziZ4JStrZoKgao6MtHeAoodWQhMVO/lXjIY2G
-         FvsHOLLcC0UIstahZaZG+KZ1bEgNSTltcuxq5krvhF6cOgx9Rh62+aJTs5Ho+2hC1v/i
-         V/0Q+bgjzZQqIT5kvZzSa/8UWZi1+rWuqj3VP1iNWOL43pzieMbHk4n/WkLOh3uiq6sn
-         VA4Y6GIn4cKd1U2WqH8DlczT3VzTPWI2DaO+ZuGk93UcqyB3SQ/rCq9jOTYNSXV1GJk2
-         I/N01tnibHm6+a7oRtKOCa1vkElQ/Nxn5qwvm7yJQmzRGlMHW3zA8RMgLEfDq0HeWpOh
-         v2UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BJDB9lPyIL7yqfOmHsy2HCj6CJV5Y/ygJ4a/Yt4ueRw=;
-        b=nin/uEBjSoD4c/5FEt0TEzvRMtHRD55QWEahE4F6fFHL9zc7BpUdDdXdxLOh5jmxEI
-         E/yWGmXvvtUYFhLHvT6GQzabuokc0uiXgx9c522DhxabeI3ulkirVdQWMD4uhA2GDKNV
-         OASbvmnAnNiOWMMvm7t0FvBl716Z8rLwGY9wJN0aTrNXCOB4tOOPY0B3Ho6+Jt/9M8+e
-         AaCTJuO6XtbsGcqOfrbhQ/oa+B1k26HmndzPcq++EithKgm/hj4fc/OLM6o/KzVl3czt
-         wGgWtBZo7094XXFoF4/9CihIsymztzxx1oN1dGOMuPCknhzuow0k9PErgaXnrKQ/gR8k
-         1h4Q==
-X-Gm-Message-State: AGi0Pub5KrAfzvy+PzKq7DYvcqfEOnOFn9b+d/H3SDRS87Kys48B+4UY
-        ZA9Pv0w7pHUREBLSMZOYDxA=
-X-Google-Smtp-Source: APiQypLCLfp3rK10yUdbPAE4Edv32G102rWA36hKIIpdEzEYeJyZFhsbGJpCwWMJe+hOipaDHzEbbg==
-X-Received: by 2002:a17:90a:2606:: with SMTP id l6mr1770330pje.188.1588297497099;
-        Thu, 30 Apr 2020 18:44:57 -0700 (PDT)
-Received: from localhost (146.85.30.125.dy.iij4u.or.jp. [125.30.85.146])
-        by smtp.gmail.com with ESMTPSA id d18sm850855pfq.177.2020.04.30.18.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2020 18:44:56 -0700 (PDT)
-From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-X-Google-Original-From: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-Date:   Fri, 1 May 2020 10:44:54 +0900
-To:     Alper Nebi Yasak <alpernebiyasak@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-serial@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Feng Tang <feng.tang@intel.com>
-Subject: Re: [RFC PATCH v2 1/3] printk: Add function to set console to
- preferred console's driver
-Message-ID: <20200501014454.GB288759@jagdpanzerIV.localdomain>
-References: <20200430161438.17640-1-alpernebiyasak@gmail.com>
- <20200430161438.17640-2-alpernebiyasak@gmail.com>
+        Sat, 2 May 2020 03:32:21 -0400
+X-Greylist: delayed 18321 seconds by postgrey-1.27 at vger.kernel.org; Sat, 02 May 2020 03:32:20 EDT
+Received: from localhost (ip6-localhost [127.0.0.1])
+        by v220120211527745399.yourvserver.net (Postfix) with ESMTP id 6EFF1DFEA1;
+        Fri,  1 May 2020 07:03:48 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at v220120211527745399.yourvserver.net
+X-Spam-Flag: NO
+X-Spam-Score: 1.589
+X-Spam-Level: *
+X-Spam-Status: No, score=1.589 required=6.31 tests=[ALL_TRUSTED=-1,
+        DNS_FROM_AHBL_RHSBL=2.438, LOTS_OF_MONEY=0.001, MISSING_MID=0.14,
+        T_HK_NAME_MR_MRS=0.01] autolearn=unavailable
+Received: from v220120211527745399.yourvserver.net ([127.0.0.1])
+        by localhost (v220120211527745399.yourvserver.net [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WStrD5xjW80N; Fri,  1 May 2020 07:03:48 +0200 (CEST)
+Received: from DMTESTv7-10.northeurope.cloudapp.azure.com (unknown [40.113.89.2])
+        by v220120211527745399.yourvserver.net (Postfix) with ESMTPA id DD020673EA;
+        Fri,  1 May 2020 04:08:14 +0200 (CEST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200430161438.17640-2-alpernebiyasak@gmail.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Grant(info)
+To:     Recipients <noreply@dbz.com>
+From:   "Mr. X" <noreply@dbz.com>
+Date:   Fri, 01 May 2020 02:08:13 +0000
+Reply-To: info1@dbzmail.com
+Message-Id: <20200501050348.6EFF1DFEA1@v220120211527745399.yourvserver.net>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On (20/04/30 19:14), Alper Nebi Yasak wrote:
-> Currently, add_preferred_console sets a preferred console, but doesn't
-> actually change /dev/console to match it. That part is handled within
-> register_device, where a newly registered console driver will be set as
-> /dev/console if it matches the preferred console.
-> 
-> However, if the relevant driver is already registered, the only way to
-> set it as /dev/console is by un-registering and re-registering it.
+Lieber Bewohner, lieber
 
-Hmm. Preferred console selection is very fragile, there are too many
-setups and workarounds that even minor tweaks introduce regressions
-oftentimes.
+Die DBZ Project Foundation hat 25 Millionen US-Dollar für Notfallzuschüsse für kleine Unternehmen und einzelne Projekte bereitgestellt.
+Der Betrag variiert zwischen 300.000,00 USD und 800.000,00 USD pro Antragsteller.
 
-We have, by the way, a pending patchset which changes the same
-are - preferred console selection.
+Die Bewerbung beginnt am 27. April unter folgender E-Mail-Adresse: info47@dbzmail.com
 
-git://git.kernel.org/pub/scm/linux/kernel/git/pmladek/printk.git for-5.7-preferred-console
+Sie finden Details in mehreren Sprachen, die erforderlichen Bewerbungsunterlagen und ein Bewerbungsformular.
 
-[..]
-> An example is the xenfb_make_preferred_console() function:
-> 
-> 	console_lock();
-> 	for_each_console(c) {
-> 		if (!strcmp(c->name, "tty") && c->index == 0)
-> 			break;
-> 	}
-> 	console_unlock();
-> 	if (c) {
-> 		unregister_console(c);
-> 		c->flags |= CON_CONSDEV;
-> 		c->flags &= ~CON_PRINTBUFFER; /* don't print again */
-> 		register_console(c);
-> 	}
+HINWEIS: Diese Spende gilt für die ersten 30 Bewerber.
 
-I didn't know about this code.
+Vielen Dank,
 
-> The code above was introduced in commit 9e124fe16ff2 ("xen: Enable
-> console tty by default in domU if it's not a dummy"). In short, it's aim
-> is to set VT as the preferred console only after a working framebuffer
-> is registered and thus VT is not the dummy device.
-> 
-> This patch introduces an update_console_to_preferred function that
-> handles the necessary /dev/console change. With this change, the example
-> above can be replaced with:
-> 
-> 	console_lock();
-> 	add_preferred_console("tty", 0, NULL);
-> 	update_console_to_preferred();
-> 	console_unlock();
-> 
-> More importantly, these two calls can be moved to vt.c in order to bump
-> its priority when a non-dummy backend for it is introduced, solving that
-> problem in general.
+DBZ-Projektteam (Weltstiftungsgruppe).
+E-Mail: info47@dbzmail.com.
+E-Mail: donationbudgetzonefoundation@gmail.com.
 
-Let me take a look over the weekend.
 
-	-ss
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Policy Disclaimer for Donation Budget Zone Foundation.  Corporacion:
+
+This message contains information that may be privileged or confidential and is the property of Donation Budget Zone Foundation. 
+It is only intended for the person to whom it is addressed. If you are not the intended recipient, you are not authorized to read, print, retain, copy, disseminate, distribute, or use this message or any part thereof. 
+If you receive this message in error, please notify the sender immediately and delete all copies of this message.
