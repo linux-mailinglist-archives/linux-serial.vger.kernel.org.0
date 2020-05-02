@@ -2,87 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 594A71C2053
-	for <lists+linux-serial@lfdr.de>; Sat,  2 May 2020 00:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDC91C235A
+	for <lists+linux-serial@lfdr.de>; Sat,  2 May 2020 07:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbgEAWGl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 1 May 2020 18:06:41 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:37590 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbgEAWGl (ORCPT
+        id S1726784AbgEBFfA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 2 May 2020 01:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726745AbgEBFfA (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 1 May 2020 18:06:41 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 680671C020C; Sat,  2 May 2020 00:06:39 +0200 (CEST)
-Date:   Sat, 2 May 2020 00:06:37 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Pavel Machek <pavel@denx.de>, Stephen Boyd <swboyd@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Rob Herring <robh@kernel.org>,
-        Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
-        Lee Jones <lee.jones@linaro.org>, Jiri Slaby <jslaby@suse.cz>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCHv6 0/6] n_gsm serdev support and GNSS driver for droid4
-Message-ID: <20200501220637.GA19818@amd>
-References: <20200430174615.41185-1-tony@atomide.com>
- <20200430222605.GA10922@duo.ucw.cz>
- <20200501145252.GC37466@atomide.com>
+        Sat, 2 May 2020 01:35:00 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D685AC061A0C
+        for <linux-serial@vger.kernel.org>; Fri,  1 May 2020 22:34:59 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id w3so4478016plz.5
+        for <linux-serial@vger.kernel.org>; Fri, 01 May 2020 22:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=+CLCV3sHPXOf3AMMGXrNmQ4JAneKOVK6Ti2wK2FOfe8=;
+        b=UeKHXnsgB9aaYZldayc5sPljcGogKdUYyIY+IKjK3pIccsE4MfVRLidWAD6YtXLLqL
+         biE+Cs0qAErH/B8d+eSkVlPyJWrvlydNawvNvPPnWHWqQyXeXD29j9O+gt0PPQR0t/6m
+         jxU0TVxzb8p5oEeiRd8sbqTX4YS4u0eYY2pUCf8LQ2PP8gGU5TTVXr7C9M9MY9Ngg5LQ
+         8rK+XnglOn0XxaJ/hLkFMhc9cGiMdnSEaAVDh0GGbGKCLkgKKQxnnRs3wGc2T9qL5n9S
+         qAxlf5GdQ0WqIucdeAeENXEeufHfAdiaoMp3mW5QDWna/UHyIJz1EIIC1LuHD9oWkjx4
+         vtKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=+CLCV3sHPXOf3AMMGXrNmQ4JAneKOVK6Ti2wK2FOfe8=;
+        b=XgDmgqHxik7ijexdNURnVQ55qHr1ANAfYqNWJnyVQF/ytqplgkCPShcmOPGuwRGhnP
+         aOID1eRhhuXbQIHFr/vFUq8uR7pQyKvYRVNGDy9rrbMgTDf5KdqAVUI+P6htzqfhd0bm
+         UMCdU1ODQ0pPzUCOvRxJ22LI5m9TvEr7oB5yvSzLdBBMsgsSFxvKZmvI4cs8/U7ZbP6Y
+         yKp2Bocv278fhCSsLqEYsmwPjzny3tT9+sPW45CULOoW4E5xECxphJvmrgnmP6kmherG
+         speasBtn1nY38Fj5Baq6RgPwPzHd5FDD5ucU8KlraGJQnC39ZjqBjr0xfclXNss5mI4A
+         C+vA==
+X-Gm-Message-State: AGi0PubH2aZ36EYV7KJywc2BRlRsbVqRpjXUs+vmbg6vXaaV0gOPSQaO
+        SBNt5t3xHuS6sgBHVOH7Z8RedovODV1Y6q3E69w=
+X-Google-Smtp-Source: APiQypKMGfSzUCmf0a2TenLQfqnzPmr34msnLPa7hGKNIrAFcVPxF2mIt/H3aWYrWcIeAlCQYX22o72z85vFRMKd3hk=
+X-Received: by 2002:a17:90a:68c1:: with SMTP id q1mr3795706pjj.35.1588397699244;
+ Fri, 01 May 2020 22:34:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="0F1p//8PRICkK4MW"
-Content-Disposition: inline
-In-Reply-To: <20200501145252.GC37466@atomide.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Received: by 2002:a17:90a:3227:0:0:0:0 with HTTP; Fri, 1 May 2020 22:34:58
+ -0700 (PDT)
+Reply-To: cafodhelporg@gmail.com
+From:   CAFOD UK <inffoffo2@gmail.com>
+Date:   Sat, 2 May 2020 06:34:58 +0100
+Message-ID: <CAMdM3SHNyCUc049BE6Z36oPDO=R+2VttaiPiEyhh0bkqrO5OWA@mail.gmail.com>
+Subject: CAFOD AID UK
+To:     cafodhelporg <cafodhelporg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+-- 
+CAFOD,
+Romero House,
+55 Westminster Bridge Road,
+London, SE1 7JB
+www.cafod.org.uk
 
---0F1p//8PRICkK4MW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri 2020-05-01 07:52:52, Tony Lindgren wrote:
-> * Pavel Machek <pavel@denx.de> [200430 22:27]:
-> >=20
-> > > My guess is that at least with the pending ofono patches, we just
-> > > want to use the raw interface for /dev/gsmtty* interface and stop
-> > > pretending we have a modem that is AT compatible.
-> >=20
-> > I tried to get it to work... it was not fun and I did not get far.
->=20
-> OK. Yeah it's now 2020 and still dealing with serial port stuff :)
 
-Yeah, and scary thing is... it is 2020 and serial port is _still_
-complex and hard to understand and debug :-).
 
-> OK :) I still need to update the ALSA related patches on top
-> of this $subject series.
 
-Let me know when you have these.
+Attn, Approved Coordinator
 
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
---0F1p//8PRICkK4MW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+The Catholic Agency for Overseas Development (Cafod) London UK has
+approved your Country as one of the Countries to be assisted for
+Humanitarian Empowerment to the less privilege people, Youths
+Education scholarship scheme as this new program has been inaugurated
+in our head office in London.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
 
-iEYEARECAAYFAl6snWwACgkQMOfwapXb+vIzIgCgh+kpNi03IGiu3qZaCkJjxrwn
-ZugAnRiL9aPdP7Z2i/pEXCljELO8idBA
-=2YyH
------END PGP SIGNATURE-----
+In order to achieve these aims, we requested to appoint you as our
+Coordinator that would assist us in handling of this program in your
+Country as we have approved some fund to be use for this Humanitarian
+mobilization program.
 
---0F1p//8PRICkK4MW--
+
+
+This humanitarian fund allocated for your Country will be release to
+you as soon as we approved you as our new Coordinator to start this
+project, if this coordinatorship offer is accepted by you then kindly
+send your Full Names, Full address, Your Scanned ID Card Or your copy
+Scanned International passport, Phone Numbers and your sizable
+Photograph to enable us issue you our official ID card and the legal
+certificate as our new coordinator in your Country.
+
+
+Thanks
+Ms. Anna Ford
+CAFOD's Head PRO
