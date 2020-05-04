@@ -2,113 +2,62 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0311C2FBE
-	for <lists+linux-serial@lfdr.de>; Sun,  3 May 2020 23:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB801C33F3
+	for <lists+linux-serial@lfdr.de>; Mon,  4 May 2020 10:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729321AbgECVrv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 3 May 2020 17:47:51 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:12329 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729313AbgECVru (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 3 May 2020 17:47:50 -0400
-X-IronPort-AV: E=Sophos;i="5.73,349,1583161200"; 
-   d="scan'208";a="46232126"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 04 May 2020 06:47:49 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id C56914006DF9;
-        Mon,  4 May 2020 06:47:45 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 10/10] ARM: dts: r8a7742-iwg21d-q7: Add support for iWave G21D-Q7 board based on RZ/G1H
-Date:   Sun,  3 May 2020 22:46:54 +0100
-Message-Id: <1588542414-14826-11-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588542414-14826-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1588542414-14826-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1727977AbgEDID4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 4 May 2020 04:03:56 -0400
+Received: from mga04.intel.com ([192.55.52.120]:14808 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727860AbgEDID4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 4 May 2020 04:03:56 -0400
+IronPort-SDR: 96dErIf2SM0VV2qg/lPcmpLHnjbeeftSVGIEFFw7pfrz4wz1WOR8+35rpFmHQAo2X8BIbnHn0t
+ AeIPc7752TyQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 01:03:56 -0700
+IronPort-SDR: nZCtHP4Q2NHk4kV0pT8l85ac64rPdmA8lkuw0bhAOEL6f3kipt5VoTwUtn/PU9+hHrSvDvmtAc
+ M2cuRZu1qIag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,351,1583222400"; 
+   d="scan'208";a="369023110"
+Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
+  by fmsmga001.fm.intel.com with ESMTP; 04 May 2020 01:03:55 -0700
+From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
+To:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@intel.com,
+        Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Subject: [PATCH] serial: lantiq: Add x86 in Kconfig dependencies for Lantiq serial driver
+Date:   Mon,  4 May 2020 16:03:52 +0800
+Message-Id: <96fd193c0a8939d27641ff93573545c02313048f.1588577002.git.rahul.tanwar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add support for iWave RainboW-G21D-Qseven board based on RZ/G1H.
+Lantiq serial driver/IP is reused for a x86 based SoC as well.
+Update the Kconfig accordingly.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
 ---
- arch/arm/boot/dts/Makefile              |  1 +
- arch/arm/boot/dts/r8a7742-iwg21d-q7.dts | 37 +++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 arch/arm/boot/dts/r8a7742-iwg21d-q7.dts
+ drivers/tty/serial/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index e8dd99201397..ed3376cce638 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -917,6 +917,7 @@ dtb-$(CONFIG_ARCH_RENESAS) += \
- 	r7s9210-rza2mevb.dtb \
- 	r8a73a4-ape6evm.dtb \
- 	r8a7740-armadillo800eva.dtb \
-+	r8a7742-iwg21d-q7.dtb \
- 	r8a7743-iwg20d-q7.dtb \
- 	r8a7743-iwg20d-q7-dbcm-ca.dtb \
- 	r8a7743-sk-rzg1m.dtb \
-diff --git a/arch/arm/boot/dts/r8a7742-iwg21d-q7.dts b/arch/arm/boot/dts/r8a7742-iwg21d-q7.dts
-new file mode 100644
-index 000000000000..1f5c35c66d91
---- /dev/null
-+++ b/arch/arm/boot/dts/r8a7742-iwg21d-q7.dts
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for the iWave-RZ/G1H Qseven board
-+ *
-+ * Copyright (C) 2020 Renesas Electronics Corp.
-+ */
-+
-+/dts-v1/;
-+#include "r8a7742-iwg21m.dtsi"
-+
-+/ {
-+	model = "iWave Systems RainboW-G21D-Qseven board based on RZ/G1H";
-+	compatible = "iwave,g21d", "iwave,g21m", "renesas,r8a7742";
-+
-+	aliases {
-+		serial2 = &scifa2;
-+	};
-+
-+	chosen {
-+		bootargs = "ignore_loglevel root=/dev/mmcblk0p1 rw rootwait";
-+		stdout-path = "serial2:115200n8";
-+	};
-+};
-+
-+&pfc {
-+	scifa2_pins: scifa2 {
-+		groups = "scifa2_data_c";
-+		function = "scifa2";
-+	};
-+};
-+
-+&scifa2 {
-+	pinctrl-0 = <&scifa2_pins>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 0aea76cd67ff..4b0a7b98f8c7 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -1035,7 +1035,7 @@ config SERIAL_SIFIVE_CONSOLE
+ 
+ config SERIAL_LANTIQ
+ 	bool "Lantiq serial driver"
+-	depends on LANTIQ
++	depends on (LANTIQ || X86) || COMPILE_TEST
+ 	select SERIAL_CORE
+ 	select SERIAL_CORE_CONSOLE
+ 	select SERIAL_EARLYCON
 -- 
-2.17.1
+2.11.0
 
