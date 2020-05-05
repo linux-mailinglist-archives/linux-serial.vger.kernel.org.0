@@ -2,94 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3209F1C59F5
-	for <lists+linux-serial@lfdr.de>; Tue,  5 May 2020 16:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEC71C5A10
+	for <lists+linux-serial@lfdr.de>; Tue,  5 May 2020 16:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729320AbgEEOtO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 5 May 2020 10:49:14 -0400
-Received: from mailout3.hostsharing.net ([176.9.242.54]:58149 "EHLO
-        mailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729065AbgEEOtO (ORCPT
+        id S1729235AbgEEOvo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 May 2020 10:51:44 -0400
+Received: from mailout2.hostsharing.net ([83.223.78.233]:33885 "EHLO
+        mailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729142AbgEEOvo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 5 May 2020 10:49:14 -0400
-X-Greylist: delayed 423 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 May 2020 10:49:13 EDT
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        Tue, 5 May 2020 10:51:44 -0400
+X-Greylist: delayed 387 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 May 2020 10:51:43 EDT
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout3.hostsharing.net (Postfix) with ESMTPS id E541C101E6A30;
-        Tue,  5 May 2020 16:42:06 +0200 (CEST)
-Received: from localhost (unknown [87.130.102.138])
+        by mailout2.hostsharing.net (Postfix) with ESMTPS id A331F1008D00D;
+        Tue,  5 May 2020 16:45:13 +0200 (CEST)
+Received: from localhost (pd95be530.dip0.t-ipconnect.de [217.91.229.48])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id 61B0D610EE1A;
-        Tue,  5 May 2020 16:42:06 +0200 (CEST)
-X-Mailbox-Line: From a91b9392e8e7914cae16f59beb1ffe6b335f81c9 Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1588505407.git.lukas@wunner.de>
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 5732D610EE1A;
+        Tue,  5 May 2020 16:45:13 +0200 (CEST)
+X-Mailbox-Line: From b3fbbe8688d5e9d173168ae45295719ca4c9d35f Mon Sep 17 00:00:00 2001
+Message-Id: <b3fbbe8688d5e9d173168ae45295719ca4c9d35f.1588505407.git.lukas@wunner.de>
+In-Reply-To: <cover.1588505407.git.lukas@wunner.de>
+References: <cover.1588505407.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Tue, 5 May 2020 16:42:00 +0200
-Subject: [PATCH 0/4] rs485 bus termination GPIO
+Date:   Tue, 5 May 2020 16:42:01 +0200
+Subject: [PATCH 1/4] serial: 8250: Avoid error message on reprobe
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Rob Herring <robh+dt@kernel.org>
+        Jiri Slaby <jslaby@suse.com>
 Cc:     "Matwey V. Kornilov" <matwey@sai.msu.ru>,
         Giulio Benetti <giulio.benetti@micronovasrl.com>,
         Heiko Stuebner <heiko@sntech.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Christoph Muellner <christoph.muellner@theobroma-systems.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Codrin Ciubotariu <Codrin.Ciubotariu@microchip.com>,
-        Razvan Stefanescu <razvan.stefanescu@microchip.com>,
-        Radu Pirea <radu.pirea@microchip.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Bich HEMON <bich.hemon@st.com>,
-        Uwe Kleine-Koenig <u.kleine-koenig@pengutronix.de>,
-        Sascha Weisenberger <sascha.weisenberger@siemens.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
+        linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Commit e8759ad17d41 ("serial: uapi: Add support for bus termination"),
-allowed user space to change rs485 bus termination through a flag in
-struct serial_rs485.  But so far only a single driver, 8250_exar.c,
-supports the flag:  It hardcodes a GPIO specific to Siemens IOT2040
-products.
+If the call to uart_add_one_port() in serial8250_register_8250_port()
+fails, a half-initialized entry in the serial_8250ports[] array is left
+behind.
 
-Provide for a more generic solution:  Define a device tree binding
-for an rs485 bus termination GPIO (patch [3/4]), amend the serial core
-to retrieve the GPIO from the device tree and amend the default
-->rs485_config() callback for 8250 drivers to change the GPIO on
-request from user space (patch [4/4]).
+A subsequent reprobe of the same serial port causes that entry to be
+reused.  Because uart->port.dev is set, uart_remove_one_port() is called
+for the half-initialized entry and bails out with an error message:
 
-Retrieving the GPIO from the device tree may fail, so allow
-uart_get_rs485_mode() to return an errno and change all callers
-to check for failure (patch [2/4]).
+bcm2835-aux-uart 3f215040.serial: Removing wrong port: (null) != (ptrval)
 
-Testing has exposed a bug in the 8250 core if retrieval of the GPIO
-initially fails with -EPROBE_DEFER and is later retried.  That bug
-is fixed by patch [1/4].
+The same happens on failure of mctrl_gpio_init() since commit
+4a96895f74c9 ("tty/serial/8250: use mctrl_gpio helpers").
 
+Fix by zeroing the uart->port.dev pointer in the probe error path.
 
-Lukas Wunner (4):
-  serial: 8250: Avoid error message on reprobe
-  serial: Allow uart_get_rs485_mode() to return errno
-  dt-bindings: serial: Add binding for rs485 bus termination GPIO
-  serial: 8250: Support rs485 bus termination GPIO
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org # v2.6.10+
+---
+ drivers/tty/serial/8250/8250_core.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
- .../devicetree/bindings/serial/rs485.yaml     |  4 +++
- drivers/tty/serial/8250/8250_core.c           | 16 +++++++---
- drivers/tty/serial/8250/8250_port.c           |  4 +++
- drivers/tty/serial/ar933x_uart.c              |  6 ++--
- drivers/tty/serial/atmel_serial.c             |  6 ++--
- drivers/tty/serial/fsl_lpuart.c               |  5 +++-
- drivers/tty/serial/imx.c                      |  6 +++-
- drivers/tty/serial/omap-serial.c              |  4 ++-
- drivers/tty/serial/serial_core.c              | 30 ++++++++++++++++++-
- drivers/tty/serial/stm32-usart.c              |  8 ++---
- include/linux/serial_core.h                   |  4 ++-
- 11 files changed, 76 insertions(+), 17 deletions(-)
-
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+index 45d9117cab68..14abade589da 100644
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -1040,7 +1040,7 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
+ 			gpios = mctrl_gpio_init(&uart->port, 0);
+ 			if (IS_ERR(gpios)) {
+ 				ret = PTR_ERR(gpios);
+-				goto out_unlock;
++				goto err;
+ 			} else {
+ 				uart->gpios = gpios;
+ 			}
+@@ -1089,7 +1089,9 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
+ 			serial8250_apply_quirks(uart);
+ 			ret = uart_add_one_port(&serial8250_reg,
+ 						&uart->port);
+-			if (ret == 0)
++			if (ret)
++				goto err;
++			else
+ 				ret = uart->port.line;
+ 		} else {
+ 			dev_info(uart->port.dev,
+@@ -1112,10 +1114,14 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
+ 		}
+ 	}
+ 
+-out_unlock:
+ 	mutex_unlock(&serial_mutex);
+ 
+ 	return ret;
++
++err:
++	uart->port.dev = NULL;
++	mutex_unlock(&serial_mutex);
++	return ret;
+ }
+ EXPORT_SYMBOL(serial8250_register_8250_port);
+ 
 -- 
 2.26.2
 
