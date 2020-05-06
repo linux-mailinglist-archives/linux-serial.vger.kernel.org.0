@@ -2,164 +2,80 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF121C7AA9
-	for <lists+linux-serial@lfdr.de>; Wed,  6 May 2020 21:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDF41C7AD5
+	for <lists+linux-serial@lfdr.de>; Wed,  6 May 2020 21:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729765AbgEFTwc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 6 May 2020 15:52:32 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:33471 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729684AbgEFTwa (ORCPT
+        id S1726477AbgEFT7V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 6 May 2020 15:59:21 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:37407 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbgEFT7T (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 6 May 2020 15:52:30 -0400
-X-IronPort-AV: E=Sophos;i="5.73,360,1583161200"; 
-   d="scan'208";a="46431245"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 07 May 2020 04:52:28 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DB3F24003ED0;
-        Thu,  7 May 2020 04:52:24 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 9/9] ARM: dts: r8a7742: Add GPIO nodes
-Date:   Wed,  6 May 2020 20:51:35 +0100
-Message-Id: <1588794695-27852-10-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588794695-27852-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1588794695-27852-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 6 May 2020 15:59:19 -0400
+Received: by mail-oi1-f194.google.com with SMTP id r25so2911507oij.4;
+        Wed, 06 May 2020 12:59:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bO0DJaCUE0XKssvRg38lswObA4y7SjfSv2q1CR1u7z0=;
+        b=Gi5chG4/JpnzOfFxkdDoZ4tjGs17v118ckN6didtg16/EukLeaUZD1bs0kTOLQTNCN
+         Rqb1wUSdD6GEKn51f1TKUlENsLIRR4fUYPfuV4M7TP/e2Duw5Pjga7J6aJmNUGv+Zaor
+         grWff5+9uuBFQyVK2xszT3oWyi3/z88h2m30b8AIQ2n19+XSnSFyNIQ0YLFnwhO6G82/
+         4C4SjypEnAFUqaxnNkyVGrwuVW/InwdW5YWYn38kLkZ4XUVjXWoQO+zM4Uk7j+S12DRo
+         IbnVmgarOVVFIprodTFa8xi8S7YS1w63iJGVgjx1GdXHpYxaHMFApB8Kx37y7LVJQ5vm
+         H7NA==
+X-Gm-Message-State: AGi0PuaGD3GtV4Sry6aedSWGhlFBou6gceYwDs+6nN3eDoWBah2+yeFP
+        cF4vPf9BmRsY06gMbuvF/w==
+X-Google-Smtp-Source: APiQypLR5WjjYamVAcv6tfzD1IA0+5vseecA/FXkvzZpzsWL3ae3CrTRLxA9Orkli3Z7VBOdSdow2Q==
+X-Received: by 2002:a54:4811:: with SMTP id j17mr3960001oij.29.1588795158503;
+        Wed, 06 May 2020 12:59:18 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e13sm767826otj.46.2020.05.06.12.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2020 12:59:17 -0700 (PDT)
+Received: (nullmailer pid 22166 invoked by uid 1000);
+        Wed, 06 May 2020 19:59:16 -0000
+Date:   Wed, 6 May 2020 14:59:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     mani@kernel.org
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        devicetree@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        linux-serial@vger.kernel.org, fabrice.gasnier@st.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: serial: Document CTS/RTS gpios in
+ STM32  UART
+Message-ID: <20200506195916.GA22126@bogus>
+References: <20200420170204.24541-1-mani@kernel.org>
+ <20200420170204.24541-2-mani@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200420170204.24541-2-mani@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Describe GPIO blocks in the R8A7742 device tree.
+On Mon, 20 Apr 2020 22:32:03 +0530, mani@kernel.org wrote:
+> From: Manivannan Sadhasivam <mani@kernel.org>
+> 
+> Document the use of CTS/RTS gpios for flow control in STM32 UART
+> controller. These properties can be used instead of 'st,hw-flow-ctrl'
+> for making use of any gpio pins for flow control instead of dedicated
+> pins. It should be noted that both CTS/RTS and 'st,hw-flow-ctrl'
+> properties cannot co-exist in a design.
+> 
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+> ---
+>  .../devicetree/bindings/serial/st,stm32-uart.yaml  | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v1->v2:
-* Included the nodes in sort order
----
-
- arch/arm/boot/dts/r8a7742.dtsi | 90 ++++++++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
-
-diff --git a/arch/arm/boot/dts/r8a7742.dtsi b/arch/arm/boot/dts/r8a7742.dtsi
-index 439ff24e7b3a..305d8086a3dd 100644
---- a/arch/arm/boot/dts/r8a7742.dtsi
-+++ b/arch/arm/boot/dts/r8a7742.dtsi
-@@ -200,6 +200,96 @@
- 		#size-cells = <2>;
- 		ranges;
- 
-+		gpio0: gpio@e6050000 {
-+			compatible = "renesas,gpio-r8a7742",
-+				     "renesas,rcar-gen2-gpio";
-+			reg = <0 0xe6050000 0 0x50>;
-+			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+			gpio-ranges = <&pfc 0 0 32>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			clocks = <&cpg CPG_MOD 912>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 912>;
-+		};
-+
-+		gpio1: gpio@e6051000 {
-+			compatible = "renesas,gpio-r8a7742",
-+				     "renesas,rcar-gen2-gpio";
-+			reg = <0 0xe6051000 0 0x50>;
-+			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+			gpio-ranges = <&pfc 0 32 30>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			clocks = <&cpg CPG_MOD 911>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 911>;
-+		};
-+
-+		gpio2: gpio@e6052000 {
-+			compatible = "renesas,gpio-r8a7742",
-+				     "renesas,rcar-gen2-gpio";
-+			reg = <0 0xe6052000 0 0x50>;
-+			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+			gpio-ranges = <&pfc 0 64 30>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			clocks = <&cpg CPG_MOD 910>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 910>;
-+		};
-+
-+		gpio3: gpio@e6053000 {
-+			compatible = "renesas,gpio-r8a7742",
-+				     "renesas,rcar-gen2-gpio";
-+			reg = <0 0xe6053000 0 0x50>;
-+			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+			gpio-ranges = <&pfc 0 96 32>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			clocks = <&cpg CPG_MOD 909>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 909>;
-+		};
-+
-+		gpio4: gpio@e6054000 {
-+			compatible = "renesas,gpio-r8a7742",
-+				     "renesas,rcar-gen2-gpio";
-+			reg = <0 0xe6054000 0 0x50>;
-+			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+			gpio-ranges = <&pfc 0 128 32>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			clocks = <&cpg CPG_MOD 908>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 908>;
-+		};
-+
-+		gpio5: gpio@e6055000 {
-+			compatible = "renesas,gpio-r8a7742",
-+				     "renesas,rcar-gen2-gpio";
-+			reg = <0 0xe6055000 0 0x50>;
-+			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+			gpio-ranges = <&pfc 0 160 32>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			clocks = <&cpg CPG_MOD 907>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 907>;
-+		};
-+
- 		pfc: pin-controller@e6060000 {
- 			compatible = "renesas,pfc-r8a7742";
- 			reg = <0 0xe6060000 0 0x250>;
--- 
-2.17.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
