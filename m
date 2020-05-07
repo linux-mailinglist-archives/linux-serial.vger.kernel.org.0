@@ -2,49 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3371C9BC9
-	for <lists+linux-serial@lfdr.de>; Thu,  7 May 2020 22:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F6E1C9BB5
+	for <lists+linux-serial@lfdr.de>; Thu,  7 May 2020 22:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728632AbgEGUJO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 May 2020 16:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S1728682AbgEGUJQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 May 2020 16:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728625AbgEGUJN (ORCPT
+        by vger.kernel.org with ESMTP id S1728658AbgEGUJP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 May 2020 16:09:13 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC36DC05BD0A
-        for <linux-serial@vger.kernel.org>; Thu,  7 May 2020 13:09:12 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id b8so2387453plm.11
-        for <linux-serial@vger.kernel.org>; Thu, 07 May 2020 13:09:12 -0700 (PDT)
+        Thu, 7 May 2020 16:09:15 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2420FC05BD09
+        for <linux-serial@vger.kernel.org>; Thu,  7 May 2020 13:09:14 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a5so3136537pjh.2
+        for <linux-serial@vger.kernel.org>; Thu, 07 May 2020 13:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JZVfMDRlaZxQ6qpzAMsiTzN4YCAYznWKH75NGk0mLe0=;
-        b=m5ylYMv87Zesz+z8ZAznR4kWc9TIjqXmxiLRRY8QyOpCZOwt00FTXHCWaihQzLwGTB
-         /kjZ0p7FzdVuwoHXJtcPF3yVROz9sUTpYmZCbApuKUmPUpqHuEyGNlO3TyZwioK9zYWZ
-         M773j7obrswcIlQPjJ858TSOKYbtG52zYMVnA=
+        bh=JDitJmCYI6w8zpra4JuK0k+hw0gGmgK6hNM/TsrDerA=;
+        b=k06JzvMvr6IYLZzGXi5MfjXYuByqlDZ5Ov7mPhaAbBAYC2WDtJlBDj/9PSIX63fckv
+         yvcOSjPw7/Q1Vr8lprU6X2yuu+hUFrZgmNJmmkEF8/JQfVgtWlgprpvoRq5+dHn2sEWv
+         beDgToAgENRUasSAvNZUqtFk/E56syR3ia0zw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JZVfMDRlaZxQ6qpzAMsiTzN4YCAYznWKH75NGk0mLe0=;
-        b=ZRBiCVQOoEOPehFyiU9932soZCNUQzp/9Cf/MAjvENdYPHQJEelTdE8N09K6GxnL+4
-         8ACESHCYBCU/nWm7FYlq0h2iA4t5XsUFsARUCINv4exZbxJPfcJo7pO+FGfi0wR+dNf+
-         0mlrBPFB1guMvyxz4lG548lhTlNJvgT6+841se2V0HcZU4apeF8CSNwI3or//tCN7j0O
-         x7icivw6pBgSGJlrx2wYR/WnJpBsCuL0y6XpojL28mP6jrrky6llZoyuKYyIR3yVzKQc
-         HQr675lxlcAe0Xi2tU0ipaAV2LDk0BYwWzNpjVO7E4ksEY2OdkFqWgRmibVxOmRkw5XN
-         fQPw==
-X-Gm-Message-State: AGi0PuY951uhphDma7NCTNvTPjIv64PDIyeYS92SJSJE0bvEGRKuyaT+
-        E8Awei9rirLRdKtX3n2XHq0UVw==
-X-Google-Smtp-Source: APiQypJWVjHYI0dqkVdBU1DEnnSramGm6bwNGEmhZQc/6xZdlZXzI9QuauPG2Tcya5C3/lJNRD27RQ==
-X-Received: by 2002:a17:902:c193:: with SMTP id d19mr15373854pld.60.1588882152281;
-        Thu, 07 May 2020 13:09:12 -0700 (PDT)
+        bh=JDitJmCYI6w8zpra4JuK0k+hw0gGmgK6hNM/TsrDerA=;
+        b=Lj/ZuQXAvEsX5BMTWv7XmsYFLu2PW4nFDLCY9MrleG6qnxSLvYQgOou2mLIdyR5i8t
+         LVn80yK8SlQPazeK2caEyesdKKKWujBMVzrSKDg/BsmFWIE6s632+O7KbBjWooccvbxL
+         vBbHC/FJDBjfkl3CUBxiYq7UHnfDZc51fx5YMUwop5Q5bHc5E24HGV2xDhDc4Zrm+WGR
+         9K0QyyU+Ml8jSIoUoJuIUdCkYvbQTd1ux+A/mRDc3bNeX3p54tWfVdHGFoM2JztORDpw
+         71jABwWBPg5G2c/p5rwN360uYB4pyfnGII04pmK0vKQ0Iw0oEFSwu7zg5oCGiwiz8ACp
+         8BjA==
+X-Gm-Message-State: AGi0PuYb4PfUBfzxbj2xvJT5BFqawFU1ky8p/vm8vQ9ja7VuNNr/95HN
+        SB46zhxJw+4FOy8sYWDBgpo9mg==
+X-Google-Smtp-Source: APiQypJ7eLBdCYVxkzItvTQhjgPKMPikSZLf+2fArLtn+DXLDcEsLN3jFlCfrxAqCJRgj8wo2lxu1w==
+X-Received: by 2002:a17:902:7593:: with SMTP id j19mr15341546pll.62.1588882153625;
+        Thu, 07 May 2020 13:09:13 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id d203sm5547601pfd.79.2020.05.07.13.09.10
+        by smtp.gmail.com with ESMTPSA id d203sm5547601pfd.79.2020.05.07.13.09.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 13:09:11 -0700 (PDT)
+        Thu, 07 May 2020 13:09:13 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
         gregkh@linuxfoundation.org
@@ -54,14 +54,10 @@ Cc:     corbet@lwn.net, frowand.list@gmail.com, bjorn.andersson@linaro.org,
         sumit.garg@linaro.org, will@kernel.org, tglx@linutronix.de,
         agross@kernel.org, catalin.marinas@arm.com, bp@alien8.de,
         Douglas Anderson <dianders@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 09/12] Documentation: kgdboc: Document new kgdboc_earlycon parameter
-Date:   Thu,  7 May 2020 13:08:47 -0700
-Message-Id: <20200507130644.v4.9.I7d5eb42c6180c831d47aef1af44d0b8be3fac559@changeid>
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 10/12] serial: qcom_geni_serial: Support kgdboc_earlycon
+Date:   Thu,  7 May 2020 13:08:48 -0700
+Message-Id: <20200507130644.v4.10.If2deff9679a62c1ce1b8f2558a8635dc837adf8c@changeid>
 X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
 In-Reply-To: <20200507200850.60646-1-dianders@chromium.org>
 References: <20200507200850.60646-1-dianders@chromium.org>
@@ -72,110 +68,77 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The recent patch ("kgdboc: Add kgdboc_earlycon to support early kgdb
-using boot consoles") adds a new kernel command line parameter.
-Document it.
+Implement the read() function in the early console driver.  With
+recent kgdb patches this allows you to use kgdb to debug fairly early
+into the system boot.
 
-Note that the patch adding the feature does some comparing/contrasting
-of "kgdboc_earlycon" vs. the existing "ekgdboc".  See that patch for
-more details, but briefly "ekgdboc" can be used _instead_ of "kgdboc"
-and just makes "kgdboc" do its normal initialization early (only works
-if your tty driver is already ready).  The new "kgdboc_earlycon" works
-in combination with "kgdboc" and is backed by boot consoles.
+We only bother implementing this if polling is enabled since kgdb
+can't be enabled without that.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 ---
 
-Changes in v4:
-- s/The the/The/
-
+Changes in v4: None
 Changes in v3:
-- Added example in kgdb.rst
-- Removed unneeded sentence in kerenel-parameters doc.
 - Renamed earlycon_kgdboc to kgdboc_earlycon.
-- Suggest people use kgdboc_earlycon instead of ekgdboc.
+- { ; } ==> { }
 
 Changes in v2: None
 
- .../admin-guide/kernel-parameters.txt         | 20 ++++++++++++++++
- Documentation/dev-tools/kgdb.rst              | 24 +++++++++++++++++++
- 2 files changed, 44 insertions(+)
+ drivers/tty/serial/qcom_geni_serial.c | 32 +++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 7bc83f3d9bdf..2cbde9ea476d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1190,6 +1190,11 @@
- 			This is designed to be used in conjunction with
- 			the boot argument: earlyprintk=vga
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 6119090ce045..6bace1c6bb09 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1090,6 +1090,36 @@ static void qcom_geni_serial_earlycon_write(struct console *con,
+ 	__qcom_geni_serial_console_write(&dev->port, s, n);
+ }
  
-+			This parameter works in place of the kgdboc parameter
-+			but can only be used if the backing tty is available
-+			very early in the boot process. For early debugging
-+			via a serial port see kgdboc_earlycon instead.
++#ifdef CONFIG_CONSOLE_POLL
++static int qcom_geni_serial_earlycon_read(struct console *con,
++					  char *s, unsigned int n)
++{
++	struct earlycon_device *dev = con->data;
++	struct uart_port *uport = &dev->port;
++	int num_read = 0;
++	int ch;
 +
- 	edd=		[EDD]
- 			Format: {"off" | "on" | "skip[mbr]"}
++	while (num_read < n) {
++		ch = qcom_geni_serial_get_char(uport);
++		if (ch == NO_POLL_CHAR)
++			break;
++		s[num_read++] = ch;
++	}
++
++	return num_read;
++}
++
++static void __init qcom_geni_serial_enable_early_read(struct geni_se *se,
++						      struct console *con)
++{
++	geni_se_setup_s_cmd(se, UART_START_READ, 0);
++	con->read = qcom_geni_serial_earlycon_read;
++}
++#else
++static inline void qcom_geni_serial_enable_early_read(struct geni_se *se,
++						      struct console *con) { }
++#endif
++
+ static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
+ 								const char *opt)
+ {
+@@ -1136,6 +1166,8 @@ static int __init qcom_geni_serial_earlycon_setup(struct earlycon_device *dev,
  
-@@ -2105,6 +2110,21 @@
- 			 kms, kbd format: kms,kbd
- 			 kms, kbd and serial format: kms,kbd,<ser_dev>[,baud]
- 
-+	kgdboc_earlycon=	[KGDB,HW]
-+			If the boot console provides the ability to read
-+			characters and can work in polling mode, you can use
-+			this parameter to tell kgdb to use it as a backend
-+			until the normal console is registered. Intended to
-+			be used together with the kgdboc parameter which
-+			specifies the normal console to transition to.
+ 	dev->con->write = qcom_geni_serial_earlycon_write;
+ 	dev->con->setup = NULL;
++	qcom_geni_serial_enable_early_read(&se, dev->con);
 +
-+			The name of the early console should be specified
-+			as the value of this parameter. Note that the name of
-+			the early console might be different than the tty
-+			name passed to kgdboc. It's OK to leave the value
-+			blank and the first boot console that implements
-+			read() will be picked.
-+
- 	kgdbwait	[KGDB] Stop kernel execution and enter the
- 			kernel debugger at the earliest opportunity.
- 
-diff --git a/Documentation/dev-tools/kgdb.rst b/Documentation/dev-tools/kgdb.rst
-index d38be58f872a..61293f40bc6e 100644
---- a/Documentation/dev-tools/kgdb.rst
-+++ b/Documentation/dev-tools/kgdb.rst
-@@ -274,6 +274,30 @@ don't like this are to hack gdb to send the :kbd:`SysRq-G` for you as well as
- on the initial connect, or to use a debugger proxy that allows an
- unmodified gdb to do the debugging.
- 
-+Kernel parameter: ``kgdboc_earlycon``
-+-------------------------------------
-+
-+If you specify the kernel parameter ``kgdboc_earlycon`` and your serial
-+driver registers a boot console that supports polling (doesn't need
-+interrupts and implements a nonblocking read() function) kgdb will attempt
-+to work using the boot console until it can transition to the regular
-+tty driver specified by the ``kgdboc`` parameter.
-+
-+Normally there is only one boot console (especially that implements the
-+read() function) so just adding ``kgdboc_earlycon`` on its own is
-+sufficient to make this work. If you have more than one boot console you
-+can add the boot console's name to differentiate. Note that names that
-+are registered through the boot console layer and the tty layer are not
-+the same for the same port.
-+
-+For instance, on one board to be explicit you might do::
-+
-+   kgdboc_earlycon=qcom_geni kgdboc=ttyMSM0
-+
-+If the only boot console on the device was "qcom_geni", you could simplify::
-+
-+   kgdboc_earlycon kgdboc=ttyMSM0
-+
- Kernel parameter: ``kgdbwait``
- ------------------------------
- 
+ 	return 0;
+ }
+ OF_EARLYCON_DECLARE(qcom_geni, "qcom,geni-debug-uart",
 -- 
 2.26.2.645.ge9eca65c58-goog
 
