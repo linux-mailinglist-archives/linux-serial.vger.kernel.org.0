@@ -2,148 +2,166 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9F31C9BC2
-	for <lists+linux-serial@lfdr.de>; Thu,  7 May 2020 22:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559671C9BF5
+	for <lists+linux-serial@lfdr.de>; Thu,  7 May 2020 22:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728661AbgEGUJa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 May 2020 16:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S1728636AbgEGUQQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 May 2020 16:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728688AbgEGUJR (ORCPT
+        by vger.kernel.org with ESMTP id S1728632AbgEGUQP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 May 2020 16:09:17 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EC2C05BD43
-        for <linux-serial@vger.kernel.org>; Thu,  7 May 2020 13:09:16 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id ms17so3133682pjb.0
-        for <linux-serial@vger.kernel.org>; Thu, 07 May 2020 13:09:16 -0700 (PDT)
+        Thu, 7 May 2020 16:16:15 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE2AC05BD43
+        for <linux-serial@vger.kernel.org>; Thu,  7 May 2020 13:16:15 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id l25so4232584vso.6
+        for <linux-serial@vger.kernel.org>; Thu, 07 May 2020 13:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bnBeK10KzsaeyDFO2398m9/Skswi+j6FYU/gKr10cks=;
-        b=GzcY94LdE0hSxHNb2Ie4O6ZGy7FUnmfrizHDOWnagUu/3DoRcnlASU4EtxJamQJf5n
-         YInSK43rqVxNgmqEJyLE1V8uoQuK711LrzZzl6Jy+DwiB3USC73zDvfsnly8sf5RE3MO
-         gJ0PUw1ZkSRig2z0wZbVSdLbZCRY0xEmG2+0A=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UQE2Pqn7s0Ks9OIhXkN/lBOad3DHjY4wcPRoAi0MgWs=;
+        b=WacTyQsgLEEU7u0AtpRsYbxT75pb0I+6Dw5GqlzMzlyoGiEgKCaIIHSxj1lTkPvQAU
+         O6b7zHfAh/vDRiIeL5bu2q6GRMeNCHryJ2/FsGV34iuplmWcYt9st/jc7aBEXeYucXcQ
+         R1GrTAIJ/ptWsJcgVQeQZS3xbP4uAwlr7D1MM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bnBeK10KzsaeyDFO2398m9/Skswi+j6FYU/gKr10cks=;
-        b=OivLLKTc1bLcWxPhjwbvOkHWWVxIvUqNslrZYYnJTncSkV+n4Y8jKoEq2gXKPAjGCT
-         N71rs6D+8AS+IKrCjGJsi6Sjc34ohjuGlvuC0FH/AT4KtoYsYW9OjFCx9uycihrHeRwb
-         pl5PDI23wGuSWPzqQvDNvXlYzZMZYMws4/E7gC8zrVKN2sbmlaxvIW6hLK7KgVm6w/OK
-         ofuQJ7U3hPCvay4BHCQEnzMbuHI/jEkOlmLVvmer6SCuKxgfYFnqpAaa2S7VAodqlu6w
-         sWBVo2D8n3t1NydWVDVBmfLbkmh59l7rwFJYviwiSswfZgAKwLPPIXMG5AASKAsQI/KO
-         QWEQ==
-X-Gm-Message-State: AGi0PualG8GDFaeyi00VfCUm0qNsaITu/mesgDNqnk5RWlYvjMLfOn/r
-        ZJmglen0VNFNyfm3Ni2hKxlUyQ==
-X-Google-Smtp-Source: APiQypKbwI7JzsjlGczS2mRvFdtUhbrL91Jdr9XjVjfScPm9ggnNRqUiKjXSnHdXQBa+ufgliHhpcg==
-X-Received: by 2002:a17:902:dc84:: with SMTP id n4mr14949596pld.281.1588882156436;
-        Thu, 07 May 2020 13:09:16 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id d203sm5547601pfd.79.2020.05.07.13.09.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 13:09:15 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        gregkh@linuxfoundation.org
-Cc:     corbet@lwn.net, frowand.list@gmail.com, bjorn.andersson@linaro.org,
-        linux-serial@vger.kernel.org, mingo@redhat.com, hpa@zytor.com,
-        jslaby@suse.com, kgdb-bugreport@lists.sourceforge.net,
-        sumit.garg@linaro.org, will@kernel.org, tglx@linutronix.de,
-        agross@kernel.org, catalin.marinas@arm.com, bp@alien8.de,
-        Douglas Anderson <dianders@chromium.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 12/12] serial: amba-pl011: Support kgdboc_earlycon
-Date:   Thu,  7 May 2020 13:08:50 -0700
-Message-Id: <20200507130644.v4.12.I8ee0811f0e0816dd8bfe7f2f5540b3dba074fae8@changeid>
-X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
-In-Reply-To: <20200507200850.60646-1-dianders@chromium.org>
-References: <20200507200850.60646-1-dianders@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UQE2Pqn7s0Ks9OIhXkN/lBOad3DHjY4wcPRoAi0MgWs=;
+        b=fDgjC/9f3cSK2/DEORHjUXqgxWsYKA8761Iu20SWfosHiHu3/Y3AqHuVnH8FUwXjEV
+         kjBlPYFvqnrGRZRtYpu+4sdfmvQ4sING7zo3jRP6r2KPB8e2QiaXNA/pcEOnW5wz4VC/
+         W+xaUF0YXcVyqP9X/p6wOzC5qvnV+Za722dGzLjUjxDsOFQ1o2AYI1jRbbnJVa6J0+u+
+         g7dCEP1J8ESYGLMuXDIxim8cRfITkj0YGXMnjYj4gLcuHQLelNnkkv5x4Gka19uBL3AY
+         1ESDXiA/PIYjArYq6pGJgb3VskEQBIYE2kxKarLJYEzKoYjF4CVvNX+1HcuEDa4Rbzp6
+         sbXQ==
+X-Gm-Message-State: AGi0PuZALMlc1goV9I2kIB2r5aEnX9Tb0KE0d8OktgfVZr7N0XAtgtLJ
+        LiLi92avdaIPDfIk1X8Zo30tWamERlQ=
+X-Google-Smtp-Source: APiQypJ1Ugn7klynBUY3nHpnuSuy/bHr1WSf81s8UetFtPcRtXA2gIA/ku5qH3yMAYAZaRkYHwBUOw==
+X-Received: by 2002:a67:f258:: with SMTP id y24mr14725575vsm.112.1588882573682;
+        Thu, 07 May 2020 13:16:13 -0700 (PDT)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
+        by smtp.gmail.com with ESMTPSA id j15sm1246534vsg.34.2020.05.07.13.16.12
+        for <linux-serial@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2020 13:16:12 -0700 (PDT)
+Received: by mail-vs1-f50.google.com with SMTP id x136so4224188vsx.2
+        for <linux-serial@vger.kernel.org>; Thu, 07 May 2020 13:16:12 -0700 (PDT)
+X-Received: by 2002:a67:c40c:: with SMTP id c12mr14014022vsk.106.1588882572099;
+ Thu, 07 May 2020 13:16:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200430095819.1.Id37f71c69eb21747b9d9e2c7c242be130814b362@changeid>
+ <20200501114943.ioetuxe24gi27bll@holly.lan> <20200501133202.GA2402281@wychelm.lan>
+ <CAD=FV=WKKCkr1va9S+ygL7XuOvSm12-qw4dCSo=FBtyXx4JvhQ@mail.gmail.com> <20200504115339.ndi3n4evklzidvb5@holly.lan>
+In-Reply-To: <20200504115339.ndi3n4evklzidvb5@holly.lan>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 7 May 2020 13:16:00 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VHUWs9X548=gmpn60-ywrM7OUOKdt-ngBdyyFgTfa3yw@mail.gmail.com>
+Message-ID: <CAD=FV=VHUWs9X548=gmpn60-ywrM7OUOKdt-ngBdyyFgTfa3yw@mail.gmail.com>
+Subject: Re: [PATCH] kgdboc: Be a bit more robust about handling earlycon leaving
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Jason Wessel <jason.wessel@windriver.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        kgdb-bugreport@lists.sourceforge.net,
+        LKML <linux-kernel@vger.kernel.org>, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Sumit Garg <sumit.garg@linaro.org>
+Hi,
 
-Implement the read() function in the early console driver. With
-recently added kgdboc_earlycon feature, this allows you to use kgdb
-to debug fairly early into the system boot.
+On Mon, May 4, 2020 at 4:53 AM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+>
+> On Fri, May 01, 2020 at 10:36:14AM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, May 1, 2020 at 6:32 AM Daniel Thompson
+> > <daniel.thompson@linaro.org> wrote:
+> > >
+> > > On Fri, May 01, 2020 at 12:49:43PM +0100, Daniel Thompson wrote:
+> > > > On Thu, Apr 30, 2020 at 09:59:09AM -0700, Douglas Anderson wrote:
+> > > > > The original implementation of kgdboc_earlycon included a comment
+> > > > > about how it was impossible to get notified about the boot console
+> > > > > going away without making changes to the Linux core.  Since folks
+> > > > > often don't want to change the Linux core for kgdb's purposes, the
+> > > > > kgdboc_earlycon implementation did a bit of polling to figure out when
+> > > > > the boot console went away.
+> > > > >
+> > > > > It turns out, though, that it is possible to get notified about the
+> > > > > boot console going away.  The solution is either clever or a hack
+> > > > > depending on your viewpoint.  ...or, perhaps, a clever hack.  All we
+> > > > > need to do is head-patch the "exit" routine of the boot console.  We
+> > > > > know that "struct console" must be writable because it has a "next"
+> > > > > pointer in it, so we can just put our own exit routine in, do our
+> > > > > stuff, and then call back to the original.
+> > > >
+> > > > I think I'm in the hack camp on this one!
+> > > >
+> > > >
+> > > > > This works great to get notified about the boot console going away.
+> > > > > The (slight) problem is that in the context of the boot console's exit
+> > > > > routine we can't call tty_find_polling_driver().
+> > > >
+> > > > I presume this is something to do with the tty_mutex?
+> > > > > We solve this by
+> > > > > kicking off some work on the system_wq when we get notified and this
+> > > > > works pretty well.
+> > > >
+> > > > There are some problems with the workqueue approach.
+> > >
+> > > ... so did a couple of experiments to avoid the workqueue.
+> > >
+> > > It occured to me that, since we have interfered with deinit() then the
+> > > console hasn't actually been uninitialized meaning we could still use it.
+> > > This does exposes us to risks similar to keep_bootcon but in exchange
+> > > there is no window where kgdb is broken (and no need to panic).
+> > >
+> > > My prototype is minimal but I did wonder about ripping out all the
+> > > code to defend against removal of the earlycon and simply keep the
+> > > earlycon around until a new kgdbio handler is installed.
+> >
+> > It took me a little while, but I finally see what you're saying.
+> > You're saying that we keep calling into the boot console even though
+> > it's no longer in the list of consoles.  Then we temporarily disable
+> > the boot console's exit routine until kgdb_earlycon() is done.  (side
+> > note: the exit routine was recently added and probably most consoles
+> > don't use it).
+>
+> Certainly none of the devices with a read() method have an exit().
+>
+>
+> > OK, that doesn't seem totally insane.  It actually works OK for you?
+>
+> I tested on qemu/x86-64 (8250) and qemu/arm64 (pl011). In both cases it
+> works well.
+>
+>
+> > It's probably at least worth a warning in the log if we detect that
+> > we're using the boot console and it's not in the console list anymore.
+> > Then if kgdb starts misbehaving someone might have a clue.
+>
+> Yes, I'll add that.
+>
+>
+> > If your solution is OK we might also want to remove the call to
+> > cleanup_earlycon_if_invalid() in configure_kgdboc() too.
+>
+> That's what I thought, yes. Although it might be best to handle that
+> by ripping it out of the original patch set.
 
-We only bother implementing this if polling is enabled since kgdb can't
-be enabled without that.
+I've incorporated ideas from my patch and yours into a v4 patchset of
+the original series.  Note that I didn't include your earlycon
+deferral patchset [1] in my series which means it'll need to be
+rebased.  Hopefully this is OK since I think the rebase will be easy,
+but yell if you want an extra pair of eyes on it.
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+[1] https://lore.kernel.org/r/20200430161741.1832050-1-daniel.thompson@linaro.org
 
-Changes in v4: None
-Changes in v3:
-- ("serial: amba-pl011: Support kgdboc_earlycon") pulled into my v3.
-- Renamed earlycon_kgdboc to kgdboc_earlycon.
 
-Changes in v2: None
-
- drivers/tty/serial/amba-pl011.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 2296bb0f9578..c010f639298d 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2435,6 +2435,37 @@ static void pl011_early_write(struct console *con, const char *s, unsigned n)
- 	uart_console_write(&dev->port, s, n, pl011_putc);
- }
- 
-+#ifdef CONFIG_CONSOLE_POLL
-+static int pl011_getc(struct uart_port *port)
-+{
-+	if (readl(port->membase + UART01x_FR) & UART01x_FR_RXFE)
-+		return NO_POLL_CHAR;
-+
-+	if (port->iotype == UPIO_MEM32)
-+		return readl(port->membase + UART01x_DR);
-+	else
-+		return readb(port->membase + UART01x_DR);
-+}
-+
-+static int pl011_early_read(struct console *con, char *s, unsigned int n)
-+{
-+	struct earlycon_device *dev = con->data;
-+	int ch, num_read = 0;
-+
-+	while (num_read < n) {
-+		ch = pl011_getc(&dev->port);
-+		if (ch == NO_POLL_CHAR)
-+			break;
-+
-+		s[num_read++] = ch;
-+	}
-+
-+	return num_read;
-+}
-+#else
-+#define pl011_early_read NULL
-+#endif
-+
- /*
-  * On non-ACPI systems, earlycon is enabled by specifying
-  * "earlycon=pl011,<address>" on the kernel command line.
-@@ -2454,6 +2485,7 @@ static int __init pl011_early_console_setup(struct earlycon_device *device,
- 		return -ENODEV;
- 
- 	device->con->write = pl011_early_write;
-+	device->con->read = pl011_early_read;
- 
- 	return 0;
- }
--- 
-2.26.2.645.ge9eca65c58-goog
-
+-Doug
