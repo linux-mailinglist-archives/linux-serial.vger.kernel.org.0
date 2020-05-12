@@ -2,79 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B3E1D0125
-	for <lists+linux-serial@lfdr.de>; Tue, 12 May 2020 23:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24621D01C2
+	for <lists+linux-serial@lfdr.de>; Wed, 13 May 2020 00:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731541AbgELVrl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 12 May 2020 17:47:41 -0400
-Received: from muru.com ([72.249.23.125]:54330 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731534AbgELVrl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 12 May 2020 17:47:41 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 68AAA8047;
-        Tue, 12 May 2020 21:48:28 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Rob Herring <robh@kernel.org>
-Cc:     Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
-        Lee Jones <lee.jones@linaro.org>, Jiri Slaby <jslaby@suse.cz>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: [PATCH 6/6] ARM: dts: omap4-droid4: Configure modem for serdev-ngsm
-Date:   Tue, 12 May 2020 14:47:13 -0700
-Message-Id: <20200512214713.40501-7-tony@atomide.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200512214713.40501-1-tony@atomide.com>
-References: <20200512214713.40501-1-tony@atomide.com>
+        id S1729942AbgELWRf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 12 May 2020 18:17:35 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:45138 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726367AbgELWRe (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 12 May 2020 18:17:34 -0400
+Received: by mail-ot1-f67.google.com with SMTP id e20so11850260otk.12;
+        Tue, 12 May 2020 15:17:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mrQ851hnunrgTqto6+wIGdOsYmYlqTuTWO4ADOavgjQ=;
+        b=bqr2Jv4gDlam72irY4ekm0BowPQHXAOVJsr+NE3tN7Zc95TUuuIhWoLPAk0dc4XBsH
+         75/d4f31rwvoWzUFOQPF9eVFh+O10WhZqttFDh27Fen8DrrR/T0VrHfmPxmKuJ4hWLsP
+         SrQ9/N0OxYilKHEQj0DLBHLy7XIrhL1reUANXqRcmGaDkOVJgMSUYR0xrr+6LNBAXCsi
+         8WAswiDZcK9q9/CcfdX1mEhhBudtdWxBeHlCtbY44lLGXOUJMOUR2Q/YCJLZGH5kNan+
+         GcBV2OB3AOh0iIM0I8NQEDKN1DSItzguKR3//ULRx9r4siKZ9ALkBlGJzQZivesiFeQM
+         dMBw==
+X-Gm-Message-State: AGi0PuZ9jn1XXUMr7r2pOcKKWBNHs9QlgJpfoynLhD1w3yk/ILHNDPCX
+        T8L8tre6QFx0Z15/6ZzM6A==
+X-Google-Smtp-Source: APiQypK+0HPJSRVk7oY5OGHm2Knyk+zbvGQGlsq2M4ejPQuqlB3/puDbsR9Qg1uci4g29yQQUydSlg==
+X-Received: by 2002:a05:6830:1302:: with SMTP id p2mr18665519otq.183.1589321852427;
+        Tue, 12 May 2020 15:17:32 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w73sm5598138oie.34.2020.05.12.15.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 15:17:31 -0700 (PDT)
+Received: (nullmailer pid 2344 invoked by uid 1000);
+        Tue, 12 May 2020 22:17:30 -0000
+Date:   Tue, 12 May 2020 17:17:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-serial@vger.kernel.org,
+        dmaengine@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] dt-bindings: pinctrl: sh-pfc: Document r8a7742
+ PFC support
+Message-ID: <20200512221730.GA2213@bogus>
+References: <1588542414-14826-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1588542414-14826-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1588542414-14826-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Let's enable the TS 27.010 /dev/gsmmux* interfaces via Linux n_gsm that
-can be used for voice calls and SMS with commands using a custom Motorola
-format.
+On Sun,  3 May 2020 22:46:45 +0100, Lad Prabhakar wrote:
+> Document PFC support for the RZ/G1H (R8A7742) SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  .../devicetree/bindings/pinctrl/renesas,pfc-pinctrl.txt          | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-And let's also enable the kernel GNSS driver via serdev-ngsm that uses a
-dedicated TS 27.010 channel.
-
-Note that voice call audio mixer is not supported yet.
-
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- arch/arm/boot/dts/motorola-mapphone-common.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/arch/arm/boot/dts/motorola-mapphone-common.dtsi b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
---- a/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-+++ b/arch/arm/boot/dts/motorola-mapphone-common.dtsi
-@@ -698,6 +698,20 @@ &uart1 {
- 	pinctrl-0 = <&uart1_pins>;
- 	interrupts-extended = <&wakeupgen GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH
- 			       &omap4_pmx_core 0xfc>;
-+
-+	modem {
-+		compatible = "motorola,mapphone-mdm6600-serial";
-+		ttymask = <0 0x00001fee>;
-+		phys = <&fsusb1_phy>;
-+		phy-names = "usb";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gnss@4 {
-+			compatible = "motorola,mapphone-mdm6600-gnss";
-+			reg = <4>;
-+		};
-+	};
- };
- 
- &uart3 {
--- 
-2.26.2
+Acked-by: Rob Herring <robh@kernel.org>
