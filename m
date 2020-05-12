@@ -2,154 +2,163 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932441CF65C
-	for <lists+linux-serial@lfdr.de>; Tue, 12 May 2020 16:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6191CF67B
+	for <lists+linux-serial@lfdr.de>; Tue, 12 May 2020 16:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729519AbgELOCz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 12 May 2020 10:02:55 -0400
-Received: from mga12.intel.com ([192.55.52.136]:62365 "EHLO mga12.intel.com"
+        id S1730118AbgELOJD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 12 May 2020 10:09:03 -0400
+Received: from mga09.intel.com ([134.134.136.24]:41344 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728085AbgELOCz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 12 May 2020 10:02:55 -0400
-IronPort-SDR: +6AklzIjm13DuzQdvcQ8xBor2r9qF41QATGN0R8rResG6vQ3X4g8bPAm/nMXqsxVbe48cJzI0d
- af8hje5WKfPA==
+        id S1727859AbgELOJC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 12 May 2020 10:09:02 -0400
+IronPort-SDR: Xwksx/rEKETJDmeFMvRF3q36i+BTxgZYdj5Tnqhbti7CK/Y9krrctBYuW5G2oZFwWztkNb8Tvd
+ C53kdGQXoFgA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 07:02:54 -0700
-IronPort-SDR: j1ExeGs2KceIGrXSd6PgKm1EqylmuOIrRBlZ/giVM4KXESM/iUocVMPAvA9Uv8g23zTB640Rii
- /YEUV/3pke4w==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 07:09:02 -0700
+IronPort-SDR: YTAiltqx0cQMeD/JF+mgLuk9Yr9klWVR59iMYXgLhpfi1OUZqMPr5xz0IOVyyiRCBjnsdnBoh1
+ l65wW3Gy96hQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,384,1583222400"; 
-   d="scan'208";a="409306729"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 12 May 2020 07:02:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 86A95101; Tue, 12 May 2020 17:02:52 +0300 (EEST)
+   d="scan'208";a="262132988"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003.jf.intel.com with ESMTP; 12 May 2020 07:08:59 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jYVag-006Daj-Nj; Tue, 12 May 2020 17:09:02 +0300
+Date:   Tue, 12 May 2020 17:09:02 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        Giulio Benetti <giulio.benetti@micronovasrl.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
         linux-serial@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] serial: 8250_exar: Make use of PCI_DEVICE_DATA() macro
-Date:   Tue, 12 May 2020 17:02:52 +0300
-Message-Id: <20200512140252.67631-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.26.2
+Subject: Re: [PATCH v2 4/4] serial: 8250: Support rs485 bus termination GPIO
+Message-ID: <20200512140902.GB185537@smile.fi.intel.com>
+References: <cover.1589285873.git.lukas@wunner.de>
+ <dafe8ecb9897efdbe530667657377ba96c43b8c7.1589285874.git.lukas@wunner.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dafe8ecb9897efdbe530667657377ba96c43b8c7.1589285874.git.lukas@wunner.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Since PCI core provides a generic PCI_DEVICE_DATA() macro,
-replace contents of EXAR_DEVICE() with former one.
+On Tue, May 12, 2020 at 02:40:04PM +0200, Lukas Wunner wrote:
+> Commit e8759ad17d41 ("serial: uapi: Add support for bus termination")
+> introduced the ability to enable rs485 bus termination from user space.
+> So far the feature is only used by a single driver, 8250_exar.c, using a
+> hardcoded GPIO pin specific to Siemens IOT2040 products.
 
-No functional change intended.
+Perhaps you need to Cc this to Jan Kiszka.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_exar.c | 65 ++++++++++++++---------------
- 1 file changed, 31 insertions(+), 34 deletions(-)
+> Provide for a more generic solution by allowing specification of an
+> rs485 bus termination GPIO pin in the device tree:  Amend the serial
+> core to retrieve the GPIO from the device tree (or ACPI table) and amend
+> the default ->rs485_config() callback for 8250 drivers to change the
+> GPIO on request from user space.
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index 885c282c3c7979..1774e9b0f44bda 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -25,13 +25,13 @@
- 
- #include "8250.h"
- 
--#define PCI_DEVICE_ID_ACCES_COM_2S		0x1052
--#define PCI_DEVICE_ID_ACCES_COM_4S		0x105d
--#define PCI_DEVICE_ID_ACCES_COM_8S		0x106c
--#define PCI_DEVICE_ID_ACCES_COM232_8		0x10a8
--#define PCI_DEVICE_ID_ACCES_COM_2SM		0x10d2
--#define PCI_DEVICE_ID_ACCES_COM_4SM		0x10db
--#define PCI_DEVICE_ID_ACCES_COM_8SM		0x10ea
-+#define PCI_DEVICE_ID_ACCESSIO_COM_2S		0x1052
-+#define PCI_DEVICE_ID_ACCESSIO_COM_4S		0x105d
-+#define PCI_DEVICE_ID_ACCESSIO_COM_8S		0x106c
-+#define PCI_DEVICE_ID_ACCESSIO_COM232_8		0x10a8
-+#define PCI_DEVICE_ID_ACCESSIO_COM_2SM		0x10d2
-+#define PCI_DEVICE_ID_ACCESSIO_COM_4SM		0x10db
-+#define PCI_DEVICE_ID_ACCESSIO_COM_8SM		0x10ea
- 
- #define PCI_DEVICE_ID_COMMTECH_4224PCI335	0x0002
- #define PCI_DEVICE_ID_COMMTECH_4222PCI335	0x0004
-@@ -743,9 +743,7 @@ static const struct exar8250_board pbn_exar_XR17V8358 = {
- 		(kernel_ulong_t)&bd					\
- 	}
- 
--#define EXAR_DEVICE(vend, devid, bd) {					\
--	PCI_VDEVICE(vend, PCI_DEVICE_ID_##devid), (kernel_ulong_t)&bd	\
--	}
-+#define EXAR_DEVICE(vend, devid, bd) { PCI_DEVICE_DATA(vend, devid, &bd) }
- 
- #define IBM_DEVICE(devid, sdevid, bd) {			\
- 	PCI_DEVICE_SUB(					\
-@@ -757,14 +755,13 @@ static const struct exar8250_board pbn_exar_XR17V8358 = {
- 	}
- 
- static const struct pci_device_id exar_pci_tbl[] = {
--	EXAR_DEVICE(ACCESSIO, ACCES_COM_2S, acces_com_2x),
--	EXAR_DEVICE(ACCESSIO, ACCES_COM_4S, acces_com_4x),
--	EXAR_DEVICE(ACCESSIO, ACCES_COM_8S, acces_com_8x),
--	EXAR_DEVICE(ACCESSIO, ACCES_COM232_8, acces_com_8x),
--	EXAR_DEVICE(ACCESSIO, ACCES_COM_2SM, acces_com_2x),
--	EXAR_DEVICE(ACCESSIO, ACCES_COM_4SM, acces_com_4x),
--	EXAR_DEVICE(ACCESSIO, ACCES_COM_8SM, acces_com_8x),
--
-+	EXAR_DEVICE(ACCESSIO, COM_2S, acces_com_2x),
-+	EXAR_DEVICE(ACCESSIO, COM_4S, acces_com_4x),
-+	EXAR_DEVICE(ACCESSIO, COM_8S, acces_com_8x),
-+	EXAR_DEVICE(ACCESSIO, COM232_8, acces_com_8x),
-+	EXAR_DEVICE(ACCESSIO, COM_2SM, acces_com_2x),
-+	EXAR_DEVICE(ACCESSIO, COM_4SM, acces_com_4x),
-+	EXAR_DEVICE(ACCESSIO, COM_8SM, acces_com_8x),
- 
- 	CONNECT_DEVICE(XR17C152, UART_2_232, pbn_connect),
- 	CONNECT_DEVICE(XR17C154, UART_4_232, pbn_connect),
-@@ -782,24 +779,24 @@ static const struct pci_device_id exar_pci_tbl[] = {
- 	IBM_DEVICE(XR17C152, SATURN_SERIAL_ONE_PORT, pbn_exar_ibm_saturn),
- 
- 	/* Exar Corp. XR17C15[248] Dual/Quad/Octal UART */
--	EXAR_DEVICE(EXAR, EXAR_XR17C152, pbn_exar_XR17C15x),
--	EXAR_DEVICE(EXAR, EXAR_XR17C154, pbn_exar_XR17C15x),
--	EXAR_DEVICE(EXAR, EXAR_XR17C158, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(EXAR, XR17C152, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(EXAR, XR17C154, pbn_exar_XR17C15x),
-+	EXAR_DEVICE(EXAR, XR17C158, pbn_exar_XR17C15x),
- 
- 	/* Exar Corp. XR17V[48]35[248] Dual/Quad/Octal/Hexa PCIe UARTs */
--	EXAR_DEVICE(EXAR, EXAR_XR17V352, pbn_exar_XR17V35x),
--	EXAR_DEVICE(EXAR, EXAR_XR17V354, pbn_exar_XR17V35x),
--	EXAR_DEVICE(EXAR, EXAR_XR17V358, pbn_exar_XR17V35x),
--	EXAR_DEVICE(EXAR, EXAR_XR17V4358, pbn_exar_XR17V4358),
--	EXAR_DEVICE(EXAR, EXAR_XR17V8358, pbn_exar_XR17V8358),
--	EXAR_DEVICE(COMMTECH, COMMTECH_4222PCIE, pbn_exar_XR17V35x),
--	EXAR_DEVICE(COMMTECH, COMMTECH_4224PCIE, pbn_exar_XR17V35x),
--	EXAR_DEVICE(COMMTECH, COMMTECH_4228PCIE, pbn_exar_XR17V35x),
--
--	EXAR_DEVICE(COMMTECH, COMMTECH_4222PCI335, pbn_fastcom335_2),
--	EXAR_DEVICE(COMMTECH, COMMTECH_4224PCI335, pbn_fastcom335_4),
--	EXAR_DEVICE(COMMTECH, COMMTECH_2324PCI335, pbn_fastcom335_4),
--	EXAR_DEVICE(COMMTECH, COMMTECH_2328PCI335, pbn_fastcom335_8),
-+	EXAR_DEVICE(EXAR, XR17V352, pbn_exar_XR17V35x),
-+	EXAR_DEVICE(EXAR, XR17V354, pbn_exar_XR17V35x),
-+	EXAR_DEVICE(EXAR, XR17V358, pbn_exar_XR17V35x),
-+	EXAR_DEVICE(EXAR, XR17V4358, pbn_exar_XR17V4358),
-+	EXAR_DEVICE(EXAR, XR17V8358, pbn_exar_XR17V8358),
-+	EXAR_DEVICE(COMMTECH, 4222PCIE, pbn_exar_XR17V35x),
-+	EXAR_DEVICE(COMMTECH, 4224PCIE, pbn_exar_XR17V35x),
-+	EXAR_DEVICE(COMMTECH, 4228PCIE, pbn_exar_XR17V35x),
-+
-+	EXAR_DEVICE(COMMTECH, 4222PCI335, pbn_fastcom335_2),
-+	EXAR_DEVICE(COMMTECH, 4224PCI335, pbn_fastcom335_4),
-+	EXAR_DEVICE(COMMTECH, 2324PCI335, pbn_fastcom335_4),
-+	EXAR_DEVICE(COMMTECH, 2328PCI335, pbn_fastcom335_8),
- 	{ 0, }
- };
- MODULE_DEVICE_TABLE(pci, exar_pci_tbl);
+Perhaps the followup can be turning 8250_exar to request those GPIOs it
+provides (as hogs or regular ones, I don't know).
+
+FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> ---
+> Changes v1 -> v2:
+> * Drop unnecessary devm_gpiod_put(). (Andy)
+> * Use GPIOD_OUT_LOW macro for brevity. (Andy)
+> * Document the rationale for disabling termination by default.
+> * Drop nonsensical read of GPIO after setting its direction to out.
+> 
+>  drivers/tty/serial/8250/8250_port.c |  4 ++++
+>  drivers/tty/serial/serial_core.c    | 16 ++++++++++++++++
+>  include/linux/serial_core.h         |  2 ++
+>  3 files changed, 22 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index f77bf820b7a3..b5b630d02110 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -681,6 +681,10 @@ int serial8250_em485_config(struct uart_port *port, struct serial_rs485 *rs485)
+>  	memset(rs485->padding, 0, sizeof(rs485->padding));
+>  	port->rs485 = *rs485;
+>  
+> +	if (port->rs485_term_gpio)
+> +		gpiod_set_value(port->rs485_term_gpio,
+> +				rs485->flags & SER_RS485_TERMINATE_BUS);
+> +
+>  	/*
+>  	 * Both serial8250_em485_init() and serial8250_em485_destroy()
+>  	 * are idempotent.
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 43b6682877d5..57840cf90388 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -3317,6 +3317,7 @@ int uart_get_rs485_mode(struct uart_port *port)
+>  	 * to get to a defined state with the following properties:
+>  	 */
+>  	rs485conf->flags &= ~(SER_RS485_RX_DURING_TX | SER_RS485_ENABLED |
+> +			      SER_RS485_TERMINATE_BUS |
+>  			      SER_RS485_RTS_AFTER_SEND);
+>  	rs485conf->flags |= SER_RS485_RTS_ON_SEND;
+>  
+> @@ -3331,6 +3332,21 @@ int uart_get_rs485_mode(struct uart_port *port)
+>  		rs485conf->flags |= SER_RS485_RTS_AFTER_SEND;
+>  	}
+>  
+> +	/*
+> +	 * Disabling termination by default is the safe choice:  Else if many
+> +	 * bus participants enable it, no communication is possible at all.
+> +	 * Works fine for short cables and users may enable for longer cables.
+> +	 */
+> +	port->rs485_term_gpio = devm_gpiod_get_optional(dev, "rs485-term",
+> +							GPIOD_OUT_LOW);
+> +	if (IS_ERR(port->rs485_term_gpio)) {
+> +		ret = PTR_ERR(port->rs485_term_gpio);
+> +		port->rs485_term_gpio = NULL;
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Cannot get rs485-term-gpios\n");
+> +		return ret;
+> +	}
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(uart_get_rs485_mode);
+> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+> index b649a2b894e7..9fd550e7946a 100644
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -10,6 +10,7 @@
+>  #include <linux/bitops.h>
+>  #include <linux/compiler.h>
+>  #include <linux/console.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/circ_buf.h>
+>  #include <linux/spinlock.h>
+> @@ -251,6 +252,7 @@ struct uart_port {
+>  	struct attribute_group	*attr_group;		/* port specific attributes */
+>  	const struct attribute_group **tty_groups;	/* all attributes (serial core use only) */
+>  	struct serial_rs485     rs485;
+> +	struct gpio_desc	*rs485_term_gpio;	/* enable RS485 bus termination */
+>  	struct serial_iso7816   iso7816;
+>  	void			*private_data;		/* generic platform data pointer */
+>  };
+> -- 
+> 2.26.2
+> 
+
 -- 
-2.26.2
+With Best Regards,
+Andy Shevchenko
+
 
