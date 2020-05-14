@@ -2,100 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C54AB1D3696
-	for <lists+linux-serial@lfdr.de>; Thu, 14 May 2020 18:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCE01D3844
+	for <lists+linux-serial@lfdr.de>; Thu, 14 May 2020 19:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgENQgg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 14 May 2020 12:36:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53588 "EHLO mail.kernel.org"
+        id S1726067AbgENRbu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 14 May 2020 13:31:50 -0400
+Received: from muru.com ([72.249.23.125]:54564 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbgENQgg (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 14 May 2020 12:36:36 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB5F220675;
-        Thu, 14 May 2020 16:36:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589474195;
-        bh=/Oud4+Cb5VEN+0rjyvNjdi0y40dgg0LowyeDFy6iBQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wlserAR3KAJqd5xHY94MD8nIrVksbeDqOZ15lIrwLhDydAbHRrjPzYK1z2GmIDIff
-         Nty/yTzlxgyCM94tWna6ZmJT4C7xT+pZCPw7JdJoMqK3Cc6RBmnfgu1oiBM+lCS2gj
-         q4TNirepiFdHOwljbHbA7YMdvPzupJFclkt+QGDY=
-Date:   Thu, 14 May 2020 18:36:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-serial@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jiri Slaby <jslaby@suse.com>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Gross <agross@kernel.org>, bp@alien8.de,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Enrico Weigelt <info@metux.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        James Morse <james.morse@arm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        jinho lim <jordan.lim@samsung.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        x86@kernel.org
-Subject: Re: [PATCH v4 00/12] kgdb: Support late serial drivers; enable early
- debug w/ boot consoles
-Message-ID: <20200514163633.GA3154055@kroah.com>
-References: <20200507200850.60646-1-dianders@chromium.org>
- <20200514162109.6qt5drd27hpilijh@holly.lan>
- <CAD=FV=X+t_Wg5KadZBTGHMSEXY3c-t6DZAtdaLXys31QJJpGGA@mail.gmail.com>
+        id S1726027AbgENRbt (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 14 May 2020 13:31:49 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 1AD9380C0;
+        Thu, 14 May 2020 17:32:37 +0000 (UTC)
+Date:   Thu, 14 May 2020 10:31:44 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Rob Herring <robh@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, Jiri Slaby <jslaby@suse.cz>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCHv8 0/6] n_gsm serdev support and GNSS driver for droid4
+Message-ID: <20200514173144.GP37466@atomide.com>
+References: <20200512214713.40501-1-tony@atomide.com>
+ <20200513190942.GA2626@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=X+t_Wg5KadZBTGHMSEXY3c-t6DZAtdaLXys31QJJpGGA@mail.gmail.com>
+In-Reply-To: <20200513190942.GA2626@duo.ucw.cz>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, May 14, 2020 at 09:34:26AM -0700, Doug Anderson wrote:
-> > (though we must keep
-> > changes to drivers/tty/serial/kgdboc alongside the kgdb changes).
-> >
-> > I can hoover them up but I'd need a solid set of acks and
-> > I don't think we've got that yet.
+* Pavel Machek <pavel@denx.de> [200513 19:10]:
+> Hi!
 > 
-> It would be nice for it to be explicit, but "get_maintainer" says that
-> Greg KH is the maintainer of serial drivers.  Git log confirms that he
-> also has been the one landing changes to these files.  Early-on he
-> provided his Reviewed-by for the series as a whole, so he's aware of
-> it and maybe would be fine w/ the serial changes landing through the
-> kgdb tree?
+> > Here's the updated set of these patches fixed up for Johan's and
+> > Pavel's earlier comments.
+> > 
+> > This series does the following:
+> > 
+> > 1. Adds functions to n_gsm.c for serdev-ngsm.c driver to use
+> > 
+> > 2. Adds a generic serdev-ngsm.c driver that brings up the TS 27.010
+> >    TTY ports configured in devicetree with help of n_gsm.c
+> > 
+> > 3. Allows the use of standard Linux device drivers for dedicated
+> >    TS 27.010 channels for devices like GNSS and ALSA found on some
+> >    modems for example
 > 
-> Greg: is that correct?
+> > 4. Adds a gnss-motmdm consumer driver for the GNSS device found on
+> >    the Motorola Mapphone MDM6600 modem on devices like droid4
+> 
+> It does one thing ... it turns Droid 4 into useful phone! 
 
-I have no objection for all of these to go through any other tree that
-wants to take them :)
+Right, a minor detail I forgot :)
 
-But if you want me to take them in the serial tree, to make it easier
-for you or any other serial driver issues, I will be glad to do that,
-just send them my way.  It's your call.
+> Thanks a lot. I believe these are same patches as in
+> droid4-pending-v5.7 branch, so whole series is
+> 
+> Tested-by: Pavel Machek <pavel@ucw.cz>
+> 
+> Getting this into 5.8 would be nice :-).
+> 
+> > Now without the chardev support, the /dev/gsmtty* using apps need
+> > to use "U1234AT+CFUN?" format for the packets. The advantage is
+> > less kernel code, and we keep the existing /dev/gsmtty* interface.
+> > 
+> > If we still really need the custom chardev support, that can now
+> > be added as needed with the channel specific consumer driver(s),
+> > but looks like this won't be needed based on Pavel's ofono work.
+> 
+> These work for me, and I have patched ofono with basic
+> functionality. It is no longer possible to use minicom for debugging,
+> but printf can be used instead, so that's not much of a problem.
+> 
+> I have adjusted ofono code, and moved away from normal AT support
+> code. More API changes would not be welcome :-).
 
-thanks,
+There is no need for a new API or API changes as we now use the
+existing n_gsm tty interface for /dev/gsmtty* devices that have
+been around for years.
 
-greg k-h
+Regards,
+
+Tony
+
