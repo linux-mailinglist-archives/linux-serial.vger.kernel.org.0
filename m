@@ -2,88 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD3B1D9E06
-	for <lists+linux-serial@lfdr.de>; Tue, 19 May 2020 19:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825241D9F1E
+	for <lists+linux-serial@lfdr.de>; Tue, 19 May 2020 20:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729384AbgESRh6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 19 May 2020 13:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729001AbgESRh5 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 19 May 2020 13:37:57 -0400
-Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C37F6C08C5C0;
-        Tue, 19 May 2020 10:37:57 -0700 (PDT)
-Received: from [192.168.178.106] (pd95ef292.dip0.t-ipconnect.de [217.94.242.146])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 1897B40A3F8;
-        Tue, 19 May 2020 17:35:00 +0000 (UTC)
-Subject: Re: [PATCH 4/4] sc16is7xx: Use threaded IRQ
-To:     Maarten Brock <m.brock@vanmierlo.com>
-Cc:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org, jslaby@suse.com,
-        pascal.huerst@gmail.com, linux-serial-owner@vger.kernel.org
-References: <20200508143757.2609740-1-daniel@zonque.org>
- <20200508143757.2609740-5-daniel@zonque.org>
- <61fdcf12976c924fd86c5203aba673a7@vanmierlo.com>
- <584de876-e675-0172-97ed-0c9534eb9526@zonque.org>
- <dfafc770e7e308cb6a2db5a1003cd759@vanmierlo.com>
- <22116d56-9240-9bfe-1b6f-a94d57a085cf@zonque.org>
- <b5d56abc8109fb3a7ef057c89a649f06@vanmierlo.com>
+        id S1729001AbgESSV4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 19 May 2020 14:21:56 -0400
+Received: from mail.bugwerft.de ([46.23.86.59]:40390 "EHLO mail.bugwerft.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726497AbgESSV4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 19 May 2020 14:21:56 -0400
+Received: from zenbar.fritz.box (pd95ef292.dip0.t-ipconnect.de [217.94.242.146])
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 585E040AEC3;
+        Tue, 19 May 2020 18:18:58 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
-Message-ID: <c03101a9-ea8b-fdff-3f29-fd7c4f400019@zonque.org>
-Date:   Tue, 19 May 2020 19:37:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org, jslaby@suse.com,
+        jringle@gridpoint.com, m.brock@vanmierlo.com,
+        pascal.huerst@gmail.com, Daniel Mack <daniel@zonque.org>
+Subject: [PATCH v2 0/6] sc16is7xx: IrDA mode and threaded IRQs
+Date:   Tue, 19 May 2020 20:21:41 +0200
+Message-Id: <20200519182147.218713-1-daniel@zonque.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <b5d56abc8109fb3a7ef057c89a649f06@vanmierlo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 5/19/20 6:32 PM, Maarten Brock wrote:
-> On 2020-05-18 18:57, Daniel Mack wrote:
+This is v2 of the series.
 
->> It's a controller that sits behind another hardware bus itself, so
->> polling is expensive. If the controller would need to check for level
->> IRQs it would need to poll, and then we could as well just poll the UART
->> directly, that's just as good :)
-> 
-> That depends on the IRQ coming out of the interrupt controller. If that is
-> a level interrupt itself, then it is easy to see if all interrupts are
-> handled. Further polling zooms in on the devices that require attention.
+v2:
 
-Yeah, I'm familiar with the concept, but it's not like that here,
-unfortunately.
+ * Change single bool properties into an array
+   (suggested by Rob Herring)
+ * Add a patch first try TRIGGER_LOW and SHARED interrupts, and then
+   fall back to FALLING edge if the IRQ controller fails to provide the
+   former (suggested by Maarten Brock)
+ * Add a patch to check for the device presence
 
->> But again - the UART driver works perfectly fine with edge IRQs as long
->> as the interrupt is not shared.
-> 
-> If you would require multiple sc16is7xx devices on I2C would you like to
-> connect multiple interrupt lines? Or just SCL,SDA and *one* IRQ?
-> 
-> OTOH for SPI you would require multiple CS already.
+Daniel Mack (4):
+  sc16is7xx: Always use falling edge IRQ
+  sc16is7xx: Use threaded IRQ
+  sc16is7xx: Allow sharing the IRQ line
+  sc16is7xx: Read the LSR register for basic device presence check
 
-Right. Nevertheless, we can allow sharing the IRQ line for level-trigger
-capable IRQ controllers, you're right.
+Pascal Huerst (2):
+  dt-bindings: sc16is7xx: Add flag to activate IrDA mode
+  sc16is7xx: Add flag to activate IrDA mode
 
->> What many drivers do is try with one setting, and if that fails because
->> the interrupt controller returns an error, they fall back to something
->> else. We could do the same here of course, but it'd be another patch on
->> top, as it's unrelated to the concrete change the patch we're commenting
->> on is bringing in.
->>
->> So what I can add is logic that first tries with IRQF_LOW|IRQF_SHARED,
->> and if that fails, we fall back to IRQF_FALLING and retry. WDYT?
-> 
-> That sounds like a decent plan.
+ .../bindings/serial/nxp,sc16is7xx.txt         |  4 +
+ drivers/tty/serial/sc16is7xx.c                | 73 +++++++++++++------
+ 2 files changed, 56 insertions(+), 21 deletions(-)
 
-Okay, I'll add a patch to the series then and resend.
+-- 
+2.26.2
 
-
-Thanks for your feedback!
-Daniel
