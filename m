@@ -2,45 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E12411E6F24
-	for <lists+linux-serial@lfdr.de>; Fri, 29 May 2020 00:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9511E6F53
+	for <lists+linux-serial@lfdr.de>; Fri, 29 May 2020 00:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437223AbgE1WeI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Thu, 28 May 2020 18:34:08 -0400
-Received: from mail.bnv.gob.ve ([201.249.200.115]:35496 "EHLO
-        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2437219AbgE1WeG (ORCPT
+        id S2437254AbgE1Wmx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 28 May 2020 18:42:53 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:44209 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437076AbgE1Wmv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 28 May 2020 18:34:06 -0400
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 78E8238E1634;
-        Thu, 28 May 2020 13:47:14 -0400 (-04)
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id U6dsUst17YfV; Thu, 28 May 2020 13:47:14 -0400 (-04)
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 5BCEE38E28A5;
-        Thu, 28 May 2020 12:46:30 -0400 (-04)
-X-Virus-Scanned: amavisd-new at bnv.gob.ve
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SmZQlhpTHqkc; Thu, 28 May 2020 12:46:30 -0400 (-04)
-Received: from [10.19.23.127] (unknown [105.0.4.230])
-        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 5582238E0A19;
-        Thu, 28 May 2020 12:30:06 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 28 May 2020 18:42:51 -0400
+Received: by mail-io1-f65.google.com with SMTP id p20so251831iop.11;
+        Thu, 28 May 2020 15:42:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e2v4fXoeX6WkbPQBFbkJ9xyFPHQKXTzJ0kD/XhuAbXI=;
+        b=D8ukURP4fx4p+8QVePT6Jrqjq4EpoQ8N4UhyQR5IQkG3YdLNttAY8DaZmCnd7wwyOP
+         VK3mIea50bSPtqTUu1UhhiM2PTmcBsQEmAYOETwbA45MFGIS37nXumRxT552SZ5yPCF0
+         jcE34b0CWrg6zG2a2PxLZdTwFPnlFTEOtBJmuy+8L+kb30ewwiUQZA4MDS1FuHrYR9hb
+         LrFQKMiEVCAmuE7PxNhoMcJEYR0E/2FvIgm6IcpiPe0hnLU9JuDM9jQkr8uSxn/Y1vMT
+         1m7/1w8B/ry32TkEaudnqED+lwXsnydH3iSOfY31Rk5pRfcoahyJ0xotExFQdS/Bixrp
+         qXSQ==
+X-Gm-Message-State: AOAM533ojwX4e5xNHmJoc6N/KOcGQfQvc4Xb6O+W/UwFeHSZYrvaJjfp
+        BFFJJcyIuPK3HhO/60CHVm8/r2I=
+X-Google-Smtp-Source: ABdhPJyvQGZ/X09rxzw+FFgW3czEMyF0VVuSqoiHjEToSQ3kfBEeiepD797L4Q4CNLyb/OQmsiB92g==
+X-Received: by 2002:a5e:d619:: with SMTP id w25mr4203490iom.189.1590705770605;
+        Thu, 28 May 2020 15:42:50 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id f10sm3725798ilj.85.2020.05.28.15.42.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 15:42:50 -0700 (PDT)
+Received: (nullmailer pid 815010 invoked by uid 1000);
+        Thu, 28 May 2020 22:42:49 -0000
+Date:   Thu, 28 May 2020 16:42:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Mack <daniel@zonque.org>
+Cc:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, jslaby@suse.com, jringle@gridpoint.com,
+        m.brock@vanmierlo.com, pascal.huerst@gmail.com
+Subject: Re: [PATCH v3 1/6] dt-bindings: sc16is7xx: Add flag to activate IrDA
+ mode
+Message-ID: <20200528224249.GA810596@bogus>
+References: <20200521091152.404404-1-daniel@zonque.org>
+ <20200521091152.404404-2-daniel@zonque.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Spende von 2.000.000,00 Euro
-To:     Recipients <manuel@info.com>
-From:   "manuel franco" <manuel@info.com>
-Date:   Thu, 28 May 2020 18:29:55 +0200
-Reply-To: manuelfrancospende11@gmail.com
-Message-Id: <20200528163007.5582238E0A19@correo.bnv.gob.ve>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200521091152.404404-2-daniel@zonque.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Nehmen Sie jetzt Kontakt mit mir auf, damit wir fortfahren können.
+On Thu, May 21, 2020 at 11:11:47AM +0200, Daniel Mack wrote:
+> From: Pascal Huerst <pascal.huerst@gmail.com>
+> 
+> This series of uart controllers is able to work in IrDA mode.
+> This adds a property to the device tree to enable that feature on
+> selected ports if needed.
+> 
+> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
+> Signed-off-by: Daniel Mack <daniel@zonque.org>
+> ---
+>  Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> index c1091a923a89..4d1f55abe876 100644
+> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> @@ -21,6 +21,8 @@ Optional properties:
+>    the second cell is used to specify the GPIO polarity:
+>      0 = active high,
+>      1 = active low.
+> +- linux,irda-mode-ports: An array that lists the indices of the port that
+> +			 should operate in IrDA mode.
+
+Sorry, should have mentioned to drop 'linux,' too. With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
