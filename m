@@ -2,121 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE881ECC45
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jun 2020 11:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B95A1ED14F
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Jun 2020 15:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbgFCJNv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Jun 2020 05:13:51 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34243 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgFCJNv (ORCPT
+        id S1725936AbgFCNtE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Jun 2020 09:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725992AbgFCNsv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Jun 2020 05:13:51 -0400
-Received: by mail-lj1-f195.google.com with SMTP id b6so1803883ljj.1;
-        Wed, 03 Jun 2020 02:13:49 -0700 (PDT)
+        Wed, 3 Jun 2020 09:48:51 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1468C08C5C3
+        for <linux-serial@vger.kernel.org>; Wed,  3 Jun 2020 06:48:49 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id 202so1367277lfe.5
+        for <linux-serial@vger.kernel.org>; Wed, 03 Jun 2020 06:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
+         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
+         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
+         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
+         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
+         iC3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aKmu2lju87/NQsXeppMhpEVDk/Ce6ci7zuwO5vzV0Bg=;
-        b=lT47t44r96qzrfPvrwR5RjwbIogaFCEgNzvAWo/H4Mn87VlHd9acUhKUgl1rkPE4hF
-         Mlo0FTbT54a2mJ2SAkjuvqUobUERUP9gDIYqjBlR5iWfZ7gQ7hWKjatxaOxsJjOdgq4t
-         6VX7bd+McRAcLVGCgfj4Tqg1v36E2W7XOIbWrIKWuvxv/YGIiPaKSbQuwcVxQCnSxn4h
-         22fjUFK4nlxNKKAlFE6v/uLQkCdLB9FqN8HLd80pSakBdCwuEP4F5nUXn9Wt39izyTfO
-         K1oyyjAvgR2v+S0eQATqz3Cx/zGDWVH6xrbkdYhElAdsnBLF6jswPt5hCBIFA6aeQYtH
-         Ifew==
-X-Gm-Message-State: AOAM532iqkmPAqZmNrxhes+iaxLGinxVF5RuGToiM2wJ78BUpQiubG98
-        lb+RiADfCaXakKcorx8qciI=
-X-Google-Smtp-Source: ABdhPJxxdspmCu2TjJoCX66VstB4xhHw4DnspYcf2pBQTVK3SqXdhtLAHR7XZphFuIZvVeHjg134mg==
-X-Received: by 2002:a05:651c:1195:: with SMTP id w21mr1765216ljo.464.1591175628744;
-        Wed, 03 Jun 2020 02:13:48 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v28sm316693ljv.40.2020.06.03.02.13.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 02:13:48 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jgPSs-0002O0-JY; Wed, 03 Jun 2020 11:13:38 +0200
-Date:   Wed, 3 Jun 2020 11:13:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Safonov <0x7f454c46@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/4] serial: core: fix broken sysrq port unlock
-Message-ID: <20200603091338.GK19480@localhost>
-References: <20200602140058.3656-1-johan@kernel.org>
- <20200602140058.3656-3-johan@kernel.org>
- <CAHp75VeXYn46wQ5EXkk_MOQ49ybtyTeoQS6BS1X9DkC6hbeF-w@mail.gmail.com>
- <b016ad68-124a-5c98-f49b-f7286d995223@gmail.com>
- <20200603084051.GJ19480@localhost>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=mQmV6OFj30CtOdNqhiDG5JX579K/wc+8qLBXhQ6gK5hsZR4iEjp2d//NWOROLahNVZ
+         DlJbhmegJ9nKL74RhkwyHt8QQ1KyZnGlBFPZUI0vG1TvO/T32jolisPUOuF46OLw+VSo
+         zykcBwpPrxUwV69Q0FUxfo9eUlCnEdqqzmdaZ/HKKi8N7KYRo/q7+D4Qrrm1ZtK8xMpD
+         ep86k2D/NKC4O4vEgrKllx7l9BEHFNmeWA3GDZR2YDJZzDuYOJeT2GYBT3+bXuONHbGR
+         JPN8doMfOI404p0xH/QQUwrEatiFGf4Rmv+y38FiSoax5l+bgOa7lpoebsopoMCwYV6X
+         z61g==
+X-Gm-Message-State: AOAM531KNnLGOiJWYNk1a4q2/Ku82/b5TgpXEcbbHCwPRqBju498M/FH
+        KPToab982R3dBwkzHhCU42ltbuqjrej7a6F6SOJ+2tIETBw=
+X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
+X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
+ Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200603084051.GJ19480@localhost>
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:48:46 +0100
+X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
+Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 10:40:51AM +0200, Johan Hovold wrote:
-> On Tue, Jun 02, 2020 at 04:34:16PM +0100, Dmitry Safonov wrote:
-> > On 6/2/20 3:48 PM, Andy Shevchenko wrote:
-> > > On Tue, Jun 2, 2020 at 5:03 PM Johan Hovold <johan@kernel.org> wrote:
-> > >>
-> > >> Commit d6e1935819db ("serial: core: Allow processing sysrq at port
-> > >> unlock time") worked around a circular locking dependency by adding
-> > >> helpers used to defer sysrq processing to when the port lock was
-> > >> released.
-> > >>
-> > >> A later commit unfortunately converted these inline helpers to exported
-> > >> functions despite the fact that the unlock helper was restoring irq
-> > >> flags, something which needs to be done in the same function that saved
-> > >> them (e.g. on SPARC).
-> > > 
-> > > I'm not familiar with sparc, can you elaborate a bit what is ABI /
-> > > architecture lock implementation background?
-> > 
-> > I remember that was a limitation a while ago to save/restore flags from
-> > the same function. Though, I vaguely remember the reason.
-> > I don't see this limitation in Documentation/*
-> 
-> It's described in both LDD3 and LKD, which is possibly where I first
-> picked it up too (admittedly a long time ago).
-> 
-> > Google suggests that it's related to storage location:
-> > https://stackoverflow.com/a/34279032
-> 
-> No, that was never the issue.
-> 
-> SPARC includes the current register window in those flags, which at
-> least had to be restored in the same stack frame.
-> 
-> > Looking into arch/sparc I also can't catch if it's still a limitation.
-> 
-> Yeah, looking closer at the current implementation it seems this is no
-> longer an issue on SPARC.
-> 
-> > Also, looking around, xa_unlock_irqrestore() is called not from the same
-> > function. Maybe this issue is in history?
-> 
-> xa_unlock_irqrestore() is just a macro for spin_unlock_irqsave() it
-> seems, so not a counter example.
->
-> > Also, some comments would be nice near functions in the header.
-> 
-> Agreed. Let me respin this and either merge this with the next patch or
-> at least amend the commit message.
+-- 
+OUR GOLDEN OPPORTUNITY
 
-I stand corrected; this appears to longer be an issue (on any arch)
-as we these days have other common code passing the flags argument
-around like this.
+Hello Dear Friend,
 
-I'll respin.
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
 
-Johan
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
+
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
+
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
