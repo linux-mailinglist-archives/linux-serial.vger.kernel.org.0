@@ -2,27 +2,27 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 494401F29D3
-	for <lists+linux-serial@lfdr.de>; Tue,  9 Jun 2020 02:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783431F2F4C
+	for <lists+linux-serial@lfdr.de>; Tue,  9 Jun 2020 02:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731362AbgFIAE3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 8 Jun 2020 20:04:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45832 "EHLO mail.kernel.org"
+        id S1728362AbgFIAtO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 8 Jun 2020 20:49:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731186AbgFHXVi (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:21:38 -0400
+        id S1728758AbgFHXKq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:10:46 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 287EF20814;
-        Mon,  8 Jun 2020 23:21:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 407E820C09;
+        Mon,  8 Jun 2020 23:10:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658498;
-        bh=Cx1jwUN44lSFlGOyKtqITBTRMncJWDg29wTHDnROk/w=;
+        s=default; t=1591657846;
+        bh=4feggQIICT8RQYNX+beLsG7/+ks9mZ0RnqmMHiP5kB0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y3ZbeNLsa3EVgNPxeuebwF1MDeP3j2cItMzrJnadXGQvVrhLT1tzpbwCf7TiU+9Hb
-         iE9R7+7BMrIFNGq7/xWUmCvptALxXbso4eGRgUrSzQrYfFWt+S/A5yPD5zqg0YO7Qo
-         kSVRrSWC3ZWM2V2OiTCCh7ign+DHLHiy4waby1lY=
+        b=EBAGcDTTrB0fePSh22zVmzrf/+a8BP7EsyMpqZcy8YqREJNsOzPt1s8l82t+4TCwH
+         DZUWr5DGbzi2KrOQ174rATyqCWvOBEgOndsXbzcfRSQZq0gy23HlPbcTvrwBBV8m1f
+         9UZzhJOppwdKoY1M/Rxh+k08FoZcUm2n/PQOram4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Douglas Anderson <dianders@chromium.org>,
@@ -30,12 +30,12 @@ Cc:     Douglas Anderson <dianders@chromium.org>,
         Daniel Thompson <daniel.thompson@linaro.org>,
         Sasha Levin <sashal@kernel.org>,
         kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 130/175] kgdboc: Use a platform device to handle tty drivers showing up late
-Date:   Mon,  8 Jun 2020 19:18:03 -0400
-Message-Id: <20200608231848.3366970-130-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 212/274] kgdboc: Use a platform device to handle tty drivers showing up late
+Date:   Mon,  8 Jun 2020 19:05:05 -0400
+Message-Id: <20200608230607.3361041-212-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
-References: <20200608231848.3366970-1-sashal@kernel.org>
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -98,7 +98,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 101 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index c7d51b51898f..f5608ad68ae1 100644
+index c9f94fa82be4..151256f70d37 100644
 --- a/drivers/tty/serial/kgdboc.c
 +++ b/drivers/tty/serial/kgdboc.c
 @@ -20,6 +20,7 @@
@@ -142,7 +142,7 @@ index c7d51b51898f..f5608ad68ae1 100644
  }
  
  static int configure_kgdboc(void)
-@@ -200,20 +206,79 @@ static int configure_kgdboc(void)
+@@ -198,20 +204,79 @@ static int configure_kgdboc(void)
  	kgdb_unregister_io_module(&kgdboc_io_ops);
  noconfig:
  	kgdboc_unregister_kbd();
@@ -227,7 +227,7 @@ index c7d51b51898f..f5608ad68ae1 100644
  }
  
  static int kgdboc_get_char(void)
-@@ -236,24 +301,20 @@ static int param_set_kgdboc_var(const char *kmessage,
+@@ -234,24 +299,20 @@ static int param_set_kgdboc_var(const char *kmessage,
  				const struct kernel_param *kp)
  {
  	size_t len = strlen(kmessage);
@@ -255,7 +255,7 @@ index c7d51b51898f..f5608ad68ae1 100644
  	strcpy(config, kmessage);
  	/* Chop out \n char as a result of echo */
  	if (len && config[len - 1] == '\n')
-@@ -262,8 +323,30 @@ static int param_set_kgdboc_var(const char *kmessage,
+@@ -260,8 +321,30 @@ static int param_set_kgdboc_var(const char *kmessage,
  	if (configured == 1)
  		cleanup_kgdboc();
  
@@ -288,7 +288,7 @@ index c7d51b51898f..f5608ad68ae1 100644
  }
  
  static int dbg_restore_graphics;
-@@ -326,15 +409,8 @@ __setup("kgdboc=", kgdboc_option_setup);
+@@ -324,15 +407,8 @@ __setup("kgdboc=", kgdboc_option_setup);
  /* This is only available if kgdboc is a built in for early debugging */
  static int __init kgdboc_early_init(char *opt)
  {
@@ -305,7 +305,7 @@ index c7d51b51898f..f5608ad68ae1 100644
  	return 0;
  }
  
-@@ -342,7 +418,7 @@ early_param("ekgdboc", kgdboc_early_init);
+@@ -340,7 +416,7 @@ early_param("ekgdboc", kgdboc_early_init);
  #endif /* CONFIG_KGDB_SERIAL_CONSOLE */
  
  module_init(init_kgdboc);
