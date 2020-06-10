@@ -2,54 +2,50 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7408F1F57AD
-	for <lists+linux-serial@lfdr.de>; Wed, 10 Jun 2020 17:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF381F585D
+	for <lists+linux-serial@lfdr.de>; Wed, 10 Jun 2020 17:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730149AbgFJPXI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 10 Jun 2020 11:23:08 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:33625 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728466AbgFJPXH (ORCPT
+        id S1728435AbgFJPxg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 10 Jun 2020 11:53:36 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:41320 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728217AbgFJPxg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 10 Jun 2020 11:23:07 -0400
-Received: by mail-lj1-f193.google.com with SMTP id s1so3017627ljo.0;
-        Wed, 10 Jun 2020 08:23:05 -0700 (PDT)
+        Wed, 10 Jun 2020 11:53:36 -0400
+Received: by mail-lf1-f68.google.com with SMTP id u16so1740964lfl.8;
+        Wed, 10 Jun 2020 08:53:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sJ5kiBklTycoPKW6IVguv1VO+B8tcW5siLL6Q9kRKKg=;
-        b=dtDPU9+PYDCemgge2fSFqHISEHn3RKBLzMGrWsCxZATlSWi7nQQETsVDHW9fyamT9S
-         ank6kAwqi78jVvdjtlRt4EaN7pWPIa/UIl9MFqMc8rKksxKPfQ3dvoxBbTcfvkqr1Crq
-         Wdih2fY0RN9OrKkjYXrlc6LpWr/5ShlzzGIxaaRaXZnBePu9nBqfpAalw/hvPa4WiigJ
-         b56iKI/BHHLyoBpfReBCKnXePRz0FoO9/ItAaiejZGFwoH0NLrvXTKW8Cl5NUrZQQ7x4
-         Hz+vLjXDGlGaYYPrmdpJbof4hBZKFtmEWjpzRTDr6tGuIx0xkmzZlLCQmToL2bKRMqyf
-         M/OA==
-X-Gm-Message-State: AOAM532fQjbhEpGLcdUHWJeI4h4ReXJNUpIx5aW8ZYwv47H46Yy2ClfQ
-        P2+/e/b8XfE1PXeU3nl+dRE=
-X-Google-Smtp-Source: ABdhPJzCGgC4adyTllMpsAqfg71/Cburvf3+0VESbttBGsAvE3VcGLFwwm94gW9f1SsYdNIeV26Vhw==
-X-Received: by 2002:a2e:8490:: with SMTP id b16mr2124983ljh.325.1591802584284;
-        Wed, 10 Jun 2020 08:23:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kHTC5ynMjdYXbR8GWvcYvNg5klsAd9eXqBm+XxUO58o=;
+        b=TmPN7DC1dCNBT1Bx5vRreyA17eIi7H1dvaVlUpiC/9zVv/d6rGjr4PhfOkxQl85oYi
+         CzhDBw/qNqL+PvkC7rEinHOFiCTX64tkR7ef+H/DI/JKkiPKJXRzzKGDUTKYjyedMm6+
+         gemLvezQpZ7GEG0ciTV7glTZPOW6XEUm+YIgCwID0tt4vHRWebfeoDFxaODXQg2513GL
+         LlqrqBrpi6ylbWijF4Qz+buTEjDXiuI+NaJNWQl0UYUm7H50lG2hnQxYuwjDXPQEKkO3
+         hKN6UbUSe+VaE9VOeAi5LswHxBNAHVFPTlV8IzodZqUKk0IiEajVm1ZoTpecBEV0Yr2V
+         cGdQ==
+X-Gm-Message-State: AOAM532VZMA+epqeAocprmptsy9g7CFy4R+kMshDLOSu/Uj8jZNCgT/+
+        SS/oYlvN+qRYaYEcjqi5zWE=
+X-Google-Smtp-Source: ABdhPJyqqx/BcJVIiBXYDw9G8HwixEOGKHpBACr+n1wBRH3ucsEekHe/2Ki7AqirrHY6cGrLrC4OEg==
+X-Received: by 2002:a05:6512:d1:: with SMTP id c17mr2068358lfp.80.1591804413811;
+        Wed, 10 Jun 2020 08:53:33 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id n9sm12853ljc.69.2020.06.10.08.23.01
+        by smtp.gmail.com with ESMTPSA id x69sm20823lff.19.2020.06.10.08.53.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2020 08:23:01 -0700 (PDT)
+        Wed, 10 Jun 2020 08:53:33 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@xi.terra>)
-        id 1jj2Z8-0004Q2-FY; Wed, 10 Jun 2020 17:22:58 +0200
+        id 1jj32f-0003fz-W3; Wed, 10 Jun 2020 17:53:30 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jslaby@suse.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+Cc:     Jiri Slaby <jslaby@suse.com>, Lukas Wunner <lukas@wunner.de>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH v2 3/3] serial: core: drop redundant sysrq checks
-Date:   Wed, 10 Jun 2020 17:22:32 +0200
-Message-Id: <20200610152232.16925-4-johan@kernel.org>
+Subject: [PATCH] serial: core: drop unnecessary gpio include
+Date:   Wed, 10 Jun 2020 17:51:21 +0200
+Message-Id: <20200610155121.14014-1-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200610152232.16925-1-johan@kernel.org>
-References: <20200610152232.16925-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -57,37 +53,61 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The sysrq timestamp will never be set unless port->has_sysrq is set (see
-uart_handle_break()) so drop the redundant checks that were added by
-commit 1997e9dfdc84 ("serial_core: Un-ifdef sysrq SUPPORT_SYSRQ").
+Drop the recently added gpio include from the serial-core header in
+favour of a forward declaration and instead include the gpio header only
+where needed.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- include/linux/serial_core.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_port.c | 1 +
+ drivers/tty/serial/serial_core.c    | 1 +
+ include/linux/serial_core.h         | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 1632f7d25acc..d64ca77d9cfa 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -16,6 +16,7 @@
+ #include <linux/ioport.h>
+ #include <linux/init.h>
+ #include <linux/console.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/sysrq.h>
+ #include <linux/delay.h>
+ #include <linux/platform_device.h>
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 3706f31b0c37..cba19f7d9ea3 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -14,6 +14,7 @@
+ #include <linux/sched/signal.h>
+ #include <linux/init.h>
+ #include <linux/console.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/of.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
 diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index 03fa7b967103..791f4844efeb 100644
+index 791f4844efeb..01fc4d9c9c54 100644
 --- a/include/linux/serial_core.h
 +++ b/include/linux/serial_core.h
-@@ -469,7 +469,7 @@ bool uart_try_toggle_sysrq(struct uart_port *port, unsigned int ch);
+@@ -10,7 +10,6 @@
+ #include <linux/bitops.h>
+ #include <linux/compiler.h>
+ #include <linux/console.h>
+-#include <linux/gpio/consumer.h>
+ #include <linux/interrupt.h>
+ #include <linux/circ_buf.h>
+ #include <linux/spinlock.h>
+@@ -30,6 +29,7 @@
+ struct uart_port;
+ struct serial_struct;
+ struct device;
++struct gpio_desc;
  
- static inline int uart_handle_sysrq_char(struct uart_port *port, unsigned int ch)
- {
--	if (!port->has_sysrq || !port->sysrq)
-+	if (!port->sysrq)
- 		return 0;
- 
- 	if (ch && time_before(jiffies, port->sysrq)) {
-@@ -488,7 +488,7 @@ static inline int uart_handle_sysrq_char(struct uart_port *port, unsigned int ch
- 
- static inline int uart_prepare_sysrq_char(struct uart_port *port, unsigned int ch)
- {
--	if (!port->has_sysrq || !port->sysrq)
-+	if (!port->sysrq)
- 		return 0;
- 
- 	if (ch && time_before(jiffies, port->sysrq)) {
+ /*
+  * This structure describes all the operations that can be done on the
 -- 
 2.26.2
 
