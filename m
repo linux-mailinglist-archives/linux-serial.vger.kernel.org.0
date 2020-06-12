@@ -2,75 +2,119 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D12D11F7AF0
-	for <lists+linux-serial@lfdr.de>; Fri, 12 Jun 2020 17:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450F91F7B0D
+	for <lists+linux-serial@lfdr.de>; Fri, 12 Jun 2020 17:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbgFLPbV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 12 Jun 2020 11:31:21 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43869 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgFLPbU (ORCPT
+        id S1726085AbgFLPms (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 12 Jun 2020 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbgFLPms (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 12 Jun 2020 11:31:20 -0400
-Received: by mail-lj1-f194.google.com with SMTP id n24so11502084lji.10;
-        Fri, 12 Jun 2020 08:31:18 -0700 (PDT)
+        Fri, 12 Jun 2020 11:42:48 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDB7C03E96F;
+        Fri, 12 Jun 2020 08:42:47 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id c3so10166028wru.12;
+        Fri, 12 Jun 2020 08:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ypF+ABDeXj9Pa6nbncrRBAhpmKKQqD9PT/WMFez+uGo=;
+        b=WBM1U14Cg6u+NfWuR+fQylDEtXvUhDzHeLoluoCJmR7/NpW4WCqTJ1K+cx4h9n4Eog
+         Wq6wg7tSnT0xZdzM+gfBjwv26gmOFX54hAlMAnRopIB3mvZcz8F+Ju/JdlwKG0lvAeg3
+         hGzIVmiaP0mm4QRp0J6GbIshg37laSpyz7I7Vi+TJQJfo4BVW6q6upnuZlLqVqIdHMyv
+         pwN70NxqToQi06Pol85OQ8zdbjUyum28fHFYlZALM5OVltlmhgAH8kIR8EJ4yzS0vQgF
+         KcZMXlFgG3kjKWg7a32UtywsZC00f8Lod34SUPCks8zfympcd/ZVTruMJhep7Agt2+nt
+         4NLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uQ85dD+vKUnEGdAVOTFoEvlnzXCa2uFEesLCGgB0kCQ=;
-        b=WpEqnePT3wbb9MbpWk/aeLPp31mIZJeYeexehHNriKxgc59eOJEA1yYPmM+IRtapZz
-         oMAdbPdWwgPzLxIkbgbpP4slQmdsJMnrUPkPIWwKGyDTOZqP/MmMbDmvS8QCw8Qn7DPi
-         sf6ZbiCk2w+Xpl4oTN1NsM1yO6HV2m/i30u9v72/LwLeWc6yaG3S2bZABIyKWUoK/EOt
-         Pq6xzrGXClAMs3Qz+1an+ao1gqw10R7iqWm4SgSMIK9wAOK4MhPJqiVpWK5GY4c5KCt5
-         +e/zXPnpRjeFFd2LBe9EHhdqcqhB2QXV7k9TQijJ4LzEpbvOeWPvJZ500y/mk3gz88rq
-         ecUA==
-X-Gm-Message-State: AOAM531Xn9W0ylNliNpmcetvdI+K6HPwrjpDERZmxtGzGUK6ODXQ+tec
-        1MlIC87IT+L2fhDtnwRs0Eo=
-X-Google-Smtp-Source: ABdhPJwWMr52gFX6uBnkI/KD9R+p2DM9xpdSQRmup0YZVLc1Ow5T944W2VM9Akv2DEpG4aYIFx2veg==
-X-Received: by 2002:a2e:a495:: with SMTP id h21mr7296320lji.436.1591975878090;
-        Fri, 12 Jun 2020 08:31:18 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v28sm1750024ljv.40.2020.06.12.08.31.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2020 08:31:17 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jjleH-0002pF-La; Fri, 12 Jun 2020 17:31:17 +0200
-Date:   Fri, 12 Jun 2020 17:31:17 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ypF+ABDeXj9Pa6nbncrRBAhpmKKQqD9PT/WMFez+uGo=;
+        b=OSqWoM7eKbp8r7UIiCYylmtGBQoLC/nBVFOPmgfbeaciogCk+5UY50NtlMPDpOUOHA
+         c/YtCLMLemAwms76iSwXBc5rrmzT0bbSipuctfFuolIcsmgCBmjaVqFjriHM/Mv7c6ms
+         zCvucLZe1jVgSWWM8SB1JBGODdkBKBAw1Gyw4KZRhozCKAMmZb/SLft576c/JFM46S4D
+         GHBTg+lENboJKmO8toCZaJyGjBQrUbkfP4YT3t+O98wEzhIxP8uYM9mBgWzcsQKf8YLx
+         zFuTHzCpQ/otibllpTMMdf91cLnZBKKeU6xJSBv6aLpjuRH77/GYrahelcIFFPPUrY3Y
+         EXYg==
+X-Gm-Message-State: AOAM531iRMEiUWwxf7sOxI9zeDcz2Q8SgJOBeT6ODQk8K1nmLNQ2ynSA
+        cNoRDhTkoOK1IPuxEJj2LVE=
+X-Google-Smtp-Source: ABdhPJwQmMM1yTDTZ8xuvYF+YAUtscTKxogtkPpvuo0jq1dOjPlH2DegGktt9WUCUqQALFQ2OLaKHA==
+X-Received: by 2002:adf:e749:: with SMTP id c9mr16912819wrn.25.1591976566693;
+        Fri, 12 Jun 2020 08:42:46 -0700 (PDT)
+Received: from ?IPv6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id n23sm9109031wmc.0.2020.06.12.08.42.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2020 08:42:46 -0700 (PDT)
+Subject: Re: [PATCH v2 2/3] serial: core: fix sysrq overhead regression
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] serial: core: fix up sysrq regressions
-Message-ID: <20200612153117.GQ19480@localhost>
 References: <20200610152232.16925-1-johan@kernel.org>
- <20200610162134.GL2428291@smile.fi.intel.com>
+ <20200610152232.16925-3-johan@kernel.org>
+ <19008afb-bfbb-35e2-3bd5-e7fd1b7355cc@gmail.com>
+ <20200612152921.GP19480@localhost>
+From:   Dmitry Safonov <0x7f454c46@gmail.com>
+Message-ID: <aa34e2f3-5b19-bf70-8a80-703aca5eeaae@gmail.com>
+Date:   Fri, 12 Jun 2020 16:42:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200610162134.GL2428291@smile.fi.intel.com>
+In-Reply-To: <20200612152921.GP19480@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 07:21:34PM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 10, 2020 at 05:22:29PM +0200, Johan Hovold wrote:
-> > This series fixes a few regressions introduced by the recent sysrq
-> > rework that went into 5.6.
-> > 
-> > The fix for the unnecessary per-character overhead probably could have
-> > been marked for stable but I left that decision to the maintainers as it
-> > is a bit intrusive (although mostly shuffling code around).
+On 6/12/20 4:29 PM, Johan Hovold wrote:
+> On Wed, Jun 10, 2020 at 05:24:57PM +0100, Dmitry Safonov wrote:
+>> Hi Johan,
+>>
+>> On 6/10/20 4:22 PM, Johan Hovold wrote:
+>>> Commit 8e20fc391711 ("serial_core: Move sysrq functions from header
+>>> file") converted the inline sysrq helpers to exported functions which
+>>> are now called for every received character, interrupt and break signal
+>>> also on systems without CONFIG_MAGIC_SYSRQ_SERIAL instead of being
+>>> optimised away by the compiler.
+>>
+>> The part with ifdeffing looks good to me.
+>>
+>>> Inlining these helpers again also avoids the function call overhead when
+>>> CONFIG_MAGIC_SYSRQ_SERIAL is enabled (e.g. when the port is not used as
+>>> a console).
+>>
+>> But this one, coul you add measures? (it will also help to understand if
+>> it's a stable material).
 > 
-> I see a problem, thanks for pointing out!
-> The fix LGTM! FWIW,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Interrupt processing takes 2-3% longer without the inlining with
+> 8250_omap on a beagleboard for example.
 
-Thanks for reviewing, Andy.
+I think the number justifies moving them back to header.
 
-Johan
+> 
+>> If one function call actually matters here, than should
+>> uart_insert_char() also go into header?
+> 
+> Good question, it actually was originally intended to be inlined as all
+> other per-character processing. Separate discussion though.
+
+Fair enough
+
+> The point is that we don't want a rarely used debugging feature to incur
+> unnecessary additional overhead that can easily be avoided.
+
+Well, it wasn't related to the debug feature, rather I wanted to cleanup
+the header from a bit over-grown functions those have realization
+details. And couldn't foresee that a function call would matter for some
+setup.
+
+Thanks,
+           Dmitry
