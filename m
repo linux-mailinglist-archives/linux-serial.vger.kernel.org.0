@@ -2,42 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0021FDEC5
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 03:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8401FE565
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 04:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732610AbgFRBap (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 17 Jun 2020 21:30:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40972 "EHLO mail.kernel.org"
+        id S1729776AbgFRBRQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 17 Jun 2020 21:17:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48326 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731836AbgFRBao (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:30:44 -0400
+        id S1729769AbgFRBRQ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:17:16 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C34122242;
-        Thu, 18 Jun 2020 01:30:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 45BB3221F1;
+        Thu, 18 Jun 2020 01:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443844;
-        bh=E5EFm55ZnNsfeIRxr5naeScJyOcG1xSOr9Zt7HyEghY=;
+        s=default; t=1592443035;
+        bh=w3ChTkUJ7kKAcOUwVsofeHlMjwmkoQ+pP8IZYyjE00s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JJbYYkWVP8ifh4pxfQ12wpfRtt1bP9bNp0BNz4VuDVpA2tkZXkPZq6Iu6yXV+9vlu
-         kAsjEOhmKGUxMEcZQM/De453yBnJE/yRQOzuxQA7jhIyqqNBTCC+VkfvaCJWPzkKVb
-         Nqg8xHlfYd/CgXetdouNqIx9rvNnwWzb0QBmDkuw=
+        b=QK/wpH3sqiAEQNMIQyabBLa7afD2AvghoKCi3eZ3ScyIM+GhxrXd5JwB31d57Od9Z
+         1W4Jm5XmRan3SUAuWr4PPcSfn34aY4RLl4XbXjAt8pZ243vYRitPzhDJHGWr/DNrhy
+         3gp4lPLd0evpqveZEy1ikJ2WvnHZezsqSTxEmMg4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Long Cheng <long.cheng@mediatek.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        Valentin Schneider <valentin.schneider@arm.com>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.4 29/60] serial: amba-pl011: Make sure we initialize the port.lock spinlock
-Date:   Wed, 17 Jun 2020 21:29:33 -0400
-Message-Id: <20200618013004.610532-29-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 032/266] serial: 8250: Fix max baud limit in generic 8250 port
+Date:   Wed, 17 Jun 2020 21:12:37 -0400
+Message-Id: <20200618011631.604574-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618013004.610532-1-sashal@kernel.org>
-References: <20200618013004.610532-1-sashal@kernel.org>
+In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
+References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,85 +56,79 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: John Stultz <john.stultz@linaro.org>
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit 8508f4cba308f785b2fd4b8c38849c117b407297 ]
+[ Upstream commit 7b668c064ec33f3d687c3a413d05e355172e6c92 ]
 
-Valentine reported seeing:
+Standard 8250 UART ports are designed in a way so they can communicate
+with baud rates up to 1/16 of a reference frequency. It's expected from
+most of the currently supported UART controllers. That's why the former
+version of serial8250_get_baud_rate() method called uart_get_baud_rate()
+with min and max baud rates passed as (port->uartclk / 16 / UART_DIV_MAX)
+and ((port->uartclk + tolerance) / 16) respectively. Doing otherwise, like
+it was suggested in commit ("serial: 8250_mtk: support big baud rate."),
+caused acceptance of bauds, which was higher than the normal UART
+controllers actually supported. As a result if some user-space program
+requested to set a baud greater than (uartclk / 16) it would have been
+permitted without truncation, but then serial8250_get_divisor(baud)
+(which calls uart_get_divisor() to get the reference clock divisor) would
+have returned a zero divisor. Setting zero divisor will cause an
+unpredictable effect varying from chip to chip. In case of DW APB UART the
+communications just stop.
 
-[    3.626638] INFO: trying to register non-static key.
-[    3.626639] the code is fine but needs lockdep annotation.
-[    3.626640] turning off the locking correctness validator.
-[    3.626644] CPU: 7 PID: 51 Comm: kworker/7:1 Not tainted 5.7.0-rc2-00115-g8c2e9790f196 #116
-[    3.626646] Hardware name: HiKey960 (DT)
-[    3.626656] Workqueue: events deferred_probe_work_func
-[    3.632476] sd 0:0:0:0: [sda] Optimal transfer size 8192 bytes not a multiple of physical block size (16384 bytes)
-[    3.640220] Call trace:
-[    3.640225]  dump_backtrace+0x0/0x1b8
-[    3.640227]  show_stack+0x20/0x30
-[    3.640230]  dump_stack+0xec/0x158
-[    3.640234]  register_lock_class+0x598/0x5c0
-[    3.640235]  __lock_acquire+0x80/0x16c0
-[    3.640236]  lock_acquire+0xf4/0x4a0
-[    3.640241]  _raw_spin_lock_irqsave+0x70/0xa8
-[    3.640245]  uart_add_one_port+0x388/0x4b8
-[    3.640248]  pl011_register_port+0x70/0xf0
-[    3.640250]  pl011_probe+0x184/0x1b8
-[    3.640254]  amba_probe+0xdc/0x180
-[    3.640256]  really_probe+0xe0/0x338
-[    3.640257]  driver_probe_device+0x60/0xf8
-[    3.640259]  __device_attach_driver+0x8c/0xd0
-[    3.640260]  bus_for_each_drv+0x84/0xd8
-[    3.640261]  __device_attach+0xe4/0x140
-[    3.640263]  device_initial_probe+0x1c/0x28
-[    3.640265]  bus_probe_device+0xa4/0xb0
-[    3.640266]  deferred_probe_work_func+0x7c/0xb8
-[    3.640269]  process_one_work+0x2c0/0x768
-[    3.640271]  worker_thread+0x4c/0x498
-[    3.640272]  kthread+0x14c/0x158
-[    3.640275]  ret_from_fork+0x10/0x1c
+Lets fix this problem by getting back the limitation of (uartclk +
+tolerance) / 16 maximum baud supported by the generic 8250 port. Mediatek
+8250 UART ports driver developer shouldn't have touched it in the first
+place  notably seeing he already provided a custom version of set_termios()
+callback in that glue-driver which took into account the extended baud
+rate values and accordingly updated the standard and vendor-specific
+divisor latch registers anyway.
 
-Which seems to be due to the fact that after allocating the uap
-structure, nothing initializes the spinlock.
-
-Its a little confusing, as uart_port_spin_lock_init() is one
-place where the lock is supposed to be initialized, but it has
-an exception for the case where the port is a console.
-
-This makes it seem like a deeper fix is needed to properly
-register the console, but I'm not sure what that entails, and
-Andy suggested that this approach is less invasive.
-
-Thus, this patch resolves the issue by initializing the spinlock
-in the driver, and resolves the resulting warning.
-
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Fixes: 81bb549fdf14 ("serial: 8250_mtk: support big baud rate.")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Long Cheng <long.cheng@mediatek.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 Cc: Russell King <linux@armlinux.org.uk>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-serial@vger.kernel.org
-Reported-by: Valentin Schneider <valentin.schneider@arm.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Reviewed-and-tested-by: Valentin Schneider <valentin.schneider@arm.com>
-Link: https://lore.kernel.org/r/20200428184050.6501-1-john.stultz@linaro.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Link: https://lore.kernel.org/r/20200506233136.11842-2-Sergey.Semin@baikalelectronics.ru
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/amba-pl011.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/8250/8250_port.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 899a77187bde..c5da46f7b909 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2323,6 +2323,7 @@ static int pl011_setup_port(struct device *dev, struct uart_amba_port *uap,
- 	uap->port.fifosize = uap->fifosize;
- 	uap->port.flags = UPF_BOOT_AUTOCONF;
- 	uap->port.line = index;
-+	spin_lock_init(&uap->port.lock);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 2c65c775bf5a..dbb27303a6b4 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2539,6 +2539,8 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+ 					     struct ktermios *termios,
+ 					     struct ktermios *old)
+ {
++	unsigned int tolerance = port->uartclk / 100;
++
+ 	/*
+ 	 * Ask the core to calculate the divisor for us.
+ 	 * Allow 1% tolerance at the upper limit so uart clks marginally
+@@ -2547,7 +2549,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+ 	 */
+ 	return uart_get_baud_rate(port, termios, old,
+ 				  port->uartclk / 16 / UART_DIV_MAX,
+-				  port->uartclk);
++				  (port->uartclk + tolerance) / 16);
+ }
  
- 	amba_ports[index] = uap;
- 
+ void
 -- 
 2.25.1
 
