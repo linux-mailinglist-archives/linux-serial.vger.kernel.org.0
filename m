@@ -2,64 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF85A1FEF60
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 12:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A801FF17E
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 14:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728331AbgFRKKU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jun 2020 06:10:20 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:46410 "EHLO
-        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1728746AbgFRKKH (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jun 2020 06:10:07 -0400
-X-Greylist: delayed 422 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Jun 2020 06:10:06 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 0A597200C125;
-        Thu, 18 Jun 2020 18:10:05 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qGvK_SY5v7eO; Thu, 18 Jun 2020 18:10:04 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id E737A200C104;
-        Thu, 18 Jun 2020 18:10:04 +0800 (HKT)
-Received: from [10.128.3.2] (061244237146.static.ctinets.com [61.244.237.146])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id DC415C013A5;
-        Thu, 18 Jun 2020 18:10:04 +0800 (HKT)
-To:     linux-arm@lists.infradead.org, linux-serial@vger.kernel.org
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Subject: rk3399: uart2 crippled signal on tx @115200
-Message-ID: <4d7fde0a-58f0-485f-41e6-2cb0b36decbc@gtsys.com.hk>
-Date:   Thu, 18 Jun 2020 18:10:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728045AbgFRMU2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Jun 2020 08:20:28 -0400
+Received: from mga07.intel.com ([134.134.136.100]:58076 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727949AbgFRMU2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 18 Jun 2020 08:20:28 -0400
+IronPort-SDR: EFJlQN16TydEtNuZSlXZU41sIVafqDdeiuqXlSTcNzb5ElDcMzAWPDA3rnaf1vFyyn9yafaBDt
+ mXozJCCYAXow==
+X-IronPort-AV: E=McAfee;i="6000,8403,9655"; a="207790111"
+X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
+   d="scan'208";a="207790111"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 05:20:27 -0700
+IronPort-SDR: 9Hj4QFTpkdOnxX15meW8hHBVTsdAxPn3Y4ti3xAG90KVSYVzYpY8+0UPdntSKcwsLxosFcMoP2
+ p0bRGFlIzg7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
+   d="scan'208";a="309094678"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 18 Jun 2020 05:20:25 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 21CCD217; Thu, 18 Jun 2020 15:20:24 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Tony Lindgren <tony@atomide.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] serial: 8250_omap: Switch to use platform_get_irq()
+Date:   Thu, 18 Jun 2020 15:20:24 +0300
+Message-Id: <20200618122024.87170-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0.rc2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
+platform_get_irq() provides an established error code and error message.
+Also, it's better to use dedicated API to retrieve Linux IRQ resource.
 
-I run into a strange thing on our customized RK3399-LPDDR4 using the 
-UART2 @115200 the
-console spits bad charters. Checking the signal at the TX explains the 
-reason, the rising edge
-is very slow, (we checked with the scope).
-Set the GPIO4_C4 to pcfg_pull_up_20am not working.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_omap.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-Kernel: 5.4.40-rt
-Uboot: 2020-4
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 144066355af4..b4cd5f1001f8 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1195,17 +1195,21 @@ MODULE_DEVICE_TABLE(of, omap8250_dt_ids);
+ 
+ static int omap8250_probe(struct platform_device *pdev)
+ {
+-	struct resource *regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	struct resource *irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct omap8250_priv *priv;
+ 	const struct omap8250_platdata *pdata;
+ 	struct uart_8250_port up;
+-	int ret;
++	struct resource *regs;
+ 	void __iomem *membase;
++	int irq, ret;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
+ 
+-	if (!regs || !irq) {
+-		dev_err(&pdev->dev, "missing registers or irq\n");
++	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!regs) {
++		dev_err(&pdev->dev, "missing registers\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -1222,7 +1226,7 @@ static int omap8250_probe(struct platform_device *pdev)
+ 	up.port.dev = &pdev->dev;
+ 	up.port.mapbase = regs->start;
+ 	up.port.membase = membase;
+-	up.port.irq = irq->start;
++	up.port.irq = irq;
+ 	/*
+ 	 * It claims to be 16C750 compatible however it is a little different.
+ 	 * It has EFR and has no FCR7_64byte bit. The AFE (which it claims to
+-- 
+2.27.0.rc2
 
-The strange observation:
-U-boot TPL boot , return to Boot-rom and the 1st
-lines from SPL (show uboot version) have a sharp rising edge as expected.
-
-Anyone?  I don't know anymore.
-
-Regards
-Chris
