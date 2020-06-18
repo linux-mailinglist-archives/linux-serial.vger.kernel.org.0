@@ -2,27 +2,27 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B85F71FE0FD
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 03:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8E91FDFC5
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 03:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732715AbgFRBva (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 17 Jun 2020 21:51:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34886 "EHLO mail.kernel.org"
+        id S1731556AbgFRBnP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 17 Jun 2020 21:43:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38258 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729791AbgFRB1C (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:27:02 -0400
+        id S1731616AbgFRB3I (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:29:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A430121D7F;
-        Thu, 18 Jun 2020 01:27:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AEF832220B;
+        Thu, 18 Jun 2020 01:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443621;
-        bh=wWuPo0w7JN995RnTAfmwiDMPwvHmPWsNeb9cArEjR28=;
+        s=default; t=1592443747;
+        bh=8Bias0CCFPKmvPcirwo29mQ+cpxRi5gBvBq4ZzupnLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zEpQfU2iGpR16q/UX9/NPbWULkrYz+Yaj/jzJEsTOWQl9qTCMpoNJkNb/y8wq8Nrm
-         tvu1St69XvIOljTiq7m0gY7///jJEnMhmLWP9lphM5hyR4YlPupk8QJWQhXPvvG2Qj
-         +DPyBsz1xEmRiToIZmX3pec6mJevCzBuKEKHPYV4=
+        b=lGrVprbBjzn3foUNiupDs6iRLRcwAblqLmTXaGgp466Uy+0pZWIFDdQXpdQEH0NVt
+         uUB11O5OSFHEKhdztcsBoZyZW7SjzVFf9yLK74PaZbFi6I4hINNyUim5+E++490V+1
+         4lJnn7mZXn5nHUBc2tQJ32XnnF9SFkgp58YPD67k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -32,12 +32,12 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 047/108] serial: amba-pl011: Make sure we initialize the port.lock spinlock
-Date:   Wed, 17 Jun 2020 21:24:59 -0400
-Message-Id: <20200618012600.608744-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 36/80] serial: amba-pl011: Make sure we initialize the port.lock spinlock
+Date:   Wed, 17 Jun 2020 21:27:35 -0400
+Message-Id: <20200618012819.609778-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
-References: <20200618012600.608744-1-sashal@kernel.org>
+In-Reply-To: <20200618012819.609778-1-sashal@kernel.org>
+References: <20200618012819.609778-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -115,10 +115,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 637f72fb6427..e55b55633721 100644
+index f6586a8681b9..b3b9b3d2cddf 100644
 --- a/drivers/tty/serial/amba-pl011.c
 +++ b/drivers/tty/serial/amba-pl011.c
-@@ -2605,6 +2605,7 @@ static int pl011_setup_port(struct device *dev, struct uart_amba_port *uap,
+@@ -2524,6 +2524,7 @@ static int pl011_setup_port(struct device *dev, struct uart_amba_port *uap,
  	uap->port.fifosize = uap->fifosize;
  	uap->port.flags = UPF_BOOT_AUTOCONF;
  	uap->port.line = index;
