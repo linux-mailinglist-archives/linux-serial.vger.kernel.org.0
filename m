@@ -2,41 +2,45 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EDB1FF1E4
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 14:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8A51FF99B
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Jun 2020 18:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727793AbgFRMdZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Jun 2020 08:33:25 -0400
-Received: from mga03.intel.com ([134.134.136.65]:58489 "EHLO mga03.intel.com"
+        id S1729191AbgFRQsO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Jun 2020 12:48:14 -0400
+Received: from mga03.intel.com ([134.134.136.65]:18733 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727091AbgFRMdY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Jun 2020 08:33:24 -0400
-IronPort-SDR: 0EQtmHjChDwQ5EjnDBJ/q/kzVTmIejLF86KK6FHD40hAdeMetWaZczFcP/A43Edf48djf7PLkT
- wK+hjfRwL3dw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9655"; a="142499406"
-X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
-   d="scan'208";a="142499406"
+        id S1732035AbgFRQsA (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 18 Jun 2020 12:48:00 -0400
+IronPort-SDR: 5MWh+y/XlxQepES0Ksq5pdL/oAb2mbygpAQXz4o+JYXqwA1djyzYDy02djRAZBHHvhPU4fdo04
+ UjPZiOaVfCQA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="142595297"
+X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
+   d="scan'208";a="142595297"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 05:33:23 -0700
-IronPort-SDR: m9/0Z/o5OVW7ZdET7pVm7OmrH13w2RyBG8lr86SfM/sqpvLPp/bEii4OSB2ju8YmZYsMPSU6cy
- /DYbtgI0MTEA==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 09:47:59 -0700
+IronPort-SDR: gnwiKIZgSkk3/AxCIm8t/GILe68cRFc4Z0vydQtAGTORUP0KdGveh0V1As8ajOuWcNEh5jdrc9
+ 7hO+YzG6PkPA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
-   d="scan'208";a="477222681"
+X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
+   d="scan'208";a="262979081"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Jun 2020 05:33:22 -0700
+  by orsmga007.jf.intel.com with ESMTP; 18 Jun 2020 09:47:52 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id AE76D217; Thu, 18 Jun 2020 15:33:21 +0300 (EEST)
+        id A318513B; Thu, 18 Jun 2020 19:47:51 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+To:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] serial: 8250_ingenic: Switch to use platform_get_irq()
-Date:   Thu, 18 Jun 2020 15:33:20 +0300
-Message-Id: <20200618123320.88612-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.27.0.rc2
+Subject: [PATCH v1 0/6] console: unify return codes from ->setup() hook
+Date:   Thu, 18 Jun 2020 19:47:45 +0300
+Message-Id: <20200618164751.56828-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
@@ -44,58 +48,31 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-platform_get_irq() provides an established error code and error message.
-Also, it's better to use dedicated API to retrieve Linux IRQ resource.
+Some of the console providers treat error code, returned by ->setup() hook,
+differently. Here is the unification of the behaviour.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_ingenic.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+The drivers checked by one of the below criteria:
+1/ the driver has explicit struct console .setup assignment
+2/ the driver has assigned callback to the setup member
 
-diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
-index 424c07c5f629..dde766fa465f 100644
---- a/drivers/tty/serial/8250/8250_ingenic.c
-+++ b/drivers/tty/serial/8250/8250_ingenic.c
-@@ -207,12 +207,11 @@ static unsigned int ingenic_uart_serial_in(struct uart_port *p, int offset)
- static int ingenic_uart_probe(struct platform_device *pdev)
- {
- 	struct uart_8250_port uart = {};
--	struct resource *regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	struct resource *irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
- 	struct ingenic_uart_data *data;
- 	const struct ingenic_uart_config *cdata;
- 	const struct of_device_id *match;
--	int err, line;
-+	struct resource *regs;
-+	int irq, err, line;
- 
- 	match = of_match_device(of_match, &pdev->dev);
- 	if (!match) {
-@@ -221,8 +220,13 @@ static int ingenic_uart_probe(struct platform_device *pdev)
- 	}
- 	cdata = match->data;
- 
--	if (!regs || !irq) {
--		dev_err(&pdev->dev, "no registers/irq defined\n");
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!regs) {
-+		dev_err(&pdev->dev, "no registers defined\n");
- 		return -EINVAL;
- 	}
- 
-@@ -238,7 +242,7 @@ static int ingenic_uart_probe(struct platform_device *pdev)
- 	uart.port.regshift = 2;
- 	uart.port.serial_out = ingenic_uart_serial_out;
- 	uart.port.serial_in = ingenic_uart_serial_in;
--	uart.port.irq = irq->start;
-+	uart.port.irq = irq;
- 	uart.port.dev = &pdev->dev;
- 	uart.port.fifosize = cdata->fifosize;
- 	uart.tx_loadsz = cdata->tx_loadsz;
+All such drivers were read in order to see if there is any problematic return
+codes, and fixed accordingly which is this series in the result.
+
+Andy Shevchenko (6):
+  mips: Return proper error code from console ->setup() hook
+  serial: sunsab: Return proper error code from console ->setup() hook
+  serial: sunzilog: Return proper error code from console ->setup() hook
+  tty: hvc: Return proper error code from console ->setup() hook
+  console: Propagate error code from console ->setup()
+  console: Fix trivia typo 'change' -> 'chance'
+
+ arch/mips/fw/arc/arc_con.c    | 4 +++-
+ drivers/tty/hvc/hvsi.c        | 2 +-
+ drivers/tty/serial/sunsab.c   | 2 +-
+ drivers/tty/serial/sunzilog.c | 2 +-
+ kernel/printk/printk.c        | 8 ++++----
+ 5 files changed, 10 insertions(+), 8 deletions(-)
+
 -- 
-2.27.0.rc2
+2.27.0
 
