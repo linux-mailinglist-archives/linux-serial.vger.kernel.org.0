@@ -2,97 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52319251DDE
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Aug 2020 19:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C01251F5B
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Aug 2020 20:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbgHYRNA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Aug 2020 13:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbgHYRM5 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Aug 2020 13:12:57 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6557C061574;
-        Tue, 25 Aug 2020 10:12:56 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id w186so5164919pgb.8;
-        Tue, 25 Aug 2020 10:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CDJUAd9wV5rW2Ler2a2mLyA8fUH115tJlJPmgB4uBuY=;
-        b=NnZw/EDHYt2NwwW6ntYS4NRclJi2nzS0qnpyZ5bOPH+F1THhlFHTusVgt0akMN1gHg
-         cruU8w15DKhorJi2+8a0CgAleQeml1Ibg+Bkkp6iqxrqbpMl5Xy2PRKkHIHnw8DLUxBK
-         kremo6Ji8Ywg1muwwQh1KGSfzGX3Cn36vVUhiAMBgdn80NgNo0UFCQUJjAkWtuczdWew
-         z37hSfISD+N/dTDknT6czKgEsGrvYbecgW2DvnKaaYUSlC0EmAIadOnbHcNmFbCRAhye
-         H6N+m7rbfMudLxWFTXNzTv/jXRx3QHfkqxyMoixpHjorW6O1PD0kKA0NfuVVX+xAIqjw
-         9HwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CDJUAd9wV5rW2Ler2a2mLyA8fUH115tJlJPmgB4uBuY=;
-        b=C3+NLszTegHPGz7CAggisbF+RnDcLyByNNrQTq95zVmkYQsAk1HoLbPWSN7l7FkcgR
-         CpFlbIM9eOzpVUOFYWWsHfHiH0sBnZ/yFYuHM3Lpz11zs3BX79qpIydLAEdHPnLODX5A
-         klGKmmZaS2yCvddL7Jyfg4xt57/8IB3haefx0U5ehbeWlfltZQe6AiMPZ30Ao8AQqBBM
-         qj6MDphFTGK076IizMGtRs2G+CQOlzHvRRHYodNyIQfHTlqKoFVLiO40egp56QYA+aIf
-         tUa9qPPbzN7hkIb6Xm64qxQITAMC9b9+s3xQ3wDLiq0mHs0gxdar69SkHAy0Afc6OlY6
-         KSHg==
-X-Gm-Message-State: AOAM5300C1fGG3HLLzZOS1E0QUKAZnvI9Ud6ZhWKiXSs37NQvqHokPqn
-        ZD5wxyoFxP+AOPdHAeePo59IrL9xBEiv
-X-Google-Smtp-Source: ABdhPJzhfdy/2hH5np/xlhW3evexK/onWwZg2iqcIhwkYrgFP32U51A3Eh68OeZL4e6QQ2I7bKGm9A==
-X-Received: by 2002:a63:f4a:: with SMTP id 10mr7150104pgp.18.1598375576436;
-        Tue, 25 Aug 2020 10:12:56 -0700 (PDT)
-Received: from PWN ([161.117.80.159])
-        by smtp.gmail.com with ESMTPSA id g8sm14481455pfo.132.2020.08.25.10.12.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 10:12:55 -0700 (PDT)
-Date:   Tue, 25 Aug 2020 13:12:49 -0400
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jslaby@suse.cz, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH 15/16] vc_screen: extract vcs_read_buf_header
-Message-ID: <20200825171249.GA860904@PWN>
-References: <20200818085706.12163-15-jslaby@suse.cz>
- <20200825164804.860743-1-yepeilin.cs@gmail.com>
- <20200825165935.GA1527003@kroah.com>
+        id S1726119AbgHYSwe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Tue, 25 Aug 2020 14:52:34 -0400
+Received: from ns2.chapar.net ([81.31.224.5]:4747 "EHLO mail.chapar.net"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726840AbgHYSwW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 25 Aug 2020 14:52:22 -0400
+Received: from chapar.net by mail.chapar.net (MDaemon PRO v12.5.6)
+        with ESMTP id md50001200330.msg
+        for <linux-serial@vger.kernel.org>; Sat, 20 Jun 2020 10:47:28 +0430
+X-Spam-Processed: mail.chapar.net, Sat, 20 Jun 2020 10:47:28 +0430
+        (not processed: message from trusted or authenticated source)
+X-Authenticated-Sender: iphone@chapar.net
+X-MDRemoteIP: 197.234.219.55
+X-Return-Path: iphone@chapar.net
+X-Envelope-From: iphone@chapar.net
+X-MDaemon-Deliver-To: linux-serial@vger.kernel.org
+Reply-To: agboarmand276@gmail.com
+From:   Mr ARMAND AGBO <iphone@chapar.net>
+To:     linux-serial@vger.kernel.org
+Subject: Mes Salutations
+Date:   19 Jun 2020 23:19:34 +0800
+Message-ID: <20200619231929.8AB76D450592364C@chapar.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825165935.GA1527003@kroah.com>
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 06:59:35PM +0200, Greg KH wrote:
-> On Tue, Aug 25, 2020 at 12:48:04PM -0400, Peilin Ye wrote:
-> > Hi all,
-> > 
-> > Link: https://syzkaller.appspot.com/bug?id=f332576321998d36cd07d09c9c1268cfed1895c9
-> > 
-> > As reported by syzbot, vcs_read_buf() is overflowing `con_buf16`, since
-> > this patch removed the following check:
-> > 
-> > -		if (count > CON_BUF_SIZE) {
-> > -			count = CON_BUF_SIZE;
-> > -			filled = count - pos;
-> > -		}
-> > 
-> > Decreasing `count` by `min(HEADER_SIZE - pos, count)` bypasses this check.
-> > Additionally, this patch also removed updates to `skip` and `filled`.
-> > 
-> > What should we do in order to fix it?
-> 
-> This patch is already reverted, and it has been discussed a bit as to
-> how to do this properly if you look at the email where this was reported
-> to us.
+A votre Attention
 
-Ah, syzbot has reported this issue as two different bugs...I started
-looking into it without noticing your discussion under another thread.
+Veuillez m'excuser pour ce dérangement très surprenant car c'est 
+suite
+à une recherche  de partenariat que je suis tombé suis votre 
+adresse.
+Je suis Mr Armand AGBO gestionnaire de compte auprès d’une 
+institution
+bancaire en Afrique de l'ouest. Je prends contact avec vous afin 
+de
+lier une relation de partenariat entre vous et moi.
 
-Sorry,
-Peilin Ye
+En effet, il s'agit d’un compte dont je suis le gestionnaire et 
+le
+compte appartenait à un investisseur libyen EL HADJ MALIK IDRISS
+malheureusement décédé suite à une courte maladie. Comme ce 
+dernier
+n'a personne ici et pour que la Banque ne bénéficie pas de ses 
+fonds,
+alors étant le gestionnaire de ce compte, je cherche une personne 
+de
+confiance que je ferais passer pour le mandataire de ce compte 
+afin
+que la  Banque lui verse cet argent.  En retour  nous allons le
+partager à part égale.
+
+Sachez que cette transaction ne représente aucun risque seulement 
+une
+confiance mutuelle et la discrétion. Alors si vous êtes d'accord  
+pour
+ une sérieuse collaboration, veuillez me fournir les informations
+suivantes par e-mail agboarmand276@gmail.com :
+NOM :
+PRENOM :
+AGE : 
+PROFESSION :
+PAYS :
+ADRESSE COMPLETES:
+NUMERO DE TELEPHONE MOBILE :
+
+Suite à cela je vous enverrai les détails et la procédure à 
+suivre.
+Dans l'attente de vos nouvelles, recevez  mes sincères et 
+profondes
+salutations.
+
+Cordialement…
+Mr Armand AGBO
+
+
