@@ -2,177 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD88203BA5
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Jun 2020 17:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DB4203BCF
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Jun 2020 18:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729343AbgFVP43 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Jun 2020 11:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729095AbgFVP43 (ORCPT
+        id S1729814AbgFVQC3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Jun 2020 12:02:29 -0400
+Received: from sonic302-21.consmr.mail.ne1.yahoo.com ([66.163.186.147]:36899
+        "EHLO sonic302-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729772AbgFVQCX (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Jun 2020 11:56:29 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0128C061795
-        for <linux-serial@vger.kernel.org>; Mon, 22 Jun 2020 08:56:28 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id z13so5458566wrw.5
-        for <linux-serial@vger.kernel.org>; Mon, 22 Jun 2020 08:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kSMspTFGxKNsReoFaFuGJU3LuXpebLrE7bbL0ZZt+X8=;
-        b=GXv2ZNEabhbhSf7vXvuVC7lyGiiOvUukOmdBQvekLZ+qdVz/B7mzEhE04wmtCu7H94
-         qIYOIUGV8F0dtRgrSLsr5rKqVlXaYQeBBZrf9wZ9PJN6A9Nc0s2NntSKKdDrCaAXsiPO
-         gVRzXm592POsuRnrI3XFZcTrUI1TNYtkaMy8bYiGeIXhsa1o9OU7zUjkuC8AWYv5l6UL
-         2u2zSVTcVV8UJaFoj1wyD6ulvLAYuXpFag7UrU8M8CwMng4DJf9jLc2eIqyYQHcrX4ki
-         7U28cjIKDC29qqaXZxSSwbAS4nbEHpM0OBtChPCL6D+4OID6G3V3HXXXg7paO8R3kaoo
-         ZEjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kSMspTFGxKNsReoFaFuGJU3LuXpebLrE7bbL0ZZt+X8=;
-        b=MrmRtXU4hZbik4/EjeT+16rQ7X0oNLbm5ndyCAeez105sFvO9KXVMGp6uO4l0hMD8A
-         1t+3tEcUlwxcydTeVBKpmuPtKhrOqoM8O9CLmUOeJKvRfKejChuzgc6Snbij61zztOqj
-         CAJFaBm46vJvAnkAcVEpwJkqEE3VzRviUaCwsit0NqPuRTZ3s7VD6i8kRWuikNLfy+oL
-         N/lXSxCp33/U4lHlTOW8xGmEkWen7R29HQvo8bRGvIfRTbEInwasAq41jE4lWkHDT3dx
-         GJVR4tKUlmq6lg1E1ifkjHrFxYXx7t1QCMONXR/yC/jYTAawpTGVyXmN0r+zsW2ruy56
-         oQXg==
-X-Gm-Message-State: AOAM531Wk5cFAi3WAURF3ZkIgI0OAVZdjxDIAttOl/BT2w1cxhQ67Byb
-        KHXxp6trRqxK64JqtYqaEAdv7Q==
-X-Google-Smtp-Source: ABdhPJxxJgkt35ckzF3UHxiybAvxxwtheduC5J/trxrNa8yKhlixDpRotx+E7cZGBlOIIJi0HzSYDA==
-X-Received: by 2002:adf:f34e:: with SMTP id e14mr19735827wrp.299.1592841387421;
-        Mon, 22 Jun 2020 08:56:27 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id n8sm15375134wrj.44.2020.06.22.08.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 08:56:26 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 16:56:24 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jason.wessel@windriver.com,
-        dianders@chromium.org, jslaby@suse.com, linux@armlinux.org.uk,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] tty: serial: Add poll_get_irq() to the polling
- interface
-Message-ID: <20200622155624.he2vs2r3e5yzf3sl@holly.lan>
-References: <1592835984-28613-1-git-send-email-sumit.garg@linaro.org>
- <1592835984-28613-3-git-send-email-sumit.garg@linaro.org>
+        Mon, 22 Jun 2020 12:02:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841741; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=imnMzKvnrwdEkzevY9v55JCHWrS7mFcRp2xLflBpdsWBX5v32iTt1Jwj292Sqyxc6zTWfVf6UW3RltjDxv8H8ZAxxFg96tpPBoXA2f/GRkfTuiNcUr3yDzOGiHeT9IqR//B+9C8c9YoGDJPnAeuuKcQvLl1HS8J+STK4/r0WZ3jbtWFF0MKDjydg+AbeXShoRDHqwsqAaAi7D9jDq8wNDWBIR81puaAh7APGDPK32RqjpFS85hxXrbmotW59Gm/gC9SoLB52q4udtwMI++FS4HYmIHt+kUh9tNcMAsNUvFYo0HWMN59EiLf7lYGm/4AR40adfmghUfkmt4dYpTZmZQ==
+X-YMail-OSG: AhKkJLAVM1lDQ3XPPTTJWpEw.A_YPk4v7tBrtMEv9XTYrBN0vKxPyUyPokZyCLH
+ 0NPJEnbM.Ixt5u0eXkMwZesEBqS.rCtCLJgnod2Yg.I9TXOm0suNzcmJ92mBaA3mHgRFUusjI.6E
+ 3Gu4LEq019.le8uhDgpgUZ.YgtmiKAQJK6Bd4WPLqozbdEc8urSPipLpvwJTvKec65xmptWyRiVv
+ 5wejfhjut7ltVV2EWvbGnxpPsKrHXW63gZY0z7W.qC8yTTTM6xXIAPM6OYdYDYNn.6t5yJFWlC1P
+ OIdbZEYbWLsjaYGAZ3nhw68imywZs7JgVqTzxfR4ZQQxpuo3K8t9CM9O0hpOCt10FP__XXwyrmrD
+ TCoCE7B_Edu3G.zjOUn_rksR4jYB.m1Rp.1vZ_bLxnQwCiAul5Wqfj8PNdUGzT.zvxnBCUVqWq9J
+ 8hXM6oMyn8gklCF.R8KCTVo6NRJRq4thjGWIexrpJEGu0QolvkJTIALFEd6_slAReLmAOEup3xKy
+ .77XY9y0L2WZlQcf1QY4ryEv90HkLK9R59Zd1MxuC8qefRgY6y6xUFmVBWO8SDJCCjnQpB48PRDP
+ pRTSfD8hEjxrcMoyLQRR8ik6SRBEuL1N.zoJ2juJT7TtdJItukcqyaFlw7VOC6cm49vWb13NtnZ0
+ gQ2bWEWTG5v0uAlc54_ulltpKs.Fgm6hkagBtyzunEJ52PGAuturV.LPWyLoBYPiB1KC1HlV8gI8
+ yJqtTplsyPL2eALndgi_xv5WXRslUdVun50zfx9iDK5v_kT1lyZrnl7BpPa5N7roHYs5FCR3fGlt
+ 00HJ7sf.lnan3Im8PEbT96k38NwI6o6wqQk3XTx1x0TOib38VwKLgaWNY916uiRI1upzFCMVqmW6
+ hKW.i_z2qDWeeQaZVyBhDmfLTpSCKpEZXqJt.HWEa0uB7F6lyRoT1rQEzhMY_zbISz6YbRmtNDlq
+ VLlEzjYA6uILpMVD7EkmwXGP0XOJgDIix93HShigByDXDbmOlbnVPelpKvxPRFg3gnhpf.0Rc47i
+ 08Ic.liUMCD9zHGFCga9cXgoGaM8kFbRyDB3CB8uLHuuV8rIwOstkm24RLt0t3H1wtfuP85AC7r8
+ v042NbRsPX1Mj80LTxFt.KStV8ND4Dc1.IiPBslhVUpEA9f2YrGnkjCHG4.U4j0M0U489djAouYX
+ y9F8lECiGIH30pwUi5p9NUzViYBtaTM7ID67rbGjIKdkEdFs14rCm3KSzct0U2izLUB1NerwsRiF
+ IQWasnNhp61WOxqpf4zyo6bEJMCV1B8QkTG.8HvHCcJtAwYQhWHkE5SwAzxSGopkwGBC4.Xf9
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:21 +0000
+Date:   Mon, 22 Jun 2020 16:02:19 +0000 (UTC)
+From:   Karim Zakari <kariim1960z@gmail.com>
+Reply-To: kzakari04@gmail.com
+Message-ID: <1507214802.1850985.1592841739314@mail.yahoo.com>
+Subject: URGENT REPLY.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1592835984-28613-3-git-send-email-sumit.garg@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1507214802.1850985.1592841739314.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 07:56:19PM +0530, Sumit Garg wrote:
-> From: Daniel Thompson <daniel.thompson@linaro.org>
-
-Sumit, to some extent this mail is me yelling at myself two years ago
-although, in my defence, at the time I choose not to post it because I
-knew it wasn't right.
-
-I'm a bit concerned to see the TODO: comment critiquing this interface
-being removed (from patch 3) without this patch being changed to
-address that comment.
 
 
-> Add new API: poll_get_irq() to the polling interface in order for user
-> of polling interface to retrieve allocated IRQ corresponding to
-> underlying serial device.
-> 
-> Although, serial interface still works in polling mode but interrupt
-> associated with serial device can be leveraged for special purposes like
-> debugger(kgdb) entry.
-> 
-> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> ---
->  drivers/tty/serial/serial_core.c | 18 ++++++++++++++++++
->  include/linux/serial_core.h      |  1 +
->  include/linux/tty_driver.h       |  1 +
->  3 files changed, 20 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 66a5e2f..1bb033c 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -2470,6 +2470,23 @@ static void uart_poll_put_char(struct tty_driver *driver, int line, char ch)
->  	port->ops->poll_put_char(port, ch);
->  	uart_port_deref(port);
->  }
-> +
-> +static int uart_poll_get_irq(struct tty_driver *driver, int line)
-> +{
-> +	struct uart_driver *drv = driver->driver_state;
-> +	struct uart_state *state = drv->state + line;
-> +	struct uart_port *port;
-> +	int ret = -ENODEV;
-> +
-> +	port = uart_port_ref(state);
-> +	if (port && port->ops->poll_get_irq) {
-> +		ret = port->ops->poll_get_irq(port);
-> +		uart_port_deref(port);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  #endif
->  
->  static const struct tty_operations uart_ops = {
-> @@ -2505,6 +2522,7 @@ static const struct tty_operations uart_ops = {
->  	.poll_init	= uart_poll_init,
->  	.poll_get_char	= uart_poll_get_char,
->  	.poll_put_char	= uart_poll_put_char,
-> +	.poll_get_irq	= uart_poll_get_irq,
+Good-Day Friend,
 
-The TODO comments claimed this API was bogus because it doesn't permit
-a free and that can cause interoperation problems with the real serial
-driver. I'll cover some of that in a reply to patch 3 but for now.
+ Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
 
-Anyhow, for this patch, what are the expected semantics for
-uart_poll_get_irq().
+Waiting for your response for more details, As you are willing to execute this business opportunity with me.
 
-In particular how do they ensure correct interlocking with the real
-serial driver underlying it (if kgdb_nmi is active on a serial port
-then the underlying driver better not be active at the same time).
-
-
-Daniel.
-
-
->  #endif
->  };
->  
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> index 92f5eba..8b132e6 100644
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -78,6 +78,7 @@ struct uart_ops {
->  	int		(*poll_init)(struct uart_port *);
->  	void		(*poll_put_char)(struct uart_port *, unsigned char);
->  	int		(*poll_get_char)(struct uart_port *);
-> +	int		(*poll_get_irq)(struct uart_port *);
->  #endif
->  };
->  
-> diff --git a/include/linux/tty_driver.h b/include/linux/tty_driver.h
-> index 3584462..d6da5c5 100644
-> --- a/include/linux/tty_driver.h
-> +++ b/include/linux/tty_driver.h
-> @@ -295,6 +295,7 @@ struct tty_operations {
->  	int (*poll_init)(struct tty_driver *driver, int line, char *options);
->  	int (*poll_get_char)(struct tty_driver *driver, int line);
->  	void (*poll_put_char)(struct tty_driver *driver, int line, char ch);
-> +	int (*poll_get_irq)(struct tty_driver *driver, int line);
->  #endif
->  	int (*proc_show)(struct seq_file *, void *);
->  } __randomize_layout;
-> -- 
-> 2.7.4
-> 
+Sincerely Yours,
+Mr. Karim Zakari.
