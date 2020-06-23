@@ -2,105 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 002F420507F
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Jun 2020 13:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061D7205151
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Jun 2020 13:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732409AbgFWLRO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Jun 2020 07:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732464AbgFWLRI (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Jun 2020 07:17:08 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C41C061797
-        for <linux-serial@vger.kernel.org>; Tue, 23 Jun 2020 04:17:07 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id v3so12613358wrc.1
-        for <linux-serial@vger.kernel.org>; Tue, 23 Jun 2020 04:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=A0CZIOBsOGprBP2yx9wdvIjerDxw8tVV1HACYa5+nrVohGuvJ8u/zR7WW2a1A6cQUy
-         1AU4k/VWL4JGQLMlQyiVq5RgAnvjpZg35G5jBXEhx6d3/H1U4Mg1D0SvSiHZC+UOmhvB
-         f6A5Sa065A7+vMvl4B1SG9nwfLKh1maAKj/zDLeWq8NzPzhRGeobXLBo3sqo2xAtr4CH
-         JtrhE0csmsX5PdN9odHGuowLP24o3rKymki1JHvU9h75Cz45x0n/VtCQXnwAUHB+YJ6O
-         a+e26mSeLIL4uTprG4gzR2RSOj7iNDdGfY8fcozJ79xzxT8edEbFBIxsga/e8JKVpjOv
-         78HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=Mq9McMZupJvUsc3+/13fq7RsL0254OIVfcbgBZc2JdDjhJO2pj1xF/OLX917kESa3e
-         r++PekLUPeYRVy0dnL99pPKqH+5ndaPV5G05PO6z/XSssZNm7PjaqKGYd4D67SzWpi/l
-         2SQfNPgFGW2V4u6gg7QSRv5xM37WuRuhro/yRH7PNh6Tm7sTu2VMjiSBz7nBzOWwJZz9
-         ofBEnOjSueqPxNFR7wladeKmYuakxq6NfNn2/542Kw/QlnkelVfnDmJn+QaksvDAdc1h
-         taj+tCqvN33xdqRkz72gqgVqucOu9D2Zawgm8YkDNBaSAgHZbfBVjIsCrpRgr4S/KcPS
-         c1cQ==
-X-Gm-Message-State: AOAM530AkPWxqAqgtl7TcgIsjoE57YKrsiGZk4Snm9gDiuCW8LPI6MkD
-        et+xKNFHYTvx+BOmcKP9X5bf++7tZIHJsgmSbNA=
-X-Google-Smtp-Source: ABdhPJw2cCXejzjPEQ0OifmpQqadROGKfTe6EoFnU99e9+vhZITKDpt//4vw2qLuPBd5O5PdU+u/YBx5ZZxe8Kdl98s=
-X-Received: by 2002:a5d:55c2:: with SMTP id i2mr24786050wrw.225.1592911026528;
- Tue, 23 Jun 2020 04:17:06 -0700 (PDT)
+        id S1732393AbgFWLvz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Jun 2020 07:51:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732245AbgFWLvz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 23 Jun 2020 07:51:55 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F2F820771;
+        Tue, 23 Jun 2020 11:51:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592913115;
+        bh=PRiIEPRfoDE9qN6mNANp8/xK2rdRTCAM55mKRzCf7og=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eEYUdvBrkaMZbust0fh7Lrrq7MFG43eT12CgOPqF9/9mOMi381tu8AMKG3CoQ0+Ry
+         LrxUrtDU3ys4lWbp7XN91rvZe+sDElyBfQhclJiJWXQRBCMVJgWPRFYh3FBX0kS5cG
+         Z91FeaqpEs4iyc4je8xnIzrc4gUeq9v3lbMOuyQs=
+Date:   Tue, 23 Jun 2020 13:51:48 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Anthony Canino <anthony.canino1@gmail.com>
+Cc:     linux-serial@vger.kernel.org
+Subject: Re: Possible bug in drivers/tty/vt/vt.c
+Message-ID: <20200623115148.GC1963415@kroah.com>
+References: <CA+dbEpsJs8AgcpjU_-Vwh60BRL4Eq21L1=3sDNJRGHr2acLWLg@mail.gmail.com>
+ <CA+dbEpt3YmDE7Q_BBhZZw9CfrUJfrhfR16XVoevXSqi=kOQjJg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:17:04
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <paulwiliam782@gmail.com>
-Date:   Tue, 23 Jun 2020 12:17:04 +0100
-Message-ID: <CAHqcnY0yFMGfeQoQRzUbXEXCiVHerbN_kWyNgCaOjbF_RcY3Bg@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+dbEpt3YmDE7Q_BBhZZw9CfrUJfrhfR16XVoevXSqi=kOQjJg@mail.gmail.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+On Tue, Jun 23, 2020 at 05:27:33AM -0400, Anthony Canino wrote:
+> Hi all,
+> 
+> I hope this is the right place to ask about a potential bug in the TTY
+> that I may have found in the TTY layer in the linux kernel. I have
+> failed a bug report
+> (https://bugzilla.kernel.org/show_bug.cgi?id=208293) but wanted to
+> email the list for the TTY layer directly. In summary, in the con_init
+> function of drivers/tty/vt/vt.c, I think this code is possibly buggy
+> is kzalloc fails to allocate:
+> 
+>   3391   for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
+>   3392     vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data),
+> GFP_NOWAIT);
+>   3393     INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
+>   3394     tty_port_init(&vc->port);
+>   3395     visual_init(vc, currcons, 1);
+>   3396     vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
+>   3397     vc_init(vc, vc->vc_rows, vc->vc_cols,
+>   3398       currcons || !vc->vc_sw->con_save_screen);
+>   3399   }
+>   3400   currcons = fg_console = 0;
+>   3401   master_display_fg = vc = vc_cons[currcons].d;
+>   3402   set_origin(vc);
+> 
+> If kzalloc returns null on 3396, I think during set_origin(vc) it is
+> possible vc_screenbuf will be dereferenced. I'd be happy to discuss
+> further if needed.
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+Yes, horrible and bad things will happen if kzalloc fails at that point
+in time.
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+Luckily, it is impossible for that to happen, so we really do not need
+to worry about it at all.  This comes up every other year or so, and the
+gyrations that people have gone through to try to fix this up, for
+something that is impossible to ever hit, always end up breaking the
+codebase or doing other horrible things.
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+In short, don't worry about it, unless you can show me how that can ever
+happen in a normal (i.e. not instrumented) system?
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
+thanks,
 
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
-
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
+greg k-h
