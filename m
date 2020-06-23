@@ -2,133 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B9B204FBE
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Jun 2020 12:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002F420507F
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Jun 2020 13:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732243AbgFWK7j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Jun 2020 06:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S1732409AbgFWLRO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Jun 2020 07:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732227AbgFWK7i (ORCPT
+        with ESMTP id S1732464AbgFWLRI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:59:38 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD2CC061755
-        for <linux-serial@vger.kernel.org>; Tue, 23 Jun 2020 03:59:38 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id s10so83179wrw.12
-        for <linux-serial@vger.kernel.org>; Tue, 23 Jun 2020 03:59:38 -0700 (PDT)
+        Tue, 23 Jun 2020 07:17:08 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C41C061797
+        for <linux-serial@vger.kernel.org>; Tue, 23 Jun 2020 04:17:07 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id v3so12613358wrc.1
+        for <linux-serial@vger.kernel.org>; Tue, 23 Jun 2020 04:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lGrEtcs91+dxyWalZ+ucVAHOrATgVM2zxSzA1+acQg4=;
-        b=H9tF1WoMJP6k1NhpjSlDkwABW022ARCBuOHBY6yhnzmiwSYAqbykNym7cUXNasMT6u
-         SYH/QYLJSJCrr7CUmwv3aXRdFcmgJW2Gwwoo/xASmrm9OFhDpLub4rC2K+bd74NpkQHq
-         lWG+gh76ybsLiaR1BwWhYVJXsHOk/KBdAQs8UIbricQv/yRTIZiqpSFXfBkzvln0Ctsb
-         vjT2M8VyzVD2irhFN8vj2aPW6c+IpWbO1W4GpbeTJFqmbP06pguKaskv3AIOztQz348D
-         c9NoaAF07LRY9pUNskKiCKuBa9lFmPvxYUuAcis9DMEgOz9pkcw6Q3JdBRixAwi3DGOE
-         Sgmw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=A0CZIOBsOGprBP2yx9wdvIjerDxw8tVV1HACYa5+nrVohGuvJ8u/zR7WW2a1A6cQUy
+         1AU4k/VWL4JGQLMlQyiVq5RgAnvjpZg35G5jBXEhx6d3/H1U4Mg1D0SvSiHZC+UOmhvB
+         f6A5Sa065A7+vMvl4B1SG9nwfLKh1maAKj/zDLeWq8NzPzhRGeobXLBo3sqo2xAtr4CH
+         JtrhE0csmsX5PdN9odHGuowLP24o3rKymki1JHvU9h75Cz45x0n/VtCQXnwAUHB+YJ6O
+         a+e26mSeLIL4uTprG4gzR2RSOj7iNDdGfY8fcozJ79xzxT8edEbFBIxsga/e8JKVpjOv
+         78HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lGrEtcs91+dxyWalZ+ucVAHOrATgVM2zxSzA1+acQg4=;
-        b=fUDmwVzbkq7/zY6tucmEhUOTNb364eLGmHNRZqntFsf2bye7Vc67TmKv5KtKQJQGQX
-         +HVnmYlQPgfKsGkfTHFj5X9UfwEQDIzzxoNTmgc+x3nPN4HAy2RKBVUNLMqi6IyONADR
-         vkXe8m4sfD9+E+P85D3i2JlDJJfwH9rV8rg8DUQ4h2Q1H3I0fu6xa3G9TqTIGoJP6Ufq
-         FYNQTpE2BW3C8OMnGJVqs5yAoGBksTDIAVZS2HC9esncdvzx1kj+V91AFfWYndh4wUjV
-         xLurFqpdhZPv8bEjkhuyvYeEAPk3mxFdu5SkgPCsl5sIn5gxSvZJWCItauTCnugiBq1J
-         Zt4A==
-X-Gm-Message-State: AOAM532fhLdQXkONYHraRumhlo+WG5ruAtiapvw0g+bwhdOi9gnSCEe+
-        K2tlVv/R4aWoClEOYOvB7PZ1zg==
-X-Google-Smtp-Source: ABdhPJw9T61gaiAi8WHXVsX1Hu7GiUkKfr66i1wj6/L+0fQWDmHApgO8RTikF4aEEn2dwEAj+42rEA==
-X-Received: by 2002:adf:e2ce:: with SMTP id d14mr24896468wrj.415.1592909976531;
-        Tue, 23 Jun 2020 03:59:36 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id n19sm3176388wmi.33.2020.06.23.03.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 03:59:35 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 11:59:34 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/7] kgdb: Add request_nmi() to the io ops table for
- kgdboc
-Message-ID: <20200623105934.wvyidi3xgqgd35af@holly.lan>
-References: <1592835984-28613-1-git-send-email-sumit.garg@linaro.org>
- <1592835984-28613-4-git-send-email-sumit.garg@linaro.org>
- <20200622160300.avgfhnfkpqzqqtsr@holly.lan>
- <CAFA6WYOmQT-OQvjpy1pVPq2mx5S264bJPd-XfwnDY2BjeoWekg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=Mq9McMZupJvUsc3+/13fq7RsL0254OIVfcbgBZc2JdDjhJO2pj1xF/OLX917kESa3e
+         r++PekLUPeYRVy0dnL99pPKqH+5ndaPV5G05PO6z/XSssZNm7PjaqKGYd4D67SzWpi/l
+         2SQfNPgFGW2V4u6gg7QSRv5xM37WuRuhro/yRH7PNh6Tm7sTu2VMjiSBz7nBzOWwJZz9
+         ofBEnOjSueqPxNFR7wladeKmYuakxq6NfNn2/542Kw/QlnkelVfnDmJn+QaksvDAdc1h
+         taj+tCqvN33xdqRkz72gqgVqucOu9D2Zawgm8YkDNBaSAgHZbfBVjIsCrpRgr4S/KcPS
+         c1cQ==
+X-Gm-Message-State: AOAM530AkPWxqAqgtl7TcgIsjoE57YKrsiGZk4Snm9gDiuCW8LPI6MkD
+        et+xKNFHYTvx+BOmcKP9X5bf++7tZIHJsgmSbNA=
+X-Google-Smtp-Source: ABdhPJw2cCXejzjPEQ0OifmpQqadROGKfTe6EoFnU99e9+vhZITKDpt//4vw2qLuPBd5O5PdU+u/YBx5ZZxe8Kdl98s=
+X-Received: by 2002:a5d:55c2:: with SMTP id i2mr24786050wrw.225.1592911026528;
+ Tue, 23 Jun 2020 04:17:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYOmQT-OQvjpy1pVPq2mx5S264bJPd-XfwnDY2BjeoWekg@mail.gmail.com>
+Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:17:04
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <paulwiliam782@gmail.com>
+Date:   Tue, 23 Jun 2020 12:17:04 +0100
+Message-ID: <CAHqcnY0yFMGfeQoQRzUbXEXCiVHerbN_kWyNgCaOjbF_RcY3Bg@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 02:07:47PM +0530, Sumit Garg wrote:
-> On Mon, 22 Jun 2020 at 21:33, Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> > > +     irq_set_status_flags(irq, IRQ_NOAUTOEN);
-> > > +     res = request_nmi(irq, fn, IRQF_PERCPU, "kgdboc", dev_id);
-> >
-> > Why do we need IRQF_PERCPU here. A UART interrupt is not normally
-> > per-cpu?
-> >
-> 
-> Have a look at this comment [1] and corresponding check in
-> request_nmi(). So essentially yes UART interrupt is not normally
-> per-cpu but in order to make it an NMI, we need to request it in
-> per-cpu mode.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/irq/manage.c#n2112
+Greetings From Mrs. Sarah Koffi
 
-Thanks! This is clear.
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-> > > +     if (res) {
-> > > +             res = request_irq(irq, fn, IRQF_SHARED, "kgdboc", dev_id);
-> >
-> > IRQF_SHARED?
-> >
-> > Currrently there is nothing that prevents concurrent activation of
-> > ttyNMI0 and the underlying serial driver. Using IRQF_SHARED means it
-> > becomes possible for both drivers to try to service the same interrupt.
-> > That risks some rather "interesting" problems.
-> >
-> 
-> Could you elaborate more on "interesting" problems?
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
-Er... one of the serial drivers we have allowed the userspace to open
-will, at best, be stone dead and not passing any characters.
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
 
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
 
-> BTW, I noticed one more problem with this patch that is IRQF_SHARED
-> doesn't go well with IRQ_NOAUTOEN status flag. Earlier I tested it
-> with auto enable set.
-> 
-> But if we agree that both shouldn't be active at the same time due to
-> some real problems(?) then I can rid of IRQF_SHARED as well. Also, I
-> think we should unregister underlying tty driver (eg. /dev/ttyAMA0) as
-> well as otherwise it would provide a broken interface to user-space.
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
 
-I don't have a particular strong opinion on whether IRQF_SHARED is
-correct or not correct since I think that misses the point.
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
 
-Firstly, using IRQF_SHARED shows us that there is no interlocking
-between kgdb_nmi and the underlying serial driver. That probably tells
-us about the importance of the interlock than about IRQF_SHARED.
+I will wait to hear from you so as to give you details.With love from
 
-To some extent I'm also unsure that kgdb_nmi could ever actually know
-the correct flags to use in all cases (that was another reason for the
-TODO comment about poll_get_irq() being a bogus API).
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
 
-
-Daniel.
+Mrs. Sarah Koffi
