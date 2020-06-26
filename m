@@ -2,126 +2,168 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C6120AFB8
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jun 2020 12:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C3020B052
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jun 2020 13:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgFZKbG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Jun 2020 06:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727012AbgFZKbF (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Jun 2020 06:31:05 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38162C08C5DB
-        for <linux-serial@vger.kernel.org>; Fri, 26 Jun 2020 03:31:05 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id z2so7066187qts.5
-        for <linux-serial@vger.kernel.org>; Fri, 26 Jun 2020 03:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=GveWXhzb8+pMma24aInLBHaMP9bSW7JCilIOdt4SjNc=;
-        b=l3PvwceempuXJubGdxfwybjomyeIIbzYWhPn9hIrc6Rz0Rm2k48eHLBMZ3FcyTd8Zl
-         16Iy7r+Gf+wJSh2P8YdApljNDhsII2CFlR6o/Fj8VLrS8swCG/i9l7gh5WnaIRHEPmBr
-         XpK+vDj/vx/oeGnckCokgqk284oPyXcnGuaQSOmikZsKxsU+oPDzUwZMuHVGXPZaO3Si
-         MytG71X1o4cGs5D7tSNq9FNtRBtg4nzGIEqWzK2zb6/2xIfG85AJ4waVz4JppuiDD9B1
-         E/qDaeiL+HvsiGVRzke8jSNuTh/7fUxa/lzNHiJJUrQ8oh7GvReFaNMq8FaJIs3bhxx1
-         QnRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=GveWXhzb8+pMma24aInLBHaMP9bSW7JCilIOdt4SjNc=;
-        b=hbaf+/gglnWsQat8l4gvSn5CJWuvFNl9JBV7Lnzd1NwGsZQW5JiF0cWBp+Wm3i7bBK
-         Fs0b51/XDEw7Ls0hSrxWdjPwMOWCVCQDZUXUI3ntqX8eOAB8PfX/HBPf1sK3oELCfZi6
-         0ZOFJujh+zAoPF3m6V3uez0KrITkFY6oXvt/1o2kPeEjwZyosEbbKxh3R1gvr2glMPDk
-         MiTqQ2qw+fWyhIb6cWogEOKZy2S+uYw3wDJfbMpLudmHJr8j+Cs7MYhKcA8iaVh9eEx6
-         Hv8F9pDcjOm5Bg7gZO5UxsWcxRLkC4KSCsVfUUT3AJ6TT8Q8/M2CO97LBLgqX+KRzBu4
-         QDoA==
-X-Gm-Message-State: AOAM531FQBpsjIX5iBhFxWiVsMu4sGhbPp7SHa0ViRQYhKXeohcCOlzP
-        2xh+daSG4E+oXHPV1t3kcINF72fFWXAH1XI9y0w=
-X-Google-Smtp-Source: ABdhPJyWORm7Ey19C8YP6ZthQa+1OMDW4j0Y1C70us1cC2qiorMUmiWS5+c4UdnD3qnKvca4zwbVmROksOCKlC9Hq+0=
-X-Received: by 2002:aed:2aa5:: with SMTP id t34mr2054936qtd.363.1593167464311;
- Fri, 26 Jun 2020 03:31:04 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ac8:2df7:0:0:0:0:0 with HTTP; Fri, 26 Jun 2020 03:31:03
- -0700 (PDT)
-From:   Aisha Gaddafi <aiashgaddafi000@gmail.com>
-Date:   Fri, 26 Jun 2020 03:31:03 -0700
-Message-ID: <CAEOO=S0W_Ryg2Gc1tKBrEjsu3fJoJZxMS9JbgSMe9s5RPawQTQ@mail.gmail.com>
-Subject: whether this is your correct email address or not
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1728403AbgFZLSq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Jun 2020 07:18:46 -0400
+Received: from mail-eopbgr80059.outbound.protection.outlook.com ([40.107.8.59]:10062
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728380AbgFZLSp (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 26 Jun 2020 07:18:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z+4wRQI3E8Jvia5xa6KlYOtQnfnAipEJKA0ZQhamJF3Rb0gkEQei6xzrZ8w0gOblVD/cW8gFrx7/DkalUZF90lvBI/2zcc+64C/aPPshQfLOqb1sjYVtPIv5G9X+FH1qEyMvhv6J39w79eLIRB/296TQEJs+VqEbkX4ljIXwYTeI0ZNhPIjpTtzhldZHoCOajtEXZRBgz4yLM97cYVJbZwVYG8llVCzqSNfqa3OI3678VFFaaXN5SzutsYZquJ4oI7gC5sminMxb6pcumwfhTQNi11QH/R7HYt4K+mYsG9eZERqDm2WEFp6rl1LxZw815BaAbdhev/fEmqu0vfUjuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBrJXOmFsrVsXY6D5uSuDhc+JYskV+BgBgoXOkXvLns=;
+ b=P5DT/CVTecTNtr0xeFziW6w14GY+FAKECVGmG+jgW2Jht/tAzUW4bYAJJFYZ4pkq+1BpqElKIVpNCh+E3xJG0/US7CWCgPbja8eE205ahZMZdkeOOvCIK/GVr1FYmnk+7PIZD5Gsyp5e9UeAC5BEP4y0COB7w9WFVydqyyXskMddeP8ZA1jApux68WGrN5qBJaKfyaSBwP7KNGaHj+caPTYElzSLxFhIkGjtPOGj22EkUsITg0zbu4zh3E8mz55sMihPbapVfAcSpHPKxD/xc54+umv1If1q9YuJjHXDvBJIwlXHMSTcKIMZJId0kbYCiiUaeGEb88blJdtvgOSuzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBrJXOmFsrVsXY6D5uSuDhc+JYskV+BgBgoXOkXvLns=;
+ b=ORdPIyaC7BB2SGUP8pHNB6ggmQOfXS/e1kgcBCybQeOE/Xh2gWUgeZdrL0/7FCqTaiEqihgTT351+OXc+4J3dQuFgDw9tCGaArEFhe8l39X0qtuiK50nuPTjlpqjQVulrDtINuaD9cWfvr5s7VyoG2gzS2ta3g4tNP3BquCWlmo=
+Received: from VI1PR04MB4800.eurprd04.prod.outlook.com (2603:10a6:803:5a::12)
+ by VI1PR04MB4335.eurprd04.prod.outlook.com (2603:10a6:803:4e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.23; Fri, 26 Jun
+ 2020 11:18:42 +0000
+Received: from VI1PR04MB4800.eurprd04.prod.outlook.com
+ ([fe80::1c58:aed8:bd10:6c9e]) by VI1PR04MB4800.eurprd04.prod.outlook.com
+ ([fe80::1c58:aed8:bd10:6c9e%3]) with mapi id 15.20.3131.021; Fri, 26 Jun 2020
+ 11:18:42 +0000
+From:   "Vabhav Sharma (OSS)" <vabhav.sharma@oss.nxp.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Vabhav Sharma (OSS)" <vabhav.sharma@oss.nxp.com>
+CC:     "jslaby@suse.com" <jslaby@suse.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Varun Sethi <V.Sethi@nxp.com>
+Subject: RE: [PATCH] tty: serial: fsl_lpuart: minimum baud rate support
+Thread-Topic: [PATCH] tty: serial: fsl_lpuart: minimum baud rate support
+Thread-Index: AQHWS6uMK90atu7fKkiLW+wqBK+01g==
+Date:   Fri, 26 Jun 2020 11:18:42 +0000
+Message-ID: <VI1PR04MB48009D6DE5C96EFB7FF559F7F3930@VI1PR04MB4800.eurprd04.prod.outlook.com>
+References: <1593078545-11272-1-git-send-email-vabhav.sharma@oss.nxp.com>
+ <20200625100410.GA3327034@kroah.com>
+ <VI1PR04MB4800F6C28186CE70F3E1D197F3920@VI1PR04MB4800.eurprd04.prod.outlook.com>
+ <20200625105256.GA3335222@kroah.com>
+In-Reply-To: <20200625105256.GA3335222@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=oss.nxp.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [103.49.154.18]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: b73f394d-f30f-4d5d-bd18-08d819c2aef4
+x-ms-traffictypediagnostic: VI1PR04MB4335:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB43357E2CEDE2F6C5366F5B87B2930@VI1PR04MB4335.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0446F0FCE1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gjcIpodNWLqOrfjGnBGC0OvKw5trJdej3MQlt3XlcOW8dWAaEFEGBA9gA7u2j7uR1l8UIcUrXX/BsN26DfGKI/3kadW4V5geQoz03mKsz+0QC9EFhKbf640GWtCaZnu1jXdaZXL2V4qd9vxfxDTgi9HVFJbZApRadyjrqhgNvFtaqRkv9UBsKqgypH/aTPOUysta/iQa0yA4lEa+0i95T+/krJ06WRJINqMMQqsDTAMMaV7QHVgA1mANYjK8zu14wz1OAtnVGBUR0UfgOCqYQmgIsMuztvAaqkJrK3sLc4mI5fjS0W5ljh/Eo5gHq6RXohsHGEcIS+cFPnSb7pl7CQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4800.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(136003)(396003)(366004)(376002)(39860400002)(66946007)(8676002)(53546011)(66556008)(71200400001)(66446008)(66476007)(316002)(86362001)(64756008)(54906003)(4326008)(83380400001)(2906002)(26005)(8936002)(7696005)(33656002)(186003)(9686003)(110136005)(6506007)(478600001)(5660300002)(55016002)(52536014)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 2CIHuDmVjW5YjEaB5vCLsY+0fcgO40QgLYC2UcH8QP8SgnDo92/hlhhiT8ptB2/A2emJo//JPqky93yxp/VKm30ZtTXD40x515tZiwE6+vfxS4Cziapv6YxvxT5BDZENCFzcmd6esxTYYbbAQbaro+ChCZmhSFC9asf1HYvCD09a51UE+LJOcbHQXx3geC1TONLQcKfK8Y84OMcEfZgay2/xz4aoWDN0geGFMup4nQBAkOUBi/GXLLtXxb4nqUvrsFHLtwySIaZgP6Ng7ZmWWRDFIFgvZZwnzccYqSZxcaMiakI0roZnhfKkGg+b9TxR0ZW7wUqRVb21BFQU56EROYOuZOaCve0GPzQG9mpQLQL0CJmXpScKktQU7kGM2W0L0wCnL84gk3shPqKMULW5DKlNrBACH97hOOA/hTIVqw3BWQRiipedf6KgHKELK2vD45TSnW2RPCKDSpka29+RGxNj3rBMZnWXHNLpCLmc23E=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4800.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b73f394d-f30f-4d5d-bd18-08d819c2aef4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2020 11:18:42.1740
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O66TgWHhVTpYxkp69xKpQfa3+cRktqVL9f9MpnEbBIFvOAn1onXIPa/+saqEYkxIJzJA52Y0oNr2mKaD9C5rtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4335
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear
-
-I came across your email contact via a private search. I   am
-Mrs. Aisha Gaddafi, 38years old and a widow with three children, Iam the on=
-ly
-Biological daughter of late Libyan President by birth and my Father (Muamma=
-r
-Gaddafi) was killed on 20 October 2011 and three of my Brother was also kil=
-led
-During the war, including the former National Security Adviser Mutassim Gad=
-dafi,
-Who died at the hands of the rebels on the same day I was granted refuge in
-Algeria with my mother and brother and Three days after my   arrival I
-gave birth
-To my baby girl called Safiya. For more knowledge, kindly
-Read the below news: Why Muammar Gaddafi's daughter was booted out of Alger=
-ia
-
-Contact address=3D aisha.younes@yandex.com
-
-After some time, the Algerian
-Government accused me of setting fires on the house and burning the Algeria=
-n
-President=E2=80=99s picture. However, that was how I was booted out of Alge=
-ria. I left
-Algeria to Burkina Faso where I am presently seeking a confidential asylum.=
- You
-Can read the news for more information:
 
 
-I Have Five Hundred Million United State   Dollar ($500M)
-Deposited by my late Father (late Gen. Muammar Gaddafi)   and I need
-an investment
-Partner, however, I am curious in you for investment project assistance in
-Your country, may be from there, we can build a business relationship in th=
-e
-Near future. I want to know if you have the ability, workforce and strength=
- to
-Handle the investment in the following sector real estate, hotel
-Management/tourism, stock management and commercial agriculture in your cou=
-ntry
-And get rewarded financially without affecting your convenience.
-
-What you required to do;
-
-[1] Provide a bank account where the funds will be
-Transfer via Bank to Bank Transfer.
-[2] Invest and Manage the Funds Profitably
-On my Behalf pending when i will be ready to take over.
-[3] 30% of the total
-Fund will be for your assistance, while the balance of 70%   will be for th=
-e
-Investment
-
-I am willing to negotiate Management Sharing Percentage   after the
-Confirmation of the funds in your account. I shall expect   to hear from yo=
-u
-Urgently as this is of high Priority. I shall make   available to you all
-Necessary , directives and possibly arrange   a meeting prior to the
-Commencement of the transaction at the bank where the funds is
-deposited in Canada
-
-Your Urgent Reply Will Be Appreciated email address=3D reply me
-aisha.younes@yandex.com
-
-Mrs.Aisha Gaddaf
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Thursday, June 25, 2020 4:23 PM
+> To: Vabhav Sharma (OSS) <vabhav.sharma@oss.nxp.com>
+> Cc: jslaby@suse.com; linux-serial@vger.kernel.org; linux-
+> kernel@vger.kernel.org; Varun Sethi <V.Sethi@nxp.com>
+> Subject: Re: [PATCH] tty: serial: fsl_lpuart: minimum baud rate support
+>=20
+> On Thu, Jun 25, 2020 at 10:12:54AM +0000, Vabhav Sharma (OSS) wrote:
+> >
+> >
+> > > -----Original Message-----
+> > > From: Greg KH <gregkh@linuxfoundation.org>
+> > > Sent: Thursday, June 25, 2020 3:34 PM
+> > > To: Vabhav Sharma (OSS) <vabhav.sharma@oss.nxp.com>
+> > > Cc: jslaby@suse.com; linux-serial@vger.kernel.org; linux-
+> > > kernel@vger.kernel.org; Varun Sethi <V.Sethi@nxp.com>; Vabhav
+> Sharma
+> > > <vabhav.sharma@nxp.com>
+> > > Subject: Re: [PATCH] tty: serial: fsl_lpuart: minimum baud rate
+> > > support
+> > >
+> > > On Thu, Jun 25, 2020 at 03:19:05PM +0530, Vabhav Sharma wrote:
+> > > > From: Vabhav Sharma <vabhav.sharma@nxp.com>
+> > > >
+> > > > The formula for the baud rate is
+> > > > baud rate =3D "baud clock / ((OSR+1) =D7 SBR)
+> > > >
+> > > > Algorithm used in function lpuart32_serial_setbrg() only changes
+> > > > the SBR. Even with maxmum value put in, OSR stays at 0x7 and the
+> > > > lowest baud rate would be ~ 2600 bps
+> > > >
+> > > > Update the algorithm to allow driver operation at 1200,2400 or
+> > > > 600 bps
+> > > >
+> > > > Signed-off-by: Vabhav Sharma <vabhav.sharma@nxp.com>
+> > > > ---
+> > > >  drivers/tty/serial/fsl_lpuart.c | 4 ++++
+> > > >  1 file changed, 4 insertions(+)
+> > > >
+> > > > diff --git a/drivers/tty/serial/fsl_lpuart.c
+> > > > b/drivers/tty/serial/fsl_lpuart.c index 90298c4..0fd0fa5f 100644
+> > > > --- a/drivers/tty/serial/fsl_lpuart.c
+> > > > +++ b/drivers/tty/serial/fsl_lpuart.c
+> > > > @@ -1925,6 +1925,10 @@ static void __lpuart32_serial_setbrg(struct
+> > > uart_port *port,
+> > > >  			tmp_sbr++;
+> > > >  		}
+> > > >
+> > > > +		if (tmp_sbr > UARTBAUD_SBR_MASK) {
+> > > > +			continue;
+> > > > +		}
+> > >
+> > > Always use scripts/checkpatch.pl on your patches so you do not get
+> > > grumpy emails from maintainers telling you to use
+> > > scripts/checkpatch.pl on your patches...
+> > Indeed, I run the script before sending patch ./scripts/checkpatch.pl
+> > 0001-tty-serial-fsl_lpuart-minimum-baud-rate-support.patch
+> > total: 0 errors, 0 warnings, 10 lines checked
+> >
+> > 0001-tty-serial-fsl_lpuart-minimum-baud-rate-support.patch has no
+> obvious style problems and is ready for submission.
+>=20
+> Ok, then something is wrong as there is obviously a coding style issue wi=
+th
+> your submission, as you can see with a manual review of it, right?
+>=20
+> greg k-h
+I see, Unnecessary usage of brace for single statement.
+Thank you
