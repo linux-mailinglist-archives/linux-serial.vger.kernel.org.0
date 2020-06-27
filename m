@@ -2,116 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEE020C20B
-	for <lists+linux-serial@lfdr.de>; Sat, 27 Jun 2020 16:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF3D20C497
+	for <lists+linux-serial@lfdr.de>; Sun, 28 Jun 2020 00:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725854AbgF0OXX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 27 Jun 2020 10:23:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725850AbgF0OXW (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 27 Jun 2020 10:23:22 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F38320672;
-        Sat, 27 Jun 2020 14:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593267801;
-        bh=z+LI4rDwcqdPllTBWP3ve1Yz1MaJfOlnanpyQgYW/k4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cFVJfwSjRJyhEigz/7AFA+Ob7mOkqMvCoTPKZrOJ7UsG+Dy2kZqHjsqylmNuTOor8
-         X7+7bmps7/9K6vRNJik2XzGaqiBfUb7c5cSh2tfuJtC7RBUffBozSV5ckCqLl4UXNa
-         L3dUIBhpviOzJwbGDQuW6pQ+0flXGXeoHJe+bwWo=
-Date:   Sat, 27 Jun 2020 16:23:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Fugang Duan <fugang.duan@nxp.com>
-Cc:     u.kleine-koenig@pengutronix.de, linux-serial@vger.kernel.org,
-        lukas@wunner.de, jslaby@suse.com, s.hauer@pengutronix.de,
-        kernel@pengutronix.de
-Subject: Re: [PATCH tty/serial 1/1] tty: serial: imx: enable imx serial
- console port as module
-Message-ID: <20200627142315.GA1959761@kroah.com>
-References: <20200605084321.26255-1-fugang.duan@nxp.com>
+        id S1726715AbgF0WFv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 27 Jun 2020 18:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726316AbgF0WFu (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 27 Jun 2020 18:05:50 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805F0C061794
+        for <linux-serial@vger.kernel.org>; Sat, 27 Jun 2020 15:05:50 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id f139so12506203wmf.5
+        for <linux-serial@vger.kernel.org>; Sat, 27 Jun 2020 15:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=f9F4OeCeRmjyCn/l5zWRCnvqn8abBSCJ0Y8qujQ0kmxWn834D2fXcj9rvsWpCDPIuS
+         J4EoerIfxQNxbL3GXEU7ldfNRYPjw9+UDx+oUErzer3ipQGx1bMVBJ4GKw5qxwtLFKgm
+         GIGKX0Yf3u59BQOeDfpIf5jZ+3vnA0ZzLii/fzh6lT1DnoxV12hExchyOgRH8ZWUzh6h
+         YfJSqrAXwDwYWOkanSpTn/205IELx8NOzYqaPLRhLaj+p8d8Tqco8ZlQgP7W4AOriRZo
+         /C1JWu9y1DjEpYGijceZGziK7m0b44a1VzD/YaM40U0hZVpq1t42ddRbOo9XgyjTsiIU
+         X8hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=jr70TxGtzQ/S2nRXRND4eNp8O7imzn2pUr7sXgCAlJumVdcfQpB2Jf85ssnx+avxq3
+         PpYFScUHjtM2YeHKeRS4yS2kBpcm84O+/+lusXk/Zfu4Tg0Sfnm0thJY8IZPBmziWv0A
+         BWrxvDeinxVxZuQSaNQrNqoWk+IgcC5l64C9NwHfcQiGZaYnDJhAYJxWxnKF1iYzEHz6
+         UzAz2H/MDWvm7GJ0dCb1zbkt8Nahnq+36MgX2TczMGGdB/Gs/1nxjHTgkm6h5yTSubMA
+         kKUj604iajRfrDSBNoKUTSpZ/JxrFrIZRToBM+r4S4g9MsjrJHuyftBRlQ9CFVmt92fO
+         /PEg==
+X-Gm-Message-State: AOAM5303Ms3vAukUDX+XY4dqXBqnUzb+obTdQYkoV29S0AfkDcnEW8dR
+        pFlaIuDwpULpyHhzX2O4BUMdrQNuldcT8s8zUv2DxKn1V20=
+X-Google-Smtp-Source: ABdhPJzB2PS1uLzfXnv9RJ9+8ywF0BTYmMReQpmFB2cwHUGJdFU/VqT1TPNRIciUkUVNxK28Z0jWU0doicUzCH8V5Ek=
+X-Received: by 2002:a7b:c043:: with SMTP id u3mr10377547wmc.185.1593295180142;
+ Sat, 27 Jun 2020 14:59:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200605084321.26255-1-fugang.duan@nxp.com>
+Received: by 2002:adf:f187:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:59:39
+ -0700 (PDT)
+Reply-To: un.org@i.ua
+From:   helen <upspostexpress@gmail.com>
+Date:   Sat, 27 Jun 2020 22:59:39 +0100
+Message-ID: <CA+HWcLeFxWA2HFg2eTDi9xRk8OKWn7oojHXSEX-EzsM7GcSGnA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jun 05, 2020 at 04:43:21PM +0800, Fugang Duan wrote:
-> GKI kernel requires drivers built as modules including
-> console driver, so add the support that imx serial console
-> driver can be built as module.
-> 
-> The changes of the patch:
-> - imx console driver can be built as module.
-> - move out earlycon code to separated driver like imx_earlycon.c,
->   and imx earlycon driver only support build-in.
-> 
-> Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
-> ---
->  drivers/tty/serial/Kconfig        | 17 +++++++----
->  drivers/tty/serial/Makefile       |  1 +
->  drivers/tty/serial/imx.c          | 37 ++---------------------
->  drivers/tty/serial/imx_earlycon.c | 50 +++++++++++++++++++++++++++++++
->  4 files changed, 65 insertions(+), 40 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index adf9e80e7dc9..890cbf214561 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -502,20 +502,27 @@ config SERIAL_IMX
->  	  can enable its onboard serial port by enabling this option.
->  
->  config SERIAL_IMX_CONSOLE
-> -	bool "Console on IMX serial port"
-> -	depends on SERIAL_IMX=y
-> +	tristate "Console on IMX serial port"
-> +	depends on SERIAL_IMX
->  	select SERIAL_CORE_CONSOLE
-> -	select SERIAL_EARLYCON if OF
->  	help
->  	  If you have enabled the serial port on the Freescale IMX
-> -	  CPU you can make it the console by answering Y to this option.
-> +	  CPU you can make it the console by answering Y/M to this option.
->  
-> -	  Even if you say Y here, the currently visible virtual console
-> +	  Even if you say Y/M here, the currently visible virtual console
->  	  (/dev/tty0) will still be used as the system console by default, but
->  	  you can alter that using a kernel command line option such as
->  	  "console=ttymxc0". (Try "man bootparam" or see the documentation of
->  	  your bootloader about how to pass options to the kernel at boot time.)
->  
-> +config SERIAL_IMX_EARLYCON
-> +	bool "Earlycon on IMX serial port"
-> +	depends OF
-> +	select SERIAL_EARLYCON if OF
-> +	help
-> +	  If you have enabled the earlycon on the Freescale IMX
-> +	  CPU you can make it the earlycon by answering Y to this option.
-> +
+MONEY-GRAM TRANSFERRED PAYMENT INFO:
 
-Did you test this?
+Below is the sender=E2=80=99s information
 
-I get the folllowing errors with this patch:
-	scripts/kconfig/conf  --oldconfig Kconfig
-	drivers/tty/serial/Kconfig:521: syntax error
-	drivers/tty/serial/Kconfig:520: invalid statement
-	drivers/tty/serial/Kconfig:521: invalid statement
-	drivers/tty/serial/Kconfig:522: invalid statement
-	drivers/tty/serial/Kconfig:523: unknown statement "If"
-	drivers/tty/serial/Kconfig:524:warning: ignoring unsupported character '.'
-	drivers/tty/serial/Kconfig:524: unknown statement "CPU"
-	make[1]: *** [scripts/kconfig/Makefile:71: oldconfig] Error 1
-	make: *** [Makefile:606: oldconfig] Error 2
 
-I'll let you make the obvious fix and actually test it this time before
-resending :)
 
-thanks,
+1. MG. REFERENCE NO#: 36360857
 
-greg k-h
+2. SENDER'S NAME: Johnson Williams
+
+3. AMOUNT TO PICKUP: US$10,000
+
+
+
+Go to any Money Gram office near you and pick up the payment Track the
+
+Reference Number by visiting and click the link below
+
+(https://secure.moneygram.com/embed/track) and enter the Reference
+
+Number: 36360857 and the Last Name: Williams, you will find the payment
+
+available for pickup instantly.
+
+Yours Sincerely,
+
+Mrs. Helen Marvis
+United Nations Liaison Office
+Directorate for International Payments
