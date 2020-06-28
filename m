@@ -2,184 +2,133 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27C20C6A7
-	for <lists+linux-serial@lfdr.de>; Sun, 28 Jun 2020 09:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FF720C8E4
+	for <lists+linux-serial@lfdr.de>; Sun, 28 Jun 2020 18:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgF1HKb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 28 Jun 2020 03:10:31 -0400
-Received: from mga14.intel.com ([192.55.52.115]:20229 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgF1HKb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 28 Jun 2020 03:10:31 -0400
-IronPort-SDR: XInaIaAxUDcpr18R/l+mwrYuNhxK/gnhb44nuisnUilnr22xXDnDS6uaEBWBCGWVOr78Lv7X9h
- hmvKSuWYyfEg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9665"; a="144849058"
-X-IronPort-AV: E=Sophos;i="5.75,290,1589266800"; 
-   d="scan'208";a="144849058"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2020 00:10:25 -0700
-IronPort-SDR: QexDFDFkTFxmH3Wo99hX2lTF/XV+cL4RdqmZEeov70/vJHG+uh8NZR7yPkQYKWnnXom33HFzOs
- pO27ltdweybQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,290,1589266800"; 
-   d="scan'208";a="355166143"
-Received: from lkp-server02.sh.intel.com (HELO 1f25e51baad6) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2020 00:10:20 -0700
-Received: from kbuild by 1f25e51baad6 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jpRSF-00003k-7k; Sun, 28 Jun 2020 07:10:19 +0000
-Date:   Sun, 28 Jun 2020 15:09:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-linus] BUILD SUCCESS
- 76ed2e105796710cf5b8a4ba43c81eceed948b70
-Message-ID: <5ef8422b.AJS0+ejghzHl9Mli%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726011AbgF1QAI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 28 Jun 2020 12:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbgF1QAI (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 28 Jun 2020 12:00:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450D9C03E979
+        for <linux-serial@vger.kernel.org>; Sun, 28 Jun 2020 09:00:08 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jpZiw-00044m-8u; Sun, 28 Jun 2020 18:00:06 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jpZiu-0000z3-Lj; Sun, 28 Jun 2020 18:00:04 +0200
+Date:   Sun, 28 Jun 2020 18:00:01 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Fugang Duan <fugang.duan@nxp.com>, linux-serial@vger.kernel.org,
+        s.hauer@pengutronix.de, lukas@wunner.de, kernel@pengutronix.de,
+        jslaby@suse.com
+Subject: Re: [PATCH tty/serial 1/1] tty: serial: imx: enable imx serial
+ console port as module
+Message-ID: <20200628160001.nmogndgajqbalzfo@pengutronix.de>
+References: <20200605084321.26255-1-fugang.duan@nxp.com>
+ <20200627142315.GA1959761@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hf2eqksat5nwcmp6"
+Content-Disposition: inline
+In-Reply-To: <20200627142315.GA1959761@kroah.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git  tty-linus
-branch HEAD: 76ed2e105796710cf5b8a4ba43c81eceed948b70  Revert "tty: xilinx_uartps: Fix missing id assignment to the console"
 
-elapsed time: 725m
+--hf2eqksat5nwcmp6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 122
-configs skipped: 1
+On Sat, Jun 27, 2020 at 04:23:15PM +0200, Greg KH wrote:
+> On Fri, Jun 05, 2020 at 04:43:21PM +0800, Fugang Duan wrote:
+> > GKI kernel requires drivers built as modules including
+> > console driver, so add the support that imx serial console
+> > driver can be built as module.
+> >=20
+> > The changes of the patch:
+> > - imx console driver can be built as module.
+> > - move out earlycon code to separated driver like imx_earlycon.c,
+> >   and imx earlycon driver only support build-in.
+> >=20
+> > Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
+> > ---
+> >  drivers/tty/serial/Kconfig        | 17 +++++++----
+> >  drivers/tty/serial/Makefile       |  1 +
+> >  drivers/tty/serial/imx.c          | 37 ++---------------------
+> >  drivers/tty/serial/imx_earlycon.c | 50 +++++++++++++++++++++++++++++++
+> >  4 files changed, 65 insertions(+), 40 deletions(-)
+> >=20
+> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> > index adf9e80e7dc9..890cbf214561 100644
+> > --- a/drivers/tty/serial/Kconfig
+> > +++ b/drivers/tty/serial/Kconfig
+> > @@ -502,20 +502,27 @@ config SERIAL_IMX
+> >  	  can enable its onboard serial port by enabling this option.
+> > =20
+> >  config SERIAL_IMX_CONSOLE
+> > -	bool "Console on IMX serial port"
+> > -	depends on SERIAL_IMX=3Dy
+> > +	tristate "Console on IMX serial port"
+> > +	depends on SERIAL_IMX
+> >  	select SERIAL_CORE_CONSOLE
+> > -	select SERIAL_EARLYCON if OF
+> >  	help
+> >  	  If you have enabled the serial port on the Freescale IMX
+> > -	  CPU you can make it the console by answering Y to this option.
+> > +	  CPU you can make it the console by answering Y/M to this option.
+> > =20
+> > -	  Even if you say Y here, the currently visible virtual console
+> > +	  Even if you say Y/M here, the currently visible virtual console
+> >  	  (/dev/tty0) will still be used as the system console by default, but
+> >  	  you can alter that using a kernel command line option such as
+> >  	  "console=3Dttymxc0". (Try "man bootparam" or see the documentation =
+of
+> >  	  your bootloader about how to pass options to the kernel at boot tim=
+e.)
+> > =20
+> > +config SERIAL_IMX_EARLYCON
+> > +	bool "Earlycon on IMX serial port"
+> > +	depends OF
+> > +	select SERIAL_EARLYCON if OF
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Given that SERIAL_IMX_EARLYCON depends on OF, the select can be
+unconditional.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm                         cm_x300_defconfig
-sh                         microdev_defconfig
-m68k                             allmodconfig
-powerpc                       ppc64_defconfig
-m68k                             alldefconfig
-nios2                         10m50_defconfig
-mips                     decstation_defconfig
-arm                       versatile_defconfig
-mips                          ath25_defconfig
-mips                        nlm_xlp_defconfig
-sparc                            allyesconfig
-arm                       netwinder_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                    gamecube_defconfig
-ia64                                defconfig
-h8300                       h8s-sim_defconfig
-sh                          landisk_defconfig
-sh                          kfr2r09_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                         apsh4a3a_defconfig
-openrisc                    or1ksim_defconfig
-mips                           jazz_defconfig
-x86_64                           alldefconfig
-arm                         s3c2410_defconfig
-powerpc                     mpc512x_defconfig
-openrisc                 simple_smp_defconfig
-sh                           cayman_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20200628
-i386                 randconfig-a002-20200628
-i386                 randconfig-a003-20200628
-i386                 randconfig-a001-20200628
-i386                 randconfig-a005-20200628
-i386                 randconfig-a004-20200628
-i386                 randconfig-a013-20200628
-i386                 randconfig-a016-20200628
-i386                 randconfig-a014-20200628
-i386                 randconfig-a012-20200628
-i386                 randconfig-a015-20200628
-i386                 randconfig-a011-20200628
-x86_64               randconfig-a002-20200628
-x86_64               randconfig-a004-20200628
-x86_64               randconfig-a003-20200628
-x86_64               randconfig-a005-20200628
-x86_64               randconfig-a001-20200628
-x86_64               randconfig-a006-20200628
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                                allnoconfig
-um                                  defconfig
-um                               allmodconfig
-um                               allyesconfig
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
+Best regards
+Uwe
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hf2eqksat5nwcmp6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl74vn4ACgkQwfwUeK3K
+7An0gAf/Sv8ijJw0umWo1goFPdoPfipQpyJhWzJ8ESdz7K9IvOS1LV0Uhx+BKLmP
+4pe2F33csYn5LXsxi5QaqolDeaJfyMRnUx1CepmI8/itTK7hjzpbEh+f3vdWgfEF
+uKoI+BhJ28DxIDVKBVKGXDkUDHJ7aUUS5sT+hRpBFYEVFFyrgV51gWCNcEkOlyJT
+Z7GiuP+fnK0ZtloLQWFk7fZAyU4stU+Z2eMlOu8fOZaY2I52wqTRqg2mUR0sz/ij
+RYjCRlwtBw8/61OSgX5FQfMbNmEBxmvAD6BQzs+ca1bclsg+AbZs/op9mpLIU6V/
+59uMVGeezTgtVnBsBFFPmY3KZx6s0Q==
+=PibU
+-----END PGP SIGNATURE-----
+
+--hf2eqksat5nwcmp6--
