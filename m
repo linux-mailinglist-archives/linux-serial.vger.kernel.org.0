@@ -2,136 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DF320E29A
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Jun 2020 00:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC1A20E933
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Jun 2020 01:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731139AbgF2VHC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jun 2020 17:07:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53740 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730952AbgF2TKR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:10:17 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 51091254C1;
-        Mon, 29 Jun 2020 15:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593446017;
-        bh=OnfXXT+AQvrD+v/2vMYn5PqETvnzchA6CKbftUpsUns=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rb1BzWSrIWEiUyIkWEz3GPQdWFibicExBLA9UB69/Hee8OFVLbdhf9CLY+LHSZFFv
-         SaiWa0OTxpynsAtwFVW9+EPwlY77HI8L90lWVgTRYiefr8lRIApVNtekaKQgQ2uTqq
-         GkNcwJxSR89z+cI9tfpJgxYpbg4TXKz551ddU2s4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 024/135] serial: amba-pl011: Make sure we initialize the port.lock spinlock
-Date:   Mon, 29 Jun 2020 11:51:18 -0400
-Message-Id: <20200629155309.2495516-25-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200629155309.2495516-1-sashal@kernel.org>
-References: <20200629155309.2495516-1-sashal@kernel.org>
+        id S1727817AbgF2XR2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jun 2020 19:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727997AbgF2XR1 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 29 Jun 2020 19:17:27 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3A8C03E97A
+        for <linux-serial@vger.kernel.org>; Mon, 29 Jun 2020 16:17:27 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id o1so1121951plk.1
+        for <linux-serial@vger.kernel.org>; Mon, 29 Jun 2020 16:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=p5nptZDL0+e6uOVQKeig1P+xdgwO7UYCGAQCU2CHOBY=;
+        b=DhpzuUF5hJ2fsxVANchsWjPwpNaKPAB0PU+nDaTYjzV1NWG6dSsUv6ml5iImoRIkJ0
+         v/vW3ekNXoiPJtuD8mKtdnBa13b1XPEZmnsY7xjX0rWStArzgU8n63yIMBkF9gpaIS4J
+         05s9eYKsvyr6uILsyxFVRMcmxDvIdmVav2AUE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=p5nptZDL0+e6uOVQKeig1P+xdgwO7UYCGAQCU2CHOBY=;
+        b=JBZ6RXl7qgpRrJ3D0qM9DVJYbsPL2GYIHGOjyovctELGxh1j0sdVaZgwjpT9w0lgWL
+         whXBZ5+Up6oHIlc3aMsLOYceHdvTdYcSvgEDYMwxc+aIqmOmSZ3Yxju5rkJqzJ43AJwu
+         BChPDaBUXempdr6YSDd8BZm9U1IO46V1lyrRnyaQqLrGwq7fbeRTLGd+VPAyo6KxNWW0
+         iLDjL/5a3VXH1zRMZ19Mes1eB+L6UyCCFCW85q8jar/9d0IjY6rAPuEHenLalTOkqYT/
+         4dgBwIyBqy2L56FX9oR+Kd7tOGjWf1QA+OqUNIK5b9unQqxEw2e6Y2RtS5ryv2qlu6ns
+         jAIA==
+X-Gm-Message-State: AOAM530XgjKY6ka0U4Q01YIFsa8xwmvTTahO/5eTOvt2XpQAYLKW7vQ/
+        U9KvFqZFrWGqKJ9z5uA9+aA0OA==
+X-Google-Smtp-Source: ABdhPJwK6CbKettJAyZjmCgDQyGjAdS1Yfm3DIvJxTAITfG4XxT8lPIX/GXfCbxUOqQA/Ej+PhV1Nw==
+X-Received: by 2002:a17:90a:a58b:: with SMTP id b11mr20230936pjq.107.1593472646911;
+        Mon, 29 Jun 2020 16:17:26 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id d7sm639974pfh.78.2020.06.29.16.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 16:17:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.229-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.4.229-rc1
-X-KernelTest-Deadline: 2020-07-01T15:53+00:00
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1592222564-13556-2-git-send-email-rnayak@codeaurora.org>
+References: <1592222564-13556-1-git-send-email-rnayak@codeaurora.org> <1592222564-13556-2-git-send-email-rnayak@codeaurora.org>
+Subject: Re: [PATCH v6 1/6] tty: serial: qcom_geni_serial: Use OPP API to set clk/perf state
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     viresh.kumar@linaro.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        linux-serial@vger.kernel.org
+To:     Rajendra Nayak <rnayak@codeaurora.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robdclark@chromium.org,
+        robdclark@gmail.com, stanimir.varbanov@linaro.org
+Date:   Mon, 29 Jun 2020 16:17:25 -0700
+Message-ID: <159347264530.1987609.11350620235820019545@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: John Stultz <john.stultz@linaro.org>
+Quoting Rajendra Nayak (2020-06-15 05:02:39)
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/q=
+com_geni_serial.c
+> index 457c0bf..a90f8ec 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/pm_opp.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/pm_wakeirq.h>
+> @@ -962,7 +963,7 @@ static void qcom_geni_serial_set_termios(struct uart_=
+port *uport,
+>                 goto out_restart_rx;
+> =20
+>         uport->uartclk =3D clk_rate;
+> -       clk_set_rate(port->se.clk, clk_rate);
+> +       dev_pm_opp_set_rate(uport->dev, clk_rate);
 
-[ Upstream commit 8508f4cba308f785b2fd4b8c38849c117b407297 ]
+If there isn't an OPP table for the device because it is optional then
+how can we unconditionally call dev_pm_opp_set_rate()?
 
-Valentine reported seeing:
+>         ser_clk_cfg =3D SER_CLK_EN;
+>         ser_clk_cfg |=3D clk_div << CLK_DIV_SHFT;
+> =20
+> @@ -1231,8 +1232,11 @@ static void qcom_geni_serial_pm(struct uart_port *=
+uport,
+>         if (new_state =3D=3D UART_PM_STATE_ON && old_state =3D=3D UART_PM=
+_STATE_OFF)
+>                 geni_se_resources_on(&port->se);
+>         else if (new_state =3D=3D UART_PM_STATE_OFF &&
+> -                       old_state =3D=3D UART_PM_STATE_ON)
+> +                       old_state =3D=3D UART_PM_STATE_ON) {
+> +               /* Drop the performance state vote */
+> +               dev_pm_opp_set_rate(uport->dev, 0);
+>                 geni_se_resources_off(&port->se);
+> +       }
+>  }
+> =20
+>  static const struct uart_ops qcom_geni_console_pops =3D {
+> @@ -1351,13 +1355,25 @@ static int qcom_geni_serial_probe(struct platform=
+_device *pdev)
+>         if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
+>                 port->cts_rts_swap =3D true;
+> =20
+> +       port->se.opp_table =3D dev_pm_opp_set_clkname(&pdev->dev, "se");
+> +       if (IS_ERR(port->se.opp_table))
+> +               return PTR_ERR(port->se.opp_table);
+> +       /* OPP table is optional */
+> +       ret =3D dev_pm_opp_of_add_table(&pdev->dev);
+> +       if (!ret) {
+> +               port->se.has_opp_table =3D true;
+> +       } else if (ret !=3D -ENODEV) {
+> +               dev_err(&pdev->dev, "invalid OPP table in device tree\n");
+> +               return ret;
+> +       }
 
-[    3.626638] INFO: trying to register non-static key.
-[    3.626639] the code is fine but needs lockdep annotation.
-[    3.626640] turning off the locking correctness validator.
-[    3.626644] CPU: 7 PID: 51 Comm: kworker/7:1 Not tainted 5.7.0-rc2-00115-g8c2e9790f196 #116
-[    3.626646] Hardware name: HiKey960 (DT)
-[    3.626656] Workqueue: events deferred_probe_work_func
-[    3.632476] sd 0:0:0:0: [sda] Optimal transfer size 8192 bytes not a multiple of physical block size (16384 bytes)
-[    3.640220] Call trace:
-[    3.640225]  dump_backtrace+0x0/0x1b8
-[    3.640227]  show_stack+0x20/0x30
-[    3.640230]  dump_stack+0xec/0x158
-[    3.640234]  register_lock_class+0x598/0x5c0
-[    3.640235]  __lock_acquire+0x80/0x16c0
-[    3.640236]  lock_acquire+0xf4/0x4a0
-[    3.640241]  _raw_spin_lock_irqsave+0x70/0xa8
-[    3.640245]  uart_add_one_port+0x388/0x4b8
-[    3.640248]  pl011_register_port+0x70/0xf0
-[    3.640250]  pl011_probe+0x184/0x1b8
-[    3.640254]  amba_probe+0xdc/0x180
-[    3.640256]  really_probe+0xe0/0x338
-[    3.640257]  driver_probe_device+0x60/0xf8
-[    3.640259]  __device_attach_driver+0x8c/0xd0
-[    3.640260]  bus_for_each_drv+0x84/0xd8
-[    3.640261]  __device_attach+0xe4/0x140
-[    3.640263]  device_initial_probe+0x1c/0x28
-[    3.640265]  bus_probe_device+0xa4/0xb0
-[    3.640266]  deferred_probe_work_func+0x7c/0xb8
-[    3.640269]  process_one_work+0x2c0/0x768
-[    3.640271]  worker_thread+0x4c/0x498
-[    3.640272]  kthread+0x14c/0x158
-[    3.640275]  ret_from_fork+0x10/0x1c
-
-Which seems to be due to the fact that after allocating the uap
-structure, nothing initializes the spinlock.
-
-Its a little confusing, as uart_port_spin_lock_init() is one
-place where the lock is supposed to be initialized, but it has
-an exception for the case where the port is a console.
-
-This makes it seem like a deeper fix is needed to properly
-register the console, but I'm not sure what that entails, and
-Andy suggested that this approach is less invasive.
-
-Thus, this patch resolves the issue by initializing the spinlock
-in the driver, and resolves the resulting warning.
-
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-serial@vger.kernel.org
-Reported-by: Valentin Schneider <valentin.schneider@arm.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Reviewed-and-tested-by: Valentin Schneider <valentin.schneider@arm.com>
-Link: https://lore.kernel.org/r/20200428184050.6501-1-john.stultz@linaro.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/amba-pl011.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 899a77187bdea..c5da46f7b9093 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2323,6 +2323,7 @@ static int pl011_setup_port(struct device *dev, struct uart_amba_port *uap,
- 	uap->port.fifosize = uap->fifosize;
- 	uap->port.flags = UPF_BOOT_AUTOCONF;
- 	uap->port.line = index;
-+	spin_lock_init(&uap->port.lock);
- 
- 	amba_ports[index] = uap;
- 
--- 
-2.25.1
-
+At least it looks optional here.
