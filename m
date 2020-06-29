@@ -2,104 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701B220D4FA
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jun 2020 21:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6870D20D562
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jun 2020 21:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731351AbgF2TNZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Jun 2020 15:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S1731679AbgF2TQ0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731325AbgF2TNU (ORCPT
+        with ESMTP id S1731903AbgF2TQJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:20 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B91C008751;
-        Mon, 29 Jun 2020 01:35:57 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id i14so15694087ejr.9;
-        Mon, 29 Jun 2020 01:35:57 -0700 (PDT)
+        Mon, 29 Jun 2020 15:16:09 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFACC08EACC
+        for <linux-serial@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id i4so18361073iov.11
+        for <linux-serial@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
+         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
+         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
+         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
+         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
+         3NGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=P/lWBTxJeT64MmPuE+Y53vSa9wNIb6a3JKrDaGJpzms=;
-        b=tCNf8B6YWMeZ7MhUEoFAMQQAPNwFYbsz8eq/qIeXIgJQ6vdkn0041EqqTNOsLS+Ait
-         7avI8YxjJj1tMA/EiLLMs3kgCxbshsE+tLXz1Zkr/SQZY78jFK2GDRipp7jWGmZScS1m
-         x0YWXskl11/zTACK5IRnOR5tCmC5WpBc1ZRDVWTcj5RK5B2ZK2TB6YSmWsVCouXkc9fH
-         m3LrT8ZGR4If4XF5Ru3zfQMz5xoTV5WWhsbTlYl9M7mxn+MGHY4/MM234iegMFhaWdsp
-         uhOC0QCCdFbme+VmxGNE4aqPWc/SeAOABmuCY5wbNX3szwexaajOfxaWr/jw8Q8AH78H
-         wrqg==
-X-Gm-Message-State: AOAM533VCO9psoKWQ3lh3cxY3vt8aw0C/h3kyeoM21T5JpLGZtQXoefc
-        /JH67q0msfWvT/9U+Fkm30zhyXT3
-X-Google-Smtp-Source: ABdhPJwSpDThVjcEd0PgJHWyDlPf/nuRiq+gnvJcGaWZixD0/guW/6gO2OZBM23kPBf0l0OLqzgoxQ==
-X-Received: by 2002:a17:906:a1cc:: with SMTP id bx12mr12520655ejb.461.1593419756288;
-        Mon, 29 Jun 2020 01:35:56 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.195])
-        by smtp.googlemail.com with ESMTPSA id c4sm24101091ejb.17.2020.06.29.01.35.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Jun 2020 01:35:55 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 10:35:53 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Tamseel Shams <m.shams@samsung.com>
-Cc:     kgene@kernel.org, gregkh@linuxfoundation.org, jslaby@suse.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com
-Subject: Re: [PATCH v2] serial: samsung: Re-factors UART IRQ resource for
- various Samsung SoC
-Message-ID: <20200629083553.GA14028@kozik-lap>
-References: <CGME20200628071932epcas5p175059c085421a95de76202767bd132cf@epcas5p1.samsung.com>
- <20200628070007.36222-1-m.shams@samsung.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=jFJzX6iwzdErrZ4IPnjD0oqEE/tFPVM3BoJ1FQ+ThFNGqQbob/c6L+rEPuRxo4N9Al
+         /XSxIkK4oJMJRsLWwwxaRk3Bl08Xp/DTUs9Jsqo6WpWf7gR/gPrEfbajjyFX7an+hS+y
+         yMQfP9j+AhcW7OnrPPfxgejWXlzXjvWX+EB9s+4x1AJoRhty9haLJ99x9s/jJD3/wfbf
+         7CZWM9JoL1b4e3KbkyiWGtkNQmc7VXyuftAbgRFe0TgcWtn38FB735y6LT36uiZRcMPI
+         uADKXvhXHLmt7jww0G1Yi7m738uSVZnAidYTree0Q2khcEM9OvtWcbqQKflwpYgF6tm1
+         xHtQ==
+X-Gm-Message-State: AOAM532YyUJdMhhBkeSO0q2Ii9WH+pZ0drDxKJb0Brehno4XUowyFao0
+        W6FI4sfA2UG9EcanYh5rgfjtStwRTnp3oIXq2uc=
+X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
+X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
+ Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200628070007.36222-1-m.shams@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
+ -0700 (PDT)
+Reply-To: mrs.victoria.alexander2@gmail.com
+From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
+Date:   Mon, 29 Jun 2020 12:15:58 -0700
+Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sun, Jun 28, 2020 at 12:30:07PM +0530, Tamseel Shams wrote:
-> In few older Samsung SoCs like s3c2410, s3c2412
-> and s3c2440, UART IP is having 2 interrupt lines.
-> However, in other SoCs like s3c6400, s5pv210,
-> exynos5433, and exynos4210 UART is having only 1
-> interrupt line. Due to this, "platform_get_irq(platdev, 1)"
-> call in the driver gives the following warning:
-> "IRQ index 1 not found" on recent platforms.
-> 
-> This patch re-factors the IRQ resources handling for
-> each platform and hence fixing the above warnings seen
-> on some platforms.
-> 
-> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
-> ---
-> Removed the RFC tag and using 'platform_get_irq_optional'
-> instead of 'platform_get_irq' as per comment received from
-> Robin Murphy.
-> 
->  drivers/tty/serial/samsung_tty.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index 6ef614d8648c..60554f42e208 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -60,6 +60,7 @@ struct s3c24xx_uart_info {
->  	char			*name;
->  	unsigned int		type;
->  	unsigned int		fifosize;
-> +	unsigned int		irq_cnt;
+Dear friend,
 
-No, it's duplicating the logic.
 
-The driver already checks whether SoC has two or one interrupt line with
-s3c24xx_serial_has_interrupt_mask() so there is no point to have two of
-such methods.
+I have a business container transaction what that some of( $13million dollars)
 
-Instead unify it please. Probably entire
-s3c24xx_serial_has_interrupt_mask() and s3c24xx_serial_type() should be
-removed and switched into *serial_drv_data.
+ I would like to discuss with you. If you are interested, please
+contact my email
 
-Best regards,
-Krzysztof
+address (mrs.victoria.alexander2@gmail.com)
+
+My WhatsApp number but only message (+19293737780)
+
+Please do not reply if you are not ready
+Thanks
