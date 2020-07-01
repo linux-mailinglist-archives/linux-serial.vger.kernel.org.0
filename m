@@ -2,42 +2,42 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A57F210203
-	for <lists+linux-serial@lfdr.de>; Wed,  1 Jul 2020 04:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C76210293
+	for <lists+linux-serial@lfdr.de>; Wed,  1 Jul 2020 05:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgGAC0c (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Jun 2020 22:26:32 -0400
-Received: from mail.farq.edu.uy ([164.73.217.22]:13452 "EHLO mail.fadu.edu.uy"
+        id S1726053AbgGADkJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Jun 2020 23:40:09 -0400
+Received: from mail.farq.edu.uy ([164.73.217.22]:50980 "EHLO mail.fadu.edu.uy"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbgGAC0c (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Jun 2020 22:26:32 -0400
+        id S1725862AbgGADkJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Jun 2020 23:40:09 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.fadu.edu.uy (Postfix) with ESMTP id 38AE012D7E8F;
-        Tue, 30 Jun 2020 23:20:09 -0300 (-03)
+        by mail.fadu.edu.uy (Postfix) with ESMTP id E626612D6A19;
+        Wed,  1 Jul 2020 00:10:11 -0300 (-03)
 Received: from mail.fadu.edu.uy ([127.0.0.1])
         by localhost (mail.fadu.edu.uy [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OHUoJvED554d; Tue, 30 Jun 2020 23:20:08 -0300 (-03)
+        with ESMTP id MDH1aAslwB3a; Wed,  1 Jul 2020 00:10:11 -0300 (-03)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.fadu.edu.uy (Postfix) with ESMTP id D1DBE12D7B9C;
-        Tue, 30 Jun 2020 23:20:07 -0300 (-03)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.fadu.edu.uy D1DBE12D7B9C
+        by mail.fadu.edu.uy (Postfix) with ESMTP id 187FC12D6977;
+        Wed,  1 Jul 2020 00:10:11 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.fadu.edu.uy 187FC12D6977
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fadu.edu.uy;
-        s=08C1D22E-0AE4-11EA-9527-FE35185E3364; t=1593570008;
+        s=08C1D22E-0AE4-11EA-9527-FE35185E3364; t=1593573011;
         bh=qzR6aIKqheN68OEsqQknrlIPUn2z1hPOyGDUb73/iaY=;
         h=MIME-Version:To:From:Date:Message-Id;
-        b=VhHeHHyU5Eqma1pBzyrVUjSgqYn6YdQZ3cXMAyqx4t/PLJi08d2nE515xCL+RNeED
-         PKxHE0oA2OXU68X48UARL9eBidpUVuM3yJ23jkbIkAQkmbqX6lcDdCsz8XcuOFrLVO
-         qn0/fyDDs5Rbpb82N76Ym2mVF9Sfhn1occFSt7crfYDKeeBRn9Tx+E+p0FlxLoWU09
-         iM2PUG+soCtHVcM6ZRKda8bmqbpYIpl3NJu0MYJ+6ybluBH4mOMXu/dwK3aGG4p64e
-         zOoLorKmd6Ugov+MoHCpILwLduAi+nu2QUqmyd+GBUyMPuRyxFi1mnIOWU7AguIZFf
-         26yLt/63sJaIg==
+        b=j9Jp/D4tZABqvY4q2PE5QRv7m/hxxuovBmJh6qNWXRaEt+8L7+lQ0Wh69IIsefXqZ
+         D2CFJQ+5BSU2Wl2imjRDv8mCykFXQYcyZNTZ9dH3ALFTHoRpokljvcA+gSTYfIjeit
+         838hV8rkK/EVXJTzT+FfII+YR702iM19q0nNEmR3HkEO4cGiQHov46j0RLBLWKcFxL
+         M/ySPujjjNZVjb8iXYx730Nt8RyAOlx3aBueGWR9qmJ+wrx+Q/Dlhf7DlpAQBdB7B3
+         vV61QhHpcTXbOBgezpjywDPRmYXPC5ry46JFGv6iPgeaMRpaflEJ0BU5DUcltHgLMK
+         g3TtzbE8O66jw==
 X-Virus-Scanned: amavisd-new at fadu.edu.uy
 Received: from mail.fadu.edu.uy ([127.0.0.1])
         by localhost (mail.fadu.edu.uy [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zSU2sWNdNeW5; Tue, 30 Jun 2020 23:20:07 -0300 (-03)
+        with ESMTP id CcOhxm0mIY74; Wed,  1 Jul 2020 00:10:10 -0300 (-03)
 Received: from [172.20.10.6] (unknown [129.205.113.76])
-        by mail.fadu.edu.uy (Postfix) with ESMTPSA id 8156C12D6440;
-        Tue, 30 Jun 2020 23:19:13 -0300 (-03)
+        by mail.fadu.edu.uy (Postfix) with ESMTPSA id DE8D112D5088;
+        Wed,  1 Jul 2020 00:09:27 -0300 (-03)
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -45,9 +45,9 @@ Content-Description: Mail message body
 Subject: FAMILIENSPENDE!
 To:     Recipients <aramirez@fadu.edu.uy>
 From:   "Charles W. Jackson Jr" <aramirez@fadu.edu.uy>
-Date:   Tue, 30 Jun 2020 19:18:19 -0700
+Date:   Tue, 30 Jun 2020 20:08:40 -0700
 Reply-To: charles_jacksonJr@outlook.com
-Message-Id: <20200701021914.8156C12D6440@mail.fadu.edu.uy>
+Message-Id: <20200701030927.DE8D112D5088@mail.fadu.edu.uy>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
