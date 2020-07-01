@@ -2,60 +2,100 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C76210293
-	for <lists+linux-serial@lfdr.de>; Wed,  1 Jul 2020 05:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BA12102F8
+	for <lists+linux-serial@lfdr.de>; Wed,  1 Jul 2020 06:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726053AbgGADkJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Jun 2020 23:40:09 -0400
-Received: from mail.farq.edu.uy ([164.73.217.22]:50980 "EHLO mail.fadu.edu.uy"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725862AbgGADkJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Jun 2020 23:40:09 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.fadu.edu.uy (Postfix) with ESMTP id E626612D6A19;
-        Wed,  1 Jul 2020 00:10:11 -0300 (-03)
-Received: from mail.fadu.edu.uy ([127.0.0.1])
-        by localhost (mail.fadu.edu.uy [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id MDH1aAslwB3a; Wed,  1 Jul 2020 00:10:11 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.fadu.edu.uy (Postfix) with ESMTP id 187FC12D6977;
-        Wed,  1 Jul 2020 00:10:11 -0300 (-03)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.fadu.edu.uy 187FC12D6977
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fadu.edu.uy;
-        s=08C1D22E-0AE4-11EA-9527-FE35185E3364; t=1593573011;
-        bh=qzR6aIKqheN68OEsqQknrlIPUn2z1hPOyGDUb73/iaY=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=j9Jp/D4tZABqvY4q2PE5QRv7m/hxxuovBmJh6qNWXRaEt+8L7+lQ0Wh69IIsefXqZ
-         D2CFJQ+5BSU2Wl2imjRDv8mCykFXQYcyZNTZ9dH3ALFTHoRpokljvcA+gSTYfIjeit
-         838hV8rkK/EVXJTzT+FfII+YR702iM19q0nNEmR3HkEO4cGiQHov46j0RLBLWKcFxL
-         M/ySPujjjNZVjb8iXYx730Nt8RyAOlx3aBueGWR9qmJ+wrx+Q/Dlhf7DlpAQBdB7B3
-         vV61QhHpcTXbOBgezpjywDPRmYXPC5ry46JFGv6iPgeaMRpaflEJ0BU5DUcltHgLMK
-         g3TtzbE8O66jw==
-X-Virus-Scanned: amavisd-new at fadu.edu.uy
-Received: from mail.fadu.edu.uy ([127.0.0.1])
-        by localhost (mail.fadu.edu.uy [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CcOhxm0mIY74; Wed,  1 Jul 2020 00:10:10 -0300 (-03)
-Received: from [172.20.10.6] (unknown [129.205.113.76])
-        by mail.fadu.edu.uy (Postfix) with ESMTPSA id DE8D112D5088;
-        Wed,  1 Jul 2020 00:09:27 -0300 (-03)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1725783AbgGAEaE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 1 Jul 2020 00:30:04 -0400
+Received: from bmailout2.hostsharing.net ([83.223.78.240]:37271 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725272AbgGAEaE (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 1 Jul 2020 00:30:04 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 1954E280038A9;
+        Wed,  1 Jul 2020 06:30:02 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id A44C71940B1; Wed,  1 Jul 2020 06:30:01 +0200 (CEST)
+Date:   Wed, 1 Jul 2020 06:30:01 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Daniel Winkler <danielwinkler@google.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc:     linux-serial@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        chromeos-bluetooth-upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        Aaron Sierra <asierra@xes-inc.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "serial: 8250: Fix max baud limit in generic 8250
+ port"
+Message-ID: <20200701043001.73qhxyyjx6bayn2m@wunner.de>
+References: <20200630164204.1.I2cc415fa5793b3e55acfd521ba8f0a71e79aa5f1@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: FAMILIENSPENDE!
-To:     Recipients <aramirez@fadu.edu.uy>
-From:   "Charles W. Jackson Jr" <aramirez@fadu.edu.uy>
-Date:   Tue, 30 Jun 2020 20:08:40 -0700
-Reply-To: charles_jacksonJr@outlook.com
-Message-Id: <20200701030927.DE8D112D5088@mail.fadu.edu.uy>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200630164204.1.I2cc415fa5793b3e55acfd521ba8f0a71e79aa5f1@changeid>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Herzlichen Gl=FCckwunsch! Sie haben eine Familienspende in H=F6he von 1.500=
-.000,00 USD von Spenden von Charles W. Jackson Jr. erhalten.
-Antwort E-Mail: charles_jacksonJr@outlook.com f=FCr weitere Details.
+On Tue, Jun 30, 2020 at 04:42:11PM -0700, Daniel Winkler wrote:
+> This reverts commit 0eeaf62981ecc79e8395ca8caa1570eaf3a12257.
 
-Freundliche Gr=FC=DFe,
-Charles W. Jackson Jr.
+That is not an upstream commit.  You probably mean:
+
+    commit 7b668c064ec33f3d687c3a413d05e355172e6c92
+    Author: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+    Date:   Thu May 7 02:31:32 2020 +0300
+
+    serial: 8250: Fix max baud limit in generic 8250 port
+
+And you didn't cc the commit author (hereby fixed).
+
+Thanks,
+
+Lukas
+
+> 
+> The change regresses the QCA6174A-3 bluetooth chip, preventing
+> firmware from being properly loaded. We have verified that without
+> this patch, the chip works as intended.
+> 
+> Signed-off-by: Daniel Winkler <danielwinkler@google.com>
+> ---
+> 
+>  drivers/tty/serial/8250/8250_port.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 1632f7d25acca..e057c65ac1580 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -2618,8 +2618,6 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+>  					     struct ktermios *termios,
+>  					     struct ktermios *old)
+>  {
+> -	unsigned int tolerance = port->uartclk / 100;
+> -
+>  	/*
+>  	 * Ask the core to calculate the divisor for us.
+>  	 * Allow 1% tolerance at the upper limit so uart clks marginally
+> @@ -2628,7 +2626,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+>  	 */
+>  	return uart_get_baud_rate(port, termios, old,
+>  				  port->uartclk / 16 / UART_DIV_MAX,
+> -				  (port->uartclk + tolerance) / 16);
+> +				  port->uartclk);
+>  }
+>  
+>  void
+> -- 
+> 2.27.0.212.ge8ba1cc988-goog
