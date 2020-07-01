@@ -2,104 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFD6210088
-	for <lists+linux-serial@lfdr.de>; Wed,  1 Jul 2020 01:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A57F210203
+	for <lists+linux-serial@lfdr.de>; Wed,  1 Jul 2020 04:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgF3XmX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Jun 2020 19:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgF3XmX (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Jun 2020 19:42:23 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231D7C03E979
-        for <linux-serial@vger.kernel.org>; Tue, 30 Jun 2020 16:42:23 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b14so17686995ybq.3
-        for <linux-serial@vger.kernel.org>; Tue, 30 Jun 2020 16:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=n7raTtIxzIsyGs4VWsPeosbmDVfxOPL6Kt3Xxdq+NzQ=;
-        b=A08aIEHFxec2io4UGF3QU20z0l2BqR3XRZdtO0deY3xpDvUVhgUsaEA0fEJq8xLVv1
-         8iCEpYwHEW+DpYTAYAhmywuVfaUUvalvMif/YEaUBGSUyzVMqL63Rsp0U5Ru387tHPZ+
-         /fUOjy+s+z1U8vdgIPpCtI/0xDh2YjITOMhhvLn43fEsd8+265yQGgrr2glqwnWDdJ8K
-         uz6cuejZtMwVxmLDE78AoZpJAyRmOBqX3S9faTinh0d0+P8tC+NoQk3w7V4yXR3zn5pI
-         dR94lL+K0Kfj/bjLrk6DNrWqlH2Zk40NlXWbGZtj95aLheVuSpxG3LAHfny/GIJwuRr3
-         YTTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=n7raTtIxzIsyGs4VWsPeosbmDVfxOPL6Kt3Xxdq+NzQ=;
-        b=OzUpd79iGWThA7aZACw2F5R5ifiBGoZhW7bq2BLiMstT3Fswmj+tK/cX6ife2V1saP
-         C+7LJxS0N+E2witrWXsIpug+8pVC3ZspHwVT6vOhqiJjIaxmbStAgdQ9FdM/w/rNm++n
-         XaBPJ++cXqO6SQ6/k+PMJta46EO1ZqFvlJnYGQ5jCh2S9xsgVmKuYPnWiwQGk6RSeFNy
-         te4whSqqtxHNaWIEB7Sgv8kaJfFORhwM41b3i1DV+TRy0JDwUyynnf8ggUTdqxnZzOo4
-         h9pU3UwefySqpxMBAucrpLBScw5lvh6Z269Z98PY0g89RT/NyPu2MoJlsOlalvYAOy2C
-         yJnw==
-X-Gm-Message-State: AOAM533FBw97SLSAD/e7HH6WFJ9NDjWUnRf9E7i5L3kbn3AHEJzThi2m
-        TBtmfJSV9zJMVTcAer/w30zaG0d2LxcKa0+agwe/qqo3W08syqjeW1YAE/m05A8h8LEhEqsrkKa
-        xrt5wvlxbwYKJSiw1RWvUsB2K1Ke+VJgqlZv6Je5mQBAUdxpdntrQYJqHlHNnY8wjy0+PXYDBY6
-        r4Cptrt+gQMPyG
-X-Google-Smtp-Source: ABdhPJywusfTFjpLcjnVuDSLKVbrHofdt3NFwsfza8+5TL1nTp3jEw6krmAW8VgpGWoTnARjWoermlh95MMUneiy1oeH
-X-Received: by 2002:a25:5d04:: with SMTP id r4mr35391905ybb.290.1593560542263;
- Tue, 30 Jun 2020 16:42:22 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 16:42:11 -0700
-Message-Id: <20200630164204.1.I2cc415fa5793b3e55acfd521ba8f0a71e79aa5f1@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH] Revert "serial: 8250: Fix max baud limit in generic 8250 port"
-From:   Daniel Winkler <danielwinkler@google.com>
-To:     linux-serial@vger.kernel.org, linux-mediatek@lists.infradead.org
-Cc:     chromeos-bluetooth-upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Aaron Sierra <asierra@xes-inc.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Lukas Wunner <lukas@wunner.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726155AbgGAC0c (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Jun 2020 22:26:32 -0400
+Received: from mail.farq.edu.uy ([164.73.217.22]:13452 "EHLO mail.fadu.edu.uy"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725988AbgGAC0c (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 30 Jun 2020 22:26:32 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.fadu.edu.uy (Postfix) with ESMTP id 38AE012D7E8F;
+        Tue, 30 Jun 2020 23:20:09 -0300 (-03)
+Received: from mail.fadu.edu.uy ([127.0.0.1])
+        by localhost (mail.fadu.edu.uy [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id OHUoJvED554d; Tue, 30 Jun 2020 23:20:08 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.fadu.edu.uy (Postfix) with ESMTP id D1DBE12D7B9C;
+        Tue, 30 Jun 2020 23:20:07 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.fadu.edu.uy D1DBE12D7B9C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fadu.edu.uy;
+        s=08C1D22E-0AE4-11EA-9527-FE35185E3364; t=1593570008;
+        bh=qzR6aIKqheN68OEsqQknrlIPUn2z1hPOyGDUb73/iaY=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=VhHeHHyU5Eqma1pBzyrVUjSgqYn6YdQZ3cXMAyqx4t/PLJi08d2nE515xCL+RNeED
+         PKxHE0oA2OXU68X48UARL9eBidpUVuM3yJ23jkbIkAQkmbqX6lcDdCsz8XcuOFrLVO
+         qn0/fyDDs5Rbpb82N76Ym2mVF9Sfhn1occFSt7crfYDKeeBRn9Tx+E+p0FlxLoWU09
+         iM2PUG+soCtHVcM6ZRKda8bmqbpYIpl3NJu0MYJ+6ybluBH4mOMXu/dwK3aGG4p64e
+         zOoLorKmd6Ugov+MoHCpILwLduAi+nu2QUqmyd+GBUyMPuRyxFi1mnIOWU7AguIZFf
+         26yLt/63sJaIg==
+X-Virus-Scanned: amavisd-new at fadu.edu.uy
+Received: from mail.fadu.edu.uy ([127.0.0.1])
+        by localhost (mail.fadu.edu.uy [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id zSU2sWNdNeW5; Tue, 30 Jun 2020 23:20:07 -0300 (-03)
+Received: from [172.20.10.6] (unknown [129.205.113.76])
+        by mail.fadu.edu.uy (Postfix) with ESMTPSA id 8156C12D6440;
+        Tue, 30 Jun 2020 23:19:13 -0300 (-03)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: FAMILIENSPENDE!
+To:     Recipients <aramirez@fadu.edu.uy>
+From:   "Charles W. Jackson Jr" <aramirez@fadu.edu.uy>
+Date:   Tue, 30 Jun 2020 19:18:19 -0700
+Reply-To: charles_jacksonJr@outlook.com
+Message-Id: <20200701021914.8156C12D6440@mail.fadu.edu.uy>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This reverts commit 0eeaf62981ecc79e8395ca8caa1570eaf3a12257.
+Herzlichen Gl=FCckwunsch! Sie haben eine Familienspende in H=F6he von 1.500=
+.000,00 USD von Spenden von Charles W. Jackson Jr. erhalten.
+Antwort E-Mail: charles_jacksonJr@outlook.com f=FCr weitere Details.
 
-The change regresses the QCA6174A-3 bluetooth chip, preventing
-firmware from being properly loaded. We have verified that without
-this patch, the chip works as intended.
-
-Signed-off-by: Daniel Winkler <danielwinkler@google.com>
----
-
- drivers/tty/serial/8250/8250_port.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 1632f7d25acca..e057c65ac1580 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2618,8 +2618,6 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
- 					     struct ktermios *termios,
- 					     struct ktermios *old)
- {
--	unsigned int tolerance = port->uartclk / 100;
--
- 	/*
- 	 * Ask the core to calculate the divisor for us.
- 	 * Allow 1% tolerance at the upper limit so uart clks marginally
-@@ -2628,7 +2626,7 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
- 	 */
- 	return uart_get_baud_rate(port, termios, old,
- 				  port->uartclk / 16 / UART_DIV_MAX,
--				  (port->uartclk + tolerance) / 16);
-+				  port->uartclk);
- }
- 
- void
--- 
-2.27.0.212.ge8ba1cc988-goog
-
+Freundliche Gr=FC=DFe,
+Charles W. Jackson Jr.
