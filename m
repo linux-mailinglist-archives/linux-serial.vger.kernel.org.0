@@ -2,311 +2,114 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D7921749D
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jul 2020 19:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C437217B98
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Jul 2020 01:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728333AbgGGRAM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Jul 2020 13:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgGGRAK (ORCPT
+        id S1728400AbgGGXLz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Jul 2020 19:11:55 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:32565 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727777AbgGGXLy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Jul 2020 13:00:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A5BC061755
-        for <linux-serial@vger.kernel.org>; Tue,  7 Jul 2020 10:00:10 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jsqwt-0004FS-U5; Tue, 07 Jul 2020 19:00:03 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jsqwt-00038x-1A; Tue, 07 Jul 2020 19:00:03 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Cc:     kernel@pengutronix.de, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH v7 3/3] leds: trigger: implement a tty trigger
-Date:   Tue,  7 Jul 2020 18:59:58 +0200
-Message-Id: <20200707165958.16522-4-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200707165958.16522-1-u.kleine-koenig@pengutronix.de>
-References: <20200707165958.16522-1-u.kleine-koenig@pengutronix.de>
+        Tue, 7 Jul 2020 19:11:54 -0400
+X-UUID: 6363544267ef4f80b9d9ec5b870c4a26-20200708
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ACgdKKQvvl0IN9nE7D17jMhl6fwZEjwiF6CEjA4GWAU=;
+        b=o3NV80BNsX4PmP6KgyiMYWE09jSPqxpKHDYAiV42GAs1eUcfH/QuMlmSdcI58gY/3bjvPeQpd3o+HsoQRCzQ50Laqf9jZxjpLnX/H11qW7ZUBw/QQ4Swx4RvRFG33XnQWG6w06AONjqYK87jvQRxqvE0aXQyBhU0di4beslthvg=;
+X-UUID: 6363544267ef4f80b9d9ec5b870c4a26-20200708
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 729408332; Wed, 08 Jul 2020 07:11:49 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 8 Jul 2020 07:11:29 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 8 Jul 2020 07:11:19 +0800
+From:   <sean.wang@mediatek.com>
+To:     <gregkh@linuxfoundation.org>, <jslaby@suse.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <sr@denx.de>, <arnd@arndb.de>,
+        <matthias.bgg@gmail.com>, <tthayer@opensource.altera.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Sean Wang <sean.wang@mediatek.com>,
+        Steven Liu <steven.liu@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>
+Subject: [PATCH v5] tty: serial: don't do termios for BTIF
+Date:   Wed, 8 Jul 2020 07:11:22 +0800
+Message-ID: <7c67171728cdcc4ccc10adfaea1a14bfbcf8375a.1594163304.git.sean.wang@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 4F28F1CAC5E7592B35293C87473BAF934B244B4F5546B2CBC7BAF98B527E8F2A2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Usage is as follows:
-
-	myled=ledname
-	tty=ttyS0
-
-	echo tty > /sys/class/leds/$myled/trigger
-	echo $tty > /sys/class/leds/$myled/ttyname
-
-. When this new trigger is active it periodically checks the tty's
-statistics and when it changed since the last check the led is flashed
-once.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- .../ABI/testing/sysfs-class-led-trigger-tty   |   6 +
- drivers/leds/trigger/Kconfig                  |   7 +
- drivers/leds/trigger/Makefile                 |   1 +
- drivers/leds/trigger/ledtrig-tty.c            | 192 ++++++++++++++++++
- 4 files changed, 206 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-led-trigger-tty
- create mode 100644 drivers/leds/trigger/ledtrig-tty.c
-
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-new file mode 100644
-index 000000000000..5c53ce3ede36
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-@@ -0,0 +1,6 @@
-+What:		/sys/class/leds/<led>/ttyname
-+Date:		Jul 2020
-+KernelVersion:	5.8
-+Contact:	linux-leds@vger.kernel.org
-+Description:
-+		Specifies the tty device name of the triggering tty
-diff --git a/drivers/leds/trigger/Kconfig b/drivers/leds/trigger/Kconfig
-index ce9429ca6dde..40ff08c93f56 100644
---- a/drivers/leds/trigger/Kconfig
-+++ b/drivers/leds/trigger/Kconfig
-@@ -144,4 +144,11 @@ config LEDS_TRIGGER_AUDIO
- 	  the audio mute and mic-mute changes.
- 	  If unsure, say N
- 
-+config LEDS_TRIGGER_TTY
-+	tristate "LED Trigger for TTY devices"
-+	depends on TTY
-+	help
-+	  This allows LEDs to be controlled by activity on ttys which includes
-+	  serial devices like /dev/ttyS0.
-+
- endif # LEDS_TRIGGERS
-diff --git a/drivers/leds/trigger/Makefile b/drivers/leds/trigger/Makefile
-index 733a83e2a718..25c4db97cdd4 100644
---- a/drivers/leds/trigger/Makefile
-+++ b/drivers/leds/trigger/Makefile
-@@ -15,3 +15,4 @@ obj-$(CONFIG_LEDS_TRIGGER_PANIC)	+= ledtrig-panic.o
- obj-$(CONFIG_LEDS_TRIGGER_NETDEV)	+= ledtrig-netdev.o
- obj-$(CONFIG_LEDS_TRIGGER_PATTERN)	+= ledtrig-pattern.o
- obj-$(CONFIG_LEDS_TRIGGER_AUDIO)	+= ledtrig-audio.o
-+obj-$(CONFIG_LEDS_TRIGGER_TTY)		+= ledtrig-tty.o
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/ledtrig-tty.c
-new file mode 100644
-index 000000000000..e44e2202fa34
---- /dev/null
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -0,0 +1,192 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/delay.h>
-+#include <linux/leds.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/tty.h>
-+#include <uapi/linux/serial.h>
-+
-+struct ledtrig_tty_data {
-+	struct led_classdev *led_cdev;
-+	struct delayed_work dwork;
-+	struct mutex mutex;
-+	const char *ttyname;
-+	struct tty_struct *tty;
-+	int rx, tx;
-+};
-+
-+static void ledtrig_tty_halt(struct ledtrig_tty_data *trigger_data)
-+{
-+	cancel_delayed_work_sync(&trigger_data->dwork);
-+}
-+
-+static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
-+{
-+	schedule_delayed_work(&trigger_data->dwork, 0);
-+}
-+
-+static ssize_t ttyname_show(struct device *dev,
-+			    struct device_attribute *attr, char *buf)
-+{
-+	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
-+	ssize_t len = 0;
-+
-+	mutex_lock(&trigger_data->mutex);
-+
-+	if (trigger_data->ttyname)
-+		len = sprintf(buf, "%s\n", trigger_data->ttyname);
-+
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	return len;
-+}
-+
-+static ssize_t ttyname_store(struct device *dev,
-+			     struct device_attribute *attr, const char *buf,
-+			     size_t size)
-+{
-+	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
-+	char *ttyname;
-+	ssize_t ret = size;
-+
-+	ledtrig_tty_halt(trigger_data);
-+
-+	mutex_lock(&trigger_data->mutex);
-+
-+	if (size > 0 && buf[size - 1] == '\n')
-+		size -= 1;
-+
-+	if (size) {
-+		ttyname = kmemdup_nul(buf, size, GFP_KERNEL);
-+		if (!ttyname) {
-+			ret = -ENOMEM;
-+			goto out_unlock;
-+		}
-+	} else {
-+		ttyname = NULL;
-+	}
-+
-+	kfree(trigger_data->ttyname);
-+	tty_kref_put(trigger_data->tty);
-+	trigger_data->tty = NULL;
-+
-+	trigger_data->ttyname = ttyname;
-+
-+out_unlock:
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	if (ttyname)
-+		ledtrig_tty_restart(trigger_data);
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(ttyname);
-+
-+static void ledtrig_tty_work(struct work_struct *work)
-+{
-+	struct ledtrig_tty_data *trigger_data =
-+		container_of(work, struct ledtrig_tty_data, dwork.work);
-+	struct serial_icounter_struct icount;
-+	int ret;
-+	bool firstrun = false;
-+
-+	mutex_lock(&trigger_data->mutex);
-+
-+	BUG_ON(!trigger_data->ttyname);
-+
-+	/* try to get the tty corresponding to $ttyname */
-+	if (!trigger_data->tty) {
-+		dev_t devno;
-+		struct tty_struct *tty;
-+		int ret;
-+
-+		firstrun = true;
-+
-+		ret = tty_dev_name_to_number(trigger_data->ttyname, &devno);
-+		if (ret < 0)
-+			/*
-+			 * A device with this name might appear later, so keep
-+			 * retrying.
-+			 */
-+			goto out;
-+
-+		tty = tty_kopen_shared(devno);
-+		if (IS_ERR(tty) || !tty)
-+			/* What to do? retry or abort */
-+			goto out;
-+
-+		trigger_data->tty = tty;
-+	}
-+
-+	ret = tty_get_icount(trigger_data->tty, &icount);
-+	if (ret)
-+		return;
-+
-+	while (firstrun ||
-+	       icount.rx != trigger_data->rx ||
-+	       icount.tx != trigger_data->tx) {
-+
-+		led_set_brightness(trigger_data->led_cdev, LED_ON);
-+
-+		msleep(100);
-+
-+		led_set_brightness(trigger_data->led_cdev, LED_OFF);
-+
-+		trigger_data->rx = icount.rx;
-+		trigger_data->tx = icount.tx;
-+		firstrun = false;
-+
-+		ret = tty_get_icount(trigger_data->tty, &icount);
-+		if (ret)
-+			return;
-+	}
-+
-+out:
-+	mutex_unlock(&trigger_data->mutex);
-+	schedule_delayed_work(&trigger_data->dwork, msecs_to_jiffies(100));
-+}
-+
-+static struct attribute *ledtrig_tty_attrs[] = {
-+	&dev_attr_ttyname.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(ledtrig_tty);
-+
-+static int ledtrig_tty_activate(struct led_classdev *led_cdev)
-+{
-+	struct ledtrig_tty_data *trigger_data;
-+
-+	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
-+	if (!trigger_data)
-+		return -ENOMEM;
-+
-+	led_set_trigger_data(led_cdev, trigger_data);
-+
-+	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
-+	trigger_data->led_cdev = led_cdev;
-+	mutex_init(&trigger_data->mutex);
-+
-+	return 0;
-+}
-+
-+static void ledtrig_tty_deactivate(struct led_classdev *led_cdev)
-+{
-+	struct ledtrig_tty_data *trigger_data = led_get_trigger_data(led_cdev);
-+
-+	cancel_delayed_work_sync(&trigger_data->dwork);
-+
-+	kfree(trigger_data);
-+}
-+
-+struct led_trigger ledtrig_tty = {
-+	.name = "tty",
-+	.activate = ledtrig_tty_activate,
-+	.deactivate = ledtrig_tty_deactivate,
-+	.groups = ledtrig_tty_groups,
-+};
-+module_led_trigger(ledtrig_tty);
-+
-+MODULE_AUTHOR("Uwe Kleine-König <u.kleine-koenig@pengutronix.de>");
-+MODULE_DESCRIPTION("UART LED trigger");
-+MODULE_LICENSE("GPL v2");
--- 
-2.27.0
+RnJvbTogU2VhbiBXYW5nIDxzZWFuLndhbmdAbWVkaWF0ZWsuY29tPg0KDQpCbHVldG9vdGggSW50
+ZXJmYWNlIChCVElGKSBpcyBkZXNpZ25lZCBkZWRpY2F0ZWRseSBmb3IgTWVkaWFUZWsgU09DIHdp
+dGgNCkJUIGluIG9yZGVyIHRvIGJlIGluc3RlYWQgb2YgdGhlIFVBUlQgaW50ZXJmYWNlIGJldHdl
+ZW4gQlQgbW9kdWxlIGFuZCBIb3N0DQpDUFUsIGFuZCBub3QgZXhwb3J0ZWQgdG8gdXNlciBzcGFj
+ZSB0byBhY2Nlc3MuDQoNCkFzIHRoZSBVQVJUIGRlc2lnbiwgQlRJRiB3aWxsIGJlIGFuIEFQQiBz
+bGF2ZSBhbmQgY2FuIHRyYW5zbWl0IG9yIHJlY2VpdmUNCmRhdGEgYnkgTUNVIGFjY2VzcywgYnV0
+IGRvZXNuJ3QgcHJvdmlkZSB0ZXJtaW9zIGZ1bmN0aW9uIGxpa2UgYmF1ZHJhdGUgYW5kDQpmbG93
+IGNvbnRyb2wgc2V0dXAuDQoNCkV2ZW4gTENSIG9uIG9mZnNldCAweEMgdGhhdCBpcyBqdXN0IGEg
+RkFLRUxDUg0KYS4gSWYgRkFLRUxDUls3XSBpcyBlcXVhbGVkIHRvIDEsIFJCUigweDAwKSwgVEhS
+KDB4MDApLCBJRVIoMHgwNCkNCiAgIHdpbGwgbm90IGJlIHJlYWRhYmxlL3dyaXRhYmxlLg0KDQpi
+LiBJZiBGQUtFTENSIGlzIGVxdWFsZWQgdG8gMHhCRiwgUkJSKDB4MDApLCBUSFIoMHgwMCksIElF
+UigweDA0KSwNCiAgIElJUigweDA4KSwgYW5kIExTUigweDE0KSB3aWxsIG5vdCBiZSByZWFkYWJs
+ZS93cml0YWJsZS4NCg0KU28gYWRkaW5nIGEgbmV3IGNhcGFiaWxpdHkgJ1VBUlRfQ0FQX05USU8n
+IGZvciB0aGUgdW51c3VhbCB1bnN1cHBvcnRlZA0KY2FzZS4NCg0KVGhlIGJsdWV0b290aCBkcml2
+ZXIgd291bGQgdXNlIEJUSUYgZGV2aWNlIGFzIGEgc2VyZGV2LiBTbyB0aGUgdGVybWlvcw0Kc3Rp
+bGwgZnVuY3Rpb24gd291bGQgYmUgY2FsbGVkIGluIGtlcm5lbHNwYWNlIGZyb20gdHR5cG9ydF9v
+cGVuIGluDQpkcml2ZXJzL3R0eS9zZXJkZXYvc2VyZGV2LXR0eXBydC5jLg0KDQpGaXhlczogMWMx
+NmFlNjVlMjUwICgic2VyaWFsOiA4MjUwOiBvZjogQWRkIG5ldyBwb3J0IHR5cGUgZm9yIE1lZGlh
+VGVrIEJUSUYgY29udHJvbGxlciBvbiBNVDc2MjIvMjMgU29DIikNCkNjOiBTdGV2ZW4gTGl1IDxz
+dGV2ZW4ubGl1QG1lZGlhdGVrLmNvbT4NClNpZ25lZC1vZmYtYnk6IFNlYW4gV2FuZyA8c2Vhbi53
+YW5nQG1lZGlhdGVrLmNvbT4NClNpZ25lZC1vZmYtYnk6IFJ5ZGVyIExlZSA8cnlkZXIubGVlQG1l
+ZGlhdGVrLmNvbT4NCg0KLS0NCnYxLT52MjoNCm5vIGNoYW5nZSBvbiB0ZXJtaW9zLT5jX2NmbGFn
+IGFuZCByZWZpbmUgY29tbWl0IG1lc3NhZ2UNCg0KdjItPnYzOg0KY2hhbmdlIHRoZSBuYW1pbmcg
+ZnJvbSBOTU9EIHRvIE5USU8gYXMgVElPIGlzIGEgd2VsbCBlc3RhYmxpc2hlZCBwcmVmaXgNCmZv
+ciB0ZXJtaW9zIElPQ1RMcy4NCg0KdjMtPnY0Og0KMS4gcmVtb3ZlIGFwcHJvcHJpYXRlIHRhZw0K
+Mi4gYWRkIHRoZSBleHBsYW5hdGlvbiB3aHkgdGhlIHRlcm1pb3MgaXMgcmVxdWlyZWQgZXZlbiB3
+aGVuIHRoZSBjb25uZWN0aW9uDQogICBpc24ndCBleHBvcnRlZCB0byB1c2Vyc3BhY2UuDQoNCnY0
+LT52NToNClVzZSB1cC0+cG9ydC5xdWlya3MgVVBRX0lHTk9SRV9URVJNSU9TIGluc3RlYWQuDQot
+LS0NCiBkcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX2NvcmUuYyB8IDMgKysrDQogZHJpdmVy
+cy90dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMgfCAzICsrKw0KIGluY2x1ZGUvbGludXgvc2Vy
+aWFsX2NvcmUuaCAgICAgICAgIHwgMSArDQogMyBmaWxlcyBjaGFuZ2VkLCA3IGluc2VydGlvbnMo
+KykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTBfY29yZS5jIGIv
+ZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9jb3JlLmMNCmluZGV4IGZjMTE4ZjY0OTg4Ny4u
+YjAwMDYwYzYxNWMyIDEwMDY0NA0KLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9j
+b3JlLmMNCisrKyBiL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTBfY29yZS5jDQpAQCAtNDkw
+LDYgKzQ5MCw5IEBAIHN0YXRpYyB2b2lkIHVuaXY4MjUwX3JzYV9zdXBwb3J0KHN0cnVjdCB1YXJ0
+X29wcyAqb3BzKQ0KIHN0YXRpYyBpbmxpbmUgdm9pZCBzZXJpYWw4MjUwX2FwcGx5X3F1aXJrcyhz
+dHJ1Y3QgdWFydF84MjUwX3BvcnQgKnVwKQ0KIHsNCiAJdXAtPnBvcnQucXVpcmtzIHw9IHNraXBf
+dHhlbl90ZXN0ID8gVVBRX05PX1RYRU5fVEVTVCA6IDA7DQorDQorCWlmICh1cC0+cG9ydC50eXBl
+ID09IFBPUlRfTVRLX0JUSUYpDQorCQl1cC0+cG9ydC5xdWlya3MgfD0gVVBRX0lHTk9SRV9URVJN
+SU9TOw0KIH0NCiANCiBzdGF0aWMgdm9pZCBfX2luaXQgc2VyaWFsODI1MF9pc2FfaW5pdF9wb3J0
+cyh2b2lkKQ0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTBfcG9ydC5j
+IGIvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMNCmluZGV4IDE2MzJmN2QyNWFj
+Yy4uYmUzODA2NDlmZWZiIDEwMDY0NA0KLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1
+MF9wb3J0LmMNCisrKyBiL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTBfcG9ydC5jDQpAQCAt
+MjY0MCw2ICsyNjQwLDkgQEAgc2VyaWFsODI1MF9kb19zZXRfdGVybWlvcyhzdHJ1Y3QgdWFydF9w
+b3J0ICpwb3J0LCBzdHJ1Y3Qga3Rlcm1pb3MgKnRlcm1pb3MsDQogCXVuc2lnbmVkIGxvbmcgZmxh
+Z3M7DQogCXVuc2lnbmVkIGludCBiYXVkLCBxdW90LCBmcmFjID0gMDsNCiANCisJaWYgKHBvcnQt
+PnF1aXJrcyAmIFVQUV9JR05PUkVfVEVSTUlPUykNCisJCXJldHVybjsNCisNCiAJaWYgKHVwLT5j
+YXBhYmlsaXRpZXMgJiBVQVJUX0NBUF9NSU5JKSB7DQogCQl0ZXJtaW9zLT5jX2NmbGFnICY9IH4o
+Q1NUT1BCIHwgUEFSRU5CIHwgUEFST0REIHwgQ01TUEFSKTsNCiAJCWlmICgodGVybWlvcy0+Y19j
+ZmxhZyAmIENTSVpFKSA9PSBDUzUgfHwNCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3Nlcmlh
+bF9jb3JlLmggYi9pbmNsdWRlL2xpbnV4L3NlcmlhbF9jb3JlLmgNCmluZGV4IDlmZDU1MGU3OTQ2
+YS4uYzQ2YWFlMzc0ZTBlIDEwMDY0NA0KLS0tIGEvaW5jbHVkZS9saW51eC9zZXJpYWxfY29yZS5o
+DQorKysgYi9pbmNsdWRlL2xpbnV4L3NlcmlhbF9jb3JlLmgNCkBAIC0xNTUsNiArMTU1LDcgQEAg
+c3RydWN0IHVhcnRfcG9ydCB7DQogDQogCS8qIHF1aXJrcyBtdXN0IGJlIHVwZGF0ZWQgd2hpbGUg
+aG9sZGluZyBwb3J0IG11dGV4ICovDQogI2RlZmluZSBVUFFfTk9fVFhFTl9URVNUCUJJVCgwKQ0K
+KyNkZWZpbmUgVVBRX0lHTk9SRV9URVJNSU9TCUJJVCgxKQ0KIA0KIAl1bnNpZ25lZCBpbnQJCXJl
+YWRfc3RhdHVzX21hc2s7CS8qIGRyaXZlciBzcGVjaWZpYyAqLw0KIAl1bnNpZ25lZCBpbnQJCWln
+bm9yZV9zdGF0dXNfbWFzazsJLyogZHJpdmVyIHNwZWNpZmljICovDQotLSANCjIuMjUuMQ0K
 
