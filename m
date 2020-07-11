@@ -2,105 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F56321C291
-	for <lists+linux-serial@lfdr.de>; Sat, 11 Jul 2020 08:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4729D21C485
+	for <lists+linux-serial@lfdr.de>; Sat, 11 Jul 2020 15:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbgGKGkK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 11 Jul 2020 02:40:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34604 "EHLO mail.kernel.org"
+        id S1728349AbgGKNxu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 11 Jul 2020 09:53:50 -0400
+Received: from mga01.intel.com ([192.55.52.88]:36441 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726963AbgGKGkK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 11 Jul 2020 02:40:10 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 70297206E2;
-        Sat, 11 Jul 2020 06:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594449610;
-        bh=gI75qSUt5Lfb8eztx2LA6onxkmBfiF0BaPrJgvW2TTw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZXAMB3JknGYYZFR3gXxFNnboZs3zv/7h+EWcJJtHBPXGac+bwsM3jyC4Apl3r+k8u
-         r3iRIEgJ41LOv5l/rdk9iAtcF2Pb1d5HEcgwz7G3M31GjVLL9MX3Gl8TQQZcFSf1hv
-         8LN5JzhnWcDW9NoEXC07rBRRIPvlarY17qbcxL34=
-Date:   Sat, 11 Jul 2020 08:40:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthew Howell <mrhowel@g.clemson.edu>
-Cc:     linux-serial@vger.kernel.org, jeff.baldwin@sealevel.com,
-        ryan.wenglarz@sealevel.com, matthew.howell@sealevel.com
-Subject: Re: [PATCH v2] serial: exar: Fix GPIO configuration for Sealevel
- cards based on XR17V35X
-Message-ID: <20200711064014.GA2786431@kroah.com>
-References: <156b27a1-82c5-090e-0ae8-86944b849d6d@g.clemson.edu>
+        id S1728339AbgGKNxt (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 11 Jul 2020 09:53:49 -0400
+IronPort-SDR: 9i0OXrOK5VtSwP2MPOnWVohw23tEJ+G2fcGhfaDf7WaqBAH86oAtW33Tn6wgnjjHA4zth19OBW
+ lSpAaXGuKj/w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9679"; a="166464615"
+X-IronPort-AV: E=Sophos;i="5.75,339,1589266800"; 
+   d="scan'208";a="166464615"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2020 06:53:49 -0700
+IronPort-SDR: 3QCfEU3cuSiKc948o95gtbhQMrzbYcONsOTXTAyukj96HDh5OMrH71WJVGjUREx8uW4BSBGCp0
+ sOQP89RcTHqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,339,1589266800"; 
+   d="scan'208";a="428855436"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 11 Jul 2020 06:53:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 89B99130; Sat, 11 Jul 2020 16:53:47 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/5] Revert "serial: sunhv: Initialize lock for non-registered console"
+Date:   Sat, 11 Jul 2020 16:53:42 +0300
+Message-Id: <20200711135346.71171-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <156b27a1-82c5-090e-0ae8-86944b849d6d@g.clemson.edu>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 04:33:00PM -0400, Matthew Howell wrote:
-> 
-> From: Matthew Howell <mrhowel@g.clemson.edu>
-> 
-> Sealevel XR17V35X based devices are inoperable on kernel versions
-> 4.11 and above due to a change in the GPIO preconfiguration introduced in commit
-> 7dea8165f1d. This patch fixes this by preconfiguring the GPIO on Sealevel
-> cards to the value (0x00) used prior to commit 7dea8165f1d
-> 
-> Fixes: 7dea8165f1d ("serial: exar: Preconfigure xr17v35x MPIOs as output")
-> Signed-off-by: Matthew Howell <mrhowel@g.clemson.edu>
-> ---
-> 
-> This is a revised patch submission based on comments received on
-> the previous submission.
-> See https://www.spinics.net/lists/linux-serial/msg39348.html
-> 
-> I am using a different email address to address the email footer issue,
-> and I have attempted to fix the formatting issues.
+This reverts commit 0f87aa66e8c314f95c00eeff978c8a0b41e05d50.
 
-The footer issues are fixed, but you should probably change the from:
-and signed-off-by to your company address, right?
+There has been a quick fix against uninitialised lock revealed by
+the commit f743061a85f5 ("serial: core: Initialise spin lock before use
+in uart_configure_port()"). Since we have now better fix in serial core,
+this may be safely reverted.
 
-> 
-> Summary/justification of the patch is below.
-> 
-> With GPIOs preconfigured as per commit 7dea8165f1d all ports on Sealevel
-> XR17V35X based devices become stuck in high impedance mode, regardless of
-> dip-switch or software configuration. This causes the device to become
-> effectively unusable. This patch (in various forms) has been distributed
-> to our customers and no issues related to it have been reported.
+Fixes: 0f87aa66e8c3 ("serial: sunhv: Initialize lock for non-registered console")
+Depends-on: f743061a85f5 ("serial: core: Initialise spin lock before use in uart_configure_port()")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/sunhv.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Why not put that paragraph in the changelog as well?
+diff --git a/drivers/tty/serial/sunhv.c b/drivers/tty/serial/sunhv.c
+index e35073e93a5b..eafada8fb6fa 100644
+--- a/drivers/tty/serial/sunhv.c
++++ b/drivers/tty/serial/sunhv.c
+@@ -567,9 +567,6 @@ static int hv_probe(struct platform_device *op)
+ 	sunserial_console_match(&sunhv_console, op->dev.of_node,
+ 				&sunhv_reg, port->line, false);
+ 
+-	/* We need to initialize lock even for non-registered console */
+-	spin_lock_init(&port->lock);
+-
+ 	err = uart_add_one_port(&sunhv_reg, port);
+ 	if (err)
+ 		goto out_unregister_driver;
+-- 
+2.27.0
 
-> 
-> Let me know if any changes need to be made.
-> 
-> --- linux/drivers/tty/serial/8250/8250_exar.c.orig    2020-07-09 11:05:03.920060577 -0400
-> +++ linux/drivers/tty/serial/8250/8250_exar.c    2020-07-09 11:05:25.275891627 -0400
-> @@ -326,7 +326,7 @@ static void setup_gpio(struct pci_dev *p
->       * devices will export them as GPIOs, so we pre-configure them safely
->       * as inputs.
->       */
-> -    u8 dir = pcidev->vendor == PCI_VENDOR_ID_EXAR ? 0xff : 0x00;
-> +    u8 dir = (pcidev->vendor == PCI_VENDOR_ID_EXAR && pcidev->subsystem_vendor != PCI_VENDOR_ID_SEALEVEL) ? 0xff : 0x00;
-
-That's a horrible line to try to read now, right?
-
-Why not turn it into a real if statement so we can make more sense of it
-over time:
-
-	u8 dir = 0x00;
-
-	if ((pcidev->vendor == PCI_VENDOR_ID_EXAR) &&
-	    (pcidev->subsystem_vendor != PCI_VENDOR_ID_SEALEVEL))
-		dir = 0xff;
-
-Looks better, right?
-
-thanks,
-
-greg k-h
