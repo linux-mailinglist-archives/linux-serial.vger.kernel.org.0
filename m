@@ -2,185 +2,135 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A9C21DBB0
-	for <lists+linux-serial@lfdr.de>; Mon, 13 Jul 2020 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685FC21E4E7
+	for <lists+linux-serial@lfdr.de>; Tue, 14 Jul 2020 02:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729835AbgGMQ05 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 13 Jul 2020 12:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729593AbgGMQ05 (ORCPT
+        id S1726534AbgGNA5M (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 13 Jul 2020 20:57:12 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:53444 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726339AbgGNA5K (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 13 Jul 2020 12:26:57 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3FAC061755
-        for <linux-serial@vger.kernel.org>; Mon, 13 Jul 2020 09:26:57 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id h17so6058402qvr.0
-        for <linux-serial@vger.kernel.org>; Mon, 13 Jul 2020 09:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=g-clemson-edu.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=5IwiE3MW39I8Vdq2ru7qR/S54NS/AS9DRHW+hinUxDk=;
-        b=RCE1Tdvi4WMnVU+9MCaZDDeE0L22wxMglilTrCx7jC8fWbykrwgtPMonAII+n4awOx
-         Z6qBwfwnOKeAiB2kx4ihuffQfImUkhmB1dD+gY3CGnMTDDyikRzRdJhYvDjgPmeraszY
-         2EQAc+HEdTImPbhqFbiKFgXYLKbckAbz3X+pSDU7LYYLAIaaAbSPWzsvA7oob1Jtz5T4
-         MZmNlb9R23ZGhCNNL6bG2v9Brajmi6+oLQE/hSAp7Dsi3tE2CTRZ/F5T9ni4egumDDQB
-         v5Xkru1ohzX39Bq58IQT+Nxc+uLrdHFbXralEMZWcIf1PcRw+OpJcLPczTeQBEP2Z8BX
-         IOBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=5IwiE3MW39I8Vdq2ru7qR/S54NS/AS9DRHW+hinUxDk=;
-        b=oWfNiOnD31fuOGr81d8uROUYot0IiLBOdZ9tHfoycGUifxfqodhZ3FiRaTqTu8XTtz
-         WAw9ycnTjkHuHPBBP7jqAKCVXX869FFn6HsdeAH3Rg/2BNVCYSuOHspDLE6jRxB+fEFI
-         dFKs+ZWBotIPVp0nZAzGT99bwPEmY2G5DoSW/USoLpKVFdehukbTyqVuSVcDHfXRhxnZ
-         KzpoJs89wnhg2LpSmJm+3f7THgWKn/EAPKnK7aXv34gWYeLWCshH1Ox+WXcreAm9Xkm+
-         nFR+eL9dx7Vp0uT5omBt0aHmSiSNUpnoG61xC8p/vPOzxJP+vvNSFN54ED/kBnlI0A8q
-         v/8Q==
-X-Gm-Message-State: AOAM530jwLNOYwPhKuu/KwD9A+PZRB6vlwD8O1mvJ9HPWY0aS58Hv1DV
-        BxPjvPxu+QgM9j+Rjr7MBmdVUPJgVOmJDw==
-X-Google-Smtp-Source: ABdhPJwuTTeJD2w46fewFhNtOplui/KVkMBmi87Wfh/O8pFauQZlYYtVDry1LeCEWG80bvqMs0b1CQ==
-X-Received: by 2002:a0c:f214:: with SMTP id h20mr223019qvk.131.1594657616250;
-        Mon, 13 Jul 2020 09:26:56 -0700 (PDT)
-Received: from [10.0.2.15] ([12.18.222.50])
-        by smtp.gmail.com with ESMTPSA id t138sm18563012qka.15.2020.07.13.09.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 09:26:55 -0700 (PDT)
-Subject: Re: [PATCH v2] serial: exar: Fix GPIO configuration for Sealevel
- cards based on XR17V35X
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, jeff.baldwin@sealevel.com,
-        ryan.wenglarz@sealevel.com, matthew.howell@sealevel.com
-References: <156b27a1-82c5-090e-0ae8-86944b849d6d@g.clemson.edu>
- <20200711064014.GA2786431@kroah.com>
-From:   Matthew Howell <mrhowel@g.clemson.edu>
-Message-ID: <c2c183d1-4a90-199a-23ad-2a736e431b27@g.clemson.edu>
-Date:   Mon, 13 Jul 2020 12:26:54 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200711064014.GA2786431@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        Mon, 13 Jul 2020 20:57:10 -0400
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200714005707epoutp037dd44ae257658479c98762c0ff4103b6~heH6HJ19f2483924839epoutp03G
+        for <linux-serial@vger.kernel.org>; Tue, 14 Jul 2020 00:57:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200714005707epoutp037dd44ae257658479c98762c0ff4103b6~heH6HJ19f2483924839epoutp03G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1594688227;
+        bh=HCa46d8xYQI4DLHreMXbh3X5Yj5CBNQoIEHru9jul4s=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=f/qcZwifksZCfYC3SVpwRF04fNyJu6abMGmYXNbrBYViV9i3KXrCkWBCUiwNQtxKx
+         AyHBSBgw/XpINoGkksmtOtLwKVvrWXWPZAYFPKO0WbAc8nAtP3PF3Lq/2kHQVX7rfN
+         iHSzde0j7TsyA5ETIQ1UCGyE4b0f1+Y6Tbmo4cDo=
+Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20200714005706epcas5p489bc537e618131984632492682815724~heH5OZSwy2121121211epcas5p4r;
+        Tue, 14 Jul 2020 00:57:06 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8A.C5.09703.2E20D0F5; Tue, 14 Jul 2020 09:57:06 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200713141655epcas5p2cdd83477e4fc024457a2b08d8ebfbad0~hVY8IEjLS2843428434epcas5p2t;
+        Mon, 13 Jul 2020 14:16:55 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200713141655epsmtrp22c16dd67baefea9442d69e62ceb2de73~hVY8HVl4b1585115851epsmtrp2k;
+        Mon, 13 Jul 2020 14:16:55 +0000 (GMT)
+X-AuditID: b6c32a4a-4b5ff700000025e7-f6-5f0d02e216c3
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1D.2D.08303.7DC6C0F5; Mon, 13 Jul 2020 23:16:55 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200713141654epsmtip144ff6a620f47b0b2e38e30453215c13e~hVY6nWmMt2095220952epsmtip1X;
+        Mon, 13 Jul 2020 14:16:54 +0000 (GMT)
+From:   Tamseel Shams <m.shams@samsung.com>
+To:     kgene@kernel.org, krzk@kernel.org, gregkh@linuxfoundation.org,
+        jslaby@suse.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        Tamseel Shams <m.shams@samsung.com>
+Subject: [PATCH v4] serial: samsung: change to platform_get_irq_optional
+Date:   Mon, 13 Jul 2020 19:25:31 +0530
+Message-Id: <20200713135531.68583-1-m.shams@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNIsWRmVeSWpSXmKPExsWy7bCmhu4jJt54g5c/DC0ezNvGZtG8eD2b
+        xZQNH5gs+h+/ZrY4f34Du8Wmx9dYLS7vmsNmMeP8PiaLM4t72S3uti5md+Dy2LSqk81j/9w1
+        7B6bl9R79G1ZxeixfstVFo/Pm+QC2KK4bFJSczLLUov07RK4Mg7uX8ZesJ2z4va1g4wNjB/Y
+        uxg5OSQETCT2nJkLZgsJ7GaUeL3UrYuRC8j+xCjRN38RC4TzmVFi2aF7jDAdU5sWM0MkdjFK
+        /Dq0nhHCaWGS+DtlDZDDwcEmoClx/Dw3SIOIQIjEu7NbwGqYBU4ySuzd3MACkhAW8JC48fge
+        K4jNIqAqcXRKP1icV8BCYtfyTawQ2+QlVm84ALZNQuAcu8S2Aw1QCReJY7vvQz0hLPHq+BYo
+        W0ri87u9bBB2vsT8eauYIewKiZUX3kDZ9hIHrsxhATmUGejQ9bv0IcKyElNPrWMCsZkF+CR6
+        fz9hgojzSuyYB2MrSvzf3Q+1Slzi3YopUOd4SMxcdpMJEo6xEg8aXrBPYJSdhbBhASPjKkbJ
+        1ILi3PTUYtMCo7zUcr3ixNzi0rx0veT83E2M4PSg5bWD8eGDD3qHGJk4GA8xSnAwK4nwRoty
+        xgvxpiRWVqUW5ccXleakFh9ilOZgURLnVfpxJk5IID2xJDU7NbUgtQgmy8TBKdXA1D/tgn64
+        TJ2V18WsXuF5G+R6LwoZXjvKEviYkXHt5u+ylz+ZFjc994oI+B33/d9et4mvI2abZunHHL1Y
+        ectuwfVf+/WPn7oswXYoqjn5/wTF3JrAzhlL9F9z6ldc55248WbGSr3FTqt/mGnYTV07eaOU
+        3SGPHbOOSSuI8PL+O/JGNvhY7pkt9r32FR1lJekuM7YFnL206ZJl8Peb1ro+J5K2/wtdnCsd
+        9Si/JzW37DHbu5ffJJ34gzotDxi/tTXr+MD5V6gh/lDEMaU3P2y8V7nGVFnc5/8YmWK5V9NX
+        s9SpYfPejoeefEv/Lw/h0ykzmnPof1iJ8+FU55DDsyLXWJp4bWVLto/7esrDK+6LEktxRqKh
+        FnNRcSIAQkSkGH4DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprILMWRmVeSWpSXmKPExsWy7bCSnO71HJ54g+Z+PYsH87axWTQvXs9m
+        MWXDByaL/sevmS3On9/AbrHp8TVWi8u75rBZzDi/j8nizOJedou7rYvZHbg8Nq3qZPPYP3cN
+        u8fmJfUefVtWMXqs33KVxePzJrkAtigum5TUnMyy1CJ9uwSujIP7l7EXbOesuH3tIGMD4wf2
+        LkZODgkBE4mpTYuZuxi5OIQEdjBKXOq6ygaREJeY9ms/I4QtLLHy33N2iKImJokfh3+zdDFy
+        cLAJaEocP88NYooIREjM/FgDUsIscJ5RYufx1UwgvcICHhI3Ht9jBbFZBFQljk7pZwGxeQUs
+        JHYt38QKMV9eYvWGA8wTGHkWMDKsYpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQIDjUt
+        rR2Me1Z90DvEyMTBeIhRgoNZSYQ3WpQzXog3JbGyKrUoP76oNCe1+BCjNAeLkjjv11kL44QE
+        0hNLUrNTUwtSi2CyTBycUg1MPA9n9uxXvBHIf/93/DKW52+sc/tWRs3eGH5x38o1bDFsRa57
+        d1bdPht5w+O1K6tX710d7ZQysTn/wnJvN8tH6k9/ssmVtXAX/5RFtnPqfi2TXM99qlyCqfxq
+        Qvm/k2+u3JM56V7BWqShwrQhxCJkrvPMpdvvur5si2o1er1HUCRJUmHqAZlp8/jzpCYG7fJ8
+        vPnUn2+HBDh5Z50wS7p65JwOg7/nk6XPn13UP6vs/JtFfz+rolZ07nP/q2wdUhxSXie4Hh//
+        Vhq/0nlr6K4Ka/vSR8d3nt+QVLzgAtPXF9m9Sabxp35d380WfVDt/Uk7pjk33cuUY1+ZmJZK
+        GL05yeDPat/AY3uY53/CqZnxSizFGYmGWsxFxYkAj29EvqQCAAA=
+X-CMS-MailID: 20200713141655epcas5p2cdd83477e4fc024457a2b08d8ebfbad0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200713141655epcas5p2cdd83477e4fc024457a2b08d8ebfbad0
+References: <CGME20200713141655epcas5p2cdd83477e4fc024457a2b08d8ebfbad0@epcas5p2.samsung.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+In few older Samsung SoCs like s3c2410, s3c2412
+and s3c2440, UART IP is having 2 interrupt lines.
+However, in other SoCs like s3c6400, s5pv210,
+exynos5433, and exynos4210 UART is having only 1
+interrupt line. Due to this, "platform_get_irq(platdev, 1)"
+call in the driver gives the following false-positive error:
+"IRQ index 1 not found" on recent platforms.
 
-On 7/11/20 2:40 AM, Greg KH wrote:
-> On Fri, Jul 10, 2020 at 04:33:00PM -0400, Matthew Howell wrote:
->>
->> From: Matthew Howell <mrhowel@g.clemson.edu>
->>
->> Sealevel XR17V35X based devices are inoperable on kernel versions
->> 4.11 and above due to a change in the GPIO preconfiguration introduced in commit
->> 7dea8165f1d. This patch fixes this by preconfiguring the GPIO on Sealevel
->> cards to the value (0x00) used prior to commit 7dea8165f1d
->>
->> Fixes: 7dea8165f1d ("serial: exar: Preconfigure xr17v35x MPIOs as output")
->> Signed-off-by: Matthew Howell <mrhowel@g.clemson.edu>
->> ---
->>
->> This is a revised patch submission based on comments received on
->> the previous submission.
->> See https://www.spinics.net/lists/linux-serial/msg39348.html
->>
->> I am using a different email address to address the email footer issue,
->> and I have attempted to fix the formatting issues.
->
-> The footer issues are fixed, but you should probably change the from:
-> and signed-off-by to your company address, right?
->
+This patch replaces the platform_get_irq() call with
+platform_get_irq_optional() and hence avoiding the
+false-positive error.
 
-That would be optimal, yes. However, I don't have direct control over
-the footer as it is enforced by our email server / group policy. Let
-me know if the company email is *required* to be in the from: field
-for this patch to be accepted though I will see if there is any way I
-can get an exemption in this case.
+Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+---
+Commit message is changed.
+Addressed Krzysztof's previous comment.
+ 
+ drivers/tty/serial/samsung_tty.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>
->> Summary/justification of the patch is below.
->>
->> With GPIOs preconfigured as per commit 7dea8165f1d all ports on Sealevel
->> XR17V35X based devices become stuck in high impedance mode, regardless of
->> dip-switch or software configuration. This causes the device to become
->> effectively unusable. This patch (in various forms) has been distributed
->> to our customers and no issues related to it have been reported.
->
-> Why not put that paragraph in the changelog as well?
-
-It is my understanding that the message above signed-off-by is
-included as the commit message and should be as short as possible,
-while additional information and justification is provided below the
-sign-off-by line. Is that not the case? If it is preferable to be
-above signed-off-by line I can move it to there.
-
->
->>
->> Let me know if any changes need to be made.
->>
->> --- linux/drivers/tty/serial/8250/8250_exar.c.orig    2020-07-09 11:05:03.920060577 -0400
->> +++ linux/drivers/tty/serial/8250/8250_exar.c    2020-07-09 11:05:25.275891627 -0400
->> @@ -326,7 +326,7 @@ static void setup_gpio(struct pci_dev *p
->>       * devices will export them as GPIOs, so we pre-configure them safely
->>       * as inputs.
->>       */
->> -    u8 dir = pcidev->vendor == PCI_VENDOR_ID_EXAR ? 0xff : 0x00;
->> +    u8 dir = (pcidev->vendor == PCI_VENDOR_ID_EXAR && pcidev->subsystem_vendor != PCI_VENDOR_ID_SEALEVEL) ? 0xff : 0x00;
->
-> That's a horrible line to try to read now, right?
->
-> Why not turn it into a real if statement so we can make more sense of it
-> over time:
->
->     u8 dir = 0x00;
->
->     if ((pcidev->vendor == PCI_VENDOR_ID_EXAR) &&
->         (pcidev->subsystem_vendor != PCI_VENDOR_ID_SEALEVEL))
->         dir = 0xff;
->
-> Looks better, right?
->
-> thanks,
->
-> greg k-h
-
-Thanks for that feedback. It must have been unclear since the value of
-dir in your if statement has the wrong value. Revised patch diff with
-added comments is below.
-
---- linux/drivers/tty/serial/8250/8250_exar.c.orig    2020-07-09 11:05:03.920060577 -0400
-+++ linux/drivers/tty/serial/8250/8250_exar.c    2020-07-13 11:54:44.386718167 -0400
-@@ -326,7 +326,20 @@ static void setup_gpio(struct pci_dev *p
-      * devices will export them as GPIOs, so we pre-configure them safely
-      * as inputs.
-      */
--    u8 dir = pcidev->vendor == PCI_VENDOR_ID_EXAR ? 0xff : 0x00;
-+
-+    u8 dir = 0x00;
-+
-+    if  ((pcidev->vendor == PCI_VENDOR_ID_EXAR) &&
-+        (pcidev->subsystem_vendor != PCI_VENDOR_ID_SEALEVEL))
-+    {
-+       // Configure GPIO as inputs for Commtech adapters
-+       dir = 0xff;
-+    }
-+    else
-+    {
-+       // Configure GPIO as outputs for SeaLevel adapters
-+       dir = 0x00;
-+    }
- 
-     writeb(0x00, p + UART_EXAR_MPIOINT_7_0);
-     writeb(0x00, p + UART_EXAR_MPIOLVL_7_0);
-
---
-
-Thanks,
-Matthew Howell
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 6ef614d8648c..c44582011b9b 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -1911,7 +1911,7 @@ static int s3c24xx_serial_init_port(struct s3c24xx_uart_port *ourport,
+ 		ourport->tx_irq = ret + 1;
+ 	}
+ 
+-	ret = platform_get_irq(platdev, 1);
++	ret = platform_get_irq_optional(platdev, 1);
+ 	if (ret > 0)
+ 		ourport->tx_irq = ret;
+ 	/*
+-- 
+2.17.1
 
