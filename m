@@ -2,162 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B483221E4E8
-	for <lists+linux-serial@lfdr.de>; Tue, 14 Jul 2020 02:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D3A21E4D6
+	for <lists+linux-serial@lfdr.de>; Tue, 14 Jul 2020 02:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgGNA5a (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 13 Jul 2020 20:57:30 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:40577 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbgGNA53 (ORCPT
+        id S1726893AbgGNAxg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 13 Jul 2020 20:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgGNAxf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 13 Jul 2020 20:57:29 -0400
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200714005726epoutp022a2fe3910fd5fc5c4a64248f702d0276~heIL2Kptw0250002500epoutp02W
-        for <linux-serial@vger.kernel.org>; Tue, 14 Jul 2020 00:57:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200714005726epoutp022a2fe3910fd5fc5c4a64248f702d0276~heIL2Kptw0250002500epoutp02W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594688246;
-        bh=M82KTQ34xlsoe98Owtp5RPP10GSPNATgF5vm5BQ+yU8=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=JVkNM8cK6WdzhsJtJeAf/Q591r9578YlW4zEkJN/piiHJ1dD+G6rj3QyRgyLL0Spm
-         V0V1Ll9INi6Btdt3J4CX+4BKjnwYEmw5Xd7ZP+DPc1f+0Z/ap3O3fy1Yg5wO8rNhEB
-         rRbWyq4fD1Hero4E3ItSn1x0KjN0qbvMhbgjVkTs=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20200714005726epcas5p3fce7b5a3b0c89e9a80c677c4f2adc515~heILK3E9e0595905959epcas5p3M;
-        Tue, 14 Jul 2020 00:57:26 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0F.E5.09703.6F20D0F5; Tue, 14 Jul 2020 09:57:26 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20200713140359epcas5p4d95206230ef6ec19269aa13132c8c8bf~hVNpeuE5m0071100711epcas5p4m;
-        Mon, 13 Jul 2020 14:03:59 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200713140359epsmtrp1a0bb03ce63bf04071b152a7ca69e7c75~hVNpd-bGj2698426984epsmtrp1D;
-        Mon, 13 Jul 2020 14:03:59 +0000 (GMT)
-X-AuditID: b6c32a4a-4b5ff700000025e7-26-5f0d02f6a275
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        02.BC.08303.FC96C0F5; Mon, 13 Jul 2020 23:03:59 +0900 (KST)
-Received: from mshams01 (unknown [107.122.43.244]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20200713140357epsmtip1e36519cc00cdf018632777d0a6d21010~hVNnP0ZSB1681216812epsmtip1P;
-        Mon, 13 Jul 2020 14:03:57 +0000 (GMT)
-From:   "M Tamseel Shams" <m.shams@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzk@kernel.org>
-Cc:     <kgene@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jslaby@suse.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alim.akhtar@samsung.com>
-In-Reply-To: <20200706081307.GA13025@kozik-lap>
-Subject: RE: [PATCH v3] serial: samsung: Re-factors UART IRQ resource for
- various Samsung SoC
-Date:   Mon, 13 Jul 2020 19:33:42 +0530
-Message-ID: <007301d6591e$74a4b2d0$5dee1870$@samsung.com>
+        Mon, 13 Jul 2020 20:53:35 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877C7C08C5DB
+        for <linux-serial@vger.kernel.org>; Mon, 13 Jul 2020 17:53:34 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id m6so3499330vsl.12
+        for <linux-serial@vger.kernel.org>; Mon, 13 Jul 2020 17:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uBmPGkwb8F27DgB7ghpu4ldmH1wyapHT/SdG1wNVoGM=;
+        b=DsVuBHOSfihKaNkABXRm4ftNILFS5xlzW6RCsluK4T11o2qaXfRJa5N0UNwsp+0kCJ
+         53tVV/PwX28dzQ54HAuuCIN7gy+nUOCPu2EunQOHMCfOVUG950g7F3158McC+Q3pXBLw
+         KdViqNVDKlGvtHk3ZRRKIfsi3+Ub9nFkvXgaw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uBmPGkwb8F27DgB7ghpu4ldmH1wyapHT/SdG1wNVoGM=;
+        b=rmvbV2DoCgknthX6yOXVN9m8MsGTq2yz3SOK7NsYoa9/LTPFX/spv0QIIT/TMECadS
+         385P9oEgiM5Ahq6w2Bg95jH59WRyiZgCh66L4/1DBTIW6wII/R+NsPewZJUhUGSJQcO1
+         ClWE3m7R8/NW3PEEFKcrMclLmlJOkwibFe72yG0n5Uqkg/mp4fpGj6WIbAczKLUg4vzF
+         AplFSe0DEXRZakDIiILM/Mph+Bv6BSAmfmoJohNZ+ears5fDCowjTGgLk4oDih3edCpd
+         TUCnrxz1hgsNCCk2JeeuO405mAQA5aDd6lfzoDV3KNBcpXzsViupvNygN6vCx5khQrCL
+         yVyQ==
+X-Gm-Message-State: AOAM530o0pfVECUSh0MClwXnw8kq3tYcGL3LI9LeCaYBC2/bmbMXBznK
+        h7IEnuadVY0T0dJ/A6bqkgtIIBneQsw=
+X-Google-Smtp-Source: ABdhPJw84B7/TEl6kvDyqWQnOoXmSSl0r2jFKcdnY7ehITrMKobwTsZqZjTOhLK7XEmb+BROHYYBlQ==
+X-Received: by 2002:a67:d90c:: with SMTP id t12mr1548276vsj.88.1594688013442;
+        Mon, 13 Jul 2020 17:53:33 -0700 (PDT)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id x25sm2069295vsg.21.2020.07.13.17.53.31
+        for <linux-serial@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2020 17:53:32 -0700 (PDT)
+Received: by mail-ua1-f46.google.com with SMTP id o25so4954672uar.1
+        for <linux-serial@vger.kernel.org>; Mon, 13 Jul 2020 17:53:31 -0700 (PDT)
+X-Received: by 2002:ab0:6e8e:: with SMTP id b14mr1932767uav.0.1594688011224;
+ Mon, 13 Jul 2020 17:53:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJ+HCpw/jCCJmkguxc6VRyn8Om3HQIWvFo9AbDj3oanl8co8A==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLKsWRmVeSWpSXmKPExsWy7bCmlu43Jt54g3UNHBYP5m1js2hevJ7N
-        YsqGD0wW/Y9fM1ucP7+B3WLT42usFpd3zWGzmHF+H5PFmcW97A6cHptWdbJ57J+7ht1j85J6
-        j74tqxg91m+5yuLxeZNcAFsUl01Kak5mWWqRvl0CV8aDWTfZCi7zVTx6P4m1gfE5dxcjJ4eE
-        gInE6t13mbsYuTiEBHYzSmx/2M0C4XxilJjXtAvK+cwoseN+GxNMy8xzn1lAbCGBXYwSl79Z
-        QNjPGSWu/TQDsdkEdCUmHWxjBrFFgOzNN5azgwxiFvjKKHFq6wc2kASngL7E0gtT2EFsYYF4
-        iSNL5gDZHBwsAqoShzdLg4R5BSwlzr7fwwhhC0qcnPkEbC+zgLbEsoWvmSHuUZD4+XQZK8Qu
-        J4m7n/4zQdSIS7w8egRsr4TAUg6JvgOH2SEaXCTWbO9mg7CFJV4d3wIVl5J42d8GZedLzJ+3
-        CmpBhcTKC2+gbHuJA1fmsIDcySygKbF+lz5EWFZi6ql1UHv5JHp/P4GGFa/EjnkwtqLE/939
-        UOPFJd6tmMI6gVFpFpLXZiF5bRaSF2YhbFvAyLKKUTK1oDg3PbXYtMAoL7Vcrzgxt7g0L10v
-        OT93EyM4RWl57WB8+OCD3iFGJg7GQ4wSHMxKIrzRopzxQrwpiZVVqUX58UWlOanFhxilOViU
-        xHmVfpyJExJITyxJzU5NLUgtgskycXBKNTAl2ip4C9//x6u5KVWawyv526Gp24U4+P/bqyke
-        8MiYxCvz8XF7S2h3kPvSWbxP566w2Hw8w16mJftyuarD9U+vNQWus7t+jzHSCf/6lU1xpUIu
-        y6HZvucD7nFHWhn0t2+/wyBhdXSVgJ9BzO/bE1st4maZmAjJP9KxZp5ZU9L33lQzIn1V8a4/
-        pu9T614p8sgKRPJJ3FG2Snn24pNe0b2tp7bPVW1f4Kz/42OZ/tPIJ2m3WVZUCzv6iF59wO35
-        s/b1ikXlnEffZP82e3CezeIZvxa7WfSkhpyiHMEoz/qS1zKzTi7v3Oi9mjl35ddUfeniLUkz
-        Cnx2CSum8V2/JN6x+/gBhv4si7zMuWcslViKMxINtZiLihMBhkAbAMADAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIIsWRmVeSWpSXmKPExsWy7bCSnO75TJ54g1e/DC0ezNvGZtG8eD2b
-        xZQNH5gs+h+/ZrY4f34Du8Wmx9dYLS7vmsNmMeP8PiaLM4t72R04PTat6mTz2D93DbvH5iX1
-        Hn1bVjF6rN9ylcXj8ya5ALYoLpuU1JzMstQifbsErowF0/4zFuzlq7i3uJ29gfEidxcjJ4eE
-        gInEzHOfWUBsIYEdjBIfziRCxMUlpv3azwhhC0us/PecvYuRC6jmKaPEzxknwBJsAroSkw62
-        MYPYIkD25hvLwYqYBf4ySrxpucgG0bGWUeLijcdMIFWcAvoSSy9MYQexhQViJba9mQS0moOD
-        RUBV4vBmaZAwr4ClxNn3exghbEGJkzOfgF3HLKAt0fuwlRHGXrbwNTPEdQoSP58uY4U4wkni
-        7qf/TBA14hIvjx5hn8AoPAvJqFlIRs1CMmoWkpYFjCyrGCVTC4pz03OLDQuM8lLL9YoTc4tL
-        89L1kvNzNzGCY01LawfjnlUf9A4xMnEwHmKU4GBWEuGNFuWMF+JNSaysSi3Kjy8qzUktPsQo
-        zcGiJM77ddbCOCGB9MSS1OzU1ILUIpgsEwenVANTV2dQ9z4hvrruU9Mcn2RlqU+8bqI1afOE
-        Z88V6xafX6b2VGBJS4LI3o6Tq/fqNies+TndWFqf206P68uyqfstNI96Tqy7W6qXambhmbjl
-        /rQoG7bCxHnl68Sn8MqmdIp2rJtZnBSk4a7oYPPY+zjTnRXugQZuLzj3rF34OipdaoWirbr2
-        K4V665f3i+IC9xtyTjVWU9eqKzzUei9rlt+ysD+HTfTvsS+5vL2Dc9Ok1UEHOBq/blipu/u3
-        cdyOCgMmntrWiGbR3m3tW85/ztCYGfCyvX9N26xGO8MSAQs26ZtibTsM+URUKoNmpuV+iJz7
-        5K970flPDzMVd8gseeq9bF1bsB53ecfLK82yckosxRmJhlrMRcWJAOYenXwkAwAA
-X-CMS-MailID: 20200713140359epcas5p4d95206230ef6ec19269aa13132c8c8bf
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200704142658epcas5p254ae909fedb07dda58cece5d6d5252b4
-References: <CGME20200704142658epcas5p254ae909fedb07dda58cece5d6d5252b4@epcas5p2.samsung.com>
-        <20200704140646.66528-1-m.shams@samsung.com>
-        <20200706081307.GA13025@kozik-lap>
+References: <1594287420-24141-1-git-send-email-rnayak@codeaurora.org> <20200710124152.GC1567243@kroah.com>
+In-Reply-To: <20200710124152.GC1567243@kroah.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 13 Jul 2020 17:53:20 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XJQaAHsDb6uvKpwU87qtqTQgNeoiuRr2kF9pqjBLhLpg@mail.gmail.com>
+Message-ID: <CAD=FV=XJQaAHsDb6uvKpwU87qtqTQgNeoiuRr2kF9pqjBLhLpg@mail.gmail.com>
+Subject: Re: [PATCH] tty: serial: qcom-geni-serial: Drop the icc bw votes in
+ suspend for console
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-serial@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-> > In few older Samsung SoCs like s3c2410, s3c2412 and s3c2440, UART IP
-> > is having 2 interrupt lines.
-> > However, in other SoCs like s3c6400, s5pv210, exynos5433, and
-> > exynos4210 UART is having only 1 interrupt line. Due to this,
-> > =22platform_get_irq(platdev, 1)=22
-> > call in the driver gives the following warning:
-> > =22IRQ index 1 not found=22 on recent platforms.
+Rajendra,
+
+On Fri, Jul 10, 2020 at 5:41 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jul 09, 2020 at 03:07:00PM +0530, Rajendra Nayak wrote:
+> > When using the geni-serial as console, its important to be
+> > able to hit the lowest possible power state in suspend,
+> > even with no_console_suspend.
+> > The only thing that prevents it today on platforms like the sc7180
+> > is the interconnect BW votes, which we certainly don't need when
+> > the system is in suspend. So in the suspend handler mark them as
+> > ACTIVE_ONLY (0x3) and on resume switch them back to the ALWAYS tag (0x7)
 > >
-> > This patch re-factors the IRQ resources handling for each platform and
-> > hence fixing the above warnings seen on some platforms.
-> >
-> > Signed-off-by: Tamseel Shams <m.shams=40samsung.com>
+> > Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 > > ---
-> > Removed the logic of irq_cnt and directly using
-> > s3c24xx_serial_has_interrupt_mask() to check for number of interrupt
-> > lines.
-> >
-> >  drivers/tty/serial/samsung_tty.c =7C 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/tty/serial/samsung_tty.c
-> > b/drivers/tty/serial/samsung_tty.c
-> > index 6ef614d8648c..8a955f3d8975 100644
-> > --- a/drivers/tty/serial/samsung_tty.c
-> > +++ b/drivers/tty/serial/samsung_tty.c
-> > =40=40 -1908,10 +1908,13 =40=40 static int s3c24xx_serial_init_port(str=
-uct
-> s3c24xx_uart_port *ourport,
-> >  	else =7B
-> >  		port->irq =3D ret;
-> >  		ourport->rx_irq =3D ret;
-> > -		ourport->tx_irq =3D ret + 1;
-> > +		if (s3c24xx_serial_has_interrupt_mask(port))
-> > +			ourport->tx_irq =3D ret;
->=20
-> Hi,
->=20
-> I don't understand: Why do you assign here the same interrupt as RX?
->=20
-> Best regards,
-> Krzysztof
->=20
-Hi Krzysztof,
-I was assigning the same interrupt to Tx and Rx for UART, which have one in=
-terrupt line,=20
-but ourport->tx_irq is never used for those UART's. So, leaving it as it wa=
-s.
-The change now is using platform_get_irq_optional () instead of platform_ge=
-t_irq ()
-to avoid false-positive error.
+> > Note: Patch applies on qcom for-next, which has the ICC support patches.
+> > The tag macros are currently not exported and hence the hardcoded values.
+> > Perhaps if and when https://patchwork.kernel.org/patch/11619705/ lands I
+> > can refresh this patch to use the macros.
+>
+> Feel free to take this patch through that tree.
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thanks & Regards,
-Tamseel
+Could you post a v2?  Bjorn landed some of my geni serial patches to
+make console / kgdb work better, but then I realized that your patch
+no longer applies cleanly.  It's trivial to resolve, so hopefully a v2
+should be quick and then Bjorn can land?
 
+Thanks!
+
+-Doug
