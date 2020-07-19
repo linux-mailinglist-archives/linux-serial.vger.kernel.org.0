@@ -2,118 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE05224B33
-	for <lists+linux-serial@lfdr.de>; Sat, 18 Jul 2020 14:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D8F22510B
+	for <lists+linux-serial@lfdr.de>; Sun, 19 Jul 2020 12:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbgGRMiv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 18 Jul 2020 08:38:51 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:36322 "EHLO smtp.al2klimov.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726493AbgGRMiv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 18 Jul 2020 08:38:51 -0400
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id A58C4BC064;
-        Sat, 18 Jul 2020 12:38:46 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     gregkh@linuxfoundation.org, jslaby@suse.com,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        josh@joshtriplett.org, jbrasen@nvidia.com, krzk@kernel.org,
-        kai.heng.feng@canonical.com, tbogendoerfer@suse.de,
-        masahiroy@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] tty: serial: Replace HTTP links with HTTPS ones
-Date:   Sat, 18 Jul 2020 14:38:40 +0200
-Message-Id: <20200718123840.19957-1-grandmaster@al2klimov.de>
+        id S1726520AbgGSKFA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 19 Jul 2020 06:05:00 -0400
+Received: from sonic314-13.consmr.mail.bf2.yahoo.com ([74.6.132.123]:40039
+        "EHLO sonic314-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726021AbgGSKFA (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 19 Jul 2020 06:05:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1595153099; bh=qXBWf2EoWT9gmJgm/3NiogFnv3V/rxlq5ApKE+Dow4k=; h=Date:From:Reply-To:Subject:References:From:Subject; b=K/YcAjYk4TvQWaBwnMLFJcDqfvvcXv59nP2+IWEntIwmoRgRsNO05gCxGp2/nbbTXQR6jROAL75Tq5qivY9fixjfkBJQ0mA/paykAHzEz/pBnAhLctBdRl45sHJIdU8Ec2YlSgd5/s0Wjp3Pv0Ohjq92JImdnIVTc4RbGlaj0In2PQOBgp52faRBTCePGlh26rWsnAoaKmUGTOSI267MyNO9P8QiVVBkQUi6nVeUXRciu0XS6QLqP1h0s4R+/5KQ3bDSBCFWlasB/m1qWH4wvZuuP27d6FZ4r4FAL5pS8pNnsLbjDsvWJfDAJpQ9khYVDu3x+mVbqfTUvLSM44tdrw==
+X-YMail-OSG: vx0zszsVM1kxDqbotIPx00qKNUpRdDbVKPw829FURANzMC5wJ2Q.hCx9.sAsMH7
+ ndt_U_oUrZpLJgOgOqb6zWHGyqBQ2Podqr0IZS8ieTq5Afodz_xGTy1n1IvY9Q5h6tMO9mgHQzXm
+ ZKcoDux8V429JyaJgqBiVT7oeWVwYowd1rFb7IxWoDAZY5fbTUIC.6avrH9Hiy1CN7fCYPwnuFJX
+ tpYVEnQCYAfAvBNhhfoCAwHgF4joz6IXEwmAB4Pwdf0FzWJBsndWqoLW9WwxrNg2e1ymQ3c9BFwk
+ kjCR89dXTt_M18sqT7psAdbi.NQU4N7jIsnesNtyLSerIHxwC32jLupCOZ8kDWQBXuSbBPuJcFXE
+ 1qXyX3shjKCYP6w.1sy.YtXVFmwIgq7iPwKkV96ukIpxr.vvTgsp1VRhDT4mPhAXS.zsQkYUXg7q
+ 3u3SXEftVmsgiFm63j0gm_tBSVddwOVqQwfy2hXLgo0R2vSgUZg0BfYr_WerHujq4NeUAqPhQSSf
+ 3O..9RnaXYCyaD5A8TQluqnSwvg3Yc5mRU3_Wc3i2.PFe3OcxGaiZySIhDp.esbSrr6fFnmgdWRE
+ .ekHQCsywXOtOGHtxlHl1aFZDyPqHlkwD6C54zwOs.0Bf4uJEkhbhkyR5zAR0q9aH8x68y2ArAdS
+ k9N.tBbA7mUw1wlnydG_q2732hCggZd61WskD3gxsgIDrWqlG3jzD5p3_kYIx.h7Ca1EqzCd7KrX
+ ryBDHySKhU_KesH0W8DQ.2.SqLlGTwiis51qLbiT2OugjnUxa.tgsKL9bRbZDIlaBWSvUuQRB2Mw
+ gA78HAyQx2kg3pXtFXtusayjTjz5gCkuS5ie.VX8g7TZ1mtIFkGM7Xeq8S.HhKtQ7xg1duT_pUB2
+ rxq3XtMWCrZhWGImqMRZfLNylVyMekDtmSi4U8GiTnAJjE1t0HEd0Y3f47jwRS25DsOgKjijIbl4
+ 6qLaMpLWLZ3lTIpPgUgm7CXCAKliauKy6N6BDoMNlF8vmIcwK4jlMXZ7RAIEf3hQMF8_9IuMj.Og
+ 5rFaDiKFBRHGXGv1jgf9kjw761efEX59Pyy0uV8sYzmr8x_d49OVlXQ_SaobFmcRfedH17inpuLk
+ QrkoubvyL7W23zgPQIl6jG1t3L6Lu1mj0ww5CYk4TCYm2oiRxoi6oPqLTAHmACU3H_60e5UQ6_0n
+ X5358RL3vFIWv5oUMrmRthDt3u4RDRtcMxqsX7_jd6cBWx.pbpjSWqMM7Z812sJKqE8gDEoDaQU7
+ 0d8zEpsSzXIPPW.5kPPSAzba_ixdCPI2kC9yQavVd_7llPLpkJ13I0BtKGOGHWqUx4qc9BnkVDA-
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.bf2.yahoo.com with HTTP; Sun, 19 Jul 2020 10:04:59 +0000
+Date:   Sun, 19 Jul 2020 10:04:55 +0000 (UTC)
+From:   Monica Render <prender1226@gmx.com>
+Reply-To: mrender377@gmail.com
+Message-ID: <1955651903.2694416.1595153095326@mail.yahoo.com>
+Subject: Nice to meet you!
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1955651903.2694416.1595153095326.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16271 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
-
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
-
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
-
- If there are any URLs to be removed completely
- or at least not (just) HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
-
- Sorry again to all maintainers who complained about subject lines.
- Now I realized that you want an actually perfect prefixes,
- not just subsystem ones.
- I tried my best...
- And yes, *I could* (at least half-)automate it.
- Impossible is nothing! :)
-
-
- drivers/tty/serial/8250/Kconfig     | 4 ++--
- drivers/tty/serial/jsm/jsm_driver.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index d2ae033aea40..603137da4736 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -222,7 +222,7 @@ config SERIAL_8250_MANY_PORTS
- 	  Say Y here if you have dumb serial boards other than the four
- 	  standard COM 1/2/3/4 ports. This may happen if you have an AST
- 	  FourPort, Accent Async, Boca (read the Boca mini-HOWTO, available
--	  from <http://www.tldp.org/docs.html#howto>), or other custom
-+	  from <https://www.tldp.org/docs.html#howto>), or other custom
- 	  serial port hardware which acts similar to standard serial port
- 	  hardware. If you only use the standard COM 1/2/3/4 ports, you can
- 	  say N here to save some memory. You can also say Y if you have an
-@@ -266,7 +266,7 @@ config SERIAL_8250_BOCA
- 	depends on SERIAL_8250 != n && ISA && SERIAL_8250_MANY_PORTS
- 	help
- 	  Say Y here if you have a Boca serial board.  Please read the Boca
--	  mini-HOWTO, available from <http://www.tldp.org/docs.html#howto>
-+	  mini-HOWTO, available from <https://www.tldp.org/docs.html#howto>
- 
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called 8250_boca.
-diff --git a/drivers/tty/serial/jsm/jsm_driver.c b/drivers/tty/serial/jsm/jsm_driver.c
-index 592e51d8944e..cd30da0ef083 100644
---- a/drivers/tty/serial/jsm/jsm_driver.c
-+++ b/drivers/tty/serial/jsm/jsm_driver.c
-@@ -16,7 +16,7 @@
- 
- #include "jsm.h"
- 
--MODULE_AUTHOR("Digi International, http://www.digi.com");
-+MODULE_AUTHOR("Digi International, https://www.digi.com");
- MODULE_DESCRIPTION("Driver for the Digi International Neo and Classic PCI based product line");
- MODULE_LICENSE("GPL");
- MODULE_SUPPORTED_DEVICE("jsm");
--- 
-2.27.0
-
+Please do you speak english?
