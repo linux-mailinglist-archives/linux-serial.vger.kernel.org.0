@@ -2,79 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4567922722B
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Jul 2020 00:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88297227682
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Jul 2020 05:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbgGTWVe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Jul 2020 18:21:34 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:46039 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726021AbgGTWVe (ORCPT
+        id S1728573AbgGUDRV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Jul 2020 23:17:21 -0400
+Received: from [211.196.21.11] ([211.196.21.11]:53206 "EHLO
+        iscure03.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725857AbgGUDRU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Jul 2020 18:21:34 -0400
-Received: by mail-io1-f68.google.com with SMTP id e64so19300901iof.12;
-        Mon, 20 Jul 2020 15:21:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bKYIymgYEsaoAp0VGuX+X+GdB+8XUwPd9yIWMXOJP1w=;
-        b=hyTu/7AZwsxWFKuXgHnq/8w3UkGTp2ZOT/wjdl+ecTqi+F7gHTc8szOv8BUYE1Wb1Y
-         Ie+uzbEwe0V02SvAEE7ajlFj85aMVKwxkFEhKDLQGmTiSNa/VuBjNT7Z8vudFQ3MJcWp
-         tBhgE+Q2Vdvym3BNc+bZ9GOv6l/pcphSDrXm3sJ+599u5xfFRmSwelKG3seOIvy65HCp
-         +cucKDdr4xMvr6ifw0ElxIybvbQKYvKPzIMcPK20KFdTzRoJ2EfIV6TJkVeoUM1b9erd
-         Da9Vc4U6BsIV8MAB/oxGFC1Aav0ABecPMzqpWF+hNBhGHwobBcbmaBzbDx3eJXkMixi2
-         D8VQ==
-X-Gm-Message-State: AOAM53133vsFyVUtIjvoUKePadMO4QtB+CaVrymcgsdU93ON2X3PhOMu
-        mVx/asb3fUiOSckQVflzfg==
-X-Google-Smtp-Source: ABdhPJyw7PV9vqQm9bNholJCp9qVWUHQhJ4HzWTR9RO+AmibGdJC53lLZ6Ro0lZ/VF/HqsMbn+QlAg==
-X-Received: by 2002:a05:6638:1187:: with SMTP id f7mr29447388jas.21.1595283693108;
-        Mon, 20 Jul 2020 15:21:33 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id n1sm9463052ilo.68.2020.07.20.15.21.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 15:21:32 -0700 (PDT)
-Received: (nullmailer pid 3055517 invoked by uid 1000);
-        Mon, 20 Jul 2020 22:21:31 -0000
-Date:   Mon, 20 Jul 2020 16:21:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        devicetree@vger.kernel.org, Jason Cooper <jason@lakedaemon.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-renesas-soc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-serial@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 4/8] dt-bindings: mmc: renesas,sdhi: Add r8a774e1 support
-Message-ID: <20200720222131.GA3055470@bogus>
-References: <1594230511-24790-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594230511-24790-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 20 Jul 2020 23:17:20 -0400
+Received: from Shop01 (unknown [127.0.0.1])
+        by iscure03.localdomain (Postfix) with SMTP id 99A7A2AE13C;
+        Mon, 20 Jul 2020 12:16:01 +0900 (KST)
+Received: from (HELO 2v45) [146.142.217.126] by Shop01 with ESMTP id 55558734; Sun, 19 Jul 2020 12:09:37 -0400
+Message-ID: <qoap--$$2--7c-9c@95ql.c.sm7vtdb>
+From:   "MOORE GATES LTD" <TEXT@TEXT.COM>
+Reply-To: "MOORE GATES LTD" <TEXT@TEXT.COM>
+To:     linux-man@vger.kernel.org
+Subject: FROM MR. MOORE
+Date:   Sun, 19 Jul 20 12:09:37 GMT
+X-Mailer: Internet Mail Service (5.5.2650.21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1594230511-24790-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: multipart/alternative;
+        boundary="D9F2D5A2__"
+X-Priority: 1
+X-MSMail-Priority: High
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 08 Jul 2020 18:48:27 +0100, Lad Prabhakar wrote:
-> Document SDHI controller for RZ/G2H (R8A774E1) SoC, which is compatible
-> with R-Car Gen3 SoC family.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/mmc/renesas,sdhi.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+--D9F2D5A2__
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
+
+Dear Beloved,
+Peace of the Lord be with you and family, I am Fitzpatrick Moore a
+United Kingdom Citizen, I have ($ 25M) Twenty five Million united
+states dollars with a finance House in United State. I will want you
+to help me collect this deposit and dispatch it to charity
+organizations. You will take out 30% of these funds for your
+assistance to help ME disburse this fund to charities. I will like you
+to acknowledge the receipt of this e-mail as soon as possible and
+treats with absolute confidentiality and sincerity. Please reply to my
+Email: (moorefitzpatrick@gmail.com)
+Yours Sincerely,
+Fitzpatrick Moore
+
+--D9F2D5A2__--
+
