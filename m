@@ -2,119 +2,134 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9562822A093
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Jul 2020 22:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7558622A3AD
+	for <lists+linux-serial@lfdr.de>; Thu, 23 Jul 2020 02:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732877AbgGVUL1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Jul 2020 16:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732791AbgGVUL0 (ORCPT
+        id S1733202AbgGWAeK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Jul 2020 20:34:10 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:60720 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729423AbgGWAeJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Jul 2020 16:11:26 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6645BC0619DC
-        for <linux-serial@vger.kernel.org>; Wed, 22 Jul 2020 13:11:26 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id k18so2785368qtm.10
-        for <linux-serial@vger.kernel.org>; Wed, 22 Jul 2020 13:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=g-clemson-edu.20150623.gappssmtp.com; s=20150623;
-        h=from:date:to:cc:subject:message-id:user-agent:mime-version;
-        bh=L7bhn4spU+NBDgg5EABDORW/iXaxYAZneHN6frZeQko=;
-        b=vTFVxANEURxYQXJF8ny/wZ4WBfwoke/2SvN7SikLudohjHKX1vebgrsoYlsUE2lub2
-         b+IZdWW1D3w4Xg8z1NruJan1fnT5FOT6qDbcAvK8QXJ46XdBOdYNg4cihBuysOU5ZIs/
-         E4Tk186dDekJhM4xQ3F5wrMt2kvKU8JCZDXZEfxjXH7JxUznFuysOJIbxoazyzEmSW0e
-         MB2/idSv1adD9ihh/hrUvbpJGgzutcOc8tUpuJbTIeryFYj4ai2e7LgTiOOrAwpPUx33
-         eHsEkLICN13p7M6vylBmM/jPfRhwPaLScn/A/J9p1yeQRZnOe2HEcSZNjK7bycCZ7Akm
-         vprA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:user-agent
-         :mime-version;
-        bh=L7bhn4spU+NBDgg5EABDORW/iXaxYAZneHN6frZeQko=;
-        b=LTT635p5j+yeCotEISIVIk/9LeOPeFLv9diE6hTtaFgKulzVW3AZCn9Le55hWZwjmY
-         g2RvA+uiP87mpcr+RYOVCEE+EPYO5ufUk4JL+jgc2Xi1gUvAjHiCHcLQHVenXptO2rmk
-         qUem9puTpHz0aqAoXtoGsl77zuykj2jE+EBBpwMQpx0cj1V9RqJV08Xb32pN915AJbXn
-         37c54UrytrOab0Cmsz1pAvhkvpRApSMErOIepQepDSj5zbtdWew0YBfpEk1BWLrBkbgw
-         KEVRWnc5JOsHawIwxFUn3NMrDr8L8eQQyICcQK1q8KUQWnifmEsIgFZZmUVEg8PkhGPS
-         VJfg==
-X-Gm-Message-State: AOAM532digAaUehl9TpcZRddhl5ZFUVhhQCY+LhkVcCk3Spg+/0PjdeC
-        +OejKrQCyTxAsTJ8g/sxcc3HFDDYs/jv8Orv
-X-Google-Smtp-Source: ABdhPJyMOFiN34ZZcC+UFmsDEJwVjd7/FgSpZoUrV3DfhrPc/vTwM75wFzdvDkj9MGSlfFhbiC2leg==
-X-Received: by 2002:aed:3f2c:: with SMTP id p41mr1126250qtf.12.1595448685615;
-        Wed, 22 Jul 2020 13:11:25 -0700 (PDT)
-Received: from tstest-VirtualBox ([12.18.222.50])
-        by smtp.gmail.com with ESMTPSA id r185sm790487qkb.39.2020.07.22.13.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2020 13:11:24 -0700 (PDT)
-From:   Matthew Howell <mrhowel@g.clemson.edu>
-X-Google-Original-From: Matthew Howell <ts-test@tstest-VirtualBox>
-Date:   Wed, 22 Jul 2020 16:11:24 -0400 (EDT)
-To:     gregkh@linuxfoundation.org
-cc:     linux-serial@vger.kernel.org, jeff.baldwin@sealevel.com,
-        ryan.wenglarz@sealevel.com, matthew.howell@sealevel.com
-Subject: [PATCH v4] serial: exar: Fix GPIO configuration for Sealevel cards
- based on XR17V35X
-Message-ID: <alpine.DEB.2.21.2007221605270.13247@tstest-VirtualBox>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 22 Jul 2020 20:34:09 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 521218040A6A;
+        Thu, 23 Jul 2020 00:34:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dmfSIOayfHoF; Thu, 23 Jul 2020 03:34:00 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/4] serial: 8250_dw: Fix ref clock usage
+Date:   Thu, 23 Jul 2020 03:33:53 +0300
+Message-ID: <20200723003357.26897-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Greg, Jiri, Andy. We've missed the last merge window. It would be pity to
+miss the next one. Please review/merge in the series.
 
-From: Matthew Howell <matthew.howell@sealevel.com>
+Regarding the patchset. It might be dangerous if an UART port reference
+clock rate is suddenly changed. In particular the 8250 port drivers
+(and AFAICS most of the tty drivers using common clock framework clocks)
+rely either on the exclusive reference clock utilization or on the ref
+clock rate being always constant. Needless to say that it turns out not
+true and if some other service suddenly changes the clock rate behind an
+UART port driver back no good can happen. So the port might not only end
+up with an invalid uartclk value saved, but may also experience a
+distorted output/input data since such action will effectively update the
+programmed baud-clock. We discovered such problem on Baikal-T1 SoC where
+two DW 8250 ports have got a shared reference clock. Allwinner SoC is
+equipped with an UART, which clock is derived from the CPU PLL clock
+source, so the CPU frequency change might be propagated down up to the
+serial port reference clock. This patchset provides a way to fix the
+problem to the 8250 serial port controllers and mostly fixes it for the
+DW 8250-compatible UART. I say mostly because due to not having a facility
+to pause/stop and resume/restart on-going transfers we implemented the
+UART clock rate update procedure executed post factum of the actual
+reference clock rate change.
 
-Sealevel XR17V35X based devices are inoperable on kernel versions
-4.11 and above due to a change in the GPIO preconfiguration introduced in
-commit
-7dea8165f1d. This patch fixes this by preconfiguring the GPIO on Sealevel
-cards to the value (0x00) used prior to commit 7dea8165f1d
+In addition the patchset includes a small optimization patch. It
+simplifies the DW APB UART ref clock rate setting procedure a bit.
 
-With GPIOs preconfigured as per commit 7dea8165f1d all ports on
-Sealevel XR17V35X based devices become stuck in high impedance
-mode, regardless of dip-switch or software configuration. This
-causes the device to become effectively unusable. This patch (in
-various forms) has been distributed to our customers and no issues
-related to it have been reported.
+This patchset is rebased and tested on the mainline Linux kernel 5.8-rc5:
+base-commit: 11ba468877bb ("Linux 5.8-rc5")
+tag: v5.8-rc5
 
-Fixes: 7dea8165f1d ("serial: exar: Preconfigure xr17v35x MPIOs as output")
-Signed-off-by: Matthew Howell <matthew.howell@sealevel.com>
----
+Changelog v3:
+- Refactor the original patch to adjust the UART port divisor instead of
+  requesting an exclusive ref clock utilization.
 
-Revised based on comments received on previous submission
-https://www.spinics.net/lists/linux-serial/msg39482.html
+Changelog v4:
+- Discard commit b426bf0fb085 ("serial: 8250: Fix max baud limit in generic
+  8250 port") since Greg has already merged it into the tty-next branch.
+- Use EXPORT_SYMBOL_GPL() for the serial8250_update_uartclk() method.
 
-It had previously passed checkpatch.pl in "patch" mode (--patch)
-without errors. However, when running it in "file" mode (-f) it finds
-stling issues that did not show up in "patch" mode. These styling
-issues are now resolved according to checkpatch.pl. It appears my
-editor (and email client) were automatically converting tabs
-to spaces.
+Changelog v5:
+- Refactor dw8250_clk_work_cb() function cheking the clk_get_rate()
+  return value for being erroneous and exit if it is.
+- Don't update p->uartclk in the port startup. It will be updated later in
+  the same procedure at the set_termios() function being invoked by the
+  serial_core anyway.
 
-Let me know if the tabs are still being converted to spaces somehow
-or if anything else looks wrong.
+Changelog v6:
+- Resend
 
---- linux/drivers/tty/serial/8250/8250_exar.c.orig	2020-07-09 11:05:03.920060577 -0400
-+++ linux/drivers/tty/serial/8250/8250_exar.c	2020-07-22 14:08:27.494512202 -0400
-@@ -326,7 +326,17 @@ static void setup_gpio(struct pci_dev *p
- 	 * devices will export them as GPIOs, so we pre-configure them safely
- 	 * as inputs.
- 	 */
--	u8 dir = pcidev->vendor == PCI_VENDOR_ID_EXAR ? 0xff : 0x00;
-+
-+	u8 dir = 0x00;
-+
-+	if  ((pcidev->vendor == PCI_VENDOR_ID_EXAR) &&
-+		(pcidev->subsystem_vendor != PCI_VENDOR_ID_SEALEVEL)) {
-+		// Configure GPIO as inputs for Commtech adapters
-+		dir = 0xff;
-+	} else {
-+		// Configure GPIO as outputs for SeaLevel adapters
-+		dir = 0x00;
-+	}
+Link: https://lore.kernel.org/linux-serial/20200617224813.23853-1-Sergey.Semin@baikalelectronics.ru
+Changelog v7:
+- Wake the device up on the serial port divider update.
 
- 	writeb(0x00, p + UART_EXAR_MPIOINT_7_0);
- 	writeb(0x00, p + UART_EXAR_MPIOLVL_7_0);
+Link: https://lore.kernel.org/linux-serial/20200619200251.9066-1-Sergey.Semin@baikalelectronics.ru
+Changelog v8:
+- Add a new patch:
+  "serial: 8250_dw: Pass the same rate to the clk round and set rate methods"
+
+Link: https://lore.kernel.org/linux-serial/20200714124808.21493-1-Sergey.Semin@baikalelectronics.ru
+Changelog v9:
+- Resend
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-serial@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (4):
+  serial: 8250: Add 8250 port clock update method
+  serial: 8250_dw: Simplify the ref clock rate setting procedure
+  serial: 8250_dw: Pass the same rate to the clk round and set rate
+    methods
+  serial: 8250_dw: Fix common clocks usage race condition
+
+ drivers/tty/serial/8250/8250_dw.c   | 120 ++++++++++++++++++++++++----
+ drivers/tty/serial/8250/8250_port.c |  40 ++++++++++
+ include/linux/serial_8250.h         |   2 +
+ 3 files changed, 148 insertions(+), 14 deletions(-)
+
+-- 
+2.26.2
+
