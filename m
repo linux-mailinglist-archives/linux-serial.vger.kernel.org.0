@@ -2,72 +2,114 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBDE22AB64
-	for <lists+linux-serial@lfdr.de>; Thu, 23 Jul 2020 11:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9CA22ABEB
+	for <lists+linux-serial@lfdr.de>; Thu, 23 Jul 2020 11:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728232AbgGWJIo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 23 Jul 2020 05:08:44 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:19453 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726127AbgGWJIn (ORCPT
+        id S1727828AbgGWJsL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 23 Jul 2020 05:48:11 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11995 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726127AbgGWJsL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 23 Jul 2020 05:08:43 -0400
-X-UUID: a394200657ba4bb49d41679fa2ec77aa-20200723
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=LkLD6rKD+tyfSOxJ/tFfCgfVHNHDHHwbNbevew2fYZ4=;
-        b=tBh0SDxEkPPTeQ8bV8EjBxN5n90HlyJbdD7ZbLv5syW+VDbcyoOtwWcvqh81YHLZ3gVivyEM1qE1trsYssbaB/uMOTPIX+y5mKBQ54kCYOlkSpBXl9e4NZvbDYGN8n2dzDs5V2bUtR6+QvoDkcs4JOVvmSagTjS0S6C+n/o/hSU=;
-X-UUID: a394200657ba4bb49d41679fa2ec77aa-20200723
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <seiya.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 125551253; Thu, 23 Jul 2020 17:08:39 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 23 Jul 2020 17:08:36 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Jul 2020 17:08:37 +0800
-From:   Seiya Wang <seiya.wang@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>,
-        Crystal Guo <crystal.guo@mediatek.com>
-Subject: [PATCH 4/4] dt-binding: mediatek: mt8192: update mtk-wdt document
-Date:   Thu, 23 Jul 2020 17:07:31 +0800
-Message-ID: <20200723090731.4482-5-seiya.wang@mediatek.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20200723090731.4482-1-seiya.wang@mediatek.com>
-References: <20200723090731.4482-1-seiya.wang@mediatek.com>
+        Thu, 23 Jul 2020 05:48:11 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N9XWE8045943;
+        Thu, 23 Jul 2020 05:47:55 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32e1yc0v15-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 05:47:55 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06N9XwQK047495;
+        Thu, 23 Jul 2020 05:47:55 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32e1yc0v0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 05:47:55 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06N9fL8G013581;
+        Thu, 23 Jul 2020 09:47:52 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 32brbgu5q0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 09:47:52 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06N9loTk29360560
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jul 2020 09:47:50 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E8FF52052;
+        Thu, 23 Jul 2020 09:47:50 +0000 (GMT)
+Received: from [9.145.184.33] (unknown [9.145.184.33])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A543052057;
+        Thu, 23 Jul 2020 09:47:49 +0000 (GMT)
+Subject: Re: [PATCH V6] GCOV: Add config to check the preqequisites situation
+To:     Cixi Geng <gengcixi@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>, jslaby@suse.com,
+        linux-serial@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Cixi Geng1 <cixi.geng1@unisoc.com>,
+        Orson Zhai <orsonzhai@gmail.com>, zhang.lyra@gmail.com
+References: <20200618100852.13715-1-gengcixi@gmail.com>
+ <2fae67c7637f4e978cb54c3b96090788@BJMBX01.spreadtrum.com>
+ <CAF12kFseC4MMbEUk6CgW=Hpz_Hg-+fjwbLZKFdPu0K_EGtcPDw@mail.gmail.com>
+From:   Peter Oberparleiter <oberpar@linux.ibm.com>
+Message-ID: <a5c4018c-a0fd-7855-1ee9-dc0c4e7251e7@linux.ibm.com>
+Date:   Thu, 23 Jul 2020 11:47:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <CAF12kFseC4MMbEUk6CgW=Hpz_Hg-+fjwbLZKFdPu0K_EGtcPDw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-23_03:2020-07-22,2020-07-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 suspectscore=1 bulkscore=0 adultscore=0 clxscore=1011
+ priorityscore=1501 mlxscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230072
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-RnJvbTogQ3J5c3RhbCBHdW8gPGNyeXN0YWwuZ3VvQG1lZGlhdGVrLmNvbT4NCg0KdXBkYXRlIG10
-ay13ZHQgZG9jdW1lbnQgZm9yIE1UODE5MiBwbGF0Zm9ybQ0KDQpTaWduZWQtb2ZmLWJ5OiBDcnlz
-dGFsIEd1byA8Y3J5c3RhbC5ndW9AbWVkaWF0ZWsuY29tPg0KLS0tDQogRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQudHh0IHwgMiArKw0KIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dCBiL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dA0KaW5kZXggNGRkMzZiZDNmMWFk
-Li5kNzYwY2E4YTYzMGUgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCisrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dA0KQEAgLTEyLDYgKzEyLDggQEAgUmVxdWly
-ZWQgcHJvcGVydGllczoNCiAJIm1lZGlhdGVrLG10NzYyOS13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5
-LXdkdCI6IGZvciBNVDc2MjkNCiAJIm1lZGlhdGVrLG10ODE4My13ZHQiLCAibWVkaWF0ZWssbXQ2
-NTg5LXdkdCI6IGZvciBNVDgxODMNCiAJIm1lZGlhdGVrLG10ODUxNi13ZHQiLCAibWVkaWF0ZWss
-bXQ2NTg5LXdkdCI6IGZvciBNVDg1MTYNCisJIm1lZGlhdGVrLG10ODE5Mi13ZHQiOiBmb3IgTVQ4
-MTkyDQorDQogDQogLSByZWcgOiBTcGVjaWZpZXMgYmFzZSBwaHlzaWNhbCBhZGRyZXNzIGFuZCBz
-aXplIG9mIHRoZSByZWdpc3RlcnMuDQogDQotLSANCjIuMTQuMQ0K
+On 16.07.2020 14:38, Cixi Geng wrote:
+> Hi All:
+> Does this patch need more modification?
 
+Yes. As it is now there's still a prompt for the prereq symbol. There
+should be no prompt for this symbol in the config dialog.
+
+[...]
+
+
+>> diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
+>> index 3941a9c48f83..f415c4aaf0ab 100644
+>> --- a/kernel/gcov/Kconfig
+>> +++ b/kernel/gcov/Kconfig
+>> @@ -51,6 +51,16 @@ config GCOV_PROFILE_ALL
+>>         larger and run slower. Also be sure to exclude files from profiling
+>>         which are not linked to the kernel image to prevent linker errors.
+>>
+>> +config GCOV_PROFILE_PREREQS
+>> +       bool "Profile Kernel for prereqs"
+>> +       default y if GCOV_KERNEL && !COMPILE_TEST
+>> +       help
+>> +         This options activates profiling for the specified kernel modules.
+>> +
+>> +         When some modules need Gcov data, enable this config, then configure
+>> +         with gcov on the corresponding modules,The directories or files of
+>> +         these modules will be added profiling flags after kernel compile.
+>> +
+
+Replace the portion above with these lines:
+
+config GCOV_PROFILE_PREREQS
+        def_bool y if GCOV_KERNEL && !COMPILE_TEST
+
+
+
+-- 
+Peter Oberparleiter
+Linux on Z Development - IBM Germany
