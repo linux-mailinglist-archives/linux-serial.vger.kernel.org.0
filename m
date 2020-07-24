@@ -2,75 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1816622BEBD
-	for <lists+linux-serial@lfdr.de>; Fri, 24 Jul 2020 09:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C299722C049
+	for <lists+linux-serial@lfdr.de>; Fri, 24 Jul 2020 09:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgGXHNe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 Jul 2020 03:13:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50776 "EHLO mail.kernel.org"
+        id S1726826AbgGXH6R (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 Jul 2020 03:58:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726543AbgGXHNe (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 Jul 2020 03:13:34 -0400
+        id S1726567AbgGXH6R (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 24 Jul 2020 03:58:17 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1543720748;
-        Fri, 24 Jul 2020 07:13:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A89C52068F;
+        Fri, 24 Jul 2020 07:58:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595574813;
-        bh=fUeIibLbxVfYamditippdQ64erDPYhNSY56DGcKqco8=;
+        s=default; t=1595577497;
+        bh=MrwCiCK2poXyalIQcTVioocFhr5gBVdyQlm3J3yoT6w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UJdUpdVHMv4UuMUJUwPQnL5XE/7udNcWNkHE2t4+1hgtIAZR2f9l0p3uu/5az95dw
-         XUkqJM5+fB8xx72eO+o8wVGKEn/oF68u4JgDpiAHIdY0+naVBAiEIjjXdgIYDgDFIz
-         Spo29x7iM0brgeiBL8tjVfD9rNrCrzVXcOG7P8sk=
-Date:   Fri, 24 Jul 2020 09:13:35 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paras Sharma <parashar@codeaurora.org>
-Cc:     Jiri Slaby <jslaby@suse.com>, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akashast@codeaurora.org
-Subject: Re: [PATCH] tty: serial: qcom_geni_serial: To correct logic for QUP
- HW version
-Message-ID: <20200724071335.GA3948185@kroah.com>
-References: <1595571242-9967-1-git-send-email-parashar@codeaurora.org>
+        b=SZ5SE4UEtBCEwHakT4CT424khXj0IXDrQsmyhCYSmXsOe/zJUUwFQzzeS25E9bTrf
+         EXegxWvE0nG3QyGlvBO1BrM1L9HyK8V8JdCtkY+b/KffvBEIMcHQU68w2uMzpfWhQn
+         T2p09xeGgeOXqQOm0BCOWV6Hnrg+Yr1G7lkqzEpc=
+Date:   Fri, 24 Jul 2020 09:58:19 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH] newport_con: vc_color is now in state
+Message-ID: <20200724075819.GA3955149@kroah.com>
+References: <202007241318.wXYkumEO%lkp@intel.com>
+ <20200724062735.18229-1-jslaby@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1595571242-9967-1-git-send-email-parashar@codeaurora.org>
+In-Reply-To: <20200724062735.18229-1-jslaby@suse.cz>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 11:44:02AM +0530, Paras Sharma wrote:
-> To correct the logic to detect whether the QUP HW version is greater
->  than 2.5.
-
-The subject line and here does not make any sense.  Can you reword this
-as what the problem is and why you need to change this?
-
+On Fri, Jul 24, 2020 at 08:27:35AM +0200, Jiri Slaby wrote:
+> Since commit 28bc24fc46f9 (vc: separate state), vc->vc_color is known as
+> vc->state.color. Somehow both me and 0-day bot missed this driver during
+> the conversion.
 > 
-> Signed-off-by: Paras Sharma <parashar@codeaurora.org>
+> So fix the driver now.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
 > ---
->  drivers/tty/serial/qcom_geni_serial.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 1ed3d35..5b0efb49 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -954,7 +954,8 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
->  	sampling_rate = UART_OVERSAMPLING;
->  	/* Sampling rate is halved for IP versions >= 2.5 */
->  	ver = geni_se_get_qup_hw_version(&port->se);
-> -	if (GENI_SE_VERSION_MAJOR(ver) >= 2 && GENI_SE_VERSION_MINOR(ver) >= 5)
-> +	if ((GENI_SE_VERSION_MAJOR(ver) >= 2 && GENI_SE_VERSION_MINOR(ver) >= 5)
-> +		|| GENI_SE_VERSION_MAJOR(ver) >= 3)
+>  drivers/video/console/newport_con.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Odd coding style :(
+You forgot the "Reported-by:" line :(
 
-Please fix all of the above up and resubmit a v2.
-
-thanks,
+I'll go add it, thanks for the fix.
 
 greg k-h
