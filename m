@@ -2,64 +2,45 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944F7230C57
-	for <lists+linux-serial@lfdr.de>; Tue, 28 Jul 2020 16:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA0023141B
+	for <lists+linux-serial@lfdr.de>; Tue, 28 Jul 2020 22:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730351AbgG1OYX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Tue, 28 Jul 2020 10:24:23 -0400
-Received: from customer-201-134-139-73.uninet-ide.com.mx ([201.134.139.73]:56586
-        "EHLO correo.tlalpan.gob.mx" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730089AbgG1OYX (ORCPT
+        id S1728836AbgG1Uky (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 28 Jul 2020 16:40:54 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:50086 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728430AbgG1Uky (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 28 Jul 2020 10:24:23 -0400
-X-Greylist: delayed 18620 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Jul 2020 10:24:23 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by correo.tlalpan.gob.mx (Postfix) with ESMTP id 3D6D044C727;
-        Tue, 28 Jul 2020 04:14:29 -0500 (CDT)
-Received: from correo.tlalpan.gob.mx ([127.0.0.1])
-        by localhost (correo.tlalpan.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CGQ6I-6Z568s; Tue, 28 Jul 2020 04:14:29 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.tlalpan.gob.mx (Postfix) with ESMTP id 6B8FF44CC14;
-        Tue, 28 Jul 2020 03:42:38 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at tlalpan.gob.mx
-Received: from correo.tlalpan.gob.mx ([127.0.0.1])
-        by localhost (correo.tlalpan.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RtySwicZ0fbR; Tue, 28 Jul 2020 03:42:38 -0500 (CDT)
-Received: from [10.85.108.11] (unknown [105.8.2.12])
-        by correo.tlalpan.gob.mx (Postfix) with ESMTPSA id 37DD44323BF;
-        Tue, 28 Jul 2020 03:28:55 -0500 (CDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 28 Jul 2020 16:40:54 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id F165D1C0BEB; Tue, 28 Jul 2020 22:40:52 +0200 (CEST)
+Date:   Tue, 28 Jul 2020 22:40:52 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     "Johnson CH Chen (???L??)" <JohnsonCH.Chen@moxa.com>
+Cc:     Jiri Slaby <jirislaby@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH] tty: Add MOXA NPort Real TTY Driver
+Message-ID: <20200728204052.GE1012@bug>
+References: <HK2PR01MB328134FB2EF5F9D1E381BDA3FA610@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <aguayenergia@tlalpan.gob.mx>
-From:   ''Tayeb Souami'' <aguayenergia@tlalpan.gob.mx>
-Date:   Tue, 28 Jul 2020 10:33:13 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20200728082857.37DD44323BF@correo.tlalpan.gob.mx>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HK2PR01MB328134FB2EF5F9D1E381BDA3FA610@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Lieber Freund,
+Hi!
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
+> +	  This driver can also be built as a module. The module will be called
+> +	  npreal2 by setting M.
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
-
-
-Das ist dein Spendencode: [TS530342018]
-
-
-Antworten Sie mit dem SPENDE-CODE an diese
-
-E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-Herr Tayeb Souami
+Odd wording...
+									Pavel
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
