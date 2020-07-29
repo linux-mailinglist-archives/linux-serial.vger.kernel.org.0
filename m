@@ -2,116 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0AB23142E
-	for <lists+linux-serial@lfdr.de>; Tue, 28 Jul 2020 22:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909EB23173F
+	for <lists+linux-serial@lfdr.de>; Wed, 29 Jul 2020 03:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728758AbgG1UrL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 28 Jul 2020 16:47:11 -0400
-Received: from mga04.intel.com ([192.55.52.120]:27214 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728453AbgG1UrL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 28 Jul 2020 16:47:11 -0400
-IronPort-SDR: S8V6kO7mBLwU9D3c8gvBEaTHUSf0Rqf6/dL2tQpcOpLowXDX9Wto2sjVPYBlIe469rAhut/WA7
- HLWL3sMl8IkA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9696"; a="148770797"
-X-IronPort-AV: E=Sophos;i="5.75,407,1589266800"; 
-   d="scan'208";a="148770797"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2020 13:47:10 -0700
-IronPort-SDR: GKubtO7IXk7VQQEibUWZ7zHCPU6YOYSrK2zmzTpDHsaaq7YG84biauYoJ9PWk6YohB7V+3iy+2
- OcurX0Z8WwLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,407,1589266800"; 
-   d="scan'208";a="328450941"
-Received: from lkp-server01.sh.intel.com (HELO d27eb53fc52b) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jul 2020 13:47:08 -0700
-Received: from kbuild by d27eb53fc52b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1k0WV9-00013j-MV; Tue, 28 Jul 2020 20:47:07 +0000
-Date:   Wed, 29 Jul 2020 04:46:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- dbaab9469b257f98723ff9eacddaac68706033a1
-Message-ID: <5f208eac.lMmeyt6X+eYCUQZT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1730117AbgG2BbW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 28 Jul 2020 21:31:22 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54258 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729918AbgG2BbV (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 28 Jul 2020 21:31:21 -0400
+X-UUID: c79d844e8a934fc197d75254acafe880-20200729
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=/9UU7kgDikfzGReMi+cNjBDucNreiMt14wXF0POFEPc=;
+        b=dx5aLlvVKSR4U6Vitr9BRul4UseAsLFfRDrayvo6SlAvJqZXA9k7C1tVETYky1NfDBPWuYGYXTAH2yjEba4PaMJbbDGOJ0uBV1ANRlc6s/6IOwfDU3HYes2MQVO30SCGyh48UT6oL6LiQ2k+wU4NW6IejQ7iNwXk9k4sgrWSP3g=;
+X-UUID: c79d844e8a934fc197d75254acafe880-20200729
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <seiya.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 997106648; Wed, 29 Jul 2020 09:31:19 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 29 Jul 2020 09:31:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 29 Jul 2020 09:31:17 +0800
+From:   Seiya Wang <seiya.wang@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <srv_heupstream@mediatek.com>
+Subject: [PATCH v3 0/3] Add basic node support for Mediatek MT8192 SoC 
+Date:   Wed, 29 Jul 2020 09:30:57 +0800
+Message-ID: <20200729013100.19539-1-seiya.wang@mediatek.com>
+X-Mailer: git-send-email 2.14.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git  tty-testing
-branch HEAD: dbaab9469b257f98723ff9eacddaac68706033a1  Merge 5.8-rc7 into tty-next
+TVQ4MTkyIGlzIGEgU29DIGJhc2VkIG9uIDY0Yml0IEFSTXY4IGFyY2hpdGVjdHVyZS4NCkl0IGNv
+bnRhaW5zIDQgQ0E1NSBhbmQgNCBDQTc2IGNvcmVzLg0KTVQ4MTkyIHNoYXJlIG1hbnkgSFcgSVAg
+d2l0aCBNVDY1eHggc2VyaWVzLg0KVGhpcyBwYXRjaHNldCB3YXMgdGVzdGVkIG9uIE1UODE5MiBl
+dmFsdWF0aW9uIGJvYXJkIGFuZCB1c2UgY29ycmVjdCBjbG9jayB0byBzaGUNCmxsLg0KDQpCYXNl
+ZCBvbiB2NS44LXJjMQ0KDQpDaGFuZ2UgaW4gdjM6DQpGaXggdHlwbyBpbiBiaW5kaW5nIGRvY3Vt
+ZW50IG9mIHRpbWVyDQoNCkNoYW5nZSBpbiB2MjoNCjEuIFJlbW92ZSBtdDgxOTItcG93ZXIuaCBm
+cm9tIG10ODE5Mi5kdHNpIHdoaWNoIGlzIG5vdCB1c2VkIHlldA0KMi4gQWRkIHRpbWVyIGJpbmRp
+bmcgZG9jdW1lbnQgYW5kIGRldmljZSB0cmVlIG5vZGUgaW4gbXQ4MTkyLmR0c2kNCjMuIFJlbW92
+ZSB3YXRjaGRvZyBkcml2ZXIgbW9kaWZpY2F0aW9uDQoNClNlaXlhIFdhbmcgKDMpOg0KICBhcm02
+NDogZHRzOiBBZGQgTWVkaWF0ZWsgU29DIE1UODE5MiBhbmQgZXZhbHVhdGlvbiBib2FyZCBkdHMg
+YW5kDQogICAgTWFrZWZpbGUNCiAgZHQtYmluZGluZ3M6IHNlcmlhbDogQWRkIGNvbXBhdGlibGUg
+Zm9yIE1lZGlhdGVrIE1UODE5Mg0KICBkdC1iaW5kaW5nczogdGltZXI6IEFkZCBjb21wYXRpYmxl
+IGZvciBNZWRpYXRlayBNVDgxOTINCi0tLQ0KVGhpcyBwYXRjaCBkZXBlbmRzIG9uDQpbUEFUQ0gg
+MS8zXSBkdC1iaW5kaW5nczogcGluY3RybDogbXQ4MTkyOiBhZGQgcGluY3RybCBmaWxlDQpbUEFU
+Q0ggMi8zXSBkdC1iaW5kaW5nczogcGluY3RybDogbXQ4MTkyOiBhZGQgYmluZGluZyBkb2N1bWVu
+dA0KW1BBVENIIHYyIDMvNF0gZHQtYmluZGluZ3M6IG1lZGlhdGVrOiBhZGQgY29tcGF0aWJsZSBm
+b3IgTVQ2ODczLzgxOTIgcHdyYXANCltQQVRDSCB2MiAxLzJdIGR0LWJpbmRpbmdzOiBzcGk6IHVw
+ZGF0ZSBiaW5kaW5ncyBmb3IgTVQ4MTkyIFNvQw0KW1BBVENIIDIvNF0gY2xrOiBtZWRpYXRlazog
+QWRkIGR0LWJpbmRpbmdzIGZvciBNVDgxOTIgY2xvY2tzDQpbUEFUQ0ggMS80XSBkdC1iaW5kaW5n
+czogQVJNOiBNZWRpYXRlazogRG9jdW1lbnQgYmluZGluZ3MgZm9yIE1UODE5Mg0KDQpQbGVhc2Ug
+YWxzbyBhY2NlcHQgdGhpcyBwYXRjaCB0b2dldGhlciB3aXRoIFsxXVsyXVszXVs0XVs1XVs2XQ0K
+dG8gYXZvaWQgYnVpbGQgYW5kIGR0IGJpbmRpbmcgY2hlY2sgZXJyb3IuDQoNClsxXSBodHRwOi8v
+bGlzdHMuaW5mcmFkZWFkLm9yZy9waXBlcm1haWwvbGludXgtbWVkaWF0ZWsvMjAyMC1KdWx5LzAx
+NDA0Mi5odG1sDQpbMl0gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvcGlwZXJtYWlsL2xpbnV4
+LW1lZGlhdGVrLzIwMjAtSnVseS8wMTQwNDMuaHRtbA0KWzNdIGh0dHA6Ly9saXN0cy5pbmZyYWRl
+YWQub3JnL3BpcGVybWFpbC9saW51eC1tZWRpYXRlay8yMDIwLUp1bHkvMDE0NTQ2Lmh0bWwNCls0
+XSBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9waXBlcm1haWwvbGludXgtbWVkaWF0ZWsvMjAy
+MC1KdWx5LzAxNDQwNi5odG1sDQpbNV0gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvcGlwZXJt
+YWlsL2xpbnV4LW1lZGlhdGVrLzIwMjAtSnVseS8wMTQ0NTAuaHRtbA0KWzZdIGh0dHA6Ly9saXN0
+cy5pbmZyYWRlYWQub3JnL3BpcGVybWFpbC9saW51eC1tZWRpYXRlay8yMDIwLUp1bHkvMDE0NDUx
+Lmh0bWwNCi0tLQ0KIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NlcmlhbC9tdGstdWFydC50eHQg
+ICAgICAgIHwgICAxICsNCiAuLi4vYmluZGluZ3MvdGltZXIvbWVkaWF0ZWssbXRrLXRpbWVyLnR4
+dCAgICAgICAgICB8ICAgMSArDQogYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9NYWtlZmls
+ZSAgICAgICAgICAgICAgfCAgIDEgKw0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4
+MTkyLWV2Yi5kdHMgICAgICAgIHwgIDI5ICsNCiBhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVr
+L210ODE5Mi5kdHNpICAgICAgICAgICB8IDY3MSArKysrKysrKysrKysrKysrKysrKysNCiA1IGZp
+bGVzIGNoYW5nZWQsIDcwMyBpbnNlcnRpb25zKCspDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gv
+YXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTkyLWV2Yi5kdHMNCiBjcmVhdGUgbW9kZSAxMDA2
+NDQgYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTIuZHRzaQ0KDQotLQ0KMi4xNC4x
+DQo=
 
-elapsed time: 1912m
-
-configs tested: 54
-configs skipped: 1
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-arm64                               defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-nios2                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-sparc                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20200727
-i386                 randconfig-a005-20200727
-i386                 randconfig-a004-20200727
-i386                 randconfig-a006-20200727
-i386                 randconfig-a002-20200727
-i386                 randconfig-a001-20200727
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
