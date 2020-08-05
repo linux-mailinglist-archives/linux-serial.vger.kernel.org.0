@@ -2,98 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 974BE23C1F6
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Aug 2020 00:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8D123C42B
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Aug 2020 05:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgHDWqk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 4 Aug 2020 18:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgHDWqj (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 4 Aug 2020 18:46:39 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20033C06174A
-        for <linux-serial@vger.kernel.org>; Tue,  4 Aug 2020 15:46:39 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id p8so7207799pgn.13
-        for <linux-serial@vger.kernel.org>; Tue, 04 Aug 2020 15:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=gAGQPSeE7HOwYwavskE5e9li4T5ni5I6TXg1XHHwgN0=;
-        b=S8KEZAlbl6pvkO7ScFienlfz7/lOjSs5NJ8AjO2nNQwSAA9jf7FyFqoVI2MTfy3hfd
-         xNglYenipTnZmPNNbFjxBMb17c4IP83io74otsfCIAwhK+OjHwSWczqI6vCxU9aH9gPk
-         aephWYw+G8XJnsPkcLYd5bIcKOypn3p/HEP5b5PQz5sWw3jSbCtzFKiqCGU0wfVMoO2N
-         wsdTBJnpGRkhiA8w6yYoqDR8om5hPnw23/b9msjjnxEuVFYYuJmq1XWgIg6DF5ock4B6
-         Zzv9nTRzLsuSL4rg8868rmjfK7OAQ5gotIxYuy2Q0l8TB0/OaR4c0Do9UQ1ux4Dc+uVX
-         FtvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=gAGQPSeE7HOwYwavskE5e9li4T5ni5I6TXg1XHHwgN0=;
-        b=FYxQhlPNN6W5zhgxnHORQUJgDpoUsVdbqQVQ1Ukbbr6/irT19xOFGGSXJG4bLIMCwU
-         vqD02bsQelLNODx/3Of9IaU24N3KZ4AXiKQBkhc890upwd6eB8mnxIUDyhJVViT3q5Fx
-         jRGM8qeSWGNCnHNB86jPKKobgMEnTU+haIxXg+5auSufy7f7Yj7soXHkFthjD6Cu9Wc1
-         4Z2gNvCXdby2CqUlabf7iQOZ5ikYBuwi1tR9P5Eod3qWm9nt4m9OKKD6u6mEQxibAx25
-         K6TkMnYOoRwrepOl5+wdcncjWQ3W/NElY3qv/Gbl12x/zaOjlkbkCSBTqsiNCKMQmf4R
-         bGPA==
-X-Gm-Message-State: AOAM530OEc1tnHEcDm7Fe5McJ5TrjPApS9FdCkHdS04Qc/JHX5g6vV60
-        dNhCMIkRF9Z1jQsvtbFLREZ/0tdCixgxYA26bXM=
-X-Google-Smtp-Source: ABdhPJxnxokx0yglyXAcmSR2WTppK7a6iBRSkM39vkPcUfJdw8mGt/vNafuAEiXto3IZAelY/0hytGZuqfKrjwi4/d0=
-X-Received: by 2002:aa7:82d5:: with SMTP id f21mr566716pfn.222.1596581198593;
- Tue, 04 Aug 2020 15:46:38 -0700 (PDT)
+        id S1726027AbgHEDwV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 4 Aug 2020 23:52:21 -0400
+Received: from mail-am6eur05on2078.outbound.protection.outlook.com ([40.107.22.78]:63616
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725904AbgHEDwT (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 4 Aug 2020 23:52:19 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VbC/wp+yQnk3yDUy/CR+4WMu8NAkfsXgyh9m4pmZUlfLde3IIA+tGHcs/NFQ1MANEd8cq4M6TbsCaSv6fGW3leIZZWKdfpLT/1PSstE5uef1hbV5TI2V7Nr++LZTuQsGGKCXknk+VtI20Sqgh+k1pDHaDWVU7FuwwSHQeylFr+NeR0m/s5GsBQtrx4TmcHTF5pKEnnB9mMTphZY4wEXL7u8ZMN85Z3e+WydeugbyqcOAHW9zP1ccjeACOJg8ns/JrxZXZbteO9FBz9YDf/0HItbWiNo/e4iDZ+0leDMWVy96wkX1JQs1+u82++ODQKjtq8UDhPUSM6Q/qkP6i8hPRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qR2SIJW/0ejMmyMoVERcDQ+8/sNa8UnFnUtJJ1Xp0ls=;
+ b=g1SfelTOJfOSR+K1d6FnVQRwzO7f3k9ub0ukcP+hRqVD5BKTeN0rNBhb+tqljf+htZT/iJlTqw62ms4csQIMHsfS30Q0AoCIV0iIxuVB1eGD9Hik9KS0Rk9+pwuoZqbn/7x2ws4JbF5dfeZ10AEIitSuxXd63sk5TnrkLW3n6Mz3/XLXRshuRHkkKuPc1CfsmF1pAuD3qk5lOVHTvAkjUjuBppKEfqFna1LBgq4nDo05UzK/ZiXypENIpnagpTS2dPd34yUQBUeHYTsG7J1aTNKZlctYOce1AsbJAAtgX7edskgiwIKVPKgVCzTHyJpsVF9neH6ihCE90sps4ElPBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qR2SIJW/0ejMmyMoVERcDQ+8/sNa8UnFnUtJJ1Xp0ls=;
+ b=g3ycNW8+Swr4JMCaGMCFaRhkR3PyjXz4hrgJME3HxH3ij49rfUEDRADTY8KH337QrS4sq7hsYhMsvxrLyNAgqcjepdG9rJXzqxMRufErIXSrTd67JXvbt8SkHyFf/j4jf+DQTmSURNLQYAWTOZXLPOQDeaJv2t1/KTixPyRqmPY=
+Received: from AM6PR0402MB3607.eurprd04.prod.outlook.com
+ (2603:10a6:209:12::18) by AM7PR04MB6968.eurprd04.prod.outlook.com
+ (2603:10a6:20b:dc::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.20; Wed, 5 Aug
+ 2020 03:52:15 +0000
+Received: from AM6PR0402MB3607.eurprd04.prod.outlook.com
+ ([fe80::75d9:c8cb:c564:d17f]) by AM6PR0402MB3607.eurprd04.prod.outlook.com
+ ([fe80::75d9:c8cb:c564:d17f%5]) with mapi id 15.20.3261.016; Wed, 5 Aug 2020
+ 03:52:15 +0000
+From:   Andy Duan <fugang.duan@nxp.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: RE: [EXT] Re: [PATCH tty/serial v3 2/2] tty: serial: imx: add imx
+ earlycon driver
+Thread-Topic: [EXT] Re: [PATCH tty/serial v3 2/2] tty: serial: imx: add imx
+ earlycon driver
+Thread-Index: AQHWYYpUoNUEN1E9XUm5EHAJWMHWnKkn9SYAgAD/PmA=
+Date:   Wed, 5 Aug 2020 03:52:15 +0000
+Message-ID: <AM6PR0402MB36079D1B1A77678BF3BD4367FF4B0@AM6PR0402MB3607.eurprd04.prod.outlook.com>
+References: <20200724070815.11445-1-fugang.duan@nxp.com>
+ <20200724070815.11445-3-fugang.duan@nxp.com>
+ <CAMuHMdUJw1rqzNMUduE0qVO=f1dBuXGMf+vcgkhRkc-x-4TAvg@mail.gmail.com>
+In-Reply-To: <CAMuHMdUJw1rqzNMUduE0qVO=f1dBuXGMf+vcgkhRkc-x-4TAvg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux-m68k.org; dkim=none (message not signed)
+ header.d=none;linux-m68k.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: b3b4cca4-c011-4a66-b2cb-08d838f2f140
+x-ms-traffictypediagnostic: AM7PR04MB6968:
+x-microsoft-antispam-prvs: <AM7PR04MB69688EF7C5CCFF3AE4F0892AFF4B0@AM7PR04MB6968.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: P48Wbt+9Xmjo/P2TxHiliZWVJQwuDfOQxCTCyxwIqgO3Tk0UHWyqyrBEy2SAGg3l4dqHm5IK3GqSxX80+Gllg+GZQKoZUhA58xNTAC2ab7viipOh9ibob5KJxAdwrdMvKKGSnOT54UC2mtIt7vjnD1v4WM0NDvihLxj1sva9ZspATsS+Mgep5qR4bwFJR93BRYL2aEkZFuHbiNcDJmsw0xL5z6PS7oZg5oc3vfr7yuFgdT8ojsIsv6PIiz9l9tpImalrHeXKJzyZxv+UwuUMTtpRYDzFYf55E/cnYWXyxWlx7OUeoy+Sp8uvg+FDiJuvLhhYO8v4aRNe/iYXUT2zlQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR0402MB3607.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(39860400002)(346002)(376002)(366004)(9686003)(6506007)(7696005)(316002)(83380400001)(5660300002)(8676002)(76116006)(6916009)(66946007)(478600001)(71200400001)(55016002)(26005)(66446008)(4326008)(66556008)(8936002)(66476007)(53546011)(86362001)(33656002)(2906002)(186003)(64756008)(54906003)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 8SiCUvOA0ovOGO+b1k6AGykSW8SWXGu6hqgRchxS+PpPMKimjZ2pYy4KrPGUjGb4rAK33f+mjip87PIfE24L6DDL7D/s5ai9hNA/KxZw164jwSTDfXjpq2Hjv7sg9VxGviF5kjMQhX9gwbbdik6mLx/qSDRxEu2LNfVVOgvgHDFHbahU8F2gVXs/yup/vXlZfNdMYIu8SpCUmvrjAa0sNx5ul0lKWyElfY0kAYmPbtccKQERT1reCRVZXee//lHlQsbgwJqP6awKZ+ff7gX/KwlsXjbKNpPIuS66z/0BZBGWF2vbfITdKokfrAEbmZVlTZdyfAS//SpEfi3mGJ+UX7/xOd3fOGsMxRYSfUltCd8D0X7N/jp+G42lZU4GT45WXgZp3OglJQF5ZZzFcq5rOv0JwK8zxixSFUtUum0K6SoICymmfEmMxN9pmCHgrqFKMqD4DU7/5AnDrf7XDCuzmZfUUQjM/qu3ZC76lTLoFXvnKlKZ3eMbfVUijs+mzsYl/bj2IvNAV4XPsR9dD+F/H3gYv5wlLlFUILROGH4GXNF3aZRpidMMTUR+bHsu/2BK4WlhkhNNjuxkoK4nHKr0cJsHstswhub2CdLFXuZ+TOfKs/P9Ai7Xnyt1NXXINn4GasSBdhmajuqUsieYzJzWhg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:95a4:0:0:0:0 with HTTP; Tue, 4 Aug 2020 15:46:37
- -0700 (PDT)
-Reply-To: sararrobrt@gmail.com
-In-Reply-To: <CAHiqPVdXrXDo2EELn8qKaQk+YABbOUxLj_c3ymENGS0AOwr3-A@mail.gmail.com>
-References: <CAHiqPVf3G_DekFSQm3j+4pxZnYdgcRuK+epsfah9kzUqOEXYWA@mail.gmail.com>
- <CAHiqPVf7Rf5DAm6-T7r9Ai0thktFugvpKGY98T-tSW+wum2sbg@mail.gmail.com>
- <CAHiqPVehmZEzFod6csrvXQ8Y+dDmpXmtmyHOGogYX3iO+8ruTw@mail.gmail.com>
- <CAHiqPVfYwayR-cQ_07s7bDfQxi_FgefLTLu6RpaOkO3_PZ_cqw@mail.gmail.com>
- <CAHiqPVeM5PkXV2+CCxP06cPfhrvX3cpV6n3aE44si0_Tm6rm8Q@mail.gmail.com>
- <CAHiqPVeav29gUaW9QDXFAcp3TYfpd-uX-skTazcOENdxeyZh4w@mail.gmail.com>
- <CAHiqPVevkWmD3X+Ne=GnQDBrPanM8uSDwdRPbGuU_c3vsmnDkg@mail.gmail.com>
- <CAHiqPVeJ+Rz=kHO9V_eTpAeOtWf=Ce92DGFGnQnLoUZeReYYQQ@mail.gmail.com>
- <CAHiqPVef_Za46DwN_+F=YaCXP45brF8OGyw2rKm4OURGg1+wRw@mail.gmail.com>
- <CAHiqPVfFE=PR0c4zx0JZd2XurRrdCv+tQ4F-+LurjK-nwBXgfw@mail.gmail.com>
- <CAHiqPVdtsvEcTfGCxSGVn4d3kwQVW7_GHvwiDwSrfHupfCdLQw@mail.gmail.com>
- <CAHiqPVdL6j0VyrSSP8JAxHbqNJi3XUYSfZBkyU2rOHtR9ckHrw@mail.gmail.com>
- <CAHiqPVda4TQRzqn3hshv1QgAo4yK8pHFQaxGu3-RdmJ2h5nAyw@mail.gmail.com>
- <CAHiqPVdXSvDo51DeK1i1UFKJXyeuMvsnjX4+qhEedgA97MFUKg@mail.gmail.com>
- <CAHiqPVe_vtxaevYnmS8ooVbrH=_Y7HBJ3Vcdesqfj0tGHNNu5w@mail.gmail.com>
- <CAHiqPVdFzL2cvyFuKVxhyk+QWU1nFOR+PVHLMB+xjUOkKCqWPw@mail.gmail.com>
- <CAHiqPVfeozuRr9CN_e6BZ-Af+ap=B5wvF2QvD4MevW8HuXHwYA@mail.gmail.com>
- <CAHiqPVeT7f2-hyuSMy5EP-ai+suGt4q7pP+MjM9n-R1gzow9mA@mail.gmail.com>
- <CAHiqPVf_hAL3BP72spVgnu_mkfFif+By1HiovN=T7uHxxeu0-Q@mail.gmail.com>
- <CAHiqPVcqk6RHCYEFiMe-PadbisaaCiBeGdqYSirBz7S7kLdDZA@mail.gmail.com>
- <CAHiqPVfdjGdY7=nRVnANxOOhskWoSSED25yo8e3Vx=jvBAjXng@mail.gmail.com>
- <CAHiqPVfgyxaPbqYQgLMkzQa5errLSChnV_t0rg9mFk3ZQ-DfdQ@mail.gmail.com>
- <CAHiqPVcrL+XC1g1NpX2cAquhgbDRrnU-BL-5hzqP4W5=U-hpMw@mail.gmail.com>
- <CAHiqPVcNGgm8nXKwnbZ7=LhY+BHj+8Eg88ONYFscDRsbAyKJ3A@mail.gmail.com> <CAHiqPVdXrXDo2EELn8qKaQk+YABbOUxLj_c3ymENGS0AOwr3-A@mail.gmail.com>
-From:   "Mrs. Sara Robert" <goodwllalex@gmail.com>
-Date:   Tue, 4 Aug 2020 23:46:37 +0100
-Message-ID: <CAHiqPVeirVoyoNc7Y6ROHRKPHCVXjXfJoHV=MtjSRj=JB0FwYg@mail.gmail.com>
-Subject: Greeting?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR0402MB3607.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3b4cca4-c011-4a66-b2cb-08d838f2f140
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2020 03:52:15.3105
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5QmLJLfjNKXwSxuURhu/ksrVav0GC2CFik5c3dNa8Xsy254ibcFVGqwo4eriHhElDWO6HN8ahfdosl2bZxzP0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6968
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-My Dear,
-I'm Mrs. Sarah H. Robert, 77 years old dying widow from Australia;
-that was diagnosed of cancer about 4 years ago. I got your details
-after an extensive online search Via (Network Power Charitable Trust)
-for a reliable person,  I have decided to donate my late husband WILL
-valued of ($5,500,000,00) (Five Million Five Hundred Thousand United
-States Dollars) to you for charitable goals. Get back to me if you
-will be interesting in carrying out this humanitarian project, so that
-i can arrange for the release of the funds to you for the work of
-charity before entering the surgery theater. Contact me via
-E-mail at :  sararrobrt@gmail.com
-Sincerely,
-Mrs. Sarah H. Robert.
+RnJvbTogR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4NCj4gSGkgRnVn
+YW4sDQo+IA0KPiBPbiBGcmksIEp1bCAyNCwgMjAyMCBhdCA5OjE3IEFNIEZ1Z2FuZyBEdWFuIDxm
+dWdhbmcuZHVhbkBueHAuY29tPiB3cm90ZToNCj4gPiBTcGxpdCBpbXggZWFybHljb24gZHJpdmVy
+IGZyb20gaW14IHNlcmlhbCBkcml2ZXIgImlteC5jIiBhcyBzZXBhcmF0ZWQNCj4gPiBkcml2ZXIu
+IGlteCBzZXJpYWwgZHJpdmVyIGNhbiBiZSBidWlsdCBhcyBtb2R1bGUsIGJ1dCBlYXJseWNvbiBk
+cml2ZXINCj4gPiBvbmx5IHN1cHBvcnQgYnVpbGQgaW4uDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBGdWdhbmcgRHVhbiA8ZnVnYW5nLmR1YW5AbnhwLmNvbT4NCj4gDQo+IFRoYW5rcyBmb3IgeW91
+ciBwYXRjaCwgd2hpY2ggaXMgbm93IGNvbW1pdCA2OTljYzRkZmQxNDA3MWU0ICgidHR5OiBzZXJp
+YWw6DQo+IGlteDogYWRkIGlteCBlYXJseWNvbiBkcml2ZXIiKSBpbiB0dHktbmV4dC4NCj4gDQo+
+ID4gIGRyaXZlcnMvdHR5L3NlcmlhbC9LY29uZmlnICAgICAgICB8ICA4ICsrKysrDQo+ID4gIGRy
+aXZlcnMvdHR5L3NlcmlhbC9pbXhfZWFybHljb24uYyB8IDUwDQo+ID4gKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKw0KPiANCj4gU2VlbXMgbGlrZSBpbXhfZWFybHljb24uYyBpcyBuZXZl
+ciBidWlsdCwgYXMgbm8gTWFrZWZpbGUgdXBkYXRlIGlzIGluY2x1ZGVkPw0KPiBFbHNlIHRoaXMg
+cGF0Y2ggaXMganVzdCBhbiBvYmZ1c2NhdGVkIHdheSB0byBlbmFibGUgU0VSSUFMX0VBUkxZQ09O
+IGZvciBhbGwgT0YNCj4gcGxhdGZvcm1zPyA7LSkNCj4gDQo+ID4gLS0tIGEvZHJpdmVycy90dHkv
+c2VyaWFsL0tjb25maWcNCj4gPiArKysgYi9kcml2ZXJzL3R0eS9zZXJpYWwvS2NvbmZpZw0KPiA+
+IEBAIC01MTUsNiArNTE1LDE0IEBAIGNvbmZpZyBTRVJJQUxfSU1YX0NPTlNPTEUNCj4gPiAgICAg
+ICAgICAgImNvbnNvbGU9dHR5bXhjMCIuIChUcnkgIm1hbiBib290cGFyYW0iIG9yIHNlZSB0aGUN
+Cj4gZG9jdW1lbnRhdGlvbiBvZg0KPiA+ICAgICAgICAgICB5b3VyIGJvb3Rsb2FkZXIgYWJvdXQg
+aG93IHRvIHBhc3Mgb3B0aW9ucyB0byB0aGUga2VybmVsIGF0DQo+ID4gYm9vdCB0aW1lLikNCj4g
+Pg0KPiA+ICtjb25maWcgU0VSSUFMX0lNWF9FQVJMWUNPTg0KPiA+ICsgICAgICAgYm9vbCAiRWFy
+bHljb24gb24gSU1YIHNlcmlhbCBwb3J0Ig0KPiA+ICsgICAgICAgZGVwZW5kcyBvbiBPRg0KPiAN
+Cj4gT2J2aW91c2x5IHRoaXMgc2hvdWxkIGRlcGVuZCBvbiAiQVJDSF9NWEMgfHwgQ09NUElMRV9U
+RVNUIi4NCg0KSSB3aWxsIHN1Ym1pdCBhbm90aGVyIHBhdGNoIGZvciBpdC4NClRoYW5rcyENCj4g
+DQo+ID4gKyAgICAgICBzZWxlY3QgU0VSSUFMX0VBUkxZQ09ODQo+ID4gKyAgICAgICBoZWxwDQo+
+ID4gKyAgICAgICAgIElmIHlvdSBoYXZlIGVuYWJsZWQgdGhlIGVhcmx5Y29uIG9uIHRoZSBGcmVl
+c2NhbGUgSU1YDQo+ID4gKyAgICAgICAgIENQVSB5b3UgY2FuIG1ha2UgaXQgdGhlIGVhcmx5Y29u
+IGJ5IGFuc3dlcmluZyBZIHRvIHRoaXMgb3B0aW9uLg0KPiA+ICsNCj4gPiAgY29uZmlnIFNFUklB
+TF9VQVJUTElURQ0KPiA+ICAgICAgICAgdHJpc3RhdGUgIlhpbGlueCB1YXJ0bGl0ZSBzZXJpYWwg
+cG9ydCBzdXBwb3J0Ig0KPiA+ICAgICAgICAgZGVwZW5kcyBvbiBIQVNfSU9NRU0NCj4gDQo+IEdy
+e29ldGplLGVldGluZ31zLA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgR2VlcnQNCj4g
+DQo+IC0tDQo+IEdlZXJ0IFV5dHRlcmhvZXZlbiAtLSBUaGVyZSdzIGxvdHMgb2YgTGludXggYmV5
+b25kIGlhMzIgLS0gZ2VlcnRAbGludXgtbTY4ay5vcmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZl
+cnNhdGlvbnMgd2l0aCB0ZWNobmljYWwgcGVvcGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLiBC
+dXQgd2hlbg0KPiBJJ20gdGFsa2luZyB0byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFt
+bWVyIiBvciBzb21ldGhpbmcgbGlrZSB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIC0tIExpbnVzIFRvcnZhbGRzDQo=
