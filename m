@@ -2,104 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A8E23D1A9
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Aug 2020 22:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E0A23DE81
+	for <lists+linux-serial@lfdr.de>; Thu,  6 Aug 2020 19:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727828AbgHEUE4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 5 Aug 2020 16:04:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727808AbgHEQgh (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 5 Aug 2020 12:36:37 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6E9121744;
-        Wed,  5 Aug 2020 12:56:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596632170;
-        bh=SmzHEjXJKI0Ah3FCpKvLcMIvLkMQABYGGHX0eTpxkp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bCxIQJw4GOQ+h1x3tpCiOUo/92RnUW5K44Ue5g2BDrgjVKDIeXDdMTLRnPjibu+3M
-         Lc+TzYJggQfzEAXArbpTLmfrvfB/Y9EwDdCS/TJ+h1PFBtf+fU8o3bsVmUfKp1RiqO
-         ox5N7Y2xXe+uqcPy6x6U6/8b6T9WvZmByeDlqzew=
-Date:   Wed, 5 Aug 2020 14:56:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Vabhav Sharma (OSS)" <vabhav.sharma@oss.nxp.com>
-Cc:     B K Karthik <bkkarthik@pesu.pes.edu>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bhuvanchandra.dv@toradex.com" <bhuvanchandra.dv@toradex.com>
-Subject: Re: [PATCH v2] tty: serial: fsl_lpuart.c: prevent a bad shift
- operation
-Message-ID: <20200805125627.GA1822283@kroah.com>
-References: <20200721174228.misj2mgqzcfz2lsj@pesu.pes.edu>
- <20200729160333.GA3652767@kroah.com>
- <VI1PR04MB480018F32A080BC5CC76E3C7F34B0@VI1PR04MB4800.eurprd04.prod.outlook.com>
+        id S1730316AbgHFR0F (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 6 Aug 2020 13:26:05 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:46178 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729832AbgHFRCD (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 6 Aug 2020 13:02:03 -0400
+Received: by mail-il1-f194.google.com with SMTP id c6so5935116ilo.13;
+        Thu, 06 Aug 2020 10:02:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4a+UH2c0ravXsXQYiIiU2PDrCAbSISRiJ7nu8uzSR8k=;
+        b=doauD29SYFYkF9x+c3jO2UjCMUlaICRp/oouYVKaPh+q19dbCjvxdeGLU04JMRUahV
+         Fc580rgI1RKdFryyT1UJjcEuVa+nfa2tcaKCGAVYRCaTzuDT+4B4Hqget+0858QftfE2
+         G+Vy0a6eIIrxp4COtbr87KvTZ7ScrG0rMHy2pvWjCpok1UbCElsEn8cW/Mj9XMrW9Swf
+         xXiRwJPyU5dMN8CfmF6rbQwMNg2uOWGMFTp7GiPAfQk7JlDTw4dIT/pRqtVrB3cZIbZE
+         G40YJvxZmzp1c6juuwMSmn8PsC04Rk3e5m/S6MpQrFbKyaNVZOtrR+ElZiqmePH+qCvQ
+         hTMg==
+X-Gm-Message-State: AOAM532lFn9QL21xxfWmse8KOzpjEj8yvIjKrk09m8wOfOieY0OZQP2S
+        KWPV59w+3eBbe5o9/AM7QGK13SY=
+X-Google-Smtp-Source: ABdhPJzRteBDaWzy4duYfRNpOT2CWnniOjFmm0VIz9MvqlHlamjAWGnsZtm0dzKTfwRZ3h3p7UE8Sg==
+X-Received: by 2002:a92:4f:: with SMTP id 76mr10864122ila.291.1596722950017;
+        Thu, 06 Aug 2020 07:09:10 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id q200sm3812334iod.5.2020.08.06.07.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2020 07:09:09 -0700 (PDT)
+Received: (nullmailer pid 771383 invoked by uid 1000);
+        Thu, 06 Aug 2020 14:09:06 -0000
+Date:   Thu, 6 Aug 2020 08:09:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     galak@codeaurora.org, festevam@gmail.com,
+        linux-serial@vger.kernel.org, s.hauer@pengutronix.de,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Linux-imx@nxp.com,
+        kernel@pengutronix.de, shawnguo@kernel.org,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: serial: Convert MXS auart to json-schema
+Message-ID: <20200806140906.GA770620@bogus>
+References: <1596603259-5367-1-git-send-email-Anson.Huang@nxp.com>
+ <1596603259-5367-2-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <VI1PR04MB480018F32A080BC5CC76E3C7F34B0@VI1PR04MB4800.eurprd04.prod.outlook.com>
+In-Reply-To: <1596603259-5367-2-git-send-email-Anson.Huang@nxp.com>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Aug 05, 2020 at 12:09:34PM +0000, Vabhav Sharma (OSS) wrote:
+On Wed, 05 Aug 2020 12:54:18 +0800, Anson Huang wrote:
+> Convert the MXS auart binding to DT schema format using json-schema.
 > 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  .../devicetree/bindings/serial/fsl-mxs-auart.txt   | 53 ------------
+>  .../devicetree/bindings/serial/fsl-mxs-auart.yaml  | 93 ++++++++++++++++++++++
+>  2 files changed, 93 insertions(+), 53 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/fsl-mxs-auart.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/fsl-mxs-auart.yaml
 > 
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Wednesday, July 29, 2020 9:34 PM
-> > To: B K Karthik <bkkarthik@pesu.pes.edu>
-> > Cc: Jiri Slaby <jirislaby@kernel.org>; linux-serial@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; Vabhav Sharma (OSS)
-> > <vabhav.sharma@oss.nxp.com>; bhuvanchandra.dv@toradex.com
-> > Subject: Re: [PATCH v2] tty: serial: fsl_lpuart.c: prevent a bad shift operation
-> > 
-> > On Tue, Jul 21, 2020 at 11:12:29PM +0530, B K Karthik wrote:
-> > > prevent a bad shift operation by verifying that the argument to fls is
-> > > non zero.
-> > >
-> > > Reported-by: "Vabhav Sharma (OSS)" <vabhav.sharma@oss.nxp.com>
-> > > Signed-off-by: B K Karthik <bkkarthik@pesu.pes.edu>
-> > > ---
-> > > v1 -> v2:
-> > > 	added Reported-by tag
-> > >
-> > >  drivers/tty/serial/fsl_lpuart.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/tty/serial/fsl_lpuart.c
-> > > b/drivers/tty/serial/fsl_lpuart.c index 7ca642249224..0cc64279cd2d
-> > > 100644
-> > > --- a/drivers/tty/serial/fsl_lpuart.c
-> > > +++ b/drivers/tty/serial/fsl_lpuart.c
-> > > @@ -1168,7 +1168,8 @@ static inline int lpuart_start_rx_dma(struct
-> > lpuart_port *sport)
-> > >  	 * 10ms at any baud rate.
-> > >  	 */
-> > >  	sport->rx_dma_rng_buf_len = (DMA_RX_TIMEOUT * baud /  bits /
-> > 1000) * 2;
-> > > -	sport->rx_dma_rng_buf_len = (1 << (fls(sport->rx_dma_rng_buf_len)
-> > - 1));
-> > > +	if (sport->rx_dma_rng_buf_len != 0)
-> > 
-> > How can this variable become 0?
-> Condition x, taking false branch
-> Explicitly returning zero 
-> 
-> static __always_inline int fls(unsigned int x)
-> {
-> 	return x ? sizeof(x) * 8 - __builtin_clz(x) : 0;
-> }
 
-What false branch?
 
-I don't see how this can ever be an issue in "the real world", can you
-explain how it could ever be a problem?
+My bot found errors running 'make dt_binding_check' on your patch:
 
-thanks,
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml: serial@8006a000: clocks: [[4294967295, 45]] is too short
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml: serial@8006a000: compatible: Additional items are not allowed ('fsl,imx23-auart' was unexpected)
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml: serial@8006a000: compatible: ['fsl,imx28-auart', 'fsl,imx23-auart'] is too long
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml: serial@8006a000: 'dmas' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml: serial@8006a000: 'dma-names' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx23-clock.example.dt.yaml: serial@8006c000: clocks: [[4294967295, 32]] is too short
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx23-clock.example.dt.yaml: serial@8006c000: 'dmas' is a required property
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx23-clock.example.dt.yaml: serial@8006c000: 'dma-names' is a required property
 
-greg k-h
+
+See https://patchwork.ozlabs.org/patch/1341077
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
