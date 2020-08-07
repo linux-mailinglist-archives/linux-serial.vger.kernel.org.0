@@ -2,90 +2,58 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB0823ECA1
-	for <lists+linux-serial@lfdr.de>; Fri,  7 Aug 2020 13:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A758A23EF37
+	for <lists+linux-serial@lfdr.de>; Fri,  7 Aug 2020 16:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbgHGLfx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 7 Aug 2020 07:35:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726293AbgHGLfx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 7 Aug 2020 07:35:53 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CE2522C9F;
-        Fri,  7 Aug 2020 11:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596800152;
-        bh=tB44LrcAJ3NxEYYWCxVL/xdN1g4mPUOLKmrBE/LmCZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=adPdvx7BNkN3vzleYgFgdh5QTP1V3DG3dm6nNmuWVM8gkbIiTTFCE48YedudEmH4P
-         X6lzhSZuMMswEMloGb/39wFETPqu1rkcW6m5xnQg/jknYdA3B25xVAZg4N6Mc5/AfX
-         fSwa0ZcfFidwfuu3qxrr1xB0vJ7CvrA1LEk8tSfo=
-Date:   Fri, 7 Aug 2020 12:35:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sangbeom Kim <sbkim73@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 18/41] ARM: s5pv210: don't imply CONFIG_PLAT_SAMSUNG
-Message-ID: <20200807113528.GE5435@sirena.org.uk>
-References: <20200806181932.2253-1-krzk@kernel.org>
- <20200806182059.2431-18-krzk@kernel.org>
+        id S1726429AbgHGOt2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 7 Aug 2020 10:49:28 -0400
+Received: from mail.furshetcrimea.ru ([193.27.243.220]:51882 "EHLO
+        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbgHGOt2 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 7 Aug 2020 10:49:28 -0400
+X-Greylist: delayed 4965 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 10:49:26 EDT
+Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
+  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
+  with ESMTPA id 11097390; Fri, 07 Aug 2020 16:34:34 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2qXFWqzzG3v1+95a"
-Content-Disposition: inline
-In-Reply-To: <20200806182059.2431-18-krzk@kernel.org>
-X-Cookie: Disposable, use only once.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Bei Interesse antworten.
+To:     Recipients <info@furshetcrimea.ru>
+From:   info@furshetcrimea.ru
+Date:   Fri, 07 Aug 2020 14:21:57 +0100
+Reply-To: mattiassjoborg751@gmail.com
+X-Antivirus: Avast (VPS 200807-0, 08/07/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <auto-000011097390@furshetcrimea.ru>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Schöne Grüße,
 
---2qXFWqzzG3v1+95a
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
 
-On Thu, Aug 06, 2020 at 08:20:35PM +0200, Krzysztof Kozlowski wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The plat-samsung directory and mach-s5pv210 can be build
-> completely independently, so split the two Kconfig symbols
-> CONFIG_PLAT_SAMSUNG and CONFIG_ARCH_S5PV210.
+Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
 
---2qXFWqzzG3v1+95a
-Content-Type: application/pgp-signature; name="signature.asc"
+www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
 
------BEGIN PGP SIGNATURE-----
+Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8tPH8ACgkQJNaLcl1U
-h9AKhQf/R7RK8Hp7GiOARjjdjgAtgRwwe6zGtME1BaY4sl5QjQX3lbKLy27zSN8g
-oIS4rQz7hiHTbEPAYejiOFvzEWdxiiJCwsb4LoUYmS7z5ZHh1hkymZNMNxkh03k5
-OtD206PpuFlkRBy5mQmvNSpCLcAZ933xTyhdUDH00eAg5/09+FEqq4z84afijimH
-EDgvn6dXYA8Zqd+w7Kx0fiERDK0Ygo1jl85OEsLKFbPZefjx9wUKqqNlm9Oz+s+k
-C6yb2uPrkc2t8FqW0jBc/nR+ky0+VBkW3duO0CCP1Sag3U2HLi5GZ2wdtQrXLXu+
-ZDfJfLruyTaIkzFFcfZgPsjk6niMXQ==
-=qNw4
------END PGP SIGNATURE-----
+Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
 
---2qXFWqzzG3v1+95a--
+Freundliche Grüße,
+Mr.Mattias Sjoborg
+(Vorsitzender des Vergütungs- und Nominierungsausschusses)
+Tethys Petroleum.
+London, England
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
