@@ -2,100 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC507243F4D
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Aug 2020 21:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FAD244100
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Aug 2020 00:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbgHMT2s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Aug 2020 15:28:48 -0400
-Received: from mga07.intel.com ([134.134.136.100]:9950 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726305AbgHMT2s (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Aug 2020 15:28:48 -0400
-IronPort-SDR: 8w2jiLh4DfVH2x7bvkSj+fZdfwxlccrRHWTC1pmTOXGamcSNZdpaRrL5j2OAz7ISK6tvOTOUlx
- 7tcr1ZJLMA+Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="218643688"
-X-IronPort-AV: E=Sophos;i="5.76,309,1592895600"; 
-   d="scan'208";a="218643688"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 12:28:48 -0700
-IronPort-SDR: VQvO+yA9XjTerJo0UIBz6/8/USCuZfIyqlBcAs9RvIEorU0qHE9kLZMbaAE/bwq58d64uHW1lq
- 3MoJk9eBCC7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,309,1592895600"; 
-   d="scan'208";a="325515256"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 13 Aug 2020 12:28:46 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1k6Iu5-008VGP-Eq; Thu, 13 Aug 2020 22:28:45 +0300
-Date:   Thu, 13 Aug 2020 22:28:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Valmer Huhn <valmer.huhn@concurrent-rt.com>
-Cc:     gregkh@linuxfoundation.org, sudip.mukherjee@codethink.co.uk,
-        jan.kiszka@siemens.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250_exar: Fix number of ports for Commtech PCIe
- cards
-Message-ID: <20200813192845.GJ1891694@smile.fi.intel.com>
-References: <20200813165255.GC345440@icarus.concurrent-rt.com>
+        id S1726564AbgHMV77 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 13 Aug 2020 17:59:59 -0400
+Received: from [186.47.21.114] ([186.47.21.114]:57192 "EHLO mail.hmvi.gob.ec"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726205AbgHMV77 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 13 Aug 2020 17:59:59 -0400
+X-Greylist: delayed 14052 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Aug 2020 17:59:59 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hmvi.gob.ec (Postfix) with ESMTP id 58952C0347F7D;
+        Thu, 13 Aug 2020 12:02:13 -0500 (-05)
+Received: from mail.hmvi.gob.ec ([127.0.0.1])
+        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id aommaE-J-Hcv; Thu, 13 Aug 2020 12:02:12 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hmvi.gob.ec (Postfix) with ESMTP id 996A9C034A2BE;
+        Thu, 13 Aug 2020 11:54:25 -0500 (-05)
+X-Virus-Scanned: amavisd-new at hmvi.gob.ec
+Received: from mail.hmvi.gob.ec ([127.0.0.1])
+        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZR4kd2Jn8hHh; Thu, 13 Aug 2020 11:54:25 -0500 (-05)
+Received: from [10.73.80.190] (unknown [105.8.3.183])
+        by mail.hmvi.gob.ec (Postfix) with ESMTPSA id 93758C034AF02;
+        Thu, 13 Aug 2020 11:53:12 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200813165255.GC345440@icarus.concurrent-rt.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <danny.puetate@mail.hmvi.gob.ec>
+From:   ''Tayeb Souami'' <danny.puetate@mail.hmvi.gob.ec>
+Date:   Thu, 13 Aug 2020 18:52:52 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200813165313.93758C034AF02@mail.hmvi.gob.ec>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 12:52:55PM -0400, Valmer Huhn wrote:
+Lieber Freund,
 
-Thanks for an update, my comments below.
-
-> The following in 8250_exar.c line 589 is used to determine the number
-> of ports for each Exar board:
-> 
-> nr_ports = board->num_ports ? board->num_ports : pcidev->device & 0x0f;
-> 
-> If the number of ports a card has is not explicitly specified, it defaults
-> to the rightmost 4 bits of the PCI device ID. This is prone to error since
-> not all PCI device IDs contain a number which corresponds to the number of
-> ports that card provides.
-> 
-> This particular case involves COMMTECH_4222PCIE, COMMTECH_4224PCIE and
-> COMMTECH_4228PCIE cards with device IDs 0x0022, 0x0020 and 0x0021.
-> Currently the multiport cards receive 2, 0 and 1 port instead of 2, 4 and
-> 8 ports respectively.
-> 
-> To fix this, each Commtech Fastcom PCIe card is given a struct where the
-> number of ports is explicitly specified. This ensures 'board->num_ports'
-> is used instead of the default 'pcidev->device & 0x0f'.
-
-...
-
-> Fixes: d0aeaa83f0b0 ("serial: exar: split out the exar code from 8250_pci")
-
-> 
-
-Shouldn't be blank line here.
-
-> Signed-off-by: Valmer Huhn <valmer.huhn@concurrent-rt.com>
-
-...
-
-> Tested-by: Valmer Huhn <valmer.huhn@concurrent-rt.com>
-
-This tag (Tested-by: Author_of_the_patch) is implied. We don't want patches
-that weren't tested by authors.
-
-After cutter line '---' you missed to provide a changelog along with bumping
-patch version. Hint, use -v<X> when run `git format-patch ...`
-
-P.S. Next should be v3, so `git format-patch -v3 ...`.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika,
+der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich
+an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre
+E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines
+Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und
+Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die
+Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden,
+um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite
+unten.
 
 
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+
+
+Das ist dein Spendencode: [TS530342018]
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+
+Grüße
+
+Herr Tayeb Souami
