@@ -2,109 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F80246E3D
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Aug 2020 19:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57943247337
+	for <lists+linux-serial@lfdr.de>; Mon, 17 Aug 2020 20:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389511AbgHQR0R (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Aug 2020 13:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S2387913AbgHQSwu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 17 Aug 2020 14:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390039AbgHQRZd (ORCPT
+        with ESMTP id S2391641AbgHQSwq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 17 Aug 2020 13:25:33 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C57C061389;
-        Mon, 17 Aug 2020 10:25:33 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id j9so15174824ilc.11;
-        Mon, 17 Aug 2020 10:25:33 -0700 (PDT)
+        Mon, 17 Aug 2020 14:52:46 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EA5C061344;
+        Mon, 17 Aug 2020 11:52:45 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id e5so13232606qth.5;
+        Mon, 17 Aug 2020 11:52:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rKtlLroQpL/sWAJgH4qxybWU48/NnHnKlgQrlvvNczw=;
-        b=Zh1hzjplnO00QpCm/On/zjcaMBwW9TTlmZ3xHT74iBDu8raplF54GVXb0JGtIgCZus
-         owaf1p2obJm9WFiiMARI3u+MFRo5MmOf9c7bohL5PGxygj+7g4S84OYpeJZjl8nqciz5
-         oyQMYuBWu0tVZk8SjeAIf5qw9l1gCM8140nr9wB94lJ2DPlnh+lfMGsMkRB7HLHqGTCp
-         XAlCYEsYhJxcGSMUwpYpUfW5QY2vIyb2c/KexMWq0kiIvnJ5d7X+eKomPKtiL4AE4mEn
-         66gUW7Gam9grdox6zUK0Zc+8vW/kn7wePWxt1b0rVRqi4TUPmBD54TmRiuO7RVRPmNZ9
-         h9MA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EyInuEBx4tu8/dpK6QVmoYclYZh/Tpg6DL8iKkTJkGU=;
+        b=Pe9fLNDEEnHmY37636XimvnOUgmaRGT+7ZjrZXOCOn5ANBcz/YnSzYtj1opCJoE4XN
+         m+0gf0HV0Z7EzBplf8sVlk6FH0vTjVtbelDqTqzTkyfd2ULr4QPGVwYN1dK4DyKiqJMs
+         80qrV3w1Icy5C7jFtQ5q4JERbSW62pKtVkH9qWljKgo0RISyJCyUXrlqTkudkBg+AQZY
+         hQyFwQsPpIHnc5RxawZHiHucwiB1s/C24VskGr9EOfwPIlkvXP2YrLNLrnKQb0LUjvzC
+         eqH/U0VQW/9Wn57DRZ1ioqovhxxUDeEovsdl4BsCRNOcMGQ6ZH1FLr00+A3kDvDp7PWa
+         QiDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rKtlLroQpL/sWAJgH4qxybWU48/NnHnKlgQrlvvNczw=;
-        b=SXyWyjuCYocXFNWET8nJpmJI3nZrRzJ47hbpF8mdYsdvC8IFsYNO5H5+nUez8Y/sD6
-         B2Zd+I8ZfEu5BZuy49s6QI3oJT+FgWK13z8MfzPzEojB0cLKIFb4k4o//JvoruRePsK7
-         rmSlYK8yRmC7DCoGX3jr+E1Z+weF+v6qZZgkFnllMCVpcw+WktV/zLw4HOL+4VzMfSS5
-         RbLQNEtO9XqFzy6a2pbmzo1P++SA5c6WpzxOe1aTBjaYUmIapsDLHhb/P5NIpp36iNsR
-         c0lRhWY9Jc1R5uZmAZWQR30iEQy1hW/ikvm/F0g2Zenaqmpu1Nx++AlmUVTXuFJZ88RH
-         quMQ==
-X-Gm-Message-State: AOAM530snq+ugm27TwAszEj7PpEkbxeRFlTiaLNtanTsM7d8h2sIlzNc
-        QTBdi6dbvZErnIVfFb0gGKMcCx9ZBdMesh0OxHeYG0EYgw81gQ==
-X-Google-Smtp-Source: ABdhPJxKJV7ZDUifvV2jxONW1h9vnjrTDiPV21b4WSI1cQ36QytJWfdjPUr/+UXcj5suUkTUs5Ql6OXn0KmK/xxxrB0=
-X-Received: by 2002:a92:2901:: with SMTP id l1mr9877131ilg.306.1597685132897;
- Mon, 17 Aug 2020 10:25:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200817165059.957748-1-ztong0001@gmail.com> <20200817170038.GA725471@kroah.com>
-In-Reply-To: <20200817170038.GA725471@kroah.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EyInuEBx4tu8/dpK6QVmoYclYZh/Tpg6DL8iKkTJkGU=;
+        b=h2VvqgHLFBx+dj/BF/6xCC02RWvw6uMaEs3/T1NtHO5Q8QA1gq0InB96gnCTnjiZ1e
+         O4JrnOKigZWJxEF6ZmD9lWdFdRyfk6MR705CbKZfcqjdBjP96N0dn5zpaNgcfKbwX514
+         zkExsJa5YpyH2NZO/BxN/6qRZ9KO5+fBTIZO5MyWkbfeDe0TNgKYeY7ZckgOEigxDkK8
+         +1BfDmGgGlCx+oJMKEjFKQ5FBtrUknbw4hCOIylLPIBWXLe1xD55pqgHq1tc9QQhcBoy
+         uWWAYaicTk6OHaTr2rDnZXM7bMh8ZhYux2nOgA3ZrXGp+BK+QxWnqqBlhVrhcOvYa/rP
+         j0iw==
+X-Gm-Message-State: AOAM530/4oyOoAK6of76nAPXo8ODwiAumeTiDkJeetgW08w5IskmRyQ+
+        wKPwy0kIZRvzE3WFAkYZuRrbTcaq3uUqNg==
+X-Google-Smtp-Source: ABdhPJzqT11r5CkeXxxzIyr9TKN47NMEwxu3N2u39F6z7Hn7QAfDIhWSgHUxGQ+wjGPXz88CIW93kw==
+X-Received: by 2002:ac8:7606:: with SMTP id t6mr15003326qtq.348.1597690364557;
+        Mon, 17 Aug 2020 11:52:44 -0700 (PDT)
+Received: from tong-desktop.local ([2601:5c0:c100:b9d:c66:53f8:5dc7:25fa])
+        by smtp.googlemail.com with ESMTPSA id m30sm21903159qtm.46.2020.08.17.11.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2020 11:52:43 -0700 (PDT)
 From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Mon, 17 Aug 2020 13:25:22 -0400
-Message-ID: <CAA5qM4AH7rLCve8YjZ50No02BY524nPbSOJVa+8_e3dXKmpuJw@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial: fix earlycon dependency
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To:     ztong0001@gmail.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] Fixes: tty: serial: earlycon dependency
+Date:   Mon, 17 Aug 2020 14:52:38 -0400
+Message-Id: <20200817185238.1133509-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 1:00 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> We can handle lines 72 characters long :)
-OK, thanks, I was not aware of that, I will reformat the text in the
-next version
+parse_options() in drivers/tty/serial/earlycon.c calls uart_parse_earlycon
+in drivers/tty/serial/serial_core.c therefore selecting SERIAL_EARLYCON
+should automatically select SERIAL_CORE, otherwise will result in symbol
+not found error during linking if SERIAL_CORE is not configured as builtin
 
-> > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
->
-> What broke to cause this to be needed?
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ drivers/tty/serial/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-newbie here, please don't laugh at me,
-I just followed what people were doing after read some articles from
-the internet
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 8a0352eb337c..42e844314cbb 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -8,6 +8,7 @@ menu "Serial drivers"
+ 
+ config SERIAL_EARLYCON
+ 	bool
++	select SERIAL_CORE
+ 	help
+ 	  Support for early consoles with the earlycon parameter. This enables
+ 	  the console before standard serial driver is probed. The console is
+-- 
+2.25.1
 
-> Can you provide a "Fixes:" tag for this?
-sure, thanks for the suggestion
-
->
-> > ---
-> >  drivers/tty/serial/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> > index 8a0352eb337c..42e844314cbb 100644
-> > --- a/drivers/tty/serial/Kconfig
-> > +++ b/drivers/tty/serial/Kconfig
-> > @@ -8,6 +8,7 @@ menu "Serial drivers"
-> >
-> >  config SERIAL_EARLYCON
-> >       bool
-> > +     select SERIAL_CORE
->
-> Are you _sure_ about this?  This feels odd...
-
-Yeah.. that also seems odd to me -- this bug can be triggered under
-some corner cases
-which I haven't figured out why --
-I can encounter this problem when doing allmodconfig followed by some random
-select/deselect in menuconfig. -- It seems that menuconfig is not
-doing some dependency
-check correctly, i.e. when SERIAL_CORE is not builtin, SERIAL_EARLYCON
-should not
-be selected either.
-What do you suggest?
-
-> thanks,
-Thank you.
-
-> greg k-h
