@@ -2,78 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 239F8248AA2
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Aug 2020 17:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FEE248B9D
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Aug 2020 18:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbgHRPyC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Aug 2020 11:54:02 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:46083 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728265AbgHRPxM (ORCPT
+        id S1726896AbgHRQ3A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Aug 2020 12:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728250AbgHRQ01 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Aug 2020 11:53:12 -0400
-Received: by mail-il1-f194.google.com with SMTP id c6so17993329ilo.13;
-        Tue, 18 Aug 2020 08:53:12 -0700 (PDT)
+        Tue, 18 Aug 2020 12:26:27 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC37C061389;
+        Tue, 18 Aug 2020 09:26:26 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id y11so9825661qvl.4;
+        Tue, 18 Aug 2020 09:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iIX0sNpmnJ6kXFsh0zKxLpYcQTRQO7AV2JMPqyWSiic=;
+        b=Bic/hW8DHiQT6NI9ZYD2pLUalLPzv43IhrECzIzAy1blLkWVMCvnvwwfyDaiES+8+h
+         c+Y16gYMVadeuQ1AQqjt05lsi7m2uHzKuYFVoNIFTkHuKdkiByM6epBC11bVKxykIyja
+         g64CzhD91jNskkR/oUyM/MVLgWWxnqw488Y35xkz9qJfNcAirZtdgSm76DbUSaHxPhEs
+         QX9ZiyNtrIyncv6FIoIYpQ/o4o5Wy6rI2wm+Lr9PXFwKG1Hpx95jztSCYvXqwoXV9fq/
+         7qkR6GyaKIv3FBdHmaHGu84rVwj4YT2KH8jUwSEqJ07LShZTq4j9JnVKyQD21t5thlHb
+         My5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e8xwT+XbdKbVXnEs3AgJg8sUqMKGkHFT2KlDaoxIjxw=;
-        b=TdMcDjst4Ir5x4ReAr2Zv1XPZfVQfdTsidjQM9soi77SehYqE7c+bFf9pi/NMwipDW
-         y5WBZjRtOM4m/MWcxpcs6puePubjeN3SW8WGSV0rLbExt3n3MNh8P4EUW1mGKu6WI6hN
-         B58enOg99W+lmJhImFv9wP9jOx0KaiN0WHJSik1rK7nMvji2P9xUKrSb9iC/aqUNXXwN
-         U5ul1buPUfQ9580OpnwhpdhDyJuXCPwbGq6F8ghVCzPE6EjhK6iywaUWdDsWCXHe1OO5
-         DLMtB17y3VB3FRb9fVysQogacitZTMoUm4qwFz6cETZH+rBSHOjZ7e1Vd1WXjavfDwSx
-         kHmw==
-X-Gm-Message-State: AOAM531jh+c4qO7ePdE4k7NMrAu6k/dPb/PmltkCvyYAlJkNB8aLANT0
-        hvVZh5+346a2obRsKpUeglRwpqG3iA==
-X-Google-Smtp-Source: ABdhPJz7y7DtUryAad9pPrdvv6ZcWrAUTi6RyapxV/kvz9wzOYmpRw8J/elnLKZGFHgiIsSQ8hPTKA==
-X-Received: by 2002:a92:dc90:: with SMTP id c16mr18914056iln.202.1597765991438;
-        Tue, 18 Aug 2020 08:53:11 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id m7sm11595867ilq.45.2020.08.18.08.53.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iIX0sNpmnJ6kXFsh0zKxLpYcQTRQO7AV2JMPqyWSiic=;
+        b=HlWtDXySbjDIG53XuijPF+bp7KAUb8a46mbMH0fpCF9ySgfw330iNea5ax5+OEe83s
+         Brg3t+trfApIIPiuNjfGhKv7RSEQXhvHJ2zoOcJPBfn1r0Gv2ayB0I6CudR0Vbd2FgXo
+         mY+4uOU/Yk0IEvmM+dA38Tx1Kzm7CdsaQuulZ5zExsQCM9uLIxkajMzjtOajoVw1eFUP
+         Nq+Ki9Px9frU7qm6KBJsulqsbd3xfF4ehiHIspjuEEjdxrLGeODATb7fbk0HqGqCMcLy
+         D+OKMMSYJ8qfk9GEohl5BAHzdlVfZ/du7sjjOh+waHsGi/EiN/HWLrqsoiJK3re1nE4z
+         +Bhw==
+X-Gm-Message-State: AOAM532qINWlgboax2RAhFe/41PmO00J3Y3UcNggPSfWqd6QfMAI75Le
+        ceO+hmBmqImOqFoUWXywE18=
+X-Google-Smtp-Source: ABdhPJy8t33CnDNghotiO9kPZ14KObEgHCT8T7IzUxyWuvEpZJ6mUqWnxWZvLoD137JlGgSdlYORzg==
+X-Received: by 2002:a0c:f2c8:: with SMTP id c8mr19867270qvm.64.1597767986007;
+        Tue, 18 Aug 2020 09:26:26 -0700 (PDT)
+Received: from tong-desktop.local ([2601:5c0:c100:b9d:f9e2:64b4:fbc4:6485])
+        by smtp.googlemail.com with ESMTPSA id u8sm11928528qkj.9.2020.08.18.09.26.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2020 08:53:10 -0700 (PDT)
-Received: (nullmailer pid 3529434 invoked by uid 1000);
-        Tue, 18 Aug 2020 15:53:09 -0000
-Date:   Tue, 18 Aug 2020 09:53:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     linux-serial@vger.kernel.org, fugang.duan@nxp.com,
-        Linux-imx@nxp.com, mturquette@baylibre.com,
-        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        festevam@gmail.com, robh+dt@kernel.org, shawnguo@kernel.org,
-        sboyd@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH V3 5/5] dt-bindings: serial: Convert NXP lpuart to
- json-schema
-Message-ID: <20200818155309.GA3529387@bogus>
-References: <1597721685-9280-1-git-send-email-Anson.Huang@nxp.com>
- <1597721685-9280-5-git-send-email-Anson.Huang@nxp.com>
+        Tue, 18 Aug 2020 09:26:25 -0700 (PDT)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, robh@kernel.org,
+        linux-serial@vger.kernel.org
+Cc:     ztong0001@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] tty: serial: earlycon dependency
+Date:   Tue, 18 Aug 2020 12:25:57 -0400
+Message-Id: <20200818162556.6621-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200818111954.GA283417@kroah.com>
+References: <20200818111954.GA283417@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1597721685-9280-5-git-send-email-Anson.Huang@nxp.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 18 Aug 2020 11:34:45 +0800, Anson Huang wrote:
-> Convert the NXP lpuart binding to DT schema format using json-schema.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> changes since V2:
-> 	- update maintainer, the original owner's email address is no longer valid,
-> 	  use one of the patch contributors as well as NXP's UART owner as maintainer.
-> ---
->  .../devicetree/bindings/serial/fsl-lpuart.txt      | 43 ------------
->  .../devicetree/bindings/serial/fsl-lpuart.yaml     | 79 ++++++++++++++++++++++
->  2 files changed, 79 insertions(+), 43 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/serial/fsl-lpuart.txt
->  create mode 100644 Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> 
+parse_options() in drivers/tty/serial/earlycon.c calls uart_parse_earlycon
+in drivers/tty/serial/serial_core.c therefore selecting SERIAL_EARLYCON
+should automatically select SERIAL_CORE, otherwise will result in symbol
+not found error during linking if SERIAL_CORE is not configured as builtin.
 
-Applied, thanks!
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+
+Fixes: 9aac5887595b ("tty/serial: add generic serial earlycon")
+v2: I made an attempt to fix the commit log
+v3: I made another attempt to fix the commit log and I also changed
+select to depends according to Jiri's comment
+
+ drivers/tty/serial/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 8a0352eb337c..6aed721e9287 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -8,6 +8,7 @@ menu "Serial drivers"
+ 
+ config SERIAL_EARLYCON
+ 	bool
++	depends SERIAL_CORE
+ 	help
+ 	  Support for early consoles with the earlycon parameter. This enables
+ 	  the console before standard serial driver is probed. The console is
+-- 
+2.25.1
+
