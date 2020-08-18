@@ -2,192 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CCE247D05
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Aug 2020 05:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1086247DF0
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Aug 2020 07:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbgHRDkV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Aug 2020 23:40:21 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:44892 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726612AbgHRDkR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 17 Aug 2020 23:40:17 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4AC772016E6;
-        Tue, 18 Aug 2020 05:40:14 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 437C82016E5;
-        Tue, 18 Aug 2020 05:40:08 +0200 (CEST)
-Received: from 10.192.242.69 (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 6E8E4402E1;
-        Tue, 18 Aug 2020 05:39:59 +0200 (CEST)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, gregkh@linuxfoundation.org,
-        fugang.duan@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V3 5/5] dt-bindings: serial: Convert NXP lpuart to json-schema
-Date:   Tue, 18 Aug 2020 11:34:45 +0800
-Message-Id: <1597721685-9280-5-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1597721685-9280-1-git-send-email-Anson.Huang@nxp.com>
-References: <1597721685-9280-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726381AbgHRFme (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Aug 2020 01:42:34 -0400
+Received: from mail-ej1-f67.google.com ([209.85.218.67]:37018 "EHLO
+        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726228AbgHRFmd (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 18 Aug 2020 01:42:33 -0400
+Received: by mail-ej1-f67.google.com with SMTP id qc22so20577054ejb.4;
+        Mon, 17 Aug 2020 22:42:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1tVz7UT+SvsNDotol38wN9NUomwuxLq4eSOdjboG+OY=;
+        b=eII3H7oLNtReXuSTcSLRJbono5IJ5z1Dbt033YzmNIrFhrEOh6DF1keS2mZDP1NrsW
+         UGnW8jVScgSD6wn58LXhRMurD7mgIn46OxEnkNotK5k5zlHgGELmeqIaNu46nT6ORvEF
+         YZalgzTmMctNVuaVx+/bZxitH1nqFWVZw10W/Cderv6mkqed9MHAam2GXJMy1nFsBa9J
+         pitZwTWAQg8ht/RiH7k9UCjUX+EFtG4P5Axmd+/KKAXMACUDo/Z8761M23iE8xAWAnMY
+         +45dXczc4AXuFkWG8GMHrdbx78j3Tz0qchcLcI+W4hX9Kz4c1XmK7P1cH/CzyYhoVYV5
+         sWAA==
+X-Gm-Message-State: AOAM532/DIX+CoblL+1Od8t/BYGsUU6WZ12UpqHIPcwvAeyJP25sTfiF
+        pkLrE/BbR50UvskB4q7Oq9qAF/65OlE=
+X-Google-Smtp-Source: ABdhPJwDhpmTxHUv/rAR858626yDAWiLDUAqQgeA5SJPCXuVD9+jaHiH0SIIZAKI5WxInsWGT+HVjw==
+X-Received: by 2002:a17:906:3cc:: with SMTP id c12mr17804853eja.222.1597729351225;
+        Mon, 17 Aug 2020 22:42:31 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id i9sm15678045ejb.48.2020.08.17.22.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Aug 2020 22:42:30 -0700 (PDT)
+Subject: Re: [PATCH v2] Fixes: tty: serial: earlycon dependency
+To:     Tong Zhang <ztong0001@gmail.com>, gregkh@linuxfoundation.org,
+        linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Hurley <peter@hurleysoftware.com>
+References: <20200817170038.GA725471@kroah.com>
+ <20200817185419.1133596-1-ztong0001@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <603a20ef-fe09-c4ae-11d0-3f1dc7b87580@kernel.org>
+Date:   Tue, 18 Aug 2020 07:42:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <20200817185419.1133596-1-ztong0001@gmail.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Convert the NXP lpuart binding to DT schema format using json-schema.
+On 17. 08. 20, 20:54, Tong Zhang wrote:
+> parse_options() in drivers/tty/serial/earlycon.c calls uart_parse_earlycon
+> in drivers/tty/serial/serial_core.c therefore selecting SERIAL_EARLYCON
+> should automatically select SERIAL_CORE, otherwise will result in symbol
+> not found error during linking if SERIAL_CORE is not configured as builtin
+> 
+> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-changes since V2:
-	- update maintainer, the original owner's email address is no longer valid,
-	  use one of the patch contributors as well as NXP's UART owner as maintainer.
----
- .../devicetree/bindings/serial/fsl-lpuart.txt      | 43 ------------
- .../devicetree/bindings/serial/fsl-lpuart.yaml     | 79 ++++++++++++++++++++++
- 2 files changed, 79 insertions(+), 43 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/serial/fsl-lpuart.txt
- create mode 100644 Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+The "Fixes:" keyword should not have been in the Subject but here.
+According to your findings something like this:
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.txt b/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
-deleted file mode 100644
-index e7448b9..0000000
---- a/Documentation/devicetree/bindings/serial/fsl-lpuart.txt
-+++ /dev/null
-@@ -1,43 +0,0 @@
--* Freescale low power universal asynchronous receiver/transmitter (lpuart)
--
--Required properties:
--- compatible :
--  - "fsl,vf610-lpuart" for lpuart compatible with the one integrated
--    on Vybrid vf610 SoC with 8-bit register organization
--  - "fsl,ls1021a-lpuart" for lpuart compatible with the one integrated
--    on LS1021A SoC with 32-bit big-endian register organization
--  - "fsl,ls1028a-lpuart" for lpuart compatible with the one integrated
--    on LS1028A SoC with 32-bit little-endian register organization
--  - "fsl,imx7ulp-lpuart" for lpuart compatible with the one integrated
--    on i.MX7ULP SoC with 32-bit little-endian register organization
--  - "fsl,imx8qxp-lpuart" for lpuart compatible with the one integrated
--    on i.MX8QXP SoC with 32-bit little-endian register organization
--  - "fsl,imx8qm-lpuart" for lpuart compatible with the one integrated
--    on i.MX8QM SoC with 32-bit little-endian register organization
--- reg : Address and length of the register set for the device
--- interrupts : Should contain uart interrupt
--- clocks : phandle + clock specifier pairs, one for each entry in clock-names
--- clock-names : For vf610/ls1021a/ls1028a/imx7ulp, "ipg" clock is for uart
--  bus/baud clock. For imx8qxp lpuart, "ipg" clock is bus clock that is used
--  to access lpuart controller registers, it also requires "baud" clock for
--  module to receive/transmit data.
--
--Optional properties:
--- dmas: A list of two dma specifiers, one for each entry in dma-names.
--- dma-names: should contain "tx" and "rx".
--- rs485-rts-active-low, linux,rs485-enabled-at-boot-time: see rs485.txt
--
--Note: Optional properties for DMA support. Write them both or both not.
--
--Example:
--
--uart0: serial@40027000 {
--		compatible = "fsl,vf610-lpuart";
--		reg = <0x40027000 0x1000>;
--		interrupts = <0 61 0x00>;
--		clocks = <&clks VF610_CLK_UART0>;
--		clock-names = "ipg";
--		dmas = <&edma0 0 2>,
--			<&edma0 0 3>;
--		dma-names = "rx","tx";
--	};
-diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-new file mode 100644
-index 0000000..e82c2cf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/serial/fsl-lpuart.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale low power universal asynchronous receiver/transmitter (lpuart)
-+
-+maintainers:
-+  - Fugang Duan <fugang.duan@nxp.com>
-+
-+allOf:
-+  - $ref: "rs485.yaml"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,vf610-lpuart
-+      - fsl,ls1021a-lpuart
-+      - fsl,ls1028a-lpuart
-+      - fsl,imx7ulp-lpuart
-+      - fsl,imx8qxp-lpuart
-+      - fsl,imx8qm-lpuart
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: ipg clock
-+      - description: baud clock
-+    minItems: 1
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: ipg
-+      - const: baud
-+    minItems: 1
-+    maxItems: 2
-+
-+  dmas:
-+    items:
-+      - description: DMA controller phandle and request line for RX
-+      - description: DMA controller phandle and request line for TX
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+      - const: tx
-+
-+  rs485-rts-active-low: true
-+  linux,rs485-enabled-at-boot-time: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/vf610-clock.h>
-+
-+    serial@40027000 {
-+        compatible = "fsl,vf610-lpuart";
-+        reg = <0x40027000 0x1000>;
-+        interrupts = <0 61 0x00>;
-+        clocks = <&clks VF610_CLK_UART0>;
-+        clock-names = "ipg";
-+        dmas = <&edma0 0 2>, <&edma0 0 3>;
-+        dma-names = "rx","tx";
-+    };
+Fixes: 73abaf87f01b (serial: earlycon: Refactor parse_options into
+serial core)
+
+I am not sure:
+1) it should be "select" (and not "depends")
+2) serial earlycon should depend on serial core. But it's likely OK.
+
+>  drivers/tty/serial/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 8a0352eb337c..42e844314cbb 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -8,6 +8,7 @@ menu "Serial drivers"
+>  
+>  config SERIAL_EARLYCON
+>  	bool
+> +	select SERIAL_CORE
+>  	help
+>  	  Support for early consoles with the earlycon parameter. This enables
+>  	  the console before standard serial driver is probed. The console is
+> 
+
+thanks,
 -- 
-2.7.4
-
+js
+suse labs
