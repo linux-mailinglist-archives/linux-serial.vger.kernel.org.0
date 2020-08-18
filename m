@@ -2,97 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FEE248B9D
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Aug 2020 18:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF95248B9A
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Aug 2020 18:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgHRQ3A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Aug 2020 12:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S1726806AbgHRQ2s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Aug 2020 12:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728250AbgHRQ01 (ORCPT
+        with ESMTP id S1726616AbgHRQ2F (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Aug 2020 12:26:27 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC37C061389;
-        Tue, 18 Aug 2020 09:26:26 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id y11so9825661qvl.4;
-        Tue, 18 Aug 2020 09:26:26 -0700 (PDT)
+        Tue, 18 Aug 2020 12:28:05 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF13C061389;
+        Tue, 18 Aug 2020 09:28:04 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id v6so21670171iow.11;
+        Tue, 18 Aug 2020 09:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iIX0sNpmnJ6kXFsh0zKxLpYcQTRQO7AV2JMPqyWSiic=;
-        b=Bic/hW8DHiQT6NI9ZYD2pLUalLPzv43IhrECzIzAy1blLkWVMCvnvwwfyDaiES+8+h
-         c+Y16gYMVadeuQ1AQqjt05lsi7m2uHzKuYFVoNIFTkHuKdkiByM6epBC11bVKxykIyja
-         g64CzhD91jNskkR/oUyM/MVLgWWxnqw488Y35xkz9qJfNcAirZtdgSm76DbUSaHxPhEs
-         QX9ZiyNtrIyncv6FIoIYpQ/o4o5Wy6rI2wm+Lr9PXFwKG1Hpx95jztSCYvXqwoXV9fq/
-         7qkR6GyaKIv3FBdHmaHGu84rVwj4YT2KH8jUwSEqJ07LShZTq4j9JnVKyQD21t5thlHb
-         My5g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uRFxHU+sCcIrDbdnNz1Ff4SJxMC8NnHQO31521UTxdw=;
+        b=JqWclZArGkhIB1X2Y6hG/JZZxOW+hCcbwCo4uxHSeYFhfX5XPNy99cXnVGWiA1WpX2
+         N1GZen2gUVAwSS3Sw1h1dzjJFPkNpxftzgpvAptrw6dkv4vH/VX+1SjfGy3113J28AsJ
+         dBGAX79jQK7Q/NB684rd42FUKtFZoC4Ob2jJ2XixWtMXZWQSIVVTCJJW+T9iCn7Wy7/0
+         pDrKisOhpeopnDdXpG2ajOOz9LqAor6MtvRC+ZDjB9pHh9euZNt47/gDCGYZIQ/K+Rhi
+         bqNy9I8QWT2iRBnnb9541NBM18JeYBUClfEh4I15b/1mDh9212yHAP7x1axWAIVsUIvQ
+         rC0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iIX0sNpmnJ6kXFsh0zKxLpYcQTRQO7AV2JMPqyWSiic=;
-        b=HlWtDXySbjDIG53XuijPF+bp7KAUb8a46mbMH0fpCF9ySgfw330iNea5ax5+OEe83s
-         Brg3t+trfApIIPiuNjfGhKv7RSEQXhvHJ2zoOcJPBfn1r0Gv2ayB0I6CudR0Vbd2FgXo
-         mY+4uOU/Yk0IEvmM+dA38Tx1Kzm7CdsaQuulZ5zExsQCM9uLIxkajMzjtOajoVw1eFUP
-         Nq+Ki9Px9frU7qm6KBJsulqsbd3xfF4ehiHIspjuEEjdxrLGeODATb7fbk0HqGqCMcLy
-         D+OKMMSYJ8qfk9GEohl5BAHzdlVfZ/du7sjjOh+waHsGi/EiN/HWLrqsoiJK3re1nE4z
-         +Bhw==
-X-Gm-Message-State: AOAM532qINWlgboax2RAhFe/41PmO00J3Y3UcNggPSfWqd6QfMAI75Le
-        ceO+hmBmqImOqFoUWXywE18=
-X-Google-Smtp-Source: ABdhPJy8t33CnDNghotiO9kPZ14KObEgHCT8T7IzUxyWuvEpZJ6mUqWnxWZvLoD137JlGgSdlYORzg==
-X-Received: by 2002:a0c:f2c8:: with SMTP id c8mr19867270qvm.64.1597767986007;
-        Tue, 18 Aug 2020 09:26:26 -0700 (PDT)
-Received: from tong-desktop.local ([2601:5c0:c100:b9d:f9e2:64b4:fbc4:6485])
-        by smtp.googlemail.com with ESMTPSA id u8sm11928528qkj.9.2020.08.18.09.26.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2020 09:26:25 -0700 (PDT)
-From:   Tong Zhang <ztong0001@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, robh@kernel.org,
-        linux-serial@vger.kernel.org
-Cc:     ztong0001@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] tty: serial: earlycon dependency
-Date:   Tue, 18 Aug 2020 12:25:57 -0400
-Message-Id: <20200818162556.6621-1-ztong0001@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200818111954.GA283417@kroah.com>
-References: <20200818111954.GA283417@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uRFxHU+sCcIrDbdnNz1Ff4SJxMC8NnHQO31521UTxdw=;
+        b=EmpH++ljaDMmrUoXOUC9bMCJAKMuwpscGD0ZyQ47Y6BkEaaA5y8LHRyJ/lFi8qkjQ1
+         IYRbaTYp9onbJup9KkqIlnCfktgia4TVnAF22cjXeu+vRaYqjXHIFoF1JQP3qhCyHG0i
+         51JlgtYjRFsJTXEkHJa8NyKhM/Q1Au78rR+PwBqChs4FGlwGkxJEg9kj9/YvhA3TsjBa
+         wOa+eDZhjUTGu52RhuMvUUe6WCpG/hNQWbvgomZUWprNfdg/0M9h0YvWtaIOtSVsZjYX
+         kr8w7KbJDOHGFufWsqVcmcb5OvyxEr0Y4KV65wK6UIw9IKqVnJETIdoY5Z+O6UrV+cey
+         RyEQ==
+X-Gm-Message-State: AOAM530Ofv2zPZUEomVKYeFOP10V0zX5yQgVFnl/iK+ylaov5NL4SHZs
+        b95bfbf4Xjv+1IFOu9zdX8otj9MMmm4guXeK4hY=
+X-Google-Smtp-Source: ABdhPJzgE7utaYe/bTL9/F7xJj4+WD6PvLhQORWJG0lo/Am3PJzrfgOU+i6LiGoeAvf2qE4fjXDmta//OBSKaE+rfUs=
+X-Received: by 2002:a6b:c88f:: with SMTP id y137mr17088532iof.55.1597768083556;
+ Tue, 18 Aug 2020 09:28:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200817170038.GA725471@kroah.com> <20200817185419.1133596-1-ztong0001@gmail.com>
+ <20200818111954.GA283417@kroah.com>
+In-Reply-To: <20200818111954.GA283417@kroah.com>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Tue, 18 Aug 2020 12:27:52 -0400
+Message-ID: <CAA5qM4CUzJszm_kYfRMAEhA6_t81j1wJ8yWi0Jtjgyt4zTojZA@mail.gmail.com>
+Subject: Re: [PATCH v2] Fixes: tty: serial: earlycon dependency
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-parse_options() in drivers/tty/serial/earlycon.c calls uart_parse_earlycon
-in drivers/tty/serial/serial_core.c therefore selecting SERIAL_EARLYCON
-should automatically select SERIAL_CORE, otherwise will result in symbol
-not found error during linking if SERIAL_CORE is not configured as builtin.
+Thanks Greg and Jiri for your suggestion!
+I made another attempt to fix those problems. Hope it will work this time.
+Thank you!
 
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
----
-
-Fixes: 9aac5887595b ("tty/serial: add generic serial earlycon")
-v2: I made an attempt to fix the commit log
-v3: I made another attempt to fix the commit log and I also changed
-select to depends according to Jiri's comment
-
- drivers/tty/serial/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 8a0352eb337c..6aed721e9287 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -8,6 +8,7 @@ menu "Serial drivers"
- 
- config SERIAL_EARLYCON
- 	bool
-+	depends SERIAL_CORE
- 	help
- 	  Support for early consoles with the earlycon parameter. This enables
- 	  the console before standard serial driver is probed. The console is
--- 
-2.25.1
-
+On Tue, Aug 18, 2020 at 7:19 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Aug 17, 2020 at 02:54:19PM -0400, Tong Zhang wrote:
+> > parse_options() in drivers/tty/serial/earlycon.c calls uart_parse_earlycon
+> > in drivers/tty/serial/serial_core.c therefore selecting SERIAL_EARLYCON
+> > should automatically select SERIAL_CORE, otherwise will result in symbol
+> > not found error during linking if SERIAL_CORE is not configured as builtin
+> >
+> > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+>
+> As Jiri pointed out, the Fixes: line goes down here, not in your subject
+> line :)
+>
+> Please fix up, thanks.
+>
+> > ---
+> >  drivers/tty/serial/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> What changed from v1?  Also always list that below the --- line so we
+> know.
+>
+> thanks,
+>
+> greg k-h
