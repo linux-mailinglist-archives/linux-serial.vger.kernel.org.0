@@ -2,53 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5605249543
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Aug 2020 08:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3524B2496BF
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Aug 2020 09:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgHSGvG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Aug 2020 02:51:06 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:36686 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbgHSGvF (ORCPT
+        id S1726838AbgHSHK6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Aug 2020 03:10:58 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35664 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbgHSHJH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Aug 2020 02:51:05 -0400
-Received: by mail-ed1-f67.google.com with SMTP id ba10so17205254edb.3
-        for <linux-serial@vger.kernel.org>; Tue, 18 Aug 2020 23:51:03 -0700 (PDT)
+        Wed, 19 Aug 2020 03:09:07 -0400
+Received: by mail-ed1-f68.google.com with SMTP id m20so17238994eds.2;
+        Wed, 19 Aug 2020 00:09:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dQdz0YbzAz7fMBAqd5KnzSATkRPJEnTNl6tRwR/LuY8=;
-        b=LBmz226DrvevzvJZTBoSYr+fdsMb2FG8kaDHGARfpUAQuC84iYcw4Z/PiC6+kDiCkj
-         51sfR4RFYbzDznq0nreQ4zHfpcJSGj/MNqgNH3UkESV2JKHvqg4Ldf4efhdYHh4LDnSq
-         aUK/tlXHH/YWptsfVuiy3y1buUoDAyXyBKyKTwQJBqSUIajQY+P1d7DIiGabXONUQVRc
-         R2ej68atEMNeiI/dKjmglvxzPq4ZWy+KQdEsQYR5HiI4TLAuaTpkxfP7BRKGnUdibrvt
-         2hZ82SWgzwmSltwfn2NBz3BB/Xl2fZVZaoVfcis/Dqj0xU1dCVY72HPvZiuH/J1j9sDH
-         7PFA==
-X-Gm-Message-State: AOAM530ixcFgrM9dnWR/xeYCpqdFTW7xfXX6zQuha3e6bST57tHIBRaT
-        aKq7NSI8e2q26LQaO3fRRKY=
-X-Google-Smtp-Source: ABdhPJyAsg5yKt2JAZ31A/3+Uq3jUS9fCzuhg20FM+Epyq6pRK0a1Zs4f72I6wUIWnOacgsja4cRpg==
-X-Received: by 2002:aa7:d84d:: with SMTP id f13mr22575735eds.155.1597819863072;
-        Tue, 18 Aug 2020 23:51:03 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fEkH4ZxpxTY42f36NAcppi2kiNk4M3AwqeTbG0SRAps=;
+        b=XMNlfuMgTF6xKPHeD7ii2g8uJGlt3u0JfKNKWQ9ZPkL9taZouE2W9RhhuFCqAPHdHr
+         dGospbZKYb0yYd8LeJqqKnWsbDeyp0hjDkGLcByuIU99Tz2ylDhv/cIBtfLMpMk+oaWl
+         sj5OllHnOq8+6G/hGbus3OvuzSLIogvpo5EACMT8sKpfoELXLLJ/vSisMklCNQI5ldy8
+         SLXfrAc0Uo6C0bKfN0Y6vJyxdS7yXzN970qkRW2Uhz8zCZQAyWNiSdnfUf5rhDGPFbl0
+         TcHPTodnFkSAauwilRpFlZ8RU1HdRcrwu+203l9v8fvBmC71gJtgEGTsrNYHIsymoPKU
+         cQgw==
+X-Gm-Message-State: AOAM531K4tTU6wxbZNkOUynE3jkR5Qr7tcRPh/fOVVn8jfWPwRSww5K5
+        gGNiPhRizyTpeNEhVuc2YxB9Fw/6iV4=
+X-Google-Smtp-Source: ABdhPJzZjN7yLJ+YMGWbIoHiOG2baBTgjcXtigIJw11DlVTj77AU08DC1d25Da8nBcT/V81rq9KKcg==
+X-Received: by 2002:a50:fd83:: with SMTP id o3mr22404496edt.170.1597820942993;
+        Wed, 19 Aug 2020 00:09:02 -0700 (PDT)
 Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id p23sm13149278edm.31.2020.08.18.23.51.01
+        by smtp.gmail.com with ESMTPSA id t19sm17329336edw.63.2020.08.19.00.09.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Aug 2020 23:51:02 -0700 (PDT)
-Subject: Re: [PATCH] serial: pl011: Don't leak amba_ports entry on driver
- register error
-To:     Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Russell King <linux@armlinux.org.uk>, linux-serial@vger.kernel.org,
-        Tushar Behera <tushar.behera@linaro.org>
-References: <138f8c15afb2f184d8102583f8301575566064a6.1597316167.git.lukas@wunner.de>
+        Wed, 19 Aug 2020 00:09:02 -0700 (PDT)
+Subject: Re: [PATCH 02/16] vt: declare xy for get/putconsxy properly
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200818085706.12163-1-jslaby@suse.cz>
+ <20200818085706.12163-2-jslaby@suse.cz> <20200818114341.GA343779@kroah.com>
 From:   Jiri Slaby <jirislaby@kernel.org>
-Message-ID: <4830ea38-6947-aa34-d04b-c143d74bb022@kernel.org>
-Date:   Wed, 19 Aug 2020 08:51:01 +0200
+Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <791f5ae5-134e-794d-903e-a39d5f6ac3e2@kernel.org>
+Date:   Wed, 19 Aug 2020 09:09:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <138f8c15afb2f184d8102583f8301575566064a6.1597316167.git.lukas@wunner.de>
+In-Reply-To: <20200818114341.GA343779@kroah.com>
 Content-Type: text/plain; charset=iso-8859-2
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,50 +97,36 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 13. 08. 20, 12:59, Lukas Wunner wrote:
-> pl011_probe() calls pl011_setup_port() to reserve an amba_ports[] entry,
-> then calls pl011_register_port() to register the uart driver with the
-> tty layer.
+On 18. 08. 20, 13:43, Greg KH wrote:
+> On Tue, Aug 18, 2020 at 10:56:52AM +0200, Jiri Slaby wrote:
+>> That is:
+>> 1) call the parameter 'xy' to denote what it really is, not generic 'p'
+>> 2) tell the compiler and users that we expect an array:
+>>    * with at least 2 chars (static 2)
+>>    * which we don't modify in putconsxy (const)
+>>
+>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>> ---
+>>  drivers/tty/vt/vt.c       | 10 +++++-----
+>>  include/linux/selection.h |  4 ++--
+>>  2 files changed, 7 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+>> index 8f283221330e..a0da7771c327 100644
+>> --- a/drivers/tty/vt/vt.c
+>> +++ b/drivers/tty/vt/vt.c
+>> @@ -4769,17 +4769,17 @@ unsigned short *screen_pos(const struct vc_data *vc, int w_offset, int viewed)
+>>  }
+>>  EXPORT_SYMBOL_GPL(screen_pos);
+>>  
+>> -void getconsxy(const struct vc_data *vc, unsigned char *p)
+>> +void getconsxy(const struct vc_data *vc, unsigned char xy[static 2])
 > 
-> If registration of the uart driver fails, the amba_ports[] entry is not
-> released.  If this happens 14 times (value of UART_NR macro), then all
-> amba_ports[] entries will have been leaked and driver probing is no
-> longer possible.  (To be fair, that can only happen if the DeviceTree
-> doesn't contain alias IDs since they cause the same entry to be used for
-> a given port.)   Fix it.
-> 
-> Fixes: ef2889f7ffee ("serial: pl011: Move uart_register_driver call to device")
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: stable@vger.kernel.org # v3.15+
-> Cc: Tushar Behera <tushar.behera@linaro.org>
-> ---
->  drivers/tty/serial/amba-pl011.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-> index cd1ba8d8b0e6..67498594d7d7 100644
-> --- a/drivers/tty/serial/amba-pl011.c
-> +++ b/drivers/tty/serial/amba-pl011.c
-> @@ -2614,7 +2614,7 @@ static int pl011_setup_port(struct device *dev, struct uart_amba_port *uap,
->  
->  static int pl011_register_port(struct uart_amba_port *uap)
->  {
-> -	int ret;
-> +	int ret, i;
->  
->  	/* Ensure interrupts from this UART are masked and cleared */
->  	pl011_write(0, uap, REG_IMSC);
-> @@ -2625,6 +2625,9 @@ static int pl011_register_port(struct uart_amba_port *uap)
->  		if (ret < 0) {
->  			dev_err(uap->port.dev,
->  				"Failed to register AMBA-PL011 driver\n");
-> +			for (i = 0; i < ARRAY_SIZE(amba_ports); i++)
-> +				if (amba_ports[i] == uap)
-> +					amba_ports[i] = NULL;
+> I didn't realize we could do "[static 2]" in the kernel now, is that
+> thanks to the bump of the minimum gcc version?  If so, nice!
 
-This doesn't look like the right place to free it. The callers should do
-it instead. Or if you really want to do it here, just pass the index to
-the function, so that you don't have to find it.
+gcc supports it since some time around 3.x (these kinds of declaration
+are defined in c99). So hopefully nothing breaks.
 
 thanks,
 -- 
