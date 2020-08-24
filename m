@@ -2,144 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC00724FB78
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Aug 2020 12:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4003F2501F5
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Aug 2020 18:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgHXKcq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Mon, 24 Aug 2020 06:32:46 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44609 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725968AbgHXKco (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Aug 2020 06:32:44 -0400
-Received: by mail-wr1-f67.google.com with SMTP id c15so8105705wrs.11;
-        Mon, 24 Aug 2020 03:32:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3kC1j2VGz3irmMnTu7OSvcIF5sgB8GN7svCyG6bNmQc=;
-        b=GwtRoBAqEhZXPoO6GRQC0NFLkAKbwreCd8CzvDJlOnNI+CyR7tVsp5c2wAr7Y6At26
-         ZiDKoD2iOmyNbkaqpnH/sm8Z6uV9OrKiMLUWcyjLic0r5Vn2L8MsEaPSIojq8ALuW3eT
-         Nj3oiME+eEnLIP0S8MPayC4j2o7dGagtLdLVI/uk5IZsLNA+z9qLfKjyQyZYIcp82I87
-         UEo37ielR9G8fZL5XypFRzEk4+Re6HEj7qdIJB58lNaP7cup8PVsGfbNKuLuOuNRL281
-         bh/rkTv4VvGQTZIccPWtfAzhhfnVgwJ8jE2kk7gsSM43qQ9L3CW7Uvdykb83LunqpvvU
-         E0sg==
-X-Gm-Message-State: AOAM530AdW6lg5HRHJaFr+Lz8okp38HGiJNxNx8GMDrLq+KFLP+HZsdL
-        SpGtqE3B5EZW3h1c7/gImEE=
-X-Google-Smtp-Source: ABdhPJweVUT7a41DfLWZjKJnJ7ppNGMhfph8/pfsheA41o3Lgtr9MDX7LDVdL1I0kuB6ivdiZ0Q/PQ==
-X-Received: by 2002:adf:e68f:: with SMTP id r15mr5135544wrm.196.1598265161023;
-        Mon, 24 Aug 2020 03:32:41 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.216])
-        by smtp.googlemail.com with ESMTPSA id b1sm614772wmj.8.2020.08.24.03.32.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Aug 2020 03:32:40 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 12:32:37 +0200
+        id S1726952AbgHXQ1S (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Aug 2020 12:27:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56626 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725780AbgHXQ1R (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:27:17 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7E5F2072D;
+        Mon, 24 Aug 2020 16:27:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598286437;
+        bh=lnBHoUXioLOrOWNKvWtcrwmt13u6QaY0trxOTodHtew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Znz4cKVrnSCgYw35MMVSPppJ5hjlovEHC0R/6Thnt26/cwLk2AL+Vy0L/Q8VJDg2z
+         0YaNbOuluJaThIJ/UdVJU13Pvd1GJutNSYP8bKDyNdneetH6PEX0IKFOEeU0GmtueK
+         tTgVmwEG0W5wMKi6KelLbGhNcQGJlRHl+mt+/mRA=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Bough Chen <haibo.chen@nxp.com>
-Cc:     Dong Aisheng <dongas86@gmail.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Anson Huang <anson.huang@nxp.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
+To:     Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible from
- USDHC
-Message-ID: <20200824103237.GA26120@kozik-lap>
-References: <20200823161550.3981-1-krzk@kernel.org>
- <20200823161550.3981-21-krzk@kernel.org>
- <AM6PR04MB49668B0F67B02B2A33603B4880560@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <20200824091102.GA20819@kozik-lap>
- <CAA+hA=S=2SoF8egOq8h-eB9wZGDqrAw66VtW-bU9oBmzFSj9Bw@mail.gmail.com>
- <VI1PR04MB52949085DFA5D29C2858094290560@VI1PR04MB5294.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <VI1PR04MB52949085DFA5D29C2858094290560@VI1PR04MB5294.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v2 01/19] dt-bindings: gpio: fsl-imx-gpio: Add i.MX 8 compatibles
+Date:   Mon, 24 Aug 2020 18:26:34 +0200
+Message-Id: <20200824162652.21047-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 10:31:31AM +0000, Bough Chen wrote:
-> > -----Original Message-----
-> > From: Dong Aisheng [mailto:dongas86@gmail.com]
-> > Sent: 2020年8月24日 17:45
-> > To: Krzysztof Kozlowski <krzk@kernel.org>
-> > Cc: Aisheng Dong <aisheng.dong@nxp.com>; devicetree@vger.kernel.org;
-> > linux-serial@vger.kernel.org; Anson Huang <anson.huang@nxp.com>;
-> > linux-gpio@vger.kernel.org; Fabio Estevam <festevam@gmail.com>; Linus
-> > Walleij <linus.walleij@linaro.org>; linux-pm@vger.kernel.org;
-> > linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-pwm@vger.kernel.org; Bartosz Golaszewski
-> > <bgolaszewski@baylibre.com>; Rob Herring <robh+dt@kernel.org>;
-> > linux-mtd@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; Pengutronix
-> > Kernel Team <kernel@pengutronix.de>; Thierry Reding
-> > <thierry.reding@gmail.com>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> > Hauer <s.hauer@pengutronix.de>; linux-arm-kernel@lists.infradead.org;
-> > linux-watchdog@vger.kernel.org; Bough Chen <haibo.chen@nxp.com>
-> > Subject: Re: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible
-> > from USDHC
-> > 
-> > On Mon, Aug 24, 2020 at 5:15 PM Krzysztof Kozlowski <krzk@kernel.org>
-> > wrote:
-> > >
-> > > On Mon, Aug 24, 2020 at 09:00:19AM +0000, Aisheng Dong wrote:
-> > > > > From: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > > Sent: Monday, August 24, 2020 12:16 AM
-> > > > >
-> > > > > The USDHC on i.MX 8QXP has its own compatible described in
-> > > > > bindings and used in the driver (with its own quirks).  Remove
-> > > > > additional fsl,imx7d-usdhc compatible to fix dtbs_check warnings like:
-> > > > >
-> > > > >   arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml:
-> > mmc@5b010000:
-> > > > >     compatible: ['fsl,imx8qxp-usdhc', 'fsl,imx7d-usdhc'] is too long
-> > > > >     From schema:
-> > > > > /ocumentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > > > >
-> > > > >   arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml:
-> > mmc@5b010000:
-> > > > >     compatible: Additional items are not allowed
-> > > > > ('fsl,imx7d-usdhc' was
-> > > > > unexpected)
-> > > > >
-> > > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > >
-> > > > For Patch 19-22, I think we should fix dt binding doc.
-> > >
-> > > Are you sure that these USDHC controllers are compatible with i.MX 7D?
-> > > Could they really run with fsl,imx7d-usdhc compatible?
-> > 
-> > AFAIK uSDHC on QXP is derived from the former platforms with adding a few
-> > more new features. e.g. HS400ES/CMDQ.
-> > Let me loop in uSDHC driver owner Haibo Chen to double confirm.
-> 
-> Yes, usdhc of imx8qxp can work by using the compatible "fsl, imx7d-usdhc", but will not support HS400ES/Command Queue any more. Also imx8qxp support Auto CMD23, but imx7d not.
-> And imx8qxp need to re-config the clock rate after system PM, imx7d do not need to do this.
+DTSes with new i.MX 8 SoCs introduce their own compatibles so add them
+to fix dtbs_check warnings like:
 
-Then we can leave the compatible in DTS and I will correct the device
-tree schema.
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible:0: 'fsl,imx8mm-gpio' is not one of ['fsl,imx1-gpio', 'fsl,imx21-gpio', 'fsl,imx31-gpio', 'fsl,imx35-gpio', 'fsl,imx7d-gpio']
+    From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
 
-Best regards,
-Krzysztof
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible: ['fsl,imx8mm-gpio', 'fsl,imx35-gpio'] is too long
+
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible: Additional items are not allowed ('fsl,imx35-gpio' was unexpected)
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ .../bindings/gpio/fsl-imx-gpio.yaml           | 21 +++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+index 0b223abe8cfb..454db20c2d1a 100644
+--- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+@@ -11,12 +11,21 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx1-gpio
+-      - fsl,imx21-gpio
+-      - fsl,imx31-gpio
+-      - fsl,imx35-gpio
+-      - fsl,imx7d-gpio
++    oneOf:
++      - enum:
++          - fsl,imx1-gpio
++          - fsl,imx21-gpio
++          - fsl,imx31-gpio
++          - fsl,imx35-gpio
++          - fsl,imx7d-gpio
++      - items:
++          - enum:
++              - fsl,imx8mm-gpio
++              - fsl,imx8mn-gpio
++              - fsl,imx8mp-gpio
++              - fsl,imx8mq-gpio
++              - fsl,imx8qxp-gpio
++          - const: fsl,imx35-gpio
+ 
+   reg:
+     maxItems: 1
+-- 
+2.17.1
+
