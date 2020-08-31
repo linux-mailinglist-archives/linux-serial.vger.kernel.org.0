@@ -2,173 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00464258111
-	for <lists+linux-serial@lfdr.de>; Mon, 31 Aug 2020 20:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFF3258456
+	for <lists+linux-serial@lfdr.de>; Tue,  1 Sep 2020 01:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbgHaSZZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 31 Aug 2020 14:25:25 -0400
-Received: from mga07.intel.com ([134.134.136.100]:21565 "EHLO mga07.intel.com"
+        id S1725941AbgHaXRq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 31 Aug 2020 19:17:46 -0400
+Received: from mail.rusoil.net ([188.128.114.25]:52254 "EHLO mail.rusoil.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726174AbgHaSZX (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 31 Aug 2020 14:25:23 -0400
-IronPort-SDR: QAzKdPSswSN46b59Ip4BrA4cMDlxBnzxVtzYWEFqF8L7dFoCBO29y+NBC3aaM3c/SqhB6GQ545
- uftGJd8HzHnQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="221268867"
-X-IronPort-AV: E=Sophos;i="5.76,376,1592895600"; 
-   d="scan'208";a="221268867"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2020 11:25:20 -0700
-IronPort-SDR: j2+Y1Fc1Y3llJXrli/UD1tIAZcczR3lqrT6RrAMS1j/9Mp/SRxkswzFqdHyW4F/hKUjdgoBrts
- XFilraawxxvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,376,1592895600"; 
-   d="scan'208";a="314441385"
-Received: from lkp-server02.sh.intel.com (HELO 713faec3b0e5) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2020 11:25:19 -0700
-Received: from kbuild by 713faec3b0e5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kCoUY-00008j-F8; Mon, 31 Aug 2020 18:25:18 +0000
-Date:   Tue, 01 Sep 2020 02:24:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- 8f49a2fe8e6bccbd47555048def9cd08da220c74
-Message-ID: <5f4d4073.CabEUXnaXg0pH0aI%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725872AbgHaXRp (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 31 Aug 2020 19:17:45 -0400
+X-Greylist: delayed 551 seconds by postgrey-1.27 at vger.kernel.org; Mon, 31 Aug 2020 19:17:44 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.rusoil.net (Postfix) with ESMTP id 66483414A2;
+        Tue,  1 Sep 2020 04:06:54 +0500 (YEKT)
+Received: from mail.rusoil.net ([127.0.0.1])
+        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id L3j_Nu9koeEc; Tue,  1 Sep 2020 04:06:54 +0500 (YEKT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.rusoil.net (Postfix) with ESMTP id 836E2414A4;
+        Tue,  1 Sep 2020 04:06:52 +0500 (YEKT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 836E2414A4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
+        s=maildkim; t=1598915212;
+        bh=KFvGR6gAFm0yl5WBtL76rbO5qPl0QF+h+TSHRjjMpNY=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=ox1hodZk9e6kIkHvLQcCqvnTG8CpcxmN2bf0C8Dfav/GYXXl5b5+GSdbg1f9U+QEv
+         uMsRy4cRcRQK1uVsEGxBlG48NhE24zf1235x8LbSaUvF7AMwR7PLGMCPw2VEb5lmVy
+         NR0qFbHhfMOeiZ3FkWfcHE9QaQYw3oM3zczOOh3A=
+X-Virus-Scanned: amavisd-new at mail.rusoil.net
+Received: from mail.rusoil.net ([127.0.0.1])
+        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id E2EuTO4y-PNf; Tue,  1 Sep 2020 04:06:52 +0500 (YEKT)
+Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
+        by mail.rusoil.net (Postfix) with ESMTP id 56C564145F;
+        Tue,  1 Sep 2020 04:06:46 +0500 (YEKT)
+Date:   Tue, 1 Sep 2020 04:06:46 +0500 (YEKT)
+From:   Blue Oak Mortgage and Loans <usts@rusoil.net>
+Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
+Message-ID: <1574411406.614813.1598915206266.JavaMail.zimbra@rusoil.net>
+Subject: We finance Business and Projects
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.210.183.69]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
+Thread-Index: HQk9CGInV3h2+lTuCsjXPSyy3xYuIw==
+Thread-Topic: We finance Business and Projects
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git  tty-testing
-branch HEAD: 8f49a2fe8e6bccbd47555048def9cd08da220c74  Merge 5.9-rc3 into tty-next
 
-elapsed time: 782m
 
-configs tested: 111
-configs skipped: 8
+Welcome to Blue Oak Mortgage and Loans.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+We have a huge Portfolio of Credit, for financing projects and Business of =
+large volume. The procedures are as follows:-=20
 
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-xtensa                           allyesconfig
-arm                            mmp2_defconfig
-m68k                        mvme147_defconfig
-um                            kunit_defconfig
-mips                 decstation_r4k_defconfig
-arc                      axs103_smp_defconfig
-riscv                            allyesconfig
-mips                          rb532_defconfig
-arm                           viper_defconfig
-arm                  colibri_pxa300_defconfig
-mips                        workpad_defconfig
-mips                     cu1830-neo_defconfig
-arm                        shmobile_defconfig
-powerpc                         wii_defconfig
-mips                   sb1250_swarm_defconfig
-sh                           se7206_defconfig
-sh                                  defconfig
-c6x                        evmc6472_defconfig
-mips                        nlm_xlp_defconfig
-m68k                       m5208evb_defconfig
-mips                          rm200_defconfig
-mips                     cu1000-neo_defconfig
-riscv                               defconfig
-arm                             pxa_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                        omega2p_defconfig
-arc                             nps_defconfig
-ia64                         bigsur_defconfig
-powerpc                         ps3_defconfig
-arm                         s3c6400_defconfig
-sh                        sh7785lcr_defconfig
-arm                         orion5x_defconfig
-powerpc                     mpc5200_defconfig
-sh                   sh7770_generic_defconfig
-powerpc                     mpc83xx_defconfig
-m68k                           sun3_defconfig
-mips                        jmr3927_defconfig
-arm                          ixp4xx_defconfig
-ia64                             alldefconfig
-m68k                        stmark2_defconfig
-arm                         nhk8815_defconfig
-sh                      rts7751r2d1_defconfig
-arm                            qcom_defconfig
-mips                     decstation_defconfig
-arm                        clps711x_defconfig
-nds32                             allnoconfig
-parisc                generic-64bit_defconfig
-xtensa                              defconfig
-arm                              alldefconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-i386                 randconfig-a001-20200831
-i386                 randconfig-a002-20200831
-i386                 randconfig-a004-20200831
-i386                 randconfig-a006-20200831
-i386                 randconfig-a005-20200831
-i386                 randconfig-a003-20200831
-x86_64               randconfig-a012-20200831
-x86_64               randconfig-a015-20200831
-x86_64               randconfig-a014-20200831
-x86_64               randconfig-a011-20200831
-x86_64               randconfig-a016-20200831
-x86_64               randconfig-a013-20200831
-i386                 randconfig-a013-20200831
-i386                 randconfig-a011-20200831
-i386                 randconfig-a012-20200831
-i386                 randconfig-a015-20200831
-i386                 randconfig-a016-20200831
-i386                 randconfig-a014-20200831
-riscv                             allnoconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+1-The client needs to send a brief summary of the project. This must includ=
+e the total amount required for the project, estimated return on investment=
+, loan repayment period.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+2- The interest rate will be 2% annually.
+
+3- Large Project must be Insured.=20
+
+
+3- Funding will take approximately 10 banking days from the day you present=
+ the insurance certificate.
+=20
+If you are satisfied with the above procedures send me a letter of intent w=
+riting on your company letterhead.=20
+
+For further details to go about procuring a loan from: Kindly respond immed=
+iately to this email:=20
+
+
+Regards, as we await your response.=20
+
+Email : info@bluelmtg.net
+
+Best Regards=20
+Michael Thomas
+
+Blue Oak Mortgage and Loans.=C2=A0
+Tel. +90-552-365-3483
+Whats App : +90-552-365-3483
