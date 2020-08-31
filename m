@@ -2,27 +2,27 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD051257D47
-	for <lists+linux-serial@lfdr.de>; Mon, 31 Aug 2020 17:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FF5257D22
+	for <lists+linux-serial@lfdr.de>; Mon, 31 Aug 2020 17:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728156AbgHaPay (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 31 Aug 2020 11:30:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40788 "EHLO mail.kernel.org"
+        id S1729219AbgHaPec (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 31 Aug 2020 11:34:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42144 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728688AbgHaPau (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 31 Aug 2020 11:30:50 -0400
+        id S1728868AbgHaPbY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 31 Aug 2020 11:31:24 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 842E221548;
-        Mon, 31 Aug 2020 15:30:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2359A207EA;
+        Mon, 31 Aug 2020 15:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598887849;
-        bh=7kggAtYaeM4k5CsWqpNQSPTgP1ACBAj2QxNoizFutYg=;
+        s=default; t=1598887883;
+        bh=oFwQTqkPx4RNpgcIPFeuHBuLYJqGFWWbtO/xBgcKfw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TmyKNEdT74oBM4bnTy7DeYA6EVFn+quwt7Alhve7wwSvqKEIvSAK3Uu7aeJbRXUiW
-         6cvWovftHzx897qDJTbBPGsv51/p9k7TB2bWyk6uEje9dwlAyeD5ddmqevfQVr7erD
-         KHeJIjx3k30nHGUdLulx6xKXfVpHiZxjCQlWxJGI=
+        b=JpG0G8lxaHLSpn/J3G9ghOTB2+D/r2GolCeDeo1gwyCJVqTdPiXDZEq8Stmrb1jpF
+         Ju8dPWFjtuVajMDpYV0WAV/Cxha9/r7qyeVEzzMmbad2m2LJ4UoPsbOd9kCtdmxqli
+         fNH+qs+PVRhgY7FoaYVJT3rY1u1IB8vS7bNDO5mw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -35,12 +35,12 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 05/23] tty: serial: qcom_geni_serial: Drop __init from qcom_geni_console_setup
-Date:   Mon, 31 Aug 2020 11:30:21 -0400
-Message-Id: <20200831153039.1024302-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 03/11] tty: serial: qcom_geni_serial: Drop __init from qcom_geni_console_setup
+Date:   Mon, 31 Aug 2020 11:31:09 -0400
+Message-Id: <20200831153117.1024537-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200831153039.1024302-1-sashal@kernel.org>
-References: <20200831153039.1024302-1-sashal@kernel.org>
+In-Reply-To: <20200831153117.1024537-1-sashal@kernel.org>
+References: <20200831153117.1024537-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -143,10 +143,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index f98a79172ad23..0b184256034fb 100644
+index 0d405cc58e722..cd0768c3e773e 100644
 --- a/drivers/tty/serial/qcom_geni_serial.c
 +++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1063,7 +1063,7 @@ static unsigned int qcom_geni_serial_tx_empty(struct uart_port *uport)
+@@ -1050,7 +1050,7 @@ static unsigned int qcom_geni_serial_tx_empty(struct uart_port *uport)
  }
  
  #ifdef CONFIG_SERIAL_QCOM_GENI_CONSOLE
