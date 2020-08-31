@@ -2,95 +2,159 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514B257A53
-	for <lists+linux-serial@lfdr.de>; Mon, 31 Aug 2020 15:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079BB257DCB
+	for <lists+linux-serial@lfdr.de>; Mon, 31 Aug 2020 17:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbgHaN0j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 31 Aug 2020 09:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726858AbgHaN0S (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 31 Aug 2020 09:26:18 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AB0C061755
-        for <linux-serial@vger.kernel.org>; Mon, 31 Aug 2020 06:26:10 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id z17so3465308lfi.12
-        for <linux-serial@vger.kernel.org>; Mon, 31 Aug 2020 06:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
-        b=Xq4uA6WQKrAYhjimxByBlx8GvGcvGHawEv3GOIrqEJ5RUHjzMHqw05v6WqOqFiCKn6
-         qRxuzvHYAhRxeUnWEKawePizICHZ57gAY9xD4g6AxCiTWl8JgMp9ZDJGItDWIfdcCwxB
-         D+RuaLZSaA/DdLAa2NqaIFZNxv8UQHjlJcNk9mz0qBxRohSukUjElohExaKZGjhIAZG6
-         fCjFii6u0MGq3aUVIKkYhmog5xaHq1dvg1Z6cFXklOCUQhUksK7LPKp0pMYeQ5MZQe/a
-         ivcRiTduDTsCcF62P9t/rnTC1RN1lraaofWCJhTFEss59vKlsMumHu2r5XlegQqeYIjp
-         h3tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
-        b=ZzweboL9ltLBFcS4vVhO3xngT7lgymwYQwlEO5ZcAsgzk82xsygGpcB/pzLckYHeJZ
-         nEovwRhIremwLiO9EkzOGE7p9X7EtqPdSCCqoeSx84D0FmP+6EInWAqHWCCq2g1alb4d
-         YJtogaRGVXY9KqeiiSC/0STTA8yqPhEiXsZzZHZGe6RHIl0oB2f+4Tja/Z8nZp+Tqbm/
-         iYQQNvR9ws4n23xDSjUjZIqG5rVnnMFxfVWkwzlPGHvmpZejALzoM0nSE8LOf2EkNB/0
-         YJMWlaR6V4Nagl3aaeH5g4juc7O1Apal/2lFStL7ohJpKVOR4cQm4Z1i67ZcShg/okH9
-         9CDw==
-X-Gm-Message-State: AOAM533kECUawe6dXc+SPOSbbxoMP7PgWsXRLqR1parhNiFltVNDasfZ
-        z45HSSfHkvoOqdSl0lONqpaC/Tb0SuikmTxJUBw=
-X-Google-Smtp-Source: ABdhPJziISB6g20VZDSn5XIRh4okPdoUnO8vKiEdwIFRlhhZcLPOFrcbTl+dbDcow8D6V0KXdzs4WSV3GBmwWRWGA6U=
-X-Received: by 2002:ac2:44a9:: with SMTP id c9mr657600lfm.99.1598880369031;
- Mon, 31 Aug 2020 06:26:09 -0700 (PDT)
+        id S1729057AbgHaPlE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 31 Aug 2020 11:41:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728441AbgHaP3t (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 31 Aug 2020 11:29:49 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3548F20E65;
+        Mon, 31 Aug 2020 15:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598887788;
+        bh=npfcU0pwyfPfRyU05fDUq1Zm5QXoTD0f+8A/EmwT2RA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PUDjw4B9VMPDd6brLGS/crNa5QA6sVBNgV5TbtX2MCzlBOKk2vR+dWGJoMapOU5ib
+         Oc660fWl1JqS4hrbz/y3CDg8v3j1HsoULV4B54SbiDe3BjffF6OuvKA6E9AIP3ia7H
+         ddl+yvb3QMjYm5iCSaTBk4Tap9F9AwFMps/0lMcc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Todd Kjos <tkjos@google.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 08/42] tty: serial: qcom_geni_serial: Drop __init from qcom_geni_console_setup
+Date:   Mon, 31 Aug 2020 11:29:00 -0400
+Message-Id: <20200831152934.1023912-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200831152934.1023912-1-sashal@kernel.org>
+References: <20200831152934.1023912-1-sashal@kernel.org>
 MIME-Version: 1.0
-Reply-To: marie_avis12@yahoo.com
-Received: by 2002:a2e:9817:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 06:26:08
- -0700 (PDT)
-From:   Miss Maris Avis <marie.avis11@gmail.com>
-Date:   Mon, 31 Aug 2020 13:26:08 +0000
-X-Google-Sender-Auth: 7H4r-nfPsq5LxU2Tftky7Xudc0o
-Message-ID: <CADTVshMoCp0ChGK+tcBWTRqkH5HD2i5Kvi=LeK87KFDAVuAUYA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-My Dear,
+From: John Stultz <john.stultz@linaro.org>
 
-My name is Miss Marie Avis the only daughter of Mr. Gabriel Avis, my
-Father was dealing in Cocoa and Timber in this country before his
-death,  It is my pleasure to contact you for a business venture which
-I intend to establish in your country. Though I have not met with you
-before but I believe one has to risk confiding before you can succeed
-sometimes in life.
+[ Upstream commit 975efc66d4e654207c17f939eb737ac591ac38fe ]
 
-I can confide in you for my brighter future since you are a human
-being like me. There is this huge amount of Ten Million five hundred
-thousand United States dollars. ($10.500.000.00) which my late Father
-kept for me in a suspense account with one of the bank here in Abidjan
-Cote d'Ivoire before he was assassinated by unknown persons, Now I
-have decided to invest these money in your country or anywhere safe
-enough for me.
+When booting with heavily modularized config, the serial console
+may not be able to load until after init when modules that
+satisfy needed dependencies have time to load.
 
-I want you to help me claim this fund from the bank and have it
-transfer into your personal account in your country for investment
-purposes in your country in these areas:
+Unfortunately, as qcom_geni_console_setup is marked as __init,
+the function may have been freed before we get to run it,
+causing boot time crashes such as:
 
-1). Telecommunication
-2). The transport Industry
-3). Five Star Hotel
-4). Tourism
-5). Real Estate
+[    6.469057] Unable to handle kernel paging request at virtual address ffffffe645d4e6cc
+[    6.481623] Mem abort info:
+[    6.484466]   ESR = 0x86000007
+[    6.487557]   EC = 0x21: IABT (current EL), IL = 32 bits
+[    6.492929]   SET = 0, FnV = 0g
+[    6.496016]   EA = 0, S1PTW = 0
+[    6.499202] swapper pgtable: 4k pages, 39-bit VAs, pgdp=000000008151e000
+[    6.501286] ufshcd-qcom 1d84000.ufshc: ufshcd_print_pwr_info:[RX, TX]: gear=[3, 3], lane[2, 2], pwr[FAST MODE, FAST MODE], rate = 2
+[    6.505977] [ffffffe645d4e6cc] pgd=000000017df9f003, p4d=000000017df9f003, pud=000000017df9f003, pmd=000000017df9c003, pte=0000000000000000
+[    6.505990] Internal error: Oops: 86000007 [#1] PREEMPT SMP
+[    6.505995] Modules linked in: zl10353 zl10039 zl10036 zd1301_demod xc5000 xc4000 ves1x93 ves1820 tuner_xc2028 tuner_simple tuner_types tua9001 tua6100 1
+[    6.506152]  isl6405
+[    6.518104] ufshcd-qcom 1d84000.ufshc: ufshcd_find_max_sup_active_icc_level: Regulator capability was not set, actvIccLevel=0
+[    6.530549]  horus3a helene fc2580 fc0013 fc0012 fc0011 ec100 e4000 dvb_pll ds3000 drxk drxd drx39xyj dib9000 dib8000 dib7000p dib7000m dib3000mc dibx003
+[    6.624271] CPU: 7 PID: 148 Comm: kworker/7:2 Tainted: G        W       5.8.0-mainline-12021-g6defd37ba1cd #3455
+[    6.624273] Hardware name: Thundercomm Dragonboard 845c (DT)
+[    6.624290] Workqueue: events deferred_probe_work_func
+[    6.624296] pstate: 40c00005 (nZcv daif +PAN +UAO BTYPE=--)
+[    6.624307] pc : qcom_geni_console_setup+0x0/0x110
+[    6.624316] lr : try_enable_new_console+0xa0/0x140
+[    6.624318] sp : ffffffc010843a30
+[    6.624320] x29: ffffffc010843a30 x28: ffffffe645c3e7d0
+[    6.624325] x27: ffffff80f8022180 x26: ffffffc010843b28
+[    6.637937] x25: 0000000000000000 x24: ffffffe6462a2000
+[    6.637941] x23: ffffffe646398000 x22: 0000000000000000
+[    6.637945] x21: 0000000000000000 x20: ffffffe6462a5ce8
+[    6.637952] x19: ffffffe646398e38 x18: ffffffffffffffff
+[    6.680296] x17: 0000000000000000 x16: ffffffe64492b900
+[    6.680300] x15: ffffffe6461e9d08 x14: 69202930203d2064
+[    6.680305] x13: 7561625f65736162 x12: 202c363331203d20
+[    6.696434] x11: 0000000000000030 x10: 0101010101010101
+[    6.696438] x9 : 4d4d20746120304d x8 : 7f7f7f7f7f7f7f7f
+[    6.707249] x7 : feff4c524c787373 x6 : 0000000000008080
+[    6.707253] x5 : 0000000000000000 x4 : 8080000000000000
+[    6.707257] x3 : 0000000000000000 x2 : ffffffe645d4e6cc
+[    6.744223] qcom_geni_serial 898000.serial: dev_pm_opp_set_rate: failed to find OPP for freq 102400000 (-34)
+[    6.744966] x1 : fffffffefe74e174 x0 : ffffffe6462a5ce8
+[    6.753580] qcom_geni_serial 898000.serial: dev_pm_opp_set_rate: failed to find OPP for freq 102400000 (-34)
+[    6.761634] Call trace:
+[    6.761639]  qcom_geni_console_setup+0x0/0x110
+[    6.761645]  register_console+0x29c/0x2f8
+[    6.767981] Bluetooth: hci0: Frame reassembly failed (-84)
+[    6.775252]  uart_add_one_port+0x438/0x500
+[    6.775258]  qcom_geni_serial_probe+0x2c4/0x4a8
+[    6.775266]  platform_drv_probe+0x58/0xa8
+[    6.855359]  really_probe+0xec/0x398
+[    6.855362]  driver_probe_device+0x5c/0xb8
+[    6.855367]  __device_attach_driver+0x98/0xb8
+[    7.184945]  bus_for_each_drv+0x74/0xd8
+[    7.188825]  __device_attach+0xec/0x148
+[    7.192705]  device_initial_probe+0x24/0x30
+[    7.196937]  bus_probe_device+0x9c/0xa8
+[    7.200816]  deferred_probe_work_func+0x7c/0xb8
+[    7.205398]  process_one_work+0x20c/0x4b0
+[    7.209456]  worker_thread+0x48/0x460
+[    7.213157]  kthread+0x14c/0x158
+[    7.216432]  ret_from_fork+0x10/0x18
+[    7.220049] Code: bad PC value
+[    7.223139] ---[ end trace 73f3b21e251d5a70 ]---
 
-If you can be of assistance to me I will be pleased to offer you 20%
-of the total fund.
+Thus this patch removes the __init avoiding crash in such
+configs.
 
-I await your soonest response.
+Cc: Andy Gross <agross@kernel.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Amit Pundir <amit.pundir@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-serial@vger.kernel.org
+Suggested-by: Saravana Kannan <saravanak@google.com>
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20200811025044.70626-1-john.stultz@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/tty/serial/qcom_geni_serial.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Respectfully yours,
-Miss Marie Evis
-Tel: +225597438528
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 457c0bf8cbf83..ffdf6da016c21 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1047,7 +1047,7 @@ static unsigned int qcom_geni_serial_tx_empty(struct uart_port *uport)
+ }
+ 
+ #ifdef CONFIG_SERIAL_QCOM_GENI_CONSOLE
+-static int __init qcom_geni_console_setup(struct console *co, char *options)
++static int qcom_geni_console_setup(struct console *co, char *options)
+ {
+ 	struct uart_port *uport;
+ 	struct qcom_geni_serial_port *port;
+-- 
+2.25.1
+
