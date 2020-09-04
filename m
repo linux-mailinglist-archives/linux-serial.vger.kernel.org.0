@@ -2,62 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9033525DCDF
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Sep 2020 17:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B646E25DDA4
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Sep 2020 17:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730258AbgIDPLF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Sep 2020 11:11:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56900 "EHLO mail.kernel.org"
+        id S1730220AbgIDPYW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Sep 2020 11:24:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730224AbgIDPLF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Sep 2020 11:11:05 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730829AbgIDPYU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 4 Sep 2020 11:24:20 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3EB2C2073B;
-        Fri,  4 Sep 2020 15:11:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB3F420770;
+        Fri,  4 Sep 2020 15:24:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599232264;
-        bh=tYJdMqrk0GYWpMweFguKqDno9M3LJpFL3eQwj/m0Txc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MdOMEGmst9Yob16TZ5IpYFaGoXecLUmvIlJ7DKcf7SvgUB8BDD+GNoKGQmCuVBde1
-         yz0urAv/drFzGttsdCy6ySKWqUHvJ7QS79fajCLlWyf7zur+7xwAsXgGwM1zxdAv1P
-         +UhU6RJjrX88wNNbK3GafUXz8uAXxZYkqN8EdWAY=
-Date:   Fri, 4 Sep 2020 17:11:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Ye Bin <yebin10@huawei.com>, chris.ruehl@gtsys.com.hk,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2] serial: imx: Delete duplicated argument to '|' in
- imx_uart_probe
-Message-ID: <20200904151125.GA3347894@kroah.com>
-References: <20200903062401.692442-1-yebin10@huawei.com>
- <20200903073541.g57uoipyolsixfjn@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200903073541.g57uoipyolsixfjn@pengutronix.de>
+        s=default; t=1599233059;
+        bh=sKvZCsZobU7Bh4Xu+fGf9ZJCYmD7SquliyFmgqG50Oo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sV58pfGmmWQn8uohb/hknW48UOzALop3pIk3iQCR4uyFQ0gZyZbkeRJ5Qu8MEqccx
+         Mkiwo6Wf3oJFhnVa4ToV7+vibP0Ihhvq3O5bvcBpigvWvC8sLMGLbJFQuBKgZhExcg
+         M/98mPuaOqB0LDnKCPaiqseidOtLyrZLK/gWkZYU=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v3 00/14] dt-bindings: Cleanup of i.MX 8
+Date:   Fri,  4 Sep 2020 17:23:50 +0200
+Message-Id: <20200904152404.20636-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 09:35:41AM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Sep 03, 2020 at 02:24:01PM +0800, Ye Bin wrote:
-> > When calculate "ucr1" UCR1_TRDYEN is duplicate.
-> > 
-> > Fixes: c514a6f848b5b ("serial: imx: use Tx ready rather than Tx empty irq")
-> > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> 
-> Not sure I'd use Fixes: to reference the commit that introduced this
-> duplication, as this fix is not critical at all.
+Hi Rob,
 
-Agreed, I'm dropping that line.
+I am resending the series (v3) without actual changes.  You already
+reviewed many of them.  I think that subsystem maintainers are hesitant
+to pick them up, so maybe this could go via your tree (all of them)?
 
-thanks,
+Changes against previous revisions are in individual patches.
 
-greg k-h
+Best regards,
+Krzysztof
+
+
+Krzysztof Kozlowski (14):
+  dt-bindings: perf: fsl-imx-ddr: Add i.MX 8M compatibles
+  dt-bindings: pwm: imx-pwm: Add i.MX 8M compatibles
+  dt-bindings: serial: fsl-imx-uart: Add i.MX 8M compatibles
+  dt-bindings: serial: fsl-lpuart: Fix compatible matching
+  dt-bindings: watchdog: fsl-imx-wdt: Add i.MX 8M compatibles
+  dt-bindings: reset: fsl,imx7-src: Add i.MX 8M compatibles
+  dt-bindings: thermal: imx8mm-thermal: Add i.MX 8M Nano compatible
+  dt-bindings: nvmem: imx-ocotp: Update i.MX 8M compatibles
+  dt-bindings: mfd: rohm,bd71847-pmic: Correct clock properties
+    requirements
+  dt-bindings: interrupt-controller: fsl,irqsteer: Fix compatible
+    matching
+  dt-bindings: mtd: gpmi-nand: Add i.MX 8M compatibles
+  dt-bindings: mtd: gpmi-nand: Fix matching of clocks on different SoCs
+  dt-bindings: mtd: nand-controller: Fix matching with size-cells==1
+  dt-bindings: clock: imx8m: Integrate duplicated i.MX 8M schemas
+
+ .../bindings/clock/imx8m-clock.yaml           | 125 ++++++++++++++++++
+ .../bindings/clock/imx8mm-clock.yaml          |  68 ----------
+ .../bindings/clock/imx8mn-clock.yaml          |  70 ----------
+ .../bindings/clock/imx8mp-clock.yaml          |  70 ----------
+ .../bindings/clock/imx8mq-clock.yaml          |  72 ----------
+ .../interrupt-controller/fsl,irqsteer.yaml    |   8 +-
+ .../bindings/mfd/rohm,bd71847-pmic.yaml       |   9 +-
+ .../devicetree/bindings/mtd/gpmi-nand.yaml    |  94 ++++++++++---
+ .../bindings/mtd/nand-controller.yaml         |   5 +-
+ .../devicetree/bindings/nvmem/imx-ocotp.yaml  |  38 +++---
+ .../devicetree/bindings/perf/fsl-imx-ddr.yaml |  16 ++-
+ .../devicetree/bindings/pwm/imx-pwm.yaml      |  14 +-
+ .../bindings/reset/fsl,imx7-src.yaml          |  19 ++-
+ .../bindings/serial/fsl-imx-uart.yaml         |   4 +
+ .../bindings/serial/fsl-lpuart.yaml           |  17 ++-
+ .../bindings/thermal/imx8mm-thermal.yaml      |  10 +-
+ .../bindings/watchdog/fsl-imx-wdt.yaml        |  11 +-
+ 17 files changed, 303 insertions(+), 347 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/imx8m-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx8mm-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx8mn-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx8mp-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx8mq-clock.yaml
+
+-- 
+2.17.1
+
