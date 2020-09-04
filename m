@@ -2,509 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D288225DD5A
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Sep 2020 17:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9F925E3B6
+	for <lists+linux-serial@lfdr.de>; Sat,  5 Sep 2020 00:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731077AbgIDPZa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Sep 2020 11:25:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34184 "EHLO mail.kernel.org"
+        id S1728135AbgIDW32 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Sep 2020 18:29:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41384 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731056AbgIDPZ0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Sep 2020 11:25:26 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.106])
+        id S1728012AbgIDW31 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 4 Sep 2020 18:29:27 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B959A20770;
-        Fri,  4 Sep 2020 15:25:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AA67208C7;
+        Fri,  4 Sep 2020 22:29:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599233124;
-        bh=jTjsLAriGTsac5PZWo3rZlx2ocUPijGc78uBb8WH4Js=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fL3kIiMG0+IHZvRFmML+ytJlgChyyBqtnMZb35N0GoX6oje6ks1uKdknAEYJf8pCN
-         OKl1EUOiiQexCn2i02mFhPZaSwr8JhDg80Fq5DL9Xkl64B6V9j2cZqnFbhMvPiVgjB
-         j2KK/ZvCxoi9vb9n76M8pp1kQ9F9CDVEzifRtXr0=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
+        s=default; t=1599258566;
+        bh=+8dgVfOXgmURomqOzPuR2s0d+0XktF+kVIZ4JamC1Yk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FPfVtLk3VgVy9YY2bppjWvDV2nvJ00oTy/jZPGsp1pSsT+kcmQKDELrZFVKOe/MW4
+         zJ45aqs0sB4ogJLfi9CwwVOS1v0zgXZFL4fluzz0xaGojKmgqLJSTmIwDbIBjLZCDs
+         e36mpUibGpzlRequFLGXPuBTspvr9u7SNO8bieYo=
+Received: by mail-ot1-f53.google.com with SMTP id g96so7253810otb.12;
+        Fri, 04 Sep 2020 15:29:26 -0700 (PDT)
+X-Gm-Message-State: AOAM530HI8S9w97j5PgXqi3vtRBxS4qaUMIMg4IDLgsN+4mUyfAvzmGg
+        1lBYOqogNOdrbP+dn0+qOhkmDJ2fNHZwlCDxBg==
+X-Google-Smtp-Source: ABdhPJyg8Cu0lq2UsQBYhJV227Jo2feqOcJKLxrdCLPxr9lVLm9MUPpbfMcEDGy7OIP/8N+4iwU7/9VeNN4vhk5EUSE=
+X-Received: by 2002:a9d:7f84:: with SMTP id t4mr7261177otp.192.1599258565768;
+ Fri, 04 Sep 2020 15:29:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-14-krzk@kernel.org>
+In-Reply-To: <20200904152404.20636-14-krzk@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 4 Sep 2020 16:29:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKOkerY14qc-7e5721Xsp0k6jm9oh1U1Lr-3SZA0HFgjw@mail.gmail.com>
+Message-ID: <CAL_JsqKOkerY14qc-7e5721Xsp0k6jm9oh1U1Lr-3SZA0HFgjw@mail.gmail.com>
+Subject: Re: [PATCH v3 13/14] dt-bindings: mtd: nand-controller: Fix matching
+ with size-cells==1
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v3 14/14] dt-bindings: clock: imx8m: Integrate duplicated i.MX 8M schemas
-Date:   Fri,  4 Sep 2020 17:24:04 +0200
-Message-Id: <20200904152404.20636-15-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200904152404.20636-1-krzk@kernel.org>
-References: <20200904152404.20636-1-krzk@kernel.org>
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The clock controller schemas for i.MX 8M Mini, 8M Nano, 8M Plus and 8M
-Quad are basically the same.  The only minor difference appears on 8M
-Quad which needs one more clock.
+On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> Most of Freescale/NXP GPMI device trees use size-cells==1 (even when
+> actually not needed except few boards).  This fixes dtbs_check warnings
+> like:
+>
+>     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: #size-cells:0:0: 0 was expected
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 40fc5b0b2b8c..0879e1108837 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@ -34,7 +34,10 @@ properties:
+>      const: 1
+>
+>    "#size-cells":
+> -    const: 0
+> +    description:
+> +      Depends on your controller. Put zero unless you need a mapping between CS
+> +      lines and dedicated memory regions.
+> +    enum: [0, 1]
 
-There is no point to have four schemas for almost the same binding.  Any
-fixes or changes would have to be duplicated four times.
+Humm, seems that was to describe partitions, but the expectation of
+the nand binding is describing nand chips. It seems the nand chips are
+never described and on 1 board even has partitions. I think you should
+fix the dts to move 'partition@N' nodes under 'partitions' which is
+preferred and needed if you ever describe nand chips. And then fix
+'#size-cells' to be 0.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- .../bindings/clock/imx8m-clock.yaml           | 125 ++++++++++++++++++
- .../bindings/clock/imx8mm-clock.yaml          |  68 ----------
- .../bindings/clock/imx8mn-clock.yaml          |  70 ----------
- .../bindings/clock/imx8mp-clock.yaml          |  70 ----------
- .../bindings/clock/imx8mq-clock.yaml          |  72 ----------
- 5 files changed, 125 insertions(+), 280 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/imx8m-clock.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/imx8mm-clock.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/imx8mn-clock.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/imx8mp-clock.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/imx8mq-clock.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-new file mode 100644
-index 000000000000..31e7cc9693c3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-@@ -0,0 +1,125 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP i.MX8M Family Clock Control Module Binding
-+
-+maintainers:
-+  - Anson Huang <Anson.Huang@nxp.com>
-+
-+description: |
-+  NXP i.MX8M Mini/Nano/Plus/Quad clock control module is an integrated clock
-+  controller, which generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,imx8mm-ccm
-+      - fsl,imx8mn-ccm
-+      - fsl,imx8mp-ccm
-+      - fsl,imx8mq-ccm
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 6
-+    maxItems: 7
-+
-+  clock-names:
-+    minItems: 6
-+    maxItems: 7
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8m-clock.h
-+      for the full list of i.MX8M clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: fsl,imx8mq-ccm
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 7
-+          maxItems: 7
-+          items:
-+            - description: 32k osc
-+            - description: 25m osc
-+            - description: 27m osc
-+            - description: ext1 clock input
-+            - description: ext2 clock input
-+            - description: ext3 clock input
-+            - description: ext4 clock input
-+        clock-names:
-+          minItems: 7
-+          maxItems: 7
-+          items:
-+            - const: ckil
-+            - const: osc_25m
-+            - const: osc_27m
-+            - const: clk_ext1
-+            - const: clk_ext2
-+            - const: clk_ext3
-+            - const: clk_ext4
-+    else:
-+      properties:
-+        clocks:
-+          items:
-+            - description: 32k osc
-+            - description: 24m osc
-+            - description: ext1 clock input
-+            - description: ext2 clock input
-+            - description: ext3 clock input
-+            - description: ext4 clock input
-+
-+        clock-names:
-+          items:
-+            - const: osc_32k
-+            - const: osc_24m
-+            - const: clk_ext1
-+            - const: clk_ext2
-+            - const: clk_ext3
-+            - const: clk_ext4
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  # Clock Control Module node:
-+  - |
-+    clock-controller@30380000 {
-+        compatible = "fsl,imx8mm-ccm";
-+        reg = <0x30380000 0x10000>;
-+        #clock-cells = <1>;
-+        clocks = <&osc_32k>, <&osc_24m>, <&clk_ext1>, <&clk_ext2>,
-+                 <&clk_ext3>, <&clk_ext4>;
-+        clock-names = "osc_32k", "osc_24m", "clk_ext1", "clk_ext2",
-+                      "clk_ext3", "clk_ext4";
-+    };
-+
-+  - |
-+    clock-controller@30390000 {
-+        compatible = "fsl,imx8mq-ccm";
-+        reg = <0x30380000 0x10000>;
-+        #clock-cells = <1>;
-+        clocks = <&ckil>, <&osc_25m>, <&osc_27m>, <&clk_ext1>,
-+                 <&clk_ext2>, <&clk_ext3>, <&clk_ext4>;
-+        clock-names = "ckil", "osc_25m", "osc_27m", "clk_ext1",
-+                      "clk_ext2", "clk_ext3", "clk_ext4";
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/clock/imx8mm-clock.yaml b/Documentation/devicetree/bindings/clock/imx8mm-clock.yaml
-deleted file mode 100644
-index ec830db1367b..000000000000
---- a/Documentation/devicetree/bindings/clock/imx8mm-clock.yaml
-+++ /dev/null
-@@ -1,68 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/clock/imx8mm-clock.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: NXP i.MX8M Mini Clock Control Module Binding
--
--maintainers:
--  - Anson Huang <Anson.Huang@nxp.com>
--
--description: |
--  NXP i.MX8M Mini clock control module is an integrated clock controller, which
--  generates and supplies to all modules.
--
--properties:
--  compatible:
--    const: fsl,imx8mm-ccm
--
--  reg:
--    maxItems: 1
--
--  clocks:
--    items:
--      - description: 32k osc
--      - description: 24m osc
--      - description: ext1 clock input
--      - description: ext2 clock input
--      - description: ext3 clock input
--      - description: ext4 clock input
--
--  clock-names:
--    items:
--      - const: osc_32k
--      - const: osc_24m
--      - const: clk_ext1
--      - const: clk_ext2
--      - const: clk_ext3
--      - const: clk_ext4
--
--  '#clock-cells':
--    const: 1
--    description:
--      The clock consumer should specify the desired clock by having the clock
--      ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8mm-clock.h
--      for the full list of i.MX8M Mini clock IDs.
--
--required:
--  - compatible
--  - reg
--  - clocks
--  - clock-names
--  - '#clock-cells'
--
--examples:
--  # Clock Control Module node:
--  - |
--    clk: clock-controller@30380000 {
--        compatible = "fsl,imx8mm-ccm";
--        reg = <0x30380000 0x10000>;
--        #clock-cells = <1>;
--        clocks = <&osc_32k>, <&osc_24m>, <&clk_ext1>, <&clk_ext2>,
--                 <&clk_ext3>, <&clk_ext4>;
--        clock-names = "osc_32k", "osc_24m", "clk_ext1", "clk_ext2",
--                      "clk_ext3", "clk_ext4";
--    };
--
--...
-diff --git a/Documentation/devicetree/bindings/clock/imx8mn-clock.yaml b/Documentation/devicetree/bindings/clock/imx8mn-clock.yaml
-deleted file mode 100644
-index bdaa29616ab1..000000000000
---- a/Documentation/devicetree/bindings/clock/imx8mn-clock.yaml
-+++ /dev/null
-@@ -1,70 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/clock/imx8mn-clock.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: NXP i.MX8M Nano Clock Control Module Binding
--
--maintainers:
--  - Anson Huang <Anson.Huang@nxp.com>
--
--description: |
--  NXP i.MX8M Nano clock control module is an integrated clock controller, which
--  generates and supplies to all modules.
--
--properties:
--  compatible:
--    const: fsl,imx8mn-ccm
--
--  reg:
--    maxItems: 1
--
--  clocks:
--    items:
--      - description: 32k osc
--      - description: 24m osc
--      - description: ext1 clock input
--      - description: ext2 clock input
--      - description: ext3 clock input
--      - description: ext4 clock input
--
--  clock-names:
--    items:
--      - const: osc_32k
--      - const: osc_24m
--      - const: clk_ext1
--      - const: clk_ext2
--      - const: clk_ext3
--      - const: clk_ext4
--
--  '#clock-cells':
--    const: 1
--    description:
--      The clock consumer should specify the desired clock by having the clock
--      ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8mn-clock.h
--      for the full list of i.MX8M Nano clock IDs.
--
--required:
--  - compatible
--  - reg
--  - clocks
--  - clock-names
--  - '#clock-cells'
--
--additionalProperties: false
--
--examples:
--  # Clock Control Module node:
--  - |
--    clk: clock-controller@30380000 {
--        compatible = "fsl,imx8mn-ccm";
--        reg = <0x30380000 0x10000>;
--        #clock-cells = <1>;
--        clocks = <&osc_32k>, <&osc_24m>, <&clk_ext1>,
--                 <&clk_ext2>, <&clk_ext3>, <&clk_ext4>;
--        clock-names = "osc_32k", "osc_24m", "clk_ext1",
--                      "clk_ext2", "clk_ext3", "clk_ext4";
--    };
--
--...
-diff --git a/Documentation/devicetree/bindings/clock/imx8mp-clock.yaml b/Documentation/devicetree/bindings/clock/imx8mp-clock.yaml
-deleted file mode 100644
-index 4351a1dbb4f7..000000000000
---- a/Documentation/devicetree/bindings/clock/imx8mp-clock.yaml
-+++ /dev/null
-@@ -1,70 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/clock/imx8mp-clock.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: NXP i.MX8M Plus Clock Control Module Binding
--
--maintainers:
--  - Anson Huang <Anson.Huang@nxp.com>
--
--description:
--  NXP i.MX8M Plus clock control module is an integrated clock controller, which
--  generates and supplies to all modules.
--
--properties:
--  compatible:
--    const: fsl,imx8mp-ccm
--
--  reg:
--    maxItems: 1
--
--  clocks:
--    items:
--      - description: 32k osc
--      - description: 24m osc
--      - description: ext1 clock input
--      - description: ext2 clock input
--      - description: ext3 clock input
--      - description: ext4 clock input
--
--  clock-names:
--    items:
--      - const: osc_32k
--      - const: osc_24m
--      - const: clk_ext1
--      - const: clk_ext2
--      - const: clk_ext3
--      - const: clk_ext4
--
--  '#clock-cells':
--    const: 1
--    description:
--      The clock consumer should specify the desired clock by having the clock
--      ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8mp-clock.h
--      for the full list of i.MX8M Plus clock IDs.
--
--required:
--  - compatible
--  - reg
--  - clocks
--  - clock-names
--  - '#clock-cells'
--
--additionalProperties: false
--
--examples:
--  # Clock Control Module node:
--  - |
--    clk: clock-controller@30380000 {
--        compatible = "fsl,imx8mp-ccm";
--        reg = <0x30380000 0x10000>;
--        #clock-cells = <1>;
--        clocks = <&osc_32k>, <&osc_24m>, <&clk_ext1>,
--                 <&clk_ext2>, <&clk_ext3>, <&clk_ext4>;
--        clock-names = "osc_32k", "osc_24m", "clk_ext1",
--                      "clk_ext2", "clk_ext3", "clk_ext4";
--    };
--
--...
-diff --git a/Documentation/devicetree/bindings/clock/imx8mq-clock.yaml b/Documentation/devicetree/bindings/clock/imx8mq-clock.yaml
-deleted file mode 100644
-index 05d7d1471e0c..000000000000
---- a/Documentation/devicetree/bindings/clock/imx8mq-clock.yaml
-+++ /dev/null
-@@ -1,72 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/clock/imx8mq-clock.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: NXP i.MX8M Quad Clock Control Module Binding
--
--maintainers:
--  - Anson Huang <Anson.Huang@nxp.com>
--
--description: |
--  NXP i.MX8M Quad clock control module is an integrated clock controller, which
--  generates and supplies to all modules.
--
--properties:
--  compatible:
--    const: fsl,imx8mq-ccm
--
--  reg:
--    maxItems: 1
--
--  clocks:
--    items:
--      - description: 32k osc
--      - description: 25m osc
--      - description: 27m osc
--      - description: ext1 clock input
--      - description: ext2 clock input
--      - description: ext3 clock input
--      - description: ext4 clock input
--
--  clock-names:
--    items:
--      - const: ckil
--      - const: osc_25m
--      - const: osc_27m
--      - const: clk_ext1
--      - const: clk_ext2
--      - const: clk_ext3
--      - const: clk_ext4
--
--  '#clock-cells':
--    const: 1
--    description:
--      The clock consumer should specify the desired clock by having the clock
--      ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8mq-clock.h
--      for the full list of i.MX8M Quad clock IDs.
--
--required:
--  - compatible
--  - reg
--  - clocks
--  - clock-names
--  - '#clock-cells'
--
--examples:
--  # Clock Control Module node:
--  - |
--    clk: clock-controller@30380000 {
--        compatible = "fsl,imx8mq-ccm";
--        reg = <0x30380000 0x10000>;
--        #clock-cells = <1>;
--        clocks = <&ckil>, <&osc_25m>, <&osc_27m>,
--                 <&clk_ext1>, <&clk_ext2>,
--                 <&clk_ext3>, <&clk_ext4>;
--        clock-names = "ckil", "osc_25m", "osc_27m",
--                      "clk_ext1", "clk_ext2",
--                      "clk_ext3", "clk_ext4";
--    };
--
--...
--- 
-2.17.1
-
+Rob
