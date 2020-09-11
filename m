@@ -2,128 +2,123 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FE8265807
-	for <lists+linux-serial@lfdr.de>; Fri, 11 Sep 2020 06:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430DD265CA5
+	for <lists+linux-serial@lfdr.de>; Fri, 11 Sep 2020 11:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725831AbgIKETw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 11 Sep 2020 00:19:52 -0400
-Received: from smtprelay0064.hostedemail.com ([216.40.44.64]:51536 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725283AbgIKETs (ORCPT
+        id S1725781AbgIKJjl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 11 Sep 2020 05:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbgIKJjh (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 11 Sep 2020 00:19:48 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 12942837F24A;
-        Fri, 11 Sep 2020 04:19:43 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:3874:4321:5007:6742:6743:10004:10400:10848:11026:11232:11473:11657:11658:11914:12043:12297:12438:12555:12740:12760:12895:13153:13161:13228:13229:13439:14096:14097:14181:14659:14721:21080:21433:21627:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: seat91_4d0f80d270eb
-X-Filterd-Recvd-Size: 4376
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf19.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 11 Sep 2020 04:19:36 +0000 (UTC)
-Message-ID: <f4ad706519917d493a0af32ea2da8565227cc74a.camel@perches.com>
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-From:   Joe Perches <joe@perches.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
-        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
-        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Kees Cook <kees.cook@canonical.com>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
-        storagedev@microchip.com, ceph-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Will Deacon <will@kernel.org>
-Date:   Thu, 10 Sep 2020 21:19:35 -0700
-In-Reply-To: <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-         <9372456a-8dcf-2735-57a4-e126aa5df3a6@arm.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+        Fri, 11 Sep 2020 05:39:37 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AFCC061756
+        for <linux-serial@vger.kernel.org>; Fri, 11 Sep 2020 02:39:36 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id a9so1453592pjg.1
+        for <linux-serial@vger.kernel.org>; Fri, 11 Sep 2020 02:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rOvkQbHcqdEEW6imcqo512VuspBp3Sjb9vemZ7YeXi8=;
+        b=SsrdoWR2xJuerEVchmJHs77EJDNTQwhJJ3BSD7dyycqxfJRgwEXXeZLoufITYzxwdf
+         KubMausaC28CReuRTTMNmIOWAOttM0CgeQmKXPHCPJI389V06KhtJx8/5NJYJa9b7l4m
+         5HXcxWMAP0vD3X1sXf+tvQ2B3z34erifCxIDc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rOvkQbHcqdEEW6imcqo512VuspBp3Sjb9vemZ7YeXi8=;
+        b=Q6WWHupQ9tOgzD4QyUNDvya77Cx4kDlStbid4z1QCnOvbCXwA1owpP0xL2PHvzCEK4
+         X1Vbo37cjq52XW5yQ8Ul0RxCBLls0ORlLmHs2qQ1Qgrh58P4Qrb7p3vuwhNjWpI+JzSz
+         WU3TDRmnEqLHr2tOixxIBImAaafQB9k0x6KRlrHhXNNEblmcyXusb6GdQ1O0fHG6u+Bb
+         ZTxF+ye4OGCHmE+ioH2s2M5ZpYitqKreEH7QpVVux5xDaZ03YNAbY2Qi85M9XC8IOmpW
+         i2jlv44r2jogEWsJxO1GCU5erYDpKrxQ/gOJTohZdN6G6A3HsU3TNwlb51UePDkgllOT
+         C8Tg==
+X-Gm-Message-State: AOAM533nA25MLQfjoJWv1gtSsP61ncq/QXPM1cFppcM8jRdquGpXbbnV
+        2o3EepX5hceRqNrwKIoQum1QyKFDGx3ed3pl
+X-Google-Smtp-Source: ABdhPJwmX6yZWnZDIEx+xL+1xsLKAJsdIGcvlBqJnTBWOdo/WI0JBf49uctm86uYeq7xvEW3CgA8Qg==
+X-Received: by 2002:a17:90a:2ec8:: with SMTP id h8mr1461759pjs.173.1599817175625;
+        Fri, 11 Sep 2020 02:39:35 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:1a60:24ff:fe89:3e93])
+        by smtp.gmail.com with ESMTPSA id v1sm1433465pjh.16.2020.09.11.02.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 02:39:34 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Changqi Hu <changqi.hu@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: [PATCH 1/2] tty: serial: print earlycon info after match->setup
+Date:   Fri, 11 Sep 2020 17:39:26 +0800
+Message-Id: <20200911093927.608024-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, 2020-09-10 at 15:21 +0100, Robin Murphy wrote:
-> On 2020-09-09 21:06, Joe Perches wrote:
-> > fallthrough to a separate case/default label break; isn't very readable.
-> > 
-> > Convert pseudo-keyword fallthrough; statements to a simple break; when
-> > the next label is case or default and the only statement in the next
-> > label block is break;
-> > 
-> > Found using:
-> > 
-> > $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> > 
-> > Miscellanea:
-> > 
-> > o Move or coalesce a couple label blocks above a default: block.
-> > 
-> > Signed-off-by: Joe Perches <joe@perches.com>
-> > ---
-> > 
-> > Compiled allyesconfig x86-64 only.
-> > A few files for other arches were not compiled.
-> > 
-> 
-> [...]
-> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> > index c192544e874b..743db1abec40 100644
-> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> > @@ -3777,7 +3777,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
-> >   	switch (FIELD_GET(IDR0_TTF, reg)) {
-> >   	case IDR0_TTF_AARCH32_64:
-> >   		smmu->ias = 40;
-> > -		fallthrough;
-> > +		break;
-> >   	case IDR0_TTF_AARCH64:
-> >   		break;
-> >   	default:
-> 
-> I have to say I don't really agree with the readability argument for 
-> this one - a fallthrough is semantically correct here, since the first 
-> case is a superset of the second. It just happens that anything we would 
-> do for the common subset is implicitly assumed (there are other 
-> potential cases we simply haven't added support for at the moment), thus 
-> the second case is currently empty.
-> This change actively obfuscates that distinction.
+8250 devices may modify iotype in their own earlycon setup. For example:
+8250_mtk and 8250_uniphier force iotype to be MMIO32. Print earlycon info
+after match->setup to reflect actual earlycon info.
 
-Then perhaps comments should be added to usefully
-describe the mechanisms.
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/tty/serial/earlycon.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-	case IDR0_TTF_AARCH32_64:
-		smmu->ias = 40;
-		fallthrough;	/* and still do the 64 bit processing */
-	case IDR0_TTF_AARCH64:
-		/* Nothing specific yet */
-		break;
-
-> Robin.
+diff --git a/drivers/tty/serial/earlycon.c b/drivers/tty/serial/earlycon.c
+index 2ae9190b64bb9..22f0876f72d49 100644
+--- a/drivers/tty/serial/earlycon.c
++++ b/drivers/tty/serial/earlycon.c
+@@ -56,7 +56,6 @@ static void __init earlycon_init(struct earlycon_device *device,
+ 				 const char *name)
+ {
+ 	struct console *earlycon = device->con;
+-	struct uart_port *port = &device->port;
+ 	const char *s;
+ 	size_t len;
+ 
+@@ -70,6 +69,12 @@ static void __init earlycon_init(struct earlycon_device *device,
+ 	len = s - name;
+ 	strlcpy(earlycon->name, name, min(len + 1, sizeof(earlycon->name)));
+ 	earlycon->data = &early_console_dev;
++}
++
++static void __init earlycon_info(struct earlycon_device *device)
++{
++	struct console *earlycon = device->con;
++	struct uart_port *port = &device->port;
+ 
+ 	if (port->iotype == UPIO_MEM || port->iotype == UPIO_MEM16 ||
+ 	    port->iotype == UPIO_MEM32 || port->iotype == UPIO_MEM32BE)
+@@ -140,6 +145,7 @@ static int __init register_earlycon(char *buf, const struct earlycon_id *match)
+ 
+ 	earlycon_init(&early_console_dev, match->name);
+ 	err = match->setup(&early_console_dev, buf);
++	earlycon_info(&early_console_dev);
+ 	if (err < 0)
+ 		return err;
+ 	if (!early_console_dev.con->write)
+@@ -302,6 +308,7 @@ int __init of_setup_earlycon(const struct earlycon_id *match,
+ 	}
+ 	earlycon_init(&early_console_dev, match->name);
+ 	err = match->setup(&early_console_dev, options);
++	earlycon_info(&early_console_dev);
+ 	if (err < 0)
+ 		return err;
+ 	if (!early_console_dev.con->write)
+-- 
+2.28.0.618.gf4bc123cb7-goog
 
