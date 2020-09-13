@@ -2,220 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2C426895A
-	for <lists+linux-serial@lfdr.de>; Mon, 14 Sep 2020 12:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B98A268A6B
+	for <lists+linux-serial@lfdr.de>; Mon, 14 Sep 2020 13:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbgINKd0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 14 Sep 2020 06:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726409AbgINKdZ (ORCPT
+        id S1726096AbgINLpU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Mon, 14 Sep 2020 07:45:20 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:38048 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726051AbgINLlR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 14 Sep 2020 06:33:25 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35767C06178A
-        for <linux-serial@vger.kernel.org>; Mon, 14 Sep 2020 03:33:25 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id x123so12268537pfc.7
-        for <linux-serial@vger.kernel.org>; Mon, 14 Sep 2020 03:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=antmicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UrmuUltF9h1wduRxzXusgQVOENqaHZyFRHTcJom8cGE=;
-        b=fZ+crlcyyGFSpUt6Evj12OiQCKtFgP1RXE/IdjznGEu25ETYptqXPS3qeYFhxKkofv
-         SsjptqfuJBQIaFe0K+hCcxK9fbgdUoKM6jEZYQRCyjo4eb85NXY9gvzSrrgo/QeQZfzo
-         dJsgPUEDbGIvYRHRdi35KxR6bEpkmR6/c6Pg8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UrmuUltF9h1wduRxzXusgQVOENqaHZyFRHTcJom8cGE=;
-        b=gbPLo7LEMB0CkiJ+S5XdCQaSPvinVPpkQGJt08HJDg7ur4mZwk86ZSog2+kCoTeFiA
-         XFAR3ot6BwlZPCyEXi4ds3+apRmF39Ov7F2Qb5pbSCRYhhbhnOSY8u0KZB+M2s9he+Kd
-         ei6QyMoRLDfzdv3u8cYs+xfXP4OQYLYbCZAQdlfX6+7AYkYaabjgFAhsUrWTJ9oaKckL
-         zPznuKzSc2B82DWBj/FhHfi5v9/nAkaQNOmg27OZLahP7d+rWjO4yuxTMUVt4qZnflgj
-         Te3vyTAlB0wvIWc+CTTHl1oNCCLbi2Vr5xwRy7AtB6GOuasF8I8npdE+ymjkmkTTUYM1
-         HC7w==
-X-Gm-Message-State: AOAM532phsacbg+BRD2LSV3rxbwowlJ46/34JlUa6csDQFiTyW60+cxR
-        So+xFz5Ve4AOjpMXT0KnuwNmH1sEg3jFKptKm0gHNQ==
-X-Google-Smtp-Source: ABdhPJxyndpwi+ymDmZJ5igPTP5mS4RnYa9l/xUnIZ4zJ3ttCGxOve1JfG0eDClKex/fOhfnpnH+LJY2hgOq/jpHDAE=
-X-Received: by 2002:a17:902:988f:b029:d0:4c09:c1 with SMTP id
- s15-20020a170902988fb02900d04c0900c1mr13651699plp.3.1600079604372; Mon, 14
- Sep 2020 03:33:24 -0700 (PDT)
+        Mon, 14 Sep 2020 07:41:17 -0400
+X-Greylist: delayed 25694 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Sep 2020 07:39:03 EDT
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 7DCD334C541A;
+        Sun, 13 Sep 2020 20:00:15 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PWncf_-g0lUa; Sun, 13 Sep 2020 20:00:15 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 2A12E3293272;
+        Sun, 13 Sep 2020 19:43:25 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id u93qn7jTg1tU; Sun, 13 Sep 2020 19:43:25 -0400 (-04)
+Received: from [192.168.8.101] (8ta-229-1-199.telkomadsl.co.za [197.229.1.199])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 63AE634A4877;
+        Sun, 13 Sep 2020 19:14:30 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20200812143324.2394375-0-mholenko@antmicro.com>
- <20200812143324.2394375-3-mholenko@antmicro.com> <20200911005740.GN3562056@lianli.shorne-pla.net>
-In-Reply-To: <20200911005740.GN3562056@lianli.shorne-pla.net>
-From:   Mateusz Holenko <mholenko@antmicro.com>
-Date:   Mon, 14 Sep 2020 12:33:11 +0200
-Message-ID: <CAPk366Tvb9g960e3ZLv3+_H8FZJRRe0Jqa4q7tejE+svMcQvLA@mail.gmail.com>
-Subject: Re: [PATCH v10 3/5] drivers/soc/litex: add LiteX SoC Controller driver
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Filip Kokosinski <fkokosinski@antmicro.com>,
-        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Gabriel L. Somlo" <gsomlo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00 Euro.
+To:     Recipients <manuelfranco@info.com>
+From:   "manuel franco" <manuelfranco@info.com>
+Date:   Mon, 14 Sep 2020 01:14:22 +0200
+Reply-To: manuelfrancospende11@gmail.com
+Message-Id: <20200913231431.63AE634A4877@correo.bnv.gob.ve>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 2:57 AM Stafford Horne <shorne@gmail.com> wrote:
->
-> On Wed, Aug 12, 2020 at 02:34:34PM +0200, Mateusz Holenko wrote:
-> > From: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
-> >
-> > This commit adds driver for the FPGA-based LiteX SoC
-> > Controller from LiteX SoC builder.
-> >
-> > Co-developed-by: Mateusz Holenko <mholenko@antmicro.com>
-> > Signed-off-by: Mateusz Holenko <mholenko@antmicro.com>
-> > Signed-off-by: Pawel Czarnecki <pczarnecki@internships.antmicro.com>
-> > ---
-> ...
-> > +static int litex_check_csr_access(void __iomem *reg_addr)
-> > +{
-> > +     unsigned long reg;
-> > +
-> > +     reg = litex_get_reg(reg_addr + SCRATCH_REG_OFF, SCRATCH_REG_SIZE);
-> > +
-> > +     if (reg != SCRATCH_REG_VALUE) {
-> > +             panic("Scratch register read error! Expected: 0x%x but got: 0x%lx",
-> > +                     SCRATCH_REG_VALUE, reg);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     litex_set_reg(reg_addr + SCRATCH_REG_OFF,
-> > +             SCRATCH_REG_SIZE, SCRATCH_TEST_VALUE);
-> > +     reg = litex_get_reg(reg_addr + SCRATCH_REG_OFF, SCRATCH_REG_SIZE);
-> > +
-> > +     if (reg != SCRATCH_TEST_VALUE) {
-> > +             panic("Scratch register write error! Expected: 0x%x but got: 0x%lx",
-> > +                     SCRATCH_TEST_VALUE, reg);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     /* restore original value of the SCRATCH register */
-> > +     litex_set_reg(reg_addr + SCRATCH_REG_OFF,
-> > +             SCRATCH_REG_SIZE, SCRATCH_REG_VALUE);
-> > +
-> > +     /* Set flag for other drivers */
-> What does this comment mean?
+ Sie haben eine Spende von 2.000.000,00 Euro.
 
-This is a leftover from the previous version of the patch
-and shouldn't be there - sorry for that.
-I'll remove it.
-
-> > +     pr_info("LiteX SoC Controller driver initialized");
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +struct litex_soc_ctrl_device {
-> > +     void __iomem *base;
-> > +};
-> > +
-> > +static const struct of_device_id litex_soc_ctrl_of_match[] = {
-> > +     {.compatible = "litex,soc-controller"},
-> > +     {},
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(of, litex_soc_ctrl_of_match);
-> > +
-> > +static int litex_soc_ctrl_probe(struct platform_device *pdev)
-> > +{
-> > +     int result;
-> > +     struct device *dev;
-> > +     struct device_node *node;
-> > +     struct litex_soc_ctrl_device *soc_ctrl_dev;
-> > +
-> > +     dev = &pdev->dev;
-> > +     node = dev->of_node;
-> > +     if (!node)
-> > +             return -ENODEV;
-> > +
-> > +     soc_ctrl_dev = devm_kzalloc(dev, sizeof(*soc_ctrl_dev), GFP_KERNEL);
-> > +     if (!soc_ctrl_dev)
-> > +             return -ENOMEM;
-> > +
-> > +     soc_ctrl_dev->base = devm_platform_ioremap_resource(pdev, 0);
-> > +     if (IS_ERR(soc_ctrl_dev->base))
-> > +             return PTR_ERR(soc_ctrl_dev->base);
-> > +
-> > +     result = litex_check_csr_access(soc_ctrl_dev->base);
-> > +     if (result) {
-> > +             // LiteX CSRs access is broken which means that
-> > +             // none of LiteX drivers will most probably
-> > +             // operate correctly
-> The comment format here with // is not usually used in the kernel, but its not
-> forbidded.  Could you use the /* */ multiline style?
-
-Sure, I'll change the commenting style here.
-
->
-> > +             BUG();
-> Instead of stopping the system with BUG, could we just do:
->
->         return litex_check_csr_access(soc_ctrl_dev->base);
->
-> We already have failure for NODEV/NOMEM so might as well not call BUG() here
-> too.
-
-It's true that litex_check_csr_accessors() already generates error
-codes that could be
-returned directly.
-The point of using BUG() macro here, however, is to stop booting the
-system so that it's visible
-(and impossible to miss for the user) that an unresolvable HW issue
-was encountered.
-
-CSR-accessors - the litex_{g,s}et_reg() functions - are intended to be
-used by other LiteX drivers
-and it's very unlikely that those drivers would work properly after
-the fail of litex_check_csr_accessors().
-Since in such case the UART driver will be affected too (no boot logs
-and error messages visible to the user),
-I thought it'll be easier to spot and debug the problem if the system
-stopped in the BUG loop.
-Perhaps there are other, more linux-friendly, ways of achieving a
-similar goal - I'm open for suggestions.
-
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
->
-> Other than that it looks ok to me.
->
-> -Stafford
-
-Thanks for the review!
-
-Best,
-Mateusz
-
-
---
-Mateusz Holenko
-Antmicro Ltd | www.antmicro.com
-Roosevelta 22, 60-829 Poznan, Poland
+Mein Name ist Manuel Franco aus den USA.
+Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit.
