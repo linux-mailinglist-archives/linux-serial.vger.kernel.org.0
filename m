@@ -2,88 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7823E26C681
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Sep 2020 19:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6672F26C633
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Sep 2020 19:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727623AbgIPRw0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Sep 2020 13:52:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42920 "EHLO mail.kernel.org"
+        id S1727282AbgIPRiv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Sep 2020 13:38:51 -0400
+Received: from mga09.intel.com ([134.134.136.24]:9004 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727278AbgIPRwV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:52:21 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5CA421973;
-        Wed, 16 Sep 2020 11:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600255155;
-        bh=5Jd9jVHxcOyK7zuQDeG8R+4sy3KRHCao0bv2UcrVMR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vkai1tLMJU4GdeUGCp9K11DMk7R5iO71tYJ7eFcDU3nm99EXhGeOnzgIeUyqh6jYO
-         3EJzlWcAATX/kACui7SjkEzA1PReh35fsj/Z/4CNqfgESq5kIwMYOqEyDyflnw/c1d
-         IUU4L3vob8oQNXHnLE1fSpalZax8hfd8OSfm9mFo=
-Date:   Wed, 16 Sep 2020 13:19:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paras Sharma <parashar@codeaurora.org>
-Cc:     Jiri Slaby <jslaby@suse.com>, linux-arm-msm@vger.kernel.org,
+        id S1727257AbgIPRip (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:38:45 -0400
+IronPort-SDR: oQpOPea35FNEgTCG2kve8o1+wO8ofHJK6vh5mnMJ4hflh3tma/kh0s+ZqI538mtIQnCzJmqY9N
+ Tca2RZobXDBg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="160382095"
+X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
+   d="scan'208";a="160382095"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 05:34:25 -0700
+IronPort-SDR: fAAMCfAxslpICGFXpsfGDzerRPBktvTOoMcBeLkSQ9TIB5idsNhJK6E6IRn3hN2kgHIn7bKpFV
+ jOX+zdPEU5Wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
+   d="scan'208";a="336009022"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 05:34:23 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kIWT6-00H4tz-NP; Wed, 16 Sep 2020 15:23:24 +0300
+Date:   Wed, 16 Sep 2020 15:23:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akashast@codeaurora.org
-Subject: Re: [PATCH V4] serial: qcom_geni_serial: To correct QUP Version
- detection logic
-Message-ID: <20200916111949.GA969520@kroah.com>
-References: <1600067957-8216-1-git-send-email-parashar@codeaurora.org>
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH 2/2] serial: core: fix console port-lock regression
+Message-ID: <20200916122324.GG3956970@smile.fi.intel.com>
+References: <20200909143101.15389-1-johan@kernel.org>
+ <20200909143101.15389-3-johan@kernel.org>
+ <20200909154815.GD1891694@smile.fi.intel.com>
+ <20200910073527.GC24441@localhost>
+ <20200910092715.GM1891694@smile.fi.intel.com>
+ <20200914080916.GI7101@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1600067957-8216-1-git-send-email-parashar@codeaurora.org>
+In-Reply-To: <20200914080916.GI7101@atomide.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 12:49:17PM +0530, Paras Sharma wrote:
-> The current implementation reduces the sampling rate by half
-> if qup HW version is  greater is than 2.5 by checking if the
-
-2 space characters?
-
-And what is "qup"?
-
-What is "HW"?
-
-> geni SE major version is greater than 2 and geni SE minor version
-
-what is "geni"?
-
-What is "SE"?
-
-> is greater than 5.This implementation fails when the version is
-> greater than or equal to 3.
+On Mon, Sep 14, 2020 at 11:09:16AM +0300, Tony Lindgren wrote:
+> * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [200910 09:27]:
+> > +Cc: Tony, let me add Tony to the discussion.
+> > 
+> > On Thu, Sep 10, 2020 at 09:35:27AM +0200, Johan Hovold wrote:
+> > > And what about power management
+> > > which was the reason for wanting this on OMAP in the first place; tty
+> > > core never calls shutdown() for a console port, not even when it's been
+> > > detached using the new interface.
+> > 
+> > That is interesting... Tony, do we have OMAP case working because of luck?
 > 
-> Hence, a new macro QUP_SE_VERSION_2_5 is defined having value
-> for major number 2 and minor number 5 as 0x20050000.Hence,if 
-
-That's not a "macro", it is a simple #define.
-
-And can you use a ' ' after a '.' please?  That's all over this
-changelog, including trailing whitespace for some reason :(
-
-> ver is greater than this value,sampling rate is halved. 
-> This logic would work for any future qup version.
-
-"will work"?
-
+> 8250_omap won't do anything unless autosuspend_timeout is configured for
+> the uart(s). If configured, then the 8250_omap will idle when console is
+> detached and the PM runtime usage count held by console is decremented, and
+> the configured autosuspend_timeout expires.
 > 
-> Fixes: ce734600545f ("tty: serial: qcom_geni_serial: Update the oversampling rate")
-> Signed-off-by: Paras Sharma <parashar@codeaurora.org>
-> ---
-> Changes in V4:
-> Created a new macro QUP_SE_VERSION_2_5 for Qup se version 2.5
-> 
+> The console is still kept open by getty, so I don't see why shutdown() would
+> be called for the console port. But maybe I don't follow what you're
+> concerned about, let me know if you want me to check something :)
 
-What changed from previous versions than v4?
+Is it possible to test configuration when you have kernel console enabled but
+no getty is run on it (perhaps something with ssh enabled access)?
 
-thanks,
+Then kernel console should call ->shutdown on detaching, right?
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
