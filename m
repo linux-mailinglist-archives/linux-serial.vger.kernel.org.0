@@ -2,88 +2,153 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6672F26C633
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Sep 2020 19:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BF626C7E7
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Sep 2020 20:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727282AbgIPRiv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Sep 2020 13:38:51 -0400
-Received: from mga09.intel.com ([134.134.136.24]:9004 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727257AbgIPRip (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:38:45 -0400
-IronPort-SDR: oQpOPea35FNEgTCG2kve8o1+wO8ofHJK6vh5mnMJ4hflh3tma/kh0s+ZqI538mtIQnCzJmqY9N
- Tca2RZobXDBg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="160382095"
-X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
-   d="scan'208";a="160382095"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 05:34:25 -0700
-IronPort-SDR: fAAMCfAxslpICGFXpsfGDzerRPBktvTOoMcBeLkSQ9TIB5idsNhJK6E6IRn3hN2kgHIn7bKpFV
- jOX+zdPEU5Wg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
-   d="scan'208";a="336009022"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 05:34:23 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kIWT6-00H4tz-NP; Wed, 16 Sep 2020 15:23:24 +0300
-Date:   Wed, 16 Sep 2020 15:23:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/2] serial: core: fix console port-lock regression
-Message-ID: <20200916122324.GG3956970@smile.fi.intel.com>
-References: <20200909143101.15389-1-johan@kernel.org>
- <20200909143101.15389-3-johan@kernel.org>
- <20200909154815.GD1891694@smile.fi.intel.com>
- <20200910073527.GC24441@localhost>
- <20200910092715.GM1891694@smile.fi.intel.com>
- <20200914080916.GI7101@atomide.com>
+        id S1728014AbgIPSgQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Sep 2020 14:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728033AbgIPS3N (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 16 Sep 2020 14:29:13 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7E6C0A8897;
+        Wed, 16 Sep 2020 05:56:21 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id x8so5341604ybm.3;
+        Wed, 16 Sep 2020 05:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cKaWYVxRkEWbSmE1Xcb5qQ3adbZiHgx8ByEmJ7c4d9U=;
+        b=bSy/Ps+eNqepLdsenjmyCaBg7NarZr3Dup815f2Yq6ozCRRgdaEuRhnaFqTm9HZN0O
+         cMAqlReM6jWcRcua+hSZ1Ow3boKULrs0YiTKq47/j+DQBLfm7GTDhbiBeDTU/QWS6VWR
+         J/Ar3EmSIFbvlQ9pl70OINmZdhv/zzUNK0xGtLJI7Qi9FpP1mkx2UC8p8GMyme4/B7TJ
+         6G71CM0K4gaXH/8fjGO6KpMKgTv+gdvm2CaJIKMKMGNWUtaJMnHw94v9iwZ38mwAM48D
+         sLOwl4T+h/MShljR0B976FhgErfOxvCu9YzcyI6A2PBCi8tPvAIbyxdy+MJKDpVcw8SP
+         PK4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cKaWYVxRkEWbSmE1Xcb5qQ3adbZiHgx8ByEmJ7c4d9U=;
+        b=HlmVgS7AmejUpIQCmWYcpSOLe8aFt88tR+ID0NjEVgqZTAjj4CoYWbvYJGEeghbduK
+         GNOYCqgUr8cZYju7RVOdIzL8XiBYQ2VQXQriND+PuAEm4VwS2BYJFlqgB+fxp09Wzdsa
+         f57OFDed2TmniBWR6PG3lDMndO1R5F3tVv+W0ad7+dvlF+V24AhjdWFT/pEzez2twiS+
+         SCisstGSfshM89JRt81HIn8iTyRQ1AVlOSVnSTyW+qB3Jo/diIzCLkG/hrH4K71naf4o
+         57jPzBwqHxIVkA2CkMtMt80EJAiWWox5DhddT4sfje9/uSK3yneA3CkH/f5apin/ORLa
+         TWMQ==
+X-Gm-Message-State: AOAM531/Dj4NcG2/vALovRWEi8bYFx9HIF5ALAHTx68iI45w32C1VlnZ
+        FzK7m/v5NOpTRW5p1nPToudmPjZ2tUKf394KP2I=
+X-Google-Smtp-Source: ABdhPJwBRXx0VqH0uQv90grTq3eaZr1B9Xi7bR6RDuBjvqVkr9+yLtEzxhLOXaKlOplgfTn+AgnlmopGUOzw2Try13c=
+X-Received: by 2002:a25:b212:: with SMTP id i18mr34347976ybj.148.1600260981032;
+ Wed, 16 Sep 2020 05:56:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200914080916.GI7101@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200727085132.29754-1-gengcixi@gmail.com> <CAF12kFuss4AQZSBX+A2G_fWjka3C4kpf4iDWU9QJY=AWigoxqg@mail.gmail.com>
+In-Reply-To: <CAF12kFuss4AQZSBX+A2G_fWjka3C4kpf4iDWU9QJY=AWigoxqg@mail.gmail.com>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Wed, 16 Sep 2020 20:55:45 +0800
+Message-ID: <CAF12kFtPQ0bUKrr4X8MjLCTfFYkRVk6BRaLb30W59GwtWQd6xA@mail.gmail.com>
+Subject: Re: [PATCH V7] GCOV: Add config to check the preqequisites situation
+To:     Greg KH <gregkh@linuxfoundation.org>, jslaby@suse.com,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-serial@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Orson Zhai <orsonzhai@gmail.com>, zhang.lyra@gmail.com,
+        Cixi Geng <cixi.geng1@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 11:09:16AM +0300, Tony Lindgren wrote:
-> * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [200910 09:27]:
-> > +Cc: Tony, let me add Tony to the discussion.
-> > 
-> > On Thu, Sep 10, 2020 at 09:35:27AM +0200, Johan Hovold wrote:
-> > > And what about power management
-> > > which was the reason for wanting this on OMAP in the first place; tty
-> > > core never calls shutdown() for a console port, not even when it's been
-> > > detached using the new interface.
-> > 
-> > That is interesting... Tony, do we have OMAP case working because of luck?
-> 
-> 8250_omap won't do anything unless autosuspend_timeout is configured for
-> the uart(s). If configured, then the 8250_omap will idle when console is
-> detached and the PM runtime usage count held by console is decremented, and
-> the configured autosuspend_timeout expires.
-> 
-> The console is still kept open by getty, so I don't see why shutdown() would
-> be called for the console port. But maybe I don't follow what you're
-> concerned about, let me know if you want me to check something :)
+Hi ALL=EF=BC=9A
+Not recieve more advise for a long time ,
+Can this submission be merged recently?
 
-Is it possible to test configuration when you have kernel console enabled but
-no getty is run on it (perhaps something with ssh enabled access)?
-
-Then kernel console should call ->shutdown on detaching, right?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Cixi Geng <gengcixi@gmail.com> =E4=BA=8E2020=E5=B9=B48=E6=9C=8820=E6=97=A5=
+=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=888:40=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi All:
+>
+> Does this patch need more modification?
+>
+> <gengcixi@gmail.com> =E4=BA=8E2020=E5=B9=B47=E6=9C=8827=E6=97=A5=E5=91=A8=
+=E4=B8=80 =E4=B8=8B=E5=8D=884:51=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > From: Cixi Geng <cixi.geng1@unisoc.com>
+> >
+> > Introduce new configuration option GCOV_PROFILE_PREREQS that can be
+> > used to check whether the prerequisites for enabling gcov profiling
+> > for specific files and directories are met.
+> >
+> > Only add SERIAL_GCOV for an example.
+> >
+> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> > ---
+> >  drivers/tty/serial/Kconfig  |  7 +++++++
+> >  drivers/tty/serial/Makefile |  1 +
+> >  kernel/gcov/Kconfig         | 12 ++++++++++++
+> >  3 files changed, 20 insertions(+)
+> >
+> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> > index 780908d43557..55b128b6b31d 100644
+> > --- a/drivers/tty/serial/Kconfig
+> > +++ b/drivers/tty/serial/Kconfig
+> > @@ -1576,3 +1576,10 @@ endmenu
+> >
+> >  config SERIAL_MCTRL_GPIO
+> >         tristate
+> > +
+> > +config SERIAL_GCOV
+> > +       bool "Enable profile gcov for serial directory"
+> > +       depends on GCOV_PROFILE_PREREQS
+> > +       help
+> > +         The SERIAL_GCOV will add Gcov profiling flags when kernel com=
+piles.
+> > +         Say 'Y' here if you want the gcov data for the serial directo=
+ry,
+> > diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+> > index d056ee6cca33..17272733db95 100644
+> > --- a/drivers/tty/serial/Makefile
+> > +++ b/drivers/tty/serial/Makefile
+> > @@ -3,6 +3,7 @@
+> >  # Makefile for the kernel serial device drivers.
+> >  #
+> >
+> > +GCOV_PROFILE :=3D $(CONFIG_SERIAL_GCOV)
+> >  obj-$(CONFIG_SERIAL_CORE) +=3D serial_core.o
+> >
+> >  obj-$(CONFIG_SERIAL_EARLYCON) +=3D earlycon.o
+> > diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
+> > index 3110c77230c7..bb2e1fb85743 100644
+> > --- a/kernel/gcov/Kconfig
+> > +++ b/kernel/gcov/Kconfig
+> > @@ -51,4 +51,16 @@ config GCOV_PROFILE_ALL
+> >         larger and run slower. Also be sure to exclude files from profi=
+ling
+> >         which are not linked to the kernel image to prevent linker erro=
+rs.
+> >
+> > +config GCOV_PROFILE_PREREQS
+> > +       bool "Profile Kernel for prereqs"
+> > +       depends on GCOV_KERNEL
+> > +       depends on  !COMPILE_TEST
+> > +       def_bool y if GCOV_KERNEL && !COMPILE_TEST
+> > +       help
+> > +         This options activates profiling for the specified kernel mod=
+ules.
+> > +
+> > +         When some modules need Gcov data, enable this config, then co=
+nfigure
+> > +         with gcov on the corresponding modules,The directories or fil=
+es of
+> > +         these modules will be added profiling flags after kernel comp=
+ile.
+> > +
+> >  endmenu
+> > --
+> > 2.17.1
+> >
