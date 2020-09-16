@@ -2,64 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBE726BCA8
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Sep 2020 08:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7823E26C681
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Sep 2020 19:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726451AbgIPGVH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Sep 2020 02:21:07 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12303 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726445AbgIPGVH (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Sep 2020 02:21:07 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 63F7230A5DCB465E5511;
-        Wed, 16 Sep 2020 14:21:05 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 16 Sep 2020 14:20:56 +0800
-From:   Qinglang Miao <miaoqinglang@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-CC:     <linux-serial@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>,
-        Qinglang Miao <miaoqinglang@huawei.com>
-Subject: [PATCH -next] serial: pmac_zilog: use for_each_child_of_node() macro
-Date:   Wed, 16 Sep 2020 14:21:38 +0800
-Message-ID: <20200916062138.191188-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727623AbgIPRw0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Sep 2020 13:52:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727278AbgIPRwV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:52:21 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5CA421973;
+        Wed, 16 Sep 2020 11:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600255155;
+        bh=5Jd9jVHxcOyK7zuQDeG8R+4sy3KRHCao0bv2UcrVMR8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vkai1tLMJU4GdeUGCp9K11DMk7R5iO71tYJ7eFcDU3nm99EXhGeOnzgIeUyqh6jYO
+         3EJzlWcAATX/kACui7SjkEzA1PReh35fsj/Z/4CNqfgESq5kIwMYOqEyDyflnw/c1d
+         IUU4L3vob8oQNXHnLE1fSpalZax8hfd8OSfm9mFo=
+Date:   Wed, 16 Sep 2020 13:19:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Paras Sharma <parashar@codeaurora.org>
+Cc:     Jiri Slaby <jslaby@suse.com>, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akashast@codeaurora.org
+Subject: Re: [PATCH V4] serial: qcom_geni_serial: To correct QUP Version
+ detection logic
+Message-ID: <20200916111949.GA969520@kroah.com>
+References: <1600067957-8216-1-git-send-email-parashar@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1600067957-8216-1-git-send-email-parashar@codeaurora.org>
 Sender: linux-serial-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Use for_each_child_of_node() macro instead of open coding it.
+On Mon, Sep 14, 2020 at 12:49:17PM +0530, Paras Sharma wrote:
+> The current implementation reduces the sampling rate by half
+> if qup HW version is  greater is than 2.5 by checking if the
 
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
----
- drivers/tty/serial/pmac_zilog.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+2 space characters?
 
-diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
-index 96e7aa479..063484b22 100644
---- a/drivers/tty/serial/pmac_zilog.c
-+++ b/drivers/tty/serial/pmac_zilog.c
-@@ -1644,7 +1644,7 @@ static int __init pmz_probe(void)
- 		 * TODO: Add routines with proper locking to do that...
- 		 */
- 		node_a = node_b = NULL;
--		for (np = NULL; (np = of_get_next_child(node_p, np)) != NULL;) {
-+		for_each_child_of_node(node_p, np) {
- 			if (of_node_name_prefix(np, "ch-a"))
- 				node_a = of_node_get(np);
- 			else if (of_node_name_prefix(np, "ch-b"))
--- 
-2.23.0
+And what is "qup"?
 
+What is "HW"?
+
+> geni SE major version is greater than 2 and geni SE minor version
+
+what is "geni"?
+
+What is "SE"?
+
+> is greater than 5.This implementation fails when the version is
+> greater than or equal to 3.
+> 
+> Hence, a new macro QUP_SE_VERSION_2_5 is defined having value
+> for major number 2 and minor number 5 as 0x20050000.Hence,if 
+
+That's not a "macro", it is a simple #define.
+
+And can you use a ' ' after a '.' please?  That's all over this
+changelog, including trailing whitespace for some reason :(
+
+> ver is greater than this value,sampling rate is halved. 
+> This logic would work for any future qup version.
+
+"will work"?
+
+> 
+> Fixes: ce734600545f ("tty: serial: qcom_geni_serial: Update the oversampling rate")
+> Signed-off-by: Paras Sharma <parashar@codeaurora.org>
+> ---
+> Changes in V4:
+> Created a new macro QUP_SE_VERSION_2_5 for Qup se version 2.5
+> 
+
+What changed from previous versions than v4?
+
+thanks,
+
+greg k-h
