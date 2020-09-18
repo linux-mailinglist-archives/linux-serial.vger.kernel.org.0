@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CE626EEE2
-	for <lists+linux-serial@lfdr.de>; Fri, 18 Sep 2020 04:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D9626F333
+	for <lists+linux-serial@lfdr.de>; Fri, 18 Sep 2020 05:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbgIRCb1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 17 Sep 2020 22:31:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42304 "EHLO mail.kernel.org"
+        id S1726518AbgIRDEn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 17 Sep 2020 23:04:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52336 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729068AbgIRCOU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:14:20 -0400
+        id S1727343AbgIRCEl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:04:41 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D53E923787;
-        Fri, 18 Sep 2020 02:14:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E3FF82344C;
+        Fri, 18 Sep 2020 02:04:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395259;
-        bh=7zUWioQgL4Jqz/0zJ+FnsMzlmrxXscGQzFYbtHJqPdI=;
+        s=default; t=1600394680;
+        bh=t1/7PI1zWYp0da7HkWLYurYjOzus+3WqUlBZAjgUN6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uBb3jN/caiDhKdaapfYKg1HnUJoPifVvIiL7iJw4HNxUPUlJSmy0LCKZ4/lWAt1TG
-         NWZyYfxDRzs9ARtrtaUNEbUGdr1+rYQrQh0tdiBYsKi+UmJSQFbZETwHbXh64X+gh6
-         4FYBZZT53W+4BWuwfjhSbW2zl2/t7KCP74oCTvOc=
+        b=hVLR9Jg5QFD4o9uV9uEjYmGxTSV4JA6ZWlRYZb3FNie3NFkvXpJ7OI+20H1waBn6h
+         9w5YvJ2dLQH5b5Ts+PJ639EAQkWva3F2A2Q+LSyNVYN1HsWpQ9AtKoEx2/A23Y3WiM
+         ndkSN02+2rVMp5yBziHRTd2eIC6vBO7tyIQ5b1I8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jonathan Bakker <xc-racer2@live.ca>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Yash Shah <yash.shah@sifive.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 100/127] tty: serial: samsung: Correct clock selection logic
-Date:   Thu, 17 Sep 2020 22:11:53 -0400
-Message-Id: <20200918021220.2066485-100-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 170/330] tty: sifive: Finish transmission before changing the clock
+Date:   Thu, 17 Sep 2020 21:58:30 -0400
+Message-Id: <20200918020110.2063155-170-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918021220.2066485-1-sashal@kernel.org>
-References: <20200918021220.2066485-1-sashal@kernel.org>
+In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
+References: <20200918020110.2063155-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,52 +43,88 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Jonathan Bakker <xc-racer2@live.ca>
+From: Palmer Dabbelt <palmerdabbelt@google.com>
 
-[ Upstream commit 7d31676a8d91dd18e08853efd1cb26961a38c6a6 ]
+[ Upstream commit 4cbd7814bbd595061fcb6d6355d63f04179161cd ]
 
-Some variants of the samsung tty driver can pick which clock
-to use for their baud rate generation.  In the DT conversion,
-a default clock was selected to be used if a specific one wasn't
-assigned and then a comparison of which clock rate worked better
-was done.  Unfortunately, the comparison was implemented in such
-a way that only the default clock was ever actually compared.
-Fix this by iterating through all possible clocks, except when a
-specific clock has already been picked via clk_sel (which is
-only possible via board files).
+SiFive's UART has a software controller clock divider that produces the
+final baud rate clock.  Whenever the clock that drives the UART is
+changed this divider must be updated accordingly, and given that these
+two events are controlled by software they cannot be done atomically.
+During the period between updating the UART's driving clock and internal
+divider the UART will transmit a different baud rate than what the user
+has configured, which will probably result in a corrupted transmission
+stream.
 
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Link: https://lore.kernel.org/r/BN6PR04MB06604E63833EA41837EBF77BA3A30@BN6PR04MB0660.namprd04.prod.outlook.com
+The SiFive UART has a FIFO, but due to an issue with the programming
+interface there is no way to directly determine when the UART has
+finished transmitting.  We're essentially restricted to dead reckoning
+in order to figure that out: we can use the FIFO's TX busy register to
+figure out when the last frame has begun transmission and just delay for
+a long enough that the last frame is guaranteed to get out.
+
+As far as the actual implementation goes: I've modified the existing
+existing clock notifier function to drain both the FIFO and the shift
+register in on PRE_RATE_CHANGE.  As far as I know there is no hardware
+flow control in this UART, so there's no good way to ask the other end
+to stop transmission while we can't receive (inserting software flow
+control messages seems like a bad idea here).
+
+Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Tested-by: Yash Shah <yash.shah@sifive.com>
+Link: https://lore.kernel.org/r/20200307042637.83728-1-palmer@dabbelt.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/samsung.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/tty/serial/sifive.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/samsung.c b/drivers/tty/serial/samsung.c
-index c67d39fea74ca..70d29b697e822 100644
---- a/drivers/tty/serial/samsung.c
-+++ b/drivers/tty/serial/samsung.c
-@@ -1165,14 +1165,14 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
- 	struct s3c24xx_uart_info *info = ourport->info;
- 	struct clk *clk;
- 	unsigned long rate;
--	unsigned int cnt, baud, quot, clk_sel, best_quot = 0;
-+	unsigned int cnt, baud, quot, best_quot = 0;
- 	char clkname[MAX_CLK_NAME_LENGTH];
- 	int calc_deviation, deviation = (1 << 30) - 1;
+diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
+index 38133eba83a87..b4343c6aa6512 100644
+--- a/drivers/tty/serial/sifive.c
++++ b/drivers/tty/serial/sifive.c
+@@ -618,10 +618,10 @@ static void sifive_serial_shutdown(struct uart_port *port)
+  *
+  * On the V0 SoC, the UART IP block is derived from the CPU clock source
+  * after a synchronous divide-by-two divider, so any CPU clock rate change
+- * requires the UART baud rate to be updated.  This presumably could corrupt any
+- * serial word currently being transmitted or received.  It would probably
+- * be better to stop receives and transmits, then complete the baud rate
+- * change, then re-enable them.
++ * requires the UART baud rate to be updated.  This presumably corrupts any
++ * serial word currently being transmitted or received.  In order to avoid
++ * corrupting the output data stream, we drain the transmit queue before
++ * allowing the clock's rate to be changed.
+  */
+ static int sifive_serial_clk_notifier(struct notifier_block *nb,
+ 				      unsigned long event, void *data)
+@@ -629,6 +629,26 @@ static int sifive_serial_clk_notifier(struct notifier_block *nb,
+ 	struct clk_notifier_data *cnd = data;
+ 	struct sifive_serial_port *ssp = notifier_to_sifive_serial_port(nb);
  
--	clk_sel = (ourport->cfg->clk_sel) ? ourport->cfg->clk_sel :
--			ourport->info->def_clk_sel;
- 	for (cnt = 0; cnt < info->num_clks; cnt++) {
--		if (!(clk_sel & (1 << cnt)))
-+		/* Keep selected clock if provided */
-+		if (ourport->cfg->clk_sel &&
-+			!(ourport->cfg->clk_sel & (1 << cnt)))
- 			continue;
- 
- 		sprintf(clkname, "clk_uart_baud%d", cnt);
++	if (event == PRE_RATE_CHANGE) {
++		/*
++		 * The TX watermark is always set to 1 by this driver, which
++		 * means that the TX busy bit will lower when there are 0 bytes
++		 * left in the TX queue -- in other words, when the TX FIFO is
++		 * empty.
++		 */
++		__ssp_wait_for_xmitr(ssp);
++		/*
++		 * On the cycle the TX FIFO goes empty there is still a full
++		 * UART frame left to be transmitted in the shift register.
++		 * The UART provides no way for software to directly determine
++		 * when that last frame has been transmitted, so we just sleep
++		 * here instead.  As we're not tracking the number of stop bits
++		 * they're just worst cased here.  The rest of the serial
++		 * framing parameters aren't configurable by software.
++		 */
++		udelay(DIV_ROUND_UP(12 * 1000 * 1000, ssp->baud_rate));
++	}
++
+ 	if (event == POST_RATE_CHANGE && ssp->clkin_rate != cnd->new_rate) {
+ 		ssp->clkin_rate = cnd->new_rate;
+ 		__ssp_update_div(ssp);
 -- 
 2.25.1
 
