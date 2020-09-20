@@ -2,87 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE9A270E81
-	for <lists+linux-serial@lfdr.de>; Sat, 19 Sep 2020 16:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCEE271442
+	for <lists+linux-serial@lfdr.de>; Sun, 20 Sep 2020 14:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbgISOZL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 19 Sep 2020 10:25:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726434AbgISOZK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 19 Sep 2020 10:25:10 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 60E4D21582;
-        Sat, 19 Sep 2020 14:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600525509;
-        bh=kHRkKnYP82SMnFqUKvGenb2khehyXzI7WLF+nQ+tzgw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=2oYZ4BVC2fLdI6wdQldYFviXX+QrY8yA0ESlee7qs0Kg3rxm+3/6PF7RDdoanWhzk
-         7SCrbarFFlCxPmeN8jVVYZ6eN2Dx0WuxN9pBX7Bej1bF3XrffumU+pypQxtnac8AZo
-         1o0OYgAJM/AzKyeyqbeC+5fYnJHhdKDn1nORlUAE=
-Received: by mail-ej1-f50.google.com with SMTP id r7so11824075ejs.11;
-        Sat, 19 Sep 2020 07:25:09 -0700 (PDT)
-X-Gm-Message-State: AOAM532oRJHdcR+yYRD/+FzSvaJSpRXr9lctERxcnRkNsxrPBQ9JP2RJ
-        cRn2Nzdz5QLi/RRmIX6NtWC3RAaQZv6d2xxPMe0=
-X-Google-Smtp-Source: ABdhPJxqLwyyHgA5Kx4Q6V81m6PRoMJ6U0hi/KURq0qDLpn+NftnXz1sAVg2ynpJvB3sE/6Veg68lbEq0jaBtPYIvhc=
-X-Received: by 2002:a17:906:4046:: with SMTP id y6mr43178032ejj.148.1600525507972;
- Sat, 19 Sep 2020 07:25:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-8-krzk@kernel.org>
- <81a8248f-0d02-5646-36b2-5d4c3a7c4211@linaro.org>
-In-Reply-To: <81a8248f-0d02-5646-36b2-5d4c3a7c4211@linaro.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Sat, 19 Sep 2020 16:24:56 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdJhfUsTqrTCouF+xQ1ChBWipBc6UaOBbewSPfrEw9Mtg@mail.gmail.com>
-Message-ID: <CAJKOXPdJhfUsTqrTCouF+xQ1ChBWipBc6UaOBbewSPfrEw9Mtg@mail.gmail.com>
-Subject: Re: [PATCH v3 07/14] dt-bindings: thermal: imx8mm-thermal: Add i.MX
- 8M Nano compatible
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726413AbgITMQX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 20 Sep 2020 08:16:23 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:33987 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726273AbgITMQX (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 20 Sep 2020 08:16:23 -0400
+X-Greylist: delayed 431 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Sep 2020 08:16:20 EDT
+X-IronPort-AV: E=Sophos;i="5.77,282,1596492000"; 
+   d="scan'208";a="468612186"
+Received: from palace.lip6.fr ([132.227.105.202])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-SHA256; 20 Sep 2020 14:08:58 +0200
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     linux-spi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-rdma@vger.kernel.org, Yossi Leybovich <sleybo@amazon.com>,
+        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        dmaengine@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH 00/14] drop double zeroing
+Date:   Sun, 20 Sep 2020 13:26:12 +0200
+Message-Id: <1600601186-7420-1-git-send-email-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, 19 Sep 2020 at 13:48, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 04/09/2020 17:23, Krzysztof Kozlowski wrote:
-> > DTSes with new i.MX 8M SoCs introduce their own compatibles so add them
-> > to fix dtbs_check warnings like:
-> >
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: tmu@30260000:
-> >     compatible:0: 'fsl,imx8mn-tmu' is not one of ['fsl,imx8mm-tmu', 'fsl,imx8mp-tmu']
-> >     From schema: Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
-> >
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: tmu@30260000:
-> >     compatible: ['fsl,imx8mn-tmu', 'fsl,imx8mm-tmu'] is too long
-> >
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: tmu@30260000:
-> >     compatible: Additional items are not allowed ('fsl,imx8mm-tmu' was unexpected)
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
->
-> Shall I pick this patch separately or did you merge the entire series ?
+sg_init_table zeroes its first argument, so the allocation of that argument
+doesn't have to.
 
-Thanks. Rob already picked this up.
+---
 
-Best regards,
-Krzysztof
+ block/bsg-lib.c                                  |    2 +-
+ drivers/dma/sh/rcar-dmac.c                       |    2 +-
+ drivers/dma/sh/shdma-base.c                      |    2 +-
+ drivers/infiniband/hw/efa/efa_verbs.c            |    2 +-
+ drivers/media/common/saa7146/saa7146_core.c      |    2 +-
+ drivers/misc/mic/scif/scif_nodeqp.c              |    2 +-
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    2 +-
+ drivers/net/wireless/intel/iwlwifi/fw/dbg.c      |    2 +-
+ drivers/pci/p2pdma.c                             |    2 +-
+ drivers/spi/spi-topcliff-pch.c                   |    4 ++--
+ drivers/target/target_core_rd.c                  |    2 +-
+ drivers/tty/serial/pch_uart.c                    |    2 +-
+ net/rds/rdma.c                                   |    2 +-
+ net/sunrpc/xprtrdma/frwr_ops.c                   |    2 +-
+ 14 files changed, 15 insertions(+), 15 deletions(-)
