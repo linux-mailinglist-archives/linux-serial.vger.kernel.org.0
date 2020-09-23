@@ -2,164 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3CE275D3A
-	for <lists+linux-serial@lfdr.de>; Wed, 23 Sep 2020 18:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E515E275E0A
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Sep 2020 18:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726706AbgIWQUH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 23 Sep 2020 12:20:07 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40290 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbgIWQUB (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 23 Sep 2020 12:20:01 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C0796803086A;
-        Wed, 23 Sep 2020 16:19:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id M6bFa9JfLHjy; Wed, 23 Sep 2020 19:19:55 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726342AbgIWQ51 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 23 Sep 2020 12:57:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60002 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726184AbgIWQ51 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 23 Sep 2020 12:57:27 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A69220BED;
+        Wed, 23 Sep 2020 16:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600880246;
+        bh=hIdSVVLt2zl1VTm4xEiFNczxwYeQMbtR2OaGzJVMESg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=frkDKHFkw1LNkAk9Hk3XL4hZDLPoU7jUkLN8nuMM/AI1vuMKuzNC7Da4YfuapGy2O
+         YHbtU7iCnrKFKaOzIysY3MfXEa4SD7bpvWbFjFHMCCr0WNUH5JvTWFvBprbc60YTF9
+         il8QBspfZvtbkFHbFCnfLuAnmXo4hcGQEtrDiY1E=
+Date:   Wed, 23 Sep 2020 18:57:45 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] serial: 8250_dw: Fix clk-notifier/port suspend deadlock
-Date:   Wed, 23 Sep 2020 19:19:50 +0300
-Message-ID: <20200923161950.6237-4-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200923161950.6237-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200923161950.6237-1-Sergey.Semin@baikalelectronics.ru>
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Dorian Stoll <dorian.stoll@tmsp.io>
+Subject: Re: [RFC PATCH 1/9] misc: Add Surface Aggregator subsystem
+Message-ID: <20200923165745.GA3732240@kroah.com>
+References: <20200923151511.3842150-1-luzmaximilian@gmail.com>
+ <20200923151511.3842150-2-luzmaximilian@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923151511.3842150-2-luzmaximilian@gmail.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-It has been discovered that there is a potential deadlock between
-the clock-change-notifier thread and the UART port suspending one:
+On Wed, Sep 23, 2020 at 05:15:03PM +0200, Maximilian Luz wrote:
+> +/* -- Safe counters. -------------------------------------------------------- */
+> +
+> +/**
+> + * ssh_seq_reset() - Reset/initialize sequence ID counter.
+> + * @c: The counter to reset.
+> + */
+> +static void ssh_seq_reset(struct ssh_seq_counter *c)
+> +{
+> +	WRITE_ONCE(c->value, 0);
+> +}
 
-   CPU0 (suspend CPU/UART)   CPU1 (update clock)
-            ----                    ----
-   lock(&port->mutex);
-                             lock((work_completion)(&data->clk_work));
-                             lock(&port->mutex);
-   lock((work_completion)(&data->clk_work));
+These "counters" are odd, what exactly are they?
 
-   *** DEADLOCK ***
+They seem like a simple atomic counter, but not quite, so you have
+rolled your own pseudo-atomic variable.  Are you sure that it works
+properly?  If so, how?
 
-The best way to fix this is to eliminate the CPU0
-port->mutex/work-completion scenario. So we suggest to register and
-unregister the clock-notifier during the DW APB UART port probe/remove
-procedures, instead of doing that at the points of the port
-startup/shutdown.
+What about just using an ida/idr structure instead?  Or just a simple
+atomic counter that avoids the values you can't touch, or better yet, a
+simple number with a correct lock protecting it :)
 
-Link: https://lore.kernel.org/linux-serial/f1cd5c75-9cda-6896-a4e2-42c5bfc3f5c3@redhat.com
+thanks,
 
-Fixes: cc816969d7b5 ("serial: 8250_dw: Fix common clocks usage race condition")
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/tty/serial/8250/8250_dw.c | 54 +++++++++++--------------------
- 1 file changed, 19 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 87f450b7c177..9e204f9b799a 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -373,39 +373,6 @@ static void dw8250_set_ldisc(struct uart_port *p, struct ktermios *termios)
- 	serial8250_do_set_ldisc(p, termios);
- }
- 
--static int dw8250_startup(struct uart_port *p)
--{
--	struct dw8250_data *d = to_dw8250_data(p->private_data);
--	int ret;
--
--	/*
--	 * Some platforms may provide a reference clock shared between several
--	 * devices. In this case before using the serial port first we have to
--	 * make sure that any clock state change is known to the UART port at
--	 * least post factum.
--	 */
--	if (d->clk) {
--		ret = clk_notifier_register(d->clk, &d->clk_notifier);
--		if (ret)
--			dev_warn(p->dev, "Failed to set the clock notifier\n");
--	}
--
--	return serial8250_do_startup(p);
--}
--
--static void dw8250_shutdown(struct uart_port *p)
--{
--	struct dw8250_data *d = to_dw8250_data(p->private_data);
--
--	serial8250_do_shutdown(p);
--
--	if (d->clk) {
--		clk_notifier_unregister(d->clk, &d->clk_notifier);
--
--		flush_work(&d->clk_work);
--	}
--}
--
- /*
-  * dw8250_fallback_dma_filter will prevent the UART from getting just any free
-  * channel on platforms that have DMA engines, but don't have any channels
-@@ -501,8 +468,6 @@ static int dw8250_probe(struct platform_device *pdev)
- 	p->serial_out	= dw8250_serial_out;
- 	p->set_ldisc	= dw8250_set_ldisc;
- 	p->set_termios	= dw8250_set_termios;
--	p->startup	= dw8250_startup;
--	p->shutdown	= dw8250_shutdown;
- 
- 	p->membase = devm_ioremap(dev, regs->start, resource_size(regs));
- 	if (!p->membase)
-@@ -622,6 +587,19 @@ static int dw8250_probe(struct platform_device *pdev)
- 		goto err_reset;
- 	}
- 
-+	/*
-+	 * Some platforms may provide a reference clock shared between several
-+	 * devices. In this case any clock state change must be known to the
-+	 * UART port at least post factum.
-+	 */
-+	if (data->clk) {
-+		err = clk_notifier_register(data->clk, &data->clk_notifier);
-+		if (err)
-+			dev_warn(p->dev, "Failed to set the clock notifier\n");
-+		else
-+			queue_work(system_unbound_wq, &data->clk_work);
-+	}
-+
- 	platform_set_drvdata(pdev, data);
- 
- 	pm_runtime_set_active(dev);
-@@ -648,6 +626,12 @@ static int dw8250_remove(struct platform_device *pdev)
- 
- 	pm_runtime_get_sync(dev);
- 
-+	if (data->clk) {
-+		clk_notifier_unregister(data->clk, &data->clk_notifier);
-+
-+		flush_work(&data->clk_work);
-+	}
-+
- 	serial8250_unregister_port(data->data.line);
- 
- 	reset_control_assert(data->rst);
--- 
-2.27.0
-
+greg k-h
