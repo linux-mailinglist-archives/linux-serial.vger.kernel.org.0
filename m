@@ -2,154 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF82759A3
-	for <lists+linux-serial@lfdr.de>; Wed, 23 Sep 2020 16:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3810275B98
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Sep 2020 17:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgIWOPR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 23 Sep 2020 10:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgIWOPQ (ORCPT
+        id S1726684AbgIWPWi (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 23 Sep 2020 11:22:38 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:16771 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbgIWPWi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 23 Sep 2020 10:15:16 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6695AC0613CE;
-        Wed, 23 Sep 2020 07:15:16 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c18so173160wrm.9;
-        Wed, 23 Sep 2020 07:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CCpG6jWr4GZzW1CfQaSnnmzY1h1hQX+z5GfUGphu6mo=;
-        b=WyrzDX2hgEfYU9YEV2oB2Vy6Tk0kl11zvxMh4GY5Zt2ZGXDlcM0bIRvJURSeI8ygz8
-         K7BOrYW6NZZZZ8WNO359lHGhMUBKLp8RYVFb1RA9XE6CqaxCBH28mpQ9VlNnCEYpp3oB
-         YaiQ5Pj3XC5d+3qWk61xf4Xl2LYrqI3P+6YmLSDhln3QT1ToaJ/YKV/EMYVvYoFY1K/n
-         CYQfJkBIqbqGPooaLBU3l8dRSPFw3jl+SdGXFuDyljkKofyPmTaHKCbPTQL6hm3orrk/
-         wFBw5Rfz51qnFjDZ6W5wZswA+McLUuOlY4QMfhiXajTRVEeG7MBrNA9HnrmSlEwbsek2
-         V/pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CCpG6jWr4GZzW1CfQaSnnmzY1h1hQX+z5GfUGphu6mo=;
-        b=j9SmZ4sBiSMf4g2btvHev7WDIpJIdRN0dhxjbWsGERL+LJBZqQ20WrVptNvv6jf6yv
-         IJeBhVu8iP2usmmWCFiA8Qtlo1z/L894jKg8nNbhJj5/eqbPDv193PCBiqFiy5YjxxcF
-         b7ns7unDr0lv2xpiuwcjY4az/hJywusbujDdo1UXBRFvb6EcU8NXHqhg3W/spbN++3jF
-         gf/nLM6JMBLNuc3SJIGOaaJ+yxDHdF7wDvhXTeOUi4uofBRd8P93q7vPJzVXhhHbW9hT
-         7KKjeOG2Ik0wmd1VXHFlgMiLukLNOqEuEtUxEpHfVkbxBWQx7h/CYJeCnSX/0OuafBvP
-         B4fQ==
-X-Gm-Message-State: AOAM533fqfkRPjCJQhTEiWnkgWxSeb9GvLKWoVpPPTmMOdVNYYPqvQPo
-        HZKGdMiQrJbnZ9hbmnVBm9o=
-X-Google-Smtp-Source: ABdhPJxE/2vXIiL4kN9hTjYGmAYGf/ntfPr0bNkLM/DKOX5sQazw3tKXKwd9st2bXep+5i7oBXEVXA==
-X-Received: by 2002:a5d:568d:: with SMTP id f13mr1056599wrv.303.1600870515112;
-        Wed, 23 Sep 2020 07:15:15 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id o4sm29300893wru.55.2020.09.23.07.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 07:15:13 -0700 (PDT)
-Date:   Wed, 23 Sep 2020 16:15:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 06/19] dt-bindings: pwm: imx-pwm: Add i.MX 8M
- compatibles
-Message-ID: <20200923141511.GF1848911@ulmo>
-References: <20200825193536.7332-1-krzk@kernel.org>
- <20200825193536.7332-7-krzk@kernel.org>
- <20200923115201.GD1846003@ulmo>
- <CAJKOXPcZuonCBK1Fc9r=rHzOL02MArrsE=R4x1tWGqov2nP0fA@mail.gmail.com>
+        Wed, 23 Sep 2020 11:22:38 -0400
+X-Greylist: delayed 714 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 11:22:37 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1600874556;
+        s=strato-dkim-0002; d=reintjes.nrw;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=R7hI6d/NmZuNcg1vUXN4expafaD5dS9k1NOlJgVsfQ0=;
+        b=dp1Mqe/64HM6YGzNzDXBEueF2uqjSRXsh9r683SD7yUe6T9JvBM6sqMywZcovO8Qg1
+        fww3xowQG7M2UjpxOcIe0TQcF3oXBSC9CyeOcR4GnBImR8VQAeAJWw1WiXn8IijzQsN6
+        6CYz5MVtp3BLiWwwyTGjOq2HmQM8LWv9zt2aLH+DBjFjdhMUB/svYpWhY/ZmGVPYJf3B
+        5XuMt1QDbe0lARAfiDzgRPGLIky4s7vRHiej5pvUrGm0p+0ZFqZnFM7WQJsgFVxycdAr
+        wcHZg2PO7WTSlkBBmGIhgqm6L1zaTf6Ny+VAi+h0GqwvXnWaJMK+3fe7DzBbhgIfJGJr
+        zHlw==
+X-RZG-AUTH: ":IGUXYVP6Ne1lB7nQNv+YSUx4qaxF0YAcTeeZr8criwvl+4OoAsy1YB7b8FzONHo5ckdw3KGGkZZ/Zu8="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.0.198]
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id Y04b60w8NFAYy22
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 23 Sep 2020 17:10:34 +0200 (CEST)
+Subject: Re: [PATCH 00/14] drop double zeroing
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     linux-serial@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-block@vger.kernel.org,
+        Yossi Leybovich <sleybo@amazon.com>,
+        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        rds-devel@oss.oracle.com
+References: <1600601186-7420-1-git-send-email-Julia.Lawall@inria.fr>
+ <160070750168.56292.17961674601916397869.b4-ty@kernel.org>
+From:   Rolf Reintjes <lists2.rolf@reintjes.nrw>
+Message-ID: <c3b33526-936d-ffa4-c301-4d0485822be1@reintjes.nrw>
+Date:   Wed, 23 Sep 2020 17:10:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SxgehGEc6vB0cZwN"
-Content-Disposition: inline
-In-Reply-To: <CAJKOXPcZuonCBK1Fc9r=rHzOL02MArrsE=R4x1tWGqov2nP0fA@mail.gmail.com>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+In-Reply-To: <160070750168.56292.17961674601916397869.b4-ty@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hello Mark,
 
---SxgehGEc6vB0cZwN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 21.09.20 18:58, Mark Brown wrote:
+> On Sun, 20 Sep 2020 13:26:12 +0200, Julia Lawall wrote:
+>> sg_init_table zeroes its first argument, so the allocation of that argument
+>> doesn't have to.
+> 
+> Applied to
+> 
+>     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
 
-On Wed, Sep 23, 2020 at 04:08:53PM +0200, Krzysztof Kozlowski wrote:
-> On Wed, 23 Sep 2020 at 13:52, Thierry Reding <thierry.reding@gmail.com> w=
-rote:
-> >
-> > On Tue, Aug 25, 2020 at 09:35:23PM +0200, Krzysztof Kozlowski wrote:
-> > > DTSes with new i.MX 8M SoCs introduce their own compatibles so add th=
-em
-> > > to fix dtbs_check warnings like:
-> > >
-> > >   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
-> > >     compatible:0: 'fsl,imx8mm-pwm' is not one of ['fsl,imx1-pwm', 'fs=
-l,imx27-pwm']
-> > >     From schema: Documentation/devicetree/bindings/pwm/imx-pwm.yaml
-> > >
-> > >   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
-> > >     compatible: ['fsl,imx8mm-pwm', 'fsl,imx27-pwm'] is too long
-> > >
-> > >   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
-> > >     compatible: Additional items are not allowed ('fsl,imx27-pwm' was=
- unexpected)
-> > >
-> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > ---
-> > >  Documentation/devicetree/bindings/pwm/imx-pwm.yaml | 14 +++++++++++-=
---
-> > >  1 file changed, 11 insertions(+), 3 deletions(-)
-> >
-> > Applied, thanks.
->=20
-> Thanks Thierry, but this was already picked up by Rob into DT tree.
+I do not understand which of the 14 patches you applied. Your mail 
+responds to the 00/14 mail.
 
-I hadn't seen any email and since Rob had given a reviewed-by I assumed
-this was supposed to be picked up into subsystem trees. I'll drop it
-again.
+Rolf
 
-Thierry
+> 
+> [1/1] spi/topcliff-pch: drop double zeroing
+>        commit: ca03dba30f2b8ff45a2972c6691e4c96d8c52b3b
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+> 
+> Thanks,
+> Mark
+> 
 
---SxgehGEc6vB0cZwN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9rWG8ACgkQ3SOs138+
-s6FYZA/+J5rgjcPTqcNSA6/9QwG56DhiJV6FV2eQhf5UbL1l2RFHvVGpAnZxjxM7
-UFP1CVWZIFEYJlXCAjEjHeKrz8wz/M8+j2UYqzCnew7XwH2QOKvJRiQYyjMzJyLh
-Z9AI7zgkZXqz0xH+WIjkynmWnoz1jZw2Ct331f2jaPHmkD4B2CURyhkVtVNhW0Kr
-5Vq8t7NQ7tqQjh2+q4cxf6ge1zc1J2PCNNdc6MDdTHFTBhpqGp4IF7Sx7aMq79OT
-/JtEp0TZohhPUXtkDl1ZghDzryf9pksNOf+HwgpgrbrbZl5tP0y2K3TL+9uIXjfT
-6clna7VIx9ofQpnAeL1RzJMGM93laLOpvdcAj02cgUcNcOU3Bj3oVGBx076M8WyA
-i58nto1/wlQEcZzlMcQigyNCFWu6nhXjebM5U9WdEWAm9xkGv4OSbHQw7ZV7TM8b
-JI334Uvholn1f99bt3JosCAOYTV/88sn4Px8SAxvwGy6EttBPKdnUvBwZdk86xTa
-eKbDtGkvF2pFAgaO7ylV2ADQnVW+A3JEXF+RbT/u5jiFiHUEz8XncHiJmB+e4xrf
-4W3V2QqbWkF6y7BQ+OaNYk98m5dkNE/e7kSCdXcmjjJwazDunejXvQvnNDr70LIP
-oNqvMzEtfA0q5K2Fee3TyE31GBycFO3i6PjxrIad0PsInjVV2Ok=
-=J7v2
------END PGP SIGNATURE-----
-
---SxgehGEc6vB0cZwN--
