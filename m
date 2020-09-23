@@ -2,86 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFA7275B61
-	for <lists+linux-serial@lfdr.de>; Wed, 23 Sep 2020 17:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A182275C3E
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Sep 2020 17:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgIWPRQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 23 Sep 2020 11:17:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbgIWPRP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 23 Sep 2020 11:17:15 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6077C2075B;
-        Wed, 23 Sep 2020 15:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600874234;
-        bh=/QQofHRADGAYxOtJIce3d38QkMvme+6u661AK0sTIww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qaL+99AxNSM+PUkApT/4Pupcbe3cWXnIOAQs/ZT35oiBfgpa53MHX/m6TMpBock3a
-         fQSnODIgnUVdnSkWJ0pBplNyHoTqkHuo7hhaFUgOEQ4u+Awe/y3f+CYmaRRBSsJrRv
-         ycipz9I2nQvfISAkNRMDRLNIxu8SAq09SP1ymhKs=
-Date:   Wed, 23 Sep 2020 16:16:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rolf Reintjes <lists2.rolf@reintjes.nrw>
-Cc:     linux-spi@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        linux-serial@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-block@vger.kernel.org,
-        Yossi Leybovich <sleybo@amazon.com>,
-        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        rds-devel@oss.oracle.com
-Subject: Re: [PATCH 00/14] drop double zeroing
-Message-ID: <20200923151620.GC5707@sirena.org.uk>
-References: <1600601186-7420-1-git-send-email-Julia.Lawall@inria.fr>
- <160070750168.56292.17961674601916397869.b4-ty@kernel.org>
- <c3b33526-936d-ffa4-c301-4d0485822be1@reintjes.nrw>
+        id S1726704AbgIWPnQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 23 Sep 2020 11:43:16 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:55765 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWPnN (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 23 Sep 2020 11:43:13 -0400
+X-Greylist: delayed 759 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 11:43:11 EDT
+Received: from mail-qt1-f179.google.com ([209.85.160.179]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Ma1D8-1k07xz2jWG-00Vviz; Wed, 23 Sep 2020 17:30:31 +0200
+Received: by mail-qt1-f179.google.com with SMTP id n10so213106qtv.3;
+        Wed, 23 Sep 2020 08:30:31 -0700 (PDT)
+X-Gm-Message-State: AOAM5307kOwsmtZfQPw3FcRZVF6R9vw0L9GcCOy6LgUSOHuw5dyGgvU0
+        MjRygTZVbVOkdKQKjboSOZ6llH1lEfK+GAYpFRQ=
+X-Google-Smtp-Source: ABdhPJyx3khV9ouMU1lDxgVnLoI4g4YiXmj0IB5rW6IHWN5WF61DmY8GCOsbNySmlU3CqZ9ohZGbz8tecEaKsFKwVrg=
+X-Received: by 2002:aed:3825:: with SMTP id j34mr581207qte.7.1600875030304;
+ Wed, 23 Sep 2020 08:30:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NU0Ex4SbNnrxsi6C"
-Content-Disposition: inline
-In-Reply-To: <c3b33526-936d-ffa4-c301-4d0485822be1@reintjes.nrw>
-X-Cookie: This report is filled with omissions.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200923151511.3842150-1-luzmaximilian@gmail.com>
+In-Reply-To: <20200923151511.3842150-1-luzmaximilian@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Sep 2020 17:30:14 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Qie_CP1dA-ERqyDv=EnaQQPnNbFYrGr3ySiY4mO0=Uw@mail.gmail.com>
+Message-ID: <CAK8P3a3Qie_CP1dA-ERqyDv=EnaQQPnNbFYrGr3ySiY4mO0=Uw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/9] Add support for Microsoft Surface System
+ Aggregator Module
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-serial@vger.kernel.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        =?UTF-8?Q?Bla=C5=BE_Hrastnik?= <blaz@mxxn.io>,
+        Dorian Stoll <dorian.stoll@tmsp.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:8N6geTkfnb188B0H6aGTVMbLl+suW/kEDmJPmYACXe0NZkdkx0T
+ 0Iv2eSBTrpLTjcbWGFtPZHXyFUfmrt8b0CJkQJF2lY/YoKl0dQNRDrdi90q9vhoJ27ekbYP
+ hnW2az5XXGHgmYbfrY84iNXFQOJz+JzUT0qfZRzG4VUP3VKySlOg44mLtJUbKQosYp1iOGO
+ 3TMl/2A6NXe2AN8sMKM5g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Phmjv88EpoY=:qh7cV9XqbHbulKPMwD2F5s
+ zHsyLfRN3Fh2puLdmoowscMMpUGiOvzzQo8bM2cCn/gBrqV0mjGWRHsHvFBb8VnOW0GigHUZo
+ GUFe25jnD7JY6XyTlQKaxEUQzIcQEhqlvS06ClJR09pzNJvw4O0zL2AATkgI1dS5g4im+fwWb
+ SWnPYsw7U9jlAUYIl90b3X2CfJzoh5nvy/VBDrvx4uvwoX4a7WAUmg5bYCquM2EFn5QXarVik
+ KDq4dzSujWheHxy5zk0B1SueNbykdfSRVLh5DZopAb7qPScalHPnOooxftvoAUcAbDlsUlNu9
+ oLq71PInBmAzV/mUrxBkiJ0n3Y/NUKmRXjt2JRzHv+hZLP81VYQDvibtpYWyAUIq1USGyV9Ez
+ +RSQ/CZkrEuC5LpI5xnSiJCOmxvZe8WpTA1epGtg4bDl3wclyeMvO92F8mhnWsGBwS8g0J0LY
+ k9NmpHaqkjHeCO8oBwOVz5+g15Fld5nADR1fVgka0SIBC5WPzfEWcR24KAiFdMhekUQPNFr56
+ JKPRMf87ni+FQO8n3F3Wy9TJzL0NmrgvtVN0kbaLBNuSve86jkyvie8r4qydwLJ1Q+lwddk+Y
+ ox24ozYlxLbERWa6didUOq6C9yqGoyVYjcD1A84LztqpymFS7LANPE1buQ7OSYX0vBUzYQ5Dy
+ ZmndrBCCgjDhVDthRiMFj1kX9nOL6asV4NUl3PLEqxiY1BpYkLBmQLBDm9rdcETsvrszcW9By
+ sGRI6jJHFb5WbWCBO9FPCIp3KS5eMMEJnYwKoHQYiYuWK+kbn8H1d/FH01bSqDj4gePvaL7xy
+ 1V4ezojlyv8lBa+VGcS5HIOif9YNpaGFhJZ6BjIgJSRa1lWEG/W1s5gQHd/CBQw0p8nXPDg
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Wed, Sep 23, 2020 at 5:15 PM Maximilian Luz <luzmaximilian@gmail.com> wrote:
+>
+> Hello,
+>
+> The Surface System Aggregator Module (we'll refer to it as Surface
+> Aggregator or SAM below) is an embedded controller (EC) found on various
+> Microsoft Surface devices. Specifically, all 4th and later generation
+> Surface devices, i.e. Surface Pro 4, Surface Book 1 and later, with the
+> exception of the Surface Go series and the Surface Duo. Notably, it
+> seems like this EC can also be found on the ARM-based Surface Pro X [1].
 
---NU0Ex4SbNnrxsi6C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think this should go to drivers/platform/x86 or drivers/platform/surface/
+along with other laptop vendor specific code rather than drivers/misc/.
 
-On Wed, Sep 23, 2020 at 05:10:33PM +0200, Rolf Reintjes wrote:
-> On 21.09.20 18:58, Mark Brown wrote:
+I'll have a look at the code myself, but I'd prefer to have the maintainers
+for the other laptop drivers review this properly.
 
-> I do not understand which of the 14 patches you applied. Your mail responds
-> to the 00/14 mail.
-
-As the mail you're replying to says:
-
-> > [1/1] spi/topcliff-pch: drop double zeroing
-> >        commit: ca03dba30f2b8ff45a2972c6691e4c96d8c52b3b
-
---NU0Ex4SbNnrxsi6C
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9rZsMACgkQJNaLcl1U
-h9AxAgf/UlZBlBEQmArmMghyqM+HNmgNqZcFWWNnNQSmBBrgl8128+pLwAgIeZLw
-0l6J3hL0JAr1ozAMpm1RGS/xj2CD8a6QFiRw+9wAgL9eY3DAdognRwtwLJlW6zq3
-nj2VF+7+R6LhZGxqub8TnxUZLSdlop3wn9ZuAnTRZjjhPq2iidr4iYPWYsGqo+j5
-svVy+eYILC3/Y6X31PpT2OXujQXkrrCGlONZz2ieOMTLSLNQhL8pZh8tkJB9s/F5
-U60+SPDeI7yrVh6k5/iCldI5JHQyjXAmHza4R6BzKTc6kgSDvUlzrVOZxw1aaGy+
-EFLE4qdwQYEPaeRMZ+XVpSUbf3dGUw==
-=Rrao
------END PGP SIGNATURE-----
-
---NU0Ex4SbNnrxsi6C--
+       Arnd
