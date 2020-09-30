@@ -2,102 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B98727E0D2
-	for <lists+linux-serial@lfdr.de>; Wed, 30 Sep 2020 08:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87AB27E1A6
+	for <lists+linux-serial@lfdr.de>; Wed, 30 Sep 2020 08:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725385AbgI3GFp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 30 Sep 2020 02:05:45 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:4091 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgI3GFp (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 30 Sep 2020 02:05:45 -0400
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 29 Sep 2020 23:05:44 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 29 Sep 2020 23:05:42 -0700
-X-QCInternal: smtphost
-Received: from parashar-linux.qualcomm.com ([10.206.13.63])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 30 Sep 2020 11:35:29 +0530
-Received: by parashar-linux.qualcomm.com (Postfix, from userid 2363307)
-        id 03CE1213D0; Wed, 30 Sep 2020 11:35:27 +0530 (IST)
-From:   Paras Sharma <parashar@codeaurora.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1728031AbgI3Gsf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 30 Sep 2020 02:48:35 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:19383 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725776AbgI3Gsf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 30 Sep 2020 02:48:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1601448514; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=0Cg0ycDtO+B0XeEyD60ZAnUts/W0lzugMtbQ+pnKkhA=; b=v/d/IXaxAdCWHAPoTeTykshQIhW7UtZby/OjNcYE07UNW5l5PmUSyR+UBctPwkcBfAeo5uai
+ 3nfkRpryxO7Wlglfpj3KbxpmMtFTLjv54Zze4z4eGJdn9hU1cnjNI6pPLmaOiBCi2+IZnJia
+ cdBmQ91FMYTBEd+xv1Ib2yhYCZY=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyIzZmY0MiIsICJsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5f742a4259892db41fe3ff08 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 30 Sep 2020 06:48:34
+ GMT
+Sender: akashast=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C399DC433FE; Wed, 30 Sep 2020 06:48:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.43.98] (unknown [47.8.99.116])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B640FC433CA;
+        Wed, 30 Sep 2020 06:48:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B640FC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V6] serial: qcom_geni_serial: To correct QUP Version
+ detection logic
+To:     Paras Sharma <parashar@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Jiri Slaby <jslaby@suse.com>, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akashast@codeaurora.org, Paras Sharma <parashar@codeaurora.org>
-Subject: [PATCH V6] serial: qcom_geni_serial: To correct QUP Version detection logic
-Date:   Wed, 30 Sep 2020 11:35:26 +0530
-Message-Id: <1601445926-23673-1-git-send-email-parashar@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1601445926-23673-1-git-send-email-parashar@codeaurora.org>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <a0a560c5-8ff5-6c5e-d313-fb77c2631a7e@codeaurora.org>
+Date:   Wed, 30 Sep 2020 12:18:14 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <1601445926-23673-1-git-send-email-parashar@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-For QUP IP versions 2.5 and above the oversampling rate is
-halved from 32 to 16.
 
-Commit ce734600545f ("tty: serial: qcom_geni_serial: Update
-the oversampling rate") is pushed to handle this scenario.
-But the existing logic is failing to classify QUP Version 3.0
-into the correct group ( 2.5 and above).
+On 9/30/2020 11:35 AM, Paras Sharma wrote:
+> For QUP IP versions 2.5 and above the oversampling rate is
+> halved from 32 to 16.
+>
+> Commit ce734600545f ("tty: serial: qcom_geni_serial: Update
+> the oversampling rate") is pushed to handle this scenario.
+> But the existing logic is failing to classify QUP Version 3.0
+> into the correct group ( 2.5 and above).
+>
+> As result Serial Engine clocks are not configured properly for
+> baud rate and garbage data is sampled to FIFOs from the line.
+>
+> So, fix the logic to detect QUP with versions 2.5 and above.
+>
+> Fixes: ce734600545f ("tty: serial: qcom_geni_serial: Update the oversampling rate")
+> Signed-off-by: Paras Sharma <parashar@codeaurora.org>
+Reviewed-by: Akash Asthana <akashast@codeaurora.org>
 
-As result Serial Engine clocks are not configured properly for
-baud rate and garbage data is sampled to FIFOs from the line.
-
-So, fix the logic to detect QUP with versions 2.5 and above.
-
-Fixes: ce734600545f ("tty: serial: qcom_geni_serial: Update the oversampling rate")
-Signed-off-by: Paras Sharma <parashar@codeaurora.org>
----
-Changes in V6:
-Removed newline unneeded change
-
-Changes in V5:
-Moved QUP_SE_VERSION_2_5 to common header file qcom-geni-se.h
-
-Changes in V4:
-Created a new #define QUP_SE_VERSION_2_5 for Qup serial engine having version 2.5
-
-Changes in V3:
-Replaced the condition for detecting Qup version(2.5 or greater) with value 0x20050000
-
-Changes in V2:
-Changed subject line and logic for checking Qup version
-
- drivers/tty/serial/qcom_geni_serial.c | 2 +-
- include/linux/qcom-geni-se.h          | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index f0b1b47..464ffc9 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1000,7 +1000,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
- 	sampling_rate = UART_OVERSAMPLING;
- 	/* Sampling rate is halved for IP versions >= 2.5 */
- 	ver = geni_se_get_qup_hw_version(&port->se);
--	if (GENI_SE_VERSION_MAJOR(ver) >= 2 && GENI_SE_VERSION_MINOR(ver) >= 5)
-+	if (ver >= QUP_SE_VERSION_2_5)
- 		sampling_rate /= 2;
- 
- 	clk_rate = get_clk_div_rate(baud, sampling_rate, &clk_div);
-diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-index 8f385fb..1c31f26 100644
---- a/include/linux/qcom-geni-se.h
-+++ b/include/linux/qcom-geni-se.h
-@@ -248,6 +248,9 @@ struct geni_se {
- #define GENI_SE_VERSION_MINOR(ver) ((ver & HW_VER_MINOR_MASK) >> HW_VER_MINOR_SHFT)
- #define GENI_SE_VERSION_STEP(ver) (ver & HW_VER_STEP_MASK)
- 
-+/* QUP SE VERSION value for major number 2 and minor number 5 */
-+#define QUP_SE_VERSION_2_5                  0x20050000
-+
- /*
-  * Define bandwidth thresholds that cause the underlying Core 2X interconnect
-  * clock to run at the named frequency. These baseline values are recommended
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
 
