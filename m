@@ -2,91 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 473142814A3
-	for <lists+linux-serial@lfdr.de>; Fri,  2 Oct 2020 16:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9DB281BDD
+	for <lists+linux-serial@lfdr.de>; Fri,  2 Oct 2020 21:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387998AbgJBOG1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 2 Oct 2020 10:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbgJBOG1 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 2 Oct 2020 10:06:27 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB014C0613D0
-        for <linux-serial@vger.kernel.org>; Fri,  2 Oct 2020 07:06:26 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id g4so1978645wrs.5
-        for <linux-serial@vger.kernel.org>; Fri, 02 Oct 2020 07:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4fQ1P5i5+5RX6Ky3j9bVO0oPaRJ1iFiFSHZs5cmAqj0=;
-        b=WK4Ko0HqIW2wK28lL7drmURbz9MXJaRbpEORGAEYkctjVAswsSnF1l/hwk/nC4LtkU
-         uPjuofNghmyanXg9OgOoSOQmG1LyjNFKfFJiL/ahjGT1t2Jx6v0KyS00DdlkwrYMnykF
-         sBWiNXhd0lcctZZIH4WKNGUuy6mGg+hD9BIjWVN++uORr1rrktKv8r5uxF4xhshclKgO
-         oKtJE/kRkZVvCVXFHwDVV824EeZZIxqsGcJXvwzdnygbkBYdb/nM0JjdFzujWpCwDoBi
-         LDUPobK9PKq4NTwbT8NwzxF7Db7nC5oiaBdjO1f6KOG+3RzXNjCMAu6pQieSmwlCbl8G
-         r7HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4fQ1P5i5+5RX6Ky3j9bVO0oPaRJ1iFiFSHZs5cmAqj0=;
-        b=a+ugyvGlnrbhso9NQuBdO0E3fTRu3XDcQPIHvJAMjnC0EwwqUrTltyzplTVLDvLXKq
-         IFsUvhRwpL8tunmyiOAXSIAZQzDi985aidIZlgwPDCfTQRMQSa8Nn5rTpcd2NdyKjcHq
-         HMhCQlmcbNrcnhL/8XdO+d2G4Uo71bd2lZjeHJEmU12pCt4wzCPgy5zl/7t2yi/twNw3
-         WWtjeDcjofQSIXT+qqXTh7RC/J+x0/NGvFr80yr44c0YgOv9VCb6WD270uG7EvTUxj67
-         qZzfjF79LSFluFmXWw5k/s3wkgLdMTq/xDMjY7o82fHx/nuABbt7ivlQPF3+7OK4gyAM
-         5dcg==
-X-Gm-Message-State: AOAM5339TOhu2SbP14J5VRwrMHJ8dv/vKmW4aBtK/0aO4j6290pzTl69
-        xftlGfNBBHVMYzJ6HQb9w7o21gey3q8VRL3B
-X-Google-Smtp-Source: ABdhPJykOE5JVtgyIOO2Io09nDK76PBiy+WKwOcX92EL0YVJBnhO+iOvb1AXmQ4sbI+HthIuSrHHSQ==
-X-Received: by 2002:adf:efc9:: with SMTP id i9mr3411669wrp.187.1601647585512;
-        Fri, 02 Oct 2020 07:06:25 -0700 (PDT)
-Received: from dfj.4.4.4.4 (host-79-20-236-235.retail.telecomitalia.it. [79.20.236.235])
-        by smtp.gmail.com with ESMTPSA id d2sm1917690wro.34.2020.10.02.07.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2020 07:06:25 -0700 (PDT)
-From:   Angelo Dureghello <angelo.dureghello@timesys.com>
-To:     gerg@linux-m68k.org, gregkh@linuxfoundation.org
-Cc:     linux-m68k@vger.kernel.org, linux-serial@vger.kernel.org,
-        Angelo Dureghello <angelo.dureghello@timesys.com>
-Subject: [PATCH] serial: mcf: add sysrq capability
-Date:   Fri,  2 Oct 2020 16:05:45 +0200
-Message-Id: <20201002140545.477481-1-angelo.dureghello@timesys.com>
-X-Mailer: git-send-email 2.28.0
+        id S2388604AbgJBTXa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 2 Oct 2020 15:23:30 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:50644 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388599AbgJBTX3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:23:29 -0400
+X-Greylist: delayed 550 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:23:29 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 4439F62AB4
+        for <linux-serial@vger.kernel.org>; Fri,  2 Oct 2020 22:14:15 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 258B862AAB
+        for <linux-serial@vger.kernel.org>; Fri,  2 Oct 2020 22:14:15 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id C7EDA62A00; Fri,  2 Oct 2020 22:14:13 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.50])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 60954622E9;
+        Fri,  2 Oct 2020 22:14:07 +0300 (EEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Fri, 02 Oct 2020 16:14:00 -0300
+Reply-To: binmurrah@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201002191413.C7EDA62A00@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan.
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201002 notchecked
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-After some unsuccessful attempts to use sysrq over console, figured
-out that port->has_sysrq should likely be enabled, as per other
-architectures, this when CONFIG_SERIAL_MCF_CONSOLE is also enabled.
+Hello Dear,
 
-Tested some magic sysrq commands (h, p, t, b), they works now
-properly. Commands works inside 5 secs after BREAK is sent, as
-expected.
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-Signed-off-by: Angelo Dureghello <angelo.dureghello@timesys.com>
----
- drivers/tty/serial/mcf.c | 1 +
- 1 file changed, 1 insertion(+)
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
 
-diff --git a/drivers/tty/serial/mcf.c b/drivers/tty/serial/mcf.c
-index 7dbfb4cde124..09c88c48fb7b 100644
---- a/drivers/tty/serial/mcf.c
-+++ b/drivers/tty/serial/mcf.c
-@@ -632,6 +632,7 @@ static int mcf_probe(struct platform_device *pdev)
- 		port->ops = &mcf_uart_ops;
- 		port->flags = UPF_BOOT_AUTOCONF;
- 		port->rs485_config = mcf_config_rs485;
-+		port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_MCF_CONSOLE);
- 
- 		uart_add_one_port(&mcf_driver, port);
- 	}
--- 
-2.28.0
+Please get back to me if you are interested for more
+details.
 
+Yours faithfully,
+Hashim Bin 
