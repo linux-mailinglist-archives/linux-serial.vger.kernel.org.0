@@ -2,81 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3D0285B37
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Oct 2020 10:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5002285D30
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Oct 2020 12:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbgJGIsL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 7 Oct 2020 04:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727914AbgJGIsL (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 7 Oct 2020 04:48:11 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38519C061755
-        for <linux-serial@vger.kernel.org>; Wed,  7 Oct 2020 01:48:11 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id e10so968562pfj.1
-        for <linux-serial@vger.kernel.org>; Wed, 07 Oct 2020 01:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ik1oEgp1T80byoGqbNiNVs/dfMtf5Ch/lCaFFQ9eyAE=;
-        b=PFms68HcnqBXElED5VebUwLLrk07JKpOP4LpCSRGt56Ga6lW27Qu3bxqSKxgRKHimK
-         jGs45MyVpC6OqQdx6u8YjZOgDv10Ckff1s0dJxBuZ1bkFJ0fUve+mBgi0TZ6cW2EhZjH
-         dKDgcwvnHzjkPS0XB2GCbsHJ4mgWSGUltIA036/eBOhPk8mJahi/2bVWqPissuSjrizr
-         IjhUhb5j7UzJojln1a805NQa700MV84EQzvd4gxuFpuH08LSpnB1xLZUvsuO1crKAgpz
-         NL1VecY6vpAeHCfMBnZJKeAfr7iphQXaKl5BOoR8ZK2JqWqM2egC2+Hd88uQGQRNEwOD
-         oi6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ik1oEgp1T80byoGqbNiNVs/dfMtf5Ch/lCaFFQ9eyAE=;
-        b=pcI7D0hScDYHUltz5WO24/YWzh2q7aHOjJMeI508KKLSWFvL02i9DBacw5zgoKp7Iy
-         kOcyTnkTGg08INTEB2y4MPkG6ueTwE5dLO1x+atdd4h4fT+dUe6SopPm18Pfj6BRCs1W
-         5ZrB0Chyy/h9FTuK1LxjNhJjHmiA0TBHkvMERMF3f1HvK9nEa1n3p2/b9iRlnaQfO8sO
-         NEr9ZqcZ0p0pAeNrDVdxMxYES2RGb/41j9D5ONsDQW/iNEkGHItQfkvolAEc+1ejYfAh
-         H1Gw5hoKedCF4s1LuKK4SO9etDUpqNQUpFhbyMpRSffM3koxEASRP4v6HEqPKkGZ4pzb
-         B+KQ==
-X-Gm-Message-State: AOAM533ubRFF/mXV1MHr/jL/7tLAGc76z1KaRX4ttDeqEEP0Vc+73K4D
-        Ag1IM1tobdtROZrWspeuxm0+xrFY5VKagQDTuVWKFzH0RzyLpA==
-X-Google-Smtp-Source: ABdhPJwbBbEDLQvJ4NcrpQ56/t2yyVRTEpv7z42yUUyygJlU0zvrFPFqfzZ1jO//hym/AQATbUHeve+7ikDeErCdCe0=
-X-Received: by 2002:a63:ec4c:: with SMTP id r12mr2081411pgj.74.1602060490711;
- Wed, 07 Oct 2020 01:48:10 -0700 (PDT)
+        id S1728187AbgJGKtU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Wed, 7 Oct 2020 06:49:20 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:55594 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727534AbgJGKtU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:49:20 -0400
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 3CB0A635E5
+        for <linux-serial@vger.kernel.org>; Wed,  7 Oct 2020 13:49:13 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id EFF2163507
+        for <linux-serial@vger.kernel.org>; Wed,  7 Oct 2020 13:49:12 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 844396308C; Wed,  7 Oct 2020 13:49:11 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id CDCB05E75C;
+        Wed,  7 Oct 2020 13:49:04 +0300 (EEST)
 MIME-Version: 1.0
-References: <20201006222222.583254-1-andy.shevchenko@gmail.com> <20201007073232.GB340590@kroah.com>
-In-Reply-To: <20201007073232.GB340590@kroah.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Oct 2020 11:47:54 +0300
-Message-ID: <CAHp75VcHyH9vu7-hW2w36WLBpjRLyffDyyt9Cn0_PHzTw+kXeg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] serial: max310x: Make use of device properties
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Wed, 07 Oct 2020 07:48:57 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201007104911.844396308C@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./mmm,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201007 notchecked
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 10:31 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Wed, Oct 07, 2020 at 01:22:21AM +0300, Andy Shevchenko wrote:
-> > Device property API allows to gather device resources from different sources,
-> > such as ACPI. Convert the drivers to unleash the power of device property API.
-
-> Did you send 2 copies of this patch series?
-
-Sorry for that. I had issues with local MTA, now fixed.
-
-> Which is correct?
-
-Any, but...
-
-> I'll drop both and wait for a v2 :)
-
-...just sent a v2, thanks!
+Hello Dear,
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+
+
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+
+
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
