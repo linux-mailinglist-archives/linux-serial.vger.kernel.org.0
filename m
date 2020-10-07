@@ -2,97 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF92285B0B
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Oct 2020 10:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3D0285B37
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Oct 2020 10:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgJGIqo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 7 Oct 2020 04:46:44 -0400
-Received: from fgw20-7.mail.saunalahti.fi ([62.142.5.81]:15516 "EHLO
-        fgw20-7.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728030AbgJGIql (ORCPT
+        id S1726218AbgJGIsL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 7 Oct 2020 04:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727914AbgJGIsL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 7 Oct 2020 04:46:41 -0400
-Received: from localhost (88-115-248-186.elisa-laajakaista.fi [88.115.248.186])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 9d8383c7-0879-11eb-ba23-005056bd6ce9;
-        Wed, 07 Oct 2020 11:46:39 +0300 (EEST)
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 2/2] serial: max310x: Use devm_clk_get_optional() to get the input clock
-Date:   Wed,  7 Oct 2020 11:46:35 +0300
-Message-Id: <20201007084635.594991-2-andy.shevchenko@gmail.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201007084635.594991-1-andy.shevchenko@gmail.com>
-References: <20201007084635.594991-1-andy.shevchenko@gmail.com>
+        Wed, 7 Oct 2020 04:48:11 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38519C061755
+        for <linux-serial@vger.kernel.org>; Wed,  7 Oct 2020 01:48:11 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id e10so968562pfj.1
+        for <linux-serial@vger.kernel.org>; Wed, 07 Oct 2020 01:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ik1oEgp1T80byoGqbNiNVs/dfMtf5Ch/lCaFFQ9eyAE=;
+        b=PFms68HcnqBXElED5VebUwLLrk07JKpOP4LpCSRGt56Ga6lW27Qu3bxqSKxgRKHimK
+         jGs45MyVpC6OqQdx6u8YjZOgDv10Ckff1s0dJxBuZ1bkFJ0fUve+mBgi0TZ6cW2EhZjH
+         dKDgcwvnHzjkPS0XB2GCbsHJ4mgWSGUltIA036/eBOhPk8mJahi/2bVWqPissuSjrizr
+         IjhUhb5j7UzJojln1a805NQa700MV84EQzvd4gxuFpuH08LSpnB1xLZUvsuO1crKAgpz
+         NL1VecY6vpAeHCfMBnZJKeAfr7iphQXaKl5BOoR8ZK2JqWqM2egC2+Hd88uQGQRNEwOD
+         oi6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ik1oEgp1T80byoGqbNiNVs/dfMtf5Ch/lCaFFQ9eyAE=;
+        b=pcI7D0hScDYHUltz5WO24/YWzh2q7aHOjJMeI508KKLSWFvL02i9DBacw5zgoKp7Iy
+         kOcyTnkTGg08INTEB2y4MPkG6ueTwE5dLO1x+atdd4h4fT+dUe6SopPm18Pfj6BRCs1W
+         5ZrB0Chyy/h9FTuK1LxjNhJjHmiA0TBHkvMERMF3f1HvK9nEa1n3p2/b9iRlnaQfO8sO
+         NEr9ZqcZ0p0pAeNrDVdxMxYES2RGb/41j9D5ONsDQW/iNEkGHItQfkvolAEc+1ejYfAh
+         H1Gw5hoKedCF4s1LuKK4SO9etDUpqNQUpFhbyMpRSffM3koxEASRP4v6HEqPKkGZ4pzb
+         B+KQ==
+X-Gm-Message-State: AOAM533ubRFF/mXV1MHr/jL/7tLAGc76z1KaRX4ttDeqEEP0Vc+73K4D
+        Ag1IM1tobdtROZrWspeuxm0+xrFY5VKagQDTuVWKFzH0RzyLpA==
+X-Google-Smtp-Source: ABdhPJwbBbEDLQvJ4NcrpQ56/t2yyVRTEpv7z42yUUyygJlU0zvrFPFqfzZ1jO//hym/AQATbUHeve+7ikDeErCdCe0=
+X-Received: by 2002:a63:ec4c:: with SMTP id r12mr2081411pgj.74.1602060490711;
+ Wed, 07 Oct 2020 01:48:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201006222222.583254-1-andy.shevchenko@gmail.com> <20201007073232.GB340590@kroah.com>
+In-Reply-To: <20201007073232.GB340590@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Oct 2020 11:47:54 +0300
+Message-ID: <CAHp75VcHyH9vu7-hW2w36WLBpjRLyffDyyt9Cn0_PHzTw+kXeg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] serial: max310x: Make use of device properties
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Simplify the code which fetches the input clock by using
-devm_clk_get_optional(). If no input clock is present
-devm_clk_get_optional() will return NULL instead of an error
-which matches the behavior of the old code.
+On Wed, Oct 7, 2020 at 10:31 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Wed, Oct 07, 2020 at 01:22:21AM +0300, Andy Shevchenko wrote:
+> > Device property API allows to gather device resources from different sources,
+> > such as ACPI. Convert the drivers to unleash the power of device property API.
 
-Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- drivers/tty/serial/max310x.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+> Did you send 2 copies of this patch series?
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index f25b9516109c..9795b2e8b0b2 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -1273,7 +1273,6 @@ static int max310x_probe(struct device *dev, const struct max310x_devtype *devty
- 			 struct regmap *regmap, int irq)
- {
- 	int i, ret, fmin, fmax, freq, uartclk;
--	struct clk *clk_osc, *clk_xtal;
- 	struct max310x_port *s;
- 	bool xtal = false;
- 
-@@ -1287,23 +1286,24 @@ static int max310x_probe(struct device *dev, const struct max310x_devtype *devty
- 		return -ENOMEM;
- 	}
- 
--	clk_osc = devm_clk_get(dev, "osc");
--	clk_xtal = devm_clk_get(dev, "xtal");
--	if (!IS_ERR(clk_osc)) {
--		s->clk = clk_osc;
-+	s->clk = devm_clk_get_optional(dev, "osc");
-+	if (IS_ERR(s->clk))
-+		return PTR_ERR(s->clk);
-+	if (s->clk) {
- 		fmin = 500000;
- 		fmax = 35000000;
--	} else if (!IS_ERR(clk_xtal)) {
--		s->clk = clk_xtal;
--		fmin = 1000000;
--		fmax = 4000000;
--		xtal = true;
--	} else if (PTR_ERR(clk_osc) == -EPROBE_DEFER ||
--		   PTR_ERR(clk_xtal) == -EPROBE_DEFER) {
--		return -EPROBE_DEFER;
- 	} else {
--		dev_err(dev, "Cannot get clock\n");
--		return -EINVAL;
-+		s->clk = devm_clk_get_optional(dev, "xtal");
-+		if (IS_ERR(s->clk))
-+			return PTR_ERR(s->clk);
-+		if (s->clk) {
-+			fmin = 1000000;
-+			fmax = 4000000;
-+			xtal = true;
-+		} else {
-+			dev_err(dev, "Cannot get clock\n");
-+			return -EINVAL;
-+		}
- 	}
- 
- 	ret = clk_prepare_enable(s->clk);
+Sorry for that. I had issues with local MTA, now fixed.
+
+> Which is correct?
+
+Any, but...
+
+> I'll drop both and wait for a v2 :)
+
+...just sent a v2, thanks!
+
+
 -- 
-2.28.0
-
+With Best Regards,
+Andy Shevchenko
