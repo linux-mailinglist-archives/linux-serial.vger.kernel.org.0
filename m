@@ -2,55 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EAA2891C1
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Oct 2020 21:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3DF28B4AD
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Oct 2020 14:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390681AbgJITcv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Fri, 9 Oct 2020 15:32:51 -0400
-Received: from mail.csu.ru ([195.54.14.68]:53459 "HELO mail.csu.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
-        id S2388639AbgJITcv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Oct 2020 15:32:51 -0400
-X-Greylist: delayed 536 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Oct 2020 15:32:40 EDT
-Received: from webmail.csu.ru (webmail.csu.ru [195.54.14.80])
-        (Authenticated sender: gmu)
-        by mail.csu.ru (Postfix) with ESMTPA id 73AB5146B81;
-        Sat, 10 Oct 2020 00:22:39 +0500 (+05)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.csu.ru 73AB5146B81
-Received: from 156.146.59.22
-        (SquirrelMail authenticated user gmu)
-        by webmail.csu.ru with HTTP;
-        Sat, 10 Oct 2020 00:22:42 +0500
-Message-ID: <f03bc418d983fb16630a7e9ee27fcfdc.squirrel@webmail.csu.ru>
-Date:   Sat, 10 Oct 2020 00:22:42 +0500
-Subject: Vorschlag
-From:   "Yi Huiman" <info@bsu.de>
-Reply-To: info@huiman.cf
-User-Agent: SquirrelMail/1.4.22
+        id S2388540AbgJLMeT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 12 Oct 2020 08:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388517AbgJLMeM (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 12 Oct 2020 08:34:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A51C0613D0
+        for <linux-serial@vger.kernel.org>; Mon, 12 Oct 2020 05:34:12 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kRx1f-0001Ew-N6; Mon, 12 Oct 2020 14:34:03 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kRx1c-0007Sl-Mz; Mon, 12 Oct 2020 14:34:00 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-leds@vger.kernel.org,
+        linux-serial@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v8 0/3] leds: trigger: implement a tty trigger
+Date:   Mon, 12 Oct 2020 14:33:55 +0200
+Message-Id: <20201012123358.1475928-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain;charset=iso-8859-1
-X-Priority: 3 (Normal)
-Importance: Normal
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 159051 [Oct 09 2020]
-X-KLMS-AntiSpam-Version: 5.9.11.0
-X-KLMS-AntiSpam-Envelope-From: info@bsu.de
-X-KLMS-AntiSpam-Auth: dmarc=none header.from=bsu.de;spf=none smtp.mailfrom=bsu.de;dkim=none
-X-KLMS-AntiSpam-Rate: 70
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Info: LuaCore: 381 381 faef97d3f9d8f5dd6a9feadc50ba5b34b9486c58, {rep_avail}, {Tracking_content_type, plain}, {Prob_reply_not_match_from}, {Prob_to_header_missing}, {Prob_Reply_to_without_To}, {Tracking_susp_macro_from_formal}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;webmail.csu.ru:7.1.1;127.0.0.199:7.1.2;bsu.de:7.1.1;huiman.cf:7.1.1;195.54.14.80:7.1.2, ApMailHostAddress: 195.54.14.80
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2020/10/09 16:54:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2020/10/09 00:29:00 #15463494
-X-KLMS-AntiVirus-Status: Clean, skipped
-Content-Transfer-Encoding: 8BIT
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ich habe ein Geschäft Vorschlag für dich.
+this is v8 of a series adding support for tty triggers. See patch 3 for
+how to use it. The first two patches provide the necessary
+infrastructure in the tty subsystem to make the trigger possible.
+
+Changes compared to v7 sent with Message-Id
+20200707165958.16522-1-u.kleine-koenig@pengutronix.de on 7 Jul 2020:
+
+ - ensure the worker function doesn't monopolize the context it is
+   running in
+ - Add a missing mutex_unlock in an error path
+
+Pavel Machek wondered in reply to v7 if led_set_brightness was a good
+idea. I didn't understand the issue and didn't get a reply to my
+question. So if this is indeed a problem, this one still persists.
+
+Best regards
+Uwe
+
+Uwe Kleine-KÃ¶nig (3):
+  tty: rename tty_kopen() and add new function tty_kopen_shared()
+  tty: new helper function tty_get_icount()
+  leds: trigger: implement a tty trigger
+
+ .../ABI/testing/sysfs-class-led-trigger-tty   |   6 +
+ drivers/accessibility/speakup/spk_ttyio.c     |   2 +-
+ drivers/leds/trigger/Kconfig                  |   9 +
+ drivers/leds/trigger/Makefile                 |   1 +
+ drivers/leds/trigger/ledtrig-tty.c            | 187 ++++++++++++++++++
+ drivers/tty/tty_io.c                          |  85 +++++---
+ include/linux/tty.h                           |   7 +-
+ 7 files changed, 272 insertions(+), 25 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-led-trigger-tty
+ create mode 100644 drivers/leds/trigger/ledtrig-tty.c
+
+-- 
+2.28.0
 
