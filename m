@@ -2,54 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6862528E923
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Oct 2020 01:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A588B28F3AC
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Oct 2020 15:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387627AbgJNXXT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 14 Oct 2020 19:23:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48636 "EHLO mail.kernel.org"
+        id S1729961AbgJONv0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Oct 2020 09:51:26 -0400
+Received: from edge.kilargo.pl ([77.252.52.110]:24065 "EHLO edge.kilargo.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387423AbgJNXXS (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 14 Oct 2020 19:23:18 -0400
-Subject: Re: [GIT PULL] TTY/Serial driver patches for 5.10-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602717798;
-        bh=A8GTFdQpKwXpre/RoI3yXxMRtFOvBs8ZvnfrwYMcESQ=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=zmOc6q/HKNrKzDHQ5AyXI+OtvHhYqs5bKZiXHKBwBrSuMIC4MzqCaPv/T9oItEfpJ
-         QtvxJU+VyO87FBeFC3+JkQepWIQhJLHytWMufzgbxcgEiqyfHWnddyvPnPq16pUj1R
-         sgVyNMpIs41vA3tn/jRi17wdYE3giHo6GHeoGB9A=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201014174826.GA3786470@kroah.com>
-References: <20201014174826.GA3786470@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201014174826.GA3786470@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.10-rc1
-X-PR-Tracked-Commit-Id: 4be87603b6dc9e49c2e07151bb51180dc0b6964a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5d6c413c92a3e6fc9399141891147d0d826517c9
-Message-Id: <160271779841.1444.5958432421590613483.pr-tracker-bot@kernel.org>
-Date:   Wed, 14 Oct 2020 23:23:18 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+        id S1726925AbgJONv0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 15 Oct 2020 09:51:26 -0400
+X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 09:51:15 EDT
+Received: from mail.kilargo.pl (77.252.52.107) by edge.kilargo.pl
+ (77.252.52.109) with Microsoft SMTP Server (TLS) id 8.3.485.1; Thu, 15 Oct
+ 2020 15:41:42 +0200
+Received: from User (185.248.12.71) by MAIL.kilargo.pl (172.22.0.36) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Oct 2020 14:54:56 +0200
+Reply-To: <kim.leang2011@yahoo.com>
+From:   Kim Leang <mechanik@kilargo.pl>
+Subject: Greeting! !!
+Date:   Thu, 15 Oct 2020 15:54:59 +0300
+MIME-Version: 1.0
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <4f8e309dade94ae8bac1d709c3e7bb19@mail.kilargo.pl>
+To:     Undisclosed recipients:;
+X-Originating-IP: [185.248.12.71]
+X-ClientProxiedBy: mail.kilargo.pl (172.22.0.36) To MAIL.kilargo.pl
+ (172.22.0.36)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A295AAB9B6B647163
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The pull request you sent on Wed, 14 Oct 2020 19:48:26 +0200:
+Greeting!
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.10-rc1
+I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5d6c413c92a3e6fc9399141891147d0d826517c9
+I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
 
-Thank you!
+The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
+
+Thanks and have a nice day,
+Mr. Kim Leang.
