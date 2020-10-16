@@ -2,65 +2,145 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52ACD290530
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Oct 2020 14:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08816290504
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Oct 2020 14:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407638AbgJPMhc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 16 Oct 2020 08:37:32 -0400
-Received: from cpanel.giganet.cl ([190.96.78.139]:39766 "EHLO
-        cpanel.giganet.cl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407562AbgJPMhY (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 16 Oct 2020 08:37:24 -0400
-X-Greylist: delayed 20782 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Oct 2020 08:37:10 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=dplgrout.cl
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:Reply-To:
-        Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=TrgUs68YRs3neP+PfrvGhLoeMXh3YzKv5z9oCWPJ0m4=; b=m/ABHCVvyLYD2QkkwOjuWUgGFG
-        i9BJXsIic9wHOFEzjhXFPbcsR2XTWptcrmKLSqDrJOV7hGJM6za5nSEFhd4CC/+eaHHsgS48/E2jM
-        qvMpEeazlOlIrwSs4xM+Zdf/REorOK5GVU6ZAJUjCzQuCMv9dTVBPKuexZxj1Qoi2hPLiQ576Ik0L
-        XzwzerIXphINfmlVQ0r0UMIuChB1Vcn201QVmD2skB/Nh9D/yp0E95Av9ZMQq7ln6H0uEUnu/2/5Y
-        /CHuMEs39xrrgaYDtG7jTh3PfukIIcCJEs3b52/mZokA1w+tDL1dp0MaV2Z+qYj+Bzs13o0ru0vv/
-        Mq733mMw==;
-Received: from [::1] (port=55048 helo=cpanel.giganet.cl)
-        by cpanel.giganet.cl with esmtpa (Exim 4.93)
-        (envelope-from <info@controlypotencia.com>)
-        id 1kTJ7f-0009vt-N3; Fri, 16 Oct 2020 03:21:51 -0300
+        id S2407463AbgJPMYR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 16 Oct 2020 08:24:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40102 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405286AbgJPMYP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 16 Oct 2020 08:24:15 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9C972ACA0;
+        Fri, 16 Oct 2020 12:24:12 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minh Yuan <yuanmingbuaa@gmail.com>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 1/3] vt: keyboard, reorder user buffer handling in vt_do_kdgkb_ioctl
+Date:   Fri, 16 Oct 2020 14:24:10 +0200
+Message-Id: <20201016122412.31767-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Date:   Fri, 16 Oct 2020 03:21:50 -0300
-From:   Ying Chongan <info@controlypotencia.com>
-To:     undisclosed-recipients:;
-Subject: Investment opportunity
-Reply-To: yingchongan@zohomail.com
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <e70e5a6e462f92c7f06eea146a612430@controlypotencia.com>
-X-Sender: info@controlypotencia.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.giganet.cl
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - controlypotencia.com
-X-Get-Message-Sender-Via: cpanel.giganet.cl: authenticated_id: mariapaz.lopez@dplgrout.cl
-X-Authenticated-Sender: cpanel.giganet.cl: mariapaz.lopez@dplgrout.cl
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings,
+KDGKBSENT (the getter) needs only user_kdgkb->kb_func from the
+userspace, i.e. the index. So do the complete copy only in KDSKBSENT
+(the setter). That means, we obtain the index before the switch-case
+and use it in both paths and copy the string only in the setter case.
+And we do it by strndup_user helper now which was not available when
+this function was written.
 
-This email is for an opportunity to invest in any lucrative business in 
-your country.
+Given we copy the two members of struct kbsentry separately, we no
+longer need a local definition. Hence we need to change all the sizeofs
+here too.
 
-We offer a quick loan at low interest rate, if you are interested, 
-please reply to yingchongan@gmail.com for more details.
+And also the getter now returns in all fail paths, not freeing the
+setter's string.
 
-Sincerely: Ying Chongan
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ drivers/tty/vt/keyboard.c | 51 ++++++++++++++++-----------------------
+ 1 file changed, 21 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
+index 0db53b5b3acf..d8e2452da1bd 100644
+--- a/drivers/tty/vt/keyboard.c
++++ b/drivers/tty/vt/keyboard.c
+@@ -1994,7 +1994,7 @@ int vt_do_kdsk_ioctl(int cmd, struct kbentry __user *user_kbe, int perm,
+ /* FIXME: This one needs untangling and locking */
+ int vt_do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb, int perm)
+ {
+-	struct kbsentry *kbs;
++	char *kbs;
+ 	char *p;
+ 	u_char *q;
+ 	u_char __user *up;
+@@ -2008,43 +2008,34 @@ int vt_do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb, int perm)
+ 	if (!capable(CAP_SYS_TTY_CONFIG))
+ 		perm = 0;
+ 
+-	kbs = kmalloc(sizeof(*kbs), GFP_KERNEL);
+-	if (!kbs) {
+-		ret = -ENOMEM;
+-		goto reterr;
+-	}
++	if (get_user(i, &user_kdgkb->kb_func))
++		return -EFAULT;
+ 
+-	/* we mostly copy too much here (512bytes), but who cares ;) */
+-	if (copy_from_user(kbs, user_kdgkb, sizeof(struct kbsentry))) {
+-		ret = -EFAULT;
+-		goto reterr;
+-	}
+-	kbs->kb_string[sizeof(kbs->kb_string)-1] = '\0';
+-	i = array_index_nospec(kbs->kb_func, MAX_NR_FUNC);
++	i = array_index_nospec(i, MAX_NR_FUNC);
+ 
+ 	switch (cmd) {
+ 	case KDGKBSENT:
+-		sz = sizeof(kbs->kb_string) - 1; /* sz should have been
+-						  a struct member */
++		/* sz should have been a struct member */
++		sz = sizeof_field(struct kbsentry, kb_string) - 1;
+ 		up = user_kdgkb->kb_string;
+ 		p = func_table[i];
+ 		if(p)
+ 			for ( ; *p && sz; p++, sz--)
+-				if (put_user(*p, up++)) {
+-					ret = -EFAULT;
+-					goto reterr;
+-				}
+-		if (put_user('\0', up)) {
+-			ret = -EFAULT;
+-			goto reterr;
+-		}
+-		kfree(kbs);
++				if (put_user(*p, up++))
++					return -EFAULT;
++
++		if (put_user('\0', up))
++			return -EFAULT;
++
+ 		return ((p && *p) ? -EOVERFLOW : 0);
+ 	case KDSKBSENT:
+-		if (!perm) {
+-			ret = -EPERM;
+-			goto reterr;
+-		}
++		if (!perm)
++			return -EPERM;
++
++		kbs = strndup_user(user_kdgkb->kb_string,
++				sizeof(user_kdgkb->kb_string));
++		if (IS_ERR(kbs))
++			return PTR_ERR(kbs);
+ 
+ 		fnw = NULL;
+ 		fnw_sz = 0;
+@@ -2062,7 +2053,7 @@ int vt_do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb, int perm)
+ 		else
+ 			fj = first_free;
+ 		/* buffer usage increase by new entry */
+-		delta = (q ? -strlen(q) : 1) + strlen(kbs->kb_string);
++		delta = (q ? -strlen(q) : 1) + strlen(kbs);
+ 
+ 		if (delta <= funcbufleft) { 	/* it fits in current buf */
+ 		    if (j < MAX_NR_FUNC) {
+@@ -2114,7 +2105,7 @@ int vt_do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb, int perm)
+ 		    funcbufsize = sz;
+ 		}
+ 		/* finally insert item itself */
+-		strcpy(func_table[i], kbs->kb_string);
++		strcpy(func_table[i], kbs);
+ 		spin_unlock_irqrestore(&func_buf_lock, flags);
+ 		break;
+ 	}
+-- 
+2.28.0
+
