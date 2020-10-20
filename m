@@ -2,77 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A17293E67
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Oct 2020 16:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27F1294066
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Oct 2020 18:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407902AbgJTOPb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 20 Oct 2020 10:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407859AbgJTOPb (ORCPT
+        id S2394568AbgJTQXR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 20 Oct 2020 12:23:17 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:60545 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394563AbgJTQXR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 20 Oct 2020 10:15:31 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02777C061755
-        for <linux-serial@vger.kernel.org>; Tue, 20 Oct 2020 07:15:31 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id a28so2189790ljn.3
-        for <linux-serial@vger.kernel.org>; Tue, 20 Oct 2020 07:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=K99E9V2vwzPgVGKOTCj0Ggxz4eJ0c8XQBqFKrtXCiTY=;
-        b=kuX0Me+yehBCS6Q11LroaLQMqMpmjdTeBSlIXc7utbBBuXu2Uixc0q04JD/lNPr12B
-         8BqWt2qdc6jW8GxgZtAWt5wM94ak3gCBxiT6gHrn38bNP504NrHpCF/TUNuizptQUoYb
-         b/nau7dKr8SgBOEb/+osWSU+/Syiq77YSS3uoRIHBUmo1hc4Dy9akPPjIhHu/4Ut60j6
-         4emp46ChHLtuvsTx0rZJDacX7rjd6k00Sf+9a3Y6KNZAcPBkVnNLEktyWJ6+GBUDZLcX
-         hI1Q/zzl0qoGI4KiHWVvxjiqvRmq1MP84IpLPd7DuuCdWphba6pe3xetKhKg/Dl1vtQa
-         AbrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=K99E9V2vwzPgVGKOTCj0Ggxz4eJ0c8XQBqFKrtXCiTY=;
-        b=bDLto05J95HiCiEF88Os+beA/H+NvR1GhuZpUMPRW0aRHQB0pUUtTRsriNSa8iPYfY
-         EnQEj4cmaQNyNFne9HmGyXQnCpdDZzxKrr89AidUV4NehIBsHV4FlCzUrB8fFPBQjDmi
-         kE5qZItByQaJLDvNYz0CavyprLMpBlXl1+JCLIqh1nim+I/MXhd5hOXDTjNuqVTWa9el
-         6XrraY4V72kED6Fkt4jHXWKJGbYI6oQKs+4wBxS8Sr3lfCu6dXmB5hxMxt+XCiftsyr9
-         nXleotp1ZpESWhKA77Ht5PdL5errY6FR9A6Ul8gcPtst1mzhHiwPBZk760/7G+Y3M6Ur
-         0PTg==
-X-Gm-Message-State: AOAM531cBHUjnVB/HJO4D8egcMDnroDlpEQD13D966L3rLznB91ckH0Z
-        3FaFp1psRSPWXgHI2le6dwMDKg4qITqACQqcLiw=
-X-Google-Smtp-Source: ABdhPJwtyzOfC1Cocw9VBhZRjKVWUSn4puIamemvKZD4sZHKQZPVfvv/t4wHGgwmMzo0bSiIwKNxSUIfUPkVU9/zlWs=
-X-Received: by 2002:a2e:874c:: with SMTP id q12mr1202514ljj.148.1603203329517;
- Tue, 20 Oct 2020 07:15:29 -0700 (PDT)
+        Tue, 20 Oct 2020 12:23:17 -0400
+Received: from localhost.localdomain ([82.252.146.14]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MvrRB-1kBaLT25Nn-00stxd; Tue, 20 Oct 2020 18:23:08 +0200
+From:   Laurent Vivier <laurent@vivier.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joshua Thompson <funaho@jurai.org>, linux-serial@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH] serial: pmac_zilog: don't init if zilog is not available
+Date:   Tue, 20 Oct 2020 18:23:03 +0200
+Message-Id: <20201020162303.1730562-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Received: by 2002:a2e:8857:0:0:0:0:0 with HTTP; Tue, 20 Oct 2020 07:15:28
- -0700 (PDT)
-Reply-To: georgemike7031@gmail.com
-From:   george mike <brichardjohnson02@gmail.com>
-Date:   Tue, 20 Oct 2020 16:15:28 +0200
-Message-ID: <CAOZWaH_cO-ryhtDA04EAc0sJRBa3Qt4V2shsGUAj8j0+=eJUkQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:bKHy5QQSiE77OMXPCG5t3IA6kn0O8DJhl6MV+YUQP93v0wYpsUL
+ coTYiKGAtOBLA3PVaVWj8x5zDK9kGX+W2jYNGYsoMOJ+HEuJCUxIACpOjZfKt0VmMqsTss8
+ oVtH8p5n8HCTCqiQGfX6xdIAfG94PL2nv6jie7AOlG5rdMQJGKfXBCXpbqfcyprrUMeyXxf
+ NqH1bsfQST/Ym95UPoE9g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WAQu6MsbUZI=:DFWpJUDEp0IFwkElkkrpXo
+ fbfo3nBHI5roarW7M3YyaoC2urbG0Wl54DII91AjRRDRFDIPBvsdVe6SyIdkp1XTHv23+208W
+ 1deQ6qZf6K+8yFpZg4eHwgbC1J6bbAsrlMorSD5kryvSmqf9RmcKceASTgaXYVchQkBAWMbTW
+ DhRZVLW0B/EbxqSlc1b33ezKElxQ/7t+i97CdaI6zVx9yUvyWyWcwkkKKu9WFiHW9ID7DcQaU
+ EF1pa4ZTBMYNZMVfm2Wyg1IvAw31QxpAODLRC6yNqa3u773bhhj5j8nBQGB1mXjhNn9m8Sn4+
+ 5/Z++c17HCYYREiU6APO4nHMwSEWx0mdRuJ6vvwHU9ev2lmbdWm9xEDKb6M/CP85weFnoXQhf
+ wC9IO5lNPF/yfso1AexECLSOeCM858pne4EXT6dXRQSIlFi0wjA/OMTgj/3Imr5AncWUmfkSx
+ +kIltyMbVA==
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hallo
+We can avoid to probe for the Zilog device (and generate ugly kernel warning)
+if kernel is built for Mac but not on a Mac.
 
-Mein Name ist George Mike. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
-Ihnen anbieten
-der n=C3=A4chste Verwandte meines Klienten. Sie erben die Summe von (8,5
-Millionen US-Dollar)
-Dollar, die mein Kunde vor seinem Tod auf der Bank gelassen hat.
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+---
+ drivers/tty/serial/pmac_zilog.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Mein Kunde ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau bei
-einem Autounfall ums Leben gekommen ist
-und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, 50% darauf
-sein f=C3=BCr dich.
-Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
-Informationen: georgemike7031@gmail.com
+diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
+index 063484b22523..d1d2e55983c3 100644
+--- a/drivers/tty/serial/pmac_zilog.c
++++ b/drivers/tty/serial/pmac_zilog.c
+@@ -1867,6 +1867,12 @@ static struct platform_driver pmz_driver = {
+ static int __init init_pmz(void)
+ {
+ 	int rc, i;
++
++#ifdef CONFIG_MAC
++	if (!MACH_IS_MAC)
++		return -ENODEV;
++#endif
++
+ 	printk(KERN_INFO "%s\n", version);
+ 
+ 	/* 
+@@ -2034,6 +2040,11 @@ static int __init pmz_console_setup(struct console *co, char *options)
+ 
+ static int __init pmz_console_init(void)
+ {
++#ifdef CONFIG_MAC
++	if (!MACH_IS_MAC)
++		return -ENODEV;
++#endif
++
+ 	/* Probe ports */
+ 	pmz_probe();
+ 
+-- 
+2.26.2
 
-Vielen Dank im Voraus,
-Mr. George Mike
