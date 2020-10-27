@@ -2,94 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E002994A7
-	for <lists+linux-serial@lfdr.de>; Mon, 26 Oct 2020 18:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9536129A710
+	for <lists+linux-serial@lfdr.de>; Tue, 27 Oct 2020 09:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1788942AbgJZR62 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 26 Oct 2020 13:58:28 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37088 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1788934AbgJZR60 (ORCPT
+        id S2509561AbgJ0IzQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 27 Oct 2020 04:55:16 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:2483 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730933AbgJ0IzQ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 26 Oct 2020 13:58:26 -0400
-Received: by mail-pg1-f195.google.com with SMTP id h6so6494069pgk.4
-        for <linux-serial@vger.kernel.org>; Mon, 26 Oct 2020 10:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=q9/6iMyuxRs29CcJNRGQlw3NkjK+ZAaS1DQKNOdZ49Y=;
-        b=hKM+EPsFhBXudgBvBD6S/N+2rd4p0d87n+1PsscRuF8xG8aOokGqs1Scy01fSvCylK
-         vFtVN5EVEStMT82Rv5AUwG7HaV95viWhftFrFm7Pjd8/H3nFJ1srA4+LYQdNcMX9ELOP
-         NtwOz1qez9ijYPcyDSgSwsG9dlxvuQ8A6NppwAb4Hc0xYclisfujp8nptwltUtB4p+x9
-         ldxOiwgJS3JsyKj2WHpa0s3C6i9/jmUy2HWSBwVM2xCGJrxi8K/Eoc1i236ds5H/G4wJ
-         xmXaC6bIw+9iwiba92w30PmnOojGPKtaLVBaot3yRtneEjVV5ZvXiGLCxaRjXgLn4+6r
-         SbNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=q9/6iMyuxRs29CcJNRGQlw3NkjK+ZAaS1DQKNOdZ49Y=;
-        b=lgqyZ1S0/h3WCSMcHi212ay5c/pwekfz0aXtE32bwqnv4knbQuXZtEZT+3biBaBthF
-         jAnOIDLyLHZMVYERIK6BOl2FkQ+Tmz6M6LnOUdw+blv3CRSv6eMfYwWp8CKfKzAZCfOW
-         Ge2IjulSaQthFLT+iXGDpI/6ka6zSVvXfsf0Vb2uxKhuFnjZXf1gO4Ov1JBbSDEBDTh9
-         SW5T7IkBKNuzXcWmfE5KlSMn7wm+RVipU7q2hTH2dpPqzvmWOb59Y7n/AzXEfempSTYQ
-         Xauq4JRWbNx3rFjkrhNBq+gTrOOFZhE5esq6TY4jWaOXyPWtfosoeFwV87+Xpb7pmlMx
-         Bh1w==
-X-Gm-Message-State: AOAM531vTcbOpbFRhQztQb0h1jmgFcBNII5wk35yvLvPwrz2Ef0hgToL
-        V9ffnrTQFVsZi7kw9okIiOP7
-X-Google-Smtp-Source: ABdhPJw2lnv9eXuIfyKMaV0vZcd4W0AB+lLZP2R6KF9/aiT6U25wEoMJoTUI98wCUAp3d0KnHSTTnw==
-X-Received: by 2002:a62:148a:0:b029:156:857e:853f with SMTP id 132-20020a62148a0000b0290156857e853fmr9112632pfu.25.1603735104771;
-        Mon, 26 Oct 2020 10:58:24 -0700 (PDT)
-Received: from localhost.localdomain ([116.68.74.56])
-        by smtp.gmail.com with ESMTPSA id o65sm11583088pga.42.2020.10.26.10.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 10:58:24 -0700 (PDT)
-From:   Vaishnav M A <vaishnav@beagleboard.org>
-To:     johan@kernel.org
-Cc:     ribalda@kernel.org, robh@kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, masahiroy@kernel.org,
-        andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        jkridner@beagleboard.org, drew@beagleboard.org,
-        robertcnelson@beagleboard.org, vaishnav@beagleboard.org
-Subject: [RFC PATCH 5/5] gnss: change of_property_read to device_property_read
-Date:   Mon, 26 Oct 2020 23:27:18 +0530
-Message-Id: <20201026175718.965773-6-vaishnav@beagleboard.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026175718.965773-1-vaishnav@beagleboard.org>
-References: <20201026175718.965773-1-vaishnav@beagleboard.org>
+        Tue, 27 Oct 2020 04:55:16 -0400
+Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4CL5BZ1pL0zQkyQ;
+        Tue, 27 Oct 2020 16:55:18 +0800 (CST)
+Received: from dggema758-chm.china.huawei.com (10.1.198.200) by
+ DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Tue, 27 Oct 2020 16:54:59 +0800
+Received: from dggema755-chm.china.huawei.com (10.1.198.197) by
+ dggema758-chm.china.huawei.com (10.1.198.200) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Tue, 27 Oct 2020 16:54:58 +0800
+Received: from dggema755-chm.china.huawei.com ([10.1.198.197]) by
+ dggema755-chm.china.huawei.com ([10.1.198.197]) with mapi id 15.01.1913.007;
+ Tue, 27 Oct 2020 16:54:58 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggLW5leHRdIHR0eTogc2VyaWFsOiBpbXg6IHJlbW92?=
+ =?utf-8?Q?e_unnecessary_breaks?=
+Thread-Topic: [PATCH -next] tty: serial: imx: remove unnecessary breaks
+Thread-Index: AQHWq7YF/DlVG1G/CUaBiTKLyZ35CqmrI0NA
+Date:   Tue, 27 Oct 2020 08:54:58 +0000
+Message-ID: <e061702ccd9642c681d7d15c2e7fce7f@huawei.com>
+References: <20201026125142.21105-1-zhangqilong3@huawei.com>
+ <20201026163459.bnoxhmncnnf7cwca@pengutronix.de>
+In-Reply-To: <20201026163459.bnoxhmncnnf7cwca@pengutronix.de>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.179.28]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-change of_property_read_u32() for the current-speed property
-to use the device_property_read_u32() this helps passing the
-properties over a suitably populated struct property_entry.
-
-Signed-off-by: Vaishnav M A <vaishnav@beagleboard.org>
----
- drivers/gnss/serial.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/gnss/serial.c b/drivers/gnss/serial.c
-index def64b36d994..473faeea6aae 100644
---- a/drivers/gnss/serial.c
-+++ b/drivers/gnss/serial.c
-@@ -110,10 +110,9 @@ static int gnss_serial_set_power(struct gnss_serial *gserial,
- static int gnss_serial_parse_dt(struct serdev_device *serdev)
- {
- 	struct gnss_serial *gserial = serdev_device_get_drvdata(serdev);
--	struct device_node *node = serdev->dev.of_node;
- 	u32 speed = 4800;
- 
--	of_property_read_u32(node, "current-speed", &speed);
-+	device_property_read_u32(&serdev->dev, "current-speed", &speed);
- 
- 	gserial->speed = speed;
- 
--- 
-2.25.1
-
+SGVsbG8NCg0KPiBPbiBNb24sIE9jdCAyNiwgMjAyMCBhdCAwODo1MTo0MlBNICswODAwLCBaaGFu
+ZyBRaWxvbmcgd3JvdGU6DQo+ID4gVGhlICdicmVhaycgaXMgbm90IHBvc3NvYmxlIHRvIGJlIHJl
+YWNoZWQNCj4gcy9wb3Nzb2JsZS9wb3NzaWJsZS8NCj4gDQo+ID4gYmVjYXVzZSBvZiBwcmV2aW91
+cyAncmV0dXJuJywgZGlzY2FyZCBpdC4NCj4gDQo+IEdpdmVuIHRoYXQgdGhpcyBzdWNoIGEgcGF0
+Y2ggd2FzIGFscmVhZHkgc2VudCBhIHdlZWsgYWdvWzFdLCBJIHdvbmRlciBpZiB0aGVyZQ0KPiBp
+cyBhIHRvb2wgdGhhdCBjb21wbGFpbnMgaGVyZT8gSWYgc28sIG1lbnRpb25pbmcgaXQgaW4gdGhl
+IGNvbW1pdCBsb2cgd291bGQgYmUNCj4gZ29vZC4NCj4gDQo+IE90aGVyIHRoYW4gdGhhdCBJIHN0
+aWxsIHRoaW5rIHRoYXQgdGhlcmUgc2hvdWxkIGJlIGF0IGxlYXN0IGFuIGVtcHR5IGxpbmUgaW5z
+dGVhZA0KPiBvZiB0aGUgYnJlYWssIGFzIEkgYWxyZWFkeSB3cm90ZSBpbiByZXBseSB0byB0aGUg
+Zmlyc3QgcGF0Y2guIEFuZCBoYXZpbmcgc2FpZCB0aGF0IEkNCj4gYWxzbyBkb24ndCB0aGluayB0
+aGlzIGlzIHdvcnRoICJmaXhpbmciLCBzZWVpbmcgdGhlIGJyZWFrIGluIGEgc3dpdGNoIHN0YXRl
+bWVudCBpcw0KPiBnb29kIGZvciBodW1hbiByZWFkZXJzLg0KPiANCj4gQmVzdCByZWdhcmRzDQo+
+IFV3ZQ0KDQpJIGhhdmUgc2VlbiB0aGF0IHBhdGNoLCB0aGFuayB5b3UgZm9yIG5pY2UgcmVtaW5k
+aW5nLiBJdCdzIG5vdCBhIHRvb2wgdGlwLiBJIGZpbmQgaXQNCndoZW4gcmVhZGluZyB0aGF0IGNv
+ZGUuIFNvIHNlbmRpbmcgdGhlIHBhdGNoIHRvIG9wdGltaXplIGl0LiBJdCBhbHNvIGxvb2tzIGdv
+b2QNCnRvIGtlZXAgJ2JyZWFrJy4NClRoYW5rcywgYmVzdCB3aXNoIHRvIHlvdSENClpoYW5nIFFp
+bG9uZw0KDQo+IA0KPiBbMV0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIwMTAxOTE3NTkx
+NS4zNzE4LTEtdHJpeEByZWRoYXQuY29tDQo+IC0tDQo+IFBlbmd1dHJvbml4IGUuSy4gICAgICAg
+ICAgICAgICAgICAgICAgICAgICB8IFV3ZSBLbGVpbmUtS8O2bmlnDQo+IHwNCj4gSW5kdXN0cmlh
+bCBMaW51eCBTb2x1dGlvbnMgICAgICAgICAgICAgICAgIHwgaHR0cHM6Ly93d3cucGVuZ3V0cm9u
+aXguZGUvIHwNCg==
