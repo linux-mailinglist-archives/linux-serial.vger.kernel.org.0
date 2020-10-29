@@ -2,64 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0E529EA9F
-	for <lists+linux-serial@lfdr.de>; Thu, 29 Oct 2020 12:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA3029ECDA
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Oct 2020 14:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727710AbgJ2Lcr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 29 Oct 2020 07:32:47 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57256 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727621AbgJ2Lc2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 29 Oct 2020 07:32:28 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B59E1B823;
-        Thu, 29 Oct 2020 11:32:26 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 17/17] vt: keyboard, use tty_insert_flip_string in puts_queue
-Date:   Thu, 29 Oct 2020 12:32:22 +0100
-Message-Id: <20201029113222.32640-17-jslaby@suse.cz>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201029113222.32640-1-jslaby@suse.cz>
-References: <20201029113222.32640-1-jslaby@suse.cz>
+        id S1726182AbgJ2N0n (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 29 Oct 2020 09:26:43 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:33442 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgJ2N0m (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 29 Oct 2020 09:26:42 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09TDQdlp073095;
+        Thu, 29 Oct 2020 08:26:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1603978000;
+        bh=GkhCoHJ1/XnzOLNyI1cMIoAAwgZQEjOKh0XhF9teF0Q=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ufT+6Q2yK3VlnvW+xry6bxZ6U7/tk3uOAZgCyr1ONBLOXnSVJMcOEtm7FujWvT3rb
+         I7sxRCvQ/xZq4SN62zIP3vOOa20qawq2AId7ZEuFWPVgVcNyNT1xmu3cdTBvIx10/c
+         JeKhOs2c229U5TcplzT6Kj8fUpVX7XZIX7pMD75U=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09TDQdrq119625
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 29 Oct 2020 08:26:39 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 29
+ Oct 2020 08:26:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 29 Oct 2020 08:26:39 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09TDQdxL109917;
+        Thu, 29 Oct 2020 08:26:39 -0500
+Date:   Thu, 29 Oct 2020 08:26:39 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <nsekhar@ti.com>
+Subject: Re: [PATCH] dt-bindings: serial: 8250_omap: Add compatible for UART
+ controller on AM64 SoC
+Message-ID: <20201029132639.xx7eoy4zrj2echi3@uphold>
+References: <20201029065318.2437-1-vigneshr@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20201029065318.2437-1-vigneshr@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-'puts_queue' currently loops over characters and employs the full tty
-buffer machinery for every character. Do the buffer allocation only once
-and copy all the character at once. This is achieved using
-tty_insert_flip_string instead of loop+tty_insert_flip_char.
+On 12:23-20201029, Vignesh Raghavendra wrote:
+> AM64 uses a UART controller that is compatible with AM654 UART.
+> Introduce a specific compatible to help handle the differences if
+> necessary.
+> 
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  Documentation/devicetree/bindings/serial/omap_serial.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/omap_serial.txt b/Documentation/devicetree/bindings/serial/omap_serial.txt
+> index dcba86b0a0d0..c2db8cabf2ab 100644
+> --- a/Documentation/devicetree/bindings/serial/omap_serial.txt
+> +++ b/Documentation/devicetree/bindings/serial/omap_serial.txt
+> @@ -1,6 +1,7 @@
+>  OMAP UART controller
+>  
+>  Required properties:
+> +- compatible : should be "ti,am64-uart", "ti,am654-uart" for AM64 controllers
+>  - compatible : should be "ti,j721e-uart", "ti,am654-uart" for J721E controllers
+>  - compatible : should be "ti,am654-uart" for AM654 controllers
+>  - compatible : should be "ti,omap2-uart" for OMAP2 controllers
+> -- 
+> 2.29.0
+> 
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/vt/keyboard.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Thanks.
 
-diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
-index 149f1791d7ec..56b5e8f8fe88 100644
---- a/drivers/tty/vt/keyboard.c
-+++ b/drivers/tty/vt/keyboard.c
-@@ -324,12 +324,9 @@ static void put_queue(struct vc_data *vc, int ch)
- 	tty_schedule_flip(&vc->port);
- }
- 
--static void puts_queue(struct vc_data *vc, char *cp)
-+static void puts_queue(struct vc_data *vc, const char *cp)
- {
--	while (*cp) {
--		tty_insert_flip_char(&vc->port, *cp, 0);
--		cp++;
--	}
-+	tty_insert_flip_string(&vc->port, cp, strlen(cp));
- 	tty_schedule_flip(&vc->port);
- }
- 
+Reviewed-by: Nishanth Menon <nm@ti.com>
 -- 
-2.29.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
