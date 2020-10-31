@@ -2,33 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A9F2A0C37
-	for <lists+linux-serial@lfdr.de>; Fri, 30 Oct 2020 18:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01632A1282
+	for <lists+linux-serial@lfdr.de>; Sat, 31 Oct 2020 02:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbgJ3RLN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Fri, 30 Oct 2020 13:11:13 -0400
-Received: from 45.173.252.243.turbolinenet.com.br ([45.173.252.243]:39191 "EHLO
-        srv01.turbolinenet.com.br" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726440AbgJ3RLN (ORCPT
+        id S1726242AbgJaB1A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 30 Oct 2020 21:27:00 -0400
+Received: from 93804.cloudwaysapps.com ([178.62.255.238]:56412 "EHLO
+        93804.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726209AbgJaB07 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 30 Oct 2020 13:11:13 -0400
-Received: from [23.106.215.139]
-        by srv01.turbolinenet.com.br with esmtpsa (TLSv1:DHE-RSA-AES256-SHA:256)
-        (Exim 4.92.2)
-        (envelope-from <info@details.com>)
-        id 1kYQXw-0007kD-SX; Fri, 30 Oct 2020 07:18:09 -0200
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 30 Oct 2020 21:26:59 -0400
+X-Greylist: delayed 12135 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 21:26:55 EDT
+Received: from 127.0.0.1 (93804.cloudwaysapps.com [127.0.0.1])
+        by 93804.cloudwaysapps.com (Postfix) with SMTP id B7E2222075;
+        Fri, 30 Oct 2020 19:28:42 +0000 (UTC)
+Received: from [205.230.2.174] by 127.0.0.1 id <5950496-65746>; Sat, 31 Oct 2020 00:24:59 +0400
+Message-ID: <ur-dehw$u-v8-$q8xj2j$n5t4uc@bcyg0.39fe.ck7>
+From:   "JOHN PHIL" <gerradfinancialplanning@gmail.com>
+Reply-To: "JOHN PHIL" <gerradfinancialplanning@gmail.com>
+To:     linux-raid@vger.kernel.org
+Subject: November Equity Investment 20-20 
+Date:   Sat, 31 Oct 20 00:24:59 GMT
+X-Mailer: AOL 7.0 for Windows US sub 118
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Final Notice 2
-To:     Recipients <info@details.com>
-From:   info@details.com
-Date:   Fri, 30 Oct 2020 02:17:59 -0700
-Reply-To: trust101101@consultant.com
-Message-Id: <E1kYQXw-0007kD-SX@srv01.turbolinenet.com.br>
+Content-Type: multipart/alternative;
+        boundary="07B_9ED_4_"
+X-Priority: 1
+X-MSMail-Priority: High
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We are trying to reach you as regards the estate of Late George Brumley, you were made one of the beneficiaries of his estate. Do get back to me at your earliest convenience. The Trustees
+
+--07B_9ED_4_
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
+
+How are you doing today I have a proposal which i think may interest you a=
+nd benefit you.I will like to give you full details of this via email:  ge=
+rradfinancialplanning@gmail.com
+Thanks.
+
+John PHIL
+
+--07B_9ED_4_--
+
