@@ -2,60 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4732A6E27
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3812A6E05
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbgKDTgB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Nov 2020 14:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S1729796AbgKDTgD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Nov 2020 14:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728815AbgKDTf7 (ORCPT
+        with ESMTP id S1729755AbgKDTgC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Nov 2020 14:35:59 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEFDC0613D4
-        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:35:58 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id p19so2555801wmg.0
-        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:35:58 -0800 (PST)
+        Wed, 4 Nov 2020 14:36:02 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4918C0613D3
+        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:00 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id p19so2555851wmg.0
+        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wH+6ay3ML2IZuG2ItERyIkPsniEGNFXIQf0sfM9xhn4=;
-        b=eDmsFAU7R/9xFhQgOZLSoSX4Ozyo7emaZvpoFzlYhKNIkMDz+wFqWLCCvpdbQvhFq8
-         ru8XqVU6zE7B6/3rxJWElO0jg8aRU4ZGGMgcpUY/ybI4fJEJZtA5qHFG1/qPv3D5ao4l
-         hvhhcYYE7pHbLhzxIlNiz78CcLLxGru7pDHJpWucJPZUkhA1yu5CK+VK047+eqUDGSCg
-         zoLNP36tEymkyuyGc6kuetKvRHfnu1GgmFtvoZ6sIqj2pA3Hn171mu5/7KpEpFELkmDK
-         OfeA39skAzWp4Kjb9IYniGlqNkpeZ310jPckyoU/haA5GL6VPZAAuQg1wr/tt5i+6xgW
-         Qt/Q==
+        bh=JW70o12XNpg7Pls0I5UJqPceVTayC1ax5WqT/gg/jic=;
+        b=h+kQLTPYyWmvEgFxKMgTNJi/nylDDDsXmcFqxjiOdqAtQTbAImcROA2sotobq6lpo0
+         jB0H1YTo4nlZXKC9Xj4RMUZEIy/3lnqtI7yaoXm5bxhbsqWp1+a7POtqn8vNktgu8O9T
+         huZw1rD4AllsPMZt4Yj7JtJdBXacm4BGeEKBmeN4y4LHHIM/7Ixufip6hhIAHdd9I0/o
+         sEep/7a4YxJxDSJAfi4NkZjpE/vmJR0x7KoX7hn/wkiPvD0EL2XB9D8CTptVi/BZ4Oa+
+         NH1zaio7VCrywiAveY81K+O6IKYbYaNIMb0U0L8tilugXC68rv3BthrU/O4l3eTSkns2
+         Lykw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wH+6ay3ML2IZuG2ItERyIkPsniEGNFXIQf0sfM9xhn4=;
-        b=X1ELCZsZ11j3AFpeAxtyo1vYCdU/1ik5uWCNd+eo7SCjLCgIYF4y/9Bmcy9AsYw35c
-         gpcQNPAUbpOOQrRuYHUEEFMcOGWbhNNy+UIEyVLLERPpIlqjReCpxPCjBFC/PDilYm5V
-         OXkfDRPW0ehb94s3iXUb2oMidp2rtusyZkcIfbh/4Bn5WxBOGUYGMz1G1CX4mfeqx92v
-         Ng5g0tXzQ+UOM+gWMBOFSzD5dCoYZAaX7+JibPEOUgJHTr4szKiSjYEsR/Mx9FIBPqTS
-         1GJg4Bxcw6miiRLb+7v2FS8XM5smw8gx8H4SjFec4dEr412zIaNNZxg3G/McDOnHJBFg
-         8SjA==
-X-Gm-Message-State: AOAM533pnIma4TZjj96hd1AWWh0Ncb6PDPzqmfHmEf/tVSQFGjMjoHG6
-        td7kwqKsvz9OnS0GWKXrpMk8jQ==
-X-Google-Smtp-Source: ABdhPJwv9KaK3YsFPmWngapSaiAdWGp0IVoe9eZG7kU0Utng+LM5h3HswS/vwkbPrp46bn+qVqtzSg==
-X-Received: by 2002:a1c:4b0c:: with SMTP id y12mr6696117wma.91.1604518557593;
-        Wed, 04 Nov 2020 11:35:57 -0800 (PST)
+        bh=JW70o12XNpg7Pls0I5UJqPceVTayC1ax5WqT/gg/jic=;
+        b=od0dnwnTXOoieIUBUKUg+Bu+1IYvy5N1EHntZ5vBo1UQi3nK5C3joD6K3WAGQQqZmO
+         EgTLPPSW15CuTYsZ0fr323YvBc8/UtLXNJk72E7ABqDo8Q8Xow0UbC1axpRTHvKBbzoD
+         cZfpj2+bzGf8QJY9Fw76VnNvUFoLAYDnq08g8MmHoGWGzb9PES4yPnHyWhtKlDr9NHVb
+         kF4LvJrTn/JZ0uxvw7c31ZCRcXfljZsSVilg7tbeuXs3SG+bVQxtNKMu5hYWRjKlgQKD
+         CnzCFm+Pc9UXvZMsQIxSi7QlrHGz4jgAIRWQ/RSRs73WpvnwYvH+YCh2GihDhAMh1oWt
+         gtuw==
+X-Gm-Message-State: AOAM531hAHEZL1GSlLudHMbE4bPeTb9Bs0fyhSN1ftbAuSX9kOdU81OR
+        fbxQC0jOqDVA/IIVZeKscu/vVA==
+X-Google-Smtp-Source: ABdhPJxOkOq8fS0a1MUngKpjjUe7WzFMXAF3FIw5qyC+UNLOlYzwjwI0W4E8s804WZN4+sp0661uhA==
+X-Received: by 2002:a7b:c14f:: with SMTP id z15mr6499816wmi.174.1604518559545;
+        Wed, 04 Nov 2020 11:35:59 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.35.54
+        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 11:35:55 -0800 (PST)
+        Wed, 04 Nov 2020 11:35:58 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH 01/36] tty: serdev: core: Remove unused variable 'dummy'
-Date:   Wed,  4 Nov 2020 19:35:14 +0000
-Message-Id: <20201104193549.4026187-2-lee.jones@linaro.org>
+Subject: [PATCH 02/36] tty: serdev: core: Provide missing description for 'owner'
+Date:   Wed,  4 Nov 2020 19:35:15 +0000
+Message-Id: <20201104193549.4026187-3-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201104193549.4026187-1-lee.jones@linaro.org>
 References: <20201104193549.4026187-1-lee.jones@linaro.org>
@@ -66,12 +66,10 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-No need to have a dummy variable here.
-
 Fixes the following W=1 kernel build warning(s):
 
  drivers/tty/serdev/core.c: In function ‘serdev_controller_remove’:
- drivers/tty/serdev/core.c:791:6: warning: variable ‘dummy’ set but not used [-Wunused-but-set-variable]
+ drivers/tty/serdev/core.c:811: warning: Function parameter or member 'owner' not described in '__serdev_device_driver_register'
 
 Cc: Rob Herring <robh@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -79,28 +77,21 @@ Cc: Jiri Slaby <jirislaby@kernel.org>
 Cc: linux-serial@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/tty/serdev/core.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/tty/serdev/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index c5f0d936b003a..fecc28a73b3b2 100644
+index fecc28a73b3b2..aead0c0c97966 100644
 --- a/drivers/tty/serdev/core.c
 +++ b/drivers/tty/serdev/core.c
-@@ -788,13 +788,10 @@ static int serdev_remove_device(struct device *dev, void *data)
-  */
- void serdev_controller_remove(struct serdev_controller *ctrl)
- {
--	int dummy;
--
- 	if (!ctrl)
- 		return;
- 
--	dummy = device_for_each_child(&ctrl->dev, NULL,
--				      serdev_remove_device);
-+	device_for_each_child(&ctrl->dev, NULL, serdev_remove_device);
- 	pm_runtime_disable(&ctrl->dev);
- 	device_del(&ctrl->dev);
- }
+@@ -800,6 +800,7 @@ EXPORT_SYMBOL_GPL(serdev_controller_remove);
+ /**
+  * serdev_driver_register() - Register client driver with serdev core
+  * @sdrv:	client driver to be associated with client-device.
++ * @owner:	client driver owner to set.
+  *
+  * This API will register the client driver with the serdev framework.
+  * It is typically called from the driver's module-init function.
 -- 
 2.25.1
 
