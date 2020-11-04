@@ -2,114 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C39C42A6E18
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D282A6E2E
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731544AbgKDTgn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Nov 2020 14:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S1731485AbgKDThd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Nov 2020 14:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731466AbgKDTgh (ORCPT
+        with ESMTP id S1731495AbgKDTgi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Nov 2020 14:36:37 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4AFC0613D4
-        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:36 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id k10so21997077wrw.13
-        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:36 -0800 (PST)
+        Wed, 4 Nov 2020 14:36:38 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3546AC0613D4
+        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:38 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id n15so23374199wrq.2
+        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LLsN4EencXRGtGh6NICYbwvfxRBgSaeY1vL5/hXBaSE=;
-        b=mDUmwxxsTe07lHZdCK2NULBQOzn4QryCvAiJRBiNod0SQqJoH9VRDVYsjyFYKGVo/W
-         reE/6DdkeQRZ5mln/8ZmhUKS1Roow+CuhxYEGWCbHlGiH6Qvhf2OzHgt7m1ca/RB6IfC
-         1Z/XDwPlOsKdZWNpKBMdu/7ai2sBwVtTD3IVxbySNMGnN2mYL5XCqTeOJDO84TsaAUgR
-         y4+ySv4XxyVtAkylZ1TZa2e5KfXHwqh1NYm4Q5nd7bi3EBSwCAabLS+uoRknth3lyNIL
-         4C639ZtdSlM3cWtK32QsZklz9nt/+PfSD/KdhAz8FygBldRS4KP1oWuJo4VC0x5CKunJ
-         1MpQ==
+        bh=qxIwRMD6TNBg9udmxGZqLaXn9yYcY9lwNa4w1OOgomY=;
+        b=jOvIce5Y8cX6tbhY9L9KsU+MZChw1k/jcW944Xh2LDWfP2jwxOiW4gq2+Bawg47x9z
+         bNE4CHODRlR5URrZecp9S23e5lzUQfpT3inK47e3MR7A9u2JyHP1M5Nu+flMLBMovr4X
+         4XuSxNmW2Ig982I82J5WyB5huHaeXoOCGUxU/+C0hOeCouFqYCUOSu7VHvBDKs4Hyycg
+         ydDhqoQ9Bav7qws0Xzs9/iSiy3k+R6NSlYZ2rseiR47s64hWEF0pq5Zjd7FLYVnRCdDR
+         NHSrZIOa5qvgwc3XTM+5JX8tmYoA3cGjK5D4IcJjYCNa5MRZmHCdUnAD/e4dR4spsuN2
+         e3+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LLsN4EencXRGtGh6NICYbwvfxRBgSaeY1vL5/hXBaSE=;
-        b=jZjcpSQ8tn6F30uWeLo53EnYP1O579QT0qpPDUDcNX8oL7mAmKUYlebB/yo9/pCXuH
-         LDinpc10aIvJFFaVKNsiVOYWO6uwLcHQXdmP6QOrMU9vXjhFRoSRah9i8+g/V7y65LAJ
-         9FMz8LNBz3lw+wDCEepUR6ISMd9gvTHaOO4pMRNxmi/E2vxDVSDd6+JQGzuvATyfHTqh
-         gHnWDJ3TERLikvV5+anUpT0bPQkXkDBWopeP3KsMYHKISiu/PKfWpv6bqfHT3xbN4HPT
-         Dj78M2a67w1mGsdJGzt2BECejdR2yDgSl8JylnP7QkwOAIT8Cih5zyXPLXdu9Y+UU2c6
-         1qYA==
-X-Gm-Message-State: AOAM531uiug4+jJue3OAWh5rHz/5q8shn6xeykdEFqObL3/37TcdAG2G
-        0Wwo1nzaKNOFLYyku50WnjqC5Q==
-X-Google-Smtp-Source: ABdhPJwj69pglo5oKTGjibnfQaOnqOYeg+zi78YMRNFefrSr4xnzdjafE2tVb3anObZuT+KBZ5gsIg==
-X-Received: by 2002:adf:de89:: with SMTP id w9mr33569428wrl.212.1604518595494;
-        Wed, 04 Nov 2020 11:36:35 -0800 (PST)
+        bh=qxIwRMD6TNBg9udmxGZqLaXn9yYcY9lwNa4w1OOgomY=;
+        b=n4MkyCj4U4y1p9M+hEmUsZ2jlWtikXV0tMMPkAF2tL065FLPJQVJ6DgIVt4uiymD0K
+         9c1Bg0mxVOVRPChW5AoeHkuTcYwjYiiyRwSKCc7HHkTq60jFn0Mvzhv5CetDLueGGX8R
+         dGveSgSpE+7l9p/AztxrxZj4kFeYlf3DhZFZgtNZcJKI/oGdTLu3Iej2PdfLsYDIW4J2
+         palztE5uaf/7/Xk6U4XWx9uaRjCqGLXHpVS0JDiKl8SszEw/L0jOmdXRuoHlwRUQv0KQ
+         mALhWup5w+dSVRyrmrJaRhuOHzuA7tr+873UtSIHWcXyp7LbSTMlbi+eYgg5opFEZnub
+         z8vA==
+X-Gm-Message-State: AOAM530kABzZzjj1vZSoHD8nLM4XCht4NDKT5Fbtc55Q1mzWMAq7sDd1
+        v5OFZQH/UgFhTdrTo3oFlf5LBQ==
+X-Google-Smtp-Source: ABdhPJxku7Y3Kg5JTrtXlnam3qROwaJDh/c2CuIvjzLZI/zWTYPrraJ+G80GnqYixVTfkfiagatmeA==
+X-Received: by 2002:a5d:490c:: with SMTP id x12mr33601906wrq.193.1604518596915;
+        Wed, 04 Nov 2020 11:36:36 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.33
+        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 11:36:34 -0800 (PST)
+        Wed, 04 Nov 2020 11:36:36 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        Laxman Dewangan <ldewangan@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 24/36] tty: serial: serial-tegra: Struct headers should start with 'struct <name>'
-Date:   Wed,  4 Nov 2020 19:35:37 +0000
-Message-Id: <20201104193549.4026187-25-lee.jones@linaro.org>
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-serial@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH 25/36] tty: serial: sifive: Struct headers should start with 'struct <name>'
+Date:   Wed,  4 Nov 2020 19:35:38 +0000
+Message-Id: <20201104193549.4026187-26-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201104193549.4026187-1-lee.jones@linaro.org>
 References: <20201104193549.4026187-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Also supply a missing member description.
+
 Fixes the following W=1 kernel build warning(s):
 
- drivers/tty/serial/serial-tegra.c:85: warning: cannot understand function prototype: 'struct tegra_uart_chip_data '
+ drivers/tty/serial/sifive.c:157: warning: cannot understand function prototype: 'struct sifive_serial_port '
 
-Cc: Laxman Dewangan <ldewangan@nvidia.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
 Cc: linux-serial@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
+Cc: linux-riscv@lists.infradead.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/tty/serial/serial-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/sifive.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index bd13014a1c537..c363ee0470f45 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -75,7 +75,7 @@
- #define TEGRA_UART_FCR_IIR_FIFO_EN		0x40
+diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
+index 13eadcb8aec4e..1066eebe3b28b 100644
+--- a/drivers/tty/serial/sifive.c
++++ b/drivers/tty/serial/sifive.c
+@@ -144,12 +144,13 @@
+  */
  
  /**
-- * tegra_uart_chip_data: SOC specific data.
-+ * struct tegra_uart_chip_data: SOC specific data.
+- * sifive_serial_port - driver-specific data extension to struct uart_port
++ * struct sifive_serial_port - driver-specific data extension to struct uart_port
+  * @port: struct uart_port embedded in this struct
+  * @dev: struct device *
+  * @ier: shadowed copy of the interrupt enable register
+  * @clkin_rate: input clock to the UART IP block.
+  * @baud_rate: UART serial line rate (e.g., 115200 baud)
++ * @clk: reference to this device's clock
+  * @clk_notifier: clock rate change notifier for upstream clock changes
   *
-  * @tx_fifo_full_status: Status flag available for checking tx fifo full.
-  * @allow_txfifo_reset_fifo_mode: allow_tx fifo reset with fifo mode or not.
+  * Configuration data specific to this SiFive UART.
 -- 
 2.25.1
 
