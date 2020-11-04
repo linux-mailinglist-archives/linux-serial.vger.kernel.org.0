@@ -2,64 +2,62 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1129D2A6E12
+	by mail.lfdr.de (Postfix) with ESMTP id EB7D42A6E14
 	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731414AbgKDTgc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Nov 2020 14:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S1731418AbgKDTge (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Nov 2020 14:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730983AbgKDTgb (ORCPT
+        with ESMTP id S1731405AbgKDTgd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Nov 2020 14:36:31 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F36C0613D3
-        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:30 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id c16so3419302wmd.2
-        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:30 -0800 (PST)
+        Wed, 4 Nov 2020 14:36:33 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF6C0613D4
+        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:32 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id x7so23339439wrl.3
+        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+W+IzJVlcwSw8IRMXBzJb1dzB3GDzrAyqgcs95IwTfA=;
-        b=VxWQRFEV0vC/Lf0jlmwNBvW8/0FLvKwzZEu+uH7X7FkNBGaGg76oETtihBzGB6HVq2
-         XK4SJALNsE0+8RJw6V9q4QjSsOGtnVDGq3e8I8p/X/R5VgutNA7Q50JpK+MLy1su0nFL
-         WNHLL9q3oM3G68w/0/99xDzA24KWCw0JLP3sZb20mex9BpL1V3jUrsoCzosgJPpAH7t9
-         MAyfOM2MiBBC5vKlcUH05ngWxEKclBvMkAmwYQ15XI360iUMoZeNQTaLWxLFJvKsuOyC
-         3nE9SEcMceJi5iN9U9n45tzdaucar/krRG6kuL23V8brq8Q3XZqLmK1ix+SV4gvPnj9U
-         llRw==
+        bh=l/gv0SsLI7CnshsO1g6Ee0CY3I2zGh9OhwtyHlvyxPI=;
+        b=G6g1v7xnvTEazh/ppcd2E7jvCP9tnex3H3LMRF+WLiV7v1gqyiHTOFHoGlbEghWcLl
+         M5Bn/Z403KWlOt57pmj2w0wXo66zrZj1cqd+ahq8abwgEqi7j+5i/2dfLxw++VpKI/Yn
+         IiszaeGQ1N+99+Qc8wB7QcRfXvhOzY6Pt8rFbTG34hhUT0aa6Y/kKwHXONYUw+B3dNkd
+         phbwSu2SMPbQkI8lwxuZOk9FkQ8KpFStZ9Sm0IrGkPV1I4MzC/2hp6Xp/Fp2sQplHP6l
+         aUAaxtYKtbJN0hwUqQJZ02apn7dO8KuluGGFsK8zWngliqyMv+cl4ogsn0b/joa2Q2wt
+         1vag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+W+IzJVlcwSw8IRMXBzJb1dzB3GDzrAyqgcs95IwTfA=;
-        b=esFqyKSpDPg0R4/tNDxfR2HcByVbFZRzkSLzFuQ5a0Ktbzjl5STdP8hT2x43JhsgBu
-         robUDUunaTQjbYBwW4OJMdt6KRpzyqdDjcDQb2K+XsaPFzU90ktsIxb1RzwbUbHpfFnA
-         MsmsDu7UqTj+RxfIyhUFoVAGYghR1vOYooUscV4jzhTriqv2EYyzxGwMiu2qhk2VkcCk
-         p6mAybqJymy91LMOdvFZmCIjto9CJt7SVL482mqCbhNN53dEgSHKHiRGSEJYHnLZMwr5
-         ZJ+o6EImy2gA2JAFwwd+3eLf8mjrEE6InC1O/hZyfJkrkS1SAABf3HJGydg6XYE5DD+y
-         dDcA==
-X-Gm-Message-State: AOAM532kE+tUXxrofLT/4SNIw1reC6a2ozImVojRRyT5gVBnfIcxHsa7
-        sAasR+08Yq0uCQEnyWTINiOABw==
-X-Google-Smtp-Source: ABdhPJzdsHB0gRKZUlixDWWHCwavM98eiP6QAn36+VXXgHdWKN98UOhPp3e0gizULhrigHzF6tsHyA==
-X-Received: by 2002:a1c:81d7:: with SMTP id c206mr6119967wmd.140.1604518588914;
-        Wed, 04 Nov 2020 11:36:28 -0800 (PST)
+        bh=l/gv0SsLI7CnshsO1g6Ee0CY3I2zGh9OhwtyHlvyxPI=;
+        b=lVSOev5cj9/zPLWwOmt3gC/GcgcrRiO2A4u/w07dNRHdGmOfQfbT3dMmegvSi2bbx4
+         /wz/lq5McWJImx4n54Ff8R/Ei1RqLDpQl/fcE31Ktl3YON9kWbd/m46koW1T8chutB1E
+         aTS+W1sykCCywDf/PyL60SIeodqnWWuzqxxte0q2kWXdjlRBqr70/h75q21+vgr4Yspu
+         +U/eBFzt9Rz3acfVzqDHtFU6FamaQPzOe2cybptn9EBg+jC4hO0KRJvYcN91hS7Vo9v0
+         Q8cW4VhfEBz9Ed00ymKVXW4RmjJ0pqPtwlCUOGkUg1RAHXP+t80TfC63sUVxe2p4Smm6
+         UEGg==
+X-Gm-Message-State: AOAM533MMnrurCvBzlN/ag7Uzbt3eYURg7aPqmrEgD7GmSg5tx4jjziq
+        sSQxXL07cOZz0ZZq656+5hb0PA==
+X-Google-Smtp-Source: ABdhPJzJvYOB3ZWklk3J/n/mJXGJhAX0H9YEbO+QG9lKvohw7OcHOpD65XMl0ZpyDLrHvlIL8OTU3Q==
+X-Received: by 2002:adf:8284:: with SMTP id 4mr9105007wrc.386.1604518590885;
+        Wed, 04 Nov 2020 11:36:30 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.27
+        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 11:36:28 -0800 (PST)
+        Wed, 04 Nov 2020 11:36:30 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Filip Aben <f.aben@option.com>,
-        Joseph Barrow <d.barow@option.com>,
-        Jan Dumon <j.dumon@option.com>,
-        Russ Gorby <russ.gorby@intel.com>, linux-serial@vger.kernel.org
-Subject: [PATCH 21/36] tty: serial: ifx6x60: Fix function documentation headers
-Date:   Wed,  4 Nov 2020 19:35:34 +0000
-Message-Id: <20201104193549.4026187-22-lee.jones@linaro.org>
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 22/36] tty: serial: xilinx_uartps: Supply description for missing member 'cts_override'
+Date:   Wed,  4 Nov 2020 19:35:35 +0000
+Message-Id: <20201104193549.4026187-23-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201104193549.4026187-1-lee.jones@linaro.org>
 References: <20201104193549.4026187-1-lee.jones@linaro.org>
@@ -71,43 +69,29 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/tty/serial/ifx6x60.c:553: warning: Function parameter or member 'tty' not described in 'ifx_port_activate'
- drivers/tty/serial/ifx6x60.c:728: warning: Function parameter or member 't' not described in 'ifx_spi_io'
- drivers/tty/serial/ifx6x60.c:728: warning: Excess function parameter 'data' description in 'ifx_spi_io'
+ drivers/tty/serial/xilinx_uartps.c:205: warning: Function parameter or member 'cts_override' not described in 'cdns_uart'
 
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Filip Aben <f.aben@option.com>
-Cc: Joseph Barrow <d.barow@option.com>
-Cc: Jan Dumon <j.dumon@option.com>
-Cc: Russ Gorby <russ.gorby@intel.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
 Cc: linux-serial@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/tty/serial/ifx6x60.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/xilinx_uartps.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/ifx6x60.c b/drivers/tty/serial/ifx6x60.c
-index 21d519c804cb9..182e0ccd60b2c 100644
---- a/drivers/tty/serial/ifx6x60.c
-+++ b/drivers/tty/serial/ifx6x60.c
-@@ -545,6 +545,7 @@ static void ifx_spi_hangup(struct tty_struct *tty)
- /**
-  *	ifx_port_activate
-  *	@port: our tty port
-+ *	@tty: our tty device
-  *
-  *	tty port activate method - called for first open. Serialized
-  *	with hangup and shutdown by the tty layer.
-@@ -719,7 +720,7 @@ static void ifx_spi_complete(void *ctx)
- 
- /**
-  *	ifx_spio_io		-	I/O tasklet
-- *	@data: our SPI device
-+ *	@t: tasklet construct used to fetch the SPI device
-  *
-  *	Queue data for transmission if possible and then kick off the
-  *	transfer.
+diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
+index a9b1ee27183a7..a14c5d9964739 100644
+--- a/drivers/tty/serial/xilinx_uartps.c
++++ b/drivers/tty/serial/xilinx_uartps.c
+@@ -192,6 +192,7 @@ MODULE_PARM_DESC(rx_timeout, "Rx timeout, 1-255");
+  * @baud:		Current baud rate
+  * @clk_rate_change_nb:	Notifier block for clock changes
+  * @quirks:		Flags for RXBS support.
++ * @cts_override:	Modem control state override
+  */
+ struct cdns_uart {
+ 	struct uart_port	*port;
 -- 
 2.25.1
 
