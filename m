@@ -2,60 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423A02A6E0E
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F32C2A6E33
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 20:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731047AbgKDTgZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Nov 2020 14:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S1730295AbgKDThr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Nov 2020 14:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731018AbgKDTgY (ORCPT
+        with ESMTP id S1731210AbgKDTg1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Nov 2020 14:36:24 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F65C0613D3
-        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:24 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id h2so881740wmm.0
-        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:24 -0800 (PST)
+        Wed, 4 Nov 2020 14:36:27 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DC0C061A4C
+        for <linux-serial@vger.kernel.org>; Wed,  4 Nov 2020 11:36:27 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id g12so23287943wrp.10
+        for <linux-serial@vger.kernel.org>; Wed, 04 Nov 2020 11:36:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PCthp+iIayFdO+hk3LjcuMh49TMSV9TDkGCxD2U2U74=;
-        b=tdLzplErGzlsTMvA24FKwL+xCV7IDZGYkhg0Ou03OOiOpukQUndtoqdN4Btssu+uh5
-         pHqlPj6YXHeaWY3svCwI+7BVuZnpLg9kcBdM3/i04heoyrJMQNzzUhmNBeh8Yx1aNXF9
-         zfq84NfJovwoP6B0NFVL4tsiXIWzvB3qmeFTQP1QCxQ/Jsk/MR9hKniaUp9Hnjz3XE88
-         pvWufpKWRjTPPVPfazBFWwYRfO50piv+Fff8KFd1J6zfTrJfwY9nT65ktGWC6K+/eWMX
-         NMTU5EATHwcZAsh3okG6nCEDbMWxSQN4ts5Y5s9aEIz0sXJZ8GY2v+CtagQdWeVvYYyH
-         ce5g==
+        bh=sjXTZO3THTknUKc+FF8iaHBvsw+0f6VMadCbFHOAPuM=;
+        b=ms2JX/olfhvXUd5gZU8GpM2AlBUdhsOVTqftJLAZsSd3S6CA4St9e8Z3GVUJOPmBH3
+         Wv+e5VL/yIgilU8EvaWEC11WiXxDDYSZTosDlw9sO3Gem/ACN7zcS+464DoBy798QAcH
+         OPG1s6i1ZL6NhVvbs5YXlsbdqZEHIzc0+LOC4YSprETgdP0IUwxP1HatTFbZr3Q1gVcv
+         i854ry1t+jafdMYbiPc8nv8BT3ro4yc3QyZESN0BlPVfflbvzS0u+2sy5v8ZA98Wm1GT
+         r3s419fmQ+DJ0EwoWS+et3BfGfkP9LbKal++RpqWiA5dqdiTmztKyhwwOy9HGefmTbgE
+         YXXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PCthp+iIayFdO+hk3LjcuMh49TMSV9TDkGCxD2U2U74=;
-        b=N2RSUH9MbU0+WkrM3BfAY8ijIVQSVbmikDGwzdmwxtz9flVTEQmj6/4mUw/rRMCaBb
-         a9KFxFQjLPVoR2ZByLfoNRlz0JnV65NSBrRoVaCC+WBeZY2sdbqKEC2lg42npXkRn+9h
-         kYi1cNlL2n4h4YGU+X17qWMb7IzAVR8qo5b4QvkfRVs8ZeJjA1bzQU4kv39CmDWpzexr
-         gEYMlxjsSXXrmToWd3DGks5kCk2+/HxD67SlZKwFhMXnCkMM9yoG0gmh65fhbPAVGJjW
-         C3RJo/BdykyJMinodcQ93IgUVshX4fvRXU0fH8ty2hsn1e7+BNPJRzhjtiy3YdFTL/yY
-         n+Uw==
-X-Gm-Message-State: AOAM531I9a+24Fdj04gK6co6bTgWUi4f0RMyeiQBSrEswyDUVs5UfyLf
-        gwOM13bzG7F4ehiEh3QfPguKcQ==
-X-Google-Smtp-Source: ABdhPJxDQR/qW6NmTWHEpSz51ngDxQ9A5uFFVjpceis1t/O+rnkxd10E6YYGgu5C0ahzzXDmBT9mmg==
-X-Received: by 2002:a7b:c11a:: with SMTP id w26mr6582229wmi.78.1604518583103;
-        Wed, 04 Nov 2020 11:36:23 -0800 (PST)
+        bh=sjXTZO3THTknUKc+FF8iaHBvsw+0f6VMadCbFHOAPuM=;
+        b=EKBWYpW1YVBCECYhotD7tPNivucPD61tRHu5lLHyK2xDzJaLT6YIuBJEGbb7KPqTcd
+         T5r6rnW0GZtMJWovZQ4V5hRT6cdtLS+lxTv+NPXPguUc1zUJUCiXTPOUTJEI2pHS0mM2
+         gL74jPETV1zkkg3/VbyOfXsfEDyiCZn6y5t3RBWzaVvhNaFJ6dP/OyGpXaBdlESg4QLQ
+         riJCMgWuV973W4U67fyN4GYlese5CkQoCp4uyvllPEX3N2Dzs6JU9i/1H9Ujh5ucPwZz
+         /K4amw1p9do9L65R7Sefzaurdk8PzOUAQNcx4q3lGxT+lcktQPEhuxJogUEWlTlCddgu
+         Au1A==
+X-Gm-Message-State: AOAM532lR7TetBo9Af9gS0FiYcnwgl7Wqe/dIvbKbeqcuqSOvnxFJb0+
+        L0zhfxMr55oPoI0fsdfT2uxu0w==
+X-Google-Smtp-Source: ABdhPJwbXgRf846UE4ULzw1UaKkRcnno8eWKOJyQ2YXTMjG5JuMVVZBJynEIcVUKav7QeoqCCWIriw==
+X-Received: by 2002:a5d:4c4f:: with SMTP id n15mr32969818wrt.137.1604518585814;
+        Wed, 04 Nov 2020 11:36:25 -0800 (PST)
 Received: from dell.default ([91.110.221.242])
-        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.21
+        by smtp.gmail.com with ESMTPSA id x10sm4034444wrp.62.2020.11.04.11.36.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 11:36:22 -0800 (PST)
+        Wed, 04 Nov 2020 11:36:25 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH 17/36] tty: serial: amba-pl011: Mark 'sbsa_uart_acpi_match' as __maybe_unused
-Date:   Wed,  4 Nov 2020 19:35:30 +0000
-Message-Id: <20201104193549.4026187-18-lee.jones@linaro.org>
+        Jiri Slaby <jirislaby@kernel.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Kevin Wells <kevin.wells@nxp.com>,
+        Roland Stigge <stigge@antcom.de>, linux-serial@vger.kernel.org
+Subject: [PATCH 19/36] tty: serial: lpc32xx_hs: Remove unused variable 'tmp'
+Date:   Wed,  4 Nov 2020 19:35:32 +0000
+Message-Id: <20201104193549.4026187-20-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201104193549.4026187-1-lee.jones@linaro.org>
 References: <20201104193549.4026187-1-lee.jones@linaro.org>
@@ -66,34 +70,41 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-When !ACPI 'sbsa_uart_acpi_match' is not referenced.
-
 Fixes the following W=1 kernel build warning(s):
 
- drivers/tty/serial/amba-pl011.c:2792:36: warning: ‘sbsa_uart_acpi_match’ defined but not used [-Wunused-const-variable=]
+ drivers/tty/serial/lpc32xx_hs.c: In function ‘__serial_uart_flush’:
+ drivers/tty/serial/lpc32xx_hs.c:244:6: warning: variable ‘tmp’ set but not used [-Wunused-but-set-variable]
 
-Cc: Russell King <linux@armlinux.org.uk>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Cc: Kevin Wells <kevin.wells@nxp.com>
+Cc: Roland Stigge <stigge@antcom.de>
 Cc: linux-serial@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/tty/serial/amba-pl011.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/lpc32xx_hs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 87dc3fc15694a..c255476cce287 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2789,7 +2789,7 @@ static const struct of_device_id sbsa_uart_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, sbsa_uart_of_match);
+diff --git a/drivers/tty/serial/lpc32xx_hs.c b/drivers/tty/serial/lpc32xx_hs.c
+index b5898c9320361..1fa098d7aec4b 100644
+--- a/drivers/tty/serial/lpc32xx_hs.c
++++ b/drivers/tty/serial/lpc32xx_hs.c
+@@ -241,12 +241,11 @@ static unsigned int __serial_get_clock_div(unsigned long uartclk,
  
--static const struct acpi_device_id sbsa_uart_acpi_match[] = {
-+static const struct acpi_device_id __maybe_unused sbsa_uart_acpi_match[] = {
- 	{ "ARMH0011", 0 },
- 	{},
- };
+ static void __serial_uart_flush(struct uart_port *port)
+ {
+-	u32 tmp;
+ 	int cnt = 0;
+ 
+ 	while ((readl(LPC32XX_HSUART_LEVEL(port->membase)) > 0) &&
+ 	       (cnt++ < FIFO_READ_LIMIT))
+-		tmp = readl(LPC32XX_HSUART_FIFO(port->membase));
++		readl(LPC32XX_HSUART_FIFO(port->membase));
+ }
+ 
+ static void __serial_lpc32xx_rx(struct uart_port *port)
 -- 
 2.25.1
 
