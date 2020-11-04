@@ -2,70 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BD32A3F30
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Nov 2020 09:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCA32A5E2D
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Nov 2020 07:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbgKCIoT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 3 Nov 2020 03:44:19 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7580 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726058AbgKCIoT (ORCPT
+        id S1725977AbgKDGmY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Nov 2020 01:42:24 -0500
+Received: from mail-m17613.qiye.163.com ([59.111.176.13]:6610 "EHLO
+        mail-m17613.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725891AbgKDGmY (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 3 Nov 2020 03:44:19 -0500
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQNcY3r2hzLsPk;
-        Tue,  3 Nov 2020 16:44:13 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 3 Nov 2020 16:44:07 +0800
-From:   Qinglang Miao <miaoqinglang@huawei.com>
+        Wed, 4 Nov 2020 01:42:24 -0500
+Received: from ubuntu.localdomain (unknown [58.213.83.157])
+        by mail-m17613.qiye.163.com (Hmail) with ESMTPA id 441A54827E9;
+        Wed,  4 Nov 2020 14:33:35 +0800 (CST)
+From:   Bernard Zhao <bernard@vivo.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Qinglang Miao" <miaoqinglang@huawei.com>
-Subject: [PATCH v3] serial: txx9: add missing platform_driver_unregister() on error in serial_txx9_init
-Date:   Tue, 3 Nov 2020 16:49:42 +0800
-Message-ID: <20201103084942.109076-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     opensource.kernel@vivo.com, bernard@vivo.com
+Subject: [PATCH 0/2] drivers/tty: delete break after return
+Date:   Tue,  3 Nov 2020 22:33:22 -0800
+Message-Id: <20201104063327.15572-1-bernard@vivo.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZTkkYGEhDSx8YHx8YVkpNS09PTEpNSk5OT0JVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS09ISFVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pxg6ARw5Lz8dKxgjGT4IHTlD
+        FykwCk1VSlVKTUtPT0xKTUpOQkxJVTMWGhIXVRkeCRUaCR87DRINFFUYFBZFWVdZEgtZQVlOQ1VJ
+        SkhVQ0hVSk5MWVdZCAFZQUpNQkM3Bg++
+X-HM-Tid: 0a7591f5effc93bakuws441a54827e9
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add the missing platform_driver_unregister() before return
-from serial_txx9_init in the error handling case when failed
-to register serial_txx9_pci_driver with macro ENABLE_SERIAL_TXX9_PCI
-defined.
+This patch sereies delete break after return, which will never run.
 
-Fixes: ab4382d27412 ("tty: move drivers/serial/ to drivers/tty/serial/")
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
----
- v2: v1 introduced a label named unreg_platform_drv which was unused
-     when ENABLE_SERIAL_TXX9_PCI not defined. It's not resonable enough,
-     so remove it and do simply check in <#ifdef ... #endif>.
- v3: add version update message.
+Signed-off-by: Bernard Zhao <bernard@vivo.com>
+*** BLURB HERE ***
 
- drivers/tty/serial/serial_txx9.c | 3 +++
- 1 file changed, 3 insertions(+)
+Bernard Zhao (2):
+  drivers/tty: delete break after return
+  drivers/tty: delete break after return
 
-diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
-index b4d89e317..7a07e7272 100644
---- a/drivers/tty/serial/serial_txx9.c
-+++ b/drivers/tty/serial/serial_txx9.c
-@@ -1280,6 +1280,9 @@ static int __init serial_txx9_init(void)
- 
- #ifdef ENABLE_SERIAL_TXX9_PCI
- 	ret = pci_register_driver(&serial_txx9_pci_driver);
-+	if (ret) {
-+		platform_driver_unregister(&serial_txx9_plat_driver);
-+	}
- #endif
- 	if (ret == 0)
- 		goto out;
+ drivers/tty/nozomi.c     | 4 ----
+ drivers/tty/serial/imx.c | 5 -----
+ 2 files changed, 9 deletions(-)
+
 -- 
-2.23.0
+2.29.0
 
