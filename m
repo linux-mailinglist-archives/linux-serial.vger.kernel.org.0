@@ -2,166 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F822AC9B4
-	for <lists+linux-serial@lfdr.de>; Tue, 10 Nov 2020 01:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DEA2ACB45
+	for <lists+linux-serial@lfdr.de>; Tue, 10 Nov 2020 03:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729452AbgKJAau (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 9 Nov 2020 19:30:50 -0500
-Received: from mga12.intel.com ([192.55.52.136]:51418 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729336AbgKJAau (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 9 Nov 2020 19:30:50 -0500
-IronPort-SDR: kUOMWU2rl2sUuO0gPjWsdR1fLCE3dmTDldrCDMP8vWR57ds/HBvay0hAjH23vx7Tp5spmnexfz
- LC+n6nm7XHgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9800"; a="149172201"
-X-IronPort-AV: E=Sophos;i="5.77,464,1596524400"; 
-   d="scan'208";a="149172201"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2020 16:30:49 -0800
-IronPort-SDR: uZizYGdn0WF0dbn/3oXw7NtTnUSSED3CMqdzfBY0pi9riyZ1tiXB41nh/PlEfh9HsOJdiG9INw
- jE594Yt4z+EQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,464,1596524400"; 
-   d="scan'208";a="541100596"
-Received: from lkp-server01.sh.intel.com (HELO d0be80f1a028) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Nov 2020 16:30:47 -0800
-Received: from kbuild by d0be80f1a028 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kcHYc-0000XA-IH; Tue, 10 Nov 2020 00:30:46 +0000
-Date:   Tue, 10 Nov 2020 08:30:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- 9b085d6e889076928d307f05cabf76e35db1e63b
-Message-ID: <5fa9df1f./tpweWrOX9pfegy/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729336AbgKJCuK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 9 Nov 2020 21:50:10 -0500
+Received: from server.hostvarna.com ([185.219.69.50]:50542 "EHLO
+        mail.hostvarna.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727311AbgKJCuK (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 9 Nov 2020 21:50:10 -0500
+X-Greylist: delayed 59996 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 21:50:09 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hostvarna.com (Postfix) with ESMTP id 46A9FD6A14E;
+        Sat,  7 Nov 2020 14:58:30 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hostvarna.com; h=
+        x-mailer:content-transfer-encoding:content-type:content-type
+        :mime-version:date:date:subject:subject:from:from:reply-to; s=
+        dkim; t=1604753907; x=1606568308; bh=m3pASy53GgfFwHppvIPHJghbzAH
+        QviKN6bgk+M/PrtE=; b=Z1hLZwM57N/xpf2b660tSG4jRwt9qrF03v81BXDUI1z
+        lSg90I2oKu6oniO6u40ZRGqO5S5Sh+ZfyUrTLypvXszJxlGTI4L50dt/4zDduSRX
+        F8Rc34N9/kB+PxvKq3gQ0xEVT3UxIrVnmQm7BK8nGOqlSjiuKydbH17v6kUBNPE8
+        =
+X-Virus-Scanned: Debian amavisd-new at server.hostvarna.com
+Received: from mail.hostvarna.com ([127.0.0.1])
+        by localhost (mail.hostvarna.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id x6xteSTqZ5iQ; Sat,  7 Nov 2020 14:58:27 +0200 (EET)
+Received: from User (unknown [176.32.23.85])
+        (Authenticated sender: simona@hostvarna.com)
+        by mail.hostvarna.com (Postfix) with ESMTPA id C5964D6A411;
+        Sat,  7 Nov 2020 09:52:42 +0200 (EET)
+Reply-To: <maviswanczyko@aol.com>
+From:   "L.  Wanczyk." <simona@hostvarna.com>
+Subject:  DONATION                                                                 .50
+Date:   Sat, 7 Nov 2020 08:51:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2800.1081
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1081
+Message-Id: <20201107125830.46A9FD6A14E@mail.hostvarna.com>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git  tty-testing
-branch HEAD: 9b085d6e889076928d307f05cabf76e35db1e63b  Merge 5.10-rc3 into tty-next
+Hello,
 
-elapsed time: 882m
+I'm Mrs. Mavis Wanczyk, the mega winner of $758 Million in Mega Millions
+Jackpot, I am donating to 5 random individuals if you get this email then
+your email was selected after a spin ball. I have spread most of my wealth
+over a number of charities and organizations. I have voluntarily decided to
+donate the sum of $ 10 Million USD to you as one of the selected , to verify
+my
+winnings via YouTube page below.
 
-configs tested: 102
-configs skipped: 2
+WATCH ME HERE: https://www.youtube.com/watch?v=7kWnqvJM1mM
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+THIS IS YOUR DONATION CODE: F207162
+Kindly send your direct telephone and fax number to enable me to reach you
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                    sam440ep_defconfig
-powerpc                     pseries_defconfig
-m68k                         amcore_defconfig
-arm                         s5pv210_defconfig
-xtensa                  audio_kc705_defconfig
-m68k                          hp300_defconfig
-sh                           se7206_defconfig
-arm                          ep93xx_defconfig
-arc                        nsimosci_defconfig
-arc                                 defconfig
-mips                      fuloong2e_defconfig
-sh                         microdev_defconfig
-arm                            mmp2_defconfig
-arm                          collie_defconfig
-sh                        sh7757lcr_defconfig
-m68k                        m5307c3_defconfig
-arm                             rpc_defconfig
-m68k                        m5272c3_defconfig
-c6x                              alldefconfig
-powerpc                      pmac32_defconfig
-arm                          imote2_defconfig
-parisc                           alldefconfig
-arm                        shmobile_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                     skiroot_defconfig
-arm                         shannon_defconfig
-nds32                               defconfig
-arm                           corgi_defconfig
-arm                          gemini_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20201110
-x86_64               randconfig-a005-20201110
-x86_64               randconfig-a004-20201110
-x86_64               randconfig-a002-20201110
-x86_64               randconfig-a006-20201110
-x86_64               randconfig-a001-20201110
-i386                 randconfig-a004-20201109
-i386                 randconfig-a006-20201109
-i386                 randconfig-a005-20201109
-i386                 randconfig-a001-20201109
-i386                 randconfig-a003-20201109
-i386                 randconfig-a002-20201109
-i386                 randconfig-a014-20201109
-i386                 randconfig-a015-20201109
-i386                 randconfig-a013-20201109
-i386                 randconfig-a016-20201109
-i386                 randconfig-a011-20201109
-i386                 randconfig-a012-20201109
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                                   rhel
-x86_64                    rhel-7.6-kselftests
+Reply with the DONATION CODE to this email: maviswanczykoo@aol.com
 
-clang tested configs:
-x86_64               randconfig-a012-20201109
-x86_64               randconfig-a015-20201109
-x86_64               randconfig-a013-20201109
-x86_64               randconfig-a011-20201109
-x86_64               randconfig-a014-20201109
-x86_64               randconfig-a016-20201109
+Hope to make you and your family happy.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Mrs. Mavis L. Wanczyk.
