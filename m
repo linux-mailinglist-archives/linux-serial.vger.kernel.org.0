@@ -2,111 +2,56 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4D22B3485
-	for <lists+linux-serial@lfdr.de>; Sun, 15 Nov 2020 12:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C002B35F9
+	for <lists+linux-serial@lfdr.de>; Sun, 15 Nov 2020 17:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgKOLDz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 15 Nov 2020 06:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726634AbgKOLDy (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 15 Nov 2020 06:03:54 -0500
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452A0C0613D1
-        for <linux-serial@vger.kernel.org>; Sun, 15 Nov 2020 03:03:54 -0800 (PST)
-Received: by mail-qv1-xf44.google.com with SMTP id ek7so7285013qvb.6
-        for <linux-serial@vger.kernel.org>; Sun, 15 Nov 2020 03:03:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=emnALhqWjtqtx0I50fV0W5CtLDGhirAFqDMnH3z4pI8=;
-        b=avHFGCs+nELQja10M1ApNwGfG6nx8tKTO80fmYgmGGhXrgNHqCCAT3IoMv77tQhGqW
-         AhCvzDtH7vb1jJVcRIdnvGz7CASSkyDIywsNMt06LN5BUen+a8rrspUugy4pWTePxJtH
-         t8OF5w+gU9nEyF7jtt6LYBqWZZmbnFpq+bIuA2MvdddTH03rnHWMp4hPMxYfBvmRsWaJ
-         jsOO7ESogJ4XV+5VLXB/Gk81XSbkqzroyHkcwGGHHHEYY3qXFyc2j8lv+eXzOg8mjvTv
-         Sa52X7kP0XUwZaDWoOa8quz6CmMQ5UzUypBFFSI+XrRkQvxAkh1OXaT104TdvF8vqWtT
-         o9qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=emnALhqWjtqtx0I50fV0W5CtLDGhirAFqDMnH3z4pI8=;
-        b=qiwFF1PwDSlrrunoHpTe91t/Gsu09opRbWSILuwejX+UbCHBKFPpf9A/EbbDEC476w
-         1l0YsfJf3FkyT+iN0GIos/P1RoBU58DtxFcynEMZPGNg1upsPSdmmwPyNqCudg8nt3Uv
-         ePBALmsYWGShgcW3oCbnj1Mj2isf5rZ7OR7Eg/QPSosiJTScznlBgFktErgl1VO4f0oI
-         oQjYSO3ZCMboR6b9GvhVwfxuPdq4eAtWH2WCExz1JpAhp11nx2u7loKoEDXy36HobuSU
-         FTwQLgS9S4kDkPYk/joxDJ49hGb6z+VzcmfgpGpvLMmJ99thh00r1o9wq33DoDT3KXgI
-         MkOA==
-X-Gm-Message-State: AOAM5312wHAL0sVTHKXfeEqG7VjWpmWmbYUrI/hq2fDsQVml85m1/OXc
-        EMS2Y2rR33YTgBdZHKQZJ0k=
-X-Google-Smtp-Source: ABdhPJwYLeR+hlsOvnb9OA1xVU//uhpa3UKdeS4z4wxpDTNynRH4HIcUs3BSw8zcLz94fh6Gtc80Gw==
-X-Received: by 2002:a0c:bd19:: with SMTP id m25mr10875655qvg.52.1605438233447;
-        Sun, 15 Nov 2020 03:03:53 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:482:997:213a:a240:fc07:36c8])
-        by smtp.gmail.com with ESMTPSA id c79sm10090471qke.69.2020.11.15.03.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2020 03:03:52 -0800 (PST)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, s.hauer@pengutronix.de,
-        fugang.duan@nxp.com, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] serial: imx: Remove unused .id_table support
-Date:   Sun, 15 Nov 2020 08:03:41 -0300
-Message-Id: <20201115110341.22761-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726727AbgKOP7y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Sun, 15 Nov 2020 10:59:54 -0500
+Received: from tigeramira.ro ([88.158.78.30]:55682 "EHLO mail.tigeramira.ro"
+        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1726631AbgKOP7y (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 15 Nov 2020 10:59:54 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 7F4F2C54403
+        for <linux-serial@vger.kernel.org>; Sun, 15 Nov 2020 16:39:59 +0200 (EET)
+Received: from mail.tigeramira.ro ([127.0.0.1])
+        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 7nQme2Lb9DaN for <linux-serial@vger.kernel.org>;
+        Sun, 15 Nov 2020 16:39:58 +0200 (EET)
+Received: from mail.tigeramira.ro (localhost [127.0.0.1])
+        by mail.tigeramira.ro (Postfix) with ESMTP id A8DB598CAA2
+        for <linux-serial@vger.kernel.org>; Fri, 13 Nov 2020 18:26:36 +0200 (EET)
+Received: from [156.96.44.214] (unknown [192.168.12.254])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 61597D3FA18
+        for <linux-serial@vger.kernel.org>; Tue, 10 Nov 2020 17:09:06 +0200 (EET)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Corporate and Personal Loan/
+To:     linux-serial@vger.kernel.org
+From:   "Investment  Corporate" <financialcapability6@gmail.com>
+Date:   Tue, 10 Nov 2020 06:09:34 -0800
+Reply-To: hmurrah39@gmail.com
+Message-Id: <20201110150907.61597D3FA18@mail.tigeramira.ro>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
-.id_table support in this driver was only useful for old non-devicetree
-platforms.
+Hello linux-serial@vger.kernel.org
 
-Get rid of the .id_table since it is no longer used.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- drivers/tty/serial/imx.c | 20 --------------------
- 1 file changed, 20 deletions(-)
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 942d828604d2..b50f97cb07e9 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -262,25 +262,6 @@ static struct imx_uart_data imx_uart_devdata[] = {
- 	},
- };
- 
--static const struct platform_device_id imx_uart_devtype[] = {
--	{
--		.name = "imx1-uart",
--		.driver_data = (kernel_ulong_t) &imx_uart_devdata[IMX1_UART],
--	}, {
--		.name = "imx21-uart",
--		.driver_data = (kernel_ulong_t) &imx_uart_devdata[IMX21_UART],
--	}, {
--		.name = "imx53-uart",
--		.driver_data = (kernel_ulong_t) &imx_uart_devdata[IMX53_UART],
--	}, {
--		.name = "imx6q-uart",
--		.driver_data = (kernel_ulong_t) &imx_uart_devdata[IMX6Q_UART],
--	}, {
--		/* sentinel */
--	}
--};
--MODULE_DEVICE_TABLE(platform, imx_uart_devtype);
--
- static const struct of_device_id imx_uart_dt_ids[] = {
- 	{ .compatible = "fsl,imx6q-uart", .data = &imx_uart_devdata[IMX6Q_UART], },
- 	{ .compatible = "fsl,imx53-uart", .data = &imx_uart_devdata[IMX53_UART], },
-@@ -2613,7 +2594,6 @@ static struct platform_driver imx_uart_platform_driver = {
- 	.probe = imx_uart_probe,
- 	.remove = imx_uart_remove,
- 
--	.id_table = imx_uart_devtype,
- 	.driver = {
- 		.name = "imx-uart",
- 		.of_match_table = imx_uart_dt_ids,
--- 
-2.17.1
 
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+
+
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
