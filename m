@@ -2,61 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A9B2B033C
-	for <lists+linux-serial@lfdr.de>; Thu, 12 Nov 2020 11:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2152B0380
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Nov 2020 12:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727954AbgKLK7J (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 12 Nov 2020 05:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        id S1727234AbgKLLHm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Nov 2020 06:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727920AbgKLK7E (ORCPT
+        with ESMTP id S1726776AbgKLK7I (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 12 Nov 2020 05:59:04 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01753C0617A6
-        for <linux-serial@vger.kernel.org>; Thu, 12 Nov 2020 02:59:04 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id l1so5499772wrb.9
-        for <linux-serial@vger.kernel.org>; Thu, 12 Nov 2020 02:59:03 -0800 (PST)
+        Thu, 12 Nov 2020 05:59:08 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EA7C0613D4
+        for <linux-serial@vger.kernel.org>; Thu, 12 Nov 2020 02:59:06 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id 19so4885725wmf.1
+        for <linux-serial@vger.kernel.org>; Thu, 12 Nov 2020 02:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4MHJyDo+dkqaA5w+YXjlvk3XVBhsjDZYqsJp3LUhS8A=;
-        b=KQSSQ3IxHes0Saggsokj8bCjKruLsA4X//7w68uYX/6pFvJ7su4wLIpBC3gFdlWQjN
-         1j1Vlo/8+Ll859yHWvPEiVEctu0EqX0rCxdYRqgbWObpqeOIIf/aF5wMW0hH3a6eYOxc
-         SS+k7VN8rM17sSJcS5+p3h30MXt/llycgXhBKQS8OwhZFaG2mfeEktgMbW9lC9EH3/9i
-         Jfy33Gdj60/fpKdjmDAYa9MEU1WEk0S7/pMiwWhVScqgSu71Xq65pnmFEyXUugGS/vsK
-         nZpFJj9gXEytzLZvzlxxwNvlpRksEoQQ3EEwKjSYl5PYIQlw7k4pfPydJcCDxEY8+hPv
-         Mnvg==
+        bh=wgyLyFchGL7Sp7PDuveL5Dq/jWJMAfMom/lcxhPZFGk=;
+        b=OIcAU4L2NY90scoNe97J7Lo3gdQ4brKCLe5fP7yOH2yD67Ofz0aO0Wo5MUjF2m7/2C
+         iqhZfqgE7sx7uOpFPy6Ej8kW1KzNWFmtq5SPp7JzD7HcWn46JIHoJagCqfDo1sLnBMmW
+         8Ag48q1gpX4QthRyaDE+UI3Mt18iHtxM0E6J81ecjFGOXmqgtNRJkbanRvJMVY+ewKaZ
+         yKEIWMnBWpwiUDnYYiK+r6VCsU2UdmV9yTj07zJZJMrzl00HxHjL52MRjrnzsiZLqanr
+         olAQRFJvinPjCXmYaWsofa2c+EJTF0jTIVk2+chj6Zx6LKZcVdSbdxxJR5dgoozgc9p4
+         XSZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4MHJyDo+dkqaA5w+YXjlvk3XVBhsjDZYqsJp3LUhS8A=;
-        b=IVEapjrsy4rftVWlQf30Fk68QB/eSZEuypGOY6lrd/UDHrI6JPOn3pf5wB3Gpo9kVJ
-         kv4UsNxa4UU1gOMwuzLHM30f1KpA2eDaGdHD1iuI9AvP/r3pa+Y+9fyJ+o0CcK8C9CqD
-         QRa7yU6gEciTDRnjZx+nR8W6fFy5p/4ElHA/z48HcjibRKPIE7lfG89DjwhOgD9SeUDc
-         qse3BYcpA7Q0fdWpSHqdTXwW3Lw+5lgXxe5Gfs77jN6jzf0cgtAVJqMOinrxuBB3Oyuv
-         R67y+U3RJFGG9t4OBjMM7CaeNlyyrTOSX0FJYD6z4f2v5uIXJI/0txQqMgz8QSP3qu68
-         HLVA==
-X-Gm-Message-State: AOAM531uKlLe5m8Jkg0jyJqv9Fx5YNZO+He4ORYcGOqYQ4Yc7q44ZM7g
-        iyV6/3VE6x3wgs1qt5g4FUchCA==
-X-Google-Smtp-Source: ABdhPJwwp6fZgnD5WnZ4ggvhKpwkhreu99lahIMHKVI/z9H4g1sYnkNE9N5zRdF5bT5/XsAWdU59Mg==
-X-Received: by 2002:adf:f04b:: with SMTP id t11mr7092763wro.147.1605178742777;
-        Thu, 12 Nov 2020 02:59:02 -0800 (PST)
+        bh=wgyLyFchGL7Sp7PDuveL5Dq/jWJMAfMom/lcxhPZFGk=;
+        b=GOla+nH3HxI/8zBo/cp88AhanXi86Ob2xgovXRqUAXGTXPqgZDJWw8nguppoc25+xe
+         OgM7SZTHw63JHCqqRgTE+3xqwxe5MylCVs0e3THkZ9M5eFxGfqwAmyJj9+vBE5ltiheV
+         ucPpBl/FLn/spGPuPw47l1dMqTVtC0hkPFBmiyucgyir/Nuhd+jShFdQPeIrLAJq7OXa
+         fhFxUc3p+gWuBHxIkvXZhnGSKa/KTQMOLP7z8QtvIDYfoferl2hLLJ8PD4Rs/VDK1VpP
+         HWy1Xh+G+obDWgPyn742U4yCsoE5P+EWP2IMc5lSQHvX0IXPclaYSnEwX670J7YBGPvl
+         lqqw==
+X-Gm-Message-State: AOAM533j1UpLR6aq2YwYkmqfTFAl/T3Ubqz1/bxI9yWgQrdFrnuTm71O
+        pgk4Mx+Px1BPx3NOIjCkO5HUcg==
+X-Google-Smtp-Source: ABdhPJypm3E5Z4Dtn6FAq2BnkUT91LvIbDHRoSB1aVRFTBICzorGYZNNLlfeGh36eCzBVJ5tkNl0tQ==
+X-Received: by 2002:a1c:4c09:: with SMTP id z9mr9042901wmf.55.1605178745182;
+        Thu, 12 Nov 2020 02:59:05 -0800 (PST)
 Received: from dell.default ([91.110.221.159])
-        by smtp.gmail.com with ESMTPSA id u5sm1167239wro.56.2020.11.12.02.59.01
+        by smtp.gmail.com with ESMTPSA id u5sm1167239wro.56.2020.11.12.02.59.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 02:59:02 -0800 (PST)
+        Thu, 12 Nov 2020 02:59:04 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Mike Hudson <Exoray@isys.ca>, linux-serial@vger.kernel.org
-Subject: [PATCH v2 2/4] tty: serial: 8250: 8250_port: Move prototypes to shared location
-Date:   Thu, 12 Nov 2020 10:58:55 +0000
-Message-Id: <20201112105857.2078977-3-lee.jones@linaro.org>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 4/4] tty: serial: pmac_zilog: Remove unused disposable variable 'garbage'
+Date:   Thu, 12 Nov 2020 10:58:57 +0000
+Message-Id: <20201112105857.2078977-5-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201112105857.2078977-1-lee.jones@linaro.org>
 References: <20201112105857.2078977-1-lee.jones@linaro.org>
@@ -69,47 +72,39 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/tty/serial/8250/8250_port.c:349:14: warning: no previous prototype for ‘au_serial_in’ [-Wmissing-prototypes]
- drivers/tty/serial/8250/8250_port.c:359:6: warning: no previous prototype for ‘au_serial_out’ [-Wmissing-prototypes]
+ drivers/tty/serial/pmac_zilog.h:365:58: warning: variable ‘garbage’ set but not used [-Wunused-but-set-variable]
 
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Mike Hudson <Exoray@isys.ca>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
 Cc: linux-serial@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/tty/serial/8250/8250_early.c | 3 ---
- include/linux/serial_8250.h          | 5 +++++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/tty/serial/pmac_zilog.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_early.c b/drivers/tty/serial/8250/8250_early.c
-index 70d7826788f53..c171ce6db6910 100644
---- a/drivers/tty/serial/8250/8250_early.c
-+++ b/drivers/tty/serial/8250/8250_early.c
-@@ -204,9 +204,6 @@ OF_EARLYCON_DECLARE(omap8250, "ti,omap4-uart", early_omap8250_setup);
+diff --git a/drivers/tty/serial/pmac_zilog.h b/drivers/tty/serial/pmac_zilog.h
+index bb874e76810e0..fa85b0de5c2fd 100644
+--- a/drivers/tty/serial/pmac_zilog.h
++++ b/drivers/tty/serial/pmac_zilog.h
+@@ -362,10 +362,10 @@ static inline void zssync(struct uart_pmac_port *port)
  
- #ifdef CONFIG_SERIAL_8250_RT288X
+ /* Misc macros */
+ #define ZS_CLEARERR(port)    (write_zsreg(port, 0, ERR_RES))
+-#define ZS_CLEARFIFO(port)   do { volatile unsigned char garbage; \
+-				     garbage = read_zsdata(port); \
+-				     garbage = read_zsdata(port); \
+-				     garbage = read_zsdata(port); \
++#define ZS_CLEARFIFO(port)   do {                       \
++				     read_zsdata(port); \
++				     read_zsdata(port); \
++				     read_zsdata(port); \
+ 				} while(0)
  
--unsigned int au_serial_in(struct uart_port *p, int offset);
--void au_serial_out(struct uart_port *p, int offset, int value);
--
- static int __init early_au_setup(struct earlycon_device *dev, const char *opt)
- {
- 	dev->port.serial_in = au_serial_in;
-diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
-index 2b70f736b091d..9e655055112d9 100644
---- a/include/linux/serial_8250.h
-+++ b/include/linux/serial_8250.h
-@@ -187,4 +187,9 @@ extern void serial8250_set_isa_configurator(void (*v)
- 					(int port, struct uart_port *up,
- 						u32 *capabilities));
- 
-+#ifdef CONFIG_SERIAL_8250_RT288X
-+unsigned int au_serial_in(struct uart_port *p, int offset);
-+void au_serial_out(struct uart_port *p, int offset, int value);
-+#endif
-+
- #endif
+ #define ZS_IS_CONS(UP)			((UP)->flags & PMACZILOG_FLAG_IS_CONS)
 -- 
 2.25.1
 
