@@ -2,69 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A552B89DD
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Nov 2020 02:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671842B8E58
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Nov 2020 10:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727298AbgKSByK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 18 Nov 2020 20:54:10 -0500
-Received: from gargamel.turcom.com.tr ([193.254.252.9]:44974 "EHLO
-        etrn.turcom.com.tr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726468AbgKSByK (ORCPT
+        id S1725944AbgKSJBJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 Nov 2020 04:01:09 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7952 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgKSJBI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 18 Nov 2020 20:54:10 -0500
-X-Greylist: delayed 11459 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Nov 2020 20:54:09 EST
-Received: from mail.stargazete.com (mail.stargazete.com [88.255.77.166])
-        by etrn.turcom.com.tr (Postfix) with ESMTPS id BA94115FC6E;
-        Thu, 19 Nov 2020 01:05:41 +0300 (+03)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.stargazete.com (Postfix) with ESMTP id A8A1A91A926C;
-        Wed, 18 Nov 2020 22:05:41 +0000 (UTC)
-Received: from mail.stargazete.com ([127.0.0.1])
-        by localhost (mail.stargazete.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id KyehNy34zz3o; Wed, 18 Nov 2020 22:05:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.stargazete.com (Postfix) with ESMTP id 2417791AA5C3;
-        Wed, 18 Nov 2020 21:56:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.stargazete.com 2417791AA5C3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stargazete.com;
-        s=BE41E402-1210-11EB-A9CA-1AF0DF4E1435; t=1605736586;
-        bh=eS6YGRou0utqjQd2YaXZkaFeXSioe/GKdvIucbq5rMI=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=ZS+ihknBtOiyQva1FhQhwrHUAe5ln+oVsRU8brG/8ny7r+K0Rw9+91CZP5smjm7Pu
-         8FI3cAaVat/enD27VyUOQtgKuzl1tolR+cOtbP2RLBIbL9/+woObbyJwOdBPELYai6
-         eRBePiyarmmnKHr8nV+tZoXgO/eNbcVY6O4EnESCMaR3Z9kITScQ4cLEfas4WZJtAx
-         syLDj2cdPwUmy7akmZrbdBYk8FQ2+MTSRj3R1XosBTzBWKYwuDXBTF2LluO/1EEwqB
-         Vv1FT3O9DgjIwFEJ3L7dGUXp5vwgRrM5ZX3iqlZeeNpoJRZRKkjTUm60lvdFB3TP6o
-         WAoXAOz/HMefQ==
-X-Virus-Scanned: amavisd-new at stargazete.com
-Received: from mail.stargazete.com ([127.0.0.1])
-        by localhost (mail.stargazete.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vdhYEp2sbwLq; Wed, 18 Nov 2020 21:56:26 +0000 (UTC)
-Received: from [172.20.10.4] (unknown [154.230.136.106])
-        by mail.stargazete.com (Postfix) with ESMTPSA id C57F891A9273;
-        Wed, 18 Nov 2020 21:48:40 +0000 (UTC)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 19 Nov 2020 04:01:08 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CcDDQ26RbzhcQj;
+        Thu, 19 Nov 2020 17:00:54 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 19 Nov 2020 17:01:03 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <afaerber@suse.de>, <manivannan.sadhasivam@linaro.org>,
+        <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tty: serial: replace spin_lock_irqsave by spin_lock in hard IRQ
+Date:   Thu, 19 Nov 2020 17:01:29 +0800
+Message-ID: <1605776489-16283-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Loan
-To:     Recipients <rtosun@stargazete.com>
-From:   rtosun@stargazete.com
-Date:   Wed, 18 Nov 2020 13:48:35 -0800
-Reply-To: samuelbrandon110@gmail.com
-Message-Id: <20201118214840.C57F891A9273@mail.stargazete.com>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+The code has been in a irq-disabled context since it is hard IRQ. There
+is no necessity to do it again.
 
-ARE YOU IN NEED OF LOAN @3% INTEREST RATE FOR BUSINESS AND PRIVATE
-PURPOSES? IF YES:
-FILL AND RETURN
-Name: =3D=3D=3D
-Amount needed: =3D=3D=3D
-Duration: =3D=3D
-country =3D=3D=3D
-Purpose: =3D=3D=3D
-Mobile number
- Dear Sir/Madam
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ drivers/tty/serial/owl-uart.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/owl-uart.c b/drivers/tty/serial/owl-uart.c
+index c149f8c3..472fdaf 100644
+--- a/drivers/tty/serial/owl-uart.c
++++ b/drivers/tty/serial/owl-uart.c
+@@ -251,10 +251,9 @@ static void owl_uart_receive_chars(struct uart_port *port)
+ static irqreturn_t owl_uart_irq(int irq, void *dev_id)
+ {
+ 	struct uart_port *port = dev_id;
+-	unsigned long flags;
+ 	u32 stat;
+ 
+-	spin_lock_irqsave(&port->lock, flags);
++	spin_lock(&port->lock);
+ 
+ 	stat = owl_uart_read(port, OWL_UART_STAT);
+ 
+@@ -268,7 +267,7 @@ static irqreturn_t owl_uart_irq(int irq, void *dev_id)
+ 	stat |= OWL_UART_STAT_RIP | OWL_UART_STAT_TIP;
+ 	owl_uart_write(port, stat, OWL_UART_STAT);
+ 
+-	spin_unlock_irqrestore(&port->lock, flags);
++	spin_unlock(&port->lock);
+ 
+ 	return IRQ_HANDLED;
+ }
+-- 
+2.7.4
+
