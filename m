@@ -2,69 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA56F2C489C
-	for <lists+linux-serial@lfdr.de>; Wed, 25 Nov 2020 20:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52FE2C5066
+	for <lists+linux-serial@lfdr.de>; Thu, 26 Nov 2020 09:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728070AbgKYTmK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 25 Nov 2020 14:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727251AbgKYTmK (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 25 Nov 2020 14:42:10 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5D2C0613D4;
-        Wed, 25 Nov 2020 11:42:09 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id 64so3053774wra.11;
-        Wed, 25 Nov 2020 11:42:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=MT4M9SX2NqdNuOObXhIV8Gtkw+yoDX+gRyJnh+feBwM=;
-        b=NHP3RYHyvA7GFeJZWJegepQ0udAcjT7TYkzgyXSA+M46wImWLoYWAMrpYgochsLahA
-         BfVrqQAQNJOJECBUel9wp7fyANnP7GW+0kb67oWD7np5E4ELuKNznH/oCp9ccGVFUmvn
-         EDk55CQKIqoH2Z8bLVAmL61LUdpj4zi+jqNsc/jRJ8+WZo/YFZsyivGRkYfX76nHtBw7
-         2Q2vp2uMO8yoa+pj4xLBFziql3ENXTE1A9UGOsKLuZ7ZcK8sGDReuZxpYCJY5m8ycnXU
-         afiAJlAsJTAbA5Zb+BOdEjEAdL5KUkeDyO7lvSYT4f33W+fXNsJD9rO/+bOw9WE2aTVD
-         /cuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=MT4M9SX2NqdNuOObXhIV8Gtkw+yoDX+gRyJnh+feBwM=;
-        b=XabmP7i1CNXmxCKll8qvoM6E5Stso2pLBV5z1S/iAt9bCSDGvO0kY378xROfxcsnq2
-         sbHBp6hcYZQwygNhpGDR1R+6rtq5C48zIcKuCr9QwfWak0iyI30jpz9ycMTH0RcTfJJU
-         KkcyrolafDQE8KrkqD9nwXGRzO2/kH4T2ZO5NHtEZQ52tmh6H5iGaL0xhAZUkDdYrGt9
-         tGrNM/xfQoe/rhVvAO0yEX6lDR8/aw4QEsf2NkI9l0PjORiNKjwWA8VMUqTJ/vaUqQRb
-         2MGEMe5MKSXNlJUGKTUmWhz3m/wQ05FXS1JeB0RY5EHr5qzZsHNvJD77cSSaVL8SKYQU
-         gPuw==
-X-Gm-Message-State: AOAM530s6AEpbPfOPLAVioD9OnLAFO13Qn/nS0huNVFXaWV555ATK5qp
-        bt6UzGjVL5ygfDb6H6cOoUo=
-X-Google-Smtp-Source: ABdhPJxpYVTyKnn2VXztxVZssWCuavXSKMcV7OeDT654vU0RtiV8GSDP/WTyw9f0fxmrjDm1nExorQ==
-X-Received: by 2002:a5d:4a07:: with SMTP id m7mr5790947wrq.316.1606333328541;
-        Wed, 25 Nov 2020 11:42:08 -0800 (PST)
-Received: from [192.168.1.152] ([102.64.149.89])
-        by smtp.gmail.com with ESMTPSA id u129sm5090970wme.9.2020.11.25.11.42.04
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 25 Nov 2020 11:42:07 -0800 (PST)
-Message-ID: <5fbeb38f.1c69fb81.a9b8d.bcc2@mx.google.com>
-From:   "Dailborh R." <ritundailb333@gmail.com>
-X-Google-Original-From: Dailborh R.
-Content-Type: text/plain; charset="iso-8859-1"
+        id S2387461AbgKZI24 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 26 Nov 2020 03:28:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726591AbgKZI24 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 26 Nov 2020 03:28:56 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9C1D620872;
+        Thu, 26 Nov 2020 08:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1606379334;
+        bh=5KvXGI9RFJSJyRMweSifK1RqHqlX24baGxqNq/n4EiY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rz0R6dlG/wYGzKkon5TL5mSatmmC/5Ghn0hAQ1XO3Hi00GA+1BQxVBJi4pBN4hKV3
+         nVc/Cewdm3WOtJiBzpoWcz8VA9bvHV8GnwFG4mvEv8T/dNi5zipQ2bICpRSl/UBJoc
+         cJ/CCnAG7NR70B6xDqk0Bcad7FD3OdQMxJ7RMfkE=
+Date:   Thu, 26 Nov 2020 09:29:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jim Quinlan <jquinlan@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] serial: 8250: of: Check for
+ CONFIG_SERIAL_8250_BCM7271
+Message-ID: <X79nh3UUzZfH17Qs@kroah.com>
+References: <20201120194305.8847-1-alcooperx@gmail.com>
+ <20201120194305.8847-2-alcooperx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Please reply to me
-To:     Recipients <Dailborh@vger.kernel.org>
-Date:   Wed, 25 Nov 2020 19:41:59 +0000
-Reply-To: dailrrob.83@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201120194305.8847-2-alcooperx@gmail.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-I'm Dailborh R. from US. I picked interest in you and I would like to know
-more about you and establish relationship with you. i will wait for
-your response. thank you.
+On Fri, Nov 20, 2020 at 02:43:03PM -0500, Al Cooper wrote:
+> From: Jim Quinlan <jquinlan@broadcom.com>
+> 
+> This commit has of_platform_serial_probe() check specifically for the
+> "brcm,bcm7271-uart" and whether its companion driver is enabled. If it
+> is the case, and the clock provider is not ready, we want to make sure
+> that when the 8250_bcm7271.c driver returns EPROBE_DEFER, we are not
+> getting the UART registered via 8250_of.c.
+> 
+> Signed-off-by: Jim Quinlan <jquinlan@broadcom.com>
+> ---
 
+When forwarding on patches from others, always include your
+signed-off-by: as well, to ensure that you have reviewed this and are ok
+with it.  I can't take this as-is, sorry.
+
+And why did you include linux-usb@vger for this patch series?
+
+thanks,
+
+greg k-h
