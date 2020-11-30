@@ -2,157 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6382C885C
-	for <lists+linux-serial@lfdr.de>; Mon, 30 Nov 2020 16:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE6C2C8CC1
+	for <lists+linux-serial@lfdr.de>; Mon, 30 Nov 2020 19:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728431AbgK3Piq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 Nov 2020 10:38:46 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40222 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728407AbgK3Pip (ORCPT
+        id S1726314AbgK3S1q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 Nov 2020 13:27:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgK3S1q (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 Nov 2020 10:38:45 -0500
-Received: by mail-lf1-f68.google.com with SMTP id u19so22465389lfr.7;
-        Mon, 30 Nov 2020 07:38:22 -0800 (PST)
+        Mon, 30 Nov 2020 13:27:46 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE78AC0613D6;
+        Mon, 30 Nov 2020 10:27:05 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id p6so6957669plr.7;
+        Mon, 30 Nov 2020 10:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kjq7AqurfeU73O1TvNnB5Y0LVcGlDBz5FkbYl20IufU=;
+        b=ImC2tXLjBq/6sX2N/46SyLLN8+pobdu3/UY54y5DuhKe6J39QsrDbaZU5si9EXoHNc
+         NhEdeNRNXAviG2HUrPIMO5G7uNSrBXakTKc51lSiLn86ioqSTxZg+MdlRJJwuqI3GAv6
+         y8Ll3j3fsWB1f7oSyJD/PBfMPLiEOP8Hdvj3sGpVhZ+uHy75cebuZS/q1h+23DMXby2K
+         G711GRW5TcmiPGCkkSr4pKJHOntAKwHzFE/s9kgu5y4Vuuki4+qHf6IKaGSAlUn+itdQ
+         qrNLr+fgU+dvn6ma14N/pxvmUZWGZQQxaT9r8VPvd5N5KdgF7w1irR/5VTPJV7JYf6in
+         qPLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4xtaGbTTemD9c+E+gQC/qoKbsCwyc5X5pTFIoVTRIcY=;
-        b=XeGGeWo2IbayVLWJuk0LH9PvIkj4JGWuM01gBEL53/k5+vLiZn/gCm2XU/lPj1uORu
-         NrwtoaT+kwUs3N3IGOFePyh1GxVFTWrkR+0JQY1ud80deSm1mc4Lal/Q5M4iXgWy19hS
-         CpPrwGCSO+OCNr84kBAQhw8NHIXy/naU9z0nJaVNRkyEXsykCcTF6MmVrD16F1M9WNOk
-         O7m4VLelVPmX4jotxLeyO5oUBonsQTDo7Qe3bG6rc5xGd1bzJaNgJcOyS2NLXSAYOHW0
-         wiI0RhYpuSfXjo7MkRRi6yfOqxVv/ae8zROOK6vYVgs8EReQJIfC55WQj8oHZoBqVpT+
-         mYBw==
-X-Gm-Message-State: AOAM530d+ek4kvrQPxjdyLp55mV/kFDEczvMoWHRc0PzUFjabZVg4sKH
-        18RcygCRMBnwoqU1FC3gqiU=
-X-Google-Smtp-Source: ABdhPJyoAIGrX3t/GwCwwxX5FF3BTTdVclkBAmNcvhBtaeIKUyVCuYC3+kJHlq1YimU+WkvJIEYSxw==
-X-Received: by 2002:ac2:50c8:: with SMTP id h8mr9258203lfm.556.1606750676607;
-        Mon, 30 Nov 2020 07:37:56 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v1sm2487959lfg.252.2020.11.30.07.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 07:37:55 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1kjlFv-0002P1-1k; Mon, 30 Nov 2020 16:38:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5/5] USB: serial: ftdi_sio: add support for FreeCalypso DUART28C adapter
-Date:   Mon, 30 Nov 2020 16:37:42 +0100
-Message-Id: <20201130153742.9163-6-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201130153742.9163-1-johan@kernel.org>
-References: <20201130153742.9163-1-johan@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kjq7AqurfeU73O1TvNnB5Y0LVcGlDBz5FkbYl20IufU=;
+        b=n8/hC9c+NSiD9TC31kDHk3FxLxPmZQ8AtSGgDyYsoiQUxKLZf6Kwetue4S7z9Kb/LM
+         eeJH7pr3XUKj7pkjKWgtsQMuA9HGUHcQTFnpoh02DHLXRrfTr+AH4g29y6rZmWvdl7Bl
+         lIW3AmHDPPYMcdh7rVVIRWbnj/HjE2YGrwqueGRrWHMFcyj0eJ705OdR1GS/TnAJmYhv
+         322DtA36aWFlxh03q2UawxgGtaTRIkPd9i4MP5iVhJ62QFytzTORaPp4rI0G/s6d5aQI
+         bx6HR20SfIcIW9XMOxmB8EoTuIbTk9fMofh/W7bEEmNAh/Nj5zhB0vkgSP7ChVBOtnM+
+         h4mw==
+X-Gm-Message-State: AOAM530qjuiKIacJ7nHCiJV911G6kSwFHs+gqmya34Eg5Xilmi50hO2v
+        1E+N4QVZ27zFzYn+7fHWYSeYwMxs1mh0ihQzV2GDv8tpw9s=
+X-Google-Smtp-Source: ABdhPJzZT74pc8LY5TmeNr2gqUnmChzjOPkZ/CaNXyHbonCAXs4PDvd/WvcAYTa4q0cV+/kDpY0/7aJllNiQdZtUY3c=
+X-Received: by 2002:a17:90b:350:: with SMTP id fh16mr121104pjb.228.1606760825351;
+ Mon, 30 Nov 2020 10:27:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201130153742.9163-1-johan@kernel.org> <20201130153742.9163-3-johan@kernel.org>
+In-Reply-To: <20201130153742.9163-3-johan@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 30 Nov 2020 20:27:54 +0200
+Message-ID: <CAHp75VdedN5iaGFpfiPFz6G=Ey3axgaZbKYtt95HEwwjWoWbmQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] serial: core: add sysfs attribute to suppress ready
+ signalling on open
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Mychaela N . Falconia" <falcon@freecalypso.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: "Mychaela N. Falconia" <falcon@freecalypso.org>
+On Mon, Nov 30, 2020 at 5:42 PM Johan Hovold <johan@kernel.org> wrote:
+>
+> Add a nordy sysfs attribute to suppress raising the modem-control lines
+> on open to signal DTE readiness.
 
-FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-on the chip) have been repurposed to drive PWON and RESET controls
-on Calypso targets.  The circuit is wired such that BDBUS[24] high
-(RTS/DTR inactive) is the normal state with Iota VRPC controls
-NOT activated, whereas BDBUS[24] low (RTS or DTR active) turn ON
-the corresponding open drain control signal drivers.
+Why not call it nomctrl ?
 
-A special ftdi_sio driver quirk is needed in order to suppress
-automatic assertion of DTR & RTS on device open: this device's
-special PWON and RESET control drivers MUST NOT be activated
-when the port is ordinarily opened for plain serial communication,
-instead they must only be activated when a special userspace
-application explicitly requests such activation with a TIOCMBIS ioctl.
-These special userspace applications are responsible for making the
-needed pulse with a TIOCMBIS, delay, TIOCMBIC sequence.
+> This can be use to prevent undesirable side-effects on open for
 
-The special quirk is conditionalized on the DUART28C adapter's custom
-USB ID, and is further limited to FT2232D Channel B only: Channel A
-is wired normally, with the chip's ADBUS2 and ADBUS4 outputs
-actually being RTS and DTR rather than something else.
+used
 
-Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
-[johan: reimplement using new NORDY flag, trim quirk comment]
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ftdi_sio.c     | 22 ++++++++++++++++++++++
- drivers/usb/serial/ftdi_sio_ids.h |  1 +
- 2 files changed, 23 insertions(+)
+> applications where the DTR and RTS lines are used for non-standard
+> purposes such as generating power-on and reset pulses.
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index b69032c9ec2b..b555bbc1b0a9 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -97,6 +97,7 @@ static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
- static void  ftdi_USB_UIRT_setup(struct usb_serial_port *port);
- static void  ftdi_HE_TIRA1_setup(struct usb_serial_port *port);
-+static void  ftdi_duart28c_setup(struct usb_serial_port *port);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
- 	.probe	= ftdi_jtag_probe,
-@@ -122,6 +123,10 @@ static const struct ftdi_sio_quirk ftdi_8u2232c_quirk = {
- 	.probe	= ftdi_8u2232c_probe,
- };
- 
-+static const struct ftdi_sio_quirk ftdi_duart28c_quirk = {
-+	.port_probe = ftdi_duart28c_setup,
-+};
-+
- /*
-  * The 8U232AM has the same API as the sio except for:
-  * - it can support MUCH higher baudrates; up to:
-@@ -1042,6 +1047,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-+	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_DUART28C_PID),
-+		.driver_info = (kernel_ulong_t)&ftdi_duart28c_quirk },
- 	{ }					/* Terminating entry */
- };
- 
-@@ -2386,6 +2393,21 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
- 	return 0;
- }
- 
-+/*
-+ * FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-+ * with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-+ * on the chip) have been repurposed to drive PWON and RESET controls.
-+ */
-+static void ftdi_duart28c_setup(struct usb_serial_port *port)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	int ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
-+
-+	if (ifnum == 1)
-+		tty_port_set_nordy(&port->port, 1);
-+}
-+
- static int ftdi_sio_port_remove(struct usb_serial_port *port)
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 3d47c6d72256..3081b8916a0a 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -45,6 +45,7 @@
-  */
- #define FTDI_FALCONIA_JTAG_BUF_PID	0x7150
- #define FTDI_FALCONIA_JTAG_UNBUF_PID	0x7151
-+#define FTDI_FALCONIA_DUART28C_PID	0x7152
- 
- /* Sienna Serial Interface by Secyourit GmbH */
- #define FTDI_SIENNA_PID		0x8348
+...
+
+> +static ssize_t nordy_store(struct device *dev, struct device_attribute *attr,
+> +                               const char *buf, size_t count)
+> +{
+> +       struct tty_port *port = dev_get_drvdata(dev);
+> +       unsigned int val;
+> +       int ret;
+> +
+> +       ret = kstrtouint(buf, 0, &val);
+> +       if (ret)
+> +               return ret;
+
+> +       if (val > 1)
+> +               return -EINVAL;
+
+Can't we utilise kstrtobool() instead?
+
+> +       tty_port_set_nordy(port, val);
+> +
+> +       return count;
+> +}
+
 -- 
-2.26.2
-
+With Best Regards,
+Andy Shevchenko
