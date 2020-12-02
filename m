@@ -2,157 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D742CBBB0
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Dec 2020 12:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9352CBBDA
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Dec 2020 12:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgLBLki (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 2 Dec 2020 06:40:38 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39033 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727664AbgLBLke (ORCPT
+        id S1726598AbgLBLsa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 2 Dec 2020 06:48:30 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42715 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbgLBLsa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 2 Dec 2020 06:40:34 -0500
-Received: by mail-lj1-f193.google.com with SMTP id o24so3201811ljj.6;
-        Wed, 02 Dec 2020 03:40:17 -0800 (PST)
+        Wed, 2 Dec 2020 06:48:30 -0500
+Received: by mail-lf1-f68.google.com with SMTP id u18so4152927lfd.9;
+        Wed, 02 Dec 2020 03:48:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=F2ypKkOamjttQVwgv5mmaq3G5mJZylZwjPDQAwTLqx0=;
-        b=OCqyoGj3zOuaMij0txoIVDfogxzH8fw5l7ZbDy27UgjQAsmwTRhA6pBVNg/ZyD0ttq
-         db4t1Ap0Ie+/2Tb+JxCDEDVqmgT9zVmXCqt0+Hsfe04FOoYC97Z9mkwAuuChB1vHSc/D
-         Xfizjo22JAFp6KppEqqgvuNkETQJyUtaPQ7Q8GkeMK6nGt9aNoy45bjH6MVZtXsB3Oe9
-         6W8PRmPqzsQIUTMGOiP5DPhwWIY25fzAs+7DsmMfXvo8SAyfUBIsTkmRD+Axt9mtf9Wc
-         E0CR4la9HimMMP0//pN0FLXiCzKD+VRw2ZCdkSg5+HDMS7tfBtkfzmUsQoEN26JVo6Rb
-         NEEA==
-X-Gm-Message-State: AOAM530fOOCLSkaN0eZ/3kTf319Jpu21PkRsLUi86lf83U9HmdKIfCgR
-        rOKAcIxWLT706xI7L7dxAEEGqcMCmXBj+Q==
-X-Google-Smtp-Source: ABdhPJyplTPn0nJsn80Zygl/EROVP3j8GB/CsH5P3t3301AG3y96QvioJWYVnT0U2BVwCRI4+l60RA==
-X-Received: by 2002:a2e:99d7:: with SMTP id l23mr973603ljj.303.1606909192214;
-        Wed, 02 Dec 2020 03:39:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=He+Sa9rFfqOxdvahQG2TB0WWdsTSDzRE0mk+yggW0ao=;
+        b=L7RnSdAkjos4papThhSAmN1ZULXFJ7B//oCM3aXMSreOIdeZzUyYF2DpBa1G/+DKZ8
+         erqL+UHsrjBoLxxvySiZDN+32adNQ5cDw5VPFPhNvqgbWWeVbvioQpjcG7rp+GqSUPXF
+         cQNUK3cwGfc7cK9uagvmIVuRNmN9pkTRLmsJq/12hdRfZnBOZo0C4Wt/B4V0e5zT5c20
+         54TbIdxWOT1O2v2QNoWR6MAUjjq0D7ciE5j8/684h1YuTv/6PvRa2sPdhN8MjwYAxyfy
+         QUWo+eVPOM4Xru+Dt0MUKKF7NOzSTHboL8NglP6MFEh0FIL4HXKMVTvNnFT0xafz8lOC
+         +A6w==
+X-Gm-Message-State: AOAM532xbcodSIyb8aD/+QZReZ6taEtZBIxP+vAWUtMq1CnoBHVLvvPm
+        Og+kQ+31EmMglQXCqu8GRyM=
+X-Google-Smtp-Source: ABdhPJy7nLm9BLIO+krjm7ukXB1GlbftAMWyr/RFqOThReZZAiAzUaEFva+vBw4tu5uh0nHmcJU0Dg==
+X-Received: by 2002:a19:5e5e:: with SMTP id z30mr1041757lfi.277.1606909667287;
+        Wed, 02 Dec 2020 03:47:47 -0800 (PST)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id s20sm401932ljg.15.2020.12.02.03.39.47
+        by smtp.gmail.com with ESMTPSA id u8sm386298lfo.168.2020.12.02.03.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 03:39:49 -0800 (PST)
+        Wed, 02 Dec 2020 03:47:46 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1kkQUd-00073I-8a; Wed, 02 Dec 2020 12:40:19 +0100
+        (envelope-from <johan@kernel.org>)
+        id 1kkQcL-000751-39; Wed, 02 Dec 2020 12:48:17 +0100
+Date:   Wed, 2 Dec 2020 12:48:17 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Mychaela Falconia <mychaela.falconia@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Mychaela N . Falconia" <falcon@freecalypso.org>,
         linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH v2 7/7] USB: serial: ftdi_sio: add support for FreeCalypso DUART28C adapter
-Date:   Wed,  2 Dec 2020 12:39:42 +0100
-Message-Id: <20201202113942.27024-8-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201202113942.27024-1-johan@kernel.org>
-References: <20201202113942.27024-1-johan@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] tty: add flag to suppress ready signalling on open
+Message-ID: <X8d/Ac5Z4bT/W7ZA@localhost>
+References: <20201130153742.9163-1-johan@kernel.org>
+ <CA+uuBqYmzJMiY75LrA_uKb_uL2=7oQTrzCFksb2ehT0XMXxrbw@mail.gmail.com>
+ <c8f3e485-54c6-99c7-4888-6eef2e174bf6@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c8f3e485-54c6-99c7-4888-6eef2e174bf6@kernel.org>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: "Mychaela N. Falconia" <falcon@freecalypso.org>
+On Tue, Dec 01, 2020 at 08:14:07AM +0100, Jiri Slaby wrote:
+> On 30. 11. 20, 22:22, Mychaela Falconia wrote:
+> > 2) For situations in which the luxury of a custom USB ID is not
+> > available, e.g., a situation where the device that does not tolerate
+> > automatic DTR/RTS assertion on open is a physical RS-232 device that
+> > can be connected to "any" serial port, the new sysfs attribute comes
+> > to the rescue.
+> > 
+> > Johan's patch comments say that the new flag can also be brought out
+> > to termios in the future, similarly to HUPCL,
+> 
+> The difference to other control flags is that open raises DTR/RTS in any 
+> case (i.e. including O_NONBLOCK) -- provided baud rate is set (and it is 
+> for casual serials). That means you cannot open a port to configure it 
+> (using e.g. setserial) without actually raising the DTR/RTS.
 
-FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-on the chip) have been repurposed to drive PWON and RESET controls
-on Calypso targets.  The circuit is wired such that BDBUS[24] high
-(RTS/DTR inactive) is the normal state with Iota VRPC controls
-NOT activated, whereas BDBUS[24] low (RTS or DTR active) turn ON
-the corresponding open drain control signal drivers.
+Right, but depending on the application this may be ok (e.g. reset and
+initialise on first open after boot, which may have triggered a reset
+anyway).
 
-A special ftdi_sio driver quirk is needed in order to suppress
-automatic assertion of DTR & RTS on device open: this device's
-special PWON and RESET control drivers MUST NOT be activated
-when the port is ordinarily opened for plain serial communication,
-instead they must only be activated when a special userspace
-application explicitly requests such activation with a TIOCMBIS ioctl.
-These special userspace applications are responsible for making the
-needed pulse with a TIOCMBIS, delay, TIOCMBIC sequence.
+If control over first open is needed, the sysfs interface provides that
+out-of-band.
 
-The special quirk is conditionalized on the DUART28C adapter's custom
-USB ID, and is further limited to FT2232D Channel B only: Channel A
-is wired normally, with the chip's ADBUS2 and ADBUS4 outputs
-actually being RTS and DTR rather than something else.
+> > but I question the
+> > usefulness of doing so, as it is a chicken and egg problem: one needs
+> > to open the tty device in order to do termios ioctls on it, and if
+> > that initial open triggers DTR/RTS hardware actions, then the end user
+> > is still screwed.  If Johan or someone else can see a potential use
+> > case for manipulating this new flag via termios (as opposed to sysfs
+> > or USB-ID-based driver quirks), perhaps you could elaborate on it?
+> 
+> We would need to (ab)use another open flag (e.g. O_DIRECT). I am not 
+> biased to either of solutions.
 
-Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
-[johan: reimplement using new NORDY flag, trim quirk comment]
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ftdi_sio.c     | 22 ++++++++++++++++++++++
- drivers/usb/serial/ftdi_sio_ids.h |  1 +
- 2 files changed, 23 insertions(+)
+Forgot to mention that using open-flags would prevent using standard
+utilities like cat, echo and terminal programs. So for that reason a
+termios and/or sysfs interface is also preferred.
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index b69032c9ec2b..1ba34ffe3a25 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -97,6 +97,7 @@ static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
- static void  ftdi_USB_UIRT_setup(struct usb_serial_port *port);
- static void  ftdi_HE_TIRA1_setup(struct usb_serial_port *port);
-+static void  ftdi_duart28c_setup(struct usb_serial_port *port);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
- 	.probe	= ftdi_jtag_probe,
-@@ -122,6 +123,10 @@ static const struct ftdi_sio_quirk ftdi_8u2232c_quirk = {
- 	.probe	= ftdi_8u2232c_probe,
- };
- 
-+static const struct ftdi_sio_quirk ftdi_duart28c_quirk = {
-+	.port_probe = ftdi_duart28c_setup,
-+};
-+
- /*
-  * The 8U232AM has the same API as the sio except for:
-  * - it can support MUCH higher baudrates; up to:
-@@ -1042,6 +1047,8 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_JTAG_UNBUF_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
-+	{ USB_DEVICE(FTDI_VID, FTDI_FALCONIA_DUART28C_PID),
-+		.driver_info = (kernel_ulong_t)&ftdi_duart28c_quirk },
- 	{ }					/* Terminating entry */
- };
- 
-@@ -2386,6 +2393,21 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
- 	return 0;
- }
- 
-+/*
-+ * FreeCalypso DUART28C is an FT2232D-based USB to dual UART adapter
-+ * with a special quirk: Channel B RTS and DTR outputs (BDBUS2 and BDBUS4
-+ * on the chip) have been repurposed to drive PWON and RESET controls.
-+ */
-+static void ftdi_duart28c_setup(struct usb_serial_port *port)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct usb_interface *intf = serial->interface;
-+	int ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
-+
-+	if (ifnum == 1)
-+		tty_port_set_nordy(&port->port, true);
-+}
-+
- static int ftdi_sio_port_remove(struct usb_serial_port *port)
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 3d47c6d72256..3081b8916a0a 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -45,6 +45,7 @@
-  */
- #define FTDI_FALCONIA_JTAG_BUF_PID	0x7150
- #define FTDI_FALCONIA_JTAG_UNBUF_PID	0x7151
-+#define FTDI_FALCONIA_DUART28C_PID	0x7152
- 
- /* Sienna Serial Interface by Secyourit GmbH */
- #define FTDI_SIENNA_PID		0x8348
--- 
-2.26.2
-
+Johan
