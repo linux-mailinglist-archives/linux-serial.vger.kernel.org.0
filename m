@@ -2,96 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 716732CB20A
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Dec 2020 02:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7955F2CB4DE
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Dec 2020 07:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbgLBBFo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 1 Dec 2020 20:05:44 -0500
-Received: from mail.cross.am ([81.89.209.7]:34698 "EHLO cross.am"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726556AbgLBBFo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 1 Dec 2020 20:05:44 -0500
-X-Greylist: delayed 705 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Dec 2020 20:05:42 EST
-Received: from cross.am (localhost [127.0.0.1])
-        by cross.am (Postfix) with ESMTP id 7C7522386EF;
-        Wed,  2 Dec 2020 04:48:29 +0400 (AMT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 cross.am 7C7522386EF
-X-Virus-Scanned: amavisd-new at cross.am
-Received: from cross.am ([127.0.0.1])
-        by cross.am (cross.am [127.0.0.1]) (amavisd-new, port 10024) with LMTP
-        id YBacQo04zcJi; Wed,  2 Dec 2020 04:48:19 +0400 (AMT)
-Received: from webmail.cross.am (webmail.cross.am [81.89.209.7])
-        by cross.am (Postfix) with ESMTP id 3CFF79A0D7;
-        Wed,  2 Dec 2020 04:01:31 +0400 (AMT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 cross.am 3CFF79A0D7
-Received: from 102.89.3.127
-        (SquirrelMail authenticated user maratuk)
-        by webmail.cross.am with HTTP;
-        Wed, 2 Dec 2020 04:01:31 +0400
-Message-ID: <084d6573773df48918c69d7fdcc504cd.squirrel@webmail.cross.am>
-Date:   Wed, 2 Dec 2020 04:01:31 +0400
-Subject: Good day
-From:   "J.N.K Mamabolo" <info@mamabolo.com>
-Reply-To: paulall@163.com
-User-Agent: SquirrelMail/1.4.23 [SVN]
+        id S1726469AbgLBGKR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 2 Dec 2020 01:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725902AbgLBGKR (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 2 Dec 2020 01:10:17 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFDAC0613CF;
+        Tue,  1 Dec 2020 22:09:37 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id f1so71896plt.12;
+        Tue, 01 Dec 2020 22:09:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qfMlRUVz5l7XVnc/HFInF5rSPBCWYyUgC3VCNT+TRWQ=;
+        b=TnsVZidest2ByMV+481VeSUNqpBgI1OL+PQhmx5TgiogzwSPYZVepCSjC2ngqlf/7O
+         hZsNyBPtSJmroRfSPgNjJ0PRip6SsydYB6J/hU9bPT7SkeDxbLICz57lItMAAPXQ6y4u
+         DKUYDpySRXQcUZv8x8YK4Zq4llEIcgqBdaOR/MrFtiRQFXLw9wujLYV8NShwUacIy8Hi
+         JGZaw4BcjZk6TX6G2NcBUELOM/T6weCLLUvyfFrbDnJ4mX/s2/wXDFXWYVUIolmUEOco
+         K9W14pOAUNOjeqkw8k47iR11F3WvSn0royFUX2VncGE/gyrBrzH7duq824Eb/VwNb1ve
+         oV8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qfMlRUVz5l7XVnc/HFInF5rSPBCWYyUgC3VCNT+TRWQ=;
+        b=F++q4ONptXDSlulq2TpvujuXBB7miJ12IPcvEkrpp3UKYXvky6avA7T2krbrmVm+A6
+         Z2fJjuo3EawyDSpSyDcz0saErwrpVbZCU71XlredU57OVBYGBqAYIfAaZ+uWDtDS9gnV
+         J7ztBZN4/x+n7Zi6N4YSwT6qN07hphI770l7euNwPHGVR0IywEhUaEXFjbnZRW+JcAqG
+         4DaCgsnKvlHxF4oJ1JOe3P2a5ZZSILE6w3Q0auiI24TGbE2DiB+JfAp8y8D7ij0djBLm
+         uNs2zjmwx4tpRsMGpFb+Cc/3m1uhy4gj0Xn1UVPs2hdScgVHIyLSqxt7OtsE1CFleefl
+         RNTw==
+X-Gm-Message-State: AOAM531flLXousOrOcM9tRWs49sXUE7H3bsNJzMQh8+PT+UeA52wk5AM
+        Q1YXDzp2Szbowul/Xc3tISOrmk9YD/lnkgfb
+X-Google-Smtp-Source: ABdhPJwMichy4GhT9OEjokknnoS7y6ksIMyspxwtwcpwQ7zwHPFe+rlQywsyLsPfJUBtzCHh3D6l4w==
+X-Received: by 2002:a17:902:ee83:b029:da:3483:3957 with SMTP id a3-20020a170902ee83b02900da34833957mr1358300pld.38.1606889376898;
+        Tue, 01 Dec 2020 22:09:36 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:e004:f0c9:61ce:d6fb:ee0e:745f])
+        by smtp.gmail.com with ESMTPSA id o14sm777130pgh.1.2020.12.01.22.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 22:09:36 -0800 (PST)
+From:   Clement Smith <rclemsmith@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Clement Smith <rclemsmith@gmail.com>
+Subject: [PATCH] tty : serial: jsm: Fixed file by adding spacing
+Date:   Wed,  2 Dec 2020 11:39:16 +0530
+Message-Id: <20201202060916.34130-1-rclemsmith@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Fixed a coding style issue
 
+Signed-off-by: Clement Smith <rclemsmith@gmail.com>
+---
+ drivers/tty/serial/jsm/jsm_tty.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
-Dear friend,
-
-I am interested in establishing and operating a very viable business as a
-means of investment abroad but i do not know too well on how this is done
-in your country. So i will need you to help me in this regard.
-
-My preference is any good profitable yielding business and i would
-appreciate any viable ideas you could come up with. I also need you to
-help me look for properties like homes and lands for sale as i am
-proposing to invest the sum of eleven million United State Dollars
-($11,000,000 USD)for this. I do not know if you can or be of help to me.
-
-For a brief on my personality. My name is J.N.K Mamabolo of Saas deputy
-Joint Special Representative for Darfur Hybrid Operation. AMBASSADOR.
-JEREMIAH K.MAMABOLO. United Nation  SPECIAL REPRESENTATIVE (UNAMID) SUDAN.
-
-http://lnx.sudafrica.it/article.html?id=368
-
-My need for this business proposition and to acquire these properties is
-very urgent as the amount was secured from the oppressive government of
-Sudan, personally secure it for the future of my four children before i
-was apprehended by his current administration as the trial proceeds in
-court, I want to quickly sent out this amount to secure valuable
-properties in your country in other not to lose everything i suffer for
-all this years.
-
-Please i expect your good and prompt reply urgently so that we can proceed
-smoothly by the grace of the most high. I will need your personal details
-such as
-
-Names:
-Your whatsapp mobile number:
-Country:
-Your residential home address:
-
-if i am unable to access my emails due to government issues arising at
-this moment that lead me to search out your email contact from Email data
-base.
-
-Best Regards.
-
-J.N.K Mamabolo
-
-
-
-
+diff --git a/drivers/tty/serial/jsm/jsm_tty.c b/drivers/tty/serial/jsm/jsm_tty.c
+index 689774c073ca..512b77195e9f 100644
+--- a/drivers/tty/serial/jsm/jsm_tty.c
++++ b/drivers/tty/serial/jsm/jsm_tty.c
+@@ -607,7 +607,7 @@ void jsm_input(struct jsm_channel *ch)
+ 				 * Give the Linux ld the flags in the
+ 				 * format it likes.
+ 				 */
+-				if (*(ch->ch_equeue +tail +i) & UART_LSR_BI)
++				if (*(ch->ch_equeue + tail + i) & UART_LSR_BI)
+ 					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i),  TTY_BREAK);
+ 				else if (*(ch->ch_equeue +tail +i) & UART_LSR_PE)
+ 					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_PARITY);
+-- 
+2.27.0
 
