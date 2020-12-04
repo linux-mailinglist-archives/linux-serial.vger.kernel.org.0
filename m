@@ -2,29 +2,37 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCE42CEB2B
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Dec 2020 10:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947212CEC96
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Dec 2020 11:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729694AbgLDJkn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Dec 2020 04:40:43 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:8651 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729512AbgLDJkg (ORCPT
+        id S2387631AbgLDK5c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 4 Dec 2020 05:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726735AbgLDK5c (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Dec 2020 04:40:36 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CnSMx3MYTz15XW8;
-        Fri,  4 Dec 2020 17:39:25 +0800 (CST)
-Received: from thunder-town.china.huawei.com (10.174.177.9) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 4 Dec 2020 17:39:47 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Fri, 4 Dec 2020 05:57:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FCEC061A51
+        for <linux-serial@vger.kernel.org>; Fri,  4 Dec 2020 02:56:51 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kl8lS-0004Tj-Og; Fri, 04 Dec 2020 11:56:38 +0100
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1kl8lM-0006gu-8p; Fri, 04 Dec 2020 11:56:32 +0100
+Message-ID: <2c36ef4c2d022f6f83ec5c78a951d5e76f95378e.camel@pengutronix.de>
+Subject: Re: [PATCH 1/5] media: dt-bindings: add the required property
+ 'additionalProperties'
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Karol Gugala <kgugala@antmicro.com>,
         Mateusz Holenko <mholenko@antmicro.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
         Stafford Horne <shorne@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -35,45 +43,38 @@ To:     Philipp Zabel <p.zabel@pengutronix.de>,
         linux-mediatek <linux-mediatek@lists.infradead.org>,
         devicetree <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 5/5] dt-bindings: mfd: correct the node name of the panel led
-Date:   Fri, 4 Dec 2020 17:38:13 +0800
-Message-ID: <20201204093813.1275-6-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20201204093813.1275-1-thunder.leizhen@huawei.com>
+Date:   Fri, 04 Dec 2020 11:56:32 +0100
+In-Reply-To: <20201204093813.1275-2-thunder.leizhen@huawei.com>
 References: <20201204093813.1275-1-thunder.leizhen@huawei.com>
+         <20201204093813.1275-2-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.9]
-X-CFilter-Loop: Reflected
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-According to the definition in leds-pwm.yaml, the node name of each led
-must match the regular expression "^led(-[0-9a-f]+)?$". "led" or "led-"
-followed by a decimal or hexadecimal ID number.
+On Fri, 2020-12-04 at 17:38 +0800, Zhen Lei wrote:
+> When I do dt_binding_check for any YAML file, below wanring is always
+> reported:
+> 
+> xxx/media/coda.yaml: 'additionalProperties' is a required property
+> xxx/media/coda.yaml: ignoring, error in schema:
+> warning: no schema found in file: xxx/media/coda.yaml
+> 
+> There are three properties defined in allOf, they should be explicitly
+> declared. Otherwise, "additionalProperties: false" will prohibit them.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- Documentation/devicetree/bindings/mfd/iqs62x.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you, there already is a patch to fix this:
 
-diff --git a/Documentation/devicetree/bindings/mfd/iqs62x.yaml b/Documentation/devicetree/bindings/mfd/iqs62x.yaml
-index 541b06d80e7337a..044cd7542c2bcf5 100644
---- a/Documentation/devicetree/bindings/mfd/iqs62x.yaml
-+++ b/Documentation/devicetree/bindings/mfd/iqs62x.yaml
-@@ -93,7 +93,7 @@ examples:
-     pwmleds {
-             compatible = "pwm-leds";
- 
--            panel {
-+            led-1 {
-                     pwms = <&iqs620a_pwm 0 1000000>;
-                     max-brightness = <255>;
-             };
--- 
-1.8.3
+https://lore.kernel.org/linux-media/20201117200752.4004368-1-robh@kernel.org/
 
-
+regards
+Philipp
