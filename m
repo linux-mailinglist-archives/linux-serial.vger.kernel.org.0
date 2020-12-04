@@ -2,79 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947212CEC96
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Dec 2020 11:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D03C2CF84F
+	for <lists+linux-serial@lfdr.de>; Sat,  5 Dec 2020 01:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387631AbgLDK5c convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Fri, 4 Dec 2020 05:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726735AbgLDK5c (ORCPT
+        id S1731128AbgLEArR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Dec 2020 19:47:17 -0500
+Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:50044 "EHLO
+        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726917AbgLEArR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Dec 2020 05:57:32 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FCEC061A51
-        for <linux-serial@vger.kernel.org>; Fri,  4 Dec 2020 02:56:51 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kl8lS-0004Tj-Og; Fri, 04 Dec 2020 11:56:38 +0100
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1kl8lM-0006gu-8p; Fri, 04 Dec 2020 11:56:32 +0100
-Message-ID: <2c36ef4c2d022f6f83ec5c78a951d5e76f95378e.camel@pengutronix.de>
-Subject: Re: [PATCH 1/5] media: dt-bindings: add the required property
- 'additionalProperties'
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 04 Dec 2020 11:56:32 +0100
-In-Reply-To: <20201204093813.1275-2-thunder.leizhen@huawei.com>
-References: <20201204093813.1275-1-thunder.leizhen@huawei.com>
-         <20201204093813.1275-2-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        Fri, 4 Dec 2020 19:47:17 -0500
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
+        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 31A351A558B;
+        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
+        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
+        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
+Date:   Sat, 05 Dec 2020 04:44:54 +0900
+From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
+To:     <infocarferr1@aim.com>
+Reply-To: <infocarfer@aim.com>
+Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
+         Kuo Fung I have Important Matter to Discuss with you concerning
+         my late client. Died without a NEXT OF KIN. Send me your private
+         email for full details information. 
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MAILER: Active! mail
+X-TM-AS-MML: disable
+X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
+X-TM-AS-Result: No--4.326-5.0-31-10
+X-imss-scan-details: No--4.326-5.0-31-10
+X-TM-AS-User-Approved-Sender: No
+X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
+        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
+        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
+        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
+        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 2020-12-04 at 17:38 +0800, Zhen Lei wrote:
-> When I do dt_binding_check for any YAML file, below wanring is always
-> reported:
-> 
-> xxx/media/coda.yaml: 'additionalProperties' is a required property
-> xxx/media/coda.yaml: ignoring, error in schema:
-> warning: no schema found in file: xxx/media/coda.yaml
-> 
-> There are three properties defined in allOf, they should be explicitly
-> declared. Otherwise, "additionalProperties: false" will prohibit them.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+infocarfer@aim.com
 
-Thank you, there already is a patch to fix this:
 
-https://lore.kernel.org/linux-media/20201117200752.4004368-1-robh@kernel.org/
 
-regards
-Philipp
