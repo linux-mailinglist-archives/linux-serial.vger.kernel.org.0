@@ -2,59 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB462CFD65
-	for <lists+linux-serial@lfdr.de>; Sat,  5 Dec 2020 19:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E392CFD08
+	for <lists+linux-serial@lfdr.de>; Sat,  5 Dec 2020 19:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727343AbgLESce (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 5 Dec 2020 13:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S1727989AbgLEST3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 5 Dec 2020 13:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727990AbgLES2x (ORCPT
+        with ESMTP id S1726664AbgLESSU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 5 Dec 2020 13:28:53 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F1DC02B8EC;
-        Sat,  5 Dec 2020 06:20:42 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id hk16so4836369pjb.4;
-        Sat, 05 Dec 2020 06:20:42 -0800 (PST)
+        Sat, 5 Dec 2020 13:18:20 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A81C02B8EF;
+        Sat,  5 Dec 2020 06:20:49 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id n10so5365838pgv.8;
+        Sat, 05 Dec 2020 06:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WBdfoW+IfnGU4uiYs2fn5u4z5HaH23KZfZERfOV5QJQ=;
-        b=OLbjerAM+fFtJJjSno9v4LBGz3LVvwyXcFf11dQjf0ExUXFzrh8L9HUV4W5+/nClK4
-         sn+12DwN6IqgyIsUf3rxpZE1MLA9zzet9h8QrRhi0Rrv27qMOrWomPKCfik2z6HO/AxY
-         n+ZwP0Af69go/MeeF/O/ZUvswpOBTapTZ5WC1R/sOMDST0eNl2+p21KN+YuVwG3E9bu6
-         cMDruHAvgDpJOUkUj70WeylWkpClqbxjddgnJfETVNQ0wvGmyhoida+Zsl1UfR6fb3Nf
-         MHG1dqS34incOsHGILwBvVUVLPIxx7NXonqjej5EOEs91hVyMLRfuOiOOTuVR05ViRgw
-         JLeQ==
+        bh=dc0LFkjcwgaxWcJJWroMzUjPziQ2S7lUjtXMZ/tjszA=;
+        b=GDH71cKIElYybGZjiw00GeP5D3OUl0/tQRPkkXTqRMQ89wsTO8qtb0gQ371G+t6YsK
+         UROAhE2V57HYYL56bMjOut462GRtle6D9mlvnlgi2+h3g3XxVGloadss99ivJnAyCU1O
+         zkaxhZCiyQUguS4hNDbyZtMlfLZ7VSA4XcC+klTjMW8uTeq/avI9EPX+pOAc4DolF1h9
+         HSu60qp2+zJxYvLyc5kOAJbT9wo5EIlTxoFfMCAUPxojFAJRMfYCUErTcZh45m89D+fo
+         LCuL0XPKUUXy0qzC1UTO04uu/6iEEupOAeyb6wBupmHl/03EsSOGQKQDRfZM4ttiEAh/
+         HABw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WBdfoW+IfnGU4uiYs2fn5u4z5HaH23KZfZERfOV5QJQ=;
-        b=JToqiVfJmak8WhQyyqux9yguVgi03FprYSx1qb6xiDTDBFpOTlNsawsBASuk/jZQvX
-         ihw2/IAgpgFCC92cLR0xYI9blS33pRhpSq3eqADx8uEQfo+Y51hGtdFq52Q0+OhFpsTN
-         1+ZwNvMTB7JUzqude7Tz1YgcWa9sWiLH80iYbWzn25QhgOZW4H//OLenDA9HQk/9dq7L
-         hpu2prsj765Q2kEFYwPXS0bCh3l65/su/MrxvczZbphV60kXANNq341yIVA2daLEhhpk
-         VxekvLt0nLPQTX/VDmQsCWA9UOaE4DLQj2tqswpUdFwCI+DtTHYiAxrpTsEtO2AhIG3S
-         ffDA==
-X-Gm-Message-State: AOAM530ShhXsCmorajuN8iH5psnSXIViU0LfViKpeg7Sc5G9Yp7U5UdK
-        gWsJI2CABks2AdMTmi5ghw8=
-X-Google-Smtp-Source: ABdhPJyRnSYt/w1OTVBXLbY8GnU8uk0/jYcsftNWTrEcvaSVTqYFn1h/9lRqRBbBW6+K2Q5tpG/S9w==
-X-Received: by 2002:a17:902:8508:b029:da:8f7e:f645 with SMTP id bj8-20020a1709028508b02900da8f7ef645mr8652008plb.30.1607178042400;
-        Sat, 05 Dec 2020 06:20:42 -0800 (PST)
+        bh=dc0LFkjcwgaxWcJJWroMzUjPziQ2S7lUjtXMZ/tjszA=;
+        b=CNKWrU6GaCOFVtyFZdtZWrQ0fojWQncjavYuBZTQeRmWbauK/VL/WzRzEeRsF1fmnJ
+         A2hDBAEhRo/CZfaA1S6V14z6Y6pc+zKUXEt7q0M377PiMRrE2fnWst3zZppDQYCsO0C1
+         ujhRw3VW3CfS9Zdaqo/l0Qh5SPBsu//wf8KZKYSgSISzaUL/zObXCzM74SBjSX29JQzo
+         WByIanJ3bfxOXSPxiaxBaFTVq19NGUVsyz7fbgyFrphs6oK92lzuxfWjiHG/1UKWaSM9
+         NtqN8dON70DqxVBCw42gpu/eQJ6WldWckzCX05R4sl6+E+nEw0BUi/jlrXCyefOnn06v
+         RcQA==
+X-Gm-Message-State: AOAM530gljZWtFT3OEaQRBlGelMWTxGZ2yw9+v/CDZNavVODtG/Qwr8d
+        n1xtYg3angjjD7jP1XhSGcw=
+X-Google-Smtp-Source: ABdhPJxTiLevWvI7pyUtA+j/f7VQCyy6drnlOAoxh4X9NPngOWz1w/5HcwHrbVGgDtOursc+XRV9Eg==
+X-Received: by 2002:a63:eb10:: with SMTP id t16mr6956780pgh.210.1607178048619;
+        Sat, 05 Dec 2020 06:20:48 -0800 (PST)
 Received: from localhost.localdomain ([2405:201:e004:f0c9:3f6:a1c3:a34c:b902])
-        by smtp.gmail.com with ESMTPSA id m4sm9400202pfd.203.2020.12.05.06.20.40
+        by smtp.gmail.com with ESMTPSA id m4sm9400202pfd.203.2020.12.05.06.20.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Dec 2020 06:20:41 -0800 (PST)
+        Sat, 05 Dec 2020 06:20:48 -0800 (PST)
 From:   Clement Smith <rclemsmith@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Clement Smith <rclemsmith@gmail.com>
-Subject: [PATCH 5/8] tty: serial: jsm: Fixed file by added more spacing in line 614
-Date:   Sat,  5 Dec 2020 19:50:12 +0530
-Message-Id: <ee968518c5cfe6b5ea416c0f86df0a5255ba7e15.1607177807.git.rclemsmith@gmail.com>
+Subject: [PATCH 8/8] tty: serial: jsm: Removed assignment in if statement
+Date:   Sat,  5 Dec 2020 19:50:15 +0530
+Message-Id: <e47a6d011ec8d660cad78448984097a4922eaf9c.1607177807.git.rclemsmith@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1607177807.git.rclemsmith@gmail.com>
 References: <cover.1607177807.git.rclemsmith@gmail.com>
@@ -64,26 +64,27 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-        Fixed a coding style issue
+            Fixed a coding style issue
 
-        Signed-off-by: Clement Smith <rclemsmith@gmail.com>
+            Signed-off-by: Clement Smith <rclemsmith@gmail.com>
 ---
- drivers/tty/serial/jsm/jsm_tty.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/jsm/jsm_tty.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/serial/jsm/jsm_tty.c b/drivers/tty/serial/jsm/jsm_tty.c
-index 45e212be64c4..75c9bfa5077c 100644
+index eab82fb6b384..bfd4b55e6c74 100644
 --- a/drivers/tty/serial/jsm/jsm_tty.c
 +++ b/drivers/tty/serial/jsm/jsm_tty.c
-@@ -611,7 +611,7 @@ void jsm_input(struct jsm_channel *ch)
- 					tty_insert_flip_char(port, *(ch->ch_rqueue + tail + i),  TTY_BREAK);
- 				else if (*(ch->ch_equeue + tail + i) & UART_LSR_PE)
- 					tty_insert_flip_char(port, *(ch->ch_rqueue + tail + i), TTY_PARITY);
--				else if (*(ch->ch_equeue +tail +i) & UART_LSR_FE)
-+				else if (*(ch->ch_equeue + tail + i) & UART_LSR_FE)
- 					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_FRAME);
- 				else
- 					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_NORMAL);
+@@ -742,7 +742,8 @@ void jsm_check_queue_flow_control(struct jsm_channel *ch)
+ 	int qleft;
+ 
+ 	/* Store how much space we have left in the queue */
+-	if ((qleft = ch->ch_r_tail - ch->ch_r_head - 1) < 0)
++    qleft = ch->ch_r_tail - ch->ch_r_head - 1;
++	if (qleft < 0)
+ 		qleft += RQUEUEMASK + 1;
+ 
+ 	/*
 -- 
 2.27.0
 
