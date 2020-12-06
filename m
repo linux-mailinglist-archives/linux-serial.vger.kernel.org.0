@@ -2,165 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 143132D0310
-	for <lists+linux-serial@lfdr.de>; Sun,  6 Dec 2020 11:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A202D033B
+	for <lists+linux-serial@lfdr.de>; Sun,  6 Dec 2020 12:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbgLFK5L (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 6 Dec 2020 05:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725794AbgLFK5K (ORCPT
+        id S1725804AbgLFLOC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 6 Dec 2020 06:14:02 -0500
+Received: from smtprelay0211.hostedemail.com ([216.40.44.211]:36018 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725767AbgLFLOC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 6 Dec 2020 05:57:10 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652B3C0613D0;
-        Sun,  6 Dec 2020 02:56:30 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id c7so10549459edv.6;
-        Sun, 06 Dec 2020 02:56:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VELJr/NXssUvymRpU41z6schgWDjiLoMIujp5PzNYgI=;
-        b=AM3Xzq6+hFoIMXw5jqHDV/aK4fIVFIUT+gYZkPKMO6b3BMn+5Z3egpuPe7EGFYm9/8
-         gABWnZDGF9uTkxFKMIKBU84O105kpKx9dmPSJ+hCIxRNP8q4GHtGfMB7UdWDzNIAUyI4
-         7gTfafti6On+2jBTq+598x5NApHw6WHqxk1sQR/xEEQLCgUvWvkfbKUwedZSENgXQvPA
-         wfnNngXyHXqTKfi4gSJBTUDk41eZKF357FgFcvXtDjdjDL0V2y5MTdZuNxcEx5kUQhlt
-         PUc3EXFZ1FbsuFeCOS4vBFX/J5Yaqmb7yBEa4sOl1qZsXJoD63UWQJgui5wOcsu6kiXZ
-         tUng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VELJr/NXssUvymRpU41z6schgWDjiLoMIujp5PzNYgI=;
-        b=P3p8D+X82kBsaaUOBGnc9gWVOlBKriRV9htCUmH6YtgppKU2w69daTojbwq0EAAa1I
-         xgsycjLulMk19+z0btj6BLpO3yF+l8VMHZIB2tF+iYVjbmpLlhcK0/rBn/O2j05BcbO9
-         2IbBhCiQMIss1MBkvSoYhGmE7GXcvv2b7dIUCAHp7HSlBT7cpnDt6YIy4Ga3Ma9oteo4
-         bFqY8QNQpES/QPagCJYM0LYYJ9EXJL899WEQqsN9ibQAa8B42mhf3ZLb0jHx3oe8w2xF
-         QW0Fg86IV0pz4MYa3oh06c5VTVpkdcKpuDjIQjD9b7pTgf3ZhxGru62rn+prRId/biRa
-         RN3Q==
-X-Gm-Message-State: AOAM53216fmhzuc3P17AbQ6LcaH+LZo3bhsFjCQOX5Jyzl1vn2fFfbyG
-        zdkQEdG55715Dp6vuwkCxX/XTyQ+/3Q=
-X-Google-Smtp-Source: ABdhPJyfn9tQ0SbTHXlHVreFPNrD0NC+wdf1y4eq/ep9Mt3EpJ18KaU3fRNrlj2DrkQi8Dv6n3Hh2Q==
-X-Received: by 2002:a05:6402:149a:: with SMTP id e26mr15325734edv.232.1607252188637;
-        Sun, 06 Dec 2020 02:56:28 -0800 (PST)
-Received: from [192.168.2.202] (pd9e5a241.dip0.t-ipconnect.de. [217.229.162.65])
-        by smtp.gmail.com with ESMTPSA id v2sm724847ejq.109.2020.12.06.02.56.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Dec 2020 02:56:27 -0800 (PST)
-Subject: Re: [PATCH v2 0/9] Add support for Microsoft Surface System
- Aggregator Module
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dorian Stoll <dorian.stoll@tmsp.io>,
-        platform-driver-x86@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20201203212640.663931-1-luzmaximilian@gmail.com>
- <20201206070705.GA686270@unreal>
- <052ecf4d-9e08-2c08-8a06-c30ba2b28d82@redhat.com>
- <1b4fe1fd-592d-4a88-b156-fbf6af2df428@www.fastmail.com>
- <20201206090614.GA693271@unreal>
- <a1db4b23-8159-924a-a99b-2fa4b0eb6fff@gmail.com>
- <8c6f7234-fc7e-66c2-948c-1232eb5ff813@redhat.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-Message-ID: <f1317cd3-368e-838b-cf9b-74b8b079a62e@gmail.com>
-Date:   Sun, 6 Dec 2020 11:56:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        Sun, 6 Dec 2020 06:14:02 -0500
+X-Greylist: delayed 545 seconds by postgrey-1.27 at vger.kernel.org; Sun, 06 Dec 2020 06:14:02 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave03.hostedemail.com (Postfix) with ESMTP id 2EF3418015424
+        for <linux-serial@vger.kernel.org>; Sun,  6 Dec 2020 11:04:59 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id EF590181D337B;
+        Sun,  6 Dec 2020 11:04:16 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2691:2828:2895:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3872:3873:3874:4321:5007:6691:7808:7901:7903:9545:10004:10400:10848:11026:11232:11473:11657:11658:11914:12043:12296:12297:12438:12555:12740:12895:13439:13894:14659:14721:21080:21433:21451:21627:30012:30054:30070:30083:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: pigs78_0c0172f273d5
+X-Filterd-Recvd-Size: 3318
+Received: from XPS-9350.home (unknown [47.151.137.21])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Sun,  6 Dec 2020 11:04:16 +0000 (UTC)
+Message-ID: <ddd2feaa6dd064b20cb7015a2e569a92484dccdd.camel@perches.com>
+Subject: Re: [PATCH 1/8] tty: serial: jsm: Fixed file by added more spacing
+From:   Joe Perches <joe@perches.com>
+To:     Clement Smith <rclemsmith@gmail.com>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 06 Dec 2020 03:04:11 -0800
+In-Reply-To: <0d1fde4c82ce4b9f20f5d1ae2c6b34314f9d9942.1607240285.git.rclemsmith@gmail.com>
+References: <0d1fde4c82ce4b9f20f5d1ae2c6b34314f9d9942.1607240285.git.rclemsmith@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-In-Reply-To: <8c6f7234-fc7e-66c2-948c-1232eb5ff813@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 12/6/20 11:43 AM, Hans de Goede wrote:
-> Hi,
-> 
-> On 12/6/20 11:33 AM, Maximilian Luz wrote:
->> On 12/6/20 10:06 AM, Leon Romanovsky wrote:> On Sun, Dec 06, 2020 at 05:58:32PM +0900, BlaÅ¾ Hrastnik wrote:
->>>>>
->>>>>> More on that, the whole purpose of proposed interface is to debug and
->>>>>> not intended to be used by any user space code.
->>>>>
->>>>> The purpose is to provide raw access to the Surface Serial Hub protocol,
->>>>> just like we provide raw access to USB devices and have hidraw devices.
->>>>>
->>>>> So this goes a litle beyond just debugging; and eventually the choice
->>>>> may be made to implement some functionality with userspace drivers,
->>>>> just like we do for some HID and USB devices.
->>>>>
->>>>> Still I agree with you that adding new userspace API is something which
->>>>> needs to be considered carefully. So I will look at this closely when
->>>>> reviewing this set.
->>>>
->>>> To add to that: this was previously a debugfs interface but was moved to misc after review on the initial RFC:
->>>> https://lkml.org/lkml/2020/9/24/96
->>>
->>> There is a huge difference between the suggestion and final implementation.
->>>
->>> Greg suggested to add new debug module to the drivers/misc that will
->>> open char device explicitly after user loaded that module to debug this
->>> hub. However, the author added full blown char device as a first citizen
->>> that has all not-break-user constrains.
->>
->> This module still needs to be loaded explicitly.
-> 
-> Good then I really do not see a problem with this.
-> 
->> And (I might be wrong
->> about this) the "not-break-user constraints" hold as soon as I register
->> a misc device at all, no?
-> 
-> Correct.
-> 
->> So I don't see how this is a) any different
->> than previously discussed with Greg and b) how the uapi header now
->> introduces any not-break-user constraints that would not be there
->> without it.
->>
->> This interface is intended as a stable interface. That's something that
->> I committed to as soon as I decided to implement this via a misc-device.
->>
->> Sure, I can move the definitions in the uapi header to the module
->> itself, but I don't see any benefit in that.
-> 
-> Right, if we are going to use a misc chardev for this, then the
-> correct thing to do is to put the API bits for that chardev under
-> include/uapi.
-> 
-> It would still be good if you can provide a pointer to some userspace
-> tools using this new API; and for the next version maybe add that
-> pointer to the commit message
+On Sun, 2020-12-06 at 13:09 +0530, Clement Smith wrote:
+> Fixed a coding style issue
 
-Right, I will add that to the commit message. I just linked you the
-scripts in my other response, but here again for completeness:
+Don't send 8 identically titled patches that each change a single line.
 
-   https://github.com/linux-surface/surface-aggregator-module/tree/master/scripts/ssam
+Send one patch, with an updated title like:
 
-While I'm not using the header directly (the scripts are written in
-python) I still think uapi is the right place to put this (please
-correct me if I'm wrong). Not putting them there seems to be needless
-obfuscating to me.
+	Subject: [PATCH] jsm_tty: Whitespace neatening
 
-Regards,
-Max
+that changes _all_ the whitespace that you believe should be updated.
+
+And ideally, instead of just whitespace changes, the code would be
+updated to eliminate the code duplication by using temporaries and a
+single line conversion.
+
+> diff --git a/drivers/tty/serial/jsm/jsm_tty.c b/drivers/tty/serial/jsm/jsm_tty.c
+[]
+> @@ -607,7 +607,7 @@ void jsm_input(struct jsm_channel *ch)
+>  				 * Give the Linux ld the flags in the
+>  				 * format it likes.
+>  				 */
+> -				if (*(ch->ch_equeue +tail +i) & UART_LSR_BI)
+> +				if (*(ch->ch_equeue + tail + i) & UART_LSR_BI)
+>  					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i),  TTY_BREAK);
+>  				else if (*(ch->ch_equeue +tail +i) & UART_LSR_PE)
+>  					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_PARITY);
+
+Something like:
+---
+ drivers/tty/serial/jsm/jsm_tty.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/tty/serial/jsm/jsm_tty.c b/drivers/tty/serial/jsm/jsm_tty.c
+index 689774c073ca..b48ca17f38d3 100644
+--- a/drivers/tty/serial/jsm/jsm_tty.c
++++ b/drivers/tty/serial/jsm/jsm_tty.c
+@@ -607,14 +607,20 @@ void jsm_input(struct jsm_channel *ch)
+ 				 * Give the Linux ld the flags in the
+ 				 * format it likes.
+ 				 */
+-				if (*(ch->ch_equeue +tail +i) & UART_LSR_BI)
+-					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i),  TTY_BREAK);
+-				else if (*(ch->ch_equeue +tail +i) & UART_LSR_PE)
+-					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_PARITY);
+-				else if (*(ch->ch_equeue +tail +i) & UART_LSR_FE)
+-					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_FRAME);
++				u8 error = ch->ch_equeue[tail + i];
++				u8 read = ch->ch_rqueue[tail + i];
++				int type;
++
++				if (error & UART_LSR_BI)
++					type = TTY_BREAK;
++				else if (error & UART_LSR_PE)
++					type = TTY_PARITY;
++				else if (error & UART_LSR_FE)
++					type = TTY_FRAME;
+ 				else
+-					tty_insert_flip_char(port, *(ch->ch_rqueue +tail +i), TTY_NORMAL);
++					type = TTY_NORMAL;
++				tty_insert_flip_char(port, read, type);
++
+ 			}
+ 		} else {
+ 			tty_insert_flip_string(port, ch->ch_rqueue + tail, s);
+
+
