@@ -2,54 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30682CFD09
-	for <lists+linux-serial@lfdr.de>; Sat,  5 Dec 2020 19:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4EF2D00E0
+	for <lists+linux-serial@lfdr.de>; Sun,  6 Dec 2020 06:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727530AbgLEST3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 5 Dec 2020 13:19:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39726 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726682AbgLERjj (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 5 Dec 2020 12:39:39 -0500
-Date:   Sat, 5 Dec 2020 17:30:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1607185727;
-        bh=wvcBfHK729324pcxOkEQ3caGkWSOs8L730mD3RJl7lM=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OcTOm4FdXoSdlMSY66ClB29wSv/Hms0wQ/bwmi8PLJ/qVm9NnRib+QH4BAQz6XDYQ
-         N0Cjf4YrGs1VCu92agoO0D4d/hAHCas7yWPd/TKFQ+hYZLBMT4J3hVtNqqlOYCTed5
-         vHJx19EgfLfl7zXp2/u5wEu/QxkonHoLGqN2GLFQ=
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Clement Smith <rclemsmith@gmail.com>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] tty: serial: jsm: Fixed file by added more spacing
- in line 610
-Message-ID: <X8u1iR6uajt2prf8@kroah.com>
-References: <cover.1607177807.git.rclemsmith@gmail.com>
- <0c203c3dfd32ea016ed7c0de7a1e83a09eb91806.1607177807.git.rclemsmith@gmail.com>
+        id S1725613AbgLFFdG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 6 Dec 2020 00:33:06 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9120 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgLFFdF (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 6 Dec 2020 00:33:05 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CpZnN2gFCz15XHT;
+        Sun,  6 Dec 2020 13:31:52 +0800 (CST)
+Received: from [127.0.0.1] (10.174.177.9) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Sun, 6 Dec 2020
+ 13:32:17 +0800
+Subject: Re: [PATCH 1/5] media: dt-bindings: add the required property
+ 'additionalProperties'
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20201204093813.1275-1-thunder.leizhen@huawei.com>
+ <20201204093813.1275-2-thunder.leizhen@huawei.com>
+ <2c36ef4c2d022f6f83ec5c78a951d5e76f95378e.camel@pengutronix.de>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <c2be6704-e3f8-ec52-9114-c3fa3c235a3c@huawei.com>
+Date:   Sun, 6 Dec 2020 13:32:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c203c3dfd32ea016ed7c0de7a1e83a09eb91806.1607177807.git.rclemsmith@gmail.com>
+In-Reply-To: <2c36ef4c2d022f6f83ec5c78a951d5e76f95378e.camel@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.9]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Dec 05, 2020 at 07:50:08PM +0530, Clement Smith wrote:
-> Fixed a coding style issue
+
+
+On 2020/12/4 18:56, Philipp Zabel wrote:
+> On Fri, 2020-12-04 at 17:38 +0800, Zhen Lei wrote:
+>> When I do dt_binding_check for any YAML file, below wanring is always
+>> reported:
+>>
+>> xxx/media/coda.yaml: 'additionalProperties' is a required property
+>> xxx/media/coda.yaml: ignoring, error in schema:
+>> warning: no schema found in file: xxx/media/coda.yaml
+>>
+>> There are three properties defined in allOf, they should be explicitly
+>> declared. Otherwise, "additionalProperties: false" will prohibit them.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > 
-> Signed-off-by: Clement Smith <rclemsmith@gmail.com>
-> ---
->  drivers/tty/serial/jsm/jsm_tty.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thank you, there already is a patch to fix this:
+> 
+> https://lore.kernel.org/linux-media/20201117200752.4004368-1-robh@kernel.org/
 
-The subject lines in this series is really funny.
+OK. I found it temporarily during do a JSON conversion，I have not subscribed the
+dt-binding maillist.
 
-Please don't do this.  If you want to get practice in making coding
-style cleanups, do it in drivers/staging/ which is why the code is
-there.  Don't "practice" in other parts of the kernel as it just gets in
-the way of other development and review efforts.
+> 
+> regards
+> Philipp
+> 
+> .
+> 
 
-good luck!
-
-greg k-h
