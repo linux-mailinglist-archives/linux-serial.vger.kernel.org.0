@@ -2,124 +2,135 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64FF2D410D
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Dec 2020 12:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4642D4204
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Dec 2020 13:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730490AbgLIL1B (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 9 Dec 2020 06:27:01 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39417 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727970AbgLIL1B (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 9 Dec 2020 06:27:01 -0500
-Received: by mail-lj1-f193.google.com with SMTP id o24so1868439ljj.6
-        for <linux-serial@vger.kernel.org>; Wed, 09 Dec 2020 03:26:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9QFflH57QDpVKtVXRpM2FYGqW9VKRNM315cIGdtSARA=;
-        b=tvkJCNjDnAQpiqdCamSl/0eK43rJL7ceP4r6ht87kWYoVy4i7Us0wvnzRBGltV0WL6
-         qaG//vkS2SMBAeHWIEfqvobwLaXn06o5Md849uwMGf6Aqb1+Hz+mlaAR5OlFx68P0/O/
-         e/KoqU6+yzZZMFyBWbFfYFv8imgz9XzznPRA6nfJ/V35stzYmCjo6QSxODUC8Xmcc4Gw
-         2bHhR2CI+RhhlcGHtbyk1pplk+iwoGtdT1D2M39ysKajYyJD7JXAqHnhslaeqOZey+tx
-         0wF6NsaKtZzfbPmm2CzPUxUcO5648EHPpKx/cP3t7GcyU4dW9G7DMJbVfuGE42nHClhK
-         aQTA==
-X-Gm-Message-State: AOAM533WVLeN2Tlht1F173Yqzlqy5+fhJaZgFIkhJp96d5L3rtdLvMOs
-        u99myYiiMwYDOPocqWPrRuE=
-X-Google-Smtp-Source: ABdhPJznrg2aOJ8+AovdyaplBjwOTjoJCzrDwr1YZFznFAYSKWJ46WqbU1EIxvOYhRenR3en/GCDWw==
-X-Received: by 2002:a2e:6c04:: with SMTP id h4mr894404ljc.391.1607513178636;
-        Wed, 09 Dec 2020 03:26:18 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id c14sm141429lfr.105.2020.12.09.03.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 03:26:17 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kmxcY-0003cM-Qa; Wed, 09 Dec 2020 12:26:58 +0100
-Date:   Wed, 9 Dec 2020 12:26:58 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 2/2] tty: serial: 8250: wait till transmitter is empty
-Message-ID: <X9C0gs9VBqBaxdzj@localhost>
-References: <20201209091728.2357-1-s.trumtrar@pengutronix.de>
- <20201209091728.2357-2-s.trumtrar@pengutronix.de>
+        id S1731380AbgLIMTr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 9 Dec 2020 07:19:47 -0500
+Received: from mail-mw2nam12on2068.outbound.protection.outlook.com ([40.107.244.68]:47553
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730428AbgLIMTk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 9 Dec 2020 07:19:40 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vycu6D2mtwYTKhu8IYKaarJh0eaIdjzD3E2TeauikTstlQ/tZ4tSjSzhiPCyaE0A5SjoO08dvqXY3VwKmBEjsgxo5PKCQ5Bir0YgMnmhZOVKOz5Q5D4xkJ/c+cAlbgXl8EX/5EgfDXVAcAIQfDgWtKncL4EQgO0Z+gL/O5RRSVi0d5MWrT6zTEJ1Wc51c5nU0TKoIop+YYDwzEjunKKKRekMzBIOJCrcgm1FP2FRWm66ecp7pbO18cn+8C0xjZpYqw06sOi21Zi4vIXCPghBJ89pA9N4tsLhYJ2HRMi4gxMDfecxTbu83lfDrykCsBv5yruaA9uPDroSAwuEu3mDow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zImqs/OFkjOnol/Bm/DqXVqF74CdIjzNGTY6f/GgotU=;
+ b=K7eSp0UEjK1jCUq1V36JhlShrOEjFNG8p5JVc9QX52dyxz1nxSejQ+8czstgwEM50eNavGhA3xhRHmbvAVKc62Y+BkLAELl6/WL75aoe20FiP8XfXeFpHlq9VzPL6LtOk1FeTwZ5lGPP8fYzuiKLklHnsLjfA427r3+jkYr8pSU10/6ED0uQwoIZr8wQiVBJ0lwr/wt40oTiKsA7irnok+sGVdnHj6qguHa8NipCmJ0pifyVS9ygpGmXG9q2IYOKUwZ/3oxq8F82mc40PcFEDSeqs9DxDyhE/va2IYHoqyeirv8OftvKEOZcfOwFu6tWbiHJYxeEiULo6t9lOceDFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zImqs/OFkjOnol/Bm/DqXVqF74CdIjzNGTY6f/GgotU=;
+ b=FlGWuGodOKLuxxj/WvOuUah6mh3E1EZTQP2UawcH25yffNwPy05HI1Pw/gH6hxr7IvkhQZPPcrX+UWTDFkPjOLieSvDKhzjetZvR4zQdQhizwPFJYX0yb93vvL7ATjPeSk41ps2JqWzqHNsjeCKnrJi57wmyrrPURDgyCC8lAig=
+Received: from CY4PR2201CA0016.namprd22.prod.outlook.com
+ (2603:10b6:910:5f::26) by DM6PR02MB5067.namprd02.prod.outlook.com
+ (2603:10b6:5:41::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.21; Wed, 9 Dec
+ 2020 12:18:47 +0000
+Received: from CY1NAM02FT057.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:910:5f:cafe::fd) by CY4PR2201CA0016.outlook.office365.com
+ (2603:10b6:910:5f::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend
+ Transport; Wed, 9 Dec 2020 12:18:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT057.mail.protection.outlook.com (10.152.75.110) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3654.12 via Frontend Transport; Wed, 9 Dec 2020 12:18:47 +0000
+Received: from xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 9 Dec 2020 04:18:26 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Wed, 9 Dec 2020 04:18:26 -0800
+Envelope-to: git@xilinx.com,
+ linux-serial@vger.kernel.org,
+ jacmet@sunsite.dk
+Received: from [10.140.6.59] (port=53746 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1kmyQL-0007Zm-Bh; Wed, 09 Dec 2020 04:18:25 -0800
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-serial@vger.kernel.org>
+CC:     <git@xilinx.com>, <jacmet@sunsite.dk>,
+        <linuxfoundation.org@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH 1/3] serial-uartlite: Disable clocks in the error path
+Date:   Wed, 9 Dec 2020 17:48:19 +0530
+Message-ID: <1607516301-26975-1-git-send-email-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201209091728.2357-2-s.trumtrar@pengutronix.de>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d176a82-5572-4d81-c6f1-08d89c3c9454
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5067:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB5067F730CB9477FBA19AB138AACC0@DM6PR02MB5067.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nJl4UKk/YWZ47CAb+B/8K3HAAulysJHW5V3GIpc1gZMvI8U5O+wD39G6iU276eI9QzJU+yS0xBLZMBWt6hgR43JOEva6ZWmmGp8kAnHw3iHA7fdCJHgDkI1Zl/a2CwiC1iO8Eb1MuKfx2vN+iLzQV6m+GGLjUT8lIzHuD1CH7xcG7+jXPTgzq6p/if/4Kb/PL+OTsz4aowYO4ELUqOHxqLiqnuBzr4fTunCxC5IVrkZ4vJ+lU1JQLmBB5fLepnn5lTZgjN4Qmh05RNn0PoUl8xFupTclwNyCryqtnItJN1BrZm8n7r5FxZWVj+TBrESxwKofy/chH3mE3uOjxmexzlGGnXdTEj1awoN7E22DtMTmN49FJteRJ6frUDgmAFirNAVq3Esu/ae4hCxm5d1vpSQaD9b5TxW0HqQr4E1TF/A=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(46966005)(336012)(7696005)(8676002)(186003)(54906003)(4744005)(36756003)(7636003)(36906005)(6666004)(426003)(508600001)(9786002)(4326008)(82310400003)(44832011)(2616005)(356005)(107886003)(70206006)(8936002)(47076004)(5660300002)(2906002)(70586007)(6916009)(26005)(83380400001)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2020 12:18:47.2850
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d176a82-5572-4d81-c6f1-08d89c3c9454
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT057.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5067
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 10:17:28AM +0100, Steffen Trumtrar wrote:
-> When only one single character is sent and RS485 signaling is used,
-> the driver runs into timing issues.
-> 
-> When serial8250_tx_chars is called the single character is transmitted.
-> The check on uart_circ_empty will be positive and __stop_tx is called.
-> The check on UART_LSR_TEMT in BOTH_EMPTY will then be negativ and the
-> function will return. On the next call to serial8250_tx_chars
-> uart_circ_empty will still be true but the check on BOTH_EMPTY in
-> __stop_tx might still fail. This leads to a deadlock.
-> 
-> Use readx_poll_timeout_atomic to allow the shift register to be emptied
-> before checking on BOTH_EMPTY.
-> 
-> The timeout value is copied from 8250_dw.c.
-> 
-> Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-> ---
->  drivers/tty/serial/8250/8250_port.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 3310c2b70138..87daf3758ff0 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -18,6 +18,7 @@
->  #include <linux/console.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/sysrq.h>
-> +#include <linux/iopoll.h>
->  #include <linux/delay.h>
->  #include <linux/platform_device.h>
->  #include <linux/tty.h>
-> @@ -1519,18 +1520,27 @@ static inline void __do_stop_tx(struct uart_8250_port *p)
->  		serial8250_rpm_put_tx(p);
->  }
->  
-> +static unsigned char serial8250_read_lsr(struct uart_8250_port *p)
-> +{
-> +	return serial_in(p, UART_LSR);
-> +}
-> +
->  static inline void __stop_tx(struct uart_8250_port *p)
->  {
->  	struct uart_8250_em485 *em485 = p->em485;
->  
->  	if (em485) {
-> -		unsigned char lsr = serial_in(p, UART_LSR);
-> +		unsigned char lsr;
-> +
->  		/*
->  		 * To provide required timeing and allow FIFO transfer,
->  		 * __stop_tx_rs485() must be called only when both FIFO and
->  		 * shift register are empty. It is for device driver to enable
->  		 * interrupt on TEMT.
->  		 */
-> +		readx_poll_timeout_atomic(serial8250_read_lsr, p, lsr,
-> +					  lsr & UART_LSR_TEMT, 1, 20000);
+Disable clocks in the error path.
 
-Tight polling (1 us) for 20 ms with interrupts disabled?!
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+---
+ drivers/tty/serial/uartlite.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Without having looked at the details, there's got to be a better way to
-handle this.
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index 09379db..ab4954f 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -799,7 +799,7 @@ static int ulite_probe(struct platform_device *pdev)
+ 		ret = uart_register_driver(&ulite_uart_driver);
+ 		if (ret < 0) {
+ 			dev_err(&pdev->dev, "Failed to register driver\n");
+-			return ret;
++			goto err_out_clk_disable;
+ 		}
+ 	}
+ 
+@@ -808,6 +808,10 @@ static int ulite_probe(struct platform_device *pdev)
+ 	clk_disable(pdata->clk);
+ 
+ 	return ret;
++
++err_out_clk_disable:
++	clk_disable_unprepare(pdata->clk);
++	return ret;
+ }
+ 
+ static int ulite_remove(struct platform_device *pdev)
+-- 
+2.1.1
 
-> +
->  		if ((lsr & BOTH_EMPTY) != BOTH_EMPTY)
->  			return;
-
-Johan
