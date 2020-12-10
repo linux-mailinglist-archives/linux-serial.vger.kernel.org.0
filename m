@@ -2,74 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7E32D5263
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Dec 2020 05:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 144862D5382
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Dec 2020 07:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732422AbgLJECJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 9 Dec 2020 23:02:09 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44119 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732225AbgLJEAD (ORCPT
+        id S1732894AbgLJGBA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 10 Dec 2020 01:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731841AbgLJGBA (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 9 Dec 2020 23:00:03 -0500
-Received: by mail-oi1-f195.google.com with SMTP id d189so4270978oig.11;
-        Wed, 09 Dec 2020 19:59:48 -0800 (PST)
+        Thu, 10 Dec 2020 01:01:00 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953ADC0613CF;
+        Wed,  9 Dec 2020 22:00:19 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id l9so4136416wrt.13;
+        Wed, 09 Dec 2020 22:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XZ0GzFkMnql2mZ9ucABMri0aPX93XDgGP0zi1s6RhwA=;
+        b=lpPQkdebMIuW2w/cNOMG3wQQ6LBxUIp+8A+fz23QJ6YBfQHmYd2Q6TFsEzkd65Bz2Q
+         nnmjvPjeS+4gbIrHSjWnyZY7eigeX6MXbFvOHu9iqxzTfso5Xn4Ex20eiBA1DOc7Dqg1
+         gajDdftMTG6qbWO0ufCTvhUF7BOCqbI/Y9fc+bD3jzdCux81kf+U8V/S9SD+MsqxMfMn
+         P+KQhlhvWVTuXidYsGa2+Ghj1y15ukXr6DAbF+glgtNRLH2wLJZGbY9DftaZGhgcZZlW
+         W8VN8+Zp2vbP95uhZ1etegd9qAn7liSoWUXEfjb44h6WVNpPFg4jj52djNRPlRFWy4z0
+         wDnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6oGGK+dOGnoINWzCvubHZwwfiFrKLTQRjMEQW/QxQb0=;
-        b=e7T57kNJBsn9PdhWT2j/OO2t8sHG/BFtEW4vm1NTEUwXBVTcst4WhkoYNZl2DaJMsT
-         AXTpHr+riZvxHHgv3hO89EXhBNb9vli/WJVkiP66T1kTR56pzPa7gPz1f+RlHOu76NaD
-         4z3zqplmjbbFZMKn9RF0x16oyi39kqXpTTPIXf+UWhUUFNHsTu2ynLtbNBbMGqWmaLFe
-         Ucqmx9Y4o6sBTGnS8RXP2ZE+kcl6P56mknpOFWukBOw8KlnlM1S5AmTMJInz0d2KspIC
-         EBwaHGyPOOhb51zv9hmy67Nn2cEgUyoQzYkbOge/V+DYCUAMUeWBYgmJ1vWEu4NQXKNH
-         xWTw==
-X-Gm-Message-State: AOAM530ONunrVJfIsnSe/VgR/H37//34d5PVxN7Him5Dhbr9dbb1Kgfi
-        A0g2E42HAOMwZH4QdagcDg==
-X-Google-Smtp-Source: ABdhPJzEJCziD7jzt8D07hIPtVj4iDG6Ls9LzxABH6iHQCPLAjSuLffty8DXLKn3cyFZUEmG/e2Tew==
-X-Received: by 2002:aca:6044:: with SMTP id u65mr4205383oib.109.1607572762746;
-        Wed, 09 Dec 2020 19:59:22 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g12sm795862oos.8.2020.12.09.19.59.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XZ0GzFkMnql2mZ9ucABMri0aPX93XDgGP0zi1s6RhwA=;
+        b=dyArKJHorjqCp0RbMDPAJBu0OA0Tk/+pdO3Lmq4XwjESnqA+K4D9eAVNCch1AdLpfz
+         Rf6HR2boX27Gx5fErEC6T9mxDMPNzN708tHxU2cWfx4j/2OZBPsGU4Raer3vcfixjLH0
+         t7RZGvh/F+f2Gpf3uAPmfacWivPMuWQfN+aXNxivGNMWmUsbEpegfp/GSjc8doTYePoZ
+         cxbST9YyqwFFpQelunUds9zYMN6x8w+EmS58WoPj0bPwWA0SVDrIfhyMxLJnso+dLDbc
+         PnDxm8+GRIaYv491G1YFil5c5BKPav/Tq3fSCdVgYo58Y7rcfU4Ttu1RKt1tDyPMJBmr
+         btgg==
+X-Gm-Message-State: AOAM533TvHeO04ermift8cJCucVCppjEqQ+1fbtfs1uGN0VGYI92nfvC
+        wHntKB9j/+YF/ntD6Y7EVvFWvPjfxfep9g==
+X-Google-Smtp-Source: ABdhPJxIZm4jacRkxlweAry7ldEyr9Cs5Uph++CwJyZaxVGgzBK88btGmFHUxJq7aphOK+x0WV2vZQ==
+X-Received: by 2002:adf:916e:: with SMTP id j101mr6237868wrj.55.1607580018016;
+        Wed, 09 Dec 2020 22:00:18 -0800 (PST)
+Received: from giga-mm.localdomain ([195.245.17.255])
+        by smtp.gmail.com with ESMTPSA id q15sm7443906wrw.75.2020.12.09.22.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 19:59:22 -0800 (PST)
-Received: (nullmailer pid 1638029 invoked by uid 1000);
-        Thu, 10 Dec 2020 03:59:20 -0000
-Date:   Wed, 9 Dec 2020 21:59:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yash Shah <yash.shah@sifive.com>
-Cc:     gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        paul.walmsley@sifive.com, peter@korsgaard.com,
-        lee.jones@linaro.org, linux-serial@vger.kernel.org,
-        thierry.reding@gmail.com, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, bgolaszewski@baylibre.com,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        palmer@dabbelt.com, u.kleine-koenig@pengutronix.de,
-        broonie@kernel.org, linus.walleij@linaro.org,
-        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        andrew@lunn.ch, linux-pwm@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v2 8/9] dt-bindings: riscv: Update YAML doc to support
- SiFive HiFive Unmatched board
-Message-ID: <20201210035920.GA1637999@robh.at.kernel.org>
-References: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
- <1607403341-57214-9-git-send-email-yash.shah@sifive.com>
+        Wed, 09 Dec 2020 22:00:17 -0800 (PST)
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] serial: 8250_omap: Avoid FIFO corruption caused by MDR1 access
+Date:   Thu, 10 Dec 2020 06:52:57 +0100
+Message-Id: <20201210055257.1053028-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1607403341-57214-9-git-send-email-yash.shah@sifive.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 08 Dec 2020 10:25:40 +0530, Yash Shah wrote:
-> Add new compatible strings to the YAML DT binding document to support
-> SiFive's HiFive Unmatched board
-> 
-> Signed-off-by: Yash Shah <yash.shah@sifive.com>
-> ---
->  Documentation/devicetree/bindings/riscv/sifive.yaml | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
+It has been observed that once per 300-1300 port openings the first
+transmitted byte is being corrupted on AM3352 ("v" written to FIFO appeared
+as "e" on the wire). It only happened if single byte has been transmitted
+right after port open, which means, DMA is not used for this transfer and
+the corruption never happened afterwards.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Therefore I've carefully re-read the MDR1 errata (link below), which says
+"when accessing the MDR1 registers that causes a dummy under-run condition
+that will freeze the UART in IrDA transmission. In UART mode, this may
+corrupt the transferred data". Strictly speaking,
+omap_8250_mdr1_errataset() performs a read access and if the value is the
+same as should be written, exits without errata-recommended FIFO reset.
+
+A brief check of the serial_omap_mdr1_errataset() from the competing
+omap-serial driver showed it has no read access of MDR1. After removing the
+read access from omap_8250_mdr1_errataset() the data corruption never
+happened any more.
+
+Link: https://www.ti.com/lit/er/sprz360i/sprz360i.pdf
+Fixes: 61929cf0169d ("tty: serial: Add 8250-core based omap driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ drivers/tty/serial/8250/8250_omap.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 562087df7d33..0cc6d35a0815 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -184,11 +184,6 @@ static void omap_8250_mdr1_errataset(struct uart_8250_port *up,
+ 				     struct omap8250_priv *priv)
+ {
+ 	u8 timeout = 255;
+-	u8 old_mdr1;
+-
+-	old_mdr1 = serial_in(up, UART_OMAP_MDR1);
+-	if (old_mdr1 == priv->mdr1)
+-		return;
+ 
+ 	serial_out(up, UART_OMAP_MDR1, priv->mdr1);
+ 	udelay(2);
+-- 
+2.29.2
+
