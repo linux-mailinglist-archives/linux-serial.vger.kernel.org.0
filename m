@@ -2,52 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584122D9BDB
-	for <lists+linux-serial@lfdr.de>; Mon, 14 Dec 2020 17:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00052D9CB5
+	for <lists+linux-serial@lfdr.de>; Mon, 14 Dec 2020 17:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440045AbgLNQFm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 14 Dec 2020 11:05:42 -0500
-Received: from server.kenspensetc.com ([185.148.128.76]:48008 "EHLO
-        server.kenspensetc.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439358AbgLNQFj (ORCPT
+        id S2440069AbgLNQ2f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 14 Dec 2020 11:28:35 -0500
+Received: from bmail1.ministro.hu ([5.249.150.236]:49876 "EHLO
+        bmail1.ministro.hu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439386AbgLNQ21 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:05:39 -0500
-Received: from localhost ([127.0.0.1]:47936 helo=server.kenspensetc.com)
-        by server.kenspensetc.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <sender@ridecals.com>)
-        id 1knLn0-00029V-6J; Thu, 10 Dec 2020 08:15:22 -0500
-Received: from [70.32.0.46] ([70.32.0.46]) by ridecals.com (Horde Framework)
- with HTTPS; Thu, 10 Dec 2020 08:15:22 -0500
-Date:   Thu, 10 Dec 2020 08:15:22 -0500
-Message-ID: <20201210081522.Horde.GEA1j18D53oi4VTUxYWD_87@ridecals.com>
-From:   Russell Branting <sender@ridecals.com>
-Subject: Vital
-Reply-to: Goodagent01@gmail.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        Mon, 14 Dec 2020 11:28:27 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bmail1.ministro.hu (Postfix) with ESMTP id 4459D123B40;
+        Mon, 14 Dec 2020 17:27:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ministro.hu;
+        s=201804; t=1607963254;
+        bh=hu9iB9JUGNU/0E24WGPhmjcNTO4ODbRItq6MiPJhM44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y88L057RazIJRKp6wPqHe4gJ63jVhm+zybppiwdzP5ZOunqfFy3FX22vA+mW7PNSG
+         +Tu7PIAqVnw+psnFroOuaz9D22CSU6RTEkZ4VCjTKUK0M/+g8jGrSDcx9obsREGkFr
+         U0n55BnkfCWHNJ7+7MxYaE8R+SnwOGjX5g/BO55buVqwS7Ux47oklQnUYAXZe225gW
+         JzyMDF7ShOXopg0qGNqykzMduKn0GYlh1VQjq2MdvATPBHIwbE6M/u9nkTeXcvCLdW
+         Pc7JglveHkZdgOt0myFw4laehp0If/ccXq9eII/TN5ZXlV0OH0Xq/4VR6Rd0SvxO1h
+         hU678uHaPYYPQ==
+X-Virus-Scanned: Debian amavisd-new at ministro.hu
+Received: from bmail1.ministro.hu ([127.0.0.1])
+        by localhost (bmail1.ministro.hu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bBFepFV1-_aB; Mon, 14 Dec 2020 17:27:04 +0100 (CET)
+Received: from dev (localhost [127.0.0.1])
+        by bmail1.ministro.hu (Postfix) with ESMTPSA id E347E123B3D;
+        Mon, 14 Dec 2020 17:27:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ministro.hu;
+        s=201804; t=1607963224;
+        bh=hu9iB9JUGNU/0E24WGPhmjcNTO4ODbRItq6MiPJhM44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=9e4c25+ZX1pZdQmfIddhggMvDPyXadCj5KilaWVtnzhMe47XYsvn3NxOcH0VybpB8
+         Ru2RqZryK8RmPqrRP+6gdKUDqzIzl/QD2CIhW+HsEAJLdDtfJcRKN3hxgQQmSroD+l
+         KD6YZA8YfquIE7H90/X+dr+Jjcp34cp0s1zNrY+PXtwC6HHTuXp9RDUCxvXxyPxYQ1
+         RGwiA862/PUu7q6P3pRPQ615s6NGHQr0Q/lsrThd89Mkty8+IFLIpgo6Pabcfn79+X
+         8x4dqLBf2Fbqz+a3TSQNo0/xHqxPiT2t8+dl2RodWBipa+kpGY8gGkVv6jUBAoJo4m
+         pdHADZjZZINsw==
+Date:   Mon, 14 Dec 2020 16:27:02 +0000
+From:   =?iso-8859-1?Q?J=F3zsef_Horv=E1th?= <info@ministro.hu>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        'Rob Herring' <robh+dt@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] Serial: silabs si4455 serial driver
+Message-ID: <20201214162701.GA32214@dev>
+References: <20201212070944.GA13909@dincontrollerdev>
+ <2855efaf-79a5-f43b-ff8c-9c01a3f14df7@kernel.org>
+ <20201214123519.GA10229@dev>
+ <77bb5835-b1f2-125a-d2d1-ad67612b164d@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.kenspensetc.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - ridecals.com
-X-Get-Message-Sender-Via: server.kenspensetc.com: authenticated_id: sender9@ridecals.com
-X-Authenticated-Sender: server.kenspensetc.com: sender9@ridecals.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <77bb5835-b1f2-125a-d2d1-ad67612b164d@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Mon, Dec 14, 2020 at 01:39:09PM +0100, Jiri Slaby wrote:
+> On 14. 12. 20, 13:35, József Horváth wrote:
+> > I'm in trouble with the device tree binding schema of this driver too.
+> 
+> Sorry, someone else has to help you who actually masters DT details.
+> 
+> -- 
+> js
 
-I am instructed to inform you of your appointment as the next of kin  
-to your deceased relative estate. Kindly indicate your acceptance by  
-reconfirming your Full Name, Address & Phone Number for immediate  
-processing of the funds release to your control OR the deceased  
-deposited funds will be declared unclaimed.
+I have answer. I forgot read before write...
+The silabs,si4455.yaml was in wrong place, the good place is
+ Documentation/devicetree/bindings/serial/silabs,si4455.yaml as Rob wrote earlier.
+Everything is fine now with it.
+
+Sorry for this.
+
+Üdvözlettel / Best regards:
+József Horváth
+
 
 
