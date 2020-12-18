@@ -2,95 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 926BF2DE985
-	for <lists+linux-serial@lfdr.de>; Fri, 18 Dec 2020 20:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257612DEAE3
+	for <lists+linux-serial@lfdr.de>; Fri, 18 Dec 2020 22:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733082AbgLRTBz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 18 Dec 2020 14:01:55 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:12790 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726111AbgLRTB2 (ORCPT
+        id S1726298AbgLRVRk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 18 Dec 2020 16:17:40 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:35265 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725843AbgLRVRk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 18 Dec 2020 14:01:28 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BIIviuH021973;
-        Fri, 18 Dec 2020 20:00:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=n+cExBFo80dtEPZ2+yAMwXdepDZXx0+zmtl1xFWwJnM=;
- b=xmOmuXHGmJCdLcMwr8hCm0dtYQHj0XHSmV1J8V4H+sjgXS/qhNNfeUDt+Yzknuyw8dV6
- UdvtEZd4VSNdOBl0Jq3sCQaws1VQ/2TQ8HS3lAn9XMFPZqpcepJ1Mmf6L75PGmzvsobw
- 0FPDZxvCD79D11o8E/UbCQcraetvwONfvbITv6GrR6ihJwKqcq2DL6LQa76v5niHRK9r
- gUO3x1KOKzBaOQ3QD3R0bwFlMcWQkvye3m0HWXUuwgNx7NyExeQBFo3MglIaaQOCnW9l
- DYASAFQrbD9LZm70MwpXw3RWC7//JdWNbSfg6zzrlpEEfPiCQJi034VE8d5IcJi3eQkk WA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 35cq03gdyj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Dec 2020 20:00:33 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A345410002A;
-        Fri, 18 Dec 2020 20:00:32 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 961AB228601;
-        Fri, 18 Dec 2020 20:00:32 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Dec 2020 20:00:32
- +0100
-From:   Erwan Le Ray <erwan.leray@foss.st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Erwan Le Ray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH 8/8] serial: stm32: update transmission complete error message in shutdown
-Date:   Fri, 18 Dec 2020 20:00:19 +0100
-Message-ID: <20201218190020.1572-9-erwan.leray@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201218190020.1572-1-erwan.leray@foss.st.com>
-References: <20201218190020.1572-1-erwan.leray@foss.st.com>
+        Fri, 18 Dec 2020 16:17:40 -0500
+Received: by mail-ot1-f42.google.com with SMTP id i6so3289462otr.2;
+        Fri, 18 Dec 2020 13:17:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oZbLTUAj2Ubj95CZHG22KJrmm6gu+1PJrDH8jQ0Wy2w=;
+        b=seNCsWOVHAc4OfncJGe2KwkTY2Y8hKcCwkO/arhF69VwEc9BrnpfH4GG4kO6eN4/BV
+         1qABkxD1FO8Ow3I4Q4hs4JksUyPf0FO4hduoZFruvGT29i+6EqM2QrGvZlP3fFhVjrBU
+         kki77YnSPWTCT5KjCrs4CKcgzL3KkYv1EFBzOT8VQAwcvLfhlVgqvNpCn1JT/ABxHlU/
+         Lvo0RWdipqMuJUasW2JQfVD4aaUFTsPpsY/rmMkugBW3hYjjfezh1zZbIr1nghGJHp5V
+         nvW0TCPF7MjxmTWroyS29phvLyIVdFmQvpJMgrZd+bxQhRAhX4wmyTmmPGgjolnd2u/2
+         i9Mw==
+X-Gm-Message-State: AOAM530wZBknA0rj/+MIpHZwOk8/9QRQ8J/WlOC39207wR3z1pCqI383
+        upEmYBwN7w6OZiKr8YWsZQ==
+X-Google-Smtp-Source: ABdhPJy9XYh7zJVONvvuBjyhbfwsYX4hbZey5qNYAdiUHfr1I2nThQ60ynXf75brR04s/jCIn1yfaQ==
+X-Received: by 2002:a9d:745a:: with SMTP id p26mr4383657otk.206.1608326219050;
+        Fri, 18 Dec 2020 13:16:59 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y84sm2078765oig.36.2020.12.18.13.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Dec 2020 13:16:58 -0800 (PST)
+Received: (nullmailer pid 2190306 invoked by uid 1000);
+        Fri, 18 Dec 2020 21:16:57 -0000
+Date:   Fri, 18 Dec 2020 15:16:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/5] dt-bindings: serial: add the required property
+ 'additionalProperties'
+Message-ID: <20201218211657.GA2190041@robh.at.kernel.org>
+References: <20201204093813.1275-1-thunder.leizhen@huawei.com>
+ <20201204093813.1275-3-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-18_12:2020-12-18,2020-12-18 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201204093813.1275-3-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The transmission complete error message provides the status of the
-ISR_USART_TC bit. This bit, when set, indicates that the transmission
-has not been completed.
-The bit status indication is not a very understandable information.
-The error message sent on console should indicate that the transmission is
-not complete, instead of providing USART_TC bit status.
-Update the error message and add a comment for better understanding.
+On Fri, 04 Dec 2020 17:38:10 +0800, Zhen Lei wrote:
+> When I do dt_binding_check for any YAML file, below wanring is always
+> reported:
+> 
+> xxx/serial/litex,liteuart.yaml: 'additionalProperties' is a required property
+> xxx/serial/litex,liteuart.yaml: ignoring, error in schema:
+> warning: no schema found in file: xxx/serial/litex,liteuart.yaml
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  Documentation/devicetree/bindings/serial/litex,liteuart.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
-
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 9d73f6976586..6a9a5ef5f5ba 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -687,8 +687,9 @@ static void stm32_usart_shutdown(struct uart_port *port)
- 					 isr, (isr & USART_SR_TC),
- 					 10, 100000);
- 
-+	/* Send the TC error message only when ISR_TC is not set */
- 	if (ret)
--		dev_err(port->dev, "transmission complete not set\n");
-+		dev_err(port->dev, "Transmission is not complete\n");
- 
- 	stm32_usart_clr_bits(port, ofs->cr1, val);
- 
--- 
-2.17.1
-
+Applied, thanks!
