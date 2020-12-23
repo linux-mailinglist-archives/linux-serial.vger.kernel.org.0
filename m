@@ -2,84 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2B12E14CC
-	for <lists+linux-serial@lfdr.de>; Wed, 23 Dec 2020 03:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0AB2E1A97
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Dec 2020 10:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729087AbgLWCn6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 22 Dec 2020 21:43:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52148 "EHLO mail.kernel.org"
+        id S1728242AbgLWJjg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 23 Dec 2020 04:39:36 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:10997 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729832AbgLWCW5 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:22:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 269E4225AA;
-        Wed, 23 Dec 2020 02:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690136;
-        bh=BbtAdIFgjwoHhKSVKJdvtiuvyo+q+gYt02aUQcUTrm4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KW4vseZTOIReZFsNY1YcRGfFgdSVjSqSdenC0qqJN49QKxvEHsxb8iHiYV9SZh9cu
-         uGFAvUi0Gh7vIsy2b478efrS34hcZ2fEoYv5kdnIp6iS0ekDEOiAWeHiFK7W2uaZQD
-         8I6UTtC0EqjoN8dOX0pTYFUAx7HHzaYI4CKMNBcP+jl9ZBZsAauYjEPGs9iW+7MmRz
-         j8jCXRIi4EyKvqs1KvpcBuqtZBoNbrboigOUZAKn8i8HmiO4f89q7MygOK3e1TQO4n
-         7W14zKx1NZwzfAhzGobOKO9Tf0NCTYhGLbM1Tn9o6Xb4IiecXHjIwC3NyDYKeMz/Mx
-         bH+pPx0IyPGIg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mingrui Ren <jiladahe1997@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 59/87] tty/serial/imx: Enable TXEN bit in imx_poll_init().
-Date:   Tue, 22 Dec 2020 21:20:35 -0500
-Message-Id: <20201223022103.2792705-59-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022103.2792705-1-sashal@kernel.org>
-References: <20201223022103.2792705-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1727014AbgLWJja (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 23 Dec 2020 04:39:30 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4D17SP6pvjz9v1yT;
+        Wed, 23 Dec 2020 10:38:45 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id aaWSSNKmWPJn; Wed, 23 Dec 2020 10:38:45 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4D17SP5sG6z9v1yS;
+        Wed, 23 Dec 2020 10:38:45 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E9E758B81D;
+        Wed, 23 Dec 2020 10:38:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id vBDlujpSTbIq; Wed, 23 Dec 2020 10:38:46 +0100 (CET)
+Received: from localhost.localdomain (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 96E7A8B75F;
+        Wed, 23 Dec 2020 10:38:46 +0100 (CET)
+Received: by localhost.localdomain (Postfix, from userid 0)
+        id 526F96696F; Wed, 23 Dec 2020 09:38:46 +0000 (UTC)
+Message-Id: <e4471bf81089252470efb3eed735d71a5b32adbd.1608716197.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH] tty: serial: cpm_uart: Add udbg support for enabling xmon
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Date:   Wed, 23 Dec 2020 09:38:46 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Mingrui Ren <jiladahe1997@gmail.com>
+In order to use xmon with powerpc 8xx, the serial driver
+must provide udbg_putc() and udpb_getc().
 
-[ Upstream commit aef1b6a27970607721a618a0b990716ca8dbbf97 ]
+Provide them via cpm_put_poll_char() and cpm_get_poll_char().
 
-As described in Documentation, poll_init() is called by kgdb to initialize
-hardware which supports both poll_put_char() and poll_get_char().
+This requires CONFIG_CONSOLE_POLL.
 
-It's necessary to enable TXEN bit, otherwise, it will cause hardware fault
-and kernel panic when calling imx_poll_put_char().
-
-Generally, if use /dev/ttymxc0 as kgdb console as well as system
-console, ttymxc0 is initialized early by system console which does enable
-TXEN bit.But when use /dev/ttymxc1 as kgbd console, ttymxc1 is only
-initialized by imx_poll_init() cannot enable the TXEN bit, which will
-cause kernel panic.
-
-Signed-off-by: Mingrui Ren <jiladahe1997@gmail.com>
-Link: https://lore.kernel.org/r/20201202072543.151-1-972931182@qq.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/tty/serial/imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/cpm_uart/cpm_uart_core.c | 40 ++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 7a6e26b12bf64..f3626ee1b06a2 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -1784,7 +1784,7 @@ static int imx_uart_poll_init(struct uart_port *port)
- 	ucr1 |= UCR1_UARTEN;
- 	ucr1 &= ~(UCR1_TXMPTYEN | UCR1_RTSDEN | UCR1_RRDYEN);
+diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
+index ba14ec5b9bc4..2920b9b602b3 100644
+--- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
++++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
+@@ -1145,6 +1145,32 @@ static void cpm_put_poll_char(struct uart_port *port,
+ 	ch[0] = (char)c;
+ 	cpm_uart_early_write(pinfo, ch, 1, false);
+ }
++
++static struct uart_port *udbg_port;
++
++static void udbg_cpm_putc(char c)
++{
++	if (c == '\n')
++		cpm_put_poll_char(udbg_port, '\r');
++	cpm_put_poll_char(udbg_port, c);
++}
++
++static int udbg_cpm_getc_poll(void)
++{
++	int c = cpm_get_poll_char(udbg_port);
++
++	return c == NO_POLL_CHAR ? -1 : c;
++}
++
++static int udbg_cpm_getc(void)
++{
++	int c;
++
++	while ((c = udbg_cpm_getc_poll()) == -1)
++		cpu_relax();
++	return c;
++}
++
+ #endif /* CONFIG_CONSOLE_POLL */
  
--	ucr2 |= UCR2_RXEN;
-+	ucr2 |= UCR2_RXEN | UCR2_TXEN;
- 	ucr2 &= ~UCR2_ATEN;
+ static const struct uart_ops cpm_uart_pops = {
+@@ -1251,7 +1277,10 @@ static int cpm_uart_init_port(struct device_node *np,
+ 		pinfo->gpios[i] = NULL;
  
- 	imx_uart_writel(sport, ucr1, UCR1);
+ #ifdef CONFIG_PPC_EARLY_DEBUG_CPM
+-	udbg_putc = NULL;
++#ifdef CONFIG_CONSOLE_POLL
++	if (!udbg_port)
++#endif
++		udbg_putc = NULL;
+ #endif
+ 
+ 	return cpm_uart_request_port(&pinfo->port);
+@@ -1370,6 +1399,15 @@ static int __init cpm_uart_console_setup(struct console *co, char *options)
+ 	uart_set_options(port, co, baud, parity, bits, flow);
+ 	cpm_line_cr_cmd(pinfo, CPM_CR_RESTART_TX);
+ 
++#ifdef CONFIG_CONSOLE_POLL
++	if (!udbg_port) {
++		udbg_port = &pinfo->port;
++		udbg_putc = udbg_cpm_putc;
++		udbg_getc = udbg_cpm_getc;
++		udbg_getc_poll = udbg_cpm_getc_poll;
++	}
++#endif
++
+ 	return 0;
+ }
+ 
 -- 
-2.27.0
+2.25.0
 
