@@ -2,62 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6752E365E
-	for <lists+linux-serial@lfdr.de>; Mon, 28 Dec 2020 12:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE9E2E41A4
+	for <lists+linux-serial@lfdr.de>; Mon, 28 Dec 2020 16:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727288AbgL1L2A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 28 Dec 2020 06:28:00 -0500
-Received: from www.zeus03.de ([194.117.254.33]:37504 "EHLO mail.zeus03.de"
+        id S2440478AbgL1PJt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 28 Dec 2020 10:09:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727134AbgL1L2A (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 28 Dec 2020 06:28:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=Byoyy+B9mzgrx3
-        L4cV+yYJa2qI4pVWuNLLGAgEHuFlw=; b=ZpagOnKCjEdIswsOfd9pm1+ZAO2q3F
-        iSyvnIEBoaBndiEOCLgM1fBySIyp8dyDkY+T9LpvVd7PomhWmvroAvWH5RPmWniU
-        Uu2YxsVHHko+6HqcoVJKPccADWdCDpM1rRuvkspk0L+/E6FYwMT/Tlax+2f8KI5M
-        +R+Gx3UG6XjDU=
-Received: (qmail 1739073 invoked from network); 28 Dec 2020 12:27:17 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Dec 2020 12:27:17 +0100
-X-UD-Smtp-Session: l3s3148p1@nU12joS3ypQgAwDPXwIpAOUwDQytQs2L
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] dt-bindings: serial: renesas,hscif: Add r8a779a0 support
-Date:   Mon, 28 Dec 2020 12:27:10 +0100
-Message-Id: <20201228112715.14947-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201228112715.14947-1-wsa+renesas@sang-engineering.com>
-References: <20201228112715.14947-1-wsa+renesas@sang-engineering.com>
+        id S2439699AbgL1PJt (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 28 Dec 2020 10:09:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D25AC207A1;
+        Mon, 28 Dec 2020 15:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1609168148;
+        bh=dzIDaoypKpUdd8dmDPRZs20tOLgmFTxJg1QGaBFWDBI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1tt9PZ/JEgP2MKJeuV8fSeeJTUzTloIF8sqy5YoCBvzTc+PHGDgd8wLdeeebedQrr
+         /LvrBjscZ8Di40qDSb+ITwif3/ni0U+z3mRejeywakVAEiHS5N6FtNteYBHuUKEkBT
+         +6+Wny73rjTxAg+VKuIuddV8TTGnI+9QyMKgP3HY=
+Date:   Mon, 28 Dec 2020 16:10:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Jiri Slaby <jslaby@suse.com>, linux-serial@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Johan Hovold <johan@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Subject: Re: [PATCH v10 0/3] leds: trigger: implement a tty trigger
+Message-ID: <X+n1Zt4IIuW9A8CF@kroah.com>
+References: <20201218104246.591315-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201218104246.591315-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/devicetree/bindings/serial/renesas,hscif.yaml | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, Dec 18, 2020 at 11:42:43AM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <uwe@kleine-koenig.org>
+> 
+> Hello,
+> 
+> here comes v10 of this series. Changes compared to v9 sent with
+> Message-Id: 20201018204022.910815-1-u.kleine-koenig@pengutronix.de in
+> October:
 
-diff --git a/Documentation/devicetree/bindings/serial/renesas,hscif.yaml b/Documentation/devicetree/bindings/serial/renesas,hscif.yaml
-index c139c5edb93e..512a84942f78 100644
---- a/Documentation/devicetree/bindings/serial/renesas,hscif.yaml
-+++ b/Documentation/devicetree/bindings/serial/renesas,hscif.yaml
-@@ -51,6 +51,7 @@ properties:
-               - renesas,hscif-r8a77980     # R-Car V3H
-               - renesas,hscif-r8a77990     # R-Car E3
-               - renesas,hscif-r8a77995     # R-Car D3
-+              - renesas,hscif-r8a779a0     # R-Car V3U
-           - const: renesas,rcar-gen3-hscif # R-Car Gen3 and RZ/G2
-           - const: renesas,hscif           # generic HSCIF compatible UART
- 
--- 
-2.29.2
+First 2 patches now applied to my tree.
 
+If I get an ack from the LED maintainer(s), I'll be glad to also queue
+up the third one too.
+
+thanks,
+
+greg k-h
