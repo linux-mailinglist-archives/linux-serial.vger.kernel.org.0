@@ -2,52 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8772E92D4
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Jan 2021 10:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3A92E9305
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Jan 2021 11:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbhADJv1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Mon, 4 Jan 2021 04:51:27 -0500
-Received: from post.dks.ru ([194.226.89.161]:53178 "EHLO post.dks.ru"
+        id S1726492AbhADKDF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 4 Jan 2021 05:03:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726236AbhADJv1 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 4 Jan 2021 04:51:27 -0500
-Received: from ksmg.dks.lan (unknown [172.17.112.11])
-        by post.dks.ru (Postfix) with ESMTP id 94328270863;
-        Mon,  4 Jan 2021 12:21:42 +0300 (MSK)
-Received: from [192.168.88.237] (unknown [212.154.23.124])
-        (Authenticated sender: zapros@dks.ru)
-        by post.dks.ru (Postfix) with ESMTP id 955CF26F446;
-        Mon,  4 Jan 2021 12:21:36 +0300 (MSK)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726465AbhADKDE (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 4 Jan 2021 05:03:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC53B20780;
+        Mon,  4 Jan 2021 10:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1609754544;
+        bh=DTQgfinQxH3xCqywDfhY454jpPb5ATM8H7eYA7h4GXk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WWT0quJnpKJqNAm4nX+AAQTwVQrJWVBZv+YuI81WWr07jSpyESECSAPQ+0VkOnair
+         lujVi/C2OSKQRhdbVLq8aLrCd4VKHpaikcwUWypNfK/aNfQfIchbD/KpwB60qyvqLf
+         rcYl4Dy2McyP6wEMdkKey1k23Irij6Ky0xiAPXBI=
+Date:   Mon, 4 Jan 2021 11:03:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tamseel Shams <m.shams@samsung.com>
+Cc:     kgene@kernel.org, krzk@kernel.org, jslaby@suse.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com
+Subject: Re: [PATCH] serial: samsung: Checks the return value of function
+Message-ID: <X/LoBqoVf9H6wI8U@kroah.com>
+References: <CGME20210104082958epcas5p12c5c0e78dec7f106375b4f507a3b152b@epcas5p1.samsung.com>
+ <20210104083551.1393-1-m.shams@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: YOUR URGENT RESPONSE !!!!
-To:     Recipients <zapros@dks.ru>
-From:   "Mr. Kim Leang" <zapros@dks.ru>
-Date:   Mon, 04 Jan 2021 01:22:02 -0800
-Reply-To: kimleang575@yahoo.com
-Message-Id: <20210104092136.955CF26F446@post.dks.ru>
-X-KLMS-Rule-ID: 7
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Status: not scanned, disabled by settings
-X-KLMS-AntiSpam-Interceptor-Info: not scanned
-X-KLMS-AntiPhishing: Clean, bases: 2021/01/04 08:40:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2021/01/04 05:34:00 #16008269
-X-KLMS-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210104083551.1393-1-m.shams@samsung.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greeting!
+On Mon, Jan 04, 2021 at 02:05:51PM +0530, Tamseel Shams wrote:
+> "uart_add_one_port" function call may fail and return
+> some error code, so adding a check for return value.
+> If it is returning some error code, then displaying the
+> result and returning back from there.
+> 
+> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+> ---
+>  drivers/tty/serial/samsung_tty.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index 6ef614d8648c..a220ba166ffe 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -2072,7 +2072,11 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	dev_dbg(&pdev->dev, "%s: adding port\n", __func__);
+> -	uart_add_one_port(&s3c24xx_uart_drv, &ourport->port);
+> +	ret = uart_add_one_port(&s3c24xx_uart_drv, &ourport->port);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "Failed to add uart port, err %d\n", ret);
+> +		return ret;
 
-I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
+Why are you not unwinding the other logic that happened above?  If this
+fails, you need to properly do that as well, otherwise the driver is
+still registered, right?
 
-I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+thanks,
 
-The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
-
-Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
-
-Thanks and have a nice day,
-Mr. Kim Leang
+greg k-h
