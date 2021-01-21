@@ -2,53 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EBA2FE68D
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Jan 2021 10:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199C82FE84B
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Jan 2021 12:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbhAUJlN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Jan 2021 04:41:13 -0500
-Received: from mail-ej1-f49.google.com ([209.85.218.49]:45765 "EHLO
-        mail-ej1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728677AbhAUJkp (ORCPT
+        id S1730071AbhAULCw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Jan 2021 06:02:52 -0500
+Received: from mail-ed1-f45.google.com ([209.85.208.45]:43961 "EHLO
+        mail-ed1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730158AbhAULCr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Jan 2021 04:40:45 -0500
-Received: by mail-ej1-f49.google.com with SMTP id ke15so1632034ejc.12;
-        Thu, 21 Jan 2021 01:40:28 -0800 (PST)
+        Thu, 21 Jan 2021 06:02:47 -0500
+Received: by mail-ed1-f45.google.com with SMTP id n6so1907889edt.10;
+        Thu, 21 Jan 2021 03:02:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=N2K+N67nLg17oc17iRiM37F6/UhrQxKklC0Dn+MIhww=;
-        b=EI1D5MqXZTsSyOyEI4hHFo7wuz6V9bYdNrm5heNTjcbxv14C9mIUh7cJMSGkMyYeA8
-         cmA/ZEwWcNBiAknnzSnc1IG68Qxkq+i5ciXDLs+93Gs+Wf2mLfnVXKge9WcVoCEKJbc/
-         /sTJe1Xk0nGY7/XkMkyxzujtHk+CvpHnJmwZtdVfo64OwcawRDDP9Joidzf+d/yWIhRL
-         aUjHoEp7lQ3xhcT7ngAYaXwRU2hyv0EBLmuC86r+hOHNN94Pod8gaLSgVOmWzPfZPDZl
-         iBUj185stygrDj4EhiFPOJHV5LIq0sjhA4qtkCOzHLv6xUIGoPJlEM0bNd6lZTV4hq/k
-         lyPw==
-X-Gm-Message-State: AOAM5335rpNwOWBjFDs8vjHLgioSDeQ3fPuNVvOo+1R0XGNJgnWyftSX
-        py7WJjzONL71TOy6DOgL4CA=
-X-Google-Smtp-Source: ABdhPJwbCFtlCf9hzBp4r+jA6JL2dMQZqLBvsLJjb3fooVUyL0VJYmUA7PYB6mHKID23yB9genpyOQ==
-X-Received: by 2002:a17:907:e9e:: with SMTP id ho30mr8946657ejc.529.1611222000183;
-        Thu, 21 Jan 2021 01:40:00 -0800 (PST)
+        bh=n6DYcYeSLADiN6siyAF5sN2ywvVzfVTuKS3Zh4JrGOg=;
+        b=PEdsYiXLsQ/glmKxl1c/RrvoMoF0wHMSpC9RWFQSWNvt5LlLy2W5xRwqx/bHlLfbo5
+         c3KSbmyGqimtOESdL1ST0usFm+HYBbKK1+6lGGlm8ilHp5OaRqasW9rYUuk7xDQOD+Es
+         qW7YYC4nVIeN2ufhJuTNUf4or1gF4rQRiG55jbMFFwLQ5K9sqHRNOX5Nc87LKmOgy3Rs
+         TdKEPsRls9TNOKOjWRnGxyayxAbIh0/R4apQ8MKk4+AdSth+IxJlcZy7lImeE4sMsc4C
+         Yr/4QA2KznC2aAdCOis6MIqHVBgM0mMc38jUFjq6v/sWu31u0G8QutP9ZKbMCwBLlFkY
+         KHMA==
+X-Gm-Message-State: AOAM530mu6YQw2MIS45R7IAH7uN6OxUS8nhSERTtoDQC4xQEtIJJv3ha
+        ZYCiQv9J+43mC22jjjIoEng=
+X-Google-Smtp-Source: ABdhPJyjvWEQNGsz5ELJZogBMc6cApHA22zZvmgRZNXo/XESvK3tkKxq6J7lxFLORMWqPslFm0v97Q==
+X-Received: by 2002:a50:8387:: with SMTP id 7mr10121555edi.131.1611226924734;
+        Thu, 21 Jan 2021 03:02:04 -0800 (PST)
 Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id i6sm1972011ejd.110.2021.01.21.01.39.59
+        by smtp.gmail.com with ESMTPSA id x9sm657673eje.36.2021.01.21.03.02.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jan 2021 01:39:59 -0800 (PST)
-Subject: Re: [PATCH 1/6] tty: implement write_iter
+        Thu, 21 Jan 2021 03:02:04 -0800 (PST)
+Subject: Re: [PATCH 2/6] tty: convert tty_ldisc_ops 'read()' function to take
+ a kernel pointer
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org
 Cc:     hch@lst.de, viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
         ohw.giles@gmail.com, r.karszniewicz@phytec.de,
         Linus Torvalds <torvalds@linux-foundation.org>
 References: <20210121090020.3147058-1-gregkh@linuxfoundation.org>
+ <20210121090020.3147058-2-gregkh@linuxfoundation.org>
 From:   Jiri Slaby <jirislaby@kernel.org>
-Message-ID: <f4c72a0a-25e6-5c7a-559b-6d3b7c930100@kernel.org>
-Date:   Thu, 21 Jan 2021 10:39:58 +0100
+Message-ID: <ff6709dc-bb42-1e52-b348-c52036960bdd@kernel.org>
+Date:   Thu, 21 Jan 2021 12:02:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20210121090020.3147058-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20210121090020.3147058-2-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset=iso-8859-2; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,156 +61,100 @@ X-Mailing-List: linux-serial@vger.kernel.org
 On 21. 01. 21, 10:00, Greg Kroah-Hartman wrote:
 > From: Linus Torvalds <torvalds@linux-foundation.org>
 > 
-> This makes the tty layer use the .write_iter() function instead of the
-> traditional .write() functionality.
+> The tty line discipline .read() function was passed the final user
+> pointer destination as an argument, which doesn't match the 'write()'
+> function, and makes it very inconvenient to do a splice method for
+> ttys.
 > 
-> That allows writev(), but more importantly also makes it possible to
-> enable .splice_write() for ttys, reinstating the "splice to tty"
-> functionality that was lost in commit 36e2c7421f02 ("fs: don't allow
-> splice read/write without explicit ops").
+> This is a conversion to use a kernel buffer instead.
 > 
-> Fixes: 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
-> Reported-by: Oliver Giles <ohw.giles@gmail.com>
+> NOTE! It does this by passing the tty line discipline ->read() function
+> an additional "cookie" to fill in, and an offset into the cookie data.
+> 
+> The line discipline can fill in the cookie data with its own private
+> information, and then the reader will repeat the read until either the
+> cookie is cleared or it runs out of data.
+> 
+> The only real user of this is N_HDLC, which can use this to handle big
+> packets, even if the kernel buffer is smaller than the whole packet.
+> 
 > Cc: Christoph Hellwig <hch@lst.de>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Cc: Al Viro <viro@zeniv.linux.org.uk>
 > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> ---
->   drivers/tty/tty_io.c | 48 ++++++++++++++++++++++++--------------------
->   1 file changed, 26 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-> index 56ade99ef99f..338bc4ef5549 100644
+...
 > --- a/drivers/tty/tty_io.c
 > +++ b/drivers/tty/tty_io.c
-> @@ -143,9 +143,8 @@ LIST_HEAD(tty_drivers);			/* linked list of tty drivers */
->   DEFINE_MUTEX(tty_mutex);
->   
->   static ssize_t tty_read(struct file *, char __user *, size_t, loff_t *);
-> -static ssize_t tty_write(struct file *, const char __user *, size_t, loff_t *);
-> -ssize_t redirected_tty_write(struct file *, const char __user *,
-> -							size_t, loff_t *);
-> +static ssize_t tty_write(struct kiocb *, struct iov_iter *);
-> +ssize_t redirected_tty_write(struct kiocb *, struct iov_iter *);
->   static __poll_t tty_poll(struct file *, poll_table *);
->   static int tty_open(struct inode *, struct file *);
->   long tty_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-> @@ -478,7 +477,8 @@ static void tty_show_fdinfo(struct seq_file *m, struct file *file)
->   static const struct file_operations tty_fops = {
->   	.llseek		= no_llseek,
->   	.read		= tty_read,
-> -	.write		= tty_write,
-> +	.write_iter	= tty_write,
-> +	.splice_write	= iter_file_splice_write,
->   	.poll		= tty_poll,
->   	.unlocked_ioctl	= tty_ioctl,
->   	.compat_ioctl	= tty_compat_ioctl,
-> @@ -491,7 +491,8 @@ static const struct file_operations tty_fops = {
->   static const struct file_operations console_fops = {
->   	.llseek		= no_llseek,
->   	.read		= tty_read,
-> -	.write		= redirected_tty_write,
-> +	.write_iter	= redirected_tty_write,
-> +	.splice_write	= iter_file_splice_write,
->   	.poll		= tty_poll,
->   	.unlocked_ioctl	= tty_ioctl,
->   	.compat_ioctl	= tty_compat_ioctl,
-> @@ -607,9 +608,9 @@ static void __tty_hangup(struct tty_struct *tty, int exit_session)
->   	/* This breaks for file handles being sent over AF_UNIX sockets ? */
->   	list_for_each_entry(priv, &tty->tty_files, list) {
->   		filp = priv->file;
-> -		if (filp->f_op->write == redirected_tty_write)
-> +		if (filp->f_op->write_iter == redirected_tty_write)
->   			cons_filp = filp;
-> -		if (filp->f_op->write != tty_write)
-> +		if (filp->f_op->write_iter != tty_write)
-
-This now relies on implicit value of hung_up_tty_fops.write_iter (i.e. 
-NULL), okay.
-
->   			continue;
->   		closecount++;
->   		__tty_fasync(-1, filp, 0);	/* can't block */
- > 		filp->f_op = &hung_up_tty_fops;
-
-Isn't this racy with VFS layer in vfs_write:
-         if (file->f_op->write)
-                 ret = file->f_op->write(file, buf, count, pos);
-         else if (file->f_op->write_iter)
-                 ret = new_sync_write(file, buf, count, pos);
-
-? hung_up_tty_fops do not set iter_write and tty_fops do not set write. 
-When we switch from one to the other here, right after the 'if', but 
-before the call, what happens? Likely nothing for the ->write case 
-immediately as compilers cache the value, but for ->write_iter, I'm not 
-sure. Anyway, this looks broken to me. (Read on.)
-
-> @@ -956,14 +957,20 @@ static inline ssize_t do_tty_write(
->   		size_t size = count;
->   		if (size > chunk)
->   			size = chunk;
-> +
->   		ret = -EFAULT;
-> -		if (copy_from_user(tty->write_buf, buf, size))
-> +		if (copy_from_iter(tty->write_buf, size, from) != size)
->   			break;
-> +
->   		ret = write(tty, file, tty->write_buf, size);
->   		if (ret <= 0)
->   			break;
-> +
-> +		/* FIXME! Have Al check this! */
-> +		if (ret != size)
-> +			iov_iter_revert(from, size-ret);
-> +
->   		written += ret;
-> -		buf += ret;
->   		count -= ret;
->   		if (!count)
->   			break;
-> @@ -1023,9 +1030,9 @@ void tty_write_message(struct tty_struct *tty, char *msg)
->    *	write method will not be invoked in parallel for each device.
->    */
->   
-> -static ssize_t tty_write(struct file *file, const char __user *buf,
-> -						size_t count, loff_t *ppos)
-> +static ssize_t tty_write(struct kiocb *iocb, struct iov_iter *from)
->   {
-> +	struct file *file = iocb->ki_filp;
->   	struct tty_struct *tty = file_tty(file);
->    	struct tty_ldisc *ld;
->   	ssize_t ret;
-> @@ -1038,18 +1045,15 @@ static ssize_t tty_write(struct file *file, const char __user *buf,
->   	if (tty->ops->write_room == NULL)
->   		tty_err(tty, "missing write_room method\n");
->   	ld = tty_ldisc_ref_wait(tty);
-> -	if (!ld)
-> -		return hung_up_tty_write(file, buf, count, ppos);
-> -	if (!ld->ops->write)
-> +	if (!ld || !ld->ops->write)
->   		ret = -EIO;
->   	else
-> -		ret = do_tty_write(ld->ops->write, tty, file, buf, count);
-> +		ret = do_tty_write(ld->ops->write, tty, file, from);
->   	tty_ldisc_deref(ld);
-
-Ok, here belongs my earlier note: "if ld == NULL => crash here." That is 
-if hangup happens during the ldisc wait, the kernel will crash in 
-tty_ldisc_deref.
-
-Is there a reason not to convert hung_up_tty_fops too and leave the 
-return hung_up_tty_write here intact? This would also solve the comments 
-above.
-
->   	return ret;
+> @@ -833,6 +833,65 @@ static void tty_update_time(struct timespec64 *time)
+>   		time->tv_sec = sec;
 >   }
 >   
-> -ssize_t redirected_tty_write(struct file *file, const char __user *buf,
-> -						size_t count, loff_t *ppos)
-> +ssize_t redirected_tty_write(struct kiocb *iocb, struct iov_iter *iter)
->   {
->   	struct file *p = NULL;
->   
+> +/*
+> + * Iterate on the ldisc ->read() function until we've gotten all
+> + * the data the ldisc has for us.
+> + *
+> + * The "cookie" is something that the ldisc read function can fill
+> + * in to let us know that there is more data to be had.
+> + *
+> + * We promise to continue to call the ldisc until it stops returning
+> + * data or clears the cookie. The cookie may be something that the
+> + * ldisc maintains state for and needs to free.
+> + */
+> +static int iterate_tty_read(struct tty_ldisc *ld, struct tty_struct *tty, struct file *file,
+> +		char __user *buf, size_t count)
+> +{
+> +	int retval = 0;
+> +	void *cookie = NULL;
+> +	unsigned long offset = 0;
+> +	char kernel_buf[64];
+> +
+> +	do {
+> +		int size, uncopied;
+> +
+> +		size = count > sizeof(kernel_buf) ? sizeof(kernel_buf) : count;
+
+Or simply
+size = min(count, sizeof(kernel_buf));
+
+> +		size = ld->ops->read(tty, file, kernel_buf, size, &cookie, offset);
+> +		if (!size)
+> +			break;
+> +
+> +		/*
+> +		 * A ldisc read error return will override any previously copied
+> +		 * data (eg -EOVERFLOW from HDLC)
+> +		 */
+> +		if (size < 0) {
+> +			memzero_explicit(kernel_buf, sizeof(kernel_buf));
+> +			return size;
+> +		}
+> +
+> +		uncopied = copy_to_user(buf+offset, kernel_buf, size);
+> +		size -= uncopied;
+> +		offset += size;
+> +		count -= size;
+> +
+> +		/*
+> +		 * If the user copy failed, we still need to do another ->read()
+> +		 * call if we had a cookie to let the ldisc clear up.
+> +		 *
+> +		 * But make sure size is zeroed.
+> +		 */
+> +		if (unlikely(uncopied)) {
+> +			count = 0;
+> +			retval = -EFAULT;
+
+n_hdlc_tty_read will return EOVERFLOW when size is 0, so this EFAULT is 
+never propagated, if I am looking correctly? n_tty seems to be fine 
+(returns zero for zeroed size).
+
+> +		}
+> +	} while (cookie);
+> +
+> +	/* We always clear tty buffer in case they contained passwords */
+> +	memzero_explicit(kernel_buf, sizeof(kernel_buf));
+> +	return offset ? offset : retval;
+> +}
 
 thanks,
 -- 
