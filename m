@@ -2,171 +2,196 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C56E6305388
-	for <lists+linux-serial@lfdr.de>; Wed, 27 Jan 2021 07:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E353053B9
+	for <lists+linux-serial@lfdr.de>; Wed, 27 Jan 2021 07:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbhA0Gve (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 27 Jan 2021 01:51:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41084 "EHLO mail.kernel.org"
+        id S229808AbhA0G5s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 27 Jan 2021 01:57:48 -0500
+Received: from mga07.intel.com ([134.134.136.100]:32499 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231916AbhA0GsF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 27 Jan 2021 01:48:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EB692072C;
-        Wed, 27 Jan 2021 06:47:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611730042;
-        bh=SMf/sTVmFizoaTCRhZKOzJIDd9pG2drSndbHjehSYHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eIxDYowELLXJdzjiGwaNPG2hkaUmupGzw2zEemwVvQomvLqzMvseCF/SkUiqZIduO
-         Gvf8oKij0ja051ihFnNxn1vEEmr2V7Rezxly/hz1a2DfgLLDiHYVnu7ywJbmKoZ/1n
-         jTjUvD1r6r/xOuNkE/io5HVCc6JZfMxpD46Zw0pDJW3S6qcXerAxfVIO9YzZfcx8BZ
-         7abmVKMgGR50oOPfV4GFaWENi4Ss/oJanPtz4wNs5YcT6fz7mNssNUbap4x9DqDp7k
-         94/V6xmo4VOiVFFF3CTluEAGGxMwLkYC3YD81tj+qqyC0M53/29Mjt0KM9D41YabCf
-         I2bnFL90rxHIw==
-Date:   Wed, 27 Jan 2021 07:47:15 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
-Message-ID: <20210127064715.GA981@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, kvm@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
+        id S231163AbhA0Gv3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 27 Jan 2021 01:51:29 -0500
+IronPort-SDR: VK+VrDOG6oz8QXiAOKvV5lho9hvpzjqSP71yXcAZyQYZVd286gC4y6/0W4VZHkLNklYOn8qB47
+ DNJCwA0Retog==
+X-IronPort-AV: E=McAfee;i="6000,8403,9876"; a="244103478"
+X-IronPort-AV: E=Sophos;i="5.79,378,1602572400"; 
+   d="scan'208";a="244103478"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 22:50:41 -0800
+IronPort-SDR: aLIq1wIuuhkdYvzXmbOK8S4bPpNTlhb4vierUdRjPbPKjFE3/KfqLXbitty/V3uJXwhEqFZaqd
+ EtGlcD45iMsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,378,1602572400"; 
+   d="scan'208";a="369378851"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2021 22:50:38 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l4ef0-0001Q0-4x; Wed, 27 Jan 2021 06:50:38 +0000
+Date:   Wed, 27 Jan 2021 14:50:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ e0f2a902c9f02fcb36c22f63e0db67e73375c843
+Message-ID: <60110d21.rTgwzAVSdP0k2bGq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="huq684BweRXVnRxX"
-Content-Disposition: inline
-In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: e0f2a902c9f02fcb36c22f63e0db67e73375c843  serial: stm32: improve platform_get_irq condition handling in init_port
 
---huq684BweRXVnRxX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 726m
 
-On Tue, Jan 26, 2021 at 05:58:34PM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> All amba drivers return 0 in their remove callback. Together with the
-> driver core ignoring the return value anyhow, it doesn't make sense to
-> return a value here.
->=20
-> Change the remove prototype to return void, which makes it explicit that
-> returning an error value doesn't work as expected. This simplifies changi=
-ng
-> the core remove callback to return void, too.
->=20
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org> # for drivers/memory
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+configs tested: 134
+configs skipped: 2
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      ep88xc_defconfig
+sh                          kfr2r09_defconfig
+powerpc                    klondike_defconfig
+powerpc                    mvme5100_defconfig
+mips                           ip22_defconfig
+openrisc                    or1ksim_defconfig
+xtensa                generic_kc705_defconfig
+nios2                         10m50_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                 mpc85xx_cds_defconfig
+mips                         tb0287_defconfig
+sh                          polaris_defconfig
+xtensa                    smp_lx200_defconfig
+parisc                generic-32bit_defconfig
+powerpc                     stx_gp3_defconfig
+powerpc                     kilauea_defconfig
+powerpc                     tqm8541_defconfig
+arm                            lart_defconfig
+openrisc                            defconfig
+c6x                         dsk6455_defconfig
+powerpc                        cell_defconfig
+mips                       rbtx49xx_defconfig
+um                           x86_64_defconfig
+arm                         lubbock_defconfig
+powerpc                      acadia_defconfig
+sh                        dreamcast_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                      integrator_defconfig
+powerpc                    adder875_defconfig
+arm                       cns3420vb_defconfig
+um                            kunit_defconfig
+sh                        edosk7705_defconfig
+powerpc                      tqm8xx_defconfig
+sh                           se7206_defconfig
+mips                         db1xxx_defconfig
+mips                     decstation_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                     powernv_defconfig
+arm                          pcm027_defconfig
+mips                       capcella_defconfig
+arm                          ep93xx_defconfig
+sh                           se7750_defconfig
+sh                          rsk7264_defconfig
+m68k                          amiga_defconfig
+powerpc                     asp8347_defconfig
+powerpc                       ppc64_defconfig
+arm                            qcom_defconfig
+arm                        shmobile_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                     pseries_defconfig
+arm                          lpd270_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210126
+i386                 randconfig-a002-20210126
+i386                 randconfig-a004-20210126
+i386                 randconfig-a006-20210126
+i386                 randconfig-a003-20210126
+i386                 randconfig-a005-20210126
+x86_64               randconfig-a012-20210126
+x86_64               randconfig-a016-20210126
+x86_64               randconfig-a015-20210126
+x86_64               randconfig-a011-20210126
+x86_64               randconfig-a013-20210126
+x86_64               randconfig-a014-20210126
+i386                 randconfig-a013-20210126
+i386                 randconfig-a011-20210126
+i386                 randconfig-a012-20210126
+i386                 randconfig-a015-20210126
+i386                 randconfig-a014-20210126
+i386                 randconfig-a016-20210126
+i386                 randconfig-a013-20210127
+i386                 randconfig-a011-20210127
+i386                 randconfig-a012-20210127
+i386                 randconfig-a015-20210127
+i386                 randconfig-a014-20210127
+i386                 randconfig-a016-20210127
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
---huq684BweRXVnRxX
-Content-Type: application/pgp-signature; name="signature.asc"
+clang tested configs:
+x86_64               randconfig-a003-20210126
+x86_64               randconfig-a002-20210126
+x86_64               randconfig-a001-20210126
+x86_64               randconfig-a005-20210126
+x86_64               randconfig-a006-20210126
+x86_64               randconfig-a004-20210126
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmARDG8ACgkQFA3kzBSg
-KbZUgg/+MkBwxjwkME0XbCPEYMUsJ9F6QLP4gXXTqGleAgxMVqSLG5XG/rJgCfPv
-BB3X116hBgVOZZBTz+uWxpOSy90WrhLh3HrOb/SGB6hmKn/a0fYdB2/YXhVOXKyN
-OlhKbYBl0Ev0PM+m8xV4sr0sQYOn1wOs0NMHoMvmK+TlnCX1GDxHBVuElpNWo8Wj
-/nFLnpq9eUGt+i4eAsKoTj/1l8Ak4cOihHe2cRWxVUC3NDRTJBL9HgZwD38wVl5v
-u/iwGQG5Zram49KLbGoBFpd60hrifA1X3Cwx2qhwZ+cm/ks3n+NwIQPvpoRyJ8Ny
-gK5+QKowfQvOtSP8PFC1QE/u+oLVpYJ4rVT3DmXddPj89l3Peo17VAS08AoPk3hO
-McIAFelbN1FmcjCpZ0ELpjCo/G6S1pKx9uAtFLbbMf80CoREU5ucCPzzWbf9unQv
-5xhIdK1xkszSC1kGjHABw1zBy/ZAEoy+x3yktPjX2nU1L8Ni/vKjR6+w27G7pspU
-WZwk2lkCFEnt8gFnRI4MFhjGagpiyiEfq0QeD1O452zgZimiPvfKjMLnWArfWzF0
-25EngNXoizDEZMYZX46drnzfUfIDKBVkCbj1CWcQLFivpp4pj7+7n4D5lJlgwNvE
-kqhQNlLLFbibwI0LNt/LqCbC/SggaYOUfYQ8XefoTe0Z6dH/+J0=
-=FyXm
------END PGP SIGNATURE-----
-
---huq684BweRXVnRxX--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
