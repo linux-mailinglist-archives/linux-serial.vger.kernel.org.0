@@ -2,65 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2DC309E8F
-	for <lists+linux-serial@lfdr.de>; Sun, 31 Jan 2021 21:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B94D30CF0D
+	for <lists+linux-serial@lfdr.de>; Tue,  2 Feb 2021 23:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbhAaUFr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Sun, 31 Jan 2021 15:05:47 -0500
-Received: from unicorn.mansr.com ([81.2.72.234]:58566 "EHLO unicorn.mansr.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231519AbhAaTry (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 31 Jan 2021 14:47:54 -0500
-X-Greylist: delayed 14344 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Jan 2021 14:47:53 EST
-Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:8d8e::3])
-        by unicorn.mansr.com (Postfix) with ESMTPS id E5A2E15360;
-        Sun, 31 Jan 2021 19:47:11 +0000 (GMT)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id DAD56219FCF; Sun, 31 Jan 2021 19:47:11 +0000 (GMT)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] serial: 8250: add option to disable registration of
- legacy ISA ports
-References: <20210128172244.22859-1-mans@mansr.com>
-        <CAHp75VenDC0R3uX4_=Yzii-q5Z-YWcfT2_OO0yJkYehYAHDCew@mail.gmail.com>
-Date:   Sun, 31 Jan 2021 19:47:11 +0000
-In-Reply-To: <CAHp75VenDC0R3uX4_=Yzii-q5Z-YWcfT2_OO0yJkYehYAHDCew@mail.gmail.com>
-        (Andy Shevchenko's message of "Sun, 31 Jan 2021 21:25:33 +0200")
-Message-ID: <yw1xo8h4dh34.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S235902AbhBBWec (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 2 Feb 2021 17:34:32 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:61037 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S230091AbhBBWeU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 2 Feb 2021 17:34:20 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=Z/qoYR5e93G/1E5Uh8tLreepyziGYShILI7fcXozE97A3DqZKBadv9kcBZBcmHZnqAUcLkt0g+COxgI6WqJ5gdfKqksQSW540KJaAE4DNiZ+EZYtErJhsiZnZCgjfp9yI8W2dpgN2EsH5zUvgVY6Bl2MWU8ziaGqy1DCXSk4DXXi+2CTtkJX9uQrf2ohPvP7bhav6zr4dJxTQjQYoopWjV3h9j7RqQq/UIXqX3VBjVDZARoXQTZUB0KN0A
+        F7X8DeijiSCFEdYkkdQwasjHi3K0B6KloKBXegK0TgQ39PHt5t2MVnmtmeZadY0DbdImfujjk25mqjLTG700JJRoTl9A==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Sat, 30 Jan 2021 02:14:15 +0000
+Message-ID: <B0CC978E-0149-4652-A2D0-17DE1F49BCC1@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Sat, 30 Jan 2021 02:14:13 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+Hello,
 
-> On Thursday, January 28, 2021, Mans Rullgard <mans@mansr.com> wrote:
->
->> On systems that do not have the traditional PC ISA serial ports, the
->> 8250 driver still creates non-functional device nodes.  This change
->> makes only ports that actually exist (PCI, DT, ...) get device nodes.
->>
->>
->
-> This is kinda ABI breakage. At least this will break x86 platforms with
-> HSUARTs (all modern ones) that are used in embedded systems.
->
-> I think you would rather need an option to disable this and select it by
-> the platforms where it is known not to break anything.
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-What exactly breaks?  The new option is enabled by default, just like
-the one right beside it (SERIAL_8250_PNP), so nothing at all changes
-unless this is actively disabled.  On a system that doesn't have those
-ports, any attempt to access the device nodes produces some kind of
-error.  How is it breaking anything to not create device nodes for
-hardware that doesn't exist?
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
--- 
-Måns Rullgård
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
+
