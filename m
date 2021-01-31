@@ -2,71 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3E0309A81
-	for <lists+linux-serial@lfdr.de>; Sun, 31 Jan 2021 06:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664E8309C8A
+	for <lists+linux-serial@lfdr.de>; Sun, 31 Jan 2021 15:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbhAaFZP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 31 Jan 2021 00:25:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39188 "EHLO mail.kernel.org"
+        id S230440AbhAaOGK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 31 Jan 2021 09:06:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56442 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229481AbhAaFZN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 31 Jan 2021 00:25:13 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1891264E1F;
-        Sun, 31 Jan 2021 05:24:31 +0000 (UTC)
+        id S231579AbhAaMsG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 31 Jan 2021 07:48:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CCE564E09;
+        Sun, 31 Jan 2021 12:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612070672;
-        bh=rztIUAxj6lRAykEeYYAw3qte7w6d9rekhBKaDwj2+Jc=;
+        s=korg; t=1612097244;
+        bh=9kbVzVw62kZgIKKE9B1IS70GsTH18purMEstGi/VG68=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YnHqzVJk0k+sY1TSm1uZwU59CQDtrLY92VcaRhW5Dfvoa0WLqc7ZrXmKWEo6WH/Q/
-         7XiNMa6ztfGry4jYnHVKfVNUYBtC8DVmjBJzLkrd5SzsGglP9OJr2gfoBgX67Pg8ia
-         0AnugPFCWY9L/b+ySVLFywNfWeiwU6RUpBwdXo9g=
-Date:   Sun, 31 Jan 2021 06:24:28 +0100
+        b=EbR5owstkp/sTS6s3kPfORsR/Nvku7bfOdwHThUYwVy80Al0j8BOTFt4dD721IP8j
+         ol2zb++Io6xxms7O9CY0MSkWboSTkUF+/idOtbqPAElZ6uGR7swA1t68Wt92iaNPZt
+         uQclxVbNcg/ej4RJAo0fM5ucl3kXUEiYvZo4FvGA=
+Date:   Sun, 31 Jan 2021 13:47:22 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mychaela Falconia <mychaela.falconia@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Maarten Brock <m.brock@vanmierlo.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Mychaela N . Falconia" <falcon@freecalypso.org>,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+To:     Mans Rullgard <mans@mansr.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] tty: add flag to suppress ready signalling on open
-Message-ID: <YBY/DDSWB+YT2r8m@kroah.com>
-References: <CA+uuBqYTzXCHGY8QnP+OQ5nRNAbqx2rMNzLM7OKLM1_4AzzinQ@mail.gmail.com>
- <6b81cca21561305b55ba8f019b78da28@vanmierlo.com>
- <X9H9i98E1Gro+mDP@kroah.com>
- <3fc3097ce1d35ce1e45fa5a3c7173666@vanmierlo.com>
- <X9IcKoofq+2iGZn7@kroah.com>
- <CA+uuBqaNcKadyLRyufm+6HUHXcs7o0rtgw84BrHc7Jq9PauV8Q@mail.gmail.com>
- <X9d039qPr/LO/2R/@localhost>
- <CA+uuBqZgq4KRZsqGRKDUbKAcQxYr1XPhYDrjzMNfWMYgDX8Wfg@mail.gmail.com>
- <YBPxG+i/ZLP8/wg1@hovoldconsulting.com>
- <CA+uuBqaf7cDJcXPsba5qKG78sak0dF4aHHtKOpUMj-0zNS-hAQ@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250: add option to disable registration of
+ legacy ISA ports
+Message-ID: <YBam2m2VMowH5Yth@kroah.com>
+References: <20210128172244.22859-1-mans@mansr.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+uuBqaf7cDJcXPsba5qKG78sak0dF4aHHtKOpUMj-0zNS-hAQ@mail.gmail.com>
+In-Reply-To: <20210128172244.22859-1-mans@mansr.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Jan 30, 2021 at 04:18:04PM -0800, Mychaela Falconia wrote:
-> Greg K-H wrote:
+On Thu, Jan 28, 2021 at 05:22:44PM +0000, Mans Rullgard wrote:
+> On systems that do not have the traditional PC ISA serial ports, the
+> 8250 driver still creates non-functional device nodes.  This change
+> makes only ports that actually exist (PCI, DT, ...) get device nodes.
 > 
-> > our job is to make Linux work for everyone.
+> Signed-off-by: Mans Rullgard <mans@mansr.com>
+> ---
+>  drivers/tty/serial/8250/8250_core.c | 26 ++++++++++++++++++++------
+>  drivers/tty/serial/8250/Kconfig     |  5 +++++
+>  2 files changed, 25 insertions(+), 6 deletions(-)
 > 
-> But as your refusal to accept the purely additive (zero impact on
-> anything other than specific hw in question) patch adding support for
-> a new hardware device clearly indicates, your job is NOT to make Linux
-> work for everyone, but rather for a smaller subset of "everyone"
-> *other than* hardware designers who come to the maintainers in good
-> faith, asking to mainline support for new hardware they just made.
+> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+> index cae61d1ebec5..49695dd3677c 100644
+> --- a/drivers/tty/serial/8250/8250_core.c
+> +++ b/drivers/tty/serial/8250/8250_core.c
+> @@ -555,6 +555,7 @@ static void __init serial8250_isa_init_ports(void)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_SERIAL_8250_ISA
 
-Anything we take adds work to our overall effort to support that new
-feature added.  And you are asking us to do that work for you, for free,
-for forever.  Sorry, given that your attitude does not understand that
-this is a community and we need to work together, I don't think it's
-worth continuing here, sorry.
+This is just making a mess of the code.  To do this right, pull the isa
+code out into a separate file and put the #ifdef in a .h file, so we can
+properly maintain and support this code over time.  This change as-is is
+not going to make that any easier :(
 
-If you change your mind in the future, you know how to contact us.
+> +config SERIAL_8250_ISA
+> +	bool "8250/16550 ISA device support" if EXPERT
+
+So, no one will set this?
+
+What userspace visable change will be caused by this?  Will ports get
+renumbered?  What harm is this causing systems today without this
+change?
+
+thanks,
 
 greg k-h
