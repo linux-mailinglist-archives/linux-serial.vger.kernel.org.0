@@ -2,64 +2,172 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B94D30CF0D
-	for <lists+linux-serial@lfdr.de>; Tue,  2 Feb 2021 23:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3553309FEB
+	for <lists+linux-serial@lfdr.de>; Mon,  1 Feb 2021 02:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235902AbhBBWec (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 2 Feb 2021 17:34:32 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:61037 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S230091AbhBBWeU (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 2 Feb 2021 17:34:20 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=Z/qoYR5e93G/1E5Uh8tLreepyziGYShILI7fcXozE97A3DqZKBadv9kcBZBcmHZnqAUcLkt0g+COxgI6WqJ5gdfKqksQSW540KJaAE4DNiZ+EZYtErJhsiZnZCgjfp9yI8W2dpgN2EsH5zUvgVY6Bl2MWU8ziaGqy1DCXSk4DXXi+2CTtkJX9uQrf2ohPvP7bhav6zr4dJxTQjQYoopWjV3h9j7RqQq/UIXqX3VBjVDZARoXQTZUB0KN0A
-        F7X8DeijiSCFEdYkkdQwasjHi3K0B6KloKBXegK0TgQ39PHt5t2MVnmtmeZadY0DbdImfujjk25mqjLTG700JJRoTl9A==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Sat, 30 Jan 2021 02:14:15 +0000
-Message-ID: <B0CC978E-0149-4652-A2D0-17DE1F49BCC1@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Sat, 30 Jan 2021 02:14:13 -0000
+        id S230526AbhBABR4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 31 Jan 2021 20:17:56 -0500
+Received: from mga14.intel.com ([192.55.52.115]:1044 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230134AbhBABRm (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 31 Jan 2021 20:17:42 -0500
+IronPort-SDR: Dq3FEw+oDzv/eQFFQwgB0KIE9uYUJeIKvg4IZDXXNlk719i/g8wfL5Na/jvMA8LV6djzlc1xCv
+ 2x3TkGAjwTVQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9881"; a="179842531"
+X-IronPort-AV: E=Sophos;i="5.79,391,1602572400"; 
+   d="scan'208";a="179842531"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2021 17:17:00 -0800
+IronPort-SDR: WQQUTW2/knWHFjwTxtDUo9EwXBj81NeyeauECw0HMtVM7GTF0up6/OuhCeoSP9jFCnx9RdwWV3
+ B81ATpxoU7/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,391,1602572400"; 
+   d="scan'208";a="478442773"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Jan 2021 17:16:59 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l6Npq-0006Gp-Pj; Mon, 01 Feb 2021 01:16:58 +0000
+Date:   Mon, 01 Feb 2021 09:16:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ 81004f0bf7f04fcdb6344692a563c49897424f14
+Message-ID: <60175677.8F1enyJrx+/wTt6S%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: 81004f0bf7f04fcdb6344692a563c49897424f14  dt-bindings: serial: imx: Switch to my personal address
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+i386-tinyconfig vmlinux size:
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
++-------+-------------------------+------------------------------------------+
+| DELTA |         SYMBOL          |                  COMMIT                  |
++-------+-------------------------+------------------------------------------+
+|  +471 | TOTAL                   | 5c8fe583cce5..81004f0bf7f0 (ALL COMMITS) |
+|  +465 | TEXT                    | 5c8fe583cce5..81004f0bf7f0 (ALL COMMITS) |
+|  +101 | kernel_fpu_begin_mask() | 5c8fe583cce5..81004f0bf7f0 (ALL COMMITS) |
+|   +91 | shrink_page_list()      | 5c8fe583cce5..81004f0bf7f0 (ALL COMMITS) |
+|   -87 | kernel_fpu_begin()      | 5c8fe583cce5..81004f0bf7f0 (ALL COMMITS) |
++-------+-------------------------+------------------------------------------+
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+elapsed time: 725m
 
-Regards,
-Ms. Reem.
+configs tested: 98
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                   bluestone_defconfig
+arm                           stm32_defconfig
+arm                         lubbock_defconfig
+arm                        mvebu_v7_defconfig
+sh                        sh7757lcr_defconfig
+sh                     magicpanelr2_defconfig
+sh                             sh03_defconfig
+sh                         microdev_defconfig
+mips                       capcella_defconfig
+arm                          iop32x_defconfig
+sh                           se7780_defconfig
+mips                           ip27_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                     pseries_defconfig
+arm                           tegra_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                      obs600_defconfig
+arm                         s3c6400_defconfig
+mips                        maltaup_defconfig
+arm                            xcep_defconfig
+powerpc                 canyonlands_defconfig
+arm                           sunxi_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210131
+i386                 randconfig-a003-20210131
+i386                 randconfig-a002-20210131
+i386                 randconfig-a001-20210131
+i386                 randconfig-a004-20210131
+i386                 randconfig-a006-20210131
+x86_64               randconfig-a015-20210131
+x86_64               randconfig-a011-20210131
+x86_64               randconfig-a014-20210131
+x86_64               randconfig-a016-20210131
+x86_64               randconfig-a012-20210131
+x86_64               randconfig-a013-20210131
+i386                 randconfig-a013-20210131
+i386                 randconfig-a011-20210131
+i386                 randconfig-a015-20210131
+i386                 randconfig-a012-20210131
+i386                 randconfig-a014-20210131
+i386                 randconfig-a016-20210131
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20210131
+x86_64               randconfig-a002-20210131
+x86_64               randconfig-a001-20210131
+x86_64               randconfig-a005-20210131
+x86_64               randconfig-a006-20210131
+x86_64               randconfig-a003-20210131
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
