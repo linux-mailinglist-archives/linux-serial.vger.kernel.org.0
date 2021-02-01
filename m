@@ -2,92 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8B7311146
-	for <lists+linux-serial@lfdr.de>; Fri,  5 Feb 2021 20:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 999BC3111C5
+	for <lists+linux-serial@lfdr.de>; Fri,  5 Feb 2021 21:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhBERwq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 5 Feb 2021 12:52:46 -0500
-Received: from mga11.intel.com ([192.55.52.93]:14562 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233694AbhBERtQ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 5 Feb 2021 12:49:16 -0500
-IronPort-SDR: RdEa4fB/9XTBb/YIh3spEiAYoOT4ptR63BgTz2ejxxsJnGHw+3DNMLO+3qAC++5klBz3jpOkwf
- RfiGxeIGCyag==
-X-IronPort-AV: E=McAfee;i="6000,8403,9886"; a="177973444"
-X-IronPort-AV: E=Sophos;i="5.81,156,1610438400"; 
-   d="scan'208";a="177973444"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 11:29:45 -0800
-IronPort-SDR: DpOSbIwA7IxUlUq1sd/9m7KtdYqPcf6QM3ZDQ27OsgD9oJrIehxyThk6iggcI+sIXA54QmILiI
- 5lFQHoEObUow==
-X-IronPort-AV: E=Sophos;i="5.81,155,1610438400"; 
-   d="scan'208";a="373492960"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 11:29:43 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1l86nT-002Ebh-Un; Fri, 05 Feb 2021 21:29:39 +0200
-Date:   Fri, 5 Feb 2021 21:29:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Giulio Benetti <giulio.benetti@micronovasrl.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, gregkh@linuxfoundation.org,
-        jslaby@suse.com, matwey.kornilov@gmail.com, lukas@wunner.de,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        christoph.muellner@theobroma-systems.com,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Subject: Re: [PATCH v3 5/5] serial: 8250_dw: add em485 support
-Message-ID: <YB2co0GoAc3zOK5m@smile.fi.intel.com>
-References: <20200517215610.2131618-1-heiko@sntech.de>
- <20200517215610.2131618-6-heiko@sntech.de>
- <20200518152103.GI1634618@smile.fi.intel.com>
- <1f7881b5-f900-dbbe-3f8d-f990d2bdf5a7@micronovasrl.com>
- <YBk14xJhIyqTNH/k@smile.fi.intel.com>
- <9b2a7c4c-2ef1-5198-9aae-83f9fec00289@micronovasrl.com>
+        id S233557AbhBESRs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 5 Feb 2021 13:17:48 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:55697 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S233183AbhBEPTk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:19:40 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=JFt3cjfr2gf0oZFNAIkKMxcz4dJD/YGkc0fGvOoSd3DydZ6om7JzTU837vBFVq1NIPU0D2QA5BLHZXE1+7cBmkJlbZjYCUFmJkkaBVbP88e4KHnDVRcctmBLIZ1pL5VerRqjcciKkL4DSuyXFJlGk3Z0CRoskvUoLBM7ZhpxLeqIU2BKsbHQXJZ1h2qHQhaHiD+VrGx+bGKjZzbhmRvwLDQIByq6jRcjht5MzYCcxpzOzp/k+Dev9dQj7B
+        WId68CyP4XonlI4wIMRo1xiGfUtKZ+P3cZo2ejPWBjr+ynq3dK3OxibTTEKfmOc5W1zmJFMAPQ+ZKxsa3M4d1PiYxHmg==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Mon, 1 Feb 2021 08:50:14 +0000
+Message-ID: <D474448D-A325-42CC-A881-8334C6C84BA7@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Mon, 1 Feb 2021 08:50:13 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b2a7c4c-2ef1-5198-9aae-83f9fec00289@micronovasrl.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 06:46:56PM +0100, Giulio Benetti wrote:
-> Il 02/02/2021 12:22, Andy Shevchenko ha scritto:
-> > On Tue, Feb 02, 2021 at 01:31:17AM +0100, Giulio Benetti wrote:
-> > > Il 18/05/2020 17:21, Andy Shevchenko ha scritto:
-> > > > On Sun, May 17, 2020 at 11:56:10PM +0200, Heiko Stuebner wrote:
-> > > > > From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> > > > > 
-> > > > > Need to use rs485 transceiver so let's use existing em485 485 emulation
-> > > > > layer on top of 8250.
-> > > > > 
-> > > > > Add rs485_config callback to port and uses the standard em485 start and
-> > > > > stop helpers.
-> > > > 
-> > > > Would it prevent to use native RS485 support?
-> > > 
-> > > 8250_dw doesn't have a native RS485 support, do you mean using hardware
-> > > RTS assertion? Anyway at the moment it's not present. This would be the
-> > > first rs485 support added to 8250_dw.
-> > 
-> > DW v4.0+ has it.
-> 
-> I have access to datasheet of DW v3, and I don't have access to hardware
-> with DW v4.0v Uart.
-> But I could add rs485emu for only UART version < 4.0 and I can find Uart
-> version by reading UCV register, would it be acceptable?
+Hello,
 
-I don't think we need to disable the possibility to have emulation even on v4+
-IP since PCB can be designed that way. My point here, that whatever code you
-add it should not prevent to use HW supported RS485, although I haven't heard
-about support of it in the upstream (yet?).
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-And for the record, Synopsys hadn't added any bit into CPR to recognize that
-feature, so only version check can be done in this case...
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
--- 
-With Best Regards,
-Andy Shevchenko
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
+Regards,
+Ms. Reem.
 
