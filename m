@@ -2,30 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41411313B45
-	for <lists+linux-serial@lfdr.de>; Mon,  8 Feb 2021 18:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B8A313D12
+	for <lists+linux-serial@lfdr.de>; Mon,  8 Feb 2021 19:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235006AbhBHRn7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Mon, 8 Feb 2021 12:43:59 -0500
-Received: from [45.145.185.74] ([45.145.185.74]:59346 "EHLO willseal.com"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233904AbhBHRnV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:43:21 -0500
-X-Greylist: delayed 12046 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Feb 2021 12:43:20 EST
-Reply-To: brianiske@willseal.com
-From:   Bitcoin Guru <brianiske@willseal.com>
-To:     linux-serial@vger.kernel.org
-Subject: Bitcoin Investment
-Date:   08 Feb 2021 09:42:42 -0800
-Message-ID: <20210208094242.D06EBF4B357F1B16@willseal.com>
+        id S233931AbhBHSSZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 8 Feb 2021 13:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235390AbhBHSRB (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 8 Feb 2021 13:17:01 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AEDC06178C;
+        Mon,  8 Feb 2021 10:16:21 -0800 (PST)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1612808179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7LMdKWQRZRSZEvKnpunODFn/eJin4dDOmq6MpkpVoZ4=;
+        b=dX9TlRrtQXsDn/N8qFxtBBV7HgJOyaBpTPAtZdE1fVqIyf52qRiGipowfJm0iSqZRAGt1J
+        puieYrHSP1kg+D+gKV8o8geZFA5Cxz1KYiy5lCGsyqTba2KumaCApgl23Za91ix6oeMCVm
+        UhWsCKr3TQnHeGYj79BKohq3z+etnA2tLp2hyvNFrG1zY7iXHhUwjV6T5Fdcov5Qwv6pjR
+        q3o4YyfOOU4XZ7K3/XEGvilCenYyYDSZ7q+k6s+ejx/GuCS8Be9jBOEE+SzRT6TiN1S0ni
+        3kaJCOpOCAEx5XImwlg6tRIdVKMJh4Q0vELapyclzZtc6sS73Cm9+uAl+sz6Nw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1612808179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7LMdKWQRZRSZEvKnpunODFn/eJin4dDOmq6MpkpVoZ4=;
+        b=o0MZOZhvYfZ0ukvFt/uYVQhE89g9om7WsK4YyE+ZDaf7qjvP/4bhc9yL6EZqemw/c7e8m5
+        Ywsz3KrurjP5L+AQ==
+To:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: tty: Remove in_interrupt() usage.
+Date:   Mon,  8 Feb 2021 19:16:13 +0100
+Message-Id: <20210208181615.381861-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Do you want 20% Daily Profit ?
-You can invest in Bitcoin now
-Kindly give me your response 
+Folks,
+
+a small series removing in_interrupt() usage within the tty layer.
+
+Sebastian
+
