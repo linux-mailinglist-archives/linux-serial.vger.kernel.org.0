@@ -2,183 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C89315D79
-	for <lists+linux-serial@lfdr.de>; Wed, 10 Feb 2021 03:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D68316F91
+	for <lists+linux-serial@lfdr.de>; Wed, 10 Feb 2021 20:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbhBJClj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 9 Feb 2021 21:41:39 -0500
-Received: from mga06.intel.com ([134.134.136.31]:23572 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235391AbhBJCjg (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 9 Feb 2021 21:39:36 -0500
-IronPort-SDR: fyAZDeUA3rbKa1j6p3sCK/FSyGav42LoPmap2LNPb9owcxNhW+C4q9OsotQ6XLhNPP+xkfCxDy
- pFdAb+0vcXog==
-X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="243493811"
-X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
-   d="scan'208";a="243493811"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 18:38:50 -0800
-IronPort-SDR: xaQ2U8jK8Ij7mlfRoScXOiqbP2QjA7+0eeOaNlqOikrCYLbM/Vg4oBa4ysYkGc+wnNZszynPKZ
- jcT01L/A8Rcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,166,1610438400"; 
-   d="scan'208";a="362022204"
-Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 09 Feb 2021 18:38:46 -0800
-Received: from kbuild by cd560a204411 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l9fOw-0002ZY-3T; Wed, 10 Feb 2021 02:38:46 +0000
-Date:   Wed, 10 Feb 2021 10:38:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- a157270fbf37f822e1fa9e9faa8ed8c81da1eb28
-Message-ID: <60234714.b5OK/ELrIVqXsE4i%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S234127AbhBJTE7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Wed, 10 Feb 2021 14:04:59 -0500
+Received: from spam.auroraoh.com ([24.56.89.101]:49922 "EHLO
+        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234354AbhBJTEm (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 10 Feb 2021 14:04:42 -0500
+X-ASG-Debug-ID: 1612983751-112c0d6a799edf0001-41HMuZ
+Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id 5uUbz3ZeGsqrpfdl; Wed, 10 Feb 2021 14:02:31 -0500 (EST)
+X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
+Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
+ (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
+ 02:41:04 -0500
+Content-Type: text/plain; charset="iso-8859-1"
+X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: We are a registered Private Loan Investment Company in the United Kingdom,
+ we also registered with the Turkish British Chamber of Commerce and Industry
+ (TBCCI) we have operations in Europe and Asia.
+To:     Recipients <januskad@auroraoh.com>
+X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
+ we also registered with the Turkish British Chamber of Commerce and Industry
+ (TBCCI) we have operations in Europe and Asia.
+From:   <januskad@auroraoh.com>
+Date:   Tue, 9 Feb 2021 15:40:17 +0800
+Reply-To: <cfolimiited@gmail.com>
+X-Priority: 1 (High)
+X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <d46ecc4f-b603-47c1-83c7-0caec3f47064@COASRV-MAIL2.auroraoh.loc>
+X-Originating-IP: [197.210.29.8]
+X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
+ COASRV-MAIL2.auroraoh.loc (10.3.1.15)
+X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
+X-Barracuda-Start-Time: 1612983751
+X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at auroraoh.com
+X-Barracuda-Scan-Msg-Size: 755
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 1.61
+X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87891
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.00 NO_REAL_NAME           From: does not include a real name
+        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
+        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
+                                   Address
+        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: a157270fbf37f822e1fa9e9faa8ed8c81da1eb28  serial: core: Remove BUG_ON(in_interrupt()) check
+We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
 
-i386-tinyconfig vmlinux size:
+We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
 
-+-------+-------------------------+------------------------------------------+
-| DELTA |         SYMBOL          |                  COMMIT                  |
-+-------+-------------------------+------------------------------------------+
-|  +471 | TOTAL                   | 5c8fe583cce5..a157270fbf37 (ALL COMMITS) |
-|  +465 | TEXT                    | 5c8fe583cce5..a157270fbf37 (ALL COMMITS) |
-|  +101 | kernel_fpu_begin_mask() | 5c8fe583cce5..a157270fbf37 (ALL COMMITS) |
-|   +91 | shrink_page_list()      | 5c8fe583cce5..a157270fbf37 (ALL COMMITS) |
-|   -87 | kernel_fpu_begin()      | 5c8fe583cce5..a157270fbf37 (ALL COMMITS) |
-+-------+-------------------------+------------------------------------------+
+Please contact us for more details;
 
-elapsed time: 728m
 
-configs tested: 109
-configs skipped: 2
+Kind regards,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Paul McCann
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-xtensa                         virt_defconfig
-microblaze                          defconfig
-powerpc                     ksi8560_defconfig
-mips                         cobalt_defconfig
-powerpc                     pseries_defconfig
-arm                       spear13xx_defconfig
-powerpc                     kmeter1_defconfig
-mips                       lemote2f_defconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                 mpc8560_ads_defconfig
-mips                           rs90_defconfig
-arm                         s5pv210_defconfig
-arm                           sama5_defconfig
-sh                        sh7763rdp_defconfig
-mips                        bcm47xx_defconfig
-openrisc                    or1ksim_defconfig
-arc                        vdk_hs38_defconfig
-powerpc                     sequoia_defconfig
-powerpc                     taishan_defconfig
-alpha                               defconfig
-mips                      maltaaprp_defconfig
-arm                       cns3420vb_defconfig
-sh                             shx3_defconfig
-arm                          ixp4xx_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                         hackkit_defconfig
-m68k                       m5475evb_defconfig
-arm                           stm32_defconfig
-sh                          rsk7201_defconfig
-arm                         socfpga_defconfig
-um                           x86_64_defconfig
-arm                            lart_defconfig
-riscv                            allyesconfig
-arm                        keystone_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210209
-x86_64               randconfig-a001-20210209
-x86_64               randconfig-a005-20210209
-x86_64               randconfig-a004-20210209
-x86_64               randconfig-a002-20210209
-x86_64               randconfig-a003-20210209
-i386                 randconfig-a001-20210209
-i386                 randconfig-a005-20210209
-i386                 randconfig-a003-20210209
-i386                 randconfig-a002-20210209
-i386                 randconfig-a006-20210209
-i386                 randconfig-a004-20210209
-i386                 randconfig-a016-20210209
-i386                 randconfig-a013-20210209
-i386                 randconfig-a012-20210209
-i386                 randconfig-a014-20210209
-i386                 randconfig-a011-20210209
-i386                 randconfig-a015-20210209
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
-clang tested configs:
-x86_64               randconfig-a013-20210209
-x86_64               randconfig-a014-20210209
-x86_64               randconfig-a015-20210209
-x86_64               randconfig-a012-20210209
-x86_64               randconfig-a016-20210209
-x86_64               randconfig-a011-20210209
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
