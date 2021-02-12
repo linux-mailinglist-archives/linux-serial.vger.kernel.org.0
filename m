@@ -2,79 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D68316F91
-	for <lists+linux-serial@lfdr.de>; Wed, 10 Feb 2021 20:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFCC31A2F4
+	for <lists+linux-serial@lfdr.de>; Fri, 12 Feb 2021 17:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234127AbhBJTE7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Wed, 10 Feb 2021 14:04:59 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:49922 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234354AbhBJTEm (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 10 Feb 2021 14:04:42 -0500
-X-ASG-Debug-ID: 1612983751-112c0d6a799edf0001-41HMuZ
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id 5uUbz3ZeGsqrpfdl; Wed, 10 Feb 2021 14:02:31 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:41:04 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
+        id S230018AbhBLQk7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 12 Feb 2021 11:40:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38666 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230412AbhBLQjx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 12 Feb 2021 11:39:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C3AFF64E7A;
+        Fri, 12 Feb 2021 16:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613147951;
+        bh=VCFu+ICSFQ6+KyDhepe9q2UWT8xP1wZdC0Z3C2QnV2o=;
+        h=From:To:Subject:Date:From;
+        b=XcrLLDbr7E8vW3u2MEuqUdTqUpMmloObWhedy2LtKZkn3y63fSI5W5oFbvn1ircA7
+         8j2Z3nMcbjL6tyA9hiamE+mY4OWkrTdRk+c1/WharmO+xFjx9ilM+lhc/i/+WKqrlg
+         q1MnuKDeTYbmq5V2070AUxzHF3ikpDAewM/KvpRukUrUVpu0HO0zGuEPCng0VF0BGu
+         xquDbMOXipNJ60JVco6XPdMCWnnMhJHpPm2tgjd43DV2Y7lK7SElIAeG8/1Vk+74iO
+         004bAMb2UqSR0r227mYL/Hu83OH6kV3bkYEjehui4xOGlbYAhMgVuGpel/dSv+kVnB
+         am5vQr4q9EUgQ==
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: serial: samsung: add DMA properties
+Date:   Fri, 12 Feb 2021 17:39:04 +0100
+Message-Id: <20210212163905.70171-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:40:17 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <d46ecc4f-b603-47c1-83c7-0caec3f47064@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612983751
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87891
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+The Samsung SoC UART nodes have usually DMA so dtschema has to reflect
+this to fix dtbs_check warnings like:
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+  arch/arm/boot/dts/exynos4210-smdkv310.dt.yaml: serial@13800000:
+    'dma-names', 'dmas' do not match any of the regexes: 'pinctrl-[0-9]+'
 
-Please contact us for more details;
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ .../devicetree/bindings/serial/samsung_uart.yaml       | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-
-Kind regards,
-
-Paul McCann
-
+diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+index 21ee627b2ced..3e29b561223d 100644
+--- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
++++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+@@ -51,6 +51,16 @@ properties:
+       - pattern: '^clk_uart_baud[0-3]$'
+       - pattern: '^clk_uart_baud[0-3]$'
+ 
++  dmas:
++    items:
++      - description: DMA controller phandle and request line for RX
++      - description: DMA controller phandle and request line for TX
++
++  dma-names:
++    items:
++      - const: rx
++      - const: tx
++
+   interrupts:
+     description: RX interrupt and optionally TX interrupt.
+     minItems: 1
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+2.25.1
 
