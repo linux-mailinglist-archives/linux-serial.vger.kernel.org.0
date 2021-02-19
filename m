@@ -2,82 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589E531F9F8
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Feb 2021 14:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2906D31FE41
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Feb 2021 18:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhBSNed (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Feb 2021 08:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbhBSNec (ORCPT
+        id S230131AbhBSRst (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Feb 2021 12:48:49 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:37599 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229546AbhBSRsf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Feb 2021 08:34:32 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8A1C061794
-        for <linux-serial@vger.kernel.org>; Fri, 19 Feb 2021 05:33:14 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lD5u9-0007P7-8B; Fri, 19 Feb 2021 14:33:09 +0100
-Received: from ukl by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lD5u8-0001aN-Q6; Fri, 19 Feb 2021 14:33:08 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@pengutronix.de, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 2/2] leds: trigger/tty: Use led_set_brightness_sync() from workqueue
-Date:   Fri, 19 Feb 2021 14:33:07 +0100
-Message-Id: <20210219133307.4840-3-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210219133307.4840-1-u.kleine-koenig@pengutronix.de>
-References: <20210219133307.4840-1-u.kleine-koenig@pengutronix.de>
+        Fri, 19 Feb 2021 12:48:35 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11JHgYZ0008252;
+        Fri, 19 Feb 2021 18:47:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=loIA3esYt/3shriHTJz+2fSOwQFG2K336Aa8gSHwP6I=;
+ b=0kGfbam1bIRwLSW/7zqqo5xRV11Y9stvRP2Fjj/iBLedOUexpuiTq+f8quiGLpUcFo6z
+ vkClfBKpsC7xtslq5eZensZfJ4kVLen1xsjCrs7m9liUvAN1BLi0y4bKEvvxUfC8sx7P
+ viLgCm+Rs0xSuMEGpF6egRM1I7X5y+KZjjj/Uc795RHE08ol85W2t+dkMyoDKVtxduhY
+ Q+d8QmAJQbxTUZFXQ7y98/Pznvr+9+B5kP72SWTkJcDT+vMABxtMeHSYfJSBFj1arjfB
+ 4i1ONc8ZEhZp/om09i55xNFsAe2TsZuB5/xaS9+uxV7RtEC1u9igX6TdVBcompjbmsc4 9Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 36sqadhawq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Feb 2021 18:47:42 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AB51610002A;
+        Fri, 19 Feb 2021 18:47:40 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 99A4C25F3FB;
+        Fri, 19 Feb 2021 18:47:40 +0100 (CET)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Feb 2021 18:47:40
+ +0100
+From:   Erwan Le Ray <erwan.leray@foss.st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Erwan Le Ray <erwan.leray@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH 00/13] stm32 usart various fixes
+Date:   Fri, 19 Feb 2021 18:47:23 +0100
+Message-ID: <20210219174736.1022-1-erwan.leray@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-19_08:2021-02-18,2021-02-19 signatures=0
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-led_set_brightness() involves scheduling a workqueue. As here the led's
-brightness setting is done in context of the trigger's workqueue this is
-unjustified overhead and it's more sensible to use
-led_set_brightness_sync().
+This series brings various fixes to stm32-usart driver.
 
-Reported-by: Pavel Machek <pavel@ucw.cz>
-Fixes: fd4a641ac88f ("leds: trigger: implement a tty trigger")
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/leds/trigger/ledtrig-tty.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Erwan Le Ray (13):
+  serial: stm32: fix probe and remove order for dma
+  serial: stm32: fix startup by enabling usart for reception
+  serial: stm32: fix incorrect characters on console
+  serial: stm32: fix TX and RX FIFO thresholds
+  serial: stm32: fix a deadlock condition with wakeup event
+  serial: stm32: fix wake-up flag handling
+  serial: stm32: fix a deadlock in set_termios
+  serial: stm32: fix tx dma completion, release channel
+  serial: stm32: call stm32_transmit_chars locked
+  serial: stm32: fix FIFO flush in startup and set_termios
+  serial: stm32: add FIFO flush when port is closed
+  serial: stm32: fix tx_empty condition
+  serial: stm32: add support for "flush_buffer" ops
 
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/ledtrig-tty.c
-index af61281dc6a1..f62db7e520b5 100644
---- a/drivers/leds/trigger/ledtrig-tty.c
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -122,12 +122,12 @@ static void ledtrig_tty_work(struct work_struct *work)
- 
- 	if (icount.rx != trigger_data->rx ||
- 	    icount.tx != trigger_data->tx) {
--		led_set_brightness(trigger_data->led_cdev, LED_ON);
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
- 
- 		trigger_data->rx = icount.rx;
- 		trigger_data->tx = icount.tx;
- 	} else {
--		led_set_brightness(trigger_data->led_cdev, LED_OFF);
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
- 	}
- 
- out:
+ drivers/tty/serial/stm32-usart.c | 198 +++++++++++++++++++++----------
+ drivers/tty/serial/stm32-usart.h |   3 -
+ 2 files changed, 135 insertions(+), 66 deletions(-)
+
 -- 
-2.29.2
+2.17.1
 
