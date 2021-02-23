@@ -2,107 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411D832296F
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Feb 2021 12:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB833322A0E
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Feb 2021 13:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbhBWLYm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Feb 2021 06:24:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35054 "EHLO mail.kernel.org"
+        id S232757AbhBWL5X (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Feb 2021 06:57:23 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:54491 "EHLO mail.JVPinto.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231591AbhBWLYk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Feb 2021 06:24:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DA6E64E58;
-        Tue, 23 Feb 2021 11:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614079439;
-        bh=7dt3WFcKWgMb17C1fabScSgpfGbLICDn6coc0lLO/Ko=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y/IR/5jEBIqIMCL6h+smpsP71zMAAcNMreRaGQbwiQCsDmPtjxIgwzUCQ27Uk1TGh
-         iV79xVfcA3nUiHJwMY5D9DnQk79pmyn7MiuE8/KxpE/7rTC12Kz3dphj/uYD5qGCTG
-         xInK+LQa/ed6GdbFmjUP+aw70PNWmLApzWQ5UUOA=
-Date:   Tue, 23 Feb 2021 12:23:55 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     dingsenjie@163.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dingsenjie <dingsenjie@yulong.com>
-Subject: Re: [PATCH] tty/serial:Remove superfluous "breaks"
-Message-ID: <YDTly/pUCjsgVpDG@kroah.com>
-References: <20210223080630.44644-1-dingsenjie@163.com>
+        id S232501AbhBWLyb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 23 Feb 2021 06:54:31 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 23 Feb 2021 03:52:35 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Tue, 23 Feb 2021
+ 03:52:20 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Tue, 23 Feb 2021 11:52:34 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210223080630.44644-1-dingsenjie@163.com>
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <933f089f49b04946b97b7d0f2a305064@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 04:06:30PM +0800, dingsenjie@163.com wrote:
-> From: dingsenjie <dingsenjie@yulong.com>
-> 
-> Remove superfluous "breaks", as there is a "return" before them.
-> 
-> Signed-off-by: dingsenjie <dingsenjie@yulong.com>
-> ---
->  drivers/tty/serial/imx.c | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index 425624d..6c1c31a 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -300,7 +300,6 @@ static u32 imx_uart_readl(struct imx_port *sport, u32 offset)
->  	switch (offset) {
->  	case UCR1:
->  		return sport->ucr1;
-> -		break;
->  	case UCR2:
->  		/*
->  		 * UCR2_SRST is the only bit in the cached registers that might
-> @@ -311,16 +310,12 @@ static u32 imx_uart_readl(struct imx_port *sport, u32 offset)
->  		if (!(sport->ucr2 & UCR2_SRST))
->  			sport->ucr2 = readl(sport->port.membase + offset);
->  		return sport->ucr2;
-> -		break;
->  	case UCR3:
->  		return sport->ucr3;
-> -		break;
->  	case UCR4:
->  		return sport->ucr4;
-> -		break;
->  	case UFCR:
->  		return sport->ufcr;
-> -		break;
->  	default:
->  		return readl(sport->port.membase + offset);
->  	}
-> -- 
-> 1.9.1
-> 
+Hello,
 
-Hi,
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Regards,
+Ms. Reem.
