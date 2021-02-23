@@ -2,93 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF45F321D60
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Feb 2021 17:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBBA3226D0
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Feb 2021 09:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbhBVQss (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Feb 2021 11:48:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42944 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbhBVQsq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Feb 2021 11:48:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C688F64ED6;
-        Mon, 22 Feb 2021 16:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614012484;
-        bh=MXWBO5J/B4ehCuAjOGHLdM4atFpj8B3PWrif6H43n14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qeKbyy0tmr3l0m6/IBkrwfcG7tjyEq2wSF8ie468m4y5KvNxwCCzqjaHX0Jciyhue
-         rPzAXXPqXtiKbDy5viGuPNVVFH4dz71XzyrEEsh6YF9NuFL6eLuUEcYBWt/DVRiKjY
-         AlFIE6zFtkBJPtyOtPFhvh+rGnF/CKQBH9/81d3LE0mep8tDV8oh56A2geWPhn40ug
-         zFO2zf9ECtLYcVK3xsI18i0k5eeLPbUWJy3qCrwW6AQqcWWZeLUPSG+5frOC2bIYoo
-         88Z1WVWc2pzK25Y7Yrn/TM0fZOOSrCQ2wgGhLim5hQdOj6ZyqI5/6IWbeEKgK1armG
-         Sse9t4ZjZTqpg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lEENh-0006BJ-OF; Mon, 22 Feb 2021 17:48:21 +0100
-Date:   Mon, 22 Feb 2021 17:48:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     charles-yeh@prolific.com.tw, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YDPgVZ4GbNq6cGDP@hovoldconsulting.com>
-References: <3aee5708-7961-f464-8c5f-6685d96920d6@IEEE.org>
- <dc3458f1-830b-284b-3464-20124dc3900a@IEEE.org>
- <YDNwxtDxd7JntAXt@hovoldconsulting.com>
- <e2dcc839-3b43-2c80-6ad1-2d97e639b46a@IEEE.org>
- <YDOvLseYXaUHs0lS@hovoldconsulting.com>
- <fb1489c2-b972-619b-b7ce-4ae8e1d2cc0f@IEEE.org>
- <YDPO/JprcDTaPmR4@hovoldconsulting.com>
- <0f9caf26-af58-13a9-9947-47bb646f505e@IEEE.org>
- <YDPS3AP63/PwmwJU@hovoldconsulting.com>
- <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
+        id S232140AbhBWIGK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Feb 2021 03:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231937AbhBWIFy (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 23 Feb 2021 03:05:54 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E94FC06178B
+        for <linux-serial@vger.kernel.org>; Tue, 23 Feb 2021 00:05:12 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id q20so8283044pfu.8
+        for <linux-serial@vger.kernel.org>; Tue, 23 Feb 2021 00:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=rjFLgW1OULBXQlh3JS0FsFrrUu6RfNW+e5SQFjA5Djs=;
+        b=AvZshTJlZ99hlPyy1Sxi/eyeMNkLPG4N75bweYCqpQlF/1DEPKI/595QdApUFguDP7
+         vq9vbBd7nGOpMWVd/vWnK6tQr7iLBs/G2rQbQtdyTiRet8d76rW6YHPOxssFTB+jCzrt
+         5FcCRKF8C3dguDVXDyH9wqnHjJOzlr7jK6QDWEQGcS3yZo+Zft5aiH2iBh8LrqLZ3jIX
+         /xi9K7p3KP2mCscAKtJonQa1tnCli5eIUlG9KX80dSElrQNOiGAUBlG5iat5nTRA3pSF
+         +kvXpprPIQfx2o4q2JtBGITpGLBKl3JMdv7n9QI7H0HiOGKrMGDkV/KNyTyaUwG1IsfQ
+         3yAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=rjFLgW1OULBXQlh3JS0FsFrrUu6RfNW+e5SQFjA5Djs=;
+        b=dpe3TVh8w1fKjrMFaojuDLLrifPPaAKzE+CqHWGn0o6s0URfTeve+gUBgHy2Bpn4l/
+         70OKFBkqGQIgKNS482LBZ9PrK/R116qyp56YqOuuZWLbg3N5wTXAWSXmXYEKRgYoeJoU
+         TXMMtkTAH1SN4dVhQRTt/x2qLTQI1jnIWfJaA33Al4p2Dv97FzY9Lgsf8SBzCIFCU9e8
+         vrmvnWa/5gvL9tteD9Uwg6PafWNYD0EAu2ulb/8PdEBggsJqMsojO+8kquZsoXDtrBuX
+         if8f9i0TXryud9Gww9LOZqX44oyLsPTOiTkLROBmwtil60vr+HJXrM0UC1cSTtRYWGHz
+         RrkQ==
+X-Gm-Message-State: AOAM5320PDESIYm0PpVWSzhM1gVmhQba8RwklG2c1g8OWhZx2H9ogmKJ
+        jGQawENa15q6FeYEsnocTO5phmbGeSjS7m/XOXY=
+X-Google-Smtp-Source: ABdhPJxbad2ymWXoJzzvVFZnFflQ0WAVbuA43QbNAhekzhr1XCL6NRRTOsZU579Vs1QU24O30QYfdE1GkgkBAzSJlUE=
+X-Received: by 2002:a05:6a00:9d:b029:1ed:c1d6:5042 with SMTP id
+ c29-20020a056a00009db02901edc1d65042mr4916915pfj.71.1614067511481; Tue, 23
+ Feb 2021 00:05:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd92ea17-4e0a-2b6c-1032-9a81727841c9@IEEE.org>
+Received: by 2002:a05:6a10:4753:0:0:0:0 with HTTP; Tue, 23 Feb 2021 00:05:11
+ -0800 (PST)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   AbdWabbo Maddah <ffoundationcoca@gmail.com>
+Date:   Tue, 23 Feb 2021 09:05:11 +0100
+Message-ID: <CAJHqv60PqK-hDQZKP8O1C2RWCMhnL1zRWE8ouPo9Wp65aKcX7Q@mail.gmail.com>
+Subject: DID YOU RECEIVE MY MAIL?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 11:37:30AM -0500, Michael G. Katzmann wrote:
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
 
-> For reference this is the device I have ...
-> 
-> Bus 001 Device 011: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x067b Prolific Technology, Inc.
->   idProduct          0x2303 PL2303 Serial Port
->   bcdDevice            3.00
->   iManufacturer           1
->   iProduct                2
-
-Would be interesting to compare with a real TA in case this one happens
-to be a clone after all.
-
-My HXD has
-
-  bcdDevice            4.00
-  iManufacturer           1 Prolific Technology Inc. 
-  iProduct                2 USB-Serial Controller D
-
-here.
-
->   iSerial                 0
->   bNumConfigurations      1
-
-Thanks!
-
-Joe, would you mind posting the output of "lsusb -v" for your device as
-well?
-
-Johan
+AbdWabbo Maddah
