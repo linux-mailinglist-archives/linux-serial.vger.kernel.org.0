@@ -2,55 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC15D32B0EB
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6790332B0FA
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348581AbhCCCRY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S1348590AbhCCCRY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Tue, 2 Mar 2021 21:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345011AbhCBGxP (ORCPT
+        with ESMTP id S1345799AbhCBG5D (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 2 Mar 2021 01:53:15 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2ADC061756;
-        Mon,  1 Mar 2021 22:52:17 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id v13so7386242edw.9;
-        Mon, 01 Mar 2021 22:52:17 -0800 (PST)
+        Tue, 2 Mar 2021 01:57:03 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21955C061788;
+        Mon,  1 Mar 2021 22:55:51 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id l12so23818128edt.3;
+        Mon, 01 Mar 2021 22:55:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rHHguOtq/SsmoWVv767qiYZjS1EduX+s7NH06dTB/5E=;
-        b=RJv/UOK1Rl1s7110nIhpxe4b/ond/IgKPJUtMc5UpBqSdc/g7Yswb1SzFmZs4SD7tI
-         igbMnrQiho1HeVqBBnZDspMXblybvDrUY0kgRGYI0BFcKamvexM8kT6hsvPxfolS1GCS
-         coW5agR7+ctcm6vKT/3bVHNM0FhJN4zIgAKuzuhQLJ33mqLcUX+B8wza/jRBoUxX5Wfh
-         pIoxdl8EnKCLs6mRm+Qft5XvnA6SClzlvqfAAEb5w9NmFyPTiJiwH8KgN2HnBBuuCq/y
-         3YFdHzIsYT0FdYPOjPaHw4toWUXjBBVfLTzMCgCTF2m4QInHCv+j88I2zuFNKCQFwPe7
-         6sag==
+        bh=FkQlyQkx4YlaiWtPjbjtcm8QF/fjSftYDKk5kkfUey0=;
+        b=PFlj/AbLsGqPbk3apdT1uKeW7cFiUGggPb7txtL2cKFfBRSbsjVq7tDgupMkQPci6d
+         /5Dfpsl3vX9oWzTRVuabWzMsmgWHDjBzvWmqsHV8XprenQE/dvM7mFPa/NOnP/ihT08z
+         autad4M91CAFPFT68Iz8XNgOS6s2O2A3oxw/r0QeN+S0ZcMsa2fKXWYmyGt/GpxR4AcV
+         V1bFbBANndmxqnxiJheuZbykHCfz+OCKdxvdfXdGKsdGVMZojiY0Hnq1djYlXz32jwW3
+         AJDi60j6zN59bgJhyp1zd8Ywv73MhRPiWhHcrIMs4mv1hRfAQUP2FnRotdda5+Qekj5u
+         8CvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rHHguOtq/SsmoWVv767qiYZjS1EduX+s7NH06dTB/5E=;
-        b=WQs5INtpaglwazoI4ir9/rchXIcLdR+ldFDIQOV1NbEqWgw0W9rOD/zuS/3V/uUi2U
-         82FK0xTJf6DEZ6vso8jzsWoFM5d4A7oKWopolBTyW+pW0z7PEITvoR0ujtAfNZ6+tiiN
-         9gSOjOfsggH7X26DDpBBBtv6FQR4i7V38VZIPISwf9k+p947SEfjrbc4TujeKkCtfF2X
-         4BLvU/4gWKChmrmGC2PqWQOUCLeNfI7q12bx8jZJU7s5CO+s+VmcirWhsXw5USXFHucM
-         SIsxWcz3YlHT/xwCU2FiJGYGalKwCYykQePArAD9HmkQ02q52vWd7XS/QuX5DWG4VzTJ
-         OnrA==
-X-Gm-Message-State: AOAM5333ibFbLTpST8cYlBXXCA4K874du0HyoQC+6awMTEm04OEIzGK7
-        frIMef+pCAcmGOQ802dacCn8SjliVW9kYulP+e8=
-X-Google-Smtp-Source: ABdhPJzobTXq9iCvVESEdOAEuL6o/ZubpkKJZsWksmzJX34L0rWX2fSOlYOmfHgZ2Aqv1W8s49fkXRvKk98Gtiba5NU=
-X-Received: by 2002:aa7:dd55:: with SMTP id o21mr32367edw.237.1614667934608;
- Mon, 01 Mar 2021 22:52:14 -0800 (PST)
+        bh=FkQlyQkx4YlaiWtPjbjtcm8QF/fjSftYDKk5kkfUey0=;
+        b=R0MRviwapnKABnTt+JoBQM43VFN0HCx7eaZn7aFctNZwEXFJboNhxl6M9Tp5BZqm2T
+         NNjTgpe+nPzzoYPSlQ0T1u0+NBQ3/RXGPLmrBGaiFEJUVAzVf2OyY1ZJ/swjiXJmyIhU
+         FLuKMPqWDI0d3gfSUD7Me/0XFnK0nvDN+rDvfc2G6+5Qt+DaL9TWrwm95l5eSM3LByOE
+         eAy4vF3K+KbNDLinT1EzbcqagYbIoMqdfjbZOTwUJadrIV6s9dRNLQoYp1eSCCRhohUG
+         0ODZex7qBpt31P2kW+KyAGY7Fe/GwJWMaYgJysxvEqI5rROl/cOqf0oPZZ5B5KLK7Rxx
+         rqew==
+X-Gm-Message-State: AOAM531vCjvvGCH/bXYS5/luYrlJwZGUZuFHqWU0obpXNVZ5+dr3/6xP
+        8JlmxTkWzj46FQ+R6mTjmYBJsUmZYopt4inpQqM=
+X-Google-Smtp-Source: ABdhPJybh6pmK5GtQmq/c3vvZGuCHaTR3ln7l9rsmzuuQ7BXZx12cEyOKZV8gpU8repWmjDUKkUnlpWFKdYgBsD+7XA=
+X-Received: by 2002:a50:d987:: with SMTP id w7mr19419656edj.350.1614668149868;
+ Mon, 01 Mar 2021 22:55:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20210302062214.29627-1-jslaby@suse.cz> <20210302062214.29627-32-jslaby@suse.cz>
-In-Reply-To: <20210302062214.29627-32-jslaby@suse.cz>
+References: <20210302062214.29627-1-jslaby@suse.cz> <20210302062214.29627-33-jslaby@suse.cz>
+In-Reply-To: <20210302062214.29627-33-jslaby@suse.cz>
 From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Mon, 1 Mar 2021 22:52:03 -0800
-Message-ID: <CAMo8BfJeXxTatB74+4PLed9KZaoRgDgekHdvpWKsfFW-povZWw@mail.gmail.com>
-Subject: Re: [PATCH 32/44] tty: xtensa/iss, setup the timer statically
+Date:   Mon, 1 Mar 2021 22:55:38 -0800
+Message-ID: <CAMo8BfJ=-ORUowT4aUrQsYyZC+Kvpa6Xk-v5u7ah_GAkcAVpCA@mail.gmail.com>
+Subject: Re: [PATCH 33/44] tty: xtensa/iss, make rs_init static
 To:     Jiri Slaby <jslaby@suse.cz>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
@@ -64,15 +64,16 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 On Mon, Mar 1, 2021 at 10:22 PM Jiri Slaby <jslaby@suse.cz> wrote:
 >
-> Use DEFINE_TIMER and avoid runtime initialization of the serial_timer.
+> To fix the warning:
+> warning: no previous prototype for 'rs_init'
 >
 > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 > Cc: Chris Zankel <chris@zankel.net>
 > Cc: Max Filippov <jcmvbkbc@gmail.com>
 > Cc: linux-xtensa@linux-xtensa.org
 > ---
->  arch/xtensa/platforms/iss/console.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+>  arch/xtensa/platforms/iss/console.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
