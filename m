@@ -2,55 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAC432B0E8
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4947832B0EE
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348565AbhCCCRV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 2 Mar 2021 21:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S1348574AbhCCCRW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 2 Mar 2021 21:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347849AbhCBGqH (ORCPT
+        with ESMTP id S1344172AbhCBGul (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 2 Mar 2021 01:46:07 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AEFC06178A;
-        Mon,  1 Mar 2021 22:45:26 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id mj10so13007651ejb.5;
-        Mon, 01 Mar 2021 22:45:26 -0800 (PST)
+        Tue, 2 Mar 2021 01:50:41 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC98C06178A;
+        Mon,  1 Mar 2021 22:49:40 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id dx17so5552415ejb.2;
+        Mon, 01 Mar 2021 22:49:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wJXh5JalEhVse0qJW0VOHI5f4foaNIcMUtcvKKJasfQ=;
-        b=dhSf9U6HzpbfvVbH5USxTu/mgglrcDn5nL7ApwwV7YvP12gdja2yCAj05Nii6uqe6c
-         0gY3636OGXi+qz8e+PjivQGvRJeYHQKCp+2JNMbAFLez0RZ/9Tie9pFa2uUbr8GFK3RN
-         te7kQ5C/TB66UOv2GtIcyTF3RDdXOkeqlSuiu0J5jf5mhNd9STs5VOdZ0E01dAURwBme
-         ZLLPbhqfLMkYLuNtE2kV9POrs5lmw0GL//yE3MqOpUBcxwQrHXPwuYUOBzjLBmgA8BRU
-         Hff+8oUxBOKJyuIvV//9YR2Qa9hHE4Vu0y6VdCzB7ArLHVTHli2FwRwJgWY6f+O+m0OA
-         iCgA==
+        bh=jzxlQzv76Y/61eQ11eH1sQgFZWAUyijap1VZ663IHg0=;
+        b=YnKI9LxURIeByYgZ0rjrwV721raQBTcA6esYWukVX6m4O9X6Czv25W8BdKF4nyy/rR
+         1W5XUEid2pQbdb74IEAZxv9StTCqClDcmekin1F6IUcZRnLjcwUdPSzubKsXYVElDkLO
+         WzYXTLNMFRhqnJc8GO/uJHp7ociRcMBR9bdlxZNWbKW+HoBH8mQkN8DW+O7H0kZsaeCN
+         OIfERAvN/xfx/R1bT5LIpye6L/nOjqBk1NvM5YOWCwgiaH9lnga09dXKnITjxzwIog52
+         413pzT8nND5Oz9CELnaNWQ8yc66dkBbeNdt2x/R+fa+9MP5eVdjMxRKkqiopfqRiEsYW
+         Z0sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wJXh5JalEhVse0qJW0VOHI5f4foaNIcMUtcvKKJasfQ=;
-        b=kADGTEr2mJ9lKB1nXxeNIH935V9fHLbZVt+C7eYmDGgdhv1arotPaz8cJb9LXXoC0N
-         iTV9FRfi/Sj5yCMm6sL0crJf63RHgp3aQxhG2RmR12a9mBVtsj/vjbaJnaM9c+Cll2bx
-         TSuwcNhTKhQjGwS+BJOkHqwPhbkidU8LLHfwKCgPw88BRLHOiPbiDgY9dTqev1hhAAqs
-         cGP3ZYvbMymor93TuuKXGH/HyGrXwEEgycFKtlgGGq8Sa6rRu+LpAxmPgxifLiSxymtY
-         G6cNbU3Fi89TBbh9qaX8T8keY0MwyI4T+CrGj+MSY5i8VSMA5ZpaNKxkbFJu+BQXa672
-         nrNQ==
-X-Gm-Message-State: AOAM530mChIklV70lgCanU+YsZ1LjPT21GYEabBe6dQ7+LayyLOocl/B
-        xaKJc20dRO4ifIVJhbY0cXdnJRfCfHzhZtm3serHaKnf
-X-Google-Smtp-Source: ABdhPJyfeSEkJtAZCSPW0OjbWtOEt4hvwGLIUzr5p2cE3aqNEJBS+u2nw7lEEz+QG+Ui2h5wnVka/aNpze7fc4oqspI=
-X-Received: by 2002:a17:906:3587:: with SMTP id o7mr19621807ejb.443.1614667525431;
- Mon, 01 Mar 2021 22:45:25 -0800 (PST)
+        bh=jzxlQzv76Y/61eQ11eH1sQgFZWAUyijap1VZ663IHg0=;
+        b=l+dlGv7rVXtcoZ9sxUVAtui1GbhaEh9y9PJWKT57boZ2ShjVCkVn49zpA9uSLoghGm
+         nbmuVaUUdjROe31FLkFelItGweSWOa3okJMdrhHCi/8lE/k6pdj/xZT/DpS3fLkQDriz
+         J5QDUtyJJa5kzh5zEvdwE7s57Yta0vzR0bb33jfbhL8CnZRFWeo/J9kkOC9n9Kay3gDI
+         DLcAg3MJYTAWKjmj/hQ6O0iDBe7mrhErM9NtwtrjPeWk/QcXH86dfAy72tA9BWwU63Cy
+         U6mQO6C2BEXv+QWE6JSfLAYngiVg+SHkMzU6fC2PSR0Imk73YQcMXwVE/dhY9NrPb7Fy
+         obaA==
+X-Gm-Message-State: AOAM532hjQbNEJTAU/FL1nms3lRLq4P1ylfkXbNzkY4mG7EgQ65jMqNP
+        vmVloZVmZYFDGpeb1GbSMsPV/jfU9GE4/k2diZ8=
+X-Google-Smtp-Source: ABdhPJwljo+mnsADAPU1Bllfx6aUc5JBmvI3C9sySY2uIgDMMeT8KjuoWwE4NbMv9wDxKqDG84z6knAVtN2ZhlhV2vE=
+X-Received: by 2002:a17:906:7797:: with SMTP id s23mr8953605ejm.98.1614667779511;
+ Mon, 01 Mar 2021 22:49:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20210302062214.29627-1-jslaby@suse.cz> <20210302062214.29627-29-jslaby@suse.cz>
-In-Reply-To: <20210302062214.29627-29-jslaby@suse.cz>
+References: <20210302062214.29627-1-jslaby@suse.cz> <20210302062214.29627-31-jslaby@suse.cz>
+In-Reply-To: <20210302062214.29627-31-jslaby@suse.cz>
 From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Mon, 1 Mar 2021 22:45:14 -0800
-Message-ID: <CAMo8BfJoVnSkw_9J9w-is+_0aWbcmE+B_FMUha6Rv=n5+my_zw@mail.gmail.com>
-Subject: Re: [PATCH 29/44] tty: xtensa/iss, drop serial_version & serial_name
+Date:   Mon, 1 Mar 2021 22:49:28 -0800
+Message-ID: <CAMo8BfK_Y4ifJ2caNYO5bu+BnxyfoUey3hkDGK7=u7GbnUFRRw@mail.gmail.com>
+Subject: Re: [PATCH 31/44] tty: xtensa/iss, remove stale comments
 To:     Jiri Slaby <jslaby@suse.cz>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
@@ -64,16 +64,16 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 On Mon, Mar 1, 2021 at 10:22 PM Jiri Slaby <jslaby@suse.cz> wrote:
 >
-> There is no need to print the information during module load. Neither to
-> print some artificial version. So drop these strings and a print.
+> These are likely taken over from amiserial. iss doesn't do anything of
+> that.
 >
 > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 > Cc: Chris Zankel <chris@zankel.net>
 > Cc: Max Filippov <jcmvbkbc@gmail.com>
 > Cc: linux-xtensa@linux-xtensa.org
 > ---
->  arch/xtensa/platforms/iss/console.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+>  arch/xtensa/platforms/iss/console.c | 18 ------------------
+>  1 file changed, 18 deletions(-)
 
 Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
