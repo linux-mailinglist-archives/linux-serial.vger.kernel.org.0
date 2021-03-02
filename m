@@ -2,116 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D76432B0B3
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAC432B0E8
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348270AbhCCCRM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 2 Mar 2021 21:17:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39622 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1835903AbhCBGZY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 2 Mar 2021 01:25:24 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CF6DEB066;
-        Tue,  2 Mar 2021 06:22:22 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 44/44] tty: make everyone's write_room return >= 0
-Date:   Tue,  2 Mar 2021 07:22:14 +0100
-Message-Id: <20210302062214.29627-44-jslaby@suse.cz>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302062214.29627-1-jslaby@suse.cz>
-References: <20210302062214.29627-1-jslaby@suse.cz>
+        id S1348565AbhCCCRV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 2 Mar 2021 21:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347849AbhCBGqH (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 2 Mar 2021 01:46:07 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AEFC06178A;
+        Mon,  1 Mar 2021 22:45:26 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id mj10so13007651ejb.5;
+        Mon, 01 Mar 2021 22:45:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wJXh5JalEhVse0qJW0VOHI5f4foaNIcMUtcvKKJasfQ=;
+        b=dhSf9U6HzpbfvVbH5USxTu/mgglrcDn5nL7ApwwV7YvP12gdja2yCAj05Nii6uqe6c
+         0gY3636OGXi+qz8e+PjivQGvRJeYHQKCp+2JNMbAFLez0RZ/9Tie9pFa2uUbr8GFK3RN
+         te7kQ5C/TB66UOv2GtIcyTF3RDdXOkeqlSuiu0J5jf5mhNd9STs5VOdZ0E01dAURwBme
+         ZLLPbhqfLMkYLuNtE2kV9POrs5lmw0GL//yE3MqOpUBcxwQrHXPwuYUOBzjLBmgA8BRU
+         Hff+8oUxBOKJyuIvV//9YR2Qa9hHE4Vu0y6VdCzB7ArLHVTHli2FwRwJgWY6f+O+m0OA
+         iCgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wJXh5JalEhVse0qJW0VOHI5f4foaNIcMUtcvKKJasfQ=;
+        b=kADGTEr2mJ9lKB1nXxeNIH935V9fHLbZVt+C7eYmDGgdhv1arotPaz8cJb9LXXoC0N
+         iTV9FRfi/Sj5yCMm6sL0crJf63RHgp3aQxhG2RmR12a9mBVtsj/vjbaJnaM9c+Cll2bx
+         TSuwcNhTKhQjGwS+BJOkHqwPhbkidU8LLHfwKCgPw88BRLHOiPbiDgY9dTqev1hhAAqs
+         cGP3ZYvbMymor93TuuKXGH/HyGrXwEEgycFKtlgGGq8Sa6rRu+LpAxmPgxifLiSxymtY
+         G6cNbU3Fi89TBbh9qaX8T8keY0MwyI4T+CrGj+MSY5i8VSMA5ZpaNKxkbFJu+BQXa672
+         nrNQ==
+X-Gm-Message-State: AOAM530mChIklV70lgCanU+YsZ1LjPT21GYEabBe6dQ7+LayyLOocl/B
+        xaKJc20dRO4ifIVJhbY0cXdnJRfCfHzhZtm3serHaKnf
+X-Google-Smtp-Source: ABdhPJyfeSEkJtAZCSPW0OjbWtOEt4hvwGLIUzr5p2cE3aqNEJBS+u2nw7lEEz+QG+Ui2h5wnVka/aNpze7fc4oqspI=
+X-Received: by 2002:a17:906:3587:: with SMTP id o7mr19621807ejb.443.1614667525431;
+ Mon, 01 Mar 2021 22:45:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210302062214.29627-1-jslaby@suse.cz> <20210302062214.29627-29-jslaby@suse.cz>
+In-Reply-To: <20210302062214.29627-29-jslaby@suse.cz>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Mon, 1 Mar 2021 22:45:14 -0800
+Message-ID: <CAMo8BfJoVnSkw_9J9w-is+_0aWbcmE+B_FMUha6Rv=n5+my_zw@mail.gmail.com>
+Subject: Re: [PATCH 29/44] tty: xtensa/iss, drop serial_version & serial_name
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The tty line disciplines don't expect tty_operations::write_room to
-return negative values. Fix the five drivers which violate this.
+On Mon, Mar 1, 2021 at 10:22 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>
+> There is no need to print the information during module load. Neither to
+> print some artificial version. So drop these strings and a print.
+>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: Chris Zankel <chris@zankel.net>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Cc: linux-xtensa@linux-xtensa.org
+> ---
+>  arch/xtensa/platforms/iss/console.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/staging/gdm724x/gdm_tty.c | 2 +-
- drivers/tty/ipwireless/tty.c      | 4 ++--
- drivers/tty/n_gsm.c               | 2 +-
- drivers/tty/vcc.c                 | 2 +-
- drivers/usb/serial/mos7720.c      | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
-index 6e813693a766..0ccc8c24e754 100644
---- a/drivers/staging/gdm724x/gdm_tty.c
-+++ b/drivers/staging/gdm724x/gdm_tty.c
-@@ -188,7 +188,7 @@ static int gdm_tty_write_room(struct tty_struct *tty)
- 	struct gdm *gdm = tty->driver_data;
- 
- 	if (!GDM_TTY_READY(gdm))
--		return -ENODEV;
-+		return 0;
- 
- 	return WRITE_SIZE;
- }
-diff --git a/drivers/tty/ipwireless/tty.c b/drivers/tty/ipwireless/tty.c
-index 1836746991b5..99bb2f149ff5 100644
---- a/drivers/tty/ipwireless/tty.c
-+++ b/drivers/tty/ipwireless/tty.c
-@@ -235,10 +235,10 @@ static int ipw_write_room(struct tty_struct *linux_tty)
- 
- 	/* FIXME: Exactly how is the tty object locked here .. */
- 	if (!tty)
--		return -ENODEV;
-+		return 0;
- 
- 	if (!tty->port.count)
--		return -EINVAL;
-+		return 0;
- 
- 	room = IPWIRELESS_TX_QUEUE_SIZE - tty->tx_bytes_queued;
- 	if (room < 0)
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index da10e975829f..9e12f9cb1a98 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -3048,7 +3048,7 @@ static int gsmtty_write_room(struct tty_struct *tty)
- {
- 	struct gsm_dlci *dlci = tty->driver_data;
- 	if (dlci->state == DLCI_CLOSED)
--		return -EINVAL;
-+		return 0;
- 	return TX_SIZE - kfifo_len(&dlci->fifo);
- }
- 
-diff --git a/drivers/tty/vcc.c b/drivers/tty/vcc.c
-index 3106df98558a..0a3a71e14df4 100644
---- a/drivers/tty/vcc.c
-+++ b/drivers/tty/vcc.c
-@@ -878,7 +878,7 @@ static int vcc_write_room(struct tty_struct *tty)
- 	port = vcc_get_ne(tty->index);
- 	if (unlikely(!port)) {
- 		pr_err("VCC: write_room: Failed to find VCC port\n");
--		return -ENODEV;
-+		return 0;
- 	}
- 
- 	num = VCC_BUFF_LEN - port->chars_in_buffer;
-diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
-index 701dfb32b129..bb3d39307d93 100644
---- a/drivers/usb/serial/mos7720.c
-+++ b/drivers/usb/serial/mos7720.c
-@@ -1042,7 +1042,7 @@ static int mos7720_write_room(struct tty_struct *tty)
- 
- 	mos7720_port = usb_get_serial_port_data(port);
- 	if (mos7720_port == NULL)
--		return -ENODEV;
-+		return 0;
- 
- 	/* FIXME: Locking */
- 	for (i = 0; i < NUM_URBS; ++i) {
 -- 
-2.30.1
-
+Thanks.
+-- Max
