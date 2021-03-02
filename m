@@ -2,87 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3AE329D48
-	for <lists+linux-serial@lfdr.de>; Tue,  2 Mar 2021 12:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E757B32B2C1
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbhCBC0e (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 1 Mar 2021 21:26:34 -0500
-Received: from ms9.eaxlabs.cz ([147.135.177.209]:38660 "EHLO ms9.eaxlabs.cz"
+        id S231494AbhCCCIV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 2 Mar 2021 21:08:21 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39022 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233254AbhCAWlq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 1 Mar 2021 17:41:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=eaxlabs.cz; s=mail;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=kFsI78mY/ZRsnqmIBcnHXfh7nTVcK0J3fpNvfJ5QymU=;
-        b=FB6mU5YXCt5R4qgHXWiXGdw2IAjfsEkKwNHCKp8N+JrrsZKpQT34V8BhtNqd/cbpVZ/TzXpYvmACGINyRgpUokHqf6loTYJsHN4FMO0RZzcxxyNAB1x2EGaeoOQHlFQmoUUXoVBxqHHPZW6Sh6gL/oPmGUEqSto3uCN9LaZWOng=;
-Received: from [82.99.129.6] (helo=[10.76.6.112])
-        by ms9.eaxlabs.cz with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <devik@eaxlabs.cz>)
-        id 1lGrDH-0006uv-Ol; Mon, 01 Mar 2021 23:40:29 +0100
-Subject: Re: [PATCH v2 1/2] tty/serial: Add rx-tx-swap OF option to
- stm32-usart
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Le Ray <erwan.leray@st.com>
-References: <CAL_JsqK8+M=Vg0PiDXP2f1LrEp4hSVea6piAASMGu1H=pxme6Q@mail.gmail.com>
- <20210227164157.30971-1-devik@eaxlabs.cz>
- <439a0d7a-cc0e-764b-7ed8-668b5a85f4a7@foss.st.com>
-From:   Martin DEVERA <devik@eaxlabs.cz>
-Message-ID: <fbdce86c-a17f-7626-51e4-9e48ea25001e@eaxlabs.cz>
-Date:   Mon, 1 Mar 2021 23:40:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1577481AbhCBGW4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 2 Mar 2021 01:22:56 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 471C2AAC5;
+        Tue,  2 Mar 2021 06:22:15 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 01/44] MAINTAINERS: orphan mxser
+Date:   Tue,  2 Mar 2021 07:21:31 +0100
+Message-Id: <20210302062214.29627-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <439a0d7a-cc0e-764b-7ed8-668b5a85f4a7@foss.st.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 3/1/21 11:28 AM, Fabrice Gasnier wrote:
-> On 2/27/21 5:41 PM, Martin Devera wrote:
->> STM32 F7/H7 usarts supports RX & TX pin swapping.
->> Add option to turn it on.
->> Tested on STM32MP157.
->>
->> Signed-off-by: Martin Devera <devik@eaxlabs.cz>
->> ---
->>   drivers/tty/serial/stm32-usart.c | 3 ++-
->>   drivers/tty/serial/stm32-usart.h | 1 +
->>   2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
->> index b3675cf25a69..3650c8798061 100644
->> --- a/drivers/tty/serial/stm32-usart.c
->> +++ b/drivers/tty/serial/stm32-usart.c
->> @@ -758,7 +758,7 @@ static void stm32_usart_set_termios(struct uart_port *port,
->>   	cr1 = USART_CR1_TE | USART_CR1_RE;
->>   	if (stm32_port->fifoen)
->>   		cr1 |= USART_CR1_FIFOEN;
->> -	cr2 = 0;
->> +	cr2 = stm32_port->swap ? USART_CR2_SWAP : 0;
-> Hi Martin,
->
-> Same could be done in the startup routine, that enables the port for
-> reception (as described in Documentation/driver-api/serial/driver.rst)
-Hello Fabrice,
+I cannot maintain this driver for years due to missing HW. Let's orphan
+the entry in MAINTAINERS. And likely drop the driver later as these
+devices are likely gone from this world. Mxser provides different
+(out-of-tree) drivers for their current devices.
 
-I already incorporated all your comments but I'm struggling with the one 
-above.
-The code must be in stm32_usart_set_termios too, because CR2 is modified.
-What is the reason to have it in startup() ?
-Is it because USART can be started without calling set_termios at all ? Like
-to reuse bootloader's last settings ?
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ MAINTAINERS | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks, Martin
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 973a937386fa..24abc010d177 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12089,8 +12089,7 @@ F:	drivers/media/pci/meye/
+ F:	include/uapi/linux/meye.h
+ 
+ MOXA SMARTIO/INDUSTIO/INTELLIO SERIAL CARD
+-M:	Jiri Slaby <jirislaby@kernel.org>
+-S:	Maintained
++S:	Orphan
+ F:	Documentation/driver-api/serial/moxa-smartio.rst
+ F:	drivers/tty/mxser.*
+ 
+-- 
+2.30.1
 
