@@ -2,164 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DE832B108
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D928632B0FE
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348786AbhCCCRZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 2 Mar 2021 21:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S1348969AbhCCCR0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 2 Mar 2021 21:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1836270AbhCBHAC (ORCPT
+        with ESMTP id S1836816AbhCBHVD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 2 Mar 2021 02:00:02 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26110C061756
-        for <linux-serial@vger.kernel.org>; Mon,  1 Mar 2021 22:59:22 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lGz03-0006AE-MD; Tue, 02 Mar 2021 07:59:19 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lGz02-0007lr-Pm; Tue, 02 Mar 2021 07:59:18 +0100
-Date:   Tue, 2 Mar 2021 07:59:18 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     gregkh@linuxfoundation.org, Fabio Estevam <festevam@gmail.com>,
-        linux-serial@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH 10/44] tty: imx, use ms_to_ktime
-Message-ID: <20210302065918.cbxwen6vz2pz4msn@pengutronix.de>
-References: <20210302062214.29627-1-jslaby@suse.cz>
- <20210302062214.29627-10-jslaby@suse.cz>
+        Tue, 2 Mar 2021 02:21:03 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3489C06178A;
+        Mon,  1 Mar 2021 23:12:36 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id g3so23834854edb.11;
+        Mon, 01 Mar 2021 23:12:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AFPfuv+YOm+k4DkSctX34qa+OTvzsdZXK2vjFfw1Tm0=;
+        b=S+JgmgnHbH90N1HKUqeQ8Ew6otkHcSonG1aR/anE8nDB8d+/JSrnIw0cAhBEC8BVq/
+         kMjmMdEUwb5hPNJKX8x3iXHlplNGC4CvUuOTaleLTBpTGngbrTgMIAMbs8IP2qW4Jkck
+         GKec9aQBiT1xpE8kX7CaZ0Ibp85vzRvpkobBvQtWrAJ67WdZZFDEfHXKI1AtuPIPuSoc
+         CnKdgAOmn8VuruQPAtWpv1ZAEBz3Asako335glZHIoToRXkTcUp04EMNF9D8xb9dcdvc
+         HQxzZUB1mTXJXYeP0z7UZ6bGTRdykeNYwaIKxJiO0bjqGDFbRu71FXnZs8jeusysVsPJ
+         X0tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AFPfuv+YOm+k4DkSctX34qa+OTvzsdZXK2vjFfw1Tm0=;
+        b=olDccLxc1bHG/n0APMv1VaTiyiFFupESqyvOm0tohbgz5cW2e+xt1wP3zsp3/E7r82
+         UgoL5MxGSIdv0Ksz8lSZPUBxaM0WFaDyPsF+1nza8nzxT1fBEWTSlRRyzMswpMrf9B+W
+         1+Bo6+j2h+1fLPx9bxTuyUsfTICwaOeyOAvwJIBZlBHr+UBwA485Coj3P+b60sHtlB+i
+         6uBqAs7t+tKoGfusIrIom2meo+5eRqgKFByVMeghBSOl7UrXM7y0+m7xJgY2sL5T+YG5
+         VIEJn0kLTm3//tgRD50ZNzaKsjJa53lTtQ0nL/i7yB8TEJA+Zu5c2ZMgB7hRPK7UkjdC
+         AIDA==
+X-Gm-Message-State: AOAM530c8OMFNqTWRmzSdXlYKY2iuAxtEi0f21TovfkvRsK8IO8N3cPQ
+        hCiraZ8rWfN2z+dNx5Nz3fZbuZqxiCm++E9h/YE=
+X-Google-Smtp-Source: ABdhPJy7opFJLI5d73Hqpi8Cv4/3I+seAygBh3QYLYVMuD5pEdzAuf6uvBUmy2PBrlAtB7jJvHh88gZ9YwZuW7j1DH0=
+X-Received: by 2002:a05:6402:888:: with SMTP id e8mr11730080edy.51.1614669155407;
+ Mon, 01 Mar 2021 23:12:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="liehcxyzb5az342c"
-Content-Disposition: inline
-In-Reply-To: <20210302062214.29627-10-jslaby@suse.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+References: <20210302062214.29627-1-jslaby@suse.cz> <20210302062214.29627-30-jslaby@suse.cz>
+In-Reply-To: <20210302062214.29627-30-jslaby@suse.cz>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Mon, 1 Mar 2021 23:12:24 -0800
+Message-ID: <CAMo8BfL0Frrd6A=j+LXmExAkcKRLBm5a_3rM1hyz+W6p9i91xQ@mail.gmail.com>
+Subject: Re: [PATCH 30/44] tty: xtensa/iss, don't reassign to tty->port
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-
---liehcxyzb5az342c
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Jiri,
-
-On Tue, Mar 02, 2021 at 07:21:40AM +0100, Jiri Slaby wrote:
-> This really eliminates multiplications from the assembly. I would have
-> thought they are optimized by inlining ktime_set, but not on x86_64 with
-> gcc 10.
->=20
+On Mon, Mar 1, 2021 at 10:22 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>
+> We already do tty_port_link_device in rs_init, so we don't need to
+> reassign a port to tty->port. It would be too late in tty::ops::open
+> anyway.
+>
 > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: Chris Zankel <chris@zankel.net>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Cc: linux-xtensa@linux-xtensa.org
 > ---
->  drivers/tty/serial/imx.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index 8257597d034d..3f69356937ef 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -394,11 +394,7 @@ static void imx_uart_rts_inactive(struct imx_port *s=
-port, u32 *ucr2)
-> =20
->  static void start_hrtimer_ms(struct hrtimer *hrt, unsigned long msec)
->  {
-> -       long sec =3D msec / MSEC_PER_SEC;
-> -       long nsec =3D (msec % MSEC_PER_SEC) * 1000000;
-> -       ktime_t t =3D ktime_set(sec, nsec);
-> -
-> -       hrtimer_start(hrt, t, HRTIMER_MODE_REL);
-> +       hrtimer_start(hrt, ms_to_ktime(msec), HRTIMER_MODE_REL);
->  }
+>  arch/xtensa/platforms/iss/console.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-What about:
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 8257597d034d..8731d4f82cb8 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -392,15 +392,6 @@ static void imx_uart_rts_inactive(struct imx_port *spo=
-rt, u32 *ucr2)
- 	mctrl_gpio_set(sport->gpios, sport->port.mctrl);
- }
-=20
--static void start_hrtimer_ms(struct hrtimer *hrt, unsigned long msec)
--{
--       long sec =3D msec / MSEC_PER_SEC;
--       long nsec =3D (msec % MSEC_PER_SEC) * 1000000;
--       ktime_t t =3D ktime_set(sec, nsec);
--
--       hrtimer_start(hrt, t, HRTIMER_MODE_REL);
--}
--
- /* called with port.lock taken and irqs off */
- static void imx_uart_start_rx(struct uart_port *port)
- {
-@@ -457,8 +448,9 @@ static void imx_uart_stop_tx(struct uart_port *port)
- 	if (port->rs485.flags & SER_RS485_ENABLED) {
- 		if (sport->tx_state =3D=3D SEND) {
- 			sport->tx_state =3D WAIT_AFTER_SEND;
--			start_hrtimer_ms(&sport->trigger_stop_tx,
--					 port->rs485.delay_rts_after_send);
-+			hrtimer_start(&sport->trigger_stop_tx,
-+				      ms_to_ktime(port->rs485.delay_rts_after_send),
-+				      HRTIMER_MODE_REL);
- 			return;
- 		}
-=20
-@@ -697,8 +689,9 @@ static void imx_uart_start_tx(struct uart_port *port)
- 				imx_uart_stop_rx(port);
-=20
- 			sport->tx_state =3D WAIT_AFTER_RTS;
--			start_hrtimer_ms(&sport->trigger_start_tx,
--					 port->rs485.delay_rts_before_send);
-+			hrtimer_start(&sport->trigger_start_tx,
-+				      ms_to_ktime(port->rs485.delay_rts_before_send),
-+				      HRTIMER_MODE_REL);
- 			return;
- 		}
-=20
-instead?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---liehcxyzb5az342c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmA94kMACgkQwfwUeK3K
-7Ak5yAf/elCUD1wY43QrLTTiAo8JYngSwH5rR2S7DKZ79hEmWcd7BAXbSkpS4lVJ
-aloUGw7g2WqlzQ1fa7UQrm7e/Xdrp5oraHkO0RStDuCDW8dVRoAuixl5CSLEKBJq
-+JSGIVQ0O0qwOQnZH9XOhBuR1C+f1SiBdXIk+hMIS/CyTuFxBB4NVlo9OUH6R07a
-KrsOk7+nbGy5B5XcTEwFSVVyeO6h603nVBSmRnURwbKO5boea1SmcDO2povuDcYm
-QJYG7qYDXDO9+VIlH0Zs1tWsm9+nY/uJ2wRd2H5kHcobEXiFeo9KV3XAeAIjyT99
-gE+Iyd47vsFR0loi7gjIBMx6SqemoA==
-=cAGD
------END PGP SIGNATURE-----
-
---liehcxyzb5az342c--
+-- 
+Thanks.
+-- Max
