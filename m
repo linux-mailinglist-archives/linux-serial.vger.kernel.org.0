@@ -2,181 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9850532C378
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 01:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F4B32C374
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 01:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbhCDAAA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Mar 2021 19:00:00 -0500
-Received: from mga05.intel.com ([192.55.52.43]:29040 "EHLO mga05.intel.com"
+        id S232759AbhCDAAB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Mar 2021 19:00:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347102AbhCCGum (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Mar 2021 01:50:42 -0500
-IronPort-SDR: ac7rXxLugokmUoGKc18GSaCehRG/E9lIgVfHF6IzYfY8NRLVZRmWx8ejXnN2pcL95NrbbVS4cs
- ojBF9JZsIEiQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="272118579"
-X-IronPort-AV: E=Sophos;i="5.81,219,1610438400"; 
-   d="scan'208";a="272118579"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 22:49:58 -0800
-IronPort-SDR: nI/Zm8sE0zJQY/bKljE3MYKW87SmDQRquHGbYDQiWk/kIOYrD1n6t+vZODxfcM4OX32bOnPCZ4
- wPCBRfWM5O2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,219,1610438400"; 
-   d="scan'208";a="586251665"
-Received: from lkp-server02.sh.intel.com (HELO 2482ff9f8ac0) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2021 22:49:56 -0800
-Received: from kbuild by 2482ff9f8ac0 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lHLKV-0000xm-RO; Wed, 03 Mar 2021 06:49:55 +0000
-Date:   Wed, 03 Mar 2021 14:49:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+        id S1452108AbhCCHMu (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 3 Mar 2021 02:12:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5615664ED4;
+        Wed,  3 Mar 2021 07:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1614755530;
+        bh=7phTEiQJXmsXVrjVLKqq6u2dR8OXxMjy2lxbyjoBZxQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BmYi8FW2kZ6deHaXoVSqA6ZvDriIKld74ms96M0T/kABkxAGFbHKt5TA+jnj78JgG
+         4455QIl21o68W5jYoxEiKVPQbEp0wHsAC6NPA5kjVaD3HuunGMvriZeQVILeAHEhXS
+         rS0/4YGW5AHgGz5WLO4wHm+4A+qsf6YMd1JYfxmI=
+Date:   Wed, 3 Mar 2021 08:12:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Grant Edwards <grant.b.edwards@gmail.com>
 Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-linus] BUILD SUCCESS
- 511a9d5dc2d4d541704d25faf7f6fc2a71a2fd9d
-Message-ID: <603f3170.jMHcDyYw9gUfSFiM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Subject: Re: low_latency flag has gone missing
+Message-ID: <YD82x3xXN41SJqaz@kroah.com>
+References: <s1lj9r$r0u$1@ciao.gmane.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <s1lj9r$r0u$1@ciao.gmane.io>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
-branch HEAD: 511a9d5dc2d4d541704d25faf7f6fc2a71a2fd9d  Revert "serial: max310x: rework RX interrupt handling"
+On Tue, Mar 02, 2021 at 02:49:31PM -0000, Grant Edwards wrote:
+> Some of the serial drivers that I maintain can make a tradeoff between
+> CPU usage, throughput, and rx data latency. For the past 20 years,
+> I've based that tradeoff on the tty struct's "low_latency" flag. This
+> allowed the user to choose between high-throughput with low CPU usage,
+> or higher CPU usage with lower latency and lower total throughput.
+> 
+> That low_latency flag appears to have "gone away" in v5.12.
+> 
+> How are users now supposed to indicate their desire for low-latency
+> operation for a serial port?
 
-elapsed time: 721m
+Given that there are no in-kernel users of this "option", perhaps
+hardware has caught up to the fact that it really wasn't doing anything
+:)
 
-configs tested: 119
-configs skipped: 2
+Do you have proof that it was working as expected somehow?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+thanks,
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                 mpc8272_ads_defconfig
-sh                           se7751_defconfig
-openrisc                            defconfig
-arm                         lpc32xx_defconfig
-powerpc                      ep88xc_defconfig
-mips                            ar7_defconfig
-sh                         microdev_defconfig
-sh                           se7712_defconfig
-s390                                defconfig
-arm                      tct_hammer_defconfig
-mips                         bigsur_defconfig
-sh                   secureedge5410_defconfig
-m68k                       bvme6000_defconfig
-arm                          collie_defconfig
-h8300                     edosk2674_defconfig
-arm                       cns3420vb_defconfig
-m68k                         amcore_defconfig
-m68k                        m5272c3_defconfig
-mips                            e55_defconfig
-arm                        spear3xx_defconfig
-s390                       zfcpdump_defconfig
-sh                      rts7751r2d1_defconfig
-sparc                               defconfig
-c6x                              alldefconfig
-m68k                       m5208evb_defconfig
-arm                   milbeaut_m10v_defconfig
-xtensa                              defconfig
-sh                        sh7785lcr_defconfig
-arm                         nhk8815_defconfig
-nds32                            alldefconfig
-h8300                    h8300h-sim_defconfig
-powerpc                        cell_defconfig
-mips                      maltasmvp_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210302
-x86_64               randconfig-a001-20210302
-x86_64               randconfig-a004-20210302
-x86_64               randconfig-a002-20210302
-x86_64               randconfig-a005-20210302
-x86_64               randconfig-a003-20210302
-i386                 randconfig-a005-20210302
-i386                 randconfig-a003-20210302
-i386                 randconfig-a002-20210302
-i386                 randconfig-a004-20210302
-i386                 randconfig-a006-20210302
-i386                 randconfig-a001-20210302
-i386                 randconfig-a016-20210302
-i386                 randconfig-a012-20210302
-i386                 randconfig-a014-20210302
-i386                 randconfig-a013-20210302
-i386                 randconfig-a011-20210302
-i386                 randconfig-a015-20210302
-i386                 randconfig-a016-20210303
-i386                 randconfig-a012-20210303
-i386                 randconfig-a014-20210303
-i386                 randconfig-a013-20210303
-i386                 randconfig-a011-20210303
-i386                 randconfig-a015-20210303
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20210303
-x86_64               randconfig-a001-20210303
-x86_64               randconfig-a004-20210303
-x86_64               randconfig-a002-20210303
-x86_64               randconfig-a005-20210303
-x86_64               randconfig-a003-20210303
-x86_64               randconfig-a013-20210302
-x86_64               randconfig-a016-20210302
-x86_64               randconfig-a015-20210302
-x86_64               randconfig-a014-20210302
-x86_64               randconfig-a012-20210302
-x86_64               randconfig-a011-20210302
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h
