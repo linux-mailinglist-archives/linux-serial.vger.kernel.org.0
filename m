@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A8B32C372
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 01:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9850532C378
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 01:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237055AbhCDAAB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Mar 2021 19:00:01 -0500
-Received: from mga11.intel.com ([192.55.52.93]:43462 "EHLO mga11.intel.com"
+        id S236908AbhCDAAA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Mar 2021 19:00:00 -0500
+Received: from mga05.intel.com ([192.55.52.43]:29040 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348128AbhCCGun (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Mar 2021 01:50:43 -0500
-IronPort-SDR: lO77fzmAJzbvjP81g7kXH6gtmqC9WhFzjtKLXL0s0CiNXh59MltdOmcQjoeO9OoSub7MDgEKT/
- XOyFNxIQfj0A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="183735547"
+        id S1347102AbhCCGum (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 3 Mar 2021 01:50:42 -0500
+IronPort-SDR: ac7rXxLugokmUoGKc18GSaCehRG/E9lIgVfHF6IzYfY8NRLVZRmWx8ejXnN2pcL95NrbbVS4cs
+ ojBF9JZsIEiQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="272118579"
 X-IronPort-AV: E=Sophos;i="5.81,219,1610438400"; 
-   d="scan'208";a="183735547"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 22:49:58 -0800
-IronPort-SDR: /bcD43fU9g0LEgKuOhjCWd4HZM+RhT7k2fkCXkr2yktn4pzntZeO7WZQs1DNkDH5O4+ul5+662
- n0FzPwGrZoMA==
+   d="scan'208";a="272118579"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 22:49:58 -0800
+IronPort-SDR: nI/Zm8sE0zJQY/bKljE3MYKW87SmDQRquHGbYDQiWk/kIOYrD1n6t+vZODxfcM4OX32bOnPCZ4
+ wPCBRfWM5O2Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,219,1610438400"; 
-   d="scan'208";a="373865914"
+   d="scan'208";a="586251665"
 Received: from lkp-server02.sh.intel.com (HELO 2482ff9f8ac0) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Mar 2021 22:49:57 -0800
+  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2021 22:49:56 -0800
 Received: from kbuild by 2482ff9f8ac0 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lHLKV-0000xp-Ru; Wed, 03 Mar 2021 06:49:55 +0000
-Date:   Wed, 03 Mar 2021 14:49:18 +0800
+        id 1lHLKV-0000xm-RO; Wed, 03 Mar 2021 06:49:55 +0000
+Date:   Wed, 03 Mar 2021 14:49:20 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- 1f8a51ee324253be71e44fd0efe00a6b053ea621
-Message-ID: <603f316e.v/8iSvpEO6LDu5N+%lkp@intel.com>
+Subject: [tty:tty-linus] BUILD SUCCESS
+ 511a9d5dc2d4d541704d25faf7f6fc2a71a2fd9d
+Message-ID: <603f3170.jMHcDyYw9gUfSFiM%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,8 +43,8 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: 1f8a51ee324253be71e44fd0efe00a6b053ea621  tty: serial: pch_uart.c: remove debugfs dentry pointer
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
+branch HEAD: 511a9d5dc2d4d541704d25faf7f6fc2a71a2fd9d  Revert "serial: max310x: rework RX interrupt handling"
 
 elapsed time: 721m
 
