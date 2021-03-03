@@ -2,135 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6CE32B139
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Mar 2021 04:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E893A32C37C
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 01:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349203AbhCCCRh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 2 Mar 2021 21:17:37 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11220 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1443639AbhCBTOE (ORCPT
+        id S236804AbhCDAAA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 3 Mar 2021 19:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449696AbhCCECF (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 2 Mar 2021 14:14:04 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 122J5EEV027328;
-        Tue, 2 Mar 2021 14:11:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qAG5xfr4ga6rSb4QwNCXooGmvsPVXs5R9sVsHP8bXoA=;
- b=PPpuxSi0/UCL2gTG3sVe/HkOKSKROzr8kukgK499nYD6lWWpvgrjOkWfbqop6pVGtOLg
- mDEEGIaTMzdpuT2h6KBn8hRVBKZOM21+s8YB8PX3Ncyn6rHwI7IZbAbpGMxsmXJuPU34
- hjr/mnw+R29JkRIT+CgY5t6wvMDSzd8ZDUNTHaxcrNTtOWh1SKHmee3QLcgQRX4EwQJI
- DPI8WjvJYAPn727pExdd9EK1dN/KeibgwqaO6OWEP+zFxGGVZhAHz8fO6FxqH/ShMERM
- Hg52fCZZTGRtux9s2IdtP5MlbG/Q9P+SarQ9wfzK1O+nuNb2c1ssRQTc/OVnLdq/l37x aw== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 371u728crb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Mar 2021 14:10:59 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 122J2Y1U003611;
-        Tue, 2 Mar 2021 19:09:51 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma02dal.us.ibm.com with ESMTP id 3710sqms21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Mar 2021 19:09:51 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 122J9oT729360502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 Mar 2021 19:09:50 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 82619BE053;
-        Tue,  2 Mar 2021 19:09:50 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5EF4EBE051;
-        Tue,  2 Mar 2021 19:09:49 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.160.44.137])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  2 Mar 2021 19:09:49 +0000 (GMT)
-Subject: Re: [PATCH 40/44] tty: hvc, drop unneeded forward declarations
-To:     Jiri Slaby <jslaby@suse.cz>, gregkh@linuxfoundation.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20210302062214.29627-1-jslaby@suse.cz>
- <20210302062214.29627-40-jslaby@suse.cz>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <4f3c0b03-4a1b-3007-97c3-560afe5f9ab4@linux.ibm.com>
-Date:   Tue, 2 Mar 2021 11:09:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 2 Mar 2021 23:02:05 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B687C06178C
+        for <linux-serial@vger.kernel.org>; Tue,  2 Mar 2021 20:01:25 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id q20so15315369pfu.8
+        for <linux-serial@vger.kernel.org>; Tue, 02 Mar 2021 20:01:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=Sf0sHmQlDAnRMVroNklxTV9sD5YAM/nZAMHjs+CyJB4=;
+        b=DqjN4DryIrwYkAZERDCNYsxYTCg/FgOx9g1tN3t7SP5NtBAhKPdo3lCnaiNnrvavBj
+         ydQv0eborD4BkC3Y+XzqoGy8aiCKnHRP/JylIcwHTxxvnmHfiNck3OubW7XBEGVgwM/E
+         eyPJ8aPDHdCm58TuvDHH1oXt8LBXlpvuzLeu0uEQYnF2tpIuFpM9aTgmkMnNPRxOhiUp
+         6urTlvt4r1gJIWV2+KwsuriqRhtODU56xJwHEbD5X45GvkFali3XUBHAsbusiBqISTAG
+         QjqQrRgogRk0iqTBD5b5SIRJMgViOx9k1dBWLNi6KV3Q8WtSrwTaeC9YwaQEP5fqZsTD
+         H6ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Sf0sHmQlDAnRMVroNklxTV9sD5YAM/nZAMHjs+CyJB4=;
+        b=Z8ymkIL/LZV9oYatiEaJ2pSv3b09SpRacYizpFjbVq3pAR5xD2UejVkTXp6Vbcrka5
+         q9HYS6mIko6KfJgMeXg+6ECm8v+8+JCEuH/n1PvXJR3zKQV5CCAqIupnL8Q8sUUNSIv7
+         JoXbNgfDu3SoxFlbUKNZPF+w9N/31N4Ni9XQ3djJxuEKLqn/BMxyCNyL7lBtiL6+wSGC
+         /1jJMcIpP7BNdhJOTPg1hack9SORx4z44L/hty63pu/hEiwc7Mshvq9RzN++xswHcu9u
+         +bHF2clrbOdwxnG8gA0BEWqdgylP0Sd4oDr0W4wpd+vFFg3yxf9Dy6HgnlrEHzZA91fH
+         PfFg==
+X-Gm-Message-State: AOAM530xannu3STQK6CX3QarQnxK7ua9ig7PKcjxpzJPnvTKfFeQ95T7
+        PpdIZ1t+tRrhESMohYUb5KIUTQ==
+X-Google-Smtp-Source: ABdhPJyoXDxfKpU/1wXB2PIFN0nnkGXEo3xzDutxggeVYQFsmIzt54/Cnp3VafjpSiT43J+plIUXXQ==
+X-Received: by 2002:a63:4a44:: with SMTP id j4mr20987404pgl.199.1614744084943;
+        Tue, 02 Mar 2021 20:01:24 -0800 (PST)
+Received: from localhost ([122.171.124.15])
+        by smtp.gmail.com with ESMTPSA id e1sm4992656pjt.10.2021.03.02.20.01.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Mar 2021 20:01:24 -0800 (PST)
+Date:   Wed, 3 Mar 2021 09:31:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
+Message-ID: <20210303040119.hpeybankxph4fyuj@vireshk-i7>
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
+ <c7a246a4-ab25-a193-f74a-98351780135e@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210302062214.29627-40-jslaby@suse.cz>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-02_08:2021-03-01,2021-03-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103020144
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7a246a4-ab25-a193-f74a-98351780135e@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 3/1/21 10:22 PM, Jiri Slaby wrote:
-> Forward declarations make the code larger and rewrites harder. Harder as
-> they are often omitted from global changes. Remove forward declarations
-> which are not really needed, i.e. the definition of the function is
-> before its first use.
+On 02-03-21, 16:40, Dmitry Osipenko wrote:
+> 20.01.2021 19:01, Dmitry Osipenko пишет:
+> > 01.01.2021 19:54, Yangtao Li пишет:
+> >> Hi,
+> >>
+> >> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
+> >> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
+> >> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
+> >> devm_pm_opp_register_notifier.
+> > 
+> > Hello Yangtao,
+> > 
+> > Thank you for your effort, looking forward to v2!
 > 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Cc: linuxppc-dev@lists.ozlabs.org
+> Yangtao, could you please let me know what is the status of this series?
+> Will you be able to make a v2 anytime soon?
 
-Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Dmitry, if Yangtao doesn't reply back this week with a proposal, please go ahead
+and respin the patches yourself. Thanks.
 
-> ---
->  drivers/tty/hvc/hvcs.c | 25 -------------------------
->  1 file changed, 25 deletions(-)
-> 
-> diff --git a/drivers/tty/hvc/hvcs.c b/drivers/tty/hvc/hvcs.c
-> index c90848919644..0b89d878a108 100644
-> --- a/drivers/tty/hvc/hvcs.c
-> +++ b/drivers/tty/hvc/hvcs.c
-> @@ -290,36 +290,11 @@ static LIST_HEAD(hvcs_structs);
->  static DEFINE_SPINLOCK(hvcs_structs_lock);
->  static DEFINE_MUTEX(hvcs_init_mutex);
-> 
-> -static void hvcs_unthrottle(struct tty_struct *tty);
-> -static void hvcs_throttle(struct tty_struct *tty);
-> -static irqreturn_t hvcs_handle_interrupt(int irq, void *dev_instance);
-> -
-> -static int hvcs_write(struct tty_struct *tty,
-> -		const unsigned char *buf, int count);
-> -static int hvcs_write_room(struct tty_struct *tty);
-> -static int hvcs_chars_in_buffer(struct tty_struct *tty);
-> -
-> -static int hvcs_has_pi(struct hvcs_struct *hvcsd);
-> -static void hvcs_set_pi(struct hvcs_partner_info *pi,
-> -		struct hvcs_struct *hvcsd);
->  static int hvcs_get_pi(struct hvcs_struct *hvcsd);
->  static int hvcs_rescan_devices_list(void);
-> 
-> -static int hvcs_partner_connect(struct hvcs_struct *hvcsd);
->  static void hvcs_partner_free(struct hvcs_struct *hvcsd);
-> 
-> -static int hvcs_enable_device(struct hvcs_struct *hvcsd,
-> -		uint32_t unit_address, unsigned int irq, struct vio_dev *dev);
-> -
-> -static int hvcs_open(struct tty_struct *tty, struct file *filp);
-> -static void hvcs_close(struct tty_struct *tty, struct file *filp);
-> -static void hvcs_hangup(struct tty_struct * tty);
-> -
-> -static int hvcs_probe(struct vio_dev *dev,
-> -		const struct vio_device_id *id);
-> -static int hvcs_remove(struct vio_dev *dev);
-> -static int __init hvcs_module_init(void);
-> -static void __exit hvcs_module_exit(void);
->  static int hvcs_initialize(void);
-> 
->  #define HVCS_SCHED_READ	0x00000001
-> 
-
+-- 
+viresh
