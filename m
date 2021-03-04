@@ -2,71 +2,156 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A050A32C319
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 01:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F155E32CDB9
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Mar 2021 08:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243806AbhCDAAG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 3 Mar 2021 19:00:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60852 "EHLO mail.kernel.org"
+        id S232161AbhCDHiF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 4 Mar 2021 02:38:05 -0500
+Received: from mga04.intel.com ([192.55.52.120]:26523 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350397AbhCCTmt (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 3 Mar 2021 14:42:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF24B64ED0;
-        Wed,  3 Mar 2021 19:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1614799865;
-        bh=h5FCaQLoCU1eLgBpB+1GspxLjjVwOPWrvQkt3lDgAUc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cEcgKJCSdq6xUFXNdC95YSgTC/uiJvkG0L6ZhxyQLlM/j4QKJH5PJyf053oXS82dR
-         ebHF+Cr1XG27xFKZ+8MVrHy5b8t5zi7N+7vB3QzJ0/++vdoMaNBGT+W/z4WikA1PNZ
-         +j3arvkQC+NwTQecUli9YcrdLDUear4lgJWqluqU=
-Date:   Wed, 3 Mar 2021 20:31:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Erwan Le Ray <erwan.leray@foss.st.com>
-Cc:     Jiri Slaby <jslaby@suse.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-serial@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: Re: [PATCH 00/13] stm32 usart various fixes
-Message-ID: <YD/j9jhkcVbN3zs0@kroah.com>
-References: <20210219174736.1022-1-erwan.leray@foss.st.com>
+        id S232295AbhCDHh5 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 4 Mar 2021 02:37:57 -0500
+IronPort-SDR: fkn296+hK8jLZaUNEhWiJQkBc9l01xsjXSaepH/5Pu29cjOKbDR00+B7+gFCcGHEK0TYcjdYYd
+ aiL0TjL+lKBw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="184952086"
+X-IronPort-AV: E=Sophos;i="5.81,222,1610438400"; 
+   d="scan'208";a="184952086"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 23:37:17 -0800
+IronPort-SDR: sJSazjSOCxxFUU67v2VBKeH0PTfYNvDjIFYDyhVhoyrKuot3vqxFPe9+cWdAvXqoPjtaY0k2Zv
+ 1XehlKscs89g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,222,1610438400"; 
+   d="scan'208";a="518562704"
+Received: from lkp-server02.sh.intel.com (HELO 2482ff9f8ac0) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 03 Mar 2021 23:37:15 -0800
+Received: from kbuild by 2482ff9f8ac0 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lHiXr-00025V-72; Thu, 04 Mar 2021 07:37:15 +0000
+Date:   Thu, 04 Mar 2021 15:37:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ 3a72308322cc7498eb2b82e5da3e132dd96feea0
+Message-ID: <60408e1c.vo3mYvNHt1K6pAI0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210219174736.1022-1-erwan.leray@foss.st.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 06:47:23PM +0100, Erwan Le Ray wrote:
-> This series brings various fixes to stm32-usart driver.
-> 
-> Erwan Le Ray (13):
->   serial: stm32: fix probe and remove order for dma
->   serial: stm32: fix startup by enabling usart for reception
->   serial: stm32: fix incorrect characters on console
->   serial: stm32: fix TX and RX FIFO thresholds
->   serial: stm32: fix a deadlock condition with wakeup event
->   serial: stm32: fix wake-up flag handling
->   serial: stm32: fix a deadlock in set_termios
->   serial: stm32: fix tx dma completion, release channel
->   serial: stm32: call stm32_transmit_chars locked
->   serial: stm32: fix FIFO flush in startup and set_termios
->   serial: stm32: add FIFO flush when port is closed
->   serial: stm32: fix tx_empty condition
->   serial: stm32: add support for "flush_buffer" ops
-> 
->  drivers/tty/serial/stm32-usart.c | 198 +++++++++++++++++++++----------
->  drivers/tty/serial/stm32-usart.h |   3 -
->  2 files changed, 135 insertions(+), 66 deletions(-)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: 3a72308322cc7498eb2b82e5da3e132dd96feea0  tty: make everyone's write_room return >= 0
 
-This series does not apply cleanly to my tree.  Can you rebase it
-against 5.12-rc1 and resend?
+elapsed time: 725m
 
-thanks,
+configs tested: 94
+configs skipped: 2
 
-greg k-h
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+m68k                             alldefconfig
+mips                       capcella_defconfig
+powerpc                         wii_defconfig
+powerpc                      pmac32_defconfig
+m68k                          multi_defconfig
+sh                             sh03_defconfig
+arc                    vdk_hs38_smp_defconfig
+microblaze                          defconfig
+sh                        sh7757lcr_defconfig
+arm                         bcm2835_defconfig
+parisc                           alldefconfig
+arm                            lart_defconfig
+arm                          lpd270_defconfig
+arm                     davinci_all_defconfig
+sh                                  defconfig
+arc                            hsdk_defconfig
+powerpc                      ppc64e_defconfig
+arm                       multi_v4t_defconfig
+arm                           sunxi_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210303
+i386                 randconfig-a003-20210303
+i386                 randconfig-a002-20210303
+i386                 randconfig-a004-20210303
+i386                 randconfig-a006-20210303
+i386                 randconfig-a001-20210303
+x86_64               randconfig-a013-20210303
+x86_64               randconfig-a016-20210303
+x86_64               randconfig-a015-20210303
+x86_64               randconfig-a014-20210303
+x86_64               randconfig-a012-20210303
+x86_64               randconfig-a011-20210303
+i386                 randconfig-a016-20210303
+i386                 randconfig-a012-20210303
+i386                 randconfig-a014-20210303
+i386                 randconfig-a013-20210303
+i386                 randconfig-a011-20210303
+i386                 randconfig-a015-20210303
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a006-20210303
+x86_64               randconfig-a001-20210303
+x86_64               randconfig-a004-20210303
+x86_64               randconfig-a002-20210303
+x86_64               randconfig-a005-20210303
+x86_64               randconfig-a003-20210303
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
