@@ -2,113 +2,154 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 596BE337C23
-	for <lists+linux-serial@lfdr.de>; Thu, 11 Mar 2021 19:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AAD337DDA
+	for <lists+linux-serial@lfdr.de>; Thu, 11 Mar 2021 20:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbhCKSLQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 11 Mar 2021 13:11:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230300AbhCKSKf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 11 Mar 2021 13:10:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 773FA65018;
-        Thu, 11 Mar 2021 18:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615486234;
-        bh=tmt8DXL/NkkK3fqsKzp1sa5x/enHlRdNBSlE6sT3Ol4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ew/NIGH8ca6hopkG3U8b9r6qb4RL4623K9fly5yItiT+8ubil19Ek3W1I9uzZkXaV
-         SS/wUSc4qF2N/+CEdEEjiosqyXdPlQDV6gmsZyGoYiofROwQuELtuvpXLsg41ZUl+I
-         zTxb4YH7gGW2lP+bk0UmqouHE1A4Ct9j5CBAZIb/EyFukR+wc5+426TEG3xvSqlTNs
-         zrISTJo7Bcn1PT6Tt7VvH6wBUv/FOVlzZjPhhFRyf24OBWtBR8UkBxZNOxnGayUlL3
-         qdG/KlD2b/NUv3xynLWzvL7xQCfBHPzi0d+rEqHmljXgXkL98TRQxiPn6hmAPOYpfu
-         pO74we79VATfg==
-Received: by mail-ej1-f43.google.com with SMTP id e19so48236776ejt.3;
-        Thu, 11 Mar 2021 10:10:34 -0800 (PST)
-X-Gm-Message-State: AOAM532gIRH9bm3Fo+i0EbsHlRjhxiPQWK5SP7fJE/Yz0D30C1g5zyPH
-        LQhMi4sqcRq0QAngd7NwMBkwIHB/s3Zjf6bAFg==
-X-Google-Smtp-Source: ABdhPJyUsXPtzO/H83nHUMgfPs1p3wnAlKlkTmdKFFzieSp9RKRftdZy73PPYTvjnRjgXVDraWLRvsEKaxzbwKml2jg=
-X-Received: by 2002:a17:906:c405:: with SMTP id u5mr4327186ejz.341.1615486232876;
- Thu, 11 Mar 2021 10:10:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
- <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
- <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
- <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
- <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
- <20210308211306.GA2920998@robh.at.kernel.org> <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
- <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
- <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st> <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
- <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st> <CAL_Jsq+X7JPm-xrxmy5bGKSuLO59yk6S=EuXmdMn0FwhpZAD7A@mail.gmail.com>
- <CAK8P3a2HWbHc-aGHk792TVh6ea2j+aKswYrB6EBsjPA6fH1=xA@mail.gmail.com>
- <CAL_JsqKYpsXKvcw7xbbYx6z7Cg3P9DxcpLUnOG+m0xeSRO7v_g@mail.gmail.com> <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 11 Mar 2021 11:10:20 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqK200WcxD3PP1FToc5w2dyF3b6TYnf2oNd9Mpz77g68og@mail.gmail.com>
-Message-ID: <CAL_JsqK200WcxD3PP1FToc5w2dyF3b6TYnf2oNd9Mpz77g68og@mail.gmail.com>
-Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
- MMIO as non-posted
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>,
-        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Alexander Graf <graf@amazon.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        id S231167AbhCKTWO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 11 Mar 2021 14:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbhCKTVi (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 11 Mar 2021 14:21:38 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDC0C061574;
+        Thu, 11 Mar 2021 11:21:37 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id z25so3607014lja.3;
+        Thu, 11 Mar 2021 11:21:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nr3MMopQK2U9fHQgnqesF0TFAIQZjafir6ZJocCIzyI=;
+        b=MyIkaSeXkIuqBbDFC2RZN06Z7+tiTtAyEFnuG6JcB8fVDc/Sps5Y/4lD3XbsyeO4ae
+         TVru7tnsGRkHH9T+lqIfziLi24bGn4Y8kTsTE9yDA1ltlFtHAtJpiks0QkaZ9aRplxPS
+         5gaASxaSxYV09M2FNYhkdvW8CF+zEtfZisqi7xVpZXA/1IPDNlhxHt6m05FCcOY89lyR
+         2GdG2+f4JHdOC1hDD3wwJPE/7krkXhXW5bP+CHhYBHdm3OpOYonPaVP1OLWWZ9Kwv+eU
+         27iTZCIS1IVBb33goI5qAl9/7f1WShlaTr+5bUuPY/hADp7/1yeTfOzDA3lIhMeLMcrB
+         kshg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nr3MMopQK2U9fHQgnqesF0TFAIQZjafir6ZJocCIzyI=;
+        b=SU8oCQXPSZuT7rjtLz2JzEq3yTH5DnZthgvl/KK2CbcWvCrUzxrVqM/XgZ0WkQM8xc
+         8Whk3xb+TsUHQ5B0ypA7ggtbf6fg09csUXCxlgTUE6Tvb2rG+7SZwjxxfsrfd6A9fkKq
+         vqdzH9bjMCS+FoZJPuPwsI9aOo6+XpV8hug0/U8JX3XYbMvKa0xTAuSjWH9o8vELuO+z
+         /fdLEiRyStdDusvSisJLu6b0K56RCUwR46y/nCVBSNZk74ItkbACKu8k1HgvIeI9rCg1
+         dYOaPc8CqjaaUIieYQPkVFyk6LqRZ2cj4MRQ7Zp/OirJ/M99AkJeZQRM2eQrmSD8b2fd
+         kAXA==
+X-Gm-Message-State: AOAM531iMjIci2L41j8DNaDVAOeo8UKHtywdRyRdYwcLEbgR0eVcPIcL
+        Vv0mrzTpiq8ZdyQvKILWDB0=
+X-Google-Smtp-Source: ABdhPJwV50MJdowwGjHNgx6AtXCWhwuCfX9B+Ri0kWRJuRnNED/9RtxV4BcKLyAa4veO0GRq4JAp4w==
+X-Received: by 2002:a2e:9f45:: with SMTP id v5mr215188ljk.183.1615490496374;
+        Thu, 11 Mar 2021 11:21:36 -0800 (PST)
+Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.gmail.com with ESMTPSA id u14sm1121153lfl.40.2021.03.11.11.21.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 11:21:35 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        DTML <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jiri Slaby <jirislaby@kernel.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        lima@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v2 00/14] Introduce devm_pm_opp_* API
+Date:   Thu, 11 Mar 2021 22:20:51 +0300
+Message-Id: <20210311192105.14998-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 9:48 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Thu, Mar 11, 2021 at 5:10 PM Rob Herring <robh@kernel.org> wrote:
-> > On Thu, Mar 11, 2021 at 2:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > On Wed, Mar 10, 2021 at 6:01 PM Rob Herring <robh@kernel.org> wrote:
-> > > Ok, makes sense.
-> > >
-> > > Conceptually, I'd like to then see a check that verifies that the
-> > > property is only set for nodes whose parent also has it set, since
-> > > that is how AXI defines it: A bus can wait for the ack from its
-> > > child node, or it can acknowledge the write to its parent early.
-> > > However, this breaks down as soon as a bus does the early ack:
-> > > all its children by definition use posted writes (as seen by the
-> > > CPU), even if they wait for stores that come from other masters.
-> > >
-> > > Does this make sense to you?
-> >
-> > BTW, I don't think it's clear in this thread, but the current
-> > definition proposed for the spec[1] and schema is 'nonposted-mmio' is
-> > specific to 'simple-bus'. I like this restriction and we can expand
-> > where 'nonposted-mmio' is allowed later if needed.
->
-> That sounds ok, as long as we can express everything for the mac
-> at the moment. Do we need to explicitly add a description to allow
-> the property in the root node in addition to simple-bus to be able
-> to enforce the rule about parent buses also having it?
+This series adds resource-managed OPP API helpers and makes drivers
+to use them.
 
-IMO it should not be allowed in the root node. That's a failure to
-define a bus node. Also, would that mean your memory has to be
-non-posted!?
+Changelog:
 
-Rob
+v2: - This is a continuation of the work that was started by Yangtao Li.
+      Apparently Yangtao doesn't have time to finish it, so I
+      (Dmitry Osipenko) picked up the effort since these patches are
+      wanted by the NVIDIA Tegra voltage-scaling series that I'm
+      working on.
+
+    - Fixed the double put of OPP resources.
+
+    - Dropped all patches that are unrelated to OPP API. I also dropped
+      the Tegra memory patch since it doesn't apply now and because I plan
+      to switch all Tegra drivers soon to a common tegra-specific OPP helper
+      that will use the resource-managed OPP API anyways.
+
+    - Squashed couple patches into a single ones since there was no
+      good reason to separate them.
+
+    - Added acks that were given to a couple of v1 patches.
+
+Yangtao Li (14):
+  opp: Add devres wrapper for dev_pm_opp_set_clkname
+  opp: Add devres wrapper for dev_pm_opp_set_regulators
+  opp: Add devres wrapper for dev_pm_opp_set_supported_hw
+  opp: Add devres wrapper for dev_pm_opp_of_add_table
+  opp: Add devres wrapper for dev_pm_opp_register_notifier
+  serial: qcom_geni_serial: Convert to use resource-managed OPP API
+  spi: spi-geni-qcom: Convert to use resource-managed OPP API
+  spi: spi-qcom-qspi: Convert to use resource-managed OPP API
+  mmc: sdhci-msm: Convert to use resource-managed OPP API
+  drm/msm: Convert to use resource-managed OPP API
+  drm/lima: Convert to use resource-managed OPP API
+  drm/panfrost: Convert to use resource-managed OPP API
+  media: venus: Convert to use resource-managed OPP API
+  memory: samsung: exynos5422-dmc: Convert to use resource-managed OPP
+    API
+
+ drivers/gpu/drm/lima/lima_devfreq.c           |  43 ++---
+ drivers/gpu/drm/lima/lima_devfreq.h           |   2 -
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |   2 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c       |   2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |  24 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h       |   2 -
+ drivers/gpu/drm/msm/dp/dp_ctrl.c              |  31 +---
+ drivers/gpu/drm/msm/dp/dp_ctrl.h              |   1 -
+ drivers/gpu/drm/msm/dp/dp_display.c           |   5 +-
+ drivers/gpu/drm/msm/dsi/dsi_host.c            |  14 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c   |  33 +---
+ drivers/gpu/drm/panfrost/panfrost_devfreq.h   |   1 -
+ .../media/platform/qcom/venus/pm_helpers.c    |  18 +--
+ drivers/memory/samsung/exynos5422-dmc.c       |  13 +-
+ drivers/mmc/host/sdhci-msm.c                  |  20 +--
+ drivers/opp/core.c                            | 151 ++++++++++++++++++
+ drivers/opp/of.c                              |  36 +++++
+ drivers/spi/spi-geni-qcom.c                   |  17 +-
+ drivers/spi/spi-qcom-qspi.c                   |  19 +--
+ drivers/tty/serial/qcom_geni_serial.c         |  24 ++-
+ include/linux/pm_opp.h                        |  34 ++++
+ include/linux/qcom-geni-se.h                  |   2 -
+ 23 files changed, 300 insertions(+), 196 deletions(-)
+
+-- 
+2.29.2
+
