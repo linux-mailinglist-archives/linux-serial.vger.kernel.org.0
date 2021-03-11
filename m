@@ -2,206 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AD93378C8
-	for <lists+linux-serial@lfdr.de>; Thu, 11 Mar 2021 17:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 499083379EF
+	for <lists+linux-serial@lfdr.de>; Thu, 11 Mar 2021 17:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbhCKQIM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 11 Mar 2021 11:08:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49668 "EHLO mail.kernel.org"
+        id S229844AbhCKQss (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 11 Mar 2021 11:48:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59662 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234341AbhCKQH6 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 11 Mar 2021 11:07:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6528664FE0;
-        Thu, 11 Mar 2021 16:07:58 +0000 (UTC)
+        id S229632AbhCKQs0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 11 Mar 2021 11:48:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5ED2864FFB;
+        Thu, 11 Mar 2021 16:48:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615478878;
-        bh=yQO2qA6ynCpFOZDqh7h1C+h3mQy2cJ0rnqM4e3ve240=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VnF4G6sGNVWtPWVzFozfHr7JU4dSVAxi+FajS5uTcPe1Ff6mnjkLAGnoxw5tV2Wsh
-         zXn2v6sgpdu+h1w404MTEiJMNPi9PpKIclqqronbohbRRHVrArWANpnuLisdx1d58p
-         K6CwHX2s66kuEV2p32klm9mYS/VG6G7uibqlYPwGxMrbkULInd6qrfkI7AtmCoMSUT
-         yO9ubRxHzCob9ZN4P8pn6a6ErEw9DZk5t00QdXvPM5nuHan+P2iB4H+xzyHlHQO0i3
-         jZnTjUWHKEmXSbD4JLFDiY+JLbI6PNZr+VDcOreZHAByQPtGdZsNEzsuToe21pvmwW
-         RSwRMvq/z9bHg==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lKNr6-0000I2-VL; Thu, 11 Mar 2021 17:08:09 +0100
-Date:   Thu, 11 Mar 2021 17:08:08 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     Charles Yeh <charlesyeh522@gmail.com>,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YEpAaL9QtVMduEpi@hovoldconsulting.com>
-References: <YDUiuLtwRkZ0D0Mi@hovoldconsulting.com>
- <f63df659-6cdf-bba6-f892-1012b98f82e2@IEEE.org>
- <YDUp0tIThOZSTHJt@hovoldconsulting.com>
- <93584ae4-665e-1e67-01e0-cc53f987bee4@IEEE.org>
- <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
- <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
+        s=k20201202; t=1615481305;
+        bh=FgHbw5HS/VjP7/VZBF5aykDpmElBQPo7RYwq/98R/y0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Xjm2VLWQbRLzLjMb3wGyLY/D8Qc6zsY+gHm5tR9VhAap9AW7Ethi7WR+IkUl/0Ven
+         86SK1RQXK0WdIlpmesgdJltCy4fWuo7zvsnG84lBdRk/0N5nLcpvF/hUG2KEB5pLoz
+         tWo9qSkUf4/NaR5c1K87+wc/ZFqufD/AI9+3vQKwbJ0F6MTGOe0EjpzFbfmJFgp1By
+         6it0kiNaV/p+q+R5Epwa6oFu3B96Y6qWUqC8c+bS1k1kY7FIeO2gDXVNEjQ/8GKwYd
+         rhLOSyDPImswIt6JrFSqzVhWrt1RA+zyTvkjXNeUBHAjiZOmku848V1UN6kGJtsqcW
+         bxfRyUcYFwIww==
+Received: by mail-oo1-f46.google.com with SMTP id e19-20020a4a73530000b02901b62c0e1bb6so831805oof.11;
+        Thu, 11 Mar 2021 08:48:25 -0800 (PST)
+X-Gm-Message-State: AOAM532BIdwPeQXtk+8rcA4oFQkV2ikl5155G19Ek+co8I95IqiPvwaY
+        og6VIqYmRUq73oCM8eEBS4Qx5qLkT3pj6c58zYw=
+X-Google-Smtp-Source: ABdhPJwIgrbXVP3PRPUXHopliI3qsXWZiXkZVPwqkBfIWll0HvAMT6p5npMnLVv5OxG3dnsn4P6GmJ7wCO0i3CmSEgk=
+X-Received: by 2002:a4a:304a:: with SMTP id z10mr7486554ooz.26.1615481304355;
+ Thu, 11 Mar 2021 08:48:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
+References: <20210304213902.83903-1-marcan@marcan.st> <20210304213902.83903-13-marcan@marcan.st>
+ <CAL_JsqJF2Hz=4U7FR_GOSjCxqt3dpf-CAWFNfsSrDjDLpHqgCA@mail.gmail.com>
+ <6e4880b3-1fb6-0cbf-c1a5-7a46fd9ccf62@marcan.st> <CAK8P3a0Hmwt-ywzS-2eEmqyQ0v2SxLsLxFwfTUoWwbzCrBNhsQ@mail.gmail.com>
+ <CAL_JsqJHRM59GC3FjvaGLCELemy1uspnGvTEFH6q0OdyBPVSjA@mail.gmail.com>
+ <CAK8P3a0_GBB-VYFO5NaySyBJDN2Ra-WMH4WfFrnzgOejmJVG8g@mail.gmail.com>
+ <20210308211306.GA2920998@robh.at.kernel.org> <CAK8P3a2GfzUevuQNZeQarJ4GNFsuDj0g7oFuN940Hdaw06YJbA@mail.gmail.com>
+ <CAL_JsqK8FagJyQVyG5DAocUjLGZT91b6NzDm_DNMW1hdCz51Xg@mail.gmail.com>
+ <c5693760-3b18-e8f1-18b6-bae42c05d329@marcan.st> <CAL_Jsq+VLLPa98iaTvOkK-tjuBH4qY7FNEGtufYGv7rXAbwegQ@mail.gmail.com>
+ <332c0b9a-dcfd-4c3b-9038-47cbda90eb3f@marcan.st> <CAL_Jsq+X7JPm-xrxmy5bGKSuLO59yk6S=EuXmdMn0FwhpZAD7A@mail.gmail.com>
+ <CAK8P3a2HWbHc-aGHk792TVh6ea2j+aKswYrB6EBsjPA6fH1=xA@mail.gmail.com> <CAL_JsqKYpsXKvcw7xbbYx6z7Cg3P9DxcpLUnOG+m0xeSRO7v_g@mail.gmail.com>
+In-Reply-To: <CAL_JsqKYpsXKvcw7xbbYx6z7Cg3P9DxcpLUnOG+m0xeSRO7v_g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 11 Mar 2021 17:48:07 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com>
+Message-ID: <CAK8P3a2iASEZf-YRh2SHYhNdUtpo8sdkuoxfk_MonXpXBk1kbg@mail.gmail.com>
+Subject: Re: [RFT PATCH v3 12/27] of/address: Add infrastructure to declare
+ MMIO as non-posted
+To:     Rob Herring <robh@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>,
+        Mohamed Mediouni <mohamed.mediouni@caramail.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Alexander Graf <graf@amazon.com>,
+        Will Deacon <will@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        DTML <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Mar 06, 2021 at 11:15:52PM -0500, Michael G. Katzmann wrote:
-> 
-> On 3/5/21 4:36 AM, Johan Hovold wrote:
-> 
-> oops I should have looked at the previous code determining variants...
-> 
-> take 2...
+On Thu, Mar 11, 2021 at 5:10 PM Rob Herring <robh@kernel.org> wrote:
+> On Thu, Mar 11, 2021 at 2:12 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Wed, Mar 10, 2021 at 6:01 PM Rob Herring <robh@kernel.org> wrote:
+> > Ok, makes sense.
+> >
+> > Conceptually, I'd like to then see a check that verifies that the
+> > property is only set for nodes whose parent also has it set, since
+> > that is how AXI defines it: A bus can wait for the ack from its
+> > child node, or it can acknowledge the write to its parent early.
+> > However, this breaks down as soon as a bus does the early ack:
+> > all its children by definition use posted writes (as seen by the
+> > CPU), even if they wait for stores that come from other masters.
+> >
+> > Does this make sense to you?
 >
-> #define PL2303_QUIRK_DIVISOR_TA                 BIT(3)
-> 
-> enum pl2303_type {
-> 	TYPE_01,	/* Type 0 and 1 (difference unknown) */
-> 	TYPE_HX,	/* HX version of the pl2303 chip */
-> 	TYPE_HXN,	/* HXN version of the pl2303 chip */
-> 	TYPE_TA,	/* TA version of the pl2303 chip */
-> 	TYPE_COUNT
-> };
-> 
-> 
-> static const struct pl2303_type_data pl2303_type_data[TYPE_COUNT] =
-> ....
->         [TYPE_TA] = {
->                 .max_baud_rate          = 6000000,
->                 .quirks                 = PL2303_QUIRK_DIVISOR_TA,
+> BTW, I don't think it's clear in this thread, but the current
+> definition proposed for the spec[1] and schema is 'nonposted-mmio' is
+> specific to 'simple-bus'. I like this restriction and we can expand
+> where 'nonposted-mmio' is allowed later if needed.
 
-I think we should just a new flag for the alternate divisor encoding
-named "alt_divisors" (cf. no_divisors).
+That sounds ok, as long as we can express everything for the mac
+at the moment. Do we need to explicitly add a description to allow
+the property in the root node in addition to simple-bus to be able
+to enforce the rule about parent buses also having it?
 
-Chances are this encoding is used for other types as well.
-
->         },
-> };
-> 
-> static int pl2303_startup(struct usb_serial *serial)
-> {
-> ....
-> 	if ( serial->dev->descriptor.bcdDevice == 0x0300 && serial->dev->descriptor.bcdUSB == 0x0200 )
-> 		type = TYPE_TA;
-
-This needs to go after the bDeviceClass == 0x02 check, and the 
-descriptor fields need to be accessed using le16_to_cpu().
-
-I've prepared a patch series that clean up and tighten the type
-detection which I suggest you built upon instead.
-
-I'll post the series after replying here.
-
-> 	else if (serial->dev->descriptor.bDeviceClass == 0x02)
-> ....
-> }
-> 
-> static speed_t pl2303_encode_baud_rate_divisor( struct usb_serial_port *port,
-> 							unsigned char buf[4],
-> 								speed_t baud)
-> {
-> 	unsigned int baseline, mantissa, exponent;
-> 	struct usb_serial *serial = port->serial;
-> 	struct pl2303_serial_private *spriv = usb_get_serial_data(serial);
-> 
-> 	/*
-> 	 * Apparently the formula is:
-> 	 * baudrate = 12M * 32 / (mantissa * 4^exponent)
-> 	 * where
-> 	 *   mantissa = buf[8:0]
-> 	 *   exponent = buf[11:9]
-> 	 *
-> 	 * TA version has more precision
-> 	 *      uses mantissa = buf[bits 10:0 ]
-
-So you discovered that there were even more bits here? Your first
-version used ten bits, I believe.
-
-I got an offline mail from a third person having problems with the TA
-and who had also verified eleven bits here.
-
-> 	 *           exponent = buf[bits 15:13]
-> 	 *  and x2 prescaler enable by buf[bit 16]
-> 	 */
-> 	baseline = 12000000 * 32;
-> 	mantissa = baseline / baud;
-> 	if (mantissa == 0)
-> 		mantissa = 1;    /* Avoid dividing by zero if baud > 32*12M. */
-> 	exponent = 0;
-> 
-> 	if (spriv->quirks & PL2303_QUIRK_DIVISOR_TA) {
-> 		while (mantissa >= 2048) {
-> 			// exponent is three bits (after shifting right)
-> 			if (exponent < 15) {   // we are going to divide this by 2 later
-> 				mantissa >>= 1;    // divide by 2
-> 				exponent++;        // currently log2 ... will become log4
-> 			} else {
-> 				/* Exponent is maxed. Trim mantissa and leave. */
-> 				mantissa = 2047 ;
-> 				break;
-> 			}
-> 		}
-> 		buf[2] = exponent & 0x01;  // activate x2 prescaler if needed
-> 		exponent >>= 1;            // now log base 4 (losing LSB)
-> 		buf[1] = (exponent << 5) | (mantissa >> 8);
-
-Again, this is really nice work.
-
-But it seems to me that we should simply think about the encoding as
-using base-2 with the LSB of the exponent in bit 16. That should make it
-easier to follow what's going on here.
-
-I've been thinking about ways of merging the two schemes (both using
-base 2), and I even checked if my HXD happened to have a 2-prescaler bit
-somewhere as well but I couldn't find one.
-
-It's probably not worth it at this point (and may not end up being more
-readable anyway) so I therefore suggest adding a separate function for
-the alternate scheme for now. You can just call it at the start of the
-"default" function:
-
-	if (spriv->type->alt_divisors)
-		return pl2303_encode_baud_rate_divisor_alt(buf, baud);
-
-> 	} else {
-> 		while (mantissa >= 512) {
-> 			if (exponent < 7) {
-> 				mantissa >>= 2; /* divide by 4 */
-> 				exponent++;
-> 			} else {
-> 				/* Exponent is maxed. Trim mantissa and leave. */
-> 				mantissa = 511;
-> 				break;
-> 			}
-> 		}
-> 		buf[2] = 0;
-> 		buf[1] = exponent << 1 | mantissa >> 8;
-> 	}
-> 
-> 	buf[3] = 0x80;
-> 	buf[0] = mantissa & 0xff;
-> 
-> 	/* Calculate and return the exact baud rate. */
-> 	baud = (baseline / mantissa / (buf[2] == 0x01 ? 2:1)) >> (exponent << 1);
-> 	return baud;
-> }
-> 
-> static void pl2303_encode_baud_rate(struct tty_struct *tty,
-> 					struct usb_serial_port *port,
-> 					u8 buf[4])
-> {
-> ....
-> 	else
-> 		baud = pl2303_encode_baud_rate_divisor(port, buf, baud);
-> ....
-> }
-
-Johan
+       Arnd
