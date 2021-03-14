@@ -2,82 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F21339EBC
-	for <lists+linux-serial@lfdr.de>; Sat, 13 Mar 2021 16:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4CE339FF4
+	for <lists+linux-serial@lfdr.de>; Sat, 13 Mar 2021 19:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbhCMPCq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 13 Mar 2021 10:02:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232904AbhCMPCe (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 13 Mar 2021 10:02:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D42064F18;
-        Sat, 13 Mar 2021 15:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615647753;
-        bh=dn9d2sq0rqQOsUyglfcBnYfaTvD6EJjNv68ebbDAMVM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DNIDqxwoJR8tyozc4sWF2ZmIfA4caB1mhxBBeTIlYIrAD+S+5Ehd2je60kmRWzCvM
-         rVbUY6/Vz0UDl+LTrIRXzoQwx9Pv3a8L3wgJl4v6YsMQO6fsqnGUlM0YE4iSL+uuEC
-         A69L/hOl31O64boc/rlXKhlVMoxb9Pn2csAlF7wc=
-Date:   Sat, 13 Mar 2021 16:02:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY / Serial driver fixes for 5.12-rc3
-Message-ID: <YEzUB0on5Uq36R2g@kroah.com>
+        id S234347AbhCMSgT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Sat, 13 Mar 2021 13:36:19 -0500
+Received: from smtp.econet.co.zw ([77.246.51.158]:65277 "EHLO
+        ironportDMZ.econet.co.zw" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234286AbhCMSf6 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 13 Mar 2021 13:35:58 -0500
+X-Greylist: delayed 472 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Mar 2021 13:35:46 EST
+IronPort-SDR: 2VH7uDjPUxuRF84kGIuoHHaISSCuqZi+ufUVCFmh+/0u/DCFCtj5VFDT1b4h9dNnVvA6flspH+
+ 3h9rw6M4gXRTOO/x00E/RP0IaZ5bJ/VFJjak29BaaBMRsZ8SomhBLF6NshxP1CgwykLJQtbFhT
+ f57yb5yFlreJnhCu99okX5fHlhFOs37BIGqeR55agFxRF7WOiDsNKvGtFuzjle44yqE/60PUcB
+ eSRuIQK9gCbtZaBXI6W4OKIxrnCmM+n1gcMJCNZUjbl9kcbsSMLo+94gqXFyBTYwkpasFfSfmL
+ xM0=
+IronPort-HdrOrdr: A9a23:z3onBKxoaNoCa6u/wVCbKrPwgr1zdoIgy1knxilNYDZSddGVkN
+ 3roe8S0gX6hC1UdHYrn92BP6foewK+ybde544NMbC+GDT3oWfAFuFfxKbr3jGIIUPD38FH06
+ MIScRDIfnRKXQ/ssrg+gm/FL8boeWv1Kyzn+/RwzNMYGhRGsddxjx0AAqaDUF6LTMubfFSKL
+ Om6tNDt36cfx0sA/iTPXUZQ/PF4+TCiZOOW29/Ozcc9AKMgTm0gYSULzGk2H4lIkpy6IZn1V
+ Lgmwz9opy5s/ehygLNvlWjiqh+qZ/EwttHCNfksLlwFhzcziKpYIhGfpHqhkFTnMifrG8wkN
+ /WowoxVv4DiU/sQg==
+X-IronPort-AV: E=Sophos;i="5.81,245,1610402400"; 
+   d="scan'208";a="3444522"
+Received: from unknown (HELO WVALE-MB-SVR-05.econetzw.local) ([192.168.101.173])
+  by ironportLAN.econet.co.zw with ESMTP; 13 Mar 2021 20:27:52 +0200
+Received: from WVALE-CAS-SVR-9.econetzw.local (192.168.101.184) by
+ WVALE-MB-SVR-05.econetzw.local (192.168.101.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1473.3; Sat, 13 Mar 2021 20:27:48 +0200
+Received: from User (165.231.148.189) by WVALE-CAS-SVR-9.econetzw.local
+ (10.10.11.230) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Sat, 13 Mar 2021 20:27:59 +0200
+Reply-To: <r19772744@daum.net>
+From:   "Reem E. A" <chawora@econet.co.zw>
+Subject: Re:
+Date:   Sat, 13 Mar 2021 18:27:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <96f8ff6fe77b4507830ab5cf78a93340@WVALE-CAS-SVR-9.econetzw.local>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+Hello,
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (2) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home on their behalf and
+for our "Mutual Benefits".
 
-are available in the Git repository at:
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Turkish Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.12-rc3
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+reem.alhashimi@yandex.com
 
-for you to fetch changes up to c776b77a279c327fe9e7710e71a3400766554255:
+Regards,
+Ms. Reem.
+This mail was sent through Econet Wireless, a Global telecoms leader.
 
-  Revert "drivers:tty:pty: Fix a race causing data loss on close" (2021-03-10 09:27:56 +0100)
+DISCLAIMER
 
-----------------------------------------------------------------
-TTY/Serial fixes for 5.12-rc3
+The information in this message is confidential and is legally privileged. It is intended solely for the addressee. Access to this message by anyone else is unauthorized. If received in error please accept our apologies and notify the sender immediately. You must also delete the original message from your machine. If you are not the intended recipient, any use, disclosure, copying, distribution or action taken in reliance of it, is prohibited and may be unlawful. The information, attachments, opinions or advice contained in this email are not the views or opinions of Econet Wireless, its subsidiaries or affiliates. Econet Wireless therefore accepts no liability for claims, losses, or damages arising from the inaccuracy, incorrectness, or lack of integrity of such information.
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/AgileBanner.png]
+WORK ISN'T A PLACE
+IT'S WHAT WE DO
+________________________________
 
-Here are some small tty and serial driver fixes for 5.12-rc3 to resolve
-some reported problems:
-	- led tty trigger fixes based on review and were acked by the
-	  led maintainer
-	- revert a max310x serial driver patch as it was causing
-	  problems.
-	- revert a pty change as it was also causing problems
 
-All of these have been in linux-next for a while with no reported
-problems.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Alexander Shiyan (1):
-      Revert "serial: max310x: rework RX interrupt handling"
 
-Greg Kroah-Hartman (1):
-      Revert "drivers:tty:pty: Fix a race causing data loss on close"
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/telephone.png]
 
-Uwe Kleine-König (2):
-      leds: trigger: Fix error path to not unlock the unlocked mutex
-      leds: trigger/tty: Use led_set_brightness_sync() from workqueue
 
- drivers/leds/trigger/ledtrig-tty.c | 11 ++++-------
- drivers/tty/pty.c                  | 15 ++-------------
- drivers/tty/serial/max310x.c       | 29 +++++------------------------
- drivers/tty/tty_io.c               |  5 ++---
- 4 files changed, 13 insertions(+), 47 deletions(-)
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/email.png]
+
+<mailto:>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/location.png]
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/website.png]
+
+www.econet.co.zw<https://www.econet.co.zw>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/inspired.jpg]
