@@ -2,168 +2,152 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1007733AE2F
-	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 10:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734B033AF0B
+	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 10:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbhCOJHY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 Mar 2021 05:07:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40808 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229702AbhCOJHV (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 Mar 2021 05:07:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7858C64EB2;
-        Mon, 15 Mar 2021 09:07:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615799240;
-        bh=BzqmnZya8s8zP6U62RedLvc9G4QXu7PSsdi0djOTSyM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fHMfCZaZIoMv0wsaE1BAv5m8e4kzPMA2EUofx5DsqqCMCU29B+O8EszF+29EAz815
-         7FRP7Kx7ny5LcFqUjO2/RoMBQlS8Fvs5Z3PMghgeAqlJnaM/rIdKdGmvYCd2oE74RC
-         txivP0qcKAvSAWRlxIaDS6Ec2/Uc0qzlAY0CrbTR9AYr4kzQYTi/P7ArcyBuTPnw3S
-         qR8tSMWsrI9tazKxIZp8klb3YBYPBLMIYryw+LnFu+aEGK4mdV6/YBXmjcTt9rF7gw
-         gGnpfeXhKDR2uHxGOz0tN7hqAP3/C4TjpEW4dfDMuxBxCBs+GtFsR/Z/NsaDd6/chj
-         st4Sz7u9Bu++Q==
-Received: from johan by xi with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lLjCH-0000yi-DL; Mon, 15 Mar 2021 10:07:34 +0100
-Date:   Mon, 15 Mar 2021 10:07:33 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Michael G. Katzmann" <michaelk@IEEE.org>
-Cc:     Charles Yeh <charlesyeh522@gmail.com>,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, Joe Abbott <jabbott@rollanet.org>
-Subject: Re: non-standard baud rates with Prolific 2303 USB-serial
-Message-ID: <YE8j1XdfQNDGLzZR@hovoldconsulting.com>
-References: <YDUysZY90FfVhrHK@hovoldconsulting.com>
- <CAAZvQQ6F=cQ-EhC0kgeTVM3GrtBWR+HfM6UJWj2AEF1NYZ-vAQ@mail.gmail.com>
- <YDaGRRYrEO5BEJv0@hovoldconsulting.com>
- <CAAZvQQ7+b9=DKqPxgsXxS7Lhqj=QTzKHCMarSbsQkAnYqdO1GA@mail.gmail.com>
- <YEH7okblCx8+Odxn@hovoldconsulting.com>
- <ddc0e424-21c2-b8f4-1b00-f589267d2b51@IEEE.org>
- <YEpAaL9QtVMduEpi@hovoldconsulting.com>
- <9d02257d-cca1-116e-634a-6ac952362c5d@IEEE.org>
- <YEtwNzhCmvyKhRto@hovoldconsulting.com>
- <a475110e-2f44-eeca-3cd2-dd946e5abfe7@IEEE.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a475110e-2f44-eeca-3cd2-dd946e5abfe7@IEEE.org>
+        id S229553AbhCOJo5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 Mar 2021 05:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhCOJo2 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 15 Mar 2021 05:44:28 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58ADCC061574;
+        Mon, 15 Mar 2021 02:44:28 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y13so6236395pfr.0;
+        Mon, 15 Mar 2021 02:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=PebrTRd7u+mXcD0wI0/r7L8uXu0acD1j/prwx8M6TtQ=;
+        b=mgfUkEAhC5LIP4cR11FtlMukCLh8h7kKe5twBI1WEyhd7xUdhj1i8iTjZ/7mKxoa9/
+         ZRP3xBOqP77EMZACzKyglNCTIXkjWV3yE9Cfu0WusHlHUiSO6L2gpP1+3hboEGXMzsTK
+         KYZIiusAqG+RSgeu7uwWIn0rkJcui2XLLaRrHxAcdTlXOPmvhgNat1Lek2AfeLQ5idED
+         AuLghNnlRUptu5SInWNSdYcPM5L/an58Jn6sHD++YFOxj6RCscQwcvd7DUdzr5DOCzHa
+         9qV/Vw3h+BZX3PGlg6W2wzSM6yltcGIiWQvLiiEkWT4NrusBNwEY2Txy5YiKtASFevVq
+         jNeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=PebrTRd7u+mXcD0wI0/r7L8uXu0acD1j/prwx8M6TtQ=;
+        b=lK7FyxYSb6kNeZ9gwrEEPn0CwdFd6IjeoittuZuVLmWhoHQwkBqk8IehYauTJrsT2W
+         3zzU8p+Vi09MKQvQzL9VJkbmzx1fY+rlB+wdXtxqyrJnlphW9Pdbx8h3xOFDN6ZwsXM/
+         3huIFXhCMEHZKmdsGQZOnBRq2XkCQ7LV9oNZ2YS45IkUkr+LdBLLEA9zo+Fhsp2J0p0c
+         g086GGcvQTJ9drYztEoytO9oUsCJc8H1deSPx2c92y5+cH1e+CuzzFubXpffM+3uTxJF
+         vUhG+9v3fTWXmzQDpgzcaYBGW0IVFgRcpTYm2UmSBO/C47CwXorDOJoqcFXx385mFQtL
+         Z77A==
+X-Gm-Message-State: AOAM532laBPuj8HHBLSAfSBTuP0SPn3mQlpoOc11Ht0HDJsa+gqiNMrb
+        68NubsvYHgI3B3PEukGYraoLaV3rvjtD6JzG
+X-Google-Smtp-Source: ABdhPJyFz059kcqdKDWKYRE9rrtCXh8qyZNW192MKG6rY97k9ZUQnsfTnmv1Q9gOJdHwfTrAPZ5GnQ==
+X-Received: by 2002:a63:4d4e:: with SMTP id n14mr22311393pgl.37.1615801467944;
+        Mon, 15 Mar 2021 02:44:27 -0700 (PDT)
+Received: from localhost.localdomain ([120.245.122.54])
+        by smtp.gmail.com with ESMTPSA id 14sm12780811pfy.55.2021.03.15.02.44.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Mar 2021 02:44:27 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     robh+dt@kernel.org, alexandre.torgue@foss.st.com,
+        a.fatoum@pengutronix.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, vladimir.murzin@arm.com,
+        afzal.mohd.ma@gmail.com, gregkh@linuxfoundation.org,
+        erwan.leray@st.com, erwan.leray@foss.st.com,
+        linux-serial@vger.kernel.org
+Cc:     dillon min <dillon.minfei@gmail.com>
+Subject: [PATCH v3 0/9] ARM: STM32: add art-pi(stm32h750xbh6) board support
+Date:   Mon, 15 Mar 2021 17:43:47 +0800
+Message-Id: <1615801436-3016-1-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 08:28:04PM -0500, Michael G. Katzmann wrote:
-> On 3/12/21 8:44 AM, Johan Hovold wrote:
-> 
-> 
-> Let me try that patch in the right format 8-)
+From: dillon min <dillon.minfei@gmail.com>
 
-That's better, but we also need a commit message and and Signed-off-by
-line from you. Take a look at the general format of the patches I CCed
-you on and there's some more information under Documentation/:
+This patchset intend to add art-pi board support, this board developed
+by rt-thread(https://www.rt-thread.org/).
 
-	Documentation/process/submitting-patches.rst
+Board resources:
 
-The easiest is probably to use git-format-patch and git-send-email to
-prevent the patch from being corrupted (e.g. the tabs below have been
-replaced by spaces).
- 
-> --- a/drivers/usb/serial/pl2303.c    2021-03-12 09:30:22.963992109 -0500
-> +++ b/drivers/usb/serial/pl2303.c    2021-03-12 20:00:20.003526891 -0500
-> @@ -188,6 +188,7 @@
->      unsigned long quirks;
->      unsigned int no_autoxonxoff:1;
->      unsigned int no_divisors:1;
-> +    unsigned int alt_divisors:1;
->  };
->  
->  struct pl2303_serial_private {
-> @@ -217,10 +218,12 @@
->      [TYPE_TA] = {
->          .name            = "TA",
->          .max_baud_rate        = 6000000,
-> +        .alt_divisors        = true,
->      },
->      [TYPE_TB] = {
->          .name            = "TB",
->          .max_baud_rate        = 12000000,
-> +        .alt_divisors        = true,
+8MiB QSPI flash
+16MiB SPI flash
+32MiB SDRAM
+AP6212 wifi,bt,fm comb
 
-Are you sure that the TB uses the alternate encoding?
+sw context:
+- as stm32h750 just has 128k bytes internal flash, so running a fw on
+  internal flash to download u-boot/kernel to qspi flash, boot
+  u-boot/kernel from qspi flash. this fw is based on rt-thread.
+- kernel can be xip on qspi flash or load to sdram
+- root filesystem is jffs2(created by buildroot), stored on spi flash
 
-Charles, could you help us out here? Which other device types use the
-alternate encoding (e.g. HX(A) or TB) if any?
+to support the boad, add following changes.
+- fix r0-r3, r12 register restore failed after svc call,
+- add dts binding
+- update yaml doc
 
->      },
->      [TYPE_HXD] = {
->          .name            = "HXD",
-> @@ -618,6 +621,46 @@
->      return baud;
->  }
->  
-> +static speed_t pl2303_encode_baud_rate_divisor_alt(unsigned char buf[4],
-> +                                                                speed_t baud)
-> +{
-> +        unsigned int baseline, mantissa, exponent;
-> +
-> +        /*
-> +         * Apparently, for the TA version the formula is:
-> +         *   baudrate = 12M * 32 / (mantissa * 2^exponent)
-> +         * where
-> +         *   mantissa = buf[10:0]
-> +         *   exponent = buf[15:13 16]
-> +         */
-> +        baseline = 12000000 * 32;
-> +        mantissa = baseline / baud;
-> +        if (mantissa == 0)
-> +                mantissa = 1;   /* Avoid dividing by zero if baud > 32*12M. */
-> +        exponent = 0;
-> +        while (mantissa >= 2048) {
-> +                if (exponent < 15) {
-> +                        mantissa >>= 1; /* divide by 2 */
-> +                        exponent++;
-> +                } else {
-> +                        /* Exponent is maxed. Trim mantissa and leave. */
-> +                        mantissa = 2047;
-> +                        break;
-> +                }
-> +        }
-> +
-> +        buf[3] = 0x80;
-> +        buf[2] = exponent & 0x01; // LS bit of exponent
-> +        buf[1] = (exponent & ~0x01) << 4 | mantissa >> 8; // 3 bits of the exponent and MS 3 bits of the mantissa
-> +        buf[0] = mantissa & 0xff; // LS 8 bits of the mantissa
+changes in v3:
+- fix dtbs_check warrning: (8002cbd78fd5 and 4bc21d3dd678)
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: pin-controller: {'type':
+  'object'} is not allowed for {'#address-cells': [[1]], '#size-cells':
+  [[1]], 'ranges': [[0,
 
-Please avoid c99-style comments, but perhaps the comment at the start of
-function is sufficient here.
+  arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: 'i2c@40005C00',
+  'i2c@58001C00' do not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$',
+  '^[^@]+$', 'pinctrl-[0-9]+'
 
-Looks great otherwise.
+  >> arch/arm/boot/dts/stm32h750i-art-pi.dt.yaml: serial@40004800: 'bluetooth'
+  does not match any of the regexes: 'pinctrl-[0-9]+'
 
-> +
-> +        /* Calculate and return the exact baud rate. */
-> +        baud = (baseline / mantissa) >> exponent;
-> +
-> +        return baud;
-> +}
-> +
-> +
->  static void pl2303_encode_baud_rate(struct tty_struct *tty,
->                      struct usb_serial_port *port,
->                      u8 buf[4])
-> @@ -645,6 +688,8 @@
->  
->      if (baud == baud_sup)
->          baud = pl2303_encode_baud_rate_direct(buf, baud);
-> +    else if (spriv->type->alt_divisors)
-> +                baud = pl2303_encode_baud_rate_divisor_alt(buf, baud);
->      else
->          baud = pl2303_encode_baud_rate_divisor(buf, baud);
+changes in v2:
+- reorganize the pinctrl device tree about
+  stm32h7-pinctrl/stm32h743/750-pinctrl
+  stm32h7-pinctrl.dtsi --> stm32h743-pinctrl.dtsi --> stm32h743i-disco.dts
+      	      	         |                          |-> stm32h743i-eval.dts
+      	      	         |-> stm32h750-pinctrl.dtsi --> stm32h750i-art-pi.dts
+  same to the stm32f7/f4's pinctrl style
+- fix author name/copyright mistake
+- add compatible string	st,stm32h750-pinctrl to pinctl-stm32h743.c as they
+  have same pin alternate functions, update Kconfig description
+- make item in stm32h750i-art-pi.dts sort by letter
 
-This works too if you don't want to pass in the port to
-pl2303_encode_baud_rate_divisor() and hide the device-type differences
-there (e.g. to make the logic in pl2303_encode_baud_rate() easier to
-follow).
+dillon min (9):
+  Documentation: arm: stm32: Add stm32h750 value line doc
+  dt-bindings: arm: stm32: Add compatible strings for ART-PI board
+  dt-bindings: pinctrl: stm32: Add stm32h750 pinctrl
+  ARM: dts: stm32: introduce stm32h7-pinctrl.dtsi to support stm32h750
+  ARM: dts: stm32: add stm32h750-pinctrl.dtsi
+  ARM: dts: stm32: add support for art-pi board based on stm32h750xbh6
+  ARM: stm32: Add a new SOC - STM32H750
+  pinctrl: stm32: Add STM32H750 MCU pinctrl support
+  dt-bindings: serial: stm32: add phandle 'bluetooth' to fix dtbs_check
+    warrning
 
-Johan
+ Documentation/arm/index.rst                        |   1 +
+ Documentation/arm/stm32/stm32h750-overview.rst     |  33 +++
+ .../devicetree/bindings/arm/stm32/stm32.yaml       |   4 +
+ .../bindings/pinctrl/st,stm32-pinctrl.yaml         |   1 +
+ .../devicetree/bindings/serial/st,stm32-uart.yaml  |   5 +
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/stm32h7-pinctrl.dtsi             | 273 ++++++++++++++++++
+ arch/arm/boot/dts/stm32h743-pinctrl.dtsi           | 307 +--------------------
+ arch/arm/boot/dts/stm32h743.dtsi                   | 153 +++++++++-
+ arch/arm/boot/dts/stm32h750-pinctrl.dtsi           |  11 +
+ arch/arm/boot/dts/stm32h750.dtsi                   |   5 +
+ arch/arm/boot/dts/stm32h750i-art-pi.dts            | 228 +++++++++++++++
+ arch/arm/mach-stm32/board-dt.c                     |   1 +
+ drivers/pinctrl/stm32/Kconfig                      |   2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32h743.c          |   3 +
+ 15 files changed, 724 insertions(+), 304 deletions(-)
+ create mode 100644 Documentation/arm/stm32/stm32h750-overview.rst
+ create mode 100644 arch/arm/boot/dts/stm32h7-pinctrl.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750-pinctrl.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750i-art-pi.dts
+
+-- 
+1.9.1
+
