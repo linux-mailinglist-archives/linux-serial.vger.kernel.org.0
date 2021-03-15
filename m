@@ -2,96 +2,133 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E82633C399
-	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 18:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40EA33C54C
+	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 19:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbhCORJ6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 Mar 2021 13:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235544AbhCORJw (ORCPT
+        id S231460AbhCOSNM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 Mar 2021 14:13:12 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:46121 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229690AbhCOSMl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 Mar 2021 13:09:52 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B34C0613DA
-        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id b10so4428144uap.4
-        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=aXgMsfvJxS8rnPrkFXfXe2FXnX4z8Cqcu/QhnL5Qn1DjMCuOtoNVfGi4EBSS9Iknwn
-         vlNLqDk2YbQyiCk670OLjQr7loetNG1u4FZO8UCDQ2J04lVrlvZVYZ8kX/m2f/vpT8RG
-         ZS2Q72l+5VWjpF0FapEgmyk86Q2RyIYtBwW0g+Kv5gwmZmeSODXVZRu5TrncT2JBKVWl
-         0T4REScA9GLg4vUJnQBLz/6DT44uKbQMn8TCECFL0QnRbFsF40mm5TjkcPcIZSc0whXV
-         T2AgYFv8Od1V+OxvkOJjvUw7wQyrmJeMqbP2Cwhn97vz8cjryp78SHO5Uey9b3DA2nH3
-         +UTg==
+        Mon, 15 Mar 2021 14:12:41 -0400
+Received: from mail-ej1-f70.google.com ([209.85.218.70])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lLrho-0006Wl-6f
+        for linux-serial@vger.kernel.org; Mon, 15 Mar 2021 18:12:40 +0000
+Received: by mail-ej1-f70.google.com with SMTP id gn30so12345316ejc.3
+        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 11:12:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=MQPFdZ62kpn2sF4yFR+Vu2hEPrYQssA16Tvrmag5hQmtpe3R1/9jRq1P1DQHt6hac6
-         j1tp5IhwL4Bj8MAHVdGmjBGyuVGL5H6g+M9LUfCU1uqpRuHGVfsOJjKmPIwAXpgwQ7Yw
-         37iIBGF4FjBysFbvdbrm3Wp7rRPQvkxMBUiu9nLPYB6jb3EOBWgCUYJjEoZEweexlCM+
-         EngL8GLMKwjyY6X4SmROvVfzR+5uR6DCtUTXwerjp7I5uUNnApdLXsra6CFcvOVl2Hd8
-         yp+PSgE4y+I3HwugYd+B7DX7E3WFJZb/NRHs399T02f0ADHkCjOh8lGhuQre/I0j7+6Z
-         SptQ==
-X-Gm-Message-State: AOAM5334/sYkS3K6Utz3L+9mbRncLeThqAHQER+sqYIP1YyU6Q0h5Sd8
-        1wlAGwiKrcAOkGKPYSLGa66CBvXyX2s0mrXRlPE=
-X-Google-Smtp-Source: ABdhPJz279ChG9se2R56+CgC4LM1QaXLH3vfcRaBnVrWnTQpeUm6AYsXRAqStDe2E32gf/IZJ47H7xYnUK1rrffxr7c=
-X-Received: by 2002:ab0:4129:: with SMTP id j38mr5247512uad.39.1615828191432;
- Mon, 15 Mar 2021 10:09:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c8ribixbYX8SKmA0or3fkXjW13OP+Yed566mFRzrUVg=;
+        b=uPH7HeaXPPcaGvYPMy6Ni1cfujAgEPn6zPm35W07AgO463fso/LCDC0TL5eR3rWZZN
+         sIRfPvjJQQ9Gf5SjZBAlpqKL3njJ6ZAMvxvWf28GxAt24s8PnIaI/EEHCODNddBeBtdO
+         d47gTrVq+Ht1zR3wba7jP0u4tmLA719eTetHuB2+WkTyC35pHzu1/9p0in4jxI0hY1Kw
+         XUvsOZplN7SwEhM7TeCj4B3jFfYuLVVeGTGBj4pco5EfD2vW02zJ7GzPxHNRk+GYIqJo
+         fPp546nXQ4EOeclJgVaO5aenMRryKy8kp3Yn/0joXas5DR23yx0s+8T4W1fn7D03EHoq
+         l72A==
+X-Gm-Message-State: AOAM533orHhRP4TPPR4PB8lC+9K4iBx6vQISGEYq+TRLcIywykKJHjti
+        jSrYdcVVktazZGFA5lWPUGCLhSHhDNoXqSvgpoIr9n3p8ULbagTeB7euIX7TKRQMCv8g2D2fXRw
+        l7o5B61FPv9GCDhV+3QLwnQONycZLYKxaYwAKVcHqXw==
+X-Received: by 2002:a17:906:151a:: with SMTP id b26mr5342972ejd.492.1615831959910;
+        Mon, 15 Mar 2021 11:12:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyLNjczp4bktcKOOXDHSL62TIadcqezY+3FpRHHLlaOEd82iwOk0aGnz/RtbQcwfWXJ/Okoww==
+X-Received: by 2002:a17:906:151a:: with SMTP id b26mr5342963ejd.492.1615831959799;
+        Mon, 15 Mar 2021 11:12:39 -0700 (PDT)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id v25sm8523926edr.18.2021.03.15.11.12.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Mar 2021 11:12:39 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     marcan@marcan.st, arnd@kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH] tty: serial: samsung_tty: remove spinlock flags in interrupt handlers
+Date:   Mon, 15 Mar 2021 19:12:12 +0100
+Message-Id: <20210315181212.113217-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:09:50
- -0700 (PDT)
-Reply-To: ezbtg22@gmail.com
-From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
-Date:   Mon, 15 Mar 2021 10:09:50 -0700
-Message-ID: <CAH16wSNYh7NNhzrypnhaAQBv8EfF3vGrQ=w1tsAkdJyEQZxf=A@mail.gmail.com>
-Subject: From Mrs.Glenn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Since interrupt handler is called with disabled local interrupts, there
+is no need to use the spinlock primitives disabling interrupts as well.
+
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ drivers/tty/serial/samsung_tty.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 80df842bf4c7..d9e4b67a12a0 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -715,13 +715,12 @@ static irqreturn_t s3c24xx_serial_rx_chars_dma(void *dev_id)
+ 	struct s3c24xx_uart_dma *dma = ourport->dma;
+ 	struct tty_struct *tty = tty_port_tty_get(&ourport->port.state->port);
+ 	struct tty_port *t = &port->state->port;
+-	unsigned long flags;
+ 	struct dma_tx_state state;
+ 
+ 	utrstat = rd_regl(port, S3C2410_UTRSTAT);
+ 	rd_regl(port, S3C2410_UFSTAT);
+ 
+-	spin_lock_irqsave(&port->lock, flags);
++	spin_lock(&port->lock);
+ 
+ 	if (!(utrstat & S3C2410_UTRSTAT_TIMEOUT)) {
+ 		s3c64xx_start_rx_dma(ourport);
+@@ -750,7 +749,7 @@ static irqreturn_t s3c24xx_serial_rx_chars_dma(void *dev_id)
+ 	wr_regl(port, S3C2410_UTRSTAT, S3C2410_UTRSTAT_TIMEOUT);
+ 
+ finish:
+-	spin_unlock_irqrestore(&port->lock, flags);
++	spin_unlock(&port->lock);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -846,11 +845,10 @@ static irqreturn_t s3c24xx_serial_rx_chars_pio(void *dev_id)
+ {
+ 	struct s3c24xx_uart_port *ourport = dev_id;
+ 	struct uart_port *port = &ourport->port;
+-	unsigned long flags;
+ 
+-	spin_lock_irqsave(&port->lock, flags);
++	spin_lock(&port->lock);
+ 	s3c24xx_serial_rx_drain_fifo(ourport);
+-	spin_unlock_irqrestore(&port->lock, flags);
++	spin_unlock(&port->lock);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -934,13 +932,12 @@ static irqreturn_t s3c24xx_serial_tx_irq(int irq, void *id)
+ {
+ 	struct s3c24xx_uart_port *ourport = id;
+ 	struct uart_port *port = &ourport->port;
+-	unsigned long flags;
+ 
+-	spin_lock_irqsave(&port->lock, flags);
++	spin_lock(&port->lock);
+ 
+ 	s3c24xx_serial_tx_chars(ourport);
+ 
+-	spin_unlock_irqrestore(&port->lock, flags);
++	spin_unlock(&port->lock);
+ 	return IRQ_HANDLED;
+ }
+ 
 -- 
-Dear Beloved,
+2.25.1
 
-I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
-in a hospital bed in Israel. I am 59 years and childless; my husband
-is dead. I was diagnosed with terminal cancer. And my doctor just
-predicted that I have but very limited time to live due to damages in
-my system and as a result of that I decided to dispose my 10.5 million
-US dollars to a God-fearing one for the continuation of charitable
-work. This is why I located you.
-
-My guess about you may not be accurate because I came across your
-contact at the humanitarian calendar event of the year but I believe
-in God who divinely directed me to you for this solemn proposal of
-charitable work.
-
-Therefore I wholeheartedly wish to bequeath my fortune to you as a
-God-fearing person for the continuation of charitable work anywhere
-around the world.
-
-I shall be going in for a surgery operations soonest and desire this
-money to be transferred to you as I do not wish to leave this money in
-the bank because bankers might misuse it for their own interest after
-my death.
-
-As soon as I receive your quick reply assuring me that you will
-utilize the money as I instructed you for the benefit of the less
-privilege, I shall give you more details and also instruct my bank to
-release the money to you for the charity project. I hope you receive
-this mail in good health.
-
-Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
-know what will be my situation in next minute,
-
-I am waiting for your reply.
-
-Yours sincerely,
-Mrs Elizabet Glenn.
