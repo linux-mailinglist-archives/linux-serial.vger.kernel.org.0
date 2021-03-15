@@ -2,113 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AB433AA43
-	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 05:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25E033ADA0
+	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 09:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbhCOEG4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 Mar 2021 00:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S229579AbhCOIfK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 Mar 2021 04:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhCOEGp (ORCPT
+        with ESMTP id S229813AbhCOIfB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 Mar 2021 00:06:45 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6797BC0613D7
-        for <linux-serial@vger.kernel.org>; Sun, 14 Mar 2021 21:06:45 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id t85so5734494pfc.13
-        for <linux-serial@vger.kernel.org>; Sun, 14 Mar 2021 21:06:45 -0700 (PDT)
+        Mon, 15 Mar 2021 04:35:01 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771CCC061574
+        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 01:35:01 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l19so7573885wmh.1
+        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 01:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eI7ImkOM7sKEYOwpNZ2uQyL8ht6ELC4KAuDJxGH26WM=;
-        b=TsLroBKaOE0Ndal3uYSavlIbCvocBVruTCmOQbtWNCTqZn34fuCTFqFvPlo8zLD9fM
-         IO6v4CAcDC/jXHA7xn0roPtBnzHafVGRYUD8lfwBtTMxKxCleNiFo9fJ8rFHjAAcLLRG
-         n0IBxgxySYh/5P9qNs36aern3PGV0Kb7uyoKAm7WyekwifeK1ct2o4JPyQ1IQo4HlwZ+
-         40l1RBYIIqEDnveIIc7V/s/pxU7Eti6u2Sl5TecW4wLjWWQTpWhk9UCZrL8vgho1h49/
-         F2BmsDsOvuWGdJf6nM5P+UwNGUZyT5QM3C9s++AMz77q/FQEl28vDvRZAA/JnZ/kvkbJ
-         LAKg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P0LQpqn1sp2gKQ3mxss2v0MtbNQBB0Oge5rskRFXry8=;
+        b=mf0X2squuN88Q++1zVaRbHGdHRdk3lTEgBdvpHWKawpFl9gkcyhB9lxEqGPXqDEKB3
+         U5cPricaGv0BQdvagmtoYE+lY5Y8/CirkRwowKmsgU100hcT88/Pwx7hinYq/tYTQ7Zv
+         daQAXFI+FMsLWslVOhvSizjfkwfNMRwVxNzG6t3gc5kTm1D0Ho+3PXi5qLapQzDxuAuU
+         d4tXIE8CcfBPxalFFryeM/W3vbXTRoO9o3JOojFaocc9117Ym6D2tMVMJLwjvLgpZNoS
+         9PTtgP6ib8QfgE20jExO7jeti3Xv4/s+uprCC0R9FJamWjrh38W+MfHmshnrH02O0sVq
+         8MNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eI7ImkOM7sKEYOwpNZ2uQyL8ht6ELC4KAuDJxGH26WM=;
-        b=Ogc/iV1xxtEk58/zjYDMVFKBuXKyRhZ7JvoUtCG4IUmPQp/HTWSDfqE8rf+D3iNwJl
-         LGyPrnQojbZki7RFA7VTAXdwnpQCbI3dizT13f32JI0gadlOqvdNqoLwwUDpCc86hypP
-         NhbJInwen5VuTyrgo4w2c6Mh7ed5TNRHwhrtIcH78QbW6LHbdJX2ZOxkL0D/kHDfzGnH
-         bpQDtB2ebZo2UOr+/ELnRud8osDKqvmQMwE/H+t7nbEwGkuJAy4XXyAzZ0/ynhbgsknp
-         dSCNtYTHeA+GCRcmhH7Tw4PQ7JG7CbANRZzsV6XTLEzQGmMUiidPBYq2S7bq59Y5rpXE
-         bw2Q==
-X-Gm-Message-State: AOAM530hC29R7ihsDp5R/YfjhdG30UOA9Ozwa/bnzXNpKs0yZHX/g0+i
-        27Px9lUZJjfd93I0OaqMRf7GLg==
-X-Google-Smtp-Source: ABdhPJzvcR9VDnxHyvgDVLMJYlxMP0Ms95A2JMyXTXyYfG5+umOTG/XVCk6roapJ92EyCnrv/2+ArQ==
-X-Received: by 2002:a63:1957:: with SMTP id 23mr3255166pgz.196.1615781204730;
-        Sun, 14 Mar 2021 21:06:44 -0700 (PDT)
-Received: from localhost ([122.171.124.15])
-        by smtp.gmail.com with ESMTPSA id l20sm12327033pfd.82.2021.03.14.21.06.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Mar 2021 21:06:44 -0700 (PDT)
-Date:   Mon, 15 Mar 2021 09:36:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3 00/15] Introduce devm_pm_opp_* API
-Message-ID: <20210315040642.mw6jz7nalhthbwlr@vireshk-i7>
-References: <20210314163408.22292-1-digetx@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P0LQpqn1sp2gKQ3mxss2v0MtbNQBB0Oge5rskRFXry8=;
+        b=o97UxhdoN6GQOxFe2mX39rEp78rGXEFZt65O/qoyhpH+sOkOmcBHUvgdf/422RhmKZ
+         /1UtpZgWmxmofncfdyvxMNFX9jVCj2BruKi4pO7qMCBOR0iXUCwYYtc5KBZ5mmq7t3zC
+         9EdsSFCo+zMmEATAWOlmAI1lKRLZd07MhdBhiN9QBVd1FvpO0WpycLKkMpD08Mk/vL9g
+         V77xJQnaJ5HBwwArI3oR6UGqm5VkvcdSznAdUuahXwupboSiMaslN0/DwfagXlHvKgeh
+         ten3jX9295e4Me6xD+32iig4/5sgmzCPzRTWRVDHXInDX0SlMGkAaYmY2BXjgzh7+Hpy
+         otLA==
+X-Gm-Message-State: AOAM531U6EZBfe8Z+0+BiJaxqFJi949FI3LY/dLUdlt4oLQXTGQddB1e
+        ohwaoDpP0U0kYt9k90hiPXouJA==
+X-Google-Smtp-Source: ABdhPJyuSFJ7w+LBE8QbGv2YrAgzrRTewd+TSsCmAC0t3U6NZO7rWWq9kbxRNygSBIk41pxdEObIVA==
+X-Received: by 2002:a7b:cb99:: with SMTP id m25mr25428082wmi.64.1615797300081;
+        Mon, 15 Mar 2021 01:35:00 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:90c:e290:708f:15aa:638c:22b7])
+        by smtp.gmail.com with ESMTPSA id o2sm8372028wmc.23.2021.03.15.01.34.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Mar 2021 01:34:59 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     gregkh@linuxfoundation.org
+Cc:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH 0/3] tty: serial: meson: add amlogic,uart-fifosize property
+Date:   Mon, 15 Mar 2021 09:34:56 +0100
+Message-Id: <20210315083459.359773-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210314163408.22292-1-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 14-03-21, 19:33, Dmitry Osipenko wrote:
-> This series adds resource-managed OPP API helpers and makes drivers
-> to use them.
-> 
-> Changelog:
-> 
-> v3: - Dropped dev_pm_opp_register_notifier().
-> 
->     - Changed return type of the devm helpers from opp_table pointer
->       to errno.
-> 
->     - Corrected drm/msm patch which missed to remove opp_put_supported_hw()
->       from a6xx_gpu. Note that the a5xx_gpu driver was missing the
->       opp_put_supported_hw() at all.
-> 
->     - Corrected spelling of the ack from Mark Brown.
+On most of the Amlogic SoCs, the first UART controller in the "Everything-Else"
+power domain has 128bytes of RX & TX FIFO, so add an optional property to describe
+a different FIFO size from the other ports (64bytes).
 
-Applied all patches except 11/15.
+This adds a property in the bindings, reads the property from the driver and updates
+the DT with the new property.
 
-Thanks.
+Neil Armstrong (3):
+  dt-bindings: serial: amlogic,meson-uart: add amlogic,uart-fifosize
+    property
+  tty: serial: meson: retrieve port FIFO size from DT
+  arm64: dts: meson: set 128bytes FIFO size on uart A
+
+ .../devicetree/bindings/serial/amlogic,meson-uart.yaml      | 6 ++++++
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi                  | 1 +
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi           | 1 +
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi                   | 1 +
+ drivers/tty/serial/meson_uart.c                             | 5 ++++-
+ 5 files changed, 13 insertions(+), 1 deletion(-)
 
 -- 
-viresh
+2.25.1
+
