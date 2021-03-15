@@ -2,83 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F07D33C1B5
-	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 17:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E82633C399
+	for <lists+linux-serial@lfdr.de>; Mon, 15 Mar 2021 18:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbhCOQ1P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 Mar 2021 12:27:15 -0400
-Received: from mail-il1-f172.google.com ([209.85.166.172]:40351 "EHLO
-        mail-il1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbhCOQ0x (ORCPT
+        id S235567AbhCORJ6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 Mar 2021 13:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235544AbhCORJw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 Mar 2021 12:26:53 -0400
-Received: by mail-il1-f172.google.com with SMTP id e7so9901463ile.7;
-        Mon, 15 Mar 2021 09:26:53 -0700 (PDT)
+        Mon, 15 Mar 2021 13:09:52 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B34C0613DA
+        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id b10so4428144uap.4
+        for <linux-serial@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=aXgMsfvJxS8rnPrkFXfXe2FXnX4z8Cqcu/QhnL5Qn1DjMCuOtoNVfGi4EBSS9Iknwn
+         vlNLqDk2YbQyiCk670OLjQr7loetNG1u4FZO8UCDQ2J04lVrlvZVYZ8kX/m2f/vpT8RG
+         ZS2Q72l+5VWjpF0FapEgmyk86Q2RyIYtBwW0g+Kv5gwmZmeSODXVZRu5TrncT2JBKVWl
+         0T4REScA9GLg4vUJnQBLz/6DT44uKbQMn8TCECFL0QnRbFsF40mm5TjkcPcIZSc0whXV
+         T2AgYFv8Od1V+OxvkOJjvUw7wQyrmJeMqbP2Cwhn97vz8cjryp78SHO5Uey9b3DA2nH3
+         +UTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uNo6vdAx+jzMNRzSxihSuYm26CfiZWtwAB/YSlTgofg=;
-        b=PvCsskFvMP9wvE+EB8y4IgPN/FP2Uy09S0u3hc8xaYG6c7dk45nERtE/MMTxXxCpl+
-         PuYrhfR+gsfEvfHQd9HysnKb+0iAgZ4mivy9xS6B2JJfKEyYmepR0bAfJuPGdjmHya/I
-         zjH1sfZT857HI2LsnOQzzAhgXVyk8ex9bnw+9n/W/eCJa4Pcn40Y7AkkIrh/M3ZTYNjf
-         WPgULmU1Kokn6nGFTdxUUA8Hl6PuKrn3lwtQfrKohcUbNONGwtD2i8Y8M68iIE4yAkkk
-         8wu3R+sF+gJXDi6JsIK3lkK1K8TJtuS0EDfx68XtUEntZkf8VE8jxj9RT1f78Gy8iCHM
-         ghtA==
-X-Gm-Message-State: AOAM5330NzdYvQhLZEdIsDciMGPzBHjW/j3e9IcxAf/42YUYknMJlRfg
-        ClnoXXeit4DdtTawsLrOJQ==
-X-Google-Smtp-Source: ABdhPJw+veskbFJEXXCKZ2E/BDJV2CNNfMgN0Pv1qQFI928Wh1rpDctvLR3CxE8mWqEyWroMro7orw==
-X-Received: by 2002:a92:d6cf:: with SMTP id z15mr355098ilp.40.1615825612758;
-        Mon, 15 Mar 2021 09:26:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id s9sm7125949iob.33.2021.03.15.09.26.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Mar 2021 09:26:52 -0700 (PDT)
-Received: (nullmailer pid 982357 invoked by uid 1000);
-        Mon, 15 Mar 2021 16:26:48 -0000
-Date:   Mon, 15 Mar 2021 10:26:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     dillon.minfei@gmail.com
-Cc:     linux-kernel@vger.kernel.org, mcoquelin.stm32@gmail.com,
-        gregkh@linuxfoundation.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux@armlinux.org.uk, erwan.leray@st.com,
-        linux-arm-kernel@lists.infradead.org, erwan.leray@foss.st.com,
-        alexandre.torgue@st.com, a.fatoum@pengutronix.de,
-        robh+dt@kernel.org, afzal.mohd.ma@gmail.com,
-        vladimir.murzin@arm.com, alexandre.torgue@foss.st.com
-Subject: Re: [PATCH v3 3/9] dt-bindings: pinctrl: stm32: Add stm32h750 pinctrl
-Message-ID: <20210315162648.GB981570@robh.at.kernel.org>
-References: <1615801436-3016-1-git-send-email-dillon.minfei@gmail.com>
- <1615801436-3016-4-git-send-email-dillon.minfei@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=MQPFdZ62kpn2sF4yFR+Vu2hEPrYQssA16Tvrmag5hQmtpe3R1/9jRq1P1DQHt6hac6
+         j1tp5IhwL4Bj8MAHVdGmjBGyuVGL5H6g+M9LUfCU1uqpRuHGVfsOJjKmPIwAXpgwQ7Yw
+         37iIBGF4FjBysFbvdbrm3Wp7rRPQvkxMBUiu9nLPYB6jb3EOBWgCUYJjEoZEweexlCM+
+         EngL8GLMKwjyY6X4SmROvVfzR+5uR6DCtUTXwerjp7I5uUNnApdLXsra6CFcvOVl2Hd8
+         yp+PSgE4y+I3HwugYd+B7DX7E3WFJZb/NRHs399T02f0ADHkCjOh8lGhuQre/I0j7+6Z
+         SptQ==
+X-Gm-Message-State: AOAM5334/sYkS3K6Utz3L+9mbRncLeThqAHQER+sqYIP1YyU6Q0h5Sd8
+        1wlAGwiKrcAOkGKPYSLGa66CBvXyX2s0mrXRlPE=
+X-Google-Smtp-Source: ABdhPJz279ChG9se2R56+CgC4LM1QaXLH3vfcRaBnVrWnTQpeUm6AYsXRAqStDe2E32gf/IZJ47H7xYnUK1rrffxr7c=
+X-Received: by 2002:ab0:4129:: with SMTP id j38mr5247512uad.39.1615828191432;
+ Mon, 15 Mar 2021 10:09:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1615801436-3016-4-git-send-email-dillon.minfei@gmail.com>
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:09:50
+ -0700 (PDT)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Mon, 15 Mar 2021 10:09:50 -0700
+Message-ID: <CAH16wSNYh7NNhzrypnhaAQBv8EfF3vGrQ=w1tsAkdJyEQZxf=A@mail.gmail.com>
+Subject: From Mrs.Glenn
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, 15 Mar 2021 17:43:50 +0800, dillon.minfei@gmail.com wrote:
-> From: dillon min <dillon.minfei@gmail.com>
-> 
-> This patch intend to add pinctrl configuration support for
-> stm32h750 value line
-> 
-> The datasheet of stm32h750 value line can be found at:
-> https://www.st.com/resource/en/datasheet/stm32h750ib.pdf
-> 
-> Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> ---
->  Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+-- 
+Dear Beloved,
 
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
 
-If a tag was not added on purpose, please state why and what changed.
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
 
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
+
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
+
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
+
+I am waiting for your reply.
+
+Yours sincerely,
+Mrs Elizabet Glenn.
