@@ -2,90 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5B6340443
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Mar 2021 12:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF015340B79
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Mar 2021 18:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbhCRLLQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 Mar 2021 07:11:16 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:11361 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbhCRLKp (ORCPT
+        id S232304AbhCRRNo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 Mar 2021 13:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232294AbhCRRNj (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 Mar 2021 07:10:45 -0400
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 18 Mar 2021 04:10:45 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Mar 2021 04:10:42 -0700
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 18 Mar 2021 16:40:14 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id B582A313A; Thu, 18 Mar 2021 16:40:13 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, mka@chromium.org, robh+dt@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Thu, 18 Mar 2021 13:13:39 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A58C061761
+        for <linux-serial@vger.kernel.org>; Thu, 18 Mar 2021 10:13:38 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id f17so1626024plr.0
+        for <linux-serial@vger.kernel.org>; Thu, 18 Mar 2021 10:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1sseX0Xf3BUtKz3PR0Gizm8Ulb+76kkvwxNlI1Phel0=;
+        b=lPHk5Qo2Lb35CXcQnM+dRJ5QATTMsQuJnxyOV8yE5AlzOJe7G7CXoxkCB7ivQ1MHCq
+         B0Dm0BhakKimujDv9ePNv9PH/WSAC/PW8M3GpTFZZTKsPwsBEPHQeT7nPFnN4GWCBNKC
+         6kDr0+TmcPqWTq4cnlMVj4fQ/ezN8uIhxFx9I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1sseX0Xf3BUtKz3PR0Gizm8Ulb+76kkvwxNlI1Phel0=;
+        b=DvY8fIW5xJn85Clvp7fsf6A276agTDCuc7TIzN03rahVJVszRk0J8vNedOMzAfFkur
+         2cQzePTQCQVz3tP3pqWKjqYDTBrG0YCS1DspHXJGbDNUIunKLDqNR2YvuAYRUJGeWOqS
+         1DzLjfVWB+Yu2MHrLnPuf/GKEiloJgfXKDDbLQ/SALkWG3PdffS5a3bv3W8HLas1TO0N
+         Twu+/8ejrK/rRsUhbiniXUUJEQ124hCJrXfAT4IhXQzFggJh1Qk+5EbcT7+FUHNFJpNL
+         E+NF0CzFeGieXkGjKmq9MoXTPP1TGk0/HdcSNQl+baBPXBkGZ1KjAEyQmviYG8McrjlO
+         KRdw==
+X-Gm-Message-State: AOAM530KNmlz0MBnsupZHyNw6DyEmIJ+P5W3X4n9nZk/2ObKzPqHSW1b
+        J/EObDclQERkd6xL7KXkatshuQ==
+X-Google-Smtp-Source: ABdhPJwbOEmo329XpSz1wEf3cFY6vA7M4NEYEfSU9e0kOD9VDn2EAXvUS6ECDxze8HrI66RfVx5BJA==
+X-Received: by 2002:a17:902:441:b029:e6:364a:5f55 with SMTP id 59-20020a1709020441b02900e6364a5f55mr10714521ple.7.1616087618263;
+        Thu, 18 Mar 2021 10:13:38 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:3cf8:6a09:780b:f65d])
+        by smtp.gmail.com with UTF8SMTPSA id 21sm2666277pgf.69.2021.03.18.10.13.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Mar 2021 10:13:37 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 10:13:36 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Roja Rani Yarubandi <rojay@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rajendra Nayak <rnayak@codeaurora.org>,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH V2 2/2] arm64: dts: qcom: sc7180: Remove QUP-CORE ICC path
-Date:   Thu, 18 Mar 2021 16:40:09 +0530
-Message-Id: <20210318111009.30365-3-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20210318111009.30365-1-rojay@codeaurora.org>
+        akashast@codeaurora.org, msavaliy@qti.qualcomm.com
+Subject: Re: [PATCH V2 1/2] soc: qcom-geni-se: Cleanup the code to remove
+ proxy votes
+Message-ID: <YFOKQKlI3MjMouEA@google.com>
 References: <20210318111009.30365-1-rojay@codeaurora.org>
+ <20210318111009.30365-2-rojay@codeaurora.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210318111009.30365-2-rojay@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We had introduced the QUP-CORE ICC path to put proxy votes from
-QUP wrapper on behalf of earlycon, if other users of QUP-CORE turn
-off this clock before the real console is probed, unclocked access
-to HW was seen from earlycon.
+On Thu, Mar 18, 2021 at 04:40:08PM +0530, Roja Rani Yarubandi wrote:
+> ICC core and platforms drivers supports sync_state feature, which
+> ensures that the default ICC BW votes from the bootloader is not
+> removed until all it's consumers are probes.
+> 
+> The proxy votes were needed in case other QUP child drivers
+> I2C, SPI probes before UART, they can turn off the QUP-CORE clock
+> which is shared resources for all QUP driver, this causes unclocked
+> access to HW from earlycon.
+> 
+> Given above support from ICC there is no longer need to maintain
+> proxy votes on QUP-CORE ICC node from QUP wrapper driver for early
+> console usecase, the default votes won't be removed until real
+> console is probed.
+> 
+> Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+> Signed-off-by: Akash Asthana <akashast@codeaurora.org>
 
-With ICC sync state support proxy votes are no longer need as ICC
-will ensure that the default bootloader votes are not removed until
-all it's consumer are probed.
+I suggest to mention that this is essentially a revert of commit
+048eb908a1f2 ("soc: qcom-geni-se: Add interconnect support to fix
+earlycon crash"). This makes the life of reviewers easier and it's
+also good to have the reference in the git history.
 
-We can safely remove ICC path for QUP-CORE clock from QUP wrapper
-device.
+You could also mention commit 7d3b0b0d8184 ("interconnect: qcom:
+Use icc_sync_state") in the intro.
 
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
-Signed-off-by: Akash Asthana <akashast@codeaurora.org>
----
-Changes in V2:
- - No chage
+I tried to test by first reproducing the original issue without
+'sync_state' in the ICC, but wasn't successful, probably something
+changed in the boot/ICC timing in the meantime ¯\_(ツ)_/¯.
 
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 83fbb481cae5..2709051740d1 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -768,8 +768,6 @@ qupv3_id_0: geniqup@8c0000 {
- 			#size-cells = <2>;
- 			ranges;
- 			iommus = <&apps_smmu 0x43 0x0>;
--			interconnects = <&qup_virt MASTER_QUP_CORE_0 0 &qup_virt SLAVE_QUP_CORE_0 0>;
--			interconnect-names = "qup-core";
- 			status = "disabled";
- 
- 			i2c0: i2c@880000 {
-@@ -1059,8 +1057,6 @@ qupv3_id_1: geniqup@ac0000 {
- 			#size-cells = <2>;
- 			ranges;
- 			iommus = <&apps_smmu 0x4c3 0x0>;
--			interconnects = <&qup_virt MASTER_QUP_CORE_1 0 &qup_virt SLAVE_QUP_CORE_1 0>;
--			interconnect-names = "qup-core";
- 			status = "disabled";
- 
- 			i2c6: i2c@a80000 {
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
