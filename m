@@ -2,174 +2,154 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0D6342511
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Mar 2021 19:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2A73429C5
+	for <lists+linux-serial@lfdr.de>; Sat, 20 Mar 2021 02:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbhCSSpB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 19 Mar 2021 14:45:01 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:42774 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230223AbhCSSoW (ORCPT
+        id S229649AbhCTB4j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 Mar 2021 21:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229564AbhCTB4c (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 Mar 2021 14:44:22 -0400
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12JIg5LT007150;
-        Fri, 19 Mar 2021 19:43:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=WPsJD07taG6bSi67dQZQOBWHCrvFMzxNJLWjag8WCLg=;
- b=zk8Uv9JTj3cidFrdljg1NFDz4H4W6P4azuDR1ihHguJflXGoKtnOqAoSHRjyGHVAYWWq
- cjsk4osSMke887jZnw/mT+T+3wOvwqqqmmoopDku9Yhvh0RpdR4g153zdj4NxeMMqeJQ
- IwIE+uE9LcGDALfekvup1BsshTHbJtymMh/I0vbEYG68Wusc/PEM2RUcJ7rjBAGYZ1iS
- q/GIM9m/0sBRj6+VFcCQfFvfdHmEjpZl8lw2d6KwTTezf7WuByKuiOy/6cM92X4htfJe
- 8P9aOuK4QGf9I9CtGV4f54C0dix/ht1vfWUYYdnB6Rnoe2ESCK7WtP9RWQAxf7CxCXLP nw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 378psa4ygs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Mar 2021 19:43:28 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8F19810002A;
-        Fri, 19 Mar 2021 19:43:27 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7D0B62721FC;
-        Fri, 19 Mar 2021 19:43:27 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 19 Mar 2021 19:43:27
- +0100
-From:   Erwan Le Ray <erwan.leray@foss.st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Erwan Le Ray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Subject: [PATCH 5/5] ARM: dts: stm32: Add wakeup management on stm32mp15x UART nodes
-Date:   Fri, 19 Mar 2021 19:42:53 +0100
-Message-ID: <20210319184253.5841-6-erwan.leray@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210319184253.5841-1-erwan.leray@foss.st.com>
-References: <20210319184253.5841-1-erwan.leray@foss.st.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-19_10:2021-03-19,2021-03-19 signatures=0
+        Fri, 19 Mar 2021 21:56:32 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916C5C061760;
+        Fri, 19 Mar 2021 18:56:32 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id kr3-20020a17090b4903b02900c096fc01deso5683266pjb.4;
+        Fri, 19 Mar 2021 18:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=3ShiRqmN0JVa7UhRNey/XzmB81pk8gwokmcnEoRtZ68=;
+        b=lnoO8EC47b1zev1YAg9sLSZDt1rQHZQoUIj/W3gCgf+drSwZ+9MYBho+okxDktJsm8
+         hHyDWAZYIvN4i0qlDyd3McRuEw1EolhomoTxxuaIvuLpoaLiowy05aun5VSTcJJKG6r9
+         jBGC/88rD3WhGq3s6f7CpGNGaUAct3Fx1yXFnOgXBsEb8NBuB23OKUdlOc3pD+O4hyPd
+         fuKUztdmDf7QT8agMlCXPH0Z/3raGueZN1nlMAJwmsdCNQMc0/L86nOSLTxl+tODMKU1
+         1cFVomOWc7XCBJI7RKjjaV/ONtrKPrIkbchoh1jeMKKkVj85jSXUwMW7tAiZYe6hCcrB
+         BA5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3ShiRqmN0JVa7UhRNey/XzmB81pk8gwokmcnEoRtZ68=;
+        b=c8oU9QkQWJXhWOo5vyb3RAYNIjLiIel2gZSL0vHE+92X+XgScLPpdI7ZdbKDutvVuN
+         wGkO3/FNG4dlFjUcb763okrjkKPtIWQ/9HwRW0KhPoMiOVnzfLrFHUJDW+etCCO0n+xe
+         yh1wDM8gXrKTbkSYcvvVZumEEdsA1hkfUDNoO3R3oTIgB9NWIdMN2tRkbEwrgJ/7pYTB
+         3jIrI3lKNjgWf+R0RI11VJ8cBlcWotCQb2DR35vUB/4mz18xxIZNQZeHcQQ6fOy7eaPV
+         ptFTPbfFP99hjkEeMfpF90r3xc0FjU8JzGB9z9qLo7zH1JJ7XE+UXsRhYAFrEjpkeYmY
+         gypQ==
+X-Gm-Message-State: AOAM530MFo5qCxmgShEk+y+Qu1ZqoW/UG/GgBnws81xBv9scOIyP0Wre
+        h6Wy3KMWaXjziJ0hTUcioQQ38Tyctpvp2/Mh
+X-Google-Smtp-Source: ABdhPJwdmLZ9tPsAf4H46sMWQthR3e7xLPl69X/OObl2TUeDve+jHfupOIAJ8yGrtV6h3MSoHoleZw==
+X-Received: by 2002:a17:90b:fce:: with SMTP id gd14mr1345409pjb.64.1616205392029;
+        Fri, 19 Mar 2021 18:56:32 -0700 (PDT)
+Received: from localhost.localdomain ([204.44.111.4])
+        by smtp.gmail.com with ESMTPSA id y7sm5755904pgp.23.2021.03.19.18.56.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Mar 2021 18:56:31 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     alexandre.torgue@foss.st.com, rong.a.chen@intel.com,
+        robh+dt@kernel.org, a.fatoum@pengutronix.de,
+        mcoquelin.stm32@gmail.com, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, vladimir.murzin@arm.com,
+        afzal.mohd.ma@gmail.com, gregkh@linuxfoundation.org,
+        erwan.leray@foss.st.com, linux-serial@vger.kernel.org,
+        lkp@intel.com
+Cc:     dillon min <dillon.minfei@gmail.com>
+Subject: [PATCH v4 0/9] ARM: STM32: add art-pi(stm32h750xbh6) board support
+Date:   Sat, 20 Mar 2021 09:56:16 +0800
+Message-Id: <1616205383-24114-1-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add EXTI lines to the following UART nodes which are used for
-wakeup from CStop.
-- EXTI line 26 to USART1
-- EXTI line 27 to USART2
-- EXTI line 28 to USART3
-- EXTI line 29 to USART6
-- EXTI line 30 to UART4
-- EXTI line 31 to UART5
-- EXTI line 32 to UART7
-- EXTI line 33 to UART8
+From: dillon min <dillon.minfei@gmail.com>
 
-Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
+This patchset intend to add art-pi board support, this board developed
+by rt-thread(https://www.rt-thread.org/).
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 4b8031782555..e242d7211059 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -452,32 +452,36 @@
- 		usart2: serial@4000e000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x4000e000 0x400>;
--			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 27 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc USART2_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		usart3: serial@4000f000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x4000f000 0x400>;
--			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 28 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc USART3_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart4: serial@40010000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40010000 0x400>;
--			interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 30 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc UART4_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart5: serial@40011000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40011000 0x400>;
--			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 31 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc UART5_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -577,16 +581,18 @@
- 		uart7: serial@40018000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40018000 0x400>;
--			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 32 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc UART7_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
- 		uart8: serial@40019000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40019000 0x400>;
--			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 33 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc UART8_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -665,8 +671,9 @@
- 		usart6: serial@44003000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x44003000 0x400>;
--			interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 29 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc USART6_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
-@@ -1505,8 +1512,9 @@
- 		usart1: serial@5c000000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x5c000000 0x400>;
--			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupts-extended = <&exti 26 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&rcc USART1_K>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
+Board resources:
+8MiB QSPI flash
+16MiB SPI flash
+32MiB SDRAM
+AP6212 wifi,bt,fm comb
+
+sw context:
+- as stm32h750 just has 128k bytes internal flash, so running a fw on
+  internal flash to download u-boot/kernel to qspi flash, boot
+  u-boot/kernel from qspi flash. this fw is based on rt-thread.
+- kernel can be xip on qspi flash or load to sdram
+- root filesystem is jffs2(created by buildroot), stored on spi flash
+
+to support the boad, add following changes.
+- fix r0-r3, r12 register restore failed after svc call,
+- add dts binding
+- update yaml doc
+
+changes in v4:
+- use unevaluatedProperties: false to fix dtbs_check warrnings instead of
+  add 'bluetooth' in st,stm32-uart.yaml
+
+changes in v3:
+- fix dtbs_check warrning: (8002cbd78fd5 and 4bc21d3dd678)
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: pin-controller:
+     {'type': 'object'} is not allowed for {'#address-cells': [[1]], '#size-cells':
+     [[1]], 'ranges': [[0,
+  
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: 'i2c@40005C00',
+     'i2c@58001C00' do not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$',
+     '^[^@]+$', 'pinctrl-[0-9]+'
+  >> arch/arm/boot/dts/stm32h750i-art-pi.dt.yaml: serial@40004800:
+     'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+changes in v2:
+- reorganize the pinctrl device tree about
+  stm32h7-pinctrl/stm32h743/750-pinctrl
+  stm32h7-pinctrl.dtsi --> stm32h743-pinctrl.dtsi --> stm32h743i-disco.dts
+                         |                          |-> stm32h743i-eval.dts
+                         |-> stm32h750-pinctrl.dtsi --> stm32h750i-art-pi.dts
+  same to the stm32f7/f4's pinctrl style
+- fix author name/copyright mistake
+- add compatible string st,stm32h750-pinctrl to pinctl-stm32h743.c as they
+  have same pin alternate functions, update Kconfig description
+- make item in stm32h750i-art-pi.dts sort by letter
+
+dillon min (9):
+  Documentation: arm: stm32: Add stm32h750 value line doc
+  dt-bindings: arm: stm32: Add compatible strings for ART-PI board
+  dt-bindings: pinctrl: stm32: Add stm32h750 pinctrl
+  ARM: dts: stm32: introduce stm32h7-pinctrl.dtsi to support stm32h750
+  ARM: dts: stm32: add stm32h750-pinctrl.dtsi
+  ARM: dts: stm32: add support for art-pi board based on stm32h750xbh6
+  ARM: stm32: Add a new SOC - STM32H750
+  pinctrl: stm32: Add STM32H750 MCU pinctrl support
+  dt-bindings: serial: stm32: Use 'unevaluatedProperties' instead of
+    'additionalProperties'
+
+ Documentation/arm/index.rst                        |   1 +
+ Documentation/arm/stm32/stm32h750-overview.rst     |  34 +++
+ .../devicetree/bindings/arm/stm32/stm32.yaml       |   4 +
+ .../bindings/pinctrl/st,stm32-pinctrl.yaml         |   1 +
+ .../devicetree/bindings/serial/st,stm32-uart.yaml  |   2 +-
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/stm32h7-pinctrl.dtsi             | 274 ++++++++++++++++++
+ arch/arm/boot/dts/stm32h743-pinctrl.dtsi           | 307 +--------------------
+ arch/arm/boot/dts/stm32h743.dtsi                   | 153 +++++++++-
+ arch/arm/boot/dts/stm32h750-pinctrl.dtsi           |  12 +
+ arch/arm/boot/dts/stm32h750.dtsi                   |   6 +
+ arch/arm/boot/dts/stm32h750i-art-pi.dts            | 229 +++++++++++++++
+ arch/arm/mach-stm32/board-dt.c                     |   1 +
+ drivers/pinctrl/stm32/Kconfig                      |   2 +-
+ drivers/pinctrl/stm32/pinctrl-stm32h743.c          |   3 +
+ 15 files changed, 725 insertions(+), 305 deletions(-)
+ create mode 100644 Documentation/arm/stm32/stm32h750-overview.rst
+ create mode 100644 arch/arm/boot/dts/stm32h7-pinctrl.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750-pinctrl.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750i-art-pi.dts
+
 -- 
-2.17.1
+1.9.1
 
