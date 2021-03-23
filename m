@@ -2,82 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A77345AE1
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Mar 2021 10:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C280345B00
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Mar 2021 10:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbhCWJcU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Mar 2021 05:32:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36950 "EHLO mail.kernel.org"
+        id S229574AbhCWJhK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Mar 2021 05:37:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45828 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230173AbhCWJcG (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Mar 2021 05:32:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CACC61582;
-        Tue, 23 Mar 2021 09:32:05 +0000 (UTC)
+        id S230204AbhCWJgq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 23 Mar 2021 05:36:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 46C8961923;
+        Tue, 23 Mar 2021 09:36:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616491926;
-        bh=ISW4ToMWWfftZ2yf9jhDSf9JFXYLhQme4XKt3jgCRjs=;
+        s=korg; t=1616492205;
+        bh=XfVvk9x0Xl6jSDtegB8uNoxoslvqQA26AIp8nlzMc1I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wZSlrB2vWiVbiTgIZ5SnH6KGwtHEPE20SUal2S4ZXeykFUqiaQLSnMN0Eqe7ZSKxR
-         sgQbXGkn0HCc69T0sfUi3tPCW+VcCYwn8D3QVo/+1ECUK2Y7nn6PauBQFP17fu+BdC
-         NQhyhN/5ZrHfHQlONfaNrLUdJ1+kn+U+oIwvrsVg=
-Date:   Tue, 23 Mar 2021 10:32:03 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Frank Zago <frank@zago.net>
-Cc:     linux-serial@vger.kernel.org
-Subject: Re: [PATCH 1/1] [RFC] USB: serial: ch341: Add I2C support to CH341
- driver
-Message-ID: <YFm1kzrPJ00HhoHR@kroah.com>
-References: <4286affb-bed1-0fc1-1d07-a5cb8d475fb1@zago.net>
+        b=vcdnD4/k/NPetX5KQ5LjborVFa235CkNkYtH5BncC61UcTkYAMKHZakiwrFIUMAR7
+         KJFFa0OLJVwlh/hw7DTxpeGn/CtEfRq+rnHygLfChkt8SwYFqHHSdhkjrKbVrCgGvO
+         I9MTyx95d/6MHA5wMQnQIFq5QzYJlh5SyHsLp9Bc=
+Date:   Tue, 23 Mar 2021 10:36:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v6 2/2] serial: 8250: Add new 8250-core based Broadcom
+ STB driver
+Message-ID: <YFm2qwgNF7H7V54V@kroah.com>
+References: <20210318191131.35992-1-alcooperx@gmail.com>
+ <20210318191131.35992-3-alcooperx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4286affb-bed1-0fc1-1d07-a5cb8d475fb1@zago.net>
+In-Reply-To: <20210318191131.35992-3-alcooperx@gmail.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 10:22:54PM -0500, Frank Zago wrote:
-> The Winchiphead CH341 IC is more than a UART interface. Amongst other
-> things, it can talk to an I2C bus.
-> 
-> Several people have contributed to an out of tree driver: Tse Lun
-> Bien, Marco Gittler and Till Harbaum.
-> 
->   https://github.com/allanbian1017/i2c-ch341-usb.git
-> 
-> This commit integrates the I2C portions into the CH341 serial driver
-> and exposes the I2C device.
-> 
-> Tested with a CH341A, CH341B and CH341T.
-> 
-> Signed-off-by: Frank Zago <frank@zago.net>
-> ---
-> 
-> I didn't find a way to say a USB device has several functions. I
-> followed what the CP210x driver did with gpio, but I think it's a
-> hack. The private data for the I2C part should be linked to the USB
-> device, not the serial port. It works here and in the cp210x driver
-> because there is only 1 serial port in the device. If it had 2 or more
-> ports, I believe bad things would happen. So is there a better way to
-> handle USB devices like that?
-> 
-> For info, the CH341A/B supports 3 different modes, each with a different
-> USB PID, usually selected by jumpers. All of them support I2C, but
-> only 2 support UART, one supports SPI and 2 support GPIOs.
-> 
-> 
->  drivers/usb/serial/Kconfig |   4 +-
->  drivers/usb/serial/ch341.c | 284 ++++++++++++++++++++++++++++++++++++-
->  2 files changed, 283 insertions(+), 5 deletions(-)
+On Thu, Mar 18, 2021 at 03:11:31PM -0400, Al Cooper wrote:
+> +config SERIAL_8250_BCM7271
+> +	bool "Broadcom 8250 based serial port"
 
-$ ./scripts/get_maintainer.pl --file drivers/usb/serial/ch341.c
-Johan Hovold <johan@kernel.org> (maintainer:USB SERIAL SUBSYSTEM)
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-linux-usb@vger.kernel.org (open list:USB SERIAL SUBSYSTEM)
-linux-kernel@vger.kernel.org (open list)
-
-Please always send patches to the proper people and mailing lists,
-otherwise it will be lost :(
+Why can this not be a module?
 
 thanks,
 
