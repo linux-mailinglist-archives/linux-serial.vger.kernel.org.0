@@ -2,62 +2,62 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF939349555
-	for <lists+linux-serial@lfdr.de>; Thu, 25 Mar 2021 16:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0514A34955E
+	for <lists+linux-serial@lfdr.de>; Thu, 25 Mar 2021 16:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhCYPY2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 25 Mar 2021 11:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S231437AbhCYPYa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 25 Mar 2021 11:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbhCYPYU (ORCPT
+        with ESMTP id S231150AbhCYPYV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 25 Mar 2021 11:24:20 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C64C06175F
-        for <linux-serial@vger.kernel.org>; Thu, 25 Mar 2021 08:24:19 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id j9so961978wrx.12
-        for <linux-serial@vger.kernel.org>; Thu, 25 Mar 2021 08:24:19 -0700 (PDT)
+        Thu, 25 Mar 2021 11:24:21 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE5AC061761
+        for <linux-serial@vger.kernel.org>; Thu, 25 Mar 2021 08:24:20 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id x13so2680429wrs.9
+        for <linux-serial@vger.kernel.org>; Thu, 25 Mar 2021 08:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1E9sF10HVEC86a98PFuWKJ9Mp74ZD46Q6KDRkjpEZM4=;
-        b=aEGht26bWiYnI/bWudlTQ+gOMbnqlc8w4EQYhzEYVrx5udt6E6ps2sXMD48X2qbsuN
-         y92CKzFQ9Lfb8SpbMUm3rcp2ThcEH0FaGHeaxY3COdRc4qxVYh2Bm3XOPeNiqikr5qkc
-         uEgrrkIW+YBt/eVRSDBIg3Y/89i1G3WhHly8noKVLeJlcIdUBJ8GVIOE554/CSvgCgLp
-         Wo+iyNx8hQ/b3ZRUsfpWOvuxp4K49Cw/wYZdUP1KbYDm7dWS6ArLmmlvY72HE0kXdMOG
-         xKFKIuv4I1jXPPoNKtLE+0EmWepzGjCa/YkCJ3QCbDNX1Jpp5u1avM3aFMiR9PYO6yO3
-         gdJg==
+        bh=sgzzDhp79bx35r5jKOLNYJfzzmoZjTRizxE5UOSMnpw=;
+        b=ZMGw7DOul3+SQoGvgOttwL1Iac5paKrRtV2ymragAJntKtRTzgfrruwJsrw+Ty0lk+
+         wNgqign0naVJIqRttat6mVH5MB14qMPBfiG/zSOvlLQlHMC5x9s/3bjNyLF8hP7lKj8k
+         Z3ibFMrbX0zZqw7BBDORGwixnLuRZxuE66wrJ/lH2w6N9gjO7O8fDcDuULfZEhEM7D9W
+         5w2hILsvh9ZpNZWP+PmVtX6683aAJJ20mqWEP8BMaElFMedPPqsUns0zIk8TPmt+989B
+         AHphs+HFybvOfPqVyJs4BSgHYEHhAkeMYyJPxv7Zdq31hhLD5BIEEHTJs2mw/+FlAJBF
+         7/5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1E9sF10HVEC86a98PFuWKJ9Mp74ZD46Q6KDRkjpEZM4=;
-        b=XXQzhcZ3K2l4A79U17u9M/XX0JTrhLYifi3wxW4NV1rg/gODMdGC7Jb50niltxQ5Z2
-         tJXLpVDvqTOCYxVoOjYHZmXZoyzm6V07cLAx9wJFrZFLoZx00eUKhkNfc1pNavXeBDRr
-         578QfJZ63V7K35o6guxfyLI5gq/XLlVm7biVpYbIsZ1hFYwoqoheqU96aP39hnL/L1/g
-         NPZwRBrjfOP5Zq9y7lXM6k4H6rf3enkxl0HHB3K1sEOHmnGEH8tnyDn0lsFrHwCk1zNx
-         FIXr+xDjaIqqaKZmCrrhrJmP1AOQktW+BeZ/S5bNZ2UTqAOBPIA2jxNV6DAIlTjB+9si
-         LvNg==
-X-Gm-Message-State: AOAM531WTlTm6GW/Y2/EMkAdhgtQf2qIXS5eF5aRoiO5HxTL78smPKZ4
-        j+ZrGx5GF+yJz7U6MyasQsligg==
-X-Google-Smtp-Source: ABdhPJzqTDL4lVT0INpPHTS+dzfkxTVO9rRKAg7IxpMLVWIsTbtXmKcT+OazzGEAYTUZL1Wj1b51hA==
-X-Received: by 2002:a5d:4d8d:: with SMTP id b13mr9433139wru.259.1616685858371;
-        Thu, 25 Mar 2021 08:24:18 -0700 (PDT)
+        bh=sgzzDhp79bx35r5jKOLNYJfzzmoZjTRizxE5UOSMnpw=;
+        b=VRRGWc4zW8G5ZtRtHhCOdo1xCItPYcto+LMeUNz0UyYHcttcwT/cUjeZUwbvnAUqrW
+         xo+CUk9zzB8JHzjky/Je+mPYpem12eYXs4aZi3WYUb0sjodE9v6ArfQONgzIMBbPKm9H
+         n6x/HiHs6gxwyDGVpBVLY6Q8/oV2tAkAD5UQ9o7VYHy5K9lG6X1nLrSb7ux3Q69As8l5
+         Fb3avul2s94wqBRrx0GKDa+o+Hyvx1bOtvHnG6eSTl9H+zJODmSsN+nhD737FN3qnqE4
+         cwmsH1KZlEx9QllCYW4ljJHCQ+i4Oogl4Yxpk7BtmjrJZ176M4P0KbNssCTfS1DHyIQu
+         zsrw==
+X-Gm-Message-State: AOAM531McZmPPu8aNwe9rPLnyogl1wHbr8B+WiOH1tlyA+jx6+t5w6/G
+        5RWdSQSKjHW43Wro6iJ4KuzOqw==
+X-Google-Smtp-Source: ABdhPJzwib9nqK77IORZQzCGahRNUu/JMVR4TWOE9ehuvIgER+dQxfV5hsZAf8zkflsy93kN7/d/kQ==
+X-Received: by 2002:a5d:638f:: with SMTP id p15mr9566480wru.220.1616685859525;
+        Thu, 25 Mar 2021 08:24:19 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:90c:e290:b105:9672:b0a:5820])
-        by smtp.gmail.com with ESMTPSA id p18sm7395260wrs.68.2021.03.25.08.24.17
+        by smtp.gmail.com with ESMTPSA id p18sm7395260wrs.68.2021.03.25.08.24.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 08:24:17 -0700 (PDT)
+        Thu, 25 Mar 2021 08:24:19 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     gregkh@linuxfoundation.org
 Cc:     devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 1/3] dt-bindings: serial: amlogic,meson-uart: add fifo-size property
-Date:   Thu, 25 Mar 2021 16:24:08 +0100
-Message-Id: <20210325152410.1795557-2-narmstrong@baylibre.com>
+        Kevin Hilman <khilman@baylibre.com>
+Subject: [PATCH v2 2/3] tty: serial: meson: retrieve port FIFO size from DT
+Date:   Thu, 25 Mar 2021 16:24:09 +0100
+Message-Id: <20210325152410.1795557-3-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210325152410.1795557-1-narmstrong@baylibre.com>
 References: <20210325152410.1795557-1-narmstrong@baylibre.com>
@@ -67,33 +67,45 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On most of the Amlogic SoCs, the first UART controller in the "Everything-Else"
-power domain has 128bytes of RX & TX FIFO, so add an optional property to describe
-a different FIFO size from the other ports (64bytes).
+Now the DT bindings has a property to get the FIFO size for a particular port,
+retrieve it and use to setup the FIFO interrupts threshold.
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 ---
- .../devicetree/bindings/serial/amlogic,meson-uart.yaml      | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/serial/meson_uart.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-index 75ebc9952a99..8ece7f420c19 100644
---- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-@@ -55,6 +55,12 @@ properties:
-       - const: pclk
-       - const: baud
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index 69eeef9edfa5..ce4dbfb0bd24 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -717,6 +717,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+ {
+ 	struct resource *res_mem, *res_irq;
+ 	struct uart_port *port;
++	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
+ 	int ret = 0;
+ 	int id = -1;
  
+@@ -743,6 +744,8 @@ static int meson_uart_probe(struct platform_device *pdev)
+ 	if (!res_irq)
+ 		return -ENODEV;
+ 
++	of_property_read_u32(pdev->dev.of_node, "fifo-size", &fifosize);
 +
-+  fifo-size:
-+    description: The fifo size supported by the UART channel.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [64, 128]
-+
- required:
-   - compatible
-   - reg
+ 	if (meson_ports[pdev->id]) {
+ 		dev_err(&pdev->dev, "port %d already allocated\n", pdev->id);
+ 		return -EBUSY;
+@@ -772,7 +775,7 @@ static int meson_uart_probe(struct platform_device *pdev)
+ 	port->type = PORT_MESON;
+ 	port->x_char = 0;
+ 	port->ops = &meson_uart_ops;
+-	port->fifosize = 64;
++	port->fifosize = fifosize;
+ 
+ 	meson_ports[pdev->id] = port;
+ 	platform_set_drvdata(pdev, port);
 -- 
 2.25.1
 
