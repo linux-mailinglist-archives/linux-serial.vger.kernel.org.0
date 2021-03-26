@@ -2,107 +2,163 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F038934A64D
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Mar 2021 12:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7FA34A76F
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Mar 2021 13:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbhCZLPu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Mar 2021 07:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S230135AbhCZMlH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Mar 2021 08:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbhCZLPl (ORCPT
+        with ESMTP id S229839AbhCZMlD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Mar 2021 07:15:41 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1745C0613AA;
-        Fri, 26 Mar 2021 04:15:41 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x26so4710057pfn.0;
-        Fri, 26 Mar 2021 04:15:41 -0700 (PDT)
+        Fri, 26 Mar 2021 08:41:03 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED80C0613AA;
+        Fri, 26 Mar 2021 05:41:02 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h13so6141790eds.5;
+        Fri, 26 Mar 2021 05:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ioUVrq22UmzpyRrEEDvYTk5HDeFP8YOT2+8IMC1K0uU=;
-        b=gOD0I1pRNyONW/xXRl8dt4+/st8jADont9iazDC7dfBAmcLVSkyP7ZxJRBC/1yQJwv
-         6RuuOnOkW/y3Uwe/+oPyOnNNazrl/J+T8CVzj0aMqY45VNnx57iqcE/PZKCYWSgOOkiK
-         0jXg3c6Cm8/VGgmxv4r/k2teNmy8CcpoJxmrAkdJrgowzr5i9Z/G7xZnqDujszYPqvj5
-         PqvTycRBP0A2nME6Am7yCVvZbgL/tdeU5tWyh78hMNhzhPeVksadfs2QC41U6BTWng38
-         jDmn209/l8FeuIziDqamX8ZG/N+f3gyxECGcAJsHdZqM0Qw6uGRDkdO98g1dTJWg1VrJ
-         2B0w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Ai/sBaJhqrRCWGFUEsUnLWF/QfwBQ52U7SGdirULJxA=;
+        b=uCjETYGYNoXkWFnAnxrREMGnWCf4CT3WkSUcUIwelIYp/DG4PNHW59MxV0ndLkmKgw
+         L2IWwNo6EyYyTYDtD8OnYmHTc3e6jv9884w6qBn83ztCcGKzBTfT9VZi4FrsY0fAmdgD
+         ur9rC0Au9YibHKnhDtRtnuR6TmiDKHMLiKkdFQBru/Rg3CNOG0AO1xf2t/BfGdTfqqmA
+         XwvFfXkcKbOAT7hy7hseEdn4+/SVJmzCmlcRTdfpBXzf34azVckBOAtF5T9AGODNsmHi
+         JB9fYSTh7FLf8XAc67eXw0GuTEJ4SVHnGJeGbaLRFM/fngNYTBDvYjVjkIiDqEkKOz/Z
+         NJ0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ioUVrq22UmzpyRrEEDvYTk5HDeFP8YOT2+8IMC1K0uU=;
-        b=QK2ql8EQUDgYazrprqff49pNfx1ezNzLe2KBn1mzck7Eag4XE+OptCq+sF7fI4MbNa
-         qt9jQW0PcDmOkYKPgWIfwtVecdwfhy1OkpRuCIjBLOqhQ8RZp4WOH+GwSY6i6FUUIolM
-         CXiNfP1bmX85v7Hrn0Su1WxkpDAvW29uS0eA1vH7p1MfChobdlDsXf4nJp5xEUzklIU4
-         Et0DhBY7UJQVxZnsa8pWxSXI9E7fJfkPv4pG29nP1Vk4cK+Z1Z/DztluRr7YYE9tFhkC
-         +Xk/N9x4srGGrpvprwUkh0VV0REn3IcWDXPGHKpJsI7P+45bWCN6ertxCyHt+Hqd8u8l
-         gVow==
-X-Gm-Message-State: AOAM531r4YubQ189b3TF4sFoApTGceP2oWbQ/aNr8KniYz9l9VO1xJ8r
-        Uwox6SIO2kKzQTlgSMb4Hdk=
-X-Google-Smtp-Source: ABdhPJygZqLH08IY9AUgbpjaTPpUsohQHVfAon9iSpi97ZOyGUyiIvy5UmRVEtvAdDxc0CVKKiwpKQ==
-X-Received: by 2002:a62:bd03:0:b029:21d:b680:db15 with SMTP id a3-20020a62bd030000b029021db680db15mr11940509pff.25.1616757341247;
-        Fri, 26 Mar 2021 04:15:41 -0700 (PDT)
-Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
-        by smtp.gmail.com with ESMTPSA id l3sm8108414pfc.81.2021.03.26.04.15.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Mar 2021 04:15:40 -0700 (PDT)
-From:   dillon.minfei@gmail.com
-To:     robh@kernel.org, valentin.caron@foss.st.com,
-        Alexandre.torgue@foss.st.com, rong.a.chen@intel.com,
-        a.fatoum@pengutronix.de, mcoquelin.stm32@gmail.com,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, vladimir.murzin@arm.com,
-        afzal.mohd.ma@gmail.com, gregkh@linuxfoundation.org,
-        erwan.leray@foss.st.com, erwan.leray@st.com,
-        linux-serial@vger.kernel.org, lkp@intel.com
-Cc:     dillon min <dillon.minfei@gmail.com>
-Subject: [PATCH v6 9/9] dt-bindings: serial: stm32: Use 'type: object' instead of false for 'additionalProperties'
-Date:   Fri, 26 Mar 2021 19:15:02 +0800
-Message-Id: <1616757302-7889-8-git-send-email-dillon.minfei@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1616757302-7889-1-git-send-email-dillon.minfei@gmail.com>
-References: <1616757302-7889-1-git-send-email-dillon.minfei@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ai/sBaJhqrRCWGFUEsUnLWF/QfwBQ52U7SGdirULJxA=;
+        b=PskyuHmVOQ7HEj1LDTVXQ1f6BBNHgfkTXhdCl8prHgTNxtonMOGlIHSwp2tZCSeXHB
+         bXdyGgXwkqzKkPvCDXO9FNpEA5M24TEazXVLarTHCnB7sOff0fCcXMO1YPB7rQEE0kcu
+         oi1ObVOy5AoV0S763IeokLDhDQF+SWDjRyQdaGN9YZehJNDADc8ch0fFirS/S8RG4xT9
+         mSHRFt/wSLQaXoQHNKnwD9Szs89YpTchjEd3clrg0Kr+59M2Fuh7f+rrHCTPP7L1scAk
+         dDvYzuNF/VKpc0ohE7+itMixgpjVSko4NtZhGm1kL5ZvgRTiuTo0lLpFrTxs5bQrM+fm
+         BHzA==
+X-Gm-Message-State: AOAM533MrmKCwoOhVpgX7K1zK5BOuc0VyOXlaQkLTpT8UwRc3c1KN2xT
+        KuD8J3nimkYrTTxxhky1UGI=
+X-Google-Smtp-Source: ABdhPJyBfhRplv3kSXtcQVbf9j3CtTsxKbJ2vdFf6xxPS0KZwTr0+U5i0X7OFEFWWah2Xup+2PjS6w==
+X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr14885368edb.189.1616762461102;
+        Fri, 26 Mar 2021 05:41:01 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id x1sm3830371eji.8.2021.03.26.05.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Mar 2021 05:40:59 -0700 (PDT)
+Date:   Fri, 26 Mar 2021 13:41:22 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Clean-up undocumented compatible strings
+Message-ID: <YF3WctL0BJON130C@orome.fritz.box>
+References: <20210316194918.3528417-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="anrc3HovXG4wMGPC"
+Content-Disposition: inline
+In-Reply-To: <20210316194918.3528417-1-robh@kernel.org>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: dillon min <dillon.minfei@gmail.com>
 
-To use additional properties 'bluetooth' on serial, need replace false with
-'type: object' for 'additionalProperties' to make it as a node, else will
-run into dtbs_check warnings.
+--anrc3HovXG4wMGPC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-'arch/arm/boot/dts/stm32h750i-art-pi.dt.yaml: serial@40004800:
-'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
+On Tue, Mar 16, 2021 at 01:49:18PM -0600, Rob Herring wrote:
+> Adding checks for undocumented compatible strings reveals a bunch of
+> warnings in the DT binding examples. Fix the cases which are typos, just
+> a mismatch between the schema and the example, or aren't documented at al=
+l.
+> In a couple of cases, fixing the compatible revealed some schema errors
+> which are fixed.
+>=20
+> There's a bunch of others remaining after this which have bindings, but
+> those aren't converted to schema yet.
+>=20
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-i3c@lists.infradead.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../clock/allwinner,sun4i-a10-pll1-clk.yaml   |  2 +-
+>  .../bindings/clock/milbeaut-clock.yaml        | 12 +++++----
+>  .../bindings/display/brcm,bcm2835-dsi0.yaml   |  6 -----
+>  .../bindings/display/panel/panel-dpi.yaml     |  2 +-
+>  .../devicetree/bindings/dma/qcom,gpi.yaml     |  2 +-
+>  .../devicetree/bindings/i3c/i3c.yaml          |  7 ++---
+>  .../iio/adc/brcm,iproc-static-adc.yaml        |  5 ----
+>  .../iio/gyroscope/nxp,fxas21002c.yaml         |  2 +-
+>  .../bindings/iio/light/upisemi,us5182.yaml    |  4 +--
+>  .../interrupt-controller/loongson,htpic.yaml  |  2 +-
+>  .../devicetree/bindings/leds/leds-lgm.yaml    | 26 ++++++++++++++++---
+>  .../bindings/phy/ti,phy-j721e-wiz.yaml        |  2 +-
+>  .../bindings/power/supply/cw2015_battery.yaml |  2 +-
+>  .../bindings/power/supply/power-supply.yaml   | 22 ----------------
+>  .../devicetree/bindings/serial/serial.yaml    |  2 +-
+>  .../bindings/spi/amlogic,meson-gx-spicc.yaml  |  4 +--
+>  .../bindings/spi/spi-controller.yaml          | 21 ++++++++-------
+>  .../devicetree/bindings/spi/spi-mux.yaml      |  8 ++----
+>  .../devicetree/bindings/spi/st,stm32-spi.yaml |  6 -----
+>  19 files changed, 58 insertions(+), 79 deletions(-)
 
-Fixes: af1c2d81695b ("dt-bindings: serial: Convert STM32 UART to json-schema")
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Valentin Caron <valentin.caron@foss.st.com>
-Signed-off-by: dillon min <dillon.minfei@gmail.com>
----
+Acked-by: Thierry Reding <thierry.reding@gmail.com>
 
-v6: no changes
+--anrc3HovXG4wMGPC
+Content-Type: application/pgp-signature; name="signature.asc"
 
- Documentation/devicetree/bindings/serial/st,stm32-uart.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-index 8631678283f9..865be05083c3 100644
---- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-@@ -80,7 +80,8 @@ required:
-   - interrupts
-   - clocks
- 
--additionalProperties: false
-+additionalProperties:
-+  type: object
- 
- examples:
-   - |
--- 
-2.7.4
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmBd1nIACgkQ3SOs138+
+s6EKNw/+PWZ5d3e0xEwvPK7F2Ar6aLwrAZTugsDRjLWV08E7tyOy+G9o7fONJcWa
+rYcXHvrQzc3Vr6/H0Aht9gv8h4N1ouQlIYbKkommVUDHWZlKKKKuf2UW9DeIzbLp
+jRdHkqZsdlRy/1UZGl7oXPsDf+OIYG04QbOA1+uBhqW+BdpfEC59ouN/KDCou9aq
+7JvFVhtOB5SZBDQhNNyY9VINpf7uHivV+onqfwg40fO/QTkYaHINb29gb73NBZWr
+fqP16h7YrpKw+JqePYucWisMfZ8hubG6mNypAlhnRBdaqhoPm+OwmRFfbb9hE0f4
+VtTBHT2HndgpshRyqJZegJUueeRQX5scz0IYfDdpHSvJ/+bvZ3HwmxOG3XHOIsEz
+o36PE9KKIX3b9PZqEtMrNfnC7a9KzlnGJzQ0N+ZKvNZufnlkpbGuKC2PN/gTnADi
+p6Shg4Nz6Jg67p2nWhIoFWMA1sYd1b18urfFn133K3B4R+6ox7NfDl7jDoLO//rO
+qxgp4aySmSZyGC0LnhX/rjThoVGggs/Ph99sxbDaObX1bed7K/3MVfuFHv9dgNxq
+BMerE+S1zd+XdeI1iSdQ459gqtFuWyTNTX4Atm3ddd+7P1Ay7iRMjyAjZ5MgwUvn
+NUVQ+ss5oAt4BguhMPXeKvkkJEDQWl8xSzXm5qd39jSxZ06FAL8=
+=w24T
+-----END PGP SIGNATURE-----
 
+--anrc3HovXG4wMGPC--
