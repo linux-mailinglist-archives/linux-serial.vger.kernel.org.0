@@ -2,39 +2,39 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C8C34B3D4
-	for <lists+linux-serial@lfdr.de>; Sat, 27 Mar 2021 03:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297F134B3D2
+	for <lists+linux-serial@lfdr.de>; Sat, 27 Mar 2021 03:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbhC0C1L (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Mar 2021 22:27:11 -0400
-Received: from mga14.intel.com ([192.55.52.115]:45101 "EHLO mga14.intel.com"
+        id S230176AbhC0C1K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Mar 2021 22:27:10 -0400
+Received: from mga17.intel.com ([192.55.52.151]:42112 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230318AbhC0C0j (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        id S230239AbhC0C0j (ORCPT <rfc822;linux-serial@vger.kernel.org>);
         Fri, 26 Mar 2021 22:26:39 -0400
-IronPort-SDR: VBCh+Kj0wep6ohQypskJ9J5aJW5S7NnjLZnOAKMA1r9gbAZoCc1d+nnMZALu/OQrGEC9IzkswM
- 43Jm1EVGYRLg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190698645"
+IronPort-SDR: DAZDm1lT23YudDjjWeQs3FAsw2GJMLKm/Ti1yC7875qmcmWNKIQYbn50tkfSIvsnwab/yegjWn
+ jC+5GfIBXxcA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="171251815"
 X-IronPort-AV: E=Sophos;i="5.81,282,1610438400"; 
-   d="scan'208";a="190698645"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 19:26:38 -0700
-IronPort-SDR: UcH1oYdyFqq3FgK6Ik2Gi/TqISxssluA2J5rzsJabGfEspNUDAIe1ktLEKUf9y4ynMuJUUuAhA
- VyiQUqg3NDlA==
+   d="scan'208";a="171251815"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 19:26:38 -0700
+IronPort-SDR: cUfZAYfdgimhQnKZypSlbA1x1Ui+nz4hehBjTItS3wct5PROit+F5NoRUdo1IKtjg8GTtGD3zL
+ Kgjq+0QAuO8g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,282,1610438400"; 
-   d="scan'208";a="382851176"
+   d="scan'208";a="443608493"
 Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Mar 2021 19:26:36 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 26 Mar 2021 19:26:36 -0700
 Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lPyeq-0003AD-4i; Sat, 27 Mar 2021 02:26:36 +0000
-Date:   Sat, 27 Mar 2021 10:26:16 +0800
+        id 1lPyeq-0003AG-6Y; Sat, 27 Mar 2021 02:26:36 +0000
+Date:   Sat, 27 Mar 2021 10:26:23 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS WITH WARNING
- 41a469482de257ea8db43cf74b6311bd055de030
-Message-ID: <605e97c8.3AMrm/aOtUSMsCNU%lkp@intel.com>
+Subject: [tty:tty-linus] BUILD SUCCESS
+ 29d96eb261345c8d888e248ae79484e681be2faa
+Message-ID: <605e97cf.FLILlChxHBtxhRzS%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,35 +43,16 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: 41a469482de257ea8db43cf74b6311bd055de030  serial: 8250: Add new 8250-core based Broadcom STB driver
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
+branch HEAD: 29d96eb261345c8d888e248ae79484e681be2faa  soc: qcom-geni-se: Cleanup the code to remove proxy votes
 
-possible Warning in current branch:
+elapsed time: 724m
 
-arch/arm/boot/dts/exynos4210-i9100.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-arch/arm/boot/dts/exynos4210-trats.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-arch/arm/boot/dts/exynos4412-i9300.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-arch/arm/boot/dts/exynos4412-i9305.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-arch/arm/boot/dts/exynos4412-n710x.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-arch/arm/boot/dts/exynos4412-p4note-n8010.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-arch/arm/boot/dts/exynos4412-trats2.dt.yaml: serial@13800000: 'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- arm-defconfig
-    |-- arch-arm-boot-dts-exynos4210-i9100.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-    |-- arch-arm-boot-dts-exynos4210-trats.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-    |-- arch-arm-boot-dts-exynos4412-i9300.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-    |-- arch-arm-boot-dts-exynos4412-i9305.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-    |-- arch-arm-boot-dts-exynos4412-n71.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-    |-- arch-arm-boot-dts-exynos4412-p4note-n8010.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-    `-- arch-arm-boot-dts-exynos4412-trats2.dt.yaml:serial:bluetooth-does-not-match-any-of-the-regexes:pinctrl
-
-elapsed time: 723m
-
-configs tested: 170
+configs tested: 163
 configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
 gcc tested configs:
 arm                                 defconfig
@@ -79,25 +60,31 @@ arm64                            allyesconfig
 arm64                               defconfig
 arm                              allyesconfig
 arm                              allmodconfig
-x86_64                           allyesconfig
 riscv                            allmodconfig
+x86_64                           allyesconfig
 i386                             allyesconfig
 riscv                            allyesconfig
+powerpc                     mpc5200_defconfig
+arm                        shmobile_defconfig
+powerpc                     ep8248e_defconfig
+powerpc                     ksi8560_defconfig
 sh                ecovec24-romimage_defconfig
 arc                    vdk_hs38_smp_defconfig
 m68k                         amcore_defconfig
 m68k                           sun3_defconfig
 powerpc                      pmac32_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                          gemini_defconfig
+powerpc                        icon_defconfig
 arm                         hackkit_defconfig
 arm                         lpc18xx_defconfig
 sh                          kfr2r09_defconfig
 sh                           se7780_defconfig
 arm                          moxart_defconfig
-powerpc                     ep8248e_defconfig
 openrisc                            defconfig
 sh                         microdev_defconfig
-powerpc                          allmodconfig
 arm                          ixp4xx_defconfig
+powerpc                          allmodconfig
 nios2                         10m50_defconfig
 powerpc                       holly_defconfig
 arm                          exynos_defconfig
@@ -108,66 +95,41 @@ ia64                          tiger_defconfig
 powerpc                         wii_defconfig
 mips                      pistachio_defconfig
 powerpc                 mpc837x_mds_defconfig
-powerpc                       ebony_defconfig
-arm                            pleb_defconfig
-m68k                        mvme147_defconfig
-microblaze                          defconfig
-powerpc                      cm5200_defconfig
-parisc                generic-64bit_defconfig
-mips                             allmodconfig
-arm                       spear13xx_defconfig
 mips                            ar7_defconfig
 powerpc                          g5_defconfig
 ia64                            zx1_defconfig
-arc                          axs101_defconfig
-arm                       imx_v4_v5_defconfig
-m68k                       m5249evb_defconfig
-arm                        mini2440_defconfig
-ia64                             allyesconfig
+arm                       spear13xx_defconfig
 arm                          pxa3xx_defconfig
 arm                       aspeed_g5_defconfig
 mips                     loongson1c_defconfig
 sparc                            alldefconfig
 mips                           rs90_defconfig
+powerpc                      pcm030_defconfig
+xtensa                  audio_kc705_defconfig
+arm                          pxa168_defconfig
+arm                           sunxi_defconfig
+powerpc                       ebony_defconfig
 sh                             sh03_defconfig
 arm                   milbeaut_m10v_defconfig
 arm                        multi_v7_defconfig
 powerpc                          allyesconfig
-powerpc                   bluestone_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                      acadia_defconfig
-arm                       multi_v4t_defconfig
-arm                            mps2_defconfig
-arm                          pxa910_defconfig
-powerpc                      arches_defconfig
-powerpc                       eiger_defconfig
 sh                      rts7751r2d1_defconfig
 alpha                            alldefconfig
 arm                         s3c2410_defconfig
 sh                            migor_defconfig
-powerpc                    sam440ep_defconfig
-sparc                       sparc64_defconfig
-sh                          polaris_defconfig
-powerpc                      walnut_defconfig
-arm                         s3c6400_defconfig
-m68k                             allmodconfig
 arm                     eseries_pxa_defconfig
 sh                            titan_defconfig
 arm                       cns3420vb_defconfig
 arm                          imote2_defconfig
 mips                          rb532_defconfig
-powerpc                     mpc5200_defconfig
-mips                           mtx1_defconfig
-sh                             shx3_defconfig
-xtensa                  cadence_csp_defconfig
 arm                         palmz72_defconfig
 arm                         mv78xx0_defconfig
-alpha                            allyesconfig
 mips                            gpr_defconfig
-powerpc                       maple_defconfig
-powerpc                    socrates_defconfig
-powerpc                      bamboo_defconfig
-m68k                                defconfig
+alpha                            allyesconfig
+powerpc                     powernv_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                      cm5200_defconfig
+um                               allyesconfig
 sh                           se7206_defconfig
 sh                           sh2007_defconfig
 powerpc                 mpc834x_mds_defconfig
@@ -175,8 +137,20 @@ sh                        sh7763rdp_defconfig
 m68k                       m5275evb_defconfig
 mips                           ci20_defconfig
 arc                        nsimosci_defconfig
+i386                             alldefconfig
+mips                        nlm_xlr_defconfig
+mips                  decstation_64_defconfig
+mips                           ip22_defconfig
+arm                        trizeps4_defconfig
+powerpc                  mpc885_ads_defconfig
+mips                        omega2p_defconfig
+powerpc                      katmai_defconfig
+powerpc                 mpc8315_rdb_defconfig
 ia64                             allmodconfig
 ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
 m68k                             allyesconfig
 nios2                               defconfig
 arc                              allyesconfig
@@ -199,6 +173,7 @@ sparc                               defconfig
 i386                               tinyconfig
 i386                                defconfig
 mips                             allyesconfig
+mips                             allmodconfig
 powerpc                           allnoconfig
 x86_64               randconfig-a002-20210327
 x86_64               randconfig-a003-20210327
@@ -231,7 +206,6 @@ riscv                               defconfig
 riscv                          rv32_defconfig
 um                               allmodconfig
 um                                allnoconfig
-um                               allyesconfig
 um                                  defconfig
 x86_64                    rhel-8.3-kselftests
 x86_64                              defconfig
