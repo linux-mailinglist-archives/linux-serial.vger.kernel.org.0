@@ -2,101 +2,173 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 205AE34DD03
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Mar 2021 02:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740A634DE69
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Mar 2021 04:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhC3AcN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Mar 2021 20:32:13 -0400
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:38343 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhC3Ab7 (ORCPT
+        id S231139AbhC3C3O (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Mar 2021 22:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230494AbhC3C3H (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Mar 2021 20:31:59 -0400
-X-Greylist: delayed 424 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Mar 2021 20:31:59 EDT
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id CDBB3373;
-        Mon, 29 Mar 2021 17:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1617063894;
-        bh=/9ihArs2Y5nqE6CHv1WmVwDQQrPL9NzAFux7u/c08ww=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OOrxlajmImZXKgUN3fi/ETblSJLGwuBqdMn1HtNxikoj8n19rQG/xf+Hboe3gORv4
-         KuW1Twxqb3ZHyaUBeu9RDLXzrsncDXXqiP7d/1pwO+TyPcrALgnmc+NZf61eCKYm1i
-         3HjgiNvg0r9a0MWJM1/a0VyQqd35yBa/0AxhcEzc=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        - <devicetree@vger.kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH 2/3] dt-bindings: serial: 8250: update for aspeed,sirq-active-high
-Date:   Mon, 29 Mar 2021 19:23:37 -0500
-Message-Id: <20210330002338.335-3-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210330002338.335-1-zev@bewilderbeest.net>
-References: <20210330002338.335-1-zev@bewilderbeest.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 29 Mar 2021 22:29:07 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D855AC061762;
+        Mon, 29 Mar 2021 19:29:06 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id v8so5363576plz.10;
+        Mon, 29 Mar 2021 19:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=lu4a0Lz+tvaJ+7tvKxJ5rrNZMNtgZSuhMggyHT8ei7Y=;
+        b=rk9YOylG0DefTSPGN/Odz2q5+vEbI6WB3FVAKOvZrIZ83K4CuDIGyl72XYJCD+diCg
+         Q/ynC83KMQq5ZbPNbeLzLYPFKRZD4NcA8J13fGzlDuF98DiwJ4edHqApzKKlOl6vTg9T
+         QVa2iTNguVD8Q3nL+Ug4ni/kfbgzswNKHfZzu1ihC/3RZvyu8RS/j3SLHL3X8UxnI/F0
+         WEPoQyFvkltff26M9BxUTSv+EuCDS7m3BOYoQG2DxrCmx+F26KpWOfhiJVBE98V4YQK7
+         Sz2SjSDjbW3M4H4SK4e26sLEH3SFSnaxZp3SUxUmQrvqYWrRCqU2mPCeNVZWw/UdIUYu
+         KqTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lu4a0Lz+tvaJ+7tvKxJ5rrNZMNtgZSuhMggyHT8ei7Y=;
+        b=sDJzF70ndNgBM8bkLB+tXe3r1O6ud4fByDSqyjN1uwt+JbqZp2kFsobNw8NrNaM8Fs
+         G9ty/2Dfk30lF+52J1o9B2LyrhUnX8QxE0Sz852mnbmp7pcNbLwcy4z0YDYzsCserUqN
+         dCuKObX89XjUDqhLTGnHMerwZv5WVnY+za9awMe1Buw2dBwCMddM+3/44GdiDs0uA9IH
+         nBI8KHQBuh3tqseGel4t2N80BCX8I3Y3oXLjo3lGl9ZpjDO8VondlpBWMy9JB+GWD98X
+         hzeB1cxYTwNjaPWzRGfciWNCYU+MTDcEwCBnKy3busIb6uUcvTcT2SwH/3ek1o/9erIv
+         5ccw==
+X-Gm-Message-State: AOAM530+WpjI/WZEUgIIjgBJTgBd5Cw2JjkhdHpBcvLynx7DhAiNBJil
+        58bfY8msAGP6J+J7Xgbe18I=
+X-Google-Smtp-Source: ABdhPJwh3gFqmwyzNbfqSdUMLgcsziEuxOYiGIZ8EhkeN0eWDe2/COfEvthZaBJk8UeraaKVWfEzxQ==
+X-Received: by 2002:a17:90a:7f87:: with SMTP id m7mr2011924pjl.64.1617071345387;
+        Mon, 29 Mar 2021 19:29:05 -0700 (PDT)
+Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
+        by smtp.gmail.com with ESMTPSA id i13sm17681385pgi.3.2021.03.29.19.29.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Mar 2021 19:29:04 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     robh@kernel.org, valentin.caron@foss.st.com,
+        Alexandre.torgue@foss.st.com, rong.a.chen@intel.com,
+        a.fatoum@pengutronix.de, mcoquelin.stm32@gmail.com,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, afzal.mohd.ma@gmail.com,
+        gregkh@linuxfoundation.org, erwan.leray@foss.st.com,
+        erwan.leray@st.com, linux-serial@vger.kernel.org, lkp@intel.com,
+        patrice.chotard@foss.st.com
+Cc:     dillon min <dillon.minfei@gmail.com>
+Subject: [PATCH v7 0/6] ARM: STM32: add art-pi(stm32h750xbh6) board support
+Date:   Tue, 30 Mar 2021 10:28:52 +0800
+Message-Id: <1617071338-9436-1-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Update DT bindings documentation for the new incarnation of the
-aspeed,sirq-polarity-sense property.
+From: dillon min <dillon.minfei@gmail.com>
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+This patchset intend to add art-pi board support, this board developed
+by rt-thread(https://www.rt-thread.org/).
+
+Board resources:
+8MiB QSPI flash
+16MiB SPI flash
+32MiB SDRAM
+AP6212 wifi,bt,fm comb
+
+sw context:
+- as stm32h750 just has 128k bytes internal flash, so running a fw on
+  internal flash to download u-boot/kernel to qspi flash, boot
+  u-boot/kernel from qspi flash. this fw is based on rt-thread.
+- kernel can be xip on qspi flash or load to sdram
+- root filesystem is jffs2(created by buildroot), stored on spi flash
+
+to support the boad, add following changes.
+- fix r0-r3, r12 register restore failed after svc call,
+- add dts binding
+- update yaml doc
+
 ---
- Documentation/devicetree/bindings/serial/8250.yaml | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+changes in v7:
+- remove changes in
+  Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+  Hi Rob Herring
+  as you has already ack this patch, please ignore it. thanks
+  history link:
+  https://lore.kernel.org/lkml/1614758717-18223-4-git-send-email-dillon.minfei@gmail.com/
+  https://lore.kernel.org/lkml/20210308195033.GA2855292@robh.at.kernel.org/
+- remove "[PATCH v6 8/9] pinctrl: stm32: Add STM32H750 MCU pinctrl support"
+  remove "[PATCH v6 5/9] ARM: dts: stm32: add stm32h750-pinctrl.dtsi"
+- reference to stm32h743-pinctrl.dtsi in stm32h750i-art-pi.dts
+v6 link:
+https://lore.kernel.org/lkml/1616757302-7889-1-git-send-email-dillon.minfei@gmail.com/
 
-diff --git a/Documentation/devicetree/bindings/serial/8250.yaml b/Documentation/devicetree/bindings/serial/8250.yaml
-index f54cae9ff7b2..0bbb7121f720 100644
---- a/Documentation/devicetree/bindings/serial/8250.yaml
-+++ b/Documentation/devicetree/bindings/serial/8250.yaml
-@@ -13,7 +13,7 @@ allOf:
-   - $ref: /schemas/serial.yaml#
-   - if:
-       required:
--        - aspeed,sirq-polarity-sense
-+        - aspeed,sirq-active-high
-     then:
-       properties:
-         compatible:
-@@ -181,13 +181,11 @@ properties:
-   rng-gpios: true
-   dcd-gpios: true
- 
--  aspeed,sirq-polarity-sense:
--    $ref: /schemas/types.yaml#/definitions/phandle-array
-+  aspeed,sirq-active-high:
-+    type: boolean
-     description: |
--      Phandle to aspeed,ast2500-scu compatible syscon alongside register
--      offset and bit number to identify how the SIRQ polarity should be
--      configured. One possible data source is the LPC/eSPI mode bit. Only
--      applicable to aspeed,ast2500-vuart.
-+      Set to indicate that the SIRQ polarity is active-high (default
-+      is active-low).  Only applicable to aspeed,ast2500-vuart.
- 
- required:
-   - reg
-@@ -227,7 +225,7 @@ examples:
-         interrupts = <8>;
-         clocks = <&syscon ASPEED_CLK_APB>;
-         no-loopback-test;
--        aspeed,sirq-polarity-sense = <&syscon 0x70 25>;
-+        aspeed,sirq-active-high;
-     };
- 
- ...
+changes in v6:
+- add gpiox{gpio-ranges, ngpios} in stm32h7-pinctrl.dtsi
+- add status="disabled" in stm32h743.dtsi 
+
+changes in v5:
+- accroding to rob's suggestion, replace false with 'type: object'
+  of 'additionalProperties'.
+- add Tested-by: Valentin Caron <valentin.caron@foss.st.com>
+
+changes in v4:
+- use unevaluatedProperties: false to fix dtbs_check warrnings instead of
+  add 'bluetooth' in st,stm32-uart.yaml
+
+changes in v3:
+- fix dtbs_check warrning: (8002cbd78fd5 and 4bc21d3dd678)
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: pin-controller:
+     {'type': 'object'} is not allowed for {'#address-cells': [[1]], '#size-cells':
+     [[1]], 'ranges': [[0,
+
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: 'i2c@40005C00',
+     'i2c@58001C00' do not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$',
+     '^[^@]+$', 'pinctrl-[0-9]+'
+  >> arch/arm/boot/dts/stm32h750i-art-pi.dt.yaml: serial@40004800:
+     'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+changes in v2:
+- reorganize the pinctrl device tree about
+  stm32h7-pinctrl/stm32h743/750-pinctrl
+  stm32h7-pinctrl.dtsi --> stm32h743-pinctrl.dtsi --> stm32h743i-disco.dts
+                         |                          |-> stm32h743i-eval.dts
+                         |-> stm32h750-pinctrl.dtsi --> stm32h750i-art-pi.dts
+  same to the stm32f7/f4's pinctrl style
+- fix author name/copyright mistake
+- add compatible string st,stm32h750-pinctrl to pinctl-stm32h743.c as they
+  have same pin alternate functions, update Kconfig description
+- make item in stm32h750i-art-pi.dts sort by letter
+
+*** BLURB HERE ***
+
+dillon min (6):
+  Documentation: arm: stm32: Add stm32h750 value line doc
+  dt-bindings: arm: stm32: Add compatible strings for ART-PI board
+  ARM: dts: stm32: introduce stm32h7-pinctrl.dtsi to support stm32h750
+  ARM: dts: stm32: add support for art-pi board based on stm32h750xbh6
+  ARM: stm32: Add a new SOC - STM32H750
+  dt-bindings: serial: stm32: Use 'type: object' instead of false for
+    'additionalProperties'
+
+ Documentation/arm/index.rst                        |   1 +
+ Documentation/arm/stm32/stm32h750-overview.rst     |  34 ++
+ .../devicetree/bindings/arm/stm32/stm32.yaml       |   4 +
+ .../devicetree/bindings/serial/st,stm32-uart.yaml  |   3 +-
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/stm32h7-pinctrl.dtsi             | 341 +++++++++++++++++++++
+ arch/arm/boot/dts/stm32h743-pinctrl.dtsi           | 307 +------------------
+ arch/arm/boot/dts/stm32h743.dtsi                   | 164 +++++++++-
+ arch/arm/boot/dts/stm32h750.dtsi                   |   6 +
+ arch/arm/boot/dts/stm32h750i-art-pi.dts            | 229 ++++++++++++++
+ arch/arm/mach-stm32/board-dt.c                     |   1 +
+ 11 files changed, 787 insertions(+), 304 deletions(-)
+ create mode 100644 Documentation/arm/stm32/stm32h750-overview.rst
+ create mode 100644 arch/arm/boot/dts/stm32h7-pinctrl.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750i-art-pi.dts
+
 -- 
-2.31.1
+2.7.4
 
