@@ -2,75 +2,146 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24ADC34D8DF
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Mar 2021 22:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1743734DD05
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Mar 2021 02:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbhC2UK4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Mar 2021 16:10:56 -0400
-Received: from a27-81.smtp-out.us-west-2.amazonses.com ([54.240.27.81]:55039
-        "EHLO a27-81.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230395AbhC2UKu (ORCPT
+        id S230248AbhC3AcN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Mar 2021 20:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230212AbhC3Ab7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Mar 2021 16:10:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zzmz6pik4loqlrvo6grmnyszsx3fszus; d=nh6z.net; t=1617048649;
-        h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:References:Message-Id;
-        bh=K7KIbWMyfNkSCg4+/gHzQaPHfkkMmVADENdA1HNdl1I=;
-        b=R0Dvtv5p5WU/1fwv4JbgF5bZdz31q72q+gwFZseQzBrHTRny+vjmDgZIe1Kr9jz/
-        CXySZBy5fyc8jyMawNyb//gIk1TDEb2g+eMDhRX4suE9i3IXJI6pbEeNcUnVoB9z+tn
-        aJyXgn8DQztL+/A/d37OafXezfh/eD7NMrG3qjx0=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=7v7vs6w47njt4pimodk5mmttbegzsi6n; d=amazonses.com; t=1617048649;
-        h=Subject:From:To:Cc:Date:Mime-Version:Content-Type:Content-Transfer-Encoding:References:Message-Id:Feedback-ID;
-        bh=K7KIbWMyfNkSCg4+/gHzQaPHfkkMmVADENdA1HNdl1I=;
-        b=L9yEBe+VAxejLLUEFDZE+4qcdfnGVQEmhK+JDF+ESm1YTsTGqmUbuCp5dy6NXtnS
-        aP5P25MPFGatIo9vEYR5XXymZHizLosZOtbYCh1PLNpXbqmJiIGE6TEV73Uvd9PVXqC
-        jneIPzuulK0SsOXjLd7Slx0UW5oXTZnV9PsTzBis=
-Subject: [PATCH v2] sc16is7xx: Defer probe if device read fails
-From:   =?UTF-8?Q?Annaliese_McDermond?= <nh6z@nh6z.net>
-To:     =?UTF-8?Q?linux-serial=40vger=2Ekernel=2Eorg?= 
-        <linux-serial@vger.kernel.org>,
-        =?UTF-8?Q?gregkh=40linuxfoundation=2Eo?= =?UTF-8?Q?rg?= 
-        <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Annaliese_McDermond?= <nh6z@nh6z.net>,
-        =?UTF-8?Q?jirislaby=40kernel=2Eorg?= <jirislaby@kernel.org>,
-        =?UTF-8?Q?team=40nwdigitalradio=2Ecom?= <team@nwdigitalradio.com>,
-        =?UTF-8?Q?stable=40vger=2Ekernel=2Eorg?= <stable@vger.kernel.org>
-Date:   Mon, 29 Mar 2021 20:10:49 +0000
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <20210329200848.409660-1-nh6z@nh6z.net>
-X-Mailer: Amazon WorkMail
-Thread-Index: AQHXJNebtcpZwxGpQ4q0FBV1tWCzFg==
-Thread-Topic: [PATCH v2] sc16is7xx: Defer probe if device read fails
-X-Original-Mailer: git-send-email 2.27.0
-X-Wm-Sent-Timestamp: 1617048648
-Message-ID: <010101787f9c3fd8-c1815c00-2d6b-4c85-a96a-a13e68597fda-000000@us-west-2.amazonses.com>
-X-SES-Outgoing: 2021.03.29-54.240.27.81
-Feedback-ID: 1.us-west-2.An468LAV0jCjQDrDLvlZjeAthld7qrhZr+vow8irkvU=:AmazonSES
+        Mon, 29 Mar 2021 20:31:59 -0400
+X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 Mar 2021 17:31:59 PDT
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AE5C061762;
+        Mon, 29 Mar 2021 17:31:59 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 1D52E196;
+        Mon, 29 Mar 2021 17:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1617063875;
+        bh=a68ojvNQDbC+AUZLivBjbDIVsO6PemBG+Kg4ci1snXQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RqMybm5NJ4LYIhg26JQHwqz1DqUbeW6JqFIDkVy/f9JY4rOkesBZXpH2elHvtVPwS
+         ScownTse3Njf4e6vksmTwA1+EusamiR6MUBgu/4ambtOYvjDXYKz9WD7Fk8oWItPDJ
+         MTBu7fBKSLQy4SRV3pk7ohlOWnOSfN0knhcL0jOs=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Zev Weiss <zev@bewilderbeest.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 1/3] drivers/tty/serial/8250: simplify Aspeed VUART SIRQ polarity DT config
+Date:   Mon, 29 Mar 2021 19:23:36 -0500
+Message-Id: <20210330002338.335-2-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210330002338.335-1-zev@bewilderbeest.net>
+References: <20210330002338.335-1-zev@bewilderbeest.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-A test was added to the probe function to ensure the device was=0D=0Aactu=
-ally connected and working before successfully completing a=0D=0Aprobe.  =
-If the device was actually there, but the I2C bus was not=0D=0Aready yet =
-for whatever reason, the probe fails permanently.=0D=0A=0D=0AChange the p=
-robe so that we defer the probe on a regmap read=0D=0Afailure so that we =
-try the probe again when the dependent drivers=0D=0Aare potentially loade=
-d.  This should not affect the case where the=0D=0Adevice truly isn't pre=
-sent because the probe will never successfully=0D=0Acomplete.=0D=0A=0D=0A=
-Fixes: 2aa916e67db3 ("sc16is7xx: Read the LSR register for basic device p=
-resence check")=0D=0ACc: stable@vger.kernel.org=0D=0ASigned-off-by: Annal=
-iese McDermond <nh6z@nh6z.net>=0D=0A---=0D=0A drivers/tty/serial/sc16is7x=
-x.c | 2 +-=0D=0A 1 file changed, 1 insertion(+), 1 deletion(-)=0D=0A=0D=0A=
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7x=
-x.c=0D=0Aindex f86ec2d2635b..9adb8362578c 100644=0D=0A--- a/drivers/tty/s=
-erial/sc16is7xx.c=0D=0A+++ b/drivers/tty/serial/sc16is7xx.c=0D=0A@@ -1196=
-,7 +1196,7 @@ static int sc16is7xx_probe(struct device *dev,=0D=0A =09ret=
- =3D regmap_read(regmap,=0D=0A =09=09=09  SC16IS7XX_LSR_REG << SC16IS7XX_=
-REG_SHIFT, &val);=0D=0A =09if (ret < 0)=0D=0A-=09=09return ret;=0D=0A+=09=
-=09return -EPROBE_DEFER;=0D=0A=20=0D=0A =09/* Alloc port structure */=0D=0A=
- =09s =3D devm_kzalloc(dev, struct_size(s, p, devtype->nr_uart), GFP_KERN=
-EL);=0D=0A--=20=0D=0A2.27.0=0D=0A=0D=0A
+The initial implementation of this configuration conflated the SIRQ
+polarity setting with the syscon eSPI/LPC strapping; this patch
+disentangles them by reducing the DT config to a simple boolean.
+
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+ drivers/tty/serial/8250/8250_aspeed_vuart.c | 39 ++-------------------
+ drivers/tty/serial/8250/Kconfig             |  1 -
+ 2 files changed, 2 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+index c33e02cbde93..b9b5fa58ab28 100644
+--- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
++++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+@@ -10,8 +10,6 @@
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+-#include <linux/regmap.h>
+-#include <linux/mfd/syscon.h>
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
+ #include <linux/clk.h>
+@@ -346,30 +344,8 @@ static int aspeed_vuart_handle_irq(struct uart_port *port)
+ 	return 1;
+ }
+ 
+-static void aspeed_vuart_auto_configure_sirq_polarity(
+-	struct aspeed_vuart *vuart, struct device_node *syscon_np,
+-	u32 reg_offset, u32 reg_mask)
+-{
+-	struct regmap *regmap;
+-	u32 value;
+-
+-	regmap = syscon_node_to_regmap(syscon_np);
+-	if (IS_ERR(regmap)) {
+-		dev_warn(vuart->dev,
+-			 "could not get regmap for aspeed,sirq-polarity-sense\n");
+-		return;
+-	}
+-	if (regmap_read(regmap, reg_offset, &value)) {
+-		dev_warn(vuart->dev, "could not read hw strap table\n");
+-		return;
+-	}
+-
+-	aspeed_vuart_set_sirq_polarity(vuart, (value & reg_mask) == 0);
+-}
+-
+ static int aspeed_vuart_probe(struct platform_device *pdev)
+ {
+-	struct of_phandle_args sirq_polarity_sense_args;
+ 	struct uart_8250_port port;
+ 	struct aspeed_vuart *vuart;
+ 	struct device_node *np;
+@@ -468,19 +444,8 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+ 
+ 	vuart->line = rc;
+ 
+-	rc = of_parse_phandle_with_fixed_args(
+-		np, "aspeed,sirq-polarity-sense", 2, 0,
+-		&sirq_polarity_sense_args);
+-	if (rc < 0) {
+-		dev_dbg(&pdev->dev,
+-			"aspeed,sirq-polarity-sense property not found\n");
+-	} else {
+-		aspeed_vuart_auto_configure_sirq_polarity(
+-			vuart, sirq_polarity_sense_args.np,
+-			sirq_polarity_sense_args.args[0],
+-			BIT(sirq_polarity_sense_args.args[1]));
+-		of_node_put(sirq_polarity_sense_args.np);
+-	}
++	if (of_property_read_bool(np, "aspeed,sirq-active-high"))
++		aspeed_vuart_set_sirq_polarity(vuart, 1);
+ 
+ 	aspeed_vuart_set_enabled(vuart, true);
+ 	aspeed_vuart_set_host_tx_discard(vuart, true);
+diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+index 603137da4736..105a325bcdd1 100644
+--- a/drivers/tty/serial/8250/Kconfig
++++ b/drivers/tty/serial/8250/Kconfig
+@@ -254,7 +254,6 @@ config SERIAL_8250_ASPEED_VUART
+ 	tristate "Aspeed Virtual UART"
+ 	depends on SERIAL_8250
+ 	depends on OF
+-	depends on REGMAP && MFD_SYSCON
+ 	help
+ 	  If you want to use the virtual UART (VUART) device on Aspeed
+ 	  BMC platforms, enable this option. This enables the 16550A-
+-- 
+2.31.1
+
