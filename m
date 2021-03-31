@@ -2,421 +2,193 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE6C34F9CB
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Mar 2021 09:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353AD34FB8E
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Mar 2021 10:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbhCaH0V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Mar 2021 03:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S231375AbhCaI3B (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Mar 2021 04:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbhCaH0E (ORCPT
+        with ESMTP id S230350AbhCaI24 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:26:04 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC17AC061574;
-        Wed, 31 Mar 2021 00:26:03 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id u2so16396538ilk.1;
-        Wed, 31 Mar 2021 00:26:03 -0700 (PDT)
+        Wed, 31 Mar 2021 04:28:56 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D7FC061574;
+        Wed, 31 Mar 2021 01:28:55 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id g10so7523203plt.8;
+        Wed, 31 Mar 2021 01:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lAubyl0NdEjn1EosOU/3uTRNGM3PuTNJIWzDeglwhJc=;
-        b=hKgdwlxTIRPkPmMQuIf7D7yTNJ4HwVKLRgRf7//Uk7nF0+t1kQ0d/NEweJ/MMJdzQu
-         qJIbdi9YdqWs40+nEMH2FDRFK1TDDaTC7ptbHDu/je3KFkqGTsI/d3dIj2nZPgrc1cvq
-         ewY+2SjSe2BxjjCWjixPbhjE3JmTUGrB9ZJ8CcfIElvCWmm9wVJtc2EL/pH4B3sTPSoJ
-         LKKn2nWCT4x4DVV7a4Jutnk7Ajfsj8oSbvSqQCYQZ2LXekBAxCF+FD3Ys6S8ErmF7Umv
-         +0Ch5N1LI10NiQDfEPIvfnAEY6Lg4ZDdASwdW3cAu3qNMdwCbJWkLH5o+GSOJa3qaTr8
-         a9eA==
+        h=from:to:cc:subject:date:message-id;
+        bh=LSOlkAz8jg+syisUb5+J8kiWofFRTKNdtiq801zgT0k=;
+        b=AdWe8HdLue+b9OjCYYZHRuxs8xgRUeCnsxLgC61NH4vg9tAkiiUaLaJXkX0aBOLwR6
+         ktyl6FNfM/2413NGnm4AvMyrtUj59BlQM4kGo+5jdusSzQi/NlsrF5yR6NS0wbKKfm/U
+         A4cxM8cInzydCMG65qilnf75cF3nvBuhM0UqYIrO2MXDTWMW8R1Ht/CsLt0LSg6s4kbf
+         MA1oPM4ld9I95FhN9KKSMVwjtrCRtY2akgEm0scvkvJ5n/3fFV0lQHnlDkZtryoUe8Rt
+         q9MxtMmyrrHLQSVG1CFXOabAgmMquO14GJL+R8b/fFoCGcFwSTBuOI5MxcwqXivdPZpM
+         7zEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lAubyl0NdEjn1EosOU/3uTRNGM3PuTNJIWzDeglwhJc=;
-        b=jlw79R1gJwA5FgR+HElu7Di/bel6iaXQlYQsIU80nqOJZq/YcPdtGmOWZhMXLRbO4+
-         f87T5YevRseBuyYRzK6YlA7z2C9DdWAMR5qpwtAYaDpXy1zE1V0spNk/VMyoRY8v0VFr
-         lkHlKBqgX6LncgC8E3D+wFvhzfWimyl9DNdThr5RIvOae36fkIce/K4xcKwBLQcqnGBS
-         Ov6SW3GQ4jOuDKWNoNTKksjdCZ8edFqU6d1MGangkF2SDbGGIjVF7jTV7PePjYQaZWGb
-         cUjoeGJagyMBctQMXaV46cTZ7sLj3LutSkwyTJ1gwCLOaqBCwT+zQGeok93FkZbD7otP
-         DK4w==
-X-Gm-Message-State: AOAM530eWgrbcAVUJgB8fpJvcQUPu6LHjS6jlJPKVWYACiwN1VIZRpe+
-        ka/iV+FcfQTIzFTPorXk8fBOCqSK+uvPIv4wsjg=
-X-Google-Smtp-Source: ABdhPJzTem1Lkxtn5mvVszFb/5k7PTd7NFR37BAPC3r8Pe++D+MJ6vNUHG5c5j711mHLCmkO094KPgfrNSUxJcWnMQ0=
-X-Received: by 2002:a92:d784:: with SMTP id d4mr1639822iln.184.1617175563300;
- Wed, 31 Mar 2021 00:26:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <1617094704-10040-1-git-send-email-dillon.minfei@gmail.com>
- <1617094704-10040-5-git-send-email-dillon.minfei@gmail.com>
- <4df8e7b8-826c-b1d4-0431-4f777e26c383@foss.st.com> <CAL9mu0LKpbraWPX-rgCJcxxX_JfaggTKc+o4P7Uq12Lqo2tMZw@mail.gmail.com>
- <46b6becb-d77e-5385-a5ed-73de253a0ee5@foss.st.com>
-In-Reply-To: <46b6becb-d77e-5385-a5ed-73de253a0ee5@foss.st.com>
-From:   dillon min <dillon.minfei@gmail.com>
-Date:   Wed, 31 Mar 2021 15:25:27 +0800
-Message-ID: <CAL9mu0JmzK57FAM8HgssLHLadMKysh5Dk9p0OnZr=QJY3HtDSw@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] ARM: dts: stm32: add support for art-pi board
- based on stm32h750xbh6
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Valentin CARON - foss <valentin.caron@foss.st.com>,
-        rong.a.chen@intel.com, Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LSOlkAz8jg+syisUb5+J8kiWofFRTKNdtiq801zgT0k=;
+        b=CTBr086abnsM/qqzdpm3DKljU8Am6n3mSRK7RwmArBbeqGODy4xYozhGDPF/U9IwCD
+         bOXbi5hpEcmJg1r6xLqR4VVK+h6CzQq8ccqPqiS7fm10H933yT/Ncb47c1Ro5fHUxmkN
+         Wdb56rKxcutbkt5Qgc832lYjuWGNiCmu53vv266CtsWRXWtHE//tD9akb6lF3JwV5lQ2
+         45akfeKO0yZ/U7SyD+m8vtL9i2Vnm7Av42RZFXaaXVf2hym5ytU1KmU3OzUc4eRwpcxt
+         QkOaAENvxrxmrEs60S7d1FX47ONX2dSh9XGJhPnUc+cZ9r9tyGVSbV7FPOriJGJsy3GG
+         PcBg==
+X-Gm-Message-State: AOAM532DcnSiDNIRJUUyOh1cu9VtU+SZ90+We9fhRLRQ8lXsfIOiy7Mr
+        WMOMoivg5S1zNEHmXY8gBUc=
+X-Google-Smtp-Source: ABdhPJySG41kxsf0qEO8iBvn2FDWddLbPMwCdtSXE4dBjTEsdFU7YoF1X5b8YZz8i/ZHhgu+FXJOyQ==
+X-Received: by 2002:a17:90a:e2ca:: with SMTP id fr10mr2390380pjb.154.1617179335231;
+        Wed, 31 Mar 2021 01:28:55 -0700 (PDT)
+Received: from fmin-OptiPlex-7060.nreal.work ([137.59.103.165])
+        by smtp.gmail.com with ESMTPSA id v1sm1420991pjt.1.2021.03.31.01.28.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 31 Mar 2021 01:28:54 -0700 (PDT)
+From:   dillon.minfei@gmail.com
+To:     robh@kernel.org, valentin.caron@foss.st.com,
+        Alexandre.torgue@foss.st.com, rong.a.chen@intel.com,
+        a.fatoum@pengutronix.de, mcoquelin.stm32@gmail.com,
+        devicetree@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux@armlinux.org.uk, afzal.mohd.ma@gmail.com,
-        gregkh@linuxfoundation.org,
-        Erwan LE-RAY - foss <erwan.leray@foss.st.com>,
-        Erwan LE RAY <erwan.leray@st.com>,
-        linux-serial@vger.kernel.org, lkp@intel.com,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
+        gregkh@linuxfoundation.org, erwan.leray@foss.st.com,
+        erwan.leray@st.com, linux-serial@vger.kernel.org, lkp@intel.com,
+        patrice.chotard@foss.st.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, pali@kernel.org,
+        mchehab+huawei@kernel.org, andrew@lunn.ch
+Cc:     dillon min <dillon.minfei@gmail.com>
+Subject: [PATCH v9 0/6] ARM: STM32: add art-pi(stm32h750xbh6) board support
+Date:   Wed, 31 Mar 2021 16:28:39 +0800
+Message-Id: <1617179325-6383-1-git-send-email-dillon.minfei@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 3:18 PM Alexandre TORGUE
-<alexandre.torgue@foss.st.com> wrote:
->
-> Hi Dillon
->
-> On 3/31/21 12:43 AM, dillon min wrote:
-> > Hi Alexandre,
-> >
-> > Thanks for the quick response.
-> >
-> > On Wed, Mar 31, 2021 at 12:50 AM Alexandre TORGUE
-> > <alexandre.torgue@foss.st.com> wrote:
-> >>
-> >>
-> >>
-> >> On 3/30/21 10:58 AM, dillon.minfei@gmail.com wrote:
-> >>> From: dillon min <dillon.minfei@gmail.com>
-> >>>
-> >>> This patchset has following changes:
-> >>>
-> >>> - introduce stm32h750.dtsi to support stm32h750 value line
-> >>> - add stm32h750i-art-pi.dtb (arch/arm/boot/dts/Makefile)
-> >>> - add stm32h750-art-pi.dts to support art-pi board
-> >>>
-> >>> art-pi board component:
-> >>> - 8MiB qspi flash
-> >>> - 16MiB spi flash
-> >>> - 32MiB sdram
-> >>> - ap6212 wifi&bt&fm
-> >>>
-> >>> the detail board information can be found at:
-> >>> https://art-pi.gitee.io/website/
-> >>>
-> >>> Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> >>> ---
-> >>> v8:
-> >>> - move file stm32h743.dtsi submit position to [PATCH V8 3/6]
-> >>>
-> >>>    arch/arm/boot/dts/Makefile              |   1 +
-> >>>    arch/arm/boot/dts/stm32h750.dtsi        |   6 +
-> >>>    arch/arm/boot/dts/stm32h750i-art-pi.dts | 229 ++++++++++++++++++++++++++++++++
-> >>>    3 files changed, 236 insertions(+)
-> >>>    create mode 100644 arch/arm/boot/dts/stm32h750.dtsi
-> >>>    create mode 100644 arch/arm/boot/dts/stm32h750i-art-pi.dts
-> >>>
-> >>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> >>> index 8e5d4ab4e75e..a19c5ab9df84 100644
-> >>> --- a/arch/arm/boot/dts/Makefile
-> >>> +++ b/arch/arm/boot/dts/Makefile
-> >>> @@ -1071,6 +1071,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
-> >>>        stm32746g-eval.dtb \
-> >>>        stm32h743i-eval.dtb \
-> >>>        stm32h743i-disco.dtb \
-> >>> +     stm32h750i-art-pi.dtb \
-> >>>        stm32mp153c-dhcom-drc02.dtb \
-> >>>        stm32mp157a-avenger96.dtb \
-> >>>        stm32mp157a-dhcor-avenger96.dtb \
-> >>> diff --git a/arch/arm/boot/dts/stm32h750.dtsi b/arch/arm/boot/dts/stm32h750.dtsi
-> >>> new file mode 100644
-> >>> index 000000000000..41e3b1e3a874
-> >>> --- /dev/null
-> >>> +++ b/arch/arm/boot/dts/stm32h750.dtsi
-> >>> @@ -0,0 +1,6 @@
-> >>> +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
-> >>> +/* Copyright (C) STMicroelectronics 2021 - All Rights Reserved */
-> >>> +
-> >>> +#include "stm32h743.dtsi"
-> >>> +
-> >>
-> >> I know it's a bit odd, but you could directly include stm32h743.dtsi in
-> >> your board as there are no SoC differences.
-> >
-> > There are some mirror difference between stm32h743 and stm32h750:
-> >
-> > Number of A/D Converters (typ):  stm32h743(none),   stm32h750(3)
-> > Crypto:      stm32h743(none),    stm32h750(HASH-AES, DES/TDES, HMAC, MD5, SHA)
-> >
-> > you can find detail diff at link:
-> > https://www.st.com/en/microcontrollers-microprocessors/stm32h7-series.html#products
-> > (select stm32h743xi, stm32h750xb to compare)
-> >
-> > I have two options for this changes.
-> > - rename stm32h743.dtsi to stm32h7.dtsi, add crypto part to
-> > stm32h7.dtsi in the future.
-> > - make the reference like this (just like stm32f429 <-- stm32f469,
-> > stm32mp151 <-- stm32mp153 <-- stm32mp157 did)
-> >    stm32h743.dtsi <-- stm32h75x.dtsi (stm32h750, stm32h753, stm32h757
-> > all with HW crypto/hash inside)
-> >    we can add crypto to stm32h75x.dtsi, i will just rename
-> > stm32h750.dtsi to stm32h75x.dtsi
-> >
-> > I'd like to use option-2, which one do you like?
->   I think what you did is correct (include stm32h743.dtsi inside
-> stm32h750.dtsi). It makes sens if you add crypto and ADC nodes inside
-> stm32h743.dtsi
-Okay, thanks.
->
-> Cheers
-> Alex
->
-> > thanks.
-> > regards.
-> >
-> >
-> >
-> > Dillon,
-> >>
-> >>
-> >>> diff --git a/arch/arm/boot/dts/stm32h750i-art-pi.dts b/arch/arm/boot/dts/stm32h750i-art-pi.dts
-> >>> new file mode 100644
-> >>> index 000000000000..9bb73bb61901
-> >>> --- /dev/null
-> >>> +++ b/arch/arm/boot/dts/stm32h750i-art-pi.dts
-> >>> @@ -0,0 +1,229 @@
-> >>> +/*
-> >>> + * Copyright 2021 - Dillon Min <dillon.minfei@gmail.com>
-> >>> + *
-> >>> + * This file is dual-licensed: you can use it either under the terms
-> >>> + * of the GPL or the X11 license, at your option. Note that this dual
-> >>> + * licensing only applies to this file, and not this project as a
-> >>> + * whole.
-> >>> + *
-> >>> + *  a) This file is free software; you can redistribute it and/or
-> >>> + *     modify it under the terms of the GNU General Public License as
-> >>> + *     published by the Free Software Foundation; either version 2 of the
-> >>> + *     License, or (at your option) any later version.
-> >>> + *
-> >>> + *     This file is distributed in the hope that it will be useful,
-> >>> + *     but WITHOUT ANY WARRANTY; without even the implied warranty of
-> >>> + *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> >>> + *     GNU General Public License for more details.
-> >>> + *
-> >>> + * Or, alternatively,
-> >>> + *
-> >>> + *  b) Permission is hereby granted, free of charge, to any person
-> >>> + *     obtaining a copy of this software and associated documentation
-> >>> + *     files (the "Software"), to deal in the Software without
-> >>> + *     restriction, including without limitation the rights to use,
-> >>> + *     copy, modify, merge, publish, distribute, sublicense, and/or
-> >>> + *     sell copies of the Software, and to permit persons to whom the
-> >>> + *     Software is furnished to do so, subject to the following
-> >>> + *     conditions:
-> >>> + *
-> >>> + *     The above copyright notice and this permission notice shall be
-> >>> + *     included in all copies or substantial portions of the Software.
-> >>> + *
-> >>> + *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-> >>> + *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-> >>> + *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-> >>> + *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-> >>> + *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-> >>> + *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> >>> + *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-> >>> + *     OTHER DEALINGS IN THE SOFTWARE.
-> >>> + *
-> >>> + * For art-pi board resources, you can refer to link:
-> >>> + *   https://art-pi.gitee.io/website/
-> >>> + */
-> >>> +
-> >>> +/dts-v1/;
-> >>> +#include "stm32h750.dtsi"
-> >>> +#include "stm32h7-pinctrl.dtsi"
-> >>> +#include <dt-bindings/interrupt-controller/irq.h>
-> >>> +#include <dt-bindings/gpio/gpio.h>
-> >>> +
-> >>> +/ {
-> >>> +     model = "RT-Thread STM32H750i-ART-PI board";
-> >>> +     compatible = "st,stm32h750i-art-pi", "st,stm32h750";
-> >>> +
-> >>> +     chosen {
-> >>> +             bootargs = "root=/dev/ram";
-> >>> +             stdout-path = "serial0:2000000n8";
-> >>> +     };
-> >>> +
-> >>> +     memory@c0000000 {
-> >>> +             device_type = "memory";
-> >>> +             reg = <0xc0000000 0x2000000>;
-> >>> +     };
-> >>> +
-> >>> +     reserved-memory {
-> >>> +             #address-cells = <1>;
-> >>> +             #size-cells = <1>;
-> >>> +             ranges;
-> >>> +
-> >>> +             linux,cma {
-> >>> +                     compatible = "shared-dma-pool";
-> >>> +                     no-map;
-> >>> +                     size = <0x100000>;
-> >>> +                     linux,dma-default;
-> >>> +             };
-> >>> +     };
-> >>> +
-> >>> +     aliases {
-> >>> +             serial0 = &uart4;
-> >>> +             serial1 = &usart3;
-> >>> +     };
-> >>> +
-> >>> +     leds {
-> >>> +             compatible = "gpio-leds";
-> >>> +             led-red {
-> >>> +                     gpios = <&gpioi 8 0>;
-> >>> +             };
-> >>> +             led-green {
-> >>> +                     gpios = <&gpioc 15 0>;
-> >>> +                     linux,default-trigger = "heartbeat";
-> >>> +             };
-> >>> +     };
-> >>> +
-> >>> +     v3v3: regulator-v3v3 {
-> >>> +             compatible = "regulator-fixed";
-> >>> +             regulator-name = "v3v3";
-> >>> +             regulator-min-microvolt = <3300000>;
-> >>> +             regulator-max-microvolt = <3300000>;
-> >>> +             regulator-always-on;
-> >>> +     };
-> >>> +
-> >>> +     wlan_pwr: regulator-wlan {
-> >>> +             compatible = "regulator-fixed";
-> >>> +
-> >>> +             regulator-name = "wl-reg";
-> >>> +             regulator-min-microvolt = <3300000>;
-> >>> +             regulator-max-microvolt = <3300000>;
-> >>> +
-> >>> +             gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
-> >>> +             enable-active-high;
-> >>> +     };
-> >>> +};
-> >>> +
-> >>> +&clk_hse {
-> >>> +     clock-frequency = <25000000>;
-> >>> +};
-> >>> +
-> >>> +&dma1 {
-> >>> +     status = "okay";
-> >>> +};
-> >>> +
-> >>> +&dma2 {
-> >>> +     status = "okay";
-> >>> +};
-> >>> +
-> >>> +&mac {
-> >>> +     status = "disabled";
-> >>> +     pinctrl-0       = <&ethernet_rmii>;
-> >>> +     pinctrl-names   = "default";
-> >>> +     phy-mode        = "rmii";
-> >>> +     phy-handle      = <&phy0>;
-> >>> +
-> >>> +     mdio0 {
-> >>> +             #address-cells = <1>;
-> >>> +             #size-cells = <0>;
-> >>> +             compatible = "snps,dwmac-mdio";
-> >>> +             phy0: ethernet-phy@0 {
-> >>> +                     reg = <0>;
-> >>> +             };
-> >>> +     };
-> >>> +};
-> >>> +
-> >>> +&sdmmc1 {
-> >>> +     pinctrl-names = "default", "opendrain", "sleep";
-> >>> +     pinctrl-0 = <&sdmmc1_b4_pins_a>;
-> >>> +     pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-> >>> +     pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-> >>> +     broken-cd;
-> >>> +     st,neg-edge;
-> >>> +     bus-width = <4>;
-> >>> +     vmmc-supply = <&v3v3>;
-> >>> +     status = "okay";
-> >>> +};
-> >>> +
-> >>> +&sdmmc2 {
-> >>> +     pinctrl-names = "default", "opendrain", "sleep";
-> >>> +     pinctrl-0 = <&sdmmc2_b4_pins_a>;
-> >>> +     pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
-> >>> +     pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
-> >>> +     broken-cd;
-> >>> +     non-removable;
-> >>> +     st,neg-edge;
-> >>> +     bus-width = <4>;
-> >>> +     vmmc-supply = <&wlan_pwr>;
-> >>> +     status = "okay";
-> >>> +
-> >>> +     #address-cells = <1>;
-> >>> +     #size-cells = <0>;
-> >>> +     brcmf: bcrmf@1 {
-> >>> +             reg = <1>;
-> >>> +             compatible = "brcm,bcm4329-fmac";
-> >>> +     };
-> >>> +};
-> >>> +
-> >>> +&spi1 {
-> >>> +     status = "okay";
-> >>> +     pinctrl-0 = <&spi1_pins>;
-> >>> +     pinctrl-names = "default";
-> >>> +     cs-gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
-> >>> +     dmas = <&dmamux1 37 0x400 0x05>,
-> >>> +            <&dmamux1 38 0x400 0x05>;
-> >>> +     dma-names = "rx", "tx";
-> >>> +
-> >>> +     flash@0 {
-> >>> +             #address-cells = <1>;
-> >>> +             #size-cells = <1>;
-> >>> +             compatible = "winbond,w25q128", "jedec,spi-nor";
-> >>> +             reg = <0>;
-> >>> +             spi-max-frequency = <80000000>;
-> >>> +
-> >>> +             partition@0 {
-> >>> +                     label = "root filesystem";
-> >>> +                     reg = <0 0x1000000>;
-> >>> +             };
-> >>> +     };
-> >>> +};
-> >>> +
-> >>> +&usart2 {
-> >>> +     pinctrl-0 = <&usart2_pins>;
-> >>> +     pinctrl-names = "default";
-> >>> +     status = "disabled";
-> >>> +};
-> >>> +
-> >>> +&usart3 {
-> >>> +     pinctrl-names = "default";
-> >>> +     pinctrl-0 = <&usart3_pins>;
-> >>> +     dmas = <&dmamux1 45 0x400 0x05>,
-> >>> +            <&dmamux1 46 0x400 0x05>;
-> >>> +     dma-names = "rx", "tx";
-> >>> +     st,hw-flow-ctrl;
-> >>> +     status = "okay";
-> >>> +
-> >>> +     bluetooth {
-> >>> +             compatible = "brcm,bcm43438-bt";
-> >>> +             host-wakeup-gpios = <&gpioc 0 GPIO_ACTIVE_HIGH>;
-> >>> +             device-wakeup-gpios = <&gpioi 10 GPIO_ACTIVE_HIGH>;
-> >>> +             shutdown-gpios = <&gpioi 11 GPIO_ACTIVE_HIGH>;
-> >>> +             max-speed = <115200>;
-> >>> +     };
-> >>> +};
-> >>> +
-> >>> +&uart4 {
-> >>> +     pinctrl-0 = <&uart4_pins>;
-> >>> +     pinctrl-names = "default";
-> >>> +     status = "okay";
-> >>> +};
-> >>> +
-> >>> +
-> >>>
+From: dillon min <dillon.minfei@gmail.com>
+
+This patchset intend to add art-pi board support, this board developed
+by rt-thread(https://www.rt-thread.org/).
+
+Board resources:
+8MiB QSPI flash
+16MiB SPI flash
+32MiB SDRAM
+AP6212 wifi,bt,fm comb
+
+sw context:
+- as stm32h750 just has 128k bytes internal flash, so running a fw on
+  internal flash to download u-boot/kernel to qspi flash, boot
+  u-boot/kernel from qspi flash. this fw is based on rt-thread.
+- kernel can be xip on qspi flash or load to sdram
+- root filesystem is jffs2(created by buildroot), stored on spi flash
+
+to support the boad, add following changes.
+- fix r0-r3, r12 register restore failed after svc call,
+- add dts binding
+- update yaml doc
+
+---
+changes in v9:
+- move gpio{a..k} entries from stm32h7-pinctrl.dtsi to stm32h743.dtsi
+v8 link:
+https://lore.kernel.org/lkml/1617094704-10040-1-git-send-email-dillon.minfei@gmail.com/
+
+changes in v8:
+- drop '[PATCH v7 3/6] ARM: dts: stm32: introduce stm32h7-pinctrl.dtsi to
+  support stm32h750' - stm32h743-pinctrl.dtsi file
+- move compatible string "st,stm32h743-pinctrl" from stm32h7-pinctrl.dtsi
+  to stm32h743.dtsi
+- update stm32h743i-{dico/eval}.dtsi to include stm32h7-pinctrl.dtsi
+- move file stm32h743.dtsi submit position to [PATCH V8 3/6]
+v7 link:
+https://lore.kernel.org/lkml/1617071338-9436-1-git-send-email-dillon.minfei@gmail.com/
+
+changes in v7:
+- remove changes in
+  Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+  Hi Rob Herring
+  as you has already ack this patch, please ignore it. thanks
+  history link:
+  https://lore.kernel.org/lkml/1614758717-18223-4-git-send-email-dillon.minfei@gmail.com/
+  https://lore.kernel.org/lkml/20210308195033.GA2855292@robh.at.kernel.org/
+- remove "[PATCH v6 8/9] pinctrl: stm32: Add STM32H750 MCU pinctrl support"
+  remove "[PATCH v6 5/9] ARM: dts: stm32: add stm32h750-pinctrl.dtsi"
+- reference to stm32h743-pinctrl.dtsi in stm32h750i-art-pi.dts
+v6 link:
+https://lore.kernel.org/lkml/1616757302-7889-1-git-send-email-dillon.minfei@gmail.com/
+
+changes in v6:
+- add gpiox{gpio-ranges, ngpios} in stm32h7-pinctrl.dtsi
+- add status="disabled" in stm32h743.dtsi 
+
+changes in v5:
+- accroding to rob's suggestion, replace false with 'type: object'
+  of 'additionalProperties'.
+- add Tested-by: Valentin Caron <valentin.caron@foss.st.com>
+
+changes in v4:
+- use unevaluatedProperties: false to fix dtbs_check warrnings instead of
+  add 'bluetooth' in st,stm32-uart.yaml
+
+changes in v3:
+- fix dtbs_check warrning: (8002cbd78fd5 and 4bc21d3dd678)
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: pin-controller:
+     {'type': 'object'} is not allowed for {'#address-cells': [[1]], '#size-cells':
+     [[1]], 'ranges': [[0,
+
+  >> arch/arm/boot/dts/stm32h743i-eval.dt.yaml: soc: 'i2c@40005C00',
+     'i2c@58001C00' do not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$',
+     '^[^@]+$', 'pinctrl-[0-9]+'
+  >> arch/arm/boot/dts/stm32h750i-art-pi.dt.yaml: serial@40004800:
+     'bluetooth' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+changes in v2:
+- reorganize the pinctrl device tree about
+  stm32h7-pinctrl/stm32h743/750-pinctrl
+  stm32h7-pinctrl.dtsi --> stm32h743-pinctrl.dtsi --> stm32h743i-disco.dts
+                         |                          |-> stm32h743i-eval.dts
+                         |-> stm32h750-pinctrl.dtsi --> stm32h750i-art-pi.dts
+  same to the stm32f7/f4's pinctrl style
+- fix author name/copyright mistake
+- add compatible string st,stm32h750-pinctrl to pinctl-stm32h743.c as they
+  have same pin alternate functions, update Kconfig description
+- make item in stm32h750i-art-pi.dts sort by letter
+
+*** BLURB HERE ***
+
+dillon min (6):
+  Documentation: arm: stm32: Add stm32h750 value line doc
+  dt-bindings: arm: stm32: Add compatible strings for ART-PI board
+  ARM: dts: stm32: introduce stm32h7-pinctrl.dtsi to support stm32h750
+  ARM: dts: stm32: add support for art-pi board based on stm32h750xbh6
+  ARM: stm32: Add a new SOC - STM32H750
+  dt-bindings: serial: stm32: Use 'type: object' instead of false for
+    'additionalProperties'
+
+ Documentation/arm/index.rst                        |   1 +
+ Documentation/arm/stm32/stm32h750-overview.rst     |  34 +++
+ .../devicetree/bindings/arm/stm32/stm32.yaml       |   4 +
+ .../devicetree/bindings/serial/st,stm32-uart.yaml  |   3 +-
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/stm32h7-pinctrl.dtsi             | 275 ++++++++++++++++++
+ arch/arm/boot/dts/stm32h743-pinctrl.dtsi           | 306 ---------------------
+ arch/arm/boot/dts/stm32h743.dtsi                   | 176 +++++++++++-
+ arch/arm/boot/dts/stm32h743i-disco.dts             |   2 +-
+ arch/arm/boot/dts/stm32h743i-eval.dts              |   2 +-
+ arch/arm/boot/dts/stm32h750.dtsi                   |   6 +
+ arch/arm/boot/dts/stm32h750i-art-pi.dts            | 229 +++++++++++++++
+ arch/arm/mach-stm32/board-dt.c                     |   1 +
+ 13 files changed, 729 insertions(+), 311 deletions(-)
+ create mode 100644 Documentation/arm/stm32/stm32h750-overview.rst
+ create mode 100644 arch/arm/boot/dts/stm32h7-pinctrl.dtsi
+ delete mode 100644 arch/arm/boot/dts/stm32h743-pinctrl.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750.dtsi
+ create mode 100644 arch/arm/boot/dts/stm32h750i-art-pi.dts
+
+-- 
+2.7.4
+
