@@ -2,74 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4103500D4
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Mar 2021 15:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56696350B6D
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Apr 2021 02:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbhCaNBM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Mar 2021 09:01:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45284 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235634AbhCaNBF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Mar 2021 09:01:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5C756196C;
-        Wed, 31 Mar 2021 13:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617195664;
-        bh=fpjbRjzuhhKjDVMy/Iwk4X2pjxw44PsDGZYpY5/o2yM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HfnOKjp8c8lRwPgGVAS8BSFnrABlFY4SHtoLLZTex7WdcxvhjIMbHMnMxpJH0MPpK
-         i0c8KFB7AXvwfitOwDE4RJSZLRgzaTBq0Xjqso7ZPaWJ8AxLEFdFlyd7FSm509xrMj
-         cUcRFTlZZorzERIBb0RhURjQi2NXFQGpbW3URTKv9lrxR7Kh/ZYr+a3S9iTPtXPl/L
-         T/o5T/r+H5a9/qxg+vB5rIzofyP+qMuJMHcfP8WHgGqG39yFKEn5yMN7s1vEGD+mQC
-         cbSb/ZnhxW+0Tpms5iDoIOLVfn7nqXM5E5Jo5IPcpekdIoTp72Cv7yJpx8ED4LKk5P
-         d5FG88bLfpGSQ==
-Date:   Wed, 31 Mar 2021 18:31:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Seiya Wang <seiya.wang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S232800AbhDAA5p (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Mar 2021 20:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232419AbhDAA5l (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 31 Mar 2021 20:57:41 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D432DC061574;
+        Wed, 31 Mar 2021 17:57:40 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 61CA318F;
+        Wed, 31 Mar 2021 17:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1617238660;
+        bh=mRouH1pDCr7SzC4G2QJanz8knNuUSwSnGNHS1Ih1lpM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HUdGDWC6v9F/hRKZXNV/JL1xlHoBPRFsDfz1KgHQ383/+WVFGBBTXdhc9pU4qgKYJ
+         9tc2oVe2sa6VLCwP/HRhcVc6+m+ZKZN7el9w83TDtpuuVD7gDcCKM4zlIyDg7vQVec
+         nwb48YZuX7DQAJ1RKYVjFQtdzzkzQzBSz1tM5ROI=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Zev Weiss <zev@bewilderbeest.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, srv_heupstream@mediatek.com
-Subject: Re: [PATCH v2 7/8] dt-bindings: phy: fix dt_binding_check warning in
- mediatek,ufs-phy.yaml
-Message-ID: <YGRyjE+CjkJojqBM@vkoul-mobl.Dlink>
-References: <20210319023427.16711-1-seiya.wang@mediatek.com>
- <20210319023427.16711-9-seiya.wang@mediatek.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, linux-serial@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: serial: 8250: deprecate aspeed,sirq-polarity-sense
+Date:   Wed, 31 Mar 2021 19:57:00 -0500
+Message-Id: <20210401005702.28271-2-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210401005702.28271-1-zev@bewilderbeest.net>
+References: <YGOuhjD19SmjmQou@hatter.bewilderbeest.net>
+ <20210401005702.28271-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210319023427.16711-9-seiya.wang@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 19-03-21, 10:34, Seiya Wang wrote:
-> This commit fixes the warning messages of make dt_binding_check from
-> newly added mediatek,mt8195-ufsphy in mediatek,ufs-phy.yaml
+This property ties SIRQ polarity to SCU register bits that don't
+necessarily have any direct relationship to it; the only use of it
+was removed in commit c82bf6e133d30e0f9172a20807814fa28aef0f67.
 
-Applied, thanks
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
+ Documentation/devicetree/bindings/serial/8250.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/Documentation/devicetree/bindings/serial/8250.yaml b/Documentation/devicetree/bindings/serial/8250.yaml
+index f54cae9ff7b2..491b9297432d 100644
+--- a/Documentation/devicetree/bindings/serial/8250.yaml
++++ b/Documentation/devicetree/bindings/serial/8250.yaml
+@@ -188,6 +188,7 @@ properties:
+       offset and bit number to identify how the SIRQ polarity should be
+       configured. One possible data source is the LPC/eSPI mode bit. Only
+       applicable to aspeed,ast2500-vuart.
++    deprecated: true
+ 
+ required:
+   - reg
 -- 
-~Vinod
+2.31.1
+
