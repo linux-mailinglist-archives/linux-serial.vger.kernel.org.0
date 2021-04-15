@@ -2,70 +2,107 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26E13605E5
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Apr 2021 11:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DE73605F4
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Apr 2021 11:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbhDOJf4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Apr 2021 05:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbhDOJfz (ORCPT
+        id S232174AbhDOJga (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Apr 2021 05:36:30 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:19758 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231880AbhDOJg3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Apr 2021 05:35:55 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E407C061756
-        for <linux-serial@vger.kernel.org>; Thu, 15 Apr 2021 02:35:32 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id k25so23693396oic.4
-        for <linux-serial@vger.kernel.org>; Thu, 15 Apr 2021 02:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mMYRPs0tmQ07nhsXBnsLY+lspiYzlsUvfaKoTpZrd3E=;
-        b=qbMmlcg49xpJgzDqqCsaR9Bis5nu9zZL9mASMXfXshuESG4Zmq+ZfGuLp2LTfd8yYH
-         IRkr1YwJM9zjXpYUJRH4oYV/C8Y6raN9ty+pJH58nku3OXdlicumxke3+sgH2sWoQlxg
-         sxA/wozTcpD3TbnXt7ytvVkwzBSgCwxLBAB34LPFzKBDCebCSm+VYWIq5SamTSPq4FjL
-         DXp8Lgom5WmFG5AAvCUXE0tHFgcDX46s2NVmOB3mPzE/hDo/WDHf0SjfYZj8sP++2Ldq
-         G2SCtORmc2s1GwNOv35TpqAtUkil5ef4QE83k7Q5VP1xOT/jUdu44TBxKuto83pgdCAl
-         v0cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mMYRPs0tmQ07nhsXBnsLY+lspiYzlsUvfaKoTpZrd3E=;
-        b=RKLhb9bBmkWHOqIhJNMSUuaMn1T7qVlcp6oQwU/YlVlA5ZHSCgXkSeDOgOnGXAZIfM
-         jbTY0TORD/K6tcw/8k0rNU1rEALujK4GFEwxgUBIYzu9JIF3mthXsNj1vZTnrAR/AfbY
-         xx1peBcuL4Ozlyn2HItic36e2OS7ts63eXV6Xm4OcPh0J8J1ifgj/20afZwbrE3RLtTW
-         QjH0io0JBrEdslCPwf8cQ0d7/g62RF1bQIsrdGNlLCsF+44gPGhDHo3qGBQPD2MaSnx6
-         Hm2+GHeDT/d/gQnmNS7nXhhyE1Paxu0U3PjC3tb64SfjkaN3Hqq/T0OrPTr58p2IjsKy
-         0zrA==
-X-Gm-Message-State: AOAM532D9xsy7GlbKRK9AKYGnYUaDTesm+hiLGz96tB88te9a/dTUfMd
-        GraXdrZFgPL8nawe+mXwcRBPhexOxsVd7FoawLU=
-X-Google-Smtp-Source: ABdhPJyF/Lz2ASOX31SXy7KQYxxaZXJg1L02PnM5TkVMJvQRqPuu4OO6W1BIWi8xC5628aOgc/T0fUpALcuD/ZfJQYQ=
-X-Received: by 2002:aca:cf44:: with SMTP id f65mr1895635oig.13.1618479331891;
- Thu, 15 Apr 2021 02:35:31 -0700 (PDT)
+        Thu, 15 Apr 2021 05:36:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1618479353; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=HqFJF53dqlnv+6ca2ohTPNOp0F3B+mW19z6tdzKD4/WBca0MqJjUsNDrIJqSgMydwz
+    Mn5UvuXapzrvC4bSXNQxseLvOAnOFKpGyznx1yADbKNmEBe1inAQZ4ZIKadNt4n9JtFU
+    naD8TVz7skBDoqfDAaVXTPywWmuv+DIyfpwzYLq40iLdEJsj0mF6XE9VBEWNFCNBwh2h
+    ByH3sAJ1SVZBJxDkQ89UfcaBPeOoUVrtqbGvtCFmm5MwTGacnzv8sXrchv1WxHWi44v+
+    A5nRN0YUMfUbI6Mo/iFMFh338VsFdQVFTPM0ju4Q6/RUSJ9viLQRZCMkqMEQD7ZLFGkB
+    0Zsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1618479353;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=UszZM0lxzcT1TucYYh81PlY6CI1II6hKqZ0KtEwG5JI=;
+    b=I88GP/dTB8qSBCb6mvoifbfw5nTYB7888Sbo0ZGQ6tZKu3t4qc8d6pitMcE2sp1FRp
+    7IXVWd4QoOc8nXcGqIX2QWnvoh+p5XGxMJcbFCuTqQLBhWNoe7UcQakxMIyNtbZKI/4D
+    0bBkhh4ZKcCs1G0HGiPHLyWLZggV+awwwmQONk5Bn40pHKVCbdg9v8efFYkaCQbynBC2
+    HlhgYN+S5prqTdt7ZcqKrsiTqhfoOAwAfsbXxIwAz29ozPg0tYy2g3p6z+eKbNyStFX9
+    BE3ZtxKTpeihn9FBVycOMNtOAl8QyUw5NkGLp8pHEdWDHTzw6kYo7OEYzBHSQMvHx1zK
+    8edA==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1618479353;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=UszZM0lxzcT1TucYYh81PlY6CI1II6hKqZ0KtEwG5JI=;
+    b=CD6w6g5CaHc2ffT8ZdvpFCXZx5X9SDd8UKDHJta4vKJchYk6fMQECfw3lE+gYcwX9U
+    8Ntswg9SrWcoJ2seOFN8cbmwZ+EK/3uhFnSJCamqkq8UOe917Qhe6K8DGtGGue5mRTqw
+    IeCe4UG7yMNV0eHR2CrYmjXq1Mhw9BlobdHQmT6wx9HjFaUcBXCRBu1oSG+VkSLFkKkJ
+    Ev9f7QXIvQdWDLvpRHbN7G/ry07wa0Q0l39keI59SNLx+EnpEByMB82lkE8jxVctcXzt
+    ogVDoA/DjeI6MUuTHq9ePSO7zzbr262bjQYgAGReCy1RN2qexwd2hkaYrkM9RvIUU4Tw
+    /quA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73dmm4I5W0/AvA67Ot4fvR82FSd93q"
+X-RZG-CLASS-ID: mo00
+Received: from groucho.site
+    by smtp.strato.de (RZmta 47.24.2 DYNA|AUTH)
+    with ESMTPSA id Y0bfddx3F9Zr7wu
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 15 Apr 2021 11:35:53 +0200 (CEST)
+From:   Ulrich Hecht <uli+renesas@fpond.eu>
+To:     linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     wsa@kernel.org, geert@linux-m68k.org,
+        yoshihiro.shimoda.uh@renesas.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        Ulrich Hecht <uli+renesas@fpond.eu>
+Subject: [PATCH] serial: sh-sci: remove obsolete latency workaround
+Date:   Thu, 15 Apr 2021 11:35:47 +0200
+Message-Id: <20210415093547.21639-1-uli+renesas@fpond.eu>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:ac9:68c5:0:0:0:0:0 with HTTP; Thu, 15 Apr 2021 02:35:31
- -0700 (PDT)
-Reply-To: tecobanktg@gmail.com
-From:   Multi Lotto Company <mrsnetomoses1@gmail.com>
-Date:   Thu, 15 Apr 2021 09:35:31 +0000
-Message-ID: <CAJpptwAYNFub5cNPe57wFDtqxrEX6Nz_ushZ7kds6bqCyUVN9g@mail.gmail.com>
-Subject: Dear Lucky winner
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This message is to let you know that your email address won
-the sum of $ 1,700,000.00 only {ONE MILLION SEVEN HUNDRED
-THOUSAND DOLLARS} in our MULTI LOTTO lottery company this month and
-your money is converted into a Visa ATM card to  be delivered through
-D H L  courier company.
-We have deposited your visa card package with D H L  courier company
-and tell them to help us deliver your visa card package as soon  as
-they hear from you, so please contact D H L delivery company through
-this email   dhlofficestg@gmail.com and ask them to give you your ATM
-card that is deposited in their office  by
- Multi Lottery Organization
-Thank you
+Since the transition to hrtimers there is no more need to set a minimum
+RX timeout to work around latency issues.
+
+Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+---
+ drivers/tty/serial/sh-sci.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
+
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index e3af97a59856..ef37fdf37612 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -2609,21 +2609,10 @@ static void sci_set_termios(struct uart_port *port, struct ktermios *termios,
+ 		udelay(DIV_ROUND_UP(10 * 1000000, baud));
+ 	}
+ 
+-	/*
+-	 * Calculate delay for 2 DMA buffers (4 FIFO).
+-	 * See serial_core.c::uart_update_timeout().
+-	 * With 10 bits (CS8), 250Hz, 115200 baud and 64 bytes FIFO, the above
+-	 * function calculates 1 jiffie for the data plus 5 jiffies for the
+-	 * "slop(e)." Then below we calculate 5 jiffies (20ms) for 2 DMA
+-	 * buffers (4 FIFO sizes), but when performing a faster transfer, the
+-	 * value obtained by this formula is too small. Therefore, if the value
+-	 * is smaller than 20ms, use 20ms as the timeout value for DMA.
+-	 */
++	/* Calculate delay for 2 DMA buffers (4 FIFO). */
+ 	s->rx_frame = (10000 * bits) / (baud / 100);
+ #ifdef CONFIG_SERIAL_SH_SCI_DMA
+ 	s->rx_timeout = s->buf_len_rx * 2 * s->rx_frame;
+-	if (s->rx_timeout < 20)
+-		s->rx_timeout = 20;
+ #endif
+ 
+ 	if ((termios->c_cflag & CREAD) != 0)
+-- 
+2.20.1
+
