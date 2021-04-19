@@ -2,174 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1AF363480
-	for <lists+linux-serial@lfdr.de>; Sun, 18 Apr 2021 11:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27763638DA
+	for <lists+linux-serial@lfdr.de>; Mon, 19 Apr 2021 02:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbhDRJrl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 18 Apr 2021 05:47:41 -0400
-Received: from smtp-35.italiaonline.it ([213.209.10.35]:54758 "EHLO libero.it"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229756AbhDRJrl (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 18 Apr 2021 05:47:41 -0400
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([95.244.94.151])
-        by smtp-35.iol.local with ESMTPA
-        id Y41ClAcrIpK9wY41HlZ94m; Sun, 18 Apr 2021 11:47:12 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1618739232; bh=FdbYlXhVuQEKZrfvlD50hIEZK6SUIqLOeYeJss0nRPA=;
-        h=From;
-        b=W/KBl1UdKQOXa7Vf9kz/MNck841XJqPW05FBTKPipOItitfLIF1q6W8BC5oI5Nx62
-         1N3aTG29oRDME/r5Op8olxE8jqKG1zj08IqLHogwoCeis7rwWc47IOYPm6zVSW3RRK
-         UwD0sqP2ghqFHRhx9UKaj+1is56Z3QIIT86IB5VNo0itEYsjq1zY0y4b8OpPGQ3NHr
-         5vxKwNdSNd99D9vqBLucECUkzTxrp8Ow6EnfOWjU+iiAxs9LcsortqhLcQIctjvqd4
-         +aIhq3MH17vB6szioeg1Qz/NqQH9XVVX57UAReLTXoTRz4Zh/U1QOo9lOP59cy8lM+
-         EH4hW4RXuL32w==
-X-CNFS-Analysis: v=2.4 cv=A9ipg4aG c=1 sm=1 tr=0 ts=607c0020 cx=a_exe
- a=ugxisoNCKEotYwafST++Mw==:117 a=ugxisoNCKEotYwafST++Mw==:17
- a=RNOFN41U3FZ75c9ZyJUA:9
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dariobin@libero.it>,
-        Dimitris Lampridis <dlampridis@logikonlabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH v4] serial: omap: fix rs485 half-duplex filtering
-Date:   Sun, 18 Apr 2021 11:47:05 +0200
-Message-Id: <20210418094705.27014-1-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-X-CMAE-Envelope: MS4xfJJUDC1EHnfgAYrCbcZSgBaVQevW0CJJkRWSfJVHAGCC5m/3BZV/WvHlyYgzHClLiA27tmHj+gdnvichinwUcxHq5bwTpMh4OsfnF39cE5QZkWoXVlbO
- I8sAbi8wA5f5xBDPtuVrIWgK06ObZNmz4qYoNiiyvZsTOzLB4oNngJTrBN71JF/AmGMIKg+ef//15SMN8OgK+WHv6Ird+8lKGym0SlzrMgaFmJtLCj6KWqyF
- Yl+EUh5zPvkaRRwnIU8kqOfYSqi5JAMlHSuG/hnmJoSEjZOQQp3sxK3DMnAtPL14DAkkNPV5DeDuECqSNnMNo9ggxGLgg9knbVMeDonVlXdRmysqWWb2dqnO
- xzUPDf7ujo9AmWN/l0jJ0PmKa4xRyZX6QsNhXLJr7bLDBSVzIfmYoS7Sq1KcfPlAazYZBOYc
+        id S235636AbhDSAoH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 18 Apr 2021 20:44:07 -0400
+Received: from mbox.abcom.al ([217.73.143.249]:41410 "EHLO mbox.abcom.al"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231860AbhDSAoF (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 18 Apr 2021 20:44:05 -0400
+X-Greylist: delayed 1075 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Apr 2021 20:44:05 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mbox.abcom.al (Postfix) with ESMTP id CEB0811A2CD57;
+        Mon, 19 Apr 2021 02:21:43 +0200 (CEST)
+Received: from mbox.abcom.al ([127.0.0.1])
+        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id fz-axQskhWF2; Mon, 19 Apr 2021 02:21:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mbox.abcom.al (Postfix) with ESMTP id 3715C1181F2BE;
+        Mon, 19 Apr 2021 02:21:43 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al 3715C1181F2BE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
+        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618791703;
+        bh=p2Sn/5BeV1TeOpE0g2OnXyVNOPHFXRN2kak+hb1GY3o=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=p+Wb5kBbqN9jixgcHporB/y+BiGolsQH2WbuQlTMhlli9dk4ZG4mS6V1XxC0op5sQ
+         5mYDq/v7Xh+CBiHCn9uFCNGnQt4jubkAnJCmWi+P6FxcvemfNJWDc1LC7Fx9DQzXOl
+         mn7DqXic/qd9TpONzaZaKglqK1WdWACsm8xfXBAk/qksblkjksLjZtqYgGRNDB4Nsx
+         0REFa3FsgNvwFzbjarkZMkdPSfcjWE4idaYzvBIdThxAxmmrMw3QX5IqCZuz1wCPC/
+         09XqP3a1FeZUQXR0Eo4fh3tCLwE1mTSPAZWV2/SLPeQCeXpxctroLbCWtsRlhueIrZ
+         4pcrvRsbUyBmw==
+X-Virus-Scanned: amavisd-new at mbox.abcom.al
+Received: from mbox.abcom.al ([127.0.0.1])
+        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eE0WH3UqeBvI; Mon, 19 Apr 2021 02:21:43 +0200 (CEST)
+Received: from [192.168.43.60] (unknown [105.4.4.115])
+        by mbox.abcom.al (Postfix) with ESMTPSA id EB73B5AC2624;
+        Mon, 19 Apr 2021 02:21:35 +0200 (CEST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
+To:     Recipients <abashi@abcom.al>
+From:   <abashi@abcom.al>
+Date:   Mon, 19 Apr 2021 02:20:59 +0200
+Reply-To: billlawrencedonationorg@yahoo.com
+Message-Id: <20210419002135.EB73B5AC2624@mbox.abcom.al>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Data received during half-duplex transmission must be filtered.
-If the target device responds quickly, emptying the FIFO at the end of
-the transmission can erase not only the echo characters but also part of
-the response message.
-By keeping the receive interrupt enabled even during transmission, it
-allows you to filter each echo character and only in a number equal to
-those transmitted.
-The issue was generated by a target device that started responding
-240us later having received a request in communication at 115200bps.
-Sometimes, some messages received by the target were missing some of the
-first bytes.
+Sehr geehrter Herr / Frau
+Ich gr=C3=BC=C3=9Fe Sie im Namen des Herrn. Diese Nachricht wird Ihnen als =
+Benachrichtigung gesendet, dass Sie ausgew=C3=A4hlt wurden, um von meinem W=
+ohlt=C3=A4tigkeitsprojekt zu profitieren, das darauf abzielt, Leben zu ber=
+=C3=BChren und denen zu helfen, die ich auf der ganzen Welt kann, wie Gott =
+mich gesegnet hat.
+Ich habe die Powerball-Lotterie in H=C3=B6he von 150 Millionen USD am 16. D=
+ezember 2019 gewonnen und ich habe mich freiwillig entschlossen, Ihnen eine=
+n Betrag von (2.000.000,00 =E2=82=AC) als Wohlt=C3=A4tigkeitsorganisation z=
+u spenden. Ich versuche, zuf=C3=A4llige Menschen aus verschiedenen Quellen =
+und Moden zu erreichen, um das Leben aus verschiedenen Quellen zu ber=C3=BC=
+hren Winkel. Deshalb erhalten Sie hier die Nachricht.
+Sie wurden als einer der gl=C3=BCcklichen Empf=C3=A4nger registriert, die 2=
+ Millionen Euro erhalten haben. Diese Spende wird Ihnen gegeben, damit Sie =
+Ihre pers=C3=B6nlichen Probleme versch=C3=A4rfen und uns zum gro=C3=9Fen Te=
+il gro=C3=9Fz=C3=BCgig dabei helfen k=C3=B6nnen, die weniger gl=C3=BCcklich=
+en Waisen und gemeinn=C3=BCtzigen Organisationen in Ihrem Land zu unterst=
+=C3=BCtzen Nachbarschaftslokalit=C3=A4t
+Zur =C3=9Cberpr=C3=BCfung: //www.powerball.com/winner-story/150-million-pow=
+erball-ticket-claimed
 
-Fixes: 3a13884abea0 ("tty/serial: omap: empty the RX FIFO at the end of half-duplex TX")
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Kontaktieren Sie mich erneut, um Spenden zu erhalten. E-Mail: billlawrenced=
+onationorg@yahoo.com
 
-
----
-
-Changes in v4:
-- Change the type of the rs485_tx_filter_count variable from atomic_t
-  to unsigned int and related read / write accesses.
-
-Changes in v3:
-- Add 'Fixes' tag
-
-Changes in v2:
-- Fix compiling error
-
- drivers/tty/serial/omap-serial.c | 39 ++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
-index 76b94d0ff586..f8fafceb5803 100644
---- a/drivers/tty/serial/omap-serial.c
-+++ b/drivers/tty/serial/omap-serial.c
-@@ -159,6 +159,8 @@ struct uart_omap_port {
- 	u32			calc_latency;
- 	struct work_struct	qos_work;
- 	bool			is_suspending;
-+
-+	unsigned int		rs485_tx_filter_count;
- };
- 
- #define to_uart_omap_port(p) ((container_of((p), struct uart_omap_port, port)))
-@@ -328,19 +330,6 @@ static void serial_omap_stop_tx(struct uart_port *port)
- 		serial_out(up, UART_IER, up->ier);
- 	}
- 
--	if ((port->rs485.flags & SER_RS485_ENABLED) &&
--	    !(port->rs485.flags & SER_RS485_RX_DURING_TX)) {
--		/*
--		 * Empty the RX FIFO, we are not interested in anything
--		 * received during the half-duplex transmission.
--		 */
--		serial_out(up, UART_FCR, up->fcr | UART_FCR_CLEAR_RCVR);
--		/* Re-enable RX interrupts */
--		up->ier |= UART_IER_RLSI | UART_IER_RDI;
--		up->port.read_status_mask |= UART_LSR_DR;
--		serial_out(up, UART_IER, up->ier);
--	}
--
- 	pm_runtime_mark_last_busy(up->dev);
- 	pm_runtime_put_autosuspend(up->dev);
- }
-@@ -366,6 +355,10 @@ static void transmit_chars(struct uart_omap_port *up, unsigned int lsr)
- 		serial_out(up, UART_TX, up->port.x_char);
- 		up->port.icount.tx++;
- 		up->port.x_char = 0;
-+		if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
-+		    !(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
-+			up->rs485_tx_filter_count++;
-+
- 		return;
- 	}
- 	if (uart_circ_empty(xmit) || uart_tx_stopped(&up->port)) {
-@@ -377,6 +370,10 @@ static void transmit_chars(struct uart_omap_port *up, unsigned int lsr)
- 		serial_out(up, UART_TX, xmit->buf[xmit->tail]);
- 		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
- 		up->port.icount.tx++;
-+		if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
-+		    !(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
-+			up->rs485_tx_filter_count++;
-+
- 		if (uart_circ_empty(xmit))
- 			break;
- 	} while (--count > 0);
-@@ -420,7 +417,7 @@ static void serial_omap_start_tx(struct uart_port *port)
- 
- 	if ((port->rs485.flags & SER_RS485_ENABLED) &&
- 	    !(port->rs485.flags & SER_RS485_RX_DURING_TX))
--		serial_omap_stop_rx(port);
-+		up->rs485_tx_filter_count = 0;
- 
- 	serial_omap_enable_ier_thri(up);
- 	pm_runtime_mark_last_busy(up->dev);
-@@ -491,8 +488,13 @@ static void serial_omap_rlsi(struct uart_omap_port *up, unsigned int lsr)
- 	 * Read one data character out to avoid stalling the receiver according
- 	 * to the table 23-246 of the omap4 TRM.
- 	 */
--	if (likely(lsr & UART_LSR_DR))
-+	if (likely(lsr & UART_LSR_DR)) {
- 		serial_in(up, UART_RX);
-+		if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
-+		    !(up->port.rs485.flags & SER_RS485_RX_DURING_TX) &&
-+		    up->rs485_tx_filter_count)
-+			up->rs485_tx_filter_count--;
-+	}
- 
- 	up->port.icount.rx++;
- 	flag = TTY_NORMAL;
-@@ -543,6 +545,13 @@ static void serial_omap_rdi(struct uart_omap_port *up, unsigned int lsr)
- 		return;
- 
- 	ch = serial_in(up, UART_RX);
-+	if ((up->port.rs485.flags & SER_RS485_ENABLED) &&
-+	    !(up->port.rs485.flags & SER_RS485_RX_DURING_TX) &&
-+	    up->rs485_tx_filter_count) {
-+		up->rs485_tx_filter_count--;
-+		return;
-+	}
-+
- 	flag = TTY_NORMAL;
- 	up->port.icount.rx++;
- 
--- 
-2.17.1
-
+Vielen Dank, Bill Lawrence
