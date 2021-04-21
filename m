@@ -2,101 +2,122 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB1F366835
-	for <lists+linux-serial@lfdr.de>; Wed, 21 Apr 2021 11:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0535136686E
+	for <lists+linux-serial@lfdr.de>; Wed, 21 Apr 2021 11:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbhDUJiv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 21 Apr 2021 05:38:51 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:16487 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238140AbhDUJiv (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 21 Apr 2021 05:38:51 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FQFmB2XhhztWfr;
-        Wed, 21 Apr 2021 17:35:54 +0800 (CST)
-Received: from [127.0.0.1] (10.174.177.72) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.498.0; Wed, 21 Apr 2021
- 17:38:12 +0800
-Subject: Re: [PATCH 1/1] dt-bindings: serial: Add label property for pl011
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20210415073105.3687-1-thunder.leizhen@huawei.com>
- <20210420200246.GA3717650@robh.at.kernel.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <fa6c6079-8061-5774-8252-31956ac84ae2@huawei.com>
-Date:   Wed, 21 Apr 2021 17:38:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S238627AbhDUJ4K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 21 Apr 2021 05:56:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238563AbhDUJ4J (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 21 Apr 2021 05:56:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 134C86144B;
+        Wed, 21 Apr 2021 09:55:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618998936;
+        bh=D3CiZX5cVcDl+OdheHA4iQdvFSnetaDLj4pdQr4SlmI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ITKL0SF+lC1Kq/ARs1TaBsjht6azC17JSZBAkLXqYAjp2IyFZwhmvFyysvzxQr0hv
+         spgu8aCxi6opSChVFrKNI/mly72VrGVdAGeWwjeo5AV/PsQRUUkDEiELMOxa8/ExUp
+         OiBqcHcoC/CHlVI4vs4CUPMqYFRhAZihjBMjSFrYqsB5ewj8ol+OPlbu68LPVsT1oM
+         wqhLhJHGYwMHRa4eORehaOkNT7C75ogKLb2ecZcn2QSGwLRsgVRxmHcrWTGZgAvRsW
+         UcE2rqRNt5noA8Dp7/OrzdA63E+zP8QmuF9RF5fkrP2Mb98lOgavU+ZaVkzOlznB9m
+         6oV8MrvIjy8aA==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lZ9a6-0000oI-Lo; Wed, 21 Apr 2021 11:55:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 00/26] tty: drop low-latency workarounds
+Date:   Wed, 21 Apr 2021 11:54:43 +0200
+Message-Id: <20210421095509.3024-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <20210420200246.GA3717650@robh.at.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.72]
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+The infamous low_latency behaviour of tty_flip_buffer_push(), which
+meant that data could be pushed to the line discipline immediately
+instead of being deferred to a work queue, was finally removed in 2014.
+
+Since then there's no need for drivers to keep hacks to temporarily drop
+the port lock during receive processing but this pattern has been
+reproduced in later added drivers nonetheless.
+
+Note that several of these workarounds were added by a series posted in
+2013, which ended up being merged despite having completely nonsensical
+commit messages. As it turned out, it was just the RT patch set which
+effectively enabled the low_latency flag for serial drivers that did not
+handle it.
+
+There's of course nothing wrong releasing the port lock before calling
+tty_flip_buffer_push(), and some drivers still do after this series, but
+let's get rid of the completely unnecessary unlock-and-reacquire
+pattern.
+
+Johan
 
 
-On 2021/4/21 4:02, Rob Herring wrote:
-> On Thu, Apr 15, 2021 at 03:31:05PM +0800, Zhen Lei wrote:
->> When there is more than one pl011 serial port present, the label property
->> allows a custom name to be used for briefly describe the usage or position
->> of each serial port.
->>
->> Without this "label" property, many dtbs_check warnings similar to the
->> following are reported:
->> arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dt.yaml: \
->> serial@ffd74000: Additional properties are not allowed ('label' was unexpected)
->>         From schema: Documentation/devicetree/bindings/serial/pl011.yaml
-> 
-> I think this should go into serial.yaml instead.
+Johan Hovold (26):
+  tty: mxser: drop low-latency workaround
+  serial: altera_jtaguart: drop low-latency workaround
+  serial: altera_uart: drop low-latency workaround
+  serial: amba-pl010: drop low-latency workaround
+  serial: amba-pl011: drop low-latency workaround
+  serial: apbuart: drop low-latency workaround
+  serial: ar933x: drop low-latency workaround
+  serial: arc_uart: drop low-latency workaround
+  serial: atmel_serial: drop low-latency workaround
+  serial: bcm63xx: drop low-latency workaround
+  serial: icom: drop low-latency workaround
+  serial: lpc32xx_hs: drop low-latency workaround
+  serial: mcf: drop low-latency workaround
+  serial: meson: drop low-latency workaround
+  serial: mpc52xx_uart: drop low-latency workaround
+  serial: msm_serial: drop low-latency workaround
+  serial: owl: drop low-latency workaround
+  serial: rda: drop low-latency workaround
+  serial: rp2: drop low-latency workaround
+  serial: sa1100: drop low-latency workaround
+  serial: txx9: drop low-latency workaround
+  serial: sifive: drop low-latency workaround
+  serial: sunsu: drop low-latency workaround
+  serial: timbuart: drop low-latency workaround
+  serial: vt8500: drop low-latency workaround
+  serial: xilinx_uartps: drop low-latency workaround
 
-Yes，But if I add "label: true" into serial.yaml, it doesn't work. I haven't figured out why.
+ drivers/tty/mxser.c                  |  7 -------
+ drivers/tty/serial/altera_jtaguart.c |  2 --
+ drivers/tty/serial/altera_uart.c     |  2 --
+ drivers/tty/serial/amba-pl010.c      |  2 --
+ drivers/tty/serial/amba-pl011.c      |  2 --
+ drivers/tty/serial/apbuart.c         |  2 --
+ drivers/tty/serial/ar933x_uart.c     |  2 --
+ drivers/tty/serial/arc_uart.c        |  2 --
+ drivers/tty/serial/atmel_serial.c    | 18 ------------------
+ drivers/tty/serial/bcm63xx_uart.c    |  2 --
+ drivers/tty/serial/icom.c            |  2 --
+ drivers/tty/serial/lpc32xx_hs.c      |  2 --
+ drivers/tty/serial/mcf.c             |  2 --
+ drivers/tty/serial/meson_uart.c      |  2 --
+ drivers/tty/serial/mpc52xx_uart.c    |  2 --
+ drivers/tty/serial/msm_serial.c      |  4 ----
+ drivers/tty/serial/owl-uart.c        |  2 --
+ drivers/tty/serial/rda-uart.c        |  2 --
+ drivers/tty/serial/rp2.c             |  2 --
+ drivers/tty/serial/sa1100.c          |  2 --
+ drivers/tty/serial/serial_txx9.c     |  4 ++--
+ drivers/tty/serial/sifive.c          |  2 --
+ drivers/tty/serial/sunsu.c           |  4 ----
+ drivers/tty/serial/timbuart.c        |  2 --
+ drivers/tty/serial/vt8500_serial.c   |  2 --
+ drivers/tty/serial/xilinx_uartps.c   |  3 +--
+ 26 files changed, 3 insertions(+), 77 deletions(-)
 
-By the way, should "$ref: /schemas/serial.yaml#" be replaced with "$ref: /schemas/serial/serial.yaml#"?
-
-> 
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  Documentation/devicetree/bindings/serial/pl011.yaml | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/serial/pl011.yaml b/Documentation/devicetree/bindings/serial/pl011.yaml
->> index 1f8e9f2644b6b80..303c7746423f503 100644
->> --- a/Documentation/devicetree/bindings/serial/pl011.yaml
->> +++ b/Documentation/devicetree/bindings/serial/pl011.yaml
->> @@ -34,6 +34,9 @@ properties:
->>    reg:
->>      maxItems: 1
->>  
->> +  label:
->> +    maxItems: 1
-> 
-> label is always a single string and so 'maxItems' is always 1. Just 
-> need:
-> 
-> label: true
-
-OK
-
-> 
->> +
->>    interrupts:
->>      maxItems: 1
->>  
->> -- 
->> 2.26.0.106.g9fadedd
->>
->>
-> 
-> .
-> 
+-- 
+2.26.3
 
