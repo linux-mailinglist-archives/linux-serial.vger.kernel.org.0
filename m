@@ -2,38 +2,37 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AD8366874
-	for <lists+linux-serial@lfdr.de>; Wed, 21 Apr 2021 11:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235D2366883
+	for <lists+linux-serial@lfdr.de>; Wed, 21 Apr 2021 11:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238687AbhDUJ4M (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 21 Apr 2021 05:56:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52432 "EHLO mail.kernel.org"
+        id S238774AbhDUJ4T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 21 Apr 2021 05:56:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238597AbhDUJ4J (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 21 Apr 2021 05:56:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C43161457;
-        Wed, 21 Apr 2021 09:55:36 +0000 (UTC)
+        id S238644AbhDUJ4K (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 21 Apr 2021 05:56:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1925C61582;
+        Wed, 21 Apr 2021 09:55:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618998936;
-        bh=i9atm7wmPJeQwTfhi8Aqvj/HCbBa43kwL5SDOxWMer0=;
+        s=k20201202; t=1618998937;
+        bh=Ksv9YjFjtrxObzx24ubHLCHYQzR97rDs6O9O5M32Y9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k4I+IO5bhSqd9MtqHtgdL4fswqpXZuYFI6Yxe9t04apuJc0MJ7nbNw4Zq1SqqRM2E
-         lklwSKlJMYkVw/a/u8P4S6Kj+HSLH+sN20lmaP4F/TkNrXDyFk23blzISUzH50fPqu
-         DqAnfnIT9/K3+Y8C2YDLcaaRP4ia3SP5H5fefz6VxBFQJT1s1WWdtubGVu31vRzXZF
-         qMKZSJc1bDC/wAlkqpAlLJUslu9N458JwvqjDvs5kpMOrfQQRgBXSKBaHMEnZb0t+l
-         LHaMFZp+5xQgG77H9kfjri26rj7sWG6NtFraZ4T0eJFSYeSZTS2hbqvI3Uii53KxMe
-         OiYTqWvJ53sug==
+        b=Xo+gdLo0wZl88+ZIU9ETD9DQj6nAHMGqRZR2vfMBWax16YBxqPkVI5VMNVSWs4qnK
+         Zd4TWxWiHjicP+wl+WqBseoTfB4K21KLh3erQaiCWT/opq0Ek42jQzGJ9C2ipNBZ4x
+         mSImIylqi+06i72GoMQ74cmWFMJLCP/Jlxyv5bz0qpboJvHV67JhAQW3w6eQPKYShW
+         t99UXt06Pdfx3CcuXE5kzQlSvJkCZsA4Jv1n+PEJR5a/cqXgJ18FPaOHZif8jZhNdV
+         05T6y+XIcK+EA9GMTMDaaJhbaI5ZIEYxWTOnQtOqKMi6KAajDBNdKlYJz5j3VEoI3K
+         cxsKw49p2AxRQ==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1lZ9a7-0000ok-FL; Wed, 21 Apr 2021 11:55:39 +0200
+        id 1lZ9a7-0000on-Hf; Wed, 21 Apr 2021 11:55:39 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>
-Subject: [PATCH 09/26] serial: atmel_serial: drop low-latency workaround
-Date:   Wed, 21 Apr 2021 11:54:52 +0200
-Message-Id: <20210421095509.3024-10-johan@kernel.org>
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 10/26] serial: bcm63xx: drop low-latency workaround
+Date:   Wed, 21 Apr 2021 11:54:53 +0200
+Message-Id: <20210421095509.3024-11-johan@kernel.org>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20210421095509.3024-1-johan@kernel.org>
 References: <20210421095509.3024-1-johan@kernel.org>
@@ -43,66 +42,47 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Commit 1ecc26bd2789 ("atmel_serial: split the interrupt handler") worked
-around the infamous low_latency behaviour of tty_flip_buffer_push() by
-dropping and reacquiring the port lock in the tasklet callback.
+Commit b4d499241c34 ("tty: serial: bcm63xx: drop uart_port->lock before
+calling tty_flip_buffer_push()") claimed to address a locking
+issue but only provided a dubious lockdep splat from an unrelated
+driver, which in the end turned out to be due a broken local change
+carried by the author.
+
+Unfortunately these patches were merged before the issue had been
+analysed properly so the commit messages makes no sense whatsoever.
+
+The real issue was first seen on RT which at the time effectively always
+set the low_latency flag for all serial drivers by patching
+tty_flip_buffer_push(). This in turn revealed that many drivers did not
+handle the infamous low_latency behaviour which meant that data was
+pushed immediately to the line discipline instead of being deferred to a
+work queue.
 
 Since commit a9c3f68f3cd8 ("tty: Fix low_latency BUG"),
 tty_flip_buffer_push() always schedules a work item to push data to the
-line discipline and there's no need to keep any low_latency hacks around.
+line discipline and there's no need to keep any low_latency hacks
+around.
 
-Cc: Richard Genoud <richard.genoud@gmail.com>
+Link: https://lore.kernel.org/linux-serial/cover.1376923198.git.viresh.kumar@linaro.org/
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/tty/serial/atmel_serial.c | 18 ------------------
- 1 file changed, 18 deletions(-)
+ drivers/tty/serial/bcm63xx_uart.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index a24e5c2b30bc..058886d9045b 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -1178,13 +1178,7 @@ static void atmel_rx_from_dma(struct uart_port *port)
- 			       1,
- 			       DMA_FROM_DEVICE);
+diff --git a/drivers/tty/serial/bcm63xx_uart.c b/drivers/tty/serial/bcm63xx_uart.c
+index 5674da2b76f0..5fb0e84f7fd1 100644
+--- a/drivers/tty/serial/bcm63xx_uart.c
++++ b/drivers/tty/serial/bcm63xx_uart.c
+@@ -294,9 +294,7 @@ static void bcm_uart_do_rx(struct uart_port *port)
  
--	/*
--	 * Drop the lock here since it might end up calling
--	 * uart_start(), which takes the lock.
--	 */
+ 	} while (--max_count);
+ 
 -	spin_unlock(&port->lock);
- 	tty_flip_buffer_push(tport);
--	spin_lock(&port->lock);
- 
- 	atmel_uart_writel(port, ATMEL_US_IER, ATMEL_US_TIMEOUT);
- }
-@@ -1576,13 +1570,7 @@ static void atmel_rx_from_ring(struct uart_port *port)
- 		uart_insert_char(port, status, ATMEL_US_OVRE, c.ch, flg);
- 	}
- 
--	/*
--	 * Drop the lock here since it might end up calling
--	 * uart_start(), which takes the lock.
--	 */
--	spin_unlock(&port->lock);
- 	tty_flip_buffer_push(&port->state->port);
+ 	tty_flip_buffer_push(tty_port);
 -	spin_lock(&port->lock);
  }
  
- static void atmel_release_rx_pdc(struct uart_port *port)
-@@ -1667,13 +1655,7 @@ static void atmel_rx_from_pdc(struct uart_port *port)
- 		}
- 	} while (head >= pdc->dma_size);
- 
--	/*
--	 * Drop the lock here since it might end up calling
--	 * uart_start(), which takes the lock.
--	 */
--	spin_unlock(&port->lock);
- 	tty_flip_buffer_push(tport);
--	spin_lock(&port->lock);
- 
- 	atmel_uart_writel(port, ATMEL_US_IER,
- 			  ATMEL_US_ENDRX | ATMEL_US_TIMEOUT);
+ /*
 -- 
 2.26.3
 
