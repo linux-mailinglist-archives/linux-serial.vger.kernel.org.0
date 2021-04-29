@@ -2,187 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A4F36E6E9
-	for <lists+linux-serial@lfdr.de>; Thu, 29 Apr 2021 10:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FCF36E7F6
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Apr 2021 11:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240155AbhD2IPB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 29 Apr 2021 04:15:01 -0400
-Received: from lucky1.263xmail.com ([211.157.147.135]:56822 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240071AbhD2IOw (ORCPT
+        id S233046AbhD2J2l (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 29 Apr 2021 05:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237366AbhD2J2k (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 29 Apr 2021 04:14:52 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 2D3FBAB07F;
-        Thu, 29 Apr 2021 16:14:03 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P2750T140649173088000S1619684039890516_;
-        Thu, 29 Apr 2021 16:14:02 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <8be1fc234b6a271c6098fd643acf5a13>
-X-RL-SENDER: cl@rock-chips.com
-X-SENDER: cl@rock-chips.com
-X-LOGIN-NAME: cl@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-RCPT-COUNT: 30
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   <cl@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: [PATCH v4 10/10] arm64: dts: rockchip: add basic dts for RK3568 EVB
-Date:   Thu, 29 Apr 2021 16:13:58 +0800
-Message-Id: <20210429081358.18057-1-cl@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210429081151.17558-1-cl@rock-chips.com>
-References: <20210429081151.17558-1-cl@rock-chips.com>
+        Thu, 29 Apr 2021 05:28:40 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77463C06138C;
+        Thu, 29 Apr 2021 02:27:53 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id x7so66082576wrw.10;
+        Thu, 29 Apr 2021 02:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sHv+t9w1wAMsbIM5VHr+smQOf+tyPUMFdSQ+YdNerTg=;
+        b=LlBSVRTCtVIOrBU1AIHYSFyCjDUySKyzOG6CAIS1yFRuE4b9MBvYh4XrbWfO32IdYG
+         6g1jPO/861wrXyU4AYIUETm+iHqGgrwaPSfkLr5q41S4xP1o0zzlBLCCKKTDRKxONCAE
+         XsBoRal7KdvVIsIeVk8xb9xvc7hlRFDNeA03Sf0+4ohBIotHstEe+cuW6nJsalBtL67D
+         y36ktx1RoVBsKu3pkhg4DxZpCWdAQzr4TngGd0WaQookUL52Y4BUD8Cb5YjeiNcnv8WJ
+         RY0zUTcdkusDaN/tFeJPuI6//wa7cY1hj55jmkbwxfYm1t0psTcEHv2URpXdqex9cmrh
+         B+xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sHv+t9w1wAMsbIM5VHr+smQOf+tyPUMFdSQ+YdNerTg=;
+        b=MfDcHsSvymdj8/wnWhvY3rvelOt66e1k9jNODJ+zmeataJR3ADkpSS4bQBHo6ctuJe
+         9hHZVtcLzhtkLRT0bnUdltZhyXVtDfM+E1HxmRexgKKvR/67CesFVirClg3JpqEekC7T
+         9WWBY2DJvBQDCLqfq6M5fpfK/7vn3nBPoxRju9y+p4/3pjYsxnuXy3XY5GFTwRc/ABmU
+         6o5dHYzjXuKwzPQxBxhjmpyp7M+CjHUNTFE7/QKUQyIPk4lvQRUBsJh6tEsi2aqw5d/c
+         yT7J2pVaookbATKj9R364H/m3wG3dg5YXz+Q+zatYjhVAiNrnrROg/KXRMCaYJ2OclNt
+         2sJw==
+X-Gm-Message-State: AOAM532th5d3I8f2ZecE6A0ZPipoj6SvEiIdOccQXGRCYmQA/kpTMtMu
+        eR6pOMT+hOG9bEOoEBLn3noyQCGmDms=
+X-Google-Smtp-Source: ABdhPJw40X1ijqMJIItMnswZOauNBA6lQ0H59WZMpduPH4NU8O7YAHx9dhQnilWfYMRsXurU0YoHIQ==
+X-Received: by 2002:adf:cc85:: with SMTP id p5mr9063889wrj.75.1619688472301;
+        Thu, 29 Apr 2021 02:27:52 -0700 (PDT)
+Received: from [192.168.1.20] ([195.245.23.224])
+        by smtp.gmail.com with ESMTPSA id m2sm9194674wmq.15.2021.04.29.02.27.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Apr 2021 02:27:51 -0700 (PDT)
+Subject: Re: [PATCH] serial: 8250_omap: fix a timeout loop condition
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <YIpd+kOpXKMpEXPf@mwanda>
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Message-ID: <960e9d26-8840-d6b6-b368-0ca79fc52544@gmail.com>
+Date:   Thu, 29 Apr 2021 11:23:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <YIpd+kOpXKMpEXPf@mwanda>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Liang Chen <cl@rock-chips.com>
+Hello Dan!
 
-This patch add rk3568-evb1-v10.dts for RK3568 evaluation board.
-add uart/emmc/i2c/rk809 node for basic function.
+On 29/04/2021 09:19, Dan Carpenter wrote:
+> This loop ends on -1 so the error message will never be printed.
+> 
+> Fixes: 4bcf59a5dea0 ("serial: 8250: 8250_omap: Account for data in flight during DMA teardown")
 
-Signed-off-by: Liang Chen <cl@rock-chips.com>
----
- .../devicetree/bindings/arm/rockchip.yaml     |  5 ++
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 79 +++++++++++++++++++
- 3 files changed, 85 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+Looks good to me!
+Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 4a6f772c1043..6546b015fc62 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -600,6 +600,11 @@ properties:
-           - const: zkmagic,a95x-z2
-           - const: rockchip,rk3318
- 
-+      - description: Rockchip RK3568 Evaluation board
-+        items:
-+          - const: rockchip,rk3568-evb1-v10
-+          - const: rockchip,rk3568
-+
- additionalProperties: true
- 
- ...
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index c3e00c0e2db7..7fdb41de01ec 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -51,3 +51,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-new file mode 100644
-index 000000000000..69786557093d
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-+ *
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/rockchip.h>
-+#include "rk3568.dtsi"
-+
-+/ {
-+	model = "Rockchip RK3568 EVB1 DDR4 V10 Board";
-+	compatible = "rockchip,rk3568-evb1-v10", "rockchip,rk3568";
-+
-+	chosen: chosen {
-+		stdout-path = "serial2:1500000n8";
-+	};
-+
-+	dc_12v: dc-12v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "dc_12v";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+	};
-+
-+	vcc3v3_sys: vcc3v3-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	vcc5v0_sys: vcc5v0-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	vcc3v3_lcd0_n: vcc3v3-lcd0-n {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_lcd0_n";
-+		regulator-boot-on;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+
-+	vcc3v3_lcd1_n: vcc3v3-lcd1-n {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_lcd1_n";
-+		regulator-boot-on;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+};
-+
-+&sdhci {
-+	bus-width = <8>;
-+	max-frequency = <200000000>;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
--- 
-2.17.1
-
-
-
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/tty/serial/8250/8250_omap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> index 8ac11eaeca51..c06631ced414 100644
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -813,7 +813,7 @@ static void __dma_rx_do_complete(struct uart_8250_port *p)
+>  			       poll_count--)
+>  				cpu_relax();
+>  
+> -			if (!poll_count)
+> +			if (poll_count == -1)
+>  				dev_err(p->port.dev, "teardown incomplete\n");
+>  		}
+>  	}
