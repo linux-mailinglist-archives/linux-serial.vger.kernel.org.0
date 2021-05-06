@@ -2,71 +2,131 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DFF374F19
-	for <lists+linux-serial@lfdr.de>; Thu,  6 May 2021 07:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF124375017
+	for <lists+linux-serial@lfdr.de>; Thu,  6 May 2021 09:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbhEFF5c (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 6 May 2021 01:57:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232750AbhEFF51 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 6 May 2021 01:57:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69E6C61176;
-        Thu,  6 May 2021 05:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620280583;
-        bh=5A+cxZCpW9PshKuw+VRDeiYXmxkSDofsAEWN00JBE9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vWCnPRXYStPE6IhDlhTzMhVUw52AqboMCZVafMFFej62brb9avM8ZrZaoO67uUfz2
-         hPwzetDoHXEm0QyOirsSluoPsO8J1I/KgdykiMqvoq0+ANYVU0FgQQsPHOl3qUNtqw
-         J+d3LfrFohhNyNCvpiIbd6yXeUEKrdvq3zCHCPtE=
-Date:   Thu, 6 May 2021 07:56:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Richard Henderson <rth@twiddle.net>
-Subject: Re: [PATCH 25/35] tty: remove tty_operations::chars_in_buffer for
- non-buffering
-Message-ID: <YJOFAzDSMsVZbu3I@kroah.com>
+        id S233163AbhEFHZL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 6 May 2021 03:25:11 -0400
+Received: from smtprelay0123.hostedemail.com ([216.40.44.123]:56858 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233383AbhEFHZK (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 6 May 2021 03:25:10 -0400
+X-Greylist: delayed 481 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 May 2021 03:25:10 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave03.hostedemail.com (Postfix) with ESMTP id 9140D1801C42B
+        for <linux-serial@vger.kernel.org>; Thu,  6 May 2021 07:16:12 +0000 (UTC)
+Received: from omf18.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 1151D100E7B44;
+        Thu,  6 May 2021 07:16:11 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 3E2642EBF98;
+        Thu,  6 May 2021 07:16:10 +0000 (UTC)
+Message-ID: <ef1bd57095e941560530be43806791966a6735ad.camel@perches.com>
+Subject: Re: [PATCH 34/35] tty: make tty_get_byte_size available
+From:   Joe Perches <joe@perches.com>
+To:     Jiri Slaby <jslaby@suse.cz>, gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 May 2021 00:16:08 -0700
+In-Reply-To: <20210505091928.22010-35-jslaby@suse.cz>
 References: <20210505091928.22010-1-jslaby@suse.cz>
- <20210505091928.22010-26-jslaby@suse.cz>
- <40c8a109-9161-621e-f8cd-c43fdba6dac2@kernel.org>
+         <20210505091928.22010-35-jslaby@suse.cz>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40c8a109-9161-621e-f8cd-c43fdba6dac2@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 3E2642EBF98
+X-Spam-Status: No, score=-2.90
+X-Stat-Signature: rqyqs418axej39nobtsrt4bmzzgx3tkt
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/EnO04s/8BpC4nMWNfXmojDlsCpHdghz0=
+X-HE-Tag: 1620285370-977581
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, May 06, 2021 at 07:47:04AM +0200, Jiri Slaby wrote:
-> On 05. 05. 21, 11:19, Jiri Slaby wrote:
-> > The only user of tty_ops::chars_in_buffer is tty_chars_in_buffer. And it
-> > considers tty_ops::chars_in_buffer optional. In case it's NULL, zero is
-> > returned. So remove all those chars_in_buffer from tty_ops which return
-> > zero. (Zero means such driver doesn't buffer.)
-> > 
-> > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> 
-> 
-> > c: Richard Henderson <rth@twiddle.net>
-> 
-> Uh, "C" is a fugitive. Wanted dead or alive.
-> 
-> So should I send a v2 with:
-> Cc: Richard Henderson <rth@twiddle.net>
-> ?
+On Wed, 2021-05-05 at 11:19 +0200, Jiri Slaby wrote:
+> Many tty drivers contain code to compute bits count depending on termios
+> cflags. So extract this code from serial core to a separate tty helper
+> function called tty_get_byte_size.
+[]
+> diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
+[]
+> +/**
+> + *	tty_get_byte_size	-	get size of a byte
+> + *	@cflag: termios cflag value
+> + *	@account_flags: account for start and stop bits, second stop bit (if
+> + *			set), and parity (if set)
+> + *
+> + *	Get the size of a byte in bits depending on @cflag. Depending on
+> + *	@account_flags parameter, the result also accounts start and stop bits,
+> + *	the second stop bit, and parity bit.
+> + */
+> +unsigned char tty_get_byte_size(unsigned int cflag, bool account_flags)
+> +{
+> +	unsigned char bits = account_flags ? 2 : 0;
+> +
+> +	/* byte size and parity */
+> +	switch (cflag & CSIZE) {
+> +	case CS5:
+> +		bits += 5;
+> +		break;
+> +	case CS6:
+> +		bits += 6;
+> +		break;
+> +	case CS7:
+> +		bits += 7;
+> +		break;
+> +	case CS8:
+> +	default:
+> +		bits += 8;
+> +		break;
+> +	}
+> +
+> +	if (account_flags && (cflag & CSTOPB))
+> +		bits++;
+> +
+> +	if (account_flags && (cflag & PARENB))
+> +		bits++;
+> +
+> +	return bits;
+> +}
+> +EXPORT_SYMBOL_GPL(tty_get_byte_size);
 
-Nah, it should be fine, I can fix it up.
+Perhaps clearer not testing account_flags multiple times.
 
-thanks,
+unsigned char tty_get_byte_size(unsigned int cflag, bool account_flags)
+{
+	unsigned char bits;
 
-greg k-h
+	/* byte size and parity */
+	switch (cflag & CSIZE) {
+	case CS5:
+		bits = 5;
+		break;
+	case CS6:
+		bits = 6;
+		break;
+	case CS7:
+		bits = 7;
+		break;
+	case CS8:
+	default:
+		bits = 8;
+		break;
+	}
+
+	if (account_flags) {
+		bits += 2;	/* start/stop bits */
+
+		if (cflag & CSTOPB)
+			bits++;
+
+		if (cflag & PARENB)
+			bits++;
+	}
+
+	return bits;
+}
+
+
