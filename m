@@ -2,73 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AEA376A9D
-	for <lists+linux-serial@lfdr.de>; Fri,  7 May 2021 21:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFA0376CC5
+	for <lists+linux-serial@lfdr.de>; Sat,  8 May 2021 00:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbhEGTUl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 7 May 2021 15:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhEGTUl (ORCPT
+        id S230151AbhEGW1m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 7 May 2021 18:27:42 -0400
+Received: from bosmailout01.eigbox.net ([66.96.190.1]:36027 "EHLO
+        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhEGW1h (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 7 May 2021 15:20:41 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670E9C061574;
-        Fri,  7 May 2021 12:19:40 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id f24so15178759ejc.6;
-        Fri, 07 May 2021 12:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9m7MMdVqLKAy3chOmd9o8x3GgGbbXRzbchSC4T+XsRI=;
-        b=KY0d3e3IEUTZBH5JzSrg6Mj1XkZNF99NKMXm5l9scfi0MdX99qxpoH73iqkKF17s1y
-         Wo3k5EBCgudNoNYx1dv0hs2+laRhHFBEr2Zw7hw9LoweZ5BfPZh1+apa1PgY5ZOUpUn/
-         EXKgQYM1kEN5ahCcpXWwn773uEaGBlACE91XZQJKou8wkylt5n6EypjyH9MBUf9dVZUH
-         7AD5n+pEDM7i7rUclwSZ4U2rVTZmHi18lTTXehB/ycLkceSu5RUg5KsMJGVk2thku4pf
-         vbpoOYMu8TQLC+rPuv1eDyk1n5tAMrNJzuZFwWHcAAWaTkmZaWFU17GIwVm8UiUNLtHl
-         tQzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9m7MMdVqLKAy3chOmd9o8x3GgGbbXRzbchSC4T+XsRI=;
-        b=dWhe+W6sNkJ7l+WAhDswWycqjaQqy1X24JklobiITtdrkoKq/5DRueo4+agONiNOQt
-         DaqO7SU5CMi6KuehMSCNNdV0fHugAPM8EBYTTW1Fi4RNmYgPSfa84+rwdTN99/FOt8a+
-         B5TQ9xaSjym3EHbKq4z+FsYYl+nkqHcdDIuYZxZo3y8EsbPnU/mVaqu2fXiKRXjwePqY
-         PNwHJGhs5JWdGUxamY05GQKBRBwSHOUlNoGncOPdJ8sNcpl7z6PWTcjGpfOQmwzigZIP
-         UWYoUoxQEO984dMZrSOkDZDicf1uldJ0hDtTm5L9T0NlKCs62X8j3r1BTLRf2+x50jsQ
-         O1RQ==
-X-Gm-Message-State: AOAM532dxaVvlPdX+fLb57U7Tbr0uPHkK5Y+Kx9bulKUGlvoO5bF9qRJ
-        K6lbiQQAkcLfUa0KHiLtlNSgnwP3vQTgkwFq
-X-Google-Smtp-Source: ABdhPJwkTnOB6rNhcQ5WxYos6n/lFZIFyXKgvJlPwbIBrWwIb4iPbrKJdgX+hWtz+LAfaJ4++1FbEg==
-X-Received: by 2002:a17:906:f6d0:: with SMTP id jo16mr11645678ejb.461.1620415178115;
-        Fri, 07 May 2021 12:19:38 -0700 (PDT)
-Received: from r00t ([212.15.178.107])
-        by smtp.gmail.com with ESMTPSA id rs28sm3965783ejb.35.2021.05.07.12.19.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 May 2021 12:19:37 -0700 (PDT)
-Date:   Fri, 7 May 2021 22:18:13 +0200
-From:   Ivan Bakula <wamreu@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh@kernel.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] TTY: serdev: Replace depricated macros
-Message-ID: <YJWghQC8hJ3UO6lG@r00t>
-References: <20210506183228.33981-1-wamreu@gmail.com>
- <YJQp4W2X/tuvLfVA@kroah.com>
- <YJUhZP1FwMlUfWrw@r00t>
- <YJUbv3t05ai+g2k0@kroah.com>
+        Fri, 7 May 2021 18:27:37 -0400
+X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:27:30 EDT
+Received: from bosmailscan09.eigbox.net ([10.20.15.9])
+        by bosmailout01.eigbox.net with esmtp (Exim)
+        id 1lf8QO-00068o-JJ; Fri, 07 May 2021 17:54:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=bjgKomV6NO5Eg5D3qsCBps1llx
+        tj4k2teSfIdfo/duBtOSoC/FW1+C1nXiYJbrvf2JDobx8fDCsgnxHFoPWOCb5eI+OJOIgvnnfKlpl
+        ZqidIuDnjEPTMao1vFwrg6M9FUKU/cz6TT5/KN4ccsk+aQli3Wgs3G1cQz5vdbC1Y2SXULFY8Mu2t
+        1PShwmiDRn71EPzgUHUVu0GG39z6uSTEuRgOXhiNl9ekuZ5QXUAEykoocvC5/DkORRmERAA91o1HY
+        Sl76pPWw9UBVGbuFbfdVPfVcFxJM5xZDrmgt6uCf9J+dn/n7LFOSOxBaL9svxxYdhOkJwdz4uh075
+        2gI+xJSw==;
+Received: from [10.115.3.32] (helo=bosimpout12)
+        by bosmailscan09.eigbox.net with esmtp (Exim)
+        id 1lf8QO-0003aD-AI; Fri, 07 May 2021 17:54:20 -0400
+Received: from boswebmail06.eigbox.net ([10.20.16.6])
+        by bosimpout12 with 
+        id 1xuH2500407qujN01xuLVi; Fri, 07 May 2021 17:54:20 -0400
+X-EN-SP-DIR: OUT
+X-EN-SP-SQ: 1
+Received: from [127.0.0.1] (helo=homestead)
+        by boswebmail06.eigbox.net with esmtp (Exim)
+        id 1lf8QL-0006fx-UG; Fri, 07 May 2021 17:54:17 -0400
+Received: from [197.239.81.229]
+ by emailmg.homestead.com
+ with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:54:17 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YJUbv3t05ai+g2k0@kroah.com>
+Date:   Fri, 07 May 2021 21:54:17 +0000
+From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
+To:     undisclosed-recipients:;
+Subject: URGENT REPLY NEEDED
+Reply-To: suzara2017malingwan@gmail.com
+Mail-Reply-To: suzara2017malingwan@gmail.com
+Message-ID: <36acfe805efde59f3f399df1324ce6b9@godsofu4.com>
+X-Sender: fast65@godsofu4.com
+User-Agent: Roundcube Webmail/1.3.14
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-EN-AuthUser: fast65@godsofu4.com
+Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Ok, got it.
 
-Thank you for your time,
 
-I.B.
+My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
+of the Philippine presently base in West Africa B/F, dealing with
+exportation of Gold, I was diagnose of blood Causal decease, and my
+doctor have announce to me that I have few days to leave due to the
+condition of my sickness.
+
+I have a desire to build an orphanage home in your country of which i
+cannot execute the project myself due to my present health condition,
+I am willing to hand over the project under your care for you to help
+me fulfill my dreams and desire of building an orphanage home in your
+country.
+
+Reply in you are will to help so that I can direct you to my bank for
+the urgent transfer of the fund/money require for the project to your
+account as I have already made the fund/money available.
+
+With kind regards
+Mrs Suzara Maling Wan
