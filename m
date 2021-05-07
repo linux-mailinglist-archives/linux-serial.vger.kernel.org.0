@@ -2,97 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5AF375971
-	for <lists+linux-serial@lfdr.de>; Thu,  6 May 2021 19:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22430375E45
+	for <lists+linux-serial@lfdr.de>; Fri,  7 May 2021 03:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236383AbhEFRfD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 6 May 2021 13:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236312AbhEFRe6 (ORCPT
+        id S232151AbhEGBPv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 6 May 2021 21:15:51 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:45845 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230387AbhEGBPv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 6 May 2021 13:34:58 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0D0C061761;
-        Thu,  6 May 2021 10:33:59 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id n15so2485726edw.8;
-        Thu, 06 May 2021 10:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CcThJDtQ981B2x/N73MHCvt7MQmPMdERZyhj+4MLJ2A=;
-        b=n940lKCUxawS1BhdCJB2Dhl0QKq7WDa6YOQvt9BCAMKfMZYWEJrpJmTKeJxkJLJ7zB
-         Bm/hhJV4yhJNSnQauhJ7K4Atx1IMWqj86Am7NMXDdMvsnsU9r0itUU2g9pn61kJbX/ZY
-         vDQv2WmRWq49gYIQb2YpBraBqcfZImV5wGcU8fDuiGLCthZ2huK0w9PDH72V8jffUxNV
-         RTc3OFiI9WNCVz3cqfOshKcuZMCfCbHiSfAX9EX8VW1nY3EMvfKL7LsqxB7W7i8Er32A
-         z4n+qMC8ncARY5/Db62qCZs6drdMRjsMaH3GKEZg/kGgK6r1qmsafJr1tI/c60QeMOoJ
-         nezw==
+        Thu, 6 May 2021 21:15:51 -0400
+Received: by mail-ot1-f52.google.com with SMTP id f75-20020a9d03d10000b0290280def9ab76so6592653otf.12;
+        Thu, 06 May 2021 18:14:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CcThJDtQ981B2x/N73MHCvt7MQmPMdERZyhj+4MLJ2A=;
-        b=FSBcZqWpY9KWjoq2iTF0a8IMMtBB/qndjmyqyWg5F45G+KqTuPcgHHZlFiDeywAtMg
-         VWWXaRpCDRLn+MsMnNi0DSTkuqqAcI7h3aErucKS3Y/uNeAcUWHFhkyrf08jE9giZiZ6
-         SZu5G19xXoYD4ZXzXgiTxgTd+5SjUl9KzySrluvk/H6rbdc6XrZn3og+tPX3cPd4swsn
-         nzenkzwR1yEk4u+wCsCH5JhgIXY03MmqR3PdryzpM3wfYIKMtVzHiqy+Am7hbeC+3cqH
-         PMYyvNpoTQo0NGz5d6Z5FfyU+Odkt9SafSf+jm2n0fgcuPsThrH8xzbIy/BBHsRWhXgr
-         LtWA==
-X-Gm-Message-State: AOAM5315BH/2F9dukEJeKHxdjadP9LwXn0f0cPNdWPA+e+GqgbU4ROz/
-        032PPsKnmMyGee+t/OZTJPM=
-X-Google-Smtp-Source: ABdhPJz/HzA4DZ2bzXhVn81vPZQ+z436nEd9211YTbTDxTNCwn5GeRK+iD873rdkN8yTQnPzIsINBw==
-X-Received: by 2002:aa7:c495:: with SMTP id m21mr6637964edq.123.1620322438192;
-        Thu, 06 May 2021 10:33:58 -0700 (PDT)
-Received: from localhost.localdomain ([212.15.177.85])
-        by smtp.gmail.com with ESMTPSA id ca20sm1801800ejb.84.2021.05.06.10.33.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oEfCN0pfoA/qDroFhgTH+ere0rMR3Q9MSvHYsosWDl8=;
+        b=SYbdMGQlWXB9JVLfx+09kg2z6CmWN/VmrzAfWH6SQwi2LUgq+iaMweh0rKpZX+LYs8
+         NyMOuCM175oWGO7XfLIhiayR4Nf8W3WvL29WUAuOHBffEnBdWq5vxdMqnIqbdkEXwqUW
+         dxZlfhaujmJY7q/znQ+YbJjU0G90pVJQ1a4FFzjLuDhegXQzjKu04NObMqr/+w6mfVP0
+         VQTuIEb9fuZgW9FwQMYUGO+sWSFr3eazkHa7eXHSat9esYgWzHly7qbNE/3Y5eNcsFry
+         1gG9A9ykI/VohGKQnjLjURxriwvaXrY2ye503lRntwuD9U+Rvu8bvCRAeFz0lFPPFm7U
+         TkDw==
+X-Gm-Message-State: AOAM532YCRuWu9vv/TjGmaIB+/oBiP91ULGJNFk+HJ+KbkcNrrJNQGrs
+        awDaSnzXfMRAo0WDWPjWDw==
+X-Google-Smtp-Source: ABdhPJwH6pLpfJTNIPyBF2g8fBrl9A07O+m3Rx4UXrIsglOnYIjflryN7rQAEjYLNNSULq8cGge4wQ==
+X-Received: by 2002:a9d:7997:: with SMTP id h23mr6097466otm.366.1620350091104;
+        Thu, 06 May 2021 18:14:51 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f13sm948681ote.46.2021.05.06.18.14.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 May 2021 10:33:57 -0700 (PDT)
-From:   Ivan Bakula <wamreu@gmail.com>
-To:     robh@kernel.org
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ivan Bakula <wamreu@gmail.com>
-Subject: [PATCH] TTY: serdev: Replace depricated macros
-Date:   Thu,  6 May 2021 20:32:28 +0200
-Message-Id: <20210506183228.33981-1-wamreu@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 06 May 2021 18:14:50 -0700 (PDT)
+Received: (nullmailer pid 1127217 invoked by uid 1000);
+        Fri, 07 May 2021 01:14:49 -0000
+Date:   Thu, 6 May 2021 20:14:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-stm32 <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: serial: Change to reference the
+ kernel-defined serial.yaml
+Message-ID: <20210507011449.GA1126886@robh.at.kernel.org>
+References: <20210506132049.1513-1-thunder.leizhen@huawei.com>
+ <20210506132049.1513-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210506132049.1513-2-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Replace depricated macros ida_simple_get and ida_simple_remove with
-appropriate function calls to ida_alloc and ida_free.
+On Thu, 06 May 2021 21:20:48 +0800, Zhen Lei wrote:
+> The /schemas/serial.yaml from dt-schema only has the property $nodename,
+> whereas the kernel-defined /schemas/serial/serial.yaml contains more
+> useful properties, support for more complex application scenarios.
+> 
+> For example:
+> 1) The property "current-speed" in fsl-lx2160a.dtsi
+> 2) The subnode "bluetooth" in hi3660-hikey960.dts
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  Documentation/devicetree/bindings/serial/8250.yaml            | 2 +-
+>  .../devicetree/bindings/serial/brcm,bcm7271-uart.yaml         | 2 +-
+>  Documentation/devicetree/bindings/serial/ingenic,uart.yaml    | 2 +-
+>  Documentation/devicetree/bindings/serial/pl011.yaml           | 4 ++--
+>  Documentation/devicetree/bindings/serial/qca,ar9330-uart.yaml | 4 ++--
+>  Documentation/devicetree/bindings/serial/renesas,em-uart.yaml | 2 +-
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml    | 2 +-
+>  Documentation/devicetree/bindings/serial/sifive-serial.yaml   | 4 ++--
+>  .../devicetree/bindings/serial/snps-dw-apb-uart.yaml          | 2 +-
+>  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml   | 3 +--
+>  10 files changed, 13 insertions(+), 14 deletions(-)
+> 
 
-Signed-off-by: Ivan Bakula <wamreu@gmail.com>
----
- drivers/tty/serdev/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for doing this!
 
-diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index aead0c0c9..5f873960b 100644
---- a/drivers/tty/serdev/core.c
-+++ b/drivers/tty/serdev/core.c
-@@ -75,7 +75,7 @@ static bool is_serdev_device(const struct device *dev)
- static void serdev_ctrl_release(struct device *dev)
- {
- 	struct serdev_controller *ctrl = to_serdev_controller(dev);
--	ida_simple_remove(&ctrl_ida, ctrl->nr);
-+	ida_free(&ctrl_ida, ctrl->nr);
- 	kfree(ctrl);
- }
- 
-@@ -488,7 +488,7 @@ struct serdev_controller *serdev_controller_alloc(struct device *parent,
- 	if (!ctrl)
- 		return NULL;
- 
--	id = ida_simple_get(&ctrl_ida, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&ctrl_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		dev_err(parent,
- 			"unable to allocate serdev controller identifier.\n");
--- 
-2.31.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
