@@ -2,66 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F256437BBA6
-	for <lists+linux-serial@lfdr.de>; Wed, 12 May 2021 13:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20AD37BF7E
+	for <lists+linux-serial@lfdr.de>; Wed, 12 May 2021 16:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbhELLTt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 May 2021 07:19:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41748 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230037AbhELLTr (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 May 2021 07:19:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A767F613CD;
-        Wed, 12 May 2021 11:18:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620818319;
-        bh=DwkFFES7CVfs2LyLbM2285mUnjBaco7qJw5/rKCfOwM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IMOwejsRLeFviD/14aLBdPAx1+JB8MJngewMcmeI+vIPNB/7YUV4CwGhzpZjHnS7V
-         EH60C3uq8iW2Grhx20nfKOB3/XI3fe6yJ6A94uqcDhFiYmFVSKsEtreYXphJ7CTWS3
-         g6h2H4/C0FaRBn0qxLy5GlLx2bZoDzzcOML3RGNQWxAMw5q50FC20OIevU3ra13IEb
-         offrtzvuM4EfhjE0MTf2Qp0Nnwf3OoZ2i7hzy6r4t9Ericl+Ae0B5083XUsv3Bdtom
-         suM2m1o8XmSVwYZxTqpwn5Du1u/7OLU9vzpR/UMwlo+4gKJ/vO5weE3sinbaoiceIk
-         2TQmppxrrmz0g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lgmt0-0004bI-7h; Wed, 12 May 2021 13:18:42 +0200
-Date:   Wed, 12 May 2021 13:18:42 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S230497AbhELOOh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 May 2021 10:14:37 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:36021 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhELOOP (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 12 May 2021 10:14:15 -0400
+Received: from mwalle01.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:fa59:71ff:fe9b:b851])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D713E2224E;
+        Wed, 12 May 2021 16:13:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1620828785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0IUiD20jWaXc9GDvz9cnvvt/m2/qUjY9WWIGbn040jA=;
+        b=sNM47TXy9w4/dt702d5w3yhYARqcBbkczYui3gcSieYdlHhgJc3sUL2N4TilpkC/lNFfa3
+        fCioKMeCo+IPpZR87pFNHRaCvSjU0qeqRAdX2I7iftayyMqjrs6EfbHFXTdVhGK5TT/Bk1
+        lQPyCK+O4u+ljRS0agkA1EH2VWr6AOg=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Angelo Dureghello <angelo.dureghello@timesys.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>
-Subject: Re: [PATCH 4/8] serial: fsl_lpuart: handle break and make sysrq work
-Message-ID: <YJu5ktQT1eziDpaI@hovoldconsulting.com>
-References: <20210511200148.11934-1-michael@walle.cc>
- <20210511200148.11934-5-michael@walle.cc>
- <YJugS4fiUBgPvIS6@hovoldconsulting.com>
- <e3e5ad179483508d02305f26fd20800a@walle.cc>
- <YJuozDa5ISIAHw7D@hovoldconsulting.com>
- <7698180da355d6626a72794cf8a172f9@walle.cc>
+        Johan Hovold <johan@kernel.org>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 0/9] serial: fsl_lpuart: sysrq, loopback support and fixes
+Date:   Wed, 12 May 2021 16:12:46 +0200
+Message-Id: <20210512141255.18277-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7698180da355d6626a72794cf8a172f9@walle.cc>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, May 12, 2021 at 12:31:33PM +0200, Michael Walle wrote:
-> [dropped fugang.duan@nxp.com, mail bounces with 550 5.4.1 Recipient
-> address rejected: Access denied]
-> 
-> Am 2021-05-12 12:07, schrieb Johan Hovold:
+Give fsl_lpuart some love and add break, loopback and sysrq support. While
+at it, some errors were noticed, which are also fixed in this series.
 
-> > But you should get rid of the sysrq trylock hack when switching to
-> > uart_unlock_and_check_sysrq().
-> 
-> Ok. But only for the sport->port.sysrq part right? We'll still
-> need it for oops_in_progress.
+The sysrq support was tested on both interrupt driven and DMA based
+transfers on the 32bit LPUART.
 
-Right.
+Changes since v1:
+ - rephrased commit message of
+     serial: fsl_lpuart: don't restore interrupt state in ISR
+   Sorry again, I didn't want to take credit of that sentence.
+ - rephrased commit message and split into two patches:
+     serial: fsl_lpuart: handle break and make sysrq work
+   Esp. drop the mention of a possible deadlock as it turns out
+   it isn't one.
+ - remove the spin_trylock_irqsave() special case for sysrq handling
 
-Johan
+Michael Walle (9):
+  serial: fsl_lpuart: don't modify arbitrary data on lpuart32
+  serial: fsl_lpuart: use UARTDATA_MASK macro
+  serial: fsl_lpuart: don't restore interrupt state in ISR
+  serial: fsl_lpuart: split sysrq handling
+  serial: fsl_lpuart: handle break and make sysrq work
+  serial: fsl_lpuart: remove RTSCTS handling from get_mctrl()
+  serial: fsl_lpuart: remove manual RTSCTS control from 8-bit LPUART
+  serial: fsl_lpuart: add loopback support
+  serial: fsl_lpuart: disable DMA for console and fix sysrq
+
+ drivers/tty/serial/fsl_lpuart.c | 132 +++++++++++++++++---------------
+ 1 file changed, 72 insertions(+), 60 deletions(-)
+
+-- 
+2.20.1
+
