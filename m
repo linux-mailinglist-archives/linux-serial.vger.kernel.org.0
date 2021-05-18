@@ -2,21 +2,21 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A88A386FB3
+	by mail.lfdr.de (Postfix) with ESMTP id 6500B386FB4
 	for <lists+linux-serial@lfdr.de>; Tue, 18 May 2021 03:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245659AbhERB6q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S1344630AbhERB6q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Mon, 17 May 2021 21:58:46 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:3012 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346153AbhERB6o (ORCPT
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3572 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346146AbhERB6o (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Mon, 17 May 2021 21:58:44 -0400
-Received: from dggems703-chm.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FkfG72mLlzlfdF;
-        Tue, 18 May 2021 09:55:11 +0800 (CST)
+Received: from dggems705-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FkfFY6WM7zmV9n;
+        Tue, 18 May 2021 09:54:41 +0800 (CST)
 Received: from dggeme758-chm.china.huawei.com (10.3.19.104) by
- dggems703-chm.china.huawei.com (10.3.19.180) with Microsoft SMTP Server
+ dggems705-chm.china.huawei.com (10.3.19.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
  15.1.2176.2; Tue, 18 May 2021 09:57:26 +0800
 Received: from localhost.localdomain (10.69.192.56) by
@@ -27,9 +27,9 @@ From:   Jay Fang <f.fangjian@huawei.com>
 To:     <gregkh@linuxfoundation.org>
 CC:     <linux-serial@vger.kernel.org>, <linuxarm@huawei.com>,
         <huangdaode@huawei.com>, <tangzihao1@hisilicon.com>
-Subject: [PATCH 08/11] tty: serial: clps711x: Fix some coding style issuses
-Date:   Tue, 18 May 2021 09:57:15 +0800
-Message-ID: <1621303038-12062-9-git-send-email-f.fangjian@huawei.com>
+Subject: [PATCH 09/11] tty: serial: digicolor: Use 'unsigned int' instead of 'unsigned'
+Date:   Tue, 18 May 2021 09:57:16 +0800
+Message-ID: <1621303038-12062-10-git-send-email-f.fangjian@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1621303038-12062-1-git-send-email-f.fangjian@huawei.com>
 References: <1621303038-12062-1-git-send-email-f.fangjian@huawei.com>
@@ -48,46 +48,28 @@ From: Zihao Tang <tangzihao1@hisilicon.com>
 Fix the following checkpatch warnings:
 
   WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
-  #365: FILE: ./drivers/tty/serial/clps711x.c:365:
-  +					unsigned n)
-
-  WARNING: suspect code indent for conditional statements (8, 12)
-  #486: FILE: ./drivers/tty/serial/clps711x.c:486:
-  +	if (IS_ERR(s->gpios))
-  +	    return PTR_ERR(s->gpios);
-
-  WARNING: Statements should start on a tabstop
-  #487: FILE: ./drivers/tty/serial/clps711x.c:487:
-  +	    return PTR_ERR(s->gpios);
+  #393: FILE: ./drivers/tty/serial/digicolor-usart.c:393:
+  +					 unsigned n)
 
 Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
 Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- drivers/tty/serial/clps711x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/digicolor-usart.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/clps711x.c b/drivers/tty/serial/clps711x.c
-index 95abc6f..3a7a76c 100644
---- a/drivers/tty/serial/clps711x.c
-+++ b/drivers/tty/serial/clps711x.c
-@@ -362,7 +362,7 @@ static void uart_clps711x_console_putchar(struct uart_port *port, int ch)
+diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
+index 13ac36e..e26afd8 100644
+--- a/drivers/tty/serial/digicolor-usart.c
++++ b/drivers/tty/serial/digicolor-usart.c
+@@ -390,7 +390,7 @@ static void digicolor_uart_console_putchar(struct uart_port *port, int ch)
  }
  
- static void uart_clps711x_console_write(struct console *co, const char *c,
--					unsigned n)
-+					unsigned int n)
+ static void digicolor_uart_console_write(struct console *co, const char *c,
+-					 unsigned n)
++					 unsigned int n)
  {
- 	struct uart_port *port = clps711x_uart.state[co->index].uart_port;
- 	struct clps711x_port *s = dev_get_drvdata(port->dev);
-@@ -484,7 +484,7 @@ static int uart_clps711x_probe(struct platform_device *pdev)
- 
- 	s->gpios = mctrl_gpio_init_noauto(&pdev->dev, 0);
- 	if (IS_ERR(s->gpios))
--	    return PTR_ERR(s->gpios);
-+		return PTR_ERR(s->gpios);
- 
- 	ret = uart_add_one_port(&clps711x_uart, &s->port);
- 	if (ret)
+ 	struct uart_port *port = digicolor_ports[co->index];
+ 	u8 status;
 -- 
 2.7.4
 
