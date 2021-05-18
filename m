@@ -2,21 +2,21 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E99386FB5
-	for <lists+linux-serial@lfdr.de>; Tue, 18 May 2021 03:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6328E386FAD
+	for <lists+linux-serial@lfdr.de>; Tue, 18 May 2021 03:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237984AbhERB6q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 May 2021 21:58:46 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:2956 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245659AbhERB6o (ORCPT
+        id S230033AbhERB6o (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 17 May 2021 21:58:44 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4719 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237226AbhERB6o (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Mon, 17 May 2021 21:58:44 -0400
-Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FkfFX1dC6zCtHX;
-        Tue, 18 May 2021 09:54:40 +0800 (CST)
+Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FkfDj468Pzmh9k;
+        Tue, 18 May 2021 09:53:57 +0800 (CST)
 Received: from dggeme758-chm.china.huawei.com (10.3.19.104) by
- dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
+ dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
  15.1.2176.2; Tue, 18 May 2021 09:57:25 +0800
 Received: from localhost.localdomain (10.69.192.56) by
@@ -27,9 +27,9 @@ From:   Jay Fang <f.fangjian@huawei.com>
 To:     <gregkh@linuxfoundation.org>
 CC:     <linux-serial@vger.kernel.org>, <linuxarm@huawei.com>,
         <huangdaode@huawei.com>, <tangzihao1@hisilicon.com>
-Subject: [PATCH 03/11] tty: serial: amba-pl011: Replace the unsuitable spaces with tabs
-Date:   Tue, 18 May 2021 09:57:10 +0800
-Message-ID: <1621303038-12062-4-git-send-email-f.fangjian@huawei.com>
+Subject: [PATCH 04/11] tty: serial: amba-pl011: Remove initialization of static variable
+Date:   Tue, 18 May 2021 09:57:11 +0800
+Message-ID: <1621303038-12062-5-git-send-email-f.fangjian@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1621303038-12062-1-git-send-email-f.fangjian@huawei.com>
 References: <1621303038-12062-1-git-send-email-f.fangjian@huawei.com>
@@ -45,51 +45,35 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Zihao Tang <tangzihao1@hisilicon.com>
 
-Replace the unsuitable spaces at the start of a line reported by
-checkpatch.pl with tabs:
+Fix the following checkpatch errors:
 
-  WARNING: please, no spaces at the start of a line
-  #1813: FILE: ./drivers/tty/serial/amba-pl011.c:1813:
-  +      unsigned long val;$
+ERROR: do not initialise statics to false
++	static bool seen_dev_with_alias = false;
 
-  WARNING: please, no spaces at the start of a line
-  #1815: FILE: ./drivers/tty/serial/amba-pl011.c:1815:
-  +      val = pl011_read(uap, lcrh);$
-
-  WARNING: please, no spaces at the start of a line
-  #1816: FILE: ./drivers/tty/serial/amba-pl011.c:1816:
-  +      val &= ~(UART01x_LCRH_BRK | UART01x_LCRH_FEN);$
-
-  WARNING: please, no spaces at the start of a line
-  #1817: FILE: ./drivers/tty/serial/amba-pl011.c:1817:
-  +      pl011_write(val, uap, lcrh);$
+ERROR: do not initialise statics to false
++	static bool seen_dev_without_alias = false;
 
 Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
 Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- drivers/tty/serial/amba-pl011.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/tty/serial/amba-pl011.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 78682c1..2a63e70 100644
+index 2a63e70..0da824b 100644
 --- a/drivers/tty/serial/amba-pl011.c
 +++ b/drivers/tty/serial/amba-pl011.c
-@@ -1810,11 +1810,11 @@ static int sbsa_uart_startup(struct uart_port *port)
- static void pl011_shutdown_channel(struct uart_amba_port *uap,
- 					unsigned int lcrh)
+@@ -2531,8 +2531,8 @@ static struct uart_driver amba_reg = {
+ static int pl011_probe_dt_alias(int index, struct device *dev)
  {
--      unsigned long val;
-+	unsigned long val;
+ 	struct device_node *np;
+-	static bool seen_dev_with_alias = false;
+-	static bool seen_dev_without_alias = false;
++	static bool seen_dev_with_alias;
++	static bool seen_dev_without_alias;
+ 	int ret = index;
  
--      val = pl011_read(uap, lcrh);
--      val &= ~(UART01x_LCRH_BRK | UART01x_LCRH_FEN);
--      pl011_write(val, uap, lcrh);
-+	val = pl011_read(uap, lcrh);
-+	val &= ~(UART01x_LCRH_BRK | UART01x_LCRH_FEN);
-+	pl011_write(val, uap, lcrh);
- }
- 
- /*
+ 	if (!IS_ENABLED(CONFIG_OF))
 -- 
 2.7.4
 
