@@ -2,19 +2,19 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C5B386FB2
+	by mail.lfdr.de (Postfix) with ESMTP id 1A88A386FB3
 	for <lists+linux-serial@lfdr.de>; Tue, 18 May 2021 03:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245537AbhERB6q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        id S245659AbhERB6q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
         Mon, 17 May 2021 21:58:46 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4653 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344630AbhERB6o (ORCPT
+Received: from szxga06-in.huawei.com ([45.249.212.32]:3012 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346153AbhERB6o (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Mon, 17 May 2021 21:58:44 -0400
-Received: from dggems703-chm.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FkfFY3Yc2z16QCr;
-        Tue, 18 May 2021 09:54:41 +0800 (CST)
+Received: from dggems703-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FkfG72mLlzlfdF;
+        Tue, 18 May 2021 09:55:11 +0800 (CST)
 Received: from dggeme758-chm.china.huawei.com (10.3.19.104) by
  dggems703-chm.china.huawei.com (10.3.19.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
@@ -27,9 +27,9 @@ From:   Jay Fang <f.fangjian@huawei.com>
 To:     <gregkh@linuxfoundation.org>
 CC:     <linux-serial@vger.kernel.org>, <linuxarm@huawei.com>,
         <huangdaode@huawei.com>, <tangzihao1@hisilicon.com>
-Subject: [PATCH 07/11] tty: serial: bcm63xx_uart: Fix some coding style issues
-Date:   Tue, 18 May 2021 09:57:14 +0800
-Message-ID: <1621303038-12062-8-git-send-email-f.fangjian@huawei.com>
+Subject: [PATCH 08/11] tty: serial: clps711x: Fix some coding style issuses
+Date:   Tue, 18 May 2021 09:57:15 +0800
+Message-ID: <1621303038-12062-9-git-send-email-f.fangjian@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1621303038-12062-1-git-send-email-f.fangjian@huawei.com>
 References: <1621303038-12062-1-git-send-email-f.fangjian@huawei.com>
@@ -45,68 +45,49 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Zihao Tang <tangzihao1@hisilicon.com>
 
-Fix 5 coding style warings reported by checkpatch.pl.
+Fix the following checkpatch warnings:
 
-Fix 4 "WARNING: Block comments use a trailing */ on a separate line".
-Fix 1 "WARNING: Prefer 'unsigned int' to bare use of 'unsigned'".
+  WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
+  #365: FILE: ./drivers/tty/serial/clps711x.c:365:
+  +					unsigned n)
+
+  WARNING: suspect code indent for conditional statements (8, 12)
+  #486: FILE: ./drivers/tty/serial/clps711x.c:486:
+  +	if (IS_ERR(s->gpios))
+  +	    return PTR_ERR(s->gpios);
+
+  WARNING: Statements should start on a tabstop
+  #487: FILE: ./drivers/tty/serial/clps711x.c:487:
+  +	    return PTR_ERR(s->gpios);
 
 Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
 Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- drivers/tty/serial/bcm63xx_uart.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/tty/serial/clps711x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/bcm63xx_uart.c b/drivers/tty/serial/bcm63xx_uart.c
-index 5fb0e84..76e2ab6 100644
---- a/drivers/tty/serial/bcm63xx_uart.c
-+++ b/drivers/tty/serial/bcm63xx_uart.c
-@@ -231,21 +231,24 @@ static void bcm_uart_do_rx(struct uart_port *port)
- 
- 	/* limit number of char read in interrupt, should not be
- 	 * higher than fifo size anyway since we're much faster than
--	 * serial port */
-+	 * serial port
-+	 */
- 	max_count = 32;
- 	do {
- 		unsigned int iestat, c, cstat;
- 		char flag;
- 
- 		/* get overrun/fifo empty information from ier
--		 * register */
-+		 * register
-+		 */
- 		iestat = bcm_uart_readl(port, UART_IR_REG);
- 
- 		if (unlikely(iestat & UART_IR_STAT(UART_IR_RXOVER))) {
- 			unsigned int val;
- 
- 			/* fifo reset is required to clear
--			 * interrupt */
-+			 * interrupt
-+			 */
- 			val = bcm_uart_readl(port, UART_CTL_REG);
- 			val |= UART_CTL_RSTRXFIFO_MASK;
- 			bcm_uart_writel(port, val, UART_CTL_REG);
-@@ -424,7 +427,8 @@ static void bcm_uart_flush(struct uart_port *port)
- 	bcm_uart_writel(port, val, UART_CTL_REG);
- 
- 	/* read any pending char to make sure all irq status are
--	 * cleared */
-+	 * cleared
-+	 */
- 	(void)bcm_uart_readl(port, UART_FIFO_REG);
+diff --git a/drivers/tty/serial/clps711x.c b/drivers/tty/serial/clps711x.c
+index 95abc6f..3a7a76c 100644
+--- a/drivers/tty/serial/clps711x.c
++++ b/drivers/tty/serial/clps711x.c
+@@ -362,7 +362,7 @@ static void uart_clps711x_console_putchar(struct uart_port *port, int ch)
  }
  
-@@ -764,7 +768,7 @@ static int __init bcm63xx_console_init(void)
- 
- console_initcall(bcm63xx_console_init);
- 
--static void bcm_early_write(struct console *con, const char *s, unsigned n)
-+static void bcm_early_write(struct console *con, const char *s, unsigned int n)
+ static void uart_clps711x_console_write(struct console *co, const char *c,
+-					unsigned n)
++					unsigned int n)
  {
- 	struct earlycon_device *dev = con->data;
+ 	struct uart_port *port = clps711x_uart.state[co->index].uart_port;
+ 	struct clps711x_port *s = dev_get_drvdata(port->dev);
+@@ -484,7 +484,7 @@ static int uart_clps711x_probe(struct platform_device *pdev)
  
+ 	s->gpios = mctrl_gpio_init_noauto(&pdev->dev, 0);
+ 	if (IS_ERR(s->gpios))
+-	    return PTR_ERR(s->gpios);
++		return PTR_ERR(s->gpios);
+ 
+ 	ret = uart_add_one_port(&clps711x_uart, &s->port);
+ 	if (ret)
 -- 
 2.7.4
 
