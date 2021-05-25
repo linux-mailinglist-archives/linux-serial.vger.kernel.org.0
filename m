@@ -2,78 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5607E38FC7B
-	for <lists+linux-serial@lfdr.de>; Tue, 25 May 2021 10:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1BD390969
+	for <lists+linux-serial@lfdr.de>; Tue, 25 May 2021 21:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbhEYIR3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 May 2021 04:17:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52706 "EHLO mail.kernel.org"
+        id S231934AbhEYTKU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 May 2021 15:10:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45804 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231951AbhEYIR2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 May 2021 04:17:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 460B6613F9;
-        Tue, 25 May 2021 08:15:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621930558;
-        bh=OI2gXiU9RTu0knVsus/2FhWQayb9rozz7U4IUjC7ymw=;
+        id S230029AbhEYTKT (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 25 May 2021 15:10:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A4376140E;
+        Tue, 25 May 2021 19:08:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621969729;
+        bh=erpKjGqAF4AJzuEwJKCEvWLbw/VoBc5b49WkYqtFinA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gs6E9wxsK2STh99Y40NKU1Zc7XoXXSStI4OyrUhaHpT3FEaHa2MIpCUZUcg/XbIpd
-         PHkvfVY6QRGof5UPb1iaGwLMqXGCrZkakrEJJF06DvnrXO5tXYLZExbe9I9mVNpih6
-         aY4RkghhfuqrCxfP9cn6hK8xLYDx9riogWYbwgUo=
-Date:   Tue, 25 May 2021 10:15:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Cc:     linux-serial@vger.kernel.org, jacmet@sunsite.dk, git@xilinx.com
-Subject: Re: [PATCH 1/2] tty: serial: uartlite: Disable clocks in case of
- errors
-Message-ID: <YKyyPB7JjPd25uiL@kroah.com>
-References: <1621929844-19727-1-git-send-email-shubhrajyoti.datta@xilinx.com>
- <1621929844-19727-2-git-send-email-shubhrajyoti.datta@xilinx.com>
+        b=i/OslaSNt1f+WuDzqwZneA+WCVy7F4O2r4E6SxvQqyzVtvoONE8Oms6MxSsMIgNtq
+         Qla5P5gNkT3gVba+Pzicj25w7ka950Z+uebbJHXlNkOiGcof0B+yODgiRtIIRhWvpn
+         Y+XhO/LPekhPoxrMqOcEwCg8xQjBoheTspChn8XnAAs/htgGxFBMwXcP/Wkt21EYSp
+         +1zhoegPIDbPbh/GCcLaEkMAzz/FMWRebCpoYlACVzxSmcCk8fwrfvkFboLa0xNXYs
+         xPbJEJi1K58DRU0iVbUL9FeuhDiW2OYDxt9jKnMKhMuABq2wnXb5OhFFurF1B67L87
+         +wg2M+zrDp4xQ==
+Date:   Tue, 25 May 2021 21:08:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     cl@rock-chips.com
+Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: Re: [PATCH v4 01/10] dt-bindings: i2c: i2c-rk3x: add description for
+ rk3568
+Message-ID: <YK1LPjhjci5jejsD@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, cl@rock-chips.com,
+        heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org
+References: <20210429081151.17558-1-cl@rock-chips.com>
+ <20210429081151.17558-2-cl@rock-chips.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NCc2q0vIdyd+dXz5"
 Content-Disposition: inline
-In-Reply-To: <1621929844-19727-2-git-send-email-shubhrajyoti.datta@xilinx.com>
+In-Reply-To: <20210429081151.17558-2-cl@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, May 25, 2021 at 01:34:03PM +0530, Shubhrajyoti Datta wrote:
-> In case the uart registration fails the clocks are left enabled.
-> Disable the clock in case of errors.
-> 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> ---
->  drivers/tty/serial/uartlite.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-> index f42ccc4..39ea495 100644
-> --- a/drivers/tty/serial/uartlite.c
-> +++ b/drivers/tty/serial/uartlite.c
-> @@ -799,7 +799,7 @@ static int ulite_probe(struct platform_device *pdev)
->  		ret = uart_register_driver(&ulite_uart_driver);
->  		if (ret < 0) {
->  			dev_err(&pdev->dev, "Failed to register driver\n");
-> -			return ret;
-> +			goto err_out_clk_disable;
->  		}
->  	}
->  
-> @@ -808,6 +808,10 @@ static int ulite_probe(struct platform_device *pdev)
->  	clk_disable(pdata->clk);
->  
->  	return ret;
-> +
-> +err_out_clk_disable:
-> +	clk_disable_unprepare(pdata->clk);
 
-Why not put this above in your error code?
+--NCc2q0vIdyd+dXz5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also, are you sure that you are calling uart_register_driver() in the
-correct place?  Shouldn't everything be set up before it is called?  You
-have more logic after it is called, what happens if your device is
-opened before the uart_register_driver() call returns?
+On Thu, Apr 29, 2021 at 04:11:42PM +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+>=20
+> add "rockchip,rk3568-i2c", "rockchip,rk3399-i2c" for i2c nodes on
+> a rk3568 platform to i2c-rk3x.yaml.
+>=20
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
 
-thanks,
+Applied to for-next, thanks!
 
-greg k-h
+
+--NCc2q0vIdyd+dXz5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCtSz4ACgkQFA3kzBSg
+KbbpaQ//ZFjmjk57xuPgcUkyVTPY3RLZE602/1iQ5IizdQa2vaxkuYrwoSSg4oH5
+TUhCcfrs3oUrEq0ZvFeHevoBcxNqsz/2V2vEpUqGscwRtJnVVEoWwfWpLEZyp33k
+8XPx/kEWyoiT8vqV8ZCz2kjEbBYxhZ3JESKGU7Jp3hhGTEE7i3OwKzokRgm05bXY
+HRT6XvhR5rQ96Rc4j5YhEAchhDbAnS6TOhUGRzIQlgR/nKZXFUlCIwfozjdpBS+D
+THbvK5W3hDqaSkt5y1ff0hujh/NZGl4jU3cOokSLnO+RdOPIZy833SenTp00VYU7
+MmK4iB5ZI/wKOgTrJ3k3BlEzvrDZLfWyD9ZFa8dnuDR6yiDigOKv8osaGuHYopIF
+fJ2QSMFZ8D0vSEc1nus1Jq5bEacIfMo2ZanOB6ZkImaDKfqajhHaMrNNE0eyhGT0
+dSnsyBDSwRKDQdkGFGV3zeCYaYCs9i+Rv5ep6CwbgvfO9pLo7xnMHBK5+qFJIcv3
+t/vm6cvy26GAUJEMP86XnWKnZirNLexFvfBFjXsg6qpwSjux1dfM8GjSBuLMkbSZ
+Xe0h3C+IfThm2AsHc7LuEXMpiEZ0tlcCkW+vSgr9DG6viM7MLLgQeg3gwxvOAHLb
+EWSrivI969UDnwVqd+Ebq8Yjs7vxjfgNCfflbxXOytLmSRkS9KU=
+=OqI6
+-----END PGP SIGNATURE-----
+
+--NCc2q0vIdyd+dXz5--
