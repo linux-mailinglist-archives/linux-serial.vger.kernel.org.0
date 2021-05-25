@@ -2,23 +2,23 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4D838FC9E
-	for <lists+linux-serial@lfdr.de>; Tue, 25 May 2021 10:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF6D38FC8D
+	for <lists+linux-serial@lfdr.de>; Tue, 25 May 2021 10:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbhEYIXQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 May 2021 04:23:16 -0400
-Received: from mail-dm6nam10on2044.outbound.protection.outlook.com ([40.107.93.44]:37792
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S232208AbhEYIWB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 May 2021 04:22:01 -0400
+Received: from mail-bn7nam10on2052.outbound.protection.outlook.com ([40.107.92.52]:52864
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232315AbhEYIXO (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 May 2021 04:23:14 -0400
+        id S230370AbhEYIWA (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 25 May 2021 04:22:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=laSKR+f9ivM1cGDOpG0ZuQOzqXPEPc6/+fvddiIElTu35qWN5qX4ruc8i0Luj9sdniSLg0JPFOWH7dFS5zMYr/KiYy1rFgwYEikPGuIeKyH9xo4NsTweninwH1XHIN+w8A2CFMxHPOSGpjHJ1sHiUDBc9vQgH/vCbYH5gb5uua/lakOCCkb0T5V32d6Px9AueJg2oXCeP0sAb6utRr5OqSIytfSfwWox3yiFvr8IJObgJJzKJQ09qpm3Gk42tFis4nxsNnBcYkwazta4mKvyk4RbeKZQtL85tIq90mi3nte2NCX09diFhCla9KLYxdhWvykSkoHrgM6VQDBxCfk1DA==
+ b=fpgUsUVeNqklX16REOfD44lPr7u6WO6IXKxVaqhzkmh7bD1H5WLLMA8/3o1Cofw58visi+QTUsdod3bvXls3fhAxl0Mlr6/rOOZWc6aKNxWz/y76jCfAAmq6pUAmE6MJr409AmG22I8uMIsx85KE0rHOw6sK+rO0zDpGXxPpMNuwyvpohZcpNaDjI9yBfPzEz0ukFK9920THege93A1QnX+yyHJM+sKqf+yMTyQInwjYq1ZdjiXNItpYx8B18NCIOAjUj/L+Kky4Qgkax0art8BKEpvHAxaLsbe7xRM/jKVDpeIkhuoBzfRFlYt5jz2xXHRBxfJ8kCdwEafgGgqP8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R6X08xsbPcIOne/6+VZ93CMNnGREyW+vgAdrycJDELk=;
- b=Jwzi1eTHhbQe5QXOhcDPrCOLW86urbU0Ahr+ufX+tBVwhP2RaUi7aED2bWi+3EU0Wg+xc7dhTnq//s1SYcuCd6B5o3duFxG7Qa0iB3vxrZNnBhCAX5kTZ8Xaq45zfM4zZCzEiHicntucNZptcfdyngOXXyJWVTb0UA4a0mY0Qlpj7Y/AivDoLI3thxinA5YlR3cVUHlsxkckypNu3VEwQ75TroC4pVxOfGO1b6WTAxaPBGnPoF1u71MeK/UrvHaZs8QgNG9MON1PPSF2iKFSy/EbfoKHicpcEWx9yViEXb2uadaGXnmcsm9PxewAVWFKPRKgg4wIljB5vd5d3kf6mA==
+ bh=BNfFPOXTjMXT/0GGOPlK8DkloAsHXVYCW2junRpSp6g=;
+ b=l8pXBqAFWVNH+RfA5KE8QOrT0/rMG3SxOaLoA3b7PyfYXJ83h7kP8JMg6n69rCqR4DPBKLoZzjpolND9WN8tadKs4wLAr8MHHF824j+b1XpUrNeQOUV0ObwGOJAR0lJaALFPblOD7cpxoQQWgwjnRap/29qp0BlG0oFL7hFO7lnjAuo9O4Awzb6Cb+U6PhCpGYc3zVvvnUBtEkiGlkX0tNQYIh6g7GTVMD/8IZi8Br0cNCHDgrJx9SpwIG/A+eS3IVTWQVPJ98rUWhdmp0eJZjpJx8LswabPkKEozOaqgBjBfucRV0VCNTDiBfcqp2Bncl6dvBqzK3l5Ew9mWLLEOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,35 +26,34 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R6X08xsbPcIOne/6+VZ93CMNnGREyW+vgAdrycJDELk=;
- b=o4B12Up+6rv0zSVErjJrTrEIxo3mdUb8hTmEq4F3KDe3nNlU9wQZ/Mz/aAh2F6WtkBPKTq5FWX4ERWZ9oHaE9R3ljty/eUFuXjSOpNugBTONGfIoVCLIhzOAD+YRsRY1CcO4qHeG96+XGH85GWH5xfcQT0FR7m1sk4cOST48HOo=
-Received: from BN0PR04CA0033.namprd04.prod.outlook.com (2603:10b6:408:e8::8)
- by CH2PR02MB6072.namprd02.prod.outlook.com (2603:10b6:610:4::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.26; Tue, 25 May
- 2021 08:04:27 +0000
-Received: from BN1NAM02FT008.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:e8:cafe::c8) by BN0PR04CA0033.outlook.office365.com
- (2603:10b6:408:e8::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.24 via Frontend
- Transport; Tue, 25 May 2021 08:04:27 +0000
+ bh=BNfFPOXTjMXT/0GGOPlK8DkloAsHXVYCW2junRpSp6g=;
+ b=skIjdqdv4qQg/zIt+LVXIid1JDwhBkeICZUEF0salkmXP0FqHZC+5WTuFcIkSX1rlREhvkoawOLdqzl5x27yZGcRB8JaoOi9CmvUQYRaZg7GMGbNzlzOdECcPZ94QahDY9RtYOCRw1MPseQ6rD9xKMvydLrbeYSp3LOmxs0Z/Hw=
+Received: from DM5PR06CA0079.namprd06.prod.outlook.com (2603:10b6:3:4::17) by
+ DM6PR02MB4363.namprd02.prod.outlook.com (2603:10b6:5:2e::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4150.27; Tue, 25 May 2021 08:04:33 +0000
+Received: from DM3NAM02FT053.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:4:cafe::7f) by DM5PR06CA0079.outlook.office365.com
+ (2603:10b6:3:4::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.23 via Frontend
+ Transport; Tue, 25 May 2021 08:04:33 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=pass action=none header.from=xilinx.com;
 Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT008.mail.protection.outlook.com (10.13.2.126) with Microsoft SMTP
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT053.mail.protection.outlook.com (10.13.5.35) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4129.27 via Frontend Transport; Tue, 25 May 2021 08:04:27 +0000
+ 15.20.4129.27 via Frontend Transport; Tue, 25 May 2021 08:04:33 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 25 May 2021 01:04:11 -0700
+ 15.1.2176.2; Tue, 25 May 2021 01:04:15 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Tue, 25 May 2021 01:04:11 -0700
+ 15.1.2176.2 via Frontend Transport; Tue, 25 May 2021 01:04:15 -0700
 Envelope-to: git@xilinx.com,
  linux-serial@vger.kernel.org,
  jacmet@sunsite.dk,
@@ -62,15 +61,15 @@ Envelope-to: git@xilinx.com,
 Received: from [10.140.6.59] (port=58378 helo=xhdshubhraj40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1llS2s-0004Kz-Fo; Tue, 25 May 2021 01:04:10 -0700
+        id 1llS2w-0004Kz-RF; Tue, 25 May 2021 01:04:15 -0700
 From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 To:     <linux-serial@vger.kernel.org>
 CC:     <jacmet@sunsite.dk>, <gregkh@linuxfoundation.org>,
         <git@xilinx.com>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH 1/2] tty: serial: uartlite: Disable clocks in case of errors
-Date:   Tue, 25 May 2021 13:34:03 +0530
-Message-ID: <1621929844-19727-2-git-send-email-shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH 2/2] tty: serial: uartlite: Add runtime pm support
+Date:   Tue, 25 May 2021 13:34:04 +0530
+Message-ID: <1621929844-19727-3-git-send-email-shubhrajyoti.datta@xilinx.com>
 X-Mailer: git-send-email 2.1.1
 In-Reply-To: <1621929844-19727-1-git-send-email-shubhrajyoti.datta@xilinx.com>
 References: <1621929844-19727-1-git-send-email-shubhrajyoti.datta@xilinx.com>
@@ -78,61 +77,150 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7a9d40c4-d783-482b-e4b0-08d91f53b7ed
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6072:
-X-Microsoft-Antispam-PRVS: <CH2PR02MB6072DE370553DB23351BE757AA259@CH2PR02MB6072.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: e2489b3d-56a5-4e70-f0a7-08d91f53bb4a
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4363:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB4363C991A477F56A94C8F88CAA259@DM6PR02MB4363.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Oob-TLC-OOBClassifiers: OLM:663;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X1DxjrlVqcEE/sOjvruBUlaVPOTxTfUpcMfeEbt/e/zWvAYiJKmJOqYJP/uwWHPYgTpHJQnEDH+vW8pMwxktT3bQQk1pcCv2LwteF7/agzh1mRsoZwFKIcTL3vjV1M2CTbUQe7t4OY9ZuDN5DVU/uEx+h7YETPkNY2yQ6KQ57pw1l4nbac/500KDukG7+kf3pITLtMuYm5zMu46eTOUQk1F88kN9hix1kRH+as1BDXJSexhyjGlG29QF1h2uB03qjxXJCdk9VgcRFm00H9iLKrqYdd1p69L1Jpi/GcoMxq3mWSHGK5MW552IurIpt+0e+bzMzI2/wwnewfvrlycAJvIm/EHJFbhUfwHWh0iUR2+vI867+mkOicVRwbzIQXnZgOUbJP3TlaU6el/OQ2DHdTNlJOv0MQz1IlsFtA3aCIkuT+iHpMlVc+Jzr6nBc31jirpXVqQNTz8wqnddEIJrxBP8D6jzB/+n0mHJk9+KwyxXUjhku/hQ/53Ug9ST3CTSf1gxuSveoENhiTprbHyu1Fq3HtkhiRl2VVeF2eTOgnA2vcJwuO1cssWhYXg5P8D+7Eg6jP6BbKsTbqrkqzPV7+engId212ZdEOzrpCmMT9UmOEsAIwMwRJXrfBZfguiGiIm++DesUIAGPSAj1QZPfdVco57zzNlusfts+nB6HtdC9srRVL8iEuFGSaYfY/aK
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(39850400004)(396003)(376002)(346002)(46966006)(36840700001)(8936002)(7696005)(83380400001)(6916009)(6666004)(2616005)(54906003)(82310400003)(186003)(478600001)(426003)(9786002)(70206006)(70586007)(44832011)(4326008)(336012)(82740400003)(26005)(107886003)(36906005)(316002)(8676002)(4744005)(36756003)(5660300002)(36860700001)(7636003)(356005)(2906002)(47076005)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: vuGue27RgMT1s0lzShPLSkG++g+BcywpWS1qDWYphBoKhMhizF75bUFG2wwgxVJxzHe21rk5MOrOAAmE4oqa7t884/oGYeLdzbFP/Hm3ZNTY5wL+pRwcQuupnQk8hYI9g5jFV1w0aZuqu2a+iSa0bg35do70epA2k1I4AfTKlaiV+gLgQOC48thqipFf4vfxBIwHq/E2vpB45dPPzu2QtahyRVxHT+GBux3rHEbWQhAMcJyDK5RjZJC2mvDm2BxKcd8X+wFfFCoebPGZIF9WUSntjoYz/C7yw+BpeRiIrFBIEhCIrL1i0/wnJiBNZmQUrorhrGzim+Rbjnvv4c9bT6f6IhzYz21v6uYOC7K7NaGbxhGyDbQb0o9RAt2naiOBLOdD/Maw3/WmhfAgiDaOCUvQKI0gMIp6aoOwT20y7CNlkslEnqN1Oo1Ftoc3kuZMDpjclRD7xT4X2J0uPRfDZAjt5ExdaqEv/6Krn0eYgY6YTuV+kcHz40EzRly16EdLC7ZIbjdeXqbQ+jyHDYM3p1mft4STzB9HLFkLC9iFNceJmdhjl5P3tJrQLcjdMujD0QYkJ6uPOzUGtGOQLEVmjOviqk2cEXUZth9zElQXsohJgUHnBoiY+aRAMrbYsh4kftSqgKo1Z7XnySLCitUnyjYVTwc6Wq+yp3QFdWYyS0tsTTGd1+s+71MiUzAQbTmv
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(396003)(346002)(39850400004)(376002)(36840700001)(46966006)(26005)(7636003)(36756003)(186003)(336012)(82740400003)(36860700001)(6916009)(316002)(47076005)(2906002)(36906005)(70206006)(70586007)(478600001)(44832011)(7696005)(6666004)(83380400001)(54906003)(82310400003)(8676002)(356005)(4326008)(426003)(2616005)(9786002)(107886003)(8936002)(5660300002)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2021 08:04:27.6724
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2021 08:04:33.3733
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a9d40c4-d783-482b-e4b0-08d91f53b7ed
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2489b3d-56a5-4e70-f0a7-08d91f53bb4a
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT008.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT053.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6072
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4363
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-In case the uart registration fails the clocks are left enabled.
-Disable the clock in case of errors.
+Add runtime pm support.
 
 Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 ---
- drivers/tty/serial/uartlite.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/tty/serial/uartlite.c | 59 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 51 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index f42ccc4..39ea495 100644
+index 39ea495..581689e 100644
 --- a/drivers/tty/serial/uartlite.c
 +++ b/drivers/tty/serial/uartlite.c
-@@ -799,7 +799,7 @@ static int ulite_probe(struct platform_device *pdev)
- 		ret = uart_register_driver(&ulite_uart_driver);
- 		if (ret < 0) {
- 			dev_err(&pdev->dev, "Failed to register driver\n");
--			return ret;
-+			goto err_out_clk_disable;
+@@ -22,6 +22,7 @@
+ #include <linux/of_device.h>
+ #include <linux/of_platform.h>
+ #include <linux/clk.h>
++#include <linux/pm_runtime.h>
+ 
+ #define ULITE_NAME		"ttyUL"
+ #define ULITE_MAJOR		204
+@@ -54,6 +55,7 @@
+ #define ULITE_CONTROL_RST_TX	0x01
+ #define ULITE_CONTROL_RST_RX	0x02
+ #define ULITE_CONTROL_IE	0x10
++#define UART_AUTOSUSPEND_TIMEOUT	3000
+ 
+ /* Static pointer to console port */
+ #ifdef CONFIG_SERIAL_UARTLITE_CONSOLE
+@@ -390,12 +392,16 @@ static int ulite_verify_port(struct uart_port *port, struct serial_struct *ser)
+ static void ulite_pm(struct uart_port *port, unsigned int state,
+ 		     unsigned int oldstate)
+ {
+-	struct uartlite_data *pdata = port->private_data;
++	int ret;
+ 
+-	if (!state)
+-		clk_enable(pdata->clk);
+-	else
+-		clk_disable(pdata->clk);
++	if (!state) {
++		ret = pm_runtime_get_sync(port->dev);
++		if (ret < 0)
++			dev_err(port->dev, "Failed to enable clocks\n");
++	} else {
++		pm_runtime_mark_last_busy(port->dev);
++		pm_runtime_put_autosuspend(port->dev);
++	}
+ }
+ 
+ #ifdef CONFIG_CONSOLE_POLL
+@@ -734,11 +740,37 @@ static int __maybe_unused ulite_resume(struct device *dev)
+ 	return 0;
+ }
+ 
++static int __maybe_unused ulite_runtime_suspend(struct device *dev)
++{
++	struct uart_port *port = dev_get_drvdata(dev);
++	struct uartlite_data *pdata = port->private_data;
++
++	clk_disable(pdata->clk);
++	return 0;
++};
++
++static int __maybe_unused ulite_runtime_resume(struct device *dev)
++{
++	struct uart_port *port = dev_get_drvdata(dev);
++	struct uartlite_data *pdata = port->private_data;
++	int ret;
++
++	ret = clk_enable(pdata->clk);
++	if (ret) {
++		dev_err(dev, "Cannot enable clock.\n");
++		return ret;
++	}
++	return 0;
++}
+ /* ---------------------------------------------------------------------
+  * Platform bus binding
+  */
+ 
+-static SIMPLE_DEV_PM_OPS(ulite_pm_ops, ulite_suspend, ulite_resume);
++static const struct dev_pm_ops ulite_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(ulite_suspend, ulite_resume)
++	SET_RUNTIME_PM_OPS(ulite_runtime_suspend,
++			   ulite_runtime_resume, NULL)
++};
+ 
+ #if defined(CONFIG_OF)
+ /* Match table for of_platform binding */
+@@ -803,9 +835,15 @@ static int ulite_probe(struct platform_device *pdev)
  		}
  	}
  
-@@ -808,6 +808,10 @@ static int ulite_probe(struct platform_device *pdev)
- 	clk_disable(pdata->clk);
++	pm_runtime_use_autosuspend(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, UART_AUTOSUSPEND_TIMEOUT);
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
++
+ 	ret = ulite_assign(&pdev->dev, id, res->start, irq, pdata);
+ 
+-	clk_disable(pdata->clk);
++	pm_runtime_mark_last_busy(&pdev->dev);
++	pm_runtime_put_autosuspend(&pdev->dev);
  
  	return ret;
-+
-+err_out_clk_disable:
-+	clk_disable_unprepare(pdata->clk);
-+	return ret;
+ 
+@@ -818,9 +856,14 @@ static int ulite_remove(struct platform_device *pdev)
+ {
+ 	struct uart_port *port = dev_get_drvdata(&pdev->dev);
+ 	struct uartlite_data *pdata = port->private_data;
++	int rc;
+ 
+ 	clk_disable_unprepare(pdata->clk);
+-	return ulite_release(&pdev->dev);
++	rc = ulite_release(&pdev->dev);
++	pm_runtime_disable(&pdev->dev);
++	pm_runtime_set_suspended(&pdev->dev);
++	pm_runtime_dont_use_autosuspend(&pdev->dev);
++	return rc;
  }
  
- static int ulite_remove(struct platform_device *pdev)
+ /* work with hotplug and coldplug */
 -- 
 2.1.1
 
