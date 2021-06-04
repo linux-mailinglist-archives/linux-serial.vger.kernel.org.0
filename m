@@ -2,102 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0222039B819
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Jun 2021 13:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A471839B8A8
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Jun 2021 14:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbhFDLkP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Jun 2021 07:40:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37614 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229980AbhFDLkP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Jun 2021 07:40:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 693E66141C;
-        Fri,  4 Jun 2021 11:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622806693;
-        bh=CITyZwk498+PUiCAZrsokNQgDCfFlea+qhpIF5zqVGI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vtNViaLJkCJCb8Ju3SnLzs0aPwEpDe/AFgKIZGG/OVHH+6yP+iAQRqYS5BfXMRtbI
-         wVHXIx57ZpNTYpCiijBV09RJrP5Vr4EejXmIUqQs+bSN2ZfzSg7N/IOzTkcJKk36ZR
-         tKhOc5blJD3JzGgstl/daOsOcbrZngBAXg9LWgbA=
-Date:   Fri, 4 Jun 2021 13:38:10 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] serial: sh-sci: Stop dmaengine transfer in
- sci_stop_tx()
-Message-ID: <YLoQotNwkeo6lDDN@kroah.com>
-References: <20210604095704.756190-1-yoshihiro.shimoda.uh@renesas.com>
- <19b2a786-0b32-f26c-efd9-2f5dbd9894aa@kernel.org>
- <TY2PR01MB3692BB5BFDA1C8C305992330D83B9@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+        id S230033AbhFDMFZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 4 Jun 2021 08:05:25 -0400
+Received: from linode.pasteur.edu.uy ([50.116.35.230]:50474 "EHLO
+        linode.pasteur.edu.uy" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229740AbhFDMFY (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 4 Jun 2021 08:05:24 -0400
+Received: from smtp.pasteur.edu.uy (coltrane.pasteur.edu.uy [164.73.118.254])
+        by linode.pasteur.edu.uy (Postfix) with ESMTP id EEBF31E397;
+        Fri,  4 Jun 2021 09:00:53 -0300 (UYT)
+Received: from cris-PC.wifi (unknown [105.9.153.138])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by smtp.pasteur.edu.uy (Postfix) with ESMTP id D8737D544;
+        Fri,  4 Jun 2021 09:00:44 -0300 (UYT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TY2PR01MB3692BB5BFDA1C8C305992330D83B9@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <apittini@pasteur.edu.uy>
+From:   ''Tayeb souami'' <apittini@pasteur.edu.uy>
+Date:   Fri, 04 Jun 2021 14:00:36 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210604120044.D8737D544@smtp.pasteur.edu.uy>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 10:28:19AM +0000, Yoshihiro Shimoda wrote:
-> Hi Jiri,
-> 
-> Thank you for your review!
-> 
-> > From: Jiri Slaby, Sent: Friday, June 4, 2021 7:22 PM
-> > 
-> > On 04. 06. 21, 11:57, Yoshihiro Shimoda wrote:
-> > > Stop dmaengine transfer in sci_stop_tx(). Otherwise, the following
-> > > message is possible output when system enters suspend and while
-> > > transferring data, because clearing TIE bit in SCSCR is not able to
-> > > stop any dmaengine transfer.
-> > >
-> > >      sh-sci e6550000.serial: ttySC1: Unable to drain transmitter
-> > >
-> > > Notes:
-> > >   - sci_dma_stop_tx() is a macro in the .h file because struct sci_port
-> > >     is declared in the .c file and #ifdef should be in the .h file.
-> > >   - This patch uses dmaengine_terminate_async() so that we can apply
-> > >     this into longterm kernel v4.9.x or later.
-> > >
-> > > Fixes: 73a19e4c0301 ("serial: sh-sci: Add DMA support.")
-> > > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > > ---
-> <snip>
-> > > diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> > > index 4baf1316ea72..3793cf9f352c 100644
-> > > --- a/drivers/tty/serial/sh-sci.c
-> > > +++ b/drivers/tty/serial/sh-sci.c
-> > > @@ -610,6 +610,8 @@ static void sci_stop_tx(struct uart_port *port)
-> > >   	ctrl &= ~SCSCR_TIE;
-> > >
-> > >   	serial_port_out(port, SCSCR, ctrl);
-> > > +
-> > > +	sci_dma_stop_tx(port);
-> > >   }
-> > >
-> > >   static void sci_start_rx(struct uart_port *port)
-> > > diff --git a/drivers/tty/serial/sh-sci.h b/drivers/tty/serial/sh-sci.h
-> > > index c0dfe4382898..435c674af1ce 100644
-> > > --- a/drivers/tty/serial/sh-sci.h
-> > > +++ b/drivers/tty/serial/sh-sci.h
-> > > @@ -174,3 +174,19 @@ enum {
-> > >   	(((port)->type == PORT_SCI) ? SCI_TDxE_CLEAR : SCIF_TDxE_CLEAR)
-> > >   #define SCxSR_BREAK_CLEAR(port) \
-> > >   	(((port)->type == PORT_SCI) ? SCI_BREAK_CLEAR : SCIF_BREAK_CLEAR)
-> > > +
-> > > +#ifdef CONFIG_SERIAL_SH_SCI_DMA
-> > > +#define sci_dma_stop_tx(port)					\
-> > 
-> > Ouch. First, why this needs to be in a header?
-> 
-> The v1 patch [1] putted #ifdef in .c file, so that I got feedback from Greg like below:
-> "Please do not put #ifdef in .c files, this should be possible without that."
 
-Yes, but that does not mean using a macro, please do this correctly.
+Lieber Freund,
 
-thanks,
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
-greg k-h
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+
+
+
+Das ist dein Spendencode: [TS530342018]
+
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
