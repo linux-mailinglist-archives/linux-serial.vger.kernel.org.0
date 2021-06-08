@@ -2,156 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BA839F967
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Jun 2021 16:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DCE39F9DB
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Jun 2021 17:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbhFHOoO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Jun 2021 10:44:14 -0400
-Received: from mga14.intel.com ([192.55.52.115]:53113 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233500AbhFHOoN (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Jun 2021 10:44:13 -0400
-IronPort-SDR: RLGUtuJ43C01br4aqc2u+pB8Z+/vUj9idKqFkLLfhD+A/fQgMo53Yse1+6zFPmKslN61ydKjJ9
- DV1mzrFiPGNg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="204672094"
-X-IronPort-AV: E=Sophos;i="5.83,258,1616482800"; 
-   d="scan'208";a="204672094"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 07:42:20 -0700
-IronPort-SDR: OB1R/q3WO+xGtAkr6tY+o/ofGSfScK7T9O6AecF2gsG14/sB5fdh07ugc+ucTyAdahZ50UKv3B
- J1z8zGDjRTRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,258,1616482800"; 
-   d="scan'208";a="637653904"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Jun 2021 07:42:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E4F5A184; Tue,  8 Jun 2021 17:42:40 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: [PATCH v1 3/3] serial: 8250_exar: Add ->unregister_gpio() callback
-Date:   Tue,  8 Jun 2021 17:42:39 +0300
-Message-Id: <20210608144239.12697-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210608144239.12697-1-andriy.shevchenko@linux.intel.com>
-References: <20210608144239.12697-1-andriy.shevchenko@linux.intel.com>
+        id S233755AbhFHPF1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Jun 2021 11:05:27 -0400
+Received: from mail-vs1-f47.google.com ([209.85.217.47]:38802 "EHLO
+        mail-vs1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233754AbhFHPF1 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 8 Jun 2021 11:05:27 -0400
+Received: by mail-vs1-f47.google.com with SMTP id x8so11035418vso.5;
+        Tue, 08 Jun 2021 08:03:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1tcavaqmFgqNru+gTTtU+o+V3Wc54CY1nbaCwXIhlxU=;
+        b=uIRTr4NTIrCrzyP8SpNuCQCiRF7hwTFyAUvth+zNPswaeRmLx6/XiaphAtAhbUog9L
+         j8t8l2E/RPGfzVZsJiz1/8wJscJ7eKCfv1STbsgyArkDPfi1xuxIOqPJWwacodinNKTo
+         s43JIQiiTCYU+qscWZAN7LBP6HUI0nBNBDpYYE249pr+nzCLSvW48nOx9DV/bPFbfjef
+         4RvfEt01SzXnCUfcXV2I0WWsEaJRfmgO35cYy4OFBUqg9m6qBhysEBcyLZaQtTEfbsP2
+         NkermI6r+JnN0GhJYntowmK5LNn43wTHS2eGxgb5b1TIkvyTdQxxG7/MdctclT3xnv/I
+         ZNgQ==
+X-Gm-Message-State: AOAM532JZoBDbkZ8yfxd8nxQJWiS3z36LpuShUvaKieH1sp3w/k/Acfe
+        MfLNHlWMzl0JWdBNodry0XkL+fTDmRWkbqH8AxE=
+X-Google-Smtp-Source: ABdhPJxLbvwTDX+9ZW5dPiJNBelOmingVkZ8kJ37buiWKcOpa7RYgnef9tMvJgQGeEA/J35nVuqllVSOzmn6Mcy2thE=
+X-Received: by 2002:a05:6102:c4c:: with SMTP id y12mr620420vss.18.1623164609788;
+ Tue, 08 Jun 2021 08:03:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210603221758.10305-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210603221758.10305-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210603221758.10305-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Jun 2021 17:03:18 +0200
+Message-ID: <CAMuHMdVyEEA7q9eKRmVRSFMs8Jcfx-V9QjZJqqnf7mBeaKi8QQ@mail.gmail.com>
+Subject: Re: [PATCH v2 10/12] serial: sh-sci: Add support for RZ/G2L SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-For the sake of reducing layering violation add ->unregister_gpio()
-callback and use it in the ->exit() one.
+On Fri, Jun 4, 2021 at 12:18 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
+>
+> Add serial support for RZ/G2L SoC with earlycon and
+> extended mode register support.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_exar.c | 36 ++++++++++++++++++-----------
- 1 file changed, 23 insertions(+), 13 deletions(-)
+FTR,
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index 3ffeedc29c83..d502240bbcf2 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -114,6 +114,7 @@ struct exar8250;
- struct exar8250_platform {
- 	int (*rs485_config)(struct uart_port *, struct serial_rs485 *);
- 	int (*register_gpio)(struct pci_dev *, struct uart_8250_port *);
-+	void (*unregister_gpio)(struct uart_8250_port *);
- };
- 
- /**
-@@ -352,9 +353,8 @@ static void setup_gpio(struct pci_dev *pcidev, u8 __iomem *p)
- 	writeb(0x00, p + UART_EXAR_MPIOOD_15_8);
- }
- 
--static void *
--__xr17v35x_register_gpio(struct pci_dev *pcidev,
--			 const struct software_node *node)
-+static struct platform_device *__xr17v35x_register_gpio(struct pci_dev *pcidev,
-+							const struct software_node *node)
- {
- 	struct platform_device *pdev;
- 
-@@ -374,6 +374,12 @@ __xr17v35x_register_gpio(struct pci_dev *pcidev,
- 	return pdev;
- }
- 
-+static void __xr17v35x_unregister_gpio(struct platform_device *pdev)
-+{
-+	device_remove_software_node(&pdev->dev);
-+	platform_device_unregister(pdev);
-+}
-+
- static const struct property_entry exar_gpio_properties[] = {
- 	PROPERTY_ENTRY_U32("exar,first-pin", 0),
- 	PROPERTY_ENTRY_U32("ngpios", 16),
-@@ -384,8 +390,7 @@ static const struct software_node exar_gpio_node = {
- 	.properties = exar_gpio_properties,
- };
- 
--static int xr17v35x_register_gpio(struct pci_dev *pcidev,
--				  struct uart_8250_port *port)
-+static int xr17v35x_register_gpio(struct pci_dev *pcidev, struct uart_8250_port *port)
- {
- 	if (pcidev->vendor == PCI_VENDOR_ID_EXAR)
- 		port->port.private_data =
-@@ -394,6 +399,15 @@ static int xr17v35x_register_gpio(struct pci_dev *pcidev,
- 	return 0;
- }
- 
-+static void xr17v35x_unregister_gpio(struct uart_8250_port *port)
-+{
-+	if (!port->port.private_data)
-+		return;
-+
-+	__xr17v35x_unregister_gpio(port->port.private_data);
-+	port->port.private_data = NULL;
-+}
-+
- static int generic_rs485_config(struct uart_port *port,
- 				struct serial_rs485 *rs485)
- {
-@@ -419,6 +433,7 @@ static int generic_rs485_config(struct uart_port *port,
- 
- static const struct exar8250_platform exar8250_default_platform = {
- 	.register_gpio = xr17v35x_register_gpio,
-+	.unregister_gpio = xr17v35x_unregister_gpio,
- 	.rs485_config = generic_rs485_config,
- };
- 
-@@ -484,6 +499,7 @@ static int iot2040_register_gpio(struct pci_dev *pcidev,
- static const struct exar8250_platform iot2040_platform = {
- 	.rs485_config = iot2040_rs485_config,
- 	.register_gpio = iot2040_register_gpio,
-+	.unregister_gpio = xr17v35x_unregister_gpio,
- };
- 
- /*
-@@ -555,17 +571,11 @@ pci_xr17v35x_setup(struct exar8250 *priv, struct pci_dev *pcidev,
- 
- static void pci_xr17v35x_exit(struct pci_dev *pcidev)
- {
-+	const struct exar8250_platform *platform = exar_get_platform();
- 	struct exar8250 *priv = pci_get_drvdata(pcidev);
- 	struct uart_8250_port *port = serial8250_get_port(priv->line[0]);
--	struct platform_device *pdev;
- 
--	pdev = port->port.private_data;
--	if (!pdev)
--		return;
--
--	device_remove_software_node(&pdev->dev);
--	platform_device_unregister(pdev);
--	port->port.private_data = NULL;
-+	platform->unregister_gpio(port);
- }
- 
- static inline void exar_misc_clear(struct exar8250 *priv)
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.30.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
