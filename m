@@ -2,80 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2235C3A1494
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Jun 2021 14:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281C63A14A0
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Jun 2021 14:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbhFIMjo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 9 Jun 2021 08:39:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50082 "EHLO mail.kernel.org"
+        id S233564AbhFIMk4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 9 Jun 2021 08:40:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232090AbhFIMjo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 9 Jun 2021 08:39:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1000961354;
-        Wed,  9 Jun 2021 12:37:48 +0000 (UTC)
+        id S233488AbhFIMk4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 9 Jun 2021 08:40:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C1AD6139A;
+        Wed,  9 Jun 2021 12:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623242269;
-        bh=4azbVFSgWEE//TQvLyn0cj8m8IsgnXUBpDf6bcvHw/E=;
+        s=korg; t=1623242341;
+        bh=jYtHpQjLmGyTZrGhKiPMLFg/1ejaPgAby5FBxFuQN/E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H4mFP5szxnQr07TZFzbxSWHxVNBQFOUzBfAL+vb4VC4FKbYDwUQkJxC3S/wb548JN
-         FwNOhrxiEPjN1IxyxCIW1D1Ly2iU9trZxrtOXuHNEhZkml3PcN7EqF1rMfGOcJUx9N
-         Z8jH/Zjwe7x+KsKssmxPCDXPhOT5O63v4ZLikgcw=
-Date:   Wed, 9 Jun 2021 14:37:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3] serial: sh-sci: Stop dmaengine transfer in
- sci_stop_tx()
-Message-ID: <YMC2C0AXxhAxH/Mf@kroah.com>
-References: <20210609014902.271237-1-yoshihiro.shimoda.uh@renesas.com>
+        b=NqiYr1+Q99rzvfeU+9N452qceuc0Z42+bwWDUBVU8BHfb0ernrhh6lJ9hBqD4+ic5
+         KNuNsZS2Yc4dZsCJx+t2OS2aw3WT3zSqhMpZi0N/PeWOwZasnRsNSnoQRK9Ey5oP+1
+         alIClrYAhGBVNK3ec8MSDBMKT7jqQ/S/GLmAuKh0=
+Date:   Wed, 9 Jun 2021 14:38:59 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Erwan Le Ray <erwan.leray@foss.st.com>
+Cc:     Jiri Slaby <jslaby@suse.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH 1/2] serial: stm32: reset dma buffers during probe
+Message-ID: <YMC2Y5tVd478wU2B@kroah.com>
+References: <20210527091537.8997-1-erwan.leray@foss.st.com>
+ <20210527091537.8997-2-erwan.leray@foss.st.com>
+ <YK9rDVeg0W9WE+9a@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210609014902.271237-1-yoshihiro.shimoda.uh@renesas.com>
+In-Reply-To: <YK9rDVeg0W9WE+9a@kroah.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 10:49:02AM +0900, Yoshihiro Shimoda wrote:
-> Stop dmaengine transfer in sci_stop_tx(). Otherwise, the following
-> message is possible output when system enters suspend and while
-> transferring data, because clearing TIE bit in SCSCR is not able to
-> stop any dmaengine transfer.
+On Thu, May 27, 2021 at 11:49:01AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, May 27, 2021 at 11:15:36AM +0200, Erwan Le Ray wrote:
+> > Reset Rx and Tx dma buffers during probe to avoid freeing
+> > invalid buffer in no dma mode.
+> > 
+> > Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
+> > 
+> > diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+> > index c2ae7b392b86..2ac3b30477a7 100644
+> > --- a/drivers/tty/serial/stm32-usart.c
+> > +++ b/drivers/tty/serial/stm32-usart.c
+> > @@ -1168,6 +1168,8 @@ static struct stm32_port *stm32_usart_of_get_port(struct platform_device *pdev)
+> >  	stm32_ports[id].cr1_irq = USART_CR1_RXNEIE;
+> >  	stm32_ports[id].cr3_irq = 0;
+> >  	stm32_ports[id].last_res = RX_BUF_L;
+> > +	stm32_ports[id].rx_dma_buf = 0;
+> > +	stm32_ports[id].tx_dma_buf = 0;
+> >  	return &stm32_ports[id];
+> >  }
+> >  
+> > -- 
+> > 2.17.1
+> > 
 > 
->     sh-sci e6550000.serial: ttySC1: Unable to drain transmitter
-> 
-> Note that this patch uses dmaengine_terminate_async() so that
-> we can apply this patch into longterm kernel v4.9.x or later.
-> 
-> Fixes: 73a19e4c0301 ("serial: sh-sci: Add DMA support.")
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> ---
->  Changes from v2:
->  - Don't use a macro.
->  - Revise the commit descrption.
->  https://lore.kernel.org/linux-renesas-soc/20210604095704.756190-1-yoshihiro.shimoda.uh@renesas.com/
-> 
->  Changes from v1:
->  - Don't put #ifdef in the .c file.
->  - Update the commit description.
->  https://lore.kernel.org/linux-renesas-soc/20210602114108.510527-1-yoshihiro.shimoda.uh@renesas.com/
-> 
->  drivers/tty/serial/sh-sci.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> index 4baf1316ea72..2d5487bf6855 100644
-> --- a/drivers/tty/serial/sh-sci.c
-> +++ b/drivers/tty/serial/sh-sci.c
-> @@ -610,6 +610,14 @@ static void sci_stop_tx(struct uart_port *port)
->  	ctrl &= ~SCSCR_TIE;
->  
->  	serial_port_out(port, SCSCR, ctrl);
-> +
-> +#ifdef CONFIG_SERIAL_SH_SCI_DMA
+> Is this a bugfix?  if so, what commit does this fix and does it need to
+> be backported anywhere?
 
-Please no #ifdef in .c files.
+Due to lack of a response, I've dropped this from my queue.  Please add
+the needed information to the patch when you get the chance to resend
+this.
 
 thanks,
 
