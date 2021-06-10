@@ -2,122 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1413A24E1
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Jun 2021 08:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A263C3A24E6
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Jun 2021 09:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbhFJHA0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 10 Jun 2021 03:00:26 -0400
-Received: from mail-vs1-f50.google.com ([209.85.217.50]:38744 "EHLO
-        mail-vs1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbhFJHA0 (ORCPT
+        id S229634AbhFJHDy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 10 Jun 2021 03:03:54 -0400
+Received: from mail.chalver.com.ec ([186.3.12.10]:12985 "EHLO
+        mail.chalver.com.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229778AbhFJHDy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 10 Jun 2021 03:00:26 -0400
-Received: by mail-vs1-f50.google.com with SMTP id x8so1311500vso.5;
-        Wed, 09 Jun 2021 23:58:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UUK5A8y0i3CSxDWdiohVrmH14HslBm7Mhl1BivLex1Q=;
-        b=K5ClchpojM55/Kw/GNdK5djKJ+muHaM5dygauUqFjxduCp4v5sV0chPI9G6CRnCsCq
-         1s0eUf5UyT+XFBJDAPanOAOVRCUlKczwnZELxfY3xDERwtk4Qxmx97JuN1chJt6W2qJx
-         LTmkfvtvFAL+2KD0U9dOql7P2iIOOBe0FBnmfXdUbNteJy2e2NJpqV2S8O8WM52NzX4H
-         s3XasdgwK0/n6YgpwFz0jxAy1WFbfbPXyE/ndhELV6o30EdiQwL/52GCoNGI/M8blkXz
-         fJWwA9F6UFG5Yo4qHAbDFxLPlFvQOM6Gn5w8lSNxTsLf3hvt2/JejeDI0GWGJKBrejCv
-         DWHg==
-X-Gm-Message-State: AOAM531SbsnIgAonyB5zy2NepoG6cGgSmqxBNtay+OUpKbXb0iHUIKq1
-        7h07c3mG7a3kVlF1UA/w/qJrvJsgw/2LXf+7gns=
-X-Google-Smtp-Source: ABdhPJzhuPg2ru7G+1D9nNr+e+pWGdEkTyNoRRpoPTOom7myuEb3Hq8mzyQWPXruFXyQdouC2lvZBSHMT6ppEfvo4V0=
-X-Received: by 2002:a05:6102:2011:: with SMTP id p17mr2899706vsr.40.1623308295528;
- Wed, 09 Jun 2021 23:58:15 -0700 (PDT)
+        Thu, 10 Jun 2021 03:03:54 -0400
+X-Greylist: delayed 3469 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Jun 2021 03:03:54 EDT
+Received: from mail.chalver.com.ec (localhost.localdomain [127.0.0.1])
+        by mail.chalver.com.ec (Postfix) with ESMTPS id 3471D1F228A6;
+        Thu, 10 Jun 2021 00:36:48 -0500 (ECT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.chalver.com.ec (Postfix) with ESMTP id 9F99B1F22C7C;
+        Thu, 10 Jun 2021 00:21:29 -0500 (ECT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.chalver.com.ec 9F99B1F22C7C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chalver.com.ec;
+        s=E2A417BC-DDA7-11E6-85F6-38495636B764; t=1623302489;
+        bh=PxMh0SAMbBGlctefOH2OhvTlJNlHw25bONEEE7Ldp0I=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=MdULk7PmFNE8PkUcu/UghyQHc8l3DF9cGTOHhlhy8qJq7CdQKzMy8XjF+NR5Q9Jqh
+         H0SLLt3MlOVydY9ca7ZuJCH/sO/7f9LEZuxT9iLSZjWLoMOWQ+bo/4JT8lJg0dKAQH
+         vrTTWAEwiCIoWUnwO6dwpGtU2Tz/H08M2/vTZJvN9xAN4RPgG/ilwbgnyOaEyvtG+4
+         hbhwesABFMamX4EridrFCrBHeBsWXUzEWjt3/aIuYOHM/FVa80xJJHKje98MupoXb7
+         9yG86b158uGzB7WL806h8cYmpbK09HvkGNsChmma7Ib/WsUmPxD1gLHvuzaVp7ikHi
+         RScQ4zb4JNAjw==
+X-Virus-Scanned: amavisd-new at chalver.com.ec
+Received: from mail.chalver.com.ec ([127.0.0.1])
+        by localhost (mail.chalver.com.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2K0Ugh-Z64h2; Thu, 10 Jun 2021 00:21:29 -0500 (ECT)
+Received: from cris-PC.wifi (unknown [105.9.120.116])
+        by mail.chalver.com.ec (Postfix) with ESMTPSA id 5F52A1F22C68;
+        Thu, 10 Jun 2021 00:21:16 -0500 (ECT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210609014902.271237-1-yoshihiro.shimoda.uh@renesas.com>
- <ac930164-6150-4358-8fe9-ab87654f68ce@gmail.com> <CAMuHMdW9oV80QdZmgwJBF99jnw56XuTSkanjHCdBY+h4jAVGew@mail.gmail.com>
- <TY2PR01MB369260DF38C0FC6E58D65362D8359@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY2PR01MB369260DF38C0FC6E58D65362D8359@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Jun 2021 08:58:04 +0200
-Message-ID: <CAMuHMdU23gB8Bap3qoypXkJhu=jwS-MQ=mu-CdzqijoWzc4rOg@mail.gmail.com>
-Subject: Re: [PATCH v3] serial: sh-sci: Stop dmaengine transfer in sci_stop_tx()
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <mpaucar@chalver.com.ec>
+From:   ''Tayeb souami'' <mpaucar@chalver.com.ec>
+Date:   Thu, 10 Jun 2021 07:28:31 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210610052116.5F52A1F22C68@mail.chalver.com.ec>
+X-Laboratorios-Chalver-MailScanner-Information: Please contact the ISP for more information
+X-Laboratorios-Chalver-MailScanner-ID: 5F52A1F22C68.A76EC
+X-Laboratorios-Chalver-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Shimoda-san,
 
-On Thu, Jun 10, 2021 at 2:50 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
-> > From: Geert Uytterhoeven, Sent: Thursday, June 10, 2021 12:30 AM
-> > On Wed, Jun 9, 2021 at 5:09 PM Sergei Shtylyov
-> > <sergei.shtylyov@gmail.com> wrote:
-> > > On 6/9/21 4:49 AM, Yoshihiro Shimoda wrote:
-> > > > Stop dmaengine transfer in sci_stop_tx(). Otherwise, the following
-> > > > message is possible output when system enters suspend and while
-> > > > transferring data, because clearing TIE bit in SCSCR is not able to
-> > > > stop any dmaengine transfer.
-> > > >
-> > > >     sh-sci e6550000.serial: ttySC1: Unable to drain transmitter
-> > > >
-> > > > Note that this patch uses dmaengine_terminate_async() so that
-> > > > we can apply this patch into longterm kernel v4.9.x or later.
-> > > >
-> > > > Fixes: 73a19e4c0301 ("serial: sh-sci: Add DMA support.")
-> > > > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > > > ---
-> > > >
-> > > >  drivers/tty/serial/sh-sci.c | 8 ++++++++
-> > > >  1 file changed, 8 insertions(+)
-> > > >
-> > > > diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> > > > index 4baf1316ea72..2d5487bf6855 100644
-> > > > --- a/drivers/tty/serial/sh-sci.c
-> > > > +++ b/drivers/tty/serial/sh-sci.c
-> > > > @@ -610,6 +610,14 @@ static void sci_stop_tx(struct uart_port *port)
-> > > >       ctrl &= ~SCSCR_TIE;
-> > > >
-> > > >       serial_port_out(port, SCSCR, ctrl);
-> > > > +
-> > > > +#ifdef CONFIG_SERIAL_SH_SCI_DMA
-> > >
-> > >    Why not use IS_ENABLED() instead? Gets rid of #ifdef. :-)
-> > >
-> > > > +     if (to_sci_port(port)->chan_tx &&
-> > > > +         !dma_submit_error(to_sci_port(port)->cookie_tx)) {
-> > > > +             dmaengine_terminate_async(to_sci_port(port)->chan_tx);
-> > > > +             to_sci_port(port)->cookie_tx = -EINVAL;
-> >
-> > Because chan_tx and cookie_tx do not exist if CONFIG_SERIAL_SH_SCI_DMA
-> > is disabled.
->
-> This is a nit though, chan_tx always exists.
+Lieber Freund,
 
-I stand corrected, only cookie_tx depends on CONFIG_SERIAL_SH_SCI_DMA.
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
+ou Tube Seite unten.
 
-> > Yes, that's why all the DMA code in this driver (.c file) is protected by
-> > #ifdef CONFIG_SERIAL_SH_SCI_DMA.
->
-> I'm thinking we have to remove #ifdef from sh-sci.c file at first...
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
 
-While I don't disagree that would be worthwhile, do we really need
-to refactor a driver first, before a fix that follows the existing
-driver style can be applied (and backported)?
 
-Thanks!
 
-Gr{oetje,eeting}s,
+Das ist dein Spendencode: [TS530342018]
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+
+Gr=C3=BC=C3=9Fe
+Herr Tayeb Souami
