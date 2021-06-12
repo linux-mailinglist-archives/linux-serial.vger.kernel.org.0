@@ -2,56 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE65E3A4A22
-	for <lists+linux-serial@lfdr.de>; Fri, 11 Jun 2021 22:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C23A3A4F97
+	for <lists+linux-serial@lfdr.de>; Sat, 12 Jun 2021 17:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbhFKUag (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 11 Jun 2021 16:30:36 -0400
-Received: from hosting.gsystem.sk ([212.5.213.30]:52412 "EHLO
-        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbhFKUaf (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 11 Jun 2021 16:30:35 -0400
-Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 21DD87A0343;
-        Fri, 11 Jun 2021 22:20:14 +0200 (CEST)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] serial_cs: Add Option International GSM-Ready 56K/ISDN modem
-Date:   Fri, 11 Jun 2021 22:19:40 +0200
-Message-Id: <20210611201940.23898-2-linux@zary.sk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210611201940.23898-1-linux@zary.sk>
-References: <20210611201940.23898-1-linux@zary.sk>
+        id S231451AbhFLP5H (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 12 Jun 2021 11:57:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47616 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231358AbhFLP5H (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 12 Jun 2021 11:57:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D63B3610FC;
+        Sat, 12 Jun 2021 15:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623513295;
+        bh=EDNW8qcQ6bxhsUUgeTf9VlCr0Q/8pLhBmFNUlwYgfuk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=u4NbBkFdja5kodz5RNxbK89yu42OrBd5/J+quHqqNI4MjSQh4byaLHXW6HhpI2XFd
+         ms6rYhkJ66q+2Oj/7nzrNeRvDNfSuxHYwbTv9rfbBo30nNYmanLd32td+UN71QlD67
+         nNnjuSrDRQtuxzvG63cKfbLR/LWri1zlA4m7LWxQ=
+Date:   Sat, 12 Jun 2021 17:54:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY/Serial driver fix for 5.13-rc6
+Message-ID: <YMTYzUp9cv+e4U6R@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add support for Option International GSM-Ready 56K/ISDN PCMCIA modem
-card.
+The following changes since commit 8124c8a6b35386f73523d27eacb71b5364a68c4c:
 
-Signed-off-by: Ondrej Zary <linux@zary.sk>
----
- drivers/tty/serial/8250/serial_cs.c | 1 +
- 1 file changed, 1 insertion(+)
+  Linux 5.13-rc4 (2021-05-30 11:58:25 -1000)
 
-diff --git a/drivers/tty/serial/8250/serial_cs.c b/drivers/tty/serial/8250/serial_cs.c
-index 6f3996502453..53f2697014a0 100644
---- a/drivers/tty/serial/8250/serial_cs.c
-+++ b/drivers/tty/serial/8250/serial_cs.c
-@@ -777,6 +777,7 @@ static const struct pcmcia_device_id serial_ids[] = {
- 	PCMCIA_DEVICE_PROD_ID12("Multi-Tech", "MT2834LT", 0x5f73be51, 0x4cd7c09e),
- 	PCMCIA_DEVICE_PROD_ID12("OEM      ", "C288MX     ", 0xb572d360, 0xd2385b7a),
- 	PCMCIA_DEVICE_PROD_ID12("Option International", "V34bis GSM/PSTN Data/Fax Modem", 0x9d7cd6f5, 0x5cb8bf41),
-+	PCMCIA_DEVICE_PROD_ID12("Option International", "GSM-Ready 56K/ISDN", 0x9d7cd6f5, 0xb23844aa),
- 	PCMCIA_DEVICE_PROD_ID12("PCMCIA   ", "C336MX     ", 0x99bcafe9, 0xaa25bcab),
- 	PCMCIA_DEVICE_PROD_ID12("Quatech Inc", "PCMCIA Dual RS-232 Serial Port Card", 0xc4420b35, 0x92abc92f),
- 	PCMCIA_DEVICE_PROD_ID12("Quatech Inc", "Dual RS-232 Serial Port PC Card", 0xc4420b35, 0x031a380d),
--- 
-Ondrej Zary
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.13-rc6
+
+for you to fetch changes up to 7c3e8d9df265bd0bdf6e328174cdfba26eb22f1c:
+
+  serial: 8250_exar: Avoid NULL pointer dereference at ->exit() (2021-06-09 14:40:48 +0200)
+
+----------------------------------------------------------------
+Serial driver fix for 5.13-rc6
+
+Here is a single 8250_exar serial driver fix for a reported problem with
+a change that happened in 5.13-rc1.
+
+It has been in linux-next with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      serial: 8250_exar: Avoid NULL pointer dereference at ->exit()
+
+ drivers/tty/serial/8250/8250_exar.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
