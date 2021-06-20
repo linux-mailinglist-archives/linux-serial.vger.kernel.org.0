@@ -2,57 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F713ADFC5
-	for <lists+linux-serial@lfdr.de>; Sun, 20 Jun 2021 20:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D6F3AE001
+	for <lists+linux-serial@lfdr.de>; Sun, 20 Jun 2021 21:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbhFTSVa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 20 Jun 2021 14:21:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60230 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229694AbhFTSVa (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 20 Jun 2021 14:21:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 128D0610C7;
-        Sun, 20 Jun 2021 18:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624213157;
-        bh=PlsS3euXua3z+OJ6tRgXb9zj8LgqpM/+lgRm4dr+ngk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=an4f4ckinHFgl1/qp8UwIEy6e/djfHvbni5LdgyzU3R/kC9UGzK9+bCn6yIdzHdc2
-         VtljvHZQcMOCoMEXIA91pKtzx892hZfPSXDcOfS7ekFcTE+rzE7fdXd5r5xvpEU5W9
-         9gTrl2jiWe/ukvTpmiSNm/mOMUHvER8KVRIFRD80=
-Date:   Sun, 20 Jun 2021 20:19:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jason Li <jason.li@cortina-access.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Alex Nemirovsky <Alex.Nemirovsky@cortina-access.com>
-Subject: Re: [tty:tty-testing 218/218]
- drivers/tty/serial/serial_cortina-access.c:469:6: warning: no previous
- prototype for 'cortina_console_write'
-Message-ID: <YM+Goo+qqPd3Tpcy@kroah.com>
-References: <202106182351.TACYSsac-lkp@intel.com>
- <HK0PR01MB2499A2741A76C6610A20773CA20B9@HK0PR01MB2499.apcprd01.prod.exchangelabs.com>
+        id S229875AbhFTTdw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 20 Jun 2021 15:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229905AbhFTTdt (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sun, 20 Jun 2021 15:33:49 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DD6C0617AF
+        for <linux-serial@vger.kernel.org>; Sun, 20 Jun 2021 12:31:35 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d16so18961540lfn.3
+        for <linux-serial@vger.kernel.org>; Sun, 20 Jun 2021 12:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
+        b=bkPS4yFR98020frGZuTqkshvNSWXl0Z6aTQyqDBQOYRNn8mNj5ss4TtiudbSrK7ff/
+         QNZJY25CiO+MAZJaIbw2u0HDwtyse9WT3A0cEIgMb7BhAc5Gi6ayNLOmqZZccWa+fNBh
+         k61qS4LmcyXeqJul4RPlYtrHntUAvOZQNCldFK4euecaucVDQIZPJo6OCRHDFo8n8io6
+         y/wykfU9I/qPBsaSVZvRbHpzbXcDYmsqOM+wVrXUhyO/jptCVxl1LpxYgYbXKqQg0pGJ
+         jrhELtWISoo7lLKraKAHFp1ru6KpHU4ePpKhtD5yFuFfQm9+elaj+smp5+MyUD/KdPaP
+         Ef2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
+        b=gBBq9JCdNrz9QhSu0+iqhqgB90HluOdw/wdMNT+KZR5Aj2Aa0Or0Kh1Nu5ACOYLZZW
+         F63cJ73zQ31s4hLwD3MkTfLQJy1pNeh0xofpk1nSwCRqHjURXZJSUdzI/LxpUWwvGYKl
+         7Z272JQ1WjVz23YiCDlqGuqXY5NYbjqqp1eQLnWHncgQZ/RyKBEcdyqyFLHHpdVtCICn
+         UwvAOAdrJEIXDRnGbXjHjuzpirl0G3eaIkv7ti/JWh/Np5zvaUJdeI80W89cFevACAJv
+         6lUtGJNgCfN7dw0ZWY1I0BlUskJiKixkDg0O6NY2tggL9SBN126nEL3Qpj6xyL2l/QZY
+         RRvw==
+X-Gm-Message-State: AOAM530yFvBgCM2faNZSHep/jthPbzkyVOCdN75iqDBRbx3PV+GXHLW+
+        l+MGNBhDssQMF4JYZRPBTmnhv0NGnRw+EAZFEQE=
+X-Google-Smtp-Source: ABdhPJyRr8xkKh1v74sSXR4glyEviCtgGMwIox16xrJwn4HhjsAH3AQXF/kC87XZ0K1UcvikGGPprpK4pH75Np6p+uM=
+X-Received: by 2002:ac2:499d:: with SMTP id f29mr6724142lfl.602.1624217492479;
+ Sun, 20 Jun 2021 12:31:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0PR01MB2499A2741A76C6610A20773CA20B9@HK0PR01MB2499.apcprd01.prod.exchangelabs.com>
+Received: by 2002:aa6:da47:0:b029:fa:6d7d:24c with HTTP; Sun, 20 Jun 2021
+ 12:31:32 -0700 (PDT)
+Reply-To: contactcenter@gnbinvestorsb.com
+From:   Gnb Investors Bank <sandraquntoo@gmail.com>
+Date:   Sun, 20 Jun 2021 22:31:32 +0300
+Message-ID: <CAPu=tC5n-=M7EGJZV++m9omRBkAZZ+M9gcWgQjJkA4Y9N6hVBQ@mail.gmail.com>
+Subject: Brauchen Sie einen Kredit?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sun, Jun 20, 2021 at 02:52:10PM +0000, Jason Li wrote:
-> Hi Greg,
-> 	I just fixed compile warning but fail to push to remote REPO:
-> 	fatal: unable to access 'https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/': The requested URL returned error: 403
+--=20
+Brauchen Sie einen Kredit? Unsere Bank vergibt Kredite zu einem Zinssatz vo=
+n 2%
 
-That's good to verify, no one should have write access to that except me :)
+Melden Sie sich f=C3=BCr weitere Informationen bei uns.
 
-> 	So I attach patch for you review.
-
-Please submit this properly, as is documented and I will be glad to take
-it.
-
-thanks,
-
-greg k-h
+E-Mail: contactcenter@gnbinvestorsb.com
