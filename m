@@ -2,143 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A0E3B08A7
-	for <lists+linux-serial@lfdr.de>; Tue, 22 Jun 2021 17:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E573B0ECE
+	for <lists+linux-serial@lfdr.de>; Tue, 22 Jun 2021 22:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbhFVPXJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 22 Jun 2021 11:23:09 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:36913 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbhFVPXI (ORCPT
+        id S229747AbhFVUeV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 22 Jun 2021 16:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229629AbhFVUeU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 22 Jun 2021 11:23:08 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mdvyo-1lO1HY1hzS-00azLe; Tue, 22 Jun 2021 17:20:50 +0200
-Received: by mail-wm1-f49.google.com with SMTP id m3so13074721wms.4;
-        Tue, 22 Jun 2021 08:20:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532muqXB2+FeUvqK7kiC6sypaar83CR9sGO3csSxZ0TMzQF+Hzai
-        CIEWo95FA2Id+JyxtDKfgXXChKOP6rr5wOOXX7Y=
-X-Google-Smtp-Source: ABdhPJxnVRrZWU3JVswJ2QZq2pjCpSgY1JUazfWhbU6JSQfwjFgSvYmHDdjApi4t3KGHf+NqzVz/wr3QCt1/VR7iGng=
-X-Received: by 2002:a1c:98d5:: with SMTP id a204mr4879216wme.43.1624375249974;
- Tue, 22 Jun 2021 08:20:49 -0700 (PDT)
+        Tue, 22 Jun 2021 16:34:20 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5CAC061574
+        for <linux-serial@vger.kernel.org>; Tue, 22 Jun 2021 13:32:03 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id 14so759127oir.11
+        for <linux-serial@vger.kernel.org>; Tue, 22 Jun 2021 13:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=qcUxS8VDWWWklZAy3zvkB9tVlXi5M60D602FHHWB190=;
+        b=blQyadZix+IIYIObFW0aAQGrB/krv4zyvFfWZNjZ+akkoHndakK8B+XdjrrAa7lpn3
+         tmTDXD3KI3XRF9N9edCBZ9RGrcUrzX247J8XsScoPGLCEbNW/LTPtpdDLrJp5BP+GBwM
+         IDfOpYkvzZU51ISUdcUfRcpgCH8XNxYwFC3dekWqyUB0NYY0hDNqyHm6CWr6zdSC6Y+F
+         10H/g7pcDpNlGTJ1ba/n6DRNACjvDGcmOomhFQyki+p0hvVxzkyQa5QE/Fy/Z+mVHiBF
+         RLzZcqrltE/qCNk7y+hJRjxiPztG2dSE69ui40SGhtY4B4ZM9rG8vlTsMZc+NJgZjjhO
+         /okA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=qcUxS8VDWWWklZAy3zvkB9tVlXi5M60D602FHHWB190=;
+        b=JKFyFPPRkX9L2lVO6/p1oziHjMSAMEJpDDfhGWVgCJeEd3hnsrREEfm/Ird/BXrDWx
+         9RUww4n4t2BOyJDJPlHQyY7BqAEmITjLwCPwAYuwLakLqsaoZ76FG506/rvaa+MohY7c
+         V1TunR0ufkx2DL9ZOsNjwmB/pMU2Ott2cS/CzOsYqoyrUsRl0JROAwicw66rhitnPCNI
+         hVFFSLjVKAX3gjh6mwprzT0wEXbsohsyBwEsKYiWTcWVQ1vZUtg5K+ZlijdLOJSjYFXB
+         0iVJHSb4EobUV853gAzqvWZvhdMhO70Cvb1e2mZ1T4ELXSKOPifvvodRc0G1ii6ooFzT
+         ap7A==
+X-Gm-Message-State: AOAM532LTf5YyskWInLWN9xqlH0WnCUbEuYO7u8099wKcgzpTXJXR82i
+        Ey5q45yV/1vkYyBEryoQcHZglqglBWcoIpxHfOVMVEXv0pi43sj1
+X-Google-Smtp-Source: ABdhPJz3yCDaLo7S7r4+YixnezQ7KZldgSedJz2hmlqZt67hQdvRhbGE0/yHVSwg4C/Uo9Hu1vL0sPNPIo8UENVoqT8=
+X-Received: by 2002:a54:4889:: with SMTP id r9mr458679oic.101.1624393923172;
+ Tue, 22 Jun 2021 13:32:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210509184519.15816-1-alex.nemirovsky@cortina-access.com>
- <20210509184519.15816-2-alex.nemirovsky@cortina-access.com>
- <YMiUpK/+PjsoCU1W@kroah.com> <CFD14D63-4537-4A91-861C-71B74E2CFAE6@cortina-access.com>
- <YMi1jOL6y+eUK3Df@kroah.com> <B71C5D02-EDBE-4AAD-AF1B-2FD467BE075A@cortina-access.com>
- <CAL_JsqKDf9W-1KHUoFFCoLareLKf0CAVMU6CXR22xW3hWM_8yg@mail.gmail.com>
- <9937DB34-7757-4A54-BCC6-AF5514FD7F1D@cortina-access.com> <CAL_JsqLHdi29Du1F=e1N471tnsziWpH7TPO_caDF3SrjvHS-iw@mail.gmail.com>
- <CAMuHMdXA9-ajoAza2JAW5879ECieMm1dbBbKHgJhDa7=3kWu3w@mail.gmail.com>
-In-Reply-To: <CAMuHMdXA9-ajoAza2JAW5879ECieMm1dbBbKHgJhDa7=3kWu3w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Jun 2021 17:18:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Zh37WwM5rRugJgm_b8f-fBcTm_pHZz439HMe8w-odPw@mail.gmail.com>
-Message-ID: <CAK8P3a3Zh37WwM5rRugJgm_b8f-fBcTm_pHZz439HMe8w-odPw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: serial: Convert Cortina-Access UART
- to json-schema
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alex Nemirovsky <Alex.Nemirovsky@cortina-access.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Li <jason.li@cortina-access.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Olof Johansson <olof@lixom.net>
+Received: by 2002:a05:6838:274d:0:0:0:0 with HTTP; Tue, 22 Jun 2021 13:32:02
+ -0700 (PDT)
+Reply-To: mariaelisabethschaeffler07@gmail.com
+From:   Maria Elisabeth Schaeffler <amakaunique23@gmail.com>
+Date:   Tue, 22 Jun 2021 13:32:02 -0700
+Message-ID: <CANEsP81Q=EscUUAhrKMkMHJhToekMSR2mWf4VW59vKE-_jUiBw@mail.gmail.com>
+Subject: =?UTF-8?Q?Darowizna_=E2=82=AC500=2C000=2E00_EUR_DLA_CIEBIE?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:tOie7vWrEnexv0CRNGItMAUz9wQ0Ofa0PTa6xbTtiUTZQ3T8or4
- SiynUPlqei6d/gdefigWSaHhJxZhhKNBGUH/O5Cehp0HQiiWXon7s3qKygV8FNW0iMTm4pV
- xeG1ZXmMkDEInmQ0ZkpXKTeZRfWjLN+Yb8n5TnNYq9xtso0bByh/zm2+cw6fe2eWbwFu+Jh
- fjyw4mOBAuhq7b7SqG7Gg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+CN8r0Y3zoI=:Cu1IqOczSpgr0i3z2CFCMA
- sD8hgr9pyIh7wPJ/dLI+HmHpmzD/6xf/e//OMoR2MnZVhwHWWMUcHJmywHtQa0+AZBpRGzah2
- 4Ih6kz/7vuqFLVLqBl8a8IcZmgH2by9RSWX/p8QO5/UaKhtjrTbL/vDpS8McvPLzObKNTJQVp
- P4EGMUWGqbjcGROqtk44XXaAMo1sG7CqRUafDDm9HgOP9HDTxgQ0ToeqCcGzCzTyXPyFkhiUL
- IVUZBGhVJdF9qvp4dS5HGB8g29JszrwoEwHJ0n1Ba6VJefjbTpmPCvFQOEzaFvX+3LXLkXNSv
- 4KYLLZDjc2+lfX5I8/ZFbSLCvFURqDtkBAO+kaHGOjrsPjl+1fPdvRNp3VR92JjdGMVizFWC1
- z2v2gr0Bx+rOZhywJD+mXFBQo9VkDvac/npmYsVKNaIyppVPERqd4x7O6TTJ5OlfHMv6HDeBd
- bf19sVYofBmVwAna2BJKcVGIAw7JHa+zSOgjC94PneKtmK6GcTYlD30a37+RDM30xHjQw+ljA
- vPPzim+kdnLxg0WKigZWb0=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 1:29 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Tue, Jun 15, 2021 at 6:21 PM Rob Herring <robh+dt@kernel.org> wrote:
-> > On Tue, Jun 15, 2021 at 10:06 AM Alex Nemirovsky <Alex.Nemirovsky@cortina-access.com> wrote:
-> > > It sounds like you are find with patch 2/3 from a DT point of view.  Could we review the rest from the DT point of view
-> > > to get either feedback for changes or ACK these, so we can unblock this series?
-> >
-> > Can't say I've seen it as I only see replies in my mail. Did this
-> > originally go to the DT list? If not, it's never in my queue[1].
->
-> None of the patches in this series ended up on a mailing list or on
-> lore, so no one could comment on them, except for people CCed directly.
+--=20
+Cze=C5=9B=C4=87,
 
-Right, in fact every email I see from @cortina-access.com at
-https://lore.kernel.org/lkml/?q=cortina-access.com is a reply, but the
-original mails are all missing, not just this series.
+Nazywam si=C4=99 Maria Elisabeth Schaeffler, kobieta biznesu z Niemiec,
+inwestorka. Po tym, jak straci=C5=82am m=C4=99=C5=BCa w szpitalnym =C5=82=
+=C3=B3=C5=BCku, kaza=C5=82 mi
+przekaza=C4=87 darowizn=C4=99 w wysoko=C5=9Bci 500 000 euro takiej dobrej o=
+sobie jak
+ty. Odda=C5=82em 25 procent mojego osobistego maj=C4=85tku na cele charytat=
+ywne.
+Zobowi=C4=85za=C5=82em si=C4=99 r=C3=B3wnie=C5=BC przekaza=C4=87 pozosta=C5=
+=82e 25% w tym roku 2021
+osobom prywatnym. Zdecydowa=C5=82em si=C4=99 przekaza=C4=87 Ci 500 000 euro=
+. Je=C5=9Bli
+jeste=C5=9B zainteresowany moj=C4=85 darowizn=C4=85, skontaktuj si=C4=99 ze=
+ mn=C4=85, aby
+uzyska=C4=87 wi=C4=99cej informacji pod adresem:
+mariaelisabethschaeffler07@gmail.com.
 
-It appears that there is a problem between the mail servers of cortina-access
-and kernel.org. Alex and Jason, please double-check if you find
-anything in
+Mo=C5=BCesz r=C3=B3wnie=C5=BC przeczyta=C4=87 wi=C4=99cej o mnie, klikaj=C4=
+=85c poni=C5=BCszy link
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-https://www.kernel.org/doc/html/latest/process/email-clients.html
+Mo=C5=BCesz zobaczy=C4=87 tutaj: https://en.wikipedia.org/wiki/Maria-Elisab=
+eth_Schaeffler
 
-that may have caused this on your end, or otherwise contact
-postmaster@vger.kernel.org for help.
-
-> The driver has been accepted in tty-next, commit b61c8bf4694b5115
-> ("tty: serial: Add UART driver for Cortina-Access platform").  From a
-> quick glance, it could have used some review.
->
-> The driver is using the compatible value "cortina-access,serial", so I
-> guess the binding patch added "cortina-access" to vendor-prefixes.yaml.
-
-Ah right. That patch has not made it in because of the issue, but right
-away I can tell that the binding is not great because the compatible
-string is way too generic: it implies that cortina-access only uses a single
-serial port type in every past, present or future SoC, which is clearly
-not the case.
-
-It's obviously up to Greg to decide whether to revert the patch, but
-I'd suggest we don't treat the driver as conforming to the binding until
-it has been reviewed, and assume that changes will be made.
-
-> The SERIAL_CORTINA_ACCESS symbol doesn't depend on anything, so
-> it will show up on everyone's oldconfig radar soon, regardless of
-> building a kernel for a Cortina Access system or not.
-> I wanted to change it to something like:
->
->      config SERIAL_CORTINA_ACCESS
->             tristate "Cortina-Access serial port support"
->     +       depends on FIXME || COMPILE_TEST
->             select SERIAL_CORE
->             help
->               This driver is for Cortina-Access SoC's UART. If you
-> have a machine
->               based on the Cortina-Access SoC and wish to use the serial port,
->               say 'Y' here. Otherwise, say 'N'.
->
-> but given there is no evidence of patches to add support for the
-> CAXXXX line of SoCs, there's no symbol to depend on...
-
-Assuming this is a SoC based on an Arm CPU core, it's clear that
-nothing from cortina-access.com ever made it through the
-linux-arm-kernel@lists.infradead.org mailing list either, if anything
-was sent at all.
-
-Alex, please try to contact me off-list about merging the full SoC
-support, I should be able to help you come up with a plan for
-submitting the rest as soon as the email troubles are resolved.
-
-For new Arm based SoC platforms, arch/{arm,arm64} patches
-should go through the soc tree and be picked up by Olof (on Cc)
-or me. The exact process is not well documented, but please
-contact us by email, or on irc://irc.libera.chat/#armlinux if you
-have questions.
-
-       Arnd
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Ciep=C5=82e pozdrowienie,
+Maria Elisabeth Schaeffler
+CEO
+Grupa Schaefflera.
