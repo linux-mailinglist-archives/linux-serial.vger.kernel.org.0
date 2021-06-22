@@ -2,91 +2,134 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E573B0ECE
-	for <lists+linux-serial@lfdr.de>; Tue, 22 Jun 2021 22:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786D93B109A
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Jun 2021 01:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbhFVUeV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 22 Jun 2021 16:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbhFVUeU (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 22 Jun 2021 16:34:20 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5CAC061574
-        for <linux-serial@vger.kernel.org>; Tue, 22 Jun 2021 13:32:03 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id 14so759127oir.11
-        for <linux-serial@vger.kernel.org>; Tue, 22 Jun 2021 13:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=qcUxS8VDWWWklZAy3zvkB9tVlXi5M60D602FHHWB190=;
-        b=blQyadZix+IIYIObFW0aAQGrB/krv4zyvFfWZNjZ+akkoHndakK8B+XdjrrAa7lpn3
-         tmTDXD3KI3XRF9N9edCBZ9RGrcUrzX247J8XsScoPGLCEbNW/LTPtpdDLrJp5BP+GBwM
-         IDfOpYkvzZU51ISUdcUfRcpgCH8XNxYwFC3dekWqyUB0NYY0hDNqyHm6CWr6zdSC6Y+F
-         10H/g7pcDpNlGTJ1ba/n6DRNACjvDGcmOomhFQyki+p0hvVxzkyQa5QE/Fy/Z+mVHiBF
-         RLzZcqrltE/qCNk7y+hJRjxiPztG2dSE69ui40SGhtY4B4ZM9rG8vlTsMZc+NJgZjjhO
-         /okA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=qcUxS8VDWWWklZAy3zvkB9tVlXi5M60D602FHHWB190=;
-        b=JKFyFPPRkX9L2lVO6/p1oziHjMSAMEJpDDfhGWVgCJeEd3hnsrREEfm/Ird/BXrDWx
-         9RUww4n4t2BOyJDJPlHQyY7BqAEmITjLwCPwAYuwLakLqsaoZ76FG506/rvaa+MohY7c
-         V1TunR0ufkx2DL9ZOsNjwmB/pMU2Ott2cS/CzOsYqoyrUsRl0JROAwicw66rhitnPCNI
-         hVFFSLjVKAX3gjh6mwprzT0wEXbsohsyBwEsKYiWTcWVQ1vZUtg5K+ZlijdLOJSjYFXB
-         0iVJHSb4EobUV853gAzqvWZvhdMhO70Cvb1e2mZ1T4ELXSKOPifvvodRc0G1ii6ooFzT
-         ap7A==
-X-Gm-Message-State: AOAM532LTf5YyskWInLWN9xqlH0WnCUbEuYO7u8099wKcgzpTXJXR82i
-        Ey5q45yV/1vkYyBEryoQcHZglqglBWcoIpxHfOVMVEXv0pi43sj1
-X-Google-Smtp-Source: ABdhPJz3yCDaLo7S7r4+YixnezQ7KZldgSedJz2hmlqZt67hQdvRhbGE0/yHVSwg4C/Uo9Hu1vL0sPNPIo8UENVoqT8=
-X-Received: by 2002:a54:4889:: with SMTP id r9mr458679oic.101.1624393923172;
- Tue, 22 Jun 2021 13:32:03 -0700 (PDT)
+        id S229873AbhFVXbz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 22 Jun 2021 19:31:55 -0400
+Received: from thoth.sbs.de ([192.35.17.2]:42196 "EHLO thoth.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229501AbhFVXbz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 22 Jun 2021 19:31:55 -0400
+X-Greylist: delayed 1951 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Jun 2021 19:31:54 EDT
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by thoth.sbs.de (8.15.2/8.15.2) with ESMTPS id 15MMuVSg027778
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Jun 2021 00:56:31 +0200
+Received: from [167.87.93.200] ([167.87.93.200])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 15MMuQ3p002566;
+        Wed, 23 Jun 2021 00:56:27 +0200
+Subject: Re: [PATCH v2] serial: 8250: 8250_omap: Fix possible interrupt storm
+ on K3 SoCs
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Tony Lindgren <tony@atomide.com>, linux-serial@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+References: <20210622145704.11168-1-vigneshr@ti.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Message-ID: <d55fc5bb-b56d-bed6-0753-574b12e2ee92@siemens.com>
+Date:   Wed, 23 Jun 2021 00:56:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Received: by 2002:a05:6838:274d:0:0:0:0 with HTTP; Tue, 22 Jun 2021 13:32:02
- -0700 (PDT)
-Reply-To: mariaelisabethschaeffler07@gmail.com
-From:   Maria Elisabeth Schaeffler <amakaunique23@gmail.com>
-Date:   Tue, 22 Jun 2021 13:32:02 -0700
-Message-ID: <CANEsP81Q=EscUUAhrKMkMHJhToekMSR2mWf4VW59vKE-_jUiBw@mail.gmail.com>
-Subject: =?UTF-8?Q?Darowizna_=E2=82=AC500=2C000=2E00_EUR_DLA_CIEBIE?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210622145704.11168-1-vigneshr@ti.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Cze=C5=9B=C4=87,
+On 22.06.21 16:57, Vignesh Raghavendra wrote:
+> On K3 family of SoCs (which includes AM654 SoC), it is observed that RX
+> TIMEOUT is signalled after RX FIFO has been drained, in which case a
+> dummy read of RX FIFO is required to clear RX TIMEOUT condition.
+> Otherwise, this would lead to an interrupt storm.
+> 
+> Fix this by introducing UART_RX_TIMEOUT_QUIRK flag and doing a dummy
+> read in IRQ handler when RX TIMEOUT is reported with no data in RX FIFO.
+> 
+> Fixes: be70874498f3 ("serial: 8250_omap: Add support for AM654 UART controller")
+> Reported-by: Jan Kiszka <jan.kiszka@siemens.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+> v2:
+> Restrict workaround to K3 family of devices only (ti,am654-uart) where
+> issue was reported.
+> 
+> v1: https://lore.kernel.org/r/20210511151955.28071-1-vigneshr@ti.com
+> 
+>  drivers/tty/serial/8250/8250_omap.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> index c06631ced414..79418d4beb48 100644
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -43,6 +43,7 @@
+>  #define UART_ERRATA_CLOCK_DISABLE	(1 << 3)
+>  #define	UART_HAS_EFR2			BIT(4)
+>  #define UART_HAS_RHR_IT_DIS		BIT(5)
+> +#define UART_RX_TIMEOUT_QUIRK		BIT(6)
+>  
+>  #define OMAP_UART_FCR_RX_TRIG		6
+>  #define OMAP_UART_FCR_TX_TRIG		4
+> @@ -104,6 +105,9 @@
+>  #define UART_OMAP_EFR2			0x23
+>  #define UART_OMAP_EFR2_TIMEOUT_BEHAVE	BIT(6)
+>  
+> +/* RX FIFO occupancy indicator */
+> +#define UART_OMAP_RX_LVL		0x64
+> +
+>  struct omap8250_priv {
+>  	int line;
+>  	u8 habit;
+> @@ -611,6 +615,7 @@ static int omap_8250_dma_handle_irq(struct uart_port *port);
+>  static irqreturn_t omap8250_irq(int irq, void *dev_id)
+>  {
+>  	struct uart_port *port = dev_id;
+> +	struct omap8250_priv *priv = port->private_data;
+>  	struct uart_8250_port *up = up_to_u8250p(port);
+>  	unsigned int iir;
+>  	int ret;
+> @@ -625,6 +630,18 @@ static irqreturn_t omap8250_irq(int irq, void *dev_id)
+>  	serial8250_rpm_get(up);
+>  	iir = serial_port_in(port, UART_IIR);
+>  	ret = serial8250_handle_irq(port, iir);
+> +
+> +	/*
+> +	 * On K3 SoCs, it is observed that RX TIMEOUT is signalled after
+> +	 * FIFO has been drained, in which case a dummy read of RX FIFO
+> +	 * is required to clear RX TIMEOUT condition.
+> +	 */
+> +	if (priv->habit & UART_RX_TIMEOUT_QUIRK &&
+> +	    (iir & UART_IIR_RX_TIMEOUT) == UART_IIR_RX_TIMEOUT &&
+> +	    serial_port_in(port, UART_OMAP_RX_LVL) == 0) {
+> +		serial_port_in(port, UART_RX);
+> +	}
+> +
+>  	serial8250_rpm_put(up);
+>  
+>  	return IRQ_RETVAL(ret);
+> @@ -1218,7 +1235,8 @@ static struct omap8250_dma_params am33xx_dma = {
+>  
+>  static struct omap8250_platdata am654_platdata = {
+>  	.dma_params	= &am654_dma,
+> -	.habit		= UART_HAS_EFR2 | UART_HAS_RHR_IT_DIS,
+> +	.habit		= UART_HAS_EFR2 | UART_HAS_RHR_IT_DIS |
+> +			  UART_RX_TIMEOUT_QUIRK,
+>  };
+>  
+>  static struct omap8250_platdata am33xx_platdata = {
+> 
 
-Nazywam si=C4=99 Maria Elisabeth Schaeffler, kobieta biznesu z Niemiec,
-inwestorka. Po tym, jak straci=C5=82am m=C4=99=C5=BCa w szpitalnym =C5=82=
-=C3=B3=C5=BCku, kaza=C5=82 mi
-przekaza=C4=87 darowizn=C4=99 w wysoko=C5=9Bci 500 000 euro takiej dobrej o=
-sobie jak
-ty. Odda=C5=82em 25 procent mojego osobistego maj=C4=85tku na cele charytat=
-ywne.
-Zobowi=C4=85za=C5=82em si=C4=99 r=C3=B3wnie=C5=BC przekaza=C4=87 pozosta=C5=
-=82e 25% w tym roku 2021
-osobom prywatnym. Zdecydowa=C5=82em si=C4=99 przekaza=C4=87 Ci 500 000 euro=
-. Je=C5=9Bli
-jeste=C5=9B zainteresowany moj=C4=85 darowizn=C4=85, skontaktuj si=C4=99 ze=
- mn=C4=85, aby
-uzyska=C4=87 wi=C4=99cej informacji pod adresem:
-mariaelisabethschaeffler07@gmail.com.
+Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-Mo=C5=BCesz r=C3=B3wnie=C5=BC przeczyta=C4=87 wi=C4=99cej o mnie, klikaj=C4=
-=85c poni=C5=BCszy link
+Thanks,
+Jan
 
-Mo=C5=BCesz zobaczy=C4=87 tutaj: https://en.wikipedia.org/wiki/Maria-Elisab=
-eth_Schaeffler
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Ciep=C5=82e pozdrowienie,
-Maria Elisabeth Schaeffler
-CEO
-Grupa Schaefflera.
+-- 
+Siemens AG, T RDA IOT
+Corporate Competence Center Embedded Linux
