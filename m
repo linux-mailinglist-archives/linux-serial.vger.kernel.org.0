@@ -2,121 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A741A3B8DC7
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Jul 2021 08:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0D13BAECA
+	for <lists+linux-serial@lfdr.de>; Sun,  4 Jul 2021 22:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbhGAGiy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Jul 2021 02:38:54 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53459 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbhGAGiy (ORCPT
+        id S229817AbhGDU2R (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 4 Jul 2021 16:28:17 -0400
+Received: from static-190-25-223-138.static.etb.net.co ([190.25.223.138]:51974
+        "EHLO correo.hdv.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229649AbhGDU2R (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Jul 2021 02:38:54 -0400
-Received: from mail-ej1-f71.google.com ([209.85.218.71])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lyqJD-0006Pa-KX
-        for linux-serial@vger.kernel.org; Thu, 01 Jul 2021 06:36:23 +0000
-Received: by mail-ej1-f71.google.com with SMTP id l6-20020a1709062a86b029046ec0ceaf5cso1734140eje.8
-        for <linux-serial@vger.kernel.org>; Wed, 30 Jun 2021 23:36:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1nK6FKv+wQ5vJJz+UrddvTERhXbD+8+95gnEDeqxL9w=;
-        b=kKiad4YTXc3+ql3vdY7yhX7tNyh9rf5eRTyFp3sSjbzTt+1YRFMIEy4xYqdRKajxuZ
-         0EezPzvpu5/hUEEeOpXDGLCTltozJYHzYfjQQ7nAbCQiawYVsMF3gilooz1IDNT3R+OR
-         erWkMZxDFATHqiIzelk9b9npex/6rcnA97TsKj88l0/3CsGsEnbGW6wj+IkZJYn+aD6S
-         RVEgYapLclvGjXZ8zeWQi22URwBDfqGaX4Fsdg1mPn8jNSuvO9EW+eDI8NAl1I1FhIJX
-         tz5rB0AONAX+k5f+92BdBwC5Qf/J0EbaTyt5zSzMywf28rfSW2eysvvu2TVzxnjR36Z3
-         Y33A==
-X-Gm-Message-State: AOAM532COir04CXJVHX42rKdQ4gfXGkpm2jyF901LGEKM5fYO13Pswjr
-        y8NIzIGIfjIyWsgYcwUKUtjad58X1l0XXz59wRP37iBsJrOQ4Aw9WM/hN5UAAhL6IOL1nl2LpJf
-        piV5OqIVVMepmW77qiiAOQosJnIJBUIXRAEmoVE93Yw==
-X-Received: by 2002:a17:906:6bcd:: with SMTP id t13mr13473690ejs.551.1625121383394;
-        Wed, 30 Jun 2021 23:36:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyvZFAOe6lKIu9s5SojYCz91sAwTldnQ6yrZh+sr2ymKgcStvH6BCYTmAH55a1wFZX24Lha4g==
-X-Received: by 2002:a17:906:6bcd:: with SMTP id t13mr13473665ejs.551.1625121383124;
-        Wed, 30 Jun 2021 23:36:23 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
-        by smtp.gmail.com with ESMTPSA id n2sm13594880edi.32.2021.06.30.23.36.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jun 2021 23:36:22 -0700 (PDT)
-Subject: Re: [PATCH v2] serial: samsung: Checks the return value of function
-To:     Tamseel Shams <m.shams@samsung.com>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com
-References: <CGME20210630133115epcas5p1706041f122819d47b18b83853b49694e@epcas5p1.samsung.com>
- <20210630133359.59275-1-m.shams@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <0c608d5e-f59b-3f05-a461-2205cece4b7e@canonical.com>
-Date:   Thu, 1 Jul 2021 08:36:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Sun, 4 Jul 2021 16:28:17 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id DB8B51F45A4E;
+        Sat,  3 Jul 2021 17:58:50 -0500 (-05)
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id qbYzLBZJ2dbA; Sat,  3 Jul 2021 17:58:50 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id 9F4721EC6CE6;
+        Sat,  3 Jul 2021 15:01:18 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 correo.hdv.gov.co 9F4721EC6CE6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hdv.gov.co;
+        s=11DF984A-9D1F-11E6-B193-F2669FC4C452; t=1625342478;
+        bh=SKFadKgM92kiwue8eMLvzaTB0eiP/neKAp89ygsk9fM=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=UJsUFmn8q2xQZ0pG4C0vppf97kv0GUYABpwMVF9+NO4iBZDNixxrer6k3xWJCHHjR
+         1V1tjtVW2bLVjAkSjYPZm/vWL+dfbc+fv2j1/ujKHsfiza+TKB32jt0UnThN1S49im
+         EdFboipfDrdhjfoWIBwg+1B1n+BdTIMZJwjvJ6lU=
+X-Virus-Scanned: amavisd-new at correo.hdv.gov.co
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id H3h5nDCme5nS; Sat,  3 Jul 2021 15:01:18 -0500 (-05)
+Received: from [172.20.10.6] (unknown [41.147.1.129])
+        by correo.hdv.gov.co (Postfix) with ESMTPSA id E4AC4187E808;
+        Sat,  3 Jul 2021 10:10:43 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20210630133359.59275-1-m.shams@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: my subject
+To:     Recipients <planeacion.arquitecto@hdv.gov.co>
+From:   planeacion.arquitecto@hdv.gov.co
+Date:   Sat, 03 Jul 2021 08:10:33 -0700
+Reply-To: callumfoundation05@outlook.com
+Message-Id: <20210703151043.E4AC4187E808@correo.hdv.gov.co>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 30/06/2021 15:33, Tamseel Shams wrote:
-> "uart_add_one_port" function call may fail and return
-> some error code, so adding a check for return value.
-> If it is returning some error code, then displaying the
-> result, unregistering the driver and then returning from
-> probe function with error code.
-> 
-> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
-> ---
-> Changes since v1:
-> 1. Added support to unregister driver on failure of "uart_add_onr_port"
-> function call.
-> 2. Commit message updated.
-> 
->  drivers/tty/serial/samsung_tty.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index 9fbc61151c2e..188e2d2da201 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -2253,7 +2253,11 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
->  	}
->  
->  	dev_dbg(&pdev->dev, "%s: adding port\n", __func__);
-> -	uart_add_one_port(&s3c24xx_uart_drv, &ourport->port);
-> +	ret = uart_add_one_port(&s3c24xx_uart_drv, &ourport->port);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Failed to add uart port, err %d\n", ret);
-> +		goto add_port_error;
-> +	}
->  	platform_set_drvdata(pdev, &ourport->port);
->  
->  	/*
-> @@ -2272,6 +2276,11 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
->  	probe_index++;
->  
->  	return 0;
-> +
-> +add_port_error:
+Hallo,
 
-You did not unwind fully s3c24xx_serial_init_port() - clocks.
+ Sie haben eine Spende von 2.800.000,00 USD. Ich gewann die amerikanische L=
+otterie im Wert von 343 Millionen US-Dollar in Amerika und spendete einen T=
+eil davon an f=FCnf gl=FCckliche Menschen und Wohlt=E4tigkeitsorganisatione=
+n, die sich an meinen verstorbenen Enkel erinnern, der Anfang April vorzeit=
+ig geboren wurde und nur einen Tag lebte. F=FCr weitere Informationen wende=
+n Sie sich bitte an: callumfoundation05@outlook.com
 
-> +	ourport->port.mapbase = 0;
-> +	uart_unregister_driver(&s3c24xx_uart_drv);
-> +	return ret;
->  }
->  
->  static int s3c24xx_serial_remove(struct platform_device *dev)
-> 
+ =
 
 
-Best regards,
-Krzysztof
+Mit freundlichen Gr=FC=DFen
+Frau Lerynne West
