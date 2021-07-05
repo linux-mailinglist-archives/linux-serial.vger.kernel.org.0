@@ -2,65 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0D13BAECA
-	for <lists+linux-serial@lfdr.de>; Sun,  4 Jul 2021 22:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4C73BB750
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Jul 2021 08:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbhGDU2R (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 4 Jul 2021 16:28:17 -0400
-Received: from static-190-25-223-138.static.etb.net.co ([190.25.223.138]:51974
-        "EHLO correo.hdv.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229649AbhGDU2R (ORCPT
+        id S229898AbhGEGwn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Jul 2021 02:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229907AbhGEGwm (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 4 Jul 2021 16:28:17 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by correo.hdv.gov.co (Postfix) with ESMTP id DB8B51F45A4E;
-        Sat,  3 Jul 2021 17:58:50 -0500 (-05)
-Received: from correo.hdv.gov.co ([127.0.0.1])
-        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id qbYzLBZJ2dbA; Sat,  3 Jul 2021 17:58:50 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.hdv.gov.co (Postfix) with ESMTP id 9F4721EC6CE6;
-        Sat,  3 Jul 2021 15:01:18 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 correo.hdv.gov.co 9F4721EC6CE6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hdv.gov.co;
-        s=11DF984A-9D1F-11E6-B193-F2669FC4C452; t=1625342478;
-        bh=SKFadKgM92kiwue8eMLvzaTB0eiP/neKAp89ygsk9fM=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=UJsUFmn8q2xQZ0pG4C0vppf97kv0GUYABpwMVF9+NO4iBZDNixxrer6k3xWJCHHjR
-         1V1tjtVW2bLVjAkSjYPZm/vWL+dfbc+fv2j1/ujKHsfiza+TKB32jt0UnThN1S49im
-         EdFboipfDrdhjfoWIBwg+1B1n+BdTIMZJwjvJ6lU=
-X-Virus-Scanned: amavisd-new at correo.hdv.gov.co
-Received: from correo.hdv.gov.co ([127.0.0.1])
-        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id H3h5nDCme5nS; Sat,  3 Jul 2021 15:01:18 -0500 (-05)
-Received: from [172.20.10.6] (unknown [41.147.1.129])
-        by correo.hdv.gov.co (Postfix) with ESMTPSA id E4AC4187E808;
-        Sat,  3 Jul 2021 10:10:43 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 5 Jul 2021 02:52:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD45C061574
+        for <linux-serial@vger.kernel.org>; Sun,  4 Jul 2021 23:50:05 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m0IPx-0000W8-T5; Mon, 05 Jul 2021 08:49:21 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m0IPq-0003Kv-Ry; Mon, 05 Jul 2021 08:49:14 +0200
+Date:   Mon, 5 Jul 2021 08:49:14 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     cl@rock-chips.com, thierry.reding@gmail.com, robh+dt@kernel.org,
+        heiko@sntech.de
+Cc:     jagan@amarulasolutions.com, wens@csie.org, uwe@kleine-koenig.org,
+        mail@david-bauer.net, jbx6244@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org,
+        lee.jones@linaro.org, linux-pwm@vger.kernel.org
+Subject: Re: [RESEND PATCH v5 1/4] dt-bindings: pwm: rockchip: add
+ description for rk3568
+Message-ID: <20210705064914.o2neaiwqndjfdyqd@pengutronix.de>
+References: <20210622020517.13100-1-cl@rock-chips.com>
+ <20210623021303.28015-1-cl@rock-chips.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: my subject
-To:     Recipients <planeacion.arquitecto@hdv.gov.co>
-From:   planeacion.arquitecto@hdv.gov.co
-Date:   Sat, 03 Jul 2021 08:10:33 -0700
-Reply-To: callumfoundation05@outlook.com
-Message-Id: <20210703151043.E4AC4187E808@correo.hdv.gov.co>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h77ynqqu64e6evvv"
+Content-Disposition: inline
+In-Reply-To: <20210623021303.28015-1-cl@rock-chips.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hallo,
 
- Sie haben eine Spende von 2.800.000,00 USD. Ich gewann die amerikanische L=
-otterie im Wert von 343 Millionen US-Dollar in Amerika und spendete einen T=
-eil davon an f=FCnf gl=FCckliche Menschen und Wohlt=E4tigkeitsorganisatione=
-n, die sich an meinen verstorbenen Enkel erinnern, der Anfang April vorzeit=
-ig geboren wurde und nur einen Tag lebte. F=FCr weitere Informationen wende=
-n Sie sich bitte an: callumfoundation05@outlook.com
+--h77ynqqu64e6evvv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- =
+On Wed, Jun 23, 2021 at 10:13:03AM +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+>=20
+> add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
+> a rk3568 platform to pwm-rockchip.yaml.
 
+Looks good to me
 
-Mit freundlichen Gr=FC=DFen
-Frau Lerynne West
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Who is supposed to apply this patch? Does this need blessing by Rob?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--h77ynqqu64e6evvv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDiq2IACgkQwfwUeK3K
+7Alswgf/S2t8Y0UpADbCraly5vO0IlgBk3eruOuhWsPvl4ytixaHcF2m/IXzJn1F
+CTm3Q4Fa8c5K6/tiVQR+LacMzobKgCaFmf5LLNUrhYggBjAgHEPXbuJc4BOUsGfv
+GLAQyRKHIUNeGdAc/Gw89sg5f20ieHij6kcgcpvGg5nhXx4r2m020hIToIbiD17u
+W+7LrS+IhuELk+mgkauwKBVpjyJ5r9pN5U7UWYPwCZPeF1FPQkTQaNRA2B3Q+7A0
+5IYkmJrv53afyC/XzA4/kGwsbGrwdeInvSCmCWnb8BarKh0hERXgSQvBEn9KU/XV
+utWTTaMgclkWJIJluRaO4dTAmRjkjQ==
+=oHYF
+-----END PGP SIGNATURE-----
+
+--h77ynqqu64e6evvv--
