@@ -2,62 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 955893BC39F
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Jul 2021 23:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464873BC3D8
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Jul 2021 00:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbhGEV1s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 5 Jul 2021 17:27:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229793AbhGEV1r (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 5 Jul 2021 17:27:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 54CD561985;
-        Mon,  5 Jul 2021 21:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625520310;
-        bh=afWSVCp2J9e+bVWI3DB/r5TI+UsJ0qI/K52qbyGvJXI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GfgGB4TupKyXcn8/xjQpW6feV4LFr/uMj+ubS2nzCn0AGxRaoWgJXPsnCcRIl96+k
-         v6RAbeUxe6JzDQyJhlO01ky9+9FAhXe/+a81pK9LhWFf3lh0VlGr8V9kiqrjOGwURa
-         Ji3Ia3L75JuG4qnFU7dbkRYuVgNSXfRTBuvSZxhiDBUGBtHVVvRRVzp6g7h4znVbq1
-         MfxNlO90jwJBo923KIifKDttcQKIkym8lNoIPKvZ3pNSUSMt/lFw8Ps4Ywcyzeyepb
-         yV6fImMfSR19Fh2fXWCVcJLtWQ7e/+y+PxfnvatsuSnIVh2FBIPBR/OByJTchTWrPt
-         d9bmIPLJg60ag==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4DFFA60A4D;
-        Mon,  5 Jul 2021 21:25:10 +0000 (UTC)
-Subject: Re: [GIT PULL] TTY/Serial driver changes for 5.14-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YOM9n3QwCwN/2FiW@kroah.com>
-References: <YOM9n3QwCwN/2FiW@kroah.com>
-X-PR-Tracked-List-Id: <linux-serial.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YOM9n3QwCwN/2FiW@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-5.14-rc1
-X-PR-Tracked-Commit-Id: 15279ebe99d7c6142d9f1a6ae4ded66c0f168678
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c932ed0adb09a7fa6d6649ee04dd78c83ab07ada
-Message-Id: <162552031031.6675.7154187358586863660.pr-tracker-bot@kernel.org>
-Date:   Mon, 05 Jul 2021 21:25:10 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+        id S233130AbhGEWQ5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 5 Jul 2021 18:16:57 -0400
+Received: from static-190-25-223-138.static.etb.net.co ([190.25.223.138]:45434
+        "EHLO correo.hdv.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233128AbhGEWQ5 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 5 Jul 2021 18:16:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id B8BD322047EA;
+        Mon,  5 Jul 2021 15:42:51 -0500 (-05)
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id x2mUaLOGGdrs; Mon,  5 Jul 2021 15:42:51 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.hdv.gov.co (Postfix) with ESMTP id 1B6ED22047C3;
+        Mon,  5 Jul 2021 15:42:48 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 correo.hdv.gov.co 1B6ED22047C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hdv.gov.co;
+        s=11DF984A-9D1F-11E6-B193-F2669FC4C452; t=1625517768;
+        bh=Po3+jYC7/Rg7V8Ibt2yKIqN5eintSYPogxawXJ1TVGE=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=SjS8+3S6btHv/j4EPmEcHk/IquAHx4UZolUph+GAo+CU219khrNccQlbKwuWFpI1T
+         3xz9oZdiDy1Qw/l0L8+aU6aSlBtXH6126Mo9rK5aFzxcEC9V/0qHdwHcEUMUK4u1N/
+         h9IwxGQApsu1uIXEh6vlfnc4OmXTdq10Rr5ROs/0=
+X-Virus-Scanned: amavisd-new at correo.hdv.gov.co
+Received: from correo.hdv.gov.co ([127.0.0.1])
+        by localhost (correo.hdv.gov.co [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TeJoKQwBS-hp; Mon,  5 Jul 2021 15:42:48 -0500 (-05)
+Received: from [10.1.237.235] (unknown [154.13.1.139])
+        by correo.hdv.gov.co (Postfix) with ESMTPSA id CF4062204771;
+        Mon,  5 Jul 2021 15:42:41 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <planeacion.arquitecto@hdv.gov.co>
+From:   planeacion.arquitecto@hdv.gov.co
+Date:   Mon, 05 Jul 2021 22:42:27 +0200
+Reply-To: callumfoundation18@gmail.com
+Message-Id: <20210705204241.CF4062204771@correo.hdv.gov.co>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The pull request you sent on Mon, 5 Jul 2021 19:13:03 +0200:
+F=C3=BCr Sie wurde eine Spende in H=C3=B6he von 2.800.000,00 =E2=82=AC gesp=
+endet. Bitte antworten Sie auf diese E-Mail, um die Spenderin (MRS. LERYNNE=
+ WEST) f=C3=BCr weitere Informationen zu gespendeten Mitteln zu kontaktiere=
+n.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-5.14-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c932ed0adb09a7fa6d6649ee04dd78c83ab07ada
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Sch=C3=B6ne Gr=C3=BC=C3=9Fe
