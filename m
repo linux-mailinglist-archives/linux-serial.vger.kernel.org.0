@@ -2,47 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF873C146C
-	for <lists+linux-serial@lfdr.de>; Thu,  8 Jul 2021 15:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2153D3C1B80
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Jul 2021 00:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbhGHNlM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 8 Jul 2021 09:41:12 -0400
-Received: from mx-n08.wc2.phx1.stabletransit.com ([207.246.242.254]:48696 "HELO
-        mx-n08.wc2.phx1.stabletransit.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S231815AbhGHNlK (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 8 Jul 2021 09:41:10 -0400
-X-Greylist: delayed 357 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 09:41:10 EDT
-Received: by mx-n08.wc2.phx1.stabletransit.com (Postfix, from userid 114)
-        id C11E9B419B; Thu,  8 Jul 2021 08:32:31 -0500 (CDT)
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
-        mx-n08.wc2.phx1.stabletransit.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.6 required=6.0 tests=BAYES_50,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_SHORT,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.2
-X-Spam-Virus: No
-Received: from php-v027.wc2.phx1.stabletransit.com (unknown [10.40.206.156])
-        by mx-n08.wc2.phx1.stabletransit.com (Postfix) with ESMTP id 5B1CEB419F
-        for <linux-serial@vger.kernel.org>; Thu,  8 Jul 2021 08:32:31 -0500 (CDT)
-Received: from digilu (uid 2914979)
-        (envelope-from mabeljohnson@citromail.hu)
-        id 1ff60
-        by php-v027.wc2.phx1.stabletransit.com (DragonFly Mail Agent v0.11);
-        Thu, 08 Jul 2021 08:32:31 -0500
-To:     linux-serial@vger.kernel.org
-Subject: WORK OF GOD.
-X-PHP-Originating-Script: 2914979:class.engine.php(12) : runtime-created function
-Date:   Thu, 8 Jul 2021 08:32:31 -0500
-From:   MARY JOHNSON <mabeljohnson@citromail.hu>
-Reply-To: mj224294@gmail.com
-Message-ID: <7afe0a627fb1e56865e027d59b6b8214@jackieleestudio.com>
+        id S230442AbhGHWiR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 8 Jul 2021 18:38:17 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:52253 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhGHWiR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 8 Jul 2021 18:38:17 -0400
+X-Greylist: delayed 590 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 18:38:16 EDT
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4GLW8Q2rRLzMT;
+        Fri,  9 Jul 2021 00:25:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1625783142; bh=e54EZYnhz2/diQUGmYLli8uvYZdZ3+QkPp8ageHuW/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fjCBMF2LOLl9a9eqbpNR6rvsC7McNsLnEOONpDfUAdOBydd+uI44iTlRmVR/FI9NA
+         f4CsjBPQzs9RhXHzD7U5LLdzDzjccaHc/NsT/b9OQhOzmyaIbMB3zrzryezyuadpSi
+         1QDxzZENajFscTDSiY5dsvVtvyLiygFAsfxqSZuS1KqcNwUXZlb0Iir2tUbALtoat2
+         K14o7Z2aD4SCX8NmbLt75apxT4dGKb+Cy2VpqbD4IlWSfMXqMotO62owlOfwaO1n5q
+         8Le8vCIYAIo4a4+uQdfqK+IwqlDOc4vzA/kkos4704YlCOG7O5nwcb1if4l/VfdUZd
+         V8T3usV1/XjDA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.2 at mail
+Date:   Fri, 9 Jul 2021 00:25:41 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH V2] serial: tegra: Only print FIFO error message when an
+ error occurs
+Message-ID: <YOd7ZTJf0WoQ8oKo@qmqm.qmqm.pl>
+References: <20210630125643.264264-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210630125643.264264-1-jonathanh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-I am Mrs. Mary Johnson,78years,an aging widow suffering from cancer, I am on admission at a hospital.I would like to willfully entrust the rest of my monetary assets to you, Kindly reply back with your full Name, cellphone, address, to enable me to send you a letter of authorization to contact my bank first inland bank nigeria plc so that they can transfer my funds to your account for the purpose of helping the poor as indicated on my WILL.
+On Wed, Jun 30, 2021 at 01:56:43PM +0100, Jon Hunter wrote:
+> The Tegra serial driver always prints an error message when enabling the
+> FIFO for devices that have support for checking the FIFO enable status.
+> Fix this by displaying the error message, only when an error occurs.
+> 
+> Finally, update the error message to make it clear that enabling the
+> FIFO failed and display the error code.
+[...]
+> @@ -1045,9 +1045,11 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
+>  
+>  	if (tup->cdata->fifo_mode_enable_status) {
+>  		ret = tegra_uart_wait_fifo_mode_enabled(tup);
+> -		dev_err(tup->uport.dev, "FIFO mode not enabled\n");
+> -		if (ret < 0)
+> +		if (ret < 0) {
+> +			dev_err(tup->uport.dev,
+> +				"Failed to enable FIFO mode: %d\n", ret);
 
+Could you change this to use %pe and ERR_PTR(ret)?
+
+Best Regards
+Micha³ Miros³aw
