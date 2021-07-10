@@ -2,92 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BC23C31D8
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Jul 2021 04:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769893C33C9
+	for <lists+linux-serial@lfdr.de>; Sat, 10 Jul 2021 11:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbhGJCpR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Jul 2021 22:45:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33764 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235341AbhGJCnq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:43:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 51D60613C9;
-        Sat, 10 Jul 2021 02:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625884759;
-        bh=uQ6RTsLOvDVz8pDEfrPBpyd1+AOS+TcL0J8HsxsKxi0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hHuoPGxh2wrysHXxEOlBADDzh2AUxilnSHR4DeuXOLPiDxZzMaZZ03tfs/36HhDAk
-         +ay386E+9Wr+lqJLDLMQ056ZT7GG+eOv2cVjubR5t+G71ujQJ6LGTxMjRBnUaE+k+2
-         chWEh4HDXqww0PSK58q6Fn47/9K8IH5uWbTlhySmuNgQiJCaMVkI/wcdmmn1zWMIGJ
-         S30R6zXIBC4ORGa9Z0upO0DUax2fp6A8x8lOpoEAoIo77uulZkAt47El44a1Yl5QGd
-         FBQHseLU5uo9QeAEp/TIq8bjwKgrENOGQUblQZNVFA3g3f0IfgpQ0d+DW4/NByXJuh
-         l2X8LMqXhdWow==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 05/23] tty: serial: 8250: serial_cs: Fix a memory leak in error handling path
-Date:   Fri,  9 Jul 2021 22:38:54 -0400
-Message-Id: <20210710023912.3172972-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710023912.3172972-1-sashal@kernel.org>
-References: <20210710023912.3172972-1-sashal@kernel.org>
+        id S230134AbhGJJDx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 10 Jul 2021 05:03:53 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:38178 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230083AbhGJJDx (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Sat, 10 Jul 2021 05:03:53 -0400
+X-UUID: 63f9c0c360884c218d9327f087a74969-20210710
+X-UUID: 63f9c0c360884c218d9327f087a74969-20210710
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <zhiyong.tao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1717240993; Sat, 10 Jul 2021 17:01:07 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 10 Jul 2021 17:01:05 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 10 Jul 2021 17:01:04 +0800
+From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
+To:     <timur@kernel.org>, <linux@armlinux.org.uk>, <alcooperx@gmail.com>,
+        <tklauser@distanz.ch>, <sean.wang@kernel.org>
+CC:     <srv_heupstream@mediatek.com>, <zhiyong.tao@mediatek.com>,
+        <hui.liu@mediatek.com>, <yuchen.huang@mediatek.com>,
+        <huihui.wang@mediatek.com>, <eddie.huang@mediatek.com>,
+        <sean.wang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>
+Subject: [PATCH 0/1] Mediatek uart patch 
+Date:   Sat, 10 Jul 2021 17:01:02 +0800
+Message-ID: <20210710090103.2643-1-zhiyong.tao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+This series includes 1 patches:
+1.fix uart access memory corruption issue
 
-[ Upstream commit fad92b11047a748c996ebd6cfb164a63814eeb2e ]
+Zhiyong Tao (1):
+  uart: mediatek: fix memory corruption issue
 
-In the probe function, if the final 'serial_config()' fails, 'info' is
-leaking.
+ drivers/tty/serial/8250/8250_mtk.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-Add a resource handling path to free this memory.
+--
+2.18.0
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/dc25f96b7faebf42e60fe8d02963c941cf4d8124.1621971720.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/8250/serial_cs.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/serial_cs.c b/drivers/tty/serial/8250/serial_cs.c
-index 1a14948c86d6..b9f996d7b6cd 100644
---- a/drivers/tty/serial/8250/serial_cs.c
-+++ b/drivers/tty/serial/8250/serial_cs.c
-@@ -305,6 +305,7 @@ static int serial_resume(struct pcmcia_device *link)
- static int serial_probe(struct pcmcia_device *link)
- {
- 	struct serial_info *info;
-+	int ret;
- 
- 	dev_dbg(&link->dev, "serial_attach()\n");
- 
-@@ -319,7 +320,15 @@ static int serial_probe(struct pcmcia_device *link)
- 	if (do_sound)
- 		link->config_flags |= CONF_ENABLE_SPKR;
- 
--	return serial_config(link);
-+	ret = serial_config(link);
-+	if (ret)
-+		goto free_info;
-+
-+	return 0;
-+
-+free_info:
-+	kfree(info);
-+	return ret;
- }
- 
- static void serial_detach(struct pcmcia_device *link)
--- 
-2.30.2
 
