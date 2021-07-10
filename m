@@ -2,38 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 070793C2D44
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Jul 2021 04:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B173C2DBA
+	for <lists+linux-serial@lfdr.de>; Sat, 10 Jul 2021 04:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbhGJCWU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Jul 2021 22:22:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38276 "EHLO mail.kernel.org"
+        id S232064AbhGJCY7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Jul 2021 22:24:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232643AbhGJCVv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:21:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19A6D613C5;
-        Sat, 10 Jul 2021 02:19:06 +0000 (UTC)
+        id S232102AbhGJCYx (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:24:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A5EA613BE;
+        Sat, 10 Jul 2021 02:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883546;
-        bh=l7HpfyGaASe1EXqssYiTB8W6w7CPgRkUmS+BAL1qRFQ=;
+        s=k20201202; t=1625883729;
+        bh=+9UPDC3W+FxbL0Fh0wF+dzwqqgzFRZAhf/9SCoD6MX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S3cfWKr7b1csjDI0tRBC74dNpbDe+jJe5aIr3U2GNZRcw0tIW5g+idfT9HPcoVTLc
-         TeAxvfBvh+00a239+qeDCJGTPgQRJ+4ho57c/IirsBxwd62mRLgdqnOge8vwEUipc+
-         m6RxSF9TyupUDP6+ls11XZm2ieXNyyJkkPCOEYQyy51/HJdHPvp1J/VOPBCwS5Pexu
-         56ALtFcx+Ha7IIEJHQaNs14xxs0l+a/wua1IFqE/cFEfCofNGyhejQn5+oBFLqa4uh
-         vGfcsRcLeE+JfefE3pgxp/RPiYzj8Cqx23qTsuop8JbrQlXxXWi3hZsY0mB/F9rwhD
-         TBlqbx3b5FdBQ==
+        b=bcwDP9z5R6UZFHjFjcuH/fPt4PEb5GwfIxlYh+0dfsFfdB+gAbQ1aX1bPkZJ7LvlR
+         p8OIB+GUZxsEw2FQPiM3kli2X7YJqjIiEl0Pz3NYzzgm7LGJDMyR/+l2wAgybFAEtM
+         9mGTB++jFWAfi4v6rm6FiWh3FbAX0ihbXtr8sgH6PQEYQnNGzk3wwlSOV9aVuADr88
+         NMSGFEIQi0CRIamJz38nVb1T0yYrTaMCQLFWFFLov2KD9/Fc8gPZ/LVpGu3LCgrJrY
+         +rkD8yDFciX8nXnM5IjSw/U5CZtktxPjZ4slkbh9x7OtOB1UkcUltsXaXXx1lKPg2k
+         mhkq9xX8AI3rg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Mack <daniel@zonque.org>,
+Cc:     Sherry Sun <sherry.sun@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 057/114] serial: tty: uartlite: fix console setup
-Date:   Fri,  9 Jul 2021 22:16:51 -0400
-Message-Id: <20210710021748.3167666-57-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 009/104] tty: serial: fsl_lpuart: fix the potential risk of division or modulo by zero
+Date:   Fri,  9 Jul 2021 22:20:21 -0400
+Message-Id: <20210710022156.3168825-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710021748.3167666-1-sashal@kernel.org>
-References: <20210710021748.3167666-1-sashal@kernel.org>
+In-Reply-To: <20210710022156.3168825-1-sashal@kernel.org>
+References: <20210710022156.3168825-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,90 +42,38 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Daniel Mack <daniel@zonque.org>
+From: Sherry Sun <sherry.sun@nxp.com>
 
-[ Upstream commit d157fca711ad42e75efef3444c83d2e1a17be27a ]
+[ Upstream commit fcb10ee27fb91b25b68d7745db9817ecea9f1038 ]
 
-Remove the hack to assign the global console_port variable at probe time.
-This assumption that cons->index is -1 is wrong for systems that specify
-'console=' in the cmdline (or 'stdout-path' in dts). Hence, on such system
-the actual console assignment is ignored, and the first UART that happens
-to be probed is used as console instead.
+We should be very careful about the register values that will be used
+for division or modulo operations, althrough the possibility that the
+UARTBAUD register value is zero is very low, but we had better to deal
+with the "bad data" of hardware in advance to avoid division or modulo
+by zero leading to undefined kernel behavior.
 
-Move the logic to console_setup() and map the console to the correct port
-through the array of available ports instead.
-
-Signed-off-by: Daniel Mack <daniel@zonque.org>
-Link: https://lore.kernel.org/r/20210528133321.1859346-1-daniel@zonque.org
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Link: https://lore.kernel.org/r/20210427021226.27468-1-sherry.sun@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/uartlite.c | 27 ++++++---------------------
- 1 file changed, 6 insertions(+), 21 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index f42ccc40ffa6..a5f15f22d9ef 100644
---- a/drivers/tty/serial/uartlite.c
-+++ b/drivers/tty/serial/uartlite.c
-@@ -505,21 +505,23 @@ static void ulite_console_write(struct console *co, const char *s,
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 794035041744..777d54b593f8 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -2414,6 +2414,9 @@ lpuart32_console_get_options(struct lpuart_port *sport, int *baud,
  
- static int ulite_console_setup(struct console *co, char *options)
- {
--	struct uart_port *port;
-+	struct uart_port *port = NULL;
- 	int baud = 9600;
- 	int bits = 8;
- 	int parity = 'n';
- 	int flow = 'n';
- 
--
--	port = console_port;
-+	if (co->index >= 0 && co->index < ULITE_NR_UARTS)
-+		port = ulite_ports + co->index;
- 
- 	/* Has the device been initialized yet? */
--	if (!port->mapbase) {
-+	if (!port || !port->mapbase) {
- 		pr_debug("console on ttyUL%i not present\n", co->index);
- 		return -ENODEV;
- 	}
- 
-+	console_port = port;
+ 	bd = lpuart32_read(&sport->port, UARTBAUD);
+ 	bd &= UARTBAUD_SBR_MASK;
++	if (!bd)
++		return;
 +
- 	/* not initialized yet? */
- 	if (!port->membase) {
- 		if (ulite_request_port(port))
-@@ -655,17 +657,6 @@ static int ulite_assign(struct device *dev, int id, u32 base, int irq,
- 
- 	dev_set_drvdata(dev, port);
- 
--#ifdef CONFIG_SERIAL_UARTLITE_CONSOLE
--	/*
--	 * If console hasn't been found yet try to assign this port
--	 * because it is required to be assigned for console setup function.
--	 * If register_console() don't assign value, then console_port pointer
--	 * is cleanup.
--	 */
--	if (ulite_uart_driver.cons->index == -1)
--		console_port = port;
--#endif
--
- 	/* Register the port */
- 	rc = uart_add_one_port(&ulite_uart_driver, port);
- 	if (rc) {
-@@ -675,12 +666,6 @@ static int ulite_assign(struct device *dev, int id, u32 base, int irq,
- 		return rc;
- 	}
- 
--#ifdef CONFIG_SERIAL_UARTLITE_CONSOLE
--	/* This is not port which is used for console that's why clean it up */
--	if (ulite_uart_driver.cons->index == -1)
--		console_port = NULL;
--#endif
--
- 	return 0;
- }
- 
+ 	sbr = bd;
+ 	uartclk = lpuart_get_baud_clk_rate(sport);
+ 	/*
 -- 
 2.30.2
 
