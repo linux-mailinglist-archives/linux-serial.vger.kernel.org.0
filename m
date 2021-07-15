@@ -2,191 +2,207 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC4C3C9B56
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Jul 2021 11:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F1E3CA0AC
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Jul 2021 16:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239525AbhGOJ0l (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Jul 2021 05:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238019AbhGOJ0l (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Jul 2021 05:26:41 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97242C061762
-        for <linux-serial@vger.kernel.org>; Thu, 15 Jul 2021 02:23:48 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id b12so4622123pfv.6
-        for <linux-serial@vger.kernel.org>; Thu, 15 Jul 2021 02:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8tGxs+ledb1QN4h36o9TBKNkqwYbwPt1Wseu2AbjCrI=;
-        b=xgR65XM8/M3g9Zqj7xaqRQnhswuu1Z76iXjfUDZynZ0GS4tz8L9cgKpkL1U8DuwUE4
-         7VOaeCOwVVH0ZXi3U6GOqsHKpduCxBXYzkYkXtp09u5PLbuKXkSC9A4Ozc7k34H+7wKU
-         raaRIyy7bGhKIDr1KotUohQgu7rWcYnO8ljkkbZMilciT6KZmyRiL+hfEF/PIM5bs/1g
-         PyXnJ1GkuLYhLDJisULz+7mJ67spIpQyT2JlNRvijudzGCurIhXBep8qEI9VF5weEl8r
-         eP3ubc0RpE2dxVov3JlMz+8Tz+4NTCt1dXPy7yOm8r9sK5QuJ0UKsmRg6b82ZsiYPCDe
-         61Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8tGxs+ledb1QN4h36o9TBKNkqwYbwPt1Wseu2AbjCrI=;
-        b=V/BfRuSKxVqTacOETDxv1/6gKr+y7PvJy+EZiP1VcaAn8lpklGl7bqpiucU4uZkVCx
-         dhWzSbIeCX2Js+gpjf8LSMpRu5AsHrWQqSu6PBFdZyDpm0iX1nPJsYMBLDQJFwDoRMiv
-         /K9crQFZOeu1px0/dWRkjfagCcOc3YwT3gCtFntLKIkQbHUJx4JpoYRRl0giJQtNr9sN
-         k4bSSJkYhBbhtdNI8s1v7SUfZOs9J4uM8LOjugB8VG0oMFhJT6npfVnW/LnniOlRU29v
-         fzg6Db7gZmedbX3Dykq1jBDT2IV06U1MWwpfimmrKbv7lWbzGa0dHg7LmEaBeQ9qWtDi
-         OqvA==
-X-Gm-Message-State: AOAM531pXHeGl//OkWwcJRT3O7Ym4W/tVe+gr/qSFNz9RA21NvAD++WV
-        M7ILJg7rlm5RSEKt3tLHaDN5
-X-Google-Smtp-Source: ABdhPJx4F1nuZubI9ezz8OqE0sdgK+YOulDXehCFHx24pniSxpNbY0ka3i68k7ATg0f+fUfw0ThspQ==
-X-Received: by 2002:a63:5117:: with SMTP id f23mr3605556pgb.200.1626341028027;
-        Thu, 15 Jul 2021 02:23:48 -0700 (PDT)
-Received: from localhost ([2405:6581:5360:1800:7285:c2ff:fec2:8f97])
-        by smtp.gmail.com with ESMTPSA id w18sm5298816pjg.50.2021.07.15.02.23.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jul 2021 02:23:47 -0700 (PDT)
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        michal.simek@xilinx.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        navam@xilinx.com, peter.crosthwaite@xilinx.com,
-        shubhrajyoti.datta@xilinx.com, soren.brinkmann@xilinx.com,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH v2] dt-bindings: serial: convert Cadence UART bindings to YAML
-Date:   Thu, 15 Jul 2021 18:22:52 +0900
-Message-Id: <20210715092252.225740-1-iwamatsu@nigauri.org>
-X-Mailer: git-send-email 2.32.0
+        id S232474AbhGOObs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Jul 2021 10:31:48 -0400
+Received: from elvis.franken.de ([193.175.24.41]:59759 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229624AbhGOObo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 15 Jul 2021 10:31:44 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1m42Ly-0004w9-02; Thu, 15 Jul 2021 16:28:42 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id AC72DC099E; Thu, 15 Jul 2021 15:02:21 +0200 (CEST)
+Date:   Thu, 15 Jul 2021 15:02:21 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@pengutronix.de, Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Geoff Levand <geoff@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        SeongJae Park <sjpark@amazon.de>,
+        Julien Grall <jgrall@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Johannes Thumshirn <jth@kernel.org>
+Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
+Message-ID: <20210715130221.GA10298@alpha.franken.de>
+References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
+ <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Convert serial for Cadence UART bindings documentation to YAML.
+On Tue, Jul 06, 2021 at 05:48:03PM +0200, Uwe Kleine-König wrote:
+> The driver core ignores the return value of this callback because there
+> is only little it can do when a device disappears.
+> 
+> This is the final bit of a long lasting cleanup quest where several
+> buses were converted to also return void from their remove callback.
+> Additionally some resource leaks were fixed that were caused by drivers
+> returning an error code in the expectation that the driver won't go
+> away.
+> 
+> With struct bus_type::remove returning void it's prevented that newly
+> implemented buses return an ignored error code and so don't anticipate
+> wrong expectations for driver authors.
+> 
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Amba and related parts)
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
+> Acked-by: Pali Rohár <pali@kernel.org>
+> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
+> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-By: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
+> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
+> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
+> Acked-by: Johan Hovold <johan@kernel.org>
+> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drivers/slimbus)
+> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
+> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and typec)
+> Acked-by: Samuel Iglesias Gonsálvez <siglesias@igalia.com> (For ipack)
+> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
+> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+> [...] 
+>  arch/mips/sgi-ip22/ip22-gio.c             | 3 +--
 
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
----
-v2:
-  - Fix enum of compatible
-  - Change from additionalProperties: false to unevaluatedProperties: false
-  - Update compatible string in examples.
-
- .../devicetree/bindings/serial/cdns,uart.txt  | 27 --------
- .../devicetree/bindings/serial/cdns,uart.yaml | 66 +++++++++++++++++++
- 2 files changed, 66 insertions(+), 27 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/serial/cdns,uart.txt
- create mode 100644 Documentation/devicetree/bindings/serial/cdns,uart.yaml
-
-diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.txt b/Documentation/devicetree/bindings/serial/cdns,uart.txt
-deleted file mode 100644
-index 4efc560f90abbd..00000000000000
---- a/Documentation/devicetree/bindings/serial/cdns,uart.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Binding for Cadence UART Controller
--
--Required properties:
--- compatible :
--  Use "xlnx,xuartps","cdns,uart-r1p8" for Zynq-7xxx SoC.
--  Use "xlnx,zynqmp-uart","cdns,uart-r1p12" for Zynq Ultrascale+ MPSoC.
--- reg: Should contain UART controller registers location and length.
--- interrupts: Should contain UART controller interrupts.
--- clocks: Must contain phandles to the UART clocks
--  See ../clocks/clock-bindings.txt for details.
--- clock-names: Tuple to identify input clocks, must contain "uart_clk" and "pclk"
--  See ../clocks/clock-bindings.txt for details.
--
--
--Optional properties:
--- cts-override : Override the CTS modem status signal. This signal will
--  always be reported as active instead of being obtained from the modem status
--  register. Define this if your serial port does not use this pin
--
--Example:
--	uart@e0000000 {
--		compatible = "cdns,uart-r1p8";
--		clocks = <&clkc 23>, <&clkc 40>;
--		clock-names = "uart_clk", "pclk";
--		reg = <0xE0000000 0x1000>;
--		interrupts = <0 27 4>;
--	};
-diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.yaml b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-new file mode 100644
-index 00000000000000..fcdbe6f87e9808
---- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/serial/cdns,uart.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cadence UART Controller Device Tree Bindings
-+
-+maintainers:
-+  - Michal Simek <michal.simek@xilinx.com>
-+
-+allOf:
-+  - $ref: /schemas/serial.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - description: UART controller for Zynq-7xxx SoC
-+        items:
-+          - const: xlnx,xuartps
-+          - const: cdns,uart-r1p8
-+      - description: UART controller for Zynq Ultrascale+ MPSoC
-+        items:
-+          - const: xlnx,zynqmp-uart
-+          - const: cdns,uart-r1p12
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: uart_clk
-+      - const: pclk
-+
-+  cts-override:
-+    description: |
-+      Override the CTS modem status signal. This signal will
-+      always be reported as active instead of being obtained
-+      from the modem status register. Define this if your serial
-+      port does not use this pin.
-+    type: boolean
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    uart0: serial@e0000000 {
-+      compatible = "xlnx,xuartps", "cdns,uart-r1p8";
-+      clocks = <&clkc 23>, <&clkc 40>;
-+      clock-names = "uart_clk", "pclk";
-+      reg = <0xE0000000 0x1000>;
-+      interrupts = <0 27 4>;
-+    };
 -- 
-2.32.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
