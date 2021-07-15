@@ -2,83 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 720E73CA049
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Jul 2021 16:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4178E3CA444
+	for <lists+linux-serial@lfdr.de>; Thu, 15 Jul 2021 19:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238550AbhGOOKy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Jul 2021 10:10:54 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:44920
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236086AbhGOOKx (ORCPT
+        id S235791AbhGOR2r (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhGOR2r (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Jul 2021 10:10:53 -0400
-Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 781DD40667;
-        Thu, 15 Jul 2021 14:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1626358079;
-        bh=APYp9urHojI4rl75uCY+A2+u3xV4Ds1D+plCvqGn2Yc=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=WMIzLRLteGXuLOd8xT/W78DY+T3u7OT60sfvJmCM0P41ukI1kOyHja8wkMCgoPklT
-         GSNYkR+8ey9HEqC5Ked5p+enhc9XGAvc0OR36LaDqcBMnviX4cLJLD4Ccd5SvMcu1d
-         PcIqfqvTrJqBDXXWmjFVnFWsOqD1ZjqBoSKQTV9LTJ0iNLFlqTrWIHZTAFWTHUFCC6
-         hT9RY5wJEgBoc5zWBdwRZJO3WGtny2q5OsA9xcJcilgy6KGFhZKr++hwSa0Lm9I1Kg
-         caDLOYDqC81I4tJfkGX+Ft+8CWkEwe7v1Sd+7oAmRypxVfNwuBB4LhrIMU2NMfXPII
-         V8Wjie/Q38OrQ==
-From:   Colin King <colin.king@canonical.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org
-Subject: [PATCH] serial: 8250: 8250_omap: make a const array static, makes object smaller
-Date:   Thu, 15 Jul 2021 15:07:59 +0100
-Message-Id: <20210715140759.27244-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 15 Jul 2021 13:28:47 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45578C0613DD
+        for <linux-serial@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id u11so7553444oiv.1
+        for <linux-serial@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
+         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
+         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
+         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
+         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
+         7b/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=AxrR365bo2nM3wsPwQkFUMpvFNe1XASBoIsTUCqck5NNi1ZNSOw91lhbS+RQfXpK5k
+         LH/ezsx7bqEByaXNmWAJvLBu8F7i4M9LlvzPAEJYing5aX2PhgoLrhCjqI3cgw2n0WKj
+         GFDwf8AyXvhEbkUkaDirwabzHHKfmIhsvSslfLW6bGx+mYaK8bkaLHpLXrLVSV2jNgtF
+         GWUN1m4DgxrZbUsgZJHPmTYE+gquLymRjXuILK7v+LPSy1Dcal5/vmEZ/GedOf1TzA8I
+         6bWvksPcj1inH46KWp/mUeORha87cnzL0pYZxmf1UhAULvNK4Js6StMxuw8h1EMziwnW
+         GmNQ==
+X-Gm-Message-State: AOAM532+d3SSdYClr3vfEr3UI2tRYKyUvMRTb9lo3kByGGLUayT8cBET
+        RegsmjT3rvQrwKEkMCSTXYYb6fBDY18syiwr1D4JrR39z04=
+X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
+X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
+ Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:41 +0000
+Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hello Dear,
 
-Don't populate the const array k3_soc_devices on the stack but instead it
-static. Makes the object code smaller by 44 bytes:
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
-Before:
-   text    data     bss     dec     hex filename
-  31628    5609     128   37365    91f5 drivers/tty/serial/8250/8250_omap.o
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
-After:
-   text    data     bss     dec     hex filename
-  31520    5673     128   37321    91c9 drivers/tty/serial/8250/8250_omap.o
-Reduction of 44 bytes
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
 
-(gcc version 10.3.0)
-
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/tty/serial/8250/8250_omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 79418d4beb48..b81d1bdc7b88 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -538,7 +538,7 @@ static void omap_8250_pm(struct uart_port *port, unsigned int state,
- static void omap_serial_fill_features_erratas(struct uart_8250_port *up,
- 					      struct omap8250_priv *priv)
- {
--	const struct soc_device_attribute k3_soc_devices[] = {
-+	static const struct soc_device_attribute k3_soc_devices[] = {
- 		{ .family = "AM65X",  },
- 		{ .family = "J721E", .revision = "SR1.0" },
- 		{ /* sentinel */ }
--- 
-2.31.1
-
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
