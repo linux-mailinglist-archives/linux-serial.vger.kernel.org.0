@@ -2,82 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78EE3CE705
-	for <lists+linux-serial@lfdr.de>; Mon, 19 Jul 2021 19:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32063CF02C
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Jul 2021 01:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345086AbhGSQUC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 19 Jul 2021 12:20:02 -0400
-Received: from mail.distrito09d14.saludzona5.gob.ec ([181.211.241.146]:59170
-        "EHLO mail.distrito09d14.saludzona5.gob.ec" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351230AbhGSQN1 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 19 Jul 2021 12:13:27 -0400
-X-Greylist: delayed 24809 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Jul 2021 12:13:26 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d14.saludzona5.gob.ec (Postfix) with ESMTP id 54B63700C4D;
-        Sun, 18 Jul 2021 20:35:48 -0500 (-05)
-Received: from mail.distrito09d14.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d14.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Wh1GjrSVWXli; Sun, 18 Jul 2021 20:35:48 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d14.saludzona5.gob.ec (Postfix) with ESMTP id 59C957C0F5F;
-        Sun, 18 Jul 2021 19:55:56 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.distrito09d14.saludzona5.gob.ec 59C957C0F5F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=distrito09d14.saludzona5.gob.ec;
-        s=9545D480-B182-11EA-AD29-124AAFB0486A; t=1626656157;
-        bh=lNb6zZ2/CKMU9xuNPBtPYnwYqW6PrxuxjasUmmzH4uo=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=OjXQWvkluZD141lPQN8WHoYRM6Wc7dbwKjDVTGdJ/SpfOP7Hv3H0OikjbY8GdMcyg
-         kjvnX/nFLIm4TaWlmWhLf9/y1ijc2LwqKmVAqYq3iLXwuGbKzjyIRfIda/GjvFQJdq
-         H1r/akJr6hzaFXiNNQ2lM9o2McGkHr6O+82fZTKpgn7EZRJ8pUOTlSeJnjHp+L6QzY
-         7NutNPu1mAoc0D6M2AKezKz3j+rNK3+uyy0ixSKnAgv84ROQPhqDY014Ci0fCxNYmh
-         e6vyStV/eOHhTa1//jbeiMAIf3QHQCIdRJOb4nKtmeD5FjaOOHhVPIToWM4IUI0Rko
-         H82OFw6hdNbEQ==
-X-Virus-Scanned: amavisd-new at distrito09d14.saludzona5.gob.ec
-Received: from mail.distrito09d14.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d14.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eq243yKbBIer; Sun, 18 Jul 2021 19:55:56 -0500 (-05)
-Received: from cris-PC.www.huaweimobilewifi.com (unknown [105.4.3.24])
-        by mail.distrito09d14.saludzona5.gob.ec (Postfix) with ESMTPSA id 281BD721B17;
-        Sun, 18 Jul 2021 17:27:34 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S1355101AbhGSW7A (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 19 Jul 2021 18:59:00 -0400
+Received: from [111.225.152.182] ([111.225.152.182]:59477 "EHLO 1mdnx.top"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1386343AbhGSUUo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 19 Jul 2021 16:20:44 -0400
+X-Greylist: delayed 1242 seconds by postgrey-1.27 at vger.kernel.org; Mon, 19 Jul 2021 16:20:43 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=1mdnx; d=1mdnx.top;
+ h=Message-ID:From:To:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding; i=etc-melsal@1mdnx.top;
+ bh=kEUPzTL+C23utVXXiQS60gcolvM=;
+ b=PB1lP6BgtUk3R+mTv/ng5L4pVjkV8U1BQz4ymx5/0hQ5xzxYZVH2du5R7TpHM6BCcQDahcpR8BKn
+   NQoE8Qmi6wecrwjpmQWK2ag95Kj1B8Ny9gAQbyELFyU7LEXrOvl2iwbDnNbJY7SLX3Qe8lNaoGg1
+   iy+cb+WQZcLqTpZMNos=
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=1mdnx; d=1mdnx.top;
+ b=Nd7qpWC4EEdwuoZw2uw5djdhW0jdiCiMFNS48fxE72kj/640VuGVLkpXPKZAkdJzjjyWKR7HK4Z6
+   gVRbBqt6oPwb8EyQ32sBAu0m3P6t6XjOPSjpU5/VwCu+CqN646dCV39CYKqUHNbDjmJ5YT8Pd4M8
+   UxolHqnDJnyisxKGspA=;
+Message-ID: <F60E503B59F6CE5D218EEE191E3C10B2@wcicuf>
+From:   =?utf-8?B?RVRD5oOF5aCx?= <etc-melsal@1mdnx.top>
+To:     <linux-serial@vger.kernel.org>
+Subject: =?utf-8?B?44K144O844OT44K56YCa55+l?=
+Date:   Tue, 20 Jul 2021 04:39:18 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Euro?=
-To:     Recipients <morayma.morales@distrito09d14.saludzona5.gob.ec>
-From:   ''Michael Weirsky'' 
-        <morayma.morales@distrito09d14.saludzona5.gob.ec>
-Date:   Mon, 19 Jul 2021 00:39:01 +0200
-Reply-To: mikeweirskyspende@gmail.com
-Message-Id: <20210718222735.281BD721B17@mail.distrito09d14.saludzona5.gob.ec>
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2900.5512
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.5512
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Lieber Freund,
-
-Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der =
-Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zu=
-f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
-il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
-meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
-und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
-Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
- spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen.
-Das ist dein Spendencode: [MW530342019]
-
-www.youtube.com/watch?v=3Dun8yRTmrYMY
-
-
-Antworten Sie mit dem SPENDE-CODE an diese =
-
-
-E-Mail:mikeweirskyspende@gmail.com
+RVRD44K144O844OT44K544KS44GU5Yip55So44Gu44GK5a6i5qeYOg0KDQoNCkVUQ+OCteODvOOD
+k+OCueOBr+eEoeWKueOBq+OBquOCiuOBvuOBl+OBn+OAgg0K5byV44GN57aa44GN44K144O844OT
+44K544KS44GU5Yip55So44GE44Gf44Gg44GN44Gf44GE5aC05ZCI44Gv44CB5LiL6KiY44Oq44Oz
+44Kv44KI44KK6Kmz57Sw44KS44GU56K66KqN44GP44Gg44GV44GE44CCDQoNCg0K5LiL6KiY44Gu
+5o6l57aa44GL44KJ5YGc5q2i5Y6f5Zug44KS56K66KqN44GX44Gm44GP44Gg44GV44GEDQpodHRw
+czovL2V0Yy1tc2xmYWktanAucmFkaW8uYW0NCg0KKOebtOaOpeOCouOCr+OCu+OCueOBp+OBjeOB
+quOBhOWgtOWQiOOBr+OAgeaJi+WLleOBp+ODluODqeOCpuOCtuOBq+OCs+ODlOODvOOBl+OBpumW
+i+OBhOOBpuOBj+OBoOOBleOBhCkNCg0KDQoNCuKAu+OBk+OBruODoeODvOODq+OBr+mAgeS/oeWw
+gueUqOOBp+OBmeOAgg0K44CA44GT44Gu44Ki44OJ44Os44K544Gr6YCB5L+h44GE44Gf44Gg44GE
+44Gm44KC6L+U5L+h44GE44Gf44GX44GL44Gt44G+44GZ44Gu44Gn44CB44GC44KJ44GL44GY44KB
+44GU5LqG5om/6aGY44GE44G+44GZ44CCDQrigLvjgarjgYrjgIHjgZTkuI3mmI7jgarngrnjgavj
+gaTjgY3jgb7jgZfjgabjga/jgIHjgYrmiYvmlbDjgafjgZnjgYzjgIENCsOLVEPjgrXjg7zjg5Pj
+grnkuovli5nlsYDjgavjgYrllY/jgYTlkIjjgo/jgZvjgY/jgaDjgZXjgYTjgIINCg0KDQoNCuKW
+oEVUQ+WIqeeUqOeFp+S8muOCteODvOODk+OCueS6i+WLmeWxgA0K5bm05Lit54Sh5LyR44CAOTow
+MO+9njE4OjAwDQrjg4rjg5Pjg4DjgqTjg6Tjg6vjgIAwNTcwLTAxMDEzOQ0K77yI44OK44OT44OA
+44Kk44Ok44Or44GM44GU5Yip55So44GE44Gf44Gg44GR44Gq44GE44GK5a6i44GV44G+44CAMDQ1
+LTc0NC0xMzcy77yJDQo=
 
 
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
-
-Gr=C3=BC=C3=9Fe
-Herr Mike Weirsky
