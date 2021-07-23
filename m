@@ -2,84 +2,138 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A5A3D358E
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Jul 2021 09:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178CF3D35C1
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Jul 2021 09:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234167AbhGWHCx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 23 Jul 2021 03:02:53 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:55458 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbhGWHCs (ORCPT
+        id S233291AbhGWHQY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 23 Jul 2021 03:16:24 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43570 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229799AbhGWHQY (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 23 Jul 2021 03:02:48 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B232E22618;
-        Fri, 23 Jul 2021 07:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1627026201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cGv3LznFQj68M3237sMqjjgkGl6aRsKe6S2Fhiqr9Cc=;
-        b=KXq+ckZwyzg6JxoBwZkhZeWN4+N5CE4kZ48rC/vTEZZOirYZ+oYTDwX3grViOOYdseBF2k
-        4QflnPkAI24e+ogbkiq8qNHivUGojTVhk+Eb3f+ahq7nB+iBtsv4ZNedRA4q2OzJgZ4kIr
-        wYAAUv2j9xoS0m9tiUuz3BcL8TW2LLI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1627026201;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cGv3LznFQj68M3237sMqjjgkGl6aRsKe6S2Fhiqr9Cc=;
-        b=kp8W8zQKNV81u1ForDI3lERrulZrbrxDzAik6MeoD29ITI4X0aSSqJ0Ooy7KKqtRQkSSh/
-        PZbi/pT5jyacXcCQ==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8A951A3B95;
-        Fri, 23 Jul 2021 07:43:21 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
+        Fri, 23 Jul 2021 03:16:24 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16N7brTW141724;
+        Fri, 23 Jul 2021 03:55:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=/YI0iVS/WgfTLDZh3OyVkj9QsRID5ja6oabQZPd5K1E=;
+ b=U9wMIkS263lX3zPfzdGYwrp6YPOsdcpVb7/u985I+dadTiT3NQ5+VphTEZC4Ws+FtPcA
+ 9Bth+o9hwLqDUZP3FQXmjDgnRTSlFvzrXIMCEbOvqt25tkaqS3PChC65W8MAdAljQywZ
+ GJcvW/vbRW4ghI8EqF+GKmnWryaT4MXbgnZ9a4ojvemhlZavWARwuUV0koYelh/4nsAz
+ gDwKGFSk/VHxGKM6yqYv9fy9reYFsMbArihzWFOrSh4kjDfIB40grrLjvX9SUSd45kM+
+ oOUuv/+7KjhdbOAaLYTFLScHUHRXWjyhXlA1kqCNSGZ/GOO5NvRT9rbRowwbSiYVePUU ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39yraqtc4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jul 2021 03:55:41 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16N7c32E142739;
+        Fri, 23 Jul 2021 03:55:40 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39yraqtc3t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jul 2021 03:55:40 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16N7lDEM026631;
+        Fri, 23 Jul 2021 07:55:38 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 39vng72h4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jul 2021 07:55:38 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16N7tYn130212536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Jul 2021 07:55:34 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF67B11C04C;
+        Fri, 23 Jul 2021 07:55:34 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1987911C04A;
+        Fri, 23 Jul 2021 07:55:33 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.25.128])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 23 Jul 2021 07:55:33 +0000 (GMT)
+Subject: Re: [PATCH 7/8] tty: drop put_tty_driver
+To:     Jiri Slaby <jslaby@suse.cz>, gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-Subject: [PATCH 8/8] tty: pdc_cons, free tty_driver upon failure
-Date:   Fri, 23 Jul 2021 09:43:17 +0200
-Message-Id: <20210723074317.32690-9-jslaby@suse.cz>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210723074317.32690-1-jslaby@suse.cz>
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        David Lin <dtwlin@gmail.com>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        David Sterba <dsterba@suse.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
 References: <20210723074317.32690-1-jslaby@suse.cz>
+ <20210723074317.32690-8-jslaby@suse.cz>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Message-ID: <23a89de9-152e-2e7a-55f7-820f225ae697@de.ibm.com>
+Date:   Fri, 23 Jul 2021 09:55:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210723074317.32690-8-jslaby@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oKUYiXL0R6NUjSrMjt1d9plqUGlmubCB
+X-Proofpoint-ORIG-GUID: dAFOCtLxHxtRvAsb4qvWAkJMCr1LRytt
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-23_03:2021-07-23,2021-07-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 clxscore=1011 suspectscore=0
+ mlxlogscore=822 mlxscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107230043
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pdc_console_tty_driver_init() does not free the allocated tty driver in
-case tty_register_driver() fails. Add one tty_driver_kref_put() to the
-error path.
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
----
- arch/parisc/kernel/pdc_cons.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/parisc/kernel/pdc_cons.c b/arch/parisc/kernel/pdc_cons.c
-index 70c2a1648fc1..2661cdd256ae 100644
---- a/arch/parisc/kernel/pdc_cons.c
-+++ b/arch/parisc/kernel/pdc_cons.c
-@@ -181,6 +181,7 @@ static int __init pdc_console_tty_driver_init(void)
- 	if (err) {
- 		printk(KERN_ERR "Unable to register the PDC console TTY driver\n");
- 		tty_port_destroy(&tty_port);
-+		tty_driver_kref_put(driver);
- 		return err;
- 	}
- 
--- 
-2.32.0
+On 23.07.21 09:43, Jiri Slaby wrote:
+> put_tty_driver() is an alias for tty_driver_kref_put(). There is no need
+> for two exported identical functions, therefore switch all users of
+> old put_tty_driver() to new tty_driver_kref_put() and remove the former
+> for good.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+[...]
+for the s390 parts
 
+Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+>   drivers/s390/char/con3215.c            | 4 ++--
+>   drivers/s390/char/sclp_tty.c           | 8 ++++----
+>   drivers/s390/char/sclp_vt220.c         | 2 +-
+>   drivers/s390/char/tty3270.c            | 4 ++--
