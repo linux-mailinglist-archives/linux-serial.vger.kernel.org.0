@@ -2,105 +2,47 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F6E3D9FCF
-	for <lists+linux-serial@lfdr.de>; Thu, 29 Jul 2021 10:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631D63DA6F8
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Jul 2021 16:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbhG2IrU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 29 Jul 2021 04:47:20 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:47186 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234878AbhG2IrU (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 29 Jul 2021 04:47:20 -0400
-X-UUID: 1be3e42e7bef43cba7867ad3766c9ec9-20210729
-X-UUID: 1be3e42e7bef43cba7867ad3766c9ec9-20210729
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <zhiyong.tao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1199891843; Thu, 29 Jul 2021 16:47:15 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 29 Jul 2021 16:47:14 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 29 Jul 2021 16:47:13 +0800
-From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
-To:     <timur@kernel.org>, <linux@armlinux.org.uk>, <alcooperx@gmail.com>,
-        <tklauser@distanz.ch>, <sean.wang@kernel.org>
-CC:     <srv_heupstream@mediatek.com>, <zhiyong.tao@mediatek.com>,
-        <hui.liu@mediatek.com>, <yuchen.huang@mediatek.com>,
-        <huihui.wang@mediatek.com>, <eddie.huang@mediatek.com>,
-        <sean.wang@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>
-Subject: [PATCH v2 1/1] serial: 8250_mtk: fix uart corruption issue when rx power off
-Date:   Thu, 29 Jul 2021 16:46:40 +0800
-Message-ID: <20210729084640.17613-2-zhiyong.tao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210729084640.17613-1-zhiyong.tao@mediatek.com>
-References: <20210729084640.17613-1-zhiyong.tao@mediatek.com>
+        id S229934AbhG2O7y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 29 Jul 2021 10:59:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56320 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229864AbhG2O7y (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 29 Jul 2021 10:59:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5584860EBC;
+        Thu, 29 Jul 2021 14:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627570790;
+        bh=VBh8qGAL8EnMQACKM3w/lx9zTrNywIdlrr9xtAu2fH4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KneH5x5YOPBqJfMk/X8UNpRwwoXQ6U0aYeaQ33mnLllYW4oTH3i7K48R4PBTLyKtH
+         8ZuNQH6AQ7SlkMIDjktAAWF/FLhkLZrSWTPSpbyShQmDr2MOXWvdzBM/VdQKAWSyc8
+         5jNYwimH/OSOhHirY5JDm7GMKGfiIovJp0t/Tr3A=
+Date:   Thu, 29 Jul 2021 16:59:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linux-serial@vger.kernel.org, Peter Korsgaard <jacmet@sunsite.dk>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: Re: [PATCH] tty: serial: uartlite: Use read_poll_timeout for a
+ polling loop
+Message-ID: <YQLCX5pTkVC1Url9@kroah.com>
+References: <20210723215220.624204-1-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210723215220.624204-1-sean.anderson@seco.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Fix uart corruption issue when rx power off.
-Add spin lock in mtk8250_dma_rx_complete function in APDMA mode.
+On Fri, Jul 23, 2021 at 05:52:20PM -0400, Sean Anderson wrote:
+> This uses read_poll_timeout_atomic to spin while waiting on uart_in32.
 
-when uart is used as a communication port with external device(GPS).
-when external device(GPS) power off, the power of rx pin is also from
-1.8v to 0v. Even if there is not any data in rx. But uart rx pin can
-capture the data "0".
-If uart don't receive any data in specified cycle, uart will generates
-BI(Break interrupt) interrupt.
-If external device(GPS) power off, we found that BI interrupt appeared
-continuously and very frequently.
-When uart interrupt type is BI, uart IRQ handler(8250 framwork
-API:serial8250_handle_irq) will push data to tty buffer.
-mtk8250_dma_rx_complete is a task of mtk_uart_apdma_rx_handler.
-mtk8250_dma_rx_complete priority is lower than uart irq
-handler(serial8250_handle_irq).
-if we are in process of mtk8250_dma_rx_complete, uart appear BI
-interrupt:1)serial8250_handle_irq will priority execution.2)it may cause
-write tty buffer conflict in mtk8250_dma_rx_complete.
-So the spin lock protect the rx receive data process is not break.
+That says what you are doing, but nothing about _why_ you are making
+this change.  Please fix up.
 
-Signed-off-by: Zhiyong Tao <zhiyong.tao@mediatek.com>
----
- drivers/tty/serial/8250/8250_mtk.c | 5 +++++
- 1 file changed, 5 insertions(+)
+thanks,
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index f7d3023f860f..fb65dc601b23 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -93,10 +93,13 @@ static void mtk8250_dma_rx_complete(void *param)
- 	struct dma_tx_state state;
- 	int copied, total, cnt;
- 	unsigned char *ptr;
-+	unsigned long flags;
- 
- 	if (data->rx_status == DMA_RX_SHUTDOWN)
- 		return;
- 
-+	spin_lock_irqsave(&up->port.lock, flags);
-+
- 	dmaengine_tx_status(dma->rxchan, dma->rx_cookie, &state);
- 	total = dma->rx_size - state.residue;
- 	cnt = total;
-@@ -120,6 +123,8 @@ static void mtk8250_dma_rx_complete(void *param)
- 	tty_flip_buffer_push(tty_port);
- 
- 	mtk8250_rx_dma(up);
-+
-+	spin_unlock_irqrestore(&up->port.lock, flags);
- }
- 
- static void mtk8250_rx_dma(struct uart_8250_port *up)
--- 
-2.18.0
-
+greg k-h
