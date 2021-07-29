@@ -2,168 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E01A83D956D
-	for <lists+linux-serial@lfdr.de>; Wed, 28 Jul 2021 20:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A519D3D9B37
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Jul 2021 03:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhG1Sln (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 28 Jul 2021 14:41:43 -0400
-Received: from mga04.intel.com ([192.55.52.120]:9346 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230455AbhG1Sln (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 28 Jul 2021 14:41:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10059"; a="210843292"
-X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
-   d="scan'208";a="210843292"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 11:41:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
-   d="scan'208";a="663614070"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jul 2021 11:41:39 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m8oUs-0008cI-Gp; Wed, 28 Jul 2021 18:41:38 +0000
-Date:   Thu, 29 Jul 2021 02:40:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-next] BUILD SUCCESS
- 3df15d6f37246d2f12f53d915c41d806289d3d46
-Message-ID: <6101a4ae.KTOk3OxdbeMe+9I/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233263AbhG2Bs7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 28 Jul 2021 21:48:59 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42308 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233205AbhG2Bs6 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 28 Jul 2021 21:48:58 -0400
+X-UUID: 73cc931f060843f99ccebaa6a6b692a7-20210729
+X-UUID: 73cc931f060843f99ccebaa6a6b692a7-20210729
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <zhiyong.tao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1007863186; Thu, 29 Jul 2021 09:48:51 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 29 Jul 2021 09:48:49 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 29 Jul 2021 09:48:48 +0800
+From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
+To:     <timur@kernel.org>, <linux@armlinux.org.uk>, <alcooperx@gmail.com>,
+        <tklauser@distanz.ch>, <sean.wang@kernel.org>
+CC:     <srv_heupstream@mediatek.com>, <zhiyong.tao@mediatek.com>,
+        <hui.liu@mediatek.com>, <yuchen.huang@mediatek.com>,
+        <huihui.wang@mediatek.com>, <eddie.huang@mediatek.com>,
+        <sean.wang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>
+Subject: [PATCH v1 0/1] Mediatek uart patch 
+Date:   Thu, 29 Jul 2021 09:48:16 +0800
+Message-ID: <20210729014817.11879-1-zhiyong.tao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-next
-branch HEAD: 3df15d6f37246d2f12f53d915c41d806289d3d46  vt: keyboard.c: make console an unsigned int
+This series includes 1 patches:
+1.fix uart corruption issue when rx power off
 
-elapsed time: 728m
+when uart is used as a communication port with external device(GPS).
+when external device(GPS) power off, the power of rx pin is also from
+1.8v to 0v. Even if there is not any data in rx. But uart rx pin can
+capture the data "0".
+If uart don't receive any data in specified cycle, uart will generates
+BI(Break interrupt) interrupt.
+If external device(GPS) power off, we found that BI interrupt appeared
+continuously and very frequently.
+When uart interrupt type is BI, uart IRQ handler(8250 framwork
+API:serial8250_handle_irq) will push data to tty buffer.
+The code path:
+https://elixir.bootlin.com/linux/latest/source/drivers/tty/serial/8250/8250_port.c#L1917
+mtk8250_dma_rx_complete is a task of mtk_uart_apdma_rx_handler.
+mtk8250_dma_rx_complete priority is lower than uart irq
+handler(serial8250_handle_irq).
+if we are in process of mtk8250_dma_rx_complete, uart appear BI
+interrupt:1)serial8250_handle_irq will priority execution.2)it may cause
+write tty buffer conflict in mtk8250_dma_rx_complete.
+So the spin lock protect the rx receive data process is not break.
 
-configs tested: 110
-configs skipped: 3
+Changes in patch v1:
+1. remove processing mechanism which count value is 0.
+2. change patch title and commit message.
+3. explain the detailed reason for the patch in changelog.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Zhiyong Tao (1):
+  serial: 8250_mtk: fix uart corruption issue when rx power off
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210728
-h8300                       h8s-sim_defconfig
-powerpc                   bluestone_defconfig
-um                             i386_defconfig
-riscv                            allmodconfig
-powerpc                     kilauea_defconfig
-m68k                          multi_defconfig
-mips                         tb0219_defconfig
-powerpc                    socrates_defconfig
-mips                         db1xxx_defconfig
-m68k                          atari_defconfig
-sh                             espt_defconfig
-powerpc                     asp8347_defconfig
-sh                          r7780mp_defconfig
-mips                     cu1000-neo_defconfig
-um                                  defconfig
-mips                      maltasmvp_defconfig
-sh                           se7750_defconfig
-powerpc                 mpc8272_ads_defconfig
-mips                     loongson1b_defconfig
-sh                          sdk7780_defconfig
-mips                           xway_defconfig
-arm                        multi_v7_defconfig
-m68k                          hp300_defconfig
-sh                            shmin_defconfig
-arm                        neponset_defconfig
-arm                            lart_defconfig
-arm                            hisi_defconfig
-powerpc                       eiger_defconfig
-openrisc                    or1ksim_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                           gcw0_defconfig
-powerpc                      mgcoge_defconfig
-x86_64                           alldefconfig
-arm                         palmz72_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210728
-x86_64               randconfig-a003-20210728
-x86_64               randconfig-a001-20210728
-x86_64               randconfig-a004-20210728
-x86_64               randconfig-a005-20210728
-x86_64               randconfig-a002-20210728
-i386                 randconfig-a005-20210728
-i386                 randconfig-a003-20210728
-i386                 randconfig-a004-20210728
-i386                 randconfig-a002-20210728
-i386                 randconfig-a001-20210728
-i386                 randconfig-a006-20210728
-i386                 randconfig-a016-20210728
-i386                 randconfig-a012-20210728
-i386                 randconfig-a013-20210728
-i386                 randconfig-a014-20210728
-i386                 randconfig-a011-20210728
-i386                 randconfig-a015-20210728
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+ drivers/tty/serial/8250/8250_mtk.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-clang tested configs:
-x86_64               randconfig-c001-20210728
-x86_64               randconfig-a016-20210728
-x86_64               randconfig-a011-20210728
-x86_64               randconfig-a014-20210728
-x86_64               randconfig-a013-20210728
-x86_64               randconfig-a012-20210728
-x86_64               randconfig-a015-20210728
+--
+2.18.0
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
