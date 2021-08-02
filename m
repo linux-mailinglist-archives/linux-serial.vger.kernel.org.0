@@ -2,78 +2,216 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4863DDB55
-	for <lists+linux-serial@lfdr.de>; Mon,  2 Aug 2021 16:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89C73DDFF7
+	for <lists+linux-serial@lfdr.de>; Mon,  2 Aug 2021 21:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbhHBOpv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 2 Aug 2021 10:45:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48474 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234313AbhHBOpv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 2 Aug 2021 10:45:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AEF9660F51;
-        Mon,  2 Aug 2021 14:45:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627915541;
-        bh=b3goBFQFlOeosgGSS9BAcZLInoN1rgbRE/qkSS4IUwk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p5QKCazERFukk3GhG9g7lKnYjLV4cHHODJD6YUhbm0BxCZ5rgUDcSvBvGdPJepnML
-         zgZHM/wKeujvshgV9nXr/8axigN3iWv2Pst3p+qHPEY4H8StJnd3idQPjN9jGtVVT4
-         g5xRSqqOCNt6zfCAvvHMGhIQphvaKzQlHlVtmOoWPk4c5WtkpMW/3z/+8CJp0oLK/Q
-         zlKNNl1zJjCJx2LhVvnPPDnHYDp83bSVdIMciBcrbDz6QpNt7+vhfNrkEw81oVres7
-         XkDvgKCJeOZb0uHuvPcMtXzK8vSkDoxljGn0q7hg1IA51Y0BzjuMuHGLRtbXZZFsFC
-         ANgBRQ40Pi5NA==
-Received: by pali.im (Postfix)
-        id DAAA2B98; Mon,  2 Aug 2021 16:45:38 +0200 (CEST)
-Date:   Mon, 2 Aug 2021 16:45:38 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 3/5] dt-bindings: mvebu-uart: document DT bindings for
- marvell, armada-3700-uart-clock
-Message-ID: <20210802144538.zbnshv3xml3t4euj@pali>
-References: <20210624224909.6350-1-pali@kernel.org>
- <20210717123829.5201-1-pali@kernel.org>
- <20210717123829.5201-4-pali@kernel.org>
- <YPMTq1wSo1YLJBQi@lunn.ch>
+        id S229567AbhHBTYo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 2 Aug 2021 15:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229716AbhHBTYo (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 2 Aug 2021 15:24:44 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FD8C061798
+        for <linux-serial@vger.kernel.org>; Mon,  2 Aug 2021 12:24:34 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id a8so3797784vsl.4
+        for <linux-serial@vger.kernel.org>; Mon, 02 Aug 2021 12:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6NL8fhjdk0TL/HeebMzN8mENLvM91hqvv1V2BLU+G5g=;
+        b=rYpY6n0sMpipTddYKxEKmMdc3FRIO9h9EWI05gy951mRPL+1oPYPlmyOuup8pQ2lrE
+         XWaW+inYuL4+rTp40y27pntjYJ+Cd0nUZz/iBI7xtK3lmzWcn6Z5+tA+wvnVIJkhrMzZ
+         BGgOcZF5gN4z0HNdCjWWX8bp+gEyHzxLn824FbKiGW7PMhRdcP0UumcLOgEHET0I3lIn
+         hwG9ejn5nVdPNRS3896WVqUtYrdV7VMvvd9Ph5U0y5qqDnVE00w73YuQMjF0BttTr13e
+         y16vfZJhjF5Qd8gM8QImaxRWkCqSNZX7GtR5qy/y1Q5r22zNBvfUEZiTnD04k9DbWXfL
+         n73w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6NL8fhjdk0TL/HeebMzN8mENLvM91hqvv1V2BLU+G5g=;
+        b=UMDsFKBFjyxkvDBtWp/WwHOM4mILq2O8krqmZ1BROmOzICvj6qEtSVpAU8O+AazhcG
+         pSgJMnllJLKTpxMQ6jWHyX86VY9ZCgCe5IVs1ub7yeeqjlnCxZmhqGpJnvxUX1XIQUO1
+         Wb3pOyI7afo5BQUODmuALNzL0oMp2ADq/+PTJbBsCbFe/6HVJ//E7mVYksmtB1CL0onJ
+         /e3d6NGoGZycnSTLIYz89+4mn/0wrNsCeiE0cMz/rqhp6+G0KDCG81C3XkB8KaRU7ZLw
+         2o0mhEyaLAa6CLS7vzFLlGEnb432j592gCso9yTIffO9P3/s+8ua+0Z5ytu8vfP91DPN
+         jhgA==
+X-Gm-Message-State: AOAM530xugTMwCAwbu53YgnBsqWMpoU5yOHldGAMr3N38+pv+Ca9378W
+        EQjPk8mTkjYXzQU+1Q+eY+ZoZUO3nmtoLOql8q6eCg==
+X-Google-Smtp-Source: ABdhPJwj5ivH+XA+udnXW1ju84n1CSmVGUcizuCYfmS2cyxqEpHpDhiYSn4JXLoeQmn6ikJYAaDQkK1+OTlUcKDehdY=
+X-Received: by 2002:a05:6102:21b:: with SMTP id z27mr11724359vsp.27.1627932273429;
+ Mon, 02 Aug 2021 12:24:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YPMTq1wSo1YLJBQi@lunn.ch>
-User-Agent: NeoMutt/20180716
+References: <20210730144922.29111-1-semen.protsenko@linaro.org>
+ <20210730144922.29111-3-semen.protsenko@linaro.org> <a2b6b868-e984-440c-75b1-599680537cc9@canonical.com>
+In-Reply-To: <a2b6b868-e984-440c-75b1-599680537cc9@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 2 Aug 2021 22:24:22 +0300
+Message-ID: <CAPLW+4=ewQf8_hMKFFqPRaoqQxhRZZ1=NGboLstvVBOYcTc3aw@mail.gmail.com>
+Subject: Re: [PATCH 02/12] pinctrl: samsung: Add Exynos850 SoC specific data
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
+        Ryu Euiyoul <ryu.real@samsung.com>,
+        Tom Gall <tom.gall@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Saturday 17 July 2021 19:30:19 Andrew Lunn wrote:
-> On Sat, Jul 17, 2021 at 02:38:27PM +0200, Pali Rohár wrote:
-> > This change adds DT bindings documentation for device nodes with compatible
-> > string "marvell,armada-3700-uart-clock".
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
+On Fri, 30 Jul 2021 at 18:22, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 30/07/2021 16:49, Sam Protsenko wrote:
+> > Add Samsung Exynos850 SoC specific data to enable pinctrl support for
+> > all platforms based on Exynos850.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > > ---
-> >  .../bindings/clock/armada3700-uart-clock.txt  | 24 +++++++++++++++++++
-> >  .../devicetree/bindings/serial/mvebu-uart.txt |  9 ++++---
-> >  2 files changed, 30 insertions(+), 3 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/armada3700-uart-clock.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/clock/armada3700-uart-clock.txt b/Documentation/devicetree/bindings/clock/armada3700-uart-clock.txt
-> > new file mode 100644
-> > index 000000000000..144bc6d7eae8
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/armada3700-uart-clock.txt
-> 
-> Since this is a new binding, please use YAML.
+> >  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 129 ++++++++++++++++++
+> >  drivers/pinctrl/samsung/pinctrl-exynos.h      |  29 ++++
+> >  drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
+> >  drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
+> >  4 files changed, 161 insertions(+)
+> >
+> > diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> > index b6e56422a700..9c71ff84ba7e 100644
+> > --- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> > +++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> > @@ -40,6 +40,24 @@ static const struct samsung_pin_bank_type exynos5433_bank_type_alive = {
+> >       .reg_offset = { 0x00, 0x04, 0x08, 0x0c, },
+> >  };
+> >
+> > +/*
+> > + * Bank type for non-alive type. Bit fields:
+> > + * CON: 4, DAT: 1, PUD: 4, DRV: 4, CONPDN: 2, PUDPDN: 4
+> > + */
+> > +static struct samsung_pin_bank_type exynos850_bank_type_off  = {
+> > +     .fld_width = { 4, 1, 4, 4, 2, 4, },
+> > +     .reg_offset = { 0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, },
+> > +};
+> > +
+> > +/*
+> > + * Bank type for alive type. Bit fields:
+> > + * CON: 4, DAT: 1, PUD: 4, DRV: 4
+> > + */
+> > +static struct samsung_pin_bank_type exynos850_bank_type_alive = {
+> > +     .fld_width = { 4, 1, 4, 4, },
+> > +     .reg_offset = { 0x00, 0x04, 0x08, 0x0c, },
+> > +};
+> > +
+> >  /* Pad retention control code for accessing PMU regmap */
+> >  static atomic_t exynos_shared_retention_refcnt;
+> >
+> > @@ -422,3 +440,114 @@ const struct samsung_pinctrl_of_match_data exynos7_of_data __initconst = {
+> >       .ctrl           = exynos7_pin_ctrl,
+> >       .num_ctrl       = ARRAY_SIZE(exynos7_pin_ctrl),
+> >  };
+> > +
+> > +/* pin banks of exynos850 pin-controller 0 (ALIVE) */
+> > +static struct samsung_pin_bank_data exynos850_pin_banks0[] = {
+> > +     /* Must start with EINTG banks, ordered by EINT group number. */
+> > +     EXYNOS9_PIN_BANK_EINTW(8, 0x000, "gpa0", 0x00),
+>
+> Why EXYNOS9 not EXYNOS850? Is it really shared with 96xx, 98xx and 9x0
+> series?
+>
 
-Changed in v4.
+Yeah, I double checked and those macros are actually used for 96xx
+SoCs. So I suggest we leave it as is, as it seems to be related to the
+whole architecture series, not only to Exynos850.
+
+> > +     EXYNOS9_PIN_BANK_EINTW(8, 0x020, "gpa1", 0x04),
+> > +     EXYNOS9_PIN_BANK_EINTW(8, 0x040, "gpa2", 0x08),
+> > +     EXYNOS9_PIN_BANK_EINTW(8, 0x060, "gpa3", 0x0c),
+> > +     EXYNOS9_PIN_BANK_EINTW(4, 0x080, "gpa4", 0x10),
+> > +     EXYNOS9_PIN_BANK_EINTN(3, 0x0A0, "gpq0"),
+> > +};
+> > +
+> > +/* pin banks of exynos850 pin-controller 1 (CMGP) */
+> > +static struct samsung_pin_bank_data exynos850_pin_banks1[] = {
+> > +     /* Must start with EINTG banks, ordered by EINT group number. */
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x000, "gpm0", 0x00),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x020, "gpm1", 0x04),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x040, "gpm2", 0x08),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x060, "gpm3", 0x0C),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x080, "gpm4", 0x10),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x0A0, "gpm5", 0x14),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x0C0, "gpm6", 0x18),
+> > +     EXYNOS9_PIN_BANK_EINTW(1, 0x0E0, "gpm7", 0x1C),
+> > +};
+> > +
+> > +/* pin banks of exynos850 pin-controller 2 (AUD) */
+> > +static struct samsung_pin_bank_data exynos850_pin_banks2[] = {
+> > +     /* Must start with EINTG banks, ordered by EINT group number. */
+> > +     EXYNOS9_PIN_BANK_EINTG(5, 0x000, "gpb0", 0x00),
+> > +     EXYNOS9_PIN_BANK_EINTG(5, 0x020, "gpb1", 0x04),
+> > +};
+> > +
+> > +/* pin banks of exynos850 pin-controller 3 (HSI) */
+> > +static struct samsung_pin_bank_data exynos850_pin_banks3[] = {
+> > +     /* Must start with EINTG banks, ordered by EINT group number. */
+> > +     EXYNOS9_PIN_BANK_EINTG(6, 0x000, "gpf2", 0x00),
+> > +};
+> > +
+> > +/* pin banks of exynos850 pin-controller 4 (CORE) */
+> > +static struct samsung_pin_bank_data exynos850_pin_banks4[] = {
+> > +     /* Must start with EINTG banks, ordered by EINT group number. */
+> > +     EXYNOS9_PIN_BANK_EINTG(4, 0x000, "gpf0", 0x00),
+> > +     EXYNOS9_PIN_BANK_EINTG(8, 0x020, "gpf1", 0x04),
+> > +};
+> > +
+> > +/* pin banks of exynos850 pin-controller 5 (PERI) */
+> > +static struct samsung_pin_bank_data exynos850_pin_banks5[] = {
+> > +     /* Must start with EINTG banks, ordered by EINT group number. */
+> > +     EXYNOS9_PIN_BANK_EINTG(2, 0x000, "gpg0", 0x00),
+> > +     EXYNOS9_PIN_BANK_EINTG(6, 0x020, "gpp0", 0x04),
+> > +     EXYNOS9_PIN_BANK_EINTG(4, 0x040, "gpp1", 0x08),
+> > +     EXYNOS9_PIN_BANK_EINTG(4, 0x060, "gpp2", 0x0C),
+> > +     EXYNOS9_PIN_BANK_EINTG(8, 0x080, "gpg1", 0x10),
+> > +     EXYNOS9_PIN_BANK_EINTG(8, 0x0A0, "gpg2", 0x14),
+> > +     EXYNOS9_PIN_BANK_EINTG(1, 0x0C0, "gpg3", 0x18),
+> > +     EXYNOS9_PIN_BANK_EINTG(3, 0x0E0, "gpc0", 0x1C),
+> > +     EXYNOS9_PIN_BANK_EINTG(6, 0x100, "gpc1", 0x20),
+> > +};
+> > +
+> > +static const struct samsung_pin_ctrl exynos850_pin_ctrl[] __initconst = {
+> > +     {
+> > +             /* pin-controller instance 0 ALIVE data */
+> > +             .pin_banks      = exynos850_pin_banks0,
+> > +             .nr_banks       = ARRAY_SIZE(exynos850_pin_banks0),
+> > +             .eint_gpio_init = exynos_eint_gpio_init,
+> > +             .eint_wkup_init = exynos_eint_wkup_init,
+> > +             .suspend        = exynos_pinctrl_suspend,
+> > +             .resume         = exynos_pinctrl_resume,
+>
+> I guess retention registers will follow sometime later.
+>
+
+Good point, never noticed retention control is needed for
+suspend/resume to work properly. I will remove suspend/resume ops in
+v2, and PM support will be sent later.
+
+> Best regards,
+> Krzysztof
