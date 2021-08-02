@@ -2,118 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35ECE3DD66E
-	for <lists+linux-serial@lfdr.de>; Mon,  2 Aug 2021 15:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF553DDB58
+	for <lists+linux-serial@lfdr.de>; Mon,  2 Aug 2021 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbhHBNH2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 2 Aug 2021 09:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbhHBNH2 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 2 Aug 2021 09:07:28 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B4BC06175F;
-        Mon,  2 Aug 2021 06:07:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id p5so21438109wro.7;
-        Mon, 02 Aug 2021 06:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NYcQMy/qifVRiMiSDikyJJrDjDDR52fe7Fa16GoTEnQ=;
-        b=uogQNy/ncaTFt18nfNPBmExmyzX3ropBliOkmrlAi5+tyutGmGEtzT+ZPXcEDmvH6S
-         uXov3oxzZqp5YzDzTJuo3G7g6nPeYtBpQFACYFPaQxzO35R+7ar5jRn5HcWf4f9/jvb1
-         XYpNwoeDvl88xWcOnxbRKoKwQI0AnWx3JzSwiXsUHvkQ/iMzrYRDVpR1ledvXBIx1gpI
-         1W5trqcXtGweV07QLvdzjaQrw8aub/P/NDVTXZ3GBRmI1WiN9nEvSPL0GIb+4nI04Wf3
-         2BlWPC9UQcnQDUCuEspBTwlroLXbelOXDIAD1OC1LMcnipDoyayrv3tjOiv8ZPKSrjHf
-         XEEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NYcQMy/qifVRiMiSDikyJJrDjDDR52fe7Fa16GoTEnQ=;
-        b=H53ABV8heFK9dJm0MEiT4fy0Xy4XTiuxZ8MX+GbpZTNbW6Q+bBJT5G8pqCDfivX2KH
-         lu0oBwsnMSRa884HKSr/kE1Mx2YazGSUZCHrBRbvRHEIwcWi0a2s5nUYMx4oQ0l7bhFf
-         A3LZlvvPNUF1zg+yorSl3ZFGZRXgrMNVt4X4JA/1Sd6ppHxpIOXudxm626sh0M2TYxKp
-         UQyG4m50rL4R3N5DTu9S0lvxnaR7KNF6PpjSLBOWfJixeqhaNB4sHd0oDgV1+XSz31Mc
-         S88ne7DadM3zVBpAFiwzklo1HBNiJ4IinHawGjCYoFrJIRm8kQG2HgTlaCDCWYIz8ZOg
-         sRKQ==
-X-Gm-Message-State: AOAM530Bc7lgLYgRiRWjDRWnDKww48rVpn4Q+pRnvUjgIluwKdg2BPQ9
-        MuGic/n8ZInz8uD7b/cxJ0HXaqmGAm4=
-X-Google-Smtp-Source: ABdhPJy6QdKrnMgOf9Ja2/DDd4GkYHWkhMhGQuq1/g1jFTf0aYdB8hly0hPoCjqIkmGCGJG3df0goA==
-X-Received: by 2002:a5d:44c7:: with SMTP id z7mr18083465wrr.286.1627909636606;
-        Mon, 02 Aug 2021 06:07:16 -0700 (PDT)
-Received: from [10.8.0.10] ([195.53.121.100])
-        by smtp.gmail.com with ESMTPSA id c190sm2536698wma.21.2021.08.02.06.07.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Aug 2021 06:07:16 -0700 (PDT)
-Subject: Re: Document the types "struct termios" and "struct termios2"
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Glibc <libc-alpha@sourceware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-serial@vger.kernel.org, linux-man <linux-man@vger.kernel.org>
-References: <ef6a352d-4926-9cdc-9894-e387866a00c4@gmail.com>
- <20210802125034.gubtf24tsm7lkh3k@pali>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-Message-ID: <5e9e1f1a-1e08-59f5-6579-a02c0738b9a4@gmail.com>
-Date:   Mon, 2 Aug 2021 15:07:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S234357AbhHBOqC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 2 Aug 2021 10:46:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48720 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234199AbhHBOqC (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 2 Aug 2021 10:46:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D3D560F58;
+        Mon,  2 Aug 2021 14:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627915552;
+        bh=sJP3kplkYoVIAiDtyEQqNFB2bgle50xC0DmUOkFui78=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SoeHworG2RS8PpgNkijH3TP21diEkcUYY5UYpkL+k1kahjno/E53sU1kub3EByT81
+         HG128DxfQh+asQruzHZW18TPgSTUVD3JkjK1WqbHkf3PFLVvbOtwbw7+/PtEOS2SXI
+         jTI7ECxuAvwpydR1uS6jbN2fONOB5OO5d/heAY1tiseNvMAVIC60CeCgdyGmUeMxIk
+         zLki39bw57/uLvgRttCeuCgOXyo1Ts/fGbF9+QPU2oncmYpKkj7VsSxZwZxXk1b/uQ
+         B+eZ0uzOSzshiUSC49gwkj8/gn86ACxhTEq/OkU22UshnFECOhcJ5g3hrkLqjxBbh2
+         H2g6p/HXuTn4w==
+Received: by pali.im (Postfix)
+        id BBD95B98; Mon,  2 Aug 2021 16:45:50 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 0/6] serial: mvebu-uart: Support for higher baudrates
+Date:   Mon,  2 Aug 2021 16:45:23 +0200
+Message-Id: <20210802144529.1520-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210624224909.6350-1-pali@kernel.org>
+References: <20210624224909.6350-1-pali@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210802125034.gubtf24tsm7lkh3k@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-+= linux-man@
+This patch series add support for baudrates higher than 230400 on
+Marvell Armada 37xx boards.
 
-:)
+Please review these patches as they touch both Device Tree bindings and
+mvebu-uart.c driver.
 
-On 8/2/21 2:50 PM, Pali Rohár wrote:
-> + linux-serial
-> 
-> On Monday 02 August 2021 14:38:43 Alejandro Colomar (man-pages) wrote:
->> Hi,
->>
->>  From a few patches of Pali and their subsequent discussions,
-> 
-> For others, link to patch with code example:
-> https://lore.kernel.org/linux-man/20210801135146.14849-1-pali@kernel.org/
-> 
-> And links to other discussions:
-> https://lore.kernel.org/linux-man/20210725225506.7404-1-pali@kernel.org/t/#u
-> https://lore.kernel.org/linux-man/20210730105353.10424-1-pali@kernel.org/t/#u
-> https://lore.kernel.org/linux-man/20210730153044.23673-1-pali@kernel.org/t/#u
-> 
->> it was clear
->> that those types need to be documented (the most appropriate place being
->> system_data_types(7), with link pages termios-struct(3) and
->> termios2-struct(3)).
->>
->> The most important part (the one we had problems with) being which headers
->> should be included for each type (and for each version of the type
->> (kernel/glibc)).  That includes the recommended header, and other headers
->> that _shall_ also provide the type.
->>
->> Is there someone that knows those types enough to write such documentation
->> and wants to do it? :)
->>
->> Thanks,
->>
->> Alex
->>
->> -- 
->> Alejandro Colomar
->> Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
->> http://www.alejandro-colomar.es/
+Changes in v4:
+* converted armada3700-uart-clock documentation to YAML
+* split documentation changes into two commits:
+  - first which adds clock documentation
+  - second which updates UART documentation
 
+Changes in v3:
+v3 is rebased on top of Linus master branch and all already applied patches
+were dropped. There are no changes in patches itself since v2.
+
+Pali Rohár (6):
+  math64: New DIV_U64_ROUND_CLOSEST helper
+  serial: mvebu-uart: implement UART clock driver for configuring UART
+    base clock
+  dt-bindings: mvebu-uart: document DT bindings for
+    marvell,armada-3700-uart-clock
+  dt-bindings: mvebu-uart: update information about UART clock
+  arm64: dts: marvell: armada-37xx: add device node for UART clock and
+    use it
+  serial: mvebu-uart: implement support for baudrates higher than 230400
+
+ .../bindings/clock/armada3700-uart-clock.yaml |  49 ++
+ .../devicetree/bindings/serial/mvebu-uart.txt |   9 +-
+ .../arm64/boot/dts/marvell/armada-3720-db.dts |   4 +
+ .../dts/marvell/armada-3720-espressobin.dtsi  |   4 +
+ .../dts/marvell/armada-3720-turris-mox.dts    |   4 +
+ .../boot/dts/marvell/armada-3720-uDPU.dts     |   4 +
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi  |  15 +-
+ drivers/tty/serial/Kconfig                    |   1 +
+ drivers/tty/serial/mvebu-uart.c               | 592 +++++++++++++++++-
+ include/linux/math64.h                        |  13 +
+ 10 files changed, 674 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/armada3700-uart-clock.yaml
 
 -- 
-Alejandro Colomar
-Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/
+2.20.1
+
