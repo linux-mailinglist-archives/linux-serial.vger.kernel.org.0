@@ -2,75 +2,80 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EA43DCF7A
-	for <lists+linux-serial@lfdr.de>; Mon,  2 Aug 2021 06:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048AD3DD5FE
+	for <lists+linux-serial@lfdr.de>; Mon,  2 Aug 2021 14:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbhHBEYn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbhHBEYn (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 2 Aug 2021 00:24:43 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64134C06179A
-        for <linux-serial@vger.kernel.org>; Sun,  1 Aug 2021 21:24:33 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id oz16so28705506ejc.7
-        for <linux-serial@vger.kernel.org>; Sun, 01 Aug 2021 21:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=WDq9P0bY1AsY9kO7VoQiuEkd/+xeN2uAzVka1J/B7YABFMMcv9zsRMDuUzGU3t7LVq
-         x60AdfwMQPfhhBT91CFmxmNgG6fRcK6BFaIDqx+Ms1vLOgOAYNOd4Xbt+10CNKTcRAMK
-         KeTYcmNC0bNtdVd3yLIRxS8Pr5sLxpts2NC88pKkxuGBDjkmUnJislac8lDy7dNnd85N
-         dz7rwNTEXx7I9NqC47E4asccGsO9/P6huztRZkI4lkvRJ5hB7XcOxioVdhTGqNDSXebW
-         Md0Dh2ya6SQXgvhbdFNsJy7D030uG2HCPIxJG2TxztPigkWx+ZXfNLX+hVWs0ri0sCK7
-         k48A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=r68MgA/E4TESc0JtmiQOVosqRKp49vKJ/Wzx90lFP5b96UjGOSqUW6i/ryYzyfpJX4
-         1N9BrjR4kj7obLjLz7SewPOV6Lk9IjJhUdKq5lyHzcjapSXa19KEmckwu7N4Jqb358Rz
-         M3VTBhnfWNaESTbSqltRCnihIcd+m9ZuPTKwgGvRqS/dG68yhpkGPA71bGbN5PCM/7uu
-         Fg15DieOjw1GzIXnwmyNmVsz/Y6fBKkPejTXMSlDal4U8YQmUTqTnO0QA9ApWcvJ4KTi
-         lkTly0nz4vPk9qTC6/Gk6LlX5BIKl1osymr3mq1yGwnYs/92xL6tJCtBAdRnRSOHMs1q
-         FYtQ==
-X-Gm-Message-State: AOAM530RxZ0aYrN+A5K26zC3IwK3pU/1lGzIYUo23+Oi0713t5eTV8Kr
-        5fbf4B9OHCA48jXvYebvNVywMD0Ux+JtVs7L7sk=
-X-Google-Smtp-Source: ABdhPJyge6CE4/3PK9Ai4ltivb6MMxmm7LTQ2s8bjzS0dUrr9KzpIrZxfzN76q9x5Xx6YjpKdH1irFSuudYhIT6knzs=
-X-Received: by 2002:a17:906:3b87:: with SMTP id u7mr13818454ejf.66.1627878272087;
- Sun, 01 Aug 2021 21:24:32 -0700 (PDT)
+        id S232629AbhHBMut (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 2 Aug 2021 08:50:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51240 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233736AbhHBMur (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 2 Aug 2021 08:50:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 31A2E60F58;
+        Mon,  2 Aug 2021 12:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627908637;
+        bh=3MKa7wkl36ZJdn/Xya+VfMjlloeBPMGrEJKPARDl+yQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DxTuvGr3pW6lB1+3AQgFJu9HPjbAUosWqP6/9JWJz3LeNTIPpxD/F/a1D7jrcb2ZT
+         +/FYU6dQKC6lYf6oTXbeUAV5Ktvza34J84OhoAGva0cmythnZjuSkmUSi7sSJGyj7H
+         lQz3rD7EOzaKmuCUi+bi+XUPqxvIUOtDDWrisnIHNQO3A1ZRi5q2ltRqt/jBiKmhXc
+         KhDHv3cde1TW9PuskA/3YtYrgLTosUEJsOulfC3AiTcxJ0/xtgqEsWK2Up4rM+ZCd/
+         khkmw00tUWx07XG+laKvEPGNrnGkU0PsKfui1s3QPIIJLzT059cbe/j/TC9IZzrIFz
+         P7O69YhvrI2eg==
+Received: by pali.im (Postfix)
+        id BE1C1B98; Mon,  2 Aug 2021 14:50:34 +0200 (CEST)
+Date:   Mon, 2 Aug 2021 14:50:34 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Cc:     Glibc <libc-alpha@sourceware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: Document the types "struct termios" and "struct termios2"
+Message-ID: <20210802125034.gubtf24tsm7lkh3k@pali>
+References: <ef6a352d-4926-9cdc-9894-e387866a00c4@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:31
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:24:31 +0100
-Message-ID: <CAKwBCXtg5uyf7Jb2AAcE1ghxD-+sCDTGfZ6n10fsvHdbE918iA@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef6a352d-4926-9cdc-9894-e387866a00c4@gmail.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
--- 
-Dear Partner,
++ linux-serial
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
+On Monday 02 August 2021 14:38:43 Alejandro Colomar (man-pages) wrote:
+> Hi,
+> 
+> From a few patches of Pali and their subsequent discussions,
 
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
+For others, link to patch with code example:
+https://lore.kernel.org/linux-man/20210801135146.14849-1-pali@kernel.org/
 
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
+And links to other discussions:
+https://lore.kernel.org/linux-man/20210725225506.7404-1-pali@kernel.org/t/#u
+https://lore.kernel.org/linux-man/20210730105353.10424-1-pali@kernel.org/t/#u
+https://lore.kernel.org/linux-man/20210730153044.23673-1-pali@kernel.org/t/#u
 
-
-Regards :  Abdoulahi Kazim
+> it was clear
+> that those types need to be documented (the most appropriate place being
+> system_data_types(7), with link pages termios-struct(3) and
+> termios2-struct(3)).
+> 
+> The most important part (the one we had problems with) being which headers
+> should be included for each type (and for each version of the type
+> (kernel/glibc)).  That includes the recommended header, and other headers
+> that _shall_ also provide the type.
+> 
+> Is there someone that knows those types enough to write such documentation
+> and wants to do it? :)
+> 
+> Thanks,
+> 
+> Alex
+> 
+> -- 
+> Alejandro Colomar
+> Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
+> http://www.alejandro-colomar.es/
