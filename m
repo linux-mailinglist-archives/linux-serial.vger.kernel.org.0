@@ -2,87 +2,151 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3C73E00DB
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Aug 2021 14:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040C63E033C
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Aug 2021 16:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237987AbhHDMHg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Aug 2021 08:07:36 -0400
-Received: from mga09.intel.com ([134.134.136.24]:30393 "EHLO mga09.intel.com"
+        id S238785AbhHDObL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Aug 2021 10:31:11 -0400
+Received: from mga14.intel.com ([192.55.52.115]:29074 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236857AbhHDMHf (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Aug 2021 08:07:35 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213889133"
+        id S238816AbhHDOaq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 4 Aug 2021 10:30:46 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213660110"
 X-IronPort-AV: E=Sophos;i="5.84,294,1620716400"; 
-   d="scan'208";a="213889133"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 05:07:22 -0700
+   d="scan'208";a="213660110"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 07:29:34 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,294,1620716400"; 
-   d="scan'208";a="467087460"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 05:07:19 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mBFg0-0056Cy-3X; Wed, 04 Aug 2021 15:07:12 +0300
-Date:   Wed, 4 Aug 2021 15:07:12 +0300
+   d="scan'208";a="420052084"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 04 Aug 2021 07:29:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2391AB9; Wed,  4 Aug 2021 17:30:00 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-serial@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Cc:     Mark Gross <mgross@linux.intel.com>, Rob Herring <robh@kernel.org>,
         Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v1 1/5] serdev: Split and export
- serdev_acpi_get_uart_resource()
-Message-ID: <YQqC8JOfH6BqTpW6@smile.fi.intel.com>
-References: <20210803192905.72246-1-andriy.shevchenko@linux.intel.com>
- <035d2579-f64c-b5c2-45ff-4421ad7db6ca@redhat.com>
+Subject: [PATCH v2 1/2] serdev: Split and export serdev_acpi_get_uart_resource()
+Date:   Wed,  4 Aug 2021 17:29:58 +0300
+Message-Id: <20210804142959.67981-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <035d2579-f64c-b5c2-45ff-4421ad7db6ca@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Aug 04, 2021 at 10:08:01AM +0200, Hans de Goede wrote:
-> Hi,
-> 
-> On 8/3/21 9:29 PM, Andy Shevchenko wrote:
-> > The same as for I²C Serial Bus resource split and export
-> > serdev_acpi_get_uart_resource(). We have already 3 users
-> > one of which is converted here.
-> > 
-> > Rationale of this is to consolidate parsing UART Serial Bus
-> > resource in one place as it's done, e.g., for I²C Serial Bus.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Thanks, patch looks good to me:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> *for this patch*
-> 
-> We do need to talk about how to merge this series, I've
-> NACK-ed patches 3/5 and 4/5 (see my reply there) so that
-> leaves just 2/5  as depending on this one. I believe it
-> would be easiest to just merge 1/5 + 2/5 to the tree
-> which caries serdev patches, which I guess is Greg's
-> tty tree ?
+The same as for IÂ²C Serial Bus resource split and export
+serdev_acpi_get_uart_resource(). We have already a few users
+one of which is converted here.
 
-I can resend a v2 with tags and dropped mentioned patches.
-I think it will be easier to everyone to handle.
+Rationale of this is to consolidate parsing UART Serial Bus
+resource in one place as it's done, e.g., for IÂ²C Serial Bus.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+---
+v2: added Rb tag (Hans)
+ drivers/tty/serdev/core.c | 36 +++++++++++++++++++++++++++++-------
+ include/linux/serdev.h    | 14 ++++++++++++++
+ 2 files changed, 43 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index 92498961fd92..436e3d1ba92c 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -562,23 +562,45 @@ struct acpi_serdev_lookup {
+ 	int index;
+ };
+ 
++/**
++ * serdev_acpi_get_uart_resource - Gets UARTSerialBus resource if type matches
++ * @ares:	ACPI resource
++ * @uart:	Pointer to UARTSerialBus resource will be returned here
++ *
++ * Checks if the given ACPI resource is of type UARTSerialBus.
++ * In this case, returns a pointer to it to the caller.
++ *
++ * Returns true if resource type is of UARTSerialBus, otherwise false.
++ */
++bool serdev_acpi_get_uart_resource(struct acpi_resource *ares,
++				   struct acpi_resource_uart_serialbus **uart)
++{
++	struct acpi_resource_uart_serialbus *sb;
++
++	if (ares->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
++		return false;
++
++	sb = &ares->data.uart_serial_bus;
++	if (sb->type != ACPI_RESOURCE_SERIAL_TYPE_UART)
++		return false;
++
++	*uart = sb;
++	return true;
++}
++EXPORT_SYMBOL_GPL(serdev_acpi_get_uart_resource);
++
+ static int acpi_serdev_parse_resource(struct acpi_resource *ares, void *data)
+ {
+ 	struct acpi_serdev_lookup *lookup = data;
+ 	struct acpi_resource_uart_serialbus *sb;
+ 	acpi_status status;
+ 
+-	if (ares->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
+-		return 1;
+-
+-	if (ares->data.common_serial_bus.type != ACPI_RESOURCE_SERIAL_TYPE_UART)
++	if (!serdev_acpi_get_uart_resource(ares, &sb))
+ 		return 1;
+ 
+ 	if (lookup->index != -1 && lookup->n++ != lookup->index)
+ 		return 1;
+ 
+-	sb = &ares->data.uart_serial_bus;
+-
+ 	status = acpi_get_handle(lookup->device_handle,
+ 				 sb->resource_source.string_ptr,
+ 				 &lookup->controller_handle);
+@@ -586,7 +608,7 @@ static int acpi_serdev_parse_resource(struct acpi_resource *ares, void *data)
+ 		return 1;
+ 
+ 	/*
+-	 * NOTE: Ideally, we would also want to retreive other properties here,
++	 * NOTE: Ideally, we would also want to retrieve other properties here,
+ 	 * once setting them before opening the device is supported by serdev.
+ 	 */
+ 
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 9f14f9c12ec4..3368c261ab62 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -327,4 +327,18 @@ static inline int serdev_tty_port_unregister(struct tty_port *port)
+ }
+ #endif /* CONFIG_SERIAL_DEV_CTRL_TTYPORT */
+ 
++struct acpi_resource;
++struct acpi_resource_uart_serialbus;
++
++#ifdef CONFIG_ACPI
++bool serdev_acpi_get_uart_resource(struct acpi_resource *ares,
++				   struct acpi_resource_uart_serialbus **uart);
++#else
++static inline bool serdev_acpi_get_uart_resource(struct acpi_resource *ares,
++						 struct acpi_resource_uart_serialbus **uart)
++{
++	return false;
++}
++#endif /* CONFIG_ACPI */
++
+ #endif /*_LINUX_SERDEV_H */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
