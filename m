@@ -2,73 +2,154 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C833E1798
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Aug 2021 17:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102783E17FB
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Aug 2021 17:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238005AbhHEPJe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Aug 2021 11:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S242072AbhHEP3I (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Aug 2021 11:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238634AbhHEPJe (ORCPT
+        with ESMTP id S242000AbhHEP3H (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Aug 2021 11:09:34 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5CC061798
-        for <linux-serial@vger.kernel.org>; Thu,  5 Aug 2021 08:09:20 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mz5-20020a17090b3785b0290176ecf64922so15505931pjb.3
-        for <linux-serial@vger.kernel.org>; Thu, 05 Aug 2021 08:09:20 -0700 (PDT)
+        Thu, 5 Aug 2021 11:29:07 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E06AC061765;
+        Thu,  5 Aug 2021 08:28:53 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id c16so7063996wrp.13;
+        Thu, 05 Aug 2021 08:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=+MDYu2cZk5y6qEtCDaD7IWEU7wQ5JsJjonx7gGHCu64=;
-        b=aMWupFhzRx56/q3+jLQyTSAyV6LPPty7b+ITkMedQgrRO1IPO5TCbm7dQUo/9HQRGU
-         JsodQPjnyobNLMSXlaL0OIl809tguHGHrqw4xyl9cZ+g0gACrSohpbCZzfiKjfHorDtw
-         6O3AzFdaiDSjFBlLysqoh6/FijnZLEMkUiGIo/zwyPssXPuRHaMPc4TWs6g4kxHEVUOC
-         8xmrlEPa2Z/73FT6booFAx4mzvdP6EbagUSMd0VcYVqnQ+Qjo8KMXGDUdayp/Gr8rN+S
-         /GLUjhi8wBgjbBY34nWiwx2DtvnN+bFoeSudmWUDec7hFM6HJbeJH49EMvjPAAhnojJH
-         zfUA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=X8OKOFT3oxnoboikDpFfPBkWTsiFzFpBrY0QV7ZSIdQ=;
+        b=heEWAxty/xo2BtzEd8ePdoV3viVS59b8A2E1WaPZukAt1khXy8SRkSLhIOUxb3lFNZ
+         3vJXvZGKFHsPYbReQsNTtG1foFv46t01VIwhYuKRC1KuVFBs70A8+fgVweyb7NsgWmH6
+         jneC3t8Qous4WYgwoGTJa8BJjucfG0pBKcDvI6apYyPwuAQceGC62Dvg9RvZKbjW7H5J
+         Qd+O89XaOQoR12nZ+iPjMGY2a0rNngVTzyZcfDjHQ2XIUqIiQzDNS3zVkiYbjULz+7zH
+         eOCUiVVeEZY9Fv58mfG8eXXij5vB7mqRz7+BY1ebQkyuRwn4QmDOBO+7uBJUu0RR3Ol2
+         9JEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=+MDYu2cZk5y6qEtCDaD7IWEU7wQ5JsJjonx7gGHCu64=;
-        b=gU4bOcpj/nnTXUlpI+DZ74UFC254CVqdoIj/BIBnizHfKs4VRXGScl8A2eHOiPxNCN
-         fBoaLfcna2CvgTACrJH1KQGMXGnVPvGasVV7+shOg6IIzmt3gwFfMdE7GsBHJfsBh+iH
-         5CT7+/vJqu9fqxRJhM8TLpF/aJ4xf+SJzvAcxyTtBVX/Ew+5dQaAqLWi1SowN792aJeU
-         mEL8VFEMvGzfWcdbZBXJKfyXq7lI8nsB5mdTgPFGCK1Q1+vVECpP+i/xcuP92BhGPutH
-         V+ZnkOUKqk6czInraWJ3l+2pZsrFJjCwhIPSSzA3VQZoUL0s09X2dSXcP5JSwfLrMH0D
-         E4XQ==
-X-Gm-Message-State: AOAM533OI4gDzUdhlN6n24wba1vQI9ljMaTa24X2MS+8RfYL8qQX8Irz
-        ju5TQv8MmfmpnLukoYRWySmMiGYZnmsWN2nEb00=
-X-Google-Smtp-Source: ABdhPJwNoLaBdpTIR4J+5Hj2CvfC1U9aB94KY52PH6TkIKxcO/SkNNdafp0wAsoaem4q68O1Kwn1pD5QZRdvGufR12k=
-X-Received: by 2002:aa7:8750:0:b029:3bb:d071:5777 with SMTP id
- g16-20020aa787500000b02903bbd0715777mr5526794pfo.47.1628176159614; Thu, 05
- Aug 2021 08:09:19 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=X8OKOFT3oxnoboikDpFfPBkWTsiFzFpBrY0QV7ZSIdQ=;
+        b=YWS0zngavy/gsZ7SDh2XnSIDgsi7Mtqef944adPgEksPJi/huhsHbilb7GP9VMgrAk
+         lwbcWtIUcpj35gppn89vVUsKmPY1ME9luxa++Cbv7p47H5VMKX+GvHMVwvSO79DPB9GJ
+         RC0RNKHmwfNOrjA7D848wT8Ovei7cq7ki6E8SgC/c65HvxXFlPVayQHBlRuXWXOxknfJ
+         hyqiYmafq8emtp6cqepqoprCG53ODW9uuFt86shMGtiVbw30ny8C/RTLH4H7kAVZQ+88
+         H0vrBp5h7NwIQRgSfkqpU6eXpuj/pFmrp6VfDItKnL1ti92TgJPs5YksblWEHVfUNdnd
+         XJhg==
+X-Gm-Message-State: AOAM533ukckhXkiVFZfIE3m4b5IubXtHle+OnhxjsF9OQfCqctPuPHm+
+        ZRNNxzK3ZJE9TgyHcgScuJ1oE0FDeqA=
+X-Google-Smtp-Source: ABdhPJx9ToecQZyJLBXXbrTgJ8Kz3sCOOp9GOOUjOblBQh3OV22rD/eWZusjr29frE56RF3D8lC58g==
+X-Received: by 2002:adf:d84b:: with SMTP id k11mr5870488wrl.135.1628177331836;
+        Thu, 05 Aug 2021 08:28:51 -0700 (PDT)
+Received: from [10.8.0.10] ([195.53.121.100])
+        by smtp.gmail.com with ESMTPSA id o24sm8099331wmm.37.2021.08.05.08.28.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Aug 2021 08:28:51 -0700 (PDT)
+Subject: Re: [PATCH v3] ioctl_tty.2: Add example how to get or set baudrate on
+ the serial port
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        libc-alpha@sourceware.org,
+        "G. Branden Robinson" <g.branden.robinson@gmail.com>,
+        linux-man@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20210730095333.6118-1-pali@kernel.org>
+ <20210801135146.14849-1-pali@kernel.org>
+ <20210804220808.cetleob6dldpfnjk@pali> <YQt8g+ECel20fA/g@kroah.com>
+ <20210805082243.qciylqnt5g74if7i@pali> <YQuhl18CgJ2+LUPW@kroah.com>
+ <20210805084410.sb5lybdri6r7t2da@pali> <YQumV3qljhFSau0y@kroah.com>
+ <20210805095100.n2qkm3kdiucwt6jd@pali>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Message-ID: <418a281b-441d-66fc-6929-5d29fafc459b@gmail.com>
+Date:   Thu, 5 Aug 2021 17:28:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Reply-To: mrakainkarim7@gmail.com
-Sender: linusgood455@gmail.com
-Received: by 2002:a17:90a:ac09:0:0:0:0 with HTTP; Thu, 5 Aug 2021 08:09:19
- -0700 (PDT)
-From:   Mr Akain Karim <aeyuhlmy739@gmail.com>
-Date:   Thu, 5 Aug 2021 08:09:19 -0700
-X-Google-Sender-Auth: Thf_RnD_49wrnP7dRXwOQcUSmf0
-Message-ID: <CAP9cbUSzo1-HgiPHaCpniAzCaRxuZ_CH42xC4nOmV-yxXRRuFQ@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210805095100.n2qkm3kdiucwt6jd@pali>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hi Pali,
+
+On 8/5/21 11:51 AM, Pali Rohár wrote:
+>>>> Also, you forgot a license for this code, that is required if you want
+>>>> people to use it...
+>>>
+>>> Hm... I do not see any license in other manpage examples. Does not apply
+>>> for it global license defined in ioctl_tty.2 file?
+>>
+>> That does not mean you do not need it.
+
+I don't know what is the status of the current code examples in terms of 
+licensing.
+
+I thought I had seen an SPDX license identifier in one of them some time 
+ago, but now I can't find it.
+
+Technically, the pages have a license at the top of each file, which 
+isn't printed on the rendered output (the license text doesn't require 
+so) (see that text below).
+
+If you want a different license for your example (let's say you want it 
+BSD for example), I guess you could add an SPDX line at the top of the 
+example for simplicity.
+
+But if your code example adheres to the same license as the rest of the 
+page, I guess you don't need to do anything in your patch.
+
+But I'm not sure at all; maybe Michael can tell you more about it.
+
+> 
+> I will wait for Alejandro's reaction on this topic as I think he wants
+> to have all manpages consistent and with the same style, headers, etc...
+> 
+
+Thanks!
+
+Alex
+
+
+---
+$ head -n 26 man7/system_data_types.7
+.\" Copyright (c) 2020 by Alejandro Colomar <colomar.6.4.3@gmail.com>
+.\" and Copyright (c) 2020 by Michael Kerrisk <mtk.manpages@gmail.com>
+.\"
+.\" %%%LICENSE_START(VERBATIM)
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one.
+.\"
+.\" Since the Linux kernel and libraries are constantly changing, this
+.\" manual page may be incorrect or out-of-date.  The author(s) assume no
+.\" responsibility for errors or omissions, or for damages resulting from
+.\" the use of the information contained herein.  The author(s) may not
+.\" have taken the same level of care in the production of this manual,
+.\" which is licensed free of charge, as they might when working
+.\" professionally.
+.\"
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\" %%%LICENSE_END
+.\"
+.\"
+
+
+
 -- 
-*Compliment of the day,I am Mr. Akain Karim,  I Have a Business Proposal of
-$10.5million for you and I  was compelled to use this medium due to the
-nature of this project, I have access to very vital information that can be
-used to transfer this huge amount of money, which may culminate into the
-investment of the said funds into your company or any lucrative venture in
-your country. If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the sharing
-percentage.Upon receipt of your reply on your expression of Interest.I will
-give you full details on how the business will be executed and I am open
-for negotiation.Thanks for your anticipated cooperation.Best RegardsMr. 	
-Akain Karim*  Please feel free to reach me on my e-mail:mrakainkarim7@gmail.com
+Alejandro Colomar
+Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
+http://www.alejandro-colomar.es/
