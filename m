@@ -2,66 +2,118 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7C63E3498
-	for <lists+linux-serial@lfdr.de>; Sat,  7 Aug 2021 12:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAD23E3535
+	for <lists+linux-serial@lfdr.de>; Sat,  7 Aug 2021 14:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbhHGKJP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 7 Aug 2021 06:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S232177AbhHGMAq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 7 Aug 2021 08:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbhHGKJL (ORCPT
+        with ESMTP id S230012AbhHGMAp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 7 Aug 2021 06:09:11 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C4C0617A0
-        for <linux-serial@vger.kernel.org>; Sat,  7 Aug 2021 03:08:33 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id h17so6543535qta.11
-        for <linux-serial@vger.kernel.org>; Sat, 07 Aug 2021 03:08:32 -0700 (PDT)
+        Sat, 7 Aug 2021 08:00:45 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708D6C0613CF;
+        Sat,  7 Aug 2021 05:00:27 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id w17so20187347ybl.11;
+        Sat, 07 Aug 2021 05:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=aiYv+ghkj1wcr5KlnL1ML71lfnXzfmxAeT1E5sMi1Qw=;
-        b=S3l4T9e2tP5pVS7ZuYdu+1Y0qbKkJYnejhs8S6oYuW6LYwueyDMIGlxr2QviX908pZ
-         9SPZJLnYHgJvYg3PLTI5fWJK5TkMxVO2qBa2FrvvgMmkTyowY9FDC29BPjsdhbPhxQLa
-         tYnwYex5seRxFiLy8EoSSBUznJBTlHeb/Bz5niZL/Il13kvDN2O2xOxWpnGH2uLwHscT
-         DoTFOxHdTymP4E3acGtQxboa5XPRRUPIM6mlAfcr7/ekHDJNJv4uG6dy2JtyqWn88ow0
-         hsiNGB55/AYboSktIHGsl5ebXsVnqzSR6R9ebR+QIoCvocI54gGy0g8VDA3p78wJouiN
-         BLYA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WyWRBH02aF7TMZK2H9iKEqjuVSj2aT5mi1GkBNRCyKg=;
+        b=QOdR5x9JTDfThKVhuyhEYPReV0+hyqKytp6bhrDU9jtJxybQG/OIAaA3oWXzAmhUeI
+         OpdNdHL2cTWOdcoGJdjl6SMiapPShk5dqCtzePXNHkSDDTyDYEUVEMRWoeWDVMRgEvWT
+         F3WsjtH95W2GEqcxmYbu5Nki6iHjaP/wAYl8B41Jx1LBzEzxM7r/El9yGNDidzRbvvqa
+         Kmis+CIiKYZTjEfn/MyNVZZE/sJlnMzcMNu5e2sZtEh+M3pQUSfAAN/s+5gpulRT28gX
+         WpDFxD9aYBck7JqESW1IHpFohPSZLTlNkFRqH4KUtyrj9Pxrh4lb4vBKQjKvBi3tS5E+
+         KYxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=aiYv+ghkj1wcr5KlnL1ML71lfnXzfmxAeT1E5sMi1Qw=;
-        b=ntmn31DrEV1PowEK4iFUaZTzLSNqqY7ySqNWQ+G5ErmXrSdrD4Vr117+tvV+j5YX0L
-         FC4B1m6vkrtqLSE8b8V417Key6D9GREh4rqmDcXWIftuN8kqYRUIQQ4DpRCm3X2Din6u
-         1FBV3dagW2O1vAG/Q8p/ZsmU4rfW/BZKdfew54JsNhVPPpMRf2XvcpbzcIl7DRD2bjsB
-         jC/jT3mrTkRW/NSk4GHRo2zdC2gg8BsF86BTv87CGlmbLGjBOCk0GiUeI86SyI76JvIV
-         UreLykDdGB12Wjfj7Xe8UHhpD+N1Q2MIcASgsLM+tBs+sgwq9Y5T8OegACHVdjAh6Pnp
-         ROMA==
-X-Gm-Message-State: AOAM533NwOufhGVd7Z/NCbB/GB1PIgKxyAamEzyvF06X1sXHArMLkhlj
-        cOX1Fzj9KRAILe7h6GBNJSAhVHY9kNv9k1N1ri4=
-X-Google-Smtp-Source: ABdhPJxgyuRRXsSMd0R6a3b0A3hI9pouiu6GtIO5W43J3txGTJtR81T+4t2OwT3S4z6DuFUIj52qGnoLd2PfTJY5Mrs=
-X-Received: by 2002:ac8:6611:: with SMTP id c17mr12282490qtp.392.1628330911954;
- Sat, 07 Aug 2021 03:08:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WyWRBH02aF7TMZK2H9iKEqjuVSj2aT5mi1GkBNRCyKg=;
+        b=FENVn+x4TjHqCmYz0t/+7EfVYf1QGqh+zYpVEYmMGPTqnHOOisyXnxzs+6hlVBhG+N
+         QQph2pPY6TkLAa3m8sU5mMDcy4AbNmu15kNxTPMh6DRzmYDaBbUc85RmuCV1GgVPqryW
+         EgWH6cNXsXTLSpg6B9wVdvY2oBP9UeTHGYzrneA/3AB/2K+eaIJpiLLBRcK3tG7HJVWy
+         PmCOFC3lrqXyvRa0Wpq4I6Uqs1KnDmVexInUNu2TpoP7L058z7s7FQ5UCxjlV4esc5Xh
+         WYznK39bNlKg0rsWYXzKfSaqIiE+k6l8K5fA5SOb3CL1CbUEZEhfI1nTa5rZz4m7xdaV
+         hF5g==
+X-Gm-Message-State: AOAM532Vo5TEnmV+KE0rkq3yYrSNcJSnBO2C/YT8KQjFaTRcaDHjTde0
+        nUc2OVB7nPEWNSFFrrQgxPso62OY9pkddZvu+yA=
+X-Google-Smtp-Source: ABdhPJxo9qHswzoJFxioC74Rd4uuv/McBZ+hRPGpGsGEvfuOE6rZWY4LuFWwzY6Vg59fOtg8kqf5oNFF1j4ZtwtEzDU=
+X-Received: by 2002:a25:1546:: with SMTP id 67mr19373700ybv.331.1628337626600;
+ Sat, 07 Aug 2021 05:00:26 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:622a:112:0:0:0:0 with HTTP; Sat, 7 Aug 2021 03:08:31
- -0700 (PDT)
-Reply-To: ssaar0101@gmail.com
-From:   Medinat Sherrif <do348911@gmail.com>
-Date:   Sat, 7 Aug 2021 10:08:31 +0000
-Message-ID: <CA+WgU6p7R+UtP_5FzWNKmG6hkPWxb7Kfk5rN4WNbAMA9+mot=Q@mail.gmail.com>
-Subject: Good morning,
-To:     undisclosed-recipients:;
+References: <20210807091927.1974404-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210807091927.1974404-1-u.kleine-koenig@pengutronix.de>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Sat, 7 Aug 2021 12:59:50 +0100
+Message-ID: <CADVatmO7Wtc8+4mzorrmcwKv2QXg579avynK==9D1Dqz9PHaJw@mail.gmail.com>
+Subject: Re: [PATCH v2] parisc: Make struct parisc_driver::remove() return void
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        alsa-devel@alsa-project.org, Corey Minyard <minyard@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-scsi@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings from here.
+On Sat, Aug 7, 2021 at 10:19 AM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The caller of this function (parisc_driver_remove() in
+> arch/parisc/kernel/drivers.c) ignores the return value, so better don't
+> return any value at all to not wake wrong expectations in driver authors.
+>
+> The only function that could return a non-zero value before was
+> ipmi_parisc_remove() which returns the return value of
+> ipmi_si_remove_by_dev(). Make this function return void, too, as for all
+> other callers the value is ignored, too.
+>
+> Also fold in a small checkpatch fix for:
+>
+> WARNING: Unnecessary space before function pointer arguments
+> +       void (*remove) (struct parisc_device *dev);
+>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> (for drivers/input)
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+> changes since v1 sent with Message-Id:
+> 20210806093938.1950990-1-u.kleine-koenig@pengutronix.de:
+>
+>  - Fix a compiler error noticed by the kernel test robot
+>  - Add Ack for Dmitry
+>
+>  arch/parisc/include/asm/parisc-device.h  | 4 ++--
+>  drivers/char/ipmi/ipmi_si.h              | 2 +-
+>  drivers/char/ipmi/ipmi_si_intf.c         | 6 +-----
+>  drivers/char/ipmi/ipmi_si_parisc.c       | 4 ++--
+>  drivers/char/ipmi/ipmi_si_platform.c     | 4 +++-
+>  drivers/input/keyboard/hilkbd.c          | 4 +---
+>  drivers/input/serio/gscps2.c             | 3 +--
+>  drivers/net/ethernet/i825xx/lasi_82596.c | 3 +--
+>  drivers/parport/parport_gsc.c            | 3 +--
 
-My name is Medinat. M  Sherrif, I have something very confidential to
-discuss with you in my next mail. Reply to me with your private email
-address for confidential discussion.
+Acked-by:  Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 
-Best Regards.
-Medinat. M  Sherrif,
+
+--=20
+Regards
+Sudip
