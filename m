@@ -2,70 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCAE3E7ED2
-	for <lists+linux-serial@lfdr.de>; Tue, 10 Aug 2021 19:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926C53E8F37
+	for <lists+linux-serial@lfdr.de>; Wed, 11 Aug 2021 13:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbhHJRf1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 10 Aug 2021 13:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbhHJReh (ORCPT
+        id S231758AbhHKLBM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 Aug 2021 07:01:12 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:53742 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231143AbhHKLBM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 10 Aug 2021 13:34:37 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194AEC0619C5
-        for <linux-serial@vger.kernel.org>; Tue, 10 Aug 2021 10:33:15 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id a7so30245408ljq.11
-        for <linux-serial@vger.kernel.org>; Tue, 10 Aug 2021 10:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=RsiBBdA9QKOcTCF5lGXKVsjmClQ3sMV8nYRHi5UzQ6RFRdaZ6t981j56diJ7q3WLiT
-         dSrogDmRt6kwHS+J+pcIdphvlu5Vk62bOJudqb0dzEOf5Tr6sAVMWTY2NbEn++ZnSdaf
-         F4yj6h4F7VBk6uVCXN4p2StSiBpSckLhr0NJoCtUTvVh+gCrpSdvA2dss+nT8Q4XWg+b
-         4x9fMuBGMminOSzPCK8njOsWexpWsfb2omBFXa3GLhHqzUauC1r8oyB3fDvFuiS7qNjT
-         fDqijYMWxjmP3EeBvtWaIUY7Z5YEma/9OhqmI5Ya7ZKqW/5hzlkm8xAdNsqyzESz/5Xj
-         5sZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=UdAU92qd7H7PNn2Wv4m1LPukPJrHpg3qeZPFZZ77Bh7aQxEg4onBbCYrGMqAhKe9Sg
-         cFFt2NZggbmTi5Rb36rmV7nhCv43xph8QyB1m/+/PMFS/ezZpUMFpxurhrf4PW1Zw7c5
-         GcUnCcnSODOkmTb2DePTWdM4bCe2+uQAXfT8ujHTVR+y+YJHL6tK8yxSJR3maELBRgEb
-         d10ntJkYyg0In/TKoTvnEYQqrdlp2KECfM1/rW8CGPh/V84c4EEHYMLvl3Qzu14g1xKn
-         PWSo22ZDbp/wsYzCHoD3KtO3xEKDz32cpCLipQSuUkwB/ugWJD/4miW7iGAcFAtSMhr6
-         D2LA==
-X-Gm-Message-State: AOAM532kIhXdxyXDomKM8t4GYu+uAuFXH1EeDkg7DHZVjfiACvWaX1nW
-        t/D7KcLwscuGJXvFcs8ebksrWCfxEO3ZYzuW7ck=
-X-Google-Smtp-Source: ABdhPJw+sC+pBQw0G+0ULVvin/r/jCVVb1V7XUqN67UCoWrnBzyIXnaSzK5br1SZrCupI/L0LIZWgMfi7vhpZK+Wcm0=
-X-Received: by 2002:a05:651c:32c:: with SMTP id b12mr1745558ljp.198.1628616792032;
- Tue, 10 Aug 2021 10:33:12 -0700 (PDT)
+        Wed, 11 Aug 2021 07:01:12 -0400
+X-Greylist: delayed 574 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Aug 2021 07:01:11 EDT
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.11]) by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46113ab96d18-63d46; Wed, 11 Aug 2021 18:51:02 +0800 (CST)
+X-RM-TRANSID: 2ee46113ab96d18-63d46
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[223.112.105.130])
+        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee66113ab91f32-3a776;
+        Wed, 11 Aug 2021 18:51:01 +0800 (CST)
+X-RM-TRANSID: 2ee66113ab91f32-3a776
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com
+Cc:     linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: [PATCH] serial: stm32: fix the conditional expression writing
+Date:   Wed, 11 Aug 2021 18:51:36 +0800
+Message-Id: <20210811105136.25392-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-Received: by 2002:ac2:5d2e:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:33:10
- -0700 (PDT)
-Reply-To: majidmuzaffar8@gmail.com
-From:   Majid Muzaffar <ing.abdullabin.rishid.me@gmail.com>
-Date:   Tue, 10 Aug 2021 20:33:10 +0300
-Message-ID: <CAFsu49XXzY7ugKhGzJm5OPKe2LG1R35c-Dkp83VgS3+u27y=sQ@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Salam alaikum,
+In the function stm32_usart_init_port, intent of the code maybe when
+irq returns a value of zero, the return should be '-ENODEV'. But the
+conditional expression '? :' maybe clerical error, it should be
+'?:' to make '-ENODEV' work.
+But in fact, as the example in platform.c is
+  * int irq = platform_get_irq(pdev, 0);
+  * if (irq < 0)
+  * return irq;
+So the return value of zero is unnecessary to check, at last remove
+the unnecessary '?: -ENODEV'.
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 3% ROI per annum. The terms are very flexible and interesting.
-Kindly revert back if you have projects that needs funding for further
-discussion and negotiation.
+Co-developed-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+ drivers/tty/serial/stm32-usart.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index ef793b3b4..090822cd1 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1034,8 +1034,8 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+ 	int ret, irq;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq <= 0)
+-		return irq ? : -ENODEV;
++	if (irq < 0)
++		return irq;
+ 
+ 	port->iotype	= UPIO_MEM;
+ 	port->flags	= UPF_BOOT_AUTOCONF;
+-- 
+2.20.1.windows.1
 
-investment officer
+
+
