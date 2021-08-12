@@ -2,68 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 111D03E94C1
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Aug 2021 17:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2583EA04E
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Aug 2021 10:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbhHKPmy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Aug 2021 11:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S231520AbhHLIK4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Aug 2021 04:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbhHKPmy (ORCPT
+        with ESMTP id S234888AbhHLIKz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Aug 2021 11:42:54 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F293C061765;
-        Wed, 11 Aug 2021 08:42:30 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id u1so2307716wmm.0;
-        Wed, 11 Aug 2021 08:42:30 -0700 (PDT)
+        Thu, 12 Aug 2021 04:10:55 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B067C061765;
+        Thu, 12 Aug 2021 01:10:30 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id a8so8089744pjk.4;
+        Thu, 12 Aug 2021 01:10:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=aPvMyuJPOs08K3NAudcw29XHwX8GhXseP7ht1DAKTPwOU/C8/LINDUxBEgYS2ZEOfR
-         g0d0+RCWtmr7WH6toPzpnEwMBxS5imDbP5zPObFn49kEsfZEStK3iIci3m1jMdL60i8T
-         AE5tsOBZfUqYiIjev8zP9CpnIwhTSHpuwD44sYZaBstgcHD5TheBIN2+cA9A1kYm1QG3
-         m5hnjUGR5Juyxr1evhmd3TCnkK9bP+jQdzv5giJWWst1SlQZZLGEYXbR7BJ/QLnXfjBR
-         yQW0rr5PFgc+D0ktuEUhkzUfX4KWXuxTu6NBx03ZAmwvC66nHaH6uRqldsZ8KyL05mCi
-         F69g==
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=wA2EylzKX5tfpad+tzO/G4l9L4yhGUfFiyAU73+HP3E=;
+        b=jytMxyA9OfnNO3v+z5cr6c2MoZg3Us6gVzi4atAwoYGQjBZAE8OQ+6MD3uiQlj8qhH
+         +PaRT7FBHiEKPLEZMdofIl2LbzfhsnzpJReir6L5CKXevb8Y+ifvhAMoM6Wf+jrmZOVZ
+         aB4J/yxlb53Pr+dnpVaf7hB9L7ujkrz1UILrrSmHPmz3CZ6CCvp6kde64oniPzaRsJNN
+         1rS8j/ZGoUhw9t7GMpsRmX8pUA+s0MNkHE0tfIH+G8CPdC1vVjsIt7in3beoY7f73cZR
+         0DCLQDGuqPuOt7KA6kkdjo0NN9SLQKGtX8YVuiqap/o2YnSzIa35SRuKrj0Bvds+vFJy
+         MrKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=liMX6B6iurSWGblAaw/eQjjswfr1jyQT0XNgIH/FXnMXg+QISb4J75qiti2ucrvP0J
-         LyjLL5P4rpkL/HIpYawVodxypvnNGVsG/kGw/8gnK/yk57i1BNmlRadmaYxG1XRXa7yP
-         vbcgoxYXk6ToFynGB99J/fS6g3uIqhCWytrobklGgc+rpjaD8Y/XrNwbKiliUcQmM4cu
-         B7uye7alWSquOyuK8qH0Notyro+6NRbK9E+NK95/6icuhmspc2s+AhfztnL2QS1LECRx
-         yeTo+bb7a8CTbUUA5otFTW8BA+1rSH2yYIxFBIHyHx9Pwo4lur293pS0KA1ASud3849H
-         NURw==
-X-Gm-Message-State: AOAM532bXqs2cyK2FAOmNp614XVPMLn9PLPLJj9jwUJa8ikphLS1jLL3
-        PU3Er+NxeQ0hACFv8SI6wC0=
-X-Google-Smtp-Source: ABdhPJxhHq6kXRw/oO4VuI5QDgrC5sZPSC3ZAgx49e+iMMqciTgSniQTnZhbuKrYlSDpb9hRyWzo6g==
-X-Received: by 2002:a1c:3c8b:: with SMTP id j133mr703977wma.9.1628696548848;
-        Wed, 11 Aug 2021 08:42:28 -0700 (PDT)
-Received: from [192.168.1.70] ([102.64.209.185])
-        by smtp.gmail.com with ESMTPSA id r18sm9485707wrt.76.2021.08.11.08.42.22
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 11 Aug 2021 08:42:28 -0700 (PDT)
-Message-ID: <6113efe4.1c69fb81.ffd8e.2a83@mx.google.com>
-From:   Vanina curth <curtisvani0038@gmail.com>
-X-Google-Original-From: Vanina  curth
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=wA2EylzKX5tfpad+tzO/G4l9L4yhGUfFiyAU73+HP3E=;
+        b=sUGfE0nhB3F7GW2H6G3vXehgtw7//oGTjhX0S4vy/HH24irU0eJFn7s8Im6yi1pu1q
+         iYDXtNZsVkT9cLOpmbuyISVDilY8l4NM0mFCEdUZ5p0LBH6Q/L1zlRNqM7f6mdklkeOA
+         p1iz6lRdJvefwWve4aJFUOWewXhADsryU3kAMT9g4PyXkA4rcbTsjHYVHhOwb5X6WGje
+         +AmyVZBvHMeo5DDlRQux5qKSKIvW0WXoM9Gvo8uzDZ7G0rhbrFYB1YZbHb9DJ6ivdBIu
+         SBNZVY2MRgWXyiOUWlAUKXywQD0A5YBqROw76LghTFNyPIbIDf3fWjCEFi3aQHjxfFFX
+         cxKA==
+X-Gm-Message-State: AOAM533aG5RhEq1gY2k/3uovFsovQqYJHJa6gfm7naJiZIimM0YatJ9p
+        3nTP2SPaFkzpHZCyllwddHY=
+X-Google-Smtp-Source: ABdhPJyWVRQ71v8WMSr+n3GTebTul9FD7s7NiNuCOmKl8aFK9g24hVHxgaxR4eTjUtZtNBKkLQNUwA==
+X-Received: by 2002:a63:e708:: with SMTP id b8mr2855779pgi.192.1628755830216;
+        Thu, 12 Aug 2021 01:10:30 -0700 (PDT)
+Received: from [10.157.0.42] ([85.203.23.10])
+        by smtp.gmail.com with ESMTPSA id k4sm2632680pgh.9.2021.08.12.01.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Aug 2021 01:10:29 -0700 (PDT)
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "baijiaju1990@gmail.com" <baijiaju1990@gmail.com>
+From:   Tuo Li <islituo@gmail.com>
+Subject: serial: sh-sci: Is there a potential buffer underflow in
+ sci_dma_rx_complete()?
+Message-ID: <0778c492-984e-b09e-cb1c-750c8256c346@gmail.com>
+Date:   Thu, 12 Aug 2021 16:10:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Dear
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Wed, 11 Aug 2021 15:42:12 +0000
-Reply-To: curtisvani9008@gmail.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-How are you? I'm Vanina. I'm interested to know you and I would like to kno=
-w more about you and establish relationship with you. i will wait for your =
-response. thank you.
+Hello,
+
+Our static analysis tool reports a possible buffer underflow in sh-sci.c 
+in Linux 5.14.0-rc3:
+
+The variable active is checked in:
+1304:    if (active >= 0)
+
+This indicates that it can be negative.
+If so, a possible buffer underflow will occur:
+1312:    desc = dmaengine_prep_slave_sg(s->chan_rx, &s->sg_rx[active], 
+1, ....);
+
+However, I am not sure whether &s->sg_rx[active] will be used in 
+dmaengine_prep_slave_sg() if the
+function sci_dma_rx_find_active() called at Line 1303 returns a negative 
+value (-1).
+
+Any feedback would be appreciated, thanks!
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+
+Best wishes,
+Tuo Li
