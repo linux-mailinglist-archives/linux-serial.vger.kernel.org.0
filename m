@@ -2,147 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7603EB902
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Aug 2021 17:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44453EB948
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Aug 2021 17:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242360AbhHMPTE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 13 Aug 2021 11:19:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:54806 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242390AbhHMPRn (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 13 Aug 2021 11:17:43 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 950201042;
-        Fri, 13 Aug 2021 08:17:16 -0700 (PDT)
-Received: from [10.57.36.146] (unknown [10.57.36.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDA023F718;
-        Fri, 13 Aug 2021 08:17:15 -0700 (PDT)
-Subject: Re: [PATCH v6] arm pl011 serial: support multi-irq request
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Bing Fan <hptsfb@gmail.com>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1628825490-18937-1-git-send-email-hptsfb@gmail.com>
- <YRYc9nCcpGOs4SaJ@kroah.com> <9c3a4336-b6c4-d96e-9a9d-8001dddcee20@gmail.com>
- <YRYqq5Cgqy3975e1@kroah.com> <f3d4ba49-0cf8-9e92-77c1-ea8964b4e6b9@arm.com>
- <YRaKDxUq5fifGJ75@kroah.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <2051ad6b-ba8b-8ced-b893-8e24680f800c@arm.com>
-Date:   Fri, 13 Aug 2021 16:17:10 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S241094AbhHMP3E (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 13 Aug 2021 11:29:04 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:7611 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241408AbhHMP3D (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 13 Aug 2021 11:29:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1628868516; x=1660404516;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=SqazGllWDPr0Qlv37WVWkdOkuMsFftvHhqgfFk44AX0=;
+  b=Nymb5HbsotOrcrKKnIpckB042SiyQkUV+v79GKDDkrjARESNsu5PDYPH
+   YbxS+KJRkF09zxZx5JTYkjut+LDhXprHWsBGnSJsVotNQN0OEY7wNQxeg
+   5UJ4aUVGVKpnHYSjQy30bqM4964kIErQQmIu99D0sz+hpvHKGanf8Xn/k
+   0=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Aug 2021 08:28:35 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2021 08:28:35 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.858.15; Fri, 13 Aug 2021 08:28:34 -0700
+Received: from [10.111.172.98] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.15; Fri, 13 Aug
+ 2021 08:28:33 -0700
+Subject: Re: [Internet]Re: [PATCH v5] arm pl011 serial: support multi-irq
+ request
+To:     gregkh <gregkh@linuxfoundation.org>,
+        Robin Murphy <robin.murphy@arm.com>
+CC:     =?UTF-8?B?dG9tYmluZmFuKOiMg+WFtSk=?= <tombinfan@tencent.com>,
+        Bing Fan <hptsfb@gmail.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <7535ae2f-6a12-8203-0498-8ac85ab0d9a7@arm.com>
+ <290c01ec-173f-755f-788e-2a33a69586e8@quicinc.com>
+ <e98962f3-9232-4abf-ec27-a7524a9e786d@arm.com>
+ <bddf2712-72f4-2e20-da17-33b3de08f769@gmail.com>
+ <0819592c-1baa-e98d-9118-5abde8b8c562@quicinc.com>
+ <67cd6c830e33491e99ea4d2480f4a89d@tencent.com>
+ <09918b566884413898f63b92ddd037a0@tencent.com>
+ <0206c94d-c91b-b7da-8132-d06e23c9d964@quicinc.com>
+ <YRaJVZOJMKtAM8Sl@kroah.com> <0f77be70-08fd-6fdd-227d-611c01c54788@arm.com>
+ <YRaMQL+YOaky+x9Q@kroah.com>
+From:   Qian Cai <quic_qiancai@quicinc.com>
+Message-ID: <4cc762c8-ba6f-12ba-35f0-3367be8c1fb5@quicinc.com>
+Date:   Fri, 13 Aug 2021 11:28:32 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <YRaKDxUq5fifGJ75@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YRaMQL+YOaky+x9Q@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanexm03g.na.qualcomm.com (10.85.0.49) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2021-08-13 16:04, Greg KH wrote:
-> On Fri, Aug 13, 2021 at 03:08:48PM +0100, Robin Murphy wrote:
->> Hi Greg,
->>
->> On 2021-08-13 09:17, Greg KH wrote:
->>> On Fri, Aug 13, 2021 at 03:56:01PM +0800, Bing Fan wrote:
->>>>
->>>> 在 8/13/2021 15:19, Greg KH 写道:
->>>>> On Fri, Aug 13, 2021 at 11:31:30AM +0800, Bing Fan wrote:
->>>>>> From: Bing Fan <tombinfan@tencent.com>
->>>>>>
->>>>>> In order to make pl011 work better, multiple interrupts are
->>>>>> required, such as TXIM, RXIM, RTIM, error interrupt(FE/PE/BE/OE);
->>>>>> at the same time, pl011 to GIC does not merge the interrupt
->>>>>> lines(each serial-interrupt corresponding to different GIC hardware
->>>>>> interrupt), so need to enable and request multiple gic interrupt
->>>>>> numbers in the driver.
->>>>>>
->>>>>> Signed-off-by: Bing Fan <tombinfan@tencent.com>
->>>>>> ---
->>>>>>     drivers/tty/serial/amba-pl011.c | 39 +++++++++++++++++++++++++++++++--
->>>>>>     1 file changed, 37 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
->>>>>> index e14f3378b8a0..eaac3431459c 100644
->>>>>> --- a/drivers/tty/serial/amba-pl011.c
->>>>>> +++ b/drivers/tty/serial/amba-pl011.c
->>>>>> @@ -1701,6 +1701,41 @@ static void pl011_write_lcr_h(struct uart_amba_port *uap, unsigned int lcr_h)
->>>>>>     	}
->>>>>>     }
->>>>>> +static void pl011_release_multi_irqs(struct uart_amba_port *uap, unsigned int max_cnt)
->>>>>> +{
->>>>>> +	struct amba_device *amba_dev = container_of(uap->port.dev, struct amba_device, dev);
->>>>>> +	int i;
->>>>>> +
->>>>>> +	for (i = 0; i < max_cnt; i++)
->>>>>> +		if (amba_dev->irq[i])
->>>>>> +			free_irq(amba_dev->irq[i], uap);
->>>>>> +}
->>>>>> +
->>>>>> +static int pl011_allocate_multi_irqs(struct uart_amba_port *uap)
->>>>>> +{
->>>>>> +	int ret = 0;
->>>>>> +	int i;
->>>>>> +	unsigned int virq;
->>>>>> +	struct amba_device *amba_dev = container_of(uap->port.dev, struct amba_device, dev);
->>>>>> +
->>>>>> +	pl011_write(uap->im, uap, REG_IMSC);
->>>>>> +
->>>>>> +	for (i = 0; i < AMBA_NR_IRQS; i++) {
->>>>>> +		virq = amba_dev->irq[i];
->>>>>> +		if (virq == 0)
->>>>>> +			break;
->>>>>> +
->>>>>> +		ret = request_irq(virq, pl011_int, IRQF_SHARED, dev_name(&amba_dev->dev), uap);
->>>>>> +		if (ret) {
->>>>>> +			dev_err(uap->port.dev, "request %u interrupt failed\n", virq);
->>>>>> +			pl011_release_multi_irqs(uap, i - 1);
->>>>>> +			break;
->>>>>> +		}
->>>>>> +	}
->>>>>> +
->>>>>> +	return ret;
->>>>>> +}
->>>>> This function looks identical to pl011_allocate_irq(), so what is the
->>>>> difference here?  Why is this still needed at all?  What does it do that
->>>>> is different from pl011_allocate_irq()?
->>>>
->>>> The v6-patch is based on master of
->>>> git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git, not tty-next.
->>>
->>> Always submit patches based on tty-next if you want them accepted into
->>> that tree.
->>>
->>>> As below, the pl011_allocate_irq function supports single irq request only,
->>>> which different from pl011_allocate_multi_irqs.
->>>>
->>>> static int pl011_allocate_irq(struct uart_amba_port *uap)
->>>> {
->>>>       pl011_write(uap->im, uap, REG_IMSC);
->>>>
->>>>       return request_irq(uap->port.irq, pl011_int, IRQF_SHARED, "uart-pl011",
->>>> uap);
->>>> }
->>>
->>> Ok, but that does not reflect what is in my tree to be merged for
->>> 5.15-rc1.  What is wrong with the code in there that is incorrect and
->>> needs to be changed?
->>
->> As reported by Qian Cai, it blows up on ACPI-based systems by assuming
->> port.dev is an amba_device when in fact in that situation it's a
->> platform_device. If you're able to drop the current patch from your tree
->> that would probably be the best thing to do for the moment.
+
+
+On 8/13/2021 11:14 AM, gregkh wrote:
+>> AFAICS commit b0819465be8b in linux-next still results in
+>> amba_device-specific code being called from sbsa_uart_startup() and
+>> sbsa_uart_shutdown(), which is what blows up.
 > 
-> I have not seen any such bug report.
+> Ick,  ok, can someone send me a revert with this information in it
+> please?
 
-It's the thread on the v5 patch that you've just replied to ;)
-
-> If something needs to be reverted in linux-next, (i.e. in my tty-next
-> branch), please let me know.  Ideally by sending a pathc to do so...
-
-Since I'm only really involved here off the back of a drive-by review 
-comment, I'll leave that up to Qian.
-
-Cheers,
-Robin.
+I guess Bin won't be around to response in his timezone on Friday, so
+I'll send a revert shortly.
