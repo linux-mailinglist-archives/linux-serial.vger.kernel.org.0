@@ -2,90 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 776AD3EDAD1
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Aug 2021 18:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3893D3EE219
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Aug 2021 03:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbhHPQWy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Aug 2021 12:22:54 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:14360 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbhHPQWy (ORCPT
+        id S235894AbhHQB0V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 16 Aug 2021 21:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233417AbhHQB0U (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Aug 2021 12:22:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1629130933;
-    s=strato-dkim-0002; d=fpond.eu;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=C/0nH6ifDkBh3BoEywEeuFHDG3Pap+r2x1iLKRjufJY=;
-    b=WBHN1wfnxzhSul4MSrFgFpTK6ZD20uOL8Fwepb6IsX+WpTP7SqlfEfcSZBdrVKs20e
-    bHtiipPQw+NH5XOG759rOCR/xO/Au3oLSCEPQptB62JCYJzn5r/sDpdH/qWXHiC+KhAe
-    LRadz4ElN3PbzZtz14K1xKEKMpeES+EX+mCZTfjoehHDQUA82vEKCAWaKtkRoJoOG1rN
-    g1v/6RUQsL73xdiCfoKSteFjq8KkOCSlAdcByk9vuYcdbr4TkjiCXGtwJ1neO+NTQLjy
-    GQRQUse9WKoQuZkBUWVSsLLHrDU0C37BNnmw0BPjne0O+cMBBOb1sM1VLHVBJX00BqzP
-    4bBA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73dmm4I5W0/AvA67Ot4fvR92tEa+WwYg=="
-X-RZG-CLASS-ID: mo00
-Received: from gummo.local
-    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id v006c2x7GGMCmQO
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 16 Aug 2021 18:22:12 +0200 (CEST)
-From:   Ulrich Hecht <uli+renesas@fpond.eu>
-To:     linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     wsa@kernel.org, geert@linux-m68k.org,
-        yoshihiro.shimoda.uh@renesas.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        Ulrich Hecht <uli+renesas@fpond.eu>
-Subject: [PATCH] serial: sh-sci: fix break handling for sysrq
-Date:   Mon, 16 Aug 2021 18:22:01 +0200
-Message-Id: <20210816162201.28801-1-uli+renesas@fpond.eu>
-X-Mailer: git-send-email 2.20.1
+        Mon, 16 Aug 2021 21:26:20 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92664C0613C1
+        for <linux-serial@vger.kernel.org>; Mon, 16 Aug 2021 18:25:48 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id w17so36396025ybl.11
+        for <linux-serial@vger.kernel.org>; Mon, 16 Aug 2021 18:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=iELgCLbQqv5tFsHgMTPz+ef0nc8wwD8GBHZ8BVFl4tE=;
+        b=PPWE12a+tIHVgCAaRkZ+BDhW5jkCA1NX7R8gL+wZdXYFuknkdIHIsM/MccOm+LyS2b
+         oX7EO2ddOAdOyb6jM4D49Rtcbps1iY6wnDxaERT5UmoOvuAH1zmoEGfuQmUMxrnlxLnm
+         tM+ZmUxM7CBZW30GSNyVnfl/CWhB9DMGTDQ+cOkNujBgKmc94HGsHsRvOBVn6spZFL7W
+         /G84NivGGvJ4F3o+3jai9Rep1CCrRjbG95Zt4KDEboJs6jp89MJkcfU/oSvFSKkP9eP9
+         yZyHdbgOj8jRqOfDjTwUI+u/W87LQjPs2iQ8lILXidw/oCX4pSclXNDGaSLSlz/cQET5
+         WEMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=iELgCLbQqv5tFsHgMTPz+ef0nc8wwD8GBHZ8BVFl4tE=;
+        b=qIdVL5w1h9KVTsdCTJV+cgcWCgO2PR8u4nwuyqhRqYuyOkZ55zG/gI5Y4defje+XsR
+         xYPbB12uQQGE/CAWF7E8jUg1JhAd5IBZCxrJ7Pm3hq91hoE8QSkovE+tgetc+U5cu0sn
+         i/QSma25L9zWKq3tPIjdr7EzRoJbutthVY99UCDXK/INlDR6zDirio30jNXMMvC4uY/M
+         //m+ezt4W66/3jzTr7IpadH1CCj8GuLKpj5tyzgV38GK69d3KUOBgG6YM2KyrskIp+Cd
+         vDFLdQDkxAAauRX/PdujcX34l0XndId0lZAqdtR3R3swXLbZ5WFt6G+s6t5zN2cs2aN3
+         UCeg==
+X-Gm-Message-State: AOAM533QSyvpmZ5XlHsupoloJQQRcYEiLXVz95ER4MDE3VOb4/H0xnu0
+        fSqZN5SKzsyJ/L1QaxCNlkmtH4y/ntR53PMzNns=
+X-Google-Smtp-Source: ABdhPJzGw6/+cLFQsN5Q15Z+3GpIxc0OFdZrRDPZpItgTYyIGDDeq2baWAk3rlhlc/76dCF6w+MP8pYq+AomhBoCoGM=
+X-Received: by 2002:a25:ab45:: with SMTP id u63mr1174083ybi.500.1629163547936;
+ Mon, 16 Aug 2021 18:25:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7000:5e1b:0:0:0:0 with HTTP; Mon, 16 Aug 2021 18:25:47
+ -0700 (PDT)
+Reply-To: charleswjacksonjr94@outlook.com
+From:   "Charles w.jackson" <powellilluminati666@gmail.com>
+Date:   Mon, 16 Aug 2021 18:25:47 -0700
+Message-ID: <CAC=uWm6Ei7qZvc_=9a-2oGVDtPoBGxucnyOLz5Cf4EcE58fi_g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This fixes two issues that cause the sysrq sequence to be inadvertently
-aborted on SCIF serial consoles:
+--=20
+Hallo lieber Beg=C3=BCnstigter
 
-- a NUL character remains in the RX queue after a break has been detected,
-  which is then passed on to uart_handle_sysrq_char()
-- the break interrupt is handled twice on controllers with multiplexed ERI
-  and BRI interrupts
+Eine Million zweihunderttausend Dollar (1.200.000.000,00 USD) wurden gespen=
+det
+Charles.w.jackson mit einem Power Ball-Jackpot von 344,6 Millionen
+US-Dollar, den er
+in den USA gewonnen. Gehen Sie zur=C3=BCck, um weitere Informationen zu
+Anspr=C3=BCchen zu erhalten:
+charleswjacksonjr94@outlook.com.
 
-Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
----
- drivers/tty/serial/sh-sci.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+    Es wurde festgestellt, dass, wenn Sie diese E-Mail in Ihrem Spam
+finden, es bitte wissen
+Es wird durch ein schwaches Netzwerk verursacht, das auf Ihre Antwort warte=
+t
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 07eb56294371..89ee43061d3a 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1758,6 +1758,10 @@ static irqreturn_t sci_br_interrupt(int irq, void *ptr)
- 
- 	/* Handle BREAKs */
- 	sci_handle_breaks(port);
-+
-+	/* drop invalid character received before break was detected */
-+	serial_port_in(port, SCxRDR);
-+
- 	sci_clear_SCxSR(port, SCxSR_BREAK_CLEAR(port));
- 
- 	return IRQ_HANDLED;
-@@ -1837,7 +1841,8 @@ static irqreturn_t sci_mpxed_interrupt(int irq, void *ptr)
- 		ret = sci_er_interrupt(irq, ptr);
- 
- 	/* Break Interrupt */
--	if ((ssr_status & SCxSR_BRK(port)) && err_enabled)
-+	if (s->irqs[SCIx_ERI_IRQ] != s->irqs[SCIx_BRI_IRQ] &&
-+	    (ssr_status & SCxSR_BRK(port)) && err_enabled)
- 		ret = sci_br_interrupt(irq, ptr);
- 
- 	/* Overrun Interrupt */
--- 
-2.20.1
-
+Herr Charles.w.jackson.
