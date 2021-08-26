@@ -2,301 +2,167 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8FA3F8EAA
-	for <lists+linux-serial@lfdr.de>; Thu, 26 Aug 2021 21:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA6F3F8EB4
+	for <lists+linux-serial@lfdr.de>; Thu, 26 Aug 2021 21:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243394AbhHZTXL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 26 Aug 2021 15:23:11 -0400
-Received: from mail-eopbgr60074.outbound.protection.outlook.com ([40.107.6.74]:17536
+        id S230122AbhHZT0z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 26 Aug 2021 15:26:55 -0400
+Received: from mail-eopbgr60045.outbound.protection.outlook.com ([40.107.6.45]:5604
         "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243391AbhHZTXK (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 26 Aug 2021 15:23:10 -0400
+        id S230008AbhHZT0y (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 26 Aug 2021 15:26:54 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UPNBd07lyBy0F3mtS700q8cSDT92gqSfByDWix9lJe2ULto91savPmFjhj+vetSlDatx2YZ8oxxLp0ZCs7ijLJocrdo4DgbO76eYTR6E/Jdo8cyzVRBn4+3PHOwMUQkg09GiBJcQGbQgaSSvFhYKX7uVA4qNEWz7ldoNnDq71P3WzJumItH45aCn208KeAdbyNiDk7jaiEVsem8enZAaxJZcJApFYF5MGxZxxF57WjEkV1xfTu+B3x/ahW3pX7b7e5jh4ohfB6vGn9rzgKKwz4VD+OFjte2cSimH82C/wlA/AO8Y+K4rHb472cFg2npmh/acJADxbYIKykwfRiyaSg==
+ b=KBVE1pPGKmTbMOQmYWja3Idewd/DMwjcSE2b6LtvP4oeVMUmzJObIBxwnxA7F41VE7KOe5YvGxDS/lQRU3/EW5r31yJfxCmeL/CpdKKMdll72I8IjKmyOOYrujLjwM/P64MZ2hk3bDpaxR0UnuSFALvoxpjAFpCHfj+2616q6sBrp19pTUwn3g8HpX9py8BjOJDgSh+pLPWoOhVQ48khwJT2NwuOHIn2yzGTt/bXG28vbYEmcJ73Tz+VR/TCfN8yw9gvh6dMbbzzn32H31GAEGjjlk3QQOmnFbNMjXQ3dzrXSyqrZaYXDZyHqv+msyUzzYO/MMPk75GbOB2RXZYltg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+++k6yptvMRCw1rPf0eQVBc8YD/HmfwtiBLN60iOdtM=;
- b=eaXgk4opYx4WxgMWDCgINvW8WSAicctOLWBtA2URBFt4h723zdfslU1FbGXplQVOyPlFx36qVX6pCH0Fs8OLdmifotPIM/2a7pUgW0FBxsCqZskt72JcAY6pP8iOLd5LhBqT1Irabwh8RXxwXhN/qAiRgp8Asnx3uhDS8ogZ4yKv7cZedWRs+ORbIvMt4UCZrRU01chDngabNWErmmv+zsG8JUPhHLq58/C6BMHQpKzgr149uVX/a6yfsiQfpN1aAqGgsRHmns0a/HCdxZAJXKgI6jjkKmSr3rm6AykQFA9AyE2F+/mlX2QxrrRPRR0YZ0wM6h+Ik1bJTV+TPXmyqA==
+ bh=4f8MZasYe4nhS3nwiJw1d2V4mgHTZqg0+gKaX673WJU=;
+ b=ePb5EDhgWlzCAmaGwhAvVcMldYVV5YpSQPRVGQKZ+iGkrD3fZqacGnHVHcYGUe2qv3NSlBl6gCU55Ca4sI8frim78wistpfzh7BE8AxzD1f7Rc0BrRDycuQTZOV7cHa2+XdJhd9tJln0GLZuqyVUAq/0PFTHWk+ZovxqJmBGbOQmMuo6nBMncnqSKOV/zy6hPYz15muLKkpGxdaU7+YPQOFrq8xoRwFZKnQ/egkrEUpSnPse1stP9gBs4xApHjDFdDkkT4BQ7vjOCECyoH/wqBI1VuCQKyFInp1Ytf5LAIlTmJAo6On4ilcnX+o3gUYvpewxpE1h2VT34EidX8sSNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
  dkim=pass header.d=seco.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=secospa.onmicrosoft.com; s=selector2-secospa-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+++k6yptvMRCw1rPf0eQVBc8YD/HmfwtiBLN60iOdtM=;
- b=gZoUpeXQYa8oVVqNLMz7pWQamzuvfNDpWzDgw1I/mhc1OajrTb81+E8sqIAuBAKlDlN19lHVur6SERGBRhjfaQQ33ZQx4uAyNVBJNaxMaP0LMx88NmYyQlTjUtJajClxvCLMyxvMXXACBaLDAyGWjBuIHh6M369a4z97q9q8ATQ=
-Authentication-Results: barco.com; dkim=none (message not signed)
- header.d=none;barco.com; dmarc=none action=none header.from=seco.com;
+ bh=4f8MZasYe4nhS3nwiJw1d2V4mgHTZqg0+gKaX673WJU=;
+ b=L+93JAFK3k0y2aiMwBe4TxCZbTugCoOcwTWsURWppijCSIDfUZRl1kk5UN1zZC+dVq2shjaLQcey6KtrFi7fdzWdbv0qVNzdPLxa64qt/bzZn89T58bZZBM748K0EaUaRDg8tH/SRi75irYvQcqj5NPRrQQ5dHhlYrF/BmVzTW0=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=seco.com;
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
  by DB7PR03MB4859.eurprd03.prod.outlook.com (2603:10a6:10:33::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.20; Thu, 26 Aug
- 2021 19:22:18 +0000
+ 2021 19:26:00 +0000
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::dc6c:815b:2062:d1f1]) by DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::dc6c:815b:2062:d1f1%7]) with mapi id 15.20.4436.025; Thu, 26 Aug 2021
- 19:22:18 +0000
+ 19:26:00 +0000
 From:   Sean Anderson <sean.anderson@seco.com>
-To:     Peter Korsgaard <peter.korsgaard@barco.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        linux-serial@vger.kernel.org
-Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     linux-serial@vger.kernel.org,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Peter Korsgaard <peter@korsgaard.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
         Michal Simek <michal.simek@xilinx.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
         Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v3 4/4] tty: serial: uartlite: Prevent changing fixed parameters
-Date:   Thu, 26 Aug 2021 15:21:54 -0400
-Message-Id: <20210826192154.3202269-5-sean.anderson@seco.com>
+Subject: [PATCH v2] tty: serial: uartlite: Use read_poll_timeout for a polling loop
+Date:   Thu, 26 Aug 2021 15:25:49 -0400
+Message-Id: <20210826192549.3203071-1-sean.anderson@seco.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210826192154.3202269-1-sean.anderson@seco.com>
-References: <20210826192154.3202269-1-sean.anderson@seco.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0046.namprd13.prod.outlook.com
- (2603:10b6:208:257::21) To DB7PR03MB4523.eurprd03.prod.outlook.com
+X-ClientProxiedBy: BL1PR13CA0207.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::32) To DB7PR03MB4523.eurprd03.prod.outlook.com
  (2603:10a6:10:19::27)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from plantagenet.inhand.com (50.195.82.171) by BL1PR13CA0046.namprd13.prod.outlook.com (2603:10b6:208:257::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.8 via Frontend Transport; Thu, 26 Aug 2021 19:22:17 +0000
+Received: from plantagenet.inhand.com (50.195.82.171) by BL1PR13CA0207.namprd13.prod.outlook.com (2603:10b6:208:2be::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.9 via Frontend Transport; Thu, 26 Aug 2021 19:25:59 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5ddc284c-042f-4b1c-4871-08d968c6d1c1
+X-MS-Office365-Filtering-Correlation-Id: b183ccc8-b3e4-4f3a-d139-08d968c75627
 X-MS-TrafficTypeDiagnostic: DB7PR03MB4859:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB7PR03MB4859A8DF7759BD603DDFE01696C79@DB7PR03MB4859.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <DB7PR03MB48592226C38A20741CBB385596C79@DB7PR03MB4859.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1148;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nRHoR1hSHEaaKmX1na6l3VqvPCqbSnH1BHfqiFL3VaLeMMB35uRhUisjfUWLD8hwXbWLHc/DiI+knMQRdJ16yfAjIEoxyNXMKoVnAsOn/ou8es4+f++pFwX2frd2kDqEAKs5gUlVSyD9pmfn+y6UoSzVRv+sB7kyXI8h2ST0x2xk+17PRnWnRA5fWwKqxBcwGt4zV7DanoYcuZFXr61YAidsqAxnflkYh5OQx9rlSA5R4CqDC3PiwlGNS17h2T1thbva2Nh4plB6P3AV9OW+Mx0P63t0IeEi2M9uLRSv0jMEtldqrEYNHDijJWN4uzZBvg4oJK+rY8M5qUdggrFDr7JzSliYBtssJH/4R4kr1ivSLgzw4ejrYr8lXIMrZS/c+lCQDGLNU5BVIIFxSaVaQq/UoJiJG9jlHL6bjrfUYPm9hmAv46SDpHe4DvWFYcEkokvG9xYOyo31OXCF5ZB5Oszt0Xk7LZGC2Mao3LCQaWq85cTl8WffxnjK3YJxDOv/XT2UE8MEM7cc/DWz/IMHh/YuYljQZYt9O7Ah1LMOXutv7bZFXMgL4rdpRNy5wwpYKAAeBqFliiF1PWMU97wrmrPWldAfzu9lfZdlCPRXS0kyKitRrc41tlFvoeQaYF/YSFycjzbZXAwbtGWADrNnIWIyF21RRQdeL7djSbeR6ENaKANd9cxgKG36S4gMgbVl0VGs5+CP/wkIgrPKWt2RAQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(366004)(39840400004)(396003)(136003)(86362001)(54906003)(110136005)(478600001)(6512007)(316002)(83380400001)(5660300002)(6506007)(1076003)(186003)(8936002)(8676002)(26005)(66556008)(2616005)(4326008)(6666004)(66476007)(52116002)(107886003)(44832011)(66946007)(38350700002)(38100700002)(2906002)(956004)(36756003)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: aZagetzt6OqyyoufZpyLwPSnO46gyMP+Ea/c1J0hIx7RV2K2KJMWHogZ4sLMRo/lQvRFagEl0N9Gy1dsIPrMsDwk2nRxnT7D1/h2UcX7Eim7Tm7++K9aMV8dVLytFUarVm4ICTKx9JpgZ5VVF8drWuDYIH7ZVWHXj088rbjYLSNPpKiI6cNKuSLfBOPOo4+SAx8bC9p+++jFrJrmyGwnhIE0JZepLrBTbxbRQQ+QicvdxrRlnPodLQqyZE74XeFsrOfU89Lj3vwSyoO28cwfpNaJzNaTvznuVpWoBuRvxUCozH7tgzqeUmAA2ExsIkAkEkL+ke88SCy5S7lvgvxz15zH2lEtIgkyqADQH6XP+ufO9EimTYIGKncGUwJ+p9VWguZdaaK/a0EdErAxNf0SJSnIYADy70eiWoV7au5oMABVpgNZLEnwaRiaqVbLQnBtjnSJyYiaBil2d9flzvi0L9Tg4ADNnFs79CotljaDwWFMwxXCulhmSlfPGK2I4PlV+SGDQTtAygOp7O26h7ldYtyyaRicVIetoJ4KfJxcoMrRiHI61BISTso8f116KMpsq8FdB5dO+BlelwY+EWuNe3LsWfrwOw62vghqkKcN0lWO3yz5N1vUg9UbC6jgyWQV81nSHbBnMcwkBFYv50mgvAj7pqsCUT7qTzv/GWP+lCYyIhfnmONz3GXzEA4UaPuP0KhfX/nkeOYJ/Ml5Jsh0aA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(396003)(39830400003)(366004)(346002)(376002)(52116002)(107886003)(44832011)(66946007)(66476007)(66556008)(2616005)(26005)(4326008)(6666004)(956004)(36756003)(6486002)(38100700002)(38350700002)(2906002)(316002)(83380400001)(6512007)(478600001)(54906003)(110136005)(86362001)(6506007)(1076003)(8676002)(186003)(8936002)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9rba6ZBJqaN3xEeH1CbmOrGiz7vqkt5Jf37gO6wRkoEnYaHDoojcMyUBi/Vk?=
- =?us-ascii?Q?Si1atC6NayH0z5xoipQ6vYH+ym9m/cpCscmvFOVRwE1Rvj3+guuER2gYWipK?=
- =?us-ascii?Q?H7+SfhVWZYGAz/37G53ekwZj5ztxN07h3hPwb8wtq/FwS+AjFQkSTnY+nDI+?=
- =?us-ascii?Q?8q58ZhNhq6SidiEILmnhyLUhc/zWpZ3/rKP9qO/QuTNWR762J8UNDlh0O2mF?=
- =?us-ascii?Q?3OPAJrGoK0mq36UHbOlK/EUZ6+XDU+TuiGQx/eqqxuXPYgxd35S9qCQCPM8Q?=
- =?us-ascii?Q?hEBkUmN34RijfxkfHOuCl2cjn5aKdSAiovI1QO/I95zkbQi6LJFo0P2gAbux?=
- =?us-ascii?Q?g32mY1Vov9ELarHERVf8YXM0XhOtysjU/afVEgoyufrBm/BI47J/kWwXYEex?=
- =?us-ascii?Q?X0w9ywvqXGnAWNpXzdwSDrS86d/mA7ahF9ufif3yL0TljfaahmcVNRwcgDhV?=
- =?us-ascii?Q?OH01LHpT84PhNpxuDkGA1boL4VoAGFbvzHO3Y2nhpdraAaaRYrT2LJlkoLYp?=
- =?us-ascii?Q?pIGLU44ZYeQ1TQgLnXxxz067vnOzwto6gFbw/WC9OaJ9/OMZS1ZmJ9C/u53Q?=
- =?us-ascii?Q?XakwzBAju2TrCoJJsu29NemH0SV3za+mCwVIW/MTcZWvSEi5urA0VXNN9XwW?=
- =?us-ascii?Q?jyB9Ns7FNNKymkZ+rpYEKfPjPU8VqIiwoxDnSiVBXqUgwSbk5tynMu8kUsKG?=
- =?us-ascii?Q?Yeh25ZM3GYf0uVWIZpVrzhZuiSODfOsCROZDDOA0ZMbsajah2MX4fIduFagw?=
- =?us-ascii?Q?/gNueos9ujlqaZbYVaV7P6vn4NnV503if890hZHi/QZ7xEb7DWpeWuArt4yx?=
- =?us-ascii?Q?PDKglA5ZIVzwQUKNPqqSjsBQmZvDaKkc/4LvdpDjY1LA7oFOBkYeRtQVSbF0?=
- =?us-ascii?Q?5xX8kRg+0+s93s5VSE9ArIWHyriM7tQs+xakoCT3+GDDPeLNIg0E1NusewRO?=
- =?us-ascii?Q?BWTWYRGRB1p7mvgWDZZOPxkzDIu2R2xXjllry/DyEKeQ5YXBrWtX4T1pL4TJ?=
- =?us-ascii?Q?61t5wgNOjeszSLRqbHxAupGXKJvtiEMGz1Hurq0Yop4ATvQoq6AWI+ZzpREF?=
- =?us-ascii?Q?IvZzfS6einHSJONug49nif10NakI4C6tv7D/6mKCDgUa475R0up7OE54fsH3?=
- =?us-ascii?Q?5WwZ9HuZWjr8aIXm69GKojqmafNiEf4yRUYS738hXnjRwTgWD7S8zvH9Lkwz?=
- =?us-ascii?Q?dOmejuM09eBNxX8y/a1uM24tFa9hPq7ZWFMmXJWNLTZpg+6BiNEO0220t2rB?=
- =?us-ascii?Q?jlWlYa84V0RablocrB7Yjnea4zY4iHsy1RbxeVoyE7gI/GcBUTKwz2pyncCs?=
- =?us-ascii?Q?9Mm61mTpOBmk5Py7pQSvrUgP?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EVmLEkJiOr7vBQfwqVZlTgAyGZoBfU+JyWJe4bA3jvXB32e3AO64USVnv+ne?=
+ =?us-ascii?Q?/7Vpqp5x+3Ic9mRXkx+WnDu6VYYsRo4Ngpxq98/YqJ6M2BRj7xYo1VCZNrWo?=
+ =?us-ascii?Q?NGzFsnmI0iRR5HtnzOFYlT0136E+HDbMxPWxgS7nhPQrPoD2UUKH5VGaYzeb?=
+ =?us-ascii?Q?69f8+4gSkEn8QK4I4dw1YCjOcV3yMYw0Qn9WIkD0+MrsTwAa39ozxvkiT24h?=
+ =?us-ascii?Q?+WHc+cwlnPkGY2JHXwXNqL5ki07UO+i6mlXKr2gXmD0YWbXSwWRrXNWbAjaY?=
+ =?us-ascii?Q?TMKjUrapG/k59yoq2yi/JfU+SYa1CPxVOOewiLUb5Ij9hYd8KBbGKqXYUlCr?=
+ =?us-ascii?Q?CWBqkYz+H8cdeTUfZ+8gF69a8mmemNqeUacDTPp7o9Boim7PX8a69pGI8cn3?=
+ =?us-ascii?Q?cCwMtxh+b1k+eTeUnzFmrvYcQxDA+7dlnsrAwTy48NO3dywNwYuRb6200S2G?=
+ =?us-ascii?Q?+EQiNlsj+XkK0pzYq4rjOnOmltZaNaVJWsxPpgNmkb8uXAPlw1S8QWhXpAJW?=
+ =?us-ascii?Q?UMEYeonwRlixM5Jdj9v0sUR5S8YdC8C7wKM7KWTujv6Es65TbI625g9IXxCz?=
+ =?us-ascii?Q?nV2VE2GWJrpvHXo36mJFaxltI5FmxNIGIGb1XZIepHMRTdg6Syzl81ykwV/p?=
+ =?us-ascii?Q?pAeLc014RmYJRi7w7rRLfJNEG7zE5xVjUMhKlaDi1Rmx5eLId/DbFFVcRdbY?=
+ =?us-ascii?Q?Pqm3pFRmHubbtGJxWk/a3EMs4gc+SIK5W10mdlbM5eR3NhVhVrXB+B6gSnZH?=
+ =?us-ascii?Q?xlViedVWKCPs04BdlIY3OS4a41YGm2WwWcbhvPFK3tJBoqBpk0g34YvRh2cP?=
+ =?us-ascii?Q?PCY/yeWkHsIQ2hgIt+7PpliJWoyaepaiyn7IlLCGx7Lq7VnbpsFzbl3/Qh4U?=
+ =?us-ascii?Q?AJfSYhy4qEJKguq12TV2y9MFNwdgFudPKlMOvOMB0CaeQAUhBJlPWZwDygGV?=
+ =?us-ascii?Q?x09NmT/lMZ4GirSCTBvOc6JdPh8e6xwt2s8r9zRocxOWXwTgbNmRD6EGu4Fs?=
+ =?us-ascii?Q?6rUHf2IgTNc6u6DCcKxmWT2eE71uPoneakVDq1gML37JagjyslXhLhxxRvto?=
+ =?us-ascii?Q?Z1E2hdi4pZDcxKLb4at0y53xEMlhg2olX9PtbDzhwTnLw+Eknab1aNBQdly3?=
+ =?us-ascii?Q?yqltrpN/4QWIHetRS56vodhRWonFVMq0a/s6KvR5PvyFIrRCpLRGHtKObtuv?=
+ =?us-ascii?Q?VzOCVLX33YmRunKRkza4H9RYlT3R9HpMLV50pXR1a4/xX7Kw0RIeJlGrcgq0?=
+ =?us-ascii?Q?VH/yDGpKHXPr3YrHfHOLG+hnWOZ1/aByzWjm5o+0mP3UqNAFdJIvWi1M9LWx?=
+ =?us-ascii?Q?GU2C3A/qUM+rAa5S30YkyMhz?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ddc284c-042f-4b1c-4871-08d968c6d1c1
+X-MS-Exchange-CrossTenant-Network-Message-Id: b183ccc8-b3e4-4f3a-d139-08d968c75627
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2021 19:22:18.3293
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2021 19:26:00.6764
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I3/Bb0Vk/iFYcb9i9aCkJpBP6a1KddC2jSWEFPIZsum+I3rb7jnnC2yap3c8N5WG3zPjNtM/bpffK/cQipr26w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: GhZ8iwemCihtXoWIToTQ71UKMs+AAcLOijRR4oXO118IizloLXA1G3QAY2IuMbVQsvt28U0ybLeuwjHThvNO6A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB4859
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This device does not support changing baud, parity, data bits, stop
-bits, or detecting breaks. Disable "changing" these settings to prevent
-their termios from diverging from the actual state of the uart.
-
-In order to determine the correct parameters to enforce, we read the
-various new devicetree parameters to discover how the uart was
-configured when it was synthesized. The defaults match
-ulite_console_setup. xlnx,use-parity, xlnx,odd-parity, and
-xlnx,data-bits are optional since there were in-tree users (and
-presumably out-of-tree users) who did not set them.
+read_poll_timeout was recently introduced, and can be used to simplify
+our console polling loop. This results in a slight reduction in code.
+early_uartlite_putc can't get the same treatment, because it can be
+called before udelay is set up.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 ---
 
-Changes in v3:
-- Remove warnings about unsupported termios
-- Set defaults for xlnx,data-bits and xlnx,use-parity
-
 Changes in v2:
-- Compare the baud computed with uart_get_baud_rate to pdata->baud,
-  instead of just checking c_cflag. This will catch anything that messes
-  with ispeed and ospeed.
-- Don't bother trying to set the initial termios. Instead, just skip
-  warning if old is NULL.
-- Because we no longer use uart_set_options, just convert the devicetree
-  properties directly to clflags.
-- Merge with [PATCH 4/5] ("tty: serial: uartlite: Initialize termios
-  with fixed synthesis parameters") to make it clearer what the
-  properties we read are being used for.
+- Elaborate commit message
 
- drivers/tty/serial/uartlite.c | 91 ++++++++++++++++++++++++++++++-----
- 1 file changed, 80 insertions(+), 11 deletions(-)
+ drivers/tty/serial/uartlite.c | 18 +++++-------------
+ 1 file changed, 5 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index f42ccc40ffa6..0bea3866bfb8 100644
+index f42ccc40ffa6..106bbbc86c87 100644
 --- a/drivers/tty/serial/uartlite.c
 +++ b/drivers/tty/serial/uartlite.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/platform_device.h>
- #include <linux/module.h>
-+#include <linux/bitfield.h>
- #include <linux/console.h>
- #include <linux/serial.h>
- #include <linux/serial_core.h>
-@@ -60,9 +61,18 @@
- static struct uart_port *console_port;
- #endif
- 
-+/**
-+ * struct uartlite_data: Driver private data
-+ * reg_ops: Functions to read/write registers
-+ * clk: Our parent clock, if present
-+ * baud: The baud rate configured when this device was synthesized
-+ * cflags: The cflags for parity and data bits
-+ */
- struct uartlite_data {
- 	const struct uartlite_reg_ops *reg_ops;
- 	struct clk *clk;
-+	unsigned int baud;
-+	tcflag_t cflags;
- };
- 
- struct uartlite_reg_ops {
-@@ -116,6 +126,8 @@ static inline void uart_out32(u32 val, u32 offset, struct uart_port *port)
- 
- static struct uart_port ulite_ports[ULITE_NR_UARTS];
- 
-+static struct uart_driver ulite_uart_driver;
-+
- /* ---------------------------------------------------------------------
-  * Core UART driver operations
-  */
-@@ -303,7 +315,12 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
- 			      struct ktermios *old)
+@@ -17,6 +17,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+@@ -448,24 +449,15 @@ static const struct uart_ops ulite_ops = {
+ static void ulite_console_wait_tx(struct uart_port *port)
  {
- 	unsigned long flags;
--	unsigned int baud;
-+	struct uartlite_data *pdata = port->private_data;
-+
-+	/* Set termios to what the hardware supports */
-+	termios->c_cflag &= ~(BRKINT | CSTOPB | PARENB | PARODD | CSIZE);
-+	termios->c_cflag |= pdata->cflags & (PARENB | PARODD | CSIZE);
-+	tty_termios_encode_baud_rate(termios, pdata->baud, pdata->baud);
+ 	u8 val;
+-	unsigned long timeout;
  
- 	spin_lock_irqsave(&port->lock, flags);
- 
-@@ -326,8 +343,7 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
- 			| ULITE_STATUS_FRAME | ULITE_STATUS_OVERRUN;
- 
- 	/* update timeout */
--	baud = uart_get_baud_rate(port, termios, old, 0, 460800);
--	uart_update_timeout(port, termios->c_cflag, baud);
-+	uart_update_timeout(port, termios->c_cflag, pdata->baud);
- 
- 	spin_unlock_irqrestore(&port->lock, flags);
+ 	/*
+ 	 * Spin waiting for TX fifo to have space available.
+ 	 * When using the Microblaze Debug Module this can take up to 1s
+ 	 */
+-	timeout = jiffies + msecs_to_jiffies(1000);
+-	while (1) {
+-		val = uart_in32(ULITE_STATUS, port);
+-		if ((val & ULITE_STATUS_TXFULL) == 0)
+-			break;
+-		if (time_after(jiffies, timeout)) {
+-			dev_warn(port->dev,
+-				 "timeout waiting for TX buffer empty\n");
+-			break;
+-		}
+-		cpu_relax();
+-	}
++	if (read_poll_timeout_atomic(uart_in32, val, !(val & ULITE_STATUS_TXFULL),
++				     0, 1000000, false, ULITE_STATUS, port))
++		dev_warn(port->dev,
++			 "timeout waiting for TX buffer empty\n");
  }
-@@ -532,8 +548,6 @@ static int ulite_console_setup(struct console *co, char *options)
- 	return uart_set_options(port, co, baud, parity, bits, flow);
- }
  
--static struct uart_driver ulite_uart_driver;
--
- static struct console ulite_console = {
- 	.name	= ULITE_NAME,
- 	.write	= ulite_console_write,
-@@ -756,18 +770,73 @@ static int ulite_probe(struct platform_device *pdev)
- 	struct uartlite_data *pdata;
- 	int irq, ret;
- 	int id = pdev->id;
--#ifdef CONFIG_OF
--	const __be32 *prop;
- 
--	prop = of_get_property(pdev->dev.of_node, "port-number", NULL);
--	if (prop)
--		id = be32_to_cpup(prop);
--#endif
- 	pdata = devm_kzalloc(&pdev->dev, sizeof(struct uartlite_data),
- 			     GFP_KERNEL);
- 	if (!pdata)
- 		return -ENOMEM;
- 
-+	if (IS_ENABLED(CONFIG_OF)) {
-+		const char *prop;
-+		struct device_node *np = pdev->dev.of_node;
-+		u32 val = 0;
-+
-+		prop = "port-number";
-+		ret = of_property_read_u32(np, prop, &id);
-+		if (ret && ret != -EINVAL)
-+of_err:
-+			return dev_err_probe(&pdev->dev, ret,
-+					     "could not read %s\n", prop);
-+
-+		prop = "current-speed";
-+		ret = of_property_read_u32(np, prop, &pdata->baud);
-+		if (ret)
-+			goto of_err;
-+
-+		prop = "xlnx,use-parity";
-+		ret = of_property_read_u32(np, prop, &val);
-+		if (ret && ret != -EINVAL)
-+			goto of_err;
-+
-+		if (val) {
-+			prop = "xlnx,odd-parity";
-+			ret = of_property_read_u32(np, prop, &val);
-+			if (ret)
-+				goto of_err;
-+
-+			if (val)
-+				pdata->cflags |= PARODD;
-+			pdata->cflags |= PARENB;
-+		}
-+
-+		val = 8;
-+		prop = "xlnx,data-bits";
-+		ret = of_property_read_u32(np, prop, &val);
-+		if (ret && ret != -EINVAL)
-+			goto of_err;
-+
-+		switch (val) {
-+		case 5:
-+			pdata->cflags |= CS5;
-+			break;
-+		case 6:
-+			pdata->cflags |= CS6;
-+			break;
-+		case 7:
-+			pdata->cflags |= CS7;
-+			break;
-+		case 8:
-+			pdata->cflags |= CS8;
-+			break;
-+		default:
-+			return dev_err_probe(&pdev->dev, -EINVAL,
-+					     "bad data bits %d\n", val);
-+		}
-+	} else {
-+		pdata->baud = 9600;
-+		pdata->cflags = CS8;
-+	}
-+
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!res)
- 		return -ENODEV;
+ static void ulite_console_putchar(struct uart_port *port, int ch)
 -- 
 2.25.1
 
