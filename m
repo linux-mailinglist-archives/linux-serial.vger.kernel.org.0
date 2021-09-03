@@ -2,92 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBB93FE207
-	for <lists+linux-serial@lfdr.de>; Wed,  1 Sep 2021 20:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141603FF9DA
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Sep 2021 07:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345013AbhIASMd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 1 Sep 2021 14:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346840AbhIASMY (ORCPT
+        id S232717AbhICFHD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Sep 2021 01:07:03 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:38814 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231705AbhICFHC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 1 Sep 2021 14:12:24 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9DFC061145
-        for <linux-serial@vger.kernel.org>; Wed,  1 Sep 2021 11:11:23 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id s29so480710pfw.5
-        for <linux-serial@vger.kernel.org>; Wed, 01 Sep 2021 11:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
-        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
-         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
-         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
-         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
-         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
-         0RlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
-        b=CJ5Zw1QB5XvOW7RKfx6b0LoJn9yyDuvlI89Ov6cNrN4FyzGKqtV5VMfWiVbjFXOtzT
-         WJGUA549BdVjvVybYDwoXPX4+tVsNf5KC5vAUBfCKIqsFb+9FSi/YzrjYT+2F57xZONt
-         q009JzAi684uRXfC4GQbEXveUDyNdl3RHT2W/6T6sSpxnOJLQ9/btdzfSmShjXj86DFI
-         ViSKm3WscW+Dy0qw3KBUmof5jq0oa+EoyzQ8Pq7H6+tDIekRubo3upCduJqhEZziLb11
-         5Qj6IJ4tzOl4ukh8Q7cKPAP3jWxFkikQCeQK38HAvnntY581W08agATVtmRDF7CDh4Kd
-         LGnA==
-X-Gm-Message-State: AOAM533myxX0X9AvuZr/h4xkGOl6nOAcvWaMPrVFDROsKAItsKA1DI7O
-        xp1tXzJjB+JQGvnjee7wOsjv8yKYhf1T/6SaDohr3DSkv9JA6Q==
-X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
-X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
- Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
+        Fri, 3 Sep 2021 01:07:02 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18355pJj083943;
+        Fri, 3 Sep 2021 00:05:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1630645551;
+        bh=16inEFXabsPQ+5fjvMPHMEARvL9pL0EtQ7YJm/2UNcs=;
+        h=From:To:CC:Subject:Date;
+        b=zRgMVe7D5f06jqnvYeS2Try55WQgWxvqVYqtOXxxSIB4AMGi111ls2J03HJI8YurU
+         uLs4pF3R0YRhXOISc6V8KjIy6epZ7qIL6RnjGbHdqXTLzxpx5A8uRh57yHjqGNGE1M
+         +dG7YnYu6i48BGICpaOcOUKdlhZp6dXVI9S3ycTY=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18355p1m043738
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Sep 2021 00:05:51 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
+ Sep 2021 00:05:51 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 3 Sep 2021 00:05:51 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18355pZm090983;
+        Fri, 3 Sep 2021 00:05:51 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] serial: 8250: 8250_omap: Fix RX_LVL register offset
+Date:   Fri, 3 Sep 2021 00:05:50 -0500
+Message-ID: <20210903050550.29050-1-nm@ti.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
-From:   CorisBank International <corisbankintlbf@gmail.com>
-Date:   Wed, 1 Sep 2021 11:11:10 -0700
-Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
-Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Att: Client
+Commit b67e830d38fa ("serial: 8250: 8250_omap: Fix possible interrupt
+storm on K3 SoCs") introduced fixup including a register read to
+RX_LVL, however, we should be using word offset than byte offset
+since our registers are on 4 byte boundary (port.regshift = 2) for
+8250_omap.
 
+Fixes: b67e830d38fa ("serial: 8250: 8250_omap: Fix possible interrupt storm on K3 SoCs")
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
 
-CORISBANK INTERNATIONAL URGENT NOTIFICATION
+Issue discovered on simulation platform where invalid address read is forced
+to generate aborts than default behavior of read of invalid address
+returning 0x0 (only writes to invalid address would abort).
 
-Notification / Notification/ Notification
+Test logs: https://gist.github.com/nmenon/46b1adc2be0a2e771fb848e1c799475a (am654, j721e, j7200)
 
-Note, We are writing to inform you officially that Finally the Central
-Bank Financial Authority have approved to transfer your $8.2Million
-which was signed by late Mrs Rose Banneth the COVID.19 victim to
-transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
-transfer her fund in our bank to you for Orphanage work before she
-died by the COVID.19
-and as it is now, you will receive your fund through our corresponding
-bank in Dubai [Emirate Investment Bank ] for security reason. Please
-you should reconfirm your details to receive the $8.2Million.
+There is a minor checkpatch error requesting < 75 character commit
+description, but I felt breaking the Fixes line up is probably not good.
 
-Name, Country, Address, occupations, Age, Telephone number, account
-Details so that we can immediately forward to the World Bank to
-transfer the fund.
-You are advised to comply on timely manner to permit this esteem bank
-transfer your fund as scheduled.
+ drivers/tty/serial/8250/8250_omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We look forward to serving you better
-Your Financial Comfort Is A Priority
-Thank you for choosing Corisbank International.
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 891fd8345e25..73e5f1dbd075 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -106,7 +106,7 @@
+ #define UART_OMAP_EFR2_TIMEOUT_BEHAVE	BIT(6)
+ 
+ /* RX FIFO occupancy indicator */
+-#define UART_OMAP_RX_LVL		0x64
++#define UART_OMAP_RX_LVL		0x19
+ 
+ struct omap8250_priv {
+ 	int line;
+-- 
+2.32.0
 
-Sincerely,
-
-----
-
-Mr Diakarya Ouattara
-Managing Director
-Bank Coris
-Burkina Faso
-+226 556 163 37
-financial_bf_info@accountant.com
