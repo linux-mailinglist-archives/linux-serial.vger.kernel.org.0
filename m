@@ -2,109 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C59B8401E3A
-	for <lists+linux-serial@lfdr.de>; Mon,  6 Sep 2021 18:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BF2401E74
+	for <lists+linux-serial@lfdr.de>; Mon,  6 Sep 2021 18:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244032AbhIFQ2f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 Sep 2021 12:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S244385AbhIFQeB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 Sep 2021 12:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243691AbhIFQ2e (ORCPT
+        with ESMTP id S244355AbhIFQd6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 Sep 2021 12:28:34 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9956AC061575
-        for <linux-serial@vger.kernel.org>; Mon,  6 Sep 2021 09:27:29 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id x137so6018222vsx.1
-        for <linux-serial@vger.kernel.org>; Mon, 06 Sep 2021 09:27:29 -0700 (PDT)
+        Mon, 6 Sep 2021 12:33:58 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D55C061796
+        for <linux-serial@vger.kernel.org>; Mon,  6 Sep 2021 09:32:53 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id n24so9333083ion.10
+        for <linux-serial@vger.kernel.org>; Mon, 06 Sep 2021 09:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1v7i8HiyO/1Ym8mqrztY8OP2nXDvUjYMU9SPvvdR5iI=;
-        b=KeHclL15otyM8f+dOzQIGQr7RAW+HW31nUm+fsJMd5ukKGOzcIIoebv4l1rxxXdtow
-         2fLv4nH55dwxD6gWWBmA140rbu234m3x5wf0LDpPh4sAK0NohP5zfd6vUKchNaYgOGiA
-         HL7C76TFHjncsA/UknFYGkUCsGfGwNvcBjRl5b9pqn7T8e3GeSmQeE2JviKh+hTXPiH8
-         W3BLdUlb6j6hZMp6lyDcAHGq2rNF5/ZzxpvNboC+KUURUxc2GOwJ+tpmmR73RePzER5F
-         xgX63er1eENm88yda0CY34Qf6EDq5VLW6gBxZ6qPPjiD1bt3kIioC5S7Sq5kOXmX7nKi
-         JUrg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
+        b=AQXQzDCQYveoXX8TzTwuiAk/FEyR3wCuvC9VFUOgylxIOdg1EFZyjuPsYQnAcX6J45
+         hGQ/TLw/xoIRE4dR4duos/11L9nUC9pcUBl/RXv6WkJZOj9GF3K+dFgRBHNvOmD3hg/2
+         8aWexR+OCBkLd9FzUsmw6Mf2hXMKPJJYu5JOjAjvp1WIk7xCdh9mnYnLj+26R+tY7rgo
+         HJPLbs6wPd+nl87UvFskxFfDoXbe22pxgW1zf9L/3TdM0lyau7vB+LmM0EAyEmYoeoMO
+         ZhwZDLJwTAD2meT4nF7FnViJ3hJIW4496YAschcWJBrRRFI5yQJjoNMRwEQgQiqRwsUz
+         E0sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1v7i8HiyO/1Ym8mqrztY8OP2nXDvUjYMU9SPvvdR5iI=;
-        b=rOFOr/MdHUWWxyLPQAWjFmhtZj0TsKyUJ5f6OiMFMpLRHwKi7ybCxcGUkXyQ9JAV3m
-         azntmJUHz8C9zF3cHS9DC6BJZ290VzPZE+SDRIbTKfaBu5KZCeHntFo4aP3gWzjD6axq
-         izGkNdaItJDsY2RDGJVi4tcwAvyYgeq3X4gbaceirFzIGSMxOfiQ0JdeBRgjPf2r74il
-         BO4ZcF6ZOPR/LczVSqF1wVfJZJkyiLLC5cESPtFyKyb1hJGETJgVmc4458gbhRJtMK+v
-         h6a3iaY+hS1xnPnQJVB0q/lqaq9JPknpCbmjdtUjM+r3MkQS9IasPgqtXj4p5nPoXUiY
-         h2zg==
-X-Gm-Message-State: AOAM533JMbObXnKElPZyvIwXogSaF55sNUrwnSti5XWxG/26nkRyDaPG
-        +tuhpG7a81/jfIs4bLQkm4XoUqmDe1+4qaKZZ86keg==
-X-Google-Smtp-Source: ABdhPJx42jYyWvN/Qn4VgmviI0/F3R5RsPLT5EvzkWi6iwNer+i/tY/TKP2zG7TW4SPXjMUt+ScleFoLjPAzV0zGCcs=
-X-Received: by 2002:a67:d387:: with SMTP id b7mr6860162vsj.55.1630945648771;
- Mon, 06 Sep 2021 09:27:28 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
+        b=iadakjbPe07+FOXtTrA+eaNMNw1Yoq0rdw0EwWq43IOv3NSBdv6da285uhmAL0IoGd
+         Mp8aVBt8ME78cuPhwFthIxcE4LdQXz+o2aYPV7eswFvIlMREIFdcRcva4dwlWQT09puw
+         +LW4UxKWJwMC8ENm2o0Kt+54H1FwEsHWXqFt48npNtrt32p4XNk6hc3Ln1cOk3GKgZl7
+         hc+G24rbLwUDnFXeEcyUZpEvbxt7V19ZrW/Ua3xC/5Obmg3ZNdUflchEmfr4nDH5yrFw
+         7D1v+i4Cg0GIoNgHRxECdGNbujwbUv24Of5MUvDtbXfWxO2ffycaerFQEQea5As2qwuN
+         Hl2A==
+X-Gm-Message-State: AOAM5338xJkFQPAJYbzQIaRbYBe/3Jlk+7o5wRFew3HajvLWeIR8ZbVE
+        13V1zuaQ7PT3K5B15cVuvJY+ZzCIjFGHeDqueLiIqZ2wuAA=
+X-Google-Smtp-Source: ABdhPJyNYLbPp58BcQ7mI7j8eL1xi4DRM/CVSKmP+XLlKZnpaM0c4B2zxnkjBdrMYYyKOgNolLHbsclwr0lft4or1UU=
+X-Received: by 2002:a05:6e02:1ca6:: with SMTP id x6mr8854675ill.86.1630945961991;
+ Mon, 06 Sep 2021 09:32:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210811114827.27322-1-semen.protsenko@linaro.org>
- <20210811114827.27322-4-semen.protsenko@linaro.org> <YRwodjUxlZmvrvSC@robh.at.kernel.org>
-In-Reply-To: <YRwodjUxlZmvrvSC@robh.at.kernel.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 6 Sep 2021 19:27:17 +0300
-Message-ID: <CAPLW+4kvty3PQmSki8eM+WSgcA+zFfyD+--e6KBpird0-gOhMw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/7] dt-bindings: serial: samsung: Add Exynos850 doc
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tom Gall <tom.gall@linaro.org>, Marc Zyngier <maz@kernel.org>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Ryu Euiyoul <ryu.real@samsung.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
+Received: by 2002:a05:6e02:1d86:0:0:0:0 with HTTP; Mon, 6 Sep 2021 09:32:41
+ -0700 (PDT)
+Reply-To: suzara.wans2021@gmail.com
+From:   Mrs Suzara Maling Wan <mr.brueshands4world@gmail.com>
+Date:   Mon, 6 Sep 2021 09:32:41 -0700
+Message-ID: <CABvx5tpkSnzTGw2hd3awtMaYZ6SrrR=GwA3X22LN=2t5+bDtOw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 18 Aug 2021 at 00:22, Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, 11 Aug 2021 14:48:23 +0300, Sam Protsenko wrote:
-> > Add compatible string for Exynos850 SoC.
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> > Changes in v3:
-> >   - None
-> >
-> > Changes in v2:
-> >   - None
-> >
-> >  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
->
-> Acked-by: Rob Herring <robh@kernel.org>
+-- 
+My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
+of the Philippine presently base in West Africa B/F, dealing with
+exportation of Gold, I was diagnose of blood Causal decease, and my
+doctor have announce to me that I have few days to leave due to the
+condition of my sickness.
 
-Hi guys,
+I have a desire to build an orphanage home in your country of which i
+cannot execute the project myself due to my present health condition,
+I am willing to hand over the project under your care for you to help
+me fulfill my dreams and desire of building an orphanage home in your
+country.
 
-Can we please merge this one? I can see that corresponding driver
-changes were pulled in already into malinline, but this one seems to
-be missed.
+Reply in you are will to help so that I can direct you to my bank for
+the urgent transfer of the fund/money require for the project to your
+account as I have already made the fund/money available.
 
-Thanks!
+With kind regards
+Mrs Suzara Maling Wan
