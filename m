@@ -2,144 +2,124 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D4D404B8E
-	for <lists+linux-serial@lfdr.de>; Thu,  9 Sep 2021 13:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8C9404A19
+	for <lists+linux-serial@lfdr.de>; Thu,  9 Sep 2021 13:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242890AbhIILwy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 9 Sep 2021 07:52:54 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:39382 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240943AbhIILuv (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 9 Sep 2021 07:50:51 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EC097200EF;
-        Mon,  6 Sep 2021 19:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1630956946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Myxi+rNyKHYVeMxsZEIiSjP23vQUMmsIvDtzesxP3qg=;
-        b=ugKP2+XRMgyLHw31scY7psFVAofUuJdQ0wYthgcIqdO1wcAgczM7lgWU29SjDbGu7dTiZs
-        aVD8IdJBjscUBRYbHtbhokcjw939BaJBNMOle1VmfAxazChHq9By+omAonWuWBpgpJmFev
-        XehwO2YWmbjutW6950aFcw7W83QDTxQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1630956946;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Myxi+rNyKHYVeMxsZEIiSjP23vQUMmsIvDtzesxP3qg=;
-        b=FoU8I4jEvkIDSm+wRdop7ggSULrkAgMIPo3na5SGl37ix+img2g0cFLU5wXL716PXVEl6O
-        XJkn34qEPE6GioAA==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 60A0E12FF9;
-        Mon,  6 Sep 2021 19:35:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id f1yAFpJtNmETGQAAGKfGzw
-        (envelope-from <afaerber@suse.de>); Mon, 06 Sep 2021 19:35:46 +0000
-Message-ID: <41b2ff7b-2dee-62e8-abb6-df90d7156313@suse.de>
-Date:   Mon, 6 Sep 2021 21:35:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.1
-Subject: Re: [PATCH 1/8] dt-bindings: arm: fsl: add NXP S32G2 boards
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Chester Lin <clin@suse.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        id S237594AbhIILoq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 9 Sep 2021 07:44:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46486 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236695AbhIILnb (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:43:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 58DE56120D;
+        Thu,  9 Sep 2021 11:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631187727;
+        bh=7UCtEtr/QStiFxeem2PIB4IzGccfSnnMDlxg8E1GFug=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pFwBGcpab5zC4ADnOqs8kAbmLYzgPY4sEyQr26GnCsUHpBXF+S+K3+LCoi83AMzzV
+         7PmdfkZps8ni84BGDT/EtSSVqPcJZkpKcF4amGQ+Vr3fBjbH6rU2JrZRYn9tnlkFii
+         hyXxiiiZ982/LtW81wbj2HAsoq+fP3PjxjEz4Roq7Teaf1Xjm4IcNYpgh2/38FMLWo
+         WEyDiEoDB6KuEA+so1we27nU0OCVNggfojQ/qpN3jiYKcktldS60eZMsI7ufuW07ko
+         eZEVqTQqIKzaYTpkCS93FoPvZ4rpLLElwpqg20ov49Rn4izT4S34yHOgqgsd1JyCA8
+         mMGKKNJa+4Giw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Matteo Lisi <matteo.lisi@engicam.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Jagan Teki <jagan@amarulasolutions.com>, s32@nxp.com,
-        catalin-dan.udma@nxp.com, bogdan.hamciuc@nxp.com,
-        bogdan.folea@nxp.com, ciprianmarian.costea@nxp.com,
-        radu-nicolae.pirea@nxp.com, ghennadi.procopciuc@nxp.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Ivan T . Ivanov" <iivanov@suse.de>, "Lee, Chun-Yi" <jlee@suse.com>
-References: <20210805065429.27485-1-clin@suse.com>
- <20210805065429.27485-2-clin@suse.com> <YRaxt1LCF+hWaMJU@robh.at.kernel.org>
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-In-Reply-To: <YRaxt1LCF+hWaMJU@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 047/252] tty: serial: jsm: hold port lock when reporting modem line changes
+Date:   Thu,  9 Sep 2021 07:37:41 -0400
+Message-Id: <20210909114106.141462-47-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 13.08.21 19:53, Rob Herring wrote:
-> On Thu, Aug 05, 2021 at 02:54:22PM +0800, Chester Lin wrote:
->> Add bindings for S32G2's evaluation board (S32G-VNP-EVB) and reference
->> design 2 board ( S32G-VNP-RDB2).
->>
->> Signed-off-by: Chester Lin <clin@suse.com>
->> ---
->>  Documentation/devicetree/bindings/arm/fsl.yaml | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
->> index e2097011c4b0..3914aa09e503 100644
->> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
->> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
->> @@ -983,6 +983,13 @@ properties:
->>            - const: solidrun,lx2160a-cex7
->>            - const: fsl,lx2160a
->>  
->> +      - description: S32G2 based Boards
->> +        items:
->> +          - enum:
->> +              - fsl,s32g274a-evb
->> +              - fsl,s32g274a-rdb2
->> +          - const: fsl,s32g2
-> 
-> Given this is an entirely different family from i.MX and new?, shouldn't 
-> it use 'nxp' instead of 'fsl'?
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-S32V also still used fsl prefix, despite the company name long being NXP
-(same for several Layerscape and i.MX models).
+[ Upstream commit 240e126c28df084222f0b661321e8e3ecb0d232e ]
 
-If, as Radu indicated on 3/8, NXP wants to make that switch now for S32G
-then I see no reason against nxp. I verified that it's already defined:
+uart_handle_dcd_change() requires a port lock to be held and will emit a
+warning when lockdep is enabled.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/vendor-prefixes.yaml
+Held corresponding lock to fix the following warnings.
 
-However, should the matching .dts[i] files using nxp prefix (4-6/8) then
-still go under dts/freescale/, or should they go to a new dts/nxp/ then?
-That would separate it from S32V. Intel did do a switch from dts/altera/
-to dts/intel/ at some point, so there's precedence for either, I guess.
-No idea whether anything might break if we moved S32V alongside S32G.
+[  132.528648] WARNING: CPU: 5 PID: 11600 at drivers/tty/serial/serial_core.c:3046 uart_handle_dcd_change+0xf4/0x120
+[  132.530482] Modules linked in:
+[  132.531050] CPU: 5 PID: 11600 Comm: jsm Not tainted 5.14.0-rc1-00003-g7fef2edf7cc7-dirty #31
+[  132.535268] RIP: 0010:uart_handle_dcd_change+0xf4/0x120
+[  132.557100] Call Trace:
+[  132.557562]  ? __free_pages+0x83/0xb0
+[  132.558213]  neo_parse_modem+0x156/0x220
+[  132.558897]  neo_param+0x399/0x840
+[  132.559495]  jsm_tty_open+0x12f/0x2d0
+[  132.560131]  uart_startup.part.18+0x153/0x340
+[  132.560888]  ? lock_is_held_type+0xe9/0x140
+[  132.561660]  uart_port_activate+0x7f/0xe0
+[  132.562351]  ? uart_startup.part.18+0x340/0x340
+[  132.563003]  tty_port_open+0x8d/0xf0
+[  132.563523]  ? uart_set_options+0x1e0/0x1e0
+[  132.564125]  uart_open+0x24/0x40
+[  132.564604]  tty_open+0x15c/0x630
 
-Similarly, the easiest and most merge-friendly would be to leave
-arm/fsl.yaml and add the nxp-prefixed S32G2 there, as done here. If NXP
-want to rename fsl.yaml to nxp.yaml in a general housekeeping effort,
-that could be done independently, outside Chester's patchset.
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/1626242003-3809-1-git-send-email-zheyuma97@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/tty/serial/jsm/jsm_neo.c | 2 ++
+ drivers/tty/serial/jsm/jsm_tty.c | 3 +++
+ 2 files changed, 5 insertions(+)
 
-> Either way,
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Thanks,
-Andreas
-
+diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
+index bf0e2a4cb0ce..c6f927a76c3b 100644
+--- a/drivers/tty/serial/jsm/jsm_neo.c
++++ b/drivers/tty/serial/jsm/jsm_neo.c
+@@ -815,7 +815,9 @@ static void neo_parse_isr(struct jsm_board *brd, u32 port)
+ 		/* Parse any modem signal changes */
+ 		jsm_dbg(INTR, &ch->ch_bd->pci_dev,
+ 			"MOD_STAT: sending to parse_modem_sigs\n");
++		spin_lock_irqsave(&ch->uart_port.lock, lock_flags);
+ 		neo_parse_modem(ch, readb(&ch->ch_neo_uart->msr));
++		spin_unlock_irqrestore(&ch->uart_port.lock, lock_flags);
+ 	}
+ }
+ 
+diff --git a/drivers/tty/serial/jsm/jsm_tty.c b/drivers/tty/serial/jsm/jsm_tty.c
+index 8e42a7682c63..d74cbbbf33c6 100644
+--- a/drivers/tty/serial/jsm/jsm_tty.c
++++ b/drivers/tty/serial/jsm/jsm_tty.c
+@@ -187,6 +187,7 @@ static void jsm_tty_break(struct uart_port *port, int break_state)
+ 
+ static int jsm_tty_open(struct uart_port *port)
+ {
++	unsigned long lock_flags;
+ 	struct jsm_board *brd;
+ 	struct jsm_channel *channel =
+ 		container_of(port, struct jsm_channel, uart_port);
+@@ -240,6 +241,7 @@ static int jsm_tty_open(struct uart_port *port)
+ 	channel->ch_cached_lsr = 0;
+ 	channel->ch_stops_sent = 0;
+ 
++	spin_lock_irqsave(&port->lock, lock_flags);
+ 	termios = &port->state->port.tty->termios;
+ 	channel->ch_c_cflag	= termios->c_cflag;
+ 	channel->ch_c_iflag	= termios->c_iflag;
+@@ -259,6 +261,7 @@ static int jsm_tty_open(struct uart_port *port)
+ 	jsm_carrier(channel);
+ 
+ 	channel->ch_open_count++;
++	spin_unlock_irqrestore(&port->lock, lock_flags);
+ 
+ 	jsm_dbg(OPEN, &channel->ch_bd->pci_dev, "finish\n");
+ 	return 0;
 -- 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer
-HRB 36809 (AG Nürnberg)
+2.30.2
+
