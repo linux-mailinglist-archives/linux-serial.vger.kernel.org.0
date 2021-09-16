@@ -2,98 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5855540E591
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Sep 2021 19:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4766140EBC2
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Sep 2021 22:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbhIPRMn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Sep 2021 13:12:43 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:59514
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345169AbhIPRK3 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Sep 2021 13:10:29 -0400
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0301840261
-        for <linux-serial@vger.kernel.org>; Thu, 16 Sep 2021 17:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1631812148;
-        bh=xPpOqBWr7It3vesqmSTKYQnMNxzHvZ+jahU7C4r+dU0=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=Iooevi3UgMJ+mkq676NMoJgjiVvtG0YQy+kX8NGAWYvMHVHPpNelUZaK0d0XFUHAA
-         P2ToA54XP3ak9kiytO6d9CELRmMyfoDH4bNlmMFctM5Ij/4/hRqBgxP2mL86+5mhKd
-         brJ/Jtp6sY6JNaQCW8nZ3iOjaeyhsRhK2hYRLjgNPA01JosPHbirobHVJSkpfqAMRe
-         ABNlNGRjAGse3og45yS34fhwA0A69GhC++yEbvBXeF6DH/8r6tXvFM3N2fJZ4tJ2E+
-         oCczyH38JeQur4iEfekno82Q9DmzZsvepk4Nwf4tdibeou5EPsEHP46Tv0Xiq4lSoG
-         7D7uDxyCIU4aA==
-Received: by mail-wm1-f71.google.com with SMTP id c187-20020a1c35c4000000b00304b489f2d8so3399289wma.6
-        for <linux-serial@vger.kernel.org>; Thu, 16 Sep 2021 10:09:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xPpOqBWr7It3vesqmSTKYQnMNxzHvZ+jahU7C4r+dU0=;
-        b=SBJU8VINvpwt0igghkyBNfDRDTiDSruE2V+0r5PNFAxNLsnxtrZmNYk49dxhBSz5fw
-         fu3NBLeY5vZcN4t0i/TxZjjtHX+k86IMurxi9q59XpKV99aMYzGZQ5L8/oNsiRBiqSW9
-         ITPUpv+w/vDFY+M0k/wozm7AtXY8IicJrbg5oRfdjoe4iCCeA+b9KcQJOWC0XPN39hny
-         MM53IshXDSI0nxKXmqWqx0fzloxGunkmBtqAJQTGSzDLcGdlqT9/Y6PiN1LrOkj2uAw5
-         i4z4UgTIz5XZgADwjGq2BbQ3uB3IaauGQTV6L/E9JCB8bjDaQ2G5Y3hMdK24HrUwOpnj
-         BjPQ==
-X-Gm-Message-State: AOAM532ubENm9Lm3PCp8ZoLEmjASoQov8iIDTusw057IptjfCNr7YPKe
-        yRvKThhuP3mB6twC88PeFsmtyOkIanENLryUY+HAQcpRbFacO71M++D3yD7e5KNO/rBakcVeIoF
-        iTZz1Lh4FtKbAbBZe+jHP8dUE4VDdNBsZv4btBvc3aQ==
-X-Received: by 2002:a1c:acc2:: with SMTP id v185mr6116422wme.71.1631812146008;
-        Thu, 16 Sep 2021 10:09:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyPp03RDoAih9s3NW/qGubj3h1EcnVLf9/Ph3lRs8Ac+5xs5w5VZJCzJ/TDFN0K5bf63k0ndA==
-X-Received: by 2002:a1c:acc2:: with SMTP id v185mr6116411wme.71.1631812145892;
-        Thu, 16 Sep 2021 10:09:05 -0700 (PDT)
-Received: from kozik-lap.lan (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id f20sm7893839wmb.32.2021.09.16.10.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 10:09:05 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
+        id S239206AbhIPUjz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Sep 2021 16:39:55 -0400
+Received: from mleia.com ([178.79.152.223]:49308 "EHLO mail.mleia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231982AbhIPUjy (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Sep 2021 16:39:54 -0400
+X-Greylist: delayed 470 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Sep 2021 16:39:54 EDT
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id A2C6D23665;
+        Thu, 16 Sep 2021 20:30:42 +0000 (UTC)
+Subject: Re: [PATCH 08/16] tty: drivers/tty/serial/, stop using
+ tty_flip_buffer_push
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Al Cooper <alcooperx@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [PATCH] serial: 8250: remove duplicated BRI0A49 and BDP3336 entries
-Date:   Thu, 16 Sep 2021 19:08:59 +0200
-Message-Id: <20210916170859.138813-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.30.2
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <20210914091134.17426-1-jslaby@suse.cz>
+ <20210914091415.17918-1-jslaby@suse.cz>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <e482a001-754d-3c60-c1e6-e5c4a4572b36@mleia.com>
+Date:   Thu, 16 Sep 2021 23:30:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210914091415.17918-1-jslaby@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20210916_203042_693451_B317D1B9 
+X-CRM114-Status: GOOD (  10.90  )
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-BRI0A49 and BDP3336 are already on the list.
+Hi Jiri,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/tty/serial/8250/8250_pnp.c | 4 ----
- 1 file changed, 4 deletions(-)
+On 9/14/21 12:14 PM, Jiri Slaby wrote:
+> Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
+> tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
+> going to remove the former, so call the latter directly in
+> drivers/tty/serial/.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-diff --git a/drivers/tty/serial/8250/8250_pnp.c b/drivers/tty/serial/8250/8250_pnp.c
-index 98e5ee4d0d08..1974bbadc975 100644
---- a/drivers/tty/serial/8250/8250_pnp.c
-+++ b/drivers/tty/serial/8250/8250_pnp.c
-@@ -56,10 +56,6 @@ static const struct pnp_device_id pnp_dev_table[] = {
- 	{	"BRI1400",		0	},
- 	/* Boca 33.6 Kbps Internal FD34FSVD */
- 	{	"BRI3400",		0	},
--	/* Boca 33.6 Kbps Internal FD34FSVD */
--	{	"BRI0A49",		0	},
--	/* Best Data Products Inc. Smart One 336F PnP Modem */
--	{	"BDP3336",		0	},
- 	/* Computer Peripherals Inc */
- 	/* EuroViVa CommCenter-33.6 SP PnP */
- 	{	"CPI4050",		0	},
--- 
-2.30.2
+for LPC32xx HS UART:
 
+>   drivers/tty/serial/lpc32xx_hs.c             |  2 +-
+
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+
+--
+Best wishes,
+Vladimir
