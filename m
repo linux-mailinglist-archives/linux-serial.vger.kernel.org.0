@@ -2,150 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF1D414DC1
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Sep 2021 18:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABF34151D5
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Sep 2021 22:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236506AbhIVQJa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Sep 2021 12:09:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41488 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232357AbhIVQJ3 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Sep 2021 12:09:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 77EC361090;
-        Wed, 22 Sep 2021 16:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632326879;
-        bh=yctlIi1HkrolODiWaucLlNNuDJShRbGjTDeBFQoL+sQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FTjlHne/yiD8nTOLATvSGiGbB5StrT2948rLIcHyuE9np1uUUEFoiqlCBFXOechzg
-         IUQjs14cF6Wkte3RZIwukniCLCpi6agkYoB4q1FJevwdIsPnggI9V1DugAmO1MGDu6
-         ywXQAEoCMhw0FTxPsPsob8cvocfL74j1uBcap/Yu20S94miYrnXROrj0V0L0SURCTa
-         EMRvUESwBJBj0nY1K3PD/yiEc66jJ2KSNUNuXjpTqyd0051s0bJzbLOx7RD2Z3jsWm
-         P9SGCmdjeAMYgOqZnbykk4OEJhpdljIUOg4SP0v2HlUDZfl38KFWvIcI8ulHRrDdpk
-         SVFyH8Fb5o9FA==
-Received: by pali.im (Postfix)
-        id 09B5579F; Wed, 22 Sep 2021 18:07:56 +0200 (CEST)
-Date:   Wed, 22 Sep 2021 18:07:56 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RESEND PATCH v5 5/6] arm64: dts: marvell: armada-37xx: add
- device node for UART clock and use it
-Message-ID: <20210922160756.flcllzfixsn7xjxt@pali>
-References: <20210922105433.11744-1-pali@kernel.org>
- <20210922105433.11744-6-pali@kernel.org>
- <87o88k63p5.fsf@BL-laptop>
+        id S237832AbhIVU4g (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Sep 2021 16:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237813AbhIVU4e (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 22 Sep 2021 16:56:34 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A621C0613DE
+        for <linux-serial@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id 72so14394756qkk.7
+        for <linux-serial@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=KdXnhe/3zkHeZgixn9BpXiRXniwMgDmhauf6YTuxP0wgB5yzxGI3euReyxhx9TVrxq
+         3Od5gARvk08SiaQHEdbK80uTPJiKvZD1mvaXmFEi2OlRGGLVxi9qjTdQEJHDNx6GrhQf
+         +YDVSfcVXX6hJ9tzkOuxVlwY0IK/v4ECFsMgPN0YbEUFjdWw7wtLO6HU7k0GlwYOwBU7
+         g0u5ZrnjkFj9bDNBfxTJ+EZszn5R+MIWkE1noseX+tMOjLt3VKfnAtHOf7zGnzUi7/Ss
+         4zORj2FhCL6VBd/6ui6VhZsTJDlTQFr3MO12bpjTdn18irITsVHBfbJQd5ezVh5SqLsC
+         4EBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=nzQqgbsDG5W0k1jffMo7Vx1g4sgrLI7v7wdJesrdejqkiJQBBaTs2qiIg5e34opw/H
+         WCtB45WTPxZqIZOWAwKzuls1NyZDCPcxchIk2ujMzC5PQsQK5wbi9UGIZvuZM9GAWmyK
+         bGX9YD2bKsiuk81fXSW06TVpXsY2uPveHtJ1c2D2pyGMvKY7MfxPEn+byDcXj8zJR4yA
+         RVycPAmfJ15CEM+hC+wn/wUF9K8KO90GXhYewTRuhTt+M+Ee2wm/lcIyF4elS8555gwl
+         89TuxQn/cK9FZsVavmSp2mQ7gJyEwG+3NdAPVKQj4MUIfcVXkaAPBdGIpeEePE0t1aNZ
+         pDlw==
+X-Gm-Message-State: AOAM532anv0XFMzCcNLZAwODZgGWppbWav/nGXOH6joTd4PjyRg5qb/d
+        RB6qw1MbnM+Isu7laWmLAfbZ7LVsCQhwNckO/vY=
+X-Google-Smtp-Source: ABdhPJwsLqRgkk9jb+wC1ECBTFJXrEEB4mmlIo/Kaul20LfIYdlAYLv9tmwaB5Pxv0AmysZSk6ZePRs2dvYCH/qVqH0=
+X-Received: by 2002:a05:6902:150a:: with SMTP id q10mr1344586ybu.515.1632344102557;
+ Wed, 22 Sep 2021 13:55:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o88k63p5.fsf@BL-laptop>
-User-Agent: NeoMutt/20180716
+Sender: pablogboy98@gmail.com
+Received: by 2002:a05:7000:1903:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:55:02
+ -0700 (PDT)
+From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
+Date:   Wed, 22 Sep 2021 21:55:02 +0100
+X-Google-Sender-Auth: EgWN-7KeHIzBWxs5WISil-9jI9s
+Message-ID: <CAFZ0LQG=HorOEh0B82pMRaOtrfukA2tHOBoX92F9fX48+pG2cA@mail.gmail.com>
+Subject: My Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wednesday 22 September 2021 17:16:22 Gregory CLEMENT wrote:
-> Hello Pali,
-> 
-> > This change defines DT node for UART clock "marvell,armada-3700-uart-clock"
-> > and use this UART clock as a base clock for all UART devices.
-> 
-> Sorry to not have pointed this earlier but I found something a little
-> unusual, see below:
-> 
-> >
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  arch/arm64/boot/dts/marvell/armada-3720-db.dts    |  4 ++++
-> >  .../boot/dts/marvell/armada-3720-espressobin.dtsi |  4 ++++
-> >  .../boot/dts/marvell/armada-3720-turris-mox.dts   |  4 ++++
-> >  arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts  |  4 ++++
-> >  arch/arm64/boot/dts/marvell/armada-37xx.dtsi      | 15 +++++++++++++--
-> >  5 files changed, 29 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-db.dts b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
-> > index 3e5789f37206..accf014a6a1e 100644
-> > --- a/arch/arm64/boot/dts/marvell/armada-3720-db.dts
-> > +++ b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
-> > @@ -191,6 +191,10 @@
-> >  	};
-> >  };
-> >  
-> > +&uartclk {
-> > +	status = "okay";
-> 
-> I found unusual to have to enable the clock at device tree level.
-> Usually the clock driver is always loaded and then the clock is really
-> enabled or disabled through the clock framework.
-> 
-> [...]
-> 
-> > diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> > index 9acc5d2b5a00..5bc61c9615f5 100644
-> > --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> > +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> > @@ -132,10 +132,21 @@
-> >  				reg = <0x11500 0x40>;
-> >  			};
-> >  
-> > +			uartclk: uartclk@12000 {
-> > +				compatible = "marvell,armada-3700-uart-clock";
-> > +				reg = <0x12010 0x4>, <0x12210 0x4>;
-> > +				clocks = <&tbg 0>, <&tbg 1>, <&tbg 2>,
-> > +					<&tbg 3>, <&xtalclk>;
-> > +				clock-names = "TBG-A-P", "TBG-B-P", "TBG-A-S",
-> > +					"TBG-B-S", "xtal";
-> > +				#clock-cells = <1>;
-> 
-> I think you could remove the following line and thanks to this there
-> won't be any change in the dts of the board:
-> > +				status = "disabled";
-
-After removing "status" from dtsi and then also from board bts files,
-UART is still working fine.
-
-So I will include this change into V6.
-
-Is there anything else?
-
-> > +			};
-> > +
-> 
-> Gregory
-> 
-> 
-> >  			uart0: serial@12000 {
-> >  				compatible = "marvell,armada-3700-uart";
-> >  				reg = <0x12000 0x18>;
-> > -				clocks = <&xtalclk>;
-> > +				clocks = <&uartclk 0>;
-> >  				interrupts =
-> >  				<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
-> >  				<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-> > @@ -147,7 +158,7 @@
-> >  			uart1: serial@12200 {
-> >  				compatible = "marvell,armada-3700-uart-ext";
-> >  				reg = <0x12200 0x30>;
-> > -				clocks = <&xtalclk>;
-> > +				clocks = <&uartclk 1>;
-> >  				interrupts =
-> >  				<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
-> >  				<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
-> > -- 
-> > 2.20.1
-> >
-> 
-> -- 
-> Gregory Clement, Bootlin
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
+Assalamu alaikum,
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological,
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children. I have investment funds
+worth Twenty Seven Million Five Hundred Thousand United State Dollar
+($27.500.000.00 ) and i need a trusted  investment Manager/Partner
+because of my current refugee status, however, I am interested in you
+for investment project assistance in your country. If you are willing
+to handle this project on my behalf kindly reply urgently to enable me
+to provide you more information about the investment
+funds.
+Best Regards
