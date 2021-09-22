@@ -2,94 +2,121 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9611414236
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Sep 2021 08:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E6D414322
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Sep 2021 09:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbhIVG6v (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Sep 2021 02:58:51 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:44608 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbhIVG6u (ORCPT
+        id S233588AbhIVIBM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Sep 2021 04:01:12 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:34546 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233394AbhIVIBK (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Sep 2021 02:58:50 -0400
-Received: by mail-wr1-f41.google.com with SMTP id d6so3600725wrc.11;
-        Tue, 21 Sep 2021 23:57:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Yh0iKTCDgYFSJb9XyCYVMvV6OqeBY6bHXPRIYvm+yjg=;
-        b=DHH8MnWsS94RMlIvrvzGevuRA74xSZaO1WgIJJ1BFnisOIcsikf1Szzl6AZiWdJM1a
-         n1kfTgyJZgldeKPTU18jcUMayQ9Edw45WsOJxo4gh6EG70o03w5tfDPYFBkVju8jR82w
-         HbASvX0B0wcFaDB8GmwwTyptXGrRjz6QuEGG4K9wn2zC3mdWj/ICyOgu8M8MUEEGi2VK
-         mBkguP2xEfhuLvgo8xiwxIB4Ae+F9ldX1HFBboyDoa6AfZ4uOC8J4ZOfrKFes6hk98zB
-         G/Q2/SsNUhmA4hvrZHe3teIi2TySa2B1B83FVL8GrsKQQGfmIaWuWHtPf5xadWPDQidw
-         ir5w==
-X-Gm-Message-State: AOAM5303zMuX53Hi8W3HTweAJYJokh529+snaHq9CbO4VDQvjMdTKZ5c
-        PN7pKzVkzzEGGxoXLXhlmL4aNZlPjU8=
-X-Google-Smtp-Source: ABdhPJyttFxWYlul8CE2uWk9E3jp4KZqp4CxVqDLXA0aqJyIInsfN9Mr2HtAfGCdR5CEcLvoYpEVSg==
-X-Received: by 2002:a7b:cd0f:: with SMTP id f15mr8629589wmj.173.1632293839620;
-        Tue, 21 Sep 2021 23:57:19 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id i67sm1164807wmi.41.2021.09.21.23.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Sep 2021 23:57:19 -0700 (PDT)
-Message-ID: <1fd9ed1a-edd2-a154-da1c-022a89b2c722@kernel.org>
-Date:   Wed, 22 Sep 2021 08:57:17 +0200
+        Wed, 22 Sep 2021 04:01:10 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C5A2B1FCA1;
+        Wed, 22 Sep 2021 07:59:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1632297578; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=XshP/bWtOUXN+bdR2fSY2t4cSl+4ai60bPafAzhx2L0=;
+        b=uRFyBBOpu9a9dtr2sTYEVbtGmrYBZiTpVLZVKSLgRCQK1rScvS8wdD2ZYWOPUcfVtvAKkQ
+        eHj4z/jv5N8CBCrSSClrQ6H0AH5wboRAE76QuGiQFYyM3WuQsCcl4cxfg436lINVAOMIn7
+        K2SxftcdOyxoDVDIyh+gknfU384BPcY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1632297578;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=XshP/bWtOUXN+bdR2fSY2t4cSl+4ai60bPafAzhx2L0=;
+        b=8DbI4HgysLiMRc85U+aRJM7qcvdBottrD+Tf+8UnPj6CRSmxexuQJUrTCWh5FFXX00vh8H
+        IxGswof9N+S2AqAQ==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9AA62A3B8B;
+        Wed, 22 Sep 2021 07:59:38 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 1/7] mxser: restore baud rate if its setting fails
+Date:   Wed, 22 Sep 2021 09:59:32 +0200
+Message-Id: <20210922075938.31390-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Subject: Re: [PATCH 16/16] tty: drop tty_flip_buffer_push
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210914091134.17426-1-jslaby@suse.cz>
- <20210914091415.17918-1-jslaby@suse.cz>
- <20210914091415.17918-9-jslaby@suse.cz>
- <YUMWaCpT4s8dQKiy@hovoldconsulting.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <YUMWaCpT4s8dQKiy@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 16. 09. 21, 12:03, Johan Hovold wrote:
-> On Tue, Sep 14, 2021 at 11:14:15AM +0200, Jiri Slaby wrote:
->> Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
->> tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). All
->> users were converted, so remove tty_flip_buffer_push() completely.
-> 
-> Did you consider inlining tty_flip_buffer_push() or unexporting
-> tty_schedule_flip() instead?
+If a user tries to set a too high rate, it fails due to check in
+mxser_set_baud(). But the high rate remains set in termios, so the user
+might think everything went smooth. Restore the baud rate from the
+old_termios if this happens, so that user knows nothing was changed in
+fact.
 
-Yes -- I see no reason for two functions doing the very same thing. It's 
-only confusing.
+It used to behave the correct way many years ago, but somehow the
+restoration vanished with commit 1c45607ad3eb (Char: mxser, remove it)
+-- the commit removed mxser's older clone.
 
-> The name tty_flip_buffer_push() is arguable more descriptive since the
-> work may already be running and is also less tied to the implementation.
-> 
-> The ratio of drivers using tty_flip_buffer_push() over
-> tty_schedule_flip() is also something like 186 to 15 so that would
-> amount to a lot less churn too.
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ drivers/tty/mxser.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-OK, I can do either way. I chose this path as tty_schedule_flip was a 
-wrapper to tty_flip_buffer_push. In any case, I wouldn't take the number 
-of changed drivers as a measure. But if it makes more sense for people 
-regarding the naming, I will "flip" the two flips.
-
-> Also, can you please start adding cover letters to your series to
-> provide an overview of what it is you're trying to accomplish?
-
-I am not a fan of cover letters as they are not Cced to people who are 
-Cced in separate patches. So what would you like to see in the letter? 
-This series are just a random cleanup and IMO there is not much more to 
-be said except what is in their commit logs.
-
-thanks,
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 1216f3985e18..b9cc41782ce1 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -559,14 +559,20 @@ static void mxser_handle_cts(struct tty_struct *tty, struct mxser_port *info,
+  * This routine is called to set the UART divisor registers to match
+  * the specified baud rate for a serial port.
+  */
+-static void mxser_change_speed(struct tty_struct *tty)
++static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_termios)
+ {
+ 	struct mxser_port *info = tty->driver_data;
+ 	unsigned cflag, cval, fcr;
+ 
+ 	cflag = tty->termios.c_cflag;
+ 
+-	mxser_set_baud(tty, tty_get_baud_rate(tty));
++	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
++		/* Use previous rate on a failure */
++		if (old_termios) {
++			speed_t baud = tty_termios_baud_rate(old_termios);
++			tty_encode_baud_rate(tty, baud, baud);
++		}
++	}
+ 
+ 	/* byte size and parity */
+ 	switch (cflag & CSIZE) {
+@@ -791,7 +797,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	/*
+ 	 * and set the speed of the serial port
+ 	 */
+-	mxser_change_speed(tty);
++	mxser_change_speed(tty, NULL);
+ 	spin_unlock_irqrestore(&info->slock, flags);
+ 
+ 	return 0;
+@@ -1119,7 +1125,7 @@ static int mxser_set_serial_info(struct tty_struct *tty,
+ 	if (tty_port_initialized(port)) {
+ 		if (old_speed != (port->flags & ASYNC_SPD_MASK)) {
+ 			spin_lock_irqsave(&info->slock, sl_flags);
+-			mxser_change_speed(tty);
++			mxser_change_speed(tty, NULL);
+ 			spin_unlock_irqrestore(&info->slock, sl_flags);
+ 		}
+ 	} else {
+@@ -1425,7 +1431,7 @@ static void mxser_set_termios(struct tty_struct *tty, struct ktermios *old_termi
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&info->slock, flags);
+-	mxser_change_speed(tty);
++	mxser_change_speed(tty, old_termios);
+ 	spin_unlock_irqrestore(&info->slock, flags);
+ 
+ 	if ((old_termios->c_cflag & CRTSCTS) && !C_CRTSCTS(tty)) {
 -- 
-js
-suse labs
+2.33.0
+
