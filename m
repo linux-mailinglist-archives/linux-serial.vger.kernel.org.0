@@ -2,66 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A658B414BC4
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Sep 2021 16:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AEF414C9F
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Sep 2021 17:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbhIVOZl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Sep 2021 10:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbhIVOZj (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Sep 2021 10:25:39 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37880C061762
-        for <linux-serial@vger.kernel.org>; Wed, 22 Sep 2021 07:24:09 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id o13so1947303uat.6
-        for <linux-serial@vger.kernel.org>; Wed, 22 Sep 2021 07:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=n9CHWZyWDp9kvdnuR+4lcf8cF9DH3RRu6znx/rfpPqs=;
-        b=AN1Vavbm8tJGsEHHEl+/mzJd9j8Oj9kqpBqxzBdikoBQ9duQtQhCs3a5P+HEgKbxfX
-         m2Cq1/WEtOFVN30IxrSrYWLrouiKx1W9i/TQayO11cG56vgAfzW5dv6C5UXwbv4jQfFz
-         Ipon/rpjAgnNeg3EzD4OS2ODLRXH+vmeZv+kqWCyiDvms51GF+wgBfMQZ2i5NgdYdEAS
-         uZRDMh3ImtbCuznLJGv26gXDxBOZ/taMfYSxZIwMtMRzmd8/NII3XVLASvUx5XN3O02Z
-         u5c9JdVbflju2qFruT5hLVxLZDaBVnUcgCwDdJV5ugeX1OOHXj7cHuK70eqlqVmxqN/k
-         /N/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=n9CHWZyWDp9kvdnuR+4lcf8cF9DH3RRu6znx/rfpPqs=;
-        b=isud2Swhb/hTOIvgpqQ8eCVlqOo8UwaNwM0IJOqktoL0pIlNAOTOYu3PM/Bnd3B183
-         GSDnbYsNUvHAHHbCe7DtnRrafSHfQXm3+Ys929TkYfQVAlEHJyPF1spnzlD5c4uZNkwH
-         Pj+L0DTSHZoNyHk3bO1y0NqUOp7EW8FxwANZJr3ydo5ShJbwkkBaLQG6zIXuL99TBJHH
-         UcfIfYj8PRMb1XCODdSkkLwAQ4UGhiF0mrxko2sZMLb6ROtMgHyuyqJYOQD63z8rNOyk
-         NfeXx1ZOE8kOcnrpuZy5fVNPKVuutFl3bTjxSdbd1UB/wKzoeay+TSNsO80M5qA/ZoiP
-         GuDw==
-X-Gm-Message-State: AOAM532shYVniGCIl2ZU3iJUMWC5iCHQ3Ru3FB8+JF7vZB0ow+LzYywv
-        r9VhCGNagv74+vJXrdMt7pkvc5flKJwb42l5Uyw=
-X-Google-Smtp-Source: ABdhPJy59oVRkPVEN4voJbLGM7dw89jFQV1IkAbP7w5vIw5ihwPYB/4xUYNNRCMM7AIxLTApxZzhjrsFzU556YaqF8k=
-X-Received: by 2002:a9f:2315:: with SMTP id 21mr21442759uae.143.1632320646151;
- Wed, 22 Sep 2021 07:24:06 -0700 (PDT)
+        id S236337AbhIVPCq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Sep 2021 11:02:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40526 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236303AbhIVPCq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 22 Sep 2021 11:02:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D846D61107;
+        Wed, 22 Sep 2021 15:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1632322876;
+        bh=+ndLHHJpqgiLl+AAzgT/7slj1gmNF6eITP0mUsOw7/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qPmzNAtcd4CM3U8j4HIh1/lqM8+Hddmpe0T2KDtU5omY27k+KjGypBUUj77++tfP+
+         eynyB8fSepmg6PSQ/zmVlDVePEvyeRQBbG5kV56K5NCFDQMvh4g+pO8mtMjO3gjxPh
+         srja6zaJmblA6D0ou1iSKhg44i5Xga+nGduUJrvE=
+Date:   Wed, 22 Sep 2021 17:01:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andreas Koensgen <ajk@comnets.uni-bremen.de>,
+        Paul Mackerras <paulus@samba.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH 07/16] tty: remove file from tty_ldisc_ops::ioctl and
+ compat_ioctl
+Message-ID: <YUtFOgAQxxXQa+PM@kroah.com>
+References: <20210914091134.17426-1-jslaby@suse.cz>
+ <20210914091134.17426-7-jslaby@suse.cz>
+ <YUlY5pQQWf2P2fKn@google.com>
+ <9049e956-2865-7309-2eaf-aa4516ab28d6@kernel.org>
+ <YUnDtTEzex5/z90J@kroah.com>
+ <e3473e69-777b-8b96-c3ae-54cfbdbdb9a2@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a67:ca19:0:0:0:0:0 with HTTP; Wed, 22 Sep 2021 07:24:05
- -0700 (PDT)
-Reply-To: mrs.fedora@yahoo.com
-From:   "Mrs. Fedora Borislav" <nnakhodorkovsky2@gmail.com>
-Date:   Wed, 22 Sep 2021 15:24:05 +0100
-Message-ID: <CANBA4+eg6G54dzBn-sbZnXnTeiVKzfZwJxx=mbXxb1GBBMjQzA@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e3473e69-777b-8b96-c3ae-54cfbdbdb9a2@kernel.org>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
--- 
-Hello
+On Tue, Sep 21, 2021 at 05:51:35PM +0200, Jiri Slaby wrote:
+> On 21. 09. 21, 13:36, Greg KH wrote:
+> > On Tue, Sep 21, 2021 at 12:52:38PM +0200, Jiri Slaby wrote:
+> > > On 21. 09. 21, 6:00, Dmitry Torokhov wrote:
+> > > > Hi Jiri,
+> > > > 
+> > > > On Tue, Sep 14, 2021 at 11:11:25AM +0200, Jiri Slaby wrote:
+> > > > > diff --git a/drivers/input/serio/serport.c b/drivers/input/serio/serport.c
+> > > > > index 17eb8f2aa48d..55e91d0e70ec 100644
+> > > > > --- a/drivers/input/serio/serport.c
+> > > > > +++ b/drivers/input/serio/serport.c
+> > > > > @@ -207,8 +207,8 @@ static void serport_set_type(struct tty_struct *tty, unsigned long type)
+> > > > >     * serport_ldisc_ioctl() allows to set the port protocol, and device ID
+> > > > >     */
+> > > > > -static int serport_ldisc_ioctl(struct tty_struct *tty, struct file *file,
+> > > > > -			       unsigned int cmd, unsigned long arg)
+> > > > > +static int serport_ldisc_ioctl(struct tty_struct *tty, unsigned int cmd,
+> > > > > +		unsigned long arg)
+> > > > 
+> > > > Can we please keep arguments aligned as they were? Otherwise
+> > > 
+> > > Fixed, thanks. Likely, I will send a follow-up -- depending if Greg drops or
+> > > keeps these in the tree.
+> > 
+> > Up to you.  I can drop them all now if you want to resend a v2 with all
+> > of the aggregate acks, or you can send a follow-up set on top of these.
+> 
+> What about if you keep everything up to (and incl.)
+>   tty: remove file from n_tty_ioctl_helper
+> (i.e. the patch 06/16, the one before this one)? If that works for you, I
+> will send v2 of the rest w/ collected acks. If it doesn't, I prefer sending
+> a complete v2 (incl. collected acks).
 
-I am Mrs.Fedora Borislav from Russia, i have a business proposal for
-you. Please reach me on my private email for more information.(
-mrs.fedora1@hotmail.com)
+Ok, I have kept everything up to and including patch 06 of this series
+and pushed that out now.
 
-Thank you.
+Feel free to rebase on my tty-next branch and resend the remaining
+changes.
+
+thanks,
+
+greg k-h
