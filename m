@@ -2,72 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB7D415CE8
-	for <lists+linux-serial@lfdr.de>; Thu, 23 Sep 2021 13:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8108C415EBE
+	for <lists+linux-serial@lfdr.de>; Thu, 23 Sep 2021 14:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240617AbhIWLiG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 23 Sep 2021 07:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240589AbhIWLiF (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 23 Sep 2021 07:38:05 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1F3C061574
-        for <linux-serial@vger.kernel.org>; Thu, 23 Sep 2021 04:36:34 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id 42so4045931uar.5
-        for <linux-serial@vger.kernel.org>; Thu, 23 Sep 2021 04:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AVuqCuI69lB47qlkpjuLyHlg8ssakPl2Ecl3HCf4XMg=;
-        b=bPvIQPRFE4eUwdAhfBpWkrc1+P12uz8LUP8EvTRZtJYqz/QTuDBovAuOtmvhIsybvX
-         5i0BcsKc+cF4tyWwd2XgEZxN7me9Yf9X0DTVLV93Japi//RwIhSYcYgFoCrnBX9MqPi+
-         fa457xkjeegOC5M0vsmFnaUkk/6MyLXdiDYAM9SzRXP2IVwgPuzLRw68/opv8nexllOi
-         xsZXSIDgJ/Le2fTbbc+XbioJZSjKrBIT6Ere7rah+iAFXx6lf0+1s+zSHAVODluvBvk+
-         w/XWZBrbKXrluHFyYCedntii1L9SAXsoZnhmhZFLqoOimVHDrqnU4B868oZ6a1+0fV0X
-         w6Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AVuqCuI69lB47qlkpjuLyHlg8ssakPl2Ecl3HCf4XMg=;
-        b=vyhzg9a7AWitWVmrr8vJ8qTAZadC35D2xrAp0RS2jyqXQ1MPcE2qjzenP4KMY7JXS1
-         d/IsWx0tb9J3Dkv5lAkV4K00MW3EdvCTzkWPLYGQlY4zcQOXevR0oYGrZ/1mNzHPVwpF
-         3ISKDUvVyelpmfT83m48Em1b+ZAmYgMl/D9pXsTWTI49gjDK0jHSpUEDNyudBjLizPTj
-         wLERiHaTJONPufRqFqAOhUukuYwJ1RJCpLOXnsteCT0dFr7AxO37BsH1LU7wC01B2AuM
-         lGaxHNyyviQh4lVitGjT0N56SKqI9WQX3L/zERZY/5RKZvMgYnHnz0QdAySHD+WJ47tG
-         lY3A==
-X-Gm-Message-State: AOAM532cxWw/+XYeb3Vgu0I6akCCfJwlrTjpmz2PhSqvv/Zi4U2ltTbG
-        8Pw0hsH04iY/M7OXlGu+HMEBxiLi9Uyz3kEUHcM=
-X-Google-Smtp-Source: ABdhPJwDzPZAiNOXBN4I3HGdbkknMscP/Wg6X8W5jyocJpPAC4LBsazMPRsrafsUG1hud/6h72gx11iOfIQsBCwJKkk=
-X-Received: by 2002:a9f:2449:: with SMTP id 67mr3406394uaq.5.1632396993681;
- Thu, 23 Sep 2021 04:36:33 -0700 (PDT)
+        id S241044AbhIWMsS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 23 Sep 2021 08:48:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53340 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241090AbhIWMrY (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 23 Sep 2021 08:47:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D9D06115A;
+        Thu, 23 Sep 2021 12:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632401152;
+        bh=MOEoOm0A6Knk1Gx88rLXlWQqwc5poz0/5WU4cVxmfVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EAMMIvVO0qp0vY0Vp9vAxvSbYybtNM3d6vzy+t/43GrnCw0mncqpK4bLiTm/8kCdl
+         VjZQSg/zSvCoQFx3H9X/9ub9GHVKCN206xXyXEevjxX0XV5zJ/tVsEBu7qPr7Bawjo
+         DcbkKNaNSc8LDd9cqokx1CEEyPFjBmRq5Hb/gi4LCYzlyFsYyfJA82t4lcCSzrlgo+
+         jeJaN/eCFzQV0WFEydlm5e1H5ZYhPlwA/+/pS/PqmEAxPPryp7ofzRfkXnYVSs2E56
+         dNX17V7bAG+D8/ywwGfUTw6YdDV4V6xsB0fkV4cmvTWRySFmRpX5E3gy+ykk+XID/p
+         5pH+XcgKYwsLQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mTO6s-0001ay-7w; Thu, 23 Sep 2021 14:45:54 +0200
+Date:   Thu, 23 Sep 2021 14:45:54 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] serial: core: Add new prep_tx for power management
+Message-ID: <YUx3AkT4Du/PT+V5@hovoldconsulting.com>
+References: <20210921103346.64824-1-tony@atomide.com>
+ <20210921103346.64824-4-tony@atomide.com>
 MIME-Version: 1.0
-Received: by 2002:a05:612c:19:b0:232:54eb:2d29 with HTTP; Thu, 23 Sep 2021
- 04:36:33 -0700 (PDT)
-Reply-To: ms.lisahugh000@gmail.com
-From:   MS LISA HUGH <safi.kabore3@gmail.com>
-Date:   Thu, 23 Sep 2021 13:36:33 +0200
-Message-ID: <CAE8aNp1KLky8oJfcxPVvoycaeeC-szAhQ5_P7S4qrNQD3_zE6w@mail.gmail.com>
-Subject: YOU WILL HAVE THE DETAILS >>MS LISA HUGH.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210921103346.64824-4-tony@atomide.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Friend,
+On Tue, Sep 21, 2021 at 01:33:43PM +0300, Tony Lindgren wrote:
+> If the serial driver implements PM runtime with autosuspend, the port may
+> be powered off for TX. To wake up the port, let's add new prep_tx() call
+> for serial drivers to implement as needed. We call it from serial
+> write_room() and write() functions. If the serial port is not enabled,
+> we just return 0.
 
-I am Ms Lisa Hugh, work in the department of Audit and accounting
-manager here in the Bank.
+This isn't right. If there's room in the driver buffer, there's no
+reason to not accept those characters.
 
-I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
-bank account with your co-operation for both of us benefit.
+It's the drivers responsibility to resume writing when write() is
+called and that me need to be done in a runtime resume callback in case
+the device is suspended.
 
-Please send the follow below,
+No need to be patching line disciplines for this.
 
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
-
-Thanks.
-Ms Lisa Hugh
+Johan
