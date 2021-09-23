@@ -2,99 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89218415A0C
-	for <lists+linux-serial@lfdr.de>; Thu, 23 Sep 2021 10:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB7D415CE8
+	for <lists+linux-serial@lfdr.de>; Thu, 23 Sep 2021 13:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239877AbhIWIeZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 23 Sep 2021 04:34:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239676AbhIWIeX (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 23 Sep 2021 04:34:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CFBC86103C;
-        Thu, 23 Sep 2021 08:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632385970;
-        bh=vnXfYXOxyn9Ib5ZzXCraaYxvauIbNLuuADn51WHKooI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FQFwno3eTTineSXa32z/9oMB+zl71XT0u2+voZDGF9tIp9dvNzCY6teposdT7D7KP
-         0FEZqDSIQnyTo7XOjl92VA9MB2DmEIpHqjUZE9xRwCPJ5SChXOH3+W53FC/NBHfGGb
-         zBU6vDVAc7rXN+t+GM5Ol4+S44se5HTby7V5MU4YuYG2j5qCRmjjAUdc8BbYg78bpY
-         MUs0RL9CH9OgI1mWUxUworIF36TdcpBggNK7u7G52W0/oghyoSSvgMcxJy6hetmNnI
-         xiUE6oPwTJTT1zynkYDxZk2JM+UgxIivvAxpeBFUAxSCzAGK+LGJ2+q5U3IX10Tvzh
-         6ayuQl3V9u0Yg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mTK9z-0008Fd-RZ; Thu, 23 Sep 2021 10:32:51 +0200
-Date:   Thu, 23 Sep 2021 10:32:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/16] tty: drop tty_flip_buffer_push
-Message-ID: <YUw7s76Pi5B4RJoL@hovoldconsulting.com>
-References: <20210914091134.17426-1-jslaby@suse.cz>
- <20210914091415.17918-1-jslaby@suse.cz>
- <20210914091415.17918-9-jslaby@suse.cz>
- <YUMWaCpT4s8dQKiy@hovoldconsulting.com>
- <1fd9ed1a-edd2-a154-da1c-022a89b2c722@kernel.org>
+        id S240617AbhIWLiG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 23 Sep 2021 07:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240589AbhIWLiF (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 23 Sep 2021 07:38:05 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1F3C061574
+        for <linux-serial@vger.kernel.org>; Thu, 23 Sep 2021 04:36:34 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id 42so4045931uar.5
+        for <linux-serial@vger.kernel.org>; Thu, 23 Sep 2021 04:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AVuqCuI69lB47qlkpjuLyHlg8ssakPl2Ecl3HCf4XMg=;
+        b=bPvIQPRFE4eUwdAhfBpWkrc1+P12uz8LUP8EvTRZtJYqz/QTuDBovAuOtmvhIsybvX
+         5i0BcsKc+cF4tyWwd2XgEZxN7me9Yf9X0DTVLV93Japi//RwIhSYcYgFoCrnBX9MqPi+
+         fa457xkjeegOC5M0vsmFnaUkk/6MyLXdiDYAM9SzRXP2IVwgPuzLRw68/opv8nexllOi
+         xsZXSIDgJ/Le2fTbbc+XbioJZSjKrBIT6Ere7rah+iAFXx6lf0+1s+zSHAVODluvBvk+
+         w/XWZBrbKXrluHFyYCedntii1L9SAXsoZnhmhZFLqoOimVHDrqnU4B868oZ6a1+0fV0X
+         w6Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AVuqCuI69lB47qlkpjuLyHlg8ssakPl2Ecl3HCf4XMg=;
+        b=vyhzg9a7AWitWVmrr8vJ8qTAZadC35D2xrAp0RS2jyqXQ1MPcE2qjzenP4KMY7JXS1
+         d/IsWx0tb9J3Dkv5lAkV4K00MW3EdvCTzkWPLYGQlY4zcQOXevR0oYGrZ/1mNzHPVwpF
+         3ISKDUvVyelpmfT83m48Em1b+ZAmYgMl/D9pXsTWTI49gjDK0jHSpUEDNyudBjLizPTj
+         wLERiHaTJONPufRqFqAOhUukuYwJ1RJCpLOXnsteCT0dFr7AxO37BsH1LU7wC01B2AuM
+         lGaxHNyyviQh4lVitGjT0N56SKqI9WQX3L/zERZY/5RKZvMgYnHnz0QdAySHD+WJ47tG
+         lY3A==
+X-Gm-Message-State: AOAM532cxWw/+XYeb3Vgu0I6akCCfJwlrTjpmz2PhSqvv/Zi4U2ltTbG
+        8Pw0hsH04iY/M7OXlGu+HMEBxiLi9Uyz3kEUHcM=
+X-Google-Smtp-Source: ABdhPJwDzPZAiNOXBN4I3HGdbkknMscP/Wg6X8W5jyocJpPAC4LBsazMPRsrafsUG1hud/6h72gx11iOfIQsBCwJKkk=
+X-Received: by 2002:a9f:2449:: with SMTP id 67mr3406394uaq.5.1632396993681;
+ Thu, 23 Sep 2021 04:36:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1fd9ed1a-edd2-a154-da1c-022a89b2c722@kernel.org>
+Received: by 2002:a05:612c:19:b0:232:54eb:2d29 with HTTP; Thu, 23 Sep 2021
+ 04:36:33 -0700 (PDT)
+Reply-To: ms.lisahugh000@gmail.com
+From:   MS LISA HUGH <safi.kabore3@gmail.com>
+Date:   Thu, 23 Sep 2021 13:36:33 +0200
+Message-ID: <CAE8aNp1KLky8oJfcxPVvoycaeeC-szAhQ5_P7S4qrNQD3_zE6w@mail.gmail.com>
+Subject: YOU WILL HAVE THE DETAILS >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Sep 22, 2021 at 08:57:17AM +0200, Jiri Slaby wrote:
-> On 16. 09. 21, 12:03, Johan Hovold wrote:
-> > On Tue, Sep 14, 2021 at 11:14:15AM +0200, Jiri Slaby wrote:
-> >> Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
-> >> tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). All
-> >> users were converted, so remove tty_flip_buffer_push() completely.
+Dear Friend,
 
-> > The name tty_flip_buffer_push() is arguable more descriptive since the
-> > work may already be running and is also less tied to the implementation.
-> > 
-> > The ratio of drivers using tty_flip_buffer_push() over
-> > tty_schedule_flip() is also something like 186 to 15 so that would
-> > amount to a lot less churn too.
-> 
-> OK, I can do either way. I chose this path as tty_schedule_flip was a 
-> wrapper to tty_flip_buffer_push. In any case, I wouldn't take the number 
-> of changed drivers as a measure. But if it makes more sense for people 
-> regarding the naming, I will "flip" the two flips.
+I am Ms Lisa Hugh, work in the department of Audit and accounting
+manager here in the Bank.
 
-I'd prefer that. The name tty_flip_buffer_push() is more descriptive and
-we've been using it in virtually all tty drivers since 1997. No need to
-force people to relearn the pattern of tty insert + push.
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
 
-(Also note that the kernel doc for tty_schedule_flip() says "push
-characters to ldisc", while the name more reflects how the tty buffering
-was originally implemented.)
- 
-> > Also, can you please start adding cover letters to your series to
-> > provide an overview of what it is you're trying to accomplish?
-> 
-> I am not a fan of cover letters as they are not Cced to people who are 
-> Cced in separate patches. So what would you like to see in the letter? 
-> This series are just a random cleanup and IMO there is not much more to 
-> be said except what is in their commit logs.
+Please send the follow below,
 
-Even if all it said was "random cleanups" it would still be worth having
-as I'd know that this is just Jiri moving code about and not necessarily
-something that needs deeper review.
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
 
-In this case the driver commit messages only said that "[w]e are going
-to remove [tty_flip_buffer_push()]" without any real explanation why
-that was chosen over the alternatives. I had to look up the series on
-lore to look for more details. But since there's no cover letter I end
-up having to skim the entire series only to come up mostly empty handed
-as the final patch just added "One less exported function" as some sort
-of motivation.
-
-Let's not make it harder for reviewers. If you're sending random cleanup
-patches then say so. And if they can be grouped into a few classes as
-seemed to be the case here then having those outlined is also helpful.
-
-Johan
+Thanks.
+Ms Lisa Hugh
