@@ -2,68 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6413541E2F6
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Sep 2021 23:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2232941E437
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Oct 2021 00:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbhI3VGO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 30 Sep 2021 17:06:14 -0400
-Received: from mga14.intel.com ([192.55.52.115]:14523 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229957AbhI3VGL (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 30 Sep 2021 17:06:11 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="224944442"
-X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
-   d="scan'208";a="224944442"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 14:04:16 -0700
-X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
-   d="scan'208";a="564452544"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 14:04:14 -0700
-Received: from andy by smile with local (Exim 4.95-RC2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mW3Dw-007G1g-5v;
-        Fri, 01 Oct 2021 00:04:12 +0300
-Date:   Fri, 1 Oct 2021 00:04:12 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] serial: 8250_dw: Mark acpi match table as maybe unused
-Message-ID: <YVYmTL8WsgYnxPwc@smile.fi.intel.com>
-References: <20210930124950.3069638-1-daniel@0x0f.com>
- <YVXWiQWGkzmp6O1A@smile.fi.intel.com>
- <CAFr9PXkgDaXPb+h3TFmS4VVzzmPqjJJj0Y4cd_ZTUgqMbNZUSA@mail.gmail.com>
+        id S1348751AbhI3W71 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 30 Sep 2021 18:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348976AbhI3W7Z (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 30 Sep 2021 18:59:25 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E2C06176C
+        for <linux-serial@vger.kernel.org>; Thu, 30 Sep 2021 15:57:42 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id g7so27181383edv.1
+        for <linux-serial@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=NbyMdHEZeBs3sGq/yDHhFme6/Fat2fIEs1FbuecL1VGVLNPFVKU5MMEzqqtmtv3lrT
+         LyW5uhTxAor2u02W/ObGaIVKkso13EmNkPeqEKWvp/MUMhviRWbZ8nckHCYJ556NudOp
+         CVsQD4dF9ZylhNVdYAbBqX0A0zUyE0K2pGMLE76ziizR4sORoxcFl/sLgtHo3wxalxgg
+         zVWop8qYFvchibQzEbMROBdDHjlzHZVZJ1FRfybhb6wrSwetzJb9THEFmdLn6gkHaAVz
+         dFyBj/yMHcUaz8lAQTBNC3OUOyaayX15aeEcmR3hIb43fnzJKw76ohBZCKh7LDPECDvY
+         Mt4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=E9q88AGWBYnq7sPbwgNdxrDbjyf29VrLk4lyQXryLd3GeIIPQRKHbNRnL8PvQnbGDh
+         zJfOka0lE6zCEtzSo16/t8WjC/07ifVzzG253Y5zv7oG1fmnVXKMN9CSMPDeycrF30uf
+         FiJn9iQwFi1mt/2QKRocTGqJd4S2+YZ4IZ+tOSgxFgv+AzMgV95TZd0L3T3mi9nIqQnC
+         GvMSAAKZXaRWoznjnHT0WKekiiHMk8Q8UvDSe4pmiIwUG4ybU6zh7G4APH745mCF0IRq
+         U4kOn092VnDeOLUd6YNf4rKPA+hOYv4L5x5jv9thv1iz9FhZxiN8CNkEhjzoQZaOL0Wo
+         Putw==
+X-Gm-Message-State: AOAM533A9e/mBSxkSclLwnC6bzuPRge32Oe48lNRTZoBR2ZJCWHhKj/F
+        yDiQf/7zUI3PGcxOpgTy+Dvu5/n5EDhg+1C+w0upSzMFFiyDmOFD
+X-Google-Smtp-Source: ABdhPJwtAjakrk22PhsocMynsw1dcpQi8Yyjww/qtw286RJir5/Sf5h95h400OE8CslcguyIOaDpjCBWapvMI27/7k0=
+X-Received: by 2002:a2e:5705:: with SMTP id l5mr8854699ljb.456.1633042649694;
+ Thu, 30 Sep 2021 15:57:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFr9PXkgDaXPb+h3TFmS4VVzzmPqjJJj0Y4cd_ZTUgqMbNZUSA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Received: by 2002:a05:6512:5d8:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:57:29
+ -0700 (PDT)
+Reply-To: southwestloanco59@gmail.com
+From:   SOUTHWESTLOANCO <saniabdullahinng2020@gmail.com>
+Date:   Thu, 30 Sep 2021 15:57:29 -0700
+Message-ID: <CA+3X9TxSf18dxD51aJOg_UrukfudS2Vv1PZk=HxC5aHG_Y0JQg@mail.gmail.com>
+Subject: Dear owner,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Oct 01, 2021 at 12:31:34AM +0900, Daniel Palmer wrote:
-> On Fri, 1 Oct 2021 at 00:24, Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > And incorrect fix. See my patches regarding to the topic
-> > (`git log --grep ACPI_PTR`) and do accordingly, i.e. drop
-> > ACPI_PTR() for good.
-> 
-> Something like 349bff48ae0f5f8aa2075d0bdc2091a30bd634f6?
-> 
-> Doesn't this mean the ACPI table ends up in kernels that will never use ACPI?
-
-Yes. Is it a problem (*)? If so, you need to use ifdeffery, since __maybe_unused is
-not for the ID tables.
-
-*) while justifying this you also need to show why it's a problem specific
-to the ACPI IDs and not a problem for OF ones, which we have tons of in the
-Linux kernel without any guards (ifdeffery).
-
 -- 
-With Best Regards,
-Andy Shevchenko
+Good day,
+          Do you need a loan ? We offer any kind of loan to repay in
+6months with just 2% interest
 
+Kindly Reply with below information
 
+NAME...............
+ADDRESS..........
+OCCUPATION....
+AGE...................
+PHONE..............
+AMOUNT NEEDED......
+
+Regards
+
+Contact  Mr Gary Edward +13182955380
+
+Remittance Department southwestloanco59@gmail.com
