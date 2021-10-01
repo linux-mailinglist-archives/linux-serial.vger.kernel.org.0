@@ -2,77 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2232941E437
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Oct 2021 00:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E6741E573
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Oct 2021 02:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348751AbhI3W71 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 30 Sep 2021 18:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S1348708AbhJAASU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 30 Sep 2021 20:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348976AbhI3W7Z (ORCPT
+        with ESMTP id S1347868AbhJAASU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 30 Sep 2021 18:59:25 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E2C06176C
-        for <linux-serial@vger.kernel.org>; Thu, 30 Sep 2021 15:57:42 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id g7so27181383edv.1
-        for <linux-serial@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
+        Thu, 30 Sep 2021 20:18:20 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E9EC06176A
+        for <linux-serial@vger.kernel.org>; Thu, 30 Sep 2021 17:16:36 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id t36so5508022uad.4
+        for <linux-serial@vger.kernel.org>; Thu, 30 Sep 2021 17:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
-        b=NbyMdHEZeBs3sGq/yDHhFme6/Fat2fIEs1FbuecL1VGVLNPFVKU5MMEzqqtmtv3lrT
-         LyW5uhTxAor2u02W/ObGaIVKkso13EmNkPeqEKWvp/MUMhviRWbZ8nckHCYJ556NudOp
-         CVsQD4dF9ZylhNVdYAbBqX0A0zUyE0K2pGMLE76ziizR4sORoxcFl/sLgtHo3wxalxgg
-         zVWop8qYFvchibQzEbMROBdDHjlzHZVZJ1FRfybhb6wrSwetzJb9THEFmdLn6gkHaAVz
-         dFyBj/yMHcUaz8lAQTBNC3OUOyaayX15aeEcmR3hIb43fnzJKw76ohBZCKh7LDPECDvY
-         Mt4w==
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=reoSaQ9AhImvnMfD926etvYbnKQHn3wv1fqTb5190TQ=;
+        b=uDiOshgTJ26FnFnhsDdDxgo0wiCApgOTuGkrvWZz8ozm6Lx/YpHN2K6Fa70Luh9BcI
+         FgCNVD80AJuwQA9PS2+tgjMNoWQRsGbAXU0d/iNj/sPlu+H/HgLRAtoUKT4+JJGyk79W
+         NX9Au7Pt3OWeqygX9Hvw15Q9m8cn6e5n+MYT4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
-        b=E9q88AGWBYnq7sPbwgNdxrDbjyf29VrLk4lyQXryLd3GeIIPQRKHbNRnL8PvQnbGDh
-         zJfOka0lE6zCEtzSo16/t8WjC/07ifVzzG253Y5zv7oG1fmnVXKMN9CSMPDeycrF30uf
-         FiJn9iQwFi1mt/2QKRocTGqJd4S2+YZ4IZ+tOSgxFgv+AzMgV95TZd0L3T3mi9nIqQnC
-         GvMSAAKZXaRWoznjnHT0WKekiiHMk8Q8UvDSe4pmiIwUG4ybU6zh7G4APH745mCF0IRq
-         U4kOn092VnDeOLUd6YNf4rKPA+hOYv4L5x5jv9thv1iz9FhZxiN8CNkEhjzoQZaOL0Wo
-         Putw==
-X-Gm-Message-State: AOAM533A9e/mBSxkSclLwnC6bzuPRge32Oe48lNRTZoBR2ZJCWHhKj/F
-        yDiQf/7zUI3PGcxOpgTy+Dvu5/n5EDhg+1C+w0upSzMFFiyDmOFD
-X-Google-Smtp-Source: ABdhPJwtAjakrk22PhsocMynsw1dcpQi8Yyjww/qtw286RJir5/Sf5h95h400OE8CslcguyIOaDpjCBWapvMI27/7k0=
-X-Received: by 2002:a2e:5705:: with SMTP id l5mr8854699ljb.456.1633042649694;
- Thu, 30 Sep 2021 15:57:29 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=reoSaQ9AhImvnMfD926etvYbnKQHn3wv1fqTb5190TQ=;
+        b=REa/2SCybEr8TlKELCEJMVWwzJCMXWPWqnpwTlYBXZ61uKEBUYXQkZyB7cj2l7mxWw
+         /fthEiV9qU3MwEoMoGXEPeuzzQ8rNB9B4GOBwISgqnAP/OHNhvMRlGuB6GpKrLQkgBha
+         vMWgwAyYQB+o9Kr8ZaVET54CFMzavos0wz7EukEQCsAEyXBsYEH+nlKVBMvzreDub9fg
+         s9E+Vgv8WKpsM7EVtFTf5KbYdDg5JSWAlGiuVckTiW6ouF7ZM3sx5WkKGhTt7JUIvMHN
+         achPtyeZQltI3IDMqZ4G3zENeTFDHVtN0q4XQ0OvYuopgp8A8J52Y0TtUlzP6SfYoRw8
+         ZhyA==
+X-Gm-Message-State: AOAM5335DbSwuRsJ8PlGeNAjcBpDPdIjeaczf5H0CbxMPwJM66w/vSVe
+        Gy2y2/SN0dwbsRz47hfr7TkMenS/y5tyWJFUEuAiSr574RQ=
+X-Google-Smtp-Source: ABdhPJwdxWlbRP12X6ZE/i37ZeQyQ7WbNoa0R8WFeUB9ZN6+OnmJwCC7HZBzoLWkDPzpBUDP9EqpT+z+lgHbzOl1ras=
+X-Received: by 2002:ab0:7587:: with SMTP id q7mr5660146uap.92.1633047395886;
+ Thu, 30 Sep 2021 17:16:35 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:5d8:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:57:29
- -0700 (PDT)
-Reply-To: southwestloanco59@gmail.com
-From:   SOUTHWESTLOANCO <saniabdullahinng2020@gmail.com>
-Date:   Thu, 30 Sep 2021 15:57:29 -0700
-Message-ID: <CA+3X9TxSf18dxD51aJOg_UrukfudS2Vv1PZk=HxC5aHG_Y0JQg@mail.gmail.com>
-Subject: Dear owner,
-To:     undisclosed-recipients:;
+References: <20210930124950.3069638-1-daniel@0x0f.com> <YVXWiQWGkzmp6O1A@smile.fi.intel.com>
+ <CAFr9PXkgDaXPb+h3TFmS4VVzzmPqjJJj0Y4cd_ZTUgqMbNZUSA@mail.gmail.com> <YVYmTL8WsgYnxPwc@smile.fi.intel.com>
+In-Reply-To: <YVYmTL8WsgYnxPwc@smile.fi.intel.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Fri, 1 Oct 2021 09:16:24 +0900
+Message-ID: <CAFr9PXmVQFDdMiMUgg4v7DAcFkdaUtFeaXOyW4_NrVd5oYKSSA@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250_dw: Mark acpi match table as maybe unused
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
--- 
-Good day,
-          Do you need a loan ? We offer any kind of loan to repay in
-6months with just 2% interest
+Hi Andy,
 
-Kindly Reply with below information
+On Fri, 1 Oct 2021 at 06:04, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> > Doesn't this mean the ACPI table ends up in kernels that will never use ACPI?
+>
+> Yes. Is it a problem (*)? If so, you need to use ifdeffery, since __maybe_unused is
+> not for the ID tables.
 
-NAME...............
-ADDRESS..........
-OCCUPATION....
-AGE...................
-PHONE..............
-AMOUNT NEEDED......
+Ok, is there a reason it's not for the ID tables? Does it break something?
 
-Regards
+> *) while justifying this you also need to show why it's a problem specific
+> to the ACPI IDs and not a problem for OF ones, which we have tons of in the
+> Linux kernel without any guards (ifdeffery).
 
-Contact  Mr Gary Edward +13182955380
+To be honest I don't care about this too much. I just wanted to cut
+down some of the noise when I build my patch backlog so that warnings
+in the stuff I'm trying to mainline are more visible.
 
-Remittance Department southwestloanco59@gmail.com
+For what it's worth I think the OF ids are a bit wasteful. For some
+drivers where there are tons of broken variations they add a few K of
+unneeded data. But since everyone now has gigabytes of memory I doubt
+they care...
+I'm working with 64MB. :)
+
+Cheers,
+
+Daniel
