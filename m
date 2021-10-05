@@ -2,56 +2,29 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83278422D63
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Oct 2021 18:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C79422DA4
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Oct 2021 18:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235543AbhJEQKM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 5 Oct 2021 12:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S236465AbhJEQRV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 Oct 2021 12:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234539AbhJEQKM (ORCPT
+        with ESMTP id S235077AbhJEQRU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 5 Oct 2021 12:10:12 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCD3C061753
-        for <linux-serial@vger.kernel.org>; Tue,  5 Oct 2021 09:08:21 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id i24so38359343lfj.13
-        for <linux-serial@vger.kernel.org>; Tue, 05 Oct 2021 09:08:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dzfx3fsRo7F5xw3fHSg8nKJV024hLxYFAlzOMQp4+E4=;
-        b=uFqA5Cc3evmiBrUl9z6ToXQIVBU296s5VunLco/GeXPzwXHxuPpMdOxZBBU7FsQwzb
-         ohznDJht5Qkj9hI2kFgCESrzSMkuWoMc90R6zOxOlAA2xntHYdgt90DkQVT5LQ8qb588
-         yeaPyQhKooeku/8QQQEEN67WGwghh7Y3uBzNWseOHcM4GkhJ7PxJERPwq8fjoQgRjhKu
-         ektxYB62gxECriYpa30+gxG5IcaPhA8YZ6wowtlTqeamGaePiWoxBgyJjGgLIysYZXUa
-         yUCFn8xxFpTQScVpxMRkJM2ZQ7x9YmbSz3Ut/7OJ3qYgAhFiQhHy8Zv0Z/J+7G8gKW2K
-         wx0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dzfx3fsRo7F5xw3fHSg8nKJV024hLxYFAlzOMQp4+E4=;
-        b=CxRdG7V0hfnlnc59dFnd8wORQyKMkmMlXvSj9HRAftDICuAo3McEdhWnO9qppdSSTA
-         nhYWpEeh5Nsl9xDlwxjkLUqxRItkXguD6pQlRtfCROZ3shn29JfLH3MdVjyBVQh1J8f7
-         CJnq+9DN60pfce+COeqZ+i6hOylhBY2sxSSQE1tTV6QRIGyRZI+qEXlWQ0AdeQP26zZG
-         hYfW3OWZxDrjdfIbkCNk4weg1VcFaVtn9LyMPd4QFjC77q3Fh9fgG/oSsmWyNAqFIZA4
-         4KXW5eJooIEpwZOLSUNnN8SjP4+DeNrau6A83ZYzcPCeUsfQoCyNdB5ydVD1EvD/BpNJ
-         SaQg==
-X-Gm-Message-State: AOAM532rS1nYDAabuNzPhhr+fsmwCAMUcVzb7he3kXSiac6UZzl7Agz5
-        ps0pqw+aY1wH37/WTPXzi2DVRYbzZNfbrd+2SyF+fg==
-X-Google-Smtp-Source: ABdhPJwnC31+Ik6u2dpcC0CWhMVXL1AHvSjtDIcmiq1/SWE794/6DgQfUSDzkEj3yIm9x+wD7DVu/FMKUe34DDg+Je4=
-X-Received: by 2002:a05:6512:10cc:: with SMTP id k12mr4520941lfg.72.1633450099935;
- Tue, 05 Oct 2021 09:08:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211005155923.173399-1-marcan@marcan.st> <20211005155923.173399-4-marcan@marcan.st>
-In-Reply-To: <20211005155923.173399-4-marcan@marcan.st>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 5 Oct 2021 18:08:08 +0200
-Message-ID: <CACRpkdanbovvXXLAGGZEEiKXXrNnW+8p1sCONQYWmAjVi-m-9A@mail.gmail.com>
-Subject: Re: [PATCH 3/7] soc: apple: Add driver for Apple PMGR power state controls
-To:     Hector Martin <marcan@marcan.st>
+        Tue, 5 Oct 2021 12:17:20 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B29C061749;
+        Tue,  5 Oct 2021 09:15:29 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id D599E41EA7;
+        Tue,  5 Oct 2021 16:15:23 +0000 (UTC)
+Subject: Re: [PATCH 3/7] soc: apple: Add driver for Apple PMGR power state
+ controls
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -68,26 +41,52 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20211005155923.173399-1-marcan@marcan.st>
+ <20211005155923.173399-4-marcan@marcan.st>
+ <CACRpkdanbovvXXLAGGZEEiKXXrNnW+8p1sCONQYWmAjVi-m-9A@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <3bad7bc3-30ac-851f-57a3-7781dfa23521@marcan.st>
+Date:   Wed, 6 Oct 2021 01:15:21 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CACRpkdanbovvXXLAGGZEEiKXXrNnW+8p1sCONQYWmAjVi-m-9A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Hector,
+Hi Linus,
 
-On Tue, Oct 5, 2021 at 6:00 PM Hector Martin <marcan@marcan.st> wrote:
+On 06/10/2021 01.08, Linus Walleij wrote:
+> Hi Hector,
+> 
+> On Tue, Oct 5, 2021 at 6:00 PM Hector Martin <marcan@marcan.st> wrote:
+> 
+>>   drivers/soc/apple/Kconfig               |  21 ++
+>>   drivers/soc/apple/Makefile              |   2 +
+>>   drivers/soc/apple/apple-pmgr-pwrstate.c | 281 ++++++++++++++++++++++++
+> 
+> This is traditionally where we put the ARM SoC drivers, but
+> Mac has traditionally used drivers/macintosh for their custom
+> board etc stuff. Or is that just for any off-chip stuff?
+> 
+> I suppose it doesn't matter much (unless there is code under
+> drivers/macintosh we want to reuse for M1), but it could be a bit
+> confusing?
 
->  drivers/soc/apple/Kconfig               |  21 ++
->  drivers/soc/apple/Makefile              |   2 +
->  drivers/soc/apple/apple-pmgr-pwrstate.c | 281 ++++++++++++++++++++++++
+Hmm, it seems that tree is mostly about the PowerPC era Macs; the only 
+thing enabled for x86 there is MAC_EMUMOUSEBTN. There is also 
+platform/x86/apple-gmux.c for an x86 Mac specific thing...
 
-This is traditionally where we put the ARM SoC drivers, but
-Mac has traditionally used drivers/macintosh for their custom
-board etc stuff. Or is that just for any off-chip stuff?
+We already broke tradition with the "apple," DT compatible prefix (used 
+to be AAPL for the PowerPC Macs), and these chips aren't even just used 
+in Macs (e.g. the iPad, which in theory people would be able to run 
+Linux on if someone figures out a jailbreak), so perhaps it's time for 
+another break here?
 
-I suppose it doesn't matter much (unless there is code under
-drivers/macintosh we want to reuse for M1), but it could be a bit
-confusing?
-
-Yours,
-Linus Walleij
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
