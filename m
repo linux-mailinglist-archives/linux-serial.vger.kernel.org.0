@@ -2,64 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AA0422A9B
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Oct 2021 16:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588B3422D6B
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Oct 2021 18:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbhJEOQJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 5 Oct 2021 10:16:09 -0400
-Received: from mga17.intel.com ([192.55.52.151]:52559 "EHLO mga17.intel.com"
+        id S235197AbhJEQLP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 Oct 2021 12:11:15 -0400
+Received: from marcansoft.com ([212.63.210.85]:46704 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236234AbhJEOPR (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 5 Oct 2021 10:15:17 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10128"; a="206561907"
-X-IronPort-AV: E=Sophos;i="5.85,349,1624345200"; 
-   d="scan'208";a="206561907"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 06:45:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="scan'208";a="439516770"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 05 Oct 2021 06:45:24 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BB78A291; Tue,  5 Oct 2021 16:45:30 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v1 2/2] serial: 8250_dw: Fix the trivial typo in the comment
-Date:   Tue,  5 Oct 2021 16:45:29 +0300
-Message-Id: <20211005134529.23256-2-andriy.shevchenko@linux.intel.com>
+        id S235543AbhJEQLP (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 5 Oct 2021 12:11:15 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 55D26419B4;
+        Tue,  5 Oct 2021 15:59:41 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 0/7] Apple SoC PMGR device power states driver
+Date:   Wed,  6 Oct 2021 00:59:16 +0900
+Message-Id: <20211005155923.173399-1-marcan@marcan.st>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211005134529.23256-1-andriy.shevchenko@linux.intel.com>
-References: <20211005134529.23256-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Fix the trivial typo in the comment: Premilinary --> Preliminary.
+This series adds the driver for the Apple PMGR device power state
+registers. These registers can clockgate and (in some cases) powergate
+specific SoC blocks. They also control the reset line, and can have
+additional features such as automatic power management.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The current driver supports only the lowest/highest power states,
+provided via the genpd framework, plus reset support provided via
+the reset subsystem.
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 792389acf9f6..5a2ff843ec5d 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -338,7 +338,7 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 	rate = clk_round_rate(d->clk, newrate);
- 	if (rate > 0) {
- 		/*
--		 * Premilinary set the uartclk to the new clock rate so the
-+		 * Preliminary set the uartclk to the new clock rate so the
- 		 * clock update event handler caused by the clk_set_rate()
- 		 * calling wouldn't actually update the UART divisor since
- 		 * we about to do this anyway.
+Apple's PMGRs (there are two in the T8103) have a uniform register
+bit layout (sometimes with varying features). To be able to support
+multiple SoC generations as well as express pd relationships
+dynamically, this binding describes each PMGR power state control
+as a single devicetree node. Future SoC generations are expected to
+retain backwards compatibility, allowing this driver to work on them
+with only DT changes.
+
+#1-#2: Adds the required device tree bindings
+#3: The driver itself.
+#4: Somewhat unrelated DT change, but I wanted to get it out of the way
+    for #7
+#5: Instantiates the driver in t8103.dtsi.
+#6: Adds runtime-pm support to the Samsung UART driver, as a first
+    consumer.
+#7: Instantiates a second UART, to more easily test this.
+
+There are currently no consumers for the reset functionality, so
+it is untested, but we will be testing it soon with the NVMe driver
+(as it is required to allow driver re-binding to work properly).
+
+Hector Martin (7):
+  dt-bindings: arm: apple: Add apple,pmgr binding
+  dt-bindings: power: Add apple,pmgr-pwrstate binding
+  soc: apple: Add driver for Apple PMGR power state controls
+  arm64: dts: apple: t8103: Rename clk24 to clkref
+  arm64: dts: apple: t8103: Add the UART PMGR tree
+  tty: serial: samsung_tty: Support runtime PM
+  arm64: dts: apple: t8103: Add UART2
+
+ .../bindings/arm/apple/apple,pmgr.yaml        |  74 +++++
+ .../bindings/power/apple,pmgr-pwrstate.yaml   | 117 ++++++++
+ MAINTAINERS                                   |   3 +
+ arch/arm64/boot/dts/apple/t8103-j274.dts      |   5 +
+ arch/arm64/boot/dts/apple/t8103.dtsi          | 134 ++++++++-
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/apple/Kconfig                     |  21 ++
+ drivers/soc/apple/Makefile                    |   2 +
+ drivers/soc/apple/apple-pmgr-pwrstate.c       | 281 ++++++++++++++++++
+ drivers/tty/serial/samsung_tty.c              |  88 +++---
+ 11 files changed, 690 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
+ create mode 100644 drivers/soc/apple/Kconfig
+ create mode 100644 drivers/soc/apple/Makefile
+ create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
+
 -- 
 2.33.0
 
