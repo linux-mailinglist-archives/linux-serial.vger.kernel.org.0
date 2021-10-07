@@ -2,101 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5CC425426
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Oct 2021 15:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B36C42553C
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Oct 2021 16:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241596AbhJGNfG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 Oct 2021 09:35:06 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36600
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241508AbhJGNfG (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 Oct 2021 09:35:06 -0400
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0214D3FFE4
-        for <linux-serial@vger.kernel.org>; Thu,  7 Oct 2021 13:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1633613592;
-        bh=XOOtcMxu4VGplGw4HdBrnq8LT8wk3wMvDJtbbxYgvsw=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=Hm0ObiBkLQ/uvvAkSfpV/DAlHEH9GBBRC7DBOC4aBdXrFVvwWquRyo2ArUINBLpRH
-         F+1aqEXzH9gx8FcWOB1rDC7msnQi2BTzZHzoKzqeqNQqebfyA3M4Rzr+9pcClMtgau
-         f8RQA/Shljmh728voCd24eCl92vpQLDNECfNUlnJRPYUZrPMxzjJBX4epn2vIMQHMm
-         bDuO9JtXZ+s3ODF/Lb8pCXnX9CCyEiih6qE2Btoc01BLTXxYAJTPVsBrQSwCEolvvI
-         xuu+lSx0/oMTno4oHuLsSIG9M82kxFGM06tSIxqbmcEeCaGDA2hO7KUBOAkZ329wfY
-         feVa95XfbHrfw==
-Received: by mail-wr1-f72.google.com with SMTP id 41-20020adf812c000000b00160dfbfe1a2so1037779wrm.3
-        for <linux-serial@vger.kernel.org>; Thu, 07 Oct 2021 06:33:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XOOtcMxu4VGplGw4HdBrnq8LT8wk3wMvDJtbbxYgvsw=;
-        b=eR/KByOX7PPp1VJCDKnIoWemdBcebXsH123nEQ4bZDBPYkekccZx5J66VDSdPCDPVZ
-         q9d06B52FNDbssqlsIQUYz2c9KFrg6k/eIUVi1clXH8rxRER2xUumScjK6beqebh/Wwu
-         yA3/4VmDF+FLp1dskO3BlilSf4fEwi68UKt1T5ZR5g5kwonz2kbuQVnWTM5ZRpVgJ5Yu
-         OiMlAmLxCZOVY7H1Sktm4T7CZmiZu/xYgeMSmYkvrOxSjLaqIJdW6JJVma3Hwpj9n0S/
-         utzhCJ+GprYAN/qCA8bm7KGfTOX+xTK2MPufhHf9CjNJJ5NIJkZx1ZQoZ8HUSpbaNgOQ
-         N/Ew==
-X-Gm-Message-State: AOAM532jq73JHDzVECp8UZw9QcOr1Gpw8Jgs2lW1NQfkpvfPIu6r81XI
-        ga6kKhoQjNWqWP4IU8YijoZirGXm3MnScuAwXHHH3y7nV6BFHVJxkMRQ8FaplzKuClCaqZ2NHKC
-        QGTElDwllLbw/6T1kH0S7xFB34/Br0ILlxmYtd4W++g==
-X-Received: by 2002:a1c:4487:: with SMTP id r129mr16396830wma.127.1633613591677;
-        Thu, 07 Oct 2021 06:33:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxjsCDvHGtPoTWQUiPu1xD+rfOLwo1X6CpLXbYUd/gRjlfYdJKXG9PE5H5BcQatFGmrqVvqCA==
-X-Received: by 2002:a1c:4487:: with SMTP id r129mr16396804wma.127.1633613591523;
-        Thu, 07 Oct 2021 06:33:11 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-186-13.adslplus.ch. [188.155.186.13])
-        by smtp.gmail.com with ESMTPSA id y1sm13474952wrh.89.2021.10.07.06.33.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Oct 2021 06:33:11 -0700 (PDT)
-Subject: Re: [PATCH v2] tty: serial: samsung: Improve naming for common macro
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211005095800.2165-1-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <e2e8cf83-b888-9472-c25d-03c4068e25d3@canonical.com>
-Date:   Thu, 7 Oct 2021 15:33:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S241664AbhJGOX0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 Oct 2021 10:23:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40484 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241042AbhJGOX0 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 7 Oct 2021 10:23:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA10F610CC;
+        Thu,  7 Oct 2021 14:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1633616492;
+        bh=xTguGxb+pvfpaW8x929jVClMOsoXSvmHcgRLD9+ZJIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FFLspULtvPRf6zffVeQl4pF5v3TsK9H33qbffAfhUHTtRE7+N3w5yENNsIMH7xUlz
+         ANAEhsEb5S+yVA9TmCVyuOpcttIqjWm7cZCMcRjBJJh7tMCyn/HYWD5zyT68lIqRQ4
+         38ypdOnelP0+T3knnMsp9mBKTlx683lZ+t9gA3zI=
+Date:   Thu, 7 Oct 2021 16:21:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Subject: Re: [PATCH] Revert "serial: 8250: Fix reporting real baudrate value
+ in c_ospeed field"
+Message-ID: <YV8CavX93a8XCSJP@kroah.com>
+References: <20211007133146.28949-1-johan@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211005095800.2165-1-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211007133146.28949-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 05/10/2021 11:58, Sam Protsenko wrote:
-> Having "_USI" suffix in EXYNOS_COMMON_SERIAL_DRV_DATA_USI() macro is
-> confusing. Rename it to just EXYNOS_COMMON_SERIAL_DRV_DATA() and provide
-> USI registers availability for all Exynos variants instead. While at it,
-> also convert .has_usi field type to bool, so its usage is more obvious.
+On Thu, Oct 07, 2021 at 03:31:46PM +0200, Johan Hovold wrote:
+> This reverts commit 32262e2e429cdb31f9e957e997d53458762931b7.
 > 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> The commit in question claims to determine the inverse of
+> serial8250_get_divisor() but failed to notice that some drivers override
+> the default implementation using a get_divisor() callback.
+> 
+> This means that the computed line-speed values can be completely wrong
+> and results in regular TCSETS requests failing (the incorrect values
+> would also be passed to any overridden set_divisor() callback).
+> 
+> Similarly, it also failed to honour the old (deprecated) ASYNC_SPD_FLAGS
+> and would break applications relying on those when re-encoding the
+> actual line speed.
+> 
+> There are also at least two quirks, UART_BUG_QUOT and an OMAP1510
+> workaround, which were happily ignored and that are now broken.
+> 
+> Finally, even if the offending commit were to be implemented correctly,
+> this is a new feature and not something which should be backported to
+> stable.
+> 
+> Cc: Pali Rohár <pali@kernel.org>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 > ---
-> Changes in v2:
->   - Converted .has_usi field to boolean
->   - Used true/false instead of 1/0 values in
->     EXYNOS_COMMON_SERIAL_DRV_DATA() macro
-> 
->  drivers/tty/serial/samsung_tty.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
+>  drivers/tty/serial/8250/8250_port.c | 17 -----------------
+>  1 file changed, 17 deletions(-)
 
+Argh, sorry I missed this, good catch.  I'll go queue this up now,
+thanks.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+greg k-h
