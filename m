@@ -2,111 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9FE42A88C
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Oct 2021 17:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3EE42A822
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Oct 2021 17:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237584AbhJLPmP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 12 Oct 2021 11:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S237419AbhJLPX3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 12 Oct 2021 11:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237588AbhJLPmJ (ORCPT
+        with ESMTP id S234023AbhJLPX2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 12 Oct 2021 11:42:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A608C061770
-        for <linux-serial@vger.kernel.org>; Tue, 12 Oct 2021 08:40:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1maJsn-0000Nb-27; Tue, 12 Oct 2021 17:40:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1maJsl-0004mD-Rx; Tue, 12 Oct 2021 17:39:59 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1maJse-0004Z3-JJ; Tue, 12 Oct 2021 17:39:52 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v2 18/20] serial: sc16is7xx: Make sc16is7xx_remove() return void
-Date:   Tue, 12 Oct 2021 17:39:43 +0200
-Message-Id: <20211012153945.2651412-19-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
-References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
+        Tue, 12 Oct 2021 11:23:28 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F9FC061570;
+        Tue, 12 Oct 2021 08:21:26 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ec8so983514edb.6;
+        Tue, 12 Oct 2021 08:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fgwbge5K1EzbR8VI8a8H+Le1NZKMMr2m8pTON2xUTN8=;
+        b=QzV9YbjGsg5t2ZQdqkJweilCwjmv4f72WtizTfjRD1Z69nHKwlfIiVk9MKiRlbEJ3M
+         TIHpw/FxnC/HP+5SA6hgP4KYPicWuytgbi9wK8eIt5nmUVSYpScMPgY+o8EiY28/GHw6
+         N0FLqSe4XHbska7BuYvfFGFuLxwQ5ehC37hDLaiWT7iLXWenpcMsDHXEpDwkNw1UoluY
+         bChBoNeZU/DB1fJvp9iHrNPflFh88J+rkZLx20pNvxo6J434CKGA8xip4fm0zZb645PF
+         duqJZMT7VmJha6C2jowMLglzgpTLnF6hzYtGuX12RQEr/03u8EZDNEWZlzQ1sAhaIRMH
+         /WBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fgwbge5K1EzbR8VI8a8H+Le1NZKMMr2m8pTON2xUTN8=;
+        b=ql1gq/UdrhrACr1IUteuY3VLxmplPBKQ6W7wz143v3hFtUUgBWkbuSema1UN+kB2z8
+         9cMdMtVaY+51VAKEwezmdPOUJNj4NOfNFMf8uZbkGNQCfExrOT4ixrcGJ+dTvTHhcJQM
+         9BkN350mNRCoxEUb/djSlFesBebCPTC6G3U4+fc6mZyiKh2SsJoZkmAiTIbhxs0dikvM
+         beEOWlSnQbF1yuy1yxuzVufAQokh5w0T74y3CJd7gDkdJNk0JMfsvYCBAU6EU8/eA+85
+         1F90qZXadAFWvqcu8fmo8u9j63G+jzyqjuTuEBVoRrTpoxotqfRkQpqeZsWuh9Tzflvg
+         LTJg==
+X-Gm-Message-State: AOAM531n9Uv/bkapCZM1Qbs63HCg+3bBi0KS461YQ4gFar2YNvVB9Ngw
+        bYF+dIkplp0xmVwu3Xh+vj/m37h9QTcOkZWXwroB+vtnfwMhSQ==
+X-Google-Smtp-Source: ABdhPJyH2Cr0E/CmRn2fpGIMT6foljvhODeW0WmDCNiwPWy1V5M7oQBd/zsMp/jE5RFRB/+ZUOCr7c7fggDU4sXQp/0=
+X-Received: by 2002:a05:6402:143b:: with SMTP id c27mr606000edx.224.1634052084925;
+ Tue, 12 Oct 2021 08:21:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=4Pou8jXQbhOkXAt6/muRjkP0OfJUPHt75pctr7W+qqQ=; m=FIxK0yiWgNMRKKImS8BCXtEUBZW2wFh2le6TX2NO04A=; p=Y2/spG10FZuOVKKCfBzsrca0ACgAG7pF66CtGegD8JQ=; g=4125ad5aa361e24225170e3f9083b1a39652127c
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFlrC8ACgkQwfwUeK3K7AkSPAf+LMT SgAFO3tZNZZ1LDwGN+CELqcna7S0o6KZVS00mDiv8s1CojK3MIWyqch1Qt1dv03uGl6MUqIMNknYN CPS/0qOSDITDrdtaCQmyXaL03YjZcVdj7nH7PscGQfpvE2CgllPJZG5GJ4HRjN88uucr3iwtd6kId 4b4VXSYei502hNrn8MxaAtbyNbLEjbc6iSH+Bs6QEVHSG6a5tcwkgsH+VIuGhPXCepjei/FeW6gI/ utPuAxfrrEDaubt+MG6Go7cq34GUyVHjOLC5xSZU1sqYrP6qAMUCyJrLyfDqXXC5KSpZtrXm3ZJ2D YwkzB3dbDGyCUsp01wa3Mtbz7LNTamQ==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+References: <20211012134027.684712-1-kernel@esmil.dk> <20211012134027.684712-2-kernel@esmil.dk>
+In-Reply-To: <20211012134027.684712-2-kernel@esmil.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 12 Oct 2021 21:20:37 +0300
+Message-ID: <CAHp75VcCCxPmnzoE5PSxtODdguoKa7VA1r2yrJRLQ=gOAevu2Q@mail.gmail.com>
+Subject: Re: [PATCH v1 01/16] RISC-V: Add StarFive SoC Kconfig option
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Up to now sc16is7xx_remove() returns zero unconditionally. Make it
-return void instead which makes it easier to see in the callers that
-there is no error to handle.
+On Tue, Oct 12, 2021 at 4:42 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
+>
+> Add StarFive Kconfig option to select SoC specific and common drivers
+> required for these SoCs.
 
-Also the return value of spi remove callbacks is ignored anyway.
+...
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/tty/serial/sc16is7xx.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+> +       select SERIAL_8250_DW
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index acbb615dd28f..64e7e6c8145f 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -1365,7 +1365,7 @@ static int sc16is7xx_probe(struct device *dev,
- 	return ret;
- }
- 
--static int sc16is7xx_remove(struct device *dev)
-+static void sc16is7xx_remove(struct device *dev)
- {
- 	struct sc16is7xx_port *s = dev_get_drvdata(dev);
- 	int i;
-@@ -1385,8 +1385,6 @@ static int sc16is7xx_remove(struct device *dev)
- 	kthread_stop(s->kworker_task);
- 
- 	clk_disable_unprepare(s->clk);
--
--	return 0;
- }
- 
- static const struct of_device_id __maybe_unused sc16is7xx_dt_ids[] = {
-@@ -1444,7 +1442,9 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
- 
- static int sc16is7xx_spi_remove(struct spi_device *spi)
- {
--	return sc16is7xx_remove(&spi->dev);
-+	sc16is7xx_remove(&spi->dev);
-+
-+	return 0;
- }
- 
- static const struct spi_device_id sc16is7xx_spi_id_table[] = {
-@@ -1497,7 +1497,9 @@ static int sc16is7xx_i2c_probe(struct i2c_client *i2c,
- 
- static int sc16is7xx_i2c_remove(struct i2c_client *client)
- {
--	return sc16is7xx_remove(&client->dev);
-+	sc16is7xx_remove(&client->dev);
-+
-+	return 0;
- }
- 
- static const struct i2c_device_id sc16is7xx_i2c_id_table[] = {
+Is it critical for boot? Why?
+
 -- 
-2.30.2
-
+With Best Regards,
+Andy Shevchenko
