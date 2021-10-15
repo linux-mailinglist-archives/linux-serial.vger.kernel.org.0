@@ -2,117 +2,131 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4079242EFB4
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Oct 2021 13:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62F142EF8D
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Oct 2021 13:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238483AbhJOL2u (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 15 Oct 2021 07:28:50 -0400
-Received: from muru.com ([72.249.23.125]:44984 "EHLO muru.com"
+        id S229632AbhJOLZr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 15 Oct 2021 07:25:47 -0400
+Received: from mga02.intel.com ([134.134.136.20]:9586 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238493AbhJOL2r (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 15 Oct 2021 07:28:47 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id ACC7683F2;
-        Fri, 15 Oct 2021 11:27:11 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        id S230169AbhJOLZq (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 15 Oct 2021 07:25:46 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10137"; a="215060069"
+X-IronPort-AV: E=Sophos;i="5.85,375,1624345200"; 
+   d="scan'208";a="215060069"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2021 04:23:39 -0700
+X-IronPort-AV: E=Sophos;i="5.85,375,1624345200"; 
+   d="scan'208";a="481663753"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.159])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2021 04:23:37 -0700
+Received: from andy by smile with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mbO7H-000Pr5-23;
+        Fri, 15 Oct 2021 17:23:23 +0300
+Date:   Fri, 15 Oct 2021 17:23:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] serial: 8250_omap: Drop the use of pm_runtime_irq_safe()
-Date:   Fri, 15 Oct 2021 14:26:26 +0300
-Message-Id: <20211015112626.35359-5-tony@atomide.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211015112626.35359-1-tony@atomide.com>
-References: <20211015112626.35359-1-tony@atomide.com>
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] serial: 8250: fix racy uartclk update
+Message-ID: <YWmO2+FNShY03fzo@smile.fi.intel.com>
+References: <20211015111422.1027-1-johan@kernel.org>
+ <20211015111422.1027-2-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211015111422.1027-2-johan@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We can finally drop the pm_runtime_irq_safe() usage for 8250_omap driver.
+On Fri, Oct 15, 2021 at 01:14:20PM +0200, Johan Hovold wrote:
+> Commit 868f3ee6e452 ("serial: 8250: Add 8250 port clock update method")
+> added a hack to support SoCs where the UART reference clock can
+> change behind the back of the driver but failed to add the proper
+> locking.
+> 
+> First, make sure to take a reference to the tty struct to avoid
+> dereferencing a NULL pointer if the clock change races with a hangup.
+> 
+> Second, the termios semaphore must be held during the update to prevent
+> a racing termios change.
 
-We already have the serial layer RX wake path fixed for power management.
-We no longer allow deeper idle states unless the kernel console has been
-detached, and we require that the RX wakeirq is configured.
+Nice catch!
+Thanks, Johan, for fixing this!
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-For TX path, we now use the prep_tx() and uart_flush_tx() calls.
+> Fixes: 868f3ee6e452 ("serial: 8250: Add 8250 port clock update method")
+> Fixes: c8dff3aa8241 ("serial: 8250: Skip uninitialized TTY port baud rate update")
+> Cc: stable@vger.kernel.org      # 5.9
+> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/tty/serial/8250/8250_port.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 66374704747e..e4dd82fd7c2a 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -2696,21 +2696,32 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
+>  void serial8250_update_uartclk(struct uart_port *port, unsigned int uartclk)
+>  {
+>  	struct uart_8250_port *up = up_to_u8250p(port);
+> +	struct tty_port *tport = &port->state->port;
+>  	unsigned int baud, quot, frac = 0;
+>  	struct ktermios *termios;
+> +	struct tty_struct *tty;
+>  	unsigned long flags;
+>  
+> -	mutex_lock(&port->state->port.mutex);
+> +	tty = tty_port_tty_get(tport);
+> +	if (!tty) {
+> +		mutex_lock(&tport->mutex);
+> +		port->uartclk = uartclk;
+> +		mutex_unlock(&tport->mutex);
+> +		return;
+> +	}
+> +
+> +	down_write(&tty->termios_rwsem);
+> +	mutex_lock(&tport->mutex);
+>  
+>  	if (port->uartclk == uartclk)
+>  		goto out_lock;
+>  
+>  	port->uartclk = uartclk;
+>  
+> -	if (!tty_port_initialized(&port->state->port))
+> +	if (!tty_port_initialized(tport))
+>  		goto out_lock;
+>  
+> -	termios = &port->state->port.tty->termios;
+> +	termios = &tty->termios;
+>  
+>  	baud = serial8250_get_baud_rate(port, termios, NULL);
+>  	quot = serial8250_get_divisor(port, baud, &frac);
+> @@ -2727,7 +2738,9 @@ void serial8250_update_uartclk(struct uart_port *port, unsigned int uartclk)
+>  	serial8250_rpm_put(up);
+>  
+>  out_lock:
+> -	mutex_unlock(&port->state->port.mutex);
+> +	mutex_unlock(&tport->mutex);
+> +	up_write(&tty->termios_rwsem);
+> +	tty_kref_put(tty);
+>  }
+>  EXPORT_SYMBOL_GPL(serial8250_update_uartclk);
+>  
+> -- 
+> 2.32.0
+> 
 
-To drop pm_runtime_irq_safe(), we remove all PM runtime calls from the
-interrupt context. If we ever see an interrupt for an idled port, we just
-bail out. We now also need to restore the port context with interrupts
-disabled to prevent interrupts from happening while restoring the port.
-
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/tty/serial/8250/8250_omap.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -621,6 +621,9 @@ static irqreturn_t omap8250_irq(int irq, void *dev_id)
- 	unsigned int iir, lsr;
- 	int ret;
- 
-+	if (port->runtime_suspended)
-+		return IRQ_NONE;
-+
- #ifdef CONFIG_SERIAL_8250_DMA
- 	if (up->dma) {
- 		ret = omap_8250_dma_handle_irq(port);
-@@ -628,7 +631,6 @@ static irqreturn_t omap8250_irq(int irq, void *dev_id)
- 	}
- #endif
- 
--	serial8250_rpm_get(up);
- 	lsr = serial_port_in(port, UART_LSR);
- 	iir = serial_port_in(port, UART_IIR);
- 	ret = serial8250_handle_irq(port, iir);
-@@ -662,8 +664,6 @@ static irqreturn_t omap8250_irq(int irq, void *dev_id)
- 		schedule_delayed_work(&up->overrun_backoff, delay);
- 	}
- 
--	serial8250_rpm_put(up);
--
- 	return IRQ_RETVAL(ret);
- }
- 
-@@ -1191,13 +1191,9 @@ static int omap_8250_dma_handle_irq(struct uart_port *port)
- 	unsigned char status;
- 	u8 iir;
- 
--	serial8250_rpm_get(up);
--
- 	iir = serial_port_in(port, UART_IIR);
--	if (iir & UART_IIR_NO_INT) {
--		serial8250_rpm_put(up);
-+	if (iir & UART_IIR_NO_INT)
- 		return IRQ_HANDLED;
--	}
- 
- 	spin_lock(&port->lock);
- 
-@@ -1226,7 +1222,6 @@ static int omap_8250_dma_handle_irq(struct uart_port *port)
- 
- 	uart_unlock_and_check_sysrq(port);
- 
--	serial8250_rpm_put(up);
- 	return 1;
- }
- 
-@@ -1420,8 +1415,6 @@ static int omap8250_probe(struct platform_device *pdev)
- 	if (!of_get_available_child_count(pdev->dev.of_node))
- 		pm_runtime_set_autosuspend_delay(&pdev->dev, -1);
- 
--	pm_runtime_irq_safe(&pdev->dev);
--
- 	pm_runtime_get_sync(&pdev->dev);
- 
- 	omap_serial_fill_features_erratas(&up, priv);
 -- 
-2.33.0
+With Best Regards,
+Andy Shevchenko
+
+
