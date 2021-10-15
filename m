@@ -2,90 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 308E442EF74
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Oct 2021 13:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DD742EFAA
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Oct 2021 13:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238342AbhJOLQv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 15 Oct 2021 07:16:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39944 "EHLO mail.kernel.org"
+        id S233820AbhJOL2k (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 15 Oct 2021 07:28:40 -0400
+Received: from muru.com ([72.249.23.125]:44942 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238318AbhJOLQu (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 15 Oct 2021 07:16:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4FD21610E8;
-        Fri, 15 Oct 2021 11:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634296484;
-        bh=J6rILMKj++wRYFa5xWLGbLwpa2qNvrGLxi9bb4GHa7U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QqsHd/MQdvT7v6YvFkvY7xeR8CuUoW+O20uSLDU/VGENoeoYVBjS5s9DUORTaOoVH
-         aKWhGYbN9dzrPoqwbT6LA4Vqun4ITJxykrB9D4GPxiGb0rWyGeniCKtSV0Ccyp28Ns
-         KbgxVYQ/z98kgSINTLMqk3NVDP1RpuF6+AEN/2FW2dBxQG9y6xVUvcUMjG8K6TUA6p
-         woJgUdqpGBrXfXZGlVpQZkJ4KrgxxYEhftoSh/VczONYoUMoNEf22Iz+TfNA+2Uk+p
-         2oMNIgsihMeMkF8NSNcqrQt7F0FoQnYgbxO6nF4Jt1ybvXXRsltF/oRxCeHcYcGtfO
-         QBzFW3zmXh7zg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mbLAc-0000HY-9B; Fri, 15 Oct 2021 13:14:38 +0200
-From:   Johan Hovold <johan@kernel.org>
+        id S233342AbhJOL2j (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 15 Oct 2021 07:28:39 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 08AAB80F1;
+        Fri, 15 Oct 2021 11:27:03 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 3/3] serial: 8250_dw: drop bogus uartclk optimisation
-Date:   Fri, 15 Oct 2021 13:14:22 +0200
-Message-Id: <20211015111422.1027-4-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211015111422.1027-1-johan@kernel.org>
-References: <20211015111422.1027-1-johan@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCHv3 0/4] Get rid of pm_runtime_irq_safe() for 8250_omap
+Date:   Fri, 15 Oct 2021 14:26:22 +0300
+Message-Id: <20211015112626.35359-1-tony@atomide.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The driver was updating the port uartclk before setting the new rate in
-an attempt to avoid having the clock notifier redundantly update the
-divisors.
+Hi,
 
-The set_termios() callback is however called under the termios semaphore
-and tty-port mutex so the worker scheduled by the clock notifier will
-block in serial8250_update_uartclk() until the uartclk and divisors have
-been updated anyway.
+Here are v3 patches to get rid of pm_runtime_irq_safe() for the 8250_omap
+driver. Based on comments from Andy, Johan and Greg, I improved a bunch of
+things as listed below.
 
-Drop the unnecessary swaps and incorrect comment and simply update the
-uartclk field if the clock-rate change was successful.
+For removing the pm_runtime_irq_safe() usage, serial TX is the last
+remaining issue. We deal with TX by waking up the port and returning 0
+bytes written from write_room() and write() if the port is not available
+because of PM runtime autoidle.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/tty/serial/8250/8250_dw.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+This series also removes the dependency to Andy's pending generic serial
+layer PM runtime patches, and hopefully makes that work a bit easier :)
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index a3a0154da567..52e03dd0eb3b 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -338,15 +338,12 @@ static void dw8250_set_termios(struct uart_port *p, struct ktermios *termios,
- 	rate = clk_round_rate(d->clk, newrate);
- 	if (rate > 0) {
- 		/*
--		 * Premilinary set the uartclk to the new clock rate so the
--		 * clock update event handler caused by the clk_set_rate()
--		 * calling wouldn't actually update the UART divisor since
--		 * we about to do this anyway.
-+		 * Note that any clock-notifer worker will block in
-+		 * serial8250_update_uartclk() until we are done.
- 		 */
--		swap(p->uartclk, rate);
- 		ret = clk_set_rate(d->clk, newrate);
--		if (ret)
--			swap(p->uartclk, rate);
-+		if (!ret)
-+			p->uartclk = rate;
- 	}
- 	clk_prepare_enable(d->clk);
- 
+Regards,
+
+Tony
+
+Chganges since v2:
+
+- Use locking instead of atomic_t as suggested by Greg
+
+Changes since v1:
+
+- Separated out line discipline patches, n_tty -EAGAIN change I still
+  need to retest
+
+- Changed prep_tx() to more generic wakeup() as also flow control needs it
+
+- Changed over to using wakeup() with device driver runtime PM instead
+  of write_room()
+
+- Added runtime_suspended flag for drivers and generic serial layer PM
+  to use
+
+
+Tony Lindgren (4):
+  serial: core: Add wakeup() and start_pending_tx() for power management
+  serial: 8250: Implement wakeup for TX and use it for 8250_omap
+  serial: 8250_omap: Require a valid wakeirq for deeper idle states
+  serial: 8250_omap: Drop the use of pm_runtime_irq_safe()
+
+ Documentation/driver-api/serial/driver.rst |  9 +++
+ drivers/tty/serial/8250/8250_omap.c        | 44 ++++++++++----
+ drivers/tty/serial/8250/8250_port.c        | 39 ++++++++++++-
+ drivers/tty/serial/serial_core.c           | 68 +++++++++++++++++++++-
+ include/linux/serial_core.h                |  3 +
+ 5 files changed, 149 insertions(+), 14 deletions(-)
+
 -- 
-2.32.0
-
+2.33.0
