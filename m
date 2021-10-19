@@ -2,212 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D38E2432C3C
-	for <lists+linux-serial@lfdr.de>; Tue, 19 Oct 2021 05:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02317433295
+	for <lists+linux-serial@lfdr.de>; Tue, 19 Oct 2021 11:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbhJSD0C (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 18 Oct 2021 23:26:02 -0400
-Received: from mga11.intel.com ([192.55.52.93]:35783 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229742AbhJSD0B (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 18 Oct 2021 23:26:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="225874603"
-X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
-   d="scan'208";a="225874603"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 20:23:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,383,1624345200"; 
-   d="scan'208";a="661634906"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Oct 2021 20:23:48 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mcfj9-000Bza-Dn; Tue, 19 Oct 2021 03:23:47 +0000
-Date:   Tue, 19 Oct 2021 11:23:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- 3968ddcf05fb4b9409cd1859feb06a5b0550a1c1
-Message-ID: <616e3a2f.H66p29PUFlxrwWyI%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S235116AbhJSJl0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 19 Oct 2021 05:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235107AbhJSJlQ (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Tue, 19 Oct 2021 05:41:16 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646BC06176D
+        for <linux-serial@vger.kernel.org>; Tue, 19 Oct 2021 02:39:02 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id n66so3031359qkn.0
+        for <linux-serial@vger.kernel.org>; Tue, 19 Oct 2021 02:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
+        b=TOvN/3L74NxJ8jkZLAwc1HWcAigE5PqgL50bgmFqgfF5N3Ni/F/hFF6HKKLKTN31yN
+         HevaAXYbPfypt8hhKvSPyehT5ALdXqczNk+5xUwtC+i5sgHXh2uIQwAecZjfCaWU8ix6
+         IP3iNNDeKzM9Rarn67S7Y6Q5meavaw7Mpk+sez5Jm9gTXVkS2K7rH0HxN0wGBD1vTEZW
+         SlZ7Ohjm5TDffwxVe9psHKkZrw9F8ewS3UJdvRp48BugnVC9N6o6tGt7kOuD9dBL9WOI
+         l1dbXlU20FuuDCR1G9eGV6dpPzPq/obtSd+vSUmjw4dvgQ3M4KndmuUgzevCd5/KLP2j
+         AvJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
+        b=aUj0QkZ7cHFihF3+EwdgrGvQ9RHUpTnc+3k6IcBMBk5ByakFvPoYX4ntlMkFUqOWkp
+         uxaXQ9LvjIyxunhJMP93dwzAs1RvrEzjp1ccXI5R25s+6N2Pbldg1/tismvL/z+Z9qk6
+         Fa2mOpauSETpyhNWSwiGcGAMOo9LfLx4Y/FP00EFK6lAY3cMQDKMsVQ8NYOe5uoOzzb9
+         yk2c6UagtRWQwY/hXD7K4j263hNMjeY2X6ztJWGc0MAPTfSklJIC0HtvmgbET+7PeXm+
+         3UHSaBCYB9PEDk9GMn+0bdqSZPBkXzHRN5fMsh2P/vgnqWXBtsP28jPiRGcpn1ozazqw
+         DNsA==
+X-Gm-Message-State: AOAM533sTzBOv/kwlaMGTjCyWiR9NGG5iIhzrmYCG0/K7OGXQr3PBP9r
+        bTsYOy6sH9rkiF8chVQGccyneRHyOtYVHmmHlRzdUGh3Mko=
+X-Google-Smtp-Source: ABdhPJzMH7/Viv+gmOFi/wRxRbcc549EbhNxq1WBmFuuCl5Y1sIaNw3hPc5P9A8SHm6QnP1HNGNAvecvirmJS/oiL6w=
+X-Received: by 2002:a02:6f5d:: with SMTP id b29mr3319085jae.113.1634636331013;
+ Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a92:c7c6:0:0:0:0:0 with HTTP; Tue, 19 Oct 2021 02:38:50
+ -0700 (PDT)
+Reply-To: megaritalouisdrayfu199@yahoo.com
+From:   "Mrs. Margarita Louis-Dreyfus." <anniewei112@gmail.com>
+Date:   Mon, 18 Oct 2021 21:38:50 -1200
+Message-ID: <CAGT4pMkzKn8mfeY05OAG04CCAxodKEVDUk46D=O7cfK8+n1=tA@mail.gmail.com>
+Subject: Charitable funds to help the less privilege!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: 3968ddcf05fb4b9409cd1859feb06a5b0550a1c1  tty: tty_buffer: Fix the softlockup issue in flush_to_ldisc
+--=20
+Hello,
 
-elapsed time: 729m
+I am sorry to encroach into your privacy in this manner, my name
+Margarita Louis-Dreyfus , I find it pleasurable to offer you my
+partnership in business, i only pray at this time that your email
+address is still valid. I want to solicit your attention to receive
+money on my behalf for humanitarian project to help the less
+priviledge.
 
-configs tested: 152
-configs skipped: 3
+The purpose of my contacting you is because my status would not permit
+me to do this alone. Given my current state of health, I have decided
+to donate Ninety -Eight Million United State Dollars to establish a
+foundation with your help to reach out to the less privilege, orphans,
+sick and homeless people in your country who will receive their
+blessings as i promised my God before i leave this earth.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I got your contact through my personal search, you were revealed as
+being quite astute in private entrepreneurship, and i have no doubt
+that you can handle this huge financial transaction. Please contact my
+executor for more information:
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211019
-powerpc                    adder875_defconfig
-powerpc                      walnut_defconfig
-arc                        nsim_700_defconfig
-sparc                       sparc64_defconfig
-powerpc                     tqm8548_defconfig
-powerpc                   bluestone_defconfig
-powerpc                      acadia_defconfig
-ia64                         bigsur_defconfig
-arm                       multi_v4t_defconfig
-arm                      jornada720_defconfig
-arm                         axm55xx_defconfig
-arm                            qcom_defconfig
-arm64                            alldefconfig
-arm                        multi_v5_defconfig
-mips                          ath79_defconfig
-powerpc                     powernv_defconfig
-openrisc                            defconfig
-sh                   secureedge5410_defconfig
-powerpc                       ppc64_defconfig
-arm                         palmz72_defconfig
-arm                         nhk8815_defconfig
-sh                          urquell_defconfig
-sh                          sdk7780_defconfig
-x86_64                              defconfig
-openrisc                    or1ksim_defconfig
-arm                        spear3xx_defconfig
-riscv                               defconfig
-sparc                               defconfig
-powerpc                     pseries_defconfig
-mips                       capcella_defconfig
-arm                         assabet_defconfig
-powerpc                     kilauea_defconfig
-arm                         vf610m4_defconfig
-m68k                        mvme147_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                            dove_defconfig
-sh                     magicpanelr2_defconfig
-riscv                          rv32_defconfig
-powerpc                      makalu_defconfig
-powerpc                 mpc85xx_cds_defconfig
-s390                       zfcpdump_defconfig
-arc                        vdk_hs38_defconfig
-m68k                            q40_defconfig
-powerpc                 linkstation_defconfig
-arm                        keystone_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                        neponset_defconfig
-powerpc                           allnoconfig
-mips                           ip28_defconfig
-sh                          rsk7264_defconfig
-powerpc                      mgcoge_defconfig
-arm                           u8500_defconfig
-powerpc64                        alldefconfig
-mips                           rs90_defconfig
-m68k                       bvme6000_defconfig
-h8300                            alldefconfig
-mips                            e55_defconfig
-powerpc                      pasemi_defconfig
-powerpc               mpc834x_itxgp_defconfig
-ia64                            zx1_defconfig
-m68k                        m5307c3_defconfig
-m68k                        m5407c3_defconfig
-arm                           sunxi_defconfig
-sh                ecovec24-romimage_defconfig
-arm                       cns3420vb_defconfig
-powerpc                          g5_defconfig
-powerpc                       holly_defconfig
-arm                      integrator_defconfig
-arm                           corgi_defconfig
-arm                        realview_defconfig
-powerpc                  storcenter_defconfig
-riscv             nommu_k210_sdcard_defconfig
-arm                  randconfig-c002-20211019
-x86_64               randconfig-c001-20211019
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a015-20211019
-x86_64               randconfig-a012-20211019
-x86_64               randconfig-a016-20211019
-x86_64               randconfig-a014-20211019
-x86_64               randconfig-a013-20211019
-x86_64               randconfig-a011-20211019
-i386                 randconfig-a014-20211019
-i386                 randconfig-a016-20211019
-i386                 randconfig-a011-20211019
-i386                 randconfig-a015-20211019
-i386                 randconfig-a012-20211019
-i386                 randconfig-a013-20211019
-riscv                    nommu_virt_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
+Mr. Ford Spencer(Attorney at Law).
+For: Mrs. Margarita Louis-Dreyfus
+LEGAL DEPARTMENT LAWSON & ASSOCIATES
+(JUSTICE, FAIRPLAY & EQUITY)
+Email: fordspencer828@yahoo.com, fordspencereqs828@gmail.com
+Office: +1-970-414-1400
++1-702-714-3422
+Mobile: +1 916 269 2733
+Fax: +1-970-414-1433
+=C2=AE Property of Steven C Spence PA.
 
-clang tested configs:
-arm                  randconfig-c002-20211019
-mips                 randconfig-c004-20211019
-i386                 randconfig-c001-20211019
-s390                 randconfig-c005-20211019
-x86_64               randconfig-c007-20211019
-riscv                randconfig-c006-20211019
-powerpc              randconfig-c003-20211019
-x86_64               randconfig-a004-20211019
-x86_64               randconfig-a006-20211019
-x86_64               randconfig-a005-20211019
-x86_64               randconfig-a001-20211019
-x86_64               randconfig-a002-20211019
-x86_64               randconfig-a003-20211019
-i386                 randconfig-a001-20211019
-i386                 randconfig-a003-20211019
-i386                 randconfig-a004-20211019
-i386                 randconfig-a005-20211019
-i386                 randconfig-a002-20211019
-i386                 randconfig-a006-20211019
-hexagon              randconfig-r041-20211019
-hexagon              randconfig-r045-20211019
+Your earliest response to this letter will be appreciated.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kind Regards,
+
+Mrs. Margarita Louis-Dreyfus.
