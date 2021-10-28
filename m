@@ -2,90 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E51043DE87
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Oct 2021 12:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBA643DF73
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Oct 2021 12:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbhJ1KQw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 28 Oct 2021 06:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S230366AbhJ1Ky7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 28 Oct 2021 06:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbhJ1KQv (ORCPT
+        with ESMTP id S230170AbhJ1Kyv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 28 Oct 2021 06:16:51 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211C2C061570;
-        Thu, 28 Oct 2021 03:14:24 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id p40so665603pfh.8;
-        Thu, 28 Oct 2021 03:14:24 -0700 (PDT)
+        Thu, 28 Oct 2021 06:54:51 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D73C061570
+        for <linux-serial@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id ee16so10053976edb.10
+        for <linux-serial@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cGRFFkbWPTpn78tArCV7l81qRRNeflw+gfeWzgd3Hsg=;
-        b=AOCFHTvxB2nikILO2omNQt5gXOpPro5gwBYzusab4FwTwq5bh5BY1w0XHmZbX2KNcc
-         ezGnMbIC8G0V4A2FtTUQ8WZYZgPJFf1QasqgKO3DS6YMsHqLdlFOPIwuRDG8f5YH9cqv
-         YxvOU2rjuiXlBib160jJnV/TORTJ16c/Qj9ovOWb2fl7YSJ4gBWE9qa04KFgcJFi4uGd
-         AboAe0zGa0SMsyMeFTm8F8M/7IJIIq6gTeft0mxT/HSVLEdN8yt/VbH7IrR6XwZIyk+U
-         VSXst6JBK2pvKVyJoboL4Eqf2oh1R/yTTZSSddDwwgpFnJR5AypDCtuNws81iExCyF0U
-         URsw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
+         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
+         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
+         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
+         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
+         gaRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cGRFFkbWPTpn78tArCV7l81qRRNeflw+gfeWzgd3Hsg=;
-        b=73qJnnxwUKGA7u+vBTSoEGxega2LSr1ujgX/LtZ2PKGP0br5e2TGTF/FPMD/dRWInr
-         zNxrdKijm2OQgYl9mze+d5+jT/VLwZHJNWtnG7z/T6bvOxOV82q02S88v1kFJVHT05pE
-         mnTnwWnpgYxybpBeH5Dk45PsAQRYHg9Ioa55yraWZrgt/iSYtRqPp5MNg7QgbRoe7ohi
-         8isa/7DIL5Hd3VifhkNiOZzBd77pg9X/zrjmzC0UwUDbEt81YuPx/xe7qg7K9HzIwVhF
-         vKfn0EnIUYxq0R6kpQdJX1dR1z+PWTqBSCcVf7Bc2G85B5lnFktia3YN5syyoa9sDwT4
-         FhoA==
-X-Gm-Message-State: AOAM530NG/7jkQ1j/80YuPjbIpJE2rJ0SS0Ntl68P7f9CrDSnGwNKvF2
-        GXV30ugPN2uksPTdv+xl+xA=
-X-Google-Smtp-Source: ABdhPJxJQcPt7Q9aPbVzsGu3HlkUvWz8Yz+Slvx7rw8A2GPzAYj1+DfzTQkNBysLCraz5+bwNT4TLg==
-X-Received: by 2002:a63:85c1:: with SMTP id u184mr2481407pgd.243.1635416063677;
-        Thu, 28 Oct 2021 03:14:23 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id mt16sm2468674pjb.22.2021.10.28.03.14.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 03:14:23 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yao.jing2@zte.com.cn
-To:     gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, johan@kernel.org, macro@orcam.me.uk,
-        fancer.lancer@gmail.com, andrew@aj.id.au, pali@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Yao <yao.jing2@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drivers: tty: replace snprintf in show functions with sysfs_emit
-Date:   Thu, 28 Oct 2021 10:13:50 +0000
-Message-Id: <20211028101350.14172-1-yao.jing2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=mvdCNdHuAyFof47W6zcc3S9nwFsXhT1K2b7/vzOatBWSm1a8lvmZ/1UFdeQfhsiiKh
+         aUYjFB+fdnTqZiz9s5Om7nwts4Ds3GNCpiJyTAKxyuVSeB1avsuaxUCYeFTFuiEBv2MO
+         VpHXRzrJs4gT+0Ushnyb0/QWlutaSg4lGWjTkNZpF5votmd4zu/OZNCEBpl7zUnbklb8
+         Hrtd6XS90N1+KeIgo5JtFCD/dYi+4Mr8rhDElEHYVzRV3F9Z/3YKlLAPuPouXFlSoxcg
+         +uiclpo1Q507W/UQplsaGvy4u2N8oNtXs61cDrMMEETA7xJ5MVJgUXkX897O5Yl5geOO
+         oHCg==
+X-Gm-Message-State: AOAM533ujGIQQt0QhWH39Cx5oFSZifyydnVBT96/pNj3gt52XBA8oovM
+        K7WuFaNNv7mHYwzk8hEQV4aL/tBXgLGNvsWJ6OGKTqOzBI326Cww
+X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
+X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
+ Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
+ -0700 (PDT)
+Reply-To: aabdulwalialhashmi@gmail.com
+From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
+Date:   Thu, 28 Oct 2021 03:52:09 -0700
+Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
+Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Jing Yao <yao.jing2@zte.com.cn>
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
----
- drivers/tty/serial/8250/8250_port.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 5775cbff8f6e..557e8b13b5c1 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -3099,7 +3099,7 @@ static ssize_t rx_trig_bytes_show(struct device *dev,
- 	if (rxtrig_bytes < 0)
- 		return rxtrig_bytes;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", rxtrig_bytes);
-+	return sysfs_emit(buf, PAGE_SIZE, "%d\n", rxtrig_bytes);
- }
- 
- static int do_set_rxtrig(struct tty_port *port, unsigned char bytes)
 -- 
-2.25.1
+Greetings,
 
+Firstly, I apologize for encroaching into your privacy in this manner
+as it may seem unethical though it is a matter of great importance.
+
+I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+
+I am contacting you because my status would not permit me to do this
+alone as it is concerning our customer and an investment placed under
+our bank's management over 5 years ago.
+
+I have a proposal I would love to discuss with you which will be very
+beneficial to both of us. It's regarding my late client who has a huge
+deposit with my bank.
+
+He is from your country and shares the same last name with you.
+
+I want to seek your consent to present you as the next of kin to my
+late client who died and left a huge deposit with my bank.
+
+I would respectfully request that you keep the contents of this mail
+confidential and respect the integrity of the information you come by
+as a result of this mail.
+
+Please kindly get back to me for more details if I can TRUST YOU.{
+aabdulwalialhashmi@gmail.com }
+
+Regards
+Abdulwali Alhashmi
+Treasury and Deposit Management,
+Cayman National Bank Cayman Islands
