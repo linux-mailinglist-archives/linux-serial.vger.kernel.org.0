@@ -2,90 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBA643DF73
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Oct 2021 12:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61CE43E0D2
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Oct 2021 14:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbhJ1Ky7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 28 Oct 2021 06:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbhJ1Kyv (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 28 Oct 2021 06:54:51 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D73C061570
-        for <linux-serial@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id ee16so10053976edb.10
-        for <linux-serial@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=mvdCNdHuAyFof47W6zcc3S9nwFsXhT1K2b7/vzOatBWSm1a8lvmZ/1UFdeQfhsiiKh
-         aUYjFB+fdnTqZiz9s5Om7nwts4Ds3GNCpiJyTAKxyuVSeB1avsuaxUCYeFTFuiEBv2MO
-         VpHXRzrJs4gT+0Ushnyb0/QWlutaSg4lGWjTkNZpF5votmd4zu/OZNCEBpl7zUnbklb8
-         Hrtd6XS90N1+KeIgo5JtFCD/dYi+4Mr8rhDElEHYVzRV3F9Z/3YKlLAPuPouXFlSoxcg
-         +uiclpo1Q507W/UQplsaGvy4u2N8oNtXs61cDrMMEETA7xJ5MVJgUXkX897O5Yl5geOO
-         oHCg==
-X-Gm-Message-State: AOAM533ujGIQQt0QhWH39Cx5oFSZifyydnVBT96/pNj3gt52XBA8oovM
-        K7WuFaNNv7mHYwzk8hEQV4aL/tBXgLGNvsWJ6OGKTqOzBI326Cww
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
+        id S229868AbhJ1MYn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 28 Oct 2021 08:24:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229578AbhJ1MYm (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 28 Oct 2021 08:24:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9807760238;
+        Thu, 28 Oct 2021 12:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635423735;
+        bh=sNViopt2AGTtGw527JuqTqB1yq2eoISJmKY8LUifpCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uKX/4zI6IWHcPtl7pW3anmaQmlXeBb4YgFJOp/BU2SAJuIN3NW0EEzmC5p7dHppqU
+         zo9JBqBGeQAPw1RDqiumR6BA4dNwpxHy2rXxKscMYKDh6NeF8aA4rzrHDqmmv2kL+X
+         OSh4+0vYvXrL98kcOYjt0aafPlxXSw8FCIOu6MJ3ifW8R1aQ3WyMX2Wyh/FFwn8T52
+         4eyzLpbMoby1OLMO46v12CZMwzTnczzgeTrQXWxl56o6lgx86VGAf17mzes2ymRjUo
+         XZ8/9Ixb/16kTjsyiuJlM+5ycsJVeEMVEs8ZwhOZTtSvbRlPSwTs0THkgM4um3YTyo
+         z329vdIQiPhVg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mg4Q9-00053D-8y; Thu, 28 Oct 2021 14:22:13 +0200
+Date:   Thu, 28 Oct 2021 14:22:13 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        macro@orcam.me.uk, fancer.lancer@gmail.com, andrew@aj.id.au,
+        pali@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jing Yao <yao.jing2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] drivers: tty: replace snprintf in show functions with
+ sysfs_emit
+Message-ID: <YXqV9V0eWhqFTc+i@hovoldconsulting.com>
+References: <20211028101350.14172-1-yao.jing2@zte.com.cn>
 MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211028101350.14172-1-yao.jing2@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
--- 
-Greetings,
+On Thu, Oct 28, 2021 at 10:13:50AM +0000, cgel.zte@gmail.com wrote:
+> From: Jing Yao <yao.jing2@zte.com.cn>
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
+Where's the commit message?
 
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+Also, look at the log for the driver you're changing for the Subject
+prefix you should use. Including "drivers:" is never right.
 
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
+> ---
+>  drivers/tty/serial/8250/8250_port.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index 5775cbff8f6e..557e8b13b5c1 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -3099,7 +3099,7 @@ static ssize_t rx_trig_bytes_show(struct device *dev,
+>  	if (rxtrig_bytes < 0)
+>  		return rxtrig_bytes;
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%d\n", rxtrig_bytes);
+> +	return sysfs_emit(buf, PAGE_SIZE, "%d\n", rxtrig_bytes);
 
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
+FFS... This would not even compile, at least not without a warning, as
+it's completely broken.
 
-He is from your country and shares the same last name with you.
+You do know that you have to at least compile-test your patches, right?
 
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
+>  }
+>  
+>  static int do_set_rxtrig(struct tty_port *port, unsigned char bytes)
 
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
-
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
+Johan
