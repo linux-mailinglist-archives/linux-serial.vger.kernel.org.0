@@ -2,43 +2,65 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 395D744085D
-	for <lists+linux-serial@lfdr.de>; Sat, 30 Oct 2021 12:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F09440F2A
+	for <lists+linux-serial@lfdr.de>; Sun, 31 Oct 2021 16:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbhJ3KYw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Sat, 30 Oct 2021 06:24:52 -0400
-Received: from 219-87-183-172.static.tfn.net.tw ([219.87.183.172]:48666 "EHLO
-        ms4.kntech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbhJ3KYv (ORCPT
+        id S229939AbhJaPh0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 31 Oct 2021 11:37:26 -0400
+Received: from smtprelay0027.hostedemail.com ([216.40.44.27]:34218 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229734AbhJaPh0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 30 Oct 2021 06:24:51 -0400
-Received: from [103.27.239.15] ([103.27.239.15])
-        (authenticated bits=0)
-        by ms4.kntech.com.tw (8.13.8/8.13.8) with ESMTP id 19RF0Gaa015480
-        for <linux-serial@vger.kernel.org>; Wed, 27 Oct 2021 23:01:15 +0800
-Message-Id: <202110271501.19RF0Gaa015480@ms4.kntech.com.tw>
-Content-Type: text/plain; charset="iso-8859-1"
+        Sun, 31 Oct 2021 11:37:26 -0400
+Received: from omf01.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id B3D52837F24D;
+        Sun, 31 Oct 2021 15:34:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id CDAEE17277;
+        Sun, 31 Oct 2021 15:34:51 +0000 (UTC)
+Message-ID: <b42482be11d04963fed0903ce1bd983742efc5c6.camel@perches.com>
+Subject: Re: [PATCH] drivers: tty: replace snprintf in show functions with
+ sysfs_emit
+From:   Joe Perches <joe@perches.com>
+To:     Greg KH <gregkh@linuxfoundation.org>, cgel.zte@gmail.com
+Cc:     jirislaby@kernel.org, johan@kernel.org, macro@orcam.me.uk,
+        fancer.lancer@gmail.com, andrew@aj.id.au, pali@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Yao <yao.jing2@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Date:   Sun, 31 Oct 2021 08:34:50 -0700
+In-Reply-To: <YXuKMo14CCM1iHMG@kroah.com>
+References: <20211028101350.14172-1-yao.jing2@zte.com.cn>
+         <YXuKMo14CCM1iHMG@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Dear Friend,
-To:     linux-serial@vger.kernel.org
-From:   "Wahid Majrooh" <wnf@sendayan.com.my>
-Date:   Wed, 27 Oct 2021 22:01:34 +0700
-Reply-To: wfnngaf@gmail.com
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: CDAEE17277
+X-Spam-Status: No, score=-2.84
+X-Stat-Signature: f6n4d7pczgg7tem16s3y5qwpawx7q89o
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18pLsj/JxrLBiU0vma/+p4e2qR0q4Co738=
+X-HE-Tag: 1635694491-566448
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Friend,
+On Fri, 2021-10-29 at 07:44 +0200, Greg KH wrote:
+> On Thu, Oct 28, 2021 at 10:13:50AM +0000, cgel.zte@gmail.com wrote:
+> > From: Jing Yao <yao.jing2@zte.com.cn>
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> 
+> Please fix your broken "robot" before submitting any more patches to the
+> Linux kernel project.
 
-I am writing to you to make a proposal regarding Investing in your
-country. I am proposing to you a business development Investment in
-housing and health sector or any other sector you can recommend. My name
-is Wahid Majrooh. Former  acting Minister of Public Health of
-Afghanistan.
+There's no indication the robot and the patch author/submitter are
+the same.
+
+I think the "robot" _reporting_ the issue is reasonable, but not the
+patch author/submitter.
+
+Though whatever the "Zeal Robot" is should likely be public otherwise
+the Reported-by: reference isn't useful.
 
 
-Sincerely
-
-Wahid
