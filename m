@@ -2,62 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CE1447AD9
-	for <lists+linux-serial@lfdr.de>; Mon,  8 Nov 2021 08:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8C8447BFD
+	for <lists+linux-serial@lfdr.de>; Mon,  8 Nov 2021 09:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235470AbhKHH3n (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 8 Nov 2021 02:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S238059AbhKHIkH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 8 Nov 2021 03:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235575AbhKHH3k (ORCPT
+        with ESMTP id S238052AbhKHIkE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 8 Nov 2021 02:29:40 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B809C06120F
-        for <linux-serial@vger.kernel.org>; Sun,  7 Nov 2021 23:26:56 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id f8so58803236edy.4
-        for <linux-serial@vger.kernel.org>; Sun, 07 Nov 2021 23:26:56 -0800 (PST)
+        Mon, 8 Nov 2021 03:40:04 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C3CC061570;
+        Mon,  8 Nov 2021 00:37:20 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id m14so58587127edd.0;
+        Mon, 08 Nov 2021 00:37:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=PnTjqCg/4dLlfwZvkIw5TCFiXXqI7eQL3D+17+RauQ+gPkf2k9hY9S+Ii/M5IA0uoj
-         tcY9XkBE8UoWnMFVRIdA+q744Hmx7Z0JsFaVREssmf6KamM5Bd6A03cMP5bTAvPf1/y/
-         DwxXsJaTEuCfFdzSQFJTUHpZB56hO6UBVJPo7/S7fIQbraF2JB9fnNx0H/YOCyXyn5Fv
-         TpIbuoc9MhMDHEy5d5ztUWIHQVhdvbVN+KOKXsEiQg7QzXSruhiqF9yWAy+A70V6Qa0U
-         ve8aiam44Pcv5P2919T2rRvgnVW0nPh2s7GY8MWiotEmFwjxJpYnpgBFa5LZ/bTsndTX
-         N0eA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gw2FCiC4aWMJkxXuSfsSyIQD/E2YOZ+rOt07PIe4WUk=;
+        b=lePT8RwnrYKsnAX0P3RcP2YZ15dkGBdbdcfdCJiIZIkqACbd8MNCnTsQo32jZcyh8I
+         7qlPKUtpPDqkAdRRQVkCvo9p66rgHfqoSncXue538YVl9c6k5LPnCaVi4YKovB0EDfGP
+         PuLyMNXXztyWOcaL/0R/HyJ7RbNG+u32K2WxF4I8w7zK+VdzzmW7lBkLpBtQqtHJJXrX
+         JqEWrROMPNPesAqD38x8GkQlFA1Vn2n1yzB25xzNKwVdgBNwDjajt7IGviTKOsqRa1gI
+         A8Q6oW7JrZOlWER1lG1iiK477DopN5XsWIItUaJStFl5vD7atAENM89NZHVHDGuMnmpR
+         zsYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=paBJ/CyzGKeKlM8T+8EFKYYRS92d2/HE3i/Ih0kqV7+wZDaP7fDmi1fFGVZnvw5ZRm
-         r8TQoH7eTLwrvJHc/tQAeGwtXUmCgTe2gQOA/KMjmgkpEW8eq9cqRFTZmOZNpQ7nT/hc
-         +ST8DjKwM3AOYr3O4woYfbWtgMEDkRuPq9e5BSXdQg9osoiC3mV4Gej1KxAUEHb9bHcO
-         kv6SOU9V0KrxjaykBCrZucOYx8pKitjtUSMYVoLTlq/NpSX4OGZcfCGdQAuIfxvVsLhC
-         GC3jiAeIYfvJOV5sDddJJQ/DFJqZasP34Wnhs1ROfI95H4ojU3Jz4NRK07ABZQ0dhS2D
-         r++w==
-X-Gm-Message-State: AOAM531l4OmaEPcEjD+jkWxyTQMOfk4R3g7HyF+ul272IUg+kGR2MmGs
-        VZPbKHKXlFHKZGVMUIe2l3qI4PjIiBF4Tx4VGWg=
-X-Google-Smtp-Source: ABdhPJz9Akl6xfGwwFGOOyIMXLWznjij6kDDSEQ53AjVdYeVh/nfgX+la012XOuUHhNctlqPhGJ9oR9znvMO/9Cv6/o=
-X-Received: by 2002:a50:930b:: with SMTP id m11mr83450378eda.133.1636356414537;
- Sun, 07 Nov 2021 23:26:54 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gw2FCiC4aWMJkxXuSfsSyIQD/E2YOZ+rOt07PIe4WUk=;
+        b=dh+AKkGnVHNUN51OWENFofyw0XluBDkg9hhm/zBRbBhSm8KLYAt3jKI8RdBZO4qXPH
+         nACtc5gB5FM4TI+czDGVkKsE3K3qKaXXGfJBp/QpHUZSZ9WIqbYbnxEMzKiG5GqqnPlS
+         8I8dvgAgaLkilN1rbUR1+1ZzShkQ1cyEz6c1BdxpjopUnQOQhlsVno/do8Xya+z1lYQT
+         ZemgR+9T490YzYwC5fUh+wz5j8dsyv/CCFeYVVQ+ofuo3FHEzMhOUGF21J3bCzJnvMko
+         bTUn0Hgz0ioj2nyTCHhZfj7+2DToMCconrUKJHMA3Q2IDdGNfEPjdmD931nrgT3Lrsje
+         6UrQ==
+X-Gm-Message-State: AOAM530cBwVflPbvrmyt0wvJ3ScN1bSLduw14EEYpLLAGuse0Z9c/ZSG
+        7lKeduMrA9UNdGNPZr+7eaanrekUzdNcqp84KhSlLjjCLhw=
+X-Google-Smtp-Source: ABdhPJwCI1MsuA2LeXHuWY3YG3X7/Z0b3UvAGxUkSnkpx8g8mQRMV4RvKy/XiSe63m0bY5b2vQsF9jOophKe2dGRnXs=
+X-Received: by 2002:a17:906:bccc:: with SMTP id lw12mr28140316ejb.128.1636360639432;
+ Mon, 08 Nov 2021 00:37:19 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:26:54 -0800 (PST)
-Reply-To: mariaschaefler@gmx.com
-From:   Maria Schaefler <ziskoraa@gmail.com>
-Date:   Mon, 8 Nov 2021 07:26:54 +0000
-Message-ID: <CAJh0FjiDs5_oQE4K3AME-kH_RMPNXEEapYKvrR9As+S+Dzwh5Q@mail.gmail.com>
-Subject: MY HEART CHOOSE YOU.
-To:     undisclosed-recipients:;
+References: <20211107031721.4734-1-ajaygargnsit@gmail.com>
+In-Reply-To: <20211107031721.4734-1-ajaygargnsit@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 8 Nov 2021 10:36:33 +0200
+Message-ID: <CAHp75VcacFAvsW6zmHe8fbnetcZq4xY_LZunZjBDG3ZdfS9NRQ@mail.gmail.com>
+Subject: Re: [PATCH v4] tty: vt: keyboard: add default switch-case, to handle
+ smatch-warnings in method vt_do_kdgkb_ioctl
+To:     Ajay Garg <ajaygargnsit@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Given my current state of health, I have decided to donate what I
-inherited from my late husband to you to help the poor and needy. I am
-Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
-cancer about 2 years ago and I have few months to live according to
-medical experts. Email me for my directives
+On Sun, Nov 7, 2021 at 4:10 PM Ajay Garg <ajaygargnsit@gmail.com> wrote:
+>
+> smatch-kchecker gives the following warnings when run on keyboard.c :
+>
+> vt_do_kdgkb_ioctl() error: uninitialized symbol 'kbs'.
+> vt_do_kdgkb_ioctl() error: uninitialized symbol 'ret'.
+>
+> This usually happens when switch has no default case and static
+> analyzers and even sometimes compilers can=E2=80=99t prove that all possi=
+ble
+> values are covered.
+>
+>
+
+One blank line is enough.
+
+> Thus, the default switch-case has been added, which sets the values
+> for the two variables :
+>
+>         * kbs as NULL, which also nicely fits in with kfree.
+>
+>         * ret as -ENOIOCTLCMD (on same lines if there is no cmd
+>                                match in "vt_do_kdskled" method).
+>
+>
+> Many thanks to the following for review of previous versions :
+>
+>         * Pavel Skripkin <paskripkin@gmail.com>
+>         * Andy Shevchenko <andy.shevchenko@gmail.com>
+>
+>
+
+Ditto for each such case.
+
+...
+
+> +       default:
+> +               kbs =3D NULL;
+
+> +               ret =3D -ENOIOCTLCMD;
+
+Why is this? How is it supposed to work?
+
+> +               break;
+>         }
+
+--=20
+With Best Regards,
+Andy Shevchenko
