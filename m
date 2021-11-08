@@ -2,106 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EE3447C5A
-	for <lists+linux-serial@lfdr.de>; Mon,  8 Nov 2021 09:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F5C447C69
+	for <lists+linux-serial@lfdr.de>; Mon,  8 Nov 2021 09:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237364AbhKHI62 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 8 Nov 2021 03:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbhKHI61 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 8 Nov 2021 03:58:27 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C73C061570;
-        Mon,  8 Nov 2021 00:55:43 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id o4so26523470oia.10;
-        Mon, 08 Nov 2021 00:55:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SV3uFGpOzk0BYk1mAzH96zrfSdq37VAR6UZ0MqQ4GoU=;
-        b=UK1MMZ6z8OPre7kMt+zn9ejRtioNXNZLQFiXiKPh2SEW53hzW1jDK2KWVoJsp6Dsdo
-         tph6iYO5pAXMm0b51I0E/9bddNz/udFDP9/vOnT+gc7Hl13bjC4l/lJFEI9A59rntZkn
-         t438WnsLH7SlCX50FaA3pRMPcqupSBKrSsAJYPJGrsDWyRBWrGsBu6/jfbI20uPZ/mfR
-         /K8X7eNp96PExQANMNjv1Q4pHYypB9T7Y8QBTw8wbzyDpo6kg88+BfS6ITumoB/b68uS
-         GwJWQrYrCf2bXCT94YNFWXaWpAgL97BfYIfoceF/wwOyk0IOjcO/G0WuWZB6eiJ2rHeI
-         FHSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SV3uFGpOzk0BYk1mAzH96zrfSdq37VAR6UZ0MqQ4GoU=;
-        b=mU1FXwTLclJekEcda/p2QqhnoEuDI0QFRruH73zMpdZXRm9mZFKllBluFLahPPXOkc
-         m1scejp/qR0dsNNRU0XU/oQzC4BD2j2Ag3TgLo9+w08EWGa+4bNF/+EJfUdLpb/ueDy3
-         u14aUz7DaaqsdzKAVm+zOtJKJpEZCQ5Qxni/e/WSKov4yzYXjD39c2T0AP7J0lgc7T1x
-         eQd+OuQWNMt6XY4alUcg57D+VGVLLlz+6mzoJsyIqavyLd1Q8oW5jLYwzx7GjocyIugw
-         l9h5dL6DO/aO2Z3MgaNUIZtcw44bwGqIns7msXCXW0RO49jgDJX28GsQHkFQz0bUmXdG
-         RNLg==
-X-Gm-Message-State: AOAM530uMKlgAiORKqH4YCUGJ1WmyggR2zVeJY/TAMxmGa4xKLTfgtr7
-        X/kesbDq7GIayYIwQtqr9PhMQDdJiPAd3pFkwYU=
-X-Google-Smtp-Source: ABdhPJy+bq7yS+jdw18APNSEBFLhed8rpYasNh8x1Yvye6eV1kPPJEJhIV3a3Q6IgZr+9BaWJ6Li73heuS2nmmLm620=
-X-Received: by 2002:a54:4499:: with SMTP id v25mr35931259oiv.71.1636361743154;
- Mon, 08 Nov 2021 00:55:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20211107031721.4734-1-ajaygargnsit@gmail.com> <CAHp75VcacFAvsW6zmHe8fbnetcZq4xY_LZunZjBDG3ZdfS9NRQ@mail.gmail.com>
-In-Reply-To: <CAHp75VcacFAvsW6zmHe8fbnetcZq4xY_LZunZjBDG3ZdfS9NRQ@mail.gmail.com>
-From:   Ajay Garg <ajaygargnsit@gmail.com>
-Date:   Mon, 8 Nov 2021 14:25:31 +0530
-Message-ID: <CAHP4M8XWbxVDAeN=4YGX93gNLDDWE0GS8_sKkNv2p_-yBjjHVg@mail.gmail.com>
-Subject: Re: [PATCH v4] tty: vt: keyboard: add default switch-case, to handle
- smatch-warnings in method vt_do_kdgkb_ioctl
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+        id S238259AbhKHJAz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 8 Nov 2021 04:00:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238257AbhKHJAz (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 8 Nov 2021 04:00:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C82B61029;
+        Mon,  8 Nov 2021 08:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636361891;
+        bh=TrHEQ4sI9oo53xDElCIDPWsGAF8FQCriNFj66mwhsjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sSAqY7cigCuQtLlmVjRn7PrjXEOvCRkVFCuw1kcuvI3Eq9z4q+rwU9PFwmpuZnwBY
+         lNh75+JZNrbWrpIy0LL9VjFVXhVn6J8BP36+yYGUonPyAcuVKWxomGu57RkKvyHc35
+         3vbfcJ7ePO6PdImIAPS3xzkSKLFtm8QoWag7bva5O2588ACd2tTT61eSTFBBA5/9Qf
+         Y2tGzDRc0feHDymJ/hEk7vY927Ca9mi4WdqBF+3ghd90cz7RwQeMEqLjfhgUnKXEjo
+         kKAWt7EL4ju+wzPxwFUgDcJO18t6NXMOyd73EeHSQ/QswFprfONI1S3tjR9fXjEK60
+         r1+IP3dZuHrPw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mk0Tg-0003JZ-PC; Mon, 08 Nov 2021 09:58:08 +0100
+Date:   Mon, 8 Nov 2021 09:58:08 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Baruch Siach <baruch@tkos.co.il>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+Subject: Re: [RFC PATCH] tty: flush buffer on signal interrupted tty close
+Message-ID: <YYjmoNkCGysVaCFr@hovoldconsulting.com>
+References: <319321886d97c456203d5c6a576a5480d07c3478.1635781688.git.baruch@tkos.co.il>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <319321886d97c456203d5c6a576a5480d07c3478.1635781688.git.baruch@tkos.co.il>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-> > This usually happens when switch has no default case and static
-> > analyzers and even sometimes compilers can=E2=80=99t prove that all pos=
-sible
-> > values are covered.
-> >
-> >
->
-> One blank line is enough.
->
-> > Many thanks to the following for review of previous versions :
-> >
-> >         * Pavel Skripkin <paskripkin@gmail.com>
-> >         * Andy Shevchenko <andy.shevchenko@gmail.com>
-> >
-> >
->
-> Ditto for each such case.
+On Mon, Nov 01, 2021 at 05:48:08PM +0200, Baruch Siach wrote:
+> When a signal interrupts tty_wait_until_sent() on a UART device, there
+> might be data left on the xmit buffer that the UART will never transmit.
+> This causes set_termios() to wait forever in tty_wait_until_sent().
+> 
+> The hang reproduces easily on my system that is equipped with DesignWare
+> 8250. Run
+> 
+>   while true; do echo -ne 0123456789abcdef01 > /dev/ttyS1; done
+> 
+> Hit Ctrl-C to interrupt the loop. When data is left in the struct
+> uart_state xmit buffer, the following command hangs:
+> 
+>   stty -F /dev/ttyS1 raw -echo
 
-Ok, will take care of this in all my future-patches.
+Thanks for reporting this. It should not be possible for there to be
+data left in the buffer and indeed we do have a long-standing regression
+here since the serdev work five years ago. I'm a bit surprised no one
+has noticed and reported this for that long.
 
-
+> Call tty_driver_flush_buffer() on signal interrupted wait, to discard
+> data from the xmit buffer.
 >
-> ...
->
-> > +       default:
-> > +               kbs =3D NULL;
->
-> > +               ret =3D -ENOIOCTLCMD;
->
-> Why is this? How is it supposed to work?
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  drivers/tty/tty_ioctl.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
+> index 507a25d692bb..0bf6fad7ecb3 100644
+> --- a/drivers/tty/tty_ioctl.c
+> +++ b/drivers/tty/tty_ioctl.c
+> @@ -203,6 +203,8 @@ void tty_wait_until_sent(struct tty_struct *tty, long timeout)
+>  
+>  	timeout = wait_event_interruptible_timeout(tty->write_wait,
+>  			!tty_chars_in_buffer(tty), timeout);
+> +	if (timeout == -ERESTARTSYS && tty->closing)
+> +		tty_driver_flush_buffer(tty);
+>  	if (timeout <= 0)
+>  		return;
 
-If there is no match for a cmd, causing the default-case to be hit, we
-must return an error ret-code to the client.
-The -ENOIOCTLCMD error ret-code has been chosen, on the same lines as
-"vt_do_kdskled" method.
+This is however not the right fix since the problem isn't limited to
+interrupted waits and in any case should not be handled in
+tty_wait_until_sent().
 
+I can reproduce the problem and have posted a fix here:
 
-Thanks and Regards,
-Ajay
+	https://lore.kernel.org/r/20211108083856.5261-1-johan@kernel.org
+
+Johan
