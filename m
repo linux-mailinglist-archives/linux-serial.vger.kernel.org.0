@@ -2,116 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8C8447BFD
-	for <lists+linux-serial@lfdr.de>; Mon,  8 Nov 2021 09:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF438447C65
+	for <lists+linux-serial@lfdr.de>; Mon,  8 Nov 2021 09:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238059AbhKHIkH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 8 Nov 2021 03:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238052AbhKHIkE (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 8 Nov 2021 03:40:04 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C3CC061570;
-        Mon,  8 Nov 2021 00:37:20 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id m14so58587127edd.0;
-        Mon, 08 Nov 2021 00:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gw2FCiC4aWMJkxXuSfsSyIQD/E2YOZ+rOt07PIe4WUk=;
-        b=lePT8RwnrYKsnAX0P3RcP2YZ15dkGBdbdcfdCJiIZIkqACbd8MNCnTsQo32jZcyh8I
-         7qlPKUtpPDqkAdRRQVkCvo9p66rgHfqoSncXue538YVl9c6k5LPnCaVi4YKovB0EDfGP
-         PuLyMNXXztyWOcaL/0R/HyJ7RbNG+u32K2WxF4I8w7zK+VdzzmW7lBkLpBtQqtHJJXrX
-         JqEWrROMPNPesAqD38x8GkQlFA1Vn2n1yzB25xzNKwVdgBNwDjajt7IGviTKOsqRa1gI
-         A8Q6oW7JrZOlWER1lG1iiK477DopN5XsWIItUaJStFl5vD7atAENM89NZHVHDGuMnmpR
-         zsYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gw2FCiC4aWMJkxXuSfsSyIQD/E2YOZ+rOt07PIe4WUk=;
-        b=dh+AKkGnVHNUN51OWENFofyw0XluBDkg9hhm/zBRbBhSm8KLYAt3jKI8RdBZO4qXPH
-         nACtc5gB5FM4TI+czDGVkKsE3K3qKaXXGfJBp/QpHUZSZ9WIqbYbnxEMzKiG5GqqnPlS
-         8I8dvgAgaLkilN1rbUR1+1ZzShkQ1cyEz6c1BdxpjopUnQOQhlsVno/do8Xya+z1lYQT
-         ZemgR+9T490YzYwC5fUh+wz5j8dsyv/CCFeYVVQ+ofuo3FHEzMhOUGF21J3bCzJnvMko
-         bTUn0Hgz0ioj2nyTCHhZfj7+2DToMCconrUKJHMA3Q2IDdGNfEPjdmD931nrgT3Lrsje
-         6UrQ==
-X-Gm-Message-State: AOAM530cBwVflPbvrmyt0wvJ3ScN1bSLduw14EEYpLLAGuse0Z9c/ZSG
-        7lKeduMrA9UNdGNPZr+7eaanrekUzdNcqp84KhSlLjjCLhw=
-X-Google-Smtp-Source: ABdhPJwCI1MsuA2LeXHuWY3YG3X7/Z0b3UvAGxUkSnkpx8g8mQRMV4RvKy/XiSe63m0bY5b2vQsF9jOophKe2dGRnXs=
-X-Received: by 2002:a17:906:bccc:: with SMTP id lw12mr28140316ejb.128.1636360639432;
- Mon, 08 Nov 2021 00:37:19 -0800 (PST)
+        id S238250AbhKHJAc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 8 Nov 2021 04:00:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238257AbhKHJAc (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 8 Nov 2021 04:00:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F09F261029;
+        Mon,  8 Nov 2021 08:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636361868;
+        bh=4wX+AII9Jyg6qEH+gRo7jIvJFABgSTjwEbhe7sn+sAA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i1MGeUtUKVpbNlY0JBiAfnYuiX/FAlw/CfpbJ7ClhJTWXW/QaO6Cpl8dHS0npTjys
+         r9ZkRwTJRmJsh5Up0j1U4WXMT5Vhe4arYzH/jWPAVGqhnK5bM4s2Y6jX7eG00B4kjz
+         n9lL8yCxDNeTqwGzMxxABjYtWLuEzUVtvT1wrpvGgrEvf1G2i8Q39uVg19nvmqCVYp
+         xTdBbmpkXn70Dzl63LFjg2TIXXMpComAh3VJ35AXDl/EiKBB/eiGorFmIcyKsY4uI+
+         0rH5bqLYQed03vsRsro+wNQUgP5T7C2IO8XTVAWEdgiTliTTST+aKP+db1dPjoiTeG
+         hEQtMtFpoOGuA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mk0TI-0003JJ-53; Mon, 08 Nov 2021 09:57:44 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Baruch Siach <baruch@tkos.co.il>, stable@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH] serial: core: fix transmit-buffer reset and memleak
+Date:   Mon,  8 Nov 2021 09:54:31 +0100
+Message-Id: <20211108085431.12637-1-johan@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211107031721.4734-1-ajaygargnsit@gmail.com>
-In-Reply-To: <20211107031721.4734-1-ajaygargnsit@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 8 Nov 2021 10:36:33 +0200
-Message-ID: <CAHp75VcacFAvsW6zmHe8fbnetcZq4xY_LZunZjBDG3ZdfS9NRQ@mail.gmail.com>
-Subject: Re: [PATCH v4] tty: vt: keyboard: add default switch-case, to handle
- smatch-warnings in method vt_do_kdgkb_ioctl
-To:     Ajay Garg <ajaygargnsit@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sun, Nov 7, 2021 at 4:10 PM Ajay Garg <ajaygargnsit@gmail.com> wrote:
->
-> smatch-kchecker gives the following warnings when run on keyboard.c :
->
-> vt_do_kdgkb_ioctl() error: uninitialized symbol 'kbs'.
-> vt_do_kdgkb_ioctl() error: uninitialized symbol 'ret'.
->
-> This usually happens when switch has no default case and static
-> analyzers and even sometimes compilers can=E2=80=99t prove that all possi=
-ble
-> values are covered.
->
->
+Commit 761ed4a94582 ("tty: serial_core: convert uart_close to use
+tty_port_close") converted serial core to use tty_port_close() but
+failed to notice that the transmit buffer still needs to be freed on
+final close.
 
-One blank line is enough.
+Not freeing the transmit buffer means that the buffer is no longer
+cleared on next open so that any ioctl() waiting for the buffer to drain
+might wait indefinitely (e.g. on termios changes) or that stale data can
+end up being transmitted in case tx is restarted.
 
-> Thus, the default switch-case has been added, which sets the values
-> for the two variables :
->
->         * kbs as NULL, which also nicely fits in with kfree.
->
->         * ret as -ENOIOCTLCMD (on same lines if there is no cmd
->                                match in "vt_do_kdskled" method).
->
->
-> Many thanks to the following for review of previous versions :
->
->         * Pavel Skripkin <paskripkin@gmail.com>
->         * Andy Shevchenko <andy.shevchenko@gmail.com>
->
->
+Furthermore, the buffer of any port that has been opened would leak on
+driver unbind.
 
-Ditto for each such case.
+Note that the port lock is held when clearing the buffer pointer due to
+the ldisc race worked around by commit a5ba1d95e46e ("uart: fix race
+between uart_put_char() and uart_shutdown()").
 
-...
+Also note that the tty-port shutdown() callback is not called for
+console ports so it is not strictly necessary to free the buffer page
+after releasing the lock (cf. d72402145ace ("tty/serial: do not free
+trasnmit buffer page under port lock")).
 
-> +       default:
-> +               kbs =3D NULL;
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Link: https://lore.kernel.org/r/319321886d97c456203d5c6a576a5480d07c3478.1635781688.git.baruch@tkos.co.il
+Fixes: 761ed4a94582 ("tty: serial_core: convert uart_close to use tty_port_close")
+Cc: stable@vger.kernel.org      # 4.9
+Cc: Rob Herring <robh@kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/tty/serial/serial_core.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> +               ret =3D -ENOIOCTLCMD;
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 0e2e35ab64c7..58834698739c 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1542,6 +1542,7 @@ static void uart_tty_port_shutdown(struct tty_port *port)
+ {
+ 	struct uart_state *state = container_of(port, struct uart_state, port);
+ 	struct uart_port *uport = uart_port_check(state);
++	char *buf;
+ 
+ 	/*
+ 	 * At this point, we stop accepting input.  To do this, we
+@@ -1563,8 +1564,18 @@ static void uart_tty_port_shutdown(struct tty_port *port)
+ 	 */
+ 	tty_port_set_suspended(port, 0);
+ 
+-	uart_change_pm(state, UART_PM_STATE_OFF);
++	/*
++	 * Free the transmit buffer.
++	 */
++	spin_lock_irq(&uport->lock);
++	buf = state->xmit.buf;
++	state->xmit.buf = NULL;
++	spin_unlock_irq(&uport->lock);
+ 
++	if (buf)
++		free_page((unsigned long)buf);
++
++	uart_change_pm(state, UART_PM_STATE_OFF);
+ }
+ 
+ static void uart_wait_until_sent(struct tty_struct *tty, int timeout)
+-- 
+2.32.0
 
-Why is this? How is it supposed to work?
-
-> +               break;
->         }
-
---=20
-With Best Regards,
-Andy Shevchenko
