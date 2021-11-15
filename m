@@ -2,105 +2,80 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B2A4505CC
-	for <lists+linux-serial@lfdr.de>; Mon, 15 Nov 2021 14:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033AE4505F0
+	for <lists+linux-serial@lfdr.de>; Mon, 15 Nov 2021 14:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbhKONqT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 Nov 2021 08:46:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51804 "EHLO mail.kernel.org"
+        id S231805AbhKONww (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 Nov 2021 08:52:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54388 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236303AbhKONnM (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 Nov 2021 08:43:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 41D6263225;
-        Mon, 15 Nov 2021 13:40:17 +0000 (UTC)
+        id S231751AbhKONwv (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 15 Nov 2021 08:52:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 03C6361C4F;
+        Mon, 15 Nov 2021 13:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636983617;
-        bh=wWcBwOu3cL9+U+zjsSAWtUQyMjCz3CDgA4mV4eUmQEI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Q4vpjH0uJaOnwWSUMmOGk4RBT6eS8WH2rt9ntVsxRfGOv9U1AcRtQ11fRaF90BIV8
-         sqeJ0HBpuF+KPmzxxWjlJGgSJ1OjqCnX5IF3kDB9UyaLteVQzEs63BelRJSGp/MN27
-         rl3mqKgow43UyjRBZHGLKQ4QfjwptO5RKrADCb33Z2mbHzpBKSuGr6uGe5kRDEdiBG
-         HHrLzrj7SUybGgQXnJJsO7yrqVHV48pmOVUw23xSRWxB7Me79U0ZJtPK4hVpkgoTGX
-         utmi82G0Uxv9J6Q2ftbl+jiVLtnlcx62LHYmA20iHfeUpWAVrLzRRvgSwCTpk4pzn6
-         ofL6tkRYcgMKA==
-Received: by mail-wr1-f46.google.com with SMTP id c4so30714585wrd.9;
-        Mon, 15 Nov 2021 05:40:17 -0800 (PST)
-X-Gm-Message-State: AOAM531vvlRykWLO92Z09uDzfZtO+Fb+dA5ADjGDxATEsgevQtZfRLx7
-        qHnRukW4U5bU8Zx1GyLFIWD6DZ3FSiCQNz2Ea4A=
-X-Google-Smtp-Source: ABdhPJydx+lGNyCCL10Ss+u6AlrY7F7Dh3irA5L/rafXQwz2EG7YLwST7GsA7bIvQOTqpVGT64n5uQbouKk1WaS2cho=
-X-Received: by 2002:adf:f088:: with SMTP id n8mr7443019wro.411.1636983615679;
- Mon, 15 Nov 2021 05:40:15 -0800 (PST)
+        s=k20201202; t=1636984196;
+        bh=9B2oJRJxG0SJ+JZ2MNk1YlpKJQB4Zx9ha0guFFwe9WA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZVebcUbGdcpMKpdjGnRNy/CNjGzIMTt1/m42tywHEMJujyn+13a21Fx/TUCBqbRtn
+         0a6p2ylxy9ft6kl7eEyAsWpt91JgbEjV4p6JuNlvBoDplgkwUpvibBdIi+6UHgVGmh
+         cNXEohgmP4iSwDIlrkChM8MfAPJODGyImuWaclW387mGyqSdAiGCWYmoleJHAuiedd
+         VyuDz0kaPISaLCeyZCc+eKRT7EfGa92039+94O1euo9dvw5MpgkZKsqx1beSPI8YzN
+         0hweZDz6jjlSbA0wy/A4GBDLEmqL05AlYDFHLGE0ZbHkur2eBhV4yB24PbjpvFbzdF
+         HrG1dZQfc0Dfw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mmcMg-00033B-4O; Mon, 15 Nov 2021 14:49:42 +0100
+Date:   Mon, 15 Nov 2021 14:49:42 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Ilia Sergachev <silia@ethz.ch>
+Cc:     linux-serial@vger.kernel.org, Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] serial: liteuart: fix missing drvdata
+Message-ID: <YZJldkD/yxZtoANS@hovoldconsulting.com>
+References: <20211115105458.6407e1aa@dtkw>
 MIME-Version: 1.0
-References: <20211115085403.360194-1-arnd@kernel.org> <20211115085403.360194-9-arnd@kernel.org>
- <YZIk6cVb7XibrMjf@pendragon.ideasonboard.com> <CAK8P3a1Fu11-e0CK2of8u3ebdjom84UKuXhBKi5FUs5ZPPdOVA@mail.gmail.com>
- <YZJJVA/92KYH8hQL@pendragon.ideasonboard.com> <CAK8P3a27rPBVbU-PrYR0BE4KV2DyJk7FoXaeDS=FU1=_RSwoQQ@mail.gmail.com>
- <YZJbLol1llm+puDT@pendragon.ideasonboard.com>
-In-Reply-To: <YZJbLol1llm+puDT@pendragon.ideasonboard.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 15 Nov 2021 14:39:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a16s6dwvb-7REjF-pmnKod2qQRq+mta-g8pDXbQpGQvHA@mail.gmail.com>
-Message-ID: <CAK8P3a16s6dwvb-7REjF-pmnKod2qQRq+mta-g8pDXbQpGQvHA@mail.gmail.com>
-Subject: Re: [PATCH 08/11] dmaengine: xilinx_dpdma: stop using slave_id field
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andy Gross <agross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Scott Branden <sbranden@broadcom.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        dmaengine@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115105458.6407e1aa@dtkw>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 2:05 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Mon, Nov 15, 2021 at 01:38:07PM +0100, Arnd Bergmann wrote:
-> > On Mon, Nov 15, 2021 at 12:49 PM Laurent Pinchart wrote:
-> >
-> > Right. I wonder if there is even a point in using the dmaengine API
-> > in that case, I think for other single-purpose drivers we tend to just
-> > integrate the functionality in the client driver. No point changing this
-> > now of course, but it does feel odd.
->
-> I agree, and that's what I would have done as well, if it wasn't for the
-> fact that the DMA engine also supports a second client for audio. This
-> isn't supported in upstream yet. We could still have created an ad-hoc
-> solution, possibly based on the components framework, but the DMA engine
-> subsystem wasn't a bad fit.
+On Mon, Nov 15, 2021 at 10:54:58AM +0100, Ilia Sergachev wrote:
+> drvdata has to be set in _probe() - otherwise platform_get_drvdata()
+> causes null pointer dereference BUG in _remove()
+> 
+> Fixes: 1da81e5562fa ("drivers/tty/serial: add LiteUART driver")
+> Signed-off-by: Ilia Sergachev <silia@ethz.ch>
+> ---
+> v1 -> v2: add Fixes:
+> 
+>  drivers/tty/serial/liteuart.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index dbc0559a9157..f075f4ff5fcf 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -285,6 +285,8 @@ static int liteuart_probe(struct platform_device *pdev)
+>  	port->line = dev_id;
+>  	spin_lock_init(&port->lock);
+>  
+> +	platform_set_drvdata(pdev, port);
+> +
+>  	return uart_add_one_port(&liteuart_driver, &uart->port);
+>  }
 
-Ah, makes sense. In this case, I guess the data could have been
-part of the DMA specifier after all, in a second cell after the
-channel number.
+Looks good:
 
-        Arnd
+Reviewed-by: Johan Hovold <johan@kernel.org>
+
+There are more issues with driver unbind than this though as the port is
+never deregistered. I've fixed it up on top of this patch:
+
+	https://lore.kernel.org/r/20211115133745.11445-1-johan@kernel.org
+
+Johan
