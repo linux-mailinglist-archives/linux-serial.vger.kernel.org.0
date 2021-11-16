@@ -2,106 +2,111 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9433245196D
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Nov 2021 00:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D435452923
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Nov 2021 05:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348850AbhKOXTn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 Nov 2021 18:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350129AbhKOVam (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 Nov 2021 16:30:42 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906DCC02C322;
-        Mon, 15 Nov 2021 13:15:31 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id y7so15655399plp.0;
-        Mon, 15 Nov 2021 13:15:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xHNx600LacDDvdaPgToGQdsVvGhdyIzYhehFyyrMX6Q=;
-        b=qZ34WRjn7XiYl6fhNEnFTnE+rB+hkm08jxb86pMdjIFxbsu5t+J8SE0qtnOiM5hztX
-         bKfFOe+J3NPxf7qpMUl1HGIDmMPb4UrdYPWXxugC/JvPwABoKr8ggYHnA4Xl3YUn5QXC
-         /m7vbQbiNizX0SLjzX+qui1HOl+NO7d/OleLVmGK5A3SVVUPJmEhDVihYQfE1U7oG0dA
-         YasMrdhTEEHNgYncm4QIRwWE0lW8O6G+2a7caNwNL8ZxZG//qgm5P7Eq11kh8dy5kI2h
-         zLBO90xK5GjEZjc/hAC9hAgD70Y1DcJ2EdWRDmh0eW4xx2L4SpO4md4sl376VPr/mBc2
-         t5dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xHNx600LacDDvdaPgToGQdsVvGhdyIzYhehFyyrMX6Q=;
-        b=DmKY1gGrhrRaLsqJxnGCzDgZWlH5mmMqBWeCUsCyc46rrqnxo/ZNPVD/aVMEnwfJn0
-         vnZwh6K2ZdqwOEKgDWET3TnMmm2nDc1DFNi4efDZZaGT7W6jMUHdBPmXsjhnmspyIXyO
-         S3s16kuBRypkkrwX2jqCU9d9CDwGuEayDRMtkoT1KjpRUsOGlOFIbdBHYR7JyHU+H70E
-         0A0n/2tHI/fq1zkCMFZhFBLccjPt+Hip3/ZahR5Kij9UKTnCnogYRAQqiJzeOndfivYK
-         4+NCv1nxZMfSyGrMYe7SipGuyRaF5ztKjpepq9Oxmat/tZ5EvojKW5VbfAqokXB5dYZc
-         gpxw==
-X-Gm-Message-State: AOAM531gkfW9gO+TW9adp5kqBURP/AqF/zVuUBlWDTYKOiP/Tyi5cwIt
-        jK582oxkuKPeEentW4pPj1qHMyzraeU=
-X-Google-Smtp-Source: ABdhPJzdQPNsx4eUXdWuRNDkDU3Xv2eXnXr7Dl74EDFbePrbJjVElqMtHHVIbmkHwGHe+falNL1ddQ==
-X-Received: by 2002:a17:902:c412:b0:141:f710:2a94 with SMTP id k18-20020a170902c41200b00141f7102a94mr39004528plk.1.1637010931030;
-        Mon, 15 Nov 2021 13:15:31 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id b21sm16229592pff.179.2021.11.15.13.15.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 13:15:30 -0800 (PST)
-Date:   Tue, 16 Nov 2021 06:15:28 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilia Sergachev <silia@ethz.ch>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Filip Kokosinski <fkokosinski@antmicro.com>
-Subject: Re: [PATCH 1/3] serial: liteuart: fix compile testing
-Message-ID: <YZLN8LXHl9FURgsU@antec>
-References: <20211115133745.11445-1-johan@kernel.org>
- <20211115133745.11445-2-johan@kernel.org>
+        id S240050AbhKPEcb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 Nov 2021 23:32:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54926 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233013AbhKPEb4 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 15 Nov 2021 23:31:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 66AA16023D;
+        Tue, 16 Nov 2021 04:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637036939;
+        bh=rcwRBlCKqfF/fOP7nToqyQtxiDrvbRwb9qhV9pcd3SE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WCkkYmiCsuCs6VTYyStyePuhjavoZznkD15Pfk4kfmFcnpOyhqwefXwCEerdsi5BB
+         gaxqtKh7IVnWz3O+cSAsdJUjs6zKFkagpHyNquC8O99klBS/lKo/7gFtT7CHdCC6ar
+         6K/pSsHI8+2FH3V1I1L7V2qq8dmjNebnK0MyEtDZ/hdrNv4x1IyseRUmNFq3EiZJ7c
+         1oiPRI0DMs2kje0Hvslatdsud/obFQMRW9uHW8NpKk4mIv94ytNZbHvJadN/Nn9YZY
+         tGLIxmhA6nCk6OcdFZAV34UHFuwVplf/2bcz9WsNFmm3THY7N2KypMCnwedbGoDGcy
+         AW5qdaBZVvhpQ==
+Date:   Tue, 16 Nov 2021 09:58:54 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Scott Branden <sbranden@broadcom.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        dmaengine@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 08/11] dmaengine: xilinx_dpdma: stop using slave_id field
+Message-ID: <YZMzhoWX0S5oPI6j@matsya>
+References: <20211115085403.360194-1-arnd@kernel.org>
+ <20211115085403.360194-9-arnd@kernel.org>
+ <YZIk6cVb7XibrMjf@pendragon.ideasonboard.com>
+ <CAK8P3a1Fu11-e0CK2of8u3ebdjom84UKuXhBKi5FUs5ZPPdOVA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211115133745.11445-2-johan@kernel.org>
+In-Reply-To: <CAK8P3a1Fu11-e0CK2of8u3ebdjom84UKuXhBKi5FUs5ZPPdOVA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 02:37:43PM +0100, Johan Hovold wrote:
-> Allow the liteuart driver to be compile tested by fixing the broken
-> Kconfig dependencies.
+On 15-11-21, 11:21, Arnd Bergmann wrote:
+> On Mon, Nov 15, 2021 at 10:14 AM Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com> wrote:
+> > On Mon, Nov 15, 2021 at 09:54:00AM +0100, Arnd Bergmann wrote:
+> > > @@ -1285,11 +1287,13 @@ static int xilinx_dpdma_config(struct dma_chan *dchan,
+> > >       spin_lock_irqsave(&chan->lock, flags);
+> > >
+> > >       /*
+> > > -      * Abuse the slave_id to indicate that the channel is part of a video
+> > > -      * group.
+> > > +      * Abuse the peripheral_config to indicate that the channel is part
+> >
+> > Is it still an abuse, or is this now the right way to pass custom data
+> > to the DMA engine driver ?
 > 
-> Fixes: 1da81e5562fa ("drivers/tty/serial: add LiteUART driver")
-> Cc: stable@vger.kernel.org	# 5.11
-> Cc: Filip Kokosinski <fkokosinski@antmicro.com>
-> Cc: Mateusz Holenko <mholenko@antmicro.com>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> It doesn't make the driver any more portable, but it's now being
+> more explicit about it. As far as I can tell, this is the best way
+> to pass data that cannot be expressed through the regular interfaces
+> in DT and the dmaengine API.
+> 
+> Ideally there would be a generic way to pass this flag, but I couldn't
+> figure out what this is actually doing, or whether there is a better
+> way. Maybe Vinod has an idea.
+> 
+> I'll change s/Abuse/Use/ for the moment until I get a definite answer.
 
-Reviewed-by: Stafford Horne <shorne@gmail.com>
+I would feel this is still not use for the peripheral_config, but lets
+keep it to get rid of slave_id.
 
-> ---
->  drivers/tty/serial/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index 6ff94cfcd9db..67de892e0947 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -1531,9 +1531,9 @@ config SERIAL_MILBEAUT_USIO_CONSOLE
->  
->  config SERIAL_LITEUART
->  	tristate "LiteUART serial port support"
-> +	depends on LITEX || COMPILE_TEST
->  	depends on HAS_IOMEM
-> -	depends on OF || COMPILE_TEST
-> -	depends on LITEX
-> +	depends on OF
->  	select SERIAL_CORE
->  	help
->  	  This driver is for the FPGA-based LiteUART serial controller from LiteX
-> -- 
-> 2.32.0
-> 
+Also, I would be better if this was moved to DT as the next cell, don't
+recall why that was not done/feasible.
+
+-- 
+~Vinod
