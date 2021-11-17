@@ -2,81 +2,115 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFFD4544A5
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Nov 2021 11:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD635454524
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Nov 2021 11:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbhKQKIo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 17 Nov 2021 05:08:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55232 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236057AbhKQKIk (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 17 Nov 2021 05:08:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1353C61AED;
-        Wed, 17 Nov 2021 10:05:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637143542;
-        bh=q+JjnaZW4YhiIxjh69UWx1tFsJdMHJxlhuR/u0OyNqE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NQ9TzlhGqpwZ/AVvZrrRbslrKmzuMBzBeUJgFzDfXtpLVr3jB2DARc5OOpmMFj7pK
-         FjGG1njwiiboZXTwA3EyCAjGKM6tqWTi71z+MT7tr40Ajei7hFXgHXf4WDZ1yYTdiA
-         VKCem4jxfm+CDU7iNHZYSQ74RghSgtu2hITy4MIMfnaP79bb7FHmAQCnJokR/iCOpN
-         fo55L/qXttJjzWjtOdueb2QxbAPFqMDgGjLwTNOJUOgEM2fEgGrQoMd+Tub8MUeb3T
-         Bj1oGlD/JDO58R2byPaOOJ2y+gGCuzhUUG8s2sYTqsbF7kBr3inmm3qpaQdm2R7kZC
-         jAYwNgx8T50Ig==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mnHoi-0001KY-QH; Wed, 17 Nov 2021 11:05:24 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ilia Sergachev <silia@ethz.ch>,
+        id S231650AbhKQKqe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 17 Nov 2021 05:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234464AbhKQKqe (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 17 Nov 2021 05:46:34 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73986C061570;
+        Wed, 17 Nov 2021 02:43:35 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id w1so9002942edc.6;
+        Wed, 17 Nov 2021 02:43:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uDN1GsOnIo4V4ElqUrvWCtZve9NFoolkaMsk7vOONMc=;
+        b=Gm/D8C/h5/hiiov56d8uVRJ/UloKPbAgDbfQ2BiLzeB3h0Bmk/EbgUFppqrezlFsJb
+         aPt24m7oD0agtX+k7WUTkGiCXs9UT1bJnlKnhKfqtBFKDLbIll0X/9pD/CZegoDBMyzW
+         xYuTr2pfLAntlCNJvupanmwWpKKl9V9wSNB5r5G0aIKFqT6rL+dMqyWhaQhL5LgDLKjz
+         Is06RAyB22Z3RmrJAVFgF7sviPfSsgTtoU1HBi+1Ti8P7vLzPA+naLBi5FJJ0E/iTItY
+         ensYu4kgixXXCw1U6sV3hm8PnMVd88E9idQsGfBhvmuuNjvfOCKCwvnvooflSRDKjjDO
+         qgCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uDN1GsOnIo4V4ElqUrvWCtZve9NFoolkaMsk7vOONMc=;
+        b=H7CkcR6y6bQfo6cHXSVmUyUiKLHQOu2BVjRDuGjSAKA1ZGCuZdm4ABlwJqv+8YXTts
+         1H/JCFPIbZ/anBZobz1XHz1I1Q2tsgRTcSaHrEvSm/cBhKAWWwLNSWahDpiml2O3osgG
+         xDHFpllOrvnP1lEzRXG0d0BjSHh3abDfVevw+s6MKQQVfxHMLGG5vtjgXRWtw8YRWFLO
+         0QY6l7sKhSgRA+xjiLpkJyERxKBngQpYC2JN5bjbbRtDOzDprsGzbym5GPahrZ60ER4O
+         HPNNtHrdwL5SMYpJgP8GX+rsXefhxoJhYcjiVqUeVbH0OK82dzxkY2n/gCgwttwmSvqc
+         gCNA==
+X-Gm-Message-State: AOAM533BU23Lpd4ir8LnOifDcLQwB0wS5ojRHYW4n9RqHZcXZmCKo80C
+        aBEKQ7qffnW0DEPQUruurNxGmHynlgjx/l+Nz8w=
+X-Google-Smtp-Source: ABdhPJy0UZW10x7IeVGEKtr3DcWxCW3RECxfztJDi9a6POTS6H3CWw1nuNc/+bHx5mNtasnfykpuO6ePXi1yDfEoEoQ=
+X-Received: by 2002:a17:907:869e:: with SMTP id qa30mr19414299ejc.356.1637145814005;
+ Wed, 17 Nov 2021 02:43:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20211117100512.5058-1-johan@kernel.org>
+In-Reply-To: <20211117100512.5058-1-johan@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 17 Nov 2021 12:42:53 +0200
+Message-ID: <CAHp75Ve9MB4MW9KDPoNhnPa8TCabmMgLbt6H7qrGgwmA8CpdNg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] serial: liteuart: fix driver unbind
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilia Sergachev <silia@ethz.ch>,
         Karol Gugala <kgugala@antmicro.com>,
         Mateusz Holenko <mholenko@antmicro.com>,
         Stafford Horne <shorne@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH v2 3/3] serial: liteuart: relax compile-test dependencies
-Date:   Wed, 17 Nov 2021 11:05:12 +0100
-Message-Id: <20211117100512.5058-4-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211117100512.5058-1-johan@kernel.org>
-References: <20211117100512.5058-1-johan@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The LITEX symbol is neither a build or runtime dependency for the
-liteuart serial driver.
+On Wed, Nov 17, 2021 at 12:05 PM Johan Hovold <johan@kernel.org> wrote:
+>
+> Ilia Sergachev noted that the liteuart remove() function would trigger a
+> NULL-pointer dereference if it was ever called since the driver data
+> pointer was never initialised.
+>
+> Turns out there are more bugs in this part of the driver which clearly
+> has never been tested.
+>
+> Also relax the Kconfig dependencies so that the driver can be
+> compile-tested without first enabling a seemingly unrelated SoC
+> controller driver.
+>
+> Note that this series depends on the fix by Ilia:
+>
+>         https://lore.kernel.org/r/20211115031808.7ab632ef@dtkw
 
-LITEX is selected by the "LiteX SoC Controller" driver, which does a
-probe-time register-access sanity check and panics if the SoC has not
-been configured correctly. That driver's Kconfig entry asserts that any
-LiteX driver using the LiteX register accessors should depend on LITEX,
-but currently only the serial driver complies.
 
-Relax this LITEX "dependency" in order to make it easier to compile test
-the driver.
+FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/tty/serial/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Johan
+>
+>
+> Changes in v2
+>  - allow compile testing without CONFIG_OF (Andy)
+>  - reword commit message to clarify that LITEX is neither a build or
+>    runtime dependency and that the change only makes it easier to
+>    compile test the driver
+>  - move the Kconfig patch last in the series
+>  - add Stafford's reviewed by tags to the two unmodified patches
+>
+>
+> Johan Hovold (3):
+>   serial: liteuart: fix use-after-free and memleak on unbind
+>   serial: liteuart: fix minor-number leak on probe errors
+>   serial: liteuart: relax compile-test dependencies
+>
+>  drivers/tty/serial/Kconfig    |  2 +-
+>  drivers/tty/serial/liteuart.c | 18 +++++++++++++++---
+>  2 files changed, 16 insertions(+), 4 deletions(-)
+>
+> --
+> 2.32.0
+>
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 6ff94cfcd9db..fc543ac97c13 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1533,7 +1533,7 @@ config SERIAL_LITEUART
- 	tristate "LiteUART serial port support"
- 	depends on HAS_IOMEM
- 	depends on OF || COMPILE_TEST
--	depends on LITEX
-+	depends on LITEX || COMPILE_TEST
- 	select SERIAL_CORE
- 	help
- 	  This driver is for the FPGA-based LiteUART serial controller from LiteX
+
 -- 
-2.32.0
-
+With Best Regards,
+Andy Shevchenko
