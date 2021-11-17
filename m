@@ -2,78 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E71E845434C
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Nov 2021 10:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD5745453E
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Nov 2021 11:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbhKQJKH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 17 Nov 2021 04:10:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51870 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234800AbhKQJKD (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 17 Nov 2021 04:10:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A9E261BF5;
-        Wed, 17 Nov 2021 09:07:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637140025;
-        bh=jSFeocSlc6IofAObidh4I1D1bgngavZHyAu2iZpsyoY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jn4SfpFEs22vvlVgwGhLZ//4vz0X5kRnla9/eATJkG9nK4IO9dkdV8ljTXTjVbTAn
-         L86XZkse3ajqEpWtBzJwC/sYyczw3tyJGhInWqtHCGstuiUIxspWz3oVXnDWrqLnfZ
-         ocPhkfrUVvaIztlNKo1I/DzKb+EgZtbvIovegi6uOU6QMeiIxyLi30/mr2p+djUKCy
-         vzDVHKPf9hEd0RDvUTlMvpBSOJgv7oyaG7CsA7XHyjTpUu2MUjqTffSD0IAuCsvRK9
-         i6va3OVYU5uLgtx9IV9RelIlvCkmFqE7T+A1vIOeYKVV47yZDVQ4L4u9+5C6awNTpg
-         mNwrB3OGjSYNA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mnGtz-00075Z-Bb; Wed, 17 Nov 2021 10:06:47 +0100
-Date:   Wed, 17 Nov 2021 10:06:47 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilia Sergachev <silia@ethz.ch>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Filip Kokosinski <fkokosinski@antmicro.com>,
-        Stafford Horne <shorne@gmail.com>
-Subject: Re: [PATCH 1/3] serial: liteuart: fix compile testing
-Message-ID: <YZTGJzJcQ3oIEsGy@hovoldconsulting.com>
-References: <20211115133745.11445-1-johan@kernel.org>
- <20211115133745.11445-2-johan@kernel.org>
- <CAHp75VeGinEWv0BuAsrHtif2b1p26uUEmSRqG4_y76vDdvNKAw@mail.gmail.com>
+        id S236590AbhKQK4M (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 17 Nov 2021 05:56:12 -0500
+Received: from mailnode.rz.hs-mannheim.de ([141.19.1.96]:43090 "EHLO
+        hs-mannheim.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231591AbhKQK4L (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Wed, 17 Nov 2021 05:56:11 -0500
+X-Greylist: delayed 3600 seconds by postgrey-1.27 at vger.kernel.org; Wed, 17 Nov 2021 05:56:10 EST
+Received: from [176.199.209.39] (account willenberg@hs-mannheim.de HELO [192.168.0.240])
+  by hs-mannheim.de (CommuniGate Pro SMTP 6.2.14)
+  with ESMTPSA id 55606295; Wed, 17 Nov 2021 10:53:10 +0100
+Message-ID: <edf15265-548a-1315-9175-967dddb38d4b@hs-mannheim.de>
+Date:   Wed, 17 Nov 2021 10:53:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VeGinEWv0BuAsrHtif2b1p26uUEmSRqG4_y76vDdvNKAw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2] uartlite: Update the default for the
+ SERIAL_UARTLITE_NR_UARTS
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        linux-serial@vger.kernel.org
+Cc:     kernel.development@povil.us, michals@xilinx.com, git@xilinx.com,
+        gregkh@linuxfoundation.org, Michal Simek <michal.simek@xilinx.com>
+References: <20211117051635.1316958-1-shubhrajyoti.datta@xilinx.com>
+From:   Ruediger Willenberg <r.willenberg@hs-mannheim.de>
+In-Reply-To: <20211117051635.1316958-1-shubhrajyoti.datta@xilinx.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 05:44:14PM +0200, Andy Shevchenko wrote:
-> On Mon, Nov 15, 2021 at 3:44 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > Allow the liteuart driver to be compile tested by fixing the broken
-> > Kconfig dependencies.
+Am 17.11.2021 um 06:16 schrieb Shubhrajyoti Datta:
+> "The uartlite is used by FPGAs that support a basically unlimited number
+> of uarts so limiting it at 16 dosn't make sense as users might need more
+> than that."
+> the commit also said that number should be unlimited. However it set the
+> default to 1 instead of 16.The original 16 written in driver should be
+>   quite reasonable default to cover most of the cases.
 > 
-> ...
-> 
-> >  config SERIAL_LITEUART
-> >         tristate "LiteUART serial port support"
-> > +       depends on LITEX || COMPILE_TEST
-> >         depends on HAS_IOMEM
-> > -       depends on OF || COMPILE_TEST
-> > -       depends on LITEX
-> 
-> > +       depends on OF
-> 
-> AFAICS this is optional and prevents compile testing in some cases.
+> So change the default number of uarts back to 16.
 
-Yeah, you're right; that clause should stay. I'll send a v2. Thanks.
+Respectfully, this is an inadequate fix to a decade-old underlying issue
+in the Xilinx device tree generator. The DTG assigns consecutive
+"port-number" properties to UARTs handled by separate drivers (uartps,
+uartlite, uartns), which are then used in drivers/tty/serial/uartlite.c
+to index the struct uart_port[] array and set uart_port->line.
+The DTG should number devices for each driver separately from 0;
+serial_core.c checks for (0 <= uart_port->line < NR_UART_PORTS). As a
+consequence, when a Zynq system has both a PS-UART and a Uartlite,
+setting SERIAL_UARTLITE_NR_UARTS explicitly to 1 in Kconfig means
+probing the uartlite fails, which is confusing to the unsuspecting
+KConfig user. Setting the default to 16 just kicks the can down the
+road because it will fail for more than 15 Uartlites (or less, if there
+are more PS-UARTs or AXI 16550A UARTs).
+I've submitted a patch for the DTG numbering scheme to git@xilinx.com
+just yesterday. Will post a PATCH to this list later today or tomorrow
+to handle the issue from the other end (uartlite.c).
 
-> >         select SERIAL_CORE
-> >         help
-> >           This driver is for the FPGA-based LiteUART serial controller from LiteX
-
-Johan
+Cheers,
+Ruediger
