@@ -2,96 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F97458FE4
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Nov 2021 15:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E274592C3
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Nov 2021 17:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239628AbhKVOFn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Nov 2021 09:05:43 -0500
-Received: from mail-pl1-f172.google.com ([209.85.214.172]:46927 "EHLO
-        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbhKVOFk (ORCPT
+        id S240115AbhKVQOj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Nov 2021 11:14:39 -0500
+Received: from mx08-00227901.pphosted.com ([91.207.212.184]:52378 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229955AbhKVQOf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Nov 2021 09:05:40 -0500
-Received: by mail-pl1-f172.google.com with SMTP id p18so14133024plf.13;
-        Mon, 22 Nov 2021 06:02:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CXsdV198ETc5Z4b8HkqNnBSItnEYeGqb45DkswhRR10=;
-        b=WZBO/+4G87fwunZkL6rLQfoGToadsvp6dysubkqOVwe/9wZWZoAGnpzDi8lFJKksJX
-         XLw2u9LqQDxOzzoH/SB5TK3BpKMmlAIGhIh0MaNHN7y5jSKUAB2CB9cfMS6dJuOtps9w
-         50Nz6S+s+af4Upkyvut3CVr8rxjUKcRDW7hqsPD70FvYbMQ7w3fQHsk2fOIZx6wxnWL5
-         xr14Rn1w+KigD5c5K5nyIYqp2n6+wjIHhjMwmBJvz8v9x6CU/1gAX2IBuqf4FO/w25Vk
-         VareCbCblrFy7rfQUOulVwPyJxr8ZWhnWlG/HVwWKGw0ldW9xR1vEul97okHAomiZb/h
-         nFTA==
-X-Gm-Message-State: AOAM533FM+CjF2TAzlSfXcWAo3NqliCY5wXCqGq1Ol2HTrRjE/R9AkxE
-        fXb+2HmxxcJNL4UKfkQdYlEvyO6It+CZAjiHMmyPTMtJeWo=
-X-Google-Smtp-Source: ABdhPJwgDW7QnFYaRXQx8WMqdI3IoaCx11UiPY/TY96xWHkzvW+86RsBX57z5zjgEHmwt2m4CJlWhRK0P1C2/0hu1wE=
-X-Received: by 2002:a17:902:728e:b0:143:a388:868b with SMTP id
- d14-20020a170902728e00b00143a388868bmr108553260pll.33.1637589748634; Mon, 22
- Nov 2021 06:02:28 -0800 (PST)
+        Mon, 22 Nov 2021 11:14:35 -0500
+Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
+        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixf018132;
+        Fri, 19 Nov 2021 10:27:13 +0100
+Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
+        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:27:13 +0100
+Received: from zbw2k16ex02.bardusch.net (172.25.1.2) by
+ ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:27:11 +0100
+Received: from User (172.25.1.131) by zbw2k16ex02.bardusch.net (172.25.1.2)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:27:00 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:27:14 -0800
 MIME-Version: 1.0
-References: <20211102161125.1144023-1-kernel@esmil.dk> <20211102161125.1144023-12-kernel@esmil.dk>
- <CACRpkdb0CrJ_uTbtfg-xGq8uu0AKoqfAB03mF2CA_G8ys_8Lzg@mail.gmail.com>
- <CANBLGcwvGptHxP5+JQEQV1Y7G=dNTt86QuVgfUuvQDDBfNrzOA@mail.gmail.com> <CACRpkdbsP1zibFvg2yL67ndQJ1MxBRmH5j+cZ-giZkmrnGROdw@mail.gmail.com>
-In-Reply-To: <CACRpkdbsP1zibFvg2yL67ndQJ1MxBRmH5j+cZ-giZkmrnGROdw@mail.gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Mon, 22 Nov 2021 15:02:17 +0100
-Message-ID: <CANBLGcyWGeYUk_RcL6rhmu4608bP7LQ35o-B5FiNckQUDJ83Wg@mail.gmail.com>
-Subject: Re: [PATCH v3 11/16] dt-bindings: pinctrl: Add StarFive JH7100 bindings
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Zhu <michael.zhu@starfivetech.com>,
-        Fu Wei <tekkamanninja@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <e36b6b33-d3b3-4f08-8033-0aba2c4cece8@zbw2k16ex02.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
+X-Proofpoint-ORIG-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, 22 Nov 2021 at 00:19, Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Fri, Nov 12, 2021 at 12:04 AM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > On Tue, 9 Nov 2021 at 01:46, Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> > > As it appears to have some cross dependencies I assume
-> > > it will be merged through the SoC tree?
-> >
-> > I don't know. I've never tried this before, so whatever is easiest I
-> > guess. Do I do anything special other than cc'ing soc@kernel.org for
-> > v4 to make that happen?
->
-> You create a pull request with git request-pull and sent it to
-> soc@vger.kernel.org and linux-arm-kernel on Cc that should
-> work fine and it appears here:
-> https://patchwork.kernel.org/project/linux-soc/list/
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
 
-Thanks. I'm just waiting for Palmer to ack the riscv bits then I'll do that.
+Looking forward to hearing from you.
 
-/Emil
+
+Respectfully!!
+Joseph Choondak
+Account Executive.
