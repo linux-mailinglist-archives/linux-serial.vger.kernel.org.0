@@ -2,69 +2,127 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E46E457E26
-	for <lists+linux-serial@lfdr.de>; Sat, 20 Nov 2021 13:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0083A457FCB
+	for <lists+linux-serial@lfdr.de>; Sat, 20 Nov 2021 18:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237305AbhKTMhW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 20 Nov 2021 07:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S237851AbhKTRTd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 20 Nov 2021 12:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237588AbhKTMhV (ORCPT
+        with ESMTP id S232180AbhKTRTd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 20 Nov 2021 07:37:21 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F13C06175B
-        for <linux-serial@vger.kernel.org>; Sat, 20 Nov 2021 04:34:17 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ay10-20020a05600c1e0a00b0033aa12cdd33so402186wmb.1
-        for <linux-serial@vger.kernel.org>; Sat, 20 Nov 2021 04:34:17 -0800 (PST)
+        Sat, 20 Nov 2021 12:19:33 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE73BC061574
+        for <linux-serial@vger.kernel.org>; Sat, 20 Nov 2021 09:16:29 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id b1so58401866lfs.13
+        for <linux-serial@vger.kernel.org>; Sat, 20 Nov 2021 09:16:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w2dLnl5hsLVKZTBAdcVFnDnMtM7+guW1LU+8LG4nir0=;
-        b=Fg0CuYYkyt0hZtxEaL3pzh0wmxFN/BDqDvJITI1D07EsGGgN8PZtfHGDuXTh7/BoIl
-         qVNJH9zXnG8cNi2LJMLF71hiIrDCE84586190GfTLhvhTykKIh4u2rbstY72IJ2bwxdi
-         dD1A4IvTr0xiNtXbl34OchcNTBgwtuJY6Bjfg1D2EI5sf1RrQ+sb29ycEh2OqGIrNIor
-         9ZgC+8bGry8Ek/GHCpQ99htcECmIpz2LX84bJAMeuv5rRWeUbFN4BCL5K+oO4sSjngOB
-         8QNuFreM8gT309f4IkX7URhAMyYexwDutkEXDHBb6UE/vMNjPjAcuLVnaWzcjl7URoeu
-         P8/Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=eibhgHyEnDty6prD7kw2qZTGk1uH223Sz/QXKL+fHLw=;
+        b=U/VkB3Whvy/WPg+ezQwvt/7dFPufHaBBnOwt0+fEAcsE2dx1vBPEI3vBz0IUGmZLdw
+         siULNZ7vbPH43XYLXVA5/33MY5t05KSQ/n6QjY4D+BmQg2oWwiawSI2l4zXLuEHtK7tC
+         f0lIb46GYY7/pFWCUIhcbBM7M/oQ8AUROl2CJUJCbaWeom8smIbVNHMMAt+l6wmNaUqp
+         TJs6FJfG/4vQ77F1/TsQjADmwpGDRSVPoa29gTxIwmxLPXskvRzUruj4yMRTwd/f+B9W
+         nm8VXA8RPzI7bb8i+e/mfla/d53izD2Xpy8QVTK8RVgCC0mVEEjwW+RyyF8wSvBOgAmf
+         zQ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w2dLnl5hsLVKZTBAdcVFnDnMtM7+guW1LU+8LG4nir0=;
-        b=ZCQuurl21PpvmXexXvc/1kaTBofC2q67q0zMv64fTTdFC0NR+QEjKPlI5kt7vOCQmd
-         G8qEoT5bZp20U4SICJouVL2IWT+XuesP6s2CMzCTA6fJ2TxqjjXKiIoOPaT+cOpBX6TX
-         Uha6zs9e9VYJSFXPsLds14GTH4g1pD45MWq8nky//cW4ix2mQu2jWphzGdCf2vQYlgOe
-         F9VQma9F16/6D+ehqxSMsDcdEm++biMGTWcoOq3B1uq2KeZg0yNEUwBG8xigJqne7LU7
-         nKP6I0AJIY5Nd9evWtnyx4wve/E2TAdngpvJxu4IBGmvTUPAPcldWMUCdfnlLgX9xz7t
-         m3zA==
-X-Gm-Message-State: AOAM530i9bjxDXk5hoRldQ2s8PkZr5BXfpFKT4Xr+QlAvpAU6p1pmtDm
-        xWVfN0gBcUNyYImpXk2n0D3rvCpclkk14AsjEcE=
-X-Google-Smtp-Source: ABdhPJx9lg3O3sAF2QNHrqcxWsGvQFfQfiAtfif8DZ5B4m8o6/KXkYAJ/QEnjRn5/uYIqbdMP8Au276Y+aqkPaELun0=
-X-Received: by 2002:a1c:5409:: with SMTP id i9mr9522973wmb.146.1637411656042;
- Sat, 20 Nov 2021 04:34:16 -0800 (PST)
+         :subject:to:content-transfer-encoding;
+        bh=eibhgHyEnDty6prD7kw2qZTGk1uH223Sz/QXKL+fHLw=;
+        b=7hs971yK1MW7Hp8XJSggSgbqTIw1nhrUnbbGifsq1y1SDAYr96xAYUQXe1Z8yfblyK
+         FWj+7Ae71b3oF30X/xgXzvg410qcfTH+KOKiaAL4Dvm7QZokBXNvu62Z6skxER9vXvWx
+         LElnYAXWZx23DOycyKBqQzEp+3siANL0cglMJr2kYLJr8Akmr8szAEz+SxzSADT1C68r
+         w2kIavyjKWjKprcxvjmC0w9BGgHBEP/9iFA/dQ3VNIC0a8E6n43LiLC9L6+7M8D64JYs
+         TkbVRgqTl6/wAPzK1YHR7RHODb7CmRGXw/JicCECoZyp6sjY8sQzsvP407SxGKRJoRVy
+         8weA==
+X-Gm-Message-State: AOAM5329KPhEnQD18Uft4K4KyDopzIrdGEWqhhqd2tGhylwfixzfgfs9
+        ewtfcfglTBp1ybJHMKSGV+qMP2ZCVr3GvJU1jA8=
+X-Google-Smtp-Source: ABdhPJxwKPl0O9eF9ovllYiJaHdHp48scIz/+y51AuxCFFb6RUcHZeZLutDqO/T7JMoT4XL8DYOFUGQ6ZvBelgit1uk=
+X-Received: by 2002:a2e:b545:: with SMTP id a5mr35530500ljn.31.1637428587898;
+ Sat, 20 Nov 2021 09:16:27 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:adf:f989:0:0:0:0:0 with HTTP; Sat, 20 Nov 2021 04:34:15
+Received: by 2002:a05:6504:16c9:0:0:0:0 with HTTP; Sat, 20 Nov 2021 09:16:27
  -0800 (PST)
-Reply-To: mitchellvivian01@gamil.com
-From:   Mitchell Vivian <duplanmartine36@gmail.com>
-Date:   Sat, 20 Nov 2021 12:34:15 +0000
-Message-ID: <CAO-XXH4V+dUpgGpmCiApBhW-zaz1u6CaEOyFDdkQsbAu_nkg3w@mail.gmail.com>
-Subject: Hello
+Reply-To: msbelinaya892@gmail.com
+From:   msbelinaya <generaldavidperkins061@gmail.com>
+Date:   Sat, 20 Nov 2021 17:16:27 +0000
+Message-ID: <CAJMWtRbNQgXtVjeO9CY-0=NDesLuO-oZS7NPAbxW8fDDDF8ucw@mail.gmail.com>
+Subject: 
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello
+Ich biete meine Freundschaft an und glaube, dass Sie mich mit gutem
+Herzen akzeptieren werden. Ich wurde gedr=C3=A4ngt, Sie zu kontaktieren und
+zu sehen, wie wir einander am besten unterst=C3=BCtzen k=C3=B6nnen. Ich bin=
+ Frau
+Kodjovi Hegbor aus der T=C3=BCrkei und arbeite als Divisionsleiterin f=C3=
+=BCr
+Operationen bei der StandardBNP bank limited Turkey . Ich glaube, es
+ist der Wille Gottes, dass ich Ihnen jetzt begegnen werde. Ich habe
+ein wichtiges gesch=C3=A4ftliches Gespr=C3=A4ch, das ich mit Ihnen teilen
+m=C3=B6chte, von dem ich glaube, dass es Sie interessiert, da es mit Ihrem
+Nachnamen in Verbindung steht und Sie davon profitieren werden.
 
-My name is Miss Vivian Mitchell. I want to donate my fund $ 4.5
-million USD to you on a charity name to help the poor People.
+ Im Jahr 2006 hat ein B=C3=BCrger Ihres Landes ein Nicht-Residentenkonto
+f=C3=BCr 36 Monate des Kalenders im Wert von =C2=A38.400.000,00 bei meiner =
+Bank
+eingerichtet. Das Ablaufdatum f=C3=BCr diesen Einlagenvertrag war der 16.
+Januar 2009. Leider starb er w=C3=A4hrend einer Gesch=C3=A4ftsreise bei ein=
+em
+t=C3=B6dlichen Erdbeben am 12. Mai 2008 in Sichuan, China, bei dem
+mindestens 68.000 Menschen ums Leben kamen.
 
-As soon as I read from you I will give you more details on how to
-achieve this goal and get this fund transferred into your bank
-account.
+Das Management meiner Bank hat noch nichts von seinem Tod erfahren,
+ich wusste davon, weil er mein Freund war und ich sein Kontof=C3=BChrer
+war, als das Konto vor meiner Bef=C3=B6rderung er=C3=B6ffnet wurde. Jedoch =
+Herr
+ erw=C3=A4hnte bei der Kontoer=C3=B6ffnung keine n=C3=A4chsten Verwandten/E=
+rben, und
+er war nicht verheiratet und hatte keine Kinder. Letzte Woche hat
+meine Bankdirektion mich gebeten, Anweisungen zu geben, was mit seinen
+Geldern zu tun ist, wenn der Vertrag verl=C3=A4ngert werden soll.
 
-Thanks have a nice day,
-Miss.vivian
+Ich wei=C3=9F, dass dies passieren wird, und deshalb habe ich nach einem
+Mittel gesucht, um mit der Situation umzugehen, denn wenn meine
+Bankdirektoren wissen, dass sie tot sind und keinen Erben haben,
+werden sie das Geld f=C3=BCr ihren pers=C3=B6nlichen Gebrauch nehmen, also =
+Ich
+m=C3=B6chte nicht, dass so etwas passiert. Das war, als ich Ihren Nachnamen
+sah, ich war gl=C3=BCcklich und suche jetzt Ihre Mitarbeit, um Sie als Next
+of Kin/Erbe des Kontos zu pr=C3=A4sentieren, da Sie den gleichen Nachnamen
+wie er haben und meine Bankzentrale das Konto freigeben wird f=C3=BCr dich.
+Es besteht kein Risiko; die Transaktion wird im Rahmen einer legitimen
+Vereinbarung ausgef=C3=BChrt, die Sie vor Rechtsverletzungen sch=C3=BCtzt.
+
+Es ist besser, dass wir das Geld beanspruchen, als es den
+Bankdirektoren zu erlauben, es zu nehmen, sie sind bereits reich. Ich
+bin kein gieriger Mensch, daher schlage ich vor, dass wir das Geld zu
+gleichen Teilen teilen, 50/50% auf beide Parteien. Mein Anteil wird
+mir helfen, mein eigenes Unternehmen zu gr=C3=BCnden und den Erl=C3=B6s f=
+=C3=BCr
+wohlt=C3=A4tige Zwecke zu verwenden, was mein Traum war.
+
+Teilen Sie mir Ihre Meinung zu meinem Vorschlag mit, bitte ich brauche
+wirklich Ihre Hilfe bei dieser Transaktion. Ich habe Sie ausgew=C3=A4hlt,
+um mir zu helfen, nicht durch mein eigenes Tun, meine Liebe, sondern
+durch Gott wollte ich, dass Sie wissen, dass ich mir Zeit zum Beten
+genommen habe =C3=BCber diese Mitteilung, bevor ich Sie jemals kontaktiert
+habe, teilen Sie mir Ihre Meinung dazu mit und behandeln Sie diese
+Informationen bitte als STRENG GEHEIM. Nach Erhalt Ihrer Antwort,
+ausschlie=C3=9Flich =C3=BCber meine pers=C3=B6nliche E-Mail-Adresse,
+msbelinaya892@gmail.com
+gibt Ihnen Details zur Transaktion. Und eine Kopie der
+Einlagenbescheinigung des Fonds sowie die Gr=C3=BCndungsurkunde der
+Gesellschaft, die den Fonds erstellt hat.
+Gott segne, in Erwartung Ihrer dringenden Antwort
+Mit freundlichen Gr=C3=BC=C3=9Fen
+Frau Kodjovi Hegbor
+msbelinaya892@gmail.com
