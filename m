@@ -2,127 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0083A457FCB
-	for <lists+linux-serial@lfdr.de>; Sat, 20 Nov 2021 18:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BA9457FD7
+	for <lists+linux-serial@lfdr.de>; Sat, 20 Nov 2021 18:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbhKTRTd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 20 Nov 2021 12:19:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbhKTRTd (ORCPT
+        id S237575AbhKTR3M (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 20 Nov 2021 12:29:12 -0500
+Received: from bmailout1.hostsharing.net ([83.223.95.100]:41685 "EHLO
+        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231142AbhKTR3M (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 20 Nov 2021 12:19:33 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE73BC061574
-        for <linux-serial@vger.kernel.org>; Sat, 20 Nov 2021 09:16:29 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b1so58401866lfs.13
-        for <linux-serial@vger.kernel.org>; Sat, 20 Nov 2021 09:16:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=eibhgHyEnDty6prD7kw2qZTGk1uH223Sz/QXKL+fHLw=;
-        b=U/VkB3Whvy/WPg+ezQwvt/7dFPufHaBBnOwt0+fEAcsE2dx1vBPEI3vBz0IUGmZLdw
-         siULNZ7vbPH43XYLXVA5/33MY5t05KSQ/n6QjY4D+BmQg2oWwiawSI2l4zXLuEHtK7tC
-         f0lIb46GYY7/pFWCUIhcbBM7M/oQ8AUROl2CJUJCbaWeom8smIbVNHMMAt+l6wmNaUqp
-         TJs6FJfG/4vQ77F1/TsQjADmwpGDRSVPoa29gTxIwmxLPXskvRzUruj4yMRTwd/f+B9W
-         nm8VXA8RPzI7bb8i+e/mfla/d53izD2Xpy8QVTK8RVgCC0mVEEjwW+RyyF8wSvBOgAmf
-         zQ0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=eibhgHyEnDty6prD7kw2qZTGk1uH223Sz/QXKL+fHLw=;
-        b=7hs971yK1MW7Hp8XJSggSgbqTIw1nhrUnbbGifsq1y1SDAYr96xAYUQXe1Z8yfblyK
-         FWj+7Ae71b3oF30X/xgXzvg410qcfTH+KOKiaAL4Dvm7QZokBXNvu62Z6skxER9vXvWx
-         LElnYAXWZx23DOycyKBqQzEp+3siANL0cglMJr2kYLJr8Akmr8szAEz+SxzSADT1C68r
-         w2kIavyjKWjKprcxvjmC0w9BGgHBEP/9iFA/dQ3VNIC0a8E6n43LiLC9L6+7M8D64JYs
-         TkbVRgqTl6/wAPzK1YHR7RHODb7CmRGXw/JicCECoZyp6sjY8sQzsvP407SxGKRJoRVy
-         8weA==
-X-Gm-Message-State: AOAM5329KPhEnQD18Uft4K4KyDopzIrdGEWqhhqd2tGhylwfixzfgfs9
-        ewtfcfglTBp1ybJHMKSGV+qMP2ZCVr3GvJU1jA8=
-X-Google-Smtp-Source: ABdhPJxwKPl0O9eF9ovllYiJaHdHp48scIz/+y51AuxCFFb6RUcHZeZLutDqO/T7JMoT4XL8DYOFUGQ6ZvBelgit1uk=
-X-Received: by 2002:a2e:b545:: with SMTP id a5mr35530500ljn.31.1637428587898;
- Sat, 20 Nov 2021 09:16:27 -0800 (PST)
+        Sat, 20 Nov 2021 12:29:12 -0500
+X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Nov 2021 12:29:11 EST
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 706E1300469AB;
+        Sat, 20 Nov 2021 18:18:10 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 6133B30A8CB; Sat, 20 Nov 2021 18:18:10 +0100 (CET)
+Date:   Sat, 20 Nov 2021 18:18:10 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Su Bao Cheng <baocheng_su@163.com>
+Cc:     Su Bao Cheng <baocheng.su@siemens.com>,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jan.kiszka@siemens.com, chao.zeng@siemens.com
+Subject: Re: [PATCH] Revert "serial: 8250: Don't touch RTS modem control
+ while in rs485 mode"
+Message-ID: <20211120171810.GA26621@wunner.de>
+References: <20211027111644.1996921-1-baocheng.su@siemens.com>
+ <20211027113938.GA9373@wunner.de>
+ <e1a9b9bf-45a4-6e71-09f4-1ae730284778@163.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6504:16c9:0:0:0:0 with HTTP; Sat, 20 Nov 2021 09:16:27
- -0800 (PST)
-Reply-To: msbelinaya892@gmail.com
-From:   msbelinaya <generaldavidperkins061@gmail.com>
-Date:   Sat, 20 Nov 2021 17:16:27 +0000
-Message-ID: <CAJMWtRbNQgXtVjeO9CY-0=NDesLuO-oZS7NPAbxW8fDDDF8ucw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1a9b9bf-45a4-6e71-09f4-1ae730284778@163.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Ich biete meine Freundschaft an und glaube, dass Sie mich mit gutem
-Herzen akzeptieren werden. Ich wurde gedr=C3=A4ngt, Sie zu kontaktieren und
-zu sehen, wie wir einander am besten unterst=C3=BCtzen k=C3=B6nnen. Ich bin=
- Frau
-Kodjovi Hegbor aus der T=C3=BCrkei und arbeite als Divisionsleiterin f=C3=
-=BCr
-Operationen bei der StandardBNP bank limited Turkey . Ich glaube, es
-ist der Wille Gottes, dass ich Ihnen jetzt begegnen werde. Ich habe
-ein wichtiges gesch=C3=A4ftliches Gespr=C3=A4ch, das ich mit Ihnen teilen
-m=C3=B6chte, von dem ich glaube, dass es Sie interessiert, da es mit Ihrem
-Nachnamen in Verbindung steht und Sie davon profitieren werden.
+On Fri, Nov 12, 2021 at 02:14:11PM +0800, Su Bao Cheng wrote:
+> On 2021/10/27 7:39, Lukas Wunner wrote:
+> > On Wed, Oct 27, 2021 at 07:16:44PM +0800, Su Bao Cheng wrote:
+> > > During tty_open, the uart_port_startup sets the MCR to 0, and then use
+> > > set_mctrl to restore the MCR, so at this time, the MCR read does not
+> > > reflect the desired value.
 
- Im Jahr 2006 hat ein B=C3=BCrger Ihres Landes ein Nicht-Residentenkonto
-f=C3=BCr 36 Monate des Kalenders im Wert von =C2=A38.400.000,00 bei meiner =
-Bank
-eingerichtet. Das Ablaufdatum f=C3=BCr diesen Einlagenvertrag war der 16.
-Januar 2009. Leider starb er w=C3=A4hrend einer Gesch=C3=A4ftsreise bei ein=
-em
-t=C3=B6dlichen Erdbeben am 12. Mai 2008 in Sichuan, China, bei dem
-mindestens 68.000 Menschen ums Leben kamen.
+So only the *initial* value of MCR[1] is wrong and prevents receiving.
+But once you've sent some data, RTS is deasserted correctly and you can
+receive again.  Did I understand that correctly?
 
-Das Management meiner Bank hat noch nichts von seinem Tod erfahren,
-ich wusste davon, weil er mein Freund war und ich sein Kontof=C3=BChrer
-war, als das Konto vor meiner Bef=C3=B6rderung er=C3=B6ffnet wurde. Jedoch =
-Herr
- erw=C3=A4hnte bei der Kontoer=C3=B6ffnung keine n=C3=A4chsten Verwandten/E=
-rben, und
-er war nicht verheiratet und hatte keine Kinder. Letzte Woche hat
-meine Bankdirektion mich gebeten, Anweisungen zu geben, was mit seinen
-Geldern zu tun ist, wenn der Vertrag verl=C3=A4ngert werden soll.
 
-Ich wei=C3=9F, dass dies passieren wird, und deshalb habe ich nach einem
-Mittel gesucht, um mit der Situation umzugehen, denn wenn meine
-Bankdirektoren wissen, dass sie tot sind und keinen Erben haben,
-werden sie das Geld f=C3=BCr ihren pers=C3=B6nlichen Gebrauch nehmen, also =
-Ich
-m=C3=B6chte nicht, dass so etwas passiert. Das war, als ich Ihren Nachnamen
-sah, ich war gl=C3=BCcklich und suche jetzt Ihre Mitarbeit, um Sie als Next
-of Kin/Erbe des Kontos zu pr=C3=A4sentieren, da Sie den gleichen Nachnamen
-wie er haben und meine Bankzentrale das Konto freigeben wird f=C3=BCr dich.
-Es besteht kein Risiko; die Transaktion wird im Rahmen einer legitimen
-Vereinbarung ausgef=C3=BChrt, die Sie vor Rechtsverletzungen sch=C3=BCtzt.
+> The MCR is set to 0 at this line within uart_port_startup():
+> 	retval = uport->ops->startup(uport);
+> 
+> On omap8250, the startup() points to omap_8250_startup(), within it:
+> 	up->mcr = 0;
+> 
+> For software controlled RTS pin of RS485 half-duplex, when not in the
+> transmitting, the MCR[1] should be constant to indicate the current
+> direction is receiving. This is set in serial8250_em485_stop_tx().
 
-Es ist besser, dass wir das Geld beanspruchen, als es den
-Bankdirektoren zu erlauben, es zu nehmen, sie sind bereits reich. Ich
-bin kein gieriger Mensch, daher schlage ich vor, dass wir das Geld zu
-gleichen Teilen teilen, 50/50% auf beide Parteien. Mein Anteil wird
-mir helfen, mein eigenes Unternehmen zu gr=C3=BCnden und den Erl=C3=B6s f=
-=C3=BCr
-wohlt=C3=A4tige Zwecke zu verwenden, was mein Traum war.
+I'm missing an important piece of information here:  Are you using
+inverse polarity for RTS?  Normally MCR[1] should be 1 to transmit
+and 0 to receive, per the figure on page 8734 of this document:
 
-Teilen Sie mir Ihre Meinung zu meinem Vorschlag mit, bitte ich brauche
-wirklich Ihre Hilfe bei dieser Transaktion. Ich habe Sie ausgew=C3=A4hlt,
-um mir zu helfen, nicht durch mein eigenes Tun, meine Liebe, sondern
-durch Gott wollte ich, dass Sie wissen, dass ich mir Zeit zum Beten
-genommen habe =C3=BCber diese Mitteilung, bevor ich Sie jemals kontaktiert
-habe, teilen Sie mir Ihre Meinung dazu mit und behandeln Sie diese
-Informationen bitte als STRENG GEHEIM. Nach Erhalt Ihrer Antwort,
-ausschlie=C3=9Flich =C3=BCber meine pers=C3=B6nliche E-Mail-Adresse,
-msbelinaya892@gmail.com
-gibt Ihnen Details zur Transaktion. Und eine Kopie der
-Einlagenbescheinigung des Fonds sowie die Gr=C3=BCndungsurkunde der
-Gesellschaft, die den Fonds erstellt hat.
-Gott segne, in Erwartung Ihrer dringenden Antwort
-Mit freundlichen Gr=C3=BC=C3=9Fen
-Frau Kodjovi Hegbor
-msbelinaya892@gmail.com
+https://www.ti.com/lit/ug/spruid7e/spruid7e.pdf
+
+Thus, setting up->mcr = 0 should be perfectly fine because it results
+in RTS being deasserted, so the transceiver is in receive mode.
+
+I suspect that you're using inverse polarity for RTS, so the desired
+initial value of MCR[1] is 1 in your case.  Is that correct?
+
+You write above that "the MCR[1] should be constant to indicate the
+current direction is receiving".  That sentence is missing the desired
+value, i.e. should MCR[1] be constant 1 or constant 0?
+
+I suspect that the incorrect value in MCR[1] is evaluated by
+omap8250_set_mctrl() via this call stack:
+  omap_8250_set_termios()
+    omap8250_restore_regs()
+      up->port.ops->set_mctrl()
+
+Could you confirm this please by inserting a dump_stack() in
+omap8250_set_mctrl()?
+
+I would also like to know if you have set UPSTAT_AUTORTS on the port
+by enabling hardware flow-control (CRTSCTS) on the tty.  That would
+cause omap8250_set_mctrl to fiddle with UART_EFR_RTS bit and I think
+the user-visible result is that the transceiver is switched to
+transmit mode when the "RX FIFO HALT trigger level" is reached.
+We should probably stop it from doing that.
+
+Thanks,
+
+Lukas
