@@ -2,91 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DB1459737
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Nov 2021 23:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413F84598D2
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Nov 2021 01:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbhKVWST (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Nov 2021 17:18:19 -0500
-Received: from mailnode.rz.hs-mannheim.de ([141.19.1.96]:48616 "EHLO
-        hs-mannheim.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233409AbhKVWSI (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Nov 2021 17:18:08 -0500
-Received: from [176.199.208.88] (account willenberg@hs-mannheim.de HELO localhost.localdomain)
-  by hs-mannheim.de (CommuniGate Pro SMTP 6.2.14)
-  with ESMTPSA id 55700081; Mon, 22 Nov 2021 23:14:56 +0100
-From:   Ruediger Willenberg <r.willenberg@hs-mannheim.de>
-To:     linux-serial@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, git@xilinx.com,
-        shubhrajyoti.datta@xilinx.com, michal.simek@xilinx.com,
-        Ruediger Willenberg <r.willenberg@hs-mannheim.de>
-Subject: [PATCH v3] serial: uartlite: Move out-of-range port-numbers into ULITE_NR_UARTS range
-Date:   Tue, 23 Nov 2021 00:14:46 +0100
-Message-Id: <20211122231446.85138-1-r.willenberg@hs-mannheim.de>
-X-Mailer: git-send-email 2.25.1
+        id S232710AbhKWAD5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Nov 2021 19:03:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232678AbhKWADo (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 22 Nov 2021 19:03:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF3DB61027;
+        Tue, 23 Nov 2021 00:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637625635;
+        bh=01cYwVbEdh0X7Ig5gVg6S/mgZIzXX2UFJSaD0Nf/IgU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=U1nmBoWjhnKgcYW1P9S5O0K0Rs11K/69Wj8qIMIwjMYyqTSq9SSAFIvwKX46MCafv
+         bzKXJmvlxQfZ96AyBeB+jN1NZHMYBe1gJ7eNUTWvU7RFnJQFeQsHUNTWr2I2h6zLDs
+         gH6aaEAr75ufBXmH79TfSd8EAGD3NX716TmMcNtk8csTCVWeFZkWmIzJBBp9k7ASdG
+         K2PuMIsmI99E0MK1tlq8fKQ5hQrpmALZjV5BmVplWZXNKDZaIKvK4uNe8TxtotADZv
+         H2Sln2ND0ACs8GbYP6iiLLWccxe9xFzttrBoEXugXv3gYH6EuehNCPKvRhbOQeOHqf
+         Uta6pbTYeOIbA==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        wim@linux-watchdog.org, s.hauer@pengutronix.de,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
+        linux@rempel-privat.de, linux@roeck-us.net
+Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        festevam@gmail.com, Peng Fan <peng.fan@nxp.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+References: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+Subject: Re: (subset) [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+Message-Id: <163762563048.2472045.8052329194047350725.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 00:00:30 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Find free uart_port struct in range 0 <= id < ULITE_NR_UARTS when
-the device tree port-number property is outside that range. This
-happens when there are other UART types in the system because the
-Xilinx device tree generator numbers all UARTs consecutively;
-as a result, not as many Uartlites as specified by the
-SERIAL_UARTLITE_NR_UARTS parameter could be successfully added.
+On Sat, 20 Nov 2021 19:34:46 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> 
+> V5:
+>  only fix patch 8/8 "arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board"
+>   - Correct bus-width to 8 for eMMC
+>   - Drop pinctrl enet which no user
+>  Drop patch 1/9 in V4, since in merged in linux-next
+>  Add A-b/R-b tag
+> 
+> [...]
 
-Signed-off-by: Ruediger Willenberg <r.willenberg@hs-mannheim.de>
----
-Changes in v3:
- - corrected indentation to strict formatting
+Applied to
 
-Changes in v2:
- - give KERN_NOTICE when changing the id,
-   with reference to the requested port-number
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
- drivers/tty/serial/uartlite.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+Thanks!
 
-diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index d3d9566e5dbd..51e3f8086d31 100644
---- a/drivers/tty/serial/uartlite.c
-+++ b/drivers/tty/serial/uartlite.c
-@@ -631,15 +631,17 @@ static int ulite_assign(struct device *dev, int id, u32 base, int irq,
- {
- 	struct uart_port *port;
- 	int rc;
-+	int oor_id = -1;
- 
--	/* if id = -1; then scan for a free id and use that */
--	if (id < 0) {
-+	/* if id -1 or out of range; then scan for a free id and use that */
-+	if (id < 0 || id >= ULITE_NR_UARTS) {
-+		oor_id = id;
- 		for (id = 0; id < ULITE_NR_UARTS; id++)
- 			if (ulite_ports[id].mapbase == 0)
- 				break;
- 	}
--	if (id < 0 || id >= ULITE_NR_UARTS) {
--		dev_err(dev, "%s%i too large\n", ULITE_NAME, id);
-+	if (id == ULITE_NR_UARTS) {
-+		dev_err(dev, "maximum number of %s assigned\n", ULITE_NAME);
- 		return -EINVAL;
- 	}
- 
-@@ -677,6 +679,11 @@ static int ulite_assign(struct device *dev, int id, u32 base, int irq,
- 		return rc;
- 	}
- 
-+	if (oor_id >= 0)
-+		dev_notice(dev,
-+			   "assigned uartlite with device tree port-number=<%i> to %s%i\n",
-+			   oor_id, ULITE_NAME, id);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+[3/8] dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
+      commit: 49cd1eb37b487036f51bd57b591f7b5760a10e02
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
