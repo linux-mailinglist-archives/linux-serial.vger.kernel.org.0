@@ -2,175 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ABC45DB0D
-	for <lists+linux-serial@lfdr.de>; Thu, 25 Nov 2021 14:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D4E45DE72
+	for <lists+linux-serial@lfdr.de>; Thu, 25 Nov 2021 17:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355237AbhKYN2f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 25 Nov 2021 08:28:35 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:50000 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352407AbhKYN0f (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 25 Nov 2021 08:26:35 -0500
+        id S241799AbhKYQQ5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 25 Nov 2021 11:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240231AbhKYQO4 (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 25 Nov 2021 11:14:56 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38833C06175F
+        for <linux-serial@vger.kernel.org>; Thu, 25 Nov 2021 08:00:11 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id z5so27638255edd.3
+        for <linux-serial@vger.kernel.org>; Thu, 25 Nov 2021 08:00:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1637846604; x=1669382604;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nalij+YGkHi88VGPLe7ObUzX6oVCCYHDMbRtMDqHOlI=;
-  b=gudbu8SDhCiiv8S6nVnHs/7S7NNg97hQycynRKWK2QXp3TkaVTLPU0KT
-   4QRaGl3MboVymOZiriiDHynkIyS+5RkzZS+dZagFKQ99qHSKQecemzPAl
-   VqqUo2AZgKtg010sGb4wPD7KiGEY7LK2f+ZB2/E5SarLOTnOcTrm0W6fk
-   fWDrG+Fbd+YtxAT19m5fzwlKKuI758KvBEbdpQNPRJcVCIKch/k8Q1+/T
-   I56o4VfyZQNV/ahK0BmrPrqgUyW4q0ab/6it4JtfovLyafhxmBmB0Ep+N
-   UJbzilJcN7+F8XFKVIaX7xIWM4QA806NkUu8QMJEuwH17zy6qvlJLIno7
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.87,263,1631570400"; 
-   d="scan'208";a="20678141"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 25 Nov 2021 14:23:20 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 25 Nov 2021 14:23:21 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 25 Nov 2021 14:23:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1637846601; x=1669382601;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nalij+YGkHi88VGPLe7ObUzX6oVCCYHDMbRtMDqHOlI=;
-  b=fCPAMtjC8PAjOxelzYpc7h7A5XGH6N+43E3anLOEPWbuXchHXRZeDygt
-   GYP/hbMHoVgUkwQHDuiWn+64oyQDfUc/DDkOVrLxBujfG22o9jt23ZRcm
-   nWoNxN8Y9GmfJ3o2UCUv+ToqAecPlqTSBZCvLyop/FUIkppNDCixOyM6J
-   4asIChJC+qSIsi+OskIwucMUCuz/I7l86DrrzpqNx1YHSWqmUCv1+guJf
-   vurZfYUFTXr618yo1lOxL266/cju8pNusny4Ku0WzASg9yA1a/ENVgPVZ
-   LlawK8r/GjyYMpWshY2ZgO558JLOShT5X5SUIPY+4StzPDdXWMuT5uSxd
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,263,1631570400"; 
-   d="scan'208";a="20678140"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 25 Nov 2021 14:23:20 +0100
-Received: from steina-w (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id A84D3280065;
-        Thu, 25 Nov 2021 14:23:20 +0100 (CET)
-Message-ID: <d7ea91a59dc57b4825cc82b18df37b94935d60de.camel@ew.tq-group.com>
-Subject: Re: (EXT) Re: (EXT) Re: (EXT) Re: [PATCH v4 12/12] dt-bindings:
- serial: fsl-lpuart: Add i.MX8DXL compatible
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Date:   Thu, 25 Nov 2021 14:23:20 +0100
-In-Reply-To: <YZ+Nb8vyH/8P5FoF@ryzen>
-References: <1636566415-22750-1-git-send-email-abel.vesa@nxp.com>
-         <1636566415-22750-13-git-send-email-abel.vesa@nxp.com>
-         <YZb4BClv4fXU65yz@robh.at.kernel.org>
-         <000f8f724ef9a8c2652e9cab0a5bb1f7768869c3.camel@ew.tq-group.com>
-         <YZvJP2ISfc/zyK+4@ryzen>
-         <c3fd087edb757a453bc2a2d745f813e834ccf08e.camel@ew.tq-group.com>
-         <YZ+Nb8vyH/8P5FoF@ryzen>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=rLiER3bv21jC+SglyGSrw1NZkqfXG+0e25FnI9xo4WM=;
+        b=MfP415TgznVpxF0kVdYTUrkntLC+96T/yL9uL1UEw9Hy+duAxfTeDVIUF7LBDUg23K
+         WwvJSdqTEXYPXlGMknkSKZoJ8fKCpxajjanxCTa9TaUf0/0Q9wwfYSm3tGGICElungET
+         2VYz6r22UIPS1DcBC9ANfdkRlFEjfUSEkVZ7nqS7ARRoqjPBPJe0iQ1hkF3+43pWeqrU
+         i6wPt/v/2ZtPSsIt9uIkIx5c2o4zFolm+dUDlp7iNizXKRwBLOnV0MSge+YdKRWTlaBz
+         qMk2pievL33u8WY3SN0Bfm6fnEmciX7y//Pk12/cevQ3Tzq1uW27G7plznbRy/IHW5zc
+         NSHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=rLiER3bv21jC+SglyGSrw1NZkqfXG+0e25FnI9xo4WM=;
+        b=eakN2WvcRPl41GF50wfK81XyJ+7W2GnWnoW5Fpyfnl6k862oIjIRW4TX4EdKZlCKjZ
+         nTb7B6JREkdhvHLhFRcTnqEcfMf5GgDlCU1tVBS7nTCVtwVGgrro/5BzfCgifCJRBsrR
+         0aO9a+fFxbQWSS2LZMLMB6BwHP3c5wS6UeFCm5xv9cfQooICYGkTGas2uFWlMkGJjYWN
+         3nQqsogi0rtDgoElW9aimz5c0E4YNfeKb3OZuDvgsLDUwvb/xcoTsKRrLD1UUNfPKYvl
+         g+tIfcWIjCwQ1T3mK5QMjxX/YqSVINEQSrdT8VFdQXeWtJ8SPkJ1UQDSq/yrnZcN3WyB
+         EJwQ==
+X-Gm-Message-State: AOAM530rIJe8DxTp9BCpKq8S3dC6tgbze+gyiZsLKBoeQm4VEdfCEcap
+        gtmpbVki6yeY6QH+4nxV+c+2PZ/MfYZa9UPlR3c=
+X-Google-Smtp-Source: ABdhPJwqBscS8uvcOy9Q2Q5tiz7i/LvKHqbxq02SnmSGF/P1ui5/64a8/J7CcAk7eq4GdK2tHFdnQ6/ovXiKW+l7+fQ=
+X-Received: by 2002:a17:907:68e:: with SMTP id wn14mr32948653ejb.258.1637856009493;
+ Thu, 25 Nov 2021 08:00:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Sender: mr.ibrahimnuru1@gmail.com
+Received: by 2002:a17:906:a0a:0:0:0:0 with HTTP; Thu, 25 Nov 2021 08:00:08
+ -0800 (PST)
+From:   Mrs Caroline Edward <gencarolineedward360@gmail.com>
+Date:   Thu, 25 Nov 2021 16:00:08 +0000
+X-Google-Sender-Auth: jEP2Xs227AB-4qr4YBCZZwJdo8Q
+Message-ID: <CACPnCHS7MW-O6YV8CpJ+q7dg2fYg0BtPUCdBMa7p3NP0aSmXRg@mail.gmail.com>
+Subject: Good day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Am Donnerstag, dem 25.11.2021 um 15:19 +0200 schrieb Abel Vesa:
-> On 21-11-23 08:30:17, Alexander Stein wrote:
-> > Am Montag, dem 22.11.2021 um 18:45 +0200 schrieb Abel Vesa:
-> > > On 21-11-19 08:17:11, Alexander Stein wrote:
-> > > > Am Donnerstag, dem 18.11.2021 um 19:04 -0600 schrieb Rob
-> > > > Herring:
-> > > > > On Wed, Nov 10, 2021 at 07:46:55PM +0200, Abel Vesa wrote:
-> > > > > > Add i.MX8DXL lpuart compatible to the bindings
-> > > > > > documentation.
-> > > > > > 
-> > > > > > Signed-off-by: Abel Vesa <
-> > > > > > abel.vesa@nxp.com
-> > > > > > 
-> > > > > > 
-> > > > > > 
-> > > > > > ---
-> > > > > >  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml |
-> > > > > > 4
-> > > > > > ++++
-> > > > > >  1 file changed, 4 insertions(+)
-> > > > > > 
-> > > > > > diff --git a/Documentation/devicetree/bindings/serial/fsl-
-> > > > > > lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-
-> > > > > > lpuart.yaml
-> > > > > > index dc1f0e07cbd4..fa8a602ccb22 100644
-> > > > > > --- a/Documentation/devicetree/bindings/serial/fsl-
-> > > > > > lpuart.yaml
-> > > > > > +++ b/Documentation/devicetree/bindings/serial/fsl-
-> > > > > > lpuart.yaml
-> > > > > > @@ -27,6 +27,10 @@ properties:
-> > > > > >        - items:
-> > > > > >            - const: fsl,imx8qm-lpuart
-> > > > > >            - const: fsl,imx8qxp-lpuart
-> > > > > > +      - items:
-> > > > > > +          - const: fsl,imx8dxl-lpuart
-> > > > > > +          - const: fsl,imx8qxp-lpuart
-> > > > > > +          - const: fsl,imx7ulp-lpuart
-> > > > > 
-> > > > > I'm confused why 8dxl is compatible with 7ulp, but 8qm is
-> > > > > not?
-> > > > > From
-> > > > > the 
-> > > > > driver, it looks like the difference is clocks.
-> > > > 
-> > > > There is a difference between 8qm and 7ulp regarding the
-> > > > clocks.
-> > > > Are
-> > > > they still considered compatible? Depending on the answer [1]
-> > > > might
-> > > > not
-> > > > be the correct solution for earlycon regression on 8qm.
-> > > > 
-> > > 
-> > > In NXP's tree, they are not compatible.
-> > > 
-> > > See here:
-> > > 
-> > > https://source.codeaurora.org/external/imx/linux-imx/tree/arch/arm64/boot/dts/freescale/imx8qm-ss-dma.dtsi?h=lf-5.10.y#n9
-> > > 
-> > 
-> > Well, commit 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4b844930f27bf7019c0bbd8cc575dde32e00ecc
-> > 
-> >  says otherwise.
-> > This might be true for earlycon only, because clocks should be
-> > setup
-> > already.
-> > 
-> > Together with your other mail regarding the imx7ulp fixup,
-> > commit b4b844930f27bf7019c0bbd8cc575dde32e00ecc should just be
-> > reverted
-> > in order to get earlycon running again on imx8qm and imx8qxp, IMHO.
-> > 
-> 
-> I think you're right, the commit b4b844930f27bf7019c should be
-> reverted.
-> 
-> You can send the revert yourself, if you want. If not, let me know.
+Good day,
 
-It's already there:
+Am Caroline Edward, a staff general in the US Army presently serving
+in Syria as a combat instructor, I sincerely apologize for intruding
+into your privacy, this might come as a surprise to you, but nothing
+is more distressing to me at this time as i find myself forced by
+events beyond my control, i have summoned courage to contact you. I am
+a 45 years old lady, am a widow and I had a son who is now 16 years of
+age.
 
-https://lore.kernel.org/all/20211124073109.805088-1-alexander.stein@ew.tq-group.com/T/
+Some money in various currencies where discovered in barrels at a farm
+house in the middle East during a rescue operation in Iraq War,and it
+was agreed by Staff Sergeant Kenneth Buff and myself that some part of
+these money be shared between both of us, I was given a total of ($5
+Million US Dollars) as my own share , I kept this money in a
+consignment for a long while with a security Company which i declared
+and deposit as my personal effects and it has been secured and
+protected for years now with the diplomatic Delivery Service.
 
-Thanks,
-Alexander
+Now, the WAR in Iraq is over, and all possible problems that could
+have emanated from the shared money has been totally cleaned up and
+all file closed, all what was discovered in the Middle East is no more
+discussed, am now ready to retire from active services by the end of
+this month, but, i need a trustworthy person that can help me take
+possession of this funds and keep it safe while i work on my relief
+letters to join you so that we could discuss possible business
+partnership together with the money.
 
+But I tell you what! No compensation can make up for the risk we are
+taken with our lives.You can confirm the genuineness of the findings
+by clicking on this web site:
 
+http://news.bbc.co.uk/2/hi/middle_east/2988455.stm
+
+I=E2=80=99m seeking your kind assistance to move the sum of US$5 Million
+Dollars to you as far as I can be assured that the money will be safe
+in your care until I  complete my service here in (SYRIA). The most
+important thing is; =E2=80=9CCan I Trust you=E2=80=9D?,As an officer on ACT=
+IVE DUTY am
+not allowed access to money, therefore, i have declared the content of
+the consignment as personal effect that i would like to be delivered
+to a friend. You will be rewarded with 30% of this funds for your
+help, all that is required is your trust between us till the money
+gets to you.
+
+Sincerely,
+Gen. Caroline Edward.
