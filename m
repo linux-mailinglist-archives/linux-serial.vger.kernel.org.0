@@ -2,73 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F372745F166
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Nov 2021 17:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C951145F1E2
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Nov 2021 17:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378412AbhKZQQf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Nov 2021 11:16:35 -0500
-Received: from mout.gmx.net ([212.227.17.22]:48219 "EHLO mout.gmx.net"
+        id S238591AbhKZQdK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Nov 2021 11:33:10 -0500
+Received: from mout.gmx.net ([212.227.17.20]:32889 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378268AbhKZQOd (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Nov 2021 11:14:33 -0500
+        id S233028AbhKZQbJ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 26 Nov 2021 11:31:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1637943072;
-        bh=b4YFw+0lviZ5gjiIocUIVpjVYRhRWpQwEvX2hIhIf7k=;
+        s=badeba3b8450; t=1637944063;
+        bh=2FuWrYm0oF6CCTDO60vNNKc1zTVcBTvOrclycCWWDE4=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=JRvrh9XAnD9jpITcRyzRr8++6PNAC0kYVstKmzJBrGHGWI/QJSFckPLPSEoWktDkK
-         ubtI/Yw87PzIU+xYMHP56YpRqytQ5isfcLZZeA/zCkLHYAvhwfVJEaaZxP9lAEMTHQ
-         o/+hzI/6WBOfd1sO2zSr+EUU4ieP7OctFzVjs+yA=
+        b=TKH/iqvWKZyjEM14QQmgMoqp3jr+up1Nc5ceiwA3snuisiB+iZAaUB5q52xEqjevK
+         lppP1Y6e2SKlgus8Ra7q3bSB96NtjuzWiIEiagne/87XXrQ9avvFVCSTIceE58FQb/
+         FEGz3MGMZ+lN1VAcJn3TQLIfnaXHQ7XiSJgQB1yA=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.59] ([46.223.119.124]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTRQq-1n2qdg081E-00TjdX; Fri, 26
- Nov 2021 17:11:12 +0100
+Received: from [192.168.178.59] ([46.223.119.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeCtj-1mIxkO17MV-00bOIM; Fri, 26
+ Nov 2021 17:27:43 +0100
 Subject: Re: [PATCH] serial: amba-pl011: do not request memory region twice
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux@armlinux.org.uk, jirislaby@kernel.org,
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
         p.rosenberger@kunbus.com, lukas@wunner.de,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20211126143925.18758-1-LinoSanfilippo@gmx.de>
- <YaD9JW8i9vxmWWhk@kroah.com>
+ <YaEGvkBl8YT33YAR@shell.armlinux.org.uk>
 From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <8bad0596-c983-6915-67d0-0cda9ac70e5c@gmx.de>
-Date:   Fri, 26 Nov 2021 17:11:11 +0100
+Message-ID: <7e7dae62-ac66-e5cd-f801-add3a9f81dc6@gmx.de>
+Date:   Fri, 26 Nov 2021 17:27:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YaD9JW8i9vxmWWhk@kroah.com>
+In-Reply-To: <YaEGvkBl8YT33YAR@shell.armlinux.org.uk>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:oM+crlb5dF2zfFGXu0GtJ3xrshNlL0SNK2p6Up4bDM9CRQovALK
- UF6I0hcHX1V73vymxHGsKMnHf75hxCfOHFZywwaZmDJ63I1t00Qq/YBWa7XKIO5Pme0LYsg
- PkjH3WLw00CqkRm4+4DUK6tWT+saxe0F2Gltyq4N/vBEH5NgHxokI/3VJG6UqUNvRgWmDHH
- Qb1nA4i2YOcchGU9NaVnA==
+X-Provags-ID: V03:K1:MNEMVyXWJGSzM0kpMnSE9zv4C/1vRByDyEWd0A6PULjzOV3IV/v
+ S+GY3Z4V/EtQOVieSs972iC3RBwnA7oEk6lgFfF/nx6JcTu7d1TAWU2ZVIGTfrCnXunaBpo
+ igRPNTqrUQn4tsr8DTGFSrsAy0zF7ShXzS4gsrJ0d3GcLfSNQyOH7q+dSDDKNZWoZJAs1hL
+ vi9wd+CSvOH+ueftn/3zw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u2u7o5Q1nI4=:FmcdA61A25nRlPd3EznTFu
- XwSJiEhhcNuWegrmNiI+yb40O9nfNeKyrBtcHYsvgBoHhBxxhBYvfP+h3/CyhE4Aaxzy0cyf3
- wrJXc8UoOLpHze30hjiWxzFCfx36DvCOpQ+sV1SoVqs7irgdf04LnNV/TRr60J/NeZc66Cq60
- 11U13/ysvgT11YNcSARrVRaBIUtDIuLoDUjAZqV9AZOFmhWzq/zSRQfKvDB+hrTXcJJScD2Ht
- vZWZsdvH218k0Wpc9Z816Wg5s3X0g7XcXLi6dgaTj+A6ATP9t/EL1rzropSeu1+Veu7e1xuMI
- IRw+JrGFsbkNdpR6+JwA7eFAUrNIFHQrdhQ/+udMb9BkSyzVAxvyCdUchUH++EVtchYniu3xI
- JmD9VZ7s7eE5/Al9Taep7wImJ5Z9zbm7l3YivsEtkAOu0H4x/CQU/YLroPyNYJwnrjUNMlIh+
- MguoTh5EEDcCnY/68YqjChDVm23YZ0NWxkT66oAWAXZKV2cvDYEtBHtBrvD4zqJ3nIi7hM7DA
- jI6f0nFU/WcPV13jQfDWu7O8c+HjBHwiHHi6gL6NbHJHc2/TWGt/SiFn/81KBgPQQux7Xyfeh
- iZLhHymgC2iMYsXNCm/31yk+ikkN4BJfiHJBfrGGcmcFPyLOpEe5iyeb0Aj1pQlek8/q4MLTd
- 1DgsKPLmKIV0s/UHo2uK6EQrmNUjiQ/U/JsUjPGT3tD1T7pznuMKkV2bl0yVRXcWI1mKDIYzQ
- /EUbwoFQYyKbNfDNySNpldCNjwcKkSsqUTjy7dcMXr0f1X9HEjFHswsV+f8/tyVGN5mZ2QIfX
- z5CP0m1D8g0/ZOzrKx4RQh5J6TFQPfpPB3q6XmVpHiJu9ZP0c8SLkifnPRgYUihE1K7mf+DV4
- mbL7/uX+GiBLiqmnPfDIMPSONyFsWoUnbBsXdnp+8sNG2VT4al4k0v94qjif/1WrYeyR+5uK6
- hc5L8hVp9SYrE/EypMSOuspYxziVEZzWLNR0xNKtlQU4x8MC0GlHgaCMehf6+1kWIJsKkbEJ/
- CHAQwSA0ji66EAYgHso4BZkfNH+UPLiV6C5W5wfROaaH6cjZ5h/UzM0xoWcIk9ukbjmLtdqJ/
- wiWU5aurTlqj00=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jqO3TJzYf8U=:Wskog9aFVnEa/8Isw3TSLN
+ c8OxzJudhsMVVrYzAdUpGJ6wiyX189aDRonrlw0r0HLfbzR2eq85agKVV0IRxkWTeTB6KhaJS
+ 2ibHuDFo7M7PisNnLe7f4SC5I4hzpup9UqkA3bIDbMA0TBrUmGXbsquuORzLMPUiBpOSMp8cG
+ gf0tUgfLRuFdNoEXuCo577LNaNZ+BjDHK5LbVZn3H74eAGMFF2pcyb8VRg6PiMxXQFtnUuRNo
+ u8lP+6Aq0zKQ+7wOw/i3Yi7pmBn1UuXxS7lfUpKWDraWoIpNCxkbrUea8p83XGrSbDXqZHp9b
+ VVLTUJyJpWi2t66cNcpYr3l0iiWA9HgiV7NcUQd+bJUnL4WzNJ4aFgpsRs3XT5wgNZh9jP7Gx
+ BrEIJteK6OBbLJ3ppwwM2OizWhNNhMkMdn4VJxNzSJsGmp0UWpXjXhG6J4Ov8RVWYVds/4WA9
+ Nja7/lhh/kuf+v9bIt/DXPk+LvKWPjYY9Mr738IWMnn0XA7m++kOQUl9F36gZmDdeNTHKSAo3
+ HVTGZdpoXgsBfwQRNOmXW/ijAtxaqfVdtL/93gptwiYPrU1JoN1EIy+NKMERrpBs0Fz8bnL+2
+ C/rCiMgXC6zI9un5f2PY+ksZKFkeisqfWjDfrL8z7mKoOlQj4EwIhbmmCkqFg2G6xB5nU+pT4
+ 8pEclYBn37rQyarQHD7OMxgKxAWDarFzPH0LlJzQwFpuaB1rZeL8A1zhIUCfL4NNc/x5UPC9B
+ /sz/mB52eFytYrp0oJe/3Yap2hzw5jKW8LhBqatZlM2noozK2DDnTZ/DQp1t6lTDtslTaNp1w
+ rDmGG4u5jN14MJ9KIX/67gtBvHkzU89pr45//hX7al02P3UER4spcivXv3C7d9bsrJYibZakW
+ Z/IknUG9qKHI5TWLq6P/MzVjNMlyfGxBcyIHaV9kpRU2uTlcfYSGl+/JSIqCu2VdAtGxrULuF
+ TTx0fnshH91k3ZSc1wDHpn0hPl3bsos/agX/Qxhww1q8RfwpQPY0M0aejhnKFh8rXhoAqooaR
+ 60che63bUnYxJpQ0P4HnuaQekDSXquCy7Q0hWIMeMNKFguUmMwJcDiK3cdFNOBcTgav7WgwsL
+ hLChDe9kAJUnM0=
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-
 Hi,
 
-On 26.11.21 at 16:28, Greg KH wrote:
+On 26.11.21 at 17:09, Russell King (Oracle) wrote:
 > On Fri, Nov 26, 2021 at 03:39:25PM +0100, Lino Sanfilippo wrote:
 >> The driver attempts to request and release the IO memory region for a u=
 art
@@ -93,26 +92,14 @@ e is
 >>
 >> Fix these issues by removing the callbacks that implement the redundant
 >> memory allocation/release.
->>
->> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
->> ---
->>
->> This patch was tested on a 5.10 Raspberry Pi kernel with a CM3.
 >
-> What commit id does this change fix?
->
-> thanks,
->
-> greg k-h
+> I think you will also need the verify_port method to also deny changing
+> port->mapbase.
 >
 
-AFAICS its commit 3873e2d7f63a ("drivers: PL011: refactor pl011_probe()") =
-which
-changed  devm_ioremap() in pl011_setup_port() to  devm_ioremap_resource().
-Since the latter not only remaps but also requests the memory region it
-collides with the memory request in pl011_config_port(). I will add an app=
-ropriate
-Fixes tag for this.
+
+Right, I will add this, thanks for the hint!
 
 Regards,
 Lino
+
