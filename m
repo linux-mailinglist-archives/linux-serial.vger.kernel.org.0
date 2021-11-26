@@ -2,92 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B1945ECBE
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Nov 2021 12:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7845345F00B
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Nov 2021 15:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241946AbhKZLjY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 26 Nov 2021 06:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344575AbhKZLhX (ORCPT
+        id S1346871AbhKZOno (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 26 Nov 2021 09:43:44 -0500
+Received: from fieber.vanmierlo.com ([84.243.197.177]:38720 "EHLO
+        kerio9.vanmierlo.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1353358AbhKZOlm (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 26 Nov 2021 06:37:23 -0500
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4921CC0698DC
-        for <linux-serial@vger.kernel.org>; Fri, 26 Nov 2021 02:56:45 -0800 (PST)
-Received: by mail-ua1-x941.google.com with SMTP id j14so17685224uan.10
-        for <linux-serial@vger.kernel.org>; Fri, 26 Nov 2021 02:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1mWmKyg34vlNfOejQ4Q/r+QB+22yx7RmVHSk6pM+Glg=;
-        b=HxXfyg54s3L6EMpYRA2e+z6k9WGnvp0pOtVjbs008nZmY9XUuT9iOYJ+f7XIHGgqJx
-         URaEpXZubwNO3C/zpLloJ+xZOZph9kFYagYAx0nusTRXGpMIaiev1o/sxAfrYjDkC3br
-         VFP43ucmPmiNRyplNctYH/we6eV0Y8Plm+1/s4ioyX8Wq/MGPpY6teiVCLxWl2jRIQ/h
-         it6bcnYehZXoMZTmcnDGkxVyStlFK8KLYBFin/1W0CoedUASAA29UCZH1fccB1EeMAQI
-         gtb5oHQ/H6Tyi3Vu2q39GfP0ro2qN9urVYIyBw3wsETc8T3nUPzsuNRnHf4PR60JLV7+
-         sXrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1mWmKyg34vlNfOejQ4Q/r+QB+22yx7RmVHSk6pM+Glg=;
-        b=uqEvYeFWb4sqb8bwzWYgOdSuXVIPiRW8cqEaVbz3wWiPkspAE6Npm82n8rbCL6ciAk
-         iLVG3gXL215UABh7u/ZvXBxGn8AqGX3jHdCtieeUkL8LPrNPRcZ0aL9Vz2mPaoUoYuZn
-         a1v9wqs+9sCQ/pwM/FBW4uUKW9li0mdz9vETE8L/UirGCibqo6a0mAR6ZIEUescSnY+/
-         pCRQ92LRXPrHX2sir5U2KcQphX1jKMY+m/5RPupmhLWiToVViV1eKO2Ne0ZAfzu26bNs
-         yuBAYq/tzCd9Em/fQMEOFaR22TAy2fuLpgM1UXW4lsDlceMuK9MnrK54f5at5kRL5rfd
-         SS4w==
-X-Gm-Message-State: AOAM533PaKcnY2txN4iJemIYEdz4U1whAEzFgCgihVLVkRRUNZXfYepd
-        82UoDrwzXolOOhSrQvaul+hNxOfKEvespJKwblE=
-X-Google-Smtp-Source: ABdhPJyBr0+VX+7WvSG/8xtgoimwgQLoX4KkbX1FI6yNTh/mQwTEBI6f9e5g7GmxTLeoUpeF6Cpw2iHbDk0wZMya34s=
-X-Received: by 2002:ab0:750c:: with SMTP id m12mr32021094uap.119.1637924204160;
- Fri, 26 Nov 2021 02:56:44 -0800 (PST)
+        Fri, 26 Nov 2021 09:41:42 -0500
+X-Greylist: delayed 1819 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Nov 2021 09:41:41 EST
+X-Footer: dmFubWllcmxvLmNvbQ==
+Received: from roundcube.vanmierlo.com ([192.168.37.37])
+        (authenticated user m.brock@vanmierlo.com)
+        by kerio9.vanmierlo.com (Kerio Connect 9.3.1 patch 1) with ESMTPA;
+        Fri, 26 Nov 2021 15:07:44 +0100
 MIME-Version: 1.0
-Received: by 2002:ab0:20b3:0:0:0:0:0 with HTTP; Fri, 26 Nov 2021 02:56:43
- -0800 (PST)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <robertanderson6016@gmail.com>
-Date:   Fri, 26 Nov 2021 02:56:43 -0800
-Message-ID: <CA+o7mw36n9Rs3iinNWWjtcHL8ZsfcqgifoAuTDVXL4RZeic7bg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 26 Nov 2021 15:07:44 +0100
+From:   Maarten Brock <m.brock@vanmierlo.com>
+To:     Shubhrajyoti Datta <shubhraj@xilinx.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, jacmet@sunsite.dk, git <git@xilinx.com>,
+        michal.simek@xilinx.com
+Subject: Re: [PATCH v2] serial-uartlite: Remove an un-necessary read of
+ control register
+In-Reply-To: <MN2PR02MB664063C64EA9C8BC59C3E566AA619@MN2PR02MB6640.namprd02.prod.outlook.com>
+References: <20211123131348.26295-1-shubhrajyoti.datta@xilinx.com>
+ <YZ4O+qnkVyhGzuDy@kroah.com>
+ <MN2PR02MB664063C64EA9C8BC59C3E566AA619@MN2PR02MB6640.namprd02.prod.outlook.com>
+Message-ID: <cd14525f12ea09fe85d9db18712ae20a@vanmierlo.com>
+X-Sender: m.brock@vanmierlo.com
+User-Agent: Roundcube Webmail/1.3.3
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-May the Almighty Lord be with you....
-Am A WIDOW TO LATE MR David Lunner,  I AM 59 .YEARS OLD. My name is
-Josephine HOLLAND.  I am married to Late Mr. David HOLLAND, who worked
-in the France Embassy a here in Lome -Togo West Africa for nine years
-before he died in the
-year 2019.
++ Michal
 
-You are chosen to Receive A Donation Cash Grant of my late husband
-that funds $5.7,000,  000,00 (Five Million Seven Hundred Thousand
-United States Dollars) to help the poor and orphanages through your
-sincere help before my death. I am suffering from long time cancer of
-the Breast, from all indication my conditions is really deteriorating
-and it is quite obvious that I wouldn't live any more longer according
-to my doctor because the cancer has gotten to a very bad stage that no
-hope for me to be a living person again, All i need from you is your
-sincerity to use this funds to do this project as i desired and I need
-your information as where My Bank will be sending the funds,
+On 2021-11-24 13:37, Shubhrajyoti Datta wrote:
+>> -----Original Message-----
+>> From: Greg KH <gregkh@linuxfoundation.org>
+>> Sent: Wednesday, November 24, 2021 3:38 PM
+>> To: Shubhrajyoti Datta <shubhraj@xilinx.com>
+>> Cc: linux-serial@vger.kernel.org; jirislaby@kernel.org; 
+>> jacmet@sunsite.dk; git
+>> <git@xilinx.com>
+>> Subject: Re: [PATCH v2] serial-uartlite: Remove an un-necessary read 
+>> of control
+>> register
+>> 
+>> On Tue, Nov 23, 2021 at 06:43:48PM +0530, Shubhrajyoti Datta wrote:
+>> > The control register is a writeonly register that's why reading it
+>> > doesn't make any sense.
+>> > The manual states "This is a write-only register. Issuing a read
+>> > request to the control register generates the read acknowledgment with zero
+>> data."
+>> 
+>> Are you sure this is ok to remove?  Usually you have to do a read 
+>> after a write to
+>> ensure that the write succeeded.
+>> 
+>> What ensures that the write succeeded now if you remove this read?
+> 
+> I do not find the mention of a read requirement in the manual.
+> Also in the current code in ulite_console_write and in ulite_startup
+> we are writing without a read.
+> 
+> Thanks and Regards,
+> Shubhrajyoti
 
-such as:
-Receiver's name:_ Address:_ Phone
-number:_ Country:_
+I suggest to confer with Michal Simek. He introduced the read in 
+ulite_request_port()
+in the past. The other one in ulite_shutdown() has been there since its 
+inception in
+2006.
 
-Please do not be offended by the way or manner I came to you as a
-stranger to do this, it is about the only way I could get to you after
-going through your contacts Id. I shall give you the contacts of the
-bank. For legitimacy with  a letter of authority that will establish
-you as my appointed beneficiary of this money.
+Maarten
 
-I am waiting for your reply.
-From Sister Josephine HOLLAND.
-
-You should contact me through my private email address:
-
-mrsjosephineoneholland@gmail.com
