@@ -2,126 +2,159 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D09FB461FB1
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Nov 2021 19:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430F9461CD6
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Nov 2021 18:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379231AbhK2S6j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 29 Nov 2021 13:58:39 -0500
-Received: from smtpcmd14161.aruba.it ([62.149.156.161]:43368 "EHLO
-        smtpcmd14161.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350514AbhK2S4j (ORCPT
+        id S1349636AbhK2RlT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 Nov 2021 12:41:19 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52208
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349265AbhK2RjT (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:56:39 -0500
-Received: from [192.168.50.18] ([146.241.138.59])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id rSUYmwZPnrIRlrSUZmkupp; Sun, 28 Nov 2021 23:17:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1638137874; bh=aXY7K66LArue7ekBfUqC+O3Vdu3DF45DOCQggVHhyRk=;
-        h=Subject:To:From:Date:MIME-Version:Content-Type;
-        b=UWFMkiSsKQ62KY+0ZURyD6NV1IdL1jjXBcAjrqYTEE7wNQN3tR/3plBoFRl5Ymo9R
-         XdqL6804DiwhYuUrxfCjxoLtDxrlexLUjPjMzPphMcHQvejZNlErXgIocjFwb5BveM
-         uKZRBszKtpbKIn99ZaSStwtUV0M4Vn7/SaGIDfbh5TJaEPIxhTOldS1rBY0FcN9jYk
-         vy4iDf7ox+ZK7PCY0a+RqgJi1gRitzGTPBUkS90y5rQ+4tBVARx/tXovG+j5B3l3nh
-         Fb2NKuGqmbVxEcmQN2J18zlZ4+0SGUgvN0BJF64Be+wfqVL8sOov9cVBJ7itP+l8av
-         J/EPoY0WuV66w==
-Subject: Re: [PATCH v3 07/13] clk: imx: Add initial support for i.MXRT clock
- driver
-To:     Jesse Taube <mr.bossman075@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
- <20211125211443.1150135-8-Mr.Bossman075@gmail.com>
- <CAOMZO5Dqo6c=4nGCOakMKG8fn=V1HA7-O26t3GmwWtD-FbZiPg@mail.gmail.com>
- <dae68360-456e-3db8-57ed-2287dc7cfd57@gmail.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <de705094-1b8c-3950-b7f5-f7150b525ea5@benettiengineering.com>
-Date:   Sun, 28 Nov 2021 23:17:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 Nov 2021 12:39:19 -0500
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3ACF340016
+        for <linux-serial@vger.kernel.org>; Mon, 29 Nov 2021 17:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638207354;
+        bh=iK3riauy7r4LiWngeJOokJxhZZPLu5etYNKqwE1epw0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LS2LaSBCKz4bkvVqvJ8ua7GA5+5R6U4AFL6HSLOeIRXkn7OM5VZXwB+hg0HpFPqQT
+         Gw3XUSBBJ83GLJqlwtXFZzKGA6+eFRLuilhAQdoYKacUNzfa0lHl1joOvMeiB/J1ce
+         PbCLo6nhr0TwjNcyLwydZovdN8vrcAFPBVXBhukajvFwH21N8LK9hyVmSWiYnAliNq
+         tRE1JeRx0gb2o+6lQlI4VKlVCNYjoGZBWb4yEhPTEdzBxQbrGK2Hzn46ogluwDRDS6
+         qFYTraome7P99+Fw5NVX9U9nfv1aRGOBR88vNyxC7WFwfmXdPWM28TVn2E2DTGKlxH
+         f/9FgDSsluHbA==
+Received: by mail-lf1-f71.google.com with SMTP id bi30-20020a0565120e9e00b00415d0e471e0so6341766lfb.19
+        for <linux-serial@vger.kernel.org>; Mon, 29 Nov 2021 09:35:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iK3riauy7r4LiWngeJOokJxhZZPLu5etYNKqwE1epw0=;
+        b=ZljTNxKlHoOUN+C+EMmtyhb+ocjjyqWQUUbJ81aom6pVuIQN9d4UNmr1tp3sZ1xk+d
+         51sk5j+4oQZWShl3Bqn1FOtD0Tf80jH6+zYv9u0k67lxCJZs9LpkYBZrJ3JxVSBRAXCD
+         K8SAWZfDZcL6IDoK8KV6d3ssUSurqUn4FSPum0N83XsxBnJLoOJy6npQdf/ZFXzahHIP
+         iC/psXz0UJUz2l8se4hbna6AKkyLglcuD4Bjx9z2C1cBnahuZbovXoTEkg2Jsdq9+H2G
+         foXLeQ3Ie9n8DN/H/De5rad2+xA2NpkAsMf3Vo6j/fMiK6u4xM4Hf4w6A80lzs8ACtqR
+         X91A==
+X-Gm-Message-State: AOAM5339toDQh6zemyNZa/+fWq8neWgAdJbofSAYNU81AUUwW1kCBrMF
+        SIUJ3SPBTCIFZtwS4UGjIDUBuxfcSTkrsAuJiPs1v0zVWvWSqqp6z9PfzkwYvkD5btcnkz7/vYM
+        E2hYuLP/CQbx/fwan6y5W8Y9XtJzqAOn7+4k8aDSKEQ==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr48531719ljp.202.1638207353500;
+        Mon, 29 Nov 2021 09:35:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCdgVQtvrXN9pR82hH5Jlf+5Oj6LFpV+QeH8GC4DH4X/4Agtjois4piKytzHJd5SDX416Alg==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr48531704ljp.202.1638207353283;
+        Mon, 29 Nov 2021 09:35:53 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id w14sm1339120ljj.7.2021.11.29.09.35.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 09:35:52 -0800 (PST)
+Message-ID: <5687bb27-973e-b774-b876-46c8dffc1176@canonical.com>
+Date:   Mon, 29 Nov 2021 18:35:51 +0100
 MIME-Version: 1.0
-In-Reply-To: <dae68360-456e-3db8-57ed-2287dc7cfd57@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
 Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        David Virag <virag.david003@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+ <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfC2+WimnYT4jDoL/5Qj39vMuFzShQz7FE/Z8sP1XkxBcrbdPos5MDmBJUX4HG5hh+ebK3KAL0how8VdRfqKsNrF/aWMVS2LsH/RZ6zyMVg9un5zPZZoN
- XpWsgys9jMAvtyErhZCjCg6c2qhQ+1ryfHitGjvwSIq5/z+GPvn8Trh3JpwusaUYelmuQOw2GUitDYe0RYkp4D3mLVXw0OnHmiwx+4fe8w/7q5wJwvTomNpJ
- RvxQo74zbj9Agg42zgej+InyJTDpxrNNx/mrojuEwwl4wApu4ST1yBYJnBnay9L9MUd2JBbfZbybNuev6n+VxbA0jqan6TpaUXOZMhe8s6zXc/u8Spgbevwh
- 9ZrFmJjLHacRXAUklqpbukFqImaltYXulxze8paExwJkEn6GWfP8Ugsf9jQmusZmVhIEQd9+Ec99+fR1zFkK+QkYq6FVavA+WR9oUwBVQlDnMIAQHOZLJjvp
- otERI3O0iDAgTl5EZdtf7dN4utkZsrZpvLi8k6HhcXHI+PQzJS4Aas31z6ZtCWB3H+IFlnoEXGhgwvOA2WaMwM4E6ftEDDfx4ugg6iQy40iiIU9wRElp/BN+
- 1L2+DjRbjnQnZYFTnm6f5Bm+PYSmRi2LVrVvuLTLCRtX1gYD58LEPYbY6XKhdwVes39RaJNEhwK4dC0kSU3jWJF6qnrRDnvVPi5GYWDbzXQLqzhCD07w8Cyn
- mgrkecLsHm8q471VM2FCy03c+/h6WDPublFMtL/ySznu61+FmUMDh4MrgwBY8EOLyvbI3tDnECr0J223wqwHMpLYKCTrvfsPDv5mhiWdg7JJycF0kukdo9WS
- +d/fkpVfyZe6uh431ToarZWHxPmF3B9FAZdPXfouVHuOBzpV+Pdm/y66C7BACVeSJ7mkyNedf/uG8K5coWzFH6OSWlxKNBAiXqV1qfX6pXrwuhFO+VfyT1ph
- tK6Xf/dA4Eq5QYjFtXbrPcZUCYJ5drhXeQTIE3Sqx1sFYqrVaI6OfdJKfri3Y/VQBRVuPxC5esevDY0AEBxqnXhbd/OHAy3lNN2ed2wC2Gi7NBglCsPvYTIj
- wNSHJHBqkWZds8O5IqlT4MxLNfDNRUjkPEDCZTJ3wQ5sIsRQ6G5/LeofgvkQSHRXAcwrPTSqAiUIWl+k2ItjIeC/vfPHKzM0TR4=
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Jesse, Fabio,
-
-On 28/11/21 21:52, Jesse Taube wrote:
-> 
-> 
-> On 11/28/21 15:50, Fabio Estevam wrote:
->> On Thu, Nov 25, 2021 at 6:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
->>>
->>> From: Jesse Taube <mr.bossman075@gmail.com>
->>>
->>> This patch adds initial clock driver support for the i.MXRT series.
-
-Also the commit log must be modified according(Summary+body).
-
-Thank you
--- 
-Giulio Benetti
-Benetti Engineering sas
-
->>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->>> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> ---
->>> V1->V2:
->>> * Kconfig: Add new line
->>> * clk-imxrt.c: Remove unused const
->>> * clk-imxrt.c: Remove set parents
->>> * clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
->>> V2->V3:
->>> * Remove unused ANATOP_BASE_ADDR
->>> * Move to hw API
->>> * Add GPT's own clock
->>> * Add SEMC clocks to set muxing to CRITICAL
->>> ---
->>>    drivers/clk/imx/Kconfig     |   4 +
->>>    drivers/clk/imx/Makefile    |   1 +
->>>    drivers/clk/imx/clk-imxrt.c | 156 ++++++++++++++++++++++++++++++++++++
+On 29/11/2021 14:56, Sam Protsenko wrote:
+> On Sun, 28 Nov 2021 at 05:15, David Virag <virag.david003@gmail.com> wrote:
 >>
->> Wouldn't it be better to name it clk-imxrt1050.c instead?
-> we can have multiple imxrt versions in there like the other IMX clk
-> drivers, is this okay?
+>> Also this way is pretty USIv2 centric. Adding USIv1 support to this
+>> driver is difficult this way because of the the lack of USI_CON and
+>> USI_OPTION registers as a whole (so having nowhere to actually set the
+>> reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+>> register). In my opinion being able to use the same driver and same
+>> device tree layout for USIv1 and USIv2 is a definite plus
 >>
+> 
+> Well, it's USIv2 driver after all. I never expected it can be extended
+> for USIv1 support. If you think it can be reused for USIv1, it's fine
+> by me. But we need to consider next things:
+>   - rename the driver to just "usi.c" (and also its configuration symbol)
+>   - provide different compatible for USIv1 (and maybe corresponding driver data)
+>   - rework bindings (header and doc); make sure existing bindings are
+> intact (we shouldn't change already introduced interfaces)
+>   - in case of USIv1 compatible; don't try to tinker with USIv2 registers
+>   - samsung,clkreq-on won't be available in case of USIv1 compatible
 
+I expect this driver to be in future extended for USIv1 and I do not see
+any problems in doing that for current Sam's approach. Most of our
+drivers support several devices, sometimes with differences, and we
+already have patterns solving it, e.g. ops structure or quirks bitmap.
+Driver for new USIv1 compatible would skip setting USI_CON (or any other
+unrelated register). Modification of SW_CONF could be shared or could be
+also split, depending on complexity.
+
+> 
+> Because I don't have USIv1 SoC TRM (and neither do I possess some
+> USIv1 board which I can use for test), I don't think it's my place to
+> add USIv1 support. But I think it's possible to do so, using my input
+> above.
+> 
+> I can see how it might be frustrating having to do some extra work
+> (comparing to just using the code existing in downstream). But I guess
+> that's the difference: vendor is mostly concerned about competitive
+> advantage and getting to market fast, while upstream is more concerned
+> about quality, considering all use cases, and having proper design.
+> Anyway, we can work together to make it right, and to have both
+> IP-cores support. In the worst case, if those are too different, we
+> can have two separate drivers for those.
+> 
+>> The only real drawback of that way is having to add code for USIv2
+>> inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
+>> overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
+>> drivers call a helper function in the USI driver to set their USI_CON
+>> and USI_OPTION registers up so that code would be shared and not
+>> duplicated. Wether this patch gets applied like this is not my choice
+>> though, I'll let the people responsible decide
+>> :-)
+>>
+> 
+> I'd argue that there are a lot of real drawbacks of using downstream
+> driver as is. That's why I completely re-designed and re-implemented
+> it. Downstream driver can't be built and function as a module, it
+> doesn't respect System Register sharing between consumers, it leads to
+> USI reset code duplication scattered across protocol drivers (that
+> arguably shouldn't even be aware of that), it doesn't reflect HW
+> structure clearly, it's not holding clocks needed for registers access
+> (btw, sysreg clock can be provided in syscon node, exactly for that
+> reason). As Krzysztof said, it also can't handle correct probe order
+> and deferred probes. Downstream driver might work fine for some
+> particular use-cases the vendor has, but in upstream it's better to
+> cover more cases we can expect, as upstream kernel is used on more
+> platforms, with more user space variants, etc.
+
+Implementing USI in each of I2C/SPI/UART drivers is a big minus. Current
+approach nicely encapsulates USI in dedicated driver without polluting
+the other drivers with unrelated bus/protocol stuff.
+
+Best regards,
+Krzysztof
