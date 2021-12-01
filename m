@@ -2,87 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBEE464C2A
-	for <lists+linux-serial@lfdr.de>; Wed,  1 Dec 2021 11:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6974B464CCD
+	for <lists+linux-serial@lfdr.de>; Wed,  1 Dec 2021 12:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348834AbhLAK6S (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 1 Dec 2021 05:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S1348980AbhLALhg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 1 Dec 2021 06:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbhLAK6R (ORCPT
+        with ESMTP id S1348965AbhLALha (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:58:17 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F93C061574;
-        Wed,  1 Dec 2021 02:54:56 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id t5so100233644edd.0;
-        Wed, 01 Dec 2021 02:54:56 -0800 (PST)
+        Wed, 1 Dec 2021 06:37:30 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CCC061757
+        for <linux-serial@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id p3so14022316qvj.9
+        for <linux-serial@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OvJoAjsiwp/bIqgJqHb/Ct3NhVVdCidlBQIJ1jfhjxs=;
-        b=Ta5UwXQvxUApA7IqpY3NDy68+xmL0+wr28tsdHISkNUFTGtfo7ptrUvzPoouoG4Nx2
-         osPBXDez94IdJ/Ji8qVLfg69ULnlL2GEWjuFInCCKrQbi65AUPgw6NbEIRVdzbIEYR7c
-         x0Kx4WQK+IbDaVrUC13ojGgd4ckfNAl8tl3vooROqTe/KKn31IOCSbXfp8NcdnqCbwNZ
-         HhRk+c3bxQxbAaQ1j+L9xwtBKR1zEm0vc9H1nR8oDadA8hNUjk7SQDDuOCI+SFCINZda
-         zEvhNiVGZOXCBPwzExF5WQL8TDmt6z++I6hoKF3dxWZ9NbfFynMR8FEXS5ipoSL6ZrI0
-         vZCQ==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OvJoAjsiwp/bIqgJqHb/Ct3NhVVdCidlBQIJ1jfhjxs=;
-        b=yqd5SbaBrEzWwBTYSkqe+cZsDB/Xunii04SG5bulXfXrMS2nYz564EbCKjuaumqD6k
-         n6796NcGaKfKpnUVxsR2hsAgifMIcvl0jpdEqAkG5mWwn2a6GyNZ299xSZwDtD1FsBz3
-         SthpDFng+T66beaxVaqGNEK4aVOOxwi7WPzrcjGH3Z7DmzDWl4/vNyS7lvf+tjryGQTF
-         ZkQp9U9MNvX4CBYdvmeieW/qDP3vr84wCVDBopp0iQ41HxLN5uyfrTmISHvG3F/MvmYD
-         eBQt3d0S7EbPd3zCiRAwz5N7kZIqG60wycopw7yn+8bvmqa0INXr2IjQUtqaMU/OFJ/s
-         D1hg==
-X-Gm-Message-State: AOAM533zJeUFcbcLubPTxb5VDJt1v/84cyNf4gxYOQ7feuhFCylWUL2T
-        b8kMm92cdWlcZXAZYEi2NH+iTtKHd5y/FbioYc0=
-X-Google-Smtp-Source: ABdhPJyMWHVjrLETt3XzlgtJwBoFDiG2sOhLr7LzkkX2v2atvCCOmIF8fnH8GGIVBIfk+JoF72F7zcD7q9iN3fMwxgw=
-X-Received: by 2002:aa7:db8d:: with SMTP id u13mr7199099edt.111.1638356095305;
- Wed, 01 Dec 2021 02:54:55 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=DgitGeHuOL4PgkKbH1dHHK6xJvJWxrtKUqg7C0H0pIGDMnryfRsJPqYO6BPi1vOh0y
+         imfjvofRyIWHlpjaPxxExnwiGvwUSgxEfrwsyDmcG2H68t4ESVCoLxJrCZNXWQ3eeiCj
+         UzRSA733b1CyTf4F4CD5Wc2AWp/QCIofRl38xEIUAZbJYPiyaq/UaDDcFy1JWX1yH97p
+         bsFj//pFGumA2JvojYaYC/J685KoimdzZC9+e30wWobt8H/QsPB4x+9lDBRWm+6q6d5i
+         R9jdKGy+QD1gafn9LMBqIYT73CRzgzLq/90kI6mHyhldYz7ADu+SwrV3THrwy+CoaafK
+         ebmQ==
+X-Gm-Message-State: AOAM531+J8AO0ITGZ/hzE788vuaQI1QlOIZs1u/jSx7YP8dvzAanvnJd
+        Zb2e/sEc1KC32jQpoHkSKC6o6a9dz1Fzs+4Ez++jywxI7pY=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130111325.29328-1-semen.protsenko@linaro.org> <20211130111325.29328-4-semen.protsenko@linaro.org>
-In-Reply-To: <20211130111325.29328-4-semen.protsenko@linaro.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 1 Dec 2021 12:54:19 +0200
-Message-ID: <CAHp75Vd8PFhs8_Ji5x1X2Ph5ey+8JrRuneWCrG=5a+52Lh-ptQ@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 3/5] tty: serial: samsung: Remove USI initialization
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 12:42 AM Sam Protsenko
-<semen.protsenko@linaro.org> wrote:
->
-> USI control is now extracted to dedicated USI driver. Remove USI related
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-the dedicated
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
-> code from serial driver to avoid conflicts and code duplication.
+Your Names: |
+Address: |
 
-Would it break run-time bisectability?
-If so, why is it not a problem?
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
 
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
 
--- 
-With Best Regards,
-Andy Shevchenko
+Regards.
+Mrs ORGIL BAATAR
