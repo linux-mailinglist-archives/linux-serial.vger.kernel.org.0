@@ -2,78 +2,107 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6974B464CCD
-	for <lists+linux-serial@lfdr.de>; Wed,  1 Dec 2021 12:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EFB4652A7
+	for <lists+linux-serial@lfdr.de>; Wed,  1 Dec 2021 17:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348980AbhLALhg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 1 Dec 2021 06:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348965AbhLALha (ORCPT
+        id S232207AbhLAQX1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 1 Dec 2021 11:23:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45418 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349782AbhLAQX0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:37:30 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CCC061757
-        for <linux-serial@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id p3so14022316qvj.9
-        for <linux-serial@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
-         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
-         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
-         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
-         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
-         Af5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=DgitGeHuOL4PgkKbH1dHHK6xJvJWxrtKUqg7C0H0pIGDMnryfRsJPqYO6BPi1vOh0y
-         imfjvofRyIWHlpjaPxxExnwiGvwUSgxEfrwsyDmcG2H68t4ESVCoLxJrCZNXWQ3eeiCj
-         UzRSA733b1CyTf4F4CD5Wc2AWp/QCIofRl38xEIUAZbJYPiyaq/UaDDcFy1JWX1yH97p
-         bsFj//pFGumA2JvojYaYC/J685KoimdzZC9+e30wWobt8H/QsPB4x+9lDBRWm+6q6d5i
-         R9jdKGy+QD1gafn9LMBqIYT73CRzgzLq/90kI6mHyhldYz7ADu+SwrV3THrwy+CoaafK
-         ebmQ==
-X-Gm-Message-State: AOAM531+J8AO0ITGZ/hzE788vuaQI1QlOIZs1u/jSx7YP8dvzAanvnJd
-        Zb2e/sEc1KC32jQpoHkSKC6o6a9dz1Fzs+4Ez++jywxI7pY=
-X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
-X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
- Wed, 01 Dec 2021 03:33:59 -0800 (PST)
+        Wed, 1 Dec 2021 11:23:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90F00B82029;
+        Wed,  1 Dec 2021 16:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C7CC53FD3;
+        Wed,  1 Dec 2021 16:20:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638375601;
+        bh=chsce8M78mn7kNe7wC0N7oHoRMbGOLek3debSSI71+U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cOHW0jivGD0sfUuHQrNLVKjiJehBs8ZawhYoqnMartRIDeDkWgV74ilz7OXDlVCkN
+         +F0ifWgvBBNNuAq5MPgxaSbi8Vle1M4cJJq7s+e8f8qdRC+CummIDpIYL+EQ13rO+o
+         3TqlCrkrtINshCtdxo1+qycfrp6K25s/uZ8ltNjv2/1H5x2ARqIof1dw7YJNEuCjmj
+         bEdC9jgx0i2b2PqMRUzDoSGktdmu+xzt0Bt3Cc2qFJuqAdDFfMGBxUnpA0YhLG4jEN
+         2zikKuE6iMcOTjWICvatacH9slk7rtuWYMJCVlhaiqYW9fs1itREqj6w/KjqoTap5i
+         Xno431a5VIOrA==
+Received: by mail-ed1-f48.google.com with SMTP id g14so104034017edb.8;
+        Wed, 01 Dec 2021 08:20:01 -0800 (PST)
+X-Gm-Message-State: AOAM530XBdkTiFZIdxAn2liuwr6EUuHRVV3CGC8WCVTAMg+hvqdD/VlT
+        WkvfV6mm8C+TEAhU7drq5Si30BjD1kwr8TkFdA==
+X-Google-Smtp-Source: ABdhPJwKFJXoFi/lkb4UGy5sVWQhcLaVrvx8NVkmo+iI+WLXt6vMQKMq3z2rVrv63RjM2MV7aMTzUWqe4fCNNlPByts=
+X-Received: by 2002:a05:6402:35ce:: with SMTP id z14mr9697479edc.197.1638375599265;
+ Wed, 01 Dec 2021 08:19:59 -0800 (PST)
 MIME-Version: 1.0
-Sender: unitednationawardwinner@gmail.com
-Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
-From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
-Date:   Wed, 1 Dec 2021 03:33:58 -0800
-X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
-Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
-Subject: Your long awaited part payment of $2.5.000.00Usd
-To:     undisclosed-recipients:;
+References: <20211130111325.29328-1-semen.protsenko@linaro.org>
+ <20211130111325.29328-2-semen.protsenko@linaro.org> <1638294184.179325.2713642.nullmailer@robh.at.kernel.org>
+ <4b5bebb0-ed74-8132-1e6b-cb7cbc21439c@canonical.com>
+In-Reply-To: <4b5bebb0-ed74-8132-1e6b-cb7cbc21439c@canonical.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 1 Dec 2021 10:19:47 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJb4nMBoGLcf-bKpi5kEE+zXQ=dfo5JSBhrqPFeLnCsHw@mail.gmail.com>
+Message-ID: <CAL_JsqJb4nMBoGLcf-bKpi5kEE+zXQ=dfo5JSBhrqPFeLnCsHw@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        linux-serial@vger.kernel.org,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        David Virag <virag.david003@gmail.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Attention: Beneficiary, Your long awaited part payment of
-$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
-Dollars) is ready for immediate release to you, and it was
-electronically credited into an ATM Visa Card for easy delivery.
+On Tue, Nov 30, 2021 at 2:04 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 30/11/2021 18:43, Rob Herring wrote:
+> > On Tue, 30 Nov 2021 13:13:21 +0200, Sam Protsenko wrote:
+> >> Add constants for choosing USIv2 configuration mode in device tree.
+> >> Those are further used in USI driver to figure out which value to write
+> >> into SW_CONF register. Also document USIv2 IP-core bindings.
+> >>
+> >> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> >> ---
+> >> Changes in v2:
+> >>   - Combined dt-bindings doc and dt-bindings header patches
+> >>   - Added i2c node to example in bindings doc
+> >>   - Added mentioning of shared internal circuits
+> >>   - Added USI_V2_NONE value to bindings header
+> >>
+> >>  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
+> >>  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
+> >>  2 files changed, 152 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> >>  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
+> >>
+> >
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > Documentation/devicetree/bindings/soc/samsung/exynos-usi.example.dts:35.39-42.15: Warning (unique_unit_address): /example-0/usi@138200c0/serial@13820000: duplicate unit-address (also used in node /example-0/usi@138200c0/i2c@13820000)
+>
+> Rob,
+>
+> The checker complains about two nodes with same unit-address, even
+> though the node name is different. Does it mean that our idea of
+> embedding two children in USI and having enabled only one (used one) is
+> wrong?
 
-Your new Payment Reference No.- 6363836,
-Pin Code No: 1787
-Your Certificate of Merit Payment No: 05872,
+IIRC, we allow for this exact scenario, and there was a change in dtc
+for it. So I'm not sure why this triggered.
 
-Your Names: |
-Address: |
-
-Person to Contact:MR KELLY HALL the Director of the International
-Audit unit ATM Payment Center,
-
-Email: uba-bf@e-ubabf.com
-TELEPHONE: +226 64865611 You can whatsApp the bank
-
-Regards.
-Mrs ORGIL BAATAR
+Rob
