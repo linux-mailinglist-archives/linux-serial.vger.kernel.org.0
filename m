@@ -2,76 +2,148 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4350466545
-	for <lists+linux-serial@lfdr.de>; Thu,  2 Dec 2021 15:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DA8466987
+	for <lists+linux-serial@lfdr.de>; Thu,  2 Dec 2021 19:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358536AbhLBOeI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Dec 2021 09:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355313AbhLBOeH (ORCPT
+        id S1376505AbhLBSDn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 Dec 2021 13:03:43 -0500
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:49977 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231154AbhLBSDl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:34:07 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57691C061759
-        for <linux-serial@vger.kernel.org>; Thu,  2 Dec 2021 06:30:45 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id y16so35426864ioc.8
-        for <linux-serial@vger.kernel.org>; Thu, 02 Dec 2021 06:30:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GHNkghZ/SHmwrMzY7g0MQJmTTVnThVnJgPEL1u34LOU=;
-        b=PljSp/DihrYuRHyKxSbw9+oBDMH3h0RmA+1G+EN2K0BguB2OBCBWpt6sT+fjJNrqzd
-         0HRnL7VWnPr1KyrqDFjks4+H5heiHNVwc/lgoRW1dBp5UZF2g2BtwkbxLP6CZIXVtwVg
-         w6bgfUV8JnBqiP9L2mZJNu7BcUeV3FV9mnQwNeEYZCeaeG7Ujetcvj2leZOpMCAdgeG/
-         +OlHkKkwd3/VWcvO+tUztePMhYNE7vh6qg13ArfDv3xtEOzPLSL/3koNSkAR3UELxpj/
-         WY3upLN8vHx/UvjCPjpbSgdNtQUGZ4lUo4FaiCKxvS/VJl7/Jz7BRVUOdE+fF3QCFAxW
-         0sGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GHNkghZ/SHmwrMzY7g0MQJmTTVnThVnJgPEL1u34LOU=;
-        b=hDXfeuF5FeRIGqCZtw51IVm1LLxmt/WzDoENvcwyoNtLgZ1idiBo7VEsVz8GS7Sky8
-         s+xW243wOA1GmyzJbMb72izRK5ZdoPt7BxokNZDx2F2Rdy6yGwrwwuf6YP0ol7Vf4mzb
-         od8/aKxg7SsxShK6H6r1vST1ML7d9+9W//6kXzu8YQXAZBn43PM+Z0+/1GP37xud6qEa
-         sadFNk3NnINPDHmypqnTK5ykMlBp3wsDUHhdqhYb4/UoVzGgRJUjfuFrn04fwROVII+u
-         KFvy/OM2WhbsuiFaX9HO0+xBzWw+vJ3LUT9bsF7BXbRnrWBeJZ35CweyzVlME/HyJXG7
-         arxQ==
-X-Gm-Message-State: AOAM530OocSfY/N1KtjKzl88R4bQDDDDPawx4G9cyCQTkNSklexxRwIk
-        1A3kRyEEcAox57Ld3RHpGnCxq0l+P76evo019D8=
-X-Google-Smtp-Source: ABdhPJyrW3eQ5pwAhb10Rt+e0IuqCkU6Ve+sMc4DY1UAEOZhwYn5fkC87hEMl8OfLLGySo8y2x3btJMdyye6QjsOm5g=
-X-Received: by 2002:a6b:2cc1:: with SMTP id s184mr15372616ios.63.1638455444318;
- Thu, 02 Dec 2021 06:30:44 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6602:1550:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:30:43
- -0800 (PST)
-Reply-To: nistelvaraj@gmail.com
-From:   Anitha Selvaraj <joakum11@gmail.com>
-Date:   Thu, 2 Dec 2021 15:30:43 +0100
-Message-ID: <CAOvonVtK2ef3+cHOqf8kMjN-mQFUpu+jHWVs9ayVTAZ6D5jcbQ@mail.gmail.com>
-Subject: Beloved one in Christ
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 2 Dec 2021 13:03:41 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id C2E1B2B0059C;
+        Thu,  2 Dec 2021 13:00:14 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Thu, 02 Dec 2021 13:00:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=WqXxaA56k/cauFGBfgNPZ3hCAT2Z
+        ZqG8MOqqw2pzOQo=; b=Q7SgWEGzLoSyIq6xy710syOyNYRzSY70ii+4tWyaz/6X
+        hOMAwaxeyQ2+bPY0DqPlFI0lPIKMXqRF1xnIU1vfUfvGN/tyXPMLCjyVxLDmqRoF
+        CfCSBW5PZO/l9p6h/tZP7vFeQ4MzaSGGKXxPELhobN0Yp1ZCNah5rqfSGJ/q+TH+
+        j8fXt0l5/IsvL0J5lv8uVftN6LwBqPmmzo1644ihuvqcB85TXXY/S6cqyEbJk0hB
+        lFdlwkJEPNTZxx9jJOhrDZaMXZNsUUT4m3riAIJlfFqzjNcE6ot6W+bmtOCwDXtz
+        4sCazQ/XqqZpunqm6udU8wF08Cpj7aLXroF1fZnfCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=WqXxaA
+        56k/cauFGBfgNPZ3hCAT2ZZqG8MOqqw2pzOQo=; b=UYYZt731oJ+nbG7EH3+d9z
+        PzahR1GOPDOYXgJwUFC/aWYhrvid9ZRx1y3edS+4B0vm8HDDLWDL8ErggL/0GIUR
+        reHaxnx/PURLqBHGgOnvFle7uS70vH6qai6ENM7By/vlbTxTxFrgnL8Zh3ax8SOP
+        UPYeyCk72YCubUt3ii+XuXud1EuyTuW7ne4Dx6i2i1I3iJ7L+a4Ymu72Zp3MtJ9B
+        3oekRDnmdEj8dNhPwe0qgXMjSf/CLA2f0q5xVGBb+Drchr84pnH4Cuc+zFCkJqrV
+        EPSi11YbY9h8BWgIg5zsAB3Ie+rHmWqyeyJO6CiLefL/dOsowIpn+ooxupAmyFCA
+        ==
+X-ME-Sender: <xms:rAmpYVDNsZ4OMuM83jX22uCU1x1Bl02DtvgN-fzwzhTWNXA2YAqMNw>
+    <xme:rAmpYThn4D1Z82MLiQney_E6S-esg3jL2rurkUfFibIyqtsIk-FKSSmAcw5fhY_HG
+    AfuHVZq3gXJX2J-Lr8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieehgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
+    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:rAmpYQmbSKSf5hhg5tkr0ORujfI76t9xU3Iox92ENediIqyyvSn3mA>
+    <xmx:rAmpYfyEYy1vx0Ve0donjTChqT08Ntz1ZrWqgcltWTq8pnjLN7hi9g>
+    <xmx:rAmpYaTLbRkJzRLKa0-d50N-kFNRRkbYt6LCK3KhONfRUuSAJ58Otw>
+    <xmx:rgmpYfg187so2lmfmXDBqxodtwj-8q5aCp5Q2I4WCMvXE3iaTOk8XND9ZMM>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CAC5F27407D4; Thu,  2 Dec 2021 13:00:12 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
+Mime-Version: 1.0
+Message-Id: <1954b7b6-abb8-4a73-9d90-6b2342f73bb8@www.fastmail.com>
+In-Reply-To: <20211124073419.181799-10-marcan@marcan.st>
+References: <20211124073419.181799-1-marcan@marcan.st>
+ <20211124073419.181799-10-marcan@marcan.st>
+Date:   Thu, 02 Dec 2021 18:59:51 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Hector Martin" <marcan@marcan.st>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Johan Hovold" <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 09/11] arm64: dts: apple: t8103: Add PMGR nodes
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
--- 
-Dearest one in Christ,
 
-I am Mrs Anitha Selvaraj, I married Mr.Francis Selvaraj, for 19 years
-without a child  and my husband died in 2007. I'm contacting you so
-that you will know my desire to donate the sum of ( 6,500,000 Dollars
-) that I inherited from my late husband to charity, currently the fund
-is still in the bank. Recently, my doctor told me that I have serious
-sickness which is cancer problem and I will not last for the next 2
-months.
 
-I want a person  that will use this fund for orphanages, schools,
-churches, widows, propagating the word of God in his country.
-Reply me for more information's,
+On Wed, Nov 24, 2021, at 08:34, Hector Martin wrote:
+> This adds the two PMGR nodes and all known power state subnodes. Since
+> there are a large number of them, let's put them in a separate file to
+> include.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  arch/arm64/boot/dts/apple/t8103-pmgr.dtsi | 1136 +++++++++++++++++++++
+>  arch/arm64/boot/dts/apple/t8103.dtsi      |   24 +
+>  2 files changed, 1160 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+>
+> diff --git a/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi 
+> b/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+> new file mode 100644
+> index 000000000000..1310be74df1d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+> @@ -0,0 +1,1136 @@
+> +// SPDX-License-Identifier: GPL-2.0+ OR MIT
+> +/*
+> + * PMGR Power domains for the Apple T8103 "M1" SoC
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + */
+> +
+> +
 
-Remain blessed
-Your sister in christ
-Mrs. Anitha Selvaraj
+[...]
+
+> +	ps_atc0_usb_aon: power-controller@88 {
+> +		compatible = "apple,t8103-pmgr-pwrstate", "apple,pmgr-pwrstate";
+> +		reg = <0x88 4>;
+> +		#power-domain-cells = <0>;
+> +		#reset-cells = <0>;
+> +		label = "atc0_usb_aon";
+> +	};
+> +
+> +	ps_atc1_usb_aon: power-controller@90 {
+> +		compatible = "apple,t8103-pmgr-pwrstate", "apple,pmgr-pwrstate";
+> +		reg = <0x90 4>;
+> +		#power-domain-cells = <0>;
+> +		#reset-cells = <0>;
+> +		label = "atc1_usb_aon";
+> +	};
+
+These two nodes have AON in their name but can be powered off.
+Is this intentional and Apple just labels things a bit weird in the ADT
+again?
+
+
+With that confirmed:
+
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+
+
+
+
+Best,
+
+Sven
