@@ -2,137 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C22A4661E3
-	for <lists+linux-serial@lfdr.de>; Thu,  2 Dec 2021 12:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4350466545
+	for <lists+linux-serial@lfdr.de>; Thu,  2 Dec 2021 15:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357114AbhLBLEa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Dec 2021 06:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S1358536AbhLBOeI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 Dec 2021 09:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346182AbhLBLE3 (ORCPT
+        with ESMTP id S1355313AbhLBOeH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:04:29 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D6FC061757
-        for <linux-serial@vger.kernel.org>; Thu,  2 Dec 2021 03:01:07 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id i6so54909936uae.6
-        for <linux-serial@vger.kernel.org>; Thu, 02 Dec 2021 03:01:07 -0800 (PST)
+        Thu, 2 Dec 2021 09:34:07 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57691C061759
+        for <linux-serial@vger.kernel.org>; Thu,  2 Dec 2021 06:30:45 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id y16so35426864ioc.8
+        for <linux-serial@vger.kernel.org>; Thu, 02 Dec 2021 06:30:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pk9D0BkgKy2MkHQjOsND26zq44gMYDCnDDc5CGOG3Eo=;
-        b=MQzwMbtX3OEq3xFhbvNV9fwEHoed0BB6w8bpPjpAnSKvxey0w7jr842wcnlTfvUu6S
-         cPvjz+MuNSnBKEyKITaKbLtK3qhcHMKkOEL3TahZ3cY3Id64C34xaAEtURku7txrqTZP
-         TEwzb8URr+IVTqCc78y2Cubsmy4cpXUIop6Si1LFZ8LKATTmVpTz1DqnbTXTm78cmLla
-         JFq0oK5fhC4CXugex+FXNY91Oq1Byoi6ik7eWr7Cq0n3Up3qRQqgxz+Menrr/elTmYWh
-         3rLbGd7mZmQx/ap6gV64cLo0CenIJ5oz3BJaFmcbCq2rsURgqYh9KLdIOeE8/jE/iO4N
-         oD5g==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GHNkghZ/SHmwrMzY7g0MQJmTTVnThVnJgPEL1u34LOU=;
+        b=PljSp/DihrYuRHyKxSbw9+oBDMH3h0RmA+1G+EN2K0BguB2OBCBWpt6sT+fjJNrqzd
+         0HRnL7VWnPr1KyrqDFjks4+H5heiHNVwc/lgoRW1dBp5UZF2g2BtwkbxLP6CZIXVtwVg
+         w6bgfUV8JnBqiP9L2mZJNu7BcUeV3FV9mnQwNeEYZCeaeG7Ujetcvj2leZOpMCAdgeG/
+         +OlHkKkwd3/VWcvO+tUztePMhYNE7vh6qg13ArfDv3xtEOzPLSL/3koNSkAR3UELxpj/
+         WY3upLN8vHx/UvjCPjpbSgdNtQUGZ4lUo4FaiCKxvS/VJl7/Jz7BRVUOdE+fF3QCFAxW
+         0sGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pk9D0BkgKy2MkHQjOsND26zq44gMYDCnDDc5CGOG3Eo=;
-        b=i2btCbCiWhAPWoQAHQ346Mr7ySuLXTHE2RNKXjff6GlIroCV62WCzQWPa2d+kmB86H
-         DTuSMZshtN1LNYJxqqv/ZT2uWS5p8NknhFC+EvJKsAyjIIe3keO6/SXlDfw0rA7Vbv8f
-         //dEdewdo9WiLO7kHaiGiuLN6daEFLuVESip2mb817PNtUIuC7LmLwu525UeURuCF99Z
-         XdzMExRtM37egZ1dGVoBahQLI6tD1JC0YNj0zmCvPy9gH0/w4d1b1zSnOVxd/vVmbNFO
-         BJITmOg3vzZk+9AlSTpyQY9hukbz4EarzWSM53erulZfTiPY80z69m+SqFMonXXvhmfw
-         F4XA==
-X-Gm-Message-State: AOAM5308q6ET9hamKzPm7cmXQLzOrlWom7lnchz5/Lp4YHIKf89cZD3A
-        6uXNoa0uBlrl2fs9EJGDt0YD3S2zHHveZfSf+fDpqg==
-X-Google-Smtp-Source: ABdhPJxakVPbeV3zYAuA0ClGNGeLE4yam1HSOcyPA7SQE2XyjCmXcnqQqxD6K9GyotZiEP2pJrwvkeSJ6r0RxEK755w=
-X-Received: by 2002:a67:be0f:: with SMTP id x15mr13744954vsq.86.1638442866176;
- Thu, 02 Dec 2021 03:01:06 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GHNkghZ/SHmwrMzY7g0MQJmTTVnThVnJgPEL1u34LOU=;
+        b=hDXfeuF5FeRIGqCZtw51IVm1LLxmt/WzDoENvcwyoNtLgZ1idiBo7VEsVz8GS7Sky8
+         s+xW243wOA1GmyzJbMb72izRK5ZdoPt7BxokNZDx2F2Rdy6yGwrwwuf6YP0ol7Vf4mzb
+         od8/aKxg7SsxShK6H6r1vST1ML7d9+9W//6kXzu8YQXAZBn43PM+Z0+/1GP37xud6qEa
+         sadFNk3NnINPDHmypqnTK5ykMlBp3wsDUHhdqhYb4/UoVzGgRJUjfuFrn04fwROVII+u
+         KFvy/OM2WhbsuiFaX9HO0+xBzWw+vJ3LUT9bsF7BXbRnrWBeJZ35CweyzVlME/HyJXG7
+         arxQ==
+X-Gm-Message-State: AOAM530OocSfY/N1KtjKzl88R4bQDDDDPawx4G9cyCQTkNSklexxRwIk
+        1A3kRyEEcAox57Ld3RHpGnCxq0l+P76evo019D8=
+X-Google-Smtp-Source: ABdhPJyrW3eQ5pwAhb10Rt+e0IuqCkU6Ve+sMc4DY1UAEOZhwYn5fkC87hEMl8OfLLGySo8y2x3btJMdyye6QjsOm5g=
+X-Received: by 2002:a6b:2cc1:: with SMTP id s184mr15372616ios.63.1638455444318;
+ Thu, 02 Dec 2021 06:30:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130111325.29328-1-semen.protsenko@linaro.org>
- <20211130111325.29328-2-semen.protsenko@linaro.org> <1638294184.179325.2713642.nullmailer@robh.at.kernel.org>
- <4b5bebb0-ed74-8132-1e6b-cb7cbc21439c@canonical.com> <CAL_JsqJb4nMBoGLcf-bKpi5kEE+zXQ=dfo5JSBhrqPFeLnCsHw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJb4nMBoGLcf-bKpi5kEE+zXQ=dfo5JSBhrqPFeLnCsHw@mail.gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 2 Dec 2021 13:00:54 +0200
-Message-ID: <CAPLW+4=Zdvf4HRNUeVMR9URLSdA867hdXVLYy+k47yLH82uTnA@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        linux-serial@vger.kernel.org,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        David Virag <virag.david003@gmail.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:6602:1550:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:30:43
+ -0800 (PST)
+Reply-To: nistelvaraj@gmail.com
+From:   Anitha Selvaraj <joakum11@gmail.com>
+Date:   Thu, 2 Dec 2021 15:30:43 +0100
+Message-ID: <CAOvonVtK2ef3+cHOqf8kMjN-mQFUpu+jHWVs9ayVTAZ6D5jcbQ@mail.gmail.com>
+Subject: Beloved one in Christ
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 18:20, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Nov 30, 2021 at 2:04 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
-> >
-> > On 30/11/2021 18:43, Rob Herring wrote:
-> > > On Tue, 30 Nov 2021 13:13:21 +0200, Sam Protsenko wrote:
-> > >> Add constants for choosing USIv2 configuration mode in device tree.
-> > >> Those are further used in USI driver to figure out which value to write
-> > >> into SW_CONF register. Also document USIv2 IP-core bindings.
-> > >>
-> > >> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > >> ---
-> > >> Changes in v2:
-> > >>   - Combined dt-bindings doc and dt-bindings header patches
-> > >>   - Added i2c node to example in bindings doc
-> > >>   - Added mentioning of shared internal circuits
-> > >>   - Added USI_V2_NONE value to bindings header
-> > >>
-> > >>  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
-> > >>  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
-> > >>  2 files changed, 152 insertions(+)
-> > >>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> > >>  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
-> > >>
-> > >
-> > > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > >
-> > > yamllint warnings/errors:
-> > >
-> > > dtschema/dtc warnings/errors:
-> > > Documentation/devicetree/bindings/soc/samsung/exynos-usi.example.dts:35.39-42.15: Warning (unique_unit_address): /example-0/usi@138200c0/serial@13820000: duplicate unit-address (also used in node /example-0/usi@138200c0/i2c@13820000)
-> >
-> > Rob,
-> >
-> > The checker complains about two nodes with same unit-address, even
-> > though the node name is different. Does it mean that our idea of
-> > embedding two children in USI and having enabled only one (used one) is
-> > wrong?
->
-> IIRC, we allow for this exact scenario, and there was a change in dtc
-> for it. So I'm not sure why this triggered.
->
+-- 
+Dearest one in Christ,
 
-It's triggered from WARNING(unique_unit_address, ...), because it
-calls static void check_unique_unit_address_common() function with
-disable_check=false. I guess we should interpret that this way: the
-warning makes sense in regular case, when having the same unit address
-for two nodes is wrong. So the warning is reasonable, it's just not
-relevant in this particular case. What can be done:
+I am Mrs Anitha Selvaraj, I married Mr.Francis Selvaraj, for 19 years
+without a child  and my husband died in 2007. I'm contacting you so
+that you will know my desire to donate the sum of ( 6,500,000 Dollars
+) that I inherited from my late husband to charity, currently the fund
+is still in the bank. Recently, my doctor told me that I have serious
+sickness which is cancer problem and I will not last for the next 2
+months.
 
-  1. We can introduce some specific property to mark nodes with
-duplicated address as intentional. check_unique_unit_address_common()
-can be extended then to omit checking the nodes if that property is
-present.
-  2. We can just ignore that warning in this particular case (and
-similar cases).
-  3. We can add some disambiguation note to that warning message, like
-"if it's intentional -- please ignore this message"
+I want a person  that will use this fund for orphanages, schools,
+churches, widows, propagating the word of God in his country.
+Reply me for more information's,
 
-I'm all for option (3), as it's the easiest one, and still reasonable.
-Rob, what do you think? Can we just ignore that warning in further
-versions of this patch series?
-
-> Rob
+Remain blessed
+Your sister in christ
+Mrs. Anitha Selvaraj
