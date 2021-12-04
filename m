@@ -2,141 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3704682E4
-	for <lists+linux-serial@lfdr.de>; Sat,  4 Dec 2021 07:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97F2468437
+	for <lists+linux-serial@lfdr.de>; Sat,  4 Dec 2021 11:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384330AbhLDGOz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 4 Dec 2021 01:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S1384676AbhLDKul (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 4 Dec 2021 05:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384250AbhLDGOb (ORCPT
+        with ESMTP id S1351571AbhLDKuk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 4 Dec 2021 01:14:31 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F3C061D7E;
-        Fri,  3 Dec 2021 22:11:04 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id m192so5854214qke.2;
-        Fri, 03 Dec 2021 22:11:04 -0800 (PST)
+        Sat, 4 Dec 2021 05:50:40 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C66C061751;
+        Sat,  4 Dec 2021 02:47:15 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x6so21827088edr.5;
+        Sat, 04 Dec 2021 02:47:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9ZCWkWDq48UBrai2D1TmmTdR94DXJ7wnNUbZMk//cy0=;
-        b=I9LQ1IKEGyvcAR3A0a3KP68qCAVxBVNMzdKp5+/XJFuQS8vHQQw+dQkr7PewYJ+tDG
-         dROhPyxEo3vSN32ugBWmMDwJBFdkSWoaYGT9bmgh+OzFog68gRlUk0b4vXfDStVjIa2y
-         lLp7ecVo06SK+LeWBlISSXMHHMiLgbn1OZ9kD+xWy88mf/cEuHsdHt9/Aq5pnSMOA0ih
-         0bj94+9mjaYqyn3TUYCfU0cmScJKIBw1NiS9CV1BYF0mzFhEk0p/a70Cjh9l8Cyc11Bp
-         P8T3ZSLCMAmtzFpOlKzpSo+HjqG7wC9Y5gqvRk6VJJ4qtOJ1mWL4SP+lUFP407XLuDOD
-         pOcQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d77EM0tE3JUwSxHiDu+PhK1bKg9re3Pgc3NQ6IiDdU0=;
+        b=QREKril2aVYAeeErWGoUn7QGA7lzEfM8Bnfjg66RWZUwJmgfoNOH3BG8L9AxQPF6pJ
+         AvGgyjTeu8vqYR6+vSr3AwNS+BmJOjGSfLEf/EUDWeIKUQ7erkhAavWUsQJ3ZWn7mGys
+         mh7cNCCvpWRMx5iloQoly5kzF2tFucLZ7tiQyq3EUDIz4R1LFIynn2G3YFR9NiAUa8fb
+         iIdiX3mEsvJUXmWlt5RNrVvaHlM6yBG5Ej6fVjyU8OoqWTkaU94YMCe3yX3iVjtVIorW
+         pm8esUmh7dKNsphuRyVrmuozykq2O3iJyIL5YQ2CHLpY4Vdg3Nc/50LS+bRVVvYnVsci
+         XwaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9ZCWkWDq48UBrai2D1TmmTdR94DXJ7wnNUbZMk//cy0=;
-        b=iYXE+Z7hfAuhdk9hji2723pm4EIhsB/J2c4qVEQxv0NftX40KQn0rTE00u8seURSAM
-         2xexSzvSVmVzZBjWMSkUxBIaZKbl4B4o8gLeJmblpK5LLE5g5cqqcCKh8sYK6uM5hsja
-         8UFv2WIXih/KjRvz56ER12WL6Sl1B1KHNAwleG+hIdVoZu41dpzmolZovPi3I6UD/uo5
-         nOtRnpULfrVz9riOZnrdherkfb/qsaTv4+sl4/riDDct9RjbI8p0PFfL56z7d5CzptDv
-         ddNrzM5YUBFdZw7gH6SFhriUluW4S8yzyMpqliPmIEsF/e6pOLcOmtamFJ2+4o/jk8sZ
-         /POw==
-X-Gm-Message-State: AOAM5314jwmlBLkt2dOS2ubNat5QmCKAoXWzY5VITAusTuui8ix9e2BK
-        pGzuxfy2x7M2v4GmtXh5R8w=
-X-Google-Smtp-Source: ABdhPJxa7N3sj9y3U0qhseSAE9RbeBnuLXpuDSxXyLC5PHjjucbquP8Bcd5yPE3s/LDy99YXV1GcBA==
-X-Received: by 2002:a05:620a:4087:: with SMTP id f7mr21508305qko.56.1638598263928;
-        Fri, 03 Dec 2021 22:11:03 -0800 (PST)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id l1sm3500913qkp.125.2021.12.03.22.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 22:11:03 -0800 (PST)
-From:   Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To:     linux-imx@nxp.com
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
-        stefan@agner.ch, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
-        adrian.hunter@intel.com, jirislaby@kernel.org,
-        giulio.benetti@benettiengineering.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, Mr.Bossman075@gmail.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v4 13/13] ARM: imxrt1050_defconfig: add i.MXRT1050 defconfig
-Date:   Sat,  4 Dec 2021 01:10:42 -0500
-Message-Id: <20211204061042.1248028-14-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
-References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d77EM0tE3JUwSxHiDu+PhK1bKg9re3Pgc3NQ6IiDdU0=;
+        b=pVaz0Dlr7wMe+vA1C9li3I7rttV6wPObfLjomzEMZqgETpZrP4Y1DB3hsRQC35Iiu7
+         tPut9dUTOFfHiQEFSDpJk4688R9vI3PfdeNJ9dngQ0H3lQB0dBZ1dAbUJ5tX+xbS1XId
+         oWNkjA6qbmZg3PaoC+FlFV8bRumfRu9YzLfd/MAyVo6Hd1EJjR+ig6TbWHm+BS8ZydQm
+         qrixLuMOmw2dz+Rnq0uELq5xuM8nwD2gIQP+eDOoxRy3pneVOwTvFvCNiz/u6rl36umH
+         SCFka1jZAmD+WVAFaUdV2nfYFMWu96VyAKMPDtAgkml0fFnQyJHDfAPN1vrNR5Wsi5Hp
+         h7SA==
+X-Gm-Message-State: AOAM532ZM0B1+iTrW9pnP+coHxCZ9826BwTsqJOQNK8C82hWxJXxmZo1
+        YIGVYbYMDvqvaeVAVpJBQo5rxazswteUnDw4Ulk=
+X-Google-Smtp-Source: ABdhPJzjNMGKt1kskPkry21udVYUmkbii2mprzGh/hM7XWBm/ujHf1wyM5vRF8TshW0guQMFwG8dkpaCrs1muwTCrMk=
+X-Received: by 2002:a17:907:1689:: with SMTP id hc9mr29466609ejc.445.1638614833775;
+ Sat, 04 Dec 2021 02:47:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
+In-Reply-To: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sat, 4 Dec 2021 07:47:02 -0300
+Message-ID: <CAOMZO5B15PqGZcGi6zneiqAmaA7y9-tELpeV7xRFYJm0SPLYqA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/13] Add initial support for the i.MXRTxxxx SoC
+ family starting from i.IMXRT1050 SoC.
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Hi Jesse,
 
-Add i.MXRT1050 defconfig, that will be the basis for the i.MXRT family.
+On Sat, Dec 4, 2021 at 3:10 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1->V2:
-* Nothing done
-V2->V3:
-* Nothing done
-V3->V4:
-* Remove unnecessary CONFIGs
-* Add futex suport after "ARM: 9122/1: select HAVE_FUTEX_CMPXCHG"
-9d417cbe36eee7afdd85c2e871685f8dab7c2dba
----
- arch/arm/configs/imxrt_defconfig | 35 ++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 arch/arm/configs/imxrt_defconfig
+> Giulio Benetti (5):
+>   ARM: imx: add initial support for i.MXRT10xx family
+>   pinctrl: freescale: Add i.MXRT1050 pinctrl driver support
+>   dt-bindings: imx: Add clock binding for i.MXRT1050
+>   ARM: dts: imx: add i.MXRT1050-EVK support
+>   ARM: imxrt1050_defconfig: add i.MXRT1050 defconfig
+>
+> Jesse Taube (8):
+>   dt-bindings: pinctrl: add i.MXRT1050 pinctrl binding doc
+>   ARM: dts: imxrt1050-pinfunc: Add pinctrl binding header
+>   dt-bindings: clock: imx: Add documentation for i.MXRT clock
+>   clk: imx: Add initial support for i.MXRT clock driver
+>   dt-bindings: serial: fsl-lpuart: add i.MXRT compatible
+>   tty: serial: fsl_lpuart: add i.MXRT support
+>   dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT compatible string
+>   mmc: sdhci-esdhc-imx: Add sdhc support for i.MXRT series
 
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-new file mode 100644
-index 000000000000..52dba3762996
---- /dev/null
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -0,0 +1,35 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_SCHED_AUTOGROUP=y
-+# CONFIG_MMU is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_SOC_IMXRT=y
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0x80000000
-+CONFIG_DRAM_SIZE=0x02000000
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_IMX_WEIM=y
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_FSL_LPUART=y
-+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_GPIO_MXC=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_DMADEVICES=y
-+CONFIG_FSL_EDMA=y
-+CONFIG_CLK_IMXRT1050=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_UTF8=y
-+CONFIG_EXFAT_FS=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_UTF8=y
--- 
-2.34.0
-
+The emmc and pinctrl patches have already been applied and they are available
+in linux-next. No need to resend them.
