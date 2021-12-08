@@ -2,90 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1086746C753
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Dec 2021 23:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEE146CC36
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Dec 2021 05:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbhLGWVu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Dec 2021 17:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S244209AbhLHERU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Dec 2021 23:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbhLGWVt (ORCPT
+        with ESMTP id S244202AbhLHERS (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:21:49 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4440AC061574;
-        Tue,  7 Dec 2021 14:18:19 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id j11so346495pgs.2;
-        Tue, 07 Dec 2021 14:18:19 -0800 (PST)
+        Tue, 7 Dec 2021 23:17:18 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78786C0617A2
+        for <linux-serial@vger.kernel.org>; Tue,  7 Dec 2021 20:13:47 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id g18so1348738pfk.5
+        for <linux-serial@vger.kernel.org>; Tue, 07 Dec 2021 20:13:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OLslRKYs3DoB0QbfX4PRYRIKyCinBx1NgHO/uw8ZVw=;
-        b=dymXRFQ6A00bVEIuvR7GYzuvZs4/X2covxGGnHpmuyqb5eJ/pj7rJlfj3lv3O5xhBJ
-         VfZmrdTtuUIpdOJbhquxnVVGLUqE5IwJtfpwUz3ybZRx5slp+FRFfGuwX4dvj2zqVxpA
-         zWGBRYC4z50ZcCpKYEE6cWvvT9uadqwuJ35/fKjiPlu480rKNg6yuZLXl0JANr1s8yVH
-         zm2eIR1BldsFMYqECF7Ayo/uhJec+6KbcYMsQmaLFhNwzaC10ChWXYQr6rAM22fCMdXT
-         kqBhx2qRUx8wkQtwwU4jzHA44a4ngFyroMFjfq/6mh3pdCQhi67Ok3U4iyViKWX96ahY
-         eD3Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
+         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
+         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
+         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
+         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
+         KdcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OLslRKYs3DoB0QbfX4PRYRIKyCinBx1NgHO/uw8ZVw=;
-        b=W2Oj18b/dijhUHd0TwcfPi0ysYezcaQTdQ7cibmQhpkywsPV5/vY0V8QQvdIgodetF
-         YtHx4NyetJg+EBk0DUbRP23eItoWjM2y1kMVLwlbq8aX5GcbiM8SqIU/gsuDDYt1ZUE7
-         TMleQqiVXMybzhyt4AevjDa9wFA5blK8aT3M0w+kkJ5/L7E2u/QJ5IKquH7dy/kuQyJp
-         0xWCq5Emn5no+pffltaR2zzqUopWAeWVetlou8mBDwCw6FUbMKGEeDR47q71wQH1aQxx
-         Y3OJcl9AzqjMvxTX3OJ+C79wbl/fOmId+h+jB02qrFm4OOMFshvu6ltZa7JjdNaS9qhG
-         XVkg==
-X-Gm-Message-State: AOAM533554Ux3FEf0BwfWIIlX5QwVWzxf/yqIn3JCb8F1YxnX42k3dk4
-        Aqtz1wM9haRm2OhZBrOLO7M=
-X-Google-Smtp-Source: ABdhPJy8pEh7udQe8vFhOWAhI8Wo0P7fZi40t67T4notOuuNlQ6quLbxfQZB7FouKWrILssSlMQlwQ==
-X-Received: by 2002:a05:6a00:b83:b0:49f:b555:1183 with SMTP id g3-20020a056a000b8300b0049fb5551183mr2042539pfj.32.1638915498838;
-        Tue, 07 Dec 2021 14:18:18 -0800 (PST)
-Received: from localhost.localdomain ([103.85.9.78])
-        by smtp.gmail.com with ESMTPSA id y130sm697832pfg.202.2021.12.07.14.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 14:18:17 -0800 (PST)
-From:   Vihas Mak <makvihas@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vihas Mak <makvihas@gmail.com>
-Subject: [PATCH] tty: serial: return appropriate error on failure
-Date:   Wed,  8 Dec 2021 03:47:41 +0530
-Message-Id: <20211207221741.50422-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=Rt0RItTfgsIVvPOMh/kZRmuq7GQiscighddXA3EbTtpbA7KXPYzAoslACvns0RnpYI
+         Q+nXvZe+Cd3/SljfLSYCohoFj6dadrLJeRKiQPpvjyxIaNXg+DqyN3sve+CrBxeThUVn
+         DiMnygP2g1/884VkS62uJbRIL7xsHHCsTIxa3R3QEF5MfOKARIK/8xLr2XId3cFSO5vz
+         SQjMIRj6XpVa3YGGQnumC8Li9nnES408EcgOFXtpjY/LlP9/uZDp6osOfEHAysp8x7DX
+         rTB9PciIzL3cVQ83se8pJJ20DTphLpnEXSAITT3pE5rNIxPAclutvNgx7vGc5doSVJdr
+         oWmQ==
+X-Gm-Message-State: AOAM530IUNHgwRqF5aa6ZYV7BQ4ycsCqyAZIaBKjf7tza7mp2eiy0L4Y
+        w/KrkQgH4POREjfbooLCVYTcotCiFYW/H7Fg4vubv9P4zjs0Zw==
+X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
+X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
+ Tue, 07 Dec 2021 20:13:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
+ -0800 (PST)
+Reply-To: dj0015639@gmail.com
+From:   David Jackson <enkenpaul@gmail.com>
+Date:   Wed, 8 Dec 2021 05:13:35 +0100
+Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
+Subject: FEDERAL BUREAU OF INVESTIGATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-when a user with CAP_SYS_ADMIN disabled calls ioctl (TIOCSSERIAL),
-uart_set_info() returns 0 instead of -EPERM and the user remains unware
-about what went wrong. Fix this.
+Our Ref: RTB /SNT/STB
+To: Beneficiary
 
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215205
+This is FBI special agents, David Jackson. I was delegated along side
+others by the United Nations to investigate scammers who has been in
+the business of swindling foreigners especially those that has one
+form of transaction/contracts and another. Please be informed that in
+the course of our investigation, we detected that your name and
+details in our Scammed Monitoring Network. We also found out that you
+were scammed of a huge sum of money by scammers via Western union and
+MoneyGram. Be informed here that in a bid to alleviate the suffering
+of scammed victims, the United Nations initiated this compensation
+program and therefore, you are entitled to the sum of Five Million Two
+Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
+victim.
 
-Signed-off-by: Vihas Mak <makvihas@gmail.com>
----
- drivers/tty/serial/serial_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note that the said fund will be transfer to you via the Citibank being
+the paying bank mandated by the United Nations officials.
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 61e3dd022..c204bdecc 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -960,7 +960,7 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
- 		uport->fifosize = new_info->xmit_fifo_size;
- 
-  check_and_exit:
--	retval = 0;
-+	retval = retval < 0 ? retval : 0;
- 	if (uport->type == PORT_UNKNOWN)
- 		goto exit;
- 	if (tty_port_initialized(port)) {
--- 
-2.30.2
+However, we have to inform you that we have been able to arrest some
+of the swindlers who has been in this illicit business and will all be
+prosecuted accordingly. Be informed as well that we have limited time
+to stay back here, so we will advice that you urgently respond to this
+message ASAP. And do not inform any of the people that collected money
+from you before now about this new development to avoid jeopardizing
+our investigation. All you need to do is to follow our instruction and
+receive your compensation accordingly as directed by the United
+Nations.
 
+We urgently wait to receive your response.
+
+Regards,
+DAVID JACKSON
+FEDERAL BUREAU OF INVESTIGATION
+INVESTIGATION ON ALL ONLINE WIRE TRANSFER
