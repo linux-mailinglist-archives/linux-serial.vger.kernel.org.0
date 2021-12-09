@@ -2,91 +2,43 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB56E46E700
-	for <lists+linux-serial@lfdr.de>; Thu,  9 Dec 2021 11:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD2646F823
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Dec 2021 01:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbhLIKxO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 9 Dec 2021 05:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbhLIKxO (ORCPT
+        id S234946AbhLJAq5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 9 Dec 2021 19:46:57 -0500
+Received: from bizcloud-cazapetro.com ([143.198.122.116]:40396 "EHLO
+        bizcloud-cazapetro.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234930AbhLJAq4 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 9 Dec 2021 05:53:14 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C03C061746;
-        Thu,  9 Dec 2021 02:49:41 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id x15so18305115edv.1;
-        Thu, 09 Dec 2021 02:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rn5yiHEVIcPf8apFH8WOG/o386JPX61QJAV5CIBGr5o=;
-        b=SceT5lGxXiYZEVyNTiTvxpynV6odUf/rM3ek99juOQusZAe0MnwqtotI/GjRMXc8WC
-         t/K94bZZr9Kf2T1NkpDkI0mq+u9cAGAQ0skR7sY0DWu6JMTDxFaUFRx3YgyRNSiWSB1t
-         D0Fg+JS354vAwJjvr5WPxEDduxeOxsA8vgUosDeahAhRmWEvfLywmn4Wonf2ic8RZ865
-         0HTBy6meUvnwB4r2ZJHAcaqhvpezaGhk1UGVBFOyPGcERDplhk+2Mllr6DoqYKN79H+1
-         yWFi3JLEA9RRXUDwEu3ZmaDsIlToImzSzYtXp+iQ1/W6XZOoIVnaP/PP7SdK8ywoYpxG
-         Vzew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rn5yiHEVIcPf8apFH8WOG/o386JPX61QJAV5CIBGr5o=;
-        b=iG0e0WOqOK/44Ga/TGHSYCTlctNeuwTZ6gwDk4JhW/EHaEOe1emHsmkQssgPTYScvm
-         AZbmedcP2E+tjxODPDMmKofed/f21JhJDxYT8hYZc9UrP3L4QALbRiDlAs0HbQBAz5oQ
-         xax/XxfJdxsVK2uQP5kMhO4CxulDMj8Nrbf0VIqofPACyRBes8R62GpsUFtccbbmmcTP
-         BBktRUHQLEyu/jAkYOJdqwsu72Q2kgEuBctMTBVWh+OuWdVQjalOl/X7xyKB/EeqUlLH
-         JMBREzB4oXpGCw+umXfJolE6Uw6FOWgw1yyESZ8Ypl8qUDjD8ESyqzV5CPGd6W5Zqxdw
-         66Kw==
-X-Gm-Message-State: AOAM530URH+2F8xe611q/muhM7Ke5BpNtz/ITONWY/v8mXKcM4X2in1H
-        gxBaAEugXd1sqhWNB0ciu9I4vFiQMdUzshoF86Q=
-X-Google-Smtp-Source: ABdhPJxlRS6j6rkvUOvm4x+7k8ZlYSH6E7d9IqpkhN2VYrbnf2Ir6tr8DLFWXU0HKJiIwY9yqWcQeXDz5qcn4YRzYaQ=
-X-Received: by 2002:a17:906:ecac:: with SMTP id qh12mr14231892ejb.377.1639046979775;
- Thu, 09 Dec 2021 02:49:39 -0800 (PST)
+        Thu, 9 Dec 2021 19:46:56 -0500
+X-Greylist: delayed 3868 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 19:46:56 EST
+Received: from ip224.ip-5-39-25.eu (bizcloud-cazapetro.com [IPv6:::1])
+        by bizcloud-cazapetro.com (Postfix) with ESMTP id 696CB2620DC
+        for <linux-serial@vger.kernel.org>; Thu,  9 Dec 2021 23:20:05 +0000 (UTC)
+Reply-To: luisfernandezconsultant@gmail.com
+From:   Luis Fernandez <luisfernandezfirm@consultant.com>
+To:     linux-serial@vger.kernel.org
+Subject: Re:Urgent Response 
+Date:   9 Dec 2021 15:20:05 -0800
+Message-ID: <20211209152005.63BA47F2A4D219AB@consultant.com>
 MIME-Version: 1.0
-References: <20211124073419.181799-1-marcan@marcan.st> <20211124074625.182815-11-marcan@marcan.st>
- <78ce61a9-b345-437a-df02-49951eb3f31e@canonical.com>
-In-Reply-To: <78ce61a9-b345-437a-df02-49951eb3f31e@canonical.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 9 Dec 2021 12:48:06 +0200
-Message-ID: <CAHp75VetdyXbeQ7hie2Oae6J0qn+fMmz+YN2zYXK+X0vppapEQ@mail.gmail.com>
-Subject: Re: [PATCH v3 10/11] tty: serial: samsung_tty: Support runtime PM
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Hector Martin <marcan@marcan.st>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 4:39 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
-> On 24/11/2021 08:46, Hector Martin wrote:
-> > This allows idle UART devices to be suspended using the standard
-> > runtime-PM framework. The logic is modeled after stm32-usart.
+Good Day,
 
-Guys, have you seen this activity:
-https://lore.kernel.org/linux-serial/YbGyNW2EQlA%2F+VIg@atomide.com/T/#t?
+My name is Luis Fernandez, I am contacting you because we have 
+investors that have the capacity to invest in any massive project 
+in your country or invest in your existing project that requires 
+funding.
+Kindly get back to me for more details.
 
-The idea eventually is to bring the serial core to do this for us. Can
-you test that series and see if it has a use in your case?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Regards
+
+Luis Fernandez
