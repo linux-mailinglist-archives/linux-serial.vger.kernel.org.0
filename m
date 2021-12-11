@@ -2,90 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256AB470C80
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Dec 2021 22:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36727471017
+	for <lists+linux-serial@lfdr.de>; Sat, 11 Dec 2021 03:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344269AbhLJV2e (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Dec 2021 16:28:34 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:46043 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237368AbhLJV2d (ORCPT
+        id S1345627AbhLKCEP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Dec 2021 21:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345594AbhLKCEO (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:28:33 -0500
-Received: by mail-ot1-f41.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso10878251otf.12;
-        Fri, 10 Dec 2021 13:24:58 -0800 (PST)
+        Fri, 10 Dec 2021 21:04:14 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35389C061A32
+        for <linux-serial@vger.kernel.org>; Fri, 10 Dec 2021 18:00:38 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id bi37so21159416lfb.5
+        for <linux-serial@vger.kernel.org>; Fri, 10 Dec 2021 18:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
+        b=JCsw4jOipMM2NQNMZXp6QizwJUHIwDzeO2Y8iQAOjp+Jha/m6XSK1Mp0rSo5X4xj5/
+         ra62wA9M29Kv3v26XdhtYfHl78HWfdHAzWZoawQBmD/f5HctnV3IDOhopHsfUEVKdc3U
+         zjgTs8kaP1GhoPoSSRRMs2H48YL4whQ07Q9gL+TKLR3Ej/+NXmB6gktiiQtCGROuxCip
+         azRcgSpJPEVAmzBSIGs8uTeu5gSEROUAGTlDnvAO293BRFtxBT6pH2u6lqSxSWYO1mdi
+         OgUvbMvACUi3QhA01V+Fa5ongtyngGSTsG3iTMSWnQqmHYynLlOpPl52O41EVB0FfiQa
+         lw2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8MM7Mqy4LVhqQo1WtAnEZHBAScofrOdZmMSPjQZ2muY=;
-        b=bAIXQgEUZfBMhYHPkSr7Q+ptZx62u/N9xYlsNjmMTxN4aYBx5bJyStVMA9wp3YmJ3H
-         y7+sZGVmw5DuhsCxvomRrFdncZvN/W5Uz1rwMU4UhNhyE51jPtU/tHIHPynIIJtOaeUq
-         omsQ59dMc97gf4Mf00E4VeDQ5gejHU4EBo1sYjmUqyjkAFHzxq3kEghCxLMs55Vzn0ys
-         3RO8PlBNSg0vMQSgGliy2ynLII1IMfzmbYMoSH7r9GgfpK1HsnhTHwLUq9cJpXRO4wUP
-         3vzgsqZHEfqAaCfXrqK7rfhWevrK2zaNjBlVXaG2nHVaaloICaQmnOoz18nYiWAG9qM3
-         BBNg==
-X-Gm-Message-State: AOAM532DYrdeo92ahRVbizoPb1WBJ8ckYvDsO9uxzgu4tFiMN7ZxzkiD
-        6AGcL+TC9hO9rN7po6RpLw==
-X-Google-Smtp-Source: ABdhPJyTn5sR0JkqUstumnB93RnMCqtBd+uULYV15dK0CVTcCdcT8gfqCXalGgl6VqPsJd0DE5LuYQ==
-X-Received: by 2002:a05:6830:1216:: with SMTP id r22mr13577934otp.10.1639171496337;
-        Fri, 10 Dec 2021 13:24:56 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r25sm722169ote.73.2021.12.10.13.24.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 13:24:55 -0800 (PST)
-Received: (nullmailer pid 1925851 invoked by uid 1000);
-        Fri, 10 Dec 2021 21:24:54 -0000
-Date:   Fri, 10 Dec 2021 15:24:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     olof@lixom.net, s.hauer@pengutronix.de, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, ulf.hansson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
-        adrian.hunter@intel.com, linux-kernel@vger.kernel.org,
-        jirislaby@kernel.org, stefan@agner.ch,
-        linux-serial@vger.kernel.org, arnd@arndb.de,
-        giulio.benetti@benettiengineering.com, gregkh@linuxfoundation.org,
-        linux-mmc@vger.kernel.org, Mr.Bossman075@gmail.com,
-        festevam@gmail.com, shawnguo@kernel.org, kernel@pengutronix.de,
-        abel.vesa@nxp.com, linux@armlinux.org.uk, aisheng.dong@nxp.com,
-        devicetree@vger.kernel.org, soc@kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v4 05/13] dt-bindings: imx: Add clock binding for
- i.MXRT1050
-Message-ID: <YbPFpt/EXjSBVBib@robh.at.kernel.org>
-References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
- <20211204061042.1248028-6-Mr.Bossman075@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
+        b=rQTXbmp+Njsu4eGF8ion6ISWPbqOtJ60+1TjQRoa+vfLWctvne+8TN1H25ARROz/4Q
+         8YUjRr8bfhj9t1Ah9CJ6PD5vfhbEN7aiMA5pyA88ZNqPPgLnL4XwdBoDLrUMF4KzsFiK
+         Z7ARldT/i7lTt4jUtsQMcx8/yjCblpKtToh2n3rp5dMQbbOpve3+t8dCXiH3MarHK+cN
+         y1FU0r98E9YeDuFTJ7V7BgE6AkljfNsYlxsGxEA9dHMNLm1dljrD9nEbkVoRe9JTXOpI
+         nsrSEGRz8EWHEh/RKtWFfKMFBtREumTa2ayyszl0ACM25JPIkcAuiSbQ+PgAK/xXlPDz
+         368A==
+X-Gm-Message-State: AOAM531XJB4A+ztqQkVpj9xiu5f6HC2i3Jxs6b7AxiunQcTiYRLCG+D2
+        U4YowG0+0Ie4K0+SEXFbSSCgno8bdOAVv0W0pVA=
+X-Google-Smtp-Source: ABdhPJyhXjcWPQSJn2BIAWx1wPs1aT43EsGt8LpVsp+ZiGbG+YkA+4EsSistpTPGdfJjrWjDwUlXhweFa5fipF4Svk8=
+X-Received: by 2002:a05:6512:6cb:: with SMTP id u11mr15747983lff.626.1639188035818;
+ Fri, 10 Dec 2021 18:00:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204061042.1248028-6-Mr.Bossman075@gmail.com>
+Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:00:34
+ -0800 (PST)
+Reply-To: internationallmonetary695@gmail.com
+From:   International Monetary fund <abubakarsadiq1297@gmail.com>
+Date:   Fri, 10 Dec 2021 18:00:34 -0800
+Message-ID: <CAHXNoSg31e+rkvOac1aWFWRjy_1TohUzLuRX4cOSGPtScWYE6w@mail.gmail.com>
+Subject: Dear Beneficiary,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, 04 Dec 2021 01:10:34 -0500, Jesse Taube wrote:
-> From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> Add the clock binding doc for i.MXRT1050.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> [Giulio: added all clocks up to IMXRT1050_CLK_USBOH3]
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> [Jesse: added clocks from IMXRT1050_CLK_IPG_PDOF to
-> IMXRT1050_CLK_DMA_MUX and moved IMXRT1050_CLK_END on]
-> ---
-> V1->V2:
-> * Nothing done
-> V2->V3:
-> * Added GPT binding
-> V3->V4:
-> * Change License to MIT or GPL-2
-> ---
->  include/dt-bindings/clock/imxrt1050-clock.h | 73 +++++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 include/dt-bindings/clock/imxrt1050-clock.h
-> 
+-- 
+ I.M.F Head Office
+#1900 Pennsylvania Ave NW,
+Washington, DC 20431
+INTERNATIONAL MONETARY FUND.
+REF:-XVGNN82010
+internationallmonetary695@gmail.com
+Telephone : +12062785473
 
-Acked-by: Rob Herring <robh@kernel.org>
+This message is from International Monetary fund (IMF) I am Mr Bo Li
+deputy to  Kristalina Georgieva the current president of International
+  Monetary fund (IMF) We are aware of the stress you have been passing
+through and how you have lost your money trying to claim your fund ,
+you have to worry no more for the international monetary fund is fully
+ in-charge of your fund now, contact  me for more info on how you will
+receive your fund( internationallmonetary695@gmail.com) or call me
+on-Telephone : +12062785473 for more info.
+
+Regards,
+Mr Bo Li
