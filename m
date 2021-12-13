@@ -2,61 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7221471B5D
-	for <lists+linux-serial@lfdr.de>; Sun, 12 Dec 2021 16:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D572472027
+	for <lists+linux-serial@lfdr.de>; Mon, 13 Dec 2021 05:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbhLLPjI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 12 Dec 2021 10:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S231775AbhLME7S (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 12 Dec 2021 23:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbhLLPjH (ORCPT
+        with ESMTP id S229990AbhLME7S (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 12 Dec 2021 10:39:07 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92F6C0613F8
-        for <linux-serial@vger.kernel.org>; Sun, 12 Dec 2021 07:39:06 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id v19so9514160plo.7
-        for <linux-serial@vger.kernel.org>; Sun, 12 Dec 2021 07:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
-        b=nW34jVsv56Ss5jLoooIeVciA93Clw83n+wCeADNfCEpcC+rdzdpKO/LYgFQaULd1OH
-         U8TXUuQSIh4yHtn8e56U2OR9tvVaBrIbZqVXXTO9qyu2ymRftWSklBAq1tsUV/ZwQyli
-         OQNIJmsnRTWXVSmhooYoNI3mrca0uQe4Qvw2po2hRHk49IphRRBl7/cc79IWCwq/knSD
-         jAnxigACSUDasTs+EUStoKgNQ9kt9Efz64Sltjg2RvPSjES1dEb3Rnabml57kHg8BYan
-         0xGZn+cZ+L22txoY5kcj47AS69tJiBQ/eAoB9E7bJT52uVrJV5T2gB+PKNcvh9Cn0hK0
-         5YnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
-        b=TBLNstjYAwyUCkACqzgOejzso8NDpjnr40vJf89IV+JYoResgfALkDWFqih+CWIUG+
-         I2Jj+rbp9F9bq5RIdS51KNQAf0iGDk0NFpV4mCuC6HYGBO71KN45PrIuk4evScxG7Z94
-         IotdnYGtfuJHnce+6EALwy8f3Ygy+M9uEjFAArfa1zZ9K51rUa5e3fmOLewoN9vRrK9k
-         86bp1c6NhGPUgMFoZc8/cXJCG8NgzrR7Uii0e1aigFah7YBe0o+GPoOYOKuGd0TNzJJX
-         rxIeWwKyl8/Kc9VeBIfeKdRp3n42Z7a2U+C92VtIR5gnMZUjJpANNKPbg2oGM/rbYE34
-         J4Sg==
-X-Gm-Message-State: AOAM531OrpdD7K0Ub+6eM4xkgfmk1Xc6+TVK16+RvOghAsttbA7vER7Z
-        a+2k4nzi1GKYgfQwygOE5mmbSFaHsHBs8Yzl4hY=
-X-Google-Smtp-Source: ABdhPJxsBJYooaMgLjqzimk0hrl//BEpZRFhZTgaDxYyJHLKhaJGvTFjIF0TvE7MIczQ9k5dw4plILBX5bRdp3Gs0bY=
-X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr38626959pjb.7.1639323545943;
- Sun, 12 Dec 2021 07:39:05 -0800 (PST)
+        Sun, 12 Dec 2021 23:59:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B5CC06173F;
+        Sun, 12 Dec 2021 20:59:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15254B80D7C;
+        Mon, 13 Dec 2021 04:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7897CC00446;
+        Mon, 13 Dec 2021 04:59:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639371554;
+        bh=uqDkjyi1DAG2WVFI7Iu0TC2w+GaDC3EmWkInyLpcGtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mVDRCny15VHJlA+o7pFyvRO+fGTVY2J3x91BIqcOwy4cryBFjZQyaHtyPhgW6KO28
+         HCKopx8WXOVlRdPjhEOrjN2VBJ1zFB8NRnGb5EUdfofWdRrki7ZlorlrhKm0n81/la
+         3mN9IpyIgfzc1/r0ZuBokeJT/zwaGH17foE/YzWMrXovh2MCpsiNQwWNaKLY5YRyFy
+         blW8ncTTX15Q1zUIMmgSzOFg2mWmU6KWhkXrs65ZUlMvc/lyG3K8k5h5nInsBLDfjW
+         SlpMqgTcrrDN8iKQSo2q7ad2+NbXTwlELLLoqff2K0DHg43fpfYsWOz0ibzpD4QupX
+         V/h6/iJ4bdVAQ==
+Date:   Mon, 13 Dec 2021 10:29:10 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Scott Branden <sbranden@broadcom.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        alsa-devel@alsa-project.org, bcm-kernel-feedback-list@broadcom.com,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 00/11] dmaengine: kill off dma_slave_config->slave_id
+Message-ID: <YbbTHo+Wfpl30ZUH@matsya>
+References: <20211122222203.4103644-1-arnd@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:90b:4c51:0:0:0:0 with HTTP; Sun, 12 Dec 2021 07:39:05
- -0800 (PST)
-Reply-To: mrsisabelladz@gmail.com
-From:   Mrs Isabella <zaidn8225@gmail.com>
-Date:   Sun, 12 Dec 2021 16:39:05 +0100
-Message-ID: <CAMU20GMeochfDfA+tFFMDmQu2qHHMSRkoPHpA3GKtw8UP0dvgw@mail.gmail.com>
-Subject: From Mrs. Isabella Dzsesszika
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211122222203.4103644-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-GOOD MORNING DEAR. MY NAME IS Isabella Dzsesszika. I AM CONTACTING YOU
-FOR IMPORTANT ISSUE I WILL LIKE TO DISCUS WITH YOU. PLEASE GET BACK TO
-ME IF YOU READ THIS MAIL.  YOURS, Isabella Dzsesszika
+On 22-11-21, 23:21, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> I recently came across some new uses of the 'slave_id' field that
+> I had (almost) removed a few years ago. There are no legitimate
+> uses of this field in the kernel, only a few stale references and
+> two drivers that abuse the field as a side-channel between the
+> dmaengine driver and its client.
+> 
+> Let's change the xilinx and qualcomm drivers to use the documented
+> side-channel (peripheral_data) instead, and remove the remnants of
+> it to prevent new users from coming in.
+> 
+> I think I got all the necessary Acks on v1 already, so if there are
+> no further concerns, please merge this through the dmaengine tree
+> for v5.17, or pull from
+
+Arnd, Thanks for the cleanup. I have applied and folder the fix you sent
+in this
+
+-- 
+~Vinod
