@@ -2,90 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F51C477DA2
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Dec 2021 21:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BFD477EA4
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Dec 2021 22:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241435AbhLPUbr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Dec 2021 15:31:47 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:46826 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbhLPUbr (ORCPT
+        id S236291AbhLPVTE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Dec 2021 16:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234877AbhLPVTD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:31:47 -0500
-Received: by mail-ot1-f44.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so282985oto.13;
-        Thu, 16 Dec 2021 12:31:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/WZk6rTknr9ohPbMfgyEB9lTmn2kskX3wnXdJpxoO54=;
-        b=xxDciDiEjcMe8H0Qqc3ZRcX3iRQvIYBqjSdJMgEJXfQKSK9Bh15tLHWEDSgl/HCnsO
-         I1YfQYTtKZxxq/Inq3LEr8QSY9tZI4GqlxbeEDXF+VNm0j2cVWHYh2kA/Jgnshe+jqho
-         zEe2J6zp2QV546JTofpV9vsXkcnqYVX5z4CGMG+f8H/S7er8v0wstXxBoHLMhEYJzKLf
-         f83mxEOny7CDjhjndETGnMpX9T/ftj/tyqIuI+ipbOZBykUytfAEYu6eLlc2KuMq2Yfh
-         TgXdZY8BSpENfFYD3eznYnMejvEPiW9EXQmFagXkNBmklyB1HHB3sOC4eh25+ooME83O
-         M9ew==
-X-Gm-Message-State: AOAM5334PaleF3liw6iTMRm4n0N8NlXHYz7Q/T7d40BwmTQhZr1l4Non
-        Etmnh99UQyBfGXM7RnlYwg==
-X-Google-Smtp-Source: ABdhPJxolUuSHrXvVWwD1DwilZGwq7k1Tjchu9lac4l0lol5CTbTY9vjTqv4KL+RF7m1rNgxNg36Gg==
-X-Received: by 2002:a05:6830:1617:: with SMTP id g23mr13541257otr.117.1639686706300;
-        Thu, 16 Dec 2021 12:31:46 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d12sm1196566otq.67.2021.12.16.12.31.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 12:31:45 -0800 (PST)
-Received: (nullmailer pid 705688 invoked by uid 1000);
-        Thu, 16 Dec 2021 20:31:44 -0000
-Date:   Thu, 16 Dec 2021 14:31:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     nobuhiro1.iwamatsu@toshiba.co.jp, abel.vesa@nxp.com,
-        ulf.hansson@linaro.org, stefan@agner.ch, sboyd@kernel.org,
-        soc@kernel.org, linux-serial@vger.kernel.org,
-        adrian.hunter@intel.com, aisheng.dong@nxp.com,
-        linux@armlinux.org.uk, shawnguo@kernel.org,
-        giulio.benetti@benettiengineering.com,
-        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
-        gregkh@linuxfoundation.org, kernel@pengutronix.de,
-        robh+dt@kernel.org, mturquette@baylibre.com,
-        linux-mmc@vger.kernel.org, Mr.Bossman075@gmail.com, olof@lixom.net,
-        linus.walleij@linaro.org, jirislaby@kernel.org,
-        devicetree@vger.kernel.org, festevam@gmail.com,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        arnd@arndb.de
-Subject: Re: [PATCH v5 6/9] dt-bindings: serial: fsl-lpuart: add i.MXRT1050
- compatible
-Message-ID: <YbuiMIfmBGIc/vao@robh.at.kernel.org>
-References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
- <20211215220538.4180616-7-Mr.Bossman075@gmail.com>
+        Thu, 16 Dec 2021 16:19:03 -0500
+X-Greylist: delayed 2558 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Dec 2021 13:19:03 PST
+Received: from wp441.webpack.hosteurope.de (wp441.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:85d2::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BCAC061574;
+        Thu, 16 Dec 2021 13:19:03 -0800 (PST)
+Received: from [2a03:7846:b79f:101:21c:c4ff:fe1f:fd93] (helo=valdese.nms.ulrich-teichert.org); authenticated
+        by wp441.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1mxxUE-0005iT-R9; Thu, 16 Dec 2021 21:36:22 +0100
+Received: from valdese.nms.ulrich-teichert.org (localhost [127.0.0.1])
+        by valdese.nms.ulrich-teichert.org (8.15.2/8.15.2/Debian-8+deb9u1) with ESMTPS id 1BGKaM5K003166
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 21:36:22 +0100
+Received: (from ut@localhost)
+        by valdese.nms.ulrich-teichert.org (8.15.2/8.15.2/Submit) id 1BGKaKGI003165;
+        Thu, 16 Dec 2021 21:36:20 +0100
+Message-Id: <202112162036.1BGKaKGI003165@valdese.nms.ulrich-teichert.org>
+Subject: Re: [PATCH] serial: 8250: Move alpha-specific quirk out of the core
+To:     lukas@wunner.de (Lukas Wunner)
+Date:   Thu, 16 Dec 2021 21:36:20 +0100 (CET)
+Cc:     gregkh@linuxfoundation.org (Greg Kroah-Hartman),
+        jirislaby@kernel.org (Jiri Slaby), linux-serial@vger.kernel.org,
+        rmk+kernel@armlinux.org.uk (Russell King),
+        krypton@ulrich-teichert.org (Ulrich Teichert),
+        torvalds@linux-foundation.org (Linus Torvalds),
+        rth@twiddle.net (Richard Henderson),
+        ink@jurassic.park.msu.ru (Ivan Kokshaysky),
+        mattst88@gmail.com (Matt Turner), linux-alpha@vger.kernel.org,
+        LinoSanfilippo@gmx.de (Lino Sanfilippo),
+        p.rosenberger@kunbus.com (Philipp Rosenberger)
+In-Reply-To: <af967f273724aff4cff3c49470110a48f790794e.1639676574.git.lukas@wunner.de>
+From:   Ulrich Teichert <krypton@ulrich-teichert.org>
+X-Mailer: ELM [version 2.5 PL8]
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215220538.4180616-7-Mr.Bossman075@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;ut@ulrich-teichert.org;1639689543;e2e54a13;
+X-HE-SMSGID: 1mxxUE-0005iT-R9
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 15 Dec 2021 17:05:35 -0500, Jesse Taube wrote:
-> From: Jesse Taube <mr.bossman075@gmail.com>
-> 
-> Add i.MXRT1050 documentation for compatible string.
-> 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
-> V1->V2:
-> * Nothing done
-> V2->V3:
-> * Rename imxrt to imxrt1050
-> V3->V4:
-> * Nothing done
-> V4->V5:
-> * Change commit description to just 1050
-> ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hi Lukas,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> struct uart_8250_port contains mcr_mask and mcr_force members whose
+> sole purpose is to work around an alpha-specific quirk.  This code
+> doesn't belong in the core where it is executed by everyone else,
+> so move it to a proper ->set_mctrl callback which is used on alpha only.
+> 
+> The alpha-specific quirk was introduced in January 1995:
+> https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/diff/drivers/char/serial.c?h=1.1.83
+> 
+> The members in struct uart_8250_port were added in 2002:
+> https://git.kernel.org/history/history/c/4524aad27854
+> 
+> The quirk applies to non-PCI alphas and arch/alpha/Kconfig specifies
+> "select FORCE_PCI if !ALPHA_JENSEN".  So apparently the only affected
+> machine is the EISA-based Jensen that Linus was working on back then:
+> https://lore.kernel.org/all/CAHk-=wj1JWZ3sCrGz16nxEj7=0O+srMg6Ah3iPTDXSPKEws_SA@mail.gmail.com/
+> 
+> Up until now the quirk is not applied unless CONFIG_PCI is disabled.
+> If users forget to do that, the serial ports aren't usable on Jensen
+> and the machine may not boot in the first place.  Avoid by confining
+> the quirk to CONFIG_ALPHA_JENSEN instead.
+
+Wouldn't that mean that you can't use a generic Alpha kernel on the Jensen
+anymore? CONFIG_ALPHA_JENSEN is only set if you specifically select the
+Jensen as target, not when you build a generic kernel. That would be a step
+back in my opinion, as the Debian generic kernel from debian-ports did
+as least boot up on real hardware and the serial console worked just fine
+[granted, the EISA cards were not detected, even after support for it
+got enabled, but that's another case of worms].
+
+Unfortunately I still can't boot my Jensen with a self-build kernel (that
+it's the only Alpha without netboot makes it only harder), so
+I can't even test your patch, but my plan is to get it booting over
+my xmas vacation :-)
+
+CU,
+Uli
+-- 
+Dipl. Inf. Ulrich Teichert|e-mail: Ulrich.Teichert@gmx.de | Listening to:
+Stormweg 24               |Eat Lipstick: Dirty Little Secret, The Baboon Show:
+24539 Neumuenster, Germany|Work Work Work, The Bellrays: Bad Reaction
