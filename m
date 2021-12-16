@@ -2,144 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34429477431
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Dec 2021 15:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1EA47743A
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Dec 2021 15:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbhLPOP2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Dec 2021 09:15:28 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:49698 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229612AbhLPOP2 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:15:28 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAnvqbgSbthnnSfAw--.52579S2;
-        Thu, 16 Dec 2021 22:14:56 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] serial: pch_uart: potential dereference of null pointer
-Date:   Thu, 16 Dec 2021 22:14:54 +0800
-Message-Id: <20211216141454.423333-1-jiasheng@iscas.ac.cn>
+        id S237835AbhLPORn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Dec 2021 09:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237844AbhLPORl (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:17:41 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CF2C061759
+        for <linux-serial@vger.kernel.org>; Thu, 16 Dec 2021 06:17:40 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d13f:527c:5504:a743])
+        by albert.telenet-ops.be with bizsmtp
+        id X2He2600V250X30062HeVJ; Thu, 16 Dec 2021 15:17:39 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mxrZi-005QZg-BF; Thu, 16 Dec 2021 15:17:38 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mxrZh-009ynu-IY; Thu, 16 Dec 2021 15:17:37 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-sh@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/3] serial: sh-sci: Clock handling improvements
+Date:   Thu, 16 Dec 2021 15:17:31 +0100
+Message-Id: <cover.1639663832.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAnvqbgSbthnnSfAw--.52579S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw4UuF4fXF4fWF48Jw1DZFb_yoW5GF4xpa
-        1jyrZ8A3yYq3Z3KF18Ar47Xr4avwn3CFy7KrW7KwnIyr9rtr1UCF15t3s0vrn5JrWxKryF
-        vw4qyF45uF48taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU6WlgUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The return value of dma_alloc_coherent() needs to be checked.
-To avoid dereference of null pointer in case of the failure of alloc.
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+	Hi Greg, Jiri,
 
-v2 -> v3
+This patch series contains a legacy cleanup and two small improvements
+for the Renesas (H)SCI(F) serial driver.
 
-*Change 1. Remove dev_err.
-*Change 2. Change the return type of pch_request_dma to int.
-*Change 3. Return -ENOMEM when dma_alloc_coherent() failed and 0 the
-others.
-*Change 4. Check return value of dma_alloc_coherent().
----
- drivers/tty/serial/pch_uart.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+This been tested on a various of Renesas (SuperH and ARM) SoCs.
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index f0351e6f0ef6..cfad5592010c 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -698,7 +698,7 @@ static bool filter(struct dma_chan *chan, void *slave)
- 	}
- }
- 
--static void pch_request_dma(struct uart_port *port)
-+static int pch_request_dma(struct uart_port *port)
- {
- 	dma_cap_mask_t mask;
- 	struct dma_chan *chan;
-@@ -723,7 +723,7 @@ static void pch_request_dma(struct uart_port *port)
- 	if (!chan) {
- 		dev_err(priv->port.dev, "%s:dma_request_channel FAILS(Tx)\n",
- 			__func__);
--		return;
-+		return 0;
- 	}
- 	priv->chan_tx = chan;
- 
-@@ -739,13 +739,20 @@ static void pch_request_dma(struct uart_port *port)
- 			__func__);
- 		dma_release_channel(priv->chan_tx);
- 		priv->chan_tx = NULL;
--		return;
-+		return 0;
- 	}
- 
- 	/* Get Consistent memory for DMA */
- 	priv->rx_buf_virt = dma_alloc_coherent(port->dev, port->fifosize,
- 				    &priv->rx_buf_dma, GFP_KERNEL);
-+	if (!priv->rx_buf_virt) {
-+		dma_release_channel(priv->chan_tx);
-+		priv->chan_tx = NULL;
-+		return -ENOMEM;
-+	}
-+
- 	priv->chan_rx = chan;
-+	return 0;
- }
- 
- static void pch_dma_rx_complete(void *arg)
-@@ -1321,8 +1328,11 @@ static int pch_uart_startup(struct uart_port *port)
- 	if (ret < 0)
- 		return ret;
- 
--	if (priv->use_dma)
--		pch_request_dma(port);
-+	if (priv->use_dma) {
-+		ret = pch_request_dma(port);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	priv->start_rx = 1;
- 	pch_uart_hal_enable_interrupt(priv, PCH_UART_HAL_RX_INT |
-@@ -1469,6 +1479,7 @@ static int pch_uart_verify_port(struct uart_port *port,
- 				struct serial_struct *serinfo)
- {
- 	struct eg20t_port *priv;
-+	int ret;
- 
- 	priv = container_of(port, struct eg20t_port, port);
- 	if (serinfo->flags & UPF_LOW_LATENCY) {
-@@ -1483,7 +1494,9 @@ static int pch_uart_verify_port(struct uart_port *port,
- 		return -EOPNOTSUPP;
- #endif
- 		if (!priv->use_dma) {
--			pch_request_dma(port);
-+			ret = pch_request_dma(port);
-+			if (ret)
-+				return ret;
- 			if (priv->chan_rx)
- 				priv->use_dma = 1;
- 		}
+Thanks!
+
+Geert Uytterhoeven (3):
+  serial: sh-sci: Drop support for "sci_ick" clock
+  serial: sh-sci: Use dev_err_probe()
+  serial: sh-sci: Use devm_clk_get_optional()
+
+ drivers/tty/serial/sh-sci.c | 37 +++++++++++--------------------------
+ 1 file changed, 11 insertions(+), 26 deletions(-)
+
 -- 
 2.25.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
