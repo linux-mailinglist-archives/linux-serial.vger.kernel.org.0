@@ -2,40 +2,32 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 002A947A788
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Dec 2021 10:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70F147A7BB
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Dec 2021 11:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbhLTJ73 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Dec 2021 04:59:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51840 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhLTJ72 (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:59:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BCBB60F70;
-        Mon, 20 Dec 2021 09:59:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76427C36AE2;
-        Mon, 20 Dec 2021 09:59:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639994367;
-        bh=1Dwzm5P68OohgasCaYVB5/wmfN7QtOCdTNyDk9p1DzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OI/NRU/PHBlvZtBD5THPleGqnxWbKhhYuZHEZQ6UnYpzd7ACeowFje09P/O0fS+56
-         6/mvo02nwaMBoa3EvfSHFGbYMw2Txt3vlIHBNO65za/t27ryuKoz1wSkDRA17HyVUC
-         HQ967pab5fEgwogKGj//WzxUR6Wj31fTgob3wSyk=
-Date:   Mon, 20 Dec 2021 10:59:25 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     wigin zeng <wigin.zeng@dji.com>
-Cc:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        id S231254AbhLTKZy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Dec 2021 05:25:54 -0500
+Received: from mail.djicorp.com ([202.66.152.220]:61205 "EHLO mail.djicorp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231250AbhLTKZy (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 20 Dec 2021 05:25:54 -0500
+IronPort-SDR: K0X66Yie50VdUrKYFUJUFAOZTRZBZuXAeIQiiQgRyCl0VzWZnkWLb3bNZVQT0VZrN0fnbe9Ea3
+ 73t7jMKalsew==
+X-IronPort-AV: E=Sophos;i="5.88,220,1635177600"; 
+   d="scan'208";a="13139988"
+From:   wigin zeng <wigin.zeng@dji.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
         "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         First Light <xiaoguang.chen@dji.com>
-Subject: Re: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlA==?=
- =?utf-8?B?5aSNOiDnrZTlpI06?= [PATCH] serial: 8250: add lock for dma rx
-Message-ID: <YcBT/Vf41PWUYdxT@kroah.com>
+Subject: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRD?=
+ =?utf-8?Q?H]_serial:_8250:_add_lock_for_dma_rx?=
+Thread-Topic: =?utf-8?B?562U5aSNOiDnrZTlpI06IOetlOWkjTog562U5aSNOiBbUEFUQ0hdIHNlcmlh?=
+ =?utf-8?Q?l:_8250:_add_lock_for_dma_rx?=
+Thread-Index: AQHX7M8cgUf9QibCHEeycmxSNUOEd6wpP9YAgACLx/D//4YHgIAAiJFw//+PM4CAEXtykP//udeAABInGiD//4DlgP//eQnw
+Date:   Mon, 20 Dec 2021 10:25:51 +0000
+Message-ID: <b9cdf44fe8064c6bb14d5e7aaec3d33a@MAIL-MBX-cwP12.dji.com>
 References: <20211209073339.21694-1-wigin.zeng@dji.com>
  <YbGygPtkz6ihyW51@kroah.com>
  <674707a0388c4a3a9bb25676c61e1737@MAIL-MBX-cwP12.dji.com>
@@ -45,37 +37,103 @@ References: <20211209073339.21694-1-wigin.zeng@dji.com>
  <62dd5f2fedbb4332a4d04dea4970a347@MAIL-MBX-cwP12.dji.com>
  <YcBEy9zi2G7UYErE@kroah.com>
  <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
+ <YcBT/Vf41PWUYdxT@kroah.com>
+In-Reply-To: <YcBT/Vf41PWUYdxT@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [58.34.188.114]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c35df81a176f418eb90e18563170de67@MAIL-MBX-cwP12.dji.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 09:44:04AM +0000, wigin zeng wrote:
-> >That makes no sense, as what orders the data coming in?  The 2 bytes could be added to the tty buffer before the 512 bytes, or the other way around.
-> 
-> >What hardware are you using that is mixing dma and irq data like this?
-> >That feels very wrong.
-> 
-> It is not normal case, normally, the input size should smaller than DMA block size and DMA complete the whole copy.
-> However, there are some abnormal situations. The external input is unexpectedly larger than the data length of the DMA configuration. This situation in my example will appear, and it may cause the kernel to panic.
-
-You did not answer my question about hardware type :(
-
-And again, how is this happening?  If you use DMA, all data should be
-coming through DMA and not the irq.  Otherwise crazy stuff like this
-will happen in any type of driver, your hardware can not mix this type
-of stuff up.
-
-> >If they are running on different cores, then you will have data corruption issues no matter if you have a lock or not, so this is not the correct solution for this hardware configuration problem.
-> 
-> The purpose of adding lock is to ensure that the kernel will not panic in this extreme case, If you want to ensure the integrity of the serial port data, you need to add more flow control logic
-
-How can flow control handle this at all?  Flow control is at the serial
-data stream level.  This is confusing the PCI data stream order.
-
-thanks,
-
-greg k-h
+T24gTW9uLCBEZWMgMjAsIDIwMjEgYXQgMDk6NDQ6MDRBTSArMDAwMCwgd2lnaW4gemVuZyB3cm90
+ZToNCj4gPiA+VGhhdCBtYWtlcyBubyBzZW5zZSwgYXMgd2hhdCBvcmRlcnMgdGhlIGRhdGEgY29t
+aW5nIGluPyAgVGhlIDIgYnl0ZXMgY291bGQgYmUgYWRkZWQgdG8gdGhlIHR0eSBidWZmZXIgYmVm
+b3JlIHRoZSA1MTIgYnl0ZXMsIG9yIHRoZSBvdGhlciB3YXkgYXJvdW5kLg0KPg0KPiA+ID5XaGF0
+IGhhcmR3YXJlIGFyZSB5b3UgdXNpbmcgdGhhdCBpcyBtaXhpbmcgZG1hIGFuZCBpcnEgZGF0YSBs
+aWtlIHRoaXM/DQo+ID4gPlRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCj4NCj4gPkl0IGlzIG5vdCBu
+b3JtYWwgY2FzZSwgbm9ybWFsbHksIHRoZSBpbnB1dCBzaXplIHNob3VsZCBzbWFsbGVyIHRoYW4g
+RE1BIGJsb2NrIHNpemUgYW5kIERNQSBjb21wbGV0ZSB0aGUgd2hvbGUgY29weS4NCj4gPkhvd2V2
+ZXIsIHRoZXJlIGFyZSBzb21lIGFibm9ybWFsIHNpdHVhdGlvbnMuIFRoZSBleHRlcm5hbCBpbnB1
+dCBpcyB1bmV4cGVjdGVkbHkgbGFyZ2VyIHRoYW4gdGhlIGRhdGEgbGVuZ3RoIG9mIHRoZSBETUEg
+Y29uZmlndXJhdGlvbi4gVGhpcyBzaXR1YXRpb24gaW4gbXkgZXhhbXBsZSB3aWxsIGFwcGVhciwg
+YW5kIGl0IG1heSBjYXVzZSB0aGUga2VybmVsIHRvIHBhbmljLg0KDQo+WW91IGRpZCBub3QgYW5z
+d2VyIG15IHF1ZXN0aW9uIGFib3V0IGhhcmR3YXJlIHR5cGUgOigNCg0KPkFuZCBhZ2FpbiwgaG93
+IGlzIHRoaXMgaGFwcGVuaW5nPyAgSWYgeW91IHVzZSBETUEsIGFsbCBkYXRhIHNob3VsZCBiZSBj
+b21pbmcgdGhyb3VnaCBETUEgYW5kIG5vdCB0aGUgaXJxLiAgT3RoZXJ3aXNlIGNyYXp5IHN0dWZm
+IGxpa2UgdGhpcyB3aWxsIGhhcHBlbiBpbiBhbnkgdHlwZSBvZiBkcml2ZXIsIHlvdXIgaGFyZHdh
+cmUgY2FuIG5vdCBtaXggdGhpcyB0eXBlIG9mIHN0dWZmIHVwLg0KDQpPbiBvdXIgcGxhdGZvcm0s
+IFVBUlQgY29ubmVjdGVkIHRvIGEgTUNVIHdoaWNoIHdpbGwgc2VuZCBkYXRhIG9mIHZhcmlhYmxl
+IGxlbmd0aCBmcm9tIHRpbWUgdG8gdGltZS4gVGhlcmUgaXMgbm8gZGVmaW5pdGlvbiBvZiBhIG1h
+eGltdW0gdHJhbnNtaXNzaW9uIGxlbmd0aC4NCldlIGNvbmZpZ3VyZWQgRE1BIGJsb2NrIHNpemUg
+aXMgNDA5NmJ5dGVzLCBob3dldmVyLCB0aGVyZSBhcmUgbW9yZSB0aGFuIDQxMDAgYnl0ZXMgaW5w
+dXQsIERNQSBqdXN0IGhhbmRsZWQgNDA5NmJ5dGVzIGFuZCBsZWZ0IGJ5dGVzIGluIEZJRk8gY2Fu
+bm90IHRyaWdnZXIgbmV4dCBETUEgDQpUcmFuc2ZlciBkb25lIGludGVycnVwdChsZWZ0IGJ5dGVz
+IG51bWJlciA8IERNQSBibG9jayBzaXplICksIHNvIHRoZXNlIGRhdGEgc2hvdWxkIGJlIHByb2Nl
+c3NlZCBieSBVQVJUIElSUS4NCg0KSW4gb3RoZXIgd29yZCwgaWYgdGhlIGV4dGVybmFsIHVzZSBV
+QVJUICJ2dWxuZXJhYmlsaXR5IiB0byBhdHRhY2sgdGhlIHN5c3RlbSwgd2UgbmVlZCB0byBlbnN1
+cmUgdGhhdCB0aGUgc3lzdGVtIG5vdCBjcmFzaCBhdCBsZWFzdCwgcmlnaHQ/DQoNCj5Ib3cgY2Fu
+IGZsb3cgY29udHJvbCBoYW5kbGUgdGhpcyBhdCBhbGw/ICBGbG93IGNvbnRyb2wgaXMgYXQgdGhl
+IHNlcmlhbCBkYXRhIHN0cmVhbSBsZXZlbC4gIFRoaXMgaXMgY29uZnVzaW5nIHRoZSBQQ0kgZGF0
+YSBzdHJlYW0gb3JkZXIuDQoNCkkganVzdCB0aGluayBtb3JlIGxvZ2ljIGlzIG5lZWRlZCB0byBj
+b250cm9sIHRoZSBvcmRlciBvZiBkYXRhIHByb2Nlc3NpbmcgYnkgRE1BIGFuZCBVQVJUIElSUSB0
+byBrZWVwIHRoZSBpbnRlZ3JpdHkgb2Ygc2VyaWFsIGRhdGEuIA0KQnV0IHRoZSBzcGVjaWZpYyBk
+ZXNpZ24sIEkgaGF2ZW4ndCBjb25zaWRlcmVkIHlldCwgdGhlIGZpcnN0IGdvYWwgaXMgdGhlIGtl
+ZXAgdGhlIHN5c3RlbSBhbGl2ZS4NCg0KQlJzDQpXZWlqdW4NCiANCi0tLS0t6YKu5Lu25Y6f5Lu2
+LS0tLS0NCuWPkeS7tuS6ujogR3JlZyBLSCBbbWFpbHRvOmdyZWdraEBsaW51eGZvdW5kYXRpb24u
+b3JnXSANCuWPkemAgeaXtumXtDogMjAyMeW5tDEy5pyIMjDml6UgMTc6NTkNCuaUtuS7tuS6ujog
+d2lnaW4gemVuZyA8d2lnaW4uemVuZ0BkamkuY29tPg0K5oqE6YCBOiBqaXJpc2xhYnlAa2VybmVs
+Lm9yZzsgbGludXgtc2VyaWFsQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZzsgRmlyc3QgTGlnaHQgPHhpYW9ndWFuZy5jaGVuQGRqaS5jb20+DQrkuLvpopg6IFJl
+OiDnrZTlpI06IOetlOWkjTog562U5aSNOiDnrZTlpI06IFtQQVRDSF0gc2VyaWFsOiA4MjUwOiBh
+ZGQgbG9jayBmb3IgZG1hIHJ4DQoNCuOAkEVYVEVSTkFMIEVNQUlM44CRIERPIE5PVCBDTElDSyBh
+bnkgbGlua3Mgb3IgYXR0YWNobWVudHMgdW5sZXNzIHlvdSBjYW4gbWFrZSBzdXJlIGJvdGggdGhl
+IHNlbmRlciBhbmQgdGhlIGNvbnRlbnQgYXJlIHRydXN0d29ydGh5Lg0KDQoNCuOAkOWklumDqOmC
+ruS7tuaPkOmGkuOAkeS7peS4i+mCruS7tuadpea6kOS6juWFrOWPuOWklumDqO+8jOivt+WLv+eC
+ueWHu+mTvuaOpeaIlumZhOS7tu+8jOmZpOmdnuaCqOehruiupOmCruS7tuWPkeS7tuS6uuWSjOWG
+heWuueWPr+S/oeOAgg0KDQoNCg0KT24gTW9uLCBEZWMgMjAsIDIwMjEgYXQgMDk6NDQ6MDRBTSAr
+MDAwMCwgd2lnaW4gemVuZyB3cm90ZToNCj4gPlRoYXQgbWFrZXMgbm8gc2Vuc2UsIGFzIHdoYXQg
+b3JkZXJzIHRoZSBkYXRhIGNvbWluZyBpbj8gIFRoZSAyIGJ5dGVzIGNvdWxkIGJlIGFkZGVkIHRv
+IHRoZSB0dHkgYnVmZmVyIGJlZm9yZSB0aGUgNTEyIGJ5dGVzLCBvciB0aGUgb3RoZXIgd2F5IGFy
+b3VuZC4NCj4NCj4gPldoYXQgaGFyZHdhcmUgYXJlIHlvdSB1c2luZyB0aGF0IGlzIG1peGluZyBk
+bWEgYW5kIGlycSBkYXRhIGxpa2UgdGhpcz8NCj4gPlRoYXQgZmVlbHMgdmVyeSB3cm9uZy4NCj4N
+Cj4gSXQgaXMgbm90IG5vcm1hbCBjYXNlLCBub3JtYWxseSwgdGhlIGlucHV0IHNpemUgc2hvdWxk
+IHNtYWxsZXIgdGhhbiBETUEgYmxvY2sgc2l6ZSBhbmQgRE1BIGNvbXBsZXRlIHRoZSB3aG9sZSBj
+b3B5Lg0KPiBIb3dldmVyLCB0aGVyZSBhcmUgc29tZSBhYm5vcm1hbCBzaXR1YXRpb25zLiBUaGUg
+ZXh0ZXJuYWwgaW5wdXQgaXMgdW5leHBlY3RlZGx5IGxhcmdlciB0aGFuIHRoZSBkYXRhIGxlbmd0
+aCBvZiB0aGUgRE1BIGNvbmZpZ3VyYXRpb24uIFRoaXMgc2l0dWF0aW9uIGluIG15IGV4YW1wbGUg
+d2lsbCBhcHBlYXIsIGFuZCBpdCBtYXkgY2F1c2UgdGhlIGtlcm5lbCB0byBwYW5pYy4NCg0KWW91
+IGRpZCBub3QgYW5zd2VyIG15IHF1ZXN0aW9uIGFib3V0IGhhcmR3YXJlIHR5cGUgOigNCg0KQW5k
+IGFnYWluLCBob3cgaXMgdGhpcyBoYXBwZW5pbmc/ICBJZiB5b3UgdXNlIERNQSwgYWxsIGRhdGEg
+c2hvdWxkIGJlIGNvbWluZyB0aHJvdWdoIERNQSBhbmQgbm90IHRoZSBpcnEuICBPdGhlcndpc2Ug
+Y3Jhenkgc3R1ZmYgbGlrZSB0aGlzIHdpbGwgaGFwcGVuIGluIGFueSB0eXBlIG9mIGRyaXZlciwg
+eW91ciBoYXJkd2FyZSBjYW4gbm90IG1peCB0aGlzIHR5cGUgb2Ygc3R1ZmYgdXAuDQoNCj4gPklm
+IHRoZXkgYXJlIHJ1bm5pbmcgb24gZGlmZmVyZW50IGNvcmVzLCB0aGVuIHlvdSB3aWxsIGhhdmUg
+ZGF0YSBjb3JydXB0aW9uIGlzc3VlcyBubyBtYXR0ZXIgaWYgeW91IGhhdmUgYSBsb2NrIG9yIG5v
+dCwgc28gdGhpcyBpcyBub3QgdGhlIGNvcnJlY3Qgc29sdXRpb24gZm9yIHRoaXMgaGFyZHdhcmUg
+Y29uZmlndXJhdGlvbiBwcm9ibGVtLg0KPg0KPiBUaGUgcHVycG9zZSBvZiBhZGRpbmcgbG9jayBp
+cyB0byBlbnN1cmUgdGhhdCB0aGUga2VybmVsIHdpbGwgbm90IHBhbmljIA0KPiBpbiB0aGlzIGV4
+dHJlbWUgY2FzZSwgSWYgeW91IHdhbnQgdG8gZW5zdXJlIHRoZSBpbnRlZ3JpdHkgb2YgdGhlIA0K
+PiBzZXJpYWwgcG9ydCBkYXRhLCB5b3UgbmVlZCB0byBhZGQgbW9yZSBmbG93IGNvbnRyb2wgbG9n
+aWMNCg0KSG93IGNhbiBmbG93IGNvbnRyb2wgaGFuZGxlIHRoaXMgYXQgYWxsPyAgRmxvdyBjb250
+cm9sIGlzIGF0IHRoZSBzZXJpYWwgZGF0YSBzdHJlYW0gbGV2ZWwuICBUaGlzIGlzIGNvbmZ1c2lu
+ZyB0aGUgUENJIGRhdGEgc3RyZWFtIG9yZGVyLg0KDQp0aGFua3MsDQoNCmdyZWcgay1oDQpUaGlz
+IGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgdGhlcmV0byBtYXkgY29udGFpbiBwcml2YXRlLCBj
+b25maWRlbnRpYWwsIGFuZCBwcml2aWxlZ2VkIG1hdGVyaWFsIGZvciB0aGUgc29sZSB1c2Ugb2Yg
+dGhlIGludGVuZGVkIHJlY2lwaWVudC4gQW55IHJldmlldywgY29weWluZywgb3IgZGlzdHJpYnV0
+aW9uIG9mIHRoaXMgZW1haWwgKG9yIGFueSBhdHRhY2htZW50cyB0aGVyZXRvKSBieSBvdGhlcnMg
+aXMgc3RyaWN0bHkgcHJvaGliaXRlZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lw
+aWVudCwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBpbW1lZGlhdGVseSBhbmQgcGVybWFuZW50
+bHkgZGVsZXRlIHRoZSBvcmlnaW5hbCBhbmQgYW55IGNvcGllcyBvZiB0aGlzIGVtYWlsIGFuZCBh
+bnkgYXR0YWNobWVudHMgdGhlcmV0by4NCg0K5q2k55S15a2Q6YKu5Lu25Y+K6ZmE5Lu25omA5YyF
+5ZCr5YaF5a655YW35pyJ5py65a+G5oCn77yM5LiU5LuF6ZmQ5LqO5o6l5pS25Lq65L2/55So44CC
+5pyq57uP5YWB6K6477yM56aB5q2i56ys5LiJ5Lq66ZiF6K+744CB5aSN5Yi25oiW5Lyg5pKt6K+l
+55S15a2Q6YKu5Lu25Lit55qE5Lu75L2V5L+h5oGv44CC5aaC5p6c5oKo5LiN5bGe5LqO5Lul5LiK
+55S15a2Q6YKu5Lu255qE55uu5qCH5o6l5pS26ICF77yM6K+35oKo56uL5Y2z6YCa55+l5Y+R6YCB
+5Lq65bm25Yig6Zmk5Y6f55S15a2Q6YKu5Lu25Y+K5YW255u45YWz55qE6ZmE5Lu244CCDQo=
