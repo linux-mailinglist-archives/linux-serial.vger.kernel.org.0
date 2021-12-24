@@ -2,126 +2,115 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A6D47EDB3
-	for <lists+linux-serial@lfdr.de>; Fri, 24 Dec 2021 10:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6720447EDFB
+	for <lists+linux-serial@lfdr.de>; Fri, 24 Dec 2021 10:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352204AbhLXJVW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 24 Dec 2021 04:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S1343805AbhLXJpw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 24 Dec 2021 04:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352184AbhLXJVW (ORCPT
+        with ESMTP id S241614AbhLXJpv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 24 Dec 2021 04:21:22 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF156C061401;
-        Fri, 24 Dec 2021 01:21:21 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id r138so7179075pgr.13;
-        Fri, 24 Dec 2021 01:21:21 -0800 (PST)
+        Fri, 24 Dec 2021 04:45:51 -0500
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA5DC061401
+        for <linux-serial@vger.kernel.org>; Fri, 24 Dec 2021 01:45:51 -0800 (PST)
+Received: by mail-qv1-xf44.google.com with SMTP id kk22so7472157qvb.0
+        for <linux-serial@vger.kernel.org>; Fri, 24 Dec 2021 01:45:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=jPTx7nBzf3LGvXSQtblaPA6rluMMl4EIwS4QSTaWNdQ=;
-        b=S/G2s7v9BwstG5jCKU8gxj0HYm4JOcx8yewb+48mW6QSQyTq3Rh92pqutu4azFNwBJ
-         7XTkFCnna2RIbPUXHDEkE0OqzmPRr5Ybgd2Iceg0pRORmM2cLEOveHQSaj0i2L6VBiex
-         P8HobsWgdlfjBZAqJa/nWOcZqx3B0rvkGguJ75Vq5UWipG0t7gwzrs5d3GN2wo6JLaip
-         XqdbgTVunkrxgtVu8XiOzXOH3ClTsPpfsw2J8bNmSIGCoCEzwtifpTpwpyZp38ORut/Z
-         9yi0zQbqllyVJvcFNrArEFykcUZcUMDr63+izcagTYusBFQD+iSaWcvcGNB1ix4Pr0p+
-         i/lQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=HTvbsgvThZTZMQqcOkBfoOTT31R03gUY8wMR3tn9rQyjr4B+OGqLiToUfAZ8hf6U5c
+         jFQRThGnr5dcTQEJA2DEumZQtzh4V9K39uzokfMUxqY9IEoFZNdLD6zeEJO1bYRkfYBu
+         iYE+CgFxlfq02Mj0XAVKUIpQAXd8JLFqWtEEu5nuwRHtaXM8d9A58d9uExpqMklzqCCp
+         tVjbe0ErmNVSFAKGiDziwl4bWLhAK2N59kVa7RFsY66Fwi5ckfnEfkCGQOC6bzgmXfnN
+         mzkAarp9sccRykQ2LZllfRlL/oYpX5pJ/X9pqesUpDoH3Gur+q/weccxVNhUg/6Wpw7x
+         jSWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=jPTx7nBzf3LGvXSQtblaPA6rluMMl4EIwS4QSTaWNdQ=;
-        b=xz3qCi2NqXIjCxkkB+9fcJSJEU36AcufEgA9CDncQi2D/UyHtEDx9SHu1CNQT7nIt9
-         eSB+L7j1DOBMw0AwjTqu0/xDwJNEMkMs2+Sg5hhi8SBYsvi52XKUwsmRhBbsJRDhZP+1
-         MUvVkfgj/B1dgMyDpv+xt42M8Se6tYGnyatME5qyn3qw/GI4JfrGyp9kEPUJczm5hAXq
-         vZly1xaF4XhW143dHqW7JMJsb0yUtKMp6ldKFbZ2MRTnrekX4YaR9Z7wYdxmVCYPe8ae
-         dj+yxJo5TIoZssnmQR/FVQWuYDNrIaccVLXYqFsJCEOKuIEUaYI5hgn+SjQXwvAkNJs7
-         zEDg==
-X-Gm-Message-State: AOAM532Hv6sWd2H+CjCIN2klMJJQZrCZ2Ob5+tbasuHL6prldS9gwhMt
-        B+AVOrK0VsIDmdlO9dNjC8/Yp3gC+oIG3xqt6QuHPpLIdWH8cQ==
-X-Google-Smtp-Source: ABdhPJz83YQbB1p+N/DrriVlSCxR13zuFw4QgI5rHqcDrrdrRy6QSkXzM16JVop4Dp8A8hg+yfZbRCWAn1A0ubnKKQs=
-X-Received: by 2002:a05:6a00:16d3:b0:4ba:4aee:2e34 with SMTP id
- l19-20020a056a0016d300b004ba4aee2e34mr6048662pfc.82.1640337681216; Fri, 24
- Dec 2021 01:21:21 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=Iw84iX5mOVzxoetsuxuSGjKJuC5hWDJp0w26azy9FnNpodFT/pxQggP1lq+zyTiVmy
+         Q3qsqMOU5P1WNJngrI7+Pa03oV7di5RaW9xx5kPPGm/QsVWNhlUwwoH2xDVMqyYKxM8e
+         7EbiJqIR2WSNZvmS4BJMdo5XTwO7ep+T/VipgMIto76DzeO90LQx4nFcsqmbxqH3iPA2
+         +Fa/G6B+YGrYuMnN4uoIUPfooebKng197ajw2nC+DSOXt/O6qo/29rXn+IM8QZURDafX
+         V7/APtHDPL3LMzU4GelTbLMk1+fqlp43H4Xua9i0GWjYesMA0R/jt3bFSkjQcI0anN7g
+         55jA==
+X-Gm-Message-State: AOAM532tWkmSTIMX+eo5GOJmLOaKU8d97l46az2kr3wQzsP494F4eXYS
+        nV/0C7VE650G0sIEDBQXv/ehNTdSsFERFtxvcUc=
+X-Google-Smtp-Source: ABdhPJyrL+NP73hXOlYqp0I4MwFxemNo0lcRdT/aNbcLXvQZCQJRCS+bJKiwldEO4LJ+iMqXRsYFEegnSE/yIQNM1UY=
+X-Received: by 2002:a0c:edca:: with SMTP id i10mr4927452qvr.62.1640339150677;
+ Fri, 24 Dec 2021 01:45:50 -0800 (PST)
 MIME-Version: 1.0
-References: <1639379407-28607-1-git-send-email-hammer.hsieh@sunplus.com>
- <1639379407-28607-3-git-send-email-hammer.hsieh@sunplus.com>
- <YcCmaJkeKy+R0mhF@kroah.com> <CAOX-t54j9=7eLMAx4n-ngiNdM=Ab=YcK-zdxRW88e41cPS=46Q@mail.gmail.com>
- <YcGOmzKSHOoycZNC@kroah.com> <CAOX-t55fBM7u3qZm7ubLANDnWNFhCiBXB29v00racWd-gy3OgA@mail.gmail.com>
- <YcWL4c0e02mzETMp@kroah.com> <CAOX-t557bRfBk0+ixH_zXkxpt54cf96vNc1Fq7yNejVLOrc--g@mail.gmail.com>
-In-Reply-To: <CAOX-t557bRfBk0+ixH_zXkxpt54cf96vNc1Fq7yNejVLOrc--g@mail.gmail.com>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Fri, 24 Dec 2021 17:21:27 +0800
-Message-ID: <CAOX-t55bGWY99r0=SYcMgUBpSCHRznHk3KFrtScq9X_J+8boyw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jirislaby@kernel.org, p.zabel@pengutronix.de, wells.lu@sunplus.com,
-        Hammer Hsieh <hammer.hsieh@sunplus.com>
+Received: by 2002:ad4:5c62:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 01:45:50
+ -0800 (PST)
+Reply-To: williamsreneta2019@gmail.com
+From:   MISS WILLIAMS <info.turvateealfastar@gmail.com>
+Date:   Fri, 24 Dec 2021 01:45:50 -0800
+Message-ID: <CAM-qQYawjBLtZuyg-QyOmCtaKRy21OJCyFneWQWQZxmVX-8XPg@mail.gmail.com>
+Subject: Greetings Dearest One,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi, Greg KH:
+Greetings Dearest One,
 
-I am still not really understand why you said the driver looks like 8250.
-SP7021 SoC have our own register define.
-That's why we submit a new serial driver.
+How are you today, together with your family?Hope fine.I would like to
+use this opportunity to introduce myself to you. I am Miss Reneta
+Williams, From Benin Republic, West Africa. And my late parents are
+Mr. and Mrs. Dikko Williams; my father was a highly reputable business
+magnet who operated in Benin Republic during his days.
 
-Refer to:
-https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universa=
-l+Asynchronous+Receiver+Transmitter+UART
+I am writing this mail to you with tears and sorrow from my heart.
+With due respect trust and humanity, I know this mail will come to you
+as a surprise since we haven't known or come across each other before,
+considering the fact that I sourced your email contact through the
+Internet in search of trusted person who can be trusted and will
+assist me.
+
+It is sad to say that he passed away mysteriously in France during one
+of his business trips abroad. Though his sudden death was linked or
+rather suspected to have been masterminded by an uncle of his who
+traveled with him at that time. But God knows the truth! My mother
+died when I was just 6yrs old, and since then my father took me so
+special.
+
+Before his death, he called me and informed me that he has the sum of
+Eighteen Million Five Hundred , United State Dollar
+(USD$18.500,000.00) left in fixed deposit account in one of the
+leading banks in Africa. He further told me that he deposited the
+money in my name, and also gave me all the necessary but legal
+documents to this fund with the bank.
+
+I am 21 years old and a university undergraduate and really don't know
+what to do. Now I want an account overseas where I can transfer this
+funds and after the transaction I will come and reside permanently in
+your country till such a time that it will be convenient for me to
+return back home if I so desire.
+
+The death of my father actually brought sorrow to my life. I also want
+to invest the fund under your care because I am ignorant of business
+world. I am in a sincere desire of your humble assistance in this
+regards. Your suggestions and ideas will be highly regarded.
+
+Now permit me to ask these few questions:
+
+1. Can you honestly help me from your heart?
+
+2. Can I completely trust you?
+
+3. What percentage of the total amount in question will be good for
+you after the money is in your account?
+
+Please, consider this and get back to me as soon as
+possible.Immediately and confirm your willingness on this my
+email(williamsreneta2019@gmail.com), here is one of my Picture and
+also i will inform you more details involved in this matter.
 
 Regards,
-Hammer Hsieh
 
-hammer hsieh <hammerh0314@gmail.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=8824=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:05=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> Hi, Greg KH:
->
-> 8250 driver means create driver in drivers/tty/8250/ ?
-> and current I create driver in drivers/tty/serial/ not correct ?
->
-> Regards,
-> Hammer Hsieh
->
-> Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2021=E5=B9=B412=E6=9C=8824=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:59=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> >
-> > On Fri, Dec 24, 2021 at 03:16:55PM +0800, hammer hsieh wrote:
-> > > Hi, Greg KH :
-> > >
-> > > In patch v1 coding quite mess, it is almost 2000 LOCs.
-> > > For down size code under 1000 LOCs, I decide to drop DMA function cod=
-e
-> > > after patch v3.
-> > > I think that's the biggest difference compared with 8250.
-> > > Without DMA function, like you said it looks like 8250 variant.
-> > > I think I should put DMA function back in next submit.
-> >
-> > The 8250 driver handles DMA just fine today, why is your chip doing it
-> > differently?  Are you sure it is a different chip?  Who created a new
-> > uart chip these days?
-> >
-> > > Another question for why I need PORT_SLUNPLUS ?
-> > > I just check many other uart driver, almost all driver define their
-> > > own PORT number.
-> > > Actually, I didn't know about it.
-> > > Maybe some device like bluetooth(use uart port) need autoconfig.
-> > > Then it will call ioctl with TIOCSERCONFIG.
-> > > I don't have tool for calling type/config/request/release/verify.
-> >
-> > If you do not need it, and you can not test for it, please do not add
-> > it.
-> >
-> > thanks,
-> >
-> > greg k-h
+Miss Reneta Williams.
