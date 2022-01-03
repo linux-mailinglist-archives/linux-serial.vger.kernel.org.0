@@ -2,146 +2,179 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6CE483184
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Jan 2022 14:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC874831A2
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Jan 2022 14:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiACNoQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Jan 2022 08:44:16 -0500
-Received: from mout.gmx.net ([212.227.17.21]:51753 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229992AbiACNoQ (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:44:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641217444;
-        bh=yaQHdpEO6ELc+KNDCcxAhySyf6kSbKGGUg4JlkIvxk0=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=LVGk9sFHCtOReTe3gdC1AG3e2q4l4s5WOJyddP3SuCGRF+jLNgquia4wTGSnOqj1T
-         fLZpHisCbUAkt72OfBAJgB+KRG10kZ2jjiHlC7OKdRE+666bvLsCqCZ2DIavhJRFig
-         Dj4flvEcl46zpxtXItc8nHXqz7Nramv3yo1yOTHw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.72] ([149.172.237.68]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZCfJ-1mrKon21Uv-00V7hl; Mon, 03
- Jan 2022 14:44:04 +0100
-Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
- pl011_set_mctrl() function.
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     jmades <jochen@mades.net>, gregkh@linuxfoundation.org,
-        Russell King <linux@armlinux.org.uk>,
+        id S232246AbiACN5f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Jan 2022 08:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230136AbiACN5f (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Mon, 3 Jan 2022 08:57:35 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B335AC061784
+        for <linux-serial@vger.kernel.org>; Mon,  3 Jan 2022 05:57:34 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id i22so70026403wrb.13
+        for <linux-serial@vger.kernel.org>; Mon, 03 Jan 2022 05:57:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=s9ejwD9yhPYnVOGboXQSQzo2YN5XrVTHlsEd+M9MQHE=;
+        b=wzBKbDAT5VRzexaEy8OyRR1b3uAcZJPFyF8c9jqe454LDDm16miT7mQScfNP/UTBQC
+         xSztPVKdpGBwu5n0POlroE2LQFgpKKDQthfVRs1mlndwVnRGSSI8Zk/5zYPAw4ZwDwAC
+         XZdSZzlOpk2vFwKj7e64oMMshnR99514Zn1b/vpmfDUx7nCkLcHICbZw+jfvPp86Vhd0
+         hlnyoTlf8XjK41Lz5gXhvt4ogbsajxty3MlX2gOY6VKIeMStwKLOCQ4Vcd3zrBMrVEo6
+         Q4NepwRPLWsoiu/F+c/jlSMJFRPW/yGNF67FchApLOQw4O22ad4NvW5LdL2N8YNjNIkx
+         sNuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=s9ejwD9yhPYnVOGboXQSQzo2YN5XrVTHlsEd+M9MQHE=;
+        b=xcosgNle9VXqo92s38i7c+Jn6EeZOLSm+oij8C/Nv+6tAYbWM+F9Cap8/ENtf07zdQ
+         PvZj6ndRJmD8ALI9Iml9AcfSaYUUHFEPIbOBthdpn+df1CgmYW/OZKBCXMc8PmmK2+mV
+         aolInu7ZwBDgRHt3Y9w1GbhJtQ8+5CawwQgUvN4GgmKXDwIb5ylJLTDEtdtqmzRLxjdY
+         0CSBzCZhPAXMLZ7yc9edqjcHb/Ey+hrzLm/gqfHWh6KOLPtYeQtek23MHiwwzZ3C1gXt
+         iajR6foOYsHRP7Uu8aYRVAX5nCk2M/77HexeUcElOlerH3Ar2/RM17KsgTa/2S6psm3r
+         K+oQ==
+X-Gm-Message-State: AOAM533U46rA9Sm0N7tJ/PHlgX9mGmnYKZR3sKfJc9+r3JnKpKX1lW1E
+        h6cHg/IFNzf6LDeLJp9gtouZFw==
+X-Google-Smtp-Source: ABdhPJxghNu6jAsWSh6bWzVfWgWaf7nRMDXoUZYnhoeOqlJPnOE8PWM88b7d69tpC9s+zfplC2ZXqg==
+X-Received: by 2002:adf:97c2:: with SMTP id t2mr39143444wrb.577.1641218253101;
+        Mon, 03 Jan 2022 05:57:33 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id y8sm38527606wrd.10.2022.01.03.05.57.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 05:57:32 -0800 (PST)
+References: <20211230102110.3861-1-yu.tu@amlogic.com>
+ <20211230102110.3861-5-yu.tu@amlogic.com>
+ <CAFBinCCL-QaeSRCLzfyNXcRQZ7YC1D85rP2y4OGkAjCmQEqGgQ@mail.gmail.com>
+ <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
+ <CAFBinCB2nF0TwRE1uJ4UTB_avcqRBfOHR1CDSe29dB1o-YjEHQ@mail.gmail.com>
+ <7278bace-a2b9-0cfc-55b3-c19311e3352e@amlogic.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-References: <20211231171516.18407-1-jochen@mades.net>
- <20220102100710.GA29858@wunner.de>
- <0e0e91b8-72f8-aa31-50e2-80090dd5613a@gmx.de>
- <20220102182801.GA22268@wunner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <769e26e3-6ebe-5d41-484e-3aff033f00c5@gmx.de>
-Date:   Mon, 3 Jan 2022 14:44:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vyacheslav <adeep@lexina.in>, Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH V3 4/6] tty: serial: meson: The UART baud rate
+ calculation is described using the common clock code. Also added S4 chip
+ uart Compatible.
+Date:   Mon, 03 Jan 2022 14:50:06 +0100
+In-reply-to: <7278bace-a2b9-0cfc-55b3-c19311e3352e@amlogic.com>
+Message-ID: <1jbl0s9b1w.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <20220102182801.GA22268@wunner.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:q20d/Pz6LffTlZL9sbytzXuMFoNESX16SsIkXD1fI8D/Ght3ib0
- PiCTumtGXkfbFJNM6deKjJKJPYsXigfp2R4LgPS/GdTY/WLeusNpM2VaZwINyq8K7hMT+VG
- FQEllyIY/JybHOX2baxk5Jh44JsMyogTzW2akotGUhY6dnT1jedARuNtvHjOh3vAXOATPkI
- gjI8bRKCzKzBmUvG6U2bQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CtiThadKlqQ=:HKMg+As/KGnUlblU2i9f+6
- 4IVIew8mHSQXYSA/hUkNVhg2DlC90UgrugyLRp4s8/9wlvlBkWHwj0ibwHOLoXy+BvhXcdNCy
- plcbxpTvD1BdRkI0PntcUtCPEOa4Y/LJZnAjKWDrjGfYIIoQ42aeoDS2pRe7jznVhQrLFCNvg
- e4GjGyEWHV9vtjPyoW2wk+Oo1ejcAvtNl54+tNgC2MCQHV/r8+eCKouCyVX5ShMid08laZ02J
- XkOzwVbYMoAGKVfolPparpGoKrHwNQE/9Tj1MXwcPbZTMFSIcyPx7sbMyQgc01/uklQQlW/vi
- iFy5MNQvhZ71xbFEbVnwmpcIrP0+8Qzrw2xMV/0kUxf6twKfDBkKAHmcQJ0H01rLzV2RfDQEw
- m9Rd+sifj0tVQIFBm3xZiktQSZSI01NXTCAcknEXSBHia7r7kX2IxZWwpF4GV9NAyfTzFHqAv
- J74mgX8igKoEw92VpbfiN66+yrk+5hFgbuXhT/+Sr3ixC0r8mBObASAZc4G0w9RcmUMn+XMk6
- Uu4Gqq8xdDwakNtAGHnLu8zVS6afdgSMvIW83DdY7S5Z7OTvt+wJ1lECvwXy2/O15efVm2Kjn
- Op6pzBtOHYoN4NM+RKSWWb70KIlv4OYBH4FtmrdPUAy7bpssLqezQrCiKPr5CoydUBOf3DnP8
- 5RG9Q0Vo28OhVNTxt6TCapBOdo/FJEcyLo5riSNO7nP9JYJNYy1LFpyaJUojf72YzDOmoR0hW
- fNw3DgSigmOhXvMhsr5JYg2Whg69Kjljt5lexnVHNeCnzkPhIYJed7E3RwzIMb09X+K/5kEjX
- DmwVfOz064HKo079cWOOzq15H4wJxdhqp3zo10TStjjf7WB1ttXWJCBLrlJ7poKc1/DD/9j3I
- GQ0ne5ym50Z7l5Xyjs+Ltr9uMsBVlW/A4Xv+fV/kFJdJDX5zcXWQycTlbCIkK61w6uqN0IEx+
- Dtpjz7iWiwIx8OSSzeNl0kSj7r2aEKYvle2rtF/buiz2XzoZt2chvjBZtx39MUIm/W+1ViZIa
- /WxqAu78nMq7iBbnUQQeJnichlRMwEm8eGCIQrGQqqNKR+L27fASDUxMQGeZBf5VLFSsCOWU9
- 24bT3pd7w5YJZE=
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 02.01.22 at 19:28, Lukas Wunner wrote:
-> On Sun, Jan 02, 2022 at 04:06:53PM +0100, Lino Sanfilippo wrote:
->> On 02.01.22 at 11:07, Lukas Wunner wrote:
->>> On Fri, Dec 31, 2021 at 05:15:14PM +0000, jmades wrote:
->>>> --- a/drivers/tty/serial/amba-pl011.c
->>>> +++ b/drivers/tty/serial/amba-pl011.c
->>>> @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *=
-port, unsigned int mctrl)
->>>>  	    container_of(port, struct uart_amba_port, port);
->>>>  	unsigned int cr;
+
+On Sat 01 Jan 2022 at 21:30, Yu Tu <yu.tu@amlogic.com> wrote:
+
+> Hi Martin,
+>     Thank you very much for your reply.
+>
+> On 2021/12/31 23:32, Martin Blumenstingl wrote:
+>> [ EXTERNAL EMAIL ]
+>> On Fri, Dec 31, 2021 at 12:24 PM Yu Tu <yu.tu@amlogic.com> wrote:
+>> [...]
+>>>>>    static int meson_uart_request_port(struct uart_port *port)
+>>>>>    {
+>>>>> +       struct meson_uart_data *private_data =3D port->private_data;
+>>>>> +       int ret;
+>>>>> +
+>>>>> +       ret =3D clk_prepare_enable(private_data->pclk);
+>>>>> +       if (ret)
+>>>>> +               return ret;
+>>>>> +
+>>>>> +       ret =3D clk_prepare_enable(private_data->baud_clk);
+>>>>> +       if (ret) {
+>>>>> +               clk_disable_unprepare(private_data->pclk);
+>>>>> +               return ret;
+>>>>> +       }
+>>>> This code is from my original suggestion - and I had a doubt there
+>>>> which I forgot to add as a comment originally:
+>>>> Can you confirm that accessing the UART controller registers works
+>>>> even when "pclk" is turned off?
+>>>> I am asking this because the common clock framework can access the
+>>>> clocks at any time.
+>>>> And I have seen SoCs which would hang when trying to access a module's
+>>>> registers while the module's pclk is turned off.
+>>> On all meson platforms, the default pclk for all UART is turned on
+>>> during the u-boot phase. When registering uart pclk in the kernel phase,
+>>> the CLK_IGNORE_UNUSED flag is added. So the real shutdown is when the
+>>> standby goes down, the parent clk shuts down.
+>> Interesting, thanks for sharing that u-boot turns these clocks on.
+>> Let's say someone wanted to make u-boot save power and turn off all
+>> UART clocks except the one for uart_AO (where we typically connect the
+>> serial console).
+>> In that case the pclk of uart_C (just to choose an example here) is
+>> turned off. Would there be a problem then accessing the registers of
+>> uart_C before clk_prepare_enable is called?
+> The way you describe it, it does hang. This would not be recommended on
+> actual projects.
+>
+> At present, AmLogic chips are older than S4 Soc, and we have no way to de=
+al
+> with this problem. We have to tell customers not to use it in this way=E3=
+=80=82
+> Customers rarely use it in real projects.On the S4 SOC we will use a clock
+> like the UART pclk to control the shutdown using two registers, one safe
+> (need to operate in EL3) and one normal (EL1). It will only be closed if
+> both registers are closed. This mainly prevents misoperation.
+>
+> With your experience, I'd like to know how you deal with this kind of
+> problem.
+
+Relying on the CLK_IGNORE_UNUSED and the boot loader is unsafe.
+As Martin is suggesting, the driver must ensure pclk is on before
+touching any register.
+
+This was done in the probe before in probe before your change which
+seems safe but maybe not optimal.
+
+Again, If you wish to optimize that, please do so in another dedicated
+change so we can discuss it and make sure it is still safe
+
+>> [...]
+>>>>>           port->fifosize =3D 64;
+>>>> commit 27d44e05d7b85d ("tty: serial: meson: retrieve port FIFO size
+>>>> from DT") [0] from May 2021 has changed this line to:
+>>>>     port->fifosize =3D fifosize;
+>>>> So your patch currently does not apply to linux-next (or even Linus'
+>>>> mainline tree).
 >>>>
->>>> -	if (port->rs485.flags & SER_RS485_ENABLED)
->>>> -		mctrl &=3D ~TIOCM_RTS;
->>>> +	if (port->rs485.flags & SER_RS485_ENABLED) {
->>>> +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
->>>> +			mctrl &=3D ~TIOCM_RTS;
->>>> +		else
->>>> +			mctrl |=3D TIOCM_RTS;
->>>> +	}
->>>>
->>>>  	cr =3D pl011_read(uap, REG_CR);
->>
->> Does this logic really have to be implemented in the driver?
->
-> No, it doesn't have to be and indeed I'm working towards consolidating
-> it in the serial core with this collection of patches:
->
-> https://git.kernel.org/gregkh/tty/c/d3b3404df318
-> https://lore.kernel.org/all/f49f945375f5ccb979893c49f1129f51651ac738.164=
-1129062.git.lukas@wunner.de
-> https://lore.kernel.org/all/e22089ab49e6e78822c50c8c4db46bf3ee885623.164=
-1129328.git.lukas@wunner.de
-> https://lore.kernel.org/all/bceeaba030b028ed810272d55d5fc6f3656ddddb.164=
-1129752.git.lukas@wunner.de
-> https://github.com/l1k/linux/commit/532ef2ad757f
->
-> The last of these removes the rs485 logic from pl011_set_mctrl().
-> I'll post it once the others (and Jochen Mades' patch) have landed.
->
-> Even though the logic is eventually removed from pl011_set_mctrl(),
-> Jochen's patch makes sense as a backportable fix for v5.15.
->
->
->> It looks as if the serial core already takes RS485 into account before
->> calling set_mctrls(). At least I get the impression when looking
->> at uart_tiocmset() and uart_port_dtr_rts(). Also other drivers like imx
->> simply seem to ignore RTS in case of RS485.
->
-> The logic in uart_port_dtr_rts() is broken.  That's fixed by d3b3404df31=
-8,
-> which is queued up in tty-next for v5.17.
->
-> The pl011 driver papered over it with its own rs485-specific logic in
-> pl011_set_mctrl().  But as Jochen Mades correctly pointed out, that
-> only worked correctly if RTS is driven high on idle.
->
->
-> The logic in uart_tiocmset() is correct, but not sufficient because
-> uart_throttle(), uart_unthrottle and uart_set_termios() need to become
-> rs485-aware as well.  That's also addressed by the above-linked
-> GitHub commit.
->
-
-
-Thanks for this information. I have one or two patches prepared a while ag=
-o that
-aim into a similar direction (move RS485 related code out of the drivers i=
-nto
-the serial core). I will send them in the next days.
-
-Best regards,
-Lino
-
-
+>>> So do I need to wait for [0] patch merged before I can continue to make
+>>> changes ?
+>> These changes are already merged.
+>>=20
+>>> What can I do before?
+>> You should base your changes on top of the tty.git/tty-next branch [1]
+>> where Greg (the maintainer of this tree) will pick up the patches once
+>> they are good (got enough Acked-by/Reviewed-by, etc.).
+>> I suspect that you based your changes on an older or stable kernel
+>> version (let's say 5.10). New functionality should always get into the
+>> -next tree where various auto-build robots will compile-test the
+>> changes and we even have Kernel CI where changes are tested on real
+>> hardware (BayLibre even maintains Amlogic boards in their Kernel CI
+>> labs). Let's say Amlogic updates to Linux 5.17 next year then the
+>> patches are already included in that kernel version - instead of being
+>> only available in Linux 5.10.
+>>=20
+> I'm sorry, I did branch confirm there was a mistake, I have corrected.
+>> Best regards,
+>> Martin
+>>=20
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?=
+h=3Dtty-next
+>>=20
 
