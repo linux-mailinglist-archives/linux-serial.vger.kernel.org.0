@@ -2,343 +2,140 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3662D48984A
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Jan 2022 13:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFAF489965
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jan 2022 14:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245248AbiAJMLz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 10 Jan 2022 07:11:55 -0500
-Received: from mail-ed1-f51.google.com ([209.85.208.51]:34720 "EHLO
-        mail-ed1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235772AbiAJMLx (ORCPT
+        id S231618AbiAJNLs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Jan 2022 08:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230510AbiAJNLq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 10 Jan 2022 07:11:53 -0500
-Received: by mail-ed1-f51.google.com with SMTP id u25so52762595edf.1;
-        Mon, 10 Jan 2022 04:11:52 -0800 (PST)
+        Mon, 10 Jan 2022 08:11:46 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C65FC061245
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id s30so16337643lfo.7
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
+        b=Bgie3w5lZXcUpEJsNUNnYT9D80sz6831OKMgWSWMpAMR4c04HQM1hwHkoZ1AqHgJ5M
+         pQJfhFBsNTGc+jfMsWTuSDXhNBe5XPwJ8/UQZKbYcWTDQ68Eu4MBBVsHf0V3Baa+27Pp
+         IUJW/950IUGNsTto2NnsTW49/Cy4Vf+KfgzDT0+KZ2gcb/QkEKg3LEIj8qPJpiII0Qbk
+         buE3CbPl0T8T6omQLXT3KYJBxN98pPIrfxDam1Qs0diPFN43pWVugWbd8LU8WaIGviK3
+         O/t/NLMKhR03EdE8rMi5c8T5epCw09Yzc4YmAU5QrO9ZaREbayNwAtpm1SWYSR1IiBuY
+         5w9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T+iudPL3VsSt2x3iV93K9ZbDpXljZOLz6OJ0OF++B6M=;
-        b=kxyEZtT7twNKprr6H0lbxoqTSL0nNqh7spc3wmGeZJrjSFuJkt41HUDBt/0YjAqFVs
-         MoZ5y9qWUMkuhAnyBojG22WDNhNv2SES/lyPlUHFn2oV3LgQYFmfXADKncQWBq58Ccjp
-         yhTjLDFVd1gJRTapM3saiRtNjriTfTDx5ohr0CKeOMzfGBPBnO6vzl4YKedyjpU2c+99
-         WIrfY2g+TC54NLFLmgVxb/s9x1/yuOeHPDiyhwtnO5JTV8uwnxSVs1zCj7MQw/ph/IZo
-         A70I3h6yBbfEIpi+ApeNqrjvqG7zTXG0mOSKNkV2X4mkfcOHfMZt4lHiLQpvyBLy6C3m
-         HALQ==
-X-Gm-Message-State: AOAM533cJPJrMCpVs+WxgZDfbVTGjtCKqgMLYxII0saohjh4TO8pbFm8
-        dF4Vvtf5kz7iLMQ8B7oJDOr5583amz0=
-X-Google-Smtp-Source: ABdhPJzif/Q6w3VWyChKykI+EyyNWMu2HjoCoAm9Z3a7c06y9baypapeH1oO72ya4VqWTG2OIpc8YA==
-X-Received: by 2002:a17:906:f01:: with SMTP id z1mr29711599eji.346.1641816712256;
-        Mon, 10 Jan 2022 04:11:52 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id d9sm3436280edy.55.2022.01.10.04.11.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 04:11:51 -0800 (PST)
-Message-ID: <327f985f-bbf1-00ba-d203-cc9d5bbd955c@kernel.org>
-Date:   Mon, 10 Jan 2022 13:11:50 +0100
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
+        b=pxdJ8niG0qJatHTyA+hPKjh1rrPRYAnXQWZAvrvz6Fyn00aeRYFhhafBwnpyKK3uMV
+         DPUJPnIIlUV8Rs8FsytK2Oex3O98CEfxC0v8yIz5T9xFb7KtVw2dN8ZOIBhfRBJqtzLJ
+         9sN/lslSTbBg3/Cg59iPsvaYO4Hw9wq4HgYrB+PyE/PUUTbL3+1/wBNdA0hI5acYgPpf
+         4XPk/wfQ7MBR3DqeNVbEULK81EpLL4tct5WLaKLiMhBLaKf1+ql3bPwpKICcKoQLZP5y
+         PeT04Ut9xIdgA3oCuj+CYZMXrjq+S/0SYnNei4zeYRhRLAn4zCx1rFkH3vmFpK9V53Ls
+         FzMA==
+X-Gm-Message-State: AOAM5337z1GkqigNDEyqBEUqRlCo6S8ijuskGnY0RgW7NZNnkUB/7E6w
+        LDufuQaubEQPLWwpwSSnzL9kzPKQGts2FQJuTnnG5fkbrDo=
+X-Google-Smtp-Source: ABdhPJyUuzfRq9+VAp3YIslVsNF7E8r6u+SDvjtiaFw6sfTA9uOxrmlrl9JDay/jDh10uqplhgk07a+YHTpM3Ge0znw=
+X-Received: by 2002:ac2:4c51:: with SMTP id o17mr60639917lfk.558.1641820293776;
+ Mon, 10 Jan 2022 05:11:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V5 3/5] tty: serial: meson: Using the common clock code
- describe.
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220110104214.25321-1-yu.tu@amlogic.com>
- <20220110104214.25321-4-yu.tu@amlogic.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220110104214.25321-4-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6504:15d1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 05:11:32
+ -0800 (PST)
+Reply-To: gtbank107@yahoo.com
+From:   Barr Robert Richter <westernunion.benin982@gmail.com>
+Date:   Mon, 10 Jan 2022 14:11:32 +0100
+Message-ID: <CAP=nHBK9zHzp_=-EVswWQiLxEoc+HV4oqddgtnEqf-9qYab_4Q@mail.gmail.com>
+Subject: Contact GT Bank-Benin to receive your transfer amount of $18.5m US Dollars.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
+Attn,Dear
+I need you to know that the fear of the LORD is
+the beginning of wisdom, and knowledge of the Holy One is
+understanding. As power of God Most High. And This is the confidence
+we have in approaching God, that if we ask anything according to his
+will, he hears us. I will make you know that Slow and steady wins the race.
+It is your turn to receive your overdue compensation funds total
+amount $18.5Milion  USD.
+I actualized that you will receive your transfer today without any more delay
+No More fee OK, Believe me , I am your Attorney standing here on your favor.
+I just concluded conversation with the Gt Bank Director, Mrs Mary Gate
+And She told me that your transfer is ready today
 
-"Subject: Using the common clock code describe."
+So the Bank Asked you to contact them immediately by re-confirming
+your Bank details asap.
+Because this is the Only thing holding this transfer
+If you did not trust me and Mrs Mary Gate,Who Else will you Trust?
+For we are the ones trying to protect your funds here
+and make sure that your funds is secure.
+So Promisingly, I am here to assure you, that Grate Miracle is coming on
+your way, and this funds total amount of $18.500,000 is your
+compensation, entitlement inheritance overdue funds on your name.
+Which you cannot let anything delay you from receiving your funds now,
 
-Please reformulate that ^^^ -- I cannot make any sense of it. And avoid 
-adding a period to the subject. PLease see others' commit logs.
+Finally i advised you to try your possible best and contact Gt Bank Benin
+once you get this message to receive your transfer $18.5 USD today.
+I know that a journey of thousand miles begins with a single step.
+Always put your best foot forward
+Try as hard as you can, God give you best.
+take my advice and follow the due process of your payment, the
+transfer will be released to
+you smoothly without any hitches or hindrance.
 
-On 10. 01. 22, 11:42, Yu Tu wrote:
-> Using the common Clock code to describe the UART baud rate clock
-> makes it easier for the UART driver to be compatible with the
-> baud rate requirements of the UART IP on different meson chips.
+Contact DR.MRS MARY GATE, Director Gt bank-Benin to receive your
+transfer amount of $18.5m US Dollars
+It was deposited and registered to your name this morning.
+Contact the Bank now to know when they will transfer to your
+country today
 
+Email id: gtbank107@yahoo.com
+Tel/mobile, +229 99069872
+Contact person, Mrs Mary Gate,Director Gt bank-Benin.
+Among the blind the one-eyed man is king
 
+As you sow, so you shall reap, i want you to receive your funds
+Best things in life are free
+Send to her your Bank Details as i listed here.
 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->   drivers/tty/serial/meson_uart.c | 224 +++++++++++++++++++++++---------
->   1 file changed, 163 insertions(+), 61 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> index 7570958d010c..1004fd0b0c9e 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -6,6 +6,7 @@
->    */
->   
->   #include <linux/clk.h>
-> +#include <linux/clk-provider.h>
->   #include <linux/console.h>
->   #include <linux/delay.h>
->   #include <linux/init.h>
-> @@ -65,9 +66,7 @@
->   #define AML_UART_RECV_IRQ(c)		((c) & 0xff)
->   
->   /* AML_UART_REG5 bits */
-> -#define AML_UART_BAUD_MASK		0x7fffff
->   #define AML_UART_BAUD_USE		BIT(23)
-> -#define AML_UART_BAUD_XTAL		BIT(24)
->   
->   #define AML_UART_PORT_NUM		12
->   #define AML_UART_PORT_OFFSET		6
-> @@ -76,6 +75,13 @@
->   #define AML_UART_POLL_USEC		5
->   #define AML_UART_TIMEOUT_USEC		10000
->   
-> +struct meson_uart_data {
-> +	struct uart_port	port;
-> +	struct clk		*pclk;
-> +	struct clk		*baud_clk;
-> +	bool			use_xtal_clk;
-> +};
-> +
->   static struct uart_driver meson_uart_driver;
->   
->   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
-> @@ -268,14 +274,11 @@ static void meson_uart_reset(struct uart_port *port)
->   static int meson_uart_startup(struct uart_port *port)
->   {
->   	u32 val;
-> -	int ret = 0;
-> +	int ret;
->   
-> -	val = readl(port->membase + AML_UART_CONTROL);
-> -	val |= AML_UART_CLEAR_ERR;
-> -	writel(val, port->membase + AML_UART_CONTROL);
-> -	val &= ~AML_UART_CLEAR_ERR;
-> -	writel(val, port->membase + AML_UART_CONTROL);
-> +	meson_uart_reset(port);
+Your account name-------------
+Your Bank Name----------------
+Account Number----------
+your Bank address----------
+Country-----------
+Your private phone number---------
+Routing Numbers-------------
+Swift Code-----------
 
-Why is this OK? We didn't use to reset it.
+Note, Your funds is %100 Percent ready for
+transfer.
+Everything you do remember that Good things come to those who wait.
+I have done this work for you with my personally effort, Honesty is
+the best policy.
+now your transfer is currently deposited with paying bank this morning.
+It is by the grace of God that I received Christ, having known the truth.
+I had no choice than to do what is lawful and justice in the
+sight of God for eternal life and in the sight of man for witness of
+God & His Mercies and glory upon my life.
 
-And why is this not done in a separate patch?
+send this needed bank details to the bank today, so that you receive
+your transfer today as
+it is available for your confirmation today.
+Please do your best as a serious person and send the fee urgent, Note
+that this transfer of $18.500.000 M USD is a Gift from God to Bless
+you.
 
+If you did not contact the bank urgent, finally the Bank will release
+your transfer of $18.500.000M USD to  Mr. David Bollen as your
+representative.
+So not allow another to claim your Money.
+Thanks For your Understanding.
 
-> +	val = readl(port->membase + AML_UART_CONTROL);
->   	val |= (AML_UART_RX_EN | AML_UART_TX_EN);
->   	writel(val, port->membase + AML_UART_CONTROL);
->   
-> @@ -293,19 +296,17 @@ static int meson_uart_startup(struct uart_port *port)
->   
->   static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
->   {
-> +	struct meson_uart_data *private_data = port->private_data;
->   	u32 val;
->   
->   	while (!meson_uart_tx_empty(port))
->   		cpu_relax();
->   
-> -	if (port->uartclk == 24000000) {
-> -		val = ((port->uartclk / 3) / baud) - 1;
-> -		val |= AML_UART_BAUD_XTAL;
-> -	} else {
-> -		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
-> -	}
-> +	val = readl(port->membase + AML_UART_REG5);
->   	val |= AML_UART_BAUD_USE;
->   	writel(val, port->membase + AML_UART_REG5);
-> +
-> +	clk_set_rate(private_data->baud_clk, baud);
->   }
->   
->   static void meson_uart_set_termios(struct uart_port *port,
-> @@ -395,11 +396,27 @@ static int meson_uart_verify_port(struct uart_port *port,
->   
->   static void meson_uart_release_port(struct uart_port *port)
->   {
-> -	/* nothing to do */
-> +	struct meson_uart_data *private_data = port->private_data;
-> +
-> +	clk_disable_unprepare(private_data->baud_clk);
-> +	clk_disable_unprepare(private_data->pclk);
->   }
->   
->   static int meson_uart_request_port(struct uart_port *port)
->   {
-> +	struct meson_uart_data *private_data = port->private_data;
-> +	int ret;
-> +
-> +	ret = clk_prepare_enable(private_data->pclk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = clk_prepare_enable(private_data->baud_clk);
-> +	if (ret) {
-> +		clk_disable_unprepare(private_data->pclk);
-> +		return ret;
-> +	}
-> +
->   	return 0;
->   }
->   
-> @@ -629,55 +646,105 @@ static struct uart_driver meson_uart_driver = {
->   	.cons		= MESON_SERIAL_CONSOLE,
->   };
->   
-> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
-> -						 const char *id)
-> +#define CLK_NAME(name) \
-> +({\
-> +	char clk_name[32];\
-> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev), #name);\
-> +	clk_name;\
-> +})
-
-This is cryptic and duplicates the variable on the stack. Why not expand 
-the macro and delete it then?
-
-> +
-> +static struct clk_div_table xtal_div_table[] = {
-> +	{ 0, 3  },
-
-An extra space here and there:
-
-> +	{ 1, 1  },
-> +	{ 2, 2  },
-> +	{ 3, 2  },
-> +};
-> +
-> +static int meson_uart_probe_clocks(struct uart_port *port)
->   {
-> -	struct clk *clk = NULL;
-> -	int ret;
-> +	struct meson_uart_data *private_data = port->private_data;
-> +	struct clk *clk_baud, *clk_xtal;
-> +	struct clk_hw *hw;
-> +	struct clk_parent_data use_xtal_mux_parents[2] = {
-> +		{ .index = -1, },
-> +		{ .index = -1, },
-> +	};
->   
-> -	clk = devm_clk_get(dev, id);
-> -	if (IS_ERR(clk))
-> -		return clk;
-> +	private_data->pclk = devm_clk_get(port->dev, "pclk");
-> +	if (IS_ERR(private_data->pclk))
-> +		return dev_err_probe(port->dev, PTR_ERR(private_data->pclk),
-> +				     "Failed to get the 'pclk' clock\n");
->   
-> -	ret = clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "couldn't enable clk\n");
-> -		return ERR_PTR(ret);
-> +	clk_baud = devm_clk_get(port->dev, "baud");
-> +	if (IS_ERR(clk_baud)) {
-> +		dev_err(port->dev, "Failed to get the 'baud' clock\n");
-> +		return PTR_ERR(clk_baud);
->   	}
->   
-> -	devm_add_action_or_reset(dev,
-> -			(void(*)(void *))clk_disable_unprepare,
-> -			clk);
-> -
-> -	return clk;
-> -}
-> -
-> -static int meson_uart_probe_clocks(struct platform_device *pdev,
-> -				   struct uart_port *port)
-> -{
-> -	struct clk *clk_xtal = NULL;
-> -	struct clk *clk_pclk = NULL;
-> -	struct clk *clk_baud = NULL;
-> -
-> -	clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> -	if (IS_ERR(clk_pclk))
-> -		return PTR_ERR(clk_pclk);
-> -
-> -	clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> +	clk_xtal = devm_clk_get(port->dev, "xtal");
->   	if (IS_ERR(clk_xtal))
-> -		return PTR_ERR(clk_xtal);
-> -
-> -	clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> -	if (IS_ERR(clk_baud))
-> -		return PTR_ERR(clk_baud);
-> +		return dev_err_probe(port->dev, PTR_ERR(clk_xtal),
-> +				     "Failed to get the 'xtal' clock\n");
-> +
-> +	if (private_data->use_xtal_clk) {
-> +		hw = devm_clk_hw_register_divider_table(port->dev,
-> +							CLK_NAME(xtal_div),
-> +							__clk_get_name(clk_baud),
-> +							CLK_SET_RATE_NO_REPARENT,
-> +							port->membase + AML_UART_REG5,
-> +							26, 2,
-> +							CLK_DIVIDER_READ_ONLY,
-> +							xtal_div_table, NULL);
-> +		if (IS_ERR(hw))
-> +			return PTR_ERR(hw);
-> +
-> +		use_xtal_mux_parents[1].hw = hw;
-> +	} else {
-> +		hw = devm_clk_hw_register_fixed_factor(port->dev,
-> +						       CLK_NAME(clk81_div4),
-> +						       __clk_get_name(clk_baud),
-> +						       CLK_SET_RATE_NO_REPARENT,
-> +						       1, 4);
-> +		if (IS_ERR(hw))
-> +			return PTR_ERR(hw);
-> +
-> +		use_xtal_mux_parents[0].hw = hw;
-> +	}
->   
-> -	port->uartclk = clk_get_rate(clk_baud);
-> +	hw = __devm_clk_hw_register_mux(port->dev, NULL,
-> +					CLK_NAME(use_xtal),
-> +					ARRAY_SIZE(use_xtal_mux_parents),
-> +					NULL, NULL,
-> +					use_xtal_mux_parents,
-> +					CLK_SET_RATE_PARENT,
-> +					port->membase + AML_UART_REG5,
-> +					24, 0x1,
-> +					CLK_MUX_READ_ONLY,
-> +					NULL, NULL);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +
-> +	port->uartclk = clk_hw_get_rate(hw);
-> +
-> +	hw = devm_clk_hw_register_divider(port->dev,
-> +					  CLK_NAME(baud_div),
-> +					  clk_hw_get_name(hw),
-> +					  CLK_SET_RATE_PARENT,
-> +					  port->membase + AML_UART_REG5,
-> +					  0, 23,
-> +					  CLK_DIVIDER_ROUND_CLOSEST,
-> +					  NULL);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +
-> +	private_data->baud_clk = clk_hw_get_clk(hw, "baud_rate");
->   
->   	return 0;
->   }
-
-
-
--- 
-js
-suse labs
+Barr Robert Richter, UN Attorney At Law Court-Benin
