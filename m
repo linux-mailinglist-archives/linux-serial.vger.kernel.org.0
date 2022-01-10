@@ -2,140 +2,455 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFAF489965
-	for <lists+linux-serial@lfdr.de>; Mon, 10 Jan 2022 14:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1AB489B87
+	for <lists+linux-serial@lfdr.de>; Mon, 10 Jan 2022 15:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiAJNLs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 10 Jan 2022 08:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S235713AbiAJOqx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 10 Jan 2022 09:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiAJNLq (ORCPT
+        with ESMTP id S235712AbiAJOqx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:11:46 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C65FC061245
-        for <linux-serial@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id s30so16337643lfo.7
-        for <linux-serial@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
+        Mon, 10 Jan 2022 09:46:53 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C4BC061751
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jan 2022 06:46:53 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id a5so23283647wrh.5
+        for <linux-serial@vger.kernel.org>; Mon, 10 Jan 2022 06:46:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=Bgie3w5lZXcUpEJsNUNnYT9D80sz6831OKMgWSWMpAMR4c04HQM1hwHkoZ1AqHgJ5M
-         pQJfhFBsNTGc+jfMsWTuSDXhNBe5XPwJ8/UQZKbYcWTDQ68Eu4MBBVsHf0V3Baa+27Pp
-         IUJW/950IUGNsTto2NnsTW49/Cy4Vf+KfgzDT0+KZ2gcb/QkEKg3LEIj8qPJpiII0Qbk
-         buE3CbPl0T8T6omQLXT3KYJBxN98pPIrfxDam1Qs0diPFN43pWVugWbd8LU8WaIGviK3
-         O/t/NLMKhR03EdE8rMi5c8T5epCw09Yzc4YmAU5QrO9ZaREbayNwAtpm1SWYSR1IiBuY
-         5w9A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=pnjbA72IxUXnMP4UtxFeA6T/mh81aEEcqJMXBAswvwk=;
+        b=CnQtqJPQ+Y+9ahLF7HeXuemYj4NvBr9XjvIbPoNGRkmV04n1nUuEcQFoQ50s3Zwct7
+         oi+HjvYPOtB+EdGlKuU7CzBROwoVQrHAMnOK46cu/amn4G9rnCkVAf6QLa1VVKFePMmM
+         ZqfdLCsVSiazVpND8yWxPlE1LGo2q/9J0XN7N9OLgQGjujVgkWrBAjEgQkujYDQu1IRx
+         D+gZktyiJoXjWfK1Kd/OE0KwUEjVeG45A/zqGQES/ZV24I3j5wBi5Yvj347V18avkh/m
+         z8v2djeICZWgFn9L0uX8OiQ0zLt3CTRfH+4zWGSaEzxZ9dNhfCkxrcAckoH83IiHTmlK
+         HOog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=pxdJ8niG0qJatHTyA+hPKjh1rrPRYAnXQWZAvrvz6Fyn00aeRYFhhafBwnpyKK3uMV
-         DPUJPnIIlUV8Rs8FsytK2Oex3O98CEfxC0v8yIz5T9xFb7KtVw2dN8ZOIBhfRBJqtzLJ
-         9sN/lslSTbBg3/Cg59iPsvaYO4Hw9wq4HgYrB+PyE/PUUTbL3+1/wBNdA0hI5acYgPpf
-         4XPk/wfQ7MBR3DqeNVbEULK81EpLL4tct5WLaKLiMhBLaKf1+ql3bPwpKICcKoQLZP5y
-         PeT04Ut9xIdgA3oCuj+CYZMXrjq+S/0SYnNei4zeYRhRLAn4zCx1rFkH3vmFpK9V53Ls
-         FzMA==
-X-Gm-Message-State: AOAM5337z1GkqigNDEyqBEUqRlCo6S8ijuskGnY0RgW7NZNnkUB/7E6w
-        LDufuQaubEQPLWwpwSSnzL9kzPKQGts2FQJuTnnG5fkbrDo=
-X-Google-Smtp-Source: ABdhPJyUuzfRq9+VAp3YIslVsNF7E8r6u+SDvjtiaFw6sfTA9uOxrmlrl9JDay/jDh10uqplhgk07a+YHTpM3Ge0znw=
-X-Received: by 2002:ac2:4c51:: with SMTP id o17mr60639917lfk.558.1641820293776;
- Mon, 10 Jan 2022 05:11:33 -0800 (PST)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=pnjbA72IxUXnMP4UtxFeA6T/mh81aEEcqJMXBAswvwk=;
+        b=tPxbBn5h0w+eX8ijqYwaiG9c3gd7IQgNhpwhAhN4g34bnqtcXJrL4j9Ro66CvWZE7J
+         0qP5SvAtf8Ephqy9pVGIb7qL3cDxvfd2p3xeFWmH7HnPFvOlK2CDopR6nfQedOZ9vxYH
+         M5Bk0OHQb5P+50ZTLHBhh4krCHkpfxe3m3Zs6Ame1GD8BNtvJGX2KRAILIP8u+xfoHxW
+         8ieLQCvt+Z6FB2xO64dw6KFhXeTGs2Okv6tCeCczDZnl1RKwhZvqA5MRCXmRPlHYd75/
+         X4oMR6F+o2Yqi56zB8irHdclVnwEBnU+PBFF9LLxNGSEP9O5Oi/krMA1G1oXpA1fUSrt
+         8DFg==
+X-Gm-Message-State: AOAM53336IoCoHlA1Z1lpUcgCwfa1G7+4ffh7PPICmZi2hmjai/UZhYU
+        rIrbXwQHbi+k8qaWCuGIZSFKtDwBN3pSYTjd
+X-Google-Smtp-Source: ABdhPJzhH1AaHbandcspknuKBxkCGxnYWD2nck48j3dyqmQaJKtd44QQj0aGQkwZyCh51S5HBX9krQ==
+X-Received: by 2002:a5d:6549:: with SMTP id z9mr4801412wrv.567.1641826011504;
+        Mon, 10 Jan 2022 06:46:51 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id l4sm5369367wru.74.2022.01.10.06.46.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 06:46:51 -0800 (PST)
+References: <20220110085604.18042-1-yu.tu@amlogic.com>
+ <20220110085604.18042-4-yu.tu@amlogic.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V4 3/5] tty: serial: meson: The UART baud rate
+Date:   Mon, 10 Jan 2022 15:29:45 +0100
+In-reply-to: <20220110085604.18042-4-yu.tu@amlogic.com>
+Message-ID: <1j8rvnps11.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6504:15d1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 05:11:32
- -0800 (PST)
-Reply-To: gtbank107@yahoo.com
-From:   Barr Robert Richter <westernunion.benin982@gmail.com>
-Date:   Mon, 10 Jan 2022 14:11:32 +0100
-Message-ID: <CAP=nHBK9zHzp_=-EVswWQiLxEoc+HV4oqddgtnEqf-9qYab_4Q@mail.gmail.com>
-Subject: Contact GT Bank-Benin to receive your transfer amount of $18.5m US Dollars.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Attn,Dear
-I need you to know that the fear of the LORD is
-the beginning of wisdom, and knowledge of the Holy One is
-understanding. As power of God Most High. And This is the confidence
-we have in approaching God, that if we ask anything according to his
-will, he hears us. I will make you know that Slow and steady wins the race.
-It is your turn to receive your overdue compensation funds total
-amount $18.5Milion  USD.
-I actualized that you will receive your transfer today without any more delay
-No More fee OK, Believe me , I am your Attorney standing here on your favor.
-I just concluded conversation with the Gt Bank Director, Mrs Mary Gate
-And She told me that your transfer is ready today
 
-So the Bank Asked you to contact them immediately by re-confirming
-your Bank details asap.
-Because this is the Only thing holding this transfer
-If you did not trust me and Mrs Mary Gate,Who Else will you Trust?
-For we are the ones trying to protect your funds here
-and make sure that your funds is secure.
-So Promisingly, I am here to assure you, that Grate Miracle is coming on
-your way, and this funds total amount of $18.500,000 is your
-compensation, entitlement inheritance overdue funds on your name.
-Which you cannot let anything delay you from receiving your funds now,
+On Mon 10 Jan 2022 at 16:56, Yu Tu <yu.tu@amlogic.com> wrote:
 
-Finally i advised you to try your possible best and contact Gt Bank Benin
-once you get this message to receive your transfer $18.5 USD today.
-I know that a journey of thousand miles begins with a single step.
-Always put your best foot forward
-Try as hard as you can, God give you best.
-take my advice and follow the due process of your payment, the
-transfer will be released to
-you smoothly without any hitches or hindrance.
+Title is bad (like several other patches in this series) - Please fix it
 
-Contact DR.MRS MARY GATE, Director Gt bank-Benin to receive your
-transfer amount of $18.5m US Dollars
-It was deposited and registered to your name this morning.
-Contact the Bank now to know when they will transfer to your
-country today
+> Using the common Clock code to describe the UART baud rate clock
+> makes it easier for the UART driver to be compatible with the
+> baud rate requirements of the UART IP on different meson chips.
+>
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
+>  drivers/tty/serial/meson_uart.c | 224 +++++++++++++++++++++++---------
+>  1 file changed, 163 insertions(+), 61 deletions(-)
+>
+> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+> index 7570958d010c..1004fd0b0c9e 100644
+> --- a/drivers/tty/serial/meson_uart.c
+> +++ b/drivers/tty/serial/meson_uart.c
+> @@ -6,6 +6,7 @@
+>   */
+>  
+>  #include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/console.h>
+>  #include <linux/delay.h>
+>  #include <linux/init.h>
+> @@ -65,9 +66,7 @@
+>  #define AML_UART_RECV_IRQ(c)		((c) & 0xff)
+>  
+>  /* AML_UART_REG5 bits */
+> -#define AML_UART_BAUD_MASK		0x7fffff
+>  #define AML_UART_BAUD_USE		BIT(23)
+> -#define AML_UART_BAUD_XTAL		BIT(24)
+>  
+>  #define AML_UART_PORT_NUM		12
+>  #define AML_UART_PORT_OFFSET		6
+> @@ -76,6 +75,13 @@
+>  #define AML_UART_POLL_USEC		5
+>  #define AML_UART_TIMEOUT_USEC		10000
+>  
+> +struct meson_uart_data {
+> +	struct uart_port	port;
+> +	struct clk		*pclk;
+> +	struct clk		*baud_clk;
+> +	bool			use_xtal_clk;
+> +};
+> +
+>  static struct uart_driver meson_uart_driver;
+>  
+>  static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+> @@ -268,14 +274,11 @@ static void meson_uart_reset(struct uart_port *port)
+>  static int meson_uart_startup(struct uart_port *port)
+>  {
+>  	u32 val;
+> -	int ret = 0;
+> +	int ret;
+>  
+> -	val = readl(port->membase + AML_UART_CONTROL);
+> -	val |= AML_UART_CLEAR_ERR;
+> -	writel(val, port->membase + AML_UART_CONTROL);
+> -	val &= ~AML_UART_CLEAR_ERR;
+> -	writel(val, port->membase + AML_UART_CONTROL);
+> +	meson_uart_reset(port);
+>  
+> +	val = readl(port->membase + AML_UART_CONTROL);
+>  	val |= (AML_UART_RX_EN | AML_UART_TX_EN);
+>  	writel(val, port->membase + AML_UART_CONTROL);
+>  
+> @@ -293,19 +296,17 @@ static int meson_uart_startup(struct uart_port *port)
+>  
+>  static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
+>  {
+> +	struct meson_uart_data *private_data = port->private_data;
+>  	u32 val;
+>  
+>  	while (!meson_uart_tx_empty(port))
+>  		cpu_relax();
+>  
+> -	if (port->uartclk == 24000000) {
+> -		val = ((port->uartclk / 3) / baud) - 1;
+> -		val |= AML_UART_BAUD_XTAL;
+> -	} else {
+> -		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
+> -	}
+> +	val = readl(port->membase + AML_UART_REG5);
+>  	val |= AML_UART_BAUD_USE;
+>  	writel(val, port->membase + AML_UART_REG5);
+> +
+> +	clk_set_rate(private_data->baud_clk, baud);
+>  }
+>  
+>  static void meson_uart_set_termios(struct uart_port *port,
+> @@ -395,11 +396,27 @@ static int meson_uart_verify_port(struct uart_port *port,
+>  
+>  static void meson_uart_release_port(struct uart_port *port)
+>  {
+> -	/* nothing to do */
+> +	struct meson_uart_data *private_data = port->private_data;
+> +
+> +	clk_disable_unprepare(private_data->baud_clk);
+> +	clk_disable_unprepare(private_data->pclk);
+>  }
+>  
+>  static int meson_uart_request_port(struct uart_port *port)
+>  {
+> +	struct meson_uart_data *private_data = port->private_data;
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(private_data->pclk);
+> +	if (ret)
+> +		return ret;
 
-Email id: gtbank107@yahoo.com
-Tel/mobile, +229 99069872
-Contact person, Mrs Mary Gate,Director Gt bank-Benin.
-Among the blind the one-eyed man is king
+In the previous version of the series, you already been asked to the
+enable of pclk in the probe. Optimization should not be mixed with this
+series
 
-As you sow, so you shall reap, i want you to receive your funds
-Best things in life are free
-Send to her your Bank Details as i listed here.
+Please make sure all comments are addressed before re-posting
 
-Your account name-------------
-Your Bank Name----------------
-Account Number----------
-your Bank address----------
-Country-----------
-Your private phone number---------
-Routing Numbers-------------
-Swift Code-----------
+> +
+> +	ret = clk_prepare_enable(private_data->baud_clk);
+> +	if (ret) {
+> +		clk_disable_unprepare(private_data->pclk);
+> +		return ret;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -629,55 +646,105 @@ static struct uart_driver meson_uart_driver = {
+>  	.cons		= MESON_SERIAL_CONSOLE,
+>  };
+>  
+> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
+> -						 const char *id)
+> +#define CLK_NAME(name) \
+> +({\
+> +	char clk_name[32];\
+> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev), #name);\
+> +	clk_name;\
+> +})
 
-Note, Your funds is %100 Percent ready for
-transfer.
-Everything you do remember that Good things come to those who wait.
-I have done this work for you with my personally effort, Honesty is
-the best policy.
-now your transfer is currently deposited with paying bank this morning.
-It is by the grace of God that I received Christ, having known the truth.
-I had no choice than to do what is lawful and justice in the
-sight of God for eternal life and in the sight of man for witness of
-God & His Mercies and glory upon my life.
+1) This result in some ugly code being inlined
+2) You return a pointer a local variable which is not gurantee to exist
+anymore  outside of this ...
 
-send this needed bank details to the bank today, so that you receive
-your transfer today as
-it is available for your confirmation today.
-Please do your best as a serious person and send the fee urgent, Note
-that this transfer of $18.500.000 M USD is a Gift from God to Bless
-you.
+Please do this simply in the related function.
 
-If you did not contact the bank urgent, finally the Bank will release
-your transfer of $18.500.000M USD to  Mr. David Bollen as your
-representative.
-So not allow another to claim your Money.
-Thanks For your Understanding.
+> +
+> +static struct clk_div_table xtal_div_table[] = {
+> +	{ 0, 3  },
+> +	{ 1, 1  },
+> +	{ 2, 2  },
+> +	{ 3, 2  },
+> +};
+> +
+> +static int meson_uart_probe_clocks(struct uart_port *port)
+>  {
+> -	struct clk *clk = NULL;
+> -	int ret;
+> +	struct meson_uart_data *private_data = port->private_data;
+> +	struct clk *clk_baud, *clk_xtal;
+> +	struct clk_hw *hw;
+> +	struct clk_parent_data use_xtal_mux_parents[2] = {
+> +		{ .index = -1, },
+> +		{ .index = -1, },
+> +	};
+>  
+> -	clk = devm_clk_get(dev, id);
+> -	if (IS_ERR(clk))
+> -		return clk;
+> +	private_data->pclk = devm_clk_get(port->dev, "pclk");
+> +	if (IS_ERR(private_data->pclk))
+> +		return dev_err_probe(port->dev, PTR_ERR(private_data->pclk),
+> +				     "Failed to get the 'pclk' clock\n");
+>  
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret) {
+> -		dev_err(dev, "couldn't enable clk\n");
+> -		return ERR_PTR(ret);
+> +	clk_baud = devm_clk_get(port->dev, "baud");
+> +	if (IS_ERR(clk_baud)) {
+> +		dev_err(port->dev, "Failed to get the 'baud' clock\n");
+> +		return PTR_ERR(clk_baud);
+>  	}
+>  
+> -	devm_add_action_or_reset(dev,
+> -			(void(*)(void *))clk_disable_unprepare,
+> -			clk);
+> -
+> -	return clk;
+> -}
+> -
+> -static int meson_uart_probe_clocks(struct platform_device *pdev,
+> -				   struct uart_port *port)
+> -{
+> -	struct clk *clk_xtal = NULL;
+> -	struct clk *clk_pclk = NULL;
+> -	struct clk *clk_baud = NULL;
+> -
+> -	clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
+> -	if (IS_ERR(clk_pclk))
+> -		return PTR_ERR(clk_pclk);
+> -
+> -	clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
+> +	clk_xtal = devm_clk_get(port->dev, "xtal");
+>  	if (IS_ERR(clk_xtal))
+> -		return PTR_ERR(clk_xtal);
+> -
+> -	clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
+> -	if (IS_ERR(clk_baud))
+> -		return PTR_ERR(clk_baud);
+> +		return dev_err_probe(port->dev, PTR_ERR(clk_xtal),
+> +				     "Failed to get the 'xtal' clock\n");
+> +
+> +	if (private_data->use_xtal_clk) {
+> +		hw = devm_clk_hw_register_divider_table(port->dev,
+> +							CLK_NAME(xtal_div),
+> +							__clk_get_name(clk_baud),
+> +							CLK_SET_RATE_NO_REPARENT,
+> +							port->membase + AML_UART_REG5,
+> +							26, 2,
+> +							CLK_DIVIDER_READ_ONLY,
+> +							xtal_div_table, NULL);
+> +		if (IS_ERR(hw))
+> +			return PTR_ERR(hw);
+> +
+> +		use_xtal_mux_parents[1].hw = hw;
+> +	} else {
+> +		hw = devm_clk_hw_register_fixed_factor(port->dev,
+> +						       CLK_NAME(clk81_div4),
+> +						       __clk_get_name(clk_baud),
+> +						       CLK_SET_RATE_NO_REPARENT,
+> +						       1, 4);
+> +		if (IS_ERR(hw))
+> +			return PTR_ERR(hw);
+> +
+> +		use_xtal_mux_parents[0].hw = hw;
+> +	}
 
-Barr Robert Richter, UN Attorney At Law Court-Benin
+Contradiction with previous series.
+In the previous series we could clearly see that gxbb did not have the
+/4 divider. It did not have bits 26 and 27 either.
+
+Now gxbb get the /4 divider. It operated correctly without it so far, so
+this is rather suspicious. Could you please comment on this ?
+
+>  
+> -	port->uartclk = clk_get_rate(clk_baud);
+> +	hw = __devm_clk_hw_register_mux(port->dev, NULL,
+> +					CLK_NAME(use_xtal),
+> +					ARRAY_SIZE(use_xtal_mux_parents),
+> +					NULL, NULL,
+> +					use_xtal_mux_parents,
+> +					CLK_SET_RATE_PARENT,
+> +					port->membase + AML_UART_REG5,
+> +					24, 0x1,
+> +					CLK_MUX_READ_ONLY,
+> +					NULL, NULL);
+> +	if (IS_ERR(hw))
+> +		return PTR_ERR(hw);
+> +
+> +	port->uartclk = clk_hw_get_rate(hw);
+> +
+> +	hw = devm_clk_hw_register_divider(port->dev,
+> +					  CLK_NAME(baud_div),
+> +					  clk_hw_get_name(hw),
+> +					  CLK_SET_RATE_PARENT,
+> +					  port->membase + AML_UART_REG5,
+> +					  0, 23,
+> +					  CLK_DIVIDER_ROUND_CLOSEST,
+> +					  NULL);
+> +	if (IS_ERR(hw))
+> +		return PTR_ERR(hw);
+> +
+> +	private_data->baud_clk = clk_hw_get_clk(hw, "baud_rate");
+
+I have already commented on the use of this function in the previous
+version.
+
+Please make sure all comments are addressed before re-posting
+
+>  
+>  	return 0;
+>  }
+>  
+>  static int meson_uart_probe(struct platform_device *pdev)
+>  {
+> +	struct meson_uart_data *private_data;
+>  	struct resource *res_mem;
+>  	struct uart_port *port;
+>  	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
+> @@ -716,18 +783,20 @@ static int meson_uart_probe(struct platform_device *pdev)
+>  		return -EBUSY;
+>  	}
+>  
+> -	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), GFP_KERNEL);
+> -	if (!port)
+> +	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
+> +				    GFP_KERNEL);
+> +	if (!private_data)
+>  		return -ENOMEM;
+>  
+> +	if (device_get_match_data(&pdev->dev))
+> +		private_data->use_xtal_clk = true;
+> +
+> +	port = &private_data->port;
+> +
+>  	port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
+>  	if (IS_ERR(port->membase))
+>  		return PTR_ERR(port->membase);
+>  
+> -	ret = meson_uart_probe_clocks(pdev, port);
+> -	if (ret)
+> -		return ret;
+> -
+>  	port->iotype = UPIO_MEM;
+>  	port->mapbase = res_mem->start;
+>  	port->mapsize = resource_size(res_mem);
+> @@ -740,7 +809,11 @@ static int meson_uart_probe(struct platform_device *pdev)
+>  	port->x_char = 0;
+>  	port->ops = &meson_uart_ops;
+>  	port->fifosize = fifosize;
+> +	port->private_data = private_data;
+
+port has private_data
+private_data has port
+
+Is it really necessary to have both ... looks to me that port in
+private_data is overkill
+
+>  
+> +	ret = meson_uart_probe_clocks(port);
+> +	if (ret)
+> +		return ret;
+>  	meson_ports[pdev->id] = port;
+>  	platform_set_drvdata(pdev, port);
+>  
+> @@ -766,10 +839,39 @@ static int meson_uart_remove(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id meson_uart_dt_match[] = {
+> -	{ .compatible = "amlogic,meson6-uart" },
+> -	{ .compatible = "amlogic,meson8-uart" },
+> -	{ .compatible = "amlogic,meson8b-uart" },
+> -	{ .compatible = "amlogic,meson-gx-uart" },
+> +	{
+> +		.compatible = "amlogic,meson6-uart",
+> +		.data = (void *)false,
+> +	},
+> +	{
+> +		.compatible = "amlogic,meson8-uart",
+> +		.data = (void *)false,
+> +	},
+> +	{
+> +		.compatible = "amlogic,meson8b-uart",
+> +		.data = (void *)false,
+> +	},
+> +	{
+> +		.compatible = "amlogic,meson-gxbb-uart",
+> +		.data = (void *)false,
+> +	},
+> +	{
+> +		.compatible = "amlogic,meson-gxl-uart",
+> +		.data = (void *)true,
+> +	},
+> +	{
+> +		.compatible = "amlogic,meson-g12a-uart",
+> +		.data = (void *)true,
+> +	},
+> +	/*
+> +	 * deprecated, don't use anymore because it doesn't differentiate
+> +	 * between GXBB, GXL and G12A which have different revisions
+> +	 * of the UART IP.
+> +	 */
+> +	{
+> +		.compatible = "amlogic,meson-gx-uart",
+> +		.data = (void *)false,
+> +	},
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
+
