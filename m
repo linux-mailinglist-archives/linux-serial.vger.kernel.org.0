@@ -2,94 +2,114 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F4348CF96
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jan 2022 01:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE3448D299
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jan 2022 08:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiAMAR1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Jan 2022 19:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiAMARX (ORCPT
+        id S230264AbiAMHGY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jan 2022 02:06:24 -0500
+Received: from mail-ed1-f53.google.com ([209.85.208.53]:39852 "EHLO
+        mail-ed1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230256AbiAMHGY (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Jan 2022 19:17:23 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A119C06173F
-        for <linux-serial@vger.kernel.org>; Wed, 12 Jan 2022 16:17:23 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id h14so10272897ybe.12
-        for <linux-serial@vger.kernel.org>; Wed, 12 Jan 2022 16:17:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=pCWih811QqNXs4egIk8I2fO93FiGmy1BmpOPH995f5M=;
-        b=n99JvY/cFSr2d5bD3noaIUQ31+cHrM2LcN0EhEwEaova8mOXnuXP/qSwPrjqobtkFt
-         ythiy47tL2hjYXdjbZihU1iF0MtgV7WFy4WinRS/DJ+idW6WdeiILPNfCQhuaCU0MEJq
-         F0J8ZQi2fWlqqi0Fd1azbDOn4r+P0jkp0FdEGpTxIP7SJOUv7xUHcR1KyAU5aokjQw9e
-         KgOv4hma+zKAJwQY2q8m3g9nd4OfB+yzeVpkOAA2HS7jO3I56zyV/dipHDhPnUZnrj/B
-         lYVZDMMICOAMZ8fpiG9DPTNX9F375qFU05bkSJE5bAVgZdncV8XYdmda87rP33Ie4aCh
-         i5Pw==
+        Thu, 13 Jan 2022 02:06:24 -0500
+Received: by mail-ed1-f53.google.com with SMTP id c71so19529036edf.6;
+        Wed, 12 Jan 2022 23:06:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=pCWih811QqNXs4egIk8I2fO93FiGmy1BmpOPH995f5M=;
-        b=xKCTdtNioVAQd/M0eLfy/93VW7tGAeV/SBG+3qcxDqe8KHBX4s4Ct4aiD5zWdcNdL/
-         fQWfy7R7E7eHVF0FVTOq1v1bHOh3LuhEE7XcyN3NIv7fmCy57vLLgQ4PyQu/UUbqKEda
-         aHRGda3h7oV10IvsgMJWoVdRe2sho/e1+Ru5ClNTYdZqURnzQx1ptcHDJK+nHKYshvi5
-         3k2KkKhCSEiFfDuYffAY6v6051AQnBKHUZUwGOMWbouXepZv2ellz/m899o7cQmZ85F+
-         /3NyWt+bLOx5VpX10qsfJXu1FaTZZ2aBMbuIOP5C9OWBDSfuv9eQyph0PKEObeGMV/21
-         rxEQ==
-X-Gm-Message-State: AOAM533CsqGjksP79mUcEG39fdWskT4tP3k6CSemy3jdzSo5tYr5hzOy
-        o9nciIG/EWhJAhfRjzi74ipat/jglfHYqBHYFj0=
-X-Google-Smtp-Source: ABdhPJy4/6OTf8Dkxm/sEkdFHqN2d1aQpR1dAV1nDyURUe542geq6JJDAIIs3Q/e0IRMByNDLwFvmoVlek3rEcv8csI=
-X-Received: by 2002:a25:dd46:: with SMTP id u67mr2862484ybg.729.1642033042242;
- Wed, 12 Jan 2022 16:17:22 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Mvd9n/r2q1EVHYqTjA0mQkCbJUoPmzaEOBWZ8LJyPcI=;
+        b=Ub0S/Hd3lVLY/uG61yrX+6dGmsBvsXfhp2NIvXkFWTaCAw9pvf/8neKamr1Ymr7YR7
+         VmZPbKYNFRCqhL/sAfW0JaJ/bUT/LD6AHEOwVNHi8ikZQC79wgrOvZIjL6453Md52wE8
+         3+hsxzyBfgxgBfiQqT1k0NsMl2iQnj2S369r+69PYJH4qSpAEt80wW/WMqcMRg/rB/8V
+         8csroAqOJAUYzKyKWtDWQIPSSyltdfKiqiV7T2ka0wniPhy24vvnOUd7IHLxuU+dOWdl
+         3Jl9owWHuzQvY8OSAZ734cvnOZjUmP3elQyzcXdVw6bGtbr2L+dgYyeE2Tj3diT2Fn4e
+         Dh9g==
+X-Gm-Message-State: AOAM5338Tkq0qd3MvBkPbolWNCn/TktcD1W2y6+gaMKAezWZc2Qn6DYQ
+        gS2vGH69G06slPGTV+LG8Ro=
+X-Google-Smtp-Source: ABdhPJyZQj1Tl2/g2XPWJstoDpyR1bE6HvQH348hrfsdVJhRH4iaZAYq+D5wgsaCj0K55YBJBjppNg==
+X-Received: by 2002:a17:906:9a52:: with SMTP id aj18mr2378613ejc.511.1642057582744;
+        Wed, 12 Jan 2022 23:06:22 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id b1sm561325ejb.51.2022.01.12.23.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 23:06:22 -0800 (PST)
+Message-ID: <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
+Date:   Thu, 13 Jan 2022 08:06:20 +0100
 MIME-Version: 1.0
-Reply-To: millasmith3250@gmail.com
-Sender: abusalam1976@gmail.com
-Received: by 2002:a05:7108:1865:0:0:0:0 with HTTP; Wed, 12 Jan 2022 16:17:21
- -0800 (PST)
-From:   "Ms. Milla Smith" <milasm3800@gmail.com>
-Date:   Wed, 12 Jan 2022 16:17:21 -0800
-X-Google-Sender-Auth: AwQPaI9dheCEMdStMvkyM0DZN_Q
-Message-ID: <CAJR+jmu3ZydG-vRBq8ZWRr7p+nD3VD-178F8MhykcaCsJ=skoA@mail.gmail.com>
-Subject: compensation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+Content-Language: en-US
+To:     Hammer Hsieh <hammerh0314@gmail.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com
+References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
+ <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Friend,
+Hi,
 
-I am sorry, but happy to inform you about my success in getting those
-funds transferred under the cooperation of a new partner from Vietnam.
-Though, I tried my best to involve you in the business, but the whole
-situation changed. Presently, I am in Vietnam for investment projects
-with my own share of the total sum. Meanwhile, I did not forget your
-past efforts and attempts to assist me in transferring those funds
-despite that it failed us some at a point.
+On 12. 01. 22, 10:24, Hammer Hsieh wrote:
+> Add Sunplus SoC UART Driver
+...
+> --- /dev/null
+> +++ b/drivers/tty/serial/sunplus-uart.c
+> @@ -0,0 +1,756 @@
+...
+> +/* Register offsets */
+> +#define SUP_UART_DATA			0x00
+> +#define SUP_UART_LSR			0x04
+> +#define SUP_UART_MSR			0x08
+> +#define SUP_UART_LCR			0x0C
+> +#define SUP_UART_MCR			0x10
+> +#define SUP_UART_DIV_L			0x14
+> +#define SUP_UART_DIV_H			0x18
+> +#define SUP_UART_ISC			0x1C
+> +#define SUP_UART_TX_RESIDUE		0x20
+> +#define SUP_UART_RX_RESIDUE		0x24
+> +
+> +/* Line Status Register bits */
+> +#define SUP_UART_LSR_BC			BIT(5) /* break condition status */
+> +#define SUP_UART_LSR_FE			BIT(4) /* frame error status */
+> +#define SUP_UART_LSR_OE			BIT(3) /* overrun error status */
+> +#define SUP_UART_LSR_PE			BIT(2) /* parity error status */
 
-Now, contact my secretary in Burkina Faso. His name is Ms. Milla Smith
-This is his email address; millasmith3250@gmail.com Ask him to send
-you the total of $850,000.00 (Eight Hundred and Fifty Thousand US
-Dollars) which I kept for your compensation for all the past efforts
-and attempts to assist me in this matter. I appreciated your efforts
-at that time very much. So, feel free and get in touch with my
-secretary, Ms. Milla Smith and instruct him where to send the amount
-to you. Please, do let me know immediately you receive it, so that we
-can share joy after all the sufferings at that time.
+I just wonder why do the HW creators feel so creative to redefine the 
+world...
 
-Finally, I=E2=80=99m very busy here, because of the investment projects whi=
-ch
-I and my new partner are having at hand. I had forwarded instruction
-to the secretary on your behalf to receive that money. He will send
-the funds to you without any delay OK. Extend my greetings to your
-family.
+> +static void sunplus_shutdown(struct uart_port *port)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&port->lock, flags);
+> +	writel(0, port->membase + SUP_UART_ISC);
+> +	spin_unlock_irqrestore(&port->lock, flags);
 
+I asked last time:
+* What bus is this -- posting?
 
-My Best regards,
-Yours brother
-Mr. Abu Salam
-Greetings from Vietnam
+You replied:
+* Here just clear interrupt.
+* Not really understand your comment?
+
+So I am asking again:
+What bus is this? Isn't a posted write a problem here? I mean, shouldn't 
+you read from the register so that the write hits the device? That 
+depends on the bus this sits on, so just asking.
+
+Other than that the driver looks much better now, i.e. LGTM.
+
+thanks,
+-- 
+js
+suse labs
