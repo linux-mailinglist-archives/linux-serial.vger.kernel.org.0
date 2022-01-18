@@ -2,101 +2,72 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 016AD491D88
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Jan 2022 04:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C466E491CC4
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Jan 2022 04:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349128AbiARDif (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Jan 2022 22:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347042AbiARDeS (ORCPT
+        id S1351090AbiARDR6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 17 Jan 2022 22:17:58 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:14899 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353759AbiARDJ6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 17 Jan 2022 22:34:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91229C03702A;
-        Mon, 17 Jan 2022 19:09:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 038BDB81235;
-        Tue, 18 Jan 2022 03:09:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9DBC36AE3;
-        Tue, 18 Jan 2022 03:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642475373;
-        bh=bVUJF15LlFX41avPvtpvLU1etpW0ALCZyjgvlj4BjYY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CHLb2cHCKzNLnvFwB5lC0AUuNmqmrMltH9y4FTWHeQDqChFZmIIjQbHf2P5isMj/0
-         Jc4zgMN30v0pGK5BYxUwxxBwjke7KTSw33k3/VB++CnzoDaEQonMYADZbQbruGRwYv
-         /quppCs2Q6XFLHkdllUp5a3n9N7sGQjYWp4mdcL5igTeEy4vU5hIUqsPbz9SsGhDwv
-         e2lOCLxelJqjQ2Hyo7tRGD0iu4NyW1d90rSkA4t9Al4LgdjCJAYqt5fjWG/uU6RYqQ
-         gHRlc2L4RCX54ckv36XviAU/6h+MO7oX5S3oqtdHtH0K643x0upr9r0QRkPTqtrgtt
-         Ep2aPQhi8YjXA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 28/29] serial: core: Keep mctrl register state and cached copy in sync
-Date:   Mon, 17 Jan 2022 22:08:21 -0500
-Message-Id: <20220118030822.1955469-28-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118030822.1955469-1-sashal@kernel.org>
-References: <20220118030822.1955469-1-sashal@kernel.org>
+        Mon, 17 Jan 2022 22:09:58 -0500
+Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Tue, 18 Jan 2022
+ 11:09:52 +0800
+From:   Yu Tu <yu.tu@amlogic.com>
+To:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Tu <yu.tu@amlogic.com>
+Subject: [PATCH V6 0/5] Use CCF to describe the UART baud rate clock
+Date:   Tue, 18 Jan 2022 11:09:06 +0800
+Message-ID: <20220118030911.12815-1-yu.tu@amlogic.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.18.11.248]
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+Using the common Clock code to describe the UART baud rate
+clock makes it easier for the UART driver to be compatible
+with the baud rate requirements of the UART IP on different
+meson chips. Add Meson S4 SoC compatible.
 
-[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
+Yu Tu (5):
+  tty: serial: meson: Move request the register region to probe
+  tty: serial: meson: Use devm_ioremap_resource to get register mapped
+    memory
+  tty: serial: meson: Describes the calculation of the UART baud rate
+    clock using a clock frame
+  tty: serial: meson: Make some bit of the REG5 register writable
+  tty: serial: meson: Added S4 SOC compatibility
 
-struct uart_port contains a cached copy of the Modem Control signals.
-It is used to skip register writes in uart_update_mctrl() if the new
-signal state equals the old signal state.  It also avoids a register
-read to obtain the current state of output signals.
+V5 -> V6: Change error format as discussed in the email.
+V4 -> V5: Change error format.
+V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
+in the email.
+V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
+the DTS before it can be deleted
+V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
+discussed in the email
 
-When a uart_port is registered, uart_configure_port() changes signal
-state but neglects to keep the cached copy in sync.  That may cause
-a subsequent register write to be incorrectly skipped.  Fix it before
-it trips somebody up.
+Link:https://lore.kernel.org/linux-amlogic/20220110104214.25321-4-yu.tu@amlogic.com/
 
-This behavior has been present ever since the serial core was introduced
-in 2002:
-https://git.kernel.org/history/history/c/33c0d1b0c3eb
+ drivers/tty/serial/meson_uart.c | 217 ++++++++++++++++++++++----------
+ 1 file changed, 149 insertions(+), 68 deletions(-)
 
-So far it was never an issue because the cached copy is initialized to 0
-by kzalloc() and when uart_configure_port() is executed, at most DTR has
-been set by uart_set_options() or sunsu_console_setup().  Therefore,
-a stable designation seems unnecessary.
 
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/serial_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 013fb874c64e2..8142135a2eec4 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -2247,7 +2247,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
- 		 * We probably don't need a spinlock around this, but
- 		 */
- 		spin_lock_irqsave(&port->lock, flags);
--		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
-+		port->mctrl &= TIOCM_DTR;
-+		port->ops->set_mctrl(port, port->mctrl);
- 		spin_unlock_irqrestore(&port->lock, flags);
- 
- 		/*
+base-commit: 4d66020dcef83314092f2c8c89152a8d122627e2
 -- 
-2.34.1
+2.33.1
 
