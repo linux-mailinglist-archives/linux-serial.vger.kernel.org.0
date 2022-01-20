@@ -2,99 +2,64 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D07EE494BB1
-	for <lists+linux-serial@lfdr.de>; Thu, 20 Jan 2022 11:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565B1494C1D
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Jan 2022 11:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376267AbiATK3e (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Jan 2022 05:29:34 -0500
-Received: from mta-65-228.siemens.flowmailer.net ([185.136.65.228]:36955 "EHLO
-        mta-65-228.siemens.flowmailer.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376259AbiATK3e (ORCPT
+        id S229494AbiATKu7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Jan 2022 05:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230470AbiATKtc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Jan 2022 05:29:34 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jan 2022 05:29:34 EST
-Received: by mta-65-228.siemens.flowmailer.net with ESMTPSA id 20220120101929eb8ba33e641f260a77
-        for <linux-serial@vger.kernel.org>;
-        Thu, 20 Jan 2022 11:19:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=JnUF520dA6MoqiwuY5pfZTlvR7T/MvYRVU/LqW1MI3k=;
- b=ihEQCGvjxiuWjujvcWcjAG+XLKapXISTs0IrcZ8ZacEMP7xLpC6wIHihY+MddP+9tao0cz
- sZeRgVbvf1G6O3e79xUTDKsH1T4MSB2HQdIZzudqKAI/CWYSy7IyRgJhZfp83OgNmBffAd2W
- ckt28/t3NAHgzpgmiIl0Ey7IXVaEw=;
-From:   daniel.starke@siemens.com
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2 1/1] tty: n_gsm: fix SW flow control encoding/handling
-Date:   Thu, 20 Jan 2022 02:18:57 -0800
-Message-Id: <20220120101857.2509-1-daniel.starke@siemens.com>
+        Thu, 20 Jan 2022 05:49:32 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A898C061574
+        for <linux-serial@vger.kernel.org>; Thu, 20 Jan 2022 02:49:32 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id h14so16411133ybe.12
+        for <linux-serial@vger.kernel.org>; Thu, 20 Jan 2022 02:49:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=6Llb3z0/5OIzG6RJ3l9/Z14PDgc6xtj5MthS1YNcYzc=;
+        b=eHf7VM8nwKnMuPlR+rCoLSiO9EmRnsWfVr0RRKXi/fwOIHWiKOODrw6FLkTVvG0tZH
+         2cFw9u4SmT/PpLSFb3jl3RSQKuWR0BbNdrRD1fVGYWkGWyKaoqH5f+1+JlyQ/CSZo+BL
+         XBugH95SB5SMVUoqeYdSZF+fPxV8tk15nu5e4Wra2eMjxV+ojLiTkDfW7ONz3VZMm51b
+         f2pbUx6bDnaYZxRJpGQ/HeLiDUvJLr4P3QynSAoHOWMEzsmfPE9XArOwSAwSg2vgIcGv
+         rq6rc7o4ojdmeOhPWzn2lW03PAKsW8Zq8m4UyEOpi6/ylFOMBrxJZtcB/JHQZ3WR2EQw
+         LaSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=6Llb3z0/5OIzG6RJ3l9/Z14PDgc6xtj5MthS1YNcYzc=;
+        b=4c4n/iQww4DpDz6Xgnieu5+0fIHe9px/NXAMe0lM58zoMpTnQHltJqnqPQJslqAFHu
+         XLwtE1gTvcBS/1nKhvhnBGM6dB/3wBU5YrldVzC3VKJU31V9ZyOjbtJ4xNLY5anaI+zV
+         hUdvtNrEqPzTot0DRmIeE8CCf3CrBENNTVeDGzSYv3nC6bhXDMGZC3vhkdwGLf4lyTQQ
+         1irzhbiVKki/HnyED2JUGjvscCgw6B61BhPFT70flDR8hZIEJmAGIAyFI8pjqrx3qaqT
+         ahuuQugRnfxun7pgpzexia6Zqpj3SoSIY8t+w4rWbvr7clcvqEUWBFZ5dN6rJNg51j0z
+         l7oA==
+X-Gm-Message-State: AOAM530FbnjvuiQkQJqPCVESanIuUR1F9uIZ5JMfcpwCSaHrw5YeWAsw
+        JMucsBE1awkrMA3WZnCuj9PMHMWNdPZJ2x+bESQ=
+X-Google-Smtp-Source: ABdhPJzZMsqM9GJcLX58zAOeMA22IYBlCD5R1pK8NsHzK/VPEDbXzqFuCYxQsQb9XYkftW0VZZQfuhIakSL3UKhBXBg=
+X-Received: by 2002:a25:73d6:: with SMTP id o205mr13544613ybc.678.1642675771801;
+ Thu, 20 Jan 2022 02:49:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-7517:519-21489:flowmailer
+Received: by 2002:a05:7000:49c7:0:0:0:0 with HTTP; Thu, 20 Jan 2022 02:49:31
+ -0800 (PST)
+Reply-To: barristerjohnsonphillip1@gmail.com
+From:   Johnson Phillip <bourahime.saliou0907521@gmail.com>
+Date:   Thu, 20 Jan 2022 10:49:31 +0000
+Message-ID: <CAE7kwUav3OiHqxm+8e9gTNuvjYYY0Q8_9+jvKqJGNsXDskx4qQ@mail.gmail.com>
+Subject: Hallo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.2.7.3 states that DC1 (XON) and DC3 (XOFF)
-are the control characters defined in ISO/IEC 646. These shall be quoted if
-seen in the data stream to avoid interpretation as flow control characters.
+Hello,
 
-ISO/IEC 646 refers to the set of ISO standards described as the ISO
-7-bit coded character set for information interchange. Its final version
-is also known as ITU T.50.
-See https://www.itu.int/rec/T-REC-T.50-199209-I/en
+I am still waiting for your response.
 
-To abide the standard it is needed to quote DC1 and DC3 correctly if these
-are seen as data bytes and not as control characters. The current
-implementation already tries to enforce this but fails to catch all
-defined cases. 3GPP 27.010 chapter 5.2.7.3 clearly states that the most
-significant bit shall be ignored for DC1 and DC3 handling. The current
-implementation handles only the case with the most significant bit set 0.
-Cases in which DC1 and DC3 have the most significant bit set 1 are left
-unhandled.
-
-This patch fixes this by masking the data bytes with ISO_IEC_646_MASK (only
-the 7 least significant bits set 1) before comparing them with XON
-(a.k.a. DC1) and XOFF (a.k.a. DC3) when testing which byte values need
-quotation via byte stuffing.
-
-Fixes: e1eaea46bb40 (tty: n_gsm line discipline, 2010-03-26)
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index ba27b274c967..0b1808e3a912 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -322,6 +322,7 @@ static int addr_cnt;
- #define GSM1_ESCAPE_BITS	0x20
- #define XON			0x11
- #define XOFF			0x13
-+#define ISO_IEC_646_MASK	0x7F
- 
- static const struct tty_port_operations gsm_port_ops;
- 
-@@ -531,7 +532,8 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
- 	int olen = 0;
- 	while (len--) {
- 		if (*input == GSM1_SOF || *input == GSM1_ESCAPE
--		    || *input == XON || *input == XOFF) {
-+		    || (*input & ISO_IEC_646_MASK) == XON
-+		    || (*input & ISO_IEC_646_MASK) == XOFF) {
- 			*output++ = GSM1_ESCAPE;
- 			*output++ = *input++ ^ GSM1_ESCAPE_BITS;
- 			olen++;
--- 
-2.25.1
-
+Regards
+Barr. Johnson Phillip
