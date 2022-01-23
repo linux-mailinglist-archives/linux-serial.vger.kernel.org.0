@@ -2,29 +2,26 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC34496FB5
-	for <lists+linux-serial@lfdr.de>; Sun, 23 Jan 2022 05:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7F9496FB7
+	for <lists+linux-serial@lfdr.de>; Sun, 23 Jan 2022 05:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiAWEKV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 22 Jan 2022 23:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiAWEKV (ORCPT
+        id S235397AbiAWESQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 22 Jan 2022 23:18:16 -0500
+Received: from bmailout2.hostsharing.net ([83.223.78.240]:49167 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230305AbiAWESQ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 22 Jan 2022 23:10:21 -0500
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9D4C06173B
-        for <linux-serial@vger.kernel.org>; Sat, 22 Jan 2022 20:10:21 -0800 (PST)
+        Sat, 22 Jan 2022 23:18:16 -0500
 Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 496D7100D9411;
-        Sun, 23 Jan 2022 05:10:17 +0100 (CET)
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 5CA852800B3D2;
+        Sun, 23 Jan 2022 05:18:14 +0100 (CET)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 12B4A40DA1; Sun, 23 Jan 2022 05:10:17 +0100 (CET)
+        id 4D85BECB4D; Sun, 23 Jan 2022 05:18:14 +0100 (CET)
 Message-Id: <85fa3323ba8c307943969b7343e23f34c3e652ba.1642909284.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Sun, 23 Jan 2021 05:10:14 +0100
+Date:   Sun, 23 Jan 2022 05:18:14 +0100
 Subject: [PATCH 1/2] serial: pl011: Fix incorrect rs485 RTS polarity on
  set_mctrl
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
