@@ -2,131 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C3849AB1C
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jan 2022 05:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FED049AD09
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jan 2022 08:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S252286AbiAYE0q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 24 Jan 2022 23:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S1346821AbiAYHGL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jan 2022 02:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3414260AbiAYDAo (ORCPT
+        with ESMTP id S1392110AbiAYHDM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:00:44 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB11C06173B
-        for <linux-serial@vger.kernel.org>; Mon, 24 Jan 2022 15:56:51 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id p37so17644984pfh.4
-        for <linux-serial@vger.kernel.org>; Mon, 24 Jan 2022 15:56:51 -0800 (PST)
+        Tue, 25 Jan 2022 02:03:12 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD8AC02B745
+        for <linux-serial@vger.kernel.org>; Mon, 24 Jan 2022 21:41:52 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id c10so58485769ybb.2
+        for <linux-serial@vger.kernel.org>; Mon, 24 Jan 2022 21:41:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9hh+6kugkeSiiQht2Ofo5ci00bQAsOJV63pvvuw8MqQ=;
-        b=Ukv/t2/v46npEGOCYlu/PQxt/5PPgr9L3wwbh32tGPkO+YO2T+VJNjvx/2Ufx2IDOo
-         KdkMlmQVWADKCI9yA9KGUNMzC12xi66LkgJ3RYXSMt8izjguSQ0iWZv3bEY3ysJASemY
-         V/LXQj5ay+6HDNGxLs6CnB2pV8Rss6mQ/rh31n0vjP+fwjhPBEP2Kbn8k3ovBrukXfYZ
-         sn/HZ1MPfzl2yw0ihxsYut5/00Ug8WLHlesy2IG23bklrSrsLLxXOajPt4JZDTnb5d81
-         e1U/Gb35iiFXl2SDNs7I9Ac1hRuzc9nYoMFDhpCt/cGQ76SKOKJEPrfgvIvNhQBomloJ
-         F0/g==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=omchJdYJcVvbnbx3iWDsqNfzfvgFxRY5UV8d5JFHFd0Qxp4Fs99oOTWbnsLJvmkGLO
+         KJ9h0aIZipzZCxLYUC1EbKJQXjsTnrYD4skWPu5L6KEa7WwksJ/DgfAKn2I//FvNz16e
+         yvRSMjBJIkfJOiN7QosmIFzfX6t0OymUxXq/kzoldmt5Tk4SMXy3poAlzZfnj4tLqkCO
+         r1uVZjBjIcfKcTHUm4yIRwmNGijXGA0OAhFYRol/6hiAAZJ37V1K6a3bLM+XpGdFXGos
+         hPiIHyT9XSW8aiVFGjIdHRgRcnWLHkX21ZW87GvspRwlXlL9xuI6dXFZXWxBZnRTJWgA
+         Bk5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9hh+6kugkeSiiQht2Ofo5ci00bQAsOJV63pvvuw8MqQ=;
-        b=UZJISYOwZL2P7DSC6DmN8fnKs/807KOlOj7158UIhx2eu5vQQ3HNOQCsFf4sZm7iSm
-         KuRU+JaSSY7GHeWnH5etBXsrxMoa8eaLb06PT/uSqZwP55mDGJHfp/5evwecKHClZnjr
-         JHJ7hZxvLTm2VVgGA8jfbMQmi6czQjsKyoC7YrxHHCfUaqjgmROSdGF0RLMKJDohkoXu
-         ryJGXlldlDHinSCnu8RIXrt7J3uln85ayaegUHi3Ep2GmIFwwTA5hJJoN0ldrJC7Mtso
-         xIaAGV/ivTvq1p06iV4HehOuBYLn0UKK1bK6iw+rPgGyvu+/S3Fh1UOQRyyzfwOxuglc
-         Qi/w==
-X-Gm-Message-State: AOAM532ztl1nmJAifOSwET+hAv3drZ6Uwrpsgdx+HXSHCpFFCITf/JAD
-        2Mg3YNqepdRJbFJFYUfmXQmioiDgcqyiILHbTsp0QA==
-X-Google-Smtp-Source: ABdhPJxL0NFnx0J+3UH5ghjwPitZ1MFPKyL7y1dwOOSJIzpGtIoMIoWPO/jVyu4eJweWcKyDzJKfzKlEgnhZ/Mtr/Uw=
-X-Received: by 2002:a05:6a00:728:b0:4b0:b1c:6fd9 with SMTP id
- 8-20020a056a00072800b004b00b1c6fd9mr15756421pfm.27.1643068611375; Mon, 24 Jan
- 2022 15:56:51 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=E1msgcIuxxRYEJzszo/X/ghkcS8ULmQma70ALnhFrbBNTMD2hoS2CiR8aRjpESZIm3
+         JMNgmhyRTllcGOZWIv4+1F73iYCAD9SGLI6HKJuQHp5+YviGmu9z4H9cEK5wehjinMy2
+         43Yb8HE1RHHGxUew5bNsM8kUsqEADH+1qxvTYrUJX0tK4AYOFn1le2V6N5vD66Gs6LLf
+         aCyJUlh3uK/epves6lIAb6bKD7p3XuOre5oZn6y7JtCF8RdvJJjfRkmR22xN8zvRQWHJ
+         2D2mA2KjowhHFLAtndcaCnO8V5oayY8NxxGUCTi2cY+b8hnzZbk6XK6dDg1a2nWli1/4
+         qDpA==
+X-Gm-Message-State: AOAM530b53wM1u2qqlcyVpIrRzYoKbGsxrdUi0Aoh7S+OK85k76UbS7t
+        Q8Zq51EVmvyKxz+bX80JeHst2jP3cTP6+JHkA21tBeLcbBI=
+X-Google-Smtp-Source: ABdhPJwywiwyTtOCXfovmJIEM7Vqt+PFDzMW3tzxRj90P3fJDPhIlV2jOd/vI9WPw47eCab8Z7S4n4qldrLRD5Ly+Sc=
+X-Received: by 2002:a25:d783:: with SMTP id o125mr27594671ybg.710.1643089301256;
+ Mon, 24 Jan 2022 21:41:41 -0800 (PST)
 MIME-Version: 1.0
-References: <CAJ+vNU0CrD8091W5zH7ve9v3ZVAGXR6=6DGebd5LhHz4mzt4+w@mail.gmail.com>
- <CAJ+vNU1tJ5W5RCUsPehgH7CS=v=7mttHgNOu-UdWGVpzf2LcBQ@mail.gmail.com> <4bdbd9c0-8ce3-84b1-9f89-be89b686c652@camlingroup.com>
-In-Reply-To: <4bdbd9c0-8ce3-84b1-9f89-be89b686c652@camlingroup.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Mon, 24 Jan 2022 15:56:40 -0800
-Message-ID: <CAJ+vNU27VQR6Bwp_KtYLubr_CBd30Ewgm6xxZtPiVXOFw8sEqg@mail.gmail.com>
-Subject: Re: Modem control lines for RTSCTS hardware flow control via rts-gpio
- and cts-gpio with IMX
-To:     =?UTF-8?Q?Tomasz_Mo=C5=84?= <tomasz.mon@camlingroup.com>
-Cc:     linux-serial@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Huang Shijie <b32955@freescale.com>,
-        Dirk Behme <dirk.behme@googlemail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>
+Received: by 2002:a05:7000:ad9d:0:0:0:0 with HTTP; Mon, 24 Jan 2022 21:41:40
+ -0800 (PST)
+Reply-To: danielseyba@yahoo.com
+From:   Seyba Daniel <mrssuzaramaling19@gmail.com>
+Date:   Tue, 25 Jan 2022 06:41:40 +0100
+Message-ID: <CAKN-9XgQjuMspSnu-F01fv+Bgr6eZEygpsR3pZ-5cF=m78av-Q@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:19 PM Tomasz Mo=C5=84 <tomasz.mon@camlingroup.co=
-m> wrote:
->
-> On 14.01.2022 04:08, Tim Harvey wrote:
-> > So I believe in order to support using gpios for rts/cts in the imx
-> > uart driver I must find the right place to call imx_uart_rts_active
-> > and imx_uart_rts_inactive when the FIFO is not full and full
-> > respectively. I'm not that familiar with the Linux uart driver
-> > framework - am I on the right track and if so any ideas where this is
-> > best done?
->
-> It is not really the driver (and thus FIFO level), but rather the amount
-> of free space in tty buffer (checked by Line Discipline workqueue) that
-> determines when to throttle (set RTS inactive). This mostly works fine,
-> but fails [1] when the RX interrupt frequency is too high [2].
->
-> The throttle/unthrottle request, when termios CRTSCTS is set, is seen by
-> the driver as the call to .set_mctrl (imx_uart_set_mctrl) with TIOCM_RTS
-> bit cleared/set in mctrl parameter. Currently imx_uart_set_mctrl() only
-> controls the UCR2_CTS and UCR2_CTSC bits based on mctrl.
->
-> To support your case you would most likely have to add the gpio handling
-> in imx_uart_set_mctrl(). However, I am unaware what other issues you
-> might encounter (i.e. if it is not done there yet simply because nobody
-> had that use case or if there is some deeper problem).
->
-> [1] https://lore.kernel.org/linux-serial/10e723c0-a28b-de0d-0632-0bd25047=
-8313@camlingroup.com/
-> [2] https://lore.kernel.org/linux-serial/20220104103203.2033673-1-tomasz.=
-mon@camlingroup.com/
->
-> Best Regards,
-> Tomasz Mon
->
+Hello,
 
-Tomasz,
+I am so sorry contacting you in this means especially when we have never
+met before. I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it.
 
-Thanks for the info. Currently imx_uart_set_mctrl calls mctrl_gpio_set
-which does toggle the rts-gpio per mctrl & TIOCM_RTS.
+My interest is in buying real estate, private schools or companies with
+potentials for rapid growth in long terms.
 
-Also, there's something in
-Documentation/devicetree/bindings/serial/serial.yaml that puzzles me:
+So please confirm interest by responding back.
 
-if:
-  required:
-    - uart-has-rtscts
-then:
-  properties:
-    cts-gpios: false
-    rts-gpios: false
+My dearest regards
 
-That would seem to indicate to me that if you define 'uart-has-rtscts'
-you should not be defining 'cts-gpios' or 'rts-gpios' but I found that
-when I omitted 'uart-has-rtscts' I could no longer enable hardware
-flow control. Is my understanding of the yaml wrong or is this just
-not accurate?
-
-Best regards,
-
-Tim
+Seyba Daniel
