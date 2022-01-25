@@ -2,94 +2,146 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E98CD49AEF4
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jan 2022 10:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1079249AF90
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jan 2022 10:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454027AbiAYI5Y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jan 2022 03:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S1453785AbiAYJLo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jan 2022 04:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453175AbiAYIwn (ORCPT
+        with ESMTP id S1455640AbiAYJFz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:52:43 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AEAC04D628
-        for <linux-serial@vger.kernel.org>; Mon, 24 Jan 2022 23:38:47 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id e9so3243242ljq.1
-        for <linux-serial@vger.kernel.org>; Mon, 24 Jan 2022 23:38:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=OeP/c5tK7M4yoYnN+Oigk/ENyBx1rxUcEBnWpLxEJJA=;
-        b=MpAYS44XJ9gMslyiGIx2jczQo1CZ6lRbs8DJcXhwH3H9wlvNu010SXn0PLR6O63Xls
-         sKaQ+AWcRJdj77xYAnkFB309YrZJamBwvuS6Cu67oul5XEMlXXQ0GC/gkbGzgamFujHL
-         03Y3mFBYCvwKti7mbf9ms89Sd3vVIj7DzeZJ9dWIga7NtM0S2S8sk9PL0gunVPbL2yyb
-         GoE1s6JuW9CjxieGAtvCR6MZH65HEraEcpMHcwBEkTsZPAHIsvJ7oaVEr2eApF1gbd0i
-         hzbiuDMOR1XvEzlb8IvBhcHJyh7neRv5skG8qama4mFcN0Xx6sZ2FhwF+LELJkWl9eMB
-         0vfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=OeP/c5tK7M4yoYnN+Oigk/ENyBx1rxUcEBnWpLxEJJA=;
-        b=lOzMd0sOAucPa+zD0Dat9zFVwp4oYtbu7iTwPwvtnhMsa9Qra8X/96DAljJVZVxyei
-         mPC8YyROxC2aUctSd4srjX4B/pvuwpLJryjw47SU2wqde8is3+mrmc5OyP+2L03+VBGk
-         ZZGwmW+YGTqYTEv9ley6SjkRE1LdXDt/0nfSciTcKrRKC044XTIejTWNL7ss38XXaR3P
-         o4OW67NGnyiAgR/TzHuK5i2/OaKhHsPDNgBya9a//mco8ldjjMaOgm1boqEzeCCIfyRl
-         1eR05jgqUDg62YoyuqaeH2UEY2KhFOClCgt9noqRKo+tGxq2anRYnsbnHn6ii34jL440
-         6jnQ==
-X-Gm-Message-State: AOAM530tZwoHdWqtideMBlGcJcD2yzAk6SOYCrvJNP8dju4nhEFHqD9I
-        UgbA5ExzaNLqDngCbUUUzhGvZ5lzSmAyf+bcC9g=
-X-Google-Smtp-Source: ABdhPJy8SB5P15sf5dIYMMXio2t3KMYCEyneHySxjVUz0Yb/pcd777OUghkr2KpypLlLDbSgfqzHZAhcXBJa95+/nd4=
-X-Received: by 2002:a2e:a484:: with SMTP id h4mr649758lji.525.1643096326021;
- Mon, 24 Jan 2022 23:38:46 -0800 (PST)
+        Tue, 25 Jan 2022 04:05:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C6CC061214;
+        Tue, 25 Jan 2022 00:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02AA2613F5;
+        Tue, 25 Jan 2022 08:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC098C340E0;
+        Tue, 25 Jan 2022 08:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643100617;
+        bh=oxSIri0DeRSQQ3KdpLeQU8/o5kCnSJfA0DeyhNCV32U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RmjJs3gckKBAckVu9AawRxpZd2S4Xg7e1H4AOOrR1GrHWXwPrrQjwAau8JCet/5vq
+         zAwWDwe7WgzsAoQsJ6TTKCLCFJrxX9uzKg1yAOR4hFm+BOU0PIVIZTEWaqSUdAfoLo
+         0ZTr5VjbIvjXF1kc1fNR70sacBx9tewG8pi5r4mA=
+Date:   Tue, 25 Jan 2022 09:50:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     wander@redhat.com, Jiri Slaby <jirislaby@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Johan Hovold <johan@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
+Message-ID: <Ye+5xrJ2kC85E8QT@kroah.com>
+References: <20211029201402.428284-1-wander@redhat.com>
+ <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
 MIME-Version: 1.0
-Received: by 2002:a2e:b804:0:0:0:0:0 with HTTP; Mon, 24 Jan 2022 23:38:45
- -0800 (PST)
-Reply-To: ag155627727@gmail.com
-From:   Mrs Aisha Gaddafi <humahuma005@gmail.com>
-Date:   Tue, 25 Jan 2022 05:38:45 -0200
-Message-ID: <CAABFLwk05arpj0sSfiZrgnZDNKtcWRFPogbiOWbhWaZZ8GEitA@mail.gmail.com>
-Subject: =?UTF-8?Q?Re=3A_Bitte_antworten_Sie_so_schnell_wie_m=C3=B6glich?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
- Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh,
+On Tue, Jan 25, 2022 at 08:39:24AM +0000, Jon Hunter wrote:
+> 
+> On 29/10/2021 21:14, wander@redhat.com wrote:
+> > From: Wander Lairson Costa <wander@redhat.com>
+> > 
+> > Note: I am using a small test app + driver located at [0] for the
+> > problem description. serco is a driver whose write function dispatches
+> > to the serial controller. sertest is a user-mode app that writes n bytes
+> > to the serial console using the serco driver.
+> > 
+> > While investigating a bug in the RHEL kernel, I noticed that the serial
+> > console throughput is way below the configured speed of 115200 bps in
+> > a HP Proliant DL380 Gen9. I was expecting something above 10KB/s, but
+> > I got 2.5KB/s.
+> > 
+> > $ time ./sertest -n 2500 /tmp/serco
+> > 
+> > real    0m0.997s
+> > user    0m0.000s
+> > sys     0m0.997s
+> > 
+> > With the help of the function tracer, I then noticed the serial
+> > controller was taking around 410us seconds to dispatch one single byte:
+> > 
+> > $ trace-cmd record -p function_graph -g serial8250_console_write \
+> >     ./sertest -n 1 /tmp/serco
+> > 
+> > $ trace-cmd report
+> > 
+> >              |  serial8250_console_write() {
+> >   0.384 us   |    _raw_spin_lock_irqsave();
+> >   1.836 us   |    io_serial_in();
+> >   1.667 us   |    io_serial_out();
+> >              |    uart_console_write() {
+> >              |      serial8250_console_putchar() {
+> >              |        wait_for_xmitr() {
+> >   1.870 us   |          io_serial_in();
+> >   2.238 us   |        }
+> >   1.737 us   |        io_serial_out();
+> >   4.318 us   |      }
+> >   4.675 us   |    }
+> >              |    wait_for_xmitr() {
+> >   1.635 us   |      io_serial_in();
+> >              |      __const_udelay() {
+> >   1.125 us   |        delay_tsc();
+> >   1.429 us   |      }
+> > ...
+> > ...
+> > ...
+> >   1.683 us   |      io_serial_in();
+> >              |      __const_udelay() {
+> >   1.248 us   |        delay_tsc();
+> >   1.486 us   |      }
+> >   1.671 us   |      io_serial_in();
+> >   411.342 us |    }
+> > 
+> > In another machine, I measured a throughput of 11.5KB/s, with the serial
+> > controller taking between 80-90us to send each byte. That matches the
+> > expected throughput for a configuration of 115200 bps.
+> > 
+> > This patch changes the serial8250_console_write to use the 16550 fifo
+> > if available. In my benchmarks I got around 25% improvement in the slow
+> > machine, and no performance penalty in the fast machine.
+> > 
+> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> 
+> 
+> On the current mainline and -next branches, I have noticed that the
+> serial output on many of our Tegra boards is corrupted and so
+> parsing the serial output is failing.
+> 
+> Before this change the serial console would appear as follows ...
+> 
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x411fd071]
+> [    0.000000] Linux version 5.16.0-rc6-00091-gadbfddc757ae (jonathanh@jonathanh-vm-01) (aarch64-linux-gnu-gcc (Linaro GCC 6.4-2017.08) 6.4.1 20170707, GNU ld (Linaro_Binutils-2017.08) 2.27.0.20161019) #15 SMP PREEMPT Tue Jan 25 00:15:25 PST 2022
+> [    0.000000] Machine model: NVIDIA Jetson TX1 Developer Kit
+> 
+> And now I see ...
+> 
+> [    0.000000] Booting Linux on physicalfd071]
+> [    0.000000] Linux version 5.16.0-rc6-athanh@j-linux-g017.08) Linaro_B20161019n 25 00:[    0.000000] Machine model: NVIDIA Jet[    0.000000] efi: UEFI not found.
+> [    0.000000] NUMA: No NUMA configurati[    0.000000] NUMA: Faking a node at [m00000001[    0.000000] NUMA: NODE_DATA [mem 0x17[    0.000000] Zone ranges:
+> 
+> Bisecting is pointing to this commit. Let me know if there are any
+> tests I can run. Otherwise we may need to disable this at least
+> for Tegra.
 
-Lieber Freund,
+Ick.  Does this uart have any other quirks assigned to it that are
+somehow not getting assigned here?
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen,
-als ich Ihre Hilfe ben=C3=B6tigte. Mein Name ist Aisha Gaddafi, eine
-alleinerziehende Mutter und Witwe mit drei Kindern. Ich bin die
-einzige leibliche Tochter des verstorbenen libyschen Pr=C3=A4sidenten (der
-verstorbene Oberst Muammar Gaddafi). derzeit im Oman wohnhaft.
+thanks,
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend US-Dollar (27.500.000,00 $) und ich brauche einen
-Investmentmanager/Partner und aufgrund des Asylstatus werde ich Ihnen
-das Eigentum an den Fonds genehmigen, aber ich bin an Ihnen
-interessiert Investitionsprojektunterst=C3=BCtzung in Ihrem Land,
-m=C3=B6glicherweise von dort, k=C3=B6nnen wir in naher Zukunft eine
-Gesch=C3=A4ftsbeziehung aufbauen.
-
-Ich bin bereit, mit Ihnen das
-Investitions-/Gesch=C3=A4ftsgewinnbeteiligungsverh=C3=A4ltnis zu verhandeln=
-,
-basierend auf den zuk=C3=BCnftigen Investitionsgewinnen.
-
-Wenn Sie bereit sind, dieses Projekt zu =C3=BCbernehmen, antworten Sie
-bitte dringend, damit ich Ihnen weitere Informationen =C3=BCber die
-Investmentfonds zukommen lassen kann.
-
-
-stehe derzeit unter politischem Asylschutz der omanischen Regierung.
-
-Ihre dringende Antwort wird gesch=C3=A4tzt
-Mit freundlichen Gr=C3=BC=C3=9Fen
-Frau Aisha Gaddafi
+greg k-h
