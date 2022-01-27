@@ -2,92 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9B149E9F7
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Jan 2022 19:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A1749ED34
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Jan 2022 22:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245058AbiA0SLM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Jan 2022 13:11:12 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:54622 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244950AbiA0SKp (ORCPT
+        id S1344248AbiA0VLF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 27 Jan 2022 16:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344235AbiA0VK7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:10:45 -0500
-Received: from callcc.thunk.org (static-74-43-95-34.fnd.frontiernet.net [74.43.95.34])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 20RIAF2r014158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 13:10:17 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 64CBB420385; Thu, 27 Jan 2022 13:10:15 -0500 (EST)
-Date:   Thu, 27 Jan 2022 13:10:15 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wander Costa <wcosta@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
-Message-ID: <YfLgB/WsQcePTXlQ@mit.edu>
-References: <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
- <f451e67d-adb9-01e8-bd11-bf7804863b4b@kernel.org>
- <8e57400f-d6a8-bd42-6214-fca1fe37a972@kernel.org>
- <11ec4350-b890-4949-cf8f-bc62d530d64f@nvidia.com>
- <CAAq0SU=9R3Y_SAdM+HaqavzWBRd1Li-b5bnZZLd5Opfgd0vnkQ@mail.gmail.com>
- <fa42a60c-954a-acc0-3962-f00427153f78@nvidia.com>
- <YfArHDfrVHw7ApDx@smile.fi.intel.com>
- <YfArWaKJ13+OC/7w@smile.fi.intel.com>
- <CAAq0SU=U3UY+DUdd1fjj25Yt_QZriShZTSFTsq5B4tPnOYhQvQ@mail.gmail.com>
- <YfELyq5AmxiZxjme@kroah.com>
+        Thu, 27 Jan 2022 16:10:59 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E415C06174E
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id g145so3820768qke.3
+        for <linux-serial@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
+         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
+         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
+         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
+         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
+         YgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=mI7m/KgQ7Nadm6KPvM7vI+zbTm70T/08FRwX4cE4gv7fDulcBxqdA/uVPH/6sxtmJx
+         HP5vxqO3F3qdeG1/tML32vwND0m68DlHmw1EU+1hLIh4RMxUDlNovpgm1+e7EkySLFyC
+         onk+MVSOeaBVp8OyuX8Er6qhQkurkysWSZSLhk9R3InzNhBT5L7gt91ctOOYsAec5lXN
+         lSBt286IjGotsG/gsy96oGA4DIIN/jKw4xVXWnqb+FqYNMAQ8BSunryQuhy/Jm7L2HjR
+         FlMWcECEtrm2VD5TewOtlOe/qyNxLh1YSuBTjcKs9QCN/QZfB5LlMn+OLf153B5Vfltn
+         i9kw==
+X-Gm-Message-State: AOAM533fsfXvC+OED/or6xYCNGTrV3sK3LIJ/dbnyYk23iMlyhC/AeiA
+        mgkxKYJ1m7076F8HSRHPGKeeWcfgdE/BSsSZiWZI8pNoMKQ=
+X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
+X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
+ Thu, 27 Jan 2022 13:10:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfELyq5AmxiZxjme@kroah.com>
+Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
+ -0800 (PST)
+Reply-To: eanna00111@gmail.com
+From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
+Date:   Thu, 27 Jan 2022 13:10:46 -0800
+Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
+Subject: Urgent Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 09:52:26AM +0100, Greg Kroah-Hartman wrote:
-> 
-> Let me revert this for now.  And no new config options please, this
-> should "just work".
+Greeting to you,
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media because it serves the fastest means
+of communication. I came across your E-mail from my personal search
+and I decided to contact you believing you will be honest to fulfill
+my final wish before I die.
 
-I'm not sure the commit is actually worth the extra complexity, to be
-honest.  The reason for the FIFO is to improve interrupt latency, and
-in the console write path, we're busy looping.  There is something
-seriously wrong serial port of the HP Proliant DL380 Gen 9.  Per the
-commit description for 5021d709b31b: ("tty: serial: Use fifo in 8250
-console driver"), on the "fast machine" (read: the one with a
-propertly working serial port), we were getting over 10 KB/s without
-the patch.  And on the "slow machine" it was getting only 2.5 KB/s,
-and with the patch it only improved things by 25% (so only 3.1 KB/s).
+I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
+suffering from a pro-long critical cancer, my doctors confirmed I may
+not live beyond two months from now as my ill health has defiled all
+forms of medical treatment. Since my days are numbered, I have decided
+willingly to fulfill my long-time promise to donate you the sum
+($5.000.000.00) million dollars I inherited from my late husband Mr.
+Edward Herbart, foreign bank account over years. I need a very honest
+person who can assist in transfer of this money to his or her account
+and use the funds for charity work of God while you use 50% for
+yourself. I want you to know there is no risk involved; it is 100%
+hitch free & safe.
 
-I assume what must be going on is this machine is emulating the UART
-and is extremely slow to set the Trasmitter Holding Register Empty
-(THRE) bit after the UART is finished sending the byte out the serial
-port.
+If you are interested in assisting in getting this fund into your
+account for a charity project to fulfill my promise before I die
+please let me know immediately.
 
-So we're adding a lot of complexity for what is obviously broken
-hardware, and we risk breaking the serial console for other machines
-with a properly implemented serial port.  How common are UART's which
-are broken in this way?  Is it unique to the HP Proliant DL380 Gen 9?
-Or is a common misimplementation which is unfortunately quite common?
-If it's the former, maybe the FIFO hack should only be done via a
-quirk?
-
-If it's really the case that the HP Proliant's nasty performance is
-due to a badly implemented emulation layer, is there any way to do
-better, perhaps via a more direct path to the serial port?  Or is the
-problem that the serial port on this motherboard is connected via some
-super-slow internal path and it would be faster if you could talk to
-it directly via a UEFI call, or some other mechanism?  Whether it's
-2.5 KB/s or 3.1 KB/s, it's really quite pathetic....
-
-     	      	     	   	       - Ted
+I will appreciate your utmost confidentiality as I wait for your reply.
+Best Regards,
+Mrs Anna Edward
