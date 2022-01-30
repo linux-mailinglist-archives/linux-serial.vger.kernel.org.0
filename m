@@ -2,95 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C9C4A32CC
-	for <lists+linux-serial@lfdr.de>; Sun, 30 Jan 2022 01:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1614A33D2
+	for <lists+linux-serial@lfdr.de>; Sun, 30 Jan 2022 05:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353555AbiA3AWZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 29 Jan 2022 19:22:25 -0500
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:33658 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353551AbiA3AWX (ORCPT
+        id S1354253AbiA3E2g (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 29 Jan 2022 23:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354213AbiA3E2a (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:22:23 -0500
-Received: by mail-oo1-f44.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso2335160oop.0;
-        Sat, 29 Jan 2022 16:22:23 -0800 (PST)
+        Sat, 29 Jan 2022 23:28:30 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCB2C061773
+        for <linux-serial@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id c19so1675524ybf.2
+        for <linux-serial@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
+         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
+         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
+         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
+         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
+         5U2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=EfijCJEIDI95t04URhCJ7b9hoUPag07U2dCpls06Eik=;
-        b=JhHE04OF2lliw5yGEpzyjqRnUgZoqiiZLd9cWnowQf5M2oxk40vHvBpj20Fq62/JrM
-         ongtsV+8JLKqACT5/NOc8WNvv7pxF9HbaghV1e01uzm76cZCtvkS49Vcidl9/jISTQ2a
-         +wgVan3CbxwO2aO1Az2zGhv4e8dl4wcJuL8n03jQswr6RXqKnPj3hS77uflmgymYi02W
-         Y/IdD7S2AEtaO2KbBQr4udGlOd8TV223VP8nt7qn4/nbXuTprlMfGNLahkGIHVjg4Xy5
-         lofzB2oW2+i3pc5qav9rLNOkwpSKF7R172qIFhlKj3q8IhQuRLMNy1P7VIcE/9fptN61
-         M+lQ==
-X-Gm-Message-State: AOAM533zpir0RVAPTG7DTfRGEUrQSg4chlimopsWqXC+/e7MbT7h1j2H
-        JptL+F42BBv9Eu+93ipF9w==
-X-Google-Smtp-Source: ABdhPJzW9TIDgKljbL7MzxDrITFkNShplHNt3Q47D8MGi0MWITbw0U9uYUJ/2JZjHJ8jPJ4oCclLUg==
-X-Received: by 2002:a4a:1505:: with SMTP id 5mr7233951oon.10.1643502142610;
-        Sat, 29 Jan 2022 16:22:22 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f17sm1443383ots.40.2022.01.29.16.22.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 16:22:21 -0800 (PST)
-Received: (nullmailer pid 416954 invoked by uid 1000);
-        Sun, 30 Jan 2022 00:22:17 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-samsung-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>
-In-Reply-To: <20220129175332.298666-4-krzysztof.kozlowski@canonical.com>
-References: <20220129175332.298666-1-krzysztof.kozlowski@canonical.com> <20220129175332.298666-4-krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH 4/5] dt-bindings: mfd: samsung,exynos5433-lpass: Convert to dtschema
-Date:   Sat, 29 Jan 2022 18:22:17 -0600
-Message-Id: <1643502137.259074.416953.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=J2l28qdpd1LAKyvvwuSRk80uL7M6iUwJkz8NSS7Ae5Vel37eOYdqT69Fr0WaHAAgIT
+         wbkSRLH/XBW1usnD5hBHlDuMUmDEqjaBXFs2Z7Yj2caai6eifW+zXUIiwmbNa/aIhues
+         TeU2cYyROfhe4VQnHSbFuQ2/i25NeXXDgxCohO0YK9/FNeHRV12F9yV9JqmTmBzUEemP
+         8sKanCAMdVQGnSOU6iouVFJd3bsUKSs88aFRoAnA6/ESLivEA8Sja7qSllTTbJl3pfhI
+         ZqCFzn5N1RmYJqWyCeaF1bPGIdwmuSRh6gi/iFYRFJ2tHqwXxDXxVlwZxcaXD2VSz4aI
+         shgQ==
+X-Gm-Message-State: AOAM531iQ+caMY/6Zdqk8sE0XR2k+OLc3r8J7HeDGQpfbAOvaPuyuRg7
+        UYrbuCcd51GIXFlTBlUXXKE8FuAzQ/xMRbrsfYy2sTtVwYc=
+X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
+X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
+ Sat, 29 Jan 2022 20:28:13 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
+ 20:28:13 -0800 (PST)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
+Date:   Sun, 30 Jan 2022 05:28:13 +0100
+Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
+Subject: Hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, 29 Jan 2022 18:53:31 +0100, Krzysztof Kozlowski wrote:
-> Convert the Exynos5433 LPASS bindings to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/mfd/samsung,exynos5433-lpass.txt |  72 -----------
->  .../mfd/samsung,exynos5433-lpass.yaml         | 119 ++++++++++++++++++
->  2 files changed, 119 insertions(+), 72 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
-> 
+You have been compensated with the sum of 9.5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks my
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.example.dt.yaml: audio-subsystem@11400000: serial@11460000:compatible:0: 'samsung,exynos5433-uart' is not one of ['apple,s5l-uart', 'samsung,s3c2410-uart', 'samsung,s3c2412-uart', 'samsung,s3c2440-uart', 'samsung,s3c6400-uart', 'samsung,s5pv210-uart', 'samsung,exynos4210-uart', 'samsung,exynos850-uart']
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.yaml
-Documentation/devicetree/bindings/mfd/samsung,exynos5433-lpass.example.dt.yaml:0:0: /example-0/audio-subsystem@11400000/serial@11460000: failed to match any schema with compatible: ['samsung,exynos5433-uart']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1586234
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+mrs bill chantal
