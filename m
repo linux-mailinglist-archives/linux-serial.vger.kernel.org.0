@@ -2,85 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F82F4A9AF5
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Feb 2022 15:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366B44A9BF3
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Feb 2022 16:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359279AbiBDO3d (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Feb 2022 09:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbiBDO3d (ORCPT
-        <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:29:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A8DC061714;
-        Fri,  4 Feb 2022 06:29:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB32DB82199;
-        Fri,  4 Feb 2022 14:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBC4C004E1;
-        Fri,  4 Feb 2022 14:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643984970;
-        bh=D/EuuGXSzxm5jQmG0yfAnA0DseWHmX4BbSRslKR0zts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EeifHCnWRVPB5F5K5vbw2uhzB7sVXNnidcHEf9PKyWXKA5TZbH6thLNgQFX9pOnhN
-         cjWsGoU5jaxoORERW54DFIT6svmFoanX8e8k/WKts27re+NhmqxTiA9w2YDAlUsm7t
-         vBPyfUAkkE4BWiZrM/VZI/0PpNoMPqJoQffeu4wg=
-Date:   Fri, 4 Feb 2022 15:29:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1359699AbiBDP2Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Feb 2022 10:28:16 -0500
+Received: from mga12.intel.com ([192.55.52.136]:58598 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231651AbiBDP2Q (ORCPT <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:28:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643988496; x=1675524496;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yL76kaqgmoqfADEJHWhRA8d3fcfFW+q28lXPw8jO6gg=;
+  b=afrvXaiTQXEx+NTEj5u3Tc0bXruUgyY2luN7rkUzuufMkIze+vHesLAK
+   +FRgn14AwaVzZ/SMFDmtPuKlvODbt3vWn7mauod9/+ouqMNOIklKhyD5y
+   lMTQMveTCwXKEuKXnEzh/Kz/S3J+3NqZQH0CmUPn2ERbl7YYTCds+Ao7A
+   Sg7yzAZTNJloHUxRg21yQ2MRk8v9Albj8apCE95xyTNcJ+osaCLV4E9kY
+   lp987ydXjDU8xKuPFhjoyjh5mp0Ei8dJFxi2fmsewVgPKLJwutlUAolIU
+   EuJwNuMa1DO4b0hXCe3smHKS8O/zM+qRqCQCSxGXybLQSHcBb8RehLP76
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="228356643"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="228356643"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:28:16 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="483637178"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:28:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nG0UU-000xtr-Dv;
+        Fri, 04 Feb 2022 17:27:14 +0200
+Date:   Fri, 4 Feb 2022 17:27:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiri Slaby <jirislaby@kernel.org>
 Subject: Re: [PATCH v1 1/1] serial: core: Drop duplicate NULL check in
  uart_*shutdown()
-Message-ID: <Yf04R+REP6WahIIr@kroah.com>
+Message-ID: <Yf1F0tgIJAnsp4Jo@smile.fi.intel.com>
 References: <20220202165648.5610-1-andriy.shevchenko@linux.intel.com>
+ <Yf04R+REP6WahIIr@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202165648.5610-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <Yf04R+REP6WahIIr@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 06:56:48PM +0200, Andy Shevchenko wrote:
-> The free_page(addr), which becomes free_pages(addr, 0) checks addr
-> against 0. No need to repeat this check in the callers.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/tty/serial/serial_core.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 57f472268b6d..59f93040d807 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -328,8 +328,7 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
->  	state->xmit.buf = NULL;
->  	spin_unlock_irqrestore(&uport->lock, flags);
->  
-> -	if (xmit_buf)
-> -		free_page((unsigned long)xmit_buf);
-> +	free_page((unsigned long)xmit_buf);
->  }
->  
->  /**
-> @@ -1621,8 +1620,7 @@ static void uart_tty_port_shutdown(struct tty_port *port)
->  	state->xmit.buf = NULL;
->  	spin_unlock_irq(&uport->lock);
->  
-> -	if (buf)
-> -		free_page((unsigned long)buf);
-> +	free_page((unsigned long)buf);
->  }
->  
->  static void uart_wait_until_sent(struct tty_struct *tty, int timeout)
-> -- 
-> 2.34.1
-> 
+On Fri, Feb 04, 2022 at 03:29:27PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Feb 02, 2022 at 06:56:48PM +0200, Andy Shevchenko wrote:
 
-What branch is this against?  It fails to apply to my tty-next branch :(
+...
+
+> What branch is this against?  It fails to apply to my tty-next branch :(
+
+Linux Next, I think/
+Let me rebase on top of yours tty-next.
+
+v2 has just been sent.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
