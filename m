@@ -2,89 +2,212 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D65F4A9BF1
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Feb 2022 16:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE024A9C26
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Feb 2022 16:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348844AbiBDP16 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Feb 2022 10:27:58 -0500
-Received: from mga14.intel.com ([192.55.52.115]:47154 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231651AbiBDP15 (ORCPT <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:27:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643988477; x=1675524477;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=37aYT7hWQ+Sf/jRnuoiNMLCZKYTC1oTxPKBGbo5Qx3w=;
-  b=S3ZcNFKNu/c6LClWUpGN7wI4IsJiJ0Kz3wCAhTweysfes+lm9hGOYSIU
-   lI7cf4tjcbyTtU06nnF3BVnVPgdvS05qGhqZyOBAVarLBpP+9LmVr8D7D
-   sQ6l235HXc9Uc1q10r+8RuVynHB7AR8AMqbUVlidFVA/kPRAXj8SOmD/U
-   ZxWQMSLe5ciSq8usLYvQ1oHcQAAF67wjFXbSU4cpQtiGxJZyy2cDFtdV9
-   Cs1vyTxNRXVUXfPU3BGHblYPNMcYrormvcuQRt/gmgWxw4mPg+XCVUQ/u
-   E+aTue+Lr1DOAAM7KWoOhQFJJQho+Jzx6lh1idKO3J5c7YqQrZKw/A1UU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248598097"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="248598097"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:27:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="677123986"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Feb 2022 07:27:56 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A59D0204; Fri,  4 Feb 2022 17:28:10 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] serial: core: Drop duplicate NULL check in uart_*shutdown()
-Date:   Fri,  4 Feb 2022 17:28:08 +0200
-Message-Id: <20220204152808.10808-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1359804AbiBDPmQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Feb 2022 10:42:16 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:40296 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1359806AbiBDPmP (ORCPT
+        <rfc822;linux-serial@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:42:15 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 214Ebxgf011945;
+        Fri, 4 Feb 2022 16:42:00 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=1UBZ1HQMJGwj58sI+h9K8wE/T4Yj+VGIcEnThWRmLs0=;
+ b=SZHUpTBe91uhtNz4Yw90DSS8oqBMB7FjuBQ8DhYZ5x4JUwaJ0mXFa9k/V/eHMHgjqcdg
+ 9pRCScPVnSVPxWOa4G3e01SM9nM/NV7UkPf6axX0kh9p/kL8pdN1WtJzUOpM8MKZ69E/
+ lI/RdxoXOKTCDXzRQowACfiHc3HtGBwy/UnpJDmWRTbuDYnsNq2ZfxnWLIc5O6TbfVrG
+ F8oQ4brpgyz8d5pZUQuO4hAM7z7SY3nZC5e3u9zE5zyXLKngQ08gg+Lp9S2yTxJ+WfCA
+ 8EagOzRcZ6LLc/Pbc9zpJGr4phBQdsy/zVUM+XECpDRYENAtthnmpjP/3Xhag2sH0+MC SQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e0ejjew8a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Feb 2022 16:42:00 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EE4BD10002A;
+        Fri,  4 Feb 2022 16:41:59 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E59B9229A8C;
+        Fri,  4 Feb 2022 16:41:59 +0100 (CET)
+Received: from lmecxl0566.lme.st.com (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 4 Feb
+ 2022 16:41:59 +0100
+Subject: Re: [PATCH 1/2] serial: mctrl_gpio: add a new API to enable / disable
+ wake_irq
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gerald Baeza <gerald.baeza@st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220203171644.12231-1-erwan.leray@foss.st.com>
+ <20220203171644.12231-2-erwan.leray@foss.st.com>
+ <CAHp75VfxGj=3mKvjcRpQjyXBCM0szsidHVuJGdAL8yP5SmdBzw@mail.gmail.com>
+From:   Erwan LE RAY <erwan.leray@foss.st.com>
+Message-ID: <cb09a49a-37f8-9e3f-168c-4c5dd62e2c07@foss.st.com>
+Date:   Fri, 4 Feb 2022 16:41:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <CAHp75VfxGj=3mKvjcRpQjyXBCM0szsidHVuJGdAL8yP5SmdBzw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-04_07,2022-02-03_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The free_page(addr), which becomes free_pages(addr, 0) checks addr
-against 0. No need to repeat this check in the callers.
+Hi Andy,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jiri Slaby <jirislaby@kernel.org>
----
-v2: rebased on top of tty-next (Greg), added tag (Jiri)
- drivers/tty/serial/serial_core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On 2/4/22 10:07 AM, Andy Shevchenko wrote:
+> 
+> 
+> On Thursday, February 3, 2022, Erwan Le Ray <erwan.leray@foss.st.com 
+> <mailto:erwan.leray@foss.st.com>> wrote:
+> 
+>     Add a new API to enable / disable wake_irq in order to enable gpio
+>     irqs as
+>     wakeup irqs for the uart port.
+> 
+>     Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com
+>     <mailto:erwan.leray@foss.st.com>>
+> 
+>     diff --git a/drivers/tty/serial/serial_mctrl_gpio.c
+>     b/drivers/tty/serial/serial_mctrl_gpio.c
+>     index c41d8911ce95..1663b3afc3a0 100644
+>     --- a/drivers/tty/serial/serial_mctrl_gpio.c
+>     +++ b/drivers/tty/serial/serial_mctrl_gpio.c
+>     @@ -299,4 +299,42 @@ void mctrl_gpio_disable_ms(struct mctrl_gpios
+>     *gpios)
+>       }
+>       EXPORT_SYMBOL_GPL(mctrl_gpio_disable_ms);
+> 
+>     +void mctrl_gpio_enable_irq_wake(struct mctrl_gpios *gpios)
+>     +{
+>     +       enum mctrl_gpio_idx i;
+>     +
+>     +       if (!gpios)
+>     +               return;
+>     +
+>     +       if (!gpios->mctrl_on)
+>     +               return;
+>     +
+>     +       for (i = 0; i < UART_GPIO_MAX; ++i) {
+>     +               if (!gpios->irq[i])
+>     +                       continue;
+> 
+> 
+> 
+> Why not simply
+> 
+>    if (gpios[])
+>      enable_irq_...
+> 
+> ?
+> 
+> And same for disabling.
+> 
+>     +
+>     +               enable_irq_wake(gpios->irq[i]);
+>     +       }
+>     +}
+>     +EXPORT_SYMBOL_GPL(mctrl_gpio_enable_irq_wake);
+>     +
+>     +void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios)
+>     +{
+>     +       enum mctrl_gpio_idx i;
+>     +
+>     +       if (!gpios)
+>     +               return;
+>     +
+>     +       if (!gpios->mctrl_on)
+>     +               return;
+>     +
+>     +       for (i = 0; i < UART_GPIO_MAX; ++i) {
+>     +               if (!gpios->irq[i])
+>     +                       continue;
+>     +
+>     +               disable_irq_wake(gpios->irq[i]);
+>     +       }
+>     +}
+>     +EXPORT_SYMBOL_GPL(mctrl_gpio_disable_irq_wake);
+>     +
+>       MODULE_LICENSE("GPL");
+>     diff --git a/drivers/tty/serial/serial_mctrl_gpio.h
+>     b/drivers/tty/serial/serial_mctrl_gpio.h
+>     index b134a0ffc894..fc76910fb105 100644
+>     --- a/drivers/tty/serial/serial_mctrl_gpio.h
+>     +++ b/drivers/tty/serial/serial_mctrl_gpio.h
+>     @@ -91,6 +91,16 @@ void mctrl_gpio_enable_ms(struct mctrl_gpios *gpios);
+>        */
+>       void mctrl_gpio_disable_ms(struct mctrl_gpios *gpios);
+> 
+>     +/*
+>     + * Enable gpio wakeup interrupts to enable wake up source.
+>     + */
+>     +void mctrl_gpio_enable_irq_wake(struct mctrl_gpios *gpios);
+>     +
+>     +/*
+>     + * Disable gpio wakeup interrupts to enable wake up source.
+>     + */
+>     +void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios);
+>     +
+>       #else /* GPIOLIB */
+> 
+>       static inline
+>     @@ -142,6 +152,14 @@ static inline void mctrl_gpio_disable_ms(struct
+>     mctrl_gpios *gpios)
+>       {
+>       }
+> 
+>     +static inline void mctrl_gpio_enable_irq_wake(struct mctrl_gpios
+>     *gpios)
+>     +{
+>     +}
+>     +
+>     +static inline void mctrl_gpio_disable_irq_wake(struct mctrl_gpios
+>     *gpios)
+>     +{
+>     +}
+>     +
+>       #endif /* GPIOLIB */
+> 
+>       #endif
+>     -- 
+>     2.17.1
+> 
+> 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index ba4baa756d51..846192a7b4bf 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -317,8 +317,7 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
- 	state->xmit.buf = NULL;
- 	uart_port_unlock(uport, flags);
- 
--	if (xmit_buf)
--		free_page((unsigned long)xmit_buf);
-+	free_page((unsigned long)xmit_buf);
- }
- 
- /**
-@@ -1569,8 +1568,7 @@ static void uart_tty_port_shutdown(struct tty_port *port)
- 	state->xmit.buf = NULL;
- 	spin_unlock_irq(&uport->lock);
- 
--	if (buf)
--		free_page((unsigned long)buf);
-+	free_page((unsigned long)buf);
- 
- 	uart_change_pm(state, UART_PM_STATE_OFF);
- }
--- 
-2.34.1
+Thanks for your review.
+I fully agree with your comment, but I wrote this code like it is to 
+keep the same structure than all the other ops of serial_mcrtrl_gpio 
+driver. I preferred keeping an homogeneous code in the driver rather 
+than breaking the driver homogeneity with the addition of an optimized code.
 
+Greg, can you please indicate which solution you recommend ?
+
+Cheers, Erwan.
