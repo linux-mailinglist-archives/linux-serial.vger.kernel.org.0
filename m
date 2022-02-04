@@ -2,85 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576EE4A900F
-	for <lists+linux-serial@lfdr.de>; Thu,  3 Feb 2022 22:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43984A957B
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Feb 2022 09:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349501AbiBCVjj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 3 Feb 2022 16:39:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32071 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231713AbiBCVji (ORCPT
+        id S1346314AbiBDItr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 4 Feb 2022 03:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351085AbiBDItp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:39:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643924378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+aX6flYCGlec8MUmzayK91nF9NO+GezhygAiZUc4qds=;
-        b=XDdmpiKbXyceFjFUG9OEyj4QKgjEh2jzCK94RUP+xTl15s2QxgrSXKeagBmd/jgT5xywfW
-        wQb3jnsaMiL9PqA61K63rC1j5nlArHUc4LM96eV/rOZ3VsNxLprmmaJDcoQeuUucrbH6Pr
-        s2PKujrDKuCO60SquntVEpfplTHFF0I=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-nJ4mMu9dOWKBbsC-4IkUdg-1; Thu, 03 Feb 2022 16:39:37 -0500
-X-MC-Unique: nJ4mMu9dOWKBbsC-4IkUdg-1
-Received: by mail-qv1-f72.google.com with SMTP id ej14-20020ad45a4e000000b00425d03eabe4so3660912qvb.9
-        for <linux-serial@vger.kernel.org>; Thu, 03 Feb 2022 13:39:37 -0800 (PST)
+        Fri, 4 Feb 2022 03:49:45 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1169C061751
+        for <linux-serial@vger.kernel.org>; Fri,  4 Feb 2022 00:49:44 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id j10so4495062pgc.6
+        for <linux-serial@vger.kernel.org>; Fri, 04 Feb 2022 00:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
+         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
+         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
+         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
+         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
+         zaOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+aX6flYCGlec8MUmzayK91nF9NO+GezhygAiZUc4qds=;
-        b=U+Gp4CcShBQm3GgRjnk06B+VyNBVlZb7lpjmqwCkYrCVNF2xDOJlvc+2VrHb3SdUQm
-         qf22iKs/G3jm1ce/qCEUp6DjrOiNDW9SkgrQDB9zJ2z/0CZFCXMP3N+mdznEv3eZU1YA
-         ZEj+os5grDYYN1FQULw5lUETj1I08P6SQ4x34pJEzHxMdQgNU2rYZ/qOFrnI8vb/k+j6
-         buWxQY3h32pSwpDMlqOIcnwz2pF7Pao1lgoFHiw/TsO7pZd0GHKaiIHyinJTfSfViH0J
-         d3PjRbPttP2B1GbsuqhIZYRYpqSSLX0yF8yLg4MydiEGhV7o/2wjRkvqM0ulVqoZp3cG
-         iYig==
-X-Gm-Message-State: AOAM533qTOVKON2xIPFdZh1EJNM7e3DjoOV8KEII3J5kKfYsoe3GUOgd
-        lLQicKrRG0ucXwAJEaBE4B0hYt+E985r3aaq49ZPfXcVrlus7TeBoDA8K14+q95Rl/BhNCCRYUP
-        WsBgKVFFbG4mEyjp7WnLqLqil
-X-Received: by 2002:a05:622a:1aa0:: with SMTP id s32mr86333qtc.145.1643924377051;
-        Thu, 03 Feb 2022 13:39:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyuJzUTTqRgkam6YpJQj0YsDVjx8yNmuoFMgpLG51XVIvp7iv7xlN6IdGc1fnZzDvFnEuKkIA==
-X-Received: by 2002:a05:622a:1aa0:: with SMTP id s32mr86319qtc.145.1643924376896;
-        Thu, 03 Feb 2022 13:39:36 -0800 (PST)
-Received: from fedora (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id u17sm22096qkp.90.2022.02.03.13.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 13:39:36 -0800 (PST)
-Date:   Thu, 3 Feb 2022 16:39:34 -0500
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-serial@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH] serial: 8250_bcm2835aux: Add ACPI support
-Message-ID: <YfxLlkQsHEb2qbjW@fedora>
-References: <20220201185001.926338-1-athierry@redhat.com>
- <412a456d-7294-a124-8a01-f052915348b4@gmail.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=mPSLBD/O0Z8WLUT9W7RaesvytPLJ1kCh+0+9YF8PNJ4QWGMnflBN3RZsZZHD2QSzFO
+         ERrhpJLfm4SADO5dOOQvOoct/UNl71/SAVePpSq4oTayPQ9rdp8e3pYjYpoRWsgH9DKW
+         T0oKFQxPD71JK2R1jSf4y97txvwLhypi+LDu7gAeTri1xBrhxeCpvlzkZlTCBWPQOZeq
+         WjOGDS7KlKC6kauU2lBcnmlBGlEtRcDm1YCuoBnuKQeuNLKm3wXF9NB4R7DolAOVq7Yr
+         rdV4jAuOLN9a0RsCDmR02z0DlCfWe0/xmiIjEClrdN37j7nm3+sxNrtxDZ6e6uFL/I2U
+         QsMQ==
+X-Gm-Message-State: AOAM532Jc5gyNUSh9uh7GdR9vIGeVUXEHibhuL3X7wLzf1lxU2I3A+ai
+        JO6N0UsK9Q1R/hiLKDjSk2mSCjjiLYm16N2o9nQ0JzaUHLU=
+X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
+X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
+ Fri, 04 Feb 2022 00:49:33 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <412a456d-7294-a124-8a01-f052915348b4@gmail.com>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=athierry@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sender: bankcoris7@gmail.com
+Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
+ -0800 (PST)
+From:   komi zongo <komizongo2020@gmail.com>
+Date:   Fri, 4 Feb 2022 08:49:32 +0000
+X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
+Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
+Subject: Very Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Thanks Florian for your feedback! I have submitted a v2 with the changes
-you required.
+I NEED TRUST.
 
-Adrien
+Hope you are in good health with your family.
 
+I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
+one of the international banks here in Burkina Faso. Although the
+world is a very small place and hard place to meet people because you
+don't know who to trust or believe, as I have developed trust in you
+after my fasting and praying,  I made up my mind to confide this
+confidential business suggestion to you.
+
+There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
+United States Dollars ($10,500,000.00) in my bank, belonging to one of
+our dead foreign customers. There were no beneficiaries stated
+concerning these funds. Therefore, your request as a foreigner is
+necessary to apply for the claim and release of the fund smoothly into
+your reliable bank account  as the Foreign Business Partner to the
+deceased.
+
+On the transfer of this fund in your account, you will take 40% as
+your share from the total fund, 5% will be shared to Charitable
+Organizations while Motherless Babies homes, disabled helpless as the
+balance of 55% will be for me. If you are really sure of your
+integrity, trustworthy, and confidentiality, reply urgently and to
+prove that, include your particulars as follows.
+
+Please get back to me through this Email Address komizongo2020@gmail.com
+
+please fill in your personal information as indicated below and as
+soon as i receive this information below i will forward you a text of an
+application which you will fill and send to the bank for the claim of the
+fund as i will direct you on what to do.
+
+Your name in full.......................... ........
+Your country....................... ..................
+Your age........................... ....................
+Your cell phone......................... ...........
+Your occupation.................... ...............
+Your sex........................... ....................
+Your marital status........................ .......
+Your id card or passport...........................
+
+Best Regards,
+
+Mr.Komi Zongo.
