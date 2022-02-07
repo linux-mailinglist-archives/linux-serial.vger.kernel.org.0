@@ -2,122 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A160D4AC1DB
-	for <lists+linux-serial@lfdr.de>; Mon,  7 Feb 2022 15:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20D04AC1C7
+	for <lists+linux-serial@lfdr.de>; Mon,  7 Feb 2022 15:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357209AbiBGOqt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 7 Feb 2022 09:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S241586AbiBGOqQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 7 Feb 2022 09:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiBGOek (ORCPT
+        with ESMTP id S1383620AbiBGOWV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:34:40 -0500
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 06:34:39 PST
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA53C0401C1
-        for <linux-serial@vger.kernel.org>; Mon,  7 Feb 2022 06:34:39 -0800 (PST)
-Received: from [192.168.0.105] (101.228.68.195) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 7 Feb
- 2022 22:19:33 +0800
-Message-ID: <ad0493ac-af20-f207-9333-561042d7fc49@amlogic.com>
-Date:   Mon, 7 Feb 2022 22:19:03 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V6 0/5] Use CCF to describe the UART baud rate clock
-Content-Language: en-US
-To:     Kevin Hilman <khilman@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        "Jerome Brunet" <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220118030911.12815-1-yu.tu@amlogic.com>
- <7hfspjqrn7.fsf@baylibre.com>
- <cc3b971f-c630-4ce2-e6dd-c13bcba89d22@amlogic.com>
- <7hbl00ykhf.fsf@baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <7hbl00ykhf.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [101.228.68.195]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 7 Feb 2022 09:22:21 -0500
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 424C2C0401DA;
+        Mon,  7 Feb 2022 06:22:19 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.88,349,1635174000"; 
+   d="scan'208";a="110511704"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 07 Feb 2022 23:22:18 +0900
+Received: from localhost.localdomain (unknown [10.226.92.17])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 444A843487D0;
+        Mon,  7 Feb 2022 23:22:16 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: serial: renesas,scif: Remove redundant renesas,scif-r9a07g054
+Date:   Mon,  7 Feb 2022 14:22:11 +0000
+Message-Id: <20220207142213.19552-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  Hi Kevin,
-	First of all,thank you very much for your reply.Due to the Chinese 
-Spring Festival holiday recently, so i just reply to you now。
+This patch removes redundant "renesas,scif-r9a07g054" from binding
+documentation as it uses renesas,scif-r9a07g044 fallback.
 
-On 2022/1/25 3:58, Kevin Hilman wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Yu Tu <yu.tu@amlogic.com> writes:
-> 
->> Hi Kevin,
->> 	Thank you very much for your reply.
->>
->> On 2022/1/20 6:37, Kevin Hilman wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> Hello,
->>>
->>> Yu Tu <yu.tu@amlogic.com> writes:
->>>
->>>> Using the common Clock code to describe the UART baud rate
->>>> clock makes it easier for the UART driver to be compatible
->>>> with the baud rate requirements of the UART IP on different
->>>> meson chips. Add Meson S4 SoC compatible.
->>>
->>> Could you describe how this was tested and on which SoCs?  There seem to
->>> be some changes in this series that might affect previous SoCs.
->>>
->> For me, the board starts normally and prints. My intention was to add
->> the S4 SOC UART compatible, but for the S4 our baud rate clock is
->> calculated at 12MHz by default.So a series of changes were made at your
->> suggestion.
->>
->> Since most SoCs are too old, I was able to find all the platforms myself
->> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
->> G12A and S4.But when I talked to Martin earlier he tried meson8b's log.
->> The test patch is in the attachment.
->>
->> I have found that on some boards with this change, the initcall_debug
->> Uart driver takes longer to initialize. Running the stty command to
->> change the baud rate at the same time may cause a jam.
-> 
-> This kind of detail is important to document in the cover letter,
-> including a bit more detail on how to reproduce so that other can help
-> test or may have ideas for how to solve.
-> 
-The problem recurrence method is described below:
-First, add the patch I changed. It then launches normally to the console 
-command line.  Finally, run the stty command to change buad rate. The 
-detailed commands are as follows:
-stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600 .Alternate 
-execution can reproduce.
+Whilst remove the additional renesas,scif-r9a07g054 from Items.
 
->> I'd love to know what else you suggest.
-> 
-> I don't expect you to be able to test on all SoCs, but just to list what
-> SoCs and which boards you tested on.  This way, those who have other
-> boards can help test and we can have a better idea of how this was
-> tested before merging.
-> 
-I only have S4 and G12A so far, so I've only tested on those two platforms.
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+v1->v2:
+ * Added Rb tag from Geert.
+---
+ Documentation/devicetree/bindings/serial/renesas,scif.yaml | 2 --
+ 1 file changed, 2 deletions(-)
 
-> Thanks,
-> 
-> Kevin
-> 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,scif.yaml b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+index ba5d3e0acc63..461392091579 100644
+--- a/Documentation/devicetree/bindings/serial/renesas,scif.yaml
++++ b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+@@ -73,7 +73,6 @@ properties:
+       - items:
+           - enum:
+               - renesas,scif-r9a07g044      # RZ/G2{L,LC}
+-              - renesas,scif-r9a07g054      # RZ/V2L
+ 
+       - items:
+           - enum:
+@@ -167,7 +166,6 @@ if:
+           - renesas,rcar-gen3-scif
+           - renesas,rcar-gen4-scif
+           - renesas,scif-r9a07g044
+-          - renesas,scif-r9a07g054
+ then:
+   required:
+     - resets
+-- 
+2.17.1
+
