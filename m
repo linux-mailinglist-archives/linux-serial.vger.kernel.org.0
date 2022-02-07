@@ -2,142 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945504ABF1E
-	for <lists+linux-serial@lfdr.de>; Mon,  7 Feb 2022 14:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C754AC03C
+	for <lists+linux-serial@lfdr.de>; Mon,  7 Feb 2022 14:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbiBGMyp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 7 Feb 2022 07:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S236573AbiBGNwA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 7 Feb 2022 08:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384694AbiBGL3g (ORCPT
+        with ESMTP id S1386897AbiBGNQn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:29:36 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02D7C03FEDE;
-        Mon,  7 Feb 2022 03:28:00 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 192so12698434ybd.10;
-        Mon, 07 Feb 2022 03:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WxR2Iy/hInfRurGC4IqSW6zQNPBVhusP7UDER7Bropk=;
-        b=dM/Tj7tr2LUBDshsrOWdnnxklmal1W15fzaCMCTQao60SujrYlghFjzCZqhB+TbXPg
-         SNiOS8RZv7OSiyaTF5lQUgyXXzQ5qk7uzVO0FRedzzIzg+4TH7RbSMTNxlmZp6P+uWVL
-         VDLP7pEQ/S1P4B0O2raEMVLXjsaZlYgyDr81GJ6N8sozwIJEoB4X10TS5RwIxV2N1AiR
-         U98git0f+YOsHGF/WZ+ZG+fh6OCtO2xL+/n+aw8SCpvayTQ2NxZY+26jLKGL5ZnuTABM
-         wuCGy+k17X1+6muAZPANzXCoA+E661hCCnVsugwiE4H5KXJW2l8u+l5N9zRLo+EVUc9T
-         QhcQ==
+        Mon, 7 Feb 2022 08:16:43 -0500
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B2FC0401E6;
+        Mon,  7 Feb 2022 05:16:34 -0800 (PST)
+Received: by mail-ua1-f50.google.com with SMTP id g15so8414459uap.11;
+        Mon, 07 Feb 2022 05:16:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WxR2Iy/hInfRurGC4IqSW6zQNPBVhusP7UDER7Bropk=;
-        b=vZq03RefnM94OAbM4Q446MKPqNP3ZvecgHlXCpOfCe5x+Qft1iP6r4jU6AnIdox7hv
-         Zddo/KTQS3YxCQb7BfetCcHUtyualrug92fqd+5JxkbsA4PVG6pOxOEW9dfHbbEBytCM
-         YS4FZoHqphSfDqqmlowT/AqXwZ5dnn3mz8E9OTRiviGLuUP/0CfYw1/4EshKzwmLGr4J
-         Kz4H15U1DRoC8nlGYbh5+EaeqzfpGydkF4XOXqaDtFSY86BGmzfeTKFCIL9ug1KIj4TK
-         sZuyvAogU2oMdhpnF/fmDPBsSb5YlP+xWtG9EEe68HmhfWeWbvTn5YSkq4Q7k6EY9G7g
-         ggBw==
-X-Gm-Message-State: AOAM532SzYU2zleXDECEFrGak6OCZS6vfu+1Mza7nDORlYom3qgGqYw4
-        3MivUOVjfSdNtw1PSp9YeeV1rKeCHIJBZ2kP4hoqoC9qhFcYUg==
-X-Google-Smtp-Source: ABdhPJxrPoHymoNp9oAgOQoocWDdgId4VRyqnJQ7fnjIlGyC/SUXMPUZyDHFDRdUTKXD9oDRLRxiKidiAB5GKIuYBc4=
-X-Received: by 2002:a81:6f56:: with SMTP id k83mr10773035ywc.58.1644233279890;
- Mon, 07 Feb 2022 03:27:59 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=DNVoXvat1/oQDV0gxOtXkAL2AeofRM0ulhZnPcz1YuM=;
+        b=oYIMguteDC/GuVDgXs5djH/X5kDFF7ejg95w1kUId+BEH7hJMsJ/pagjGfyskPMPbF
+         /4A4ZUZfTTiVwOuMWOgN543rvoUE+D6s6nAZ++S20HMUVfpyZ7wp66FPbBYi5klUS7ZE
+         itm8GmXWIOP2je8j1BLVSGqCzrhWrA5Q4xU/w0bOE3Ca7a41T+AZKs1AGRaszN3GY3ZI
+         xRCJUPGw03REuaFcgpj6jiMMNJh14A85l5+fe3V81GCg8sRaTpTnDg7AvGtgkhfGL56/
+         xTldOAaw+lZq5mZS/xa10fxJv/4IElBhjA+M6IC1a1/tJVkBXhiT7x2PhEGzLs5odH7W
+         F/tQ==
+X-Gm-Message-State: AOAM530IpawBibYlRWCS/lzeMiTbzCNZYrpXH4NnoCQi1228WxvxaZ5j
+        kxeEgO0E9/OL/e+pxYsc91A3EoIQCV0HGA==
+X-Google-Smtp-Source: ABdhPJw99oZ8ccbCYtQGJAY7JlaQcRlq7jxLnz+tULBHViQAYcR7Zb1v0n1uWQYgGviCf32MqMNZvg==
+X-Received: by 2002:a05:6102:34cd:: with SMTP id a13mr4770358vst.64.1644239793469;
+        Mon, 07 Feb 2022 05:16:33 -0800 (PST)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id h30sm2228612vsq.7.2022.02.07.05.16.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 05:16:33 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id 103so9105494uag.4;
+        Mon, 07 Feb 2022 05:16:32 -0800 (PST)
+X-Received: by 2002:a67:5f83:: with SMTP id t125mr4218270vsb.68.1644239792795;
+ Mon, 07 Feb 2022 05:16:32 -0800 (PST)
 MIME-Version: 1.0
-References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
- <1644213481-20321-3-git-send-email-hammerh0314@gmail.com> <YgDHwgg0s6U3bFxF@kroah.com>
-In-Reply-To: <YgDHwgg0s6U3bFxF@kroah.com>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Mon, 7 Feb 2022 19:28:13 +0800
-Message-ID: <CAOX-t55sbxd6rvkafnw-m1nYMuEZTsKOkBBftqSoKxocxSZbJQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>, p.zabel@pengutronix.de,
-        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+References: <20220206184749.11532-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220206184749.11532-1-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Feb 2022 14:16:21 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVHF+Cv7=YqwP8riNGQA8ZDm9-RVgS8fH0cMRUBf9=eWQ@mail.gmail.com>
+Message-ID: <CAMuHMdVHF+Cv7=YqwP8riNGQA8ZDm9-RVgS8fH0cMRUBf9=eWQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: serial: renesas,scif: Remove redundant renesas,scif-r9a07g054
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=887=E6=
-=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:18=E5=AF=AB=E9=81=93=EF=BC=9A
+On Sun, Feb 6, 2022 at 7:48 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> This patch removes redundant "renesas,scif-r9a07g054" from binding
+> documentation as it uses renesas,scif-r9a07g044 fallback.
 >
-> On Mon, Feb 07, 2022 at 01:58:01PM +0800, Hammer Hsieh wrote:
-> > Add Sunplus SoC UART Driver
-> >
+> Whilst remove the additional renesas,scif-r9a07g054 from Items.
 >
-> We need more of a changelog comment here please.  Describe the hardware,
-> what the new tty name you are using, and other stuff.  Be descriptive.
->
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-I will describe as below.
-Add Sunplus SoC UART Driver.
-SP7021 UART block contains 5 UARTs.
-There are UART0~4 that supported in SP7021, the features list as below.
-Support Full-duplex communication.
-Support data packet length configurable.
-Support stop bit number configurable.
-Support force break condition.
-Support baud rate configurable.
-Support error detection and report.
-Support RXD Noise Rejection Vote configurable.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-UART0 pinout only support TX/RX two pins.
-UART1 to UART4 pinout support TX/RX/CTS/RTS four pins.
-Normally UART0 used for kernel console, also can be used for normal uart.
-Command line set "console=3DttySUP0,115200", SUP means Sunplus Uart Port.
-UART driver probe will create path named "/dev/ttySUPx".
+Gr{oetje,eeting}s,
 
-https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universa=
-l+Asynchronous+Receiver+Transmitter+UART
+                        Geert
 
-> > --- a/include/uapi/linux/serial_core.h
-> > +++ b/include/uapi/linux/serial_core.h
-> > @@ -274,4 +274,7 @@
-> >  /* Freescale LINFlexD UART */
-> >  #define PORT_LINFLEXUART     122
-> >
-> > +/* Sunplus UART */
-> > +#define PORT_SUNPLUS 123
->
-> Why is this needed?  Are you going to require this in some userspace
-> code?  If not, please do not add it.
->
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In serial_core.c (line 3014) uart_add_one_port( )
-It will call uart_configure_port( ).
-In my uart driver probe set port->flags=3DUPF_BOOT_AUTOCONF.
-I try to remove port define and remove  sunplus_config_port( )
- and just add a "sunplus_uart" for in sunplus_type( ).
-And my uart console not work with PuTTY tool.
-
-I try to do another test as below.
-static const char *sunplus_type(struct uart_port *port)
-{
-        return "sunplus_uart";
-}
-static void sunplus_config_port(struct uart_port *port, int type)
-{
-        if (type & UART_CONFIG_TYPE)
-                port->type =3D "sunplus_uart"; //type define is unsigned in=
-t
-}
-Uart console works, but port->type should be unsigned int , not string.
-So compile will warning " assignment makes integer from pointer
-without a cast [-Wint-conversion]".
-
-I think I should keep the current submit code.
-
-> thanks,
->
-> greg k-h
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
