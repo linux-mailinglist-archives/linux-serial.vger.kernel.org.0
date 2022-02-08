@@ -2,202 +2,166 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8704AD20D
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Feb 2022 08:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3334AD6EE
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Feb 2022 12:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347977AbiBHHSX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Feb 2022 02:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S1356683AbiBHLal (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Feb 2022 06:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235298AbiBHHSW (ORCPT
+        with ESMTP id S244906AbiBHKEE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Feb 2022 02:18:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F6B4C0401F2;
-        Mon,  7 Feb 2022 23:18:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5BFD2B;
-        Mon,  7 Feb 2022 23:18:18 -0800 (PST)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63F4E3F73B;
-        Mon,  7 Feb 2022 23:18:18 -0800 (PST)
-Message-ID: <827f3c8b-b89a-018f-a5af-3984c7bc8492@arm.com>
-Date:   Tue, 8 Feb 2022 01:18:09 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3] serial: 8250_bcm2835aux: Add ACPI support
-Content-Language: en-US
-To:     Adrien Thierry <athierry@redhat.com>, linux-serial@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 8 Feb 2022 05:04:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3497FC03FEC0;
+        Tue,  8 Feb 2022 02:04:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C82C5B819AA;
+        Tue,  8 Feb 2022 10:04:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D1CC340ED;
+        Tue,  8 Feb 2022 10:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644314639;
+        bh=9XRxX5n5xmPLXTFls/kdqprhfHPlsurq93wudUcHvmI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ydMfYgvttYlxl9uRj9Idy5Mfb8u3n3OXW3As+08WOsMeVgyEFsIELiokvKXAza88c
+         q+ArZi2JeMzdkwiYIC0h7rfZzDkecdHEsCX5Opcb2I4tCAzLDMedbto4z8meqsvHsG
+         itZ329OsvY3CyLkSCy7t5yq0VrQU3vmhnOF9VhfA=
+Date:   Tue, 8 Feb 2022 11:03:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Harald Seiler <hws@denx.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-serial@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220207232129.402882-1-athierry@redhat.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <20220207232129.402882-1-athierry@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
+Message-ID: <YgJADKxWfOZroS35@kroah.com>
+References: <20220119145204.238767-1-hws@denx.de>
+ <20220119151145.zft47rzebnabiej2@pengutronix.de>
+ <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
+ <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
+ <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
-
-On 2/7/22 17:21, Adrien Thierry wrote:
-> Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
-> use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
-> firmware.
-
-I merged this to 5.17rc3, switched the console to this device and it now 
-works in linux! Thanks for doing this!
-
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-
+On Wed, Jan 19, 2022 at 05:59:46PM +0100, Harald Seiler wrote:
+> Hi,
 > 
-> Signed-off-by: Adrien Thierry <athierry@redhat.com>
-> ---
-> V1 -> V2: Refactored code to remove unnecessary conditional paths and
-> intermediate variables
-> V2 -> V3: Cleaned up coding style and addressed review comments
+> On Wed, 2022-01-19 at 17:21 +0100, Uwe Kleine-König wrote:
+> > On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
+> > > Hi,
+> > > 
+> > > On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-König wrote:
+> > > > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
+> > > > > Right now, even when `delay_rts_before_send` and `delay_rts_after_send`
+> > > > > are 0, the hrtimer is triggered (with timeout 0) which can introduce a
+> > > > > few 100us of additional overhead on slower i.MX platforms.
+> > > > > 
+> > > > > Implement a fast path when the delays are 0, where the RTS signal is
+> > > > > toggled immediately instead of going through an hrtimer.  This fast path
+> > > > > behaves identical to the code before delay support was implemented.
+> > > > > 
+> > > > > Signed-off-by: Harald Seiler <hws@denx.de>
+> > > > > ---
+> > > > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
+> > > > >  1 file changed, 14 insertions(+), 4 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> > > > > index df8a0c8b8b29..67bbbb69229d 100644
+> > > > > --- a/drivers/tty/serial/imx.c
+> > > > > +++ b/drivers/tty/serial/imx.c
+> > > > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_port *port)
+> > > > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
+> > > > >  		if (sport->tx_state == SEND) {
+> > > > >  			sport->tx_state = WAIT_AFTER_SEND;
+> > > > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > > > +
+> > > > > +			if (port->rs485.delay_rts_after_send > 0) {
+> > > > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > > >  					 port->rs485.delay_rts_after_send);
+> > > > > -			return;
+> > > > > +				return;
+> > > > > +			}
+> > > > > +
+> > > > > +			/* continue without any delay */
+> > > > 
+> > > > Is it right to keep the assignment sport->tx_state = WAIT_AFTER_SEND ?
+> > > 
+> > > I am keeping the assignment intentionally, to fall into the
+> > > if(state == WAIT_AFTER_RTS) below (which then sets the state to OFF).
+> > > I originally had the code structured like this:
+> > > 
+> > > 	if (port->rs485.delay_rts_after_send > 0) {
+> > > 		sport->tx_state = WAIT_AFTER_SEND;
+> > > 		start_hrtimer_ms(&sport->trigger_stop_tx,
+> > > 			 port->rs485.delay_rts_after_send);
+> > > 		return;
+> > > 	} else {
+> > > 		/* continue without any delay */
+> > > 		sport->tx_state = WAIT_AFTER_SEND;
+> > > 	}
+> > > 
+> > > This is functionally identical, but maybe a bit more explicit.
+> > > 
+> > > Not sure what is more clear to read?
+> > 
+> > I didn't oppose to the readability thing. With your patch you skip
+> > starting the stop_tx timer and that would usually care for calling
+> > imx_uart_stop_tx and setting sport->tx_state = OFF. This doesn't happen
+> > with your patch any more.
 > 
->   drivers/tty/serial/8250/8250_bcm2835aux.c | 52 ++++++++++++++++++++---
->   1 file changed, 46 insertions(+), 6 deletions(-)
+> Not starting the timer is the entire point of the patch - instead, the
+> code which would run inside the timer callback now runs immediately. To
+> do this, I set the tx_state to WAIT_AFTER_SEND and _don't_ do the early
+> return which leads into the if(tx_state == WAIT_AFTER_SEND) below.  This
+> is the code-path which normally runs later in the hrtimer callback.
 > 
-> diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
-> index fd95860cd661..2a1226a78a0c 100644
-> --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
-> +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
-> @@ -17,6 +17,7 @@
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/platform_device.h>
-> +#include <linux/property.h>
->   
->   #include "8250.h"
->   
-> @@ -44,6 +45,10 @@ struct bcm2835aux_data {
->   	u32 cntl;
->   };
->   
-> +struct bcm2835_aux_serial_driver_data {
-> +	resource_size_t offset;
-> +};
-> +
->   static void bcm2835aux_rs485_start_tx(struct uart_8250_port *up)
->   {
->   	if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX)) {
-> @@ -80,9 +85,12 @@ static void bcm2835aux_rs485_stop_tx(struct uart_8250_port *up)
->   
->   static int bcm2835aux_serial_probe(struct platform_device *pdev)
->   {
-> +	const struct bcm2835_aux_serial_driver_data *bcm_data;
->   	struct uart_8250_port up = { };
->   	struct bcm2835aux_data *data;
-> +	resource_size_t offset = 0;
->   	struct resource *res;
-> +	unsigned int uartclk;
->   	int ret;
->   
->   	/* allocate the custom structure */
-> @@ -109,9 +117,7 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
->   	platform_set_drvdata(pdev, data);
->   
->   	/* get the clock - this also enables the HW */
-> -	data->clk = devm_clk_get(&pdev->dev, NULL);
-> -	if (IS_ERR(data->clk))
-> -		return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
-> +	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
->   
->   	/* get the interrupt */
->   	ret = platform_get_irq(pdev, 0);
-> @@ -125,8 +131,24 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
->   		dev_err(&pdev->dev, "memory resource not found");
->   		return -EINVAL;
->   	}
-> -	up.port.mapbase = res->start;
-> -	up.port.mapsize = resource_size(res);
-> +
-> +	bcm_data = device_get_match_data(&pdev->dev);
-> +
-> +	/* Some UEFI implementations (e.g. tianocore/edk2 for the Raspberry Pi)
-> +	 * describe the miniuart with a base address that encompasses the auxiliary
-> +	 * registers shared between the miniuart and spi.
-> +	 *
-> +	 * This is due to historical reasons, see discussion here :
-> +	 * https://edk2.groups.io/g/devel/topic/87501357#84349
-> +	 *
-> +	 * We need to add the offset between the miniuart and auxiliary
-> +	 * registers to get the real miniuart base address.
-> +	 */
-> +	if (bcm_data)
-> +		offset = bcm_data->offset;
-> +
-> +	up.port.mapbase = res->start + offset;
-> +	up.port.mapsize = resource_size(res) - offset;
->   
->   	/* Check for a fixed line number */
->   	ret = of_alias_get_id(pdev->dev.of_node, "serial");
-> @@ -141,12 +163,19 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	uartclk = clk_get_rate(data->clk);
-> +	if (!uartclk) {
-> +		ret = device_property_read_u32(&pdev->dev, "clock-frequency", &uartclk);
-> +		if (ret)
-> +			return dev_err_probe(&pdev->dev, ret, "could not get clk rate\n");
-> +	}
-> +
->   	/* the HW-clock divider for bcm2835aux is 8,
->   	 * but 8250 expects a divider of 16,
->   	 * so we have to multiply the actual clock by 2
->   	 * to get identical baudrates.
->   	 */
-> -	up.port.uartclk = clk_get_rate(data->clk) * 2;
-> +	up.port.uartclk = uartclk * 2;
->   
->   	/* register the port */
->   	ret = serial8250_register_8250_port(&up);
-> @@ -173,16 +202,27 @@ static int bcm2835aux_serial_remove(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +static const struct bcm2835_aux_serial_driver_data bcm2835_acpi_data = {
-> +	.offset = 0x40,
-> +};
-> +
->   static const struct of_device_id bcm2835aux_serial_match[] = {
->   	{ .compatible = "brcm,bcm2835-aux-uart" },
->   	{ },
->   };
->   MODULE_DEVICE_TABLE(of, bcm2835aux_serial_match);
->   
-> +static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
-> +	{ "BCM2836", (kernel_ulong_t)&bcm2835_acpi_data },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, bcm2835aux_serial_acpi_match);
-> +
->   static struct platform_driver bcm2835aux_serial_driver = {
->   	.driver = {
->   		.name = "bcm2835-aux-uart",
->   		.of_match_table = bcm2835aux_serial_match,
-> +		.acpi_match_table = bcm2835aux_serial_acpi_match,
->   	},
->   	.probe  = bcm2835aux_serial_probe,
->   	.remove = bcm2835aux_serial_remove,
+> I suppose it would have been good to provide more context lines in the
+> patch... Here is the relevant bit (in the changed version now):
 > 
-> base-commit: 2ade8eef993c37a2a43e51a9b1f6c25509a2acce
+> 	if (sport->tx_state == SEND) {
+> 		sport->tx_state = WAIT_AFTER_SEND;
+> 
+> 		if (port->rs485.delay_rts_after_send > 0) {
+> 			start_hrtimer_ms(&sport->trigger_stop_tx,
+> 				 port->rs485.delay_rts_after_send);
+> 			return;
+> 		}
+> 
+> 		/* continue without any delay */
+> 	}
+> 
+> 	if (sport->tx_state == WAIT_AFTER_RTS ||
+> 	    sport->tx_state == WAIT_AFTER_SEND) {
+> 		/* ... actual rts toggling ... */
+> 
+> 		sport->tx_state = OFF;
+> 	}
 > 
 
+Uwe, any thoughts about if this patch should be taken or not?
+
+thanks,
+
+greg k-h
