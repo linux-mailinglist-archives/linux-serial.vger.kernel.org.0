@@ -2,205 +2,124 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395B24AD6FC
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Feb 2022 12:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E144AD6EB
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Feb 2022 12:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357104AbiBHLao (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Feb 2022 06:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S1356464AbiBHLah (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Feb 2022 06:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356912AbiBHLMW (ORCPT
+        with ESMTP id S1357010AbiBHLQj (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:12:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91897C03FEC6
-        for <linux-serial@vger.kernel.org>; Tue,  8 Feb 2022 03:12:20 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHOPo-0003m2-J3; Tue, 08 Feb 2022 12:12:08 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHOPo-00FHrC-0B; Tue, 08 Feb 2022 12:12:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nHOPm-00BpnB-FQ; Tue, 08 Feb 2022 12:12:06 +0100
-Date:   Tue, 8 Feb 2022 12:12:03 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Harald Seiler <hws@denx.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] tty: serial: imx: Add fast path when rs485 delays are 0
-Message-ID: <20220208111203.qi6fpo2l6um6znkz@pengutronix.de>
-References: <20220119145204.238767-1-hws@denx.de>
- <20220119151145.zft47rzebnabiej2@pengutronix.de>
- <0df5d9ea2081f5d798f80297efb973f542dae183.camel@denx.de>
- <20220119162122.jmnz2hxid76p4hli@pengutronix.de>
- <5cab27cab5a39ef5e19992bc54e57c3f6106dafe.camel@denx.de>
- <YgJADKxWfOZroS35@kroah.com>
+        Tue, 8 Feb 2022 06:16:39 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54857C03FEC0;
+        Tue,  8 Feb 2022 03:16:39 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id g14so48689794ybs.8;
+        Tue, 08 Feb 2022 03:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nu7/YVH6EUneCQklBZ5MS41to049uINEDS/3iIPXoMM=;
+        b=AVCxW/K+sd6X3H3McN/ORZimi27QyU+E4rTwL57qwrLaqRtOYtASwb9CTB+41zgtlB
+         xsJ7e6yG/UHvktqGc/lV3qQxjDllvsSpw6DGTj7ot7BG8+AbgGh955xF73s5CHEhwAbB
+         QjhuGYGXEOCir9YbXYCxEKtHmzgew0aUgfRGbcrjKgiz1+T387Qokq7ufwJm7ZnP45pE
+         PWDSukRXZnBK/z5R1Eu2rJIf7Kq0NqI3J9gQuklL2fKz6hOQx2/4M9fG39iXb122NQMg
+         ZgvMG9BjYz29MfLVgsNHI/CIWdvqf7QStFMajgKL9LBjixChFljGNn5I1s1AX4pe1Sz5
+         IVMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nu7/YVH6EUneCQklBZ5MS41to049uINEDS/3iIPXoMM=;
+        b=3rvetcpUbeRg7+wQNoqEDV//+9jNp/RpATY1y9ZKNHGoyDllD05uXrTS4bR58Jg/6y
+         S33k4YYxmUxzeST6a7PaSfoN33J9pMIv2kD/BaGup2DXHekV8+qd0rrWZvEEVEKncvvj
+         zFfdbvU8I/ERbpW63gDHxMUDM3WTekhBPvEZARYec9dAj+2vPIYOjtjuK0hdo8dgV37C
+         xTuFluiL6JlCSqnE5Z9gcBJSw6PoBN8vCHD1CoSXDDHyuKsx6nEAgIUH4zwqea1WKQva
+         8aE6VnN9bCavGbgArBBoRU3z8qTXYmQnT/AIXDfddkOCvgNz8kq4GYEzcEoMml2UIyTT
+         YPlQ==
+X-Gm-Message-State: AOAM5317I5b9Gb5hRnMAIZY/lZtd2QOJT16ObZf3XhTHDcb2c7bbAxxn
+        QNFUcrRgX7+fbm3jnKlw6NnyqcqHOhADwtZGYOI=
+X-Google-Smtp-Source: ABdhPJz06wEjYiXp/Zki0OtcMPFFilsPoeZ54FGyMmqZbxwlJBCVPRQ+mK6VPpT2h7ZZnDVf/HoHKhSgfOq+O6jr5hg=
+X-Received: by 2002:a81:ac09:: with SMTP id k9mr4332831ywh.356.1644318998417;
+ Tue, 08 Feb 2022 03:16:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cofqnvm6jpalvn3e"
-Content-Disposition: inline
-In-Reply-To: <YgJADKxWfOZroS35@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1644213481-20321-1-git-send-email-hammerh0314@gmail.com>
+ <1644213481-20321-3-git-send-email-hammerh0314@gmail.com> <7aa14a1e-2814-0014-a682-f40666f635ac@kernel.org>
+In-Reply-To: <7aa14a1e-2814-0014-a682-f40666f635ac@kernel.org>
+From:   hammer hsieh <hammerh0314@gmail.com>
+Date:   Tue, 8 Feb 2022 19:16:52 +0800
+Message-ID: <CAOX-t569-0aTu73eGSY3k+btAuVgueRY91Jd5b9kbpjmxPp+Dw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Jiri Slaby <jirislaby@kernel.org> =E6=96=BC 2022=E5=B9=B42=E6=9C=888=E6=97=
+=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=882:27=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Hi,
+>
+> On 07. 02. 22, 6:58, Hammer Hsieh wrote:
+> > +static void sunplus_shutdown(struct uart_port *port)
+> > +{
+> > +     unsigned long flags;
+> > +     unsigned int isc;
+> > +
+> > +     spin_lock_irqsave(&port->lock, flags);
+> > +
+> > +     isc =3D readl(port->membase + SUP_UART_ISC);
+> > +     isc &=3D ~(SUP_UART_ISC_RXM | SUP_UART_ISC_TXM);
+>
+> Is this correct? I mean: will the SUP_UART_ISC read contain the control
+> bits, not only status bits?
+>
 
---cofqnvm6jpalvn3e
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I assume reviewers don't like writel(0,xxx).
+So I use definition to let the code easy to read.
+The purpose is to clear all interrupt.
+Bit[3:0] status bit only for read, write 1 or 0 no effect.
 
-Hello Greg,
+> > +     writel(isc, port->membase + SUP_UART_ISC);
+> > +
+> > +     spin_unlock_irqrestore(&port->lock, flags);
+> > +
+> > +     free_irq(port->irq, port);
+>
+> I am still waiting for explanation why this is safe with respect to
+> posted writes.
+>
 
-On Tue, Feb 08, 2022 at 11:03:56AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 19, 2022 at 05:59:46PM +0100, Harald Seiler wrote:
-> > On Wed, 2022-01-19 at 17:21 +0100, Uwe Kleine-K=F6nig wrote:
-> > > On Wed, Jan 19, 2022 at 04:20:12PM +0100, Harald Seiler wrote:
-> > > > Hi,
-> > > >=20
-> > > > On Wed, 2022-01-19 at 16:11 +0100, Uwe Kleine-K=F6nig wrote:
-> > > > > On Wed, Jan 19, 2022 at 03:52:03PM +0100, Harald Seiler wrote:
-> > > > > > Right now, even when `delay_rts_before_send` and `delay_rts_aft=
-er_send`
-> > > > > > are 0, the hrtimer is triggered (with timeout 0) which can intr=
-oduce a
-> > > > > > few 100us of additional overhead on slower i.MX platforms.
-> > > > > >=20
-> > > > > > Implement a fast path when the delays are 0, where the RTS sign=
-al is
-> > > > > > toggled immediately instead of going through an hrtimer.  This =
-fast path
-> > > > > > behaves identical to the code before delay support was implemen=
-ted.
-> > > > > >=20
-> > > > > > Signed-off-by: Harald Seiler <hws@denx.de>
-> > > > > > ---
-> > > > > >  drivers/tty/serial/imx.c | 18 ++++++++++++++----
-> > > > > >  1 file changed, 14 insertions(+), 4 deletions(-)
-> > > > > >=20
-> > > > > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > > > > > index df8a0c8b8b29..67bbbb69229d 100644
-> > > > > > --- a/drivers/tty/serial/imx.c
-> > > > > > +++ b/drivers/tty/serial/imx.c
-> > > > > > @@ -455,9 +455,14 @@ static void imx_uart_stop_tx(struct uart_p=
-ort *port)
-> > > > > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > > > > >  		if (sport->tx_state =3D=3D SEND) {
-> > > > > >  			sport->tx_state =3D WAIT_AFTER_SEND;
-> > > > > > -			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > > > +
-> > > > > > +			if (port->rs485.delay_rts_after_send > 0) {
-> > > > > > +				start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > > >  					 port->rs485.delay_rts_after_send);
-> > > > > > -			return;
-> > > > > > +				return;
-> > > > > > +			}
-> > > > > > +
-> > > > > > +			/* continue without any delay */
-> > > > >=20
-> > > > > Is it right to keep the assignment sport->tx_state =3D WAIT_AFTER=
-_SEND ?
-> > > >=20
-> > > > I am keeping the assignment intentionally, to fall into the
-> > > > if(state =3D=3D WAIT_AFTER_RTS) below (which then sets the state to=
- OFF).
-> > > > I originally had the code structured like this:
-> > > >=20
-> > > > 	if (port->rs485.delay_rts_after_send > 0) {
-> > > > 		sport->tx_state =3D WAIT_AFTER_SEND;
-> > > > 		start_hrtimer_ms(&sport->trigger_stop_tx,
-> > > > 			 port->rs485.delay_rts_after_send);
-> > > > 		return;
-> > > > 	} else {
-> > > > 		/* continue without any delay */
-> > > > 		sport->tx_state =3D WAIT_AFTER_SEND;
-> > > > 	}
-> > > >=20
-> > > > This is functionally identical, but maybe a bit more explicit.
-> > > >=20
-> > > > Not sure what is more clear to read?
-> > >=20
-> > > I didn't oppose to the readability thing. With your patch you skip
-> > > starting the stop_tx timer and that would usually care for calling
-> > > imx_uart_stop_tx and setting sport->tx_state =3D OFF. This doesn't ha=
-ppen
-> > > with your patch any more.
-> >=20
-> > Not starting the timer is the entire point of the patch - instead, the
-> > code which would run inside the timer callback now runs immediately. To
-> > do this, I set the tx_state to WAIT_AFTER_SEND and _don't_ do the early
-> > return which leads into the if(tx_state =3D=3D WAIT_AFTER_SEND) below. =
- This
-> > is the code-path which normally runs later in the hrtimer callback.
-> >=20
-> > I suppose it would have been good to provide more context lines in the
-> > patch... Here is the relevant bit (in the changed version now):
-> >=20
-> > 	if (sport->tx_state =3D=3D SEND) {
-> > 		sport->tx_state =3D WAIT_AFTER_SEND;
-> >=20
-> > 		if (port->rs485.delay_rts_after_send > 0) {
-> > 			start_hrtimer_ms(&sport->trigger_stop_tx,
-> > 				 port->rs485.delay_rts_after_send);
-> > 			return;
-> > 		}
-> >=20
-> > 		/* continue without any delay */
-> > 	}
-> >=20
-> > 	if (sport->tx_state =3D=3D WAIT_AFTER_RTS ||
-> > 	    sport->tx_state =3D=3D WAIT_AFTER_SEND) {
-> > 		/* ... actual rts toggling ... */
-> >=20
-> > 		sport->tx_state =3D OFF;
-> > 	}
-> >=20
->=20
-> Uwe, any thoughts about if this patch should be taken or not?
+Actually I'm not IC designer, not expert for bus design.
+About data incoherence issue between memory bus and peripheral bus.
+In case of AXI bus, use non-posted write can avoid data incoherence issue.
+What if in case of posted write:
+Send a specific command after last write command.
+SDCTRL identify specific command, means previous write command done.
+Then send interrupt signal to interrupt controller.
+And then interrupt controller send done signal to Master.
+Master receive done signal, means write command done.
+Then issue a interrupt or proceed next write command.
 
-I will take a deeper look later today and tell you my thoughts.
+IC designer told us no problem, and as a uart driver maintainer.
+It is not my concern, but glad you ask.
+Let me have chance to know it from IC designer.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---cofqnvm6jpalvn3e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmICUAAACgkQwfwUeK3K
-7AkCVggAiaCfK44uF1z68o5GGrLoOxmCBoUtRqyKPMZpAfss1DpikhesyhQfors+
-HsNakAxm+vUb7LX5ABOQpOQ8RCE8RaHN/y/NP0adsItH3ncycnUUZF/hQ2p1CE0F
-8GNSjkgorw6KI+49JoSLIZS2f662FMRJHHpkZopdbg5cTHajB/uyLhbmeavrvI5h
-8oN+P4hiDLb28frPesEw+qDkm2mh8sVdv+mvsiY78ILd6EDf/f2JCe35s1MLNd45
-rITAcLeUkQEEWKZnlR2h3wfaznBl8lm2FkVDqelhhuld0+EJIL9ZVb0zLTebV6Sx
-I8/3kveSia/OPuLzIa4Sy8BM6Mm/gw==
-=xTHA
------END PGP SIGNATURE-----
-
---cofqnvm6jpalvn3e--
+> regards,
+> --
+> js
+> suse labs
