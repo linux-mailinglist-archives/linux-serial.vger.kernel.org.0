@@ -2,207 +2,146 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9300F4AD6F3
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Feb 2022 12:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545844AD6E7
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Feb 2022 12:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356938AbiBHLan (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Feb 2022 06:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S1347940AbiBHLag (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Feb 2022 06:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356063AbiBHKHK (ORCPT
+        with ESMTP id S1356333AbiBHKc2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Feb 2022 05:07:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC26C03FEC0;
-        Tue,  8 Feb 2022 02:07:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51E25B81802;
-        Tue,  8 Feb 2022 10:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55214C340EF;
-        Tue,  8 Feb 2022 10:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644314827;
-        bh=OikrdX8FMNiMLuMVEJTQbFg4yac0GkRiulyJsMntNGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jiP1EPaq3l/aJLJwYUcK5NMYqW2KzAtVaLuE9HOb9vDiTt92PUE12lcvGYU6E6zqt
-         XcPHv5v36KfoKOmKMk4R3I/1iVdMxdBG53W5NftkumO7AlhhmCtBDucZk4S+gPHloK
-         ss7Xe7jZpLAI2h8sTcfxDRByeIUNzXrPHSohN2ps=
-Date:   Tue, 8 Feb 2022 11:07:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Erwan LE RAY <erwan.leray@foss.st.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Gerald Baeza <gerald.baeza@st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] serial: mctrl_gpio: add a new API to enable /
- disable wake_irq
-Message-ID: <YgJAyAZFJBFXQGvf@kroah.com>
-References: <20220203171644.12231-1-erwan.leray@foss.st.com>
- <20220203171644.12231-2-erwan.leray@foss.st.com>
- <CAHp75VfxGj=3mKvjcRpQjyXBCM0szsidHVuJGdAL8yP5SmdBzw@mail.gmail.com>
- <cb09a49a-37f8-9e3f-168c-4c5dd62e2c07@foss.st.com>
+        Tue, 8 Feb 2022 05:32:28 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58749C03FEC0;
+        Tue,  8 Feb 2022 02:32:27 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id co28so9394010edb.1;
+        Tue, 08 Feb 2022 02:32:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v3+9Y32cf+Ax3G/iWkV5vM08y7nrpNijPcp38VaOUAE=;
+        b=Kw06RO75rbLUFrLHJ93ga19ZxxshO5/eizKWNfLYjMLV3cJLg4d6s+I98J5q0VdCGo
+         NS6bdVcwDSY89lrxKuzs2BAoT4Fpucs1BIEecy7QnncI/TKM2grUufsKf8mumEt7xgzB
+         gElndbyM+A7LeU83VNqK8dqsVA2jgtQfpn0Ew0uTKWbBmFbbM9waSxznq4LOd2UFOfIi
+         5AoAAcr/B87VPn5AjrWpUQgsdKowxCKuJIGRJwVMstEcDgP+PZ/CajWf3g7IBNv9uLXt
+         1s0Ml5wnJw0nag6BMDmDNPHTcbRIdl6rALNKSZTP67OzwrJaU5Q7Edci0gw/YsRFEyCp
+         XiQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v3+9Y32cf+Ax3G/iWkV5vM08y7nrpNijPcp38VaOUAE=;
+        b=pYlp37jRKIhFlVBCUt9GLmcknxEzsOO1OzQ5+iBlcqzwuXhXFVDTxiM+iInwIvPgiZ
+         FY+Ccuj8mCVzscoQ9M4wCxpLZIvwIa9VPeKCOnrfZ6+dhvnoBw3fVQ2wnmbmseoDT5ic
+         3LfdygKlaQIE+4YZ93iun+XiRbseuig9ynwkIGnryMkcKXxD/Yb3V+KX+ez1mPygIK3x
+         vdk1IUs8hYOEM1PzuhOvNnG1es0tlsRHvay3nQrmloxwAz72wwCEV91WnZj7bnKYgA8i
+         jd0nO4pNIy6aT+0Q44CcuW0KiyNnQ9IPYa4ywj4ETG2VJODz5+qvqC8AgBKy1tdvNVyn
+         RyQw==
+X-Gm-Message-State: AOAM530gdBl8apMDHCHG83EFqJFWjFXFqplOlolnvDo+qwoXsP+Xgfek
+        g/t4Qus1AhnDuI9XyVh0SmIopHrRAbrYMAz6jtY=
+X-Google-Smtp-Source: ABdhPJwz3uJ6NB6o/NiskBls8cso3tajnnfMcijvIzyd4aD0huokx70+fDoPUd5tajwSs1cuxL+FwQ51hqdYoSjLnWo=
+X-Received: by 2002:a05:6402:2741:: with SMTP id z1mr3760419edd.264.1644316345736;
+ Tue, 08 Feb 2022 02:32:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cb09a49a-37f8-9e3f-168c-4c5dd62e2c07@foss.st.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220207232129.402882-1-athierry@redhat.com>
+In-Reply-To: <20220207232129.402882-1-athierry@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 8 Feb 2022 12:31:49 +0200
+Message-ID: <CAHp75VexSp1kijGHoOijSHB44fHTWqj6LZPzhSBhN2ms2huh-g@mail.gmail.com>
+Subject: Re: [PATCH v3] serial: 8250_bcm2835aux: Add ACPI support
+To:     Adrien Thierry <athierry@redhat.com>
+Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 04:41:58PM +0100, Erwan LE RAY wrote:
-> Hi Andy,
-> 
-> On 2/4/22 10:07 AM, Andy Shevchenko wrote:
-> > 
-> > 
-> > On Thursday, February 3, 2022, Erwan Le Ray <erwan.leray@foss.st.com
-> > <mailto:erwan.leray@foss.st.com>> wrote:
-> > 
-> >     Add a new API to enable / disable wake_irq in order to enable gpio
-> >     irqs as
-> >     wakeup irqs for the uart port.
-> > 
-> >     Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com
-> >     <mailto:erwan.leray@foss.st.com>>
-> > 
-> >     diff --git a/drivers/tty/serial/serial_mctrl_gpio.c
-> >     b/drivers/tty/serial/serial_mctrl_gpio.c
-> >     index c41d8911ce95..1663b3afc3a0 100644
-> >     --- a/drivers/tty/serial/serial_mctrl_gpio.c
-> >     +++ b/drivers/tty/serial/serial_mctrl_gpio.c
-> >     @@ -299,4 +299,42 @@ void mctrl_gpio_disable_ms(struct mctrl_gpios
-> >     *gpios)
-> >       }
-> >       EXPORT_SYMBOL_GPL(mctrl_gpio_disable_ms);
-> > 
-> >     +void mctrl_gpio_enable_irq_wake(struct mctrl_gpios *gpios)
-> >     +{
-> >     +       enum mctrl_gpio_idx i;
-> >     +
-> >     +       if (!gpios)
-> >     +               return;
-> >     +
-> >     +       if (!gpios->mctrl_on)
-> >     +               return;
-> >     +
-> >     +       for (i = 0; i < UART_GPIO_MAX; ++i) {
-> >     +               if (!gpios->irq[i])
-> >     +                       continue;
-> > 
-> > 
-> > 
-> > Why not simply
-> > 
-> >    if (gpios[])
-> >      enable_irq_...
-> > 
-> > ?
-> > 
-> > And same for disabling.
-> > 
-> >     +
-> >     +               enable_irq_wake(gpios->irq[i]);
-> >     +       }
-> >     +}
-> >     +EXPORT_SYMBOL_GPL(mctrl_gpio_enable_irq_wake);
-> >     +
-> >     +void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios)
-> >     +{
-> >     +       enum mctrl_gpio_idx i;
-> >     +
-> >     +       if (!gpios)
-> >     +               return;
-> >     +
-> >     +       if (!gpios->mctrl_on)
-> >     +               return;
-> >     +
-> >     +       for (i = 0; i < UART_GPIO_MAX; ++i) {
-> >     +               if (!gpios->irq[i])
-> >     +                       continue;
-> >     +
-> >     +               disable_irq_wake(gpios->irq[i]);
-> >     +       }
-> >     +}
-> >     +EXPORT_SYMBOL_GPL(mctrl_gpio_disable_irq_wake);
-> >     +
-> >       MODULE_LICENSE("GPL");
-> >     diff --git a/drivers/tty/serial/serial_mctrl_gpio.h
-> >     b/drivers/tty/serial/serial_mctrl_gpio.h
-> >     index b134a0ffc894..fc76910fb105 100644
-> >     --- a/drivers/tty/serial/serial_mctrl_gpio.h
-> >     +++ b/drivers/tty/serial/serial_mctrl_gpio.h
-> >     @@ -91,6 +91,16 @@ void mctrl_gpio_enable_ms(struct mctrl_gpios *gpios);
-> >        */
-> >       void mctrl_gpio_disable_ms(struct mctrl_gpios *gpios);
-> > 
-> >     +/*
-> >     + * Enable gpio wakeup interrupts to enable wake up source.
-> >     + */
-> >     +void mctrl_gpio_enable_irq_wake(struct mctrl_gpios *gpios);
-> >     +
-> >     +/*
-> >     + * Disable gpio wakeup interrupts to enable wake up source.
-> >     + */
-> >     +void mctrl_gpio_disable_irq_wake(struct mctrl_gpios *gpios);
-> >     +
-> >       #else /* GPIOLIB */
-> > 
-> >       static inline
-> >     @@ -142,6 +152,14 @@ static inline void mctrl_gpio_disable_ms(struct
-> >     mctrl_gpios *gpios)
-> >       {
-> >       }
-> > 
-> >     +static inline void mctrl_gpio_enable_irq_wake(struct mctrl_gpios
-> >     *gpios)
-> >     +{
-> >     +}
-> >     +
-> >     +static inline void mctrl_gpio_disable_irq_wake(struct mctrl_gpios
-> >     *gpios)
-> >     +{
-> >     +}
-> >     +
-> >       #endif /* GPIOLIB */
-> > 
-> >       #endif
-> >     --     2.17.1
-> > 
-> > 
-> > 
-> > -- 
-> > With Best Regards,
-> > Andy Shevchenko
-> > 
-> > 
-> 
-> Thanks for your review.
-> I fully agree with your comment, but I wrote this code like it is to keep
-> the same structure than all the other ops of serial_mcrtrl_gpio driver. I
-> preferred keeping an homogeneous code in the driver rather than breaking the
-> driver homogeneity with the addition of an optimized code.
-> 
-> Greg, can you please indicate which solution you recommend ?
+On Tue, Feb 8, 2022 at 11:13 AM Adrien Thierry <athierry@redhat.com> wrote:
+>
+> Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
+> use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
 
-Sadly, this is the format in this file, so I'll take this as-is.
+TianoCore EDK II
 
-thanks,
+> firmware.
 
-greg k-h
+...
+
+>         /* get the clock - this also enables the HW */
+> -       data->clk = devm_clk_get(&pdev->dev, NULL);
+
+> -       if (IS_ERR(data->clk))
+> -               return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
+
+You shouldn't remove the error handling. Even if optional there may be
+other types of errors that need to be reported.
+
+> +       data->clk = devm_clk_get_optional(&pdev->dev, NULL);
+
+...
+
+
+> +       bcm_data = device_get_match_data(&pdev->dev);
+
+Move this closer to the condition where it's used the first time.
+
+> +       /* Some UEFI implementations (e.g. tianocore/edk2 for the Raspberry Pi)
+.
+If there are some not doing that, can we end up in the situation when
+for the same ID we have different offset?
+Also, Why not go and fix that implementation?
+Can you provide a DSDT excerpt to show how it looks there?
+
+TianoCore EDK II
+
+/*
+ * Multi-line comments should look
+ * like this.
+ */
+
+> +        * describe the miniuart with a base address that encompasses the auxiliary
+> +        * registers shared between the miniuart and spi.
+
+SPI
+
+> +        *
+> +        * This is due to historical reasons, see discussion here :
+> +        * https://edk2.groups.io/g/devel/topic/87501357#84349
+> +        *
+> +        * We need to add the offset between the miniuart and auxiliary
+> +        * registers to get the real miniuart base address.
+> +        */
+> +       if (bcm_data)
+> +               offset = bcm_data->offset;
+
+...
+
+> +static const struct acpi_device_id bcm2835aux_serial_acpi_match[] = {
+> +       { "BCM2836", (kernel_ulong_t)&bcm2835_acpi_data },
+> +       { }
+> +};
+
+I believe this ID is allocated by Broadcom. Can we have a confirmation, please?
+
+-- 
+With Best Regards,
+Andy Shevchenko
