@@ -2,66 +2,61 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 622774AE7B0
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Feb 2022 04:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64514AE84F
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Feb 2022 05:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243401AbiBIDD3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        id S243629AbiBIEIH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Feb 2022 23:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349898AbiBICxp (ORCPT
+        with ESMTP id S1347703AbiBIEDP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:53:45 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67184C0613CC;
-        Tue,  8 Feb 2022 18:53:44 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id s185so1169390oie.3;
-        Tue, 08 Feb 2022 18:53:44 -0800 (PST)
+        Tue, 8 Feb 2022 23:03:15 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78EDC061578;
+        Tue,  8 Feb 2022 20:03:14 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id t199so1250726oie.10;
+        Tue, 08 Feb 2022 20:03:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fNZGPXUROmHp4KkqnE4bBZ82gCwkY+Gd8mQE5E/HzyA=;
-        b=ntoQ7p2k/V3RDrDImlNg2et31bpQjw1r6C3ZBcsGMgt7e30WYCqL+egYx27pokydER
-         PzJtCE5oFvXLNDAGsh7X5udcXPQeLkdAD4gspS+SFc2aaBuerAQ5wP902oMLAp24H4dJ
-         5FG/bCmqSZBTf7jqpLcutAIuFoH+KyEwcyHO0bF/HeOD1EZIwhON85DyI+RnXXW7s2Po
-         QpkKsGTsf12a0td0peEPHDOgWSnbcmAyaS1LCbIogmnRq3c4kSpTzyo5hrORfRkWb2Wn
-         Cv2rfLK/LFfVNthPBZxXtgd6QyRmSJw5KJAFvs2aA981nggFP7d78ubYpH2r4yRx4Onx
-         UKvw==
-X-Gm-Message-State: AOAM5332HOVuPeIwmDeamQapiZJ8fBP2FUmXcCGhba+NtV9ay8Fg9b0s
-        2lC3m04HklMvLB3gnLqvlw==
-X-Google-Smtp-Source: ABdhPJwklX3+feeACa2Kp9/ndGvpPiCo+Q+Utu1UgIfNFSyTdtDznL0XFZ3V63+D63H5b3nML99SJA==
-X-Received: by 2002:a05:6808:198d:: with SMTP id bj13mr78932oib.146.1644375223674;
-        Tue, 08 Feb 2022 18:53:43 -0800 (PST)
+        bh=CmY7PgTIB+xl2LL7tzgCE9G7RhMcwApZzrQupeWWqm8=;
+        b=6h1d2t2G211pKh/J/W6mFYjOM/5w5c6d3YF0bnfFGeHhvt4FqSWWdZnH+5C+TFQlAp
+         O9rPRCydoN1IOwcjDPgADWbMDtsEnSq6EFSBX2kSqloezP4AUgjdvaDNqdb+xZnAOxr6
+         MH9PJZNgZUPtfoAlphTt/pABs+6HwL/4MqSA8tFdmtt6ZSmo0m1RNFTqM38k1IYt0L6v
+         T7kW1K30FlGS9nzm74Hp/VSJdzqEmWVnUPx+UVCG/3Xrf5fn+HdFsw4rNTgn0zOMSJDi
+         Z7xDpXsht4fSJCEAnyHZ3dFcBKPATaTJgqiCUQiT+tBRKDem6XwiP6+3FHjmTjVcVaN9
+         JmKQ==
+X-Gm-Message-State: AOAM5301JHXlMyJsF/ma/sthhrfX1aBLP5A1b29XNceATD9+cAHdpEGA
+        N0hN544AUafdo5GXyOnl9g==
+X-Google-Smtp-Source: ABdhPJx9qakOYsm8R9weCyJ5x50P3WxmBB4MhXyP6Tg54v2pjw/BqbvG0kz8V3sAEgcHwwz5Clokqg==
+X-Received: by 2002:a54:4812:: with SMTP id j18mr514855oij.277.1644379394062;
+        Tue, 08 Feb 2022 20:03:14 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q41sm6054935ooh.38.2022.02.08.18.53.42
+        by smtp.gmail.com with ESMTPSA id 12sm2580297oam.5.2022.02.08.20.03.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:53:42 -0800 (PST)
-Received: (nullmailer pid 3525989 invoked by uid 1000);
-        Wed, 09 Feb 2022 02:53:41 -0000
-Date:   Tue, 8 Feb 2022 20:53:41 -0600
+        Tue, 08 Feb 2022 20:03:13 -0800 (PST)
+Received: (nullmailer pid 3630578 invoked by uid 1000);
+        Wed, 09 Feb 2022 04:03:12 -0000
+Date:   Tue, 8 Feb 2022 22:03:12 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH 1/2] dt-bindings: serial: fsl-lpuart: Drop i.MX8QXP
- backwards compatibility
-Message-ID: <YgMstcQHIB0dWzuT@robh.at.kernel.org>
-References: <20220118135918.2126010-1-abel.vesa@nxp.com>
+To:     Icenowy Zheng <icenowy@nucleisys.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: Re: [PATCH 01/12] dt-bindings: vendor-prefixes: add Nuclei
+Message-ID: <YgM9AMFhzsvhd85O@robh.at.kernel.org>
+References: <20220127151647.2375449-1-icenowy@nucleisys.com>
+ <20220127151647.2375449-2-icenowy@nucleisys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118135918.2126010-1-abel.vesa@nxp.com>
+In-Reply-To: <20220127151647.2375449-2-icenowy@nucleisys.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -73,14 +68,15 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 18 Jan 2022 15:59:17 +0200, Abel Vesa wrote:
-> Drop the i.MX8QXP backwards compatibility with i.MX7ULP since they
-> differ from clocks handling point of view.
+On Thu, 27 Jan 2022 23:16:36 +0800, Icenowy Zheng wrote:
+> Nuclei System Technology is a RISC-V CPU IP core vendor.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Add vendor prefix for it.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@nucleisys.com>
 > ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
