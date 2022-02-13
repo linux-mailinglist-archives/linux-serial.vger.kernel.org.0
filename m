@@ -2,74 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3381F4B3DF4
-	for <lists+linux-serial@lfdr.de>; Sun, 13 Feb 2022 23:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A854B3E12
+	for <lists+linux-serial@lfdr.de>; Sun, 13 Feb 2022 23:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238544AbiBMWPh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 13 Feb 2022 17:15:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46662 "EHLO
+        id S238668AbiBMWeK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 13 Feb 2022 17:34:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233686AbiBMWPh (ORCPT
+        with ESMTP id S238655AbiBMWd7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 13 Feb 2022 17:15:37 -0500
+        Sun, 13 Feb 2022 17:33:59 -0500
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767BF541A5;
-        Sun, 13 Feb 2022 14:15:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E510054BCC;
+        Sun, 13 Feb 2022 14:33:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644790512;
-        bh=/GuRz1vrm15+tEX8Jbv2LcM92USmJGaAMmozHmwYR98=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=LyBWlw2UP7pxemCAbIaRF+07BSsYThs13dE+csFKaPE1m7tR1uDvN3fRZKBQ2c/0+
-         JclyjxK7T87eNNvnLrZkd1yyTbiGOHIrEIr4rcD/867u8OVWWiMekeM2mXlbalc4iH
-         dISJfabPiepGZ143AZh7STlwFwmvpsETJCntFlXg=
+        s=badeba3b8450; t=1644791631;
+        bh=VMbcSuC7p0n3hqLa0/U0n6fD5g5ZwGHCadLUz5+JSTo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=hIVdW5vhiEyMbAguqVbYLBrYdLEbTQrtO9hfikEsDNCe/9jFaayRgeyi+mjT1Rkgu
+         aHDTNgeVCa6+Jn5R5FsCIZfFSn12mDl1ysujtDwnihcvjNUahMcydHrhSbRTkahS4K
+         SEkb6DTnONVin+IWNVVZWlyx9JITRMnKAoDWMSBY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.190.238]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MybGX-1oD9h70hXp-00yzer; Sun, 13
- Feb 2022 23:15:12 +0100
-Message-ID: <1e43c3b9-c5b7-de77-dd28-981d60a4d97d@gmx.de>
-Date:   Sun, 13 Feb 2022 23:15:05 +0100
+Received: from Venus.fritz.box ([149.172.237.68]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MdNcG-1nsR3E0FLk-00ZMLp; Sun, 13
+ Feb 2022 23:28:04 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux@armlinux.org.uk, richard.genoud@gmail.com,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, lukas@wunner.de
+Subject: Move RS485 implementation from drivers to serial core
+Date:   Sun, 13 Feb 2022 23:27:28 +0100
+Message-Id: <20220213222737.15709-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] serial: parisc: GSC: fix build when PCI_LBA is not set
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-parisc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>
-References: <20220213193903.8815-1-rdunlap@infradead.org>
- <0baabcbc-196e-08fa-e2db-b7e925993cc1@gmx.de>
- <55c73cb4-21ae-7307-7b14-a19cf270f4d6@infradead.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <55c73cb4-21ae-7307-7b14-a19cf270f4d6@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gJ0P9y8TH5sSIgBh0gzgU8cCS3hLcXKc+yGMGLvVPHvsnbLMWiP
- 2Aew9G+LMzKAcxZ8M7Xnx7Z1gfLj14eQz0ruBbDk0ioUizl/iltCOk3Yj1pTDw6+BmqwCNV
- RndElaC86aqJVyE+0TwlyCYG8kl2IsO5O810v47lNE1ZQ0jUWKjz7gG9KZJErkcUr5pI8Zy
- sCGZvlBUDOVzg9p3I+RZQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5CCV3+Y39Fo=:iIDunnDRSK2/K78Y4sQHwC
- j799Dv518khpBHCl0cwgg43WMKdgpBxo/lm2dz+OoP+8y+iEPhdsWI+Hji2OOI+4s60X4e3/j
- 0FTum8GnR/sHBOfZ2Wr775KiPE/NdibqvhA0KQ9+ZolTztXrwgzLhvqfkfKkmF/o41Ot/FRkD
- w3/QpXZC1bM8FbiHM9eKYE4aoC2ZObTH8FR2cYlMNfzvrCBOkwm+dFXeJUafj8ACLCuza/yQY
- hz3UVdwMaVKC88KmPijcZEOdyrkSmIkNpNIMbLfssGoZ6ajuPCO6L8Mhkcq9+SNghmWlWdhrJ
- XSPI5w33uMLMN1KOQLvZSLPy7oospUVAYCau6bP7xCgzLpeEOaJonzimCP7eTImHWp9LROMGg
- FpXZKObytyMzsr1mQM5FB4U5ykM4O9j69T9N0WFqrb7LcOkb6lwlZeihXDZV5BfU0plT0ivWt
- itLKO1vIHbU9AYcKSNrwCFO4x9mkIWmfnnCjbo8Lde6T48vxFrb3cWtMRIdjljv0cDNma7ilr
- 6m9Vq+S+jGS3FDDudxNbCGnSSP0ItPD473tqd9U7h/AzjeRdXowAFRafaX9EJ/csuTajQ1fIh
- U43TiG24TGYPS0ZGtZz08I4ngenCUS4VYN/zhGaGDcKbhQLHHTl61dyqo9kKeecBPhIL5uAWl
- o8oGkmiAAp2zLeZXkogUbfQkTXL4zU1sDTeFVVCrl4hHqIL1ccKnCvZUlVCttLHXhT1dKOmiC
- I1ZS5eUHI8lixMn7FU3h0ktHQ17uF3ElHRVZenrlR0/UaSzeZ6iBrUAVX5er1fHcKAQ709QBG
- 7jR2gl58I1uXhs9+uhjnf5TryHJ1W7TiJj8nSjOv8SgC5hOgjo491BamiNBOFZbIEsVrbbCRK
- kAWWc4s3n4axST8leYqQZ+F+gcZJGH6b3Ynb6kVwHo/4nAt0gE8/pw+AT1MUzWXyyYtQKcE6p
- Faw3pkR8xMXCtiZaf4gLjkZ0Ns9wdL1xIKjLueDxHc77HjC/t8lhC0jbgfdSQmM30g8U0oViD
- sW0oMIfMMi4hjHithfjfeC7xMkzu1bHAFHHZwxOEolP/0HFo/oZo32VdOd7ldOTah47ypdme4
- Z9dRZiNrmBwKvk=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:s913s5qBkaysiWGAuTn1tH4rldqCkA6d7se/P2ylN3mokt+xD8S
+ sWBy0zVPYNQoU7I5IuAbAnIHu4ZJq6FAUSC/Ftgs5OCVQX3xWB1TqbbPkjC1JvtxaMcQeyK
+ sWTz3APtcttuWfM0F5VNYEt24Mh3amfwKpEB0zF/GDX+C6U7t4EWr+BcLN4Ar+/BSCwR7FD
+ 5/u4lZj16gv24srLDYYKQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UYAkBzF9hKw=:c7uCz/ztwSm8AoFjDFHBHL
+ awgehg2vgBWfOmxzGgaeNuJF82nznJFd4O7SC6HoDxCkOnxcp9zlB0odSkEulOZH4TYXEkOFr
+ R/HycjEYE05LCHtv2jB12UZSzshFiQEe+FUQgwqNTyCqbbV0HerBV99SN3ZnBFc8UQjSdmqps
+ nsGMDFXpC3xQIr8ICmge6tNhXGJkHSs2rAoMCmzaNDYjRAyVCKPZtsQ5F0sa2fpiza2Pcx1L8
+ eEN8Fnzxz4xpOOXsY7OpuLryw1qbSmYJCiNeItKm5qlB0E9NxEKS5VwmhZjZ1lsg/Takbj4sj
+ 3fpR9Ur7s+DW0dl2F71pF74QYIwAplLxSw3/YkYxzapXIJ7wtJew6b/JKTGz0IpANQT3b2SJl
+ 7QfgdpoW38Nf9EdvJZgTq9UMu89ZcOXrWh18j2P+LFfka4Lb7HV65th8MqFkPPwmUFNA1bX7Q
+ tB4L0faPQ3jm6j9n0PQ0ncJyHPuZ9odYhNhtQXAAXWH/xNdb9qkqld4d5m5VxKWGpxGptmn/S
+ leYIfJ2rdzRfrrZfY+b5tnykZ5H229QZMWp6eJwseDUjIAixItj7R4eSbexpWgxgZlk6RlN+A
+ 3RygB2++K9udfRqgvRqKWF2vfmrHK6uQtf5JMoqkO1toiw45SR3Vkf4vG+F6PGOQsW+pHA0ld
+ gGsNvFW1a553HYgZ2IYVOYFw0Bzha59ApYWl4mC+wfJyxMJJGtkqK57+wsSbwF60jL5T1YyX0
+ /sYQ1MpvD7Z+YvlkBbxusakjxtDC648ra+nXR5YJ2O4Kl6ZClXgaclV8BFtXUzWlewL3mVd84
+ wy5MnDEZQ+j8kCIPYErQQvcjcERcfsz/4FkkzYh0hFg4R1B+4aaf+/J0n+AAzAAOEsBWuXdms
+ WGEZQ1vokquYhzVprNpWZo85XzdD1sc4RoBh/jH3DLQ7aWml94X2xNXSEg7Veg41leYBJqLoW
+ REIO2x7qKBNX8i0i35ENxwia3axbeRQkAMRCTMwjI/VXfAz2PhABVe61nLmNB0XCuGlyFjo6S
+ EpvvG5p2rY18aLu8GYzpoYHLHzRnfBxZC9I1XOVIAxGwQ2B7UA7lQTT5fo2WP7T6h915bCHsx
+ w1RcqEvglNR+4g=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,75 +73,18 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2/13/22 22:07, Randy Dunlap wrote:
->
->
-> On 2/13/22 12:35, Helge Deller wrote:
->> Hi Randy,
->>
->> On 2/13/22 20:39, Randy Dunlap wrote:
->>> There is a build error when using a kernel .config file from
->>> 'kernel test robot' for a different build problem:
->>>
->>> hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3=
-':
->>> (.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
->>>
->>> when:
->>>   CONFIG_GSC=3Dy
->>>   CONFIG_SERIO_GSCPS2=3Dy
->>>   CONFIG_SERIAL_8250_GSC=3Dy
->>>   CONFIG_PCI is not set
->>>     and hence PCI_LBA is not set.
->>>   IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
->>>
->>> Making SERIAL_8250_GSC depend on PCI_LBA prevents the build error.
->>
->> It maybe makes the build error go away, but ...
->>
->>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
->>> Cc: Helge Deller <deller@gmx.de>
->>> Cc: linux-parisc@vger.kernel.org
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: linux-serial@vger.kernel.org
->>> Cc: Jiri Slaby <jirislaby@kernel.org>
->>> Cc: Johan Hovold <johan@kernel.org>
->>> ---
->>>  drivers/tty/serial/8250/Kconfig |    2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> --- linux-next-20220211.orig/drivers/tty/serial/8250/Kconfig
->>> +++ linux-next-20220211/drivers/tty/serial/8250/Kconfig
->>> @@ -118,7 +118,7 @@ config SERIAL_8250_CONSOLE
->>>
->>>  config SERIAL_8250_GSC
->>>  	tristate
->>> -	depends on SERIAL_8250 && GSC
->>> +	depends on SERIAL_8250 && GSC && PCI_LBA
->>>  	default SERIAL_8250
->>
->> The serial device is on the GSC bus, so if you make it
->> dependend on the PCI bus it will not be useable on machines
->> which only have a GSC bus...
->>
->> We need another patch.
->> Do you have a link to the build error?
->
->
-> No, it's from the other build error that you just replied to,
-> where the incorrect compiler was used.
->
-> I'll recheck it and reconsider what to do, if anything.
-
-Ok, thank you!
-
-By the way, I just sent another patch (and added it to the parisc for-next=
- tree)
-which should at least give a better error message if someone uses the wron=
-g compiler:
-https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/co=
-mmit/?h=3Dfor-next&id=3Db160628e9ebcdc85d0db9d7f423c26b3c7c179d0
-
-Helge
+VGhpcyBwYXRjaCBzZXJpZXMgaXMgYW4gYXR0ZW1wdCB0byBzaW1wbGlmeSByczQ4NSBpbXBsZW1l
+bnRhdGlvbiBpbiBkcml2ZXJzCmJ5IG1vdmluZyB0aGUgZm9sbG93aW5nIHRhc2tzIG91dCBvZiB0
+aGUgZHJpdmVycyBpbnRvIHRoZSBzZXJpYWwgY29yZToKCi0gZW5zdXJlIHNhbmUgUlRTIHNldHRp
+bmdzOiBpbiBjYXNlIG9mIGFuIGludmFsaWQgY29uZmlndXJhdGlvbiAoYm90aCBSVFMKICBhZnRl
+ciBzZW5kIGFuZCBSVFMgb24gc2VuZCBzZXQgb3IgYm90aCB1bnNldCkgZW5hYmxlIFJUUyBvbiBz
+ZW5kIGFuZAogIGRpc2FibGUgUlRTIGFmdGVyIHNlbmQKCi0gbnVsbGlmeSB0aGUgcGFkZGluZyBm
+aWVsZCBvZiB0aGUgc2VyaWFsX3JzNDg1IHN0cnVjdCBiZWZvcmUgaXQgaXMKICByZXR1cm5lZCB0
+byB1c2Vyc3BhY2UKCi0gY29weSB0aGUgY29uZmlndXJhdGlvbiBzdG9yZWQgaW4gdGhlIHNlcmlh
+bF9yczQ4NSBzdHJ1Y3QgdG8gdGhlIHBvcnQKICBjb25maWd1cmF0aW9uIGlmIHNldHRpbmcgdGhl
+IGNvbmZpZ3VyYXRpb24gaW4gdGhlIGRyaXZlciB3YXMgc3VjY2Vzc2Z1bGwKCi0gbGltaXQgdGhl
+IFJUUyBkZWxheSB0byAxMDBtcwoKClJlZHVuZGFudCBjb2RlIGhhcyBiZWVuIHJlbW92ZWQgZnJv
+bSB0aGUgZm9sbG93aW5nIGRyaXZlcnMgZm9yIG5vdzoKCi0gYXRtZWwKLSBmc2xfbHB1YXJ0Ci0g
+YW1iYQotIGlteAotIG1heDMxMHgKLSBvbWFwLXNlcmlhbAotIHNjMTZpczd4eAotIHN0bTMyLXVz
+YXJ0CgpUaGUgY29kZSBoYXMgYmVlbiB0ZXN0ZWQgd2l0aCB0aGUgYW1iYSBwbDAxMSBkcml2ZXIu
+IFRoaXMgc2VyaWVzIGFwcGxpZXMKYWdhaW5zdCB0dHktdGVzdGluZy4KCgo=
