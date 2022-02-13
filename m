@@ -2,91 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC1C4B3BE2
-	for <lists+linux-serial@lfdr.de>; Sun, 13 Feb 2022 15:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF19A4B3D27
+	for <lists+linux-serial@lfdr.de>; Sun, 13 Feb 2022 20:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236617AbiBMOrP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 13 Feb 2022 09:47:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50280 "EHLO
+        id S237526AbiBMTjN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 13 Feb 2022 14:39:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbiBMOrO (ORCPT
+        with ESMTP id S229737AbiBMTjN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 13 Feb 2022 09:47:14 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44EB6423
-        for <linux-serial@vger.kernel.org>; Sun, 13 Feb 2022 06:47:08 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id l19so19060404pfu.2
-        for <linux-serial@vger.kernel.org>; Sun, 13 Feb 2022 06:47:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Xmjq8muvZH/FL73jrL5x6SrlpvY9Sys6n8v/EYhDMxo=;
-        b=jPE6/gM9Ybm6uwSKeoT3kIx4QTmNCRn5YR7g14urorFyz0wOLNJMHevG849ugIxYm8
-         SVMr+kBrKLgOjU4ZJLFg3m4EsovmW859rosNNhfnF9ul+Qxc1Va7mS/9uqd7/wWzRuQa
-         Xkw0LdyQymnbPRBILwQ5TXcDNOSyQX/qs0Gtd1GKWijebxgWQocuUzjLvPCgBJW94cY6
-         fRUPoy4csqkORcqHvhm06ZX/ue4Aw/6OVe/pDu+9AnqeRcGAkOW8J994tm/lY1p8xrtj
-         MvIA3EDLmn8/i8xd0cGTtNDuXunG8dIp79RwLVrHxtw4K/qkHua/aqCsmHmES4X1YrSJ
-         1srA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=Xmjq8muvZH/FL73jrL5x6SrlpvY9Sys6n8v/EYhDMxo=;
-        b=WUQJn4nI2jN/OBuWFo8vxzT7n7Z/3WxmJI+C4ddRuvH+Z9bcEUJ6tafemRjafWr8cs
-         9+fwmd0Xx85TKerB4L2nFiw9NwahgW6q6FqsQXlkwNQN64xInq/6n+BW8GlVclTYQfVK
-         r3oEk8ymL2z4xmGcKLwshbs/pBRpJk3MI8N9xoLdSVODctSzPzAkG+C4NRFGWR6BAF0s
-         oYii/5Ob9x7R/SVNoz6x4lS1awB9kEbao7kwgjahQxgNjnb9ruRfkZFzOtUXuwqGd+rG
-         Tp5WcPjdPELDfn7RAJyg0dzQa6jTfGnKtLgib9lePftJtp7tq2R7uvEPTfEZriOelitq
-         fDrw==
-X-Gm-Message-State: AOAM532LUbmJ5tKqM4Lruor4dUBiH4C389sHn6gOcfgWu4xqzyICLdfc
-        6tqezCkjQGyjy4/GmAB3E8SuQi54JskFzlvxS2w=
-X-Google-Smtp-Source: ABdhPJzvHxOIQUZZ53uYwJ0rkUjnTxogMuTzSzq0OEz1dQR3DjVtDoEOR4r2NTEbh5cEDFajk3WWs3HfyyRAqKIhM/Q=
-X-Received: by 2002:a05:6a00:b50:: with SMTP id p16mr10332564pfo.22.1644763628288;
- Sun, 13 Feb 2022 06:47:08 -0800 (PST)
+        Sun, 13 Feb 2022 14:39:13 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5656C2B;
+        Sun, 13 Feb 2022 11:39:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=8wk56JhGdlcQBk1SHLgauEyhCZzPUCKrQNT4Qxie6hE=; b=ev09HBmSkOOsf26kNFWf+6MwSk
+        V62iWgjf/5ysgMK4blcPc2MzS4uajHZkzlUU5OZ+bg2rrGEJz0QiqDjVhMQZBG++aFeH3PdGz9q5+
+        CpTj8flarf+LVqKqeAfCrhTVUAMaWlmzpZB8j2yvCfhqCh2QRrSZO8LHfJK82fukecGpgrfXSdz4v
+        UU1ER9woszomIWKMQybecMQgVOMv/O8f4ekrGpJsahWDepfMEpo7Qb6Ivi5upjLOar8WJjvjzBeob
+        8JWskmvQPoHTwrlVq2ZpS3uzfM7EC3WjgI+Um/kZpvQRw2vtrrefJFPAQFLp7YqjM2hwTNkF2RvBk
+        +yowOS6g==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJKi8-00CO3h-PL; Sun, 13 Feb 2022 19:39:04 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH] serial: parisc: GSC: fix build when PCI_LBA is not set
+Date:   Sun, 13 Feb 2022 11:39:03 -0800
+Message-Id: <20220213193903.8815-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Sender: chervronrecruitment962@gmail.com
-Received: by 2002:a05:6a10:fd94:0:0:0:0 with HTTP; Sun, 13 Feb 2022 06:47:07
- -0800 (PST)
-From:   "Mr.Aliou Traore" <mralioutraore44@gmail.com>
-Date:   Sun, 13 Feb 2022 14:47:07 +0000
-X-Google-Sender-Auth: wqs3k4LVbYRAJuGH1Ne91ZkeQcY
-Message-ID: <CAKdFRE4pQPAR=6kz=csg3yX3im_N8LfWGThNcyNBd0BK3qC5Tg@mail.gmail.com>
-Subject: From Mr.Aliou Traore
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
+There is a build error when using a kernel .config file from
+'kernel test robot' for a different build problem:
 
-I am indeed sorry for contacting you through this means. However, I
-assure you that it is discreet and totally legit. I am Mr.Aliou
-Traore, one of the Roch Marc Christian Kabor=C3=A9 top bodyguard Presidents
-of Burkina faso that was overthrown by soldiers in a coup on January
-27, 2022.  I am sure you are aware of the political situation in my
-country, Burkina Faso. As a result, Gold belonging to the first Top
-bodyguard of Roch Marc Christian Kabor=C3=A9 that was killed doing the coup
-on January 27, 2022 was with me and I have moved them to the bank and
-converted Gold to Cash.
+hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
+(.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
 
-I need your help to secure these funds of ($10,200,000.00 Million
-Dollars Ten million two hundred thousand dollars) I shall explain
-fully to you the position and your stake too on receipt of your
-positive response so we can proceed.
+when:
+  CONFIG_GSC=y
+  CONFIG_SERIO_GSCPS2=y
+  CONFIG_SERIAL_8250_GSC=y
+  CONFIG_PCI is not set
+    and hence PCI_LBA is not set.
+  IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
 
-Or you can delete this message if you are disinterested.
+Making SERIAL_8250_GSC depend on PCI_LBA prevents the build error.
 
-Regards
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>
+---
+ drivers/tty/serial/8250/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-From Mr.Aliou Traore
+--- linux-next-20220211.orig/drivers/tty/serial/8250/Kconfig
++++ linux-next-20220211/drivers/tty/serial/8250/Kconfig
+@@ -118,7 +118,7 @@ config SERIAL_8250_CONSOLE
+ 
+ config SERIAL_8250_GSC
+ 	tristate
+-	depends on SERIAL_8250 && GSC
++	depends on SERIAL_8250 && GSC && PCI_LBA
+ 	default SERIAL_8250
+ 
+ config SERIAL_8250_DMA
