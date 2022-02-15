@@ -2,101 +2,161 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46954B6DE3
-	for <lists+linux-serial@lfdr.de>; Tue, 15 Feb 2022 14:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C794B71A9
+	for <lists+linux-serial@lfdr.de>; Tue, 15 Feb 2022 17:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237840AbiBONn7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 15 Feb 2022 08:43:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38224 "EHLO
+        id S239117AbiBOOyP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 15 Feb 2022 09:54:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiBONn6 (ORCPT
+        with ESMTP id S239358AbiBOOyJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:43:58 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2974D109F;
-        Tue, 15 Feb 2022 05:43:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644932628; x=1676468628;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8+Ef9YN8LSSPy+BvHaYR3DJrg5mpRPczEb96wm5Ge38=;
-  b=H/qfXOGtj4cOzckR5WHsm4NXgYxtqQkp94vUwG3m/qKxS4a64QN2qNzn
-   1TxIZuoZt4Ys6GbFcJRxaXWI5vBKHauYgenr1r4h6UPVUDnKY4baA/0zk
-   lQSdIT/1/+NC8FhnYADU3SYm/WSoikGdqKsNDb3S4i4Ej92xV6pYq6vY0
-   So7HZ936t7jyY4bYgIjfjMhaXQq43hvHL9EnrK7jHBvws8bNBZ+SeLkjJ
-   csnOQDqFXmSxgoHTpSCgBIdMe0UAvv4SX1/lIODQh8PkEkxtcZf0bZWi6
-   iF+0FNv0DNijBc+xGHAAIrCgPN/9d1oGn6DCWltulXH+PmBzNlgUuuSG+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="313626821"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="313626821"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 05:43:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="497136041"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 05:43:46 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5FDBE143; Tue, 15 Feb 2022 15:44:02 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v2 2/2] serial: 8250_lpss: Switch to pcim_iomap() instead of pci_ioremap_bar()
-Date:   Tue, 15 Feb 2022 15:43:59 +0200
-Message-Id: <20220215134359.78169-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215134359.78169-1-andriy.shevchenko@linux.intel.com>
-References: <20220215134359.78169-1-andriy.shevchenko@linux.intel.com>
+        Tue, 15 Feb 2022 09:54:09 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9835CAF1E8
+        for <linux-serial@vger.kernel.org>; Tue, 15 Feb 2022 06:53:56 -0800 (PST)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 315E240334
+        for <linux-serial@vger.kernel.org>; Tue, 15 Feb 2022 14:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644936829;
+        bh=nPMJHTnYZbzS8znk5AsEiCmewu+zF2DU271/1BBA6Eo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=pgRbLzC7Vma+2T8v8tH4OvJds0ho/7egymd3saiOKXwwXSX61jtQweMxveFjob4dv
+         kh3XAf7kP6zlVfNIVT23jwUnu08ia97GcUtVWdCnH4sP1WNHqV7vWZ+F5c54nGcQBI
+         z2HmQgeJNv1KDHqWGlgk6DqqjSXYERtHaIdJh6mN5yJdoKg4+jqMMgeE/suR817taD
+         drevrlMBF9I0Ax918bdQdeyjn7q0zLSeLlJnt+q6+vRbtp638nxKnzV2TUXAdATGtu
+         q2TB8+9u0kKc6UAzicSq+nTG9vfktlSVikLjOO99BlOtEiBevb1H5Qxc7VrSl6NLq9
+         sCYXp0T/AxVGw==
+Received: by mail-wr1-f71.google.com with SMTP id i10-20020adfaaca000000b001e4b2db0303so6484850wrc.23
+        for <linux-serial@vger.kernel.org>; Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nPMJHTnYZbzS8znk5AsEiCmewu+zF2DU271/1BBA6Eo=;
+        b=fYg6TXnH+1q8IEZA+rEbukxIxLv1Wvx8tkVlqS5/s7BwDqzh5lICRTmvC6y9tzP8zc
+         rqWg8wMhQVPYb03W7CQDrodjw4ixhaDrc1sLNGbgvVxblqvro/e23H64fQOFcKTJhmjy
+         9IsW3NKEqRGLnUIF9rBiBYzuKhkjuy/jrYLpt2aGDti3FsFAOnBMKuomiLes7Z7hktq9
+         mSQp1E1LbGVgXwoEQZwHhXhiJjQp+9f+dw9NS8fbgLblZ7o6vf1vo0bnHw/NWaczapxb
+         FPxCMnD9F66C2XoFRH9emetU1Vl3Cgk1CDw+HwUkigK7UBQ4hd21GG3zokjsrd24jE3o
+         cvBg==
+X-Gm-Message-State: AOAM532NhX5wKVEF2iJzuvWgo7RO+WAF5JRL6aTGTX1qvvnmA7r5NQ9u
+        UZZNt8QL0gviL5mt+LrCojidWMwps6Aq8iFm6/Nz8ke14oMzkZM3MlrjdDIZ2OQQxwGJ0o1Jjna
+        T3pPGi5Th2Rmpw/ufVpdmKUkgEKZd35q+sETFRpvzUw==
+X-Received: by 2002:a05:600c:34c4:b0:37b:f84d:d55a with SMTP id d4-20020a05600c34c400b0037bf84dd55amr3308656wmq.123.1644936828656;
+        Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwon3JF6xxLKESk658q0+LTv95ZfTFy8vR9jXtExV/jZEWdqZ1UK6aKau2J/Bpu24pZQ9e+pQ==
+X-Received: by 2002:a05:600c:34c4:b0:37b:f84d:d55a with SMTP id d4-20020a05600c34c400b0037bf84dd55amr3308637wmq.123.1644936828425;
+        Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+Received: from [192.168.0.108] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id r2sm19588933wmq.24.2022.02.15.06.53.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 06:53:48 -0800 (PST)
+Message-ID: <b50bf9ef-eb38-8e86-70f9-7a9a959be67b@canonical.com>
+Date:   Tue, 15 Feb 2022 15:53:47 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 1/2] dt-bindings:serial:Add bindings doc for Sunplus
+ SoC UART Driver
+Content-Language: en-US
+To:     Hammer Hsieh <hammerh0314@gmail.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jirislaby@kernel.org, p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com
+References: <1644917065-23168-1-git-send-email-hammerh0314@gmail.com>
+ <1644917065-23168-2-git-send-email-hammerh0314@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1644917065-23168-2-git-send-email-hammerh0314@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The pci_iounmap() doesn't cover all the cases where resource should
-be unmapped. Instead of spreading it more, replace the pci_ioremap_bar()
-with pcim_iomap() which uses managed resource approach.
+On 15/02/2022 10:24, Hammer Hsieh wrote:
+> Add bindings doc for Sunplus SoC UART Driver
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
+> ---
+> Changes in v8:
+>  - no change.
+> 
+>  .../bindings/serial/sunplus,sp7021-uart.yaml       | 56 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 ++
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> new file mode 100644
+> index 0000000..894324c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/serial/sunplus,sp7021-uart.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Sunplus SoC SP7021 UART Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Hammer Hsieh <hammerh0314@gmail.com>
+> +
+> +allOf:
+> +  - $ref: serial.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-uart
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    aliases {
+> +            serial0 = &uart0;
 
-Fixes: fecdef932b00 ("serial: 8250_lpss: enable DMA on Intel Quark UART")
-Depends-on: ea5ab2e422de ("8250_lpss: check null return when calling pci_ioremap_bar")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: new fix (by code inspection due to previous patch)
- drivers/tty/serial/8250/8250_lpss.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Incorrect indentation. With this fixed:
 
-diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 0f5af061e0b4..a9fc1d7d9c37 100644
---- a/drivers/tty/serial/8250/8250_lpss.c
-+++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -209,7 +209,7 @@ static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port)
- 	chip->dev = &pdev->dev;
- 	chip->id = pdev->devfn;
- 	chip->irq = pci_irq_vector(pdev, 0);
--	chip->regs = pci_ioremap_bar(pdev, 1);
-+	chip->regs = pcim_iomap(pdev, 1, 0);
- 	if (!chip->regs)
- 		return;
- 
-@@ -241,8 +241,6 @@ static void qrk_serial_exit_dma(struct lpss8250 *lpss)
- 		return;
- 
- 	dw_dma_remove(chip);
--
--	pci_iounmap(to_pci_dev(chip->dev), chip->regs);
- }
- #else	/* CONFIG_SERIAL_8250_DMA */
- static void qrk_serial_setup_dma(struct lpss8250 *lpss, struct uart_port *port) {}
--- 
-2.34.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+
+Best regards,
+Krzysztof
