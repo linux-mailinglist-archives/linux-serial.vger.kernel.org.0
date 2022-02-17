@@ -2,104 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D99D4B8F92
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Feb 2022 18:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 842BE4B9A90
+	for <lists+linux-serial@lfdr.de>; Thu, 17 Feb 2022 09:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbiBPRnz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Feb 2022 12:43:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46006 "EHLO
+        id S236964AbiBQIHS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 17 Feb 2022 03:07:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237299AbiBPRnz (ORCPT
+        with ESMTP id S234937AbiBQIHP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:43:55 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1531E2B0B3B
-        for <linux-serial@vger.kernel.org>; Wed, 16 Feb 2022 09:43:42 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nKOKr-0002mV-1E; Wed, 16 Feb 2022 18:43:25 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nKOKn-00H0SM-3Z; Wed, 16 Feb 2022 18:43:20 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nKOKl-003bGa-LT; Wed, 16 Feb 2022 18:43:19 +0100
-Date:   Wed, 16 Feb 2022 18:43:19 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        alexandre.belloni@bootlin.com, mcoquelin.stm32@gmail.com,
-        richard.genoud@gmail.com, festevam@gmail.com,
-        s.hauer@pengutronix.de, linux@armlinux.org.uk,
-        nicolas.ferre@microchip.com, alexandre.torgue@foss.st.com,
-        ludovic.desroches@microchip.com, lukas@wunner.de,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-serial@vger.kernel.org, shawnguo@kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2 7/9] serial: imx: remove redundant assignment in
- rs485_config
-Message-ID: <20220216174319.rajioisll5b5pfpe@pengutronix.de>
-References: <20220216001803.637-1-LinoSanfilippo@gmx.de>
- <20220216001803.637-8-LinoSanfilippo@gmx.de>
+        Thu, 17 Feb 2022 03:07:15 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 00:07:00 PST
+Received: from mta-65-228.siemens.flowmailer.net (mta-65-228.siemens.flowmailer.net [185.136.65.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02BD27DF36
+        for <linux-serial@vger.kernel.org>; Thu, 17 Feb 2022 00:07:00 -0800 (PST)
+Received: by mta-65-228.siemens.flowmailer.net with ESMTPSA id 20220217080556f13e76b9ea150b43da
+        for <linux-serial@vger.kernel.org>;
+        Thu, 17 Feb 2022 09:05:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=1PPSTDXqlzyXQhlxtHT8JuIds5BO+gt8oYzfP79dzIw=;
+ b=f97meTGniVSpdNfFcFarDXigvz7uWji+MTf5hGOp8qubvwq83E1cM5SdMSIHkqVP+oe4Hl
+ KH/I5NNV+hkBjygxJsoPt9qJHImsFcqpdulpGz6F/JRocBRExn2qeUT+x3wuZUBDTljGDUGW
+ WZuK1p/NXoxlM5GAV41p/AjpFeoPQ=;
+From:   daniel.starke@siemens.com
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 1/1] tty: n_gsm: fix encoding of control signal octet bit DV
+Date:   Thu, 17 Feb 2022 00:05:49 -0800
+Message-Id: <20220217080555.5387-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="da2lbr7flv5tn5tr"
-Content-Disposition: inline
-In-Reply-To: <20220216001803.637-8-LinoSanfilippo@gmx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-7517:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.4.6.3.7 describes the encoding of the
+control signal octet used by the MSC (modem status command). The same
+encoding is also used in convergence layer type 2 as described in chapter
+5.5.2. Table 7 and 24 both require the DV (data valid) bit to be set 1 for
+outgoing control signal octets sent by the DTE (data terminal equipment),
+i.e. for the initiator side.
+Currently, the DV bit is only set if CD (carrier detect) is on, regardless
+of the side.
 
---da2lbr7flv5tn5tr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch fixes this behavior by setting the DV bit on the initiator side
+unconditionally.
 
-On Wed, Feb 16, 2022 at 01:18:01AM +0100, Lino Sanfilippo wrote:
-> In uart_set_rs485_config() the serial core already assigns the passed
-> serial_rs485 struct to the uart port.
->=20
-> So remove the assignment in the drivers rs485_config() function to avoid
-> reduncancy.
->=20
-> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks
-Uwe
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 0b1808e3a912..e199315a158e 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -439,7 +439,7 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
+ 		modembits |= MDM_RTR;
+ 	if (dlci->modem_tx & TIOCM_RI)
+ 		modembits |= MDM_IC;
+-	if (dlci->modem_tx & TIOCM_CD)
++	if (dlci->modem_tx & TIOCM_CD || dlci->gsm->initiator)
+ 		modembits |= MDM_DV;
+ 	return modembits;
+ }
+-- 
+2.25.1
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---da2lbr7flv5tn5tr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmINN7QACgkQwfwUeK3K
-7AlQGAf/ac6fGA3JlB+w+RAXYkZDqG//NDFsdlUzOp7B8hIJ80nDvlVkn9v/gp57
-rMUw1/NgNSpn7hyc+3oy9WKurjdN9U2jBd9aIjas2NT5aWJv+AOOmere37nv5N0O
-1PUkAm33WZ4vgu9ldLE3al/zvpxjJghaycEZx7+Udtgu7NjtnkMus8XqDQ1TEx6D
-RaucYDkywS0Um62zqye+r9kHxEA9wBvdrsHPRf0cw0SpjU01SQ002+zfgpw0BZNh
-R+Bmr8a/V6ays42x/njh9U5yNI/vJ4xWWMdZUfSz9u9UYTwArtJlh/hid7FQp6AK
-e0RXvaXZKEdVXnU6KKl4m8SoamPP5g==
-=S/7p
------END PGP SIGNATURE-----
-
---da2lbr7flv5tn5tr--
