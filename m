@@ -2,111 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69B64BC918
-	for <lists+linux-serial@lfdr.de>; Sat, 19 Feb 2022 16:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA994BCF7B
+	for <lists+linux-serial@lfdr.de>; Sun, 20 Feb 2022 16:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242532AbiBSP3L (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 19 Feb 2022 10:29:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43940 "EHLO
+        id S239707AbiBTPiq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 20 Feb 2022 10:38:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbiBSP3J (ORCPT
+        with ESMTP id S244122AbiBTPin (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 19 Feb 2022 10:29:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C594C5D647;
-        Sat, 19 Feb 2022 07:28:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C4E60B20;
-        Sat, 19 Feb 2022 15:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A50C004E1;
-        Sat, 19 Feb 2022 15:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645284517;
-        bh=F6pcZPFpnI6hLMIYVmpuXloWiEvqSEfMam/xjyvdLDs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dMOKL2ugYw+WQBj3ZZQVOq9CBHushdo1zYvAtdjLBBulSXfJCxtB2RB70mxRdh3Uh
-         ZYRcyq4pgoZE0hi21EZUgZLGUBEdHYbpQ7+AqPMYjT8aeaE7RLgMOO/smC1jXlvwjm
-         Q/sdx9DDPtm5A9x8tDuFkGuh39ujbcS2YQQRGELvoICo8W3of08RrEAW+MtNrqSFD3
-         8GbHqHZbW4letP1dhAsqbX0W5Qffp8DgxfIFidm5jpNEosdiO2Gb4jjxV7PB1KCauD
-         9owowxo0EQU1Br+wL0r+wc1ipLOZrV/Wp9QP+XmQyyg5mhhEMyi5yteqShfU6+mVXA
-         +rJYplsFU8AQg==
-From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v9 6/6] arm64: dts: marvell: armada-37xx: add device node for UART clock and use it
-Date:   Sat, 19 Feb 2022 16:28:18 +0100
-Message-Id: <20220219152818.4319-7-kabel@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220219152818.4319-1-kabel@kernel.org>
-References: <20220219152818.4319-1-kabel@kernel.org>
+        Sun, 20 Feb 2022 10:38:43 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74364160F
+        for <linux-serial@vger.kernel.org>; Sun, 20 Feb 2022 07:38:17 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id h15so7501422edv.7
+        for <linux-serial@vger.kernel.org>; Sun, 20 Feb 2022 07:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
+        b=degv64KeFtdi2zbjsMqCg99XUBwRsWWRsat8pVSE1dsJMyLEQebzW+u8gL6CBfEQQn
+         TR573CG7WA+9vnEdvbzyisLdqVfd2L7tW255YjXAv70Nz6z7oKmPah1XlxlqBd5nDgXH
+         ePUhHpcz6Nz3MIgpiiVSbZwwadbd4mnHSGmsNzIMifS2uWsr5SlJ5m2rsNUPByoI5zhb
+         SR83azGcCTW//SbmgQ0y+vLGSla0uKvjbMIVO2C3U/MToeM9d3wUPHwP8BDBVACmWkyb
+         mbrrj1iz1ehyoQ1IJSYmVaPjfehHwDHBxgq0J/uzM167cyMcPy58BK3LuVjr98uUFJPh
+         U0VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
+        b=kfcrk9wOjFEetyAGdCivmdao+Cng0+byKBFrsBIuPoHaQe51ngYVw93uOr6g8yQ0UY
+         WxPZK/wZ3mmthf3Jd9YzU6X7fnmvsYvt1qGoKJz4yHjv3/nlWsGFiyxOgq9dMXYdJK2N
+         4ZR206Kwopi04Bc2QBTi2NqkQL2B68Loeqt71Vn4thQ2fAlU4H7WjpwBE9ZPNvcutRuJ
+         hMQllzP4Pkc2RWZfbxjtppXvT71Ozxjim0T9sJNaK2CGUEOfBUGExLB/KPD8l7tKcd7d
+         wxNVYLZggBg1w7FzRs8Q1WmgkO44x7Tzk2Xwd2DCL7088u1obwRd563B+6f6TfnvQc0R
+         ZmTQ==
+X-Gm-Message-State: AOAM5319kJAlU8/PcV4VdbA/KQmKLqR9nLLjeIfjJ6LgmsE7gtAgONU+
+        qcRzWvGYsQcWQpwfSowEtKhALvF7y7kYmx6pB3w=
+X-Google-Smtp-Source: ABdhPJz0AN7o9No0fhs6xZEm8hzyX6WOZhNi8B3U8PCYdBi3itNU8MBgMEdAbbMqhnsTf7H9NACa5LH5MJlqKIgsin0=
+X-Received: by 2002:aa7:ce92:0:b0:40f:b89c:18fe with SMTP id
+ y18-20020aa7ce92000000b0040fb89c18femr17517323edv.67.1645371495858; Sun, 20
+ Feb 2022 07:38:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a54:38c1:0:0:0:0:0 with HTTP; Sun, 20 Feb 2022 07:38:15
+ -0800 (PST)
+Reply-To: fatibaro01@yahoo.com
+From:   Fatimah Baro <imanosose@gmail.com>
+Date:   Sun, 20 Feb 2022 16:38:15 +0100
+Message-ID: <CAFEyOE7M=ZUrSROmPGAE3yrv-g10xHU=UARo1h+trJF7vepfMA@mail.gmail.com>
+Subject: Business invitation
+To:     imanosose <imanosose@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.8 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
-
-Define DT node for UART clock "marvell,armada-3700-uart-clock" and use
-this UART clock as a base clock for all UART devices.
-
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
----
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-index 673f4906eef9..da2f6b5c4b20 100644
---- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-@@ -132,10 +132,20 @@ avs: avs@11500 {
- 				reg = <0x11500 0x40>;
- 			};
- 
-+			uartclk: clock-controller@12010 {
-+				compatible = "marvell,armada-3700-uart-clock";
-+				reg = <0x12010 0x4>, <0x12210 0x4>;
-+				clocks = <&tbg 0>, <&tbg 1>, <&tbg 2>,
-+					 <&tbg 3>, <&xtalclk>;
-+				clock-names = "TBG-A-P", "TBG-B-P", "TBG-A-S",
-+					      "TBG-B-S", "xtal";
-+				#clock-cells = <1>;
-+			};
-+
- 			uart0: serial@12000 {
- 				compatible = "marvell,armada-3700-uart";
- 				reg = <0x12000 0x18>;
--				clocks = <&xtalclk>;
-+				clocks = <&uartclk 0>;
- 				interrupts =
- 				<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
- 				<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-@@ -147,7 +157,7 @@ uart0: serial@12000 {
- 			uart1: serial@12200 {
- 				compatible = "marvell,armada-3700-uart-ext";
- 				reg = <0x12200 0x30>;
--				clocks = <&xtalclk>;
-+				clocks = <&uartclk 1>;
- 				interrupts =
- 				<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
- 				<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
--- 
-2.34.1
-
+Greetings from Burkina Faso,
+Please pardon me if my request offend your person; I need you to stand
+as my foreign partner for investment in your country. Please reply
+immediately if you are interested, so that I can give you more
+information.
+Fatimah Baro
