@@ -2,73 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA994BCF7B
-	for <lists+linux-serial@lfdr.de>; Sun, 20 Feb 2022 16:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBC04BD23B
+	for <lists+linux-serial@lfdr.de>; Sun, 20 Feb 2022 23:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239707AbiBTPiq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 20 Feb 2022 10:38:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42230 "EHLO
+        id S239908AbiBTWZA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 20 Feb 2022 17:25:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244122AbiBTPin (ORCPT
+        with ESMTP id S230124AbiBTWY7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:38:43 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74364160F
-        for <linux-serial@vger.kernel.org>; Sun, 20 Feb 2022 07:38:17 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id h15so7501422edv.7
-        for <linux-serial@vger.kernel.org>; Sun, 20 Feb 2022 07:38:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
-        b=degv64KeFtdi2zbjsMqCg99XUBwRsWWRsat8pVSE1dsJMyLEQebzW+u8gL6CBfEQQn
-         TR573CG7WA+9vnEdvbzyisLdqVfd2L7tW255YjXAv70Nz6z7oKmPah1XlxlqBd5nDgXH
-         ePUhHpcz6Nz3MIgpiiVSbZwwadbd4mnHSGmsNzIMifS2uWsr5SlJ5m2rsNUPByoI5zhb
-         SR83azGcCTW//SbmgQ0y+vLGSla0uKvjbMIVO2C3U/MToeM9d3wUPHwP8BDBVACmWkyb
-         mbrrj1iz1ehyoQ1IJSYmVaPjfehHwDHBxgq0J/uzM167cyMcPy58BK3LuVjr98uUFJPh
-         U0VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
-        b=kfcrk9wOjFEetyAGdCivmdao+Cng0+byKBFrsBIuPoHaQe51ngYVw93uOr6g8yQ0UY
-         WxPZK/wZ3mmthf3Jd9YzU6X7fnmvsYvt1qGoKJz4yHjv3/nlWsGFiyxOgq9dMXYdJK2N
-         4ZR206Kwopi04Bc2QBTi2NqkQL2B68Loeqt71Vn4thQ2fAlU4H7WjpwBE9ZPNvcutRuJ
-         hMQllzP4Pkc2RWZfbxjtppXvT71Ozxjim0T9sJNaK2CGUEOfBUGExLB/KPD8l7tKcd7d
-         wxNVYLZggBg1w7FzRs8Q1WmgkO44x7Tzk2Xwd2DCL7088u1obwRd563B+6f6TfnvQc0R
-         ZmTQ==
-X-Gm-Message-State: AOAM5319kJAlU8/PcV4VdbA/KQmKLqR9nLLjeIfjJ6LgmsE7gtAgONU+
-        qcRzWvGYsQcWQpwfSowEtKhALvF7y7kYmx6pB3w=
-X-Google-Smtp-Source: ABdhPJz0AN7o9No0fhs6xZEm8hzyX6WOZhNi8B3U8PCYdBi3itNU8MBgMEdAbbMqhnsTf7H9NACa5LH5MJlqKIgsin0=
-X-Received: by 2002:aa7:ce92:0:b0:40f:b89c:18fe with SMTP id
- y18-20020aa7ce92000000b0040fb89c18femr17517323edv.67.1645371495858; Sun, 20
- Feb 2022 07:38:15 -0800 (PST)
+        Sun, 20 Feb 2022 17:24:59 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A11E4B420;
+        Sun, 20 Feb 2022 14:24:37 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 11D3A1C0B77; Sun, 20 Feb 2022 23:24:35 +0100 (CET)
+Date:   Sun, 20 Feb 2022 23:24:34 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: =?iso-8859-1?Q?Ad?=
+ =?iso-8859-1?Q?d_Pali_Roh=E1r?= as mvebu-uart.c maintainer
+Message-ID: <20220220222434.GA18143@duo.ucw.cz>
+References: <20220214124808.31971-1-pali@kernel.org>
+ <YgpVaR421wQYx9mt@kroah.com>
+ <20220214140641.v2wlfr43lqgxvw7e@pali>
 MIME-Version: 1.0
-Received: by 2002:a54:38c1:0:0:0:0:0 with HTTP; Sun, 20 Feb 2022 07:38:15
- -0800 (PST)
-Reply-To: fatibaro01@yahoo.com
-From:   Fatimah Baro <imanosose@gmail.com>
-Date:   Sun, 20 Feb 2022 16:38:15 +0100
-Message-ID: <CAFEyOE7M=ZUrSROmPGAE3yrv-g10xHU=UARo1h+trJF7vepfMA@mail.gmail.com>
-Subject: Business invitation
-To:     imanosose <imanosose@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.8 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
+Content-Disposition: inline
+In-Reply-To: <20220214140641.v2wlfr43lqgxvw7e@pali>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings from Burkina Faso,
-Please pardon me if my request offend your person; I need you to stand
-as my foreign partner for investment in your country. Please reply
-immediately if you are interested, so that I can give you more
-information.
-Fatimah Baro
+
+--82I3+IH0IqGh5yIs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon 2022-02-14 15:06:41, Pali Roh=E1r wrote:
+> On Monday 14 February 2022 14:13:13 Greg Kroah-Hartman wrote:
+> > On Mon, Feb 14, 2022 at 01:48:08PM +0100, Pali Roh=E1r wrote:
+> > > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
+> >=20
+> > I can not take patches without any changelog text, sorry.
+>=20
+> Well, I'm the only one who has been working on this driver recently and
+> I have development boards with this UART HW.
+
+Greg wants to say that you need to copy subject into changelog body,
+so that it is non-empty.
+
+Best regards,
+								Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--82I3+IH0IqGh5yIs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYhK/ogAKCRAw5/Bqldv6
+8lBpAKCaKh1tBvFkqgS8PFmECs4rIaOEqgCguGaq8H88u5b8qqWuD1q8FIamUgU=
+=KTOC
+-----END PGP SIGNATURE-----
+
+--82I3+IH0IqGh5yIs--
