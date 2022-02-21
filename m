@@ -2,397 +2,161 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039364BE14D
-	for <lists+linux-serial@lfdr.de>; Mon, 21 Feb 2022 18:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A7D4BDBC7
+	for <lists+linux-serial@lfdr.de>; Mon, 21 Feb 2022 18:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345613AbiBUIwz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 21 Feb 2022 03:52:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44228 "EHLO
+        id S1355764AbiBULRR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 21 Feb 2022 06:17:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345398AbiBUIwu (ORCPT
+        with ESMTP id S1356340AbiBULQ0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:52:50 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE21DCE;
-        Mon, 21 Feb 2022 00:52:15 -0800 (PST)
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 21 Feb
- 2022 16:52:13 +0800
-Message-ID: <0d00b84d-2e8c-3c12-d820-cf6f7142083d@amlogic.com>
-Date:   Mon, 21 Feb 2022 16:52:13 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V6 3/5] tty: serial: meson: Describes the calculation of
- the UART baud rate clock using a clock frame
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mon, 21 Feb 2022 06:16:26 -0500
+Received: from eu-smtp-delivery-197.mimecast.com (eu-smtp-delivery-197.mimecast.com [185.58.85.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1657E019
+        for <linux-serial@vger.kernel.org>; Mon, 21 Feb 2022 02:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=camlingroup.com;
+        s=mimecast20210310; t=1645441081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A59/DCztyWyzNgQ/wHkqQ5Zrjg2ROP9ly2YMhz8oVCk=;
+        b=ApJETYhgK0oXYNESqwv85NfYCNPrl34+o9SNOPHnzyat/V0kBQttom/zYfcoNlZy4DB0Lp
+        G/Y1N9rE4MEPpJhcGrqD5men2M2nmV1rb4XMixtQIEQktBuQ9+60ALDvzXt1153tpdWNyB
+        JuQE/av2gvRXnZy4Uvwc+derPTbqocQ=
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com
+ (mail-lo2gbr01lp2058.outbound.protection.outlook.com [104.47.21.58]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ uk-mta-27-rEKKXXNwPH2_Xo-1FWvXpg-1; Mon, 21 Feb 2022 10:56:50 +0000
+X-MC-Unique: rEKKXXNwPH2_Xo-1FWvXpg-1
+Received: from CWLP123MB5572.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:16b::6)
+ by CWLP123MB6574.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:184::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Mon, 21 Feb
+ 2022 10:56:49 +0000
+Received: from CWLP123MB5572.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::6dad:8602:45c5:6747]) by CWLP123MB5572.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::6dad:8602:45c5:6747%8]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
+ 10:56:49 +0000
+From:   =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>
+To:     linux-serial@vger.kernel.org
+CC:     Phil Elwell <phil@raspberrypi.com>,
+        Daniel Mack <daniel@zonque.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220118030911.12815-1-yu.tu@amlogic.com>
- <20220118030911.12815-4-yu.tu@amlogic.com>
- <1jfspi2i5s.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1jfspi2i5s.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Krzysztof=20Drobi=C5=84ski?= 
+        <k.drobinski@camlintechnologies.com>,
+        Lech Perczak <l.perczak@camlintechnologies.com>,
+        =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>
+Subject: [PATCH 0/6] sc16is7xx: Hardware flow control fixes
+Date:   Mon, 21 Feb 2022 11:56:12 +0100
+Message-ID: <20220221105618.3503470-1-tomasz.mon@camlingroup.com>
+X-Mailer: git-send-email 2.25.1
+X-ClientProxiedBy: LO4P123CA0469.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a8::6) To CWLP123MB5572.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:16b::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca0aa08a-f4c0-4d70-5eff-08d9f528dc0a
+X-MS-TrafficTypeDiagnostic: CWLP123MB6574:EE_
+X-Microsoft-Antispam-PRVS: <CWLP123MB6574097DFE798D9BFBA063CE923A9@CWLP123MB6574.GBRP123.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: tvKWhIzatnjB9O6TFGeeJhi/fajf4Jlewza+SQHu+gQIlZSliqvyiQ+MqHLg0SgPdWPQ3Fs/ui6+mi6MPLfSB+NwQCXqAu6hus4S9ha4/3huK5Om4Dh7uRsH7ixTrWK/zOxg7v/qy9UKzqVZxWQ4/lcDgcMenjwHb6nd2f8wSJpN1LbjNG1lpOpSZbEP95NAiK4EcDgpy2AimqT52MetUc17+jdoJwYmVqFrO51hB9MSK/tJr8rh/FWJ0mXMGKgHPdIfTo15cktP2Geg0HCGEUviOLjDU7UQvoKfdUyHev2KgbKnc4xApofDj8MPTujMBtFcukJGW1IzW3CX6UHozXE/8SIrs7oqXmJBtNg5/baXsWgZUhZuUMkGQzEzlEkSKLqLozEPXR4VyK+1KfOe+OlSVUk0NZb3p20O64bmcaInGmz3vjMyTpF6H00Vg1s8sLbKp7XVG08opNzezcgEYqFgqG1YwIwRzzjB52i/pwHMjkVGSsZt9i2BZeUQJBQg5ppYmOa5S44q8fKx+BV+1unFfaom1r7+yDVq+d7WRep1eGpMKSdyaI4jeIqK1ATYwdnRhCLob4ErmkKlCa7n9uAbAFsI0dpHWTPdYq2VO3B4Wmm+8VUy8tRxyCfLyD7O6shdmQCImb5AsIY5FP9SehAQkjgny6xRA9UtcLoSCuNandMq5NwaV3qhC+ta5QamgMK1JzZjoNtzmhffdkSUBcGKmCQuKAH/H7Ti0hJeJ0L9KlQxPy3/G9N5ZSagw1/xKNHazIukl4HJ3m+GQBJ/xmBeY1v/KiVgMtxYw/aLGPo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB5572.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(366004)(107886003)(52116002)(6666004)(6512007)(6506007)(5660300002)(508600001)(8936002)(38350700002)(38100700002)(36756003)(2906002)(86362001)(4326008)(8676002)(6486002)(966005)(54906003)(2616005)(83380400001)(66946007)(66556008)(66476007)(6916009)(316002)(26005)(186003)(1076003);DIR:OUT;SFP:1101
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RAnxKISVMa8RAKpucSscE8x4FA/b8rTOQw600rjP8XWZPpEfGV82mkDiFAi+?=
+ =?us-ascii?Q?Z06lWiTCtcPVplzN3a1L7pW3ZR6M+I4YxguOl3yQZ1n+9jLxjdMkCP6C670J?=
+ =?us-ascii?Q?Cp4OxnFQYBGujgM56HD3K8Ph47JsvF6a5ifNCOpOQxnOMb9eehCNzJkKXJ0/?=
+ =?us-ascii?Q?dHQQSYJbXQcEkz+GZU4b9Mbd9vqijo/3S9f86ddx4RdLiCsLu9p8TxF8koCv?=
+ =?us-ascii?Q?GrVGL85GAlF+ya3PKPPf/iwxT5/ok6Z1ns4OmMEiI5Ep5gPeoDFrrEV0mBqu?=
+ =?us-ascii?Q?+7ShqdzidRJ0lit5jyrKwpqs+juRSWTUDSCyPVUM87jZY9nl2q8pwYanIX/T?=
+ =?us-ascii?Q?A8utMnIhqNcSVzrnjDkhoA2LiFAswh90+94pb3t7O0x0gDpwpND+awNe12pf?=
+ =?us-ascii?Q?E+6bPU3XzOmhTtdo6lxWXOGLsYnGcv4GZP4ncMfufXU8AUfeIxIh/fZvVqNz?=
+ =?us-ascii?Q?RqWx+4vL5TDQzxbY83vUpG3txmp1/495660v/mnKURJ6rHQnJ20t8DXTdEMR?=
+ =?us-ascii?Q?8w46zKSlaDdeN1yyenKRUyPhDHLSn3fINUr8Bvfy3W7/KNcWCxp+YWzhBb1K?=
+ =?us-ascii?Q?aqpM0H4XPC3pHyxE/fCVwphehvEArHMpjo1/Rd5mSle+sM1xilgimfxAtq0E?=
+ =?us-ascii?Q?EvFqtbI5ppu6Haq7qSzRp8rAJTGPANEJV2n5DLygO7krA0ORKYkijTPbh5LG?=
+ =?us-ascii?Q?rQUdWzbLEjCSMC5L33cb4s+py0fvPuFiZ+YWQTYm/LfZqRAei/BtNs9h0uJZ?=
+ =?us-ascii?Q?V0hhqccZ1VT7K93sS1Di5q3HLWfKstJgSf5vWE5O6Uu3mc9v7gQ7lyT0GLJS?=
+ =?us-ascii?Q?UAXFtMrcpUpNfGpgpKh0JHXFeDwHb55mYdAnsYTGm1LV2gLJVJvdc9HkGIQH?=
+ =?us-ascii?Q?0wrlENKh/VsCk8iTWhJ/Zt5q4m/gLUAD7DxUAxJNSWuGPz0Qr1RfOuJOtplA?=
+ =?us-ascii?Q?CJs/wLMEqa896MoXI9UBytrJSfQ8P4KFPmYApByE1tQGNqd3NGZbIg7rm1db?=
+ =?us-ascii?Q?uGaipZn0sAD8KwzPxuwNwQxLhveQOQYSNnzABtS/ECyrIdn1myeONaaeB6Lj?=
+ =?us-ascii?Q?yJMfJ06YW9iA3A/DBVadfAZpdEU15oANG6OyDUeo14TDW8p4a+NPl8TMfpBo?=
+ =?us-ascii?Q?XzyS97cM0CvtF7s8VedB5dMVS6/8iomUXTr3lRJWChO33eTbWv8iXRa4smqX?=
+ =?us-ascii?Q?3dgWcnLWKYBI46V2o1DXy52deTxaBK9VwmIbUGcJV/wSBxG/MARaGCxFSqOg?=
+ =?us-ascii?Q?zZaPTU8WA4Ef446jqlJdd9joOD2HHOW1t0S7WTK4XGH7hrRkfYPNXt5poRD9?=
+ =?us-ascii?Q?ElHjjJcPpaqrGlKKROsiKDQ8EbM9j8v+jdEMHDTZ+INxqUcf/r10pHDVS+oK?=
+ =?us-ascii?Q?dcLhhykXy8zSfNgFbZdIrxnFFwA1XUdROaxkPmpoVeKnAM4c3ZmzQ9PR+ui1?=
+ =?us-ascii?Q?8CrAM2b77tkKWH3wLa/5ya4B6q2VgBakBszb4Ek054IF81yO8y8+8RX4yqKn?=
+ =?us-ascii?Q?EGwosM0yOFLNtfAMQg78ui1hc50dUWpo/fUu3mPxZTs3JVJOv/zuilC3HL3u?=
+ =?us-ascii?Q?KxELtyqX38NW9pS3LKX/GTvnvVPSivkAHjmMcMuwmMaEWuOgN5bsXw/15f2r?=
+ =?us-ascii?Q?shhLcmuadwQlrIL2RVpDV+At+1UT1rrQb/BA1NeAFSXPZjm/z6uWv0kWdFJB?=
+ =?us-ascii?Q?kyQb1sCIswJfHSm1NWTCkZv25eA=3D?=
+X-OriginatorOrg: camlingroup.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca0aa08a-f4c0-4d70-5eff-08d9f528dc0a
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB5572.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 10:56:49.0362
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fd4b1729-b18d-46d2-9ba0-2717b852b252
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hX/bWoQGurg6SRIr32Ilm7p41mVoDLtXZ25e03683Wg9AGoPCq1Z3wr8QOw/1H6GatBuJtpixmqQJONpEWktCza9PEYF+UBlMuF4kFM6T7Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP123MB6574
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUK97A341 smtp.mailfrom=tomasz.mon@camlingroup.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: camlingroup.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Jerome,
-     Thank you very much for your reply. At present, the problem of 
-switching UART baud rate stuck has been solved. I'm ready to send the 
-next edition. However, I still don't understand your suggestion and need 
-to communicate with you.
+sc16is7xx driver assumes that the device handles hardware flow control
+automatically. This is not really true as the driver does inadvertently
+clear the bits that enable hardware flow control.
 
-On 2022/1/21 5:40, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Tue 18 Jan 2022 at 11:09, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Using the common Clock code to describe the UART baud rate clock
->> makes it easier for the UART driver to be compatible with the
->> baud rate requirements of the UART IP on different meson chips.
->>
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->> ---
->>   drivers/tty/serial/meson_uart.c | 195 +++++++++++++++++++++++---------
->>   1 file changed, 142 insertions(+), 53 deletions(-)
->>
->> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
->> index 7570958d010c..92fa91c825e6 100644
->> --- a/drivers/tty/serial/meson_uart.c
->> +++ b/drivers/tty/serial/meson_uart.c
->> @@ -6,6 +6,7 @@
->>    */
->>   
->>   #include <linux/clk.h>
->> +#include <linux/clk-provider.h>
->>   #include <linux/console.h>
->>   #include <linux/delay.h>
->>   #include <linux/init.h>
->> @@ -65,9 +66,7 @@
->>   #define AML_UART_RECV_IRQ(c)		((c) & 0xff)
->>   
->>   /* AML_UART_REG5 bits */
->> -#define AML_UART_BAUD_MASK		0x7fffff
->>   #define AML_UART_BAUD_USE		BIT(23)
->> -#define AML_UART_BAUD_XTAL		BIT(24)
->>   
->>   #define AML_UART_PORT_NUM		12
->>   #define AML_UART_PORT_OFFSET		6
->> @@ -76,6 +75,11 @@
->>   #define AML_UART_POLL_USEC		5
->>   #define AML_UART_TIMEOUT_USEC		10000
->>   
->> +struct meson_uart_data {
->> +	struct clk	*baud_clk;
->> +	bool		use_xtal_clk;
->> +};
->> +
->>   static struct uart_driver meson_uart_driver;
->>   
->>   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
->> @@ -293,19 +297,17 @@ static int meson_uart_startup(struct uart_port *port)
->>   
->>   static void meson_uart_change_speed(struct uart_port *port, unsigned long baud)
->>   {
->> +	struct meson_uart_data *private_data = port->private_data;
->>   	u32 val;
->>   
->>   	while (!meson_uart_tx_empty(port))
->>   		cpu_relax();
->>   
->> -	if (port->uartclk == 24000000) {
->> -		val = ((port->uartclk / 3) / baud) - 1;
->> -		val |= AML_UART_BAUD_XTAL;
->> -	} else {
->> -		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
->> -	}
->> +	val = readl(port->membase + AML_UART_REG5);
->>   	val |= AML_UART_BAUD_USE;
->>   	writel(val, port->membase + AML_UART_REG5);
->> +
->> +	clk_set_rate(private_data->baud_clk, baud);
->>   }
->>   
->>   static void meson_uart_set_termios(struct uart_port *port,
->> @@ -395,11 +397,20 @@ static int meson_uart_verify_port(struct uart_port *port,
->>   
->>   static void meson_uart_release_port(struct uart_port *port)
->>   {
->> -	/* nothing to do */
->> +	struct meson_uart_data *private_data = port->private_data;
->> +
->> +	clk_disable_unprepare(private_data->baud_clk);
->>   }
->>   
->>   static int meson_uart_request_port(struct uart_port *port)
->>   {
->> +	struct meson_uart_data *private_data = port->private_data;
->> +	int ret;
->> +
->> +	ret = clk_prepare_enable(private_data->baud_clk);
->> +	if (ret)
->> +		return ret;
->> +
->>   	return 0;
->>   }
->>   
->> @@ -629,57 +640,105 @@ static struct uart_driver meson_uart_driver = {
->>   	.cons		= MESON_SERIAL_CONSOLE,
->>   };
->>   
->> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
->> -						 const char *id)
->> -{
->> -	struct clk *clk = NULL;
->> -	int ret;
->> -
->> -	clk = devm_clk_get(dev, id);
->> -	if (IS_ERR(clk))
->> -		return clk;
->> -
->> -	ret = clk_prepare_enable(clk);
->> -	if (ret) {
->> -		dev_err(dev, "couldn't enable clk\n");
->> -		return ERR_PTR(ret);
->> -	}
->> -
->> -	devm_add_action_or_reset(dev,
->> -			(void(*)(void *))clk_disable_unprepare,
->> -			clk);
->> -
->> -	return clk;
->> -}
->> +static struct clk_div_table xtal_div_table[] = {
->> +	{0, 3},
->> +	{1, 1},
->> +	{2, 2},
->> +	{3, 2},
->> +};
->>   
->> -static int meson_uart_probe_clocks(struct platform_device *pdev,
->> -				   struct uart_port *port)
->> +static int meson_uart_probe_clocks(struct uart_port *port)
->>   {
->> -	struct clk *clk_xtal = NULL;
->> -	struct clk *clk_pclk = NULL;
->> -	struct clk *clk_baud = NULL;
->> +	struct meson_uart_data *private_data = port->private_data;
->> +	struct clk *clk_baud, *clk_xtal;
->> +	struct clk_hw *hw;
->> +	char clk_name[32];
->> +	struct clk_parent_data use_xtal_mux_parents[2] = {
->> +		{ .index = -1, },
->> +		{ .index = -1, },
->> +	};
-> 
-> You are using hw pointers later, you don't need to init the index to -1
-> I think
-> 
-I'm going to delete them in the next version.
-like: struct clk_parent_data use_xtal_mux_parents[2] = { };
->>   
->> -	clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
->> -	if (IS_ERR(clk_pclk))
->> -		return PTR_ERR(clk_pclk);
->> +	clk_baud = devm_clk_get(port->dev, "baud");
->> +	if (IS_ERR(clk_baud)) {
->> +		dev_err(port->dev, "Failed to get the 'baud' clock\n");
->> +		return PTR_ERR(clk_baud);
->> +	}
->>   
->> -	clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
->> +	clk_xtal = devm_clk_get(port->dev, "xtal");
->>   	if (IS_ERR(clk_xtal))
->> -		return PTR_ERR(clk_xtal);
->> -
->> -	clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
->> -	if (IS_ERR(clk_baud))
->> -		return PTR_ERR(clk_baud);
->> +		return dev_err_probe(port->dev, PTR_ERR(clk_xtal),
->> +				     "Failed to get the 'xtal' clock\n");
->> +
->> +	if (private_data->use_xtal_clk) {
->> +		snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
->> +			 "xtal_div");
->> +		hw = devm_clk_hw_register_divider_table(port->dev,
->> +							clk_name,
->> +							__clk_get_name(clk_baud),
->> +							CLK_SET_RATE_NO_REPARENT,
->> +							port->membase + AML_UART_REG5,
->> +							26, 2,
->> +							CLK_DIVIDER_READ_ONLY,
->> +							xtal_div_table, NULL);
->> +		if (IS_ERR(hw))
->> +			return PTR_ERR(hw);
->> +
->> +		use_xtal_mux_parents[1].hw = hw;
->> +	} else {
->> +		snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
->> +			 "clk81_div4");
->> +		hw = devm_clk_hw_register_fixed_factor(port->dev,
->> +						       clk_name,
->> +						       __clk_get_name(clk_baud),
->> +						       CLK_SET_RATE_NO_REPARENT,
->> +						       1, 4);
->> +		if (IS_ERR(hw))
->> +			return PTR_ERR(hw);
->> +
->> +		use_xtal_mux_parents[0].hw = hw;
->> +	}
-> 
-> The above is still wrong.
-> 
-> use_xtal_mux_parents initialize both parent to nothing
-> And you init the parent in the conditional above.
-> It is means only one path is actually set instead of both.
-> 
-> The mux always has 2 sources - Both should be set regardless of the HW version
-> You just add
-> * /4 on path 0 on legacy SoC
-> * the funky divider on path 1 on newer SoC.
-> 
-You do have a point, so I was wondering if you had any suggestions.
->>   
->> -	port->uartclk = clk_get_rate(clk_baud);
->> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
->> +		 "use_xtal");
->> +	hw = __devm_clk_hw_register_mux(port->dev, NULL,
->> +					clk_name,
->> +					ARRAY_SIZE(use_xtal_mux_parents),
->> +					NULL, NULL,
->> +					use_xtal_mux_parents,
->> +					CLK_SET_RATE_PARENT,
->> +					port->membase + AML_UART_REG5,
->> +					24, 0x1,
->> +					CLK_MUX_READ_ONLY,
->> +					NULL, NULL);
->> +	if (IS_ERR(hw))
->> +		return PTR_ERR(hw);
->> +
->> +	port->uartclk = clk_hw_get_rate(hw);
->> +
->> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
->> +		 "baud_div");
->> +	hw = devm_clk_hw_register_divider(port->dev,
->> +					  clk_name,
->> +					  clk_hw_get_name(hw),
->> +					  CLK_SET_RATE_PARENT,
->> +					  port->membase + AML_UART_REG5,
->> +					  0, 23,
->> +					  CLK_DIVIDER_ROUND_CLOSEST,
->> +					  NULL);
->> +	if (IS_ERR(hw))
->> +		return PTR_ERR(hw);
->> +
->> +	private_data->baud_clk = hw->clk;
->>   
->>   	return 0;
->>   }
->>   
->>   static int meson_uart_probe(struct platform_device *pdev)
->>   {
->> +	struct meson_uart_data *private_data;
->>   	struct resource *res_mem;
->>   	struct uart_port *port;
->> +	struct clk *pclk;
->>   	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
->>   	int ret = 0;
->>   	int irq;
->> @@ -705,6 +764,15 @@ static int meson_uart_probe(struct platform_device *pdev)
->>   	if (!res_mem)
->>   		return -ENODEV;
->>   
->> +	pclk = devm_clk_get(&pdev->dev, "pclk");
->> +	if (IS_ERR(pclk))
->> +		return dev_err_probe(&pdev->dev, PTR_ERR(pclk),
->> +				     "Failed to get the 'pclk' clock\n");
->> +
->> +	ret = clk_prepare_enable(pclk);
->> +	if (ret)
->> +		return ret;
->> +
-> 
-> I think this is unbalanced.
-I don't understand what you mean. How should I change it? Can you tell 
-me more specifically.
-> 
->>   	irq = platform_get_irq(pdev, 0);
->>   	if (irq < 0)
->>   		return irq;
->> @@ -724,9 +792,13 @@ static int meson_uart_probe(struct platform_device *pdev)
->>   	if (IS_ERR(port->membase))
->>   		return PTR_ERR(port->membase);
->>   
->> -	ret = meson_uart_probe_clocks(pdev, port);
->> -	if (ret)
->> -		return ret;
->> +	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
->> +				    GFP_KERNEL);
->> +	if (!private_data)
->> +		return -ENOMEM;
->> +
->> +	if (device_get_match_data(&pdev->dev))
->> +		private_data->use_xtal_clk = true;
->>   
->>   	port->iotype = UPIO_MEM;
->>   	port->mapbase = res_mem->start;
->> @@ -740,6 +812,11 @@ static int meson_uart_probe(struct platform_device *pdev)
->>   	port->x_char = 0;
->>   	port->ops = &meson_uart_ops;
->>   	port->fifosize = fifosize;
->> +	port->private_data = private_data;
->> +
->> +	ret = meson_uart_probe_clocks(port);
->> +	if (ret)
->> +		return ret;
->>   
->>   	meson_ports[pdev->id] = port;
->>   	platform_set_drvdata(pdev, port);
->> @@ -766,10 +843,22 @@ static int meson_uart_remove(struct platform_device *pdev)
->>   }
->>   
->>   static const struct of_device_id meson_uart_dt_match[] = {
->> -	{ .compatible = "amlogic,meson6-uart" },
->> -	{ .compatible = "amlogic,meson8-uart" },
->> -	{ .compatible = "amlogic,meson8b-uart" },
->> -	{ .compatible = "amlogic,meson-gx-uart" },
->> +	{
->> +		.compatible = "amlogic,meson6-uart",
->> +		.data = (void *)false,
->> +	},
->> +	{
->> +		.compatible = "amlogic,meson8-uart",
->> +		.data = (void *)false,
->> +	},
->> +	{
->> +		.compatible = "amlogic,meson8b-uart",
->> +		.data = (void *)false,
->> +	},
->> +	{
->> +		.compatible = "amlogic,meson-gx-uart",
->> +		.data = (void *)true,
->> +	},
->>   	{ /* sentinel */ },
->>   };
->>   MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
-> 
+This patch series solves multiple issues present in the driver. While
+the patches are fairly independent, there are some dependencies. The
+"sc16is7xx: Properly resume TX after stop" adds IER bit set function
+that is later used in "sc16is7xx: Set AUTOCTS and AUTORTS bits". Also
+the patches that control which interrupts are enabled are dependent on
+each other.
+
+Patches should be applied respecting the order in the series. The whole
+series applies on top of "sc16is7xx: Fix for incorrect data being
+transmitted" [1].
+
+Patch series has been developed and tested on a board with SC16IS760
+connected via SPI bus.
+
+[1] https://lore.kernel.org/linux-serial/20220216160802.1026013-1-phil@rasp=
+berrypi.com/
+
+Lech Perczak (3):
+  sc16is7xx: Preserve EFR bits on update
+  sc16is7xx: Update status lines in single call
+  sc16is7xx: Separate GPIOs from modem control lines
+
+Tomasz Mo=C5=84 (3):
+  sc16is7xx: Properly resume TX after stop
+  sc16is7xx: Handle modem status lines
+  sc16is7xx: Set AUTOCTS and AUTORTS bits
+
+ drivers/tty/serial/sc16is7xx.c | 257 +++++++++++++++++++++++++++++----
+ 1 file changed, 227 insertions(+), 30 deletions(-)
+
+--=20
+2.25.1
+
