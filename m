@@ -2,45 +2,63 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5244BE7A1
-	for <lists+linux-serial@lfdr.de>; Mon, 21 Feb 2022 19:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0565B4BE9B8
+	for <lists+linux-serial@lfdr.de>; Mon, 21 Feb 2022 19:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380247AbiBUQaP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 21 Feb 2022 11:30:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37270 "EHLO
+        id S1381449AbiBUQ5L (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 21 Feb 2022 11:57:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380393AbiBUQaI (ORCPT
+        with ESMTP id S236717AbiBUQ5K (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:30:08 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B651D333
-        for <linux-serial@vger.kernel.org>; Mon, 21 Feb 2022 08:29:43 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:49dc:a1b5:3fe0:3d2b])
-        by laurent.telenet-ops.be with bizsmtp
-        id xsVi260083YJRAw01sVirC; Mon, 21 Feb 2022 17:29:42 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nMBZ0-001TjF-PI; Mon, 21 Feb 2022 17:29:26 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nMBZ0-006G86-Ah; Mon, 21 Feb 2022 17:29:26 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mon, 21 Feb 2022 11:57:10 -0500
+X-Greylist: delayed 362 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Feb 2022 08:56:46 PST
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAECEAE5F
+        for <linux-serial@vger.kernel.org>; Mon, 21 Feb 2022 08:56:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1645462242;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=K5C8Dhu+YNf1WOD2amlcnu/3tmStkuqsr65XbgfBlY4=;
+    b=DidxxpUnW3NJcYxsqUoWS0Hkscz9OdBaAEMDSjrEOTvp6KPeoN+Olp64gHRak/G0U3
+    KN0H7PF62fkeYZ+Nt52GfaR0LfGJYyC1xNvYynjNiQ+6CE/frDiCEECTJ8dqRQ0m/O/g
+    YfRjQ7F/tNZnQIyYodk2KDAHlj9/assFTNdpWboff3aYD5RJdWYm1yzeQDNmR3lJkxy9
+    jKp6x6lPXF1WeTwsfgQKh4/MNA34VRarbKw7uyu737u+odLuS2eUtJ7XTbd58TqkDn8/
+    uPYJi1lsDIBvrh2wBiW0DDYP33hiZP8kBP1FbNT/efnTeq9wLKWvej9TyHWhiZj3l7Ss
+    j1mA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCv/xi15g=="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp01-05.back.ox.d0m.de
+    by smtp-ox.front (RZmta 47.40.0 AUTH)
+    with ESMTPSA id 6c30c7y1LGog0LT
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 21 Feb 2022 17:50:42 +0100 (CET)
+Date:   Mon, 21 Feb 2022 17:50:42 +0100 (CET)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] serial: sh-sci: Simplify multiplication/shift logic
-Date:   Mon, 21 Feb 2022 17:29:25 +0100
-Message-Id: <118d62e167f6cf5e98bdf9a738634b4590ea8d09.1645460901.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+Cc:     linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Message-ID: <312332855.472251.1645462242686@webmail.strato.com>
+In-Reply-To: <118d62e167f6cf5e98bdf9a738634b4590ea8d09.1645460901.git.geert+renesas@glider.be>
+References: <118d62e167f6cf5e98bdf9a738634b4590ea8d09.1645460901.git.geert+renesas@glider.be>
+Subject: Re: [PATCH] serial: sh-sci: Simplify multiplication/shift logic
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.5-Rev38
+X-Originating-Client: open-xchange-appsuite
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,28 +67,36 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-"a * (1 << b)" == "a << b".
 
-No change in generated code.
+> On 02/21/2022 5:29 PM Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+> 
+>  
+> "a * (1 << b)" == "a << b".
+> 
+> No change in generated code.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/tty/serial/sh-sci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> index 968967d722d494c2..77d76973858f7d7f 100644
+> --- a/drivers/tty/serial/sh-sci.c
+> +++ b/drivers/tty/serial/sh-sci.c
+> @@ -2293,7 +2293,7 @@ static int sci_scbrr_calc(struct sci_port *s, unsigned int bps,
+>  	for_each_sr(sr, s) {
+>  		for (c = 0; c <= 3; c++) {
+>  			/* integerized formulas from HSCIF documentation */
+> -			prediv = sr * (1 << (2 * c + 1));
+> +			prediv = sr << (2 * c + 1);
+>  
+>  			/*
+>  			 * We need to calculate:
+> -- 
+> 2.25.1
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/tty/serial/sh-sci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 968967d722d494c2..77d76973858f7d7f 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -2293,7 +2293,7 @@ static int sci_scbrr_calc(struct sci_port *s, unsigned int bps,
- 	for_each_sr(sr, s) {
- 		for (c = 0; c <= 3; c++) {
- 			/* integerized formulas from HSCIF documentation */
--			prediv = sr * (1 << (2 * c + 1));
-+			prediv = sr << (2 * c + 1);
- 
- 			/*
- 			 * We need to calculate:
--- 
-2.25.1
-
+CU
+Uli
