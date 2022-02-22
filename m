@@ -2,33 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6064BEF22
-	for <lists+linux-serial@lfdr.de>; Tue, 22 Feb 2022 02:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2E44BF242
+	for <lists+linux-serial@lfdr.de>; Tue, 22 Feb 2022 07:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbiBVBQD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 21 Feb 2022 20:16:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52226 "EHLO
+        id S230346AbiBVGwJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 22 Feb 2022 01:52:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiBVBQC (ORCPT
+        with ESMTP id S229867AbiBVGwI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 21 Feb 2022 20:16:02 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7793C24F2E;
-        Mon, 21 Feb 2022 17:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645492512;
-        bh=lEGAOtzgMEFzQKENfjNLVN0s0ToEzWqdhUuUbTO2bGM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ge/7Uk7V/IzQamDgNXDVZvVyKqd5insicDzvapDhXavvi3qo4FYW7M0nyZDFh+YSj
-         4Qwj/k0FxGe1jZ6UvIQcW0bLgf+sp3SpexFk6m8CAWRzKw2p3RA3b9gMPBhyHMx+WI
-         kEqu29XU9YXG34Hytbz2bNt/WzYUAx2Mtxjr+PEE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([149.172.237.68]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiJV6-1nqh301gSk-00fT5W; Tue, 22
- Feb 2022 02:15:12 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        u.kleine-koenig@pengutronix.de
+        Tue, 22 Feb 2022 01:52:08 -0500
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C23827B10;
+        Mon, 21 Feb 2022 22:51:43 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id z22so34480327edd.1;
+        Mon, 21 Feb 2022 22:51:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bR8Q0QY9SX7TEWCLjuX9Gl0qDTq1gqx2gu8NIUCvNZY=;
+        b=oqiGuTD3Dl1pZGMyO1xCU/U2c0AfNgqoHtki+0Fz2rXhoyIQddoecfd46DyhrVmXpM
+         qh7ixkWDUN5AR9JntSvDcvf8UGuHrvmuyP3KxLzJ0XEwID2FwIXYqe/glRi6i83+D5kO
+         i6466vUz6vZe6JSSS3v+PfghJiRA0JuXHUqWWGiYC6HEJfVA/s5fiLLX1PE5LThlcAPO
+         +DH5xnn0CGX7FrfTN/9erfg74WxmINNoeX85mqJapwfxj+VZa2xfmXvTY0Gt32qkpoXK
+         G0sTahFvs+dXlF5lnEOvvIzQyRHfm+YBg9HXE/NV06B2VAw8q7x+zgvfMpvb9kizjnNm
+         IQ/Q==
+X-Gm-Message-State: AOAM533FDThjVnEvALDP83vr2FPhEqJ3WN31G6ngxAA5XR9GqMbxq/3T
+        1UstFFa79342DwPqJPmY0+Y=
+X-Google-Smtp-Source: ABdhPJybXoH/4IC5sxgRdrpiS40oI8K5YpOtI4ArFM9KXKTCbppArM6MONHlNQCHPNBdKQfXpU+8Ng==
+X-Received: by 2002:a05:6402:1e8b:b0:3da:58e6:9a09 with SMTP id f11-20020a0564021e8b00b003da58e69a09mr25358130edf.155.1645512701870;
+        Mon, 21 Feb 2022 22:51:41 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id x6sm9348611edv.109.2022.02.21.22.51.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 22:51:41 -0800 (PST)
+Message-ID: <e883ccb5-68ea-f802-e4fd-864672d8ad7b@kernel.org>
+Date:   Tue, 22 Feb 2022 07:51:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v3 1/9] serial: core: move RS485 configuration tasks from
+ drivers into core
+Content-Language: en-US
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        gregkh@linuxfoundation.org, u.kleine-koenig@pengutronix.de
 Cc:     linux@armlinux.org.uk, richard.genoud@gmail.com,
         nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
         ludovic.desroches@microchip.com, shawnguo@kernel.org,
@@ -37,63 +56,80 @@ Cc:     linux@armlinux.org.uk, richard.genoud@gmail.com,
         alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: [PATCH v3 9/9] serial: atmel: remove redundant assignment in rs485_config
-Date:   Tue, 22 Feb 2022 02:14:33 +0100
-Message-Id: <20220222011433.8761-10-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220222011433.8761-1-LinoSanfilippo@gmx.de>
+        p.rosenberger@kunbus.com
 References: <20220222011433.8761-1-LinoSanfilippo@gmx.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:bv2z3mAXWdpqELROOyojpjGAFmvhd9PZYl442nj8R122IfdOqxk
- 1tQpzRuLC7Fsyr4HxbpC8xSGSSJHPnaHWcP4ketFZsBdZ5ZpmJoJmpMFHvfiTa1YR5BLMzh
- cfNM0W9I/MenOtYzJSnXNdBIbrdvZCHwMLNyc46qbPHuLRSY9O0m1lANaZ2AMk/4P8bzpvz
- hDZOOPRadR7oxCIq2jwcA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b9iQb2TqwS0=:FMH99wrfQQGCjY2UNaGD8t
- 3voyfBU2YiqBxOp/7Yjfl2vovYpoCeU4ao/AaLL/+2nLHggL8MvxrfsV1TXfUVdbJrKoUKacv
- kPN6DWZCwxRxRLzRS+lp9ZWRMWTZm2GO3aqdIpg+PbLOQbgFwQw6+ExGr3p156V06egM+zO43
- dkgkvJ/zOgjrU5MYbj5XpZgqz1evF9WVcmwSPDLWrIRxYluq9LRbKdOVOOUMMCElkRophkndl
- 24N0xjtpeHQcRTU5pAKT0Mnava7kvxfR2dkHC3vM7aZlvtfqzs9bcHerOEqKGtRZJTkTbW6PY
- usu2rMEp3XCwaz3c8O9lod7B8MLkUv7vn5r7QqlmXtaNQ1cVqZyQlVmbOoFG62U5i+e9nmaPs
- GK7NneVEHN2X29x6l8NybWkH8eABylVpfOH2F3NzWpTq7KSf8u0Xu0d63ysu55x1u2cxLZ3tH
- 3Di1L3VI8ATgULFDI6rEoLFgP6sO0EcRq8SvWrLe89cL5BjKeSOx7xZ1GKirIu1oQURjGL5Bd
- jMV6pr+MwTkvbIR5aiXYDeGLiQ6ZUajH9qsbEva0eyVE8vMR+rhrJjauTJM3K5DtnlG44pNQV
- RjMUySGhd2HPDgrihsWL7zSjRV8C/GZYEoTXs3AajN8SW7rFy67+U8w7SLN/0TrXjh6eEGdVj
- IhtC4TPPCI7QjVmSsoBZVBDh+O/XFeyYValvhxPawUnapL+KhS4OvfKx242TGSaRtXbfljkSq
- u+NGDicXrwBmfLR/N17ikCmzk1W1H4Fmd1mF/94OtJYkKN/byg1i46wu5vHFS8Dsnwj4SW8Gm
- GMYnCqFu51V/PoVc1j6H91y51YPBwvU+OZMn/vksJaqmM4jx72xw6jccBaz4htVPEP1N81U46
- DNTgV08Sm97yuXLHNrjbahlziAbVliddDHmrn/XOMmaGlhgYj5LvWUwFJB3qstdYeN4a6V1ll
- VghyGPa2GQJN8YCKf9ttyj3NLv7IgNiUZZPaEcDurG+VkljkOBc8JGChXI7sncidPvV3kqhMr
- j03vWp3jusvtN4jtqLqWxdnPXXlEz/dA/a/g4lQMK3X9pO2/VKUPh/NktmVkyMtBReul/hzoE
- DIlSFzITkj95kI=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220222011433.8761-2-LinoSanfilippo@gmx.de>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220222011433.8761-2-LinoSanfilippo@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-SW4gdWFydF9zZXRfcnM0ODVfY29uZmlnKCkgdGhlIHNlcmlhbCBjb3JlIGFscmVhZHkgYXNzaWdu
-cyB0aGUgcGFzc2VkCnNlcmlhbF9yczQ4NSBzdHJ1Y3QgdG8gdGhlIHVhcnQgcG9ydC4KClNvIHJl
-bW92ZSB0aGUgYXNzaWdubWVudCBmcm9tIHRoZSBkcml2ZXJzIHJzNDg1X2NvbmZpZygpIGZ1bmN0
-aW9uIHRvIGF2b2lkCnJlZHVuZGFuY3kuCgpBY2tlZC1ieTogUmljaGFyZCBHZW5vdWQgPHJpY2hh
-cmQuZ2Vub3VkQGdtYWlsLmNvbT4KU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxMaW5v
-U2FuZmlsaXBwb0BnbXguZGU+Ci0tLQogZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5j
-IHwgNCArLS0tCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDMgZGVsZXRpb25zKC0p
-CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jIGIvZHJpdmVy
-cy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jCmluZGV4IDczZDQzOTE5ODk4ZC4uMThkM2JiZGNi
-N2EyIDEwMDY0NAotLS0gYS9kcml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxfc2VyaWFsLmMKKysrIGIv
-ZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jCkBAIC0yOTksMTEgKzI5OSw5IEBAIHN0
-YXRpYyBpbnQgYXRtZWxfY29uZmlnX3JzNDg1KHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQsCiAJLyog
-UmVzZXR0aW5nIHNlcmlhbCBtb2RlIHRvIFJTMjMyICgweDApICovCiAJbW9kZSAmPSB+QVRNRUxf
-VVNfVVNNT0RFOwogCi0JcG9ydC0+cnM0ODUgPSAqcnM0ODVjb25mOwotCiAJaWYgKHJzNDg1Y29u
-Zi0+ZmxhZ3MgJiBTRVJfUlM0ODVfRU5BQkxFRCkgewogCQlkZXZfZGJnKHBvcnQtPmRldiwgIlNl
-dHRpbmcgVUFSVCB0byBSUzQ4NVxuIik7Ci0JCWlmIChwb3J0LT5yczQ4NS5mbGFncyAmIFNFUl9S
-UzQ4NV9SWF9EVVJJTkdfVFgpCisJCWlmIChyczQ4NWNvbmYtPmZsYWdzICYgU0VSX1JTNDg1X1JY
-X0RVUklOR19UWCkKIAkJCWF0bWVsX3BvcnQtPnR4X2RvbmVfbWFzayA9IEFUTUVMX1VTX1RYUkRZ
-OwogCQllbHNlCiAJCQlhdG1lbF9wb3J0LT50eF9kb25lX21hc2sgPSBBVE1FTF9VU19UWEVNUFRZ
-OwotLSAKMi4zNS4xCgo=
+On 22. 02. 22, 2:14, Lino Sanfilippo wrote:
+> Several drivers that support setting the RS485 configuration via userspace
+> implement one or more of the following tasks:
+> 
+> - in case of an invalid RTS configuration (both RTS after send and RTS on
+>    send set or both unset) fall back to enable RTS on send and disable RTS
+>    after send
+> 
+> - nullify the padding field of the returned serial_rs485 struct
+> 
+> - copy the configuration into the uart port struct
+> 
+> - limit RTS delays to 100 ms
+> 
+> Move these tasks into the serial core to make them generic and to provide
+> a consistent behaviour among all drivers.
+> 
+> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> ---
+>   drivers/tty/serial/serial_core.c | 29 +++++++++++++++++++++++++++++
+>   1 file changed, 29 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 846192a7b4bf..2b3afe038c1c 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -42,6 +42,11 @@ static struct lock_class_key port_lock_key;
+>   
+>   #define HIGH_BITS_OFFSET	((sizeof(long)-sizeof(int))*8)
+>   
+> +/*
+> + * Max time with active RTS before/after data is sent.
+> + */
+> +#define RS485_MAX_RTS_DELAY	100 /* msecs */
+> +
+>   static void uart_change_speed(struct tty_struct *tty, struct uart_state *state,
+>   					struct ktermios *old_termios);
+>   static void uart_wait_until_sent(struct tty_struct *tty, int timeout);
+> @@ -1282,8 +1287,32 @@ static int uart_set_rs485_config(struct uart_port *port,
+>   	if (copy_from_user(&rs485, rs485_user, sizeof(*rs485_user)))
+>   		return -EFAULT;
+>   
+> +	/* pick sane settings if the user hasn't */
+> +	if (!(rs485.flags & SER_RS485_RTS_ON_SEND) ==
+> +	    !(rs485.flags & SER_RS485_RTS_AFTER_SEND)) {
+> +		pr_warn("invalid RTS setting, using RTS_ON_SEND instead\n");
+
+Can't we have a device prefix here, so that everyone knows what device 
+is affected? Without that, it's not that useful. At least port->name & 
+port->line could be printed. The uart core uses dev_* prints, but prints 
+also line as uport->dev can be NULL sometimes.
+
+Hm, we could introduce uart_print family (to print something like what 
+is in uart_report_port).
+
+thanks,
+-- 
+js
+suse labs
