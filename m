@@ -2,101 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5524C289C
-	for <lists+linux-serial@lfdr.de>; Thu, 24 Feb 2022 10:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00EF4C28A4
+	for <lists+linux-serial@lfdr.de>; Thu, 24 Feb 2022 10:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbiBXJ4B (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 24 Feb 2022 04:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S233040AbiBXJzx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 24 Feb 2022 04:55:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiBXJ4A (ORCPT
+        with ESMTP id S231461AbiBXJzw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:56:00 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:55:29 PST
-Received: from sym2.noone.org (sym.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48113285A86;
-        Thu, 24 Feb 2022 01:55:28 -0800 (PST)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4K47805nRszvjfm; Thu, 24 Feb 2022 10:36:16 +0100 (CET)
-Date:   Thu, 24 Feb 2022 10:36:16 +0100
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH v2] serial: make uart_console_write->putchar()'s
- character an unsigned char
-Message-ID: <20220224093616.wxrvqaips4dyxhdr@distanz.ch>
-References: <20220223113355.30860-1-jslaby@suse.cz>
+        Thu, 24 Feb 2022 04:55:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE9C285737;
+        Thu, 24 Feb 2022 01:55:22 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 683A71F43D;
+        Thu, 24 Feb 2022 09:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645696521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=QX4pwJ95VPUYGIdo+wEwkfjIMCQstOundOUIBWQsseE=;
+        b=Vf6ONM1AFqAP0pA7ChpaUKhyJrQcnHs6cL/AN8y4wnPSs+AmZ2GQFgD0wfRo6OKFJ4Xbes
+        cSW+uGZkUO32fk2xL17oXkAuQX+JZaQcSOH/rbeVgcMUWLonbO5TqdQKdXikqivRwYL4oh
+        jiWX3OxEEU4Vgqn00FpMSzq1J4kTx1g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645696521;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=QX4pwJ95VPUYGIdo+wEwkfjIMCQstOundOUIBWQsseE=;
+        b=SeSuiXULhLS6cjrSADKC3dfkFEihDSExwnkc+n5ySfHnh5V6zUvtckklW0VhE8F6JJFi8h
+        Cyx+ht1KpZN+DNBw==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3DF24A3B89;
+        Thu, 24 Feb 2022 09:55:21 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 0/5] UART_LCR_WLEN cleanups
+Date:   Thu, 24 Feb 2022 10:55:17 +0100
+Message-Id: <20220224095517.30872-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220223113355.30860-1-jslaby@suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2022-02-23 at 12:33:55 +0100, Jiri Slaby <jslaby@suse.cz> wrote:
-[...]
->  drivers/tty/serial/altera_jtaguart.c       | 4 ++--
->  drivers/tty/serial/altera_uart.c           | 2 +-
+Many drivers currently do:
+   switch (cflag & CSIZE) {
+   case CS5:
+           lcr = UART_LCR_WLEN5;
+           break;
+   case CS6:
+           lcr = UART_LCR_WLEN6;
+           break;
+   case CS7:
+           lcr = UART_LCR_WLEN7;
+           break;
+   default:
+   case CS8:
+           lcr = UART_LCR_WLEN8;
+           break;
+   }
 
-For these:
+We can simplify it to:
+   lcr = UART_LCR_WLEN(tty_get_char_size(cflag));
+if we define UART_LCR_WLEN() properly first.
 
-Acked-by: Tobias Klauser <tklauser@distanz.ch>
+So UART_LCR_WLEN is defined in this series and all such drivers are
+converted too.
 
-Thank you
+We could go even further: to define something like uart_compute_LCR()
+and compute there whole LCR based even on parity+stop fields in cflag. I
+will try if it is worth it later. But this series on its own drops some
+duplicated lines already.
+
+Jiri Slaby (5):
+  tty: serial: define UART_LCR_WLEN() macro
+  tty: serial: make use of UART_LCR_WLEN() + tty_get_char_size()
+  USB: serial: make use of UART_LCR_WLEN() + tty_get_char_size()
+  sdio_uart: make use of UART_LCR_WLEN() + tty_get_char_size()
+  mxser: make use of UART_LCR_WLEN() + tty_get_char_size()
+
+ drivers/mmc/core/sdio_uart.c        | 16 +---------------
+ drivers/tty/mxser.c                 | 16 +---------------
+ drivers/tty/serial/8250/8250_omap.c | 16 +---------------
+ drivers/tty/serial/8250/8250_port.c | 16 +---------------
+ drivers/tty/serial/jsm/jsm_cls.c    | 16 +---------------
+ drivers/tty/serial/jsm/jsm_neo.c    | 16 +---------------
+ drivers/tty/serial/omap-serial.c    | 16 +---------------
+ drivers/tty/serial/pxa.c            | 16 +---------------
+ drivers/tty/serial/serial-tegra.c   | 22 ++++------------------
+ drivers/tty/serial/vr41xx_siu.c     | 15 +--------------
+ drivers/usb/serial/ark3116.c        | 17 ++---------------
+ drivers/usb/serial/f81232.c         | 16 +---------------
+ drivers/usb/serial/f81534.c         | 16 +---------------
+ drivers/usb/serial/mos7720.c        | 20 +-------------------
+ drivers/usb/serial/quatech2.c       | 16 +---------------
+ drivers/usb/serial/ssu100.c         | 16 +---------------
+ include/uapi/linux/serial_reg.h     |  1 +
+ 17 files changed, 21 insertions(+), 246 deletions(-)
+
+-- 
+2.35.1
+
