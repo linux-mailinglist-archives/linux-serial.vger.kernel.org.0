@@ -2,110 +2,187 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E594C49F8
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Feb 2022 17:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC264C4DE2
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Feb 2022 19:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241037AbiBYQDA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 25 Feb 2022 11:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S233267AbiBYSfG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 25 Feb 2022 13:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241291AbiBYQC7 (ORCPT
+        with ESMTP id S233300AbiBYSfB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:02:59 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139F71BE93;
-        Fri, 25 Feb 2022 08:02:25 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so6751913oov.3;
-        Fri, 25 Feb 2022 08:02:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2ASEIJpWMgZzPUwKo/TaO7NWpJLb+t/kj417W/xfgP4=;
-        b=izH6/wf96NgYOVfXpIC99W3BRwnruiN6Sso4QbjGl6k463cTXNtqtx3lZpGWBs4lxN
-         +U39whiQ/PeEsnq/3e7K4Z5JTD324n2UN9vLibA7hQ/0PK+BLx3W/AoWuYMo6xI/C3LR
-         u7YgrvlBDC4EKMmkrlccPiFQqUpq35bv+3ypIdQPAEY9PEeBd7trwFYypnucH3nnF/CJ
-         QrnhafcYmsO6SPoGruOXXDkbdWgU3rOho9QZii36XRgsc1TxX0hXUMykMbU8TgbnplH8
-         1Ltnl4kKOYlOw9XsHr6d1AZzzWBv8sS7JGzo+HZ37Lb0w8jWWURO2yUHdFH3aGq0sHf2
-         HgFQ==
-X-Gm-Message-State: AOAM531XG7PqU3XRyEI1V8Au85+DfPMiJd7H97253AXtP2AQ8Fp+ml9+
-        Zpkp8G7edVxTV7o4g95qRD+qA72Xdg==
-X-Google-Smtp-Source: ABdhPJwrpMHe59yPa1HMSv7HBHlTdQmKUhoIL6/d6QbUOBN648IRIt8dvgXUIAMk48G0Uk7rK4dE5Q==
-X-Received: by 2002:a05:6870:f21f:b0:d4:9de:8ec7 with SMTP id t31-20020a056870f21f00b000d409de8ec7mr1492215oao.319.1645804944306;
-        Fri, 25 Feb 2022 08:02:24 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm1511812oiv.21.2022.02.25.08.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:02:23 -0800 (PST)
-Received: (nullmailer pid 1005305 invoked by uid 1000);
-        Fri, 25 Feb 2022 16:02:22 -0000
-Date:   Fri, 25 Feb 2022 10:02:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] dt-bindings: serial: fsl-lpuart: Add imx93 compatible
- string
-Message-ID: <Yhj9joQkgTswMVcs@robh.at.kernel.org>
-References: <20220215081334.788419-1-peng.fan@oss.nxp.com>
+        Fri, 25 Feb 2022 13:35:01 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0A01A8CBD
+        for <linux-serial@vger.kernel.org>; Fri, 25 Feb 2022 10:34:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645814068; x=1677350068;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AWcWqNTCdAVoq0CzsMS2d/hoo3sz2Vx6l2pyUzXy78w=;
+  b=ZmKWBoUfYgrcU7ulSO6BHUq7BPdn15eOuAE4KfetdXb38p1OBosjnEgz
+   4ZGQk9+UGNfRXzILcAa6S/CBGfJDsJuDzAfimT7gPqAiijOMDTEfGokwE
+   uHtH1qKvvIJhqlQy4UExSJZndxTala/I0u8+HnNC0KcUZICUWXpJ9x73K
+   EDFiRPUMw5RWr1fHgAWsKil2zmOcn/88iQYqn98km5T3jj5sP/usVrU65
+   8SMSHwiyfpPKTEAP6nhBHsunmPp6vlw2qvFaOiJ8LBeUMu3cP5BMwD1ar
+   e0jo12yUtvDYvmMAbbAfkRjJbNXUXyXX6SWG6rXZljkLPsOBJ20IljLe5
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="250135001"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="250135001"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 10:34:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
+   d="scan'208";a="549371034"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 10:34:22 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNfQ5-0004bp-Ks; Fri, 25 Feb 2022 18:34:21 +0000
+Date:   Sat, 26 Feb 2022 02:34:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [tty:tty-testing 31/42] drivers/mmc/core/sdio_uart.c:253:9: error:
+ implicit declaration of function 'UART_LCR_WLEN'
+Message-ID: <202202260016.JwqeCxcs-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215081334.788419-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 04:13:34PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The lpuart on i.MX93 is derived from i.MX8ULP with some industrial
-> enhancements, it uses three compatible strings, so update the
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+head:   a6d8f09319fff9e6e7a91cadb19923b8cb2573e0
+commit: b6f8eaea0cf1afe2500f8af7b6cc805647fe4889 [31/42] sdio_uart: make use of UART_LCR_WLEN() + tty_get_char_size()
+config: arm-s3c2410_defconfig (https://download.01.org/0day-ci/archive/20220226/202202260016.JwqeCxcs-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?id=b6f8eaea0cf1afe2500f8af7b6cc805647fe4889
+        git remote add tty https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
+        git fetch --no-tags tty tty-testing
+        git checkout b6f8eaea0cf1afe2500f8af7b6cc805647fe4889
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mmc/core/
 
-Looks like it's 2 compatible strings...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> compatible string for i.MX93. But for a few instants,
+All errors (new ones prefixed by >>):
 
-s/instants/instances/
+>> drivers/mmc/core/sdio_uart.c:253:9: error: implicit declaration of function 'UART_LCR_WLEN' [-Werror,-Wimplicit-function-declaration]
+           cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
+                  ^
+   1 error generated.
 
-> DTR_B, DSR_B, DCD_B and RIN_B pins are supported, so use one compatible
-> string fsl,imx93-lpuart-v2
 
-If the differences are just what gets pinned out, then I think the 
-differences should be handled with separate properties. We probably 
-already have some.
+vim +/UART_LCR_WLEN +253 drivers/mmc/core/sdio_uart.c
 
-Plus, while you may have all the above signals, a board design may still 
-only use a subset.
+   245	
+   246	static void sdio_uart_change_speed(struct sdio_uart_port *port,
+   247					   struct ktermios *termios,
+   248					   struct ktermios *old)
+   249	{
+   250		unsigned char cval, fcr = 0;
+   251		unsigned int baud, quot;
+   252	
+ > 253		cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
+   254	
+   255		if (termios->c_cflag & CSTOPB)
+   256			cval |= UART_LCR_STOP;
+   257		if (termios->c_cflag & PARENB)
+   258			cval |= UART_LCR_PARITY;
+   259		if (!(termios->c_cflag & PARODD))
+   260			cval |= UART_LCR_EPAR;
+   261	
+   262		for (;;) {
+   263			baud = tty_termios_baud_rate(termios);
+   264			if (baud == 0)
+   265				baud = 9600;  /* Special case: B0 rate. */
+   266			if (baud <= port->uartclk)
+   267				break;
+   268			/*
+   269			 * Oops, the quotient was zero.  Try again with the old
+   270			 * baud rate if possible, otherwise default to 9600.
+   271			 */
+   272			termios->c_cflag &= ~CBAUD;
+   273			if (old) {
+   274				termios->c_cflag |= old->c_cflag & CBAUD;
+   275				old = NULL;
+   276			} else
+   277				termios->c_cflag |= B9600;
+   278		}
+   279		quot = (2 * port->uartclk + baud) / (2 * baud);
+   280	
+   281		if (baud < 2400)
+   282			fcr = UART_FCR_ENABLE_FIFO | UART_FCR_TRIGGER_1;
+   283		else
+   284			fcr = UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_10;
+   285	
+   286		port->read_status_mask = UART_LSR_OE | UART_LSR_THRE | UART_LSR_DR;
+   287		if (termios->c_iflag & INPCK)
+   288			port->read_status_mask |= UART_LSR_FE | UART_LSR_PE;
+   289		if (termios->c_iflag & (BRKINT | PARMRK))
+   290			port->read_status_mask |= UART_LSR_BI;
+   291	
+   292		/*
+   293		 * Characters to ignore
+   294		 */
+   295		port->ignore_status_mask = 0;
+   296		if (termios->c_iflag & IGNPAR)
+   297			port->ignore_status_mask |= UART_LSR_PE | UART_LSR_FE;
+   298		if (termios->c_iflag & IGNBRK) {
+   299			port->ignore_status_mask |= UART_LSR_BI;
+   300			/*
+   301			 * If we're ignoring parity and break indicators,
+   302			 * ignore overruns too (for real raw support).
+   303			 */
+   304			if (termios->c_iflag & IGNPAR)
+   305				port->ignore_status_mask |= UART_LSR_OE;
+   306		}
+   307	
+   308		/*
+   309		 * ignore all characters if CREAD is not set
+   310		 */
+   311		if ((termios->c_cflag & CREAD) == 0)
+   312			port->ignore_status_mask |= UART_LSR_DR;
+   313	
+   314		/*
+   315		 * CTS flow control flag and modem status interrupts
+   316		 */
+   317		port->ier &= ~UART_IER_MSI;
+   318		if ((termios->c_cflag & CRTSCTS) || !(termios->c_cflag & CLOCAL))
+   319			port->ier |= UART_IER_MSI;
+   320	
+   321		port->lcr = cval;
+   322	
+   323		sdio_out(port, UART_IER, port->ier);
+   324		sdio_out(port, UART_LCR, cval | UART_LCR_DLAB);
+   325		sdio_out(port, UART_DLL, quot & 0xff);
+   326		sdio_out(port, UART_DLM, quot >> 8);
+   327		sdio_out(port, UART_LCR, cval);
+   328		sdio_out(port, UART_FCR, fcr);
+   329	
+   330		sdio_uart_write_mctrl(port, port->mctrl);
+   331	}
+   332	
 
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> index 6e04e3848261..d7805f31ccc2 100644
-> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> @@ -24,6 +24,8 @@ properties:
->            - fsl,imxrt1050-lpuart
->        - items:
->            - enum:
-> +              - fsl,imx93-lpuart
-> +              - fsl,imx93-lpuart-v2
->                - fsl,imx8qxp-lpuart
->                - fsl,imx8ulp-lpuart
->            - const: fsl,imx7ulp-lpuart
-> -- 
-> 2.25.1
-> 
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
