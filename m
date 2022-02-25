@@ -2,61 +2,61 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC264C4DE2
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Feb 2022 19:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262D94C4DDE
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Feb 2022 19:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbiBYSfG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 25 Feb 2022 13:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
+        id S233277AbiBYSe6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 25 Feb 2022 13:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiBYSfB (ORCPT
+        with ESMTP id S233267AbiBYSe5 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:35:01 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0A01A8CBD
-        for <linux-serial@vger.kernel.org>; Fri, 25 Feb 2022 10:34:28 -0800 (PST)
+        Fri, 25 Feb 2022 13:34:57 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6BA1A8CA3
+        for <linux-serial@vger.kernel.org>; Fri, 25 Feb 2022 10:34:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645814068; x=1677350068;
+  t=1645814064; x=1677350064;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AWcWqNTCdAVoq0CzsMS2d/hoo3sz2Vx6l2pyUzXy78w=;
-  b=ZmKWBoUfYgrcU7ulSO6BHUq7BPdn15eOuAE4KfetdXb38p1OBosjnEgz
-   4ZGQk9+UGNfRXzILcAa6S/CBGfJDsJuDzAfimT7gPqAiijOMDTEfGokwE
-   uHtH1qKvvIJhqlQy4UExSJZndxTala/I0u8+HnNC0KcUZICUWXpJ9x73K
-   EDFiRPUMw5RWr1fHgAWsKil2zmOcn/88iQYqn98km5T3jj5sP/usVrU65
-   8SMSHwiyfpPKTEAP6nhBHsunmPp6vlw2qvFaOiJ8LBeUMu3cP5BMwD1ar
-   e0jo12yUtvDYvmMAbbAfkRjJbNXUXyXX6SWG6rXZljkLPsOBJ20IljLe5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="250135001"
+  bh=o3dYNdGend36tbyPV31Ez828nq6NrQaWsdVTQlqzhw0=;
+  b=UPxHFxmvBw6BrNNwow1Ba9fPkXDsa5iVycnwdgGx4RA6xqjq6H0xtkV/
+   ME0rEt3LgytVNcB5W/1oBFr0jfmsR4zME/5rC7cVI6NWJCnqD/b/fTQoi
+   1m4NNt7yqMXVE5I913DoHQClw63UJqFX/uKR8foKKq4Tlba3L5sic8SoN
+   wVcWG7CBgrjkn9njrKTqSRlcJgNoH5be0lNiFhCRFXbFkRL6yhwnjtOQj
+   yJkALm2fZopeEQSDS4uQ6u2cU8JO1V9fYswdwutNc9Txl+szULjFYOUYk
+   99MlMKbhav1wDvydjeINFuxu1UQ/l1rrBQqwZPmNvEC8UhoAcv7Zyl9KB
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338992332"
 X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="250135001"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 10:34:28 -0800
+   d="scan'208";a="338992332"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 10:34:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,137,1643702400"; 
-   d="scan'208";a="549371034"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="509356555"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2022 10:34:22 -0800
+  by orsmga006.jf.intel.com with ESMTP; 25 Feb 2022 10:34:22 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nNfQ5-0004bp-Ks; Fri, 25 Feb 2022 18:34:21 +0000
-Date:   Sat, 26 Feb 2022 02:34:05 +0800
+        id 1nNfQ5-0004bl-Ji; Fri, 25 Feb 2022 18:34:21 +0000
+Date:   Sat, 26 Feb 2022 02:34:09 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-serial@vger.kernel.org,
+Cc:     kbuild-all@lists.01.org, linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [tty:tty-testing 31/42] drivers/mmc/core/sdio_uart.c:253:9: error:
- implicit declaration of function 'UART_LCR_WLEN'
-Message-ID: <202202260016.JwqeCxcs-lkp@intel.com>
+Subject: [tty:tty-testing 31/42] drivers/mmc/core/sdio_uart.c:253:16: error:
+ implicit declaration of function 'UART_LCR_WLEN'; did you mean
+ 'UART_LCR_WLEN5'?
+Message-ID: <202202260105.p77piygB-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,33 +66,33 @@ X-Mailing-List: linux-serial@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
 head:   a6d8f09319fff9e6e7a91cadb19923b8cb2573e0
 commit: b6f8eaea0cf1afe2500f8af7b6cc805647fe4889 [31/42] sdio_uart: make use of UART_LCR_WLEN() + tty_get_char_size()
-config: arm-s3c2410_defconfig (https://download.01.org/0day-ci/archive/20220226/202202260016.JwqeCxcs-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+config: arc-randconfig-r043-20220225 (https://download.01.org/0day-ci/archive/20220226/202202260105.p77piygB-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?id=b6f8eaea0cf1afe2500f8af7b6cc805647fe4889
         git remote add tty https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
         git fetch --no-tags tty tty-testing
         git checkout b6f8eaea0cf1afe2500f8af7b6cc805647fe4889
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/mmc/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/mmc/core/sdio_uart.c:253:9: error: implicit declaration of function 'UART_LCR_WLEN' [-Werror,-Wimplicit-function-declaration]
-           cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
-                  ^
-   1 error generated.
+   drivers/mmc/core/sdio_uart.c: In function 'sdio_uart_change_speed':
+>> drivers/mmc/core/sdio_uart.c:253:16: error: implicit declaration of function 'UART_LCR_WLEN'; did you mean 'UART_LCR_WLEN5'? [-Werror=implicit-function-declaration]
+     253 |         cval = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
+         |                ^~~~~~~~~~~~~
+         |                UART_LCR_WLEN5
+   cc1: some warnings being treated as errors
 
 
-vim +/UART_LCR_WLEN +253 drivers/mmc/core/sdio_uart.c
+vim +253 drivers/mmc/core/sdio_uart.c
 
    245	
    246	static void sdio_uart_change_speed(struct sdio_uart_port *port,
