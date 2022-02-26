@@ -2,100 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BD54C552F
-	for <lists+linux-serial@lfdr.de>; Sat, 26 Feb 2022 11:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA74C57CD
+	for <lists+linux-serial@lfdr.de>; Sat, 26 Feb 2022 20:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiBZKdK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 26 Feb 2022 05:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S232908AbiBZTPp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 26 Feb 2022 14:15:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiBZKdJ (ORCPT
+        with ESMTP id S232904AbiBZTPo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 26 Feb 2022 05:33:09 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C37B344E0;
-        Sat, 26 Feb 2022 02:32:34 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 7CF2292009D; Sat, 26 Feb 2022 11:32:31 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 77FE792009C;
-        Sat, 26 Feb 2022 10:32:31 +0000 (GMT)
-Date:   Sat, 26 Feb 2022 10:32:31 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] serial: 8250: Report which option to enable for
- blacklisted PCI devices
-In-Reply-To: <Yhiixm/iRlnF18B7@kroah.com>
-Message-ID: <alpine.DEB.2.21.2202251753530.25061@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2202121646020.34636@angie.orcam.me.uk> <alpine.DEB.2.21.2202121706060.34636@angie.orcam.me.uk> <Yhiixm/iRlnF18B7@kroah.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sat, 26 Feb 2022 14:15:44 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB66350069
+        for <linux-serial@vger.kernel.org>; Sat, 26 Feb 2022 11:15:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645902909; x=1677438909;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kOnomP9I3Pfl7Kza1qHl7P6ejed/MKwSnjWjpnggpwI=;
+  b=OHe2x50bgZLkcbKTKUEhMeo70Kef66DpYMCZJ0fK+mqdSRXZfR/6wuS0
+   pLFefD00E75sFsQYEltoDz3COgTAcAP4lYcBdEyvZIciRPL3COLl/COxk
+   GGlMX7R16OjFEDHw9z+0onLSSXm4cvA7GTCSJQxg/AveBQalHfMhi+n/W
+   kXX1r3oQIFXm3B+z26xChfWPAik2G6Sve6VY617zKyALUX1ZczygICqoU
+   B9QGU1u4xxRL0t3WLToJjoxB6hkUmtXmR2uB93DmN88nnZX1NzIof37or
+   NSUynTVZgM/kwOu/hYfFucipNMuF8el2iGGoaaNc4J/xmymDhlWC1srBM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10270"; a="313396769"
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="313396769"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 11:15:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="549700813"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Feb 2022 11:15:06 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nO2X4-0005sS-66; Sat, 26 Feb 2022 19:15:06 +0000
+Date:   Sun, 27 Feb 2022 03:14:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yu Tu <yu.tu@amlogic.com>
+Cc:     kbuild-all@lists.01.org, linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [tty:tty-testing 30/42] meson_uart.c:undefined reference to
+ `__clk_get_name'
+Message-ID: <202202262312.11J4P9pP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 25 Feb 2022, Greg Kroah-Hartman wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+head:   71404f653cf7858fdbb81dd5419a8a4ac4ffa20c
+commit: 44023b8e1f14bc72bb773dd84dc3563fc912d210 [30/42] tty: serial: meson: Describes the calculation of the UART baud rate clock using a clock frame
+config: s390-randconfig-p002-20220226 (https://download.01.org/0day-ci/archive/20220226/202202262312.11J4P9pP-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?id=44023b8e1f14bc72bb773dd84dc3563fc912d210
+        git remote add tty https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
+        git fetch --no-tags tty tty-testing
+        git checkout 44023b8e1f14bc72bb773dd84dc3563fc912d210
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-> On Sat, Feb 12, 2022 at 05:30:59PM +0000, Maciej W. Rozycki wrote:
-> > Provide information in the kernel log as to what configuration option to 
-> > enable for PCI UART devices that have been blacklisted in the generic 
-> > PCI 8250 UART driver and which have a dedicated driver available to 
-> > handle that has been disabled.  The rationale is there is no easy way 
-> > for the user to map a specific PCI vendor:device pair to an individual 
-> > dedicated driver while the generic driver has this information readily 
-> > available and it will likely be confusing that the generic driver does 
-> > not register such a port.
-> > 
-> > A message is then printed like:
-> > 
-> > serial 0000:04:00.3: ignoring port, enable SERIAL_8250_PERICOM to handle
-> > 
-> > when an affected device is encountered and the generic driver rejects it.
-> > 
-> > Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> 
-> I've applied patch 1 of this series, but this is really an odd one.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
- Thank you.
+All errors (new ones prefixed by >>):
 
-> We don't do this for any other driver subsystem, so why is it really
-> needed?  What is so special about this driver that distros can't
-> just enable all of the drivers and all is good?  What is keeping those
-> drivers fromb eing enabled?
+   s390-linux-ld: drivers/tty/serial/meson_uart.o: in function `meson_uart_probe_clocks.constprop.0':
+>> meson_uart.c:(.text+0xc64): undefined reference to `__clk_get_name'
+>> s390-linux-ld: meson_uart.c:(.text+0xc80): undefined reference to `devm_clk_hw_register_fixed_factor'
+>> s390-linux-ld: meson_uart.c:(.text+0xd00): undefined reference to `__clk_get_name'
+>> s390-linux-ld: meson_uart.c:(.text+0xd68): undefined reference to `__devm_clk_hw_register_divider'
+>> s390-linux-ld: meson_uart.c:(.text+0xe80): undefined reference to `__devm_clk_hw_register_mux'
+>> s390-linux-ld: meson_uart.c:(.text+0xe94): undefined reference to `clk_hw_get_rate'
+>> s390-linux-ld: meson_uart.c:(.text+0xf12): undefined reference to `clk_hw_get_name'
+   s390-linux-ld: meson_uart.c:(.text+0xf70): undefined reference to `__devm_clk_hw_register_divider'
 
- My justification is we have a supposedly generic PCI 8250 UART driver, 
-except it explicitly and silently refuses to handle a handful of devices 
-chosen by their PCI IDs based on that they may have extra features, even 
-though they are otherwise fully compatible with a generic 8250.
-
- For distributions it probably does not matter as long as the packager 
-does not forget to enable an option, which itself might be a problem (I've 
-seen distributions missing drivers randomly).  A user who configures their 
-kernel on their own may simply not be aware that for one card enabling 
-SERIAL_8250_PCI will do while for another almost identical card they need 
-to use SERIAL_8250_foo instead even though it's just another PCI 8250 
-UART.
-
- Consequently someone may well waste a day trying to figure out why their 
-card does not work (is it faulty perhaps, is there a configuration error 
-with the hardware?).  Even if they actually realise it's a kernel config 
-issue, they may still have to go through a trial-and-error experience 
-trying to figure out which driver to enable.  While the generic driver 
-knows perfectly well.  Then why not make people's life easier and let them 
-know as well what is going on?
-
- I don't think we have another case like this, do we?  Hence my proposal.
-
- Have I made myself clear now?  What are your actual arguments against my 
-reasoning?
-
-  Maciej
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
