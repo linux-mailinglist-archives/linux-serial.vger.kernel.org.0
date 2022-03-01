@@ -2,118 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10CA4C85A5
-	for <lists+linux-serial@lfdr.de>; Tue,  1 Mar 2022 08:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3303D4C8563
+	for <lists+linux-serial@lfdr.de>; Tue,  1 Mar 2022 08:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiCAH6m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 1 Mar 2022 02:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S233068AbiCAHms (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 1 Mar 2022 02:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiCAH6m (ORCPT
+        with ESMTP id S233069AbiCAHmr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 1 Mar 2022 02:58:42 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366A850B21;
-        Mon, 28 Feb 2022 23:58:01 -0800 (PST)
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 1 Mar
- 2022 15:57:57 +0800
-Message-ID: <154c3e60-f111-6760-aa08-b9851d66b034@amlogic.com>
-Date:   Tue, 1 Mar 2022 15:57:56 +0800
+        Tue, 1 Mar 2022 02:42:47 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E417CDD5;
+        Mon, 28 Feb 2022 23:42:06 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K78Kq67k8zBrRV;
+        Tue,  1 Mar 2022 15:40:15 +0800 (CST)
+Received: from localhost.localdomain (10.175.102.38) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 1 Mar 2022 15:42:03 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     <weiyongjun1@huawei.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+CC:     <linux-serial@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] serial: mvebu-uart: fix return value check in mvebu_uart_clock_probe()
+Date:   Tue, 1 Mar 2022 07:58:06 +0000
+Message-ID: <20220301075806.3950108-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V7 0/6] Use CCF to describe the UART baud rate clock
-Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220225073922.3947-1-yu.tu@amlogic.com>
- <849a95fd-ae81-9a3b-0c06-dd7826af9eb2@baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <849a95fd-ae81-9a3b-0c06-dd7826af9eb2@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.102.38]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Neil,
+In case of error, the function devm_ioremap() returns NULL pointer
+not ERR_PTR(). The IS_ERR() test in the return value check should
+be replaced with NULL test.
 
-On 2022/3/1 15:25, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Hi,
-> 
-> Le 25/02/2022 à 08:39, Yu Tu a écrit :
->> Using the common Clock code to describe the UART baud rate
->> clock makes it easier for the UART driver to be compatible
->> with the baud rate requirements of the UART IP on different
->> meson chips. Add Meson S4 SoC compatible.
->>
->> The test method:
->> Start the console and run the following commands in turn:
->> stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600.
->>
->> Since most SoCs are too old, I was able to find all the platforms myself
->> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
->> G12A and S4.
->>
->> Yu Tu (6):
->>    tty: serial: meson: Move request the register region to probe
->>    tty: serial: meson: Use devm_ioremap_resource to get register mapped
->>      memory
->>    tty: serial: meson: Describes the calculation of the UART baud rate
->>      clock using a clock frame
->>    tty: serial: meson: Make some bit of the REG5 register writable
->>    tty: serial: meson: The system stuck when you run the stty command on
->>      the console to change the baud rate
->>    tty: serial: meson: Added S4 SOC compatibility
->>
->> V6 -> V7: To solve the system stuck when you run the stty command on
->> the console to change the baud rate.
->> V5 -> V6: Change error format as discussed in the email.
->> V4 -> V5: Change error format.
->> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
->> in the email.
->> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must 
->> change
->> the DTS before it can be deleted
->> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some 
->> changes as
->> discussed in the email
->>
->> Link:https://lore.kernel.org/linux-amlogic/20220118030911.12815-4-yu.tu@amlogic.com/ 
->>
->>
->>   drivers/tty/serial/meson_uart.c | 221 ++++++++++++++++++++++----------
->>   1 file changed, 154 insertions(+), 67 deletions(-)
->>
->>
->> base-commit: a603ca60cebff8589882427a67f870ed946b3fc8
-> 
-> Could you send the emails To Kevin, Jerome, Martin & me, and put the 
-> various lists in CC instead ? otherwise we are not notified when the 
-> patch is accepted by the tty maintainer.
-The fact is that sending is adding you up, you see
-Link: 
-https://lore.kernel.org/linux-amlogic/20220225073922.3947-1-yu.tu@amlogic.com/
-> 
-> Thanks,
-> Neil
-> 
+Fixes: b7e2b5360f9b ("serial: mvebu-uart: implement UART clock driver for configuring UART base clock")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/tty/serial/mvebu-uart.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
+index 2e9263888ddc..45976e2140d4 100644
+--- a/drivers/tty/serial/mvebu-uart.c
++++ b/drivers/tty/serial/mvebu-uart.c
+@@ -1382,8 +1382,8 @@ static int mvebu_uart_clock_probe(struct platform_device *pdev)
+ 	 */
+ 	uart_clock_base->reg1 = devm_ioremap(dev, res->start,
+ 					     resource_size(res));
+-	if (IS_ERR(uart_clock_base->reg1))
+-		return PTR_ERR(uart_clock_base->reg1);
++	if (!uart_clock_base->reg1)
++		return -ENOMEM;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+ 	if (!res) {
+@@ -1401,8 +1401,8 @@ static int mvebu_uart_clock_probe(struct platform_device *pdev)
+ 	 */
+ 	uart_clock_base->reg2 = devm_ioremap(dev, res->start,
+ 					     resource_size(res));
+-	if (IS_ERR(uart_clock_base->reg2))
+-		return PTR_ERR(uart_clock_base->reg2);
++	if (!uart_clock_base->reg2)
++		return -ENOMEM;
+ 
+ 	hw_clk_data = devm_kzalloc(dev,
+ 				   struct_size(hw_clk_data, hws,
+
