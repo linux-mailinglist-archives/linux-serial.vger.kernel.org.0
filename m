@@ -2,296 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A5C4C890C
-	for <lists+linux-serial@lfdr.de>; Tue,  1 Mar 2022 11:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E93544C8C33
+	for <lists+linux-serial@lfdr.de>; Tue,  1 Mar 2022 14:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiCAKNX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 1 Mar 2022 05:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S233990AbiCANDf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 1 Mar 2022 08:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbiCAKNW (ORCPT
+        with ESMTP id S234890AbiCANDe (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 1 Mar 2022 05:13:22 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B658240A20;
-        Tue,  1 Mar 2022 02:12:39 -0800 (PST)
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 1 Mar
- 2022 18:12:37 +0800
-Message-ID: <4712c41c-fc9f-e8d1-c233-a6c2de0c23dd@amlogic.com>
-Date:   Tue, 1 Mar 2022 18:12:36 +0800
+        Tue, 1 Mar 2022 08:03:34 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B65FF2E
+        for <linux-serial@vger.kernel.org>; Tue,  1 Mar 2022 05:02:52 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id bc27so5470232pgb.4
+        for <linux-serial@vger.kernel.org>; Tue, 01 Mar 2022 05:02:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
+        b=I9+1Zbt0ximD+EfMcIUx3a2l1GIvD6ikd2vWhHQZyGSrsUnAipgBmBGqwkFszTbXbS
+         ChKWrg/ujsdeRWu0pTksl/OwARrCKdw6mTc5U2z0E0Jf9Q+830QEiTK4w7DaloN7Pkoh
+         nOhY4NVX44D1U/vDoZRtLWHVkchHcMeaIkqUfdOjGK3jPkmRHj2ppVm1CwLeIUIHt/z0
+         LelPvGX3XDZG4NRmAU9iuuAJqG8Rj37VwQ2/X+5mtGBiPqQa3ycAs3FR3ZqIaVzBBDKG
+         eDW+GskCJ2TkTodwh583qLOSIFzqwxdwiKIenbb1HW82m8AiBJ8IbKAIq4HyUG3rvlpC
+         7r/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
+        b=XSCLcGLQcd0Cb4RzALp2gwwzEjQZ6TKbVqh64Es3Uc2NCJ/w71nvARPfIxab9pJR2C
+         F4ORDCbivITKOjMqq+p+TXP92R961D5Ur3R6btrSc6CK+d89psI2JQW+x7P6Kjd+N7Wh
+         kyphMOZDT/VbjBdTpkmvsIU9dVgpKRTH+g6lv3HfFHEKR7kY+p3G06j78BGGWOyVRvPQ
+         IKzdDsmP0UGbkUuKPy+JKJizXRLVIXRzsJQbL366Iig+JCt4YQI3XlYP5lSRXX0qEW+a
+         XiIzWWmNe4UUIxDeMUGjMWzBTXqroa7fLyV1iJ2thTTe7sQYN0nus2/mmuYqsLrRMMQP
+         Z4ug==
+X-Gm-Message-State: AOAM531t+qpZjbjtWug3nemBLcjEe1VUvQWAjr6qRLz9LbxXhFnfdui3
+        Ew1/BNBKAvOl9+bI3KwmW8IG1WTJfce05q16fUc=
+X-Google-Smtp-Source: ABdhPJys9IiFYGA9Gi+Dczx11GW/scR9xruH4Q88+a/H9Ega/2PnKW9PJf96gUfOM3wyqSklbKU+dtW76pMDESbAwJs=
+X-Received: by 2002:a63:2c53:0:b0:373:7234:adf2 with SMTP id
+ s80-20020a632c53000000b003737234adf2mr21494162pgs.111.1646139771873; Tue, 01
+ Mar 2022 05:02:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V7 0/6] Use CCF to describe the UART baud rate clock
-Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220225073922.3947-1-yu.tu@amlogic.com>
- <1j8rtvxnkv.fsf@starbuckisacylon.baylibre.com>
- <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
- <1jilsyvyz9.fsf@starbuckisacylon.baylibre.com>
- <0054cf2f-f09d-5b01-d6ca-0dc877a757c3@amlogic.com>
- <c23fe6e7-879a-fab6-71ba-fcebdaf7ae37@baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <c23fe6e7-879a-fab6-71ba-fcebdaf7ae37@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:90a:4ec6:0:0:0:0 with HTTP; Tue, 1 Mar 2022 05:02:49
+ -0800 (PST)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <umarsalehtmw@gmail.com>
+Date:   Tue, 1 Mar 2022 05:02:49 -0800
+Message-ID: <CAHup-S5p26kZccVy_y2N2Rwwfuu8C1J2k1nOCjAqsphfAFwXZQ@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:542 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4376]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lilywilliam989[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [umarsalehtmw[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Neil,
-	Thank you very much for your advice.
+-- 
+Hi Dear,
 
-On 2022/3/1 17:27, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Hi,
-> 
-> On 01/03/2022 10:01, Yu Tu wrote:
->> Hi Jerome,
->>
->> On 2022/3/1 16:36, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>>
->>> On Tue 01 Mar 2022 at 13:54, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> Hi Jerome,
->>>>
->>>> On 2022/2/28 18:59, Jerome Brunet wrote:
->>>>> [ EXTERNAL EMAIL ]
->>>>>
->>>>> On Fri 25 Feb 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>
->>>>>> Using the common Clock code to describe the UART baud rate
->>>>>> clock makes it easier for the UART driver to be compatible
->>>>>> with the baud rate requirements of the UART IP on different
->>>>>> meson chips. Add Meson S4 SoC compatible.
->>>>>>
->>>>>> The test method:
->>>>>> Start the console and run the following commands in turn:
->>>>>> stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600.
->>>>>>
->>>>>> Since most SoCs are too old, I was able to find all the platforms 
->>>>>> myself
->>>>>> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
->>>>>> G12A and S4.
->>>>> GXL based board are still very common an easy to come by.
->>>>> I'm quite surprised that you are unable to test on this SoC family
->>>> The fact of the matter is that the S4 is our end-2020 chip, the G12A is
->>>> five years old, and the GXL is seven years old. If you must ask for a
->>>> test, I will report this problem to the leadership to coordinate 
->>>> resources.
->>>
->>> The age of the SoC is irrelevant. SoCs don't get deprecated based on age
->>> in mainline. It is not just GXL, same goes for meson8.
->>>
->>> These SoCs are actively used. Boards with these SoCs are still sold and
->>> easily available. See the VIM1 or the Libretech boards.
->>>
->>> Breaking things for the the users of these SoCs is not acceptable.
->>> So yes, looking at your series, I strongly recommend you do more tests.
->>>
->> You have a point there. Let's go back to the root of the problem. I 
->> aim to increase S4. The S4 uses 12MHZ to calculate baud. That's all.
->> Change it to CCF as you suggested. The changes are so large that you 
->> ask to test all the chips.
->> I also mentioned last time that using CCF would lead to a longer drive 
->> probe time and affect the board startup time. If this problem is not 
->> solved, can we reject the way you suggest using CCF?
-> 
-> I have a much simpler proposal (non-tested):
-> 
-I can test it for you. But if you need to add S4 chips. Again, we need 
-to add a judgment. Is that acceptable to you?
+My name is Lily William, I am from the United States of America. It's my
+pleasure to contact you for a new and special friendship. I will be glad to
+see your reply so we can get to know each other better.
 
-What we've been talking about for a long time is how to make the least 
-changes and the least impact for the S4.
-
-The fact is that Amlogic has recommended 12MHz for baud rates for all 
-chips starting with the G12A. I really doubt whether the G12A/B and SM1 
-were tested before. So if we want to upload subsequent Amlogic chips, 
-not only the S4 needs to solve the 12MHz problem, but other chips can't 
-get around this area.
-> ============><===================================================
-> diff --git a/drivers/tty/serial/meson_uart.c 
-> b/drivers/tty/serial/meson_uart.c
-> index 45e00d928253..eda3fdad60d1 100644
-> --- a/drivers/tty/serial/meson_uart.c
-> +++ b/drivers/tty/serial/meson_uart.c
-> @@ -76,6 +76,12 @@
->   #define AML_UART_POLL_USEC        5
->   #define AML_UART_TIMEOUT_USEC        10000
-> 
-> +struct meson_uart_data {
-> +    struct clk    *clk_pclk;
-> +    struct clk    *clk_xtal;
-> +    struct clk    *clk_baud;
-> +};
-> +
->   static struct uart_driver meson_uart_driver;
-> 
->   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
-> @@ -293,16 +299,17 @@ static int meson_uart_startup(struct uart_port *port)
-> 
->   static void meson_uart_change_speed(struct uart_port *port, unsigned 
-> long baud)
->   {
-> +    struct meson_uart_data *private_data = port->private_data;
->       u32 val;
-> 
->       while (!meson_uart_tx_empty(port))
->           cpu_relax();
-> 
-> -    if (port->uartclk == 24000000) {
-> -        val = ((port->uartclk / 3) / baud) - 1;
-> +    if (clk_is_match(private_data->clk_baud, private_data->clk_xtal)) {
-> +        val = ((clk_get_rate(private_data->clk_baud) / 3) / baud) - 1;
->           val |= AML_UART_BAUD_XTAL;
->       } else {
-> -        val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
-> +        val = ((clk_get_rate(private_data->clk_baud) * 10 / (baud * 4) 
-> + 5) / 10) - 1;
->       }
->       val |= AML_UART_BAUD_USE;
->       writel(val, port->membase + AML_UART_REG5);
-> @@ -666,31 +673,26 @@ static inline struct clk 
-> *meson_uart_probe_clock(struct device *dev,
->   }
-> 
->   static int meson_uart_probe_clocks(struct platform_device *pdev,
-> -                   struct uart_port *port)
-> +                   struct meson_uart_data *private_data)
->   {
-> -    struct clk *clk_xtal = NULL;
-> -    struct clk *clk_pclk = NULL;
-> -    struct clk *clk_baud = NULL;
-> -
-> -    clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> -    if (IS_ERR(clk_pclk))
-> -        return PTR_ERR(clk_pclk);
-> +    private_data->clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
-> +    if (IS_ERR(private_data->clk_pclk))
-> +        return PTR_ERR(private_data->clk_pclk);
-> 
-> -    clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> -    if (IS_ERR(clk_xtal))
-> -        return PTR_ERR(clk_xtal);
-> +    private_data->clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
-> +    if (IS_ERR(private_data->clk_xtal))
-> +        return PTR_ERR(private_data->clk_xtal);
-> 
-> -    clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> -    if (IS_ERR(clk_baud))
-> -        return PTR_ERR(clk_baud);
-> -
-> -    port->uartclk = clk_get_rate(clk_baud);
-> +    private_data->clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
-> +    if (IS_ERR(private_data->clk_baud))
-> +        return PTR_ERR(private_data->clk_baud);
-> 
->       return 0;
->   }
-> 
->   static int meson_uart_probe(struct platform_device *pdev)
->   {
-> +    struct meson_uart_data *private_data;
->       struct resource *res_mem;
->       struct uart_port *port;
->       u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
-> @@ -714,6 +716,11 @@ static int meson_uart_probe(struct platform_device 
-> *pdev)
->       if (pdev->id < 0 || pdev->id >= AML_UART_PORT_NUM)
->           return -EINVAL;
-> 
-> +    private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
-> +                    GFP_KERNEL);
-> +    if (!private_data)
-> +        return -ENOMEM;
-> +
->       res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->       if (!res_mem)
->           return -ENODEV;
-> @@ -733,7 +740,7 @@ static int meson_uart_probe(struct platform_device 
-> *pdev)
->       if (!port)
->           return -ENOMEM;
-> 
-> -    ret = meson_uart_probe_clocks(pdev, port);
-> +    ret = meson_uart_probe_clocks(pdev, private_data);
->       if (ret)
->           return ret;
-> 
-> @@ -749,6 +756,7 @@ static int meson_uart_probe(struct platform_device 
-> *pdev)
->       port->x_char = 0;
->       port->ops = &meson_uart_ops;
->       port->fifosize = fifosize;
-> +    port->private_data = private_data;
-> 
->       meson_ports[pdev->id] = port;
->       platform_set_drvdata(pdev, port);
-> ============><===================================================
-> 
-> Neil
-> 
->>>>>
->>>>>>
->>>>>> Yu Tu (6):
->>>>>>     tty: serial: meson: Move request the register region to probe
->>>>>>     tty: serial: meson: Use devm_ioremap_resource to get register 
->>>>>> mapped
->>>>>>       memory
->>>>>>     tty: serial: meson: Describes the calculation of the UART baud 
->>>>>> rate
->>>>>>       clock using a clock frame
->>>>>>     tty: serial: meson: Make some bit of the REG5 register writable
->>>>>>     tty: serial: meson: The system stuck when you run the stty 
->>>>>> command on
->>>>>>       the console to change the baud rate
->>>>>>     tty: serial: meson: Added S4 SOC compatibility
->>>>>>
->>>>>> V6 -> V7: To solve the system stuck when you run the stty command on
->>>>>> the console to change the baud rate.
->>>>>> V5 -> V6: Change error format as discussed in the email.
->>>>>> V4 -> V5: Change error format.
->>>>>> V3 -> V4: Change CCF to describe the UART baud rate clock as 
->>>>>> discussed
->>>>>> in the email.
->>>>>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it 
->>>>>> must change
->>>>>> the DTS before it can be deleted
->>>>>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some 
->>>>>> changes as
->>>>>> discussed in the email
->>>>>>
->>>>>> Link:https://lore.kernel.org/linux-amlogic/20220118030911.12815-4-yu.tu@amlogic.com/ 
->>>>>>
->>>>>>
->>>>>>    drivers/tty/serial/meson_uart.c | 221 
->>>>>> ++++++++++++++++++++++----------
->>>>>>    1 file changed, 154 insertions(+), 67 deletions(-)
->>>>>>
->>>>>>
->>>>>> base-commit: a603ca60cebff8589882427a67f870ed946b3fc8
->>>>>
->>>
-> 
+Yours
+Lily
