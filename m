@@ -2,77 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A85B4C8699
-	for <lists+linux-serial@lfdr.de>; Tue,  1 Mar 2022 09:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4792F4C8712
+	for <lists+linux-serial@lfdr.de>; Tue,  1 Mar 2022 09:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbiCAIft (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 1 Mar 2022 03:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S233561AbiCAIuh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 1 Mar 2022 03:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiCAIfq (ORCPT
+        with ESMTP id S233578AbiCAIug (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 1 Mar 2022 03:35:46 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE6363BE7
-        for <linux-serial@vger.kernel.org>; Tue,  1 Mar 2022 00:35:05 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id s1so20935064edd.13
-        for <linux-serial@vger.kernel.org>; Tue, 01 Mar 2022 00:35:05 -0800 (PST)
+        Tue, 1 Mar 2022 03:50:36 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1954C89332
+        for <linux-serial@vger.kernel.org>; Tue,  1 Mar 2022 00:49:54 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id s24so21026933edr.5
+        for <linux-serial@vger.kernel.org>; Tue, 01 Mar 2022 00:49:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version:content-transfer-encoding;
-        bh=581d5D6KA6uGeEFhWJuvM1NIBuXYywCqvyH8LTd14IA=;
-        b=btbiwNi69t//ZAp+SKv0Q4ykiUFt5Vcee8OG/aZUV/3/mEL6qCooFVbyDvhieBabec
-         CkXz6UGXrke98ZVvQ72UuAMxZwsIfwh+3g3tK2X0k1zbFdUDs/+/OK1fCTFFQOT7UHWN
-         z0SGermy1OptrYhdNwG2SjAF8Iy2D/bC8aVmKXNdBID/wURfxVbVE+QyMV5xd5+hVU2P
-         7UAkphywTA2sXS8jB/ps9Kcir4h64rEe4PhvIq8Fufb+E0teJ0kR087Xzr14Qd4KJ0DF
-         Qzm9enrRJsGu4gGmyGHjbsCTvR55t8XjpjYC+HsSfTFdAdWWiDXozOXw2e3X48KoaVr6
-         04YQ==
+         :message-id:mime-version;
+        bh=XXHAzHSUKx1FZRpzOVh0FkOoc+KpTYgeqdRYpbFwNrY=;
+        b=F+esdrn2u/7IDUUa1QkHWhRVrp8WFnBvGjuqIGJHuagwFCGXLVP7vSZU2U3+wERsQT
+         fWvJ+xVv29r9Vrmb9tn5rHED5cU1X8tK2CqfvV6RM7ezsNCdpa2It3cm4FlFR47szVMA
+         eCVvAxQXUxdGb0T/KPMTEqz/zILzvrx4TfoVmIeR9sr3xkFKjk0FSai0zNLjIqNh5sn+
+         fN7DjLfFSGC311dIGwM3xCmkbA+CJ1cOM9qaZ/yG4C4X3O31AX151x7loCW6uKWMF9W6
+         WUL5RqWHhqfJFCCTDtQlIVQP7aw4ks1mo9jMmZArFpwcyWc6pxYrEW01WCNfjPO6TnlG
+         /IUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version:content-transfer-encoding;
-        bh=581d5D6KA6uGeEFhWJuvM1NIBuXYywCqvyH8LTd14IA=;
-        b=3JYpAZLx0tfoBk2B3gRikmYmp2Bsn9/08O1Hqupj2EuIK/b4JbKVg2HMqOyY6e4b2g
-         WFKNIaouD7g2IL1fUrMaWNkYJ2L8Q/f3wivjk4B6KeGiGojtH3V3eTUrAPZk8ahz2E6T
-         M3U89J7koTHH+e+rlIO/QzX4QrkD0lpkhUn7pstsxxgP0YTb4BvUIB1z6EgCYP3PC4VU
-         UM4mPTVpmqPu9bkFIv7X1++Rb/KhAa7zPK2uY5Xd3esdk4+lqcQhwp3+uexfzXnnrnK5
-         ZwLJMcYEhbohjU+usfoB3Rh4LVwYYDvAFo0/UJXO9hqgyicUnQj0Bz0oE4/poJqGBdAv
-         lbpA==
-X-Gm-Message-State: AOAM533LT/KKzF6z7CnHEr65bYGf6I6B+i66BO8T9COx2EXlcXdpNnTu
-        9phw4BFwP1sIgBKsCY2eBn+yRA==
-X-Google-Smtp-Source: ABdhPJwubftsKZHHyeS1ZbNkCnU+nk1j6sKjNZ5wyeunS3woMMkfozT4OFVs7GF4Plw+VBgaQ0e1+g==
-X-Received: by 2002:aa7:cb96:0:b0:413:8d05:ebc with SMTP id r22-20020aa7cb96000000b004138d050ebcmr14581306edt.81.1646123704506;
-        Tue, 01 Mar 2022 00:35:04 -0800 (PST)
+         :in-reply-to:message-id:mime-version;
+        bh=XXHAzHSUKx1FZRpzOVh0FkOoc+KpTYgeqdRYpbFwNrY=;
+        b=ROOglUYJBr0tvHbHgp0KFc8LN9dOaEjJopdOmHNCZa8u6HFObD4EjHTeMPIVOJHVZa
+         3O+e5lfXlGqDp0ovfaFjOleNj9TGWa1/MswTGLdjGMRy6jz07v8MZsbtWiw4+FQJ9gjT
+         gcqEsUwAPtCj/XtFubccFJycC60QOgMMM9gh3Ym0lR3Rk9mrjchudCP/niQTJRG5cCkq
+         i82g8aezz+a3szhv5PfQVa1Z0CZv5e+mgW5PLM1UMUZYtQxMLtQ69DXhjT6vHI1kn4w3
+         ukJU4VHXQoU4skhtpxNGBriIpx8AEubK0M21xV23Hrh09IEednQnMdwya9zioni9GQMp
+         DiTg==
+X-Gm-Message-State: AOAM530rK8RjJAydoIqm3SN4nWXrnVZYnD/K3h1ttviUcHFFQKFu5nAh
+        dJFBOC5bJuTnlBpHFW/DiI2qIg==
+X-Google-Smtp-Source: ABdhPJwwv92nJBUIPZ3wtAe+ZLpDEefHhE/W3cCSrhFs9ZkbcU/booLmLagFYpQio8mA18rbBXJFSQ==
+X-Received: by 2002:a05:6402:5207:b0:412:806b:6424 with SMTP id s7-20020a056402520700b00412806b6424mr23434103edd.131.1646124592564;
+        Tue, 01 Mar 2022 00:49:52 -0800 (PST)
 Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709060f5400b006d6d54b9203sm1065010ejj.38.2022.03.01.00.35.03
+        by smtp.gmail.com with ESMTPSA id d2-20020a50cf42000000b004135b6eef60sm6931187edk.94.2022.03.01.00.49.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 00:35:04 -0800 (PST)
-References: <20220228135530.6918-1-yu.tu@amlogic.com>
- <29b34655-f820-39c9-4363-878481cd3f63@baylibre.com>
- <Yh087tJhakKHs88e@kroah.com>
- <8747c5c6-a129-3a26-8ebb-9e21a18236ec@baylibre.com>
- <96dc5932-7a4c-4f92-b33b-bfd7fc4477e8@amlogic.com>
+        Tue, 01 Mar 2022 00:49:52 -0800 (PST)
+References: <20220225073922.3947-1-yu.tu@amlogic.com>
+ <1j8rtvxnkv.fsf@starbuckisacylon.baylibre.com>
+ <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
 User-agent: mu4e 1.6.10; emacs 27.1
 From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH V3] tty: serial: meson: Fix the compile link error
- reported by kernel test robot
-Date:   Tue, 01 Mar 2022 09:33:15 +0100
-In-reply-to: <96dc5932-7a4c-4f92-b33b-bfd7fc4477e8@amlogic.com>
-Message-ID: <1jmtiavznx.fsf@starbuckisacylon.baylibre.com>
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V7 0/6] Use CCF to describe the UART baud rate clock
+Date:   Tue, 01 Mar 2022 09:36:07 +0100
+In-reply-to: <d0da38f1-72c1-d111-2d0d-2bfa2faf1a1d@amlogic.com>
+Message-ID: <1jilsyvyz9.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -83,53 +77,72 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 
-On Tue 01 Mar 2022 at 15:47, Yu Tu <yu.tu@amlogic.com> wrote:
+On Tue 01 Mar 2022 at 13:54, Yu Tu <yu.tu@amlogic.com> wrote:
 
-> Hi Neil,
+> Hi Jerome,
 >
-> On 2022/3/1 15:23, Neil Armstrong wrote:
+> On 2022/2/28 18:59, Jerome Brunet wrote:
 >> [ EXTERNAL EMAIL ]
->> Hi Greg,
->> Le 28/02/2022 =C3=A0 22:21, Greg Kroah-Hartman a =C3=A9crit=C2=A0:
->>> On Mon, Feb 28, 2022 at 03:13:48PM +0100, Neil Armstrong wrote:
->>>> Hi,
->>>>
->>>> On 28/02/2022 14:55, Yu Tu wrote:
->>>>> Describes the calculation of the UART baud rate clock using a clock
->>>>> frame. Forgot to add in Kconfig kernel test Robot compilation error
->>>>> due to COMMON_CLK dependency.
->>>>>
->>>>> Fixes: ("tty: serial:meson: Describes the calculation of the UART baud
->>>>> rate clock using a clock frame=E2=80=9C)
->>>>
->>>> As I already replied on V2 of this patch, you're invited to apply these
->>>> fixes directly
->>>> on the next version of your "Use CCF to describe the UART baud rate
->>>> clock" patchset
->>>> and not as a separate patch.
+>> 
+>> On Fri 25 Feb 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
+>> 
+>>> Using the common Clock code to describe the UART baud rate
+>>> clock makes it easier for the UART driver to be compatible
+>>> with the baud rate requirements of the UART IP on different
+>>> meson chips. Add Meson S4 SoC compatible.
 >>>
->>> No, this is broken in linux-next now as the path listed here is in my
->>> tree right now.
->> Oh, I wasn't aware you took this patchset.
->>=20
+>>> The test method:
+>>> Start the console and run the following commands in turn:
+>>> stty -F /dev/ttyAML0 115200 and stty -F /dev/ttyAML0 921600.
 >>>
->>> I need a fix for it, or I can revert the original.
->> Please revert the whole patchset, it's not ready yet, neither fully=20
->> reviewed ands buggy
->> on old SoCs.
-> I have tested that there is no problem with G12A and S4 boards. Can I mer=
-ge
-> them first and fix them later if there is any problem?
+>>> Since most SoCs are too old, I was able to find all the platforms myself
+>>> such as Meson6, Meson8, Meson8b, GXL and so on. I only tested it with
+>>> G12A and S4.
+>> GXL based board are still very common an easy to come by.
+>> I'm quite surprised that you are unable to test on this SoC family
+> The fact of the matter is that the S4 is our end-2020 chip, the G12A is
+> five years old, and the GXL is seven years old. If you must ask for a 
+> test, I will report this problem to the leadership to coordinate resources.
 
-That's called a regression. That is not how we do things in mainline
-There is still a lot of people using GXL boards. Those are still sold even.
+The age of the SoC is irrelevant. SoCs don't get deprecated based on age
+in mainline. It is not just GXL, same goes for meson8.
 
->> Thanks,
->> Neil
->>=20
+These SoCs are actively used. Boards with these SoCs are still sold and
+easily available. See the VIM1 or the Libretech boards.
+
+Breaking things for the the users of these SoCs is not acceptable.
+So yes, looking at your series, I strongly recommend you do more tests.
+
+>> 
 >>>
->>> thanks,
+>>> Yu Tu (6):
+>>>    tty: serial: meson: Move request the register region to probe
+>>>    tty: serial: meson: Use devm_ioremap_resource to get register mapped
+>>>      memory
+>>>    tty: serial: meson: Describes the calculation of the UART baud rate
+>>>      clock using a clock frame
+>>>    tty: serial: meson: Make some bit of the REG5 register writable
+>>>    tty: serial: meson: The system stuck when you run the stty command on
+>>>      the console to change the baud rate
+>>>    tty: serial: meson: Added S4 SOC compatibility
 >>>
->>> greg k-h
->>=20
+>>> V6 -> V7: To solve the system stuck when you run the stty command on
+>>> the console to change the baud rate.
+>>> V5 -> V6: Change error format as discussed in the email.
+>>> V4 -> V5: Change error format.
+>>> V3 -> V4: Change CCF to describe the UART baud rate clock as discussed
+>>> in the email.
+>>> V2 -> V3: add compatible = "amlogic,meson-gx-uart". Because it must change
+>>> the DTS before it can be deleted
+>>> V1 -> V2: Use CCF to describe the UART baud rate clock.Make some changes as
+>>> discussed in the email
+>>>
+>>> Link:https://lore.kernel.org/linux-amlogic/20220118030911.12815-4-yu.tu@amlogic.com/
+>>>
+>>>   drivers/tty/serial/meson_uart.c | 221 ++++++++++++++++++++++----------
+>>>   1 file changed, 154 insertions(+), 67 deletions(-)
+>>>
+>>>
+>>> base-commit: a603ca60cebff8589882427a67f870ed946b3fc8
+>> 
 
