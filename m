@@ -2,293 +2,151 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25CD4CA187
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Mar 2022 10:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A364CA205
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Mar 2022 11:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240839AbiCBJ62 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 2 Mar 2022 04:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S240953AbiCBKUl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 2 Mar 2022 05:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240837AbiCBJ6V (ORCPT
+        with ESMTP id S237437AbiCBKUl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 2 Mar 2022 04:58:21 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEC21CB07;
-        Wed,  2 Mar 2022 01:57:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646215056; x=1677751056;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6eiVEbbk45CnAZ8/EHrebW67L0OGGnBAhyrehZsBcas=;
-  b=GpB7Q8rqyqjoDT2YGvpx3qIjB7vMCdpT12M4UAwMwRnnk3Hm+FqAejWt
-   LNHrzLU93sbXNe7LILSK6q4W3kJ5YEHJ8x1S2XwddE8ckktlZTbitTPod
-   78zz9UXViM1w+9/GQIDF77k80FoZ/FcRfLQslF+Qec6oDaFbySQEK0aKP
-   cALKwhHPSC1NNpiYo6did9gjOvXG6qMGSPNWurSQPInxc5CSb41CwxXzq
-   KuuwwnLuAaethjfEYGTCP+xMzfygdvqmI6DnQln1Y1LzHVOXfH474ZUcs
-   592/VGsAVB6mydzT7J+kEBf7/2lSxK8fX0i3NHJqd2IrvaL01xRfdzbWj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="339794650"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="339794650"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:57:34 -0800
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="551182269"
-Received: from abotoi-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.218.48])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 01:57:30 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>
-Subject: [RFC PATCH 7/7] serial: 8250_dwlib: Support for 9th bit multipoint addressing
-Date:   Wed,  2 Mar 2022 11:56:06 +0200
-Message-Id: <20220302095606.14818-8-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 2 Mar 2022 05:20:41 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6576690FF3
+        for <linux-serial@vger.kernel.org>; Wed,  2 Mar 2022 02:19:58 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id x27-20020aa79a5b000000b004f3f7c2981eso1037708pfj.3
+        for <linux-serial@vger.kernel.org>; Wed, 02 Mar 2022 02:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Yq89WbWr/nKtI2RVDgbrgWiRqIUUvQxU4ZRP/u39Tc4=;
+        b=lm4zJUzyhqzs2nvdFpXSR0vlIVib2Ri38tWVjvsqeYEdwiEB/dxkr1OjSZBdKRIhWP
+         mOqCavmFBymWwOrD0rp4KYZUr0Ol+p86D4yAkeZDMOBUmioLtRyAM0Y1Re2kFojye2S9
+         /6G7U6K078XM38L9pSWDyY9HW4BfENWa5utIpmtqViWK+Ug7VhxoX0G30P6Y/VM7NA3s
+         8b6NdWbCkU5JymN+ENB5BeIRq7YDKcgcMbdIW4IuZbqJ1MlPQtNZSq9tFLPP/uvLtCWz
+         rPBhwC6kcAIriegH5SODZ3BROXUxIylYmljIiX+77sNZvgtnxxVDyiMyoxqUfQzcmhKN
+         yNhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Yq89WbWr/nKtI2RVDgbrgWiRqIUUvQxU4ZRP/u39Tc4=;
+        b=vAkUjJ6FRdIh4ZO99vubRyilhkoJhMax9rOO3icAP418a3X7mnOvRbB+3nIdox3v8J
+         gmaJUXad0k7l32TCCWBAvC5suoBJkdZ1Gsfv0p5zXH0L6ibQLQjI4laq0IYqmp+HrDqx
+         6TVltdcHupNGIY3bHzVimEX1xJ/NQD5xqYRARCTfezkvYnGXlPppNjT+bLqoEZ6nXuHr
+         0XCkiqQvtkM3KaLElpGbKZvcFIbtw86otyI/aT7JpUb9gwNlLzHv7Jpd294tCbwHzCYR
+         l+IYcYpDO/4c4rwHbiHqZu91VoanewY8XijZtxSHcNdiXEael5aD2aQAK8iKRWCpYJNJ
+         N6Bg==
+X-Gm-Message-State: AOAM531chfzrFVjaUreqRqbbsKHrlIivKagsdus4/QcYrZRg+uG8hk4R
+        YxVzq5fbmpIepAOlcdcjrIAlXo1SzrKa9Q==
+X-Google-Smtp-Source: ABdhPJzEXQNhD0xqT2s2x//pYYtesl+TerhASD0Ziddn/5GiSvMBYaO6FAMA2Ou6p+she/JPNCFbtFSgjrrJtQ==
+X-Received: from woodylin.ntc.corp.google.com ([2401:fa00:fc:202:3ddc:5127:fcb7:1fad])
+ (user=woodylin job=sendgmr) by 2002:a17:903:2285:b0:151:4b38:298e with SMTP
+ id b5-20020a170903228500b001514b38298emr20044336plh.36.1646216397851; Wed, 02
+ Mar 2022 02:19:57 -0800 (PST)
+Date:   Wed,  2 Mar 2022 18:19:25 +0800
+Message-Id: <20220302101925.210810-1-woodylin@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH] serial: samsung: Add samsung_early_read to support early kgdboc
+From:   Woody Lin <woodylin@google.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, woodylin@google.com,
+        markcheng@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This change adds 9th bit multipoint addressing mode for DW UART using
-the new ioctls introduced in the previous change. 9th bit addressing
-can be used only when HW RS485 is available.
+The 'kgdboc_earlycon_init' looks for boot console that has both .read
+and .write callbacks. Adds 'samsung_early_read' to samsung_tty.c's early
+console to support kgdboc.
 
-Updating RAR (receive address register) is bit tricky because
-busy indication is not be available when DW UART is strictly
-16550 compatible, which is the case with the hardware I was
-testing with. RAR should not be updated while receive is in
-progress which is now achieved by deasserting RE and waiting
-for one frame (in case rx would be in progress, the driver
-seems to have no way of knowing it w/o busy indication).
-
-Co-developed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Co-developed-by: Raymond Tan <raymond.tan@intel.com>
-Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-Co-developed-by: Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>
-Signed-off-by: Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Woody Lin <woodylin@google.com>
 ---
- drivers/tty/serial/8250/8250_dwlib.c | 124 +++++++++++++++++++++++++++
- drivers/tty/serial/8250/8250_dwlib.h |   3 +
- 2 files changed, 127 insertions(+)
+ drivers/tty/serial/samsung_tty.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-index 51b0f55ee9d0..57bf6ca0309b 100644
---- a/drivers/tty/serial/8250/8250_dwlib.c
-+++ b/drivers/tty/serial/8250/8250_dwlib.c
-@@ -3,9 +3,11 @@
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index d002a4e48ed9..eeb30d016ff1 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -2949,6 +2949,7 @@ static void wr_reg_barrier(struct uart_port *port, u32 reg, u32 val)
  
- #include <linux/bitops.h>
- #include <linux/bitfield.h>
-+#include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-+#include <linux/math.h>
- #include <linux/property.h>
- #include <linux/serial_8250.h>
- #include <linux/serial_core.h>
-@@ -17,6 +19,9 @@
- #define DW_UART_DE_EN	0xb0 /* Driver Output Enable Register */
- #define DW_UART_RE_EN	0xb4 /* Receiver Output Enable Register */
- #define DW_UART_DLF	0xc0 /* Divisor Latch Fraction Register */
-+#define DW_UART_RAR	0xc4 /* Receive Address Register */
-+#define DW_UART_TAR	0xc8 /* Transmit Address Register */
-+#define DW_UART_LCR_EXT	0xcc /* Line Extended Control Register */
- #define DW_UART_CPR	0xf4 /* Component Parameter Register */
- #define DW_UART_UCV	0xf8 /* UART Component Version */
- 
-@@ -29,6 +34,12 @@
- #define DW_UART_TCR_XFER_MODE_SW_DE_OR_RE	FIELD_PREP(DW_UART_TCR_XFER_MODE, 1)
- #define DW_UART_TCR_XFER_MODE_DE_OR_RE		FIELD_PREP(DW_UART_TCR_XFER_MODE, 2)
- 
-+/* Line Extended Control Register bits */
-+#define DW_UART_LCR_EXT_DLS_E		BIT(0)
-+#define DW_UART_LCR_EXT_ADDR_MATCH	BIT(1)
-+#define DW_UART_LCR_EXT_SEND_ADDR	BIT(2)
-+#define DW_UART_LCR_EXT_TRANSMIT_MODE	BIT(3)
-+
- /* Component Parameter Register bits */
- #define DW_UART_CPR_ABP_DATA_WIDTH	(3 << 0)
- #define DW_UART_CPR_AFCE_MODE		(1 << 4)
-@@ -91,16 +102,126 @@ static void dw8250_set_divisor(struct uart_port *p, unsigned int baud,
- 	serial8250_do_set_divisor(p, baud, quot, quot_frac);
- }
- 
-+/* Wait until re is de-asserted for sure. Without BUSY indication available,
-+ * only available course of action is to wait until current frame is received.
-+ */
-+static void dw8250_wait_re_deassert(struct uart_port *p)
-+{
-+	struct dw8250_port_data *d = p->private_data;
-+
-+	if (d->rar_timeout_us)
-+		udelay(d->rar_timeout_us);
-+}
-+
-+static void dw8250_update_rar(struct uart_port *p, u32 addr)
-+{
-+	u32 re_en = dw8250_readl_ext(p, DW_UART_RE_EN);
-+
-+	/* RAR shouldn't be changed while receiving. Thus, de-assert RE_EN
-+	 * if asserted and wait.
-+	 */
-+	if (re_en)
-+		dw8250_writel_ext(p, DW_UART_RE_EN, 0);
-+	dw8250_wait_re_deassert(p);
-+	dw8250_writel_ext(p, DW_UART_RAR, addr);
-+	if (re_en)
-+		dw8250_writel_ext(p, DW_UART_RE_EN, re_en);
-+}
-+
-+static void dw8250_addrmode_setup(struct uart_port *p, bool enable_addrmode)
-+{
-+	struct dw8250_port_data *d = p->private_data;
-+
-+	if (enable_addrmode) {
-+		/* Clear RAR & TAR of any previous values */
-+		dw8250_writel_ext(p, DW_UART_RAR, 0);
-+		dw8250_writel_ext(p, DW_UART_TAR, 0);
-+		dw8250_writel_ext(p, DW_UART_LCR_EXT, DW_UART_LCR_EXT_DLS_E);
-+	} else {
-+		dw8250_writel_ext(p, DW_UART_LCR_EXT, 0);
-+	}
-+
-+	d->addrmode = enable_addrmode;
-+}
-+
- void dw8250_do_set_termios(struct uart_port *p, struct ktermios *termios, struct ktermios *old)
- {
-+	struct dw8250_port_data *d = p->private_data;
-+
- 	p->status &= ~UPSTAT_AUTOCTS;
- 	if (termios->c_cflag & CRTSCTS)
- 		p->status |= UPSTAT_AUTOCTS;
- 
-+	if (!(p->rs485.flags & SER_RS485_ENABLED) || !d->hw_rs485_support)
-+		termios->c_cflag &= ~ADDRB;
-+
-+	if (!old || (termios->c_cflag ^ old->c_cflag) & ADDRB)
-+		dw8250_addrmode_setup(p, termios->c_cflag & ADDRB);
-+
- 	serial8250_do_set_termios(p, termios, old);
-+
-+	d->rar_timeout_us = termios->c_ispeed ?
-+			    DIV_ROUND_UP(tty_get_frame_size(termios->c_cflag) * USEC_PER_SEC,
-+					 termios->c_ispeed) : 0;
- }
- EXPORT_SYMBOL_GPL(dw8250_do_set_termios);
- 
-+static int dw8250_rs485_set_addr(struct uart_port *p, struct serial_addr *addr)
-+{
-+	struct dw8250_port_data *d = p->private_data;
-+	u32 lcr;
-+
-+	if (!(p->rs485.flags & SER_RS485_ENABLED) || !d->addrmode)
-+		return -EINVAL;
-+
-+	addr->flags &= SER_ADDR_RECV | SER_ADDR_RECV_CLEAR | SER_ADDR_DEST;
-+	if (!addr->flags)
-+		return -EINVAL;
-+
-+	lcr = dw8250_readl_ext(p, DW_UART_LCR_EXT);
-+	if (addr->flags & SER_ADDR_RECV) {
-+		dw8250_update_rar(p, addr->addr & 0xff);
-+		lcr |= DW_UART_LCR_EXT_ADDR_MATCH;
-+		addr->flags &= ~SER_ADDR_RECV_CLEAR;
-+	} else if (addr->flags & SER_ADDR_RECV_CLEAR) {
-+		lcr &= DW_UART_LCR_EXT_ADDR_MATCH;
-+	}
-+	if (addr->flags & SER_ADDR_DEST) {
-+		dw8250_writel_ext(p, DW_UART_TAR, addr->addr & 0xff);
-+		lcr |= DW_UART_LCR_EXT_SEND_ADDR;
-+	}
-+	dw8250_writel_ext(p, DW_UART_LCR_EXT, lcr);
-+
-+	return 0;
-+}
-+
-+static int dw8250_rs485_get_addr(struct uart_port *p, struct serial_addr *addr)
-+{
-+	struct dw8250_port_data *d = p->private_data;
-+
-+	if (!(p->rs485.flags & SER_RS485_ENABLED) || !d->addrmode)
-+		return -EINVAL;
-+
-+	if (addr->flags == SER_ADDR_DEST) {
-+		addr->addr = dw8250_readl_ext(p, DW_UART_TAR) & 0xff;
-+		return 0;
-+	}
-+	if (addr->flags == SER_ADDR_RECV) {
-+		u32 lcr = dw8250_readl_ext(p, DW_UART_LCR_EXT);
-+
-+		if (!(lcr & DW_UART_LCR_EXT_ADDR_MATCH)) {
-+			addr->flags = SER_ADDR_RECV_CLEAR;
-+			addr->addr = 0;
-+		} else {
-+			addr->addr = dw8250_readl_ext(p, DW_UART_RAR) & 0xff;
-+		}
-+
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- static void dw8250_rs485_start_tx(struct uart_8250_port *up)
- {
- 	struct uart_port *p = &(up->port);
-@@ -157,6 +278,7 @@ static int dw8250_rs485_config(struct uart_port *p, struct serial_rs485 *rs485)
- 		tcr &= ~DW_UART_TCR_RS485_EN;
- 		dw8250_writel_ext(p, DW_UART_DE_EN, 0);
- 		dw8250_writel_ext(p, DW_UART_RE_EN, 0);
-+		dw8250_addrmode_setup(p, false);
- 	}
- 
- 	/* Resetting the default DE_POL & RE_POL */
-@@ -203,6 +325,8 @@ void dw8250_setup_port(struct uart_port *p)
- 		p->rs485_config = dw8250_rs485_config;
- 		up->rs485_start_tx = dw8250_rs485_start_tx;
- 		up->rs485_stop_tx = dw8250_rs485_stop_tx;
-+		p->set_addr = dw8250_rs485_set_addr;
-+		p->get_addr = dw8250_rs485_get_addr;
- 	} else {
- 		p->rs485_config = serial8250_em485_config;
- 		up->rs485_start_tx = serial8250_em485_start_tx;
-diff --git a/drivers/tty/serial/8250/8250_dwlib.h b/drivers/tty/serial/8250/8250_dwlib.h
-index a8fa020ca544..bfb1d8af7f0c 100644
---- a/drivers/tty/serial/8250/8250_dwlib.h
-+++ b/drivers/tty/serial/8250/8250_dwlib.h
-@@ -17,6 +17,9 @@ struct dw8250_port_data {
- 
- 	/* RS485 variables */
- 	bool			hw_rs485_support;
-+	/* 9-bit framing (9th bit is address indicator) */
-+	bool			addrmode;
-+	unsigned int		rar_timeout_us;
+ struct samsung_early_console_data {
+ 	u32 txfull_mask;
++	u32 rxfifo_mask;
  };
  
- void dw8250_do_set_termios(struct uart_port *p, struct ktermios *termios, struct ktermios *old);
+ static void samsung_early_busyuart(struct uart_port *port)
+@@ -2983,6 +2984,26 @@ static void samsung_early_write(struct console *con, const char *s,
+ 	uart_console_write(&dev->port, s, n, samsung_early_putc);
+ }
+ 
++static int samsung_early_read(struct console *con, char *s, unsigned int n)
++{
++	struct earlycon_device *dev = con->data;
++	struct samsung_early_console_data *data = dev->port.private_data;
++	int ch, ufstat, num_read = 0;
++
++	while (num_read < n) {
++		ufstat = rd_regl(&dev->port, S3C2410_UFSTAT);
++		if (!(ufstat & data->rxfifo_mask))
++			break;
++		ch = rd_reg(&dev->port, S3C2410_URXH);
++		if (ch == NO_POLL_CHAR)
++			break;
++
++		s[num_read++] = ch;
++	}
++
++	return num_read;
++}
++
+ static int __init samsung_early_console_setup(struct earlycon_device *device,
+ 					      const char *opt)
+ {
+@@ -2990,12 +3011,14 @@ static int __init samsung_early_console_setup(struct earlycon_device *device,
+ 		return -ENODEV;
+ 
+ 	device->con->write = samsung_early_write;
++	device->con->read = samsung_early_read;
+ 	return 0;
+ }
+ 
+ /* S3C2410 */
+ static struct samsung_early_console_data s3c2410_early_console_data = {
+ 	.txfull_mask = S3C2410_UFSTAT_TXFULL,
++	.rxfifo_mask = S3C2410_UFSTAT_RXFULL | S3C2410_UFSTAT_RXMASK,
+ };
+ 
+ static int __init s3c2410_early_console_setup(struct earlycon_device *device,
+@@ -3011,6 +3034,7 @@ OF_EARLYCON_DECLARE(s3c2410, "samsung,s3c2410-uart",
+ /* S3C2412, S3C2440, S3C64xx */
+ static struct samsung_early_console_data s3c2440_early_console_data = {
+ 	.txfull_mask = S3C2440_UFSTAT_TXFULL,
++	.rxfifo_mask = S3C2440_UFSTAT_RXFULL | S3C2440_UFSTAT_RXMASK,
+ };
+ 
+ static int __init s3c2440_early_console_setup(struct earlycon_device *device,
+@@ -3030,6 +3054,7 @@ OF_EARLYCON_DECLARE(s3c6400, "samsung,s3c6400-uart",
+ /* S5PV210, Exynos */
+ static struct samsung_early_console_data s5pv210_early_console_data = {
+ 	.txfull_mask = S5PV210_UFSTAT_TXFULL,
++	.rxfifo_mask = S5PV210_UFSTAT_RXFULL | S5PV210_UFSTAT_RXMASK,
+ };
+ 
+ static int __init s5pv210_early_console_setup(struct earlycon_device *device,
 -- 
-2.30.2
+2.35.1.574.g5d30c73bfb-goog
 
