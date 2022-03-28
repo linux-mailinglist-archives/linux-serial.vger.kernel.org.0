@@ -2,60 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C174E95F8
-	for <lists+linux-serial@lfdr.de>; Mon, 28 Mar 2022 13:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06074E980F
+	for <lists+linux-serial@lfdr.de>; Mon, 28 Mar 2022 15:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241963AbiC1L7I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Mon, 28 Mar 2022 07:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S234265AbiC1N2f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 28 Mar 2022 09:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242558AbiC1L6Y (ORCPT
+        with ESMTP id S236582AbiC1N2c (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 28 Mar 2022 07:58:24 -0400
-X-Greylist: delayed 1791 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 04:55:57 PDT
-Received: from mail.skytrust.co (unknown [IPv6:2002:67d0:d8dc::67d0:d8dc])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A5453134C
-        for <linux-serial@vger.kernel.org>; Mon, 28 Mar 2022 04:55:57 -0700 (PDT)
-Received: from trust.co ([103.167.92.100]) by skytrust.co with MailEnable ESMTP; Mon, 28 Mar 2022 22:25:32 +1100
-Reply-To: "Private Mail" <dannuar4@gmail.com>
-From:   "Private Mail" <xerox@trust.co>
-To:     linux-serial@vger.kernel.org
-Subject: Portfolio Management!!
-Date:   28 Mar 2022 12:25:36 +0100
-Message-ID: <20220328122536.60D1379E66731B2C@trust.co>
+        Mon, 28 Mar 2022 09:28:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2126B5E17F;
+        Mon, 28 Mar 2022 06:26:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7C556CE13BA;
+        Mon, 28 Mar 2022 13:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D38C34111;
+        Mon, 28 Mar 2022 13:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648474006;
+        bh=AQvdABq5Hxq1MNktjBiqDB3yfDLoZjajlprb/I71spY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jh44AB6PQwrKHG1yUqmMlZ8J//ua/zoX2E/ACH8+sKC3qMdghNqCsCqgjFeu3t/K1
+         8FUM3794iaXlKu6jsrtnADFhH4EyktPQVZsi2ROhv3/5j+MpTF76oVppqdsmJ9Ya1D
+         0fRke3GPSH+DSv1OIWZDxWxjXYVkcpkSm7nnifUL0KR4CJq6XY+c0PrGPydm7MTmPY
+         zhilxaAcN5G5jaABuxRPfcIBtzoQulPxZYLU5wU6QD8bAHNIj4vUdj4Ot7c+Nlmw8A
+         iJdKHm4nxLy/JT40LZhHx/3tHVgpLlmkpQywuqbQzszKI8SpVaGELrJ6J3+f+Asl8x
+         gnbj16r40HeRg==
+Received: by mail-ej1-f53.google.com with SMTP id pv16so28730866ejb.0;
+        Mon, 28 Mar 2022 06:26:46 -0700 (PDT)
+X-Gm-Message-State: AOAM530/gJ0cABwW33CjpV+/3o/Yw7J6kMu5r3D3dMs1Rr336qqga48A
+        aBFwlkBuTWHpmS7kLKIWQa023CuLgWE4652NyQ==
+X-Google-Smtp-Source: ABdhPJyGhH7lmYwMaaU/tzHGQoNYL3u81M6M0BdaLpzWBmjMU0br1//SVrBhdo/wvqx9JKvOvdgSdTq1sPDKtP1oAT0=
+X-Received: by 2002:a17:906:5418:b0:6df:a07f:764b with SMTP id
+ q24-20020a170906541800b006dfa07f764bmr26681735ejo.27.1648474005064; Mon, 28
+ Mar 2022 06:26:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RDNS_NONE,
-        REPTO_419_FRAUD_GM,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5516]
-        *  2.6 REPTO_419_FRAUD_GM Reply-To is known advance fee fraud
-        *      collector mailbox
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dannuar4[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.8 SPF_NEUTRAL SPF: sender does not match SPF record (neutral)
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+References: <cover.1637061057.git.shubhrajyoti.datta@xilinx.com>
+ <e1d6913bfe5ce023d7f6ea106d0359142063e694.1637061057.git.shubhrajyoti.datta@xilinx.com>
+ <YaVPYiGmDsqY+1at@robh.at.kernel.org> <DM6PR02MB663589B3489C53A34DC25A31AA719@DM6PR02MB6635.namprd02.prod.outlook.com>
+ <MN2PR02MB6640017950EFB0FD21D2AD91AA339@MN2PR02MB6640.namprd02.prod.outlook.com>
+ <DM6PR02MB66352597DBF172ACC5307274AA179@DM6PR02MB6635.namprd02.prod.outlook.com>
+In-Reply-To: <DM6PR02MB66352597DBF172ACC5307274AA179@DM6PR02MB6635.namprd02.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 28 Mar 2022 08:26:33 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLV3De0O2WDq=w_CQbvAiJVvQ-=V9XuC1tJyZNLyneDZw@mail.gmail.com>
+Message-ID: <CAL_JsqLV3De0O2WDq=w_CQbvAiJVvQ-=V9XuC1tJyZNLyneDZw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: serial: pl011: Add 'arm,xlnx-uart'
+To:     Shubhrajyoti Datta <shubhraj@xilinx.com>
+Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Raviteja Narayanam <rna@xlnx.xilinx.com>,
+        Srinivas Goud <sgoud@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello,
+On Tue, Mar 22, 2022 at 5:59 AM Shubhrajyoti Datta <shubhraj@xilinx.com> wrote:
+>
+> <snip>
+> > > > > diff --git a/Documentation/devicetree/bindings/serial/pl011.yaml
+> > > > > b/Documentation/devicetree/bindings/serial/pl011.yaml
+> > > > > index 5ea00f8a283d..6c73923dd15e 100644
+> > > > > --- a/Documentation/devicetree/bindings/serial/pl011.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/serial/pl011.yaml
+> > > > > @@ -24,9 +24,13 @@ select:
+> > > > >
+> > > > >  properties:
+> > > > >    compatible:
+> > > > > -    items:
+> > > > > -      - const: arm,pl011
+> > > > > -      - const: arm,primecell
+> > > > > +    oneOf:
+> > > > > +      - items:
+> > > > > +          - const: arm,pl011
+> > > > > +          - const: arm,primecell
+> > > > > +      - items:
+> > > > > +          - const: arm,pl011
+> > > > > +          - const: arm,xlnx-uart # xilinx uart as platform device
+> > > >
+> > > > 'arm,primecell' means the block has ID registers. Are you saying
+> > > > this implementation doesn't?
+> > >
+> > > The ID registers do not have any Xilinx specific identifiers.
+> > > However there are differences  like 32-bit access.
+> >
+> > Hope that the current approach is fine with you.
+>
+> Could you please guide  how to go about it.
 
-You have effective skills in portfolio management.
+No, I don't know what the differences are in your h/w. You have ID
+registers, but changed the IP and didn't change the ID registers? How
+has the IP changed?
 
-We have a private business proposition for you, contact me for 
-more details.
-
-Thank you,
-Datuk. Sip220/3-28-22/A18
+Rob
