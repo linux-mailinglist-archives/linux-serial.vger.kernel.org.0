@@ -2,69 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA844E8F5E
-	for <lists+linux-serial@lfdr.de>; Mon, 28 Mar 2022 09:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C174E95F8
+	for <lists+linux-serial@lfdr.de>; Mon, 28 Mar 2022 13:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238743AbiC1Hzp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 28 Mar 2022 03:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        id S241963AbiC1L7I convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Mon, 28 Mar 2022 07:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238972AbiC1Hzo (ORCPT
+        with ESMTP id S242558AbiC1L6Y (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 28 Mar 2022 03:55:44 -0400
-X-Greylist: delayed 433 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 00:54:04 PDT
-Received: from mail.ourpartnership.pl (mail.ourpartnership.pl [80.211.82.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9D965FD
-        for <linux-serial@vger.kernel.org>; Mon, 28 Mar 2022 00:54:03 -0700 (PDT)
-Received: by mail.ourpartnership.pl (Postfix, from userid 1001)
-        id E8991615E9; Mon, 28 Mar 2022 08:46:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ourpartnership.pl;
-        s=mail; t=1648453607;
-        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
-        h=Date:From:To:Subject:From;
-        b=kDJVTEWMTy+GQtTtfrCF5df5c7322U1k9U6Xpm9av+gCLzUfDovy6gVq8r9gA8/10
-         uGBxLXkZ7dvJ3zG/dWv7zHSAUYgYADQDI4JeQAdk4wYems0jS3qMdUXZmdsp2vK81t
-         bZhFNfESm9g6QyGs2C7TuaiAofs05vTUXZSoi+m9hZUlGza3VU1Tk6iOi8PZbEpEet
-         yf6gr4bHh8trn8qCwHxU6m3GqZ86nAUD0/GaoKbn9GxyLymoSsHS9/FnCyRFGz3w9b
-         LXl0JGN64Cq+U/k3d5nXKWTcuTjDs3LK2dl5Txq8UwzeUdcRBI/n0JCbQDwQ6mcrpu
-         3ec8gOZ8qE/oA==
-Received: by mail.ourpartnership.pl for <linux-serial@vger.kernel.org>; Mon, 28 Mar 2022 07:46:04 GMT
-Message-ID: <20220328074501-0.1.9.2aoa.0.cwfkpr15cb@ourpartnership.pl>
-Date:   Mon, 28 Mar 2022 07:46:04 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@ourpartnership.pl>
-To:     <linux-serial@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.ourpartnership.pl
+        Mon, 28 Mar 2022 07:58:24 -0400
+X-Greylist: delayed 1791 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 04:55:57 PDT
+Received: from mail.skytrust.co (unknown [IPv6:2002:67d0:d8dc::67d0:d8dc])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A5453134C
+        for <linux-serial@vger.kernel.org>; Mon, 28 Mar 2022 04:55:57 -0700 (PDT)
+Received: from trust.co ([103.167.92.100]) by skytrust.co with MailEnable ESMTP; Mon, 28 Mar 2022 22:25:32 +1100
+Reply-To: "Private Mail" <dannuar4@gmail.com>
+From:   "Private Mail" <xerox@trust.co>
+To:     linux-serial@vger.kernel.org
+Subject: Portfolio Management!!
+Date:   28 Mar 2022 12:25:36 +0100
+Message-ID: <20220328122536.60D1379E66731B2C@trust.co>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RDNS_NONE,
+        REPTO_419_FRAUD_GM,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5516]
+        *  2.6 REPTO_419_FRAUD_GM Reply-To is known advance fee fraud
+        *      collector mailbox
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dannuar4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.8 SPF_NEUTRAL SPF: sender does not match SPF record (neutral)
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hello,
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+You have effective skills in portfolio management.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+We have a private business proposition for you, contact me for 
+more details.
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
-
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+Thank you,
+Datuk. Sip220/3-28-22/A18
