@@ -2,74 +2,140 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1324EA931
-	for <lists+linux-serial@lfdr.de>; Tue, 29 Mar 2022 10:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC9D4EA9BF
+	for <lists+linux-serial@lfdr.de>; Tue, 29 Mar 2022 10:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbiC2I3w (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 29 Mar 2022 04:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S233016AbiC2IxE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 29 Mar 2022 04:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbiC2I3v (ORCPT
+        with ESMTP id S234238AbiC2Iwt (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 29 Mar 2022 04:29:51 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AB01F9754;
-        Tue, 29 Mar 2022 01:28:08 -0700 (PDT)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KSN2D2Vg5zgY87;
-        Tue, 29 Mar 2022 16:26:28 +0800 (CST)
-Received: from kwepeml500002.china.huawei.com (7.221.188.128) by
- kwepemi500009.china.huawei.com (7.221.188.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 29 Mar 2022 16:28:06 +0800
-Received: from huawei.com (10.175.104.82) by kwepeml500002.china.huawei.com
- (7.221.188.128) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 29 Mar
- 2022 16:28:05 +0800
-From:   Huang Guobin <huangguobin4@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] tty: Fix a possible resource leak in icom_probe
-Date:   Tue, 29 Mar 2022 16:46:12 +0800
-Message-ID: <20220329084612.178189-1-huangguobin4@huawei.com>
+        Tue, 29 Mar 2022 04:52:49 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2619451E5A;
+        Tue, 29 Mar 2022 01:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648543865; x=1680079865;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wWjkIsGoRiHdG4LM9QjPl/bqZpReNK5RcM9UVleK3mw=;
+  b=B/LEcAqrLIBOv2FnFFlIoYTbhf5KrkcjpWjSVjnLtv3EWUt8MWmQn/YM
+   gQxOx68OfTLViQewQl9BN48BzHSAyNq9fvkrGzt1xQaA3CyepQN2RtSAQ
+   M2Uph0WgHgf+QorVEC06yTvxZyOzNiaJyzbKlpPYA8rpnHknQapLgN23T
+   SIS5WEbbHmWNGJ0qpgQl7zCYWKH2inbOn/FT861wvrsm6qe00uKTYa7Lr
+   yvB0a5uRt8/bL9WCtFiGR3xAnRviotlgORj1OMmb4oxLpOtp7hCerzGJJ
+   +nZyViWsl5xhFHn4YRrWaasi/SCtavgPTM9iIIh8YofrvOiD63F2G8hLc
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,219,1643670000"; 
+   d="scan'208";a="22954136"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 29 Mar 2022 10:51:02 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 29 Mar 2022 10:51:02 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 29 Mar 2022 10:51:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1648543862; x=1680079862;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wWjkIsGoRiHdG4LM9QjPl/bqZpReNK5RcM9UVleK3mw=;
+  b=QnE21zjVvkmAd27D8EsS86mdmONZwM+HOwPgYUSQiDVnnsYDKln6YqXl
+   OmVNDhiYFx/Bp9SJHkUZzCLOm5mqZAYchtNIoUEfrTeTZjnNXtsSujAx4
+   2hRgsMh6hFDxBKLVCmF67V9xuGvDB0V3NvJUC+Zc23k9A/3N2ARR1FbKx
+   akYeJdHw/sMW8dAAxzhhjPumbIt+ixH4k/gw8dR1TQnbmS/k6M32YqTJ+
+   /Ewm4RryjznrgfTj/CDDSAZ4zjfsv4lOeJ9LQ2Xx0yC1jVelMdIO1rzuj
+   wr3cGjsdIZn+Hb21E1aFaBubxnFHM0hRIBkBYSWUklcIeuw3qlBnIHoeB
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,219,1643670000"; 
+   d="scan'208";a="22954135"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 29 Mar 2022 10:51:02 +0200
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id C47F3280065;
+        Tue, 29 Mar 2022 10:51:01 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Russell King <linux@armlinux.org.uk>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] serial: Revert RS485 polarity change on UART open
+Date:   Tue, 29 Mar 2022 10:50:50 +0200
+Message-Id: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepeml500002.china.huawei.com (7.221.188.128)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-When pci_read_config_dword failed, call pci_release_regions() and
-pci_disable_device() to recycle the resource previously allocated.
+While the change of the RS485 polarity in
+commit d3b3404df318 ("serial: Fix incorrect rs485 polarity on uart open")
+might have made sense based on the original intention of the
+rs485-rts-active-low flag (*), this is not how it is implemented in
+various drivers:
 
-Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
+At least the 8250 and the i.MX UART drivers interpret rs485-rts-active-low
+the other way around. For these drivers, said change broke the initial
+state of the RTS pin after opening the UART, making it impossible to
+receive data until after the first send.
+
+I considered fixing up the drivers to match the polarity used for the
+initial state, however doing so would break all existing Device Trees
+that configure RS485 for one of these drivers. Reverting the change
+makes RS485 work correctly again on these devices.
+
+[(*) My understanding of the mentioned commit's description is that
+rs485-rts-active-low should have referred to the electical signal level
+of the RTS pin, rather than the logical RTS state as understood by the
+UART controller.]
+
+Fixes: d3b3404df318 ("serial: Fix incorrect rs485 polarity on uart open")
+Fixes: 2dd8a74fddd2 ("serial: core: Initialize rs485 RTS polarity already on probe")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 ---
- drivers/tty/serial/icom.c | 2 +-
+
+Skimming through a few other drivers with RS485 support, many other
+implementation are in agreement with the 8250 and i.MX drivers. This seems
+to be the case for the OMAP and the STM32 drivers. The PL011 driver on the
+other hand seems to disagree, so it will need to be fixed if the intention
+is to make all drivers consistent (preferable by someone who is familiar
+with that hardware and can test the change).
+
+It is unfortunate that different drivers disagree here, as any fix to
+make things more consistent will break some users. One way to avoid that
+would be to deprecate the rs485-rts-active-low flag altogether and replace
+it with something new that is implemented consistently...
+
+I can also propose a clarification for the DT binding documentation, if
+this revert is how we want to proceed with the issue.
+
+ drivers/tty/serial/serial_core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index 03a2fe9f4c9a..02b375ba2f07 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -1501,7 +1501,7 @@ static int icom_probe(struct pci_dev *dev,
- 	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
- 	if (retval) {
- 		dev_err(&dev->dev, "PCI Config read FAILED\n");
--		return retval;
-+		goto probe_exit0;
- 	}
- 
- 	pci_write_config_dword(dev, PCI_COMMAND,
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 6a8963caf954..c1c8bd712a59 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2390,7 +2390,7 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		spin_lock_irqsave(&port->lock, flags);
+ 		port->mctrl &= TIOCM_DTR;
+ 		if (port->rs485.flags & SER_RS485_ENABLED &&
+-		    !(port->rs485.flags & SER_RS485_RTS_AFTER_SEND))
++		    !(port->rs485.flags & SER_RS485_RTS_ON_SEND))
+ 			port->mctrl |= TIOCM_RTS;
+ 		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
 -- 
 2.25.1
 
