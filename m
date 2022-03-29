@@ -2,77 +2,117 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301EC4EA186
-	for <lists+linux-serial@lfdr.de>; Mon, 28 Mar 2022 22:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCC44EA8FF
+	for <lists+linux-serial@lfdr.de>; Tue, 29 Mar 2022 10:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345805AbiC1Ua3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 28 Mar 2022 16:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S233756AbiC2IMj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 29 Mar 2022 04:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345815AbiC1Ua0 (ORCPT
+        with ESMTP id S232285AbiC2IMj (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:30:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAAB1FA78;
-        Mon, 28 Mar 2022 13:28:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD8AF61490;
-        Mon, 28 Mar 2022 20:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3D330C34110;
-        Mon, 28 Mar 2022 20:28:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648499324;
-        bh=lA8wzpzQTd8cNFVN7AOOrY+UNhAzP3Rv6HIIcPxD+3c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HrsGER3/3UFkNF0FA7SEgVI23IRmCB4ySW5r4fXaM3g5UrHRUF4cDgkotMpgCbjoR
-         19k0uSEWeGdEChNUV9ndz7qSbLDly1iBclyN84T6jPI+HZx/Ur0IiEsX1Exvsz9N0E
-         01xeE5/9I9YuvEMqI9ZO1/MQ0CsfbzL5m9G7Rrp8L5Zn+DXrTOMp2G1/GOBQXHio5J
-         g9sjgwzFF/YhpoTvteE72IBNtoMJE9kre6orkQfidPmNs2RTsa+roF8x2G5utGLvSM
-         rQ9MgCRo9kALWNIQ6hYU4HUjxhSyy9xqKPoca9XSa4QVgWbLYEENGEK3xMbpfWp/qr
-         SBqVnRkbe64rQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B1F8E7BB0B;
-        Mon, 28 Mar 2022 20:28:44 +0000 (UTC)
-Subject: Re: [GIT PULL] TTY/Serial driver changes for 5.18-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YkG68oNE448ucfPD@kroah.com>
-References: <YkG68oNE448ucfPD@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YkG68oNE448ucfPD@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc1
-X-PR-Tracked-Commit-Id: b31c41339f4f8a833cb9dc509f87aab6a159ffe4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7203062171db6669f746d14148c4af76af619e74
-Message-Id: <164849932417.7875.308580921083211883.pr-tracker-bot@kernel.org>
-Date:   Mon, 28 Mar 2022 20:28:44 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 29 Mar 2022 04:12:39 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC73024587;
+        Tue, 29 Mar 2022 01:10:55 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7ABEA60015;
+        Tue, 29 Mar 2022 08:10:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648541454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NIWeVXp5W7Tm62vf3HbLfCCWgDNazWwRL2/kVsgxxvU=;
+        b=fPwKcMracZgtVY+QxEkAB4PGiZlBSbk3ENnAi+LgEhzlNp2Um/GE2p5n0cwC5d3daLI/ix
+        7aKmE6Eu1Z0ETiHkb3+CjIfGBjsEFAcrK4ZYja1FVBPwt0L2RCrdj+EnkvMftaOSkE6gIX
+        2cjZuatijrYYM224DGEiYyxV9izW6Y9Iz469eRbi9M74cQ9GUNCz3LGfohPy9lNS3XoCG1
+        giAC38DktbX6E9BcNb4GULiveRSFpv0j0cFlRceoYm8gFYEv2YU8Ento/jVSUDHxhoXlyZ
+        WnLWQW/B6l/EMGsNuibAiBCxMN2y1+by54kCL4hy13lSnqjSti3KPp2FJFaBKg==
+Date:   Tue, 29 Mar 2022 10:10:49 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v2 01/10] serial: 8250: dw: Move the per-device
+ structure
+Message-ID: <20220329101049.069a0b1b@xps13>
+In-Reply-To: <CAHp75Ve-PbTMBdb6Y0TYdaOMDwsJ_2JVoKCkwCFBG=iUd8baEA@mail.gmail.com>
+References: <20220317174627.360815-1-miquel.raynal@bootlin.com>
+        <20220317174627.360815-2-miquel.raynal@bootlin.com>
+        <CAHp75Ve-PbTMBdb6Y0TYdaOMDwsJ_2JVoKCkwCFBG=iUd8baEA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The pull request you sent on Mon, 28 Mar 2022 15:41:06 +0200:
+Hi Andy,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc1
+andy.shevchenko@gmail.com wrote on Fri, 18 Mar 2022 12:51:29 +0200:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7203062171db6669f746d14148c4af76af619e74
+> On Thu, Mar 17, 2022 at 9:56 PM Miquel Raynal <miquel.raynal@bootlin.com>=
+ wrote:
+> >
+> > From: Phil Edworthy <phil.edworthy@renesas.com>
+> >
+> > This structure needs to be reused from dwlib, so let's move it into a
+> > shared header. There is no functional change. =20
+>=20
+> ...
+>=20
+> >  #include <linux/types.h> =20
+>=20
+> > +#include <linux/clk.h> =20
+>=20
+> I have mentioned forward declarations.
 
-Thank you!
+Why do you want forward declarations more than includes?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> So, this can be simply replaced by
+>=20
+> struct clk;
+>=20
+> > +#include <linux/notifier.h>
+> > +#include <linux/workqueue.h> =20
+
+And why these two should remain but reset and clk be replaced?
+
+>=20
+> > +#include <linux/reset.h> =20
+>=20
+> Ditto.
+>=20
+> struct reset_control;
+>=20
+> On top of that, please keep them ordered.
+>=20
+> Otherwise it looks good to me.
+>=20
+
+
+Thanks,
+Miqu=C3=A8l
