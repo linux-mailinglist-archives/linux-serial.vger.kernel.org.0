@@ -2,77 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019714EBC8A
-	for <lists+linux-serial@lfdr.de>; Wed, 30 Mar 2022 10:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19DA4EBF26
+	for <lists+linux-serial@lfdr.de>; Wed, 30 Mar 2022 12:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244194AbiC3ISt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 30 Mar 2022 04:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S245558AbiC3Kso (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 30 Mar 2022 06:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244212AbiC3ISs (ORCPT
+        with ESMTP id S245509AbiC3Kso (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 30 Mar 2022 04:18:48 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCDA21267
-        for <linux-serial@vger.kernel.org>; Wed, 30 Mar 2022 01:17:00 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 5so34454370lfp.1
-        for <linux-serial@vger.kernel.org>; Wed, 30 Mar 2022 01:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M32C2MHJpxfv0C/rKIvNbWiRzkrTOQet2nkeXJtQzo0=;
-        b=t9OAHmAFXejxXd/ABsEtkYmuhHgDTwLbTCfevdiYo0MasX/W4Y46/gP0+rZeUkxmdC
-         dS5ElpGzDz7LVOreWpTiEHK9fMNj2+oARBc8IRc/n8r1xslr+8TSuUawqnqc1DOPUm03
-         CK5eaZoH4W3sQOh0oN1PWyYR/ZZtbOXDBeIPYSBW72I1QOb24D1JZy4ug/FeS9NwjPHu
-         8ajhDwHgSH+fjKntg393D4uOBL3kLfbkYgjClBIqObYX+4gyEPW/uIQSgLhRJ39M+7m9
-         tDdT1z/Rk7wDig/QVWl4ianWvWELewIYqOzzYLdfALAmTyJTX/cCnyhxsTGKDis3Z1t+
-         iglw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M32C2MHJpxfv0C/rKIvNbWiRzkrTOQet2nkeXJtQzo0=;
-        b=2wmyDhMBxNraER81K9bcgVDrkbxc74xvGW8SMuMxfWBTMAxW0e8FljxcWUBHHsqu9L
-         vCajJ6AfE9tqRYrFs7tes0Ev9nCOK+gQ9gIqm25tnNyi8cgJbl7HLczunTfnP+EsM7ag
-         m63JQbIk52rmgkvgRcNuGDvyqA4NwF951H70fK4p6wDyigbzAxk8MBCvPcgEMoYeoFro
-         3SwNFC+QI61ItJ4U628I9ZZKbqv/620kaMdBxLU/JmYTs8FiVTbJLLDOBtIATCUEBN3B
-         lj6856bIG//M3r822P//AR1I6DgrPuqF6Cj1rf5/qlganFSnQqjt/B10xw8rC5D3eMll
-         k6GA==
-X-Gm-Message-State: AOAM530WN/EyceONCqpe8t+/6VICCZXDE1nREezQDrloIyuziIzCqchB
-        kEBUEOKdR1wRal0tfOaNIDKUi8NjduSVWXS/
-X-Google-Smtp-Source: ABdhPJyTFIiM6MpxCMpjaTZ6/DzmmysJPS4k5E+NlHAafGVlbwGJmW82547Bn11svVa6TmJUro3aZw==
-X-Received: by 2002:a17:906:a0ce:b0:6d1:cb30:3b3b with SMTP id bh14-20020a170906a0ce00b006d1cb303b3bmr38128430ejb.582.1648628207357;
-        Wed, 30 Mar 2022 01:16:47 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m20-20020a056402431400b00419315cc3e2sm9619545edc.61.2022.03.30.01.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 01:16:46 -0700 (PDT)
-Message-ID: <d75fa410-db8d-eeed-5ace-ac88dce81610@linaro.org>
-Date:   Wed, 30 Mar 2022 10:16:45 +0200
+        Wed, 30 Mar 2022 06:48:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A6269A70
+        for <linux-serial@vger.kernel.org>; Wed, 30 Mar 2022 03:46:59 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nZVql-0002vB-V0; Wed, 30 Mar 2022 12:46:52 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nZVqh-003y5u-Ji; Wed, 30 Mar 2022 12:46:50 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nZVqj-00Clkj-Iy; Wed, 30 Mar 2022 12:46:49 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Tremblay <etremblay@distech-controls.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH v3 0/3] Handle UART without interrupt on TEMT using em485
+Date:   Wed, 30 Mar 2022 12:46:39 +0200
+Message-Id: <20220330104642.229507-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: serial: uniphier: Add "resets"
- property as optional
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1648617338-8600-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648617338-8600-3-git-send-email-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1648617338-8600-3-git-send-email-hayashi.kunihiko@socionext.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=943; h=from:subject; bh=llOorWorLlD1RrCRWPKaiBFBXVBahCxRpgbDtUoJ3is=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBiRDT/qkr5wGZ8XoQyXcH/kPlkuheaUms41Yy7yAWJ e9+cgyCJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYkQ0/wAKCRDB/BR4rcrsCVtGB/ 4poOasW3+w8BKKV7ahXcMTXiXkaJaRoJIs4sFaweD3G3migKCpDWExvf7bWziqa7RqXMZrzp5xfTSC wrqDGYOWkbKXaWpvQdVJjQizxXDWm24rUAC6MwFXB0wmnGhh7yBYTEbgvxwK16hk8musO4ncbOdoTS KppeCaubX99xr+YDAOSwt/3LahdGNRjdOG0U+DlfCVSpjVa4QL4CAUyXN5cIEUvp1RADX2C17SbsWO qgmk2Lgz0NQPnFj2Gbk+IjxIRT1T6nKTXaKNVpYERT8CEMnn7YbC4gCXtVOnQhLSEcORiDXOe5u7II 3SAFfaI+0luXGeAyYEk27VNq+Xd6ED
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,20 +57,35 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 30/03/2022 07:15, Kunihiko Hayashi wrote:
-> UniPhier UART controller has a reset lines from system controller.
-> Add "resets" property to fix the following warning.
-> 
->   uniphier-ld11-global.dtb: serial@54006800: 'resets' does not match any of the regexes: 'pinctrl-[0-9]+'
->       From schema: Documentation/devicetree/bindings/serial/socionext,uniphier-uart.yaml
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../devicetree/bindings/serial/socionext,uniphier-uart.yaml    | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Hello,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+this is a follow up to
+https://lore.kernel.org/linux-serial/20210204161158.643-1-etremblay@distech-controls.com
 
-Best regards,
-Krzysztof
+Compared to this v3 the following happend:
+
+ - rebased to v5.17
+ - Slightly reworded commit log of patch 2 and 3 (requested by Andy)
+ - Use tty_get_frame_size instead of adding another variant.
+
+I tested this series on a Freescale MPC8313 (ARCH=powerpc).
+
+Best regards
+Uwe
+
+Eric Tremblay (3):
+  serial: 8250: Handle UART without interrupt on TEMT using em485
+  serial: 8250: Add UART_CAP_NOTEMT on PORT_16550A_FSL64
+  serial: 8250: add compatible for fsl,16550-FIFO64
+
+ drivers/tty/serial/8250/8250.h      |  1 +
+ drivers/tty/serial/8250/8250_of.c   |  2 +
+ drivers/tty/serial/8250/8250_port.c | 78 +++++++++++++++++++++++++++--
+ include/linux/serial_8250.h         |  2 +
+ 4 files changed, 80 insertions(+), 3 deletions(-)
+
+
+base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+-- 
+2.30.2
+
