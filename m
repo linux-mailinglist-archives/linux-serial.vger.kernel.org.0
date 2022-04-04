@@ -2,166 +2,190 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA23A4F1C23
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Apr 2022 23:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8184F1D9A
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Apr 2022 23:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376450AbiDDVZP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 4 Apr 2022 17:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S1359562AbiDDVZO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 4 Apr 2022 17:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379091AbiDDQeT (ORCPT
+        with ESMTP id S1379983AbiDDScM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:34:19 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644BE36E0C
-        for <linux-serial@vger.kernel.org>; Mon,  4 Apr 2022 09:32:23 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id bo5so9477167pfb.4
-        for <linux-serial@vger.kernel.org>; Mon, 04 Apr 2022 09:32:23 -0700 (PDT)
+        Mon, 4 Apr 2022 14:32:12 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B51327FFB;
+        Mon,  4 Apr 2022 11:30:16 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s21so1384384pgs.4;
+        Mon, 04 Apr 2022 11:30:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2bL0zVy+T84o1RMeqMcnjFfLYjA+GUYGgoiquYSSAHY=;
-        b=QRTuRBVdMggNkZKDKiVvRCfbxLmN/4Scvw/NVPF7mRZ6Ng7eYBz4lEM8ZpODjayuz6
-         fHIj9gn+tCSfkLNwzzluQHLAI2YPvxvzhKEE9MRM0emAM5N+T/84llSb51wruVmWrtvS
-         XEfdi++KzE+e3iOjOVtFEcKg7tUbFt9GjJOMQ=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Us6wl0q/gwpRDfhlxNog2kgLvXIfSCvVL7Nr5vhLBX8=;
+        b=mB4WyIQGue7DvaUx4D9COiqiKi0aII624/cqdrNZJlThXAmTEreD6QUdvmieq6VdtJ
+         2YODxJtQ6TzJJO5qnUxXBPO5u4oiMekkSLfUoxFrJh34IocF4Ps9aqIQeYVkCox0Rg5j
+         bqCuDju3NmeirJ0h/qIfHZ8PO8ImWf7brggesYsPW0Bhb/G5PpMU/7FT6HGWJZrL7TPZ
+         F7cl+8zwrBW/U0fwak2MYExbLnPdVNksh0dfx9WIRzN0UEXUSy1h4pC6jpRPMgFHjbS6
+         iEUQslZrsCik1TP3xEJel6dHS15Ixq93DFyhCpxUSK/yLJwDwPcCvkLgVHtfP2H94Vx3
+         FKvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2bL0zVy+T84o1RMeqMcnjFfLYjA+GUYGgoiquYSSAHY=;
-        b=67wRs+AMt3ANh7XkcCP+xrRk2tbX89Ehnfh7jKhlQ0v4lMtOwi3JdhTfo7P4/pTE4S
-         +x0Ov9PrKjmKPLxaC303GxJWSpy87UxBmveLXtPGo89VUUzjV6UIIr2Sr208TjjYXNqt
-         HBijCPBm1EWo+UfsjoVbwlKzN8jZVyLU6/o6vXkOoSYckY5MXMeFb68In3b0+3lBpY9n
-         1Annj/RzWm8d/cDtGrKAl/aBeccOaUprdm7VznxyEIJe6Nu+dHar3SWOg5QY7+T5Nt9E
-         W9SEYqx4vYMcIn/kujlJhMEG7EoWi3Bz7wwOyXi0E4Y9PMngM6wnPflyTPhfaVGUcmY0
-         nP2A==
-X-Gm-Message-State: AOAM53358fpP1gvxqUv7lyR/Z8+qjdT6x507jD5OTXhp10gwZOzMI6rv
-        g4ovft5FrGXF2Nr9iR1G3adEQw==
-X-Google-Smtp-Source: ABdhPJwKOuEHl+BnsbgNxrNKz+t2civ6hhXWxr7p+FhUpmTI1La4qStQ4P50t0JSRmOGG8TiOxxaqA==
-X-Received: by 2002:a05:6a00:10c7:b0:4fd:9ee6:4130 with SMTP id d7-20020a056a0010c700b004fd9ee64130mr375022pfu.84.1649089942793;
-        Mon, 04 Apr 2022 09:32:22 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:1ebc:cb71:2a38:38db])
-        by smtp.gmail.com with UTF8SMTPSA id s20-20020aa78d54000000b004fac74c83b3sm12466884pfe.186.2022.04.04.09.32.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 09:32:22 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 09:32:19 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_msavaliy@quicinc.com,
-        dianders@chromium.org
-Subject: Re: [PATCH] drivers/tty/serial/qcom-geni-serial: Do stop_rx in
- suspend path for console if console_suspend is disabled
-Message-ID: <Yksdk+YTxXRDWBbj@google.com>
-References: <1648491444-17137-1-git-send-email-quic_vnivarth@quicinc.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Us6wl0q/gwpRDfhlxNog2kgLvXIfSCvVL7Nr5vhLBX8=;
+        b=enqiYt1DmSvbAJmKNTa6MpiZprt8yAgWCsETwyglH11Mp4KI4mENjRdsEDVRlDUxlI
+         USm4cJXNbGU3aTE4EGRwrQCkPSSLC7FpW79hW8WmiN3xHXMN9J0r78672iCdTO8kpDtI
+         UfnZKXhBeFuevBAus2abvhgSkOvBE6BOSBia+qc5NDNpEwmQmEplreVBichDGSUuXZzm
+         AWD8xJD/hHjhzMBLFzUQsl40n33fNyc+jwAbYB5DbqHsA/Gde2B1xRf7BC4K2a8z7dAG
+         kBAoz+IWrhylMUrh2Rdfq8j7tmO52YkbgkqQ/0QtXfUdvKpvX3RcwYBHOTqEpI7EZYRg
+         maQQ==
+X-Gm-Message-State: AOAM530jbnl0PrIh1u13CiWIrUF0XLkTPB0LQgyKwOYUcP+T5yxNH9iK
+        414B6aKnMzzdh67g+auE4LI=
+X-Google-Smtp-Source: ABdhPJzTxAnneoPAFMDLgXiuo+NRQ2lyhuVefbgbtFbo8F/6GMQz2MlZF5WVGGeySrDhRcHJIjPiAA==
+X-Received: by 2002:a05:6a00:b8e:b0:4fa:de88:9fc7 with SMTP id g14-20020a056a000b8e00b004fade889fc7mr929643pfj.56.1649097015518;
+        Mon, 04 Apr 2022 11:30:15 -0700 (PDT)
+Received: from localhost.localdomain ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id kk11-20020a17090b4a0b00b001c73933d803sm162656pjb.10.2022.04.04.11.30.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 11:30:15 -0700 (PDT)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v2 3/4] dt-bindings: serial: Update Qualcomm geni based QUP UART bindings
+Date:   Mon,  4 Apr 2022 23:59:36 +0530
+Message-Id: <20220404182938.29492-4-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
+References: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1648491444-17137-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:47:24PM +0530, Vijaya Krishna Nivarthi wrote:
-> [Why]
-> For the case of console_suspend disabled, if back to back suspend/resume
-> test is executed, at the end of test, sometimes console would appear to
-> be frozen not responding to input. This would happen because, for
-> console_suspend disabled, suspend/resume routines only turn resources
-> off/on but don't do a port close/open.
-> As a result, during resume, some rx transactions come in before system is
-> ready, malfunction of rx happens in turn resulting in console appearing
-> to be stuck.
-> 
-> [How]
+Similar to I2C controller, move geni based QUP UART controller binding
+out from parent schema to an individual binding and let parent refer to
+child schema later on. UART binding also stand incomplete right now
+similar to I2C, complete it along this process.
 
-Please drop the [Why] / [How] 'tags'
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+v2:
+- s/i2c/I2C
+- s/uart/UART
+- Sort nodes alphabetically
+- Add Krzystof's Rb tag
+---
+ .../serial/qcom,serial-geni-qcom.yaml         | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
 
-> Do a stop_rx in suspend sequence to prevent this. start_rx is already
-> present in resume sequence as part of call to set_termios which does a
-> stop_rx/start_rx.
-> Additionally other changes have been made at same place
-> a) replace the hardcoded flags with macros
-> b) perform voting before calling resume_port in resume sequence
-> c) consequently, swap the order in suspend sequence
+diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+new file mode 100644
+index 000000000000..05a6999808d1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/serial/qcom,serial-geni-qcom.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Qualcomm Geni based QUP UART interface
++
++maintainers:
++  - Andy Gross <agross@kernel.org>
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++allOf:
++  - $ref: /schemas/serial/serial.yaml#
++
++properties:
++  compatible:
++    enum:
++      - qcom,geni-uart
++      - qcom,geni-debug-uart
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: se
++
++  interconnects:
++    maxItems: 2
++
++  interconnect-names:
++    items:
++      - const: qup-core
++      - const: qup-config
++
++  interrupts:
++    minItems: 1
++    items:
++      - description: UART core irq
++      - description: Wakeup irq (RX GPIO)
++
++  operating-points-v2: true
++
++  pinctrl-0: true
++  pinctrl-1: true
++
++  pinctrl-names:
++    minItems: 1
++    items:
++      - const: default
++      - const: sleep
++
++  power-domains:
++    maxItems: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - interrupts
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/qcom,gcc-sc7180.h>
++    #include <dt-bindings/interconnect/qcom,sc7180.h>
++
++    serial@a88000 {
++        compatible = "qcom,geni-uart";
++        reg = <0xa88000 0x7000>;
++        interrupts = <GIC_SPI 355 IRQ_TYPE_LEVEL_HIGH>;
++        clock-names = "se";
++        clocks = <&gcc GCC_QUPV3_WRAP0_S0_CLK>;
++        pinctrl-0 = <&qup_uart0_default>;
++        pinctrl-names = "default";
++        interconnects = <&qup_virt MASTER_QUP_CORE_0 0 &qup_virt SLAVE_QUP_CORE_0 0>,
++                        <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>;
++        interconnect-names = "qup-core", "qup-config";
++    };
++...
+-- 
+2.25.1
 
-This patch is short, but IMO it still does too many things at once which
-aren't all directly related. At the very least the change from hardcoded
-flags to macros should be in a separate patch. If the ICC voting order
-isn't direcly related with the console_suspend issue then I'd also suggest
-to split it out into its own patch.
-
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index aedc388..37d064f 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -19,6 +19,7 @@
->  #include <linux/slab.h>
->  #include <linux/tty.h>
->  #include <linux/tty_flip.h>
-> +#include <dt-bindings/interconnect/qcom,icc.h>
->  
->  /* UART specific GENI registers */
->  #define SE_UART_LOOPBACK_CFG		0x22c
-> @@ -1477,34 +1478,38 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
->  
->  static int __maybe_unused qcom_geni_serial_sys_suspend(struct device *dev)
->  {
-> +	int ret;
->  	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
->  	struct uart_port *uport = &port->uport;
->  	struct qcom_geni_private_data *private_data = uport->private_data;
->  
-> +	/* do a stop_rx here, start_rx is handled in uart_resume_port by call to setermios */
-> +	if (!console_suspend_enabled && uart_console(uport))
-> +		uport->ops->stop_rx(uport);
-> +
->  	/*
->  	 * This is done so we can hit the lowest possible state in suspend
->  	 * even with no_console_suspend
->  	 */
-> +	ret = uart_suspend_port(private_data->drv, uport);
->  	if (uart_console(uport)) {
-> -		geni_icc_set_tag(&port->se, 0x3);
-> +		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ACTIVE_ONLY);
->  		geni_icc_set_bw(&port->se);
->  	}
-> -	return uart_suspend_port(private_data->drv, uport);
-> +	return ret;
->  }
->  
->  static int __maybe_unused qcom_geni_serial_sys_resume(struct device *dev)
->  {
-> -	int ret;
->  	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
->  	struct uart_port *uport = &port->uport;
->  	struct qcom_geni_private_data *private_data = uport->private_data;
->  
-> -	ret = uart_resume_port(private_data->drv, uport);
->  	if (uart_console(uport)) {
-> -		geni_icc_set_tag(&port->se, 0x7);
-> +		geni_icc_set_tag(&port->se, QCOM_ICC_TAG_ALWAYS);
->  		geni_icc_set_bw(&port->se);
->  	}
-> -	return ret;
-> +	return uart_resume_port(private_data->drv, uport);
->  }
->  
->  static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
-> -- 
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-> 
