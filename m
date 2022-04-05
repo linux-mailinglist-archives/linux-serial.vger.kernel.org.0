@@ -2,33 +2,33 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D914F3707
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Apr 2022 16:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3AE4F36FE
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Apr 2022 16:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243555AbiDELJu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 5 Apr 2022 07:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S241845AbiDELJh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 Apr 2022 07:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349497AbiDEJt6 (ORCPT
+        with ESMTP id S242864AbiDEKfe (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D47119;
-        Tue,  5 Apr 2022 02:47:45 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686E92B192;
+        Tue,  5 Apr 2022 03:20:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD02FB81B76;
-        Tue,  5 Apr 2022 09:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88E1C385A4;
-        Tue,  5 Apr 2022 09:47:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 044E8617CC;
+        Tue,  5 Apr 2022 10:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07CCC385A1;
+        Tue,  5 Apr 2022 10:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152062;
+        s=korg; t=1649154013;
         bh=JCLM8YKiiHyma2HgpUKFb0VzrXsL8iLb6rFhuU6ooFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDLrJs9yDmKjWWg8xZlefRWACd68U8pXbjZnCwL3jpGka+8sPeYPDQ7r9pa+mrYgK
-         E7vaaohmKJBRgNhaDLN62tWMuaDkFskC4HHPYMpgqfDJiWw1WDXLjWfS8uWvDlG1uC
-         e9iKo5Opa9qrbbM9BKfswVHrcPeFQL9lyNnPtz2o=
+        b=X8cJOmxF6VQXoHqkdC80pu7028J73fUWuda+bVMgr0Hgn/opBdTFJ91v2BTwQOohM
+         VVr2kgUpEJj7nSdDMYVgEWjGYE/lw49ahZRg89z6FWRsq92RY+zzvprkhNuRneXxzF
+         ZiPrptOsI64nuDxMzYpUk8qur/EmQ0dPlzTpm5lc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,12 +42,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Igor Zhbanov <i.zhbanov@omprussia.ru>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 641/913] kgdboc: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:28:23 +0200
-Message-Id: <20220405070359.054596577@linuxfoundation.org>
+Subject: [PATCH 5.10 426/599] kgdboc: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:32:00 +0200
+Message-Id: <20220405070311.509873524@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
