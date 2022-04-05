@@ -2,326 +2,207 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC5A4F235E
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Apr 2022 08:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1A24F237B
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Apr 2022 08:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiDEGhm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 5 Apr 2022 02:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        id S230399AbiDEGmt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 Apr 2022 02:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiDEGhd (ORCPT
+        with ESMTP id S230385AbiDEGmr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:37:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21AE19285
-        for <linux-serial@vger.kernel.org>; Mon,  4 Apr 2022 23:35:20 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id qh7so14508521ejb.11
-        for <linux-serial@vger.kernel.org>; Mon, 04 Apr 2022 23:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CBvlbU43jHzlylVBNIqHKM031Xg4IT9urGiAHQVtPUQ=;
-        b=II3h2PtUIgEV6c5K+3sALeQYfGFWVVfOmHcA+KQYJewDuem5RY1eAAR4hoPWhjJqYs
-         1LrqSLJt6tDpxWU3S9XndOtaZKz1DoA2+/AqybjdcNI8/+C3rPgVEuKdO3CeCHWDnubJ
-         a6JWFuovkctm1Yy2t6qnq1zgffR3LWt/7tPnSIEoVmKpu5aidJHfq79jwO7GYJTxs+BA
-         eTJNRXiyZGeqqGikyCd8iOzPEd3V1BSx1E1FCcpsi7CEfCLXqKln2gHHFnct/QZqVVX9
-         CLML1z7QttWQ5VZGVSY05P6b3KPZM1CMyothq7HZ+FORKf18dMFd/xhdO62Fl3ZeJ/mA
-         tCzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CBvlbU43jHzlylVBNIqHKM031Xg4IT9urGiAHQVtPUQ=;
-        b=8RdBr4grzQsX+b6bfLbEbW3LrfjzxEDvy8j/de7va9L27Y/y4fnk394vINJY6+Usca
-         QrDi4mtFvEJms4lq6xIz+LNHDMfduuk2s5WfktdDWzr6U5/mHVGKTO5fkvdoRamsS4y9
-         0hOHDbmG3wNRSjgMYUcJBF7uHrN8o7FVbnLnXyNNYnWZIvUGJDUrgWJxMqd456893Nj8
-         gJaXwEI7+pLfCePZXkA02c2/ykWhpm6RpzW99vk6q3YS/WDaHyx8vMXpcIWZzaHZ9ywv
-         ccalSJtG7yIbDE5wj/dDC29G+qs4jIuJY9fN8fdetDPmVmSEQe5nQEKwE5rheJza9R6N
-         hEew==
-X-Gm-Message-State: AOAM531MU6ncBEYXGVt5N4o5vvqC9soY6qRi3xeTbGCeEOjoWWc6ncb9
-        Is/R7vVERooSMo6XRM/dkMPVlQ==
-X-Google-Smtp-Source: ABdhPJzuIslR7e62msxXDGKisOMK2+YPFnREc28H4X8PEniBM44xQHZDnA6eym9Q3LGIpL0Gxsuc1Q==
-X-Received: by 2002:a17:907:7d89:b0:6e7:fdc1:255b with SMTP id oz9-20020a1709077d8900b006e7fdc1255bmr1986753ejc.340.1649140519232;
-        Mon, 04 Apr 2022 23:35:19 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id bs7-20020a056402304700b004197e5d2350sm6086543edb.54.2022.04.04.23.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 23:35:18 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 9/9] dt-bindings: qcom: qcom,gsbi: convert to dtschema
-Date:   Tue,  5 Apr 2022 08:34:51 +0200
-Message-Id: <20220405063451.12011-10-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
-References: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
+        Tue, 5 Apr 2022 02:42:47 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD8051584
+        for <linux-serial@vger.kernel.org>; Mon,  4 Apr 2022 23:40:49 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220405064044epoutp037665bfebffcfb2729f9967fb17e43898~i7NxLXpc70200502005epoutp03B
+        for <linux-serial@vger.kernel.org>; Tue,  5 Apr 2022 06:40:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220405064044epoutp037665bfebffcfb2729f9967fb17e43898~i7NxLXpc70200502005epoutp03B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649140844;
+        bh=AGDcIVWKuM0iLeBsDgZsrsbO80+RisT3bm2qxbskRg4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=U8FVdoDK62AgxEIzedG18DxgWFjlKSSeDgIk+o+jQLUjPKlsAMOzx3oJWQ1AfXV0T
+         Jm1TbWnPOM2SNEZmB8nlsL+UJEAwd5afsqUpaYFtYumsq+3Y14z3O2NAPY1agfCj10
+         u1fMrAQVTiPYQAQP57FhOYQiq5fh+lXfraBspT8Y=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220405064043epcas2p3b05a6ed1c73bae131f95e1d35e7ed272~i7Nwc5TS-2285922859epcas2p3B;
+        Tue,  5 Apr 2022 06:40:43 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.98]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KXdLx42GHz4x9Q1; Tue,  5 Apr
+        2022 06:40:41 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        49.69.10444.864EB426; Tue,  5 Apr 2022 15:40:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220405064040epcas2p3e5d3687bf67384c85d61c5d4ee24acaf~i7NtGidre2065120651epcas2p3H;
+        Tue,  5 Apr 2022 06:40:40 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220405064040epsmtrp2c4f2f37859554611fe724b4eebdf65cb~i7NtF0oag0813708137epsmtrp2u;
+        Tue,  5 Apr 2022 06:40:40 +0000 (GMT)
+X-AuditID: b6c32a45-4fdff700000228cc-9c-624be46868c1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E8.82.24342.764EB426; Tue,  5 Apr 2022 15:40:40 +0900 (KST)
+Received: from KORCO006858 (unknown [10.229.18.72]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220405064039epsmtip2e6314ae5982b52b513a44d516fcd5061~i7Ns8-M3k3244732447epsmtip2b;
+        Tue,  5 Apr 2022 06:40:39 +0000 (GMT)
+From:   "Jaewon Kim" <jaewon02.kim@samsung.com>
+To:     "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
+Cc:     "'Krzysztof Kozlowski'" <krzk@kernel.org>,
+        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        "'Jiri Slaby'" <jirislaby@kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Chanho Park'" <chanho61.park@samsung.com>
+In-Reply-To: <YkvNQJ5hBhQKCwcU@kroah.com>
+Subject: RE: [PATCH 1/1] tty: serial: samsung: add spin_lock for interrupt
+ and console_write
+Date:   Tue, 5 Apr 2022 15:40:39 +0900
+Message-ID: <001601d848b8$10c97490$325c5db0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQIGb4zGqJBuoSbl8bInG1JCGdzaKQGgf2fpAhFXrQICNgTaqaxVSdrA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmuW7GE+8kg42PlC0ezNvGZnF5v7ZF
+        8+L1bBbv5spYnD+/gd1i0+NrrBaXd81hs5hxfh+TxZnFvewOnB6bVnWyeeyfu4bdY/OSeo++
+        LasYPT5vkgtgjcq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ
+        0HXLzAG6RkmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1pi
+        ZWhgYGQKVJiQndGz+wJbwT2BihVLzrM0MM7i7WLk5JAQMJG4/fc7WxcjF4eQwA5GiQMzFrJA
+        OJ8YJb596GSHcL4xSuxseAFUxgHWcu6OBUR8L6PE3t3/oYpeMEqcm72HDWQum4CuxM6Nr9hB
+        bBEBc4m5D4+D2cwCB5kkTvXygNicApoSxxa3gNULC8RJzNi1HcxmEVCR2PH+J5jNK2ApcXPa
+        TWYIW1Di5MwnLBBz5CW2v53DDPGDgsTPp8tYIeIiErM725gh9rpJnGycwARynITASg6J/4/e
+        sUA0uEjsmtjCCmELS7w6voUdwpaS+PxuLxuEXSxxvOc7VHMDo8TZOwegGowlZj1rZwQFBTPQ
+        B+t36UNCRVniyC2o2/gkOg7/ZYcI80p0tAlBNKpJ3J96Dmq6jMSkIyuZJjAqzULy2Swkn81C
+        8s0shF0LGFlWMYqlFhTnpqcWGxUYwiM7OT93EyM4oWq57mCc/PaD3iFGJg7GQ4wSHMxKIrw5
+        QZ5JQrwpiZVVqUX58UWlOanFhxhNgWE9kVlKNDkfmNLzSuINTSwNTMzMDM2NTA3MlcR5vVI2
+        JAoJpCeWpGanphakFsH0MXFwSjUwrZ5+2OfqArVWoTjXTIfl1b5ea0MV17bu5+duNJgWI/g+
+        O+9Q7VOLu0VLmjc7J+2yffXuxY3zafkiF6/sOZ9zwm1FXciM8JATrv3xAszbfk8yuOonGaH9
+        omySdPTbV93Pthj3GwsZ6YtLTN28dIawwKoay423+ZoFNGx5vz0rOpT1SqG7MvUiX1Du1htS
+        273DLsUmXbpwj3fHTqEpJ3Z+Y1Hmm5JuseXl0mUb5jLf2Hf8D7Pz7JzCuLdz1W22aT7c8Znf
+        h8VLep5XauF3A8NFbr5PzK1vMkfy7DG58GzXoqjLFVIvftUW2C4/XrnpeP4l6R8xu/f/DBDi
+        fnU/xseQY/aKxX6yqkm3XLZ7MUuYK7EUZyQaajEXFScCAJD1fnMxBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJXjfjiXeSQe92JosH87axWVzer23R
+        vHg9m8W7uTIW589vYLfY9Pgaq8XlXXPYLGac38dkcWZxL7sDp8emVZ1sHvvnrmH32Lyk3qNv
+        yypGj8+b5AJYo7hsUlJzMstSi/TtErgyenZfYCu4J1CxYsl5lgbGWbxdjBwcEgImEufuWHQx
+        cnIICexmlLg3PRXElhCQkVj+rI8NwhaWuN9yhLWLkQuo5hmjxK73f1hBEmwCuhI7N75iB7FF
+        BMwl5j48zg5SxCxwnEli2ZsWdoiOB4wSex6uYgGp4hTQlDi2uAVsrLBAjMTtiafB4iwCKhI7
+        3v8Ei/MKWErcnHaTGcIWlDg58wkLyKXMAnoSbRsZQcLMAvIS29/OYYa4TkHi59NlrBBxEYnZ
+        nW3MEAe5SZxsnMA0gVF4FpJJsxAmzUIyaRaS7gWMLKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz
+        0vWS83M3MYIjS0tzB+P2VR/0DjEycTAeYpTgYFYS4c0J8kwS4k1JrKxKLcqPLyrNSS0+xCjN
+        waIkznuh62S8kEB6YklqdmpqQWoRTJaJg1OqgemELve6BwafFlZO1O2c/XPNNPmrEVzirGcW
+        sVryZbhOs/j6sVfzh/+qt6HeUy8+5TAKSO14ulFvbaRphtantufvYk75zi+YkvVoneBNaYm8
+        S7nfL15tWCSXW39yVlrNbOaJcTy9trtLHmU+Sq7+xxMTJcm87fjqZbaRn/xFSt8sM1Q07Jzm
+        1royROcBz3SvgjPK68zv3QjhjOf+/DO8enOEgea9tq4diXJ13AcCTt9QefbKe/FdBfnDzdEn
+        rsaf2vzZb23kadlHAWtCDq/eZpLpuqklUmv6zKtLXfiSk5438tcw1ObeOZxzR9jKijWc81sz
+        k8rxlcfe89doiOtMmXrA5v2kUJ+apzdv8r+M7VFiKc5INNRiLipOBACXg3/7GwMAAA==
+X-CMS-MailID: 20220405064040epcas2p3e5d3687bf67384c85d61c5d4ee24acaf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220405033448epcas2p397080e15c54369d24eaf94c2a27bd06c
+References: <20220405033854.110374-1-jaewon02.kim@samsung.com>
+        <CGME20220405033448epcas2p397080e15c54369d24eaf94c2a27bd06c@epcas2p3.samsung.com>
+        <20220405033854.110374-2-jaewon02.kim@samsung.com>
+        <YkvNQJ5hBhQKCwcU@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Convert the Qualcomm General Serial Bus Interface (GSBI) to DT
-Schema.
+Hello
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
- .../bindings/soc/qcom/qcom,gsbi.yaml          | 132 ++++++++++++++++++
- 2 files changed, 132 insertions(+), 87 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+On 22. 4. 5. 14:01, Greg Kroah-Hartman wrote:
+> On Tue, Apr 05, 2022 at 12:38:54PM +0900, Jaewon Kim wrote:
+> > The console_write and IRQ handler can run concurrently.
+> > Problems may occurs console_write is continuously executed while the
+> > IRQ handler is running.
+> >
+> > Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+> > ---
+> >  drivers/tty/serial/samsung_tty.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> 
+> What commit does this fix?
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-deleted file mode 100644
-index fe1855f09dcc..000000000000
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
-+++ /dev/null
-@@ -1,87 +0,0 @@
--QCOM GSBI (General Serial Bus Interface) Driver
--
--The GSBI controller is modeled as a node with zero or more child nodes, each
--representing a serial sub-node device that is mux'd as part of the GSBI
--configuration settings.  The mode setting will govern the input/output mode of
--the 4 GSBI IOs.
--
--Required properties:
--- compatible:	Should contain "qcom,gsbi-v1.0.0"
--- cell-index:	Should contain the GSBI index
--- reg: Address range for GSBI registers
--- clocks: required clock
--- clock-names: must contain "iface" entry
--- qcom,mode : indicates MUX value for configuration of the serial interface.
--  Please reference dt-bindings/soc/qcom,gsbi.h for valid mux values.
--
--Optional properties:
--- qcom,crci : indicates CRCI MUX value for QUP CRCI ports.  Please reference
--  dt-bindings/soc/qcom,gsbi.h for valid CRCI mux values.
--- syscon-tcsr: indicates phandle of TCSR syscon node.  Required if child uses
--  dma.
--
--Required properties if child node exists:
--- #address-cells: Must be 1
--- #size-cells: Must be 1
--- ranges: Must be present
--
--Properties for children:
--
--A GSBI controller node can contain 0 or more child nodes representing serial
--devices.  These serial devices can be a QCOM UART, I2C controller, spi
--controller, or some combination of aforementioned devices.
--
--See the following for child node definitions:
--Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
--Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
--Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
--
--Example for APQ8064:
--
--#include <dt-bindings/soc/qcom,gsbi.h>
--
--	gsbi4@16300000 {
--		compatible = "qcom,gsbi-v1.0.0";
--		cell-index = <4>;
--		reg = <0x16300000 0x100>;
--		clocks = <&gcc GSBI4_H_CLK>;
--		clock-names = "iface";
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges;
--		qcom,mode = <GSBI_PROT_I2C_UART>;
--		qcom,crci = <GSBI_CRCI_QUP>;
--
--		syscon-tcsr = <&tcsr>;
--
--		/* child nodes go under here */
--
--		i2c_qup4: i2c@16380000 {
--			compatible = "qcom,i2c-qup-v1.1.1";
--			reg = <0x16380000 0x1000>;
--			interrupts = <0 153 0>;
--
--			clocks = <&gcc GSBI4_QUP_CLK>, <&gcc GSBI4_H_CLK>;
--			clock-names = "core", "iface";
--
--			clock-frequency = <200000>;
--
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--		};
--
--		uart4:	serial@16340000 {
--			compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
--			reg = <0x16340000 0x1000>,
--				<0x16300000 0x1000>;
--			interrupts = <0 152 0x0>;
--			clocks = <&gcc GSBI4_UART_CLK>, <&gcc GSBI4_H_CLK>;
--			clock-names = "core", "iface";
--		};
--	};
--
--	tcsr: syscon@1a400000 {
--		compatible = "qcom,apq8064-tcsr", "syscon";
--		reg = <0x1a400000 0x100>;
--	};
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-new file mode 100644
-index 000000000000..c33704333e49
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
-@@ -0,0 +1,132 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,gsbi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm General Serial Bus Interface (GSBI)
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  The GSBI controller is modeled as a node with zero or more child nodes, each
-+  representing a serial sub-node device that is mux'd as part of the GSBI
-+  configuration settings.  The mode setting will govern the input/output mode
-+  of the 4 GSBI IOs.
-+
-+  A GSBI controller node can contain 0 or more child nodes representing serial
-+  devices.  These serial devices can be a QCOM UART, I2C controller, spi
-+  controller, or some combination of aforementioned devices.
-+
-+properties:
-+  compatible:
-+    const: qcom,gsbi-v1.0.0
-+
-+  '#address-cells':
-+    const: 1
-+
-+  cell-index:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      The GSBI index.
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: iface
-+
-+  qcom,crci:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      CRCI MUX value for QUP CRCI ports.  Please reference
-+      include/dt-bindings/soc/qcom,gsbi.h for valid CRCI mux values.
-+
-+  qcom,mode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      MUX value for configuration of the serial interface.  Please reference
-+      include/dt-bindings/soc/qcom,gsbi.h for valid mux values.
-+
-+  '#size-cells':
-+    const: 1
-+
-+  syscon-tcsr:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle of TCSR syscon node.Required if child uses dma.
-+
-+  ranges: true
-+
-+  reg:
-+    maxItems: 1
-+
-+patternProperties:
-+  "spi@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/spi/qcom,spi-qup.yaml#
-+
-+  "i2c@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/i2c/qcom,i2c-qup.yaml#
-+
-+  "serial@[0-9a-f]+$":
-+    type: object
-+    $ref: /schemas/serial/qcom,msm-uartdm.yaml#
-+
-+required:
-+  - compatible
-+  - cell-index
-+  - clocks
-+  - clock-names
-+  - qcom,mode
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-msm8960.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/soc/qcom,gsbi.h>
-+
-+    gsbi@12440000 {
-+        compatible = "qcom,gsbi-v1.0.0";
-+        reg = <0x12440000 0x100>;
-+        cell-index = <1>;
-+        clocks = <&gcc GSBI1_H_CLK>;
-+        clock-names = "iface";
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges;
-+
-+        syscon-tcsr = <&tcsr>;
-+        qcom,mode = <GSBI_PROT_I2C_UART>;
-+
-+        serial@12450000 {
-+            compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
-+            reg = <0x12450000 0x100>,
-+                  <0x12400000 0x03>;
-+            interrupts = <0 193 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&gcc GSBI1_UART_CLK>, <&gcc GSBI1_H_CLK>;
-+            clock-names = "core", "iface";
-+        };
-+
-+        i2c@12460000 {
-+            compatible = "qcom,i2c-qup-v1.1.1";
-+            reg = <0x12460000 0x1000>;
-+            pinctrl-0 = <&i2c1_pins>;
-+            pinctrl-1 = <&i2c1_pins_sleep>;
-+            pinctrl-names = "default", "sleep";
-+            interrupts = <0 194 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&gcc GSBI1_QUP_CLK>, <&gcc GSBI1_H_CLK>;
-+            clock-names = "core", "iface";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            status = "disabled"; /* UART chosen */
-+        };
-+    };
--- 
-2.32.0
+This is not an issue caused by anohter commits.
+There was potential issue from the beginning.
+
+Other drivers were fixed, but samsung_tty was not.
+PL011 patch : https://lkml.org/lkml/2012/2/1/495
+
+
+> 
+> >
+> > diff --git a/drivers/tty/serial/samsung_tty.c
+> > b/drivers/tty/serial/samsung_tty.c
+> > index e1585fbae909..d362e8e114f1 100644
+> > --- a/drivers/tty/serial/samsung_tty.c
+> > +++ b/drivers/tty/serial/samsung_tty.c
+> > @@ -2480,12 +2480,26 @@ s3c24xx_serial_console_write(struct console *co, const char *s,
+> >  			     unsigned int count)
+> >  {
+> >  	unsigned int ucon = rd_regl(cons_uart, S3C2410_UCON);
+> > +	unsigned long flags;
+> > +	int locked = 1;
+> 
+> bool?
+
+It is return value of spin_trylock()
+I used int because mose drivers used int.
+If you guide to change int to bool, I will change it.
+
+> 
+> >
+> >  	/* not possible to xmit on unconfigured port */
+> >  	if (!s3c24xx_port_configured(ucon))
+> >  		return;
+> >
+> > +	local_irq_save(flags);
+> > +	if (cons_uart->sysrq)
+> > +		locked = 0;
+> > +	else if (oops_in_progress)
+> > +		locked = spin_trylock(&cons_uart->lock);
+> > +	else
+> > +		spin_lock(&cons_uart->lock);
+> > +
+> >  	uart_console_write(cons_uart, s, count,
+> > s3c24xx_serial_console_putchar);
+> > +
+> > +	if (locked)
+> > +		spin_unlock(&cons_uart->lock);
+> > +	local_irq_restore(flags);
+> 
+> Why is irq_save required as well as a spinlock?
+
+No special reason.
+I will change spin_trylock() -? spin_trylock_irqsave().
+spin_lock -> spin_lock_irqsave().
+And, remove local_irq_save/restore.
+It looks more clean.
+
+
+> 
+> thanks,
+> 
+> greg k-h
+
+Thanks
+Jaewon Kim
 
