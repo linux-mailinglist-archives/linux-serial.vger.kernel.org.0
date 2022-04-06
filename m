@@ -2,69 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D285A4F5E97
-	for <lists+linux-serial@lfdr.de>; Wed,  6 Apr 2022 15:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF904F5F2E
+	for <lists+linux-serial@lfdr.de>; Wed,  6 Apr 2022 15:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiDFMyy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 6 Apr 2022 08:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S231653AbiDFNOi (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 6 Apr 2022 09:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbiDFMyP (ORCPT
+        with ESMTP id S233719AbiDFNMy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 6 Apr 2022 08:54:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0A5388C60;
-        Wed,  6 Apr 2022 01:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649235486; x=1680771486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=p8nBEB+MNXhz5UaO1/EM6bxXdwDLzhXQjFRAKQlIL8A=;
-  b=bDsmAURJulz3qvXTukFLpsecKZSulv3Z6K31WeVy1fjSif1vNEPGFQa0
-   tabQWoWlhd5KOx/6kj/BgFUzvVRMUVY9jlZE2vCJdEeV3Vzdzf+KA4czJ
-   qdRS/MqjI5/KA1L6Bz6b1A6Htif8sOBEDN7rIKtE1m3BExXDqrNqpaiqq
-   H8fbJIF8xJfB4Jg0sF1qRUCH/6qFN6RYtGifrW6BOlEA6EjaoYmHcqQ83
-   k5bgv1wiSeam7dCy7+TZq4UorKCEFaAfMc2pGlfwpAz/j81CUxvBkKRBg
-   reYGGZjRNBdepk4v+3huAijg6KFKgMUf3/HlgJ4Ylg/Vrb598e3C3dEHJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="241576990"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="241576990"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 01:57:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="608812355"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 01:57:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nc1SR-000BIE-Aj;
-        Wed, 06 Apr 2022 11:56:07 +0300
-Date:   Wed, 6 Apr 2022 11:56:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH 2/2] tty: Implement lookahead to process XON/XOFF timely
-Message-ID: <Yk1Vp+nQQBRE+MjN@smile.fi.intel.com>
-References: <20220405102437.4842-1-ilpo.jarvinen@linux.intel.com>
- <20220405102437.4842-3-ilpo.jarvinen@linux.intel.com>
- <YkxqGDsURPpkDM5W@smile.fi.intel.com>
- <fce9c28e-a334-3c70-3a6a-8812f11d8fc7@kernel.org>
- <Yk1VLWMmMu6jJEWo@smile.fi.intel.com>
+        Wed, 6 Apr 2022 09:12:54 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1685F90BE;
+        Wed,  6 Apr 2022 02:50:19 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id g20so1932702edw.6;
+        Wed, 06 Apr 2022 02:50:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PO8bgVYc+6yq/GV1chIgW+khCSDiG15QhmYnAA0FTmY=;
+        b=jJY4a1XyPEMAt4EXBRXTFwKg733D9QCnjp+tvaRH5ix3czCPMdBiaFhGrl6pXlKB/9
+         pIgnjxa8JfFVfQAwgIa+yBy47KMzwTPmkxQnuQvzyrn+oEZQxnluyC4h/IPHa7c4z2NR
+         rCTvZe15XxY1xU7J16/Cyfwek8+3rskF/9+/Y7ujEb9T748yip38DNllJ7bxo5hEoyaS
+         vDkrYzSsQy274lfuHEItbgQ1lc4RQtexBjLz75X6JcBPnvEMSKR+KAUAHnR7/qEwx0ny
+         e8YLXLYjEoATiKiQJu1bMgT4Jl5h3FA2TZ/bv7Ga4xThOfLL+0tskUwvOT+0sY0JCjeW
+         OhaA==
+X-Gm-Message-State: AOAM532vz4Dw9LxDqYjIgDKvXTV7NrhizPwW7qr1CpZnTk1DayB8jxj+
+        XlFzVyBFD+jgT/b/jPUVL70=
+X-Google-Smtp-Source: ABdhPJwDepzSDc+UC30gZbKsINVUj0Z32NzckEH9QLPfmT3vbdsNLWRBxxyj70khlKjB9SmuoiVNsA==
+X-Received: by 2002:a50:ed0b:0:b0:41c:cf60:a882 with SMTP id j11-20020a50ed0b000000b0041ccf60a882mr7956124eds.12.1649238539608;
+        Wed, 06 Apr 2022 02:48:59 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm6356961ejc.95.2022.04.06.02.48.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 02:48:59 -0700 (PDT)
+Message-ID: <98c359ba-9563-3da0-d968-ae40cee9d45f@kernel.org>
+Date:   Wed, 6 Apr 2022 11:48:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yk1VLWMmMu6jJEWo@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/1] tty: serial: samsung: add spin_lock for interrupt and
+ console_write
+Content-Language: en-US
+To:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
+Cc:     'Krzysztof Kozlowski' <krzk@kernel.org>,
+        'Alim Akhtar' <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        'Chanho Park' <chanho61.park@samsung.com>
+References: <20220406082216.11206-1-jaewon02.kim@samsung.com>
+ <CGME20220406081823epcas2p2f7afa27e2402c4fc02c9bee5972bed4f@epcas2p2.samsung.com>
+ <20220406082216.11206-2-jaewon02.kim@samsung.com>
+ <Yk1NmTdUgMcSIq1O@kroah.com> <042701d84991$ca50d410$5ef27c30$@samsung.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <042701d84991$ca50d410$5ef27c30$@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,82 +73,39 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 11:54:05AM +0300, Andy Shevchenko wrote:
-> On Wed, Apr 06, 2022 at 10:21:12AM +0200, Jiri Slaby wrote:
-> > On 05. 04. 22, 18:11, Andy Shevchenko wrote:
-> > > On Tue, Apr 05, 2022 at 01:24:37PM +0300, Ilpo Järvinen wrote:
-
-> > > > +	if (c == START_CHAR(tty)) {
-> > > > +		if (!lookahead_done) {
-> > > > +			start_tty(tty);
-> > > > +			process_echoes(tty);
-> > > > +		}
-> > > > +		return true;
-> > > > +	}
-> > > > +	if (c == STOP_CHAR(tty)) {
-> > > > +		if (!lookahead_done)
-> > > > +			stop_tty(tty);
-> > > > +		return true;
-> > > > +	}
-
-> > > Looking into this I would first make a preparatory patch that splits out
-> > > current code into something like
-> > > 
-> > > static bool __n_tty_receive_char_special_no_lookahead(struct tty_struct *tty, unsigned char c)
-> > > {
-> > > 	...current code...
-> > > }
-> > > 
-> > > Then in the patch 1 you add
-> > > 
-> > > static bool __n_tty_receive_char_special_lookahead(struct tty_struct *tty, unsigned char c)
-> > > {
-> > > 	...
-> > > }
-> > > 
-> > > static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
-> > > 					 bool lookahead_done)
-> > 
-> > This should be dubbed better. Maybe n_tty_receive_char_flow_control()?
-> > 
-> > And I would place the if (I_IXON(tty)) to the caller. I am a bit lost in
-> > this pseudo code, so maybe this doesn't make sense in your proposal. I have
-> > something like in my mind:
-> > 
-> > if (I_IXON(tty))
-> >   return n_tty_receive_char_flow_control();
+On 06. 04. 22, 10:39, Jaewon Kim wrote:
+> On 22. 4. 6. 17:21, Greg Kroah-Hartman wrote:
+>> On Wed, Apr 06, 2022 at 05:22:16PM +0900, Jaewon Kim wrote:
+>>> The console_write and IRQ handler can run concurrently.
+>>> Problems may occurs console_write is continuously executed while the
+>>> IRQ handler is running.
+>>>
+>>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+>>> ---
+>>>   drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+>>>   1 file changed, 12 insertions(+)
+>>>
+>>> diff --git a/drivers/tty/serial/samsung_tty.c
+>>> b/drivers/tty/serial/samsung_tty.c
+>>> index e1585fbae909..9db479d728b5 100644
+>>> --- a/drivers/tty/serial/samsung_tty.c
+>>> +++ b/drivers/tty/serial/samsung_tty.c
+>>> @@ -2480,12 +2480,24 @@ s3c24xx_serial_console_write(struct console *co, const char *s,
+>>>   			     unsigned int count)
+>>>   {
+>>>   	unsigned int ucon = rd_regl(cons_uart, S3C2410_UCON);
+>>> +	unsigned long flags;
+>>> +	bool locked = 1;
+>>
+>> "1" is not a boolean :)
 > 
-> My point to have three helpers which make each change cleaner:
-> 
->   .-> n_tty_receive_char_flow_control_lah()
->   |
->   |  .-> n_tty_receive_char_flow_control_no_lah()
->   |  |
->   `- + -- n_tty_receive_char_flow_control()
-> 
-> Where no_lah variant can be split as preparatory patch prepending the current
-> series.
+> return value of spin_trylock() is 1 or 0.
+> It seems better to keep it as an int than to change it to bool.
+> I will return it to int.
 
-Another possibility to keep one function, but split it first in a separate
-patch and then modify.
+Hi, no, do not that. Simply use bool/true/false.
 
-> And yes, calling I_IXON at the caller seems better.
-> 
-> > Historically, these n_tty_receive* function names were a big mess. Don't
-> > produce more of that by simply prepending only "__".
-> > 
-> > > {
-> > > 	if (!I_IXON(tty))
-> > > 		return false;
-> > > 
-> > > 	if (lookahead_done)
-> > > 		return _lookahead();
-> > > 
-> > > 	return _no_lookahead();
-> > > }
-
+thanks,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+js
+suse labs
