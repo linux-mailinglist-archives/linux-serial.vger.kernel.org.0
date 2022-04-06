@@ -2,115 +2,156 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA194F5C14
-	for <lists+linux-serial@lfdr.de>; Wed,  6 Apr 2022 13:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B037F4F5C7B
+	for <lists+linux-serial@lfdr.de>; Wed,  6 Apr 2022 13:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242780AbiDFL1p (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 6 Apr 2022 07:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S234586AbiDFLd6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 6 Apr 2022 07:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241900AbiDFL1B (ORCPT
+        with ESMTP id S237400AbiDFLdD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 6 Apr 2022 07:27:01 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA6B55F353;
-        Wed,  6 Apr 2022 01:13:39 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id ot30so2552004ejb.12;
-        Wed, 06 Apr 2022 01:13:39 -0700 (PDT)
+        Wed, 6 Apr 2022 07:33:03 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6495549FA0B;
+        Wed,  6 Apr 2022 01:21:16 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id ot30so2589755ejb.12;
+        Wed, 06 Apr 2022 01:21:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=nbgR+IckzJRUGptIoNowdGGPeNkA0puvrWRLQTOMQtg=;
-        b=b9ZCrlDB+GTB2tVlJ/03f4DiB6XAjJLJKb4ju2RtXtfz2tJbZYXFz71/nhsJDZOsLo
-         L6raeh7/AIHcw83pF3yrDE4JGlD2ik+B4sCAwit8Ppm3GKgHrlmhhHSm4mGY32xNPa8H
-         Ua9b8nJOpDTu9x+Jrpcpogv4mtiSYHw/ub8rC97JIaByLspqNSI7NAGdAhGjr5E4f8tU
-         82bTW/HjL+6XlA2c0VQQBYENjhWK9k1Mta4sJE6n1Vi/tF2V1ZWrSqNHJdkU2hJGeQ5h
-         n1+3vlgoZYK9Q7a7mkXf7XNgagipkFHKtDsrI0xhYIGyjBDKZcKHe6PeyV57qPlMb0Zq
-         W8LA==
-X-Gm-Message-State: AOAM531adGUewbHwKMnLe3tMcNrg+us/HWT5o3H5UmsvZixEJqcQ0pyz
-        Y5PGfAvOpy4Of374/Vld9Y8=
-X-Google-Smtp-Source: ABdhPJxi7OtObunO4HoGzaVX4GKdsXdaUsE1FqYamU4yS4gwOCjIaGhCC1e2eJVmIPDZ2UdFExQpcQ==
-X-Received: by 2002:a17:907:3f9c:b0:6d8:116d:476b with SMTP id hr28-20020a1709073f9c00b006d8116d476bmr7036757ejc.432.1649232818074;
-        Wed, 06 Apr 2022 01:13:38 -0700 (PDT)
+        bh=gwHQbPUCA95cMcvHayfyBMUngTXbYPcEVQeXfQ7AKpk=;
+        b=Ow2XpmvYum8Ub38aKVzErMFis8H3RH804wGNnh4D8c5QnRkY2HQLBr0xQt26dfqaRM
+         IaXHd3pUX/hjOEJgrqQhPf4jLbhh5+QCxss6nsPl+4c6cL/mvdpuGFyDvHi6qxxPoCRk
+         qghtig/xBcvLY3K6FjGt88XJTVEuzxLbIX5ZNluvdhL5rlig4RndgZnUV4lJDKUOSTx1
+         T68UpmgXWi3is6ngfx/Rz4vNNwpSCZ3gUj7TkVt8qWOdFCJp5qZKf5dMOhhFxhN28k4X
+         bgLrfbKuR6uOhiA/B6tl3GwFX+xZusKb0EV2UPVNsBi3ea17AQ/MAQyYlwrcXgu0b1OC
+         950g==
+X-Gm-Message-State: AOAM5331XX7lGiRjF1QZgTE+mQTiQfMvx+IspwAvvlUSU58rbp76yfrc
+        0ZLassW/K2zx7/kGSAkRiBRLIDayIzc=
+X-Google-Smtp-Source: ABdhPJy6UW+ZK3rGaHWe2T0tIJe9hyy4wFTb9nXZmP8D3JgQ2W0Ksz3zKneZjLOAHt3dVLS3yQipzQ==
+X-Received: by 2002:a17:907:2d8d:b0:6df:a06c:7c55 with SMTP id gt13-20020a1709072d8d00b006dfa06c7c55mr7244819ejc.325.1649233273709;
+        Wed, 06 Apr 2022 01:21:13 -0700 (PDT)
 Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id c14-20020a170906340e00b006ce98f2581asm6270629ejb.205.2022.04.06.01.13.37
+        by smtp.gmail.com with ESMTPSA id dn4-20020a17090794c400b006dbec4f4acbsm6382356ejc.6.2022.04.06.01.21.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 01:13:37 -0700 (PDT)
-Message-ID: <7cb1cc42-ef98-cbbe-1779-107602747d07@kernel.org>
-Date:   Wed, 6 Apr 2022 10:13:36 +0200
+        Wed, 06 Apr 2022 01:21:13 -0700 (PDT)
+Message-ID: <fce9c28e-a334-3c70-3a6a-8812f11d8fc7@kernel.org>
+Date:   Wed, 6 Apr 2022 10:21:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] tty: Add lookahead param to receive_buf
+Subject: Re: [PATCH 2/2] tty: Implement lookahead to process XON/XOFF timely
 Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
         Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Johan Hovold <johan@kernel.org>
 References: <20220405102437.4842-1-ilpo.jarvinen@linux.intel.com>
- <20220405102437.4842-2-ilpo.jarvinen@linux.intel.com>
+ <20220405102437.4842-3-ilpo.jarvinen@linux.intel.com>
+ <YkxqGDsURPpkDM5W@smile.fi.intel.com>
 From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220405102437.4842-2-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <YkxqGDsURPpkDM5W@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 05. 04. 22, 12:24, Ilpo Järvinen wrote:
-> After lookahead for XON/XOFF characters is added by the next
-> patch, the receive side needs to ensure the flow-control
-> actions are not retaken later on when those same characters
-> get read by TTY.
+On 05. 04. 22, 18:11, Andy Shevchenko wrote:
+> On Tue, Apr 05, 2022 at 01:24:37PM +0300, Ilpo Järvinen wrote:
+>> When tty is not read from, XON/XOFF may get stuck into an
+>> intermediate buffer. As those characters are there to do software
+>> flow-control, it is not very useful. In the case where neither end
+>> reads from ttys, the receiving ends might not be able receive the
+>> XOFF characters and just keep sending more data to the opposite
+>> direction. This problem is almost guaranteed to occur with DMA
+>> which sends data in large chunks.
+>>
+>> If TTY is slow to process characters, that is, eats less than given
+>> amount in receive_buf, invoke lookahead for the rest of the chars
+>> to process potential XON/XOFF characters.
+>>
+>> The guards necessary for ensuring the XON/XOFF character are
+>> processed only once were added by the previous patch. All this patch
+>> needs to do on that front is to pass the lookahead count (that can
+>> now be non-zero) into port->client_ops->receive_buf().
 > 
-> Thus, pass lookahead count to receive_buf and skip
-> flow-control character actions if already taken for the
-> character in question. Lookahead count will become live after
-> the next patch.
-...
-> --- a/include/linux/tty_ldisc.h
-> +++ b/include/linux/tty_ldisc.h
-> @@ -224,11 +224,11 @@ struct tty_ldisc_ops {
->   	 * The following routines are called from below.
->   	 */
->   	void	(*receive_buf)(struct tty_struct *tty, const unsigned char *cp,
-> -			       const char *fp, int count);
-> +			       const char *fp, int count, int lookahead_count);
->   	void	(*write_wakeup)(struct tty_struct *tty);
->   	void	(*dcd_change)(struct tty_struct *tty, unsigned int status);
->   	int	(*receive_buf2)(struct tty_struct *tty, const unsigned char *cp,
-> -				const char *fp, int count);
-> +				const char *fp, int count, int lookahead_count);
+> ...
+> 
+>> +static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
+>> +					 bool lookahead_done)
+>> +{
+>> +	if (!I_IXON(tty))
+>> +		return false;
+>> +
+>> +	if (c == START_CHAR(tty)) {
+>> +		if (!lookahead_done) {
+>> +			start_tty(tty);
+>> +			process_echoes(tty);
+>> +		}
+>> +		return true;
+>> +	}
+>> +	if (c == STOP_CHAR(tty)) {
+>> +		if (!lookahead_done)
+>> +			stop_tty(tty);
+>> +		return true;
+>> +	}
+>> +	return false;
+>> +}
+> 
+> Looking into this I would first make a preparatory patch that splits out
+> current code into something like
+> 
+> static bool __n_tty_receive_char_special_no_lookahead(struct tty_struct *tty, unsigned char c)
+> {
+> 	...current code...
+> }
+> 
+> Then in the patch 1 you add
+> 
+> static bool __n_tty_receive_char_special_lookahead(struct tty_struct *tty, unsigned char c)
+> {
+> 	...
+> }
+> 
+> static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
+> 					 bool lookahead_done)
 
-Please always use unsigned if you don't expect negative numbers. count 
-should be changed to unsigned in long term too.
+This should be dubbed better. Maybe n_tty_receive_char_flow_control()?
 
-> diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
-> index 58e9619116b7..1871a6a9cb00 100644
-> --- a/include/linux/tty_port.h
-> +++ b/include/linux/tty_port.h
-> @@ -39,7 +39,7 @@ struct tty_port_operations {
->   };
->   
->   struct tty_port_client_operations {
-> -	int (*receive_buf)(struct tty_port *port, const unsigned char *, const unsigned char *, size_t);
-> +	int (*receive_buf)(struct tty_port *port, const unsigned char *, const unsigned char *, size_t, size_t);
+And I would place the if (I_IXON(tty)) to the caller. I am a bit lost in 
+this pseudo code, so maybe this doesn't make sense in your proposal. I 
+have something like in my mind:
 
-Good, here it is unsigned and even of size_t size (I don't immediately 
-see why, but OK).
+if (I_IXON(tty))
+   return n_tty_receive_char_flow_control();
 
-thanks,
+Historically, these n_tty_receive* function names were a big mess. Don't 
+produce more of that by simply prepending only "__".
+
+> {
+> 	if (!I_IXON(tty))
+> 		return false;
+> 
+> 	if (lookahead_done)
+> 		return _lookahead();
+> 
+> 	return _no_lookahead();
+> }
+
+thanks
 -- 
 js
 suse labs
