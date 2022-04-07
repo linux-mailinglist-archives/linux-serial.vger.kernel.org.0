@@ -2,71 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972894F76BA
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Apr 2022 09:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D224F76F9
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Apr 2022 09:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238150AbiDGHEN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 Apr 2022 03:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S240247AbiDGHOl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 Apr 2022 03:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbiDGHEK (ORCPT
+        with ESMTP id S241486AbiDGHOf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:04:10 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4591EF9DB;
-        Thu,  7 Apr 2022 00:02:09 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id c42so5290241edf.3;
-        Thu, 07 Apr 2022 00:02:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=46G4DElr2lTCJKQvU2NBw5+Ku6Z9RIMMPeVF6jkEn4U=;
-        b=O8v6DuJ263WlV1eGdk/1DSkiR8EoXqVEWtmXFaX/ODGTAScxC8MPLn6yFO9u2up9JG
-         PzozbZSyxn7s5jGRHKIsSko1ySx8uIKmlqwonX37Jjn1zYaBjdJAen6OyS+BwolkUPvL
-         kXzz0k6slYzccH59O/iHsGAUH8d8F97fK1EqeZRDO/ZeWJFijv4hGhhFzvf2QIdYa6wC
-         Wl1UCOGIIKw3SGlgsy/BK2eScAa6okEZ2BRCfpGFxeaSQsAzhS3fNVFQxPKfJL+LukgS
-         s2/ODsQnbPAH7PwErJMwh3KF1T1blebX0IBjlysPo/QCZGkhCfiVOfPKwSK78Fd1023L
-         rzfQ==
-X-Gm-Message-State: AOAM530SpzQT3aatvWZcWbiBh8KknO2B7rDWElAuuFAxQsA934PzeFtI
-        DKZxJKy5LBn8gUmP1eqJD81KTGwrIUt5eg==
-X-Google-Smtp-Source: ABdhPJyVCanP2uW7lJxkIPHF3GlJ1OHZfNBFV6sC53moBL0MR5YRphUv/uvWzQu3TDqz1ql0BUTMLw==
-X-Received: by 2002:a05:6402:5243:b0:419:52a1:a743 with SMTP id t3-20020a056402524300b0041952a1a743mr12778753edd.269.1649314927858;
-        Thu, 07 Apr 2022 00:02:07 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id q3-20020a50da83000000b0041cdd6e92b1sm3870276edj.27.2022.04.07.00.02.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 00:02:07 -0700 (PDT)
-Message-ID: <656ffd1d-e7cf-d2c0-e0e6-c10215ba422b@kernel.org>
-Date:   Thu, 7 Apr 2022 09:02:05 +0200
+        Thu, 7 Apr 2022 03:14:35 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E299C31923
+        for <linux-serial@vger.kernel.org>; Thu,  7 Apr 2022 00:12:32 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220407071226epoutp01b65cd44149d3bab829104cd84329e691~ji8BQ9tho1210612106epoutp01d
+        for <linux-serial@vger.kernel.org>; Thu,  7 Apr 2022 07:12:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220407071226epoutp01b65cd44149d3bab829104cd84329e691~ji8BQ9tho1210612106epoutp01d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649315546;
+        bh=l7xJjaagiLTfCODKz8+QKDCkzzsU969u/zrB90J2OgI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=CNy6XJCnXD2b3t/C+iOIQAwWSCnS+3+FEO9K6DRW/G7F5fx2fMXeCJp2LtqU14zAL
+         vdVP5AxkV6YiGSkb/pt5nJEa5y5i4y7FjEhYnRXkUKNsBaL6IDTMKAaeqIbANhnXXr
+         xyKo1dh7U2lHnhTSx8VhpTZ4+0bX3r+lJdJ2f70A=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220407071225epcas2p339c2289b6c7c5b32d7fc99e7942bf385~ji8AjpAl61510115101epcas2p3e;
+        Thu,  7 Apr 2022 07:12:25 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KYsyc0Z88z4x9Pv; Thu,  7 Apr
+        2022 07:12:24 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.26.25540.7DE8E426; Thu,  7 Apr 2022 16:12:23 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220407071223epcas2p2f25428844528dbd505d1b49e0778133d~ji79_RzF93109231092epcas2p20;
+        Thu,  7 Apr 2022 07:12:23 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220407071223epsmtrp2aa847720b15dccbeb1552341fa698391~ji799ccbE0860608606epsmtrp2_;
+        Thu,  7 Apr 2022 07:12:23 +0000 (GMT)
+X-AuditID: b6c32a47-81bff700000063c4-95-624e8ed7aee4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4D.96.24342.6DE8E426; Thu,  7 Apr 2022 16:12:23 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220407071222epsmtip1b87c83bb15ef3fd808e69de7d47aed6e~ji79vSI-K2313523135epsmtip1j;
+        Thu,  7 Apr 2022 07:12:22 +0000 (GMT)
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: [PATCH v3 0/1] tty: serial: samsung: add spin_lock in console_write
+Date:   Thu,  7 Apr 2022 16:16:18 +0900
+Message-Id: <20220407071619.102249-1-jaewon02.kim@samsung.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 01/11] drivers: tty: serial: Fix deadlock in
- sa1100_set_termios()
-Content-Language: en-US
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
-Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
-        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, jes@trained-monkey.org,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        linux-xtensa@linux-xtensa.org, linux-rdma@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-hippi@sunsite.dk, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        Russell King - ARM Linux <linux@armlinux.org.uk>
-References: <cover.1649310812.git.duoming@zju.edu.cn>
- <e82ff9358d4ef90a7e9f624534d6d54fc193467f.1649310812.git.duoming@zju.edu.cn>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <e82ff9358d4ef90a7e9f624534d6d54fc193467f.1649310812.git.duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphk+LIzCtJLcpLzFFi42LZdljTQvd6n1+SwdkXMhYP5m1js7i8X9ui
+        efF6NosdDUdYLd7NlbE4f34Du8Wmx9dYLS7vmsNmMeP8PiaLM4t72R24PDat6mTz2D93DbvH
+        5iX1Hn1bVjF6fN4kF8AalW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ib
+        aqvk4hOg65aZA3SSkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAvECvODG3uDQv
+        XS8vtcTK0MDAyBSoMCE74+rp+SwF31grJv79xNrA+JCli5GTQ0LARKJ5Ti9TFyMXh5DADkaJ
+        /5fnM0M4nxgl1sy8CZX5xijRtWoLG0zLpEnz2SESexkllt19ygSSEBL4yCgx91gyiM0moC3x
+        ff1iVpAiEYHTjBKHtx8Fc5hBluxq/w7UwcEhLOAj8WyJFkgDi4CqxJymi+wgNq+AnURnbzcT
+        xDZ5ie5/f1gg4oISJ2c+AbOZgeLNW2eD3SohcI9d4tyZDqiPXCTWn3oNdaqwxKvjW9ghbCmJ
+        z+/2QsWLJY73fGeCaG5glDh75wArRMJYYtazdkaQ45gFNCXW79IHMSUElCWO3ILayyfRcfgv
+        O0SYV6KjTQiiUU3i/tRzUNNlJCYdWQl1vofE912HWCDhEyvR1b+JZQKj/Cwk38xC8s0shL0L
+        GJlXMYqlFhTnpqcWGxUYw2M1OT93EyM4WWq572Cc8faD3iFGJg7GQ4wSHMxKIrxVuT5JQrwp
+        iZVVqUX58UWlOanFhxhNgeE7kVlKNDkfmK7zSuINTSwNTMzMDM2NTA3MlcR5vVI2JAoJpCeW
+        pGanphakFsH0MXFwSjUwLVftaFg7Oa9fQnTOi2Ihu8OTPGQPTd3VNGPKr657U/yj3u//5HZV
+        SGjC/KUaZzibnVU+1mtdv2nC8SFyt6ZyQYdcyKnqKZJc7IKW92XXPRVbZ2F+e8lqLZslv9KP
+        G65YkBOz9KyVeemiGXzqwmEbTl3g8VzHbVFm4xR/lGtR/bXt/g+1SrYlqr99IuvGLaJwpM0/
+        8crLyQ3zry7WElF0fuc/R+yTskjz/IqvR7stt889rbbx4+uyl5H9p3ez/X0sce+P2PuV/9d7
+        FL29HJzoJmYTXjF1j/CBq8+1uiyWFmcKsbxyfnDZ3qTtI/ME1b21N2fo2m1ovmxpor7DOIAt
+        5cC089m+z5hzr3q9ld3yWomlOCPRUIu5qDgRAD8hCEcfBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLLMWRmVeSWpSXmKPExsWy7bCSnO71Pr8kg7O7GS0ezNvGZnF5v7ZF
+        8+L1bBY7Go6wWrybK2Nx/vwGdotNj6+xWlzeNYfNYsb5fUwWZxb3sjtweWxa1cnmsX/uGnaP
+        zUvqPfq2rGL0+LxJLoA1issmJTUnsyy1SN8ugSvj6un5LAXfWCsm/v3E2sD4kKWLkZNDQsBE
+        YtKk+exdjFwcQgK7GSUunOyCSshILH/WxwZhC0vcbznCClH0nlHi3dNmsCI2AW2J7+sXgyVE
+        BM4zSkx+/IYNxGEW2MMosWb2d2aQKmEBX4kd/96CjWIRUJWY03SRHcTmFbCT6OztZoJYIS/R
+        /e8PC0RcUOLkzCdgNjNQvHnrbOYJjHyzkKRmIUktYGRaxSiZWlCcm55bbFhgmJdarlecmFtc
+        mpeul5yfu4kRHMJamjsYt6/6oHeIkYmD8RCjBAezkghvVa5PkhBvSmJlVWpRfnxRaU5q8SFG
+        aQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1M0yQVmX2bypeJ38hyqowPKzllGKjkfNRw
+        x+Vwe8GuSyaJ8n53+I1/scq/zlBuWez9+MJT3qy4e2o/XlXN3cXFMaF5okHKwh279O/06Qdd
+        1Tq/avfjE5Uls826WDKTcn2u5egd8NFeU/bm/Y+iz4E/H/6VeWWk8c0+zuuhd5sWyzqlTxy1
+        WmckTSZMdFj8xvHA5m6fmMjXEUInZkSKXTLLWcsn/Dej8blWj7X6vrKomzYePAcuP/vJ4PF7
+        TsWG6t2HBD4dCNq2aJbCvnnVH7TNX/DNW7K77aqLyKsXMaaFJiY74/8Hn2JSsWpiZZh70/D4
+        G7bdiaKLt61fLcMxr/rFhkSb+PMNVcUvrTdFeT5RYinOSDTUYi4qTgQAOin67tACAAA=
+X-CMS-MailID: 20220407071223epcas2p2f25428844528dbd505d1b49e0778133d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220407071223epcas2p2f25428844528dbd505d1b49e0778133d
+References: <CGME20220407071223epcas2p2f25428844528dbd505d1b49e0778133d@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,64 +119,29 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 07. 04. 22, 8:33, Duoming Zhou wrote:
-> There is a deadlock in sa1100_set_termios(), which is shown
-> below:
-> 
->     (Thread 1)              |      (Thread 2)
->                             | sa1100_enable_ms()
-> sa1100_set_termios()       |  mod_timer()
->   spin_lock_irqsave() //(1) |  (wait a time)
->   ...                       | sa1100_timeout()
->   del_timer_sync()          |  spin_lock_irqsave() //(2)
->   (wait timer to stop)      |  ...
-> 
-> We hold sport->port.lock in position (1) of thread 1 and
-> use del_timer_sync() to wait timer to stop, but timer handler
-> also need sport->port.lock in position (2) of thread 2. As a result,
-> sa1100_set_termios() will block forever.
-> 
-> This patch extracts del_timer_sync() from the protection of
-> spin_lock_irqsave(), which could let timer handler to obtain
-> the needed lock.
-> 
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->   drivers/tty/serial/sa1100.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
-> index 5fe6cccfc1a..3a5f12ced0b 100644
-> --- a/drivers/tty/serial/sa1100.c
-> +++ b/drivers/tty/serial/sa1100.c
-> @@ -476,7 +476,9 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
->   				UTSR1_TO_SM(UTSR1_ROR);
->   	}
->   
-> +	spin_unlock_irqrestore(&sport->port.lock, flags);
+When console and printk log are printed at the same time,
+they are called through tty driver and console driver concurrently.
+In this case, this could lead to potintial issue that
+data loss or fifo full.
 
-Unlocking the lock at this point doesn't look safe at all. Maybe moving 
-the timer deletion before the lock? There is no current maintainer to 
-ask. Most of the driver originates from rmk. Ccing him just in case.
+This issue also occurred with other drivers and has been fixed.
+"serial: amba-pl011: lock console writes against interrupts"
+ - https://lkml.org/lkml/2012/2/1/495
 
-FWIW the lock was moved by this commit around linux 2.5.55 (from 
-full-history-linux [1])
-commit f38aef3e62c26a33ea360a86fde9b27e183a3748
-Author: Russell King <rmk@flint.arm.linux.org.uk>
-Date:   Fri Jan 3 15:42:09 2003 +0000
+---
+Changes since v2:
+ - value of lock is chanaged to true/false
 
-     [SERIAL] Convert change_speed() to settermios()
+Changes since v1:
+ - locked variable type changed bool from int
+ - spin_lock() changed to spin_lock_irqsave()
 
-[1] 
-https://archive.org/download/git-history-of-linux/full-history-linux.git.tar
+Jaewon Kim (1):
+  tty: serial: samsung: add spin_lock for interrupt and console_write
 
->   	del_timer_sync(&sport->timer);
-> +	spin_lock_irqsave(&sport->port.lock, flags);
->   
->   	/*
->   	 * Update the per-port timeout.
+ drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-thanks,
 -- 
-js
-suse labs
+2.35.1
+
