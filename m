@@ -2,110 +2,171 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68514FBA3C
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 12:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDED74FBA2C
+	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 12:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343501AbiDKK6Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Apr 2022 06:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S1345772AbiDKK42 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Apr 2022 06:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245016AbiDKK6P (ORCPT
+        with ESMTP id S240251AbiDKK4Z (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:58:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF263B2A8
-        for <linux-serial@vger.kernel.org>; Mon, 11 Apr 2022 03:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649674561; x=1681210561;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3XS+zMt/2GJSDWFAnh7v6Du9fAG72B3xZKxzLdCY/Gc=;
-  b=ep2OT0YKbv/N2dMkuRN00svO+dgl7lirTquRLQXzR3kpNrO37RpUkJhM
-   aI03hpWox/Xtp7U7p4JvQEEl7IxEW4LErKQhAvEuEh0GkQZpEUzDGrsLP
-   8tLtJb65ScqJRn3oJx+QBefCJ049lsJwFkujr5EOWVt6va9KoscBgskDQ
-   Xy/MRS718KLL9WCsu1TKue2l+ePfG24bmfCqfUdTymbMpf0vz57onsX7+
-   8D4lbLx+/VDs58RhhiKh7XKqyu99BdAmc0SkklfpF9EnaHPL4cmD8Ivgd
-   rXs1Se1KHXwls4DpPLAVm3wvT6DVtoYZHh8SFZdDY0Vz7lgtcn6VxRWO6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="243971679"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="243971679"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:56:00 -0700
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="525479515"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:55:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ndrec-001BZ7-6Q;
-        Mon, 11 Apr 2022 13:52:18 +0300
-Date:   Mon, 11 Apr 2022 13:52:17 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
-        giulio.benetti@micronovasrl.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v3 01/12] serial: Store character timing information to
- uart_port
-Message-ID: <YlQIYatkKoeLekFJ@smile.fi.intel.com>
-References: <20220411083321.9131-1-ilpo.jarvinen@linux.intel.com>
- <20220411083321.9131-2-ilpo.jarvinen@linux.intel.com>
+        Mon, 11 Apr 2022 06:56:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A0B12;
+        Mon, 11 Apr 2022 03:54:08 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8BED81F38D;
+        Mon, 11 Apr 2022 10:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649674447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j1s/ljyl7zRa3Wwc8LKTq4IIoQmYHWi7pP4k8x7uAGE=;
+        b=UTiDDmUHwjaSsgqSy4T6CE3RTR8l+AnaXBjXW2ap/oDIsan5ZsvNBm2HM/XMMiOftaqqrK
+        A8lEUQKIGeOmYFOU9L4oju9eMuMTurRmqIStodrOOkwJh4c/F3KHeJKmDOUh4E0DAMmp3A
+        8iKjxbiu1viVQPm3c0vm7LW//vNl1Q0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649674447;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j1s/ljyl7zRa3Wwc8LKTq4IIoQmYHWi7pP4k8x7uAGE=;
+        b=91vAcOt5z+ytrUcuWk8bvmToYhRU/F6vOBRZ9r7aVzeI9ni048a5Le5rVB3bf0VrRSxahD
+        rYPIYAwSuBxUe4Bg==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F00D2A3B87;
+        Mon, 11 Apr 2022 10:54:05 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 0/3] tty: TX helpers
+Date:   Mon, 11 Apr 2022 12:54:02 +0200
+Message-Id: <20220411105405.9519-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220411083321.9131-2-ilpo.jarvinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:33:10AM +0300, Ilpo J�rvinen wrote:
-> Struct uart_port currently stores FIFO timeout. Having character
-> timing information readily available is useful. Even serial core
-> itself determines char_time from port->timeout using inverse
-> calculation.
-> 
-> Store frame_time directly into uart_port. Character time is stored
-> in nanoseconds to have reasonable precision with high rates.
-> To avoid overflow, 64-bit math is necessary.
-> 
-> It might be possible to determine timeout from frame_time by
-> multiplying it with fifosize as needed but only part of the
-> users seem to be protected by a lock. Thus, this patch does
-> not pursue storing only frame_time in uart_port.
+First, this series depends on "tty: various cleanups"
+(20220411104506.8990-1-jslaby@suse.cz).
 
-...
+This series introduces uart_port_tx{,_limit}() TX helpers. See PATCH
+1/3 for the details. Comments welcome.
 
-> -	char_time = (port->timeout - HZ/50) / port->fifosize;
-> -	char_time = char_time / 5;
-> -	if (char_time == 0)
-> -		char_time = 1;
-> +	char_time = max(nsecs_to_jiffies(port->frame_time / 5), 1UL);
-> +
->  	if (timeout && timeout < char_time)
->  		char_time = timeout;
+Then it switches drivers to use them. First, uart_port_tx() in 2/3 and
+then uart_port_tx_limit() in 3/3.
 
-Seems it can be packed to something like
+The diffstat of patches 2+3 is as follows:
+ 27 files changed, 330 insertions(+), 883 deletions(-)
+which appears to be nice.
 
-	char_time = min_not_zero(nsecs_to_jiffies(port->frame_time / 5), timeout);
+Cc: Tobias Klauser <tklauser@distanz.ch>
+Cc: Richard Genoud <richard.genoud@gmail.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: "Pali Rohár" <pali@kernel.org>
+Cc: Kevin Cernekee <cernekee@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang7@gmail.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: linux-riscv@lists.infradead.org
 
-?
+Jiri Slaby (3):
+  tty: serial: introduce uart_port_tx{,_limit}() helpers
+  tty: serial: use uart_port_tx() helper
+  tty: serial: use uart_port_tx_limit() helper
+
+ Documentation/driver-api/serial/driver.rst | 28 +++++++++++
+ drivers/tty/serial/21285.c                 | 40 ++++++----------
+ drivers/tty/serial/altera_jtaguart.c       | 43 +++++------------
+ drivers/tty/serial/altera_uart.c           | 47 ++++++-------------
+ drivers/tty/serial/amba-pl010.c            | 40 +++-------------
+ drivers/tty/serial/apbuart.c               | 37 +++------------
+ drivers/tty/serial/atmel_serial.c          | 37 ++++++---------
+ drivers/tty/serial/bcm63xx_uart.c          | 48 ++++---------------
+ drivers/tty/serial/fsl_lpuart.c            | 49 +++++++-------------
+ drivers/tty/serial/lantiq.c                | 50 +++++++-------------
+ drivers/tty/serial/lpc32xx_hs.c            | 53 +++++++--------------
+ drivers/tty/serial/mcf.c                   | 35 ++++++--------
+ drivers/tty/serial/mpc52xx_uart.c          | 54 +++++++---------------
+ drivers/tty/serial/mps2-uart.c             | 44 ++++++------------
+ drivers/tty/serial/mux.c                   | 48 ++++++-------------
+ drivers/tty/serial/mvebu-uart.c            | 47 ++++++-------------
+ drivers/tty/serial/mxs-auart.c             | 43 ++++++++---------
+ drivers/tty/serial/omap-serial.c           | 53 ++++++---------------
+ drivers/tty/serial/owl-uart.c              | 47 ++++++-------------
+ drivers/tty/serial/pxa.c                   | 43 ++++-------------
+ drivers/tty/serial/rp2.c                   | 36 ++++-----------
+ drivers/tty/serial/sa1100.c                | 50 ++++++++------------
+ drivers/tty/serial/serial_core.c           | 53 +++++++++++++++++++++
+ drivers/tty/serial/serial_txx9.c           | 40 +++-------------
+ drivers/tty/serial/sifive.c                | 48 +++----------------
+ drivers/tty/serial/sprd_serial.c           | 41 +++-------------
+ drivers/tty/serial/st-asc.c                | 51 +++-----------------
+ drivers/tty/serial/vr41xx_siu.c            | 42 +++--------------
+ drivers/tty/serial/vt8500_serial.c         | 47 ++++++-------------
+ include/linux/serial_core.h                |  9 ++++
+ 30 files changed, 420 insertions(+), 883 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
