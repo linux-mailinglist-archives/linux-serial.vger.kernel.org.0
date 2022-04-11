@@ -2,47 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E1E4FBA33
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 12:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDD44FBA6A
+	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 13:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241539AbiDKK5i (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Apr 2022 06:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S1345828AbiDKLEY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Apr 2022 07:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238654AbiDKK5h (ORCPT
+        with ESMTP id S1346078AbiDKLCf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:57:37 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9C4C3B2A8;
-        Mon, 11 Apr 2022 03:55:24 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id EEFCC809F;
-        Mon, 11 Apr 2022 10:52:52 +0000 (UTC)
-Date:   Mon, 11 Apr 2022 13:55:22 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mon, 11 Apr 2022 07:02:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E924504A
+        for <linux-serial@vger.kernel.org>; Mon, 11 Apr 2022 04:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649674814; x=1681210814;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=jYgo/pskezyKWbM20xhS/s9H18em5qzPlsxzrjkorgc=;
+  b=eF1gKpBfmkz/LqCoHitxyYNHD5Vg1UhjiCoYsvQuPmjIhDKY8IITSCgs
+   B34XCXaxDQHU/tWQgvsYaZo7E5YnooWZ0oxZ5txv3cOylNKOHlcWieFGQ
+   boe8B96dbAwPjUI4IkeXwR5LA4g+0v416BWfBp9OxAsG7lfwyAAkZMImu
+   vhaXsWcEuthMhklAtRhuE27pJOCDqHGg/93MXHIcLWUodhILKWiu2ftvi
+   Hlo2RKaAlYl+EbN4BH7rxssiCX6V/Vs81MMLq1GekkqoOcnfwgOgheVqo
+   9a6JA5XOsmxLJ7/fZXuu7H1KQZiZzvSXyGVYGDc6Y5zqRzKYfmcJege81
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261832371"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="261832371"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 04:00:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="644040267"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 04:00:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ndria-001BcR-FW;
+        Mon, 11 Apr 2022 13:56:24 +0300
+Date:   Mon, 11 Apr 2022 13:56:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] serial: core: Add support of runtime PM
-Message-ID: <YlQJGrzyb3ymq0Vm@atomide.com>
-References: <20211115084203.56478-1-tony@atomide.com>
- <20211115084203.56478-2-tony@atomide.com>
- <YaX82wxybOZnPKpy@hovoldconsulting.com>
- <YbGwaOj0ZbEuNEPA@atomide.com>
- <YbHb7HRGGFRBorB7@smile.fi.intel.com>
- <YeaLL0cJFeIhz1Tr@atomide.com>
- <YlQEoNDYRtoHDL68@smile.fi.intel.com>
+        Lukas Wunner <lukas@wunner.de>,
+        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v3 01/12] serial: Store character timing information to
+ uart_port
+Message-ID: <YlQJWHVTMeN2YsPA@smile.fi.intel.com>
+References: <20220411083321.9131-1-ilpo.jarvinen@linux.intel.com>
+ <20220411083321.9131-2-ilpo.jarvinen@linux.intel.com>
+ <YlQIYatkKoeLekFJ@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YlQEoNDYRtoHDL68@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YlQIYatkKoeLekFJ@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,15 +74,50 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-* Andy Shevchenko <andriy.shevchenko@intel.com> [220411 10:37]:
-> I'm a bit off of the UART work nowadays, but luckily we have Ilpo who is
-> pretty much ramped up on the topic. Please, include him in all your work
-> WRT 8250 UART improvements. I hope Ilpo might have time to test the patch
-> mentioned in this message or give an idea how to do better, if possibly.
+On Mon, Apr 11, 2022 at 01:52:18PM +0300, Andy Shevchenko wrote:
+> On Mon, Apr 11, 2022 at 11:33:10AM +0300, Ilpo Järvinen wrote:
+> > Struct uart_port currently stores FIFO timeout. Having character
+> > timing information readily available is useful. Even serial core
+> > itself determines char_time from port->timeout using inverse
+> > calculation.
+> > 
+> > Store frame_time directly into uart_port. Character time is stored
+> > in nanoseconds to have reasonable precision with high rates.
+> > To avoid overflow, 64-bit math is necessary.
+> > 
+> > It might be possible to determine timeout from frame_time by
+> > multiplying it with fifosize as needed but only part of the
+> > users seem to be protected by a lock. Thus, this patch does
+> > not pursue storing only frame_time in uart_port.
 
-OK, I'll be sending out a preparatory patch that starts managing serial
-port devices in addition to serial port with serial_core.c.
+...
 
-Regards,
+> > -	char_time = (port->timeout - HZ/50) / port->fifosize;
+> > -	char_time = char_time / 5;
+> > -	if (char_time == 0)
+> > -		char_time = 1;
+> > +	char_time = max(nsecs_to_jiffies(port->frame_time / 5), 1UL);
+> > +
+> >  	if (timeout && timeout < char_time)
+> >  		char_time = timeout;
+> 
+> Seems it can be packed to something like
+> 
+> 	char_time = min_not_zero(nsecs_to_jiffies(port->frame_time / 5), timeout);
+> 
+> ?
 
-Tony
+Actually:
+
+	char_time = min_not_zero(timeout, nsecs_to_jiffies(port->frame_time / 5));
+
+Ah, either way it would still miss the case when both == 0. So, we need
+something like minmax3_not_zero, where 1UL is implied argument. Probably
+a suggesting for the future, since here it doesn't make much sense to
+introduce.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
