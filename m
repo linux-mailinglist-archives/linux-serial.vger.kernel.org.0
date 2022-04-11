@@ -2,72 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E344D4FBA74
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 13:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9BD4FBA58
+	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 13:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244385AbiDKLGH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Apr 2022 07:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S1344427AbiDKLEA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Apr 2022 07:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345820AbiDKLGG (ORCPT
+        with ESMTP id S230468AbiDKLD7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:06:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE0B44776
-        for <linux-serial@vger.kernel.org>; Mon, 11 Apr 2022 04:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649675028; x=1681211028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hef0Rvs2pZW/Io/0Qnl4QBytmvr3De5paC/D4xr6NRs=;
-  b=F879labq1paLhz+TdEPNR6IeZmkaMK9Sx8ymRlpWM0ba1HdHW5+DHrNK
-   6aToJDctez/27TLGMteR14PGY/f2sbf+a7aPc8QazSFts6nzgZJimWoOX
-   7py7L2mM/Bfmgx4pP9KRpo2HncOT8KwQkvWFw6M/+eJwPMVGyzqL9br8w
-   6jst/cNwxCl1I+d0BbalLDPVJWQTaike6PB01avlj5mibs/Xd+BUhiJmw
-   ydYTWhL59kIxZqrLbCLuIJMTWYBAyvJIEhuKOP6YVDgI/pZBwcYge1TBg
-   BQJOKsPVLn+Hl2+MPSt85QxYSXzlECiuvMacQhrC16VfmJ2kPU9Odx7mG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261833034"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="261833034"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 04:03:47 -0700
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="589837968"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 04:03:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ndrm8-001BfU-Rx;
-        Mon, 11 Apr 2022 14:00:04 +0300
-Date:   Mon, 11 Apr 2022 14:00:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
-        giulio.benetti@micronovasrl.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v3 01/12] serial: Store character timing information to
- uart_port
-Message-ID: <YlQKNF0OORYQtvaZ@smile.fi.intel.com>
-References: <20220411083321.9131-1-ilpo.jarvinen@linux.intel.com>
- <20220411083321.9131-2-ilpo.jarvinen@linux.intel.com>
- <YlQIYatkKoeLekFJ@smile.fi.intel.com>
- <YlQJWHVTMeN2YsPA@smile.fi.intel.com>
+        Mon, 11 Apr 2022 07:03:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568DC47;
+        Mon, 11 Apr 2022 04:01:45 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C10A4215FC;
+        Mon, 11 Apr 2022 11:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649674903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TOslUvi/cDmQavLrpqh4QEcnpVMqxdKoJ62gjCK8ziE=;
+        b=JtBV4ZhgmdXf8dZaJA6HD71mXaHPDMZcSZy5VmAnLNCRnOt28GdDdSKadhIVhJxSuzINWk
+        p4WL1phACClTu4Ao11X3I6YMERR3cQ3eZmhA8VUHnHkwx5+o/jBmYeppN0rejqZtjKadJ7
+        H2fB4N0Re26OK4Hfl4pKxuEDeYO1vcE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649674903;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TOslUvi/cDmQavLrpqh4QEcnpVMqxdKoJ62gjCK8ziE=;
+        b=Sl7m5Js0SIxcFKOk2BZEI3qkI0fUIDCKPpEsQ84MF6629tN/T0zTGBZ01djLx2K8MiutZY
+        6F3xs+OBaqHJWWBQ==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9556FA3B88;
+        Mon, 11 Apr 2022 11:01:43 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 0/6] tty: Documentation moves and updates.
+Date:   Mon, 11 Apr 2022 13:01:37 +0200
+Message-Id: <20220411110143.10019-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YlQJWHVTMeN2YsPA@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +57,46 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 01:56:24PM +0300, Andy Shevchenko wrote:
-> On Mon, Apr 11, 2022 at 01:52:18PM +0300, Andy Shevchenko wrote:
-> > On Mon, Apr 11, 2022 at 11:33:10AM +0300, Ilpo Järvinen wrote:
-> > > Struct uart_port currently stores FIFO timeout. Having character
-> > > timing information readily available is useful. Even serial core
-> > > itself determines char_time from port->timeout using inverse
-> > > calculation.
-> > > 
-> > > Store frame_time directly into uart_port. Character time is stored
-> > > in nanoseconds to have reasonable precision with high rates.
-> > > To avoid overflow, 64-bit math is necessary.
-> > > 
-> > > It might be possible to determine timeout from frame_time by
-> > > multiplying it with fifosize as needed but only part of the
-> > > users seem to be protected by a lock. Thus, this patch does
-> > > not pursue storing only frame_time in uart_port.
-> 
-> ...
-> 
-> > > -	char_time = (port->timeout - HZ/50) / port->fifosize;
-> > > -	char_time = char_time / 5;
-> > > -	if (char_time == 0)
-> > > -		char_time = 1;
-> > > +	char_time = max(nsecs_to_jiffies(port->frame_time / 5), 1UL);
-> > > +
-> > >  	if (timeout && timeout < char_time)
-> > >  		char_time = timeout;
-> > 
-> > Seems it can be packed to something like
-> > 
-> > 	char_time = min_not_zero(nsecs_to_jiffies(port->frame_time / 5), timeout);
-> > 
-> > ?
-> 
-> Actually:
-> 
-> 	char_time = min_not_zero(timeout, nsecs_to_jiffies(port->frame_time / 5));
-> 
-> Ah, either way it would still miss the case when both == 0. So, we need
-> something like minmax3_not_zero, where 1UL is implied argument. Probably
-> a suggesting for the future, since here it doesn't make much sense to
-> introduce.
+This moves tty to driver-api, move more tty documents there and updates
+them. Either to use ReST properly or update so that they correspond to
+the current state.
 
-In case somebody goes for it:
+Jiri Slaby (6):
+  Documentation: move tty to driver-api
+  Documentation: tty: introduce "Other Documentation"
+  Documentation: tty: move n_gsm to tty
+  Documentation: tty: move moxa-smartio.rst to tty
+  Documentation: tty: n_gsm, delete "Additional Documentation"
+  Documentation: tty: n_gsm, use power of ReST
 
-#define minmax_not_zero(x, y)	(min_not_zero(x, y) ?: 1)
+ Documentation/driver-api/index.rst            |   1 +
+ Documentation/driver-api/serial/driver.rst    |   2 +-
+ Documentation/driver-api/serial/index.rst     |   2 -
+ Documentation/driver-api/serial/n_gsm.rst     | 159 ------------------
+ Documentation/{ => driver-api}/tty/index.rst  |  22 ++-
+ .../{serial => tty}/moxa-smartio.rst          |   0
+ Documentation/driver-api/tty/n_gsm.rst        | 153 +++++++++++++++++
+ Documentation/{ => driver-api}/tty/n_tty.rst  |   0
+ .../{ => driver-api}/tty/tty_buffer.rst       |   0
+ .../{ => driver-api}/tty/tty_driver.rst       |   0
+ .../{ => driver-api}/tty/tty_internals.rst    |   0
+ .../{ => driver-api}/tty/tty_ldisc.rst        |   0
+ .../{ => driver-api}/tty/tty_port.rst         |   0
+ .../{ => driver-api}/tty/tty_struct.rst       |   0
+ Documentation/index.rst                       |   1 -
+ 15 files changed, 171 insertions(+), 169 deletions(-)
+ delete mode 100644 Documentation/driver-api/serial/n_gsm.rst
+ rename Documentation/{ => driver-api}/tty/index.rst (81%)
+ rename Documentation/driver-api/{serial => tty}/moxa-smartio.rst (100%)
+ create mode 100644 Documentation/driver-api/tty/n_gsm.rst
+ rename Documentation/{ => driver-api}/tty/n_tty.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_buffer.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_driver.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_internals.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_ldisc.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_port.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_struct.rst (100%)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
