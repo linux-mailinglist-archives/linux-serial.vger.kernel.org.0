@@ -2,97 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3826C4FB9F4
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 12:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68514FBA3C
+	for <lists+linux-serial@lfdr.de>; Mon, 11 Apr 2022 12:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345683AbiDKKrg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Apr 2022 06:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S1343501AbiDKK6Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Apr 2022 06:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345690AbiDKKr1 (ORCPT
+        with ESMTP id S245016AbiDKK6P (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:47:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A9413CC3;
-        Mon, 11 Apr 2022 03:45:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8CA3C1F864;
-        Mon, 11 Apr 2022 10:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649673911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zGE3QD6z+mw6oVDHzRqdqpWGIUM4LnUnXOrLoFmEk7o=;
-        b=Lh+SCQtDUeJKJSpxBy4Gy/KSBUKznVcw3tchP02SlruZA+o5DZ9lRCfwPuazcOFWAnt044
-        oQLlePmyhB4oXPXmCfbgdiluWhNmXtNz8QxvesMqV8lN6d/8ORX+6qZrzKEevGja8EPelm
-        SUDQr16mUnEgrGFcuxrCimDf6IDwQqo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649673911;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zGE3QD6z+mw6oVDHzRqdqpWGIUM4LnUnXOrLoFmEk7o=;
-        b=OvMO7talElJztTKB6xkPxpPfl0t2e4YQ1Nxe9LQ/McMpE2MooOn4yjh+KX04NU01P7lK+Z
-        MhYyC5HN/8RIGjAg==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4EE0BA3B96;
-        Mon, 11 Apr 2022 10:45:11 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        Tobias Klauser <tklauser@distanz.ch>
-Subject: [PATCH 3/3] tty: serial: altera: use altera_jtaguart_stop_tx()
-Date:   Mon, 11 Apr 2022 12:45:06 +0200
-Message-Id: <20220411104506.8990-4-jslaby@suse.cz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411104506.8990-1-jslaby@suse.cz>
-References: <20220411104506.8990-1-jslaby@suse.cz>
+        Mon, 11 Apr 2022 06:58:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF263B2A8
+        for <linux-serial@vger.kernel.org>; Mon, 11 Apr 2022 03:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649674561; x=1681210561;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=3XS+zMt/2GJSDWFAnh7v6Du9fAG72B3xZKxzLdCY/Gc=;
+  b=ep2OT0YKbv/N2dMkuRN00svO+dgl7lirTquRLQXzR3kpNrO37RpUkJhM
+   aI03hpWox/Xtp7U7p4JvQEEl7IxEW4LErKQhAvEuEh0GkQZpEUzDGrsLP
+   8tLtJb65ScqJRn3oJx+QBefCJ049lsJwFkujr5EOWVt6va9KoscBgskDQ
+   Xy/MRS718KLL9WCsu1TKue2l+ePfG24bmfCqfUdTymbMpf0vz57onsX7+
+   8D4lbLx+/VDs58RhhiKh7XKqyu99BdAmc0SkklfpF9EnaHPL4cmD8Ivgd
+   rXs1Se1KHXwls4DpPLAVm3wvT6DVtoYZHh8SFZdDY0Vz7lgtcn6VxRWO6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="243971679"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="243971679"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:56:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="525479515"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:55:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ndrec-001BZ7-6Q;
+        Mon, 11 Apr 2022 13:52:18 +0300
+Date:   Mon, 11 Apr 2022 13:52:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v3 01/12] serial: Store character timing information to
+ uart_port
+Message-ID: <YlQIYatkKoeLekFJ@smile.fi.intel.com>
+References: <20220411083321.9131-1-ilpo.jarvinen@linux.intel.com>
+ <20220411083321.9131-2-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220411083321.9131-2-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-altera_jtaguart_tx_chars() duplicates what altera_jtaguart_stop_tx()
-already does. So instead of the duplication, call the helper instead.
+On Mon, Apr 11, 2022 at 11:33:10AM +0300, Ilpo Järvinen wrote:
+> Struct uart_port currently stores FIFO timeout. Having character
+> timing information readily available is useful. Even serial core
+> itself determines char_time from port->timeout using inverse
+> calculation.
+> 
+> Store frame_time directly into uart_port. Character time is stored
+> in nanoseconds to have reasonable precision with high rates.
+> To avoid overflow, 64-bit math is necessary.
+> 
+> It might be possible to determine timeout from frame_time by
+> multiplying it with fifosize as needed but only part of the
+> users seem to be protected by a lock. Thus, this patch does
+> not pursue storing only frame_time in uart_port.
 
-Not only it makes the code cleaner, but it also says what the "if"
-really does.
+...
 
-Cc: Tobias Klauser <tklauser@distanz.ch>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/serial/altera_jtaguart.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> -	char_time = (port->timeout - HZ/50) / port->fifosize;
+> -	char_time = char_time / 5;
+> -	if (char_time == 0)
+> -		char_time = 1;
+> +	char_time = max(nsecs_to_jiffies(port->frame_time / 5), 1UL);
+> +
+>  	if (timeout && timeout < char_time)
+>  		char_time = timeout;
 
-diff --git a/drivers/tty/serial/altera_jtaguart.c b/drivers/tty/serial/altera_jtaguart.c
-index 1c16345d0a1f..cb791c5149a3 100644
---- a/drivers/tty/serial/altera_jtaguart.c
-+++ b/drivers/tty/serial/altera_jtaguart.c
-@@ -168,10 +168,8 @@ static void altera_jtaguart_tx_chars(struct altera_jtaguart *pp)
- 		}
- 	}
- 
--	if (pending == 0) {
--		pp->imr &= ~ALTERA_JTAGUART_CONTROL_WE_MSK;
--		writel(pp->imr, port->membase + ALTERA_JTAGUART_CONTROL_REG);
--	}
-+	if (pending == 0)
-+		altera_jtaguart_stop_tx(port);
- }
- 
- static irqreturn_t altera_jtaguart_interrupt(int irq, void *data)
+Seems it can be packed to something like
+
+	char_time = min_not_zero(nsecs_to_jiffies(port->frame_time / 5), timeout);
+
+?
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
