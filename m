@@ -2,33 +2,33 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3745011E5
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Apr 2022 17:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53D0501428
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Apr 2022 17:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350577AbiDNOWf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 14 Apr 2022 10:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
+        id S244779AbiDNNf5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 14 Apr 2022 09:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345104AbiDNNpI (ORCPT
+        with ESMTP id S245359AbiDNN2w (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:08 -0400
+        Thu, 14 Apr 2022 09:28:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB342CCA9;
-        Thu, 14 Apr 2022 06:42:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069A49BB89;
+        Thu, 14 Apr 2022 06:22:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC35EB82968;
-        Thu, 14 Apr 2022 13:42:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0426FC385A1;
-        Thu, 14 Apr 2022 13:42:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79468B82983;
+        Thu, 14 Apr 2022 13:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD80C385A5;
+        Thu, 14 Apr 2022 13:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943720;
-        bh=QMtNxulyfx81R37POF0+7xpByUSFgPbFT4ZF2J9sYZQ=;
+        s=korg; t=1649942553;
+        bh=/yxcK02g7VH/RZ2+1dxRFjHmnG7NYbGRQivQLXSLm2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WfrEXbpLzhO5omWfE9/cCK+LaYzw3FC76KOgDLqnlx9rG8h9MOLX4zJR4X3VM9+kO
-         nmlSdDlfJlYVVriBmuDQ3hAeY16AxX3Qg5YydvLfZzLrs7f5jGjNAZaxCyks4f7Ymc
-         xt/1GNW7Z2okHUUApAY711/LgoZ5VH3n8CBvJoC0=
+        b=kGOH6W8xzCslZOzZjoZ76gXl9YCuxKBvhEBhCC62EH8RQ3Df4xpUw0gqzy6HogtvV
+         jI0J6kcoBpVhOmGDfLCoQzBtf06NkIqOIykSuorXnxu6Ea+Z4xNdlRaLOV6GFNNtdo
+         UZtyVM1H+D4REVVn1iPRKoBxOhEV0MMAzNlSxSOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,12 +42,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Igor Zhbanov <i.zhbanov@omprussia.ru>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 256/475] kgdboc: fix return value of __setup handler
-Date:   Thu, 14 Apr 2022 15:10:41 +0200
-Message-Id: <20220414110902.274474002@linuxfoundation.org>
+Subject: [PATCH 4.19 177/338] kgdboc: fix return value of __setup handler
+Date:   Thu, 14 Apr 2022 15:11:20 +0200
+Message-Id: <20220414110843.936093665@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -107,10 +107,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index f5608ad68ae1..6d4792ec9e5f 100644
+index b0aa864f84a9..6e81d782d8a0 100644
 --- a/drivers/tty/serial/kgdboc.c
 +++ b/drivers/tty/serial/kgdboc.c
-@@ -391,16 +391,16 @@ static int kgdboc_option_setup(char *opt)
+@@ -302,16 +302,16 @@ static int kgdboc_option_setup(char *opt)
  {
  	if (!opt) {
  		pr_err("config string not provided\n");
