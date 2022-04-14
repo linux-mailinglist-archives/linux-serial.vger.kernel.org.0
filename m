@@ -2,91 +2,200 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64F1501295
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Apr 2022 17:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5F8501946
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Apr 2022 18:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245591AbiDNORZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 14 Apr 2022 10:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S239818AbiDNQ7W (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 14 Apr 2022 12:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242410AbiDNN7d (ORCPT
+        with ESMTP id S1344369AbiDNQ6o (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:33 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B412018A;
-        Thu, 14 Apr 2022 06:55:44 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id c64so6433544edf.11;
-        Thu, 14 Apr 2022 06:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y5aWYxkMrcBFiZitnUw0BTQJF0hESlZ4bWlKsoVZ2qk=;
-        b=JY+wyiniWXODIB9ip+nO+wz7WCk7mIMRSrne8Efqpq6QArFTFLkSy1HHHAcMyfO5Lh
-         7c1+uBsd4DXxMgKgAzuhJTQ0T9kSCP/aKmZ/hIqrpZTi8d3M3czgJv7aRJNpJ66uwW63
-         BDRAZJPH/yW0iqGp3y8Hz29qbByy24RMCqzS22Jv3/MJqFu5JTzVRgfIJ5fQLRGVOKGe
-         Xr5vqtVVMEhDZeplv7OUiuwOGeVEm7ycntN+Frp3W/awvwq20P3gmiVwW14Qpmv4N7aj
-         Zwyk166RqpMzhj/c31zjd7lwvBFPdn/RyZVLjjZ/ofxopRqmY5+oBYmQyLX5EBnMvwah
-         ZvXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y5aWYxkMrcBFiZitnUw0BTQJF0hESlZ4bWlKsoVZ2qk=;
-        b=VzsQjve0imrdIA5pTjN/xdTpcH8ZCY9eRvqNTrZwHFFG8SkSE5Z3bw4DNjt20CSlWi
-         0UPINHOxSs3DctGS5K6Bzy22gF/UA2tBrFt/P/Ajp7vreKD260LWRl/HwGFWyVwGiGTC
-         OeqbJg31v4ZpRtsV+QyDt13jqkIyVwwhD3HTjg/thMHFBqLZYzpw3F4mIUEr+giiCieO
-         D6BwqkNiHIg2lYE0J2LTka2s6MlW9XJpqgpBdUPmUwQgYAsuLFHglgQT2o9k6TyHmyxv
-         TCCWUYsztgtUYCYDhDPX/hHFNBkBOWHVobQzRwUrQ+GiKnMp5gsviaqSYkZFjXGrmvCZ
-         caTg==
-X-Gm-Message-State: AOAM531eb0WkOPEpBG0GzPdUeNOFSa5XO2Fholrwn9BhvIxILPoSXPoq
-        J3VkVnnlnKjaK6yU2/MSxHrBGebf2bqJDwQHbaY=
-X-Google-Smtp-Source: ABdhPJwyww3e7aXwVAs5W5XjFg3dukyYoKr1v4cFU96Oyg0QAXFlpH1HVg2jgzcNDXhZb66cB0aqELroxq5jSc7mxQ4=
-X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
- z22-20020a50e696000000b00419998d5febmr3188574edm.122.1649944543309; Thu, 14
- Apr 2022 06:55:43 -0700 (PDT)
+        Thu, 14 Apr 2022 12:58:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313DC9F6C0;
+        Thu, 14 Apr 2022 09:32:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA54E61FEC;
+        Thu, 14 Apr 2022 16:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D21C385A5;
+        Thu, 14 Apr 2022 16:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649953930;
+        bh=hdd96lwHARk1y0gyMqVXzjjCx4Up+g8Yw/n6h7HFY3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IG4XPTR2iiuTGA251zdre+MOrTvjCrVug0OvyEp6FVKof3sR3O3ByMLfvjQQdhjWq
+         bfdrSGZCs2KpTH6uBNSZ/qRYjudyTgtpwUIjrLptb8vsx+3TJ+5ADIZMKq3rFDwNUa
+         yZWfDalboZu1KwfcOMfqbB490COqxZXT5vrJ//n4=
+Date:   Thu, 14 Apr 2022 18:32:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] tty: serial: introduce uart_port_tx{,_limit}()
+ helpers
+Message-ID: <YlhMhy9FhK0j3MId@kroah.com>
+References: <20220411105405.9519-1-jslaby@suse.cz>
+ <20220411105405.9519-2-jslaby@suse.cz>
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk>
- <alpine.DEB.2.21.2204132103190.9383@angie.orcam.me.uk> <CAHp75VdOf3+j8yQh=-f6iCN_gRhisgoQjov2kK1fhgv7xaBJRg@mail.gmail.com>
- <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Apr 2022 16:55:07 +0300
-Message-ID: <CAHp75Vcb0JBQoNrb=ABCsPeM1U2zmHLw0P7Haa-Z=6D__VuqWA@mail.gmail.com>
-Subject: Re: [PING][PATCH v3 0/2] serial: 8250: Fixes for Oxford Semiconductor
- 950 UARTs
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411105405.9519-2-jslaby@suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 4:47 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> On Thu, 14 Apr 2022, Andy Shevchenko wrote:
+On Mon, Apr 11, 2022 at 12:54:03PM +0200, Jiri Slaby wrote:
+> Many serial drivers do the same thing:
+> * send x_char if set
+> * keep sending from the xmit circular buffer until either
+>   - the loop reaches the end of the xmit buffer
+>   - TX is stopped
+>   - HW fifo is full
+> * check for pending characters and:
+>   - wake up tty writers to fill for more data into xmit buffer
+>   - stop TX if there is nothing in the xmit buffer
+> 
+> The only differences are:
+> * how to write the character to the HW fifo
+> * the check of the end condition:
+>   - is the HW fifo full?
+>   - is limit of the written characters reached?
+> 
+> So unify the above into two helpers:
+> * uart_port_tx_limit() -- the generic one, it performs the above taking
+>   into account the written characters limit
+> * uart_port_tx() -- calls the above with ~0 as the limit. So it only
+>   checks the HW fullness.
+> 
+> We need three more hooks in struct uart_ops for all this to work:
+> * tx_ready() -- returns true if HW can accept more data.
+> * put_char() -- write a character to the device.
+> * tx_done() -- when the write loop is done, perform arbitrary action
+>   before potential invocation of ops->stop_tx() happens.
+> 
+> NOTE1: Maybe the three hooks in uart_ops above are overkill. We can
+> instead pass pointers to the three functions directly to the new helpers
+> as they are not used elsewhere. Similar to uart_console_write() and its
+> putchar().
+> 
+> NOTE2: These two new helper functions call the hooks per every character
+> processed. I was unable to measure any difference, provided most time is
+> spent by readb (or alike) in the hooks themselves.  First, LTO might
+> help to eliminate these explicit calls (we might need NOTE1 to be
+> implemented for this to be true). Second, if this turns out to be a
+> problem, we can introduce a macro to build the helper in the driver's
+> code instead of serial_core. That is, similar to wait_event().
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+>  Documentation/driver-api/serial/driver.rst | 28 ++++++++++++
+>  drivers/tty/serial/serial_core.c           | 53 ++++++++++++++++++++++
+>  include/linux/serial_core.h                |  9 ++++
+>  3 files changed, 90 insertions(+)
+> 
+> diff --git a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
+> index 06ec04ba086f..7dc3791addeb 100644
+> --- a/Documentation/driver-api/serial/driver.rst
+> +++ b/Documentation/driver-api/serial/driver.rst
+> @@ -80,6 +80,34 @@ hardware.
+>  
+>  	This call must not sleep
+>  
+> +  tx_ready(port)
+> +	The driver returns true if the HW can accept more data to be sent.
+> +
+> +	Locking: port->lock taken.
+> +
+> +	Interrupts: locally disabled.
+> +
+> +	This call must not sleep.
+> +
+> +  put_char(port, ch)
+> +	The driver is asked to write ch to the device.
+> +
+> +	Locking: port->lock taken.
+> +
+> +	Interrupts: locally disabled.
+> +
+> +	This call must not sleep.
+> +
+> +  tx_done(port)
+> +	When the write loop is done, the driver can perform arbitrary action
+> +	here before potential invocation of ops->stop_tx() happens.
+> +
+> +	Locking: port->lock taken.
+> +
+> +	Interrupts: locally disabled.
+> +
+> +	This call must not sleep.
+> +
+>    set_mctrl(port, mctrl)
+>  	This function sets the modem control lines for port described
+>  	by 'port' to the state described by mctrl.  The relevant bits
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 6a8963caf954..1be14e90066c 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -107,6 +107,59 @@ void uart_write_wakeup(struct uart_port *port)
+>  }
+>  EXPORT_SYMBOL(uart_write_wakeup);
+>  
+> +static bool uart_port_tx_always_ready(struct uart_port *port)
+> +{
+> +	return true;
+> +}
+> +
+> +/**
+> + * uart_port_tx_limit -- transmit helper for uart_port
+> + * @port: from which port to transmit
+> + * @count: limit count
+> + *
+> + * uart_port_tx_limit() transmits characters from the xmit buffer to the
+> + * hardware using @uart_port::ops::put_char(). It does so until @count
+> + * characters are sent and while @uart_port::ops::tx_ready() still returns
+> + * non-zero (if non-NULL).
+> + *
+> + * Return: number of characters in the xmit buffer when done.
+> + */
+> +unsigned int uart_port_tx_limit(struct uart_port *port, unsigned int count)
+> +{
+> +	struct circ_buf *xmit = &port->state->xmit;
+> +	bool (*tx_ready)(struct uart_port *) = port->ops->tx_ready ? :
+> +		uart_port_tx_always_ready;
+> +	unsigned int pending;
+> +
+> +	for (; count && tx_ready(port); count--, port->icount.tx++) {
+> +		if (port->x_char) {
+> +			port->ops->put_char(port, port->x_char);
+> +			port->x_char = 0;
+> +			continue;
+> +		}
+> +
+> +		if (uart_circ_empty(xmit) || uart_tx_stopped(port))
+> +			break;
+> +
+> +		port->ops->put_char(port, xmit->buf[xmit->tail]);
 
->  I fail to understand really why a piece of code to correct and improve
-> broken UART baud rate calculation has to be stuck in limbo for almost a
-> year.  There is nothing wrong with this code and it has a proper change
-> description and my observation has been that actually broken code often
-> with half a sentence serving as justification gets accepted with no fuss
-> all the time. :(
+That's a lot of redirection and function pointer mess per each character
+sent now.  With the spectre overhead here (and only getting worse), this
+feels like a step backwards.
 
-If you remove those 3 or so lines of the code (that are pushing old
-SPD_CUST hack) I would be happy to Ack your patches immediately.
-Otherwise it's up to maintainers, if they are fine on that. I think
-it's a step back advertising something that should have not existed
-from day 1.
+I doubt throughput matters here given cpu speeds now, _but_ the cpu load
+should go up.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Although on smaller cpus with slower Mhz and faster line rates, this
+feels like a lot of extra work happening for no real good reason.
+
+Any benchmarks?
+
+thanks,
+
+greg k-h
