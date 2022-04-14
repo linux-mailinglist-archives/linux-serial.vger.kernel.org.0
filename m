@@ -2,91 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558C45011E2
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Apr 2022 17:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64F1501295
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Apr 2022 17:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244423AbiDNOWf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 14 Apr 2022 10:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S245591AbiDNORZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 14 Apr 2022 10:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346530AbiDNN52 (ORCPT
+        with ESMTP id S242410AbiDNN7d (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:28 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B68695F8F0;
-        Thu, 14 Apr 2022 06:47:18 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 9933A92009C; Thu, 14 Apr 2022 15:47:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 9485992009B;
-        Thu, 14 Apr 2022 14:47:17 +0100 (BST)
-Date:   Thu, 14 Apr 2022 14:47:17 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 14 Apr 2022 09:59:33 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B412018A;
+        Thu, 14 Apr 2022 06:55:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id c64so6433544edf.11;
+        Thu, 14 Apr 2022 06:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y5aWYxkMrcBFiZitnUw0BTQJF0hESlZ4bWlKsoVZ2qk=;
+        b=JY+wyiniWXODIB9ip+nO+wz7WCk7mIMRSrne8Efqpq6QArFTFLkSy1HHHAcMyfO5Lh
+         7c1+uBsd4DXxMgKgAzuhJTQ0T9kSCP/aKmZ/hIqrpZTi8d3M3czgJv7aRJNpJ66uwW63
+         BDRAZJPH/yW0iqGp3y8Hz29qbByy24RMCqzS22Jv3/MJqFu5JTzVRgfIJ5fQLRGVOKGe
+         Xr5vqtVVMEhDZeplv7OUiuwOGeVEm7ycntN+Frp3W/awvwq20P3gmiVwW14Qpmv4N7aj
+         Zwyk166RqpMzhj/c31zjd7lwvBFPdn/RyZVLjjZ/ofxopRqmY5+oBYmQyLX5EBnMvwah
+         ZvXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y5aWYxkMrcBFiZitnUw0BTQJF0hESlZ4bWlKsoVZ2qk=;
+        b=VzsQjve0imrdIA5pTjN/xdTpcH8ZCY9eRvqNTrZwHFFG8SkSE5Z3bw4DNjt20CSlWi
+         0UPINHOxSs3DctGS5K6Bzy22gF/UA2tBrFt/P/Ajp7vreKD260LWRl/HwGFWyVwGiGTC
+         OeqbJg31v4ZpRtsV+QyDt13jqkIyVwwhD3HTjg/thMHFBqLZYzpw3F4mIUEr+giiCieO
+         D6BwqkNiHIg2lYE0J2LTka2s6MlW9XJpqgpBdUPmUwQgYAsuLFHglgQT2o9k6TyHmyxv
+         TCCWUYsztgtUYCYDhDPX/hHFNBkBOWHVobQzRwUrQ+GiKnMp5gsviaqSYkZFjXGrmvCZ
+         caTg==
+X-Gm-Message-State: AOAM531eb0WkOPEpBG0GzPdUeNOFSa5XO2Fholrwn9BhvIxILPoSXPoq
+        J3VkVnnlnKjaK6yU2/MSxHrBGebf2bqJDwQHbaY=
+X-Google-Smtp-Source: ABdhPJwyww3e7aXwVAs5W5XjFg3dukyYoKr1v4cFU96Oyg0QAXFlpH1HVg2jgzcNDXhZb66cB0aqELroxq5jSc7mxQ4=
+X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
+ z22-20020a50e696000000b00419998d5febmr3188574edm.122.1649944543309; Thu, 14
+ Apr 2022 06:55:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2204132103190.9383@angie.orcam.me.uk> <CAHp75VdOf3+j8yQh=-f6iCN_gRhisgoQjov2kK1fhgv7xaBJRg@mail.gmail.com>
+ <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Apr 2022 16:55:07 +0300
+Message-ID: <CAHp75Vcb0JBQoNrb=ABCsPeM1U2zmHLw0P7Haa-Z=6D__VuqWA@mail.gmail.com>
+Subject: Re: [PING][PATCH v3 0/2] serial: 8250: Fixes for Oxford Semiconductor
+ 950 UARTs
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PING][PATCH v3 0/2] serial: 8250: Fixes for Oxford Semiconductor
- 950 UARTs
-In-Reply-To: <CAHp75VdOf3+j8yQh=-f6iCN_gRhisgoQjov2kK1fhgv7xaBJRg@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2204141421190.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk> <alpine.DEB.2.21.2204132103190.9383@angie.orcam.me.uk> <CAHp75VdOf3+j8yQh=-f6iCN_gRhisgoQjov2kK1fhgv7xaBJRg@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, 14 Apr 2022, Andy Shevchenko wrote:
+On Thu, Apr 14, 2022 at 4:47 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+> On Thu, 14 Apr 2022, Andy Shevchenko wrote:
 
-> > >  Here's v3 of the outstanding fixes for Oxford Semiconductor 950 UARTs.
-> > > As the change for the default FIFO rx trigger level has been already
-> > > merged with commit d7aff291d069 ("serial: 8250: Define RX trigger levels
-> > > for OxSemi 950 devices") only one patch of the original series remains.
-> >
-> >  Ping for:
-> > <https://lore.kernel.org/lkml/alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk/>
-> 
-> I still didn't get the answer why BOTHER can't be used instead of
-> spreading the old hack.
+>  I fail to understand really why a piece of code to correct and improve
+> broken UART baud rate calculation has to be stuck in limbo for almost a
+> year.  There is nothing wrong with this code and it has a proper change
+> description and my observation has been that actually broken code often
+> with half a sentence serving as justification gets accepted with no fuss
+> all the time. :(
 
- I just fail to see any sense in repeating myself over and over.
+If you remove those 3 or so lines of the code (that are pushing old
+SPD_CUST hack) I would be happy to Ack your patches immediately.
+Otherwise it's up to maintainers, if they are fine on that. I think
+it's a step back advertising something that should have not existed
+from day 1.
 
-> You mentioned fractional baud rates and
-> something else, and I asked why do you need them and from where you
-> got the limitation of 16-bit values for dividers when using BOTHER.
-
- Sigh, I have documented it there with the original submission 10 months 
-ago and then repeated with every reiteration:
-
->  Finally the 16-bit UART_DIV_MAX limitation of the baud rate requested
-> with `serial8250_get_baud_rate' makes the standard rates of 200bps and
-> lower inaccessible in the regular way with the baud base of 15625000.
-> That could be avoided by tweaking our 8250 driver core appropriately, but
-> I have figured out with modern serial port usage that would not be the
-> best use of my time.  Someone who does have a real need to use an Oxford
-> device at these low rates can step in and make the necessary chances.
-
- To put it shortly: the `spd_cust' feature is out there and it works, and 
-contrary to what you assert requires no maintenance effort if you just 
-leave it alone, while the alternative has various shortcomings that do 
-require effort if they were to be addressed.  So please just get over it 
-and let users choose what suits them best while letting developers focus 
-on other stuff that keeps waiting.  If someone is happy with what BOTHER 
-offers, then by no means I keep them from using it.
-
- I fail to understand really why a piece of code to correct and improve 
-broken UART baud rate calculation has to be stuck in limbo for almost a 
-year.  There is nothing wrong with this code and it has a proper change 
-description and my observation has been that actually broken code often 
-with half a sentence serving as justification gets accepted with no fuss 
-all the time. :(
-
-  Maciej
+-- 
+With Best Regards,
+Andy Shevchenko
