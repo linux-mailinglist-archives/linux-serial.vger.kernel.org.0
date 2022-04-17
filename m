@@ -2,76 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1555034D6
-	for <lists+linux-serial@lfdr.de>; Sat, 16 Apr 2022 09:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE14504732
+	for <lists+linux-serial@lfdr.de>; Sun, 17 Apr 2022 10:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiDPHwt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 16 Apr 2022 03:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S233709AbiDQIiJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 17 Apr 2022 04:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiDPHwJ (ORCPT
+        with ESMTP id S233672AbiDQIh6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 16 Apr 2022 03:52:09 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D9FFFA7
-        for <linux-serial@vger.kernel.org>; Sat, 16 Apr 2022 00:49:37 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id r66so10092318pgr.3
-        for <linux-serial@vger.kernel.org>; Sat, 16 Apr 2022 00:49:37 -0700 (PDT)
+        Sun, 17 Apr 2022 04:37:58 -0400
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BB82DAA3
+        for <linux-serial@vger.kernel.org>; Sun, 17 Apr 2022 01:35:19 -0700 (PDT)
+Received: by mail-vk1-xa41.google.com with SMTP id o132so5085378vko.11
+        for <linux-serial@vger.kernel.org>; Sun, 17 Apr 2022 01:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
-         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
-         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
-         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
-         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
-         XtNg==
+        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
+        b=oNJc2INf8Rhr5FB/7dmVLUtXIN32Zpr+JOws5mZo8yLIZkx20k3ktobg4cFsyHfo10
+         opyovUTmrMqZBrjIIPL8dwM3Cl42hbyZvaLR8TbrZDbPh7rgV94AneypUIz7gx5LvazE
+         zDLFkcDX1nbPbvLE1YDjvnnDO6sd+MeRRKk7hJojVtPLOuB8iX7Tisqm37Yqye5BOvOD
+         qrtEmC9HZPFnF8UhgjxviHDBiEkp+KFrjrNS6AiUfUOujeKcrIPlTDjJJypvibkN2ZRc
+         Fcc5bL7t8fX01QLLow126XRV2cU5sFntAnAB/7YbhrXrCEA2hg1PeuWagasZGrwW/+fq
+         MCiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=A0B9vW44rJs36e+KwM3J8K9UfCKV1LvSnVVifQU4KDcrXFVFLddpRJv1RLVb6Nrw25
-         HfVGu8OS6KdZQrw8yGm6m/8JuqR6ARXRtgdbXcc+b4Q0kFk33mVrKSrunTtrPZzBskWE
-         zeGJ6iiUMXc9LQetIhsqtrQNqCDAPAzHwqAUjo5UyibHq2ILHSVK/oHDCJKUDufl2ZrR
-         1SbMY7JDnKI0t07H3q3ElckhhYD7Z/nVoAUPZnJbjOGMeBu4wwrG4NcI6B31KeJVvE2e
-         xL9YVTaRS/MxDdIrLjppL4J+hqZjZQh/VmWw1vVugoY9fLmpMyvDwCUYuIhDNXN9B5vz
-         2G3Q==
-X-Gm-Message-State: AOAM531W39eVXmwXgBj9Zg9wHGRAJinLEBbUlWzpm0vSfylwBCT6MziY
-        ZjJGYFAPNfYRALsES/XhS1EAOR04ZY7T2If72rNgFXwZ3Ws=
-X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
-X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
- q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
- Apr 2022 00:49:26 -0700 (PDT)
+        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
+        b=sLefrw6lhKHMftuSgtKS1F5+AiROzjpGoup9JCBWHv7w3xt7g1GoGeCWXR8/w8ADdf
+         Zfa7xTC4RecnB9uUFR5pxzCX/Rrn818Ctco4sTXDFi/ZeqqFHuRpz4NRQm700QkOn/3i
+         yrL5YthnpXL84j4fy/QQQCLJwYJpZIwxuPXtk+0TcEru7GMNbLtURuOlui8kY70/98MJ
+         Pb0o4GlZKE4CtD4qYVe3/hDjhGazNQGuTiLq46F0vPNmLXRzOIa0bc7P7DC7HcG0trs9
+         biCdkjimW/s82SPWBnQpIaTECupIDqCt73zvtlrPtx6qc7JBwNxOMSjgrHPWX0hDHnRe
+         +uUQ==
+X-Gm-Message-State: AOAM530BFPk1DH3p9M0zQwGsWrvDB1K04F5p1BP0BRenbhrw6WyOUeS4
+        O2gs+qQbB5+JCziTiVB0yUd4OBj2hDlq+ErGeXtggkNdLYuljyqipr0=
+X-Google-Smtp-Source: ABdhPJw9Xt2OFrIK7hURg4kp9HjRikv5sLzHEzVl1NzDr5ZjkMyPbwTBECFNWcwqZlk35V3UQisOkE0Lf5eHqEkQTho=
+X-Received: by 2002:a1f:5105:0:b0:345:252e:b0f5 with SMTP id
+ f5-20020a1f5105000000b00345252eb0f5mr1463329vkb.22.1650184508047; Sun, 17 Apr
+ 2022 01:35:08 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
- -0700 (PDT)
-Reply-To: daniel.seyba@yahoo.com
-From:   Seyba Daniel <royhalton13@gmail.com>
-Date:   Sat, 16 Apr 2022 09:49:26 +0200
-Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
-Subject: Hello,
+Received: by 2002:a05:612c:2303:b0:2a3:2b46:b7d with HTTP; Sun, 17 Apr 2022
+ 01:35:07 -0700 (PDT)
+Reply-To: markwillima00@gmail.com
+From:   Mark <muhammadsuleima888@gmail.com>
+Date:   Sun, 17 Apr 2022 01:35:07 -0700
+Message-ID: <CANCcrFBrB3Qw8Ab_hBy19n0Ch6+XNpkXj3PjXKrc26cej7s+Kg@mail.gmail.com>
+Subject: Re: Greetings!
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:543 listed in]
+        *      [2607:f8b0:4864:20:0:0:0:a41 listed in]
         [list.dnswl.org]
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
         *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [markwillima00[at]gmail.com]
         * -0.0 SPF_PASS SPF: sender matches SPF record
         *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
         *      provider
-        *      [royhalton13[at]gmail.com]
+        *      [muhammadsuleima888[at]gmail.com]
         *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
         *       in digit
-        *      [royhalton13[at]gmail.com]
+        *      [muhammadsuleima888[at]gmail.com]
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
         * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
         *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
@@ -93,16 +96,19 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Hello,
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+The HSBC Bank is a financial institution in United Kingdom. We
+promotes long-term,sustainable and broad-based economic growth in
+developing and emerging countries by providing financial support like
+loans and investment to large, small and
+medium-sized companies (SMEs) as well as fast-growing enterprises
+which in turn helps to create secure and permanent jobs and reduce
+poverty.
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+If you need fund to promotes your business, project(Project Funding),
+Loan, planning, budgeting and expansion of your business(s) , do not
+hesitate to indicate your interest as we are here to serve you better
+by granting your request.
 
-So please confirm interest by responding back.
 
-My dearest regards
-
-Seyba Daniel
+Thank you
+Mr:Mark
