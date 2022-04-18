@@ -2,116 +2,136 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2325C504FBC
-	for <lists+linux-serial@lfdr.de>; Mon, 18 Apr 2022 14:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307D15055F8
+	for <lists+linux-serial@lfdr.de>; Mon, 18 Apr 2022 15:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiDRMNG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 18 Apr 2022 08:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S241190AbiDRNb2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 18 Apr 2022 09:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235661AbiDRMNF (ORCPT
+        with ESMTP id S244470AbiDRNab (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:13:05 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5B7DE9F;
-        Mon, 18 Apr 2022 05:10:26 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y10so9082552ejw.8;
-        Mon, 18 Apr 2022 05:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JVPSPKy4jcGaphHDpx5hUle8QXu6cx0+LV1j9x5xpfQ=;
-        b=oM3cZjIQfJ349ghEoRQ0l6lMtZe9XojDljdUCtZlm8iGM2LRBO3PaQ1pS2NybUGQDK
-         ZEUEdWTPeXa1MxFSe1r/zn49QJ4OPeHinB2zgwQS/8d6+PNg8UFrfCRuvfQ5NPzyAMdZ
-         WdFK/tjcPgai32HBrmAlUBEaQ1hB5ULWeRr7Z6qeluB4bO1AqBbFTs/YwKqpl9fGjtDn
-         BEGlmWd7yKYIXzqK2sBEcvveVXiZW8JuEBwFj8NkAn8rwUyd75AqXJfivFk8Yn7MK061
-         a2jv262dWtZuu4X776BS0Zi8v2q2b1M1TIICwDrLDJWhAGwWUN6Fi3GAvd82+OPDwKSS
-         XjBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JVPSPKy4jcGaphHDpx5hUle8QXu6cx0+LV1j9x5xpfQ=;
-        b=VmmbwU4n578z+3eV0BUqq/CotDG0hDsUhkHKo9jf6auUZwYF+Ly8egYpgdPCapBjIq
-         ZenaIOeXefQQUUXGCfxQgdEh/n8Salq/d11IHObTqH5siOODb8dHBlGlbiiILd7wgQBl
-         D47Jnp6+6HZnXuOepjQi8JhuNVGTGhgAHz5MdfS6hDnp1BCa2swOBf50Cn9amlbNYklj
-         zpKVhSisUlZASk85XFKz05oJNW8Yqr6EVmLa4E+pp6vtLhJkBmOGfpGAJEQ47E8YfjV4
-         gP3EjrXRhLWksGfwNQIoKNpJ4zC3CLP8myzjEA/lI74nyUH9DZQ3420q+5tgEbPZnVPn
-         KRqA==
-X-Gm-Message-State: AOAM532ZV61jRuEMl2Xtr/Zj8Pwrht0xUQ7CtaqyVwhWMrGGLjX8lPH6
-        +oEsZtRqeGgYkeTzwWfv4b1ZvvS1FljM8tVUZxE=
-X-Google-Smtp-Source: ABdhPJyNNskiSG4Dun0u/29PY0MPfeh8JQN+/nnHN7PsNrhegMi+99MqdnEN+kGgx3gyvXV6NAzYrzmCt56rzAp333Y=
-X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
- hd14-20020a170907968e00b006dbaed543c8mr8858684ejc.636.1650283825241; Mon, 18
- Apr 2022 05:10:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220418053202.24528-1-yu.tu@amlogic.com> <20220418053202.24528-2-yu.tu@amlogic.com>
-In-Reply-To: <20220418053202.24528-2-yu.tu@amlogic.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 15:09:48 +0300
-Message-ID: <CAHp75VeW65dV9jJu8-yUWME+XKnaxZBu5Zv8iEJxP2dizA=HUg@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] tty: serial: meson: Add a 12MHz internal clock
- rate to calculate baud rate in order to meet the baud rate requirements of
- special BT modules
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        Mon, 18 Apr 2022 09:30:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB4412742;
+        Mon, 18 Apr 2022 05:54:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2623B80EBA;
+        Mon, 18 Apr 2022 12:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DC8C385A1;
+        Mon, 18 Apr 2022 12:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650286471;
+        bh=+GLEJZPMdNnOUodzXhHjndU9yOjabO6mSPPMQ04fUSI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IZyBdW363Qe1CsiBn9FwpousON2bfn6DAGexiNUKZr4q225/di2ffGlbPiT6k3tPI
+         CE7xg4bkyKl2GS4XNrKNzAk4UMry9bZQjYY7pNlFC2wpFhcXbEE0tyPTAfnzcsrZBn
+         m3Ig4UlvvrlrVvzuAxGja3Ls8BxTBJIPdXhhpYII=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, He Zhe <zhe.he@windriver.com>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        kgdb-bugreport@lists.sourceforge.net,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-serial@vger.kernel.org,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 145/284] kgdboc: fix return value of __setup handler
+Date:   Mon, 18 Apr 2022 14:12:06 +0200
+Message-Id: <20220418121215.677608345@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 8:50 AM Yu Tu <yu.tu@amlogic.com> wrote:
->
-> A /2 divider over XTAL was introduced since G12A, and is preferred
-> to be used over the still present /3 divider since it provides much
-> closer frequencies vs the request baudrate.Especially the BT module
+From: Randy Dunlap <rdunlap@infradead.org>
 
-'e. E' (mind the space)
+[ Upstream commit ab818c7aa7544bf8d2dd4bdf68878b17a02eb332 ]
 
-> uses 3Mhz baud rate. 8Mhz calculations can lead to baud rate bias,
-> causing some problems.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) environment strings.
+So return 1 from kgdboc_option_setup().
 
-...
+Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
+  kgdboc=kbd kgdbts=", will be passed to user space.
 
-> +struct meson_uart_data {
-> +       bool has_xtal_div2;
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc7
+     kgdboc=kbd
+     kgdbts=
 
-I would prefer to see this as an unsigned int and with a less
-particular name, e.g. xtal_div would suffice.
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
+Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
+Cc: He Zhe <zhe.he@windriver.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: kgdb-bugreport@lists.sourceforge.net
+Cc: Jason Wessel <jason.wessel@windriver.com>
+Cc: Daniel Thompson <daniel.thompson@linaro.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: linux-serial@vger.kernel.org
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220309033018.17936-1-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/tty/serial/kgdboc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> +};
-
-...
-
-> +               unsigned int xtal_div = 3;
-
-> +               if (private_data && private_data->has_xtal_div2) {
-> +                       xtal_div = 2;
-
-Better to define privata data always
-
-
-> +                       val |= AML_UART_BAUD_XTAL_DIV2;
-> +               }
-> +               val |= DIV_ROUND_CLOSEST(port->uartclk / xtal_div, baud) - 1;
-
-
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index 0314e78e31ff..72b89702d008 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -304,16 +304,16 @@ static int kgdboc_option_setup(char *opt)
+ {
+ 	if (!opt) {
+ 		pr_err("config string not provided\n");
+-		return -EINVAL;
++		return 1;
+ 	}
+ 
+ 	if (strlen(opt) >= MAX_CONFIG_LEN) {
+ 		pr_err("config string too long\n");
+-		return -ENOSPC;
++		return 1;
+ 	}
+ 	strcpy(config, opt);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ __setup("kgdboc=", kgdboc_option_setup);
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+
+
+
