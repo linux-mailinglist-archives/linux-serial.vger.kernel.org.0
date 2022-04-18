@@ -2,136 +2,135 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF8D50583A
-	for <lists+linux-serial@lfdr.de>; Mon, 18 Apr 2022 15:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4527A504FCA
+	for <lists+linux-serial@lfdr.de>; Mon, 18 Apr 2022 14:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244877AbiDRN7f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 18 Apr 2022 09:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
+        id S238059AbiDRMRE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 18 Apr 2022 08:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244996AbiDRN6W (ORCPT
+        with ESMTP id S231868AbiDRMRD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:58:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10542273D;
-        Mon, 18 Apr 2022 06:08:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74C9360F59;
-        Mon, 18 Apr 2022 13:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BD1C385BA;
-        Mon, 18 Apr 2022 13:08:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287294;
-        bh=+GLEJZPMdNnOUodzXhHjndU9yOjabO6mSPPMQ04fUSI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y3sMW3ILLoWAq13e0VS4iwkeDkg3eukmK69yUCKr7/qIGD7iiKuyY8PkIeK8WdaLJ
-         Hgo48ttzmNA7Y1UcN5dyzyMdfz5z33613OOADaQjLKG01aLvH6y69HS2AZ27U6N0fj
-         ShjSK5DDBxlXxn1/32745LMOAEgHozMJM6BhfKCQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, He Zhe <zhe.he@windriver.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-serial@vger.kernel.org,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 116/218] kgdboc: fix return value of __setup handler
-Date:   Mon, 18 Apr 2022 14:13:02 +0200
-Message-Id: <20220418121202.914576118@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 18 Apr 2022 08:17:03 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DB61A82E;
+        Mon, 18 Apr 2022 05:14:22 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id c64so17219105edf.11;
+        Mon, 18 Apr 2022 05:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9Yi3JLK4e1JeX9Duse43qaRJcbvheP09jxiZrAgIDBU=;
+        b=DxLelIcLuvrBmf7L8udOP+AY3bWeeIv36zEOdsZuLI+OadRQs5Tj2cNMLfYjQabwPA
+         YL240QfjEFUTl4D1PGG3Nt7vYLxEZlrvgSl1R3KUVvXsOLzXLweH+1gjr9fPAHAbWV6p
+         X6QPcD5V0fGP1kEuqp8b2pnI4LKKRkTLOjfANG55K0CA33htMblD8hAyzXSxoepuRoWp
+         Oizl9sDGNVU/myD7YD9Ks5QeYeZtiQGQOPMjYDWHHhnA9BfumJMsob+KvM3mVq2VSnER
+         t3QbDq3FMzEQThxSnZKojKFHBo/DrQuRe9lW0xkHoz+xpkuHdI589Vh/HuRxEYdGk6bf
+         BPQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Yi3JLK4e1JeX9Duse43qaRJcbvheP09jxiZrAgIDBU=;
+        b=e8X4Us+/Za9OxNlTw5zadBWh81gmC5p7Jke3wLxJ5IVJrdgNSNLk2cjxnkXGQMH4Gt
+         lIKikSumIWXsQJJX279p3ViUBImQ7Nx6pkM5nW54G/XJWw6qTKVnvYHCgt21W7F8Mlca
+         SiZlAEvAegqP15Lb915Re+oOAd5Oj/fOd2ug2dHb7Tg6mC7btqYETuTrnb7hguQTwBRf
+         /0qloluy4GGkUN0Q67nSmxE+fvtVApMa9BNNHVIVFXM5Upvr7fKZX97tt6RVzHkPyjHP
+         1sIMF/lAvWjNc51NMBiKrnfIc5qe3HKpwWIMoMH32wS6pBaSpzti8/825tTcG2yq/tm3
+         xEbw==
+X-Gm-Message-State: AOAM5303xGnRvCzqvZjF5qapTaY4swEOq++sVaQb0ETUTSL2uG97JXCT
+        rcyIEHoa9hTJC10QjbSs2ywla93almM5fUmhBrMj/GHfqJ9kzw==
+X-Google-Smtp-Source: ABdhPJw9OLFzWqDY5GO1qkj761DGYpTL/KDZbxcg1DmwEBkgenFKvVhRHy5LQTjCOPt3MrdJ9RmgO06nOEDblpXd9HE=
+X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
+ z22-20020a50e696000000b00419998d5febmr12073094edm.122.1650284060716; Mon, 18
+ Apr 2022 05:14:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162123320.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204162123320.9383@angie.orcam.me.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 Apr 2022 15:13:44 +0300
+Message-ID: <CAHp75VdTzd56DzWsjf9GW3zfCtYh4ej3U6KTS7j3aXSVkWOOig@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] serial: 8250: Correct the clock for EndRun
+ PTP/1588 PCIe device
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> The EndRun PTP/1588 dual serial port device is based on the Oxford
+> Semiconductor OXPCIe952 UART device with the PCI vendor:device ID set
+> for EndRun Technologies and is therefore driven by a fixed 62.5MHz clock
+> input derived from the 100MHz PCI Express clock.  The clock rate is
+> divided by the oversampling rate of 16 as it is supplied to the baud
+> rate generator, yielding the baud base of 3906250.
+>
+> Replace the incorrect baud base of 4000000 with the right value of
+> 3906250 then, complementing commit 6cbe45d8ac93 ("serial: 8250: Correct
+> the clock for OxSemi PCIe devices").
 
-[ Upstream commit ab818c7aa7544bf8d2dd4bdf68878b17a02eb332 ]
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
-So return 1 from kgdboc_option_setup().
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 1bc8cde46a159 ("8250_pci: Added driver for Endrun Technologies PTP PCIe card.")
+> ---
+> New change in v4, factored out from 2/5.
+> ---
+>  drivers/tty/serial/8250/8250_pci.c |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> linux-serial-8250-endrun-pcie-clock.diff
+> Index: linux-macro/drivers/tty/serial/8250/8250_pci.c
+> ===================================================================
+> --- linux-macro.orig/drivers/tty/serial/8250/8250_pci.c
+> +++ linux-macro/drivers/tty/serial/8250/8250_pci.c
+> @@ -2667,7 +2667,7 @@ enum pci_board_num_t {
+>         pbn_panacom2,
+>         pbn_panacom4,
+>         pbn_plx_romulus,
+> -       pbn_endrun_2_4000000,
+> +       pbn_endrun_2_3906250,
+>         pbn_oxsemi,
+>         pbn_oxsemi_1_3906250,
+>         pbn_oxsemi_2_3906250,
+> @@ -3195,10 +3195,10 @@ static struct pciserial_board pci_boards
+>         * signal now many ports are available
+>         * 2 port 952 Uart support
+>         */
+> -       [pbn_endrun_2_4000000] = {
+> +       [pbn_endrun_2_3906250] = {
+>                 .flags          = FL_BASE0,
+>                 .num_ports      = 2,
+> -               .base_baud      = 4000000,
+> +               .base_baud      = 3906250,
+>                 .uart_offset    = 0x200,
+>                 .first_offset   = 0x1000,
+>         },
+> @@ -4128,7 +4128,7 @@ static const struct pci_device_id serial
+>         */
+>         {       PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
+>                 PCI_ANY_ID, PCI_ANY_ID, 0, 0,
+> -               pbn_endrun_2_4000000 },
+> +               pbn_endrun_2_3906250 },
+>         /*
+>          * Quatech cards. These actually have configurable clocks but for
+>          * now we just use the default.
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
 
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
-Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
-Cc: He Zhe <zhe.he@windriver.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: linux-serial@vger.kernel.org
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220309033018.17936-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/tty/serial/kgdboc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 0314e78e31ff..72b89702d008 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -304,16 +304,16 @@ static int kgdboc_option_setup(char *opt)
- {
- 	if (!opt) {
- 		pr_err("config string not provided\n");
--		return -EINVAL;
-+		return 1;
- 	}
- 
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		pr_err("config string too long\n");
--		return -ENOSPC;
-+		return 1;
- 	}
- 	strcpy(config, opt);
- 
--	return 0;
-+	return 1;
- }
- 
- __setup("kgdboc=", kgdboc_option_setup);
 -- 
-2.34.1
-
-
-
+With Best Regards,
+Andy Shevchenko
