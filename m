@@ -2,120 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99FF50704C
-	for <lists+linux-serial@lfdr.de>; Tue, 19 Apr 2022 16:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30879507101
+	for <lists+linux-serial@lfdr.de>; Tue, 19 Apr 2022 16:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347442AbiDSO1J (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 19 Apr 2022 10:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S1352550AbiDSOxM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 19 Apr 2022 10:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbiDSO1I (ORCPT
+        with ESMTP id S231583AbiDSOxL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:27:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFC2366A1
-        for <linux-serial@vger.kernel.org>; Tue, 19 Apr 2022 07:24:26 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ngomG-0000FA-LN; Tue, 19 Apr 2022 16:24:24 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ngomD-003zLY-8J; Tue, 19 Apr 2022 16:24:19 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ngomB-004HcX-05; Tue, 19 Apr 2022 16:24:19 +0200
-Date:   Tue, 19 Apr 2022 16:24:05 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Lukas Wunner <lukas.wunner@intel.com>, kernel@pengutronix.de,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Giulio Benetti <giulio.benetti@micronovasrl.com>
-Subject: Re: [PATCH 1/1] serial: 8250: revert UART_CAP_NOTEMT changes
-Message-ID: <20220419142405.xpwzvgnmh3oyoxge@pengutronix.de>
-References: <db15ba9d-d914-53fa-23b8-870df7bb13@linux.intel.com>
+        Tue, 19 Apr 2022 10:53:11 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69683A5CE
+        for <linux-serial@vger.kernel.org>; Tue, 19 Apr 2022 07:50:28 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id r1so15838507vsi.12
+        for <linux-serial@vger.kernel.org>; Tue, 19 Apr 2022 07:50:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=cvfYEjF7QKOIf/caSAhp4YLSCOj7kiNo1L7dgNRsEag=;
+        b=Gb+Z3IFX9COAUQCfYxti9iFS4xdKrEymMrowyIyUh49H0nsCxBl2EmpZJvbknz8KbL
+         HZuYNOW7y9108mHtpTlU21rOYgxpM2k2fKaQ73bCuremvTGFF8rJ9LunzkDJttdnmQWZ
+         I+TvR0fvJAPOnpRzyUuPXNKhtplTi18+Wx+pS/3rpKVlYw+5QGaRexViBCTe4+l3Nld0
+         xm8TJj8zW5gJV+93DL6y4Uejp0A+18h8luk+9UB/phuNhjK5hUwDZrCiPknNOtQbxM6Y
+         1E0V39lHAZIGbzmp9172jb+ZjLfH/n8I2YfKQD6OBj7CMKd07iMUhkBixIqOxYHo97ub
+         hqaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=cvfYEjF7QKOIf/caSAhp4YLSCOj7kiNo1L7dgNRsEag=;
+        b=d9DWgDyha6AuX6mTsXgvMBlz0QDf6QJCFxWJunmUKyrf/XzyZS2ZtWxhcaLKw2EQoi
+         0mHlnG1eB3Ny/rg6fnmHo281059/XEJiZDwy3sF8TfYU5Ci69gTSI95lz/EGHBBZsawW
+         bPb+e36nSk5nm0ghG85JJfMFSZQl7KkwbXwajdIxOEfQ/42i7Z6lx777oyMYdplhfiYF
+         LCFWAFm5SL+YXyN8M4gM2lEZgUIJXtAphOS2RP9rXv/ttOJoKYykHScfU5LPQrneqHS2
+         XPxgXCCsr/QXTHVtLdPat9Cm1FcadcKOeW4rJwIwUXrXHjc4JGMmVnAVngDrXJdj6FK4
+         ERIA==
+X-Gm-Message-State: AOAM531zZ530RlLUIrrHE/G7/C4gdVcx/+NQH6bFF/bcvMvtMyT0hFbr
+        5hp7+ZOjJxw5hAS3tmaziIUPjxfUb0D0R/AiUdM=
+X-Google-Smtp-Source: ABdhPJzyA8zotx1ZtqWqqaFXJh3wbl+uWWLQpB87fd8QWG8ggEuLXrsXfgUnhWn/siSYFK/Yabp2feoiTZn5EWDFq0s=
+X-Received: by 2002:a67:e3a5:0:b0:32a:31a6:8257 with SMTP id
+ j5-20020a67e3a5000000b0032a31a68257mr4616996vsm.62.1650379827609; Tue, 19 Apr
+ 2022 07:50:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7bvuicodhiptnqn6"
-Content-Disposition: inline
-In-Reply-To: <db15ba9d-d914-53fa-23b8-870df7bb13@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a59:cd27:0:b0:2ae:a55:e491 with HTTP; Tue, 19 Apr 2022
+ 07:50:26 -0700 (PDT)
+Reply-To: uchennailobitenone@gmail.com
+From:   uchenna <robertandersonhappy2@gmail.com>
+Date:   Tue, 19 Apr 2022 16:50:26 +0200
+Message-ID: <CABzJeR_NDxdtJ1QTZujUBSTVmEZyBBwL2p1c2F7efjHXxGsjjw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Gratulacje!
 
---7bvuicodhiptnqn6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Organizacja Narod=C3=B3w Zjednoczonych dosz=C5=82a do wniosku, =C5=BCe z po=
+moc=C4=85 nowo
+wybranego prezydenta z powodu Covid-19 (koronawirusa) zostanie
+wyp=C5=82acona kwota sze=C5=9Bciu milion=C3=B3w dolar=C3=B3w (6.000.000 dol=
+ar=C3=B3w)
+szcz=C4=99=C5=9Bliwym beneficjentom na ca=C5=82ym =C5=9Bwiecie. r=C3=B3=C5=
+=BCne kraje i globalne
+zagro=C5=BCenie dla tak wielu istnie=C5=84 ludzkich.
 
-Hello,
+ Organizacja Narod=C3=B3w Zjednoczonych zleci=C5=82a szwajcarskiemu bankowi
+=C5=9Bwiatowemu uwolnienie p=C5=82atno=C5=9Bci funduszu kompensacyjnego we =
+wsp=C3=B3=C5=82pracy
+z bankiem IBE w Wielkiej Brytanii.
 
-On Tue, Apr 19, 2022 at 04:39:49PM +0300, Ilpo J=C3=A4rvinen wrote:
->=20
-> This reverts UART_CAP_NOTEMT commit and driver changes depending
-> on it:
->   f6f586102ad1 (serial: 8250: Handle UART without interrupt on TEMT
->                 using em485)
->   296385fe1275 (serial: 8250: Add UART_CAP_NOTEMT on PORT_16550A_FSL64)
->   bec1f1b66a6a (serial: 8250: add compatible for fsl,16550-FIFO64)
->=20
-> The UART_CAP_NOTEMT code added in f6f586102add1 (serial: 8250:
-> Handle UART without interrupt on TEMT using em485) containts math
-> overflow for 32-bit archs. In addition, the approach used in it
-> is unnecessarily complicated requiring a dedicated timer just for
-> notemt. A simpler approach for providing UART_CAP_NOTEMT already
-> exists (patches 1-2):
->   https://lore.kernel.org/linux-serial/20220411083321.9131-3-ilpo.jarvine=
-n@linux.intel.com/T/#u
-> Thus, simply revert the UART_CAP_NOTEMT changes for now.
->=20
-> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+P=C5=82atno=C5=9B=C4=87 zostanie przekazana na kart=C4=99 bankomatow=C4=85 =
+Visa i wys=C5=82ana do
+szcz=C4=99=C5=9Bliwego beneficjenta, kt=C3=B3ry z=C5=82o=C5=BCy wniosek za =
+po=C5=9Brednictwem banku
+IBE w Wielkiej Brytanii za po=C5=9Brednictwem dyplomatycznej firmy
+kurierskiej znajduj=C4=85cej si=C4=99 w pobli=C5=BCu kraju beneficjenta.
 
-Oh I wasn't aware that Greg picked that up. OK for me to revert.
+S=C4=85 to informacje wymagane przez kierownictwo Zjednoczonego Kr=C3=B3les=
+twa,
+aby przekaza=C4=87 wyp=C5=82at=C4=99 funduszu kompensacyjnego do progu kraj=
+u
+beneficjenta.
 
-I wonder however if it's nice to revert three patches in one commit. I
-would have just reverted f6f586102ad1 and kept the define
-UART_CAP_NOTEMT such that the other two patches are noops until your
-fixed series comes in. Just my 0.02=E2=82=AC.
+1. Twoje imi=C4=99 i nazwisko:
+2. Adres domowy:
+3. Miasto:
+4. Kraj:
+5. Zaw=C3=B3d:
+6. P=C5=82e=C4=87:
+7. Stan cywilny:
+8. Wiek:
+9. Paszport / dow=C3=B3d osobisty / prawo jazdy
+10. Numer telefonu:
+Skontaktuj si=C4=99 z naszym identyfikatorem e-mail agenta:
+nazwa solomo brandy
 
-Best regards
-Uwe
+ADRES EMIL (solomonbrandyfiveone@gmail.com ) dla Twojej p=C5=82atno=C5=9Bci=
+ bez zw=C5=82oki,
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7bvuicodhiptnqn6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJexgIACgkQwfwUeK3K
-7AmpPQf9EesTRGgfz4XOYf+v/xD0gLqNrg3oVmPjgpXE8RCJpucdUUCaZy6Ea7u1
-KEHqqJXk9B1DkQESpA5eOijd/7ehq3rqU0pILxlc3l/6hXuvU8mYjNKSqI4+E9n1
-wh7cHNNIRlRIvn4e3fmT2e3FbkNoXgG70enadz8Hv3ZjPYSEspRs7DbyWUapam4u
-bQZqWXgwC/6XxU2Ig8OJwr4BGciwX7khgaFPEPXNmJZU7d2n5IdaUPVbGo7AkuK2
-FXmSrt5cbWOSAz2hqURn/GOihbbBVFKxDb2eXKLyaStynjtmTl8l51WOAYBaPnYq
-P4tA3v6lpSkqPsXinlfgzszWxocIzQ==
-=cyO+
------END PGP SIGNATURE-----
-
---7bvuicodhiptnqn6--
+Pozdrowienia
+Pani Mary J. Robertson.
