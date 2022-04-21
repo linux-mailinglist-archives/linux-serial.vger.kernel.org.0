@@ -2,92 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85352509CD8
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Apr 2022 11:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3860A509D6E
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Apr 2022 12:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387957AbiDUJ4q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Apr 2022 05:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S1388250AbiDUKUD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Apr 2022 06:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387949AbiDUJ4j (ORCPT
+        with ESMTP id S1382272AbiDUKT7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:56:39 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A9A25C47;
-        Thu, 21 Apr 2022 02:53:49 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E1ECC1BF207;
-        Thu, 21 Apr 2022 09:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650534828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vfef994do5FRt+AbCiJzA7csEtqO2gQ1yEzsSrgSqq8=;
-        b=ZgreE0I9aw+0ZlpiEHa7QHnMq1BowcNrpAn4q6f2HmaiWREtwgGsiaXvQ6ufsL/3gEd4dt
-        +BX5Vo+tMQCDWNcc5u4QCk1cqJ/M7CuZz43LzZ0u0oYHuUBzdJ46MFt3S+zBfP1jMWSf7F
-        OJ0OyPudr08Gjhcr0e18zTT5DIpHW5Mws386ktBdQ8X3UfDxPkd0UfBwlkfM6P7JRAcyle
-        WRqUwZzzAtmYtwvH88u5y71mbvYXa/9Xa/6L9Qyw/Qu9NEWReHQF20E8cxiKkIIml4eEI6
-        UwdJdyD5AyINlZilIsMASOQjUvvjj2RF1ekkkbinZlUlOwf6zHElI2lxw+MncA==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v6 12/12] bestla: Add support for RZN1 dmamux
-Date:   Thu, 21 Apr 2022 11:53:23 +0200
-Message-Id: <20220421095323.101811-13-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220421095323.101811-1-miquel.raynal@bootlin.com>
-References: <20220421095323.101811-1-miquel.raynal@bootlin.com>
+        Thu, 21 Apr 2022 06:19:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD1A22525;
+        Thu, 21 Apr 2022 03:17:10 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3A8A1215FC;
+        Thu, 21 Apr 2022 10:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650536229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=3O6/BdDKv6pQlJqixzof36IiCZINQ7EleO0KCxDYz08=;
+        b=Gwxs6xPNUG8N4mol49RlvyysByoXuj/4BkAmKh9CYflIQGSSlcVbekd8xvly3WOCk6KYW2
+        48cyDeZqZczl09WaDcwqFyEwpvR6a1tszxs3ssCCLH0dEut90wuxG9ZY+2rxJvZEBoYFNg
+        LjXfJVyaDoIZ6icbL+83D5sqssgY9KU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650536229;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=3O6/BdDKv6pQlJqixzof36IiCZINQ7EleO0KCxDYz08=;
+        b=Un44p/32CI+/Gg3yw9FzYxTSWF43suEDiPCeFUmzZNq/LV2rZLdpBsPpiG8fMdTZpZcY23
+        OUwe2Blot0PL0+Bg==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 090082C142;
+        Thu, 21 Apr 2022 10:17:09 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 0/7] serial: various cleanups
+Date:   Thu, 21 Apr 2022 12:17:01 +0200
+Message-Id: <20220421101708.5640-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- arch/arm/configs/bestla_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is a set of simple cleanups for various drivers. All should be
+straightforward.
 
-diff --git a/arch/arm/configs/bestla_defconfig b/arch/arm/configs/bestla_defconfig
-index 1d84f44fbf7d..fc573cbdddf4 100644
---- a/arch/arm/configs/bestla_defconfig
-+++ b/arch/arm/configs/bestla_defconfig
-@@ -66,7 +66,6 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_BLK_DEV_BSGLIB=y
- CONFIG_KSM=y
- CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
--CONFIG_CLEANCACHE=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=y
-@@ -106,6 +105,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
- # CONFIG_USB_SUPPORT is not set
- CONFIG_DMADEVICES=y
- CONFIG_DW_DMAC=y
-+CONFIG_RZN1_DMAMUX=y
- CONFIG_DMATEST=y
- # CONFIG_VIRTIO_MENU is not set
- # CONFIG_VHOST_MENU is not set
+The last two patches enable compilation on 0-day bot also for three more
+drivers. So we should have a better coverage. Actually the last but one
+is the result of the last one -- 0-day bot already complained to me.
+
+Jiri Slaby (7):
+  serial: sunplus-uart: mark sunplus_console_ports[] static
+  serial: xilinx_uartps: return early in cdns_uart_handle_tx()
+  serial: xilinx_uartps: cache xmit in cdns_uart_handle_tx()
+  serial: zs: use NULL as a pointer, not 0
+  serial: qcom: use check for empty instead of pending
+  serial: pic32: make SERIAL_PIC32_CONSOLE depend on SERIAL_PIC32=y
+  serial: allow COMPILE_TEST for some drivers
+
+ drivers/tty/serial/Kconfig             |  8 ++---
+ drivers/tty/serial/cpm_uart/cpm_uart.h |  2 ++
+ drivers/tty/serial/qcom_geni_serial.c  |  2 +-
+ drivers/tty/serial/sunplus-uart.c      |  2 +-
+ drivers/tty/serial/xilinx_uartps.c     | 46 +++++++++-----------------
+ drivers/tty/serial/zs.c                |  2 +-
+ 6 files changed, 25 insertions(+), 37 deletions(-)
+
 -- 
-2.27.0
+2.36.0
 
