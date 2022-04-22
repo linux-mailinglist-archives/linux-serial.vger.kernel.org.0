@@ -2,105 +2,263 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A88D50B0D4
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Apr 2022 08:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F1050B12D
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Apr 2022 09:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443537AbiDVGu6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Apr 2022 02:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S1444679AbiDVHOh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Apr 2022 03:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444366AbiDVGu5 (ORCPT
+        with ESMTP id S1352948AbiDVHOf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Apr 2022 02:50:57 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53F850E00;
-        Thu, 21 Apr 2022 23:48:04 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id s70so5213362qke.8;
-        Thu, 21 Apr 2022 23:48:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m6HPhJ0w/YCYbG1CtnrPIlmqlHiQywBms+joUGlVeEc=;
-        b=1R6CCt52+dhiS3/vVMUmE5SjT9pin/vUsnxRkq77KcqhMBfndGb536MfCMZM67OHPg
-         4diBYardCDZVaqylrD2KoMTcUCxU47fUTYirDB254tVJFzUYfYNS0XvykA98DrIRsL3r
-         14Yurl42o2i6UZFbEEaPefI/jS8WXRTWBek3x3N3Xc6rtr0A2H4UoHSjWHtMur9BDyqA
-         qF2Q4pjLpRcJExaRQwukVdQvLlJDPX/0nUjfaso+ClfWUmLB+da+oZ+fDZr5cm15BBdA
-         OfGsr0W4vPtzVQhJ4E4GAAzXvxvTEbc9Nl1mRpSUCtBpwNWoDBDwzq3vOoFT0fUPUiDl
-         561w==
-X-Gm-Message-State: AOAM531WueG/uqHQxDlcm+m/oxmoMUpLPViMu5FAbZsmznBUqOhXZ0uT
-        Cd7oMlSO1pKCLEIXJ0GPf5XF2HLXpsnfGQ==
-X-Google-Smtp-Source: ABdhPJzErHsjfoAQ3RSyCumup8J1Kb/NBCllO7MW9c54qDxLeWBMDT6+0pp/h3OjqW3JmYyOb85Dnw==
-X-Received: by 2002:a05:620a:4309:b0:67b:3fc1:86eb with SMTP id u9-20020a05620a430900b0067b3fc186ebmr1737663qko.495.1650610083942;
-        Thu, 21 Apr 2022 23:48:03 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac85fce000000b002f344fc0e0bsm897836qta.38.2022.04.21.23.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 23:48:03 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id r189so12794604ybr.6;
-        Thu, 21 Apr 2022 23:48:02 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
- c4-20020a5b0984000000b0063f8c38676cmr3101621ybq.393.1650610082372; Thu, 21
- Apr 2022 23:48:02 -0700 (PDT)
+        Fri, 22 Apr 2022 03:14:35 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 00:11:42 PDT
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133AA5131C
+        for <linux-serial@vger.kernel.org>; Fri, 22 Apr 2022 00:11:41 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20220422071036c4c10135346166c1a8
+        for <linux-serial@vger.kernel.org>;
+        Fri, 22 Apr 2022 09:10:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=N+qgC+uSMHsyklwVh7o4vM2DFt2Is5fDal+efTqi/0g=;
+ b=JWv/SILhzSdJ3lIzagC04ZWXR5Hmsq0RH+2Ge1LJL9QKBLmRXqx3+qi/NvyrU8O50bH+mZ
+ IUbKXhWkJ5dhs1UElflSYEAZsKF/Jwzw3qLH4+32QNCi9j7UISu1GMAPDM8TT3wF1FnttvBd
+ gnEmZLiplUs0xBWHZ2zAvKKIujviI=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 1/3] tty: n_gsm: fix broken virtual tty handling
+Date:   Fri, 22 Apr 2022 00:10:23 -0700
+Message-Id: <20220422071025.5490-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-References: <20220420084255.375700-1-yoshihiro.shimoda.uh@renesas.com>
- <20220420084255.375700-8-yoshihiro.shimoda.uh@renesas.com>
- <CAMuHMdVkcG-edq=v_onOc66y3UpJgr74R1c9t7kfYhnOnqZdZQ@mail.gmail.com> <TYBPR01MB5341601F1268F4E74E5EE7CDD8F79@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYBPR01MB5341601F1268F4E74E5EE7CDD8F79@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 22 Apr 2022 08:47:51 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWs=N7yj=f-bVj6TAG62pMKSyLL=tr_-6XYPy7p3RhjVw@mail.gmail.com>
-Message-ID: <CAMuHMdWs=N7yj=f-bVj6TAG62pMKSyLL=tr_-6XYPy7p3RhjVw@mail.gmail.com>
-Subject: Re: [PATCH 07/15] dt-bindings: clock: Add r8a779g0 CPG Core Clock Definitions
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Shimoda-san,
+From: Daniel Starke <daniel.starke@siemens.com>
 
-On Fri, Apr 22, 2022 at 7:40 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
-> > From: Geert Uytterhoeven, Sent: Thursday, April 21, 2022 7:19 PM
-> > On Wed, Apr 20, 2022 at 10:43 AM Yoshihiro Shimoda
-> > <yoshihiro.shimoda.uh@renesas.com> wrote:
-> > > Add all Clock Pulse Generator Core Clock Outputs for the Renesas
-> > > R-Car V4H (R8A779G0) SoC.
-> > >
-> > > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Dynamic virtual tty registration was introduced to allow the user to handle
+these cases with uevent rules. The following commits relate to this:
+Commit 5b87686e3203 ("tty: n_gsm: Modify gsmtty driver register method when config requester")
+Commit 0b91b5332368 ("tty: n_gsm: Save dlci address open status when config requester")
+Commit 46292622ad73 ("tty: n_gsm: clean up indenting in gsm_queue()")
 
-> > > --- /dev/null
-> > > +++ b/include/dt-bindings/clock/r8a779g0-cpg-mssr.h
+However, the following behavior can be seen with this implementation:
+- n_gsm ldisc is activated via ioctl
+- all configuration parameters are set to their default value (initiator=0)
+- the mux gets activated and attached and gsmtty0 is being registered in
+  in gsm_dlci_open() after DLCI 0 was established (DLCI 0 is the control
+  channel)
+- the user configures n_gsm via ioctl GSMIOC_SETCONF as initiator
+- this re-attaches the n_gsm mux
+- no new gsmtty devices are registered in gsmld_attach_gsm() because the
+  mux is already active
+- the initiator side registered only the control channel as gsmtty0
+  (which should never happen) and no user channel tty
 
-> > Missing IMPA0?
-> > Or is it internal-only? Perhaps the same for IMPA1 below?
->
-> IIUC, IMPA[01] are internal-only.
+The commits above make it impossible to operate the initiator side as no
+user channel tty is or will be available.
+On the other hand, this behavior will make it also impossible to allow DLCI
+parameter negotiation on responder side in the future. The responder side
+first needs to provide a device for the application before the application
+can set its parameters of the associated DLCI via ioctl.
+Note that the user application is still able to detect a link establishment
+without relaying to uevent by waiting for DTR open on responder side. This
+is the same behavior as on a physical serial interface. And on initiator
+side a tty hangup can be detected if a link establishment request failed.
 
-OK.
+Revert the commits above completely to always register all user channels
+and no control channel after mux attachment. No other changes are made.
 
-Gr{oetje,eeting}s,
+Fixes: 5b87686e3203 ("tty: n_gsm: Modify gsmtty driver register method when config requester")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 87 ++++++++-------------------------------------
+ 1 file changed, 15 insertions(+), 72 deletions(-)
 
-                        Geert
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 979dc9151383..99fe54247a87 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -272,10 +272,6 @@ static DEFINE_SPINLOCK(gsm_mux_lock);
+ 
+ static struct tty_driver *gsm_tty_driver;
+ 
+-/* Save dlci open address */
+-static int addr_open[256] = { 0 };
+-/* Save dlci open count */
+-static int addr_cnt;
+ /*
+  *	This section of the driver logic implements the GSM encodings
+  *	both the basic and the 'advanced'. Reliable transport is not
+@@ -1185,7 +1181,6 @@ static void gsm_control_rls(struct gsm_mux *gsm, const u8 *data, int clen)
+ }
+ 
+ static void gsm_dlci_begin_close(struct gsm_dlci *dlci);
+-static void gsm_dlci_close(struct gsm_dlci *dlci);
+ 
+ /**
+  *	gsm_control_message	-	DLCI 0 control processing
+@@ -1204,28 +1199,15 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ {
+ 	u8 buf[1];
+ 	unsigned long flags;
+-	struct gsm_dlci *dlci;
+-	int i;
+-	int address;
+ 
+ 	switch (command) {
+ 	case CMD_CLD: {
+-		if (addr_cnt > 0) {
+-			for (i = 0; i < addr_cnt; i++) {
+-				address = addr_open[i];
+-				dlci = gsm->dlci[address];
+-				gsm_dlci_close(dlci);
+-				addr_open[i] = 0;
+-			}
+-		}
++		struct gsm_dlci *dlci = gsm->dlci[0];
+ 		/* Modem wishes to close down */
+-		dlci = gsm->dlci[0];
+ 		if (dlci) {
+ 			dlci->dead = true;
+ 			gsm->dead = true;
+-			gsm_dlci_close(dlci);
+-			addr_cnt = 0;
+-			gsm_response(gsm, 0, UA|PF);
++			gsm_dlci_begin_close(dlci);
+ 		}
+ 		}
+ 		break;
+@@ -1459,8 +1441,6 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 		wake_up_interruptible(&dlci->port.open_wait);
+ 	} else
+ 		dlci->gsm->dead = true;
+-	/* Unregister gsmtty driver,report gsmtty dev remove uevent for user */
+-	tty_unregister_device(gsm_tty_driver, dlci->addr);
+ 	wake_up(&dlci->gsm->event);
+ 	/* A DLCI 0 close is a MUX termination so we need to kick that
+ 	   back to userspace somehow */
+@@ -1482,8 +1462,6 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	dlci->state = DLCI_OPEN;
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes open.\n", dlci->addr);
+-	/* Register gsmtty driver,report gsmtty dev add uevent for user */
+-	tty_register_device(gsm_tty_driver, dlci->addr, NULL);
+ 	/* Send current modem state */
+ 	if (dlci->addr)
+ 		gsmtty_modem_update(dlci, 0);
+@@ -1794,7 +1772,6 @@ static void gsm_queue(struct gsm_mux *gsm)
+ 	struct gsm_dlci *dlci;
+ 	u8 cr;
+ 	int address;
+-	int i, j, k, address_tmp;
+ 
+ 	if (gsm->fcs != GOOD_FCS) {
+ 		gsm->bad_fcs++;
+@@ -1826,11 +1803,6 @@ static void gsm_queue(struct gsm_mux *gsm)
+ 		else {
+ 			gsm_response(gsm, address, UA|PF);
+ 			gsm_dlci_open(dlci);
+-			/* Save dlci open address */
+-			if (address) {
+-				addr_open[addr_cnt] = address;
+-				addr_cnt++;
+-			}
+ 		}
+ 		break;
+ 	case DISC|PF:
+@@ -1841,33 +1813,8 @@ static void gsm_queue(struct gsm_mux *gsm)
+ 			return;
+ 		}
+ 		/* Real close complete */
+-		if (!address) {
+-			if (addr_cnt > 0) {
+-				for (i = 0; i < addr_cnt; i++) {
+-					address = addr_open[i];
+-					dlci = gsm->dlci[address];
+-					gsm_dlci_close(dlci);
+-					addr_open[i] = 0;
+-				}
+-			}
+-			dlci = gsm->dlci[0];
+-			gsm_dlci_close(dlci);
+-			addr_cnt = 0;
+-			gsm_response(gsm, 0, UA|PF);
+-		} else {
+-			gsm_response(gsm, address, UA|PF);
+-			gsm_dlci_close(dlci);
+-			/* clear dlci address */
+-			for (j = 0; j < addr_cnt; j++) {
+-				address_tmp = addr_open[j];
+-				if (address_tmp == address) {
+-					for (k = j; k < addr_cnt; k++)
+-						addr_open[k] = addr_open[k+1];
+-					addr_cnt--;
+-					break;
+-				}
+-			}
+-		}
++		gsm_response(gsm, address, UA|PF);
++		gsm_dlci_close(dlci);
+ 		break;
+ 	case UA|PF:
+ 		if (cr == 0 || dlci == NULL)
+@@ -2451,19 +2398,17 @@ static int gsmld_attach_gsm(struct tty_struct *tty, struct gsm_mux *gsm)
+ 	else {
+ 		/* Don't register device 0 - this is the control channel and not
+ 		   a usable tty interface */
+-		if (gsm->initiator) {
+-			base = mux_num_to_base(gsm); /* Base for this MUX */
+-			for (i = 1; i < NUM_DLCI; i++) {
+-				struct device *dev;
++		base = mux_num_to_base(gsm); /* Base for this MUX */
++		for (i = 1; i < NUM_DLCI; i++) {
++			struct device *dev;
+ 
+-				dev = tty_register_device(gsm_tty_driver,
++			dev = tty_register_device(gsm_tty_driver,
+ 							base + i, NULL);
+-				if (IS_ERR(dev)) {
+-					for (i--; i >= 1; i--)
+-						tty_unregister_device(gsm_tty_driver,
+-									base + i);
+-					return PTR_ERR(dev);
+-				}
++			if (IS_ERR(dev)) {
++				for (i--; i >= 1; i--)
++					tty_unregister_device(gsm_tty_driver,
++								base + i);
++				return PTR_ERR(dev);
+ 			}
+ 		}
+ 	}
+@@ -2485,10 +2430,8 @@ static void gsmld_detach_gsm(struct tty_struct *tty, struct gsm_mux *gsm)
+ 	int i;
+ 
+ 	WARN_ON(tty != gsm->tty);
+-	if (gsm->initiator) {
+-		for (i = 1; i < NUM_DLCI; i++)
+-			tty_unregister_device(gsm_tty_driver, base + i);
+-	}
++	for (i = 1; i < NUM_DLCI; i++)
++		tty_unregister_device(gsm_tty_driver, base + i);
+ 	tty_kref_put(gsm->tty);
+ 	gsm->tty = NULL;
+ }
+-- 
+2.25.1
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
