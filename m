@@ -2,131 +2,138 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F15650B124
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Apr 2022 09:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2448650B142
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Apr 2022 09:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444659AbiDVHNf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Apr 2022 03:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S1386732AbiDVHT4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Apr 2022 03:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444590AbiDVHNe (ORCPT
+        with ESMTP id S1444657AbiDVHTy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Apr 2022 03:13:34 -0400
-Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F3650E2D
-        for <linux-serial@vger.kernel.org>; Fri, 22 Apr 2022 00:10:39 -0700 (PDT)
-Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 20220422071037ead52f246f7a6b64ce
-        for <linux-serial@vger.kernel.org>;
-        Fri, 22 Apr 2022 09:10:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=HCoAqgrHQKyCuVz/FqZ9uH/p1/IK2zii6dkkGwez/mU=;
- b=jPKcKXwf8hiVr35oLisxodp1qoe/LaKPPpj/UjYmsBbD7UwO/ufEw7tC1YCot34buHWQDO
- TKMfWrG1O/EjKNw76/rTa8/yW4u+8qu5H916AjeoaAPrxfulpbw3rjmmZQXv3AAoNS9Erxk+
- /8valCbdXUMmYoJkAjA78VIe3bsT0=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 3/3] tty: n_gsm: fix software flow control handling
-Date:   Fri, 22 Apr 2022 00:10:25 -0700
-Message-Id: <20220422071025.5490-3-daniel.starke@siemens.com>
-In-Reply-To: <20220422071025.5490-1-daniel.starke@siemens.com>
-References: <20220422071025.5490-1-daniel.starke@siemens.com>
+        Fri, 22 Apr 2022 03:19:54 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342F350E34
+        for <linux-serial@vger.kernel.org>; Fri, 22 Apr 2022 00:17:01 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l7so14636522ejn.2
+        for <linux-serial@vger.kernel.org>; Fri, 22 Apr 2022 00:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kKzqFYULcaKbgHWS4pm8RBaixFS7n+6/vYUvELbma6o=;
+        b=X5T5yN3xfhW0CQder3imIIGFrrjcK3Y6Es7wJHGpMRRQGT64qmbLdN+s473tScuOYX
+         fVPPQk5NgCUd/BXhYOPXohHkApEDuDbazZopyQDl/kxEQkf0U9uQi+wa0O9GUBSeait5
+         XOMSJtS3nprM5punmsUKhNqVprhZ0ucMAEwBFHzOJPEeT/6MrjmP2eegOfYEVjXIwlnf
+         r/QoOA8HZk8NDayqV06u5zphUw2ycosjHFRYFDbjPgjetXJAbLE1S1q/LHJpUhzUqrzA
+         Zxos7gpgYeibbTZrsYi1/yVwdgdlhNO8JHiN3FwqYF2+uo2vLjwDUPHFfYhTipkwwCJM
+         IJaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kKzqFYULcaKbgHWS4pm8RBaixFS7n+6/vYUvELbma6o=;
+        b=XcdQgg/JNb1bGr6jo4Mc0m2nNqh6utNFA3sBahrIOF2X5qDTe5K0kpREqb1eZNpmFe
+         VhVo1lbp0BmSdEbKCa7xY8d0QXP2G/miJwzLoxrPRBLiVl3qwPRlLslAxIE5vkHLTzYv
+         zFHuzC5QzKOEtKxO6kLMXcnYeqhdFY2D5tAfHd+vw/wCaIaPu3g085kHpEwg5wNMgLDm
+         icH4UlX6M9dkzzpolksImIWonRO3LrWtVU6evagPvUbom7jWv7KBFKcC195zSPbUtgUg
+         rQL7F3JvsLvWZkrRqXdLXB3lN6naX0NJ0z4SFPO0ciddc23GcYogBbNzi2vJldOkb8AK
+         B9YQ==
+X-Gm-Message-State: AOAM532x3TusZ1l6BMgKiKuWWqFIiZ0IvczAeVLk7JAGf9hYq1DOjCZc
+        1WE4qcY0r3WVv3HbhS8AkzaKWg==
+X-Google-Smtp-Source: ABdhPJyaQK+LejRxdXC/EaYZE+04lv8g6ZxZaowwRLuHiGG3jXNYNdbPSmsEhAr8bx6Sdg9uV5VEPA==
+X-Received: by 2002:a17:906:a08b:b0:6cf:65bc:e7de with SMTP id q11-20020a170906a08b00b006cf65bce7demr2978338ejy.220.1650611819709;
+        Fri, 22 Apr 2022 00:16:59 -0700 (PDT)
+Received: from [192.168.0.230] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id x12-20020a170906710c00b006ef8f9ee226sm456452ejj.115.2022.04.22.00.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 00:16:59 -0700 (PDT)
+Message-ID: <d953b4e8-4e0a-8a6d-16cf-1ea4e4bd0190@linaro.org>
+Date:   Fri, 22 Apr 2022 09:16:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 07/15] dt-bindings: clock: Add r8a779g0 CPG Core Clock
+ Definitions
+Content-Language: en-US
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+References: <20220420084255.375700-1-yoshihiro.shimoda.uh@renesas.com>
+ <20220420084255.375700-8-yoshihiro.shimoda.uh@renesas.com>
+ <c86f78ac-ccf5-30ad-5de4-33211ca8b351@linaro.org>
+ <TYBPR01MB5341D2CAB8DD77E95C14AF8CD8F79@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYBPR01MB5341D2CAB8DD77E95C14AF8CD8F79@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+On 22/04/2022 07:32, Yoshihiro Shimoda wrote:
+> Hello Krzysztof,
+> 
+>> From: Krzysztof Kozlowski, Sent: Thursday, April 21, 2022 4:49 PM
+>>
+>> On 20/04/2022 10:42, Yoshihiro Shimoda wrote:
+>>> Add all Clock Pulse Generator Core Clock Outputs for the Renesas
+>>> R-Car V4H (R8A779G0) SoC.
+>>>
+>>> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+>>> ---
+>>>  include/dt-bindings/clock/r8a779g0-cpg-mssr.h | 87 +++++++++++++++++++
+>>>  1 file changed, 87 insertions(+)
+>>>  create mode 100644 include/dt-bindings/clock/r8a779g0-cpg-mssr.h
+>>>
+>>> diff --git a/include/dt-bindings/clock/r8a779g0-cpg-mssr.h b/include/dt-bindings/clock/r8a779g0-cpg-mssr.h
+>>> new file mode 100644
+>>> index 000000000000..07a94cf45581
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/r8a779g0-cpg-mssr.h
+>>> @@ -0,0 +1,87 @@
+>>> +/* SPDX-License-Identifier: (GPL-2.0 or MIT) */
+>>
+>> Any reason why not licensing it the same as bindings document
+>> (GPL-2.0-only OR BSD-2-Clause)? The same applies to patch 5.
+>>
+>> MIT and BSD-2-clause are almost the same, AFAIR, so let's stick to one
+>> (BSD-2-clause) for consistency?
+> 
+> Since r8a779g0.dtsi (which uses this) is under (GPL-2.0 or MIT), I use it here.
+> Also, r8a779g0.dtsi includes dt-bindings/interrupt-controller/arm-gic.h and
+> the arm-gic.h is under (GPL-2.0 or MIT). So, using it is better, IIUC.
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.4.8.1 states that XON/XOFF characters
-shall be used instead of Fcon/Fcoff command in advanced option mode to
-handle flow control. Chapter 5.4.8.2 describes how XON/XOFF characters
-shall be handled. Basic option mode only used Fcon/Fcoff commands and no
-XON/XOFF characters. These are treated as data bytes here.
-The current implementation uses the gsm_mux field 'constipated' to handle
-flow control from the remote peer and the gsm_dlci field 'constipated' to
-handle flow control from each DLCI. The later is unrelated to this patch.
-The gsm_mux field is correctly set for Fcon/Fcoff commands in
-gsm_control_message(). However, the same is not true for XON/XOFF
-characters in gsm1_receive().
-Disable software flow control handling in the tty to allow explicit
-handling by n_gsm.
-Add the missing handling in advanced option mode for gsm_mux in
-gsm1_receive() to comply with the standard.
+This would mean we want to license the bindings the same as we license
+the DTS. It's not the case. For the bindings we have the strong
+preference - GPL-2.0 or BSD-2-clause. For the DTS - not that much, just
+recommendation, I think.
 
-This patch depends on the following commit:
-Commit 8838b2af23ca ("tty: n_gsm: fix SW flow control encoding/handling")
+> In other words, r8a779g0.dtsi doesn't include any the bindings document
+> so that there is not needed to use the same license, I think.
+> # I'm not a lawyer though...
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+If you would like to follow your recommendation, you should license also
+schema as MIT, because your DTS uses it as well (as a derivative work).
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 570f0b8b7576..8652308c187f 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -232,6 +232,7 @@ struct gsm_mux {
- 	int initiator;			/* Did we initiate connection */
- 	bool dead;			/* Has the mux been shut down */
- 	struct gsm_dlci *dlci[NUM_DLCI];
-+	int old_c_iflag;		/* termios c_iflag value before attach */
- 	bool constipated;		/* Asked by remote to shut up */
- 
- 	spinlock_t tx_lock;
-@@ -2022,6 +2023,16 @@ static void gsm0_receive(struct gsm_mux *gsm, unsigned char c)
- 
- static void gsm1_receive(struct gsm_mux *gsm, unsigned char c)
- {
-+	/* handle XON/XOFF */
-+	if ((c & ISO_IEC_646_MASK) == XON) {
-+		gsm->constipated = true;
-+		return;
-+	} else if ((c & ISO_IEC_646_MASK) == XOFF) {
-+		gsm->constipated = false;
-+		/* Kick the link in case it is idling */
-+		gsm_data_kick(gsm, NULL);
-+		return;
-+	}
- 	if (c == GSM1_SOF) {
- 		/* EOF is only valid in frame if we have got to the data state */
- 		if (gsm->state == GSM_DATA) {
-@@ -2449,6 +2460,9 @@ static int gsmld_attach_gsm(struct tty_struct *tty, struct gsm_mux *gsm)
- 	int ret, i;
- 
- 	gsm->tty = tty_kref_get(tty);
-+	/* Turn off tty XON/XOFF handling to handle it explicitly. */
-+	gsm->old_c_iflag = tty->termios.c_iflag;
-+	tty->termios.c_iflag &= (IXON | IXOFF);
- 	ret =  gsm_activate_mux(gsm);
- 	if (ret != 0)
- 		tty_kref_put(gsm->tty);
-@@ -2489,6 +2503,8 @@ static void gsmld_detach_gsm(struct tty_struct *tty, struct gsm_mux *gsm)
- 	WARN_ON(tty != gsm->tty);
- 	for (i = 1; i < NUM_DLCI; i++)
- 		tty_unregister_device(gsm_tty_driver, base + i);
-+	/* Restore tty XON/XOFF handling. */
-+	gsm->tty->termios.c_iflag = gsm->old_c_iflag;
- 	tty_kref_put(gsm->tty);
- 	gsm->tty = NULL;
- }
--- 
-2.25.1
+Anyway MIT and BSD-2-c are very similar, so there is no much difference
+here.
 
+
+Best regards,
+Krzysztof
