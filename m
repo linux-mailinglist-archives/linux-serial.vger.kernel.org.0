@@ -2,99 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624AE50BFC2
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Apr 2022 20:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7013B50C182
+	for <lists+linux-serial@lfdr.de>; Sat, 23 Apr 2022 00:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbiDVSNm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Apr 2022 14:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S230355AbiDVV5E (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Apr 2022 17:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbiDVSKE (ORCPT
+        with ESMTP id S230422AbiDVV4j (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:10:04 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC3815B46C;
-        Fri, 22 Apr 2022 11:07:10 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C5A51100008;
-        Fri, 22 Apr 2022 18:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650650796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=InYlcnp2sDm4ChkUXG4xyc4b9OP+smT4t/tQR4FHwzw=;
-        b=krxB/j1VLxHYflaeOYpxgSRpNiHJQuzzRMPvW9G3vmAIXiI/kFL0esitjydF+WMV4EzJye
-        fyCRh+hiS47pns/xwZHQ9tzsSOMZrsbfmyTa0uCVuDfYQWR6VO3OH5b1WNrnjOIZrpYC7C
-        fHazs+P2lwCwiMnAZMngU4qLGVMAfI5nPRlQQ2CQPEKY9loQWmWUJDWkRBSlsKl1eBTTgw
-        0Rs/3HlgUZX08hhoW8hQp3yn+ls097RcRGt9KhQoosEZ15eVrNT0TTvGDdoJQej0fwHrSu
-        ZSD7Ryh7x2KmZ7t0lfX3MNWfPD890BisxRSj0+LHqhyAH5IqORdG4h6xkpJ32g==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Fri, 22 Apr 2022 17:56:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351D2A4CB4;
+        Fri, 22 Apr 2022 13:39:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650659956; x=1682195956;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=itPL4SDhaJNbtUUlmV3x5Gcrnw+9kVzEXPvSZciorvU=;
+  b=I74K3tUGWZeqJjHA0axRe+ueDzJX78bVscWLOHcAiRPdZiM+QLk5DxNJ
+   3fEKdLX6V1/AIrF2FtXb5bX1C6Oxp+nrEML781rix6jDQMYOtJ/T0/1Ib
+   F0e/fyDcclhoKX3aXh6jcfUIYgbRx1BkWwAU4WVte64fV8bcVsXzwbmhs
+   v1l8vh5JFUa619PNZX2kRm4DEnI4GcPKTH71zBphEilGmsu5NhjchRlna
+   ayl7mHPxgJrDWzoVIPxsgPH4tRLTzjwl5N9F+963xkwDwcDLnqDYkIflx
+   TWVe8FgR7xwfubVnWn3zAXqiR5FDdMRjG1EqjDHWF9Efrlib/ROhN+LeI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244699982"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="244699982"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 13:09:14 -0700
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="578075082"
+Received: from assenmac-mobl.ger.corp.intel.com ([10.251.216.136])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 13:09:10 -0700
+Date:   Fri, 22 Apr 2022 23:09:07 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Subject: [PATCH v7 9/9] serial: 8250: dw: Improve RZN1 support
-Date:   Fri, 22 Apr 2022 20:06:15 +0200
-Message-Id: <20220422180615.9098-10-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220422180615.9098-1-miquel.raynal@bootlin.com>
-References: <20220422180615.9098-1-miquel.raynal@bootlin.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v3 3/5] tty: Add lookahead param to receive_buf
+In-Reply-To: <YmK83NfVqEvGg8DW@kroah.com>
+Message-ID: <d496d544-fe59-5fa7-5d21-ab6ad025fa75@linux.intel.com>
+References: <20220411094859.10894-1-ilpo.jarvinen@linux.intel.com> <20220411094859.10894-4-ilpo.jarvinen@linux.intel.com> <YmK83NfVqEvGg8DW@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Phil Edworthy <phil.edworthy@renesas.com>
+On Fri, 22 Apr 2022, Greg KH wrote:
 
-Renesas RZ/N1 SoC features a slightly modified DW UART.
+> > diff --git a/drivers/accessibility/speakup/spk_ttyio.c b/drivers/accessibility/speakup/spk_ttyio.c
+> > index 08cf8a17754b..b33536eea1d3 100644
+> > --- a/drivers/accessibility/speakup/spk_ttyio.c
+> > +++ b/drivers/accessibility/speakup/spk_ttyio.c
+> > @@ -73,7 +73,7 @@ static void spk_ttyio_ldisc_close(struct tty_struct *tty)
+> >  
+> >  static int spk_ttyio_receive_buf2(struct tty_struct *tty,
+> >  				  const unsigned char *cp,
+> > -				  const char *fp, int count)
+> > +				  const char *fp, int count, unsigned int lookahead_count)
+> 
+> Ick, adding yet-another-parameter to a function is a mess as it's hard
+> to know what to do with this and what it means just by looking at when
+> it is called.
 
-On this SoC, the CPR register value is known but not synthetized in
-hardware. We hence need to provide a CPR value in the platform
-data. This version of the controller also relies on acting as flow
-controller when using DMA, so we need to provide the
-"is dma flow controller" quirk.
+To be honest, I didn't like it either but just couldn't find another 
+way... That is, not until now that you pushed.
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-Co-developed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dw.c | 2 ++
- 1 file changed, 2 insertions(+)
+I think I can add lookahead_count into n_tty_data, then both layers 
+(n_tty and tty_buffer) that depend on it will indepedently keep track of 
+it rather than passing it through the whole callchain.
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 90e64c8bd4bf..0cf1a99dc124 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -761,6 +761,8 @@ static const struct dw8250_platform_data dw8250_armada_38x_data = {
- 
- static const struct dw8250_platform_data dw8250_renesas_rzn1_data = {
- 	.usr_reg = DW_UART_USR,
-+	.cpr_val = 0x00012f32,
-+	.quirks = DW_UART_QUIRK_IS_DMA_FC,
- };
- 
- static const struct dw8250_platform_data dw8250_starfive_jh7100_data = {
+> >  /* Returns true if c is consumed as flow-control character */
+> > -static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
+> > +static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c,
+> > +					 bool lookahead_done)
+> >  {
+> >  	if (!n_tty_is_char_flow_ctrl(tty, c))
+> >  		return false;
+> >  
+> > +	if (lookahead_done)
+> > +		return true;
+> 
+> Why would this function be called if this option was true?
+
+Agreed, it makes sense to move the check before call (and then I also 
+don't need to reorganize this function anymore).
+
+> the overall idea is good, this implementation isn't quite there yet.
+
+Thanks for taking a look.
+
+
 -- 
-2.27.0
+ i.
 
