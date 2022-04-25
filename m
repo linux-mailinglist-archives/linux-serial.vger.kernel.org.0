@@ -2,41 +2,41 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C84750E35A
-	for <lists+linux-serial@lfdr.de>; Mon, 25 Apr 2022 16:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6C050E34D
+	for <lists+linux-serial@lfdr.de>; Mon, 25 Apr 2022 16:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242469AbiDYOid (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 25 Apr 2022 10:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S238535AbiDYOib (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 25 Apr 2022 10:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242509AbiDYOi3 (ORCPT
+        with ESMTP id S242532AbiDYOi3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Mon, 25 Apr 2022 10:38:29 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8222B13EA1
-        for <linux-serial@vger.kernel.org>; Mon, 25 Apr 2022 07:35:24 -0700 (PDT)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DCF167D2;
+        Mon, 25 Apr 2022 07:35:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650897324; x=1682433324;
+  t=1650897325; x=1682433325;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rCZmX0Kn0w1o6CElhcTujjwriEzH777EOr4ruZUBkPU=;
-  b=fJuq/+WVo49zRX2wt95/T/dBx2FUyB03arla/bnRXQGEsskhLg/RESwi
-   dO2OMUNUZmz5WfP1Gqi7JBKPFvufUjS2WmPkXRtyJGSOiI6Pk8X0kqdsK
-   qwXnpiFBPEow3Ff+HLMCgP4uIMk8XpJxyMIh7kLQOYVkALIqYVJJ6BEed
-   Jjd11ckCN8J7qTrmFcih0GxCvVjswyAgU1JbmVO9HjT6vJnn2/iLEEUk8
-   n0YHkOY8j8QFR+lHEF5hxxRDOvP4cQkP5mUmjgPzGASZzAqp6SU/r9Yrl
-   goRx/fQqHFZ7RIjbst1JnYcA+zjc421KnVW8GPrHjmRaGyZatEi5MK+I3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="252632930"
+  bh=dWJ3/7cdmA0pgFsitZuEUw3jz9OX5cH4BT7oF2UsM8c=;
+  b=lW3suoFzqymKfFfHM0N/QyxjKep/lxCcKWZA4xmxRFYucCiAQaXEoIyC
+   DqeVvOhC9rerYB8AbQLj8xW8fC7tLUUUGNkApDOTyt8sYD3FHPGTM1Yzc
+   39s9swz25pJ0IhZdgx/LiEMnYyQF4WK9fxBwz0xNiri6UeWpkkKgXGPz1
+   vBqvZHHtCJNozEajO32ysdc+3beAClqQLLLlPS/YiJagVnDXy1cy8I+z4
+   zHkFr64FIJA3KcpSVrgxH29QWDfe5VTvixXeqKXQEU2ik1oGmUL2Nh1D3
+   7gkmzwB/plvPtf2agWvvATNFOX3l97VpeCpRwhO8f4DxAfFkDZIEz3pkX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247191890"
 X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="252632930"
+   d="scan'208";a="247191890"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:14 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:24 -0700
 X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="579315817"
+   d="scan'208";a="579315891"
 Received: from lpuglia-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.217.93])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:09 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:19 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
@@ -49,19 +49,18 @@ Cc:     Johan Hovold <johan@kernel.org>, heiko@sntech.de,
         giulio.benetti@micronovasrl.com,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Eric Tremblay <etremblay@distech-controls.com>
-Subject: [PATCH v4 05/13] serial: 8250_dwlib: Implement SW half duplex support
-Date:   Mon, 25 Apr 2022 17:34:02 +0300
-Message-Id: <20220425143410.12703-6-ilpo.jarvinen@linux.intel.com>
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 06/13] dt_bindings: rs485: Add receiver enable polarity
+Date:   Mon, 25 Apr 2022 17:34:03 +0300
+Message-Id: <20220425143410.12703-7-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220425143410.12703-1-ilpo.jarvinen@linux.intel.com>
 References: <20220425143410.12703-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,45 +68,34 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This patch enables support for SW half-duplex mode using em485.
+Add polarity property for receiver enable. Some UARTs have separate
+enable pins for tx (RTS or DE) and rx (RE). As most RS485 transceivers
+have !RE pin, the default is active low in contrast to
+rs485-rts-active-low that defaults to active high.
 
-Cc: Eric Tremblay <etremblay@distech-controls.com>
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Tested-by: Vicente Bergas <vicencb@gmail.com>
+Cc: devicetree@vger.kernel.org
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_dwlib.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/serial/rs485.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-index 08432e2fe511..04852af4c024 100644
---- a/drivers/tty/serial/8250/8250_dwlib.c
-+++ b/drivers/tty/serial/8250/8250_dwlib.c
-@@ -172,8 +172,14 @@ void dw8250_setup_port(struct uart_port *p)
- 	u32 reg;
+diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
+index 0c9fa694f85c..f2c9c9fe6aa7 100644
+--- a/Documentation/devicetree/bindings/serial/rs485.yaml
++++ b/Documentation/devicetree/bindings/serial/rs485.yaml
+@@ -33,6 +33,11 @@ properties:
+     description: drive RTS low when sending (default is high).
+     $ref: /schemas/types.yaml#/definitions/flag
  
- 	d->hw_rs485_support = dw8250_detect_rs485_hw(p);
--	if (d->hw_rs485_support)
-+	if (d->hw_rs485_support) {
- 		p->rs485_config = dw8250_rs485_config;
-+	} else {
-+		p->rs485_config = serial8250_em485_config;
-+		up->rs485_start_tx = serial8250_em485_start_tx;
-+		up->rs485_stop_tx = serial8250_em485_stop_tx;
-+	}
-+	up->capabilities |= UART_CAP_NOTEMT;
- 
- 	/*
- 	 * If the Component Version Register returns zero, we know that
-@@ -205,7 +211,7 @@ void dw8250_setup_port(struct uart_port *p)
- 		p->type = PORT_16550A;
- 		p->flags |= UPF_FIXED_TYPE;
- 		p->fifosize = DW_UART_CPR_FIFO_SIZE(reg);
--		up->capabilities = UART_CAP_FIFO;
-+		up->capabilities = UART_CAP_FIFO | UART_CAP_NOTEMT;
- 	}
- 
- 	if (reg & DW_UART_CPR_AFCE_MODE)
++  rs485-rx-active-high:
++    description: Polarity of receiver enable signal (when separate from RTS).
++      True indicates active high (default is low).
++    $ref: /schemas/types.yaml#/definitions/flag
++
+   linux,rs485-enabled-at-boot-time:
+     description: enables the rs485 feature at boot time. It can be disabled
+       later with proper ioctl.
 -- 
 2.30.2
 
