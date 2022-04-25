@@ -2,41 +2,41 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6C050E34D
-	for <lists+linux-serial@lfdr.de>; Mon, 25 Apr 2022 16:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56E550E359
+	for <lists+linux-serial@lfdr.de>; Mon, 25 Apr 2022 16:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238535AbiDYOib (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 25 Apr 2022 10:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S242462AbiDYOiv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 25 Apr 2022 10:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242532AbiDYOi3 (ORCPT
+        with ESMTP id S242546AbiDYOis (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 25 Apr 2022 10:38:29 -0400
+        Mon, 25 Apr 2022 10:38:48 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DCF167D2;
-        Mon, 25 Apr 2022 07:35:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869D339177
+        for <linux-serial@vger.kernel.org>; Mon, 25 Apr 2022 07:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650897325; x=1682433325;
+  t=1650897335; x=1682433335;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dWJ3/7cdmA0pgFsitZuEUw3jz9OX5cH4BT7oF2UsM8c=;
-  b=lW3suoFzqymKfFfHM0N/QyxjKep/lxCcKWZA4xmxRFYucCiAQaXEoIyC
-   DqeVvOhC9rerYB8AbQLj8xW8fC7tLUUUGNkApDOTyt8sYD3FHPGTM1Yzc
-   39s9swz25pJ0IhZdgx/LiEMnYyQF4WK9fxBwz0xNiri6UeWpkkKgXGPz1
-   vBqvZHHtCJNozEajO32ysdc+3beAClqQLLLlPS/YiJagVnDXy1cy8I+z4
-   zHkFr64FIJA3KcpSVrgxH29QWDfe5VTvixXeqKXQEU2ik1oGmUL2Nh1D3
-   7gkmzwB/plvPtf2agWvvATNFOX3l97VpeCpRwhO8f4DxAfFkDZIEz3pkX
+  bh=M20JHKJiXZAMJNMAVPefCnaIxwHFCR/rpkPdlb+OK2c=;
+  b=RBlWGGcUT1RUKCgj+OVtWQKy2GTrRBZGHPLNjKBsKKYF7qHhTDAq55gy
+   eFGayMEEdyzNW1bDeinLln/N+r9htAW9urM+NN5Zgqx9QeaRJ/GU4AClI
+   3jCGTBKUfCfrhrezLmbxi9zGlpINryOWI20parv1g1yN2QZZBdErvWDCa
+   8YN6NDtln+k25azuO9XJ59HmzVT9LwpCyTl9ZkZbzRv8CU5Aq7wl6V2k4
+   wGoIY5OD544YSAr6Q9qgLB8Nz8w5BGGEE4XxUL19aHlDFeU9AcnXDqy73
+   4ouoq8Il72Ae4KcGYrt0BkLcmXPT8/BkatiwaINbLLRW4rLWwXO2iGg/o
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247191890"
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247191930"
 X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="247191890"
+   d="scan'208";a="247191930"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:24 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:34 -0700
 X-IronPort-AV: E=Sophos;i="5.90,288,1643702400"; 
-   d="scan'208";a="579315891"
+   d="scan'208";a="579315954"
 Received: from lpuglia-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.217.93])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:19 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 07:35:29 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
@@ -48,11 +48,10 @@ To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
 Cc:     Johan Hovold <johan@kernel.org>, heiko@sntech.de,
         giulio.benetti@micronovasrl.com,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 06/13] dt_bindings: rs485: Add receiver enable polarity
-Date:   Mon, 25 Apr 2022 17:34:03 +0300
-Message-Id: <20220425143410.12703-7-ilpo.jarvinen@linux.intel.com>
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 07/13] ACPI / property: Document RS485 _DSD properties
+Date:   Mon, 25 Apr 2022 17:34:04 +0300
+Message-Id: <20220425143410.12703-8-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220425143410.12703-1-ilpo.jarvinen@linux.intel.com>
 References: <20220425143410.12703-1-ilpo.jarvinen@linux.intel.com>
@@ -68,34 +67,50 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add polarity property for receiver enable. Some UARTs have separate
-enable pins for tx (RTS or DE) and rx (RE). As most RS485 transceivers
-have !RE pin, the default is active low in contrast to
-rs485-rts-active-low that defaults to active high.
+Document RS485 related properties returned from ACPI _DSD as device
+properties.
 
-Cc: devicetree@vger.kernel.org
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- Documentation/devicetree/bindings/serial/rs485.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../firmware-guide/acpi/enumeration.rst       | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
-index 0c9fa694f85c..f2c9c9fe6aa7 100644
---- a/Documentation/devicetree/bindings/serial/rs485.yaml
-+++ b/Documentation/devicetree/bindings/serial/rs485.yaml
-@@ -33,6 +33,11 @@ properties:
-     description: drive RTS low when sending (default is high).
-     $ref: /schemas/types.yaml#/definitions/flag
+diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
+index 74b830b2fd59..b42017bf789e 100644
+--- a/Documentation/firmware-guide/acpi/enumeration.rst
++++ b/Documentation/firmware-guide/acpi/enumeration.rst
+@@ -374,6 +374,31 @@ descriptors once the device is released.
+ See Documentation/firmware-guide/acpi/gpio-properties.rst for more information
+ about the _DSD binding related to GPIOs.
  
-+  rs485-rx-active-high:
-+    description: Polarity of receiver enable signal (when separate from RTS).
-+      True indicates active high (default is low).
-+    $ref: /schemas/types.yaml#/definitions/flag
++RS-485 support
++==============
 +
-   linux,rs485-enabled-at-boot-time:
-     description: enables the rs485 feature at boot time. It can be disabled
-       later with proper ioctl.
++ACPI _DSD (Device Specific Data) can be used to describe RS-485 capability
++of UART.
++
++For example::
++
++	Device (DEV)
++	{
++		...
++
++		// ACPI 5.1 _DSD used for RS-485 capabilities
++		Name (_DSD, Package ()
++		{
++			ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
++			Package ()
++			{
++				Package () {"rs485-rts-active-low", Zero},
++				Package () {"rs485-rx-active-high", Zero},
++				Package () {"rs485-rx-during-tx", Zero},
++			}
++		})
++		...
++
+ MFD devices
+ ===========
+ 
 -- 
 2.30.2
 
