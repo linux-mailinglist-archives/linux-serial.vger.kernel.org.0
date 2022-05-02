@@ -2,96 +2,80 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E2B516F24
-	for <lists+linux-serial@lfdr.de>; Mon,  2 May 2022 13:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BE6516F47
+	for <lists+linux-serial@lfdr.de>; Mon,  2 May 2022 14:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384806AbiEBL7y (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 2 May 2022 07:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S233428AbiEBMKb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 2 May 2022 08:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbiEBL7v (ORCPT
+        with ESMTP id S233362AbiEBMK2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 2 May 2022 07:59:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C501B796;
-        Mon,  2 May 2022 04:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651492583; x=1683028583;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LU/yq2s1oiKyRxaX8QPYQK3cW92BG0hvyB55dS1zvnY=;
-  b=bGR0VMGNJiB0kh6bqN3kxw3bFix7H9IWfbmn9pY2Q3aaE6cc7WPr7ViT
-   G7bqSLJB9O8CDj5MXPHRlqxKeBnKVGw1ku5HCCgNWOqYtYvN76LxRSXcr
-   OQkO+w+jNyDfjEJuXbOJsC3bpD26+V+/a2OnfLKQMA4kw9G2EYy7kfWYM
-   RRLmK9sYUW08xeUqH7xSWaWG3CzioR0weqs1cAw+jqlQKv6CCc2097Vb9
-   eNjYw5+dmPTjnCn83q0aFkSLo0Q9s2BOaK2CO41Zl454Gi/xv+zBWm2yC
-   nktYWs+VR0nCfq5fUil8KulDOKlhXwqtEUVnUU9K41MWmPmaPXD9agpCn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247100462"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247100462"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 04:56:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="707576070"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 May 2022 04:56:20 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: 8250: dw: Fix NULL pointer dereference
-Date:   Mon,  2 May 2022 14:56:21 +0300
-Message-Id: <20220502115621.77985-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 2 May 2022 08:10:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6632B10FE0;
+        Mon,  2 May 2022 05:07:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 025A660C0B;
+        Mon,  2 May 2022 12:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DEEFC385AC;
+        Mon,  2 May 2022 12:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651493219;
+        bh=qetEOcAf7xVqMAk2Ja1t6zfPHpXbHu/1KECgNdTnRvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ntf9qGJykfKce1zRoZPx84E7tVWUcZvpAQ2p+B2xg4H49YByUJo5JIU+ogHTpUWT+
+         yWqL+ehCVu1fFYen2qQBm6AX8AlcZ1m6ALFE7RuiEuiZq3qAuR2XCKcsa2EKf2YAgc
+         j68iucwG09eqMbuDD6NblfO5aeiUq/kf9gtwt7o0=
+Date:   Mon, 2 May 2022 14:06:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com
+Subject: Re: [PATCH 0/2] Disable MMIO tracing from QUP wrapper and serial
+ driver
+Message-ID: <Ym/JYr3ltaKWqHQn@kroah.com>
+References: <1651488314-19382-1-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651488314-19382-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-dw8250_platform_data is only used on DT platforms for now.
+On Mon, May 02, 2022 at 04:15:12PM +0530, Vijaya Krishna Nivarthi wrote:
+> Register read/write tracing is causing excessive
+> logging and filling the rtb buffer and effecting
+> performance.
+> 
+> Disabled MMIO tracing from QUP wrapper and serial
+> driver to disable register read/write tracing.
+> 
+> Vijaya Krishna Nivarthi (2):
+>   soc: qcom: geni: Disable MMIO tracing
+>   tty: serial: qcom_geni_serial: Disable MMIO tracing
+> 
+>  drivers/soc/qcom/qcom-geni-se.c       | 8 +++++++-
+>  drivers/tty/serial/qcom_geni_serial.c | 8 +++++++-
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 
 
-Fixes: 4a218b277fdb ("serial: 8250: dw: Create a generic platform data structure")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-Hi,
+Doesn't this series depend on the MMIO tracing series?  Why not just
+make it part of that one?
 
-I'm sorry, I have to resend this (to you guys).
-I left out the mailing lists.
+confused,
 
-Br,
----
- drivers/tty/serial/8250/8250_dw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 0cf1a99dc1244..31422e44c64ff 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -433,9 +433,9 @@ static void dw8250_prepare_rx_dma(struct uart_8250_port *p)
- static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
- {
- 	struct device_node *np = p->dev->of_node;
--	unsigned int quirks = data->pdata->quirks;
- 
- 	if (np) {
-+		unsigned int quirks = data->pdata->quirks;
- 		int id;
- 
- 		/* get index of serial line, if found in DT aliases */
--- 
-2.35.1
-
+greg k-h
