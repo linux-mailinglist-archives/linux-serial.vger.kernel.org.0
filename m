@@ -2,78 +2,115 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D04516FA7
-	for <lists+linux-serial@lfdr.de>; Mon,  2 May 2022 14:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6939517077
+	for <lists+linux-serial@lfdr.de>; Mon,  2 May 2022 15:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbiEBMnS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 2 May 2022 08:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S1385384AbiEBNjD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 2 May 2022 09:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiEBMnS (ORCPT
+        with ESMTP id S1385377AbiEBNiw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 2 May 2022 08:43:18 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3102213D13;
-        Mon,  2 May 2022 05:39:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id F3B7F41982;
-        Mon,  2 May 2022 12:39:44 +0000 (UTC)
-Message-ID: <c5413c42-b728-b88b-4229-9d4e3943413e@marcan.st>
-Date:   Mon, 2 May 2022 21:39:42 +0900
+        Mon, 2 May 2022 09:38:52 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B52767A
+        for <linux-serial@vger.kernel.org>; Mon,  2 May 2022 06:35:20 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:194e:5782:c420:7f87])
+        by albert.telenet-ops.be with bizsmtp
+        id Rpb52700A28fWK506pb5V9; Mon, 02 May 2022 15:35:18 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nlWCe-002mrd-PI; Mon, 02 May 2022 15:35:04 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nlWCd-002vA0-Ss; Mon, 02 May 2022 15:35:03 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/7] dt-bindings: renesas: R-Car V3U is R-Car Gen4
+Date:   Mon,  2 May 2022 15:34:52 +0200
+Message-Id: <cover.1651497024.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: es-ES
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220502092505.30934-1-marcan@marcan.st>
- <Ym/EAGq3IzW5rYwr@kroah.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH] tty: serial: samsung_tty: Fix suspend/resume on S5L
-In-Reply-To: <Ym/EAGq3IzW5rYwr@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 02/05/2022 20.44, Greg Kroah-Hartman wrote:
-> On Mon, May 02, 2022 at 06:25:05PM +0900, Hector Martin wrote:
->> We were restoring the IRQ masks then clearing them again, because
->> ucon_mask wasn't set properly. Adding that makes suspend/resume
->> work as intended.
->>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>  drivers/tty/serial/samsung_tty.c | 1 +
->>  include/linux/serial_s3c.h       | 3 +++
->>  2 files changed, 4 insertions(+)
-> 
-> Does this fix a specific older commit?
-> 
-> And should it be backported to older stable kernels?
+	Hi all,
 
-It does fix the commit that introduced this device support in general; I
-can add a Fixes line for that. I don't think anyone cares about
-backporting though, since there are other fairly critical devices that
-don't have support outright and there's still work to do before
-suspend/resume is generally usable on these machines.
+Despite the name, R-Car V3U is the first member of the R-Car Gen4
+family[1].
+
+Hence this patch series updates various DT binding documents to move
+compatible values for R-Car V3U devices to R-Car Gen4 sections, in
+bindings where the latter already exist.  Other DT binding documents
+will be updated progressively, after adding support for more SoCs in the
+R-Car Gen4 family.
+
+These patches are intended to be taken by DT or subsystem maintainers.
+Separate patches to update the DTS file[2] and SoC identication code[3]
+are in-flight.
+
+Thanks for your comments!
+
+[1] https://www.renesas.com/eu/en/products/automotive-products/automotive-system-chips-socs/r-car-v3u-best-class-r-car-v3u-asil-d-system-chip-automated-driving
+[2] [PATCH] arm64: dts: renesas: r8a779a0: Update to R-Car Gen4 compatible values
+    https://lore.kernel.org/73cea9d5e1a6639422c67e4df4285042e31c9fd5.1651497071.git.geert+renesas@glider.be
+[3] [PATCH] soc: renesas: R-Car V3U is R-Car Gen4
+    https://lore.kernel.org/2bbecad7b6c24c0d5c1797b3f7f0733d5ba33842.1651497066.git.geert+renesas@glider.be
+
+Geert Uytterhoeven (7):
+  dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is R-Car Gen4
+  dt-bindings: i2c: renesas,rcar-i2c: R-Car V3U is R-Car Gen4
+  dt-bindings: iommu: renesas,ipmmu-vmsa: R-Car V3U is R-Car Gen4
+  dt-bindings: renesas,rcar-dmac: R-Car V3U is R-Car Gen4
+  dt-bindings: serial: renesas,hscif: R-Car V3U is R-Car Gen4
+  dt-bindings: serial: renesas,scif: R-Car V3U is R-Car Gen4
+  dt-bindings: watchdog: renesas,wdt: R-Car V3U is R-Car Gen4
+
+ .../devicetree/bindings/dma/renesas,rcar-dmac.yaml     | 10 ++++------
+ .../devicetree/bindings/gpio/renesas,rcar-gpio.yaml    |  4 +---
+ .../devicetree/bindings/i2c/renesas,rcar-i2c.yaml      |  2 +-
+ .../devicetree/bindings/iommu/renesas,ipmmu-vmsa.yaml  |  4 ++--
+ .../devicetree/bindings/serial/renesas,hscif.yaml      |  2 +-
+ .../devicetree/bindings/serial/renesas,scif.yaml       |  2 +-
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml      |  2 +-
+ 7 files changed, 11 insertions(+), 15 deletions(-)
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
