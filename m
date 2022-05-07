@@ -2,113 +2,154 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0DA51E5D9
-	for <lists+linux-serial@lfdr.de>; Sat,  7 May 2022 11:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA0451E643
+	for <lists+linux-serial@lfdr.de>; Sat,  7 May 2022 12:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiEGJPe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 7 May 2022 05:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S1446230AbiEGKFt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 7 May 2022 06:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiEGJPd (ORCPT
+        with ESMTP id S232437AbiEGKFl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 7 May 2022 05:15:33 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A033152E
-        for <linux-serial@vger.kernel.org>; Sat,  7 May 2022 02:11:47 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id x22so7670015qto.2
-        for <linux-serial@vger.kernel.org>; Sat, 07 May 2022 02:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=InIUFO2xPCGgMqAwMXEOJPcVlLbbEQaW5WMSlm16vJ0=;
-        b=Tq4M7kNPza0Y+JgmxvjzNWgRfpwRcMbYX1jls/xdfunsx50SWw3SV1s1fOX9KXP7ZY
-         xeHpdXMWEz1Wah3kdpdJ2NA8PZe0MGcxu9TA4XxQRzCc8I7UlzA7Zf8pqvxy6JGvnyIJ
-         Jhlhzx8IPcqxJjjpIcd6mT8UMzVghiwJK5BFFo+tQEBMwLVexdOsp1Fe+qC+qjtj7R5o
-         BdtrYh6NViAiDPNBXNnzb3+V6VKY4wxOOrzu/IfLcEqrCyqGqbNMwFRKGmBlu75ubtXG
-         9CHMWIm1aEfywAjKu4moG1GyzYxeL5mACyA8kcPvgglGQxsrTsQbsJwRCkOuBZ1qPKLt
-         FEGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=InIUFO2xPCGgMqAwMXEOJPcVlLbbEQaW5WMSlm16vJ0=;
-        b=bm8qKlJixBlgvm2A+k6xMm3awz0GWPHftP+iQslYK2NeKhPIblWEyqLQuLNJng5uS3
-         jfkia7FcYY2pUJeFYwsdSgHFFuDogmQrk/gU1RlUDHixGjPfYSPOIOgFzlmtBnLa8QHZ
-         c+3TupWWC95Pn57IGekdfVRRkQxmDj3lXyj1bgzWbkxvM24L1s53UxP6fkz3ysvLQcu4
-         X+GCwpoqa3vAkrQn46cHiHEIHmC9JKG+rCc1oSsP/pLGMtAWMZs5dI/9XKJ8jQG8Ri7n
-         bq4duivLTWQ49QACNHMsdq3U1vQIA1nzlSqBRcRZzEnzPRQOL68sZVHj340oCoDrU8Ni
-         J1yg==
-X-Gm-Message-State: AOAM531XRHJH6GeYH81cLxcyqyVVFBE7SfDNfe+5IStKi0hFwBKcVsaf
-        2S1HSdTcAXfYmtUmLb1PdKkTzcru8lGt+4aZLyPqVsIaOw8=
-X-Google-Smtp-Source: ABdhPJwtTZE/CQUL1wAnjKsTZim8Owu2U+Hihhqpd3h9mBxavfD3dqjaYQoHSGzPi1CoCPG5NbOsQv8IDiWWsH/vhTY=
-X-Received: by 2002:ac8:57d1:0:b0:2f3:b340:1e2e with SMTP id
- w17-20020ac857d1000000b002f3b3401e2emr6592746qta.52.1651914706783; Sat, 07
- May 2022 02:11:46 -0700 (PDT)
+        Sat, 7 May 2022 06:05:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040C53D4B9;
+        Sat,  7 May 2022 03:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651917715; x=1683453715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q/otdjcbA6WbbPS5f3qcEn378K8z0rLFkeMOCGtuneE=;
+  b=B61f1fM1p9qVEJQbfg4WSL1V39NNCIKF5mwSY0Zk4neWljbwsvU7x8Jl
+   3j5ijrmTAsc7i0aYl4I6LSE4RjKFwCJ8yIq3dQCbeuwsAJqFCz6LJnrRZ
+   QfPcNbP5eHDPdnDehEgjgi7n5huQSbFUuv9iIlCeYDLKec6X4pvkUkeHF
+   +B/ee2gSw8gY4i7eDZrrQx3YArTQkX9Ec0lTgOtX2zwX8bvRfQpAlPxZR
+   L1LsMLMjWmrukvMKmbtg3P4gYjjb/EX/gKj1FB/JjT/wOiNqrym0zQEhR
+   BnsJ0O/KdvGj53iH6nwdA4L74HYMqdyNXVmoa8EmDBD4URt2LXy6RnoRf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268828938"
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="268828938"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:01:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
+   d="scan'208";a="695555683"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 07 May 2022 03:01:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 78FB3155; Sat,  7 May 2022 13:01:49 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>
+Subject: [PATCH v2 1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+Date:   Sat,  7 May 2022 13:01:44 +0300
+Message-Id: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   cael <juanfengpy@gmail.com>
-Date:   Sat, 7 May 2022 17:11:35 +0800
-Message-ID: <CAPmgiUJkzZacYnMOFU+SsEoLZPdiSaOxiugOcLCj88OQUvJm_A@mail.gmail.com>
-Subject: tty: fix a possible hang on tty device
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We have met a hang on pty device, the reader was blocking at epoll on
-master side, the writer was sleeping at wait_woken inside n_tty_write
-on slave side , and the write buffer on tty_port was full, we found
-that the reader and writer would never be woken again and block
-forever.
+It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
 
-We thought the problem was caused as a race between reader and kworker
-as follows:
-n_tty_read(reader):                            |
-  n_tty_receive_buf_common(kworker):
-                                                           |
-              room = N_TTY_BUF_SIZE - (ldata->read_head - tail);
-                                                           |
-              room <= 0
-copy_from_read_buf(tty, &b, &nr);     |
-n_tty_kick_worker(tty);                       |
-                                                           |
-              ldata->no_room = true
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Wolfram Sang <wsa@kernel.org>
+---
+v2: collected tags
+ arch/powerpc/include/asm/mpc52xx.h           |  1 -
+ arch/powerpc/platforms/52xx/mpc52xx_common.c | 37 --------------------
+ 2 files changed, 38 deletions(-)
 
-After writing to slave device, writer wakes up kworker to flush data
-on tty_port to reader, and the kworker finds that reader has no room
-to store data so room <= 0 is met. At this moment, reader consumes all
-the data on reader buffer and call n_tty_kick_worker to check
-ldata->no_room and finds that there is no need to call
-tty_buffer_restart_work to flush data to reader and reader quits
-reading. Then kworker sets  ldata->no_room = true and quits too.
+diff --git a/arch/powerpc/include/asm/mpc52xx.h b/arch/powerpc/include/asm/mpc52xx.h
+index ce1e0aabaa64..ddd80aae1e32 100644
+--- a/arch/powerpc/include/asm/mpc52xx.h
++++ b/arch/powerpc/include/asm/mpc52xx.h
+@@ -274,7 +274,6 @@ extern void mpc52xx_declare_of_platform_devices(void);
+ extern int mpc5200_psc_ac97_gpio_reset(int psc_number);
+ extern void mpc52xx_map_common_devices(void);
+ extern int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv);
+-extern unsigned int mpc52xx_get_xtal_freq(struct device_node *node);
+ extern void __noreturn mpc52xx_restart(char *cmd);
+ 
+ /* mpc52xx_gpt.c */
+diff --git a/arch/powerpc/platforms/52xx/mpc52xx_common.c b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+index 565e3a83dc9e..4a39e1cb2263 100644
+--- a/arch/powerpc/platforms/52xx/mpc52xx_common.c
++++ b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+@@ -203,43 +203,6 @@ int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv)
+ }
+ EXPORT_SYMBOL(mpc52xx_set_psc_clkdiv);
+ 
+-/**
+- * mpc52xx_get_xtal_freq - Get SYS_XTAL_IN frequency for a device
+- *
+- * @node: device node
+- *
+- * Returns the frequency of the external oscillator clock connected
+- * to the SYS_XTAL_IN pin, or 0 if it cannot be determined.
+- */
+-unsigned int mpc52xx_get_xtal_freq(struct device_node *node)
+-{
+-	u32 val;
+-	unsigned int freq;
+-
+-	if (!mpc52xx_cdm)
+-		return 0;
+-
+-	freq = mpc5xxx_get_bus_frequency(node);
+-	if (!freq)
+-		return 0;
+-
+-	if (in_8(&mpc52xx_cdm->ipb_clk_sel) & 0x1)
+-		freq *= 2;
+-
+-	val  = in_be32(&mpc52xx_cdm->rstcfg);
+-	if (val & (1 << 5))
+-		freq *= 8;
+-	else
+-		freq *= 4;
+-	if (val & (1 << 6))
+-		freq /= 12;
+-	else
+-		freq /= 16;
+-
+-	return freq;
+-}
+-EXPORT_SYMBOL(mpc52xx_get_xtal_freq);
+-
+ /**
+  * mpc52xx_restart: ppc_md->restart hook for mpc5200 using the watchdog timer
+  */
+-- 
+2.35.1
 
-If write buffer is not full, writer will wake kworker to flush data
-again after following writes, but if writer buffer is full and writer
-goes to sleep, kworker will never be woken again and tty device is
-blocked.
-
-We think this problem can be solved with a check for read buffer
-inside function n_tty_receive_buf_common, if read buffer is empty and
-ldata->no_room is true, this means that kworker has more data to flush
-to read buffer, so a call to n_tty_kick_worker is necessary.
-
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index f9c584244..4e65e2422 100644
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1760,6 +1760,8 @@ n_tty_receive_buf_common(struct tty_struct *tty,
-const unsigned char *cp,
-        } else
-                n_tty_check_throttle(tty);
-
-+       if (!chars_in_buffer(tty))
-+               n_tty_kick_worker(tty);
-        up_read(&tty->termios_rwsem);
-
-        return rcvd;
