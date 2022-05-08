@@ -2,218 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FC851E647
-	for <lists+linux-serial@lfdr.de>; Sat,  7 May 2022 12:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D68251EAD4
+	for <lists+linux-serial@lfdr.de>; Sun,  8 May 2022 04:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446242AbiEGKFx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 7 May 2022 06:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S1343629AbiEHCTD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 7 May 2022 22:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388612AbiEGKFo (ORCPT
+        with ESMTP id S234119AbiEHCTC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 7 May 2022 06:05:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB60C3AA56;
-        Sat,  7 May 2022 03:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651917715; x=1683453715;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1MylfDouAUkI19ElTFtDpDZL11z3RMfTO2EX3tvIe7Q=;
-  b=K5RfCjzUGjuAlLmBVwcIU8OfH5ZBHSMwGB4ak5i2IHM0bIp7IOFs2dBl
-   1FoT6EhtunRHtQIwfP6FUVDTxcFjJjcgEMaV8yVRCQW4ZIYCLXM+1lW3a
-   cfDSJFnwppXDwNAe59tcy+GnzLcoBMrtTYSpht9lHfmCffHFgzzSZ3EAA
-   U3qEFBqWbltxgk/wSLPF1HeGZsdkkSY3JGMf6b61u75ieND2T/uMa6tCP
-   cpZgx+5m0PQ4cV7NewnWtsvMn36MHFXn+y7LkEEM3f7yDhQAie7G12arg
-   wf1TpkaDCI589XL8VjZrPQYYxvlDgVCLxEmGsOlsCv6ZYsSuLHroznQWv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268315653"
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="268315653"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2022 03:01:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,206,1647327600"; 
-   d="scan'208";a="600936229"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 07 May 2022 03:01:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A0ED027D; Sat,  7 May 2022 13:01:49 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mark Brown <broonie@kernel.org>,
-        chris.packham@alliedtelesis.co.nz,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>
-Subject: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
-Date:   Sat,  7 May 2022 13:01:47 +0300
-Message-Id: <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
-References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+        Sat, 7 May 2022 22:19:02 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBE911143
+        for <linux-serial@vger.kernel.org>; Sat,  7 May 2022 19:15:13 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id k27so12603117edk.4
+        for <linux-serial@vger.kernel.org>; Sat, 07 May 2022 19:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
+        b=hIE5zwv2rTKn+CswdyopQHf0jMYKWFxRBF6odjeCxWBM/WRdVHzPYHl78NQfbEd29K
+         9enqxTUB9ZAvVAoyjF8AWhpC+f5IVcnJoMj+unQol6NBiW/KIRN+RPaYSq7RoP62yjw1
+         2X5NuVc9b98bRcPhXJz7ydAIkaPKYIMfoxEKnd5fu9ZsX03fmWcqseP8+bykpooAanlU
+         h5RINDqd4mWKTcsWni5bShtEPJLQkkRYT8dOneNqwF1lDvdzymwuLYp+4P1W1ToIwe8o
+         DNyWfhk7sajXrmDQAaFVYyGNgCHChouTJ3BZcW21ISZxH2nUIlO4cSJ32UEeiIotkomt
+         QV/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
+        b=wWxczXPm5o8y7dSZdYJJWGjmrIPakcrK5rb4+wUwopw0eNYumaw6/SB731bs4QcVJ1
+         l6hJvc6GzyusocixB1Ir0CpuUe6d++4CzqcKieO8USJim6/gG3hSPxNpa3JOBrVF4ha2
+         sVcP/C8wuXU8iT4n872xgoqic9RtLS1Foo7J6hT+MwbGpKgtfaM0+hGE+lho4dcMjoJk
+         NIBtkG0BJtL7NG6wq4qTCnbrwSe1LIt70OiBG2c1rbUwuhEAI82EuS7wX84jUByWcVOC
+         zeljburJheXzj0DndMr6Bcl4zcsgCDUs+EsY8G/2j8Y4/w3w50bgo1kEjnD22iFB1sgr
+         f5qg==
+X-Gm-Message-State: AOAM530vLnPEaANLhHmJbMgy4bRpkhhHihHUPOOJVfL/UTfL9KM78vbs
+        gOHwQ8bNHZW4YjWRzpxmpSDgbw/2QjrSXYI72tc=
+X-Google-Smtp-Source: ABdhPJzTI/QqRCdwIAmphqF9OzyyYNq5Vx7Ax17gRaKdquRTzXBKHWHIi7p9/pNhdRsw+jE0joTHzv2TJm/aPiu3TUo=
+X-Received: by 2002:a50:ed0e:0:b0:425:e476:f4ed with SMTP id
+ j14-20020a50ed0e000000b00425e476f4edmr10770566eds.32.1651976112082; Sat, 07
+ May 2022 19:15:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a50:3554:0:0:0:0:0 with HTTP; Sat, 7 May 2022 19:15:11 -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Mr. David Kabore" <dkabore16@gmail.com>
+Date:   Sat, 7 May 2022 19:15:11 -0700
+Message-ID: <CANLKR0vzXK+xff8dc1NLRToAvTmMja99WOdUionm413PVRoNow@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:530 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4996]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [dkabore16[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dkabore16[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 HK_NAME_FM_MR_MRS No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We may convert the GPT driver to use fwnode API for the sake
-of consistency of the used APIs inside the driver.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no changes
- arch/powerpc/platforms/52xx/mpc52xx_gpt.c | 47 +++++++++++------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
-
-diff --git a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-index ae47fdcc8a96..58c3651034bd 100644
---- a/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-+++ b/arch/powerpc/platforms/52xx/mpc52xx_gpt.c
-@@ -53,10 +53,9 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/list.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
--#include <linux/of.h>
--#include <linux/of_platform.h>
--#include <linux/of_gpio.h>
- #include <linux/kernel.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-@@ -64,7 +63,7 @@
- #include <linux/watchdog.h>
- #include <linux/miscdevice.h>
- #include <linux/uaccess.h>
--#include <linux/module.h>
-+
- #include <asm/div64.h>
- #include <asm/mpc52xx.h>
- 
-@@ -235,18 +234,17 @@ static const struct irq_domain_ops mpc52xx_gpt_irq_ops = {
- 	.xlate = mpc52xx_gpt_irq_xlate,
- };
- 
--static void
--mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt, struct device_node *node)
-+static void mpc52xx_gpt_irq_setup(struct mpc52xx_gpt_priv *gpt)
- {
- 	int cascade_virq;
- 	unsigned long flags;
- 	u32 mode;
- 
--	cascade_virq = irq_of_parse_and_map(node, 0);
--	if (!cascade_virq)
-+	cascade_virq = platform_get_irq(to_platform_device(gpt->dev), 0);
-+	if (cascade_virq < 0)
- 		return;
- 
--	gpt->irqhost = irq_domain_add_linear(node, 1, &mpc52xx_gpt_irq_ops, gpt);
-+	gpt->irqhost = irq_domain_create_linear(dev_fwnode(gpt->dev), 1, &mpc52xx_gpt_irq_ops, gpt);
- 	if (!gpt->irqhost) {
- 		dev_err(gpt->dev, "irq_domain_add_linear() failed\n");
- 		return;
-@@ -670,8 +668,7 @@ static int mpc52xx_gpt_wdt_init(void)
- 	return err;
- }
- 
--static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
--				 const u32 *period)
-+static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
- {
- 	u64 real_timeout;
- 
-@@ -679,14 +676,14 @@ static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
- 	mpc52xx_gpt_wdt = gpt;
- 
- 	/* configure the wdt if the device tree contained a timeout */
--	if (!period || *period == 0)
-+	if (period == 0)
- 		return 0;
- 
--	real_timeout = (u64) *period * 1000000000ULL;
-+	real_timeout = (u64)period * 1000000000ULL;
- 	if (mpc52xx_gpt_do_start(gpt, real_timeout, 0, 1))
- 		dev_warn(gpt->dev, "starting as wdt failed\n");
- 	else
--		dev_info(gpt->dev, "watchdog set to %us timeout\n", *period);
-+		dev_info(gpt->dev, "watchdog set to %us timeout\n", period);
- 	return 0;
- }
- 
-@@ -697,8 +694,7 @@ static int mpc52xx_gpt_wdt_init(void)
- 	return 0;
- }
- 
--static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
--					const u32 *period)
-+static inline int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt, const u32 period)
- {
- 	return 0;
- }
-@@ -726,25 +722,26 @@ static int mpc52xx_gpt_probe(struct platform_device *ofdev)
- 	dev_set_drvdata(&ofdev->dev, gpt);
- 
- 	mpc52xx_gpt_gpio_setup(gpt);
--	mpc52xx_gpt_irq_setup(gpt, ofdev->dev.of_node);
-+	mpc52xx_gpt_irq_setup(gpt);
- 
- 	mutex_lock(&mpc52xx_gpt_list_mutex);
- 	list_add(&gpt->list, &mpc52xx_gpt_list);
- 	mutex_unlock(&mpc52xx_gpt_list_mutex);
- 
- 	/* check if this device could be a watchdog */
--	if (of_get_property(ofdev->dev.of_node, "fsl,has-wdt", NULL) ||
--	    of_get_property(ofdev->dev.of_node, "has-wdt", NULL)) {
--		const u32 *on_boot_wdt;
-+	if (device_property_present(gpt->dev, "fsl,has-wdt") ||
-+	    device_property_present(gpt->dev, "has-wdt")) {
-+		u32 on_boot_wdt = 0;
-+		int ret;
- 
- 		gpt->wdt_mode = MPC52xx_GPT_CAN_WDT;
--		on_boot_wdt = of_get_property(ofdev->dev.of_node,
--					      "fsl,wdt-on-boot", NULL);
--		if (on_boot_wdt) {
-+		ret = device_property_read_u32(gpt->dev, "fsl,wdt-on-boot", &on_boot_wdt);
-+		if (ret) {
-+			dev_info(gpt->dev, "can function as watchdog\n");
-+		} else {
- 			dev_info(gpt->dev, "used as watchdog\n");
- 			gpt->wdt_mode |= MPC52xx_GPT_IS_WDT;
--		} else
--			dev_info(gpt->dev, "can function as watchdog\n");
-+		}
- 		mpc52xx_gpt_wdt_setup(gpt, on_boot_wdt);
- 	}
- 
 -- 
-2.35.1
+Hello,
+I'm Mr. David Kabore, how are you doing hope you are in good health,
+the Board irector try to reach you on phone several times Meanwhile,
+your number was not connecting. before he ask me to send you an email
+to hear from you if you are fine. hope to hear you are in good Health.
 
+Thanks,
+Mr. David Kabore.
