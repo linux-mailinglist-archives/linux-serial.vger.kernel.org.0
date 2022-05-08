@@ -2,105 +2,147 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D68251EAD4
-	for <lists+linux-serial@lfdr.de>; Sun,  8 May 2022 04:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4512551ECE9
+	for <lists+linux-serial@lfdr.de>; Sun,  8 May 2022 12:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343629AbiEHCTD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 7 May 2022 22:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S231475AbiEHKjp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 8 May 2022 06:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234119AbiEHCTC (ORCPT
+        with ESMTP id S230152AbiEHKjo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 7 May 2022 22:19:02 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBE911143
-        for <linux-serial@vger.kernel.org>; Sat,  7 May 2022 19:15:13 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id k27so12603117edk.4
-        for <linux-serial@vger.kernel.org>; Sat, 07 May 2022 19:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
-        b=hIE5zwv2rTKn+CswdyopQHf0jMYKWFxRBF6odjeCxWBM/WRdVHzPYHl78NQfbEd29K
-         9enqxTUB9ZAvVAoyjF8AWhpC+f5IVcnJoMj+unQol6NBiW/KIRN+RPaYSq7RoP62yjw1
-         2X5NuVc9b98bRcPhXJz7ydAIkaPKYIMfoxEKnd5fu9ZsX03fmWcqseP8+bykpooAanlU
-         h5RINDqd4mWKTcsWni5bShtEPJLQkkRYT8dOneNqwF1lDvdzymwuLYp+4P1W1ToIwe8o
-         DNyWfhk7sajXrmDQAaFVYyGNgCHChouTJ3BZcW21ISZxH2nUIlO4cSJ32UEeiIotkomt
-         QV/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
-        b=wWxczXPm5o8y7dSZdYJJWGjmrIPakcrK5rb4+wUwopw0eNYumaw6/SB731bs4QcVJ1
-         l6hJvc6GzyusocixB1Ir0CpuUe6d++4CzqcKieO8USJim6/gG3hSPxNpa3JOBrVF4ha2
-         sVcP/C8wuXU8iT4n872xgoqic9RtLS1Foo7J6hT+MwbGpKgtfaM0+hGE+lho4dcMjoJk
-         NIBtkG0BJtL7NG6wq4qTCnbrwSe1LIt70OiBG2c1rbUwuhEAI82EuS7wX84jUByWcVOC
-         zeljburJheXzj0DndMr6Bcl4zcsgCDUs+EsY8G/2j8Y4/w3w50bgo1kEjnD22iFB1sgr
-         f5qg==
-X-Gm-Message-State: AOAM530vLnPEaANLhHmJbMgy4bRpkhhHihHUPOOJVfL/UTfL9KM78vbs
-        gOHwQ8bNHZW4YjWRzpxmpSDgbw/2QjrSXYI72tc=
-X-Google-Smtp-Source: ABdhPJzTI/QqRCdwIAmphqF9OzyyYNq5Vx7Ax17gRaKdquRTzXBKHWHIi7p9/pNhdRsw+jE0joTHzv2TJm/aPiu3TUo=
-X-Received: by 2002:a50:ed0e:0:b0:425:e476:f4ed with SMTP id
- j14-20020a50ed0e000000b00425e476f4edmr10770566eds.32.1651976112082; Sat, 07
- May 2022 19:15:12 -0700 (PDT)
+        Sun, 8 May 2022 06:39:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF59E0AE;
+        Sun,  8 May 2022 03:35:50 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652006148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Wg5rgmNfLBMFs6+g076Tc69lJyydQy68rcQ9tdaUcOE=;
+        b=d8FMbrH+ZnIzNn38VNXgyx0rlmVihz2sgmBykxM1ijuFHr/encYlNAO/FYu+00jN5IaBPf
+        nuT70471orDPF3hqmVgafDF+6S44F0DBmgHNcDDXybOzpk2dytgoLzeWg35VQJW5rLBx+2
+        CO2hxm90hqJoqW+/c+6edL583AnVr+IvIHWQl7KMaT+LqnoP5+WhaqKm/i2FZMcKyqtQON
+        2lu8+YOHSNxdzeYuGUZ+9xA9ZPKMGN9VYjrNAhLH9k9izTmalcjST1YecYH4ZRm3Vc9+47
+        wCZrxf+vm13kfAZMwgZoV/uSs3Lp8leLOcTpXlMrXKVYhTN2d9FgXEY0t6sXpA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652006148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Wg5rgmNfLBMFs6+g076Tc69lJyydQy68rcQ9tdaUcOE=;
+        b=jbctOsS1Qy4kMsGrmyICmp7zgkryPYX6MCehq3ekzyo01N9EyO256vJmZBPTyf8dl2IGuw
+        1Usb4/w4051eRfBg==
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH v1] serial: meson: acquire port->lock in startup()
+Date:   Sun,  8 May 2022 12:41:47 +0206
+Message-Id: <20220508103547.626355-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Received: by 2002:a50:3554:0:0:0:0:0 with HTTP; Sat, 7 May 2022 19:15:11 -0700 (PDT)
-Reply-To: wijh555@gmail.com
-From:   "Mr. David Kabore" <dkabore16@gmail.com>
-Date:   Sat, 7 May 2022 19:15:11 -0700
-Message-ID: <CANLKR0vzXK+xff8dc1NLRToAvTmMja99WOdUionm413PVRoNow@mail.gmail.com>
-Subject: Good Day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:530 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4996]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [wijh555[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [dkabore16[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [dkabore16[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 HK_NAME_FM_MR_MRS No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
--- 
-Hello,
-I'm Mr. David Kabore, how are you doing hope you are in good health,
-the Board irector try to reach you on phone several times Meanwhile,
-your number was not connecting. before he ask me to send you an email
-to hear from you if you are fine. hope to hear you are in good Health.
+The uart_ops startup() callback is called without interrupts
+disabled and without port->lock locked, relatively late during the
+boot process (from the call path of console_on_rootfs()). If the
+device is a console, it was already previously registered and could
+be actively printing messages.
 
-Thanks,
-Mr. David Kabore.
+Since the startup() callback is reading/writing registers used by
+the console write() callback (AML_UART_CONTROL), its access must
+be synchronized using the port->lock. Currently it is not.
+
+The startup() callback is the only function that explicitly enables
+interrupts. Without the synchronization, it is possible that
+interrupts become accidentally permanently disabled.
+
+CPU0                           CPU1
+meson_serial_console_write     meson_uart_startup
+--------------------------     ------------------
+spin_lock(port->lock)
+val = readl(AML_UART_CONTROL)
+uart_console_write()
+                               writel(INT_EN, AML_UART_CONTROL)
+writel(val, AML_UART_CONTROL)
+spin_unlock(port->lock)
+
+Add port->lock synchronization to meson_uart_startup() to avoid
+racing with meson_serial_console_write().
+
+Also add detailed comments to meson_uart_reset() explaining why it
+is *not* using port->lock synchronization.
+
+Link: https://lore.kernel.org/lkml/2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/tty/serial/meson_uart.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index 2bf1c57e0981..39021dac09cc 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -253,6 +253,14 @@ static const char *meson_uart_type(struct uart_port *port)
+ 	return (port->type == PORT_MESON) ? "meson_uart" : NULL;
+ }
+ 
++/*
++ * This function is called only from probe() using a temporary io mapping
++ * in order to perform a reset before setting up the device. Since the
++ * temporarily mapped region was successfully requested, there can be no
++ * console on this port at this time. Hence it is not necessary for this
++ * function to acquire the port->lock. (Since there is no console on this
++ * port at this time, the port->lock is not initialized yet.)
++ */
+ static void meson_uart_reset(struct uart_port *port)
+ {
+ 	u32 val;
+@@ -267,9 +275,12 @@ static void meson_uart_reset(struct uart_port *port)
+ 
+ static int meson_uart_startup(struct uart_port *port)
+ {
++	unsigned long flags;
+ 	u32 val;
+ 	int ret = 0;
+ 
++	spin_lock_irqsave(&port->lock, flags);
++
+ 	val = readl(port->membase + AML_UART_CONTROL);
+ 	val |= AML_UART_CLEAR_ERR;
+ 	writel(val, port->membase + AML_UART_CONTROL);
+@@ -285,6 +296,8 @@ static int meson_uart_startup(struct uart_port *port)
+ 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
+ 	writel(val, port->membase + AML_UART_MISC);
+ 
++	spin_unlock_irqrestore(&port->lock, flags);
++
+ 	ret = request_irq(port->irq, meson_uart_interrupt, 0,
+ 			  port->name, port);
+ 
+
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+-- 
+2.30.2
+
