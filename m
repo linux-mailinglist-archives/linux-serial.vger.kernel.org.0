@@ -2,244 +2,194 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70072520276
-	for <lists+linux-serial@lfdr.de>; Mon,  9 May 2022 18:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05141520384
+	for <lists+linux-serial@lfdr.de>; Mon,  9 May 2022 19:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236837AbiEIQbt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 9 May 2022 12:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S239562AbiEIR0P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 9 May 2022 13:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239084AbiEIQbr (ORCPT
+        with ESMTP id S239574AbiEIRZ3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 9 May 2022 12:31:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B0B24AC46
-        for <linux-serial@vger.kernel.org>; Mon,  9 May 2022 09:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2BC461449
-        for <linux-serial@vger.kernel.org>; Mon,  9 May 2022 16:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 384D2C385AC;
-        Mon,  9 May 2022 16:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652113671;
-        bh=S0V8g9Q+rtOhW8zS6pQb1UdHnzurpYoAzo408azn5ig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R7R9BUtPSg+q2p7vcGt0yB/n81n89BqJc2feue4wN8K+Ko/9kWHUUAof+9WccHqbi
-         jbxtczbK3MbL8/my8gZU6kimoAMvjHpSh0WCBuA3nvjf+r+Z3Xoa3Sv4x0SJvlBMVn
-         2pMUkSG47qsJ5l5gilSOjiLs5eOk1+CoRCOlZ/FH5KpOJtHzrM7uFpGZsxYjdfSaLs
-         WF4QdqNKNEbdIxvkABOcyUGv6BiHt6y3nWmoMLerOZuoM6/bTAt9qcdpQ2tH94D5n8
-         q5uhVFXqdpgKR43N6VyIA/4odOvXh5ziM8JMBRSO/+FgpK48laW67B+bp4YAol0WE2
-         v0Dyy8bX0tLoA==
-Date:   Mon, 9 May 2022 17:27:46 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Mon, 9 May 2022 13:25:29 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3A524FDAB;
+        Mon,  9 May 2022 10:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652116891; x=1683652891;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=I4V4xhLbqiqJOKcdU+RpD14ssw/t4JQP8jT2I6gAeBc=;
+  b=MBdZ95lzLqb5TsdkyWuqKsCE0MSluxezRwuyDMdRbtOv6W94ywKjeYyD
+   G67NApJy5CW2/c3U5xATJw4BluzUQjgDvT49vLQsxTpwGC4RCREr6AxBL
+   NmqneoXxGv3RPliR5w9iByWtqIOD/ncH7ES/bDhb5ZQvTsolBdmAuv6DP
+   YYT1ndlXG0Gkle+dnJ1IQkSERG5n+5I7rUVvMH+q4iWBFnuKrSMnYVSfM
+   O/cszBgthwcVTxxa97TKJvJBHz+x7sAxC6vWgM78w6760uF/AbS3aNW/b
+   TSv1jIMMRSoRCHt+iOGpVL5vin+ZSkfDQW2esw7h6aFMHKMiKjsoMejsa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10342"; a="329710546"
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="329710546"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 10:21:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
+   d="scan'208";a="592915418"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 09 May 2022 10:21:28 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4A80DD1; Mon,  9 May 2022 20:21:30 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernelci-results@groups.io, bot@kernelci.org,
-        gtucker@collabora.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: Re: next/pending-fixes bisection: baseline.login on mt8173-elm-hana
-Message-ID: <YnlBAoZTJ6WbM394@sirena.org.uk>
-References: <62793d83.1c69fb81.71b96.033e@mx.google.com>
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH v1 1/2] serial: 8250_dw: Use devm_add_action_or_reset()
+Date:   Mon,  9 May 2022 20:21:28 +0300
+Message-Id: <20220509172129.37770-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="byCN00+m1yrx8Aui"
-Content-Disposition: inline
-In-Reply-To: <62793d83.1c69fb81.71b96.033e@mx.google.com>
-X-Cookie: Boycott meat -- suck your thumb.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Slightly simplify ->probe() and drop a few goto labels by using
+devm_add_action_or_reset() for clock and reset cleanup.
 
---byCN00+m1yrx8Aui
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_dw.c | 63 +++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 32 deletions(-)
 
-On Mon, May 09, 2022 at 09:12:51AM -0700, KernelCI bot wrote:
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index 7934e4658281..e7ef61899576 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -484,6 +484,16 @@ static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+ 	}
+ }
+ 
++static void dw8250_clk_disable_unprepare(void *data)
++{
++	clk_disable_unprepare(data);
++}
++
++static void dw8250_reset_control_assert(void *data)
++{
++	reset_control_assert(data);
++}
++
+ static int dw8250_probe(struct platform_device *pdev)
+ {
+ 	struct uart_8250_port uart = {}, *up = &uart;
+@@ -585,35 +595,43 @@ static int dw8250_probe(struct platform_device *pdev)
+ 	if (err)
+ 		dev_warn(dev, "could not enable optional baudclk: %d\n", err);
+ 
++	err = devm_add_action_or_reset(dev, dw8250_clk_disable_unprepare, data->clk);
++	if (err)
++		return err;
++
+ 	if (data->clk)
+ 		p->uartclk = clk_get_rate(data->clk);
+ 
+ 	/* If no clock rate is defined, fail. */
+ 	if (!p->uartclk) {
+ 		dev_err(dev, "clock rate not defined\n");
+-		err = -EINVAL;
+-		goto err_clk;
++		return -EINVAL;
+ 	}
+ 
+ 	data->pclk = devm_clk_get_optional(dev, "apb_pclk");
+-	if (IS_ERR(data->pclk)) {
+-		err = PTR_ERR(data->pclk);
+-		goto err_clk;
+-	}
++	if (IS_ERR(data->pclk))
++		return PTR_ERR(data->pclk);
+ 
+ 	err = clk_prepare_enable(data->pclk);
+ 	if (err) {
+ 		dev_err(dev, "could not enable apb_pclk\n");
+-		goto err_clk;
++		return err;
+ 	}
+ 
++	err = devm_add_action_or_reset(dev, dw8250_clk_disable_unprepare, data->pclk);
++	if (err)
++		return err;
++
+ 	data->rst = devm_reset_control_get_optional_exclusive(dev, NULL);
+-	if (IS_ERR(data->rst)) {
+-		err = PTR_ERR(data->rst);
+-		goto err_pclk;
+-	}
++	if (IS_ERR(data->rst))
++		return PTR_ERR(data->rst);
++
+ 	reset_control_deassert(data->rst);
+ 
++	err = devm_add_action_or_reset(dev, dw8250_reset_control_assert, data->rst);
++	if (err)
++		return err;
++
+ 	dw8250_quirks(p, data);
+ 
+ 	/* If the Busy Functionality is not implemented, don't handle it */
+@@ -631,10 +649,8 @@ static int dw8250_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	data->data.line = serial8250_register_8250_port(up);
+-	if (data->data.line < 0) {
+-		err = data->data.line;
+-		goto err_reset;
+-	}
++	if (data->data.line < 0)
++		return data->data.line;
+ 
+ 	/*
+ 	 * Some platforms may provide a reference clock shared between several
+@@ -655,17 +671,6 @@ static int dw8250_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 
+ 	return 0;
+-
+-err_reset:
+-	reset_control_assert(data->rst);
+-
+-err_pclk:
+-	clk_disable_unprepare(data->pclk);
+-
+-err_clk:
+-	clk_disable_unprepare(data->clk);
+-
+-	return err;
+ }
+ 
+ static int dw8250_remove(struct platform_device *pdev)
+@@ -683,12 +688,6 @@ static int dw8250_remove(struct platform_device *pdev)
+ 
+ 	serial8250_unregister_port(data->data.line);
+ 
+-	reset_control_assert(data->rst);
+-
+-	clk_disable_unprepare(data->pclk);
+-
+-	clk_disable_unprepare(data->clk);
+-
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_put_noidle(dev);
+ 
+-- 
+2.35.1
 
-The KernelCI bisection bot found a boot regression on mt8173-elm-hana
-which bisected to 6f81fdded0d02 ("serial: 8250_mtk: Make sure to select
-the right FEATURE_SEL").  With the patch the output terminates at:
-
-<6>[    0.763969] EINJ: ACPI disabled.
-<6>[    0.789312] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-<6>[    0.798321] printk: console [ttyS0] disabled
-<6>[    0.823022] 11002000.serial: ttyS0 at MMIO 0x11002000 (irq =3D 251, b=
-ase_baud =3D 1625000) is a 16550A
-
-with a stream of ^@s following.
-
-I've included the full bisection report, including links to more info
-like full logs and a Reported-by tag from the bot below:
-
-> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> * This automated bisection report was sent to you on the basis  *
-> * that you may be involved with the breaking commit it has      *
-> * found.  No manual investigation has been done to verify it,   *
-> * and the root cause of the problem may be somewhere else.      *
-> *                                                               *
-> * If you do send a fix, please include this trailer:            *
-> *   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
-> *                                                               *
-> * Hope this helps!                                              *
-> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-> next/pending-fixes bisection: baseline.login on mt8173-elm-hana
->=20
-> Summary:
->   Start:      a42b168a3ce2c Merge branch 'for-linux-next-fixes' of git://=
-anongit.freedesktop.org/drm/drm-misc
->   Plain log:  https://storage.kernelci.org/next/pending-fixes/v5.18-rc6-1=
-66-ga42b168a3ce2/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
-line-mt8173-elm-hana.txt
->   HTML log:   https://storage.kernelci.org/next/pending-fixes/v5.18-rc6-1=
-66-ga42b168a3ce2/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
-line-mt8173-elm-hana.html
->   Result:     6f81fdded0d02 serial: 8250_mtk: Make sure to select the rig=
-ht FEATURE_SEL
->=20
-> Checks:
->   revert:     PASS
->   verify:     PASS
->=20
-> Parameters:
->   Tree:       next
->   URL:        https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-=
-next.git
->   Branch:     pending-fixes
->   Target:     mt8173-elm-hana
->   CPU arch:   arm64
->   Lab:        lab-collabora
->   Compiler:   gcc-10
->   Config:     defconfig+arm64-chromebook
->   Test case:  baseline.login
->=20
-> Breaking commit found:
->=20
-> -------------------------------------------------------------------------=
-------
-> commit 6f81fdded0d024c7d4084d434764f30bca1cd6b1
-> Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.c=
-om>
-> Date:   Wed Apr 27 15:23:27 2022 +0200
->=20
->     serial: 8250_mtk: Make sure to select the right FEATURE_SEL
->    =20
->     Set the FEATURE_SEL at probe time to make sure that BIT(0) is enabled:
->     this guarantees that when the port is configured as AP UART, the
->     right register layout is interpreted by the UART IP.
->    =20
->     Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@=
-collabora.com>
->     Cc: stable <stable@vger.kernel.org>
->     Link: https://lore.kernel.org/r/20220427132328.228297-3-angelogioacch=
-ino.delregno@collabora.com
->     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->=20
-> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250=
-/8250_mtk.c
-> index cd62a5f340149..28e36459642ce 100644
-> --- a/drivers/tty/serial/8250/8250_mtk.c
-> +++ b/drivers/tty/serial/8250/8250_mtk.c
-> @@ -54,6 +54,9 @@
->  #define MTK_UART_TX_TRIGGER	1
->  #define MTK_UART_RX_TRIGGER	MTK_UART_RX_SIZE
-> =20
-> +#define MTK_UART_FEATURE_SEL	39	/* Feature Selection register */
-> +#define MTK_UART_FEAT_NEWRMAP	BIT(0)	/* Use new register map */
-> +
->  #ifdef CONFIG_SERIAL_8250_DMA
->  enum dma_rx_status {
->  	DMA_RX_START =3D 0,
-> @@ -569,6 +572,10 @@ static int mtk8250_probe(struct platform_device *pde=
-v)
->  		uart.dma =3D data->dma;
->  #endif
-> =20
-> +	/* Set AP UART new register map */
-> +	writel(MTK_UART_FEAT_NEWRMAP, uart.port.membase +
-> +	       (MTK_UART_FEATURE_SEL << uart.port.regshift));
-> +
->  	/* Disable Rate Fix function */
->  	writel(0x0, uart.port.membase +
->  			(MTK_UART_RATE_FIX << uart.port.regshift));
-> -------------------------------------------------------------------------=
-------
->=20
->=20
-> Git bisection log:
->=20
-> -------------------------------------------------------------------------=
-------
-> git bisect start
-> # good: [c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a] Linux 5.18-rc6
-> git bisect good c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
-> # bad: [a42b168a3ce2c4923d405814c81ef015aa5e6515] Merge branch 'for-linux=
--next-fixes' of git://anongit.freedesktop.org/drm/drm-misc
-> git bisect bad a42b168a3ce2c4923d405814c81ef015aa5e6515
-> # bad: [d424caf55dd6da1f39787899d223b17b61bff74e] Merge branch 'tty-linus=
-' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
-> git bisect bad d424caf55dd6da1f39787899d223b17b61bff74e
-> # good: [2ecea400e96eddd79295a717ce9a7ef71d9519c0] Merge branch 'master' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
-> git bisect good 2ecea400e96eddd79295a717ce9a7ef71d9519c0
-> # good: [493e389da29b9df4898136e487b7217b277a0d2f] Merge branch 'for-linu=
-s' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git
-> git bisect good 493e389da29b9df4898136e487b7217b277a0d2f
-> # good: [4e02910ec7a8c7d7608dd3d18169f92d04e40eac] Merge branch 'for-linu=
-s' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
-> git bisect good 4e02910ec7a8c7d7608dd3d18169f92d04e40eac
-> # bad: [edd5f60c340086891fab094ad61270d6c80f9ca4] tty: n_gsm: fix mux act=
-ivation issues in gsm_config()
-> git bisect bad edd5f60c340086891fab094ad61270d6c80f9ca4
-> # bad: [6f81fdded0d024c7d4084d434764f30bca1cd6b1] serial: 8250_mtk: Make =
-sure to select the right FEATURE_SEL
-> git bisect bad 6f81fdded0d024c7d4084d434764f30bca1cd6b1
-> # good: [bb0b197aadd928f52ce6f01f0ee977f0a08cf1be] serial: 8250_mtk: Fix =
-UART_EFR register address
-> git bisect good bb0b197aadd928f52ce6f01f0ee977f0a08cf1be
-> # first bad commit: [6f81fdded0d024c7d4084d434764f30bca1cd6b1] serial: 82=
-50_mtk: Make sure to select the right FEATURE_SEL
-> -------------------------------------------------------------------------=
-------
->=20
->=20
-> -=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
-> Groups.io Links: You receive all messages sent to this group.
-> View/Reply Online (#26744): https://groups.io/g/kernelci-results/message/=
-26744
-> Mute This Topic: https://groups.io/mt/90993243/1131744
-> Group Owner: kernelci-results+owner@groups.io
-> Unsubscribe: https://groups.io/g/kernelci-results/unsub [broonie@kernel.o=
-rg]
-> -=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-=3D-
->=20
->=20
-
---byCN00+m1yrx8Aui
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ5QQEACgkQJNaLcl1U
-h9B5Vwf/YWVIfriIAi/mXoPDS+3GuOCCdwXq7OydHL4v2uxpjhEb6RhW5UIhkw4L
-K4OkWGoWpXkfSkIUfbX+KsolJQLof1KfQMZVXObP0xVFTTmeTJol7ng65jlGjBqu
-P1Sn6+wTaXkoXhtHR5WStObcB2UcCH+tX0y4Hp6rYERzO4bqmyroIEFp/ttt+FFl
-KdROHQC1/ORv6M3Tx898+T4d5JQwLRp9p6mtaODvucL+9DxxrzeGyTz0mEfESB0I
-FOi5Q3VT2n6+Y3rW3nJIrzI0MyM0hA5MbMvC+Lrl+2MfoH8e7ic8IT6SQ9pWo6Ie
-WDGNQVXCpZB7cUHT8e56OE1LKNCOMA==
-=JeF4
------END PGP SIGNATURE-----
-
---byCN00+m1yrx8Aui--
