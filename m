@@ -2,69 +2,61 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B1651F8A0
-	for <lists+linux-serial@lfdr.de>; Mon,  9 May 2022 11:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D284A51F9C3
+	for <lists+linux-serial@lfdr.de>; Mon,  9 May 2022 12:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbiEIJxT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 9 May 2022 05:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S232755AbiEIK1b (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 9 May 2022 06:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiEIJjz (ORCPT
+        with ESMTP id S233751AbiEIK1a (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 9 May 2022 05:39:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B7618C06D;
-        Mon,  9 May 2022 02:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652088961; x=1683624961;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JULdTGBTfThIZcRLutbTwErm+tkVZJR7XHUyFQtfHus=;
-  b=I7KHiNxYzLnjnhp3L39e9Rbks2p6eiKRG0gNap7+/972wyozBhr4qQ8y
-   6qWauqHGCyGpHCWgKWTBLwShlMv4+cgw0S0Z+9cGu9GFV3Xrme6jlolVG
-   yHnz05zCDkXweBZHjra0Qsuu4KbyQ/LFPDhpqpKRvK68n4YEjEkW3DQDc
-   1WgjnEyqbSWNA1LH8Dnn/U/X+ecH/XtzEKBGZjmsnLwiUl/c7NPSqc7Yr
-   dZUpfsanIZj208oiX+uHDuJkZdRalHwKhXzzEGgBTVgI6+IWfu5aFLaiC
-   zEJcv7opiKNPSnQLE3QZxEwd0rN3U7m06aIR7++fh/60Sq9vUVOrYxjpB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="249533352"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="249533352"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 02:35:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="564969629"
-Received: from mfuent2x-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.220.67])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 02:35:14 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 3/3] termbits.h: Remove posix_types.h include
-Date:   Mon,  9 May 2022 12:34:46 +0300
-Message-Id: <20220509093446.6677-4-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220509093446.6677-1-ilpo.jarvinen@linux.intel.com>
-References: <20220509093446.6677-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 9 May 2022 06:27:30 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68861DE570
+        for <linux-serial@vger.kernel.org>; Mon,  9 May 2022 03:22:17 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id p189so8088579wmp.3
+        for <linux-serial@vger.kernel.org>; Mon, 09 May 2022 03:22:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cjmP5f8o6qkhTLtlBX/qb4mHQGvjQadtuCgjH5PFef4=;
+        b=Y+oxLww1vwJvUKiZw+o+HW8UnlcwZskrvSxIuXlMv1byFTtkg9PgiG66KXujNDD1Ys
+         DxztrhvO4Z2MF3hNZj0EOT6AFQZk/OQ5KuzvGl5wzY6I/4SWo5F3/2X92tJJiltqmoE6
+         HBGWznm2IP1PNzXOSEKGJW7rvkKCtPI6RRmAXphAqQ6nY7aQqI+ZLx0f5PyWXPg6J5q9
+         3dj2FcoLvFIIg6lIysyxhKdg+Fa5Gd4LahXoM+6oXhwSTJDwiAnTx+rYxGyz7dqFoYcJ
+         XgKO/hGUILCukzvgkstzmsowciRYPL764IChhkw0fUiLfJzYjOm/rH0sfysFXduVeV5Q
+         x2Xg==
+X-Gm-Message-State: AOAM53112bDArXQLcvmcq4VDvD2tGFq6VSG+7qGnex9jBiQj4qcm1Kac
+        ljbrnPZxsQPiWKxlGLuUyvk=
+X-Google-Smtp-Source: ABdhPJzOjx2UvFMLGfOd4Q5S1rlIh43G9ph88cFzu3lCc/I6qK3l4xqGOb8DtzYJD0yJhaoEB4HrAg==
+X-Received: by 2002:a05:600c:35c6:b0:394:856d:fb07 with SMTP id r6-20020a05600c35c600b00394856dfb07mr9433341wmq.131.1652091720759;
+        Mon, 09 May 2022 03:22:00 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id i6-20020adffdc6000000b0020c5253d8f1sm10410577wrs.61.2022.05.09.03.21.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 03:22:00 -0700 (PDT)
+Message-ID: <26f51ae5-6530-2376-55ac-0cfd3884f1ef@kernel.org>
+Date:   Mon, 9 May 2022 12:21:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] fsl_lpuart: Don't enable interrupts too early
+Content-Language: en-US
+To:     Indan Zupancic <Indan.Zupancic@mep-info.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     sherry.sun@nxp.com, linux-imx@nxp.com, linux-serial@vger.kernel.org
+References: <20220505114750.45423-1-Indan.Zupancic@mep-info.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220505114750.45423-1-Indan.Zupancic@mep-info.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,82 +64,74 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Nothing in termbits seems to require anything from linux/posix_types.h.
+On 05. 05. 22, 13:47, Indan Zupancic wrote:
+> If an irq is pending when devm_request_irq() is called, the irq
+> handler will cause a NULL pointer access because initialisation
+> is not done yet.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- arch/alpha/include/uapi/asm/termbits.h  | 2 --
- arch/mips/include/uapi/asm/termbits.h   | 2 --
- arch/parisc/include/uapi/asm/termbits.h | 2 --
- arch/sparc/include/uapi/asm/termbits.h  | 2 --
- include/uapi/asm-generic/termbits.h     | 2 --
- 5 files changed, 10 deletions(-)
+Sounds about right. But could you be a bit more specific? Like appending 
+the BUG and its stack trace?
 
-diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
-index 735e9ffe2795..f1290b22072b 100644
---- a/arch/alpha/include/uapi/asm/termbits.h
-+++ b/arch/alpha/include/uapi/asm/termbits.h
-@@ -2,8 +2,6 @@
- #ifndef _ALPHA_TERMBITS_H
- #define _ALPHA_TERMBITS_H
- 
--#include <linux/posix_types.h>
--
- #include <asm-generic/termbits-common.h>
- 
- typedef unsigned int	tcflag_t;
-diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
-index 8fa3e79d4f94..1eb60903d6f0 100644
---- a/arch/mips/include/uapi/asm/termbits.h
-+++ b/arch/mips/include/uapi/asm/termbits.h
-@@ -11,8 +11,6 @@
- #ifndef _ASM_TERMBITS_H
- #define _ASM_TERMBITS_H
- 
--#include <linux/posix_types.h>
--
- #include <asm-generic/termbits-common.h>
- 
- typedef unsigned int	tcflag_t;
-diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-index d72c5ebf3a3a..3a8938d26fb4 100644
---- a/arch/parisc/include/uapi/asm/termbits.h
-+++ b/arch/parisc/include/uapi/asm/termbits.h
-@@ -2,8 +2,6 @@
- #ifndef __ARCH_PARISC_TERMBITS_H__
- #define __ARCH_PARISC_TERMBITS_H__
- 
--#include <linux/posix_types.h>
--
- #include <asm-generic/termbits-common.h>
- 
- typedef unsigned int	tcflag_t;
-diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
-index cfcc4e07ce51..4321322701fc 100644
---- a/arch/sparc/include/uapi/asm/termbits.h
-+++ b/arch/sparc/include/uapi/asm/termbits.h
-@@ -2,8 +2,6 @@
- #ifndef _UAPI_SPARC_TERMBITS_H
- #define _UAPI_SPARC_TERMBITS_H
- 
--#include <linux/posix_types.h>
--
- #include <asm-generic/termbits-common.h>
- 
- #if defined(__sparc__) && defined(__arch64__)
-diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
-index c92179563289..890ef29053e2 100644
---- a/include/uapi/asm-generic/termbits.h
-+++ b/include/uapi/asm-generic/termbits.h
-@@ -2,8 +2,6 @@
- #ifndef __ASM_GENERIC_TERMBITS_H
- #define __ASM_GENERIC_TERMBITS_H
- 
--#include <linux/posix_types.h>
--
- #include <asm-generic/termbits-common.h>
- 
- typedef unsigned int	tcflag_t;
+> Fixes: 9d7ee0e28da59 ("tty: serial: lpuart: avoid report NULL interrupt")
+> Signed-off-by: Indan Zupancic <Indan.Zupancic@mep-info.com>
+> ---
+>   drivers/tty/serial/fsl_lpuart.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index 75b3c36c13bc..7b46b97a6ddd 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -2629,6 +2629,7 @@ static int lpuart_probe(struct platform_device *pdev)
+>   	struct device_node *np = pdev->dev.of_node;
+>   	struct lpuart_port *sport;
+>   	struct resource *res;
+> +	irq_handler_t handler;
+>   	int ret;
+>   
+>   	sport = devm_kzalloc(&pdev->dev, sizeof(*sport), GFP_KERNEL);
+> @@ -2701,17 +2702,11 @@ static int lpuart_probe(struct platform_device *pdev)
+>   
+>   	if (lpuart_is_32(sport)) {
+>   		lpuart_reg.cons = LPUART32_CONSOLE;
+> -		ret = devm_request_irq(&pdev->dev, sport->port.irq, lpuart32_int, 0,
+> -					DRIVER_NAME, sport);
+> +		handler = lpuart32_int;
+>   	} else {
+>   		lpuart_reg.cons = LPUART_CONSOLE;
+> -		ret = devm_request_irq(&pdev->dev, sport->port.irq, lpuart_int, 0,
+> -					DRIVER_NAME, sport);
+> +		handler = lpuart_int;
+>   	}
+> -
+> -	if (ret)
+> -		goto failed_irq_request;
+> -
+>   	ret = uart_add_one_port(&lpuart_reg, &sport->port);
+>   	if (ret)
+>   		goto failed_attach_port;
+> @@ -2733,13 +2728,18 @@ static int lpuart_probe(struct platform_device *pdev)
+>   
+>   	sport->port.rs485_config(&sport->port, &sport->port.rs485);
+>   
+> +	ret = devm_request_irq(&pdev->dev, sport->port.irq, handler, 0,
+> +				DRIVER_NAME, sport);
+> +	if (ret)
+> +		goto failed_irq_request;
+> +
+>   	return 0;
+>   
+> +failed_irq_request:
+>   failed_get_rs485:
+>   failed_reset:
+>   	uart_remove_one_port(&lpuart_reg, &sport->port);
+>   failed_attach_port:
+> -failed_irq_request:
+>   	lpuart_disable_clks(sport);
+>   	return ret;
+>   }
+
+
 -- 
-2.30.2
-
+js
+suse labs
