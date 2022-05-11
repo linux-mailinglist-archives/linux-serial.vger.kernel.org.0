@@ -2,105 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1265A522B53
-	for <lists+linux-serial@lfdr.de>; Wed, 11 May 2022 06:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FD6522C31
+	for <lists+linux-serial@lfdr.de>; Wed, 11 May 2022 08:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiEKEkk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 May 2022 00:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S235375AbiEKGWw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 May 2022 02:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238666AbiEKEjj (ORCPT
+        with ESMTP id S237612AbiEKGWu (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 May 2022 00:39:39 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1491514E6
-        for <linux-serial@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e5e433d66dso1486715fac.5
-        for <linux-serial@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
-         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
-         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
-         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
-         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
-         wrQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=zEU8TFNG3fTQlrb4LhG5Nbtp3Xk3pf4iCMvEFT7dJT+cqLfeeE/M+0x1J9psnh1Ohf
-         kQPFYAgb8V7aIZan8EMw3cJG+Zd2nlAUa1v+IgM7UiOLHXVdXXlU0AONWXmAkWzbqcTu
-         +sIdgzudIiSkCRr+2/nsmhH04inoP0oOFRIntzRD/diepAH/JQYj0RNvj0pfucvPmtWR
-         JT+/4PeKmA85ChFPp6WGHA4YBXNOyHoFjkHAa5nE6SY/HQ0Rg0ShC5RYoV3RomG/OcmG
-         ItGY/JOE7fgzHq4ShpLuQVFSl8xp5FSYB+N00pgRUsY36PUHTEMAxsNHNV2un4BCFBFF
-         sBTg==
-X-Gm-Message-State: AOAM533N5q40ZVBNvMFXB0ECnMu6OuGCDxVsqViWFttlpPusn8EoVmKJ
-        4YHCTzBpvsVG65ytUqlDezJluli8d0TTqTvYhzv9GdW/iLQElA==
-X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
-X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
- gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
- May 2022 21:39:11 -0700 (PDT)
+        Wed, 11 May 2022 02:22:50 -0400
+X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 10 May 2022 23:22:49 PDT
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B911CA040;
+        Tue, 10 May 2022 23:22:49 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="51935716"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647270000"; 
+   d="scan'208";a="51935716"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 11 May 2022 15:21:41 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 4038DE5BA6;
+        Wed, 11 May 2022 15:21:40 +0900 (JST)
+Received: from oym-om1.fujitsu.com (oym-om1.o.css.fujitsu.com [10.85.58.161])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 76BD2140E1;
+        Wed, 11 May 2022 15:21:39 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by oym-om1.fujitsu.com (Postfix) with ESMTP id 4078940487F9C;
+        Wed, 11 May 2022 15:21:39 +0900 (JST)
+From:   Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+To:     linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+        linux-serial@vger.kernel.org, sumit.garg@linaro.org
+Cc:     arnd@arndb.de, olof@lixom.net, catalin.marinas@arm.com,
+        will@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org, linux-kernel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, peterz@infradead.org,
+        hasegawa-hitomi@fujitsu.com
+Subject: [PATCH v4 0/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+Date:   Wed, 11 May 2022 15:21:12 +0900
+Message-Id: <20220511062113.2645747-1-hasegawa-hitomi@fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
- -0700 (PDT)
-From:   Private Mail <privatemail1961@gmail.com>
-Date:   Tue, 10 May 2022 21:39:10 -0700
-Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
-Subject: Have you had this? It is for your Benefit
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Our Ref: BG/WA0151/2022
+The interrupt is set using pseudo-NMI if it is available. Arm has a
+diagnostic interrupt feature called "Arm Generic Diagnostic Dump and
+Reset device", but the A64FX does not support this feature and instead
+has its own device definition.
 
-Dear Beneficiary
+I tested on FX700:
+$ echo 1 > /proc/sys/kernel/sysrq
+$ echo HARDLOCKUP > /sys/kernel/debug/provoke-crash/DIRECT
+:
+:
 
-Subject: An Estate of US$15.8 Million
+Send the "chassis power diag" command from the management server
+using ipmitool, the following message is shown:
+[  123.272342] Kernel panic - not syncing: a64fx_diag: interrupt received
+:
+:
 
-Blount and Griffin Genealogical Investigators specializes in probate
-research to locate missing heirs and beneficiaries to estates in the
-United Kingdom and Europe.
+Changes in V4:
+ - Call the panic function instead of sysrq. Prepare a handler
+   for each NMI/IRQ and call nmi_panic()/panic() respectively (as in v1).
+ - Fixing other issues raised by Greg.
 
-We can also help you find wills, obtain copies of certificates, help
-you to administer an estate, as well as calculating how an estate,
-intestacy or trust should be distributed.
+Changes in V3:
+ - Exclude Sumit's patch.
+ - Retest in v5.17.
 
-You may be entitled to a large pay out for an inheritance in Europe
-worth US$15.8 million. We have discovered an estate belonging to the
-late Depositor has remained unclaimed since he died in 2011 and we
-have strong reasons to believe you are the closest living relative to
-the deceased we can find.
+Changes in V2:
+ - Include Sumit's patch.
+ - The handler calls handle_sysrq() to use the sysrq feature to cause
+   a panic.
+ - request_nmi() and request_irq() now use the same handler, and
+   the function name of the handler has also changed.
+ - Use readl()/writel() instead of readl_relaxed()/writel_relaxed().
 
-You may unknowingly be the heir of this person who died without
-leaving a will (intestate). We will conduct a probate research to
-prove your entitlement, and can submit a claim on your behalf all at
-no risk to yourselves.
+V3: https://lore.kernel.org/linux-arm-kernel/20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com/
+V2: https://lore.kernel.org/linux-arm-kernel/20220304064324.331217-3-hasegawa-hitomi@fujitsu.com/
+V1: https://lore.kernel.org/linux-arm-kernel/20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com/
 
-Our service fee of 10% will be paid to us after you have received the estate.
 
-The estate transfer process should take just a matter of days as we
-have the mechanism and expertise to get this done very quickly. This
-message may come to you as a shock, however we hope to work with you
-to transfer the estate to you as quickly as possible.
+Hitomi Hasegawa (1):
+  soc: fujitsu: Add A64FX diagnostic interrupt driver
 
-Feel free to email our senior case worker Mr. Malcolm Casey on email:
-malcolmcasey68@yahoo.com for further discussions.
+ MAINTAINERS                      |   5 +
+ drivers/soc/Kconfig              |   1 +
+ drivers/soc/Makefile             |   1 +
+ drivers/soc/fujitsu/Kconfig      |  13 +++
+ drivers/soc/fujitsu/Makefile     |   3 +
+ drivers/soc/fujitsu/a64fx-diag.c | 155 +++++++++++++++++++++++++++++++
+ 6 files changed, 178 insertions(+)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
+ create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
 
-With warm regards,
+-- 
+2.27.0
 
-Mr. Blount W. Gort, CEO.
-Blount and Griffin Associates Inc
