@@ -2,98 +2,137 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FC9523065
-	for <lists+linux-serial@lfdr.de>; Wed, 11 May 2022 12:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941FB523104
+	for <lists+linux-serial@lfdr.de>; Wed, 11 May 2022 12:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241420AbiEKKMh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 May 2022 06:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S237162AbiEKKxG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 May 2022 06:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241325AbiEKKM3 (ORCPT
+        with ESMTP id S229819AbiEKKxF (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 May 2022 06:12:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2309A21935A;
-        Wed, 11 May 2022 03:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652263933; x=1683799933;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=F2ZGQHsx6x/fGntuee5Dt0BhAfm+/Hlzd1YGdP2vArk=;
-  b=CqpVF3cw1vUDTQpRJLdkMd32AiL/4rYB39vil5RLkML6uDaCVWK4lobg
-   kNhuvYJ70ETd0SLspoOs/b2DPGDJzF8YJF6PiElXL1TQT3NW1VXAYGnPA
-   CnLYZQoGKusU8d+np3ZL0dw1d3YDZoHi+shVEL0EFHfVUwyYJ5LIp4oxW
-   nAlepbiFaHRHbBG9aZ4946+j3V0P65kNFgkwLd77EskgCTXAx9z6eGYxS
-   GfEagPi6LPkH6S9Sn2AnKq69XRisbTk20LEPIJuujNv29myKAeQgP7HIR
-   mzpFHYJ7u1XI8WnZoMeGPOE+Gq+9n4vbqfmGYkMN2AM1HqNKTIBSrYbOG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="250184352"
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="250184352"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:12 -0700
-X-IronPort-AV: E=Sophos;i="5.91,216,1647327600"; 
-   d="scan'208";a="594049671"
-Received: from meliyahx-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.32.210])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 03:12:10 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 5/5] serial: jsm: Use B0 instead of 0
-Date:   Wed, 11 May 2022 13:11:39 +0300
-Message-Id: <20220511101139.5306-6-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
-References: <20220511101139.5306-1-ilpo.jarvinen@linux.intel.com>
+        Wed, 11 May 2022 06:53:05 -0400
+X-Greylist: delayed 1804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 03:53:02 PDT
+Received: from connect2.vanmierlo.com (fieber.vanmierlo.com [84.243.197.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618A0880EC;
+        Wed, 11 May 2022 03:53:02 -0700 (PDT)
+X-Footer: dmFubWllcmxvLmNvbQ==
+Received: from roundcube.vanmierlo.com ([192.168.37.37])
+        (authenticated user m.brock@vanmierlo.com)
+        by connect2.vanmierlo.com (Kerio Connect 9.4.0) with ESMTPA;
+        Wed, 11 May 2022 12:22:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Wed, 11 May 2022 12:22:16 +0200
+From:   m.brock@vanmierlo.com
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Matthias Schiffer' <matthias.schiffer@ew.tq-group.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH] serial: Revert RS485 polarity change on UART open
+In-Reply-To: <df0034da2db14b6b9993c37422a6711d@AcuMS.aculab.com>
+References: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
+ <20220329100328.GA2090@wunner.de>
+ <b2f29129f966685105e09781620b85c8f4f1a88e.camel@ew.tq-group.com>
+ <749eee7dd2c7464a8c4d9ea5972205fa@AcuMS.aculab.com>
+ <82266d339e09ad16963e16014cd836fa670b3a0c.camel@ew.tq-group.com>
+ <df0034da2db14b6b9993c37422a6711d@AcuMS.aculab.com>
+Message-ID: <8f44fa843e3053f19e3ec749e3083a5a@vanmierlo.com>
+X-Sender: m.brock@vanmierlo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Use B0 to check zero baudrate rather than literal 0.
+David Laight wrote on 2022-03-29 15:19:
+> From: Matthias Schiffer
+>> Sent: 29 March 2022 14:03
+>> 
+>> On Tue, 2022-03-29 at 12:55 +0000, David Laight wrote:
+>> > From: Matthias Schiffer
+>> > > Sent: 29 March 2022 11:39
+>> > ...
+>> > > I guess that would work. The fact that even the different
+>> > > variants of the 8250 are implemented inconsistently makes this
+>> > > especially ugly... It certainly puts a damper on the efforts to
+>> > > make the handling of RS485 in serial drivers more generic.
+>> >
+>> > One thing to remember is that RS232 (IIRC really V.38) line driver
+>> > chips are typically inverting.
+>> >
+>> > So the modem signals on a TTL level output will have the
+>> > opposite polarity to that required on the actual connector.
+>> >
+>> > Normally a UART will have an 'active high' register bit for
+>> > a modem signal that drives and 'active low' pin so you get
+>> > the correct polarity with an inverting line driver.
+>> >
+>> > 	David
+>> >
+>> 
+>> Indeed. As far as I can tell, this property of UARTs is what got us
+>> into this mess: Some people interpreted SER_RS485_RTS_ON_SEND as "set
+>> the RTS flag in the MCR register on send", while other thought it
+>> should mean "set the RTS pin to high on send", leading to opposite
+>> behaviours in different UART drivers (and even different UART variants
+>> in the same driver, in the case of the 8250 family).
+> 
+> Hmmm... A complete mess.
+> The 'RTS pin' that needs to go high is the one on the (typically) 'D'
+> connector after the inverting line driver.
+> Not the pin on the uart package.
+> I'd expect TTL level serial interfaces to require active low
+> modem signals.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/jsm/jsm_cls.c | 2 +-
- drivers/tty/serial/jsm/jsm_neo.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+A typical 'D' connector for RS485? I've seen all sorts of connectors
+and I can't say one of them is typical. You're assuming there are
+RS232 level shifters in play, but usually there aren't and the TTL
+UART signals are directly connected to an RS485 transceiver. For
+RS485 there is no outside RTS pin, so you will have to talk about
+the UART TTL pin.
 
-diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
-index 046b624e5f71..ca05e84a7c90 100644
---- a/drivers/tty/serial/jsm/jsm_cls.c
-+++ b/drivers/tty/serial/jsm/jsm_cls.c
-@@ -689,7 +689,7 @@ static void cls_param(struct jsm_channel *ch)
- 	/*
- 	 * If baud rate is zero, flush queues, and set mval to drop DTR.
- 	 */
--	if ((ch->ch_c_cflag & (CBAUD)) == 0) {
-+	if ((ch->ch_c_cflag & (CBAUD)) == B0) {
- 		ch->ch_r_head = 0;
- 		ch->ch_r_tail = 0;
- 		ch->ch_e_head = 0;
-diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
-index 0cf586c10688..95bebf2a73d3 100644
---- a/drivers/tty/serial/jsm/jsm_neo.c
-+++ b/drivers/tty/serial/jsm/jsm_neo.c
-@@ -938,7 +938,7 @@ static void neo_param(struct jsm_channel *ch)
- 	/*
- 	 * If baud rate is zero, flush queues, and set mval to drop DTR.
- 	 */
--	if ((ch->ch_c_cflag & (CBAUD)) == 0) {
-+	if ((ch->ch_c_cflag & (CBAUD)) == B0) {
- 		ch->ch_r_head = ch->ch_r_tail = 0;
- 		ch->ch_e_head = ch->ch_e_tail = 0;
- 
--- 
-2.30.2
+https://www.kernel.org/doc/Documentation/serial/serial-rs485.txt
+is unfortunately not entirely clear:
+	/* Set logical level for RTS pin equal to 1 when sending: */
+	rs485conf.flags |= SER_RS485_RTS_ON_SEND;
+
+Most (all?) UART chips have an RTSn, RTS# or /RTS pin which means RTS
+inverted. So the "RTS pin" can't be set to logic level 1, but RTS can.
+
+IMHO it would be best to let SER_RS485_RTS_ON_SEND mean that RTS is
+asserted during sending. That means that RTSn should be 0V.
+
+When the UART chip is connected directly to an RS485 driver with RTSn
+connected to DE, you need SER_RS485_RTS_AFTER_SEND so RTS=0 and
+RTSn=DE=1 during sending.
+
+When a UART is not in RS485 mode and unopened it usually has RTS=0,
+RTSn=1 which would make any directly connected RS485 driver claim
+the bus. This is probably undesired behaviour and thus asks for an
+extra inverter between RTSn and DE. With this added inverter one
+would need SER_RS485_RTS_ON_SEND.
+
+https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/serial/rs485.yaml
+isn't much better either:
+  rs485-rts-active-low:
+     description: drive RTS low when sending (default is high).
+
+Was this meant as "drive the RTSn pin low when sending"?
+
+Finally, can these two methods be synchronized in their wording?
+E.g. can we just drop "rs485-rts-active-low" and replace it with
+"rs485-rts-on-send" and "rs485-rts-after-send"?
+
+Maarten
 
