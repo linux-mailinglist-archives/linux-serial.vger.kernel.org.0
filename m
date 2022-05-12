@@ -2,98 +2,131 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C58A524B82
-	for <lists+linux-serial@lfdr.de>; Thu, 12 May 2022 13:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D856C524E00
+	for <lists+linux-serial@lfdr.de>; Thu, 12 May 2022 15:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353195AbiELLVt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 12 May 2022 07:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S238351AbiELNPO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 May 2022 09:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353239AbiELLVp (ORCPT
+        with ESMTP id S1353288AbiELNPN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 12 May 2022 07:21:45 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBE14B847
-        for <linux-serial@vger.kernel.org>; Thu, 12 May 2022 04:21:43 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id m190so9119556ybf.4
-        for <linux-serial@vger.kernel.org>; Thu, 12 May 2022 04:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=OGjovOLLCNX5QV/XTVfdAcAkHFV5TFmZScvINXsyNcw=;
-        b=ItqODeG7JfJNM1d4LJCDqp+qK+8MUctqK03dNaMGXD7aoshbnkvQoIHWVNjhkGVpLm
-         JbjTOyd7MB1A3NhhMzni3Smq2PKCmXYPQas1H0/Z0z716saQkbCzQOinVfp1xL3yu9wA
-         77M/id8YGn3GwNELVgjCNnKyRiMFYPK7V4SSFtCniUzEouIJIhItjAl7Pd1+KUeHp93P
-         kH7IhfTiT8cSCLKoVkwJ3S/Ed53Bk4/lgeLY4gngdpdBVbp9WVhhRH1SH+PLxfzZtaJU
-         b9JLuelMNhFh8sDBGk5LvQS941rVUcTeOpaZ8xAKgo/F3oqRObfcCrL3eMe4Qb2cV3Z/
-         j4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=OGjovOLLCNX5QV/XTVfdAcAkHFV5TFmZScvINXsyNcw=;
-        b=uaIh/uRRUbZOtPBNtfXbyX0wv9t084sCUcxV+auajtm/dWz1/4uHmtOSEOPczoGl4B
-         HmI1ts8RFObTAoZDHogPm9gts32Kw3sTFBdudiqwCO8Ze5wEtdmayufGNgfJ6Nc7JcUk
-         5BiiJapUzQk1h/BXFBF1Vxn65Fks/d2xsLdZNXUVpGmfsAu4QgPOPOlxJprr0/fdOVd9
-         Racn2p8DajKtA80BZL4cz9yq9lfpbTRehW/ynMn88gcL7DILSFQ3kkiMtBw5cDeCtNCW
-         sn9vnmgX89c7DWya3B8A3vBfIBFrHks/NpaEuaqyp18QkEPLHiPN5YemU5Q+PMmessC6
-         o01g==
-X-Gm-Message-State: AOAM532MhwFSuovjKUm503CwfB9Ehga6H7xRhVGkvp96oJA2zL1erUEa
-        h7rvbJzGSYs8YKCfxxYJk8bZEtlYpd8uDMmoGA==
-X-Google-Smtp-Source: ABdhPJxk8HMrxPEw7jjnMpxREvi5hq/Kkzz02iDCls+05vkMHYXbFbFfq15KsXIHmJg+Sknk8ZqOkAUw9u5ubo7R+EE=
-X-Received: by 2002:a25:d801:0:b0:64b:4013:1c44 with SMTP id
- p1-20020a25d801000000b0064b40131c44mr6101109ybg.187.1652354502341; Thu, 12
- May 2022 04:21:42 -0700 (PDT)
+        Thu, 12 May 2022 09:15:13 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B619C223879;
+        Thu, 12 May 2022 06:15:12 -0700 (PDT)
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id A184480B3;
+        Thu, 12 May 2022 13:11:35 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniel Starke <daniel.starke@siemens.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Zhenguo Zhao <Zhenguo.Zhao1@unisoc.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: [PATCH] tty: n_gsm: Fix packet data hex dump output
+Date:   Thu, 12 May 2022 16:15:06 +0300
+Message-Id: <20220512131506.1216-1-tony@atomide.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Received: by 2002:a05:7000:380b:0:0:0:0 with HTTP; Thu, 12 May 2022 04:21:41
- -0700 (PDT)
-Reply-To: rolandnyemih200@gmail.com
-From:   Rowland Nyemih <happypalama@gmail.com>
-Date:   Thu, 12 May 2022 12:21:41 +0100
-Message-ID: <CAJoenewDSSXZmLAoP_gy9dAteVKE_9+gHWRXE34rteAps9e2fg@mail.gmail.com>
-Subject: Rowland N.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b42 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4502]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [happypalama[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rolandnyemih200[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-HI,
-Good day.
-Kindly confirm to me if this is your correct email Address and get
-back to me for our interest.
-Sincerely,
-Rowland
+The module param debug for n_gsm uses KERN_INFO level, but the hexdump
+now uses KERN_DEBUG level. This started after commit 091cb0994edd
+("lib/hexdump: make print_hex_dump_bytes() a nop on !DEBUG builds").
+We now use dynamic_hex_dump() unless DEBUG is set.
+
+This causes no packets to be seen with modprobe n_gsm debug=0x1f unlike
+earlier. Let's fix this by adding gsm_hex_dump_bytes() that calls
+print_hex_dump() with KERN_INFO to match what n_gsm is doing with the
+other debug related output.
+
+Fixes: 091cb0994edd ("lib/hexdump: make print_hex_dump_bytes() a nop on !DEBUG builds")
+Cc: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/tty/n_gsm.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -443,6 +443,25 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
+ 	return modembits;
+ }
+ 
++static void gsm_hex_dump_bytes(const char *fname, const u8 *data,
++			       unsigned long len)
++{
++	char *prefix;
++
++	if (!fname) {
++		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, data, len,
++			       true);
++		return;
++	}
++
++	prefix = kasprintf(GFP_KERNEL, "%s: ", fname);
++	if (!prefix)
++		return;
++	print_hex_dump(KERN_INFO, prefix, DUMP_PREFIX_OFFSET, 16, 1, data, len,
++		       true);
++	kfree(prefix);
++}
++
+ /**
+  *	gsm_print_packet	-	display a frame for debug
+  *	@hdr: header to print before decode
+@@ -507,7 +526,7 @@ static void gsm_print_packet(const char *hdr, int addr, int cr,
+ 	else
+ 		pr_cont("(F)");
+ 
+-	print_hex_dump_bytes("", DUMP_PREFIX_NONE, data, dlen);
++	gsm_hex_dump_bytes(NULL, data, dlen);
+ }
+ 
+ 
+@@ -697,9 +716,7 @@ static void gsm_data_kick(struct gsm_mux *gsm, struct gsm_dlci *dlci)
+ 		}
+ 
+ 		if (debug & 4)
+-			print_hex_dump_bytes("gsm_data_kick: ",
+-					     DUMP_PREFIX_OFFSET,
+-					     gsm->txframe, len);
++			gsm_hex_dump_bytes(__func__, gsm->txframe, len);
+ 		if (gsmld_output(gsm, gsm->txframe, len) <= 0)
+ 			break;
+ 		/* FIXME: Can eliminate one SOF in many more cases */
+@@ -2442,8 +2459,7 @@ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len)
+ 		return -ENOSPC;
+ 	}
+ 	if (debug & 4)
+-		print_hex_dump_bytes("gsmld_output: ", DUMP_PREFIX_OFFSET,
+-				     data, len);
++		gsm_hex_dump_bytes(__func__, data, len);
+ 	return gsm->tty->ops->write(gsm->tty, data, len);
+ }
+ 
+@@ -2519,8 +2535,7 @@ static void gsmld_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+ 	char flags = TTY_NORMAL;
+ 
+ 	if (debug & 4)
+-		print_hex_dump_bytes("gsmld_receive: ", DUMP_PREFIX_OFFSET,
+-				     cp, count);
++		gsm_hex_dump_bytes(__func__, cp, count);
+ 
+ 	for (; count; count--, cp++) {
+ 		if (fp)
+-- 
+2.36.1
