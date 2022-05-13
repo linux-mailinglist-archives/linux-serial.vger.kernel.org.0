@@ -2,43 +2,55 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF300525CCB
-	for <lists+linux-serial@lfdr.de>; Fri, 13 May 2022 10:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A282F525D7F
+	for <lists+linux-serial@lfdr.de>; Fri, 13 May 2022 10:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378056AbiEMIHB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 13 May 2022 04:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S1378210AbiEMI3U (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 13 May 2022 04:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378032AbiEMIGw (ORCPT
+        with ESMTP id S1378215AbiEMI3T (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 13 May 2022 04:06:52 -0400
-Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D0450017
-        for <linux-serial@vger.kernel.org>; Fri, 13 May 2022 01:06:42 -0700 (PDT)
-Received: by mail.coredeal.pl (Postfix, from userid 1002)
-        id AE332A4954; Fri, 13 May 2022 08:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
-        t=1652429200; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
-        h=Date:From:To:Subject:From;
-        b=X9Vz8AdnqqOrT5atg+IRIduU6fbBEgVYafWXKa9vXOmBGjstTjay+mxzhRR0PZ2c9
-         lbJ2PF62PcFzJzz26GDXA1+lFJZsZZ1Botg5WP51TW4C1pJMOIWMsZfmCPh2rsjkCp
-         QYCixbHNGP/7c68dVvAOQC6SUfCjwGUhFZ5+XxLmhAlp5FZCw9L6fRVkLehZGf8mOq
-         fMNgFtwOV/4t4AcD7VGY06kPjjrWbr0Zh1PYeNdfmUS7TLEPElbsw5LzslmltreyNA
-         sRPiJC2m/Jwc3qM86KOtw6c0loQ5BYrF4wBokh8NgUdleZCV3tTGJLq+qnm4VN7cBK
-         OBzRd1s9nCCLQ==
-Received: by mail.coredeal.pl for <linux-serial@vger.kernel.org>; Fri, 13 May 2022 08:05:55 GMT
-Message-ID: <20220513064500-0.1.33.o0as.0.yhe8ipzrx5@coredeal.pl>
-Date:   Fri, 13 May 2022 08:05:55 GMT
-From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
-To:     <linux-serial@vger.kernel.org>
-Subject: Biznesowy angielski
-X-Mailer: mail.coredeal.pl
+        Fri, 13 May 2022 04:29:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1AE2A7C36
+        for <linux-serial@vger.kernel.org>; Fri, 13 May 2022 01:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652430558; x=1683966558;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=y55pFPeNh6kZi8hRsizET5/kqUMcGDSTd28bgP3B334=;
+  b=eCfR7M+lkXv7XfbblJSU9Vjaa603LmFhtBCmpTVJeRWmhcZT6nI6aFy8
+   nPokuazscvl9N3Au42JKYlQ+JOKxZFt0ZYz9MnS7EgqxG9y9IX8UjSXEd
+   bKd8sfW2MmTMfRR5XpjQC5gjddUzOV3h40EJyGACRLV57GBsgZzmOotlu
+   tz1SAV9fXHmJbCSQoftCHAsJj2FL5THKRsZAzETffSlvpf0jKMg4ARuVC
+   DCrWTgA11XlCBK4Fw/zM7VK0k93OliWTvHCQw7PMSOlKbIYenC5jHz2qX
+   izDGZFy6QZ0uVm1WfeEH6KhprRW9ob0nv+VBcBls0gBzkEARenfFREYDu
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="270385160"
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="270385160"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 01:29:18 -0700
+X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
+   d="scan'208";a="567107449"
+Received: from huberth-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.34.58])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 01:29:16 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 0/5] tty/serial: termbits cleanups
+Date:   Fri, 13 May 2022 11:29:01 +0300
+Message-Id: <20220513082906.11096-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,29 +58,37 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+A few simple cleanups that I've come across while playing with the
+termbits.
 
-czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
-swoich pracownik=C3=B3w?
+v2:
+- Make shortlog simpler
+- Note when in the history ifdefs became unnecessary
+- Balance braces
+- Remove extra parenthesis from the same lines
 
-Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
-w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
-ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
-=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+Ilpo Järvinen (5):
+  tty: remove CMSPAR ifdefs
+  tty: remove BOTHER ifdefs
+  tty: remove IBSHIFT ifdefs
+  serial: fsl_lpuart: Remove unnecessary clearing for CRTSCTS
+  serial: jsm: Use B0 instead of 0
 
-Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
-=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
-re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
-o=C5=BCliwo=C5=9Bci biznesowe.=20
+ drivers/char/pcmcia/synclink_cs.c   |  2 --
+ drivers/tty/amiserial.c             |  2 --
+ drivers/tty/mxser.c                 |  5 ++---
+ drivers/tty/serial/8250/8250_port.c |  2 --
+ drivers/tty/serial/fsl_lpuart.c     |  8 +++----
+ drivers/tty/serial/jsm/jsm_cls.c    |  8 +------
+ drivers/tty/serial/jsm/jsm_neo.c    |  8 +------
+ drivers/tty/serial/sunsu.c          |  2 --
+ drivers/tty/tty_baudrate.c          | 35 +++++++----------------------
+ drivers/tty/tty_ioctl.c             |  2 --
+ drivers/usb/class/cdc-acm.h         |  8 -------
+ drivers/usb/serial/ark3116.c        |  3 +--
+ drivers/usb/serial/whiteheat.c      |  4 ----
+ 13 files changed, 16 insertions(+), 73 deletions(-)
 
-Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
- kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
-za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
-=2E
+-- 
+2.30.2
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
-w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
-
-
-Pozdrawiam
-Krzysztof Maj
