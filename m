@@ -2,123 +2,150 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A175552CC5A
-	for <lists+linux-serial@lfdr.de>; Thu, 19 May 2022 09:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3511752CC85
+	for <lists+linux-serial@lfdr.de>; Thu, 19 May 2022 09:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiESHCr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 May 2022 03:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S232079AbiESHJ2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 19 May 2022 03:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiESHCp (ORCPT
+        with ESMTP id S230453AbiESHJY (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 May 2022 03:02:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B23B19C
-        for <linux-serial@vger.kernel.org>; Thu, 19 May 2022 00:02:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 363C361A8A
-        for <linux-serial@vger.kernel.org>; Thu, 19 May 2022 07:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10922C34100;
-        Thu, 19 May 2022 07:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652943763;
-        bh=15fHYFqNeavE+taYo/yl6z6a68MOaZGBw4pYrJkVNCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U8cdPBj+jNwJhxgverQhcm2TNMcW6WvjV+U9X50vdrDlrtH88bIca54BWS+EoK/gK
-         SXxNyV/mvT6TcrzL79lsYVcXfyjUe2FuQaCr682dVPQ9kPg1CHuw6i+3BSrIoSpUSl
-         E1xNDkbnCzaKEucpsyg8+hzguf5a4G2wTse2pxqk=
-Date:   Thu, 19 May 2022 09:02:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     christopher tyerman <linuxkernel@firebladeautomationsystems.uk>
-Cc:     linux-serial@vger.kernel.org
-Subject: Re: Using Serdev is it Possible to Pull RX Low
-Message-ID: <YoXrj6r+rhpSpZXt@kroah.com>
-References: <341d8439-4466-7182-745d-ba613301e009@firebladeautomationsystems.uk>
- <YoSy2vnS68wkLpcO@kroah.com>
- <e92ad3ac-3d52-7f77-8839-74ef81a74154@firebladeautomationsystems.uk>
+        Thu, 19 May 2022 03:09:24 -0400
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B465C68307
+        for <linux-serial@vger.kernel.org>; Thu, 19 May 2022 00:09:21 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20220519070918205a9ce663d2754b31
+        for <linux-serial@vger.kernel.org>;
+        Thu, 19 May 2022 09:09:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=H/or2OZsQeDEkRCrMm6GNFDu44m+XF/7j107kxhZkho=;
+ b=U60N1c8r560NMW3iOshF1O+ZUF4+ODYQfVrvQ1ouc/le0NpaIuF1yCaJxrjEbwFRUvf+Q+
+ SZIqeS2+SJdT/RttYLUmCYghzTk07yYLFak43oXrcadr+Eq2q5X1X7C/4RQwJn0BOT1p9/QV
+ Y2XyISlzon4sTC6tYcmdfBtugY3To=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v2 1/9] tty: n_gsm: fix user open not possible at responder until initiator open
+Date:   Thu, 19 May 2022 09:07:49 +0200
+Message-Id: <20220519070757.2096-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e92ad3ac-3d52-7f77-8839-74ef81a74154@firebladeautomationsystems.uk>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, May 18, 2022 at 07:11:38PM +0100, christopher tyerman wrote:
-> On 18/05/2022 09:48, Greg KH wrote:> On Tue, May 17, 2022 at 07:42:46PM
-> +0100, linuxkernel wrote:
-> >> hello I, looking at writing a kernel driver for the Texas instruments
-> >> TPS92662A/TPS92663A which uses a "UART bus" e.g
-> >> |-----------|    |-----------|    |-----------|     |-----------|
-> >> |           |    | TPS92662A |    | TPS92662A |     | TPS92663A |
-> >> |   UART    |    | -Q1       |    | -Q1       |     | -Q1 	   |
-> >> |           |    |           |    |           |     |           |
-> >> |-----------|    |-----------|    |-----------|     |-----------|
-> >>       |                |                |                 |
-> >>       |                |                |                 |
-> >>       |                |                |                 |
-> >>       -----------------------------------------------------
-> >> and control communications by specific sequencing. configuring this
-> >> appears to require being able to pull RX Low
-> >>> The MCU unit can reset the device UART and protocol state machine at
-> >>> any time by holding the RX input low for a period of at least 12 bit
-> >>> times (16 × 12 CLK periods).
-> >> practically i can always pull RX low via other means, but if the UART
-> >> can do this it would be better and be more generic.
-> > How can your UART do that in a generic way? thanks, greg k-h sorry
-> 
-> im not sure i explained that clearly
-> 
-> i also appear to have, not got the previous diagram right, (corrected in
-> this reply for clarity) Im still getting used to plain text emails.
-> 
-> im not that familiar with UARTs in practice, and after re-reading i think i
-> could have phrased that better, as had issue with MCU/IC UART TX/RX
-> perspectives
-> 
-> e.g
-> 
-> |-----------|           |-----------|
-> |         TX|-----------|RX         |
-> | MCU UART  |           |    IC     |
-> |         RX|-----------|TX         |
-> |-----------|           |-----------|
-> 
-> from the mcu perspective its the TX pin, while from the RX pin from the ICs
-> perspective.
-> 
-> from that perspective i need to pull the ICs RX pin low which means pull the
-> MCU UART TX pin Low.
-> 
-> now this seems conceptually similar to a "break condition"
-> 
-> which some tty functions can produce
-> e.g
-> static int send_break(struct tty_struct *tty, unsigned int duration)
-> [https://elixir.bootlin.com/linux/latest/source/drivers tty/tty_io.c#L2461]
-> 
-> with which i might me half way to answering my own question
-> 
-> i can't see call to that via serdev, or equivalent
-> 
+From: Daniel Starke <daniel.starke@siemens.com>
 
-That is correct, serdev can not handle break conditions on the tty port
-right now.  You need to write a "real" serial driver if you want to have
-that type of control over the connection.
+After setting up the control channel on both sides the responder side may
+want to open a virtual tty to listen on until the initiator starts an
+application on a user channel. The current implementation allows the
+open() but no other operation, like termios. These fail with EINVAL.
+The responder sided application has no means to detect an open by the
+initiator sided application this way. And the initiator sided applications
+usually expect the responder sided application to listen on the user
+channel upon open.
+Set the user channel into half-open state on responder side once a user
+application opens the virtual tty to allow IO operations on it.
+Furthermore, keep the user channel constipated until the initiator side
+opens it to give the responder sided application the chance to detect the
+new connection and to avoid data loss if the responder sided application
+starts sending before the user channel is open.
 
-You could propose a patch for serdev to handle break, try that and
-submit it and see if the serdev maintainer agrees that it is a worth
-addition.
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 31 +++++++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-thanks,
+This commit was not changed as there have been no comments on it in v1.
 
-greg k-h
+Link: https://lore.kernel.org/all/20220506144725.1946-1-daniel.starke@siemens.com/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index fd8b86dde525..08fea3e7674d 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1493,6 +1493,8 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes closed.\n", dlci->addr);
+ 	dlci->state = DLCI_CLOSED;
++	/* Prevent us from sending data before the link is up again */
++	dlci->constipated = true;
+ 	if (dlci->addr != 0) {
+ 		tty_port_tty_hangup(&dlci->port, false);
+ 		spin_lock_irqsave(&dlci->lock, flags);
+@@ -1522,6 +1524,7 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	del_timer(&dlci->t1);
+ 	/* This will let a tty open continue */
+ 	dlci->state = DLCI_OPEN;
++	dlci->constipated = false;
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes open.\n", dlci->addr);
+ 	/* Send current modem state */
+@@ -1602,6 +1605,25 @@ static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
+ 	mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
+ }
+ 
++/**
++ *	gsm_dlci_wait_open	-	wait for channel open procedure
++ *	@dlci: DLCI to open
++ *
++ *	Wait for a DLCI opening from the other side. Asynchronously wait until
++ *	we get a SABM and set off timers and the responses.
++ */
++static void gsm_dlci_wait_open(struct gsm_dlci *dlci)
++{
++	switch (dlci->state) {
++	case DLCI_CLOSED:
++	case DLCI_CLOSING:
++		dlci->state = DLCI_OPENING;
++		break;
++	default:
++		break;
++	}
++}
++
+ /**
+  *	gsm_dlci_begin_close	-	start channel open procedure
+  *	@dlci: DLCI to open
+@@ -1745,10 +1767,13 @@ static struct gsm_dlci *gsm_dlci_alloc(struct gsm_mux *gsm, int addr)
+ 	dlci->addr = addr;
+ 	dlci->adaption = gsm->adaption;
+ 	dlci->state = DLCI_CLOSED;
+-	if (addr)
++	if (addr) {
+ 		dlci->data = gsm_dlci_data;
+-	else
++		/* Prevent us from sending data before the link is up */
++		dlci->constipated = true;
++	} else {
+ 		dlci->data = gsm_dlci_command;
++	}
+ 	gsm->dlci[addr] = dlci;
+ 	return dlci;
+ }
+@@ -3163,6 +3188,8 @@ static int gsmtty_open(struct tty_struct *tty, struct file *filp)
+ 	/* Start sending off SABM messages */
+ 	if (gsm->initiator)
+ 		gsm_dlci_begin_open(dlci);
++	else
++		gsm_dlci_wait_open(dlci);
+ 	/* And wait for virtual carrier */
+ 	return tty_port_block_til_ready(port, tty, filp);
+ }
+-- 
+2.34.1
+
