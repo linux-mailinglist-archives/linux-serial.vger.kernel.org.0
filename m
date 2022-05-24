@@ -2,122 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186E153262A
-	for <lists+linux-serial@lfdr.de>; Tue, 24 May 2022 11:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E92533D37
+	for <lists+linux-serial@lfdr.de>; Wed, 25 May 2022 15:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbiEXJLr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 24 May 2022 05:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S236808AbiEYNF4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 May 2022 09:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiEXJLq (ORCPT
+        with ESMTP id S232809AbiEYNF4 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 24 May 2022 05:11:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30101EAEA
-        for <linux-serial@vger.kernel.org>; Tue, 24 May 2022 02:11:44 -0700 (PDT)
+        Wed, 25 May 2022 09:05:56 -0400
+X-Greylist: delayed 98730 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 06:05:55 PDT
+Received: from box.indicandustries.com (hwsrv-970840.hostwindsdns.com [104.168.149.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CB2A5AB4
+        for <linux-serial@vger.kernel.org>; Wed, 25 May 2022 06:05:55 -0700 (PDT)
+Received: from authenticated-user (box.indicandustries.com [104.168.149.109])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.indicandustries.com (Postfix) with ESMTPSA id 61093107A47
+        for <linux-serial@vger.kernel.org>; Tue, 24 May 2022 03:24:40 -0600 (MDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653383504; x=1684919504;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Xuha6AedGwfVmpfLM6Pcd6YzeRzMKwbZ3+ru2QXLR44=;
-  b=dl9RmFsWB8/DnfmcchcgLCeOIr45dLx4xaNkCxnyOphzC2B2+zAlWvdc
-   qaSOyltou93hM2Tt4Ey9R4zi4zeiEVC1MPyUNwVhMc4S9V8dVr3J1eelc
-   tNzNKFqkJzccZDM5ca9dJWsvjZZiv8kjdWSu2QHY7bHahQ1gkVsU1+9Br
-   xxJO7kvXROaB7tIzBrIjqIko7ENTpylyah4+SD69FXfiAOW+Lh6HyL7vQ
-   scbRXgkeYePF3M9WT9lDMrTiSKEJkD+mROaN9Y0PfMiQQp4FT8ZbbOf/7
-   mi1KlbgUVcJDLVCYq1W4A4UCw8XKRyinTsDedyFPRCb4nO2ZqSFzeYgsf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="298794959"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="298794959"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 02:11:44 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="601126176"
-Received: from jzawadzk-mobl2.amr.corp.intel.com ([10.251.212.72])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 02:11:42 -0700
-Date:   Tue, 24 May 2022 12:11:34 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     cael <juanfengpy@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>
-Subject: Re: tty: fix a possible hang on tty device
-In-Reply-To: <CAPmgiU+HucpCLvEyre9GHj7S1K0smnUfbhG2HLCQb8x1LpVr_Q@mail.gmail.com>
-Message-ID: <b316c623-ca11-716f-4445-9b35e075630@linux.intel.com>
-References: <CAPmgiU+HucpCLvEyre9GHj7S1K0smnUfbhG2HLCQb8x1LpVr_Q@mail.gmail.com>
+        d=box.indicandustries.com; s=mail; t=1653384280;
+        bh=V6VCn7WEbqHjVVQ20/+SYu6rwS1WmTHcxX88g+j430s=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=JRZvyHurTHST6dTqTzFoDdzl/MZIhgcD89/FIFV+VhdyBBjwqnuQCnG/NWoRr9fvf
+         HVJOXZJA/yfyv5ogJRGMGjAb0tgM6RCtnXrhJkEVag/oDlHZ56sOUJQ5XbJtVKOa1y
+         v9hxopuKZ+c7sSHYVX9BC8X9W5lvFl80Xb5Uv3jlSo1VTW7/i9E2F+hN18fkQOL6gc
+         M2GWmNfyMe/w8y513PJNCtU9AGggY1ovvEaNvga/a3B2d2LrZarhSMc0f02cvKfw0C
+         /uHmnLRKsYqbjIdY5RrK/+mDTT50b0g1BCOtjH2NK/KumpZNcXBtrE1kPwEs9Mxztt
+         loJMTOMqxK4kw==
+Reply-To: amjalia90@gmail.com
+From:   amjad.ali@box.indicandustries.com
+To:     linux-serial@vger.kernel.org
+Subject: Hello Sir, I seek your urgent consideration.
+Date:   24 May 2022 11:24:40 +0200
+Message-ID: <20220524112440.B358E831C40B6E7B@box.indicandustries.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 24 May 2022, cael wrote:
+Hello,
 
-> We have met a hang on pty device, the reader was blocking at
->  epoll on master side, the writer was sleeping at wait_woken inside
->  n_tty_write on slave side ,and the write buffer on tty_port was full, we
+Greetings? I am Amjad. I work with a leading Bio Firm.  Due to=20
+the setbacks of the pandemic, my company has opened a bid in=20
+search of new suppliers for basic raw materials needed in=20
+production.
 
-Space after comma. It would be also useful to tone down usage of "we" in 
-the changelog.
+I am seeking a representative=C2=A0as I am a staff, I can not be=20
+involved directly. It may not be your area of work but the=20
+profits are great and I will guide you through. I have already=20
+sourced a local supplier for this. I only need a reliable=20
+representative.
 
->  found that the reader and writer would never be woken again and block
->  forever.
-> 
-> We thought the problem was caused as a race between reader and
-> kworker as follows:
-> n_tty_read(reader)| n_tty_receive_buf_common(kworker)
->                   |room = N_TTY_BUF_SIZE - (ldata->read_head - tail)
->                   |room <= 0
-> copy_from_read_buf|
-> n_tty_kick_worker |
->                   |ldata->no_room = true
->
-> After writing to slave device, writer wakes up kworker to flush
-> data on tty_port to reader, and the kworker finds that reader
-> has no room to store data so room <= 0 is met. At this moment,
-> reader consumes all the data on reader buffer and call
-> n_tty_kick_worker to check ldata->no_room and finds that there
-> is no need to call tty_buffer_restart_work to flush data to reader
-> and reader quits reading. Then kworker sets ldata->no_room=true
-> and quits too.
-> 
-> If write buffer is not full, writer will wake kworker to flush data
-> again after following writes, but if writer buffer is full and writer
-> goes to sleep, kworker will never be woken again and tty device is
-> blocked.
-> 
-> We think this problem can be solved with a check for read buffer
-> inside function n_tty_receive_buf_common, if read buffer is empty and
-> ldata->no_room is true, this means that kworker has more data to flush
-> to read buffer, so a call to n_tty_kick_worker is necessary.
-> 
-> Signed-off-by: cael <juanfengpy@gmail.com>
-> ---
-> diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-> index efc72104c840..36c7bc033c78 100644
-> --- a/drivers/tty/n_tty.c
-> +++ b/drivers/tty/n_tty.c
-> @@ -1663,6 +1663,9 @@ n_tty_receive_buf_common(struct tty_struct *tty,
-> const unsigned char *cp,
->         } else
->                 n_tty_check_throttle(tty);
-> 
-> +       if (!chars_in_buffer(tty))
-> +               n_tty_kick_worker(tty);
-> +
+Please get back to me so I can explain this in full.
 
-chars_in_buffer() accesses ldata->read_tail in producer context so this 
-probably just moves the race there?
-
-
--- 
- i.
-
+Amjad
