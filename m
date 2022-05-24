@@ -2,115 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAAD5320D7
-	for <lists+linux-serial@lfdr.de>; Tue, 24 May 2022 04:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BCF53235F
+	for <lists+linux-serial@lfdr.de>; Tue, 24 May 2022 08:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiEXCVS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 23 May 2022 22:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S233709AbiEXGkJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 24 May 2022 02:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233064AbiEXCVR (ORCPT
+        with ESMTP id S233600AbiEXGkG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 23 May 2022 22:21:17 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE5B7672
-        for <linux-serial@vger.kernel.org>; Mon, 23 May 2022 19:21:16 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id i68so12931599qke.11
-        for <linux-serial@vger.kernel.org>; Mon, 23 May 2022 19:21:16 -0700 (PDT)
+        Tue, 24 May 2022 02:40:06 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A204698081
+        for <linux-serial@vger.kernel.org>; Mon, 23 May 2022 23:40:03 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1328570pjq.2
+        for <linux-serial@vger.kernel.org>; Mon, 23 May 2022 23:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=uf2Jdsip0ywvu8mLU9XReWchD1u3huP01v2DKhSll3g=;
-        b=X81R8zYPfroNkR9HHoF6rEVi2xjM2I0P630wizJ0RnOiHByp9v8tkrpG4i2isl55ig
-         Udh7YObYXYxz7vB6+FryTlyCdZzGJk+m8kc8yEDoWeWLI7FLdlb9e/KUFuScGPPRmF24
-         jKJq0qT8eo039F+U8HFa5DytbRAXrbFSUHhsM1yv953LoHZRvfcDBWB1HMPmCCWrvmUA
-         RC4GOW5LqsD57Z9V6vuFB/jZ7VXoIDR/547ejKxOjaGZvUcIUBA7pEHSoJ1sRrqxCEdV
-         RrmJAkZEO6YNOBYBFFEvthdl3r23OFhZrmQL0i9m6CpoEOUetQg+cSJALwB1hc/bhw/m
-         Z86A==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=+/ObZQdcudoKPi9EHyxehxS+g8fV78JSk4u1MMEObnU=;
+        b=WjhXP28oJoHL8ogK3QG2RjFsV+hZ0iHpDmHg3yHT9N9bXf7854LhjBAfm3oGVJALGd
+         M7H8Bjp0+Bdc+Q92SCenH6At1XNJLnJd5Bjq4WwpOceAoiwIRfNs5ZSbupn5dTnKEcnr
+         fOZ+f2oQJqTRA28I5lMuKe/x0++U/0W3Hc2WakkqcNBPho1bfjOFIRDymU4OOeSwHyBW
+         Iv9gsxC2DJHeNU0b9lfx/90AdYhgVbrYlD7fqNiQLAepJr2ppLa4AuD6fFlB5P2hPSrO
+         S0eQSBjSxsbDvgDrsSY8vg8sLP6V3R1ZA2DqS9KxoyDyMh6FPugCp4rOdaRvIzk5z+WE
+         aihg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=uf2Jdsip0ywvu8mLU9XReWchD1u3huP01v2DKhSll3g=;
-        b=VoArWE4a6imgTwhr2kHJQFhrgx07Lw56B+7Xx7EZC+VaVv7Hchao3VVyanuj9g2hIx
-         6S0z8cAtC0Sz4wsjgttxXsylAPq4NY8gaFk7fUMUc3jPdLFRXkWf3Y6O54HARMljFf0E
-         hAz+AoNehepIjXpfISo3H6tiwQn9lczP/vXTcP29ktiptkcrjyQrM+43zuRA96cMwveg
-         rtoO3loLbvRITzx3FX+d60HUzo/JlY50CymerkMRxTrhKoGBq7Fh1zkl7+V+VVkYVoRp
-         B99edm86MjwexrGzu0dYgbQyOuhCXr7EHooOIIQQ5fA1KJq/FoPX702OibFzg5ClCyvM
-         hDkQ==
-X-Gm-Message-State: AOAM531L2g3JeN2B92WSD0ZgaE+pwy6tCM8TW6u2OittUgQRTdiQNc6i
-        IMa6iPzv9FqE4A61HQMsodmKOyDKULCgtyvXtVhWgI4vxKw=
-X-Google-Smtp-Source: ABdhPJyAh/B2rIKt18ap79MAF4IulCN+Ft1hLwMwVC4qIWRdZszA48gynVj3RimOhf8E8wKfxXLcl5Lk4bkqpvq1cLs=
-X-Received: by 2002:a05:620a:b0b:b0:6a3:5f9a:1b80 with SMTP id
- t11-20020a05620a0b0b00b006a35f9a1b80mr9353747qkg.283.1653358875671; Mon, 23
- May 2022 19:21:15 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=+/ObZQdcudoKPi9EHyxehxS+g8fV78JSk4u1MMEObnU=;
+        b=8G2UGvhlJNkTpKO2WkhTso9e12lRGrQvnm0/z0b07tVrjC8P/F99Nk5VIX1Us7A69w
+         wC6NYcyOynrZziF6iH5sPVk9DMtDa6e5P9LYPQTRyHSUhhdpnspc4gI/IL1zcQR0GzDf
+         BZhIfoB8tAR5ttO3erxQrv0rwEzIDlQD0D3N9YbKUQeM2sCCrLe7fi0FRYlUXLgFlGsU
+         MjOYQI1CtkG9dqS0OzvxIDQzSxhkRANERBVjUPZ2cfh+B97qXk4Xcp0OsLRorowEWGbf
+         8K7Sbeldz5mvki91s+L5FpMJ8zxpS46omjDk7pqB8eGuZYjX4oKGmOkTrnboyVw8MaeP
+         BQqA==
+X-Gm-Message-State: AOAM533JuK2yttqsTWhkE1Jn1CrAMfze3OQJ8TuWq/bF1fVEPT1mInY7
+        vWurUR2YxBVNLhtTJUaFyI+cLmcE+9SVS8ck+2k=
+X-Google-Smtp-Source: ABdhPJy9SV7m95QH+sEk4ynypsYPVPmGmjim6I4qUEF7RYJ4Hd3+oNUZe4cC7E8YpwEe17Im0ZXd9Ep/uPw0HweaEVU=
+X-Received: by 2002:a17:90b:3884:b0:1df:db8a:1fcf with SMTP id
+ mu4-20020a17090b388400b001dfdb8a1fcfmr2996886pjb.217.1653374402873; Mon, 23
+ May 2022 23:40:02 -0700 (PDT)
 MIME-Version: 1.0
-From:   cael <juanfengpy@gmail.com>
-Date:   Tue, 24 May 2022 10:21:04 +0800
-Message-ID: <CAPmgiU+HucpCLvEyre9GHj7S1K0smnUfbhG2HLCQb8x1LpVr_Q@mail.gmail.com>
-Subject: tty: fix a possible hang on tty device
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org
+Received: by 2002:a17:90a:e7ce:0:0:0:0 with HTTP; Mon, 23 May 2022 23:40:02
+ -0700 (PDT)
+Reply-To: BAkermarrtin@gmail.com
+From:   Martin Baker <davidabula9077@gmail.com>
+Date:   Tue, 24 May 2022 06:40:02 +0000
+Message-ID: <CABMMw35sTRzV6m3nzaLUzdUjbLUybf3iWcw=0_g0m-J8gMaXFw@mail.gmail.com>
+Subject: Morning Dear,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4713]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [davidabula9077[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [davidabula9077[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We have met a hang on pty device, the reader was blocking at
- epoll on master side, the writer was sleeping at wait_woken inside
- n_tty_write on slave side ,and the write buffer on tty_port was full, we
- found that the reader and writer would never be woken again and block
- forever.
+Morning Dear,
 
-We thought the problem was caused as a race between reader and
-kworker as follows:
-n_tty_read(reader)| n_tty_receive_buf_common(kworker)
-                  |room = N_TTY_BUF_SIZE - (ldata->read_head - tail)
-                  |room <= 0
-copy_from_read_buf|
-n_tty_kick_worker |
-                  |ldata->no_room = true
-
-After writing to slave device, writer wakes up kworker to flush
-data on tty_port to reader, and the kworker finds that reader
-has no room to store data so room <= 0 is met. At this moment,
-reader consumes all the data on reader buffer and call
-n_tty_kick_worker to check ldata->no_room and finds that there
-is no need to call tty_buffer_restart_work to flush data to reader
-and reader quits reading. Then kworker sets ldata->no_room=true
-and quits too.
-
-If write buffer is not full, writer will wake kworker to flush data
-again after following writes, but if writer buffer is full and writer
-goes to sleep, kworker will never be woken again and tty device is
-blocked.
-
-We think this problem can be solved with a check for read buffer
-inside function n_tty_receive_buf_common, if read buffer is empty and
-ldata->no_room is true, this means that kworker has more data to flush
-to read buffer, so a call to n_tty_kick_worker is necessary.
-
-Signed-off-by: cael <juanfengpy@gmail.com>
----
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index efc72104c840..36c7bc033c78 100644
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1663,6 +1663,9 @@ n_tty_receive_buf_common(struct tty_struct *tty,
-const unsigned char *cp,
-        } else
-                n_tty_check_throttle(tty);
-
-+       if (!chars_in_buffer(tty))
-+               n_tty_kick_worker(tty);
-+
-        up_read(&tty->termios_rwsem);
-
-        return rcvd;
--- 
-2.27.0
+How are you, Please my previous mail you did not reply it
