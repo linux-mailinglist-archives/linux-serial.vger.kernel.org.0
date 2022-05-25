@@ -2,90 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59732533DF0
-	for <lists+linux-serial@lfdr.de>; Wed, 25 May 2022 15:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAE1534543
+	for <lists+linux-serial@lfdr.de>; Wed, 25 May 2022 22:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiEYNfT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 25 May 2022 09:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S244049AbiEYUsb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 May 2022 16:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244416AbiEYNfR (ORCPT
+        with ESMTP id S241058AbiEYUsa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 25 May 2022 09:35:17 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B467360B94;
-        Wed, 25 May 2022 06:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1653485716; x=1685021716;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jkBj8ysM/XsQcxMgdKHTqDMJDz4jqO5aSUJT7CWKlFg=;
-  b=d2Wexmgd2XtDcWpCtFBnRoT5G5K6hA2nzCva7aSqwXjsw+0x4toDC1mW
-   EvRvE6/h6xQx/zyfukTHOp2KW8LragmnjZvyIOaN7il93bKSWtz0OU6uJ
-   RC1cPRLcXQhoVT21PQ6LSSgCRtbUtwADfI7V3wZI7g1gQiu1FpJW6WLHX
-   CnP4tvnCbKt9486iWW1VYhObGsiGypHTrjHU7vIHfHvkngIOaUmbyUMfm
-   ZQDMH8zqOHUU8SwMtpXyU1t+gg4y0AUZnZhoG3eKHMV/BET4dW2AHsUDp
-   2XEQ9lLYZLY/aOu7Ax5GDwYVd33XQAQxVPFbaRyB8HrSGGS+p35WSSgIh
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="97276335"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2022 06:35:16 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 25 May 2022 06:35:15 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 25 May 2022 06:35:13 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <patrice.chotard@foss.st.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 3/3] serial: st-asc: remove include of pm_runtime.h
-Date:   Wed, 25 May 2022 16:37:33 +0300
-Message-ID: <20220525133733.1051714-4-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
-References: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
+        Wed, 25 May 2022 16:48:30 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87EF674FD
+        for <linux-serial@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id x137so9859288ybg.5
+        for <linux-serial@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=MIznAoP29XHGMZwK2XaORcuFYY4KHU3SiD37YZr3IksbwEszYFwRGI6NMOaIsgw3Rc
+         MNWUak9e2Pk5zm0JPp6szTBpWptBOFEsDKaXw1mzZOTFcRGcvyjOwqdtF8UB9EvyuuJZ
+         fMICjT1+KZ7bxeE9NTTU8LESXRGeqFThSri55TjzyU4r+qSYB8KRkbeHsWYNf08X2bEy
+         pryupL2ykuBV+sygnkk+fqajrVN1/45XJT6UIDBI/J4JIiO7GZW4kaISjbo9xtOnIbu3
+         /lAT2wlHOnLDqj2MsvwscUqPgxRkbuhwflLse0VSR01xDxZYapbGb527uMRlqnyfWWDn
+         3l8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=lFVo1bML98FSea7GrwPjCAj0iM7vKlqvzkS9EOsxf07FjgRITLdwtlo5MLi5lTAzlG
+         U9FdPHogS0dfzBSzwGVQEVq7mI98hgCYE4e0l9xcdQiMVm8/VpegfoUpmJNzywowcPfK
+         Z1TFfvzDjl+wCs3cPYSRES0z8a75sC47b8jhJQFRu+YoSE2D97JCI+i/37Q9Vht2S6ID
+         MRYfoyX7GQDexcHk1AVgKM+sDw57xyuYMS2nh60UvZI46lhcxuv55HUuBHHVMC1OGGtz
+         seOChfACkAFRg2JnVVjXsCnxXVzCi+y0qX2cknuZA6SAsgPT54cV9bGo2KZwjo9I2WfP
+         M8iw==
+X-Gm-Message-State: AOAM533qIKmVGx7cKBies+DmR9S6CPEYOLYA7CZ6T0e9HeLv00qsHxRv
+        WPqiq8PK7nAZ0Wht8NOW2nWSSncmsZ4AoBn4dM0=
+X-Google-Smtp-Source: ABdhPJygDnPWuNyLLxTk2B3Kv8LEKih1+m2wVtTUpsrNi1Bs8nM6GPylqvWzkD99kDlHZJJaie6GrPKCBIwCtXokpK8=
+X-Received: by 2002:a05:6902:1023:b0:64f:39e7:ef05 with SMTP id
+ x3-20020a056902102300b0064f39e7ef05mr31533397ybt.126.1653511701867; Wed, 25
+ May 2022 13:48:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
+ 13:48:21 -0700 (PDT)
+From:   Colina Fernando <colinafernando724@gmail.com>
+Date:   Wed, 25 May 2022 22:48:21 +0200
+Message-ID: <CAP7Hh1-EL6tqrQsO0De_QJ1avJao_roXNeVStyzCoPtO9q14fg@mail.gmail.com>
+Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
+To:     contact@firstdiamondbk.com
+Cc:     info@firstdiamondbk.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-st-asc driver doesn't use helpers from pm_runtime.h thus remove its
-include.
+Guten Tag,
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/tty/serial/st-asc.c | 1 -
- 1 file changed, 1 deletion(-)
+Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 1b0da603ab54..cce42f4c9bc2 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -17,7 +17,6 @@
- #include <linux/tty_flip.h>
- #include <linux/delay.h>
- #include <linux/spinlock.h>
--#include <linux/pm_runtime.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/serial_core.h>
--- 
-2.34.1
+haben ?
 
+Ich habe versucht, Sie per E-Mail zu erreichen.
+
+Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
+
+Danke
+
+Fernando Colina
+
+colinafernando724@gmail.com
+
+
+
+
+----------------------------------
+
+
+
+
+Good Afternoon,
+
+I was just wondering if you got my Previous E-mail
+have ?
+
+I tried to reach you by E-mail.
+
+Please come back to me quickly, it is very Important.
+
+Thanks
+
+Fernando Colina
+
+colinafernando724@gmail.com
