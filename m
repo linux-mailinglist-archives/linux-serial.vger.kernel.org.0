@@ -2,57 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6AC533B9C
-	for <lists+linux-serial@lfdr.de>; Wed, 25 May 2022 13:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DDF533DE7
+	for <lists+linux-serial@lfdr.de>; Wed, 25 May 2022 15:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbiEYLVZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 25 May 2022 07:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        id S244389AbiEYNcx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 25 May 2022 09:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbiEYLVY (ORCPT
+        with ESMTP id S241480AbiEYNcw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 25 May 2022 07:21:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA95487A09
-        for <linux-serial@vger.kernel.org>; Wed, 25 May 2022 04:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653477683; x=1685013683;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=iRlD7ypje9lRnsZ3t0wAS8o3qfAvjVBDNa5Wtxw1khA=;
-  b=FDM4nOVMslHo2oo7y8KJRP/Cn5SAjvbnQMbVQjysbDyHLpAbMzbqrJ0q
-   1aPtP4JwVfsHKxH12WVzQc4gL4jCbnSABIfOHoLwBkzMOg3Bqtz55lvEq
-   xXSiRcE5Ld7amHqcAJdzJK3ky5xU4bQp5tk2fDzf52Hm1K//fBpozqq3B
-   EPKU04epW6zGeHON1W7Mz6SqqXjRz3rJhDM/3nUtRD3d93vnu+kqKTjr7
-   5gERWLj0tNZ3d8rOavqz5d2ROPuFvODqH84rT5VdayXY98wBPWFkiFgRf
-   /IkJVAcpxJNdRMdpGBvLaXD0DrVZxaiXhh68jFZo3c180iUTiaa3m5/g7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273514603"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="273514603"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 04:21:23 -0700
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="573188910"
-Received: from gbocksch-mobl.ger.corp.intel.com ([10.252.55.246])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 04:21:21 -0700
-Date:   Wed, 25 May 2022 14:21:16 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     cael <juanfengpy@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 25 May 2022 09:32:52 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C383632A;
+        Wed, 25 May 2022 06:32:49 -0700 (PDT)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 98BBB24000B;
+        Wed, 25 May 2022 13:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653485567;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K2LLmMdA4vHYK7N2vJ1T6WRKIiii8VMOFALIJtd4D6w=;
+        b=WLizWyxeP8bSi00jmOplHPRDBzG6UMRAOcv+dJ6Gxr4Z8ybrBSyOf/pnL1ON4vwvw3fdti
+        hTwIqRcWcMTTjOrzDOOiRbeEj/1dxPACkT5XfxFZTX3/kRJ/6yZ9hKRJfRA81CF+7+oQ9F
+        N5bwEZNQMxXm/HzdjcRZnAwxC7qDtBoMXa5zImRXdshOAzpPeMJCUAYE2D2lly6xkidzxL
+        SRLTfH/77Lgi+b1J7nBH8Np1KznlniCOV1s0voi4+y5zwS7W9RSRuUTMiVKs26jo3fbRb4
+        E+66YLaKF53MT+zSK2XLB7k1EPQ5TGXdVJnOKcgVEN762+9mAxGhMLtXd/iABg==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Tony Lindgren <tony@atomide.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniel Starke <daniel.starke@siemens.com>,
         Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>
-Subject: Re: tty: fix a possible hang on tty device
-In-Reply-To: <CAPmgiULo4h8bOrzL+XJ5Pndw0kz80fBPfH_KNLx3c5j-Yj04SA@mail.gmail.com>
-Message-ID: <269a9a97-dc62-a89-d978-3be8e9d1f7e4@linux.intel.com>
-References: <CAPmgiU+HucpCLvEyre9GHj7S1K0smnUfbhG2HLCQb8x1LpVr_Q@mail.gmail.com> <b316c623-ca11-716f-4445-9b35e075630@linux.intel.com> <CAPmgiU+=uA9DrN13kAYb7VQ0xmfEA+xUduu+qEvp75qxFpZq7g@mail.gmail.com> <707c16ca-1610-68b1-fc96-4c5906f2c86@linux.intel.com>
- <CAPmgiUKar69xaRJ5F2oXBx+WPjSipqKjth85bm+NHZsmzsb+pg@mail.gmail.com> <c4de15d1-547d-eefe-eb43-c2e9da8f57ed@linux.intel.com> <CAPmgiULo4h8bOrzL+XJ5Pndw0kz80fBPfH_KNLx3c5j-Yj04SA@mail.gmail.com>
+        Johan Hovold <johan@kernel.org>,
+        Zhenguo Zhao <Zhenguo.Zhao1@unisoc.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH] tty: n_gsm: Debug output allocation must use GFP_ATOMIC
+In-Reply-To: <20220523155052.57129-1-tony@atomide.com>
+References: <20220523155052.57129-1-tony@atomide.com>
+Date:   Wed, 25 May 2022 15:32:46 +0200
+Message-ID: <87sfoxyby9.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,39 +54,45 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 25 May 2022, cael wrote:
+Tony Lindgren <tony@atomide.com> writes:
 
-> >Now you switched to an entirely different case, not the one we were
-> >talking about. ...There is no ldisc->no_room = true race in the case
-> >you now described.
-> So, I think we should back to the case ldata->no_room=true as
-> ldata->no_room=false seems harmless.
-> 
-> >I'm not worried about the case where both cpus call n_tty_kick_worker but
-> >the case where producer cpu sees chars_in_buffer() > 0 and consumer cpu
-> >!no_room.
+> Dan Carpenter <dan.carpenter@oracle.com> reported the following Smatch
+> warning:
 >
-> As ldata->no_room=true is set before checking chars_in_buffer()
+> drivers/tty/n_gsm.c:720 gsm_data_kick()
+> warn: sleeping in atomic context
+>
+> This is because gsm_control_message() is holding a spin lock so
+> gsm_hex_dump_bytes() needs to use GFP_ATOMIC instead of GFP_KERNEL.
+>
+> Fixes: 925ea0fa5277 ("tty: n_gsm: Fix packet data hex dump output")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
 
-Please take a brief look at Documentation/memory-barriers.txt and then 
-tell me if you still find this claim to be true.
 
-> if producer
-> finds chars_in_buffer() > 0, then if reader is currently in n_tty_read,
+Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-...Then please do a similar analysis for ldata->read_tail. What guarantees 
-its update is seen by the producer cpu when the reader is already past the 
-point you think it still must be in?
 
-> when reader quits n_tty_read, n_tty_kick_worker will be called. If reader
-> has already exited n_tty_read, which means that reader still has data to read,
-> next time reader will call n_tty_kick_worker inside n_tty_read too.
-
-C-level analysis alone is not going to be very useful here given you're 
-dealing with a concurrency challenge here.
-
+> ---
+>  drivers/tty/n_gsm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -459,7 +459,7 @@ static void gsm_hex_dump_bytes(const char *fname, const u8 *data,
+>  		return;
+>  	}
+>  
+> -	prefix = kasprintf(GFP_KERNEL, "%s: ", fname);
+> +	prefix = kasprintf(GFP_ATOMIC, "%s: ", fname);
+>  	if (!prefix)
+>  		return;
+>  	print_hex_dump(KERN_INFO, prefix, DUMP_PREFIX_OFFSET, 16, 1, data, len,
+> -- 
+> 2.36.1
 
 -- 
- i.
-
-
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
