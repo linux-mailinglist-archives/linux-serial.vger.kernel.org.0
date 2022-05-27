@@ -2,30 +2,31 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FC95368D5
-	for <lists+linux-serial@lfdr.de>; Sat, 28 May 2022 00:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155785368DD
+	for <lists+linux-serial@lfdr.de>; Sat, 28 May 2022 00:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353472AbiE0Wgn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 27 May 2022 18:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S1354814AbiE0Wgq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 27 May 2022 18:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiE0Wgn (ORCPT
+        with ESMTP id S1354787AbiE0Wgo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 27 May 2022 18:36:43 -0400
+        Fri, 27 May 2022 18:36:44 -0400
 Received: from freecalypso.org (freecalypso.org [195.154.163.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CFE2408A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC71C255AF;
         Fri, 27 May 2022 15:36:42 -0700 (PDT)
 Received: by freecalypso.org (Postfix, from userid 1001)
-        id 1AC8837401F1; Fri, 27 May 2022 22:27:09 +0000 (UTC)
+        id A369E3740211; Fri, 27 May 2022 22:27:13 +0000 (UTC)
 From:   "Mychaela N. Falconia" <falcon@freecalypso.org>
 To:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
 Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
         mychaela.falconia@gmail.com
-Subject: [PATCH 1/6] tty: add port flag to suppress raising DTR & RTS on open
-Message-Id: <20220527222709.1AC8837401F1@freecalypso.org>
-Date:   Fri, 27 May 2022 22:27:08 +0000 (UTC)
+Subject: [PATCH 2/6] serial: core: add sysfs attribute to suppress raising DTR
+ & RTS on open
+Message-Id: <20220527222713.A369E3740211@freecalypso.org>
+Date:   Fri, 27 May 2022 22:27:13 +0000 (UTC)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -35,74 +36,91 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-There exist special serial devices (either attaching to generic serial
-ports or containing a built-in USB-serial chip) in which DTR and/or RTS
-have been repurposed for non-standard uses.  Depending on exactly how
-these signals are repurposed, standard POSIX/SUS behaviour of
-unconditionally raising both signals on open may range from harmless
-to undesirable to a total killer, precluding the use of Linux with
-such custom hardware.
+Add a manual_rtsdtr sysfs attribute to suppress automatic raising of
+DTR and RTS modem control signals on serial port open.
 
-The newly added TTY_PORT_MANUAL_RTSDTR flag switches an individual
-serial port from POSIX/SUS standard to non-standard behaviour: when
-set, it suppresses the built-in action of raising DTR & RTS on serial
-port open.
-
-This flag can be exported through sysfs, and it can also be set by
-USB-serial device drivers when they see a custom hw device (identified
-by VID:PID) that is known to be wired in a way that requires this flag
-to be set.
+This special mode can be used to prevent undesirable side effects on
+open for applications where these lines are used for non-standard
+purposes such as generating power-on and reset pulses.
 
 Co-developed-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
 ---
- drivers/tty/tty_port.c   |  2 +-
- include/linux/tty_port.h | 11 +++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-tty | 10 ++++++++++
+ drivers/tty/serial/serial_core.c    | 27 +++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
-index 880608a65773..59f1c49bb23c 100644
---- a/drivers/tty/tty_port.c
-+++ b/drivers/tty/tty_port.c
-@@ -441,7 +441,7 @@ EXPORT_SYMBOL(tty_port_carrier_raised);
-  */
- void tty_port_raise_dtr_rts(struct tty_port *port)
- {
--	if (port->ops->dtr_rts)
-+	if (port->ops->dtr_rts && !tty_port_manual_rtsdtr(port))
- 		port->ops->dtr_rts(port, 1);
- }
- EXPORT_SYMBOL(tty_port_raise_dtr_rts);
-diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
-index 58e9619116b7..9e5ad46d8a53 100644
---- a/include/linux/tty_port.h
-+++ b/include/linux/tty_port.h
-@@ -133,6 +133,7 @@ struct tty_port {
- #define TTY_PORT_CHECK_CD	4	/* carrier detect enabled */
- #define TTY_PORT_KOPENED	5	/* device exclusively opened by
- 					   kernel */
-+#define TTY_PORT_MANUAL_RTSDTR	6	/* do not raise DTR & RTS on open */
- 
- void tty_port_init(struct tty_port *port);
- void tty_port_link_device(struct tty_port *port, struct tty_driver *driver,
-@@ -226,6 +227,16 @@ static inline void tty_port_set_kopened(struct tty_port *port, bool val)
- 	assign_bit(TTY_PORT_KOPENED, &port->iflags, val);
+diff --git a/Documentation/ABI/testing/sysfs-tty b/Documentation/ABI/testing/sysfs-tty
+index 820e412d38a8..3e666538451b 100644
+--- a/Documentation/ABI/testing/sysfs-tty
++++ b/Documentation/ABI/testing/sysfs-tty
+@@ -161,3 +161,13 @@ Contact:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ Description:
+ 		 Allows user to detach or attach back the given device as
+ 		 kernel console. It shows and accepts a boolean variable.
++
++What:		/sys/class/tty/tty<x>/manual_rtsdtr
++Date:		May 2022
++Contact:	Mychaela N. Falconia <falcon@freecalypso.org>
++Description:
++		 Writing 1 into this flag attribute suppresses automatic
++		 assertion of DTR & RTS on serial port open, putting these
++		 signals under manual control (TIOCMBIS & TIOCMBIC).
++		 Writing 0 restores standard POSIX/SUS behaviour of
++		 automatically asserting both DTR and RTS on open.
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 9a85b41caa0a..b47004a3fb77 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2870,6 +2870,31 @@ static ssize_t console_store(struct device *dev,
+ 	return ret < 0 ? ret : count;
  }
  
-+static inline bool tty_port_manual_rtsdtr(const struct tty_port *port)
++static ssize_t manual_rtsdtr_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
 +{
-+	return test_bit(TTY_PORT_MANUAL_RTSDTR, &port->iflags);
++	struct tty_port *port = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%d\n", tty_port_manual_rtsdtr(port));
 +}
 +
-+static inline void tty_port_set_manual_rtsdtr(struct tty_port *port, bool val)
++static ssize_t manual_rtsdtr_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
 +{
-+	assign_bit(TTY_PORT_MANUAL_RTSDTR, &port->iflags, val);
++	struct tty_port *port = dev_get_drvdata(dev);
++	bool val;
++	int ret;
++
++	ret = kstrtobool(buf, &val);
++	if (ret)
++		return ret;
++
++	tty_port_set_manual_rtsdtr(port, val);
++
++	return count;
 +}
 +
- struct tty_struct *tty_port_tty_get(struct tty_port *port);
- void tty_port_tty_set(struct tty_port *port, struct tty_struct *tty);
- int tty_port_carrier_raised(struct tty_port *port);
+ static DEVICE_ATTR_RO(uartclk);
+ static DEVICE_ATTR_RO(type);
+ static DEVICE_ATTR_RO(line);
+@@ -2884,6 +2909,7 @@ static DEVICE_ATTR_RO(io_type);
+ static DEVICE_ATTR_RO(iomem_base);
+ static DEVICE_ATTR_RO(iomem_reg_shift);
+ static DEVICE_ATTR_RW(console);
++static DEVICE_ATTR_RW(manual_rtsdtr);
+ 
+ static struct attribute *tty_dev_attrs[] = {
+ 	&dev_attr_uartclk.attr,
+@@ -2900,6 +2926,7 @@ static struct attribute *tty_dev_attrs[] = {
+ 	&dev_attr_iomem_base.attr,
+ 	&dev_attr_iomem_reg_shift.attr,
+ 	&dev_attr_console.attr,
++	&dev_attr_manual_rtsdtr.attr,
+ 	NULL
+ };
+ 
 -- 
 2.9.0
 
