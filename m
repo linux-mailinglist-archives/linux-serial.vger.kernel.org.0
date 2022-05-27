@@ -2,31 +2,30 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424945368DB
-	for <lists+linux-serial@lfdr.de>; Sat, 28 May 2022 00:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FC95368D5
+	for <lists+linux-serial@lfdr.de>; Sat, 28 May 2022 00:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354816AbiE0Wgt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 27 May 2022 18:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S1353472AbiE0Wgn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 27 May 2022 18:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354808AbiE0Wgq (ORCPT
+        with ESMTP id S229996AbiE0Wgn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 27 May 2022 18:36:46 -0400
+        Fri, 27 May 2022 18:36:43 -0400
 Received: from freecalypso.org (freecalypso.org [195.154.163.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94CE24BE4;
-        Fri, 27 May 2022 15:36:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CFE2408A;
+        Fri, 27 May 2022 15:36:42 -0700 (PDT)
 Received: by freecalypso.org (Postfix, from userid 1001)
-        id BA4D3374020E; Fri, 27 May 2022 22:27:03 +0000 (UTC)
+        id 1AC8837401F1; Fri, 27 May 2022 22:27:09 +0000 (UTC)
 From:   "Mychaela N. Falconia" <falcon@freecalypso.org>
 To:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
 Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
         mychaela.falconia@gmail.com
-Subject: [PATCH 0/6] serial ports: add ability to suppress raising DTR & RTS
- on open
-Message-Id: <20220527222703.BA4D3374020E@freecalypso.org>
-Date:   Fri, 27 May 2022 22:27:03 +0000 (UTC)
+Subject: [PATCH 1/6] tty: add port flag to suppress raising DTR & RTS on open
+Message-Id: <20220527222709.1AC8837401F1@freecalypso.org>
+Date:   Fri, 27 May 2022 22:27:08 +0000 (UTC)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -36,114 +35,74 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Back in 1970s UNIX a poor design decision was made regarding serial port
-handling; this bad design has been codified into standards (POSIX, SUS)
-and persists into present-day Linux.  In 2021 FreeBSD 13.0 became the
-first Unix-style OS to fix the problem; the present patch series aims
-to implement a similar solution in Linux.
+There exist special serial devices (either attaching to generic serial
+ports or containing a built-in USB-serial chip) in which DTR and/or RTS
+have been repurposed for non-standard uses.  Depending on exactly how
+these signals are repurposed, standard POSIX/SUS behaviour of
+unconditionally raising both signals on open may range from harmless
+to undesirable to a total killer, precluding the use of Linux with
+such custom hardware.
 
-The root of the problem is the POSIX/SUS-codified design decision to
-always automatically assert both DTR and RTS modem control signals on
-the initial open of a serial port, without giving userspace any ability
-to say "no, please don't do it".  This design is flawed on a fundamental
-philosophical level: an OS kernel needs to provide a mechanism for
-applications to operate on hardware, rather than insert its own mind
-in the middle.  If a user wishes to open any kind of hardware device
-and perform arbitrary operations on that device, the kernel needs to
-allow this access unobstructed, provided that the user has the necessary
-permissions.  If the user is asking to merely open a hardware device,
-but the kernel refuses to provide such "simple open" access without
-mandatorily imposing some specific hardware action along with that
-open, this behaviour needs to be considered a defect, a design bug.
+The newly added TTY_PORT_MANUAL_RTSDTR flag switches an individual
+serial port from POSIX/SUS standard to non-standard behaviour: when
+set, it suppresses the built-in action of raising DTR & RTS on serial
+port open.
 
-Because the design bug is codified in POSIX, SUS etc, it cannot be
-simply fixed - a change to default behaviour would violate standards
-and break bazillion existing applications.  Instead the only possible
-solutions at this point in time have to take the form of creative
-workarounds - and by necessity, such creative workarounds should NOT
-be expected to be "pretty" or architecturally clean.  The
-architecturally-clean boat has sailed a few decades ago - in the
-present time, non-pretty workarounds are required.
+This flag can be exported through sysfs, and it can also be set by
+USB-serial device drivers when they see a custom hw device (identified
+by VID:PID) that is known to be wired in a way that requires this flag
+to be set.
 
-The solution implemented in FreeBSD relies on a feature of that OS
-which does not exist in Linux: initial-state devices.  In FreeBSD
-each ttyXX device also has a corresponding ttyXX.init device node;
-the purpose of this .init device is to set the initial termios state
-that will apply every time the regular ttyXX device is opened.
-Furthermore, these .init devices have an additional property: opening
-an init device does not raise modem control signals, unlike opening
-of regular tty devices.  Having these init devices already available
-(implemented a long time ago for unrelated reasons) made it possible
-for FreeBSD to implement the option of suppressing automatic assertion
-of DTR & RTS on open by way of a simple termios flag: they defined a
-new termios flag CNO_RTSDTR (added to cflags) which needs to be set
-on the /dev/ttyXX.init or /dev/cuaXX.init device _before_ opening
-/dev/ttyXX or /dev/cuaXX for actual serial communication.
+Co-developed-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Mychaela N. Falconia <falcon@freecalypso.org>
+---
+ drivers/tty/tty_port.c   |  2 +-
+ include/linux/tty_port.h | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-However, because Linux does not have any equivalent to FreeBSD's
-/dev/ttyXX.init devices, FreeBSD's CNO_RTSDTR solution cannot be
-copied to Linux verbatim.  A naive approach of copying FreeBSD's
-termios flag and expecting users to set it on the regular /dev/ttyXX
-device (lacking /dev/ttyXX.init) would not work: the act of opening
-/dev/ttyXX for the purpose of setting the flag would in itself
-assert DTR & RTS, which on some hardware devices can cause irreparable
-harm to the user.  Instead the closest thing that can be implemented
-in Linux would be a sysfs attribute attached to tty<x> serial devices,
-and this sysfs approach is what the present patch series implements.
-
-With this approach, a serial device control application (typically
-developed together with the custom hw device in which DTR and RTS
-are repurposed for non-standard uses) that seeks to support both
-Linux and FreeBSD can treat both OSes in a unified manner, using
-an abstraction function to hide the small difference between the two.
-An application can implement an abstraction function like
-set_initial_rtsdtr_mode(bool autoraise) with only the guts of this
-function different between Linux and FreeBSD: the Linux version
-would open /sys/class/tty/ttyXX/manual_rtsdtr and write into that
-attribute file, whereas the FreeBSD version would open /dev/ttyXX.init
-and set or clear CNO_RTSDTR termios flag.
-
-It needs to be emphasized that the present patch series is a purely
-additive change, merely adding a new optional mode of operation that
-needs to be explicitly invoked by those users who desire it.  There
-is NO change to any existing serial port behaviour or to anything
-else pre-existing: until and unless a user explicitly writes into
-the new /sys/class/tty/ttyXX/manual_rtsdtr attribute and sets it to 1,
-absolutely nothing changes, exactly zero impact.
-
-There is also one other possibility: there exist some hardware devices
-in which a USB-serial converter chip and the application circuit behind
-that chip (which repurposes DTR & RTS for non-standard uses) are
-integrated into a single monolithic device, with a custom USB VID:PID
-identifying the hardware device as a whole.  Because they are custom
-ID codes not known at all to "naive" OS kernels, adding Linux support
-for any such hw device will necessarily require adding knowledge of
-that custom VID:PID to the appropriate USB-serial driver - and if it
-is *known* that this paricular hardware device is wired in such a way
-that requires the manual_rtsdtr flag to be set, then it makes the most
-sense for the USB-serial driver to set the flag in the device-specific
-quirk.  The present patch series adds support for one such device.
-
-Mychaela N. Falconia (6):
-  tty: add port flag to suppress raising DTR & RTS on open
-  serial: core: add sysfs attribute to suppress raising DTR & RTS on
-    open
-  serial: core: fully suppress raising DTR & RTS on open if
-    manual_rtsdtr
-  USB: serial: add sysfs attribute to suppress raising DTR & RTS on open
-  USB: serial: ftdi_sio: pass port to quirk port_probe functions
-  USB: serial: ftdi_sio: add support for FreeCalypso DUART28C adapter
-
- Documentation/ABI/testing/sysfs-tty | 10 +++++++++
- drivers/tty/serial/serial_core.c    | 30 ++++++++++++++++++++++++-
- drivers/tty/tty_port.c              |  2 +-
- drivers/usb/serial/bus.c            | 36 +++++++++++++++++++++++++++--
- drivers/usb/serial/ftdi_sio.c       | 45 ++++++++++++++++++++++++++++++-------
- drivers/usb/serial/ftdi_sio_ids.h   |  1 +
- include/linux/tty_port.h            | 11 +++++++++
- 7 files changed, 123 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
+index 880608a65773..59f1c49bb23c 100644
+--- a/drivers/tty/tty_port.c
++++ b/drivers/tty/tty_port.c
+@@ -441,7 +441,7 @@ EXPORT_SYMBOL(tty_port_carrier_raised);
+  */
+ void tty_port_raise_dtr_rts(struct tty_port *port)
+ {
+-	if (port->ops->dtr_rts)
++	if (port->ops->dtr_rts && !tty_port_manual_rtsdtr(port))
+ 		port->ops->dtr_rts(port, 1);
+ }
+ EXPORT_SYMBOL(tty_port_raise_dtr_rts);
+diff --git a/include/linux/tty_port.h b/include/linux/tty_port.h
+index 58e9619116b7..9e5ad46d8a53 100644
+--- a/include/linux/tty_port.h
++++ b/include/linux/tty_port.h
+@@ -133,6 +133,7 @@ struct tty_port {
+ #define TTY_PORT_CHECK_CD	4	/* carrier detect enabled */
+ #define TTY_PORT_KOPENED	5	/* device exclusively opened by
+ 					   kernel */
++#define TTY_PORT_MANUAL_RTSDTR	6	/* do not raise DTR & RTS on open */
+ 
+ void tty_port_init(struct tty_port *port);
+ void tty_port_link_device(struct tty_port *port, struct tty_driver *driver,
+@@ -226,6 +227,16 @@ static inline void tty_port_set_kopened(struct tty_port *port, bool val)
+ 	assign_bit(TTY_PORT_KOPENED, &port->iflags, val);
+ }
+ 
++static inline bool tty_port_manual_rtsdtr(const struct tty_port *port)
++{
++	return test_bit(TTY_PORT_MANUAL_RTSDTR, &port->iflags);
++}
++
++static inline void tty_port_set_manual_rtsdtr(struct tty_port *port, bool val)
++{
++	assign_bit(TTY_PORT_MANUAL_RTSDTR, &port->iflags, val);
++}
++
+ struct tty_struct *tty_port_tty_get(struct tty_port *port);
+ void tty_port_tty_set(struct tty_port *port, struct tty_struct *tty);
+ int tty_port_carrier_raised(struct tty_port *port);
 -- 
 2.9.0
 
-base-commit: 25e02ba60f0fbe65ba07553b5b2b8867726273c4
