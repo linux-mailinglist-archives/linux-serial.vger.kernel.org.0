@@ -2,95 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85367537E78
-	for <lists+linux-serial@lfdr.de>; Mon, 30 May 2022 16:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D9E5384A2
+	for <lists+linux-serial@lfdr.de>; Mon, 30 May 2022 17:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbiE3Nwh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 May 2022 09:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S240003AbiE3PSp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 May 2022 11:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236893AbiE3Nvz (ORCPT
+        with ESMTP id S241020AbiE3PS3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 May 2022 09:51:55 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666FADF73;
-        Mon, 30 May 2022 06:36:57 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id wh22so20901344ejb.7;
-        Mon, 30 May 2022 06:36:57 -0700 (PDT)
+        Mon, 30 May 2022 11:18:29 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E54EABBB
+        for <linux-serial@vger.kernel.org>; Mon, 30 May 2022 07:20:34 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z20so11481783iof.1
+        for <linux-serial@vger.kernel.org>; Mon, 30 May 2022 07:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=937kmwxUYWQp9ITb4YK1bDcj17pWbp4MJAyEaMgPVI8=;
-        b=P6kPWsCrPPP4m4QmX35oeBVlGVewzKEvH4KkZgpHrvLfAmo822AQ3Pe0cKy8E7iSxp
-         L7TyMMUZxBWN89nTxyGkmfCTyxgTgvBVfEgAlF3vxkKhZV0D4flO5ryoXtWkRBViSYxR
-         +B+HRlhCHl+Iludco8eczAungH4k6ybNUhO0dcM67HNzs9qJW7bhlCCQWcML87N9GkcG
-         6qeHVXdOF9BFLRfQ+sUytO0Zfo16JCfV1im0T/wIYBY76SMZK5Ap/kBWIAlLVc5t6Tg+
-         UHBZhEmVUnZ04tKFplmuUbmcvCmz66iC1sPKQqOefh23q4J4fwuHjN9p4rZeoZPDkaCL
-         do9A==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
+        b=Wc9YLfir5ejlsDTz4KQpGBf4urVA/F2ogmC6FfLeyv2RCfAOeKFzlKlppzhHItc1Bq
+         vHeCQtNTz/suh8kziWhOIun4oCdQ4RIPux43jF2U4bgOApJU9XCDG1w4vwb3MsA82kNB
+         9Us6Et6UQKfU5aAUEkHyGO8whgTbLWqra46yHhqF9o8unKDP2lnDv9363PKnmlWJsFuP
+         RGcG16haNPz1H5YFR+Z69B0Lb5RGSmlriOSJ8Ug7l9qtBzq4bXBEkeuNGIA/4zpMB5DK
+         bfHRx1y5TSGzlgjuVF4KMQFM8XYReKP4ZLbwbj6wzk0akZy9rTPRtxkpaBCYv6CNuDRE
+         aMVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=937kmwxUYWQp9ITb4YK1bDcj17pWbp4MJAyEaMgPVI8=;
-        b=VfTIeMwUZItU4hLo3FutM7sILMCdHx/xEGJsmLvnj4KZ74cfSNIwhMVlieEQXWCkOJ
-         llhPK/H0W7p2KGfNS/FxQiQ6YfBTt6QqJEF8xaQwR6onMnCTneI1tThIYf6XxM0nSf0g
-         iyhL05zus1mYVOKNLmoLSZpYH4V1Gpnu/EvPmQdPPGgblnfYyccre42kolfNvhgyg52/
-         xkxIJlSiEqDZ4K7/YH3JPkj3rurhE65HieIMlvdzD5giVUSVzLARdXldDKYchsGjGZJL
-         MBzgdgH/VUCPP8SRAJi63RE5bzgxFJqj6d5mVrEX90ynCjyOcy/9ByxjA7g/tqe0r9fn
-         rsdQ==
-X-Gm-Message-State: AOAM530d3vO84GdhMQsZ8kwH0KzZ8i03/oMTvhCt2b/Agdh4CZy2Zuwy
-        FrdsoCaygYgQNudSVYo55UZ/vrb67J30MgbyX5I=
-X-Google-Smtp-Source: ABdhPJynoTMUIY84GPa2469SMdZmfaKyElHA9Qt9eYR5ODn56YIGffT0w/CJT8Chw/YBmCDiRJi++2Vfw41TEcxidTQ=
-X-Received: by 2002:a17:907:6e01:b0:6fe:fe21:8c56 with SMTP id
- sd1-20020a1709076e0100b006fefe218c56mr28697989ejc.579.1653917815205; Mon, 30
- May 2022 06:36:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
+        b=H5MIu95PdNYIOu6xBJY+XElb9YT7UJKjffRfDbNtTmJtnH8082Nb4KiLApBV4QTr48
+         +DDPV5EwbkaD7YxLtAzkDZnFXT2S/ShD6n/cIEkW8lhvNUeeQ2ipBUhJ34IXeHSEMqZ6
+         VdUsuYWYrLDe/5S6Nuk7o0MixaQ4LFP01yIxfhxU0wOi8uhPbWs6shRWDDz5Lfb4AeO2
+         MBqXDRurkIzbGXlS+RJsP4PyNPBOHCOQeLTciLgQQza06Wl8yqLqlf0DSMovMVPglkyC
+         s+PXIqbSyfXm9zMZcSBPa8LRZ+6N9z8KKWZ2xXZb+VZFOgDBpdDRykMY+yjVF70e5D+5
+         su4w==
+X-Gm-Message-State: AOAM5317dTVBzZqhkAtUELW2qdietG6bqhZdAu5QT4+uDoXrGs3d9bZj
+        ORGx/96sCzKSJC2pgUUCcl6kBQVhp/hdXsl51NI=
+X-Google-Smtp-Source: ABdhPJxjpQKM5stogsglVw1vjymm5n5jVJgWw3WodUvIBLYuGZKRRDdmP+WUPpKGpZhiKarXTScRvxVkvgg9P1qoYdA=
+X-Received: by 2002:a5d:9d95:0:b0:663:c256:e19e with SMTP id
+ ay21-20020a5d9d95000000b00663c256e19emr17055181iob.7.1653920424607; Mon, 30
+ May 2022 07:20:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220527222718.A21433740218@freecalypso.org>
-In-Reply-To: <20220527222718.A21433740218@freecalypso.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 30 May 2022 15:36:18 +0200
-Message-ID: <CAHp75VdjCMjKzmE0pNzhPb9pOPeQ3qpMi925meWsJCHXUNuLiQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] serial: core: fully suppress raising DTR & RTS on
- open if manual_rtsdtr
-To:     "Mychaela N. Falconia" <falcon@freecalypso.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Mychaela Falconia <mychaela.falconia@gmail.com>
+Received: by 2002:a05:6622:f06:0:0:0:0 with HTTP; Mon, 30 May 2022 07:20:24
+ -0700 (PDT)
+Reply-To: barristerbenjamin221@gmail.com
+From:   Attorney Amadou <koadaidrissa1@gmail.com>
+Date:   Mon, 30 May 2022 07:20:24 -0700
+Message-ID: <CAOh7+P-bAv+p1s5fx2Lazi2kYkmbqXrXk85_k1cAiBH4_HUV1g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d43 listed in]
+        [list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [koadaidrissa1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [barristerbenjamin221[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [koadaidrissa1[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, May 28, 2022 at 9:53 PM Mychaela N. Falconia
-<falcon@freecalypso.org> wrote:
->
-> When manual_rtsdtr sysfs attribute is written as 1,
-> TTY_PORT_MANUAL_RTSDTR is set, and the call to raise DTR & RTS in
-> tty_port_raise_dtr_rts() is suppressed.  However, there is one other
-> place where these signals are also raised on open: uart_port_startup()
-> in drivers/tty/serial/serial_core.c - this other point of raising
-> DTR & RTS also needs to be suppressed if TTY_PORT_MANUAL_RTSDTR is set.
-
-...
-
-> -               if (init_hw && C_BAUD(tty))
-> +               if (init_hw && !tty_port_manual_rtsdtr(&state->port) &&
-> +                   C_BAUD(tty))
->                         uart_port_dtr_rts(uport, 1);
->         }
-
-As per patch 1, I would put the custom flag check first.
-
--- 
-With Best Regards,
-Andy Shevchenko
+SGVsbG8gZGVhciBmcmllbmQuDQoNClBsZWFzZSBJIHdpbGwgbG92ZSB0byBkaXNjdXNzIHNvbWV0
+aGluZyB2ZXJ5IGltcG9ydGFudCB3aXRoIHlvdSwgSQ0Kd2lsbCBhcHByZWNpYXRlIGl0IGlmIHlv
+dSBncmFudCBtZSBhdWRpZW5jZS4NCg0KU2luY2VyZWx5Lg0KQmFycmlzdGVyIEFtYWRvdSBCZW5q
+YW1pbiBFc3EuDQouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCuimquaEm+OB
+quOCi+WPi+S6uuOAgeOBk+OCk+OBq+OBoeOBr+OAgg0KDQrnp4Hjga/jgYLjgarjgZ/jgajpnZ7l
+uLjjgavph43opoHjgarjgZPjgajjgavjgaTjgYTjgaboqbHjgZflkIjjgYbjga7jgYzlpKflpb3j
+gY3jgafjgZnjgIHjgYLjgarjgZ/jgYznp4HjgavogbTooYbjgpLkuI7jgYjjgabjgY/jgozjgozj
+gbDnp4Hjga/jgZ3jgozjgpLmhJ/orJ3jgZfjgb7jgZnjgIINCg0K5b+D44GL44KJ44CCDQrjg5Dj
+g6rjgrnjgr/jg7zjgqLjg57jg4njgqXjg5njg7Pjgrjjg6Pjg5/jg7NFc3HjgIINCg==
