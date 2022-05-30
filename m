@@ -2,56 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F2A537FA4
-	for <lists+linux-serial@lfdr.de>; Mon, 30 May 2022 16:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA275380D3
+	for <lists+linux-serial@lfdr.de>; Mon, 30 May 2022 16:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237806AbiE3Nnw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 May 2022 09:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S233496AbiE3NxL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 May 2022 09:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237804AbiE3NmF (ORCPT
+        with ESMTP id S239226AbiE3NvV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 May 2022 09:42:05 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1BC9A98C;
-        Mon, 30 May 2022 06:32:03 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w27so6858443edl.7;
-        Mon, 30 May 2022 06:32:03 -0700 (PDT)
+        Mon, 30 May 2022 09:51:21 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4586382152;
+        Mon, 30 May 2022 06:35:32 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id c2so4023319edf.5;
+        Mon, 30 May 2022 06:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VmC5J5LAtvxholHC0kJMwLzD6EpuzXL1X0zC6FmW1Eo=;
-        b=gtClHKizARJKVaT/I/8Z7FkUBInOenM6EVVtQwhZldOZiiVHS5tkuBJG5zlvBIUpL0
-         rvudAZhIfyA/MRCGN94wHSVTqkYEExkxROH6YwlKGNDPREjeyNua5axKWdgGq9PXB9Qv
-         6/A2y0SPcDGNDhntWPM5aArmXnDmP7Ah4vH4Rq+EHrrX4LQ+H8BwHK8yo6DbLaFHkrke
-         4ST0RMWoVI1vS/8thOslzdfROfixbC6gi0HrjGtBkfwnE9mZQmd09WUWRI/Dl/wBcKHq
-         wjoo/W8V3045qertaSYvpan4puzMRtRj8oVIz1iL+ZlydadJ8aPDLudZMaSAfHwoExWX
-         /Hag==
+        bh=B5qzJKFRJwAAu/QM/B/KVn24fcOUj7gvWWYWm+pws8I=;
+        b=EWtmQSlAEQCyXW1SZi7EJsYzFWTGB4Q+1bUGtDn/pkr+Yr2eH0RrMUxgq/OWfbNeKw
+         M6/yhJYDfJ9fy+d/a+08VRePSNPMZXlvgRYNU13d15l/SaFfP/YEjiwBM70OBzYV7fje
+         JzJCB+lfgMIuNk8FUxbZnOoX8ANwm2+n7aLjW6B6M8NqiZCcMeztgOPWL0IzEKHUlRY4
+         Y95g/w4XK7mo6MDlnwQfUs7WU6hc8OGUslzUfJXGkEd5CAz1iwrO9kG9IfZni+lirPvs
+         SizdIUTlaANRJ37dclYwy0obvmwcpK+1Y/P9fEhHeBinE3EP6+i0zCvw2xWFS/I9MCy0
+         sZ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VmC5J5LAtvxholHC0kJMwLzD6EpuzXL1X0zC6FmW1Eo=;
-        b=zR8tEXxqsP/LZRPxov31jKzLqS8d+GO9tZ7frwkyjTxDPsw4H0JtfVlHfsyreU9oJU
-         Idmtc4VnXQuFiPSQj6izpDE7e+CAyqQHknUtCZr1tAJmOi4c3gRGCNakRBv++sYK+TRp
-         4G2gxejAJb+z5GjxrxSaoRIEKRP+ClNx3n3Syn8AmCsQLQRJUOQ7h0P1DqJCayGtSief
-         Hi7zo9wz34U2qI2K8D0kxQmUk1k4ebIaNHnZDTe1JMD2XJB6yYy5YXOpCcTX2AKQehfF
-         qwm8gRHKwihcAa6xUiG1dO9VsDFXGxk2R/K3hQpmYZWhDPIH3tA6ZY1widxuSkfCg0xu
-         al5g==
-X-Gm-Message-State: AOAM533CSTvWCNv7nQiJ2uJVmDYzJ7sJfkUBLGLECft5jZIc3FQm2do1
-        RjcDzEmiB2r0U2O1jJ/znB5qBm1nnLrqgfme/3E=
-X-Google-Smtp-Source: ABdhPJw7yEAy0iu+jD3K6+RYaallqZkORRLUe8H7vJHEHL+AYzkc3jtqNHKEFmro5Xmt/PBuwTdey0kle8MLbQy7fsI=
-X-Received: by 2002:a05:6402:4394:b0:42a:e84c:2cfb with SMTP id
- o20-20020a056402439400b0042ae84c2cfbmr59605567edc.97.1653917521475; Mon, 30
- May 2022 06:32:01 -0700 (PDT)
+        bh=B5qzJKFRJwAAu/QM/B/KVn24fcOUj7gvWWYWm+pws8I=;
+        b=4Wqov/RIGAA78rf05VWJ2YPW37n4CJz0RA62j815m9Dpk69njmnrR1xu7vG+U3IolC
+         mJrQ1BmbVM/Bp5w4NzgTZhgkRU4+zWE4+7Fas4Z9JOOsbGIG2F33ebOKt9Oh97MRrUWD
+         G/YR4a6i3Ftu1dtp79FJ1bhiGLIKUlY6yMtiwYlmuN6iDgxsj7Bis+y267a4TPeDD+B5
+         dDrl2DqH6k7flRVYziexQ40bMxMqeaDxaSyITQp7zhy1KC97fmvE8AZ9tf7TDUCM5NBD
+         k/41eQ1F1CBfBKDNutMWHt17Ea5AhTfCVVGVecp2f2yeiNYO6jbPfDQq368IYUB7tcRY
+         iQKw==
+X-Gm-Message-State: AOAM530K33DlhLTRWLVzrA+YSFslGMkvzw79Ej/I8XGLXj3tTsyh90vi
+        JzagQZlQfMENx4HnFwadmDC5xPsnUBPkLvaSCrsND0w649pQ7w==
+X-Google-Smtp-Source: ABdhPJy1tcRWc2i/fixr5Hi89yMwtDtGxooa1pHHooQkVtWeJjBbYN8Iox0QLzdTeQV7bG77PvYdggjo6yYQygXVdJo=
+X-Received: by 2002:a05:6402:2382:b0:42b:7fec:1abf with SMTP id
+ j2-20020a056402238200b0042b7fec1abfmr33897162eda.111.1653917730570; Mon, 30
+ May 2022 06:35:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220527222709.1AC8837401F1@freecalypso.org>
-In-Reply-To: <20220527222709.1AC8837401F1@freecalypso.org>
+References: <20220527222713.A369E3740211@freecalypso.org>
+In-Reply-To: <20220527222713.A369E3740211@freecalypso.org>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 30 May 2022 15:31:25 +0200
-Message-ID: <CAHp75VeQzY+Pfru4LSgv+fqya-2F7G21TjaVsybCqQBSD8NeUw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] tty: add port flag to suppress raising DTR & RTS on open
+Date:   Mon, 30 May 2022 15:34:54 +0200
+Message-ID: <CAHp75Ve2WG3bQk5XXumX6r1V=qunOE-z5F90eS0tMhvbBY-Qug@mail.gmail.com>
+Subject: Re: [PATCH 2/6] serial: core: add sysfs attribute to suppress raising
+ DTR & RTS on open
 To:     "Mychaela N. Falconia" <falcon@freecalypso.org>
 Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,45 +71,22 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, May 28, 2022 at 8:51 PM Mychaela N. Falconia
+On Sat, May 28, 2022 at 2:22 AM Mychaela N. Falconia
 <falcon@freecalypso.org> wrote:
 >
-> There exist special serial devices (either attaching to generic serial
-> ports or containing a built-in USB-serial chip) in which DTR and/or RTS
-> have been repurposed for non-standard uses.  Depending on exactly how
-> these signals are repurposed, standard POSIX/SUS behaviour of
-
-Which version of POSIX and SUS standards are in consideration?
-
-> unconditionally raising both signals on open may range from harmless
-> to undesirable to a total killer, precluding the use of Linux with
-> such custom hardware.
+> Add a manual_rtsdtr sysfs attribute to suppress automatic raising of
+> DTR and RTS modem control signals on serial port open.
 >
-> The newly added TTY_PORT_MANUAL_RTSDTR flag switches an individual
-> serial port from POSIX/SUS standard to non-standard behaviour: when
-> set, it suppresses the built-in action of raising DTR & RTS on serial
-> port open.
->
-> This flag can be exported through sysfs, and it can also be set by
-> USB-serial device drivers when they see a custom hw device (identified
-> by VID:PID) that is known to be wired in a way that requires this flag
-> to be set.
+> This special mode can be used to prevent undesirable side effects on
+> open for applications where these lines are used for non-standard
+> purposes such as generating power-on and reset pulses.
 
-Is it only the USB class of devices that are affected or do we have
-examples on other buses?
-
-...
-
->  void tty_port_raise_dtr_rts(struct tty_port *port)
->  {
-> -       if (port->ops->dtr_rts)
-> +       if (port->ops->dtr_rts && !tty_port_manual_rtsdtr(port))
->                 port->ops->dtr_rts(port, 1);
-
-Logically I would put them otherwise, first to check a custom flag and
-then the existence of the callback.
-
->  }
+As I read this I think of the pins used as GPIOs. So, sounds like what
+we need instead is to list the pins that are used for (dedicated)
+GPIOs and pass this information to serial mctrl layer and perhaps
+prepare that layer to handle exclusions like these. The given (in this
+series) approach sounds to me like a (hackish?) workaround of this
+simple idea.
 
 -- 
 With Best Regards,
