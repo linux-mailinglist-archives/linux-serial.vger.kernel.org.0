@@ -2,87 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E5153B530
-	for <lists+linux-serial@lfdr.de>; Thu,  2 Jun 2022 10:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E619B53B535
+	for <lists+linux-serial@lfdr.de>; Thu,  2 Jun 2022 10:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiFBIbe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Jun 2022 04:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        id S231678AbiFBIf2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 Jun 2022 04:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiFBIbd (ORCPT
+        with ESMTP id S230003AbiFBIf0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:31:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D1F138B70;
-        Thu,  2 Jun 2022 01:31:30 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6F7501F8FC;
-        Thu,  2 Jun 2022 08:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1654158689; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=10nDheyhogOFP2uFxXcHKhtZwoVGn9GsYK9dDFZMoaM=;
-        b=HC7xUygIWp+T73nNV+0m1gBlgIBcBmJ7nzi3+ybZ7omLCV9HQUDXOdyvvk00JxLjeljH2V
-        LvI2tlCHebSzeNgLUcOYe+8oKhh+yPilEphIw15ds2nFFMmNg8gOAchncDXX+ZsdMfZkBz
-        I7HOlkJO+msX/eNH7M2qqbxMAy4I5ro=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1654158689;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=10nDheyhogOFP2uFxXcHKhtZwoVGn9GsYK9dDFZMoaM=;
-        b=ZFRJ0ioP6HjarEV646iDz8nnsmhYrf2itlS35bnb/81vxfbqymBjFmawCXBZe5qLYpaU4L
-        VVu3VIJ2NuWCVlDw==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3B4412C142;
-        Thu,  2 Jun 2022 08:31:29 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 2/2] tty/vt: Makefile, add --unicode for loadkeys invocation
-Date:   Thu,  2 Jun 2022 10:31:28 +0200
-Message-Id: <20220602083128.22540-2-jslaby@suse.cz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220602083128.22540-1-jslaby@suse.cz>
-References: <20220602083128.22540-1-jslaby@suse.cz>
+        Thu, 2 Jun 2022 04:35:26 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2476C1FD9E2;
+        Thu,  2 Jun 2022 01:35:25 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id l204so7103074ybf.10;
+        Thu, 02 Jun 2022 01:35:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=fyv5qXxzRNlKcviUT5bygdy56T+SSeZ5/D4qh4GaJ0A=;
+        b=qh3siJ0ZDSNbxxC4A4CsxhfazOwNXCJwRuTjBIKb3jsLY0Gq1yx3fW8iJeV1sjIj8B
+         z/ffvyWHo+mt/46cfhhJk0/dHa8bF22XEMNbLklweze5HaMcSWyP5E4UMXDIQCGRWg6J
+         l6ySKFNBJHuyZezDl6q2iu4Q7BBx34ivlbasf4AukcHYTrCDphbhISrYsBNnVbDsYSgd
+         Ztj25La3vbV61aml3p+GRbIbAhvRA/uIVNTFlH7JCNInmfFlvgKYldXAoVzvibYV05pR
+         CEX7etZUYaM3/A3J2QfUoojtvsZFZGRjI9yFWTz2pINn8QpxfKT5gxJ00LplH+Kew6i0
+         wn5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=fyv5qXxzRNlKcviUT5bygdy56T+SSeZ5/D4qh4GaJ0A=;
+        b=lXZzx6P4mq78qpscjM245Zpup7gDIMZhQGpI0qk89TuBGSDMlpsdRaU3K7Gq7fQCuq
+         cO/cJDl2ogRv2tXWPzLy+IgvEZBHHORcQvbE1Uu4lxJCF/1xYEVJgibduiJQysmi5xNL
+         uIiGFlFjEKP1N3xjgpRizTix5MMdOI/WWeExNHCeRvuUTyLgrtOCLNrJXXPI84buI7MD
+         ImKwu6+bzE+P0A0UyvHYchLwVZ4hdvl4bRXnUWcxBM3qwWwjpkldE07cN6ptLIUaHbb7
+         z8WnvzETrLGN5+O18KAaCxpKz1dlzYb2FL0971TimgAjvPe/t0T0hHk35y6O+p81YSzN
+         AF6g==
+X-Gm-Message-State: AOAM531jY3ogoLBZojZzgXgVRBQ+SQ5ASTtwq8vxP/hVxBDPP8aA+yv2
+        r9avlEAu9OBYL9figWg+Aeal3yYsj1KWI5rvHlhMIGfT
+X-Google-Smtp-Source: ABdhPJxH6XEghFHDdpos+Xl2mWZyzTjeqluvnrO3eIGlg1FS01vOR1J8dLdTBrMHRSpjEtnHIhUKVnkuiOvZbJ/AlGA=
+X-Received: by 2002:a25:945:0:b0:65c:e3e8:b04 with SMTP id u5-20020a250945000000b0065ce3e80b04mr4091820ybm.441.1654158924403;
+ Thu, 02 Jun 2022 01:35:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7000:7aa7:0:0:0:0 with HTTP; Thu, 2 Jun 2022 01:35:23
+ -0700 (PDT)
+In-Reply-To: <dbec85f5-7b28-3d0b-6b39-bd4296a49a70@kernel.org>
+References: <20220531043356.8CAB637401A9@freecalypso.org> <20220531043655.DDF783740232@freecalypso.org>
+ <dbec85f5-7b28-3d0b-6b39-bd4296a49a70@kernel.org>
+From:   Mychaela Falconia <mychaela.falconia@gmail.com>
+Date:   Thu, 2 Jun 2022 00:35:23 -0800
+Message-ID: <CA+uuBqacb3X+km-3EtdRxaWi0FvxZWCv8RpCo-+qaNkT-=JAgw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] serial: core: add sysfs attribute to suppress
+ ready signalling on open
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-For a long time, we generate unicode tables using loadkeys. So fix
-Makefile to use that flag too.
+Jiri Slaby wrote:
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/vt/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> s@ttyS0@ttyS<x>@
+> [...]
+> sysfs_emit()? (Even if I know %d won't overflow PAGE_SIZE :P.)
 
-diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
-index fe30ce512819..b3dfe9d5717e 100644
---- a/drivers/tty/vt/Makefile
-+++ b/drivers/tty/vt/Makefile
-@@ -30,6 +30,6 @@ $(obj)/defkeymap.o:  $(obj)/defkeymap.c
- ifdef GENERATE_KEYMAP
- 
- $(obj)/defkeymap.c: $(obj)/%.c: $(src)/%.map
--	loadkeys --mktable $< > $@
-+	loadkeys --mktable --unicode $< > $@
- 
- endif
--- 
-2.36.1
+Thanks for the feedback - saving it for v3 of my patch series.
 
+Any comments, positive or negative, on the principal/philosophical
+idea behind this proposed patch series?
+
+M~
