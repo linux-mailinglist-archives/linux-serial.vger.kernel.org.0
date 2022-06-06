@@ -2,97 +2,223 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6FC53E01A
-	for <lists+linux-serial@lfdr.de>; Mon,  6 Jun 2022 05:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C7C53E9C9
+	for <lists+linux-serial@lfdr.de>; Mon,  6 Jun 2022 19:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352282AbiFFDd5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 5 Jun 2022 23:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S233280AbiFFKFd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 Jun 2022 06:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbiFFDdx (ORCPT
+        with ESMTP id S233036AbiFFKF3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 5 Jun 2022 23:33:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5425237A38;
-        Sun,  5 Jun 2022 20:33:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C755C60EDE;
-        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18083C341C0;
-        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654486430;
-        bh=TI4P18/3vyoUu1YoM1I93ZEGQv/UWUtMjgpV3is+1kU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tFJZusU1hxG2s1CJAu/uiv0E+bAvVegQhojDIoAHyJhGf2CpfQHdYfd63OYaXP0/3
-         tl9nzWxkaafABij8lqsZ5MrgoRiCJkmKhT6mUps3kQJJUcarzBWjvqhX+nnzU7KuuH
-         M1sITb9nLev16/CnmDOBLDR9sft1NqYa56mDK6TYh+XhuSxzBGaz00U17pkjsv1ykO
-         1xbqro3byn4WFq2ZXjDSp5Mx6gkf+iadKrRgaEInhfU6CUJOoXak/Exda99R6yHsRc
-         ZpeQ/WkQ7MtuWXRB2kZKovQ5cRR+ulL6ulkGtXTJWKxLQIUAMOP2Du9HlLMaTPj68u
-         6fltf6QTe+EWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9551E737F0;
-        Mon,  6 Jun 2022 03:33:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 6 Jun 2022 06:05:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E2F66207;
+        Mon,  6 Jun 2022 03:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654509924; x=1686045924;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nl/Cl7bz5pNe4naULcGm3w7oTRumNgiPNhJiqVmMNic=;
+  b=G/HkFiUOP21asFpjjl2LoKxG4Jk28WhOxGpUY8oGwfe2l/LrTStkh+dU
+   6YnHKiLAEZAeIgXAegB3E0ceyI78JDs/bgirCrOsJAJ5yGAuiDxmnn5V+
+   W4b9UMe4yNjqyzsN8wCVl0M9UWgLlIplNvsJfHT4L3+9s8ScVmeimVDEd
+   j6ZIUM9TFq/cxLEFA55TgNtecpcGYRfBRNa6Hf07Qi4aPPSeXhmg0sjon
+   TS3KTEE183OzoTZ4yJH34qoJq11tb3aYZYDkwKJ/y/er0x4F7HROmWTrO
+   Job3m94YqCC2+6E4LMtOgt380CsIRI9QOmKQ0jSbWFpncd27B79R1hmXk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987024"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="362987024"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:04:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="635523353"
+Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:04:43 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        alexandre.belloni@bootlin.com, alexandre.torgue@foss.st.com,
+        andriy.shevchenko@linux.intel.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        claudiu.beznea@microchip.com, corbet@lwn.net, festevam@gmail.com,
+        f.fainelli@gmail.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        linux-doc@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, nicolas.ferre@microchip.com,
+        nsaenz@kernel.org, richard.genoud@gmail.com, rjui@broadcom.com,
+        sbranden@broadcom.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
+        vz@mleia.com
+Subject: [PATCH 00/36] RS485 serial_rs485 sanitization
+Date:   Mon,  6 Jun 2022 13:03:57 +0300
+Message-Id: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165448642995.20111.10251737230487275413.git-patchwork-notify@kernel.org>
-Date:   Mon, 06 Jun 2022 03:33:49 +0000
-References: <20220519211411.2200720-1-robh@kernel.org>
-In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
-        thierry.reding@gmail.com, sam@ravnborg.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl, dmitry.torokhov@gmail.com,
-        bleung@chromium.org, groeck@chromium.org, mchehab@kernel.org,
-        peda@axentia.se, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, kvalo@kernel.org, bhelgaas@google.com,
-        sre@kernel.org, mpm@selenic.com, herbert@gondor.apana.org.au,
-        gregkh@linuxfoundation.org, broonie@kernel.org, mripard@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello:
+This series adds sanitization to serial_rs485 struct before passing it
+to driver's rs485_config. This takes the work Lino Sanfilippo started
+(0ed12afa5655^..60efd0513916) a bit further. By moving sanitization of
+the rs485 struct into the serial core, per driver rs485_config() is
+more into the point, that is, setting up the hw to realize RS485.
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Rob Herring <robh@kernel.org>:
+The other benefit is that with the sanitization, the other drivers no
+longer need to care when new things are added to serial_rs485 as serial
+core handles them on the other drivers' behalf. The addressing mode
+changes I'll submit separately will take advantage of this. The
+addressing mode changes were the main motivator for doing the changes,
+however, I believe these changes stand on their feet even w/o
+considering the addressing mode changes.
 
-On Thu, 19 May 2022 16:14:11 -0500 you wrote:
-> Now that the schema tools can extract type information for all
-> properties (in order to decode dtb files), finding properties missing
-> any type definition is fairly trivial though not yet automated.
-> 
-> Fix the various property schemas which are missing a type. Most of these
-> tend to be device specific properties which don't have a vendor prefix.
-> A vendor prefix is how we normally ensure a type is defined.
-> 
-> [...]
+The series is long because per driver changes are split into two
+different stages. The key objectives here for the split have been to
+keep things bisect safe and to do changes per driver rather than in one
+large block. This required 4 stages:
 
-Here is the summary with links:
-  - dt-bindings: Fix properties without any type
-    https://git.kernel.org/chrome-platform/c/4e71ed985389
+  1) Add datastructure entries & other preps (01-03)
+  2) Per driver rs485_supported (04-21)
+  3) Sanitization, core taking advantage of rs485_supported (22-24)
+  4) Cleanup per driver custom sanitization code (25-36)
 
-You are awesome, thank you!
+As you can see, the downside of this split is that the per driver code
+is split to 2+4 patches which makes some things moving less obvious.
+Merging them is only possible if the stages 2-4 are done in one large
+change (little bits here and there could be left out from it but not
+much).
+
+In stage 3 patches, there are a few userspace interface impacting
+changes with userspace api regression potential:
+
+  a) Some drivers have not cleared flags/fields in per driver code while
+     other drivers have. The old behavior is inconsistent. Now the bits
+     will get cleaned up by serial core. I don't believe it's going to
+     cause issues.
+
+  b) Init path now sanitizes configuration if rs485_config is being
+     called from the init path (mainly coming from dt). It attempts to
+     repair some incorrect configurations which seems ok.
+
+     However, if RS485 mode is not enabled at boot, serial_rs485 struct
+     gets cleared in order for it to match what the port is configured
+     with (RS232). Such clearing implies losing values that were
+     configured through dt and that could perhaps be seen as unwanted
+     side-effect from having consistent serial_rs485?
+
+     There is also impact for the ioctl path from this clearing of
+     serial_rs485 when RS485 is disabled but impact seems minor at most.
+
+  c) Returning -EINVAL for non-legacy flags. This also affects setting
+     bits that were previously padding (that is, all flags bits
+     currently not defined in include/uapi/linux/serial.h). It was
+     possible to put garbage into them earlier but no more. I guess
+     this is not very likely a big issue. No non-legacy flags are
+     added in this series (the addressing mode changes submitted
+     separately will add new flags).
+
+Cc: alexandre.belloni@bootlin.com
+Cc: alexandre.torgue@foss.st.com
+Cc: andriy.shevchenko@linux.intel.com
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: claudiu.beznea@microchip.com
+Cc: corbet@lwn.net
+Cc: festevam@gmail.com
+Cc: f.fainelli@gmail.com
+Cc: kernel@pengutronix.de
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux@armlinux.org.uk
+Cc: linux-doc@vger.kernel.org
+Cc: linux-imx@nxp.com
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-rpi-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: mcoquelin.stm32@gmail.com
+Cc: nicolas.ferre@microchip.com
+Cc: nsaenz@kernel.org
+Cc: richard.genoud@gmail.com
+Cc: rjui@broadcom.com
+Cc: sbranden@broadcom.com
+Cc: s.hauer@pengutronix.de
+Cc: shawnguo@kernel.org
+Cc: vz@mleia.com
+
+Ilpo Järvinen (36):
+  serial: Add uart_rs485_config()
+  serial: Move serial_rs485 sanitization into separate function
+  serial: Add rs485_supported to uart_port
+  serial: 8250: Create serial8250_em485_supported for em485 users
+  serial: 8250_bcm2835aux: Use serial8250_em485_supported
+  serial: 8250_dwlib: Fill in rs485_supported
+  serial: 8250_exar: Fill in rs485_supported
+  serial: 8250_fintek: Fill in rs485_supported
+  serial: 8250_lpc18cc: Fill in rs485_supported
+  serial: 8250_of: Use serial8250_em485_supported
+  serial: 8250_pci: Fill in rs485_supported for pci_fintek
+  serial: pl011: Fill in rs485_supported
+  serial: ar933x: Fill in rs485_supported
+  serial: atmel: Fill in rs485_supported
+  serial: fsl_lpuart: Fill in rs485_supported
+  serial: imx: Fill in rs485_supported
+  serial: max310x: Fill in rs485_supported
+  serial: mcf: Fill in rs485_supported
+  serial: omap: Fill in rs485_supported
+  serial: sc16is7xx: Fill in rs485_supported
+  serial: stm32: Fill in rs485_supported
+  serial: Sanitize rs485_struct
+  serial: Clear rs485 struct when non-RS485 mode is set
+  serial: return -EINVAL for non-legacy RS485 flags
+  serial: 8250_dwlib: Remove serial_rs485 sanitization
+  serial: 8250_fintek: Remove serial_rs485 sanitization
+  serial: 8250: lpc18xx: Remove serial_rs485 sanitization
+  serial: 8250_pci: Remove serial_rs485 sanitization
+  serial: pl011: Remove serial_rs485 sanitization
+  serial: fsl_lpuart: Call core's sanitization and remove custom one
+  serial: imx: Remove serial_rs485 sanitization
+  serial: max310x: Remove serial_rs485 sanitization
+  serial: 8250_exar: Remove serial_rs485 assignment
+  serial: mcf: Remove serial_rs485 assignment
+  serial: sc16is7xx: Remove serial_rs485 assignment
+  serial: 8250: Remove serial_rs485 sanitization from em485
+
+ .../driver-api/serial/serial-rs485.rst        |  12 +-
+ drivers/tty/serial/8250/8250.h                |   1 +
+ drivers/tty/serial/8250/8250_bcm2835aux.c     |   1 +
+ drivers/tty/serial/8250/8250_core.c           |   1 +
+ drivers/tty/serial/8250/8250_dwlib.c          |  17 +--
+ drivers/tty/serial/8250/8250_exar.c           |  14 +-
+ drivers/tty/serial/8250/8250_fintek.c         |  29 +++--
+ drivers/tty/serial/8250/8250_lpc18xx.c        |  20 +--
+ drivers/tty/serial/8250/8250_of.c             |   1 +
+ drivers/tty/serial/8250/8250_pci.c            |  24 +---
+ drivers/tty/serial/8250/8250_port.c           |  28 ++--
+ drivers/tty/serial/amba-pl011.c               |  13 +-
+ drivers/tty/serial/ar933x_uart.c              |   7 +
+ drivers/tty/serial/atmel_serial.c             |   7 +
+ drivers/tty/serial/fsl_lpuart.c               |  25 +---
+ drivers/tty/serial/imx.c                      |  19 ++-
+ drivers/tty/serial/max310x.c                  |   9 +-
+ drivers/tty/serial/mcf.c                      |   7 +-
+ drivers/tty/serial/omap-serial.c              |   8 ++
+ drivers/tty/serial/sc16is7xx.c                |   8 +-
+ drivers/tty/serial/serial_core.c              | 120 ++++++++++++++----
+ drivers/tty/serial/stm32-usart.c              |   8 ++
+ include/linux/serial_core.h                   |   2 +
+ 23 files changed, 247 insertions(+), 134 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
