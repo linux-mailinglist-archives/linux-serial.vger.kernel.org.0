@@ -2,90 +2,117 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D411E54017F
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 16:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7220C5401AB
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 16:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245575AbiFGOeh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Jun 2022 10:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+        id S244631AbiFGOp1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Jun 2022 10:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245610AbiFGOeg (ORCPT
+        with ESMTP id S1343537AbiFGOpG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:34:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989761572F;
-        Tue,  7 Jun 2022 07:34:28 -0700 (PDT)
+        Tue, 7 Jun 2022 10:45:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D51433350
+        for <linux-serial@vger.kernel.org>; Tue,  7 Jun 2022 07:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654612468; x=1686148468;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=CSqAyQ69YMjsKUi4kQA7lQgbvG8ZQTQdDHQjX4aMF7s=;
-  b=E62gmmpIonnNqoca7U0Jev2upPq16gaTrX0GTMGWqhaEDLeojiVHWhjW
-   eR4GW8m+sKuBUtX9O4/Y32O1Dg3Q6rs4KkUQ2ySP3FCJAyzzDMlG9fZM4
-   Gc6RxRK1TH58hXPkoXsYMjX2mpZ+R8LtFGc1rPA0bEg3sDj+lOTIdSELu
-   DQHb2Axk2cDAABE2DqcYebhvZFxHVOUjY8c3evNHnhDVZtAroArp7hwWw
-   MQK/TqGALfIR9hyARwJNFBaMlBjqVG9j2Ma9fgkfyoIv3QKHzeghnbu07
-   ZCYGrgKVZPrQGfJ/589wruq/eNGhdhKHWH/0xFLqJOrJfrL2SCXRWpHC7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="302085551"
+  t=1654613103; x=1686149103;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Fqk+TTEw8HThSSmeMKm+Uy2V47gx4k3BB22Tw6OyZLM=;
+  b=gDns3L/F4P39y//aIxoQRu2Z3jG9DLg6evRfbZltSSJHiFCHH6WjmuY6
+   /9An2uryC8lSQ0FVtre1kLpJctqjG6ji9NabVVtTxs5xizB5nN0GrHSQO
+   YLEb9abhaN3254zLWTPkUg84trRgkhnyvQ3m8JJTTmgG1Iz7xwb93MS6M
+   W38tfUEdHNxs7EMa3bTHnLyiR3RWnRcO4wAY3QH0siscezGhkA1pEnlCC
+   on/2LUCqUSa4z0gzNm9sY/j6NFnVCWtrXUEhxSBMe4ZcQK2fRALKNie8C
+   QUUwt2BVOdWf+EXGzsoS6rB4ZCK6pNiaR737xqjqQP80cjkbs851rAVBU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="274260237"
 X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="302085551"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:34:28 -0700
+   d="scan'208";a="274260237"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:45:03 -0700
 X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="636149557"
-Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:34:25 -0700
-Date:   Tue, 7 Jun 2022 17:34:23 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 20/36] tty/vt: consolemap: saner variable names in
- set_inverse_trans_unicode()
-In-Reply-To: <20220607104946.18710-20-jslaby@suse.cz>
-Message-ID: <afd36ee7-1e8-38cc-d0c5-b82325f1b2ca@linux.intel.com>
-References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-20-jslaby@suse.cz>
+   d="scan'208";a="669998661"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:45:01 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nyaS2-000VmA-R8;
+        Tue, 07 Jun 2022 17:44:58 +0300
+Date:   Tue, 7 Jun 2022 17:44:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v3 0/6] LSR flag preservation improvements
+Message-ID: <Yp9kaoQyq91/lNhA@smile.fi.intel.com>
+References: <20220607082934.7242-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-886879419-1654612467=:1622"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220607082934.7242-1-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-886879419-1654612467=:1622
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 7 Jun 2022, Jiri Slaby wrote:
-
-> The function uses too vague variable names like i, j, k for iterators, p,
-> q, p1, p2 for pointers etc.
+On Tue, Jun 07, 2022 at 11:29:28AM +0300, Ilpo Järvinen wrote:
+> Improve LSR flag preservation. Not all devices preserve all LSR flags
+> on read. Therefore, the non-permanent flags must be stored until
+> consumed. 8250_port has handled this for some of the reads (but not
+> all). Drivers not so much but it's unclear to me which of the devices
+> actually clear flags on read so this series only does per driver fixes
+> for DW.
 > 
-> Rename all these, so that it is clear what is going on:
-> - dict: for dictionaries.
-> - d, r, g: for dir, row, glyph iterators -- these are unsigned now.
-> - dir, row: for directory and row pointers.
-> - glyph: for the glyph.
-> - and so on...
+> I've just put Uwe as Co-dev-by and SoB according to Andy's suggestion
+> in order to allow forward progress (Uwe indicated he's OK with any
+> sensible combination of tags anyway). I agree with Uwe's position
+> though that it would be nice to be able to record Acked-by in some
+> (probably quite rare) cases even if the person is already SoB but I
+> don't want to keep dragging this issue on and on over a single line
+> patch :-).
 > 
-> This is a lot of shuffling, but the result pays off, IMO.
+> v2:
+> - Added more patches
 > 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> v3:
+> - Fix Uwe's email and convert it to Co-developed-by
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+For the non-commented patches:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Ilpo Järvinen (6):
+>   serial: 8250: Store to lsr_save_flags after lsr read
+>   serial: 8250: Create serial_lsr_in()
+>   serial: 8250: Get preserved flags using serial_lsr_in()
+>   serial: 8250: Adjust misleading LSR related comment
+>   serial: 8250_dw: Use serial_lsr_in() in dw8250_handle_irq()
+>   serial: 8250_dw: Store LSR into lsr_saved_flags in
+>     dw8250_tx_wait_empty()
+> 
+>  drivers/tty/serial/8250/8250.h      | 20 ++++++++++++++++++++
+>  drivers/tty/serial/8250/8250_core.c |  3 +--
+>  drivers/tty/serial/8250/8250_dw.c   |  7 +++++--
+>  drivers/tty/serial/8250/8250_port.c | 24 +++++++++++-------------
+>  4 files changed, 37 insertions(+), 17 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
 
 -- 
- i.
+With Best Regards,
+Andy Shevchenko
 
---8323329-886879419-1654612467=:1622--
+
