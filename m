@@ -2,134 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF2B53F283
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 01:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC3A53F59A
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 07:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbiFFXYY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 Jun 2022 19:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S235849AbiFGFm3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Jun 2022 01:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiFFXYX (ORCPT
+        with ESMTP id S236375AbiFGFm2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 Jun 2022 19:24:23 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6BA6B0A9
-        for <linux-serial@vger.kernel.org>; Mon,  6 Jun 2022 16:24:22 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 25so20486929edw.8
-        for <linux-serial@vger.kernel.org>; Mon, 06 Jun 2022 16:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=UAOvT72nEzyjB3EaBfIB4vBLAlWNhJb9FUU2K5PC8fM=;
-        b=ZyNlZhAMA+Vquu72ix+yACD2k9XUpvfe00q9XTllGnWXvrTfVGbv7ER0ZTs7prh1QQ
-         IKQVOSIqy+g5B9BAkSWEOgDqEJ9mdL7QDP0A0QDcOFI9+7KXAmXuw3bSPtwyJqVyNbXD
-         li83yYhq4hUrdd+8h+b8MnAn5wpggwgj071k50QxOYd2koap/WOuuOFvQpfhNLdqSOsS
-         II4e0WY+FFjeEiJhCM50l3i5jvpvohYBo8ovqkNqaRBZ+bFMxb4l5mWoJ9C0AxMghZob
-         MbmbfB6oNlYFbi10BI3qumpmj0Yw5gAHJ03BRKg8kPp6+oPzIYA9uCKmjvbHaRJRUPdz
-         a1fg==
+        Tue, 7 Jun 2022 01:42:28 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E22033E39;
+        Mon,  6 Jun 2022 22:42:24 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id m20so32875686ejj.10;
+        Mon, 06 Jun 2022 22:42:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=UAOvT72nEzyjB3EaBfIB4vBLAlWNhJb9FUU2K5PC8fM=;
-        b=zhMLN+8tIFYKFPUC+A1yFICzIA0os7BCPt9HniayJqAzktKEqI07jxqZmznIt6tvhm
-         VugV7bqavcukJS9NUCI8c6Kyik+AwfHukSgfHU79/iMTh/FlHyHBr3KxuqUGFdQELuzH
-         Odu5wWYLK9d5iZTH7FoUmPF3v9mQD6K+7f6eL3jX9ELPs8b3Cw7HamfKmjMUxH+i14oD
-         VjK7NKBP16bdJZJkpDhklOV01rRLeCg1dpQDd66QQt7Q4p1AT8l6wJQWaf5Ij4KC4rHz
-         LnsBg/3szsXPX4D0XR0YADhU/VTbT3p/0RZyx+71dCUzzzMJXe16v/6i+qU8K7cg3dNt
-         IUpw==
-X-Gm-Message-State: AOAM530K0zMJxQbphnXpJOL5zETEy1nNYtqCTJzoRS+DPFvCpkJa6CKX
-        fiJh3n7i3rRr18qHRwYs+O3Jr4kifkqcsTll4ts=
-X-Google-Smtp-Source: ABdhPJx2nVlwvmVpMc52OZ2y39LFgCUxL1+vZwokztk6TQuKyKGHHCLaXPmpXGA9GDPWfjy0G6tbQtH45M8JtV+pAWo=
-X-Received: by 2002:a05:6402:1941:b0:413:2b5f:9074 with SMTP id
- f1-20020a056402194100b004132b5f9074mr30192669edz.414.1654557860333; Mon, 06
- Jun 2022 16:24:20 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jG5R0zb9PynKCeHbyahXy5XvhO7UDwbT1uGHecSuYDM=;
+        b=VwJZXtgjbVR7y96yPTdRFEvDP+LErWOBvYUW8CkY7tV/64yo1dqe5YckNhGU0U0+4m
+         IokucpmsOhx2hAJwgupLzRvZRquxyASzlgUZkoOu8PC51/X7TV5WcZ0fYOFAf1+GzSNl
+         DGjM3+8WSM+QhSzLLT2WFcgURouoA8ji5SA2MympMjaAPiVLsSHOyJAAm1Wuo7BR7lhr
+         72SYXlFIK8HR4mTUtRPGBKAVJph+jGwaMseUnZcxi9tH7tmFPPt+3BnIwArrlDr2CeYA
+         8887kRXoMLID5eY52DW96wyYM/N5Jv4AcjjyzmGplhoru/N1RMZla3CZS54Wx2hNO47u
+         JoPQ==
+X-Gm-Message-State: AOAM533ep7rCLU+Tb5JXIrA3etIK+TN90VE7k52qJs5AYg4D0TmAjINx
+        RtVHt/fT+jUQpEqvHBhMOE+na/I4+5w=
+X-Google-Smtp-Source: ABdhPJy5ogW8XnqElq0MJ4+csXjtuj6bo+OfXlM8WKgh1aJYJhrSOdGrMCWgL8a/7ihPyHouzrBI4A==
+X-Received: by 2002:a17:907:971f:b0:6ff:2d30:4b37 with SMTP id jg31-20020a170907971f00b006ff2d304b37mr24700997ejc.7.1654580542441;
+        Mon, 06 Jun 2022 22:42:22 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id x11-20020a056402414b00b0043158c608e4sm2976559eda.27.2022.06.06.22.42.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 22:42:21 -0700 (PDT)
+Message-ID: <4d4549ef-f8f8-d0cb-6d27-e6200aa14048@kernel.org>
+Date:   Tue, 7 Jun 2022 07:42:20 +0200
 MIME-Version: 1.0
-Reply-To: jennybezoss14@gmail.com
-Sender: evakipkalyakones1@gmail.com
-Received: by 2002:a50:44b:0:0:0:0:0 with HTTP; Mon, 6 Jun 2022 16:24:19 -0700 (PDT)
-From:   Mrs Jenny Bezos <jennybezos1@gmail.com>
-Date:   Mon, 6 Jun 2022 23:24:19 +0000
-X-Google-Sender-Auth: 5rMEXiY-8bhKwshQJmvtgmDbxKU
-Message-ID: <CA+mKr-+m0L-aPj21sV1XtuT71dN1FQreo0wZ4T7ro9bZCiAPfg@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:536 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6373]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [evakipkalyakones1[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [evakipkalyakones1[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jennybezoss14[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] tty/vt: Makefile, add --unicode for loadkeys
+ invocation
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220602083128.22540-1-jslaby@suse.cz>
+ <20220602083128.22540-2-jslaby@suse.cz>
+ <CAHp75VfsR6sVwO9iF6RA0bhVjMF1jC1_JEkv106TubPgL_m8YA@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAHp75VfsR6sVwO9iF6RA0bhVjMF1jC1_JEkv106TubPgL_m8YA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On 06. 06. 22, 16:35, Andy Shevchenko wrote:
+> On Thu, Jun 2, 2022 at 12:30 PM Jiri Slaby <jslaby@suse.cz> wrote:
+>>
+>> For a long time, we generate unicode tables using loadkeys. So fix
+>> Makefile to use that flag too.
+> 
+> generated
+
+We still do, but I didn't even know there is even a rule for that ;).
+
+> Does it make sense to add the Fixes tag?
+
+I don't think so -- I don't think anyone ran the rule in the past decade 
+:P. I.e. it'd be pre-git anyway.
+
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>> ---
+>>   drivers/tty/vt/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
+>> index fe30ce512819..b3dfe9d5717e 100644
+>> --- a/drivers/tty/vt/Makefile
+>> +++ b/drivers/tty/vt/Makefile
+>> @@ -30,6 +30,6 @@ $(obj)/defkeymap.o:  $(obj)/defkeymap.c
+>>   ifdef GENERATE_KEYMAP
+>>
+>>   $(obj)/defkeymap.c: $(obj)/%.c: $(src)/%.map
+>> -       loadkeys --mktable $< > $@
+>> +       loadkeys --mktable --unicode $< > $@
+>>
+>>   endif
+>> --
+>> 2.36.1
+>>
+> 
+> 
+
+thanks,
 -- 
-Dearest Friend,
-
-I am Mrs. Jenny Bezos from America  USA, I decided to donate what I
-have to you  for investment towards the good work of charity
-organizations, and also  to help the motherless and the less
-privileged ones and to carry out charitable works in your Country and
-around the World on my Behalf.
-
-I am diagnosing of throat Cancer, hospitalize for good 2 years and
-some months now and quite obvious that I have few days to live, and I
-am a Widow no child; I decided to will/donate the sum of $7.8 million
-to you for the good work of God, and also to help the motherless and
-less privilege and also forth assistance of the widows. At the moment
-I cannot take any telephone calls right now due to the fact that my
-relatives (who have squandered the funds for this purpose before) are
-around me and my health also. I have adjusted my will and my Bank  is
-aware.
-
- I have willed those properties to you by quoting my Personal File
-Routing and Account Information. And I have also notified the bank
-that I am willing to give that property to you for good, effective and
-prudent work. It is right to say that I have been directed to do this
-by God. I will be going in for a surgery soon and I want to make sure
-that I make this donation before undergoing this surgery.  I will need
-your support to make this dream come through, could you let me know
-your interest to enable me to give you further information. And I
-hereby advise you to contact me by this email address.
-
-Thanks
-Mrs. Jenny Bezos.
+js
+suse labs
