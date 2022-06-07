@@ -2,132 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E5153F9B8
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 11:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DF553FAA7
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 11:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbiFGJ2a (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Jun 2022 05:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S240306AbiFGJ7g (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Jun 2022 05:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239460AbiFGJ2M (ORCPT
+        with ESMTP id S239776AbiFGJ7f (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:28:12 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3108D366B2
-        for <linux-serial@vger.kernel.org>; Tue,  7 Jun 2022 02:28:11 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id u8-20020a4ae688000000b0041b8dab7f71so530327oot.7
-        for <linux-serial@vger.kernel.org>; Tue, 07 Jun 2022 02:28:11 -0700 (PDT)
+        Tue, 7 Jun 2022 05:59:35 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F90813EF;
+        Tue,  7 Jun 2022 02:59:34 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id m20so34042256ejj.10;
+        Tue, 07 Jun 2022 02:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
-         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
-         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
-         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
-         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
-         O14A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lxVWtgk2MYK7tyuypm6e6PUQAcCHSHou/3ZRAHbOVpk=;
+        b=VQY1loPqU6cmtCq5MRX6W0SUd2IIzjij1i4LvyyQHZO9sypUIWSaN58u3MkyhwOTCw
+         x04dCTwmvWZ5sJrbeYH36tuBLTiVpYOS1BEQAGxdfYkBNPpDQrLGHuq9wndgRgO15Api
+         DVoLIFic1x1/0akX/jkXeWT1Uzh2pcSjZfQtjf+7s17UJ/mHk56WZhLxgmDWmdQw8n9k
+         nefJSFxgYYuAUCSkY1beh4DoEyZuGCIUkeWclLr6i6E1mCaqFp3j/TPmzc1fiY1HEVwn
+         donSUzVAekTmUAK+j2Bl9IUjuUu8pZRALvbUGPDeTxi4Al+80RngkUjmtNK27mvCLuFI
+         sa0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=mX96qjccWuefHbVQshDmda3yfFMhsN7GMK8gUGHilt/pG9AghyN+Rj6TaAQ/bYxDy6
-         w7QTPNNBvz1lwL/VwZryPJyGhQtDKCKN0nH6HtflYTwa38DSG5nszxNSjjBdwM0ulA4y
-         59eJEh5B7I+M9yeT/We4iHcF03C2LZYvJ+7eAdJ6m9KFA93UIf9RIe35dY3yDDJHigp9
-         5ER9GLbpDotFw9wjRQmZcCnxqtJoaAFq2kGn0PM0LuLRDUAcj81oaWcT42CodEH5eKdg
-         QXRU8mqfKadF7JlshdEwUj+YZcaPctoHnsae1VrcxrYoRoejTU9PmlxCFo9vnAob1qHk
-         QeIg==
-X-Gm-Message-State: AOAM531zbxxJmUKC+XN7Esy4IKwNHbxrtt4vc/LiPMFaZXypOj7K2LWw
-        iZ0EGw+qGONExOOQWOdtdrhUEN6BMrYUVO/LsUBRkUd96XMuGLxU
-X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
-X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
- v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
- Jun 2022 02:28:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lxVWtgk2MYK7tyuypm6e6PUQAcCHSHou/3ZRAHbOVpk=;
+        b=hFOhhff8ynkWiSgkjD+2lwjRvC2Hx53Lob0RyP2VcXqCHVY/kNkRRHvX2s9USj4B1N
+         sOCL3lCDGvgUyqnjcqwJYLfdKOpmPG0e9Wi2UpXPz09rWtTXWkO/fyYIjQaWbWlx5O2z
+         oP6DDtee6L21L3/n+DPehKZsUdIXJ4/Ls64+YrsJ0d+gB8XEXudYp29WaLbXXWrr8l1u
+         kYEMhaPHGlnV5XVqhCTblcl1CCo65Y/qhkXZA5YQYh6b/N3gJxCfMr4ulhEqurY9Apu8
+         JxTguH7yP+Wg48kKb/q6Etnet8raQ+G40TveYPrAC7Nr2qWH8PaNvIajuUvdLPI3xBLM
+         0H7A==
+X-Gm-Message-State: AOAM5328HeDSUNwVJtiuGk5NYf5r7AZXlr1QpqGZXjgrcjt6ManKILWg
+        JFjFQcacpKB3t+KEqoLqQgm+n2b9gg/7kk1KzmItl+UBefl5FQ==
+X-Google-Smtp-Source: ABdhPJw9TTzAR820+KlxuAowdaRO/HTzzE8b4ylykIraDj7jVSMwXYdCf34or+khV/0U9tR3CzPcrTVrwlbkh1m5+ws=
+X-Received: by 2002:a17:907:2ce3:b0:6ff:1447:d3a4 with SMTP id
+ hz3-20020a1709072ce300b006ff1447d3a4mr26847700ejc.497.1654595972614; Tue, 07
+ Jun 2022 02:59:32 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
- 02:28:00 -0700 (PDT)
-Reply-To: robertbaileys_spende@aol.com
-From:   Robert Baileys <mercymiji.j@gmail.com>
-Date:   Tue, 7 Jun 2022 11:28:00 +0200
-Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220602083128.22540-1-jslaby@suse.cz> <20220602083128.22540-2-jslaby@suse.cz>
+ <CAHp75VfsR6sVwO9iF6RA0bhVjMF1jC1_JEkv106TubPgL_m8YA@mail.gmail.com> <4d4549ef-f8f8-d0cb-6d27-e6200aa14048@kernel.org>
+In-Reply-To: <4d4549ef-f8f8-d0cb-6d27-e6200aa14048@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 7 Jun 2022 11:58:56 +0200
+Message-ID: <CAHp75Vd4H2AOcDV-cWug+MCup5RY0udTZX2uq3rzP+czy0uiJg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tty/vt: Makefile, add --unicode for loadkeys invocation
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c2b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mercymiji.j[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Hallo, lieber Beg=C3=BCnstigter,
+On Tue, Jun 7, 2022 at 7:42 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+> On 06. 06. 22, 16:35, Andy Shevchenko wrote:
+> > On Thu, Jun 2, 2022 at 12:30 PM Jiri Slaby <jslaby@suse.cz> wrote:
+> >>
+> >> For a long time, we generate unicode tables using loadkeys. So fix
+> >> Makefile to use that flag too.
+> >
+> > generated
+>
+> We still do, but I didn't even know there is even a rule for that ;).
 
-Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
-bin ein pensionierter Regierungsangestellter aus Harlem und ein
-Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
-bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
-ttery
-in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
-und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
-Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
-Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
-um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
-Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
-machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
-e
-Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
-gegen=C3=BCberstehen.
-https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
-t-in-new-york-history/Sie
-Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
-Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
-e
-Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
-Euro beginnen kann.
-Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
-Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
-erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
+I understand, but here is English stylistics like this. You need to
+use past ind. or present perfect ("for a long time" dictates that).
 
-Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
-
-Powerball-Jackpot-Gewinner
-E-Mail: robertbaileys_spende@aol.com
+-- 
+With Best Regards,
+Andy Shevchenko
