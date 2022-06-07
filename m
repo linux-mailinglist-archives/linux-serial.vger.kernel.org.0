@@ -2,129 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C89953F861
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 10:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E5153F9B8
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jun 2022 11:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbiFGImO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Jun 2022 04:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S239511AbiFGJ2a (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Jun 2022 05:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238345AbiFGImM (ORCPT
+        with ESMTP id S239460AbiFGJ2M (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:42:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106CB32ED2;
-        Tue,  7 Jun 2022 01:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654591330; x=1686127330;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hue1OWpyEYvWCbIXGd1i/2Zb5JQTovT2W/Hw1M+6dDo=;
-  b=SGfLqe3OCq7743MylU0g1UbnRwkB2Nb6rN9YE4Bj+Ehflwg01JjiD2ER
-   qhgd63fesfwdkYYII3urFdLeqDuAyaaiOz2ejxKKNXS1ujLvXTNv86MaD
-   BLe2D0et5Hf3/IwOWDTp0tDWJzJ3+xjaMYPv+YwR1LDfJ2uGFwLFoE27K
-   +hFuJvXzlwH/7rKEuuBUSidiIUagm+lwrsfWaQv+ExQwlid8ls/OCl5tX
-   IUqInHBNsYTCO8enmt+5k7KRVOVzZbH6/Ne8MOc4+M15199ANEfBDBeN+
-   tnCEwUo6Cv4+kIao0J0+btdIN7aWYD+WSOelZaRFcc9P2adE+Qs5BD/cV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="277398633"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="277398633"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 01:42:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="647933840"
-Received: from akmessan-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.146])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 01:42:07 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 2/2] serial: 8250: handle __start_tx() call in start_tx()
-Date:   Tue,  7 Jun 2022 11:41:54 +0300
-Message-Id: <20220607084154.8172-2-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220607084154.8172-1-ilpo.jarvinen@linux.intel.com>
-References: <20220607084154.8172-1-ilpo.jarvinen@linux.intel.com>
+        Tue, 7 Jun 2022 05:28:12 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3108D366B2
+        for <linux-serial@vger.kernel.org>; Tue,  7 Jun 2022 02:28:11 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id u8-20020a4ae688000000b0041b8dab7f71so530327oot.7
+        for <linux-serial@vger.kernel.org>; Tue, 07 Jun 2022 02:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
+         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
+         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
+         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
+         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
+         O14A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=mX96qjccWuefHbVQshDmda3yfFMhsN7GMK8gUGHilt/pG9AghyN+Rj6TaAQ/bYxDy6
+         w7QTPNNBvz1lwL/VwZryPJyGhQtDKCKN0nH6HtflYTwa38DSG5nszxNSjjBdwM0ulA4y
+         59eJEh5B7I+M9yeT/We4iHcF03C2LZYvJ+7eAdJ6m9KFA93UIf9RIe35dY3yDDJHigp9
+         5ER9GLbpDotFw9wjRQmZcCnxqtJoaAFq2kGn0PM0LuLRDUAcj81oaWcT42CodEH5eKdg
+         QXRU8mqfKadF7JlshdEwUj+YZcaPctoHnsae1VrcxrYoRoejTU9PmlxCFo9vnAob1qHk
+         QeIg==
+X-Gm-Message-State: AOAM531zbxxJmUKC+XN7Esy4IKwNHbxrtt4vc/LiPMFaZXypOj7K2LWw
+        iZ0EGw+qGONExOOQWOdtdrhUEN6BMrYUVO/LsUBRkUd96XMuGLxU
+X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
+X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
+ v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
+ Jun 2022 02:28:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
+ 02:28:00 -0700 (PDT)
+Reply-To: robertbaileys_spende@aol.com
+From:   Robert Baileys <mercymiji.j@gmail.com>
+Date:   Tue, 7 Jun 2022 11:28:00 +0200
+Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c2b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mercymiji.j[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-As either start_tx_rs485() or start_tx() calls __start_tx() as the last
-line of their logic, it makes sense to just move that call into
-start_tx(). When start_tx_rs485() wants to defer tx using timer, return
-false so start_tx() can return based on it.
+--=20
+Hallo, lieber Beg=C3=BCnstigter,
 
-Reorganize em485 code in serial8250_start_tx() so that the return can be
-shared for the cases where tx start is deferred.
+Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
+bin ein pensionierter Regierungsangestellter aus Harlem und ein
+Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
+bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
+ttery
+in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
+und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
+Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
+Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
+um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
+Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
+machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
+e
+Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
+gegen=C3=BCberstehen.
+https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
+t-in-new-york-history/Sie
+Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
+Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
+e
+Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
+Euro beginnen kann.
+Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
+Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
+erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_port.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 448cfbb05f63..a3ffbdfe8fae 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1610,7 +1610,8 @@ void serial8250_em485_start_tx(struct uart_8250_port *up)
- }
- EXPORT_SYMBOL_GPL(serial8250_em485_start_tx);
- 
--static inline void start_tx_rs485(struct uart_port *port)
-+/* Returns false, if start_tx_timer was setup to defer TX start */
-+static bool start_tx_rs485(struct uart_port *port)
- {
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 	struct uart_8250_em485 *em485 = up->em485;
-@@ -1638,11 +1639,11 @@ static inline void start_tx_rs485(struct uart_port *port)
- 			em485->active_timer = &em485->start_tx_timer;
- 			start_hrtimer_ms(&em485->start_tx_timer,
- 					 up->port.rs485.delay_rts_before_send);
--			return;
-+			return false;
- 		}
- 	}
- 
--	__start_tx(port);
-+	return true;
- }
- 
- static enum hrtimer_restart serial8250_em485_handle_start_tx(struct hrtimer *t)
-@@ -1672,14 +1673,12 @@ static void serial8250_start_tx(struct uart_port *port)
- 
- 	serial8250_rpm_get_tx(up);
- 
--	if (em485 &&
--	    em485->active_timer == &em485->start_tx_timer)
--		return;
--
--	if (em485)
--		start_tx_rs485(port);
--	else
--		__start_tx(port);
-+	if (em485) {
-+		if ((em485->active_timer == &em485->start_tx_timer) ||
-+		    !start_tx_rs485(port))
-+			return;
-+	}
-+	__start_tx(port);
- }
- 
- static void serial8250_throttle(struct uart_port *port)
--- 
-2.30.2
-
+Powerball-Jackpot-Gewinner
+E-Mail: robertbaileys_spende@aol.com
