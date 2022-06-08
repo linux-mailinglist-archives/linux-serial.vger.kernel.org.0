@@ -2,57 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68756542CA5
-	for <lists+linux-serial@lfdr.de>; Wed,  8 Jun 2022 12:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34237542CAF
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Jun 2022 12:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236061AbiFHKJr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 8 Jun 2022 06:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S236366AbiFHKKb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 8 Jun 2022 06:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236991AbiFHKJ3 (ORCPT
+        with ESMTP id S235957AbiFHKJn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:09:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C356FA3B;
-        Wed,  8 Jun 2022 02:54:05 -0700 (PDT)
+        Wed, 8 Jun 2022 06:09:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540DF1D30D1
+        for <linux-serial@vger.kernel.org>; Wed,  8 Jun 2022 02:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654682045; x=1686218045;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=Cd8pbVH0sEmGPZUUgfp1h3i8osc5+Du509bEtizTrWg=;
-  b=C6Vcdb/fAd1MkkkHeMs5rlUzdUA//45Ev6PFlA1XtAg+l4swdsR7fn0Z
-   vNIifRFcf/pInw/bhcKXBGRa/Uu+Icz9t20PhndfYZ5GbjHmwg1s/Mcpf
-   8CEAQBPAp+VoUQeWEl+6Tkh2R5KQQYx4QUTw5AFVJ7QfOH499Gxv8EccA
-   FrrpZqrK3UH65JZbmX4nxhf3a/O/hj3oCPEnNzAFFLo7zz2B710Owt/vs
-   va502N7B0MlXdVYVk4HuhEVTSrGnWQXuLNXcl45F+bGqJBQ+oerRQ7bgh
-   L5GMnLP7YzAu3Z4SwrBf7USpd9U4gSkFSIBr5RAEpYPqznsFe+tdbNuNJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="276866313"
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="276866313"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:54:04 -0700
+  t=1654682096; x=1686218096;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HaN30WmjFXq77C7E5SYx2o/YQmDl/1sd14eIJVTbEGw=;
+  b=e0JjFl6RqivjDNVUaUbBuguiKUxWpRpuXm2OqC27TZ0WtIL9Mv6F1dAA
+   fpL1mw7aySSGQdG4N9oOwuuTTFhVS4Ur6vhIGScjv09pM52EiSJ1+FsA4
+   dp02oJLcCaBLG3oxqdmJCRan5orsY9bW041+BKvEaDL3bRnaX9Qnzn8Io
+   g/3lnvaD8OQnqgnM50kHoy7hEKXTO74N5+m3rEkW/UPUPRGK5fB9baxAX
+   4L0cM2CeyTtmCtH0pw6fJyzxU6eMFG+/BMD5WZr9KO1dVGH6FA0gS4dX9
+   oPchldXcVixRFYw/EhqRj8bqiggNvqrT4kEMAWY0MAuTSUGCh3DSx6o2s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="278019503"
 X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="636721443"
-Received: from bmichals-mobl.ger.corp.intel.com ([10.252.57.131])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:54:03 -0700
-Date:   Wed, 8 Jun 2022 12:54:01 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 03/36] tty/vt: consolemap: define UNI_* macros for
- constants
-In-Reply-To: <ab9bf4c2-48ed-1a14-9788-8a1672e29849@suse.cz>
-Message-ID: <dd7830f1-be51-29a-b77-64a5f4c34a6a@linux.intel.com>
-References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-3-jslaby@suse.cz> <59e0ae93-c7b-2087-75f8-4da0de918250@linux.intel.com> <ab9bf4c2-48ed-1a14-9788-8a1672e29849@suse.cz>
+   d="scan'208";a="278019503"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:54:42 -0700
+X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
+   d="scan'208";a="584783415"
+Received: from bmichals-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.131])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 02:54:39 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 0/6] LSR flag preservation improvements
+Date:   Wed,  8 Jun 2022 12:54:25 +0300
+Message-Id: <20220608095431.18376-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1421660256-1654678483=:1676"
-Content-ID: <9d3b502f-879d-19b7-99db-1cce7bf934c@linux.intel.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,52 +61,46 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Improve LSR flag preservation. Not all devices preserve all LSR flags
+on read. Therefore, the non-permanent flags must be stored until
+consumed. 8250_port has handled this for some of the reads (but not
+all). Drivers not so much but it's unclear to me which of the devices
+actually clear flags on read so this series only does per driver fixes
+for DW.
 
---8323329-1421660256-1654678483=:1676
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <94ebc639-5988-436d-3f10-ca604d4f30eb@linux.intel.com>
+I've just put Uwe as Co-dev-by and SoB according to Andy's suggestion
+in order to allow forward progress (Uwe indicated he's OK with any
+sensible combination of tags anyway). I agree with Uwe's position
+though that it would be nice to be able to record Acked-by in some
+(probably quite rare) cases even if the person is already SoB but I
+don't want to keep dragging this issue on and on over a single line
+patch :-).
 
-On Wed, 8 Jun 2022, Jiri Slaby wrote:
+v2:
+- Added more patches
 
-> On 07. 06. 22, 15:21, Ilpo Järvinen wrote:
-> > On Tue, 7 Jun 2022, Jiri Slaby wrote:
-> > 
-> > > The code uses constants for sizes of dictionary substructures on many
-> > > places. Define 3 macros and use them in the code, so that loop bounds,
-> > > local variables and the dictionary always match. (And the loop bounds
-> > > are obvious now too.)
-> > > 
-> > > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> > 
-> > Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > 
-> > > -			for (k = 0; k < 64; k++) {
-> > > +			for (k = 0; k < UNI_ROW_GLYPHS; k++) {
-> > >   				glyph = p2[k];
-> > >   				if (glyph >= 0 && glyph < MAX_GLYPH
-> > >   					       && q[glyph] < 32)
-> > 
-> > Probably unrelated to this change but what's that < 32? It seems to appear
-> > twice related to the inverse mapping (and you didn't end up naming it).
-> 
-> That's ascii C0 test _IMO_.
+v3:
+- Fix Uwe's email and convert it to Co-developed-by
 
-Ok, that's what I though it must be. But then this code seems even more 
-odd to me, why it sets the inverse again but only if it's a control 
-character...
+v4:
+- Tweak comments
+- Fix URL link to earlier discussion & improve changelog
 
-Maybe this gives some hint why but it's unintelligible to me:
-			/* prefer '-' above SHY etc. */
-Both that quoted - and soft hyphen (SHY) are >= 32. So it kind of matches 
-to what the if does, but it completely fails to explain why preference is 
-the different way around with the control chars.
+Ilpo JÃ¤rvinen (6):
+  serial: 8250: Store to lsr_save_flags after lsr read
+  serial: 8250: Create serial_lsr_in()
+  serial: 8250: Get preserved flags using serial_lsr_in()
+  serial: 8250: Adjust misleading LSR related comment
+  serial: 8250_dw: Use serial_lsr_in() in dw8250_handle_irq()
+  serial: 8250_dw: Store LSR into lsr_saved_flags in
+    dw8250_tx_wait_empty()
 
-Btw, for set_inverse_transl(), q -> inv rename would still be useful on 
-top of the other variable renames.
+ drivers/tty/serial/8250/8250.h      | 20 ++++++++++++++++++++
+ drivers/tty/serial/8250/8250_core.c |  3 +--
+ drivers/tty/serial/8250/8250_dw.c   |  7 +++++--
+ drivers/tty/serial/8250/8250_port.c | 23 ++++++++++-------------
+ 4 files changed, 36 insertions(+), 17 deletions(-)
 
 -- 
- i.
---8323329-1421660256-1654678483=:1676--
+2.30.2
+
