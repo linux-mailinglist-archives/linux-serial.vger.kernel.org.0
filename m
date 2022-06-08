@@ -2,226 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1314A542DD3
-	for <lists+linux-serial@lfdr.de>; Wed,  8 Jun 2022 12:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369A6542E01
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Jun 2022 12:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237195AbiFHKak (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 8 Jun 2022 06:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
+        id S236728AbiFHKjj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 8 Jun 2022 06:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238141AbiFHK3x (ORCPT
+        with ESMTP id S238391AbiFHKj3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:29:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15889192C42
-        for <linux-serial@vger.kernel.org>; Wed,  8 Jun 2022 03:21:58 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id o7so7218140eja.1
-        for <linux-serial@vger.kernel.org>; Wed, 08 Jun 2022 03:21:58 -0700 (PDT)
+        Wed, 8 Jun 2022 06:39:29 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DA222C467;
+        Wed,  8 Jun 2022 03:39:28 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c2so26455754edf.5;
+        Wed, 08 Jun 2022 03:39:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
-        b=wDIlVKTWdiWhZ8wBWJY6cKiaQFw8rDj207bvbTp/h11ey3tP6nET1Ax/CdHjZfLIEV
-         bWnJx67yUwmZnAjjjd5Pnmh8VhMfnKk9ZGg+xoCyY9GLA3nn7mGO8lVMAqq0oiDn/3Gb
-         RdEmlcoDLk/NATza/gALLbwlAadFQrZRy9MfXKJk8j2q4AuOEEZ+zY7bealsPyXM8b4Y
-         ih+WRBDp4jQzRDyApQ0uO+L54w+TGVWPyUYM9CH3Ot8Y/Q0bHkVx4jxyiDXFnpuvcBiT
-         7waY/rXX63WmY9xsunaYaDRWKXRiJMMbWedZPkAKAn6m/lwDnhiKftwSsfbgmiXgBvuN
-         pGIA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AflYLC9Cqj0Sh7IAAdBilAnuAv8TaAYj4Q3b9HGi3LI=;
+        b=j80tuK+ahAaKf2tOnjexak08mW2qPcSawqmqvdmh+AR+svs/ocLKqPxSN8BoX6dDHq
+         93ky+2yLNg6R0jRT9oYrITbukQBudgVPuUQ8ag9dJc/JXXhX2rCDoJRCnigmAsvNN1CH
+         MQkYtRtpkk7nAjy2SOQZrK4I1kot9x5ahABLvvhbuHFauZD6hbDZ6d+fOPh6kvktILIp
+         eUysQSMsfgpKiLhhJW4Fs7chnLhbUhVDSgh2Zx11L41LsHJ4g7BhDF1/+v/mm9OK9l4V
+         WKy5dkR7hBvo35NUv5Q9xZL6fU0p47buYzKSmrF0W46Pv/XAUCpBXiRlNBp/CPbhJXJ5
+         +AoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
-        b=jh6BMiddVLs8C62IZXWrwtJr4rwx6wMV9JMM+PO7lOKCyjm3Ff1r0Eiol+5Y4WfBjA
-         sVCXb849FR7nBxnBXRBv0c2nyuq8XwFHK5Isb6LcIu8N940KIdNAJuCsYWM+CQM7Fkdo
-         sGqvw6suRZyQObN9IJFvXSrDgSi4Abg8R11grtV8mPUkq7D9d2xKZ/iwFkSoihBqDFg4
-         ATfIj2zZZ64xOQsV+Gmqe9QeWml6dYgMSvCPpR8TFXn68Bu8B7g5/W+r1y6pXfR4eQVS
-         Qyc4rzdk/Oeo63ZqG4prYkAPUjBVJKi5T2eXiOVvck6BDELCYCiTPi1e4aBrifxCeVu3
-         4gNg==
-X-Gm-Message-State: AOAM531FlRPYqFODtoAIvCLhcF2hHX0mKY/D6czEGkUQz3vxzUkq79QS
-        gCYRu6+2dc3wI26Le/mUARec+Q==
-X-Google-Smtp-Source: ABdhPJw4saSPhMUohzNzjdscZN0KDbM9WKgE0UI3Y2mk91NtDGFQsXLJsTcltgv6Da2VMwekYNeMFA==
-X-Received: by 2002:a17:906:8416:b0:705:6a1b:e8ef with SMTP id n22-20020a170906841600b007056a1be8efmr30244309ejx.614.1654683716491;
-        Wed, 08 Jun 2022 03:21:56 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g3-20020aa7dd83000000b0042bc5a536edsm11883683edv.28.2022.06.08.03.21.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:21:55 -0700 (PDT)
-Message-ID: <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org>
-Date:   Wed, 8 Jun 2022 12:21:54 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AflYLC9Cqj0Sh7IAAdBilAnuAv8TaAYj4Q3b9HGi3LI=;
+        b=of2+3tFH05YgDrR65xNw7aTcbHzqJdREsSncrL4LHDjwQDnCykCTFGp11YTkbJWrgQ
+         FSlNQgs5ExXplw4CEPT4IiJNwsvLpwUgscAdb9HWUVTIGR+cRwsn1ELW3m097vnldo3L
+         E+eAbuijRVsdKoHqBd6GirhQO8NVsJgBkdbp5obxqHLpAY77G3IsHPn45xx3f7OOjufr
+         JwGarQhR7JSgZ9CZtxxID/3ttjGogkIToquiLp/1uuotCDoqmKN7Kkju3+hrDMd936if
+         6uaYbdl8ygkMKzZMXmzXMHHRvoT6PPcSFEGcRykgFy/WDVq8B3mFYf7sfvynCgO84out
+         nODw==
+X-Gm-Message-State: AOAM532ybEPDyoYRdm7jfNiJy1lT9UOsXRz3gEwF0BqPlzRf567DsG5g
+        gDDan6j6WDAwkwymSv2OTeHIXgcIdObUN8zhMWw=
+X-Google-Smtp-Source: ABdhPJz2XGURaDipUizHRf/IKPdud1SXAXIGH0SRdGA8M/4H7Tuqy/0lPrVk9C7d7d+wAy+2tc9EIjvnrFHnWXMcu4k=
+X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
+ b1-20020aa7d481000000b0042dd5fdf963mr38552340edr.209.1654684766428; Wed, 08
+ Jun 2022 03:39:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device
- tree
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-19-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220608095623.22327-19-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-16-jslaby@suse.cz>
+ <8ad44d3b-449f-4a30-1a4c-dffd43bbbd1@linux.intel.com> <e9f35a26-8f5b-f585-2e8c-19690bf3c770@kernel.org>
+In-Reply-To: <e9f35a26-8f5b-f585-2e8c-19690bf3c770@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 8 Jun 2022 12:38:49 +0200
+Message-ID: <CAHp75VfPi=BMzw4x2tTv2S5Wa0y6vvB3HUY6GyF3t_ddg_YUGA@mail.gmail.com>
+Subject: Re: [PATCH 16/36] tty/vt: consolemap: check put_user() in con_get_unimap()
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 08/06/2022 11:56, Tomer Maimon wrote:
-> This adds initial device tree support for the
-> Nuvoton NPCM845 Board Management controller (BMC) SoC family.
-> 
-> The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
-> have various peripheral IPs.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 197 ++++++++++++++++++
->  .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++++++
->  3 files changed, 274 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
->  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-> index 1ba04e31a438..7b107fa7414b 100644
-> --- a/arch/arm64/boot/dts/Makefile
-> +++ b/arch/arm64/boot/dts/Makefile
-> @@ -19,6 +19,7 @@ subdir-y += lg
->  subdir-y += marvell
->  subdir-y += mediatek
->  subdir-y += microchip
-> +subdir-y += nuvoton
->  subdir-y += nvidia
->  subdir-y += qcom
->  subdir-y += realtek
-> diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-> new file mode 100644
-> index 000000000000..97e108c50760
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-> @@ -0,0 +1,197 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
-> +
-> +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/ {
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +	interrupt-parent = <&gic>;
-> +
-> +	/* external reference clock */
-> +	clk_refclk: clk-refclk {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <25000000>;
+On Wed, Jun 8, 2022 at 10:56 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+> On 07. 06. 22, 16:19, Ilpo J=C3=A4rvinen wrote:
+> > On Tue, 7 Jun 2022, Jiri Slaby wrote:
 
-Ignored comment.
+...
 
-> +		clock-output-names = "refclk";
-> +	};
-> +
-> +	/* external reference clock for cpu. float in normal operation */
-> +	clk_sysbypck: clk-sysbypck {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <1000000000>;
+> > Doesn't this fix something?
+>
+> If you mean a Fixes tag, this is pre-git.
 
-Ignored comment.
+You may use history.git [1] for pregit SHAs.
 
-> +		clock-output-names = "sysbypck";
-> +	};
-> +
-> +	/* external reference clock for MC. float in normal operation */
-> +	clk_mcbypck: clk-mcbypck {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <1050000000>;
-> +		clock-output-names = "mcbypck";
-> +	};
-> +
-> +	soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		interrupt-parent = <&gic>;
-> +		ranges;
-> +
-> +		gcr: gcr@f0800000 {
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/
 
-Ignored comment.
-
-> +			compatible = "nuvoton,npcm845-gcr", "syscon",
-> +				"simple-mfd";
-
-This is not a simple-mfd... I see original bindings defined it that way,
-but why? I think they should be corrected - remove simple-mfd from the
-bindings and DTS.
-
-
-> +			reg = <0x0 0xf0800000 0x0 0x1000>;
-> +		};
-> +
-> +		gic: interrupt-controller@dfff9000 {
-> +			compatible = "arm,gic-400";
-> +			reg = <0x0 0xdfff9000 0x0 0x1000>,
-> +			      <0x0 0xdfffa000 0x0 0x2000>,
-> +			      <0x0 0xdfffc000 0x0 0x2000>,
-> +			      <0x0 0xdfffe000 0x0 0x2000>;
-> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-> +			#interrupt-cells = <3>;
-> +			interrupt-controller;
-> +			#address-cells = <0>;
-> +			ppi-partitions {
-> +				ppi_cluster0: interrupt-partition-0 {
-> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	ahb {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		interrupt-parent = <&gic>;
-> +		ranges;
-> +
-> +		rstc: rstc@f0801000 {
-
-Ignored comment.
-
-Four comments from v1 ignored in this patch alone.
-
-I'll stop reviewing, it is a waste of my time.
-
-NAK for this change.
-
-Best regards,
-Krzysztof
+--=20
+With Best Regards,
+Andy Shevchenko
