@@ -2,60 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C32542D54
-	for <lists+linux-serial@lfdr.de>; Wed,  8 Jun 2022 12:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1314A542DD3
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Jun 2022 12:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236555AbiFHKYU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 8 Jun 2022 06:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S237195AbiFHKak (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 8 Jun 2022 06:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiFHKXB (ORCPT
+        with ESMTP id S238141AbiFHK3x (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:23:01 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EF31F4D21
-        for <linux-serial@vger.kernel.org>; Wed,  8 Jun 2022 03:11:47 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id o10so26368963edi.1
-        for <linux-serial@vger.kernel.org>; Wed, 08 Jun 2022 03:11:47 -0700 (PDT)
+        Wed, 8 Jun 2022 06:29:53 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15889192C42
+        for <linux-serial@vger.kernel.org>; Wed,  8 Jun 2022 03:21:58 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id o7so7218140eja.1
+        for <linux-serial@vger.kernel.org>; Wed, 08 Jun 2022 03:21:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mygdx+EWNce3HPDkrN+VDocEDtdpxehguvhwMJDyyeI=;
-        b=PAAKqLB62Hf/CGzyWWAYkLIyFRIVbTaQknYin4XTddJKhLILqUaH/h+ROZBMEzpWG9
-         QvZNQgojCeVWEyVWWvz52S0tjhNRD5zUpMdD+SSF4PFZw4Kzmfa3vqiqt3HVjg/mIEgA
-         CUgcFu3b8gEdphdAFko5DtnElqBmE4T0Uk7F2XTl9/goXCdVZaoGEOgKv7QEO7Nhvoqh
-         ZtZx8/7BFoPuNznm/pVcXHiHxsqKTyH5/8i39BW8eM4qLIm/hxWdIsb5PmO+oNG5mqbI
-         3j5K3G0lMJISK4JnFAKs+uO/4kFyh4MSo16lSqaiAMgTjLW3UcBytzBo1km+4BzgDKWo
-         7hLg==
+        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
+        b=wDIlVKTWdiWhZ8wBWJY6cKiaQFw8rDj207bvbTp/h11ey3tP6nET1Ax/CdHjZfLIEV
+         bWnJx67yUwmZnAjjjd5Pnmh8VhMfnKk9ZGg+xoCyY9GLA3nn7mGO8lVMAqq0oiDn/3Gb
+         RdEmlcoDLk/NATza/gALLbwlAadFQrZRy9MfXKJk8j2q4AuOEEZ+zY7bealsPyXM8b4Y
+         ih+WRBDp4jQzRDyApQ0uO+L54w+TGVWPyUYM9CH3Ot8Y/Q0bHkVx4jxyiDXFnpuvcBiT
+         7waY/rXX63WmY9xsunaYaDRWKXRiJMMbWedZPkAKAn6m/lwDnhiKftwSsfbgmiXgBvuN
+         pGIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=mygdx+EWNce3HPDkrN+VDocEDtdpxehguvhwMJDyyeI=;
-        b=IWvPx336U9ahYIeEWF1xurUHKz0oHA2+LprNgr3wkiUuhiWhwc1traKiAKVn55lKlX
-         PPnJFKP21wK3VFjpomKryITw5wHGpqG9YlTn+/K05k6HOe1SbS8u+WLL3vg6ak9HETwO
-         FNPQ/S3jZkQo9MgWShW39TI6d/U7WFxbTC1XYszxG58iJ2Ju51cIhMd8+lue2v8hLGuV
-         flWYB9poEUmClKzEMqz1+5noiUTTPzCSLSLOAp56TkYSTMXD1sS4FdIbOH8r5oNaXG0m
-         EkOGcsMhp0nqlXz2tpSPytQ3CuARDpargNLMypP5kdX82SuDP2q4EUTl3d36QjcFe0PM
-         cniA==
-X-Gm-Message-State: AOAM532+0O1cwA2X7syv6h+BahAD5xZ++7TpMU0v6qLCraHdQgiZx90S
-        wp2HZa8yKoSczPO8ZvGxHUjsIQ==
-X-Google-Smtp-Source: ABdhPJz6yzZ0SRBcoSfjLq/PRs3lNBoAcpo1IGSW4puqEJVVItF1fjdsK3KOv8VpyJU205TN8zsZrA==
-X-Received: by 2002:aa7:d6d5:0:b0:431:b7c0:50c9 with SMTP id x21-20020aa7d6d5000000b00431b7c050c9mr4115115edr.62.1654683105981;
-        Wed, 08 Jun 2022 03:11:45 -0700 (PDT)
+        bh=+bPvkCIqs6A3Lw8cRRemx4/EkW0G1asPn8kHboHtVJY=;
+        b=jh6BMiddVLs8C62IZXWrwtJr4rwx6wMV9JMM+PO7lOKCyjm3Ff1r0Eiol+5Y4WfBjA
+         sVCXb849FR7nBxnBXRBv0c2nyuq8XwFHK5Isb6LcIu8N940KIdNAJuCsYWM+CQM7Fkdo
+         sGqvw6suRZyQObN9IJFvXSrDgSi4Abg8R11grtV8mPUkq7D9d2xKZ/iwFkSoihBqDFg4
+         ATfIj2zZZ64xOQsV+Gmqe9QeWml6dYgMSvCPpR8TFXn68Bu8B7g5/W+r1y6pXfR4eQVS
+         Qyc4rzdk/Oeo63ZqG4prYkAPUjBVJKi5T2eXiOVvck6BDELCYCiTPi1e4aBrifxCeVu3
+         4gNg==
+X-Gm-Message-State: AOAM531FlRPYqFODtoAIvCLhcF2hHX0mKY/D6czEGkUQz3vxzUkq79QS
+        gCYRu6+2dc3wI26Le/mUARec+Q==
+X-Google-Smtp-Source: ABdhPJw4saSPhMUohzNzjdscZN0KDbM9WKgE0UI3Y2mk91NtDGFQsXLJsTcltgv6Da2VMwekYNeMFA==
+X-Received: by 2002:a17:906:8416:b0:705:6a1b:e8ef with SMTP id n22-20020a170906841600b007056a1be8efmr30244309ejx.614.1654683716491;
+        Wed, 08 Jun 2022 03:21:56 -0700 (PDT)
 Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id m26-20020a50ef1a000000b0042bae6fbee2sm11815721eds.74.2022.06.08.03.11.43
+        by smtp.gmail.com with ESMTPSA id g3-20020aa7dd83000000b0042bc5a536edsm11883683edv.28.2022.06.08.03.21.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:11:45 -0700 (PDT)
-Message-ID: <add025b6-c622-b204-d39e-67b31878d37f@linaro.org>
-Date:   Wed, 8 Jun 2022 12:11:43 +0200
+        Wed, 08 Jun 2022 03:21:55 -0700 (PDT)
+Message-ID: <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org>
+Date:   Wed, 8 Jun 2022 12:21:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for
- NPCM8XX
+Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device
+ tree
 Content-Language: en-US
 To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
         tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
@@ -75,9 +75,9 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-13-tmaimon77@gmail.com>
+ <20220608095623.22327-19-tmaimon77@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220608095623.22327-13-tmaimon77@gmail.com>
+In-Reply-To: <20220608095623.22327-19-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,75 +91,137 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 On 08/06/2022 11:56, Tomer Maimon wrote:
-> Add binding document and device tree binding
-> constants for Nuvoton BMC NPCM8XX reset controller.
+> This adds initial device tree support for the
+> Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+> 
+> The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
+> have various peripheral IPs.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  .../bindings/reset/nuvoton,npcm-reset.yaml    |  13 +-
->  .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 128 ++++++++++++++++++
->  2 files changed, 140 insertions(+), 1 deletion(-)
->  create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 197 ++++++++++++++++++
+>  .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++++++
+>  3 files changed, 274 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+>  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
 > 
-> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-> index c6bbc1589ab9..93ea81686f58 100644
-> --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-> +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.yaml
-> @@ -9,9 +9,20 @@ title: Nuvoton NPCM Reset controller
->  maintainers:
->    - Tomer Maimon <tmaimon77@gmail.com>
->  
-> +description: |
-> +  The NPCM reset controller used to reset various set of peripherals. 
-> +  Please refer to reset.txt in this directory for common reset
-> +  controller binding usage.
-> +
-> +  For list of all valid reset indices see
-> +    <dt-bindings/reset/nuvoton,npcm7xx-reset.h> for Poleg NPCM7XX SoC,
-> +    <dt-bindings/reset/nuvoton,npcm8xx-reset.h> for Arbel NPCM8XX SoC.
-> +
->  properties:
->    compatible:
-> -    const: nuvoton,npcm750-reset
-> +    enum: 
-> +      - nuvoton,npcm750-reset        # Poleg NPCM7XX SoC
-> +      - nuvoton,npcm845-reset        # Arbel NPCM8XX SoC
->  
->    reg:
->      maxItems: 1
-> diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+> index 1ba04e31a438..7b107fa7414b 100644
+> --- a/arch/arm64/boot/dts/Makefile
+> +++ b/arch/arm64/boot/dts/Makefile
+> @@ -19,6 +19,7 @@ subdir-y += lg
+>  subdir-y += marvell
+>  subdir-y += mediatek
+>  subdir-y += microchip
+> +subdir-y += nuvoton
+>  subdir-y += nvidia
+>  subdir-y += qcom
+>  subdir-y += realtek
+> diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
 > new file mode 100644
-> index 000000000000..5b3b74534b50
+> index 000000000000..97e108c50760
 > --- /dev/null
-> +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> @@ -0,0 +1,128 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Again - ignored comment from v1.
-
-> +/*
-> + * Copyright (c) 2022 Nuvoton Technology corporation.
-> + * Author: Tomer Maimon <tmaimon77@gmail.com>
-> + */
+> +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+> @@ -0,0 +1,197 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
 > +
-> +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
-> +#define _DT_BINDINGS_NPCM8XX_RESET_H
+> +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
 > +
-> +/* represent reset register offset */
-> +#define NPCM8XX_RESET_IPSRST1		0x20
-> +#define NPCM8XX_RESET_IPSRST2		0x24
-> +#define NPCM8XX_RESET_IPSRST3		0x34
-> +#define NPCM8XX_RESET_IPSRST4		0x74
+> +/ {
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +	interrupt-parent = <&gic>;
 > +
-> +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
+> +	/* external reference clock */
+> +	clk_refclk: clk-refclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <25000000>;
 
-Again - ignored comment from v1. My last message was quite clear, wasn't it?
+Ignored comment.
 
-https://lore.kernel.org/all/4a69902f-a545-23a1-1430-e5ece16997e9@linaro.org/
+> +		clock-output-names = "refclk";
+> +	};
+> +
+> +	/* external reference clock for cpu. float in normal operation */
+> +	clk_sysbypck: clk-sysbypck {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <1000000000>;
 
-You ignored several of previous comments, so:
+Ignored comment.
 
-NAK.
+> +		clock-output-names = "sysbypck";
+> +	};
+> +
+> +	/* external reference clock for MC. float in normal operation */
+> +	clk_mcbypck: clk-mcbypck {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <1050000000>;
+> +		clock-output-names = "mcbypck";
+> +	};
+> +
+> +	soc {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		compatible = "simple-bus";
+> +		interrupt-parent = <&gic>;
+> +		ranges;
+> +
+> +		gcr: gcr@f0800000 {
+
+Ignored comment.
+
+> +			compatible = "nuvoton,npcm845-gcr", "syscon",
+> +				"simple-mfd";
+
+This is not a simple-mfd... I see original bindings defined it that way,
+but why? I think they should be corrected - remove simple-mfd from the
+bindings and DTS.
+
+
+> +			reg = <0x0 0xf0800000 0x0 0x1000>;
+> +		};
+> +
+> +		gic: interrupt-controller@dfff9000 {
+> +			compatible = "arm,gic-400";
+> +			reg = <0x0 0xdfff9000 0x0 0x1000>,
+> +			      <0x0 0xdfffa000 0x0 0x2000>,
+> +			      <0x0 0xdfffc000 0x0 0x2000>,
+> +			      <0x0 0xdfffe000 0x0 0x2000>;
+> +			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +			#interrupt-cells = <3>;
+> +			interrupt-controller;
+> +			#address-cells = <0>;
+> +			ppi-partitions {
+> +				ppi_cluster0: interrupt-partition-0 {
+> +					affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	ahb {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		compatible = "simple-bus";
+> +		interrupt-parent = <&gic>;
+> +		ranges;
+> +
+> +		rstc: rstc@f0801000 {
+
+Ignored comment.
+
+Four comments from v1 ignored in this patch alone.
+
+I'll stop reviewing, it is a waste of my time.
+
+NAK for this change.
 
 Best regards,
 Krzysztof
