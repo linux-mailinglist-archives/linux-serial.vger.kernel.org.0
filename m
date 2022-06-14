@@ -2,93 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5F154AFF7
-	for <lists+linux-serial@lfdr.de>; Tue, 14 Jun 2022 14:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C778154B05B
+	for <lists+linux-serial@lfdr.de>; Tue, 14 Jun 2022 14:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356582AbiFNMKa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 Jun 2022 08:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S241199AbiFNMQF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 Jun 2022 08:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356483AbiFNMK0 (ORCPT
+        with ESMTP id S1357012AbiFNMOV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:10:26 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93F748E7B;
-        Tue, 14 Jun 2022 05:10:24 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id s37so5708824pfg.11;
-        Tue, 14 Jun 2022 05:10:24 -0700 (PDT)
+        Tue, 14 Jun 2022 08:14:21 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B4033A3A
+        for <linux-serial@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id y16-20020a9d5190000000b0060c1292a5b9so6422809otg.3
+        for <linux-serial@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Mw0EQvrU7rnu0xsHd/85d5zmXokM1828mn5qv/9/7pY=;
-        b=IdHqyEQ5ZxrIpPpcXsfUe9kU0utW++E7PzruvcWj2bH+qq5j1rOoA/Zs4KRgJVDPJB
-         FwZEQH8gRuSUbEkeKH2O+CdzNYuYbC+yWsBpHAF3CuF5mTw231bjPkiuSq8dPiGJ8cRw
-         9C9qIkH6p3LbKyEVfCuH1mg6kttUOxvHFG1IBoCip6r/l6GK0U4YY65FjfOsnfvWY2qt
-         cVdRNmNhAH6OAxTV4+xu4PWGbKHX/qMoVIwVf3CC79ULH5BhY14zUz3Ory00Dc8wGq+v
-         v+OBeshLEcU0L5wQeEXDBuLURFZEhz4LFh4jkntnUVKau4UJaYHuzJJT2I67n4eL3qYm
-         yXtA==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
+        b=UNA00ExpSe/IYk9qRpK3nhNY3MQGhIZVH9b+TBjq+LdlUjXIh78z6gPdY8GF0sQHK1
+         HJ2n3gfPpUPhyyacfGQvRyEpF1QlynrQ30w+G5Aew5oVgyNdOMVYVhySdHNUBZObva2y
+         PuLir0DHRxYshYjhyycNkTLQ7VsAQLmTK6m5EVJfcKtgRbmxa7D08ugJk7y5pLRJ/ze1
+         6cL1+ieOt2sNltOPHDSKZebgxow79UdI2TUNij2cNTn50jsq9VR126vHNmWni88LExVM
+         7xKsxa1nHQ7JrwK4VAXG7j0wCn6FqCQrLI4ANDOm8760jdm8KbeqIvWnFua/uGvpfZQ4
+         nejg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Mw0EQvrU7rnu0xsHd/85d5zmXokM1828mn5qv/9/7pY=;
-        b=6Qyp9tJ9D22Np8w1GIGhJbfZ9tnTskJwEDUqnhVCMXA9/VMcztepSyAYtY4jMP97Go
-         O4vpA59MKwpmN+/oq16+jHT8BBazRNykT/YGC558iTGyDFwqrn02QN5A8ovdqQjPlyAq
-         5nHJaha9O+jwdXikfbtT8tyia4AO377ZKO4ovGuqVhh0b0WdBjiD/XgLEctNjcQaienA
-         9AdAnJNajIj34OPLi9RyB2Y26++sEL9W2LUYlJHhzesFHGhPyWPJ8bFGqjTIdPNn/1RM
-         nq2/H2pOHHLBImW/NMVhKH1mUHPogT02yhwq3NvqkXOCRojatQLg4QODTk11Vpd+4NBQ
-         WDSQ==
-X-Gm-Message-State: AOAM533Ubjkg6VqXN+dNOJG2Efyzwfr5y/PBceac9ESwVEL3w6CtjDbp
-        JQ/pN8CewUZuRCsMY1EY6Kw=
-X-Google-Smtp-Source: ABdhPJw4eED7I9ElEerUgaqmPKpAQIi60hKd1blZwLF8Y8+rUFNbj0QxxKpNqFpkHgkfj5dWcsQQZA==
-X-Received: by 2002:a05:6a00:9a7:b0:51c:3e28:1501 with SMTP id u39-20020a056a0009a700b0051c3e281501mr4414402pfg.86.1655208624312;
-        Tue, 14 Jun 2022 05:10:24 -0700 (PDT)
-Received: from localhost (subs02-180-214-232-21.three.co.id. [180.214.232.21])
-        by smtp.gmail.com with ESMTPSA id f125-20020a62db83000000b0051be7a8c008sm7435411pfg.30.2022.06.14.05.10.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 05:10:23 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 19:10:20 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] tty: Add closing marker into comment in tty_ldisc.h
-Message-ID: <Yqh6rL7nNvR3B5Ix@debian.me>
-References: <9bc6d45d-48c8-519-1646-78ba22505b1f@linux.intel.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
+        b=3VuUzLxjG9/RZpywqp7ULBWFIHeoxcNaydlRrg0lg7pjbFRbt8oREtCDyUmv/4GUkD
+         bvLlzm0GbxJwPTrk1SjZNDPgNoWOJ/GWIfI1WN4DCqpyXwTeUJeI0y+qVla71/bO+r/j
+         n2tW2m27RZxu+THRM+WOzfVv4OpbE09mu730K24FH+wUSYCTW6Piy+uG5Ddx03SlbObf
+         ZZdQKgDsGco0BRHYoA48UU5JWCwcwK3gSy9QbdgsyQKxSceOMNJHqmQYfKKnSIy5bx7U
+         kKsWAVHfYj/h6cP8YBSANsvKA29Ongz14r8rSSnBPm6LhzIJTV7wZuFC9vjvIv384hDd
+         hPeA==
+X-Gm-Message-State: AOAM533X1lwUOo7B9Ys2vmNPCsL2HMUwXM+WVeFhYmQ/0ygp/bmrVgPz
+        i8TWf4ZpBDACIus+uzi/yL2Ja3u7HCZ+wGLbCfI=
+X-Google-Smtp-Source: ABdhPJxH036Sb3549Y0f3hc7Zhwns93SCbnuybCuqmcROW8sIBDtc8O0vPfU6QLql+6epoXLTxfkWaoTwfvvDQjMptA=
+X-Received: by 2002:a05:6830:1691:b0:60c:1eb1:6ddf with SMTP id
+ k17-20020a056830169100b0060c1eb16ddfmr1906144otr.205.1655208853785; Tue, 14
+ Jun 2022 05:14:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9bc6d45d-48c8-519-1646-78ba22505b1f@linux.intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+Received: by 2002:a8a:c46:0:b0:42d:ab20:ed24 with HTTP; Tue, 14 Jun 2022
+ 05:14:13 -0700 (PDT)
+From:   Daniel Affum <danielaffum05@gmail.com>
+Date:   Tue, 14 Jun 2022 15:14:13 +0300
+Message-ID: <CAPkju_PQmptLCUNLrFjDqn4sN-xwFQ9XOg5Cv+KN_pd6V1aXpA@mail.gmail.com>
+Subject: Confirm Receipt
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:50:54AM +0300, Ilpo Järvinen wrote:
-> The closing `` is missing. Add it.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: 6bb6fa6908eb ("tty: Implement lookahead to process XON/XOFF timely")
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> 
+Hello Dear,
 
-Hi Ilpo,
+I am Daniel Affum a retired civil servant i have a  business to
+discuss with you from the Eastern part of Africa aimed at agreed
+percentage upon your acceptance of my hand in business and friendship.
+Kindly respond to me if you are interested to partner with me for an
+update.Very important.
 
-I have already posted the same fix at [1]. Thanks anyway.
-
-[1]: https://lore.kernel.org/linux-doc/20220614091214.511791-1-bagasdotme@gmail.com/
-
--- 
-An old man doll... just what I always wanted! - Clara
+Yours Sincerely,
+Daniel Affum.
+Reply to:danielaffum005@yahoo.com
