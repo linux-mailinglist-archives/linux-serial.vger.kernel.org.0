@@ -2,215 +2,139 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A5B54C781
-	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 13:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94AF54C8F6
+	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 14:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347562AbiFOL3d (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 15 Jun 2022 07:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S1348826AbiFOMtB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 Jun 2022 08:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347864AbiFOL3b (ORCPT
+        with ESMTP id S1345882AbiFOMs7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:29:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35B452E42
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 04:29:30 -0700 (PDT)
+        Wed, 15 Jun 2022 08:48:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A7618388;
+        Wed, 15 Jun 2022 05:48:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655292570; x=1686828570;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=1HschoPjd2zP8YgkMKNgIBoXbflqr6F1MDHBt9P9JEw=;
-  b=ByNQRIHUcJ97pIi4/LuJTjVhz2WEobb+sbYDFSLB/fyyanT12nXPKC8r
-   /yHF8fPyNgoUwLGw/aKQ1At2WhtbGyzUaIPAV1QMSP+OCvUBd2e1lhVBZ
-   ZkxM/MoObbEs1eraQbMHATxx6/EHJOcYIvLsiraqHSE1kzMSRYIuuPrdv
-   jGit1YF2ojFpP36Gr4Yr0vQ2paObzGQMx4RxISk3/F8WucOGQJLGIkJdw
-   dZj9l7E3Wxzmu5TNmoQG1Hc52iwptewIBgLdQtYdJHl7FzCFrGYGAjhMK
-   q9X0UwGwFAh3YB9MPeQ1C/Npc66S0DeASS2KNt49eY/qeGQ1WY6CEAJvL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="278975826"
+  t=1655297338; x=1686833338;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1LeS1Y26/DPWMeFDEpo81CHFZxsFn7K1q5Nm4vENnvY=;
+  b=aHAIcPEmBSwj6wthbLSY4XRgTSRSZbWkh2McHCdtfd2aGGeMRV4vFzDc
+   1KQu/UlwfOP1ov4RnZIjAzi9A5qWmtZtZNZXJK7NEa3FDJPMn7VJQ1QLU
+   FJ7CNnbquoQmGPf185AbgjqZwoTQAnszWwMVUMlC2r7w+76wuaxE64y8A
+   O8A7duGoLOjlNRTXen71dLkVsCXU8vbjts4mjjzhNmS1Zx+RKKnSTmCEf
+   yKd2oQAFb/ncSOGg0iy/anyN94JDVkcEIPTJol0z9pLmV4kDONpsfcdt9
+   oI60Fh1e+c9XsFFI99fl8kty7qjaGohEnK9AICVowXvbgAQUosdzvmK+F
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="261973569"
 X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="278975826"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 04:29:30 -0700
+   d="scan'208";a="261973569"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:48:46 -0700
 X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="640944514"
-Received: from mgrymel-mobl1.ger.corp.intel.com ([10.249.41.34])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 04:29:28 -0700
-Date:   Wed, 15 Jun 2022 14:29:26 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     cael <juanfengpy@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, benbjiang@tencent.com,
-        robinlai@tencent.com, linux-serial <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH v5] tty: fix hang on tty device with no_room set
-In-Reply-To: <1655291821-19676-1-git-send-email-juanfengpy@gmail.com>
-Message-ID: <4354aab5-e01d-c631-9479-cc7c9246d68@linux.intel.com>
-References: <YqmmdRynrDSzNL0W@kroah.com> <1655291821-19676-1-git-send-email-juanfengpy@gmail.com>
+   d="scan'208";a="687288095"
+Received: from mgrymel-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.34])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:48:43 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v7 0/6] Add RS485 9th bit addressing mode support to DW UART
+Date:   Wed, 15 Jun 2022 15:48:23 +0300
+Message-Id: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-915404693-1655292570=:1642"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+This patchset adds RS-485 9th bit addressing mode support to the DW
+UART driver and the necessary serial core bits to handle it. The
+addressing mode is configured through .rs485_config() as was requested
+during the review of the earlier versions. The line configuration
+related ADDRB is still kept in ktermios->c_cflag to be able to take
+account the extra addressing bit while calculating timing, etc. but it
+is set/cleared by .rs485_config().
 
---8323329-915404693-1655292570=:1642
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+PLEASE CHECK that the serial_rs485 .padding change looks OK (mainly
+that it won't add hole under some odd condition which would alter
+serial_rs485's sizeof)!
 
-On Wed, 15 Jun 2022, cael wrote:
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
 
-> From: caelli <juanfengpy@gmail.com>
-> 
-> We have met a hang on pty device, the reader was blocking
-> at epoll on master side, the writer was sleeping at wait_woken
-> inside n_tty_write on slave side, and the write buffer on
-> tty_port was full, we found that the reader and writer would
-> never be woken again and blocked forever.
-> 
-> The problem was caused by a race between reader and kworker:
-> n_tty_read(reader):  n_tty_receive_buf_common(kworker):
->                     |room = N_TTY_BUF_SIZE - (ldata->read_head - tail)
->                     |room <= 0
-> copy_from_read_buf()|
-> n_tty_kick_worker() |
->                     |ldata->no_room = true
-> 
-> After writing to slave device, writer wakes up kworker to flush
-> data on tty_port to reader, and the kworker finds that reader
-> has no room to store data so room <= 0 is met. At this moment,
-> reader consumes all the data on reader buffer and calls
-> n_tty_kick_worker to check ldata->no_room which is false and
-> reader quits reading. Then kworker sets ldata->no_room=true
-> and quits too.
-> 
-> If write buffer is not full, writer will wake kworker to flush data
-> again after following writes, but if write buffer is full and writer
-> goes to sleep, kworker will never be woken again and tty device is
-> blocked.
-> 
-> This problem can be solved with a check for read buffer size inside
-> n_tty_receive_buf_common, if read buffer is empty and ldata->no_room
-> is true, a call to n_tty_kick_worker is necessary to keep flushing
-> data to reader.
-> 
-> Signed-off-by: caelli <juanfengpy@gmail.com>
-> ---
-> Patch changelogs between v1 and v2:
-> 	-add barrier inside n_tty_read and n_tty_receive_buf_common;
-> 	-comment why barrier is needed;
-> 	-access to ldata->no_room is changed with READ_ONCE and WRITE_ONCE;
-> Patch changelogs between v2 and v3:
-> 	-in function n_tty_receive_buf_common, add unlikely to check
-> 	 ldata->no_room, eg: if (unlikely(ldata->no_room)), and READ_ONCE
-> 	 is removed here to get locality;
-> 	-change comment for barrier to show the race condition to make
-> 	 comment easier to understand;
-> Patch changelogs between v3 and v4:
-> 	-change subject from 'tty: fix a possible hang on tty device' to
-> 	 'tty: fix hang on tty device with no_room set' to make subject 
-> 	 more obvious;
-> Patch changelogs between v4 and v5:
-> 	-name is changed from cael to caelli, li is added as the family
-> 	 name and caelli is the fullname.
-> 
->  drivers/tty/n_tty.c | 41 +++++++++++++++++++++++++++++++++++++----
->  1 file changed, 37 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-> index efc72104c840..544f782b9a11 100644
-> --- a/drivers/tty/n_tty.c
-> +++ b/drivers/tty/n_tty.c
-> @@ -201,8 +201,8 @@ static void n_tty_kick_worker(struct tty_struct *tty)
->  	struct n_tty_data *ldata = tty->disc_data;
->  
->  	/* Did the input worker stop? Restart it */
-> -	if (unlikely(ldata->no_room)) {
-> -		ldata->no_room = 0;
-> +	if (unlikely(READ_ONCE(ldata->no_room))) {
-> +		WRITE_ONCE(ldata->no_room, 0);
->  
->  		WARN_RATELIMIT(tty->port->itty == NULL,
->  				"scheduling with invalid itty\n");
-> @@ -1632,7 +1632,7 @@ n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
->  			if (overflow && room < 0)
->  				ldata->read_head--;
->  			room = overflow;
-> -			ldata->no_room = flow && !room;
-> +			WRITE_ONCE(ldata->no_room, flow && !room);
->  		} else
->  			overflow = 0;
->  
-> @@ -1663,6 +1663,24 @@ n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
->  	} else
->  		n_tty_check_throttle(tty);
->  
-> +	if (unlikely(ldata->no_room)) {
-> +		/*
-> +		 * Barrier here is to ensure to read the latest read_tail in
-> +		 * chars_in_buffer() and to make sure that read_tail is not loaded
-> +		 * before ldata->no_room is set, otherwise, following race may occur:
-> +		 * n_tty_receive_buf_common() |n_tty_read()
-> +		 * chars_in_buffer() > 0      |
-> +		 *                            |copy_from_read_buf()->chars_in_buffer()==0
-> +		 *                            |if (ldata->no_room)
-> +		 * ldata->no_room = 1         |
-> +		 * Then both kworker and reader will fail to kick n_tty_kick_worker(),
-> +		 * smp_mb is paired with smp_mb() in n_tty_read().
-> +		 */
-> +		smp_mb();
-> +		if (!chars_in_buffer(tty))
-> +			n_tty_kick_worker(tty);
-> +	}
-> +
->  	up_read(&tty->termios_rwsem);
->  
->  	return rcvd;
-> @@ -2180,8 +2198,23 @@ static ssize_t n_tty_read(struct tty_struct *tty, struct file *file,
->  		if (time)
->  			timeout = time;
->  	}
-> -	if (tail != ldata->read_tail)
-> +	if (tail != ldata->read_tail) {
-> +		/*
-> +		 * Make sure no_room is not read before setting read_tail,
-> +		 * otherwise, following race may occur:
-> +		 * n_tty_read()		                |n_tty_receive_buf_common()
-> +		 * if(ldata->no_room)->false            |
-> +		 *			                |ldata->no_room = 1
-> +		 *                                      |char_in_buffer() > 0
-> +		 * ldata->read_tail = ldata->commit_head|
-> +		 * Then copy_from_read_buf() in reader consumes all the data
-> +		 * in read buffer, both reader and kworker will fail to kick
-> +		 * tty_buffer_restart_work().
-> +		 * smp_mb is paired with smp_mb() in n_tty_receive_buf_common().
-> +		 */
-> +		smp_mb();
->  		n_tty_kick_worker(tty);
-> +	}
->  	up_read(&tty->termios_rwsem);
->  
->  	remove_wait_queue(&tty->read_wait, &wait);
+v6 -> v7:
+- Fixed typos in documentation & comment
+- Changes lsr typing from unsigned int to u16
 
-I think the code looks fine. What I'm not entirely sure if there is 
-supposed to be some other backup mechanism to handle this case.
+v5 -> v6:
+- Reorder remaining patches
+- LSR changes are simpler due to helper added by LSR fix series
+- Depend on rs485_struct sanitization on catching much of invalid config
+- In order to be able to alter ADDRB in termios .c_cflag within
+  .rs485_config(), take termios_rwsem and pass ktermios to it.
+- Moved addressing mode setup entirely into .rs485_config()
+- Use ndelay() instead of udelay() (uart_port->frame_time is in nsecs)
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Note to Cael: you don't need to resend the patch just to add my reviewed 
-by, it would be picked by the tools automatically. But if you need to 
-resend due to other reasons, please add it in that case.
+Ilpo JÃ¤rvinen (6):
+  serial: 8250: make saved LSR larger
+  serial: 8250: create lsr_save_mask
+  serial: 8250_lpss: Use 32-bit reads
+  serial: take termios_rwsem for .rs485_config() & pass termios as param
+  serial: Support for RS-485 multipoint addresses
+  serial: 8250_dwlib: Support for 9th bit multipoint addressing
 
+ Documentation/driver-api/serial/driver.rst    |   2 +
+ .../driver-api/serial/serial-rs485.rst        |  26 ++++-
+ drivers/tty/serial/8250/8250.h                |   9 +-
+ drivers/tty/serial/8250/8250_core.c           |   4 +
+ drivers/tty/serial/8250/8250_dw.c             |   2 +-
+ drivers/tty/serial/8250/8250_dwlib.c          | 105 +++++++++++++++++-
+ drivers/tty/serial/8250/8250_exar.c           |  11 +-
+ drivers/tty/serial/8250/8250_fintek.c         |   2 +-
+ drivers/tty/serial/8250/8250_fsl.c            |   2 +-
+ drivers/tty/serial/8250/8250_ingenic.c        |   2 +-
+ drivers/tty/serial/8250/8250_lpc18xx.c        |   2 +-
+ drivers/tty/serial/8250/8250_lpss.c           |   2 +-
+ drivers/tty/serial/8250/8250_omap.c           |   7 +-
+ drivers/tty/serial/8250/8250_pci.c            |   2 +-
+ drivers/tty/serial/8250/8250_port.c           |  20 ++--
+ drivers/tty/serial/amba-pl011.c               |   2 +-
+ drivers/tty/serial/ar933x_uart.c              |   2 +-
+ drivers/tty/serial/atmel_serial.c             |   2 +-
+ drivers/tty/serial/fsl_lpuart.c               |   4 +-
+ drivers/tty/serial/imx.c                      |   2 +-
+ drivers/tty/serial/max310x.c                  |   2 +-
+ drivers/tty/serial/mcf.c                      |   3 +-
+ drivers/tty/serial/omap-serial.c              |   3 +-
+ drivers/tty/serial/sc16is7xx.c                |   2 +-
+ drivers/tty/serial/serial_core.c              |  26 ++++-
+ drivers/tty/serial/stm32-usart.c              |   2 +-
+ drivers/tty/tty_ioctl.c                       |   4 +
+ include/linux/serial_8250.h                   |   7 +-
+ include/linux/serial_core.h                   |   3 +-
+ include/uapi/asm-generic/termbits-common.h    |   1 +
+ include/uapi/linux/serial.h                   |  12 +-
+ 31 files changed, 222 insertions(+), 53 deletions(-)
 
 -- 
- i.
+2.30.2
 
---8323329-915404693-1655292570=:1642--
