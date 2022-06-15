@@ -2,203 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032EA54C73C
-	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 13:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F2654C7B7
+	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 13:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243960AbiFOLRQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 15 Jun 2022 07:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S245507AbiFOLts (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 Jun 2022 07:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbiFOLRO (ORCPT
+        with ESMTP id S237723AbiFOLtr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:17:14 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64FA3B3DC
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 04:17:13 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id z14so6187762pjb.4
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 04:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HROt9F3Q8hzxTeq/HaqrOEyNoRmpauqjeCqvroXNKgM=;
-        b=UMCGwYC+S4IbeHTAJ7B51ddkcuEv8wfVpCTITrkG8HyAv510J8R7Bgy+XrZCbAzjFn
-         0PgfdKmcby1A7l6eLSACZzBZCeGCzxzDBWCkm0BNkLnIWUaD9rEh7hEQMyNlhcyq1WvI
-         XT1B6S80K7k8ueP4oo2SLJTi7WE/FGjqzbjYeaH9vxCcYraX4LWJhZxehpRBZ6el5ZFy
-         afaioLEcbnZk00UMA4wK1XPOuH0FvUbVXBxqegw49PUv/imIzqThEasGoigq/UCtzPjW
-         FIl7DNsuEkUZOI8GBwP/gXQ4G0k0IcvHNQ39mcEputeilUKqZoGI9JMSBVFWGiFj9HiS
-         Fcig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=HROt9F3Q8hzxTeq/HaqrOEyNoRmpauqjeCqvroXNKgM=;
-        b=qPJKqs5smPeTFqIedhSqeCmSHCERqLN0AGbwZfxL5WwGoutIGCtne5SNJHBKUI728E
-         uIz/14fc8YQHgKLQlxbA/3eA7CzlJjCSBKkIWubbItpYeBl4Wh9xa8mCIP/xDad50iTv
-         kMqFYi9ZLf/K0UNwS+rC/bhVSL5WkIOUv6tHoH0NT5c6r7+PiLnQECkDA4DjzKVwjvHN
-         XSHLOvAhdhTQrVvVtldtQWbNpZCDNxWlDZiA9DGnobpcN5ijpEd+xe1+uk2MlHFsKAnH
-         2fmi/YdQLUrtcguINwIlyXIIeGY55mSDZJrivs6eRPBssXXtjYzxj23C5qPOv/76cGVT
-         F5sQ==
-X-Gm-Message-State: AJIora9znilgIu+j7C/9Rbn6eEj8S7+8z5N8gSjTcsnN42wFSbA6hMWd
-        X8Q3SlnPuje5zP5cXopZdJxqt+/QsJQPVA==
-X-Google-Smtp-Source: AGRyM1v8nWBK+Na+EY738x4CkFh1R4Kae7MJrc8c5q8qG/WW0+gecb2HLJ8k+sQq847oGnGJw1ypcQ==
-X-Received: by 2002:a17:90b:1c87:b0:1ca:f4e:4fbe with SMTP id oo7-20020a17090b1c8700b001ca0f4e4fbemr9670668pjb.159.1655291833319;
-        Wed, 15 Jun 2022 04:17:13 -0700 (PDT)
-Received: from localhost.localdomain ([43.155.90.222])
-        by smtp.googlemail.com with ESMTPSA id q21-20020a170902bd9500b0016760c06b76sm9017751pls.194.2022.06.15.04.17.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 Jun 2022 04:17:12 -0700 (PDT)
-From:   cael <juanfengpy@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        benbjiang@tencent.com, robinlai@tencent.com,
-        linux-serial@vger.kernel.org, juanfengpy@gmail.com
-Subject: [PATCH v5] tty: fix hang on tty device with no_room set
-Date:   Wed, 15 Jun 2022 19:17:01 +0800
-Message-Id: <1655291821-19676-1-git-send-email-juanfengpy@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <YqmmdRynrDSzNL0W@kroah.com>
-References: <YqmmdRynrDSzNL0W@kroah.com>
+        Wed, 15 Jun 2022 07:49:47 -0400
+X-Greylist: delayed 1877 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 04:49:45 PDT
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D03248331;
+        Wed, 15 Jun 2022 04:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QqKPV
+        BGfow1c4ZMlx0YSYTPT8kkKDZgzEU0kwf4SuA4=; b=iU8zznYKuLyz1drshpTqO
+        UeX4dBnETWilJ5oDPVg0IeQWmZAK+TVvp30JV3ZVerG0n6Zoeu5AmWPz1U9zy5pb
+        Qg3zT4bGYEhCYL9FDGlt1No38v/GeusGfJMRkDlqjwTRaDvN58dOr2r7tSni71L2
+        a+8ilkCnwIJdhU8q9+6h1M=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp1 (Coremail) with SMTP id C8mowAD3Jifbv6liZhOoEQ--.58335S2;
+        Wed, 15 Jun 2022 19:17:47 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     ldewangan@nvidia.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc:     linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, windhl@126.com
+Subject: [PATCH] drivers: tty: serial: Add missing of_node_put() in serial-tegra.c
+Date:   Wed, 15 Jun 2022 19:17:47 +0800
+Message-Id: <20220615111747.3963930-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8mowAD3Jifbv6liZhOoEQ--.58335S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurW3KFyUCryDCw13JFWrZrb_yoW3CFb_Ww
+        nrW3s7Zr4j9FsYqanavry3ur9IvFn8WFnYqF92qas7W345ZF4DJrWqqrn7A3sF93y7CrW3
+        CrsrWFsrAr1DXjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRimhFDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhwhF18RPTCjAAAAsE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: caelli <juanfengpy@gmail.com>
+In tegra_uart_init(), of_find_matching_node() will return a node
+pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-We have met a hang on pty device, the reader was blocking
-at epoll on master side, the writer was sleeping at wait_woken
-inside n_tty_write on slave side, and the write buffer on
-tty_port was full, we found that the reader and writer would
-never be woken again and blocked forever.
-
-The problem was caused by a race between reader and kworker:
-n_tty_read(reader):  n_tty_receive_buf_common(kworker):
-                    |room = N_TTY_BUF_SIZE - (ldata->read_head - tail)
-                    |room <= 0
-copy_from_read_buf()|
-n_tty_kick_worker() |
-                    |ldata->no_room = true
-
-After writing to slave device, writer wakes up kworker to flush
-data on tty_port to reader, and the kworker finds that reader
-has no room to store data so room <= 0 is met. At this moment,
-reader consumes all the data on reader buffer and calls
-n_tty_kick_worker to check ldata->no_room which is false and
-reader quits reading. Then kworker sets ldata->no_room=true
-and quits too.
-
-If write buffer is not full, writer will wake kworker to flush data
-again after following writes, but if write buffer is full and writer
-goes to sleep, kworker will never be woken again and tty device is
-blocked.
-
-This problem can be solved with a check for read buffer size inside
-n_tty_receive_buf_common, if read buffer is empty and ldata->no_room
-is true, a call to n_tty_kick_worker is necessary to keep flushing
-data to reader.
-
-Signed-off-by: caelli <juanfengpy@gmail.com>
+Signed-off-by: Liang He <windhl@126.com>
 ---
-Patch changelogs between v1 and v2:
-	-add barrier inside n_tty_read and n_tty_receive_buf_common;
-	-comment why barrier is needed;
-	-access to ldata->no_room is changed with READ_ONCE and WRITE_ONCE;
-Patch changelogs between v2 and v3:
-	-in function n_tty_receive_buf_common, add unlikely to check
-	 ldata->no_room, eg: if (unlikely(ldata->no_room)), and READ_ONCE
-	 is removed here to get locality;
-	-change comment for barrier to show the race condition to make
-	 comment easier to understand;
-Patch changelogs between v3 and v4:
-	-change subject from 'tty: fix a possible hang on tty device' to
-	 'tty: fix hang on tty device with no_room set' to make subject 
-	 more obvious;
-Patch changelogs between v4 and v5:
-	-name is changed from cael to caelli, li is added as the family
-	 name and caelli is the fullname.
+ drivers/tty/serial/serial-tegra.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/tty/n_tty.c | 41 +++++++++++++++++++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index efc72104c840..544f782b9a11 100644
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -201,8 +201,8 @@ static void n_tty_kick_worker(struct tty_struct *tty)
- 	struct n_tty_data *ldata = tty->disc_data;
- 
- 	/* Did the input worker stop? Restart it */
--	if (unlikely(ldata->no_room)) {
--		ldata->no_room = 0;
-+	if (unlikely(READ_ONCE(ldata->no_room))) {
-+		WRITE_ONCE(ldata->no_room, 0);
- 
- 		WARN_RATELIMIT(tty->port->itty == NULL,
- 				"scheduling with invalid itty\n");
-@@ -1632,7 +1632,7 @@ n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
- 			if (overflow && room < 0)
- 				ldata->read_head--;
- 			room = overflow;
--			ldata->no_room = flow && !room;
-+			WRITE_ONCE(ldata->no_room, flow && !room);
- 		} else
- 			overflow = 0;
- 
-@@ -1663,6 +1663,24 @@ n_tty_receive_buf_common(struct tty_struct *tty, const unsigned char *cp,
- 	} else
- 		n_tty_check_throttle(tty);
- 
-+	if (unlikely(ldata->no_room)) {
-+		/*
-+		 * Barrier here is to ensure to read the latest read_tail in
-+		 * chars_in_buffer() and to make sure that read_tail is not loaded
-+		 * before ldata->no_room is set, otherwise, following race may occur:
-+		 * n_tty_receive_buf_common() |n_tty_read()
-+		 * chars_in_buffer() > 0      |
-+		 *                            |copy_from_read_buf()->chars_in_buffer()==0
-+		 *                            |if (ldata->no_room)
-+		 * ldata->no_room = 1         |
-+		 * Then both kworker and reader will fail to kick n_tty_kick_worker(),
-+		 * smp_mb is paired with smp_mb() in n_tty_read().
-+		 */
-+		smp_mb();
-+		if (!chars_in_buffer(tty))
-+			n_tty_kick_worker(tty);
-+	}
-+
- 	up_read(&tty->termios_rwsem);
- 
- 	return rcvd;
-@@ -2180,8 +2198,23 @@ static ssize_t n_tty_read(struct tty_struct *tty, struct file *file,
- 		if (time)
- 			timeout = time;
- 	}
--	if (tail != ldata->read_tail)
-+	if (tail != ldata->read_tail) {
-+		/*
-+		 * Make sure no_room is not read before setting read_tail,
-+		 * otherwise, following race may occur:
-+		 * n_tty_read()		                |n_tty_receive_buf_common()
-+		 * if(ldata->no_room)->false            |
-+		 *			                |ldata->no_room = 1
-+		 *                                      |char_in_buffer() > 0
-+		 * ldata->read_tail = ldata->commit_head|
-+		 * Then copy_from_read_buf() in reader consumes all the data
-+		 * in read buffer, both reader and kworker will fail to kick
-+		 * tty_buffer_restart_work().
-+		 * smp_mb is paired with smp_mb() in n_tty_receive_buf_common().
-+		 */
-+		smp_mb();
- 		n_tty_kick_worker(tty);
-+	}
- 	up_read(&tty->termios_rwsem);
- 
- 	remove_wait_queue(&tty->read_wait, &wait);
+diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
+index d942ab152f5a..5c4850a3762c 100644
+--- a/drivers/tty/serial/serial-tegra.c
++++ b/drivers/tty/serial/serial-tegra.c
+@@ -1667,6 +1667,7 @@ static int __init tegra_uart_init(void)
+ 	node = of_find_matching_node(NULL, tegra_uart_of_match);
+ 	if (node)
+ 		match = of_match_node(tegra_uart_of_match, node);
++	of_node_put(node);
+ 	if (match)
+ 		cdata = match->data;
+ 	if (cdata)
 -- 
-2.27.0
+2.25.1
 
