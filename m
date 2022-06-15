@@ -2,47 +2,56 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9242454C2A8
-	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 09:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D909C54C2FE
+	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 09:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243643AbiFOHdt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 15 Jun 2022 03:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S234950AbiFOH6G (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 Jun 2022 03:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234935AbiFOHds (ORCPT
+        with ESMTP id S229460AbiFOH6F (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:33:48 -0400
-X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 00:33:45 PDT
-Received: from mail.gtsys.com.hk (tunnel316222-pt.tunnel.tserv25.sin1.ipv6.he.net [IPv6:2001:470:35:5f1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337A44754B
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 00:33:45 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id BA43422A1D83
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 15:25:17 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vjtFLi9xEl4X for <linux-serial@vger.kernel.org>;
-        Wed, 15 Jun 2022 15:25:17 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 97BE522A0306
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 15:25:17 +0800 (HKT)
-Received: from [10.128.1.32] (unknown [182.239.120.85])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 773FFC01303
-        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 15:25:17 +0800 (HKT)
-To:     linux-serial@vger.kernel.org
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Subject: serial: usb: cdc-acm: OMRON B5L ToF, device probe failed
-Message-ID: <ba16082c-f238-a724-0b13-8d298fa8c07b@gtsys.com.hk>
-Date:   Wed, 15 Jun 2022 15:25:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Jun 2022 03:58:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB66D27CE7
+        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 00:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655279884; x=1686815884;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ZWDpOVzOQZR0rD5CbXDvBhkXPTZ1fZKBX3NJCE2UioI=;
+  b=eOMZhOX/2GCuYYVdGfof+aRfSAbfaCQF+/t5cOHxM/nTrOPvrOOt2IL5
+   MIItQHL5zgC9tFZMHI646zbLk34SJJ66bM8wgkSrJRLC/9J0UriQBJkPt
+   F59FnGFBk/UowPa+Jq97lLsRIcxC8+I/L5Hlf/MrCo02kWl9tMNPWF/lx
+   WCejaa3olsWxrsJhx2oAXa+ZHSvxz3z9B/L515df7q5KV+nO99SNFU033
+   9dosg5qtp7C7KLPcMYV/5tHZ/kOAhmBmF3YUZsWxIu2Mwd8MCFjKk1Yqd
+   Myg2/PAR0QyumW1jFOF75ABlptWg5LBi/J4FX5T/nAka8L8WTG8VqDeZ0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="342835751"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="342835751"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 00:58:04 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="640859170"
+Received: from mgrymel-mobl1.ger.corp.intel.com ([10.249.41.34])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 00:58:02 -0700
+Date:   Wed, 15 Jun 2022 10:57:48 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     cael <juanfengpy@gmail.com>, Jiri Slaby <jirislaby@kernel.org>,
+        benbjiang@tencent.com, robinlai@tencent.com,
+        linux-serial <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v4] tty: fix hang on tty device with no_room set
+In-Reply-To: <YqlnVBY6IBSQnTFC@kroah.com>
+Message-ID: <a5acf481-1986-7fc1-541e-6a5dea7c33c@linux.intel.com>
+References: <Yqdx0W8HhvT5qZlP@kroah.com> <1655264710-26055-1-git-send-email-juanfengpy@gmail.com> <YqlnVBY6IBSQnTFC@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,144 +59,87 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi there,
+Hi Greg,
 
-yet an other cdc-acm which not probed and no /dev/ttyACM0 comes up.
+On Wed, 15 Jun 2022, Greg KH wrote:
 
-[  539.655588] usb 2-1.4.3: USB disconnect, device number 9
-[  568.792182] usb 2-1.4.3: new high-speed USB device number 10 using ehci-pci
-[  568.890554] usb 2-1.4.3: New USB device found, idVendor=0590, idProduct=00ca, 
-bcdDevice= 2.00
-[  568.890562] usb 2-1.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[  568.890566] usb 2-1.4.3: Product: OMRON B5L-001011
-[  568.890568] usb 2-1.4.3: Manufacturer: OMRON Corporation
-[  568.890571] usb 2-1.4.3: SerialNumber: 010000366A1
-[  568.945679] cdc_acm 2-1.4.3:1.0: Zero length descriptor references
-[  568.945690] cdc_acm: probe of 2-1.4.3:1.0 failed with error -22
-[  568.946477] usbcore: registered new interface driver cdc_acm
-[  568.946480] cdc_acm: USB Abstract Control Model driver for USB modems and 
-ISDN adapters
-
-so I set the quirk in the cdc-acm.c
-
-  { USB_DEVICE(0x0590, 0x00ca), /* Omron b5l */
-      .driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-  },
-
-and solved the error.
-
-[  724.148131] usbcore: deregistering interface driver cdc_acm
-[  725.766219] usb 2-1.4.3: USB disconnect, device number 10
-[  757.467770] usb 2-1.4.3: new high-speed USB device number 11 using ehci-pci
-[  757.566100] usb 2-1.4.3: New USB device found, idVendor=0590, idProduct=00ca, 
-bcdDevice= 2.00
-[  757.566109] usb 2-1.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[  757.566113] usb 2-1.4.3: Product: OMRON B5L-001011
-[  757.566115] usb 2-1.4.3: Manufacturer: OMRON Corporation
-[  757.566117] usb 2-1.4.3: SerialNumber: 010000366A1
-[  757.622501] usbcore: registered new interface driver cdc_acm
-[  757.622506] cdc_acm: USB Abstract Control Model driver for USB modems and 
-ISDN adapters
-
-
-But the kernel does not create the /dev/ttyACM0.
-
-Kernel is vanilla 5.15.47
-
-lsusb -v get me this.
-
-Bus 002 Device 014: ID 0590:00ca Omron Corp. OMRON B5L-001011
-Device Descriptor:
-   bLength                18
-   bDescriptorType         1
-   bcdUSB               2.00
-   bDeviceClass            2 Communications
-   bDeviceSubClass         2 Abstract (modem)
-   bDeviceProtocol         0
-   bMaxPacketSize0        64
-   idVendor           0x0590 Omron Corp.
-   idProduct          0x00ca
-   bcdDevice            2.00
-   iManufacturer           1 OMRON Corporation
-   iProduct                2 OMRON B5L-001011
-   iSerial                 3 010000366A1
-   bNumConfigurations      1
-   Configuration Descriptor:
-     bLength                 9
-     bDescriptorType         2
-     wTotalLength       0x002e
-     bNumInterfaces          1
-     bConfigurationValue     1
-     iConfiguration          0
-     bmAttributes         0x80
-       (Bus Powered)
-     MaxPower                4mA
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        0
-       bAlternateSetting       0
-       bNumEndpoints           4
-       bInterfaceClass         2 Communications
-       bInterfaceSubClass      2 Abstract (modem)
-       bInterfaceProtocol      0
-       iInterface              0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x01  EP 1 OUT
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0200  1x 512 bytes
-         bInterval               0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x82  EP 2 IN
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0200  1x 512 bytes
-         bInterval               0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x03  EP 3 OUT
-         bmAttributes            3
-           Transfer Type            Interrupt
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval              16
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x84  EP 4 IN
-         bmAttributes            3
-           Transfer Type            Interrupt
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval              16
-Device Qualifier (for other device speed):
-   bLength                10
-   bDescriptorType         6
-   bcdUSB               2.00
-   bDeviceClass            2 Communications
-   bDeviceSubClass         2 Abstract (modem)
-   bDeviceProtocol         0
-   bMaxPacketSize0        64
-   bNumConfigurations      1
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0001
-   Self Powered
+> On Wed, Jun 15, 2022 at 11:45:10AM +0800, cael wrote:
+> > We have met a hang on pty device, the reader was blocking
+> > at epoll on master side, the writer was sleeping at wait_woken
+> > inside n_tty_write on slave side, and the write buffer on
+> > tty_port was full, we found that the reader and writer would
+> > never be woken again and blocked forever.
+> > 
+> > The problem was caused by a race between reader and kworker:
+> > n_tty_read(reader):  n_tty_receive_buf_common(kworker):
+> >                     |room = N_TTY_BUF_SIZE - (ldata->read_head - tail)
+> >                     |room <= 0
+> > copy_from_read_buf()|
+> > n_tty_kick_worker() |
+> >                     |ldata->no_room = true
+> > 
+> > After writing to slave device, writer wakes up kworker to flush
+> > data on tty_port to reader, and the kworker finds that reader
+> > has no room to store data so room <= 0 is met. At this moment,
+> > reader consumes all the data on reader buffer and calls
+> > n_tty_kick_worker to check ldata->no_room which is false and
+> > reader quits reading. Then kworker sets ldata->no_room=true
+> > and quits too.
+> > 
+> > If write buffer is not full, writer will wake kworker to flush data
+> > again after following writes, but if write buffer is full and writer
+> > goes to sleep, kworker will never be woken again and tty device is
+> > blocked.
+> > 
+> > This problem can be solved with a check for read buffer size inside
+> > n_tty_receive_buf_common, if read buffer is empty and ldata->no_room
+> > is true, a call to n_tty_kick_worker is necessary to keep flushing
+> > data to reader.
+> > 
+> > Signed-off-by: cael <juanfengpy@gmail.com>
+> > ---
+> > Patch changelogs between v1 and v2:
+> > 	-add barrier inside n_tty_read and n_tty_receive_buf_common;
+> > 	-comment why barrier is needed;
+> > 	-access to ldata->no_room is changed with READ_ONCE and WRITE_ONCE;
+> > Patch changelogs between v2 and v3:
+> > 	-in function n_tty_receive_buf_common, add unlikely to check
+> > 	 ldata->no_room, eg: if (unlikely(ldata->no_room)), and READ_ONCE
+> > 	 is removed here to get locality;
+> > 	-change comment for barrier to show the race condition to make
+> > 	 comment easier to understand;
+> > Patch changelogs between v3 and v4:
+> > 	-change subject from 'tty: fix a possible hang on tty device' to
+> > 	 'tty: fix hang on tty device with no_room set' to make subject 
+> > 	 more obvious.
 
 
-Anything you have in mind?
+> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> a patch that has triggered this response.  He used to manually respond
+> to these common problems, but in order to save his sanity (he kept
+> writing the same thing over and over, yet to different people), I was
+> created.  Hopefully you will not take offence and will fix the problem
+> in your patch and resubmit it so that it can be accepted into the Linux
+> kernel tree.
+> 
+> You are receiving this message because of the following common error(s)
+> as indicated below:
 
-Thanks
-Chris
+[...snip...]
+
+> - This looks like a new version of a previously submitted patch, but you
+>   did not list below the --- line any changes from the previous version.
+>   Please read the section entitled "The canonical patch format" in the
+>   kernel file, Documentation/SubmittingPatches for what needs to be done
+>   here to properly describe this.
+
+I think your bot's changelog heuristic got it wrong here. He provided
+the list of changes as you can see above.
+
+(The name thing might still be valid though, I've no idea which names are 
+real and which are not).
+
+
+-- 
+ i.
 
