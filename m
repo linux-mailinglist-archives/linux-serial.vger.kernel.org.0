@@ -2,268 +2,243 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359C654C906
-	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 14:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F91D54C9E3
+	for <lists+linux-serial@lfdr.de>; Wed, 15 Jun 2022 15:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349061AbiFOMt0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 15 Jun 2022 08:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
+        id S1351741AbiFONdx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 15 Jun 2022 09:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349096AbiFOMtY (ORCPT
+        with ESMTP id S1351712AbiFONdv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:49:24 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A2222B26;
-        Wed, 15 Jun 2022 05:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655297356; x=1686833356;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CN4HUWoxMxuJTcRO+N+vJhass0BW9c8+/WydTlrOqBM=;
-  b=cBGANnXMtyHa3j90TpEaFzcy+2FlLag+punbtxcwjXTl2ZrY8s+/9jPN
-   xUaxDhJCCO3Xu5QqLEo8g02kJ/BR8bVoCZS96vbVDN/GHr81sNOievBVS
-   J1I664zrzWGA5URK0aqRLdp3fnxy+Kln9KWhQ46XiubBLhi/f624moWPa
-   HtaI5sXHwuZbDV+P4Vj9eSGvK9htEisHwKhcDK579g3oY0JiecM7kzo11
-   cuYr2HI+Y1/Q+5g1nVrUalHLnkotNwoGVvjsQCWpbBzwpf4yf6A2TliyZ
-   G2XpJ8hfhwfc9JYHLW16ZvtTtLmf+2VSJIAyh45pB8rt7Nmd3o+kNJhEF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="258800997"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="258800997"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:49:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="687288184"
-Received: from mgrymel-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.34])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:49:12 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>
-Subject: [PATCH v7 6/6] serial: 8250_dwlib: Support for 9th bit multipoint addressing
-Date:   Wed, 15 Jun 2022 15:48:29 +0300
-Message-Id: <20220615124829.34516-7-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
-References: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
+        Wed, 15 Jun 2022 09:33:51 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540FF24F32
+        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 06:33:49 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id x75so8680302qkb.12
+        for <linux-serial@vger.kernel.org>; Wed, 15 Jun 2022 06:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wt9UabH04m75py7CX2dKLL5QgLM6Mwlm7YmMo02jF10=;
+        b=LEZoi1U5j3VNo/i9Ti2xQGouITnkRKw2LEz6sbXwn5eShR+CzH3rXyb2bmg86JFUYp
+         jJ/McePvc2onCoPUBC1skdSB+nM6iHSg2VsydoMdED7dO6lvGI7ZvLjQKAzMHpAuKA6V
+         7X5tUdUvmRQTfcED1z1hcI1THYuNP45NVWxcOHaLSKOmLjGIUYoF6fAcIVNWHnSmXFW0
+         HyUmxOLnWlS0J1+ZsJMTwfPhsV1JXhX97tcqTii+E2jn/ZL/mfLOtsBIR2TPVuhn4vuj
+         0WVMOQLDAq8sqBw5xxNYprXGB/DDseYNu0WhkG9oASsCethfQtYMJ4pbyLpBWHyu649H
+         H/cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wt9UabH04m75py7CX2dKLL5QgLM6Mwlm7YmMo02jF10=;
+        b=crTsfbyUNsG5BA1EIt5W8S3fVCBf7Wo/VHs0eAq4sRTrw1/l4D4KZ0TLXWsyLdww+H
+         kMdOBsqr2eDgtNrbPKtOLnAQJ3Vx+vopWSVW54jTy4gW6/XVZiulXzO4gDOeh3I+Ta6t
+         f/6JIwLaD9ct8OSWaGs1NXlNPt29/lm0lvOcAzGO2ln+WnAAtJJ4rUEo5pAcqR5ceEQr
+         VTFRzh3UqopPw/5MihTQ6DCx+jl5WAjmW3cghECCWzhTCLIjOAaUM+zpNqZWAC5EoOGW
+         IAL/gH2BibZRnbqHkkGyLsy5TkIFIB+/5n3hov19ZBRBKC/rjgvYlfLQYwcOpwUL9w2H
+         pDKg==
+X-Gm-Message-State: AOAM532FSQJs0lqqb+AoxhAkvCY8pScnKd80dwdsIZTCl7vHaATFOPTS
+        GW3n0FVjrjyCOFNfzsSpSDabrSlxy6ebbNaGTHxr0bOjO/A=
+X-Google-Smtp-Source: ABdhPJwghxeiG3FayNDvHsCOS60o3rPiddFVO+tZ9yDnmEI0lnwVhX5mkZto9dQsfsDH6w+Rodg0XvsUyGlQbK7Q2Dg=
+X-Received: by 2002:a37:c20a:0:b0:6a6:bfa7:ca5a with SMTP id
+ i10-20020a37c20a000000b006a6bfa7ca5amr7776397qkm.283.1655300028925; Wed, 15
+ Jun 2022 06:33:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <YqmmdRynrDSzNL0W@kroah.com> <1655291821-19676-1-git-send-email-juanfengpy@gmail.com>
+ <4354aab5-e01d-c631-9479-cc7c9246d68@linux.intel.com>
+In-Reply-To: <4354aab5-e01d-c631-9479-cc7c9246d68@linux.intel.com>
+From:   caelli <juanfengpy@gmail.com>
+Date:   Wed, 15 Jun 2022 21:33:37 +0800
+Message-ID: <CAPmgiUJanAd9xAwi2NGiXBgST1Y64-=PhVFN7i91hkXSPk9eMQ@mail.gmail.com>
+Subject: Re: [PATCH v5] tty: fix hang on tty device with no_room set
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, benbjiang@tencent.com,
+        robinlai@tencent.com, linux-serial <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add 9th bit multipoint addressing mode for DW UART. 9th bit addressing
-can be used only when HW RS485 is available.
+It seems done, thanks for your opinion and help. The original patch
+(without barrier) was tested in our environment and seemed to work.
+The main idea is around when to call n_tty_kick_worker, calling it
+periodically still works, the current solution seems to be more
+reasonable and obvious.
 
-Updating RAR (receive address register) is bit tricky because busy
-indication is not be available when DW UART is strictly 16550
-compatible, which is the case with the hardware I was testing with. RAR
-should not be updated while receive is in progress which is now
-achieved by deasserting RE and waiting for one frame (in case rx would
-be in progress, the driver seems to have no way of knowing it w/o busy
-indication). Because of this complexity, it's better to avoid doing it
-unless really needed.
-
-Co-developed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Co-developed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Co-developed-by: Raymond Tan <raymond.tan@intel.com>
-Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-Co-developed-by: Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>
-Signed-off-by: Lakshmi Sowjanya <lakshmi.sowjanya.d@intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dwlib.c | 102 ++++++++++++++++++++++++++-
- 1 file changed, 101 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-index c9d9bd7f7bd9..fe6feb59e68d 100644
---- a/drivers/tty/serial/8250/8250_dwlib.c
-+++ b/drivers/tty/serial/8250/8250_dwlib.c
-@@ -3,8 +3,10 @@
- 
- #include <linux/bitops.h>
- #include <linux/bitfield.h>
-+#include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
-+#include <linux/math.h>
- #include <linux/property.h>
- #include <linux/serial_8250.h>
- #include <linux/serial_core.h>
-@@ -16,9 +18,18 @@
- #define DW_UART_DE_EN	0xb0 /* Driver Output Enable Register */
- #define DW_UART_RE_EN	0xb4 /* Receiver Output Enable Register */
- #define DW_UART_DLF	0xc0 /* Divisor Latch Fraction Register */
-+#define DW_UART_RAR	0xc4 /* Receive Address Register */
-+#define DW_UART_TAR	0xc8 /* Transmit Address Register */
-+#define DW_UART_LCR_EXT	0xcc /* Line Extended Control Register */
- #define DW_UART_CPR	0xf4 /* Component Parameter Register */
- #define DW_UART_UCV	0xf8 /* UART Component Version */
- 
-+/* Receive / Transmit Address Register bits */
-+#define DW_UART_ADDR_MASK		GENMASK(7, 0)
-+
-+/* Line Status Register bits */
-+#define DW_UART_LSR_ADDR_RCVD		BIT(8)
-+
- /* Transceiver Control Register bits */
- #define DW_UART_TCR_RS485_EN		BIT(0)
- #define DW_UART_TCR_RE_POL		BIT(1)
-@@ -28,6 +39,12 @@
- #define DW_UART_TCR_XFER_MODE_SW_DE_OR_RE	FIELD_PREP(DW_UART_TCR_XFER_MODE, 1)
- #define DW_UART_TCR_XFER_MODE_DE_OR_RE		FIELD_PREP(DW_UART_TCR_XFER_MODE, 2)
- 
-+/* Line Extended Control Register bits */
-+#define DW_UART_LCR_EXT_DLS_E		BIT(0)
-+#define DW_UART_LCR_EXT_ADDR_MATCH	BIT(1)
-+#define DW_UART_LCR_EXT_SEND_ADDR	BIT(2)
-+#define DW_UART_LCR_EXT_TRANSMIT_MODE	BIT(3)
-+
- /* Component Parameter Register bits */
- #define DW_UART_CPR_ABP_DATA_WIDTH	(3 << 0)
- #define DW_UART_CPR_AFCE_MODE		(1 << 4)
-@@ -82,9 +99,83 @@ void dw8250_do_set_termios(struct uart_port *p, struct ktermios *termios, struct
- 		p->status |= UPSTAT_AUTOCTS;
- 
- 	serial8250_do_set_termios(p, termios, old);
-+
-+	/* Filter addresses which have 9th bit set */
-+	p->ignore_status_mask |= DW_UART_LSR_ADDR_RCVD;
-+	p->read_status_mask |= DW_UART_LSR_ADDR_RCVD;
- }
- EXPORT_SYMBOL_GPL(dw8250_do_set_termios);
- 
-+/*
-+ * Wait until re is de-asserted for sure. An ongoing receive will keep
-+ * re asserted until end of frame. Without BUSY indication available,
-+ * only available course of action is to wait for the time it takes to
-+ * receive one frame (there might nothing to receive but w/o BUSY the
-+ * driver cannot know).
-+ */
-+static void dw8250_wait_re_deassert(struct uart_port *p)
-+{
-+	ndelay(p->frame_time);
-+}
-+
-+static void dw8250_update_rar(struct uart_port *p, u32 addr)
-+{
-+	u32 re_en = dw8250_readl_ext(p, DW_UART_RE_EN);
-+
-+	/*
-+	 * RAR shouldn't be changed while receiving. Thus, de-assert RE_EN
-+	 * if asserted and wait.
-+	 */
-+	if (re_en)
-+		dw8250_writel_ext(p, DW_UART_RE_EN, 0);
-+	dw8250_wait_re_deassert(p);
-+	dw8250_writel_ext(p, DW_UART_RAR, addr);
-+	if (re_en)
-+		dw8250_writel_ext(p, DW_UART_RE_EN, re_en);
-+}
-+
-+static void dw8250_rs485_set_addr(struct uart_port *p, struct serial_rs485 *rs485,
-+				  struct ktermios *termios)
-+{
-+	u32 lcr = dw8250_readl_ext(p, DW_UART_LCR_EXT);
-+
-+	if (rs485->flags & SER_RS485_ADDRB) {
-+		lcr |= DW_UART_LCR_EXT_DLS_E;
-+		if (termios)
-+			termios->c_cflag |= ADDRB;
-+
-+		if (rs485->flags & SER_RS485_ADDR_RECV) {
-+			u32 delta = p->rs485.flags ^ rs485->flags;
-+
-+			/*
-+			 * rs485 (param) is equal to uart_port's rs485 only during init
-+			 * (during init, delta is not yet applicable).
-+			 */
-+			if (unlikely(&p->rs485 == rs485))
-+				delta = rs485->flags;
-+
-+			if ((delta & SER_RS485_ADDR_RECV) ||
-+			    (p->rs485.addr_recv != rs485->addr_recv))
-+				dw8250_update_rar(p, rs485->addr_recv);
-+			lcr |= DW_UART_LCR_EXT_ADDR_MATCH;
-+		} else {
-+			lcr &= ~DW_UART_LCR_EXT_ADDR_MATCH;
-+		}
-+		if (rs485->flags & SER_RS485_ADDR_DEST) {
-+			/*
-+			 * Don't skip writes here as another endpoint could
-+			 * have changed communication line's destination
-+			 * address in between.
-+			 */
-+			dw8250_writel_ext(p, DW_UART_TAR, rs485->addr_dest);
-+			lcr |= DW_UART_LCR_EXT_SEND_ADDR;
-+		}
-+	} else {
-+		lcr = 0;
-+	}
-+	dw8250_writel_ext(p, DW_UART_LCR_EXT, lcr);
-+}
-+
- static int dw8250_rs485_config(struct uart_port *p, struct serial_rs485 *rs485,
- 			       struct ktermios *termios)
- {
-@@ -109,6 +200,9 @@ static int dw8250_rs485_config(struct uart_port *p, struct serial_rs485 *rs485,
- 		dw8250_writel_ext(p, DW_UART_DE_EN, 1);
- 		dw8250_writel_ext(p, DW_UART_RE_EN, 1);
- 	} else {
-+		if (termios)
-+			termios->c_cflag &= ~ADDRB;
-+
- 		tcr &= ~DW_UART_TCR_RS485_EN;
- 	}
- 
-@@ -123,6 +217,10 @@ static int dw8250_rs485_config(struct uart_port *p, struct serial_rs485 *rs485,
- 
- 	dw8250_writel_ext(p, DW_UART_TCR, tcr);
- 
-+	/* Addressing mode can only be set up after TCR */
-+	if (rs485->flags & SER_RS485_ENABLED)
-+		dw8250_rs485_set_addr(p, rs485, termios);
-+
- 	return 0;
- }
- 
-@@ -142,7 +240,8 @@ static bool dw8250_detect_rs485_hw(struct uart_port *p)
- 
- static const struct serial_rs485 dw8250_rs485_supported = {
- 	.flags = SER_RS485_ENABLED | SER_RS485_RX_DURING_TX | SER_RS485_RTS_ON_SEND |
--		 SER_RS485_RTS_AFTER_SEND,
-+		 SER_RS485_RTS_AFTER_SEND | SER_RS485_ADDRB | SER_RS485_ADDR_RECV |
-+		 SER_RS485_ADDR_DEST,
- };
- 
- void dw8250_setup_port(struct uart_port *p)
-@@ -155,6 +254,7 @@ void dw8250_setup_port(struct uart_port *p)
- 	pd->hw_rs485_support = dw8250_detect_rs485_hw(p);
- 	if (pd->hw_rs485_support) {
- 		p->rs485_config = dw8250_rs485_config;
-+		up->lsr_save_mask = LSR_SAVE_FLAGS | DW_UART_LSR_ADDR_RCVD;
- 		p->rs485_supported = &dw8250_rs485_supported;
- 	} else {
- 		p->rs485_config = serial8250_em485_config;
--- 
-2.30.2
-
+Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com> =E4=BA=8E2022=E5=B9=B46=
+=E6=9C=8815=E6=97=A5=E5=91=A8=E4=B8=89 19:29=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, 15 Jun 2022, cael wrote:
+>
+> > From: caelli <juanfengpy@gmail.com>
+> >
+> > We have met a hang on pty device, the reader was blocking
+> > at epoll on master side, the writer was sleeping at wait_woken
+> > inside n_tty_write on slave side, and the write buffer on
+> > tty_port was full, we found that the reader and writer would
+> > never be woken again and blocked forever.
+> >
+> > The problem was caused by a race between reader and kworker:
+> > n_tty_read(reader):  n_tty_receive_buf_common(kworker):
+> >                     |room =3D N_TTY_BUF_SIZE - (ldata->read_head - tail=
+)
+> >                     |room <=3D 0
+> > copy_from_read_buf()|
+> > n_tty_kick_worker() |
+> >                     |ldata->no_room =3D true
+> >
+> > After writing to slave device, writer wakes up kworker to flush
+> > data on tty_port to reader, and the kworker finds that reader
+> > has no room to store data so room <=3D 0 is met. At this moment,
+> > reader consumes all the data on reader buffer and calls
+> > n_tty_kick_worker to check ldata->no_room which is false and
+> > reader quits reading. Then kworker sets ldata->no_room=3Dtrue
+> > and quits too.
+> >
+> > If write buffer is not full, writer will wake kworker to flush data
+> > again after following writes, but if write buffer is full and writer
+> > goes to sleep, kworker will never be woken again and tty device is
+> > blocked.
+> >
+> > This problem can be solved with a check for read buffer size inside
+> > n_tty_receive_buf_common, if read buffer is empty and ldata->no_room
+> > is true, a call to n_tty_kick_worker is necessary to keep flushing
+> > data to reader.
+> >
+> > Signed-off-by: caelli <juanfengpy@gmail.com>
+> > ---
+> > Patch changelogs between v1 and v2:
+> >       -add barrier inside n_tty_read and n_tty_receive_buf_common;
+> >       -comment why barrier is needed;
+> >       -access to ldata->no_room is changed with READ_ONCE and WRITE_ONC=
+E;
+> > Patch changelogs between v2 and v3:
+> >       -in function n_tty_receive_buf_common, add unlikely to check
+> >        ldata->no_room, eg: if (unlikely(ldata->no_room)), and READ_ONCE
+> >        is removed here to get locality;
+> >       -change comment for barrier to show the race condition to make
+> >        comment easier to understand;
+> > Patch changelogs between v3 and v4:
+> >       -change subject from 'tty: fix a possible hang on tty device' to
+> >        'tty: fix hang on tty device with no_room set' to make subject
+> >        more obvious;
+> > Patch changelogs between v4 and v5:
+> >       -name is changed from cael to caelli, li is added as the family
+> >        name and caelli is the fullname.
+> >
+> >  drivers/tty/n_tty.c | 41 +++++++++++++++++++++++++++++++++++++----
+> >  1 file changed, 37 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
+> > index efc72104c840..544f782b9a11 100644
+> > --- a/drivers/tty/n_tty.c
+> > +++ b/drivers/tty/n_tty.c
+> > @@ -201,8 +201,8 @@ static void n_tty_kick_worker(struct tty_struct *tt=
+y)
+> >       struct n_tty_data *ldata =3D tty->disc_data;
+> >
+> >       /* Did the input worker stop? Restart it */
+> > -     if (unlikely(ldata->no_room)) {
+> > -             ldata->no_room =3D 0;
+> > +     if (unlikely(READ_ONCE(ldata->no_room))) {
+> > +             WRITE_ONCE(ldata->no_room, 0);
+> >
+> >               WARN_RATELIMIT(tty->port->itty =3D=3D NULL,
+> >                               "scheduling with invalid itty\n");
+> > @@ -1632,7 +1632,7 @@ n_tty_receive_buf_common(struct tty_struct *tty, =
+const unsigned char *cp,
+> >                       if (overflow && room < 0)
+> >                               ldata->read_head--;
+> >                       room =3D overflow;
+> > -                     ldata->no_room =3D flow && !room;
+> > +                     WRITE_ONCE(ldata->no_room, flow && !room);
+> >               } else
+> >                       overflow =3D 0;
+> >
+> > @@ -1663,6 +1663,24 @@ n_tty_receive_buf_common(struct tty_struct *tty,=
+ const unsigned char *cp,
+> >       } else
+> >               n_tty_check_throttle(tty);
+> >
+> > +     if (unlikely(ldata->no_room)) {
+> > +             /*
+> > +              * Barrier here is to ensure to read the latest read_tail=
+ in
+> > +              * chars_in_buffer() and to make sure that read_tail is n=
+ot loaded
+> > +              * before ldata->no_room is set, otherwise, following rac=
+e may occur:
+> > +              * n_tty_receive_buf_common() |n_tty_read()
+> > +              * chars_in_buffer() > 0      |
+> > +              *                            |copy_from_read_buf()->char=
+s_in_buffer()=3D=3D0
+> > +              *                            |if (ldata->no_room)
+> > +              * ldata->no_room =3D 1         |
+> > +              * Then both kworker and reader will fail to kick n_tty_k=
+ick_worker(),
+> > +              * smp_mb is paired with smp_mb() in n_tty_read().
+> > +              */
+> > +             smp_mb();
+> > +             if (!chars_in_buffer(tty))
+> > +                     n_tty_kick_worker(tty);
+> > +     }
+> > +
+> >       up_read(&tty->termios_rwsem);
+> >
+> >       return rcvd;
+> > @@ -2180,8 +2198,23 @@ static ssize_t n_tty_read(struct tty_struct *tty=
+, struct file *file,
+> >               if (time)
+> >                       timeout =3D time;
+> >       }
+> > -     if (tail !=3D ldata->read_tail)
+> > +     if (tail !=3D ldata->read_tail) {
+> > +             /*
+> > +              * Make sure no_room is not read before setting read_tail=
+,
+> > +              * otherwise, following race may occur:
+> > +              * n_tty_read()                         |n_tty_receive_bu=
+f_common()
+> > +              * if(ldata->no_room)->false            |
+> > +              *                                      |ldata->no_room =
+=3D 1
+> > +              *                                      |char_in_buffer()=
+ > 0
+> > +              * ldata->read_tail =3D ldata->commit_head|
+> > +              * Then copy_from_read_buf() in reader consumes all the d=
+ata
+> > +              * in read buffer, both reader and kworker will fail to k=
+ick
+> > +              * tty_buffer_restart_work().
+> > +              * smp_mb is paired with smp_mb() in n_tty_receive_buf_co=
+mmon().
+> > +              */
+> > +             smp_mb();
+> >               n_tty_kick_worker(tty);
+> > +     }
+> >       up_read(&tty->termios_rwsem);
+> >
+> >       remove_wait_queue(&tty->read_wait, &wait);
+>
+> I think the code looks fine. What I'm not entirely sure if there is
+> supposed to be some other backup mechanism to handle this case.
+>
+> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+>
+> Note to Cael: you don't need to resend the patch just to add my reviewed
+> by, it would be picked by the tools automatically. But if you need to
+> resend due to other reasons, please add it in that case.
+>
+>
+> --
+>  i.
