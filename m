@@ -2,108 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABE4552ED1
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Jun 2022 11:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F21E553278
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Jun 2022 14:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349484AbiFUJkS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 21 Jun 2022 05:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S1348761AbiFUMuL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 21 Jun 2022 08:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349362AbiFUJkI (ORCPT
+        with ESMTP id S239785AbiFUMuK (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 21 Jun 2022 05:40:08 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D075127CD0
-        for <linux-serial@vger.kernel.org>; Tue, 21 Jun 2022 02:39:55 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id w6so23509254ybl.4
-        for <linux-serial@vger.kernel.org>; Tue, 21 Jun 2022 02:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=NKhg6kSkfnglJlsPDVUWhCY3Iibudx7OhZC5CePFgeNekYJKNrcmU8wB8gkktmjPqY
-         f0o4DET3nwW7oGb1WQAmWVCm6yLISrVrQXMY/9qoCppMNLX7K/jA/JZ+JMs1mNT38j+N
-         qSlM2vTiSOIkQo5cZ6oY4dkMVda7fWn0vzKRT295Q67AStI8u0BTanvw38uSxo4IMvFm
-         mtbeFJOQugEk6bmbrSLJZHxNWvSEoU0AT9TQz59V3jAGDZbWiI6U0Fx8UlroTYMr9wGQ
-         +xC78kHT5AZK7k/f6wmWhdDj3ThC5Cy20ctCKCcYvb/idPExEpgvQXB/UX/ziCu3vO07
-         Q2/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=mBCN1tq+UepcGL0MkmLZo3nyG1DviSjfc/2auoTAhSljeyGvgiUsp9rTnPnvL1wyzS
-         B3sFbnE7MEg8vex45KoULBP4a56cpmPR1P/8hhedZsMgX9xom/+bh7mXcToKW+TltGGy
-         zUCrym0xdGnsokj2lD5wglHLQSCqr/HI7ovyjW3jUA5UdbcJeMoJbod6r1J8uQ+jdbem
-         E9mT1d9Bw4JymRxueXne5/IVgePybsC5E+uZ+XAuKTTT//zd8EzPqJMHYrdPWr6TwafH
-         3FHgWSFzS/54l+TNZguLAvLDKaSpQJ3ROCCHS0Ac3idz9NZP/ZZkCFnwgN+ZKPE9s3W/
-         Eu3g==
-X-Gm-Message-State: AJIora8DV5LdpxJaHNTxts3VMMaGT7+jlC/SrupoxBKZFD/F9pk5Dapu
-        f+0Tq2wVIYA+AJpeQ7lKUvkRsChswYkjvvd4qnzri8gkRG249uH2
-X-Google-Smtp-Source: AGRyM1sTF/SvvxCyraPE52znD36ZX02jNmxmam87lP8bWzXT3yTfChS1a9JgJI9LjBXh9tpS4qLO5E/t+5efudcEruY=
-X-Received: by 2002:a0d:d7c7:0:b0:317:bfe8:4f2 with SMTP id
- z190-20020a0dd7c7000000b00317bfe804f2mr12417910ywd.276.1655804384555; Tue, 21
- Jun 2022 02:39:44 -0700 (PDT)
+        Tue, 21 Jun 2022 08:50:10 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD602872B;
+        Tue, 21 Jun 2022 05:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655815809; x=1687351809;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iFtimXlg9dBBb6HEEdgVlKr19m9u0dmma7Bcoe3d/kA=;
+  b=AafMsW+POJs1kdIctjFIR/nH0blad+K1W4slcr2+1AmiuhBRHqJ8L/qX
+   RBLXRu7t4O5hXXWdMthAwNverqbrcM2UnLY/ICOVzLCWlQk8jwXf/jDae
+   HJZvNiMOakoRm2D1AxkAFSYcTgfIGmZSz6vKuZyzXG66Ecs6k2XbQIcIM
+   kKmZEIDr2XVqU+WFBBBXlej0mIJlaLiWxr5PWVvKaUe4RN1Ag7Nm8Crcn
+   feR7IcMEivD07zpl81nv6JxOmYf2BuSgKhC5DAQdh4sg3sHOD6GFnKatP
+   8doe8louxQt7H0h7VXWuq37g9pjmz/58LMhaKB1iJhLA3JgG367VGBdtc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="341792947"
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="341792947"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:50:09 -0700
+X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
+   d="scan'208";a="833561536"
+Received: from zjeffery-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.211])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 05:50:06 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 0/6] serial: A few cleanups
+Date:   Tue, 21 Jun 2022 15:49:52 +0300
+Message-Id: <20220621124958.3342-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a05:7010:e10a:b0:2d9:e631:94d0 with HTTP; Tue, 21 Jun 2022
- 02:39:44 -0700 (PDT)
-Reply-To: dimitryedik@gmail.com
-From:   Dimitry Edik <lsbthdwrds@gmail.com>
-Date:   Tue, 21 Jun 2022 02:39:44 -0700
-Message-ID: <CAGrL05aBO8rbFuij24J-APa+Luis69gEjhj35iv_GZfkHCVYDQ@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b33 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lsbthdwrds[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Dear,
+Here are a few cleanup to semi-random things I've come across while
+reading the code.
 
-My Name is Dimitry Edik from Russia A special assistance to my Russia
-boss who deals in oil import and export He was killed by the Ukraine
-soldiers at the border side. He supplied
-oil to the Philippines company and he was paid over 90 per cent of the
-transaction and the remaining $18.6 Million dollars have been paid into a
-Taiwan bank in the Philippines..i want a partner that will assist me
-with the claims. Is a (DEAL ) 40% for you and 60% for me
-I have all information for the claims.
-Kindly read and reply to me back is 100 per cent risk-free
+The series had initially only patches 3-6 but then msm_serial exploded
+during build because of redefining UART_SCR so I had to resolve the
+namespace conflict. It would have probably being avoided if there would
+have been linux/serial_reg.h but it was recently ruled out:
 
-Yours Sincerely
-Dimitry Edik
+  https://lore.kernel.org/lkml/CAPDyKFqHLQ8YTc3wzaFOdAA7Ay9RBEfdQC5uN574=oMavi6iCQ@mail.gmail.com/t/
+
+(Now there would 3 items already in serial_reg.h already but it would
+leave only async_icount into serial.h so the same problem in other
+file).
+
+v2:
+- Fix commit summary line prefix
+
+Ilpo Järvinen (6):
+  serial: msm: Convert container_of UART_TO_MSM to static inline
+  serial: msm: Rename UART_* defines to MSM_UART_*
+  serial: Use bits for UART_LSR_BRK_ERROR_BITS/MSR_ANY_DELTA
+  serial: 8250: Use C99 array initializer & define UART_REG_UNMAPPED
+  serial: Use UART_XMIT_SIZE
+  serial: Consolidate BOTH_EMPTY use
+
+ arch/mips/ath79/early_printk.c           |   9 +-
+ drivers/accessibility/speakup/serialio.h |   3 +-
+ drivers/tty/amiserial.c                  |  18 +-
+ drivers/tty/mips_ejtag_fdc.c             |   2 +-
+ drivers/tty/serial/8250/8250_early.c     |   4 +-
+ drivers/tty/serial/8250/8250_port.c      |  50 +--
+ drivers/tty/serial/meson_uart.c          |   2 +-
+ drivers/tty/serial/msm_serial.c          | 550 ++++++++++++-----------
+ drivers/tty/serial/omap-serial.c         |   7 +-
+ drivers/tty/serial/owl-uart.c            |   2 +-
+ drivers/tty/serial/pch_uart.c            |   7 +-
+ drivers/tty/serial/pxa.c                 |   5 +-
+ drivers/tty/serial/rda-uart.c            |   2 +-
+ drivers/tty/serial/sunsu.c               |   4 +-
+ drivers/tty/serial/vr41xx_siu.c          |   4 +-
+ include/linux/serial.h                   |  15 +-
+ include/linux/serial_core.h              |   1 +
+ include/uapi/linux/serial_reg.h          |   4 +-
+ 18 files changed, 343 insertions(+), 346 deletions(-)
+
+-- 
+2.30.2
+
