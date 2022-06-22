@@ -2,96 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B42554FBA
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Jun 2022 17:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC905551E5
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Jun 2022 19:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359484AbiFVPro (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 22 Jun 2022 11:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S1359727AbiFVRFF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 22 Jun 2022 13:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359075AbiFVPrn (ORCPT
+        with ESMTP id S1358953AbiFVRFF (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:47:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208553A5DF;
-        Wed, 22 Jun 2022 08:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655912842;
-        bh=P76JCAoBEwYxagrCxqz0x5UalaF1hec9VzDLAcDAK90=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=gI1K62Ac1Y8Zx3itipz4l03G0B4VpHAqQssoOhMy45OJHJ7d6vl6R48KWA23w5wHX
-         lLpcQtAu5Z9rWcNJ3tME5m7Xum9Y/CA553ucU33xukIAk0a0rh5Ww1jYD9CkfhF0xb
-         OHrcXkxYHMChG59WJajHANGnes5KYp99xt9wn8f8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([46.223.2.22]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N9Mta-1naV942eE0-015Fq4; Wed, 22
- Jun 2022 17:47:22 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, vz@mleia.com,
+        Wed, 22 Jun 2022 13:05:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBBD3ED37;
+        Wed, 22 Jun 2022 10:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655917503; x=1687453503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4ruRy4f9EvQNfXtXFVy/TM7+tPV8XW6BRuYpvrsY5Ws=;
+  b=VwG/VIW21YUvoT2UqK38rg7DdX/YQYy/iewuph5SDdmjPuVf2kwRh5WI
+   MGSgYAZyErw1w+OhKcsi5Kuo1nTlb0lyO137vTBvFvFwhn/2+aA7V9h8+
+   Yz8wIinSqcy/Qbk9zO2NYkOOr79/1kMVpF2wxHMQlwAX7+eNQD5XZGHb4
+   c0ERYdoqYtH910aEidPXzC6O32qPOlY3YOz4Nhr7TAhwP1YiOpUzdiO6Z
+   UznLAKfeEmOpCqrvsEXLjALyENeGYSZhdHEvocxx2TzpN1vwZHThz0MWU
+   +xXrMjua9aKyNmaE+80GedYImT35A4mLnBiiHuNiCL4Tk4TnI9S/tw0Wd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260297722"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="260297722"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 10:05:03 -0700
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="644294273"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 10:05:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o43mg-000sUA-HH;
+        Wed, 22 Jun 2022 20:04:54 +0300
+Date:   Wed, 22 Jun 2022 20:04:54 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vz@mleia.com,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         lukas@wunner.de, p.rosenberger@kunbus.com,
         Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: [PATCH 8/8] serial: 8250: lpc18xx: Remove redundant sanity check for RS485 flags
-Date:   Wed, 22 Jun 2022 17:46:59 +0200
-Message-Id: <20220622154659.8710-9-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
+Subject: Re: [PATCH 1/8] serial: core: only get RS485 termination gpio if
+ supported
+Message-ID: <YrNLtg+BZlwKsBbF@smile.fi.intel.com>
 References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
+ <20220622154659.8710-2-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:WKHLwSJiQn/lE+w+iwlvUVlY+hSjpvhwDHxzI/x8AFxyiTj4QCk
- GTI2fk9fSpQP3EnqiPKgLA/I98tb8vKF0Q4dwXlGNBk+RnRJLkvLOrJCT6JkraJYyX6hvfP
- vss2kjip1uOIBclB0Issx6scJCOIPxFsNJAMk229SIDjibTBwNB7AZyWoVlB4lRWToVKN2K
- d8myOgdT/Z2X1ICVbHXYw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iVH+DtPsNl4=:I3yIIZMg6ftu/BPmnCuV47
- yr8woBxBq0n/NEkF8Th+CcdZiXC7vlGyp/DN5B2FPGur7o6AD7/UwSCwFC2WWldf3HpK6OraY
- evL1IQ3wIeTMr5JCtM40+ZHdHTLlcvRwcuCWeGoM/CiQsWG88IrqJofXafcbYofa+QKC/oI9L
- pmXngFqXuXxjkbJ2PKUg5Rp3Zo85K16r1yP1QghTo1I2xmvY3m/T/Lc3GvKS7J6XIhHHZdYBF
- 9OzaTIur2dtfwY+Lbl+QGrlsb3ktTV7vodgPnuegX53RClh4IZrvTgmXSM/Y/mQNwLz+zfhBC
- eMr0c5O1pwibXgELsJcJ8RTCFDQpSuxV2rOXjS+95feRbXLicHC7fFIKDquNnvkH+mwAcnmxz
- neQzO8FAVdvlwHRC7xyGO0GXMnGK1x9JTDvsnLZ98nCC2K1/myWxTM2FPPOeOTB1ULtIkXbKM
- hW8k66Tj2b6vHr9QVzNB0AEipTEf64Aeq+MCMfty+xgj9TPu+WeIgn4OjD53jQ0M3cnjCLFSR
- BMvhayoW0tLe7ByS8THdHvKlVD9cRasuODbeO3jEHj52xUUtXiegDK50ZGp+FQ4qHqCfQenLW
- iV4Xi9E7umRJQ9hs5pugWESRDR8jSDF9DcM38ZNfaTQaNtG+QAequSopBEmdNawhDl52X8AiD
- fKbSe3wwSvJ0Z2TwwaZqR3/vjsVEy1WJhkYXgJwO8m2lrcLdAMI17nC6k/qL10m4kyEsyV+u4
- IpQbpuAybwIOQ9O3yM2e6m+xfO+r1tAOUxlkzv1ZrRsvrcx00oPNPJrq4zgObvsu/zi76iQZd
- TeGcZY8stRdVkgGhiDln3yQ5LxmqSWr4i9zIcJFz0zfsobOVbHPx2Wo3c+zp4Qo3d2WvKMC9S
- qKHcZngglEppklaE/EDJIX83T9lPMDdg2yI9oWCHxLYDvguUFYIg8xcVE0mWIkEQcRILkVxvV
- k5Ualh/6T56zYez6mbthhUVMnCfMtJCkdAq2PxJbyJYovtnPZpa8Ce8vYjLUKWppwDmK5FHDv
- JXG7eX2lcdFtWpaHT7R5y6uoXJBngAj48KDaqlLvRd9d+h+2xy63+q/HpgurFGdhAmyCayLSR
- bDyfDbXYqaQ1UyRrhTcSQwcbo0ELvbYfNOLdMgV/G0PN2Ko6+H/mfLWcA==
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622154659.8710-2-LinoSanfilippo@gmx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkJlZm9yZSB0
-aGUgZHJpdmVycyByczQ4NV9jb25maWcoKSBmdW5jdGlvbiBpcyBjYWxsZWQgdGhlIHNlcmlhbCBj
-b3JlCmFscmVhZHkgZW5zdXJlcyB0aGF0IG9ubHkgb25lIG9mIGJvdGggb3B0aW9ucyBSVFMgb24g
-c2VuZCBvciBSVFMgYWZ0ZXIgc2VuZAppcyBzZXQuIFNvIHJlbW92ZSB0aGUgY29uY2VybmluZyBz
-YW5pdHkgY2hlY2sgaW4gdGhlIGRyaXZlciBmdW5jdGlvbiB0bwphdm9pZCByZWR1bmRhbmN5LgoK
-U2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4K
-LS0tCiBkcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX2xwYzE4eHguYyB8IDYgKy0tLS0tCiAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
-IGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9scGMxOHh4LmMgYi9kcml2ZXJzL3R0eS9z
-ZXJpYWwvODI1MC84MjUwX2xwYzE4eHguYwppbmRleCAzYTFjYjUxY2JjOTEuLjIxODk2YWRlYjE3
-MiAxMDA2NDQKLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9scGMxOHh4LmMKKysr
-IGIvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9scGMxOHh4LmMKQEAgLTQ0LDEyICs0NCw4
-IEBAIHN0YXRpYyBpbnQgbHBjMTh4eF9yczQ4NV9jb25maWcoc3RydWN0IHVhcnRfcG9ydCAqcG9y
-dCwKIAkJcnM0ODVfY3RybF9yZWcgfD0gTFBDMThYWF9VQVJUX1JTNDg1Q1RSTF9OTU1FTiB8CiAJ
-CQkJICBMUEMxOFhYX1VBUlRfUlM0ODVDVFJMX0RDVFJMOwogCi0JCWlmIChyczQ4NS0+ZmxhZ3Mg
-JiBTRVJfUlM0ODVfUlRTX09OX1NFTkQpIHsKKwkJaWYgKHJzNDg1LT5mbGFncyAmIFNFUl9SUzQ4
-NV9SVFNfT05fU0VORCkKIAkJCXJzNDg1X2N0cmxfcmVnIHw9IExQQzE4WFhfVUFSVF9SUzQ4NUNU
-UkxfT0lOVjsKLQkJCXJzNDg1LT5mbGFncyAmPSB+U0VSX1JTNDg1X1JUU19BRlRFUl9TRU5EOwot
-CQl9IGVsc2UgewotCQkJcnM0ODUtPmZsYWdzIHw9IFNFUl9SUzQ4NV9SVFNfQUZURVJfU0VORDsK
-LQkJfQogCX0KIAogCWlmIChyczQ4NS0+ZGVsYXlfcnRzX2FmdGVyX3NlbmQpIHsKLS0gCjIuMzYu
-MQoK
+On Wed, Jun 22, 2022 at 05:46:52PM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> In uart_get_rs485_mode() only try to get a termination GPIO if RS485 bus
+> termination is supported by the driver.
+
+I'm not sure I got the usefulness of this change.
+We request GPIO line as optional, so if one is defined it in the DT/ACPI, then
+they probably want to (opportunistically) have it.
+
+The certain driver may or may not utilize this GPIO.
+
+With your change it's possible to have a DTS where GPIO line defined in a
+broken way and user won't ever know about it, if they are using platforms
+without termination support.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
