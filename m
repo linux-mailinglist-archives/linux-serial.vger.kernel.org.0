@@ -2,128 +2,114 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A852155B2A8
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Jun 2022 17:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0483F55B3B8
+	for <lists+linux-serial@lfdr.de>; Sun, 26 Jun 2022 21:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiFZPmB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Jun 2022 11:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S232133AbiFZTUd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Jun 2022 15:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiFZPmA (ORCPT
+        with ESMTP id S232132AbiFZTUc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Jun 2022 11:42:00 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F39EDFDB;
-        Sun, 26 Jun 2022 08:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656258099;
-        bh=9wnn2viNtYo2HS4a6b8V2lbF+SSHfd4WFAFaclgRsso=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=SHlhQLJT8dgGcqR+X5nHvn7Yjw4el0brNLtT897XUkjePIvV7HSm8fOECnfOBmutl
-         x6KPuUYG554QgIvtaUVlD7FQ+d0+i/+9+eK0kxF/jy2xDFddJR5rmueyp6NRelRDzk
-         wCOCGuqjgcXIdlJrmnUVtAgIv3A+7RhI+qgSCuuA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.248]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7b6b-1o0Ef93eAf-0085OH; Sun, 26
- Jun 2022 17:41:38 +0200
-Subject: Re: [PATCH 2/8] serial: core, 8250: set RS485 termination gpio in
- serial core
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-3-LinoSanfilippo@gmx.de>
- <83762813-70ec-93c3-4015-5676ce9534fd@linux.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <aa851698-ff26-a319-500a-575a9c669d95@gmx.de>
-Date:   Sun, 26 Jun 2022 17:41:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 26 Jun 2022 15:20:32 -0400
+X-Greylist: delayed 6053 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Jun 2022 12:20:32 PDT
+Received: from mailgw01.garantiserver.com (mailgw01.dnsflare.com [185.85.206.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2307DDFD1
+        for <linux-serial@vger.kernel.org>; Sun, 26 Jun 2022 12:20:32 -0700 (PDT)
+Received: from 204139.dnsflare.com ([185.85.204.139]:34520)
+        by mailgw01.garantiserver.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <greyson.edwardchevron@gmail.com>)
+        id 1o5Ocg-0007M6-0P
+        for linux-serial@vger.kernel.org; Sun, 26 Jun 2022 12:32:06 +0300
+Received: from 204139.dnsflare.com (localhost [127.0.0.1])
+        by 204139.dnsflare.com (Postfix) with ESMTP id EF9A620E6352
+        for <linux-serial@vger.kernel.org>; Sun, 26 Jun 2022 12:32:05 +0300 (+03)
+X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000,
+        BODYTEXTP_SIZE_400_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
+        BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_300_399 0.000000,
+        BODY_SIZE_5000_LESS 0.000000, BODY_SIZE_7000_LESS 0.000000,
+        CTE_QUOTED_PRINTABLE 0.000000, DKIM_SIGNATURE 0.000000,
+        FORGED_FROM_GMAIL 0.100000, FRAUD_HIGH_X3 0.000000,
+        FROM_NAME_PHRASE 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
+        IN_REP_TO 0.000000, MULTIPLE_RCPTS 0.100000, NO_CTA_URI_FOUND 0.000000,
+        NO_URI_HTTPS 0.000000, REFERENCES 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
+        TO_UNDISCLOSED_RECIPIENTS 0.000000, WEBMAIL_SOURCE 0.000000,
+        WEBMAIL_USER_AGENT 0.000000, __ANY_URI 0.000000,
+        __AUTH_RES_DKIM_PASS 0.000000, __BODY_NO_MAILTO 0.000000, __CT 0.000000,
+        __CTE 0.000000, __CT_TEXT_PLAIN 0.000000, __DC_PHRASE 0.000000,
+        __FRAUD_INTRO 0.000000, __FRAUD_JOB 0.000000, __FRAUD_PARTNERSHIP 0.000000,
+        __FRAUD_SUBJ_ALLCAPS 0.000000, __FRAUD_WEBMAIL 0.000000,
+        __FRAUD_WEBMAIL_FROM 0.000000, __FROM_DOMAIN_NOT_IN_BODY 0.000000,
+        __FROM_GMAIL 0.000000, __FROM_NAME_NOT_IN_BODY 0.000000,
+        __FUR_HEADER 0.000000, __HAS_FROM 0.000000, __HAS_MSGID 0.000000,
+        __HAS_REFERENCES 0.000000, __HAS_REPLYTO 0.000000, __INT_PROD_LOC 0.000000,
+        __IN_REP_TO 0.000000, __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000,
+        __MIME_TEXT_P1 0.000000, __MIME_VERSION 0.000000, __MSGID_32HEX 0.000000,
+        __NO_HTML_TAG_RAW 0.000000, __PHISH_SPEAR_GREETING 0.000000,
+        __PHISH_SPEAR_STRUCTURE_1 0.000000, __PHISH_SPEAR_STRUCTURE_2 0.000000,
+        __REFERENCES 0.000000, __RUS_SUBJ_ALL_UCASE_1251 0.000000,
+        __RUS_SUBJ_ALL_UCASE_KOI8R 0.000000, __SANE_MSGID 0.000000,
+        __SUBJECT_ALLCAPS 0.000000, __SUBJECT_NOLC 0.000000,
+        __TO_MALFORMED_3 0.000000, __URI_MAILTO 0.000000, __URI_NO_WWW 0.000000,
+        __URI_NS 0.000000, __USER_AGENT 0.000000,
+        __USER_AGENT_ROUNDCUBE_WEBMAIL 0.000000
+X-SASI-Probability: 9%
+X-SASI-RCODE: 200
+X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2022.6.26.84819
+Authentication-Results: 204139.dnsflare.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=ornekdomain.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ornekdomain.com;
+         h=content-transfer-encoding:user-agent:message-id:references
+        :in-reply-to:reply-to:subject:subject:to:from:from:date:date
+        :content-type:content-type:mime-version; s=dkim; t=1656235925;
+         x=1658827926; bh=lsDT4tvAc3Bj211wDsf28O2PMftqo7mPcbgISGd07Jw=; b=
+        c2Vgkw1XH1vPnCPSYW9jgNlMr04DmW8LQVp7yffXdypamFI1uZ+O5jH1ONhZlyin
+        37S6Bgjf7lA35NDVIxz5PohKzTaJ4KwUmfiwQgzrVKbQviTmv2xoMYhugb2wG4oi
+        uQZ7XFMioPJqfsn41pXzZXQHnYqix2/VsfoOxpiXvdE=
+X-Virus-Scanned: Debian amavisd-new at dione.dnsflare.com
+Received: from 204139.dnsflare.com ([127.0.0.1])
+        by 204139.dnsflare.com (204139.dnsflare.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id MMRzhmLq-sqt for <linux-serial@vger.kernel.org>;
+        Sun, 26 Jun 2022 12:32:05 +0300 (+03)
+Received: from _ (localhost [127.0.0.1])
+        by 204139.dnsflare.com (Postfix) with ESMTPSA id CD42E20E6336;
+        Sun, 26 Jun 2022 12:30:32 +0300 (+03)
 MIME-Version: 1.0
-In-Reply-To: <83762813-70ec-93c3-4015-5676ce9534fd@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date:   Sun, 26 Jun 2022 10:30:32 +0100
+From:   "Chevron HR, Employment" <greyson.edwardchevron@gmail.com>
+To:     undisclosed-recipients:;
+Subject: FOREIGN JOB OPENING!
+Reply-To: greyson@chevron-hr.com
+Mail-Reply-To: greyson@chevron-hr.com
+In-Reply-To: <86406f7382d3cbe4949e7fc7763e1a9f@outlook.com>
+References: <86406f7382d3cbe4949e7fc7763e1a9f@outlook.com>
+Message-ID: <3ba1a9245d7d756a5473be6043e9ea91@gmail.com>
+X-Sender: greyson.edwardchevron@gmail.com
+User-Agent: Roundcube Webmail
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:cyIQlMtZ+G8jaNtEoKMkpMf21pMZu7+zmG4ZsrBrWfjfJ8shTgY
- pupK7k4b3RxBSSU6r9jfqTCB/AphGTAU8V3S3pjE2iwtUCvrYjHGrkDi+IPTZtbaekmMP+j
- XLGfEG2lV+c8+nuB09tRdgrxUIbTeEoRaX28TCdEgdjkjYfN9fyuas6tcj1o9kLXhp5/HUn
- m8SricM+TNI9EiH/EpPHg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fIJ5qj6lHQc=:8S6VSR7PdExKw8bJkX+MlF
- H3suE7c7Pe31QjpiBufX07LOqmrqcIPg9Fb74x6UYoHX0oIemab+QCZnQBoipJ+ZRU2MrHS5x
- YbZZsMXFkSyd/jraIb1QkxALtwaYRC2TVItcrFAP2khOCzjkahUGtg7Xo1vQzri/EgV1fureK
- ZnJ8BWp32B9RgiCm1+6YaDmTDvNwEC3AH64mKc7RWIGcOuJG+v96COjpg6GFgMmakS4TDCUiA
- qePKp9BlPyrft6XyxHuFMXGe9lPiwzUHBNljEGGDaLLLiHr5DpWOQ55YRFZz95yDMhFddqdLP
- w/It7/0N/09QO+MWw2n+/CZfkxqxFyW9+WLEkz8pZ78Yg41AsXS6TFvKfwy7HfhbBNkfs7kGG
- M65SooRgYaOFRySABeQHafEaPv3vn6eo9Aizb7ntyPC3sYHoDpBMQbIyFgDixyd0atKw1rXhj
- IxmzzuSac633dPs8pwy537nD1TGox6uBlR2ibk5Lmf1RvI2TnTyL9en4iPXiyHvhnDIdvYr2p
- WURTyDybVg/jtC445+TLuZtbGkdxV7M3f+dYrJV7AQozPjQMJ7NqNkOHCBd5tgxsQhNKp9ZKh
- DHnukgvivd57KVUuh/Btq3PbkAWd9s2fkNWRZICTJDaytt2dlBBBOZXGzhrDTJPhJgaakrcqa
- 43vh758Dkg1bf8ZKqb++q0PLM+0QWAAWwqkaHD9Dlh3cXOmg0x22nwN/wqW7onSPqbLMB+Rm5
- ZbXnuqPM9JBXQQZvLtiwphigpARm/8JWzI6syf/EH4VF9oU2KrVtU3b6oFDbAbZVXQqBhY0PL
- 2xfoyQR7UUYsYt8hyKBG9cCwLrcNwjxeUjOVFTyUuOoegcCADElKZMxE63J6UU6MaBCRVlkNp
- LYkOPRUGYyrFZpctUonaYlx4cWvaMifyDxhe7g2aXBjPtjkuYPHWmy7YLxxuAhiugVFmkKaQW
- eRtw+y89NGeDycpISmXxIdc2u4mt12L3+LMCMwc8cGaaHYbekAAvdjIiVBL+aJJswjPSnc8c5
- FCwh/4nmH8Ruo8qTnNeSjZqJKOXWJ+/i9ftc7HxCGup0W2J/vsr64f1jZwObNz6n4/i7UdFNN
- eepTFF5kuDkJc12KYI927EsBzYxv0oAaKKj7n9hqdRjENbw/9nZfNcuPg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
+        DKIM_INVALID,DKIM_SIGNED,FORGED_GMAIL_RCVD,FREEMAIL_FROM,
+        KHOP_HELO_FCRDNS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+ATTN,
 
-Hi,
+      This is to inform you that we are currently hiring foreign=20
+international reputable and experienced applicants on various job=20
+positions available if you are interested kindly apply by sending your=20
+CV/r=C3=A9sum=C3=A9 to greyson@chevron-hr.com for more details.
 
-On 25.06.22 at 12:40, Ilpo J=C3=A4rvinen wrote:
->> +
->>  int uart_rs485_config(struct uart_port *port)
->>  {
->>  	struct serial_rs485 *rs485 =3D &port->rs485;
->>  	int ret;
->>
->>  	uart_sanitize_serial_rs485(port, rs485);
->> +	uart_set_rs485_termination(port, rs485);
->>
->>  	ret =3D port->rs485_config(port, rs485);
->>  	if (ret)
->> @@ -1400,6 +1411,7 @@ static int uart_set_rs485_config(struct uart_port=
- *port,
->>  	if (ret)
->>  		return ret;
->>  	uart_sanitize_serial_rs485(port, &rs485);
->> +	uart_set_rs485_termination(port, &rs485);
->>
->>  	spin_lock_irqsave(&port->lock, flags);
->>  	ret =3D port->rs485_config(port, &rs485);
->
-> When port->rs485_config(port, &rs485) returns non-zero, the input got
-> partially applied?
->
->
-The thing is we dont know what the state of the termination GPIO (asserted=
- or deasserted)
-was before we set it and port->rs485_config() failed, so we cannot restore=
- it.
-We could read the GPIO before we change it but AFAIK this is unsafe since =
-it is an output
-pin. Maybe add a boolean variable "rs485_termination_gpio_asserted" to uar=
-t_port to track the
-current state?
-
-
-Regards,
-Lino
-
-
-
+Regards
+Greyson Edwards
+EMEA Recruitment Team Lead.
+HR Chevron Corporation London UK
