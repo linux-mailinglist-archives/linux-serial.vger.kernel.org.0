@@ -2,114 +2,183 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0483F55B3B8
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Jun 2022 21:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4007955B5C6
+	for <lists+linux-serial@lfdr.de>; Mon, 27 Jun 2022 05:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiFZTUd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Jun 2022 15:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S232613AbiF0D0U (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Jun 2022 23:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiFZTUc (ORCPT
+        with ESMTP id S232181AbiF0D0T (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Jun 2022 15:20:32 -0400
-X-Greylist: delayed 6053 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Jun 2022 12:20:32 PDT
-Received: from mailgw01.garantiserver.com (mailgw01.dnsflare.com [185.85.206.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2307DDFD1
-        for <linux-serial@vger.kernel.org>; Sun, 26 Jun 2022 12:20:32 -0700 (PDT)
-Received: from 204139.dnsflare.com ([185.85.204.139]:34520)
-        by mailgw01.garantiserver.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <greyson.edwardchevron@gmail.com>)
-        id 1o5Ocg-0007M6-0P
-        for linux-serial@vger.kernel.org; Sun, 26 Jun 2022 12:32:06 +0300
-Received: from 204139.dnsflare.com (localhost [127.0.0.1])
-        by 204139.dnsflare.com (Postfix) with ESMTP id EF9A620E6352
-        for <linux-serial@vger.kernel.org>; Sun, 26 Jun 2022 12:32:05 +0300 (+03)
-X-SASI-Hits: BODYTEXTP_SIZE_3000_LESS 0.000000,
-        BODYTEXTP_SIZE_400_LESS 0.000000, BODY_SIZE_1000_LESS 0.000000,
-        BODY_SIZE_2000_LESS 0.000000, BODY_SIZE_300_399 0.000000,
-        BODY_SIZE_5000_LESS 0.000000, BODY_SIZE_7000_LESS 0.000000,
-        CTE_QUOTED_PRINTABLE 0.000000, DKIM_SIGNATURE 0.000000,
-        FORGED_FROM_GMAIL 0.100000, FRAUD_HIGH_X3 0.000000,
-        FROM_NAME_PHRASE 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
-        IN_REP_TO 0.000000, MULTIPLE_RCPTS 0.100000, NO_CTA_URI_FOUND 0.000000,
-        NO_URI_HTTPS 0.000000, REFERENCES 0.000000, REPLYTO_FROM_DIFF_ADDY 0.100000,
-        TO_UNDISCLOSED_RECIPIENTS 0.000000, WEBMAIL_SOURCE 0.000000,
-        WEBMAIL_USER_AGENT 0.000000, __ANY_URI 0.000000,
-        __AUTH_RES_DKIM_PASS 0.000000, __BODY_NO_MAILTO 0.000000, __CT 0.000000,
-        __CTE 0.000000, __CT_TEXT_PLAIN 0.000000, __DC_PHRASE 0.000000,
-        __FRAUD_INTRO 0.000000, __FRAUD_JOB 0.000000, __FRAUD_PARTNERSHIP 0.000000,
-        __FRAUD_SUBJ_ALLCAPS 0.000000, __FRAUD_WEBMAIL 0.000000,
-        __FRAUD_WEBMAIL_FROM 0.000000, __FROM_DOMAIN_NOT_IN_BODY 0.000000,
-        __FROM_GMAIL 0.000000, __FROM_NAME_NOT_IN_BODY 0.000000,
-        __FUR_HEADER 0.000000, __HAS_FROM 0.000000, __HAS_MSGID 0.000000,
-        __HAS_REFERENCES 0.000000, __HAS_REPLYTO 0.000000, __INT_PROD_LOC 0.000000,
-        __IN_REP_TO 0.000000, __MIME_TEXT_ONLY 0.000000, __MIME_TEXT_P 0.000000,
-        __MIME_TEXT_P1 0.000000, __MIME_VERSION 0.000000, __MSGID_32HEX 0.000000,
-        __NO_HTML_TAG_RAW 0.000000, __PHISH_SPEAR_GREETING 0.000000,
-        __PHISH_SPEAR_STRUCTURE_1 0.000000, __PHISH_SPEAR_STRUCTURE_2 0.000000,
-        __REFERENCES 0.000000, __RUS_SUBJ_ALL_UCASE_1251 0.000000,
-        __RUS_SUBJ_ALL_UCASE_KOI8R 0.000000, __SANE_MSGID 0.000000,
-        __SUBJECT_ALLCAPS 0.000000, __SUBJECT_NOLC 0.000000,
-        __TO_MALFORMED_3 0.000000, __URI_MAILTO 0.000000, __URI_NO_WWW 0.000000,
-        __URI_NS 0.000000, __USER_AGENT 0.000000,
-        __USER_AGENT_ROUNDCUBE_WEBMAIL 0.000000
-X-SASI-Probability: 9%
-X-SASI-RCODE: 200
-X-SASI-Version: Antispam-Engine: 4.1.4, AntispamData: 2022.6.26.84819
-Authentication-Results: 204139.dnsflare.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=ornekdomain.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ornekdomain.com;
-         h=content-transfer-encoding:user-agent:message-id:references
-        :in-reply-to:reply-to:subject:subject:to:from:from:date:date
-        :content-type:content-type:mime-version; s=dkim; t=1656235925;
-         x=1658827926; bh=lsDT4tvAc3Bj211wDsf28O2PMftqo7mPcbgISGd07Jw=; b=
-        c2Vgkw1XH1vPnCPSYW9jgNlMr04DmW8LQVp7yffXdypamFI1uZ+O5jH1ONhZlyin
-        37S6Bgjf7lA35NDVIxz5PohKzTaJ4KwUmfiwQgzrVKbQviTmv2xoMYhugb2wG4oi
-        uQZ7XFMioPJqfsn41pXzZXQHnYqix2/VsfoOxpiXvdE=
-X-Virus-Scanned: Debian amavisd-new at dione.dnsflare.com
-Received: from 204139.dnsflare.com ([127.0.0.1])
-        by 204139.dnsflare.com (204139.dnsflare.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id MMRzhmLq-sqt for <linux-serial@vger.kernel.org>;
-        Sun, 26 Jun 2022 12:32:05 +0300 (+03)
-Received: from _ (localhost [127.0.0.1])
-        by 204139.dnsflare.com (Postfix) with ESMTPSA id CD42E20E6336;
-        Sun, 26 Jun 2022 12:30:32 +0300 (+03)
+        Sun, 26 Jun 2022 23:26:19 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5072736
+        for <linux-serial@vger.kernel.org>; Sun, 26 Jun 2022 20:26:03 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220627032558epoutp042b5d8bee1e025e4a7799130f7aa283fb~8XGZ6-Gx52317323173epoutp04s
+        for <linux-serial@vger.kernel.org>; Mon, 27 Jun 2022 03:25:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220627032558epoutp042b5d8bee1e025e4a7799130f7aa283fb~8XGZ6-Gx52317323173epoutp04s
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1656300358;
+        bh=GyyJq89eah//UNxEHjdnPrbyeAPQ8IHY4BpVN8PZ2os=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=JmO22mcmZ3qWFdtgQE5pROPPGTMRiLQNHliiy5IoFxd4h1Wsgeh3FUWMZ31S1C9BP
+         DruauxWjluqc1tTmntCI0rNXmPZcmBcfJwknJMQ5YlwpLGxqEHcvasBbBMKMMC8qqP
+         PZL8JfqJhmTXMsP7491W9cjkZalYx5Iqq+pQvLho=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220627032557epcas2p1f3c3e3f2c9a4cb2c4a00f6e9475e584e~8XGZZ9VdP1208312083epcas2p1z;
+        Mon, 27 Jun 2022 03:25:57 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LWY5x22hmz4x9Pw; Mon, 27 Jun
+        2022 03:25:57 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CC.C3.09642.54329B26; Mon, 27 Jun 2022 12:25:57 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220627032556epcas2p26c2cd2786888a5018607bf651bc5dec0~8XGYaM-AH1126011260epcas2p2M;
+        Mon, 27 Jun 2022 03:25:56 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220627032556epsmtrp11c2525b0a2da95a63712e8c0c35eedd5~8XGYZVrW43117931179epsmtrp1S;
+        Mon, 27 Jun 2022 03:25:56 +0000 (GMT)
+X-AuditID: b6c32a47-5e1ff700000025aa-c8-62b92345bc09
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2A.6E.08802.44329B26; Mon, 27 Jun 2022 12:25:56 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220627032556epsmtip2ba371a7fd41b70e72aae2f3853cec7a7~8XGYIAmnF0953609536epsmtip2O;
+        Mon, 27 Jun 2022 03:25:56 +0000 (GMT)
+From:   Chanho Park <chanho61.park@samsung.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Hector Martin <marcan@marcan.st>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH] tty: serial: samsung_tty: loopback mode support
+Date:   Mon, 27 Jun 2022 12:23:53 +0900
+Message-Id: <20220627032353.8868-1-chanho61.park@samsung.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Date:   Sun, 26 Jun 2022 10:30:32 +0100
-From:   "Chevron HR, Employment" <greyson.edwardchevron@gmail.com>
-To:     undisclosed-recipients:;
-Subject: FOREIGN JOB OPENING!
-Reply-To: greyson@chevron-hr.com
-Mail-Reply-To: greyson@chevron-hr.com
-In-Reply-To: <86406f7382d3cbe4949e7fc7763e1a9f@outlook.com>
-References: <86406f7382d3cbe4949e7fc7763e1a9f@outlook.com>
-Message-ID: <3ba1a9245d7d756a5473be6043e9ea91@gmail.com>
-X-Sender: greyson.edwardchevron@gmail.com
-User-Agent: Roundcube Webmail
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
-        DKIM_INVALID,DKIM_SIGNED,FORGED_GMAIL_RCVD,FREEMAIL_FROM,
-        KHOP_HELO_FCRDNS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmma6r8s4kgw9nuSwezNvGZnF5v7ZF
+        8+L1bBY7Go6wWrybK2Ox9/VWdotNj6+xWsw4v4/J4sziXnaL09cWsFuc3+bvwO1xfV2Ax6ZV
+        nWwed67tYfPYP3cNu8fmJfUei5ftZPPo27KK0ePzJrkAjqhsm4zUxJTUIoXUvOT8lMy8dFsl
+        7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygI5UUyhJzSoFCAYnFxUr6djZF+aUlqQoZ
+        +cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ2RnLNzxmLDjKX/Fk2lzGBsbPPF2M
+        nBwSAiYS63ufs3QxcnEICexglNiwtJcVwvnEKNFwaDMTSJWQwGdGiQUtijAdRzY1sEHEdzFK
+        tP1TgbA/Mkp8X1QHYrMJ6Epsef6KEcQWEciWmNO+CWwos8BDJok7qw4ygySEBRwkTl89wgpi
+        swioSnQ86gAbyitgK3Hu5nNmiGXyEhvm9zJDxAUlTs58wgJiMwPFm7fOZgYZKiHwl11iw7+H
+        TBANLhIfF7+AsoUlXh3fwg5hS0m87G+Dsoslls76xATR3MAocXnbLzaIhLHErGftQGdzAG3Q
+        lFi/Sx/ElBBQljhyC2ovn0TH4b/sEGFeiY42IYhGdYkD26ezQNiyEt1zPrNC2B4SncceskLC
+        J1bi3LKJ7BMY5Wch+WYWkm9mIexdwMi8ilEstaA4Nz212KjAGB6nyfm5mxjByVTLfQfjjLcf
+        9A4xMnEwHmKU4GBWEuF9fX1rkhBvSmJlVWpRfnxRaU5q8SFGU2D4TmSWEk3OB6bzvJJ4QxNL
+        AxMzM0NzI1MDcyVxXq+UDYlCAumJJanZqakFqUUwfUwcnFINTFr+u+Z8ZW+qqtyRM3OJq9q6
+        0w2TbYonhMlI/31+ZeW3c0pfTkzw3fNKc7dG68u57OoNBhLJn2/8e73o32m+2Qff8L3ZabW4
+        qsZYp3vvVNV/j67s8Nz056b/Knalx4d91zPr5z4zOM2x6X3Lx2XyM9LZdp5yPj6zR+yRm627
+        m13YDZ7EkBXB0nUGraWRrfbFk+8++L9hKcf29Rut2XQtz9Vne+fe6q10ma/kdmDrhJywFfXH
+        cvZ8fLvI913htMLgT11fZQVfJbjNksy+cVjPRlqIJZbj2EKlIH2uvn9Sz9VLk+eyrtPb7hPz
+        admUM8Z9H1gkuF5+t5Ow7Q/ZbvFpJY/Q3JnX1D5dd7Qt1fjef0eJpTgj0VCLuag4EQBN80nX
+        LwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsWy7bCSvK6L8s4kg53TpS0ezNvGZnF5v7ZF
+        8+L1bBY7Go6wWrybK2Ox9/VWdotNj6+xWsw4v4/J4sziXnaL09cWsFuc3+bvwO1xfV2Ax6ZV
+        nWwed67tYfPYP3cNu8fmJfUei5ftZPPo27KK0ePzJrkAjigum5TUnMyy1CJ9uwSujOUbHjMW
+        HOWveDJtLmMD42eeLkZODgkBE4kjmxrYuhi5OIQEdjBKTFp3kB0iISvx7N0OKFtY4n7LEVaI
+        oveMEuv332cDSbAJ6Epsef6KEcQWEciWWPtlL9gkZoHnTBL7pk5lAUkICzhInL4K0s3JwSKg
+        KtHxqAOsmVfAVuLczefMEBvkJTbM72WGiAtKnJz5BKyXGSjevHU28wRGvllIUrOQpBYwMq1i
+        lEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAgOci2tHYx7Vn3QO8TIxMF4iFGCg1lJhPf1
+        9a1JQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTA1rXMz
+        vLGz6cDlScoqnnyPQ5u6b+noij2tfvDG/qcb14G6VxHn6jec6nxYum9HmdAVjtKcsw8NJH50
+        2BbKXlzX5SIrdPy+plSF1qaCHRuOTImXXvRXLctc76b2M6t470TVUp8p2eFFRY/e7p+6rPXQ
+        ni1LTC93P9j5KWv93JcXBToUX/WZMYlbHjh8c8fT+rmbZEu2nOF/Hur0UfHWd+1SqayzPdbd
+        jZFx0xQ56+8/Ur3G3DJj6pmvZYYnLiR8NnetcrINz/7w1WqGrHeV8dkCaT6L82p3njt92fhv
+        8v5L+6ve/rCI3eZ0//n0yM6ZRx7Elrs7brLbEvwm+smyKZVn5yxs7av/XMuVl7F95v8rSizF
+        GYmGWsxFxYkAyKO1GOECAAA=
+X-CMS-MailID: 20220627032556epcas2p26c2cd2786888a5018607bf651bc5dec0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220627032556epcas2p26c2cd2786888a5018607bf651bc5dec0
+References: <CGME20220627032556epcas2p26c2cd2786888a5018607bf651bc5dec0@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ATTN,
+Internal loopback mode can be supported by setting
+S3C2443_UCON_LOOPBACK bit. The mode & bit can be supported since
+s3c2410 and later SoCs. We can test it by linux-serial-test program[1]
+with -k option. It will set TIOCM_LOOP mode during test.
 
-      This is to inform you that we are currently hiring foreign=20
-international reputable and experienced applicants on various job=20
-positions available if you are interested kindly apply by sending your=20
-CV/r=C3=A9sum=C3=A9 to greyson@chevron-hr.com for more details.
+-k, --loopback     Use internal hardware loop back
 
-Regards
-Greyson Edwards
-EMEA Recruitment Team Lead.
-HR Chevron Corporation London UK
+[1]: https://github.com/cbrake/linux-serial-test
+Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+---
+ drivers/tty/serial/samsung_tty.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index d5ca904def34..d7d035cd95c0 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -1002,16 +1002,22 @@ static unsigned int s3c24xx_serial_tx_empty(struct uart_port *port)
+ static unsigned int s3c24xx_serial_get_mctrl(struct uart_port *port)
+ {
+ 	unsigned int umstat = rd_reg(port, S3C2410_UMSTAT);
++	unsigned int ucon = rd_reg(port, S3C2410_UCON);
++	unsigned int mctrl = TIOCM_CAR | TIOCM_DSR;
+ 
+ 	if (umstat & S3C2410_UMSTAT_CTS)
+-		return TIOCM_CAR | TIOCM_DSR | TIOCM_CTS;
+-	else
+-		return TIOCM_CAR | TIOCM_DSR;
++		mctrl |= TIOCM_CTS;
++
++	if (ucon & S3C2443_UCON_LOOPBACK)
++		mctrl |= TIOCM_LOOP;
++
++	return mctrl;
+ }
+ 
+ static void s3c24xx_serial_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ {
+ 	unsigned int umcon = rd_regl(port, S3C2410_UMCON);
++	unsigned int ucon = rd_reg(port, S3C2410_UCON);
+ 
+ 	if (mctrl & TIOCM_RTS)
+ 		umcon |= S3C2410_UMCOM_RTS_LOW;
+@@ -1019,6 +1025,13 @@ static void s3c24xx_serial_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ 		umcon &= ~S3C2410_UMCOM_RTS_LOW;
+ 
+ 	wr_regl(port, S3C2410_UMCON, umcon);
++
++	if (mctrl & TIOCM_LOOP)
++		ucon |= S3C2443_UCON_LOOPBACK;
++	else
++		ucon &= ~S3C2443_UCON_LOOPBACK;
++
++	wr_regl(port, S3C2410_UCON, ucon);
+ }
+ 
+ static void s3c24xx_serial_break_ctl(struct uart_port *port, int break_state)
+-- 
+2.36.1
+
