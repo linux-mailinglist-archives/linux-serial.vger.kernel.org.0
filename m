@@ -2,50 +2,52 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F9555DD48
-	for <lists+linux-serial@lfdr.de>; Tue, 28 Jun 2022 15:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97C055E186
+	for <lists+linux-serial@lfdr.de>; Tue, 28 Jun 2022 15:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiF0M2W (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 Jun 2022 08:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S235764AbiF0M2m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 Jun 2022 08:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiF0M2T (ORCPT
+        with ESMTP id S235907AbiF0M2W (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:28:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BED63F4;
-        Mon, 27 Jun 2022 05:28:17 -0700 (PDT)
+        Mon, 27 Jun 2022 08:28:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C767363F4;
+        Mon, 27 Jun 2022 05:28:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40CEC6066C;
-        Mon, 27 Jun 2022 12:28:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D94AC3411D;
-        Mon, 27 Jun 2022 12:28:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92733B81110;
+        Mon, 27 Jun 2022 12:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F28F7C3411D;
+        Mon, 27 Jun 2022 12:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656332896;
-        bh=7Rdz8suEqYG1kHUJrQ4xkQv8wNMVsgrcbrc2gYFbrJw=;
+        s=korg; t=1656332899;
+        bh=ItpgoEcOuwDEFm+eFghMeChypkh3vU8dbMK2C/PstZk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OGhTewzE7OBEgESRa4LWnXBmMvSVPc6QosIET5/NxGUZnd0znZMAGj8TYsUguUDx4
-         upacxF4vKWMplDU7amJusGoEzibKzEoorLRi/gPgBbAUkuX+RM/1pAUJUXKwwFfqwd
-         1+ISBwsTtrJ1B1fCVOnH/PhPPBTSKRKMwVpxHBuE=
-Date:   Mon, 27 Jun 2022 14:09:33 +0200
+        b=1Pzi1/gcvjNfq0hTLc2246UYLr1cBss+sqkSAubLHFv005K2lJhz/KgtJq0as3QSN
+         YoyVuLjwAMvFv8mn7Ysasd3NK1lDlUI8ECSp+h1GOD0XAsmSlAXz85XZwoi6GMCPfe
+         eyyHKtgLIi2ya+3tyMXACRZSaq+SGyR9ewTfOLZQ=
+Date:   Mon, 27 Jun 2022 14:16:47 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Yi Yang <yiyang13@huawei.com>, Jiri Slaby <jirislaby@kernel.org>,
-        andy.shevchenko@gmail.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] serial: 8250: fix return error code in
- serial8250_request_std_resource()
-Message-ID: <Yrmd/Y06xWHKjCGy@kroah.com>
-References: <20220620072025.172088-1-yiyang13@huawei.com>
- <fe25cbe3-3cc3-45c3-d6d0-e867ee372b7@linux.intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <Yrmfr3GfXYhclKXA@kroah.com>
+References: <20220615062455.15490-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fe25cbe3-3cc3-45c3-d6d0-e867ee372b7@linux.intel.com>
+In-Reply-To: <20220615062455.15490-1-tony@atomide.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,95 +58,41 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 10:53:24AM +0300, Ilpo Järvinen wrote:
-> On Mon, 20 Jun 2022, Yi Yang wrote:
+On Wed, Jun 15, 2022 at 09:24:55AM +0300, Tony Lindgren wrote:
+> We want to enable runtime PM for serial port device drivers in a generic
+> way. To do this, we want to have the serial core layer manage the
+> registered serial port controllers. For runtime PM, we need a way to find
+> the serial ports for each serial port controller device.
 > 
-> > If port->mapbase = NULL in serial8250_request_std_resource() , it need
-> > return a error code instead of 0. If uart_set_info() fail to request new
-> > regions by serial8250_request_std_resource() but the return value of
-> > serial8250_request_std_resource() is 0, that The system will mistakenly
-> > considers that port resources are successfully applied for. A null
-> > pointer reference is triggered when the port resource is later invoked.
-> > 
-> > The problem can also be triggered with the following simple program:
-> > ----------
-> >   #include <stdio.h>
-> >   #include <sys/types.h>
-> >   #include <sys/stat.h>
-> >   #include <fcntl.h>
-> >   #include <sys/ioctl.h>
-> >   #include <unistd.h>
-> >   #include <errno.h>
-> > 
-> >   struct serial_struct {
-> >       int type;
-> >       int line;
-> >       unsigned int    port;
-> >       int irq;
-> >       int flags;
-> >       int xmit_fifo_size;
-> >       int custom_divisor;
-> >       int baud_base;
-> >       unsigned short  close_delay;
-> >       char    io_type;
-> >       char    reserved_char[1];
-> >       int hub6;
-> >       unsigned short  closing_wait; /* time to wait before closing */
-> >       unsigned short  closing_wait2; /* no longer used... */
-> >       unsigned char   *iomem_base;
-> >       unsigned short  iomem_reg_shift;
-> >       unsigned int    port_high;
-> >       unsigned long   iomap_base; /* cookie passed into ioremap */
-> >   };
-> > 
-> >   struct serial_struct str;
-> > 
-> >   int main(void)
-> >   {
-> >       open("/dev/ttyS0", O_RDWR);
-> >       ioctl(fd, TIOCGSERIAL, &str);
-> >       str.iomem_base = 0;
-> >       ioctl(fd, TIOCSSERIAL, str);
-> >       return 0;
-> >   }
-> 
-> With admin priviledges I guess?
-> 
-> > ----------
-> > 
-> > Signed-off-by: Yi Yang <yiyang13@huawei.com>
-> > ---
-> >  drivers/tty/serial/8250/8250_port.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > index 3e3d784aa628..e1cefa97bdeb 100644
-> > --- a/drivers/tty/serial/8250/8250_port.c
-> > +++ b/drivers/tty/serial/8250/8250_port.c
-> > @@ -2961,8 +2961,10 @@ static int serial8250_request_std_resource(struct uart_8250_port *up)
-> >  	case UPIO_MEM32BE:
-> >  	case UPIO_MEM16:
-> >  	case UPIO_MEM:
-> > -		if (!port->mapbase)
-> > +		if (!port->mapbase) {
-> > +			ret = -EFAULT;
-> >  			break;
-> > +		}
-> >  
-> >  		if (!request_mem_region(port->mapbase, size, "serial")) {
-> >  			ret = -EBUSY;
-> > 
-> 
-> I recall reading somewhere that somebody more knowledgeful than me noted 
-> that this interface has many ways to shoot oneself in the foot if one 
-> really wants to which is why some things are limited to admin only.
-> I cannot seem to find that a reference to that now though.
+> The serial core manages ports. Each serial controller can have multiple
+> ports. As serial core has no struct device, and the serial port device
+> drivers have their own driver data, we cannot currently start making
+> use of serial core generic data easily without changing all the serial
+> port device drivers.
 
-Yes, what could go wrong with allowing userspace to specify memory
-locations that a uart might be located at :)
+Really?  Why not make struct uart_port a real struct device?
 
-This stuff should all be "locked down" for any system with untrusted
-users.
+> We could consider adding a serial core specific struct device. It would
+> be a child of the serial port device, and would allow us eventually to use
+> device_links to add generic runtime PM calls for example. But as the serial
+> core layer is not a device driver, driver specific features would need to
+> be added, and are probably not justified for a virtual device.
+
+I think it's very justified, let's not paper over this whole thing by
+adding a kref stuck in in the middle and trying to hook up the PM code
+to it, instead of just using all of the PM logic that the driver model
+already provides.
+
+> Considering the above, let's improve the serial core layer so we can
+> manage the serial port controllers better. Let's register the controllers
+> with the serial core layer in addition to the serial ports.
+
+Why can't controllers be a device as well?
+
+Let's try to work with the driver model here, not work around it, if at
+all possible.  We never did a full conversion of the serial layer to the
+driver core all those decades ago.  Perhaps now is the time to really do
+that.
 
 thanks,
 
