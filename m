@@ -2,58 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7613A56178B
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Jun 2022 12:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F70561829
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Jun 2022 12:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiF3KU5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 30 Jun 2022 06:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S235254AbiF3KgS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 30 Jun 2022 06:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiF3KUz (ORCPT
+        with ESMTP id S234684AbiF3KgQ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:20:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA21545064;
-        Thu, 30 Jun 2022 03:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656584454; x=1688120454;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=4FGMng3U7GLnTku7mVOT+9WivvYzRVqmckgQnASfO9g=;
-  b=Ql7uZZoKVL79/biniHg1ixcW1/+HejRnB0gKU2OHD3IKpn/VQZdHNUR3
-   MIhLK/xan1qP6/Oj+gyjDTOnEgGrlKJgjCpnLQWzH+6LPgqZnHH9S3P/p
-   ADHcaq4N48AhXIVombcCkpdTa1bObojX4AKuCViGUYMhrmc1Pr5q22tAP
-   MLtEYflBv26zufbro0h0pSmGilkKqJ0+vEvNTRvzYCRV+bBWThM9djew2
-   KMWcmKzErZ4ySMT/5PJ6mbqKMWmRuWydXRZXm/4Uqwd3deXwi4xaSSnjR
-   91LYYxVZb590MplsyFOQB9owAJkDvnfEQjL5nxffp6ftVu1d7bxecLrKt
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10393"; a="346300209"
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="346300209"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 03:20:53 -0700
-X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
-   d="scan'208";a="647832875"
-Received: from emontau-mobl2.ger.corp.intel.com ([10.249.42.178])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2022 03:20:50 -0700
-Date:   Thu, 30 Jun 2022 13:20:49 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] 8250_dwlib: Convert bitops to newer form
-In-Reply-To: <CAHp75VcH9O6=Lk06w3Set==zBEFyseCSDN6OUE3n7g4ZnBM4Bg@mail.gmail.com>
-Message-ID: <eeba3ce9-c0a1-2363-154a-82b0b4468e3@linux.intel.com>
-References: <20220630100536.41329-1-ilpo.jarvinen@linux.intel.com> <CAHp75VcH9O6=Lk06w3Set==zBEFyseCSDN6OUE3n7g4ZnBM4Bg@mail.gmail.com>
+        Thu, 30 Jun 2022 06:36:16 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10C1A4F183;
+        Thu, 30 Jun 2022 03:36:14 -0700 (PDT)
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 315651C81188;
+        Thu, 30 Jun 2022 18:36:12 +0800 (CST)
+Received: from NTHCML01A.nuvoton.com (10.1.8.177) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 30
+ Jun 2022 18:36:12 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01A.nuvoton.com
+ (10.1.8.177) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 30 Jun
+ 2022 18:36:11 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Thu, 30 Jun 2022 18:36:11 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id A48CF63A0A; Thu, 30 Jun 2022 13:36:10 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
+        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
+        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
+        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
+        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v6 00/17] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Thu, 30 Jun 2022 13:35:49 +0300
+Message-ID: <20220630103606.83261-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-29156649-1656584452=:1605"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,79 +69,124 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+This patchset  adds initial support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family. 
 
---8323329-29156649-1656584452=:1605
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+The NPCM8XX computing subsystem comprises a quadcore ARM 
+Cortex A35 ARM-V8 architecture.
 
-On Thu, 30 Jun 2022, Andy Shevchenko wrote:
+This patchset adds minimal architecture and drivers such as:
+Clocksource, Clock, Reset, and WD.
 
-> On Thu, Jun 30, 2022 at 12:08 PM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > Instead of open-coding, use BIT(), GENMASK(), and FIELD_GET() helpers.
-> 
-> FIELD_GET() requires bitfield.h to be included. Is this the case already?
+Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
 
-It's there already.
+This patchset was tested on the Arbel NPCM8XX evaluation board.
+
+Addressed comments from:
+ - Arnd Bergmann: https://www.spinics.net/lists/arm-kernel/msg991125.html
+ - Christophe JAILLET : https://www.spinics.net/lists/kernel/msg4410204.html
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+ - NPCM8XX clock source driver
+	- Remove NPCM8XX TIMER_OF_DECLARE support, using the same as NPCM7XX.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (17):
+  dt-bindings: timer: npcm: Add npcm845 compatible string
+  dt-bindings: serial: 8250: Add npcm845 compatible string
+  dt-bindings: watchdog: npcm: Add npcm845 compatible string
+  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+  clk: npcm8xx: add clock controller
+  dt-bindings: reset: npcm: add GCR syscon property
+  ARM: dts: nuvoton: add reset syscon property
+  reset: npcm: using syscon instead of device data
+  dt-bindings: reset: npcm: Add support for NPCM8XX
+  reset: npcm: Add NPCM8XX support
+  dt-bindings: arm: npcm: Add maintainer
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+  arm64: dts: nuvoton: Add initial NPCM8XX device tree
+  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+  arm64: defconfig: Add Nuvoton NPCM family support
+
+ .../devicetree/bindings/arm/npcm/npcm.yaml    |   7 +
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   2 +
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   |  49 ++
+ .../bindings/reset/nuvoton,npcm750-reset.yaml |  10 +-
+ .../devicetree/bindings/serial/8250.yaml      |   1 +
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt    |   3 +-
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   1 +
+ arch/arm64/Kconfig.platforms                  |  11 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 170 +++++
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  |  30 +
+ .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 600 ++++++++++++++++++
+ drivers/reset/reset-npcm.c                    | 206 +++++-
+ .../dt-bindings/clock/nuvoton,npcm845-clk.h   |  49 ++
+ 21 files changed, 1196 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
 
 -- 
- i.
+2.33.0
 
-> If so,
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/tty/serial/8250/8250_dwlib.c | 26 +++++++++++++-------------
-> >  1 file changed, 13 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-> > index da330ef46446..a8bbed74ea70 100644
-> > --- a/drivers/tty/serial/8250/8250_dwlib.c
-> > +++ b/drivers/tty/serial/8250/8250_dwlib.c
-> > @@ -46,21 +46,21 @@
-> >  #define DW_UART_LCR_EXT_TRANSMIT_MODE  BIT(3)
-> >
-> >  /* Component Parameter Register bits */
-> > -#define DW_UART_CPR_ABP_DATA_WIDTH     (3 << 0)
-> > -#define DW_UART_CPR_AFCE_MODE          (1 << 4)
-> > -#define DW_UART_CPR_THRE_MODE          (1 << 5)
-> > -#define DW_UART_CPR_SIR_MODE           (1 << 6)
-> > -#define DW_UART_CPR_SIR_LP_MODE                (1 << 7)
-> > -#define DW_UART_CPR_ADDITIONAL_FEATURES        (1 << 8)
-> > -#define DW_UART_CPR_FIFO_ACCESS                (1 << 9)
-> > -#define DW_UART_CPR_FIFO_STAT          (1 << 10)
-> > -#define DW_UART_CPR_SHADOW             (1 << 11)
-> > -#define DW_UART_CPR_ENCODED_PARMS      (1 << 12)
-> > -#define DW_UART_CPR_DMA_EXTRA          (1 << 13)
-> > -#define DW_UART_CPR_FIFO_MODE          (0xff << 16)
-> > +#define DW_UART_CPR_ABP_DATA_WIDTH     GENMASK(1, 0)
-> > +#define DW_UART_CPR_AFCE_MODE          BIT(4)
-> > +#define DW_UART_CPR_THRE_MODE          BIT(5)
-> > +#define DW_UART_CPR_SIR_MODE           BIT(6)
-> > +#define DW_UART_CPR_SIR_LP_MODE                BIT(7)
-> > +#define DW_UART_CPR_ADDITIONAL_FEATURES        BIT(8)
-> > +#define DW_UART_CPR_FIFO_ACCESS                BIT(9)
-> > +#define DW_UART_CPR_FIFO_STAT          BIT(10)
-> > +#define DW_UART_CPR_SHADOW             BIT(11)
-> > +#define DW_UART_CPR_ENCODED_PARMS      BIT(12)
-> > +#define DW_UART_CPR_DMA_EXTRA          BIT(13)
-> > +#define DW_UART_CPR_FIFO_MODE          GENMASK(23, 16)
-> >
-> >  /* Helper for FIFO size calculation */
-> > -#define DW_UART_CPR_FIFO_SIZE(a)       (((a >> 16) & 0xff) * 16)
-> > +#define DW_UART_CPR_FIFO_SIZE(a)       (FIELD_GET(DW_UART_CPR_FIFO_MODE, (a)) * 16)
-> >
-> >  /*
-> >   * divisor = div(I) + div(F)
-> > --
-> > 2.30.2
-> >
-> 
-> 
-> 
-
---8323329-29156649-1656584452=:1605--
