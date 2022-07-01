@@ -2,131 +2,135 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9C05630DC
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Jul 2022 12:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEE4563115
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Jul 2022 12:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235284AbiGAKBI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 1 Jul 2022 06:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S233881AbiGAKNp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 1 Jul 2022 06:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234423AbiGAKBF (ORCPT
+        with ESMTP id S233332AbiGAKNo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 1 Jul 2022 06:01:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C820473937
-        for <linux-serial@vger.kernel.org>; Fri,  1 Jul 2022 03:01:03 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so2173677pjj.5
-        for <linux-serial@vger.kernel.org>; Fri, 01 Jul 2022 03:01:03 -0700 (PDT)
+        Fri, 1 Jul 2022 06:13:44 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAEB735B8
+        for <linux-serial@vger.kernel.org>; Fri,  1 Jul 2022 03:13:43 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-317a66d62dfso18747327b3.7
+        for <linux-serial@vger.kernel.org>; Fri, 01 Jul 2022 03:13:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EU+80uB9AuFDDwuDBeiwAOcy+KrpS749JH5BAOBcYCY=;
-        b=RQhyCVoJpISo4lW6ptfdIP1t2P+XiiVWvh7e5vn3W4BYATzrNOxd60d4k1GEEV9SL/
-         9q/LZbrj7KEpHzy536su0G4HRm4Z+ASlnecJZH3wF3NpTP3eygNTaDLYO2GzwnQR7M5t
-         FRVO301n6EcrOlF8BUEXNPI8ItnfRv5Lz5rdKct8qQBZCwhqpBD4lWyGCUxSBLM/2lCX
-         Zp/kvsTzutYgg6rE0h+Dq9JGR1Wbj20SFrvJD0DBs76bVLZ9DkQtZcSnJRu8qNMEXdLt
-         tYETEGNTgN0tM1wHhNM722aMFKs0F2nzuDQCum4RtACWqsB2jt7SJZ60KXf9bEHFkSWJ
-         9JCA==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zkRKKkHvNmeWqvRVOQLK4rfH21duyawXjkMEAhn/9YU=;
+        b=jc9gdMoaVyMdn2YJ8TGD4DyU8BGVsno1wLmvRcr2UavKHBClKTu8+gVDn5M5yFujUw
+         R2ijLTgXmeLmPLaKyzfbgHU3e8AXRYqNhNjjuUP9RvKLjPmPcwNXqItmNvkABPBp5iUY
+         Zw7fG+CZK3/1p5XxjFlACaowALfzIkGfraDMkJ1l/0BZE4huaircz41BrP3Omh5ss7Qm
+         WbgHyP2wyGfzlmarTPP7xV3O67bS0tKtnU1bLQ+xowUkWONB7J+wLjwvY6ckiPj48Qqx
+         5w9A6fqVHNPsswdABw53vlPSUlg11qc8kM2yQKg1BSPrjhUmayvP//IE8XlLmX+FfboT
+         EUxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EU+80uB9AuFDDwuDBeiwAOcy+KrpS749JH5BAOBcYCY=;
-        b=GFtZCH6dyKxxjpgAwAuPZr915aT3onC25sMkEd11ugHtTWZip2X05lugJ43jUGSOU2
-         ErnpX23jfPmRxsFao4jVJwKhA7wjnqROsGWZec8OdP9qj1u3d3mmBXoHY4cNjsJNxlbE
-         aGO/m9i36k6jy3Aqf7zgNjtsyo+HUDv863/ohOGWmEF6Te78l4u/66T8gKfNnzTEYVze
-         /dNtIOsW3Sut7Ec0ZCgBzCHox2Xr3Q+Jr9B1coOnvCFXhev6uFYvLII3/B8hBC8PfMOr
-         WXrmBKL4NTLqDJT6HWAtANoLB+GXth2S5RcIO5Hlgy4KcrKUEOqjHWPGXhGP3NDvqUw1
-         pifg==
-X-Gm-Message-State: AJIora+Tz20bTLtZdBO8v5Vil1r8isxPN4Kk+qBgNzaNzt/q5WRGSKrV
-        UpDx5vaJea7T2Gvc9oL7nyxolA==
-X-Google-Smtp-Source: AGRyM1tV1beAgmHJBBN4pNbi1B7WPOwBFJgQ1MJ2XehV5ju/UBeogLNx5INSiFlIR65SHcj52wr0qg==
-X-Received: by 2002:a17:902:f543:b0:16a:54c6:78c0 with SMTP id h3-20020a170902f54300b0016a54c678c0mr19537321plf.22.1656669663309;
-        Fri, 01 Jul 2022 03:01:03 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id x1-20020a636301000000b004085adf1372sm14913513pgb.77.2022.07.01.03.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jul 2022 03:01:02 -0700 (PDT)
-Date:   Fri, 1 Jul 2022 15:31:00 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 24/30] serial: qcom: Migrate to dev_pm_opp_set_config()
-Message-ID: <20220701100100.bxv4t4t7iqphalpv@vireshk-i7>
-References: <cover.1656660185.git.viresh.kumar@linaro.org>
- <1f3328dafaf9e2944fba8ec9e55e3072a63a4192.1656660185.git.viresh.kumar@linaro.org>
- <Yr6z5ixRTsIbZvsq@kroah.com>
- <20220701092458.tzqv7yul476kh2o7@vireshk-i7>
- <Yr7AwAZeSPeQKDPU@kroah.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zkRKKkHvNmeWqvRVOQLK4rfH21duyawXjkMEAhn/9YU=;
+        b=L7DkUHJe3lcN7Fh5C5I96DpCmAW03RCu5j58I+/3x5gkNGbw3UP3TvJzAsNzJhGv4R
+         VHhBkEgnvjRPHjh+/2Cc/XhrDjlekFZp7pmJwUkiQTpolndhEaFhlRmr9VYI42j8X9E/
+         pVukb4Ke3GCFlF3uKE8nTtWWhPD+LLcisskF/Amk2nBAkTZBDQacBLv24vr9xXBv8e7f
+         X48JjWPm5Dlgw6ve0cZ/AoPD8AyJqymUraKBibZzRLcj6lQ+5CqMXBOqfsHADzcR5sQY
+         d9mn3/TxjmcQGFCD7DYaHah+zTRAY/QVATVFefrQlKPAZNYeREh8RskflyvFJZlxce46
+         K4UQ==
+X-Gm-Message-State: AJIora+vqAH5S+Xm/pyJYtt85CT/1xzCi3dLL+WtIW6a2gHIEpXum4Ts
+        ntrT7035Y4trFXY+JcE5Y6YR9Cecgs/lVbOcNlw=
+X-Google-Smtp-Source: AGRyM1ufp0bUl+jOYYov+0Zuomx2Ux+d3Pk0S60JFRp6EfGOyTXtX3+RYzPNzSf68K9WfN+iapa6HfdFG9z3v1AzVJE=
+X-Received: by 2002:a81:74d7:0:b0:317:7463:d852 with SMTP id
+ p206-20020a8174d7000000b003177463d852mr15641908ywc.385.1656670422593; Fri, 01
+ Jul 2022 03:13:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr7AwAZeSPeQKDPU@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: samsonka22@gmail.com
+Received: by 2002:a05:7000:9993:0:0:0:0 with HTTP; Fri, 1 Jul 2022 03:13:42
+ -0700 (PDT)
+From:   HANAH VANDRAD <h.vandrad@gmail.com>
+Date:   Fri, 1 Jul 2022 03:13:42 -0700
+X-Google-Sender-Auth: 0LPyUJdOGIOEMhl_BgWvTe2Dz3Q
+Message-ID: <CAKY8iZrONJE44s7SqojBdusvvmVunMSQBiOpOPbQF7nhpWd5Xw@mail.gmail.com>
+Subject: Greetings dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1143 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [samsonka22[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [h.vandrad[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 01-07-22, 11:39, Greg Kroah-Hartman wrote:
-> It's now more complex for simple drivers like this, right?
+Greetings dear
 
-They need to add a structure, yes.
 
-> Why not
-> provide translations of the devm_pm_opp_set_clkname() to use internally
-> devm_pm_opp_set_config() if you want to do complex things,
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god's mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs.Hannah
+Vandrad, a widow suffering from a long time illness. I have some funds
+I inherited from my late husband, the sum of ($11,000,000.00,)
+my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest and God fearing person who can claim this
+money and use it for Charity works, for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of god
+and the effort that the house of god is maintained.
 
-That can be done, yes.
+ I do not want a situation where this money will be used in an ungodly
+manner. That's why I'm taking this decision. I'm not afraid of death,
+so I know where I'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincere and urgent answer to know if you will be able to execute
+this project, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of god be with you and all those that you
+love and  care for.
 
-> allowing you
-> to continue to do simple things without the overhead of a driver having
-> to create a structure on the stack
+I am waiting for your reply.
 
-I didn't think of it as complexity, and I still feel it is okay-ish.
+May God Bless you,
 
-> and remember how the "const char *[]"
-> syntax looks like (seriously, that's crazy).
-
-The syntax can be fixed, if we want, by avoiding the cast with
-something like this:
-
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index a018b45c5a9a..1a5480214a43 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -2559,8 +2559,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
-        const struct sdhci_msm_offset *msm_offset;
-        const struct sdhci_msm_variant_info *var_info;
-        struct device_node *node = pdev->dev.of_node;
-+       const char *clks[] = { "core" };
-        struct dev_pm_opp_config opp_config = {
--               .clk_names = (const char *[]){ "core" },
-+               .clk_names = clks,
-                .clk_count = 1,
-        };
-
-> Make it simple for simple things, and provide the ability to do complex
-> things only if that is required.
-
-I still feel it isn't too bad for simple cases right now too, it is
-just a structure to fill out but I don't have hard feelings for
-keeping the old API around. I just feel it isn't too helpful to keep
-the old interfaces around, it will just confuse people at the best.
-
-Anyway, I will keep them around.
-
--- 
-viresh
+ Mrs.Hannah Vandrad.
