@@ -2,143 +2,44 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF82B563228
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Jul 2022 13:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE7A563375
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Jul 2022 14:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiGALEj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 1 Jul 2022 07:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S233772AbiGAMYw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 1 Jul 2022 08:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiGALEh (ORCPT
+        with ESMTP id S230467AbiGAMYv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 1 Jul 2022 07:04:37 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0D7B34C;
-        Fri,  1 Jul 2022 04:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1656673474; x=1657278274;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=bv766joUVjhml/ohRewuiZUoQpgWryALAkuM5T2/NTU=;
-  b=DriJBfY8sStlyjTJFerwu98iHtkrTSyqhb5zk7Da0x/k1Mj/kRbzfcEn
-   9IwxbLm1ZTV0wR4HwW3gt2KNRPBGBg+wF8Qbmk2D+Wvo506eF5LTkqZrM
-   A83YB403AFgIkQEzGoKOZzcPjRemEoEAtjXtNpBmmYc6whkgBijTYDN60
-   U=;
-Received: from mail-co1nam11lp2177.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.177])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 11:04:32 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0wZ1Gd0EzEotnbEKcEBFgcloIqKurxC3BAV7QQ9HXjW6U133Ioqb7OnyjYN8JaLPPKG17Fp2dLAoSZIzzWzZIVeIr2A6yIrGH+adzhS4zfeaZBbG0HQzFFsZcWRjw40CHc6sYq0S5qRLCxIpEbVBPOyWTKxX1HDhY3c79JT9lHQsbk5/f8GAt9oDxBhHqDyWDVoTZmoZLKj3bp5eU6X77ypKQzszaKbxk3rOt9LzDYYpOoH32+RM2nsrWTkGIGeAK26bvPIV9eBnzo73Q0oMYindA9eyUXfCk3xdeuIzM+yxXO8BekazvbQgABeOlhnR9lY87+pGRKWdNFheodvPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bv766joUVjhml/ohRewuiZUoQpgWryALAkuM5T2/NTU=;
- b=AVMciDQkCcYXX6ClvJ831pGEyBN8i6xkLq49TDpLhU4H1MghaEo6Eka9g6g2AVAPtLLNYadAt1jLdbWF6wbusJ0RHECIgudYBH042pioMEXztrYPGYSEjGQiH5a6BPI4nJI69uoeHUAcu+5ssp+yZeOafwH5hpBR3fbMgVrf8Zr/nPvHrmfQIVI2xEbJ+t0v/UYZufipwynx5RZYLlkvuzBFOvWgrRpgCiV6ywYI9sVlqB75MAr1pvde7RB7DBOpnmxuNiTjbwANTozKRSbh+UJfsQLgYlE9EoditPZwVNpfnPnyXT5NSHVsBO/xu/NBYf31WMNWc92TATrzm3nj8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from BL0PR02MB4564.namprd02.prod.outlook.com (2603:10b6:208:4d::13)
- by SA1PR02MB8397.namprd02.prod.outlook.com (2603:10b6:806:1f1::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Fri, 1 Jul
- 2022 11:04:30 +0000
-Received: from BL0PR02MB4564.namprd02.prod.outlook.com
- ([fe80::e861:e6a:b148:865b]) by BL0PR02MB4564.namprd02.prod.outlook.com
- ([fe80::e861:e6a:b148:865b%3]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 11:04:30 +0000
-From:   "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>
-To:     Doug Anderson <dianders@chromium.org>,
-        "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>
-CC:     Andy Gross <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: RE: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Thread-Topic: [V2] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which
- otherwise could return a sub-optimal clock rate.
-Thread-Index: AQHYi58pVIc+cNioKEmeVrCYMiTPqq1nBQCAgAJNqOA=
-Date:   Fri, 1 Jul 2022 11:04:30 +0000
-Message-ID: <BL0PR02MB4564A1EC37911A464BBEC260FABD9@BL0PR02MB4564.namprd02.prod.outlook.com>
-References: <1656496841-5853-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=UXP+dfYEHpsS_djnWYxNVUS__2Uu5Mmxt2G4T=vfSSQQ@mail.gmail.com>
-In-Reply-To: <CAD=FV=UXP+dfYEHpsS_djnWYxNVUS__2Uu5Mmxt2G4T=vfSSQQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7cdefb14-8dd0-4220-3b96-08da5b5178c6
-x-ms-traffictypediagnostic: SA1PR02MB8397:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0ORsiSHXWlfCuk52N7kPaszhq/7EgrvHvgE8oC5CDJ6xGcYbOt5g2jZDzDp2Rxl8Js/EKLBqGWcZAR7kZS8hAK/i5oCvSohycpoUGzT3DfYVa0bB0FsbLypdi6O1hBHvp1UmV9hGW+HNtrVOpcTIEMqXHnUYsYPKCNRiL/36jtxsMDKhnwcChtKosFwDjIEGoGlcDg20e4PY0ogwtja1WJzolbIPzmu8yqCsI+DJ3xXq4E8VMs2e4t24xoydstqHg4eQ52N2pDDz0IK2rBzrzl5P3Y9wPCBhGcQDWPY03PWN2gb5qWlYscflCQ6YDWCIqAVdymPfLX5AQo+JF4JhM8nTW0r1qbdFCSnzmf8JreR6CrZZzLsRomNCXdjDkcCz9hi+DsOUDbj6/Uze11ddy8J+xJB2c8rsQq1usyjFHDs20YnCH304FGwOm8oQRGi2rBpojhbc+1irR6uqDeGgWcuP/ERVwVxWC77voYQ4Yrw9ULJw9yFpfAPfPueYk1fo5aI1O7dlbC3/RC26VrvcnF1QAUk5LRRLwjgmV6vdXFF+v47IzbpaoHI/GP1y1rDLG5HScgF7/aQuyzOQQ31VidzXGthcg8VMtw4E0gcOk4d8dzr8qDRUMUAptPm5ZDXuScy6rzQtqjGEZIFHpmnnob/POlN/EoBzl0foej7uj6r2nbi7agRaZl2uNSilF9gQi0aFoUB0deZEuRg6IqItjM0SLDe+o2HVSHAqRS+qa+PgRDqQZfrsq7y11hNaUJg93uzynGJjeeqSzCpSurlSyOWbvlGOWyq4B4OFZpCwpkTJWkTw3bI2vaU3ZK5l52vR
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4564.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(136003)(39860400002)(346002)(366004)(76116006)(8676002)(64756008)(478600001)(66556008)(66476007)(52536014)(66946007)(5660300002)(66446008)(2906002)(33656002)(4326008)(7416002)(26005)(9686003)(86362001)(71200400001)(8936002)(7696005)(6506007)(41300700001)(53546011)(110136005)(55016003)(122000001)(316002)(38100700002)(186003)(83380400001)(54906003)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ylk3YTJlRUN5cU93aHZNOStkSkxrcm5uOVdFWUJ5QnR2bXNlQ1p6OGtZVG9B?=
- =?utf-8?B?ZFF3ekRtZFZJVktQRGVsUDI0SGYyRDIzWURabXVQSXVCT2dRaGNOVVIvZm9L?=
- =?utf-8?B?bVdEWmFZakliY2w1KytkUWdFamVtejRKRW5PdDhUMGJFVXF0aEZUaUxxK1Nv?=
- =?utf-8?B?L3c3ZC82Zmdyc1M0RnQvbVpLcmtOOTJDSWdjU1poT1lsTXVvUUhYdVlITnRr?=
- =?utf-8?B?UmV4K3Qzdkg1ZmxPMk1Vc21Bc3VIR3c1eWdBR1NEc2VtSXAweW1lNHhkbEZM?=
- =?utf-8?B?VkFFejlIMGY1TlE5ckpkSnBKUG5uYnJtUmN6NCtNbTQ2MWhDTVI2ZENIT3Iv?=
- =?utf-8?B?ZHo0T3czOGJESXZGSmF2dXJmcUpwdUlmWjhBV3J5U1Z1L1FtUjRVRHk2RjlI?=
- =?utf-8?B?MFVxSk54bXBkRWwybytNN0hKU0hIMzdBTlpRS1grVU5BelVnZzgzSmlnU2gx?=
- =?utf-8?B?Q1VQYUdPeEVIeTc4dWd3L21iYmFZVmtKNzdRT2pQOXFvRW1UMkkvSGF3Z3Bx?=
- =?utf-8?B?K0dvM0NjZ09jM1czTGhLY3Z0Lzh1aTdlVmJyNldqdDg1My9ycS9iSDVpQzZK?=
- =?utf-8?B?Ym1QZWttSnRhWHI3eEIxNzArWTl1VjdWL2ZtV2hsa3ExMnRTVVE1KzBqZ1l2?=
- =?utf-8?B?TlcyOTVHanlyeHBYL3NLY1RWK0lTOXExSmtyRHZhOHY2S1VOWlZPZGdvQ1Nk?=
- =?utf-8?B?QW9uM1dPRVRZN1VodmFPaThwVTBWekhmYmpYYnZZSHFRRnJ0UzRlNlNRSTh3?=
- =?utf-8?B?dDdzRmlJYmtYWW9DeERCOWtZbTFNZFBvWjZSaXRsU0pQUXZmak1NUHFmQU9F?=
- =?utf-8?B?L0FNTlRBNDdLY25JQ2E4N2RJSUJtblcyNnVHK2ZnN2JSMTBvRXZkaUF6Y2x3?=
- =?utf-8?B?REM1Sis3T1hvWWtYeFpnZkhJbVk1ZDE1UFhhT2pxbXY5TE5jY3Y5UWIrMWVr?=
- =?utf-8?B?SUVRQlNWYXk5MEN6dTRJTk9VR2owbm5hV2xhdm9BQ3Bzb0hPRDc0bjQ1bHZq?=
- =?utf-8?B?Y0FEOUdGQ0VCcXY1Ni9OdFRiZzdQMXZ6QUNZTHlJUGI0bVdiRzhoUVgvZVBz?=
- =?utf-8?B?QW5naHhtQXpEa3oydWNXbGV4cHJtNVN6RjdpY2RPZVJqWXlxUkdEbnRlSy9t?=
- =?utf-8?B?QzYyekpSVjliRDVSajFDR1lNOXk3RS90blFoVFhFWlRYbStIT0k2cDIydWIz?=
- =?utf-8?B?NWNLOXo0cTlqUUdBd0hxNVJqcnVkeDRacjNzZDM1Z1pqRXU2Ukc2R0MraEUw?=
- =?utf-8?B?bWsranpiK0ZGWlZyN1lGYnNGWnM5T3NYZVZuM2lmVkhiaHBnMS9ZU1N3cnJE?=
- =?utf-8?B?STl1c1NvYlZwdHJpV1M0cXFpUFdGWExtR0NBdnpHTzV5L213MGJtYzNNZTBo?=
- =?utf-8?B?RVQ0RDZndnhWT2trOTlnaEtMWFBCbnJmSWkyME1IU01jUm1NSHFrTEVVQ1pr?=
- =?utf-8?B?eXlZODQ4cFlxYVdkbHN0SDdCNjZtVU1xWXY4SThhU3RaQ0hEd1pnSTh2TCtt?=
- =?utf-8?B?YThvdEtPTDlRQXRLMW5uamh4Y0I0VHkvOW5hcVk2SGFnN3ZDQlJma3BpMjQ5?=
- =?utf-8?B?bmdLRVRVcXpDL1owWVRyZHRXaHJuSitMbndYSWRmaWZsditwQWtlZlRNOEF0?=
- =?utf-8?B?MHNJUmE0VFNMc0VkSHB0cVQyc3I5Y2xrVTN1WEZTNXhpdjVRWlptZ00wYnMz?=
- =?utf-8?B?SDM0VXdsa3JDOVFqYjZZSDJCV3R5V25TU3QwbkppbmJaZUVWUDJRN3NuOUdy?=
- =?utf-8?B?cXBIaGg5Wjk2OGtEdEh2aXAyc0F4eTM4bi9uU3d3S2FXOWJPcDFkMWZBdFVL?=
- =?utf-8?B?Q3prakc2R2VNMlJnVU9KTC94WCtQdm9LOCtORFpFbDFvTTVqeUVHSUtRRXc3?=
- =?utf-8?B?M1c5Q3AwSG54ZDdlN2o0bVUrWUE1TVk1R2MvNzRJK2o1VCtFaDErZXMxeHZx?=
- =?utf-8?B?SGxEdTY5VFhEdjNKY2VPZFo4ZlhPdmo0VWcwc1hMUHRpSDNFTGN5ZGNIdU1s?=
- =?utf-8?B?SUJrdTNRTkRYREMxeHAvTE4wd0d5WlpDd1RHcmp1REdjb1ltb2ZQUFRJcWFo?=
- =?utf-8?B?NnQxRE5CL0VhYTR4SGpUUmhLYWo3aHZSa2tadnVLSGRuS2ZZWkx6RFY3bWl2?=
- =?utf-8?Q?v3f0XJiisX8G3CRpcljj+sFgX?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 1 Jul 2022 08:24:51 -0400
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128B528703
+        for <linux-serial@vger.kernel.org>; Fri,  1 Jul 2022 05:24:49 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20220701122446cebc95ac459f9a633a
+        for <linux-serial@vger.kernel.org>;
+        Fri, 01 Jul 2022 14:24:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=vdEjvi4goJaezVsDPfjJiGKV/3k14Nxs5JO/YmKAESY=;
+ b=LlRrCsAXz1Zp1bVB7wVXLfgoo3bA4Lq1rZLTZxsXvmrC1PB7QR/Mq9/S/FLpx/2KW1IEd3
+ lIYcFR3XnkSUHpmZT2YbV9u8Uk20HAPiDWZ0p2iWP94OS616Y2dXYgawN1SsMYQkti3LVCFw
+ mpnpOpOyAJ+yo5k07rH5NBpER6wtA=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v5 1/2] tty: n_gsm: fix deadlock and link starvation in outgoing data path
+Date:   Fri,  1 Jul 2022 14:23:31 +0200
+Message-Id: <20220701122332.2039-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4564.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cdefb14-8dd0-4220-3b96-08da5b5178c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2022 11:04:30.2769
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oCU4G3Gf7K+L+QI96r0zo16MaaPFr4gbXOMa3oVb8y3MyGO+vnoFrTCAi4wrZk1cRSyVkbREJPjNS0dunhU7OBKp6CdnqGI0Ct+CSYwWj8M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB8397
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -147,77 +48,713 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-SGksDQoNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBEb3VnIEFuZGVy
-c29uIDxkaWFuZGVyc0BjaHJvbWl1bS5vcmc+DQo+IFNlbnQ6IFRodXJzZGF5LCBKdW5lIDMwLCAy
-MDIyIDQ6NDUgQU0NCj4gVG86IFZpamF5YSBLcmlzaG5hIE5pdmFydGhpIChUZW1wKSAoUVVJQykg
-PHF1aWNfdm5pdmFydGhAcXVpY2luYy5jb20+DQo+IENjOiBBbmR5IEdyb3NzIDxhZ3Jvc3NAa2Vy
-bmVsLm9yZz47IGJqb3JuLmFuZGVyc3NvbkBsaW5hcm8ub3JnOyBLb25yYWQNCj4gRHliY2lvIDxr
-b25yYWQuZHliY2lvQHNvbWFpbmxpbmUub3JnPjsgR3JlZyBLcm9haC1IYXJ0bWFuDQo+IDxncmVn
-a2hAbGludXhmb3VuZGF0aW9uLm9yZz47IEppcmkgU2xhYnkgPGppcmlzbGFieUBrZXJuZWwub3Jn
-PjsgbGludXgtYXJtLQ0KPiBtc20gPGxpbnV4LWFybS1tc21Admdlci5rZXJuZWwub3JnPjsgbGlu
-dXgtc2VyaWFsQHZnZXIua2VybmVsLm9yZzsgTEtNTA0KPiA8bGludXgta2VybmVsQHZnZXIua2Vy
-bmVsLm9yZz47IE11a2VzaCBTYXZhbGl5YSAoUVVJQykNCj4gPHF1aWNfbXNhdmFsaXlAcXVpY2lu
-Yy5jb20+OyBNYXR0aGlhcyBLYWVobGNrZSA8bWthQGNocm9taXVtLm9yZz47DQo+IFN0ZXBoZW4g
-Qm95ZCA8c3dib3lkQGNocm9taXVtLm9yZz4NCj4gU3ViamVjdDogUmU6IFtWMl0gdHR5OiBzZXJp
-YWw6IHFjb20tZ2VuaS1zZXJpYWw6IEZpeCBnZXRfY2xrX2Rpdl9yYXRlKCkgd2hpY2gNCj4gb3Ro
-ZXJ3aXNlIGNvdWxkIHJldHVybiBhIHN1Yi1vcHRpbWFsIGNsb2NrIHJhdGUuDQo+IA0KPiANCj4g
-DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvKiBTYXZlIHRoZSBmaXJzdCAo
-bG93ZXN0IGZyZXEpIHdpdGhpbiB0b2xlcmFuY2UgKi8NCj4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHNlcl9jbGsgPSBmcmVxOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgKmNsa19kaXYgPSBuZXdfZGl2Ow0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgLyogbm8gbW9yZSBzZWFyY2ggZm9yIGV4YWN0IG1hdGNoIHJlcXVpcmVkIGluIDJu
-ZCBydW4gKi8NCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmICghZXhhY3Rf
-bWF0Y2gpDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFr
-Ow0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIH0NCj4gPiArICAgICAgICAgICAgICAgfQ0K
-PiA+DQo+ID4gLSAgICAgICAgICAgICAgIHByZXYgPSBmcmVxOw0KPiA+ICsgICAgICAgICAgICAg
-ICBkaXYgPSBmcmVxIC8gZGVzaXJlZF9jbGsgKyAxOw0KPiANCj4gQ2FuJ3QgeW91IGluZmluaXRl
-IGxvb3Agbm93Pw0KPiANCj4gU3RhcnQgd2l0aDoNCj4gDQo+IGRlc2lyZWRfY2xrID0gMTAwMDAN
-Cj4gZGl2ID0gMQ0KPiBwZXJjZW50X3RvbCA9IDINCj4gDQo+IA0KPiBOb3c6DQo+IA0KPiBtdWx0
-ID0gMTAwMDANCj4gb2Zmc2V0ID0gMjAwDQo+IHRlc3RfZnJlcSA9IDk4MDANCj4gZnJlcSA9IDk4
-MDANCj4gZGl2ID0gOTgwMCAvIDEwMDAwICsgMSA9IDAgKyAxID0gMQ0KPiANCj4gLi4uYW5kIHRo
-ZW4geW91J2xsIGxvb3AgYWdhaW4gd2l0aCAiZGl2ID0gMSIsIHdvbid0IHlvdT8gLi4ub3IgZGlk
-IEkgZ2V0DQo+IHNvbWV0aGluZyB3cm9uZyBpbiBteSBhbmFseXNpcz8gVGhpcyBpcyB0aGUgcmVh
-c29uIG15IHByb3Bvc2VkIGFsZ29yaXRobQ0KPiBoYWQgdHdvIGxvb3BzLg0KPiANCj4gDQoNCkkg
-d2VudCBiYWNrIHRvIHlvdXIgcHJvcG9zZWQgYWxnb3JpdGhtIGFuZCBtYWRlIGNvdXBsZSBvZiBz
-aW1wbGUgY2hhbmdlcywgYW5kIGl0IHNlZW1lZCBsaWtlIHdoYXQgd2UgbmVlZC4NCg0KYSkgbG9v
-ayBvbmx5IGZvciBleGFjdCBtYXRjaCBvbmNlIGEgY2xvY2sgcmF0ZSB3aXRoaW4gdG9sZXJhbmNl
-IGlzIGZvdW5kDQpiKSBzd2FwIHRlc3RfZnJlcSBhbmQgZnJlcSBhdCBlbmQgb2Ygd2hpbGUgbG9v
-cHMgdG8gbWFrZSBpdCBydW4gYXMgZGVzaXJlZA0KDQoNCgltYXhkaXYgPSBDTEtfRElWX01TSyA+
-PiBDTEtfRElWX1NIRlQ7DQoJZGl2ID0gMTsNCg0KCXdoaWxlIChkaXYgPCBtYXhkaXYpIHsNCgkJ
-bXVsdCA9ICh1bnNpZ25lZCBsb25nIGxvbmcpZGl2ICogZGVzaXJlZF9jbGs7DQoJCWlmIChtdWx0
-ICE9ICh1bnNpZ25lZCBsb25nKW11bHQpDQoJCQlicmVhazsNCg0KCQlpZiAoc2VyX2NsaykNCgkJ
-CW9mZnNldCA9IDA7DQoJCT09PT09PT09PT09PT09PT09PT1hPT09PT09PT09PT09PT09PT09PT09
-DQoJCWVsc2UNCgkJCW9mZnNldCA9IGRpdl91NjQobXVsdCAqIHBlcmNlbnRfdG9sLCAxMDApOw0K
-DQoJCS8qDQoJCSAqIExvb3AgcmVxdWVzdGluZyAoZnJlcSAtIDIlKSBhbmQgcG9zc2libHkgKGZy
-ZXEpLg0KCQkgKg0KCQkgKiBXZSdsbCBrZWVwIHRyYWNrIG9mIHRoZSBsb3dlc3QgZnJlcSBpbmV4
-YWN0IG1hdGNoIHdlIGZvdW5kDQoJCSAqIGJ1dCBhbHdheXMgdHJ5IHRvIGZpbmQgYSBwZXJmZWN0
-IG1hdGNoLiBOT1RFOiB0aGlzIGFsZ29yaXRobQ0KCQkgKiBjb3VsZCBtaXNzIGEgc2xpZ2h0bHkg
-YmV0dGVyIGZyZXEgaWYgdGhlcmUncyBtb3JlIHRoYW4gb25lDQoJCSAqIGZyZXEgYmV0d2VlbiAo
-ZnJlcSAtIDIlKSBhbmQgKGZyZXEpIGJ1dCAoZnJlcSkgY2FuJ3QgYmUgbWFkZQ0KCQkgKiBleGFj
-dGx5LCBidXQgdGhhdCdzIE9LLg0KCQkgKg0KCQkgKiBUaGlzIGFic29sdXRlbHkgcmVsaWVzIG9u
-IHRoZSBmYWN0IHRoYXQgdGhlIFF1YWxjb21tIGNsb2NrDQoJCSAqIGRyaXZlciBhbHdheXMgcm91
-bmRzIHVwLg0KCQkgKi8NCgkJdGVzdF9mcmVxID0gbXVsdCAtIG9mZnNldDsNCgkJd2hpbGUgKHRl
-c3RfZnJlcSA8PSBtdWx0KSB7DQoJCQlmcmVxID0gY2xrX3JvdW5kX3JhdGUoY2xrLCB0ZXN0X2Zy
-ZXEpOw0KDQoJCQkvKg0KCQkJICogQSBkZWFkLW9uIGZyZXEgaXMgYW4gaW5zdGEtd2luLiBUaGlz
-IGltcGxpY2l0bHkNCgkJCSAqIGhhbmRsZXMgd2hlbiAiZnJlcSA9PSBtdWx0Ig0KCQkJICovDQoJ
-CQlpZiAoIShmcmVxICUgZGVzaXJlZF9jbGspKSB7DQoJCQkJKmNsa19kaXYgPSBmcmVxIC8gZGVz
-aXJlZF9jbGs7DQoJCQkJcmV0dXJuIGZyZXE7DQoJCQl9DQoNCgkJCS8qDQoJCQkgKiBPbmx5IHRp
-bWUgY2xvY2sgZnJhbWV3b3JrIGRvZXNuJ3Qgcm91bmQgdXAgaXMgaWYNCgkJCSAqIHdlJ3JlIHBh
-c3QgdGhlIG1heCBjbG9jayByYXRlLiBXZSdyZSBkb25lIHNlYXJjaGluZw0KCQkJICogaWYgdGhh
-dCdzIHRoZSBjYXNlLg0KCQkJICovDQoJCQlpZiAoZnJlcSA8IHRlc3RfZnJlcSkNCgkJCQlyZXR1
-cm4gc2VyX2NsazsNCg0KCQkJLyogU2F2ZSB0aGUgZmlyc3QgKGxvd2VzdCBmcmVxKSB3aXRoaW4g
-dG9sZXJhbmNlICovDQoJCQlpZiAoIXNlcl9jbGsgJiYgZnJlcSA8PSBtdWx0ICsgb2Zmc2V0KSB7
-DQoJCQkJc2VyX2NsayA9IGZyZXE7DQoJCQkJKmNsa19kaXYgPSBkaXY7DQoJCQl9DQoNCgkJCS8q
-DQoJCQkgKiBJZiB3ZSBhbHJlYWR5IHJvdW5kZWQgdXAgcGFzdCBtdWx0IHRoZW4gdGhpcyB3aWxs
-DQoJCQkgKiBjYXVzZSB0aGUgbG9vcCB0byBleGl0LiBJZiBub3QgdGhlbiB0aGlzIHdpbGwgcnVu
-DQoJCQkgKiB0aGUgbG9vcCBhIHNlY29uZCB0aW1lIHdpdGggZXhhY3RseSBtdWx0Lg0KCQkJICov
-DQoJCQl0ZXN0X2ZyZXEgPSBtYXgodGVzdF9mcmVxICsgMSwgbXVsdCk7DQoJCQkgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgID09PT1iPT09PQ0KCQl9DQoNCgkJLyoNCgkJICogZnJlcSB3aWxs
-IGFsd2F5cyBiZSBiaWdnZXIgdGhhbiBtdWx0IGJ5IGF0IGxlYXN0IDEuDQoJCSAqIFRoYXQgbWVh
-bnMgd2UgY2FuIGdldCB0aGUgbmV4dCBkaXZpZGVyIHdpdGggYSBESVZfUk9VTkRfVVAuDQoJCSAq
-IFRoaXMgaGFzIHRoZSBhZHZhbnRhZ2Ugb2Ygc2tpcHBpbmcgYnkgYSB3aG9sZSBidW5jaCBvZiBk
-aXZzDQoJCSAqIElmIHRoZSBjbG9jayBmcmFtZXdvcmsgYWxyZWFkeSBieXBhc3NlZCB0aGVtLg0K
-CQkgKi8NCgkJZGl2ID0gRElWX1JPVU5EX1VQKGZyZXEsIGRlc2lyZWRfY2xrKTsNCgkJICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPT09Yj09DQoJfQ0KDQoNCldpbGwgYWxz
-byBkcm9wIGV4YWN0X21hdGNoIG5vdy4NCg0KV2lsbCB1cGxvYWQgdjMgYWZ0ZXIgdGVzdGluZy4N
-Cg0KVGhhbmsgeW91LA0KVmlqYXkvDQoNCg0K
+From: Daniel Starke <daniel.starke@siemens.com>
+
+The current implementation queues up new control and user packets as needed
+and processes this queue down to the ldisc in the same code path.
+That means that the upper and the lower layer are hard coupled in the code.
+Due to this deadlocks can happen as seen below while transmitting data,
+especially during ldisc congestion. Furthermore, the data channels starve
+the control channel on high transmission load on the ldisc.
+
+Introduce an additional control channel data queue to prevent timeouts and
+link hangups during ldisc congestion. This is being processed before the
+user channel data queue in gsm_data_kick(), i.e. with the highest priority.
+Put the queue to ldisc data path into a workqueue and trigger it whenever
+new data has been put into the transmission queue. Change
+gsm_dlci_data_sweep() accordingly to fill up the transmission queue until
+TX_THRESH_HI. This solves the locking issue, keeps latency low and provides
+good performance on high data load.
+Note that now all packets from a DLCI are removed from the internal queue
+if the associated DLCI was closed. This ensures that no data is sent by the
+introduced write task to an already closed DLCI.
+
+BUG: spinlock recursion on CPU#0, test_v24_loop/124
+ lock: serial8250_ports+0x3a8/0x7500, .magic: dead4ead, .owner: test_v24_loop/124, .owner_cpu: 0
+CPU: 0 PID: 124 Comm: test_v24_loop Tainted: G           O      5.18.0-rc2 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0x34/0x44
+ do_raw_spin_lock+0x76/0xa0
+ _raw_spin_lock_irqsave+0x72/0x80
+ uart_write_room+0x3b/0xc0
+ gsm_data_kick+0x14b/0x240 [n_gsm]
+ gsmld_write_wakeup+0x35/0x70 [n_gsm]
+ tty_wakeup+0x53/0x60
+ tty_port_default_wakeup+0x1b/0x30
+ serial8250_tx_chars+0x12f/0x220
+ serial8250_handle_irq.part.0+0xfe/0x150
+ serial8250_default_handle_irq+0x48/0x80
+ serial8250_interrupt+0x56/0xa0
+ __handle_irq_event_percpu+0x78/0x1f0
+ handle_irq_event+0x34/0x70
+ handle_fasteoi_irq+0x90/0x1e0
+ __common_interrupt+0x69/0x100
+ common_interrupt+0x48/0xc0
+ asm_common_interrupt+0x1e/0x40
+RIP: 0010:__do_softirq+0x83/0x34e
+Code: 2a 0a ff 0f b7 ed c7 44 24 10 0a 00 00 00 48 c7 c7 51 2a 64 82 e8 2d
+e2 d5 ff 65 66 c7 05 83 af 1e 7e 00 00 fb b8 ff ff ff ff <49> c7 c2 40 61
+80 82 0f bc c5 41 89 c4 41 83 c4 01 0f 84 e6 00 00
+RSP: 0018:ffffc90000003f98 EFLAGS: 00000286
+RAX: 00000000ffffffff RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff82642a51 RDI: ffffffff825bb5e7
+RBP: 0000000000000200 R08: 00000008de3271a8 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000030 R14: 0000000000000000 R15: 0000000000000000
+ ? __do_softirq+0x73/0x34e
+ irq_exit_rcu+0xb5/0x100
+ common_interrupt+0xa4/0xc0
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x1e/0x40
+RIP: 0010:_raw_spin_unlock_irqrestore+0x2e/0x50
+Code: 00 55 48 89 fd 48 83 c7 18 53 48 89 f3 48 8b 74 24 10 e8 85 28 36 ff
+48 89 ef e8 cd 58 36 ff 80 e7 02 74 01 fb bf 01 00 00 00 <e8> 3d 97 33 ff
+65 8b 05 96 23 2b 7e 85 c0 74 03 5b 5d c3 0f 1f 44
+RSP: 0018:ffffc9000020fd08 EFLAGS: 00000202
+RAX: 0000000000000000 RBX: 0000000000000246 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff8257fd74 RDI: 0000000000000001
+RBP: ffff8880057de3a0 R08: 00000008de233000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000100 R14: 0000000000000202 R15: ffff8880057df0b8
+ ? _raw_spin_unlock_irqrestore+0x23/0x50
+ gsmtty_write+0x65/0x80 [n_gsm]
+ n_tty_write+0x33f/0x530
+ ? swake_up_all+0xe0/0xe0
+ file_tty_write.constprop.0+0x1b1/0x320
+ ? n_tty_flush_buffer+0xb0/0xb0
+ new_sync_write+0x10c/0x190
+ vfs_write+0x282/0x310
+ ksys_write+0x68/0xe0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3e5e35c15c
+Code: 8b 7c 24 08 89 c5 e8 c5 ff ff ff 89 ef 89 44 24 08 e8 58 bc 02 00 8b
+44 24 08 48 83 c4 10 5d c3 48 63 ff b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff
+ff 76 10 48 8b 15 fd fc 05 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007ffcee77cd18 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007ffcee77cd70 RCX: 00007f3e5e35c15c
+RDX: 0000000000000100 RSI: 00007ffcee77cd90 RDI: 0000000000000003
+RBP: 0000000000000100 R08: 0000000000000000 R09: 7efefefefefefeff
+R10: 00007f3e5e3bddeb R11: 0000000000000246 R12: 00007ffcee77ce8f
+R13: 0000000000000001 R14: 000056214404e010 R15: 00007ffcee77cd90
+ </TASK>
+
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 407 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 279 insertions(+), 128 deletions(-)
+
+Merged v4 into the tty-testing branch. No other changes applied.
+
+Link: https://lore.kernel.org/all/20220701061652.39604-6-daniel.starke@siemens.com/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 9a3d7db33394..79869f2b570c 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -5,6 +5,14 @@
+  *
+  *	* THIS IS A DEVELOPMENT SNAPSHOT IT IS NOT A FINAL RELEASE *
+  *
++ * Outgoing path:
++ * tty -> DLCI fifo -> scheduler -> GSM MUX data queue    ---o-> ldisc
++ * control message               -> GSM MUX control queue --´
++ *
++ * Incoming path:
++ * ldisc -> gsm_queue() -o--> tty
++ *                        `-> gsm_control_response()
++ *
+  * TO DO:
+  *	Mostly done:	ioctls for setting modes/timing
+  *	Partly done:	hooks so you can pull off frames to non tty devs
+@@ -210,6 +218,9 @@ struct gsm_mux {
+ 	/* Events on the GSM channel */
+ 	wait_queue_head_t event;
+ 
++	/* ldisc send work */
++	struct work_struct tx_work;
++
+ 	/* Bits for GSM mode decoding */
+ 
+ 	/* Framing Layer */
+@@ -241,7 +252,8 @@ struct gsm_mux {
+ 	unsigned int tx_bytes;		/* TX data outstanding */
+ #define TX_THRESH_HI		8192
+ #define TX_THRESH_LO		2048
+-	struct list_head tx_list;	/* Pending data packets */
++	struct list_head tx_ctrl_list;	/* Pending control packets */
++	struct list_head tx_data_list;	/* Pending data packets */
+ 
+ 	/* Control messages */
+ 	struct timer_list kick_timer;	/* Kick TX queuing on timeout */
+@@ -371,6 +383,11 @@ static const u8 gsm_fcs8[256] = {
+ 
+ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len);
+ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk);
++static struct gsm_msg *gsm_data_alloc(struct gsm_mux *gsm, u8 addr, int len,
++								u8 ctrl);
++static int gsm_send_packet(struct gsm_mux *gsm, struct gsm_msg *msg);
++static void gsmld_write_trigger(struct gsm_mux *gsm);
++static void gsmld_write_task(struct work_struct *work);
+ 
+ /**
+  *	gsm_fcs_add	-	update FCS
+@@ -655,57 +672,73 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
+  *	@cr: command/response bit seen as initiator
+  *	@control:  control byte including PF bit
+  *
+- *	Format up and transmit a control frame. These do not go via the
+- *	queueing logic as they should be transmitted ahead of data when
+- *	they are needed.
+- *
+- *	FIXME: Lock versus data TX path
++ *	Format up and transmit a control frame. These should be transmitted
++ *	ahead of data when they are needed.
+  */
+-
+-static void gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
++static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
+ {
+-	int len;
+-	u8 cbuf[10];
+-	u8 ibuf[3];
++	struct gsm_msg *msg;
++	u8 *dp;
+ 	int ocr;
++	unsigned long flags;
++
++	msg = gsm_data_alloc(gsm, addr, 0, control);
++	if (!msg)
++		return -ENOMEM;
+ 
+ 	/* toggle C/R coding if not initiator */
+ 	ocr = cr ^ (gsm->initiator ? 0 : 1);
+ 
+-	switch (gsm->encoding) {
+-	case 0:
+-		cbuf[0] = GSM0_SOF;
+-		cbuf[1] = (addr << 2) | (ocr << 1) | EA;
+-		cbuf[2] = control;
+-		cbuf[3] = EA;	/* Length of data = 0 */
+-		cbuf[4] = 0xFF - gsm_fcs_add_block(INIT_FCS, cbuf + 1, 3);
+-		cbuf[5] = GSM0_SOF;
+-		len = 6;
+-		break;
+-	case 1:
+-	case 2:
+-		/* Control frame + packing (but not frame stuffing) in mode 1 */
+-		ibuf[0] = (addr << 2) | (ocr << 1) | EA;
+-		ibuf[1] = control;
+-		ibuf[2] = 0xFF - gsm_fcs_add_block(INIT_FCS, ibuf, 2);
+-		/* Stuffing may double the size worst case */
+-		len = gsm_stuff_frame(ibuf, cbuf + 1, 3);
+-		/* Now add the SOF markers */
+-		cbuf[0] = GSM1_SOF;
+-		cbuf[len + 1] = GSM1_SOF;
+-		/* FIXME: we can omit the lead one in many cases */
+-		len += 2;
+-		break;
+-	default:
+-		WARN_ON(1);
+-		return;
+-	}
+-	gsmld_output(gsm, cbuf, len);
+-	if (!gsm->initiator) {
+-		cr = cr & gsm->initiator;
+-		control = control & ~PF;
++	msg->data -= 3;
++	dp = msg->data;
++	*dp++ = (addr << 2) | (ocr << 1) | EA;
++	*dp++ = control;
++
++	if (gsm->encoding == 0)
++		*dp++ = EA; /* Length of data = 0 */
++
++	*dp = 0xFF - gsm_fcs_add_block(INIT_FCS, msg->data, dp - msg->data);
++	msg->len = (dp - msg->data) + 1;
++
++	gsm_print_packet("Q->", addr, cr, control, NULL, 0);
++
++	spin_lock_irqsave(&gsm->tx_lock, flags);
++	list_add_tail(&msg->list, &gsm->tx_ctrl_list);
++	gsm->tx_bytes += msg->len;
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
++	gsmld_write_trigger(gsm);
++
++	return 0;
++}
++
++/**
++ *	gsm_dlci_clear_queues	-	remove outstanding data for a DLCI
++ *	@gsm: mux
++ *	@dlci: clear for this DLCI
++ *
++ *	Clears the data queues for a given DLCI.
++ */
++static void gsm_dlci_clear_queues(struct gsm_mux *gsm, struct gsm_dlci *dlci)
++{
++	struct gsm_msg *msg, *nmsg;
++	int addr = dlci->addr;
++	unsigned long flags;
++
++	/* Clear DLCI write fifo first */
++	spin_lock_irqsave(&dlci->lock, flags);
++	kfifo_reset(&dlci->fifo);
++	spin_unlock_irqrestore(&dlci->lock, flags);
++
++	/* Clear data packets in MUX write queue */
++	spin_lock_irqsave(&gsm->tx_lock, flags);
++	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
++		if (msg->addr != addr)
++			continue;
++		gsm->tx_bytes -= msg->len;
++		list_del(&msg->list);
++		kfree(msg);
+ 	}
+-	gsm_print_packet("-->", addr, cr, control, NULL, 0);
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
+ }
+ 
+ /**
+@@ -767,6 +800,45 @@ static struct gsm_msg *gsm_data_alloc(struct gsm_mux *gsm, u8 addr, int len,
+ 	return m;
+ }
+ 
++/**
++ *	gsm_send_packet	-	sends a single packet
++ *	@gsm: GSM Mux
++ *	@msg: packet to send
++ *
++ *	The given packet is encoded and sent out. No memory is freed.
++ *	The caller must hold the gsm tx lock.
++ */
++static int gsm_send_packet(struct gsm_mux *gsm, struct gsm_msg *msg)
++{
++	int len, ret;
++
++
++	if (gsm->encoding == 0) {
++		gsm->txframe[0] = GSM0_SOF;
++		memcpy(gsm->txframe + 1, msg->data, msg->len);
++		gsm->txframe[msg->len + 1] = GSM0_SOF;
++		len = msg->len + 2;
++	} else {
++		gsm->txframe[0] = GSM1_SOF;
++		len = gsm_stuff_frame(msg->data, gsm->txframe + 1, msg->len);
++		gsm->txframe[len + 1] = GSM1_SOF;
++		len += 2;
++	}
++
++	if (debug & 4)
++		gsm_hex_dump_bytes(__func__, gsm->txframe, len);
++	gsm_print_packet("-->", msg->addr, gsm->initiator, msg->ctrl, msg->data,
++			 msg->len);
++
++	ret = gsmld_output(gsm, gsm->txframe, len);
++	if (ret <= 0)
++		return ret;
++	/* FIXME: Can eliminate one SOF in many more cases */
++	gsm->tx_bytes -= msg->len;
++
++	return 0;
++}
++
+ /**
+  *	gsm_is_flow_ctrl_msg	-	checks if flow control message
+  *	@msg: message to check
+@@ -799,59 +871,81 @@ static bool gsm_is_flow_ctrl_msg(struct gsm_msg *msg)
+ }
+ 
+ /**
+- *	gsm_data_kick		-	poke the queue
++ *	gsm_data_kick	-	poke the queue
+  *	@gsm: GSM Mux
+- *	@dlci: DLCI sending the data
+  *
+  *	The tty device has called us to indicate that room has appeared in
+- *	the transmit queue. Ram more data into the pipe if we have any
++ *	the transmit queue. Ram more data into the pipe if we have any.
+  *	If we have been flow-stopped by a CMD_FCOFF, then we can only
+- *	send messages on DLCI0 until CMD_FCON
+- *
+- *	FIXME: lock against link layer control transmissions
++ *	send messages on DLCI0 until CMD_FCON. The caller must hold
++ *	the gsm tx lock.
+  */
+-
+-static void gsm_data_kick(struct gsm_mux *gsm, struct gsm_dlci *dlci)
++static int gsm_data_kick(struct gsm_mux *gsm)
+ {
+ 	struct gsm_msg *msg, *nmsg;
+-	int len;
++	struct gsm_dlci *dlci;
++	int ret;
+ 
+-	list_for_each_entry_safe(msg, nmsg, &gsm->tx_list, list) {
++	clear_bit(TTY_DO_WRITE_WAKEUP, &gsm->tty->flags);
++
++	/* Serialize control messages and control channel messages first */
++	list_for_each_entry_safe(msg, nmsg, &gsm->tx_ctrl_list, list) {
+ 		if (gsm->constipated && !gsm_is_flow_ctrl_msg(msg))
++			return -EAGAIN;
++		ret = gsm_send_packet(gsm, msg);
++		switch (ret) {
++		case -ENOSPC:
++			return -ENOSPC;
++		case -ENODEV:
++			/* ldisc not open */
++			gsm->tx_bytes -= msg->len;
++			list_del(&msg->list);
++			kfree(msg);
+ 			continue;
+-		if (gsm->encoding != 0) {
+-			gsm->txframe[0] = GSM1_SOF;
+-			len = gsm_stuff_frame(msg->data,
+-						gsm->txframe + 1, msg->len);
+-			gsm->txframe[len + 1] = GSM1_SOF;
+-			len += 2;
+-		} else {
+-			gsm->txframe[0] = GSM0_SOF;
+-			memcpy(gsm->txframe + 1 , msg->data, msg->len);
+-			gsm->txframe[msg->len + 1] = GSM0_SOF;
+-			len = msg->len + 2;
+-		}
+-
+-		if (debug & 4)
+-			gsm_hex_dump_bytes(__func__, gsm->txframe, len);
+-		if (gsmld_output(gsm, gsm->txframe, len) <= 0)
++		default:
++			if (ret >= 0) {
++				list_del(&msg->list);
++				kfree(msg);
++			}
+ 			break;
+-		/* FIXME: Can eliminate one SOF in many more cases */
+-		gsm->tx_bytes -= msg->len;
+-
+-		list_del(&msg->list);
+-		kfree(msg);
++		}
++	}
+ 
+-		if (dlci) {
+-			tty_port_tty_wakeup(&dlci->port);
+-		} else {
+-			int i = 0;
++	if (gsm->constipated)
++		return -EAGAIN;
+ 
+-			for (i = 0; i < NUM_DLCI; i++)
+-				if (gsm->dlci[i])
+-					tty_port_tty_wakeup(&gsm->dlci[i]->port);
++	/* Serialize other channels */
++	if (list_empty(&gsm->tx_data_list))
++		return 0;
++	list_for_each_entry_safe(msg, nmsg, &gsm->tx_data_list, list) {
++		dlci = gsm->dlci[msg->addr];
++		/* Send only messages for DLCIs with valid state */
++		if (dlci->state != DLCI_OPEN) {
++			gsm->tx_bytes -= msg->len;
++			list_del(&msg->list);
++			kfree(msg);
++			continue;
++		}
++		ret = gsm_send_packet(gsm, msg);
++		switch (ret) {
++		case -ENOSPC:
++			return -ENOSPC;
++		case -ENODEV:
++			/* ldisc not open */
++			gsm->tx_bytes -= msg->len;
++			list_del(&msg->list);
++			kfree(msg);
++			continue;
++		default:
++			if (ret >= 0) {
++				list_del(&msg->list);
++				kfree(msg);
++			}
++			break;
+ 		}
+ 	}
++
++	return 1;
+ }
+ 
+ /**
+@@ -900,9 +994,21 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+ 	msg->data = dp;
+ 
+ 	/* Add to the actual output queue */
+-	list_add_tail(&msg->list, &gsm->tx_list);
++	switch (msg->ctrl & ~PF) {
++	case UI:
++	case UIH:
++		if (msg->addr > 0) {
++			list_add_tail(&msg->list, &gsm->tx_data_list);
++			break;
++		}
++		fallthrough;
++	default:
++		list_add_tail(&msg->list, &gsm->tx_ctrl_list);
++		break;
++	}
+ 	gsm->tx_bytes += msg->len;
+-	gsm_data_kick(gsm, dlci);
++
++	gsmld_write_trigger(gsm);
+ 	mod_timer(&gsm->kick_timer, jiffies + 10 * gsm->t1 * HZ / 100);
+ }
+ 
+@@ -1129,32 +1235,39 @@ static int gsm_dlci_modem_output(struct gsm_mux *gsm, struct gsm_dlci *dlci,
+ 
+ static int gsm_dlci_data_sweep(struct gsm_mux *gsm)
+ {
+-	int len, ret = 0;
+ 	/* Priority ordering: We should do priority with RR of the groups */
+-	int i = 1;
+-
+-	while (i < NUM_DLCI) {
+-		struct gsm_dlci *dlci;
++	int i, len, ret = 0;
++	bool sent;
++	struct gsm_dlci *dlci;
+ 
+-		if (gsm->tx_bytes > TX_THRESH_HI)
+-			break;
+-		dlci = gsm->dlci[i];
+-		if (dlci == NULL || dlci->constipated) {
+-			i++;
+-			continue;
++	while (gsm->tx_bytes < TX_THRESH_HI) {
++		for (sent = false, i = 1; i < NUM_DLCI; i++) {
++			dlci = gsm->dlci[i];
++			/* skip unused or blocked channel */
++			if (!dlci || dlci->constipated)
++				continue;
++			/* skip channels with invalid state */
++			if (dlci->state != DLCI_OPEN)
++				continue;
++			/* count the sent data per adaption */
++			if (dlci->adaption < 3 && !dlci->net)
++				len = gsm_dlci_data_output(gsm, dlci);
++			else
++				len = gsm_dlci_data_output_framed(gsm, dlci);
++			/* on error exit */
++			if (len < 0)
++				return ret;
++			if (len > 0) {
++				ret++;
++				sent = true;
++				/* The lower DLCs can starve the higher DLCs! */
++				break;
++			}
++			/* try next */
+ 		}
+-		if (dlci->adaption < 3 && !dlci->net)
+-			len = gsm_dlci_data_output(gsm, dlci);
+-		else
+-			len = gsm_dlci_data_output_framed(gsm, dlci);
+-		if (len < 0)
++		if (!sent)
+ 			break;
+-		/* DLCI empty - try the next */
+-		if (len == 0)
+-			i++;
+-		else
+-			ret++;
+-	}
++	};
+ 
+ 	return ret;
+ }
+@@ -1402,7 +1515,6 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 						const u8 *data, int clen)
+ {
+ 	u8 buf[1];
+-	unsigned long flags;
+ 
+ 	switch (command) {
+ 	case CMD_CLD: {
+@@ -1424,9 +1536,7 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 		gsm->constipated = false;
+ 		gsm_control_reply(gsm, CMD_FCON, NULL, 0);
+ 		/* Kick the link in case it is idling */
+-		spin_lock_irqsave(&gsm->tx_lock, flags);
+-		gsm_data_kick(gsm, NULL);
+-		spin_unlock_irqrestore(&gsm->tx_lock, flags);
++		gsmld_write_trigger(gsm);
+ 		break;
+ 	case CMD_FCOFF:
+ 		/* Modem wants us to STFU */
+@@ -1629,8 +1739,6 @@ static int gsm_control_wait(struct gsm_mux *gsm, struct gsm_control *control)
+ 
+ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ {
+-	unsigned long flags;
+-
+ 	del_timer(&dlci->t1);
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes closed.\n", dlci->addr);
+@@ -1639,17 +1747,16 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 	dlci->constipated = true;
+ 	if (dlci->addr != 0) {
+ 		tty_port_tty_hangup(&dlci->port, false);
+-		spin_lock_irqsave(&dlci->lock, flags);
+-		kfifo_reset(&dlci->fifo);
+-		spin_unlock_irqrestore(&dlci->lock, flags);
++		gsm_dlci_clear_queues(dlci->gsm, dlci);
+ 		/* Ensure that gsmtty_open() can return. */
+ 		tty_port_set_initialized(&dlci->port, 0);
+ 		wake_up_interruptible(&dlci->port.open_wait);
+ 	} else
+ 		dlci->gsm->dead = true;
+-	wake_up(&dlci->gsm->event);
+ 	/* A DLCI 0 close is a MUX termination so we need to kick that
+ 	   back to userspace somehow */
++	gsm_dlci_data_kick(dlci);
++	wake_up(&dlci->gsm->event);
+ }
+ 
+ /**
+@@ -1672,6 +1779,7 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	/* Send current modem state */
+ 	if (dlci->addr)
+ 		gsm_modem_update(dlci, 0);
++	gsm_dlci_data_kick(dlci);
+ 	wake_up(&dlci->gsm->event);
+ }
+ 
+@@ -2222,7 +2330,7 @@ static void gsm1_receive(struct gsm_mux *gsm, unsigned char c)
+ 	} else if ((c & ISO_IEC_646_MASK) == XOFF) {
+ 		gsm->constipated = false;
+ 		/* Kick the link in case it is idling */
+-		gsm_data_kick(gsm, NULL);
++		gsmld_write_trigger(gsm);
+ 		return;
+ 	}
+ 	if (c == GSM1_SOF) {
+@@ -2353,6 +2461,9 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ 	del_timer_sync(&gsm->kick_timer);
+ 	del_timer_sync(&gsm->t2_timer);
+ 
++	/* Finish writing to ldisc */
++	flush_work(&gsm->tx_work);
++
+ 	/* Free up any link layer users and finally the control channel */
+ 	if (gsm->has_devices) {
+ 		gsm_unregister_devices(gsm_tty_driver, gsm->num);
+@@ -2364,9 +2475,12 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ 	mutex_unlock(&gsm->mutex);
+ 	/* Now wipe the queues */
+ 	tty_ldisc_flush(gsm->tty);
+-	list_for_each_entry_safe(txq, ntxq, &gsm->tx_list, list)
++	list_for_each_entry_safe(txq, ntxq, &gsm->tx_ctrl_list, list)
++		kfree(txq);
++	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
++	list_for_each_entry_safe(txq, ntxq, &gsm->tx_data_list, list)
+ 		kfree(txq);
+-	INIT_LIST_HEAD(&gsm->tx_list);
++	INIT_LIST_HEAD(&gsm->tx_data_list);
+ }
+ 
+ /**
+@@ -2385,6 +2499,7 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+ 
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
++	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+ 	init_waitqueue_head(&gsm->event);
+ 	spin_lock_init(&gsm->control_lock);
+ 	spin_lock_init(&gsm->tx_lock);
+@@ -2494,7 +2609,8 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	spin_lock_init(&gsm->lock);
+ 	mutex_init(&gsm->mutex);
+ 	kref_init(&gsm->ref);
+-	INIT_LIST_HEAD(&gsm->tx_list);
++	INIT_LIST_HEAD(&gsm->tx_ctrl_list);
++	INIT_LIST_HEAD(&gsm->tx_data_list);
+ 
+ 	gsm->t1 = T1;
+ 	gsm->t2 = T2;
+@@ -2651,6 +2767,47 @@ static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len)
+ 	return gsm->tty->ops->write(gsm->tty, data, len);
+ }
+ 
++
++/**
++ *	gsmld_write_trigger	-	schedule ldisc write task
++ *	@gsm: our mux
++ */
++static void gsmld_write_trigger(struct gsm_mux *gsm)
++{
++	if (!gsm || !gsm->dlci[0] || gsm->dlci[0]->dead)
++		return;
++	schedule_work(&gsm->tx_work);
++}
++
++
++/**
++ *	gsmld_write_task	-	ldisc write task
++ *	@work: our tx write work
++ *
++ *	Writes out data to the ldisc if possible. We are doing this here to
++ *	avoid dead-locking. This returns if no space or data is left for output.
++ */
++static void gsmld_write_task(struct work_struct *work)
++{
++	struct gsm_mux *gsm = container_of(work, struct gsm_mux, tx_work);
++	unsigned long flags;
++	int i, ret;
++
++	/* All outstanding control channel and control messages and one data
++	 * frame is sent.
++	 */
++	ret = -ENODEV;
++	spin_lock_irqsave(&gsm->tx_lock, flags);
++	if (gsm->tty)
++		ret = gsm_data_kick(gsm);
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
++
++	if (ret >= 0)
++		for (i = 0; i < NUM_DLCI; i++)
++			if (gsm->dlci[i])
++				tty_port_tty_wakeup(&gsm->dlci[i]->port);
++}
++
+ /**
+  *	gsmld_attach_gsm	-	mode set up
+  *	@tty: our tty structure
+@@ -2790,6 +2947,7 @@ static int gsmld_open(struct tty_struct *tty)
+ 
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
++	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+ 
+ 	return 0;
+ }
+@@ -2806,16 +2964,9 @@ static int gsmld_open(struct tty_struct *tty)
+ static void gsmld_write_wakeup(struct tty_struct *tty)
+ {
+ 	struct gsm_mux *gsm = tty->disc_data;
+-	unsigned long flags;
+ 
+ 	/* Queue poll */
+-	clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
+-	spin_lock_irqsave(&gsm->tx_lock, flags);
+-	gsm_data_kick(gsm, NULL);
+-	if (gsm->tx_bytes < TX_THRESH_LO) {
+-		gsm_dlci_data_sweep(gsm);
+-	}
+-	spin_unlock_irqrestore(&gsm->tx_lock, flags);
++	gsmld_write_trigger(gsm);
+ }
+ 
+ /**
+-- 
+2.34.1
+
