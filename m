@@ -2,98 +2,116 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBED5648C9
-	for <lists+linux-serial@lfdr.de>; Sun,  3 Jul 2022 19:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D042564918
+	for <lists+linux-serial@lfdr.de>; Sun,  3 Jul 2022 20:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232782AbiGCRCM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 3 Jul 2022 13:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S232498AbiGCS2S (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 3 Jul 2022 14:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiGCRBz (ORCPT
+        with ESMTP id S232060AbiGCS2R (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 3 Jul 2022 13:01:55 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C905E627B;
-        Sun,  3 Jul 2022 10:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656867693;
-        bh=r3dNDUDIuUE3Q0qRG27sRGL8QSUVi1dKmu2o/TP38+o=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=IrAd30hI+KUcO22l6V3kbwW5xHgsijSs1p/i71c27LXUsdMOpa0ypTKskAHkDFHpj
-         JE/09dEVOj9gGtf7+J2t/ZqJyOpZUjJpM5FA1195w5TIH9wL6esbljwXYQL4PRcvLB
-         WQyMBuSrwWdviCLV4NsgrRp/f5h69xVNUikzLV18=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([46.223.3.210]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M5QJD-1o8sJs2ocP-001Oya; Sun, 03 Jul 2022 19:01:33 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, vz@mleia.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukas@wunner.de, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: [PATCH v2 9/9] serial: 8250: lpc18xx: Remove redundant sanity check for RS485 flags
-Date:   Sun,  3 Jul 2022 19:00:39 +0200
-Message-Id: <20220703170039.2058202-10-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220703170039.2058202-1-LinoSanfilippo@gmx.de>
-References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de>
+        Sun, 3 Jul 2022 14:28:17 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CBACF4;
+        Sun,  3 Jul 2022 11:28:16 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id d145so9971514ybh.1;
+        Sun, 03 Jul 2022 11:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yjZR/70PHdM2PN7TkWB0TtRfSwOaskYmscGVtZ9BAyE=;
+        b=a29l4TY5Uu+UsD/SBXw0sFjO1CW+IN2+uhmdCHwpsBPF0osshMBITJ5hDe1KBAeDZa
+         KJGZdCzp9eonNqcoi+nIi3fhaWALWPShC6m/bRxS2uuLHkr2hZiQX1r08aXHEnqmH9pi
+         mFWjFxe18nTC9aaIP+e3fsfTA97ayA3T8UN4laAbY0iMAltd4vco0URiFm24wDoRvE84
+         TsZj/T9YsPrvbd7ss4jMm1oZXCQjpq34z3+SZ1ifr4jL9A/qSCvqUJ9f12RWwS8+hO2t
+         rOS73dEP1Ai7R2jsgrCOq47pWsod3KRceFnaGulT1wn51B4VeyMk2p6sRaWzwFlkzIMr
+         r9Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yjZR/70PHdM2PN7TkWB0TtRfSwOaskYmscGVtZ9BAyE=;
+        b=6hXC89otPg45Mx6C2JrzihlOFVZF5dZjfHb2j9Pe17xCM/w+A2pSMob2I4UX+FzOXj
+         AF5nc2hvASRz79KqF1u0cd1fhi6gGbplnDCcA6paUqcVnjJG2XTdCX9kpcOQ0a3nl/FP
+         /TalQjJGI41RYpnro/iIM8FwpxCvajx34XO9/RGohzYGeFD9+akOXKnrnGgyK7Xv/RBh
+         jfcWqTR+/p4dAv+RxVqhHv1I4h7JEKzyDZPwahOg/uXwzbTXCl2kIsmKoCKuvab6O5e4
+         gt1H1P264VMdLN3ENjtpYd552k5WPkyT4fLaSDV3nZgt9Ig8M+OFRfv6fhJHr4B5HWeS
+         Q3wA==
+X-Gm-Message-State: AJIora+JJl1Nmtm0VAtnR0LuR6Cee8k8wxO+ptjvLQTfj3C9EOvFFx7x
+        mMyDcGx3C/g30NyJ4UWSiAjWRgrw8XnvMZ6j6Rw=
+X-Google-Smtp-Source: AGRyM1s3IcdAbvbL68QwHWAcHy5wnzv9v0dtbhrfomjH0uKcNBKUV4HH5ulNe6arGwBQNEnX23Qbv6HOtUoonzDrN40=
+X-Received: by 2002:a05:6902:1549:b0:66d:5f76:27ba with SMTP id
+ r9-20020a056902154900b0066d5f7627bamr26444320ybu.385.1656872895607; Sun, 03
+ Jul 2022 11:28:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:KjAB4TazV/OvuLGClQIL62mGEv/0G6rRtTs5pe+N09lU9C9u8xm
- 81tPPKgUO4gFQ/640DbtwTghVkeUew/lXZ132Zx7lpMa7HbYuUo6nPX3HNBwTFf8pgXyXUR
- 1nuiwWq2ftAkbP7ADU8L6aiMNKMOe6wQAf0wbvKqGxPKe1TKDE8k2BjTm+ExZ1L9ivWvJKN
- o6I+B9izQFtUuVJ8eR+sw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t+3L/KYJQ68=:Idxt9qmFJMRusII+8L49Aa
- zSEABMSFoylvJHtAm0y/CS9YVujhvonXNXu1GJTkyShWG1tLqw89/VpBtdaF2c66TTiJUgOwm
- KI6+f5TGj7Sjd7B0mmIFPwRVrJWSrHO3vM7edcNHpTa0JM3+RmZ3sNi8pjTpNCDuCgE5XlD2h
- mrm9uXPMIPy8tph8lpaYpiRBVaP7a6QTnNpWFOzQYCGe/8F6UbvMQX2oRT7BDQPOVytP02UVY
- YOVbhq3oqeAgMAptgRoq5CzPBVEWcvg9atN6dkcRD0mbqILD/eTf1NngAiLdn3xOlCKC4CxpV
- b7K0AZG7oKsqqmBarzoMIxTIObjF7JGsVyFewDGrLmOHu6UvXrKKD+M5xniRFzQaIu0378Ayn
- l9OH3QXdyePodceFWxarQrhf9GjXbzyVfh+YUILaK66fCx3LQft7Fhs95ccWKhpSY8Lms/RjF
- oRaGf0tZRFvnWA0rG4FoyI/tfd2Gb1iXqJkvC5VU1XQvcLDHmSDGo2fucc75oMYg9mD+zgu0b
- zoUGA4hSinXPuCh9TNIZOO6FVjA2Tw1dpnedxUfdcoSFziSRa8ZSYbVHGb1h3gGHx2TvXwoRr
- 4punAqCmgyhw/2/ug6fo7J4XW1Rqnp/nObBb3v3Mj0XfDN73Mcu5BvDuzpcne86IAjsKaX8km
- j3s4M96Mn72DBI+KiGyZS7wbiTLx/3dHJO4TZwLGMVOq7DuH6kfDfoah10cmEL4rEvPiX9Jph
- cPuQp1f4KdPpcu3jlt2m8Mc4P1hzY7bF924o6/Q6V5kSX5os8/S5uygtT/O8NjWCrfpSHIYvA
- ttZh7Kuiuasvf5BU3ZwBriZXY+oPOYCSO/aNB9B/BmmFpdJYcSVZTYKxqcbM2qY/sbazuHT94
- uKvBfT88apH4yV1gcuhKhapJfubzTZl0DF46zvBeH89MH7ohbCBE/8tAJDUi5lkPNEYBboYuP
- IkUAB7IH7MJFUvrbj7S7wI4HGgW2TNPi+IvwqXAwfbJbuyw4/fXty4WBMHthI46HvQnULV1l4
- N617UjZIHNOtqa1OkMSiAlUb3GPobKsTfHmbGXaziwEo8xCgHURaTxPLbz8vaAfpZ4Jyr7OFm
- 7yElBeI/pR2ocJKJx826lpW4oRhiwYe0BsN/13CYajy+gHb9xgBdcVngw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220703170039.2058202-1-LinoSanfilippo@gmx.de> <20220703170039.2058202-2-LinoSanfilippo@gmx.de>
+In-Reply-To: <20220703170039.2058202-2-LinoSanfilippo@gmx.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 3 Jul 2022 20:27:39 +0200
+Message-ID: <CAHp75VcU-gLQBvuesoYp-G91SjzeYB7PNCN17PGL7u139VZY2g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] serial: core: only get RS485 termination GPIO if supported
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkJlZm9yZSB0
-aGUgZHJpdmVycyByczQ4NV9jb25maWcoKSBmdW5jdGlvbiBpcyBjYWxsZWQgdGhlIHNlcmlhbCBj
-b3JlCmFscmVhZHkgZW5zdXJlcyB0aGF0IG9ubHkgb25lIG9mIGJvdGggb3B0aW9ucyBSVFMgb24g
-c2VuZCBvciBSVFMgYWZ0ZXIgc2VuZAppcyBzZXQuIFNvIHJlbW92ZSB0aGUgY29uY2VybmluZyBz
-YW5pdHkgY2hlY2sgaW4gdGhlIGRyaXZlciBmdW5jdGlvbiB0bwphdm9pZCByZWR1bmRhbmN5LgoK
-U2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4K
-UmV2aWV3ZWQtYnk6IElscG8gSsOkcnZpbmVuIDxpbHBvLmphcnZpbmVuQGxpbnV4LmludGVsLmNv
-bT4KLS0tCiBkcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX2xwYzE4eHguYyB8IDYgKy0tLS0t
-CiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9scGMxOHh4LmMgYi9kcml2ZXJzL3R0
-eS9zZXJpYWwvODI1MC84MjUwX2xwYzE4eHguYwppbmRleCBkN2NiM2JiNTIwNjkuLmZiYTBiYjE3
-ZTUzNiAxMDA2NDQKLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9scGMxOHh4LmMK
-KysrIGIvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9scGMxOHh4LmMKQEAgLTQ0LDEyICs0
-NCw4IEBAIHN0YXRpYyBpbnQgbHBjMTh4eF9yczQ4NV9jb25maWcoc3RydWN0IHVhcnRfcG9ydCAq
-cG9ydCwgc3RydWN0IGt0ZXJtaW9zICp0ZXJtaW9zCiAJCXJzNDg1X2N0cmxfcmVnIHw9IExQQzE4
-WFhfVUFSVF9SUzQ4NUNUUkxfTk1NRU4gfAogCQkJCSAgTFBDMThYWF9VQVJUX1JTNDg1Q1RSTF9E
-Q1RSTDsKIAotCQlpZiAocnM0ODUtPmZsYWdzICYgU0VSX1JTNDg1X1JUU19PTl9TRU5EKSB7CisJ
-CWlmIChyczQ4NS0+ZmxhZ3MgJiBTRVJfUlM0ODVfUlRTX09OX1NFTkQpCiAJCQlyczQ4NV9jdHJs
-X3JlZyB8PSBMUEMxOFhYX1VBUlRfUlM0ODVDVFJMX09JTlY7Ci0JCQlyczQ4NS0+ZmxhZ3MgJj0g
-flNFUl9SUzQ4NV9SVFNfQUZURVJfU0VORDsKLQkJfSBlbHNlIHsKLQkJCXJzNDg1LT5mbGFncyB8
-PSBTRVJfUlM0ODVfUlRTX0FGVEVSX1NFTkQ7Ci0JCX0KIAl9CiAKIAlpZiAocnM0ODUtPmRlbGF5
-X3J0c19hZnRlcl9zZW5kKSB7Ci0tIAoyLjI1LjEKCg==
+On Sun, Jul 3, 2022 at 7:02 PM Lino Sanfilippo <LinoSanfilippo@gmx.de> wrote:
+>
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>
+> In uart_get_rs485_mode() only try to get a termination GPIO if RS485 bus
+> termination is supported by the driver. This prevents from allocating
+> and holding a GPIO descriptor for the drivers lifetimg that will never be
+
+lifetiming
+
+> used.
+
+...
+
+>         port->rs485_term_gpio = devm_gpiod_get_optional(dev, "rs485-term",
+>                                                         GPIOD_OUT_LOW);
+> +
+> +       if (port->rs485_term_gpio &&
+
+This check is incorrect. Either you need to move that after error
+checking (that's what I personally prefer), or use !IS_ERR_OR_NULL().
+
+> +           !(port->rs485_supported->flags & SER_RS485_TERMINATE_BUS)) {
+> +               dev_warn(port->dev,
+> +                       "%s (%d): RS485 termination gpio not supported by driver\n",
+> +                       port->name, port->line);
+> +               devm_gpiod_put(dev, port->rs485_term_gpio);
+> +               port->rs485_term_gpio = NULL;
+> +       }
+> +
+>         if (IS_ERR(port->rs485_term_gpio)) {
+>                 ret = PTR_ERR(port->rs485_term_gpio);
+>                 port->rs485_term_gpio = NULL;
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
