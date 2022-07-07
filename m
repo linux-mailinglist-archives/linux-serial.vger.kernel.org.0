@@ -2,135 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2748C569E07
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Jul 2022 10:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3819456A111
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Jul 2022 13:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiGGIsy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 Jul 2022 04:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S235366AbiGGLd4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 Jul 2022 07:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235117AbiGGIsr (ORCPT
+        with ESMTP id S235348AbiGGLdy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:48:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC53326E3;
-        Thu,  7 Jul 2022 01:48:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D32B7B820C5;
-        Thu,  7 Jul 2022 08:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE3FC341C0;
-        Thu,  7 Jul 2022 08:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657183723;
-        bh=fHqE0HJYboE0WTHz4AC1/YxMfzfzjS8F9GqESkQwlb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PxCC+jpTOnOJ9vTUJcvHknrzEJSa8YOW/S/tq0YP/emSOoMMX106mPIC0Qq/yY1tV
-         5e52N+9o8w4m45fr6x/KpwX0uM8FsOJKEat27De4hShLp0+x7/BluvBatMrjyPggPj
-         kF+SfkiLOxfTpLjPve0AN+jzkQ2/1QcRCCb8/wFq5xR/trmq8zSRvmOZqdhOtbC87V
-         +o8/SWLyEJxmkwDCfoILVBeQ5rix3359k4Xs6pY587I3qb47uO/CfYK9TlPmhukAPi
-         EiLh4xYl4uVXUDm7zY6DqsHKexqBrW37aIPVu6fBO8aShDEk/ryioHHd9WNK3fhrng
-         oCi4ODpcxVX8A==
-Received: by pali.im (Postfix)
-        id 24D847B1; Thu,  7 Jul 2022 10:48:40 +0200 (CEST)
-Date:   Thu, 7 Jul 2022 10:48:40 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
-Message-ID: <20220707084840.jvsstvyx2ul5ltb6@pali>
-References: <20220321163055.4058-1-pali@kernel.org>
- <CAHp75VddDG-ZJpbAb5ZhKaMpP0L+CMEx2pcYy3FOMiaxNydCWA@mail.gmail.com>
- <YmK7drS0XgnTQcaf@kroah.com>
+        Thu, 7 Jul 2022 07:33:54 -0400
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9672A71D
+        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 04:33:50 -0700 (PDT)
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 202207071133472337f1d7a12bffb971
+        for <linux-serial@vger.kernel.org>;
+        Thu, 07 Jul 2022 13:33:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=4zrox7ZlHscR7GaMrL4oS4/tk+1RCzBT6lJQ3JfJL0o=;
+ b=HUiTBM6BLE6FL/IKNjsboP7hCLX6YfsV25sCaqNvdbwN9jig4jMsRx9/uwSTllrWuoV43E
+ 9GKrXZbk+hxwly5vX37zBkkvykw6ywSzvzTvTJyG7O2RLNkKWEZMal1sxbYQN6SW61zW5FkZ
+ vghSkA6GzHoyVr16NOIQH9xf+uCZY=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v2 1/4] tty: n_gsm: fix wrong T1 retry count handling
+Date:   Thu,  7 Jul 2022 13:32:20 +0200
+Message-Id: <20220707113223.3685-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmK7drS0XgnTQcaf@kroah.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Friday 22 April 2022 16:28:06 Greg Kroah-Hartman wrote:
-> On Tue, Mar 22, 2022 at 04:29:08PM +0200, Andy Shevchenko wrote:
-> > On Mon, Mar 21, 2022 at 11:07 PM Pali Rohár <pali@kernel.org> wrote:
-> > >
-> > > Support for UPF_SPD_* flags is currently broken in more drivers for two
-> > > reasons. First one is that uart_update_timeout() function does not
-> > 
-> > the uart_update_timeout()
-> > 
-> > > calculate timeout for UPF_SPD_CUST flag correctly. Second reason is that
-> > > userspace termios structre is modified by most drivers after each
-> > 
-> > structure
-> > 
-> > ...
-> > 
-> > > (error handling was ommited for simplification)
-> > 
-> > omitted
-> > 
-> > > After calling set_active_spd_cust_baud() function SPD custom divisor
-> > > should be active and therefore is_spd_cust_active() should return true.
-> > >
-> > > But it is not active (cfgetospeed does not return B38400) and this patch
-> > > series should fix it. I have tested it with 8250 driver.
-> > 
-> > drivers
-> > 
-> > > Originally Johan Hovold reported that there may be issue with these
-> > > ASYNC_SPD_FLAGS in email:
-> > > https://lore.kernel.org/linux-serial/20211007133146.28949-1-johan@kernel.org/
-> > >
-> > >
-> > > Johan, Greg, could you please test these patches if there is not any
-> > > regression?
-> > 
-> > I'm wondering why we are still supporting this ugly hack?
-> > Doesn't BOTHER work for you?
-> 
-> Yes, I too do not want to add more support for these old flags.  If they
-> have not been working, let's not add support for them as obviously no
-> one is using them.  Let's try to remove them if at all possible.
+From: Daniel Starke <daniel.starke@siemens.com>
 
-Well, it works partially. For more drivers SET method is working, but
-GET method returns incorrect value. If your userspace application is
-written in a way that does not retrieve from kernel current settings
-then it has big probability that application works.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.7.3 states that the valid range for the
+maximum number of retransmissions (N2) is from 0 to 255 (both including).
+gsm_dlci_t1() handles this number incorrectly by performing N2 - 1
+retransmission attempts. Setting N2 to zero results in more than 255
+retransmission attempts.
+Fix gsm_dlci_t1() to comply with 3GPP 27.010.
 
-So, do you really want to remove support for these old flags completely?
-That would of course break above applications.
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Note that usage of BOTHER is problematic and in most cases highly
-impossible if you are using glibc libc.so. BOTHER is incompatible with
-glibc header files and so you can either include BOTHER/linux termios
-file (exclusive) OR glibc header files.
+No changes have been applied compared to v1.
 
-New version of tcsetattr and ioctl_tty manpages would have documented
-how to use BOTHER (it is currently in the manpages git).
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index ba399a660573..1a70e7ae90cc 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1805,8 +1805,8 @@ static void gsm_dlci_t1(struct timer_list *t)
+ 
+ 	switch (dlci->state) {
+ 	case DLCI_OPENING:
+-		dlci->retries--;
+ 		if (dlci->retries) {
++			dlci->retries--;
+ 			gsm_command(dlci->gsm, dlci->addr, SABM|PF);
+ 			mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
+ 		} else if (!dlci->addr && gsm->control == (DM | PF)) {
+@@ -1821,8 +1821,8 @@ static void gsm_dlci_t1(struct timer_list *t)
+ 
+ 		break;
+ 	case DLCI_CLOSING:
+-		dlci->retries--;
+ 		if (dlci->retries) {
++			dlci->retries--;
+ 			gsm_command(dlci->gsm, dlci->addr, DISC|PF);
+ 			mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
+ 		} else
+-- 
+2.34.1
 
-Currently the only known option how to use BOTHER is to completely
-reimplement all functions from "termios.h", provide custom "termios.h"
-header file (and not use glibc termios.h nor any file which it includes)
-and statically link this reimplementation into final application.
-
-So in most cases BOTHER is not alternative to those old SPD flags even
-for modern applications.
-
-> thanks,
-> 
-> greg k-h
