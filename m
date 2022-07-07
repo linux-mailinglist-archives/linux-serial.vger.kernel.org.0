@@ -2,44 +2,44 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA43C56A643
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Jul 2022 16:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF5356A644
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Jul 2022 16:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbiGGOzc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 Jul 2022 10:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S236314AbiGGOzd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 Jul 2022 10:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiGGOzJ (ORCPT
+        with ESMTP id S236020AbiGGOzM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:55:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADE257225
-        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 07:54:01 -0700 (PDT)
+        Thu, 7 Jul 2022 10:55:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C374257238
+        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 07:54:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8AA062307
-        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 14:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB84C341CE;
-        Thu,  7 Jul 2022 14:53:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E92B62311
+        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 14:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94FAC341CF;
+        Thu,  7 Jul 2022 14:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657205640;
-        bh=bBQ4nDvhFzwNbduaomhv8GNzHnp4QLgYNwLwjQnkEpk=;
+        s=k20201202; t=1657205641;
+        bh=+AOZMG0lq8uk7YAirx7jHjJosu+nCe5BtTI4k2V1/NU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XxKGwUBqoXvlZ9nJXRE2Et7y67fKYb90d4QSypLTTQXIIQCS6BJuMx1qszqFz+8bL
-         Yn2VEqIPfgSExmWwYpe8KCSNxuaAWuqj2/OAs5feGI8nbZTB6F/Ff3pmByM/XdypOd
-         qrPYJvn6QWGTSzfScBUAa8HqGoyet9vTLqs4uDjitjsMKg94bzJCWdIkZuf0uDHeDt
-         Lf9KyKmyJuhqcVGTyQgIpwiPsmODG5rj5E4d0CceGl8skcRdoGCFSA6zc4720Metbj
-         0RmkaET7fgNpk6zUnW8xpDegvYPOquJAZgTDnsz331ohc1KaUIrmOLOBH3j00gDmbV
-         jSAOvsLclhKzg==
+        b=WJ6pFhVBRViKWRxGmUsJWHphdBU+ZrFhGW4mGCcaC1VEDz3s9GtSCmoujux/966oE
+         HpX+kX2+aUdZklVJOW6KQ4MlsuGAlnLxLgzN1jw1JIbfePuYl34axuyy/TJqXCqM8U
+         iPmyhpvqJUeZo7ZepG90mwPod1mab1hGowL9+YBxMEdXb5Cj8Vfnlg7riI6AptvnBj
+         aE7EmhBy/T/kNoCnRrKWlHBwKyuvLAz+K+g32RPz/TtV++zjSi/HQ68+s3uaxPP5Aw
+         dP/v1C1xNhePUMCYc+eu8TzC0wJZFkBYkmg4fiOdUExYI+NP6P+PiKHoDZKbzUvoXT
+         xsY/CTZWl9FYQ==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 1/7] USB: serial: ftdi_sio: Fix divisor overflow
-Date:   Thu,  7 Jul 2022 16:53:48 +0200
-Message-Id: <20220707145354.29705-2-kabel@kernel.org>
+Subject: [PATCH 2/7] USB: serial: ftdi_sio: Add missing baudrate validation
+Date:   Thu,  7 Jul 2022 16:53:49 +0200
+Message-Id: <20220707145354.29705-3-kabel@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220707145354.29705-1-kabel@kernel.org>
 References: <20220707145354.29705-1-kabel@kernel.org>
@@ -58,46 +58,46 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Pali Rohár <pali@kernel.org>
 
-Divisor in the register is a 17-bit wide number.
-Therefore we need to clamp it on overflow.
+More FTDI variants limit the minimal baudrate value. Add lower bound
+checks.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 Tested-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/usb/serial/ftdi_sio.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/serial/ftdi_sio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index b440d338a895..ea40f367e70c 100644
+index ea40f367e70c..717b97f4e094 100644
 --- a/drivers/usb/serial/ftdi_sio.c
 +++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1157,6 +1157,8 @@ static unsigned short int ftdi_232am_baud_base_to_divisor(int baud, int base)
- 	int divisor3 = DIV_ROUND_CLOSEST(base, 2 * baud);
- 	if ((divisor3 & 0x7) == 7)
- 		divisor3++; /* round x.7/8 up to x+1 */
-+	if (divisor3 > GENMASK(16, 0))
-+		divisor3 = GENMASK(16, 0);
- 	divisor = divisor3 >> 3;
- 	divisor3 &= 0x7;
- 	if (divisor3 == 1)
-@@ -1181,6 +1183,8 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base)
- 	u32 divisor;
- 	/* divisor shifted 3 bits to the left */
- 	int divisor3 = DIV_ROUND_CLOSEST(base, 2 * baud);
-+	if (divisor3 > GENMASK(16, 0))
-+		divisor3 = GENMASK(16, 0);
- 	divisor = divisor3 >> 3;
- 	divisor |= (u32)divfrac[divisor3 & 0x7] << 14;
- 	/* Deal with special cases for highest baud rates. */
-@@ -1204,6 +1208,8 @@ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base)
- 
- 	/* hi-speed baud rate is 10-bit sampling instead of 16-bit */
- 	divisor3 = DIV_ROUND_CLOSEST(8 * base, 10 * baud);
-+	if (divisor3 > GENMASK(16, 0))
-+		divisor3 = GENMASK(16, 0);
- 
- 	divisor = divisor3 >> 3;
- 	divisor |= (u32)divfrac[divisor3 & 0x7] << 14;
+@@ -1330,7 +1330,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 		}
+ 		break;
+ 	case FT8U232AM: /* 8U232AM chip */
+-		if (baud <= 3000000) {
++		if (baud >= 183 && baud <= 3000000) {
+ 			div_value = ftdi_232am_baud_to_divisor(baud);
+ 		} else {
+ 			dev_dbg(dev, "%s - Baud rate too high!\n", __func__);
+@@ -1343,7 +1343,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 	case FT2232C: /* FT2232C chip */
+ 	case FT232RL: /* FT232RL chip */
+ 	case FTX:     /* FT-X series */
+-		if (baud <= 3000000) {
++		if (baud >= 183 && baud <= 3000000) {
+ 			u16 product_id = le16_to_cpu(
+ 				port->serial->dev->descriptor.idProduct);
+ 			if (((product_id == FTDI_NDI_HUC_PID)		||
+@@ -1367,7 +1367,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 	case FT232H:  /* FT232H chip */
+ 		if ((baud <= 12000000) && (baud >= 1200)) {
+ 			div_value = ftdi_2232h_baud_to_divisor(baud);
+-		} else if (baud < 1200) {
++		} else if (baud >= 183 && baud < 1200) {
+ 			div_value = ftdi_232bm_baud_to_divisor(baud);
+ 		} else {
+ 			dev_dbg(dev, "%s - Baud rate too high!\n", __func__);
 -- 
 2.35.1
 
