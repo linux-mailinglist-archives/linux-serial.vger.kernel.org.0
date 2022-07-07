@@ -2,44 +2,44 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFD556A648
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Jul 2022 16:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD63256A64D
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Jul 2022 16:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236090AbiGGOzs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 7 Jul 2022 10:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S235961AbiGGO4C (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 7 Jul 2022 10:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235666AbiGGOzU (ORCPT
+        with ESMTP id S235713AbiGGOzb (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 7 Jul 2022 10:55:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3009359248
-        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 07:54:08 -0700 (PDT)
+        Thu, 7 Jul 2022 10:55:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731CB599C5
+        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 07:54:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE80762305
-        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 14:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B922C3411E;
-        Thu,  7 Jul 2022 14:54:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 231F66231C
+        for <linux-serial@vger.kernel.org>; Thu,  7 Jul 2022 14:54:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DC3C341C6;
+        Thu,  7 Jul 2022 14:54:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657205647;
-        bh=wO5Z8TVIPCt4aD3Vytr0Et/jlS7dzxpF2zIuARMfYfY=;
+        s=k20201202; t=1657205648;
+        bh=Gh4TMbEzSAw1heyKyberRUJl4zTh6HNwlmdrtbBQWvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iw3PVl41vvcNYSb169CfZ3A3jGPe0Nh0gxP95hRet1x8zfn0Wr9jKoWKw5fJEDPMQ
-         pfmKotKS3LDrJSph1PDDBmD0XiluGPYGYFMEnThkI/FOZtSFkC+lEF02ESh75l9sJ4
-         Py3Y4lQqUUbfFArryPka3AUJdlxZ9DPcvBv951Y3f1oyKuzaL8/ogJHONuhMwjha8W
-         /asuQYMbUGUJkepxkgZvuTlYdAGtQN5/kzk28qYQ5fCiaFdcx8ypcXUYBcWX/5H6vA
-         cpaqoP/ZcAbefM6cbj2YgPJNjDJpKHddSrdLJMIaRxV1I+NX9ABFqCxQaoJ1w2lx3v
-         37ZtkYgSDGE+g==
+        b=Rfl2WPbW+snl+geQy/d2Ow8r/2TBMbi98doPGBuK9Wl1XzUXsxf6oZQSSvE8cO06O
+         7/iszhlSwToEyVVWdbrDB7IBu2Kl5p+TXu3nroiFDLcf4L/pR7No9jOs81AstpGJ+L
+         +Ki0YU58TObyn7bVYWSI8F3Z7FbmUtoL2xXSI64NYV0z7HWosxb6eiG9wRZNaI8w/z
+         czGsDrUV/l7VeB3pMFyITNIC7Zq8/PDgXUikc/fy/bxC15AQLYVHGG1FaO/MKh7rQd
+         cS6lMYnvUFjrnN7j8BpnMVj6IKleEStEcD+v1X8pyRf/VTcK47S+qzh4Rj7c+eqvD3
+         zW+1aFiKhf1SA==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 6/7] USB: serial: ftdi_sio: Fix custom_divisor and c_*speed for ASYNC_SPD_CUST
-Date:   Thu,  7 Jul 2022 16:53:53 +0200
-Message-Id: <20220707145354.29705-7-kabel@kernel.org>
+Subject: [PATCH 7/7] USB: serial: ftdi_sio: Fill c_*speed fields with real baudrate
+Date:   Thu,  7 Jul 2022 16:53:54 +0200
+Message-Id: <20220707145354.29705-8-kabel@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220707145354.29705-1-kabel@kernel.org>
 References: <20220707145354.29705-1-kabel@kernel.org>
@@ -58,65 +58,182 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Pali Rohár <pali@kernel.org>
 
-When ASYNC_SPD_CUST is used, update and recalculate custom_divisor and
-c_*speed fields from newly set baudrate value, so that userspace GET
-functions can see current configuration.
+Calculate baudrate value in c_*speed fields to the real value which was set
+to hardware. For this operation add a new set of functions divisor_to_baud
+for each chip and use it for calculating the real baudrate value.
+
+Each divisor_to_baud function is constructed as an inverse function of
+corresponding baud_to_divisor function.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 Tested-by: Marek Behún <kabel@kernel.org>
 ---
- drivers/usb/serial/ftdi_sio.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/usb/serial/ftdi_sio.c | 79 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
 
 diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index ac84d5779966..3bf5750e76de 100644
+index 3bf5750e76de..1f78ae695a1b 100644
 --- a/drivers/usb/serial/ftdi_sio.c
 +++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1303,6 +1303,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
- {
- 	struct ftdi_private *priv = usb_get_serial_port_data(port);
- 	struct device *dev = &port->dev;
-+	int fix_custom_divisor = 0;
- 	u32 div_value = 0;
- 	int div_okay = 1;
- 	int baud;
-@@ -1317,6 +1318,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
- 	if (baud == 38400 &&
- 	    ((priv->flags & ASYNC_SPD_MASK) == ASYNC_SPD_CUST) &&
- 	     (priv->custom_divisor)) {
-+		fix_custom_divisor = 1;
- 		baud = DIV_ROUND_CLOSEST(priv->baud_base, priv->custom_divisor);
- 		dev_dbg(dev, "%s - custom divisor %d sets baud rate to %d\n",
- 			__func__, priv->custom_divisor, baud);
-@@ -1401,7 +1403,19 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
- 			ftdi_chip_name[priv->chip_type]);
+@@ -1167,6 +1167,23 @@ static u32 ftdi_sio_baud_to_divisor(int baud)
  	}
- 
-+	/* Fix deprecated async-compatible custom_divisor hack and update tty baudrate */
-+	if (fix_custom_divisor) {
-+		priv->custom_divisor = DIV_ROUND_CLOSEST(priv->baud_base, baud);
-+		old_baud = baud;
-+		baud = 38400;
-+	}
-+
- 	tty_encode_baud_rate(tty, baud, baud);
-+
-+	/* For async-compatible custom_divisor store into TCGETS2 c_*speed fields real baudrate */
-+	if (fix_custom_divisor)
-+		tty->termios.c_ispeed = tty->termios.c_ospeed = old_baud;
-+
- 	return div_value;
  }
  
-@@ -2674,6 +2688,8 @@ static void ftdi_set_termios(struct tty_struct *tty,
- 		dev_dbg(ddev, "%s: forcing baud rate for this device\n", __func__);
- 		tty_encode_baud_rate(tty, priv->force_baud,
- 					priv->force_baud);
-+		termios->c_ispeed = termios->c_ospeed =
-+			DIV_ROUND_CLOSEST(priv->baud_base, priv->custom_divisor);
- 	}
++static int ftdi_sdio_divisor_to_baud(u32 divisor)
++{
++	switch (divisor) {
++	case ftdi_sio_b300: return 300;
++	case ftdi_sio_b600: return 600;
++	case ftdi_sio_b1200: return 1200;
++	case ftdi_sio_b2400: return 2400;
++	case ftdi_sio_b4800: return 4800;
++	case ftdi_sio_b9600: return 9600;
++	case ftdi_sio_b19200: return 19200;
++	case ftdi_sio_b38400: return 38400;
++	case ftdi_sio_b57600: return 57600;
++	case ftdi_sio_b115200: return 115200;
++	default: return 9600;
++	}
++}
++
+ static unsigned short int ftdi_232am_baud_base_to_divisor(int baud, int base)
+ {
+ 	unsigned short int divisor;
+@@ -1189,11 +1206,27 @@ static unsigned short int ftdi_232am_baud_base_to_divisor(int baud, int base)
+ 	return divisor;
+ }
  
- 	/* Force RTS-CTS if this device requires it. */
++static int ftdi_232am_divisor_base_to_baud(unsigned short int divisor, int base)
++{
++	static const unsigned char divfrac_inv[4] = { 0, 4, 2, 1 };
++	unsigned int divisor3;
++	if (divisor == 0)
++		divisor = 1;
++	divisor3 = (GENMASK(13, 0) & divisor) << 3;
++	divisor3 |= divfrac_inv[(divisor >> 14) & 0x3];
++	return DIV_ROUND_CLOSEST(base, 2 * divisor3);
++}
++
+ static unsigned short int ftdi_232am_baud_to_divisor(int baud)
+ {
+ 	 return ftdi_232am_baud_base_to_divisor(baud, 48000000);
+ }
+ 
++static int ftdi_232am_divisor_to_baud(unsigned short int divisor)
++{
++	return ftdi_232am_divisor_base_to_baud(divisor, 48000000);
++}
++
+ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base)
+ {
+ 	static const unsigned char divfrac[8] = { 0, 3, 2, 4, 1, 5, 6, 7 };
+@@ -1212,11 +1245,30 @@ static u32 ftdi_232bm_baud_base_to_divisor(int baud, int base)
+ 	return divisor;
+ }
+ 
++static int ftdi_232bm_divisor_base_to_baud(u32 divisor, int base)
++{
++	static const unsigned char divfrac_inv[8] = { 0, 4, 2, 1, 3, 5, 6, 7 };
++	u32 divisor3;
++	/* Deal with special cases for highest baud rates. */
++	if (divisor == 0)
++		divisor = 1;		/* 1.0 */
++	else if (divisor == 1)
++		divisor = 0x4001;	/* 1.5 */
++	divisor3 = (GENMASK(13, 0) & divisor) << 3;
++	divisor3 |= divfrac_inv[(divisor >> 14) & 0x7];
++	return DIV_ROUND_CLOSEST(base, 2 * divisor3);
++}
++
+ static u32 ftdi_232bm_baud_to_divisor(int baud)
+ {
+ 	 return ftdi_232bm_baud_base_to_divisor(baud, 48000000);
+ }
+ 
++static int ftdi_232bm_divisor_to_baud(u32 divisor)
++{
++	return ftdi_232bm_divisor_base_to_baud(divisor, 48000000);
++}
++
+ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base)
+ {
+ 	static const unsigned char divfrac[8] = { 0, 3, 2, 4, 1, 5, 6, 7 };
+@@ -1244,11 +1296,31 @@ static u32 ftdi_2232h_baud_base_to_divisor(int baud, int base)
+ 	return divisor;
+ }
+ 
++static int ftdi_2232h_divisor_base_to_baud(u32 divisor, int base)
++{
++	static const unsigned char divfrac_inv[8] = { 0, 4, 2, 1, 3, 5, 6, 7 };
++	u32 divisor3;
++	divisor &= GENMASK(16, 0);
++	/* Deal with special cases for highest baud rates. */
++	if (divisor == 0)
++		divisor = 1;		/* 1.0 */
++	else if (divisor == 1)
++		divisor = 0x4001;	/* 1.5 */
++	divisor3 = (GENMASK(13, 0) & divisor) << 3;
++	divisor3 |= divfrac_inv[(divisor >> 14) & 0x7];
++	return DIV_ROUND_CLOSEST(8 * base, 10 * divisor3);
++}
++
+ static u32 ftdi_2232h_baud_to_divisor(int baud)
+ {
+ 	 return ftdi_2232h_baud_base_to_divisor(baud, 120000000);
+ }
+ 
++static int ftdi_2232h_divisor_to_baud(u32 divisor)
++{
++	return ftdi_2232h_divisor_base_to_baud(divisor, 120000000);
++}
++
+ #define set_mctrl(port, set)		update_mctrl((port), (set), 0)
+ #define clear_mctrl(port, clear)	update_mctrl((port), 0, (clear))
+ 
+@@ -1342,6 +1414,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 			}
+ 			div_okay = 0;
+ 		}
++		baud = ftdi_sdio_divisor_to_baud(div_value);
+ 		break;
+ 	case FT8U232AM: /* 8U232AM chip */
+ 		if (baud >= 183 && baud <= 3000000) {
+@@ -1352,6 +1425,7 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 			div_value = ftdi_232am_baud_to_divisor(baud);
+ 			div_okay = 0;
+ 		}
++		baud = ftdi_232am_divisor_to_baud(div_value);
+ 		break;
+ 	case FT232BM: /* FT232BM chip */
+ 	case FT2232C: /* FT2232C chip */
+@@ -1375,22 +1449,27 @@ static u32 get_ftdi_divisor(struct tty_struct *tty,
+ 			div_value = ftdi_232bm_baud_to_divisor(baud);
+ 			div_okay = 0;
+ 		}
++		baud = ftdi_232bm_divisor_to_baud(div_value);
+ 		break;
+ 	case FT2232H: /* FT2232H chip */
+ 	case FT4232H: /* FT4232H chip */
+ 	case FT232H:  /* FT232H chip */
+ 		if ((baud <= 12000000) && (baud >= 1200)) {
+ 			div_value = ftdi_2232h_baud_to_divisor(baud);
++			baud = ftdi_2232h_divisor_to_baud(div_value);
+ 		} else if (baud >= 183 && baud < 1200) {
+ 			div_value = ftdi_232bm_baud_to_divisor(baud);
++			baud = ftdi_232bm_divisor_to_baud(div_value);
+ 		} else {
+ 			dev_dbg(dev, "%s - Baud rate too high!\n", __func__);
+ 			if (old_baud >= 183 && old_baud < 1200) {
+ 				baud = old_baud;
+ 				div_value = ftdi_232bm_baud_to_divisor(baud);
++				baud = ftdi_232bm_divisor_to_baud(div_value);
+ 			} else {
+ 				baud = (old_baud >= 1200 && old_baud <= 12000000) ? old_baud : 9600;
+ 				div_value = ftdi_2232h_baud_to_divisor(baud);
++				baud = ftdi_2232h_divisor_to_baud(div_value);
+ 			}
+ 			div_okay = 0;
+ 		}
 -- 
 2.35.1
 
