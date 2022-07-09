@@ -2,163 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C57156C5EA
-	for <lists+linux-serial@lfdr.de>; Sat,  9 Jul 2022 04:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA0F56C84E
+	for <lists+linux-serial@lfdr.de>; Sat,  9 Jul 2022 11:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiGICCU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 8 Jul 2022 22:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S229496AbiGIJUb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 9 Jul 2022 05:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiGICCT (ORCPT
+        with ESMTP id S229570AbiGIJU3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 8 Jul 2022 22:02:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A3952884
-        for <linux-serial@vger.kernel.org>; Fri,  8 Jul 2022 19:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657332138; x=1688868138;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=b3k30r8wfWGmMlGvOHc6V761i3xp3F3LuLRFDefhogk=;
-  b=VMHO/rYO330CMWv7a/vRhiLxqWMyKSMNLTBLhaKzDDWudCaa2T8tVl+w
-   frb+z7z+sktjN8MoQuJBkJ/Z37b4Uj7WcH7c1iGdN3O1Wpzm5JIMo2U+g
-   IDakE4gWYvqZ7P1rp/l/7hd6VXrNPl8EvPDEFNnQHaHQ8mbVaxUa54BuR
-   HIRpJNZuhOQPIvU8hYsVdOiJU4pEaxB+YK1UB9C362pSQurFbC6Sm6iwq
-   tnMk/CBwG1ANMJdxQxWGXJ/QFyHVDnAyvwVWBJXLd0q6bIwrS3JfWwIgg
-   LFqhaKT9gITBGokJe4TXyQI4Vf4/2zhCP5Px2fAFzcbkEB+lKj25wdSuq
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="283152627"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="283152627"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 19:02:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="651777044"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Jul 2022 19:02:17 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9znU-000OBE-Fn;
-        Sat, 09 Jul 2022 02:02:16 +0000
-Date:   Sat, 09 Jul 2022 10:01:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-linus] BUILD SUCCESS
- a501ab75e7624d133a5a3c7ec010687c8b961d23
-Message-ID: <62c8e17f.e5Q3GDBbqEHlDlg3%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 9 Jul 2022 05:20:29 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665CC66ACB
+        for <linux-serial@vger.kernel.org>; Sat,  9 Jul 2022 02:20:23 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id mf4so153671ejc.3
+        for <linux-serial@vger.kernel.org>; Sat, 09 Jul 2022 02:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=TKvyPiNZ+anjmYa10tWJwFVa+LgbgMa6tcU0LfkkBNI=;
+        b=Rw4EfubfZ/faCl4SO4kGUHTsF29gYmjUZN5r9EX2QvJZu1MCNedG9zlXeV2AhFrD+e
+         SXaisYWxi2fUxcpk19A/i7AtZbMpv3lr7KUgXbxpkLIIUEJyCshVIYNhva/EaDsmb0pp
+         34YplPkczi2T6yFHhiVl87ULuueLNlq21qgKhbgzefk/zgF3MSAJ/EB94FuyhPSFpwaS
+         LQjwd8/JA89CMxd1TzBKztR50rgjHQG/1pn1q4sYpKoJjmXYoL3DuCwTrbCj9+TXy7u2
+         AhJgLh9STUmqhDuCm1GQgtrOxx/JMJRJrDLbc1QMj3bXzNJMrA0fbQKeShJ/tnNmoYAB
+         5OTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=TKvyPiNZ+anjmYa10tWJwFVa+LgbgMa6tcU0LfkkBNI=;
+        b=NEfGa4XYLrHlozQnvmd/dxPPU5sF87f2rdr8n0T0TCzn6xoC5MfuIa9wzoBwltKk1c
+         qQlBSMDkg1zhfUm4pktRzUT+iqx4GB9Z4tYRvVAbt1Squs4F+xYf1s33IyZW+PHkJIjq
+         QpWomPemyi5LuMCOjwIyHBt5+KncP9i+BqETVAd7Bc+bLnh17GVddzFpyMdhbL2tuXM6
+         575SZc6Wg/52/rO2S5uuqu0duwsF88XIIPK30whjKA7Qa+Y/WvA6ZVMWYR9DmFWWxxqF
+         WW0XXRDICdzs4ajC4AioSkrFwmBh3anqg09LZZ62FHa741carbnmJyXvhb98C4B+kVt7
+         vC+Q==
+X-Gm-Message-State: AJIora8Oxi65fFq8dlMvx11XZ4pAxef/KcnQbmXQxi/OquQL9FJS61El
+        3kOPJHKCx05+McojekPh0rYemLqtTzcciY1NzYI=
+X-Google-Smtp-Source: AGRyM1u+lkUomLC9sj7m2S98v3aFMbUcPQRo+XYLcmPa7mGw7szcEoVya6ud7PjqcZccMjpswFD4wRZfo1uSn8ZwKfk=
+X-Received: by 2002:a17:907:1c8f:b0:6e8:f898:63bb with SMTP id
+ nb15-20020a1709071c8f00b006e8f89863bbmr8101819ejc.721.1657358421741; Sat, 09
+ Jul 2022 02:20:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:907:a40c:0:0:0:0 with HTTP; Sat, 9 Jul 2022 02:20:21
+ -0700 (PDT)
+From:   John Jacob <jjacobvsusa@gmail.com>
+Date:   Sat, 9 Jul 2022 12:20:21 +0300
+Message-ID: <CAKZDKkCKN5p+6LNhGP=88n5ZYzzERAMdH-XX-DunqQw+dsw0iQ@mail.gmail.com>
+Subject: Confirm Receipt
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
-branch HEAD: a501ab75e7624d133a5a3c7ec010687c8b961d23  tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
+Hello Dear,
 
-elapsed time: 726m
+I am Daniel Affum a retired civil servant i have a  business to
+discuss with you from the Eastern part of Africa aimed at agreed
+percentage upon your acceptance of my hand in business and friendship.
+Kindly respond to me if you are interested to partner with me for an
+update.Very important.
 
-configs tested: 81
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-ia64                          tiger_defconfig
-sh                          rsk7264_defconfig
-sh                        edosk7705_defconfig
-arm                           corgi_defconfig
-powerpc                     ep8248e_defconfig
-powerpc                 linkstation_defconfig
-arm                         vf610m4_defconfig
-sh                           se7619_defconfig
-sh                           se7712_defconfig
-sh                           se7721_defconfig
-sh                           se7750_defconfig
-mips                         rt305x_defconfig
-alpha                            alldefconfig
-arm                        clps711x_defconfig
-arm                        oxnas_v6_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-riscv                randconfig-r042-20220707
-arc                  randconfig-r043-20220707
-s390                 randconfig-r044-20220707
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-hexagon                          alldefconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                      walnut_defconfig
-powerpc                          g5_defconfig
-mips                       rbtx49xx_defconfig
-arm                         palmz72_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220707
-hexagon              randconfig-r041-20220707
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours Sincerely,
+Jacob John.
+For,
+Daniel Affum.
+Reply to: danielaffum005@yahoo.com
