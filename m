@@ -2,69 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E473256CFF3
-	for <lists+linux-serial@lfdr.de>; Sun, 10 Jul 2022 18:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD4456D01A
+	for <lists+linux-serial@lfdr.de>; Sun, 10 Jul 2022 18:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiGJQIY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 10 Jul 2022 12:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S229708AbiGJQp3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 10 Jul 2022 12:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGJQIX (ORCPT
+        with ESMTP id S229678AbiGJQpU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 10 Jul 2022 12:08:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7902A5F7D;
-        Sun, 10 Jul 2022 09:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657469302; x=1689005302;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u2rFHyjk0IO1Axsj1F5yVAJwDZ/wJ5mGUuZgurI+KIg=;
-  b=buQ8/caL7jTGu4FjzP0NkIza9BlrMtN0FJWhqCASxD+RVGChK40/u48x
-   5qC9WxLasQQngqea7CuqRy6wpd5bKmG3mJOyAW5BsJ0khfHKGORhqUDhY
-   rCPQqdw45UieT2dAOEHHsFIwTtJ+9iCA0dHD3s2xsDHsINRp99ND3FM2i
-   rH7GHyp6MHedaLrZNlN+oOm0WuVppf/Dy8rYSsewXRfN7BDA3PXAs166N
-   cywqFAexndrKjse6Cdm1KQbD/I97Sih3JsMsdZoDZlIkHOrQQMSOjEQNz
-   bFShTJyaZqHtzW/t06G+xPlT7qsLqYe9KVU89OaYCVyl9Y50vIBztAkMg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10404"; a="282073003"
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="282073003"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2022 09:08:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,261,1650956400"; 
-   d="scan'208";a="662291019"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Jul 2022 09:08:18 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oAZTl-000Pzi-Cs;
-        Sun, 10 Jul 2022 16:08:17 +0000
-Date:   Mon, 11 Jul 2022 00:07:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
+        Sun, 10 Jul 2022 12:45:20 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928CE13D47;
+        Sun, 10 Jul 2022 09:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657471495;
+        bh=nYNKgNEFTLWJv70qJTgu0U52c7ApU1mo6Iozs+zcxjw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=YteHhjU8dVZTAIVPpyKB9v/uxHfFWo45uox51wUJ1dj6lJP0/WJelE057EyZmcLx0
+         0IqmUFoII0BaY/75ZD5+7SSc7ufs9wtX/0UCZYXcQAHyAfCQo3w7sw/ibwqI8Ocb2V
+         Q3+Vlm+/Y21nBLkMbjoCVQ7QYD7x6PP/ZXkvsITI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([46.223.3.243]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MTzb8-1o1Kfl0VWc-00R3fK; Sun, 10 Jul 2022 18:44:55 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org,
         andriy.shevchenko@linux.intel.com, vz@mleia.com,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         lukas@wunner.de, p.rosenberger@kunbus.com,
         Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v3 3/8] serial: core, 8250: set RS485 termination gpio in
- serial core
-Message-ID: <202207102355.Y27cvu6y-lkp@intel.com>
-References: <20220710150322.2846170-4-LinoSanfilippo@gmx.de>
+Subject: [PATCH v4 0/8] Fixes and cleanup for RS485
+Date:   Sun, 10 Jul 2022 18:44:34 +0200
+Message-Id: <20220710164442.2958979-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220710150322.2846170-4-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:wgkedPKpLWO35Avvm9PJn8OvmcwTt7xznmtVa+nKkgW33M68BHP
+ ZOTxah1zmbpI3eJZ60nGpnZCrYBKwHL/83zIjjZQ7oCo6sOo5nI4gSVQhqA0Kr98Tg49Asr
+ uh8fsbvXKF15XqwVML5Rb3KvRsFwW2K2RX/xcDgbyUrQ1HjvPwVJfP5CARmU5zGfCAJSTPP
+ CDrOsrrZYtojQz8ap0vMQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X51eDTNwzUE=:CT++cnbYZbV+o/7XPAqieW
+ b+xwxsn7b28vk0rFPzsc5i6lQyy1Uy3e/RIVwBoZJwX8XO6sfJQZeNQqyf6lKVyV3Djc7H7iL
+ UbM8AAAwWzhSGY1BcbpDu3qBWz0BabXCewxq5hHKrT7fYCESVT66HkXRYt4RNH7eudt06Ido2
+ 1s2V2j5AAuKawyCktJhzoc/1TzxyEZLqgFS27m5yBvHdmx4B8OhOqm0e/ccUXvVwp+SNRJPyN
+ rBY1LU+r5sescb/xl1VUvvxcTY0M9S+ob9Fb7Ed4jwmSF1io974+wO7J+ftHRb9seVo1mvIxn
+ HU5zm6fK98qauTO2oLR0S9dzJf2YdPtUMwob10M1HbKfYjzeUgKaZC4/RcgcLOWg8i91JtQzN
+ 797ZGDf2yMnFBmxw/0lkt8yra7QyAKPkwLj+wHgXpyml8iP2vemFe3Wfw5tv+3xFN6sr1IFMy
+ FQE+ihIuf6CaOkDOPNWmST4AJU6qQw8vEMmiFOLNvbw3V2oAfpbNL6UTJ8FfnzSHFQ3wJaZ2Z
+ a+NWmdnZaeAsEjIalLZZlPUqPAjveGIeK4k7D7iSXc7enSsGLylkMdFlYw8GE+QeYq9Bb40b5
+ Mp5IiAlfKb9mAFPsLR+sGsPxN6EoPoZpVslEzAa8KKPmBH4m64sEFKzxGrDd6uNBt/yrVMjMA
+ V7eJekUzYmhxt+/1aEjEiRWB7WjSLwH5+t2NFXvKe9+Vmx4XwkcTyjLLvPfPcKDvKytH/NjR7
+ kzJZTJbi3fmPjBY9NqayaAmHqOadG5WUJAmC1V/miRJOHCmaOWvykYVGsAB9MzRxwA+feqZdb
+ y+ZWtY+ErCeZeUjsVeOs5kAtfOnITLLodHyY1ru+FvSSG+DMHKVUvoDqGpdW+SF9e/R1w0Th4
+ e+GiS+PZUUWADlQaObLnKuHinbxfCMm2G7SLsfUVvvS7syk5LJWcqYTEJbxzClxxtF8Y3Bety
+ T8Qg+ay6W4anIs1LBNUxG2NXvazJJ0BKohUfzyT8Uzej/7zt9fWLwdNCzbmtQpM5xP2hGdNJH
+ LsAUC9/vXNHBhqpV5QcdEeTXqs/v9GGrvrDzJ7eIP6QOWpHNMT1C3zSw8pmu3rpjqi2QnqxeF
+ ynKlTLco88OKfwRf9LxWNUbJU7zZM85RNnlgBDu6MHjUOQ4UjTynvaDgw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,60 +73,45 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Lino,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on 7e5b4322cde067e1d0f1bf8f490e93f664a7c843]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lino-Sanfilippo/Fixes-and-cleanup-for-RS485/20220710-230624
-base:   7e5b4322cde067e1d0f1bf8f490e93f664a7c843
-config: hexagon-randconfig-r041-20220710 (https://download.01.org/0day-ci/archive/20220710/202207102355.Y27cvu6y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6ce63e267aab79ca87bf63453d34dd3909ab978d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/846f02e6da9692810ed632dd72f45af667c3cc67
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lino-Sanfilippo/Fixes-and-cleanup-for-RS485/20220710-230624
-        git checkout 846f02e6da9692810ed632dd72f45af667c3cc67
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/tty/serial/serial_core.c:1364:6: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
-           if (!rs485->flags & SER_RS485_ENABLED)
-               ^             ~
-   drivers/tty/serial/serial_core.c:1364:6: note: add parentheses after the '!' to evaluate the bitwise operator first
-           if (!rs485->flags & SER_RS485_ENABLED)
-               ^
-                (                               )
-   drivers/tty/serial/serial_core.c:1364:6: note: add parentheses around left hand side expression to silence this warning
-           if (!rs485->flags & SER_RS485_ENABLED)
-               ^
-               (            )
-   1 warning generated.
-
-
-vim +1364 drivers/tty/serial/serial_core.c
-
-  1360	
-  1361	static void uart_set_rs485_termination(struct uart_port *port,
-  1362					       const struct serial_rs485 *rs485)
-  1363	{
-> 1364		if (!rs485->flags & SER_RS485_ENABLED)
-  1365			return;
-  1366	
-  1367		gpiod_set_value_cansleep(port->rs485_term_gpio,
-  1368					 !!(rs485->flags & SER_RS485_TERMINATE_BUS));
-  1369	}
-  1370	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSBmb2xs
+b3dpbmcgc2VyaWVzIGluY2x1ZGVzIGNsZWFudXAgYW5kIGZpeGVzIGFyb3VuZCBSUzQ4NSBpbiB0
+aGUgc2VyaWFsCmNvcmUgYW5kIHVhcnQgZHJpdmVyczoKClBhdGNoIDE6IGFyOTMzeDogRml4IGNo
+ZWNrIGZvciBSUzQ4NSBzdXBwb3J0ClBhdGNoIDI6IFJlbW92ZSBzdXBlcmZsdW91cyBjb2RlIGlu
+IGFyOTMzeC4KUGF0Y2ggMzogU2V0IHRoZSByczQ4NSB0ZXJtaW5hdGlvbiBHUElPIGluIHRoZSBz
+ZXJpYWwgY29yZS4gVGhpcyBpcyBuZWVkZWQKCSBzaW5jZSBpZiB0aGUgZ3BpbyBpcyBvbmx5IGFj
+Y2Vzc2libGUgaW4gc2xlZXBhYmxlIGNvbnRleHQuIEl0IGFsc28KCSBpcyBhIGZ1cnRoZXIgc3Rl
+cCB0byBtYWtlIHRoZSBSUzQ4NSBoYW5kbGluZyBtb3JlIGdlbmVyaWMuClBhdGNoIDQ6IE1vdmUg
+c2FuaXRpemluZyBvZiBSUzQ4NSBkZWxheXMgaW50byBhbiBvd24gZnVuY3Rpb24uIFRoaXMgaXMg
+aW4gCgkgcHJlcGFyYXRpb24gb2YgcGF0Y2ggNC4KUGF0Y2ggNTogU2FuaXRpemUgUlM0ODUgZGVs
+YXlzIHJlYWQgZnJvbSBkZXZpY2UgdHJlZS4KUGF0Y2ggNjogQ29ycmVjdCBSUzQ4NSBkZWxheXMg
+aW4gYmluZGluZyBkb2N1bWVudGF0aW9uLgpQYXRjaCA3OiBSZW1vdmUgcmVkdW5kYW50IGNvZGUg
+aW4gODI1MF9kd2xpYi4KUGF0Y2ggODogUmVtb3ZlIHJlZHVuZGFudCBjb2RlIGluIDgyNTAtbHBj
+MTh4eC4KCkNoYW5nZXMgaW4gdjQ6Ci0gZml4ZWQgbG9naWNhbCBlcnJvciBmb3VuZCBieSAKLSBj
+YXBpdGFsaXplICJ1YXJ0IiBhbmQgImdwaW8iIGluIGNvbW1pdCBtZXNzYWdlcwoKQ2hhbmdlcyBp
+biB2MzoKLSByZW1vdmUgb2Jzb2xldGUgcGF0Y2ggKGR1ZSB0byBjaGFuZ2VzIGJ5IElscG8pCi0g
+Y29ycmVjdGVkIGFuZCByZXBocmFzZSBjb21taXQgbWVzc2FnZXMgKHBvaW50ZWQgb3V0IGJ5IEFu
+ZHkpCi0gcmVtb3ZlIHN1cGVyZmx1b3VzIGNoZWNrIChwb2ludGVkIG91dCBieSBBbmR5KQotIHNl
+cGFyYXRlIGFyOTMzeCBVQVJUIGJ1Z2ZpeCBhbmQgY2xlYW51cCBpbnRvIGRpZmZlcmVudCBwYXRj
+aGVzCiAgKGFzIHN1Z2dlc3RlZCBieSBJbHBvKQotIHB1dCB0aGUgYXI5MzN4IGZpeCBhdCB0aGUg
+YmVnaW5uaW5nIG9mIHRoZSBzZXJpZXMgKGFzIHN1Z2dlc3RlZCBieSBBbmR5KQoKQ2hhbmdlcyBp
+biB2MjoKLSBwcmludCBhIHdhcm5pbmcgaWYgdGVybWluYXRpb24gR1BJTyBpcyBzcGVjaWZpZWQg
+aW4gRFQvQUNQSSBidXQgaXMgbm90CiAgc3VwcG9ydGVkIGJ5IGRyaXZlciAKLSBmaXhlZCBjb21t
+aXQgbWVzc2FnZSBmb3IgZGV2dHJlZSBkb2N1bWVudGF0aW9uIChhcyBzdWdnZXN0ZWQgYnkgQW5k
+eSkKLSBmaXhlZCBjb2RlIGNvbW1lbnQKLSBhZGRlZCBwYXRjaCA3CgpMaW5vIFNhbmZpbGlwcG8g
+KDgpOgogIHNlcmlhbDogYXI5MzN4OiBGaXggY2hlY2sgZm9yIFJTNDg1IHN1cHBvcnQKICBzZXJp
+YWw6IGFyOTMzeDogUmVtb3ZlIHN1cGVyZmx1b3VzIGNvZGUgaW4gYXI5MzN4X2NvbmZpZ19yczQ4
+NSgpCiAgc2VyaWFsOiBjb3JlLCA4MjUwOiBzZXQgUlM0ODUgdGVybWluYXRpb24gR1BJTyBpbiBz
+ZXJpYWwgY29yZQogIHNlcmlhbDogY29yZTogbW92ZSBzYW5pdGl6aW5nIG9mIFJTNDg1IGRlbGF5
+cyBpbnRvIG93biBmdW5jdGlvbgogIHNlcmlhbDogY29yZTogc2FuaXRpemUgUlM0ODUgZGVsYXlz
+IHJlYWQgZnJvbSBkZXZpY2UgdHJlZQogIGR0X2JpbmRpbmdzOiByczQ4NTogQ29ycmVjdCBkZWxh
+eSB2YWx1ZXMKICBzZXJpYWw6IDgyNTBfZHdsaWI6IHJlbW92ZSByZWR1bmRhbnQgc2FuaXR5IGNo
+ZWNrIGZvciBSUzQ4NSBmbGFncwogIHNlcmlhbDogODI1MDogbHBjMTh4eDogUmVtb3ZlIHJlZHVu
+ZGFudCBzYW5pdHkgY2hlY2sgZm9yIFJTNDg1IGZsYWdzCgogLi4uL2RldmljZXRyZWUvYmluZGlu
+Z3Mvc2VyaWFsL3JzNDg1LnlhbWwgICAgIHwgIDQgKy0KIGRyaXZlcnMvdHR5L3NlcmlhbC84MjUw
+LzgyNTBfZHdsaWIuYyAgICAgICAgICB8IDEwICstLS0KIGRyaXZlcnMvdHR5L3NlcmlhbC84MjUw
+LzgyNTBfbHBjMTh4eC5jICAgICAgICB8ICA2ICstCiBkcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84
+MjUwX3BvcnQuYyAgICAgICAgICAgfCAgMyAtCiBkcml2ZXJzL3R0eS9zZXJpYWwvYXI5MzN4X3Vh
+cnQuYyAgICAgICAgICAgICAgfCAxOCArKy0tLS0KIGRyaXZlcnMvdHR5L3NlcmlhbC9zZXJpYWxf
+Y29yZS5jICAgICAgICAgICAgICB8IDYwICsrKysrKysrKysrKy0tLS0tLS0KIDYgZmlsZXMgY2hh
+bmdlZCwgNTAgaW5zZXJ0aW9ucygrKSwgNTEgZGVsZXRpb25zKC0pCgoKYmFzZS1jb21taXQ6IDdl
+NWI0MzIyY2RlMDY3ZTFkMGYxYmY4ZjQ5MGU5M2Y2NjRhN2M4NDMKLS0gCjIuMjUuMQoK
