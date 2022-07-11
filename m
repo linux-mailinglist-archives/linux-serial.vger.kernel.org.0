@@ -2,88 +2,73 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A101256FFAE
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Jul 2022 13:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89DE570007
+	for <lists+linux-serial@lfdr.de>; Mon, 11 Jul 2022 13:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiGKLEH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Jul 2022 07:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S230469AbiGKLSp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Jul 2022 07:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiGKLDv (ORCPT
+        with ESMTP id S230236AbiGKLSZ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Jul 2022 07:03:51 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2207BA3B3
-        for <linux-serial@vger.kernel.org>; Mon, 11 Jul 2022 03:10:50 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id e16so4353578pfm.11
-        for <linux-serial@vger.kernel.org>; Mon, 11 Jul 2022 03:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8hQbQuIkXH2nGerXV36d8aZidSoI6QgUgjQAkOlJd1E=;
-        b=HNqkU+6COV5zPrcjrdTrk/MnpONKK1qsXD/joQnTTCWeKDnbrIlpVu8fG8OTdmG0cu
-         NbpQDgkbIzDhDD2e46iTwhJVe+PrFSF9dfCQciCUsS8xrR03uHUd0DoGp8S2bIkR4B2u
-         fSKcJ6tHuDXTFJNG+Q99FGejke7l+U0ktxeCQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8hQbQuIkXH2nGerXV36d8aZidSoI6QgUgjQAkOlJd1E=;
-        b=v9hGAR7ZBa7mTEc5+omN8AbosBu37IXhw83zfl5jz7gT0cF+L3N9P3i1wVATR22Jha
-         G1UUv/fbwDJps5VjnXL4qwLsbUDd+B1cZNzg5oaQaJ2ro11G7X4APHuUJ6AEzkcHVups
-         LeJ6nz/OjPI8cwgepYCrtG8DVupdu/BGz+KadWrhzzgE9/sNDYG13IJSDjKQBEWHs5tf
-         +rAZoX1XnRWw9WLqO+ACY+vDl9Bh0jsezpMK8matdaZyEvZ0oxb9Pxn2kUfbKFJOZ9V9
-         4ebsGIrvz1bdgCjsk+0RtrHcerp2HYmwLlWy0RPfFDJzRSqw5kWtzmJEBGoqFzIHxNv0
-         zrEg==
-X-Gm-Message-State: AJIora90MiVfoPqFgvbPt2TIc8T/qLoQlsThjT4o9JcZWsGzMnMrJ1Ws
-        LIYzg2pRoeD0uxU4DxZ/6rWgHA==
-X-Google-Smtp-Source: AGRyM1uzUJheRLsOh6g4rN2qYYRG9lFr0c+/BQ+0Zzqd4yX/KG08Rl0SlssZT8yQL6EuogWTW0hmrw==
-X-Received: by 2002:a63:2a8f:0:b0:412:5278:b90 with SMTP id q137-20020a632a8f000000b0041252780b90mr15136947pgq.363.1657534250032;
-        Mon, 11 Jul 2022 03:10:50 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:ef9b:8bda:6cfb:9c5a])
-        by smtp.gmail.com with ESMTPSA id g6-20020a655806000000b0040c74f0cdb5sm3864633pgr.6.2022.07.11.03.10.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 03:10:49 -0700 (PDT)
-Date:   Mon, 11 Jul 2022 19:10:44 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        todd.e.brandt@linux.intel.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
- (printk issue)
-Message-ID: <Ysv3JNs4RwE7kAou@google.com>
-References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
- <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
- <87czegxccb.fsf@jogness.linutronix.de>
- <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
- <87tu7qvx1q.fsf@jogness.linutronix.de>
- <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
- <87o7xwbuoy.fsf@jogness.linutronix.de>
- <Ysvbp8vz7R9hDNqx@alley>
+        Mon, 11 Jul 2022 07:18:25 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA04A190;
+        Mon, 11 Jul 2022 03:41:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhL5T4Hkrz4xD9;
+        Mon, 11 Jul 2022 20:41:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
+        s=201707; t=1657536062;
+        bh=WkUBTudz6dG+TVvLeDvu9O1AhkbCdb5uNCCAictTr2g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=w0cOffT/9tTiRHg2BhqZIQK+XKZC7zeFHiPlYdJZqgVyy7K78aV7UI7HRpX++qhYD
+         QCUmrsSj+cT54B0rgOiDWhQpwVOazT00+CiEao10e/LWnLcBq4sWfvKSHfP1BNK8iA
+         oP1QL8jt9Kd+j9O1KPOxbUH853N/SSKATmj/dvecsxmnV8NiaRFBWjWSOE2KItF6SK
+         Er3xAimALb3TlI/Om51KOhk5c+fYLvDgs73m87RbtF+OxpT+BNmAr7WXV7mAAmYPmx
+         6KagakpccinWRER1Zl4ce/KscfrLXugFFwKrgN0ZwzzNjp+ks2eApMeM0I4wKTBEfY
+         n+5T8EocAu9Wg==
+Message-ID: <74b98265ff9638ad7a06a58ef0dea1758396744f.camel@ozlabs.org>
+Subject: Re: [PATCH] serial: 8250: SERIAL_8250_ASPEED_VUART should depend on
+ ARCH_ASPEED
+From:   Jeremy Kerr <jk@ozlabs.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 11 Jul 2022 18:40:38 +0800
+In-Reply-To: <259138c372d433005b4871789ef9ee8d15320307.1657528861.git.geert+renesas@glider.be>
+References: <259138c372d433005b4871789ef9ee8d15320307.1657528861.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ysvbp8vz7R9hDNqx@alley>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On (22/07/11 10:13), Petr Mladek wrote:
-> 
-> It seems that __pr_flush() does not check whether all consoles
-> are suspended. In this case the progress is not possible and
-> it has to wait the entire timeout.
+Hi Geert,
 
-But isn't console_suspended set after pr_flush() call?
+> The Aspeed Virtual UART is only present on Aspeed BMC platforms.=C2=A0
+> Hence add a dependency on ARCH_ASPEED, to prevent asking the user
+> about this driver when configuring a kernel without Aspeed BMC
+> support.
+
+All fine by me. It'd be super weird if this hardware appeared on a
+non-ASPEED platform.
+
+Reviewed-by: Jeremy Kerr <jk@ozlabs.org>
+
+Cheers,
+
+
+Jeremy
