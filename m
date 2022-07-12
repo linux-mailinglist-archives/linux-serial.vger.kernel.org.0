@@ -2,53 +2,46 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321BA57197D
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Jul 2022 14:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B771571A37
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Jul 2022 14:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiGLMLQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 12 Jul 2022 08:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229729AbiGLMnx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 12 Jul 2022 08:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbiGLMLP (ORCPT
+        with ESMTP id S229526AbiGLMnw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:11:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4475A2D5
-        for <linux-serial@vger.kernel.org>; Tue, 12 Jul 2022 05:11:14 -0700 (PDT)
+        Tue, 12 Jul 2022 08:43:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7CD32065;
+        Tue, 12 Jul 2022 05:43:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3706FB817D2
-        for <linux-serial@vger.kernel.org>; Tue, 12 Jul 2022 12:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BF6C3411C;
-        Tue, 12 Jul 2022 12:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657627872;
-        bh=VnlQRqsZnHVjfpAsg5GC6/cWxkdR6Ss6n2spBoZ7mM0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tNWSfpblY9dvxi6PTgvqcGrn2IS+HAjTQUJwovMlob5U5H/sk1t4j9YJUV5NLRKFw
-         VMD0LcdvBoialIOVaWPmoUoOmSNJO2VAkbUgZRSkgxtKV052QwQYZuTUzuwvJfOHpR
-         Pdaou7T0tf+Cumb2XBT+3gU7ATyhLAynCreV5UIYeFZQ22/eVQQe97u4UpsKXHluoj
-         ieLDRam8KxcAp9oXnSsJRJTHPszxDINkzQSJYIPCnv5q3PfhTUtTSNKYSTAAgTygVV
-         Nvvv2+nwGpIvIAZyh1pSvXK685c3d3MoLiyEzSo2OcIqaamGpitJvxaRWuDk2Zg/xj
-         5gms+V3gfFZCQ==
-Date:   Tue, 12 Jul 2022 14:11:07 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Subject: Re: [PATCH 4/7] USB: serial: ftdi_sio: Do not reset baudrate to
- 9600 on error
-Message-ID: <20220712141107.24b3f44d@thinkpad>
-In-Reply-To: <CAHp75VdamVbTZ2--GXLY6u_O9QmqN5GXTyZQ-NLfWWaEX6bBBw@mail.gmail.com>
-References: <20220707145354.29705-1-kabel@kernel.org>
-        <20220707145354.29705-5-kabel@kernel.org>
-        <CAHp75VdamVbTZ2--GXLY6u_O9QmqN5GXTyZQ-NLfWWaEX6bBBw@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1C80B81816;
+        Tue, 12 Jul 2022 12:43:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637B8C3411C;
+        Tue, 12 Jul 2022 12:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657629828;
+        bh=pJsxsIkxzdE6TIbOKNl3gsVKK6ceL91vfhLdJaMSbH8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x4UOBE0EHiymr0xPTajxEznlFbIexTaPI/66JgKLGYpwl6oIbf/y6MjlfiELPzUax
+         NPd1JOyU7C4tonOGyP7P2nuKMxMlrSJzg0//YgqIw+tDVnF5MlENpN7+5JwUhhlQro
+         8dcfgVfMI8NhyZvRGTZ64cNwNHSPR2zAU3KrYd2w=
+Date:   Tue, 12 Jul 2022 14:43:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jonathan Woithe <jwoithe@just42.net>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
+ chunks
+Message-ID: <Ys1sfRyL6El7go94@kroah.com>
+References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,48 +52,69 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-I forgot to look at your comments before sending v2, ouch :(
+On Tue, Jul 12, 2022 at 09:29:57PM +0930, Jonathan Woithe wrote:
+> Hi all
+> 
+> For many years I have been using a CH341 USB-serial converter (VID:PID
+> 4348:5523) to drive a microcontroller programming dongle.  This was under
+> kernel 4.4.14.  When I recently upgraded the machine to a 5.15.27 kernel the
+> programmer stopped working, reporting timeouts.  Using a loopback cable and
+> minicom I discovered that under 5.15.27 data was only delivered back to
+> minicom in blocks of 32 characters.  This explains why the programming
+> software reported timeouts.  It seems that either outgoing data is blocked
+> until 32 bytes are ready for transmission, or receive data is only reported
+> in blocks of 32 bytes.
+> 
+> Under 4.4.14 (and all kernels prior to 4.10.0), individual characters are
+> echoed back by minicom as soon as they hare pressed on the keyboard.
+> 
+> As far as I can tell, the regression affects all kernels since 4.10.0.
+> 
+> I have done a git bisect which identified the following commit as the source
+> of the problem.
+> 
+> commit 55fa15b5987db22b4f35d3f0798928c126be5f1c
+> Author: Johan Hovold <johan@kernel.org>
+> Date:   Fri Jan 6 19:15:16 2017 +0100
 
-On Fri, 8 Jul 2022 17:51:00 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Please always cc: the developer who wrote a commit that you have
+questions about, so that they are sure to see it, otherwise it's just
+random luck :)
 
-> On Thu, Jul 7, 2022 at 4:57 PM Marek Beh=C3=BAn <kabel@kernel.org> wrote:
-> >
-> > From: Pali Roh=C3=A1r <pali@kernel.org>
-> >
-> > On failure to set new baudrate, reset baudrate to the previous value =20
->=20
-> a new
-> baud rate
->=20
-> > (as is done by other serial drivers) instead of resetting to 9600. =20
->=20
-> ...
->=20
-> > +                       baud =3D old_baud ? old_baud : 9600; =20
->=20
-> Can be written as
->=20
->   baud =3D old_baud ?: 9600;
->=20
-> ...
->=20
-> > +                       if (div_value =3D=3D (u32)-1) { =20
->=20
-> Oh, unsigned -1? Can you define it with a meaningful name and depends
-> on the semantics use U32_MAX or GENMASK()?
->=20
-> > +                               baud =3D 9600;
-> > +                               div_value =3D ftdi_sio_baud_to_divisor(=
-baud);
-> > +                       } =20
->=20
-> ...
->=20
-> > +                       baud =3D (old_baud >=3D 183 && old_baud <=3D 30=
-00000) ? old_baud : 9600; =20
->=20
-> These repetitive magics are error prone (easy to make a mistake or
-> off-by-one error). Can you create a simple helper for this?
->=20
+>     USB: serial: ch341: fix baud rate and line-control handling
+> 
+>     Revert to using direct register writes to set the divisor and
+>     line-control registers.
+> 
+>     A recent change switched to using the init vendor command to update
+>     these registers, something which also enabled support for CH341A
+>     devices. It turns out that simply setting bit 7 in the divisor register
+>     is sufficient to support CH341A and specifically prevent data from being
+>     buffered until a full endpoint-size packet (32 bytes) has been received.
+> 
+>     Using the init command also had the side-effect of temporarily
+>     deasserting the DTR/RTS signals on every termios change (including
+>     initialisation on open) something which for example could cause problems
+>     in setups where DTR is used to trigger a reset.
+> 
+>     Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on
+>     reconfiguration")
+>     Signed-off-by: Johan Hovold <johan@kernel.org>
 
+It seems like this change does the opposite of what it says, we don't
+want the device to wait for a full endpoint of packets to send stuff
+out, right?
+
+> It would be great if this regression could be addressed.  At present I must
+> boot a pre-4.10 kernel whenever I need to use the programming dongle with
+> this converter.
+> 
+> Please let me know if there is anything I can do to help resolve the
+> problem.
+
+If you revert this commit on top of the latest kernel release, does it
+solve the problem for you?
+
+thanks,
+
+greg k-h
