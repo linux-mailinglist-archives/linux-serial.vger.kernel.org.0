@@ -2,94 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C995719C5
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Jul 2022 14:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16C4571971
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Jul 2022 14:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiGLMVV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 12 Jul 2022 08:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
+        id S229994AbiGLMJd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 12 Jul 2022 08:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiGLMVV (ORCPT
+        with ESMTP id S229729AbiGLMJc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 12 Jul 2022 08:21:21 -0400
-X-Greylist: delayed 1275 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 05:21:17 PDT
-Received: from server.atrad.com.au (server.atrad.com.au [150.101.241.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323617AB1E
-        for <linux-serial@vger.kernel.org>; Tue, 12 Jul 2022 05:21:16 -0700 (PDT)
-Received: from marvin.atrad.com.au (marvin.atrad.com.au [192.168.0.2])
-        by server.atrad.com.au (8.17.1/8.17.1) with ESMTPS id 26CBxvkd020196
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-        for <linux-serial@vger.kernel.org>; Tue, 12 Jul 2022 21:29:58 +0930
-Date:   Tue, 12 Jul 2022 21:29:57 +0930
-From:   Jonathan Woithe <jwoithe@just42.net>
-To:     linux-serial@vger.kernel.org
-Subject: [Regression] CH341 USB-serial converter passes data in 32 byte chunks
-Message-ID: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
+        Tue, 12 Jul 2022 08:09:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D425E87
+        for <linux-serial@vger.kernel.org>; Tue, 12 Jul 2022 05:09:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A3D615CF
+        for <linux-serial@vger.kernel.org>; Tue, 12 Jul 2022 12:09:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4591DC3411C;
+        Tue, 12 Jul 2022 12:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657627770;
+        bh=DwgRnopJw/EbrZD1Tr6CgEIADlBGnXISMHaX1hQnucs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cq+1FbNvzJ9WIihV21ehXjiQZYYqwD4VhxIV2lqdJM/h16+Y9TyOqtl/k9kbD+K4y
+         qTCT2BVYBQReyg5AlPY98xEFF51mEqnchmlP3/ulpr0cEr2PPwQbtyUMGrA2OjKl1g
+         /1vVtF6wqKbmxMhUtJlRzgg/5W371J2RC7fSWwLJf7pXGfci1lQP1x2a9BtcU0Ecc4
+         iJPsb8Zf7Tt0DSJnrq1WVtmzScPV5LPkDUXzbg+/Y55qASXpB+t92b0oUZJhrKLS3Q
+         NygQeqTdzfB+lam1hN2UHxqxXWw0JtnXfnMTvUcIkbgcdhqfxO8nguu9T74VxN4C1A
+         1v2LYL4slZOyg==
+Date:   Tue, 12 Jul 2022 14:09:25 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     m.brock@vanmierlo.com
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Subject: Re: [PATCH 4/7] USB: serial: ftdi_sio: Do not reset baudrate to
+ 9600 on error
+Message-ID: <20220712140925.68f7f3c8@thinkpad>
+In-Reply-To: <f94731a7bc103f153bea7a405b4fd9fc@vanmierlo.com>
+References: <20220707145354.29705-1-kabel@kernel.org>
+        <20220707145354.29705-5-kabel@kernel.org>
+        <CAHp75VdamVbTZ2--GXLY6u_O9QmqN5GXTyZQ-NLfWWaEX6bBBw@mail.gmail.com>
+        <f94731a7bc103f153bea7a405b4fd9fc@vanmierlo.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-MIMEDefang-action: accept
-X-Scanned-By: MIMEDefang 2.86 on 192.168.0.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi all
+On Tue, 12 Jul 2022 13:28:17 +0200
+m.brock@vanmierlo.com wrote:
 
-For many years I have been using a CH341 USB-serial converter (VID:PID
-4348:5523) to drive a microcontroller programming dongle.  This was under
-kernel 4.4.14.  When I recently upgraded the machine to a 5.15.27 kernel the
-programmer stopped working, reporting timeouts.  Using a loopback cable and
-minicom I discovered that under 5.15.27 data was only delivered back to
-minicom in blocks of 32 characters.  This explains why the programming
-software reported timeouts.  It seems that either outgoing data is blocked
-until 32 bytes are ready for transmission, or receive data is only reported
-in blocks of 32 bytes.
+> Andy Shevchenko schreef op 2022-07-08 17:51:
+> >> +                       baud = old_baud ? old_baud : 9600;  
+> > 
+> > Can be written as
+> > 
+> >   baud = old_baud ?: 9600;  
+> 
+> That is invalid C !
+> This is a GCC extension.
 
-Under 4.4.14 (and all kernels prior to 4.10.0), individual characters are
-echoed back by minicom as soon as they hare pressed on the keyboard.
-
-As far as I can tell, the regression affects all kernels since 4.10.0.
-
-I have done a git bisect which identified the following commit as the source
-of the problem.
-
-commit 55fa15b5987db22b4f35d3f0798928c126be5f1c
-Author: Johan Hovold <johan@kernel.org>
-Date:   Fri Jan 6 19:15:16 2017 +0100
-
-    USB: serial: ch341: fix baud rate and line-control handling
-
-    Revert to using direct register writes to set the divisor and
-    line-control registers.
-
-    A recent change switched to using the init vendor command to update
-    these registers, something which also enabled support for CH341A
-    devices. It turns out that simply setting bit 7 in the divisor register
-    is sufficient to support CH341A and specifically prevent data from being
-    buffered until a full endpoint-size packet (32 bytes) has been received.
-
-    Using the init command also had the side-effect of temporarily
-    deasserting the DTR/RTS signals on every termios change (including
-    initialisation on open) something which for example could cause problems
-    in setups where DTR is used to trigger a reset.
-
-    Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on
-    reconfiguration")
-    Signed-off-by: Johan Hovold <johan@kernel.org>
-
-
-It would be great if this regression could be addressed.  At present I must
-boot a pre-4.10 kernel whenever I need to use the programming dongle with
-this converter.
-
-Please let me know if there is anything I can do to help resolve the
-problem.
-
-Regards
-  jonathan
+Kernel is saturated with usage of GCC extensions.
