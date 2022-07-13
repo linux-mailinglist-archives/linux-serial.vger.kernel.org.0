@@ -2,103 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A477573D2A
-	for <lists+linux-serial@lfdr.de>; Wed, 13 Jul 2022 21:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9AB573EE5
+	for <lists+linux-serial@lfdr.de>; Wed, 13 Jul 2022 23:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236763AbiGMTdb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 13 Jul 2022 15:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S236812AbiGMVXB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 13 Jul 2022 17:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236694AbiGMTd2 (ORCPT
+        with ESMTP id S237401AbiGMVWo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:33:28 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4022B2DAB1
-        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id t127so11683707vsb.8
-        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
-        b=aM1IhBunUxE23qoS04VXLKhmfEzv0G+rIPuL+tw7ecWQpkkV/VIRfagQrgSyOoTIAm
-         AZWPXQE2ns7ZNMtu2h9VrGRckGYmFXAYncydcobmDBiRLde8BCgwi2hlvMDHXzYgqMkQ
-         SeJxIk0u87w3y3HvNwB5qYF3cTerdoWv2b9mV8jFDizIJX8stbEHhwQnKSILH4q0Huup
-         hTOO9Jx4LSsJcLZc09WMxCsF4ciSzvQTXVpvt0KUlX7r0Y8qXhkOofhAjq9rhr7n0O3a
-         0Nz5Fyl2IiFFXOdqA4nMId1341Np8datpnUgsVwvaqGydn6uB0z1+35u/mxwEULjiUxM
-         xCNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
-        b=HKsDaF9Jls/7jKu8W+fPKdK7ZX42sEUzI0mvmFI2Tb8yi7S7wkd2HUXB4jCydUEZWk
-         DRklu6x+qq6/l0zkZbyFUPf9aZ3TJdL9WvoFb7MKIcHJjk8h0dJjnIYCFnqjq5Rie6+c
-         yHEXq0fa70MCcFS/5ixMFCPop3EQ9BWsFHPvs7jIFFhtNego+ClEuWJyJ6yqRr42IZFM
-         zxaMClSUpmnqfTlRXtpXAO8HwxLBEz5M4wE1wYRg9FtA+YI04LuT4cBEk7pHRDt/UmSq
-         m8coof7iZLzFd+HuQsZBt+cF4ej7DvzEeDDc6kKGUzSVgSJxVEFsDP1yyIYEBvmwe9H5
-         LCBQ==
-X-Gm-Message-State: AJIora/gbLbyXQzdGsR0UmbiVV90zpUorv42Y/2iXHoZ0ii0lJDe4Le8
-        CGKS/QqgbZDloVmjJrGf7y50r8cjd5/iFW8H4bw=
-X-Google-Smtp-Source: AGRyM1sJxaHNFmNllzWTe6lcXJtKq+jpeM0H1VbICZMt0N2iL7xjj1CQ/iGumgoql0QuMbeebjAgPClviShoH8saaK0=
-X-Received: by 2002:a67:a449:0:b0:357:3407:9f60 with SMTP id
- p9-20020a67a449000000b0035734079f60mr2391818vsh.17.1657740805145; Wed, 13 Jul
- 2022 12:33:25 -0700 (PDT)
+        Wed, 13 Jul 2022 17:22:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FF013F03;
+        Wed, 13 Jul 2022 14:22:23 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1657747341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1yBttfM1OIBrcobeykZD9o4tbtZiHFfM1/f7oRhcDk0=;
+        b=YKWajG8WfsiE2Hr4rJ3Kr0aJnB1C5SjgyGRO2LpCbAHowS403vGXprtO4TNatWTuIIrbBB
+        2QBdSMS71kwtHcIsBpC+6tg8qEtkzKx1SDDccULp5gTGGZri/Rmw34adavSWgoxmocVOsE
+        PFlYzwvYHTmBGZOlJu/1nv98ho/aW60ahxsHO+H3Rd9sinJNmqdLKwuF9NoLU0xm39uda4
+        1juleGNMm3I6Pq5opoampRysUKqd8Boa2RyqIio8Ds0ek71C2RNJFgg5n+owfT2zPpioDv
+        XdQMBjldIjR4NjfkyJmoav0QVREhc9LOnODw3L1WIr9vwCZ88al4CRhEPlcc3Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1657747341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1yBttfM1OIBrcobeykZD9o4tbtZiHFfM1/f7oRhcDk0=;
+        b=ztDAuM+VYw/ELLKYIWq1oUmmyc0nNOrLOLf5XoW48EDkkvcr0GcedXNhsyqdMtVBvwREuG
+        THBcfEwAco6coVAQ==
+To:     todd.e.brandt@linux.intel.com,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Petr Mladek <pmladek@suse.com>, rafael.j.wysocki@intel.com,
+        len.brown@intel.com
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
+ (printk issue)
+In-Reply-To: <7d79e9877d63cdb74144f38d8736959281b562cc.camel@linux.intel.com>
+References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
+ <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
+ <87czegxccb.fsf@jogness.linutronix.de>
+ <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
+ <87tu7qvx1q.fsf@jogness.linutronix.de>
+ <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
+ <87o7xwbuoy.fsf@jogness.linutronix.de> <Ysvbp8vz7R9hDNqx@alley>
+ <Ysv3JNs4RwE7kAou@google.com> <87ilo1wdac.fsf@jogness.linutronix.de>
+ <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
+ <7d79e9877d63cdb74144f38d8736959281b562cc.camel@linux.intel.com>
+Date:   Wed, 13 Jul 2022 23:28:20 +0206
+Message-ID: <875yk0908j.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Received: by 2002:a67:e05b:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 12:33:24
- -0700 (PDT)
-Reply-To: pstefanopessina80@gmail.com
-From:   STEFANO PESSINA <awabuts49@gmail.com>
-Date:   Wed, 13 Jul 2022 22:33:24 +0300
-Message-ID: <CABqU-Kt960=z5WPCBXkW7U+2SM=criymhoesJ=oQD7uhrCaFLQ@mail.gmail.com>
-Subject: donation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4889]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [awabuts49[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [pstefanopessina80[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [awabuts49[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
+On 2022-07-13, Todd Brandt <todd.e.brandt@linux.intel.com> wrote:
+> URGENT: Removing the commit FIXES the issue.
+>
+> I just ran a 5.19.0-rc6 kernel with the offending commit removed and
+> it fixed the problem completely on all 3 machines.
 
-Congratulations!
-The sum of =E2=82=AC1,500,000.00 has been donated to you by STEFANO PESSINA=
-.
-Kindly get back for more info via pstefanopessina80@gmail.com
+I believe to have found the issue. A patch was posted to bugzilla:
+
+https://bugzilla.kernel.org/attachment.cgi?id=301413
+
+Please test this. Thanks.
+
+John Ogness
