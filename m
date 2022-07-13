@@ -2,169 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174B1573C76
-	for <lists+linux-serial@lfdr.de>; Wed, 13 Jul 2022 20:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A477573D2A
+	for <lists+linux-serial@lfdr.de>; Wed, 13 Jul 2022 21:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbiGMSYB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 13 Jul 2022 14:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S236763AbiGMTdb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 13 Jul 2022 15:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiGMSYA (ORCPT
+        with ESMTP id S236694AbiGMTd2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:24:00 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E3183A9;
-        Wed, 13 Jul 2022 11:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657736639; x=1689272639;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/GFwjk0WDlWHLT5scE0PrSHapMgZnVgphn1v3cLSw9A=;
-  b=cI/2c4443pjmTyyFEGXDlkXtjTN4oJI/qkUqbOFgvjJzMlX4kL4De6t5
-   kGNhZD+mnTeXs+hTWFU4mkHOmI0hNG4tVe+51ChrRGaFZZMks7NSuNfMI
-   BMFrZvzZxqCyUNIfFkSlbbT4JhlezgUpDxvAvfPbn66Z1ciyl9TABTCez
-   E/PTYIaz6yuJ2TcjzUUEt5WdhY+U/LiOMdWK0yGm8oDnSSqUmoVExvXeR
-   lcd7/YEG1I3r/NhLbIvak9K8Vyu1jZ5V6+Vrj1CvX6Zn6e/W7Lpnz/RI5
-   +woQVMAhRGSlwm5NH3sq/tb70R7IMJtjTyiiX0H4cha7JhP2VGZ7rMUU/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="310955144"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="310955144"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 11:23:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="623074034"
-Received: from wopr.jf.intel.com ([10.54.75.125])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jul 2022 11:23:58 -0700
-Message-ID: <7d79e9877d63cdb74144f38d8736959281b562cc.camel@linux.intel.com>
-Subject: Re: PNP0501 serial driver takes almost 2 seconds to suspend/resume
- (printk issue)
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, rafael.j.wysocki@intel.com,
-        len.brown@intel.com
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Date:   Wed, 13 Jul 2022 11:23:58 -0700
-In-Reply-To: <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
-References: <12fb98fe27e23e3f74a139e5e8eb83a97a343372.camel@linux.intel.com>
-         <51b9e2cc3baf61a604bd239b736ec2d12f1f6695.camel@linux.intel.com>
-         <87czegxccb.fsf@jogness.linutronix.de>
-         <045ebee30af2b80aaeace1dab18ecd113e3f17c7.camel@linux.intel.com>
-         <87tu7qvx1q.fsf@jogness.linutronix.de>
-         <CAHp75VfyzMNMO2NRwXwSjAmQqBbdRG3+SzyFDG+90dmvmg1xLQ@mail.gmail.com>
-         <87o7xwbuoy.fsf@jogness.linutronix.de> <Ysvbp8vz7R9hDNqx@alley>
-         <Ysv3JNs4RwE7kAou@google.com> <87ilo1wdac.fsf@jogness.linutronix.de>
-         <c60f5634e8605cb4c2ef4646b6e511e6135bea48.camel@linux.intel.com>
+        Wed, 13 Jul 2022 15:33:28 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4022B2DAB1
+        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id t127so11683707vsb.8
+        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
+        b=aM1IhBunUxE23qoS04VXLKhmfEzv0G+rIPuL+tw7ecWQpkkV/VIRfagQrgSyOoTIAm
+         AZWPXQE2ns7ZNMtu2h9VrGRckGYmFXAYncydcobmDBiRLde8BCgwi2hlvMDHXzYgqMkQ
+         SeJxIk0u87w3y3HvNwB5qYF3cTerdoWv2b9mV8jFDizIJX8stbEHhwQnKSILH4q0Huup
+         hTOO9Jx4LSsJcLZc09WMxCsF4ciSzvQTXVpvt0KUlX7r0Y8qXhkOofhAjq9rhr7n0O3a
+         0Nz5Fyl2IiFFXOdqA4nMId1341Np8datpnUgsVwvaqGydn6uB0z1+35u/mxwEULjiUxM
+         xCNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
+        b=HKsDaF9Jls/7jKu8W+fPKdK7ZX42sEUzI0mvmFI2Tb8yi7S7wkd2HUXB4jCydUEZWk
+         DRklu6x+qq6/l0zkZbyFUPf9aZ3TJdL9WvoFb7MKIcHJjk8h0dJjnIYCFnqjq5Rie6+c
+         yHEXq0fa70MCcFS/5ixMFCPop3EQ9BWsFHPvs7jIFFhtNego+ClEuWJyJ6yqRr42IZFM
+         zxaMClSUpmnqfTlRXtpXAO8HwxLBEz5M4wE1wYRg9FtA+YI04LuT4cBEk7pHRDt/UmSq
+         m8coof7iZLzFd+HuQsZBt+cF4ej7DvzEeDDc6kKGUzSVgSJxVEFsDP1yyIYEBvmwe9H5
+         LCBQ==
+X-Gm-Message-State: AJIora/gbLbyXQzdGsR0UmbiVV90zpUorv42Y/2iXHoZ0ii0lJDe4Le8
+        CGKS/QqgbZDloVmjJrGf7y50r8cjd5/iFW8H4bw=
+X-Google-Smtp-Source: AGRyM1sJxaHNFmNllzWTe6lcXJtKq+jpeM0H1VbICZMt0N2iL7xjj1CQ/iGumgoql0QuMbeebjAgPClviShoH8saaK0=
+X-Received: by 2002:a67:a449:0:b0:357:3407:9f60 with SMTP id
+ p9-20020a67a449000000b0035734079f60mr2391818vsh.17.1657740805145; Wed, 13 Jul
+ 2022 12:33:25 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a67:e05b:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 12:33:24
+ -0700 (PDT)
+Reply-To: pstefanopessina80@gmail.com
+From:   STEFANO PESSINA <awabuts49@gmail.com>
+Date:   Wed, 13 Jul 2022 22:33:24 +0300
+Message-ID: <CABqU-Kt960=z5WPCBXkW7U+2SM=criymhoesJ=oQD7uhrCaFLQ@mail.gmail.com>
+Subject: donation
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4889]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [awabuts49[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [pstefanopessina80[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [awabuts49[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-URGENT: Removing the commit FIXES the issue.
+--=20
 
-I just ran a 5.19.0-rc6 kernel with the offending commit removed and it
-fixed the problem completely on all 3 machines. To be clear the
-offending commit is:
-
-commit 3b604ca81202eea2a917eb6491e90f610fba0ec7
-
-I strongly recommend that this commit be pulled (or fixed very quickly)
-before the 5.19 release or 1 in 10 linux machines running 5.19 will
-take up to 2 seconds longer in suspend/resume.
-
-commit 3b604ca81202eea2a917eb6491e90f610fba0ec7
-Author: John Ogness <john.ogness@linutronix.de>
-Date:   Thu Apr 21 23:28:46 2022 +0206
-
-    printk: add pr_flush()
-
-    Provide a might-sleep function to allow waiting for console
-printers
-    to catch up to the latest logged message.
-
-    Use pr_flush() whenever it is desirable to get buffered messages
-    printed before continuing: suspend_console(), resume_console(),
-    console_stop(), console_start(), console_unblank().
-
-    Signed-off-by: John Ogness <john.ogness@linutronix.de>
-    Reviewed-by: Petr Mladek <pmladek@suse.com>
-    Signed-off-by: Petr Mladek <pmladek@suse.com>
-    Link: 
-https://lore.kernel.org/r/20220421212250.565456-12-john.ogness@linutronix.de
-
- include/linux/printk.h |  7 +++++
- kernel/printk/printk.c | 83
-++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 90 insertions(+)
-
-
-
-On Wed, 2022-07-13 at 10:11 -0700, Todd Brandt wrote:
-> I've updated the bugzilla entry with new data:
-> https://bugzilla.kernel.org/show_bug.cgi?id=216216
-> 
-> I just added 3 new tests for 5.19.0-rc6 on 3 machines that see this
-> issue: otcpl-asus-e200-cht (cherry trail), otcpl-aml-y (amber lake),
-> and otcpl-whl-u (whiskey lake). The kernel has the
-> CONFIG_PRINTK_CALLER
-> option enabled.
-> 
-> The test is a S2idle and is run thusly:
-> %> sleepgraph -dev -m freeze -rtcwake 15
-> 
-> I've included the dmesg boot logs for all three. The dmesg
-> suspend/resume logs are included in the html timelines by clicking
-> the
-> "dmesg" button in the upper right hand corner of the timeline.
-> There's
-> a "log" button as well that shows other system into.
-> 
-> These files are attached to the bugzilla entry.
-> otcpl-aml-y-5.19.0-rc6-boot-dmesg.txt
-> otcpl-aml-y-5.19.0-rc6-freeze.html
-> otcpl-asus-e200-cht-5.19.0-rc6-boot-dmesg.txt
-> otcpl-asus-e200-cht-5.19.0-rc6-freeze.html
-> otcpl-whl-u-5.19.0-rc6-boot-dmesg.txt
-> otcpl-whl-u-5.19.0-rc6-freeze.html
-> 
-> If possible can we move this thread to the bugzilla comment section?
-> 
-> 
-> On Wed, 2022-07-13 at 11:57 +0206, John Ogness wrote:
-> > On 2022-07-11, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > > > It seems that __pr_flush() does not check whether all consoles
-> > > > are
-> > > > suspended. In this case the progress is not possible and it has
-> > > > to
-> > > > wait the entire timeout.
-> > > 
-> > > But isn't console_suspended set after pr_flush() call?
-> > 
-> > There should not be any printing after the suspend_console()
-> > message.
-> > If
-> > Todd's report is coming from 5.19-rc1, then it is likely a kthread
-> > issue, where the kthread is not respecting @console_suspended.
-> > (This
-> > would still need to be fixed for the kthreads, but would not be
-> > relevant
-> > for 5.19.)
-> > 
-> > John
-
+Congratulations!
+The sum of =E2=82=AC1,500,000.00 has been donated to you by STEFANO PESSINA=
+.
+Kindly get back for more info via pstefanopessina80@gmail.com
