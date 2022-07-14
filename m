@@ -2,80 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0C357452A
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Jul 2022 08:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381645746E6
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Jul 2022 10:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235024AbiGNGmF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 14 Jul 2022 02:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S235779AbiGNIgo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 14 Jul 2022 04:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiGNGl6 (ORCPT
+        with ESMTP id S235825AbiGNIgm (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:41:58 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABAF201AB
-        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 23:41:57 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l23so1657332ejr.5
-        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 23:41:57 -0700 (PDT)
+        Thu, 14 Jul 2022 04:36:42 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9B93ED40
+        for <linux-serial@vger.kernel.org>; Thu, 14 Jul 2022 01:36:40 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bp17so1650306lfb.3
+        for <linux-serial@vger.kernel.org>; Thu, 14 Jul 2022 01:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=RC9NTSXuyCF50is5JSFEvJn6He6oJ5ev3DmXRdNSNpU=;
-        b=OliKD0rmfxhvwN5W72o36DmuUvmpoUMdLAUULaMTZoRvJnl4rFRQyD1GeOkXYI7/Gn
-         amgkNqYma+gQYKfnVSzewYH58dwk4NImTbxP6+q0dc26U5BHLNN79pfCPeBhxvAVirmE
-         G7eJ4u+w1VOqo3/PiKNlWun4OAvfJkRxEGolSwYTo4bFJPi2AHh4jgjG23LA6m1nDbMe
-         jQqI6ciLKRb3g6JtPo5bQv/9hRanMSu6k9eiq2xj7MnSCz8nKItoCM2Qy4kJ8T1p/Hll
-         vYNG1ZluXryKGgqwRjiA/oJOXnEBBMM9uaYIheRcEoJOV7/qSQRts2LemKchtBAhJ5+L
-         005w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=nfF93HFABydKtKUN6hm08YjvNRh2G4i7biDP0iGWKm0CJI/6tO/7ASVGiMVbrFcvre
+         dFe7LS0o6XmnC1olR6EZQT61Pk5CcDXk8EOCE/ZUPQPC2WOF08wHjQNTI98f51BXkTW7
+         5dyslKzFlMJ1FAFUBcS5XSZMuJJQc0mVGS8sJL1EcuApFLh9MbSY3DeHMChVpm6lylO2
+         ZiD2YD5TYnCnW1RYesj2zabgr2TZokupGOdRW5Wg1Wsic5Yzi6a7GNVAIH/aFq924Tv4
+         l/BLkapdJUQdDh1nnfELCxBLwNTsd2zSHh12MGEWr6e9uOYA2kL+ohlW7KhzBK2CbHvs
+         dAHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=RC9NTSXuyCF50is5JSFEvJn6He6oJ5ev3DmXRdNSNpU=;
-        b=4PepYyLmGXGe8KqvDOBsTxlS0hrxFqJxFlEejIhOx1KEOmJoNodY8nvPoqK7uHF+MQ
-         q0/0L9TouHjG2e39xWEOdqty1QPRDt1N6m/ikjQFNGYXr2KJDpeI1MJa7AxkKxcCWLI8
-         kzyWA0osBet9RF/6vM1c/AC4Ru3g4JVsooIrE2ciCLWWgLmfQa/UssCDZ/vGOLsLIqOF
-         oYD1mt1PPtRNdjzOoCDU8dd+c+zEIuy7zD4Lv72kLnUgOvblePp2C2fR+cY55qYBhBat
-         Pdk+ZxHbcrL1eBuZwPyOn9xfjAKD8pLRQfYy7Z5tLAUauqfaZwE71dY1lX4gh3MjEU9g
-         Ynlw==
-X-Gm-Message-State: AJIora+kkd7z2KIyAsxeU5OH6QijoQfKRwPSVeXHWH5qjA1tr+PYl/2S
-        1E7lwKVzlMKGE6GFI8M0rAArxxw1gE9AZZYHN78=
-X-Google-Smtp-Source: AGRyM1uM2ZbrnM2PHX6q3FwLu4SQS99eRqtEwvhf9lBnU/LwPKahPu6lK2OaMR0uYv0zU/wr8o8P3JuH5EoFlv+21Y0=
-X-Received: by 2002:a17:906:216:b0:711:f623:8bb0 with SMTP id
- 22-20020a170906021600b00711f6238bb0mr7508701ejd.174.1657780915715; Wed, 13
- Jul 2022 23:41:55 -0700 (PDT)
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=770GifXSMJpcfXR5xZMne8LetgrmoblNKIJiGZjnSEWTGIRX6kwoIxOTSfJGxAIX0H
+         tJmNWfsVQkAygV3zpvygNFBZ/SYLfvte6a2d0/CMlDhTeoslpWy4l4buXtu/OIrJMDkU
+         Hb8I2LRLefKpwCIlInh0m7rhLJXOvAvjYafE4heCtFVaE3nCOxY1/oig4UQARoS59u3b
+         fNSCe07pJa4H+nh9Wur/tpxfgLUeAAbOvX4AUQW/MYQ2c5FbMn8Uyykuhg9ymN0zyFaC
+         kKAoai/+QR81DGRH85KeCbIEKEYxDB4pQa7ROPECl/bGNwuji1cWFBvU11QNugnXHL6I
+         A5XQ==
+X-Gm-Message-State: AJIora+VoOwck7anjuUsQW45vMf7XB4P0ARVrq2RUIHPsoAu4x0xou2V
+        JGSNWjkDfwxpVvixUkNUMPcGxbRGVW7jBmrBoPE=
+X-Google-Smtp-Source: AGRyM1sBAY02anFyAAkYvB61573ohyB+lIVHvdune1I2St249pttaSZdeqZISv5rckThyg5u7Q/retQg6yCpkFrJ9YI=
+X-Received: by 2002:a05:6512:1307:b0:47f:baa4:52c5 with SMTP id
+ x7-20020a056512130700b0047fbaa452c5mr4350443lfu.103.1657787798421; Thu, 14
+ Jul 2022 01:36:38 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab4:924d:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 23:41:55
+Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:36:37
  -0700 (PDT)
-Reply-To: dossojerry14@hotmail.com
-From:   Jerry Dosso <jerrydosso20@gmail.com>
-Date:   Thu, 14 Jul 2022 08:41:55 +0200
-Message-ID: <CAK7AM3qz66d2eKDX=J70Ud4hfNFcTyz80vJnjwVhuwUU_Jwq1Q@mail.gmail.com>
-Subject: Mr Jerry Dosso
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
+Date:   Thu, 14 Jul 2022 09:36:37 +0100
+Message-ID: <CAFC-3idDfFB0Mmtq-N-n6z5Ly7T-KDCJtvbc0UgtirMnTLYTCg@mail.gmail.com>
+Subject: Get back to me... URGENT
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
         *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
         *      provider
-        *      [jerrydosso20[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dossojerry14[at]hotmail.com]
+        *      [abdwabbomaddah746[at]gmail.com]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:135 listed in]
+        [list.dnswl.org]
         *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
         *       in digit
-        *      [jerrydosso20[at]gmail.com]
+        *      [abdwabbomaddah746[at]gmail.com]
         * -0.0 SPF_PASS SPF: sender matches SPF record
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
         * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
@@ -96,8 +91,9 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-LS0gDQpNeSBEZWFyIEZyaWVuZCwNCg0KRGlkIHlvdSByZWNlaXZlIHRoZSBtZXNzYWdlIGkgc2Vu
-dCB0byB5b3U/DQoNClJlZ2FyZHMsDQoNCk1yIEplcnJ5IERvc3NvDQouLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCg0K64K0IOyGjOykke2VnCDs
-uZzqtawsDQoNCuuCtOqwgCDri7nsi6Dsl5Dqsowg67O064K4IOuplOyLnOyngOulvCDrsJvslZjs
-irXri4jquYw/DQoNCuusuOyViCDsnbjsgqwsDQoNCuuvuOyKpO2EsCDsoJzrpqwg64+E7IaMDQo=
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
