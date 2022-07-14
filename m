@@ -2,153 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F1A5741CC
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Jul 2022 05:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0C357452A
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Jul 2022 08:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiGNDT3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 13 Jul 2022 23:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S235024AbiGNGmF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 14 Jul 2022 02:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiGNDT1 (ORCPT
+        with ESMTP id S234804AbiGNGl6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 13 Jul 2022 23:19:27 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DBB240A6;
-        Wed, 13 Jul 2022 20:19:26 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so6879785pjr.4;
-        Wed, 13 Jul 2022 20:19:26 -0700 (PDT)
+        Thu, 14 Jul 2022 02:41:58 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABAF201AB
+        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 23:41:57 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id l23so1657332ejr.5
+        for <linux-serial@vger.kernel.org>; Wed, 13 Jul 2022 23:41:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=z16sKopkYHjN1FnPOO3LV6eRRV3MiPUM2Dv4PfBl0DI=;
-        b=U4JVh3ts33oVhhRAbTM4c01uw8QW6+vPU5AqzfkUcw3FPZNY8y02/Y+KIVqy1S4PKY
-         5pj7O3afgjTX6R10hLARBk03+f/Hr1YiLgdpLhc/e78LIyjRKfljkvQXJB1hLqJFdRRF
-         jdF6c0pxHOTze5Aj9r6r8Nmy8oQi6jZ4fMraezZQo5ANTXWFU5Nc+3Nei8lIvYBuJaFH
-         aDPaeHQAbNaqtI5y6YG+jZUe87mlUecRFtkz3v8gPOC9GcuAfGaQCidjOxNgzJyyS0EH
-         219BNBZfoqtKx2cfHqVkMALPBSks3/29Di8x9BNKUvXm9NYwBdYLzJtor8iERr1Y+tC/
-         OyxQ==
+        bh=RC9NTSXuyCF50is5JSFEvJn6He6oJ5ev3DmXRdNSNpU=;
+        b=OliKD0rmfxhvwN5W72o36DmuUvmpoUMdLAUULaMTZoRvJnl4rFRQyD1GeOkXYI7/Gn
+         amgkNqYma+gQYKfnVSzewYH58dwk4NImTbxP6+q0dc26U5BHLNN79pfCPeBhxvAVirmE
+         G7eJ4u+w1VOqo3/PiKNlWun4OAvfJkRxEGolSwYTo4bFJPi2AHh4jgjG23LA6m1nDbMe
+         jQqI6ciLKRb3g6JtPo5bQv/9hRanMSu6k9eiq2xj7MnSCz8nKItoCM2Qy4kJ8T1p/Hll
+         vYNG1ZluXryKGgqwRjiA/oJOXnEBBMM9uaYIheRcEoJOV7/qSQRts2LemKchtBAhJ5+L
+         005w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z16sKopkYHjN1FnPOO3LV6eRRV3MiPUM2Dv4PfBl0DI=;
-        b=WwAzydN/Y+B2LOjKMl9fn7G4SUxfVj0CZ9iy6vTn0Zj41DdECDai5kKS9DbHX602Hj
-         CHr2+Jsg8BAfuHxFXSKZdSLRg/OGLfLrBQLw2tmMGKBNqv2xxlRBwlfxJSc/woNFmYD+
-         +B1Ia+K7rjHRoz5KNaNiJfjItD50PfxOadqNrTVO3lj+SKpkWGuwT7mw/Tq9iQiuIrh7
-         xS+LfqNAp1J7rbOdmrqQcCwseT1rItWra1q0r08xPED6yq4gfBRKabhrCWAywWk9pbxu
-         00b5XS7KfDKsmBrxK/Qc01gKh4cy4fiNV0sc/fmsIHjb39dh5tZ3ReWU79SWlhL4ET8x
-         6SnA==
-X-Gm-Message-State: AJIora+LwLk35UfYP0Z0hH48+5n1bicQwrwVkU6aEstdpaNil8Yrtc7c
-        TRyVjICgoBZuZxHe0fbPq4DhNkSS8FA=
-X-Google-Smtp-Source: AGRyM1tWJujGTkrezqCP3LyXiasWmr8nGAOJP1sPDZw2284iA56M+LT2CdcvyND93KOnVEX4QwG++Q==
-X-Received: by 2002:a17:90b:3149:b0:1f0:3539:e7ae with SMTP id ip9-20020a17090b314900b001f03539e7aemr13877497pjb.80.1657768765569;
-        Wed, 13 Jul 2022 20:19:25 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id pc13-20020a17090b3b8d00b001ef8ea89a33sm2411453pjb.2.2022.07.13.20.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 20:19:24 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-serial@vger.kernel.org
-Cc:     Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3] serial: 8250_bcm7271: Save/restore RTS in suspend/resume
-Date:   Wed, 13 Jul 2022 20:13:15 -0700
-Message-Id: <20220714031316.404918-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=RC9NTSXuyCF50is5JSFEvJn6He6oJ5ev3DmXRdNSNpU=;
+        b=4PepYyLmGXGe8KqvDOBsTxlS0hrxFqJxFlEejIhOx1KEOmJoNodY8nvPoqK7uHF+MQ
+         q0/0L9TouHjG2e39xWEOdqty1QPRDt1N6m/ikjQFNGYXr2KJDpeI1MJa7AxkKxcCWLI8
+         kzyWA0osBet9RF/6vM1c/AC4Ru3g4JVsooIrE2ciCLWWgLmfQa/UssCDZ/vGOLsLIqOF
+         oYD1mt1PPtRNdjzOoCDU8dd+c+zEIuy7zD4Lv72kLnUgOvblePp2C2fR+cY55qYBhBat
+         Pdk+ZxHbcrL1eBuZwPyOn9xfjAKD8pLRQfYy7Z5tLAUauqfaZwE71dY1lX4gh3MjEU9g
+         Ynlw==
+X-Gm-Message-State: AJIora+kkd7z2KIyAsxeU5OH6QijoQfKRwPSVeXHWH5qjA1tr+PYl/2S
+        1E7lwKVzlMKGE6GFI8M0rAArxxw1gE9AZZYHN78=
+X-Google-Smtp-Source: AGRyM1uM2ZbrnM2PHX6q3FwLu4SQS99eRqtEwvhf9lBnU/LwPKahPu6lK2OaMR0uYv0zU/wr8o8P3JuH5EoFlv+21Y0=
+X-Received: by 2002:a17:906:216:b0:711:f623:8bb0 with SMTP id
+ 22-20020a170906021600b00711f6238bb0mr7508701ejd.174.1657780915715; Wed, 13
+ Jul 2022 23:41:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab4:924d:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 23:41:55
+ -0700 (PDT)
+Reply-To: dossojerry14@hotmail.com
+From:   Jerry Dosso <jerrydosso20@gmail.com>
+Date:   Thu, 14 Jul 2022 08:41:55 +0200
+Message-ID: <CAK7AM3qz66d2eKDX=J70Ud4hfNFcTyz80vJnjwVhuwUU_Jwq1Q@mail.gmail.com>
+Subject: Mr Jerry Dosso
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jerrydosso20[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dossojerry14[at]hotmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jerrydosso20[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Doug Berger <opendmb@gmail.com>
-
-Commit 9cabe26e65a8 ("serial: 8250_bcm7271: UART errors after resuming
-from S2") prevented an early enabling of RTS during resume, but it did
-not actively restore the RTS state after resume.
-
-Fixes: 9cabe26e65a8 ("serial: 8250_bcm7271: UART errors after resuming from S2")
-Signed-off-by: Doug Berger <opendmb@gmail.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-Changes in v3:
-
-- moved set_mctrl within the critical section
-
-Changes in v2:
-
-- reworded the commit message to be clearer
-
- drivers/tty/serial/8250/8250_bcm7271.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
-index 9b878d023dac..8efdc271eb75 100644
---- a/drivers/tty/serial/8250/8250_bcm7271.c
-+++ b/drivers/tty/serial/8250/8250_bcm7271.c
-@@ -1139,16 +1139,19 @@ static int __maybe_unused brcmuart_suspend(struct device *dev)
- 	struct brcmuart_priv *priv = dev_get_drvdata(dev);
- 	struct uart_8250_port *up = serial8250_get_port(priv->line);
- 	struct uart_port *port = &up->port;
--
--	serial8250_suspend_port(priv->line);
--	clk_disable_unprepare(priv->baud_mux_clk);
-+	unsigned long flags;
- 
- 	/*
- 	 * This will prevent resume from enabling RTS before the
--	 *  baud rate has been resored.
-+	 *  baud rate has been restored.
- 	 */
-+	spin_lock_irqsave(&port->lock, flags);
- 	priv->saved_mctrl = port->mctrl;
--	port->mctrl = 0;
-+	port->mctrl &= ~TIOCM_RTS;
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	serial8250_suspend_port(priv->line);
-+	clk_disable_unprepare(priv->baud_mux_clk);
- 
- 	return 0;
- }
-@@ -1158,6 +1161,7 @@ static int __maybe_unused brcmuart_resume(struct device *dev)
- 	struct brcmuart_priv *priv = dev_get_drvdata(dev);
- 	struct uart_8250_port *up = serial8250_get_port(priv->line);
- 	struct uart_port *port = &up->port;
-+	unsigned long flags;
- 	int ret;
- 
- 	ret = clk_prepare_enable(priv->baud_mux_clk);
-@@ -1180,7 +1184,15 @@ static int __maybe_unused brcmuart_resume(struct device *dev)
- 		start_rx_dma(serial8250_get_port(priv->line));
- 	}
- 	serial8250_resume_port(priv->line);
--	port->mctrl = priv->saved_mctrl;
-+
-+	if (priv->saved_mctrl & TIOCM_RTS) {
-+		/* Restore RTS */
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_RTS;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.25.1
-
+LS0gDQpNeSBEZWFyIEZyaWVuZCwNCg0KRGlkIHlvdSByZWNlaXZlIHRoZSBtZXNzYWdlIGkgc2Vu
+dCB0byB5b3U/DQoNClJlZ2FyZHMsDQoNCk1yIEplcnJ5IERvc3NvDQouLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCg0K64K0IOyGjOykke2VnCDs
+uZzqtawsDQoNCuuCtOqwgCDri7nsi6Dsl5Dqsowg67O064K4IOuplOyLnOyngOulvCDrsJvslZjs
+irXri4jquYw/DQoNCuusuOyViCDsnbjsgqwsDQoNCuuvuOyKpO2EsCDsoJzrpqwg64+E7IaMDQo=
