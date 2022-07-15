@@ -2,1049 +2,225 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C982576356
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Jul 2022 16:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47D35766F9
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Jul 2022 20:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbiGOODn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 15 Jul 2022 10:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S229597AbiGOS42 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 15 Jul 2022 14:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235102AbiGOODd (ORCPT
+        with ESMTP id S229538AbiGOS42 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 15 Jul 2022 10:03:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1158C6465;
-        Fri, 15 Jul 2022 07:03:30 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B31A0337E4;
-        Fri, 15 Jul 2022 14:03:28 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 94E732C141;
-        Fri, 15 Jul 2022 14:03:28 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH] serial: remove VR41XX serial driver
-Date:   Fri, 15 Jul 2022 16:03:22 +0200
-Message-Id: <20220715140322.135825-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 15 Jul 2022 14:56:28 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590102DAA2;
+        Fri, 15 Jul 2022 11:56:27 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FEs6KC031633;
+        Fri, 15 Jul 2022 18:55:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=9wiYGNZN6tmOdPV5LNB6z205KdtgihGjwpgjz9fRBbk=;
+ b=jFD7Hkisz/gPy41HLTpPLMM5U77kczSFF3ZFB79T5ucz2iQz1QwBy7FifKXHP0+2mjvA
+ SvQthBAWzbHnJUwsdhF1OUVoqLG0N/F6XlFU/8ZrLs0P2Ym4pkDQg8Bgqv3P/wlqMnLj
+ nf6mHWQhP55Cfi9J3H3bH1Y/2VMbm8Kv5EknSQgbX32zoHmSgqKfffAtGU3UWInqjso3
+ lAQ2+pv5nIucn9jVkOwCwU4AXT1k1yv1dcfoGlZ8eLxh1TsInX8v60COR+0vvKiPOXbH
+ IiT6NUaicyx/a0ctE80OqJRkBvaqtKHH2GMJW9Teg6tabEbvwHGf4rdwBav4568fFbes uQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hawhwjt6t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 18:55:52 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 26FItmTU001945;
+        Fri, 15 Jul 2022 18:55:48 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3h72rjjuc2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 15 Jul 2022 18:55:48 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26FItmW8001940;
+        Fri, 15 Jul 2022 18:55:48 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 26FItmej001939;
+        Fri, 15 Jul 2022 18:55:48 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 6992C410F; Sat, 16 Jul 2022 00:25:47 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [V6] tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which otherwise could return a sub-optimal clock rate.
+Date:   Sat, 16 Jul 2022 00:25:43 +0530
+Message-Id: <1657911343-1909-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: b5i3boycqfCgB3ZPaLuNrhL0z4vbzPI6
+X-Proofpoint-ORIG-GUID: b5i3boycqfCgB3ZPaLuNrhL0z4vbzPI6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_10,2022-07-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=999
+ adultscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207150084
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
-for MIPS VR41xx platform, so remove exclusive drivers for this
-platform, too.
+In the logic around call to clk_round_rate(), for some corner conditions,
+get_clk_div_rate() could return an sub-optimal clock rate. Also, if an
+exact clock rate was not found lowest clock was being returned.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Search for suitable clock rate in 2 steps
+a) exact match or within 2% tolerance
+b) within 5% tolerance
+This also takes care of corner conditions.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Fixes: c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart frequency table. Instead, find suitable frequency with call to clk_round_rate")
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 ---
- drivers/tty/serial/Kconfig       |  17 -
- drivers/tty/serial/Makefile      |   1 -
- drivers/tty/serial/vr41xx_siu.c  | 932 -------------------------------
- include/uapi/linux/serial_core.h |   4 -
- 4 files changed, 954 deletions(-)
- delete mode 100644 drivers/tty/serial/vr41xx_siu.c
+v6: moved logging to caller function
+v5: corrected format specifiers for logs
+v4: replaced pr_dbg calls with dev_dbg
+v3: simplified algorithm further, fixed robot compile warnings
+v2: removed minor optimisations to make more readable
+v1: intial patch contained slightly complicated logic
+---
+ drivers/tty/serial/qcom_geni_serial.c | 88 +++++++++++++++++++++--------------
+ 1 file changed, 53 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index e3279544b03c..877173907c53 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -890,23 +890,6 @@ config SERIAL_TXX9_STDSERIAL
- 	bool "TX39XX/49XX SIO act as standard serial"
- 	depends on !SERIAL_8250 && SERIAL_TXX9
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 2e23b65..624ffe1 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -943,52 +943,63 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
+ 	return 0;
+ }
  
--config SERIAL_VR41XX
--	tristate "NEC VR4100 series Serial Interface Unit support"
--	depends on CPU_VR41XX
--	select SERIAL_CORE
--	help
--	  If you have a NEC VR4100 series processor and you want to use
--	  Serial Interface Unit(SIU) or Debug Serial Interface Unit(DSIU)
--	  (not include VR4111/VR4121 DSIU), say Y.  Otherwise, say N.
--
--config SERIAL_VR41XX_CONSOLE
--	bool "Enable NEC VR4100 series Serial Interface Unit console"
--	depends on SERIAL_VR41XX=y
--	select SERIAL_CORE_CONSOLE
--	help
--	  If you have a NEC VR4100 series processor and you want to use
--	  a console on a serial port, say Y.  Otherwise, say N.
--
- config SERIAL_JSM
- 	tristate "Digi International NEO and Classic PCI Support"
- 	depends on PCI
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index 61cc8de95571..238a9557b487 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -51,7 +51,6 @@ obj-$(CONFIG_SERIAL_SCCNXP) += sccnxp.o
- obj-$(CONFIG_SERIAL_SC16IS7XX_CORE) += sc16is7xx.o
- obj-$(CONFIG_SERIAL_JSM) += jsm/
- obj-$(CONFIG_SERIAL_TXX9) += serial_txx9.o
--obj-$(CONFIG_SERIAL_VR41XX) += vr41xx_siu.o
- obj-$(CONFIG_SERIAL_ATMEL) += atmel_serial.o
- obj-$(CONFIG_SERIAL_UARTLITE) += uartlite.o
- obj-$(CONFIG_SERIAL_MSM) += msm_serial.o
-diff --git a/drivers/tty/serial/vr41xx_siu.c b/drivers/tty/serial/vr41xx_siu.c
-deleted file mode 100644
-index 1ba689a81abd..000000000000
---- a/drivers/tty/serial/vr41xx_siu.c
-+++ /dev/null
-@@ -1,932 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/*
-- *  Driver for NEC VR4100 series Serial Interface Unit.
-- *
-- *  Copyright (C) 2004-2008  Yoichi Yuasa <yuasa@linux-mips.org>
-- *
-- *  Based on drivers/serial/8250.c, by Russell King.
-- */
--
--#include <linux/console.h>
--#include <linux/errno.h>
--#include <linux/init.h>
--#include <linux/interrupt.h>
--#include <linux/ioport.h>
--#include <linux/module.h>
--#include <linux/platform_device.h>
--#include <linux/serial.h>
--#include <linux/serial_core.h>
--#include <linux/serial_reg.h>
--#include <linux/tty.h>
--#include <linux/tty_flip.h>
--
--#include <linux/io.h>
--#include <asm/vr41xx/siu.h>
--#include <asm/vr41xx/vr41xx.h>
--
--#define SIU_BAUD_BASE	1152000
--#define SIU_MAJOR	204
--#define SIU_MINOR_BASE	82
--
--#define RX_MAX_COUNT	256
--#define TX_MAX_COUNT	15
--
--#define SIUIRSEL	0x08
-- #define TMICMODE	0x20
-- #define TMICTX		0x10
-- #define IRMSEL		0x0c
-- #define IRMSEL_HP	0x08
-- #define IRMSEL_TEMIC	0x04
-- #define IRMSEL_SHARP	0x00
-- #define IRUSESEL	0x02
-- #define SIRSEL		0x01
--
--static struct uart_port siu_uart_ports[SIU_PORTS_MAX] = {
--	[0 ... SIU_PORTS_MAX-1] = {
--		.lock	= __SPIN_LOCK_UNLOCKED(siu_uart_ports->lock),
--		.irq	= 0,
--	},
--};
--
--#ifdef CONFIG_SERIAL_VR41XX_CONSOLE
--static uint8_t lsr_break_flag[SIU_PORTS_MAX];
--#endif
--
--#define siu_read(port, offset)		readb((port)->membase + (offset))
--#define siu_write(port, offset, value)	writeb((value), (port)->membase + (offset))
--
--void vr41xx_select_siu_interface(siu_interface_t interface)
--{
--	struct uart_port *port;
--	unsigned long flags;
--	uint8_t irsel;
--
--	port = &siu_uart_ports[0];
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	irsel = siu_read(port, SIUIRSEL);
--	if (interface == SIU_INTERFACE_IRDA)
--		irsel |= SIRSEL;
--	else
--		irsel &= ~SIRSEL;
--	siu_write(port, SIUIRSEL, irsel);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--EXPORT_SYMBOL_GPL(vr41xx_select_siu_interface);
--
--void vr41xx_use_irda(irda_use_t use)
--{
--	struct uart_port *port;
--	unsigned long flags;
--	uint8_t irsel;
--
--	port = &siu_uart_ports[0];
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	irsel = siu_read(port, SIUIRSEL);
--	if (use == FIR_USE_IRDA)
--		irsel |= IRUSESEL;
--	else
--		irsel &= ~IRUSESEL;
--	siu_write(port, SIUIRSEL, irsel);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--EXPORT_SYMBOL_GPL(vr41xx_use_irda);
--
--void vr41xx_select_irda_module(irda_module_t module, irda_speed_t speed)
--{
--	struct uart_port *port;
--	unsigned long flags;
--	uint8_t irsel;
--
--	port = &siu_uart_ports[0];
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	irsel = siu_read(port, SIUIRSEL);
--	irsel &= ~(IRMSEL | TMICTX | TMICMODE);
--	switch (module) {
--	case SHARP_IRDA:
--		irsel |= IRMSEL_SHARP;
--		break;
--	case TEMIC_IRDA:
--		irsel |= IRMSEL_TEMIC | TMICMODE;
--		if (speed == IRDA_TX_4MBPS)
--			irsel |= TMICTX;
--		break;
--	case HP_IRDA:
--		irsel |= IRMSEL_HP;
--		break;
--	default:
--		break;
--	}
--	siu_write(port, SIUIRSEL, irsel);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--EXPORT_SYMBOL_GPL(vr41xx_select_irda_module);
--
--static inline void siu_clear_fifo(struct uart_port *port)
--{
--	siu_write(port, UART_FCR, UART_FCR_ENABLE_FIFO);
--	siu_write(port, UART_FCR, UART_FCR_ENABLE_FIFO | UART_FCR_CLEAR_RCVR |
--	                          UART_FCR_CLEAR_XMIT);
--	siu_write(port, UART_FCR, 0);
--}
--
--static inline unsigned long siu_port_size(struct uart_port *port)
--{
--	switch (port->type) {
--	case PORT_VR41XX_SIU:
--		return 11UL;
--	case PORT_VR41XX_DSIU:
--		return 8UL;
--	}
--
--	return 0;
--}
--
--static inline unsigned int siu_check_type(struct uart_port *port)
--{
--	if (port->line == 0)
--		return PORT_VR41XX_SIU;
--	if (port->line == 1 && port->irq)
--		return PORT_VR41XX_DSIU;
--
--	return PORT_UNKNOWN;
--}
--
--static inline const char *siu_type_name(struct uart_port *port)
--{
--	switch (port->type) {
--	case PORT_VR41XX_SIU:
--		return "SIU";
--	case PORT_VR41XX_DSIU:
--		return "DSIU";
--	}
--
--	return NULL;
--}
--
--static unsigned int siu_tx_empty(struct uart_port *port)
--{
--	uint8_t lsr;
--
--	lsr = siu_read(port, UART_LSR);
--	if (lsr & UART_LSR_TEMT)
--		return TIOCSER_TEMT;
--
--	return 0;
--}
--
--static void siu_set_mctrl(struct uart_port *port, unsigned int mctrl)
--{
--	uint8_t mcr = 0;
--
--	if (mctrl & TIOCM_DTR)
--		mcr |= UART_MCR_DTR;
--	if (mctrl & TIOCM_RTS)
--		mcr |= UART_MCR_RTS;
--	if (mctrl & TIOCM_OUT1)
--		mcr |= UART_MCR_OUT1;
--	if (mctrl & TIOCM_OUT2)
--		mcr |= UART_MCR_OUT2;
--	if (mctrl & TIOCM_LOOP)
--		mcr |= UART_MCR_LOOP;
--
--	siu_write(port, UART_MCR, mcr);
--}
--
--static unsigned int siu_get_mctrl(struct uart_port *port)
--{
--	uint8_t msr;
--	unsigned int mctrl = 0;
--
--	msr = siu_read(port, UART_MSR);
--	if (msr & UART_MSR_DCD)
--		mctrl |= TIOCM_CAR;
--	if (msr & UART_MSR_RI)
--		mctrl |= TIOCM_RNG;
--	if (msr & UART_MSR_DSR)
--		mctrl |= TIOCM_DSR;
--	if (msr & UART_MSR_CTS)
--		mctrl |= TIOCM_CTS;
--
--	return mctrl;
--}
--
--static void siu_stop_tx(struct uart_port *port)
--{
--	unsigned long flags;
--	uint8_t ier;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	ier = siu_read(port, UART_IER);
--	ier &= ~UART_IER_THRI;
--	siu_write(port, UART_IER, ier);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static void siu_start_tx(struct uart_port *port)
--{
--	unsigned long flags;
--	uint8_t ier;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	ier = siu_read(port, UART_IER);
--	ier |= UART_IER_THRI;
--	siu_write(port, UART_IER, ier);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static void siu_stop_rx(struct uart_port *port)
--{
--	unsigned long flags;
--	uint8_t ier;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	ier = siu_read(port, UART_IER);
--	ier &= ~UART_IER_RLSI;
--	siu_write(port, UART_IER, ier);
--
--	port->read_status_mask &= ~UART_LSR_DR;
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static void siu_enable_ms(struct uart_port *port)
--{
--	unsigned long flags;
--	uint8_t ier;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	ier = siu_read(port, UART_IER);
--	ier |= UART_IER_MSI;
--	siu_write(port, UART_IER, ier);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static void siu_break_ctl(struct uart_port *port, int ctl)
--{
--	unsigned long flags;
--	uint8_t lcr;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	lcr = siu_read(port, UART_LCR);
--	if (ctl == -1)
--		lcr |= UART_LCR_SBC;
--	else
--		lcr &= ~UART_LCR_SBC;
--	siu_write(port, UART_LCR, lcr);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static inline void receive_chars(struct uart_port *port, uint8_t *status)
--{
--	uint8_t lsr, ch;
--	char flag;
--	int max_count = RX_MAX_COUNT;
--
--	lsr = *status;
--
--	do {
--		ch = siu_read(port, UART_RX);
--		port->icount.rx++;
--		flag = TTY_NORMAL;
--
--#ifdef CONFIG_SERIAL_VR41XX_CONSOLE
--		lsr |= lsr_break_flag[port->line];
--		lsr_break_flag[port->line] = 0;
--#endif
--		if (unlikely(lsr & (UART_LSR_BI | UART_LSR_FE |
--		                    UART_LSR_PE | UART_LSR_OE))) {
--			if (lsr & UART_LSR_BI) {
--				lsr &= ~(UART_LSR_FE | UART_LSR_PE);
--				port->icount.brk++;
--
--				if (uart_handle_break(port))
--					goto ignore_char;
--			}
--
--			if (lsr & UART_LSR_FE)
--				port->icount.frame++;
--			if (lsr & UART_LSR_PE)
--				port->icount.parity++;
--			if (lsr & UART_LSR_OE)
--				port->icount.overrun++;
--
--			lsr &= port->read_status_mask;
--			if (lsr & UART_LSR_BI)
--				flag = TTY_BREAK;
--			if (lsr & UART_LSR_FE)
--				flag = TTY_FRAME;
--			if (lsr & UART_LSR_PE)
--				flag = TTY_PARITY;
--		}
--
--		if (uart_handle_sysrq_char(port, ch))
--			goto ignore_char;
--
--		uart_insert_char(port, lsr, UART_LSR_OE, ch, flag);
--
--	ignore_char:
--		lsr = siu_read(port, UART_LSR);
--	} while ((lsr & UART_LSR_DR) && (max_count-- > 0));
--
--	tty_flip_buffer_push(&port->state->port);
--
--	*status = lsr;
--}
--
--static inline void check_modem_status(struct uart_port *port)
--{
--	uint8_t msr;
--
--	msr = siu_read(port, UART_MSR);
--	if ((msr & UART_MSR_ANY_DELTA) == 0)
--		return;
--	if (msr & UART_MSR_DDCD)
--		uart_handle_dcd_change(port, msr & UART_MSR_DCD);
--	if (msr & UART_MSR_TERI)
--		port->icount.rng++;
--	if (msr & UART_MSR_DDSR)
--		port->icount.dsr++;
--	if (msr & UART_MSR_DCTS)
--		uart_handle_cts_change(port, msr & UART_MSR_CTS);
--
--	wake_up_interruptible(&port->state->port.delta_msr_wait);
--}
--
--static inline void transmit_chars(struct uart_port *port)
--{
--	struct circ_buf *xmit;
--	int max_count = TX_MAX_COUNT;
--
--	xmit = &port->state->xmit;
--
--	if (port->x_char) {
--		siu_write(port, UART_TX, port->x_char);
--		port->icount.tx++;
--		port->x_char = 0;
--		return;
--	}
--
--	if (uart_circ_empty(xmit) || uart_tx_stopped(port)) {
--		siu_stop_tx(port);
--		return;
--	}
--
--	do {
--		siu_write(port, UART_TX, xmit->buf[xmit->tail]);
--		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
--		port->icount.tx++;
--		if (uart_circ_empty(xmit))
--			break;
--	} while (max_count-- > 0);
--
--	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
--		uart_write_wakeup(port);
--
--	if (uart_circ_empty(xmit))
--		siu_stop_tx(port);
--}
--
--static irqreturn_t siu_interrupt(int irq, void *dev_id)
--{
--	struct uart_port *port;
--	uint8_t iir, lsr;
--
--	port = (struct uart_port *)dev_id;
--
--	iir = siu_read(port, UART_IIR);
--	if (iir & UART_IIR_NO_INT)
--		return IRQ_NONE;
--
--	lsr = siu_read(port, UART_LSR);
--	if (lsr & UART_LSR_DR)
--		receive_chars(port, &lsr);
--
--	check_modem_status(port);
--
--	if (lsr & UART_LSR_THRE)
--		transmit_chars(port);
--
--	return IRQ_HANDLED;
--}
--
--static int siu_startup(struct uart_port *port)
--{
--	int retval;
--
--	if (port->membase == NULL)
--		return -ENODEV;
--
--	siu_clear_fifo(port);
--
--	(void)siu_read(port, UART_LSR);
--	(void)siu_read(port, UART_RX);
--	(void)siu_read(port, UART_IIR);
--	(void)siu_read(port, UART_MSR);
--
--	if (siu_read(port, UART_LSR) == 0xff)
--		return -ENODEV;
--
--	retval = request_irq(port->irq, siu_interrupt, 0, siu_type_name(port), port);
--	if (retval)
--		return retval;
--
--	if (port->type == PORT_VR41XX_DSIU)
--		vr41xx_enable_dsiuint(DSIUINT_ALL);
--
--	siu_write(port, UART_LCR, UART_LCR_WLEN8);
--
--	spin_lock_irq(&port->lock);
--	siu_set_mctrl(port, port->mctrl);
--	spin_unlock_irq(&port->lock);
--
--	siu_write(port, UART_IER, UART_IER_RLSI | UART_IER_RDI);
--
--	(void)siu_read(port, UART_LSR);
--	(void)siu_read(port, UART_RX);
--	(void)siu_read(port, UART_IIR);
--	(void)siu_read(port, UART_MSR);
--
--	return 0;
--}
--
--static void siu_shutdown(struct uart_port *port)
--{
--	unsigned long flags;
--	uint8_t lcr;
--
--	siu_write(port, UART_IER, 0);
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	port->mctrl &= ~TIOCM_OUT2;
--	siu_set_mctrl(port, port->mctrl);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--
--	lcr = siu_read(port, UART_LCR);
--	lcr &= ~UART_LCR_SBC;
--	siu_write(port, UART_LCR, lcr);
--
--	siu_clear_fifo(port);
--
--	(void)siu_read(port, UART_RX);
--
--	if (port->type == PORT_VR41XX_DSIU)
--		vr41xx_disable_dsiuint(DSIUINT_ALL);
--
--	free_irq(port->irq, port);
--}
--
--static void siu_set_termios(struct uart_port *port, struct ktermios *new,
--                            struct ktermios *old)
--{
--	tcflag_t c_cflag, c_iflag;
--	uint8_t lcr, fcr, ier;
--	unsigned int baud, quot;
--	unsigned long flags;
--
--	c_cflag = new->c_cflag;
--	lcr = UART_LCR_WLEN(tty_get_char_size(c_cflag));
--
--	if (c_cflag & CSTOPB)
--		lcr |= UART_LCR_STOP;
--	if (c_cflag & PARENB)
--		lcr |= UART_LCR_PARITY;
--	if ((c_cflag & PARODD) != PARODD)
--		lcr |= UART_LCR_EPAR;
--	if (c_cflag & CMSPAR)
--		lcr |= UART_LCR_SPAR;
--
--	baud = uart_get_baud_rate(port, new, old, 0, port->uartclk/16);
--	quot = uart_get_divisor(port, baud);
--
--	fcr = UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_10;
--
--	spin_lock_irqsave(&port->lock, flags);
--
--	uart_update_timeout(port, c_cflag, baud);
--
--	c_iflag = new->c_iflag;
--
--	port->read_status_mask = UART_LSR_THRE | UART_LSR_OE | UART_LSR_DR;
--	if (c_iflag & INPCK)
--		port->read_status_mask |= UART_LSR_FE | UART_LSR_PE;
--	if (c_iflag & (IGNBRK | BRKINT | PARMRK))
--		port->read_status_mask |= UART_LSR_BI;
--
--	port->ignore_status_mask = 0;
--	if (c_iflag & IGNPAR)
--		port->ignore_status_mask |= UART_LSR_FE | UART_LSR_PE;
--	if (c_iflag & IGNBRK) {
--		port->ignore_status_mask |= UART_LSR_BI;
--		if (c_iflag & IGNPAR)
--			port->ignore_status_mask |= UART_LSR_OE;
--	}
--
--	if ((c_cflag & CREAD) == 0)
--		port->ignore_status_mask |= UART_LSR_DR;
--
--	ier = siu_read(port, UART_IER);
--	ier &= ~UART_IER_MSI;
--	if (UART_ENABLE_MS(port, c_cflag))
--		ier |= UART_IER_MSI;
--	siu_write(port, UART_IER, ier);
--
--	siu_write(port, UART_LCR, lcr | UART_LCR_DLAB);
--
--	siu_write(port, UART_DLL, (uint8_t)quot);
--	siu_write(port, UART_DLM, (uint8_t)(quot >> 8));
--
--	siu_write(port, UART_LCR, lcr);
--
--	siu_write(port, UART_FCR, fcr);
--
--	siu_set_mctrl(port, port->mctrl);
--
--	spin_unlock_irqrestore(&port->lock, flags);
--}
--
--static void siu_pm(struct uart_port *port, unsigned int state, unsigned int oldstate)
--{
--	switch (state) {
--	case 0:
--		switch (port->type) {
--		case PORT_VR41XX_SIU:
--			vr41xx_supply_clock(SIU_CLOCK);
--			break;
--		case PORT_VR41XX_DSIU:
--			vr41xx_supply_clock(DSIU_CLOCK);
--			break;
--		}
--		break;
--	case 3:
--		switch (port->type) {
--		case PORT_VR41XX_SIU:
--			vr41xx_mask_clock(SIU_CLOCK);
--			break;
--		case PORT_VR41XX_DSIU:
--			vr41xx_mask_clock(DSIU_CLOCK);
--			break;
--		}
--		break;
--	}
--}
--
--static const char *siu_type(struct uart_port *port)
--{
--	return siu_type_name(port);
--}
--
--static void siu_release_port(struct uart_port *port)
--{
--	unsigned long size;
--
--	if (port->flags	& UPF_IOREMAP) {
--		iounmap(port->membase);
--		port->membase = NULL;
--	}
--
--	size = siu_port_size(port);
--	release_mem_region(port->mapbase, size);
--}
--
--static int siu_request_port(struct uart_port *port)
--{
--	unsigned long size;
--	struct resource *res;
--
--	size = siu_port_size(port);
--	res = request_mem_region(port->mapbase, size, siu_type_name(port));
--	if (res == NULL)
--		return -EBUSY;
--
--	if (port->flags & UPF_IOREMAP) {
--		port->membase = ioremap(port->mapbase, size);
--		if (port->membase == NULL) {
--			release_resource(res);
--			return -ENOMEM;
--		}
--	}
--
--	return 0;
--}
--
--static void siu_config_port(struct uart_port *port, int flags)
--{
--	if (flags & UART_CONFIG_TYPE) {
--		port->type = siu_check_type(port);
--		(void)siu_request_port(port);
--	}
--}
--
--static int siu_verify_port(struct uart_port *port, struct serial_struct *serial)
--{
--	if (port->type != PORT_VR41XX_SIU && port->type != PORT_VR41XX_DSIU)
--		return -EINVAL;
--	if (port->irq != serial->irq)
--		return -EINVAL;
--	if (port->iotype != serial->io_type)
--		return -EINVAL;
--	if (port->mapbase != (unsigned long)serial->iomem_base)
--		return -EINVAL;
--
--	return 0;
--}
--
--static const struct uart_ops siu_uart_ops = {
--	.tx_empty	= siu_tx_empty,
--	.set_mctrl	= siu_set_mctrl,
--	.get_mctrl	= siu_get_mctrl,
--	.stop_tx	= siu_stop_tx,
--	.start_tx	= siu_start_tx,
--	.stop_rx	= siu_stop_rx,
--	.enable_ms	= siu_enable_ms,
--	.break_ctl	= siu_break_ctl,
--	.startup	= siu_startup,
--	.shutdown	= siu_shutdown,
--	.set_termios	= siu_set_termios,
--	.pm		= siu_pm,
--	.type		= siu_type,
--	.release_port	= siu_release_port,
--	.request_port	= siu_request_port,
--	.config_port	= siu_config_port,
--	.verify_port	= siu_verify_port,
--};
--
--static int siu_init_ports(struct platform_device *pdev)
--{
--	struct uart_port *port;
--	struct resource *res;
--	int *type = dev_get_platdata(&pdev->dev);
--	int i;
--
--	if (!type)
+-static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
+-			unsigned int sampling_rate, unsigned int *clk_div)
++static unsigned long find_clk_rate_in_tol(struct clk *clk, unsigned int desired_clk,
++			unsigned int *clk_div, unsigned int percent_tol)
+ {
+-	unsigned long ser_clk;
+-	unsigned long desired_clk;
+-	unsigned long freq, prev;
++	unsigned long freq;
+ 	unsigned long div, maxdiv;
+-	int64_t mult;
+-
+-	desired_clk = baud * sampling_rate;
+-	if (!desired_clk) {
+-		pr_err("%s: Invalid frequency\n", __func__);
 -		return 0;
--
--	port = siu_uart_ports;
--	for (i = 0; i < SIU_PORTS_MAX; i++) {
--		port->type = type[i];
--		if (port->type == PORT_UNKNOWN)
--			continue;
--		port->irq = platform_get_irq(pdev, i);
--		port->uartclk = SIU_BAUD_BASE * 16;
--		port->fifosize = 16;
--		port->regshift = 0;
--		port->iotype = UPIO_MEM;
--		port->flags = UPF_IOREMAP | UPF_BOOT_AUTOCONF;
--		port->line = i;
--		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--		port->mapbase = res->start;
--		port++;
 -	}
++	u64 mult;
++	unsigned long offset, abs_tol, achieved;
+ 
++	abs_tol = div_u64((u64)desired_clk * percent_tol, 100);
+ 	maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
+-	prev = 0;
 -
--	return i;
--}
--
--#ifdef CONFIG_SERIAL_VR41XX_CONSOLE
--
--static void wait_for_xmitr(struct uart_port *port)
--{
--	int timeout = 10000;
--	uint8_t lsr, msr;
--
--	do {
--		lsr = siu_read(port, UART_LSR);
--		if (lsr & UART_LSR_BI)
--			lsr_break_flag[port->line] = UART_LSR_BI;
--
--		if (uart_lsr_tx_empty(lsr))
--			break;
--	} while (timeout-- > 0);
--
--	if (port->flags & UPF_CONS_FLOW) {
--		timeout = 1000000;
--
--		do {
--			msr = siu_read(port, UART_MSR);
--			if ((msr & UART_MSR_CTS) != 0)
--				break;
--		} while (timeout-- > 0);
--	}
--}
--
--static void siu_console_putchar(struct uart_port *port, unsigned char ch)
--{
--	wait_for_xmitr(port);
--	siu_write(port, UART_TX, ch);
--}
--
--static void siu_console_write(struct console *con, const char *s, unsigned count)
--{
--	struct uart_port *port;
--	uint8_t ier;
--
--	port = &siu_uart_ports[con->index];
--
--	ier = siu_read(port, UART_IER);
--	siu_write(port, UART_IER, 0);
--
--	uart_console_write(port, s, count, siu_console_putchar);
--
--	wait_for_xmitr(port);
--	siu_write(port, UART_IER, ier);
--}
--
--static int __init siu_console_setup(struct console *con, char *options)
--{
--	struct uart_port *port;
--	int baud = 9600;
--	int parity = 'n';
--	int bits = 8;
--	int flow = 'n';
--
--	if (con->index >= SIU_PORTS_MAX)
--		con->index = 0;
--
--	port = &siu_uart_ports[con->index];
--	if (port->membase == NULL) {
--		if (port->mapbase == 0)
--			return -ENODEV;
--		port->membase = ioremap(port->mapbase, siu_port_size(port));
--	}
--
--	if (port->type == PORT_VR41XX_SIU)
--		vr41xx_select_siu_interface(SIU_INTERFACE_RS232C);
--
--	if (options != NULL)
--		uart_parse_options(options, &baud, &parity, &bits, &flow);
--
--	return uart_set_options(port, con, baud, parity, bits, flow);
--}
--
--static struct uart_driver siu_uart_driver;
--
--static struct console siu_console = {
--	.name	= "ttyVR",
--	.write	= siu_console_write,
--	.device	= uart_console_device,
--	.setup	= siu_console_setup,
--	.flags	= CON_PRINTBUFFER,
--	.index	= -1,
--	.data	= &siu_uart_driver,
--};
--
--static int siu_console_init(void)
--{
--	struct uart_port *port;
--	int i;
--
--	for (i = 0; i < SIU_PORTS_MAX; i++) {
--		port = &siu_uart_ports[i];
--		port->ops = &siu_uart_ops;
--	}
--
--	register_console(&siu_console);
--
--	return 0;
--}
--
--console_initcall(siu_console_init);
--
--void __init vr41xx_siu_early_setup(struct uart_port *port)
--{
--	if (port->type == PORT_UNKNOWN)
--		return;
--
--	siu_uart_ports[port->line].line = port->line;
--	siu_uart_ports[port->line].type = port->type;
--	siu_uart_ports[port->line].uartclk = SIU_BAUD_BASE * 16;
--	siu_uart_ports[port->line].mapbase = port->mapbase;
--	siu_uart_ports[port->line].ops = &siu_uart_ops;
--}
--
--#define SERIAL_VR41XX_CONSOLE	&siu_console
--#else
--#define SERIAL_VR41XX_CONSOLE	NULL
--#endif
--
--static struct uart_driver siu_uart_driver = {
--	.owner		= THIS_MODULE,
--	.driver_name	= "SIU",
--	.dev_name	= "ttyVR",
--	.major		= SIU_MAJOR,
--	.minor		= SIU_MINOR_BASE,
--	.cons		= SERIAL_VR41XX_CONSOLE,
--};
--
--static int siu_probe(struct platform_device *dev)
--{
--	struct uart_port *port;
--	int num, i, retval;
--
--	num = siu_init_ports(dev);
--	if (num <= 0)
--		return -ENODEV;
--
--	siu_uart_driver.nr = num;
--	retval = uart_register_driver(&siu_uart_driver);
--	if (retval)
--		return retval;
--
--	for (i = 0; i < num; i++) {
--		port = &siu_uart_ports[i];
--		port->ops = &siu_uart_ops;
--		port->dev = &dev->dev;
--		port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_VR41XX_CONSOLE);
--
--		retval = uart_add_one_port(&siu_uart_driver, port);
--		if (retval < 0) {
--			port->dev = NULL;
+-	for (div = 1; div <= maxdiv; div++) {
+-		mult = div * desired_clk;
+-		if (mult > ULONG_MAX)
++	div = 1;
++	while (div <= maxdiv) {
++		mult = (u64)div * desired_clk;
++		if (mult != (unsigned long)mult)
+ 			break;
+ 
+-		freq = clk_round_rate(clk, (unsigned long)mult);
+-		if (!(freq % desired_clk)) {
+-			ser_clk = freq;
 -			break;
 -		}
--	}
--
--	if (i == 0 && retval < 0) {
--		uart_unregister_driver(&siu_uart_driver);
--		return retval;
--	}
--
--	return 0;
--}
--
--static int siu_remove(struct platform_device *dev)
--{
--	struct uart_port *port;
--	int i;
--
--	for (i = 0; i < siu_uart_driver.nr; i++) {
--		port = &siu_uart_ports[i];
--		if (port->dev == &dev->dev) {
--			uart_remove_one_port(&siu_uart_driver, port);
--			port->dev = NULL;
--		}
--	}
--
--	uart_unregister_driver(&siu_uart_driver);
--
--	return 0;
--}
--
--static int siu_suspend(struct platform_device *dev, pm_message_t state)
--{
--	struct uart_port *port;
--	int i;
--
--	for (i = 0; i < siu_uart_driver.nr; i++) {
--		port = &siu_uart_ports[i];
--		if ((port->type == PORT_VR41XX_SIU ||
--		     port->type == PORT_VR41XX_DSIU) && port->dev == &dev->dev)
--			uart_suspend_port(&siu_uart_driver, port);
--
--	}
--
--	return 0;
--}
--
--static int siu_resume(struct platform_device *dev)
--{
--	struct uart_port *port;
--	int i;
--
--	for (i = 0; i < siu_uart_driver.nr; i++) {
--		port = &siu_uart_ports[i];
--		if ((port->type == PORT_VR41XX_SIU ||
--		     port->type == PORT_VR41XX_DSIU) && port->dev == &dev->dev)
--			uart_resume_port(&siu_uart_driver, port);
--	}
--
--	return 0;
--}
--
--static struct platform_driver siu_device_driver = {
--	.probe		= siu_probe,
--	.remove		= siu_remove,
--	.suspend	= siu_suspend,
--	.resume		= siu_resume,
--	.driver		= {
--		.name	= "SIU",
--	},
--};
--
--module_platform_driver(siu_device_driver);
--
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:SIU");
-diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-index 6faf502b7860..3ba34d8378bd 100644
---- a/include/uapi/linux/serial_core.h
-+++ b/include/uapi/linux/serial_core.h
-@@ -124,10 +124,6 @@
- /* TXX9 type number */
- #define PORT_TXX9	64
++		offset = div * abs_tol;
++		freq = clk_round_rate(clk, mult - offset);
  
--/* NEC VR4100 series SIU/DSIU */
--#define PORT_VR41XX_SIU		65
--#define PORT_VR41XX_DSIU	66
--
- /* Samsung S3C2400 SoC */
- #define PORT_S3C2400	67
+-		if (!prev)
+-			ser_clk = freq;
+-		else if (prev == freq)
++		/* Can only get lower if we're done */
++		if (freq < mult - offset)
+ 			break;
  
+-		prev = freq;
+-	}
++		/*
++		 * Re-calculate div in case rounding skipped rates but we
++		 * ended up at a good one, then check for a match.
++		 */
++		div = DIV_ROUND_CLOSEST(freq, desired_clk);
++		achieved = DIV_ROUND_CLOSEST(freq, div);
++		if (achieved <= desired_clk + abs_tol &&
++		    achieved >= desired_clk - abs_tol) {
++			*clk_div = div;
++			return freq;
++		}
+ 
+-	if (!ser_clk) {
+-		pr_err("%s: Can't find matching DFS entry for baud %d\n",
+-								__func__, baud);
+-		return ser_clk;
++		div = DIV_ROUND_UP(freq, desired_clk);
+ 	}
+ 
+-	*clk_div = ser_clk / desired_clk;
+-	if (!(*clk_div))
+-		*clk_div = 1;
++	return 0;
++}
++
++static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
++			unsigned int sampling_rate, unsigned int *clk_div)
++{
++	unsigned long ser_clk;
++	unsigned long desired_clk;
++
++	desired_clk = baud * sampling_rate;
++	if (!desired_clk)
++		return 0;
++
++	/*
++	 * try to find a clock rate within 2% tolerance, then within 5%
++	 */
++	ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 2);
++	if (!ser_clk)
++		ser_clk = find_clk_rate_in_tol(clk, desired_clk, clk_div, 5);
+ 
+ 	return ser_clk;
+ }
+@@ -1023,8 +1034,15 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 
+ 	clk_rate = get_clk_div_rate(port->se.clk, baud,
+ 		sampling_rate, &clk_div);
+-	if (!clk_rate)
++	if (!clk_rate) {
++		dev_err(port->se.dev,
++			"Couldn't find suitable clock rate for %lu\n",
++			baud * sampling_rate);
+ 		goto out_restart_rx;
++	}
++
++	dev_dbg(port->se.dev, "desired_rate-%lu, clk_rate-%lu, clk_div-%u\n",
++			baud * sampling_rate, clk_rate, clk_div);
+ 
+ 	uport->uartclk = clk_rate;
+ 	dev_pm_opp_set_rate(uport->dev, clk_rate);
 -- 
-2.29.2
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
