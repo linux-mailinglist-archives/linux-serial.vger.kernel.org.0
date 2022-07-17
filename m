@@ -2,131 +2,201 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB443577326
-	for <lists+linux-serial@lfdr.de>; Sun, 17 Jul 2022 04:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EEC577531
+	for <lists+linux-serial@lfdr.de>; Sun, 17 Jul 2022 11:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiGQCPK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 16 Jul 2022 22:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S232706AbiGQJQc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 17 Jul 2022 05:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGQCPJ (ORCPT
+        with ESMTP id S232057AbiGQJQb (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 16 Jul 2022 22:15:09 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8804EBF4B
-        for <linux-serial@vger.kernel.org>; Sat, 16 Jul 2022 19:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658024106; x=1689560106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8whLrbw0yagzGZnGC8lUHtNV4l1wBOGp0KnezY224wE=;
-  b=j/H8LoMtHj7W8luOtqLbtkjafcDGjDVQvLkBGvHPfo8XGd+xQbhkzXuv
-   JJBXAJxXrFdApRxX8qTM3ZV7qlKwkNK9Evsr705/TAMVb+z3SSPbbzl+S
-   LsOBM3qhdZaacbboKmhizhfDX1z4nTmtOfoJt/3ZL7TH7wnKc6vySVk/U
-   DiXwWxfBlBhoh3vagpn4+c7pf0g4vTv4tgkgPyIc+eLZmvkkV+gib1Obo
-   f9k13X8uuUYuXcfU23viQVolTE9HCZrwdqBpJmS+s+zMiyRuP6mm3YDi+
-   7DgFePS54UagRBeCfPQ6kxKd+7K3l3k/YdezgfI8G7wQuw2M00NtbGjbu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="311693493"
-X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="311693493"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 19:15:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,278,1650956400"; 
-   d="scan'208";a="842916204"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jul 2022 19:15:05 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCtoG-0002Vu-O6;
-        Sun, 17 Jul 2022 02:15:04 +0000
-Date:   Sun, 17 Jul 2022 10:14:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     kbuild-all@lists.01.org, linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [tty:tty-testing 77/77] arch/mips/vr41xx/common/siu.c:18:9: error:
- 'PORT_VR41XX_SIU' undeclared here (not in a function)
-Message-ID: <202207171049.VucAZfef-lkp@intel.com>
+        Sun, 17 Jul 2022 05:16:31 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17C4E15FC6;
+        Sun, 17 Jul 2022 02:16:28 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id DD3AA1C8115D;
+        Sun, 17 Jul 2022 17:16:26 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Sun, 17 Jul
+ 2022 17:16:26 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Sun, 17 Jul 2022 17:16:26 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 3AB2763A23; Sun, 17 Jul 2022 12:16:25 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
+        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
+        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
+        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
+        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v9 00/16] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Sun, 17 Jul 2022 12:15:53 +0300
+Message-ID: <20220717091609.122968-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-head:   ceefa81e6e69b020997205e5c30a42d43aa5ae63
-commit: ceefa81e6e69b020997205e5c30a42d43aa5ae63 [77/77] serial: remove VR41XX serial driver
-config: mips-tb0226_defconfig (https://download.01.org/0day-ci/archive/20220717/202207171049.VucAZfef-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?id=ceefa81e6e69b020997205e5c30a42d43aa5ae63
-        git remote add tty https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
-        git fetch --no-tags tty tty-testing
-        git checkout ceefa81e6e69b020997205e5c30a42d43aa5ae63
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+This patchset  adds initial support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family. 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+The NPCM8XX computing subsystem comprises a quadcore ARM 
+Cortex A35 ARM-V8 architecture.
 
-All errors (new ones prefixed by >>):
+This patchset adds minimal architecture and drivers such as:
+Clocksource, Clock, Reset, and WD.
 
->> arch/mips/vr41xx/common/siu.c:18:9: error: 'PORT_VR41XX_SIU' undeclared here (not in a function)
-      18 |         PORT_VR41XX_SIU,
-         |         ^~~~~~~~~~~~~~~
->> arch/mips/vr41xx/common/siu.c:37:9: error: 'PORT_VR41XX_DSIU' undeclared here (not in a function)
-      37 |         PORT_VR41XX_DSIU,
-         |         ^~~~~~~~~~~~~~~~
-   arch/mips/vr41xx/common/siu.c:110:13: warning: no previous prototype for 'vr41xx_siu_setup' [-Wmissing-prototypes]
-     110 | void __init vr41xx_siu_setup(void)
-         |             ^~~~~~~~~~~~~~~~
+Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
 
+This patchset was tested on the Arbel NPCM8XX evaluation board.
 
-vim +/PORT_VR41XX_SIU +18 arch/mips/vr41xx/common/siu.c
+Addressed comments from:
+ - Stephen Boyd: https://www.spinics.net/lists/arm-kernel/msg996551.html
 
-891649409edbed Yoichi Yuasa 2007-05-09  16  
-891649409edbed Yoichi Yuasa 2007-05-09  17  static unsigned int siu_type1_ports[SIU_PORTS_MAX] __initdata = {
-891649409edbed Yoichi Yuasa 2007-05-09 @18  	PORT_VR41XX_SIU,
-891649409edbed Yoichi Yuasa 2007-05-09  19  	PORT_UNKNOWN,
-891649409edbed Yoichi Yuasa 2007-05-09  20  };
-891649409edbed Yoichi Yuasa 2007-05-09  21  
-891649409edbed Yoichi Yuasa 2007-05-09  22  static struct resource siu_type1_resource[] __initdata = {
-891649409edbed Yoichi Yuasa 2007-05-09  23  	{
-891649409edbed Yoichi Yuasa 2007-05-09  24  		.start	= 0x0c000000,
-891649409edbed Yoichi Yuasa 2007-05-09  25  		.end	= 0x0c00000a,
-891649409edbed Yoichi Yuasa 2007-05-09  26  		.flags	= IORESOURCE_MEM,
-891649409edbed Yoichi Yuasa 2007-05-09  27  	},
-891649409edbed Yoichi Yuasa 2007-05-09  28  	{
-891649409edbed Yoichi Yuasa 2007-05-09  29  		.start	= SIU_IRQ,
-891649409edbed Yoichi Yuasa 2007-05-09  30  		.end	= SIU_IRQ,
-891649409edbed Yoichi Yuasa 2007-05-09  31  		.flags	= IORESOURCE_IRQ,
-891649409edbed Yoichi Yuasa 2007-05-09  32  	},
-891649409edbed Yoichi Yuasa 2007-05-09  33  };
-891649409edbed Yoichi Yuasa 2007-05-09  34  
-891649409edbed Yoichi Yuasa 2007-05-09  35  static unsigned int siu_type2_ports[SIU_PORTS_MAX] __initdata = {
-891649409edbed Yoichi Yuasa 2007-05-09  36  	PORT_VR41XX_SIU,
-891649409edbed Yoichi Yuasa 2007-05-09 @37  	PORT_VR41XX_DSIU,
-891649409edbed Yoichi Yuasa 2007-05-09  38  };
-891649409edbed Yoichi Yuasa 2007-05-09  39  
+Changes since version 8:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Add space before and aftre '{' '}'.
+	- Handle devm_of_clk_add_hw_provider function error.
 
-:::::: The code at line 18 was first introduced by commit
-:::::: 891649409edbed528728b4a104d29e43e9d7473a [MIPS] separate platform_device registration for VR41xx serial interface
+Changes since version 7:
+ - NPCM8XX clock driver
+	- The clock and reset registers using the same memory region, 
+	  due to it the clock driver should claim the ioremap directly 
+	  without checking the memory region.
 
-:::::: TO: Yoichi Yuasa <yoichi_yuasa@tripeaks.co.jp>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+Changes since version 6:
+ - NPCM reset driver
+	- Modify warning message.
+ - dt-bindings: serial: 8250: Add npcm845 compatible string patch accepted, due
+   to it the patch removed from the patchset.
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+ - NPCM8XX clock source driver
+	- Remove NPCM8XX TIMER_OF_DECLARE support, using the same as NPCM7XX.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (16):
+  dt-bindings: timer: npcm: Add npcm845 compatible string
+  dt-bindings: watchdog: npcm: Add npcm845 compatible string
+  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+  clk: npcm8xx: add clock controller
+  dt-bindings: reset: npcm: add GCR syscon property
+  ARM: dts: nuvoton: add reset syscon property
+  reset: npcm: using syscon instead of device data
+  dt-bindings: reset: npcm: Add support for NPCM8XX
+  reset: npcm: Add NPCM8XX support
+  dt-bindings: arm: npcm: Add maintainer
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+  arm64: dts: nuvoton: Add initial NPCM8XX device tree
+  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+  arm64: defconfig: Add Nuvoton NPCM family support
+
+ .../devicetree/bindings/arm/npcm/npcm.yaml    |   7 +
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   2 +
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   |  49 ++
+ .../bindings/reset/nuvoton,npcm750-reset.yaml |  10 +-
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt    |   3 +-
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   1 +
+ arch/arm64/Kconfig.platforms                  |  11 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 170 +++++
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  |  30 +
+ .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 610 ++++++++++++++++++
+ drivers/reset/reset-npcm.c                    | 207 +++++-
+ .../dt-bindings/clock/nuvoton,npcm845-clk.h   |  49 ++
+ 20 files changed, 1206 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.33.0
+
