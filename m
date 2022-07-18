@@ -2,112 +2,91 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEF9577556
-	for <lists+linux-serial@lfdr.de>; Sun, 17 Jul 2022 11:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AA15779A9
+	for <lists+linux-serial@lfdr.de>; Mon, 18 Jul 2022 04:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiGQJQj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 17 Jul 2022 05:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        id S232254AbiGRCt3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 17 Jul 2022 22:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbiGQJQf (ORCPT
+        with ESMTP id S229887AbiGRCt2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 17 Jul 2022 05:16:35 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30ABD15FFD;
-        Sun, 17 Jul 2022 02:16:34 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id D92231C811EC;
-        Sun, 17 Jul 2022 17:16:28 +0800 (CST)
-Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Sun, 17
- Jul 2022 17:16:28 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
- (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Sun, 17 Jul
- 2022 17:16:28 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Sun, 17 Jul 2022 17:16:28 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 07F0663A5B; Sun, 17 Jul 2022 12:16:26 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
-        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
-        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
-        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v9 16/16] arm64: defconfig: Add Nuvoton NPCM family support
-Date:   Sun, 17 Jul 2022 12:16:09 +0300
-Message-ID: <20220717091609.122968-17-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220717091609.122968-1-tmaimon77@gmail.com>
-References: <20220717091609.122968-1-tmaimon77@gmail.com>
+        Sun, 17 Jul 2022 22:49:28 -0400
+Received: from server.atrad.com.au (server.atrad.com.au [150.101.241.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC99F11C36;
+        Sun, 17 Jul 2022 19:49:24 -0700 (PDT)
+Received: from marvin.atrad.com.au (marvin.atrad.com.au [192.168.0.2])
+        by server.atrad.com.au (8.17.1/8.17.1) with ESMTPS id 26I2n2NC006650
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Mon, 18 Jul 2022 12:19:04 +0930
+Date:   Mon, 18 Jul 2022 12:19:02 +0930
+From:   Jonathan Woithe <jwoithe@just42.net>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [Regression] CH341 USB-serial converter passes data in 32 byte
+ chunks
+Message-ID: <YtTKHhdfq5cM0G4G@marvin.atrad.com.au>
+References: <Ys1iPTfiZRWj2gXs@marvin.atrad.com.au>
+ <Ys1sfRyL6El7go94@kroah.com>
+ <Ys2nEmkvz2dfAKkU@hovoldconsulting.com>
+ <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ys4QOgNF0pJDwRCJ@marvin.atrad.com.au>
+X-MIMEDefang-action: accept
+X-Scanned-By: MIMEDefang 2.86 on 192.168.0.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Enable basic drivers for NPCM8XX booting up support: Architecture, Clock,
-and WD.
+On Wed, Jul 13, 2022 at 09:52:20AM +0930, Jonathan Woithe wrote:
+> On Tue, Jul 12, 2022 at 06:53:38PM +0200, Johan Hovold wrote:
+> > On Tue, Jul 12, 2022 at 02:43:41PM +0200, Greg Kroah-Hartman wrote:
+> > > On Tue, Jul 12, 2022 at 09:29:57PM +0930, Jonathan Woithe wrote:
+> > > > It would be great if this regression could be addressed.  At present I must
+> > > > boot a pre-4.10 kernel whenever I need to use the programming dongle with
+> > > > this converter.
+> > > > 
+> > > > Please let me know if there is anything I can do to help resolve the
+> > > > problem.
+> > > 
+> > > If you revert this commit on top of the latest kernel release, does it
+> > > solve the problem for you?
+> > 
+> > Simply reverting the commit blamed by the bisection should only makes
+> > things worse, at least for some device types.
+> > 
+> > Perhaps we need to set that bit 7 based on the type, even if the bit
+> > meaning having been inverted seems a bit far-fetched.
+> > 
+> > Jonathan, could you try simply commenting out the
+> > 	
+> > 	val |= BIT(7);
+> > 
+> > statement in ch341_set_baudrate_lcr()?
+> 
+> Commenting out the above line brought some improvement.  In minicom with a
+> loopback connector in place, the first byte sent does not get echoed
+> back at all.  However, all other bytes are echoed as soon as they are sent.
+> 
+> The kernel used for the above test was 672c0c5 (5.18-rc5), which is the most
+> recent I can conveniently get onto the test machine at present.  I tested
+> the unmodified kernel before commenting out the line and confirmed that it
+> exhibited the full fault condition (bytes come back in blocks of 32).
+> 
+> > Also, what chip version do you have (see debug statement in
+> > ch341_configure())?
+> 
+> Chip revision is 0x27.
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+Is there anything further I can do or provide to help identify a solution to
+the regression?
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d1105343bc2..c4a237a84efa 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -49,6 +49,7 @@ CONFIG_ARCH_MEDIATEK=y
- CONFIG_ARCH_MESON=y
- CONFIG_ARCH_MVEBU=y
- CONFIG_ARCH_MXC=y
-+CONFIG_ARCH_NPCM=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
-@@ -627,6 +628,7 @@ CONFIG_RENESAS_RZG2LWDT=y
- CONFIG_UNIPHIER_WATCHDOG=y
- CONFIG_PM8916_WATCHDOG=m
- CONFIG_BCM2835_WDT=y
-+CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_MFD_ALTERA_SYSMGR=y
- CONFIG_MFD_BD9571MWV=y
- CONFIG_MFD_AXP20X_I2C=y
-@@ -1021,6 +1023,7 @@ CONFIG_COMMON_CLK_FSL_SAI=y
- CONFIG_COMMON_CLK_S2MPS11=y
- CONFIG_COMMON_CLK_PWM=y
- CONFIG_COMMON_CLK_VC5=y
-+CONFIG_COMMON_CLK_NPCM8XX=y
- CONFIG_COMMON_CLK_BD718XX=m
- CONFIG_CLK_RASPBERRYPI=m
- CONFIG_CLK_IMX8MM=y
--- 
-2.33.0
-
+Regards
+  jonathan
