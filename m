@@ -2,26 +2,26 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47914584FBA
-	for <lists+linux-serial@lfdr.de>; Fri, 29 Jul 2022 13:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EBD584FBC
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Jul 2022 13:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiG2LsI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 29 Jul 2022 07:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        id S234874AbiG2LsS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 29 Jul 2022 07:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234644AbiG2LsG (ORCPT
+        with ESMTP id S235143AbiG2LsO (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 29 Jul 2022 07:48:06 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7307E303
-        for <linux-serial@vger.kernel.org>; Fri, 29 Jul 2022 04:48:05 -0700 (PDT)
+        Fri, 29 Jul 2022 07:48:14 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E6D87F4F
+        for <linux-serial@vger.kernel.org>; Fri, 29 Jul 2022 04:48:13 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YXGh0FB80L1m4Nt3M4TZy5sY4/8GJAIPodvGiTSYS8a1lALXs2fed5lMKjTdc+nrrQ07vguslWnDnOzpzEx3asx/k9XNIReWQm7WTJf4CBNOGhWMC4M+ZgOv4yqO8rT4MGstXH3rpvhaC6sTaCwIfgIdltyg15FjYynbfxDeKJvYgO3HxUE//Eqk/gD4jam3zcBgrLbiIcXfALW+8g9E8CsGue/Z5QecfKtpChoYhgvSQOyismAPYi5Y5b26aROCHzZFtT2XstcmsMrAK5VW5R02l0Bm8e6Y97aPSJ3CyvIGkCHkhPmf1g6bsvmwxNWpskjQijEDP2qryCH5jNH7sQ==
+ b=DvCggTfjiDCXX9dcnYQkcoyV0THhgT8q1adLHx0LRkdm9IvoVBcXJQKUzvYO0KYivspnJPCoNskbgxDOi3pDYbDmSFMy4N2eefeu3g2xoAoe+ebyNVAbsjkp25NwBgO+UAF4bi1kpLdeF4pxLZmGDlCBAFA4fofpQLeEqNYbD574uA32OaxH/8nXSfmVMjA1lHUQy/S2wMZIzo/s4JkTucpz0i3cWifKFESfxevvYF9fEXTkXkjlyt97wamNwTl+L+q+mr6o8nRIzTQ1vRRbGMs/eLVrkExo+4nLlLCc7f55absiRXA9ht0HO+hz3N60sOlIC2uNbYDo5pT+7BqKOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iSn262ivQ/yhDBv1Kaj/LLFYFPVXX78d9KGdEKOYLDQ=;
- b=F2LW1yAs0h87/jQpuKfiU3eTHUQPkyKmRU7Gzlp1NFH3HXgGaVyWLa5h60nncdkjS6HXCBf5wKAwo9tAt9LZuZPl6Yq5hM0kINN64tUHstfYqOFTX6w9DxTev1dtB+3Wa/9uc+RZ/eb6aqwNoj4QMPsvkr9IEiwOone0fyWL2Kq5zsA0uUSY/j0Sdc7gzOjiEP3xZQuAazVljP3+nvAuf7fR5b3pL4M8NF3XvfCD3pDDX0UIpboqw6qBDJ7xUPaGZprWl+q6myMZKs8SmuaTuPpUjK/smcDmAXqMBidKvqhAIju9kAo2HndiMYtCOmusBXXTglP8OsnGVt9s2gCVBw==
+ bh=Y1tGCJQOjdjzQoTHoDaLHma027MZX0sVuh7BdRxnJow=;
+ b=AApxCTNEGE+8/Ex5zdi6wylaMpa6hmhW2wBxuCbmZVjsuUk3sImnJaDIBjzKFPtXPVntXqW5KMBw8m0K939KCYsGr4PRV76cg+kkh+Dgr6cScol+fD0rNfQTYvV0FYyaWyO5Im1pLrsKo2IwwFHmpb/LIzaU1fRe6SgS05I+cF3amv/DMYJTzYpsI/EndZXyc3noAyI2wFL0GFMmtukHUJxkod/4Fs4Dynv+aGtSdTeVM+v+GjL2ijht4UCSCNhCuF+1h+OourZLBvMPjb6YqHJk3IWsPiCISSWEv+HGW4YgHgNLOpdRonTOqShBz4iofuGLF004ArO0oreSrlI9fw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -29,18 +29,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iSn262ivQ/yhDBv1Kaj/LLFYFPVXX78d9KGdEKOYLDQ=;
- b=gssvqo5D2so4tgSC6X2hxAbvvroOzCMAs+w2arQYudnchurtcSS8w1pAMaRm7jEis+/OCoiTSCI7YGFTgHa1v4WTk+97i8i/izw2RhxRhE39iGkCd3EEE9BgT1eWY6nA6e0WSCr5YY3dlyJ+KhdGHlG0feKobv9TchO+IEKoSXQ=
-Received: from SN6PR01CA0010.prod.exchangelabs.com (2603:10b6:805:b6::23) by
- MN2PR02MB6623.namprd02.prod.outlook.com (2603:10b6:208:1dd::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Fri, 29 Jul
- 2022 11:48:03 +0000
+ bh=Y1tGCJQOjdjzQoTHoDaLHma027MZX0sVuh7BdRxnJow=;
+ b=lRxRJsC9QQOI/4MAUQ0v9hgY3h4Zb5GtmLKdf+gePj6F9Qt1vYwEKihDUePIyyG/1+PgRmGQCg/dM7XXNvDbfmH8W+X4UAV3Q4Acccovq0NSVdOIayHpTP8GWmKXdyQfrbuSkCTeeURKOKL7shN8qnKt8JQM2FIrnVBo16Bb74Y=
+Received: from SN6PR01CA0004.prod.exchangelabs.com (2603:10b6:805:b6::17) by
+ BN6PR02MB2500.namprd02.prod.outlook.com (2603:10b6:404:54::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.6; Fri, 29 Jul 2022 11:48:11 +0000
 Received: from SN1NAM02FT0041.eop-nam02.prod.protection.outlook.com
- (2603:10b6:805:b6:cafe::bc) by SN6PR01CA0010.outlook.office365.com
- (2603:10b6:805:b6::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.7 via Frontend
- Transport; Fri, 29 Jul 2022 11:48:02 +0000
+ (2603:10b6:805:b6:cafe::c5) by SN6PR01CA0004.outlook.office365.com
+ (2603:10b6:805:b6::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.10 via Frontend
+ Transport; Fri, 29 Jul 2022 11:48:10 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=xilinx.com;
@@ -50,14 +49,14 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
 Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
  SN1NAM02FT0041.mail.protection.outlook.com (10.97.5.44) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5458.17 via Frontend Transport; Fri, 29 Jul 2022 11:48:02 +0000
+ 15.20.5458.17 via Frontend Transport; Fri, 29 Jul 2022 11:48:10 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 29 Jul 2022 04:48:01 -0700
+ 15.1.2176.14; Fri, 29 Jul 2022 04:48:04 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 29 Jul 2022 04:48:01 -0700
+ 15.1.2176.14 via Frontend Transport; Fri, 29 Jul 2022 04:48:04 -0700
 Envelope-to: linux-serial@vger.kernel.org,
  gregkh@linuxfoundation.org,
  shubhrajyoti.datta@gmail.com,
@@ -65,15 +64,15 @@ Envelope-to: linux-serial@vger.kernel.org,
 Received: from [10.140.6.18] (port=57946 helo=xhdlakshmis40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1oHOTJ-000DJo-Cu; Fri, 29 Jul 2022 04:48:01 -0700
+        id 1oHOTL-000DJo-VQ; Fri, 29 Jul 2022 04:48:04 -0700
 From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 To:     <linux-serial@vger.kernel.org>
 CC:     <michal.simek@xilinx.com>, <gregkh@linuxfoundation.org>,
         <shubhrajyoti.datta@gmail.com>, <git@amd.com>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH v2 3/7] tty: xilinx_uartps: Initialise the read_status_mask
-Date:   Fri, 29 Jul 2022 17:17:44 +0530
-Message-ID: <20220729114748.18332-4-shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH v2 4/7] tty: xilinx_uartps: Fix the ignore_status
+Date:   Fri, 29 Jul 2022 17:17:45 +0530
+Message-ID: <20220729114748.18332-5-shubhrajyoti.datta@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220729114748.18332-1-shubhrajyoti.datta@xilinx.com>
 References: <20220729114748.18332-1-shubhrajyoti.datta@xilinx.com>
@@ -81,24 +80,24 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a10621cc-abc3-4f86-005b-08da7158319a
-X-MS-TrafficTypeDiagnostic: MN2PR02MB6623:EE_
+X-MS-Office365-Filtering-Correlation-Id: 36462786-ae2d-40f1-d883-08da7158363a
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2500:EE_
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T0XZJVqTJorc8cjmwuRlzQUOvOj6qQIuml3hcR9s6GdknBdufoeJaaNpLkQB/7Bi7LoDEOh20Sy5JufYEIdSTuSu/NslqJyDJd5rhApGSFPxP25CxVdowfR+wBWTGBCjZcs/n22WTg/qZ5GBhsjvSIXWzCFFmZarqP45MQo4mlB31JuKmBjcRdK+ohmIT97JXUeIErJa5mY36/ovSSUTrupxs1hhxG7AGOMGL9J/IO3IMJKNmXZz06IK0Q6cBQGqY0x+qlHugCa8C6WV0MZOsv/UtccZdha26baGOfuKr4BP0OI8moyAGjR2JsQJTDDeBbvYT+YtHTbG7ZgnuvGhTtj31fSbIP2L/U9CBtToUBBWvdwaAZjW8io0kN+S0yHWrp5VCUSWtR4VhH9Ugek2iQ75RNGkpXLnAfNMIsxiQX4zrCT27dnjpe/sA8GTtT2E6c742TRHzYskucBxPQC3CIu9ocax/j5dOm8qt/JNpaRR2FpI/0AbSEayaNI/aLX7VhtK+7dIpC9aK276449JjxmSWoyp4Gx2g2x7a3kbZD55efuJ93TMSFJfzVCo0/Jb5hJ3oaON5/coe65A8bKrIBeboL06DIUG1VbFjCDHTl/p9NTBqV1yeReIkFyYoOdYYAS/NN1+pwXopScG3jdgRB8Z8RM/uuyIhx+VEOzSDU9Ho26mMH73s0m3q3H4M9QnU6CQKjTcOnbX8hpjMLFy+yNeoeMzTl2tfV/2UI/4wv+sZxvcdZmDaHHORx47EN+0a/4NvgcAkRkMihO3ENX2ndYEnpZkVZMfPNA+BwfUN+IJ2UO6uNVoolMGkgTLRfzMBmf7Fzt7+AlFe5KTBQfECw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(39860400002)(396003)(46966006)(40470700004)(36840700001)(426003)(2906002)(82740400003)(9786002)(44832011)(5660300002)(7636003)(107886003)(186003)(336012)(1076003)(356005)(36860700001)(47076005)(8676002)(36756003)(7696005)(26005)(6666004)(41300700001)(8936002)(316002)(478600001)(40460700003)(82310400005)(70586007)(4744005)(4326008)(40480700001)(2616005)(54906003)(6916009)(70206006)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: m/mqbe58d5iNUshasP22uuXbr6gNPcZpQPfi4tJTNsoRICh+YIm/biMxiV7mP7+mrC0qWWtL3ff19FoOhN35E7KkZUt4WTcvHgnuEnXE38dJ4EX0czX/eI6q3eqlPBQO9Qz2/KFHLxpnT57h/+8NqJXLrhXgpdbjR+DgX3Qi2owM8RpVLV5CBuJqntQfLECjjwlXR4N8TIvii8J2Sjo1jgqytZow6hcNUugPNjup3KG58m4HRjNFOrL6Gcv3wM4mUZBIxyXhtdY1s4FW82C4SZo+Mzry2llTkyGFTL7Hjo2FpVFzXoE7Hg9wDbgGwdVMOfSbqp323psn36hVEb5+JB3huDOGgM+1zDMVMmab4xAPi2cLzSjvYIbuB3WZlhdLFKwpaynsYjRjdBOVIreTWDtdy7Tw0xBE0IM3s0/qXrToxmJAnBcVwRWzCSlzPpiLninirA2Q3G7h/pROel5O8NkIkEDVUG7wbZauq0BDnm4m5WrrxT+D7NauVpfkgn3VUp/WFlnj9c4Ms64Oe7losue1D+nQ8k+cSuSsx2r+X+y2wuKxZbCgJPf66JTdOAAUyzdp5c5r7Z2z+2TxQKCM9rQBC3Oq5KJJYfQVzjgQp4LxoSt3eqYBIbGWbZCIIMwfjedty2zzQ/e6ZwdSS0LZqW8rifwcV2IwDzilvX9QqgqWKHPvfkCwlSnks9VPSJKZyMexGwzRRs/ilcY6XBLtS/yD8FsuFZLOSFyYRryrgySR7AGEv7gPJbujZ7Syyh6nthgPyCCKRpDbli9OHb/+DFXa4RCmoRBF6N3BusOG/qmYkkzDgySL1auAw7qecrtPdc8RkufKUxU5NSjSCOa6FQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(39860400002)(36840700001)(46966006)(40470700004)(40480700001)(40460700003)(36860700001)(7636003)(82740400003)(356005)(7696005)(82310400005)(70206006)(70586007)(478600001)(9786002)(5660300002)(4326008)(8936002)(8676002)(316002)(6916009)(54906003)(186003)(107886003)(336012)(2616005)(47076005)(1076003)(426003)(83380400001)(41300700001)(2906002)(6666004)(4744005)(44832011)(26005)(36756003)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 11:48:02.8802
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 11:48:10.6452
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a10621cc-abc3-4f86-005b-08da7158319a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36462786-ae2d-40f1-d883-08da7158363a
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
 X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0041.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6623
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2500
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -108,31 +107,28 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Initialise the read status in probe.
-It will be checked in the isr so to have the default values lets initialise
-in probe.
+Currently the ignore_status is not considered in the isr.
+Add a check to add the ignore_status.
 
+Fixes: 61ec9016988f ("tty/serial: add support for Xilinx PS UART)
 Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 ---
-v2:
-Split the patch.
-
  drivers/tty/serial/xilinx_uartps.c | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 8d2c21718869..94e1bc694457 100644
+index 94e1bc694457..ae99e1164f0c 100644
 --- a/drivers/tty/serial/xilinx_uartps.c
 +++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -1559,6 +1559,8 @@ static int cdns_uart_probe(struct platform_device *pdev)
- 	port->dev = &pdev->dev;
- 	port->uartclk = clk_get_rate(cdns_uart_data->uartclk);
- 	port->private_data = cdns_uart_data;
-+	port->read_status_mask = CDNS_UART_IXR_TXEMPTY | CDNS_UART_IXR_RXTRIG |
-+			CDNS_UART_IXR_OVERRUN | CDNS_UART_IXR_TOUT;
- 	cdns_uart_data->port = port;
- 	platform_set_drvdata(pdev, port);
+@@ -361,6 +361,8 @@ static irqreturn_t cdns_uart_isr(int irq, void *dev_id)
+ 		isrstatus &= ~CDNS_UART_IXR_TXEMPTY;
+ 	}
  
++	isrstatus &= port->read_status_mask;
++	isrstatus &= ~port->ignore_status_mask;
+ 	/*
+ 	 * Skip RX processing if RX is disabled as RXEMPTY will never be set
+ 	 * as read bytes will not be removed from the FIFO.
 -- 
 2.25.1
 
