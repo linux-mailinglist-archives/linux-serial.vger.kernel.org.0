@@ -2,216 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B9A585A59
-	for <lists+linux-serial@lfdr.de>; Sat, 30 Jul 2022 14:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC835876EE
+	for <lists+linux-serial@lfdr.de>; Tue,  2 Aug 2022 08:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbiG3MAe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 30 Jul 2022 08:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S233004AbiHBGCO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 2 Aug 2022 02:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234285AbiG3MAe (ORCPT
+        with ESMTP id S230298AbiHBGCN (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 30 Jul 2022 08:00:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B0613EAB;
-        Sat, 30 Jul 2022 05:00:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2A4AB80E05;
-        Sat, 30 Jul 2022 12:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC21C433C1;
-        Sat, 30 Jul 2022 12:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659182429;
-        bh=g0xyjqQPMC6JiTcqLBVlrILQwBUFyXz8xSHhDNEJgIw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LKK7ipEBEPJnvmDQ801tH/Axl5jnuwKZA2DrRuIOPfngpoWMd9c3WIyjizkj/+Oh0
-         6FMz7OIBdbFZ+adxKLso0OBCLfAfxaGopigcyicmgYQO/LbwmWGLm+AytFFFqOkqw3
-         dTLW2EUrfBvYCaY3U+XjE6UDC8fkvOriIjGzWkb4=
-Date:   Sat, 30 Jul 2022 14:00:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     Xingrui Yi <yixingrui@linux.alibaba.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vt: remove old FONT ioctls definitions in uapi
-Message-ID: <YuUdWoa7UFHmkNu9@kroah.com>
-References: <20220722061133.7765-1-yixingrui@linux.alibaba.com>
- <YuJIIl/LwGwuYdib@kroah.com>
- <YuRPZX4S3DHsLeDs@angband.pl>
+        Tue, 2 Aug 2022 02:02:13 -0400
+Received: from mail.rv.npu.gov.ua (mail.rv.npu.gov.ua [85.159.5.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A1026AEE;
+        Mon,  1 Aug 2022 23:02:12 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rv.npu.gov.ua (Postfix) with ESMTP id A102D46D4BA3;
+        Tue,  2 Aug 2022 04:02:55 +0300 (EEST)
+Received: from mail.rv.npu.gov.ua ([127.0.0.1])
+        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id MT0CiNgi_tuj; Tue,  2 Aug 2022 04:02:54 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rv.npu.gov.ua (Postfix) with ESMTP id 2CE1346D4BAC;
+        Tue,  2 Aug 2022 04:02:54 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rv.npu.gov.ua 2CE1346D4BAC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rv.npu.gov.ua;
+        s=D9C6921A-69F2-11EB-967E-80F8358BD1FC; t=1659402174;
+        bh=rXKZG/8bQHY28IslpDmB9+1lxzhBpWrTxjnUDTFW+HM=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=Kr5P/VEkz6ExW4O4//zI7dtRbp7R5CHxA/t+pDc76a3qzgxVBSfB+v/2taYL7UjiP
+         rAu0c6pnfEzLNnTpuB9DaqCjPWVK4dw9Z08vAF7X4SXKNURM0xExBL856+KSmCXatF
+         DLmRAd7qZ6LAtYUWF3B6Fmmu6k87IRyKTeU7H4/NwTMfP9+q5Pz6E5N7g/hYYwOVin
+         jAHoTS24ieEwGTkMjH5jyueteND8dJuVjONgTD+sNlFPo1y1gsdvrK5EYRAFg1ciAx
+         SLZlVX8YL7o71rXvCfLmQ/CUsSQ5AKLzJlfdDfiFPXFVk0+KCruqmb2nqgeXu9sZQs
+         H6nQlRItsxFMQ==
+X-Virus-Scanned: amavisd-new at rv.npu.gov.ua
+Received: from mail.rv.npu.gov.ua ([127.0.0.1])
+        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NhqFSFPTTm0r; Tue,  2 Aug 2022 04:02:54 +0300 (EEST)
+Received: from DESKTOP-CJHK18M.home (gateway [101.19.1.22])
+        by mail.rv.npu.gov.ua (Postfix) with ESMTPSA id B847946D4BAF;
+        Tue,  2 Aug 2022 04:02:51 +0300 (EEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YuRPZX4S3DHsLeDs@angband.pl>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re:
+To:     Recipients <kt@rv.npu.gov.ua>
+From:   "MacKenzie Scott" <kt@rv.npu.gov.ua>
+Date:   Tue, 02 Aug 2022 09:09:35 +0800
+Reply-To: mackenziescott@reservasgoldenwayki.com
+Message-Id: <20220802010251.B847946D4BAF@mail.rv.npu.gov.ua>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOTS_OF_MONEY,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 11:21:41PM +0200, Adam Borowski wrote:
-> On Thu, Jul 28, 2022 at 10:26:10AM +0200, Greg KH wrote:
-> > On Fri, Jul 22, 2022 at 02:11:33PM +0800, Xingrui Yi wrote:
-> > > As was demonstrated by commit ff2047fb755d ("vt: drop old FONT ioctls"),
-> > > old font ioctls like PIO_FONT have been deleted and KDFONTOP ioctl is used
-> > > for years instead.
-> > > 
-> > > However, unused definitions of these ioctl numbers and "strut
-> > > consolefontdesc" still exist in a uapi header. They could have been removed
-> > > since no userspace was using them. Otherwise they will become a
-> > > misleading for users, and users will fail with ENOTTY with wrong call.
-> 
-> > > -#define GIO_FONT	0x4B60	/* gets font in expanded form */
-> > > -#define PIO_FONT	0x4B61	/* use font in expanded form */
-> > > -#define GIO_FONTX	0x4B6B	/* get font using struct consolefontdesc */
-> > > -#define PIO_FONTX	0x4B6C	/* set font using struct consolefontdesc */
-> > > -struct consolefontdesc {
-> > > -#define PIO_FONTRESET   0x4B6D	/* reset to default font */
-> 
-> > Did you rebuild a distribution like Debian to verify that these values
-> > and structure are not used anywhere?
-> 
-> I just did.  https://codesearch.debian.net lists packages to check:
-> aalib
-> busybox
-> cde
-> console-cyrillic
-> dietlibc
-> doclifter
-> emscripten
-> fpc
-> gargoyle-free
-> gcc-10
-> gcc-11
-> gcc-12
-> gcc-9
-> gcc-arm-none-eabi
-> gcc-avr
-> gcc-riscv64-unknown-elf
-> gcc-snapshot
-> hurd
-> kbd
-> kfreebsd-10
-> lazarus
-> libabigail
-> libexplain
-> linux
-> llvm-toolchain-11
-> llvm-toolchain-12
-> llvm-toolchain-13
-> llvm-toolchain-14
-> llvm-toolchain-9
-> llvm-toolchain-snapshot
-> lynx
-> manpages-l10n
-> sequeler
-> strace
-> stress-ng
-> systemd
-> trinity
-> vala
-> valgrind
-> 
-> Of these, I've ignored the kernels, and built only the latest released
-> version of a compiler.
-> 
-> .--====[ aalib ]
-> aalinux.c: In function ‘linux_init’:
-> aalinux.c:106:34: error: storage size of ‘desc’ isn’t known
->   106 |           struct consolefontdesc desc;
->       |                                  ^~~~
-> aalinux.c:109:26: error: ‘GIO_FONTX’ undeclared (first use in this function)
->   109 |           i = ioctl (fd, GIO_FONTX, &desc);
->       |                          ^~~~~~~~~
-> `----
-> 
-> .--====[ kbd ]
-> kdfontop.c: In function ‘kfont_restore_font’:
-> kdfontop.c:27:23: error: ‘PIO_FONTRESET’ undeclared (first use in this function)
->    27 |         if (ioctl(fd, PIO_FONTRESET, 0)) {
->       |                       ^~~~~~~~~~~~~
-> kdfontop.c: In function ‘get_font_giofontx’:
-> kdfontop.c:89:32: error: storage size of ‘cfd’ isn’t known
-> kdfontop.c:102:30: error: ‘GIO_FONTX’ undeclared
-> kdfontop.c: In function ‘get_font_giofont’:
-> kdfontop.c:137:30: error: ‘GIO_FONT’ undeclared
-> kdfontop.c: In function ‘put_font_piofontx’:
-> kdfontop.c:242:32: error: storage size of ‘cfd’ isn’t known
-> kdfontop.c:262:31: error: ‘PIO_FONTX’ undeclared
-> kdfontop.c: In function ‘put_font_piofont’:
-> kdfontop.c:299:31: error: ‘PIO_FONT’ undeclared
-> `----
-> 
-> .--====[ gcc-12 ]
-> ../../../../src/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp:850:29: error: 'GIO_FONT' was not declared in this scope
->   850 |   unsigned IOCTL_GIO_FONT = GIO_FONT;
->       |                             ^~~~~~~~
-> `----
-> 
-> .--====[ llvm-toolchain-14 ]
-> /<<PKGBUILDDIR>>/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp:865:29: error: use of undeclared identifier 'GIO_FONT'
->   unsigned IOCTL_GIO_FONT = GIO_FONT;
->                             ^
-> /<<PKGBUILDDIR>>/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.cpp:898:29: error: use of undeclared identifier 'PIO_FONT'
->   unsigned IOCTL_PIO_FONT = PIO_FONT;
->                             ^
-> `----
-> 
-> .--====[ libexplain ]
-> libexplain/buffer/consolefontdesc.c: In function ‘explain_buffer_consolefontdesc’:
-> libexplain/buffer/consolefontdesc.c:34:48: error: invalid application of ‘sizeof’ to incomplete type ‘c
-> onst struct consolefontdesc’
->    34 |     if (explain_is_efault_pointer(value, sizeof(*value)))
->       |                                                ^
-> libexplain/buffer/consolefontdesc.c:43:14: error: invalid use of undefined type ‘const struct consolefo
-> ntdesc’
->    43 |         value->charcount,
->       |              ^~
-> `----
-> 
-> .--====[ trinity ]
-> In file included from ioctls/vt.c:8:
-> ioctls/vt.c:48:15: error: ‘GIO_FONT’ undeclared here (not in a function)
->    48 |         IOCTL(GIO_FONT),
->       |               ^~~~~~~~
-> include/ioctls.h:53:22: note: in definition of macro ‘IOCTL’
->    53 |         { .request = _request, .name = #_request, }
->       |                      ^~~~~~~~
-> ioctls/vt.c:49:15: error: ‘PIO_FONT’ undeclared here (not in a function)
->    49 |         IOCTL(PIO_FONT),
->       |               ^~~~~~~~
-> ioctls/vt.c:50:15: error: ‘GIO_FONTX’ undeclared here (not in a function)
-> ioctls/vt.c:51:15: error: ‘PIO_FONTX’ undeclared here (not in a function)
-> ioctls/vt.c:52:15: error: ‘PIO_FONTRESET’ undeclared here (not in a function)
-> `----
-> 
-> 
-> So there _are_ failures in userspace.
-> But let's take a look at them:
-> 
-> * aalib: dead upstream since 2001, this code is broken
-> * kbd: uses KDFONTOP, falls back if unsupported
-> * libsanitizer (bundled in gcc, llvm-toolchain): can drop
-> * libexplain: can drop
-> * trinity: can drop
-> 
-> So we have one real failure, one fallback, and a few "lists all ioctls".
-> I'd say that's acceptable.  Especially because presence of code that list
-> all ioctls means we would never done any clean-up otherwise.
+Hello, =
 
-Nope, we can't break exiting tools, especially for things like gcc or
-llvm which do get built often.  We've been down this path before, and
-had to revert things in the past.  We can only remove stuff like this
-when all users are gone.
+                          =
 
-Please work with the gcc and llvm developers to remove those usages,
-along with the other packages and maybe we can revisit this in 5 years
-or so.
+I'm MacKenzie Scott Ex-wife of Amazon CEO and founder, I'm donating $ 4 bil=
+lion Dollars to charities, individuals, colleges across the Globe from Scot=
+t's foundation, to provide immediate support to people suffering economical=
+ly from COVID-19 pandemic and you're one of the lucky winners, i have a don=
+ation grant worth $100,800,000.00 Dollars for you, you can contact me for m=
+ore information if you're interested.
 
-thanks,
-
-greg k-h
+Regards,
+MacKenzie Scott.
