@@ -2,215 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C138F596AD2
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Aug 2022 10:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3786596B10
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Aug 2022 10:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiHQIDx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 17 Aug 2022 04:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S234126AbiHQIJD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 17 Aug 2022 04:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbiHQIDo (ORCPT
+        with ESMTP id S234042AbiHQIJC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:03:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB12239B85;
-        Wed, 17 Aug 2022 01:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660723413; x=1692259413;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2Pv7hkZ6hWMmBycZ4+WnhfRT5RtAh4O9ymOlESkLyAQ=;
-  b=el0TvXszO1vTR/oJ4s3T7tAyOfh1G7cxN23l/qhLRconxkhmU+GjsnqG
-   r10We7N5ZkQCB3Blm7q5LlEaeacyDSvP2nP+zIA5nXBw83oX9HbkGBrdc
-   mal3sUly/xz4ef14ry4+aeN5JoXS2TGOCXQ0QeOlbqLPTW221GzBQ3UoT
-   Ymfr6jYb5ouY1xU2IoEue8bNYJMqr9Nw9Hh5b32iRDT+adcm55MzE3Mma
-   V7zDyixCVn3i192NO1oi2h/sOWti5ePFc15793g+bXlp1S6Y6i3ZiKBo8
-   rM97qwGtQ3dRlWnDlmGNmzWGNeaoGsYxiBxRXxxhYFQ4QiYOR19taKWiM
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,242,1654585200"; 
-   d="scan'208";a="109399692"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Aug 2022 01:03:31 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 17 Aug 2022 01:03:27 -0700
-Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 17 Aug 2022 01:03:23 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <admin@hifiphile.com>, <kavyasree.kotagiri@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH 5/5] tty: serial: atmel: Make the driver aware of the existence of GCLK
-Date:   Wed, 17 Aug 2022 10:55:18 +0300
-Message-ID: <20220817075517.49575-6-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220817075517.49575-1-sergiu.moga@microchip.com>
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
+        Wed, 17 Aug 2022 04:09:02 -0400
+X-Greylist: delayed 447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Aug 2022 01:08:59 PDT
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7431A4E86F
+        for <linux-serial@vger.kernel.org>; Wed, 17 Aug 2022 01:08:59 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id BC00C22DEA; Wed, 17 Aug 2022 08:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1660723291; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=nE7O/xQcjE9wodBTaTpLmek7lwZBfmWhYOl2mh/cLoxdmfZMNPKjOYXJDKiVArEym
+         kQJK5A4SduUrMx4eNXKqI3p1hDi/WpPNVRDXyIpnGiSURwKbuitF3ABeTp9pRJ0QOJ
+         wh6SS2PUp+44EzQPf8j1sAvUicaaw5NhWD794Os7AXBCGRCZvJvK00FhEpPEAQAFwf
+         jIFjHHH95oVK1qgOhVuwrVTlF4UEWesZh5EwZvjY8ni6SsZdDO/6ub/evqtZ/1L2Zf
+         EkqYbbMYLNEqybVglJy2Qknfr//ITXsC4scpgsV9nSkJ3WK6vG8+/IEG+JQtpaoC5S
+         DsEHujCXndUkA==
+Received: by mail.fadrush.pl for <linux-serial@vger.kernel.org>; Wed, 17 Aug 2022 08:00:09 GMT
+Message-ID: <20220817064500-0.1.12.8bdh.0.44q597qipb@fadrush.pl>
+Date:   Wed, 17 Aug 2022 08:00:09 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-serial@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Previously, the atmel serial driver did not take into account the
-possibility of using the more customizable generic clock as its
-baudrate generator. Unless there is a Fractional Part available to
-increase accuracy, there is a high chance that we may be able to
-generate a baudrate closer to the desired one by using the GCLK as the
-clock source. Now, depending on the error rate between
-the desired baudrate and the actual baudrate, the serial driver will
-fallback on the generic clock. The generic clock must be provided
-in the DT node of the serial that may need a more flexible clock source.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
----
- drivers/tty/serial/atmel_serial.c | 52 ++++++++++++++++++++++++++++++-
- drivers/tty/serial/atmel_serial.h |  1 +
- 2 files changed, 52 insertions(+), 1 deletion(-)
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 30ba9eef7b39..0a0b46ee0955 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -15,6 +15,7 @@
- #include <linux/init.h>
- #include <linux/serial.h>
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
- #include <linux/console.h>
- #include <linux/sysrq.h>
- #include <linux/tty_flip.h>
-@@ -77,6 +78,8 @@ static void atmel_stop_rx(struct uart_port *port);
- #endif
- 
- #define ATMEL_ISR_PASS_LIMIT	256
-+#define ERROR_RATE(desired_value, actual_value) \
-+	((int)(100 - ((desired_value) * 100) / (actual_value)))
- 
- struct atmel_dma_buffer {
- 	unsigned char	*buf;
-@@ -110,6 +113,7 @@ struct atmel_uart_char {
- struct atmel_uart_port {
- 	struct uart_port	uart;		/* uart */
- 	struct clk		*clk;		/* uart clock */
-+	struct clk		*gclk;		/* uart generic clock */
- 	int			may_wakeup;	/* cached value of device_may_wakeup for times we need to disable it */
- 	u32			backup_imr;	/* IMR saved during suspend */
- 	int			break_active;	/* break being received */
-@@ -2115,6 +2119,8 @@ static void atmel_serial_pm(struct uart_port *port, unsigned int state,
- 		 * This is called on uart_close() or a suspend event.
- 		 */
- 		clk_disable_unprepare(atmel_port->clk);
-+		if (atmel_port->gclk && __clk_is_enabled(atmel_port->gclk))
-+			clk_disable_unprepare(atmel_port->gclk);
- 		break;
- 	default:
- 		dev_err(port->dev, "atmel_serial: unknown pm %d\n", state);
-@@ -2129,7 +2135,8 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- {
- 	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
- 	unsigned long flags;
--	unsigned int old_mode, mode, imr, quot, baud, div, cd, fp = 0;
-+	unsigned int old_mode, mode, imr, quot, div, cd, fp = 0;
-+	unsigned int baud, actual_baud, gclk_rate;
- 
- 	/* save the current mode register */
- 	mode = old_mode = atmel_uart_readl(port, ATMEL_US_MR);
-@@ -2288,6 +2295,37 @@ static void atmel_set_termios(struct uart_port *port, struct ktermios *termios,
- 		cd /= 8;
- 		mode |= ATMEL_US_USCLKS_MCK_DIV8;
- 	}
-+
-+	/*
-+	 * If there is no Fractional Part, there is a high chance that
-+	 * we may be able to generate a baudrate closer to the desired one
-+	 * if we use the GCLK as the clock source driving the baudrate
-+	 * generator.
-+	 */
-+	if (!fp && atmel_port->gclk) {
-+		if (__clk_is_enabled(atmel_port->gclk))
-+			clk_disable_unprepare(atmel_port->gclk);
-+		clk_set_rate(atmel_port->gclk, 16 * baud);
-+		gclk_rate = clk_get_rate(atmel_port->gclk);
-+		actual_baud = clk_get_rate(atmel_port->clk) / (16 * cd);
-+		if (abs(ERROR_RATE(baud, actual_baud)) >
-+		    abs(ERROR_RATE(baud, gclk_rate / 16))) {
-+			mode |= ATMEL_US_GCLK;
-+
-+			/*
-+			 * Set the Clock Divisor for GCLK to 1.
-+			 * Since we were able to generate the smallest
-+			 * multiple of the desired baudrate times 16,
-+			 * then we surely can generate a bigger multiple
-+			 * with the exact error rate for an equally increased
-+			 * CD. Thus no need to take into account
-+			 * a higher value for CD.
-+			 */
-+			cd = 1;
-+			clk_prepare_enable(atmel_port->gclk);
-+		}
-+	}
-+
- 	quot = cd | fp << ATMEL_US_FP_OFFSET;
- 
- 	if (!(port->iso7816.flags & SER_ISO7816_ENABLED))
-@@ -2883,6 +2921,16 @@ static int atmel_serial_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err;
- 
-+	atmel_port->gclk = devm_clk_get_optional(&pdev->dev, "gclk");
-+	if (atmel_port->gclk) {
-+		ret = clk_prepare_enable(atmel_port->gclk);
-+		if (ret) {
-+			atmel_port->gclk = NULL;
-+			return ret;
-+		}
-+		clk_disable_unprepare(atmel_port->gclk);
-+	}
-+
- 	ret = atmel_init_port(atmel_port, pdev);
- 	if (ret)
- 		goto err_clk_disable_unprepare;
-@@ -2929,6 +2977,8 @@ static int atmel_serial_probe(struct platform_device *pdev)
- 	 * is used
- 	 */
- 	clk_disable_unprepare(atmel_port->clk);
-+	if (atmel_port->gclk && __clk_is_enabled(atmel_port->gclk))
-+		clk_disable_unprepare(atmel_port->gclk);
- 
- 	return 0;
- 
-diff --git a/drivers/tty/serial/atmel_serial.h b/drivers/tty/serial/atmel_serial.h
-index 0d8a0f9cc5c3..fb718972f81a 100644
---- a/drivers/tty/serial/atmel_serial.h
-+++ b/drivers/tty/serial/atmel_serial.h
-@@ -63,6 +63,7 @@
- #define		ATMEL_US_PAR_MARK		(3 <<  9)
- #define		ATMEL_US_PAR_NONE		(4 <<  9)
- #define		ATMEL_US_PAR_MULTI_DROP		(6 <<  9)
-+#define ATMEL_US_GCLK                          BIT(12)
- #define	ATMEL_US_NBSTOP		GENMASK(13, 12)	/* Number of Stop Bits */
- #define		ATMEL_US_NBSTOP_1		(0 << 12)
- #define		ATMEL_US_NBSTOP_1_5		(1 << 12)
--- 
-2.25.1
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
