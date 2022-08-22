@@ -2,104 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D190C59BF59
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Aug 2022 14:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7326F59BF5E
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Aug 2022 14:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiHVMPu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Aug 2022 08:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
+        id S233496AbiHVMRK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Aug 2022 08:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235019AbiHVMPh (ORCPT
+        with ESMTP id S234207AbiHVMRJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:15:37 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B221E2F009;
-        Mon, 22 Aug 2022 05:15:34 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1661170507t880wh30
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 22 Aug 2022 20:15:05 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: /rrU+puPB7Q5buPq1+M8oaz3Bq6YwZZRDTWvvdwm6oGCfZP5AXY7eTvHBMQIR
-        J/rXVNBkRjy39pjT5d4PDcjzXZY3NKFk9gFWOA3x2IkJvuc1mOrFd2sE9aa6j+PJnmYmDFI
-        tU1oYxwzpMvpFSMNzcam2vnnP15Cox5MeE90qcEZ3GCf1cqFd3RS7DVmG8WVh0Lu/zKblPl
-        sKuqQJMmVWF3Lz4szgxF8ImQqEawq2tT0EviPRRMBX01ffnsfxcCcm+qUcJpNoZM63OHfXT
-        CaaPTOjbpXWA+G8eLlFPWcUgAatV7zKoyAfsG/nRY04+40B7CEoDgPN4DaznM31ka3AJKnN
-        1DhqnDlmQP7eJDUgTqlp5QYex1axvDK6OmnGs4I2INshdNziUmJ68xxVs61H7rYaiKLvWnM
-        tpVR1th89IE=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        colin.king@intel.com
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] serial/jsm: fix repeated words in comments
-Date:   Mon, 22 Aug 2022 20:14:57 +0800
-Message-Id: <20220822121457.21004-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 22 Aug 2022 08:17:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FB332046;
+        Mon, 22 Aug 2022 05:17:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB91FB81132;
+        Mon, 22 Aug 2022 12:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C999BC433C1;
+        Mon, 22 Aug 2022 12:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661170626;
+        bh=oWVM7idOqW4dR8gZgi5tDWNec1Qi+DE4xGa4+wIhJ+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RGnw2o5Mit1URHScHlF+Uf2BUBd3SEenSS5PaII1Ijo/TnhSrjb2HfXDQS7V8JCvM
+         uEmZGyvhdJ0zegqac9UsdphxW2Iey8d/3F/eUuvFhTtD8ryQZae+YoU1/T+uB7mox0
+         DjjiKBpVczWDCf/80lD5+7fVZ8Vya32iP1FoLEuU=
+Date:   Mon, 22 Aug 2022 14:17:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     jirislaby@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH] tty/serial: fix repeated words in comments
+Message-ID: <YwNzv6GXPTG46D3r@kroah.com>
+References: <20220822120901.17913-1-yuanjilin@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
-        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822120901.17913-1-yuanjilin@cdjrlc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [43.154.54.12 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
- Delete the redundant word 'way'.
+On Mon, Aug 22, 2022 at 08:09:01PM +0800, Jilin Yuan wrote:
+>  Delete the redundant word 'power'.
+>  Delete the redundant word 'long'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> ---
+>  drivers/tty/serial/imx.c         | 2 +-
+>  drivers/tty/serial/samsung_tty.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index 30edb35a6a15..c72e0dad3544 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -2069,7 +2069,7 @@ imx_uart_console_get_options(struct imx_port *sport, int *baud,
+>  		{	/*
+>  			 * The next code provides exact computation of
+>  			 *   baud_raw = round(((uartclk/16) * (ubir + 1)) / (ubmr + 1))
+> -			 * without need of float support or long long division,
+> +			 * without need of float support or long division,
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/tty/serial/jsm/jsm_cls.c | 2 +-
- drivers/tty/serial/jsm/jsm_neo.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The original is correct here.
 
-diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
-index 3fd57ac3ad81..8c2f0038db53 100644
---- a/drivers/tty/serial/jsm/jsm_cls.c
-+++ b/drivers/tty/serial/jsm/jsm_cls.c
-@@ -403,7 +403,7 @@ static void cls_copy_data_from_uart_to_queue(struct jsm_channel *ch)
- 		/*
- 		 * If our queue is full, we have no choice but to drop some
- 		 * data. The assumption is that HWFLOW or SWFLOW should have
--		 * stopped things way way before we got to this point.
-+		 * stopped things way before we got to this point.
- 		 *
- 		 * I decided that I wanted to ditch the oldest data first,
- 		 * I hope thats okay with everyone? Yes? Good.
-diff --git a/drivers/tty/serial/jsm/jsm_neo.c b/drivers/tty/serial/jsm/jsm_neo.c
-index 0c78f66276cd..e12dcb5f03ec 100644
---- a/drivers/tty/serial/jsm/jsm_neo.c
-+++ b/drivers/tty/serial/jsm/jsm_neo.c
-@@ -433,7 +433,7 @@ static void neo_copy_data_from_uart_to_queue(struct jsm_channel *ch)
- 		/*
- 		 * If our queue is full, we have no choice but to drop some data.
- 		 * The assumption is that HWFLOW or SWFLOW should have stopped
--		 * things way way before we got to this point.
-+		 * things way before we got to this point.
- 		 *
- 		 * I decided that I wanted to ditch the oldest data first,
- 		 * I hope thats okay with everyone? Yes? Good.
--- 
-2.36.1
+>  			 * which would be required to prevent 32bit arithmetic overflow
+>  			 */
+>  			unsigned int mul = ubir + 1;
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index d5ca904def34..af799b79ba25 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -1353,7 +1353,7 @@ static int apple_s5l_serial_startup(struct uart_port *port)
+>  	return ret;
+>  }
+>  
+> -/* power power management control */
+> +/* power management control */
 
+Are you sure this isn't also correct?
+
+greg k-h
