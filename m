@@ -2,41 +2,43 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0142959BF42
-	for <lists+linux-serial@lfdr.de>; Mon, 22 Aug 2022 14:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F3859BF4A
+	for <lists+linux-serial@lfdr.de>; Mon, 22 Aug 2022 14:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbiHVMHX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 Aug 2022 08:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
+        id S234943AbiHVMJw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 22 Aug 2022 08:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234862AbiHVMHW (ORCPT
+        with ESMTP id S234941AbiHVMJt (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:07:22 -0400
+        Mon, 22 Aug 2022 08:09:49 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750339BBC;
-        Mon, 22 Aug 2022 05:07:21 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1661170001txl6mzdn
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AACA3A485
+        for <linux-serial@vger.kernel.org>; Mon, 22 Aug 2022 05:09:47 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1661170150tizb7q9p
 Received: from localhost.localdomain ( [182.148.14.124])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 22 Aug 2022 20:06:39 +0800 (CST)
+        id ; Mon, 22 Aug 2022 20:09:08 +0800 (CST)
 X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: CR3LFp2JE4m1XgG8B6AP/kJtqaE0mJj6j7qwJI03u6WS7tx5jEQ2pm9PxITr5
-        rbUSKzKwoz9OWwCOsRVzPKH36fxal0QFN/sqdebBghyMp1Bp+Kj3R5km95KemhjB6U/boD/
-        UQBRkll3ZbAylv4awr24cisZa8GpgLqEiv7wTa3Ewg+phDdDL91k4p44Q5gV+1y99j1e4Mb
-        wi503zQyMBObcvvSDnpXSCWTPmCucWpDIa72G4+/TId8GNoVgWtPXxgrXm+seJCedOSU2Cc
-        Ykfta4mlJxUp6aNoX7MDEZaLSLOWI8Fp4lRdcX7snQGoiRyUmsdVuSdQaWCftUskXNuEqJg
-        P7XjUtycrAEI7o4gS1P0WeDP22/3cOWX7LAop5wo6Xr/hJ9AOwnL2bwUunLdQ==
+X-QQ-FEAT: J5JfekO1WsjqZ9Csd1xMP8RiLXNCg6N05x9timq6hi6m6FxQ7t81A1rQPp8mO
+        pp0j2b89NGZLsTJsSEz2j+fbfVZ2IynUbhPo0xvT38blLo3I8iZWr/MPsuWMqtLKZs4kyqv
+        mw/3+OULHPpVGQk2SHg6k0uS+8FE0ZCbgTZY3DMXoKYDmHSoCHIgru2RrPTPIKHoIb/wh2+
+        FrD5pVGNwS9epJXtOvUF4aaEhLXd3EcU1vv0N7dNnCcfO+E56UFiLqhwnPk8AGmFcg91xk3
+        vr7h/EUdFSx5L+P/v3OxBwVJKpH+KVTmhrHbFvO6Cszy6PXmdBY6Xi42u2A9XkCkdawHlsD
+        /flw6msX6EyQi159wsGsxqj0mukGWbWOd4Y6XUYIyScYWEKGiEn5v7z5IAXqiZFZHPbxt2W
+        jwZYAkypJPs=
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
 To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] tty/seria: fix repeated words in comments
-Date:   Mon, 22 Aug 2022 20:06:33 +0800
-Message-Id: <20220822120633.16753-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] tty/serial: fix repeated words in comments
+Date:   Mon, 22 Aug 2022 20:09:01 +0800
+Message-Id: <20220822120901.17913-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,14 +53,14 @@ X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
         *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
         *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
         *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
         *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
         * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
         *      [score: 0.0000]
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
         * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [43.154.54.12 listed in wl.mailspike.net]
         * -0.0 T_SCC_BODY_TEXT_LINE No description available.
 X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,41 +69,41 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
- Delete the redundant word 'as'.
- Delete the redundant word 'the'.
+ Delete the redundant word 'power'.
+ Delete the redundant word 'long'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/tty/serial/fsl_lpuart.c | 2 +-
- drivers/tty/serial/kgdboc.c     | 2 +-
+ drivers/tty/serial/imx.c         | 2 +-
+ drivers/tty/serial/samsung_tty.c | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 0d6e62f6bb07..fff4fa8d73ca 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2787,7 +2787,7 @@ static int __maybe_unused lpuart_suspend(struct device *dev)
- 		 * EDMA driver during suspend will forcefully release any
- 		 * non-idle DMA channels. If port wakeup is enabled or if port
- 		 * is console port or 'no_console_suspend' is set the Rx DMA
--		 * cannot resume as as expected, hence gracefully release the
-+		 * cannot resume as expected, hence gracefully release the
- 		 * Rx DMA path before suspend and start Rx DMA path on resume.
- 		 */
- 		if (irq_wake) {
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 79b7db8580e0..a471fc132acb 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -343,7 +343,7 @@ static int param_set_kgdboc_var(const char *kmessage,
- 	 * Configure with the new params as long as init already ran.
- 	 * Note that we can get called before init if someone loads us
- 	 * with "modprobe kgdboc kgdboc=..." or if they happen to use the
--	 * the odd syntax of "kgdboc.kgdboc=..." on the kernel command.
-+	 * odd syntax of "kgdboc.kgdboc=..." on the kernel command.
- 	 */
- 	if (configured >= 0)
- 		ret = configure_kgdboc();
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 30edb35a6a15..c72e0dad3544 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -2069,7 +2069,7 @@ imx_uart_console_get_options(struct imx_port *sport, int *baud,
+ 		{	/*
+ 			 * The next code provides exact computation of
+ 			 *   baud_raw = round(((uartclk/16) * (ubir + 1)) / (ubmr + 1))
+-			 * without need of float support or long long division,
++			 * without need of float support or long division,
+ 			 * which would be required to prevent 32bit arithmetic overflow
+ 			 */
+ 			unsigned int mul = ubir + 1;
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index d5ca904def34..af799b79ba25 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -1353,7 +1353,7 @@ static int apple_s5l_serial_startup(struct uart_port *port)
+ 	return ret;
+ }
+ 
+-/* power power management control */
++/* power management control */
+ 
+ static void s3c24xx_serial_pm(struct uart_port *port, unsigned int level,
+ 			      unsigned int old)
 -- 
 2.36.1
 
