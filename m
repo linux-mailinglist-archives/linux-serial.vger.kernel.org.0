@@ -2,90 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F6E59D157
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Aug 2022 08:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE5959D5BA
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Aug 2022 11:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240676AbiHWGaS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Aug 2022 02:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S241532AbiHWIsc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Aug 2022 04:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240660AbiHWGaO (ORCPT
+        with ESMTP id S1346279AbiHWIrg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Aug 2022 02:30:14 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Aug 2022 23:30:12 PDT
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D9D5FF42
-        for <linux-serial@vger.kernel.org>; Mon, 22 Aug 2022 23:30:12 -0700 (PDT)
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202208230624070742ebb610803435a2
-        for <linux-serial@vger.kernel.org>;
-        Tue, 23 Aug 2022 08:29:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=yrhprMDTlGL4plZ3xVQSKewwsGW84oYrlZ/o+UkYd40=;
- b=T66vzWwTQYCS/dpWOxW1+UKUvi2PHm9vChyFSVHBhw8LKY76bcJ2zRaRSmLVQUGiiNFpVN
- xX0ipuwSOIhDZC2CjXRfVwhVzO33WOVlWlBKM+nt9+taN5K6vuzUBdPRiO/JCFlK0nwHCs5E
- iiBuWZ7CsaI6mt4zLIPg65OCWES0c=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v2 6/6] tty: n_gsm: add debug bit for user payload
-Date:   Tue, 23 Aug 2022 08:22:59 +0200
-Message-Id: <20220823062259.4754-6-daniel.starke@siemens.com>
-In-Reply-To: <20220823062259.4754-1-daniel.starke@siemens.com>
-References: <20220823062259.4754-1-daniel.starke@siemens.com>
+        Tue, 23 Aug 2022 04:47:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9587C184
+        for <linux-serial@vger.kernel.org>; Tue, 23 Aug 2022 01:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661242907; x=1692778907;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=MylI7XOBn/b5O/7vdOnXg859J9QFJyAdC86rcBlOZsw=;
+  b=RvVFiD121Ti90HqFDfUX8snXdl/7ad5caF8JrETPQgIbs1L9ainwTkbe
+   ZhVOw9Kp++HTK4aunmDnUt05jHGFTsyuIoMXcih1SATjb9LYJGqCIRuxk
+   Ha5ftvQte4g46fB79dQnmgbEqrUMJAExI7r2MTz8c/iRyfDLS6U2cC01w
+   UhWkQrsuT/rGZWEHOclBuTcy8pxUwOofw3kTWJMqggivH98/WjV6uQ9gN
+   iXTIEOTJLs6SYvW/tQ5Mg9YmJscrGgu5LYfk74+peTaVp9aTSoZMUVPnL
+   /qRuddI1b0GfmbkNWGuxlAk2SMPayERoi5ejwycckp6QLt0XuSeqdPvOP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="274010458"
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="274010458"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 01:19:13 -0700
+X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
+   d="scan'208";a="638556695"
+Received: from kimtingt-mobl.gar.corp.intel.com ([10.252.42.4])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 01:19:10 -0700
+Date:   Tue, 23 Aug 2022 11:19:02 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH 0/8] tty/serial: Convert ->set_termios() related callchains
+ to const old ktermios
+In-Reply-To: <alpine.DEB.2.21.2208202144450.36368@angie.orcam.me.uk>
+Message-ID: <14ce34f-d67-b0ec-753c-8285e85cc473@linux.intel.com>
+References: <20220816115739.10928-1-ilpo.jarvinen@linux.intel.com> <CAHp75VeDnT3q9kZMd0H_PXK-2pyhwke6FwOh+-5=RtubjLzsiw@mail.gmail.com> <6368fa4b-4232-9e2c-24e3-70115af88d2e@linux.intel.com> <alpine.DEB.2.21.2208202144450.36368@angie.orcam.me.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1735757789-1661242752=:1608"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-A debug bit to output a complete transmission dump exists. Sometimes only
-the user frames are relevant. Add an additional bit which limits the
-transmission dump output to user data frames if set.
+--8323329-1735757789-1661242752=:1608
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On Sat, 20 Aug 2022, Maciej W. Rozycki wrote:
 
-No changes since v1.
+> On Thu, 18 Aug 2022, Ilpo Järvinen wrote:
+> 
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > for all, but patch 3.
+> > > 
+> > > I'm not sure we can blindly use old_termios settings, is there any
+> > > guarantee that old_termios _always_ has a correct baud rate settings?
+> > 
+> > Old_termios is just the previous termios the port was using. If the 
+> > baudrate in termios was invalid already by then, it's another issue that 
+> > should be fixed (but I cannot see how that could occur assuming the 
+> > validation works).
+> > 
+> > How could it get wrong baud rate settings if the kernel sets (old_)termios 
+> > (earlier) through these same paths (which validated it)?
+> 
+>  If the old baud rate in termios was invalid, then we would just resort to 
+> 9600 baud, so I wouldn't be concerned here as we need to set the baud rate 
+> to something anyway.
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index fcf2d52d5095..f3f0668f0a73 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -69,6 +69,7 @@ module_param(debug, int, 0600);
- #define DBG_DATA	(1 << 2) /* Data transmission details. */
- #define DBG_ERRORS	(1 << 3) /* Details for fail conditions. */
- #define DBG_TTY		(1 << 4) /* Transmission statistics for DLCI TTYs. */
-+#define DBG_PAYLOAD	(1 << 5) /* Limits DBG_DUMP to payload frames. */
- 
- /* Defaults: these are from the specification */
- 
-@@ -598,6 +599,10 @@ static void gsm_print_packet(const char *hdr, int addr, int cr,
- {
- 	if (!(debug & DBG_DUMP))
- 		return;
-+	/* Only show user payload frames if debug & DBG_PAYLOAD */
-+	if (!(debug & DBG_PAYLOAD) && addr != 0)
-+		if ((control & ~PF) == UI || (control & ~PF) == UIH)
-+			return;
- 
- 	pr_info("%s %d) %c: ", hdr, addr, "RC"[cr]);
- 
+I still assert that old baud rate should never be "invalid". When it was 
+set (earlier) through dz_set_termios(), it got validated and invalid 
+ones were corrected. I think a valid baud rate in tty->termios is an 
+invariant we just maintain on each call to dz_set_termios().
+
+> My only concern is whether `tty_termios_baud_rate' 
+> can ever return 0 for `old_termios', which would of course never happen 
+> with `uart_get_baud_rate'.
+
+dz_encode_baud_rate() disallows 0 as baud rate. I don't understand what 
+you're trying to say here.
+
+> But new code seems to me to be doing the right thing anyway.  That is if 
+> we're getting out of a hangup (which we don't currently handle with the 
+> modem lines anyway, but that's quite a different and complex matter) with 
+> an invalid baud rate, then we'll fail to encode it, then fail to encode 0, 
+> and finally resort to 9600 baud and write it back to `termios'.  So we'll 
+> get out of a hangup with a baud rate different to one requested, but that 
+> is as much as we can do in that case: we have fulfilled the request the 
+> best we could and `uart_get_baud_rate' would set the rate to 9600 baud 
+> anyway.
+
+This I kind of agree with but given the precondition where 0 baud rate is 
+always rejected by dz_encode_baud_rate(), I don't think this scenario can 
+materialize at all?
+
+>  Given the observation above I have acked your patch.  Perhaps you could 
+> put some of the analysis above into the change description.
+> 
+>   Maciej
+> 
+
 -- 
-2.34.1
+ i.
 
+--8323329-1735757789-1661242752=:1608--
