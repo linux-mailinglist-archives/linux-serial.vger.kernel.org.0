@@ -2,87 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FE559E7EB
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Aug 2022 18:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F4D59E91B
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Aug 2022 19:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245414AbiHWQu4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 23 Aug 2022 12:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S231414AbiHWRWU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 23 Aug 2022 13:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245736AbiHWQua (ORCPT
+        with ESMTP id S238923AbiHWRVB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:50:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC82C6940;
-        Tue, 23 Aug 2022 07:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661264352; x=1692800352;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PsOi3fbzWr8P5Muv3jMlM40nS/z+63mGM4QBzrU8bew=;
-  b=MysyLZh2i0qpIHpeo5F1aAqv69fFsyeMvJi4HNqzyWGadYeKeq6uIIdE
-   n4u0GpUx6IlOeEAiOK+yxPsSqWOIRXdxko4aUqRfu0MasiRV57rpws7L9
-   1M56ORV4qv/A0PCrQej95rEspknqEhtoQ/Bsjf41IjQGuReTpOLmOwp5x
-   oRU2fI2uTpoBgKSmUD9pbmy7aVwWZqdc3h0zdF2xGi+g5npcV+wPw6+/O
-   K6ioKoTW1hV3UlM4VdbD7pQ8J3Xdh96WjZ72W3e8TLiKYQ3hTYhPrRPw1
-   SakL2Ymd9AYGtdxjmZ2Wh/+gMUpDr0rZMdZ5WN+G6pUrVvYUE17qKNVJm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="276723953"
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="276723953"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:18:57 -0700
-X-IronPort-AV: E=Sophos;i="5.93,257,1654585200"; 
-   d="scan'208";a="638671449"
-Received: from kimtingt-mobl.gar.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.42.4])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 07:18:54 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+        Tue, 23 Aug 2022 13:21:01 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4016EF5AA;
+        Tue, 23 Aug 2022 07:57:04 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id a133so8510491oif.4;
+        Tue, 23 Aug 2022 07:57:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SMkQGb2meOHqQ3XeuH36b0daZ7EGL7C2+BlU5YxZCws=;
+        b=BalsLBBIERJdDuCeO4DwxpP/RH9FZqlgn78d2w2hGal7f3K1BFaJMX/8lREUB0ZzjR
+         BPhjSIavpN4jbod0ogx071dN8crIiFYbN5xucVPLCjj4pvK1eNQ5osTsRTSPmxdP9mt1
+         Oagaz7Js3GPCQRfxfGlFuVy/eZ/mvG43nRYq439jlGdQoiExSR8A3Oo0Zz5UD/UVXvDw
+         eB7EKOqdVAjtqkfO+elxG0gn5NTEUbKj1x8IlXgVHUfZds5/qXJjeSNCspcIG9DlgipX
+         RVWtmP02iGWrLmp/DFE63u6If3AeZvsaeEEwpWjb/T4jzxJ0vZ82Ya3c3lGm4IsBvh3v
+         3WRg==
+X-Gm-Message-State: ACgBeo3TJAK6dm2uhKb85FFEHqOjP7bZ3I2pweDy9qKDjykDJp4xw4aA
+        4CKZKec6k2AaPGw43lJ/0w==
+X-Google-Smtp-Source: AA6agR6xzWvGgZqYd3x7xuRg7BZuL+v+Yucp3s++eMMwthXLGw+y7H/8hoYXfp6Y4J0eX+e/+z87/Q==
+X-Received: by 2002:a05:6808:1a06:b0:343:290e:813e with SMTP id bk6-20020a0568081a0600b00343290e813emr1456943oib.256.1661266623521;
+        Tue, 23 Aug 2022 07:57:03 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id t1-20020a056870600100b0011c65559b04sm3840637oaa.34.2022.08.23.07.57.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 07:57:03 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 3/3] serial: pch_uart: CIRC_CNT_TO_END() is enough
-Date:   Tue, 23 Aug 2022 17:18:39 +0300
-Message-Id: <20220823141839.165244-3-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220823141839.165244-1-ilpo.jarvinen@linux.intel.com>
-References: <20220823141839.165244-1-ilpo.jarvinen@linux.intel.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: serial: samsung: Add 'power-domains' property
+Date:   Tue, 23 Aug 2022 09:56:32 -0500
+Message-Id: <20220823145649.3118479-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Testing also CIRC_CNT() with CIRC_CNT_TO_END() is unnecessary because
-to latter alone covers all necessary cases.
+Some Samsung UARTs are in a power domain, so allow 'power-domains'
+property.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/tty/serial/pch_uart.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ Documentation/devicetree/bindings/serial/samsung_uart.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index 8a9065e4a903..116a2e76093d 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -898,9 +898,7 @@ static unsigned int dma_handle_tx(struct eg20t_port *priv)
- 		fifo_size--;
- 	}
+diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+index 901c1e2cea28..d20f77c44dfd 100644
+--- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
++++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+@@ -69,6 +69,9 @@ properties:
+     minItems: 1
+     maxItems: 2
  
--	bytes = min((int)CIRC_CNT(xmit->head, xmit->tail,
--			     UART_XMIT_SIZE), CIRC_CNT_TO_END(xmit->head,
--			     xmit->tail, UART_XMIT_SIZE));
-+	bytes = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
- 	if (!bytes) {
- 		dev_dbg(priv->port.dev, "%s 0 bytes return\n", __func__);
- 		pch_uart_hal_disable_interrupt(priv, PCH_UART_HAL_TX_INT);
++  power-domains:
++    maxItems: 1
++
+   samsung,uart-fifosize:
+     description: The fifo size supported by the UART channel.
+     $ref: /schemas/types.yaml#/definitions/uint32
 -- 
-2.30.2
+2.34.1
 
