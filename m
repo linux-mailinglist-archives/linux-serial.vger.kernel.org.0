@@ -2,34 +2,34 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829845A5E8F
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Aug 2022 10:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834CC5A5EA8
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Aug 2022 10:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiH3Ito (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 30 Aug 2022 04:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S230315AbiH3Iw6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 30 Aug 2022 04:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiH3Itl (ORCPT
+        with ESMTP id S231768AbiH3Iwd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:49:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF98B99D2;
-        Tue, 30 Aug 2022 01:49:39 -0700 (PDT)
+        Tue, 30 Aug 2022 04:52:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6AF9A967;
+        Tue, 30 Aug 2022 01:52:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A77CFB81887;
-        Tue, 30 Aug 2022 08:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C9BBC433D7;
-        Tue, 30 Aug 2022 08:49:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C35ABB81888;
+        Tue, 30 Aug 2022 08:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE725C433D7;
+        Tue, 30 Aug 2022 08:52:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661849377;
-        bh=y+1MMFa8GkCF5J8xOBa4wpAmNDUFKU7en8TBxW//a4E=;
+        s=korg; t=1661849542;
+        bh=GfTk307VAPbulMgNaAUsMDt2ahKUcbPofgSTa8PhAiQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bf1YtPs307mo8lMrBvPJ8JYzsN4hPwgTGnjeruF2ZT+1HYnd27ANo4lCmBvYw6VuQ
-         2XxLEk1UupnJaBo6WfhMPaUkQ7okqnaaO9IlK6tMeOhVGHNOJT8Nvn6H+iLkIHrqoI
-         YzbnTxjGWzGZRSZHOSZBz4hrQkidgYl3DUpQ/ghA=
-Date:   Tue, 30 Aug 2022 10:49:34 +0200
+        b=DyAjFc9HC2ltJIBwtejCLHGP0+sh4+HuJH4YfCl6P8VLxiBLSdh4bYf4KeN7al3lV
+         5PLJQlBjMnWL25yCyRqMVhzRZ3gM02EAmzOaeMviC4al0M8ZWWAUGB8MNMawubTwtT
+         eF2q9bnUCiff/VsE6cHX2ADN9bnv18PGyeNm8ssg=
+Date:   Tue, 30 Aug 2022 10:52:19 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
@@ -54,7 +54,7 @@ Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
         Lino Sanfilippo <LinoSanfilippo@gmx.de>
 Subject: Re: [PATCH v2 4/4] serial: Add kserial_rs485 to avoid wasted space
  due to .padding
-Message-ID: <Yw3PHg0imhJyb9sf@kroah.com>
+Message-ID: <Yw3Pw9kwDDKXuqC+@kroah.com>
 References: <20220830072956.3630-1-ilpo.jarvinen@linux.intel.com>
  <20220830072956.3630-5-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
@@ -73,41 +73,44 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 On Tue, Aug 30, 2022 at 10:29:56AM +0300, Ilpo Järvinen wrote:
-> The struct serial_rs485 has a .padding field to make uapi updates
-> easier. It wastes space, however. Create struct kserial_rs485 which is
-> a kerner counterpart w/o padding.
+> -static int serial_rs485_from_user(struct serial_rs485 *rs485,
+> +static int serial_rs485_from_user(struct kserial_rs485 *rs485,
+>  				  const struct serial_rs485 __user *rs485_user)
+>  {
+> -	if (copy_from_user(rs485, rs485_user, sizeof(*rs485)))
+> +	struct serial_rs485 rs485_uapi;
+> +
+> +	if (copy_from_user(&rs485_uapi, rs485_user, sizeof(*rs485)))
+>  		return -EFAULT;
+>  
+> +	*rs485 = *((struct kserial_rs485 *)&rs485_uapi);
 
-"kernel"?
+Ah, you are mapping this on top of the existing structure, so there was
+no padding in the original one, why say that?
 
-And what is the size difference now?
+> +/*
+> + * Compile-time asserts for struct kserial_rs485 and struct serial_rs485 equality
+> + * (except padding).
 
-> +/**
-> + * struct kserial_rs485 - kernel-side struct for controlling RS485 settings.
-> + * @flags:			RS485 feature flags
-> + * @delay_rts_before_send:	Delay before send (milliseconds)
-> + * @delay_rts_after_send:	Delay after send (milliseconds)
-> + * @addr_recv:			Receive filter for RS485 addressing mode
-> + *				(used only when %SER_RS485_ADDR_RECV is set).
-> + * @addr_dest:			Destination address for RS485 addressing mode
-> + *				(used only when %SER_RS485_ADDR_DEST is set).
-> + *
-> + * Must match with struct serial_rs485 in include/uapi/linux/serial.h excluding
-> + * the padding.
-
-Why must this match?  And how is that going to be enforced?
+This does not take into account any padding, in fact it's the opposite
+as all of this:
 
 > + */
-> +struct kserial_rs485 {
-> +	__u32	flags;
-> +	__u32	delay_rts_before_send;
-> +	__u32	delay_rts_after_send;
-> +	struct {
-> +		__u8    addr_recv;
-> +		__u8    addr_dest;
-> +	};
+> +static_assert(offsetof(struct kserial_rs485, flags) ==
+> +	      offsetof(struct serial_rs485, flags));
+> +static_assert(offsetof(struct kserial_rs485, delay_rts_before_send) ==
+> +	      offsetof(struct serial_rs485, delay_rts_before_send));
+> +static_assert(offsetof(struct kserial_rs485, delay_rts_after_send) ==
+> +	      offsetof(struct serial_rs485, delay_rts_after_send));
+> +static_assert(offsetof(struct kserial_rs485, addr_recv) ==
+> +	      offsetof(struct serial_rs485, addr_recv));
+> +static_assert(offsetof(struct kserial_rs485, addr_dest) ==
+> +	      offsetof(struct serial_rs485, addr_dest));
+> +static_assert(sizeof(struct kserial_rs485) <= sizeof(struct serial_rs485));
 
-As this is an in-kernel structure, this should be "u32" and "u8" now.
+Is there to ensure that the offsets are exactly the same, no padding
+involved anywhere.
 
-thanks,
+So I don't understand the problem you are trying to solve here,
 
 greg k-h
