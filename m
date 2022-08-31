@@ -2,38 +2,38 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31E5A77B2
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Aug 2022 09:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E158E5A7897
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Aug 2022 10:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiHaHki (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Aug 2022 03:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S231159AbiHaIM2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Aug 2022 04:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiHaHkg (ORCPT
+        with ESMTP id S230301AbiHaIM1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:40:36 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 00:40:30 PDT
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B0BB14D7
-        for <linux-serial@vger.kernel.org>; Wed, 31 Aug 2022 00:40:27 -0700 (PDT)
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202208310739247ab39d2019a4e13dd9
+        Wed, 31 Aug 2022 04:12:27 -0400
+X-Greylist: delayed 1983 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 01:12:26 PDT
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EA9BB00F
+        for <linux-serial@vger.kernel.org>; Wed, 31 Aug 2022 01:12:26 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202208310739217436e416de6187c483
         for <linux-serial@vger.kernel.org>;
-        Wed, 31 Aug 2022 09:39:24 +0200
+        Wed, 31 Aug 2022 09:39:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=nGvVUAIr6EVotI+lAvFGhAT1Y/xk9oR6QAFXkdDhLEw=;
- b=oZui0olsoyaKWY7sY/5bHi3zMsJicM6TzSPdIdIm3NgxLhoz8IU8gqcWDcHqtBzxpyKIQw
- ljw95J1G0F30ZF1feFaean/JYoLMtO3+D90EnCxSDV53kptic3fUOcb3DwpKyWynp9q6npC9
- u5FgaM+l7xBh+cqAva+9x280PeFYo=;
+ bh=26Dc7y6NWxeC2hFu/fC7SmDBkUmYDy6k4QE9Vjw2usY=;
+ b=oh59g8ea4m/iQCLUXttHs97Zi0xPTkZnJapKeJDJ2JX85CQ2H92HUMpoJ601IPUcvlg9Z4
+ u5CDyfLvRTq9aJmVL8WHcIkYdxUSnn7EDaUewax2YKK3oU4sSjGgAxVdxfORJwTHjRweg3eu
+ Zw68OOSdHytlXecjU7fgCk4KImPQI=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 6/6] tty: n_gsm: add debug bit for user payload
-Date:   Wed, 31 Aug 2022 09:38:00 +0200
-Message-Id: <20220831073800.7459-6-daniel.starke@siemens.com>
+Subject: [PATCH v3 2/6] tty: n_gsm: name gsm tty device minors
+Date:   Wed, 31 Aug 2022 09:37:56 +0200
+Message-Id: <20220831073800.7459-2-daniel.starke@siemens.com>
 In-Reply-To: <20220831073800.7459-1-daniel.starke@siemens.com>
 References: <20220831073800.7459-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -52,43 +52,42 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-A debug bit to output a complete transmission dump exists. Sometimes only
-the user frames are relevant. Add an additional bit which limits the
-transmission dump output to user data frames if set.
+Add a macro which defines the possible number of virtual devices for n_gsm
+to improve code readability.
 
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/tty/n_gsm.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Incorporated review comments from Jiri Slaby since v2:
-- changed (1 << n) to BIT(n) in the debug macro definitions
+Added reviewed-by line since v2. No other changes done.
 
-Link: https://lore.kernel.org/all/1d8d0d72-a5b7-724e-a70a-71d9fd3330c4@kernel.org/
+Link: https://lore.kernel.org/all/dae848f0-6817-a281-94b3-9d2b6f84c90d@kernel.org/
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index f8a8c4059907..6588b84eed96 100644
+index 3fa859a29317..813363825e54 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -69,6 +69,7 @@ module_param(debug, int, 0600);
- #define DBG_DATA	BIT(2) /* Data transmission details. */
- #define DBG_ERRORS	BIT(3) /* Details for fail conditions. */
- #define DBG_TTY		BIT(4) /* Transmission statistics for DLCI TTYs. */
-+#define DBG_PAYLOAD	BIT(5) /* Limits DBG_DUMP to payload frames. */
+@@ -164,6 +164,9 @@ struct gsm_dlci {
+ 	struct net_device *net; /* network interface, if created */
+ };
  
- /* Defaults: these are from the specification */
++/* Total number of supported devices */
++#define GSM_TTY_MINORS		256
++
+ /* DLCI 0, 62/63 are special or reserved see gsmtty_open */
  
-@@ -598,6 +599,10 @@ static void gsm_print_packet(const char *hdr, int addr, int cr,
- {
- 	if (!(debug & DBG_DUMP))
- 		return;
-+	/* Only show user payload frames if debug & DBG_PAYLOAD */
-+	if (!(debug & DBG_PAYLOAD) && addr != 0)
-+		if ((control & ~PF) == UI || (control & ~PF) == UIH)
-+			return;
+ #define NUM_DLCI		64
+@@ -3749,7 +3752,7 @@ static int __init gsm_init(void)
+ 		return status;
+ 	}
  
- 	pr_info("%s %d) %c: ", hdr, addr, "RC"[cr]);
- 
+-	gsm_tty_driver = tty_alloc_driver(256, TTY_DRIVER_REAL_RAW |
++	gsm_tty_driver = tty_alloc_driver(GSM_TTY_MINORS, TTY_DRIVER_REAL_RAW |
+ 			TTY_DRIVER_DYNAMIC_DEV | TTY_DRIVER_HARDWARE_BREAK);
+ 	if (IS_ERR(gsm_tty_driver)) {
+ 		pr_err("gsm_init: tty allocation failed.\n");
 -- 
 2.34.1
 
