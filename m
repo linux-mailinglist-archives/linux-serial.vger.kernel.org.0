@@ -2,45 +2,47 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573865A77AF
-	for <lists+linux-serial@lfdr.de>; Wed, 31 Aug 2022 09:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43935A77B3
+	for <lists+linux-serial@lfdr.de>; Wed, 31 Aug 2022 09:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiHaHkg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 Aug 2022 03:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S230086AbiHaHki (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 Aug 2022 03:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiHaHkf (ORCPT
+        with ESMTP id S229686AbiHaHkg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:40:35 -0400
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 00:40:27 PDT
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24566AE226
-        for <linux-serial@vger.kernel.org>; Wed, 31 Aug 2022 00:40:25 -0700 (PDT)
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202208310739207086c9c8dbf85843da
+        Wed, 31 Aug 2022 03:40:36 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 00:40:28 PDT
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246E1AE23A
+        for <linux-serial@vger.kernel.org>; Wed, 31 Aug 2022 00:40:27 -0700 (PDT)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 202208310739222e3267e984d7690fcd
         for <linux-serial@vger.kernel.org>;
-        Wed, 31 Aug 2022 09:39:21 +0200
+        Wed, 31 Aug 2022 09:39:23 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=fki1t98PPbsC2wkUCa236sME2WYL7L7FXeFgWgV2Qwk=;
- b=g+P2vilhsh2t+KxUuZd/sSM9TGQ8vExkWne2zcRryaQZHUMDRrVMoWub2Nhl38FEVORO0Q
- El0OajqF7sF5JNJIDunZwYTUEJzKwurca3CwMZIBpc0bXm3kd5hnRmPYKx9HtO8+r2/vcC7y
- EPg4ByAXgVtOoVphqZmNkn03wML5w=;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=xPAHuyCcauRzXbU2F0wSMbyCkn9ZpPEPIcMeTRGYZX4=;
+ b=RcmqXxPyY3VqVsNVXTbfPf8J7fUnCgEgBxrG1ryuOhv+flTFlG0IkLZSL2rDN0l7WtKr+A
+ 329i7qK7y2CunAv4rjuBT7uj3HQZQgen7ThvZSSzdAtN2GTHLbKms8lBucvGspaULvduW31A
+ OK8YQD3+4Er+fpMr97mBlIgI0pnpE=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 1/6] tty: n_gsm: add enumeration for gsm encodings
-Date:   Wed, 31 Aug 2022 09:37:55 +0200
-Message-Id: <20220831073800.7459-1-daniel.starke@siemens.com>
+Subject: [PATCH v3 4/6] tty: n_gsm: introduce gsm_control_command() function
+Date:   Wed, 31 Aug 2022 09:37:58 +0200
+Message-Id: <20220831073800.7459-4-daniel.starke@siemens.com>
+In-Reply-To: <20220831073800.7459-1-daniel.starke@siemens.com>
+References: <20220831073800.7459-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Flowmailer-Platform: Siemens
 Feedback-ID: 519:519-314044:519-21489:flowmailer
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,142 +52,79 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-Add an enumeration for the gsm mux encoding types to improve code
-readability and to avoid invalid values. Only two values are defined by the
-standard:
-- basic option mode
-- advanced option mode (uses ISO HDLC standard transparency mechanism)
+Move the content of gsm_control_transmit() to a new function
+gsm_control_command() with a more generic signature and analog to
+gsm_control_reply(). Use this within gsm_control_transmit().
+
+This is needed to simplify upcoming functional additions.
 
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ drivers/tty/n_gsm.c | 33 ++++++++++++++++++++++++++-------
+ 1 file changed, 26 insertions(+), 7 deletions(-)
 
 Incorporated review comments from Jiri Slaby since v2:
-- removed exlicit cast from enum to int
-- removed unrelated removal of redundant assignment of gsm->encoding in
-  gsmld_open()
+- leading changed tab to space in function comment of gsm_control_command()
+- made function parameter data to const in gsm_control_command()
+- added extra line-feeds in gsm_control_command()
+- kept signess and constness of other parameters in gsm_control_command()
+  to align with gsm_control_reply() as stated in the commit message;
+  possible changes here are subject to a different commit which should
+  keep the changes in alignment to the signature of gsm_control_reply()
 
-Link: https://lore.kernel.org/all/3801995e-1eb5-1184-a9ba-2cec1d19bc58@kernel.org/
+Link: https://lore.kernel.org/all/fe014b7b-a1d2-9be9-625b-2f630934c56c@kernel.org/
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index caa5c14ed57f..3fa859a29317 100644
+index 9d0b4f79b65a..e050d76385ba 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -184,6 +184,11 @@ struct gsm_control {
- 	int error;	/* Error if any */
- };
+@@ -1316,6 +1316,31 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
+  */
  
-+enum gsm_encoding {
-+	GSM_BASIC_OPT,
-+	GSM_ADV_OPT,
-+};
+ 
++/**
++ * gsm_control_command	-	send a command frame to a control
++ * @gsm: gsm channel
++ * @cmd: the command to use
++ * @data: data to follow encoded info
++ * @dlen: length of data
++ *
++ * Encode up and queue a UI/UIH frame containing our command.
++ */
++static int gsm_control_command(struct gsm_mux *gsm, int cmd, const u8 *data,
++			       int dlen)
++{
++	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, dlen + 2, gsm->ftype);
 +
- enum gsm_mux_state {
- 	GSM_SEARCH,
- 	GSM_START,
-@@ -230,7 +235,7 @@ struct gsm_mux {
- 	unsigned int address;
- 	unsigned int count;
- 	bool escape;
--	int encoding;
-+	enum gsm_encoding encoding;
- 	u8 control;
- 	u8 fcs;
- 	u8 *txframe;			/* TX framing buffer */
-@@ -694,7 +699,7 @@ static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 	*dp++ = (addr << 2) | (ocr << 1) | EA;
- 	*dp++ = control;
++	if (msg == NULL)
++		return -ENOMEM;
++
++	msg->data[0] = (cmd << 1) | CR | EA;	/* Set C/R */
++	msg->data[1] = (dlen << 1) | EA;
++	memcpy(msg->data + 2, data, dlen);
++	gsm_data_queue(gsm->dlci[0], msg);
++
++	return 0;
++}
++
+ /**
+  *	gsm_control_reply	-	send a response frame to a control
+  *	@gsm: gsm channel
+@@ -1621,13 +1646,7 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
  
--	if (gsm->encoding == 0)
-+	if (gsm->encoding == GSM_BASIC_OPT)
- 		*dp++ = EA; /* Length of data = 0 */
+ static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
+ {
+-	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
+-	if (msg == NULL)
+-		return;
+-	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
+-	msg->data[1] = (ctrl->len << 1) | EA;
+-	memcpy(msg->data + 2, ctrl->data, ctrl->len);
+-	gsm_data_queue(gsm->dlci[0], msg);
++	gsm_control_command(gsm, ctrl->cmd, ctrl->data, ctrl->len);
+ }
  
- 	*dp = 0xFF - gsm_fcs_add_block(INIT_FCS, msg->data, dp - msg->data);
-@@ -813,7 +818,7 @@ static int gsm_send_packet(struct gsm_mux *gsm, struct gsm_msg *msg)
- 	int len, ret;
- 
- 
--	if (gsm->encoding == 0) {
-+	if (gsm->encoding == GSM_BASIC_OPT) {
- 		gsm->txframe[0] = GSM0_SOF;
- 		memcpy(gsm->txframe + 1, msg->data, msg->len);
- 		gsm->txframe[msg->len + 1] = GSM0_SOF;
-@@ -965,7 +970,7 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- 	u8 *fcs = dp + msg->len;
- 
- 	/* Fill in the header */
--	if (gsm->encoding == 0) {
-+	if (gsm->encoding == GSM_BASIC_OPT) {
- 		if (msg->len < 128)
- 			*--dp = (msg->len << 1) | EA;
- 		else {
-@@ -2508,7 +2513,7 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
- 	spin_lock_init(&gsm->control_lock);
- 	spin_lock_init(&gsm->tx_lock);
- 
--	if (gsm->encoding == 0)
-+	if (gsm->encoding == GSM_BASIC_OPT)
- 		gsm->receive = gsm0_receive;
- 	else
- 		gsm->receive = gsm1_receive;
-@@ -2618,7 +2623,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	gsm->n2 = N2;
- 	gsm->ftype = UIH;
- 	gsm->adaption = 1;
--	gsm->encoding = 1;
-+	gsm->encoding = GSM_ADV_OPT;
- 	gsm->mru = 64;	/* Default to encoding 1 so these should be 64 */
- 	gsm->mtu = 64;
- 	gsm->dead = true;	/* Avoid early tty opens */
-@@ -2719,7 +2724,7 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
- 	gsm->initiator = c->initiator;
- 	gsm->mru = c->mru;
- 	gsm->mtu = c->mtu;
--	gsm->encoding = c->encapsulation;
-+	gsm->encoding = c->encapsulation ? GSM_ADV_OPT : GSM_BASIC_OPT;
- 	gsm->adaption = c->adaption;
- 	gsm->n2 = c->n2;
- 
-@@ -2942,8 +2947,7 @@ static int gsmld_open(struct tty_struct *tty)
- 	tty->receive_room = 65536;
- 
- 	/* Attach the initial passive connection */
--	gsm->encoding = 1;
--
-+	gsm->encoding = GSM_ADV_OPT;
- 	gsmld_attach_gsm(tty, gsm);
- 
- 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
-@@ -3345,7 +3349,7 @@ static int gsm_modem_upd_via_msc(struct gsm_dlci *dlci, u8 brk)
- 	struct gsm_control *ctrl;
- 	int len = 2;
- 
--	if (dlci->gsm->encoding != 0)
-+	if (dlci->gsm->encoding != GSM_BASIC_OPT)
- 		return 0;
- 
- 	modembits[0] = (dlci->addr << 2) | 2 | EA;  /* DLCI, Valid, EA */
-@@ -3374,7 +3378,7 @@ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk)
- 		/* Send convergence layer type 2 empty data frame. */
- 		gsm_modem_upd_via_data(dlci, brk);
- 		return 0;
--	} else if (dlci->gsm->encoding == 0) {
-+	} else if (dlci->gsm->encoding == GSM_BASIC_OPT) {
- 		/* Send as MSC control message. */
- 		return gsm_modem_upd_via_msc(dlci, brk);
- 	}
-@@ -3398,8 +3402,8 @@ static int gsm_carrier_raised(struct tty_port *port)
- 	 * Basic mode with control channel in ADM mode may not respond
- 	 * to CMD_MSC at all and modem_rx is empty.
- 	 */
--	if (gsm->encoding == 0 && gsm->dlci[0]->mode == DLCI_MODE_ADM &&
--	    !dlci->modem_rx)
-+	if (gsm->encoding == GSM_BASIC_OPT &&
-+	    gsm->dlci[0]->mode == DLCI_MODE_ADM && !dlci->modem_rx)
- 		return 1;
- 
- 	return dlci->modem_rx & TIOCM_CD;
+ /**
 -- 
 2.34.1
 
