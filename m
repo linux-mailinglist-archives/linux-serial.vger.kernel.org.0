@@ -2,108 +2,170 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8875AE53F
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Sep 2022 12:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9F45AE5DE
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Sep 2022 12:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiIFKX2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Sep 2022 06:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S234001AbiIFKuN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Sep 2022 06:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239422AbiIFKWt (ORCPT
+        with ESMTP id S239897AbiIFKtf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:22:49 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9777A759;
-        Tue,  6 Sep 2022 03:22:02 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id c11so10478721wrp.11;
-        Tue, 06 Sep 2022 03:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=FO37cN0NhbSvcmbUWhzIYEmiT47YcrB62BYarlZD1xI=;
-        b=ZpNatYnfQ8sud2FmqEp8aR06XBWCCNFtvGJjH2zacgcwMK6wmqZk1t0PYu7tX/iq8Y
-         OiPSAeU3WXkfWxvIEbzpDJMyAED+y+ek66BEDWPd0+te189LCmJk3PKZUC8GqiU5XKRD
-         nu5CkM1mJkFbK/9tkfp75Zpmb3awZ2R/7hd7z4OyWbcQwc3J2STWj6uaE0esTWvssKKm
-         fpUK6YKD1kxBr/7wRfa+1swYGSdi7G0QCvBKrdi/lFYiVQBrNXCbyivtYKCKVrj2gEdJ
-         /9j8TaHjEvfijJP+Or4+QCfwlN/JoWoavyna4gFiTEFOaf0YIcZ2bV0CBLCXJAo1nLE9
-         ndGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FO37cN0NhbSvcmbUWhzIYEmiT47YcrB62BYarlZD1xI=;
-        b=XBLklwvdMMGXB2+WHondK2UBUTP+qYuLKRXbo3aomYIMWtxArCVwjGg5sxqaSUg/bf
-         +TmX5AeRpqp29IipgikjLhOCXHOmyiIYVX7VSVplNyxviebLmt3GfcWP883KWXmcMH6f
-         HGW9ZRKssays7zIgjcuB5fFhL2qUSs6N+gXfcOTeDKIrlTw2yz5ha04iEoIiK76CCBcx
-         jxpeTYq5vMW6TX+BmtIBzdvcefM0/r42zLwmo1jB08qe7AtFCRaOtqWzjDU5cZWh8s9u
-         wTkefqrbgazSmQfwpcympFMihyBtHmn3M1bAAZOUfoewdMTKNW1ZxFG4Md+AVf97gxdF
-         x1+g==
-X-Gm-Message-State: ACgBeo1kQAdJNvhS4a5m1oWJBPEqryKNmWaSQZ7Sda1Gw7/I7SESmSWq
-        f6U4LzwE+pz5uZROCsaC+yE=
-X-Google-Smtp-Source: AA6agR78j7MRQwJPeo/IRiIhLjT4Ww1k4jN5nY5HzNbZeaeP26i4RxdXPB87mlAqe/Cr5CB26q3tmA==
-X-Received: by 2002:a05:6000:144f:b0:225:6d79:b44f with SMTP id v15-20020a056000144f00b002256d79b44fmr28650138wrx.190.1662459714478;
-        Tue, 06 Sep 2022 03:21:54 -0700 (PDT)
-Received: from [192.168.2.41] ([46.227.18.67])
-        by smtp.gmail.com with ESMTPSA id h2-20020a5d4302000000b0021e51c039c5sm11922851wrq.80.2022.09.06.03.21.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 03:21:53 -0700 (PDT)
-Message-ID: <c7d0dc8a-f12b-d586-c7ce-10e329fdac2f@gmail.com>
-Date:   Tue, 6 Sep 2022 12:21:53 +0200
+        Tue, 6 Sep 2022 06:49:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3C37C1C5;
+        Tue,  6 Sep 2022 03:48:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8E7951F9BC;
+        Tue,  6 Sep 2022 10:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662461291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q3rkXIagMmmA69aWcds1BM5RGdYgpYHt9G+1K9Bag0Y=;
+        b=z2hW9YJjVsEZuFUGGaJpT6YCB5+9ddQ0vw9X3t7zqXq92Nz3wVEjvckg9K/zDvcqw+EC9w
+        8jLSx9ftLtXvz0U3vuKs9bkTfI6pslJ5y+bcD8Gvu3QTuL10L73IG2RXe290hWnVo/J4yg
+        F7aYT6ljOK3YunyYmsrtT+VO0dqMAzc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662461291;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q3rkXIagMmmA69aWcds1BM5RGdYgpYHt9G+1K9Bag0Y=;
+        b=alY8JjNRmhYSNjggnEtvcyU219S6dGl4LGO4N6cOKf3MQ1eUOaNJdYtHQ5JeceWWkeURId
+        6dH6wqNnTzozJTAw==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DF9E12C141;
+        Tue,  6 Sep 2022 10:48:08 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/4] tty: TX helpers
+Date:   Tue,  6 Sep 2022 12:48:01 +0200
+Message-Id: <20220906104805.23211-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] tty: serial: atmel: fix spelling typo in comment
-Content-Language: fr
-To:     Jiangshan Yi <13667453960@163.com>, gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20220906063957.2951323-1-13667453960@163.com>
-From:   Richard Genoud <richard.genoud@gmail.com>
-In-Reply-To: <20220906063957.2951323-1-13667453960@163.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Le 06/09/2022 à 08:39, Jiangshan Yi a écrit :
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
-> 
-> Fix spelling typo in comment.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-Acked-by: Richard Genoud <richard.genoud@gmail.com>
+This series introduces DEFINE_UART_PORT_TX_HELPER +
+DEFINE_UART_PORT_TX_HELPER_LIMITED TX helpers. See PATCH 2/4 for the
+details. Comments welcome.
 
+Then it switches drivers to use them. First, to
+DEFINE_UART_PORT_TX_HELPER() in 3/4 and then
+DEFINE_UART_PORT_TX_HELPER_LIMITED() in 4/4.
 
-> ---
->  drivers/tty/serial/atmel_serial.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-> index 7450d3853031..7f8af2ea3fa5 100644
-> --- a/drivers/tty/serial/atmel_serial.c
-> +++ b/drivers/tty/serial/atmel_serial.c
-> @@ -40,7 +40,7 @@
->  /* Revisit: We should calculate this based on the actual port settings */
->  #define PDC_RX_TIMEOUT		(3 * 10)		/* 3 bytes */
->  
-> -/* The minium number of data FIFOs should be able to contain */
-> +/* The minimum number of data FIFOs should be able to contain */
->  #define ATMEL_MIN_FIFO_SIZE	8
->  /*
->   * These two offsets are substracted from the RX FIFO size to define the RTS
+The diffstat of patches 3+4 is as follows:
+ 26 files changed, 191 insertions(+), 823 deletions(-)
+which appears to be nice.
+
+Cc: Tobias Klauser <tklauser@distanz.ch>
+Cc: Richard Genoud <richard.genoud@gmail.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: "Pali Rohár" <pali@kernel.org>
+Cc: Kevin Cernekee <cernekee@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang7@gmail.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: linux-riscv@lists.infradead.org
+
+Jiri Slaby (4):
+  tty: serial: move and cleanup vt8500_tx_empty()
+  tty: serial: introduce transmit helper generators
+  tty: serial: use DEFINE_UART_PORT_TX_HELPER()
+  tty: serial: use DEFINE_UART_PORT_TX_HELPER_LIMITED()
+
+ Documentation/driver-api/serial/driver.rst |  3 +
+ drivers/tty/serial/21285.c                 | 33 ++-------
+ drivers/tty/serial/altera_jtaguart.c       | 42 +++--------
+ drivers/tty/serial/altera_uart.c           | 37 ++--------
+ drivers/tty/serial/amba-pl010.c            | 37 ++--------
+ drivers/tty/serial/apbuart.c               | 36 ++--------
+ drivers/tty/serial/atmel_serial.c          | 29 ++------
+ drivers/tty/serial/bcm63xx_uart.c          | 47 +++----------
+ drivers/tty/serial/fsl_lpuart.c            | 38 +++-------
+ drivers/tty/serial/lantiq.c                | 44 ++++--------
+ drivers/tty/serial/lpc32xx_hs.c            | 38 ++--------
+ drivers/tty/serial/mcf.c                   | 27 ++------
+ drivers/tty/serial/mpc52xx_uart.c          | 43 +-----------
+ drivers/tty/serial/mps2-uart.c             | 29 +-------
+ drivers/tty/serial/mux.c                   | 46 ++++--------
+ drivers/tty/serial/mvebu-uart.c            | 40 ++---------
+ drivers/tty/serial/mxs-auart.c             | 31 ++-------
+ drivers/tty/serial/omap-serial.c           | 47 ++++---------
+ drivers/tty/serial/owl-uart.c              | 35 +---------
+ drivers/tty/serial/pxa.c                   | 39 +++--------
+ drivers/tty/serial/rp2.c                   | 36 ++--------
+ drivers/tty/serial/sa1100.c                | 49 +++++--------
+ drivers/tty/serial/serial_txx9.c           | 37 ++--------
+ drivers/tty/serial/sifive.c                | 45 ++----------
+ drivers/tty/serial/sprd_serial.c           | 38 ++--------
+ drivers/tty/serial/st-asc.c                | 50 ++-----------
+ drivers/tty/serial/vt8500_serial.c         | 40 ++---------
+ include/linux/serial_core.h                | 81 ++++++++++++++++++++++
+ 28 files changed, 275 insertions(+), 822 deletions(-)
+
+-- 
+2.37.3
 
