@@ -2,114 +2,273 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CF35B06A2
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Sep 2022 16:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EEC5B07F7
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Sep 2022 17:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiIGObu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 7 Sep 2022 10:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S230307AbiIGPGA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 7 Sep 2022 11:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiIGOb3 (ORCPT
+        with ESMTP id S230234AbiIGPF7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:31:29 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD7550738
-        for <linux-serial@vger.kernel.org>; Wed,  7 Sep 2022 07:31:16 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id l14so7323678eja.7
-        for <linux-serial@vger.kernel.org>; Wed, 07 Sep 2022 07:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=boA3graP4wtJe8cwRxkMJy5rso3t9xyj4fxUFsG0Fez1aWDY0C6gZpYPvm/Hxa5tX5
-         Zk+XDE4h4sSr3Kc7gAmKt5OJ7AP3AEEipJ5m7D7tQ5BTHkXWMmIdiC/g3MqGg04yG8Wz
-         mFTYUlKwIYoLI0bvi9Q3MSV1athb174l2Ms/7z+L0TzD2CQLBWt0bOa5Jg9CBAeygplA
-         zqROn488xUY/B608ffA8/XOsolF390gA0UeCbMrgWX87LxLuf34XOCHn+1VgcYnMY7Sr
-         klavsMj/u/K0iLTegE+9syCXTdcAl7jimLLfNxQJoiGWtjh15Idxzz9bfpV/1Jhy4Wly
-         oLRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=Zy9XzM25GAdHxEXXX6Nx8K3WgruNBqTw4qZVKxjP9E5nim/YR5JeAPcOTW4Cs7ZzhJ
-         sN4kAHg2YI8j63sNvZSF5fCkATwei9pqnpZbzXXabUKjZBGxMBUKwgLxg8pzM84oEcSz
-         6M8fzU6Qq6QKtszOF6CNY8Sm3zSoQGbhXoyfMYdh1/Mua6Z6XSj2kU7VWdDGmZjtGM+J
-         teTNyFvBEwTaiN2QmD65xc2mm3HEqKGtW0rBrLdXFBihU8fdd+2eaThKsyWMPw9W2TtZ
-         fVMivImtigWihaKLBj9tbWsNA4AAylx33jF7ESTcCL7hJh/DKdrEJd/m0Dnpn5XLPH8O
-         GRaQ==
-X-Gm-Message-State: ACgBeo2h3nryQyHV58dDYEGk8/y3jGiQsS3AD3dBmK/xzxJ312n2TX2n
-        mSuGS1edAq9mWeHfO9iBfafX/nkT/sMNu7wl7+k=
-X-Google-Smtp-Source: AA6agR7OKiKkSx+MbdKnn4tKaQhdmVzFj2krU0Vhk4MjDetoGwDDBbw+8TT3Fj+g2bgbPAiBcK/73KQpnrd5Cpv4s3c=
-X-Received: by 2002:a17:907:75ec:b0:741:484b:3ca4 with SMTP id
- jz12-20020a17090775ec00b00741484b3ca4mr2508106ejc.316.1662561074796; Wed, 07
- Sep 2022 07:31:14 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:14 -0700 (PDT)
-Reply-To: lumar.casey@outlook.com
-From:   LUMAR CASEY <miriankushrat@gmail.com>
-Date:   Wed, 7 Sep 2022 16:31:14 +0200
-Message-ID: <CAO4StN0fh9iLpvL71MAvphxmFm4ur7+Op=qm5oJuhdRZZPJ3cA@mail.gmail.com>
-Subject: ATTENTION/PROPOSAL
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:641 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5049]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [miriankushrat[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+        Wed, 7 Sep 2022 11:05:59 -0400
+X-Greylist: delayed 551 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 08:05:58 PDT
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1423E696C9;
+        Wed,  7 Sep 2022 08:05:57 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 174E0580347;
+        Wed,  7 Sep 2022 10:56:47 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 10:56:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662562607; x=1662566207; bh=GzaX5v4M3u
+        YZGVDHmA54EWlyDj5TXPSzbZMQtn7o1Fs=; b=aUkat/PTyOzxfkwQburyZWVMDF
+        zINi9Bqjj2XPqR5mTmzwK9PzJ983akjvAiGRcJ+mXVAqSmn4wt466gsZeKIz+ADY
+        jPRHCAxfJ1NmC/vtftZ9Y8jEQl1kVZahlz/fFj0I0F9kfmNUDqIgrqbon1F7vepu
+        kHZyHd+0Z8hARWxNJP3wGVb9iX8goXOJFPLCrZnpFSFWtNtum+QA6OtlrwAm74Ug
+        5h1g0lRK6D3iHCZ7KeO/KlQx7FYYMq1UYT7IriJaF8yZ1OqNW5PPHlk3OlRLLcD3
+        b8X5A2pAYRSs884DEMxCazB1P/Iu822qLIYn5D3PIZczYB/hZLLed+Er78Ww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662562607; x=1662566207; bh=GzaX5v4M3uYZGVDHmA54EWlyDj5T
+        XPSzbZMQtn7o1Fs=; b=zt06cd9u9mzrt83EVzh4+WAHsSJDrO81JYvgRDVbjG4c
+        qSRNA26E2GwKSRqbY0JXqQRIsnXUirNVR83xcb6/iplF/6yldHM/OID7zmuODD5e
+        pG1OuCpwyJ24/Z4taYwLfG5mCcZj8QyAVYr9lP8cDPRFQDADKW8pctsuLnu97bjw
+        dtAPMQ1UKlQe2xIyjNmjTPWDSFGVgczhzPf/0yooUnOyguIcWz1vsNe85/Oyovn6
+        407cHGyFMuazCYDdVQnZaDQFpchf2YJYj27byUnhPDFnwaf4onOPs2nTp56rj0kx
+        1hh6jAJ7APnjQRZuNr11yNox5XujqQH/DCtO6XlWwg==
+X-ME-Sender: <xms:LbEYY0R0XEj4yDOEMvVxDW4C5GF5EkDKM5fM5a4BqZlugyg8NsUCNA>
+    <xme:LbEYYxy1eE4dXRtcAJ_Dcj4iHYsL5w1iEoXLvhg3m1I_sOx8aR4ATUZqci27n-b95
+    MD_hXhU2NDji9bL4u8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:LbEYYx2dTBE22jIXfcyjTD-fdsyGl82HY25_KNX8powQgJBGPOtAtQ>
+    <xmx:LbEYY4BfZnTCJ2NIANklXIdvcvrkqWV5frmRYUfMqiW4bUckzqNS4A>
+    <xmx:LbEYY9htp88nQi1vE74onKOA4pguUjvQLc0NmRqAqX7mfWuvZZLEEw>
+    <xmx:LrEYY4PrHHi5doUy7UslZ59C8CDGdfom_mjzaz6Z4kBcqY3HCXmBLA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BBBD8B60083; Wed,  7 Sep 2022 10:56:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <2197faa3-0217-41e0-8ff0-b5396561c623@www.fastmail.com>
+In-Reply-To: <YxiiOWQxGCUz9ktF@shell.armlinux.org.uk>
+References: <20220906104805.23211-1-jslaby@suse.cz>
+ <Yxcvbk281f/vy4vb@hovoldconsulting.com>
+ <dec6d5c4-45b7-f087-95f4-bf1dae9e9d27@kernel.org>
+ <4e9b4471-a6f2-4b16-d830-67d253ae4e6a@linux.intel.com>
+ <715b40ba-1bcc-4582-bed1-ef41126c7b94@www.fastmail.com>
+ <cfd16d53-6aa0-e848-91d0-dce8ff72bb4d@linux.intel.com>
+ <YxiONiDgGYp8MGQA@kroah.com>
+ <c66f9c98-dcef-27c-d74a-ea826f6a799@linux.intel.com>
+ <YxiQVTN/jX8AfO4L@kroah.com> <YxiiOWQxGCUz9ktF@shell.armlinux.org.uk>
+Date:   Wed, 07 Sep 2022 16:56:03 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Russell King" <linux@armlinux.org.uk>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        "Johan Hovold" <johan@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Tobias Klauser" <tklauser@distanz.ch>,
+        "Richard Genoud" <richard.genoud@gmail.com>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
+        "Vladimir Zapolskiy" <vz@mleia.com>,
+        "Liviu Dudau" <liviu.dudau@arm.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        "Kevin Cernekee" <cernekee@gmail.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Orson Zhai" <orsonzhai@gmail.com>,
+        "Baolin Wang" <baolin.wang7@gmail.com>,
+        "Chunyan Zhang" <zhang.lyra@gmail.com>,
+        "Patrice Chotard" <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] tty: TX helpers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-ATTENTION
+On Wed, Sep 7, 2022, at 3:52 PM, Russell King (Oracle) wrote:
+> On Wed, Sep 07, 2022 at 02:36:37PM +0200, Greg Kroah-Hartman wrote:
+>
+> Of course, it would have been nicer to see the definition of this
+> macro, because then we can understand what the "ch" argument is to
+> this macro, and how that relates to the macro argument that is
+> shown in the example as a writel().
 
-BUSINESS PARTNER,
+I pulled out the 'ch' variable from the macro to avoid having
+the macro define local variables that are then passed to the
+inner expressions. 
 
-I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
-MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
-PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
-DIPLOMATIC OUTLET.
+> Maybe a more complete example would help clear up the confusion?
+> Arnd?
 
-I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
-PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
-YOUR COUNTRY.
+Here is a patch on top of the series that would implement the
+uart_port_tx_helper_limited() and uart_port_tx_helper()
+macros that can be used directly from drivers in place of defining
+local functions, with the (alphabetically) first two drivers
+converted to that.
 
-I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
+I left the (now trivial) DEFINE_UART_PORT_TX_HELPER_LIMITED() and
+DEFINE_UART_PORT_TX_HELPER() macros in place to keep it building,
+but they would get removed if we decide to use something like
+my suggested approach for all drivers.
 
-REGARDS,
+   Arnd
 
-LUMAR CASEY
+diff --git a/drivers/tty/serial/21285.c b/drivers/tty/serial/21285.c
+index 40cf1bb534f3..a0f5c59d6128 100644
+--- a/drivers/tty/serial/21285.c
++++ b/drivers/tty/serial/21285.c
+@@ -151,16 +151,14 @@ static irqreturn_t serial21285_rx_chars(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static DEFINE_UART_PORT_TX_HELPER_LIMITED(serial21285_do_tx_chars,
+-		!(*CSR_UARTFLG & 0x20),
+-		*CSR_UARTDR = ch,
+-		({}));
+-
+ static irqreturn_t serial21285_tx_chars(int irq, void *dev_id)
+ {
+ 	struct uart_port *port = dev_id;
++	unsigned int count = 256;
++	unsigned char ch;
+ 
+-	serial21285_do_tx_chars(port, 256);
++	uart_port_tx_helper_limited(port, !(*CSR_UARTFLG & 0x20),
++				    *CSR_UARTDR = ch, ({}), count, ch);
+ 
+ 	return IRQ_HANDLED;
+ }
+diff --git a/drivers/tty/serial/altera_uart.c b/drivers/tty/serial/altera_uart.c
+index 70c0ad431cf9..f81dd950cd39 100644
+--- a/drivers/tty/serial/altera_uart.c
++++ b/drivers/tty/serial/altera_uart.c
+@@ -246,10 +246,14 @@ static void altera_uart_rx_chars(struct altera_uart *pp)
+ 	tty_flip_buffer_push(&port->state->port);
+ }
+ 
+-static DEFINE_UART_PORT_TX_HELPER(altera_uart_tx_chars,
+-		altera_uart_readl(port, ALTERA_UART_STATUS_REG) &
+-		                ALTERA_UART_STATUS_TRDY_MSK,
+-		altera_uart_writel(port, ch, ALTERA_UART_TXDATA_REG));
++static int altera_uart_tx_chars(struct uart_port *port)
++{
++	u8 ch;
++
++	return uart_port_tx_helper(port, 
++		altera_uart_readl(port, ALTERA_UART_STATUS_REG) & ALTERA_UART_STATUS_TRDY_MSK,
++		altera_uart_writel(port, ch, ALTERA_UART_TXDATA_REG), ch);
++}
+ 
+ static irqreturn_t altera_uart_interrupt(int irq, void *data)
+ {
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index 7236fc76ba22..d48d2301d1b7 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -638,13 +638,11 @@ struct uart_driver {
+ 
+ void uart_write_wakeup(struct uart_port *port);
+ 
+-#define __DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, tx_done,	  \
+-		for_test, for_post, ...)				  \
+-unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
+-{									  \
++#define __uart_port_tx_helper(port, tx_ready, put_char, tx_done,	  \
++	       	for_test, for_post, ch)					  \
++({									  \
+ 	struct circ_buf *xmit = &port->state->xmit;			  \
+ 	unsigned int pending;						  \
+-	u8 ch;								  \
+ 									  \
+ 	for (; (for_test) && (tx_ready); (for_post), port->icount.tx++) { \
+ 		if (port->x_char) {					  \
+@@ -672,8 +670,15 @@ unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
+ 			port->ops->stop_tx(port);			  \
+ 	}								  \
+ 									  \
+-	return pending;							  \
+-}
++	pending;							  \
++})
++
++#define uart_port_tx_helper_limited(port, tx_ready, put_char, tx_done, count, ch) \
++	__uart_port_tx_helper(port, tx_ready, put_char, tx_done, count, count--, ch)
++
++#define uart_port_tx_helper(port, tx_ready, put_char, ch)		  \
++	__uart_port_tx_helper(port, tx_ready, put_char, ({}), true, ({}), ch)
++
+ 
+ /**
+  * DEFINE_UART_PORT_TX_HELPER_LIMITED -- generate transmit helper for uart_port
+@@ -703,9 +708,13 @@ unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
+  * For all of them, @port->lock is held, interrupts are locally disabled and
+  * the expressions must not sleep.
+  */
+-#define DEFINE_UART_PORT_TX_HELPER_LIMITED(name, tx_ready, put_char, tx_done) \
+-	__DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, tx_done,	      \
+-			count, count--, unsigned int count)
++#define DEFINE_UART_PORT_TX_HELPER_LIMITED(name, tx_ready, put_char, tx_done)	\
++unsigned int name(struct uart_port *port, unsigned int count)			\
++{										\
++	u8 ch;									\
++	return uart_port_tx_helper_limited(port, tx_ready, put_char, tx_done,	\
++					   count, ch);				\
++}
+ 
+ /**
+  * DEFINE_UART_PORT_TX_HELPER -- generate transmit helper for uart_port
+@@ -715,9 +724,12 @@ unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
+  *
+  * See DEFINE_UART_PORT_TX_HELPER_LIMITED() for more details.
+  */
+-#define DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char)		\
+-	__DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, ({}),	\
+-			true, ({}))
++#define DEFINE_UART_PORT_TX_HELPER(name, tx_ready, put_char, ...)	  \
++unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
++{									  \
++	u8 ch;								  \
++	return uart_port_tx_helper(port, tx_ready, put_char, ch);	  \
++}
+ 
+ /*
+  * Baud rate helpers.
+
