@@ -2,111 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E615B4252
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Sep 2022 00:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACDE5B43B2
+	for <lists+linux-serial@lfdr.de>; Sat, 10 Sep 2022 04:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiIIWEG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Sep 2022 18:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S229540AbiIJCAz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Sep 2022 22:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiIIWCl (ORCPT
+        with ESMTP id S229529AbiIJCAy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Sep 2022 18:02:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4C14A51B;
-        Fri,  9 Sep 2022 15:02:34 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id gh9so7131603ejc.8;
-        Fri, 09 Sep 2022 15:02:34 -0700 (PDT)
+        Fri, 9 Sep 2022 22:00:54 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4995C7E00C
+        for <linux-serial@vger.kernel.org>; Fri,  9 Sep 2022 19:00:50 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id 134so1592768vkz.11
+        for <linux-serial@vger.kernel.org>; Fri, 09 Sep 2022 19:00:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date;
-        bh=5wDSQei0VH/0N0cIYpX+WvxREvgCAsAfy7LHoQVjBlQ=;
-        b=pzeyCMXPWtw5W3TzsjGLnySXo8soVYUYeJ9xFygN5yMcAFfkmo68Mn5NVSDaAqvEef
-         eMfcgrKdofMIrb0NkC9c/9Vds5bjV3ktzlLzWstteZoyzJiblmObGx9yNFJOzwAvY7lO
-         1KY9hKyA68Qr0+/E5uvCFdh+SbIOxQgl4kCdLO3bEGLkkfQGP9D/Q9zv03tqjXBbFmW/
-         wQA877zU19eUftI9o02PkytlYbM/sujtsOJ3kUS0dJ/fdCEs1YH93ga6tw2Zt32RLYLH
-         dvfsrtjWpLuPSgMAfQYmTNPST7qelX0TgYFbw5w+81Sytx+Gi4mwLwH/2plVR4zEjN9H
-         7bkQ==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=B/bzVap7w2nbpPLUVaGrgo7Id2TJpqaHDpbbBhcEalA=;
+        b=gKgQqD+SMVmL1T52pVA/kTkZ9J1hcU385nqjj+1JiScSZi4YzOErGKRklfMW3mtkSo
+         7BahxzH/SF4fafDfdtk95E9VH2BbCCQsUsdqsTswEovOJvHuZQhrys9mIYw8vxsoNisR
+         A04aSYyxmk/iaGSGATWvAn6WbOO/NeZ6j8NoFhDBKVwjjOIrf4jNGRKloldLTWSnhezM
+         IRRF0LP3ruMJaP9kC2l48aMQyuiri1GZS/vHJt/Oa0KeHB7Sw6KOTrj28PBcZpZcaGow
+         JesxPZvSHkdiL8CmqaLB2mEKpgXZ2/Ff8jmScf25m+mFfzQhWERMdKK/5Szal+aB336Y
+         hdcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=5wDSQei0VH/0N0cIYpX+WvxREvgCAsAfy7LHoQVjBlQ=;
-        b=F3HCG7L//kgoDJrzYe+NHXevX4FMYr/mOfckkY9UiMdW75Jt75KEJfaEWla9QBXWEt
-         8KV4xU7H1cLDSPDaGPB4IOo/ecTZ+MUkHKo5wvrWld4UykUNo5gT7J6J+8AEwqwozzyf
-         Nw6KJmiTcotPujdcucTvvi0y+bA4mRoOCJtzBQERRXMGlZywYDYGHpg0k6Zfj5e/P58A
-         HueLAjnXzhhsjp7F5LV+7VeCjiLqTL5gKnkmdlnAWS/WJGVsu9YGx3TaL+akcp/iro8a
-         Pu/ytwsBSg9CICSq4/qpDDcLGSIYYSWzyFdOVkc2hiRIkEZTc+4g1VVNNRWZMJvazQdp
-         2MGw==
-X-Gm-Message-State: ACgBeo1/aaw/tDvawkIN+gg+jIv09L3TnbJFxV3lwP4+XMZIGiqjgbdT
-        pM9e3hRr9puUuEiHXrpLoZI=
-X-Google-Smtp-Source: AA6agR5i2KdDv0Rikxka5ZmZqz4fP9NU9rl0imXOMXzTXa+EpchEAZGLS2pB1pzRZUktqmDJgOVSoQ==
-X-Received: by 2002:a17:907:3d8e:b0:741:8ebe:3464 with SMTP id he14-20020a1709073d8e00b007418ebe3464mr11326966ejc.747.1662760952366;
-        Fri, 09 Sep 2022 15:02:32 -0700 (PDT)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id x17-20020a1709065ad100b0073d87068042sm804845ejs.110.2022.09.09.15.02.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 15:02:32 -0700 (PDT)
-Message-ID: <405db21d-154e-fed0-7524-ace1cef0203c@gmail.com>
-Date:   Sat, 10 Sep 2022 00:02:30 +0200
+        bh=B/bzVap7w2nbpPLUVaGrgo7Id2TJpqaHDpbbBhcEalA=;
+        b=guvHwyXQJtjXGbGC1J3T5Vk+4GBbiAAOfZrExBdWd4WkqFzZAv7G2WvhINurtIX27W
+         IPeroKBARwilrambdZWWSmEY4fL3C7B9F4CKh2TcmID5gU4aV6T+9FAXqBBoA8WrTWQh
+         YbQocznkMZj9UaA2ugqM9Nkipjz7uCcLbxrPKFkCaCgI9ERQxbxSHegWjehYOjyWwqiU
+         +HOqYKy1OJmK3NvBdfU5qpYjOIK+lD1UOxiJtlWVmCaC7lQkZ5Ooj+LfjxmmOtyOHI5X
+         PWK5fSNr+yz+gv4WJC1s+3qT0Z/+2A/HqRmTsoqfgobbMT1lzrsSscwqknBJ5AmqAmVK
+         1srA==
+X-Gm-Message-State: ACgBeo2oT1Ew688f+cguaBUfkgmAcgPUg7PM+mLIMlcHVZtCUfXeyQaL
+        je+hFo1Bha57f93XYqgwjgCKikNFCB52+6P63gs=
+X-Google-Smtp-Source: AA6agR5jF6nDIUflt8C7EdKHaSszyzaWXZpDP4oyZmaFmyKkVlqu+I1hPg4l5JAFhrgvip+HSyD0fomCu9Nt/h/lT4U=
+X-Received: by 2002:a1f:9c52:0:b0:389:404d:44bc with SMTP id
+ f79-20020a1f9c52000000b00389404d44bcmr6057953vke.23.1662775249283; Fri, 09
+ Sep 2022 19:00:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1 02/11] dt-bindings: i2c: rockchip: add rockchip,rk3128-i2c
-To:     kever.yang@rock-chips.com
-Cc:     sjg@chromium.org, philipp.tomsich@vrull.eu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, kishon@ti.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        zhangqing@rock-chips.com, jamie@jamieiles.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20220909212543.17428-1-jbx6244@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20220909212543.17428-1-jbx6244@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a59:1a19:0:b0:2f5:5f8f:da6a with HTTP; Fri, 9 Sep 2022
+ 19:00:48 -0700 (PDT)
+Reply-To: daviesmarian100@gmail.com
+From:   Marian <ikoroezinne0@gmail.com>
+Date:   Sat, 10 Sep 2022 02:00:48 +0000
+Message-ID: <CALHpY0581f_8VuJwOuJDETqXsAQhxJ1ZAUGrYNRFht5ay0ft+Q@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:a36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4998]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ikoroezinne0[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ikoroezinne0[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [daviesmarian100[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add rockchip,rk3128-i2c compatible string.
-
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-index ee9f8b91d..82b9d6682 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-@@ -29,6 +29,7 @@ properties:
-       - items:
-           - enum:
-               - rockchip,rk3036-i2c
-+              - rockchip,rk3128-i2c
-               - rockchip,rk3368-i2c
-           - const: rockchip,rk3288-i2c
-       - items:
 -- 
-2.20.1
-
+Hello
