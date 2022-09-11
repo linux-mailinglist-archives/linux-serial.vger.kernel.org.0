@@ -2,67 +2,45 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABF85B4CA5
-	for <lists+linux-serial@lfdr.de>; Sun, 11 Sep 2022 10:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1935B4CCA
+	for <lists+linux-serial@lfdr.de>; Sun, 11 Sep 2022 11:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiIKIhY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 11 Sep 2022 04:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S230012AbiIKJCd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 11 Sep 2022 05:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIKIhX (ORCPT
+        with ESMTP id S229981AbiIKJCd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 11 Sep 2022 04:37:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882D30560;
-        Sun, 11 Sep 2022 01:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662885442; x=1694421442;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uMf3K04xeQCNkmkTP8NTLrU3WiyufBIe+F2AtJ43V04=;
-  b=VA/L7JBYE6UHEYhLhpxlsbLJM2EmHykYKN7HnqUYpZR6e/qTnWVRlUDI
-   EGpygAlcSvOfuG72S3/mU3to9IFLeUne2asCzy77YiQCSyMya/JAhwlzV
-   fvY0ew/wmdgWopPk859UZEgG0sVPAy2NukGbxets8MV9yC9Y4q+tN5jBc
-   6n2v3IfYR79ImljLKdYsWIXJ+o3mlIJn17xWp2lv5xUKg810hTnrjeP2t
-   +8SNH3ahAY7ifGMTMcvmUVlD7ZQUrlnBsquXwV9aDBKmq7dHAI5iLHTsq
-   EwqXkrJ6AfAsjOkgOLXhV05slnrK+UVd8k2DTKT5uaa6OSYYEUOptjbRO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10466"; a="280725885"
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="280725885"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2022 01:37:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,307,1654585200"; 
-   d="scan'208";a="566841440"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 11 Sep 2022 01:37:16 -0700
-Date:   Sun, 11 Sep 2022 16:27:45 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v1 3/5] fpga: dfl: Add DFHv1 Register Definitions
-Message-ID: <Yx2cAaQ0HhPkYyC4@yilunxu-OptiPlex-7050>
-References: <20220906190426.3139760-1-matthew.gerlach@linux.intel.com>
- <20220906190426.3139760-4-matthew.gerlach@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906190426.3139760-4-matthew.gerlach@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        Sun, 11 Sep 2022 05:02:33 -0400
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CAF22BCE
+        for <linux-serial@vger.kernel.org>; Sun, 11 Sep 2022 02:02:31 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id 2E9E5101E6B69;
+        Sun, 11 Sep 2022 11:02:30 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id E0542603E021;
+        Sun, 11 Sep 2022 11:02:29 +0200 (CEST)
+X-Mailbox-Line: From 6059eab35dba394468335ef640df8b0050fd9dbd Mon Sep 17 00:00:00 2001
+Message-Id: <6059eab35dba394468335ef640df8b0050fd9dbd.1662886616.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Sun, 11 Sep 2022 11:02:03 +0200
+Subject: [PATCH] serial: stm32: Deassert Transmit Enable on ->rs485_config()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Vasut <marex@denx.de>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,87 +49,159 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2022-09-06 at 12:04:24 -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> 
-> This patch adds the definitions for DFHv1 header and related register
-> bitfields.
-> 
-> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->  include/linux/dfl.h | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index b5accdcfa368..61bcf20c1bc8 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -23,6 +23,16 @@
->  #define GUID_H			0x10
->  #define NEXT_AFU		0x18
->  
-> +/*
-> + * DFHv1 Register Offset definitons
-> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
-> + * as common header registers
-> + */
-> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
-> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
-> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
-> +#define DFHv1_PARAM_DATA	0x8   /* Offset of Param data from Param header */
-> +
->  #define DFH_SIZE		0x8
->  
->  /* Device Feature Header Register Bitfield */
-> @@ -30,8 +40,35 @@
->  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->  #define DFH_EOL			BIT_ULL(40)		/* End of list */
-> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
->  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->  
-> +/*
-> + *  CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+The STM32 USART can control RS-485 Transmit Enable in hardware.  Since
+commit 7df5081cbf5e ("serial: stm32: Add RS485 RTS GPIO control"),
+it can alternatively be controlled in software.  That was done to allow
+RS-485 even if the RTS pin is unavailable because it's pinmuxed to a
+different function.
 
-Reduce one whitespace indent.
+However the commit neglected to deassert Transmit Enable upon invocation
+of the ->rs485_config() callback.  Fix it.
 
-> + * 1'b1 = absolute (ARM or other non-PCIe use)
-> + */
-> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
-> +
-> +/*
-> + * CSR Header Register Bit Definitions
-> + */
+Avoid forward declarations by moving stm32_usart_tx_empty(),
+stm32_usart_rs485_rts_enable() and stm32_usart_rs485_rts_disable()
+further up in the driver.
 
-Use oneline style comment should be OK?
+Fixes: 7df5081cbf5e ("serial: stm32: Add RS485 RTS GPIO control")
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org # v5.9+
+Cc: Marek Vasut <marex@denx.de>
+---
+ drivers/tty/serial/stm32-usart.c | 100 ++++++++++++++++---------------
+ 1 file changed, 53 insertions(+), 47 deletions(-)
 
-> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
-> +
-> +/*
-> + * CSR SIZE Goup Register Bit Definitions
-> + */
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 0b18615b2ca4..c48f225eba86 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -131,6 +131,53 @@ static void stm32_usart_clr_bits(struct uart_port *port, u32 reg, u32 bits)
+ 	writel_relaxed(val, port->membase + reg);
+ }
+ 
++static unsigned int stm32_usart_tx_empty(struct uart_port *port)
++{
++	struct stm32_port *stm32_port = to_stm32_port(port);
++	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
++
++	if (readl_relaxed(port->membase + ofs->isr) & USART_SR_TC)
++		return TIOCSER_TEMT;
++
++	return 0;
++}
++
++static void stm32_usart_rs485_rts_enable(struct uart_port *port)
++{
++	struct stm32_port *stm32_port = to_stm32_port(port);
++	struct serial_rs485 *rs485conf = &port->rs485;
++
++	if (stm32_port->hw_flow_control ||
++	    !(rs485conf->flags & SER_RS485_ENABLED))
++		return;
++
++	if (rs485conf->flags & SER_RS485_RTS_ON_SEND) {
++		mctrl_gpio_set(stm32_port->gpios,
++			       stm32_port->port.mctrl | TIOCM_RTS);
++	} else {
++		mctrl_gpio_set(stm32_port->gpios,
++			       stm32_port->port.mctrl & ~TIOCM_RTS);
++	}
++}
++
++static void stm32_usart_rs485_rts_disable(struct uart_port *port)
++{
++	struct stm32_port *stm32_port = to_stm32_port(port);
++	struct serial_rs485 *rs485conf = &port->rs485;
++
++	if (stm32_port->hw_flow_control ||
++	    !(rs485conf->flags & SER_RS485_ENABLED))
++		return;
++
++	if (rs485conf->flags & SER_RS485_RTS_ON_SEND) {
++		mctrl_gpio_set(stm32_port->gpios,
++			       stm32_port->port.mctrl & ~TIOCM_RTS);
++	} else {
++		mctrl_gpio_set(stm32_port->gpios,
++			       stm32_port->port.mctrl | TIOCM_RTS);
++	}
++}
++
+ static void stm32_usart_config_reg_rs485(u32 *cr1, u32 *cr3, u32 delay_ADE,
+ 					 u32 delay_DDE, u32 baud)
+ {
+@@ -214,6 +261,12 @@ static int stm32_usart_config_rs485(struct uart_port *port, struct ktermios *ter
+ 
+ 	stm32_usart_set_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+ 
++	/* Adjust RTS polarity in case it's driven in software */
++	if (stm32_usart_tx_empty(port))
++		stm32_usart_rs485_rts_disable(port);
++	else
++		stm32_usart_rs485_rts_enable(port);
++
+ 	return 0;
+ }
+ 
+@@ -529,42 +582,6 @@ static void stm32_usart_tc_interrupt_disable(struct uart_port *port)
+ 	stm32_usart_clr_bits(port, ofs->cr1, USART_CR1_TCIE);
+ }
+ 
+-static void stm32_usart_rs485_rts_enable(struct uart_port *port)
+-{
+-	struct stm32_port *stm32_port = to_stm32_port(port);
+-	struct serial_rs485 *rs485conf = &port->rs485;
+-
+-	if (stm32_port->hw_flow_control ||
+-	    !(rs485conf->flags & SER_RS485_ENABLED))
+-		return;
+-
+-	if (rs485conf->flags & SER_RS485_RTS_ON_SEND) {
+-		mctrl_gpio_set(stm32_port->gpios,
+-			       stm32_port->port.mctrl | TIOCM_RTS);
+-	} else {
+-		mctrl_gpio_set(stm32_port->gpios,
+-			       stm32_port->port.mctrl & ~TIOCM_RTS);
+-	}
+-}
+-
+-static void stm32_usart_rs485_rts_disable(struct uart_port *port)
+-{
+-	struct stm32_port *stm32_port = to_stm32_port(port);
+-	struct serial_rs485 *rs485conf = &port->rs485;
+-
+-	if (stm32_port->hw_flow_control ||
+-	    !(rs485conf->flags & SER_RS485_ENABLED))
+-		return;
+-
+-	if (rs485conf->flags & SER_RS485_RTS_ON_SEND) {
+-		mctrl_gpio_set(stm32_port->gpios,
+-			       stm32_port->port.mctrl & ~TIOCM_RTS);
+-	} else {
+-		mctrl_gpio_set(stm32_port->gpios,
+-			       stm32_port->port.mctrl | TIOCM_RTS);
+-	}
+-}
+-
+ static void stm32_usart_transmit_chars_pio(struct uart_port *port)
+ {
+ 	struct stm32_port *stm32_port = to_stm32_port(port);
+@@ -807,17 +824,6 @@ static irqreturn_t stm32_usart_threaded_interrupt(int irq, void *ptr)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static unsigned int stm32_usart_tx_empty(struct uart_port *port)
+-{
+-	struct stm32_port *stm32_port = to_stm32_port(port);
+-	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
+-
+-	if (readl_relaxed(port->membase + ofs->isr) & USART_SR_TC)
+-		return TIOCSER_TEMT;
+-
+-	return 0;
+-}
+-
+ static void stm32_usart_set_mctrl(struct uart_port *port, unsigned int mctrl)
+ {
+ 	struct stm32_port *stm32_port = to_stm32_port(port);
+-- 
+2.36.1
 
-Same concern
-
-> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
-> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
-> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
-> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
-> +
-> +/*
-> + * PARAM Header Register Bit Definitions
-> + */
-
-Same
-
-> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
-> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
-> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
-> +
->  /**
->   * enum dfl_id_type - define the DFL FIU types
->   */
-> -- 
-> 2.25.1
-> 
