@@ -2,147 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAD95B6B9D
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Sep 2022 12:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EA05B6D04
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Sep 2022 14:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiIMK2d (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Sep 2022 06:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S230408AbiIMMRO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Sep 2022 08:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiIMK20 (ORCPT
+        with ESMTP id S229669AbiIMMRM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Sep 2022 06:28:26 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9605C94D
-        for <linux-serial@vger.kernel.org>; Tue, 13 Sep 2022 03:28:25 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id k10so19317926lfm.4
-        for <linux-serial@vger.kernel.org>; Tue, 13 Sep 2022 03:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=oFPao6+FHTUKOYc11RmLF8YTaUlvFn2TAMXlqT2wmEQ=;
-        b=QaeRW/iRYZOZN+tU13/28qc0fJfz1vBIgH2B6DpUcCa3VjL/56r5M/xKb0QgwrcT4B
-         k1rFFa+poJgej8cN5x3NH676yE4p+jIf6itqXBNqIAiBZSTiSWE9x5czvixci++EsZs0
-         SUmfPd20DKsdJPOcaVxQfeensTr37GsEBFgVCQGlj2Fu/ieIp56FkoZHxOSjD1QKmo3u
-         JZrD/uTPQqyoPms0ZwWQILqzQS46TFe98h0w4kBOhuPUHtSDM6OsubdBEiFe9jzdRWSb
-         WdfJAAXqm3FsvFka2Tg7KpteJPFjbczwigj0VVcKZsyG+99tAOrL0hEZRG236MrftICz
-         ZLtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=oFPao6+FHTUKOYc11RmLF8YTaUlvFn2TAMXlqT2wmEQ=;
-        b=wb+42f9VEXV8jsq4N/ovzAiiE8bG/UT7AyQC6z9zULUpcpItF5bQinxb32gz6mFV3L
-         a6/oJXuyc6EjOWeZoQ6LYL6rwHY1sO6Zc78YqFbaEP9et0T+FvabEMIgYxWDx4gTEEh1
-         rKziDMyvH52GrVgan8dtLMz+DlcXjoQcx6t4CU3CX6hj9f3ciTYBayLPGh1rgzf9plhi
-         Roej3eI9b+N/A3aDvSzGIZWziK0RmtTvkKTw74P/YR11E2kJxRKppilL114jkDkK6UdT
-         nUVfnvwIvW9xURqphYKvITzVbuhh56pwhMMO9/lnB2GgXkPv4/38xIVNKRAjQOTiss+N
-         WQ1g==
-X-Gm-Message-State: ACgBeo2vXxaUj9LXZop5PhWKEvvf9hIP11B33v7MAkFSenbW9xAuccZJ
-        ZTun9q2UAZZiJf/aXYRHaONzMM0H2TETuPzz2Jg=
-X-Google-Smtp-Source: AA6agR7bbkhgcCoDHLb8qx3rP1bHW0TKMhC7oECOGjOmdY7XFE46YM43lGg8megS6i1XXTOxwseJgunnFFTy7/1jDO0=
-X-Received: by 2002:a19:f805:0:b0:498:df1f:858e with SMTP id
- a5-20020a19f805000000b00498df1f858emr9330279lff.610.1663064903146; Tue, 13
- Sep 2022 03:28:23 -0700 (PDT)
+        Tue, 13 Sep 2022 08:17:12 -0400
+Received: from wedge010.net.lu.se (wedge010.net.lu.se [130.235.56.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAD715720
+        for <linux-serial@vger.kernel.org>; Tue, 13 Sep 2022 05:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; d=control.lth.se; s=edge;
+        c=relaxed/relaxed; t=1663071424; h=from:subject:to:date:message-id;
+        bh=F+m24p1GzqI+lbT+ZBom7pwe2vsMXLIkA9PWTBKYWZ4=;
+        b=i5nCUC84lCwgvhgdW7qic0nSdfwFo6UuOyMKt1n43Q7FZqz2YOi0I71nWAnBmiDuDRxE8x+Isqb
+        GsMqCOUEFppeudRq+OPi7nxUqr4giQZ4g2lC+8vEKch1UQQMCmlc6PwzQoMsqLNtSWUYvfrmUhjs5
+        dwHdTa1GQ77HMkley3UwwHjN+sABzR3uh0oJ7AeTo91bjkZEBCaPXfNjj3p+97bT4UGQ+8zlfvY/o
+        nYUZaLWlwbtqOd01VSNwr0bn2dOKCEwrfBoUSJ71LfmFPMm/c4sZLoWPzpOJZioYg+2wOkZX3e10e
+        6/OwONAcbnvjCQw1UBjS6lH5ZzIXBQqxepug==
+Received: from wexc007.uw.lu.se (130.235.59.251) by mail.lu.se
+ (130.235.56.200) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.12; Tue, 13
+ Sep 2022 14:17:04 +0200
+Received: from [130.235.83.196] (130.235.139.100) by wexc007.uw.lu.se
+ (130.235.59.251) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.12; Tue, 13
+ Sep 2022 14:16:40 +0200
+Message-ID: <ff41c70a-767a-45b8-f993-1f70ad3d9254@control.lth.se>
+Date:   Tue, 13 Sep 2022 14:16:39 +0200
 MIME-Version: 1.0
-Sender: missaisha.gaddafi2014@gmail.com
-Received: by 2002:a05:6512:318a:0:0:0:0 with HTTP; Tue, 13 Sep 2022 03:28:22
- -0700 (PDT)
-From:   Mr Ibrahim <ibrahimidewu4@gmail.com>
-Date:   Tue, 13 Sep 2022 11:28:22 +0100
-X-Google-Sender-Auth: NwP0BLnV4kw4qf9oHUwplZq_Ekg
-Message-ID: <CAHnzjr1N4Trgp8GMAZzH+0-3Q=s4NzWPPHpbvuJWhNEzn6bJgQ@mail.gmail.com>
-Subject: GREETINGS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
-        BAYES_99,BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_SCAM,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:143 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9992]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 0.9992]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [missaisha.gaddafi2014[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ibrahimidewu4[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.0 HK_SCAM No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.5 MONEY_FORM Lots of money if you fill out a form
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  0.4 ADVANCE_FEE_5_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: kernel 5.19.8: "Oxford Semiconductor Ltd OXPCIe952 Dual Native
+ 950 UART" gets wrong baudrate (PCI ID 1415:c158)
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+CC:     <linux-serial@vger.kernel.org>
+References: <ef8fd762-88cf-548a-0599-17d939ad3a57@control.lth.se>
+ <YyA9maUOlPIExIUd@kroah.com>
+From:   Anders Blomdell <anders.blomdell@control.lth.se>
+In-Reply-To: <YyA9maUOlPIExIUd@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [130.235.139.100]
+X-ClientProxiedBy: wexc008.uw.lu.se (130.235.59.252) To wexc007.uw.lu.se
+ (130.235.59.251)
+X-CrossPremisesHeadersFilteredBySendConnector: wexc007.uw.lu.se
+X-OrganizationHeadersPreserved: wexc007.uw.lu.se
+X-ORF-InterSessionInfo: eid=CNqSUe6T9zQ=;oid=AAAAAMCENUM=;bar=wip;cid=AFRb3DDViAQ08ILSDHAc86NA4A==;iss=y;loc=hp;s=/Ojn+UWQE8NZ18kMyvqLxZKLpGePDg03RyUvfmkbARf1j6W2uB9p+/h4l5VKGujezmYpEnf4vvjFTB84uvIGDA==
+Received-SPF: Pass (wedge010.net.lu.se: domain of
+ anders.blomdell@control.lth.se designates 130.235.59.251 as permitted sender)
+ receiver=wedge010.net.lu.se; client-ip=130.235.59.251; helo=wexc007.uw.lu.se;
+X-CrossPremisesHeadersFilteredBySendConnector: wedge010.net.lu.se
+X-OrganizationHeadersPreserved: wedge010.net.lu.se
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear,
-                       Can you trust a financial relationship that is
-mutually beneficial to us both? I have received your name and contact
-information from your country's banking data Information, hoping that
-you are interested in what I am going to tell you.
+I get incorrect baudrates, my oscilloscope gives:
 
-I'm Mr. Ibrahim idewu from Ouagadougou, here in Burkina Faso. I work
-for coris bank international. I am writing to you about a business
-proposal that will be of great benefit to both of us. In my
-department, as a banker, I discovered $19,300,000 in the account of
-one of our deceased foreign clients.
-The choice to contact you depends on the sensitivity of the
-transaction and the confidentiality it contains. Now our bank has been
-waiting for one of the family members to file the application, but
-nobody has done so. Personally, I have not found family members for a
-long time. I ask for permission to present you as the next of kin /
-beneficiary of the deceased, so the proceeds of this account are worth
-$19,300,000 to you.
+Programmed	Measured
 
-This is paid or shared in these percentages, 60% for me and 40% for
-you. I have secured legal documents that can be used to substantiate
-this claim. The only thing I have to do is put your names in the
-documents and legalize them here in court to prove you as the rightful
-beneficiary. All I need now is your honest cooperation,
-confidentiality and your trust, so that we can complete this
-transaction. I guarantee that this transaction is 100% risk-free, as
-the transfer is subject to international banking law
+   2400		  5208
+   4800		 13150
+   9600		 10410
+  19200		 71420
+  38400		142000
+  57600		201600
+115200		138800
 
-Please give me this as we have 5 days to work through this. This is very urgent.
 
-1. Full Name:
-2. Your direct mobile number:
-3. Your contact address:
-4. Your job:
-5. Your nationality:
-6. Your gender / age:
+On 2022-09-13 10:21, Greg Kroah-Hartman wrote:
+> On Mon, Sep 12, 2022 at 09:59:08PM +0200, Anders Blomdell wrote:
+>> Reverting commits
+>>    366f6c955d4d1a5125ffcd6875ead26a3c7a2a1c
+>>    9c5c8aaed50bf3478073ab51b8b1f3f5327d3cfa
+>> fixes my problems.
+> 
+> What problems exactly?
+> 
+> And why not cc: the developers of those commits?
+> 
+> thanks,
+> 
+> greg k-h
 
-Please confirm your message and interest to provide further
-information. Please do get back to me on time.
-
-Best regards
-Mr. Ibrahim idewu
+-- 
+Anders Blomdell                  Email: anders.blomdell@control.lth.se
+Department of Automatic Control
+Lund University                  Phone:    +46 46 222 4625
+P.O. Box 118
+SE-221 00 Lund, Sweden
