@@ -2,98 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793405B77FE
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Sep 2022 19:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64ED5B789E
+	for <lists+linux-serial@lfdr.de>; Tue, 13 Sep 2022 19:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbiIMRbQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 13 Sep 2022 13:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S233604AbiIMRqh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 13 Sep 2022 13:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiIMRal (ORCPT
+        with ESMTP id S233315AbiIMRqJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:30:41 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C97CEB858
-        for <linux-serial@vger.kernel.org>; Tue, 13 Sep 2022 09:19:37 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id AD37392009D; Tue, 13 Sep 2022 18:19:27 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id AA09E92009C;
-        Tue, 13 Sep 2022 17:19:27 +0100 (BST)
-Date:   Tue, 13 Sep 2022 17:19:27 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Anders Blomdell <anders.blomdell@control.lth.se>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: kernel 5.19.8: "Oxford Semiconductor Ltd OXPCIe952 Dual Native
- 950 UART" gets wrong baudrate (PCI ID 1415:c158)
-In-Reply-To: <e9ca9267-dfee-c7b0-f1ec-4d2b76a05991@control.lth.se>
-Message-ID: <alpine.DEB.2.21.2209131638550.60554@angie.orcam.me.uk>
-References: <ef8fd762-88cf-548a-0599-17d939ad3a57@control.lth.se> <YyA9maUOlPIExIUd@kroah.com> <ff41c70a-767a-45b8-f993-1f70ad3d9254@control.lth.se> <YyB4AtFJx++PeA6S@kroah.com> <7a99a59e-838d-c9da-6ead-167398642c07@control.lth.se> <YyCNOV9no9NPwv8m@kroah.com>
- <e9ca9267-dfee-c7b0-f1ec-4d2b76a05991@control.lth.se>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 13 Sep 2022 13:46:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A99463E4;
+        Tue, 13 Sep 2022 09:42:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 998F1614B2;
+        Tue, 13 Sep 2022 16:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC96C433C1;
+        Tue, 13 Sep 2022 16:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663087347;
+        bh=3Q42QFQ/ngGZQQeyp7QhP6eTWM1+zQJpWZ4yQpNfCck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CxcOkubrZXQn2EQ474gG4UJo8mQX4nMBEhGTo20JqjXQk8APbj4ESssFffXLIIrHe
+         EkQekGPKV6oi28uzSCB2vMMBMNbL4MG/Y5Jqo/Ck6PRg6Gf6/9R/4ETjb53/y1bDmI
+         ER8i6KF9wD8A2E87VuxXZrTmY3TJJvX2uADpxHUwm4/hxI6WH3ha1O7+/zCtIQmadL
+         tSaG76vGXeo3tTYJOqbp4CDh6cL8oz16K6lPvZscMq0aHIQ5cAbdBIkL0kaQ1BFzBj
+         ZnFYabEV5yARdpuFbCj0JK78O4TM5SxigD6MRnGzfigOv/gp8fXAhW6xuuCQGo/mmn
+         t/XgkL+PxS2DQ==
+Date:   Tue, 13 Sep 2022 22:12:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, kishon@ti.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        zhangqing@rock-chips.com, jamie@jamieiles.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v1 09/11] dt-bindings: phy: phy-rockchip-inno-usb2: add
+ rockchip,rk3128-usb2phy
+Message-ID: <YyCy7838UGnV2qcR@matsya>
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d477a077-a68f-e752-5192-807db80a9e68@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Anders,
+On 10-09-22, 00:01, Johan Jonker wrote:
+> Add rockchip,rk3128-usb2phy compatible string.
 
- Sorry to cause you trouble.
+Applied, thanks
 
-> > I really don't know what to do here, sorry.  Are you saying a specific
-> > commit has broken this?  If so, did you test if you made a change it
-> > fixed the issue?
-> 
-> Yes, commit 366f6c955d4d1a5125ffcd6875ead26a3c7a2a1c broke the one to one
-> correspondence
-> between programmed and actual baudrate; reverting it (and
-> 9c5c8aaed50bf3478073ab51b8b1f3f5327d3cfa
-> that builds on that patch) restores the expected functionality (i.e. you get
-> the baudrate you ask for)
-> on 5.19.8.
-
- I have implemented the calculation using parameters from original OxSemi 
-datasheets and verified this code across three architectures available to 
-me (POWER9, RISC-V, 32-bit x86) and a couple of cards made by different 
-manufacturers connected to a non-OxSemi serial device each at the other 
-end.  I have checked the usual baud rates of up to 460800bps.  Higher baud 
-rates work too, though I could only try them between OxSemi devices, so 
-actual rates were not verified for correctness.
-
- And offhand I can say it works just fine at 230400bps with 6.0.0-rc2 as 
-at commit 10d4879f9ef0 and my RISC-V machine (using an EXSYS EX-44171 
-1S+1P port PCIe option card, built around the OXPCIe952 too) talking to a 
-remote console server in my lab.  I don't have an oscilloscope available 
-to check actual waveforms produced.
-
-> > What do you suggest happen here?
-> Either there is a bug in the code, or the chipset on my card (a Delock 2xRS232
-> card) is not a true oxford
-> chipset (the package and PCI id's says that they are).
-
- A bug can never be ruled out.  I doubt that Delock would use a fake chip 
-or indeed that anyone would choose to clone an OxSemi part, which seems 
-fairly complex to me for a serial port.
-
-> Since the chip seems to be discontinued since 2014 (see
-> https://www.mouser.com/PCN/PLX_Technology_2013_8.pdf),
-> I think a revert would not be uncalled for.
-
- The problem is the original calculation is inaccurate enough for the 
-serial interface not to communicate correctly at higher baud rates.  I 
-found setting two stop bits while talking to a remote end that has one 
-stop bit set a possible workaround for some cases, but why not do the 
-calculation correctly in the first place?
-
- If you're willing to debug it, then I'll be more than happy to supply you 
-with diagnostic patches, some of which I made in the development of the 
-fix.  Also what processor architecture do you use the interface with?
-
-  Maciej
+-- 
+~Vinod
