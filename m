@@ -2,272 +2,156 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D691D5B9F9A
-	for <lists+linux-serial@lfdr.de>; Thu, 15 Sep 2022 18:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D167B5BA3D5
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Sep 2022 03:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiIOQ2C (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 15 Sep 2022 12:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S229789AbiIPBRj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 15 Sep 2022 21:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiIOQ16 (ORCPT
+        with ESMTP id S229538AbiIPBRf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 15 Sep 2022 12:27:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195519E11F;
-        Thu, 15 Sep 2022 09:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663259277; x=1694795277;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=hTLgiq46065uoaGpLmCVB41MvllRV5rjFIMLJgL3xHU=;
-  b=gp6Fbu9f7eEvTJ+5RnrIg5o6HslxPAkykbFp8WmNmfIQmK5mnFrT0TjK
-   QLah07IbZE4L7Jh/e5T0htAYlDWpDhPBqdt1s3zApOvD3qnYisYLlz5x3
-   +eGhABU23bI3ZhFFFvc9B5U0HKNGnEPAzlNP8kDR6m+C8un/LSWU/RFYs
-   3284Okm7YOrEv5tl9dch9GaCIjpOapSSKa7zeaOQfZEkipMtXAb9o35Gr
-   LjqGAHY0dj7CJjlO2lUFgtgHZ/bh3vJrTlUjsnD9m46lAqsDndziV9b9u
-   lUjV9RoQ8LwxeuCsRS8Iaqon0/vYWYb9rSeoT8hdRYEPVz1i/wk/TRYNf
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="297490732"
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="297490732"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:27:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,318,1654585200"; 
-   d="scan'208";a="721066213"
-Received: from khagn-mobl1.ger.corp.intel.com ([10.249.46.185])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 09:27:53 -0700
-Date:   Thu, 15 Sep 2022 19:27:45 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lennert Buytenhek <buytenh@wantstofly.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: I/O page faults from 8250_mid PCIe UART after TIOCVHANGUP
-In-Reply-To: <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
-Message-ID: <7fd034a9-c1e1-2dca-693b-129c9d2649@linux.intel.com>
-References: <YyF/dogp/0C87zLb@wantstofly.org> <YyGoZLTFhYQvlf+P@smile.fi.intel.com> <YyG2tDdq9PWTlaBQ@wantstofly.org> <YyHR4o5bOnODZzZ9@smile.fi.intel.com>
+        Thu, 15 Sep 2022 21:17:35 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01hn2219.outbound.protection.outlook.com [52.100.164.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B8A7757A;
+        Thu, 15 Sep 2022 18:17:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d4o83MdUwBzT/yGYHHri9JxKgvKAr1myKifExpoOG6RW/DJ6Hwx/HFWbCRTAcnalNMWZtiCfWWiv5BNRgudbeIRIrFA1aUpAMqgiR637yuSms6do4DF6jNeC1yKumQYHlgZ/a6HhOxwZtpo9C6zkL+bsu0JAtMId5JULDOXnfzA74uvlRxyoZiVHHEh/Uxv1/xdTJ3SjFGvN5cw/tu1nDH1AdI9DEHKG6moY6aDp85uW3+wP2ZL69Kx/X22OyF20hg7Jn3VKP6Yu1kJZQ6g9LvjUj7xhFxAzUAtOtHKQA12ks/Rp4h2PyduF+HYYaHU47spmmHU6GI+HZ8sqNniaWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bs10Md+15nMnyayKLyd22Uv+/ZH79IcFcpzuzGLq1Fg=;
+ b=Z+6l5XN4eD0pGu0kvU1O/11m+Uv6YQ0Qd0vITH042WwFlhw/RN66l78Gi6CIsx+jk0c6wO03fHHPsVd/vmE9a2h7Z4mu0Dxy/sHonKIToUsqzJPoL2MGFIkZTWulAgfRVhIwUoOa/5+ajfIWHSwxqXysIlktUz9o4p9llcGX2U9ba9l6TAPweWQd0I4uGlHEqoSQkOQAgEuyGJNmlSaLKkSZCV26SzSt+/M0gqI/nHTMnYzNs7Yz1f4/JyocTsAQNUbeUxCBz1zX5m7n0+ACY8fap+nzx488tj/tt2Dh5SJ4O/v7mKBm6RA0+J5XwKp/44GqHMPEdBA/zmASs0FHZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 45.14.71.5) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=t4.cims.jp;
+ dmarc=bestguesspass action=none header.from=t4.cims.jp; dkim=none (message
+ not signed); arc=none (0)
+Received: from SG2PR02CA0090.apcprd02.prod.outlook.com (2603:1096:4:90::30) by
+ PSAPR04MB4296.apcprd04.prod.outlook.com (2603:1096:301:3e::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5632.16; Fri, 16 Sep 2022 01:17:31 +0000
+Received: from SG2APC01FT0020.eop-APC01.prod.protection.outlook.com
+ (2603:1096:4:90:cafe::f3) by SG2PR02CA0090.outlook.office365.com
+ (2603:1096:4:90::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.16 via Frontend
+ Transport; Fri, 16 Sep 2022 01:17:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 45.14.71.5)
+ smtp.mailfrom=t4.cims.jp; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=t4.cims.jp;
+Received-SPF: Pass (protection.outlook.com: domain of t4.cims.jp designates
+ 45.14.71.5 as permitted sender) receiver=protection.outlook.com;
+ client-ip=45.14.71.5; helo=User; pr=M
+Received: from mail.prasarana.com.my (58.26.8.159) by
+ SG2APC01FT0020.mail.protection.outlook.com (10.13.36.117) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5632.12 via Frontend Transport; Fri, 16 Sep 2022 01:17:31 +0000
+Received: from MRL-EXH-02.prasarana.com.my (10.128.66.101) by
+ MRL-EXH-02.prasarana.com.my (10.128.66.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 16 Sep 2022 09:17:00 +0800
+Received: from User (45.14.71.5) by MRL-EXH-02.prasarana.com.my
+ (10.128.66.101) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Fri, 16 Sep 2022 09:16:31 +0800
+Reply-To: <rhashimi202222@kakao.com>
+From:   Consultant Swift Capital Loans Ltd <info@t4.cims.jp>
+Subject: I hope you are doing well, and business is great!
+Date:   Fri, 16 Sep 2022 09:17:11 +0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1047278770-1663259274=:1610"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <b88f6004-1774-41cd-b8dd-c9210b0ec8a2@MRL-EXH-02.prasarana.com.my>
+To:     Undisclosed recipients:;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-SkipListedInternetSender: ip=[45.14.71.5];domain=User
+X-MS-Exchange-ExternalOriginalInternetSender: ip=[45.14.71.5];domain=User
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2APC01FT0020:EE_|PSAPR04MB4296:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7aa05c1d-b4b1-4479-90f5-08da97813a4d
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?windows-1251?Q?Wlj+8wRk159ZZGYOMMQMsVGFU8Q2vffl1gPIM54q/xLej1O0onCPvKJ1?=
+ =?windows-1251?Q?db5cTfD+QYb/55NAe1/ezWpdAr4waGSS1/b8XaoOyRaH0SzrivWB8Hxs?=
+ =?windows-1251?Q?my4otFyzs/vJHRl1NZ7QJIqBm+gVlmVROAVTiLvr+caZFt0HGaxvP5Qk?=
+ =?windows-1251?Q?1+N2FcNB59nGWHDJNH8vMVawO4HRkqa77ryRIzrgxqiJVsmLVueKrjrC?=
+ =?windows-1251?Q?kLATBANyE8bLxCCH/E8wLUxkoGthHaJDt9B34muAt1G3Z98SO0B1zsvu?=
+ =?windows-1251?Q?99EMUJQIT0aJz5CrgddRkJBq6fRW+LwEF+PhCXPJCeo8Ngk6qO+Z6ey8?=
+ =?windows-1251?Q?+HMFsIzLNg3YyfuK5TnIU0jRjcPnLimz9yMBqSxeDovAeuhZujVGaAVh?=
+ =?windows-1251?Q?Qsa/el9xd9CwS2KEq+zJ7uoiVgg0zWvb7yzX6EcjY+xiAIWHrlacSlWO?=
+ =?windows-1251?Q?KSzRh+qugc79k82JfQQqpuHe/x0i9Xia2UIQFi4xnCZBhH9vJS+w5IGH?=
+ =?windows-1251?Q?I99iehXePIc/0eVgvh70AoTRdAP7Nsd/oqNeEeCl4mKQSd/oA8afkXf9?=
+ =?windows-1251?Q?TlfNjuN1S+FCG7eDpcKp1UIAxotWqyskoiybPvSrxIh4cYuVnrFAE+V5?=
+ =?windows-1251?Q?A5GY2O27nhABEwSTxzPzRhma8CALg00FgAFxtD17cPJuenlM5iPsEdGG?=
+ =?windows-1251?Q?QOYXyXHvEmDEEuLssmeeNT4mF3LUYJpgbqlpJ/cP3WrbE+0oobEFy8sV?=
+ =?windows-1251?Q?yLx37JE5Fd20f6vu1/egAjVCDR+LHhumsfZeCw8oIe6m8fxkVlIayxdZ?=
+ =?windows-1251?Q?RtB23v9WeVdYAFF19SM0RbHcwpOWBOAxxI5Dq1WYFEnOgVCl0/ufRHYZ?=
+ =?windows-1251?Q?X/AYDGvljLES7XEfe33NXnph16ztDgch9vkMzdZD04cw4ykMrgFwWh+j?=
+ =?windows-1251?Q?/Vl05CV2c0s4lzp+u2CkCbNj4+Ahz3AvOhaF/DFz+vW5od/4Fr4owDM6?=
+ =?windows-1251?Q?KV4sat4mdN0skjLoagoe0JiwybH3bjCx0hZFynxLPaB0lTsWGyLYrJ6a?=
+ =?windows-1251?Q?ANKe4FMW9yKi//rdG9vlbZYbRtf9jM96z3pDKMzBqSiI0EzwVZvE5jF5?=
+ =?windows-1251?Q?6BJhJrWVnVOiKFqGA8ZCU386n82z0lOmgtv9DMEA6zo/rOpXhbIMtd5w?=
+ =?windows-1251?Q?fL1OVUtDjLv0it/PB1uYZbTYDbWxF/+H+Sg0GPiVI47CeEJ73lmDGlAu?=
+ =?windows-1251?Q?3UQmL+UUzm5SGkBxt+fvyUDkCT5YsFyT0RqMqGEYDLZUwtmX9NGdd6WI?=
+ =?windows-1251?Q?sUYC1+yw4eArmU3uoLmLCdtgYwp9Iv1Iwr/q1bUQDSuVW4r1?=
+X-Forefront-Antispam-Report: CIP:58.26.8.159;CTRY:JP;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:User;PTR:45.14.71.5.static.xtom.com;CAT:OSPM;SFS:(13230022)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199015)(40470700004)(46966006)(82740400003)(66899012)(2906002)(156005)(32850700003)(31686004)(70586007)(4744005)(9686003)(26005)(70206006)(31696002)(40460700003)(47076005)(81166007)(5660300002)(7416002)(40480700001)(7366002)(86362001)(498600001)(109986005)(6666004)(956004)(7406005)(41300700001)(8936002)(316002)(36906005)(35950700001)(8676002)(82310400005)(336012)(2700400008);DIR:OUT;SFP:1501;
+X-OriginatorOrg: myprasarana.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 01:17:31.0458
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa05c1d-b4b1-4479-90f5-08da97813a4d
+X-MS-Exchange-CrossTenant-Id: 3cbb2ff2-27fb-4993-aecf-bf16995e64c0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3cbb2ff2-27fb-4993-aecf-bf16995e64c0;Ip=[58.26.8.159];Helo=[mail.prasarana.com.my]
+X-MS-Exchange-CrossTenant-AuthSource: SG2APC01FT0020.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR04MB4296
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
+        AXB_X_FF_SEZ_S,BAYES_50,FORGED_MUA_OUTLOOK,FSL_CTYPE_WIN1251,
+        FSL_NEW_HELO_USER,HEADER_FROM_DIFFERENT_DOMAINS,NSL_RCVD_FROM_USER,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [52.100.164.219 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5105]
+        *  0.0 NSL_RCVD_FROM_USER Received from User
+        *  0.0 FSL_CTYPE_WIN1251 Content-Type only seen in 419 spam
+        *  3.2 AXB_X_FF_SEZ_S Forefront sez this is spam
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [52.100.164.219 listed in bl.score.senderscore.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [52.100.164.219 listed in wl.mailspike.net]
+        *  0.0 AXB_XMAILER_MIMEOLE_OL_024C2 Yet another X header trait
+        *  0.0 FSL_NEW_HELO_USER Spam's using Helo and User
+        *  1.9 FORGED_MUA_OUTLOOK Forged mail pretending to be from MS Outlook
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hello,
 
---8323329-1047278770-1663259274=:1610
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+I hope you are doing well, and business is great!
+However, if you need working capital to further grow and expand your business, we may be a perfect fit for you. I am Ms. Kaori Ichikawa Swift Capital Loans Ltd Consultant, Our loans are NOT based on your personal credit, and NO collateral is required.
 
-On Wed, 14 Sep 2022, Andy Shevchenko wrote:
+We are a Direct Lender who can approve your loan today, and fund as Early as Tomorrow.
 
-> On Wed, Sep 14, 2022 at 02:10:44PM +0300, Lennert Buytenhek wrote:
-> > On Wed, Sep 14, 2022 at 01:09:40PM +0300, Andy Shevchenko wrote:
-> > > > On an Intel SoC with several 8250_mid PCIe UARTs built into the CPU, I
-> > > > can reliably trigger I/O page faults if I invoke TIOCVHANGUP on any of
-> > > > the UARTs and then re-open that UART.
-> > > > 
-> > > > Invoking TIOCVHANGUP appears to clear the MSI address/data registers
-> > > > in the UART via tty_ioctl() -> tty_vhangup() -> __tty_hangup() ->
-> > > > uart_hangup() -> uart_shutdown() -> uart_port_shutdown() ->
-> > > > univ8250_release_irq() -> free_irq() -> irq_domain_deactivate_irq() ->
-> > > > __irq_domain_deactivate_irq() -> msi_domain_deactivate() ->
-> > > > __pci_write_msi_msg():
-> > > > 
-> > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > 		Address: fee00278  Data: 0000
-> > > > [root@icelake ~]# cat hangup.c
-> > > > #include <stdio.h>
-> > > > #include <sys/ioctl.h>
-> > > > 
-> > > > int main(int argc, char *argv[])
-> > > > {
-> > > > 	ioctl(1, TIOCVHANGUP);
-> > > > 
-> > > > 	return 0;
-> > > > }
-> > > > [root@icelake ~]# gcc -Wall -o hangup hangup.c
-> > > > [root@icelake ~]# ./hangup > /dev/ttyS4
-> > > > [root@icelake ~]# lspci -s 00:1a.0 -vv | grep -A1 MSI:
-> > > > 	Capabilities: [40] MSI: Enable+ Count=1/1 Maskable- 64bit-
-> > > > 		Address: 00000000  Data: 0000
-> > > > [root@icelake ~]#
-> > > > 
-> > > > Opening the serial port device again while the UART is in this state
-> > > > then appears to cause the UART to generate an interrupt
-> > > 
-> > > The interrupt is ORed three: DMA Tx, DMA Rx and UART itself.
-> > > Any of them can be possible, but to be sure, can you add:
-> > > 
-> > > 	dev_info(p->dev, "FISR: %x\n", fisr);
-> > > 
-> > > into dnv_handle_irq() before any other code and see which bits we
-> > > actually got there before the crash?
-> > > 
-> > > (If it floods the logs, dev_info_ratelimited() may help)
-> > 
-> > I think that that wouldn't report anything because when the UART is
-> > triggering an interrupt here, the MSI address/data are zero, so the
-> > IRQ handler is not actually invoked.
-> 
-> Ah, indeed. Then you may disable MSI (in 8250_mid) and see that anyway?
-> 
-> > If Ilpo doesn't beat me to it, I'll try adding some debug code to see
-> > exactly which UART register write in the tty open path is causing the
-> > UART to signal an interrupt before the IRQ handler is set up.
-> > 
-> > (The IOMMU stops the write in this case, so the machine doesn't crash,
-> > we just get an I/O page fault warning in dmesg every time this happens.)
-> 
-> And I believe you are not using that UART as debug console, so it won't
-> dead lock itself. It's then better than I assumed.
-> 
-> > > > before the
-> > > > MSI vector has been set up again, causing a DMA write to I/O virtual
-> > > > address zero:
-> > > > 
-> > > > [root@icelake console]# echo > /dev/ttyS4
-> > > > [  979.463307] DMAR: DRHD: handling fault status reg 3
-> > > > [  979.469409] DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-> > > > 
-> > > > I'm guessing there's something under tty_open() -> uart_open() ->
-> > > > tty_port_open() -> uart_port_activate() -> uart_port_startup() ->
-> > > > serial8250_do_startup() that triggers a UART interrupt before the
-> > > > MSI vector has been set up again.
-> > > > 
-> > > > I did a quick search but it didn't seem like this is a known issue.
-> > > 
-> > > Thanks for your report and reproducer! Yes, I also never heard about
-> > > such an issue before. Ilpo, who is doing more UART work nowadays, might
-> > > have an idea, I hope.
+Once your reply I will send you the official website to complete your application
 
-The patch below seems to avoid the faults. I'm far from sure if it's the 
-best fix though as I don't fully understand what causes the faults during 
-the THRE tests because the port->irq is disabled by the THRE test block.
+Waiting for your reply.
 
---
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-[PATCH] serial: 8250: Turn IER bits on only after irq has been set up
-
-Invoking TIOCVHANGUP on 8250_mid port and then reopening the
-port triggers these faults during serial8250_do_startup():
-
-  DMAR: DRHD: handling fault status reg 3
-  DMAR: [DMA Write NO_PASID] Request device [00:1a.0] fault addr 0x0 [fault reason 0x05] PTE Write access is not set
-
-The faults are triggered by the THRE test that temporarily toggles THRI
-in IER before UART's irq is set up.
-
-Refactor serial8250_do_startup() such that irq is setup before the THRE
-test. The current irq setup code is intermixed with the timer setup
-code. As THRE test must be performed prior to the timer setup, extract
-it into own function and call it only after the THRE test.
-
-Reported-by: Lennert Buytenhek <buytenh@wantstofly.org>
-Fixes: 40b36daad0ac ("[PATCH] 8250 UART backup timer")
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
----
- drivers/tty/serial/8250/8250.h      |  2 ++
- drivers/tty/serial/8250/8250_core.c | 23 ++++++++++++-----------
- drivers/tty/serial/8250/8250_port.c |  8 +++++---
- 3 files changed, 19 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-index 287153d32536..dbf4c1204bf3 100644
---- a/drivers/tty/serial/8250/8250.h
-+++ b/drivers/tty/serial/8250/8250.h
-@@ -403,3 +403,5 @@ static inline int serial_index(struct uart_port *port)
- {
- 	return port->minor - 64;
- }
-+
-+void univ8250_setup_timer(struct uart_8250_port *up);
-diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 2e83e7367441..e81a9cab6960 100644
---- a/drivers/tty/serial/8250/8250_core.c
-+++ b/drivers/tty/serial/8250/8250_core.c
-@@ -298,21 +298,15 @@ static void serial8250_backup_timeout(struct timer_list *t)
- 		jiffies + uart_poll_timeout(&up->port) + HZ / 5);
- }
- 
--static int univ8250_setup_irq(struct uart_8250_port *up)
-+void univ8250_setup_timer(struct uart_8250_port *up)
- {
- 	struct uart_port *port = &up->port;
--	int retval = 0;
- 
--	/*
--	 * The above check will only give an accurate result the first time
--	 * the port is opened so this value needs to be preserved.
--	 */
- 	if (up->bugs & UART_BUG_THRE) {
- 		pr_debug("%s - using backup timer\n", port->name);
- 
- 		up->timer.function = serial8250_backup_timeout;
--		mod_timer(&up->timer, jiffies +
--			  uart_poll_timeout(port) + HZ / 5);
-+		mod_timer(&up->timer, jiffies + uart_poll_timeout(port) + HZ / 5);
- 	}
- 
- 	/*
-@@ -322,10 +316,17 @@ static int univ8250_setup_irq(struct uart_8250_port *up)
- 	 */
- 	if (!port->irq)
- 		mod_timer(&up->timer, jiffies + uart_poll_timeout(port));
--	else
--		retval = serial_link_irq_chain(up);
-+}
-+EXPORT_SYMBOL_GPL(univ8250_setup_timer);
- 
--	return retval;
-+static int univ8250_setup_irq(struct uart_8250_port *up)
-+{
-+	struct uart_port *port = &up->port;
-+
-+	if (port->irq)
-+		return serial_link_irq_chain(up);
-+
-+	return 0;
- }
- 
- static void univ8250_release_irq(struct uart_8250_port *up)
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 39b35a61958c..6e8e16227a3a 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2294,6 +2294,10 @@ int serial8250_do_startup(struct uart_port *port)
- 	if (port->irq && (up->port.flags & UPF_SHARE_IRQ))
- 		up->port.irqflags |= IRQF_SHARED;
- 
-+	retval = up->ops->setup_irq(up);
-+	if (retval)
-+		goto out;
-+
- 	if (port->irq && !(up->port.flags & UPF_NO_THRE_TEST)) {
- 		unsigned char iir1;
- 
-@@ -2336,9 +2340,7 @@ int serial8250_do_startup(struct uart_port *port)
- 		}
- 	}
- 
--	retval = up->ops->setup_irq(up);
--	if (retval)
--		goto out;
-+	univ8250_setup_timer(up);
- 
- 	/*
- 	 * Now, initialize the UART
-
--- 
-tg: (1d10cd4da593..) 8250/setup-irq-fix (depends on: tty-linus)
---8323329-1047278770-1663259274=:1610--
+Regards
+Ms. Kaori Ichikawa
+Consultant Swift Capital Loans Ltd
