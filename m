@@ -2,96 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B779D5EC0EE
-	for <lists+linux-serial@lfdr.de>; Tue, 27 Sep 2022 13:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEAC5EC1D3
+	for <lists+linux-serial@lfdr.de>; Tue, 27 Sep 2022 13:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiI0LSq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 27 Sep 2022 07:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S232119AbiI0Lro (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 27 Sep 2022 07:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiI0LSX (ORCPT
+        with ESMTP id S232165AbiI0Lrl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:18:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5426BCEB;
-        Tue, 27 Sep 2022 04:18:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 83FF71FD07;
-        Tue, 27 Sep 2022 11:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664277501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g6ztBScsKSn32mkT2NhD08kHlXvqclyG0jMfeztB7nU=;
-        b=2ygAvVOXTuAu2mtJF1vrPjUFilv97iBfRlK7wohSbSnUtDV+j4nE3WfxnQs0/5ctR/Ailh
-        JvbrVp3snQu9JvGHaePH8tgzZUtyBiXEy5nCaVR37jU40pd49YG9rRuRIMm1g+iWBX2L55
-        sN7w2SSz7fHUsrO2+iFKAA6u07MMNB8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664277501;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g6ztBScsKSn32mkT2NhD08kHlXvqclyG0jMfeztB7nU=;
-        b=HUxLzx87puN1Dd0I2gvbpmWCWVWr9xyK9ek1B6FNOlnSu/oxDhash4C95JEBTXk6YDPtE8
-        fCySs6ZRtHgtPdBQ==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4C1622C162;
-        Tue, 27 Sep 2022 11:18:21 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        Tobias Klauser <tklauser@distanz.ch>
-Subject: [PATCH 4/4] tty: serial: do unlock on a common path in altera_jtaguart_console_putc()
-Date:   Tue, 27 Sep 2022 13:18:19 +0200
-Message-Id: <20220927111819.18516-4-jslaby@suse.cz>
-X-Mailer: git-send-email 2.37.3
+        Tue, 27 Sep 2022 07:47:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B442B6D1F;
+        Tue, 27 Sep 2022 04:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664279260; x=1695815260;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=s6AJoa89+cpJOlqj7hRJRgtFtDN6+afMKye4KWGWigU=;
+  b=DrcSQExnoZQ6pHR4MEZR2JyPkb5lbQBOrPJYby9PUfb+zsw3bbBVJ8G/
+   oL201zU38ScuJqxwo32g7LrkB2m8+Xnoz0CofGe3J9Q5DAgFHGNOx5FKU
+   FSmyPMVIrrq9nHvDMtP5uPQtUXSgUvipPjguWZK4Osetg9DS1IC8HrwLE
+   aLo5w8syPwt/DSMhe3zQVMIYKOORgkym2Yk2k2jGNeCewQ6T6+amrK5uj
+   4vMjChe5sepUYAcZWzl6Y4Y7mJA7k1M3gktiUxayn/P/4MBpumFwfjH2o
+   BXcJDw6w7B/xO3X3uNlZ45YP8YoKh4THYgb800Nit9CmXZaBuhNIY7rFW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="301272305"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="301272305"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:47:40 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="710531219"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="710531219"
+Received: from aksaxena-mobl2.ger.corp.intel.com ([10.252.60.19])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:47:38 -0700
+Date:   Tue, 27 Sep 2022 14:47:37 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] tty: serial: extend lqasc_tx_ready() to
+ lqasc_console_putchar()
 In-Reply-To: <20220927111819.18516-1-jslaby@suse.cz>
+Message-ID: <b46d3edd-adb8-c91a-c1-a2cfe39205f@linux.intel.com>
 References: <20220927111819.18516-1-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-268247081-1664279261=:2334"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-port->lock is unlocked in each branch in altera_jtaguart_console_putc(),
-so do it before the "if". "status" needs not be under the lock, as the
-register was already read.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Cc: Tobias Klauser <tklauser@distanz.ch>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/serial/altera_jtaguart.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+--8323329-268247081-1664279261=:2334
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/drivers/tty/serial/altera_jtaguart.c b/drivers/tty/serial/altera_jtaguart.c
-index ac8ce418de36..c2d154d78e54 100644
---- a/drivers/tty/serial/altera_jtaguart.c
-+++ b/drivers/tty/serial/altera_jtaguart.c
-@@ -310,11 +310,12 @@ static void altera_jtaguart_console_putc(struct uart_port *port, unsigned char c
- 
- 	spin_lock_irqsave(&port->lock, flags);
- 	while (!altera_jtaguart_tx_space(port, &status)) {
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
- 		if ((status & ALTERA_JTAGUART_CONTROL_AC_MSK) == 0) {
--			spin_unlock_irqrestore(&port->lock, flags);
- 			return;	/* no connection activity */
- 		}
--		spin_unlock_irqrestore(&port->lock, flags);
-+
- 		cpu_relax();
- 		spin_lock_irqsave(&port->lock, flags);
- 	}
--- 
-2.37.3
+On Tue, 27 Sep 2022, Jiri Slaby wrote:
 
+> There is one more place where lqasc_tx_ready() can be used now:
+> lqasc_console_putchar(). So replace the open-coded variant by the
+> helper.
+> 
+> Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+> ---
+>  drivers/tty/serial/lantiq.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/lantiq.c b/drivers/tty/serial/lantiq.c
+> index 6da1b7496c6c..ba9739af30ed 100644
+> --- a/drivers/tty/serial/lantiq.c
+> +++ b/drivers/tty/serial/lantiq.c
+> @@ -606,15 +606,12 @@ static const struct uart_ops lqasc_pops = {
+>  static void
+>  lqasc_console_putchar(struct uart_port *port, unsigned char ch)
+>  {
+> -	int fifofree;
+> -
+>  	if (!port->membase)
+>  		return;
+>  
+> -	do {
+> -		fifofree = (__raw_readl(port->membase + LTQ_ASC_FSTAT)
+> -			& ASCFSTAT_TXFREEMASK) >> ASCFSTAT_TXFREEOFF;
+> -	} while (fifofree == 0);
+> +	while (!lqasc_tx_ready(port))
+> +		;
+> +
+>  	writeb(ch, port->membase + LTQ_ASC_TBUF);
+>  }
+>  
+> 
+--8323329-268247081-1664279261=:2334--
