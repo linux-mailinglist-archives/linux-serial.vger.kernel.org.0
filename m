@@ -2,107 +2,194 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6471B5EB15C
-	for <lists+linux-serial@lfdr.de>; Mon, 26 Sep 2022 21:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9835EBAE9
+	for <lists+linux-serial@lfdr.de>; Tue, 27 Sep 2022 08:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiIZTbZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 26 Sep 2022 15:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S230081AbiI0Gqp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 27 Sep 2022 02:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiIZTbT (ORCPT
+        with ESMTP id S229538AbiI0Gqn (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 26 Sep 2022 15:31:19 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313AD9F0F5
-        for <linux-serial@vger.kernel.org>; Mon, 26 Sep 2022 12:31:16 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id q10so1939574oib.5
-        for <linux-serial@vger.kernel.org>; Mon, 26 Sep 2022 12:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=rA5xeXD0TyjUhjvsrx6ejmOzOVqFLC9Uf1Of+5mK/os=;
-        b=XYLGtCvyTnJImyC4fHMGRBRWfyyGInN0ek05ZAmxmZqzFNBT5Kr1LPwn4NSLbAHbck
-         dJ4mTOJiA9Ng0qmJdG8lgA8J+4GW04jkMT0EZCXUP1k2nm1DDZWG/UWhgNwT2d311gxN
-         cbzXEZcV9PEWeb4auJ8YfKX51kuM63TVorvqcTP621X6VMY42pEknEr00Qj/eaCkiv3u
-         iIHSoKyAGlOaSeLoe9UzG98QVrElZO+9Ue7rCD3hFoNoOxcHO1OyBq8qgCmfHrjEa47H
-         xRUze1ZrVNTpSAXVnKTKl41z7UCbFNPTrsF1+4880Xce3SH7oZ//g65K5OoBHG+dvcGs
-         yzJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=rA5xeXD0TyjUhjvsrx6ejmOzOVqFLC9Uf1Of+5mK/os=;
-        b=fha8+9XiO3nn8gV9TOUucimQybvDxkIOUV+ltyhhKzSv0rUn37L8VrhMhyIBbP1qVJ
-         4CDZ0zVe0SgKaSySgMpsY67XjKd63WYH+YGU4+piAm15cV0Ol1jqrHpuaaMGTdWBjgsg
-         IfhI5hsZB12SLb54gri5PqlhlOOpfiKtDAzmyo4U4d3aNZN6cLHUpg9dFjRmeqy0Z/vE
-         WV4K/GMyE0TpuNyjEP3TZp9kN1ZeS38zpnD6nd1LWlAeRFu0aee0OFIJYWbQY967y2fZ
-         jpIRcjNXc4X5QhF6hT0UJR/HUI3xKOHRYjUdIDm2kB05d01gXW1+Jes/DVd4o77eJDfO
-         FVLg==
-X-Gm-Message-State: ACrzQf3cnMHeged0QkEoR3l5foj2QFqw/mjS97mXOWvlcsmhDxMyzUox
-        79HYaCf0yJ5ju1y2nbFRK+TCZEwRVtbttF2zFprM3psUQ2WPJg==
-X-Google-Smtp-Source: AMsMyM4VRTXS41jsPPJScI9q/EFUHpNf32UA5q3Da+DZbTVyGQsvA+z+WpVJmroZvC8Z6n2RBouuoygEzzes90zagS4=
-X-Received: by 2002:a05:6808:30a0:b0:34f:656c:1909 with SMTP id
- bl32-20020a05680830a000b0034f656c1909mr140742oib.115.1664220675896; Mon, 26
- Sep 2022 12:31:15 -0700 (PDT)
+        Tue, 27 Sep 2022 02:46:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21546A00E2;
+        Mon, 26 Sep 2022 23:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664261202; x=1695797202;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=UYSRZj7T7ZxjpirfOn+GZ9jSLsE+bkyXb8Mh75XWUEA=;
+  b=bhGRdeaPHQZJaEVHiAHvnjRXKHdFH13zP3itfJ3ZSTRY6wDJBQvqd1Kr
+   dNv7hscvM0IdOgsvZmpz59BRq4J6SLyIeVROSJNsaV3L7ruQkpjSRIWvQ
+   p9XbGaE+thiEhW0HK1s98O7Aufe/BT3NTnhnsKcCFGBGYVNGectnGPR9m
+   g0Xu/+abFfiPJOeQjmZeVlaiSlG66Ds13kZ0An4ZG2GrUoCmJV0Q6laM4
+   +PhX7cVfVHqsmPb9TiDYFXuTJ1SUQO+uYIHCnmblkaiVXQZ+/I/09uVym
+   lHMFkWfCjodJ4CaMxzs60Z8fXvCrFUrbvoGApDbmPj9F58tQhh6uNWcX1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="365280456"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="365280456"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 23:46:41 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="689882103"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="689882103"
+Received: from aksaxena-mobl2.ger.corp.intel.com ([10.252.60.19])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 23:46:36 -0700
+Date:   Tue, 27 Sep 2022 09:46:32 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX
+ interrupts
+In-Reply-To: <alpine.DEB.2.22.394.2209260734490.363733@rhweight-WRK1>
+Message-ID: <609e122-f6a0-c0c2-4168-4025dd96a1ac@linux.intel.com>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-5-matthew.gerlach@linux.intel.com> <a602677-78ac-23a0-1a63-96b325595998@linux.intel.com> <alpine.DEB.2.22.394.2209260734490.363733@rhweight-WRK1>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:7253:b0:c7:f373:780 with HTTP; Mon, 26 Sep 2022
- 12:31:15 -0700 (PDT)
-Reply-To: pointerscott009@gmail.com
-From:   Aminuind Aabawa <aminuindabawa00@gmail.com>
-Date:   Mon, 26 Sep 2022 20:31:15 +0100
-Message-ID: <CAP_JfypsEfR_sHu+px7aKWhO=YFVcTcfQP7xigQtUQG=Q-mYWg@mail.gmail.com>
-Subject: =?UTF-8?Q?Bussines_offer_Gesch=C3=A4ftsangebot=2E?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:244 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [pointerscott009[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aminuindabawa00[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [aminuindabawa00[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/mixed; boundary="8323329-529190930-1664261202=:2334"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Hello, Do you have a projects that need urgent loan??
-Granting out loans today in 10,000 / 500 Million to Interested
-Investors, Companies & Private Individuals.
-Revert back if you interested.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-529190930-1664261202=:2334
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Mon, 26 Sep 2022, matthew.gerlach@linux.intel.com wrote:
+
+> 
+> 
+> On Fri, 23 Sep 2022, Ilpo Järvinen wrote:
+> 
+> > On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
+> > 
+> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > 
+> > > Define and use a DFHv1 parameter to add generic support for MSIX
+> > > interrupts for DFL devices.
+> > > 
+> > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > ---
+> > > v2: fix kernel doc
+> > >     clarify use of DFH_VERSION field
+> > > ---
+> > >  drivers/fpga/dfl.c  | 60 +++++++++++++++++++++++++++++++++++++++++----
+> > >  include/linux/dfl.h | 14 +++++++++++
+> > >  2 files changed, 69 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> > > index 1132f3c10440..dfd3f563c92d 100644
+> > > --- a/drivers/fpga/dfl.c
+> > > +++ b/drivers/fpga/dfl.c
+> > > @@ -941,23 +941,22 @@ static int parse_feature_irqs(struct
+> > > build_feature_devs_info *binfo,
+> > >  	void __iomem *base = binfo->ioaddr + ofst;
+> > >  	unsigned int i, ibase, inr = 0;
+> > >  	enum dfl_id_type type;
+> > > -	int virq;
+> > > +	int virq, off;
+> > >  	u64 v;
+> > > 
+> > >  	type = feature_dev_id_type(binfo->feature_dev);
+> > > 
+> > >  	/*
+> > >  	 * Ideally DFL framework should only read info from DFL header, but
+> > > -	 * current version DFL only provides mmio resources information for
+> > > +	 * current version, DFHv0, only provides mmio resources information
+> > > for
+> > >  	 * each feature in DFL Header, no field for interrupt resources.
+> > >  	 * Interrupt resource information is provided by specific mmio
+> > >  	 * registers of each private feature which supports interrupt. So in
+> > >  	 * order to parse and assign irq resources, DFL framework has to look
+> > >  	 * into specific capability registers of these private features.
+> > >  	 *
+> > > -	 * Once future DFL version supports generic interrupt resource
+> > > -	 * information in common DFL headers, the generic interrupt parsing
+> > > -	 * code will be added. But in order to be compatible to old version
+> > > +	 * DFHv1 supports generic interrupt resource information in DFHv1
+> > > +	 * parameter blocks. But in order to be compatible to old version
+> > >  	 * DFL, the driver may still fall back to these quirks.
+> > >  	 */
+> > >  	if (type == PORT_ID) {
+> > > @@ -981,6 +980,36 @@ static int parse_feature_irqs(struct
+> > > build_feature_devs_info *binfo,
+> > >  		}
+> > >  	}
+> > > 
+> > > +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+> > > +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+> > > +
+> > > +		v = FIELD_GET(DFH_VERSION, readq(base));
+> > 
+> > I'd call this variable version (or ver) if you want to store it but it
+> > would also fit to switch () line so that no extra variable is needed.
+> 
+> I will change the v to dfh_ver to be clearer.  I want to store the value
+> because it is used in the default case in the error message.  The error
+> message helps to debug broken FPGA images.
+
+Right, I missed that (or didn't think it too much and all being called 
+"v" didn't help either :-)).
+
+> > > +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+> > > +				off = dfl_find_param(base + DFHv1_PARAM_HDR,
+> > > ofst,
+> > > +						     DFHv1_PARAM_ID_MSIX);
+> > > +				if (off >= 0) {
+> > 
+> > I'd reverse these 2 conditions and break when there's nothing to do.
+> 
+> I'm not sure what you mean by reversing these conditions because a DFHv1 may
+> or may not have parameters (the first condition), and a DFHv1 may have
+> parameters but may not have a MSI-X parameter (the second condition).
+
+This is what I meant:
+
+		if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v))
+			break;
+
+		off = dfl_find_param(...);
+		if (off < 0)
+			break;
+
+		ibase = ...
 
 
-Hallo, haben Sie Projekte, die dringend einen Kredit ben=C3=B6tigen?
-Vergeben Sie heute Kredite in H=C3=B6he von 10.000 / 500 Millionen an
-interessierte Investoren, Unternehmen und Privatpersonen. Kommen Sie
-zur=C3=BCck, wenn Sie interessiert sind.
+-- 
+ i.
+
+
+> > > +					ibase = readl(base + DFHv1_PARAM_HDR +
+> > > +						      off +
+> > > DFHv1_PARAM_MSIX_STARTV);
+> > > +					inr = readl(base + DFHv1_PARAM_HDR +
+> > > +						    off +
+> > > DFHv1_PARAM_MSIX_NUMV);
+> > > +					dev_dbg(binfo->dev, "start %d num %d
+> > > fid 0x%x\n",
+> > > +						ibase, inr, fid);
+> > > +				}
+> > > +			}
+> > > +			break;
+
+--8323329-529190930-1664261202=:2334--
