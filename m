@@ -2,120 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB91F5EFAD2
-	for <lists+linux-serial@lfdr.de>; Thu, 29 Sep 2022 18:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EEC5EFF15
+	for <lists+linux-serial@lfdr.de>; Thu, 29 Sep 2022 23:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234708AbiI2Qdy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 29 Sep 2022 12:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S229660AbiI2VJd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 29 Sep 2022 17:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235201AbiI2Qdm (ORCPT
+        with ESMTP id S230019AbiI2VJM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:33:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A1355A4;
-        Thu, 29 Sep 2022 09:33:41 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 019CD1F8BE;
-        Thu, 29 Sep 2022 16:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664469220; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8eShIPYqu7E10XqA1YXAoCftbC0rFatAmpe4+4vsscI=;
-        b=HrytoeWsHGUIH5VJtyPUoJbyv0xaregBL9fpxSePMNf0cHw5nf+aDFmL36YJQ3Jn1YmQyx
-        eW5zw2346C+FqG7Q8ICq/meKC/T4wcj0j0RThkBCrDcJvCJ2tPtNO0Qoh6JhVRHBOSmqte
-        nBCLwjNhPnV0W1Yoa/c5AWzNQtWFceo=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E2A212C14E;
-        Thu, 29 Sep 2022 16:33:38 +0000 (UTC)
-Date:   Thu, 29 Sep 2022 18:33:35 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Sven Schnelle <svens@stackframe.org>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        linux-parisc@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH printk 00/18] preparation for threaded/atomic printing
-Message-ID: <YzXI3ztt3kpMbFt1@alley>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+        Thu, 29 Sep 2022 17:09:12 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DD61BBEFF
+        for <linux-serial@vger.kernel.org>; Thu, 29 Sep 2022 14:08:45 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id a129so2936801vsc.0
+        for <linux-serial@vger.kernel.org>; Thu, 29 Sep 2022 14:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date;
+        bh=a/4gJxYFUflekDqu/7BIxC8IwRhmkcL7ufJZYwUJhJs=;
+        b=R5TZJFfzjDdVHlS0JDkykfowudaEFNUaOSkvUrPiadaq5uIQrwotLFns4vaXKXZhWZ
+         tuvBXDxk/95/oDVdCw5PpVv3nHfyYk2gyaWXlKGNI+ixhnYy2az8VEDhFi5bNLZ+8JZR
+         Fq9MUsYQWi/pVVho9vXHp9BmZmlvrTx+wItMNg7UPb5B2ho7WG+eHKGAee9PmAPBBPC/
+         mlSYi6t/s+Vz3f19rUMJIwJobx6RKdSwvNn1V8VFcctxbsMlzWvouDbQWNeGKShNMHke
+         15urtxmDKvgLFi3vrIh2oZbNaRhk9LrMCy5hgTRUiALxZKLF/PsT53VIbTrq6sCJz5uT
+         IAcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=a/4gJxYFUflekDqu/7BIxC8IwRhmkcL7ufJZYwUJhJs=;
+        b=vkWze5EuqIKNMD+bOZ2Z6C5NowztVa46L6+8JFqsoDa1nZejc9AZ93IhO3iDz4GsDM
+         r8NHbbdJ7oHyEQxc0wa6KHqH9dKWoZgqpatUipEYSS8y263S9BeW7zW5rx40qwdW1Ywb
+         4Yg5s2LvCL+/dIcSBDYWkMKhDasQcUfF7zhFZFOZkY+yGBWAC5Y2HeH/1+zG0eHHyh1H
+         itHlC0e/AA6p8ztPBCEEmWDDJX66wqOs0UnbSa8jTuxDsQsf+hh4l0YH1W7jc5QcCsRY
+         DRQ662q/ylb9DNYic6ThhR9RstsOcqGg9+bJkWQ8WLQOobDju7xnVoJvmLBkOELv1tUq
+         Vaow==
+X-Gm-Message-State: ACrzQf3RSwbDc2zYf/WM3oljNfSja6d7pQPYsI5Q6MqsCgBlDVZL4gXz
+        v0EBu5+Leow/xaITkF7+OqSkqKGoahF5bSj0PsA=
+X-Google-Smtp-Source: AMsMyM5zN7PhIhSRNChl8O0iIlB4qusgl34Jz0tchmp036TH7mk0W6ZZTBHe6SLQvN5owwIbDTDXdCBQOOf5CuaruZQ=
+X-Received: by 2002:a67:d704:0:b0:3a5:de42:fe2e with SMTP id
+ p4-20020a67d704000000b003a5de42fe2emr2969954vsj.9.1664485723963; Thu, 29 Sep
+ 2022 14:08:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-1-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: christiangnansa05@gmail.com
+Received: by 2002:a05:6122:c9b:0:0:0:0 with HTTP; Thu, 29 Sep 2022 14:08:43
+ -0700 (PDT)
+From:   Tomani David <davidtomani24@gmail.com>
+Date:   Thu, 29 Sep 2022 21:08:43 +0000
+X-Google-Sender-Auth: 0gSuSLFVGi3fyOLEa4LCA7UE3OM
+Message-ID: <CACuprae0A1b7mEQuVqAh6jM=z5rc_UjLAHurRDHVUWNZVRme5A@mail.gmail.com>
+Subject: Opportunity
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat 2022-09-24 02:10:36, John Ogness wrote:
-> Hi,
-> 
-> This series is essentially the first 18 patches of tglx's RFC series
-> [0] with only minor changes in comments and commit messages. It's
-> purpose is to lay the groundwork for the upcoming threaded/atomic
-> console printing posted as the RFC series and demonstrated at
-> LPC2022 [1].
-> 
-> This series is interesting for mainline because it cleans up various
-> code and documentation quirks discovered while working on the new
-> console printing implementation.
-> 
-> Aside from cleanups, the main features introduced here are:
-> 
-> - Converts the console's DIY linked list implementation to hlist.
-> 
-> - Introduces a console list lock (mutex) so that readers (such as
->   /proc/consoles) can safely iterate the consoles without blocking
->   console printing.
-> 
-> - Adds SRCU support to the console list to prepare for safe console
->   list iterating from any context.
-> 
-> - Refactors buffer handling to prepare for per-console, per-cpu,
->   per-context atomic printing.
-> 
-> The series has the following parts:
-> 
->    Patches  1 - 5:   Cleanups
-> 
->    Patches  6 - 12:  Locking and list conversion
-> 
->    Patches 13 - 18:  Improved output buffer handling to prepare for
->                      code sharing
-> 
-> Thomas Gleixner (18):
->   printk: Make pr_flush() static
->   printk: Declare log_wait properly
->   printk: Remove write only variable nr_ext_console_drivers
->   printk: Remove bogus comment vs. boot consoles
->   printk: Mark __printk percpu data ready __ro_after_init
+Good evening,
 
-JFYI, I have pushed the first 5 cleanup patches into printk/linux.git,
-branch rework/kthreads. The aim is to get them into 6.1.
+I want to discuss a business with you if you are interested
 
-The rest of the patchset is still being discussed.
 
-Best Regards,
-Petr
+Regards,
+Mr. David
