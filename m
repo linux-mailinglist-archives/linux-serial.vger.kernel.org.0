@@ -2,48 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F353F5F3689
-	for <lists+linux-serial@lfdr.de>; Mon,  3 Oct 2022 21:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F4C5F36C5
+	for <lists+linux-serial@lfdr.de>; Mon,  3 Oct 2022 21:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJCTme (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 3 Oct 2022 15:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S229914AbiJCTzS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 3 Oct 2022 15:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiJCTmb (ORCPT
+        with ESMTP id S229947AbiJCTzM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:42:31 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B5548E84
-        for <linux-serial@vger.kernel.org>; Mon,  3 Oct 2022 12:42:27 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        Mon, 3 Oct 2022 15:55:12 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3799FFB
+        for <linux-serial@vger.kernel.org>; Mon,  3 Oct 2022 12:55:05 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id ABBAD100D941D;
-        Mon,  3 Oct 2022 21:42:24 +0200 (CEST)
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 0D4B03000034F;
+        Mon,  3 Oct 2022 21:55:00 +0200 (CEST)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 7A18159769; Mon,  3 Oct 2022 21:42:24 +0200 (CEST)
-Date:   Mon, 3 Oct 2022 21:42:24 +0200
+        id E12D2517A8; Mon,  3 Oct 2022 21:54:59 +0200 (CEST)
+Date:   Mon, 3 Oct 2022 21:54:59 +0200
 From:   Lukas Wunner <lukas@wunner.de>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Su Bao Cheng <baocheng.su@siemens.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Nishanth Menon <nm@ti.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
 Subject: Re: [PATCH] serial: 8250: 8250_omap: Support native RS485
-Message-ID: <20221003194224.GC12171@wunner.de>
+Message-ID: <20221003195459.GA11858@wunner.de>
 References: <b9f5e4b01f10bb692fc78df668f686dd33d8c036.1664279959.git.lukas@wunner.de>
- <20221003151059.mypganj25awuxc2d@iaqt7>
+ <42986e92-d12e-bfde-2f5c-f580c113c3b@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221003151059.mypganj25awuxc2d@iaqt7>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <42986e92-d12e-bfde-2f5c-f580c113c3b@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
@@ -54,8 +55,8 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 10:10:59AM -0500, Bin Liu wrote:
-> On Tue, Sep 27, 2022 at 02:10:01PM +0200, Lukas Wunner wrote:
+On Wed, Sep 28, 2022 at 02:38:40PM +0300, Ilpo Järvinen wrote:
+> On Tue, 27 Sep 2022, Lukas Wunner wrote:
 > > Recent TI Sitara SoCs such as AM64/AM65 have gained the ability to
 > > automatically assert RTS when data is transmitted, obviating the need
 > > to emulate this functionality in software.
@@ -64,29 +65,46 @@ On Mon, Oct 03, 2022 at 10:10:59AM -0500, Bin Liu wrote:
 > > Mode Definition Register 3.  For details see page 8783 and 8890 of the
 > > AM65 TRM:  https://www.ti.com/lit/ug/spruid7e/spruid7e.pdf
 [...]
-> > -	if (up->port.rs485.flags & SER_RS485_ENABLED)
-> > +	if (priv->habit & UART_HAS_NATIVE_RS485)
-> > +		serial_out(up, UART_OMAP_MDR3, priv->mdr3);
+> > @@ -1335,10 +1387,7 @@ static int omap8250_probe(struct platform_device *pdev)
+> >  	up.port.shutdown = omap_8250_shutdown;
+> >  	up.port.throttle = omap_8250_throttle;
+> >  	up.port.unthrottle = omap_8250_unthrottle;
+> > -	up.port.rs485_config = serial8250_em485_config;
+> >  	up.port.rs485_supported = serial8250_em485_supported;
+> > -	up.rs485_start_tx = serial8250_em485_start_tx;
+> > -	up.rs485_stop_tx = serial8250_em485_stop_tx;
+> >  	up.port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
+> >  
+> >  	ret = of_alias_get_id(np, "serial");
+> > @@ -1377,6 +1426,14 @@ static int omap8250_probe(struct platform_device *pdev)
+> >  			 DEFAULT_CLK_SPEED);
+> >  	}
+> >  
+> > +	if (priv->habit & UART_HAS_NATIVE_RS485) {
+> > +		up.port.rs485_config = omap8250_rs485_config;
+> > +	} else {
+> > +		up.port.rs485_config = serial8250_em485_config;
+> > +		up.rs485_start_tx = serial8250_em485_start_tx;
+> > +		up.rs485_stop_tx = serial8250_em485_stop_tx;
+> > +	}
 > 
-> This makes the NATIVE_RS485 always used if the SoC supports it, but
-> 
-> > +	else if (up->port.rs485.flags & SER_RS485_ENABLED)
-> >  		serial8250_em485_stop_tx(up);
-> 
-> there are cases em485 should be used even if SoC supports NATIVE_RS485.
-> For example:
-> - the design has pinmux conflict and the RTS pin has to be used for
->   something else. Then a GPIO pin would be used for RS485 DE control;
-> - the design requires customized delay_rts_before_send or
->   delay_rts_after_send which NATIVE_RS485 doesn't support;
-> 
-> So we might need an option for such usecases. A device tree flag?
+> I guess .rs485_supported shouldn't be equal in both cases?
 
-I expect those cases to be rare, hence do not see the need to
-address them right from the start.  Support for falling back
-to software emulation can easily be added later.  Indeed a
-device tree property might be an appropriate way to trigger
-such a fallback.
+I contemplated whether it should be different for hardware-assisted
+RS485 but came to the conclusion that it shouldn't:
+
+The polarity may be chosen both for hardware- and software-controlled RTS.
+
+Whether RX_DURING_TX is possible depends on how the RS485 transceiver
+is wired to the UART:  If RTS asserts !RE on the transceiver when sending,
+the UART cannot receive data, regardless whether hardware- or software-
+controlled RTS is used.
+
+TERMINATE_BUS works independently from RTS control.
+
+And ADDRB doesn't seem to be supported in either mode AFAICS.
+
+Am I missing something?
 
 Thanks,
 
