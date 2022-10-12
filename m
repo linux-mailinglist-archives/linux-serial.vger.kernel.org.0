@@ -2,54 +2,62 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044B95FC954
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Oct 2022 18:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389235FC906
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Oct 2022 18:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiJLQaJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 12 Oct 2022 12:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S229489AbiJLQT5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 12 Oct 2022 12:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJLQ3o (ORCPT
+        with ESMTP id S229573AbiJLQT4 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 12 Oct 2022 12:29:44 -0400
-X-Greylist: delayed 2404 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 09:29:37 PDT
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AB3DFF;
-        Wed, 12 Oct 2022 09:29:37 -0700 (PDT)
-Received: from martin by viti.kaiser.cx with local (Exim 4.89)
-        (envelope-from <martin@viti.kaiser.cx>)
-        id 1oidz2-000187-AD; Wed, 12 Oct 2022 17:49:24 +0200
-Date:   Wed, 12 Oct 2022 17:49:24 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
+        Wed, 12 Oct 2022 12:19:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A791C41D;
+        Wed, 12 Oct 2022 09:19:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAA73B81A61;
+        Wed, 12 Oct 2022 16:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E16CCC433D6;
+        Wed, 12 Oct 2022 16:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665591591;
+        bh=TEDjogBy+ecqduxNWQvtcOqrUZbEXN3M1edKYOv2Kik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJc+dkG+SDhZ587/nB8yJgEeqLGk6vg6xMvfXgkcwSttnuYcdtUYvKQKGHMFZgGWO
+         OXu5gGm6v3E+Aax24MEzRf58atn8s77BkPUZrhukOLvM80T8F5NmdBeQqjRmJRNYKr
+         lbMVJynC/ibSUrrK4PjJP74170sW9LGV/uP8Lnd4=
+Date:   Wed, 12 Oct 2022 18:20:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Martin Kaiser <martin@kaiser.cx>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] serial: imx: Add missing .thaw_noirq hook
-Message-ID: <20221012154924.x4rjav563efhsnep@viti.kaiser.cx>
+Message-ID: <Y0bpU51o88u6iH0R@kroah.com>
 References: <20221012121353.2346280-1-shawn.guo@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20221012121353.2346280-1-shawn.guo@linaro.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
-Sender: Martin Kaiser <martin@viti.kaiser.cx>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Thus wrote Shawn Guo (shawn.guo@linaro.org):
-
+On Wed, Oct 12, 2022 at 08:13:53PM +0800, Shawn Guo wrote:
 > The following warning is seen with non-console UART instance when
 > system hibernates.
-
+> 
 > [   37.371969] ------------[ cut here ]------------
 > [   37.376599] uart3_root_clk already disabled
 > [   37.380810] WARNING: CPU: 0 PID: 296 at drivers/clk/clk.c:952 clk_core_disable+0xa4/0xb0
@@ -78,27 +86,27 @@ Thus wrote Shawn Guo (shawn.guo@linaro.org):
 > [   37.584792]  el0t_64_sync_handler+0xe8/0xf0
 > [   37.588976]  el0t_64_sync+0x1a0/0x1a4
 > [   37.592639] ---[ end trace 56e22eec54676d75 ]---
-
+> 
 > On hibernating, pm core calls into related hooks in sequence like:
-
+> 
 >     .freeze
 >     .freeze_noirq
 >     .thaw_noirq
 >     .thaw
-
+> 
 > With .thaw_noirq hook being absent, the clock will be disabled in a
 > unbalanced call which results the warning above.
-
+> 
 >     imx_uart_freeze()
 >         clk_prepare_enable()
 >     imx_uart_suspend_noirq()
 >         clk_disable()
 >     imx_uart_thaw
 >         clk_disable_unprepare()
-
+> 
 > Adding the missing .thaw_noirq hook as imx_uart_resume_noirq() will have
 > the call sequence corrected as below and thus fix the warning.
-
+> 
 >     imx_uart_freeze()
 >         clk_prepare_enable()
 >     imx_uart_suspend_noirq()
@@ -107,29 +115,12 @@ Thus wrote Shawn Guo (shawn.guo@linaro.org):
 >         clk_enable()
 >     imx_uart_thaw
 >         clk_disable_unprepare()
-
+> 
 > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
->  drivers/tty/serial/imx.c | 1 +
->  1 file changed, 1 insertion(+)
 
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index 590a25369531..e5163c2c4169 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -2603,6 +2603,7 @@ static const struct dev_pm_ops imx_uart_pm_ops = {
->  	.suspend_noirq = imx_uart_suspend_noirq,
->  	.resume_noirq = imx_uart_resume_noirq,
->  	.freeze_noirq = imx_uart_suspend_noirq,
-> +	.thaw_noirq = imx_uart_resume_noirq,
->  	.restore_noirq = imx_uart_resume_noirq,
->  	.suspend = imx_uart_suspend,
->  	.resume = imx_uart_resume,
-> -- 
-> 2.25.1
+What commit id does this fix, and does it need to go to older/stable
+kernels?
 
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+thanks,
 
-Thanks,
-
-   Martin
+greg k-h
