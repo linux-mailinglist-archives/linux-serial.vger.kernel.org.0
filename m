@@ -2,109 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCEF5FEB2B
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Oct 2022 10:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACFC5FFC98
+	for <lists+linux-serial@lfdr.de>; Sun, 16 Oct 2022 01:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiJNIwF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Oct 2022 04:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S229579AbiJOX0K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 15 Oct 2022 19:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiJNIvh (ORCPT
+        with ESMTP id S229573AbiJOX0J (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Oct 2022 04:51:37 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D5C1C492B
-        for <linux-serial@vger.kernel.org>; Fri, 14 Oct 2022 01:50:40 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id h12so4389499pjk.0
-        for <linux-serial@vger.kernel.org>; Fri, 14 Oct 2022 01:50:40 -0700 (PDT)
+        Sat, 15 Oct 2022 19:26:09 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25193FA29
+        for <linux-serial@vger.kernel.org>; Sat, 15 Oct 2022 16:26:02 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id j7so13015955wrr.3
+        for <linux-serial@vger.kernel.org>; Sat, 15 Oct 2022 16:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ng7mcmr4QJ6ZL7X9dSXkz6scbTE1whqwn58ZUV1v7fU=;
-        b=fl2DDYb6sXIUk+qaBL13rlS9GoxSjIN7An/O2MV8JX9SMYz9XToI3mTg8mdjaXEwF4
-         b+UHSSSnwNCpi7/LHm6oo/GiN9j/9V1IAZIotyj/JIIDm4uFGgPylrfUNLfXTn31mlp4
-         jBMUdqParK4xBjG1b8z//l9kseFfYIwWlsTKduZdNr81Fp91zNCMZR+gFWUHAuX4mmtc
-         rGO+bEzplHd2QQDcbiDac1iPuEXe+oUFnkQwKEVaEowCE5VwxseDcs8zB1BVGOKexX0T
-         HCb0P6e4hLZjjtmc2d07r6//iA/NfCNyVTUbtzy+K2/neclaOKfPZXFqDvXrT1p/qpsw
-         7O3Q==
+        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
+        b=Y20Ob9ciuVze9ya2LUog/LVE/aKMnR3J9ypMrS5aRaTXXlhI74+vQLJBBTs4s68i7G
+         qQmwWgLFtyUYAbD+vhKmI/P2wZUr5e4nDZraqCtBrBeunMXAHdmZx2RqbLLhiRPfnUxL
+         WHJL99yDu5E0Ez+q6IjZ2xMYFwaiUG8LABoAsrgu0CtrSFsShrFAbSjy7nWstXzOivS3
+         8oc5UUWZ/eb9TRS+LC319O7BgJAbrzIXDT3CYY03PionaWn/KJUugPPAVPo7ge7l0vRa
+         dfM3pbaEj0VwMKdsED3pWjEHaOgcs1I/JO8F9RXDXSB1cd/Pt3gIi2VDeAKf4Ld9qpU0
+         dTJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ng7mcmr4QJ6ZL7X9dSXkz6scbTE1whqwn58ZUV1v7fU=;
-        b=0qLZ7hm68a6C00Y4eV58O/Ae2vGIGdM0JSNvihs/gjra3E3ZI05yAv0cWCs1I4Fp09
-         GJFi/NpwCi8uUR0CnGEOZytlEPSyj7LFeR3ehkqeCclsZVauZWXqbO+/6Xg475ueRYZ8
-         bID+F2Eh31rrpPQtL6jPvLdkbrpuN4iD6WVppKutt2BseFq4udTSdYyKqt70rOTfwf25
-         IhH8kjz7wmLiTJTfvxnFEOa0quNkq6OsmsOGucNyFC3GecAxAl4uOVjYOrgg2V2NQceN
-         thU5+D5EkxO+SSpjZ09N9BkJAeeUC7D+oAhbcHznOX9fnEY0XabfjSA99q92wIjhjtAF
-         w+dg==
-X-Gm-Message-State: ACrzQf2owMwip8aARrxILcSZtrzkgbvf+hTrkjvNPnZe8jNLuv/pVc/f
-        xEa+imlrdSJyfQapUdDj7/4/+ERF6KfYuWUuK5U=
-X-Google-Smtp-Source: AMsMyM6Gki/zibqvO4IUgq6AOHNg4UurZbkRSjnNzOHtUw9ZXTifNl1yRiqLhPXHcg0Trce5ObeLDauGmNB586RL02s=
-X-Received: by 2002:a17:902:c241:b0:182:a32f:4db7 with SMTP id
- 1-20020a170902c24100b00182a32f4db7mr4093749plg.131.1665737439596; Fri, 14 Oct
- 2022 01:50:39 -0700 (PDT)
+        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
+        b=iMIVlCXZy+OG+kZaKHEK+arPdO3BW8wMwNOy2hAg/I3H5BQKpStXkwrcK5ehvzrVoZ
+         cUpCUggB0g6V4n9NoUT0ABf79b4D0sbDq1OOVh/fV76qQ4fsIdlhqra0uVgc95kSaHur
+         Pnct3xV7/mr0JKRcw8UwtNmM+32iphk2X9BzQr3hOAWG30Pc9DttzbceMBZRul7iWhwY
+         PwzH8v/X4Qjm4OcVFnLP99uIH11KShav9fvqej+a+BKNZduV3vxBydQoTVebWoXDyvcY
+         UhGn/KpUnoWwZQeTz1FYL0XJo6j1pQBUwhTMIthFDWa1boCLx+2Fp0sEYMf5NO+Ap4z/
+         qqIg==
+X-Gm-Message-State: ACrzQf3/ujJA7J7HmA5G/aqUdyfVRpDBAH7vz3/QJQveGUndkSXmC+hE
+        eSFXJfvSYd0k8dbJrzoyH8lV/i2p47N24NZ3Vj8=
+X-Google-Smtp-Source: AMsMyM6kU3pXsSNGiL94HkY9zUeCM238G3f3ObmM9kxNfzpZlI2TlsUSYeRHlOblHRQRA7PSyQ1JFO2+CWXfSN0jY3g=
+X-Received: by 2002:adf:e19e:0:b0:22e:64de:39fa with SMTP id
+ az30-20020adfe19e000000b0022e64de39famr2322766wrb.369.1665876361181; Sat, 15
+ Oct 2022 16:26:01 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6a11:48e:b0:2f5:1f00:a707 with HTTP; Fri, 14 Oct 2022
- 01:50:39 -0700 (PDT)
-Reply-To: stephenbord61@yahoo.com
-From:   Stephen Bordeaux <baslealio.58@gmail.com>
-Date:   Fri, 14 Oct 2022 09:50:39 +0100
-Message-ID: <CADG+sOauq0k+wqigL2_kC79B-9gjhV5=WvFGZBMgDTq4R1Oaiw@mail.gmail.com>
-Subject: =?UTF-8?B?TcWvxb5lIG8gdG8gcG/FvsOhZGF0?=
+Received: by 2002:a05:6000:1f8f:0:0:0:0 with HTTP; Sat, 15 Oct 2022 16:26:00
+ -0700 (PDT)
+Reply-To: richardwahl9035@gmail.com
+From:   Richard Wahl <cgichuhi872@gmail.com>
+Date:   Sun, 16 Oct 2022 02:26:00 +0300
+Message-ID: <CANQzO9V0MWwohW3nxnUgZu81Vy34g+V4c1avuU9uL3TMV-4LFA@mail.gmail.com>
+Subject: Re,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_80,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM_LOOSE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1043 listed in]
+        *      [2a00:1450:4864:20:0:0:0:42d listed in]
         [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4202]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8172]
         * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [baslealio.58[at]gmail.com]
         *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
         *      digit
-        *      [stephenbord61[at]yahoo.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *      [richardwahl9035[at]gmail.com]
         *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
         *      provider
-        *      [baslealio.58[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
+        *      [cgichuhi872[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cgichuhi872[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
         * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
         *      envelope-from domain
         * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
         * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
         *      author's domain
+        *  1.0 REPTO_419_FRAUD_GM_LOOSE Ends-in-digits Reply-To is similar to
+        *      known advance fee fraud collector mailbox
         *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
         *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
         *      different freemails
-X-Spam-Level: *****
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dobr=C3=BD den
+--=20
+Sch=C3=B6nen Tag,
 
-Jsem Stephen Bordeaux, pr=C3=A1vn=C3=AD z=C3=A1stupce z advok=C3=A1tn=C3=AD=
- kancel=C3=A1=C5=99e Bordeaux.
-Kontaktoval jsem v=C3=A1s ohledn=C4=9B poz=C5=AFstalosti fondu zesnul=C3=A9=
-ho Dr. Edwin ve
-v=C3=BD=C5=A1i 8,5 milionu dolar=C5=AF, kter=C3=A9 maj=C3=AD b=C3=BDt repat=
-riov=C3=A1ny na v=C3=A1=C5=A1 =C3=BA=C4=8Det.
-Nav=C3=ADc v t=C3=A9to transakci chci, abyste odpov=C4=9Bd=C4=9Bli d=C5=AFv=
-=C4=9Brn=C4=9B.
-
-Stephen Bordeaux
+Ich bin Herr Richard Wahl, Sie haben eine Spende von 700.000,00 =E2=82=AC. =
+Ich
+habe ein gewonnen
+Gl=C3=BCck in der Power-Ball-Lotterie und ich spende einen Teil davon an Te=
+n
+Lucky People und Ten Charity Organisation. Ihre E-Mail kam heraus
+siegreich, also antworte mir dringend f=C3=BCr weitere Informationen unter:
+richardwahl9035@gmail.com
+Aufrichtig,
+Herr Richard Wah7
