@@ -2,112 +2,227 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACFC5FFC98
-	for <lists+linux-serial@lfdr.de>; Sun, 16 Oct 2022 01:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476BC5FFE0A
+	for <lists+linux-serial@lfdr.de>; Sun, 16 Oct 2022 10:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiJOX0K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 15 Oct 2022 19:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S229579AbiJPICH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 16 Oct 2022 04:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJOX0J (ORCPT
+        with ESMTP id S229575AbiJPICG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 15 Oct 2022 19:26:09 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25193FA29
-        for <linux-serial@vger.kernel.org>; Sat, 15 Oct 2022 16:26:02 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id j7so13015955wrr.3
-        for <linux-serial@vger.kernel.org>; Sat, 15 Oct 2022 16:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
-        b=Y20Ob9ciuVze9ya2LUog/LVE/aKMnR3J9ypMrS5aRaTXXlhI74+vQLJBBTs4s68i7G
-         qQmwWgLFtyUYAbD+vhKmI/P2wZUr5e4nDZraqCtBrBeunMXAHdmZx2RqbLLhiRPfnUxL
-         WHJL99yDu5E0Ez+q6IjZ2xMYFwaiUG8LABoAsrgu0CtrSFsShrFAbSjy7nWstXzOivS3
-         8oc5UUWZ/eb9TRS+LC319O7BgJAbrzIXDT3CYY03PionaWn/KJUugPPAVPo7ge7l0vRa
-         dfM3pbaEj0VwMKdsED3pWjEHaOgcs1I/JO8F9RXDXSB1cd/Pt3gIi2VDeAKf4Ld9qpU0
-         dTJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
-        b=iMIVlCXZy+OG+kZaKHEK+arPdO3BW8wMwNOy2hAg/I3H5BQKpStXkwrcK5ehvzrVoZ
-         cUpCUggB0g6V4n9NoUT0ABf79b4D0sbDq1OOVh/fV76qQ4fsIdlhqra0uVgc95kSaHur
-         Pnct3xV7/mr0JKRcw8UwtNmM+32iphk2X9BzQr3hOAWG30Pc9DttzbceMBZRul7iWhwY
-         PwzH8v/X4Qjm4OcVFnLP99uIH11KShav9fvqej+a+BKNZduV3vxBydQoTVebWoXDyvcY
-         UhGn/KpUnoWwZQeTz1FYL0XJo6j1pQBUwhTMIthFDWa1boCLx+2Fp0sEYMf5NO+Ap4z/
-         qqIg==
-X-Gm-Message-State: ACrzQf3/ujJA7J7HmA5G/aqUdyfVRpDBAH7vz3/QJQveGUndkSXmC+hE
-        eSFXJfvSYd0k8dbJrzoyH8lV/i2p47N24NZ3Vj8=
-X-Google-Smtp-Source: AMsMyM6kU3pXsSNGiL94HkY9zUeCM238G3f3ObmM9kxNfzpZlI2TlsUSYeRHlOblHRQRA7PSyQ1JFO2+CWXfSN0jY3g=
-X-Received: by 2002:adf:e19e:0:b0:22e:64de:39fa with SMTP id
- az30-20020adfe19e000000b0022e64de39famr2322766wrb.369.1665876361181; Sat, 15
- Oct 2022 16:26:01 -0700 (PDT)
+        Sun, 16 Oct 2022 04:02:06 -0400
+Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [83.223.95.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE213C8D5
+        for <linux-serial@vger.kernel.org>; Sun, 16 Oct 2022 01:02:03 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by mailout1.hostsharing.net (Postfix) with ESMTPS id 1287E1012FE0F;
+        Sun, 16 Oct 2022 10:01:59 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id D626C603E021;
+        Sun, 16 Oct 2022 10:01:58 +0200 (CEST)
+X-Mailbox-Line: From e9f25f5c9200a35d3162973c2b45d6b892cc9bf2 Mon Sep 17 00:00:00 2001
+Message-Id: <e9f25f5c9200a35d3162973c2b45d6b892cc9bf2.1665906869.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Sun, 16 Oct 2022 10:02:00 +0200
+Subject: [PATCH v2] serial: 8250: 8250_omap: Support native RS485
 MIME-Version: 1.0
-Received: by 2002:a05:6000:1f8f:0:0:0:0 with HTTP; Sat, 15 Oct 2022 16:26:00
- -0700 (PDT)
-Reply-To: richardwahl9035@gmail.com
-From:   Richard Wahl <cgichuhi872@gmail.com>
-Date:   Sun, 16 Oct 2022 02:26:00 +0300
-Message-ID: <CANQzO9V0MWwohW3nxnUgZu81Vy34g+V4c1avuU9uL3TMV-4LFA@mail.gmail.com>
-Subject: Re,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM_LOOSE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:42d listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8172]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [richardwahl9035[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cgichuhi872[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cgichuhi872[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  1.0 REPTO_419_FRAUD_GM_LOOSE Ends-in-digits Reply-To is similar to
-        *      known advance fee fraud collector mailbox
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, Bin Liu <b-liu@ti.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        "Su Bao Cheng" <baocheng.su@siemens.com>,
+        Nishanth Menon <nm@ti.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Sch=C3=B6nen Tag,
+Recent TI Sitara SoCs such as AM64/AM65 have gained the ability to
+automatically assert RTS when data is transmitted, obviating the need
+to emulate this functionality in software.
 
-Ich bin Herr Richard Wahl, Sie haben eine Spende von 700.000,00 =E2=82=AC. =
-Ich
-habe ein gewonnen
-Gl=C3=BCck in der Power-Ball-Lotterie und ich spende einen Teil davon an Te=
-n
-Lucky People und Ten Charity Organisation. Ihre E-Mail kam heraus
-siegreich, also antworte mir dringend f=C3=BCr weitere Informationen unter:
-richardwahl9035@gmail.com
-Aufrichtig,
-Herr Richard Wah7
+The feature is controlled through new DIR_EN and DIR_POL bits in the
+Mode Definition Register 3.  For details see page 8783 and 8890 of the
+AM65 TRM:  https://www.ti.com/lit/ug/spruid7e/spruid7e.pdf
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Cc: Su Bao Cheng <baocheng.su@siemens.com>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Bin Liu <b-liu@ti.com>
+---
+ Changes v1 -> v2:
+
+ * Fall back to RS485 software emulation if RTS GPIO is used or
+   user-requested delays exceed fixed hardware delays (Bin Liu,
+   Vignesh Raghavendra)
+
+ * Set fixed hardware delay upon RTS assertion to 1 clock cycle
+   instead of 0 previously
+
+ * Add code comment to clarify that rs485_supported is the same
+   for software emulation and native RS485 (Ilpo Järvinen)
+
+ drivers/tty/serial/8250/8250_omap.c | 85 ++++++++++++++++++++++++++++-
+ 1 file changed, 82 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 68f5a167377f..0648e858a7cd 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -44,6 +44,7 @@
+ #define	UART_HAS_EFR2			BIT(4)
+ #define UART_HAS_RHR_IT_DIS		BIT(5)
+ #define UART_RX_TIMEOUT_QUIRK		BIT(6)
++#define UART_HAS_NATIVE_RS485		BIT(7)
+ 
+ #define OMAP_UART_FCR_RX_TRIG		6
+ #define OMAP_UART_FCR_TX_TRIG		4
+@@ -101,6 +102,11 @@
+ #define UART_OMAP_IER2			0x1B
+ #define UART_OMAP_IER2_RHR_IT_DIS	BIT(2)
+ 
++/* Mode Definition Register 3 */
++#define UART_OMAP_MDR3			0x20
++#define UART_OMAP_MDR3_DIR_POL		BIT(3)
++#define UART_OMAP_MDR3_DIR_EN		BIT(4)
++
+ /* Enhanced features register 2 */
+ #define UART_OMAP_EFR2			0x23
+ #define UART_OMAP_EFR2_TIMEOUT_BEHAVE	BIT(6)
+@@ -112,6 +118,7 @@ struct omap8250_priv {
+ 	int line;
+ 	u8 habit;
+ 	u8 mdr1;
++	u8 mdr3;
+ 	u8 efr;
+ 	u8 scr;
+ 	u8 wer;
+@@ -345,7 +352,10 @@ static void omap8250_restore_regs(struct uart_8250_port *up)
+ 
+ 	up->port.ops->set_mctrl(&up->port, up->port.mctrl);
+ 
+-	if (up->port.rs485.flags & SER_RS485_ENABLED)
++	serial_out(up, UART_OMAP_MDR3, priv->mdr3);
++
++	if (up->port.rs485.flags & SER_RS485_ENABLED &&
++	    up->port.rs485_config == serial8250_em485_config)
+ 		serial8250_em485_stop_tx(up);
+ }
+ 
+@@ -793,6 +803,74 @@ static void omap_8250_unthrottle(struct uart_port *port)
+ 	pm_runtime_put_autosuspend(port->dev);
+ }
+ 
++static int omap8250_rs485_config(struct uart_port *port,
++				 struct ktermios *termios,
++				 struct serial_rs485 *rs485)
++{
++	struct omap8250_priv *priv = port->private_data;
++	struct uart_8250_port *up = up_to_u8250p(port);
++	u32 fixed_delay_rts_before_send = 0;
++	u32 fixed_delay_rts_after_send = 0;
++	unsigned int baud;
++
++	/*
++	 * There is a fixed delay of 3 bit clock cycles after the TX shift
++	 * register is going empty to allow time for the stop bit to transition
++	 * through the transceiver before direction is changed to receive.
++	 *
++	 * Additionally there appears to be a 1 bit clock delay between writing
++	 * to the THR register and transmission of the start bit, per page 8783
++	 * of the AM65 TRM:  https://www.ti.com/lit/ug/spruid7e/spruid7e.pdf
++	 */
++	if (priv->quot) {
++		if (priv->mdr1 & UART_OMAP_MDR1_16X_MODE)
++			baud = port->uartclk / (16 * priv->quot);
++		else
++			baud = port->uartclk / (13 * priv->quot);
++
++		fixed_delay_rts_after_send  = 3 * MSEC_PER_SEC / baud;
++		fixed_delay_rts_before_send = 1 * MSEC_PER_SEC / baud;
++	}
++
++	/*
++	 * Fall back to RS485 software emulation if the UART is missing
++	 * hardware support, if the device tree specifies an mctrl_gpio
++	 * (indicates that RTS is unavailable due to a pinmux conflict)
++	 * or if the requested delays exceed the fixed hardware delays.
++	 */
++	if (!(priv->habit & UART_HAS_NATIVE_RS485) ||
++	    mctrl_gpio_to_gpiod(up->gpios, UART_GPIO_RTS) ||
++	    rs485->delay_rts_after_send  > fixed_delay_rts_after_send ||
++	    rs485->delay_rts_before_send > fixed_delay_rts_before_send) {
++		priv->mdr3 &= ~UART_OMAP_MDR3_DIR_EN;
++		serial_out(up, UART_OMAP_MDR3, priv->mdr3);
++
++		port->rs485_config = serial8250_em485_config;
++		return serial8250_em485_config(port, termios, rs485);
++	}
++
++	rs485->delay_rts_after_send  = fixed_delay_rts_after_send;
++	rs485->delay_rts_before_send = fixed_delay_rts_before_send;
++
++	if (rs485->flags & SER_RS485_ENABLED)
++		priv->mdr3 |= UART_OMAP_MDR3_DIR_EN;
++	else
++		priv->mdr3 &= ~UART_OMAP_MDR3_DIR_EN;
++
++	/*
++	 * Retain same polarity semantics as RS485 software emulation,
++	 * i.e. SER_RS485_RTS_ON_SEND means driving RTS low on send.
++	 */
++	if (rs485->flags & SER_RS485_RTS_ON_SEND)
++		priv->mdr3 &= ~UART_OMAP_MDR3_DIR_POL;
++	else
++		priv->mdr3 |= UART_OMAP_MDR3_DIR_POL;
++
++	serial_out(up, UART_OMAP_MDR3, priv->mdr3);
++
++	return 0;
++}
++
+ #ifdef CONFIG_SERIAL_8250_DMA
+ static int omap_8250_rx_dma(struct uart_8250_port *p);
+ 
+@@ -1242,7 +1320,7 @@ static struct omap8250_dma_params am33xx_dma = {
+ static struct omap8250_platdata am654_platdata = {
+ 	.dma_params	= &am654_dma,
+ 	.habit		= UART_HAS_EFR2 | UART_HAS_RHR_IT_DIS |
+-			  UART_RX_TIMEOUT_QUIRK,
++			  UART_RX_TIMEOUT_QUIRK | UART_HAS_NATIVE_RS485,
+ };
+ 
+ static struct omap8250_platdata am33xx_platdata = {
+@@ -1335,7 +1413,8 @@ static int omap8250_probe(struct platform_device *pdev)
+ 	up.port.shutdown = omap_8250_shutdown;
+ 	up.port.throttle = omap_8250_throttle;
+ 	up.port.unthrottle = omap_8250_unthrottle;
+-	up.port.rs485_config = serial8250_em485_config;
++	up.port.rs485_config = omap8250_rs485_config;
++	/* same rs485_supported for software emulation and native RS485 */
+ 	up.port.rs485_supported = serial8250_em485_supported;
+ 	up.rs485_start_tx = serial8250_em485_start_tx;
+ 	up.rs485_stop_tx = serial8250_em485_stop_tx;
+-- 
+2.36.1
+
