@@ -2,128 +2,108 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F92C602F7F
-	for <lists+linux-serial@lfdr.de>; Tue, 18 Oct 2022 17:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F3A6032A9
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Oct 2022 20:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiJRPT0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 18 Oct 2022 11:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S230142AbiJRSnb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Oct 2022 14:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJRPTZ (ORCPT
+        with ESMTP id S229774AbiJRSmG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 18 Oct 2022 11:19:25 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11BAD18C4;
-        Tue, 18 Oct 2022 08:19:18 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v11so939240wmd.1;
-        Tue, 18 Oct 2022 08:19:18 -0700 (PDT)
+        Tue, 18 Oct 2022 14:42:06 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E298E461
+        for <linux-serial@vger.kernel.org>; Tue, 18 Oct 2022 11:42:05 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id p89so5869579uap.12
+        for <linux-serial@vger.kernel.org>; Tue, 18 Oct 2022 11:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vBaIo106NnMu5MVYhnHg1HZlVjv/pqWACQc2/Rh9K70=;
-        b=ZyQ2qR+lYrjCwN9BuntaHYeFKcS9E/1mIQOxeSq/41Kn02oMdiB953Ms78+IMAYSJp
-         ZfxQKkzrrhkm6ARLmfc4Rah+N60I0gZ42dQ9SR9U/ToB1jyTfzwN+KLimMRU++f0YduA
-         RyQVfvjrtEensuaJSFfCC8pZGmNkRPiflUZajJHxks6lqXQM6UhZXU/8PQvvlfbSFsX1
-         dIt/GBT8diP3m9pH1ADEx6pBd6cGgFdUoVGzcdXi5kJKyHzmGaCbk1HEp9muB+wWCYHX
-         B/0crnU41A7VR4lFD0OzHMVlIFCi0gya7RPgS3szh8LTieYz1z9hzqooL2xdalq7GBXU
-         R8+A==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a9G1TFmLPWxtTEROXa3EgKVxLt69MAzXIdwglwBoviU=;
+        b=ebhgea+WYZgxfilLwCK8DwF9TxPIzdETOuPMYYmPD+3pwWKu1QERiKnxuqWBA7ENvL
+         ktssYy4RQCjTG/sjtojGxQSCKyh544nDLd0ZwL2ua0JOLtrV7usGQcOL2Au1bak+XHyT
+         r3zrXROjgfuyxxsXyDyYScd8KPJCpT7vUbMiitQ8ae1//dNPwmCG40l7JBucy+UUHBRD
+         bB/S+lu/1PJNg7YwToRWY/kEAVlao4/T1owyu3eLEd/sWg4uhQPYDRSbomC/eGq0i8RZ
+         PpOl9t+AVpPtVUOYZG3Ts/62agoWbn5ZY1AuMGH7bSl7zx/1eZ8or5wwavAWmCRlGceB
+         YHqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vBaIo106NnMu5MVYhnHg1HZlVjv/pqWACQc2/Rh9K70=;
-        b=cCJ8ZGURjoBvwZX/DA6tjTZ0MyZDZmvvcJaAgC3Vwc7BZzfZ2MIQMHbGKdw8wBdlFF
-         UcDKYChbnDeUQuWm7xp0Ul1o/Iq8tjEcSm548zLW13VQiDbQNpK1CW4DXl3cqGtpey3g
-         PmSvBgOqv0WAjNIuYaD5ZeU2Vafxsu3ceb8PNVD0goaCUmx1s9dJXlP6N2PHNJMWSpX+
-         A4FEm07eNVUX9fNfR1VbmxbaQSACGHBabuwlJ6TA90fCKH6cYX0AFO+PerkT3ra1wxL3
-         CftMrHFoDC/vcfac5p60Gfu/GUx4Jm9WHzTsvmNUcilHptADL7FjdE23myc64FKq30qU
-         QVRA==
-X-Gm-Message-State: ACrzQf2OG8QLKCcXewStxJaq0pKzvWlsflF8jNXtwPYULQ/7eMaNP4e1
-        NyGYK8n8L5SmpZxZV4M/J1A=
-X-Google-Smtp-Source: AMsMyM5iYn3fIXe/RenMqtxk3UKsm1373VHjP5tMTGXKlsjnmWhE6jeKDRj03288fCIB0xvq0V9dlQ==
-X-Received: by 2002:a05:600c:1f16:b0:3c6:b6f7:d224 with SMTP id bd22-20020a05600c1f1600b003c6b6f7d224mr2464464wmb.46.1666106357383;
-        Tue, 18 Oct 2022 08:19:17 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05600c2d8800b003c64c186206sm13179153wmg.16.2022.10.18.08.19.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 08:19:16 -0700 (PDT)
-Date:   Tue, 18 Oct 2022 17:19:14 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Kartik <kkartik@nvidia.com>
-Cc:     ldewangan@nvidia.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, jonathanh@nvidia.com, alan@linux.intel.com,
-        swarren@nvidia.com, akhilrajeev@nvidia.com,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] serial: tegra: Read DMA status before terminating
-Message-ID: <Y07D8qIPJYrwqWPM@orome>
-References: <1666105086-17326-1-git-send-email-kkartik@nvidia.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9G1TFmLPWxtTEROXa3EgKVxLt69MAzXIdwglwBoviU=;
+        b=Jp1YcxDuVDkpEesGBBeKOVQ5sBiMAhoOdsU25NFDVZetd0Ae9E2Y1jH+4G2l6hCuFT
+         T9NU56MPevua7dssYWt2xMy8oiI/SAZZJ78OtnRCIaDIxWwY34Mg/o7oK9FhGNacUqhZ
+         h3U+d5TF9h3ItUU7zetImUVSvyQRVoycMBU79NmGpTJOEdLUlHH+ZbH+BILuWb3WeqNM
+         nFO0eHxRfcGYVl8BfC+4hxgCcWQZGgwDEiKVI+7MNEntrIIhl9FIdt8FRA40Q4p9SA7N
+         GRG6CgV2dpM0gC2NSys9j7TUf8fPPMqmgLJfgKSROilVi4IY87jiWjgISBz/DXoibwgB
+         uedA==
+X-Gm-Message-State: ACrzQf32z7KcWXta4deVkKvqq19Sijd6Ul6tZRXY2FijA1rypnf1L9w/
+        nxuUV7Yf70d+AofQ4cJHMotC844KvqeEc5kIYV0=
+X-Google-Smtp-Source: AMsMyM6Po9fUIBmyLVjh+jrKbqWaEyipV+x1nF2jctjDU9bBMwsnBGszruXWNQko5k/O3UqwPmMA7m/9AVQFNgXUPKU=
+X-Received: by 2002:ab0:3855:0:b0:3d8:6475:49f8 with SMTP id
+ h21-20020ab03855000000b003d8647549f8mr2354800uaw.78.1666118524144; Tue, 18
+ Oct 2022 11:42:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IHuIGTSViub8/3Tu"
-Content-Disposition: inline
-In-Reply-To: <1666105086-17326-1-git-send-email-kkartik@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:612c:2209:b0:31a:c0a0:2913 with HTTP; Tue, 18 Oct 2022
+ 11:42:03 -0700 (PDT)
+Reply-To: iilluminatiinitiationcenter0@gmail.com
+From:   Garry Lee <janenakibuka0@gmail.com>
+Date:   Tue, 18 Oct 2022 21:42:03 +0300
+Message-ID: <CAN6xanNXCMAqLxWF1K3iqG70NnhM4nLqcJL6B_9n2nuaEmmL_w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        UNDISC_FREEM,UPPERCASE_75_100 autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:935 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [iilluminatiinitiationcenter0[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [janenakibuka0[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [janenakibuka0[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+-- 
+DO YOU WANT TO BE RICH AND FAMOUS? JOIN THE GREAT ILLUMINATI ORDER OF
+RICHES, POWER/FAME  NOW AND ACHIEVE ALL YOUR DREAMS? IF YES EMAIL US :
+MAIL: illuminatiinitiationcenter0@gmail.com
 
---IHuIGTSViub8/3Tu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Oct 18, 2022 at 08:28:06PM +0530, Kartik wrote:
-> Read the DMA status before terminating the DMA, as doing so deletes
-> the DMA desc.
->=20
-> Also, to get the correct transfer status information, pause the DMA
-> using dmaengine_pause() before reading the DMA status.
->=20
-> Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Signed-off-by: Kartik <kkartik@nvidia.com>
-> ---
-> v1->v2:
->  * Pause the DMA before reading the DMA status.
->  * Updated commit message.
->=20
->  drivers/tty/serial/serial-tegra.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-
-Seems fine:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---IHuIGTSViub8/3Tu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNOw/IACgkQ3SOs138+
-s6GgFA//fpcMpjiCNE0bjI9gIWfKnoaHklq0pIKH3JzHH4bXoIEXDzpa4lRECS+O
-Vaof0L0kUKBQwjPn87YmWoTc0QGO4YqFSV8OO4eyORk1H7affyY4IxpdcEdKg18y
-dUGRLj0mjMNDs/ZZRIkNK6nJMoplMbjBBaDeBiuhQ1ijBJWwm9AuuNzdEzPTXu8p
-uF8U9jM7dWBJ82JuasuJXnanT+qhyvPGnda4ABTV3fKgBN5XfwnzKLx1ik5mbGti
-LGU65Vm7vokMTrCvWjrnDnMZEGPn8BMJPfrjMhNYWzjnXYM1+vWr1XtpVhOLQoCv
-CxQ4A0eEbKb8E28DhUcJn2VFVIhpAEgL+kcDKB0LtrkRSAwwKKgaZKW8chUEl1kN
-EuHKlfTnuEYIde0U6jUv9cw1Z3tnmVmcca7Iu9w5tXB8au1LqhxscO5XNotlTnJF
-lRuHcGEkjThMET2s9iNrJqhC/fLXidPPuA3lHL8Z6Vp+Bp81cSwKFXbAcp6SEc/H
-jent0tT879mWh5cbsHs6oGRP51CRyiNj7q0YddOsEXPgSEu2V447uPTltZlWk6Jl
-JP+q1ERq48b7zBkt3jTXxeMYzdcxjWW02QWWtODS+nfANoM+aTy8W6X6NVWAZXY+
-prx2rH+b5vL1evw6GamwxFE808z+uXmYBVctt5TH8EUdsOTD410=
-=AAlD
------END PGP SIGNATURE-----
-
---IHuIGTSViub8/3Tu--
+YOUR FULL NAME:
+PHONE NUMBER :
+COUNTRY :
+GENDER:
