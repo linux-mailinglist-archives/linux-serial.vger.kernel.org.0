@@ -2,62 +2,76 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D7A604A86
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Oct 2022 17:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8ED604AA5
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Oct 2022 17:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiJSPGE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Oct 2022 11:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S232136AbiJSPIs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Oct 2022 11:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbiJSPFj (ORCPT
+        with ESMTP id S232241AbiJSPII (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:05:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09281125015;
-        Wed, 19 Oct 2022 07:59:13 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666191380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FdvxHOKwRIeI8BiM8k+rYwU/Yx30rZAhLXmKb87AiP8=;
-        b=YJM/Q8Y/iU41nYJhp3ruJ3GZbQPygcVKdQtdGfYKzTF62VPMx1mnPM9tcgyukJ54yaBxZA
-        GVrkuBdRj36R50zyHRbByxcwzeIkJ2CitT346w2Db5zH5yWwwEieG+szD/pwmPecMyCI1h
-        0OEDEw9VNJtjb26YQe62EHk5Rwz/lbk5LQrNjCrzvDvUiIssEVgWHSJaoJO/87vO/A/kOf
-        XaEI1oeCR6s/TkWDLLjt70+k/1a69wPsRy2nuUIWcbB/Vtekle1QbRVEcd04sjNyqVuA0D
-        1WVA1iDuqI9sMaCvV7EaPS+iAWUQOLFn2okif3uEEF9aGgVMzxDui9lC/dsqAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666191380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FdvxHOKwRIeI8BiM8k+rYwU/Yx30rZAhLXmKb87AiP8=;
-        b=8EnO9qClCf1jaZEbNBimixqghlBQ62awKnPSz1PmBmcugCl3Z+v0WMz2rs+IIgPUeCv/Ol
-        Snw30DIMiYbGmfDw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 19 Oct 2022 11:08:08 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2883B94A;
+        Wed, 19 Oct 2022 08:00:04 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id s3so11803230qtn.12;
+        Wed, 19 Oct 2022 08:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Cdn1en3TCL697wD1YaDBcq9FxSMHwz0hFmIkA7fa/ok=;
+        b=RDgWmV3rs9DT8G5fm/e9+KmXGAXq3ODB053Ojsc8i2vNeP54Ocoy1LQoRsly0Q/lLV
+         /wdK/UYar+cupAV7w7HMVGPpf4BZJAQ3ZFV0Lh2NtsZumli6rKlo/gYTXdd4XqwCbNWA
+         dQRmL89p/5VAplc0sBQ4khbBUTsiMCDrquYIj7vfQ1kQpHm5xWgMSxNzL6PKD0xECsm0
+         hXbVe3zi1Yui3vjH/j9jUtpv9rBHNRVDk65v1CdFCNiH18fyaUcy7DqktAXSGVL2dbrS
+         Nf+Okkyn3Hqg1XU2PxMR4SXzcc2W5F+xFugK3GDOJZ3Kq/c01/eI/GT7UsVL45UJ9EXq
+         kuoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cdn1en3TCL697wD1YaDBcq9FxSMHwz0hFmIkA7fa/ok=;
+        b=ztvfrAa5lrpl1aym5teUNJ+nEdcAr8O24u6WToRRGGumnVIAw0Lzo+X2mdfZmYTXUu
+         lmG1M5NPz7Cy2JDWt+Y8/F/GnoQzMrABvopkCN8vrS03CbNYBT4TpDm1KMn6gjT4FUHF
+         lw2aIFQa7Pni/z3bmgcSzEQKJOWJk71jCN70PNDcL0cVqTbg9eGHyqeIsF1Ic5fdKjpo
+         Y3EvPfWbL87Cckbsq5GH6LfrnlQ9mZXeL7nw5j0LK8tFdwILmxhsHrRLcjviBe8wbwTa
+         669Pk8+/davOYlgD9XMowxBpjeJJuL4o51GbR99S1YUIz5Zo/IuLn59czg6fyuOJxpTl
+         wDlA==
+X-Gm-Message-State: ACrzQf2/8cn5ec4wwFJiBmoTrjw5F96479//P/vBrZZdchZTBGTvp2Fc
+        ylITUSLp0Lacuebx7Xf43K0=
+X-Google-Smtp-Source: AMsMyM7b7RKtw6fYMcmP3GJf8fJkEJDD8E+4RaxLnqAleHS83boBJkoUTEnja4ZGTYnD7XNSrAtrxA==
+X-Received: by 2002:ac8:5981:0:b0:39c:e03e:86ed with SMTP id e1-20020ac85981000000b0039ce03e86edmr6886233qte.503.1666191593368;
+        Wed, 19 Oct 2022 07:59:53 -0700 (PDT)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id x27-20020a05620a0b5b00b006ecdfcf9d81sm4920276qkg.84.2022.10.19.07.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 07:59:52 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 10:59:45 -0400
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: [PATCH printk v2 34/38] serial: kgdboc: use console_list_lock instead of console_lock
-Date:   Wed, 19 Oct 2022 17:01:56 +0206
-Message-Id: <20221019145600.1282823-35-john.ogness@linutronix.de>
-In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 19/44] serial: liteuart: Use uart_xmit_advance()
+Message-ID: <Y1AQ4S6csWiVGS0f@glsvmlin.ini.cmu.edu>
+References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
+ <20221019091151.6692-20-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221019091151.6692-20-ilpo.jarvinen@linux.intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,45 +79,34 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-kgdboc_earlycon_init() uses the console_lock to ensure that no consoles
-are unregistered until the kgdboc_earlycon is setup. The console_list_lock
-should be used instead because list synchronization repsponsibility will
-be removed from the console_lock in a later change.
+On Wed, Oct 19, 2022 at 12:11:26PM +0300, Ilpo Järvinen wrote:
+> Take advantage of the new uart_xmit_advance() helper.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/serial/liteuart.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index 4c0604325ee9..062812fe1b09 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -136,8 +136,7 @@ static void liteuart_start_tx(struct uart_port *port)
+>  	} else if (!uart_circ_empty(xmit)) {
+>  		while (xmit->head != xmit->tail) {
+>  			ch = xmit->buf[xmit->tail];
+> -			xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> -			port->icount.tx++;
+> +			uart_xmit_advance(port, 1);
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- drivers/tty/serial/kgdboc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Acked-by: Gabriel Somlo <gsomlo@gmail.com>
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 48000666789a..0d85596aebe2 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -547,13 +547,13 @@ static int __init kgdboc_earlycon_init(char *opt)
- 	 */
- 
- 	/*
--	 * Hold the console_lock to guarantee that no consoles are
-+	 * Hold the console_list_lock to guarantee that no consoles are
- 	 * unregistered until the kgdboc_earlycon setup is complete.
- 	 * Trapping the exit() callback relies on exit() not being
- 	 * called until the trap is setup. This also allows safe
- 	 * traversal of the console list.
- 	 */
--	console_lock();
-+	console_list_lock();
- 	for_each_console(con) {
- 		if (con->write && con->read &&
- 		    (console_is_enabled(con) || (con->flags & CON_BOOT)) &&
-@@ -595,7 +595,7 @@ static int __init kgdboc_earlycon_init(char *opt)
- 	}
- 
- unlock:
--	console_unlock();
-+	console_list_unlock();
- 
- 	/* Non-zero means malformed option so we always return zero */
- 	return 0;
--- 
-2.30.2
+Thanks,
+--Gabriel
 
+>  			liteuart_putchar(port, ch);
+>  		}
+>  	}
+> -- 
+> 2.30.2
+> 
