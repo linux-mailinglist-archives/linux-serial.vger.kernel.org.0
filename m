@@ -2,76 +2,120 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6CE6043EA
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Oct 2022 13:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CDE604365
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Oct 2022 13:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJSLxf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 19 Oct 2022 07:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
+        id S229660AbiJSLhT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 19 Oct 2022 07:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiJSLxO (ORCPT
+        with ESMTP id S231492AbiJSLhD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:53:14 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102B185424;
-        Wed, 19 Oct 2022 04:31:48 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id bv10so28542009wrb.4;
-        Wed, 19 Oct 2022 04:31:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+C4/MEmPs6jjzJFhCgwSQZ9Bhv6OsstKQBIugIvO+Hw=;
-        b=Q7MsmlMZULcAQQpRWR2KUHzwGMbOEt6ookbLhEsT5VxqIj8gGI/XnlFOv+mgHXnt1x
-         7nwUuJJEO3IIONd7Ii0Zk4Eot7HXBz1cxhl1gZVUEopzuHpEVqniBJa6P5KyLh1/xCqi
-         sTvthIYyU9i9RbszdKfHVwVqC1q2reVoZz6aLRdDcdWmSbqUFL+ILbxxYyhY+Nx0LM8R
-         kAvqCtKwJpjOPEaU5Cre7a6buvIoCtiYH1MV/QhpRcnvC6dDrAuGbS8L4OK0aw28Ch96
-         aK9usAelUVzakRO/a/qCVh0ys4m1iOnUVjdmgq5rIZ7MPw3yGLQB/81Wnsr91GqTgqW6
-         mZhA==
-X-Gm-Message-State: ACrzQf0+UXOAOYmS1RDI9nCzauEI5/DqAjr0TszUaCdrhuCYhZiGCj11
-        TBTwGvYa6WCzsXH8TU0mLmg1Dv4nyS2QDg==
-X-Google-Smtp-Source: AMsMyM5eOm/kk0xoS7rbKDQ7Op+l6IBKQUmMJaS9A02c4eqJwLEKEdJy4cerww606ujYl19fXuBwBA==
-X-Received: by 2002:a05:6402:350d:b0:45c:f5a2:348e with SMTP id b13-20020a056402350d00b0045cf5a2348emr6802451edd.398.1666176917245;
-        Wed, 19 Oct 2022 03:55:17 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id x9-20020a170906710900b0073a20469f31sm8795985ejj.41.2022.10.19.03.55.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 03:55:16 -0700 (PDT)
-Message-ID: <c7e5c112-e53f-b3ab-6b85-f47fadef7ce9@kernel.org>
-Date:   Wed, 19 Oct 2022 12:55:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 00/44] serial: Convert drivers to use uart_xmit_advance()
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Wed, 19 Oct 2022 07:37:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A690F036D;
+        Wed, 19 Oct 2022 04:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666178117; x=1697714117;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=6P7kIa36+7jAAfqrpo1HhIeiIYqEsGmum7j1waY+mVw=;
+  b=TBOlxz7JkqsBYXqTpSfb+6M7JjARaCyHYNN532TTckiJhvxBrOdxzqtr
+   J2NV0CCJvt4IwsU7cMr+Uc5/elrM6i/A20jZ9yr+EPrpRSs8z4+DfIy8D
+   AUmk5NSfrp0+UOHa1w3ueUkIhY5qR+1yea5BUmoaYM3XJqNm2i/zjV1A8
+   e54+h0/5bREIS8BImymxTIUeBK1o/Xrq3HkGtr/f68KSw4sL4a5OGnNuT
+   XcJMO8uV41+/Th1fVKx2TtgEAPyLKJTRTBoAqbQqbCyNhdys3eyubb/BJ
+   OZSYFjYCY5G9nNAlEs3xTA4DQVk9rkmcsS8lM2zvwGE+s++oG4jusxiR8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="303996165"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="303996165"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 04:11:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="624086281"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="624086281"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 19 Oct 2022 04:11:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ol6yc-009pA6-31;
+        Wed, 19 Oct 2022 14:11:10 +0300
+Date:   Wed, 19 Oct 2022 14:11:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/44] serial: pch_uart: Use uart_xmit_advance()
+Message-ID: <Y0/bTtsR2gqVa8/t@smile.fi.intel.com>
 References: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221019091151.6692-1-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20221019091151.6692-5-ilpo.jarvinen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221019091151.6692-5-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 19. 10. 22, 11:11, Ilpo JÃ¤rvinen wrote:
-> I've tried to pick the drivers such that these shouldn't collide with
-> the ones Jiri's tx loop rewrite series is touching (unless he has
-> something hidden beyond what has been on the list).
+On Wed, Oct 19, 2022 at 12:11:11PM +0300, Ilpo Järvinen wrote:
+> Take advantage of the new uart_xmit_advance() helper.
 
-No, nothing more here.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-thanks,
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/serial/pch_uart.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
+> index c59ce7886579..c76719c0f453 100644
+> --- a/drivers/tty/serial/pch_uart.c
+> +++ b/drivers/tty/serial/pch_uart.c
+> @@ -738,15 +738,12 @@ static void pch_dma_tx_complete(void *arg)
+>  {
+>  	struct eg20t_port *priv = arg;
+>  	struct uart_port *port = &priv->port;
+> -	struct circ_buf *xmit = &port->state->xmit;
+>  	struct scatterlist *sg = priv->sg_tx_p;
+>  	int i;
+>  
+> -	for (i = 0; i < priv->nent; i++, sg++) {
+> -		xmit->tail += sg_dma_len(sg);
+> -		port->icount.tx += sg_dma_len(sg);
+> -	}
+> -	xmit->tail &= UART_XMIT_SIZE - 1;
+> +	for (i = 0; i < priv->nent; i++, sg++)
+> +		uart_xmit_advance(port, sg_dma_len(sg));
+> +
+>  	async_tx_ack(priv->desc_tx);
+>  	dma_unmap_sg(port->dev, sg, priv->orig_nent, DMA_TO_DEVICE);
+>  	priv->tx_dma_use = 0;
+> @@ -843,8 +840,7 @@ static unsigned int handle_tx(struct eg20t_port *priv)
+>  
+>  	while (!uart_tx_stopped(port) && !uart_circ_empty(xmit) && fifo_size) {
+>  		iowrite8(xmit->buf[xmit->tail], priv->membase + PCH_UART_THR);
+> -		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> -		port->icount.tx++;
+> +		uart_xmit_advance(port, 1);
+>  		fifo_size--;
+>  		tx_empty = 0;
+>  	}
+> -- 
+> 2.30.2
+> 
+
 -- 
-js
+With Best Regards,
+Andy Shevchenko
+
 
