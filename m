@@ -2,49 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B421C60616F
-	for <lists+linux-serial@lfdr.de>; Thu, 20 Oct 2022 15:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8E4606285
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Oct 2022 16:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiJTNVH (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Oct 2022 09:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S229610AbiJTOLA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Oct 2022 10:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiJTNVF (ORCPT
+        with ESMTP id S229645AbiJTOK7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:21:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DAAA52F6
-        for <linux-serial@vger.kernel.org>; Thu, 20 Oct 2022 06:20:33 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtSrd4YbWzHtck;
-        Thu, 20 Oct 2022 21:20:17 +0800 (CST)
-Received: from [10.174.176.83] (10.174.176.83) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 21:20:24 +0800
-Message-ID: <74352a7a-2a3a-c26d-9687-c31eed699a4e@huawei.com>
-Date:   Thu, 20 Oct 2022 21:20:24 +0800
+        Thu, 20 Oct 2022 10:10:59 -0400
+Received: from first.geanix.com (first.geanix.com [116.203.34.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B557B111BBE
+        for <linux-serial@vger.kernel.org>; Thu, 20 Oct 2022 07:10:57 -0700 (PDT)
+Received: from [127.0.0.1] (87-49-146-81-mobile.dk.customer.tdc.net [87.49.146.81])
+        by first.geanix.com (Postfix) with ESMTPSA id 0015757A8A;
+        Thu, 20 Oct 2022 14:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1666275054; bh=UjEnQ9CTND4X9jz81R913jY69IPuGELZx6Pu1jdS89c=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References;
+        b=H+Pl6EhOHaPvrJABy2VVhaQjeGF6qF46kEAtEV2xHGYJ6p2XoIOZv5SUmgUlCDgiZ
+         +hIL0khNJi2DhREa0wTzIlGSAjMVGYPnZ+h0i834Sqkc1Z8gaipZjwJfocE7TDVLT2
+         XP2NgJ2SPFoO+YVXMw4Qt0HcIepviVR17YVpbo844tMFpfYZARed/FKuaMSaKR9xnP
+         P6JcPOxFk8SISqniegPhtvR5Rd5w4zm4IvorA+VXvEIEknNRht2ou6wZEdbwqjXg2M
+         xAKDIZ/7q4vmTbj1q78JzXkScbG71dA1k+OjolnNr1hCcAmdUdsY5LKJgpyifQoB5P
+         axX/N0lx6to4w==
+Date:   Thu, 20 Oct 2022 16:10:53 +0200
+From:   =?ISO-8859-1?Q?Martin_Hundeb=F8ll?= <martin@geanix.com>
+To:     =?ISO-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/3=5D_serial=3A_8250=3A_allow_?= =?US-ASCII?Q?use_of_non-runtime_configured_uart_ports?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <7baa90-e168-4bbe-5ce1-12c7de2ee04e@linux.intel.com>
+References: <20221018133419.134110-1-martin@geanix.com> <7baa90-e168-4bbe-5ce1-12c7de2ee04e@linux.intel.com>
+Message-ID: <0B4E8D8F-8E89-4951-9B5C-AFDF6667A1CC@geanix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] earlycon: Fix compile error when SERIAL_CORE is m
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-serial@vger.kernel.org>, <jirislaby@kernel.org>,
-        <robh@kernel.org>, <ztong0001@gmail.com>,
-        <peter@hurleysoftware.com>
-References: <20221020032722.3263846-1-zhangxiaoxu5@huawei.com>
- <Y1DW9Q5HLsh4kBnm@kroah.com>
-From:   "zhangxiaoxu (A)" <zhangxiaoxu5@huawei.com>
-In-Reply-To: <Y1DW9Q5HLsh4kBnm@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.83]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,60 +52,30 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 
 
-On 2022/10/20 13:04, Greg KH wrote:
-> On Thu, Oct 20, 2022 at 11:27:22AM +0800, Zhang Xiaoxu wrote:
->> When set CONFIG_SERIAL_EARLYCON=y and CONFIG_SERIAL_CORE=m, there is
->> a compile error as below:
->>
->>    ld: vmlinux.o: in function `parse_options.constprop.0':
->>    earlycon.c:(.init.text+0xba5a3): undefined reference to `uart_parse_earlycon'
->>
->> Since the SERIAL_EARLYCON use 'uart_parse_earlycon' which defined in
->> SERIAL_CORE, so should select rather than depends on.
-> 
-> No, please try to never use "select".
-> 
->>
->> Fixes: 9aac5887595b ("tty/serial: add generic serial earlycon")
-> 
-> So this has been a problem for a very very long time and never been
-> seen until now?  That feels wrong, what changed to cause this to not
-> ever be hit before with all of the tens of thousands of random configs
-> that have been built since this very old kernel?
-> 
-Yes, 0fb9342d06b0 ("tty: serial: earlycon dependency") already fix the
-same issue with add "depends on SERIAL_CORE".
+On October 20, 2022 2:34:14 PM GMT+02:00, "Ilpo J=C3=A4rvinen" <ilpo=2Ejar=
+vinen@linux=2Eintel=2Ecom> wrote:
+>On Tue, 18 Oct 2022, Martin Hundeb=C3=B8ll wrote:
+>
+>> The logic to find unused ports when registering new 8250 uart ports
+>> searches only up to CONFIG_SERIAL_8250_RUNTIME_UART, which forces users
+>> of external 8250 ports to increase the number of runtime ports
+>> artificially=2E
+>>=20
+>> Fix this by initializing each allocated port structure with basic
+>> settings like line number and uart operation callbacks, and by searchin=
+g
+>> the entire array of allocated ports to find an unused one=2E
+>
+>So nr_uarts no longer means "Maximum number of UARTs supported=2E" ?
+>Perhaps it should be reworded too=2E
+>
 
-But there are some other scenarios can trigger the same issue.
+It never did=2E Confusingly, the module parameter name (nr_uarts) correspo=
+nds to CONFIG_SERIAL_8250_RUNTIME_UARTS, and controls the number of built-i=
+n (non-discoverable) ports=2E The other config, CONFIG_SERIAL_8250_NR_UARTS=
+, controls the maximum number of ports=2E
 
-Use the config file in the bugzilla can reproduce the problem.
-https://bugzilla.kernel.org/show_bug.cgi?id=216611
+We cannot change the module parameter name, so I'm not sure if we should m=
+ap it to another static variable in the source?
 
-Bisect with this config, find out the following commit introduce the issue:
-   cdcc41a256efe8 ("tty: serial: Kconfig: Allow SERIAL_QCOM_GENI_CONSOLE to be enabled if SERIAL_QCOM_GENI is a module")
-
-  config SERIAL_QCOM_GENI
-         tristate "QCOM on-chip GENI based serial port support"
-         depends on ARCH_QCOM || COMPILE_TEST
-         depends on QCOM_GENI_SE
-         select SERIAL_CORE
-
-  config SERIAL_QCOM_GENI_CONSOLE
-         bool "QCOM GENI Serial Console support"
--       depends on SERIAL_QCOM_GENI=y
-+       depends on SERIAL_QCOM_GENI
-         select SERIAL_CORE_CONSOLE
-         select SERIAL_EARLYCON
-         help
-           Serial console driver for Qualcomm Technologies Inc's GENI based
-           QUP hardware.
-
-Since 73abaf87f01b ("serial: earlycon: Refactor parse_options into serial core")
-use the uart_parse_earlycon() which defined in SERIAL_CORE, so if SERIAL_EARLYCON=y,
-should always select SERIAL_CORE=y.
-
-If change to "depends on SERIAL_CORE=y", just WARNING when make olddefconfig, can't
-auto select the depends to Y.
-> thanks,
-> 
-> greg k-h
+// Martin
