@@ -2,171 +2,201 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C18860B525
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Oct 2022 20:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EC660B544
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Oct 2022 20:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbiJXSM4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 24 Oct 2022 14:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S231536AbiJXSS1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Oct 2022 14:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiJXSMU (ORCPT
+        with ESMTP id S231476AbiJXSRx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:12:20 -0400
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C56126C452;
-        Mon, 24 Oct 2022 09:53:44 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 011D42B066F0;
-        Mon, 24 Oct 2022 09:19:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 24 Oct 2022 09:19:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666617549; x=1666624749; bh=dNk4I7ELz1
-        Q72dRob/8j+4seSTYFKAZT/RUPASjRJ5c=; b=q+NqZuUcR73y8BnZPPG5dx1Zsk
-        6km9xLqa6tEkJrornmVIrbgVsoTaG0EQRj//U3P/qs5FFUR0kQj3xsDpIMDiHNAP
-        KHymuWr00P67rJl6tNZNMaSvfwBvDXs8mjOeO+DtIb91LFvy9u7IqPZlLBHzDqVY
-        OqQ+UV/5sGJOiUEzmGUI9NOmwTaSDzu4RgOGbpc9QTg1ReluTq9aBn60FamJs6vN
-        DKIJe0X1BrhoAYInvyHnNd5GZdOejs+w4Suvb5ImKHNqRwAYBvpipR0/HvaVLckd
-        CHTLMlrLH5H5bEpdNq1ZJ2ZVvg8gjN0DzzHIiqNjzW420ViiiKKJHNZdB8zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666617549; x=1666624749; bh=dNk4I7ELz1Q72dRob/8j+4seSTYF
-        KAZT/RUPASjRJ5c=; b=uYEImk9/JaoBLZkHmS4JMUN51UUW3Adz4NZ33zTXfhfn
-        X2zc+bMCIXUEr4nNHo354GqKRASijikTpJx4FFU+epgcfr8J1IPlgZPNpNiYVB9M
-        w8ihE4tr46Zh/a1sL2xOLJxavoW+rkvJ5mUtViAoLX1JGrLBO17yVcJcaCCL+4DZ
-        U79zEm+ybsbN3XMbJe7XZH2qegoAJbChw5mNkbbe1D33ukaTT9FYQuJEpTpQ+3Cm
-        dcgc9DJADBfxr4sonBlprzuNuFtddjyQxgp5OFhdXtZwXkncp0R9eBa1XvUUpv5H
-        Fai3j/IlJ8ZfnHiUrjBdKzUP8vcWG93GWsi2JgpEew==
-X-ME-Sender: <xms:zZBWY4d6hZdrWDWBmQnXOunjtmGBLNtVOGtYlcpUAkqGnIq3nQ_ULg>
-    <xme:zZBWY6ORVL4inZtEZ347UGYnYKlOyas-DedRgWZhgJSTlHghoiUBMTH5Vdl7j2SlB
-    orGRM2A45E3sznwkiE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:zZBWY5jMfpgYOekZ5Xiy1zZWPWGF2N1SaGbKcsqvIIsAoksVTelYew>
-    <xmx:zZBWY98Y0Yr03VdtjC58Vfn64oQoe8znN7FH4bLecym0d8-7ie150w>
-    <xmx:zZBWY0u1N4N4cR6ZhhO6MwuQK8N3p7TbkgEiIMvu0C2hnaFTg0G-QA>
-    <xmx:zZBWY2px7fOBs4XObZs9jNKaCaM5g4TthCLLA4wr0bUEo7pzc_VBCiqJhiU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3DDB5B60086; Mon, 24 Oct 2022 09:19:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <e5aa233d-526b-45ab-9acb-ab792b8686bc@app.fastmail.com>
-In-Reply-To: <20221024130035.GA1645003-robh@kernel.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221024130035.GA1645003-robh@kernel.org>
-Date:   Mon, 24 Oct 2022 15:18:41 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Rob Herring" <robh@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
-        "Simtec Linux Team" <linux@simtec.co.uk>,
-        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 14:17:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555227E075;
+        Mon, 24 Oct 2022 09:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666630758; x=1698166758;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=7ZhNkL3lvgkekoLnvkErYGzQcvxtw6NFtK0TosGfS1I=;
+  b=hzq4kgpUkV5wF8WzQiVHWt5FVS47UZa5IYGCU1ikoLFe8L46edqcJJrf
+   0QeUZ+2vkFAvyS28uP/zsIB6GTHajjPh6PA30hVl1l6pL+7tbHlPfsoUo
+   5WG2DBxGbnsPzMS03kXt8UBkbR2Ld94SmlfnzAvyLzpfhWliMqIE0LT1S
+   Ypmxu0iLhl5bQLG2cRqNn9Nehbr+ukm2+gRZ/URi6pp1Ws7fGOUBqlVpc
+   i3ik1EmxiS5vuFeInyX00ez1EMRzgo32xnxQff032kqOZ926m5PmqytGf
+   xEjlhqJ3qGIIiFBHI0fupUq0Nrn1pHLRZj5tBOWHkJO3WDvSX81G0JW7C
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="305050380"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="305050380"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:03:28 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582443519"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="582443519"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:03:28 -0700
+Date:   Mon, 24 Oct 2022 08:03:45 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
+        marpagan@redhat.com,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v4 2/4] fpga: dfl: Add DFHv1 Register Definitions
+In-Reply-To: <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2210240802580.2070724@rhweight-WRK1>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-3-matthew.gerlach@linux.intel.com> <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323328-2133041476-1666623825=:2070724"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Oct 24, 2022, at 15:00, Rob Herring wrote:
-> On Fri, Oct 21, 2022 at 10:22:28PM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The s3c24xx platform was marked as deprecated a while ago,
->> and for the s3c64xx platform, we marked all except one legacy
->> board file as unused.
->> 
->> This series removes all of those, leaving only s3c64xx support
->> for DT based boots as well as the cragg6410 board file.
->> 
->> About half of the s3c specific drivers were only used on
->> the now removed machines, so these drivers can be retired
->> as well. I can either merge the driver removal patches through
->> the soc tree along with the board file patches, or subsystem
->> maintainers can pick them up into their own trees, whichever
->> they prefer.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323328-2133041476-1666623825=:2070724
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8BIT
+
+
+
+On Fri, 21 Oct 2022, Ilpo Järvinen wrote:
+
+> On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 >
-> [...]
+>> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+>>
+>> This patch adds the definitions for DFHv1 header and related register
+>> bitfields.
+>>
+>> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> ---
+>> v4: s/MSIX/MSI_X/g
+>>     move kerneldoc to implementation
+>>     don't change copyright date
+>>
+>> v3:
+>>     keep DFHv1 definitions "hidden" in drivers/fpga/dfl.h
+>>
+>> v2: clean up whitespace and one line comments
+>>     remove extra space in commit
+>>     use uniform number of digits in constants
+>>     don't change copyright date because of removed content
+>>
+>> dfl.h s/MSIX/MSI_X/g move kerneldoc
+>> ---
+>>  drivers/fpga/dfl.h  | 33 +++++++++++++++++++++++++++++++++
+>>  include/linux/dfl.h | 11 +++++++++++
+>>  2 files changed, 44 insertions(+)
+>>
+>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+>> index 06cfcd5e84bb..45e6e1359a67 100644
+>> --- a/drivers/fpga/dfl.h
+>> +++ b/drivers/fpga/dfl.h
+>> @@ -74,11 +74,44 @@
+>>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
+>> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+>>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>>  #define DFH_TYPE_AFU		1
+>>  #define DFH_TYPE_PRIVATE	3
+>>  #define DFH_TYPE_FIU		4
+>>
+>> +/*
+>> + * DFHv1 Register Offset definitons
+>> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
+>> + * as common header registers
+>> + */
+>> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
+>> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
+>> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
+>> +
+>> +/*
+>> + * CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+>> + * 1'b1 = absolute (ARM or other non-PCIe use)
+>> + */
+>> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
+>> +
+>> +/* CSR Header Register Bit Definitions */
+>> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
+>> +
+>> +/* CSR SIZE Goup Register Bit Definitions */
+>> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
+>> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
+>> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
+>> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
 >
->>  Documentation/arm/index.rst                   |    1 -
->>  Documentation/arm/samsung-s3c24xx/cpufreq.rst |   77 -
->>  .../arm/samsung-s3c24xx/eb2410itx.rst         |   59 -
->>  Documentation/arm/samsung-s3c24xx/gpio.rst    |  172 --
->>  Documentation/arm/samsung-s3c24xx/h1940.rst   |   41 -
->>  Documentation/arm/samsung-s3c24xx/index.rst   |   20 -
->>  Documentation/arm/samsung-s3c24xx/nand.rst    |   30 -
->>  .../arm/samsung-s3c24xx/overview.rst          |  311 ---
->>  Documentation/arm/samsung-s3c24xx/s3c2412.rst |  121 -
->>  Documentation/arm/samsung-s3c24xx/s3c2413.rst |   22 -
->>  .../arm/samsung-s3c24xx/smdk2440.rst          |   57 -
->>  Documentation/arm/samsung-s3c24xx/suspend.rst |  137 --
->>  .../arm/samsung-s3c24xx/usb-host.rst          |   91 -
->>  Documentation/arm/samsung/overview.rst        |   13 -
+> SIZE -> SZ would remove two letters w/o loss of info (remember to
+> rename the offset too if you make this change).
 >
-> What about?:
+>> +/* PARAM Header Register Bit Definitions */
+>> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
+>> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+>> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+>> +#define DFHv1_PARAM_HDR_NEXT_EOL	BIT_ULL(0)
+>> +#define DFHv1_PARAM_HDR_NEXT_MASK	GENMASK_ULL(1, 0)
+>> +#define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
+>> +
+>>  /* Next AFU Register Bitfield */
+>>  #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
+>>
+>> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+>> index 431636a0dc78..fea9e16d35b6 100644
+>> --- a/include/linux/dfl.h
+>> +++ b/include/linux/dfl.h
+>> @@ -11,6 +11,17 @@
+>>  #include <linux/device.h>
+>>  #include <linux/mod_devicetable.h>
+>>
+>> +#define DFHv1_PARAM_ID_MSI_X		0x1
+>> +#define DFHv1_PARAM_MSI_X_STARTV	0x0
+>> +#define DFHv1_PARAM_MSI_X_NUMV		0x4
+>> +
+>> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
+>> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
+>> +
+>> +#define DFHv1_PARAM_ID_REG_LAYOUT 0x4
+>> +#define DFHv1_PARAM_ID_REG_WIDTH  GENMASK_ULL(63, 32)
+>> +#define DFHv1_PARAM_ID_REG_SHIFT  GENMASK_ULL(31, 0)
 >
-> Documentation/devicetree/bindings/clock/samsung,s3c2410-clock.txt
-> Documentation/devicetree/bindings/interrupt-controller/samsung,s3c24xx-irq.txt
-> Documentation/devicetree/bindings/mmc/samsung,s3cmci.txt
+> Any particular reason why MSI_X parameters are given as offsets and
+> these REG_LAYOUT ones as bitfields (both are 32-bit)?
 
-Good catch!
+I agree that it would be much better to be consistent.
 
-I've removed these three now and and will add the removal to
-the same patch, also the related
-samsung,s3c2412-clock.txt and samsung,s3c2443-clock.txt
-files.
+>
+> The naming here would indicate that DFHv1_PARAM_ID_REG_WIDTH is one of the
+> parameters but it's part of param data instead. I suppose you'd want
+> DFHv1_PARAM_REG_LAYOUT_WIDTH instead.
 
-> Documentation/devicetree/bindings/mtd/samsung-s3c2410.txt
+Thanks for the naming suggestions.
 
-samsung,s3c2412-nand is apparently still used on s3c6400,
-and the driver is selectable on that platform, so I think
-that should remain in there until we remove s3c64xx in 2024,
-even if it is not referenced by the dts files in the kernel.
-
-> Documentation/devicetree/bindings/usb/s3c2410-usb.txt
-
-Similarly, the driver is used on the crag6410 board
-(without DT), and probably just works with the DT based
-boards if one adds a node to s3c64xx.dtsi.
-
-I've also checked if any of the other removed drivers
-matches of_device_id[] strings to see if there are more
-bindings to kill off, but I don't see any that have
-now become obsolete. It did point me to pxa2xx_ac97_dt_ids,
-which Robert already complained about, this apparently
-is still used with dts files outside of mainline.
-
-      Arnd
+>
+> -- 
+> i.
+>
+>
+--8323328-2133041476-1666623825=:2070724--
