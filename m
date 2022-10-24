@@ -2,124 +2,244 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32B260ADB1
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Oct 2022 16:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7CB60B16E
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Oct 2022 18:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236996AbiJXOai (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 24 Oct 2022 10:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S234141AbiJXQXi (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Oct 2022 12:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiJXO2v (ORCPT
+        with ESMTP id S232443AbiJXQXS (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:28:51 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED92D73C2;
-        Mon, 24 Oct 2022 06:02:17 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-13b23e29e36so10999254fac.8;
-        Mon, 24 Oct 2022 06:02:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p+x9joGdXdBFLPPxN1p6d7/jrm+b1E7zu0ZikUl9XbM=;
-        b=kN4xIs/QEGJ+oT9qrn2OjPi/N6FcvGH6BvACP76blbVF103TXYi+7qEU5tINWQ+OJz
-         dApYzrcvxoO2ZIXOFTxb7h3JgOvX67e53Ux9I2wwMvKPIJrbpeDZZobSiNgXQhwqMaF/
-         R3ztR06WTPRqxKei/NzyOWyK9tZuNZ0Cm15uInIPmFb7tUxRSre+3lm52uo1EfezpHK9
-         o9VNCRaweqKifLKL/48NiILy3trNo3072uYGiXhEVisoQwGcZ30ghYt4hAv1vlMBiN/X
-         ltLvQXpHTYGfKkWtuOvorD19U4Zbzkwzp6qZaLG5THbYH133b9fRVRaPubb8xH2WHVbL
-         oPdg==
-X-Gm-Message-State: ACrzQf3i7XkzH7UpZj1xKGIMrADeoCGwSUDmJj0hXhqGuTa4oC2Svjr2
-        vms3XoPp+qtUCiVrBxssV68CXNLJaw==
-X-Google-Smtp-Source: AMsMyM4RB1x55W7tWXLqKMCfn9+yNGKoyP28eeDXqoWuK46CSg7FurAIxSSG6961lNUtLuCZU2W88g==
-X-Received: by 2002:a05:6870:e9a8:b0:133:223f:49a1 with SMTP id r40-20020a056870e9a800b00133223f49a1mr38235091oao.114.1666616434841;
-        Mon, 24 Oct 2022 06:00:34 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g20-20020a056870c15400b0012796e8033dsm2716705oad.57.2022.10.24.06.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:00:34 -0700 (PDT)
-Received: (nullmailer pid 1652638 invoked by uid 1000);
-        Mon, 24 Oct 2022 13:00:35 -0000
-Date:   Mon, 24 Oct 2022 08:00:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Message-ID: <20221024130035.GA1645003-robh@kernel.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
+        Mon, 24 Oct 2022 12:23:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353AF4B0E4;
+        Mon, 24 Oct 2022 08:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666624140; x=1698160140;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=2aq6bJvZs/INx2TIs6FczB9jmb8q3tRqCcz8AIvKGzQ=;
+  b=J+JCyiVWb5CkeN8MYnca/S4XA2nP9R2RotbIipWevSAAC4v66c++jFLG
+   xnJlVO/DH9NjzQQjAL7KtoV+t7FS0W2oXfLsoP7hRjtvMxDJ4EDMHaZlo
+   HwUC98rjqnaQT8ocPkC+0gVoatTgMMkHuCUekbqr7TVNV7pvs/X7ZRiRW
+   vSU60SXplbbl9VvV1tLi/XUYBBZfVaM4nmLGba1mJ0lqjVCqnJazVaEWS
+   ZLfLZJeNSN5Z6wgdU4PtUXiBk4iKt6XWHdDibSQ1DCpOK0hagHfpRbC5a
+   0N6xqDBOr7ZpKh2RiTR6WJ+IMk9WPvxOEMrYrwzBRhB5Y8/h1uSdRhzz6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287155496"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="287155496"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:55:59 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="626092623"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="626092623"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:55:58 -0700
+Date:   Mon, 24 Oct 2022 07:56:11 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
+In-Reply-To: <Y1HGhT5+Nxv6anw5@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2210240746570.2070724@rhweight-WRK1>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-4-matthew.gerlach@linux.intel.com> <Y1HGhT5+Nxv6anw5@smile.fi.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 10:22:28PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The s3c24xx platform was marked as deprecated a while ago,
-> and for the s3c64xx platform, we marked all except one legacy
-> board file as unused.
-> 
-> This series removes all of those, leaving only s3c64xx support
-> for DT based boots as well as the cragg6410 board file.
-> 
-> About half of the s3c specific drivers were only used on
-> the now removed machines, so these drivers can be retired
-> as well. I can either merge the driver removal patches through
-> the soc tree along with the board file patches, or subsystem
-> maintainers can pick them up into their own trees, whichever
-> they prefer.
 
-[...]
 
->  Documentation/arm/index.rst                   |    1 -
->  Documentation/arm/samsung-s3c24xx/cpufreq.rst |   77 -
->  .../arm/samsung-s3c24xx/eb2410itx.rst         |   59 -
->  Documentation/arm/samsung-s3c24xx/gpio.rst    |  172 --
->  Documentation/arm/samsung-s3c24xx/h1940.rst   |   41 -
->  Documentation/arm/samsung-s3c24xx/index.rst   |   20 -
->  Documentation/arm/samsung-s3c24xx/nand.rst    |   30 -
->  .../arm/samsung-s3c24xx/overview.rst          |  311 ---
->  Documentation/arm/samsung-s3c24xx/s3c2412.rst |  121 -
->  Documentation/arm/samsung-s3c24xx/s3c2413.rst |   22 -
->  .../arm/samsung-s3c24xx/smdk2440.rst          |   57 -
->  Documentation/arm/samsung-s3c24xx/suspend.rst |  137 --
->  .../arm/samsung-s3c24xx/usb-host.rst          |   91 -
->  Documentation/arm/samsung/overview.rst        |   13 -
+On Fri, 21 Oct 2022, Andy Shevchenko wrote:
 
-What about?:
+> On Thu, Oct 20, 2022 at 02:26:09PM -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add generic support for MSI-X interrupts for DFL devices.
+>>
+>> The location of a feature's registers is explicitly
+>> described in DFHv1 and can be relative to the base of the DFHv1
+>> or an absolute address.  Parse the location and pass the information
+>> to DFL driver.
+>
+> ...
+>
+>> +static void *find_param(void *base, resource_size_t max, int param)
+>
+> Why base can't be u64 * to begin with?
 
-Documentation/devicetree/bindings/clock/samsung,s3c2410-clock.txt
-Documentation/devicetree/bindings/interrupt-controller/samsung,s3c24xx-irq.txt
-Documentation/devicetree/bindings/mmc/samsung,s3cmci.txt
-Documentation/devicetree/bindings/mtd/samsung-s3c2410.txt
-Documentation/devicetree/bindings/usb/s3c2410-usb.txt
+It can be u64, and I will consider it for the next iteration.
+>
+>> +{
+>> +	int off = 0;
+>> +	u64 v, next;
+>> +
+>> +	while (off < max) {
+>
+> Maybe you need a comment somewhere to tell that the caller guarantees that max
+> won't provoke OOB accesses.
+>
+>> +		v = *(u64 *)(base + off);
+>
+> Okay, if offset is not multiple of at least 4, how do you guarantee no
+> exception on the architectures with disallowed misaligned accesses?
+>
+> Making base to be u64 * solves this, but you need to take care to provide
+> offset in terms of u64 words.
 
-Rob
+The masking of next below ensures that the offset it at least 4 byte 
+aligned, but it might make sense to define the next field in terms of 8 
+byte words.
+
+>
+>> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+>> +			return base + off + DFHv1_PARAM_DATA;
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		off += next & ~DFHv1_PARAM_HDR_NEXT_MASK;
+>> +		if (next & DFHv1_PARAM_HDR_NEXT_EOL)
+>> +			break;
+>> +
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+>
+> ...
+>
+>> +		/*
+>> +		 * DFHv0 only provides mmio resource information for each feature
+>
+> MMIO
+
+I'll change mmio to MMIO here and a place in the documentation that I 
+noticed.
+
+>
+>> +		 * in the DFL header.  There is no generic interrupt information.
+>> +		 * Instead, features with interrupt functionality provide
+>> +		 * the information in feature specific registers.
+>> +		 */
+>
+> ...
+>
+>> +		if (!finfo->param_size)
+>>  			break;
+>
+> This is redundant as it's implied by find_param().
+
+I will remove the redundant code.
+
+>
+>> +		p = find_param(params, finfo->param_size, DFHv1_PARAM_ID_MSI_X);
+>> +		if (!p)
+>>  			break;
+>
+> ...
+>
+>> +static int dfh_get_psize(void __iomem *dfh_base, resource_size_t max)
+>> +{
+>> +	int size = 0;
+>> +	u64 v, next;
+>> +
+>> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS,
+>> +		       readq(dfh_base + DFHv1_CSR_SIZE_GRP)))
+>> +		return 0;
+>> +
+>> +	while (size + DFHv1_PARAM_HDR < max) {
+>> +		v = readq(dfh_base + DFHv1_PARAM_HDR + size);
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		if (!(next & ~DFHv1_PARAM_HDR_NEXT_MASK))
+>> +			return -EINVAL;
+>> +
+>> +		size += next & ~DFHv1_PARAM_HDR_NEXT_MASK;
+>> +
+>> +		if (next & DFHv1_PARAM_HDR_NEXT_EOL)
+>> +			return size;
+>
+> These 3 looks like they deserve different fields and hence separate FIELD_GET()
+> will return exactly what we need without additional masking, right?
+
+I agree separate FIELD_GET() calls will be cleaner.
+
+>
+>> +	}
+>> +
+>> +	return -ENOENT;
+>> +}
+>
+> ...
+>
+>> +	if (dfh_psize > 0) {
+>
+> Isn't this implied by memcpy_fromio()? I mean if it's 0, nothing bad will
+> happen if you call the above directly.
+>
+>> +		memcpy_fromio(finfo->params,
+>> +			      binfo->ioaddr + ofst + DFHv1_PARAM_HDR, dfh_psize);
+>> +		finfo->param_size = dfh_psize;
+>> +	}
+>
+> ...
+>
+>>  	finfo->mmio_res.flags = IORESOURCE_MEM;
+>> +	if (dfh_ver == 1) {
+>> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
+>> +		if (v & DFHv1_CSR_ADDR_REL)
+>> +			finfo->mmio_res.start = v & ~DFHv1_CSR_ADDR_REL;
+>> +		else
+>> +			finfo->mmio_res.start = binfo->start + ofst +
+>> +					       FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
+>> +
+>> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
+>> +		finfo->mmio_res.end = finfo->mmio_res.start +
+>> +				      FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
+>> +	} else {
+>> +		finfo->mmio_res.start = binfo->start + ofst;
+>> +		finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>> +	}
+>
+> You may define
+>
+> 	resource_size_t start, end;
+>
+> locally and simplify above quite a bit.
+
+That is a good suggestion that should clean up the code quite a bit.
+
+>
+> ...
+>
+>> +void *dfh_find_param(struct dfl_device *dfl_dev, int param);
+>
+> + Blank line.
+>
+>>  #endif /* __LINUX_DFL_H */
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>
