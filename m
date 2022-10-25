@@ -2,66 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877AF60BF79
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Oct 2022 02:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7920D60C0C1
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Oct 2022 03:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbiJYAXa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 24 Oct 2022 20:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S231482AbiJYBPu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Oct 2022 21:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJYAW4 (ORCPT
+        with ESMTP id S231506AbiJYBPW (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:22:56 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343BB52FEE
-        for <linux-serial@vger.kernel.org>; Mon, 24 Oct 2022 15:46:39 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id e18so33763312edj.3
-        for <linux-serial@vger.kernel.org>; Mon, 24 Oct 2022 15:46:39 -0700 (PDT)
+        Mon, 24 Oct 2022 21:15:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4569663F27
+        for <linux-serial@vger.kernel.org>; Mon, 24 Oct 2022 17:33:32 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id q9so8948932ejd.0
+        for <linux-serial@vger.kernel.org>; Mon, 24 Oct 2022 17:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIHl2iCS5umkUQOttHMwOxT4DU4dTXsnDaz+mZRAMKc=;
-        b=oZyDNuZZ8bs6Dd/+bmcm0ORHJLVHkh6oX/lOWkQd7odI9UAqCD7O/wCA/hDvorihH3
-         N9+QLewwBtMtqshKTjtsp9e5sf8Q8V9IMkMUcxglNK13SVPGIcxHiUROeBAQPe//FtdZ
-         MC3KWgqs6B/AegdXOlxhnQfyBH4y0fiqdEFFQ=
+        bh=SwjrQKeWuL/UTLvlOb5w0Oe0RoidZXir5S4vG79BLUw=;
+        b=YZugDW7tObAfGv7/nl7dpBqM1o0NuLh7r/vtflD7JeJ1NM5xmB+ff2CqU4zkDJSYNk
+         6JMgIHIw0iVHvEW4jiJj00OGLmvSa6ZQurr+pmhK/mlshehc8TpxfKJ4Jr+zQgQE0wKm
+         MICKDbypklPHTCv8GzN6dFChYHG/NDT3w22XQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oIHl2iCS5umkUQOttHMwOxT4DU4dTXsnDaz+mZRAMKc=;
-        b=cpqViZA3gG3UmVzFpdNVu9x2HHEJp8Q1g4OsOfoLZV3K9rOHuenD4bzUfFZv1kFBcW
-         E6ByuJK7zbxqJ0TQ10PsGKpf0nCM9qga45Q5gXDKW8qvr1GfyXIwDOo4zYZrBrNj301X
-         bfphqlkxr3yrzfg6/Vl8PYkv+Y82vNNPCD/17kYRDZzsfiQ0A+qug3EMokiRtzvagCym
-         fRQb6hDZ98ks3Rf1GoFUM2A8vLdVf4it65auSg0pQqkWCYcPv/irwnmfkhZtVQVRrUlR
-         kH338qMAvvukDsG9IXjlKlZuG0K6r0eKcalJrdfrTvm4AcFTbYucuMXSLrPQzaLA3Go1
-         2M0g==
-X-Gm-Message-State: ACrzQf2yV1i7za5+Fuq2rv+m+0RxUY0JtLBVXHcowJHxqpE9d032BASG
-        MqOeqn1mXTRe5KLuYQ0Zf7khF6UI37VuW6h3
-X-Google-Smtp-Source: AMsMyM63zfx0aHnYhiAGrDMn8zZqBSWrAoJ1Yb7YegPwrmHsZNTqVbJQkkdP0A/RB5FWJmOisp9AIg==
-X-Received: by 2002:a05:6402:371b:b0:460:ff7d:f511 with SMTP id ek27-20020a056402371b00b00460ff7df511mr22620267edb.148.1666651597415;
-        Mon, 24 Oct 2022 15:46:37 -0700 (PDT)
+        bh=SwjrQKeWuL/UTLvlOb5w0Oe0RoidZXir5S4vG79BLUw=;
+        b=1SsdwkYzMk5wvzXoY+ZEB64k0ANI+kHx1UitwwDvwH7/GlCEsR9QdS6cwdVNWBXDGE
+         gtE+TYEWqg0BnnescYkNUHReP8u9ilLirrs2LIYnswVkfSjfnCiU+wBgMwUd2hI7tzfy
+         76ONGc/w82y0HMXiwLMp7f0zFPK+vyaIYzvDlmVno7cPRVCF4kWC0lZXU5HfQnyYlI/N
+         1MVlCzliuuN5UIh/X+2ZawjM3vXCXAvvf4swCRAUFD7exjl0P8wsIj5ve1kO8+tWtWV8
+         w8iVedoG42eEWOSiEljbsG+HbEMIH+T3RGO8ItAwMDKM+4SRFsGNr+B52L1/aFdCzWE/
+         H0sQ==
+X-Gm-Message-State: ACrzQf3JPUa+GNfE0GgGUmtcBhliavQ79CvdV9ahbZC9lvFTP8ouWmvc
+        WhuOE2dSnJWdovoBJjukjOUGzJby9SftNVuf
+X-Google-Smtp-Source: AMsMyM4jIXbgKKLQsLjIKeKfMyNqS8W3sVcYWbWQXhZmzKfvuTtsLdBvUx5JnDx5oIj08DH0tG3YFA==
+X-Received: by 2002:a17:907:2d0b:b0:78e:674:6b32 with SMTP id gs11-20020a1709072d0b00b0078e06746b32mr29440251ejc.226.1666658010379;
+        Mon, 24 Oct 2022 17:33:30 -0700 (PDT)
 Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id w20-20020aa7dcd4000000b004611f5efea8sm531618edu.17.2022.10.24.15.46.35
+        by smtp.gmail.com with ESMTPSA id kz5-20020a17090777c500b0077e6be40e4asm536426ejc.175.2022.10.24.17.33.28
         for <linux-serial@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 15:46:36 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id g12so5448316wrs.10
-        for <linux-serial@vger.kernel.org>; Mon, 24 Oct 2022 15:46:35 -0700 (PDT)
-X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id
- o8-20020a5d6488000000b0022b3b0b5e72mr23635683wri.138.1666651584545; Mon, 24
- Oct 2022 15:46:24 -0700 (PDT)
+        Mon, 24 Oct 2022 17:33:28 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id z14so4957150wrn.7
+        for <linux-serial@vger.kernel.org>; Mon, 24 Oct 2022 17:33:28 -0700 (PDT)
+X-Received: by 2002:a5d:51cb:0:b0:236:6a62:4bc8 with SMTP id
+ n11-20020a5d51cb000000b002366a624bc8mr7153865wrv.583.1666658008254; Mon, 24
+ Oct 2022 17:33:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019145600.1282823-1-john.ogness@linutronix.de> <20221019145600.1282823-13-john.ogness@linutronix.de>
-In-Reply-To: <20221019145600.1282823-13-john.ogness@linutronix.de>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-22-john.ogness@linutronix.de> <Y1K2JP6LIf8H2Ub5@alley>
+In-Reply-To: <Y1K2JP6LIf8H2Ub5@alley>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 24 Oct 2022 15:46:12 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
-Message-ID: <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
-Subject: Re: [PATCH printk v2 12/38] tty: serial: kgdboc: use console_is_enabled()
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
+Date:   Mon, 24 Oct 2022 17:33:16 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VfgdY9qabAzOxu4Rs5UjCRCHMMh=zidX3oq25_tuQD-w@mail.gmail.com>
+Message-ID: <CAD=FV=VfgdY9qabAzOxu4Rs5UjCRCHMMh=zidX3oq25_tuQD-w@mail.gmail.com>
+Subject: Re: [PATCH printk v2 21/38] serial: kgdboc: use srcu console list iterator
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -74,8 +75,8 @@ Cc:     Petr Mladek <pmladek@suse.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,32 +85,37 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 Hi,
 
-On Wed, Oct 19, 2022 at 7:56 AM John Ogness <john.ogness@linutronix.de> wrote:
+On Fri, Oct 21, 2022 at 8:09 AM Petr Mladek <pmladek@suse.com> wrote:
 >
-> Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
+> On Wed 2022-10-19 17:01:43, John Ogness wrote:
+> > Use srcu console list iteration for safe console list traversal.
+> >
+> > Note that configure_kgdboc() still requires the console_lock in
+> > order to ensure that no console is in its write() callback when
+> > its direct() callback is called. Add comments to clarify this.
 >
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  drivers/tty/serial/kgdboc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> s/direct()/device()/
 >
-> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-> index e76f0186c335..b17aa7e49894 100644
-> --- a/drivers/tty/serial/kgdboc.c
-> +++ b/drivers/tty/serial/kgdboc.c
-> @@ -533,7 +533,7 @@ static int __init kgdboc_earlycon_init(char *opt)
->         console_lock();
->         for_each_console(con) {
->                 if (con->write && con->read &&
-> -                   (con->flags & (CON_BOOT | CON_ENABLED)) &&
-> +                   (console_is_enabled(con) || (con->flags & CON_BOOT)) &&
+> Do you know about such requirements or is it just
+> a conservative approach, please?
+>
+> I ask because the comment in the code says "may assume".
+>
+>
+> Anyway, this would deserve a comment why the SRCU list iteration is
+> needed even when console_lock() is needed as well.
+>
+> The reason is that further patches are going to synchronize
+> console_list manipulation with another lock and console_lock()
+> will be used only to serialize accessing con->write() callbacks.
 
-<shrug>. I guess this is OK, but it feels a little pointless. If we're
-still directly looking at the CON_BOOT bit in con->flags it seems
-weird to be accessing CON_ENABLED through a special wrapper that's
-marked as a `data_race`. In our case it's _not_ a data race, right,
-since this function continues to hold the console_lock() even at the
-end of the series? I personally would drop this patch but if you
-really want it I won't object.
+I had the same concern. I'll note that at the end of the series the
+documentation for console_lock() still says:
+
+ * Acquires a lock which guarantees that the caller has
+ * exclusive access to the console system.
+
+That seems to imply (at least to me) that if you're holding
+console_lock() there's no need to hold the SRCU lock.
 
 -Doug
