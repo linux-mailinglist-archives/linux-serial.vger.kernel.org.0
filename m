@@ -2,152 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6128E60DF9D
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Oct 2022 13:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8508A60E601
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Oct 2022 19:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbiJZLcT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Oct 2022 07:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S233681AbiJZRBT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Oct 2022 13:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiJZLbz (ORCPT
+        with ESMTP id S233126AbiJZRBR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:31:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CF7297F
-        for <linux-serial@vger.kernel.org>; Wed, 26 Oct 2022 04:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666783901; x=1698319901;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jrGSLtx40ZyLtY9pGZKpZNNPujlNpZihob9wPbsNhDU=;
-  b=ZBWNiHJjeqp04BjPcrWp3AibNpAcKTUvZktZ6z7C5hQWCKJyfKkeMHKP
-   esfk3FJVrvkaoA9zue65lij2AhH5SqtVquUAqIo2CL4yrWETMcPEMVc6A
-   2tgsual1U/CU4gNCCj70khw72ojHG6G3tXa2JT7UvVoS5v2eiJ8ENzhoD
-   GdS5NvS/B71uvXmlddQBUf6lhfxhq52W3ccvWnYNB7msZE+C6mFAGzxOy
-   M3Rqfa7azGI5JJjwY9Wu+KA/WxRKBL0LtCQQJZyBoqab4uTJbMhYiDWRO
-   tbXjobZKWF/7Jy7EUCAngCPLAK9fORexmt5NcEdksrSt0KuNuMzobtMHd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="305535693"
-X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="305535693"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 04:31:40 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="626753074"
-X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="626753074"
-Received: from sgohier-mobl.ger.corp.intel.com ([10.252.54.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 04:31:38 -0700
-Date:   Wed, 26 Oct 2022 14:31:37 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <martin@geanix.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 3/4] serial: 8250: skip platform device registration
- with no runtime ports
-In-Reply-To: <20221025073944.102437-3-martin@geanix.com>
-Message-ID: <c1642f35-6270-7155-795d-a3f7324f799c@linux.intel.com>
-References: <20221025073944.102437-1-martin@geanix.com> <20221025073944.102437-3-martin@geanix.com>
+        Wed, 26 Oct 2022 13:01:17 -0400
+X-Greylist: delayed 482 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Oct 2022 10:01:14 PDT
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40C037C31D
+        for <linux-serial@vger.kernel.org>; Wed, 26 Oct 2022 10:01:12 -0700 (PDT)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.securetransport.de (Postfix) with ESMTPSA id 5C201720507;
+        Wed, 26 Oct 2022 18:52:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1666803149;
+        bh=QUKg28pcVKM/t0EP9hfe9G7J4P8dcYN9ZQdbQEccXVE=;
+        h=From:To:CC:Subject:Date:From;
+        b=LJdNBr1eCN0rB1bBz0MRlJNhW4LJYGu/auwVTHc05ZPemjyS6Et3vHDZUXbNSXXfP
+         f41hTUTg1Vu93BRldtnsyJIJ46hp3bqa8maSsx+2QmjcbzhNTGQUA61W5kd9EWfuP/
+         +visV24XQHhnHT9/7qRx5Ai59XutQ9bhEe18s9ZBoiFDnSULG/a2qYvE74vUFe7zog
+         l/NVLdxakrQKFJCzMbfQNhNzBXh0DhPqx5QG8sDntxzDhOyxY+SbPwXgaE5tkN3/1a
+         3aI6Euf7eBBS3x2wtENdj2GF2X25Nm7I6JgT3DibX2CaZ86WlduswF9fKh/qkaUcMK
+         fnlXOWR/+BVjg==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.15; Wed, 26 Oct 2022 18:52:18 +0200
+Received: from localhost.localdomain (172.16.51.8) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.15 via Frontend Transport; Wed, 26 Oct 2022 18:52:17 +0200
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <marex@denx.de>,
+        <jirislaby@kernel.org>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Subject: [PATCH 0/4] tty: serial: Add ability to control rs485 RX_DURING_TX via a GPIO
+Date:   Wed, 26 Oct 2022 18:50:45 +0200
+Message-ID: <20221026165049.9541-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1785117009-1666783900=:9482"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+This patch series add the ability to control the RS485 feature RX_DURING_TX via
+a GPIO. Currently it is handled by the low level serial driver and it depends
+on the ability of the serial hardware. In case of that RX_DURING_TX is disabled
+the serial hardware must be capable to turn off the receiver during sending.
+The idea is to have an electrical circuit that connects/disconnects the Rx by
+using the RX_DURING_TX GPIO. On one hand by using this GPIO the use of RS485
+RX_DURING_TX becomes independent of the capability of the serial hardware, and
+on the other hand possible software-caused switch-off and switch-on times of the
+receiver in case of RX_DURING_TX is disabled (default state) can also be avoided.
 
---8323329-1785117009-1666783900=:9482
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+The core patch adds a generic GPIO variable for the use of this RS485 feature
+controlled by a GPIO. The GPIO is defined by the devicetree property
+"rs485-rx-during-tx-gpios".
 
-On Tue, 25 Oct 2022, Martin Hundebøll wrote:
+The low-level implementation is done for the STM32 and the i.MX serial driver.
+Other platforms are not covered in this series, but can easily be added.
 
-> Skip registration of the platform device used for built-in ports, if no
-> such ports are configured/created.
-> 
-> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+I tested it with a DHCOM i.MX6DL and DHCOM STM32MP1 on a PicoITX board.
 
-For patches 1-3:
+In this series the devicetree bindings description is also included.
 
-Tested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Please include these tags into the next version of your submission.
-Thank you.
+Christoph Niedermaier (4):
+  dt_bindings: rs485: Add binding for GPIO that controls Rx enable
+    during Tx
+  serial: core: Add option to control rs485 RX_DURING_TX by a GPIO
+  serial: imx: Add support for rs485 RX_DURING_TX GPIO
+  serial: stm32: Add support for rs485 RX_DURING_TX GPIO
+
+ Documentation/devicetree/bindings/serial/rs485.yaml |  4 ++++
+ drivers/tty/serial/imx.c                            | 13 +++++++++++--
+ drivers/tty/serial/serial_core.c                    | 12 ++++++++++++
+ drivers/tty/serial/stm32-usart.c                    |  9 ++++++++-
+ include/linux/serial_core.h                         |  1 +
+ 5 files changed, 36 insertions(+), 3 deletions(-)
 
 -- 
- i.
+2.11.0
 
-> ---
-> 
-> Change since v1:
->  * call serial8250_pnp_init() also when nr_uarts is zero
-> 
-> Change since v2:
->  * invert condition to initialize built-in ports (as suggested by Ilpo)
-> 
->  drivers/tty/serial/8250/8250_core.c | 30 +++++++++++++++++------------
->  1 file changed, 18 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-> index ba48431ec6e2..a8fbc2325244 100644
-> --- a/drivers/tty/serial/8250/8250_core.c
-> +++ b/drivers/tty/serial/8250/8250_core.c
-> @@ -1186,22 +1186,26 @@ static int __init serial8250_init(void)
->  	if (ret)
->  		goto unreg_uart_drv;
->  
-> -	serial8250_isa_devs = platform_device_alloc("serial8250",
-> -						    PLAT8250_DEV_LEGACY);
-> -	if (!serial8250_isa_devs) {
-> -		ret = -ENOMEM;
-> -		goto unreg_pnp;
-> +	if (nr_uarts) {
-> +		serial8250_isa_devs = platform_device_alloc("serial8250",
-> +							    PLAT8250_DEV_LEGACY);
-> +		if (!serial8250_isa_devs) {
-> +			ret = -ENOMEM;
-> +			goto unreg_pnp;
-> +		}
-> +
-> +		ret = platform_device_add(serial8250_isa_devs);
-> +		if (ret)
-> +			goto put_dev;
-> +
-> +		serial8250_register_ports(&serial8250_reg, &serial8250_isa_devs->dev);
->  	}
->  
-> -	ret = platform_device_add(serial8250_isa_devs);
-> -	if (ret)
-> -		goto put_dev;
-> -
-> -	serial8250_register_ports(&serial8250_reg, &serial8250_isa_devs->dev);
-> -
->  	ret = platform_driver_register(&serial8250_isa_driver);
->  	if (ret == 0)
->  		goto out;
-> +	if (!nr_uarts)
-> +		goto unreg_pnp;
->  
->  	platform_device_del(serial8250_isa_devs);
->  put_dev:
-> @@ -1230,7 +1234,9 @@ static void __exit serial8250_exit(void)
->  	serial8250_isa_devs = NULL;
->  
->  	platform_driver_unregister(&serial8250_isa_driver);
-> -	platform_device_unregister(isa_dev);
-> +
-> +	if (nr_uarts)
-> +		platform_device_unregister(isa_dev);
->  
->  	serial8250_pnp_exit();
->  
-> 
-
---8323329-1785117009-1666783900=:9482--
