@@ -2,110 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955F860E6A7
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Oct 2022 19:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EBA60E5D8
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Oct 2022 18:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbiJZRi3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Oct 2022 13:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S233441AbiJZQyQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Oct 2022 12:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbiJZRi2 (ORCPT
+        with ESMTP id S233682AbiJZQyP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:38:28 -0400
-X-Greylist: delayed 1388 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Oct 2022 10:38:26 PDT
-Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A3F38A7E7
-        for <linux-serial@vger.kernel.org>; Wed, 26 Oct 2022 10:38:26 -0700 (PDT)
-Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        Wed, 26 Oct 2022 12:54:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66E5F985B;
+        Wed, 26 Oct 2022 09:54:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.securetransport.de (Postfix) with ESMTPSA id DD3A75E898;
-        Wed, 26 Oct 2022 19:37:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1666805859;
-        bh=TmMyXjcM0YsNPNvSSd5+dJKufXYGQ0pbaGROlQHD9IE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=GxJf0zvnl0KTpx/0pucbPmBQKBITUWdxmwkTOJH53+8vAEvqnD2SVfGlGTku6G4OM
-         fPnxiHqLDzfxB176zJj2TDCnjU6IpLzfcFjXWzdNqjiBlnPDolTO4eNAxRnf+iOqqx
-         3jnshxwyQtQ6BZxdZyiXQRpq+dGDxDxmR2QlQ9AuCrnNbfdjdGAo9MN3fgl5hF3YGx
-         s+LF5zdSfuTPGnlwY7SRCoU6CGM+rTfDRc9jNorZgiH6eE7/SlHtSX2zQIDnhCaMNS
-         rsTOMY0BRcKtgbizCJom3OAon6IJwZunaKybGQLsDgP/pVUYCoET04keyOkFwAx2vO
-         EVnBQO8uGVRSw==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.15; Wed, 26 Oct 2022 18:52:21 +0200
-Received: from localhost.localdomain (172.16.51.8) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.15 via Frontend Transport; Wed, 26 Oct 2022 18:52:21 +0200
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <marex@denx.de>,
-        <jirislaby@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH 4/4] serial: stm32: Add support for rs485 RX_DURING_TX GPIO
-Date:   Wed, 26 Oct 2022 18:50:49 +0200
-Message-ID: <20221026165049.9541-5-cniedermaier@dh-electronics.com>
-X-Mailer: git-send-email 2.11.0
-X-klartext: yes
-In-Reply-To: <20221026165049.9541-1-cniedermaier@dh-electronics.com>
-References: <20221026165049.9541-1-cniedermaier@dh-electronics.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62BCE61FCB;
+        Wed, 26 Oct 2022 16:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749EFC433B5;
+        Wed, 26 Oct 2022 16:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666803253;
+        bh=2QZvPddq3LVwpWCyC1ZiUaUBdBGd9LnlGy6Mb6c2s4s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DU2ADWSpgiv68QWcovvOgwewY9Z73R9kogo7fj+a9gqGDFwVtu4NbJlYduFTC93hO
+         7KKisriyuNInA8/ls1JVEaUGl5iJeFVKBdkN7Rbg/dEJwcaeu6mOYQBeNDupfw0ZgF
+         vayaStsp9+kuKPsvh/SQ7G7kIa83oceizN2Ioqm8=
+Date:   Wed, 26 Oct 2022 18:54:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dominique Martinet <dominique.martinet@atmark-techno.com>
+Cc:     Lukas Wunner <lukas@wunner.de>, stable@vger.kernel.org,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Roosen Henri <Henri.Roosen@ginzinger.com>,
+        linux-serial@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Daisuke Mizobuchi <mizo@atmark-techno.com>
+Subject: Re: [PATCH 5.10 v2 1/2] serial: core: move RS485 configuration tasks
+ from drivers into core
+Message-ID: <Y1lmM7Qu1yscuaIU@kroah.com>
+References: <20221017051737.51727-1-dominique.martinet@atmark-techno.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017051737.51727-1-dominique.martinet@atmark-techno.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-If a RX_DURING_TX GPIO is defined by the DT property "rs485-rx-during-tx-gpios"
-this patch switches this GPIO accordingly to the RS485 flag RX_DURING_TX in user
-space. Controlled by this GPIO, now the hardware is responsible for connecting
-or disconnecting Rx during Tx.
+On Mon, Oct 17, 2022 at 02:17:36PM +0900, Dominique Martinet wrote:
+> From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> 
+> Several drivers that support setting the RS485 configuration via userspace
+> implement one or more of the following tasks:
+> 
+> - in case of an invalid RTS configuration (both RTS after send and RTS on
+>   send set or both unset) fall back to enable RTS on send and disable RTS
+>   after send
+> 
+> - nullify the padding field of the returned serial_rs485 struct
+> 
+> - copy the configuration into the uart port struct
+> 
+> - limit RTS delays to 100 ms
+> 
+> Move these tasks into the serial core to make them generic and to provide
+> a consistent behaviour among all drivers.
+> 
+> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> Link: https://lore.kernel.org/r/20220410104642.32195-2-LinoSanfilippo@gmx.de
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> [ Upstream commit 0ed12afa5655512ee418047fb3546d229df20aa1 ]
+> Signed-off-by: Daisuke Mizobuchi <mizo@atmark-techno.com>
+> Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+> ---
+> Follow-up of https://lkml.kernel.org/r/20221017013807.34614-1-dominique.martinet@atmark-techno.com
 
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
----
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-serial@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
----
- drivers/tty/serial/stm32-usart.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+I need a 5.15.y version of this series before I can take the 5.10.y
+version.
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index dfdbcf092fac..91ff6d386932 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -226,7 +226,14 @@ static int stm32_usart_config_rs485(struct uart_port *port, struct ktermios *ter
- 
- 	stm32_usart_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
- 
--	rs485conf->flags |= SER_RS485_RX_DURING_TX;
-+	if (port->rs485_rx_during_tx_gpio) {
-+		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
-+			gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio, 1);
-+		else
-+			gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio, 0);
-+	} else {
-+		rs485conf->flags |= SER_RS485_RX_DURING_TX;
-+	}
- 
- 	if (rs485conf->flags & SER_RS485_ENABLED) {
- 		cr1 = readl_relaxed(port->membase + ofs->cr1);
--- 
-2.11.0
+thanks,
 
+greg k-h
