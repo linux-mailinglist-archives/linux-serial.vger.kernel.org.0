@@ -2,107 +2,168 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1458460EAA0
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Oct 2022 22:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82A860ECF0
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Oct 2022 02:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiJZU7P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Oct 2022 16:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S233736AbiJ0AUA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Oct 2022 20:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbiJZU7P (ORCPT
+        with ESMTP id S233642AbiJ0AT7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:59:15 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FAD1217F6;
-        Wed, 26 Oct 2022 13:59:13 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso3855132otn.0;
-        Wed, 26 Oct 2022 13:59:13 -0700 (PDT)
+        Wed, 26 Oct 2022 20:19:59 -0400
+Received: from gw.atmark-techno.com (gw.atmark-techno.com [13.115.124.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2959938A3F
+        for <linux-serial@vger.kernel.org>; Wed, 26 Oct 2022 17:19:52 -0700 (PDT)
+Received: from gw.atmark-techno.com (localhost [127.0.0.1])
+        by gw.atmark-techno.com (Postfix) with ESMTP id 427526013E
+        for <linux-serial@vger.kernel.org>; Thu, 27 Oct 2022 09:19:51 +0900 (JST)
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        by gw.atmark-techno.com (Postfix) with ESMTPS id 4A0F46013C
+        for <linux-serial@vger.kernel.org>; Thu, 27 Oct 2022 09:19:50 +0900 (JST)
+Received: by mail-pg1-f199.google.com with SMTP id h2-20020a656382000000b0044b0f6c572fso8911573pgv.20
+        for <linux-serial@vger.kernel.org>; Wed, 26 Oct 2022 17:19:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9SGTpGJ14IzV3mTWmW98EDecB40xRhD+qIv4J7Ibrzc=;
-        b=YPIlQzxmQNLVhT9Iq6roNrPwOMlfCCFpekAVKLwJyKZChoJhsHdqxBSa1TuTQV/V03
-         tBnfKKWFVmdTYHQybSESDQIK/srCKuxQyDEm+5a/cZWbM7mcNPTtBLo6FH3/2DrQxJEO
-         p6AGoe0ZPw6uJfie4xbiVBGFDaKNMVLFkQOzn/tY2K0RLzoJSLRcev3glTVCb6uenCvu
-         vV9YEeG71GqiMo12QuNppmGAz8T/TPxR3iBPuZtLyM8kPU4XLT0YzUrGaZQBqwp2YIqu
-         KGEmQfJDvVU08ENHANqwMj3Puc75iQOOwbJbmrXTan/gROP50P12nCsaqKPEb6US6whS
-         PYNQ==
-X-Gm-Message-State: ACrzQf3QrJQCGz5j1cplYkzgAKGa14WGRp6pB+dPcwoeL2M4fF0VBRaP
-        gWqQP5t1umJ3XW8xHBvddA==
-X-Google-Smtp-Source: AMsMyM5kHygF1C7avKvdsYNEhsTiUfv1gpzHowhVZYUGRV2ZVyQ3RIJeLUWjNOlgHtBfx6JMZxuF2g==
-X-Received: by 2002:a05:6830:3987:b0:661:b516:6a61 with SMTP id bs7-20020a056830398700b00661b5166a61mr22873954otb.303.1666817953187;
-        Wed, 26 Oct 2022 13:59:13 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p1-20020a4a95c1000000b0047f72b6988fsm2563862ooi.45.2022.10.26.13.59.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 13:59:12 -0700 (PDT)
-Received: (nullmailer pid 1303800 invoked by uid 1000);
-        Wed, 26 Oct 2022 20:59:14 -0000
-Date:   Wed, 26 Oct 2022 15:59:14 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, marex@denx.de,
-        jirislaby@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt_bindings: rs485: Add binding for GPIO that
- controls Rx enable during Tx
-Message-ID: <20221026205914.GA1294440-robh@kernel.org>
-References: <20221026165049.9541-1-cniedermaier@dh-electronics.com>
- <20221026165049.9541-2-cniedermaier@dh-electronics.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qfZ9R7q2Lgo19/7Oj4ib2QifeanwUUpIwCxGFd3DVaM=;
+        b=pvzynBd/VC0ZIrItvH/gQuU99F4s7HkPxnN63qcATXtLRnkRL/+skWxe8qDvDTNJDh
+         f3TrKrDM6M7whdkgRGN2OyGMQG3+ovaqO2X+QEU4+soj8acb+WPClRgQec7aUIr70Q9B
+         GGEXLQLy3Hu3wYE4FMmP1nULNq95DJM6LvX9OIhnEPPaxK1uRLbF8FTSTZJAdPMDulue
+         WpUTWoZifH0WWfwB35LyCPBRI+PVjq+peryH9GwvPDZDbxWTIvSZ/U9pEM48bYMvw+Oy
+         rRw3bwxFS9cjQqlaDEY5aTuQFdzDxFuxpPtNct0Lh0GvsiLUMukNh74aWaJkv+NWxkqI
+         L6CQ==
+X-Gm-Message-State: ACrzQf054roxC3jbe18lQJNSJrPCGvI1Ow9heg8CZPTJ2SNmCzQvTdZq
+        gFCC89Tdg6qxtpDIHfYJqsLrsk6/ARGnicZUVqR09576PB5p46ZflOuZ1x7Od4xoPEuepBnw6ap
+        Y/LuARXx+tB3qNJMzPzI1hJC2sJNk
+X-Received: by 2002:a63:5f54:0:b0:462:1149:f3b3 with SMTP id t81-20020a635f54000000b004621149f3b3mr39853623pgb.445.1666829989362;
+        Wed, 26 Oct 2022 17:19:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5XRay6tkiWUM/SfLYwR8yU9i3mUiMf0Ev2VgcUkiInEiwhxDLycmsU4guch0ZM00Uii0vM/A==
+X-Received: by 2002:a63:5f54:0:b0:462:1149:f3b3 with SMTP id t81-20020a635f54000000b004621149f3b3mr39853587pgb.445.1666829988906;
+        Wed, 26 Oct 2022 17:19:48 -0700 (PDT)
+Received: from pc-zest.atmarktech (117.209.187.35.bc.googleusercontent.com. [35.187.209.117])
+        by smtp.gmail.com with ESMTPSA id 62-20020a621541000000b0056bf6cd44cdsm3637917pfv.91.2022.10.26.17.19.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Oct 2022 17:19:48 -0700 (PDT)
+Received: from martinet by pc-zest.atmarktech with local (Exim 4.96)
+        (envelope-from <martinet@pc-zest>)
+        id 1onqcc-002fq6-3B;
+        Thu, 27 Oct 2022 09:19:46 +0900
+From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Wunner <lukas@wunner.de>, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Roosen Henri <Henri.Roosen@ginzinger.com>,
+        linux-serial@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Daisuke Mizobuchi <mizo@atmark-techno.com>,
+        Dominique Martinet <dominique.martinet@atmark-techno.com>
+Subject: [PATCH 5.15 1/2] serial: core: move RS485 configuration tasks from drivers into core
+Date:   Thu, 27 Oct 2022 09:19:42 +0900
+Message-Id: <20221027001943.637449-1-dominique.martinet@atmark-techno.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026165049.9541-2-cniedermaier@dh-electronics.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 06:50:46PM +0200, Christoph Niedermaier wrote:
-> Add the binding for a generic definition of a GPIO, that controls whether Rx
-> is connected or disconnected by an electrical circuit to have the ability
-> to receive the signals on the bus during sending or disable receiving during
-> sending.
-> 
-> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> ---
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: devicetree@vger.kernel.org
-> To: linux-serial@vger.kernel.org
-> To: linux-arm-kernel@lists.infradead.org
-> ---
->  Documentation/devicetree/bindings/serial/rs485.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
-> index 90a1bab40f05..0ebd7690f85d 100644
-> --- a/Documentation/devicetree/bindings/serial/rs485.yaml
-> +++ b/Documentation/devicetree/bindings/serial/rs485.yaml
-> @@ -51,6 +51,10 @@ properties:
->      description: GPIO pin to enable RS485 bus termination.
->      maxItems: 1
->  
-> +  rs485-rx-during-tx-gpios:
-> +    description: GPIO pin to control RS485 Rx enable during Tx.
+From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-Active state means do what? And inactive? This is an output gating the 
-RX signal or an input telling the receiver what to do during tx? The 
-description is not adequate.
+Several drivers that support setting the RS485 configuration via userspace
+implement one or more of the following tasks:
 
-How does this property relate to 'rs485-rx-during-tx' Any combination of 
-the 2 being present or not is okay? If not, you need some constraints.
+- in case of an invalid RTS configuration (both RTS after send and RTS on
+  send set or both unset) fall back to enable RTS on send and disable RTS
+  after send
 
-Rob
+- nullify the padding field of the returned serial_rs485 struct
+
+- copy the configuration into the uart port struct
+
+- limit RTS delays to 100 ms
+
+Move these tasks into the serial core to make them generic and to provide
+a consistent behaviour among all drivers.
+
+[ Upstream commit 0ed12afa5655512ee418047fb3546d229df20aa1 ]
+Link: https://lkml.kernel.org/r/20221017051737.51727-1-dominique.martinet@atmark-techno.com
+Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Link: https://lore.kernel.org/r/20220410104642.32195-2-LinoSanfilippo@gmx.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Daisuke Mizobuchi <mizo@atmark-techno.com>
+Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+---
+
+5.15 version of the 5.10 backport:
+https://lkml.kernel.org/r/20221017051737.51727-1-dominique.martinet@atmark-techno.com
+(only build tested)
+
+
+ drivers/tty/serial/serial_core.c | 33 ++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 82ddbb92d07d..48dafd1e084b 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -42,6 +42,11 @@ static struct lock_class_key port_lock_key;
+ 
+ #define HIGH_BITS_OFFSET	((sizeof(long)-sizeof(int))*8)
+ 
++/*
++ * Max time with active RTS before/after data is sent.
++ */
++#define RS485_MAX_RTS_DELAY	100 /* msecs */
++
+ static void uart_change_speed(struct tty_struct *tty, struct uart_state *state,
+ 					struct ktermios *old_termios);
+ static void uart_wait_until_sent(struct tty_struct *tty, int timeout);
+@@ -1299,8 +1304,36 @@ static int uart_set_rs485_config(struct uart_port *port,
+ 	if (copy_from_user(&rs485, rs485_user, sizeof(*rs485_user)))
+ 		return -EFAULT;
+ 
++	/* pick sane settings if the user hasn't */
++	if (!(rs485.flags & SER_RS485_RTS_ON_SEND) ==
++	    !(rs485.flags & SER_RS485_RTS_AFTER_SEND)) {
++		dev_warn_ratelimited(port->dev,
++			"%s (%d): invalid RTS setting, using RTS_ON_SEND instead\n",
++			port->name, port->line);
++		rs485.flags |= SER_RS485_RTS_ON_SEND;
++		rs485.flags &= ~SER_RS485_RTS_AFTER_SEND;
++	}
++
++	if (rs485.delay_rts_before_send > RS485_MAX_RTS_DELAY) {
++		rs485.delay_rts_before_send = RS485_MAX_RTS_DELAY;
++		dev_warn_ratelimited(port->dev,
++			"%s (%d): RTS delay before sending clamped to %u ms\n",
++			port->name, port->line, rs485.delay_rts_before_send);
++	}
++
++	if (rs485.delay_rts_after_send > RS485_MAX_RTS_DELAY) {
++		rs485.delay_rts_after_send = RS485_MAX_RTS_DELAY;
++		dev_warn_ratelimited(port->dev,
++			"%s (%d): RTS delay after sending clamped to %u ms\n",
++			port->name, port->line, rs485.delay_rts_after_send);
++	}
++	/* Return clean padding area to userspace */
++	memset(rs485.padding, 0, sizeof(rs485.padding));
++
+ 	spin_lock_irqsave(&port->lock, flags);
+ 	ret = port->rs485_config(port, &rs485);
++	if (!ret)
++		port->rs485 = rs485;
+ 	spin_unlock_irqrestore(&port->lock, flags);
+ 	if (ret)
+ 		return ret;
+-- 
+2.35.1
+
+
