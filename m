@@ -2,138 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB761617490
-	for <lists+linux-serial@lfdr.de>; Thu,  3 Nov 2022 03:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82626179C1
+	for <lists+linux-serial@lfdr.de>; Thu,  3 Nov 2022 10:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbiKCCzd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 2 Nov 2022 22:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S230363AbiKCJWM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 3 Nov 2022 05:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiKCCzS (ORCPT
+        with ESMTP id S230389AbiKCJV0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:55:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787D513F96;
-        Wed,  2 Nov 2022 19:54:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B9161CF4;
-        Thu,  3 Nov 2022 02:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9E9C433C1;
-        Thu,  3 Nov 2022 02:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667444086;
-        bh=4KHUanK4Eb1jeTKJdS189VeKoR1cBDb90sED4WqUSPU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cffox6kD0l4pbNz+Sgn+ZsQKAETP+3Ml6lKhXxyg9Zhh4SWrcKx6Oy23PkTWQl20t
-         3RE4KLtOvIAzJZJ2hjicbCkCaQNRhJhvIYYGPV8tgY8GA0JF6vWXHTOFee2hZHePG/
-         WaJjkpYkqG6obxXY9rJc8hCjSoCn4lcvTyMny3t8=
-Date:   Thu, 3 Nov 2022 03:55:42 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tty: Convert tty_buffer flags to bool
-Message-ID: <Y2Mtricfx/HxiEHc@kroah.com>
-References: <20221019105504.16800-1-ilpo.jarvinen@linux.intel.com>
+        Thu, 3 Nov 2022 05:21:26 -0400
+X-Greylist: delayed 73 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 02:21:25 PDT
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEE6DFF7
+        for <linux-serial@vger.kernel.org>; Thu,  3 Nov 2022 02:21:25 -0700 (PDT)
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 202211030920097c5bc17b1bf3d85f13
+        for <linux-serial@vger.kernel.org>;
+        Thu, 03 Nov 2022 10:20:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=ymHU3X/qr6+q1iY2LysQF2vzhHX/JM5cmkF/ZciRuKw=;
+ b=m3Y1LgnTK9GD/M6e5Eesa6/4c5nbgngUeunmNE09fE8Jngw2IcNfHQOIwiOQjzdM+DF0Q/
+ oWKAxlzd5ix83MOzbIGM18o4xWGek2qQp6GXbS5y5DBPuXB1mP5T/Pey+OH7RCxWCy2aVoUj
+ +GACObHy4uk5QZ0zWvqC8kmm+Hwjc=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v3 1/3] tty: n_gsm: introduce macro for minimal unit size
+Date:   Thu,  3 Nov 2022 10:17:41 +0100
+Message-Id: <20221103091743.2119-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019105504.16800-1-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:55:03PM +0300, Ilpo Järvinen wrote:
-> The struct tty_buffer has flags which is only used for storing TTYB_NORMAL.
-> There is also a few quite confusing operations for checking the presense
-> of TTYB_NORMAL. Simplify things by converting flags to bool.
-> 
-> Despite the name remaining the same, the meaning of "flags" is altered
-> slightly by this change. Previously it referred to flags of the buffer
-> (only TTYB_NORMAL being used as a flag). After this change, flags tell
-> whether the buffer contains/should be allocated with flags array along
-> with character data array. It is much more suitable name that
-> TTYB_NORMAL was for this purpose, thus the name remains.
-> 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
-> 
-> v2:
-> - Make it more obvious why flags is not renamed (both in kerneldoc
->   comment and commit message).
-> 
->  drivers/tty/tty_buffer.c   | 28 ++++++++++++++--------------
->  include/linux/tty_buffer.h |  5 +----
->  include/linux/tty_flip.h   |  4 ++--
->  3 files changed, 17 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-> index 5e287dedce01..b408d830fcbc 100644
-> --- a/drivers/tty/tty_buffer.c
-> +++ b/drivers/tty/tty_buffer.c
-> @@ -107,7 +107,7 @@ static void tty_buffer_reset(struct tty_buffer *p, size_t size)
->  	p->commit = 0;
->  	p->lookahead = 0;
->  	p->read = 0;
-> -	p->flags = 0;
-> +	p->flags = true;
->  }
->  
->  /**
-> @@ -249,7 +249,7 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
->   * __tty_buffer_request_room	-	grow tty buffer if needed
->   * @port: tty port
->   * @size: size desired
-> - * @flags: buffer flags if new buffer allocated (default = 0)
-> + * @flags: buffer has to store flags along character data
->   *
->   * Make at least @size bytes of linear space available for the tty buffer.
->   *
-> @@ -260,19 +260,19 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
->   * Returns: the size we managed to find.
->   */
->  static int __tty_buffer_request_room(struct tty_port *port, size_t size,
-> -				     int flags)
-> +				     bool flags)
->  {
->  	struct tty_bufhead *buf = &port->buf;
->  	struct tty_buffer *b, *n;
->  	int left, change;
->  
->  	b = buf->tail;
-> -	if (b->flags & TTYB_NORMAL)
-> +	if (!b->flags)
->  		left = 2 * b->size - b->used;
->  	else
->  		left = b->size - b->used;
->  
-> -	change = (b->flags & TTYB_NORMAL) && (~flags & TTYB_NORMAL);
-> +	change = !b->flags && flags;
->  	if (change || left < size) {
->  		/* This is the slow path - looking for new buffers to use */
->  		n = tty_buffer_alloc(port, size);
-> @@ -300,7 +300,7 @@ static int __tty_buffer_request_room(struct tty_port *port, size_t size,
->  
->  int tty_buffer_request_room(struct tty_port *port, size_t size)
->  {
-> -	return __tty_buffer_request_room(port, size, 0);
-> +	return __tty_buffer_request_room(port, size, true);
+From: Daniel Starke <daniel.starke@siemens.com>
 
-Did this logic just get inverted?
+n_gsm has a minimal protocol overhead of 7 bytes. The current code already
+checks whether the configured MRU/MTU size is at least one byte more than
+this.
 
-Maybe it's the jet-lag, but this feels like it's not correct anymore.
+Introduce the macro MIN_MTU to make this value more obvious.
 
-Maybe a commet up above where you calculate "left" would make more sense
-as to what is going on?
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-thanks,
+v2 -> v3:
+No changes.
 
-greg k-h
+Link: https://lore.kernel.org/all/20221024130114.2070-1-daniel.starke@siemens.com/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 5e516f5cac5a..570c40a3d78f 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -89,6 +89,7 @@ module_param(debug, int, 0600);
+  */
+ #define MAX_MRU 1500
+ #define MAX_MTU 1500
++#define MIN_MTU (PROT_OVERHEAD + 1)
+ /* SOF, ADDR, CTRL, LEN1, LEN2, ..., FCS, EOF */
+ #define PROT_OVERHEAD 7
+ #define	GSM_NET_TX_TIMEOUT (HZ*10)
+@@ -2712,7 +2713,9 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ 	if ((c->adaption != 1 && c->adaption != 2) || c->k)
+ 		return -EOPNOTSUPP;
+ 	/* Check the MRU/MTU range looks sane */
+-	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
++	if (c->mru < MIN_MTU || c->mtu < MIN_MTU)
++		return -EINVAL;
++	if (c->mru > MAX_MRU || c->mtu > MAX_MTU)
+ 		return -EINVAL;
+ 	if (c->n2 > 255)
+ 		return -EINVAL;
+@@ -3296,7 +3299,7 @@ static int gsm_create_network(struct gsm_dlci *dlci, struct gsm_netconfig *nc)
+ 		return -ENOMEM;
+ 	}
+ 	net->mtu = dlci->gsm->mtu;
+-	net->min_mtu = 8;
++	net->min_mtu = MIN_MTU;
+ 	net->max_mtu = dlci->gsm->mtu;
+ 	mux_net = netdev_priv(net);
+ 	mux_net->dlci = dlci;
+-- 
+2.34.1
+
