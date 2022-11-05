@@ -2,88 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCF6619D0C
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Nov 2022 17:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BE361DA54
+	for <lists+linux-serial@lfdr.de>; Sat,  5 Nov 2022 13:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiKDQXW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 4 Nov 2022 12:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S229825AbiKEMkG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 5 Nov 2022 08:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiKDQXT (ORCPT
+        with ESMTP id S229826AbiKEMj7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 4 Nov 2022 12:23:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7788C2FC25;
-        Fri,  4 Nov 2022 09:23:17 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667578996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tijLp86GZkQuYvpbkKNsoSVqaYbeBZGTP0NGWpFyyCE=;
-        b=rhX9V8yaFwgNnlHRVbXxSHwqauTFRTjTrQL6BQ1p6vBoQS+MPSPyCmgaN+rVzZbZBMCK8l
-        xo5SiNiRlO3EDC0yfxtSoi8U3Zjuu33rA+FMPViiORyfhqRC19TvEgrnEYVsKhv/m0CUrv
-        7uo+pCOQcFp6C62wH+xMood/ljqOalG8ogQFvFnOEVZ/zpGls4t+rqTIIxBquItUOK8ZBn
-        rgSqrlIJ74Nh5rH4KOzY24TklkQ8VxiLlwm+QOxJV/3l9cfBRUgmtn4fjiw8RxGTQc6j5P
-        Lo3zjkbgBHbIxinMoz3ykEASjqzkzppFTRmxVuyv60daF7CRQtMVQwq6XOLoIA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667578996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tijLp86GZkQuYvpbkKNsoSVqaYbeBZGTP0NGWpFyyCE=;
-        b=03km6Xg2ZZbUKK1SCAp0bHxpHwoD19D3C1TT2XmKXk1NfLgyr78f44THYoqM/4udhMvv4f
-        SinlmF6qT5x7kCDw==
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH printk v2 12/38] tty: serial: kgdboc: use
- console_is_enabled()
-In-Reply-To: <87czagf8hf.fsf@jogness.linutronix.de>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-13-john.ogness@linutronix.de>
- <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
- <CAD=FV=WF2S9wQ6uR+VKU4EfDTVd0JnKkuU3Wyfo6P8E_FouebQ@mail.gmail.com>
- <87czagf8hf.fsf@jogness.linutronix.de>
-Date:   Fri, 04 Nov 2022 17:29:15 +0106
-Message-ID: <87bkpm7kp8.fsf@jogness.linutronix.de>
+        Sat, 5 Nov 2022 08:39:59 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A106116593
+        for <linux-serial@vger.kernel.org>; Sat,  5 Nov 2022 05:39:58 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13c569e5ff5so8226899fac.6
+        for <linux-serial@vger.kernel.org>; Sat, 05 Nov 2022 05:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
+         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
+         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
+         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
+         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
+         6xmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=rYlxes2bcbDv9zPQA4zMtV7/o+4V/DrJw8MAfMzwOcnwShgxj+eSy1ODcE7rd+EfJe
+         Wrd/tQXnrVylJwj3SiIC+xlS4hdU/kIGPifEhp1/M1ZaAxDfkik5JvnGZt5fy12KzZJU
+         ndzlx8/sjsel++U1m0NNQ63r1fDJHvysN1NjMdPDLJuJBztsXenT9xHetaBUm/dl6sk9
+         M0MxXgwwyRwaGIdPDaI4d4HTk37sM5KDFSQdWHJYVtC0hFzny2xRYYu5YdPJxTeqv4IT
+         eVONeZL18ECJnGvfNJW3chts+ESBuiL+dmumlK1d7FXaXMj+hoQO7MHp4rXsm8qIRSq2
+         XSIQ==
+X-Gm-Message-State: ACrzQf3hu39RxKzZ2FHwoOjgxvHuUzw2pMTd7G/3cCMh9CxNgi5yfrLW
+        bLvv1fyBYQyVgRXk01SI0smQAM143TmyiD/zS4ubzSICVMA=
+X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
+X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
+ mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
+ Nov 2022 05:39:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
+ 05:39:47 -0700 (PDT)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <wamathaibenard@gmail.com>
+Date:   Sat, 5 Nov 2022 15:39:47 +0300
+Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
+Subject: Geldspende
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2022-10-24, Doug Anderson <dianders@chromium.org> wrote:
-> It actually only holds console_list_lock() even at the end of the
-> series. Still, it seems weird that we're declaring the `data_race` on
-> CON_ENABLED but not CON_BOOT ?
-
-For my upcoming v3 I decided to drop this patch and will keep the
-existing direct reading of @flags. Instead of this patch, for v3 the
-comment will additionally mention why @flags is allowed to be directly
-read:
-
-/*
- * Hold the console_lock to guarantee that no consoles are
- * unregistered until the kgdboc_earlycon setup is complete.
- * Trapping the exit() callback relies on exit() not being
- * called until the trap is setup. This also allows safe
- * traversal of the console list and race-free reading of @flags.
- */
-
-John Ogness
+--=20
+Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
+t.
+Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
+stefanopessia755@hotmail.com
