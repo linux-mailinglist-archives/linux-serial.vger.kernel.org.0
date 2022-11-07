@@ -2,41 +2,41 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F5E61F516
-	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 15:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3833261F537
+	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 15:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbiKGOQo (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 7 Nov 2022 09:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S232207AbiKGOQ5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 7 Nov 2022 09:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiKGOQn (ORCPT
+        with ESMTP id S231773AbiKGOQs (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 7 Nov 2022 09:16:43 -0500
+        Mon, 7 Nov 2022 09:16:48 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187F71CFF6;
-        Mon,  7 Nov 2022 06:16:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E011D0ED;
+        Mon,  7 Nov 2022 06:16:47 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667830601;
+        s=2020; t=1667830606;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dQqN7WWFfeRk0rEfRkWVolPjdsk8N//2uvtsWSdUdzA=;
-        b=1AfBH1Y1iFfphLxwLDzchu0JtFa4StD8+vHmibnAtoR7r0d9yVZ7XudeFA2hxeTHvPJNO1
-        ofQxZT3QO7S3AIt5J6jw1rTh+uGC+ykQ2zYmR+fMAtYm0/E/+eRNResYTvMXDWeXtDpBar
-        RhKMrMIijaLU7Ul+Ipvhji9wlW6zaf4LkCuyg9BfVvQ86fLD3DZvTVIe3aP5cl9i7e1Ysy
-        pPuGSq0stzuTH4IF+pPHEL72It1Z2+S8gqw5e/hO3s7QnrkrXM3RZ19pIP8Lh/W5WzcknX
-        74CdrAlyEh6Swq3T12qX0WpMC7JL0DFBPsUAxGiCsJktqmJZ7DgpuMEBJysaJA==
+        bh=UHuP0rbZWQQBzSmPTErQb30w1r8OemTOVXxBtKXD5zo=;
+        b=iNt4WLybeNZ2mg/QU8nQRgYO3eRwjEe4TxpxeuViKZgOFqSLGdnxpB4EIHsbH38cw2h6Am
+        kJVDUMhcmDfKwlcQItq60yXQiAM46j6B9Q30Uv+BDFud70sS99pVRWZsqjhTRdLZ1dBaFE
+        UfhdVUIkj1KudfH6d1vG5YHIMtg+leLFlBPIIrj+Gzw03dt7+TXN3UcBPcTVmJ5kf31YVr
+        G7mFekiqU9lb9lIMsaNunxvcSejZoGuF85W8nc+Rx/+O+XVwv+c9/Iu0yNjb2pkjvKZEFG
+        FDPXkYTRkDp2Ifzzr8b9XUdgb2olC4aoS/elsnnplXFO8y8GhZMrmHrHM2DqiA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667830601;
+        s=2020e; t=1667830606;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dQqN7WWFfeRk0rEfRkWVolPjdsk8N//2uvtsWSdUdzA=;
-        b=tjQDm3eXUbLBxw7+a927SUadjeYu0UPY5exQDo0Y3czHli8azPa+URgzRubTdplWFAe0Jt
-        zSX0xI8ffcVGXtCQ==
+        bh=UHuP0rbZWQQBzSmPTErQb30w1r8OemTOVXxBtKXD5zo=;
+        b=vWTVUpf3xvuqVwTe/KNxkvP7t8I4roXjMftkB13FmomVHEj3IjzCEpCFORfE4FT8CtCEsX
+        KCLNz75VQR2R8iBg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
@@ -48,9 +48,9 @@ Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: [PATCH printk v3 02/40] serial: kgdboc: Lock console list in probe function
-Date:   Mon,  7 Nov 2022 15:22:00 +0106
-Message-Id: <20221107141638.3790965-3-john.ogness@linutronix.de>
+Subject: [PATCH printk v3 12/40] tty: serial: kgdboc: document console_lock usage
+Date:   Mon,  7 Nov 2022 15:22:10 +0106
+Message-Id: <20221107141638.3790965-13-john.ogness@linutronix.de>
 In-Reply-To: <20221107141638.3790965-1-john.ogness@linutronix.de>
 References: <20221107141638.3790965-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -65,40 +65,39 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+kgdboc_earlycon_init() uses the console_lock to ensure that no consoles
+are unregistered until the kgdboc_earlycon is setup. This is necessary
+because the trapping of the exit() callback assumes that the exit()
+callback is not called before the trap is setup.
 
-Unprotected list walks are not necessarily safe.
+Explicitly document this non-typical console_lock usage.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/serial/kgdboc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/kgdboc.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 7aa37be3216a..e76f0186c335 100644
+index e76f0186c335..5be381003e58 100644
 --- a/drivers/tty/serial/kgdboc.c
 +++ b/drivers/tty/serial/kgdboc.c
-@@ -193,6 +193,7 @@ static int configure_kgdboc(void)
- 	if (!p)
- 		goto noconfig;
- 
-+	console_lock();
- 	for_each_console(cons) {
- 		int idx;
- 		if (cons->device && cons->device(cons, &idx) == p &&
-@@ -201,6 +202,7 @@ static int configure_kgdboc(void)
- 			break;
- 		}
- 	}
-+	console_unlock();
- 
- 	kgdb_tty_driver = p;
- 	kgdb_tty_line = tty_line;
+@@ -530,6 +530,14 @@ static int __init kgdboc_earlycon_init(char *opt)
+ 	 * Look for a matching console, or if the name was left blank just
+ 	 * pick the first one we find.
+ 	 */
++
++	/*
++	 * Hold the console_lock to guarantee that no consoles are
++	 * unregistered until the kgdboc_earlycon setup is complete.
++	 * Trapping the exit() callback relies on exit() not being
++	 * called until the trap is setup. This also allows safe
++	 * traversal of the console list and race-free reading of @flags.
++	 */
+ 	console_lock();
+ 	for_each_console(con) {
+ 		if (con->write && con->read &&
 -- 
 2.30.2
 
