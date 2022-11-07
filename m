@@ -2,232 +2,304 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCE561F39C
-	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 13:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD0961F51E
+	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 15:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiKGMqG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 7 Nov 2022 07:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S232142AbiKGOQt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 7 Nov 2022 09:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbiKGMpq (ORCPT
+        with ESMTP id S232065AbiKGOQo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 7 Nov 2022 07:45:46 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC201C418;
-        Mon,  7 Nov 2022 04:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667825140; x=1699361140;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=D//c159JdP5zGwVmYcseJt/CqM7tylXEkUxafuaKZOo=;
-  b=pec5ydngnJ+bTp2udfOII6yv/LYczafrLZ+zGo4cFjKJOlI4crHIy2S/
-   T1teoDh49Co6QY4aKc9WEzTMP++kvpDcWK0WsNsWJdg5IEFb4kccMju5F
-   UmcqN60/QfiO0FsfdaSzZGmJoNaUkCix3VWxX3Z+5/B+3EKQ5a+TT5JlL
-   Q5Ov+E1gsJHKl9CklQSmEop6NNa1+W0HxYFG104Pof3Iwv6+j+v+y3d3V
-   84qf2VWZA4wUXGHl3O1UtkCk4T+YfN7E83paFpQXIowg4csF875tIdxE1
-   KhvVT/OTlmOz4oFv9YudgR4SX1omgFH40m4rrl5FSypCIdfVfzIDdYmGX
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="122142863"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Nov 2022 05:45:39 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 7 Nov 2022 05:45:38 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 7 Nov 2022 05:45:33 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        <ilpo.jarvinen@linux.intel.com>, <macro@orcam.me.uk>,
-        <jay.dolan@accesio.com>, <cang1@live.co.uk>,
-        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
-        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        <biju.das.jz@bp.renesas.com>, <geert+renesas@glider.be>,
-        <phil.edworthy@renesas.com>, <lukas@wunner.de>,
-        <UNGLinuxDriver@microchip.com>
-Subject: [PATCH v3 tty-next 3/3] 8250: microchip: pci1xxxx: Add power management functions to quad-uart driver
-Date:   Mon, 7 Nov 2022 18:15:17 +0530
-Message-ID: <20221107124517.1364484-4-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221107124517.1364484-1-kumaravel.thiagarajan@microchip.com>
-References: <20221107124517.1364484-1-kumaravel.thiagarajan@microchip.com>
+        Mon, 7 Nov 2022 09:16:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178CA1BE94;
+        Mon,  7 Nov 2022 06:16:42 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667830600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zf2Nnq9aaBhq9OyJBdbPoPZazbYrZ5ZYcguoDhN8w38=;
+        b=2DMdV6P5I8sPplJufSLuueHeVl4bvVMKaOCMLHG/8T/fwK7DAOABqqdX7aJ+59oIKbSeI/
+        jxIUQ7vmqJIWBg5uBPUnLwho/ozyVcK4cifb7E8MZWqNAgvSZcTQkooqi2XOBJKmdFoPe0
+        S/wZC7FHNIjNqHF8aKh2I4aJghp93sxvUy5SQTr2sLIW2gINDw/7UBtkXqGJH9YxH5hhOO
+        0O67dTObUBp0/Va8bcvOAkYNduQYwv+rsV/BkAAXQ2emD/fAX8uWsiRgCCzSlHK71l+mxd
+        DWhAO2yHDDwVwuy7tiy10mhyFAMcwaRZxpwSCRbmOIfW9QXr83hR7vV88Ebaiw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667830600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zf2Nnq9aaBhq9OyJBdbPoPZazbYrZ5ZYcguoDhN8w38=;
+        b=jYEgYMmbvDXYj7DRG/zDjOcuyxgqHf6CJ4sMHlEhQTQPnAhOStcpCmHEsG9VmODdbETAmt
+        FuRjrih+zd0krvCw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tony Lindgren <tony@atomide.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH printk v3 00/40] reduce console_lock scope
+Date:   Mon,  7 Nov 2022 15:21:58 +0106
+Message-Id: <20221107141638.3790965-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-pci1xxxx's quad-uart function has the capability to wake up the host
-from suspend state. Enable wakeup before entering into suspend and
-disable wakeup on resume.
+This is v3 of a series to prepare for threaded/atomic
+printing. v2 is here [0]. This series focuses on reducing the
+scope of the BKL console_lock. It achieves this by switching to
+SRCU and a dedicated mutex for console list iteration and
+modification, respectively. The console_lock will no longer
+offer this protection and is completely removed from
+(un)register_console() and console_stop/start() code.
 
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
----
-Changes in v3:
-- Handled race condition in suspend and resume callbacks
+Also, during the review of v2 it came to our attention that
+many console drivers are checking CON_ENABLED to see if they
+are registered. Because this flag can change without
+unregistering and because this flag does not represent an
+atomic point when an (un)registration process is complete,
+a new console_is_registered() function is introduced. This
+function uses the console_list_lock to synchronize with the
+(un)registration process to provide a reliable status.
 
-Changes in v2:
-- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-- Change the return data type of pci1xxxx_port_suspend to bool from int.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 117 ++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
+All users of the console_lock for list iteration have been
+modified. For the call sites where the console_lock is still
+needed (because of other reasons), comments are added to
+explain exactly why the console_lock was needed.
 
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index ed3418feb262..adc1b51db0ca 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -184,6 +184,117 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
- 	/* Delay RTS before send is not supported */
- };
- 
-+static bool pci1xxxx_port_suspend(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+	bool ret = false;
-+	u8 wakeup_mask;
-+
-+	mutex_lock(&tport->mutex);
-+	if (port->suspended == 0 && port->dev) {
-+		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-+
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl &= ~TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
-+		if ((wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS)
-+			ret = true;
-+	}
-+
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+	mutex_unlock(&tport->mutex);
-+
-+	return ret;
-+}
-+
-+static void pci1xxxx_port_resume(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+
-+	mutex_lock(&tport->mutex);
-+	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+
-+	if (port->suspended == 0) {
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+	mutex_unlock(&tport->mutex);
-+}
-+
-+static int pci1xxxx_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	bool wakeup = false;
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			serial8250_suspend_port(priv->line[i]);
-+			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
-+		}
-+	}
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+
-+	if (wakeup)
-+		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
-+
-+	iounmap(p);
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pcidev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_resume(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+	iounmap(p);
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			pci1xxxx_port_resume(priv->line[i]);
-+			serial8250_resume_port(priv->line[i]);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 			  struct uart_8250_port *port, int idx)
- {
-@@ -394,6 +505,9 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
- 	}
- }
- 
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend,
-+				pci1xxxx_resume);
-+
- static const struct pci_device_id pci1xxxx_pci_tbl[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
-@@ -408,6 +522,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
- 	.name = "pci1xxxx serial",
- 	.probe = pci1xxxx_serial_probe,
- 	.remove = pci1xxxx_serial_remove,
-+	.driver = {
-+		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
-+	},
- 	.id_table = pci1xxxx_pci_tbl,
- };
- 
+All users of CON_ENABLED for registration status have been
+modified to use console_is_registered(). Note that there are
+still users of CON_ENABLED, but this is for legitimate purposes
+about a registered console being able to print.
+
+The base commit for this series is from Paul McKenney's RCU tree
+and provides an NMI-safe SRCU implementation [1]. Without the
+NMI-safe SRCU implementation, this series is not less safe than
+mainline. But we will need the NMI-safe SRCU implementation for
+atomic consoles anyway, so we might as well get it in
+now. Especially since it _does_ increase the reliability for
+mainline in the panic path.
+
+Changes since v3:
+
+general:
+
+- introduce a synchronized console_is_registered() to query if
+  a console is registered, meant to replace CON_ENABLED
+  (mis)use for this purpose
+
+- directly read console->flags for registered consoles if it is
+  race-free (and document that it is so)
+
+- replace uart_console_enabled() with a new
+  uart_console_registered() based on console_is_registered()
+
+- change comments about why console_lock is used to synchronize
+  console->device() by providing an example
+
+registration check fixups:
+
+- the following drivers were modified to use the new
+  console_is_registered() instead of CON_ENABLED checks
+
+   - arch/m68k/emu/nfcon.c
+   - drivers/firmware/efi/earlycon.c
+   - drivers/net/netconsole.c
+   - drivers/tty/hvc/hvc_console.c
+   - drivers/tty/serial/8250/8250_core.c
+   - drivers/tty/serial/earlycon.c
+   - drivers/tty/serial/pic32_uart.c
+   - drivers/tty/serial/samsung_tty.c
+   - drivers/tty/serial/serial_core.c
+   - drivers/tty/serial/xilinx_uartps.c
+   - drivers/usb/early/xhci-dbc.c
+
+um: kmsg_dumper:
+
+- change stdout dump criteria to match original intention
+
+kgdb/kdb:
+
+- in configure_kgdboc(), take console_list_lock to synchronize
+  tty_find_polling_driver() against register_console()
+
+- add comments explaining why calling console->write() without
+  locking might work
+
+tty: sh-sci:
+
+- use a setup() callback to setup the early console
+
+fbdev: xen:
+
+- implement a cleaner approach for
+  console_force_preferred_locked()
+
+rcu:
+
+- implement debug_lockdep_rcu_enabled() for
+  !CONFIG_DEBUG_LOCK_ALLOC
+
+printk:
+
+- check CONFIG_DEBUG_LOCK_ALLOC for srcu_read_lock_held()
+  availability
+
+- for console_lock/_trylock/_unlock, replace "lock the console
+  system" language with "block the console subsystem from
+  printing"
+
+- use WRITE_ONCE() for updating console->flags of registered
+  consoles
+
+- expand comments of synchronize_srcu() calls to explain why
+  they are needed, and also expand comments to explain when it
+  is not needed
+
+- change CON_BOOT consoles to always begin at earliest message
+
+- for non-BOOT/non-PRINTBUFFER consoles, initialize @seq to the
+  minimal @seq of any of the enabled boot consoles
+
+- add comments and lockdep assertion to
+  unregister_console_locked() because it is not clear from the
+  name which lock is implied
+
+- dropped patches that caused unnecessary churn in the series
+
+John Ogness
+
+[0] https://lore.kernel.org/lkml/20221019145600.1282823-1-john.ogness@linutronix.de
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=srcunmisafe.2022.10.21a
+
+John Ogness (38):
+  rcu: implement lockdep_rcu_enabled for !CONFIG_DEBUG_LOCK_ALLOC
+  printk: Prepare for SRCU console list protection
+  printk: fix setting first seq for consoles
+  um: kmsg_dump: only dump when no output console available
+  console: introduce console_is_enabled() wrapper
+  printk: use console_is_enabled()
+  um: kmsg_dump: use console_is_enabled()
+  kdb: kdb_io: use console_is_enabled()
+  um: kmsg_dumper: use srcu console list iterator
+  tty: serial: kgdboc: document console_lock usage
+  tty: tty_io: document console_lock usage
+  proc: consoles: document console_lock usage
+  kdb: use srcu console list iterator
+  printk: console_flush_all: use srcu console list iterator
+  printk: console_unblank: use srcu console list iterator
+  printk: console_flush_on_panic: use srcu console list iterator
+  printk: console_device: use srcu console list iterator
+  printk: __pr_flush: use srcu console list iterator
+  printk: introduce console_list_lock
+  console: introduce console_is_registered()
+  serial_core: replace uart_console_enabled() with
+    uart_console_registered()
+  tty: nfcon: use console_is_registered()
+  efi: earlycon: use console_is_registered()
+  tty: hvc: use console_is_registered()
+  tty: serial: earlycon: use console_is_registered()
+  tty: serial: pic32_uart: use console_is_registered()
+  tty: serial: samsung_tty: use console_is_registered()
+  tty: serial: xilinx_uartps: use console_is_registered()
+  usb: early: xhci-dbc: use console_is_registered()
+  netconsole: avoid CON_ENABLED misuse to track registration
+  printk, xen: fbfront: create/use safe function for forcing preferred
+  tty: tty_io: use console_list_lock for list synchronization
+  proc: consoles: use console_list_lock for list iteration
+  tty: serial: kgdboc: use console_list_lock for list traversal
+  tty: serial: kgdboc: synchronize tty_find_polling_driver() and
+    register_console()
+  tty: serial: kgdboc: use console_list_lock to trap exit
+  printk: relieve console_lock of list synchronization duties
+  tty: serial: sh-sci: use setup() callback for early console
+
+Thomas Gleixner (2):
+  serial: kgdboc: Lock console list in probe function
+  printk: Convert console_drivers list to hlist
+
+ .clang-format                       |   1 +
+ arch/m68k/emu/nfcon.c               |  10 +-
+ arch/um/kernel/kmsg_dump.c          |  24 +-
+ drivers/firmware/efi/earlycon.c     |   8 +-
+ drivers/net/netconsole.c            |  21 +-
+ drivers/tty/hvc/hvc_console.c       |   4 +-
+ drivers/tty/serial/8250/8250_core.c |   2 +-
+ drivers/tty/serial/earlycon.c       |   4 +-
+ drivers/tty/serial/kgdboc.c         |  46 ++-
+ drivers/tty/serial/pic32_uart.c     |   4 +-
+ drivers/tty/serial/samsung_tty.c    |   2 +-
+ drivers/tty/serial/serial_core.c    |  14 +-
+ drivers/tty/serial/sh-sci.c         |  17 +-
+ drivers/tty/serial/xilinx_uartps.c  |   2 +-
+ drivers/tty/tty_io.c                |  18 +-
+ drivers/usb/early/xhci-dbc.c        |   2 +-
+ drivers/video/fbdev/xen-fbfront.c   |  12 +-
+ fs/proc/consoles.c                  |  21 +-
+ include/linux/console.h             | 111 +++++++-
+ include/linux/rcupdate.h            |   5 +
+ include/linux/serial_core.h         |  15 +-
+ kernel/debug/kdb/kdb_io.c           |  14 +-
+ kernel/printk/printk.c              | 424 +++++++++++++++++++++-------
+ 23 files changed, 605 insertions(+), 176 deletions(-)
+
+
+base-commit: e29a4915db1480f96e0bc2e928699d086a71f43c
 -- 
-2.25.1
+2.30.2
 
