@@ -2,74 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BE361DA54
-	for <lists+linux-serial@lfdr.de>; Sat,  5 Nov 2022 13:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8836361EAE5
+	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 07:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiKEMkG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 5 Nov 2022 08:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        id S230448AbiKGGYk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 7 Nov 2022 01:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKEMj7 (ORCPT
+        with ESMTP id S231250AbiKGGYi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 5 Nov 2022 08:39:59 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A106116593
-        for <linux-serial@vger.kernel.org>; Sat,  5 Nov 2022 05:39:58 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13c569e5ff5so8226899fac.6
-        for <linux-serial@vger.kernel.org>; Sat, 05 Nov 2022 05:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
-         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
-         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
-         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
-         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
-         6xmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=rYlxes2bcbDv9zPQA4zMtV7/o+4V/DrJw8MAfMzwOcnwShgxj+eSy1ODcE7rd+EfJe
-         Wrd/tQXnrVylJwj3SiIC+xlS4hdU/kIGPifEhp1/M1ZaAxDfkik5JvnGZt5fy12KzZJU
-         ndzlx8/sjsel++U1m0NNQ63r1fDJHvysN1NjMdPDLJuJBztsXenT9xHetaBUm/dl6sk9
-         M0MxXgwwyRwaGIdPDaI4d4HTk37sM5KDFSQdWHJYVtC0hFzny2xRYYu5YdPJxTeqv4IT
-         eVONeZL18ECJnGvfNJW3chts+ESBuiL+dmumlK1d7FXaXMj+hoQO7MHp4rXsm8qIRSq2
-         XSIQ==
-X-Gm-Message-State: ACrzQf3hu39RxKzZ2FHwoOjgxvHuUzw2pMTd7G/3cCMh9CxNgi5yfrLW
-        bLvv1fyBYQyVgRXk01SI0smQAM143TmyiD/zS4ubzSICVMA=
-X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
-X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
- mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
- Nov 2022 05:39:47 -0700 (PDT)
+        Mon, 7 Nov 2022 01:24:38 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F25B10B5A;
+        Sun,  6 Nov 2022 22:24:35 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5LmW53LHzRp42;
+        Mon,  7 Nov 2022 14:24:27 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 14:24:33 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <krzysztof.kozlowski@linaro.org>, <alim.akhtar@samsung.com>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <ben-linux@fluff.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.or>
+Subject: [PATCH] tty: serial: samsung_tty: Fix clk resource leak issue
+Date:   Mon, 7 Nov 2022 14:21:20 +0800
+Message-ID: <20221107062120.20321-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
- 05:39:47 -0700 (PDT)
-Reply-To: stefanopessia755@hotmail.com
-From:   Stefano Pessina <wamathaibenard@gmail.com>
-Date:   Sat, 5 Nov 2022 15:39:47 +0300
-Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
-Subject: Geldspende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
---=20
-Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
-t.
-Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
-stefanopessia755@hotmail.com
+In the s3c24xx_serial_get_options(), calling clk_get() without clk_put()
+will cause clk resource leak issue, this patch fixes it.
+
+Fixes: b497549a035c ("[ARM] S3C24XX: Split serial driver into core and per-cpu drivers")
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ drivers/tty/serial/samsung_tty.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 77d1363029f5..8a3bb9832172 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -2529,9 +2529,10 @@ s3c24xx_serial_get_options(struct uart_port *port, int *baud,
+ 		sprintf(clk_name, "clk_uart_baud%d", clk_sel);
+ 
+ 		clk = clk_get(port->dev, clk_name);
+-		if (!IS_ERR(clk))
++		if (!IS_ERR(clk)) {
+ 			rate = clk_get_rate(clk);
+-		else
++			clk_put(clk);
++		} else
+ 			rate = 1;
+ 
+ 		*baud = rate / (16 * (ubrdiv + 1));
+-- 
+2.17.1
+
