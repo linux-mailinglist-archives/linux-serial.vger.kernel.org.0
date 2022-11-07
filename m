@@ -2,129 +2,127 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D42A61F033
-	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 11:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3369A61F04C
+	for <lists+linux-serial@lfdr.de>; Mon,  7 Nov 2022 11:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbiKGKVY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 7 Nov 2022 05:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S231592AbiKGKWC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 7 Nov 2022 05:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiKGKVR (ORCPT
+        with ESMTP id S231733AbiKGKVw (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:21:17 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AAB17045
-        for <linux-serial@vger.kernel.org>; Mon,  7 Nov 2022 02:21:15 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso12488562pjn.0
-        for <linux-serial@vger.kernel.org>; Mon, 07 Nov 2022 02:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=L9okY7Icb0Gf5ctoFsS3m7Ms6FyffuhIG/wumllqb99pGSDM0eKoVdXRomu4k2Vvje
-         vaAAA5b5CG4T9vL3DYzTbt6i7ilTYVRiZHeAf51qWroCKMi/06UV8twkwYbbvcb58b0c
-         O8aiXYIeKLPGKFxD8AeTNjdm9XiiwAwYXXYnxXnBzQtt4ZaPQYbu2mn3d4/wBF5dq0sI
-         fYgKey8dWac3TMQ3pm+aZLL8XgADS0c8wc9DQhJYDoGLimjkDspSigMMA/pe1/be4Mmf
-         FTMTprRtatoAeN10/4e16TIuQYPcJ6zZ7AsqjnUqg8Bde3BWUPkO4V20s/KjpolOjYbD
-         1dVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=dMt9mFAQb94XI4Nu7uS+Y7Sd0h3OSMf6fRprh/PfUba4Pgfp+rsZBj4oug++7OGQNx
-         uSAkE8qiW25bLPUz/9EvuQTvFP5aQtS/YZzvVCYbU/el2+521A6Wcc/vQ5ggLEmJhZsZ
-         +cxuHurCZLIYzeG7R3ehzOyJTzHUzATfVD7eAeZqVG70PPDiO3V4bjV28SuKPWDcNatt
-         iVWPFvy2Z6+ieazzhCLms6aWIPjPMJeP9ZXyf5eKHS0Nt4KgAzpmQ+lzdR5SXdtVvLM+
-         i3xcBuRpOKqAFPV0kyEizV6Quk8pUeWUnRBQj0BOGBsktZo6nZuKIU9yLLIPfot+y1g1
-         6YPg==
-X-Gm-Message-State: ACrzQf2HrMeprNDUWNIFVpN5AVTkghc+MlwyZgnu6LfisuXIq3eMYKRB
-        MjEdMw0C6ANxwXAYvar2Kkw8tuTdivBXMP52d34=
-X-Google-Smtp-Source: AMsMyM4Z92xjGZXgCyg2wym9Bu3/u65n6EL2ZpWI9kWf7s8xWZden0QG/zdZVfFd3uCVmOfceIs+YigxV7lXSF4Af+Y=
-X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
- mr19-20020a17090b239300b00213ecb22e04mr38944517pjb.100.1667816475223; Mon, 07
- Nov 2022 02:21:15 -0800 (PST)
+        Mon, 7 Nov 2022 05:21:52 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0433018E36;
+        Mon,  7 Nov 2022 02:21:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667816499; x=1699352499;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=86H81jTk5MeGGr4bfjg6h5GLTuAz4tzPfCa+h/HeqSM=;
+  b=Ajm/VtNK0dgsKTDcGVG9hGscy3xT2aJKNr13HxjMwp61x8+5qIB4sSjR
+   iSxJiE54+joW8RzxSe4MO8x5WoyEJqCSj3+12wWbsd7S/00FstHBsT/6h
+   1jb4Gis8b1NLO+Ol4kaVLXrBEt0x1KpMbM1MNHXn22SW0pBrNEk5er0Nn
+   PiiSti2212B002jeMsNpkErKOw4kxzGB8bx2vO76GF2Uy7QPA+wA63fKN
+   uHnox2Yrvx42yHbc3JEQj59btWttoLzfxpaLyH+nKxYJGw4rcN8psoekc
+   +wbtkW7Ymp8nIHQa9R7IQ7BZhtsByP6hH2jFTbdhsmcv9hW4X6O/PPh3y
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="293724142"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="293724142"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 02:21:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="965100338"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="965100338"
+Received: from gschoede-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.46.211])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 02:21:36 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Gilles BULOZ <gilles.buloz@kontron.com>
+Subject: [PATCH 1/1] serial: 8250_dma: Rearm DMA Rx if more data is pending
+Date:   Mon,  7 Nov 2022 12:21:26 +0200
+Message-Id: <20221107102126.56481-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
- 02:21:14 -0800 (PST)
-Reply-To: contact@ammico.it
-From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
-Date:   Mon, 7 Nov 2022 11:21:14 +0100
-Message-ID: <CAHAXD+Z_SoFK+TjW_6apBCCLtc_awXEjaqOdf77jdLRxxup3TA@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1042 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [977638ib[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hei ja miten voit?
-Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
- toivolla
-v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
-leikkaus
-t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
-suudet selviyty=C3=A4.
-Mutta ennen kuin min=C3=A4
-Tee toinen vaarallinen operaatio, annan sen sinulle
-Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
-sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
-voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
-iden auttamista
-ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
-=C3=A4 minulla ei ole niit=C3=A4
-kenelt=C3=A4 perii rahaa.
-Vastaa minulle nopeasti
-terveisi=C3=A4
-Rouva Monika Evereen
-Florida, Amerikan Yhdysvallat
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-Hi and how are you?
-My name is Mrs. Evereen, I am sending this message with great hope for
-an immediate response, as I have to undergo heart reoperation in my
-current poor health with little chance of survival. But before I
-undertake the second dangerous operation, I will give you the
-$6,550,000 I have in my US bank account to invest well, manage and use
-the profits to run a charity project for me. I count helping the sick
-and the poor as my last wish on earth, because I have no one to
-inherit money from.
-Please give me a quick reply
-regards
-Mrs. Monika Evereen
-Florida, United States of America
+When DMA Rx completes, the current behavior is to just exit the DMA
+completion handler without future actions. If the transfer is still
+on-going, UART will trigger an interrupt and that eventually rearms the
+DMA Rx. The extra interrupt round-trip has an inherent latency cost
+that increases the risk of FIFO overrun. In such situations, the
+latency margin tends to already be less due to FIFO not being empty.
+
+Add check into DMA Rx completion handler to detect if LSR has DR (Data
+Ready) still set. DR indicates there will be more characters pending
+and DMA Rx can be rearmed right away to handle them.
+
+Cc: Gilles BULOZ <gilles.buloz@kontron.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_dma.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+index b85c82616e8c..37d6af2ec427 100644
+--- a/drivers/tty/serial/8250/8250_dma.c
++++ b/drivers/tty/serial/8250/8250_dma.c
+@@ -38,9 +38,8 @@ static void __dma_tx_complete(void *param)
+ 	spin_unlock_irqrestore(&p->port.lock, flags);
+ }
+ 
+-static void __dma_rx_complete(void *param)
++static void __dma_rx_complete(struct uart_8250_port *p)
+ {
+-	struct uart_8250_port	*p = param;
+ 	struct uart_8250_dma	*dma = p->dma;
+ 	struct tty_port		*tty_port = &p->port.state->port;
+ 	struct dma_tx_state	state;
+@@ -57,6 +56,20 @@ static void __dma_rx_complete(void *param)
+ 	tty_flip_buffer_push(tty_port);
+ }
+ 
++static void dma_rx_complete(void *param)
++{
++	struct uart_8250_port *p = param;
++	struct uart_8250_dma *dma = p->dma;
++	unsigned long flags;
++
++	__dma_rx_complete(p);
++
++	spin_lock_irqsave(&p->port.lock, flags);
++	if (!dma->rx_running && (serial_lsr_in(p) & UART_LSR_DR))
++		p->dma->rx_dma(p);
++	spin_unlock_irqrestore(&p->port.lock, flags);
++}
++
+ int serial8250_tx_dma(struct uart_8250_port *p)
+ {
+ 	struct uart_8250_dma		*dma = p->dma;
+@@ -130,7 +143,7 @@ int serial8250_rx_dma(struct uart_8250_port *p)
+ 		return -EBUSY;
+ 
+ 	dma->rx_running = 1;
+-	desc->callback = __dma_rx_complete;
++	desc->callback = dma_rx_complete;
+ 	desc->callback_param = p;
+ 
+ 	dma->rx_cookie = dmaengine_submit(desc);
+-- 
+2.30.2
+
