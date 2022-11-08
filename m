@@ -2,133 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C874620E3D
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 12:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8A7620EE6
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 12:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbiKHLIj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Nov 2022 06:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S233880AbiKHLYX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Nov 2022 06:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbiKHLIQ (ORCPT
+        with ESMTP id S233832AbiKHLYP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:08:16 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FAD47309;
-        Tue,  8 Nov 2022 03:08:05 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id A2CE35C0217;
-        Tue,  8 Nov 2022 06:08:04 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 08 Nov 2022 06:08:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1667905684; x=1667992084; bh=U2YniFrngs
-        ovR3GGMHxDGF+HfkbcgWA9nLVRmjP0B74=; b=DLZAbHIDGlSTqD5S6iR3/gtAx9
-        eQPOYkplcG08hQDSgSO1gFClIBZ2sG7HpVUj8MRQGSvwr3uX0nWzeaIFqs9BtSV0
-        K6Cha0JZ4bLdlWYZtF6ytoLIqWDEAsB53CrO86XXr0e0n4Og2B/pQ/n6T7NguH3n
-        ZgVhYysiE3e4IahkP7qciaGtVZyg9P1WwqW7kx8iewWSD47Jt1S4eLTkeEpd8aX9
-        JaPh1OeythbWk1w12UGaD65Ah+DzjDVwXD8CLbRxEe/uwEp9nH0Prj5TDfdsKBL5
-        Yfh4kvAiZbUIr3vxHNd51QMOjzK2H0RU5uQXZ1J6MLcCMmmIVHYwj/nva7WQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667905684; x=1667992084; bh=U2YniFrngsovR3GGMHxDGF+Hfkbc
-        gWA9nLVRmjP0B74=; b=guo9ieRqxDkiVbCiCXSD12kJW79DrE3/LFbw76BjvFvM
-        4OUzzLIX/dE07AIH0AAWU08egIJQ7ch32xAxGofrymLafOsbRHhjUIm6a37pPDpN
-        cDBaSFbbAsIqzSE4xu+gr1WZz1z5xll+m+2Nz1MIwlbmQrPNIRaf3M78dqVb8BMS
-        7H0hoZXWFqBNHFOY0yPXyHvr+V9LJl+7ivf4A8RpAweUKzOnnuPdFMfl/ozcfgfb
-        vZFukuUffMCdMmegB0y0oBbl/qKMswvuwxEM/h4DNixcmQ28IpJiYITK/WJfUH85
-        Zz3R7bPMFAlGHL9EyuPNhJ/cLRA8yg/NV+iBArsDQQ==
-X-ME-Sender: <xms:kzhqYxSRQqupIpfPXyXLRHQN-f7Swmt-t-SiPLc9Qb4nbBbka45vSg>
-    <xme:kzhqY6zZFRhJJTTEe4plBs6MlVt3yMnZ608f1Xn2QSqDkT3aN7jwyrqSZ0DPJbQ_S
-    QVPa-wKNwbdLTgtfLM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedtgddvhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:kzhqY22OzqwTPxWzlMhHiKqQ446U1FI1m5Yy45A9NbLjmnv4P4SJDA>
-    <xmx:kzhqY5D-Rz_VgQ94AH2kjcL5y74K5vL0-T2cPdBJASFgYgnJexgiaA>
-    <xmx:kzhqY6iHYGkZyYz5fovjzvcwG5T3IJmkEi9PqQopFjxW3ERDXIBujg>
-    <xmx:lDhqY1TFWSNJsWkhZe0ejtZAEljf33bOXTw81USZ4MUxfDl5OYgWUQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 84808B60086; Tue,  8 Nov 2022 06:08:03 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <d5f29c86-4bd8-4550-971e-4e941b1099f2@app.fastmail.com>
-In-Reply-To: <ef5d4f48-71b9-2d5c-37f4-7a029a32a41b@gmail.com>
-References: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
- <20221107071511.2764628-8-Mr.Bossman075@gmail.com>
- <d293e410-223d-4baa-ba6d-65bc11ab1e55@app.fastmail.com>
- <ef5d4f48-71b9-2d5c-37f4-7a029a32a41b@gmail.com>
-Date:   Tue, 08 Nov 2022 12:07:33 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jesse Taube" <mr.bossman075@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>, aisheng.dong@nxp.com,
-        stefan@agner.ch, "Linus Walleij" <linus.walleij@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Russell King" <linux@armlinux.org.uk>, abel.vesa@nxp.com,
-        dev@lynxeye.de, "Marcel Ziswiler" <marcel.ziswiler@toradex.com>,
-        tharvey@gateworks.com, leoyang.li@nxp.com, fugang.duan@nxp.com,
-        "Giulio Benetti" <giulio.benetti@benettiengineering.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v1 7/7] ARM: dts: imx: Update i.MXRT1050.dtsi compatibles
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 06:24:15 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B003419A1
+        for <linux-serial@vger.kernel.org>; Tue,  8 Nov 2022 03:24:14 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id o13so7307151ilc.7
+        for <linux-serial@vger.kernel.org>; Tue, 08 Nov 2022 03:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=LXzLwEfFEIjs9nRQ/0D9sK0UdFF/hcYD1/7lPcxtKxGf+ipiOyxIUkG9FxWjTQwnxI
+         D0k1pcJ4r9HbGweGR8VttiL8E2qc4lcsz3jC3X1z+Myzw30J2a8GCz5AS/bkRvOOAlHD
+         E+tAU65cwh01zP65Dht/AwghXmg8POvqM5wMW+NclASoJJ1M+p89BgFOSDch5BgQ0Avc
+         9JiZIkvYkz5qbwJiVyZnhn8aEs4dsNPEV6aJ60VBa1B1c4nkJvkSo/q1xUjbvGvnQsI2
+         YCKRfjADZRvavXIhrgWVqvohpAMKlTCL5cT3Ex4YqBvyGRv/IX591YGJ8Vqkx1vqKbDZ
+         WAQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=CPgv8MSjVuZccfw+YOd5+s20pdNCsnYQfYPVg6VIl/1fUuJOyOo1oeRqA1BQE7IQYH
+         AL8C7Z/X76MqIR+PKiyMl8NAwQh7n/KYblwEVyU6pMvhthsuzHl0/iVupw43t44q6TOk
+         8np4sgc5USc23Nq6b05CLG8qLI8he9zn8y6UlNutSSw525McTAaufqFEatqtBHY6YyVT
+         rgTOO8tWGT8HFN+WL8HQ3+9a+Y/DNTq4qSvh3vYwWLZhwziryidrAuM6ONXw2jVkTMn5
+         e0mYUuqgyYXcV0L6X6enQkrtVLDgZWuRSdKu6VAxyK9ipwhSecrdlqkLyrMgoJMUyW63
+         aoow==
+X-Gm-Message-State: ACrzQf1wlhnBGwylvmBv9i+QGYIPny48OlKoYRKPOEo111bVFxxBDTyS
+        vM0wd7LvifyPq2ENaoJw9MBOMl0kSrwyCRcyTY0=
+X-Google-Smtp-Source: AMsMyM7l9664LpWj9QcPDmFBWC92J2k8lgTtaMBq0d8Kn2LaY6/WvjL6jmQ58ep7k3CUc1mU0tvXdcs9IQAedNtHTSY=
+X-Received: by 2002:a92:bf0e:0:b0:300:cc8e:fe07 with SMTP id
+ z14-20020a92bf0e000000b00300cc8efe07mr18642833ilh.184.1667906653482; Tue, 08
+ Nov 2022 03:24:13 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6638:1921:0:0:0:0 with HTTP; Tue, 8 Nov 2022 03:24:13
+ -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik10@gmail.com>
+Date:   Tue, 8 Nov 2022 03:24:13 -0800
+Message-ID: <CAEbPynvxfjzGLRVVaaVB9fasgmGPWiH+Ceaj9c3oE5eqT5_+0Q@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:132 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik10[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik10[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Nov 7, 2022, at 16:09, Jesse Taube wrote:
-> On 11/7/22 02:44, Arnd Bergmann wrote:
->> On Mon, Nov 7, 2022, at 08:15, Jesse Taube wrote:
->>> Remove unused compatibles from i.MXRT1050.dtsi.
->>> Change GPT clock-names to match documentation.
->>>
->>> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->> 
->> Can you make sure your changelog texts explain why you do this?
-> Yes, sorry I wasn't clear.
->
->> Are they fundamentally different from the devices you had
->> claimed to be compatible with that need a different driver,
->
-> UART and SDHC had drivers added which are better fit.
-> The GPT binds to imx6dl which is also the same as imx6sl.
+-- 
+Dear
 
-Where are those drivers added? Looking at linux-6.1-rc2
-and linux-next, I still see them use the same drivers as
-the original ones, and listing both strings would be the
-preferred method.
+How are you, I have a serious client, whom will be interested to
+invest in your country, I got your Details through the Investment
+Network and world Global Business directory.
 
->> or are there drivers in the field that bind to the wrong
->> string first?
-> I don't understand?
+Let me know if you are interested for more details.....
 
-I mean if you had run into the case where you have
-a driver that misbehaves when the fallback string is
-present in addition to the most specific one.
-
-     Arnd
+Sincerely,
+Mr. Kairi Andrew
