@@ -2,111 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7FA621198
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 13:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1597A6216D0
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 15:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiKHM5l (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Nov 2022 07:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
+        id S233808AbiKHOcW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Nov 2022 09:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiKHM5k (ORCPT
+        with ESMTP id S234116AbiKHObo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:57:40 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7812D14033;
-        Tue,  8 Nov 2022 04:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667912258; x=1699448258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xSK23YgmWbIwWWCN8dNWUK/G0TelxDekE8oSOLxEO5o=;
-  b=MqnOC1mKI3xQaATx1++88QHGg5Wy8o4d4t4iBN4XNpULW5HDV/Lnw2HD
-   RkKQlicUnVGOJdy9qlWlR173jo1R8qTMx+SIUPPF1MrayW+W4YfD0ZRta
-   Uq5jknvJw2dpWd6V/DWpIopunVJ6AJqhlM4B1uY+y5PwQcW7WCdGYkB16
-   evdXBbjUOw+Yqb4WTck7Fica/4458H3cjxVlIrTvCT9Qjbrvyfy5h489i
-   rkzh9qVdCZyHTq4N9KpVo/sUxLqibwW7S/hPdWVRn9qYQ7U1MkADsdQ7/
-   oVtPiQWpEuWTjifXwHUQcQasm0mOJPFqIryAg8eX3/uoA/tYDoLVFNOQH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310684135"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="310684135"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:57:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="669538018"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="669538018"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 08 Nov 2022 04:57:36 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1osOAY-0098S5-1J;
-        Tue, 08 Nov 2022 14:57:34 +0200
-Date:   Tue, 8 Nov 2022 14:57:34 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gilles BULOZ <gilles.buloz@kontron.com>
-Subject: Re: [PATCH 1/1] serial: 8250_dma: Rearm DMA Rx if more data is
- pending
-Message-ID: <Y2pSPspgnx+YkBJH@smile.fi.intel.com>
-References: <20221107102126.56481-1-ilpo.jarvinen@linux.intel.com>
- <Y2jsqNHQ5KhYISb3@smile.fi.intel.com>
+        Tue, 8 Nov 2022 09:31:44 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1F9178B4
+        for <linux-serial@vger.kernel.org>; Tue,  8 Nov 2022 06:31:16 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id i12so10332977qvs.2
+        for <linux-serial@vger.kernel.org>; Tue, 08 Nov 2022 06:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
+         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
+         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
+         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
+         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
+         a/jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=V7SYVUH551K4mreTnLSCQKJQQQdMczgN9HQGNKc27TApp5wrigEULKYcS4RGrqCDVs
+         iSMapbYABQTVZ/RsL+3r2VUgsh2dQf/nLI6UeGSTl5qn2miEam32WWPfyRzU4FPlgUi+
+         6oENTzYGC7KEu9YBgbK8jw/+ki83R9B4ia038pfdzBwzHtfEtK6M8fEdWLkDQ0LwdbEr
+         +MKTf6ApXO5GbywhOrJemErmbao8s3hYgJkzQv8PMBeYJ9/Xkwie0QAZ0mGrXT8YAjKx
+         RuASkyREDgsWDgq4LTStyTCx+Vi1DN/VCRpLtiW/CSJFRa67PzaD8fNnTL1lOOaV758E
+         p49A==
+X-Gm-Message-State: ACrzQf1tNNZQ1EyJ7F53y+6x10aCI/5SbV7fVxuF4fSV5bPX9edOlfbx
+        ZGqjgbwWB7kEauSB8TR1/wAWTDSQGP6ju/wQa9oUgkotCtw2ug==
+X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
+X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
+ z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
+ Nov 2022 06:31:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y2jsqNHQ5KhYISb3@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
+ 06:31:03 -0800 (PST)
+Reply-To: mr.abraham022@gmail.com
+From:   "Mr.Abraham" <davidbraddy01@gmail.com>
+Date:   Tue, 8 Nov 2022 14:31:03 +0000
+Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
+Subject: Greeting
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f2a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4954]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mr.abraham022[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [davidbraddy01[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [davidbraddy01[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 01:31:52PM +0200, Andy Shevchenko wrote:
-> On Mon, Nov 07, 2022 at 12:21:26PM +0200, Ilpo Järvinen wrote:
-
-...
-
-> Yep, I used to have something like draft of the below change locally.
-> Thanks for putting it in shape and upstreamimg!
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-...
-
-> > -static void __dma_rx_complete(void *param)
-> > +static void __dma_rx_complete(struct uart_8250_port *p)
-> >  {
-> > -	struct uart_8250_port	*p = param;
-> >  	struct uart_8250_dma	*dma = p->dma;
-
-Btw, looking into my patch in archives I noticed that dma can also be passed as
-a parameter...
-
-...
-
-> > +static void dma_rx_complete(void *param)
-> > +{
-> > +	struct uart_8250_port *p = param;
-
-> > +	struct uart_8250_dma *dma = p->dma;
-
-...since you have it already here.
-
-> > +	unsigned long flags;
-> > +
-> > +	__dma_rx_complete(p);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+My Greeting, Did you receive the letter i sent to you. Please answer me.
+Regard, Mr.Abraham
