@@ -2,98 +2,93 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918126210AF
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 13:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFCA62114A
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 13:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbiKHMaM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Nov 2022 07:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S234189AbiKHMrX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Nov 2022 07:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbiKHMaI (ORCPT
+        with ESMTP id S234079AbiKHMrT (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:30:08 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2DA29CB4
-        for <linux-serial@vger.kernel.org>; Tue,  8 Nov 2022 04:30:06 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id s20so8949387qkg.5
-        for <linux-serial@vger.kernel.org>; Tue, 08 Nov 2022 04:30:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=cigNPlEtEE1k5xiZ9PvVBazoo9lUtOBUwB6YZSwBfhiXaLfnGYlViGJ/CkI7QbpyRc
-         DUkc/pXyGXkzwxwNKmQ/AVr17gtcnro/HIxn3z8V8Vc+39bff1bepY3CjxGya/RlhJQD
-         pm03SLH1zh1vk5Et08W05yayJWnxdxRnbNjb7jCohrMzy/0/FJWKkATniYBbpKgsaBKE
-         Z+OGb8Lsc3JgCU/vlNmJzwFukVrY1yODwKOWdcEffdpTGbLPgR5Erg+jlwzjZKljWkGx
-         l6m9q0cv+BGPJ+GX+X1NDb4hrmrYY0d2qQvBndPhFSr7mcH+QfGu5TnM80huZaOEkW4m
-         IdPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=33dYbmGjuxQ9uBIaizpNoi5qwTtoM2290Zl3HpwcaE8DqDXtey0eMm5VNaQqkqJzn9
-         XSo0Mo+OcnYiRMbpkZ28ryx0ToNF1blQN0Iza6zGf8QRrdIlFOccxxpCRoiHx55Rdlyr
-         0qqvCdjhcTfoZf/3hVg+sA76e7Wmh9YakxxyW+CXyumUM7YFUQPd3mbER4Wdn2aLTa7W
-         ntLFRzoCWKmwNSOkW2lMgIczN7o71Vkz8fFza/+TBrY4ooYxDBhVOGLIE8EdSJ1F6pmv
-         a07O+pvuEbkIFWb4lGoZIqtnwvoNY11Qi7JvK3gKw1NGKH37CAGNfT2T/y8YCED3ew4p
-         O9rw==
-X-Gm-Message-State: ACrzQf24BBn57FVe51jOPreYCGKvTHHPI3w4RdEjAeNRjcpEIcV4SQZT
-        /Ugh0zWCG1072wpSIpEbGfREn/ydnPwXMX+NouE=
-X-Google-Smtp-Source: AMsMyM58hZ1EPsKu7coHtKEAadQRfLUwq2/6MbLEjdgMZ+NpfmCkJjte0dLlRzUMReSpEc0nbvrKDwByTED+/niEF+4=
-X-Received: by 2002:ae9:eb48:0:b0:6fa:d61:4510 with SMTP id
- b69-20020ae9eb48000000b006fa0d614510mr37684535qkg.768.1667910605712; Tue, 08
- Nov 2022 04:30:05 -0800 (PST)
+        Tue, 8 Nov 2022 07:47:19 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DF951C29;
+        Tue,  8 Nov 2022 04:47:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667911638; x=1699447638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zvBFCIqzdoTj9UnYmptO+ryXyIdI3ESvdJd9r6IDuZA=;
+  b=SkmUVBJYf6sES4vKCpC6lpcTFsQ3lpgOSOT0HSeWEmOjgMs3YI0cr5Kd
+   F6ztZxuXTdnkBnXA0Z43JHFFsK2kxU5ZNJzPmzgQpnddvzWuhYevO7SXs
+   TO1VKjEmhBIRTpvYa0D7KTnZ1YHVdleGWtwXe/OpXaBnmpxQqS2WLbJq/
+   cA9oWBVBqnCCf4ZmvOvzJUZMPyl3kaFjA3T0eIDOMmYWECXflWaaQECgR
+   yfDzkFMmqSrS7EPSXuHm5TJNQ/gbrb1DlWhrkQ1TTb/trC9EqEpCxeUAE
+   FSHFe4c6LQA2/4kwRO8KSK3yHAa7Pl8cGnyBB9p8cRk1doI19aMDYsThV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="374955747"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="374955747"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:47:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="699910525"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="699910525"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Nov 2022 04:47:15 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osO0Y-0098GB-0o;
+        Tue, 08 Nov 2022 14:47:14 +0200
+Date:   Tue, 8 Nov 2022 14:47:13 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Gilles BULOZ <gilles.buloz@kontron.com>
+Subject: Re: [PATCH v2 0/4] 8250: DMA Fixes
+Message-ID: <Y2pP0VSW4uSyoqrS@smile.fi.intel.com>
+References: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:2f8a:b0:4bb:6e86:8303 with HTTP; Tue, 8 Nov 2022
- 04:30:05 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   Mr Abraham <mr.abraham2021@gmail.com>
-Date:   Tue, 8 Nov 2022 12:30:05 +0000
-Message-ID: <CAJ2UK+YqK-OgWa-GbqjTU89edKqVZ5nqmL-j=gKpwP5uFtkvUA@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:731 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4987]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mr.abraham2021[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mr.abraham2021[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Tue, Nov 08, 2022 at 02:19:48PM +0200, Ilpo Järvinen wrote:
+> Here are a number of 8250 DMA related fixes. The last one seems the
+> most serious problem able to corrupt the payload ordering.
+
+Thank you for the update!
+LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> v2:
+> - Tweak configure logic to match Andy's suggestion
+> - Cleaned up the tags from the oneliner patch
+> 
+> Ilpo Järvinen (4):
+>   serial: 8250: Fall back to non-DMA Rx if IIR_RDI occurs
+>   serial: 8250_lpss: Configure DMA also w/o DMA filter
+>   serial: 8250_lpss: Use 16B DMA burst with Elkhart Lake
+>   serial: 8250: Flush DMA Rx on RLSI
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
