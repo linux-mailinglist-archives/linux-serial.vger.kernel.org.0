@@ -2,98 +2,195 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1597A6216D0
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Nov 2022 15:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F39622382
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Nov 2022 06:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiKHOcW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S229602AbiKIFoX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 9 Nov 2022 00:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234116AbiKHObo (ORCPT
+        with ESMTP id S229447AbiKIFoX (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:31:44 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1F9178B4
-        for <linux-serial@vger.kernel.org>; Tue,  8 Nov 2022 06:31:16 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id i12so10332977qvs.2
-        for <linux-serial@vger.kernel.org>; Tue, 08 Nov 2022 06:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=V7SYVUH551K4mreTnLSCQKJQQQdMczgN9HQGNKc27TApp5wrigEULKYcS4RGrqCDVs
-         iSMapbYABQTVZ/RsL+3r2VUgsh2dQf/nLI6UeGSTl5qn2miEam32WWPfyRzU4FPlgUi+
-         6oENTzYGC7KEu9YBgbK8jw/+ki83R9B4ia038pfdzBwzHtfEtK6M8fEdWLkDQ0LwdbEr
-         +MKTf6ApXO5GbywhOrJemErmbao8s3hYgJkzQv8PMBeYJ9/Xkwie0QAZ0mGrXT8YAjKx
-         RuASkyREDgsWDgq4LTStyTCx+Vi1DN/VCRpLtiW/CSJFRa67PzaD8fNnTL1lOOaV758E
-         p49A==
-X-Gm-Message-State: ACrzQf1tNNZQ1EyJ7F53y+6x10aCI/5SbV7fVxuF4fSV5bPX9edOlfbx
-        ZGqjgbwWB7kEauSB8TR1/wAWTDSQGP6ju/wQa9oUgkotCtw2ug==
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        Wed, 9 Nov 2022 00:44:23 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634F813CEA
+        for <linux-serial@vger.kernel.org>; Tue,  8 Nov 2022 21:44:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667972662; x=1699508662;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0+UHtDFgBUWqiMoCDRQmvEVwbuC/fQAftNddTUdeS1M=;
+  b=XPFgW8CdOk5aGjJnFPDE/uiur8h4EdGnjTuNUsHi6QulRZibz3DI/RkD
+   EC2QxpPStGT9rdGAmiGlK9ltakbtPabMikm1P8EU2ixExTULmBdYuT4EV
+   LjaShPcwUW0aYA/77FbJb4KEEBgcE9HErDrKJzrs2VvezbaGNn4gQy8kC
+   tx7+bZAxDS/jyZ2jm1xx5iR0gqnIyFUfE/Rj+fc4FYKLzVGEqhRvDEQn8
+   mAbxrymnE7rZ9sg4jm/ta3/MOfaN5LMsyQWfUX8X6HgBg4AIbsWe7VyuU
+   +M3q7VnEh1PYc1XhcsFo7JZLaps/u1prvGKULevQQZhTtbHQoag9gArBR
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="291283183"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="291283183"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 21:44:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="667869235"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="667869235"
+Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 08 Nov 2022 21:44:20 -0800
+Received: from kbuild by e783503266e8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1osdsq-00016x-0P;
+        Wed, 09 Nov 2022 05:44:20 +0000
+Date:   Wed, 09 Nov 2022 13:44:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ 5c30f3e4a6e67c88c979ad30554bf4ef9b24fbd0
+Message-ID: <636b3e2a.Fd9xltPhGgAJU0v0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f2a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4954]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: 5c30f3e4a6e67c88c979ad30554bf4ef9b24fbd0  tty: Move TIOCSTI toggle variable before kerndoc
+
+elapsed time: 791m
+
+configs tested: 112
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+ia64                             allmodconfig
+i386                          randconfig-c001
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+sparc                       sparc32_defconfig
+csky                             alldefconfig
+sh                           se7712_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+mips                      loongson3_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                     sequoia_defconfig
+arm                             ezx_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                       holly_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arc                              alldefconfig
+arm                          exynos_defconfig
+mips                          rb532_defconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64               randconfig-a006-20221107
+x86_64               randconfig-a001-20221107
+x86_64               randconfig-a004-20221107
+x86_64               randconfig-a003-20221107
+x86_64               randconfig-a005-20221107
+x86_64               randconfig-a002-20221107
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+xtensa                           allyesconfig
+powerpc                      makalu_defconfig
+powerpc                       maple_defconfig
+i386                 randconfig-a001-20221107
+i386                 randconfig-a006-20221107
+i386                 randconfig-a003-20221107
+i386                 randconfig-a002-20221107
+i386                 randconfig-a005-20221107
+i386                 randconfig-a004-20221107
+arm                        trizeps4_defconfig
+arm                           sunxi_defconfig
+arc                        vdk_hs38_defconfig
+m68k                        m5272c3_defconfig
+sh                          rsk7269_defconfig
+arm                             rpc_defconfig
+arm                      integrator_defconfig
+powerpc                        cell_defconfig
+powerpc                     rainier_defconfig
+sh                           se7751_defconfig
+powerpc                 linkstation_defconfig
+arm                        clps711x_defconfig
+arm                      footbridge_defconfig
+m68k                       m5275evb_defconfig
+nios2                            alldefconfig
+powerpc                    klondike_defconfig
+powerpc                        warp_defconfig
+sh                           se7722_defconfig
+mips                            ar7_defconfig
+parisc                generic-64bit_defconfig
+mips                        bcm47xx_defconfig
+riscv                               defconfig
+openrisc                 simple_smp_defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221108
+hexagon              randconfig-r045-20221108
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+arm                       imx_v4_v5_defconfig
+arm                          moxart_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+mips                     cu1000-neo_defconfig
+mips                          ath25_defconfig
+mips                        qi_lb60_defconfig
+arm                         mv78xx0_defconfig
+x86_64                        randconfig-k001
+powerpc                 mpc836x_rdk_defconfig
+i386                              allnoconfig
+arm                       aspeed_g4_defconfig
+arm64                            allyesconfig
+powerpc                     skiroot_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
