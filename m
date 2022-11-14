@@ -2,83 +2,140 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1946F62795A
-	for <lists+linux-serial@lfdr.de>; Mon, 14 Nov 2022 10:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C15962818F
+	for <lists+linux-serial@lfdr.de>; Mon, 14 Nov 2022 14:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235625AbiKNJqc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 14 Nov 2022 04:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S229762AbiKNNp3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 14 Nov 2022 08:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235639AbiKNJqb (ORCPT
+        with ESMTP id S236936AbiKNNp2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:46:31 -0500
-X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 01:46:29 PST
-Received: from relay.mgdcloud.pe (relay.mgdcloud.pe [201.234.116.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29FF19C3C
-        for <linux-serial@vger.kernel.org>; Mon, 14 Nov 2022 01:46:29 -0800 (PST)
-Received: from relay.mgdcloud.pe (localhost.localdomain [127.0.0.1])
-        by relay.mgdcloud.pe (Proxmox) with ESMTP id 69A98229935;
-        Mon, 14 Nov 2022 04:36:53 -0500 (-05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cgracephoto.com;
-         h=cc:content-description:content-transfer-encoding:content-type
-        :content-type:date:from:from:message-id:mime-version:reply-to
-        :reply-to:subject:subject:to:to; s=Relay; bh=POmmLhbs6/14Mhmcbsw
-        HpX0H+MIlo+W0e6cG8XDkBG8=; b=aM0wsebiTY+nJVRgTiyBWnmrig7hphRJ09p
-        Sr0WxtijTG9fvp/LCMYQzemIy0jOuVideHoZOxW8w+NTx7p8ALMv0N76hYB5G7gZ
-        hsqPUU8bQZS3TSNqDCu/iD/+5udgE7+FjKlYZAg0Wkca5mvRgtBv5dhCsb7GlF2U
-        UB0nO6BQs3wPAWEVQXVTOJ1d/7tN2Mp+Tjc6oobijhdlKRtYUKmh4DhryLHxtGJu
-        jAhRvJ/PJCXqn+9HruIZBpo4GN1xZv1ERGLlplzBl5Q7ndeK/F1XeHsx1QX1vQLA
-        /SVZwQEv+/my76kQ6WKTOJlXFELb9t60UW1f6xeEDIemZ22Udbg==
-Received: from portal.mgd.pe (portal.mgd.pe [107.1.2.10])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 14 Nov 2022 08:45:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EBE24093;
+        Mon, 14 Nov 2022 05:45:23 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5B59120008;
+        Mon, 14 Nov 2022 13:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668433522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nBxrJD3dpbkrLcoAw5xCCnCqviVBPHnrjEWuuoLd3BU=;
+        b=hw9KJ9KNhTmqXCktmrZuCnSkd2kMHj5VtXLZ5Y4racFgEEFNIob97XyiMOZX/H8RZmawJW
+        wX8Ea+JW1xIrKQqYXTuTfOKYU7mRzZodLO3rxoP+9JK/MkBXLBHsQOT+q4lmcQ6JKghRqi
+        4IPovdZdbnV9qPbd0guWhXYxM2rWvB4=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay.mgdcloud.pe (Proxmox) with ESMTPS id 5200D229934;
-        Mon, 14 Nov 2022 04:36:53 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by portal.mgd.pe (Postfix) with ESMTP id 337B620187D81;
-        Mon, 14 Nov 2022 04:36:53 -0500 (-05)
-Received: from portal.mgd.pe ([127.0.0.1])
-        by localhost (portal.mgd.pe [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id SXLyiVaBmrjR; Mon, 14 Nov 2022 04:36:52 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by portal.mgd.pe (Postfix) with ESMTP id D1A6220187D80;
-        Mon, 14 Nov 2022 04:36:52 -0500 (-05)
-X-Virus-Scanned: amavisd-new at mgd.pe
-Received: from portal.mgd.pe ([127.0.0.1])
-        by localhost (portal.mgd.pe [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id OME4Jo252Vrl; Mon, 14 Nov 2022 04:36:52 -0500 (-05)
-Received: from [103.125.190.179] (unknown [103.125.190.179])
-        by portal.mgd.pe (Postfix) with ESMTPSA id 8BD9920187D81;
-        Mon, 14 Nov 2022 04:36:46 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        by relay2.suse.de (Postfix) with ESMTPS id 2EF272C142;
+        Mon, 14 Nov 2022 13:45:21 +0000 (UTC)
+Date:   Mon, 14 Nov 2022 14:45:21 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Do not delay boot when printing log to serial console during
+ startup?
+Message-ID: <Y3JGcQyuW+ydwkYE@alley>
+References: <c87cc376-3b0d-8fda-7fc1-555c930faaf1@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Strategic plan
-To:     Recipients <cindy@cgracephoto.com>
-From:   "Mr.IgorS. Lvovich" <cindy@cgracephoto.com>
-Date:   Mon, 14 Nov 2022 01:36:45 -0800
-Reply-To: richad.tang@yahoo.com.hk
-Message-Id: <20221114093646.8BD9920187D81@portal.mgd.pe>
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,HK_NAME_MR_MRS,RCVD_IN_SBL,
-        SPF_FAIL,SPF_HELO_PASS,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c87cc376-3b0d-8fda-7fc1-555c930faaf1@molgen.mpg.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello
-I will like to use the liberty of this medium to inform you as a consultant=
-,that my principal is interested in investing his bond/funds as a silent bu=
-siness partner in your company.Taking into proper
-consideration the Return on Investment(ROI) based on a ten (10) year strate=
-gic plan.
-I shall give you details when you reply.
+Adding John into Cc. He is working on introducing printk kthreads that
+might allow to handle consoles asynchronously.
 
-Regards,
+On Tue 2022-10-11 11:03:39, Paul Menzel wrote:
+> Dear Linux folks,
+> 
+> 
+> We boot our systems generally with the serial console enabled
+> `console=ttyS0,115200n8`, and noticed that initializing the console takes at
+> least one second.
+> 
+>     $ dmesg | grep -e 'DMI:' -e 'printk: console'
+>     [    0.000000] DMI: Dell Inc. PowerEdge R7525/05Y13N, BIOS 2.7.3
+> 03/30/2022
+>     [    2.691432] printk: console [tty0] enabled
+>     [    5.414384] printk: console [ttyS0] enabled
+> 
+>     $ dmesg | grep -e 'DMI:' -e 'printk:'
+>     [    0.000000] DMI: Dell Inc. Precision Tower 3620/0MWYPT, BIOS 2.22.0
+> 07/13/2022
+>     [    0.146953] printk: console [tty0] enabled
+>     [    1.374382] printk: console [ttyS0] enabled
+> 
+>     $ dmesg | grep -e 'DMI:' -e 'printk: console'
+>     [    0.000000] DMI: Dell Inc. PowerEdge R7425/08V001, BIOS 1.6.7
+> 10/29/2018
+>     [    1.589543] printk: console [tty0] enabled
+>     [    3.057770] printk: console [ttyS0] enabled
+> 
+>     $ dmesg | grep -e 'DMI:' -e 'printk: console'
+>     [    0.000000] DMI: HPE ProLiant DL385 Gen10 Plus/ProLiant DL385 Gen10
+> Plus, BIOS A42 12/03/2021
+>     [    5.171202] printk: console [tty0] enabled
+>     [    8.066602] printk: console [ttyS0] enabled
+> 
+> `initcall_debug` shows:
+> 
+>     [    0.190491] calling  univ8250_console_init+0x0/0x2b @ 0
+>     [    1.488645] printk: console [ttyS0] enabled
+>     [    1.492945] initcall univ8250_console_init+0x0/0x2b returned 0 after
+> 0 usecs
+> 
+> (Note, that the “after time” by initcall does not match the timestamp at the
+> beginning.)
 
+The message "printk: console [ttyS0] enabled" is printed almost at the
+end of register_console(). It happens after all previously printed
+messages reach the console.
+
+It might take a long time to show all messages on slow serial consoles.
+
+
+> So it looks to me like, that the already recorded messages are printed out
+> over the serial console first, before it continues. The documentation of
+> `register_console()` in `kernel/printk/printk.c` confirms that:
+> >
+> >  * The console driver calls this routine during kernel initialization
+> >  * to register the console printing procedure with printk() and to
+> >  * print any messages that were printed by the kernel before the
+> >  * console driver was initialized.
+
+Most people want to see all messages. Any previous warning or error might
+the reason why the system crashed later.
+
+If you want faster boot, you might consider using "quiet" or
+loglevel=<some low number> on the kernel command line. It will
+show only the most important messages on the console.
+
+
+> Is there an option to enable the serial console but send the messages to it
+> asynchronously so it does not hold up the boot?
+
+We have been trying to get this into upstream for years. It is not
+that easy. Asynchronous handling increases the risk that a console
+will not show the last important messages when things go wrong.
+
+Anyway, we are still trying. One puzzle of this effort is just
+being reviewed in this thread,
+https://lore.kernel.org/r/20221107141638.3790965-1-john.ogness@linutronix.de
+
+Best Regards,
+Petr
