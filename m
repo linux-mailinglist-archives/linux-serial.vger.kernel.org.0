@@ -2,195 +2,138 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4ED62C148
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Nov 2022 15:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5796B62C14A
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Nov 2022 15:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiKPOsn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Nov 2022 09:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S233406AbiKPOtV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Nov 2022 09:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbiKPOsm (ORCPT
+        with ESMTP id S233309AbiKPOtT (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:48:42 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083F71A218
-        for <linux-serial@vger.kernel.org>; Wed, 16 Nov 2022 06:48:39 -0800 (PST)
-Received: from [192.168.1.107] (82-131-200-171.pool.digikabel.hu [82.131.200.171])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: hs@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id C2DB784A14;
-        Wed, 16 Nov 2022 15:48:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1668610117;
-        bh=KWzY50RVH+2ZYGUjmf0Y7ybA/7x2fGxBya4vWUbTqlQ=;
-        h=Subject:To:Cc:References:Reply-To:From:Date:In-Reply-To:From;
-        b=GEkLLImLur4/2j6JbeOLH2BaEgv/H1axTazcAS23db7yr3MdFlXwzOgtEjlGT/wOv
-         xqVwN7lVR/toBF8mLHO8h/SX6XqWDphsw3bPcqQuT/umFnM26eetSfv2tB0ccgkRUd
-         LUCfGGoxX9Pfn5TULxv+zVB8/mpO1L4P3vY8hzONwkno5Nv2miaZMKSCrBj8rhUzFq
-         OEm8tOahmmmwRfNUvItbbmsYBU/FYCtoVPDmRM76tGQskKs4+MfGT13Ja+f+8GOCNH
-         imcLCsvGHVl3ND2UxoDjTEl/WkqOfvKp8XBFWeqI7QmL3Dv5Ni/xTSjIWBYcowwgcP
-         4dToXdwNDRKwA==
-Subject: Re: [PATCH v2] tty: serial: imx: Handle RS485 DE signal active high
-To:     Marek Vasut <marex@denx.de>
-Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        kernel@dh-electronics.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-References: <20220929144400.13571-1-marex@denx.de>
-Reply-To: hs@denx.de
-From:   Heiko Schocher <hs@denx.de>
-Message-ID: <122dadc4-a1e2-a102-e0a9-fd3d4da45c48@denx.de>
-Date:   Wed, 16 Nov 2022 15:48:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 16 Nov 2022 09:49:19 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3255617AAD;
+        Wed, 16 Nov 2022 06:49:17 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id i9so11718855qki.10;
+        Wed, 16 Nov 2022 06:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VhT+wRGsMqZBVBNYbapxMHCh1jnUO0LAhIzATarUXGw=;
+        b=Zj8Wr2/kDohSllpnz2X0zeoz2eqddleHHUv7vKHoxgAjy0pWzlYNnjXpy5+Q8HsjaT
+         dH4gC6qIVpFnJwXC023mz1oOzfU2/MvGh1GPK1A9xK5qJATg+Td5KdYhCh5egyFZ3mxR
+         ympEPLtbg1F7LNpR1uK3gMnYlteniwwnWOyR1oROaZI8lAu9aJ/lCOVYplKf8HUTpnAC
+         bMUnrf28iprIYF1R+DdZsv+5MpbYL6amup3zv5ExbIisgI7I7adQ593u9gwD6exY39TE
+         1QCUqZKyQMtth06rZB/xLL6WkIjIdvgZOLIPQw6CpEoioTm26pnGBRNWkACav96i3LC2
+         bA8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VhT+wRGsMqZBVBNYbapxMHCh1jnUO0LAhIzATarUXGw=;
+        b=K/80ZvrLRr7VuK0tmka3ke6qyrUY8KznjLhhogJPcDtBaqTyRS0/HT7Zgq/SoiIKIA
+         x94CXGujFt/771LzlIcZ88gpcX/Sk4uhpKs0txKfMqiMFnQTDrPiVnPkA9As3D7w45oN
+         XMRyAy7wabPzyP6GdUntSvOTFlb3iM+sVQgQhx4aaa7H8xvksjXN+xvdgdB8ZlbFXG2R
+         iQjMX2Mx4eSLQQ9U11ASLJusDOZGUxC95/cOys08QK2vNlEyhPqZionLTQd+c9E/tRO2
+         N45dEFQokQ/uWsZGj1f/Om1Sy77DHqMzaJs4z1+uQRdjdG3lbdYecKwvi32Wy6O6NOm9
+         fkKA==
+X-Gm-Message-State: ANoB5pkjblcXCoVwn+rOCGaZbCFMgoobU+cf5IxI0OPTnBsAKq7RVuey
+        zLS5FtZCvTOHs1ZKM800OlfvDxEFUofHRg==
+X-Google-Smtp-Source: AA0mqf40EvOlBxPBqo5493cwl+vY0AF8jUzkoqL/U8wHLZ0w7F5dgTfRF2ctxts1API4yGm/6zyZSw==
+X-Received: by 2002:a05:620a:211d:b0:6fa:182:f2d7 with SMTP id l29-20020a05620a211d00b006fa0182f2d7mr19009471qkl.360.1668610155923;
+        Wed, 16 Nov 2022 06:49:15 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id g5-20020ac84805000000b0039a55f78792sm8729624qtq.89.2022.11.16.06.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 06:49:15 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, kgugala@antmicro.com, mholenko@antmicro.com,
+        joel@jms.id.au, david.abdurachmanov@gmail.com,
+        florent@enjoy-digital.fr, geert@linux-m68k.org,
+        ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v4 00/14] serial: liteuart: add IRQ support
+Date:   Wed, 16 Nov 2022 09:48:54 -0500
+Message-Id: <20221116144908.234154-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-In-Reply-To: <20220929144400.13571-1-marex@denx.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hello Marek,
+Add IRQ support to the LiteX LiteUART serial interface
 
-On 29.09.22 16:44, Marek Vasut wrote:
-> The default polarity of RS485 DE signal is active high. This driver does
-> not handle such case properly. Currently, when a pin is multiplexed as a
-> UART CTS_B on boot, this pin is pulled HIGH by the i.MX UART CTS circuit,
-> which activates DE signal on the RS485 transceiver and thus behave as if
-> the RS485 was transmitting data, so the system blocks the RS485 bus when
-> it starts and until user application takes over. This behavior is not OK.
-> The problem consists of two separate parts.
-> 
-> First, the i.MX UART IP requires UCR1 UARTEN and UCR2 RXEN to be set for
-> UCR2 CTSC and CTS bits to have any effect. The UCR2 CTSC bit permits the
-> driver to set CTS (RTS_B or RS485 DE signal) to either level sychronous
-> to the internal UART IP clock. Compared to other options, like GPIO CTS
-> control, this has the benefit of being synchronous to the UART IP clock
-> and thus without glitches or bus delays. The reason for the CTS design
-> is likely because when the Receiver is disabled, the UART IP can never
-> indicate that it is ready to receive data by assering CTS signal, so
-> the CTS is always pulled HIGH by default.
-> 
-> When the port is closed by user space, imx_uart_stop_rx() clears UCR2
-> RXEN bit, and imx_uart_shutdown() clears UCR1 UARTEN bit. This disables
-> UART Receiver and UART itself, and forces CTS signal HIGH, which leads
-> to the RS485 bus being blocked because RS485 DE is incorrectly active.
-> 
-> The proposed solution for this problem is to keep the Receiver running
-> even after the port is closed, but in loopback mode. This disconnects
-> the RX FIFO input from the RXD external signal, and since UCR2 TXEN is
-> cleared, the UART Transmitter is disabled, so nothing can feed data in
-> the RX FIFO. Because the Receiver is still enabled, the UCR2 CTSC and
-> CTS bits still have effect and the CTS (RS485 DE) control is retained.
-> 
-> Note that in case of RS485 DE signal active low, there is no problem and
-> no special handling is necessary. The CTS signal defaults to HIGH, thus
-> the RS485 is by default set to Receive and the bus is not blocked.
-> 
-> Note that while there is the possibility to control CTS using GPIO with
-> either CTS polarity, this has the downside of not being synchronous to
-> the UART IP clock and thus glitchy and susceptible to slow DE switching.
-> 
-> Second, on boot, before the UART driver probe callback is called, the
-> driver core triggers pinctrl_init_done() and configures the IOMUXC to
-> default state. At this point, UCR1 UARTEN and UCR2 RXEN are both still
-> cleared, but UART CTS_B (RS485 DE) is configured as CTS function, thus
-> the RTS signal is pulled HIGH by the UART IP CTS circuit.
-> 
-> One part of the solution here is to enable UCR1 UARTEN and UCR2 RXEN and
-> UTS loopback in this driver probe callback, thus unblocking the CTSC and
-> CTS control early on. But this is still too late, since the pin control
-> is already configured and CTS has been pulled HIGH for a short period
-> of time.
-> 
-> When Linux kernel boots and this driver is bound, the pin control is set
-> to special "init" state if the state is available, and driver can switch
-> the "default" state afterward when ready. This state can be used to set
-> the CTS line as a GPIO in DT temporarily, and a GPIO hog can force such
-> GPIO to LOW, thus keeping the RS485 DE line LOW early on boot. Once the
-> driver takes over and UCR1 UARTEN and UCR2 RXEN and UTS loopback are all
-> enabled, the driver can switch to "default" pin control state and control
-> the CTS line as function instead. DT binding example is below:
-> 
-> "
-> &gpio6 {
->   rts-init-hog {
->     gpio-hog;
->     gpios = <5 0>;
->     output-low;
->     line-name = "rs485-de";
->   };
-> };
-> 
-> &uart5 { /* DHCOM UART2 */
->   pinctrl-0 = <&pinctrl_uart5>;
->   pinctrl-1 = <&pinctrl_uart5_init>;
->   pinctrl-names = "default", "init";
->   ...
-> };
-> pinctrl_uart5_init: uart5-init-grp {
->   fsl,pins = <
-> ...
->     MX6QDL_PAD_CSI0_DAT19__GPIO6_IO05       0x30b1
->   >;
-> };
-> 
-> pinctrl_uart5: uart5-grp {
->   fsl,pins = <
-> ...
->     MX6QDL_PAD_CSI0_DAT19__UART5_CTS_B      0x30b1
->   >;
-> };
-> "
-> 
-> Tested-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> Reviewed-by: Fabio Estevam <festevam@denx.de>
-> ---
-> Cc: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-> Cc: Fabio Estevam <festevam@denx.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jiri Slaby <jirislaby@kernel.org>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> Cc: kernel@dh-electronics.com
-> Cc: kernel@pengutronix.de
-> Cc: linux-arm-kernel@lists.infradead.org
-> To: linux-serial@vger.kernel.org
-> ---
-> V2: - Add code comments per input from Uwe
->     - Add TB from Christoph
-> ---
->  drivers/tty/serial/imx.c | 64 ++++++++++++++++++++++++++++++++++++----
->  1 file changed, 58 insertions(+), 6 deletions(-)
+Changes from v3:
+  - picked up r/b Ilpo Järvinen on select subset of commits
+  - rebased entire series on top of tty-next tree
+  - 2/14 ("use bit number macros"): explicitly include <linux/bits.h>
+  - 3/14 ("remove unused uart_ops stubs"): don't add gratuitous comment
+    removed later on in the series
+  - 12/14 ("add IRQ support for the RX path"): add shadow irq register
+    to support polling mode and avoid reading hardware mmio irq register
+    to learn which irq flags are enabled
+    - this also simplifies both liteuart_interrupt() and liteuart_startup()
+  - 13/14 ("add IRQ support for the TX path"):
+    - removed superfluous curly braces from liteuart_interrupt()
+    - simplified [start|stop]_tx() by using shadow irq register from 12/14
+    - simplified liteuart_tx_chars() by rebasing on top of tty-next tree
 
-Thank! Successfully tested on an imx8mp based board.
+> Changes from v2:
+>   - further split out "separate RX loop from poll timer" into
+>     dedicated patches highlighting additional changes explicitly:
+>       - factoring out tty_flip_buffer_push() (6/14)
+>       - ack only RX events in RX loop (7/14)
+>       - pass constant flag to uart_insert_char() directly (8/14)
+>       - fix variable types in rx loop (9/14)
+>       - separating RX loop from poll timer (10/14)
+>   - added patch (11/14) to move function definitions to a more
+>     convenient location, making subsequent changes easier to read
+>     in diff patch form.
+>   - fixes and clarifications for RX path IRQ support patch (now 12/14):
+>       - only return IRQ_HANDLED for RX events
+>       - use pr_fmt() to improve style of irq setup error message
+>       - remove unnecessary locking from around single-register access
+>   - modify TX path to support both IRQ-mode and polling (13/14)
+>   - move polling-only liteuart_putchar() behind same conditional
+>     (CONFIG_SERIAL_LITEUART_CONSOLE) as the rest of the code that's
+>     still using it.
+>
+> Changes from v1:
+>   - split minor cosmetic changes out into individual patches
+>     (1/3 became 1..5/7)
+>   - patches 6/7 and 7/7 unchanged (used to be 2/3 and 3/3)
 
-Tested-by: Heiko Schocher <hs@denx.de>
+Gabriel Somlo (14):
+  serial: liteuart: use KBUILD_MODNAME as driver name
+  serial: liteuart: use bit number macros
+  serial: liteuart: remove unused uart_ops stubs
+  serial: liteuart: don't set unused port fields
+  serial: liteuart: minor style fix in liteuart_init()
+  serial: liteuart: move tty_flip_buffer_push() out of rx loop
+  serial: liteuart: rx loop should only ack rx events
+  serial: liteuart: simplify passing of uart_insert_char() flag
+  serial: liteuart: fix rx loop variable types
+  serial: liteuart: separate rx loop from poll timer
+  serial: liteuart: move function definitions
+  serial: liteuart: add IRQ support for the RX path
+  serial: liteuart: add IRQ support for the TX path
+  serial: liteuart: move polling putchar() function
 
-bye,
-Heiko
+ drivers/tty/serial/liteuart.c | 210 ++++++++++++++++++++--------------
+ 1 file changed, 126 insertions(+), 84 deletions(-)
+
 -- 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
+2.38.1
+
