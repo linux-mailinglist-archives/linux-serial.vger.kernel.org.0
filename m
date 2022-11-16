@@ -2,73 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AD862C163
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Nov 2022 15:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9229E62C3FE
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Nov 2022 17:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233866AbiKPOuC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Nov 2022 09:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S233869AbiKPQWF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Nov 2022 11:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbiKPOtl (ORCPT
+        with ESMTP id S233205AbiKPQWC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Nov 2022 09:49:41 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB9E17A9E;
-        Wed, 16 Nov 2022 06:49:31 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id u7so12003003qvn.13;
-        Wed, 16 Nov 2022 06:49:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GsRGGaIiBoJlwl/45zB6BAECaPWQUSVeGqaE9kAVQrI=;
-        b=CqrrIl3uMqf9NCB5q4CLw/Pa8BCbWfgMrW1s9jDsDO0IemRCQGuS1bWJnczyJEz4yv
-         sSzpnT2kKzIrTl4xHRy6MuaGNn4SYXg5fPxuSXtaZvP4CPLvgFmhMtqi5ouDKYYD1Kyl
-         2QKrrtN/XU1QXctfCpfvsqxQxigLLro4miqSM0JVDHd5YDAlc5+DGPZUW96wJ1s85mE4
-         VjHj/3V8++CJPw5A3x660GYei74pQ8yyorgP79WHClIW00NWC3RH0on+zHo/JrT3nN/o
-         qaojdX1Rbi+azeYmSoA0e1fqTfQjq7Yd62hTSyTbb8yFapevogH9pQgQKjyXdK0NXWVA
-         leLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GsRGGaIiBoJlwl/45zB6BAECaPWQUSVeGqaE9kAVQrI=;
-        b=tLrRNeCt9UajBy8AfNxCHY+kloSy50SQNXGINjpPnM1yyN0H9raTMATDkCAFgHSifQ
-         awGBs/WVIBRz768Tbd7CpUPTLpa2Me17Q6C+3MWd62lQ9Gls55iNO9Vx2tEWv1Ft9JCx
-         HrB19qufbgLyXLdhNTo9q+YWom1fdkjTNpGO9AqponmeQ1Kn1HbiOhz0xA32F7b/zH8m
-         3p02kt3HYoQ5LPvvHlFyHajPJcWcmaX+XH8Us0zISm9vYvdlLFbFDkNoNIghePGn9Yvf
-         vpocaDvxh3xOZdLj/Ij3BRevF+7E15xKD6p2aTKPigBKxRCBROJksRxK55k0XiTwakVV
-         VbEg==
-X-Gm-Message-State: ANoB5pk6zD7N1PLLHBaLnuegO/YRNDTBrx8dEFZZTbJI61tRi60MV4v8
-        fdaJtaNEisBzah7o704uxrKN0N5LKOZXtA==
-X-Google-Smtp-Source: AA0mqf7GNSwZZJNcB+oms94DY8nCWtNvbQUHc7BMFnPcrIxoh8m0VYjlpfke324iahugsfe/I0dNTQ==
-X-Received: by 2002:a05:6214:370c:b0:4bb:64f7:dce5 with SMTP id np12-20020a056214370c00b004bb64f7dce5mr20740663qvb.15.1668610170609;
-        Wed, 16 Nov 2022 06:49:30 -0800 (PST)
-Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
-        by smtp.gmail.com with ESMTPSA id g5-20020ac84805000000b0039a55f78792sm8729624qtq.89.2022.11.16.06.49.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 06:49:30 -0800 (PST)
-From:   Gabriel Somlo <gsomlo@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, kgugala@antmicro.com, mholenko@antmicro.com,
-        joel@jms.id.au, david.abdurachmanov@gmail.com,
-        florent@enjoy-digital.fr, geert@linux-m68k.org,
-        ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 14/14] serial: liteuart: move polling putchar() function
-Date:   Wed, 16 Nov 2022 09:49:08 -0500
-Message-Id: <20221116144908.234154-15-gsomlo@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116144908.234154-1-gsomlo@gmail.com>
-References: <20221116144908.234154-1-gsomlo@gmail.com>
+        Wed, 16 Nov 2022 11:22:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB42326E8;
+        Wed, 16 Nov 2022 08:22:00 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668615717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VtCslIGlEzy614T2a8IHyZzYUS3h+qQy0DKVc9BzNdg=;
+        b=GzY5cgNDoWBa/lbOwfd9mX/PwG123YTrjFa/2RWy/MxTGTTbo5ThPzbyy9v6dG3zYsF1pZ
+        N+iegswchbcXUAHRtbTykseR0L6W+HQIgfgiX9SSYYN5RgrOfoZwE1DQPFiaVifugRbmwD
+        AyBCdUHkwK+OSb4pBPykW240H0ST1UqF503Aq8rnG+/8xoyKFITxQ5Wo6+vQYoyof/YpGg
+        mwgQRVb20rIizIFIJqJNAksD+xCwoZHyDaiU+3Ezmava1OwpI8+ReSgzmSupdlYX72TX7m
+        HSxs3KVDXxdWRzVgOd+h/0zRrlR+P8zbX1vczS2jWcXMvKgDHE79PmhU5YDATQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668615717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VtCslIGlEzy614T2a8IHyZzYUS3h+qQy0DKVc9BzNdg=;
+        b=vFkQ9WmGMftRn2ZYMrgPBYAnAbFOKcqTla1ih+Fi5GvDPVQBXzB/7++jTAHdNGmTFP2e82
+        KdXuR59uIU7zsfBw==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH printk v5 00/40] reduce console_lock scope
+Date:   Wed, 16 Nov 2022 17:27:12 +0106
+Message-Id: <20221116162152.193147-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,51 +92,133 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The polling liteuart_putchar() function is only called from methods
-conditionally enabled by CONFIG_SERIAL_LITEUART_CONSOLE. Move its
-definition closer to the console code where it is dependent on the
-same config option.
+This is v5 of a series to prepare for threaded/atomic
+printing. v4 is here [0]. This series focuses on reducing the
+scope of the BKL console_lock. It achieves this by switching to
+SRCU and a dedicated mutex for console list iteration and
+modification, respectively. The console_lock will no longer
+offer this protection.
 
-Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/liteuart.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Also, during the review of v2 it came to our attention that
+many console drivers are checking CON_ENABLED to see if they
+are registered. Because this flag can change without
+unregistering and because this flag does not represent an
+atomic point when an (un)registration process is complete,
+a new console_is_registered() function is introduced. This
+function uses the console_list_lock to synchronize with the
+(un)registration process to provide a reliable status.
 
-diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index 977fc4349b47..238f615cb80e 100644
---- a/drivers/tty/serial/liteuart.c
-+++ b/drivers/tty/serial/liteuart.c
-@@ -70,14 +70,6 @@ static struct uart_driver liteuart_driver = {
- #endif
- };
- 
--static void liteuart_putchar(struct uart_port *port, unsigned char ch)
--{
--	while (litex_read8(port->membase + OFF_TXFULL))
--		cpu_relax();
--
--	litex_write8(port->membase + OFF_RXTX, ch);
--}
--
- static void liteuart_update_irq_reg(struct uart_port *port, bool set, u8 mask)
- {
- 	struct liteuart_port *uart = to_liteuart_port(port);
-@@ -372,6 +364,14 @@ static struct platform_driver liteuart_platform_driver = {
- 
- #ifdef CONFIG_SERIAL_LITEUART_CONSOLE
- 
-+static void liteuart_putchar(struct uart_port *port, unsigned char ch)
-+{
-+	while (litex_read8(port->membase + OFF_TXFULL))
-+		cpu_relax();
-+
-+	litex_write8(port->membase + OFF_RXTX, ch);
-+}
-+
- static void liteuart_console_write(struct console *co, const char *s,
- 	unsigned int count)
- {
+All users of the console_lock for list iteration have been
+modified. For the call sites where the console_lock is still
+needed (for other reasons), comments are added to explain
+exactly why the console_lock is needed.
+
+All users of CON_ENABLED for registration status have been
+modified to use console_is_registered(). Note that there are
+still users of CON_ENABLED, but this is for legitimate purposes
+about a registered console being able to print.
+
+The base commit for this series is from Paul McKenney's RCU tree
+and provides an NMI-safe SRCU implementation [1]. Without the
+NMI-safe SRCU implementation, this series is not less safe than
+mainline. But we will need the NMI-safe SRCU implementation for
+atomic consoles anyway, so we might as well get it in
+now. Especially since it _does_ increase the reliability for
+mainline in the panic path.
+
+Changes since v4:
+
+printk:
+
+- Introduce console_init_seq() to handle the now rather complex
+  procedure to find an appropriate start sequence number for a
+  new console upon registration.
+
+- When registering a non-boot console and boot consoles are
+  registered, try to flush all the consoles to get the next @seq
+  value before falling back to use the @seq of the enabled boot
+  console that is furthest behind.
+
+- For console_force_preferred_locked(), make the console the
+  head of the console list.
+
+John Ogness
+
+[0] https://lore.kernel.org/lkml/20221114162932.141883-1-john.ogness@linutronix.de
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=srcunmisafe.2022.11.09a
+
+John Ogness (38):
+  printk: Prepare for SRCU console list protection
+  printk: register_console: use "registered" for variable names
+  printk: move @seq initialization to helper
+  printk: fix setting first seq for consoles
+  um: kmsg_dump: only dump when no output console available
+  tty: serial: kgdboc: document console_lock usage
+  tty: tty_io: document console_lock usage
+  proc: consoles: document console_lock usage
+  printk: introduce console_list_lock
+  console: introduce wrappers to read/write console flags
+  um: kmsg_dumper: use srcu console list iterator
+  kdb: use srcu console list iterator
+  printk: console_flush_all: use srcu console list iterator
+  printk: __pr_flush: use srcu console list iterator
+  printk: console_is_usable: use console_srcu_read_flags
+  printk: console_unblank: use srcu console list iterator
+  printk: console_flush_on_panic: use srcu console list iterator
+  printk: console_device: use srcu console list iterator
+  console: introduce console_is_registered()
+  serial_core: replace uart_console_enabled() with
+    uart_console_registered()
+  tty: nfcon: use console_is_registered()
+  efi: earlycon: use console_is_registered()
+  tty: hvc: use console_is_registered()
+  tty: serial: earlycon: use console_is_registered()
+  tty: serial: pic32_uart: use console_is_registered()
+  tty: serial: samsung_tty: use console_is_registered()
+  tty: serial: xilinx_uartps: use console_is_registered()
+  usb: early: xhci-dbc: use console_is_registered()
+  netconsole: avoid CON_ENABLED misuse to track registration
+  printk, xen: fbfront: create/use safe function for forcing preferred
+  tty: tty_io: use console_list_lock for list synchronization
+  proc: consoles: use console_list_lock for list iteration
+  tty: serial: kgdboc: use srcu console list iterator
+  tty: serial: kgdboc: use console_list_lock for list traversal
+  tty: serial: kgdboc: synchronize tty_find_polling_driver() and
+    register_console()
+  tty: serial: kgdboc: use console_list_lock to trap exit
+  printk: relieve console_lock of list synchronization duties
+  tty: serial: sh-sci: use setup() callback for early console
+
+Thomas Gleixner (2):
+  serial: kgdboc: Lock console list in probe function
+  printk: Convert console_drivers list to hlist
+
+ .clang-format                       |   1 +
+ arch/m68k/emu/nfcon.c               |   9 +-
+ arch/um/kernel/kmsg_dump.c          |  24 +-
+ drivers/firmware/efi/earlycon.c     |   8 +-
+ drivers/net/netconsole.c            |  21 +-
+ drivers/tty/hvc/hvc_console.c       |   4 +-
+ drivers/tty/serial/8250/8250_core.c |   2 +-
+ drivers/tty/serial/earlycon.c       |   4 +-
+ drivers/tty/serial/kgdboc.c         |  46 ++-
+ drivers/tty/serial/pic32_uart.c     |   4 +-
+ drivers/tty/serial/samsung_tty.c    |   2 +-
+ drivers/tty/serial/serial_core.c    |  14 +-
+ drivers/tty/serial/sh-sci.c         |  20 +-
+ drivers/tty/serial/xilinx_uartps.c  |   2 +-
+ drivers/tty/tty_io.c                |  18 +-
+ drivers/usb/early/xhci-dbc.c        |   2 +-
+ drivers/video/fbdev/xen-fbfront.c   |  12 +-
+ fs/proc/consoles.c                  |  21 +-
+ include/linux/console.h             | 129 +++++++-
+ include/linux/serial_core.h         |  10 +-
+ kernel/debug/kdb/kdb_io.c           |  18 +-
+ kernel/printk/printk.c              | 493 +++++++++++++++++++++-------
+ 22 files changed, 680 insertions(+), 184 deletions(-)
+
+
+base-commit: f733615e39aa2d6ddeef33b7b2c9aa6a5a2c2785
 -- 
-2.38.1
+2.30.2
 
