@@ -2,118 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA88A632DEB
-	for <lists+linux-serial@lfdr.de>; Mon, 21 Nov 2022 21:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611B46332A2
+	for <lists+linux-serial@lfdr.de>; Tue, 22 Nov 2022 03:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiKUU1m (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 21 Nov 2022 15:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S232429AbiKVCEE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 21 Nov 2022 21:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiKUU1l (ORCPT
+        with ESMTP id S232430AbiKVCEC (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:27:41 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B83212D1F;
-        Mon, 21 Nov 2022 12:27:39 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D0C3F1359;
-        Mon, 21 Nov 2022 21:27:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669062457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dK3d1oQe8X/2pt53oFWkl+Bv7pDERsDly7J5/Bok7U=;
-        b=o921CSn/87OErQwPhLw+XZXrl1z/1WIdOI3ijg2y3bWIDdTV6b3Kti9W59jDmL/CZIHcUi
-        1SncAISlqzwHnbLTKRWIHDkbdipwYU/XVVzI2J6GLwEcE1PJoQWXSNw0bZeTAILBo7r3Bo
-        c2AYqk7zscF44u/utES2ZVTyJDGM8zK420esoS/IP2nMS+24ZYb64rcWV7u8/DArxpKgwN
-        PccvGDLnHVjDo5kJrRXcoYh/QOtoo6FQVg1Fs3V5hkKvt3YEgV/vvkAoY4QvPGzdr7RV7t
-        S/q33mEGojWVUyNCZMYV9/a4QMh1K6M/fyXHfVkOyuNzTYoIqbbetlAOC6keIQ==
-From:   Michael Walle <michael@walle.cc>
-To:     jirislaby@kernel.org
-Cc:     afaerber@suse.de, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, festevam@gmail.com,
-        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com, mani@kernel.org,
-        nicolas.ferre@microchip.com, richard.genoud@gmail.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, sudeep.holla@arm.com,
-        tklauser@distanz.ch, vz@mleia.com
-Subject: Re: [PATCH v5 2/3] tty: serial: use uart_port_tx() helper
-Date:   Mon, 21 Nov 2022 21:27:24 +0100
-Message-Id: <20221121202724.1708460-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221004104927.14361-3-jirislaby@kernel.org>
-References: <20221004104927.14361-3-jirislaby@kernel.org>
+        Mon, 21 Nov 2022 21:04:02 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496C8C7213;
+        Mon, 21 Nov 2022 18:04:02 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3a3961f8659so39330517b3.2;
+        Mon, 21 Nov 2022 18:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TzriTTjDN2sG1GFT5R1JUO/5Csi2e/XJJrWhOlsWXVg=;
+        b=mrxfXGgSv373PWJgm80ATEzqSwwa0Q7tVbMNWfmqMxhy2yyBtscLwV12nXuvqOLNjj
+         eFS8FyDDnBn7dlb3QehsEwEz6RaTgzVRJBsBGOvDEb46/IQKvhQSjV7vevgPwDXTSf06
+         xj3IN47CNcalIgTWt8ti252jq6qnr+HoYnwAvba49WQOklUy9HUfCxX9Gyco0EgOYf2Z
+         CJ0+WdVAI/AsxvW9PVeBR96tnXhc+zggHNYNRQ5YDTMmHvvJn+qdbMxeks8T/2hNeHal
+         y5dDjbJGlZaurkrG0GdE3KVaH8LCbgtLfTa8gLI4vR+pLpLDjZIpYBJFuvsqM6LLeF0f
+         em7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TzriTTjDN2sG1GFT5R1JUO/5Csi2e/XJJrWhOlsWXVg=;
+        b=TDa+RL82769JefbgpNsPDhsTBocBFCpL2CkkYy90KnVHvJF0gpZmojRaAhAHeilyB4
+         SfaLp4prjimW6kcEi743F3/YkridAmU/DeEPMP2SIQT1jslsclffFEmYpaTSXmJYsEcL
+         k2MTgnwchmds6feZhuWnhVdjMdcnOcbokZryC5x4LA93z0ez+gLPRHzdmx1LC5BiiHIC
+         6joEesPfl+RCFnNtaDTwxwZefIV7XDz4elqG3GBzFbwwAeqh0XTWrsZP4enGFSZ3HMGX
+         EOnga9FU4iDhIK3gcZM8ID0WiLJxWKGFGnfWXmuvpitkCz01rXUTJUXmmifQNQ4sC+bQ
+         W1yA==
+X-Gm-Message-State: ANoB5pknJgJY5vOEWmaoQ+lLvrph3or82XpzWZrtYivBiTjsTjzld/Ip
+        GXXLKKw13GJqZo4NAvN9HSM8++FKeP1KxOFvNOzlZkkegu281EzU
+X-Google-Smtp-Source: AA0mqf4BgxsC9aIrMaQRhD8pLDEayfmcykFiWo+TKaALiht0J4G6oCYhaXmgM0eaAh/ISr3UdUWBkYM8LZxNC+kTUT0=
+X-Received: by 2002:a81:9194:0:b0:3a2:55fa:e3c2 with SMTP id
+ i142-20020a819194000000b003a255fae3c2mr1806947ywg.320.1669082641424; Mon, 21
+ Nov 2022 18:04:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a25:9f88:0:0:0:0:0 with HTTP; Mon, 21 Nov 2022 18:04:01
+ -0800 (PST)
+From:   Felipe Bedetti <felipebedetticosta@gmail.com>
+Date:   Mon, 21 Nov 2022 23:04:01 -0300
+Message-ID: <CAFO8uszP62oOSCuLaex_3xS3HAoJt5OQgi5rPPrknLOLz=GvMA@mail.gmail.com>
+Subject: Norah Colly
+To:     linux serial <linux-serial@vger.kernel.org>,
+        linux sh <linux-sh@vger.kernel.org>,
+        linux sparse <linux-sparse@vger.kernel.org>,
+        linux tegra <linux-tegra@vger.kernel.org>,
+        linux usb <linux-usb@vger.kernel.org>,
+        linux uvc devel <linux-uvc-devel@lists.sourceforge.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,BODY_SINGLE_URI,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SHORT_SHORTNER,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS,TVD_SPACE_RATIO autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1135 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.5 SUSPICIOUS_RECIPS Similar addresses in recipient list
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [felipebedetticosta[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 TVD_SPACE_RATIO No description available.
+        *  1.6 SHORT_SHORTNER Short body with little more than a link to a
+        *      shortener
+        *  0.7 BODY_SINGLE_URI Message body is only a URI
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-
-Hi Jiri,
-
-> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-> index bd07f79a2df9..a6b4d30c5888 100644
-> --- a/drivers/tty/serial/atmel_serial.c
-> +++ b/drivers/tty/serial/atmel_serial.c
-> @@ -824,30 +824,14 @@ static void atmel_rx_chars(struct uart_port *port)
->   */
->  static void atmel_tx_chars(struct uart_port *port)
->  {
-> -	struct circ_buf *xmit = &port->state->xmit;
->  	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
-> +	bool pending;
-> +	u8 ch;
->  
-> -	if (port->x_char &&
-> -	    (atmel_uart_readl(port, ATMEL_US_CSR) & ATMEL_US_TXRDY)) {
-> -		atmel_uart_write_char(port, port->x_char);
-> -		port->icount.tx++;
-> -		port->x_char = 0;
-> -	}
-> -	if (uart_circ_empty(xmit) || uart_tx_stopped(port))
-> -		return;
-> -
-> -	while (atmel_uart_readl(port, ATMEL_US_CSR) & ATMEL_US_TXRDY) {
-> -		atmel_uart_write_char(port, xmit->buf[xmit->tail]);
-> -		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
-> -		port->icount.tx++;
-> -		if (uart_circ_empty(xmit))
-> -			break;
-> -	}
-> -
-> -	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-> -		uart_write_wakeup(port);
-> -
-> -	if (!uart_circ_empty(xmit)) {
-> +	pending = uart_port_tx(port, ch,
-> +		atmel_uart_readl(port, ATMEL_US_CSR) & ATMEL_US_TXRDY,
-> +		atmel_uart_write_char(port, ch));
-> +	if (pending) {
->  		/* we still have characters to transmit, so we should continue
->  		 * transmitting them when TX is ready, regardless of
->  		 * mode or duplexity
-
-This will break serial output for the userspace on my board
-(arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt*dts). The uart_port_tx()
-helper will call __port->ops->stop_tx(__port) if uart_circ_chars_pending()
-returns 0. But the code above, doesn't do that. In fact, removing the
-stop_tx() call in the helper macro, will fix the console output.
-
-Any ideas how to fix that?
-
--michael
+https://bit.ly/3UV8qJp
