@@ -2,96 +2,109 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611B46332A2
-	for <lists+linux-serial@lfdr.de>; Tue, 22 Nov 2022 03:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C999633599
+	for <lists+linux-serial@lfdr.de>; Tue, 22 Nov 2022 08:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiKVCEE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 21 Nov 2022 21:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S232258AbiKVHCJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 22 Nov 2022 02:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiKVCEC (ORCPT
+        with ESMTP id S229750AbiKVHCI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:04:02 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496C8C7213;
-        Mon, 21 Nov 2022 18:04:02 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3a3961f8659so39330517b3.2;
-        Mon, 21 Nov 2022 18:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TzriTTjDN2sG1GFT5R1JUO/5Csi2e/XJJrWhOlsWXVg=;
-        b=mrxfXGgSv373PWJgm80ATEzqSwwa0Q7tVbMNWfmqMxhy2yyBtscLwV12nXuvqOLNjj
-         eFS8FyDDnBn7dlb3QehsEwEz6RaTgzVRJBsBGOvDEb46/IQKvhQSjV7vevgPwDXTSf06
-         xj3IN47CNcalIgTWt8ti252jq6qnr+HoYnwAvba49WQOklUy9HUfCxX9Gyco0EgOYf2Z
-         CJ0+WdVAI/AsxvW9PVeBR96tnXhc+zggHNYNRQ5YDTMmHvvJn+qdbMxeks8T/2hNeHal
-         y5dDjbJGlZaurkrG0GdE3KVaH8LCbgtLfTa8gLI4vR+pLpLDjZIpYBJFuvsqM6LLeF0f
-         em7w==
+        Tue, 22 Nov 2022 02:02:08 -0500
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC39F23BF0;
+        Mon, 21 Nov 2022 23:02:07 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id f27so33722478eje.1;
+        Mon, 21 Nov 2022 23:02:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TzriTTjDN2sG1GFT5R1JUO/5Csi2e/XJJrWhOlsWXVg=;
-        b=TDa+RL82769JefbgpNsPDhsTBocBFCpL2CkkYy90KnVHvJF0gpZmojRaAhAHeilyB4
-         SfaLp4prjimW6kcEi743F3/YkridAmU/DeEPMP2SIQT1jslsclffFEmYpaTSXmJYsEcL
-         k2MTgnwchmds6feZhuWnhVdjMdcnOcbokZryC5x4LA93z0ez+gLPRHzdmx1LC5BiiHIC
-         6joEesPfl+RCFnNtaDTwxwZefIV7XDz4elqG3GBzFbwwAeqh0XTWrsZP4enGFSZ3HMGX
-         EOnga9FU4iDhIK3gcZM8ID0WiLJxWKGFGnfWXmuvpitkCz01rXUTJUXmmifQNQ4sC+bQ
-         W1yA==
-X-Gm-Message-State: ANoB5pknJgJY5vOEWmaoQ+lLvrph3or82XpzWZrtYivBiTjsTjzld/Ip
-        GXXLKKw13GJqZo4NAvN9HSM8++FKeP1KxOFvNOzlZkkegu281EzU
-X-Google-Smtp-Source: AA0mqf4BgxsC9aIrMaQRhD8pLDEayfmcykFiWo+TKaALiht0J4G6oCYhaXmgM0eaAh/ISr3UdUWBkYM8LZxNC+kTUT0=
-X-Received: by 2002:a81:9194:0:b0:3a2:55fa:e3c2 with SMTP id
- i142-20020a819194000000b003a255fae3c2mr1806947ywg.320.1669082641424; Mon, 21
- Nov 2022 18:04:01 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=obhyf6FbeDYJ4EzUmao9xEvzmssDDgcxntsnLOZ5F7g=;
+        b=ZgQzUOvf1AG4XRU9QvCfO/xuBT0LzT8i9dqulbVwlbeSvr/oyg53SSDEpHRO7NkaUe
+         +X6qF0eceb33pRteladirlW+QNZAOiEjN0BfaAcr+yXxGQltSRB7cUExmmUHYBWadI6+
+         JqhHvkpC/QbOoZudGzre1BIheWOC+l15RIfrdohHoAeeHvdvuzOx8VoLkZHPX5GvcuRi
+         mAMOiPWa78P7kZtRPSwui55xBDK1wahWRrM1jvR3NQghapkbck5Zh3KqBeyB98/lryjC
+         0EahdalbLMUW7IyW8QoeKbzPIqIe1WWioHrck2pCwaIzGJUCmx/Zu/7VX2AI+As0/Uem
+         gEJA==
+X-Gm-Message-State: ANoB5pn5cDU1cbokLHDIrkOllXbOB5u/f14R3saCPeD4qt/t7G4dfr2q
+        NMN7n9tWODXchD/DnWfXeeX4NPqKYYrSsA==
+X-Google-Smtp-Source: AA0mqf6K+SNMjIbRwN8XBuKJx8oR6/cRUUp23vgQyzgzvpU6h2PPnNCsBeh2ys7OQ9298Isleb1DzA==
+X-Received: by 2002:a17:907:c208:b0:7ad:79c0:547a with SMTP id ti8-20020a170907c20800b007ad79c0547amr8621315ejc.41.1669100526244;
+        Mon, 21 Nov 2022 23:02:06 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id b14-20020a17090636ce00b007a8de84ce36sm5751620ejc.206.2022.11.21.23.02.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 23:02:05 -0800 (PST)
+Message-ID: <f95ef7b7-cc23-9fed-5d05-1aa66aaeb86a@kernel.org>
+Date:   Tue, 22 Nov 2022 08:02:04 +0100
 MIME-Version: 1.0
-Received: by 2002:a25:9f88:0:0:0:0:0 with HTTP; Mon, 21 Nov 2022 18:04:01
- -0800 (PST)
-From:   Felipe Bedetti <felipebedetticosta@gmail.com>
-Date:   Mon, 21 Nov 2022 23:04:01 -0300
-Message-ID: <CAFO8uszP62oOSCuLaex_3xS3HAoJt5OQgi5rPPrknLOLz=GvMA@mail.gmail.com>
-Subject: Norah Colly
-To:     linux serial <linux-serial@vger.kernel.org>,
-        linux sh <linux-sh@vger.kernel.org>,
-        linux sparse <linux-sparse@vger.kernel.org>,
-        linux tegra <linux-tegra@vger.kernel.org>,
-        linux usb <linux-usb@vger.kernel.org>,
-        linux uvc devel <linux-uvc-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,BODY_SINGLE_URI,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SHORT_SHORTNER,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS,TVD_SPACE_RATIO autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.5 SUSPICIOUS_RECIPS Similar addresses in recipient list
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [felipebedetticosta[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 TVD_SPACE_RATIO No description available.
-        *  1.6 SHORT_SHORTNER Short body with little more than a link to a
-        *      shortener
-        *  0.7 BODY_SINGLE_URI Message body is only a URI
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v5 2/3] tty: serial: use uart_port_tx() helper
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     afaerber@suse.de, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, festevam@gmail.com,
+        gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com, mani@kernel.org,
+        nicolas.ferre@microchip.com, richard.genoud@gmail.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org, sudeep.holla@arm.com,
+        tklauser@distanz.ch, vz@mleia.com
+References: <20221004104927.14361-3-jirislaby@kernel.org>
+ <20221121202724.1708460-1-michael@walle.cc>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221121202724.1708460-1-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-https://bit.ly/3UV8qJp
+Hi,
+
+On 21. 11. 22, 21:27, Michael Walle wrote:
+> This will break serial output for the userspace on my board
+> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt*dts). The uart_port_tx()
+> helper will call __port->ops->stop_tx(__port) if uart_circ_chars_pending()
+> returns 0. But the code above, doesn't do that. In fact, removing the
+> stop_tx() call in the helper macro, will fix the console output.
+> 
+> Any ideas how to fix that?
+
+Hm, so ATMEL_US_TXRDY is removed from tx_done_mask in stop_tx, but not 
+added back in start_tx. So the tx interrupt is never handled (the tx 
+tasklet is not scheduled to send the queue chars) in 
+atmel_handle_transmit().
+
+Any chance, the below fixes it?
+
+diff --git a/drivers/tty/serial/atmel_serial.c 
+b/drivers/tty/serial/atmel_serial.c
+index 11bf2466390e..395370e0c77b 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -596,6 +596,8 @@ static void atmel_start_tx(struct uart_port *port)
+                 /* re-enable PDC transmit */
+                 atmel_uart_writel(port, ATMEL_PDC_PTCR, ATMEL_PDC_TXTEN);
+
++       atmel_port->tx_done_mask |= ATMEL_US_TXRDY;
++
+         /* Enable interrupts */
+         atmel_uart_writel(port, ATMEL_US_IER, atmel_port->tx_done_mask);
+
+
+thanks,
+-- 
+js
+
