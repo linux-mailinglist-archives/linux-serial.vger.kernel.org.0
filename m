@@ -2,99 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEB1638F7B
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Nov 2022 19:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7766392ED
+	for <lists+linux-serial@lfdr.de>; Sat, 26 Nov 2022 01:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiKYSE2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 25 Nov 2022 13:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S229980AbiKZA5Z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 25 Nov 2022 19:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiKYSE1 (ORCPT
+        with ESMTP id S229990AbiKZA5X (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:04:27 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D32CDC5;
-        Fri, 25 Nov 2022 10:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669399467; x=1700935467;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cvo+wdxbGI7eQfNrQ+AeWW9IagbEwD8A5SKG0BtPBIQ=;
-  b=OqWNJLCJTXLk51LoCe7y9h5tt0APhBjUQR7lwHs2jaJjcLPocPKGLB/V
-   Km5kb/cjd0ZevrXiMlKrTLalEkXEqkeVm07aa40v9fzgoEpmI0+e4+P0E
-   x/11LA8I3Br7SeFZyqtCgx4/1BZDs356CNEiM/3b9PWF85X6q6nptcCLO
-   jfyLgeDvWD2qn9BfG5UD3AQL/1bS2KxA/ii7R1iM0Auczche0LYM6N1NN
-   vPg3cXzbhk7vQnt48PMfwmktNWP9YAiREAGi1Nnl74P8rNer0220P0+Gq
-   8nAEv7qhuF7eU9Y/+jMnDT3oMRE+hUzfUz32dXGYkVHZRG7/VOLyMkuZ6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="316345438"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="316345438"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 10:04:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="675445123"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="675445123"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 25 Nov 2022 10:03:58 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oyd3K-00HLRW-2S;
-        Fri, 25 Nov 2022 20:03:54 +0200
-Date:   Fri, 25 Nov 2022 20:03:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        macro@orcam.me.uk, jay.dolan@accesio.com, cang1@live.co.uk,
-        u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
-        phil.edworthy@renesas.com, lukas@wunner.de,
-        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com
-Subject: Re: [PATCH v5 tty-next 1/4] 8250: microchip: pci1xxxx: Add driver
- for quad-uart support.
-Message-ID: <Y4EDinQApvqheyZC@smile.fi.intel.com>
-References: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
- <20221117050126.2966714-2-kumaravel.thiagarajan@microchip.com>
- <Y3Xv6XOwddNq6Gmr@smile.fi.intel.com>
- <PH7PR11MB595813B2AB661CD50517DEB89B0E9@PH7PR11MB5958.namprd11.prod.outlook.com>
+        Fri, 25 Nov 2022 19:57:23 -0500
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49BD59871
+        for <linux-serial@vger.kernel.org>; Fri, 25 Nov 2022 16:57:20 -0800 (PST)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-3704852322fso55235687b3.8
+        for <linux-serial@vger.kernel.org>; Fri, 25 Nov 2022 16:57:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q5grRhzDgJlRek3REBN4Xq7JrHQXLu+Ef9bolVS8SjU=;
+        b=pE0EE204QfApPu07hlxe/IrT+Gm/y11be9zBrZdOYSL+bBqM1erl7U5oS71+H35vu2
+         eXRyT0ojbcq2Bg4rRLEcIySXE9tb/2nC3ei/G0Tf+rk0GPWJlUve1vVvJ94nNaGJlSPQ
+         HZjWYwaMNZXUOOQJHfTOdp9nqTC+8jR3CvHZTwE6r9sPmygjUhd8H+NvRqNgHWugZAU5
+         LSnWqs0An87WicfBt40uqu+nFq+xug2ymSnj5sxUswWKt740EFlc5QxlK/U7PwJK/8J7
+         hsXM1FD9iCXzAdQQtMPY5BxaogktlP9UPn0kFOhP6YfHOHgE2fogq175p+TO16CjMqiu
+         hHdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q5grRhzDgJlRek3REBN4Xq7JrHQXLu+Ef9bolVS8SjU=;
+        b=DbdgXb6QxCKcAuk8SbYuk1fjNGFXwHZK+pvAO7+Y36qpofoZqkCGk9sfDGB1NYWDvO
+         I+PVKRzReuqxIKVjQxWZblDjTtzWON4VNwVyfAKT3e7jVrGy1/1JXaa4F4AqhL647wQr
+         O2w1zhPXOdFf82yMBUO5BiBLadXC+rBqbrg7YomVmk3w3hKrHtmo0ru4AAYRvvywaeph
+         PcBl8T+KomEs2wBvfH24bLScd8eEdq7xGunTnYFYAmukG8sIh6ZdAocmrxfAAWGLHnr2
+         U/UeSAByi4RnfvDbFNWCRxkAPre1i4tzg53cFlavFSiX++20VkIo+FgZKdmRjOtrKhqB
+         +DZQ==
+X-Gm-Message-State: ANoB5pmpkO8+SJT7ay0ZxG1s4FXzcLbq85mpYGrgvbo+JEUeYL1MlWQe
+        op2F0Nq9qMs3eyThX+lu+coJOT3ft7qqSvc31Ps=
+X-Google-Smtp-Source: AA0mqf6519474Zb6Fw0+w/vk47jdpLurX7zacFH9X6nEc11h8MTVafeCt4mmLkr8bCbehMaJTQGk24GKYx4ygMQIAh4=
+X-Received: by 2002:a81:1915:0:b0:3bf:9e45:1139 with SMTP id
+ 21-20020a811915000000b003bf9e451139mr693756ywz.267.1669424239908; Fri, 25 Nov
+ 2022 16:57:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR11MB595813B2AB661CD50517DEB89B0E9@PH7PR11MB5958.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6918:6b07:b0:ef:f5dc:12ae with HTTP; Fri, 25 Nov 2022
+ 16:57:19 -0800 (PST)
+Reply-To: samsonvichisunday@gmail.com
+From:   Pastor Experience <experiencepastor@gmail.com>
+Date:   Sat, 26 Nov 2022 01:57:19 +0100
+Message-ID: <CAKLjfSGQ0EQCCdF7YKPN=G1xXQ8ihhntG9V=HG0d9wOOz++DMQ@mail.gmail.com>
+Subject: INVITATION TO THE GREAT ILLUMINATI SOCIETY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_LOAN,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [experiencepastor[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 03:45:01PM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Thursday, November 17, 2022 1:55 PM
-
-...
-
-> > > +     case PCI_SUBDEVICE_ID_EFAR_PCI11414:
-> > > +             irq_idx = idx;
-> > > +             break;
-> > 
-> > Try to make this entire switch-case more compact. It's possible.
-> 
-> I am planning to use look-up table for this in-order to avoid computation
-> within switch case. Does this approach sound good?
-
-Maybe, it's you who decides, just show us the result and we will see.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--=20
+INVITATION TO THE GREAT ILLUMINATI SOCIETY
+CONGRATULATIONS TO YOU....
+You have been chosen among the people given the opportunity this
+November to become rich and popular by joining the Great ILLUMINATI.
+This is an open invitation for you to become part of the world's
+biggest conglomerate and reach the peak of your career. a worthy goal
+and motivation to reach those upper layers of the pyramid to become
+one among the most Successful, Richest, Famous, Celebrated, Powerful
+and most decorated Personalities in the World???
+If you are interested, please respond to this message now with =E2=80=9CI
+ACCEPT" and fill the below details to get the step to join the
+Illuminati.
+KINDLY FILL BELOW DETAILS AND RETURN NOW.....
+Full names: ....................
+Your Country: .................
+State/ City: .............
+Age: ....................
+Marital status: ....................
+Occupation: ....................
+Monthly income: ....................
+WhatsApp Number: ......
+Postal Code: .....
+Home / House Address: .....
+For direct Whats-App Messages : + 356 7795 1054
+Email : samsonvichisunday@gmail.com
+NOTE: That you are not forced to join us, it is on your decision to
+become part of the world's biggest conglomerate and reach the peak of
+your career.
+Distance is not a barrier.
