@@ -2,84 +2,74 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40111639B1D
-	for <lists+linux-serial@lfdr.de>; Sun, 27 Nov 2022 14:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C940A639B72
+	for <lists+linux-serial@lfdr.de>; Sun, 27 Nov 2022 15:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiK0NgE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 27 Nov 2022 08:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S229450AbiK0Osn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 27 Nov 2022 09:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiK0Nfd (ORCPT
+        with ESMTP id S229551AbiK0Osi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 27 Nov 2022 08:35:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2671114E;
-        Sun, 27 Nov 2022 05:35:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AED6B60DD8;
-        Sun, 27 Nov 2022 13:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E54C43149;
-        Sun, 27 Nov 2022 13:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669556108;
-        bh=WY2HK68xmDUjRE/FprHRGRMX/MQ7yprY9uH/Mc9QD0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IL9tRkrEJkfPG91CZkJ7uLIYnU9L/HjkrxQLfTceisGhzG2SDOx2xfcLYjD2YUNTO
-         Rf2jbKSbxwmQJ5oCMQeorhqlsxxownbgLSgTmxwsAgXg2fKsUx7YEQJYIyulRTnEei
-         xBT3zHMsHUnl2AiCboocns2U16xRrj0lnmpI/fXy3AfvUP2Acg/k4iDQ/yoTOMHIiy
-         kRSh7qMSUWww0SLigqFCVDjcb377PNCUbh1ugkjzMv6TFHNoM6JwjbEgPxyRzctwQZ
-         gcMIFGpHudSy9JsApjgUxaIF/ieZHuAGFpVIcz0QKDA4ApnXwWbZpgt7FSsfWlBQ4U
-         0yd1H7v1+pu5A==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 9/9] riscv: defconfig: enable BOUFFALOLAB SoC
-Date:   Sun, 27 Nov 2022 21:24:48 +0800
-Message-Id: <20221127132448.4034-10-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221127132448.4034-1-jszhang@kernel.org>
-References: <20221127132448.4034-1-jszhang@kernel.org>
+        Sun, 27 Nov 2022 09:48:38 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3FFF593
+        for <linux-serial@vger.kernel.org>; Sun, 27 Nov 2022 06:48:37 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id y5so1660876lji.0
+        for <linux-serial@vger.kernel.org>; Sun, 27 Nov 2022 06:48:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BT171Unjb6EFvUBvn33Ts5USHKYTfqzQFkQsCflakoA=;
+        b=ksaDiADiHYUwyECmaFvDzycpKpe9Xd5WJW+hjLSdxUt7x1AgLVaQ2LAvbvADQy26xA
+         yPSzlXO7l2F+c3nwbjKuRsai9iHNZSCJedxrampb59vvfhiV3Hv32UBiQhzq1s9IuVer
+         ZFNnzJp7A79KSzjIpqwf5ad/GgyewraNFFFEXpV+HDz7x13Fo2xhG0QZIrRWyWcbARJA
+         1XR//uhlyS0x3bLxFwP97usLpXBbuwOVv0HtkpJMxLL0+eTs26gJWHdhh9RczSpB/31B
+         b4BzzDE/EwCGbMbo9Eb5vTdjz/p0kO7EP9WNJI+gZf6n8y/t590iliEMKJkV6pVxHLLE
+         RoLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BT171Unjb6EFvUBvn33Ts5USHKYTfqzQFkQsCflakoA=;
+        b=ebYiW5AKvYKQpU9nmjYUVkUOS741ZZsb3JZmazBWqQYMwCR3121F1Td68aFRQHzD5x
+         XiIZOTWdlcA2qcF/b8lOlgOkfkjbxiDsIbR/X+mzJ3Meqz+eGXMLxVUtrl5flpJqw8WV
+         W+Ls9R4n4g1+ATpACGBlpFqiz+QlUZQG9j1xO9VhL9E418nPq8vR+DowwwecLLfW9cos
+         qfe5l0PW/ZhXfm0GBCgcBuNQ1o/dRK3tJ1HPYbq1M8hDLsg7U+UJf8yqcQy8OdoeZce5
+         rU4LjAp3GbxwuFtc/fvX7cmGpBsVqVM/NOJNdqap34RAKykyWzZ+b5sCMo1rSzKrn/QN
+         oc4w==
+X-Gm-Message-State: ANoB5plPCEIItqkD5RVRmVa9FUfGqvXaNKeT7y6CLch5YlIzDrb8DpkK
+        rPhizFZI+wI3tRoLVuKztxkNBX7byR5yaTT/jPM=
+X-Google-Smtp-Source: AA0mqf7LWtnvfWBknIx0eTYFZ2ojCNrosyqsqQznes507f9XwC/ZsbL1Hl+LFJFeoSvbyKDx3Pq5eMvGl4Fr0Y8hOw0=
+X-Received: by 2002:a2e:9194:0:b0:279:7ffa:15aa with SMTP id
+ f20-20020a2e9194000000b002797ffa15aamr5827142ljg.307.1669560515762; Sun, 27
+ Nov 2022 06:48:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: mohammedaahil30@gmail.com
+Received: by 2002:a05:6504:28e:0:0:0:0 with HTTP; Sun, 27 Nov 2022 06:48:35
+ -0800 (PST)
+From:   H mimi m <mimih6474@gmail.com>
+Date:   Sun, 27 Nov 2022 14:48:35 +0000
+X-Google-Sender-Auth: gYWnCTEBcNrhxjy2J-gWsCV371g
+Message-ID: <CALoWANjJkmQS0dc8=kvMCJfLRWf5QcHbLgAZGm54nFopNnabDQ@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Enable BOUFFALOLAB soc config in defconfig to allow the default
-upstream kernel to boot on Sipeed M1s Dock board.
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 05fd5fcf24f9..27b3d59c7d90 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -25,6 +25,7 @@ CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
- # CONFIG_SYSFS_SYSCALL is not set
- CONFIG_PROFILING=y
-+CONFIG_SOC_BOUFFALOLAB=y
- CONFIG_SOC_MICROCHIP_POLARFIRE=y
- CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_STARFIVE=y
--- 
-2.38.1
-
+If you are interested to use the sum US$9,500,000.00 to help the
+orphans around the world and invest it in your country, kindly get
+back to me for more information
+Warm
+Regards,
+Mrs.MIMI HASSAN  ABDUL MOHAMMAD
