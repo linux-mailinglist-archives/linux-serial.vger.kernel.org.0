@@ -2,115 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0737F63EFE0
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Dec 2022 12:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882E263EEB2
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Dec 2022 12:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiLALu0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Dec 2022 06:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S230433AbiLALDf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Dec 2022 06:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiLALuX (ORCPT
+        with ESMTP id S230062AbiLALDI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:50:23 -0500
-Received: from mx2.securetransport.de (mx2.securetransport.de [188.68.39.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 240AA9AE04
-        for <linux-serial@vger.kernel.org>; Thu,  1 Dec 2022 03:50:20 -0800 (PST)
-Received: from mail.dh-electronics.com (unknown [77.24.89.57])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx2.securetransport.de (Postfix) with ESMTPSA id 8C6CD5EA83;
-        Thu,  1 Dec 2022 12:49:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1669895363;
-        bh=q++aMqT8Oud2A2Zv20gglvjrODW/2aUDXXQe4X+End0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=iTBqhgJd8/2BlFGJh87GoNpoUymU6kPlgEESJ7X2S2XDyfyTmFgO44aKQhu2Zmf56
-         zLhVjT76wub9E6n8+wWHr6C8Ul4ztKk3l/MCMf8pqwA2j8u8iudNJOePDeZVqvmJzq
-         oYH5Bo1oLwJFfpGc2fAdgF/Vd8xx/DZqRjd8HKdPsW9CjpgvndXG7R+gRYeOQYHjEv
-         NDYywlXJFSlZBsLD6XlHLXUv6UiIhMsjS33UyVhDgfGj2E2xHzpTXHO/RoYN7khp2r
-         2CzMRBLzxl0m8exW58ec+FP1j4tBra6zP6mF84zrErb/B9iB8MhaQv3M1XBF+T6j0F
-         D2ewVRtb6PAyQ==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Thu, 1 Dec 2022 12:03:58 +0100
-Received: from localhost.localdomain (172.16.51.2) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20 via Frontend Transport; Thu, 1 Dec 2022 12:03:58 +0100
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <marex@denx.de>,
-        <jirislaby@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexander Dahl <ada@thorsis.com>, <kernel@dh-electronics.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH V3 4/4] serial: stm32: Add support for rs485 RX_DURING_TX output GPIO
-Date:   Thu, 1 Dec 2022 12:02:37 +0100
-Message-ID: <20221201110237.7917-4-cniedermaier@dh-electronics.com>
-X-Mailer: git-send-email 2.11.0
-X-klartext: yes
-In-Reply-To: <20221201110237.7917-1-cniedermaier@dh-electronics.com>
-References: <20221201110237.7917-1-cniedermaier@dh-electronics.com>
+        Thu, 1 Dec 2022 06:03:08 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2028C2E6B5
+        for <linux-serial@vger.kernel.org>; Thu,  1 Dec 2022 03:03:07 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j4so1983213lfk.0
+        for <linux-serial@vger.kernel.org>; Thu, 01 Dec 2022 03:03:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xZPsJdX0DeKIWrtluUWX3HVvTrGo25QoDXGFCZw1PXk=;
+        b=Iymxm2gwfFfqDxv99/Cvwgt5Tt86cvRAlbIcRFWVwq86La55pm/Wo85Vda8Abburiq
+         +n3izNS6OKkWrKNxSR7d4nYTKkRisuxhy72xbJdZlPGyodm9rRlv79WAHcEZEQh5ODCF
+         3bI2VKbSof5THgzSiG1M/osblrxsXxBEwbET9bJM1ToEZYibo54O/MKYhxPMwN2HTEMF
+         xzxmqF6zfBPGlwF2GgpYW38omTN4zE/muv5xZer5SOacWpy09fPs11gsgRsHlzgKI4b6
+         2CqKCMUboHskQm8xxv8fyveBOPHoYbQbYxdiFH/eY+rnKKTJ82CRWYT5YdyErzWM+iBc
+         E1bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xZPsJdX0DeKIWrtluUWX3HVvTrGo25QoDXGFCZw1PXk=;
+        b=gJT+MCgK45z/PDueZG1NgHuxv7tGguiQB+asFnsbwwpZ7hXXtKBYPOrYWSg2mKEnCo
+         8svdwUt94Bw0aap/zE+7XV6gSHtZ/GeBV/2/PesV/9R9S9wOKuO6/738VVXjUG4W/1SW
+         jRXHJjSZFW0SIoSoBpie9ogczV9ldXVoWj5CGbt6GpKKExVWaWD/suzRxsXk+sUHLYk2
+         +fDU3aToygTXeBMbfEbbgMGEqx12YmTjqKBVZRv6ZJVNoFrvyWAr/crCEEI3fsgzpBc6
+         6QmFkroWgzQ/hxqPkoleP4iXdoIQYteyYauznPNtHwo5OEq/DRInOPxCE4zuQ+6l+E9v
+         ogRQ==
+X-Gm-Message-State: ANoB5pk7zfmCkKy9XmkbtDfrzz5bqz+ykOk91SEKhn6NtTNxbaF7X+FG
+        7OqCCwurZoesIgwW5qwqhKK2WQ==
+X-Google-Smtp-Source: AA0mqf4rvnW0TD1qNBxou5BIbgpN6sDqmoCi83kGXJ7IydthJadNC0OxxCFRj4tbainX/imKqFlpAQ==
+X-Received: by 2002:a05:6512:3a8a:b0:4b5:4888:4362 with SMTP id q10-20020a0565123a8a00b004b548884362mr244955lfu.176.1669892585363;
+        Thu, 01 Dec 2022 03:03:05 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j22-20020a056512399600b004b49025f96dsm610425lfu.187.2022.12.01.03.03.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 03:03:03 -0800 (PST)
+Message-ID: <be603b02-9357-431f-0f5a-069659bd6ce5@linaro.org>
+Date:   Thu, 1 Dec 2022 12:03:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 4/9] dt-bindings: vendor-prefixes: add bouffalolab
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-5-jszhang@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221127132448.4034-5-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-If a RX_DURING_TX GPIO is defined by the DT property "rs485-rx-during-tx-gpios"
-this patch switches this GPIO accordingly to the RS485 flag RX_DURING_TX in user
-space. Controlled by this GPIO, now the hardware is responsible for connecting
-or disconnecting RX during TX.
+On 27/11/2022 14:24, Jisheng Zhang wrote:
+> In the following commits, we will support bl808 SoC which is from
+> Bouffalo Lab Technology (Nanjing) Co., Ltd.
+> 
+> Add bouffalolab vendor prefix binding.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
----
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Alexander Dahl <ada@thorsis.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: kernel@dh-electronics.com
-Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-serial@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
----
-V2: - Rework of the commit message
-V3: - No changes
----
- drivers/tty/serial/stm32-usart.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Wrong order of commits. You cannot start using something before adding
+its description. This should be the first patch in the set.
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index a1490033aa16..0f2cca9054ba 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -226,7 +226,14 @@ static int stm32_usart_config_rs485(struct uart_port *port, struct ktermios *ter
- 
- 	stm32_usart_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
- 
--	rs485conf->flags |= SER_RS485_RX_DURING_TX;
-+	if (port->rs485_rx_during_tx_gpio) {
-+		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
-+			gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio, 1);
-+		else
-+			gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio, 0);
-+	} else {
-+		rs485conf->flags |= SER_RS485_RX_DURING_TX;
-+	}
- 
- 	if (rs485conf->flags & SER_RS485_ENABLED) {
- 		cr1 = readl_relaxed(port->membase + ofs->cr1);
--- 
-2.11.0
+Best regards,
+Krzysztof
 
