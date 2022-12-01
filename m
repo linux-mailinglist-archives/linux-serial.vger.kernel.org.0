@@ -2,42 +2,42 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA3163EEE2
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Dec 2022 12:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0F363EF5B
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Dec 2022 12:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiLALGp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Dec 2022 06:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S230349AbiLALXE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Dec 2022 06:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiLALFl (ORCPT
+        with ESMTP id S230390AbiLALWo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:05:41 -0500
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECEAD13D20;
-        Thu,  1 Dec 2022 03:05:03 -0800 (PST)
+        Thu, 1 Dec 2022 06:22:44 -0500
+Received: from mx2.securetransport.de (mx2.securetransport.de [188.68.39.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6A80A6CE3
+        for <linux-serial@vger.kernel.org>; Thu,  1 Dec 2022 03:20:13 -0800 (PST)
 Received: from mail.dh-electronics.com (unknown [77.24.89.57])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx3.securetransport.de (Postfix) with ESMTPSA id 92D755DDF5;
-        Thu,  1 Dec 2022 12:04:08 +0100 (CET)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id 93F905E964;
+        Thu,  1 Dec 2022 12:19:11 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1669892649;
-        bh=oHceRgk+gFfdajQXBs3vdONlXzIv43vyzNrgumEI73k=;
-        h=From:To:CC:Subject:Date:From;
-        b=df9YQpSl5ROg2pVfpnO69J8V3eJTYYv3vjSJLCXcoqKse/XwNuByOE1cTj6xVtrTl
-         qOnmiZyV0yUj4GR4MLehlCc0JhzsOss4Ko1qH7hQTUrBu5OIxs0uw+1CzI5G5qSsU+
-         JGRNDb7ws/zww0Z5KfqhZAlaO8mSfbf3SgE+KGvjQsmwPrtKKM3Qmz4zwriDD1Kdoq
-         277Q2XzunorUxq78Rks5dNbQnTWM5FdHzjFQ2rv0/RXQQFmXitnde3eA+SfMfObQ7m
-         Plym2f/rp41/7/Olz+TOXYIPJcwNWsH1Gyf2MEPge1d/m6l5XyW7myc43MER7uadDY
-         Zge06SQ8322eQ==
+        s=dhelectronicscom; t=1669893557;
+        bh=FlmKkoiFrEw7TwGNpagiI9P7WN6bC6dRqMXHKIF8BeY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=oaXShN/N6uhqot/zdWCQ8a1n0wzLspLOrFEk6Dghez5iD4rl17zk8nl5vGAy1lhpK
+         EZcSu9hepKZoOHxX/YwTvZvfWcFFSLJehg7CHz3QvlABAJiso2aPZhcLfpktdaPhNX
+         TrdmmGWgIZWcWAJF/XXfb3DFqTX8n1LINKxPUapzautZV2WV9jYREVNeYCye8xhB8B
+         HBZv/6l1CArD4pXVbK/+MXiRIzJCkt9FgeoMmGLHVcZv+ZV9qrPAQTyeaEqtGYcm4G
+         ZsJpgqXHcShSoEw/MLCh4LwNExTepvME4ENssvxKrh+m3THs0ieP07V7DwV4nPnqh2
+         2WE7lz3BxVlxQ==
 Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
  DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Thu, 1 Dec 2022 12:03:55 +0100
+ 15.2.1118.20; Thu, 1 Dec 2022 12:03:56 +0100
 Received: from localhost.localdomain (172.16.51.2) by
  DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20 via Frontend Transport; Thu, 1 Dec 2022 12:03:55 +0100
+ 15.2.1118.20 via Frontend Transport; Thu, 1 Dec 2022 12:03:56 +0100
 From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
 To:     <linux-serial@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
@@ -45,17 +45,17 @@ CC:     <krzysztof.kozlowski+dt@linaro.org>, <marex@denx.de>,
         <jirislaby@kernel.org>,
         Christoph Niedermaier <cniedermaier@dh-electronics.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Alexander Dahl" <ada@thorsis.com>, <kernel@dh-electronics.com>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH V3 1/4] dt-bindings: serial: rs485: Add GPIO controlling RX enable during TX
-Date:   Thu, 1 Dec 2022 12:02:34 +0100
-Message-ID: <20221201110237.7917-1-cniedermaier@dh-electronics.com>
+        Alexander Dahl <ada@thorsis.com>, <kernel@dh-electronics.com>,
+        Linux Team <linux-imx@nxp.com>
+Subject: [PATCH V3 2/4] serial: core: Add option to output RS485 RX_DURING_TX state via GPIO
+Date:   Thu, 1 Dec 2022 12:02:35 +0100
+Message-ID: <20221201110237.7917-2-cniedermaier@dh-electronics.com>
 X-Mailer: git-send-email 2.11.0
 X-klartext: yes
+In-Reply-To: <20221201110237.7917-1-cniedermaier@dh-electronics.com>
+References: <20221201110237.7917-1-cniedermaier@dh-electronics.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -65,81 +65,72 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add a binding for a generic definition of an output GPIO that sets the
-state of rs485-rx-during-tx. The idea is that the hardware already controls
-the option receiving during sending before it gets to the signal receiving
-hardware. The standard RS485 is a half-duplex bus that in most cases is
-driven by an UART controller. The advantage of using this GPIO is that it
-is independent of the capabilities of the UART core and the UART driver.
-On the hardware side the interface to the bus is controlled by a transceiver,
-that has a pin called RE (RX Enable) or similar, which connects the bus to
-the RX signal of the UART controller. The GPIO can switch between two states
-to control the RE pin via an electrical circuit:
-- Active:
-  The RE pin is always active. The UART RX see everything on the bus and
-  therefore also what happens with the TX signal on the bus.
-- Inactive:
-  The RE pin is always active, but during sending on the bus the pin RE is
-  inactive. So basically the receiving during sending is suppressed.
-
-A possible circuit diagram could look like this:
-                                  ┌──────────────────┐
-                                  │       RS485      │
-                TX ───────────────┤D                 │
-                                  │    Transceiver   │
-               RTS ────┬──────────┤DE                │
-                       │          │                  │
-                       │ ┌─────┐  │                  │
-                       └─┤&    │  │                  │
-                         │     ├──┤!RE               │
-!rx_during_tx_gpio ──────┤     │  │                  │
-                         └─────┘  │                  │
-                                  │                  │
-                RX ───────────────┤R                 │
-                                  │                  │
-                                  └──────────────────┘
-
-Here the RTS pin of the UART core is used to control TX via the transceiver
-pin DE (Drive Enable). RE and rx_during_tx_gpio are active low.
+This patch provides a generic GPIO variable for outputting the state
+of RS485 RX_DURING_TX. The GPIO is defined by the devicetree property
+"rs485-rx-during-tx-gpios". To use it in a low level serial driver,
+the evaluation of this variable must be implemented there accordingly.
 
 Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 ---
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
 Cc: Alexander Dahl <ada@thorsis.com>
 Cc: Marek Vasut <marex@denx.de>
 Cc: kernel@dh-electronics.com
-Cc: devicetree@vger.kernel.org
+Cc: Linux Team <linux-imx@nxp.com>
 To: linux-serial@vger.kernel.org
 To: linux-arm-kernel@lists.infradead.org
 ---
 V2: - Rework of the commit message
     - Rework GPIO property comment
-V3: - Rework the binding description
-    - Rework message title
-    - Rework of the commit message
+V3: - Rework GPIO property comment
 ---
- Documentation/devicetree/bindings/serial/rs485.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/serial/serial_core.c | 12 ++++++++++++
+ include/linux/serial_core.h      |  1 +
+ 2 files changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
-index 90a1bab40f05..a973ab7d7e46 100644
---- a/Documentation/devicetree/bindings/serial/rs485.yaml
-+++ b/Documentation/devicetree/bindings/serial/rs485.yaml
-@@ -51,6 +51,12 @@ properties:
-     description: GPIO pin to enable RS485 bus termination.
-     maxItems: 1
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index b9fbbee598b8..867f2675caca 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -3410,6 +3410,7 @@ int uart_get_rs485_mode(struct uart_port *port)
+ 	struct device *dev = port->dev;
+ 	u32 rs485_delay[2];
+ 	int ret;
++	int rx_during_tx_gpio_flag;
  
-+  rs485-rx-during-tx-gpios:
-+    description: Output GPIO pin that sets the state of rs485-rx-during-tx. This
-+      signal can be used to control the RX part of an RS485 transceiver. Thereby
-+      the active state enables RX during TX.
-+    maxItems: 1
+ 	ret = device_property_read_u32_array(dev, "rs485-rts-delay",
+ 					     rs485_delay, 2);
+@@ -3458,6 +3459,17 @@ int uart_get_rs485_mode(struct uart_port *port)
+ 	if (port->rs485_term_gpio)
+ 		port->rs485_supported.flags |= SER_RS485_TERMINATE_BUS;
+ 
++	rx_during_tx_gpio_flag = (rs485conf->flags & SER_RS485_RX_DURING_TX) ?
++				 GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
++	port->rs485_rx_during_tx_gpio = devm_gpiod_get_optional(dev,
++								"rs485-rx-during-tx",
++								rx_during_tx_gpio_flag);
++	if (IS_ERR(port->rs485_rx_during_tx_gpio)) {
++		ret = PTR_ERR(port->rs485_rx_during_tx_gpio);
++		port->rs485_rx_during_tx_gpio = NULL;
++		return dev_err_probe(dev, ret, "Cannot get rs485-rx-during-tx-gpios\n");
++	}
 +
- additionalProperties: true
- 
- ...
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(uart_get_rs485_mode);
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index fd59f600094a..7d3784b18a6f 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -579,6 +579,7 @@ struct uart_port {
+ 	struct serial_rs485     rs485;
+ 	struct serial_rs485	rs485_supported;	/* Supported mask for serial_rs485 */
+ 	struct gpio_desc	*rs485_term_gpio;	/* enable RS485 bus termination */
++	struct gpio_desc	*rs485_rx_during_tx_gpio; /* Output GPIO that sets the state of RS485 RX during TX */
+ 	struct serial_iso7816   iso7816;
+ 	void			*private_data;		/* generic platform data pointer */
+ };
 -- 
 2.11.0
 
