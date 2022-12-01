@@ -2,148 +2,115 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687FC63EFB4
-	for <lists+linux-serial@lfdr.de>; Thu,  1 Dec 2022 12:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9AE63F02C
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Dec 2022 13:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiLALmM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 1 Dec 2022 06:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S231203AbiLAMJl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 1 Dec 2022 07:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiLALlz (ORCPT
+        with ESMTP id S229720AbiLAMJk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 1 Dec 2022 06:41:55 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE1F983B7
-        for <linux-serial@vger.kernel.org>; Thu,  1 Dec 2022 03:41:52 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bp15so2036552lfb.13
-        for <linux-serial@vger.kernel.org>; Thu, 01 Dec 2022 03:41:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0UiAnxiG5gru9IeukT0uPFqmufGik114HWN4x39w6FA=;
-        b=zopg1txRN5QgqaXfvugj89RD4LqFxqoqVjHWRsqgKB0npSUazcU7D9c2uZ9eF+aBjn
-         YF6qfci1wHSt4AFzDdaT6TP9OhQ3Mdaza3DpmSV5hpIUekk3KR80oodi3SN9yWI5tGS6
-         BuQ4A1vklebhvhifCHCdZnMSoSeCWvFM/Ob8qdlXPxy4zsG7kk5g+VQP3o6YbOTvD/iZ
-         2WoTXkrwVdgV3weLjEU6HWVghtCCvmbFUyO94sTViyHwjHW1koa5iH6wuV0IKiROfrwq
-         tf+I6a/cjSMNzM9dEX7KO+nfOz8/O/3aZxCS+RhXktnqnxBEzb01V5YJ95RsD8VHUo5a
-         Jrug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0UiAnxiG5gru9IeukT0uPFqmufGik114HWN4x39w6FA=;
-        b=NEDpLRldNHWOLJwr69R9sXKZeFi879jZLxqHlBxjDJ4h5xUsOdlhZ9WBntiwOidXdR
-         bawaUTNlSZc64NJVI97gWxWkSxaVXt4msCeaFa0TMEkcPiw1htvLZN62dJvRxwOPcJKA
-         1Kwx6HzImxCnBy5CPYWdAbYtfpCxO88z6eolnCa+2SGiLunDerpN28FPhIpgQ4tz3WzG
-         edmtnoR6QGzC/8mbN0nMWCSimHEk3gFV1yi6CGXmMyWQqicK4vxZ1lRy+VprXPO2EEQR
-         rIt0xQHiJmD7M8Dk3XgNYgLmtmkEgBSTbDI6tovQyjY1lhnQmz+hEL4FhJaZwBdmhLlr
-         e1ew==
-X-Gm-Message-State: ANoB5pnwnFq7TIFT1tXM9TCbCFN88XQIjwJlWbny+8xDh9fs9fZvgbcl
-        eRPd5+KDN+4p5BTaZy3T7EgsXw==
-X-Google-Smtp-Source: AA0mqf5NJwSDFJVZ4ee0obiZShaUI/uPkLiEO75TR/uSDPOAHIZkEPvJJ1JC3LaLkJUeMh2M4XFoqQ==
-X-Received: by 2002:a05:6512:a83:b0:4aa:f944:f7ec with SMTP id m3-20020a0565120a8300b004aaf944f7ecmr17809472lfu.467.1669894910308;
-        Thu, 01 Dec 2022 03:41:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05651234ca00b0048a8c907fe9sm612837lfr.167.2022.12.01.03.41.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Dec 2022 03:41:47 -0800 (PST)
-Message-ID: <a1d8197e-33fa-e853-ab73-81b167ec45ec@linaro.org>
-Date:   Thu, 1 Dec 2022 12:41:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 5/9] dt-bindings: riscv: Add bouffalolab bl808 board
- compatibles
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 1 Dec 2022 07:09:40 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872BC94565
+        for <linux-serial@vger.kernel.org>; Thu,  1 Dec 2022 04:09:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669896579; x=1701432579;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=c2A3JlbdQzPIBwuXqYqtYZK3Lxugj8gZL6mBVUWZu0s=;
+  b=GW3xL5Z5JWGO+KafMb3yF1NrJ6msc1AaoNSrwde8odTl7jahzs1UaSuX
+   2qXXzFpEvuMZ3uWqq1M27Hp5Wc4UHr0HoI00kRWlcqXYz+7HSIgoH7CF3
+   SdlkJvXjloehKn7jrg31BoCAg09Avs/kWtqSWt9wsqEorjBoocjt+57eJ
+   iupjRTpAybozEzGjtjzqC4cBQh0H9ol1reDyqDrjDQ3UVQNaFbWaE8Gdk
+   l7mY2c9Ps7DhbmQKEFyDdwkmCOHzZMjsmJgjFsDzsslUAEOViGxGIShCW
+   kcAmRZLz6ksW68qim48EW11MiZ+q0WuaTTs0ngGWMTQmOfI21NGS3XU36
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="313298019"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="313298019"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 04:09:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="595042881"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="595042881"
+Received: from akoroglu-mobl.ger.corp.intel.com ([10.251.212.165])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 04:09:35 -0800
+Date:   Thu, 1 Dec 2022 14:09:32 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, marex@denx.de,
         Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20221127132448.4034-1-jszhang@kernel.org>
- <20221127132448.4034-6-jszhang@kernel.org>
- <60991459-945f-35db-f26a-fb27824728ad@linaro.org> <Y4iMrKjLAHpkCygo@wendy>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y4iMrKjLAHpkCygo@wendy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexander Dahl <ada@thorsis.com>, kernel@dh-electronics.com,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH V3 4/4] serial: stm32: Add support for rs485 RX_DURING_TX
+ output GPIO
+In-Reply-To: <20221201110237.7917-4-cniedermaier@dh-electronics.com>
+Message-ID: <2d909d7f-9c6-474-ce15-76a55fdafed3@linux.intel.com>
+References: <20221201110237.7917-1-cniedermaier@dh-electronics.com> <20221201110237.7917-4-cniedermaier@dh-electronics.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 01/12/2022 12:14, Conor Dooley wrote:
-> Hey Krzysztof,
+On Thu, 1 Dec 2022, Christoph Niedermaier wrote:
+
+> If a RX_DURING_TX GPIO is defined by the DT property "rs485-rx-during-tx-gpios"
+> this patch switches this GPIO accordingly to the RS485 flag RX_DURING_TX in user
+> space. Controlled by this GPIO, now the hardware is responsible for connecting
+> or disconnecting RX during TX.
 > 
-> On Thu, Dec 01, 2022 at 12:05:04PM +0100, Krzysztof Kozlowski wrote:
->> On 27/11/2022 14:24, Jisheng Zhang wrote:
->>> Several SoMs and boards are available that feature the Bouffalolab
->>> bl808 SoC. Document the compatible strings.
->>>
->>> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
->>> ---
->>>  .../bindings/riscv/bouffalolab.yaml           | 34 +++++++++++++++++++
->>>  1 file changed, 34 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
->>> new file mode 100644
->>> index 000000000000..91ca9dbdc798
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
->>> @@ -0,0 +1,34 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Bouffalo Lab Technology SoC-based boards
->>> +
->>> +maintainers:
->>> +  - Jisheng Zhang <jszhang@kernel.org>
->>> +
->>> +description:
->>> +  Bouffalo Lab Technology SoC-based boards
->>> +
->>> +properties:
->>> +  $nodename:
->>> +    const: '/'
->>> +  compatible:
->>> +    oneOf:
->>> +      - description: Sipeed M1s SoM:
->>> +        items:
->>> +          - const: sipeed,m1s
->>> +          - const: bouffalolab,bl808
->>
->> I don't think that SoM is usable alone. It always needs a carrier, so
->> drop this entry.
+> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+> ---
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Alexander Dahl <ada@thorsis.com>
+> Cc: Marek Vasut <marex@denx.de>
+> Cc: kernel@dh-electronics.com
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> To: linux-serial@vger.kernel.org
+> To: linux-arm-kernel@lists.infradead.org
+> ---
+> V2: - Rework of the commit message
+> V3: - No changes
+> ---
+>  drivers/tty/serial/stm32-usart.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> For my own information, if a SoM is not capable of functioning without a
-> carrier there is no merit in it having a compatible?
-> Does this also apply if there are multiple possible carriers from
-> different vendors?
+> diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+> index a1490033aa16..0f2cca9054ba 100644
+> --- a/drivers/tty/serial/stm32-usart.c
+> +++ b/drivers/tty/serial/stm32-usart.c
+> @@ -226,7 +226,14 @@ static int stm32_usart_config_rs485(struct uart_port *port, struct ktermios *ter
+>  
+>  	stm32_usart_clr_bits(port, ofs->cr1, BIT(cfg->uart_enable_bit));
+>  
+> -	rs485conf->flags |= SER_RS485_RX_DURING_TX;
+> +	if (port->rs485_rx_during_tx_gpio) {
+> +		if (rs485conf->flags & SER_RS485_RX_DURING_TX)
+> +			gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio, 1);
+> +		else
+> +			gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio, 0);
 
-Compatible makes sense anyway. There will be different boards using this
-SoM (not only carriers, but final products) and they all will have
-common piece - the SoM. It's the same for other SoM designs (e.g. for iMX).
+gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio,
+			 !!(rs485conf->flags & SER_RS485_RX_DURING_TX));
 
-Best regards,
-Krzysztof
+And the same comment also for the other patch.
 
+-- 
+ i.
