@@ -2,70 +2,107 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A7B644492
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Dec 2022 14:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C9B64458A
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Dec 2022 15:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiLFNcF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Dec 2022 08:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S234976AbiLFOXW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Dec 2022 09:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiLFNb4 (ORCPT
+        with ESMTP id S234932AbiLFOXV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:31:56 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74EE23BE3
-        for <linux-serial@vger.kernel.org>; Tue,  6 Dec 2022 05:31:53 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3b48b139b46so151461027b3.12
-        for <linux-serial@vger.kernel.org>; Tue, 06 Dec 2022 05:31:53 -0800 (PST)
+        Tue, 6 Dec 2022 09:23:21 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B1438B8;
+        Tue,  6 Dec 2022 06:23:18 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id a7so17341631ljq.12;
+        Tue, 06 Dec 2022 06:23:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=OeyCMsHYScRvVh8RXebzMnb6pRDfFrPhGFM5Oo/oZrwyoa5Qe6A4MFoFU3Mp0QEA1i
-         SYxbR4sBY6B2f4vL1OEJybUifemEqA8IjQX2J09dxjCQRODPxlkwi9ZEZSAu9TEhort/
-         rwllpgNt60odz5Nl0j8spOK2S4UH94zHMFD6KX6br/bHNI2fZHIzqWvZlcUTMKyD9vqw
-         pbBkxrH6eRDakHg6i3SDW/XG3pxdEfflEK99JxjqsHbJ7YAIkEj/5S6ueT5UYlPSmqQ/
-         Hub6z0zknduscVyttBCDKyxn8xzrz/kgtfd7lHkiDU9nHicul2vZth5Aja6oh/8jcMGO
-         G90g==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sT1QGkgmhBkSpHiyhRuKPI4cqNjm9QnBwa8ft8tm2b4=;
+        b=l+v/q+gX2uTMHA9ZkYaAEAOtqVZdgJNwEosrM3dkEf7jw4tHyTliypQOHtJCtyU/H9
+         W7Rb7+6szCYzuywkLj8Zzm8bXfov7G34xh+DWePoSoe3mUbB9RTRgb4Eoe8P5za4HhYo
+         dqM6Rl8x97B2IcqV6Bbti5ExuCNlqSZ8XCLIBcuNfbACL6rR0FzgrSP3QuLtkaV1X83p
+         WDR8LXEIKzHxXYaMLxwysL+5yuFzANOq60Tmx256kIMgIGLGL+c3zdZhTjoEc6bXyMzb
+         mTf2P51kB/RnI5TnC6bBnUbYBNumrfqdbQAc+5FEo9sqIrbg9zjykdwwm5+wVohhP2yH
+         79Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=LJiWVPcvRV88Z53MUHjdX8y5GlUoCDJyBtCYQkh7VQ78gYGpmGK/AIiRKytW9SnOgH
-         WK9BqMU1/8+Iggg7xNPLbYyuX9hqdz6lpp/MNmz6b66rA7w02lvuyJ0k48ntgT6pico6
-         0H8/UYU09yf0R6G5OkR/E+DlXjR/CVwmaw2f7W0UFBYORJXk66dVItmTGK8o/ndHMjes
-         T10rLLZ3qnDXxC7Q1xjBB44Bi4K3xGuSqHj7+cPD1JQf5vnbFgPVEbcNbFjnqUbRY8tX
-         qqFOv6UdnT4TQpbZO7ZL6/hOo8OnWO024/tkEf4oyswLl7OVKfYMjYnXQIMB+qGzgtOr
-         L17w==
-X-Gm-Message-State: ANoB5pkgJ9Xu/FfeawGJuMx33I6+WJJbcEDcpPEs0oWCaNme3+2zBuow
-        pYjmTOWP/ps32KxtapiPyTlmoGo8okRQtr4ZEM8=
-X-Google-Smtp-Source: AA0mqf7Z2Y5k3chtNt8kbVNLNOAPCXtgRbw0oMU6LK5Q/RiR2Ia6QNch2ZuKx5+xFv9D2teTY/76/SaSp4zD3zNfpik=
-X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
- g64-20020a815243000000b003d22098c5fbmr31214777ywb.121.1670333513086; Tue, 06
- Dec 2022 05:31:53 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sT1QGkgmhBkSpHiyhRuKPI4cqNjm9QnBwa8ft8tm2b4=;
+        b=A5IexOMxQnEjjrD2SOPKM7O5gWs8dGbKRGjquroWM/VLDY3YEl99XIsnSIvLPH6krs
+         uWyhMSPqocrnCrb816oyMBcrSWmqAsdoLS9SI7+SZq8rz9mpYOl0EOrLfWXNNTYoLsjk
+         uCnlgLfKP6I5/W/d6gvDx5XoaqDZIJ3lXiiJVH4bzytDF3Vs5PecpfWXdqXZlChzHhKK
+         sx5ti9MJ/UNuUosD8s21NWjIhjX7cC0k7VsuZ7ZEafTCZ1cvu0OUJXTi5WNWwx36YGy0
+         veeYTOru9oEbuMKaAPbax9RQGGxH1WbX2xorH1uzDLi6lt35TcA4qR7gxPRFx4nI/IRG
+         SYGA==
+X-Gm-Message-State: ANoB5plJLyVLshTEfwhpoYUT3RcskW6TkPPbjo6IC8TSGBporqFX36hS
+        mt50nl/h4efXWmbVAN7BFG1fAfUCmDSclqly0SzuOPk8
+X-Google-Smtp-Source: AA0mqf48L7a4pxzGkZLU939Pac44paZk+6TCPskq0MapimEioj6zash50V+a81kf7aJotA75z78shCuZOCge67gFClo=
+X-Received: by 2002:a2e:a22f:0:b0:27a:d4:f94f with SMTP id i15-20020a2ea22f000000b0027a00d4f94fmr2544512ljm.499.1670336596229;
+ Tue, 06 Dec 2022 06:23:16 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
- 05:31:52 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
-Date:   Tue, 6 Dec 2022 13:31:52 +0000
-Message-ID: <CACJtp8vgE8Nrmo+zWDrnXRqoM_o=MmruUY09Qi=4vFfLMPDrtA@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+References: <20221205050038.195746-1-bmeng@tinylab.org> <b3aff238-c473-e587-dd04-cc5ef4517722@kernel.org>
+In-Reply-To: <b3aff238-c473-e587-dd04-cc5ef4517722@kernel.org>
+From:   Bin Meng <bmeng.cn@gmail.com>
+Date:   Tue, 6 Dec 2022 22:23:04 +0800
+Message-ID: <CAEUhbmVBLLppJdnw5CUiD+Vpj1jaGQ7FTZGVr4xT0_LaA7qSjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] serial: Adapt Arm semihosting earlycon driver to RISC-V
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Bin Meng <bmeng@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Tue, Dec 6, 2022 at 2:47 PM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> On 05. 12. 22, 6:00, Bin Meng wrote:
+> ...
+> > --- a/drivers/tty/serial/earlycon-arm-semihost.c
+> > +++ b/drivers/tty/serial/earlycon-arm-semihost.c
+> ...
+> > @@ -23,7 +27,18 @@
+> >    */
+> >   static void smh_putc(struct uart_port *port, unsigned char c)
+> >   {
+> > -#ifdef CONFIG_ARM64
+> > +#if defined(CONFIG_RISCV)
+> > +     asm volatile("addi    a1, %0, 0\n"
+> > +                  "addi    a0, zero, 3\n"
+> > +                  ".balign 16\n"
+> > +                  ".option push\n"
+> > +                  ".option norvc\n"
+> > +                  "slli    zero, zero, 0x1f\n"
+> > +                  "ebreak\n"
+> > +                  "srai    zero, zero, 0x7\n"
+> > +                  ".option pop\n"
+> > +                  : : "r" (&c) : "a0", "a1", "memory");
+> > +#elif defined(CONFIG_ARM64)
+> >       asm volatile("mov  x1, %0\n"
+> >                    "mov  x0, #3\n"
+> >                    "hlt  0xf000\n"
+>
+> Hmm, can we implement all those smh_putc() variants in respective
+> arch/*/include/semihost.h instead?
+>
+
+I think so. Will do in v2.
+
+Regards,
+Bin
