@@ -2,100 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6725B643D55
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Dec 2022 07:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A7B644492
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Dec 2022 14:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiLFGxG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 6 Dec 2022 01:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S234309AbiLFNcF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 6 Dec 2022 08:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiLFGxE (ORCPT
+        with ESMTP id S233795AbiLFNb4 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:53:04 -0500
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5019118E19;
-        Mon,  5 Dec 2022 22:53:03 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id c66so12667500edf.5;
-        Mon, 05 Dec 2022 22:53:03 -0800 (PST)
+        Tue, 6 Dec 2022 08:31:56 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74EE23BE3
+        for <linux-serial@vger.kernel.org>; Tue,  6 Dec 2022 05:31:53 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3b48b139b46so151461027b3.12
+        for <linux-serial@vger.kernel.org>; Tue, 06 Dec 2022 05:31:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=OeyCMsHYScRvVh8RXebzMnb6pRDfFrPhGFM5Oo/oZrwyoa5Qe6A4MFoFU3Mp0QEA1i
+         SYxbR4sBY6B2f4vL1OEJybUifemEqA8IjQX2J09dxjCQRODPxlkwi9ZEZSAu9TEhort/
+         rwllpgNt60odz5Nl0j8spOK2S4UH94zHMFD6KX6br/bHNI2fZHIzqWvZlcUTMKyD9vqw
+         pbBkxrH6eRDakHg6i3SDW/XG3pxdEfflEK99JxjqsHbJ7YAIkEj/5S6ueT5UYlPSmqQ/
+         Hub6z0zknduscVyttBCDKyxn8xzrz/kgtfd7lHkiDU9nHicul2vZth5Aja6oh/8jcMGO
+         G90g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwtS9TDJJ7vIw83Se/GeNxatxjK+vLXoVYcIsIw2pCE=;
-        b=S0sXAj7SOfM530NxQrt47d/CKYamGpsJDFPxxZwEbdKFn/kki0aInccH8jjr4bNGxa
-         3VKUQ7HapM4RSp0Hm3QMh+uksmuCHuf8/Y8JrqRuob2t/F68btSFu8vFeisHG2c0OMWf
-         o/x7FBwTekwItB/odd3029wY55+iJK6LdW61UHl5WBeLfBU4qwlRvdZYLr7FjClLeJhP
-         wk3/JG0UZJE/FslfJp3tOTxnaDuO7Z3DLfOiD4PUQWGGq8xvJfw0QOIW8sxZGul81yAs
-         /Q4q6GKD2r2E+d4vcsJjFDoc3J/AZUCrp2NuS/KO6EZIlErYxu5P2/q29rHd4S7GQNv+
-         z9sw==
-X-Gm-Message-State: ANoB5pm20fyTP7OdCdbBjEZNcBhKbOip6KHjqUDaEcAgc4K9rpfDVr6p
-        RKhvS8mrSc44UOsr4Hj2mL3rWs29cHI=
-X-Google-Smtp-Source: AA0mqf6dqcBoKY2qtVoQUNjNIl+EnIHecxyGvQiux6H57y+P29ImNa3L1/hmxyYKqmAAjQ5kDxc40A==
-X-Received: by 2002:a05:6402:4289:b0:467:9864:9463 with SMTP id g9-20020a056402428900b0046798649463mr59324551edc.360.1670309581953;
-        Mon, 05 Dec 2022 22:53:01 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id lb26-20020a170907785a00b00781e7d364ebsm7099422ejc.144.2022.12.05.22.53.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 22:53:01 -0800 (PST)
-Message-ID: <df281b81-ba6c-4ca8-3da6-135d4ae09861@kernel.org>
-Date:   Tue, 6 Dec 2022 07:53:00 +0100
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=LJiWVPcvRV88Z53MUHjdX8y5GlUoCDJyBtCYQkh7VQ78gYGpmGK/AIiRKytW9SnOgH
+         WK9BqMU1/8+Iggg7xNPLbYyuX9hqdz6lpp/MNmz6b66rA7w02lvuyJ0k48ntgT6pico6
+         0H8/UYU09yf0R6G5OkR/E+DlXjR/CVwmaw2f7W0UFBYORJXk66dVItmTGK8o/ndHMjes
+         T10rLLZ3qnDXxC7Q1xjBB44Bi4K3xGuSqHj7+cPD1JQf5vnbFgPVEbcNbFjnqUbRY8tX
+         qqFOv6UdnT4TQpbZO7ZL6/hOo8OnWO024/tkEf4oyswLl7OVKfYMjYnXQIMB+qGzgtOr
+         L17w==
+X-Gm-Message-State: ANoB5pkgJ9Xu/FfeawGJuMx33I6+WJJbcEDcpPEs0oWCaNme3+2zBuow
+        pYjmTOWP/ps32KxtapiPyTlmoGo8okRQtr4ZEM8=
+X-Google-Smtp-Source: AA0mqf7Z2Y5k3chtNt8kbVNLNOAPCXtgRbw0oMU6LK5Q/RiR2Ia6QNch2ZuKx5+xFv9D2teTY/76/SaSp4zD3zNfpik=
+X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
+ g64-20020a815243000000b003d22098c5fbmr31214777ywb.121.1670333513086; Tue, 06
+ Dec 2022 05:31:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 2/2] earlycon: Increase options size
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20221123-serial-clk-v3-0-49c516980ae0@chromium.org>
- <20221123-serial-clk-v3-2-49c516980ae0@chromium.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221123-serial-clk-v3-2-49c516980ae0@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
+ 05:31:52 -0800 (PST)
+Reply-To: mr.abraham022@gmail.com
+From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
+Date:   Tue, 6 Dec 2022 13:31:52 +0000
+Message-ID: <CACJtp8vgE8Nrmo+zWDrnXRqoM_o=MmruUY09Qi=4vFfLMPDrtA@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 24. 11. 22, 13:39, Ricardo Ribalda wrote:
-> Now that the clock frequency is also part of the options, 16 bytes is
-> too little.
-> 
-> Without this patch dmesg does not show the whole options, Eg:
-> 
-> earlycon: uart0 at MMIO32 0x00000000fedc9000 (options '115200n8,480000')
-> 
-> instead of: '115200n8,48000000'
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> index d657f2a42a7b..f555927195da 100644
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -701,7 +701,7 @@ static inline int uart_poll_timeout(struct uart_port *port)
->   struct earlycon_device {
->   	struct console *con;
->   	struct uart_port port;
-> -	char options[16];		/* e.g., 115200n8 */
-> +	char options[32];		/* e.g., 115200n8 */
->   	unsigned int baud;
->   };
->   
-> 
-
--- 
-js
-suse labs
-
+My Greeting, Did you receive the letter i sent to you. Please answer me.
+Regard, Mr.Abraham
