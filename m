@@ -2,47 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC402645B72
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Dec 2022 14:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40803645F19
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Dec 2022 17:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiLGNy0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 7 Dec 2022 08:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S229515AbiLGQkP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 7 Dec 2022 11:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLGNyV (ORCPT
+        with ESMTP id S229486AbiLGQkO (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:54:21 -0500
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6074048774;
-        Wed,  7 Dec 2022 05:54:19 -0800 (PST)
-X-QQ-mid: bizesmtp74t1670421240tpugafm0
-Received: from ubuntu.. ( [111.196.135.79])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Dec 2022 21:53:59 +0800 (CST)
-X-QQ-SSF: 01200000002000B0B000B00A0000000
-X-QQ-FEAT: WfQrrMZtGtFaBhCIjFkwlouFogiRdBICx5npfjqOayIRbX/Flh8LzJ93MYCFh
-        36X35vAPGzUK6kjShIP7otSDF0ZW6nd1bkmmFzHHzjDrZYl2OsqoTk0Zz7hFXdq3Dw19JIB
-        kKjISittyAUaHDPTnXlZtLYNZgmDRE6fon+hkNT/Lp8E/T09fUcoErU3Js7KONhTPwYzOWQ
-        ai7k+ZIRsSQgaurOY1zU3WIdrNIbh2qgEigV/9325z9PywKyNrTwOmUq+E80jl/rpsoEzwo
-        nfnv+NSCaYIX8vdLu8G7yMR/sMKJb7f9Ka/F5NyWt9vgcsc1uaHibUBnFqzNQr8yob5P7FB
-        30Z9Ilrkk8MZVXrBeZCLIGbhzumN94YTX34evrXQ6lxCwHpwnM=
-X-QQ-GoodBg: 0
-From:   Bin Meng <bmeng@tinylab.org>
-To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v2 3/3] serial: Rename earlycon semihost driver
-Date:   Wed,  7 Dec 2022 21:53:52 +0800
-Message-Id: <20221207135352.592556-3-bmeng@tinylab.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221207135352.592556-1-bmeng@tinylab.org>
+        Wed, 7 Dec 2022 11:40:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D9565B0;
+        Wed,  7 Dec 2022 08:40:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6839ECE1AFE;
+        Wed,  7 Dec 2022 16:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A02C433C1;
+        Wed,  7 Dec 2022 16:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670431210;
+        bh=g5fGGrWSIRqwNSexjwtqPOCti3BgIlEU85pKTBf8T0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oo5QBkISEd5C93re2xC0MAd5GbmcJS0EQqCFX92m+ZL2Nnj+W+l6Aa8NisLDN8s2+
+         T/59VugOVhDKZk6+JfIq19yMgs9W72I7zpqEoVvLjqhwYaGveEsjBalrCI/i9FYgpi
+         GRSSZt4wnoHmFdjJya2qZ2v6WPaiqIAOgtedaL1X6wHhznVa3upGa5A4T7yrYIH67B
+         E4KovPtFNabXUFMrqkNctQza7wTDUZlfNqI0Y0kN7wBNdJAqcQgul/ISBt0ja9HSUx
+         24oqNM/bS5VlKbyeAGSVDrOv390/2jSLOD5C3VBU1dHcR9zdD6AcLhueUri6w+Obo/
+         RZQPBhowOylmw==
+Date:   Wed, 7 Dec 2022 16:40:05 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Bin Meng <bmeng@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH v2 2/3] riscv: Implement semihost.h for earlycon semihost
+ driver
+Message-ID: <Y5DB5c7O4oAMkTa/@spud>
 References: <20221207135352.592556-1-bmeng@tinylab.org>
+ <20221207135352.592556-2-bmeng@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="P16++YdENF2wGyvg"
+Content-Disposition: inline
+In-Reply-To: <20221207135352.592556-2-bmeng@tinylab.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,66 +60,39 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Now that earlycon semihost driver works on RISC-V too, let's use a
-much more generic name for the driver.
 
-Signed-off-by: Bin Meng <bmeng@tinylab.org>
+--P16++YdENF2wGyvg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
+Hello,
 
-(no changes since v1)
+Two tiny nits for whenever other comments require a v3.
 
- drivers/tty/serial/Kconfig                           | 12 ++++++------
- drivers/tty/serial/Makefile                          |  2 +-
- .../{earlycon-arm-semihost.c => earlycon-semihost.c} |  0
- 3 files changed, 7 insertions(+), 7 deletions(-)
- rename drivers/tty/serial/{earlycon-arm-semihost.c => earlycon-semihost.c} (100%)
+On Wed, Dec 07, 2022 at 09:53:51PM +0800, Bin Meng wrote:
+> Per RISC-V semihosting spec [1], implement semihost.h for the existing
+> Arm semihosting earlycon driver to work on RISC-V.
+>=20
+> [1] https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semih=
+osting-spec.adoc
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index e94d1265151c..a3779472edf6 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -73,17 +73,17 @@ config SERIAL_AMBA_PL011_CONSOLE
- 	  your boot loader (lilo or loadlin) about how to pass options to the
- 	  kernel at boot time.)
- 
--config SERIAL_EARLYCON_ARM_SEMIHOST
--	bool "Early console using ARM semihosting"
-+config SERIAL_EARLYCON_SEMIHOST
-+	bool "Early console using Arm compatible semihosting"
- 	depends on ARM64 || ARM || RISCV
- 	select SERIAL_CORE
- 	select SERIAL_CORE_CONSOLE
- 	select SERIAL_EARLYCON
- 	help
--	  Support for early debug console using ARM semihosting. This enables
--	  the console before standard serial driver is probed. This is enabled
--	  with "earlycon=smh" on the kernel command line. The console is
--	  enabled when early_param is processed.
-+	  Support for early debug console using Arm compatible semihosting.
-+	  This enables the console before standard serial driver is probed.
-+	  This is enabled with "earlycon=smh" on the kernel command line.
-+	  The console is enabled when early_param is processed.
- 
- config SERIAL_EARLYCON_RISCV_SBI
- 	bool "Early console using RISC-V SBI"
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index 238a9557b487..cd9afd9e3018 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -6,7 +6,7 @@
- obj-$(CONFIG_SERIAL_CORE) += serial_core.o
- 
- obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
--obj-$(CONFIG_SERIAL_EARLYCON_ARM_SEMIHOST) += earlycon-arm-semihost.o
-+obj-$(CONFIG_SERIAL_EARLYCON_SEMIHOST) += earlycon-semihost.o
- obj-$(CONFIG_SERIAL_EARLYCON_RISCV_SBI) += earlycon-riscv-sbi.o
- 
- # These Sparc drivers have to appear before others such as 8250
-diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-semihost.c
-similarity index 100%
-rename from drivers/tty/serial/earlycon-arm-semihost.c
-rename to drivers/tty/serial/earlycon-semihost.c
--- 
-2.34.1
+Could you please use regular Link: tags? Also, for a multi-patch series
+please send a cover letter :)
 
+Thanks,
+Conor.
+
+
+--P16++YdENF2wGyvg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5DB5QAKCRB4tDGHoIJi
+0pZKAQCwhsweZT35rE6Qa9nOrzhd5VKjCEPMMwbXWCfug86MmAEAmCRVZoYRpUvE
+E1k+9d6yojCvx8N+tjKoPiR/Bzb88w4=
+=64rp
+-----END PGP SIGNATURE-----
+
+--P16++YdENF2wGyvg--
