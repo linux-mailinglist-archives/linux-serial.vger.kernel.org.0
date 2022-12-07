@@ -2,154 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAE8646257
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Dec 2022 21:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D090646272
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Dec 2022 21:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiLGU22 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 7 Dec 2022 15:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S229646AbiLGUhQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 7 Dec 2022 15:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiLGU22 (ORCPT
+        with ESMTP id S229486AbiLGUhP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:28:28 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EACEDE88;
-        Wed,  7 Dec 2022 12:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670444906; x=1701980906;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sWTDm26dkSn9+qW1jd6fTadfWfLcjbzkrYlN30smQ6o=;
-  b=dREONcz7Jthp8/bEn/Tr2KGdmuNsdT03Rj8mXGP7GWQhK1Qb0aJvqS8p
-   T864/KLkkhBiW2yeXcjkQAavPIkRKVhzW7cekoQ1U0cgS7LEma6YgxxD0
-   uunMNdhfq+Zb6XCtUM5Q34HjL7KqIEKuAgsmFv8Gi5A/j6Yzs4aJ25D3m
-   TACULAOkanYXnc0jezjtA/iMVSOTGCYe1Lf5XHHAkrS8W2V2KNF0eAQy/
-   JHwVYKlSKpZ4xknGBwk4jmjkz74QA2zDiQ4q2NVA3ixy5HSiIe1nNfPHw
-   jcddGOiaD3Qzv/koHj1a83sGIO/YSbq1RZbVreb9bu0gCm+84lQzxlRU3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="314642775"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="314642775"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 12:28:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="624433944"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="624433944"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 07 Dec 2022 12:28:02 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p311M-005yqb-30;
-        Wed, 07 Dec 2022 22:28:00 +0200
-Date:   Wed, 7 Dec 2022 22:28:00 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v4 1/1] serial: core: Start managing serial
- controllers to enable runtime PM
-Message-ID: <Y5D3UKLgHCT9feuC@smile.fi.intel.com>
-References: <20221207124305.49943-1-tony@atomide.com>
- <Y5D187ygOvDEA0UK@smile.fi.intel.com>
+        Wed, 7 Dec 2022 15:37:15 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C265BC5C
+        for <linux-serial@vger.kernel.org>; Wed,  7 Dec 2022 12:37:14 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id r11so16343331oie.13
+        for <linux-serial@vger.kernel.org>; Wed, 07 Dec 2022 12:37:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=duG4073yog6ZDCWn5gRxVQ94Hax7BsJvOpMzZEtv1jU=;
+        b=SS7IsUxAXZ/uzlBRmoZlkG9B4HiVF1eDxZs9iA97EBg1BUMhr0/OrJIx3YGmEXGNvu
+         0wYLVw5DShuApU/GXY2l+yGhEJaHU1CfE9WKyhBDnxUs58m4jonnDZAZQ9Z7x8ekmj+x
+         hFZ1/MY7qVxSLlYOEqhWeKK3tkF35au5GQtpaxuL3aijl6fZvIaSNYa6ppyOwcxKd2jJ
+         b6oBkJKciI990PeaFgQkp+1JiDUdCTetMoLWPYQEBxvwE0y/IK0EYbd5SbB7MPtzs9Af
+         /FMgRb6tJkNUe6fzhrz3lq8DaQ7Vig9MyuItm+jk9thqEnrOS4ApEZTBvWxeSDBxHvcd
+         c+vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=duG4073yog6ZDCWn5gRxVQ94Hax7BsJvOpMzZEtv1jU=;
+        b=aOtDXSlx6R1ek/7+hLVydAdw111N3Pi8Cy8gpq4c5oZxSgh7VCUQgMrLbt8PPJWxwu
+         ErY3bB7Lj4Q6A+/1Wm42+W15x/21Ox9hkg8h168p68exGOY6k5ZLnZvwKAnMANwANo8v
+         CZUy+RCRcshvACoBc2xEOcCHPIXlih1hvsKiq8woGosrnwCtnptfij8EkLz5vQS114AM
+         E5F29wMpVJLXZsYkwfjpScG2CcMJr06ZtrYH27Yp82op1xiLnkRBCzp7+RhKmczNOjDL
+         /f1Yv4/Fp+Zdy2P2crt5R2FgLiRcNEeObOAUh+lCk+wXXCcilaDmdgnacEzyeDPOQfbx
+         NCQA==
+X-Gm-Message-State: ANoB5pkMMyL6ajxaBXNPvo+W+XwBK8DfrR+2a9tJyj4kkiC5+tM2mOuF
+        hHfAxfrSmCs5ZZpAl+L7oyNPFa4ntxE3ZNN+w0I=
+X-Google-Smtp-Source: AA0mqf5xdRW5SYd7b9Myku0aqFRQVBBp0iqZFAWB3667drDaw5/eZEo3oYtVmsLHRKGLZXSiBvrSkEuAm4CpPMYYgzw=
+X-Received: by 2002:a05:6808:684:b0:35a:534a:4505 with SMTP id
+ k4-20020a056808068400b0035a534a4505mr47292708oig.189.1670445434113; Wed, 07
+ Dec 2022 12:37:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5D187ygOvDEA0UK@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:4045:b0:e0:3dc0:ba04 with HTTP; Wed, 7 Dec 2022
+ 12:37:13 -0800 (PST)
+Reply-To: un.online.coordinator.files@gmail.com
+From:   Mrs Anne Gray <kodjoakpadja@gmail.com>
+Date:   Wed, 7 Dec 2022 20:37:13 +0000
+Message-ID: <CAHw_9RXamYVJc3_q933ayBNB=+J2sYBAdt2H8MWJtEaJ7sExiw@mail.gmail.com>
+Subject: d4re332
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 10:22:11PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 07, 2022 at 02:43:05PM +0200, Tony Lindgren wrote:
-
-...
-
-> > +int serial_core_register_port(struct uart_driver *drv, struct uart_port *port)
-> > +{
-> 
-> > +	bool allocated = false;
-> 
-> Not sure why this is needed.
-
-Okay, I got it.
-Still, see below.
-
-> > +	struct device *ctrl_dev;
-> > +	int ret;
-> > +
-> > +	ret = serial_core_add_one_port(drv, port);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mutex_lock(&port_mutex);
-> > +
-> > +	/* Inititalize a serial core controller device if needed */
-> > +	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
-> > +	if (!ctrl_dev) {
-> > +		ctrl_dev = serial_core_ctrl_device_add(port);
-> > +		if (!ctrl_dev)
-> > +			goto err_remove_port;
-> > +		allocated = true;
-> > +	}
-> 
-> Wouldn't be slightly better
-> 
-> 	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
-> 	if (!ctrl_dev)
-> 		ctrl_dev = serial_core_ctrl_device_add(port);
-> 	if (!ctrl_dev)
-> 		goto err_remove_port;
-> 
-> ?
-> 
-> > +	/* Initialize a serial core port device */
-> > +	ret = serial_core_port_device_add(ctrl_dev, port);
-> > +	if (ret)
-> > +		goto err_del_ctrl_dev;
-> > +
-> > +	mutex_unlock(&port_mutex);
-> > +
-> > +	return 0;
-> > +
-> > +err_del_ctrl_dev:
-> > +	if (allocated)
-
-We can avoid this check by caching the platform device.
-
-	struct platform_device *ctrl_pdev = NULL;
-
-	if (...) {
-		ctrl_pdev = to_platform_device(ctrl_dev);
-	}
-
-	platform_device_del(ctrl_pdev);
-
-> > +		platform_device_del(to_platform_device(ctrl_dev));
-> 
-> Shouldn't you call platform_device_unregister()?
-> 
-> > +err_remove_port:
-> > +	mutex_unlock(&port_mutex);
-> > +
-> > +	return serial_core_remove_one_port(drv, port);
-> > +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-Witaj m=C3=B3j przyjacielu
+Wierz=C4=99, =C5=BCe otrzymasz m=C3=B3j pierwszy e-mail. Nazywam si=C4=99 P=
+ani Anna Gray i
+zapewniam, =C5=BCe jest to uczciwy e-mail. Pisz=C4=99, aby poinformowa=C4=
+=87 Ci=C4=99, =C5=BCe
+jeste=C5=9B w=C5=9Br=C3=B3d tych, kt=C3=B3rzy otrzymali nasz=C4=85 aprobat=
+=C4=99!
+Z powa=C5=BCaniem,
+Pani Anny Grey
