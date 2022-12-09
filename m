@@ -2,135 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63FB648379
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Dec 2022 15:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCC1648494
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Dec 2022 16:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLIOMV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Dec 2022 09:12:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S230118AbiLIPFP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Dec 2022 10:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiLIOLg (ORCPT
+        with ESMTP id S230019AbiLIPFO (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:11:36 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A872425C4E
-        for <linux-serial@vger.kernel.org>; Fri,  9 Dec 2022 06:07:51 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso5832298wme.5
-        for <linux-serial@vger.kernel.org>; Fri, 09 Dec 2022 06:07:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nofF3uq4mMCbmKOkK6zREu9Cnd568OqVIOgqPBzLczQ=;
-        b=7vgfFbEF2nf6NQkTEVbI4W1ni7qg48IYIHg46dDKOOO/5HNcsRjlzq3pRL8ZYe0X+Q
-         VonuKatsOY/CzkY4JOdxL4a8uzG94YJWp6vxqjuJIuSYDcwZPxPKQncRe8NDHknoMuyZ
-         IvYnnM68rI+nNRHSLqs6cJrlbqMzziLrSFTaoboDp3S21VpQvFSZw2OOT/bmaa3suZUj
-         Yzpnq/DDL6D/wSD3axjP4V50VmonoeN5+2sYGg09WRA1I/uqmUYH/djtSQPq9MmeS6t+
-         DghXv51PMutOGkAnEwtT4USksj8Cly2/oArCcG/a4yG4OmZVYjKqtn2zCVLOhsBevlfl
-         pBCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nofF3uq4mMCbmKOkK6zREu9Cnd568OqVIOgqPBzLczQ=;
-        b=sPtf7a/G8eBJhhoDUHUFSV9Y9BkSGKmVn/geeLHWYGU2uNasvQ4QWpXz699DQMUwXc
-         iSZxpdaqzSTwLN2qTU1enk4iqnl2K40iAf2SEE4J65ZJXf1gdPyAB1f2VaSS5BlkiEMN
-         PpMDNtPF2gQLLAvOxiH9u6hWoSt3WXHb6fITQxeiaV+4OCdQ9yInMw5UWm7pEhVINm9W
-         fB0XKIYcA9ZVF0+cR4RfUXrzVpliLtoBv5cempFBMF1Kellp5epQbtEO6qvkmtatT/AT
-         +88yT1yqru0ikdXpqTV7RM6eHEEo4L5pRc9gWBl5aixr04pIOK1RlRwWWpTt03xCEJxL
-         ZJew==
-X-Gm-Message-State: ANoB5pm584M6h5RegINGwMzZZ8Mfz1w4LGrcqOhSrAMbxn95ySuMO7v/
-        QTAPYVPQTaSTkWHirshOvvAQCQ==
-X-Google-Smtp-Source: AA0mqf6v7YakytNoN0NrAI81R1P8GQ1jxvefsU4UuQfsuRoqiC+9Hy8r1tsShgHTdWQ+OC29fqGWgQ==
-X-Received: by 2002:a05:600c:34cd:b0:3cf:c2a5:5abc with SMTP id d13-20020a05600c34cd00b003cfc2a55abcmr5244101wmq.17.1670594857347;
-        Fri, 09 Dec 2022 06:07:37 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:51db:8fd7:45e0:fe69])
-        by smtp.gmail.com with ESMTPSA id q3-20020a1c4303000000b003cfa81e2eb4sm1869848wma.38.2022.12.09.06.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:07:36 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Fri, 9 Dec 2022 10:05:14 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D591E2189C;
+        Fri,  9 Dec 2022 07:05:12 -0800 (PST)
+X-QQ-mid: bizesmtp89t1670598279tf8ekbj4
+Received: from ubuntu.. ( [111.196.135.79])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 09 Dec 2022 23:04:37 +0800 (CST)
+X-QQ-SSF: 01200000002000B0C000B00A0000000
+X-QQ-FEAT: 7bD38UErqBMse/wQvkTTMEyob1uRl85oGpxpBEZmiEMslPZLCL+kkKP6NtbX2
+        gPc0PSkUeyw56O8ET95uXwx6vMo+BhrnioINwoXo4H2tTnglrQ/7WRNrtlQxK7ZQxSzw4ba
+        ZeYLrpHEC9pG4k7/gbKQgezfWTytqnhFV+jA16UgOb0XV+eGbyAAhyEZQ7gB/3fFm0ivwFx
+        bdP+CFTqDOLadz2kycFslFhdoxQFI4FDYuWQVzMVw3ReGwgKnFOt8f3+eihWRjuFqXfIje2
+        KdVb9RsMmhoL4ikneZlRSDmfernerWgzDol1vR6cutPf4eSN8cTqRMCFNRjhWwlE0OvFo4z
+        hbLJM6xeg60PoRG+FB96PPSALEiAg==
+X-QQ-GoodBg: 0
+From:   Bin Meng <bmeng@tinylab.org>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 2/2] tty: serial: qcom-geni-serial: use devres for uart port management
-Date:   Fri,  9 Dec 2022 15:07:31 +0100
-Message-Id: <20221209140731.573503-3-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221209140731.573503-1-brgl@bgdev.pl>
-References: <20221209140731.573503-1-brgl@bgdev.pl>
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/3] serial: Add RISC-V support to the earlycon semihost driver
+Date:   Fri,  9 Dec 2022 23:04:34 +0800
+Message-Id: <20221209150437.795918-1-bmeng@tinylab.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Shrink and simplify the probe() and remove() code by using the managed
-variant of uart_add_one_port().
+RISC-V semihosting spec [1] is built on top of the existing Arm one;
+we can add RISC-V earlycon semihost driver easily.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/tty/serial/qcom_geni_serial.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+This series refactors the existing driver a little bit, to move smh_putc()
+variants in respective arch's semihost.h, then we can implement RISC-V's
+version in the riscv arch directory.
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 83b66b73303a..16532cb64465 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1469,7 +1469,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, port);
- 	port->handle_rx = console ? handle_rx_console : handle_rx_uart;
- 
--	ret = uart_add_one_port(drv, uport);
-+	ret = devm_uart_add_one_port(&pdev->dev, drv, uport);
- 	if (ret)
- 		return ret;
- 
-@@ -1478,7 +1478,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 			IRQF_TRIGGER_HIGH, port->name, uport);
- 	if (ret) {
- 		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
--		uart_remove_one_port(drv, uport);
- 		return ret;
- 	}
- 
-@@ -1495,7 +1494,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 						port->wakeup_irq);
- 		if (ret) {
- 			device_init_wakeup(&pdev->dev, false);
--			uart_remove_one_port(drv, uport);
- 			return ret;
- 		}
- 	}
-@@ -1505,12 +1503,8 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 
- static int qcom_geni_serial_remove(struct platform_device *pdev)
- {
--	struct qcom_geni_serial_port *port = platform_get_drvdata(pdev);
--	struct uart_driver *drv = port->private_data.drv;
--
- 	dev_pm_clear_wake_irq(&pdev->dev);
- 	device_init_wakeup(&pdev->dev, false);
--	uart_remove_one_port(drv, &port->uport);
- 
- 	return 0;
- }
+Link: https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semihosting-spec.adoc [1]
+
+Changes in v3:
+- add #ifdef in the header to prevent from multiple inclusion
+- add forward-declare struct uart_port
+- add a Link tag in the commit message
+
+Changes in v2:
+- new patch: "serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h"
+- Move the RISC-V implementation to semihost.h
+
+Bin Meng (3):
+  serial: earlycon-arm-semihost: Move smh_putc() variants in respective
+    arch's semihost.h
+  riscv: Implement semihost.h for earlycon semihost driver
+  serial: Rename earlycon semihost driver
+
+ arch/arm/include/asm/semihost.h               | 30 +++++++++++++++++++
+ arch/arm64/include/asm/semihost.h             | 24 +++++++++++++++
+ arch/riscv/include/asm/semihost.h             | 26 ++++++++++++++++
+ drivers/tty/serial/Kconfig                    | 14 ++++-----
+ drivers/tty/serial/Makefile                   |  2 +-
+ ...con-arm-semihost.c => earlycon-semihost.c} | 25 +---------------
+ 6 files changed, 89 insertions(+), 32 deletions(-)
+ create mode 100644 arch/arm/include/asm/semihost.h
+ create mode 100644 arch/arm64/include/asm/semihost.h
+ create mode 100644 arch/riscv/include/asm/semihost.h
+ rename drivers/tty/serial/{earlycon-arm-semihost.c => earlycon-semihost.c} (57%)
+
 -- 
-2.37.2
+2.34.1
 
