@@ -2,110 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1276A65D70C
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Jan 2023 16:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1457665D738
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Jan 2023 16:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239478AbjADPRC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Jan 2023 10:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S230192AbjADPZn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Jan 2023 10:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239613AbjADPQx (ORCPT
+        with ESMTP id S229499AbjADPZm (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Jan 2023 10:16:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E61A233;
-        Wed,  4 Jan 2023 07:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672845412; x=1704381412;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JjjW6dFqxPvZpMJtTa0hvemI7uFSxCRu5bewJdPlkFg=;
-  b=QBYZIFKCp4RDHI2A6skJ/DtzCZHQj9LMjTquXytZElrH7U+3pXATraT/
-   RHxXRv3sRv3stjRNhYcx+TIw3zbVgftn74S/vrYUx4mUgyX2FuNPmp63Y
-   A4dBssryqVjvLwqVCzpqUxjaBf2GSLDk6Nk5wUgnynhpus4gGj4xsXqyf
-   afLz4IywQvKoJJbmbPJvunaeRIYjnL9GfT71Mcyugx9eUgrp6dU9o171N
-   q8wNALk5Qhgm2JZ9+MyYRHfH6KOtCwW06jct74FXZOA/NpriYnCoQxz1D
-   2x7Aar09FhptoTCUGRD5IiwlI22GJJxeViXy34c1Yzz29TZKLeS8+jmyb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301644574"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="301644574"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 07:16:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="762700952"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="762700952"
-Received: from msvoboda-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.48.119])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 07:16:29 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 10/10] tty: Return bool from tty_termios_hw_change()
-Date:   Wed,  4 Jan 2023 17:15:31 +0200
-Message-Id: <20230104151531.73994-11-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
-References: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 Jan 2023 10:25:42 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 699CF2AF4;
+        Wed,  4 Jan 2023 07:25:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=xHX97vFou7CZnafP0E
+        zQLsxSqdqEy43T2DctXuby9FQ=; b=JQ2YOVyQoEAK/rmg8+RQPGkMHF0KuzkKI/
+        MTcJ+75oDWfAzuOrL9kYHSCYsplXO+Tkoh+UOb86CjVEEPwCXJ/DGcqWlRJYgbTD
+        fRG+R1yyPdn8xKCHZ/qp6H6uZ4c1xk2QijmPnAxDzLkkIxFHC7EK6Ofs3UbmXX1R
+        QxCqv5O4Y=
+Received: from localhost.localdomain (unknown [36.4.209.174])
+        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wBHo5g9mrVjhjNwAA--.49442S4;
+        Wed, 04 Jan 2023 23:25:16 +0800 (CST)
+From:   lizhe <sensor1010@163.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lizhe <sensor1010@163.com>
+Subject: [PATCH v4] serial: linflexuart: remove redundant uart type assignment
+Date:   Wed,  4 Jan 2023 07:24:44 -0800
+Message-Id: <20230104152444.3407-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: _____wBHo5g9mrVjhjNwAA--.49442S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw4rAw47XF48Cr17XFy3XFb_yoWfGrX_ur
+        1DA34xWr10kFWakFnrtFyYkr9agFs5ZF48JF10qa9aqw4DZw4rXryxXrZrurnrJw48Zry7
+        G3y7Jr12yrnrXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRM5l8UUUUUU==
+X-Originating-IP: [36.4.209.174]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBogPsq1aEHDuKVAAAsN
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Change tty_termios_hw_change() return to bool and convert it to
-a or-chained return statement.
+in linflex_config_port() the member variable type will be
+assigned again. see linflex_connfig_port()
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: lizhe <sensor1010@163.com>
+Link: https://lore.kernel.org/all/20230103170948.3777-1-sensor1010@163.com/
 ---
- drivers/tty/tty_ioctl.c | 10 ++++------
- include/linux/tty.h     |  2 +-
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ drivers/tty/serial/fsl_linflexuart.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index ce511557b98b..4a80fabf6d5e 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -270,13 +270,11 @@ EXPORT_SYMBOL(tty_termios_copy_hw);
-  *	between the two termios structures, or a speed change is needed.
-  */
+diff --git a/drivers/tty/serial/fsl_linflexuart.c b/drivers/tty/serial/fsl_linflexuart.c
+index 6fc21b6684e6..34400cc6ac7f 100644
+--- a/drivers/tty/serial/fsl_linflexuart.c
++++ b/drivers/tty/serial/fsl_linflexuart.c
+@@ -837,7 +837,6 @@ static int linflex_probe(struct platform_device *pdev)
+ 		return PTR_ERR(sport->membase);
  
--int tty_termios_hw_change(const struct ktermios *a, const struct ktermios *b)
-+bool tty_termios_hw_change(const struct ktermios *a, const struct ktermios *b)
- {
--	if (a->c_ispeed != b->c_ispeed || a->c_ospeed != b->c_ospeed)
--		return 1;
--	if ((a->c_cflag ^ b->c_cflag) & ~(HUPCL | CREAD | CLOCAL))
--		return 1;
--	return 0;
-+	return a->c_ispeed != b->c_ispeed ||
-+	       a->c_ospeed != b->c_ospeed ||
-+	       (a->c_cflag ^ b->c_cflag) & ~(HUPCL | CREAD | CLOCAL);
- }
- EXPORT_SYMBOL(tty_termios_hw_change);
- 
-diff --git a/include/linux/tty.h b/include/linux/tty.h
-index 730c3301d710..093935e97f42 100644
---- a/include/linux/tty.h
-+++ b/include/linux/tty.h
-@@ -453,7 +453,7 @@ unsigned char tty_get_char_size(unsigned int cflag);
- unsigned char tty_get_frame_size(unsigned int cflag);
- 
- void tty_termios_copy_hw(struct ktermios *new, const struct ktermios *old);
--int tty_termios_hw_change(const struct ktermios *a, const struct ktermios *b);
-+bool tty_termios_hw_change(const struct ktermios *a, const struct ktermios *b);
- int tty_set_termios(struct tty_struct *tty, struct ktermios *kt);
- 
- void tty_wakeup(struct tty_struct *tty);
+ 	sport->dev = &pdev->dev;
+-	sport->type = PORT_LINFLEXUART;
+ 	sport->iotype = UPIO_MEM;
+ 	sport->irq = platform_get_irq(pdev, 0);
+ 	sport->ops = &linflex_pops;
 -- 
-2.30.2
+2.17.1
 
