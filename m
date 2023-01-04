@@ -2,85 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA33765CEF4
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Jan 2023 10:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A24D65D362
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Jan 2023 13:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbjADJCj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Jan 2023 04:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
+        id S239323AbjADMzh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 4 Jan 2023 07:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbjADJBk (ORCPT
+        with ESMTP id S237408AbjADMzF (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Jan 2023 04:01:40 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7E513F94;
-        Wed,  4 Jan 2023 01:00:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672822851; bh=LLQeTnvNuZCdPg+E7Hbr+aQYgS8XCWQxD7iW+7QqbBY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=mf1vJ+9V0G/y85PujC+0RQeuHmVEKg0KbhD2ZRzibsziGPrJhkp77Ker8evTtf3T9
-         rhNjx8Ei/9a4A0oR61B/Hi2oUGy7pdNHM06xJ2qVClIemBlerJjiCu5Vb0WkXZPUqU
-         xJ0ocnKL6aQnJXISzbxHPjYwZGEdVNo7RS10BK7U=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed,  4 Jan 2023 10:00:51 +0100 (CET)
-X-EA-Auth: /EDdEHgOuYMl2jkDd/7fB7flqOZUzBVHc0UeQJUETcM2XHO9lRxSq5Qo1WuH0wT4Lqgum8EJLwjsiulvrm0y8bRAPX7Ra2Sl
-Date:   Wed, 4 Jan 2023 14:30:44 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH v4 2/2] tty: serial: dz: convert atomic_* to refcount_*
- APIs for irq_guard
-Message-ID: <Y7VAPI7Y5tfVUdvR@qemulion>
-References: <cover.1671898144.git.drv@mailo.com>
- <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
- <3c4e744f-c313-e195-af93-a22382c81bb6@kernel.org>
- <Y7P+zZEF09YWs5yW@qemulion>
- <Y7U4wiLM/z+H/rOc@kroah.com>
+        Wed, 4 Jan 2023 07:55:05 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EA43219E
+        for <linux-serial@vger.kernel.org>; Wed,  4 Jan 2023 04:54:53 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id pe2so16230725qkn.1
+        for <linux-serial@vger.kernel.org>; Wed, 04 Jan 2023 04:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
+         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
+         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
+         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
+         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
+         yzWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=d8baNCcj46YgpgvCRhsSNK8l2XYum94xGp3PN8LMx/G1Lfmp78BUaxAW/0x/iC7e2W
+         +phX+xeVSmzBqcb0V4tiG4uYtkyr9wZJ5fWtg/XFzup3oCSZxPKNoMW9pssP5GbZmxPv
+         fGu2EBDDTYYx6y2TIj7wJWZP8bvnnu0PKgY+4K4p2Hdanw65/sj49tpczn8vafNF3Vpj
+         lcHvo32fC38crTEUlk7WRjhOcVetCgt3wMJKTJSCEbr+ZzSg4Pe1SgvZ+U12sYVZbZ9L
+         s8A/EF5dn7zL9Yh3+41jg+EdLpV4DdTGxJ+5vQCqX996JwslPc0icB8kmJ9zf60P+P3l
+         +bkA==
+X-Gm-Message-State: AFqh2kofG6dmpjbhb6FWBExEJMYSOEK43muMFTV2JOwK5fF6t3rtXUN4
+        QQB3xwWuE1nA0CHaud0PnnWoLpoDrPS0MixfedUfnMsAlVY=
+X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
+X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
+ h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
+ Jan 2023 04:54:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7U4wiLM/z+H/rOc@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
+ 04:54:41 -0800 (PST)
+Reply-To: Gregdenzell9@gmail.com
+From:   Greg Denzell <mzsophie@gmail.com>
+Date:   Wed, 4 Jan 2023 12:54:41 +0000
+Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Jan 04, 2023 at 09:28:50AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Jan 03, 2023 at 03:39:17PM +0530, Deepak R Varma wrote:
-> > On Tue, Jan 03, 2023 at 10:00:48AM +0100, Jiri Slaby wrote:
-> > > On 26. 12. 22, 7:21, Deepak R Varma wrote:
-> > > > +	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
-> > >
-> > > How is this related to the above described change?
-> >
-> > No, it is not. My apologies. I must have joined the lines for improved readability
-> > and forgot to revert. I will restore this in next revision based on the feedback
-> > on the other patch of this series. OR I can include this change in the current
-> > change log as a "while at it..." statement. Would you advise me?
->
-> NEVER have a "while at it..." change as part of a commit unless it is
-> relevant to the main change being made.  You know better...
+Seasons Greetings!
 
-Sounds very good. Thank you for the advise. I will revert the change in the next
-revision.
-
-Thank you,
-./drv
-
->
-> thanks,
->
-> greg k-h
-
-
+This will remind you again that I have not yet received your reply to
+my last message to you.
