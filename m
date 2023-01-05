@@ -2,331 +2,333 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB0365E0DC
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Jan 2023 00:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33B265E55A
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Jan 2023 07:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbjADXWd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 4 Jan 2023 18:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S230189AbjAEGDQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Jan 2023 01:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbjADXW1 (ORCPT
+        with ESMTP id S230340AbjAEGDQ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 4 Jan 2023 18:22:27 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D99D3FA23;
-        Wed,  4 Jan 2023 15:22:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672874546; x=1704410546;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YbK0ZFebc3C1aEHFkh2yWBK0gLY996ZLxM87h2OZEsg=;
-  b=nQQP/vQcTGXWtdNygpJpuYPRWG8OVwTLgo8096aoBgQTlu7te0nMf17h
-   ztmzZn1NUrYhAwL/7K+aMs/jSc6GehCo+rFiIAztXtHoliaB7rLjPz5p8
-   i/5rGPtNTbAFbJfyCrFt6lOqSAcaul1G5lzttkHq2SwkU0kRYrtPk/1y2
-   0V9iA1ecUVqhsDnrZ53vHTrDcvMhGfvXybakrLf1jcezEoTRkyYUOuQ3v
-   4RVDXgcSz9zUAi/pPQnQuWkaIhnAkA3aqqqZYdPP2ZDZ2W9pHuWXWzvN3
-   3LQl5Tt0oE6R1c0EzpiAeU0xwOJYiGON4UAm0TPguIOVjLUE1CJEQje2z
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="301762156"
-X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="301762156"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:22:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="900739382"
-X-IronPort-AV: E=Sophos;i="5.96,301,1665471600"; 
-   d="scan'208";a="900739382"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 15:22:24 -0800
-From:   matthew.gerlach@linux.intel.com
-To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com, bagasdotme@gmail.com
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v9 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
-Date:   Wed,  4 Jan 2023 15:22:53 -0800
-Message-Id: <20230104232253.24743-5-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230104232253.24743-1-matthew.gerlach@linux.intel.com>
-References: <20230104232253.24743-1-matthew.gerlach@linux.intel.com>
+        Thu, 5 Jan 2023 01:03:16 -0500
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC77351334;
+        Wed,  4 Jan 2023 22:03:11 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id m7so682449wrn.10;
+        Wed, 04 Jan 2023 22:03:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bEzpVC3EeI3l8U0Cs59v9D4ORssORPtMVrh6A+hHqD8=;
+        b=UN8aRaQTYD0gF3pJjwv1rAi3ku5i6XaplYRfdEahqjKUKIH534pYNojCl+Fr4+79lB
+         gDDXNJEVVwa5InWjuOYP+PlctVMllMvYBz1k5y+tvphZKqqfXXYEn6AJ2qMYRdPWCOMc
+         BA7Lu5wx2w5PRUkfYAlY5e/xr6hh35OpOQ/fOxOK9aOadHmChdll6pkOHPhxi/W2j+3F
+         ube+3xjYZJjaQ3vAu9AVF2QVowWDvf4PGGQsRC/aXZ7qOr2p8AuQy+JrQgfN6esbj2wG
+         gfIOPrvdm0s3h3FmZLj2aJI50oVOtIJKsv5peC2z4HhRaeeLYnGuPvFXtrGXjNJVOkJB
+         e7og==
+X-Gm-Message-State: AFqh2kq20X7Rmw06TbQpiyJ5hQzvvWVofP5G3414ZEUT5Q1bnRAG00WS
+        y+zC6uiheO5sgQhcC9fCPPs=
+X-Google-Smtp-Source: AMrXdXtYSS045iYCmsuam/MFCvIwTCDCWKpw4YN9wPe+Q9TkwRxS0+Nw4ah9Gwg0+9Nnpkbd5s52cw==
+X-Received: by 2002:adf:e103:0:b0:26a:6e7d:5782 with SMTP id t3-20020adfe103000000b0026a6e7d5782mr30616611wrz.35.1672898590071;
+        Wed, 04 Jan 2023 22:03:10 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id d11-20020adffd8b000000b00236545edc91sm35375917wrr.76.2023.01.04.22.03.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Jan 2023 22:03:09 -0800 (PST)
+Message-ID: <ea88d9a2-9bf3-0ced-bc9c-c5bdbeec1517@kernel.org>
+Date:   Thu, 5 Jan 2023 07:03:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org
+References: <20230104151531.73994-1-ilpo.jarvinen@linux.intel.com>
+ <20230104151531.73994-2-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 01/10] tty: Cleanup tty_port_set_initialized() bool
+ parameter
+In-Reply-To: <20230104151531.73994-2-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 04. 01. 23, 16:15, Ilpo Järvinen wrote:
+> Make callers pass true/false consistently for bool val.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Add a Device Feature List (DFL) bus driver for the Altera
-16550 implementation of UART.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v9: add Rb Andy Shevchenko
-    move dfh_get_u64_param_vals to static version of dfh_get_u64_param_val
+> ---
+>   drivers/char/pcmcia/synclink_cs.c | 4 ++--
+>   drivers/ipack/devices/ipoctal.c   | 4 ++--
+>   drivers/s390/char/con3215.c       | 4 ++--
+>   drivers/tty/amiserial.c           | 4 ++--
+>   drivers/tty/moxa.c                | 2 +-
+>   drivers/tty/mxser.c               | 2 +-
+>   drivers/tty/n_gsm.c               | 4 ++--
+>   drivers/tty/serial/serial_core.c  | 6 +++---
+>   drivers/tty/synclink_gt.c         | 4 ++--
+>   drivers/tty/tty_port.c            | 4 ++--
+>   drivers/usb/serial/console.c      | 2 +-
+>   11 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+> index b2735be81ab2..baa46e8a094b 100644
+> --- a/drivers/char/pcmcia/synclink_cs.c
+> +++ b/drivers/char/pcmcia/synclink_cs.c
+> @@ -1309,7 +1309,7 @@ static int startup(MGSLPC_INFO * info, struct tty_struct *tty)
+>   	if (tty)
+>   		clear_bit(TTY_IO_ERROR, &tty->flags);
+>   
+> -	tty_port_set_initialized(&info->port, 1);
+> +	tty_port_set_initialized(&info->port, true);
+>   
+>   	return 0;
+>   }
+> @@ -1359,7 +1359,7 @@ static void shutdown(MGSLPC_INFO * info, struct tty_struct *tty)
+>   	if (tty)
+>   		set_bit(TTY_IO_ERROR, &tty->flags);
+>   
+> -	tty_port_set_initialized(&info->port, 0);
+> +	tty_port_set_initialized(&info->port, false);
+>   }
+>   
+>   static void mgslpc_program_hw(MGSLPC_INFO *info, struct tty_struct *tty)
+> diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
+> index fc00274070b6..103fce0c49e6 100644
+> --- a/drivers/ipack/devices/ipoctal.c
+> +++ b/drivers/ipack/devices/ipoctal.c
+> @@ -647,7 +647,7 @@ static void ipoctal_hangup(struct tty_struct *tty)
+>   	tty_port_hangup(&channel->tty_port);
+>   
+>   	ipoctal_reset_channel(channel);
+> -	tty_port_set_initialized(&channel->tty_port, 0);
+> +	tty_port_set_initialized(&channel->tty_port, false);
+>   	wake_up_interruptible(&channel->tty_port.open_wait);
+>   }
+>   
+> @@ -659,7 +659,7 @@ static void ipoctal_shutdown(struct tty_struct *tty)
+>   		return;
+>   
+>   	ipoctal_reset_channel(channel);
+> -	tty_port_set_initialized(&channel->tty_port, 0);
+> +	tty_port_set_initialized(&channel->tty_port, false);
+>   }
+>   
+>   static void ipoctal_cleanup(struct tty_struct *tty)
+> diff --git a/drivers/s390/char/con3215.c b/drivers/s390/char/con3215.c
+> index 72ba83c1bc79..0b05cd76b7d0 100644
+> --- a/drivers/s390/char/con3215.c
+> +++ b/drivers/s390/char/con3215.c
+> @@ -629,7 +629,7 @@ static int raw3215_startup(struct raw3215_info *raw)
+>   	if (tty_port_initialized(&raw->port))
+>   		return 0;
+>   	raw->line_pos = 0;
+> -	tty_port_set_initialized(&raw->port, 1);
+> +	tty_port_set_initialized(&raw->port, true);
+>   	spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+>   	raw3215_try_io(raw);
+>   	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+> @@ -659,7 +659,7 @@ static void raw3215_shutdown(struct raw3215_info *raw)
+>   		spin_lock_irqsave(get_ccwdev_lock(raw->cdev), flags);
+>   		remove_wait_queue(&raw->empty_wait, &wait);
+>   		set_current_state(TASK_RUNNING);
+> -		tty_port_set_initialized(&raw->port, 1);
+> +		tty_port_set_initialized(&raw->port, true);
+>   	}
+>   	spin_unlock_irqrestore(get_ccwdev_lock(raw->cdev), flags);
+>   }
+> diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
+> index f52266766df9..f8cdce1626cb 100644
+> --- a/drivers/tty/amiserial.c
+> +++ b/drivers/tty/amiserial.c
+> @@ -502,7 +502,7 @@ static int startup(struct tty_struct *tty, struct serial_state *info)
+>   	 */
+>   	change_speed(tty, info, NULL);
+>   
+> -	tty_port_set_initialized(port, 1);
+> +	tty_port_set_initialized(port, true);
+>   	local_irq_restore(flags);
+>   	return 0;
+>   
+> @@ -556,7 +556,7 @@ static void shutdown(struct tty_struct *tty, struct serial_state *info)
+>   
+>   	set_bit(TTY_IO_ERROR, &tty->flags);
+>   
+> -	tty_port_set_initialized(&info->tport, 0);
+> +	tty_port_set_initialized(&info->tport, false);
+>   	local_irq_restore(flags);
+>   }
+>   
+> diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+> index 35b6fddf0341..bc474f3c3f8f 100644
+> --- a/drivers/tty/moxa.c
+> +++ b/drivers/tty/moxa.c
+> @@ -1484,7 +1484,7 @@ static int moxa_open(struct tty_struct *tty, struct file *filp)
+>   		MoxaPortLineCtrl(ch, 1, 1);
+>   		MoxaPortEnable(ch);
+>   		MoxaSetFifo(ch, ch->type == PORT_16550A);
+> -		tty_port_set_initialized(&ch->port, 1);
+> +		tty_port_set_initialized(&ch->port, true);
+>   	}
+>   	mutex_unlock(&ch->port.mutex);
+>   	mutex_unlock(&moxa_openlock);
+> diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+> index 2436e0b10f9a..2926a831727d 100644
+> --- a/drivers/tty/mxser.c
+> +++ b/drivers/tty/mxser.c
+> @@ -1063,7 +1063,7 @@ static int mxser_set_serial_info(struct tty_struct *tty,
+>   	} else {
+>   		retval = mxser_activate(port, tty);
+>   		if (retval == 0)
+> -			tty_port_set_initialized(port, 1);
+> +			tty_port_set_initialized(port, true);
+>   	}
+>   	mutex_unlock(&port->mutex);
+>   	return retval;
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index daf12132deb1..631539c17d85 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -2059,7 +2059,7 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+>   		tty_port_tty_hangup(&dlci->port, false);
+>   		gsm_dlci_clear_queues(dlci->gsm, dlci);
+>   		/* Ensure that gsmtty_open() can return. */
+> -		tty_port_set_initialized(&dlci->port, 0);
+> +		tty_port_set_initialized(&dlci->port, false);
+>   		wake_up_interruptible(&dlci->port.open_wait);
+>   	} else
+>   		dlci->gsm->dead = true;
+> @@ -3880,7 +3880,7 @@ static int gsmtty_open(struct tty_struct *tty, struct file *filp)
+>   	dlci->modem_rx = 0;
+>   	/* We could in theory open and close before we wait - eg if we get
+>   	   a DM straight back. This is ok as that will have caused a hangup */
+> -	tty_port_set_initialized(port, 1);
+> +	tty_port_set_initialized(port, true);
+>   	/* Start sending off SABM messages */
+>   	if (gsm->initiator)
+>   		gsm_dlci_begin_open(dlci);
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index b9fbbee598b8..e049c760b738 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -290,7 +290,7 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
+>   		set_bit(TTY_IO_ERROR, &tty->flags);
+>   
+>   	if (tty_port_initialized(port)) {
+> -		tty_port_set_initialized(port, 0);
+> +		tty_port_set_initialized(port, false);
+>   
+>   		/*
+>   		 * Turn off DTR and RTS early.
+> @@ -2347,7 +2347,7 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
+>   		unsigned int mctrl;
+>   
+>   		tty_port_set_suspended(port, 1);
+> -		tty_port_set_initialized(port, 0);
+> +		tty_port_set_initialized(port, false);
+>   
+>   		spin_lock_irq(&uport->lock);
+>   		ops->stop_tx(uport);
+> @@ -2458,7 +2458,7 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+>   					uart_rs485_config(uport);
+>   				ops->start_tx(uport);
+>   				spin_unlock_irq(&uport->lock);
+> -				tty_port_set_initialized(port, 1);
+> +				tty_port_set_initialized(port, true);
+>   			} else {
+>   				/*
+>   				 * Failed to resume - maybe hardware went away?
+> diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+> index 72b76cdde534..2b96bf0ecafb 100644
+> --- a/drivers/tty/synclink_gt.c
+> +++ b/drivers/tty/synclink_gt.c
+> @@ -2354,7 +2354,7 @@ static int startup(struct slgt_info *info)
+>   	if (info->port.tty)
+>   		clear_bit(TTY_IO_ERROR, &info->port.tty->flags);
+>   
+> -	tty_port_set_initialized(&info->port, 1);
+> +	tty_port_set_initialized(&info->port, true);
+>   
+>   	return 0;
+>   }
+> @@ -2401,7 +2401,7 @@ static void shutdown(struct slgt_info *info)
+>   	if (info->port.tty)
+>   		set_bit(TTY_IO_ERROR, &info->port.tty->flags);
+>   
+> -	tty_port_set_initialized(&info->port, 0);
+> +	tty_port_set_initialized(&info->port, false);
+>   }
+>   
+>   static void program_hw(struct slgt_info *info)
+> diff --git a/drivers/tty/tty_port.c b/drivers/tty/tty_port.c
+> index dce08a6d7b5e..0c00d5bd6c88 100644
+> --- a/drivers/tty/tty_port.c
+> +++ b/drivers/tty/tty_port.c
+> @@ -367,7 +367,7 @@ static void tty_port_shutdown(struct tty_port *port, struct tty_struct *tty)
+>   		goto out;
+>   
+>   	if (tty_port_initialized(port)) {
+> -		tty_port_set_initialized(port, 0);
+> +		tty_port_set_initialized(port, false);
+>   		/*
+>   		 * Drop DTR/RTS if HUPCL is set. This causes any attached
+>   		 * modem to hang up the line.
+> @@ -788,7 +788,7 @@ int tty_port_open(struct tty_port *port, struct tty_struct *tty,
+>   				return retval;
+>   			}
+>   		}
+> -		tty_port_set_initialized(port, 1);
+> +		tty_port_set_initialized(port, true);
+>   	}
+>   	mutex_unlock(&port->mutex);
+>   	return tty_port_block_til_ready(port, tty, filp);
+> diff --git a/drivers/usb/serial/console.c b/drivers/usb/serial/console.c
+> index da19a5fa414f..c3ea3a46ed76 100644
+> --- a/drivers/usb/serial/console.c
+> +++ b/drivers/usb/serial/console.c
+> @@ -169,7 +169,7 @@ static int usb_console_setup(struct console *co, char *options)
+>   			tty_save_termios(tty);
+>   			tty_kref_put(tty);
+>   		}
+> -		tty_port_set_initialized(&port->port, 1);
+> +		tty_port_set_initialized(&port->port, true);
+>   	}
+>   	/* Now that any required fake tty operations are completed restore
+>   	 * the tty port count */
 
-v8: use dfh_get_u64_param_vals()
-
-v7: no change
-
-v6: move driver specific parameter definitions to limit scope
-
-v5: removed unneeded blank line
-    removed unneeded includes
-    included device.h and types.h
-    removed unneeded local variable
-    remove calls to dev_dbg
-    memset -> { }
-    remove space after period
-    explicitly include used headers
-    remove redundant Inc from Copyright
-    fix format specifier
-
-v4: use dev_err_probe() everywhere that is appropriate
-    clean up noise
-    change error messages to use the word, unsupported
-    tried again to sort Makefile and KConfig better
-    reorder probe function for easier error handling
-    use new dfh_find_param API
-
-v3: use passed in location of registers
-    use cleaned up functions for parsing parameters
-
-v2: clean up error messages
-    alphabetize header files
-    fix 'missing prototype' error by making function static
-    tried to sort Makefile and Kconfig better
----
- drivers/tty/serial/8250/8250_dfl.c | 167 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |  12 +++
- drivers/tty/serial/8250/Makefile   |   1 +
- 3 files changed, 180 insertions(+)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-
-diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-new file mode 100644
-index 000000000000..fe3a4f7fc0e6
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_dfl.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for FPGA UART
-+ *
-+ * Copyright (C) 2022 Intel Corporation.
-+ *
-+ * Authors:
-+ *   Ananda Ravuri <ananda.ravuri@intel.com>
-+ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/dfl.h>
-+#include <linux/errno.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/types.h>
-+
-+#include <linux/serial.h>
-+#include <linux/serial_8250.h>
-+
-+#define DFHv1_PARAM_ID_CLK_FRQ    0x2
-+#define DFHv1_PARAM_ID_FIFO_LEN   0x3
-+
-+#define DFHv1_PARAM_ID_REG_LAYOUT	0x4
-+#define DFHv1_PARAM_REG_LAYOUT_WIDTH	GENMASK_ULL(63, 32)
-+#define DFHv1_PARAM_REG_LAYOUT_SHIFT	GENMASK_ULL(31, 0)
-+
-+struct dfl_uart {
-+	int line;
-+};
-+
-+static int dfh_get_u64_param_val(struct dfl_device *dfl_dev, int param_id, u64 *pval)
-+{
-+	size_t psize;
-+	u64 *p;
-+
-+	p = dfh_find_param(dfl_dev, param_id, &psize);
-+	if (IS_ERR(p))
-+		return PTR_ERR(p);
-+
-+	if (psize != 1)
-+		return -EINVAL;
-+
-+	*pval = *p;
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	u64 fifo_len, clk_freq, reg_layout;
-+	u32 reg_width;
-+	int ret;
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ, &clk_freq);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing CLK_FRQ param\n");
-+
-+	uart->port.uartclk = clk_freq;
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN, &fifo_len);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing FIFO_LEN param\n");
-+
-+	switch (fifo_len) {
-+	case 32:
-+		uart->port.type = PORT_ALTR_16550_F32;
-+		break;
-+
-+	case 64:
-+		uart->port.type = PORT_ALTR_16550_F64;
-+		break;
-+
-+	case 128:
-+		uart->port.type = PORT_ALTR_16550_F128;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
-+	}
-+
-+	ret = dfh_get_u64_param_val(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT, &reg_layout);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "missing REG_LAYOUT param\n");
-+
-+	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, reg_layout);
-+	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, reg_layout);
-+	switch (reg_width) {
-+	case 4:
-+		uart->port.iotype = UPIO_MEM32;
-+		break;
-+
-+	case 2:
-+		uart->port.iotype = UPIO_MEM16;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
-+
-+	}
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_probe(struct dfl_device *dfl_dev)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	struct uart_8250_port uart = { };
-+	struct dfl_uart *dfluart;
-+	int ret;
-+
-+	uart.port.flags = UPF_IOREMAP;
-+	uart.port.mapbase = dfl_dev->mmio_res.start;
-+	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
-+
-+	ret = dfl_uart_get_params(dfl_dev, &uart);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-+
-+	if (dfl_dev->num_irqs == 1)
-+		uart.port.irq = dfl_dev->irqs[0];
-+
-+	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-+	if (!dfluart)
-+		return -ENOMEM;
-+
-+	dfluart->line = serial8250_register_8250_port(&uart);
-+	if (dfluart->line < 0)
-+		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-+
-+	dev_set_drvdata(dev, dfluart);
-+
-+	return 0;
-+}
-+
-+static void dfl_uart_remove(struct dfl_device *dfl_dev)
-+{
-+	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-+
-+	serial8250_unregister_port(dfluart->line);
-+}
-+
-+#define FME_FEATURE_ID_UART 0x24
-+
-+static const struct dfl_device_id dfl_uart_ids[] = {
-+	{ FME_ID, FME_FEATURE_ID_UART },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-+
-+static struct dfl_driver dfl_uart_driver = {
-+	.drv = {
-+		.name = "dfl-uart",
-+	},
-+	.id_table = dfl_uart_ids,
-+	.probe = dfl_uart_probe,
-+	.remove = dfl_uart_remove,
-+};
-+module_dfl_driver(dfl_uart_driver);
-+
-+MODULE_DESCRIPTION("DFL Intel UART driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index b0f62345bc84..08af2acd4645 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
- 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
- 	  enables support for ACPI enumeration.
- 
-+config SERIAL_8250_DFL
-+	tristate "DFL bus driver for Altera 16550 UART"
-+	depends on SERIAL_8250 && FPGA_DFL
-+	help
-+	  This option enables support for a Device Feature List (DFL) bus
-+	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
-+	  can be instantiated in a FPGA and then be discovered during
-+	  enumeration of the DFL bus.
-+
-+	  To compile this driver as a module, chose M here: the
-+	  module will be called 8250_dfl.
-+
- config SERIAL_8250_DW
- 	tristate "Support for Synopsys DesignWare 8250 quirks"
- 	depends on SERIAL_8250
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index 1615bfdde2a0..4e1a32812683 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
- obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
- obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
- obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
-+obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
- obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
- obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
- obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
 -- 
-2.25.1
+js
+suse labs
 
