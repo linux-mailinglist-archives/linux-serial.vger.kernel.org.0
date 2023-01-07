@@ -2,96 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5757265FF37
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Jan 2023 11:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E5F660B3E
+	for <lists+linux-serial@lfdr.de>; Sat,  7 Jan 2023 02:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjAFK42 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 6 Jan 2023 05:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S236762AbjAGBHs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 6 Jan 2023 20:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjAFK40 (ORCPT
+        with ESMTP id S236389AbjAGBHr (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:56:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351DF6B5B4
-        for <linux-serial@vger.kernel.org>; Fri,  6 Jan 2023 02:56:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C797261D7F
-        for <linux-serial@vger.kernel.org>; Fri,  6 Jan 2023 10:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEDBC433D2;
-        Fri,  6 Jan 2023 10:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673002584;
-        bh=nbW5XajoK2QVAl0EVdOaNOkV2Y1wIBpQ9zgctDUR4Qw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gJ/A9EFgN6C5ZcWvpw+6eYLSOs5onyQmxZhit8VHS7NHySUkhhUuOm3V73dloz+/w
-         vKhy3Hlg7nYn+OcBm+PqfrAS4KpLS6Ti2c8KHoFwKb1PcCtIZC8O6ECMz+uGnwXv8l
-         gNWrdIa+T4G7fsmXqQiSv+rKcn0+tuq1b8VWvnPdAP0Wu2RGzhhj0LvL8Mv3yjfXpw
-         aBS3/DS86W08XqhlgMK6n7mqxfAUdGQTPCpPXAmm3MHg3RD2f7A4ReO9/CEHCkMHWc
-         jgGr2SJ6Jgdv5UEYjTDCCNMxEVHwJRgOQE/qWmGH1SrLV7BASJue+wUtUNUaAVZzAc
-         FmO72MEp0bUBQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pDkP0-0001c3-ME; Fri, 06 Jan 2023 11:56:47 +0100
-Date:   Fri, 6 Jan 2023 11:56:46 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-serial@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Erwan Le Ray <erwan.leray@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v3] serial: stm32: Merge hard IRQ and threaded IRQ
- handling into single IRQ handler
-Message-ID: <Y7f+birb2KpTygxI@hovoldconsulting.com>
-References: <20221216115338.7150-1-marex@denx.de>
- <Y6sHr5kuxUoahlzJ@hovoldconsulting.com>
- <a66988fd-af44-63cd-e962-47ffa6205a6a@denx.de>
+        Fri, 6 Jan 2023 20:07:47 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAE3848CA
+        for <linux-serial@vger.kernel.org>; Fri,  6 Jan 2023 17:07:46 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id s66so1836349oib.7
+        for <linux-serial@vger.kernel.org>; Fri, 06 Jan 2023 17:07:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C56Q+YV0i1VwzqpPgsaApjf/2tDIDNvnJyLhwVpmM08=;
+        b=nmsmQMZvdhIgS6ecZLly4Ad7eZ8sM5Lr0ptLXa5TCdPxGsa7ao28nDJNkuukCByZH5
+         mhNyXs3eW1Ca80UK9WA6ojsNf8M50V9R07isr7abNe1V9JqdVigD+67J0fGcu1QptQRp
+         1B/BO7V9i6dzuTLoD8jI1Fs6V209NfyDzVGpLrmDuJw1liwGo8aT/TZAKLBTUg8Ll9iz
+         gg2FQTYQ6e98fsMbLwjU+tM7Ds0SJEbX7s8JnLr/BLVi5aGbBF7Yg3AYMUAyiTUs5IQh
+         egtjsnjyfTCnSUwipndbp/Fkd2WnN21jsUcg6GK1jQ8Co47u+mV+i4kQWRsDdTRXxO4k
+         XntQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C56Q+YV0i1VwzqpPgsaApjf/2tDIDNvnJyLhwVpmM08=;
+        b=xGEuIoJ+pyhWHINdTwTm6C1HZGBKtaOLq7ZyTNgCyGmFg66nEd/OM15bnVLGPQSnR6
+         9YxOO6Pog0WrtGOT3S8tI9CfIylFRBL0GNT+1guE26xIKQ8KuEYlPNAOwqA8Bof/IsFA
+         rTM5EDjoMWeeMXOLLeewo/rxBkRvYk8kyDEBzOJP1CoP/KOR9W4JG3nr7K3nIXLLhqZz
+         mMqrYNjESRZlw9BwQ/6TX7qXvikQ4jY9FZ8ZGA1PNY3DYoaean6YSac1580j2g6v+woj
+         1KBGZUdF3qxrugzPgA2RoxtMmP++1O8n7L5dXD1wDxLwCe2wv4kSihVGwgB6Po4TyF5g
+         fbxA==
+X-Gm-Message-State: AFqh2koo4HCikOScRGK1nP2pkryuR68PTmlTnGgBLoE5h96DXKmcaXBY
+        3qgP6XlQWBajDc8l8+GAuEdpDvzgM1fZyOFuNyg=
+X-Google-Smtp-Source: AMrXdXsRh6PRYoKr0jXpM6mjlzta2om81nvqgw58fUKsI8WKdwiVR5llClso3UyL6VUxKExk0JKBlqTf4VATJIjbX6k=
+X-Received: by 2002:aca:1b0a:0:b0:354:7fcd:4e27 with SMTP id
+ b10-20020aca1b0a000000b003547fcd4e27mr2936955oib.239.1673053666059; Fri, 06
+ Jan 2023 17:07:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a66988fd-af44-63cd-e962-47ffa6205a6a@denx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6808:2387:0:0:0:0 with HTTP; Fri, 6 Jan 2023 17:07:45
+ -0800 (PST)
+Reply-To: jamesaissy13@gmail.com
+From:   James AISSY <samueltia200@gmail.com>
+Date:   Fri, 6 Jan 2023 17:07:45 -0800
+Message-ID: <CAOD2y7nQAbfT-V-Bx9JaeknDim5e7QQ31TiK3Wo8QUvq-CuJqg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 09:46:57PM +0100, Marek Vasut wrote:
-> On 12/27/22 15:56, Johan Hovold wrote:
-> 
-> [...]
-> 
-> >> @@ -793,27 +794,13 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
-> >>   	}
-> >>   
-> >>   	if ((sr & USART_SR_TXE) && !(stm32_port->tx_ch)) {
-> >> -		spin_lock(&port->lock);
-> >> +		spin_lock_irqsave(&port->lock, flags);
-> >>   		stm32_usart_transmit_chars(port);
-> >> -		spin_unlock(&port->lock);
-> >> +		spin_unlock_irqrestore(&port->lock, flags);
-> > 
-> > This is not needed as the handler runs with interrupts disabled.
-> 
-> On SMP system, another thread on another core can call 
-> stm32_usart_transmit_chars() . I don't think removing the locking is 
-> correct ?
+Hello My Dear,
 
-I didn't say that you should remove the locking, which is very much
-needed. There's just no need to disable interrupts in a (non-threaded)
-interrupt handler as that has already been done by IRQ core (and, yes,
-that is also the case with forced threading).
+I hope this message finds you in good Health.
 
-Johan
+My name is Mr. James AISSY. I am looking for a partner who is willing to
+team up with me for potential investment opportunities. I shall provide the
+FUND for the investment, and upon your acknowledgment of receiving this
+Message I will therefore enlighten you with the Full Details of my
+investment proposal.
+
+I'm awaiting your Response.
+
+My regards,
+Mr. James AISSY.
