@@ -2,96 +2,68 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E908666C01
-	for <lists+linux-serial@lfdr.de>; Thu, 12 Jan 2023 09:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B29666D2B
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Jan 2023 09:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239479AbjALICg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 12 Jan 2023 03:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S239643AbjALI6Z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 12 Jan 2023 03:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239507AbjALICO (ORCPT
+        with ESMTP id S239725AbjALI5E (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 12 Jan 2023 03:02:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCB511146;
-        Thu, 12 Jan 2023 00:01:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0C7F61F22;
-        Thu, 12 Jan 2023 08:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCACEC433D2;
-        Thu, 12 Jan 2023 08:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673510516;
-        bh=d2bIAUOlHt7YYiWvk6LzbCqDofUm8lVXEtPYTafVHtY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7bRuzCUVRrHbn+457VVpVSGV8kg2AAgYLhxg0lZ1wjRFbYOXcnwh70JZnwl50PP9
-         QuDtytVkiWHDrK8BwiBQqKcOJEpCvBDIu5dfpQxa9AAywFpJSEwEkhRTu35K8D2u0n
-         eA1AQx9d6p5PcOHzCU49AC0W4CTsttcfnxQRU+nUdjsxt/+WL5RRsdQ0WJmGP+iafR
-         PR3RmYfe4jwzWu9WhDBk/VYBxkuFv+aiUashOOJzNamxYs/PE91Wp/vuktpKPPRUdv
-         Kh2BRCZ25ZNJOppFvrTfllePGsOJXe60IRelR1jPnWt51mkdd5vckHpjjOXxMacGYX
-         wfSbQ4NdQVpTQ==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     Kees Cook <keescook@chromium.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH 11/11] tty: vt: cache row count in con_scroll()
-Date:   Thu, 12 Jan 2023 09:01:36 +0100
-Message-Id: <20230112080136.4929-11-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230112080136.4929-1-jirislaby@kernel.org>
-References: <20230112080136.4929-1-jirislaby@kernel.org>
+        Thu, 12 Jan 2023 03:57:04 -0500
+Received: from mail.glencoeaur.com (mail.glencoeaur.com [217.61.97.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E61750F7A
+        for <linux-serial@vger.kernel.org>; Thu, 12 Jan 2023 00:55:00 -0800 (PST)
+Received: by mail.glencoeaur.com (Postfix, from userid 1001)
+        id 98F3A82022; Thu, 12 Jan 2023 08:35:38 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=glencoeaur.com;
+        s=mail; t=1673512539;
+        bh=2S0GQFScndXkBEK4sqdoOhOYLqsB2sEH8Q5XQfVvKpo=;
+        h=Date:From:To:Subject:From;
+        b=J6h44YW/TbKFOPSo245aafVRGlTiU7by6cG4uGQHVBa3UwKMESAo86Lmg1UP0kI9v
+         u/aLo1l9vNVW9U7CDUyPMiZB9utI8swYeojyxm6DAwDUolA5WVQXIR226EwbWddkRF
+         CGZ3B5nwVXN36kmK48zJcVdl2TX9JZGXaYf6xy7xVNq7mkqPPv4IuHEhvWOY2TxgNV
+         2wzIR79NQ0cw+XAn5QdBwBloc6cAc83sKhCawUVulEjxrz1hUrsi59ajh+NiG+qt9p
+         Ktrrpq36puP1NKY8kb/YQ/oKnd1Er3XJ8nIPq2gyEWt0AuocLR/xD6qgVQNEXoUgM5
+         gcaXH33A0q5RA==
+Received: by mail.glencoeaur.com for <linux-serial@vger.kernel.org>; Thu, 12 Jan 2023 08:35:33 GMT
+Message-ID: <20230112074500-0.1.z.3fla.0.k8ibhbelmi@glencoeaur.com>
+Date:   Thu, 12 Jan 2023 08:35:33 GMT
+From:   "Zbynek Spacek" <zbynek.spacek@glencoeaur.com>
+To:     <linux-serial@vger.kernel.org>
+Subject: Silikonmischungen
+X-Mailer: mail.glencoeaur.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-It's used on few places, so make the code easier to follow by caching
-the subtraction result.
+Good morning,
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
----
- drivers/tty/vt/vt.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+do you need intermediates for processing, plastics (e.g. rubber) or silic=
+one mixtures?
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 165c81211bdc..671304b31f9f 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -561,10 +561,11 @@ static void con_scroll(struct vc_data *vc, unsigned int top,
- 		       unsigned int bottom, enum con_scroll dir,
- 		       unsigned int nr)
- {
-+	unsigned int rows = bottom - top;
- 	u16 *clear, *dst, *src;
- 
- 	if (top + nr >= bottom)
--		nr = bottom - top - 1;
-+		nr = rows - 1;
- 	if (bottom > vc->vc_rows || top >= bottom || nr < 1)
- 		return;
- 
-@@ -577,10 +578,10 @@ static void con_scroll(struct vc_data *vc, unsigned int top,
- 	dst = (u16 *)(vc->vc_origin + vc->vc_size_row * (top + nr));
- 
- 	if (dir == SM_UP) {
--		clear = src + (bottom - top - nr) * vc->vc_cols;
-+		clear = src + (rows - nr) * vc->vc_cols;
- 		swap(src, dst);
- 	}
--	scr_memmovew(dst, src, (bottom - top - nr) * vc->vc_size_row);
-+	scr_memmovew(dst, src, (rows - nr) * vc->vc_size_row);
- 	scr_memsetw(clear, vc->vc_video_erase_char, vc->vc_size_row * nr);
- }
- 
--- 
-2.39.0
+We provide a wide range of silicone rubbers with various properties, sili=
+cone mixtures from renowned manufacturers such as Wacker, Elastosil LR an=
+d dyes, stabilizers, primers and anti-adhesive additives.
 
+We also produce technical silicone compounds with increased resistance to=
+ oils, resistant to high temperatures and water vapor, conductive and man=
+y more.
+
+We provide fast order fulfillment, timely deliveries and cost optimizatio=
+n.
+
+Can I introduce what we can offer you?
+
+
+Best regards
+Zbynek Spacek
