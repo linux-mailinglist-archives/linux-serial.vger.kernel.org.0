@@ -2,51 +2,53 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6C4674BE0
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 06:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8228674C15
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 06:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjATFLr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 20 Jan 2023 00:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
+        id S231335AbjATFXt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 20 Jan 2023 00:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjATFLM (ORCPT
+        with ESMTP id S231337AbjATFXf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:11:12 -0500
+        Fri, 20 Jan 2023 00:23:35 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3C072C14;
-        Thu, 19 Jan 2023 20:59:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4207518D7;
+        Thu, 19 Jan 2023 21:13:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA15B824B4;
-        Thu, 19 Jan 2023 14:52:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C65C433EF;
-        Thu, 19 Jan 2023 14:52:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9937BB82524;
+        Thu, 19 Jan 2023 15:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E37C433EF;
+        Thu, 19 Jan 2023 15:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674139966;
-        bh=pFEkGzZclr313dDw7QOuP7VKAbnZdzWUSenn71Hk3OM=;
+        s=korg; t=1674140665;
+        bh=id1+Re7X1vZT7tf0fhU3RkTT29VB9Fy5VaB/3VxY2c4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lGjAcHMA3ALVP/Ub8bSHSnMxeSb+mrRUeNLQ3ks/BKM3BYvdkxeTiID7Q+T0ihS9F
-         Et0IullpHEj/1/lCzFmzmEGHj1eVINAd2ExZ/4rD4/aqGBGmo89xe5cZlAmcDJQJ/8
-         lUMJaZ4yl+PuT1dqIzpA+u0OqzSHKFCEGR1P9FAg=
-Date:   Thu, 19 Jan 2023 15:52:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Alexey V. Vissarionov" <gremlin@altlinux.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Abraham <thomas.abraham@linaro.org>,
-        Kukjin Kim <kgene.kim@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] serial: samsung: fix buffer size for clk_name
-Message-ID: <Y8lZNi9pYVFkYvh9@kroah.com>
-References: <20230116141658.GC8107@altlinux.org>
+        b=zGy0mfkQ4pC05tDv2oJBgoWZUkSAfQeXr4s6CreswKd7xfsDxUuWuBMf+YCtAr0Oo
+         reUgUPh700pR39JJ1RzyzPRiugZfWArCsDMLUnZwcuecpt79uhSf/2sfWJS4fWy1Gy
+         o0hsg7BapGLADsJMVSHNG/3MLiFz7QJC0miYaXKY=
+Date:   Thu, 19 Jan 2023 16:04:22 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
+        macro@orcam.me.uk, andriy.shevchenko@linux.intel.com,
+        cang1@live.co.uk, colin.i.king@gmail.com,
+        phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com,
+        geert+renesas@glider.be, lukas@wunner.de,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v10 tty-next 0/4] serial: 8250_pci1xxxx: Add driver for
+ the pci1xxxx's quad-uart function
+Message-ID: <Y8lb9utGeeD02JJp@kroah.com>
+References: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116141658.GC8107@altlinux.org>
+In-Reply-To: <20221217191507.2359029-1-kumaravel.thiagarajan@microchip.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,18 +58,29 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 05:16:58PM +0300, Alexey V. Vissarionov wrote:
-> Although very unlikely, the 'clk_num' value may be as big as
-> 2**32 - 1 (uint32_max), so the buffer should have enough
-> space for storing "clk_uart_baud4294967295\0".
-> Also, the numbers in clk_name are expected to be unsigned.
+On Sun, Dec 18, 2022 at 12:45:03AM +0530, Kumaravel Thiagarajan wrote:
+> pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
+> downstream ports. Quad-uart is one of the functions in the multi-function
+> endpoint. This patch adds device driver for the quad-uart function and
+> enumerates between 1 to 4 instances of uarts based on the PCIe subsystem
+> device ID.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> The changes from v1->v2->v3->v4->v5->v6->v7->v8->v9->v10 are mentioned in
+> each patch in the patchset.
 > 
-> Fixes: 5f5a7a5578c58852 ("serial: samsung: switch to clkdev based clock lookup")
+> Thanks to Andy Shevchenko, Ilpo Jarvinen, Chritophe JAILLET, Geert
+> Uytterhoeven, Greg KH, Jiri Slaby for their review comments.
+> 
+> Kumaravel Thiagarajan (4):
+>   serial: 8250_pci: Add serial8250_pci_setup_port definition in
+>     8250_pcilib.c
+>   serial: 8250_pci1xxxx: Add driver for quad-uart support
+>   serial: 8250_pci1xxxx: Add RS485 support to quad-uart driver
+>   serial: 8250_pci1xxxx: Add power management functions to quad-uart
+>     driver
 
-Please fix your scripts to use the proper number of SHA1 digits in a
-Fixes: line as the documentation asks for.
+This doesn't apply to my tree anymore.  Can you rebase it against
+Linus's latest, or linux-next and resend?
 
 thanks,
 
