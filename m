@@ -2,207 +2,106 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBCB674A45
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 04:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5322674C02
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 06:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjATDgl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 19 Jan 2023 22:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S229742AbjATFTz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 20 Jan 2023 00:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjATDgl (ORCPT
+        with ESMTP id S229597AbjATFTg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 19 Jan 2023 22:36:41 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DDA9431D
-        for <linux-serial@vger.kernel.org>; Thu, 19 Jan 2023 19:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674185800; x=1705721800;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dHrkUaDdx3vDZMeA28QcTczdKzM+64VSeVAAPcOUfJo=;
-  b=QsxpkC6WElQkzNRIiGVqiJgAUmjvOketdKrax0B445rW/pJ3GMTQ9P6h
-   HinaQbkpgI8lOtD498maOL039STIYn7msDWwKFOCbrSSgisKflfj6Dm44
-   aKj5oIOufc9nOjbNgMHHZge0PSGnUeIoCjT3KW6hdPrOIkt/bBLwUlEPX
-   stDubcrBxxiah7d0G9OMEJGu9tgmzTkoEpZRm9ogXo3yWJ1XoGgrmuXO6
-   JOJ61KHHZOqtdMExWC0D7wXrY0fcXX7mhpUBL9mpm3j2tX19dWLmkXK9p
-   KWS7rpFUDYoK0O8mZiuZniV8jEGey7Jstw2VKiWjEaLilKtRSfpQsORXB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323188900"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="323188900"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 19:36:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="768545454"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="768545454"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2023 19:36:38 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIiCj-00028q-1l;
-        Fri, 20 Jan 2023 03:36:37 +0000
-Date:   Fri, 20 Jan 2023 11:36:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-linus] BUILD REGRESSION
- 5342ab0af45064cbdc773645b93ab70c24ee161f
-Message-ID: <63ca0c40.fC8jTwGRSKjZloA7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 20 Jan 2023 00:19:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AFA7DFAB;
+        Thu, 19 Jan 2023 21:09:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B087BB823C8;
+        Thu, 19 Jan 2023 13:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC78C433D2;
+        Thu, 19 Jan 2023 13:52:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674136364;
+        bh=o+MRE6eQh3jzlCO0huiyyivHqXsZNKLN474B0e3rGRE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L4nGtipd7FU1P1/x5hzKoWzI5HH1TKPIRz3pHdvW05AXZVhuGmgxNnaiOq8bPgEGp
+         tzd08EWg6bodxd/jMNDAtktV/Pc5rmfLKFrOe1yOltDXgrtze0tnReystUyT8H8u//
+         JLkQv3BbqAC8KBXElvwjapOzMa5JvSdrGRsEnzlc=
+Date:   Thu, 19 Jan 2023 14:52:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH v2] tty: serial: zs: convert atomic_* to refcount_* APIs
+ for irq_guard
+Message-ID: <Y8lLJK3RH+oX8RgE@kroah.com>
+References: <Y6cvHgOlkcG90j1J@qemulion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <Y6cvHgOlkcG90j1J@qemulion>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
-branch HEAD: 5342ab0af45064cbdc773645b93ab70c24ee161f  tty: serial: qcom_geni: avoid duplicate struct member init
+On Sat, Dec 24, 2022 at 10:25:58PM +0530, Deepak R Varma wrote:
+> The refcount_* APIs are designed to address known issues with the
+> atomic_t APIs for reference counting. They provide following distinct
+> advantages:
+>    - protect the reference counters from overflow/underflow
+>    - avoid use-after-free errors
+>    - provide improved memory ordering guarantee schemes
+>    - neater and safer.
+> Hence, replace the atomic_* APIs by their equivalent refcount_t
+> API functions.
+> 
+> This patch proposal address the following warnings generated by
+> the atomic_as_refcounter.cocci coccinelle script
+> atomic_add_return(-1, ...)
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> 
+> Changes in v2:
+>    1. Separate the combined change into one variable per patch as
+>       suggested by gregkh@linuxfoundation.org
+>    2. There was additional feedback on validating the change as it appeared to
+>       modify the existing logic. However, I found that the logic does not
+>       change with the proposed refcount_* APIs used in this change. Hence that
+>       feedback is not applied in this version.
+> 
+> Please Note:
+>    The patch is compile tested using dec_station.defconfig for MIPS architecture.
+> 
+>  drivers/tty/serial/zs.c | 14 +++++---------
+>  drivers/tty/serial/zs.h |  2 +-
+>  2 files changed, 6 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/zs.c b/drivers/tty/serial/zs.c
+> index 730c648e32ff..6be9933eff5c 100644
+> --- a/drivers/tty/serial/zs.c
+> +++ b/drivers/tty/serial/zs.c
+> @@ -753,17 +753,15 @@ static int zs_startup(struct uart_port *uport)
+>  	struct zs_port *zport = to_zport(uport);
+>  	struct zs_scc *scc = zport->scc;
+>  	unsigned long flags;
+> -	int irq_guard;
+>  	int ret;
+> 
+> -	irq_guard = atomic_add_return(1, &scc->irq_guard);
+> -	if (irq_guard == 1) {
+> +	refcount_inc(&scc->irq_guard);
+> +	if (refcount_read(&scc->irq_guard) == 1) {
 
-Error/Warning reports:
+This conversion is wrong :(
 
-https://lore.kernel.org/oe-kbuild-all/202301200130.ttBiTzfO-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-drivers/tty/serial/stm32-usart.c:804:62: error: 'flags' undeclared (first use in this function)
-drivers/tty/serial/stm32-usart.c:808:62: error: 'flags' undeclared (first use in this function)
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- alpha-randconfig-c041-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arc-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arc-buildonly-randconfig-r002-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-defconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-randconfig-c043-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-randconfig-r046-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm64-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-allmodconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-randconfig-s052-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- loongarch-randconfig-r026-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-allmodconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-randconfig-r015-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- mips-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-randconfig-r005-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-r002-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- parisc-randconfig-r001-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- parisc-randconfig-r034-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- powerpc-allmodconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- s390-allyesconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sh-allmodconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc-randconfig-r034-20230119
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-|-- um-allmodconfig
-|   `-- drivers-tty-serial-stm32-usart.c:error:flags-undeclared-(first-use-in-this-function)
-
-elapsed time: 723m
-
-configs tested: 65
-configs skipped: 2
-
-gcc tested configs:
-x86_64                            allnoconfig
-powerpc                           allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-sh                               allmodconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230119
-powerpc                          allmodconfig
-arc                  randconfig-r043-20230119
-s390                                defconfig
-x86_64                    rhel-8.3-kselftests
-s390                             allyesconfig
-mips                             allyesconfig
-x86_64                          rhel-8.3-func
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-i386                                defconfig
-i386                             allyesconfig
-m68k                          hp300_defconfig
-sparc                       sparc32_defconfig
-sparc64                          alldefconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-sh                          sdk7786_defconfig
-parisc                              defconfig
-xtensa                          iss_defconfig
-sh                         ecovec24_defconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r045-20230119
-hexagon              randconfig-r041-20230119
-s390                 randconfig-r044-20230119
-riscv                randconfig-r042-20230119
-x86_64                        randconfig-k001
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-powerpc                 mpc8315_rdb_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
