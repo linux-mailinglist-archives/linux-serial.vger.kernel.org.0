@@ -2,144 +2,81 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00E5674B9C
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 06:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9B5674D7D
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 07:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjATFDT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 20 Jan 2023 00:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S229449AbjATGqd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 20 Jan 2023 01:46:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjATFDG (ORCPT
+        with ESMTP id S229454AbjATGqc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:03:06 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F22BD0DBA
-        for <linux-serial@vger.kernel.org>; Thu, 19 Jan 2023 20:50:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674190231; x=1705726231;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XBPrToKy4m2DOzlnvfhFKnySJPpYetNXbadAdfNrD6A=;
-  b=DXFTWiJh69WYDkIh7VNMUzSHieK6zG02tc9S/5irCSiWijUtOpB6Qn4U
-   1ICPr69fUV/j1N4X4yE/QpcrQ/CdRhg/FHPST2LnTYtHKoOBHNcfiUm11
-   XXr+d5Hm93zdO6ZYTSnKqlcwBNxwKHFz+WdPfMZz0kC45pi7zE7q48qCS
-   Avx0sWQaMtwNn5heYjhjQVZnPOgdbsW7zi6zX2Xyo5L6vTUYemK6sd5Ye
-   iUvWddOHrJocadotIzEzAjeBkE5IRPP03D7YhBQr8utVg0IxONXm9Vc/h
-   W2kVaUXovJk1zvGadFYxJnmKtklE/Feej67t/jlTrz6Rc6dEQR9aW+3v+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="309077611"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="309077611"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 19:57:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="728988185"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="728988185"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Jan 2023 19:57:38 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pIiX4-00029f-0E;
-        Fri, 20 Jan 2023 03:57:38 +0000
-Date:   Fri, 20 Jan 2023 11:57:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- 05e2600cb0a4d73b0779cf29512819616252aeeb
-Message-ID: <63ca1111.EVUhSqgun+Q9g/Xk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 20 Jan 2023 01:46:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD74E40F9
+        for <linux-serial@vger.kernel.org>; Thu, 19 Jan 2023 22:46:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61A5861E2C
+        for <linux-serial@vger.kernel.org>; Fri, 20 Jan 2023 06:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5E8C433D2;
+        Fri, 20 Jan 2023 06:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674197190;
+        bh=tF42KmX2vST2IaU7J3dJPNiyMHXscoOSRk7IHHuFQ6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=exHnsZYe+hp+HEf6U+eVCjqWj0RRJafH0x3H9RCzeSbpp4c03HlSALfJyWLJN62Hk
+         8v/g+UK5gCnYtGWQYwDerHwrBELnzxbJjKGR29acdVnBsKFFkS8BNVG2MpeFe3FzMZ
+         2yNJW5FJ3DmXYcL2PY2p36OBwbx8/clRoj+9jZzA=
+Date:   Fri, 20 Jan 2023 07:46:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marek Vasut <marex@denx.de>
+Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        linux-serial@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [tty:tty-linus 4/7] drivers/tty/serial/stm32-usart.c:804:62:
+ error: 'flags' undeclared
+Message-ID: <Y8o4w8jRJAUSPIDx@kroah.com>
+References: <202301200130.ttBiTzfO-lkp@intel.com>
+ <f5f4b504-8e58-2844-fa26-c8896a625794@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <f5f4b504-8e58-2844-fa26-c8896a625794@denx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: 05e2600cb0a4d73b0779cf29512819616252aeeb  VT: Bump font size limitation to 64x128 pixels
+On Thu, Jan 19, 2023 at 07:08:00PM +0100, Marek Vasut wrote:
+> On 1/19/23 18:33, kernel test robot wrote:
+> 
+> [...]
+> 
+> > cc58d0a3f0a475 Erwan Le Ray     2021-10-20  800  	/* Receiver timeout irq for DMA RX */
+> > f24771b62a8323 Marek Vasut      2023-01-12  801  	if (stm32_usart_rx_dma_enabled(port) && !stm32_port->throttled) {
+> > f24771b62a8323 Marek Vasut      2023-01-12  802  		spin_lock(&port->lock);
+> > 6333a485062172 Erwan Le Ray     2021-10-25  803  		size = stm32_usart_receive_chars(port, false);
+> > 6333a485062172 Erwan Le Ray     2021-10-25 @804  		uart_unlock_and_check_sysrq_irqrestore(port, flags);
+> 
+> +CC Johan
+> 
+> This one should be uart_unlock_and_check_sysrq(port); I think . If that's
+> correct, then I'll send a patch.
+> 
+> > 6333a485062172 Erwan Le Ray     2021-10-25  805  		if (size)
+> > 6333a485062172 Erwan Le Ray     2021-10-25  806  			tty_flip_buffer_push(tport);
+> > 6333a485062172 Erwan Le Ray     2021-10-25  807  	}
+> 
+> [...]
 
-elapsed time: 722m
+Let me go revert this now until you all get it fixed up in a new change,
+I can't have a broken branch right now, sorry.
 
-configs tested: 62
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-alpha                            allyesconfig
-x86_64                          rhel-8.3-func
-arc                              allyesconfig
-powerpc                           allnoconfig
-arm                                 defconfig
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a013
-x86_64                        randconfig-a004
-x86_64                        randconfig-a011
-x86_64                        randconfig-a002
-x86_64                               rhel-8.3
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-arm                              allyesconfig
-i386                                defconfig
-arc                                 defconfig
-x86_64                           allyesconfig
-arm                  randconfig-r046-20230119
-arc                  randconfig-r043-20230119
-i386                          randconfig-a005
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-ia64                             allmodconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-i386                             allyesconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-x86_64                        randconfig-a005
-i386                          randconfig-a004
-hexagon              randconfig-r041-20230119
-i386                          randconfig-a013
-i386                          randconfig-a015
-s390                 randconfig-r044-20230119
-hexagon              randconfig-r045-20230119
-i386                          randconfig-a006
-riscv                randconfig-r042-20230119
-i386                          randconfig-a011
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h
