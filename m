@@ -2,139 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34250674BFF
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 06:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00E5674B9C
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Jan 2023 06:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjATFTz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 20 Jan 2023 00:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S230296AbjATFDT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 20 Jan 2023 00:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjATFTj (ORCPT
+        with ESMTP id S230210AbjATFDG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 20 Jan 2023 00:19:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646307DFAD
-        for <linux-serial@vger.kernel.org>; Thu, 19 Jan 2023 21:09:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4399B826FB
-        for <linux-serial@vger.kernel.org>; Thu, 19 Jan 2023 19:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C44C433F0;
-        Thu, 19 Jan 2023 19:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674154971;
-        bh=FxmuMNY95tSkO6GCCRSUZcRsDNZLf64oi7FRyUtNuIE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KqQTNt+jVnN5jwTY4dMF/CkaRwSUxKbTu2cU6Hi2NA9rv7mbS7vfsuti6vt83HWCD
-         mqsb4iYS1g0P+gtB+A/vUEeUhuxT2hXAHC8v92qdzW4fWdGNWr/9TU0GQktxbIs0io
-         +15Lr6j6a9BRVlfa5mOqXKbrpzuUn8oeC2oRYa/Y=
-Date:   Thu, 19 Jan 2023 20:02:48 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthew Howell <mrhowel@g.clemson.edu>
-Cc:     linux-serial@vger.kernel.org, jeff.baldwin@sealevel.com,
-        ryan.wenglarz@sealevel.com, matthew.howell@sealevel.com,
-        darren.beeson@sealevel.com
-Subject: Re: [PATCH v3] serial: exar: Add support for Sealevel 7xxxC serial
- cards
-Message-ID: <Y8mT2P4asFeTEOAB@kroah.com>
-References: <alpine.DEB.2.21.2301191204520.22332@tstest-VirtualBox>
+        Fri, 20 Jan 2023 00:03:06 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F22BD0DBA
+        for <linux-serial@vger.kernel.org>; Thu, 19 Jan 2023 20:50:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674190231; x=1705726231;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XBPrToKy4m2DOzlnvfhFKnySJPpYetNXbadAdfNrD6A=;
+  b=DXFTWiJh69WYDkIh7VNMUzSHieK6zG02tc9S/5irCSiWijUtOpB6Qn4U
+   1ICPr69fUV/j1N4X4yE/QpcrQ/CdRhg/FHPST2LnTYtHKoOBHNcfiUm11
+   XXr+d5Hm93zdO6ZYTSnKqlcwBNxwKHFz+WdPfMZz0kC45pi7zE7q48qCS
+   Avx0sWQaMtwNn5heYjhjQVZnPOgdbsW7zi6zX2Xyo5L6vTUYemK6sd5Ye
+   iUvWddOHrJocadotIzEzAjeBkE5IRPP03D7YhBQr8utVg0IxONXm9Vc/h
+   W2kVaUXovJk1zvGadFYxJnmKtklE/Feej67t/jlTrz6Rc6dEQR9aW+3v+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="309077611"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="309077611"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 19:57:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="728988185"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="728988185"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jan 2023 19:57:38 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIiX4-00029f-0E;
+        Fri, 20 Jan 2023 03:57:38 +0000
+Date:   Fri, 20 Jan 2023 11:57:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ 05e2600cb0a4d73b0779cf29512819616252aeeb
+Message-ID: <63ca1111.EVUhSqgun+Q9g/Xk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2301191204520.22332@tstest-VirtualBox>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 12:10:49PM -0500, Matthew Howell wrote:
-> From: Matthew Howell <matthew.howell@sealevel.com>
-> 
-> Add support for Sealevel 7xxxC serial cards.
-> 
-> This patch:
-> * Adds IDs to recognize 7xxxC cards from Sealevel Systems.
-> * Updates exar_pci_probe() to set nr_ports to last two bytes of primary
-> dev ID for these cards.
-> 
-> Signed-off-by: Matthew Howell <matthew.howell@sealevel.com>
-> ---
-> 
-> v2: Moved "This patch..." above signed-off line.
-> v3: "Added From: Matthew Howell <matthew.howell@sealevel.com>" to
-> submission.
-> 
-> Let me know if I need to make any more changes.
-> 
-> diff --git a/drivers/tty/serial/8250/8250_exar.c
-> b/drivers/tty/serial/8250/8250_exar.c
-> index 314a05e00..64770c62b 100644
-> --- a/drivers/tty/serial/8250/8250_exar.c
-> +++ b/drivers/tty/serial/8250/8250_exar.c
-> @@ -43,6 +43,12 @@
->  #define PCI_DEVICE_ID_EXAR_XR17V4358		0x4358
->  #define PCI_DEVICE_ID_EXAR_XR17V8358		0x8358
-> 
-> +#define PCI_DEVICE_ID_SEALEVEL_710xC		0x1001
-> +#define PCI_DEVICE_ID_SEALEVEL_720xC		0x1002
-> +#define PCI_DEVICE_ID_SEALEVEL_740xC		0x1004
-> +#define PCI_DEVICE_ID_SEALEVEL_780xC		0x1008
-> +#define PCI_DEVICE_ID_SEALEVEL_716xC		0x1010
-> +
->  #define UART_EXAR_INT0		0x80
->  #define UART_EXAR_8XMODE	0x88	/* 8X sampling rate select */
->  #define UART_EXAR_SLEEP	0x8b	/* Sleep mode */
-> @@ -638,6 +644,8 @@ exar_pci_probe(struct pci_dev *pcidev, const struct
-> pci_device_id *ent)
->  		nr_ports = BIT(((pcidev->device & 0x38) >> 3) - 1);
->  	else if (board->num_ports)
->  		nr_ports = board->num_ports;
-> +	else if (pcidev->vendor == PCI_VENDOR_ID_SEALEVEL)
-> +		nr_ports = pcidev->device & 0xff;
->  	else
->  		nr_ports = pcidev->device & 0x0f;
-> 
-> @@ -864,6 +872,12 @@ static const struct pci_device_id exar_pci_tbl[] = {
->  	EXAR_DEVICE(COMMTECH, 4224PCI335, pbn_fastcom335_4),
->  	EXAR_DEVICE(COMMTECH, 2324PCI335, pbn_fastcom335_4),
->  	EXAR_DEVICE(COMMTECH, 2328PCI335, pbn_fastcom335_8),
-> +
-> +	EXAR_DEVICE(SEALEVEL, 710xC, pbn_exar_XR17V35x),
-> +	EXAR_DEVICE(SEALEVEL, 720xC, pbn_exar_XR17V35x),
-> +	EXAR_DEVICE(SEALEVEL, 740xC, pbn_exar_XR17V35x),
-> +	EXAR_DEVICE(SEALEVEL, 780xC, pbn_exar_XR17V35x),
-> +	EXAR_DEVICE(SEALEVEL, 716xC, pbn_exar_XR17V35x),
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, exar_pci_tbl);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: 05e2600cb0a4d73b0779cf29512819616252aeeb  VT: Bump font size limitation to 64x128 pixels
 
-Hi,
+elapsed time: 722m
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+configs tested: 62
+configs skipped: 2
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+gcc tested configs:
+x86_64                            allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+x86_64                    rhel-8.3-kselftests
+alpha                            allyesconfig
+x86_64                          rhel-8.3-func
+arc                              allyesconfig
+powerpc                           allnoconfig
+arm                                 defconfig
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a013
+x86_64                        randconfig-a004
+x86_64                        randconfig-a011
+x86_64                        randconfig-a002
+x86_64                               rhel-8.3
+x86_64                        randconfig-a015
+arm64                            allyesconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+arm                              allyesconfig
+i386                                defconfig
+arc                                 defconfig
+x86_64                           allyesconfig
+arm                  randconfig-r046-20230119
+arc                  randconfig-r043-20230119
+i386                          randconfig-a005
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+ia64                             allmodconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                             allyesconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+clang tested configs:
+x86_64                          rhel-8.3-rust
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+x86_64                        randconfig-a005
+i386                          randconfig-a004
+hexagon              randconfig-r041-20230119
+i386                          randconfig-a013
+i386                          randconfig-a015
+s390                 randconfig-r044-20230119
+hexagon              randconfig-r045-20230119
+i386                          randconfig-a006
+riscv                randconfig-r042-20230119
+i386                          randconfig-a011
 
-thanks,
-
-greg k-h's patch email bot
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
