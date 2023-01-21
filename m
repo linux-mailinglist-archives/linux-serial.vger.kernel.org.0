@@ -2,54 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2CC676736
-	for <lists+linux-serial@lfdr.de>; Sat, 21 Jan 2023 16:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF0967673B
+	for <lists+linux-serial@lfdr.de>; Sat, 21 Jan 2023 16:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjAUPhP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 21 Jan 2023 10:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S229795AbjAUPh0 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 21 Jan 2023 10:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjAUPhO (ORCPT
+        with ESMTP id S229738AbjAUPhP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 21 Jan 2023 10:37:14 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2592CFC3
-        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:54 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id kt14so20876297ejc.3
-        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:54 -0800 (PST)
+        Sat, 21 Jan 2023 10:37:15 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D7829144
+        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:56 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x36so9897674ede.13
+        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fGRQXniAfmCVOhEPry8KBc9X4/FRyELFse0MGdO3NRc=;
-        b=Mt91O6wsHDuq9PZCKox9+WJFhgaeFmwcOWWLL/2N5ObZAjE6d+mUtPcre6xI0qeZ1p
-         xAGWfUqn3Udu0VA5eFYCZUyV7Qj+nlNrkRgtNbcai4vq5AdxIuNZ2lOUtDMynwzaqZgW
-         7TsJnh4kg87opmBIzWtd8mzppl7aNW3YljRDTAY/h6zlff8vhiXopClVfSdEKcQMz98D
-         3VMTGsP4So01okN5M47ol8DM3F5en9qQs7dglNXQUSI6hHXK7SG1/aEF8v+T2Dj7Cnd9
-         /vZThwN6tTTyo6pYIuCMuoHzRA3Xc9XePRfRCE7s+AfPlHUzm+PFWmhbOw+qXAvjkNEd
-         DR2w==
+        bh=vDEp4eKXdg/3wssI2Ou1QYWdbAeeL+58ez61t5CUM9E=;
+        b=JQG3/QBq3Cu5aXSi75iJ529tcqRVrA08Kk09q8GDWwzYETH4PulFr8xpk+C1UeZP7t
+         UrLrjn+b7SLfG9Si2udGHx+ijp1qO+PKXlkLon+qSFg44WBbLgoXTElPm2FOMoAVAAyu
+         Pdq2KPJuJWMzkSCqYIAHt8xJDDDlOI6UBGWDd7wkns1kWRUU4y9c4XHHIk/wO6vIi7M9
+         p/7coFP0GDE3ReSCIVhITHoKgwE4pjSKg7at8tnhGnV7tpYNkzx5Kev1CkxFwlB1cGGg
+         DHiHBE5S1ljG9DXKG8Vkkrbj7Gjk8FDQZY6MZESqoIIusZzblTgCtCkD8lJtKpVed2+T
+         zhaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fGRQXniAfmCVOhEPry8KBc9X4/FRyELFse0MGdO3NRc=;
-        b=JL6eLOafAySIggVoy//BINuWi6UMQTu3hTAXL+22Dxp8YRimhxVk29QcN++3skWcy4
-         JqdqFC8mQvxZaZ/t1rH9hu+4Mcx5fx4eu9OUeb7JvZFr18WBo9G2tYzRiglvZwDICvfP
-         Jrs8+6Wi0oFZYee3dCm/dS2zOEq/5ufF4zBYJ5kfZ0R3BKdhpYG61vChiAFI6jmp6mfh
-         YzxAj6JP1TBIUKlgXJyvtXy+ZOQjrWzknzgK3wip2W8jL4W6PplEC7cahXi9BLMTyEL5
-         ntCkFcFbsSz9RVOwoQS+qEzHnMUgaDDekdgNh1JAmKaYb3PCuhXtIIdzEpGuzXM76vWL
-         HfhQ==
-X-Gm-Message-State: AFqh2kqlv6oeXpnHKieSikrpft9EzN/HhasGn26nND3/6NtcVhfUi4Wq
-        er0B3pXcHGYsU5qfiNPaNJkKixhMsoM=
-X-Google-Smtp-Source: AMrXdXtubvnAryt3g7C8rOL6o559ps+y9uy/MSBM/mlbKGyY45wWmLQCWCYT6SvaX414gJFU/TGHNg==
-X-Received: by 2002:a17:906:3616:b0:870:e329:5f2e with SMTP id q22-20020a170906361600b00870e3295f2emr19580340ejb.20.1674315412643;
-        Sat, 21 Jan 2023 07:36:52 -0800 (PST)
+        bh=vDEp4eKXdg/3wssI2Ou1QYWdbAeeL+58ez61t5CUM9E=;
+        b=p03Zp536XbLMQpGbuzhURzLn+BwYpHThinScMxfT3X7W5Bskc3IZOGZZS3AiiiaPEb
+         HuxnPb695Jhy2/ElmGCW/U0fFiClSUZDbf4+Wa4kvrZTsdY/vLmhWHKzdrXnTKKeaJbg
+         0QDB4LzXGO8o3mctA+ebOQm/QWBU6iFuBGEWb4ImcWBQAEWzIaNyROp3Xa7VWELBwuPL
+         QCgveo7uNOPwngGX/AFDq9oxuHIWdlGIxA0J+FvDcaOPgA/PAsHdEn2EkEIxTUm1LSnI
+         ZsDrqauk/hZbhtC+PTX4AkVd+K/3vj9IfAZBSsd8XcoKZd9bZi8PjAoq3sbA7mf5KW19
+         tHQg==
+X-Gm-Message-State: AFqh2kqGXNd0hqVvYcfhgdfQFm9KKIr45pN9uU3iCtQ0mYfRZvTOQ6K5
+        VjyXUpHN409SsSFt+lsHyt5m8NeD7Nw=
+X-Google-Smtp-Source: AMrXdXvev1KC2/5QAYjPE4iBLwVSwtQqr3XKO+MlwcpsnrdjI3d6g33FMjpjdhYdk9I380ElvaGeAw==
+X-Received: by 2002:a05:6402:40a:b0:499:1ed2:6456 with SMTP id q10-20020a056402040a00b004991ed26456mr19191580edv.22.1674315414273;
+        Sat, 21 Jan 2023 07:36:54 -0800 (PST)
 Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id vc10-20020a170907d08a00b008717a377125sm8187030ejc.85.2023.01.21.07.36.51
+        by smtp.gmail.com with ESMTPSA id vc10-20020a170907d08a00b008717a377125sm8187030ejc.85.2023.01.21.07.36.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 07:36:52 -0800 (PST)
+        Sat, 21 Jan 2023 07:36:53 -0800 (PST)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     linux-serial@vger.kernel.org
 Cc:     Fabio Estevam <festevam@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sergey Organov <sorganov@gmail.com>
-Subject: [PATCH v1 1/7] serial: imx: factor-out common code to imx_uart_soft_reset()
-Date:   Sat, 21 Jan 2023 18:36:33 +0300
-Message-Id: <20230121153639.15402-2-sorganov@gmail.com>
+Subject: [PATCH v1 2/7] serial: imx: work-around for hardware RX flood
+Date:   Sat, 21 Jan 2023 18:36:34 +0300
+Message-Id: <20230121153639.15402-3-sorganov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230121153639.15402-1-sorganov@gmail.com>
 References: <87bko4e65y.fsf@osv.gnss.ru>
@@ -87,131 +87,219 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We perform soft reset in 2 places, slightly differently for no sufficient
-reasons, so move more generic variant to a function, and re-use the code.
+Check if hardware Rx flood is in progress, and issue soft reset to UART to
+stop the flood.
 
-Out of 2 repeat counters, 10 and 100, select 10, as the code works at
-interrupts disabled, and in practice the reset happens immediately.
+A way to reproduce the flood (checked on iMX6SX) is: open iMX UART at 9600
+8N1, and from external source send 0xf0 char at 115200 8N1. In about 90% of
+cases this starts a flood of "receiving" of 0xff characters by the iMX UART
+that is terminated by any activity on RxD line, or could be stopped by
+issuing soft reset to the UART (just stop/start of RX does not help). Note
+that in essence what we did here is sending isolated start bit about 2.4
+times shorter than it is to be if issued on the UART configured baud rate.
+
+There was earlier attempt to fix similar issue in: 'commit
+b38cb7d25711 ("serial: imx: Disable new features of autobaud detection")',
+but apparently it only gets harder to reproduce the issue after that
+commit.
 
 Signed-off-by: Sergey Organov <sorganov@gmail.com>
 ---
- drivers/tty/serial/imx.c | 73 ++++++++++++++++++++--------------------
- 1 file changed, 37 insertions(+), 36 deletions(-)
+ drivers/tty/serial/imx.c | 123 ++++++++++++++++++++++++++++++---------
+ 1 file changed, 95 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 757825edb0cd..bf222d8568a9 100644
+index bf222d8568a9..e7fce31e460d 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
-@@ -397,6 +397,39 @@ static void start_hrtimer_ms(struct hrtimer *hrt, unsigned long msec)
-        hrtimer_start(hrt, ms_to_ktime(msec), HRTIMER_MODE_REL);
+@@ -210,6 +210,9 @@ struct imx_port {
+ 
+ 	struct mctrl_gpios *gpios;
+ 
++	/* counter to stop 0xff flood */
++	int idle_counter;
++
+ 	/* shadow registers */
+ 	unsigned int ucr1;
+ 	unsigned int ucr2;
+@@ -428,6 +431,8 @@ static void imx_uart_soft_reset(struct imx_port *sport)
+ 	imx_uart_writel(sport, ubir, UBIR);
+ 	imx_uart_writel(sport, ubmr, UBMR);
+ 	imx_uart_writel(sport, uts, IMX21_UTS);
++
++	sport->idle_counter = 0;
  }
  
-+/* called with port.lock taken and irqs off */
-+static void imx_uart_soft_reset(struct imx_port *sport)
+ /* called with port.lock taken and irqs off */
+@@ -834,15 +839,66 @@ static irqreturn_t imx_uart_txint(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
++/* Check if hardware Rx flood is in progress, and issue soft reset to stop it.
++ * This is to be called from Rx ISRs only when some bytes were actually
++ * received.
++ *
++ * A way to reproduce the flood (checked on iMX6SX) is: open iMX UART at 9600
++ * 8N1, and from external source send 0xf0 char at 115200 8N1. In about 90% of
++ * cases this starts a flood of "receiving" of 0xff characters by the iMX6 UART
++ * that is terminated by any activity on RxD line, or could be stopped by
++ * issuing soft reset to the UART (just stop/start of RX does not help). Note
++ * that what we do here is sending isolated start bit about 2.4 times shorter
++ * than it is to be on UART configured baud rate.
++ */
++static void imx_uart_check_flood(struct imx_port *sport, u32 usr2)
 +{
-+	int i = 10;
-+	u32 ucr2, ubir, ubmr, uts;
-+
-+	/*
-+	 * According to the Reference Manual description of the UART SRST bit:
++	/* To detect hardware 0xff flood we monitor RxD line between RX
++	 * interrupts to isolate "receiving" of char(s) with no activity
++	 * on RxD line, that'd never happen on actual data transfers.
 +	 *
-+	 * "Reset the transmit and receive state machines,
-+	 * all FIFOs and register USR1, USR2, UBIR, UBMR, UBRC, URXD, UTXD
-+	 * and UTS[6-3]".
++	 * We use USR2_WAKE bit to check for activity on RxD line, but we have a
++	 * race here if we clear USR2_WAKE when receiving of a char is in
++	 * progress, so we might get RX interrupt later with USR2_WAKE bit
++	 * cleared. Note though that as we don't try to clear USR2_WAKE when we
++	 * detected no activity, this race may hide actual activity only once.
 +	 *
-+	 * We don't need to restore the old values from USR1, USR2, URXD and
-+	 * UTXD. UBRC is read only, so only save/restore the other three
-+	 * registers.
++	 * Yet another case where receive interrupt may occur without RxD
++	 * activity is expiration of aging timer, so we consider this as well.
++	 *
++	 * We use 'idle_counter' to ensure that we got at least so many RX
++	 * interrupts without any detected activity on RxD line. 2 cases
++	 * described plus 1 to be on the safe side gives us a margin of 3,
++	 * below. In practice I was not able to produce a false positive to
++	 * induce soft reset at regular data transfers even using 1 as the
++	 * margin, so 3 is actually very strong.
++	 *
++	 * We count interrupts, not chars in 'idle-counter' for simplicity.
 +	 */
-+	ubir = imx_uart_readl(sport, UBIR);
-+	ubmr = imx_uart_readl(sport, UBMR);
-+	uts = imx_uart_readl(sport, IMX21_UTS);
 +
-+	ucr2 = imx_uart_readl(sport, UCR2);
-+	imx_uart_writel(sport, ucr2 & ~UCR2_SRST, UCR2);
-+
-+	while (!(imx_uart_readl(sport, UCR2) & UCR2_SRST) && (--i > 0))
-+		udelay(1);
-+
-+	/* Restore the registers */
-+	imx_uart_writel(sport, ubir, UBIR);
-+	imx_uart_writel(sport, ubmr, UBMR);
-+	imx_uart_writel(sport, uts, IMX21_UTS);
++	if (usr2 & USR2_WAKE) {
++		imx_uart_writel(sport, USR2_WAKE, USR2);
++		sport->idle_counter = 0;
++	} else if (++sport->idle_counter > 3) {
++		dev_warn(sport->port.dev, "RX flood detected: soft reset.");
++		imx_uart_soft_reset(sport); /* also clears 'sport->idle_counter' */
++	}
 +}
 +
- /* called with port.lock taken and irqs off */
- static void imx_uart_start_rx(struct uart_port *port)
+ static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
  {
-@@ -1398,7 +1431,7 @@ static void imx_uart_disable_dma(struct imx_port *sport)
- static int imx_uart_startup(struct uart_port *port)
- {
- 	struct imx_port *sport = (struct imx_port *)port;
--	int retval, i;
-+	int retval;
- 	unsigned long flags;
- 	int dma_is_inited = 0;
- 	u32 ucr1, ucr2, ucr3, ucr4, uts;
-@@ -1430,15 +1463,9 @@ static int imx_uart_startup(struct uart_port *port)
- 		dma_is_inited = 1;
+ 	struct imx_port *sport = dev_id;
+ 	unsigned int rx, flg, ignored = 0;
+ 	struct tty_port *port = &sport->port.state->port;
++	u32 usr2;
  
- 	spin_lock_irqsave(&sport->port.lock, flags);
+-	while (imx_uart_readl(sport, USR2) & USR2_RDR) {
+-		u32 usr2;
++	usr2 = imx_uart_readl(sport, USR2);
+ 
++	/* If we received something, check for 0xff flood */
++	if (usr2 & USR2_RDR)
++		imx_uart_check_flood(sport, usr2);
 +
- 	/* Reset fifo's and state machines */
--	i = 100;
--
--	ucr2 = imx_uart_readl(sport, UCR2);
--	ucr2 &= ~UCR2_SRST;
--	imx_uart_writel(sport, ucr2, UCR2);
--
--	while (!(imx_uart_readl(sport, UCR2) & UCR2_SRST) && (--i > 0))
--		udelay(1);
-+	imx_uart_soft_reset(sport);
++	for ( ; usr2 & USR2_RDR; usr2 = imx_uart_readl(sport, USR2)) {
+ 		flg = TTY_NORMAL;
+ 		sport->port.icount.rx++;
  
- 	/*
- 	 * Finally, clear and enable interrupts
-@@ -1593,8 +1620,6 @@ static void imx_uart_flush_buffer(struct uart_port *port)
- {
- 	struct imx_port *sport = (struct imx_port *)port;
- 	struct scatterlist *sgl = &sport->tx_sgl[0];
--	u32 ucr2;
--	int i = 100, ubir, ubmr, uts;
+@@ -1180,55 +1236,64 @@ static void imx_uart_dma_rx_callback(void *data)
+ 	status = dmaengine_tx_status(chan, sport->rx_cookie, &state);
  
- 	if (!sport->dma_chan_tx)
+ 	if (status == DMA_ERROR) {
++		spin_lock(&sport->port.lock);
+ 		imx_uart_clear_rx_errors(sport);
++		spin_unlock(&sport->port.lock);
  		return;
-@@ -1612,32 +1637,8 @@ static void imx_uart_flush_buffer(struct uart_port *port)
- 		sport->dma_is_txing = 0;
  	}
  
--	/*
--	 * According to the Reference Manual description of the UART SRST bit:
--	 *
--	 * "Reset the transmit and receive state machines,
--	 * all FIFOs and register USR1, USR2, UBIR, UBMR, UBRC, URXD, UTXD
--	 * and UTS[6-3]".
--	 *
--	 * We don't need to restore the old values from USR1, USR2, URXD and
--	 * UTXD. UBRC is read only, so only save/restore the other three
--	 * registers.
--	 */
--	ubir = imx_uart_readl(sport, UBIR);
--	ubmr = imx_uart_readl(sport, UBMR);
--	uts = imx_uart_readl(sport, IMX21_UTS);
-+	imx_uart_soft_reset(sport);
+-	if (!(sport->port.ignore_status_mask & URXD_DUMMY_READ)) {
++	/*
++	 * The state-residue variable represents the empty space
++	 * relative to the entire buffer. Taking this in consideration
++	 * the head is always calculated base on the buffer total
++	 * length - DMA transaction residue. The UART script from the
++	 * SDMA firmware will jump to the next buffer descriptor,
++	 * once a DMA transaction if finalized (IMX53 RM - A.4.1.2.4).
++	 * Taking this in consideration the tail is always at the
++	 * beginning of the buffer descriptor that contains the head.
++	 */
  
--	ucr2 = imx_uart_readl(sport, UCR2);
--	ucr2 &= ~UCR2_SRST;
--	imx_uart_writel(sport, ucr2, UCR2);
--
--	while (!(imx_uart_readl(sport, UCR2) & UCR2_SRST) && (--i > 0))
--		udelay(1);
--
--	/* Restore the registers */
--	imx_uart_writel(sport, ubir, UBIR);
--	imx_uart_writel(sport, ubmr, UBMR);
--	imx_uart_writel(sport, uts, IMX21_UTS);
+-		/*
+-		 * The state-residue variable represents the empty space
+-		 * relative to the entire buffer. Taking this in consideration
+-		 * the head is always calculated base on the buffer total
+-		 * length - DMA transaction residue. The UART script from the
+-		 * SDMA firmware will jump to the next buffer descriptor,
+-		 * once a DMA transaction if finalized (IMX53 RM - A.4.1.2.4).
+-		 * Taking this in consideration the tail is always at the
+-		 * beginning of the buffer descriptor that contains the head.
+-		 */
++	/* Calculate the head */
++	rx_ring->head = sg_dma_len(sgl) - state.residue;
+ 
+-		/* Calculate the head */
+-		rx_ring->head = sg_dma_len(sgl) - state.residue;
++	/* Calculate the tail. */
++	bd_size = sg_dma_len(sgl) / sport->rx_periods;
++	rx_ring->tail = ((rx_ring->head-1) / bd_size) * bd_size;
+ 
+-		/* Calculate the tail. */
+-		bd_size = sg_dma_len(sgl) / sport->rx_periods;
+-		rx_ring->tail = ((rx_ring->head-1) / bd_size) * bd_size;
++	if (rx_ring->head <= sg_dma_len(sgl) &&
++	    rx_ring->head > rx_ring->tail) {
+ 
+-		if (rx_ring->head <= sg_dma_len(sgl) &&
+-		    rx_ring->head > rx_ring->tail) {
++		/* Move data from tail to head */
++		r_bytes = rx_ring->head - rx_ring->tail;
+ 
+-			/* Move data from tail to head */
+-			r_bytes = rx_ring->head - rx_ring->tail;
++		/* If we received something, check for 0xff flood */
++		if (r_bytes > 0) {
++			spin_lock(&sport->port.lock);
++			imx_uart_check_flood(sport, imx_uart_readl(sport, USR2));
++			spin_unlock(&sport->port.lock);
++		}
++
++		if (!(sport->port.ignore_status_mask & URXD_DUMMY_READ)) {
+ 
+ 			/* CPU claims ownership of RX DMA buffer */
+ 			dma_sync_sg_for_cpu(sport->port.dev, sgl, 1,
+-				DMA_FROM_DEVICE);
++					    DMA_FROM_DEVICE);
+ 
+ 			w_bytes = tty_insert_flip_string(port,
+-				sport->rx_buf + rx_ring->tail, r_bytes);
++							 sport->rx_buf + rx_ring->tail, r_bytes);
+ 
+ 			/* UART retrieves ownership of RX DMA buffer */
+ 			dma_sync_sg_for_device(sport->port.dev, sgl, 1,
+-				DMA_FROM_DEVICE);
++					       DMA_FROM_DEVICE);
+ 
+ 			if (w_bytes != r_bytes)
+ 				sport->port.icount.buf_overrun++;
+ 
+ 			sport->port.icount.rx += w_bytes;
+-		} else	{
+-			WARN_ON(rx_ring->head > sg_dma_len(sgl));
+-			WARN_ON(rx_ring->head <= rx_ring->tail);
+ 		}
++	} else	{
++		WARN_ON(rx_ring->head > sg_dma_len(sgl));
++		WARN_ON(rx_ring->head <= rx_ring->tail);
+ 	}
+ 
+ 	if (w_bytes) {
+@@ -1304,6 +1369,8 @@ static void imx_uart_clear_rx_errors(struct imx_port *sport)
+ 		imx_uart_writel(sport, USR2_ORE, USR2);
+ 	}
+ 
++	sport->idle_counter = 0;
++
  }
  
- static void
+ #define TXTL_DEFAULT 2 /* reset default */
 -- 
 2.30.1
 
