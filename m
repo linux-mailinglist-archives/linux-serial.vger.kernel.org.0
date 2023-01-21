@@ -2,54 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6C3676739
-	for <lists+linux-serial@lfdr.de>; Sat, 21 Jan 2023 16:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85638676737
+	for <lists+linux-serial@lfdr.de>; Sat, 21 Jan 2023 16:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjAUPhS (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 21 Jan 2023 10:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S229769AbjAUPhR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 21 Jan 2023 10:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjAUPhP (ORCPT
+        with ESMTP id S229680AbjAUPhP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
         Sat, 21 Jan 2023 10:37:15 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60F72C647
-        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:57 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id bk15so20786522ejb.9
-        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:57 -0800 (PST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD9F2CC5E
+        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:59 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id vw16so20786123ejc.12
+        for <linux-serial@vger.kernel.org>; Sat, 21 Jan 2023 07:36:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t9PFvNqNRiBtgoK1FQlt2dgZjVa65hIZ+MQtdwTOsMQ=;
-        b=QEjQ5FTQ1p1l7Cd4SDXPKJZ6sDaKO4pSMir4BAS6hvoSdAFJ0cS+qBajfbwJV2pTJO
-         x2WivqetX72P82ztk/8BSNaqx/ZIMtwfufirIk+npl3/cZ8qUhMakCz94H1xBr/3WHxh
-         ywOmBlRnzvzzAP8cTsedv1lwu0D4+7aE74grKArkKVJ+WIeykONRA4PRV9/ucaH3FIYA
-         LKA0BxbFTXdRw785gtB1QIJ/DUO6JseDP+AXJDDPl7HIx8xK5E3MxQEVEZJp0Lev81sl
-         IJcbkwi+HZW2xqNRDkhDwV452ClQoPHLJKYRFMy1rg93qxkbztTQSFp0g2diIisN/LBz
-         YhYQ==
+        bh=WEm5A99uTG2c238a+JDBkz/mOTpdwi/bBFV9FIiWCUw=;
+        b=hKOanOB+Jp4twUTrfXiXV8T4xU7zos4v0oiBi0NKbLmvUTU+eLWrdQvXmBhVaVndRP
+         VMVuYgvl43SPxyS042yXS1SrdssVRlpWla7n1BLoDIGOeVeoaEnMG3VqLsUzOMHyJ7Uv
+         hTBVuIdBBVN30aMgO3Pejg7iQ+Mo6jnmPm3SQtgKg1hJK4i1WNqQZQK/FuXjR5uIfCuw
+         zCjSW4OTXKoTx5DKqGUzNA8Dh7YAIxlPH+UBSyfPUn4V13t/uf7+vp5REfGqWc4JOzGX
+         lX7HTkdrO3ACsF9yAGxTZlED4Qe1cEwr1LSl6s8g8vj9dhSzj5p405tjEW4u+MtlMPxC
+         k9Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=t9PFvNqNRiBtgoK1FQlt2dgZjVa65hIZ+MQtdwTOsMQ=;
-        b=4D6ayM65y0V8Zwdpf4lgQGELHfdntp1ITp3qYioPheYUjp/MzMECOS6WwHuYYY8N1r
-         YrDihjaD3XQr4wGLwyYIRvxsXqLprm6zZImo3mm4MQx18cqRt+srtw2cUivqdSkAQ5BN
-         aEPsEJYfVqmmccLn1vBmfovnoysDsUe08nn+loDtHI1ws0dXhdKOVB9dKu+RZf5mCAtm
-         DiJINq5jy7uWYDqjxi2ZRzAqBk/oMdVmuOJuzhuNXVuynzSZ37TlXovkGMqignFA+jOt
-         caDbtE/sPNpWQknXuq05wdRbeUpOQZJBX9vnT8X6dm6aNVf+0Fnj+9NP43ii9BBaUuWf
-         T4tA==
-X-Gm-Message-State: AFqh2kqQtej3MKTjovf8RNpsqt46LKsfq0hyUEesLwYJ32Da27o8C6uh
-        zoGTDgKFvOvL6gQqP2yv5vWjDF2N1K8=
-X-Google-Smtp-Source: AMrXdXu8317LXKt67uugrjyibQpv8a3lJd/ELRzxu3nTo8TdR5m3rzZ6aUVDkVcdqpY+V2cnlpMPjQ==
-X-Received: by 2002:a17:906:2612:b0:83f:384f:ea23 with SMTP id h18-20020a170906261200b0083f384fea23mr19222886ejc.57.1674315415953;
-        Sat, 21 Jan 2023 07:36:55 -0800 (PST)
+        bh=WEm5A99uTG2c238a+JDBkz/mOTpdwi/bBFV9FIiWCUw=;
+        b=W1E+A0pgbW+ph0Mse1S3LtGp4tfm2FpJ7NhtedXb+O3co47kYvfPgUO2+9Cc3Wrrfb
+         1/5J2+8Dd8njiDgvWlifKqF7Olduf6b9OqXLwpuCS3DD34ruX7K6pZqio3QkIBsVsyqS
+         /iQg8AFQusfKWpYvg9Ip+4lblPwADoKKi686z4W1x1eGZP2kLMWXSN5IcHyLvxSKAs+E
+         G6AdiOsA6iN9lF7V/VwieloXbAYX9fBZtSGYp1I2uxKryx/y9qHednWGKMaXr+QYaj1q
+         vM56ZxvlKUCRXEkqobUxP/zFJXJvG6FyZexe45sya97dBuEbFuF4zH1S96DH+spXOzgE
+         BGqg==
+X-Gm-Message-State: AFqh2kprnq0V0YzQAtKJJJm+XVdBe/vYGkXY6jZIrJvlljJnp24vPJzv
+        CYiD2ayQC7ZDNU/I7Uk7xdbWaEhhrzM=
+X-Google-Smtp-Source: AMrXdXud2vbRhpBZTL2WdDc/3x2g68JGn78+ZaUp9GYAg6ZI1mbhN9/TQRbZhqN8NeRWcVIpiEvVxg==
+X-Received: by 2002:a17:906:6bc6:b0:7c0:f684:9092 with SMTP id t6-20020a1709066bc600b007c0f6849092mr18559572ejs.37.1674315417507;
+        Sat, 21 Jan 2023 07:36:57 -0800 (PST)
 Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id vc10-20020a170907d08a00b008717a377125sm8187030ejc.85.2023.01.21.07.36.54
+        by smtp.gmail.com with ESMTPSA id vc10-20020a170907d08a00b008717a377125sm8187030ejc.85.2023.01.21.07.36.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 07:36:55 -0800 (PST)
+        Sat, 21 Jan 2023 07:36:57 -0800 (PST)
 From:   Sergey Organov <sorganov@gmail.com>
 To:     linux-serial@vger.kernel.org
 Cc:     Fabio Estevam <festevam@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sergey Organov <sorganov@gmail.com>
-Subject: [PATCH v1 3/7] serial: imx: do not sysrq broken chars
-Date:   Sat, 21 Jan 2023 18:36:35 +0300
-Message-Id: <20230121153639.15402-4-sorganov@gmail.com>
+Subject: [PATCH v1 4/7] serial: imx: do not break from FIFO reading loop prematurely
+Date:   Sat, 21 Jan 2023 18:36:36 +0300
+Message-Id: <20230121153639.15402-5-sorganov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230121153639.15402-1-sorganov@gmail.com>
 References: <87bko4e65y.fsf@osv.gnss.ru>
@@ -87,37 +87,56 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Do not call uart_handle_sysrq_char() if we got any receive error along with
-the character, as we don't want random junk to be considered a sysrq.
+There is no reason to prematurely break out of FIFO reading loop, and it
+might cause needless reenters into ISR, so keep reading until FIFO is
+empty.
 
 Signed-off-by: Sergey Organov <sorganov@gmail.com>
 ---
- drivers/tty/serial/imx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/serial/imx.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index e7fce31e460d..e709118fe85c 100644
+index e709118fe85c..797c441088a9 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
-@@ -911,9 +911,6 @@ static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
+@@ -888,7 +888,7 @@ static void imx_uart_check_flood(struct imx_port *sport, u32 usr2)
+ static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
+ {
+ 	struct imx_port *sport = dev_id;
+-	unsigned int rx, flg, ignored = 0;
++	unsigned int rx, flg;
+ 	struct tty_port *port = &sport->port.state->port;
+ 	u32 usr2;
+ 
+@@ -921,11 +921,8 @@ static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
+ 			if (rx & URXD_OVRRUN)
+ 				sport->port.icount.overrun++;
+ 
+-			if (rx & sport->port.ignore_status_mask) {
+-				if (++ignored > 100)
+-					goto out;
++			if (rx & sport->port.ignore_status_mask)
  				continue;
- 		}
+-			}
  
--		if (uart_handle_sysrq_char(&sport->port, (unsigned char)rx))
--			continue;
--
- 		if (unlikely(rx & URXD_ERR)) {
- 			if (rx & URXD_BRK)
- 				sport->port.icount.brk++;
-@@ -942,6 +939,8 @@ static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
- 				flg = TTY_OVERRUN;
+ 			rx &= (sport->port.read_status_mask | 0xFF);
  
- 			sport->port.sysrq = 0;
-+		} else if (uart_handle_sysrq_char(&sport->port, (unsigned char)rx)) {
-+			continue;
+@@ -944,13 +941,12 @@ static irqreturn_t __imx_uart_rxint(int irq, void *dev_id)
  		}
  
  		if (sport->port.ignore_status_mask & URXD_DUMMY_READ)
+-			goto out;
++			continue;
+ 
+ 		if (tty_insert_flip_char(port, rx, flg) == 0)
+ 			sport->port.icount.buf_overrun++;
+ 	}
+ 
+-out:
+ 	tty_flip_buffer_push(port);
+ 
+ 	return IRQ_HANDLED;
 -- 
 2.30.1
 
