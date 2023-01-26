@@ -2,101 +2,94 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B23A67CF29
-	for <lists+linux-serial@lfdr.de>; Thu, 26 Jan 2023 16:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFFD67D4C7
+	for <lists+linux-serial@lfdr.de>; Thu, 26 Jan 2023 19:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjAZPEc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 26 Jan 2023 10:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S232283AbjAZS6h (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 26 Jan 2023 13:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjAZPEc (ORCPT
+        with ESMTP id S232288AbjAZS6g (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 26 Jan 2023 10:04:32 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4946B981
-        for <linux-serial@vger.kernel.org>; Thu, 26 Jan 2023 07:04:30 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id w11so3395961lfu.11
-        for <linux-serial@vger.kernel.org>; Thu, 26 Jan 2023 07:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=85g64dsl/DcFY/LlzFQvHEB0mO6DyTsjvCN0CbsFtNw=;
-        b=RkiI+vwnnL7VCkolwfyJmz2pmhwyz1uPFgE9WrH3eTnJ0h1OjtfKBo3De8gNoeWD+X
-         l3xRPZIq/L9vFJzv6PULtvhXKKJtDa9LLTd2AiHrb4BZ60JZC+IqDP/SwDQlwxNDg3Lu
-         9JvSTWA0sLX1/2yvxrUmgT4h1TvymGWt7fVAn2xOTJDbbM8Feyi8EviAkCrynsKOph1z
-         JlCZLF6rHye2m3z2r22q6SSNhTHJoseOKvgJklu5p9zXC51NgfsruhZVLFQ0SRjjMd8L
-         sQonnT13MfN0mupzXLJTbk49qRIe8hctNAc3jWuKFq37gyG4sRWzTKJCqEAo/+pvSIr+
-         DyPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=85g64dsl/DcFY/LlzFQvHEB0mO6DyTsjvCN0CbsFtNw=;
-        b=iwEk4Q5MZG5yTtKUcV4lcvW0o7R9IqrUT1xxtJc5U5Bk4/1rT0VEoJWFlvsd6kZ7Af
-         Ugll7xMnuI9/VjIH7CXH/mdDd9iYa6T0zWzR+uQq+fuABKxaev5Vie0RgpJItVQgyQu5
-         F8f6RdNjpEY/94F0uhjLisiyZgCfnI1HpoStPdfNHUOdqUtbX41Bo5BcyYPJST5xwxW4
-         J/rhG0F45JeESLNFm5+BSXsSO4j6Ra9NUyJurjzrBaBsPLnqQjXPdN9Mb5q5g9DC2xNc
-         rqpu7MDmxAc/JFOrJ3PMBeKkCeNSdLi8RiuR77xMuIoZmh+u0UXX8FCQi1jZpmDtwM4e
-         SJwA==
-X-Gm-Message-State: AFqh2koru2VJs38Y7onEQHjJUoGP2Qq6vxX/FAt2UgRfpfrjFGFDHFzO
-        CvV2wypoJF9Cjbo2a+hiJvFmWQ==
-X-Google-Smtp-Source: AMrXdXu6eyBeVwquiscq6dc3oKOQoMKYuh59bv0ZswxZ5ffCDxH44vMaC4VrsM+OBs46fi7tYToQIA==
-X-Received: by 2002:ac2:4f0c:0:b0:4ca:f887:fe99 with SMTP id k12-20020ac24f0c000000b004caf887fe99mr9661416lfr.25.1674745468435;
-        Thu, 26 Jan 2023 07:04:28 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id p8-20020adff208000000b002423edd7e50sm1618824wro.32.2023.01.26.07.04.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 07:04:27 -0800 (PST)
-Message-ID: <0a47dfbd-d786-c7bd-e4f5-c71e1b649b9f@linaro.org>
-Date:   Thu, 26 Jan 2023 16:04:25 +0100
+        Thu, 26 Jan 2023 13:58:36 -0500
+Received: from sp13.canonet.ne.jp (sp13.canonet.ne.jp [210.134.168.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A85DD5D11F;
+        Thu, 26 Jan 2023 10:58:35 -0800 (PST)
+Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
+        by sp13.canonet.ne.jp (Postfix) with ESMTP id 205E01E05A2;
+        Fri, 27 Jan 2023 03:58:34 +0900 (JST)
+Received: from echeck13.canonet.ne.jp ([172.21.160.123])
+        by csp3 with ESMTP
+        id L7SEpOx3yxJr5L7SEpPmGL; Fri, 27 Jan 2023 03:58:34 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=S49nfKgP c=1 sm=1 tr=0
+ ts=63d2cd5a cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=QA8zHFxAwLBQ4A9MkZgA:9
+ p=WKcvGfCz9DfGexK3dBCb:22 a=c8wCX2VJ6RehaN9m5YqYzw==:117
+ a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
+ a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
+ a=xo5jKAKm-U-Zyk2_beg_:22"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id CF3E01C026B;
+        Fri, 27 Jan 2023 03:58:33 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
+        by echeck13.canonet.ne.jp (Postfix) with ESMTP id A235D1C0264;
+        Fri, 27 Jan 2023 03:58:33 +0900 (JST)
+Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id D227215F963;
+        Fri, 27 Jan 2023 03:58:32 +0900 (JST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 7/9] dt-bindings: timer: mediatek,mtk-timer: add MT8365
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
-        matthias.bgg@gmail.com, gregkh@linuxfoundation.org,
-        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
-        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
-        sean.wang@mediatek.com, zhiyong.tao@mediatek.com
-References: <20230125143503.1015424-1-bero@baylibre.com>
- <20230125143503.1015424-8-bero@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230125143503.1015424-8-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Message-ID: <20230126185832.00004E28.0156@daime.co.jp>
+Date:   Fri, 27 Jan 2023 03:58:32 +0900
+From:   "Mrs Alice Walton" <daime@daime.co.jp>
+To:     <INQUIRY@daime.co.jp>
+Reply-To: <alicewaltton1@gmail.com>
+Subject: INQUIRY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Mrs Alice Walton
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674759513;VERSION=7944;MC=424886444;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=0;RNP=
+X-ESET-Antispam: OK
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOCALPART_IN_SUBJECT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_MR_MRS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5005]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [210.134.168.90 listed in wl.mailspike.net]
+        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
+        *      Subject
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [alicewaltton1[at]gmail.com]
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 T_HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 25/01/2023 15:35, Bernhard Rosenkränzer wrote:
-> Add binding description for mediatek,mt8365-systimer
-> 
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
 
-Applied, thanks
+Greetings,
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
+Please let me know as soon as possible,
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regard
+Mrs Alice Walton
+
 
