@@ -2,94 +2,126 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFFD67D4C7
-	for <lists+linux-serial@lfdr.de>; Thu, 26 Jan 2023 19:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117C167E03F
+	for <lists+linux-serial@lfdr.de>; Fri, 27 Jan 2023 10:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjAZS6h (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 26 Jan 2023 13:58:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S233019AbjA0Jcb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 27 Jan 2023 04:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjAZS6g (ORCPT
+        with ESMTP id S233003AbjA0Jc2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:58:36 -0500
-Received: from sp13.canonet.ne.jp (sp13.canonet.ne.jp [210.134.168.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A85DD5D11F;
-        Thu, 26 Jan 2023 10:58:35 -0800 (PST)
-Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
-        by sp13.canonet.ne.jp (Postfix) with ESMTP id 205E01E05A2;
-        Fri, 27 Jan 2023 03:58:34 +0900 (JST)
-Received: from echeck13.canonet.ne.jp ([172.21.160.123])
-        by csp3 with ESMTP
-        id L7SEpOx3yxJr5L7SEpPmGL; Fri, 27 Jan 2023 03:58:34 +0900
-X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=S49nfKgP c=1 sm=1 tr=0
- ts=63d2cd5a cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=QA8zHFxAwLBQ4A9MkZgA:9
- p=WKcvGfCz9DfGexK3dBCb:22 a=c8wCX2VJ6RehaN9m5YqYzw==:117
- a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
- a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
- a=xo5jKAKm-U-Zyk2_beg_:22"
-X-CNT-CMCheck-Score: 100.00
-Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id CF3E01C026B;
-        Fri, 27 Jan 2023 03:58:33 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
-        by echeck13.canonet.ne.jp (Postfix) with ESMTP id A235D1C0264;
-        Fri, 27 Jan 2023 03:58:33 +0900 (JST)
-Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id D227215F963;
-        Fri, 27 Jan 2023 03:58:32 +0900 (JST)
+        Fri, 27 Jan 2023 04:32:28 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ACD38024
+        for <linux-serial@vger.kernel.org>; Fri, 27 Jan 2023 01:32:25 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id l8so2996844wms.3
+        for <linux-serial@vger.kernel.org>; Fri, 27 Jan 2023 01:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+nr5yhr/+t2gpLfGOs+Jk9mqx4K88IomiY/057Wk89I=;
+        b=afmjeNTvz+QfUYiPvDH9aI4+T3r6PKox0Z9VZNkm/tf4SrNrWhmAcU/fV+6GKjKun0
+         eo9QyIGD2KagMefssAESDksaJXXFJRmKbfo1rmLaHPLpff+IelOR/8NStIUQfsWi55uS
+         qA+Vkq6u2u9jqDXXsflTi3MrPmYzdeVqSMDTaSRU+kZaMs9USDTu2cP8vy0U7WTP9hWf
+         NxrdpUjYK3tZ0pqfZrABbKlgk6Jg/0+eBZF8tzTept+x41W70ysQfVEoPC9ugQNzXPuM
+         s+CCp3ROSLUim+9jHenXJtiPJrg6FHgFAKQW/3155i8iK7ZkRBShMo40/I7t/oUoTRlM
+         kD7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+nr5yhr/+t2gpLfGOs+Jk9mqx4K88IomiY/057Wk89I=;
+        b=LpsFGxZtes0txPwd7li1e1cLn5t25mHSsQuHmogsv7sBBG2hUOs4zRPStM0D66f0+C
+         kCnT2pWCK9F6QqCq6QOandSq5Mw+4PO5qZXn1KeSym5pgAVGx2PEUoxoldDhKdIXnJTQ
+         3Nu4Iedmgt7ajz4t5w/ijuRw0W4N5ksHSYo8sNacVrs/Sw1VbZr58i3xjLFjyWrngp/Y
+         PT64D4KNQnBhXickiRv/8Ks7zx3G1OuvfPcsF31T0cbwuPyOazpRWKXG+zKox2AduH9U
+         foO6ih0MrYmh2XXNdAM8OXYbeoXOMNCcOddRnYU3P/5hI0BMGzoF3qnOyDidjaYh3HS0
+         8R8w==
+X-Gm-Message-State: AFqh2krTfdp3fJ+D3dzHdMIC/VX+7F/yakluenSE2F2m9A/c/6eqawbb
+        bokuRRub6VUlOeKeIf4jIDC+/A==
+X-Google-Smtp-Source: AMrXdXuMTQOCdCJ4CvxFABguPpRWFrI5npvRZDl6tCte99HXwtgK6k0OjDxljIq3pESdxDzl3Zcb6A==
+X-Received: by 2002:a05:600c:1c1a:b0:3da:fbd2:a324 with SMTP id j26-20020a05600c1c1a00b003dafbd2a324mr38878286wms.36.1674811943923;
+        Fri, 27 Jan 2023 01:32:23 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e19-20020a05600c439300b003cfd4e6400csm3795265wmn.19.2023.01.27.01.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 01:32:23 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/3] dt-bindings: serial/mtd/mc/ata: use MC peripheral props
+Date:   Fri, 27 Jan 2023 10:32:14 +0100
+Message-Id: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <20230126185832.00004E28.0156@daime.co.jp>
-Date:   Fri, 27 Jan 2023 03:58:32 +0900
-From:   "Mrs Alice Walton" <daime@daime.co.jp>
-To:     <INQUIRY@daime.co.jp>
-Reply-To: <alicewaltton1@gmail.com>
-Subject: INQUIRY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: Mrs Alice Walton
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674759513;VERSION=7944;MC=424886444;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOCALPART_IN_SUBJECT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_MR_MRS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [210.134.168.90 listed in wl.mailspike.net]
-        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
-        *      Subject
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [alicewaltton1[at]gmail.com]
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 T_HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hi,
 
-Greetings,
+Dependencies
+============
+I think entire patchset should go via one tree (Rob's). Patch #2 depends on
+patch #1.  Patch #3 could go separate tree as long as others are in the
+linux-next.  However for simplicity let's push everything through Rob's DT
+tree?
 
-I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
-Please let me know as soon as possible,
+Changelog
+=========
+This is a v2 of this one patch:
+https://lore.kernel.org/linux-devicetree/20230123151302.368277-11-krzysztof.kozlowski@linaro.org/
 
-Regard
-Mrs Alice Walton
+Changes since v1:
+1. Add patches 1 and 2 to fix dt_binding_check and few dtbs_check warnings
 
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  dt-bindings: intel,ixp4xx-expansion-bus: split out peripheral
+    properties
+  dt-bindings: reference MC peripheral properties in relevant devices
+  dt-bindings: serial: restrict possible child node names
+
+ .../ata/intel,ixp4xx-compact-flash.yaml       |  1 +
+ ...intel,ixp4xx-expansion-bus-controller.yaml | 64 +--------------
+ ...tel,ixp4xx-expansion-peripheral-props.yaml | 80 +++++++++++++++++++
+ .../mc-peripheral-props.yaml                  |  1 +
+ .../devicetree/bindings/mtd/mtd-physmap.yaml  |  1 +
+ .../devicetree/bindings/serial/8250.yaml      |  1 +
+ .../devicetree/bindings/serial/serial.yaml    |  2 +-
+ .../bindings/watchdog/maxim,max63xx.yaml      |  1 +
+ 8 files changed, 87 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/intel,ixp4xx-expansion-peripheral-props.yaml
+
+-- 
+2.34.1
 
