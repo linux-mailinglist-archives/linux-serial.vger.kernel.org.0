@@ -2,105 +2,136 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6751867F081
-	for <lists+linux-serial@lfdr.de>; Fri, 27 Jan 2023 22:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4395767F35B
+	for <lists+linux-serial@lfdr.de>; Sat, 28 Jan 2023 01:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjA0Viw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 27 Jan 2023 16:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S231496AbjA1Ayd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 27 Jan 2023 19:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjA0Viv (ORCPT
+        with ESMTP id S233518AbjA1Ayc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 27 Jan 2023 16:38:51 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41862007C
-        for <linux-serial@vger.kernel.org>; Fri, 27 Jan 2023 13:38:50 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id w21so2943797qkf.8
-        for <linux-serial@vger.kernel.org>; Fri, 27 Jan 2023 13:38:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EkjlJx23CrkCdR6Z9AlaV1vvEzLjMrV/VSTIV1fEBgE=;
-        b=mdSFmRNUmWQq+PcXXLwJph7CYzqDTSPiartUvARRGxoGc1aVC4POxGBX2FggO/3pu3
-         tQFZhD+2V6mS+vdDTGCdjH8/FrQxi8HRqTTNNPcMu5W5wnxcbINbEwC2uNxi16VqiCrO
-         spk3LNSUUGWq9NS1/ROkCfB5Ox947kYiSkJhopYy57uEk7X1FazkJABT0QaaWtsjwE7r
-         wO/3wn0B/X9ffj10o5BpGlMf6j3OkxuiwccZ79tRyIm09vaB2+BsgheNIk/XNgIon8r0
-         AAe5cGFFuaXLmz3cJvk7X0bAKvEdrCkDma6CLHS4KCzXss+wZOUs7zLIkLGlwB9b1ui4
-         u6Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EkjlJx23CrkCdR6Z9AlaV1vvEzLjMrV/VSTIV1fEBgE=;
-        b=egDr2KHuAIA387PPN8BuXFjv6RFmiOObvm4SL+gxlb5T3bDu9f2nuUV0N79MvAB/IN
-         jiwyXkOR/ANPG5CulWSYe8CIlIwErccSFUfMsVTJ7FJ6mbj0mWUWuISnzfqMEKf/wpdu
-         rKYvh/lyfiGDjxBmr2tmTr8WLaOx0+Koc6dT3pdqSA/0OPC7b3i5CbkEJYEzkbC6hqIg
-         qegiC9z37PWF9ZDcOuwsRKiRVrepwf/oGfTtnjeU1h93uNGrZo3i1ELl/BBmA/Bl4S5R
-         FWYTYwM1uVtvIEAsqQjOa8VyAlMzmWpoPiHgpWp6VgAYYhDkJyoDyvaq8fNiujFShNmt
-         KG6Q==
-X-Gm-Message-State: AFqh2kqQNG+vAZdQgug3Y4wJxgJ0Cpf9u8a28448hDxiet0alTf2ueni
-        MgV/xftzdA5JVNMK4w5cxF8VmsSadNLTS4AXPjQ=
-X-Google-Smtp-Source: AMrXdXsk2W296jrqnhgL8kKhRiSFwc9CWIOCXF0g3sGOXBKyQYL5TqE8x1jplv4n4pOuAMZpZqMCweE4nKqi6Xud/Ak=
-X-Received: by 2002:ae9:e214:0:b0:708:ee3b:e153 with SMTP id
- c20-20020ae9e214000000b00708ee3be153mr1126380qkc.352.1674855529998; Fri, 27
- Jan 2023 13:38:49 -0800 (PST)
+        Fri, 27 Jan 2023 19:54:32 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C0D83278
+        for <linux-serial@vger.kernel.org>; Fri, 27 Jan 2023 16:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1674867270; x=1706403270;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=8HroFzcMUn53K8eqs6JLXQhk7cTtRl6khnafxvlvf58=;
+  b=VVunoUzRW73PFTr+OUe6+WCXr7dQn1aH2Kki7QMTGHwg4J2uMo64R+w2
+   PDexZqS1RRjcKizTtf7jhwx2VRLXgI3ZbyoMrRvRMJfgZB17GCO5N6NXF
+   /Th+aQu3Jh8+LRSYD1gHYSofR94Tea0YP53bjChojz2AJ+XmNd3yH9bU9
+   PT3yzyPr5kRFM19F/nira5iKZKb/vMzmX86rKIIqakqZHG4gQ0ZY/A6zZ
+   869q0TGz7uQptjsPfA78cgE8E6OBQRNYCBaOJyUJX3uZwgULpiWy+Nz3u
+   f9yo+Vn9jOEE+rdegPXZzDd5MR5bIx4edQ/XetYq2RTtYXXViNPHQocVx
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,252,1669046400"; 
+   d="scan'208";a="221742372"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2023 08:54:18 +0800
+IronPort-SDR: Cw2ORc4w0LheX4DL/QaJDWJXOR414izs9rTbu5NQcQqsrafoAGMMqmTbxzj3vq5EInQQlJcS2e
+ OpQpTwuDDbsO8XkdG7h2ypPMOzGQPjtfo2eLJROIOnifqFDgwoCV7hH8RkVk4GirNcCdGWUWN+
+ Ag96fvTyDOXFLPq0CuYfXiO2YUCdBROu2Q3FDgU320bdU4tQuggmnCbOKv1x99INRlpuaQrmYj
+ EIzyuXTMv7w2PmvXgeBv6/dBcLK3F8JLo4dqQlAqK96atb3CCnLJSg34+rfkxfE78zpJTPAGBZ
+ GhE=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2023 16:06:03 -0800
+IronPort-SDR: 17yhW25kTap6XuBPUloT+sby6MsvH7p9HUqpfBIV+S2+BWB2ivXSlWKFCIJvuNQ2GjWpjk+hAk
+ AXa9fytVFXeb2SnpS51RTBbNmzLt/w08uxD5h6iArz4TWXTRX9Dyrur0iu5UfnnApOXK0ddY5m
+ tdY01r6vXY0GYvIzfxtFzSWJ0h6755zg4d7LPL8C9Bn0l70d0f8P/dJ1SqY+AM9FQ6DdBLjJCe
+ 0Fx76uBWXCTxe/8gMFpwdktCKtg3ILYV1a+7J3eT1xx6ViRgwt64qqqbgKE/EdYovd89+ImR+x
+ 998=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2023 16:54:19 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P3bYj6r87z1RwvT
+        for <linux-serial@vger.kernel.org>; Fri, 27 Jan 2023 16:54:17 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1674867256; x=1677459257; bh=8HroFzcMUn53K8eqs6JLXQhk7cTtRl6khna
+        fxvlvf58=; b=ShftbYmd37Un2N6WXeDLuDn368rIZ7rg0bPyrhOhRV4L+OujvBZ
+        9t8qHFpVJ9RP9zP8FBgxqvyARvggZHlQecr5g6REKIL7iS/I5mp/zcILc1CJIDnK
+        eNA5e0cb5clxhH30P9AwwNnBnpmc4eCQx23IrsUCGiFiYbpjuCzCe4nihmz/r/pb
+        a40GgA7aEk2TxXGdKxBIf7R5q8nNV1GLcsTNR48eKphEVQZb3leRSAv96TRrs2Xi
+        HvHLkNGrYeNxQEiJKcsmUXydBaOCiqhmUKI8Wog2rqzVCKrwuTaN1On12FtbYbv5
+        aQqi/qfXflV+L3rvEVEDNsMiNU0bzwX0V8Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id AXRkKoc6sFGe for <linux-serial@vger.kernel.org>;
+        Fri, 27 Jan 2023 16:54:16 -0800 (PST)
+Received: from [10.225.163.66] (unknown [10.225.163.66])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P3bYd1nCCz1RvLy;
+        Fri, 27 Jan 2023 16:54:12 -0800 (PST)
+Message-ID: <75aa04c9-e173-6a2d-6b38-d0e16f3800aa@opensource.wdc.com>
+Date:   Sat, 28 Jan 2023 09:54:11 +0900
 MIME-Version: 1.0
-Received: by 2002:a05:622a:2c6:b0:3b6:4a9d:4c83 with HTTP; Fri, 27 Jan 2023
- 13:38:49 -0800 (PST)
-Reply-To: mrsmargaret1960r@gmail.com
-From:   "Mrs. Margaret Christopher" <alkasimabubakar644@gmail.com>
-Date:   Fri, 27 Jan 2023 22:38:49 +0100
-Message-ID: <CAC84WCrZJNgrSfmMM24wp7WU8T7ZCPvgPUyXRBgHx++ro78g4w@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:72b listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7452]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [alkasimabubakar644[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [alkasimabubakar644[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: reference MC peripheral properties in
+ relevant devices
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
+ <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On 1/27/23 18:32, Krzysztof Kozlowski wrote:
+> Several devices can be attached to memory controllers (or memory-mapped
+> buses), thus they can come with additional controller-specific
+> properties, e.g. devices wired under Intel IXP4XX bus: cfi-flash,
+> intel,ixp4xx-compact-flash, NS8250 serial and MAX6369 watchdog.
+> 
+> Referencing Memory Controller or IXP4XX bus peripheral properties fixes
+> few dtbs_check warnings like:
+> 
+>   intel-ixp42x-gateworks-gw2348.dtb: ide@1,0: Unevaluated properties are not allowed
+>     ('intel,ixp4xx-eb-ahb-split-transfers', 'intel,ixp4xx-eb-byte-access', ... ' were unexpected)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
 -- 
-Hello Dear
+Damien Le Moal
+Western Digital Research
 
-  Am a dying woman here in the hospital, i was diagnose as a
-Coronavirus patient over  a month ago. I am A business woman who is
-dealing with Gold Exportation, I Am from USA California i have a
-charitable and unfulfilling project that am about to handover to you,
-if you are interested to know more about this project please reply me.
- Hope to hear from you
-
-Best Regard
-Mrs Margaret
