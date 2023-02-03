@@ -2,144 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E0D689C31
-	for <lists+linux-serial@lfdr.de>; Fri,  3 Feb 2023 15:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DA7689C49
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Feb 2023 15:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjBCOut (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 3 Feb 2023 09:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S232671AbjBCO4D (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Feb 2023 09:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjBCOus (ORCPT
+        with ESMTP id S232055AbjBCO4C (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 3 Feb 2023 09:50:48 -0500
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE49D060
-        for <linux-serial@vger.kernel.org>; Fri,  3 Feb 2023 06:50:45 -0800 (PST)
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 2023020314504325054c719bac6333dc
-        for <linux-serial@vger.kernel.org>;
-        Fri, 03 Feb 2023 15:50:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=soWeu6gkV3NEcYNRrfIYl154ZKDvANaWKtl+GG89qaE=;
- b=Zoq+elDa54uNPWIqcLTvhC6h8SEmYAp7+CC2tc+BukBRK8JfKgI6Lc6sKWeADUWMCy979s
- mK2dnRwPYk5zS953sx2RfMHa+lhFKXzeRrj/cbjY7ymzsk84F7gMo3+IejoLYtCOI1CJ/e/l
- k/v9BOA0ogvP2xpqH6oJyjLHgPsIs=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 4/4] tty: n_gsm: add TIOCMIWAIT support
-Date:   Fri,  3 Feb 2023 15:50:23 +0100
-Message-Id: <20230203145023.6012-4-daniel.starke@siemens.com>
-In-Reply-To: <20230203145023.6012-1-daniel.starke@siemens.com>
-References: <20230203145023.6012-1-daniel.starke@siemens.com>
+        Fri, 3 Feb 2023 09:56:02 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B7F3B664
+        for <linux-serial@vger.kernel.org>; Fri,  3 Feb 2023 06:56:01 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so5710584wmq.1
+        for <linux-serial@vger.kernel.org>; Fri, 03 Feb 2023 06:56:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GE8LRefBbCr+vfDK+OAPRXSUgs+NOR142JeKY5u24zc=;
+        b=gVLHbXSFArNyVySbKLYtIAbS7wOVw2/uF/7sFj1V2kQyD+OBs0IMZz6moOQLkH8p0r
+         zuwe9faHu/8YamWSB5HU9WLJQ9uoTOqd96AjLwUffqwKAr0EKRNfb/Mq6XIkpMqEpa5C
+         kUJGoC+v/lRH4cZv6btzkNVIvI2zcq8xl/PBLMSSXxk8dk7+VczpQNIZtQGSezjkcnwo
+         PQ0zfatYfyrm5cdMBns4US5evzsSW+cFbSnW9jEFuXdJ4XNHz69G4XtIvQQttOfELFuX
+         EVuWH65V1X9CMGuQEpKMM2T4+BgH6heHlnLQ34e1KBngPH8LyWNVvhfTMA3nv4FpsV4m
+         8qjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GE8LRefBbCr+vfDK+OAPRXSUgs+NOR142JeKY5u24zc=;
+        b=qBrqvAIieP6jVSB6wdBysXvTEM5N9e433EIPHoRBGuBgPWnedteacL1kyuq8G+7GvV
+         jryu/HZzPu3rblyFSXfYFQRKypLbJ8AgdGRVF3EgMFFHns2og4vuRUuyymQOdo+u/unZ
+         NtEEtt89oUDo6zRMH/gsa/U5ybO0wwnuWlTM1WFR89Gk8icMJECMxu/BnjBS0IO7Ho/F
+         hVPZgAyDHzzUF10HdtKSnDiKcO3aK1Hesoid/p6DZ4crAxJdI0qAS1tDYscyijTbIIJv
+         Z56136MmqV7z9NRVEw4jkVlw8txx3NuI0jeJfRHYpNLD8a12y7QGIjNJh4P6BMzEqkYw
+         0rxw==
+X-Gm-Message-State: AO0yUKUghEDB5WlRJaqD/JC1BqDI85BAEfsOJOorv5YDfdJhfZpe4Niv
+        OQWthjOGgpW8pczIVt6CzJdKn2FNYNaOpQOucFw=
+X-Google-Smtp-Source: AK7set8eM/FKZMeOZp5dEOwzN74dSpKypZJhDF906hgMPRd8mfG+Hg3Sg2xPhWjL9YFq34trlg5irNBxFCwrH/5B/cg=
+X-Received: by 2002:a05:600c:5569:b0:3df:e1d9:8914 with SMTP id
+ ja9-20020a05600c556900b003dfe1d98914mr341691wmb.189.1675436159398; Fri, 03
+ Feb 2023 06:55:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Sender: dareadja5@gmail.com
+Received: by 2002:a05:6020:4710:b0:259:ad88:21bb with HTTP; Fri, 3 Feb 2023
+ 06:55:58 -0800 (PST)
+From:   Kayla Manthey <sergeantkayllamanthey@gmail.com>
+Date:   Fri, 3 Feb 2023 14:55:58 +0000
+X-Google-Sender-Auth: YeauNz1P6sTBHUxFP3WntVqGFL0
+Message-ID: <CAE9bZtNgCnc6DJ4cN88CyUew6oLNNkiCuqHnaLRvYJfpCgsmjA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
-
-Add support for the TIOCMIWAIT ioctl on the virtual ttys. This enables the
-user to wait for virtual modem signals like RING.
-
-More work is needed to support also TIOCGICOUNT.
-
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
-
-v2 -> v3:
-Added appropriate cast of arg in gsm_wait_modem_change() call as remarked
-in the review.
-No other changes.
-
-Link: https://lore.kernel.org/all/Y9vZOsAuzKjBNArJ@kroah.com/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index cf1ab7d619d9..aa3488280f1b 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1542,6 +1542,7 @@ static void gsm_process_modem(struct tty_struct *tty, struct gsm_dlci *dlci,
- 	if (brk & 0x01)
- 		tty_insert_flip_char(&dlci->port, 0, TTY_BREAK);
- 	dlci->modem_rx = mlines;
-+	wake_up_interruptible(&dlci->gsm->event);
- }
- 
- /**
-@@ -2129,7 +2130,7 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
- 	/* A DLCI 0 close is a MUX termination so we need to kick that
- 	   back to userspace somehow */
- 	gsm_dlci_data_kick(dlci);
--	wake_up(&dlci->gsm->event);
-+	wake_up_all(&dlci->gsm->event);
- }
- 
- /**
-@@ -2339,6 +2340,7 @@ static void gsm_dlci_begin_close(struct gsm_dlci *dlci)
- 	dlci->state = DLCI_CLOSING;
- 	gsm_command(dlci->gsm, dlci->addr, DISC|PF);
- 	mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
-+	wake_up_interruptible(&gsm->event);
- }
- 
- /**
-@@ -3877,6 +3879,33 @@ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk)
- 	return -EPROTONOSUPPORT;
- }
- 
-+/**
-+ * gsm_wait_modem_change - wait for modem status line change
-+ * @dlci: channel
-+ * @mask: modem status line bits
-+ *
-+ * The function returns if:
-+ * - any given modem status line bit changed
-+ * - the wait event function got interrupted (e.g. by a signal)
-+ * - the underlying DLCI was closed
-+ * - the underlying ldisc device was removed
-+ */
-+static int gsm_wait_modem_change(struct gsm_dlci *dlci, u32 mask)
-+{
-+	struct gsm_mux *gsm = dlci->gsm;
-+	u32 old = dlci->modem_rx;
-+	int ret;
-+
-+	ret = wait_event_interruptible(gsm->event, gsm->dead ||
-+				       dlci->state != DLCI_OPEN ||
-+				       (old ^ dlci->modem_rx) & mask);
-+	if (gsm->dead)
-+		return -ENODEV;
-+	if (dlci->state != DLCI_OPEN)
-+		return -EL2NSYNC;
-+	return ret;
-+}
-+
- static bool gsm_carrier_raised(struct tty_port *port)
- {
- 	struct gsm_dlci *dlci = container_of(port, struct gsm_dlci, port);
-@@ -4136,6 +4165,8 @@ static int gsmtty_ioctl(struct tty_struct *tty,
- 		gsm_destroy_network(dlci);
- 		mutex_unlock(&dlci->mutex);
- 		return 0;
-+	case TIOCMIWAIT:
-+		return gsm_wait_modem_change(dlci, (u32)arg);
- 	default:
- 		return -ENOIOCTLCMD;
- 	}
--- 
-2.34.1
-
+Dia duit a st=C3=B3r, an bhfuair t=C3=BA mo theachtaireacht roimhe seo?, Go
+raibh maith agat.
