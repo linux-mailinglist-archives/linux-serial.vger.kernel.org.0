@@ -2,64 +2,40 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FB569BFD3
-	for <lists+linux-serial@lfdr.de>; Sun, 19 Feb 2023 10:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7865569C0A6
+	for <lists+linux-serial@lfdr.de>; Sun, 19 Feb 2023 15:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjBSJqu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 19 Feb 2023 04:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S229613AbjBSOXT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 19 Feb 2023 09:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjBSJqu (ORCPT
+        with ESMTP id S229729AbjBSOXS (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 19 Feb 2023 04:46:50 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C2A12F33
-        for <linux-serial@vger.kernel.org>; Sun, 19 Feb 2023 01:46:09 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id c65so1110578edf.11
-        for <linux-serial@vger.kernel.org>; Sun, 19 Feb 2023 01:46:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EJntxz4d8bIHPiBQgUEYlKd1uQSFWcfmni6Frb9jtyc=;
-        b=N/2XDyiDAGlKgc3TaLq6KMju7SZX9eEOoRTxfStQuvL3wKrYIO3Nj7Tn59TqcUUNKu
-         54BtUE99hMbv4KVdMm4NqZ4w35ALd2eJW5XLuTTf9/f6eWTwet93ZZLjAlf9W39gM0Zz
-         yR6MZeTrqz8sl9hFR4ndLQLWy1s/hsqgd1sju39oxGVRTzD6aK8qNTiZHHXmGWp/cejL
-         Q4TYdi40igr+oL5OJHz9l8NpKOD43ZDaR1GAVTGIb4duy97o2fRe0wPI0HgMwG0z+8wc
-         7Q0VKHZ4/SYRkfa9ClVhCLqyO93695DwcbwMv9vDSz81u7xoGYZQpGwgmiwZiHVcnpgk
-         MeUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EJntxz4d8bIHPiBQgUEYlKd1uQSFWcfmni6Frb9jtyc=;
-        b=SG2HqYan0jAKZXHLiKyost5ZuIUOZ5uUgw8d2qomyR98SE86/oedV6a/VqZFtnCYb2
-         256D4aqIUxs4hbD08luGzqi8g0tJoYKjSo6vQSBa8mqkmgp80ZGY58TfffCN224yG4sQ
-         j+gO8cbyRZ7sbot+jE4UOgJgpbrWB/QBlMpTpq0mS3V5r6UcCoXlIyWCTQ7+bLUOCn5R
-         TYV9FwmBTNBNbtGkWUYZIfFHomGqmwXW/EZ0cK/pnWogQHkglVhNVCgvBzRN6WerkJDI
-         wdLZN7oAdJ9kE89oyZt+mEd2ZKiJKJQMBYO3RulnEE03Wx1yvOAFJS2kNmS1Qbs87L99
-         GdSg==
-X-Gm-Message-State: AO0yUKV3HIpDjfB0uQNftLZ57ufD6jA2WrpcQPs+UJrz70NkzOkqCF99
-        rauiXqvjhcJEv2+xUfSSJsK8zQ==
-X-Google-Smtp-Source: AK7set+/2plUttzZDp75JGZ7GVwRhhqqjohq/sBAYcfGQoYHobm18Ehjwa/hC8zBO98Lb5s0Pooq7A==
-X-Received: by 2002:a17:906:2894:b0:8a0:7158:15dc with SMTP id o20-20020a170906289400b008a0715815dcmr6745616ejd.74.1676799879212;
-        Sun, 19 Feb 2023 01:44:39 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s21-20020a1709060c1500b00887f6c39ac0sm4315263ejf.98.2023.02.19.01.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Feb 2023 01:44:38 -0800 (PST)
-Message-ID: <dfbb244b-576b-a664-3d2b-996aadc39175@linaro.org>
-Date:   Sun, 19 Feb 2023 10:44:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] dt-bindings: serial: imx: Document optional DMA
- properties
-Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org
-Cc:     Fabio Estevam <festevam@gmail.com>,
+        Sun, 19 Feb 2023 09:23:18 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00090F773;
+        Sun, 19 Feb 2023 06:23:16 -0800 (PST)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 09DED830E9;
+        Sun, 19 Feb 2023 15:23:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1676816593;
+        bh=YwYuJ4THKrUqwaPaod5OY9KB6nlV+P65S9SXqydHM2I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QSkdYOWGMWwyCR1RiN85cJs9tCPNhqeanVHlsAPaYQ99w8crYwuBdEpZxBPtSNnYb
+         ZCcX0L1XAiDXmNNhKekDgGAGYZwrm2wFdv6xRmbrUBE6R5d86aNV5jfqjOaHYV9lQo
+         04Ke/d3mI+6uBmc9gLh+E/4qbbeDX9KdwNb1Kd/5THePtGZBi6l+d2tFMlxbq7/5lS
+         mP2QYcTL0hst5ayJxcrS91UonOhsnr6/PSm8A6tkGTuy+/qDRXwoGQATwUJq7zc9vZ
+         4cIuPqWm4XIu58xyQd5ADXY5dhTENIP/noAxjvGcMCHfZXZmnR4z9o6UYsppXep8xf
+         /QSqLJjgaSoNw==
+From:   Marek Vasut <marex@denx.de>
+To:     devicetree@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -68,30 +44,76 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-References: <20230218223959.116358-1-marex@denx.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230218223959.116358-1-marex@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2 1/2] dt-bindings: serial: imx: Document optional DMA properties
+Date:   Sun, 19 Feb 2023 15:22:49 +0100
+Message-Id: <20230219142250.10176-1-marex@denx.de>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 18/02/2023 23:39, Marek Vasut wrote:
-> The UART IP can be connected to DMA engine, document the properties in DT bindings.
-> Update example to match Linux arch/arm/boot/dts/imx51.dtsi .
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Fabio Estevam <festevam@gmail.com>
+The UART IP can be connected to DMA engine, document the properties in DT bindings.
+Update example to match Linux arch/arm/boot/dts/imx51.dtsi .
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-serial@vger.kernel.org
+---
+V2: Add AB from Krzysztof
+---
+ .../devicetree/bindings/serial/fsl-imx-uart.yaml     | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml b/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
+index 4cbe76e1715b7..c22aab8c55f83 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
+@@ -49,6 +49,16 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  dmas:
++    items:
++      - description: DMA controller phandle and request line for RX
++      - description: DMA controller phandle and request line for TX
++
++  dma-names:
++    items:
++      - const: rx
++      - const: tx
++
+   interrupts:
+     maxItems: 1
+ 
+@@ -100,6 +110,8 @@ examples:
+         compatible = "fsl,imx51-uart", "fsl,imx21-uart";
+         reg = <0x73fbc000 0x4000>;
+         interrupts = <31>;
++        dmas = <&sdma 18 4 1>, <&sdma 19 4 2>;
++        dma-names = "rx", "tx";
+         uart-has-rtscts;
+         fsl,dte-mode;
+     };
+-- 
+2.39.1
 
