@@ -2,117 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00436A333F
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Feb 2023 18:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B576A33D3
+	for <lists+linux-serial@lfdr.de>; Sun, 26 Feb 2023 21:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjBZRjt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Feb 2023 12:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S229774AbjBZUEJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Feb 2023 15:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjBZRjs (ORCPT
+        with ESMTP id S229379AbjBZUEI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Feb 2023 12:39:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8950518B27
-        for <linux-serial@vger.kernel.org>; Sun, 26 Feb 2023 09:39:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677433140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=i/hpLCH1J1OZC0aaq8N5qErte4jZaIcaYpEnIIPJejU=;
-        b=JNI/n/srQ2iN9KA1fJ3zBBhAzLq019H9SMRw9xFI4s8O8VtKFKw53Ljajp6mKBLdOfq5W9
-        3H+FIuniHH5vhjyE1YBhIdbFlA9q0bR/o4zcX4X/Owfn9c302k09x8dl2adW5jbtduPUuw
-        e71Ml8o+F2sJ+VLf9H3TLe9RneWOgL4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-65-am0DTIbBMJOc7VXv6KMN5A-1; Sun, 26 Feb 2023 12:38:59 -0500
-X-MC-Unique: am0DTIbBMJOc7VXv6KMN5A-1
-Received: by mail-qv1-f72.google.com with SMTP id u18-20020a0cec92000000b0056ea549d728so2244948qvo.10
-        for <linux-serial@vger.kernel.org>; Sun, 26 Feb 2023 09:38:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i/hpLCH1J1OZC0aaq8N5qErte4jZaIcaYpEnIIPJejU=;
-        b=Nzey/bRxMIPiJowlX9wpZKaRpFvWbYu6zEV96CbqMBsYjTpoRh0n5aaDFRGkY7NMyJ
-         OP30MKHRqUenpvp5ZTrEKCnCTlv4l4X9CYWS7Mg4HGMWkBLx+4em1fSip/ZpzO+SYenD
-         dvpatrE+ekVDNToftSkUofCbi7vwHbAcQKHI4ZbH73COT5NentE8hay+uT/mBuD27fed
-         TNwWUSqFtbGMY5RqT3M6FIOKavjwJ6AZ6WS/9itlBOm8UE+FumKYTo82XTvwnDlsC3oo
-         jDGmWxbwVlQC5WUgyKNe7eiwDxW7gGguIH0zPTy99tKyibcYveipW/9ENgvrfCs5NhVc
-         vKYQ==
-X-Gm-Message-State: AO0yUKWBD0e9ft92XI6Yh7ZIWTSGcyZEuIF6w0hF+vI0CGF/KgYDBig3
-        4DH5NAofDgGEGFLN2llVfPdr+gJTGmMsIE8WMH8lSBqq9VMGQpKKAYMa16Fl1SvvCS5FlseW6PH
-        Cp/c7vgfDcKLYLb+Zxv/mHxW3
-X-Received: by 2002:a05:6214:400d:b0:56e:f1fd:f16c with SMTP id kd13-20020a056214400d00b0056ef1fdf16cmr10742456qvb.20.1677433138671;
-        Sun, 26 Feb 2023 09:38:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set9hvhZVb90JP5bKYcnQSg83aAvp4BYFORSYNpZjoUDZCW3/tH8VrWxub3amijsmOE+4vS8s9g==
-X-Received: by 2002:a05:6214:400d:b0:56e:f1fd:f16c with SMTP id kd13-20020a056214400d00b0056ef1fdf16cmr10742440qvb.20.1677433138458;
-        Sun, 26 Feb 2023 09:38:58 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id r191-20020a37a8c8000000b00729a26e836esm3341343qke.84.2023.02.26.09.38.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 09:38:58 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        sherry.sun@nxp.com, jindong.yue@nxp.com
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] Revert "tty: serial: fsl_lpuart: adjust SERIAL_FSL_LPUART_CONSOLE config dependency"
-Date:   Sun, 26 Feb 2023 12:38:46 -0500
-Message-Id: <20230226173846.236691-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 26 Feb 2023 15:04:08 -0500
+X-Greylist: delayed 4382 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Feb 2023 12:04:06 PST
+Received: from antispamsnwll.cedia.org.ec (antispamsnwll.cedia.org.ec [201.159.220.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD93711E99;
+        Sun, 26 Feb 2023 12:04:06 -0800 (PST)
+Received: from antispamsnwll.cedia.org.ec (127.0.0.1) id hvetjc0171sp; Sun, 26 Feb 2023 13:25:31 -0500 (envelope-from <prvs=1421df1a3c=phernandez@cuenca.gob.ec>)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cuenca.gob.ec; s=cuenca; i=@cuenca.gob.ec; h=Received:Received:
+        Received:Received:Received:Content-Type:MIME-Version:
+        Content-Transfer-Encoding:Content-Description:Subject:To:From:
+        Date:Reply-To:Message-Id; bh=4Q8sM1WnLl2+Gbtb3rrOkEcuzcuZBE8iv+H
+        DJ7a/1zw=; b=g8POkRfwHe7VDlaHXQ5+PmZqGux5e0eY0gQaHlphG/F7Rzt/j4d
+        UI+LsxhxJoRxKcjEt4K55+aij7Ek7sNnOXHDbUF+G4E3V5H02DpTk9pLoU2AcDUZ
+        U9NDTS0f3TkEtVkwwpQcZ4TgipOXlxZS9Sz+Gg0w5vF41XlWi4Y16VQ0=
+Received: from mtace.cuenca.gob.ec ([200.55.234.131])
+        by antispamsnwll.cedia.org.ec ([192.168.205.200]) (SonicWall 10.0.21.7607)
+        with ESMTP id o202302261825300028170-2; Sun, 26 Feb 2023 13:25:30 -0500
+Received: from mtace.cuenca.gob.ec (localhost [127.0.0.1])
+        by mtace.cuenca.gob.ec (Postfix) with ESMTPS id 2949E4205D12;
+        Sun, 26 Feb 2023 13:25:30 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mtace.cuenca.gob.ec (Postfix) with ESMTP id 059B54205D11;
+        Sun, 26 Feb 2023 13:25:30 -0500 (-05)
+Received: from mtace.cuenca.gob.ec ([127.0.0.1])
+        by localhost (mtace.cuenca.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id c69ir4Iz3jDk; Sun, 26 Feb 2023 13:25:29 -0500 (-05)
+Received: from [10.20.18.117] (unknown [156.146.63.154])
+        by mtace.cuenca.gob.ec (Postfix) with ESMTPSA id 0583D4205D21;
+        Sun, 26 Feb 2023 13:25:20 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Investment proposition
+To:     Recipients <phernandez@cuenca.gob.ec>
+From:   "Franklin C. James QC" <phernandez@cuenca.gob.ec>
+Date:   Sun, 26 Feb 2023 19:25:08 +0100
+Reply-To: franklin.c34@aol.com
+X-Antivirus: Avast (VPS 230226-0, 2/26/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230226182521.0583D4205D21@mtace.cuenca.gob.ec>
+X-Mlf-DSE-Version: 7077
+X-Mlf-Rules-Version: s20230112191048; ds20200715013501;
+        di20230221222152; ri20160318003319; fs20230223174059
+X-Mlf-Smartnet-Version: 20210917223710
+X-Mlf-Envelope-From: phernandez@cuenca.gob.ec
+X-Mlf-CnxnMgmt-Allow: 200.55.234.131
+X-Mlf-Version: 10.0.21.7607
+X-Mlf-License: BSV_C_AP_T_R
+X-Mlf-UniqueId: o202302261825300028170
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_PSBL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [201.159.220.42 listed in psbl.surriel.com]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [franklin.c34[at]aol.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This reverts commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30.
+I trust you are staying safe and well, I am Franklin C. James QC. from Glas=
+gow, Scotland. I have an investment proposition for your consideration and =
+more details will be revealed once your interest is indicated.
+   
+Yours in service,
+Franklin C. James QC.
+____________________
+Secretary: Phillip Hernandez
 
-This results in a link error of
-
-ld: drivers/tty/serial/earlycon.o: in function `parse_options':
-drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
-
-When the config is in this state
-
-CONFIG_SERIAL_CORE=m
-CONFIG_SERIAL_CORE_CONSOLE=y
-CONFIG_SERIAL_EARLYCON=y
-CONFIG_SERIAL_FSL_LPUART=m
-CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-
-Fixes: 5779a072c248 ("tty: serial: fsl_lpuart: adjust SERIAL_FSL_LPUART_CONSOLE config dependency")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/tty/serial/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 625358f44419..0072892ca7fc 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
- 
- config SERIAL_FSL_LPUART_CONSOLE
- 	bool "Console on Freescale lpuart serial port"
--	depends on SERIAL_FSL_LPUART
-+	depends on SERIAL_FSL_LPUART=y
- 	select SERIAL_CORE_CONSOLE
- 	select SERIAL_EARLYCON
- 	help
 -- 
-2.27.0
-
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
