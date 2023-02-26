@@ -2,95 +2,131 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51766A33C8
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Feb 2023 20:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68A96A34B5
+	for <lists+linux-serial@lfdr.de>; Sun, 26 Feb 2023 23:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjBZT7K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Feb 2023 14:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S229489AbjBZW3W (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Feb 2023 17:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjBZT7J (ORCPT
+        with ESMTP id S229566AbjBZW3V (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Feb 2023 14:59:09 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0388216889
-        for <linux-serial@vger.kernel.org>; Sun, 26 Feb 2023 11:59:07 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 31QJwibP008362
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 26 Feb 2023 14:58:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1677441529; bh=sUDNujaHfUqZ8bjP9HuWhvva7+VEbIW3Zww8AIVTgtQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=U0g3nrxbwhModARiSgwYYoCAvHxED2XBpVYNdpkDDmekIh5GDte8nIxUPQ7pxRpvV
-         eOjL1IS5x0OGFkKHLEJ8+9Ulestd3B1qoSgNWhr4rPMebY/HSSrLL/daGMlV7Jce3d
-         Mjh1daVESQQKWgP2gXOaNChOupoLGbcbKV1EZXFt0oRkvktTfqq2e+OHqKYOVt5hH8
-         KHlmc1rZN7C8/yyK4WzAo1rLkfVuocqWNsUk1M8aMh4LZ+WhVfC8gA8QRRspQZUAKo
-         /S4gu9XivmDxj3ishPxE+7hpRRO7VoZCikWs1TprbQ/qN2JEDbjNTt2RfBUpjte+Ws
-         xLstb0dU2FXhQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id A014315C5823; Sun, 26 Feb 2023 14:58:44 -0500 (EST)
-Date:   Sun, 26 Feb 2023 14:58:44 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [GIT PULL] TTY/Serial driver updates for 6.3-rc1
-Message-ID: <Y/u59FFG+ID0OAbg@mit.edu>
-References: <Y/iywbFbiUAA6ZD3@kroah.com>
- <CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com>
- <CAHk-=wjyFhdR-M7H6JpH7zF0k_z5xj8+qERaHsh5+0c4uOmv+g@mail.gmail.com>
- <Y/qcXOxTVHTNDQbY@mit.edu>
- <CAHk-=wjPrei8BkaJ3wjGF_fTsehhQZVZppzqYrt76oc+oYXk8w@mail.gmail.com>
+        Sun, 26 Feb 2023 17:29:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181A386A4
+        for <linux-serial@vger.kernel.org>; Sun, 26 Feb 2023 14:28:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWPU0-0000v4-Cx; Sun, 26 Feb 2023 23:27:04 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWPTv-000UbL-A7; Sun, 26 Feb 2023 23:26:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pWPTu-000YPc-Ii; Sun, 26 Feb 2023 23:26:58 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ajay Gupta <ajayg@nvidia.com>,
+        Peter Senna Tschudin <peter.senna@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-mtd@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
+        Crt Mori <cmo@melexis.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Rosin <peda@axentia.se>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH v2 0/9] i2c: Switch .probe() to not take an id parameter
+Date:   Sun, 26 Feb 2023 23:26:45 +0100
+Message-Id: <20230226222654.1741900-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1991; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=EenKKdT6RETFmVGwF2CrYShLqN5ZYnH65OR4Oth2DhU=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj+9yIsuD2BffFtVmTLqMLW9+LGg9CrL1S9JEyp A8isju5DgGJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY/vciAAKCRDB/BR4rcrs CVArCACf5Exs+Q2fpw9bhFprBhf8Jn0zdE1HAJWqKw9geHnrqn2c77H0nb4l6za7xknleFOdFjl vT1oJ/Hil7ZZHfjj0Q02CEsZqvCUoh/T4UAse77L1aYyUPrZ0RZsOyTquharTxDIKLoriggp8O7 oibgm8zSD2bY1eFXyPkExlGm+6FBBRW8p3Smjl0DhgJHra46+W71KaqBmYkG1IBl5lrINIPfwRv 3ktxNmDCAgv/OMRMRji9mRAtfbTNBB8fvk22YGZXKc7/Ja9bBtoyWYo0UPM2LwcfDAfOnqJXu0d 8S7iE11b92EW7g3eeBkHU339ye95YJ2KDZ7wmHd7p+WkiVWd
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wjPrei8BkaJ3wjGF_fTsehhQZVZppzqYrt76oc+oYXk8w@mail.gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 06:14:11PM -0800, Linus Torvalds wrote:
-> On Sat, Feb 25, 2023 at 3:40 PM Theodore Ts'o <tytso@mit.edu> wrote:
-> >
-> > For what it's worth, in the VM world (e.g., qemu, AWS, GCP, Azure,
-> > Linode, etc.)  serial consoles are quite common way of debugging VM's,
-> > and as an emergency login path when the networking has been screwed up
-> > for some reason....
-> 
-> Everybody seems to be missing the point.
-> 
-> We don't make new drivers "default y" (or, in this case, "default SERIAL_8250".
-> 
-> It does not matter ONE WHIT if you have a serial device in your
-> machine. If your old driver was enabled and worked for you and you
-> used it daily, that is ENTIRELY IMMATERIAL to a new driver, even if
-> that new driver then happens to use some of the same infrastructure as
-> the old one did.
+Hello,
 
-Oh, agreed, I wasn't responding to that part of your message.  New
-serial drivers should never be enabled by default.
+this is v2 of the series. I send it a bit earlier than I planned to do that
+initially because I failed to send v1 completely to the linux-i2c list.
 
-I was responding to your musing about whether it still made sense to
-enable the COM1/2/3/4 serial ports by default on x86.  It's true that
-on desktops COM1/2/3/4 serial ports are rarely used, and some other
-boards might not even have them any more.  But for x86 VM's, they are
-used quite a lot.
+Changes since (implicit) v1:
+ - Added Acks for patches #5, #6 and #8
+ - Fixed kernel doc as pointed out by Luca Ceresoli (patch #7)
+ - Send all patches to linux-i2c mailing list
+ - Rebased to current Linus' tree.
+   This reduces the list of prerequisite patches to two.
 
-Cheers,
+I updated
 
-				- Ted
+	https://git.pengutronix.de/git/ukl/linux i2c-probe-new
+
+accordingly.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (9):
+  misc: ad525x_dpot-i2c: Convert to i2c's .probe_new()
+  mtd: maps: pismo: Convert to i2c's .probe_new()
+  serial: sc16is7xx: Convert to i2c's .probe_new()
+  w1: ds2482: Convert to i2c's .probe_new()
+  media: i2c: ov5695: convert to i2c's .probe_new()
+  media: i2c: ov2685: convert to i2c's .probe_new()
+  i2c: Switch .probe() to not take an id parameter
+  i2c: mux: Convert all drivers to new .probe() callback
+  i2c: Convert drivers to new .probe() callback
+
+ drivers/i2c/i2c-core-base.c         | 13 +++----------
+ drivers/i2c/i2c-slave-eeprom.c      |  2 +-
+ drivers/i2c/i2c-slave-testunit.c    |  2 +-
+ drivers/i2c/i2c-smbus.c             |  2 +-
+ drivers/i2c/muxes/i2c-mux-ltc4306.c |  2 +-
+ drivers/i2c/muxes/i2c-mux-pca9541.c |  2 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c |  2 +-
+ drivers/media/i2c/ov2685.c          |  5 ++---
+ drivers/media/i2c/ov5695.c          |  5 ++---
+ drivers/misc/ad525x_dpot-i2c.c      |  6 +++---
+ drivers/mtd/maps/pismo.c            |  5 ++---
+ drivers/tty/serial/sc16is7xx.c      |  6 +++---
+ drivers/w1/masters/ds2482.c         |  5 ++---
+ include/linux/i2c.h                 | 18 +++++++++++-------
+ 14 files changed, 34 insertions(+), 41 deletions(-)
+
+
+base-commit: f3a2439f20d918930cc4ae8f76fe1c1afd26958f
+prerequisite-patch-id: 256857b4eee79540b271b8d4899b9ba0aa3c4c27
+prerequisite-patch-id: bb49c9c71311ac1f1056c562f20f26aa356c95a6
+-- 
+2.39.1
+
