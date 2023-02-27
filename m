@@ -2,99 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B7B6A34CA
-	for <lists+linux-serial@lfdr.de>; Sun, 26 Feb 2023 23:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDF16A3618
+	for <lists+linux-serial@lfdr.de>; Mon, 27 Feb 2023 02:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjBZWpY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 26 Feb 2023 17:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
+        id S229507AbjB0BDy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 26 Feb 2023 20:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBZWpY (ORCPT
+        with ESMTP id S229737AbjB0BDx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 26 Feb 2023 17:45:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BD5CC0E;
-        Sun, 26 Feb 2023 14:45:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=qWnDKBNh35K+ganeqMEvc7orr2tqqQPr3nUxaAl0qYs=; b=edHC6/cA8EGZHvetsmv5VVqAhR
-        RKBBjjSeCp1k5i858eNYHM1xgAsVD37Y/HBvxByEDpbZZjbxzBOOgxLTK/xKmoUIKlGmtht7TNe49
-        N0Ch4UpHLSryJe8P57LbRA4Ch/TrwrouDcikCuzLydUBAWflO4YGYMXTij+Nn8a38B2Yt4rwxYGRW
-        aXcYPDxSvijS6l+6hY57n4eIKSuFbWfXsHgK8tGpGJLyelIajyrZXUzj9QyOSCtT2oD8jIdY6fiLb
-        qGo/XY/WmTnRigAbz1p6iQj0ZkNDCV3PLY1ZmFlNTgTAnPzS7FF7eQeqWbg4VbpDzEsKwdFBwv6JZ
-        L25wy4Sg==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWPld-007wJD-AX; Sun, 26 Feb 2023 22:45:17 +0000
-Message-ID: <c32f8b2b-7137-c15e-9786-601b94a4ada4@infradead.org>
-Date:   Sun, 26 Feb 2023 14:45:15 -0800
+        Sun, 26 Feb 2023 20:03:53 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB537B455
+        for <linux-serial@vger.kernel.org>; Sun, 26 Feb 2023 17:03:47 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id f18so6499225lfa.3
+        for <linux-serial@vger.kernel.org>; Sun, 26 Feb 2023 17:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=weYNpobTz7e34lKnlfhxYchHcnpoQgNkJdKwW1l0gho=;
+        b=Bg075geJRtLuk5nD33/cHYbxzauamLadOVEFdrO289zAmE3h2RG2Jlc10oLzP0aFlv
+         9ULN6HxpTLct7w30955hFlDvGU/53vTcyAoqiegyfxmRdooh57F3JX0uXZLVG52cADDp
+         pbUIOE0nXPd1/JLwzQT4PW8wVHn9a2eQ+7Ntf6BvV2WdAUQSj8/dRyndTpLCo4VEuVgX
+         7KYXFq6IaRK6zXhv1SGp3EnmYQmjr4ezx4PCnwb8O/GpVTYSFK41X9swkjbTcLdT2zEL
+         OFj5vQOMcoj5szGnljIgASkScI/NMp+7GgcBOyAUO+XTz2ljIkt0EZqeC/J8ql4XFfCR
+         B4Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=weYNpobTz7e34lKnlfhxYchHcnpoQgNkJdKwW1l0gho=;
+        b=kRv878i6a/lsLm+OwVmR8gDipAEbccDig3KezCw/YQfYQI0oJ4AJQybFuYDImTROVY
+         87f1CYcc8ACj8p6bcwIhrFt83XoTZZOTeG8digiyCF1fl0KjvvERnBJRtjh0ZoYb43ot
+         NC3MjTCPcrgHUR7ecW7w1aTyfLy3F5Nmv1uNTN5ID/G1mg9D5rjOLCOwaX9EOcQw2EXC
+         Driv24AozwncpmThQmQf3FC7imuQi6v0q67hHysGsVSABc73r7eIiDtC8zBZGrIKLfjR
+         ZjK35NHaOfqa681PXTViWeCedN3Sc5nbkzW32gnXkfyEQtzjXysnsZSpVlZ34UyaFNk1
+         4iiw==
+X-Gm-Message-State: AO0yUKWMc0OZt78Hxr24Tmh1B/+rXladgJJos3LfRK/IYcbXtZvFxK21
+        fOynof9S5NDVM4ywc+9VlVu756klQMOHqW4skS4=
+X-Google-Smtp-Source: AK7set+8B2eXY795400Ygu65cTPLrxfKe9xyDBnQCL3BplyEWYhocag/7r+D61SM7SGjuSIaII2D2WAXHIihef4q8m4=
+X-Received: by 2002:a05:6512:73:b0:4d5:ca42:e43a with SMTP id
+ i19-20020a056512007300b004d5ca42e43amr6997518lfo.3.1677459825939; Sun, 26 Feb
+ 2023 17:03:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] Revert "tty: serial: fsl_lpuart: adjust
- SERIAL_FSL_LPUART_CONSOLE config dependency"
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, sherry.sun@nxp.com, jindong.yue@nxp.com
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230226173846.236691-1-trix@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230226173846.236691-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a89:b8f:0:b0:187:2c43:10df with HTTP; Sun, 26 Feb 2023
+ 17:03:45 -0800 (PST)
+From:   Adel Aldoseri <adelaldoseri1@gmail.com>
+Date:   Sun, 26 Feb 2023 17:03:45 -0800
+Message-ID: <CAECeVmTV+NDTVNWw8ORBv88TT99RyCvZkwkZbzTFMdcDQ15cQQ@mail.gmail.com>
+Subject: We finance viable projects only
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Attention: Sir
+
+Our Company is willing, ready to help you grow your network and offer
+you Loan funds to complete and fund your existing Projects. We can
+send you our Company Terms and Condition after review of your project
+plan and executive summary of your project, if you are serious and
+Interested contact us for further Information:
 
 
-On 2/26/23 09:38, Tom Rix wrote:
-> This reverts commit 5779a072c248db7a40cfd0f5ea958097fd1d9a30.
-> 
-> This results in a link error of
-> 
-> ld: drivers/tty/serial/earlycon.o: in function `parse_options':
-> drivers/tty/serial/earlycon.c:99: undefined reference to `uart_parse_earlycon'
-> 
-> When the config is in this state
-> 
-> CONFIG_SERIAL_CORE=m
-> CONFIG_SERIAL_CORE_CONSOLE=y
-> CONFIG_SERIAL_EARLYCON=y
-> CONFIG_SERIAL_FSL_LPUART=m
-> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-> 
-> Fixes: 5779a072c248 ("tty: serial: fsl_lpuart: adjust SERIAL_FSL_LPUART_CONSOLE config dependency")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Best regards,
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  drivers/tty/serial/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index 625358f44419..0072892ca7fc 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -1313,7 +1313,7 @@ config SERIAL_FSL_LPUART
->  
->  config SERIAL_FSL_LPUART_CONSOLE
->  	bool "Console on Freescale lpuart serial port"
-> -	depends on SERIAL_FSL_LPUART
-> +	depends on SERIAL_FSL_LPUART=y
->  	select SERIAL_CORE_CONSOLE
->  	select SERIAL_EARLYCON
->  	help
-
--- 
-~Randy
+Adel Aldoseri
