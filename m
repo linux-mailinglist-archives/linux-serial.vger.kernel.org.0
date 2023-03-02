@@ -2,99 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0416A819B
-	for <lists+linux-serial@lfdr.de>; Thu,  2 Mar 2023 12:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407A76A8211
+	for <lists+linux-serial@lfdr.de>; Thu,  2 Mar 2023 13:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjCBLzy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Mar 2023 06:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S229667AbjCBMUd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 Mar 2023 07:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCBLzw (ORCPT
+        with ESMTP id S229615AbjCBMUb (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:55:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0C332501
-        for <linux-serial@vger.kernel.org>; Thu,  2 Mar 2023 03:55:51 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pXhXJ-0007ij-RH; Thu, 02 Mar 2023 12:55:49 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pXhXI-001Jku-Kt; Thu, 02 Mar 2023 12:55:48 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pXhXI-001Xke-2Z; Thu, 02 Mar 2023 12:55:48 +0100
-Date:   Thu, 2 Mar 2023 12:55:47 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Thu, 2 Mar 2023 07:20:31 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9FD3B870
+        for <linux-serial@vger.kernel.org>; Thu,  2 Mar 2023 04:20:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1677759630; x=1709295630;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Jc7NCjQNaCgCuZVespPULBgPudxFGzjmmOwhTE6K09E=;
+  b=EavFIFKJQ206MlUDTkojKAwT2nZC82qyUa6DkNTZunYPV9odZ41fYh3j
+   F96TfjNJ/mqAt0OoEJNq24BbezjTBAbhtkbSkieSI+/Wuz2CIPwbkv/tc
+   UJzmjpqCj561o+IHVYH3LkJoY/nnlh327k+zhKLyo7YSC6JdXAx7K/oEl
+   SmZ0trs6J6rHSfGwQGsrUEDnSObQqKggqUa15BH1fid2vZIl2byT8YVEx
+   933wfuzN4mbXn0LBH7X8sVJO9N5iMRZuUppqpsR94+Iluz2Px4P2Pmd8k
+   16oBlKSas8YCk0fgoQZa4WiWKSWfAEdk4YcHm6XQxUbgi1U1D/Zaw8N2I
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,227,1673910000"; 
+   d="scan'208";a="29424524"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 02 Mar 2023 13:20:28 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 02 Mar 2023 13:20:28 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 02 Mar 2023 13:20:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1677759628; x=1709295628;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Jc7NCjQNaCgCuZVespPULBgPudxFGzjmmOwhTE6K09E=;
+  b=hr6dIdZaqnG+kXV825HVvmihOgbDw9v8v7MnX8UEshFR4wXWVNdoyvS9
+   2U+ZDqeyD5Zx+Fy+Qixi+044k3a3l5PGnYTq36absE2FflZ5b/C16MUT3
+   g6zUnDhgI4ed3rDzmqtPyhCC8bc30j7401g8WnxeOWyJek0JF4tCPCtTY
+   P9CLuIOsz5xY+TgmsHbiozvolRcVHz/1mtuhLs55i5smVP2dPSYg/Cc00
+   ffvrbLZaNm+p0mwYPkz00lEa2c5PXev+KrGGXJMYnB4WjJC7DW8e1w1+e
+   PJ6atOgNxl/hR8BeO3IFmHUIO5wY/EJGQGK2ilfcIwTQ9iNrR7Sunf7Li
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,227,1673910000"; 
+   d="scan'208";a="29424523"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 02 Mar 2023 13:20:27 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id AFFCF280056;
+        Thu,  2 Mar 2023 13:20:27 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org
 Cc:     linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
+        linux-arm-kernel@lists.infradead.org,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
 Subject: Re: [PATCH] serial: imx: Simplify imx_uart_type
-Message-ID: <20230302115547.sacjk4ekwmfev2xz@pengutronix.de>
-References: <20230302114810.1859500-1-u.kleine-koenig@pengutronix.de>
+Date:   Thu, 02 Mar 2023 13:20:25 +0100
+Message-ID: <5912297.lOV4Wx5bFT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230302115547.sacjk4ekwmfev2xz@pengutronix.de>
+References: <20230302114810.1859500-1-u.kleine-koenig@pengutronix.de> <20230302115547.sacjk4ekwmfev2xz@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="njc7y6q7e4kphywj"
-Content-Disposition: inline
-In-Reply-To: <20230302114810.1859500-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hi Uwe,
 
---njc7y6q7e4kphywj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Thu, Mar 02, 2023 at 12:48:10PM +0100, Uwe Kleine-K=F6nig wrote:
-> There is no point in casting a struct uart_port to a struct imx_port
-> just to access the first member of the latter (a struct uart_port).
+Am Donnerstag, 2. M=E4rz 2023, 12:55:47 CET schrieb Uwe Kleine-K=F6nig:
+> * PGP Signed by an unknown key
 >=20
-> This introduces code changes.
+> Hello,
+>=20
+> On Thu, Mar 02, 2023 at 12:48:10PM +0100, Uwe Kleine-K=F6nig wrote:
+> > There is no point in casting a struct uart_port to a struct imx_port
+> > just to access the first member of the latter (a struct uart_port).
+> >=20
+> > This introduces code changes.
+>=20
+> Please disregard this patch. While the patch is fine as is, I just
+> noticed a few more functions in this driver that can be simplified
+> accordingly. I'm about to send out an improved version (with a different
+> subject, so not called v2).
 
-Please disregard this patch. While the patch is fine as is, I just
-noticed a few more functions in this driver that can be simplified
-accordingly. I'm about to send out an improved version (with a different
-subject, so not called v2).
+Shouldn't this cast on the other locations be converted into a to_imx_port(=
+)=20
+function using container_of as well?
 
-Best regards
-Uwe
+Best regards,
+Alexander
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> Best regards
+> Uwe
 
---njc7y6q7e4kphywj
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQAjsAACgkQwfwUeK3K
-7AmE/AgAn/H7Wfk5eHlQC+pgoSGO6U641t2brUcEJYE7hO/oJVng5dxUBx7mplrA
-fI7HNNbh9h7H3v4BMQj4mOi6uW4AtP45yWyDqYNOxV7agKHNo/Z5hvhWIw/pLXnR
-1HDlsIZZGFBdIkBLbGJChGZY38Kwwk6HnH1+u9weWaeecB4C2mUQ8xoEIAmcwYfd
-m4g74lQMib8HSfoSPBxuhCwsbeiushMaltUScl3cFCYKFaQkwDBr8o5eNf8rFurx
-8UmYmypmdp83ozlSyCzjrs4devEJOhKjrwY6B+0Dca8pf4VdZHIVo6gl+5WT9A/A
-Og4jhyx6xqaEg4uvinnhWwciXNq94A==
-=5w10
------END PGP SIGNATURE-----
 
---njc7y6q7e4kphywj--
