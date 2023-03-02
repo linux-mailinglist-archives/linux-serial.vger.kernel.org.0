@@ -2,31 +2,31 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987406A817E
-	for <lists+linux-serial@lfdr.de>; Thu,  2 Mar 2023 12:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103206A819C
+	for <lists+linux-serial@lfdr.de>; Thu,  2 Mar 2023 12:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCBLsb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Mar 2023 06:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
+        id S229625AbjCBL4D (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 2 Mar 2023 06:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCBLsa (ORCPT
+        with ESMTP id S229624AbjCBL4C (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:48:30 -0500
+        Thu, 2 Mar 2023 06:56:02 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434A47ED1
-        for <linux-serial@vger.kernel.org>; Thu,  2 Mar 2023 03:48:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C256F32501
+        for <linux-serial@vger.kernel.org>; Thu,  2 Mar 2023 03:56:00 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXhQ0-0006B8-BX; Thu, 02 Mar 2023 12:48:16 +0100
+        id 1pXhXP-0007ms-0U; Thu, 02 Mar 2023 12:55:55 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXhPz-001JkQ-7S; Thu, 02 Mar 2023 12:48:15 +0100
+        id 1pXhXO-001Jkz-Aj; Thu, 02 Mar 2023 12:55:54 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pXhPy-001Xhl-4n; Thu, 02 Mar 2023 12:48:14 +0100
+        id 1pXhXN-001Xki-BD; Thu, 02 Mar 2023 12:55:53 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -35,13 +35,13 @@ Cc:     Jiri Slaby <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] serial: imx: Simplify imx_uart_type
-Date:   Thu,  2 Mar 2023 12:48:10 +0100
-Message-Id: <20230302114810.1859500-1-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH] serial: imx: Drop a few unneeded casts
+Date:   Thu,  2 Mar 2023 12:54:17 +0100
+Message-Id: <20230302115417.1860210-1-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=849; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=qnYVdNecTjL9Ir+/QCH0AF6NN4dqFcO1sYt7UzFAxqo=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAIz3Vq+ATK1RJnPwEaT2Dh4wiapsq/1UaECj2 3fhrkUDLfqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZACM9wAKCRDB/BR4rcrs CZ+oB/49bi+xqyCuVY1mHkZUz4U6aKXcdEHnzUXprfXoEopLeMr1WEJAa7KW+vK1kZk4uZvbeja JHNi+y+Ifb/bFRQBLe7opuRwvlC0i74ktR1VoMouoZxaXlZbhQaX5mjdpq5UxtKk+2ee4dFxx5J qN5Rf2prj5U90CMA4Ux0W4mi+qP4fi0fd1vrRJdnip7fKsjo5YagdC9o12t4sj/wbqtvXBb7vcO yMRQ+WhNT3Y3R5I3ccKu7vD4gAjIMwW5gW3QZHy2Vbr9orXJGtAC665MazTJKDpeytrDYtoxHXT d3i1GdkDn75ToUm08LjeHH70VXSs1tfKUSPI9bfCb6+Add/+
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2045; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=sxjzZGEcQoxBqKIHeS4o+02NY0JeWVk+ygLIqzyqKeE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAI5jnEjCH5EmmfoKPECD7JWdWshpYo/GI+IMt WLmoaKtivaJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZACOYwAKCRDB/BR4rcrs CdKsB/9s5HFO6IoAnysmunYqNIKHYHJOIzltcHY7jyn8PMKR722KIi1EUkVryKOECX6m7lCqAFo jSCRBq0Cvl2eqT3kkZWQLaFHF6qPseyVVZ7Wfc3m43ZxkeV+JIl+fLa2+pei0gRK2fLN8m2oEfG KxNfkvt//4z4fD0Ny58nbi551f5eyKFHMFLrs22K9X42Bk+4L1PLI3iuE7XoxEOko9NwXN4/EXB qWAuZHx61kwm/quSmTi+O3beRVawQnOI/JqKl5MD8C8tPzlawFLjKZ1KHdBHHz2tMF2WkNzOfIL /OzOu45Fjk/eNvXwsQsi0KFJDekrIoL6SpDvJkDR+sdEt+sN
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -63,11 +63,11 @@ This introduces code changes.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/imx.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/tty/serial/imx.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 523f296d5747..8d5933e83248 100644
+index 523f296d5747..84bc0e768726 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
 @@ -1808,9 +1808,7 @@ imx_uart_set_termios(struct uart_port *port, struct ktermios *termios,
@@ -81,6 +81,43 @@ index 523f296d5747..8d5933e83248 100644
  }
  
  /*
+@@ -1818,10 +1816,8 @@ static const char *imx_uart_type(struct uart_port *port)
+  */
+ static void imx_uart_config_port(struct uart_port *port, int flags)
+ {
+-	struct imx_port *sport = (struct imx_port *)port;
+-
+ 	if (flags & UART_CONFIG_TYPE)
+-		sport->port.type = PORT_IMX;
++		port->type = PORT_IMX;
+ }
+ 
+ /*
+@@ -1832,20 +1828,19 @@ static void imx_uart_config_port(struct uart_port *port, int flags)
+ static int
+ imx_uart_verify_port(struct uart_port *port, struct serial_struct *ser)
+ {
+-	struct imx_port *sport = (struct imx_port *)port;
+ 	int ret = 0;
+ 
+ 	if (ser->type != PORT_UNKNOWN && ser->type != PORT_IMX)
+ 		ret = -EINVAL;
+-	if (sport->port.irq != ser->irq)
++	if (port->irq != ser->irq)
+ 		ret = -EINVAL;
+ 	if (ser->io_type != UPIO_MEM)
+ 		ret = -EINVAL;
+-	if (sport->port.uartclk / 16 != ser->baud_base)
++	if (port->uartclk / 16 != ser->baud_base)
+ 		ret = -EINVAL;
+-	if (sport->port.mapbase != (unsigned long)ser->iomem_base)
++	if (port->mapbase != (unsigned long)ser->iomem_base)
+ 		ret = -EINVAL;
+-	if (sport->port.iobase != ser->port)
++	if (port->iobase != ser->port)
+ 		ret = -EINVAL;
+ 	if (ser->hub6 != 0)
+ 		ret = -EINVAL;
 -- 
 2.39.1
 
