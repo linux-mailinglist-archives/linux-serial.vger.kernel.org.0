@@ -2,130 +2,63 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADAD6A8846
-	for <lists+linux-serial@lfdr.de>; Thu,  2 Mar 2023 19:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8805E6A9389
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 10:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCBSHj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 2 Mar 2023 13:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
+        id S229447AbjCCJQF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Mar 2023 04:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCBSHi (ORCPT
+        with ESMTP id S230021AbjCCJP7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:07:38 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B6636FFC
-        for <linux-serial@vger.kernel.org>; Thu,  2 Mar 2023 10:07:37 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id p6so18673pga.0
-        for <linux-serial@vger.kernel.org>; Thu, 02 Mar 2023 10:07:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677780457;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bVufqt2q+1OxmxXvizVLiJnEoIcg0hYQSdi895bILhk=;
-        b=jfgW0mkdIo+66M6yepHxjJnbjVud5yqIQC8vDG9Pn/LBIPcajv22gvOrpN3l6nLvX3
-         DbdbiHN9YfilFGa6SJ2f4BHhtD0NfhErKqNJe/MJlyWfaYdXKPLdBVbQac5DBUUZojH1
-         JQHAefreZuFn4LAep+mafMpxQqNLcTh4nc5/v87w4UGW0tQaQ2hePzS+S71JfZicMkWA
-         mFvu+oaimj7VzuSg/fKGT840NPbN9tWGNOHqMVjXpv+clCs70u8CAe1apnD5zQbfpnrp
-         GhxADdc0kAWpuDLxpC9/3/iqC9tNdOH64F1c2QIWhUIYwi4zAWzFbULGjef0YZBs2CiP
-         33Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677780457;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bVufqt2q+1OxmxXvizVLiJnEoIcg0hYQSdi895bILhk=;
-        b=vNRqHD9/hrc4Mm32Mm1JBFpXw/64KfB7ibTs4H7nuaK8fr/FLZKt8CdSg6QKrbdQfm
-         LW4YLuh/q3Nv4gnt8daSzpn2F4siK8O1oM+jffVyetikruulpmfMLw6P8cyEIP1Q8xss
-         Ql03pB8cKyfYJ+9RoH6H+I8mubzr7mzSNdCV6Sv8uvXixEZ45ZMsxqR6VanXTZQVwsfQ
-         3zNJP4ek9H6UToRhfmxtIEPpIzczpzszqQKcEsd3Ul9JrlDIGLDE3wOILd+Ut4P1hKDe
-         c/07Zwiw7zj32kdU3aYXPHADOvwB2NLX085haK2D20rBHzE8R12XoZUHlVg2BurxSD26
-         Utfg==
-X-Gm-Message-State: AO0yUKVmzBwqqAzAT7Oy/ulwJt+XyPdt6Kf7Jz8Zf2/cEU18qkwWcQQn
-        x9HXG+NPEOKZCp6z8SCxLhXMmhfaU0fHfp4zdfy0OQ==
-X-Google-Smtp-Source: AK7set+wJr4ZeaN1idB6Fcp8tiIPrlabfRBjutTrKKHxAjXUMLEp+20opx4fQEeQAeW/CXIdPZ6fMZQ9TwsClnLtryA=
-X-Received: by 2002:a62:8281:0:b0:5df:9809:6220 with SMTP id
- w123-20020a628281000000b005df98096220mr4372776pfd.3.1677780456826; Thu, 02
- Mar 2023 10:07:36 -0800 (PST)
+        Fri, 3 Mar 2023 04:15:59 -0500
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499371633D
+        for <linux-serial@vger.kernel.org>; Fri,  3 Mar 2023 01:15:59 -0800 (PST)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id 82F52A3CDF; Fri,  3 Mar 2023 09:15:56 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1677834963; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
+        h=Date:From:To:Subject:From;
+        b=OhcXUvfoPsozbSZat1NScMkAZOVFm3zBK59+4mxCpidnsMn3g11ClLq32BejOL9nT
+         qulzO5yQetebiAH5aZPE6pbCUqcbYV8FlXNk8c90q7UtPZpaDWJNVKkeKjzdM+QMpS
+         TN59p1Zckbcc4ws/Tn2pFGXxV/2UeVO2T5aCuo3Si751mksaAXzL0uHs66fUkDffRy
+         pyir1YngJ35bbjS74VrebaqGyjDnX8ahxI29cd+PkeQl3STJseOdg1HPj2ff2FD9hg
+         1A5LWnuxWxrHshaHDQ7ORuwyW13FmBeuCnRR1TNVoimj4t018q065tjh9bB6J0YwC8
+         RazJdSeqBz53g==
+Received: by mail.corrib.pl for <linux-serial@vger.kernel.org>; Fri,  3 Mar 2023 09:15:51 GMT
+Message-ID: <20230303074501-0.1.5u.hd7n.0.djonk1che6@corrib.pl>
+Date:   Fri,  3 Mar 2023 09:15:51 GMT
+From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
+        <szczepan.kielbasa@corrib.pl>
+To:     <linux-serial@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
 MIME-Version: 1.0
-References: <20230302023509.319903-1-saravanak@google.com> <2cc752fb-a25d-0789-0fad-54b99f08ced7@i2se.com>
- <CAGETcx_nCdm2WYLC7h1s8i9tnHc_LcHk2oZUQ0sUDr-PBsUWDg@mail.gmail.com> <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com>
-In-Reply-To: <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 2 Mar 2023 10:07:00 -0800
-Message-ID: <CAGETcx_crW9BJmUoVJv1iU-KTr+9WPp_bpfrKoxzQiJGpqDgAA@mail.gmail.com>
-Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kernel-team@android.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 9:51=E2=80=AFAM Florian Fainelli <f.fainelli@gmail.c=
-om> wrote:
->
->
->
-> On 3/2/2023 9:20 AM, Saravana Kannan wrote:
-> > On Thu, Mar 2, 2023 at 9:01=E2=80=AFAM Stefan Wahren <stefan.wahren@i2s=
-e.com> wrote:
-> >>
-> >> Hi Saravana,
-> >>
-> >> Am 02.03.23 um 03:35 schrieb Saravana Kannan:
-> >>> This allow fw_devlink to do dependency tracking for serdev devices.
-> >>>
-> >>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-> >>> Link: https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f17=
-e5@gmail.com/
-> >>> Cc: Stefan Wahren <stefan.wahren@i2se.com>
-> >>> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> >>
-> >> since this fixes an issue on Raspberry Pi 4, shouldn't this be mention=
-ed
-> >> in the commit message and providing a Fixes tag?
-> >
-> > So RPi 4 was never creating a device links between serdev devices and
-> > their consumers. The error message was just a new one I added and we
-> > are noticing and catching the fact that serdev wasn't setting fwnode
-> > for a device.
-> >
-> > I'm also not sure if I can say this commit "Fixes" an issue in serdev
-> > core because when serdev core was written, fw_devlink wasn't a thing.
-> > Once I add Fixes, people will start pulling this into stable
-> > branches/other trees where I don't think this should be pulled into
-> > older stable branches.
->
-> That is kind of the point of Fixes: tag, is not it? It is appropriate to
-> list a commit that is not specific to serdev, but maybe a particular
-> point into the fw_devlink history.
+Dzie=C5=84 dobry,
 
-I don't want to pick an arbitrary point in fw_devlink as I don't want
-people picking this up with some old version of fw_devlink and having
-to support it there.
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-> Given this did not appear to have a
-> functional impact, we could go without one.
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
-This is my take too.
 
-Greg/Rob,
-
-If you really want a Fixes here, can you please just add it instead of
-a v2 patch just for that? You can use this commit:
-3fb16866b51d driver core: fw_devlink: Make cycle detection more robust
-
--Saravana
+Pozdrawiam
+Szczepan Kie=C5=82basa
