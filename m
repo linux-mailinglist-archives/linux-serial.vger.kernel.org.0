@@ -2,47 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B3E6AA3B9
-	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 23:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF08A6AA2E3
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 22:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbjCCWDc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 3 Mar 2023 17:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S232719AbjCCVv2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Mar 2023 16:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbjCCWDN (ORCPT
+        with ESMTP id S232069AbjCCVt3 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:03:13 -0500
+        Fri, 3 Mar 2023 16:49:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EE84B813;
-        Fri,  3 Mar 2023 13:53:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030EE6B5F3;
+        Fri,  3 Mar 2023 13:45:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A26261929;
-        Fri,  3 Mar 2023 21:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A566C433A1;
-        Fri,  3 Mar 2023 21:44:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C228A61921;
+        Fri,  3 Mar 2023 21:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0A04C433A4;
+        Fri,  3 Mar 2023 21:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677879895;
-        bh=DHr65bTl5V4jvmojYqvPfDkjqi8K3e/bRx2v6zMwmvs=;
+        s=k20201202; t=1677879956;
+        bh=eyJN3ADA5oVBDcdDcIqcEf1aKewszDedfjIJZaz3EJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LoHp6C+RS9QkyTasZiwukBaxXmICU9Xw+RFfwDosQlzZrIWD8zSdWJAp989z4D7jx
-         Figq7CNvyhulqc+9zWax1wKLcWyv4dCIzPcR3ZUtwiXP6pJ6sb1hgG4XqApzNBFkLf
-         phS3mq5vb68JrPh0JGNExZMKeE62akECExJcVjl169Ch1VDjzf+FVuIZirVvCGRwT1
-         7ITomBReTUCLLeAjPCnuriMiukeur1Hl+lV4HwrzDe6G7iYBpvLL4cVlqGz8lNx23d
-         moAc725iWK+hgfaoIEO/IoonVcU5Zmx6ZX6I1b+bNb8xnGi8CxDiMfAarlfR/11xVV
-         1LBUIWCWO2K3g==
+        b=hOjd0OP4IoAXWEhgqDMeot5w40FH/lEBarUGDBxa+2Ad7JsPmytpIiE7Csvpwk0aE
+         geuAxKIY/6AsbRITasw1Ay4wrpHEJLZd2xe/yj04hhS7bEKhb6FnMx4vQZWy0enAxb
+         H0F2rfJvF3iVMLzNGBjUqlKsi/3FqvFQiJF2fEp0GuMbfFBOEr1LNhdVW77R5Tdq3Q
+         OBQqXf2A5URKVDiAmU2LeEDZWx5+043vJwSpngYaL4Dm+gInHg9df1i2Z7YTqbgxAz
+         n44EdRJSbWSETyDr2sEaNAUnMkopYX1eKx+p7aTHRFv7AAvJBqVpqKOrlPwlyBPtbG
+         vgIstLEQc2ycQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 46/60] tty: pcn_uart: fix memory leak with using debugfs_lookup()
-Date:   Fri,  3 Mar 2023 16:43:00 -0500
-Message-Id: <20230303214315.1447666-46-sashal@kernel.org>
+Cc:     Sherry Sun <sherry.sun@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, jirislaby@kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 11/50] tty: serial: fsl_lpuart: disable the CTS when send break signal
+Date:   Fri,  3 Mar 2023 16:44:52 -0500
+Message-Id: <20230303214531.1450154-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
-References: <20230303214315.1447666-1-sashal@kernel.org>
+In-Reply-To: <20230303214531.1450154-1-sashal@kernel.org>
+References: <20230303214531.1450154-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,35 +57,73 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Sherry Sun <sherry.sun@nxp.com>
 
-[ Upstream commit 04a189c720aa2b6091442113ce9b9bc93552dff8 ]
+[ Upstream commit c4c81db5cf8bc53d6160c3abf26d382c841aa434 ]
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic
-at once.
+LPUART IP has a bug that it treats the CTS as higher priority than the
+break signal, which cause the break signal sending through UARTCTRL_SBK
+may impacted by the CTS input if the HW flow control is enabled.
 
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Link: https://lore.kernel.org/r/20230202141221.2293012-1-gregkh@linuxfoundation.org
+Add this workaround patch to fix the IP bug, we can disable CTS before
+asserting SBK to avoid any interference from CTS, and re-enable it when
+break off.
+
+Such as for the bluetooth chip power save feature, host can let the BT
+chip get into sleep state by sending a UART break signal, and wake it up
+by turning off the UART break. If the BT chip enters the sleep mode
+successfully, it will pull up the CTS line, if the BT chip is woken up,
+it will pull down the CTS line. If without this workaround patch, the
+UART TX pin cannot send the break signal successfully as it affected by
+the BT CTS pin. After adding this patch, the BT power save feature can
+work well.
+
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Link: https://lore.kernel.org/r/20221214031137.28815-2-sherry.sun@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/pch_uart.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/fsl_lpuart.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index 83f35b7b0897c..abff1c6470f6a 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -1779,7 +1779,7 @@ static void pch_uart_exit_port(struct eg20t_port *priv)
- 	char name[32];
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index fc311df9f1c9d..1497098e100bf 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -1484,12 +1484,32 @@ static void lpuart_break_ctl(struct uart_port *port, int break_state)
  
- 	snprintf(name, sizeof(name), "uart%d_regs", priv->port.line);
--	debugfs_remove(debugfs_lookup(name, NULL));
-+	debugfs_lookup_and_remove(name, NULL);
- 	uart_remove_one_port(&pch_uart_driver, &priv->port);
- 	free_page((unsigned long)priv->rxbuf.buf);
+ static void lpuart32_break_ctl(struct uart_port *port, int break_state)
+ {
+-	unsigned long temp;
++	unsigned long temp, modem;
++	struct tty_struct *tty;
++	unsigned int cflag = 0;
++
++	tty = tty_port_tty_get(&port->state->port);
++	if (tty) {
++		cflag = tty->termios.c_cflag;
++		tty_kref_put(tty);
++	}
+ 
+ 	temp = lpuart32_read(port, UARTCTRL) & ~UARTCTRL_SBK;
++	modem = lpuart32_read(port, UARTMODIR);
+ 
+-	if (break_state != 0)
++	if (break_state != 0) {
+ 		temp |= UARTCTRL_SBK;
++		/*
++		 * LPUART CTS has higher priority than SBK, need to disable CTS before
++		 * asserting SBK to avoid any interference if flow control is enabled.
++		 */
++		if (cflag & CRTSCTS && modem & UARTMODIR_TXCTSE)
++			lpuart32_write(port, modem & ~UARTMODIR_TXCTSE, UARTMODIR);
++	} else {
++		/* Re-enable the CTS when break off. */
++		if (cflag & CRTSCTS && !(modem & UARTMODIR_TXCTSE))
++			lpuart32_write(port, modem | UARTMODIR_TXCTSE, UARTMODIR);
++	}
+ 
+ 	lpuart32_write(port, temp, UARTCTRL);
  }
 -- 
 2.39.2
