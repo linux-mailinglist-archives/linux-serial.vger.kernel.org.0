@@ -2,43 +2,60 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8805E6A9389
-	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 10:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BD36A96D8
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 12:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjCCJQF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 3 Mar 2023 04:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S231207AbjCCL5w (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Mar 2023 06:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjCCJP7 (ORCPT
+        with ESMTP id S230388AbjCCL5v (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:15:59 -0500
-Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499371633D
-        for <linux-serial@vger.kernel.org>; Fri,  3 Mar 2023 01:15:59 -0800 (PST)
-Received: by mail.corrib.pl (Postfix, from userid 1001)
-        id 82F52A3CDF; Fri,  3 Mar 2023 09:15:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
-        t=1677834963; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
-        h=Date:From:To:Subject:From;
-        b=OhcXUvfoPsozbSZat1NScMkAZOVFm3zBK59+4mxCpidnsMn3g11ClLq32BejOL9nT
-         qulzO5yQetebiAH5aZPE6pbCUqcbYV8FlXNk8c90q7UtPZpaDWJNVKkeKjzdM+QMpS
-         TN59p1Zckbcc4ws/Tn2pFGXxV/2UeVO2T5aCuo3Si751mksaAXzL0uHs66fUkDffRy
-         pyir1YngJ35bbjS74VrebaqGyjDnX8ahxI29cd+PkeQl3STJseOdg1HPj2ff2FD9hg
-         1A5LWnuxWxrHshaHDQ7ORuwyW13FmBeuCnRR1TNVoimj4t018q065tjh9bB6J0YwC8
-         RazJdSeqBz53g==
-Received: by mail.corrib.pl for <linux-serial@vger.kernel.org>; Fri,  3 Mar 2023 09:15:51 GMT
-Message-ID: <20230303074501-0.1.5u.hd7n.0.djonk1che6@corrib.pl>
-Date:   Fri,  3 Mar 2023 09:15:51 GMT
-From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
-        <szczepan.kielbasa@corrib.pl>
-To:     <linux-serial@vger.kernel.org>
-Subject: Faktoring
-X-Mailer: mail.corrib.pl
+        Fri, 3 Mar 2023 06:57:51 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A21D5D888;
+        Fri,  3 Mar 2023 03:57:41 -0800 (PST)
+Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N3KgE-1qXyHe2Eug-010O6H; Fri, 03 Mar 2023 12:57:32 +0100
+Message-ID: <98f5abe2-3d25-661a-a2b8-a50e2d27f085@i2se.com>
+Date:   Fri, 3 Mar 2023 12:57:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kernel-team@android.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230302023509.319903-1-saravanak@google.com>
+ <2cc752fb-a25d-0789-0fad-54b99f08ced7@i2se.com>
+ <CAGETcx_nCdm2WYLC7h1s8i9tnHc_LcHk2oZUQ0sUDr-PBsUWDg@mail.gmail.com>
+ <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com>
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:6SqIBuwl4hgkQVUMYPkjR7InGlbwGbJFAsRR4hE8HFy/tAGGHFk
+ Jgd5rAhKTcZEpIQV2wRk7zja7u0uyW/3jt8tDBammY9difig9xj4IhbjW1sruvglW8ZusAt
+ g6G8GpkzBmK81UgOKjSEU+/CFAtYwnCRLdcviwT2mGKYmR/4aZVUr0YWVGvQUtUMjDLAWXF
+ WF9ie6zTZ25HKGv/r2IUg==
+UI-OutboundReport: notjunk:1;M01:P0:yWS7SgGM3NA=;CdlKhqu9pItUD2gKhGkw34MOtbA
+ 5dz7oSDUgteJy+6QAdh2O1H9LvVIdd1BDnkxC7LhxpjEZqV2UKvEPrMA+TWwl7+BgJfYi+Vgz
+ Lc8SFIskUC30FpHWOb2dRqnx5dq2WCdegU4r7FOQ85WoPLHwPEDSuhDJdX3CuBNxZvdNGlAoC
+ 4ObcZ3KUyJxEE6qukjaKNZNCRi/fPVpXg6lGb8ArrGIu2JXsf8qzJcuIeERErii7OvZNPANPX
+ OK34q6psSSaiNH/kkS/ZWg8Ys2a8IWsoi81L/SsjxR3OKHl64hD0v6hajxJDrlKimZ10zgTFA
+ kr4feRYIZC+Q/pYUc5JZtG0E0m58Bh3jWkD/EUN/98eoTp6xVcckPRUfn+wW+ysCNXDdesWjL
+ YmAJGuZe9BMk/9bKfqz401Qk6GGQUEpXswILkncr1XVv7HORbXvvIyu6tll6GPu3KCaCqQelZ
+ 1iMQTUf9kYHNUwJ0FO/cBdBcntBKm/hQAL6OzuOwmPUpKOKi0/P6tG0fkRrrkvqnnXYox4Gao
+ 6AxCIqjqiPnAHOlkMbcCafIWL67SPao/y2Zf0uxSbzUL0v1lQUgVMghM1L72G4mlJ/5fSzO5E
+ qly7hF6no9XUJrUCJG8+ciFeRgt10t58St1hjyBocLJpWSIglQFts1/wsnKVKz7K5u70vNHaY
+ AzRIXLRt8lZxL/6PxJkpy57KX7wE9aujaQhv3+dsAw==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,19 +63,63 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
-ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
-wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
+Am 02.03.23 um 18:51 schrieb Florian Fainelli:
+>
+>
+> On 3/2/2023 9:20 AM, Saravana Kannan wrote:
+>> On Thu, Mar 2, 2023 at 9:01 AM Stefan Wahren <stefan.wahren@i2se.com> 
+>> wrote:
+>>>
+>>> Hi Saravana,
+>>>
+>>> Am 02.03.23 um 03:35 schrieb Saravana Kannan:
+>>>> This allow fw_devlink to do dependency tracking for serdev devices.
+>>>>
+>>>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>> Link: 
+>>>> https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f17e5@gmail.com/
+>>>> Cc: Stefan Wahren <stefan.wahren@i2se.com>
+>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+>>>
+>>> since this fixes an issue on Raspberry Pi 4, shouldn't this be 
+>>> mentioned
+>>> in the commit message and providing a Fixes tag?
+>>
+>> So RPi 4 was never creating a device links between serdev devices and
+>> their consumers. The error message was just a new one I added and we
+>> are noticing and catching the fact that serdev wasn't setting fwnode
+>> for a device.
+>>
+>> I'm also not sure if I can say this commit "Fixes" an issue in serdev
+>> core because when serdev core was written, fw_devlink wasn't a thing.
+>> Once I add Fixes, people will start pulling this into stable
+>> branches/other trees where I don't think this should be pulled into
+>> older stable branches.
+>
+> That is kind of the point of Fixes: tag, is not it? It is appropriate 
+> to list a commit that is not specific to serdev, but maybe a 
+> particular point into the fw_devlink history. Given this did not 
+> appear to have a functional impact, we could go without one.
 
-Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
-stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
-z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
- kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
-adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
-Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
+i was under the impression that this issue breaks at least Bluetooth on 
+Raspberry Pi 4 because the driver is never probed. I cannot see the 
+success output in Florian's trace. Something like this:
 
+[    7.124879] hci_uart_bcm serial0-0: supply vbat not found, using 
+dummy regulator
+[    7.131743] hci_uart_bcm serial0-0: supply vddio not found, using 
+dummy regulator
+...
+[    7.517249] Bluetooth: hci0: BCM: chip id 107
+[    7.517499] Bluetooth: hci0: BCM: features 0x2f
+[    7.519757] Bluetooth: hci0: BCM4345C0
+[    7.519768] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
+[    7.539495] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
+...
+[    8.348831] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+
+[    8.348845] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0342
 
-Pozdrawiam
-Szczepan Kie=C5=82basa
+I just want to make sure that 6.2 doesn't have a regression.
+
