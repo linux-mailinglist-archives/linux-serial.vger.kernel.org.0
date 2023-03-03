@@ -2,155 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263296AA0F0
-	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 22:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B35546AA1C1
+	for <lists+linux-serial@lfdr.de>; Fri,  3 Mar 2023 22:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjCCVRR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 3 Mar 2023 16:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S232145AbjCCVmn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 3 Mar 2023 16:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjCCVRQ (ORCPT
+        with ESMTP id S232125AbjCCVmJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:17:16 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC5A6150E
-        for <linux-serial@vger.kernel.org>; Fri,  3 Mar 2023 13:17:07 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id i5so4133558pla.2
-        for <linux-serial@vger.kernel.org>; Fri, 03 Mar 2023 13:17:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677878227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhuLhnLZCviHLHyGIe9EHKicgCaiC5kWp2NCXRvwT4I=;
-        b=nb/SD5Ls7IpbF/vQOkYudAu4gMlzu7iFxRTOsHX8uh5yXs77Dbfbd94UpWLyPcpKT5
-         vmmOy5tH7iPwZuDw+v1Ae9TrWhs+zjtyHuC7kVSDl5maoaon2ZGg1hK0gIuh/XTwvK/0
-         hYGn3id9j5kZFjEHqDII0oeLTTTmKfyCS+41r29/ApvkJc+nOSZxvoiikqd+6ia3LuRN
-         otBAoDslznqT82OwXo9zIt6E7xoJsvV2QqJU930y5lOLYR1XvPX+kGLL/YprGF/coZPs
-         weG5Y7kYSDvHG2VFRgh2FofaakQoo3tAhKsreGHDjv3UtQwsD3EP1OVhxk5SNUCaMIsi
-         FP/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677878227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OhuLhnLZCviHLHyGIe9EHKicgCaiC5kWp2NCXRvwT4I=;
-        b=TgLDK1kHL8yRebxgaTpGCN2NHkLzfarQFF/+VTRxLzyuJKzrsAQJ6NSgSXfsQfSLBQ
-         gBiYo259w4xL+TuIk9kEMb/pudX9ZHxlEMVCaaOsjfNf0JdW2yCkh37p/W87UdvlADwP
-         WxW52mTn0ChHY04Xknqt/CDFkOLudWmZvXfrQULNNOnOiWBVetZbCdpXjj1Q4Vv+yN9F
-         ZwgPmHWWOe27WwyfDoA8IVano1lbDXz2EGSVGS9Bsk/Pouaygt44FqpkqsP89RWm+Jca
-         KfqDopQTZCtdlNlo0VJhggl/ZLqGmFBIMka3YKnabXwM3t1Gqut659DAelhhgPV0Opdm
-         jEKQ==
-X-Gm-Message-State: AO0yUKXMt44SrPTiwZmdkRa/DrXaGTS5y6HX0KOSlFFveyEQJMzIQFhh
-        I1KhVh8gVlhWcbzVWV1q2DGF7LZEEp6taWrrhv6yYBlcPiC10kopakw=
-X-Google-Smtp-Source: AK7set+32LcKQp112YY6MZ6fMJypwdkQArStXiZgdTOdsG7SWiCMXSTE0LjhEFcXm2TYDtRE+daKrHb6aq/srLIW1gI=
-X-Received: by 2002:a17:903:41c9:b0:19e:2a1b:2797 with SMTP id
- u9-20020a17090341c900b0019e2a1b2797mr1324176ple.10.1677878226573; Fri, 03 Mar
- 2023 13:17:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20230302023509.319903-1-saravanak@google.com> <2cc752fb-a25d-0789-0fad-54b99f08ced7@i2se.com>
- <CAGETcx_nCdm2WYLC7h1s8i9tnHc_LcHk2oZUQ0sUDr-PBsUWDg@mail.gmail.com>
- <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com> <98f5abe2-3d25-661a-a2b8-a50e2d27f085@i2se.com>
- <667f007f-1cb0-7e89-242a-c41823e82bee@gmail.com>
-In-Reply-To: <667f007f-1cb0-7e89-242a-c41823e82bee@gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 3 Mar 2023 13:16:30 -0800
-Message-ID: <CAGETcx9UdOWT+ZnoydcXXqcS-sQ_i0FosWGr4ZTfRmRjA_FVcA@mail.gmail.com>
-Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Rob Herring <robh@kernel.org>,
+        Fri, 3 Mar 2023 16:42:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21266637C9;
+        Fri,  3 Mar 2023 13:41:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39AB161910;
+        Fri,  3 Mar 2023 21:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47EBAC433A0;
+        Fri,  3 Mar 2023 21:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677879694;
+        bh=++2MIM8/0ONyzcXtp7CAWK0DEF5HeCHRY3IEkNWQ9+A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Z4zjEyKVmW27vGte2F9WaKr48lNmoaw0rdi9eSormxmcjIlm2nfeHUFFyr7mNkokJ
+         pczqOaIy5YzGbsGDDqR2HdzqTqEN17Bok+yHn+bGLLBYS5jMvcsp6Y8j1oaDxgFmTd
+         dfJEEQ5D8CWqByEXKprisSiBgjIATQoejbRVxHpAyfUVwn9GKNAV6n+1RS17D19wga
+         iIfYVcQPxW0aYvCmz/LKmeQY5XJ9QB4ut72MSt5aA+hZHm9EcLeGk4gaDaxHZbyTnc
+         ZMVUE31H0H7AFeerQrL7n0M1jt31+brM2gXuhq8R2/z0JiB+2VAyMzycdpLXK/0g23
+         PUP1nT9DFiZqg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sherry Sun <sherry.sun@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kernel-team@android.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sasha Levin <sashal@kernel.org>, jirislaby@kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 16/64] tty: serial: fsl_lpuart: disable the CTS when send break signal
+Date:   Fri,  3 Mar 2023 16:40:18 -0500
+Message-Id: <20230303214106.1446460-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303214106.1446460-1-sashal@kernel.org>
+References: <20230303214106.1446460-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 9:22=E2=80=AFAM Florian Fainelli <f.fainelli@gmail.c=
-om> wrote:
->
-> On 3/3/23 03:57, Stefan Wahren wrote:
-> > Hi,
-> >
-> > Am 02.03.23 um 18:51 schrieb Florian Fainelli:
-> >>
-> >>
-> >> On 3/2/2023 9:20 AM, Saravana Kannan wrote:
-> >>> On Thu, Mar 2, 2023 at 9:01=E2=80=AFAM Stefan Wahren <stefan.wahren@i=
-2se.com>
-> >>> wrote:
-> >>>>
-> >>>> Hi Saravana,
-> >>>>
-> >>>> Am 02.03.23 um 03:35 schrieb Saravana Kannan:
-> >>>>> This allow fw_devlink to do dependency tracking for serdev devices.
-> >>>>>
-> >>>>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-> >>>>> Link:
-> >>>>> https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f17e5@g=
-mail.com/
-> >>>>> Cc: Stefan Wahren <stefan.wahren@i2se.com>
-> >>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> >>>>
-> >>>> since this fixes an issue on Raspberry Pi 4, shouldn't this be
-> >>>> mentioned
-> >>>> in the commit message and providing a Fixes tag?
-> >>>
-> >>> So RPi 4 was never creating a device links between serdev devices and
-> >>> their consumers. The error message was just a new one I added and we
-> >>> are noticing and catching the fact that serdev wasn't setting fwnode
-> >>> for a device.
-> >>>
-> >>> I'm also not sure if I can say this commit "Fixes" an issue in serdev
-> >>> core because when serdev core was written, fw_devlink wasn't a thing.
-> >>> Once I add Fixes, people will start pulling this into stable
-> >>> branches/other trees where I don't think this should be pulled into
-> >>> older stable branches.
-> >>
-> >> That is kind of the point of Fixes: tag, is not it? It is appropriate
-> >> to list a commit that is not specific to serdev, but maybe a
-> >> particular point into the fw_devlink history. Given this did not
-> >> appear to have a functional impact, we could go without one.
-> >
-> > i was under the impression that this issue breaks at least Bluetooth on
-> > Raspberry Pi 4 because the driver is never probed. I cannot see the
-> > success output in Florian's trace. Something like this:
-> >
-> > [    7.124879] hci_uart_bcm serial0-0: supply vbat not found, using
-> > dummy regulator
-> > [    7.131743] hci_uart_bcm serial0-0: supply vddio not found, using
-> > dummy regulator
-> > ...
-> > [    7.517249] Bluetooth: hci0: BCM: chip id 107
-> > [    7.517499] Bluetooth: hci0: BCM: features 0x2f
-> > [    7.519757] Bluetooth: hci0: BCM4345C0
-> > [    7.519768] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
-> > [    7.539495] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
-> > ...
-> > [    8.348831] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+
-> > [    8.348845] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0342
-> >
-> > I just want to make sure that 6.2 doesn't have a regression.
->
-> My configuration uses hci_uart as a module, and it would always load
-> fine, but I suppose I can make sure that even built-in this works
-> properly. Give me a day or two to test that.
+From: Sherry Sun <sherry.sun@nxp.com>
 
-Thanks Stefan and Florian! I'll wait to see the results.
+[ Upstream commit c4c81db5cf8bc53d6160c3abf26d382c841aa434 ]
 
-But based on my mental model of fw_devlink I don't expect BT to be
-broken without this patch. If a device doesn't have fwnode set, it's
-effectively invisible to fw_devlink. That could only affect consumers
-of the device and not the device itself.
+LPUART IP has a bug that it treats the CTS as higher priority than the
+break signal, which cause the break signal sending through UARTCTRL_SBK
+may impacted by the CTS input if the HW flow control is enabled.
 
--Saravana
+Add this workaround patch to fix the IP bug, we can disable CTS before
+asserting SBK to avoid any interference from CTS, and re-enable it when
+break off.
+
+Such as for the bluetooth chip power save feature, host can let the BT
+chip get into sleep state by sending a UART break signal, and wake it up
+by turning off the UART break. If the BT chip enters the sleep mode
+successfully, it will pull up the CTS line, if the BT chip is woken up,
+it will pull down the CTS line. If without this workaround patch, the
+UART TX pin cannot send the break signal successfully as it affected by
+the BT CTS pin. After adding this patch, the BT power save feature can
+work well.
+
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Link: https://lore.kernel.org/r/20221214031137.28815-2-sherry.sun@nxp.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/tty/serial/fsl_lpuart.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 5e69fb73f570f..fcb123296a0d1 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -1462,12 +1462,32 @@ static void lpuart_break_ctl(struct uart_port *port, int break_state)
+ 
+ static void lpuart32_break_ctl(struct uart_port *port, int break_state)
+ {
+-	unsigned long temp;
++	unsigned long temp, modem;
++	struct tty_struct *tty;
++	unsigned int cflag = 0;
++
++	tty = tty_port_tty_get(&port->state->port);
++	if (tty) {
++		cflag = tty->termios.c_cflag;
++		tty_kref_put(tty);
++	}
+ 
+ 	temp = lpuart32_read(port, UARTCTRL) & ~UARTCTRL_SBK;
++	modem = lpuart32_read(port, UARTMODIR);
+ 
+-	if (break_state != 0)
++	if (break_state != 0) {
+ 		temp |= UARTCTRL_SBK;
++		/*
++		 * LPUART CTS has higher priority than SBK, need to disable CTS before
++		 * asserting SBK to avoid any interference if flow control is enabled.
++		 */
++		if (cflag & CRTSCTS && modem & UARTMODIR_TXCTSE)
++			lpuart32_write(port, modem & ~UARTMODIR_TXCTSE, UARTMODIR);
++	} else {
++		/* Re-enable the CTS when break off. */
++		if (cflag & CRTSCTS && !(modem & UARTMODIR_TXCTSE))
++			lpuart32_write(port, modem | UARTMODIR_TXCTSE, UARTMODIR);
++	}
+ 
+ 	lpuart32_write(port, temp, UARTCTRL);
+ }
+-- 
+2.39.2
+
