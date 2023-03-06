@@ -2,104 +2,82 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834D26AC58A
-	for <lists+linux-serial@lfdr.de>; Mon,  6 Mar 2023 16:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B74196AC4D3
+	for <lists+linux-serial@lfdr.de>; Mon,  6 Mar 2023 16:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjCFPg2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 Mar 2023 10:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S231297AbjCFP1s (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 Mar 2023 10:27:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjCFPgF (ORCPT
+        with ESMTP id S231248AbjCFP1l (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:36:05 -0500
-X-Greylist: delayed 1201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 07:35:15 PST
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F07F367CF;
-        Mon,  6 Mar 2023 07:35:15 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 093F921E2C;
-        Mon,  6 Mar 2023 15:56:33 +0100 (CET)
-Date:   Mon, 6 Mar 2023 15:56:28 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com
-Subject: Re: [PATCH v6 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-Message-ID: <ZAX/HHyy2yL76N0K@francesco-nb.int.toradex.com>
-References: <20230301154514.3292154-1-neeraj.sanjaykale@nxp.com>
- <20230301154514.3292154-4-neeraj.sanjaykale@nxp.com>
+        Mon, 6 Mar 2023 10:27:41 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1ECEB311E9;
+        Mon,  6 Mar 2023 07:27:37 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39E2212FC;
+        Mon,  6 Mar 2023 07:28:20 -0800 (PST)
+Received: from e127643.broadband (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3437D3F71A;
+        Mon,  6 Mar 2023 07:27:34 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     James Clark <james.clark@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH 0/4] devres: Provide krealloc_array
+Date:   Mon,  6 Mar 2023 15:27:19 +0000
+Message-Id: <20230306152723.3090195-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301154514.3292154-4-neeraj.sanjaykale@nxp.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 09:15:14PM +0530, Neeraj Sanjay Kale wrote:
-> This adds a driver based on serdev driver for the NXP BT serial protocol
-> based on running H:4, which can enable the built-in Bluetooth device
-> inside an NXP BT chip.
-> 
-> This driver has Power Save feature that will put the chip into sleep state
-> whenever there is no activity for 2000ms, and will be woken up when any
-> activity is to be initiated over UART.
-> 
-> This driver enables the power save feature by default by sending the vendor
-> specific commands to the chip during setup.
-> 
-> During setup, the driver checks if a FW is already running on the chip
-> by waiting for the bootloader signature, and downloads device specific FW
-> file into the chip over UART if bootloader signature is received..
-> 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Hi,
 
-<snip>
+I had a use for a devm realloc_array in a separate change, so I've
+added one and updated all the obvious existing uses of it that I could
+find. This is basically a copy paste of the one in slab.h
 
-> +#define FIRMWARE_W8987	"nxp/uartuart8987_bt.bin"
-> +#define FIRMWARE_W8997	"nxp/uartuart8997_bt_v4.bin"
-> +#define FIRMWARE_W9098	"nxp/uartuart9098_bt_v1.bin"
-> +#define FIRMWARE_IW416	"nxp/uartiw416_bt_v0.bin"
-> +#define FIRMWARE_IW612	"nxp/uartspi_n61x_v1.bin.se"
+Applies to v6.3-rc1
 
-Where are this files coming from? Where can I download those?
-Is loading a combo firmware from the mwifiex driver supported? 
+Thanks
+James
 
-> +#define HCI_NXP_PRI_BAUDRATE	115200
-> +#define HCI_NXP_SEC_BAUDRATE	3000000
+James Clark (4):
+  devres: Provide krealloc_array
+  hwmon: pmbus: Use devm_krealloc_array
+  iio: adc: Use devm_krealloc_array
+  serial: qcom_geni: Use devm_krealloc_array
 
-What if the UART device does not support 3000000 baudrate (think at
-limitation on the clock source/divider of the UART)? Shouldn't this be
-configurable?
+ .../driver-api/driver-model/devres.rst          |  1 +
+ drivers/hwmon/pmbus/pmbus_core.c                |  6 +++---
+ drivers/iio/adc/xilinx-ams.c                    |  9 +++------
+ drivers/iio/adc/xilinx-xadc-core.c              | 17 +++++++----------
+ drivers/tty/serial/qcom_geni_serial.c           |  6 +++---
+ include/linux/device.h                          | 10 ++++++++++
+ 6 files changed, 27 insertions(+), 22 deletions(-)
 
-> +#define NXP_V1_FW_REQ_PKT	0xa5
-> +#define NXP_V1_CHIP_VER_PKT	0xaa
-> +#define NXP_V3_FW_REQ_PKT	0xa7
-> +#define NXP_V3_CHIP_VER_PKT	0xab
-> +
-> +#define NXP_ACK_V1		0x5a
-> +#define NXP_NAK_V1		0xbf
-> +#define NXP_ACK_V3		0x7a
-> +#define NXP_NAK_V3		0x7b
-> +#define NXP_CRC_ERROR_V3	0x7c
-
-I assume this was already discussed, but the *_V1 looks just like the
-existing Marvell protocol, is it really worth a new driver? I did not check all
-the details here, so maybe the answer is just yes.
-
-Francesco
+-- 
+2.34.1
 
