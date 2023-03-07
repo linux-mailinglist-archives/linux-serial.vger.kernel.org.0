@@ -2,93 +2,119 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B567C6AE71A
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Mar 2023 17:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA786AE731
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Mar 2023 17:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbjCGQrA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Mar 2023 11:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
+        id S231171AbjCGQsd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Mar 2023 11:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjCGQqh (ORCPT
+        with ESMTP id S230335AbjCGQsE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:46:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6701D211D5;
-        Tue,  7 Mar 2023 08:43:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB288614D1;
-        Tue,  7 Mar 2023 16:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C71C4339C;
-        Tue,  7 Mar 2023 16:43:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678207417;
-        bh=nr7223xxoM6+3D2kuSbPhGCYTqq1ERzivz361j3EF3E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s5eQ16PbFgS8bt+xxIG7HhBp99LyC48qMXEOdCl6Hkw4Snt938cXBRWAhRcYqo6PZ
-         Uyw4joS7AXANqJSP4HrrzO3WfSkYU/HtVtalesDI1LMXLdxZd2koXkS2+j5+6hePsp
-         zdWLa9GAT9L33Z+KN7+wHKUxde0AgkIpV3CF/ZpRgQkQYZL5Cdo59YJQMUfBBX0VWZ
-         CbnjgDNhd4VFNUr/4KTCyee1nhqjsgHtp4NaGC5w4EliWWd1i1YaI0L2Al6YXzh+1g
-         TuQcTLtcN1+z0gtCENyv8dueZI4J55Ljn1jCiyhqoOF/Fa7+M4zlSe15sirQp0yjXA
-         +X723GnvHb8sQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pZaQH-0003i9-6y; Tue, 07 Mar 2023 17:44:21 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Tue, 7 Mar 2023 11:48:04 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB4D9CFD2
+        for <linux-serial@vger.kernel.org>; Tue,  7 Mar 2023 08:44:36 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536b7ffdd34so255012047b3.6
+        for <linux-serial@vger.kernel.org>; Tue, 07 Mar 2023 08:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678207475;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fudFHVuFTBFg/trnMAjwYtHP559hB1IlUkkm8c37Y50=;
+        b=C1FtktTUZLRScveIKZ9szc5tqFc6zTVlhosAm5W76bIoTA3+jownCZemOQJtXqOj/i
+         OswV+evhE1bJddGQbzMng1HQJDkU2BUx6B9RB9Pe9n0f/n4QtjzYtDChr0Ayz2e7bRUU
+         kMYvci9lBkG6mamdFC3GBN0aEpock3bvfim3piuR76BI/d3rspNk8J3Z8ZaumNx/OMzA
+         UmV9535q5E0zVsf9yBGCMIGTSfIdpnxUU0qb6MG9EKVAD7TIPSkEsDGgQGFOerMUOlB4
+         jfqW9qFop3MurMcW8Upi8uSgzVR1WrvzZOgJtH517PHHvOzldcVVB2GjoDgA3OVlz4hs
+         OO6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678207475;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fudFHVuFTBFg/trnMAjwYtHP559hB1IlUkkm8c37Y50=;
+        b=0q+4gbSQ6TPhFW2ZmTdr0lfVV+W/83u6PH9q6tjtIdFGiKuVf5Fzc3N/pvAZjHM56f
+         GBW5bt2UcBc5jZ6UF3Eg1rWFV39nF7D02CmGmkjNH1ehk4soRm6Qu2Hzqc7mAAz9LNHh
+         0lTASIfJe8eRlDNE2zIJLbXyms7UgH+xxYuYKhuvafEC/PexEfgzLqDKP89j/7m2L75/
+         CzQSTSVec3iD11o7YtI0fpVYAAByWofZafP2RPB40ZjAWogcDIhyIB+I9Gf5zbuvM46d
+         wsDTg2iMMQzZMKuRQYGpChyXirHdtPcM6JCNoam8xrKMMXjvn4mEpcd6QhGlSJJBm7cw
+         aV/w==
+X-Gm-Message-State: AO0yUKVtyuDwh5VwFBXjz0gg32wcW+OOIsx6CcUdZrm9KcBSkq3uCXkS
+        xOCIQPNMfxRzx6uty6BVmgMsdrZCEEQTKFbKFTVgxA==
+X-Google-Smtp-Source: AK7set8Mlhd3BMu0el6kBe6TVY9uurv9wWYfzGKZYZ3v+8bg59K0iPFTbzTLcG3qzqvWFFLjae+E3TdWxy0lihl0lxw=
+X-Received: by 2002:a81:ae26:0:b0:52f:1c40:b1f9 with SMTP id
+ m38-20020a81ae26000000b0052f1c40b1f9mr9643617ywh.7.1678207475364; Tue, 07 Mar
+ 2023 08:44:35 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307164405.14218-1-johan+linaro@kernel.org>
+In-Reply-To: <20230307164405.14218-1-johan+linaro@kernel.org>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Tue, 7 Mar 2023 17:44:24 +0100
+Message-ID: <CACMJSes3usJUvCsrMBR_9dDGCbo2y7JqA8-B5mP28H2Cjg-v6A@mail.gmail.com>
+Subject: Re: [PATCH 0/4] serial: qcom-geni: fix console shutdown hang
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Douglas Anderson <dianders@chromium.org>,
         Daniel Thompson <daniel.thompson@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 4/4] serial: qcom-geni: drop bogus uart_write_wakeup()
-Date:   Tue,  7 Mar 2023 17:44:05 +0100
-Message-Id: <20230307164405.14218-5-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307164405.14218-1-johan+linaro@kernel.org>
-References: <20230307164405.14218-1-johan+linaro@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Drop the bogus uart_write_wakeup() from when setting up a new DMA
-transfer, which does not free up any more space in the ring buffer.
+On Tue, 7 Mar 2023 at 17:43, Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> This series fixes some of the fallout after a recent series adding
+> support for DMA transfers to the Qualcomm geni serial driver.
+>
+> Most importantly it fixes a hang during reboot when using a serial
+> console and the getty is stopped during reboot.
+>
+> Doug just posted an equivalent fix here:
+>
+>         https://lore.kernel.org/lkml/20230307073155.1.Iaab0159b8d268060a0e131ebb27125af4750ef99@changeid
+>
+> but the commit message only mentions the regression with respect to
+> kgdb, which is not as widely used serial consoles generally, so I
+> figured I'd post my version for completeness.
+>
+> Either version of that fix should address the immediate regression, but
+> fixing the underlying problems which have been there since the driver
+> was first merged is going to be a bit more involved.
+>
+> The rest of the series fixes a few bugs in the new DMA support that I
+> found while investigating the console regression.
+>
+> Johan
+>
+>
+> Johan Hovold (4):
+>   serial: qcom-geni: fix console shutdown hang
+>   serial: qcom-geni: fix DMA mapping leak on shutdown
+>   serial: qcom-geni: fix mapping of empty DMA buffer
+>   serial: qcom-geni: drop bogus uart_write_wakeup()
+>
+>  drivers/tty/serial/qcom_geni_serial.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> --
+> 2.39.2
+>
 
-Any pending writers will be woken up when the transfer completes.
+Hey Johan,
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/tty/serial/qcom_geni_serial.c | 4 ----
- 1 file changed, 4 deletions(-)
+Douglas and Srini beat you to these fixes but thanks!
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 9871225b2f9b..28fbc927a546 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -634,10 +634,6 @@ static void qcom_geni_serial_start_tx_dma(struct uart_port *uport)
- 	if (uart_circ_empty(xmit))
- 		return;
- 
--	xmit_size = uart_circ_chars_pending(xmit);
--	if (xmit_size < WAKEUP_CHARS)
--		uart_write_wakeup(uport);
--
- 	xmit_size = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
- 
- 	qcom_geni_serial_setup_tx(uport, xmit_size);
--- 
-2.39.2
-
+Bart
