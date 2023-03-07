@@ -2,150 +2,150 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4AE6AE63A
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Mar 2023 17:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE906AE725
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Mar 2023 17:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjCGQVE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Mar 2023 11:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S230508AbjCGQrv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Mar 2023 11:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjCGQUd (ORCPT
+        with ESMTP id S231163AbjCGQqx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:20:33 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A8492276
-        for <linux-serial@vger.kernel.org>; Tue,  7 Mar 2023 08:20:28 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id y14so13747732ljq.4
-        for <linux-serial@vger.kernel.org>; Tue, 07 Mar 2023 08:20:28 -0800 (PST)
+        Tue, 7 Mar 2023 11:46:53 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ACB90B50
+        for <linux-serial@vger.kernel.org>; Tue,  7 Mar 2023 08:43:59 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536bbe5f888so254885847b3.8
+        for <linux-serial@vger.kernel.org>; Tue, 07 Mar 2023 08:43:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678206026;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VQEsugkh0V2vIKcG4izkUsyGyZl7yhwYFD2CCB1ntKU=;
-        b=mA/4o0aegl4nboHdlLauTz1AgNIEmH9EWAckuq/MpX+To4fnV+W71vW9RrsqMuyO/1
-         Rr/C7qKdABhhjW/XVLwEM3i9trgVwIoj73R8ZW4wgZyfLXUlFIv7ngpe8lh8lvPIGjN2
-         eGXXVLF0erABbFX3KDBvh3vUiwgEAhB6+YBYEpze3+caqAfPNMVUtFdF7rTYC3s7fj0a
-         EWERZpmZOG3/G1Edd4ck9pjblWD3UxfYxupqpxe/stAaEJzaDTVWo/fyOmBKEaGb6eA5
-         fkkC7wYt63BtKOCIaXYdPYy/4xA7cc1dv6Lk48JFxbn2qlYOW54qnfS7dcsjVu4ewo4O
-         W3FQ==
+        d=linaro.org; s=google; t=1678207439;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6C5p9QZU598TAHAlwTKJLIwHjrkkcrwzk82daiPRKVA=;
+        b=lF2ABLa10Km1tgp1B02FgcV22tgi3hdEJd3tigXnkCm+lIrPP32eRE8zt1Q5nRfEvt
+         8nTgUs0z0PZzWpxTRWVYcBkNUKzqXCecCuV9RhWU1/tKt5rxEdZ6ARL/XcQKkC6TogUq
+         evnAfQaNIbw9PCxzpzRGZkUBJKvQahhV9eN9ucPUEw63Ljwu+GrGo5zn5k61G9sxBZbn
+         ksMuFoXSSlmlPY//ve0ML6w6kAjZ0aeD6yS5K7JNJ81v5jsaXNzz4MpORLzPK+DMXK4Q
+         PSkc3KMyExFjos7/iG5QryNNjyJJd+g08a9epQlkknN+4O8fx6bBY8qKfFpSreSe+Izo
+         Qi9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678206026;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VQEsugkh0V2vIKcG4izkUsyGyZl7yhwYFD2CCB1ntKU=;
-        b=CTX1nzH5DIqo2V4dhgVPexaap3SEkbTijIMLoXw44ZzRRoEIptFqvnGsF19+HNRt0R
-         PQ9L66VVLNzby94dltOh9hl9YwA5pNiWralKmIWDePqBIZjDmhr7pVAXMzjmUiPkEcDC
-         hlDqdaMViRtxxetJnPMTeO2AfDkphBf8jYmYUGlP6XOYGqXmqThbL4OHQG849vws23uy
-         upMrSnNJxIjjg7hCxAgoIvjz4GqmEnduF4vnjp3OhwT/wjlowK6HdLby87l+NEXyPCJa
-         pKR6aPevooZr/Wqq/1Ca4zoQd1taAaxqlrtXFWEdRY+m0yYSJDasvNGymM/bvvlgXKMD
-         YPIg==
-X-Gm-Message-State: AO0yUKUbfb3YNkwsv+T5K2xa1vjAR+m1cCWlC3VkdSAN/PwIMQOAbwe5
-        D7fQTySfV+fGcjDphlM9CJvJjA==
-X-Google-Smtp-Source: AK7set86ec1LsrI69Xbru8x7CA2NaSOBMOkEbirKvIm8EryBwd0yI/ZyV/snxmmAXbmrFT74e9d9EA==
-X-Received: by 2002:a2e:a4cc:0:b0:295:b4ed:fca8 with SMTP id p12-20020a2ea4cc000000b00295b4edfca8mr5081494ljm.24.1678206026708;
-        Tue, 07 Mar 2023 08:20:26 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id j8-20020a2eb708000000b00295b0c0e0c1sm2227918ljo.118.2023.03.07.08.20.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:20:26 -0800 (PST)
-Message-ID: <c7830eaa-f4b9-dac9-93b2-c3cc032ed4fb@linaro.org>
-Date:   Tue, 7 Mar 2023 17:20:25 +0100
+        d=1e100.net; s=20210112; t=1678207439;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6C5p9QZU598TAHAlwTKJLIwHjrkkcrwzk82daiPRKVA=;
+        b=c0pGx9qmQ4dGEArpqGkb34Rvz/oRm4q5jBdzVzaTf9BQLUPLECmDxTnk4dXZbj4Db4
+         vKjpvCx7YbDPzRaOh6aSpdV1WDVDVKCYomI5VyxWY4gSQiync2DRuKLxWTAvAALcPcTZ
+         eX9QrDNfS5sizk61Myd+PgsBkhRTgCSFyvhKyRooDb2y4ikfGVwn5sYL4PTqwslvhwx0
+         /cUDnXeUXORc9kpLiG/WrnbvKq5k1u+5Y+UVupexR9VDkuZbSwuDwnTnYkTaA4gLAWOU
+         67JFIYr7s4+kBV9ijBz9paa/URtmHUkVVTCwvGqifeTijHSe9y9MOF6bTG+43Iddd/lH
+         YcjQ==
+X-Gm-Message-State: AO0yUKUzbArHJxUwEFmjG1ek417VHJ5qM+8Rq2LiC8J7RwfrG79w0Q17
+        cMKc3pGgRjipDfK0yhjQ1itVmkIk1IqENnNMjxMOYg==
+X-Google-Smtp-Source: AK7set82pxw64ijxA1supSETlb7X6hjCvrTPUjlOU65pM8yLtKEOGgBzO5kUhk9SY1SMFL2SUZGw2wWx7jo+Qgg7bvQ=
+X-Received: by 2002:a81:ae26:0:b0:52f:1c40:b1f9 with SMTP id
+ m38-20020a81ae26000000b0052f1c40b1f9mr9642508ywh.7.1678207438737; Tue, 07 Mar
+ 2023 08:43:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+References: <20230307155543.31021-1-srinivas.kandagatla@linaro.org>
+ <20230307155543.31021-2-srinivas.kandagatla@linaro.org> <c7830eaa-f4b9-dac9-93b2-c3cc032ed4fb@linaro.org>
+In-Reply-To: <c7830eaa-f4b9-dac9-93b2-c3cc032ed4fb@linaro.org>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Tue, 7 Mar 2023 17:43:47 +0100
+Message-ID: <CACMJSevF=ur17LdYsYhN8nCcOg8k3mpz9poV_GGFUxo41DxXeQ@mail.gmail.com>
 Subject: Re: [PATCH 2/2] tty: serial: qcom-geni-serial: check for valid size
  before starting dma
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        agross@kernel.org, andersson@kernel.org, gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, bartosz.golaszewski@linaro.org,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, andersson@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230307155543.31021-1-srinivas.kandagatla@linaro.org>
- <20230307155543.31021-2-srinivas.kandagatla@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230307155543.31021-2-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Tue, 7 Mar 2023 at 17:20, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 7.03.2023 16:55, Srinivas Kandagatla wrote:
+> > Check if there are valid length of bytes to transfer before starting dma.
+> >
+> > without this check we can see below kernel warning when we try to map a zero size buffers.
+> >
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 0 at drivers/iommu/dma-iommu.c:1046 iommu_dma_unmap_page+0xe0/0xfc
+> > Modules linked in:
+> > CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W          6.3.0-rc1-dirty #347
+> > Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+> > pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > pc : iommu_dma_unmap_page+0xe0/0xfc
+> > lr : iommu_dma_unmap_page+0x38/0xfc
+> > ...
+> > Call trace:
+> >  iommu_dma_unmap_page+0xe0/0xfc
+> >  dma_unmap_page_attrs+0x30/0x1ec
+> >  geni_se_tx_dma_unprep+0x58/0x80
+> >  qcom_geni_serial_isr+0x350/0x750
+> >  __handle_irq_event_percpu+0x58/0x148
+> >  handle_irq_event_percpu+0x18/0x4c
+> >  handle_irq_event+0x48/0x88
+> >  handle_fasteoi_irq+0xb0/0x130
+> >  generic_handle_domain_irq+0x2c/0x44
+> >  gic_handle_irq+0xd4/0x140
+> >  call_on_irq_stack+0x24/0x4c
+> >  do_interrupt_handler+0x80/0x84
+> >  el1_interrupt+0x38/0x6c
+> >  el1h_64_irq_handler+0x18/0x24
+> >  el1h_64_irq+0x64/0x68
+> >  cpuidle_enter_state+0x1e4/0x310
+> >  cpuidle_enter+0x3c/0x54
+> >  call_cpuidle+0x1c/0x40
+> >  do_idle+0x204/0x260
+> >  cpu_startup_entry+0x28/0x2c
+> >  kernel_init+0x0/0x12c
+> >  arch_post_acpi_subsys_init+0x0/0x8
+> >  start_kernel+0x3cc/0x74c
+> >  __primary_switched+0xbc/0xc4
+> >
+> > Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
+> > Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> S-o-b but no C-d-b? Weird..
+>
 
+It was supposed to be Reviewed-by actually.
 
-On 7.03.2023 16:55, Srinivas Kandagatla wrote:
-> Check if there are valid length of bytes to transfer before starting dma.
-> 
-> without this check we can see below kernel warning when we try to map a zero size buffers.
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 0 at drivers/iommu/dma-iommu.c:1046 iommu_dma_unmap_page+0xe0/0xfc
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W          6.3.0-rc1-dirty #347
-> Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-> pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : iommu_dma_unmap_page+0xe0/0xfc
-> lr : iommu_dma_unmap_page+0x38/0xfc
-> ...
-> Call trace:
->  iommu_dma_unmap_page+0xe0/0xfc
->  dma_unmap_page_attrs+0x30/0x1ec
->  geni_se_tx_dma_unprep+0x58/0x80
->  qcom_geni_serial_isr+0x350/0x750
->  __handle_irq_event_percpu+0x58/0x148
->  handle_irq_event_percpu+0x18/0x4c
->  handle_irq_event+0x48/0x88
->  handle_fasteoi_irq+0xb0/0x130
->  generic_handle_domain_irq+0x2c/0x44
->  gic_handle_irq+0xd4/0x140
->  call_on_irq_stack+0x24/0x4c
->  do_interrupt_handler+0x80/0x84
->  el1_interrupt+0x38/0x6c
->  el1h_64_irq_handler+0x18/0x24
->  el1h_64_irq+0x64/0x68
->  cpuidle_enter_state+0x1e4/0x310
->  cpuidle_enter+0x3c/0x54
->  call_cpuidle+0x1c/0x40
->  do_idle+0x204/0x260
->  cpu_startup_entry+0x28/0x2c
->  kernel_init+0x0/0x12c
->  arch_post_acpi_subsys_init+0x0/0x8
->  start_kernel+0x3cc/0x74c
->  __primary_switched+0xbc/0xc4
-> 
-> Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-S-o-b but no C-d-b? Weird..
+Bart
 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Anyway, the change is good!
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/tty/serial/qcom_geni_serial.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index 5972b5c317d3..bb63a00f4c07 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -637,6 +637,9 @@ static void qcom_geni_serial_start_tx_dma(struct uart_port *uport)
->  
->  	xmit_size = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
->  
-> +	if (!xmit_size)
-> +		return;
-> +
->  	qcom_geni_serial_setup_tx(uport, xmit_size);
->  
->  	ret = geni_se_tx_dma_prep(&port->se, &xmit->buf[xmit->tail],
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> Anyway, the change is good!
+>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>
+> Konrad
+> >  drivers/tty/serial/qcom_geni_serial.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > index 5972b5c317d3..bb63a00f4c07 100644
+> > --- a/drivers/tty/serial/qcom_geni_serial.c
+> > +++ b/drivers/tty/serial/qcom_geni_serial.c
+> > @@ -637,6 +637,9 @@ static void qcom_geni_serial_start_tx_dma(struct uart_port *uport)
+> >
+> >       xmit_size = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
+> >
+> > +     if (!xmit_size)
+> > +             return;
+> > +
+> >       qcom_geni_serial_setup_tx(uport, xmit_size);
+> >
+> >       ret = geni_se_tx_dma_prep(&port->se, &xmit->buf[xmit->tail],
