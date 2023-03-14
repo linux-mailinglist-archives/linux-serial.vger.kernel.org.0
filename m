@@ -2,156 +2,251 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486FD6B96A8
-	for <lists+linux-serial@lfdr.de>; Tue, 14 Mar 2023 14:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1B96B9632
+	for <lists+linux-serial@lfdr.de>; Tue, 14 Mar 2023 14:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbjCNNpp (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 14 Mar 2023 09:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S232397AbjCNN26 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 Mar 2023 09:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbjCNNpS (ORCPT
+        with ESMTP id S232428AbjCNN2O (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:45:18 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813E8480E;
-        Tue, 14 Mar 2023 06:42:22 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aeb5a.dynamic.kabel-deutschland.de [95.90.235.90])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3796961CC457B;
-        Tue, 14 Mar 2023 13:03:54 +0100 (CET)
-Message-ID: <e1b0452c-4068-deba-4773-14006fd32c2a@molgen.mpg.de>
-Date:   Tue, 14 Mar 2023 13:03:53 +0100
+        Tue, 14 Mar 2023 09:28:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C8F8B307;
+        Tue, 14 Mar 2023 06:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678800342; x=1710336342;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0DeveTeOTTZY6abqN216d+MpmyjSz+VWTzc+RDADd0I=;
+  b=Pom7t7R5qTtJjcwtAr5Z0/P+St8EUPJt4k66dK6rtiRF7AtLsqO/ek0p
+   6R9if7NrM6P58FocrJfzVsW8zSY6AHYOpNSnVo5Lrom2MkcQ+zRwGREWq
+   dLclwFBcauouE1LC680oE7JueuOCcc0eAVygV7kqbjbIkoC+k5G4+ouXW
+   H7yRDuzuF1nYNf1+D6m32ZWdTvB5BjvPo6cYZ8SCVVFCZ7HE16z6FEfEi
+   NtCGqokyeHIKDR7t6dR75qJAMADxCkgGBHs8GImgXimkNL5VCLgfzpe4X
+   TcpNo0soJV7uzG/2GW8mjqgjhNEyDmktQTNeI7xTG2ghWlxmQ9GClJ9MI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="365088126"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="365088126"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 06:24:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802861553"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="802861553"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 14 Mar 2023 06:24:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pc4db-003EZd-39;
+        Tue, 14 Mar 2023 15:24:23 +0200
+Date:   Tue, 14 Mar 2023 15:24:23 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v7 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZBB1h12WHIGo4NX8@smile.fi.intel.com>
+References: <20230314073603.42279-1-tony@atomide.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
- support
-Content-Language: en-US
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        simon.horman@corigine.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
-References: <20230313144028.3156825-1-neeraj.sanjaykale@nxp.com>
- <20230313144028.3156825-3-neeraj.sanjaykale@nxp.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230313144028.3156825-3-neeraj.sanjaykale@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314073603.42279-1-tony@atomide.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Neeraj,
-
-
-Thank you for your patch.
-
-Am 13.03.23 um 15:40 schrieb Neeraj Sanjay Kale:
-> Add binding document for NXP bluetooth chipsets attached over UART.
+On Tue, Mar 14, 2023 at 09:35:59AM +0200, Tony Lindgren wrote:
+> We want to enable runtime PM for serial port device drivers in a generic
+> way. To do this, we want to have the serial core layer manage the
+> registered physical serial controller devices.
 > 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> v2: Resolved dt_binding_check errors. (Rob Herring)
-> v2: Modified description, added specific compatibility devices, corrected
-> indentations. (Krzysztof Kozlowski)
-> v3: Modified description, renamed file (Krzysztof Kozlowski)
-> v4: Resolved dt_binding_check errors, corrected indentation.
-> (Rob Herring, Krzysztof Kozlowski)
-> v5: Corrected serial device name in example. (Krzysztof Kozlowski)
-> ---
->   .../net/bluetooth/nxp,88w8987-bt.yaml         | 46 +++++++++++++++++++
->   MAINTAINERS                                   |  6 +++
->   2 files changed, 52 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> To do this, let's set up a struct bus and struct device for the serial
+> core controller as suggested by Greg and Jiri. The serial core controller
+> devices are children of the physical serial port device. The serial core
+> controller device is needed to support multiple different kind of ports
+> connected to single physical serial port device.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> new file mode 100644
-> index 000000000000..b913ca59b489
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/bluetooth/nxp,88w8987-bt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP Bluetooth chips
-> +
-> +description:
-> +  This binding describes UART-attached NXP bluetooth chips.
-> +  These chips are dual-radio chips supporting WiFi and Bluetooth.
-> +  The bluetooth works on standard H4 protocol over 4-wire UART.
-> +  The RTS and CTS lines are used during FW download.
-> +  To enable power save mode, the host asserts break signal
-> +  over UART-TX line to put the chip into power save state.
-> +  De-asserting break wakes-up the BT chip.
+> Let's also set up a struct device for the serial core port. The serial
+> core port instances are children of the serial core controller device.
 
-The verb is spelled with a space: wakes up the BT chip.
+> We need to also update the documentation a bit as suggested by Andy.
 
-You seem to break the line whenever a sentence ends. Is that intentional?
+Now this can be moved to the comments section (below '---' cutter)
+with perhaps addition why it's not done yet.
 
+> With the serial core port device we can now flush pending TX on the
+
+...
+
+> +	return (strncmp(dev_name(dev), drv->name, len) == 0);
+
+Outer parentheses are redundant. The ' == 0' can be replaced with !,
+but it's up to you.
+
+...
+
+> +struct serial_base_device *serial_base_device_add(struct uart_port *port,
+> +						  const char *name,
+> +						  struct device *parent_dev)
+> +{
+> +	struct serial_base_device *dev;
+
+Can we call this variable (and perhaps everywhere else) like sbd, or sbdev?
+
+This will help to distinguish core device operations and serial one, because,
+for example, I have stumbled over kfree(dev) and puzzled a lot.
+
+> +	int err, id;
 > +
-> +maintainers:
-> +  - Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> +	if (!dev)
+> +		return NULL;
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,88w8987-bt
-> +      - nxp,88w8997-bt
+> +	device_initialize(&dev->dev);
+> +	dev->dev.parent = parent_dev;
+> +	dev->dev.bus = &serial_base_bus_type;
+
+Who should provide a ->release() callback?
+
+> +	if (str_has_prefix(name, "ctrl")) {
+> +		id = port->ctrl_id;
+> +	} else {
+> +		id = port->line;
+> +		dev->port = port;
+> +	}
 > +
-> +  fw-init-baudrate:
-> +    description:
-> +      Chip baudrate after FW is downloaded and initialized.
-> +      This property depends on the module vendor's
-> +      configuration. If this property is not specified,
-> +      115200 is set as default.
+> +	err = dev_set_name(&dev->dev, "%s.%s.%d", name, dev_name(port->dev), id);
+> +	if (err)
+> +		goto err_free_dev;
 > +
-> +required:
-> +  - compatible
+> +	err = device_add(&dev->dev);
+> +	if (err)
+> +		goto err_free_name;
 > +
-> +additionalProperties: false
+> +	return dev;
 > +
-> +examples:
-> +  - |
-> +    serial {
-> +        bluetooth {
-> +            compatible = "nxp,88w8987-bt";
-> +            fw-init-baudrate = <3000000>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 32dd41574930..030ec6fe89df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22835,6 +22835,12 @@ L:	linux-mm@kvack.org
->   S:	Maintained
->   F:	mm/zswap.c
->   
-> +NXP BLUETOOTH WIRELESS DRIVERS
-> +M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
-> +M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> +err_free_name:
+> +	kfree_const(dev->dev.kobj.name);
+
+It's still missing put_device() call as suggested by device_add() kernel
+documentation. (Double) check also the removal path.
+
+> +err_free_dev:
+> +	kfree(dev);
+
+> +	return NULL;
+> +}
+
+...
+
+> +struct device;
+
+Since you are embedding the device object this won't suffice,
+you need to include device.h.
+
+> +struct uart_driver;
+> +struct uart_port;
 > +
->   THE REST
->   M:	Linus Torvalds <torvalds@linux-foundation.org>
->   L:	linux-kernel@vger.kernel.org
+> +struct serial_base_device {
+> +	struct device dev;
+> +	struct uart_port *port;
+> +};
+> +
+> +#define to_serial_base_device(x) container_of((x), struct serial_base_device, dev)
+
+container_of.h
+
+...
+
+> +	/* Increment the runtime PM usage count for the active check below */
+> +	err = pm_runtime_get(port_dev);
+
+The question here is why don't we need to actually turn on the device immediately
+(sync) if it's not already powered?
+
+> +	if (err < 0) {
+> +		pm_runtime_put_noidle(port_dev);
+> +		return;
+> +	}
+
+> +	/*
+> +	 * Start TX if enabled, and kick runtime PM. Otherwise we must
+> +	 * wait for a retry. See also serial_port.c for runtime PM
+> +	 * autosuspend timeout.
+> +	 */
+
+I.o.w. does the start_tx() require device to be powered on at this point?
+
+> +	if (pm_runtime_active(port_dev))
+>  		port->ops->start_tx(port);
+> +	pm_runtime_mark_last_busy(port_dev);
+> +	pm_runtime_put_autosuspend(port_dev);
+
+...
+
+> +++ b/drivers/tty/serial/serial_ctrl.c
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +/*
+> + * Serial core controller driver
+> + *
+> + * This driver manages the serial core controller struct device instances.
+> + * The serial core controller devices are children of the physical serial
+> + * port device.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/serial_core.h>
+
+Include for the struct device_driver?
+
+Do we need a separete include for EXPORT_SYMBOL_NS()?
+
+...
+
+> +/*
+> + * Serial core port device driver
+> + */
+> +#include <linux/module.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/serial_core.h>
+
+Similar questions.
+
++ spinlock.h?
+
+...
+
+> +static __maybe_unused DEFINE_RUNTIME_DEV_PM_OPS(serial_port_pm,
+
+Do you still need __maybe_unused?
+
+> +						NULL,
+> +						serial_port_runtime_resume,
+> +						NULL);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
