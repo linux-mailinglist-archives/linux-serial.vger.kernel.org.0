@@ -2,76 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79756BF307
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Mar 2023 21:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D376BF351
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Mar 2023 21:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCQUsU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 17 Mar 2023 16:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S229830AbjCQU6T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 17 Mar 2023 16:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjCQUsS (ORCPT
+        with ESMTP id S230344AbjCQU6O (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:48:18 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CC2EC7B;
-        Fri, 17 Mar 2023 13:48:16 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id v27so5599086vsa.7;
-        Fri, 17 Mar 2023 13:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679086095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ee6J0WOIDLoOleb4NPcisF64humPRCG8+jx5pR9784s=;
-        b=FiA1BFSKJ1Zm32K8S3NjXmdJiDWVf6tWvWC8aIi8359dhX+d4u2poBgZwvY+0+OaCJ
-         FUQyVv9bYORuNG47yNR/wvwAOqjd3SQ6JTEX0ObUo4tOyhV1SYLbiTrAPFDyTFbfC0DO
-         XJMZx8EzuQkzzof5S7HFmnifwXcIsHMSr5gp870QVWzODgt++aArVy0kM4rUSaaW3lkM
-         nbCCDRO5bQBeC35xDFgxwAzADm/WXN2HLyHBIi7QrzNx06TQRTFXpDCEWNGWAeCf/p8s
-         8mZdI4skZUxD1uyGaHFYweJUcMYJAtGC+K31nB6Za230mkz4ILjJWpeb/PyVBUhSlcSQ
-         i6jw==
+        Fri, 17 Mar 2023 16:58:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B2062B45
+        for <linux-serial@vger.kernel.org>; Fri, 17 Mar 2023 13:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679086641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3ueSLYTbczhpfG9NghbRnTQhmVk9+C96iBsuLv5iJJc=;
+        b=UZ0NzoRyC9cFuIjibwQ7DAscLfmQ3KoLUPlxde60tzF7x+XYw9Y3ZW76cug3JmmSWaOkD1
+        dzDhCzS7pokOI9sXXbIGcKoIj2ka2Vt2iD9hcNOFkH7+5dTHTjEXXPwGBbGYXRucpHXRP1
+        bLK3cbMMZ7RUWht0S9ZwXh6U2GNJd7M=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-572-2uUOtXLgNcyi18l-wPCHLA-1; Fri, 17 Mar 2023 16:57:20 -0400
+X-MC-Unique: 2uUOtXLgNcyi18l-wPCHLA-1
+Received: by mail-qk1-f197.google.com with SMTP id z11-20020ae9e60b000000b00745cb04c72eso3257285qkf.13
+        for <linux-serial@vger.kernel.org>; Fri, 17 Mar 2023 13:57:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679086095;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ee6J0WOIDLoOleb4NPcisF64humPRCG8+jx5pR9784s=;
-        b=iqMwi9/bSo3F3dzr83rAHrxwyJcEdi1erfc3eReMsYWalVKN4ijowNiapU2yLxHBsx
-         W6jtLuYsZDbd9nTslwgJgUSfTnDeFsYXxI8RsAwokvwdSfc1bSinyS2aAQRmSXqh1nxP
-         26oajOYUpCePSS2HQyBup+MMsYOLnqv8l+OkWRPhaQ75vFG087N7efrFp3yxDu/i3QEO
-         8P8p9s7HF0Ife4un3s/wXF1ux2Wu3cHcXEeZx2n63zxSQiTrHXE6t/b7cJgUul/FrpEB
-         /PWjuxz1wBAl6NbceQ/zLaVqto6/dHoicJfF5kmYF7UPeOAveHn1bY+Q2Lxq57YA5t9P
-         t3GA==
-X-Gm-Message-State: AO0yUKUMBu3mKm7+AunJ7NSyqujG8hHLCyDQWbMSXDYbsCTGBmVBuKKW
-        U2MJ07xoUMCnD31az+D/6/mYemCevBV2IwQr3eQ=
-X-Google-Smtp-Source: AK7set/fdXhElNWqm+48s4YpD/+UsAFBGmgv8ebcZ6jVSE6b0PSV+9CZppp1FztOGDz/GVR3njU+whT3LpuVbBYoJek=
-X-Received: by 2002:a67:c811:0:b0:423:d4af:dfda with SMTP id
- u17-20020a67c811000000b00423d4afdfdamr23149vsk.2.1679086095600; Fri, 17 Mar
- 2023 13:48:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679086640;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3ueSLYTbczhpfG9NghbRnTQhmVk9+C96iBsuLv5iJJc=;
+        b=B9P3o0q+55gDGv1fr+p0B3/VuRwxu8zF4JTqlG940axdr/5U0H7MtEsgeXDbBMhzGy
+         FVPjyXRFO7tYW7iNqMQrQNy0/mozeUQfmLGUz2Iaq/hgtZbzPRMO+/wvLyAzNoyxMuyY
+         DO33VmZbDpB+mZzmUciBJERWLr0BnIpUUOh95UCcqpb3nCkh7xsEGjZ5TDKlW1VnEzYL
+         yA6cVy9N5FePR+D2njvmc4Q2YbRuX8SiZPNytHFeObEdXS2in7rE8+shuw//hSM7LHEx
+         Jdjtp5OUCKtaLDHWsucwaQJ7IDZavHhS3VVkMyZ2Il912hZk9z9NIH/wVjRUaDYx6TQM
+         rJ6A==
+X-Gm-Message-State: AO0yUKVaViXA8+ydY7GGComvkzlrWjza6HdDa6txH9W3ZfaBEM7UwUbA
+        0nUzjMEy4wXAPI2+8g38aHGekayWKg47Gc0Pa3bq2wPw2tFuC6gYyoN2PxM2rVnAzoY/nrBhpfa
+        Tx+ioMhvEa4Ei8wpH5ZDaVxwP
+X-Received: by 2002:a05:6214:e88:b0:5b4:2271:b42f with SMTP id hf8-20020a0562140e8800b005b42271b42fmr15359009qvb.47.1679086639846;
+        Fri, 17 Mar 2023 13:57:19 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+i8S89kFUh6Def3I4RhtkIaIaYkO0oKXURsOnZTacJ2FYR4+jckCSLZDHDDsPzEFtMvK2Vgw==
+X-Received: by 2002:a05:6214:e88:b0:5b4:2271:b42f with SMTP id hf8-20020a0562140e8800b005b42271b42fmr15358978qvb.47.1679086639567;
+        Fri, 17 Mar 2023 13:57:19 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id s20-20020a374514000000b00742bc037f29sm2295574qka.120.2023.03.17.13.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 13:57:19 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] serial: imx: remove unused imx_uart_is_imx* functions
+Date:   Fri, 17 Mar 2023 16:57:10 -0400
+Message-Id: <20230317205710.1672232-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230316172214.3899786-1-neeraj.sanjaykale@nxp.com>
- <CABBYNZ+DM+DKYVb-EqRX+WwW2hCrcVeMh29PVjqTM0WW2+HBuw@mail.gmail.com> <ZBTQu4RXHHbVRJTA@corigine.com>
-In-Reply-To: <ZBTQu4RXHHbVRJTA@corigine.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 17 Mar 2023 13:48:03 -0700
-Message-ID: <CABBYNZJG3T+v=RdQBuW-zvDDCQpqdkn3K=fP3NkPECJQdLbo9A@mail.gmail.com>
-Subject: Re: [PATCH v13 0/4] Add support for NXP bluetooth chipsets
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,68 +82,51 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Simon,
+clang with W=1 reports
+drivers/tty/serial/imx.c:292:19: error:
+  unused function 'imx_uart_is_imx21' [-Werror,-Wunused-function]
+static inline int imx_uart_is_imx21(struct imx_port *sport)
+                  ^
+drivers/tty/serial/imx.c:297:19: error:
+  unused function 'imx_uart_is_imx53' [-Werror,-Wunused-function]
+static inline int imx_uart_is_imx53(struct imx_port *sport)
+                  ^
+drivers/tty/serial/imx.c:302:19: error:
+  unused function 'imx_uart_is_imx6q' [-Werror,-Wunused-function]
+static inline int imx_uart_is_imx6q(struct imx_port *sport)
+                  ^
+These static functions are not used, so remove them.
 
-On Fri, Mar 17, 2023 at 1:42=E2=80=AFPM Simon Horman <simon.horman@corigine=
-.com> wrote:
->
-> On Fri, Mar 17, 2023 at 01:00:11PM -0700, Luiz Augusto von Dentz wrote:
-> > Hi Neeraj,
-> >
-> > On Thu, Mar 16, 2023 at 10:22=E2=80=AFAM Neeraj Sanjay Kale
-> > <neeraj.sanjaykale@nxp.com> wrote:
-> > >
-> > > This patch adds a driver for NXP bluetooth chipsets.
-> > >
-> > > The driver is based on H4 protocol, and uses serdev APIs. It supports=
- host
-> > > to chip power save feature, which is signalled by the host by asserti=
-ng
-> > > break over UART TX lines, to put the chip into sleep state.
-> > >
-> > > To support this feature, break_ctl has also been added to serdev-tty =
-along
-> > > with a new serdev API serdev_device_break_ctl().
-> > >
-> > > This driver is capable of downloading firmware into the chip over UAR=
-T.
-> > >
-> > > The document specifying device tree bindings for this driver is also
-> > > included in this patch series.
-> > >
-> > > Neeraj Sanjay Kale (4):
-> > >   serdev: Replace all instances of ENOTSUPP with EOPNOTSUPP
-> > >   serdev: Add method to assert break signal over tty UART port
-> > >   dt-bindings: net: bluetooth: Add NXP bluetooth support
-> > >   Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
-> > >
-> > >  .../net/bluetooth/nxp,88w8987-bt.yaml         |   45 +
-> > >  MAINTAINERS                                   |    7 +
-> > >  drivers/bluetooth/Kconfig                     |   12 +
-> > >  drivers/bluetooth/Makefile                    |    1 +
-> > >  drivers/bluetooth/btnxpuart.c                 | 1297 +++++++++++++++=
-++
-> > >  drivers/tty/serdev/core.c                     |   17 +-
-> > >  drivers/tty/serdev/serdev-ttyport.c           |   16 +-
-> > >  include/linux/serdev.h                        |   10 +-
-> > >  8 files changed, 1398 insertions(+), 7 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/net/bluetooth/n=
-xp,88w8987-bt.yaml
-> > >  create mode 100644 drivers/bluetooth/btnxpuart.c
-> > >
-> > > --
-> > > 2.34.1
-> >
-> > If there are no new comments to be addressed by the end of the day I'm
-> > planning to merge this into bluetooth-next.
->
-> FWIIW, as someone involved in the review of this series, I am fine with t=
-hat.
-> Even though I have only supplied tags for some of the patches;
-> those for which I feel that it is appropriate.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/tty/serial/imx.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-Thanks for the feedback and the review as well.
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 84bc0e768726..dbb3af4c1a34 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -289,20 +289,6 @@ static inline int imx_uart_is_imx1(struct imx_port *sport)
+ 	return sport->devdata->devtype == IMX1_UART;
+ }
+ 
+-static inline int imx_uart_is_imx21(struct imx_port *sport)
+-{
+-	return sport->devdata->devtype == IMX21_UART;
+-}
+-
+-static inline int imx_uart_is_imx53(struct imx_port *sport)
+-{
+-	return sport->devdata->devtype == IMX53_UART;
+-}
+-
+-static inline int imx_uart_is_imx6q(struct imx_port *sport)
+-{
+-	return sport->devdata->devtype == IMX6Q_UART;
+-}
+ /*
+  * Save and restore functions for UCR1, UCR2 and UCR3 registers
+  */
+-- 
+2.27.0
 
-
---=20
-Luiz Augusto von Dentz
