@@ -2,68 +2,167 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680CD6BF564
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Mar 2023 23:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA626BF37B
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Mar 2023 22:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjCQWye (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 17 Mar 2023 18:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S229971AbjCQVFy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 17 Mar 2023 17:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjCQWyc (ORCPT
+        with ESMTP id S230156AbjCQVFx (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 17 Mar 2023 18:54:32 -0400
-Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9F422D4F4C
-        for <linux-serial@vger.kernel.org>; Fri, 17 Mar 2023 15:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
-         h=mime-version:content-type:content-transfer-encoding:date:from
-        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
-        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=zG/ZdNe/m4SDUBIpyxzvz0vO
-        lVmI9+KbSOPt8Svr/tclj4ScnvITIyy9QPv9v65BUs8btFVzDia0dfW8DioqwppK
-        pOSA0EWlfOEewS8ZJgN05EA/QdElupj4cN0Hh0cQ85Gj6a5XE6T5ZORahwohczsm
-        t2GAydZ07yacfGczXRI22UP2XoCfFu5fCS2PqvrnWh+7rtEITRMYWJ+fSGBUzn3C
-        8PtdMzndZOpFAybdXkMyQIPYnl4QuXpcfENyGmo+N83vpLm1USTH3X60hbtR7Mlw
-        NmhTZTHft1BYTOSXgw1Hc+pwWuaYn2xivyNC4bUaXs+9cHc6Kk0u0zg0yrYadg==
-Received: (qmail 61124 invoked from network); 15 Mar 2023 02:00:09 -0000
-Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
-  by localhost with SMTP; 15 Mar 2023 02:00:09 -0000
+        Fri, 17 Mar 2023 17:05:53 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C955D31BE0;
+        Fri, 17 Mar 2023 14:05:45 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id b5so2901949iow.0;
+        Fri, 17 Mar 2023 14:05:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679087145;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5NecYJUuy8uaK/tVQe/yH+/ckF6yra+2Pis8jiBooqI=;
+        b=EEkQpikadJ0do2Eio39rYWjS4wGEOJsBkyfNqhbrnXf13h433OUy4Ra+EjG4ROY5zn
+         f8Sj7SFcDUUJukOFDcLd9ldhETd8W3Z9rBS9LmAsNrg5zRCFvqkVNY+il/Bv5TcDqwxR
+         scU/SNz9A56QmjveB+cFDmzg3AyXIPhzECRReSS/5N+CfC89PcguczLSBUT7DWjWwH0Z
+         PCxT7bt/aJKFGzqu3PId/QI3vma+/RIExQwWQ0Uovi4Mn1mELH2efiIqIhrPK59gJp6G
+         a0ReyBwmvwfT2DMhFHXHEWz/G5FuGLQPQFAH+099Dx+KhbGhsz61637LprUjcvTyUFXB
+         BtlQ==
+X-Gm-Message-State: AO0yUKWP6KKS1+aTz35hEuyPoP1AQY7STYyxOJ4WwFTZV27gXKw14q8j
+        TQEP3NhHpT/VOna51n4Iqw==
+X-Google-Smtp-Source: AK7set8xIMQuQwJ6PDoZs6XtPl1fgkJczzCoyKvb4BiewQRvHyAeYv7nOvtmHPPFiuOhaMQjb5HJ4w==
+X-Received: by 2002:a6b:e216:0:b0:753:121f:72a7 with SMTP id z22-20020a6be216000000b00753121f72a7mr23373ioc.8.1679087145050;
+        Fri, 17 Mar 2023 14:05:45 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id cs6-20020a056638470600b003e9e5e1aacasm1005332jab.143.2023.03.17.14.05.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 14:05:44 -0700 (PDT)
+Received: (nullmailer pid 2804141 invoked by uid 1000);
+        Fri, 17 Mar 2023 21:05:42 -0000
+Date:   Fri, 17 Mar 2023 16:05:42 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+Cc:     vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        joel@jms.id.au, andrew@aj.id.au, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pmenzel@molgen.mpg.de,
+        ilpo.jarvinen@linux.intel.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: dmaengine: Add AST2600 UDMA bindings
+Message-ID: <20230317210542.GB2790192-robh@kernel.org>
+References: <20230314021817.30446-1-chiawei_wang@aspeedtech.com>
+ <20230314021817.30446-3-chiawei_wang@aspeedtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 14 Mar 2023 19:00:08 -0700
-From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
-To:     undisclosed-recipients:;
-Subject: <LOAN OPPORTUNITY AT LOW-INTEREST RATE>
-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
-Message-ID: <f78883eae0a96399c9f7349f3d78794c@sragenkab.go.id>
-X-Sender: jurnalsukowati@sragenkab.go.id
-User-Agent: Roundcube Webmail/0.8.1
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314021817.30446-3-chiawei_wang@aspeedtech.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Tue, Mar 14, 2023 at 10:18:14AM +0800, Chia-Wei Wang wrote:
+> Add the dmaengine bindings for the UART DMA engine of Aspeed AST2600 SoC.
+> 
+> Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+> ---
+>  .../bindings/dma/aspeed,ast2600-udma.yaml     | 56 +++++++++++++++++++
+>  include/dt-bindings/dma/ast2600-udma.h        | 40 +++++++++++++
+>  2 files changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/dma/aspeed,ast2600-udma.yaml
+>  create mode 100644 include/dt-bindings/dma/ast2600-udma.h
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/aspeed,ast2600-udma.yaml b/Documentation/devicetree/bindings/dma/aspeed,ast2600-udma.yaml
+> new file mode 100644
+> index 000000000000..f92e06ac9f39
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/aspeed,ast2600-udma.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/aspeed,ast2600-udma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed AST2600 UART DMA controller
+> +
+> +maintainers:
+> +  - Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+> +
+> +description: |
 
+Don't need '|'
 
--- 
-Greetings,
-   I am contacting you based on the Investment/Loan opportunity for 
-companies in need of financing a project/business, We have developed a 
-new method of financing that doesn't take long to receive financing from 
-our clients.
-    If you are looking for funds to finance your project/Business or if 
-you are willing to work as our agent in your country to find clients in 
-need of financing and earn commissions, then get back to me for more 
-details.
+> +  The Aspeed AST2600 UDMA controller provides direct memory access capabilities
+> +  for the NS16550A-compatible UART devices inside AST2600 SoCs. UDMA supports 28
+> +  DMA channels and each UART device has its dedicated pair of TX and RX channels.
+> +
+> +allOf:
+> +  - $ref: "dma-controller.yaml#"
 
-Regards,
-Ibrahim Tafa
-ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
+Drop quotes
+
+> +
+> +properties:
+> +  compatible:
+> +    const: aspeed,ast2600-udma
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#dma-cells":
+> +    const: 1
+> +
+> +  dma-channels:
+> +    maximum: 28
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#dma-cells"
+> +  - dma-channels
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    udma: dma-controller@1e79e000 {
+
+Drop unused label.
+
+> +        compatible = "aspeed,ast2600-udma";
+> +        reg = <0x1e79e000 0x1000>;
+> +        interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
+> +        dma-channels = <28>;
+> +        #dma-cells = <1>;
+> +    };
+> +
+> +...
+> diff --git a/include/dt-bindings/dma/ast2600-udma.h b/include/dt-bindings/dma/ast2600-udma.h
+> new file mode 100644
+> index 000000000000..0b92035b94f1
+> --- /dev/null
+> +++ b/include/dt-bindings/dma/ast2600-udma.h
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+
+Headers should be dual licensed.
+
+However, similar to interrupts, we don't normally do defines for DMA 
+request numbers. It's only when we make up the numbering (e.g. clock 
+ids).
+
+Rob
