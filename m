@@ -2,113 +2,69 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2B66BE2E1
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Mar 2023 09:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2526BE40B
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Mar 2023 09:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCQIRK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 17 Mar 2023 04:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S231685AbjCQIm3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 17 Mar 2023 04:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjCQIQ5 (ORCPT
+        with ESMTP id S230078AbjCQImG (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:16:57 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7D0D7C1C
-        for <linux-serial@vger.kernel.org>; Fri, 17 Mar 2023 01:16:23 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-304-MWU-jB63O1-wjO_6J_lLaw-1; Fri, 17 Mar 2023 08:09:17 +0000
-X-MC-Unique: MWU-jB63O1-wjO_6J_lLaw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Fri, 17 Mar
- 2023 08:09:15 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Fri, 17 Mar 2023 08:09:15 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?utf-8?B?J0lscG8gSsOkcnZpbmVuJw==?= 
-        <ilpo.jarvinen@linux.intel.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH 2/2] serial: 8250: Fix serial8250_tx_empty() race with DMA
- Tx
-Thread-Topic: [PATCH 2/2] serial: 8250: Fix serial8250_tx_empty() race with
- DMA Tx
-Thread-Index: AQHZWArCK8WwTTBjQ0K/guscWP8/fq7+nMjw
-Date:   Fri, 17 Mar 2023 08:09:14 +0000
-Message-ID: <55704d488ee644f5a710841f3912b25f@AcuMS.aculab.com>
-References: <20230316132452.76478-1-ilpo.jarvinen@linux.intel.com>
- <20230316132452.76478-3-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20230316132452.76478-3-ilpo.jarvinen@linux.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 17 Mar 2023 04:42:06 -0400
+Received: from mail.surechiers.com (mail.surechiers.com [80.211.239.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AB46421F
+        for <linux-serial@vger.kernel.org>; Fri, 17 Mar 2023 01:40:48 -0700 (PDT)
+Received: by mail.surechiers.com (Postfix, from userid 1002)
+        id 84DB883351; Fri, 17 Mar 2023 09:30:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=surechiers.com;
+        s=mail; t=1679041817;
+        bh=xg3VVY9SU+I+f+ynMyY8e0Lum0EY/KrTvpy5BYTg7yw=;
+        h=Date:From:To:Subject:From;
+        b=IoqfyeasTpie1RpY7j3biMSr574o6Ql9MBbfNgOLCxWnRczTv3ySnrRLn2einL84T
+         TXxjzpleWnFJyr9sM9wB2jqQctdX+Bimnts/Y4YbzfOs8kVcK/UxyM30DfuqiBN8Hd
+         c9w8Ut3h9NVie4gVmaX6xpK+sO/JqntujgbgTBgQXJBDi0jyT4IYEgVAc+9+p2qjeH
+         mSciY0Uo7vkRLHRjg4xWO/pi/xAl2BXKIyf9QKzfE4PIxM8NmlegGeOSv7aD1iRkbb
+         8Y5tlBg0drmftODCsoOllHEGaVA6D5MONAiGy9Cr96hrLeukiC4SgreAjJHb/DK8dt
+         gsOfrJZzTsVsA==
+Received: by mail.surechiers.com for <linux-serial@vger.kernel.org>; Fri, 17 Mar 2023 08:30:16 GMT
+Message-ID: <20230317084500-0.1.r.1nzn.0.akagbop1pj@surechiers.com>
+Date:   Fri, 17 Mar 2023 08:30:16 GMT
+From:   =?UTF-8?Q? "J=C3=A1chym_Zdr=C3=A1hal" ?= 
+        <jachym.zdrahal@surechiers.com>
+To:     <linux-serial@vger.kernel.org>
+Subject: Renovace podlahy
+X-Mailer: mail.surechiers.com
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-RnJvbTogSWxwbyBKw6RydmluZW4NCj4gU2VudDogMTYgTWFyY2ggMjAyMyAxMzoyNQ0KPiANCj4g
-VGhlcmUncyBhIHBvdGVudGlhbCByYWNlIGJlZm9yZSBUSFJFL1RFTVQgZGVhc3NlcnRzIHdoZW4g
-RE1BIFR4IGlzDQo+IHN0YXJ0aW5nIHVwIChvciB0aGUgbmV4dCBiYXRjaCBvZiBjb250aW51b3Vz
-IFR4IGlzIGJlaW5nIHN1Ym1pdHRlZCkuDQo+IFRoaXMgY2FuIGxlYWQgdG8gbWlzZGV0ZWN0aW5n
-IFR4IGVtcHR5IGNvbmRpdGlvbi4NCj4gDQo+IEl0IGlzIGVudGlyZWx5IG5vcm1hbCBmb3IgVEhS
-RS9URU1UIHRvIGJlIHNldCBmb3Igc29tZSB0aW1lIGFmdGVyIHRoZQ0KPiBETUEgVHggaGFkIGJl
-ZW4gc2V0dXAgaW4gc2VyaWFsODI1MF90eF9kbWEoKS4gQXMgVHggc2lkZSBpcyBkZWZpbml0ZWx5
-DQo+IG5vdCBlbXB0eSBhdCB0aGF0IHBvaW50LCBpdCBzZWVtcyBpbmNvcnJlY3QgZm9yIHNlcmlh
-bDgyNTBfdHhfZW1wdHkoKQ0KPiBjbGFpbSBUeCBpcyBlbXB0eS4NCj4gDQo+IEZpeCB0aGUgcmFj
-ZSBieSBhbHNvIGNoZWNraW5nIGluIHNlcmlhbDgyNTBfdHhfZW1wdHkoKSB3aGV0aGVyIHRoZXJl
-J3MNCj4gRE1BIFR4IGFjdGl2ZS4NCj4gDQo+IE5vdGU6IFRoaXMgZml4IG9ubHkgYWRkcmVzc2Vz
-IGluLWtlcm5lbCByYWNlIG1haW5seSB0byBtYWtlIHVzaW5nDQo+IFRDU0FEUkFJTi9GTFVTSCBy
-b2J1c3QuIFVzZXJzcGFjZSBjYW4gc3RpbGwgY2F1c2Ugb3RoZXIgcmFjZXMgYnV0IHRoZXkNCj4g
-c2VlbSB1c2Vyc3BhY2UgY29uY3VycmVuY3kgY29udHJvbCBwcm9ibGVtcy4NCj4gDQo+IEZpeGVz
-OiA5ZWU0YjgzZTUxZjc0ICgic2VyaWFsOiA4MjUwOiBBZGQgc3VwcG9ydCBmb3IgZG1hZW5naW5l
-IikNCj4gQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcNCj4gU2lnbmVkLW9mZi1ieTogSWxwbyBK
-w6RydmluZW4gPGlscG8uamFydmluZW5AbGludXguaW50ZWwuY29tPg0KPiAtLS0NCj4gIGRyaXZl
-cnMvdHR5L3NlcmlhbC84MjUwLzgyNTAuaCAgICAgIHwgMTIgKysrKysrKysrKysrDQo+ICBkcml2
-ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUwX3BvcnQuYyB8ICA3ICsrKysrKy0NCj4gIDIgZmlsZXMg
-Y2hhbmdlZCwgMTggaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvdHR5L3NlcmlhbC84MjUwLzgyNTAuaCBiL2RyaXZlcnMvdHR5L3NlcmlhbC84
-MjUwLzgyNTAuaA0KLi4uDQo+ICBzdGF0aWMgaW5saW5lIGludCBuczE2NTUwYV9nb3RvX2hpZ2hz
-cGVlZChzdHJ1Y3QgdWFydF84MjUwX3BvcnQgKnVwKQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90
-dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMgYi9kcml2ZXJzL3R0eS9zZXJpYWwvODI1MC84MjUw
-X3BvcnQuYw0KPiBpbmRleCBmYTQzZGYwNTM0MmIuLjQ5NTRjNGYxNWZiMiAxMDA2NDQNCj4gLS0t
-IGEvZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMNCj4gKysrIGIvZHJpdmVycy90
-dHkvc2VyaWFsLzgyNTAvODI1MF9wb3J0LmMNCj4gQEAgLTIwMDYsMTcgKzIwMDYsMjIgQEAgc3Rh
-dGljIHVuc2lnbmVkIGludCBzZXJpYWw4MjUwX3R4X2VtcHR5KHN0cnVjdCB1YXJ0X3BvcnQgKnBv
-cnQpDQo+ICB7DQo+ICAJc3RydWN0IHVhcnRfODI1MF9wb3J0ICp1cCA9IHVwX3RvX3U4MjUwcChw
-b3J0KTsNCj4gIAl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiArCWJvb2wgZG1hX3R4X3J1bm5pbmc7
-DQo+ICAJdTE2IGxzcjsNCj4gDQo+ICAJc2VyaWFsODI1MF9ycG1fZ2V0KHVwKTsNCj4gDQo+ICAJ
-c3Bpbl9sb2NrX2lycXNhdmUoJnBvcnQtPmxvY2ssIGZsYWdzKTsNCj4gIAlsc3IgPSBzZXJpYWxf
-bHNyX2luKHVwKTsNCj4gKwlkbWFfdHhfcnVubmluZyA9IHNlcmlhbDgyNTBfdHhfZG1hX3J1bm5p
-bmcodXApOw0KPiAgCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnBvcnQtPmxvY2ssIGZsYWdzKTsN
-Cj4gDQo+ICAJc2VyaWFsODI1MF9ycG1fcHV0KHVwKTsNCj4gDQo+IC0JcmV0dXJuIHVhcnRfbHNy
-X3R4X2VtcHR5KGxzcikgPyBUSU9DU0VSX1RFTVQgOiAwOw0KPiArCWlmICh1YXJ0X2xzcl90eF9l
-bXB0eShsc3IpICYmICFkbWFfdHhfcnVubmluZykNCj4gKwkJcmV0dXJuIFRJT0NTRVJfVEVNVDsN
-Cj4gKw0KPiArCXJldHVybiAwOw0KPiAgfQ0KDQpTaW5jZSBjaGVja2luZyB3aGV0aGVyIGRtYSBp
-cyBhY3RpdmUgaXMgZmFzdCBidXQgcmVhZGluZw0KdGhlIGxzciBpcyBzbG93IGl0IGlzIHByb2Jh
-Ymx5IGJldHRlciB0byBnZW5lcmF0ZSB0aGUgcmV0dXJuDQp2YWx1ZSBpbnNpZGUgdGhlIGxvY2sg
-YW5kIHRlc3QgZm9yIGRtYSBmaXJzdC4NClNvbWV0aGluZyBsaWtlOg0KCXNwaW5fbG9jaygpDQoJ
-cmVzdWx0ID0gMDsNCglpZiAoIXNlcmlhbDgyNTBfdHhfZG1hX3J1bm5pbmcodXApICYmDQoJICAg
-IHVhcnRfbHNyX3R4X2VtcHR5KHNlcmlhbF9sc3JfaW4odXApKSkNCgkJcmVzdWx0ID0gVElPQ1NF
-Ul9URU1UOw0KCX0NCglzcGluX3VubG9jaygpDQoJLi4uDQoJcmV0dXJuIHJlc3VsdDsNCg0KCURh
-dmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+Dobr=C3=A9 r=C3=A1no,
 
+m=C4=9Bli byste z=C3=A1jem o beze=C5=A1v=C3=A9, chemicky, n=C3=A1razu a o=
+t=C4=9Bru odoln=C3=A9 podlahy?
+
+Zaji=C5=A1=C5=A5uj=C3=AD spolehlivost bez ohledu na to, zda je pou=C5=BE=C3=
+=ADv=C3=A1te v n=C3=A1ro=C4=8Dn=C3=BDch v=C3=BDrobn=C3=ADch prostorech, s=
+kladech, komunika=C4=8Dn=C3=ADch tras=C3=A1ch nebo komer=C4=8Dn=C3=ADch p=
+rostor=C3=A1ch.
+
+Navrhli jsme snadno =C4=8Distiteln=C3=A9, hygienick=C3=A9 a protiskluzov=C3=
+=A9 podlahy pro pr=C5=AFmyslov=C3=A9 i komer=C4=8Dn=C3=AD pou=C5=BEit=C3=AD=
+=2E
+
+Mohu nab=C3=ADdnout bezplatn=C3=BD audit va=C5=A1ich podlah spolu s kompl=
+exn=C3=AD anal=C3=BDzou podkladu. Mohu o tomhle zavolat?
+
+
+J=C3=A1chym Zdr=C3=A1hal
