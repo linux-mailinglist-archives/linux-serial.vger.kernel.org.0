@@ -2,95 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A59F6C18EA
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Mar 2023 16:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBD06C1738
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Mar 2023 16:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbjCTP2u (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Mar 2023 11:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S232431AbjCTPMR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Mar 2023 11:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbjCTP22 (ORCPT
+        with ESMTP id S232146AbjCTPLp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:28:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ECE32534;
-        Mon, 20 Mar 2023 08:21:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C9526158B;
-        Mon, 20 Mar 2023 15:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CC8C433EF;
-        Mon, 20 Mar 2023 15:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679325676;
-        bh=gbkODAwK/OWLYiSLQQ1vtVK4wzka5QYbDWyqUr7xv/U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n1cSk3gib5aaPBrfSNymTVNeSpNlTikl2QIr5TXhVYUXYXWaKlT4fPVMQB+oo+LKO
-         zCgTAad/Gkf9XmmMKUfnTxjB0zibaIpRHHGE/1G9sdT9UeRi5BfxuynihI5A8hhqew
-         S3G8bo8YOpyRoUXCfFI0lag0n+1EC7XNfHh2WZTs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, stable <stable@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
-Subject: [PATCH 6.1 121/198] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
-Date:   Mon, 20 Mar 2023 15:54:19 +0100
-Message-Id: <20230320145512.624841943@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
-References: <20230320145507.420176832@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 20 Mar 2023 11:11:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6A21311F0;
+        Mon, 20 Mar 2023 08:06:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 888FDFEC;
+        Mon, 20 Mar 2023 07:58:06 -0700 (PDT)
+Received: from e127643.arm.com (unknown [10.57.18.95])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7AF033F71E;
+        Mon, 20 Mar 2023 07:57:19 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        michal.simek@amd.com, Jonathan.Cameron@huawei.com
+Cc:     James Clark <james.clark@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v3 1/4] devres: Provide krealloc_array
+Date:   Mon, 20 Mar 2023 14:57:06 +0000
+Message-Id: <20230320145710.1120469-2-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230320145710.1120469-1-james.clark@arm.com>
+References: <20230320145710.1120469-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+There is no krealloc_array equivalent in devres. Users would have to
+do their own multiplication overflow check so provide one.
 
-commit f8086d1a65ac693e3fd863128352b4b11ee7324d upstream.
-
-REGMAP is a hidden (not user visible) symbol. Users cannot set it
-directly thru "make *config", so drivers should select it instead of
-depending on it if they need it.
-
-Consistently using "select" or "depends on" can also help reduce
-Kconfig circular dependency issues.
-
-Therefore, change the use of "depends on REGMAP" to "select REGMAP".
-
-Fixes: 8d310c9107a2 ("drivers/tty/serial/8250: Make Aspeed VUART SIRQ polarity configurable")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Oskar Senft <osk@google.com>
-Cc: linux-serial@vger.kernel.org
-Link: https://lore.kernel.org/r/20230226053953.4681-9-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: James Clark <james.clark@arm.com>
 ---
- drivers/tty/serial/8250/Kconfig |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/driver-api/driver-model/devres.rst |  1 +
+ include/linux/device.h                           | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -253,8 +253,9 @@ config SERIAL_8250_ASPEED_VUART
- 	tristate "Aspeed Virtual UART"
- 	depends on SERIAL_8250
- 	depends on OF
--	depends on REGMAP && MFD_SYSCON
-+	depends on MFD_SYSCON
- 	depends on ARCH_ASPEED || COMPILE_TEST
-+	select REGMAP
- 	help
- 	  If you want to use the virtual UART (VUART) device on Aspeed
- 	  BMC platforms, enable this option. This enables the 16550A-
-
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+index 4249eb4239e0..8be086b3f829 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -364,6 +364,7 @@ MEM
+   devm_kmalloc_array()
+   devm_kmemdup()
+   devm_krealloc()
++  devm_krealloc_array()
+   devm_kstrdup()
+   devm_kstrdup_const()
+   devm_kvasprintf()
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 1508e637bb26..4dce92e99d08 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -223,6 +223,17 @@ static inline void *devm_kcalloc(struct device *dev,
+ {
+ 	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+ }
++static inline __realloc_size(3, 4) void * __must_check
++devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
++{
++	size_t bytes;
++
++	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
++		return NULL;
++
++	return devm_krealloc(dev, p, bytes, flags);
++}
++
+ void devm_kfree(struct device *dev, const void *p);
+ char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp) __malloc;
+ const char *devm_kstrdup_const(struct device *dev, const char *s, gfp_t gfp);
+-- 
+2.34.1
 
