@@ -2,87 +2,150 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447A16CA86E
-	for <lists+linux-serial@lfdr.de>; Mon, 27 Mar 2023 17:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7956CA8B1
+	for <lists+linux-serial@lfdr.de>; Mon, 27 Mar 2023 17:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjC0PBn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 27 Mar 2023 11:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        id S232666AbjC0PL2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 27 Mar 2023 11:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjC0PBi (ORCPT
+        with ESMTP id S232523AbjC0PL1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:01:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E84D4483;
-        Mon, 27 Mar 2023 08:01:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE6061303;
-        Mon, 27 Mar 2023 15:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FC4C4339E;
-        Mon, 27 Mar 2023 15:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679929296;
-        bh=dsoVd3bOkZ1/OXyt+ZP8t5ze5tdgtMoUGRvUuV6EukM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SHPAMbr7ynIEkq5oNWhug9hIbn4LJ0wlRJ6JgemhXBguNbBUPRRDeUdVcqazMWkWC
-         dk9d8QHtU103JjtWCjNwzZLwSakTbYVoyyZMPznbW2kNkDFCK+lV/7pj97e//rbFdB
-         KAcjBslm3nZ5BD8UOtzQgE313X4qN68GC8CjlYGQyBtCbPdHgVt918IpKotLwM74ca
-         Zn52WHW55dJ8f6+KX/RVedxJw0EkqlPTOL1x9rcwK7iDgIZU3Ce79U8tYgcWxannLX
-         MEStSzPPRTj0snsGEx0UFdc0kYSX/e0hXkgCvgkTLp0pcdTYZYHGlYYERA/m/ZwxGN
-         9en6lprtJ6hkQ==
-From:   Will Deacon <will@kernel.org>
-To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-modules@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 00/24] MODULE_LICENSE removals, second tranche
-Date:   Mon, 27 Mar 2023 16:01:15 +0100
-Message-Id: <167992609868.3834946.4831319626649638477.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230217141059.392471-1-nick.alcock@oracle.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
+        Mon, 27 Mar 2023 11:11:27 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E33C1B
+        for <linux-serial@vger.kernel.org>; Mon, 27 Mar 2023 08:11:16 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id g17so11903186lfv.4
+        for <linux-serial@vger.kernel.org>; Mon, 27 Mar 2023 08:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679929875;
+        h=content-transfer-encoding:mime-version:user-agent:message-id
+         :in-reply-to:date:references:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=M/m2d2cpr0u0mENErOZs6fKG3ZMIMx4Lh0v4RM7/bmM=;
+        b=ZugIrca1ySnU3VFI4e6jpNQjnVMvyDRCO989hZiDcT68tAMd9caRg0w5MAcR3vCTDC
+         z4GKjFuTeqCbnYpNDzjv2P2P0orEg6D3DN+pjT5BCMBGj7SE3gvxFa8e9nTurDVxSW1y
+         hV5li0S+jrEXSzNnkFJ1mtZpbbrHJzpaDjdyFXlnSBCQhHk0sHgh35hGb/pMjwV+LGs+
+         dh+VfzNH2pIzlXIS8r9+KSZPr0umJznCQdYC43v+V2j0Mz7nincsFuYC8bvafHMvomIx
+         gwRhEtbJHYPqFfaNYMiaHq7fI2GVRMUiOk7CyVXkdCUKXfTABXE8KtvxNStdbhZVQUJb
+         FikQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679929875;
+        h=content-transfer-encoding:mime-version:user-agent:message-id
+         :in-reply-to:date:references:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M/m2d2cpr0u0mENErOZs6fKG3ZMIMx4Lh0v4RM7/bmM=;
+        b=llu69ID8UJQHokEfRPblszqykhk2RuvDeql0oeWsR+KCwbLy80CjLcGtCu4entVEDI
+         E5S14SbIIfHctUwckfed/98LygoTkPLoMa5ros1vbA5PXwe7ftTD6xpkMyVqtpR4436I
+         /5312ndJCIt24uIe+JNDwpB356wfrzRs2ehGNTVjOgTYrjYbNm4jVbmgGNJ1H7rv4CHm
+         F6XQshmjdh7TO+6Adss9gOEcaRWp67mhU7+llPnQjq0ENEyd2xfHSw0lFnGms0kDod7j
+         fhsH3UmtgMcXdREo27s2UxXHIgTsuNZiAwVOa66j3IzzwR+SxKPOo03Nop5fmRFHn1XX
+         qETw==
+X-Gm-Message-State: AAQBX9cAq+z8gsbV7RH5j0CtbOp1K5PJZd3zAHXtncPiOaKqWOzg6BRl
+        Z1dImVgs8ttHb3vob9y7gDQ=
+X-Google-Smtp-Source: AKy350Z+oNTAEN1qA2lvwoUrGWwjtShCQ04QsVgluSEB33qfzytXmu9qLbPJfBo0qR2pfSBY/ufybQ==
+X-Received: by 2002:ac2:555a:0:b0:4e8:45d5:53bf with SMTP id l26-20020ac2555a000000b004e845d553bfmr3280533lfk.40.1679929875106;
+        Mon, 27 Mar 2023 08:11:15 -0700 (PDT)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id u4-20020ac248a4000000b004cb8de497ffsm4652546lfg.154.2023.03.27.08.11.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 08:11:13 -0700 (PDT)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ilpo =?utf-8?Q?J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tomasz =?utf-8?Q?Mo=C5=84?= <tomasz.mon@camlingroup.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: Regression: serial: imx: overrun errors on debug UART
+References: <2c29454b-9369-4360-8eb4-c151f59460cb@i2se.com>
+        <d660e3cf-5686-d989-3b59-efe83ec9d590@linux.intel.com>
+        <CAOMZO5A+GujiQY-UT3Q-8o0AKujJb_4kY+5L4x1e07ovGfo31w@mail.gmail.com>
+        <9e22f237-f3ee-0415-9e6b-89a137769b8f@i2se.com>
+        <5d59dec6-9f6f-7b20-1221-f57c94b29cca@i2se.com>
+        <20230325151100.mskydt3hwbnspqp4@pengutronix.de>
+        <cb16ddb7-f22f-d637-8670-bccc77add0af@i2se.com>
+Date:   Mon, 27 Mar 2023 18:11:12 +0300
+In-Reply-To: <cb16ddb7-f22f-d637-8670-bccc77add0af@i2se.com> (Stefan Wahren's
+        message of "Mon, 27 Mar 2023 16:42:23 +0200")
+Message-ID: <87mt3ynsa7.fsf@osv.gnss.ru>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, 17 Feb 2023 14:10:35 +0000, Nick Alcock wrote:
-> This series, based on current modules-next, is part of a treewide cleanup
-> suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
-> files/objects that are not tristate.  Due to recent changes to kbuild, these
-> uses are now problematic.  See the commit logs for more details.
-> 
-> (The commit log prefixes and Cc lists are automatically determined using
-> the script mentioned below.  I've eyeballed them, and they seem reasonable:
-> my apologies if they are not.)
-> 
-> [...]
+Stefan Wahren <stefan.wahren@i2se.com> writes:
 
-Applied drivers/perf patch to will (for-next/perf), thanks!
+> Hi,
+>
+> Am 25.03.23 um 16:11 schrieb Uwe Kleine-König:
 
-[08/24] kbuild, drivers/perf: remove MODULE_LICENSE in non-modules
-        https://git.kernel.org/will/c/a64021d3726a
+[...]
 
-Cheers,
--- 
-Will
+> today i had time to do some testing. At first i tested with different RXTL_DEFAULT values.
+>
+> 1 No overrun
+> 2 No overrun
+> 4 No overrun
+> 8 Overruns
+>
+> After that i look at the # echo 0 > /proc/sys/kernel/printk approach,
+> but this didn't change anything. The kernel is usually silent about
+> log message after boot and the console works still with echo.
+> Enforcing some driver to call printk periodically would make the
+> console unusuable.
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+As you figured that printk() is not the cause, it must be something else
+that causes overruns, so there is no need to check printk case further.
+
+>
+> Finally i tried to disabled the spin_lock in imx_uart_console_write:
+>
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index f07c4f9ff13c..c342559ff1a2 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -2007,14 +2007,12 @@ imx_uart_console_write(struct console *co, const char *s, unsigned int count)
+>  	struct imx_port_ucrs old_ucr;
+>  	unsigned long flags;
+>  	unsigned int ucr1;
+> -	int locked = 1;
+> +	int locked = 0;
+>
+>  	if (sport->port.sysrq)
+>  		locked = 0;
+>  	else if (oops_in_progress)
+>  		locked = spin_trylock_irqsave(&sport->port.lock, flags);
+> -	else
+> -		spin_lock_irqsave(&sport->port.lock, flags);
+>
+>  	/*
+>  	 *	First, save UCR1/2/3 and then disable interrupts
+>
+> But the overruns still occured. Is this because the serial core
+> already helds a lock?
+
+This probably isn't even called when there is no printk() output, as
+user-space writes to /dev/console are rather performed through regular
+generic code, AFAIK.
+
+Best regards,
+-- Sergey Organov
