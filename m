@@ -2,109 +2,151 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717456D7602
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Apr 2023 09:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5026D7699
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Apr 2023 10:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbjDEH5Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 5 Apr 2023 03:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S237285AbjDEIP4 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 5 Apr 2023 04:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237245AbjDEH5K (ORCPT
+        with ESMTP id S237209AbjDEIPz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 5 Apr 2023 03:57:10 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADD64ECB
-        for <linux-serial@vger.kernel.org>; Wed,  5 Apr 2023 00:57:04 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5027d3f4cd7so237956a12.0
-        for <linux-serial@vger.kernel.org>; Wed, 05 Apr 2023 00:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680681423;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=ZFAmFQTn20XXB58Hm1LdXdWSQ5ZKxD4voHxxAhS1cKrInxf7DLRcTSbw0glAYuheNd
-         QsgC19PfAnkNACoih4X9yWq8Ua2f3Z5aqpAwmyG7K5XHuwPNdYpOLvr+4dizYlmkwqvh
-         8ippA6GSg6vwbKsguRd+gNlt6Q3d6qdPQH52wPe4yUNm7drYy8w79XnI6OkaMCxGYxXe
-         MDkio/NlgHAyk3tGfHbZ8+FvtwIbKJyHeY9Hl3c4m/UBMxdY642/4m0lMYD1+lZcL9DU
-         GTGlzj7aK8t/dfhFV0ZGCnZD6XTAnjOEHb+Mkw5/16dwcMVpicpYd4/+ImRJVe79/Ozv
-         w6jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681423;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=1v8b/rcx9WeMn7oU9F2z7hSpC1lnaqlPeQW+tEAZuZh6w9e+oIu1P6phaLoL/7Hyhn
-         nCe+8yiyP+ITQ7+r8jRXPKRdmw0gSDYSb7U28AwypDFQs1A+MqyAxAlVwAna/bBSI7AC
-         Z5xZwReQgyhMKWyZ/UCiRK6AAsgZQ+cRflJ1xEU6eiThzHcFHe7jAXkF36j2yBzxwzs1
-         HJVZHFc/b2Wr0lybyCGmi+Q0vFgfC98m/U3x+4AoVyAlQKqH83KXiN035qlUsCHROa17
-         8rxS1P+7qDbXqEUEAoZ4xyQgBaY4MEc8nHroKDxgzRwccxNsf+xuz0I3Kc5QwtPhK99y
-         XylQ==
-X-Gm-Message-State: AAQBX9dQ21RAkiiK5vO1igW5CNos2y4zDIIglkoNvnZApYFP8O504nlv
-        4RuRYIioNvL6xp/c6YCOCuyBreFlDvwPnbpHzdA=
-X-Google-Smtp-Source: AKy350b+6mlAYsE5jCYer29QJ01MP1yshNVCPV/yu1iTNStkeOVxzQSr9n/dP8VlK7PnohYB4ysIDujVG47xryzVK58=
-X-Received: by 2002:a50:d781:0:b0:500:547b:4e1b with SMTP id
- w1-20020a50d781000000b00500547b4e1bmr691870edi.6.1680681423244; Wed, 05 Apr
- 2023 00:57:03 -0700 (PDT)
+        Wed, 5 Apr 2023 04:15:55 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8329D8;
+        Wed,  5 Apr 2023 01:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680682554; x=1712218554;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=iJhTkz/SNIN43IDEw6G9zmwKLL+Nm+UXFEFElFxzk0A=;
+  b=fxk/6KZx5yrboO88YB92gl5s3o5FC7T5PjkQWOz25SMXk5Hm77+X+5Sb
+   HxfmBCqygTxKirutqsZcsw3f+koFzytmieNHfZSwYAH7+6uh0sNfjtXPH
+   USOPLyArcv2Ljc2kO0uH+KPUc1fw7SDuFGH8mqUN78WM75JL2uzrzpNrr
+   oY+VCHTh0Eb+tgVqFe4bjge9X+n6AkghK9pRak0VECnbs0eFwhJ596z+W
+   YK0ayxm0dwmdIGR+1TN5OGY0MZZjWBsrfxzk3+cXRHuwY25ILZ8zccoxR
+   0GZIie56oEb1LxQsJoAhdOzC1hEucoQfFGOUSgO879XiSzZbgrCkyHUCM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="407473058"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="407473058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:15:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="719227756"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="719227756"
+Received: from wtedesch-mobl1.ger.corp.intel.com ([10.252.53.134])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:15:52 -0700
+Date:   Wed, 5 Apr 2023 11:15:47 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "D. Starke" <daniel.starke@siemens.com>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/9] tty: n_gsm: add restart parameter to DLC specific
+ ioctl config
+In-Reply-To: <20230405054730.3850-2-daniel.starke@siemens.com>
+Message-ID: <cd7c33c8-2634-382d-cf62-3785e391af2@linux.intel.com>
+References: <20230405054730.3850-1-daniel.starke@siemens.com> <20230405054730.3850-2-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
- 00:57:02 -0700 (PDT)
-Reply-To: tamimbinhamadalthani00@gmail.com
-From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
-Date:   Wed, 5 Apr 2023 00:57:02 -0700
-Message-ID: <CAAYY=dZe5ZjJ2b2KEkYbGOEnyScbFaaGqjvb6EmPHE7Lypp0cg@mail.gmail.com>
-Subject: RE:Saudi Arabia-Inquiry about your products.!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:529 listed in]
-        [list.dnswl.org]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [tamimbinhamadalthani00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dear Sir/Madam,
+On Wed, 5 Apr 2023, D. Starke wrote:
+
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> 'gsm_config_ext' already allows to force a link reset via 'restart'
+> parameter.
+
+Please be more precise, there a function and struct with this name.
+
+HOWEVER, there is no such parameter in tty-next (am I looking from wrong 
+repo??):
+
+static int gsm_config_ext(struct gsm_mux *gsm, struct gsm_config_ext *ce)
+
+...nor here:
+
+struct gsm_config_ext {
+        __u32 keep_alive;       /* Control channel keep-alive in 1/100th of a
+                                 * second (0 to disable)
+                                 */
+        __u32 wait_config;      /* Wait for DLCI config before opening virtual link? */
+        __u32 reserved[6];      /* For future use, must be initialized to zero */
+};
+
+???
 
 
+-- 
+ i.
 
-Can you supply your products to  the government of (Saudi Arabia). We
-buy in larger quantity if your company can supply please reply with
-your products detail for more information.
+> An equivalent parameter for an forced channel reset is still
+> missing in 'gsm_dlci_config'. Therefore, the user has no means to perform
+> an automatic channel reset after parameter configuration for
+> non-conflicting changes. Conflicting changes automatically reset the
+> channel already in the current implementation.
+> 
+> Add the parameter 'restart' to 'gsm_dlci_config' to force a channel reset
+> after ioctl setting regardless of whether the changes made require this or
+> not.
+> 
+> Note that the parameter is limited to the values 0 and 1 to allow future
+> additions here.
+> 
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>  drivers/tty/n_gsm.c         | 4 ++++
+>  include/uapi/linux/gsmmux.h | 3 ++-
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index c42c8b89fd46..eb21ca583642 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -2531,6 +2531,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
+>  		return -EINVAL;
+>  	if (dc->k > 7)
+>  		return -EINVAL;
+> +	if (dc->restart > 1)   /* allow future extensions */
+> +		return -EINVAL;
+>  
+>  	/*
+>  	 * See what is needed for reconfiguration
+> @@ -2545,6 +2547,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
+>  	/* Requires care */
+>  	if (dc->priority != dlci->prio)
+>  		need_restart = true;
+> +	if (dc->restart)
+> +		need_restart = true;
+>  
+>  	if ((open && gsm->wait_config) || need_restart)
+>  		need_open = true;
+> diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
+> index eb67884e5f38..33ee7b857c52 100644
+> --- a/include/uapi/linux/gsmmux.h
+> +++ b/include/uapi/linux/gsmmux.h
+> @@ -58,7 +58,8 @@ struct gsm_dlci_config {
+>  	__u32 priority;		/* Priority (0 for default value) */
+>  	__u32 i;		/* Frame type (1 = UIH, 2 = UI) */
+>  	__u32 k;		/* Window size (0 for default value) */
+> -	__u32 reserved[8];	/* For future use, must be initialized to zero */
+> +	__u32 restart;		/* Force DLCI channel reset? */
+> +	__u32 reserved[7];	/* For future use, must be initialized to zero */
+>  };
+>  
+>  #define GSMIOC_GETCONF_DLCI	_IOWR('G', 7, struct gsm_dlci_config)
+> 
 
-Looking forward to hearing from you.
-
-Thanks and Regards
-
- Mr.Tamim Mohammed Taher
-
-Email:tamimbinhamadalthani00@gmail.com
