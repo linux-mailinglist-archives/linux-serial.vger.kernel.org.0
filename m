@@ -2,148 +2,100 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0346E1EF5
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Apr 2023 11:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06456E1F21
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Apr 2023 11:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjDNJE5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 14 Apr 2023 05:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S229720AbjDNJUq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Apr 2023 05:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDNJE4 (ORCPT
+        with ESMTP id S229479AbjDNJUp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 14 Apr 2023 05:04:56 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA3B4EF2;
-        Fri, 14 Apr 2023 02:04:55 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id y6so16655774plp.2;
-        Fri, 14 Apr 2023 02:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681463095; x=1684055095;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yXmHkC1a048CwiQG8SZ7PoO3Ikz1HsLxMGbsHdgDqWk=;
-        b=gL7zqSMoji7E25lrTbA+NFwfZFoNEYCO3zElJ4oZwNWgUkl6SI01khkvKSUhLKiB9z
-         JXmBMaw5Pi50VXy58HT64n61hVbzFrjXBTZOC+wLq1ayDPbY1ycSdSPtjd6DYZ0Xdruv
-         XJUVaMSO53/NxvUR2UBSumqvXbD1CnllgAPFBV3jIT0PkwMmpguY5MGFYK9l9qh3GnTH
-         ckuCX7ckZvnbFp3ZozvbNeM98vV+xDw5DidolfQlBpAEBZl+abuxXxdnkb2M3hIqbeXf
-         fxQVg6eFTc1sFJOtmOJKWObx6zQ2t85KxyItoZUSYMj6tKW5+t5CcDLLdkY77i83Y4gR
-         lGXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681463095; x=1684055095;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yXmHkC1a048CwiQG8SZ7PoO3Ikz1HsLxMGbsHdgDqWk=;
-        b=bw0aVaPrUQaa4/VQjIslExOi0Uwg8mJz5llA6Jpa9bKCalFlFAwuhI+BDD/IMLL49Z
-         IKi9w2pbfJcEz9xSb7ZPnLiBra1pdpUNYkfZTfLet/d1dv6TVuvyMPNbzeyXHfIPptOs
-         Me1PABZclre9fUZR1Cgd9SovpWqOvUAncjRMnjxb76l80//j3QKUni3ob1nXSy+Cr38M
-         4rzkHsIRtTU8CCilNrt49TpYknDV4EMNZ/ijpggy9ba6Zl2TcXXEQeaFS7HGum6zlCDV
-         MH/DngKYwIRBJY7k/mJSsHc44uohLi2Fm8nTyUj+S7bI1apbUjgqfxXCssgV9OCsziIy
-         g1Qw==
-X-Gm-Message-State: AAQBX9fkTo3EGHgiM5pMPlWQAWwYNbmuKyBbX1IpOz9TqCmyFmMzEr8b
-        IfEoh8lriQ7WBAccMr69qMo=
-X-Google-Smtp-Source: AKy350YivyfWQMADG9PcbVLMIrbWErTwYNxSC9hCuLgFDtEkOvvbmCap6Cd7PVP8BXxl5AsCsGM4IA==
-X-Received: by 2002:a17:902:c601:b0:1a6:87ae:542d with SMTP id r1-20020a170902c60100b001a687ae542dmr1808247plr.48.1681463095070;
-        Fri, 14 Apr 2023 02:04:55 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id jo10-20020a170903054a00b001a190baea88sm2681102plb.97.2023.04.14.02.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 02:04:54 -0700 (PDT)
-Message-ID: <1bca6745-23df-5898-7675-c914531fa40b@gmail.com>
-Date:   Fri, 14 Apr 2023 17:04:50 +0800
+        Fri, 14 Apr 2023 05:20:45 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541475BB0;
+        Fri, 14 Apr 2023 02:20:44 -0700 (PDT)
+Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N4Q8u-1qX8jH2Txu-011RQg; Fri, 14 Apr 2023 11:20:09 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        linux-imx@nxp.com, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V3 0/6] ARM: dts: imx6ull: Fix dtbs_check warnings
+Date:   Fri, 14 Apr 2023 11:19:41 +0200
+Message-Id: <20230414091947.7831-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v7 12/12] MAINTAINERS: Add entry for NUVOTON MA35
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230412053824.106-1-ychuang570808@gmail.com>
- <20230412053824.106-13-ychuang570808@gmail.com>
- <241f6cb1-193f-d372-0eda-157946b15780@linaro.org>
- <91861072-dc2d-46d3-dc0d-26d17a3693c7@gmail.com>
- <4b9a0f13-d03a-8496-a400-8621b8d7c98a@linaro.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <4b9a0f13-d03a-8496-a400-8621b8d7c98a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:hZO7aSeh19CFSzyt1wn7DMqe5u+cJwhytrJylrSjOxbVjlxhFzV
+ la9Z3fIgiDi3HXXewf+iWVDf4Pz851OnoCQEvSb5U1Z6T/JbnJtn6509JsU9bXk4E2f73Ef
+ idkUHyq/4w34eR6PgnFQW5/bKeNKaATggNeKkNp0hsQiQC9YVUxFvLYH4hX7ufHVEWZCc7f
+ ImlrB1EGBnn1B6UTtL4Dg==
+UI-OutboundReport: notjunk:1;M01:P0:T4Ry70SW50U=;1kp/ghpYCyKpzAyHh/WjkyYii9z
+ MdWawSyhF1XQp+hbp4dviq+AgQQSQcHMmidH8MYlIYxNpJ5Hfy8nnzfQbMC/Rc67v5PAUxD+3
+ mz0mekv+1dw5uO/6dg23sxLuxOwYbt91EZhE3u4H+7sPWHGsc4xsuZSEFtc3e67h4HRFVYZJj
+ gmUmb3QkIarRFcKpGoSJ2/9k3ODxKIM5MJrTQkUrKllA/Wf6sCb+W3m7nS6xvFeyy9v3ZTROO
+ uBGJokHgL0baX01rquISsU8CXJIYWiPK0TlkI584uCP/AFx1pWwHeoNJ8DI0ooq4yJ173xKcM
+ lEbDKocv9JydyPVw/7+c/1PT+CyhF/VMQZtg+0JKC1mcVhElXZ6oOKjHxqBLpepSv146pwlML
+ KmvYDCVMnvLl1C45h7PCCdXMaFnEIlLDG91aq1ThdAb+kHATQBCMa5ncEhs1kFQpBiU1wD4hm
+ 2oUVIdXYJJzAZ37wcW+jiU6lXZw1WKpeX1tw0GCUorGkSWs5KZcGPsOSHX1vrCjvWemW8/Q9a
+ QtDpB1dgpQBiXl2YxjhTPGExek9qVOoYOrJ+T1e2+lAu9314F3egz1HZLWjj9jEOjH0oNc9ZG
+ 7kBAyiwnDQd4aMfe0oVrLU6NwUuUdPHyvTsZO86Gotf8wL48Y4DI7TuwchKcEI4qvzAvRKB4h
+ OKluAaiyw87XBKviGquCA1c988CSwh/+38QWukzfvw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+This series tries to address some dtbs_check warnings on i.MX6ULL.
 
+Changes in V3:
+- add Krzysztof's Reviewed-Bys
+- fix indentation in Patch 6 found by Krzysztof Kozlowski
 
-On 2023/4/14 下午 03:46, Krzysztof Kozlowski wrote:
-> On 14/04/2023 03:22, Jacky Huang wrote:
->> Dear Krzysztof,
->>
->>
->> On 2023/4/14 上午 01:01, Krzysztof Kozlowski wrote:
->>> On 12/04/2023 07:38, Jacky Huang wrote:
->>>> From: Jacky Huang <ychuang3@nuvoton.com>
->>>>
->>>> Add entry for Nuvoton ma35d1 maintainer and files.
->>>> In addition, update board binding paths of NUVOTON NPCM.
->>>>    ARM/NUVOTON NPCM ARCHITECTURE
->>>>    M:	Avi Fishman <avifishman70@gmail.com>
->>>>    M:	Tomer Maimon <tmaimon77@gmail.com>
->>>> @@ -2512,7 +2522,8 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
->>>>    S:	Supported
->>>>    F:	Documentation/devicetree/bindings/*/*/*npcm*
->>>>    F:	Documentation/devicetree/bindings/*/*npcm*
->>>> -F:	Documentation/devicetree/bindings/arm/npcm/*
->>> It is not a bisectable change.
->>>
->>> Best regards,
->>> Krzysztof
->>>
->> F:    Documentation/devicetree/bindings/*/*/*npcm*
->> F:    Documentation/devicetree/bindings/*/*npcm*
->> F:    Documentation/devicetree/bindings/arm/nuvoton/*npcm*    <-- remove
->> this
->> F:    Documentation/devicetree/bindings/soc/nuvoton/*npcm* <-- remove this
->>
->> Yes, the two statements at the bottom seem redundant. I will remove them.
-> I did not comment about "redundant". I used the word "bisectable". git
-> help bisect.
->
-> Best regards,
-> Krzysztof
->
-Dear Krzysztof,
+Changes in V2:
+- new patch to fix fsl-imx-uart warnings 
+- fixed GPC typo found by Fabio Estevam
+- keep enum in bindings as suggested by Krzysztof Kozlowski
+- make imx6ul GPT compatible to imx6sx
 
-I do a test on it, but cannot find issues.
-Could you please advise on how to duplicate the issue? Thank you.
+Stefan Wahren (6):
+  dt-bindings: serial: fsl-imx-uart: add missing properties
+  dt-bindings: crypto: fsl-dcp: add imx6sl and imx6ull compatible
+  dt-bindings: imx-thermal: add imx6sll and imx6ul compatible
+  dt-bindings: imxgpt: add imx6ul compatible
+  ARM: dts: imx: Adjust dma-apbh node name
+  ARM: dts: imx6ul: Add clock and PGC node to GPC
 
-I do the following 'git bisect' test.
+ .../devicetree/bindings/crypto/fsl-dcp.yaml   | 12 ++++++---
+ .../bindings/serial/fsl-imx-uart.yaml         | 25 +++++++++++++++++++
+ .../bindings/thermal/imx-thermal.yaml         | 14 ++++++++---
+ .../devicetree/bindings/timer/fsl,imxgpt.yaml |  3 +++
+ arch/arm/boot/dts/imx23.dtsi                  |  2 +-
+ arch/arm/boot/dts/imx28.dtsi                  |  2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                |  2 +-
+ arch/arm/boot/dts/imx6sx.dtsi                 |  2 +-
+ arch/arm/boot/dts/imx6ul.dtsi                 | 14 ++++++++++-
+ arch/arm/boot/dts/imx7s.dtsi                  |  2 +-
+ 10 files changed, 65 insertions(+), 13 deletions(-)
 
-$ git log --oneline
-5e186f4f1f94 (HEAD, master) MAINTAINERS: Add entry for NUVOTON MA35
-. . .
-1a8a804a4f5d Merge tag 'trace-v6.3-rc5-2' of 
-git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace
-
-
-$ git bisect start 5e186f4f1f94 1a8a804a4f5d
-  HEAD is now at 5e186f4f1f94 MAINTAINERS: Add entry for NUVOTON MA35
-  Bisecting: 68 revisions left to test after this (roughly 6 steps)
-
-
-Best regards,
-Jacky Huang
-
+-- 
+2.34.1
 
