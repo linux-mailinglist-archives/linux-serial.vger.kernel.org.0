@@ -2,53 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C005E6E51FD
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Apr 2023 22:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495EC6E58E8
+	for <lists+linux-serial@lfdr.de>; Tue, 18 Apr 2023 07:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjDQUmf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 17 Apr 2023 16:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S229714AbjDRF7i (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 18 Apr 2023 01:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjDQUmf (ORCPT
+        with ESMTP id S230385AbjDRF7e (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 17 Apr 2023 16:42:35 -0400
-X-Greylist: delayed 1809 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 13:42:34 PDT
-Received: from slot0.gie-nz.com (slot0.gie-nz.com [45.81.243.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A52A8
-        for <linux-serial@vger.kernel.org>; Mon, 17 Apr 2023 13:42:33 -0700 (PDT)
-From:   FASTWAYBASE.US94@consultant.com
-To:     linux-serial@vger.kernel.org
-Subject: Re: new order
-Date:   17 Apr 2023 22:12:06 +0200
-Message-ID: <20230417221206.0A7EBB1267AEFD92@consultant.com>
+        Tue, 18 Apr 2023 01:59:34 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE75B59E4
+        for <linux-serial@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id kt6so32080217ejb.0
+        for <linux-serial@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681797571; x=1684389571;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=h2u+IvYIbnFxxtQG/ZtOJXOGODtmHZE6DE2kphmV5deUhBtI5SSl5ZpPS81I4DoyvM
+         cL/QsMoq/nZ79QoTUVBpjigDCpbkhNV4ihdOYSWAZCOke9dA/QR1VB/koOlQ9LVEDYMX
+         XtbtlwSc8k7WA+c3R6xpugIUkMv4IcvxiBX5jugHOkE6bIQRd6XIP4bPoYTYUOtLJ8cY
+         jqOSy7VahCSY+50nHqKMLAvtMY0jgSKZG9RLZ0VM4rlX3dlYAIwPmpAZEs5sdE1jKPzt
+         sUSa+Yt3rvdogEL685HX9OzzgKvbxUuLxSFiR0ubii95w3DTWRmDDneYGKBqJn2l6obd
+         7Bag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681797571; x=1684389571;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=gzGod8xUgvH+IxgQ4I+qf5I9PW97D3GLv3p/qjDrD2VopiZ00PQdFyq8DkhYFwbL+u
+         J8fwMRY+ylzNpOsodxtQFZE6bxIl4d2yyEKCHn+uz6nHxqPXpQRvJFneEqAvO9h7IlHj
+         Hqamup+ZSC0K3sVkdGhlhysdHkbNTcHoH6fu/BAElWegAsQh7norqxjaEl4OSywXoggY
+         IQsxGfLjo+ixpmBFux8acnQjhqm5dH/63wFJkQJw7tcfSXEddSnA5c6xFS15runVyusi
+         dcsWschOvtkMakMyGQKn/U5QkWoscjSebyhwPLf2wFt0r7phhSa3gnP4M/AlQKvjsKFd
+         eneg==
+X-Gm-Message-State: AAQBX9e6mcQHxcoj2tU2QPPCoP82BjOuWoBrBM2cyGpUDKOAZIqKAHTQ
+        wHyKlHV1C53OiPEjeN7ZN23FrCygt6jnKx9pnEwFkWdME8lWbbwX
+X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
+X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
+ v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
+ 2023 22:59:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-        boundary="----=_NextPart_000_0012_14D6C7A4.1CADF3AC"
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_ZBI,RCVD_IN_SBL,RCVD_IN_SBL_CSS,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
+ 22:59:10 -0700 (PDT)
+Reply-To: mariamkouame.info@myself.com
+From:   Mariam Kouame <mariamkouame1992@gmail.com>
+Date:   Mon, 17 Apr 2023 22:59:10 -0700
+Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
+Subject: from mariam kouame
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-This is a multi-part message in MIME format.
+Dear,
 
-------=_NextPart_000_0012_14D6C7A4.1CADF3AC
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
 
-Dea Sir.
-
-Please see attached new order and revert to us the delivery date/
-FOB
-also inform us payment terms.
-
-Best Regards=20
-Susan
-Purchase Manager.
-------=_NextPart_000_0012_14D6C7A4.1CADF3AC--
+Mrs. Mariam Kouame
