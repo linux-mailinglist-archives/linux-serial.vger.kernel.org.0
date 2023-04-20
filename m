@@ -2,38 +2,37 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A85D6E8D55
-	for <lists+linux-serial@lfdr.de>; Thu, 20 Apr 2023 10:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015DC6E8D3F
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Apr 2023 10:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbjDTI4F (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Apr 2023 04:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S234017AbjDTIyy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Apr 2023 04:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbjDTIyg (ORCPT
+        with ESMTP id S234192AbjDTIxq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:54:36 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Apr 2023 01:53:02 PDT
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37D146B6
-        for <linux-serial@vger.kernel.org>; Thu, 20 Apr 2023 01:53:02 -0700 (PDT)
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 20230420085158382ea5f5fa16b3fc4f
+        Thu, 20 Apr 2023 04:53:46 -0400
+Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F05F6A7A
+        for <linux-serial@vger.kernel.org>; Thu, 20 Apr 2023 01:52:01 -0700 (PDT)
+Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202304200851597bbd3e95150ce54b3e
         for <linux-serial@vger.kernel.org>;
-        Thu, 20 Apr 2023 10:51:58 +0200
+        Thu, 20 Apr 2023 10:51:59 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=Y2LTmzdIUeHUdjGT1TEFeLvtTYBm6sbII2BeByX9Cyo=;
- b=TVE5mZ0ygCr3yjUkb74h5JCCCkbjlfuUUsG9EubKy+za7fBXiApvXJqU8xE6FFCwShHJIG
- zXjELbbG9bF7g2j0ZKrVWy7boHLYpCdfCyp0N8ECBHNTlN+75krikafr3SJu1zO3Pz7os5dW
- PabIdKzD6bBXunqVc6Sjmwse9+AkY=;
+ bh=7MNaE1HTKvukMJ9m1g98lEt+XmsMRBduxzjINiIWnBE=;
+ b=m8YbMEjKF+E6FgUq5fYKF2eWGxj7w+j9I3bjoFkFNp8aCCRvicaQk8PVd8ppp4prvwdKtZ
+ X1JCTiDZupsxpka8ng9gldocD2BiRzMWIVQaRMVFTejbrTveDf/tVaWxj05Y7szJMecanHny
+ 60I8IosV5p1r0QxwUxJtvRu6UnrtM=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v2 2/9] tty: n_gsm: add restart parameter to DLC specific ioctl config
-Date:   Thu, 20 Apr 2023 10:50:10 +0200
-Message-Id: <20230420085017.7314-2-daniel.starke@siemens.com>
+Subject: [PATCH v2 3/9] tty: n_gsm: add missing description to gsm_config
+Date:   Thu, 20 Apr 2023 10:50:11 +0200
+Message-Id: <20230420085017.7314-3-daniel.starke@siemens.com>
 In-Reply-To: <20230420085017.7314-1-daniel.starke@siemens.com>
 References: <20230420085017.7314-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -52,67 +51,58 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-Currently, changing the parameters of a DLCI gives no direct control to the
-user whether this should trigger a channel reset or not. The decision is
-solely made by the driver based on the assumption which parameter changes
-are compatible or not. Therefore, the user has no means to perform an
-automatic channel reset after parameter configuration for non-conflicting
-changes.
+Currently, all available structure fields in gsmmux.h except those
+for gsm_config are commented.
 
-Add the parameter 'restart' to 'gsm_dlci_config' to force a channel reset
-after ioctl setting regardless of whether the changes made require this or
-not.
+Fix this by adding appropriate comments to the not commented fields.
+Note that 'mru' and 'mtu' refer to the size without basic/advanced option
+mode header and byte stuffing as defined in the standard in chapter 5.7.2.
 
-Note that the parameter is limited to the values 0 and 1 to allow future
-additions here.
-
+Link: https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c         | 4 ++++
- include/uapi/linux/gsmmux.h | 3 ++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ include/uapi/linux/gsmmux.h | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
 v1 -> v2:
-Changed wording as remarked in the review.
+Added remark regarding the mru/mtu size comment as this was unclear in the
+review.
 
-Link: https://lore.kernel.org/all/AS4PR10MB5895BA5B2ECFFF74DDBAB571E0919@AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM/
+Link: https://lore.kernel.org/all/AS4PR10MB5895ADDAF211A669CCF7F8C5E0919@AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM/
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index c42c8b89fd46..eb21ca583642 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2531,6 +2531,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
- 		return -EINVAL;
- 	if (dc->k > 7)
- 		return -EINVAL;
-+	if (dc->restart > 1)   /* allow future extensions */
-+		return -EINVAL;
- 
- 	/*
- 	 * See what is needed for reconfiguration
-@@ -2545,6 +2547,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
- 	/* Requires care */
- 	if (dc->priority != dlci->prio)
- 		need_restart = true;
-+	if (dc->restart)
-+		need_restart = true;
- 
- 	if ((open && gsm->wait_config) || need_restart)
- 		need_open = true;
 diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
-index eb67884e5f38..33ee7b857c52 100644
+index 33ee7b857c52..422a52e184b3 100644
 --- a/include/uapi/linux/gsmmux.h
 +++ b/include/uapi/linux/gsmmux.h
-@@ -58,7 +58,8 @@ struct gsm_dlci_config {
- 	__u32 priority;		/* Priority (0 for default value) */
- 	__u32 i;		/* Frame type (1 = UIH, 2 = UI) */
- 	__u32 k;		/* Window size (0 for default value) */
--	__u32 reserved[8];	/* For future use, must be initialized to zero */
-+	__u32 restart;		/* Force DLCI channel reset? */
-+	__u32 reserved[7];	/* For future use, must be initialized to zero */
+@@ -8,17 +8,17 @@
+ 
+ struct gsm_config
+ {
+-	unsigned int adaption;
+-	unsigned int encapsulation;
+-	unsigned int initiator;
+-	unsigned int t1;
+-	unsigned int t2;
+-	unsigned int t3;
+-	unsigned int n2;
+-	unsigned int mru;
+-	unsigned int mtu;
+-	unsigned int k;
+-	unsigned int i;
++	unsigned int adaption;	/* Convergence layer type */
++	unsigned int encapsulation; /* Framing (0 = basic option, 1 = advanced option) */
++	unsigned int initiator;	/* Initiator or responder */
++	unsigned int t1;	/* Acknowledgment timer */
++	unsigned int t2;	/* Response timer for multiplexer control channel */
++	unsigned int t3;	/* Response timer for wake-up procedure */
++	unsigned int n2;	/* Maximum number of retransmissions */
++	unsigned int mru;	/* Maximum incoming frame payload size */
++	unsigned int mtu;	/* Maximum outgoing frame payload size */
++	unsigned int k;		/* Window size */
++	unsigned int i;		/* Frame type (1 = UIH, 2 = UI) */
+ 	unsigned int unused[8];	/* Can not be used */
  };
  
- #define GSMIOC_GETCONF_DLCI	_IOWR('G', 7, struct gsm_dlci_config)
 -- 
 2.34.1
 
