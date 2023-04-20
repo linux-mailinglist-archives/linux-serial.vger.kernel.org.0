@@ -2,46 +2,63 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512E96E8D48
-	for <lists+linux-serial@lfdr.de>; Thu, 20 Apr 2023 10:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9950D6E8DA9
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Apr 2023 11:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbjDTIy6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 20 Apr 2023 04:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S234091AbjDTJL1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 20 Apr 2023 05:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbjDTIxv (ORCPT
+        with ESMTP id S234296AbjDTJLP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 20 Apr 2023 04:53:51 -0400
-Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925347294
-        for <linux-serial@vger.kernel.org>; Thu, 20 Apr 2023 01:52:04 -0700 (PDT)
-Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20230420085202f26331c63e51b9ff85
-        for <linux-serial@vger.kernel.org>;
-        Thu, 20 Apr 2023 10:52:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=GMJnTQBjqNDmRCR9GVA4p1Mh+jUY2F8iX0UGlZoBzWI=;
- b=AuyFbk//3khrCXXs0xkWwn6u7UfH40FHgcDYoNUmV+ND4Luo7vLCO/ufVWrIGHDeiS609b
- TooMq2FIlpsMSNtbOixkvdMfhr3FL1DVkJZ7KK2AdALAOCGN4v0sWYsY35guW7KSd6yZa+1C
- vfdvz88uOIb3lQUk6J9NwcXksOmIA=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v2 9/9] tty: n_gsm: add DLCI specific rx/tx statistics
-Date:   Thu, 20 Apr 2023 10:50:17 +0200
-Message-Id: <20230420085017.7314-9-daniel.starke@siemens.com>
-In-Reply-To: <20230420085017.7314-1-daniel.starke@siemens.com>
-References: <20230420085017.7314-1-daniel.starke@siemens.com>
+        Thu, 20 Apr 2023 05:11:15 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03095258;
+        Thu, 20 Apr 2023 02:10:30 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-94a34d3812cso57068066b.2;
+        Thu, 20 Apr 2023 02:10:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681981714; x=1684573714;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0eXhKdE5lqprqiAflIQDndd2L6jOpCRY4FudSchqd5w=;
+        b=VJLJka4YDGT0SebadLggkylpPlxsqX/kUssRHuXOLFjgLTJDvbaOLre7i23WylDJTi
+         zW3XU9F03ofh9XncGr0phQfa6wsatVE9ZhxcvGdnPHMjImH4F+sHRLb2Nc6TGUoHRwFb
+         M4N023d0xNInKXQVA+yDRtTgANQ4vBlTLlXarf10HuRa6SZA5iYy+2mdlI/62ln18J+/
+         OtzvWbEnBLdeJO5QmnFq6p7sAhvK96GqUrRY0weSOC6lT10wIl/gJ20o5LyMZaNpHk/q
+         DPDxSCxN+cSSsHLF0c550cQgP4+bs391/Cbt9MFH15d2bmPq9rALzsoujxs6qey+X3Vm
+         9whw==
+X-Gm-Message-State: AAQBX9dIElfFxhINVdnRJ2daCegGfjEezHrBZlv5DSAZk2QBiCqVkbAs
+        G3aqOq3PNDlX2rbLZUQU8BvP/Ietxtk=
+X-Google-Smtp-Source: AKy350b0zw8rIX4c6M83szqn5QLghUr1D5U9pggBpQOuprP8Z9Obhj2Iw7t6obXeGfEGZPk5z+HGRA==
+X-Received: by 2002:aa7:c406:0:b0:506:9ece:60cb with SMTP id j6-20020aa7c406000000b005069ece60cbmr842503edq.38.1681981714091;
+        Thu, 20 Apr 2023 02:08:34 -0700 (PDT)
+Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id e7-20020a170906844700b0094f7b713e40sm490180ejy.126.2023.04.20.02.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 02:08:33 -0700 (PDT)
+Message-ID: <2f2b20e4-34cd-a154-022f-c76c1b0e06c5@kernel.org>
+Date:   Thu, 20 Apr 2023 11:08:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/9] tty: n_gsm: add missing description to gsm_config
+Content-Language: en-US
+To:     "D. Starke" <daniel.starke@siemens.com>,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230420085017.7314-1-daniel.starke@siemens.com>
+ <20230420085017.7314-3-daniel.starke@siemens.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230420085017.7314-3-daniel.starke@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,140 +66,68 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+On 20. 04. 23, 10:50, D. Starke wrote:
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> Currently, all available structure fields in gsmmux.h except those
+> for gsm_config are commented.
+> 
+> Fix this by adding appropriate comments to the not commented fields.
+> Note that 'mru' and 'mtu' refer to the size without basic/advanced option
+> mode header and byte stuffing as defined in the standard in chapter 5.7.2.
 
-Add counters for the number of data bytes received/transmitted per DLCI in
-for preparation for an upcoming patch which will expose these values to the
-user.
+Maybe you can start documenting them using kernel-doc? And convert the 
+others and expose them all to Documentation and finally to:
+https://www.kernel.org/doc/html/latest/
+?
 
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+> Link: https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>   include/uapi/linux/gsmmux.h | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> v1 -> v2:
+> Added remark regarding the mru/mtu size comment as this was unclear in the
+> review.
+> 
+> Link: https://lore.kernel.org/all/AS4PR10MB5895ADDAF211A669CCF7F8C5E0919@AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM/
+> 
+> diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
+> index 33ee7b857c52..422a52e184b3 100644
+> --- a/include/uapi/linux/gsmmux.h
+> +++ b/include/uapi/linux/gsmmux.h
+> @@ -8,17 +8,17 @@
+>   
+>   struct gsm_config
+>   {
+> -	unsigned int adaption;
+> -	unsigned int encapsulation;
+> -	unsigned int initiator;
+> -	unsigned int t1;
+> -	unsigned int t2;
+> -	unsigned int t3;
+> -	unsigned int n2;
+> -	unsigned int mru;
+> -	unsigned int mtu;
+> -	unsigned int k;
+> -	unsigned int i;
+> +	unsigned int adaption;	/* Convergence layer type */
+> +	unsigned int encapsulation; /* Framing (0 = basic option, 1 = advanced option) */
+> +	unsigned int initiator;	/* Initiator or responder */
+> +	unsigned int t1;	/* Acknowledgment timer */
+> +	unsigned int t2;	/* Response timer for multiplexer control channel */
+> +	unsigned int t3;	/* Response timer for wake-up procedure */
+> +	unsigned int n2;	/* Maximum number of retransmissions */
+> +	unsigned int mru;	/* Maximum incoming frame payload size */
+> +	unsigned int mtu;	/* Maximum outgoing frame payload size */
+> +	unsigned int k;		/* Window size */
+> +	unsigned int i;		/* Frame type (1 = UIH, 2 = UI) */
+>   	unsigned int unused[8];	/* Can not be used */
+>   };
+>   
 
-v1 -> v2:
-Moved from patch 8 to 9 as suggested in the review.
-Added missing change of gsm_dlci_data_output_framed() where dlci->tx also
-needs to be increased. This has been pointed out in the review.
-
-Link: https://lore.kernel.org/all/AS4PR10MB58956DDD178D33EC6CA3A73EE0919@AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index bd6bddb185b9..7f15c122a333 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -185,6 +185,9 @@ struct gsm_dlci {
- 	void (*data)(struct gsm_dlci *dlci, const u8 *data, int len);
- 	void (*prev_data)(struct gsm_dlci *dlci, const u8 *data, int len);
- 	struct net_device *net; /* network interface, if created */
-+	/* Statistics (not currently exposed) */
-+	u64 tx;			/* Data bytes sent on this DLCI */
-+	u64 rx;			/* Data bytes received on this DLCI */
- };
- 
- /*
-@@ -1215,6 +1218,7 @@ static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
- 	tty_port_tty_wakeup(&dlci->port);
- 
- 	__gsm_data_queue(dlci, msg);
-+	dlci->tx += len;
- 	/* Bytes of data we used up */
- 	return size;
- }
-@@ -1282,6 +1286,7 @@ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
- 	memcpy(dp, dlci->skb->data, len);
- 	skb_pull(dlci->skb, len);
- 	__gsm_data_queue(dlci, msg);
-+	dlci->tx += len;
- 	if (last) {
- 		dev_kfree_skb_any(dlci->skb);
- 		dlci->skb = NULL;
-@@ -1460,6 +1465,7 @@ static int gsm_control_command(struct gsm_mux *gsm, int cmd, const u8 *data,
- 	msg->data[1] = (dlen << 1) | EA;
- 	memcpy(msg->data + 2, data, dlen);
- 	gsm_data_queue(dlci, msg);
-+	dlci->tx += dlen;
- 
- 	return 0;
- }
-@@ -1487,6 +1493,7 @@ static void gsm_control_reply(struct gsm_mux *gsm, int cmd, const u8 *data,
- 	msg->data[1] = (dlen << 1) | EA;
- 	memcpy(msg->data + 2, data, dlen);
- 	gsm_data_queue(dlci, msg);
-+	dlci->tx += dlen;
- }
- 
- /**
-@@ -1851,10 +1858,13 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
- 						const u8 *data, int clen)
- {
- 	u8 buf[1];
-+	struct gsm_dlci *dlci = gsm->dlci[0];
-+
-+	if (dlci)
-+		dlci->rx += clen;
- 
- 	switch (command) {
- 	case CMD_CLD: {
--		struct gsm_dlci *dlci = gsm->dlci[0];
- 		/* Modem wishes to close down */
- 		if (dlci) {
- 			dlci->dead = true;
-@@ -1933,6 +1943,8 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
- 
- 	ctrl = gsm->pending_cmd;
- 	dlci = gsm->dlci[0];
-+	if (dlci)
-+		dlci->rx += clen;
- 	command |= 1;
- 	/* Does the reply match our command */
- 	if (ctrl != NULL && (command == ctrl->cmd || command == CMD_NSC)) {
-@@ -2297,6 +2309,9 @@ static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
- 			need_pn = true;
- 	}
- 
-+	dlci->tx = 0;
-+	dlci->rx = 0;
-+
- 	switch (dlci->state) {
- 	case DLCI_CLOSED:
- 	case DLCI_WAITING_CONFIG:
-@@ -2329,6 +2344,9 @@ static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
-  */
- static void gsm_dlci_set_opening(struct gsm_dlci *dlci)
- {
-+	dlci->tx = 0;
-+	dlci->rx = 0;
-+
- 	switch (dlci->state) {
- 	case DLCI_CLOSED:
- 	case DLCI_WAITING_CONFIG:
-@@ -2348,6 +2366,9 @@ static void gsm_dlci_set_opening(struct gsm_dlci *dlci)
-  */
- static void gsm_dlci_set_wait_config(struct gsm_dlci *dlci)
- {
-+	dlci->tx = 0;
-+	dlci->rx = 0;
-+
- 	switch (dlci->state) {
- 	case DLCI_CLOSED:
- 	case DLCI_CLOSING:
-@@ -2424,6 +2445,7 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
- 		fallthrough;
- 	case 1:		/* Line state will go via DLCI 0 controls only */
- 	default:
-+		dlci->rx += clen;
- 		tty_insert_flip_string(port, data, clen);
- 		tty_flip_buffer_push(port);
- 	}
-@@ -2784,6 +2806,7 @@ static void gsm_queue(struct gsm_mux *gsm)
- 			gsm->open_error++;
- 			return;
- 		}
-+		dlci->rx += gsm->len;
- 		if (dlci->dead)
- 			gsm_response(gsm, address, DM|PF);
- 		else {
 -- 
-2.34.1
+js
+suse labs
 
