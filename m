@@ -2,123 +2,138 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC206EEF70
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Apr 2023 09:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE97C6EEFC6
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Apr 2023 10:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239947AbjDZHkP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Apr 2023 03:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S239928AbjDZIDk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Apr 2023 04:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239713AbjDZHkM (ORCPT
+        with ESMTP id S239944AbjDZIDg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:40:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7563C1B
-        for <linux-serial@vger.kernel.org>; Wed, 26 Apr 2023 00:40:05 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1prZkd-0000oH-C7; Wed, 26 Apr 2023 09:39:43 +0200
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1prZkb-0001VM-MH; Wed, 26 Apr 2023 09:39:41 +0200
-Date:   Wed, 26 Apr 2023 09:39:41 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Jacky Huang <ychuang570808@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v8 09/11] reset: Add Nuvoton ma35d1 reset driver support
-Message-ID: <20230426073941.GB4724@pengutronix.de>
-References: <20230425102418.185783-1-ychuang570808@gmail.com>
- <20230425102418.185783-10-ychuang570808@gmail.com>
+        Wed, 26 Apr 2023 04:03:36 -0400
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FD03C15
+        for <linux-serial@vger.kernel.org>; Wed, 26 Apr 2023 01:03:32 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202304260803307b14267cdf3a7f8288
+        for <linux-serial@vger.kernel.org>;
+        Wed, 26 Apr 2023 10:03:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=btnpjanps7GZuVDl1HyLhoOR3uwTdi+jFgZdJzn8lO8=;
+ b=W5lRVWftuxQ4NVdnxx0NWP7jI7LdRTLWA1YNChTZ29wLWaE4GfdqQf5dZzFXItnI1kdeRh
+ W3yvJuZ/H0lNGx+fSsEaHFHhL/zVScNUR5u78WS+aws60YBQzCDiw1f1kJxL+Db4wmFbbb+N
+ lh/lSTsV82AlfnHts8V0yqXXxFsXw=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v4 1/8] tty: n_gsm: add restart flag to DLC specific ioctl config
+Date:   Wed, 26 Apr 2023 10:03:08 +0200
+Message-Id: <20230426080315.7595-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425102418.185783-10-ychuang570808@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Jacky,
+From: Daniel Starke <daniel.starke@siemens.com>
 
-On Tue, Apr 25, 2023 at 10:24:16AM +0000, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> This driver supports individual IP reset for ma35d1. The reset
-> control registers is a subset of system control registers.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  drivers/reset/Kconfig        |   6 +
->  drivers/reset/Makefile       |   1 +
->  drivers/reset/reset-ma35d1.c | 229 +++++++++++++++++++++++++++++++++++
-[...]
-> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
-> new file mode 100644
-> index 000000000000..648b380becf7
-> --- /dev/null
-> +++ b/drivers/reset/reset-ma35d1.c
-> @@ -0,0 +1,229 @@
-[...]
-> +static int ma35d1_reset_update(struct reset_controller_dev *rcdev,
-> +			       unsigned long id, bool assert)
-> +{
-> +	u32 reg;
-> +	struct ma35d1_reset_data *data = container_of(rcdev,
-> +						      struct ma35d1_reset_data,
-> +						      rcdev);
-> +
-> +	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
-> +	if (assert)
-> +		reg |= BIT(ma35d1_reset_map[id].bit);
-> +	else
-> +		reg &= ~(BIT(ma35d1_reset_map[id].bit));
-> +	writel_relaxed(reg, data->base + ma35d1_reset_map[id].reg_ofs);
+Currently, changing the parameters of a DLCI gives no direct control to the
+user whether this should trigger a channel reset or not. The decision is
+solely made by the driver based on the assumption which parameter changes
+are compatible or not. Therefore, the user has no means to perform an
+automatic channel reset after parameter configuration for non-conflicting
+changes.
 
-This is missing a spinlock to protect the read-modify-write cycle from
-simultaneous updates.
+Add the parameter 'flags' to 'gsm_dlci_config' to force a channel reset
+after ioctl setting regardless of whether the changes made require this or
+not by setting this to 'GSM_FL_RESTART'.
 
-[...]
-> +static int ma35d1_reset_probe(struct platform_device *pdev)
-> +{
-> +	int err;
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	struct ma35d1_reset_data *reset_data;
-> +
-> +	if (!pdev->dev.of_node) {
-> +		dev_err(&pdev->dev, "Device tree node not found\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
-> +	if (!reset_data)
-> +		return -ENOMEM;
-> +
-> +	reset_data->base = devm_ioremap_resource(&pdev->dev, res);
+Note that 'GSM_FL_RESTART' is currently the only allow flag to allow
+additions here.
 
-You could use devm_platform_ioremap_resource() here.
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c         |  4 ++++
+ include/uapi/linux/gsmmux.h | 13 ++++++++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-regards
-Philipp
+v3 -> v4:
+Changed gsm_dlci_config field name from 'restart' to 'flags' and introduced
+'GSM_FL_RESTART' to set the restart flag. The patch description was changed
+accordingly. This was done as suggested during the review.
+The remarked kernel doc compatible field comment is done in patch 2/8.
+
+Link: https://lore.kernel.org/all/2023042453-dubbed-botany-2ed9@gregkh/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index b411a26cc092..66edcf65a4dd 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2532,6 +2532,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
+ 		return -EINVAL;
+ 	if (dc->k > 7)
+ 		return -EINVAL;
++	if (dc->flags & ~GSM_FL_RESTART)   /* allow future extensions */
++		return -EINVAL;
+ 
+ 	/*
+ 	 * See what is needed for reconfiguration
+@@ -2546,6 +2548,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
+ 	/* Requires care */
+ 	if (dc->priority != dlci->prio)
+ 		need_restart = true;
++	if (dc->flags & GSM_FL_RESTART)
++		need_restart = true;
+ 
+ 	if ((open && gsm->wait_config) || need_restart)
+ 		need_open = true;
+diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
+index eb67884e5f38..958257af05ab 100644
+--- a/include/uapi/linux/gsmmux.h
++++ b/include/uapi/linux/gsmmux.h
+@@ -2,10 +2,20 @@
+ #ifndef _LINUX_GSMMUX_H
+ #define _LINUX_GSMMUX_H
+ 
++#include <linux/const.h>
+ #include <linux/if.h>
+ #include <linux/ioctl.h>
+ #include <linux/types.h>
+ 
++/*
++ * flags definition for n_gsm
++ *
++ * Used by:
++ * struct gsm_dlci_config.flags
++ */
++/* Force DLCI channel reset? Always cleared on retrieval. */
++#define GSM_FL_RESTART	_BITUL(0)
++
+ struct gsm_config
+ {
+ 	unsigned int adaption;
+@@ -58,7 +68,8 @@ struct gsm_dlci_config {
+ 	__u32 priority;		/* Priority (0 for default value) */
+ 	__u32 i;		/* Frame type (1 = UIH, 2 = UI) */
+ 	__u32 k;		/* Window size (0 for default value) */
+-	__u32 reserved[8];	/* For future use, must be initialized to zero */
++	__u32 flags;		/* DLCI specific flags. */
++	__u32 reserved[7];	/* For future use, must be initialized to zero */
+ };
+ 
+ #define GSMIOC_GETCONF_DLCI	_IOWR('G', 7, struct gsm_dlci_config)
+-- 
+2.34.1
+
