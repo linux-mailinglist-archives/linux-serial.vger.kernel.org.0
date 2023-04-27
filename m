@@ -2,178 +2,104 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B666F0196
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Apr 2023 09:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A5F6F044F
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Apr 2023 12:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242886AbjD0HXl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 27 Apr 2023 03:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S243223AbjD0KlR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 27 Apr 2023 06:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbjD0HXj (ORCPT
+        with ESMTP id S242999AbjD0KlQ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 27 Apr 2023 03:23:39 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A304EF5;
-        Thu, 27 Apr 2023 00:22:59 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a69f686345so63306315ad.2;
-        Thu, 27 Apr 2023 00:22:59 -0700 (PDT)
+        Thu, 27 Apr 2023 06:41:16 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE2D83
+        for <linux-serial@vger.kernel.org>; Thu, 27 Apr 2023 03:41:15 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f00d3f98deso3066143e87.0
+        for <linux-serial@vger.kernel.org>; Thu, 27 Apr 2023 03:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682580135; x=1685172135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kXJHDR+uvigrdqjtItsF0amUfeR/xcg4WFinveNN2RY=;
-        b=jWDo3kzPfX9uZTI+RJ06zG503kFpbG0icTs3PBkudav0w7nbVWnlOxeJU2R+UhPp6o
-         1MGmtg9T4ZoK+1Tlm1TteFyd3QcicOpretq9RxJhFW0ssm4ZxbfFWLkTj7hNzAzETYuM
-         ML2L0nSOWD/Aolznnh+z2NndUoCz7kGW6BnXzkf3p6E3O36fnst6lYDyXQMNL5/+QMKF
-         +rS9PR2tUgLTVL7cRVIUh1M4QifkRcC+6AKuaCUID5vcQEAl8f31ObgZXZ6hKnKB9Q7D
-         TVoT7XeLnyjhE2q0u6Cxalk/o+FLNOObIU5ngguKmQ7jRSRk/TBqh0NKtZv9Lqb4lfms
-         EJ9w==
+        d=gmail.com; s=20221208; t=1682592074; x=1685184074;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cHhTd4WQ5jW3liGbje3krk/dFm+1ccLit5tZIHiKpw8=;
+        b=X910xCax/ukpQVc/c+0G6R/a9qPGPBxODJ4Ygzoz4IUrPOT92JPtUZZxWDr4J8y156
+         /asqnA+RdWLbsqUgTmzyHPO1IkUi1P36uYi1JwLOP83EoGgPrjgKxgYBx9MVkyza5djc
+         MUU+5yECYifqXyRUEKYygZwHSdXs8aTKRyei1Qbjic6ESLjZA7md0VtFN5E43XwZl1EP
+         9zoX11TrtOwOzHf5L7amr4I4egrJ/pLXD4rsdQBJmqkVvKedxi7lTvVCTD+KpNqLUFxM
+         ZPbjNPbefWZzMZPyFP8/tqLs1mgUNR4Xg27HsJ3HFgSFHutQWfo5uo12H+pooAI7vXII
+         qwBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682580135; x=1685172135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682592074; x=1685184074;
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kXJHDR+uvigrdqjtItsF0amUfeR/xcg4WFinveNN2RY=;
-        b=V5TFRGDCfbwVktVYpgHVEPhwngPbKHYhhNPyLGOVsM0U5FYt7vtQnZmJrOp7w4vz7f
-         S8A2dqcLEFxgvaW+mqEDox3VK6G4FXpS1653cxKAxAF5p/xVFq+C84BzVzzcBR4fL2JD
-         /+vmpbvlpoGGUU8oCeH2gxK7t1Tsgi6p6F3D2eQX+2sZTFXXX1DQ+HM0A0dhg4B4S2ay
-         LZzuI4cXQWRTadcHjSdI8dc7202uEUSt53epMymC70sHX03LWwA7IEql1cOtaC6R4a4K
-         xPs/XyiwV5zDAnOlyRWBILZTjHXxFKB5ZjCi4v83L4pUguKR8LNnTagT9+oG1OX8j52r
-         svwg==
-X-Gm-Message-State: AC+VfDxdx1/J1u7zUpJHpZXN590xQRXa7H1OGoIbt+vgKGeuSgoWaOn4
-        lfJA2RNVi/L/chNLHjoprH4=
-X-Google-Smtp-Source: ACHHUZ7QFbzk6DipZKj1VayaE1oZ/33TmkMvLk6ABtMS3XNELvyeMZtBaXjFmGh0CryDFiwMa2QPLg==
-X-Received: by 2002:a17:903:2095:b0:1a5:309e:d205 with SMTP id d21-20020a170903209500b001a5309ed205mr594702plc.21.1682580135198;
-        Thu, 27 Apr 2023 00:22:15 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170902bd4a00b001a95aef9728sm8009094plx.19.2023.04.27.00.22.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 00:22:14 -0700 (PDT)
-Message-ID: <d2d42bf5-fc7e-7a88-7e62-f35e16401012@gmail.com>
-Date:   Thu, 27 Apr 2023 15:22:09 +0800
+        bh=cHhTd4WQ5jW3liGbje3krk/dFm+1ccLit5tZIHiKpw8=;
+        b=Yi15/LQpiU3p3t3v/CvnjmLyiPu0XZHIx49dmIxTQwa5mfz/JK6VcznGVlPvQuSdLZ
+         a/YfhbG5wEHjOV9LsdK1E3ZjR4Ve/IsmHbpjT+O70E8rH2ESHVZfYMM8bMQGLawwvx7p
+         UNHzkeLKq4iThq7wxJ4d3pe9BCW8wpI1/VBIln/PERTBMVBVuLbVBh+GZGENzbxWqNds
+         Y93V/yywn4gdbTCW/VxW2Wj6NZQibOiP6wPuvjVdsrIrboswmCPM1z2Fi+JSjUZ3DYRB
+         Tk3WKphzjDoVmV8TcaF3Yuhr2+GePzENp2sCWmtWysIb6p/t9iwJKz1UW725PwhNn6Sr
+         iRrw==
+X-Gm-Message-State: AC+VfDzo/N6gvF4rsT9S4SiZIBRLQoD3cnNPciVS1opXUJTI7TZsrjEy
+        xqiE/fBMzeyYZpL7TMpuc2JWQgdyqnJxEA6pv4w=
+X-Google-Smtp-Source: ACHHUZ5n+YDK/JayLtjfLvShgQpAvr74HJWvrzl5Us1xdR0QMWfnJ5YvdCCJkFjcnCzzL9vPXT/2kFOe6NjHv2opq1Q=
+X-Received: by 2002:a05:6512:3e0f:b0:4e8:5c66:e01e with SMTP id
+ i15-20020a0565123e0f00b004e85c66e01emr1654737lfv.21.1682592073575; Thu, 27
+ Apr 2023 03:41:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v8 10/11] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230425102418.185783-1-ychuang570808@gmail.com>
- <20230425102418.185783-11-ychuang570808@gmail.com>
- <46933536-2999-c3b0-f3d3-60e8830f50a6@wanadoo.fr>
-Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <46933536-2999-c3b0-f3d3-60e8830f50a6@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a05:6520:34a:b0:25f:d371:2806 with HTTP; Thu, 27 Apr 2023
+ 03:41:13 -0700 (PDT)
+Reply-To: mr.alabbashadi@gmail.com
+From:   MR ABBAS HADI <mrs.annabruun071@gmail.com>
+Date:   Thu, 27 Apr 2023 03:41:13 -0700
+Message-ID: <CAEEmtG4pKjFCKOrq9k=cQX-XVouDWOke2pcfkHOMJMCY+iynKg@mail.gmail.com>
+Subject: WITH ALL DUE RESPECT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:134 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4925]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrs.annabruun071[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrs.annabruun071[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.5 HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+-- 
+Good Day,
 
+I am Mr. Abbas Hadi, the manager with BOA i contact you for a deal
+relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
-On 2023/4/25 下午 06:38, Christophe JAILLET wrote:
-> Le 25/04/2023 à 12:24, Jacky Huang a écrit :
->> From: Jacky Huang <ychuang3@nuvoton.com>
->>
->> This adds UART and console driver for Nuvoton ma35d1 Soc.
->> It supports full-duplex communication, FIFO control, and
->> hardware flow control.
->>
->> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->> ---
->>   drivers/tty/serial/Kconfig         |  18 +
->>   drivers/tty/serial/Makefile        |   1 +
->>   drivers/tty/serial/ma35d1_serial.c | 781 +++++++++++++++++++++++++++++
->>   3 files changed, 800 insertions(+)
->>   create mode 100644 drivers/tty/serial/ma35d1_serial.c
->>
->
-> [...]
->
->> +static int ma35d1serial_probe(struct platform_device *pdev)
->> +{
->> +    struct resource *res_mem;
->> +    struct uart_ma35d1_port *up;
->> +    int ret = 0;
->> +    struct clk *clk;
->> +    int err;
->> +
->> +    if (pdev->dev.of_node) {
->> +        ret = of_alias_get_id(pdev->dev.of_node, "serial");
->> +        if (ret < 0) {
->> +            dev_err(&pdev->dev, "failed to get alias/pdev id, errno 
->> %d\n", ret);
->> +            return ret;
->> +        }
->> +    }
->> +    up = &ma35d1serial_ports[ret];
->> +    up->port.line = ret;
->> +    res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +    if (!res_mem)
->> +        return -ENODEV;
->> +
->> +    up->port.iobase = res_mem->start;
->> +    up->port.membase = devm_ioremap(&pdev->dev, up->port.iobase, 
->> UART_REG_SIZE);
->> +    up->port.ops = &ma35d1serial_ops;
->> +
->> +    spin_lock_init(&up->port.lock);
->> +
->> +    clk = of_clk_get(pdev->dev.of_node, 0);
->
-> Does this...
->
->> +    if (IS_ERR(clk)) {
->> +        err = PTR_ERR(clk);
->> +        dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
->> +        return -ENOENT;
->> +    }
->> +
->> +    err = clk_prepare_enable(clk);
->
-> ... and this be undone in the remove function?
->
-> CJ
->
-
-I will add clk_disable_unprepare() in the remove function.
-
->> +    if (err)
->> +        return -ENOENT;
->> +
->> +    if (up->port.line != 0)
->> +        up->port.uartclk = clk_get_rate(clk);
->> +
->> +    ret = platform_get_irq(pdev, 0);
->> +    if (ret < 0)
->> +        return ret;
->> +    up->port.irq = ret;
->> +    up->port.dev = &pdev->dev;
->> +    up->port.flags = UPF_BOOT_AUTOCONF;
->> +
->> +    platform_set_drvdata(pdev, up);
->> +
->> +    return uart_add_one_port(&ma35d1serial_reg, &up->port);
->> +}
->
-> [...]
->
-
-Best Regards,
-Jacky Huang
+Regards,
+Mr. Abbas Hadi
