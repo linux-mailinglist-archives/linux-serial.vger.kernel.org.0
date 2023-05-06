@@ -2,98 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9816F8F85
-	for <lists+linux-serial@lfdr.de>; Sat,  6 May 2023 08:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574606F925B
+	for <lists+linux-serial@lfdr.de>; Sat,  6 May 2023 15:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjEFGuq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 6 May 2023 02:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        id S232541AbjEFN7d (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 6 May 2023 09:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjEFGup (ORCPT
+        with ESMTP id S231933AbjEFN7c (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 6 May 2023 02:50:45 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB56A5CB
-        for <linux-serial@vger.kernel.org>; Fri,  5 May 2023 23:50:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965e4be7541so282082966b.1
-        for <linux-serial@vger.kernel.org>; Fri, 05 May 2023 23:50:43 -0700 (PDT)
+        Sat, 6 May 2023 09:59:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAC92452B
+        for <linux-serial@vger.kernel.org>; Sat,  6 May 2023 06:59:31 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-958bb7731a9so520348566b.0
+        for <linux-serial@vger.kernel.org>; Sat, 06 May 2023 06:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683355842; x=1685947842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uyLSGcqzev4ScCUTVAy/dI0FShLpsKcG+iQhkbBmwu4=;
-        b=AlfRNVG3E3APA+Cf7R720DagAe1db7tpRUYFB5jhqr3xtQD0uysDqwcdi3u6Ezxk7m
-         KP70xR7fbiv48VXV98A86UvtqVHK01ERc2R5PuMt5hT6q540GxKOUFECRkrcrqYFdtUY
-         cOAVmo4HkSVubck+5re4/FrqcoCKARUE+PqsrOdHpoKh9Z5m+o5OqsVkQlCjK3h2zRyM
-         OPuhnNA5r1Z4mHkrQ5Sl7992aAFU/ZyrsLwxTCBDSOPtf2kNcElmYTi1qiJjkrlGxw5z
-         SGoZHEf/NoNhESk59YswB3fJz4QcGdJ3e+5zfmD7ixDyi5oA/5Be3+SfDfYZ1Zwn+5Pw
-         V6ig==
+        d=gmail.com; s=20221208; t=1683381570; x=1685973570;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yk2ZAoW+pxo/MiMBjqX3UORnaIwGKzfMAfunn0eCutA=;
+        b=UY/JBxBzhBIwnxHUQIdF9RkJ+cJ29AnPTHkx7LpVNxpdBn8E4COSo6nfYGH/q9Xo8F
+         NoGEnZJ2jkB5uaMilOQ0+itAPtkwnk85m5ypW/nRJ5+Sv1oBGuBoiBUaAwGyzRzdwC8S
+         DLDiUCIYeKqm2hOsymYNe3o+8fu/urDIe4CQ+SIFzzNBeOLh0eO3BYh0SpBU9b4xOVD9
+         eZgXb6r3XUBzGsE38jlEkz9Un6wdE4dnlcmpktuCZ5WMy3uQTfNn+JbauWGOfU2LFtdu
+         aMTcdOms6Ec6M/wkbdDogCK2wikzsaEhg5K2i7uNJQ32DfDeD++Py3+TlecsI9C7KP+v
+         /lcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683355842; x=1685947842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyLSGcqzev4ScCUTVAy/dI0FShLpsKcG+iQhkbBmwu4=;
-        b=RyWiXz6XyPtQGt2D9YRrf3hNDqI99HmKNhUTQD4ChBUeWK/bidaxgf9/woayiPssJb
-         /kqCaKvuyFZvimMKoODXYR1HVfMTHPDOTTWQgP5ZT0pUNGHcpDXU0MU9OHiTDDDa3WLB
-         ulXGuRScBAFEPpcQDiNUk9EnRimORZn+4b50IR3PUXTnKT93BycMposlWZkABFtVGKuh
-         St09f9prgTVIB+gUC5jD+JyUX6AmWmgDapbwOzn+z1TiRvX5GLmY2FVuDOmD2VROspT2
-         4+7lZmt631l4zpQr9ysSYLjqYErOLpsfOubNgRWiOn6rRCLHHSehYB2VFJ1AddFh7eD1
-         v4Rg==
-X-Gm-Message-State: AC+VfDxpVREswnHXjbq+WFSeuAqoAjuMZNyD+2EHn7PbOU4hVWskT1ZN
-        T7sRfPpY4Ng4IefNSiOSbPQdFg==
-X-Google-Smtp-Source: ACHHUZ4qwZlWqW21bAjZx+NhonFjoZxHRzhnBe74050ohLqDg+tEhybkuwIbcn3+p0SMly0JESZ5CQ==
-X-Received: by 2002:a17:907:6d1f:b0:94e:f1b9:e933 with SMTP id sa31-20020a1709076d1f00b0094ef1b9e933mr3426437ejc.53.1683355842265;
-        Fri, 05 May 2023 23:50:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:efe5:7c03:a10a:7a40? ([2a02:810d:15c0:828:efe5:7c03:a10a:7a40])
-        by smtp.gmail.com with ESMTPSA id ia24-20020a170907a07800b00959b3c30f2csm1880807ejc.222.2023.05.05.23.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 23:50:41 -0700 (PDT)
-Message-ID: <b799be60-0ba6-c856-517d-0b0ed3adeab7@linaro.org>
-Date:   Sat, 6 May 2023 08:50:40 +0200
+        d=1e100.net; s=20221208; t=1683381570; x=1685973570;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yk2ZAoW+pxo/MiMBjqX3UORnaIwGKzfMAfunn0eCutA=;
+        b=A23EPyUDngcZ8bXuRnEsdnm9/gsaGYScbVRDSsgfYfj0zGNYUakHn3Mj/PI75OLJRb
+         RlFMTIecrKhz6jabtnOdo9xdsRij+lF77TN7DAsaWYO+s0JtVXnxy7hCKwdvS+nsV9z6
+         q/lUgRs5FgHumlrEOiZt/qbTl8GKbkiQmgE9xA2rHRLsXiMvNVyLGEhtFZ2jLOSh3eLF
+         Oe31ku4sFeSUzNLnkelf6knKzcjP8i90YOGZJyIpOPQfFY+oJu3r9qCUY71RBGzouNoP
+         VWThmDJhRuChqI6o0zZfKBf1Br3sQV4pXmLLev3ASIQL7CWFwCB/bRUrZB06byytRZfy
+         EaYg==
+X-Gm-Message-State: AC+VfDwVn3ukBMCN3xAuxSYMXLvp1cQy3YDoK0LP/Vq9e20IqHNfc4TK
+        wDHi7mDXyXwbnGOWnsn6S6Ys9WN8KTG9Co6yoPU=
+X-Google-Smtp-Source: ACHHUZ5POeupXCb/799lm6SI1+k+sFeGxmJU9F6FXImgHaVzimSPBDN3pmjCXRzpMO8l0b/5fFqryvU38+T05ZYEPaw=
+X-Received: by 2002:a17:907:7e92:b0:958:5c21:3fa7 with SMTP id
+ qb18-20020a1709077e9200b009585c213fa7mr4896751ejc.25.1683381569423; Sat, 06
+ May 2023 06:59:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 tty-next 1/2] dt-bindings: serial: ni,ni16650: add
- bindings
-Content-Language: en-US
-To:     Brenda Streiff <brenda.streiff@ni.com>
-Cc:     ilpo.jarvinen@linux.intel.com,
-        Gratian Crisan <gratian.crisan@ni.com>,
-        Jason Smith <jason.smith@ni.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230505213850.829639-1-brenda.streiff@ni.com>
- <20230505213850.829639-2-brenda.streiff@ni.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230505213850.829639-2-brenda.streiff@ni.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a98:df8a:0:b0:1ca:7b2f:6afd with HTTP; Sat, 6 May 2023
+ 06:59:28 -0700 (PDT)
+Reply-To: justinekevin013@gmail.com
+From:   justine <directorpaulnavas@gmail.com>
+Date:   Sat, 6 May 2023 13:59:28 +0000
+Message-ID: <CAJnQhZM7up4yxCAS+emyJZ2gbpkRY-wbvxf52Eew69BeHD=+jw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 05/05/2023 23:38, Brenda Streiff wrote:
-> Add bindings for the NI 16550 UART.
-> 
-> Signed-off-by: Brenda Streiff <brenda.streiff@ni.com>
-> Cc: Gratian Crisan <gratian.crisan@ni.com>
-> Cc: Jason Smith <jason.smith@ni.com>
-> ---
+This is second time i sent you message without respond i hope all is
+well. I have something important to discuss with you.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yours sincerely
+Mrs Justine
+---------------------------------------------------------------------
 
-Best regards,
-Krzysztof
+To ju=C5=BC drugi raz, kiedy wys=C5=82a=C5=82em Ci wiadomo=C5=9B=C4=87 bez =
+odpowiedzi, mam
+nadziej=C4=99, =C5=BCe wszystko jest w porz=C4=85dku. Mam z tob=C4=85 co=C5=
+=9B wa=C5=BCnego do
+om=C3=B3wienia.
 
+Z powa=C5=BCaniem
+Pani Justyno
