@@ -2,36 +2,36 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44746F95D4
-	for <lists+linux-serial@lfdr.de>; Sun,  7 May 2023 02:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3982B6F9602
+	for <lists+linux-serial@lfdr.de>; Sun,  7 May 2023 02:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjEGAid (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 6 May 2023 20:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S232230AbjEGAjK (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 6 May 2023 20:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbjEGAiO (ORCPT
+        with ESMTP id S232492AbjEGAi2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 6 May 2023 20:38:14 -0400
+        Sat, 6 May 2023 20:38:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69EA2E05D;
-        Sat,  6 May 2023 17:36:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B903046B;
+        Sat,  6 May 2023 17:36:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 709B76151C;
-        Sun,  7 May 2023 00:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDCA0C433EF;
-        Sun,  7 May 2023 00:36:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF2B26156A;
+        Sun,  7 May 2023 00:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FBBC433EF;
+        Sun,  7 May 2023 00:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683419765;
-        bh=61nXFMZeqAJnP6wU2NPz4bAlVGf6xyOVH8pnGCgjejU=;
+        s=k20201202; t=1683419791;
+        bh=UIbvYLUBM+8jW37SKurkacFYJ5//7L3H+q1QY7/LnB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZBdLn7+cjzQ0fOszQlCMaGnNP1euLXlLKu7N2BROnVNid8fyq7X5hFoefYRMTq9yp
-         nW7fH1tS8vutYYE0UYsGiHaxAF1FepqUYG1yjhYWpREY934g2R65Jg2CmvkIqqPRnY
-         Vy5z+ID3b3OmLwv1TVu5/0tAAzbd/BgbJw0eVMH0cJghim/y03QLYjyUECY2GhU16h
-         AnxqwiqluqYHS1vuteXuWWVFykWGe9peS+Fs0hx+outsBBQ4J27cMzKBs/q3UFYnoP
-         MDIFDivoJ1bf48BQWZrNUkR2wW6QMWiZWNanMQW1tUps+/BX9jSOV9THVVzZGv8xGp
-         G3fQIaXARus0w==
+        b=sNvgv0tau/1wTanQ0smNIXwRENixf2xc5dc4qq3x/5YVN+8pwIrxhfu33Didm68SP
+         KEyN0lvTx2Di4LQ2LZ9NI9DokKFCRSECehJOB6zYKmRmQqH5MXOAavkvnxFEo5lAa3
+         wGM97rUZy2wm8FoSr4/Pd1mVvo8Z4shxR4HO8QZ6qLAaBez9IRsI3Xqe1Wb/KeOimo
+         0CAh0bJ8PI51hy3wleUbMkeOzNzv4vmcFdlgKsj17E4HW8Algf2nBmZauFf1udn/TF
+         Erzzfl9CCxlQ2o5JGaRPRxMkd3vLsyz7KPvoC2mMgT7EtRNgKfBAc4XXrIF2A+Laeu
+         Oi3QGou/kxv2A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tony Lindgren <tony@atomide.com>,
@@ -40,12 +40,12 @@ Cc:     Tony Lindgren <tony@atomide.com>,
         ilpo.jarvinen@linux.intel.com, andriy.shevchenko@linux.intel.com,
         pmladek@suse.com, john.ogness@linutronix.de,
         linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 8/9] serial: 8250: Reinit port->pm on port specific driver unbind
-Date:   Sat,  6 May 2023 20:35:44 -0400
-Message-Id: <20230507003545.4078941-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 8/9] serial: 8250: Reinit port->pm on port specific driver unbind
+Date:   Sat,  6 May 2023 20:36:08 -0400
+Message-Id: <20230507003609.4079746-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230507003545.4078941-1-sashal@kernel.org>
-References: <20230507003545.4078941-1-sashal@kernel.org>
+In-Reply-To: <20230507003609.4079746-1-sashal@kernel.org>
+References: <20230507003609.4079746-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -97,10 +97,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-index 0a7e9491b4d14..43f2eed6df78e 100644
+index 2675771a03a0d..d7afff1e7685f 100644
 --- a/drivers/tty/serial/8250/8250_core.c
 +++ b/drivers/tty/serial/8250/8250_core.c
-@@ -1165,6 +1165,7 @@ void serial8250_unregister_port(int line)
+@@ -1138,6 +1138,7 @@ void serial8250_unregister_port(int line)
  		uart->port.type = PORT_UNKNOWN;
  		uart->port.dev = &serial8250_isa_devs->dev;
  		uart->capabilities = 0;
