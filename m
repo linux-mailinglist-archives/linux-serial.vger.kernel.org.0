@@ -2,72 +2,97 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8856FBFC2
-	for <lists+linux-serial@lfdr.de>; Tue,  9 May 2023 08:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F096FC327
+	for <lists+linux-serial@lfdr.de>; Tue,  9 May 2023 11:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235129AbjEIG6Q (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 9 May 2023 02:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S233789AbjEIJuh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 9 May 2023 05:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbjEIG6F (ORCPT
+        with ESMTP id S229952AbjEIJuA (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 9 May 2023 02:58:05 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1B10D071;
-        Mon,  8 May 2023 23:57:59 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 47CD6804D;
-        Tue,  9 May 2023 06:57:59 +0000 (UTC)
-Date:   Tue, 9 May 2023 09:57:58 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v10 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <20230509065758.GZ14287@atomide.com>
-References: <20230508110339.38699-1-tony@atomide.com>
- <202305090752.w4XZxmsN-lkp@intel.com>
+        Tue, 9 May 2023 05:50:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42BC619C;
+        Tue,  9 May 2023 02:49:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 720561063;
+        Tue,  9 May 2023 02:50:39 -0700 (PDT)
+Received: from e127643.arm.com (unknown [10.57.83.64])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A7E903F67D;
+        Tue,  9 May 2023 02:49:50 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     linux@roeck-us.net, michal.simek@amd.com,
+        Jonathan.Cameron@huawei.com, James Clark <james.clark@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v4 0/4] devres: Provide krealloc_array
+Date:   Tue,  9 May 2023 10:49:37 +0100
+Message-Id: <20230509094942.396150-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305090752.w4XZxmsN-lkp@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-* kernel test robot <lkp@intel.com> [230508 23:13]:
-> >> drivers/tty/serial/serial_base_bus.c:97:13: warning: variable 'id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->            } else if (type == &serial_port_type) {
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/tty/serial/serial_base_bus.c:102:77: note: uninitialized use occurs here
->            err = dev_set_name(&sbd->dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
->                                                                                       ^~
->    drivers/tty/serial/serial_base_bus.c:97:9: note: remove the 'if' if its condition is always true
->            } else if (type == &serial_port_type) {
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/tty/serial/serial_base_bus.c:83:13: note: initialize the variable 'id' to silence this warning
->            int err, id;
->                       ^
->                        = 0
->    1 warning generated.
+Changes since v3:
 
-Thanks I'll just add else goto err_free_dev for unknown types.
+ * Rebase onto v6.4-rc1
 
-Regards,
+Changes since v2:
+ 
+ * Remove change in qcom_geni_serial.c in the last commmit and replace
+   it with a comment instead
+ * Whitespace fix
 
-Tony
+Changes since v1:
+
+ * Style fix
+
+-----------------------
+
+Hi,
+
+I had a use for a devm realloc_array in a separate change, so I've
+added one and updated all the obvious existing uses of it that I could
+find. This is basically a copy paste of the one in slab.h
+
+Applies to v6.4-rc1
+
+Thanks
+James
+James Clark (4):
+  devres: Provide krealloc_array
+  hwmon: pmbus: Use devm_krealloc_array
+  iio: adc: Use devm_krealloc_array
+  serial: qcom_geni: Comment use of devm_krealloc rather than
+    devm_krealloc_array
+
+ .../driver-api/driver-model/devres.rst          |  1 +
+ drivers/hwmon/pmbus/pmbus_core.c                |  6 +++---
+ drivers/iio/adc/xilinx-ams.c                    |  9 +++------
+ drivers/iio/adc/xilinx-xadc-core.c              | 17 +++++++----------
+ drivers/tty/serial/qcom_geni_serial.c           |  5 +++++
+ include/linux/device.h                          | 11 +++++++++++
+ 6 files changed, 30 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
+
