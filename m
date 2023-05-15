@@ -2,97 +2,139 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E867B702591
-	for <lists+linux-serial@lfdr.de>; Mon, 15 May 2023 08:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F8C7025C0
+	for <lists+linux-serial@lfdr.de>; Mon, 15 May 2023 09:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjEOG6Z (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 15 May 2023 02:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S240291AbjEOHMc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 15 May 2023 03:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240593AbjEOG6I (ORCPT
+        with ESMTP id S231540AbjEOHMb (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 15 May 2023 02:58:08 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8110F1
-        for <linux-serial@vger.kernel.org>; Sun, 14 May 2023 23:57:09 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:3f77:5127:1ef7:f210])
-        by xavier.telenet-ops.be with bizsmtp
-        id wux62900P5WeK8L01ux6o4; Mon, 15 May 2023 08:57:06 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pyS8e-002Dc8-Gm;
-        Mon, 15 May 2023 08:57:06 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pyS8o-007EMC-BW;
-        Mon, 15 May 2023 08:57:06 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: 8250: omap: Move uart_write() inside PM section
-Date:   Mon, 15 May 2023 08:57:06 +0200
-Message-Id: <20230515065706.1723477-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 May 2023 03:12:31 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3002E74
+        for <linux-serial@vger.kernel.org>; Mon, 15 May 2023 00:12:29 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F6SYC3032304;
+        Mon, 15 May 2023 09:11:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=/7Vozrx9Gl2OmUCpxJALq0Vbp5ECVC3PGd4Snjw1hSw=;
+ b=hT2S/fRFJcRyqrsdCRz1nX6TEQ/cVfmz0eMm+x1vLf7wYDBRfUGtRrwoqjO/GaDSOJeb
+ emMLoJWdI0y1+5P8SvwagCCMQrUJXs2ZCBTH+k77Y4wu5X5Rv6Pw+59sjmf+b7Ae/fUf
+ +JyIqeCKx1ggv5WFM46TCUfpBVjRh8fMKIk3f+L/A4AB2g7FYPTDTdFSJaok6nTF4Dv7
+ J1omChL8d+x3u10NE5jJw+36HqEIVNRJWf9IRx8ScAUNKon55VRwQXXXyqNmUuMVGdWV
+ caeFmbNzBGMT5Wk6x7Pjrq5DiBuhr14gOmzrAntL2pxnX5ylm0ibW3KtWjpSZpZwgT3O Ww== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qhyp7spns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 09:11:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 88F6F10002A;
+        Mon, 15 May 2023 09:11:37 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6DA702122E7;
+        Mon, 15 May 2023 09:11:37 +0200 (CEST)
+Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 15 May
+ 2023 09:11:36 +0200
+Message-ID: <0dffd5df-e5bf-1665-8c00-56e78fa7d785@foss.st.com>
+Date:   Mon, 15 May 2023 09:11:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] serial: Make uart_remove_one_port() return void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Michal Simek <michal.simek@amd.com>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        YueHaibing <yuehaibing@huawei.com>
+CC:     Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-serial@vger.kernel.org>,
+        "moderated list:ARM/Microchip" <linux-arm-kernel@lists.infradead.org>,
+        <kernel@pengutronix.de>
+References: <20230512173810.131447-1-u.kleine-koenig@pengutronix.de>
+ <20230512173810.131447-3-u.kleine-koenig@pengutronix.de>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20230512173810.131447-3-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.26]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_04,2023-05-05_01,2023-02-09_01
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-If CONFIG_PM is not set (e.g. m68k/allmodconfig):
+Hi
 
-    drivers/tty/serial/8250/8250_omap.c:169:13: error: ‘uart_write’ defined but not used [-Werror=unused-function]
-      169 | static void uart_write(struct omap8250_priv *priv, u32 reg, u32 val)
-	  |             ^~~~~~~~~~
+On 5/12/23 19:38, Uwe Kleine-König wrote:
+> The return value is only ever used as a return value for remove callbacks
+> of platform drivers. This return value is ignored by the driver core.
+> (The only effect is an error message, but uart_remove_one_port() already
+> emitted one in this case.)
+> 
+> So the return value isn't used at all and uart_remove_one_port() can be
+> changed to return void without any loss. Also this better matches the
+> Linux device model as remove functions are not supposed to fail.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/tty/serial/atmel_serial.c           |  5 ++---
+>  drivers/tty/serial/clps711x.c               |  4 +++-
+>  drivers/tty/serial/cpm_uart/cpm_uart_core.c |  5 ++++-
+>  drivers/tty/serial/imx.c                    |  4 +++-
+>  drivers/tty/serial/lantiq.c                 |  4 +++-
+>  drivers/tty/serial/serial_core.c            |  6 +-----
+>  drivers/tty/serial/st-asc.c                 |  4 +++-
+>  drivers/tty/serial/uartlite.c               | 12 ++++--------
+>  drivers/tty/serial/xilinx_uartps.c          |  5 ++---
+>  include/linux/serial_core.h                 |  2 +-
+>  10 files changed, 26 insertions(+), 25 deletions(-)
 
-Fix tis by moving uart_write() inside the existing section protected
-by #ifdef CONFIG_PM.
+> diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+> index 5215e6910f68..dc2f2051435c 100644
+> --- a/drivers/tty/serial/st-asc.c
+> +++ b/drivers/tty/serial/st-asc.c
+> @@ -796,7 +796,9 @@ static int asc_serial_remove(struct platform_device *pdev)
+>  {
+>  	struct uart_port *port = platform_get_drvdata(pdev);
+>  
+> -	return uart_remove_one_port(&asc_uart_driver, port);
+> +	uart_remove_one_port(&asc_uart_driver, port);
+> +
+> +	return 0;
+>  }
+>  
+>  #ifdef CONFIG_PM_SLEEP
 
-Reported-by: noreply@ellerman.id.au
-Link: http://kisskb.ellerman.id.au/kisskb/buildresult/14925095/
-Fixes: 398cecc24846e867 ("serial: 8250: omap: Fix imprecise external abort for omap_8250_pm()")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- drivers/tty/serial/8250/8250_omap.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+For st-asc:  
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 5c093dfcee1d53bb..6bd15089fa67383f 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -166,11 +166,6 @@ static u32 uart_read(struct omap8250_priv *priv, u32 reg)
- 	return readl(priv->membase + (reg << OMAP_UART_REGSHIFT));
- }
- 
--static void uart_write(struct omap8250_priv *priv, u32 reg, u32 val)
--{
--	writel(val, priv->membase + (reg << OMAP_UART_REGSHIFT));
--}
--
- /*
-  * Called on runtime PM resume path from omap8250_restore_regs(), and
-  * omap8250_set_mctrl().
-@@ -1637,6 +1632,11 @@ static int omap8250_lost_context(struct uart_8250_port *up)
- 	return 0;
- }
- 
-+static void uart_write(struct omap8250_priv *priv, u32 reg, u32 val)
-+{
-+	writel(val, priv->membase + (reg << OMAP_UART_REGSHIFT));
-+}
-+
- /* TODO: in future, this should happen via API in drivers/reset/ */
- static int omap8250_soft_reset(struct device *dev)
- {
--- 
-2.34.1
-
+Thanks
+Patrice
