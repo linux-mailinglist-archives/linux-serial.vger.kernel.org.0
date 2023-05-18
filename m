@@ -2,102 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964EC7082B3
-	for <lists+linux-serial@lfdr.de>; Thu, 18 May 2023 15:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E6E7084F3
+	for <lists+linux-serial@lfdr.de>; Thu, 18 May 2023 17:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjERNa6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 18 May 2023 09:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S231232AbjERPd6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 18 May 2023 11:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjERNa6 (ORCPT
+        with ESMTP id S230446AbjERPd5 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 18 May 2023 09:30:58 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB881A2;
-        Thu, 18 May 2023 06:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=fRqoAfEGrb69vxhTSyLB10x+JE5MQ4XwObAsHGXg2dw=; b=QT8cOkj6ZnwlK7KEFGou1i0Ims
-        a/OgxDUpB5KbydZR+HtiBc1t8bql/2eVlQ11ToWwMVibuBWJuOZz7IxC5jJ+6kZdkEyoGu3kIwOdc
-        wkKTzz3e4KrRVVQgo32dSpon6qaQcpPaMNyEKD65h0het0ZopPO8/72W31hn0FGrVnRY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55638 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pzdiT-0004VO-SJ; Thu, 18 May 2023 09:30:50 -0400
-Date:   Thu, 18 May 2023 09:30:49 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 18 May 2023 11:33:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5ABF9;
+        Thu, 18 May 2023 08:33:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CE9465026;
+        Thu, 18 May 2023 15:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB67BC433D2;
+        Thu, 18 May 2023 15:33:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684424035;
+        bh=Idwi7pRttqveLxo342VgrsknBdG/Au/cKRfftR8uEfI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NIF7wQwjVOQEUO5xrDWJvv67MCL86sfKCsUrui3Tb0RW0bGUc7fXDF9W0AOwLaNV8
+         YeFFPfbhYUIHnZH/T/gY7jeug1/bCL1hryRXp9HdiWtYD6mWxkJVT0vrexNjYo1H8z
+         Hz2O2lFWfjlW9RRIcHBIExnwnV6gW/DC+kEKzVCrXDyw9MpIr6J+Y2DQELB1OJEF0N
+         FbcQyKTY/+mXNqyCnmRSCiRx8Sl3JRbm/CHRicQ2L0Fu/a65uQBZSWSKAnHdLhbfc+
+         voKTAOWOhPAeCNEKuafI4+en8us7bKh/TGXKArKdWv4KppBmDvLMmbcos1DXESE2eT
+         UqQNBfpVbar2Q==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230518093049.1e1cdf9561ea326f4655af02@hugovil.com>
-In-Reply-To: <20230517-argue-unbeaten-b07405fdd313@spud>
-References: <20230517150746.3823249-1-hugo@hugovil.com>
-        <20230517-argue-unbeaten-b07405fdd313@spud>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v4 00/10] riscv: add Bouffalolab bl808 support
+Date:   Thu, 18 May 2023 23:22:34 +0800
+Message-Id: <20230518152244.2178-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH 1/2] dt-bindings: sc16is7xx: Add property to change GPIO
- function
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 17 May 2023 18:25:07 +0100
-Conor Dooley <conor@kernel.org> wrote:
+This series adds Bouffalolab uart driver and basic devicetrees for
+Bouffalolab bl808 SoC and Sipeed M1s dock board.
 
-> On Wed, May 17, 2023 at 11:07:46AM -0400, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Some variants in this series of uart controllers have GPIO pins that
-> > are shared between GPIO and modem control lines.
-> > 
-> > The pin mux mode (GPIO or modem control lines) can be set for each
-> > ports (channels) supported by the variant.
-> > 
-> > This adds a property to the device tree to set the GPIO pin mux to
-> > modem control lines on selected ports if needed.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../bindings/serial/nxp,sc16is7xx.txt         | 28 +++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > index 0fa8e3e43bf8..426b7285ad50 100644
-> > --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > @@ -23,6 +23,9 @@ Optional properties:
-> >      1 = active low.
-> >  - irda-mode-ports: An array that lists the indices of the port that
-> >  		   should operate in IrDA mode.
-> > +- modem-control-line-ports: An array that lists the indices of the port that
-> > +			    should have shared GPIO lines configured as modem
-> > +			    control lines.
-> 
-> If this is an NXP specific property, should it not have an nxp, vendor
-> prefix?
+Since v3:
+  - fix build error reported by lkp@intel.com
+  - fix earlycon compatible string
+  - fix dtbs_check
+  - collect Reviewed-by tag
 
-Yes, I will resubmit a V2 with nxp vendor prefix.
+Since v2:
+  - fix dt_binding_check and dtbs_check warnings
+  - use uart_port_tx_limited() helper in uart driver
+  - collect Acked-by/Reviewed-by tag
+  - uart0 -> uart3
+  - update "riscv,ndev" property
+  - mv vendor prefix binding as the first patch
+  - add compatible string for bouffalolab bl808 plic
 
-Hugo.
+Since v1:
+  - use FIELD_PREP and FIELD_GET macro
+  - rewrite bflb_uart_tx_chars()
+  - add vendor prefix for bouffalolab
+  - add dt binding for bl808 compatibles
+  - enable SOC_BOUFFALOLAB in defconfig
+  - collect Reviewed-by tag
+  - modify commit-msg as suggested
+
+
+Jisheng Zhang (10):
+  dt-bindings: vendor-prefixes: add bouffalolab
+  dt-bindings: interrupt-controller: Add bouffalolab bl808 plic
+  dt-bindings: serial: add documentation for Bouffalolab UART Driver
+  serial: bflb_uart: add Bouffalolab UART Driver
+  riscv: add the Bouffalolab SoC family Kconfig option
+  dt-bindings: riscv: Add bouffalolab bl808 board compatibles
+  riscv: dts: bouffalolab: add the bl808 SoC base device tree
+  riscv: dts: bouffalolab: add Sipeed M1s SoM and Dock devicetree
+  MAINTAINERS: riscv: add entry for Bouffalolab SoC
+  riscv: defconfig: enable BOUFFALOLAB SoC
+
+ .../sifive,plic-1.0.0.yaml                    |   1 +
+ .../bindings/riscv/bouffalolab.yaml           |  29 +
+ .../serial/bouffalolab,bl808-uart.yaml        |  47 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ arch/riscv/Kconfig.socs                       |   5 +
+ arch/riscv/boot/dts/Makefile                  |   1 +
+ arch/riscv/boot/dts/bouffalolab/Makefile      |   2 +
+ .../dts/bouffalolab/bl808-sipeed-m1s-dock.dts |  25 +
+ .../dts/bouffalolab/bl808-sipeed-m1s.dtsi     |  21 +
+ arch/riscv/boot/dts/bouffalolab/bl808.dtsi    |  73 +++
+ arch/riscv/configs/defconfig                  |   1 +
+ drivers/tty/serial/Kconfig                    |  18 +
+ drivers/tty/serial/Makefile                   |   1 +
+ drivers/tty/serial/bflb_uart.c                | 586 ++++++++++++++++++
+ include/uapi/linux/serial_core.h              |   3 +
+ 16 files changed, 822 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+ create mode 100644 Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+ create mode 100644 drivers/tty/serial/bflb_uart.c
+
+-- 
+2.40.0
+
