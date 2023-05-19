@@ -2,649 +2,175 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1DE7091C9
-	for <lists+linux-serial@lfdr.de>; Fri, 19 May 2023 10:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C987092D8
+	for <lists+linux-serial@lfdr.de>; Fri, 19 May 2023 11:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjESIkJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Fri, 19 May 2023 04:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S231368AbjESJSJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 19 May 2023 05:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjESIkI (ORCPT
+        with ESMTP id S230032AbjESJSH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 19 May 2023 04:40:08 -0400
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80B8107;
-        Fri, 19 May 2023 01:40:05 -0700 (PDT)
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-643990c5373so3016499b3a.1;
-        Fri, 19 May 2023 01:40:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684485605; x=1687077605;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/UOchxxUnmXIMoyxuk1iTxwCG4937jStQaVujCO6JY=;
-        b=FdZ1bGYpNoKEPA8eHdKFn1SgKG6CUHUFy34FznmRETNluaEWz1Lvcxd1aghDLehnnv
-         ncNGEwmR44Zn97W/UVaivjiL9l7dd5osGgAfl4+FEuyovTKf+30c+y3px4qnjFCtOynP
-         UXLAzFmXw3qMUzBVAnnIuE121qaH58yZK4JfmTQOceEKkf0cGYge50lkuo6RlicUr5OU
-         TnHIOS/t9sUTswzyYBnzHPcCq26c1CIYGhsPFLgMM7aES48HJahOxtb4Maj05nEV1o44
-         8lU6AXiT+qe1wrO10W8XbFN2GyzBka5oTkIqop13NC2PH5iPBDtHRCC+4+JQfJcKg7y4
-         PPWQ==
-X-Gm-Message-State: AC+VfDwA4sGdiGf43SKJjwtjfjdtY/9uJ8k5FOlQ5QUfi/Adez/fbPl9
-        oey1XF1Yri/lXb0fUBrcjB9nHfSYex9ZNvFO
-X-Google-Smtp-Source: ACHHUZ6GYQZlYvHe/szDTDmTqCUzzwH881NyUk/HVYvJVZBdmWPNDwiE2VQ6Rodfx9b3roRFYXTCyw==
-X-Received: by 2002:a05:6a21:6d95:b0:ff:d437:13fb with SMTP id wl21-20020a056a216d9500b000ffd43713fbmr1434517pzb.49.1684485605116;
-        Fri, 19 May 2023 01:40:05 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090a4ecc00b00252b3328ad8sm970042pjl.0.2023.05.19.01.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 01:40:04 -0700 (PDT)
-From:   Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     rdunlap@infradead.org, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xy521521@gmail.com, Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [RFC PATCH v2 -next] tty: serial: add panic serial helper
-Date:   Fri, 19 May 2023 16:40:01 +0800
-Message-Id: <0507937d-33ed-9396-2efd-c749acdcefc7@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <a8c0f2b3-fcc3-ee94-16b5-ef37b4ec37a9@infradead.org>
-References: <20230518102903.1179581-1-xiehongyu1@kylinos.cn> <a8c0f2b3-fcc3-ee94-16b5-ef37b4ec37a9@infradead.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.11.0
+        Fri, 19 May 2023 05:18:07 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2044.outbound.protection.outlook.com [40.107.15.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D8510F3;
+        Fri, 19 May 2023 02:18:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DD57bDQf+W8ASYvI5UHG05/KBbPpLSEqNL7Mo6Zoj8hn4BIwGLtlirZ4Bbd7V9Zm6Q5JX6evylBC8m77dwsW0SRCTD37sJhClx1G0rkIy42SgFqbMg5VcalOAMrnxb+HdQCEXeLtqJ94Y+6LDqTSM0c0u6RiezVyWGF8+CR5SuHlWpXajhvV7+KnbCkplYiNoUSTpOOut2h4D5cLQkkYbYAAcKQ6DPsFC75iXpz7JzFNgWEBntMttwtzJ+JNVFcc7r7wWdTzVeU1HQFV1/zQsWmIV/eH8Go8s9NIXzyensC0r8z8tfgg8LIo2KvELGuC8jDY+oUf7TVkoF0IToMCog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tiyYwJq4DOKS6Iim/lJ8vXSeBASz6J5nEgStqIcVcZs=;
+ b=GaUQTivnYkTvIQ5ZDrb/kL/SIqE1QjSrlDh3wGWyfQxHrpUeLrLFI2cS7epHUGmZDccTaA5Kk8A7CrRbn/2CXlYQ/6y9y59KXhXgPQ/zLZjDMlgxNSlCrNRPxAIoX72GaZ2vHIP/g3ye9wRRJ+Sn/mKBlXz+IeM1jFjv62YJ14H2S4bAafpnZ5wVYqvBxrLwr5vYF6DNXwDR+M0SgYBM3l4gKTNIopGmDw+W6K2LGcGfrjHIU2UXS0KgSLx77ZFlo9thxTJ2y+Sp+CCvYrIxoutl8/2RgShkacXNWAEt5UVEmL2IQ/CvAY9lmT1cvmJvIwDYcYA83ptShnMH0PHDPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tiyYwJq4DOKS6Iim/lJ8vXSeBASz6J5nEgStqIcVcZs=;
+ b=LnSXj9DTWvbVpT6W2WRtk6jLdI68nTLqzIyKdvRoxxV3QHCHAunzlAZQO8+aPBpRoZwmc652uybrFKg3DUVO2aPtY1DAbAWH4OKo2+sHeEtLuDJxHfjgwgJcLYg/UdKTRTZiY/JV6t6BbbD+k40hQqRUpr15IrlAaaFStV2/KpY=
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by PAWPR04MB9959.eurprd04.prod.outlook.com (2603:10a6:102:387::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
+ 2023 09:17:59 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::e1cd:e733:d3aa:ea49]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::e1cd:e733:d3aa:ea49%7]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 09:17:59 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH] tty: serial: fsl_lpuart: make sure to turn off break
+ before enabling CTS
+Thread-Topic: [PATCH] tty: serial: fsl_lpuart: make sure to turn off break
+ before enabling CTS
+Thread-Index: AQHZh99s8RWAVNtMX0y0/1fbxEQUmq9hVVyg
+Date:   Fri, 19 May 2023 09:17:59 +0000
+Message-ID: <AS8PR04MB8404282ABF1BADCB551D66BC927C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+References: <20230516101138.24179-1-sherry.sun@nxp.com>
+In-Reply-To: <20230516101138.24179-1-sherry.sun@nxp.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
-X-Identity-Key: id1
-Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR04MB8404:EE_|PAWPR04MB9959:EE_
+x-ms-office365-filtering-correlation-id: b0e4c31d-0fda-4902-79f4-08db5849f08b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5XfwCUaUbqrVs3uaqoGDsJQMVyiZqTYm9HPWIPRfLnqyE0nT3JbGSbyv2SqSRkfbpHZdL0yWxd1zqu755AGQAhpP9cSQiaYah7JE5tu8DAYxa13n3sBlCHqdyuXUwNR60HYwvmlmwDID3WZG20u9AJIbBO2SJQmNtw0f2Qwpgr8C5te0lPJveLaTVuH4n8FXz9oc8q50ejXh8flpTx6ib3jC4XtyMqh3sW8QUR5KAhTneGuFWyHPCxHBN48BiVMxq3gyZstxRuABDup4bRjRS3cCKaItVl/vgmmgZw6f3kHKoy8nc9g5SZqeCHLKG4mmTJjSXfx8vtLqr0Bn+RKmkPeLH4JsBrn9gQyy+PKYdB9Qg/7rWAzF/I/c0gPA6dZBgAy3lk2UMAkYZ0aBgTklEuD/Nrn6inKsTEhLlgWYOKt3lEsTY2/kzbA+tSH7S7Y+M1lmy4lfrHLGDVtnHKe/ElFcFCQ3rWl1/aLs8N1o+YuZv8CArbOVb/sQz9KW6fhVLcyZibhXVJiO8wjjFTb4th5k8MadmKBV4EHg92PRSSkcu4bXJhxfcd68WI3puRj2XHIA+pFXWVTnnsWZIy9Bl9YmlcbthzcFVmCavYXEEN5LyNlzxdNdgY16XVr+SnIz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(451199021)(86362001)(83380400001)(8936002)(8676002)(2906002)(66446008)(4326008)(66556008)(66946007)(66476007)(76116006)(38070700005)(478600001)(5660300002)(52536014)(41300700001)(54906003)(44832011)(110136005)(64756008)(316002)(38100700002)(122000001)(7696005)(55016003)(6506007)(71200400001)(186003)(9686003)(33656002)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?L3ZQd1lCaVZ6K3pha0lHZ3hzWDRWTmFpMDZjczVRcFlzZUpLa3hSME1xeUZL?=
+ =?gb2312?B?YzNKclRuY1dyVE5POTA4V1hOV1laNFZvMWNRcWJrdmtuT0FsQ28xQVRURGdw?=
+ =?gb2312?B?TXpVc0xjR2RWREQvUms0UCtXcWx5TG9RQjRpOFdkZ3FKaVR6cDhsdm1zd0p4?=
+ =?gb2312?B?M2RUc0pKbVJCVjJ5Z2lHeEZNbVNQY2VobngwVFE1cjhMblF5RUlmOTVCTXI4?=
+ =?gb2312?B?VER6VjJsalFvVUhWcHRMSkVEaWNvOU16bnMrSDNsSStSL1EyZkQrT2RrWXJl?=
+ =?gb2312?B?d2xvdEY5eU9tUlM1MGNEUGhUWkpXaStLKy83VmZTdTQ5N00wZTZQNVh3YnVX?=
+ =?gb2312?B?b1FtejFNMVc3b1V2ZTgyaWFpQ2tqaDQ2MHZYc0wyQjJZbkdhWklsZXR6Z1Z5?=
+ =?gb2312?B?TiszejBaZkRNbmNuTXdDTk1OZnVUU2NkL2xmdzVBdFJYRTFQRkQwazFTTWdL?=
+ =?gb2312?B?OXFwUkZLTVR2R0NkVXBRbzZJUlBZSTBFU1hzRER3MlhmR0NLV25pdmZUV1RI?=
+ =?gb2312?B?OHppRTJKSnl3bzJQU0VMNWNEQTdidGxZamh4MzVoWWdOR29yTWhKT1VFdi9C?=
+ =?gb2312?B?QUNQUGZzRGdPNHZ0b2VpUER0RGNraE5rQUErVFNNdTQ2cEhRQ25Hay95VEs2?=
+ =?gb2312?B?QjdULzVtYm9PVGFwQks1anVUS2s3WE40RzU1aG9iNC9xcEd3MTFGa1gveU01?=
+ =?gb2312?B?aFVESEtHYjVLb2ZsT000WDlia2NpQThUaEdrM3RnRTZQOWVMdllyZ1JJRk94?=
+ =?gb2312?B?MjZOZ016TXMwUzM1UFFFZE9uS3hObGYvMFU1MFk2aXQvaklsTjlsMlpjMGlU?=
+ =?gb2312?B?OTdETGJWc2ltakM2SjVoQ1pPZTA0RnI5UFgrK08rUU1aT0hQUUd6U1Rmcng2?=
+ =?gb2312?B?bnAzbXlRN3l5SlNTd21tb29jM0Y1VnhGN1NVSEFpQXZQU1BSMGNLdndBMUg1?=
+ =?gb2312?B?ZkFFVFpZSmxycEgwOThuQmErcUxQOCsrWEk0OVF4UTdjOUs2SXdyOWprZ3Bw?=
+ =?gb2312?B?ZzJuNmlVVWZ0alE4NHUxelllbm5wWkJhRTVqOXo2L2VJeUI3bUdRUEhnMUl3?=
+ =?gb2312?B?ZUtBa2lCR1ArM2dLYjg3MUdMTUw0Kzk2cld5MzR1OEJYcDVCckZ5dEZSYllE?=
+ =?gb2312?B?YnRCMk5HbFlwKytoR1RPblkyaFhXUU9lRlBCMFIzSWFxTVUvVE1lUUlDblBT?=
+ =?gb2312?B?R1pKV1lXQTM4VzVEcmNYN1NRTUUyVHVReFB0dW9HVmhYQURzcHY3SFBuY0Zv?=
+ =?gb2312?B?YWxuQURHUGI0a2VBZVR6VGJ2c25aZVRyOXBLd0NwREFLTGQ3NHhhUGRHaWI5?=
+ =?gb2312?B?cm9pcTRNNXJjcDNkYU1GTzlramlxdVpvMzJGUjhzSEY5YndPK2FMbDhXdFll?=
+ =?gb2312?B?bDhUcXRMaGxHeWNMSzF1RE9wU3h6Tm9PUlEwNmZsZndicVphSzkvNWVjMFRG?=
+ =?gb2312?B?eHVnZWd4NUpPU1V0ZjMxV1dzQ3pINUlHR3ZKOGNETnBsc0ozbEV3Y0IvcGp1?=
+ =?gb2312?B?ZlJmU1F0SGQzeU4xYzE1RXR1cDVKWWJsS2xZNXdZN0J2K3RYRXpoSUcvMkpU?=
+ =?gb2312?B?a21kRFNsVHc0YU56ZW1LYWZMRnhyUVJDWkxqcXB2V2ZVcW1mL2o5VU41Q0lF?=
+ =?gb2312?B?OCtqSmpjVkZMSkppWGdtbkhoYUJRanJZOHo0TC9ON3pXcGhHb0pIelJGajFa?=
+ =?gb2312?B?ZWM3ZGV0RjlyOEM3aUJTWHF4eUpUZytqalNaMXhTVmhRdFZWRmxpUlF0Q1h0?=
+ =?gb2312?B?NjRmd2hrK2hNNk5QNGlmVXBla1BwUGRJWGdaUVRDc3pnbjlkYmRBTHREaVJ2?=
+ =?gb2312?B?WEJBcm42Y01oNmR6WGdZOWl3M2Y0bFYyMFlnVUdCakNZY1NzK0UwcC9jRWJB?=
+ =?gb2312?B?L2p0Zno2SjFCNFkrWjVOOEEvekxGam5idENjYU5GeXZuWnhWS1J3SWp4SGhy?=
+ =?gb2312?B?dDdENmp2ams2MHNlbmQ4QlZVblNvZkhwbmQ5bG5sNldkM05XRHZwQzVTV1NF?=
+ =?gb2312?B?TkY3bWFuQ0NnS1YzWjVja01sYmpKT0JWdnluOHNIKzNtcDBVeng2QitLSjNy?=
+ =?gb2312?B?ZFdWVm1xTzFLUnVGY0tFZ1AzeXlXM1kyS3RUdz09?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0e4c31d-0fda-4902-79f4-08db5849f08b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 09:17:59.4020
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0Gtmo2MI4gsv8UyhWyfCws+G5GrLLJEfWtUzqhYFW/fBo01je3X4xenSI2eX6tc3cwkX1sSvKrIMHKRuPgztyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9959
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi,
-
-
-在 2023/5/19 13:33, Randy Dunlap 写道:
-> Hi--
-> 
-> On 5/18/23 03:29, Hongyu Xie wrote:
->> It was inspired by kgdboc.
->>
->> This is a debug module that allows you to get all kernel logs
->> after panic.
->>
->> Normally you need to attach a USB-to-UART tool or enable kdump
->> before panic happens to get log from kernel after panic. If you
->> didn't do that and kdump is not working, you can't get any log to
->> know what happened before panic. If you have a USB-to-UART tool
->> and the uart port on your computer is working. This module helps
->> you to get all kernel log after panic() is called.
->>
->> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
->>
->> Tested on arm64, x86 device.
->>
->> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
->> ---
->>
->> v2:
->>   1. add a doc file
->>   2. remove the password thing
->>
->>   .../dev-tools/panic_serial_helper.rst         | 143 +++++
-> 
-> This file name (panic_serial_helper) also needs to be added to
-> Documentation/dev-tools/index.rst.
-> 
->>   MAINTAINERS                                   |   5 +
->>   drivers/tty/serial/Kconfig                    |  46 ++
->>   drivers/tty/serial/Makefile                   |   1 +
->>   drivers/tty/serial/panic_serial_helper.c      | 571 ++++++++++++++++++
->>   include/linux/panic.h                         |   1 +
->>   kernel/panic.c                                |  12 +
->>   7 files changed, 779 insertions(+)
->>   create mode 100644 Documentation/dev-tools/panic_serial_helper.rst
->>   create mode 100644 drivers/tty/serial/panic_serial_helper.c
->>
->> diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentation/dev-tools/panic_serial_helper.rst
->> new file mode 100644
->> index 000000000000..adbc4026fbe4
->> --- /dev/null
->> +++ b/Documentation/dev-tools/panic_serial_helper.rst
->> @@ -0,0 +1,143 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
-> 
-> The "===...===" lines here must be at least as long as the heading.
-> 
->> +=================================================
->> +Using panic serial helper to get kernel logs after panic
->> +=================================================
-> 
->> +========================================================
->> +Using panic serial helper to get kernel logs after panic
->> +========================================================
-> 
->> +
->> +:Author: Hongyu Xie <xiehongyu1@kylinos.cn>
->> +
->> +What is this?
->> +============
-> 
->     =============
-> 
->> +
->> +A debug module inspired by kgdboc that allows you to get all kernel logs
->> +after panic.
->> +
->> +When do you need it and why?
->> +============
-> 
->     =============================
-> 
->> +
->> +When
->> +--------------
->> +
->> +Didn't enable debugging tool like Kdump and didn't connect a USB-to-UART
->> +tool to the debug uart port on your PC before panic.
->> +
->> +Why
->> +--------------
->> +
->> +There are many debugging methods to know what was going on before panic.
->> +
->> +Kdump, for example. If Kdump is enabled, you can get a core image after
->> +panic. Then use GDB or Crash to debug that core image to know what happened
->> +before panic(see ``Documentation/admin-guide/kdump/kdump.rst`` for more
-> 
->     before panice (see
-> 
->> +information about Kdump).
->> +
->> +Another way is to connect the UART side of a USB-to-UART tool to the
-> 
-> Please use "UART" consistently (not "uart").
-> 
->> +debugging uart port(normally a 3 pin slot on the motherborad or a RS232
-> 
->     debugging UART port (normally a 3-pin            motherboard or an RS232
-> 
->> +port on the back panel of your PC) before panic happens. Then connect the
-> 
-> I wish I had a PC with a serial port so that I could test/use this.
-> 
->> +USB side of a USB-to-UART tool to another PC. You can read all the kernel
->> +logs coming from that uart port through apps like minicom on another PC.
->> +So when panic happens you'll know what was going on.
->> +
->> +What if Kdump hasn't been enabled? And in production environment you don't
->> +always connect a USB-to-UART tool before panic happens.
->> +
->> +So if Kdump is not enabled, you can use this module to get all the kernel
->> +logs after panic.
-> 
-> if this module is loaded prior to the panic.
-> 
->> +
->> +How to use it?
->> +============
-> 
->     ===============
->> +
->> +Prerequisites
->> +--------------
->> +
->> +1. Same as kgdboc, the UART driver must implement two callbacks in the
->> +struct uart_ops. See ``Documentation/dev-tools/kgdb.rst`` section
->> +``kgdboc and uarts``
->> +
->> +2. Your PC has an uart port and it's working.
->> +
->> +How
->> +--------------
->> +
->> +First you need to enable ``CONFIG_PANIC_SERIAL_HELPER`` in your
->> +config. To enable ``CONFIG_PANIC_SERIAL_HELPER`` you should look under
->> +:menuselection:
->> +`Device Drivers
->> +  --> Character devices
->> +    --> Enable TTY (TTY [=y])
->> +      --> Serial drivers`
->> +and select
->> +:menuselection:`debug through uart after panic`.
->> +
->> +Second, build and update the kernel image. Then wait for panic.
->> +
->> +After panic, you need to do the following,
-> 
->                                     following:
-> 
->> +1. connect the uart side of an USB-to-UART tool to any uart
->> +  port on your device(PC, server, Laptop, etc...) after panic.
-> 
->                    device (PC,                etc.).
-> 
-> You have already said "after panic".
-> 
->> +  Connect the USB side of that tool to another PC. Open
->> +  minicom(or other app) on that PC, and set "/dev/ttyUSB0"(or
-> 
->       minicom (or                                     ttyUSB0" (or
-> 
->> +  "/dev/ttyUSB1 if there is already another USB-to-UART tool
->> +  connected to your device) with "115200 8N1".
->> +
->> +  It automatically selects the port where you first pressing the
-> 
->                                                   first press the
-> 
->> +  "Enter"(some keyboard labeled with "Return")
-> 
->       "Enter" key (some keyboards label this with "Return").
-> 
->> +
->> +2. press "Enter"(some keyboard labeled with "Return") in that
-> 
->              "Enter" (or "Return") in that
-> 
->> +  minicom window, you'll get a help menu,
-> 
->       minicom window; you'll get a help meu:
-> 
->> +  "
->> +  help:
->> +      -a      show all kernel msg
->> +      -3      show S3 msg
->> +      -4      show S4 msg
->> +      -filter-[string]        show msg contains [string]
-> 
->                                            containing
-> 
->> +      -q-     quit
->> +  "
->> +
->> +see ``Help menu options`` for details.
->> +
->> +3. finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
->> + "Enter" to get what you want.
->> +
->> +Help menu options
->> +--------------
->> +Available options:
->> +
->> + - a
->> +
->> +   Show all the messages starting from ``Booting Linux on ...``
->> +
->> + - 3
->> +
->> +   If STR happened before panic, this will show messages starting from
-> 
-> What "STR" is this?
-Suspend to ram, also known as S3.
-> 
->> +   ``PM: suspend entry...``
->> +
->> + - 4
->> +
->> +   If STD happened before panic, this will show messages starting from
-> 
-> Is this "STD" or "STR"?
-STD, suspend to disk, also known as S4.
-> 
->> +   ``PM: hibernation entry...``
->> +
->> + - filter-[string]
->> +
->> +   Only show messages that contain ``string``. For example, if you're only
->> +   interesting in message lines that contain ``CPU``, you just input
->> +   ``filter-CPU``.
->> +   Here is an output example for fitering ``CPU``::
-> 
->                                      filtering
-> 
-> It might be nice to provide case-ignored filter matching, e.g.,
-> find "CPU" or "cpu".
-Ok, it'll be in v3.
-> 
->> +
->> +   <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6633
->> +   <6>[    0.000000] Detected PIPT I-cache on CPU0
->> +   <6>[    0.000000] CPU features: detected: Kernel page table isolation (K
->> +   ...
->> +   <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000
->> +   <6>[    0.002411] smp: Bringing up secondary CPUs ...
->> +   <6>[    0.039105] Detected PIPT I-cache on CPU1
->> +   ...
->> +   <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
->> +   <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
->> +   ...
->> +   <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
->> +   <2>[  225.297909] SMP: stopping secondary CPUs
->> +   <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
->> +
->> + - q-
->> +
->> +   return to help menu.
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5bd0f510f744..951c6804b3cb 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11552,6 +11552,11 @@ F:	include/linux/kgdb.h
->>   F:	kernel/debug/
->>   F:	kernel/module/kdb.c
->>   
->> +PANIC SERIAL CONSOLE
->> +M:	Hongyu Xie <xiehongyu1@kylinos.cn>
->> +F:	drivers/tty/serial/panic_serial_helper.c
->> +F:	drivers/tty/serial/panic_serial_helper.h
->> +
-> 
-> This is the wrong place for "PANIC SERIAL CONSOLE".
-> The MAINTAINERS file should remain in alphabetical order.
-> Please move this to after
-> PANASONIC LAPTOP ACPI EXTRAS DRIVER
-> Thanks.
-> 
->>   KHADAS MCU MFD DRIVER
->>   M:	Neil Armstrong <neil.armstrong@linaro.org>
->>   L:	linux-amlogic@lists.infradead.org
->> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
->> index 398e5aac2e77..66cc7bddf561 100644
->> --- a/drivers/tty/serial/Kconfig
->> +++ b/drivers/tty/serial/Kconfig
->> @@ -198,6 +198,52 @@ config SERIAL_KGDB_NMI
->>   
->>   	  If unsure, say N.
->>   
-> 
-> I have comments here and similar ones in the documentation file.
-> It would be quite OK to make the Kconfig help text shorter and refer
-> to the Documentation file for more detailed help.
-> 
->> +config PANIC_SERIAL_HELPER
->> +	tristate "debug through uart after panic"
->> +	depends on PANIC_TIMEOUT=0
->> +	select CONSOLE_POLL
->> +	help
->> +	  This is a debug module that allows you to get all kernel logs
->> +	  after panic.
->> +
->> +	  Normally you need to attach a USB-to-UART tool or enable kdump
->> +	  before panic happens to get log from kernel after panic. If you
->> +	  didn't do that and kdump is not working, you can't get any log to
->> +	  know what happened before panic. If you have a USB-to-UART tool
->> +	  and the uart port on your computer is working. This module helps
-> 
-> 	                                     is working, this module helps
-> 
->> +	  you to get all kernel log after panic() is called.
->> +
->> +	  This module use serial port in poll mode, so it's more stable
-> 
-> 	              uses
-> 
->> +	  than other debugging methods.
->> +
->> +	  To use this, you need to do the following after panic,
->> +	    1. connect the uart side of an USB-to-UART tool to any uart
->> +	    port on your device(PC, server, Laptop, etc...) after panic.
-> 
-> 	                 device (PC,                etc.).
-> 
->> +	    Connect the USB side of that tool to another PC. Open
->> +	    minicom(or other app) on that PC, and set "/dev/ttyUSB0"(or
-> 
-> 	    minicom (or                                     ttyUSB0" (or
-> 
->> +	    "/dev/ttyUSB1 if there is already another USB-to-UART tool
->> +	    connected to your device) with "115200 8N1".
->> +
->> +	    It automatically selects the port where you first pressing the
-> 
-> 	                                                first press the
-> 
->> +	    "Enter"(some keyboard labeled with "Return")
-> 
-> 	    "Enter" key (some keyboards label this as "Return").
-> 
->> +
->> +	    2.press "Enter"(some keyboard labeled with "Return") in that
-> 
-> 	    2. press "Enter" (or "Return") in that
-> 
->> +	    minicom window, you'll get a help menu,
-> 
-> 	            window; you'll get a help menu:
-> 
->> +	    "
->> +	    help:
->> +	        -a      show all kernel msg
->> +	        -3      show S3 msg
->> +	        -4      show S4 msg
->> +	        -filter-[string]        show msg contains [string]
-> 
-> 	                                         containing
-> 
->> +	        -q-     quit
->> +	    "
->> +
->> +	   3.Finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
-> 
-> 	   3. Finally,
-> 
->> +	   "Enter" to get what you want.
->> +
->> +	  Say Y if you have an UART port that is working.  If unsure, say N
-> 
-> 	                                                              say N.
-> 
->> +	  Say M if you want add this as a module driver.
-> 
-> 	  The moudul will be called panic_serial_helper.
-> 
->> +
->>   config SERIAL_MESON
->>   	tristate "Meson serial port support"
->>   	depends on ARCH_MESON || COMPILE_TEST
->> diff --git a/drivers/tty/serial/panic_serial_helper.c b/drivers/tty/serial/panic_serial_helper.c
->> new file mode 100644
->> index 000000000000..59863f777331
->> --- /dev/null
->> +++ b/drivers/tty/serial/panic_serial_helper.c
->> @@ -0,0 +1,571 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * panic_serial_helper.c Debug through uart when panic.
->> + *
->> + * Copyright (C) 2023 Xie Hongyu <xiehongyu1@kylinos.cn>
->> + *
->> + * Inspired by kgdboc.
->> + *
->> + */
->> +
->> +#define MODULE_NAME "panic_seial_helper"
-> 
->                                serial
-> 
->> +#define pr_fmt(fmt) MODULE_NAME ": " fmt
->> +
->> +#include <linux/kmsg_dump.h>
->> +#include <linux/bsearch.h>
->> +#include <linux/slab.h>
->> +#include <linux/delay.h>
->> +#include <linux/module.h>
->> +#include <linux/tty_driver.h>
->> +#include <linux/serial_core.h>
->> +
->> +#define S3_ENTRY "PM: suspend entry"
->> +#define S3_EXIT "PM: suspend exit"
->> +#define S4_ENTRY "PM: hibernation entry"
->> +#define S4_EXIT "PM: hibernation exit"
->> +
->> +/* list to store msg lines */
->> +static LIST_HEAD(psh_list);
->> +
->> +/* msg line prototype */
->> +struct dmesg_lines {
->> +	struct list_head entry;
->> +	char *buf;
->> +	int size;
->> +};
->> +
->> +/* panic serial helper status*/
->> +enum PSHS {
->> +	PSHS_INIT,
->> +	PSHS_WAIT_HELP_INPUT,
->> +};
->> +
->> +/* panic serial helper msg type */
->> +enum PSHM_TYPE {
->> +	PSHM_TYPE_ALL,
->> +	PSHM_TYPE_S3,
->> +	PSHM_TYPE_S4,
->> +	PSHM_TYPE_STRINGS,
->> +	PSHM_TYPE_QUIT,
->> +};
->> +
->> +/* whether uart is dumping msg */
->> +static bool dumping_msg;
->> +
->> +/* to filter msg */
->> +static char filter[256] = {0};
->> +
->> +struct psh_buf {
->> +#define PSH_BUF_SIZE 256
->> +	char buf[PSH_BUF_SIZE];
->> +	int cur;
->> +};
->> +
->> +static const char psh_tty_types[][32] = {
->> +	{"ttyAMA"},
->> +	{"ttyS"},
->> +	{"ttyPS"},
->> +	{"ttyLP"},
->> +	{"ttyARC"},
->> +	{"ttyAL"},
->> +	{"ttyUL"},
->> +};
->> +
->> +#define TTY_OPS "115200n8n"
-> 
-> Other places here say "115200 8N1". Is there a typo above?
-Not a typo, the order that uart_parse_options parse is parity, bits, 
-flow. "115200 8N1" shows in minicom setting window.
-> 
->> +
->> +struct psh_serial_dev {
->> +	struct list_head entry;
->> +	struct tty_driver *drv;
->> +	struct psh_buf buf;
->> +	enum PSHS psh_status;
->> +	enum PSHM_TYPE psh_msg_type;
->> +	int line;
->> +};
->> +
->> +struct psh_serial_dev *psh_dev;
->> +
->> +/* char handle prototype */
-> 
-> s/handle/handler/ IMO
-> and in other places also.
-> 
->> +struct c_handle {
->> +	char c;
->> +	int (*handler)(struct psh_serial_dev *dev, void *d);
->> +};
->> +
-> 
-> [snip]
-What does "[snip]" mean? Can't find it on Bing or Google.
-> 
->> +
->> +static void psh_help(struct psh_serial_dev *dev)
->> +{
->> +	static const char help[] = "\nhelp:\n";
->> +	static const char show_all[] = "\t-a\tshow all kernel msg\n";
->> +	static const char show_s3[] = "\t-3\tshow S3 msg\n";
->> +	static const char show_s4[] = "\t-4\tshow S4 msg\n";
->> +	static const char _filter[] =
->> +		"\t-filter-[string]\tshow msg contains [string]\n";
-> 
-> 		                              containing
-> 
->> +	static const char _quit[] = "\t-q-\tquit\n";
->> +
->> +	psh_put_strings(dev, help, strlen(help));
->> +	psh_put_strings(dev, show_all, strlen(show_all));
->> +	psh_put_strings(dev, show_s3, strlen(show_s3));
->> +	psh_put_strings(dev, show_s4, strlen(show_s4));
->> +	psh_put_strings(dev, _filter, strlen(_filter));
->> +	psh_put_strings(dev, _quit, strlen(_quit));
->> +}
->> +
-> 
-> [snip]
-> 
->> +
->> +/* try all uart port under the same driver */
->> +static int psh_try_all_uart_port(struct uart_driver *drv)
->> +{
->> +	struct psh_serial_dev *dev = NULL;
->> +	struct uart_driver *driver = NULL;
->> +	char drv_name[64] = {0};
->> +	int count = 10000;
->> +	int i = 0, nr = drv->nr;
->> +
->> +	for (i = 0; i < nr; i++) {
->> +		memset(drv_name, 0, sizeof(drv_name));
->> +		snprintf(drv_name, sizeof(drv_name), "%s%d,%s",
->> +			drv->driver_name,
->> +			i, TTY_OPS);
->> +
->> +		driver = psh_find_uart_driver(drv_name);
->> +		if (!driver)
->> +			continue;
->> +
->> +		dev = create_psh_serial_dev(driver, i);
->> +		if (!dev) {
->> +			tty_driver_kref_put(driver->tty_driver);
->> +			driver = NULL;
->> +			continue;
->> +		}
->> +
->> +		count = 10000;
-> 
-> Already init-ed to 10000 above...
-Need it here. Out side of while loop is a for loop.
-> 
->> +		while (count-- > 0) {
->> +			psh_wait_for_input(dev);
->> +
->> +			if (psh_dev)
->> +				return 0;
->> +		}
->> +
->> +		tty_driver_kref_put(driver->tty_driver);
->> +		driver = NULL;
->> +		kfree(dev);
->> +		dev = NULL;
->> +	}
->> +
->> +	return -1;
->> +}
-> 
-> 
-> Thanks.
-Thanks for your kind reply. I'll send v3 asap.
-
-Hongyu Xie
+U29ycnksIHBsZWFzZSBpZ25vcmUgdGhpcyBwYXRjaCwgd2lsbCBzZW5kIGFub3RoZXIgcGF0Y2gg
+dG8gZml4IHRoZSBscHVhcnQgYnJlYWsgaXNzdWUuDQoNCkJlc3QgUmVnYXJkcw0KU2hlcnJ5DQo+
+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNoZXJyeSBTdW4NCj4gU2VudDog
+MjAyM8TqNdTCMTbI1SAxODoxNg0KPiBUbzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGpp
+cmlzbGFieUBrZXJuZWwub3JnDQo+IENjOiBsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnOyBs
+aW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBkbC1saW51eC1pbXgNCj4gPGxpbnV4LWlteEBu
+eHAuY29tPg0KPiBTdWJqZWN0OiBbUEFUQ0hdIHR0eTogc2VyaWFsOiBmc2xfbHB1YXJ0OiBtYWtl
+IHN1cmUgdG8gdHVybiBvZmYgYnJlYWsgYmVmb3JlDQo+IGVuYWJsaW5nIENUUw0KPiANCj4gRHVl
+IHRvIG9uZSBMUFVBUlQgSVAgYnVnIHdoaWNoIHRyZWF0IHRoZSBDVFMgYXMgaGlnaGVyIHByaW9y
+aXR5IHRoYW4gdGhlDQo+IGJyZWFrIHNpZ25hbCwgdGhhdCBjYXVzZSB0aGUgYnJlYWsgc2lnbmFs
+IHNlbmRpbmcgdGhyb3VnaCBVQVJUQ1RSTF9TQksgbWF5DQo+IGltcGFjdGVkIGJ5IHRoZSBDVFMg
+aW5wdXQgaWYgdGhlIEhXIGZsb3cgY29udHJvbCBpcyBlbmFibGVkLg0KPiANCj4gU28gY29tbWl0
+IGM0YzgxZGI1Y2Y4YiAoInR0eTogc2VyaWFsOiBmc2xfbHB1YXJ0OiBkaXNhYmxlIHRoZSBDVFMg
+d2hlbiBzZW5kDQo+IGJyZWFrIHNpZ25hbCIpIHRyeSB0byB3b3JrYXJvdW5kIHRoaXMgSVAgaXNz
+dWUsIGl0IGRpc2FibGVzIENUUyBiZWZvcmUgYXNzZXJ0aW5nDQo+IFNCSyB0byBhdm9pZCBhbnkg
+aW50ZXJmZXJlbmNlIGZyb20gQ1RTLCBhbmQgcmUtZW5hYmxlIGl0IHdoZW4gYnJlYWsgb2ZmLg0K
+PiANCj4gSGVyZSB3ZSBlbmFibGUgQ1RTIGJlZm9yZSB0dXJuaW5nIG9mZiB0aGUgYnJlYWssIHRo
+ZXJlIGlzIHN0aWxsIGEgcmlzayBvZiB0aGUNCj4gYnJlYWsgc2lnbmFsIGJlZW4gaW1wYWN0ZWQg
+YnkgQ1RTIGlucHV0LiBUaGUgY29ycmVjdCBzZXF1ZW5jZSBpcyB0byBkaXNhYmxlDQo+IENUUyBi
+ZWZvcmUgYXNzZXJ0aW5nIFNCSywgYW5kIHJlLWVuYWJsZSBDVFMgYWZ0ZXIgYnJlYWsgb2ZmLCB3
+aGljaCBlbnN1cmVzDQo+IHRoZSBicmVhayBzaWduYWwgd29uJ3QgYmUgaW1wYWN0ZWQgYnkgQ1RT
+LCBzbyBmaXggaXQuDQo+IA0KPiBGaXhlczogYzRjODFkYjVjZjhiICgidHR5OiBzZXJpYWw6IGZz
+bF9scHVhcnQ6IGRpc2FibGUgdGhlIENUUyB3aGVuIHNlbmQgYnJlYWsNCj4gc2lnbmFsIikNCj4g
+U2lnbmVkLW9mZi1ieTogU2hlcnJ5IFN1biA8c2hlcnJ5LnN1bkBueHAuY29tPg0KPiAtLS0NCj4g
+IGRyaXZlcnMvdHR5L3NlcmlhbC9mc2xfbHB1YXJ0LmMgfCA3ICsrKy0tLS0NCj4gIDEgZmlsZSBj
+aGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy90dHkvc2VyaWFsL2ZzbF9scHVhcnQuYyBiL2RyaXZlcnMvdHR5L3NlcmlhbC9m
+c2xfbHB1YXJ0LmMNCj4gaW5kZXggMGU1NmZhNjRiNGNlLi5kOWU0NmY3YjgwZTUgMTAwNjQ0DQo+
+IC0tLSBhL2RyaXZlcnMvdHR5L3NlcmlhbC9mc2xfbHB1YXJ0LmMNCj4gKysrIGIvZHJpdmVycy90
+dHkvc2VyaWFsL2ZzbF9scHVhcnQuYw0KPiBAQCAtMTU1MCwyMCArMTU1MCwxOSBAQCBzdGF0aWMg
+dm9pZCBscHVhcnQzMl9icmVha19jdGwoc3RydWN0IHVhcnRfcG9ydA0KPiAqcG9ydCwgaW50IGJy
+ZWFrX3N0YXRlKQ0KPiAgCW1vZGVtID0gbHB1YXJ0MzJfcmVhZChwb3J0LCBVQVJUTU9ESVIpOw0K
+PiANCj4gIAlpZiAoYnJlYWtfc3RhdGUgIT0gMCkgew0KPiAtCQl0ZW1wIHw9IFVBUlRDVFJMX1NC
+SzsNCj4gIAkJLyoNCj4gIAkJICogTFBVQVJUIENUUyBoYXMgaGlnaGVyIHByaW9yaXR5IHRoYW4g
+U0JLLCBuZWVkIHRvIGRpc2FibGUNCj4gQ1RTIGJlZm9yZQ0KPiAgCQkgKiBhc3NlcnRpbmcgU0JL
+IHRvIGF2b2lkIGFueSBpbnRlcmZlcmVuY2UgaWYgZmxvdyBjb250cm9sIGlzDQo+IGVuYWJsZWQu
+DQo+ICAJCSAqLw0KPiAgCQlpZiAoY2ZsYWcgJiBDUlRTQ1RTICYmIG1vZGVtICYgVUFSVE1PRElS
+X1RYQ1RTRSkNCj4gIAkJCWxwdWFydDMyX3dyaXRlKHBvcnQsIG1vZGVtICYNCj4gflVBUlRNT0RJ
+Ul9UWENUU0UsIFVBUlRNT0RJUik7DQo+ICsJCWxwdWFydDMyX3dyaXRlKHBvcnQsIHRlbXAgfCBV
+QVJUQ1RSTF9TQkssIFVBUlRDVFJMKTsNCj4gIAl9IGVsc2Ugew0KPiAtCQkvKiBSZS1lbmFibGUg
+dGhlIENUUyB3aGVuIGJyZWFrIG9mZi4gKi8NCj4gKwkJbHB1YXJ0MzJfd3JpdGUocG9ydCwgdGVt
+cCwgVUFSVENUUkwpOw0KPiArCQkvKiBSZS1lbmFibGUgdGhlIENUUyBhZnRlciBicmVhayBvZmYu
+ICovDQo+ICAJCWlmIChjZmxhZyAmIENSVFNDVFMgJiYgIShtb2RlbSAmIFVBUlRNT0RJUl9UWENU
+U0UpKQ0KPiAgCQkJbHB1YXJ0MzJfd3JpdGUocG9ydCwgbW9kZW0gfCBVQVJUTU9ESVJfVFhDVFNF
+LA0KPiBVQVJUTU9ESVIpOw0KPiAgCX0NCj4gLQ0KPiAtCWxwdWFydDMyX3dyaXRlKHBvcnQsIHRl
+bXAsIFVBUlRDVFJMKTsNCj4gIH0NCj4gDQo+ICBzdGF0aWMgdm9pZCBscHVhcnRfc2V0dXBfd2F0
+ZXJtYXJrKHN0cnVjdCBscHVhcnRfcG9ydCAqc3BvcnQpDQo+IC0tDQo+IDIuMTcuMQ0KDQo=
