@@ -2,99 +2,63 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BE270C32B
-	for <lists+linux-serial@lfdr.de>; Mon, 22 May 2023 18:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F3970CEFF
+	for <lists+linux-serial@lfdr.de>; Tue, 23 May 2023 02:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjEVQUy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 22 May 2023 12:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S229757AbjEWABn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Mon, 22 May 2023 20:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjEVQUu (ORCPT
+        with ESMTP id S235120AbjEVX2A (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 22 May 2023 12:20:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6098B130;
-        Mon, 22 May 2023 09:20:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E25AB61787;
-        Mon, 22 May 2023 16:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9920C433D2;
-        Mon, 22 May 2023 16:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684772444;
-        bh=vSFHOs36phaNDhoJJwl55AGouRVa+xyYfnlhHvEqarI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UDCThWn6U9qygT9+6U/z8hefj6+FpfR9CLVMzW39pDAP5loaWjYK0WK//B6amxkgW
-         tlFEXSxoGnsji4RG2hy9U+hwOBuIVz1psQBNYJjbbQVgCvoRE9kxB8wztEytFSoCX5
-         3Bqbv+pQrYgUqjx0j/1NGXwG1VCvg/5xKZoFssro=
-Date:   Mon, 22 May 2023 17:20:40 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Sherry Sun <sherry.sun@nxp.com>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH] tty: serial: fsl_lpuart: Check the return value of
- dmaengine_tx_status
-Message-ID: <2023052225-slimy-struggle-6fee@gregkh>
-References: <20230522025111.3747-1-sherry.sun@nxp.com>
- <PAXPR04MB918546704F3DB435675B747A89439@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Mon, 22 May 2023 19:28:00 -0400
+X-Greylist: delayed 114086 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 16:21:18 PDT
+Received: from mail.reaganai.com (mail.reaganai.com [70.237.186.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5891700;
+        Mon, 22 May 2023 16:21:18 -0700 (PDT)
+Received-SPF: none (HFG.local: legacylifeagent.com does not designate permitted sender hosts)
+Received: from [192.168.1.91] ([102.64.209.60]) by HFG.local with
+ MailEnable ESMTPS (version=TLS1 cipher=TLS_RSA_WITH_AES_256_CBC_SHA); Sun, 21 May 2023 06:43:34 -0500
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB918546704F3DB435675B747A89439@PAXPR04MB9185.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: 
+To:     Recipients <brianjneal@legacylifeagent.com>
+From:   "Daniela Kovalenko" <brianjneal@legacylifeagent.com>
+Date:   Sun, 21 May 2023 12:43:19 +0100
+Reply-To: kovalenkodaniela1@gmail.com
+X-Antivirus: Avast (VPS 230520-6, 5/20/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <AFAE9B612DC14D78B456EE49F863D23F.MAI@HFG.local>
+X-ME-CountryOrigin: TG
+X-Envelope-Sender: brianjneal@legacylifeagent.com
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [102.64.209.60 listed in zen.spamhaus.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [kovalenkodaniela1[at]gmail.com]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [70.237.186.148 listed in wl.mailspike.net]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, May 22, 2023 at 02:45:12PM +0000, Shenwei Wang wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Sherry Sun <sherry.sun@nxp.com>
-> > Sent: Sunday, May 21, 2023 9:51 PM
-> > To: gregkh@linuxfoundation.org; jirislaby@kernel.org; Shenwei Wang
-> > <shenwei.wang@nxp.com>; ilpo.jarvinen@linux.intel.com
-> > Cc: linux-serial@vger.kernel.org; linux-kernel@vger.kernel.org; dl-linux-imx
-> > <linux-imx@nxp.com>
-> > Subject: [PATCH] tty: serial: fsl_lpuart: Check the return value of
-> > dmaengine_tx_status
-> > 
-> > Coverity reports the Unchecked return value (CHECKED_RETURN) warning:
-> > Calling dmaengine_tx_status without checking return value.
-> > 
-> > So here add the return value check for dmaengine_tx_status() function to make
-> > coverity happy.
-> > 
-> > Fixes: cf9aa72d2f91 ("tty: serial: fsl_lpuart: optimize the timer based EOP logic")
-> > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > ---
-> >  drivers/tty/serial/fsl_lpuart.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c index
-> > 92a3bd0f4158..f2a47a8c5b85 100644
-> > --- a/drivers/tty/serial/fsl_lpuart.c
-> > +++ b/drivers/tty/serial/fsl_lpuart.c
-> > @@ -1286,13 +1286,19 @@ static void lpuart_dma_rx_complete(void *arg)
-> > static void lpuart_timer_func(struct timer_list *t)  {
-> >  	struct lpuart_port *sport = from_timer(sport, t, lpuart_timer);
-> > +	enum dma_status dmastat;
-> 
-> Should be reverse Christmas tree order.
+Hello,I'm Daniela Kovalenko, I'm from Ukraine, please, I need your help.
 
-Not a requirement at all, please don't force it.
-
-thanks,
-
-greg k-h
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
