@@ -2,109 +2,139 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801487139BE
-	for <lists+linux-serial@lfdr.de>; Sun, 28 May 2023 15:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4EC714B95
+	for <lists+linux-serial@lfdr.de>; Mon, 29 May 2023 16:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjE1N4W (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 28 May 2023 09:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S230286AbjE2OHe (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 29 May 2023 10:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjE1N4K (ORCPT
+        with ESMTP id S230258AbjE2OHd (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 28 May 2023 09:56:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1187CB8;
-        Sun, 28 May 2023 06:56:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AC1C60B09;
-        Sun, 28 May 2023 13:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC10C433D2;
-        Sun, 28 May 2023 13:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685282168;
-        bh=JT5y3bSqnJBtSO4Uhlu1HHm2FPspPmwBPjGg1IWW6HM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K4y0eD/VPD77aBerNR+9ZF+cx0epBIPX8NwlH8igpBL9qDhWgjSIyI3ae2tj8j4uh
-         RgqhQqhchTnEWgThs4DdC7zhTNmT30XImMiltRve4tVAs+AEZ0b1sAoyoHEihZwrrb
-         AOWj4Kfa/fHwwkipSW4mP5AsFFbikBAgz1q8p4rQ=
-Date:   Sun, 28 May 2023 12:56:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Mon, 29 May 2023 10:07:33 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C118B9C;
+        Mon, 29 May 2023 07:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=9wWqWVCVdQlNVYDWbbFgx/wemja1yAb3HdOOiloUC8c=; b=TQFv4hFnTpX5mFX43uNk66S5c1
+        DCfFhG93xOfmYD1y3ZgbJlYT6EzzMwWmazXpQ+Awp37PRU+T0BXex47AralXR3nASODH12k3hloHa
+        Br4tAQbxH3w/LQXbEUK00k6eR9x+lpdlwCfA5AVCsnPbiXX0GhH9JQdU86JSTE7ij9nw=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:50024 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q3dWm-0004Ht-QC; Mon, 29 May 2023 10:07:18 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com,
+        linux-gpio@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 11/11] serial: sc16is7xx: add dump registers function
-Message-ID: <2023052837-entree-broken-d7dd@gregkh>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
- <20230525040324.3773741-12-hugo@hugovil.com>
+Date:   Mon, 29 May 2023 10:07:02 -0400
+Message-Id: <20230529140711.896830-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525040324.3773741-12-hugo@hugovil.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485 improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:03:25AM -0400, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> With this driver, it is very hard to debug the registers using
-> the /sys/kernel/debug/regmap interface.
-> 
-> The main reason is that bits 0 and 1 of the register address
-> correspond to the channels bits, so the register address itself starts
-> at bit 2, so we must 'mentally' shift each register address by 2 bits
-> to get its offset.
-> 
-> Also, only channels 0 and 1 are supported, so combinations of bits
-> 0 and 1 being 10b and 11b are invalid, and the display of these
-> registers is useless.
-> 
-> For example:
-> 
-> cat /sys/kernel/debug/regmap/spi0.0/registers
-> 04: 10 -> Port 0, register offset 1
-> 05: 10 -> Port 1, register offset 1
-> 06: 00 -> Port 2, register offset 1 -> invalid
-> 07: 00 -> port 3, register offset 1 -> invalid
-> ...
-> 
-> Add a debug module parameter to call a custom dump function for each
-> port registers after the probe phase to help debug.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  drivers/tty/serial/sc16is7xx.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-> index 03d00b144304..693b6cc371f8 100644
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -347,6 +347,10 @@ struct sc16is7xx_port {
->  	struct sc16is7xx_one		p[];
->  };
->  
-> +static bool debug;
-> +module_param(debug, bool, 0644);
-> +MODULE_PARM_DESC(debug, "enable/disable debug messages");
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Sorry, but no, use the normal dynamic debugging logic that the whole
-rest of the kernel uses.  Do not add random per-driver module parameters
-like this, that would be a regression from the existing infrastructure
-that we have in place already.
+Hello,
+this patch series mainly fixes a GPIO regression and improve RS485 flags and
+properties detection from DT.
 
-thanks,
+It now also includes various small fixes and improvements that were previously
+sent as separate patches, but that made testing everything difficult.
 
-greg k-h
+Patch 1 fixes an issue when debugging IOcontrol register. After testing the GPIO
+regression patches (patches 6 and 7, tests done by Lech Perczak), it appers that
+this patch is also necessary for having the correct IOcontrol register values.
+
+Patch 2 introduces a delay after a reset operation to respect datasheet
+timing recommandations.
+
+Patch 3 fixes an issue with init of first port during probing.
+
+Patch 4 fixes a bug with the output value when first setting the GPIO direction.
+
+Patch 5 is a refactor of GPIO registration code.
+
+Patches 6 and 7 fix a GPIO regression by (re)allowing to choose GPIO function
+for GPIO pins shared with modem status lines.
+
+Patch 8 allows to read common rs485 device-tree flags and properties.
+
+Patch 9 improves comments about chip variants.
+
+I have tested the changes on a custom board with two SC16IS752 DUART using a
+Variscite IMX8MN NANO SOM.
+
+Thank you.
+
+Link: [v1] https://lkml.org/lkml/2023/5/17/967
+      [v1] https://lkml.org/lkml/2023/5/17/777
+      [v1] https://lkml.org/lkml/2023/5/17/780
+      [v1] https://lkml.org/lkml/2023/5/17/785
+      [v1] https://lkml.org/lkml/2023/5/17/1311
+      [v2] https://lkml.org/lkml/2023/5/18/516
+      [v3] https://lkml.org/lkml/2023/5/25/7
+
+Changes for V3:
+- Integrated all patches into single serie to facilitate debugging and tests.
+- Reduce number of exported GPIOs depending on new property
+  nxp,modem-control-line-ports
+- Added additional example in DT bindings
+
+Changes for V4:
+- Increase reset post delay to relax scheduler.
+- Put comments patches at the end.
+- Remove Fixes tag for patch "mark IOCONTROL register as volatile".
+- Improve commit messages after reviews.
+- Fix coding style issues after reviews.
+- Change GPIO registration to always register the maximum number of GPIOs
+  supported by the chip, but maks-out GPIOs declared as modem control lines.
+- Add patch to refactor GPIO registration.
+- Remove patch "serial: sc16is7xx: fix syntax error in comments".
+- Remove patch "add dump registers function"
+
+Hugo Villeneuve (9):
+  serial: sc16is7xx: mark IOCONTROL register as volatile
+  serial: sc16is7xx: add post reset delay
+  serial: sc16is7xx: fix broken port 0 uart init
+  serial: sc16is7xx: fix bug when first setting GPIO direction
+  serial: sc16is7xx: refactor GPIO controller registration
+  dt-bindings: sc16is7xx: Add property to change GPIO function
+  serial: sc16is7xx: fix regression with GPIO configuration
+  serial: sc16is7xx: add call to get rs485 DT flags and properties
+  serial: sc16is7xx: improve comments about variants
+
+ .../bindings/serial/nxp,sc16is7xx.txt         |  46 ++++++
+ drivers/tty/serial/sc16is7xx.c                | 150 +++++++++++++-----
+ 2 files changed, 156 insertions(+), 40 deletions(-)
+
+
+base-commit: 8b817fded42d8fe3a0eb47b1149d907851a3c942
+-- 
+2.30.2
+
