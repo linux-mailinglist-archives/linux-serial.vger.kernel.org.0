@@ -2,79 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FD9718BC1
-	for <lists+linux-serial@lfdr.de>; Wed, 31 May 2023 23:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF10718E61
+	for <lists+linux-serial@lfdr.de>; Thu,  1 Jun 2023 00:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjEaVXt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 May 2023 17:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S231193AbjEaWY5 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 May 2023 18:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjEaVXs (ORCPT
+        with ESMTP id S229553AbjEaWYq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 May 2023 17:23:48 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883B4B3;
-        Wed, 31 May 2023 14:23:47 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so7703875e87.2;
-        Wed, 31 May 2023 14:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685568225; x=1688160225;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/o7KHBWZ+J55ZTx2wkCBeVpg6ewT4ab9Dk0YMh5VnVQ=;
-        b=FLvgGKO/oMijXf1KYnSriKRqcF0Khz4UsHfadWLafI//gSZwBgh9OxypJBiBWgBA+l
-         /gquV9B3z8AW0P35EYtkBK6LSBDgJRm3oH5zSsypekY4x0+a51FVxXSireeZE2kFZ/ym
-         1tCMBT6WZG2i5WptFxX5yfTAiiR4CeV/oABWLsMbqu8wb2JWUs1WzndLDdjk0oIYhIjT
-         MGA3J7kH9nUeAmM3pBT6w68gWIbr6Arq3TdCesdyAlTiwr7YuvVW40DpM4b4s9AsPsR6
-         5ZiTRyg5Mc/mLF7m1i8aY6Miaa5PKp/FPb4YfoPJzWk4XBQ1wA8GbDiFjxaOAbXzAwNi
-         z2wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685568225; x=1688160225;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/o7KHBWZ+J55ZTx2wkCBeVpg6ewT4ab9Dk0YMh5VnVQ=;
-        b=R5GDIZzC4rKVrCRotqmHh86Pr8B2az1mISLC6c7LCvpeK4zuAn3Cgqnvi0jtBBOCMc
-         g0bkdwFV/Og3gZnDiSsTCWwPQ2Z9zUbqoinYJDpyr0ex8qweQ4YbazMeeIBrGhUCKeWf
-         ZZKTjMehaC1yT7v18kgbyjc8jT78Ti4a5rgG7H7mM/6+ywimA/wF0YXdSdukEfFj7Ndn
-         ty/UoEfBws2JOpSS+Ldo6hIfJEg2OQgjGD1SVDRzT9d6EbU77y5WoIGo/iDK/QMLSYOS
-         UdKx9OaqvIh/Z4WIic3LLYlvddHWKRfm5IiGGdHqAylprIKKrg+krvlkLNzliFQzuxWD
-         p3VQ==
-X-Gm-Message-State: AC+VfDylDacCf4hdCXdoxDHNFFY9v4aYIWRHSJ3v0nOEZ+bNWOSsNIre
-        eOtxIzfMTKgOBrtWJaSxHR4GBvk80u4lkNNQ
-X-Google-Smtp-Source: ACHHUZ4HSrzAKwWcEGlLlqcZKTHdB6wwjM/xqNb72tZZsHT76BgqQkER9rkEj+np4PSBiBEzo6O0Kg==
-X-Received: by 2002:a19:a413:0:b0:4ef:ec94:9674 with SMTP id q19-20020a19a413000000b004efec949674mr188296lfc.32.1685568224666;
-        Wed, 31 May 2023 14:23:44 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id f25-20020aa7d859000000b00514b3dd8638sm2015646eds.67.2023.05.31.14.23.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 14:23:44 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-input@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] docs: update some straggling Documentation/arm references
-Date:   Wed, 31 May 2023 23:23:43 +0200
-Message-ID: <1852730.tdWV9SEqCh@jernej-laptop>
-In-Reply-To: <20230529144856.102755-7-corbet@lwn.net>
-References: <20230529144856.102755-1-corbet@lwn.net>
- <20230529144856.102755-7-corbet@lwn.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 31 May 2023 18:24:46 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64009F
+        for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 15:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685571884; x=1717107884;
+  h=date:from:to:cc:subject:message-id;
+  bh=5BqGz2niNk4R3wnvmtAWwnyhu3uPpQwHdiSn7mRfj5A=;
+  b=G6wChxCc1vc+asP+JfhNqNDb+p8fyyxNOsrFjNIWLqG/Ure2BeB3ZA5Z
+   RApRVdq8jZpIWcU5bcmb494ek0zv7Vmv/XU8T88uIZIuDbS6C2dk3TsmR
+   gxRhrxFjLQLiNW8cWnjA8yPjERAhM1NdXDXUw2roRVAw0RGZeSNXGeLIL
+   0IlzJNgfzL53Rt7Lr97KghYSLF6v34DVWgjM6pnu2h2biYj65k1Ttz9AN
+   kMTXVxv1INdgEE54gVB93UUU2rKyH5T0XrHjNj4r037M0SnzntXEzIzHM
+   +ROj3WtIFjtUmpR+0V3RY74qnQk7f06cTXlDR5NNCsfILR/DMHLTkCG/n
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="418879866"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="418879866"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 15:24:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="701292184"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="701292184"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 31 May 2023 15:24:43 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4UFG-0001dz-1v;
+        Wed, 31 May 2023 22:24:42 +0000
+Date:   Thu, 01 Jun 2023 06:23:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ 84a9582fd203063cd4d301204971ff2cd8327f1a
+Message-ID: <20230531222343.pvgEu%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,36 +60,71 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dne ponedeljek, 29. maj 2023 ob 16:48:55 CEST je Jonathan Corbet napisal(a):
-> The Arm documentation has moved to Documentation/arch/arm; update the
-> last remaining references to match.
->=20
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-sunxi@lists.linux.dev
-> Cc: linux-pwm@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> ---
->  MAINTAINERS                          | 4 ++--
->  drivers/input/touchscreen/sun4i-ts.c | 2 +-
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: 84a9582fd203063cd4d301204971ff2cd8327f1a  serial: core: Start managing serial controllers to enable runtime PM
 
-=46or sun4i-ts.c:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+elapsed time: 750m
 
-Best regards,
-Jernej
+configs tested: 52
+configs skipped: 2
 
->  drivers/pwm/pwm-atmel.c              | 2 +-
->  drivers/pwm/pwm-pxa.c                | 2 +-
->  drivers/tty/serial/Kconfig           | 4 ++--
->  5 files changed, 7 insertions(+), 7 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i011-20230531   clang
+i386                 randconfig-i012-20230531   clang
+i386                 randconfig-i013-20230531   clang
+i386                 randconfig-i014-20230531   clang
+i386                 randconfig-i015-20230531   clang
+i386                 randconfig-i016-20230531   clang
+i386                 randconfig-i091-20230531   gcc  
+i386                 randconfig-i092-20230531   gcc  
+i386                 randconfig-i093-20230531   gcc  
+i386                 randconfig-i094-20230531   gcc  
+i386                 randconfig-i095-20230531   gcc  
+i386                 randconfig-i096-20230531   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                               rhel-8.3   gcc  
 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
