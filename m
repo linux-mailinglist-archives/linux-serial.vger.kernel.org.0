@@ -2,101 +2,68 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7635C7177B1
-	for <lists+linux-serial@lfdr.de>; Wed, 31 May 2023 09:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10443717996
+	for <lists+linux-serial@lfdr.de>; Wed, 31 May 2023 10:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjEaHUC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 May 2023 03:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S235113AbjEaIGT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 May 2023 04:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbjEaHUA (ORCPT
+        with ESMTP id S235121AbjEaIGM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 May 2023 03:20:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFFB122
-        for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 00:19:59 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9707313e32eso1010231966b.2
-        for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 00:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685517597; x=1688109597;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wsS6GDqgpNAmHpKdI6b5w8uOTwICMlebaNtmOgCy3SM=;
-        b=UGE5VJOgPZRwK1zQ550I76tAgWk8HJshIRMkpPniZYSi1k21x7Bx8Eab4hLWC2Z+FH
-         J+kJAREVWZm+nJ52KpEYA7JyVbjxCPO4faJdV6xr5jeEt4BNjLFOAtYA1K2EkjlzSMls
-         xwFSMIXqKN3OEQoHAwSaJgSbJg1FT4njaVSf69Ih0Ao+qvLMh27tEw/YFvtMQbHJygoT
-         hYD0szXMmYwY/1G0pTBjcLLQHBNuuU5/VOItBf+HZAS+c8dJnpva6anMSQpE9KcKNqSO
-         04Uk3kjE423BN29o2d7IJUJJHNQMwU8gEetZTKRHsp9iL4c91SOQpY46q0STtwIM7gYA
-         6SAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685517597; x=1688109597;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wsS6GDqgpNAmHpKdI6b5w8uOTwICMlebaNtmOgCy3SM=;
-        b=GHLRBSKZ0ScYiYzct3w/0P5zNLuf2xf7iYI3fhU/7iqKPZ98/aLdUm2X+1OMYc8Qto
-         TdfSCR+2H66cfltjSTcb0EnUIkUjTRnAbIO55p+N45sYGSI9Haa4pwjFiXUV+FAcDZ/B
-         yHBuUS95XX2WUjLAU0lZJ96zx/8s4CgoY/u+jyRxMPR+uEgSfehEJxHeqiTPHHt8Fl9r
-         /sklpPpshNTpxRFuV4z3IXTUVoZqAcc49D6bc2DfJzZslg/36RhqXs95GBdCNVikjGMN
-         BdhivfJV8Q0aM8TxDOpQjOPec3mtCaQqyhiS+y5dSoiAni43OfeoVklTFC91bnOtnlI4
-         LJjA==
-X-Gm-Message-State: AC+VfDx69FElCCbAKCQUWEOPkEp/DedfK7IvxwoC5jRAG97i7Sgep1/m
-        B818aGJuDsIwn/f5AB2t7XYINfSnIy3hN84gWhnCyw==
-X-Google-Smtp-Source: ACHHUZ5IM1zFOBAGfF7IUiwChLpT0Z/yB8ys3i5QgoDo+K7S/WmPZgCH48k4C3BiMdFd/r678IekOg==
-X-Received: by 2002:a17:906:ef06:b0:973:940e:a01d with SMTP id f6-20020a170906ef0600b00973940ea01dmr4563977ejs.67.1685517597596;
-        Wed, 31 May 2023 00:19:57 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id b7-20020a1709062b4700b0096f6a131b9fsm8409136ejg.23.2023.05.31.00.19.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:19:57 -0700 (PDT)
-Message-ID: <dac15aee-1d01-dbfe-4ec3-52f296997a05@linaro.org>
-Date:   Wed, 31 May 2023 09:19:55 +0200
+        Wed, 31 May 2023 04:06:12 -0400
+Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDED122
+        for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 01:06:00 -0700 (PDT)
+Received: by mail.mahavavy.com (Postfix, from userid 1002)
+        id BD97A222FD; Wed, 31 May 2023 08:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
+        t=1685520358; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
+        h=Date:From:To:Subject:From;
+        b=Qg8ozAttbqEmeRf+lj6Hb8FvDjXwBQZL6a1H1cYJ7aFsGYyQhm2wMzA6sp8VRdNAv
+         KQY8m8cvOyPCszzPpLHjwNF0g65O4Auc9hQczLx1DxCX2FLxeBR4DwBPgVFeFo/0xb
+         0Nu82+PptjH3PpCx5Ax+waUVLjh+JkytLTgdriROp8jZkYBd/z64LrvfsF9A9HFct6
+         uKhHQ3XBJCE/8jhU++fknrT3B4PVlpLqLnWzUhEd///F3N4SvQJkPAMvh52FTogvob
+         5WtcvLC5cNkWYi/f17f/SBEMT2mdU1SmbD9MWfxwvlko2/RbBhGsMxY0XN/iqVS4q1
+         wYs7zNGK3SQIQ==
+Received: by mail.mahavavy.com for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 08:05:38 GMT
+Message-ID: <20230531064500-0.1.2u.5kh2.0.3s884fvc0d@mahavavy.com>
+Date:   Wed, 31 May 2023 08:05:38 GMT
+From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
+        <kristian.pletanek@mahavavy.com>
+To:     <linux-serial@vger.kernel.org>
+Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
+X-Mailer: mail.mahavavy.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1] dt-bindings: serial: 8250_omap: add
- rs485-rts-active-high
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        linux-kernel@vger.kernel.org
-References: <20230531064013.16551-1-francesco@dolcini.it>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230531064013.16551-1-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 31/05/2023 08:40, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> 
-> Add rs485-rts-active-high property, this was removed by mistake.
-> In general we just use rs485-rts-active-low property, however the OMAP
-> UART for legacy reason uses the -high one.
-> 
-> Fixes: 767d3467eb60 ("dt-bindings: serial: 8250_omap: drop rs485 properties")
-> Reported-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Dobr=C3=A9 r=C3=A1no,
 
-We do not add Reported-by tags for own reports. Otherwise all patches
-would carry them. Reported-by is to credit 3rd party reported who did
-not write the patch.
+zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
 
+M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
+=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
+robu mezi lokalitami.
 
-Best regards,
-Krzysztof
+Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
+ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
+=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
+=AF.
+=20
+Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
+=C3=ADj=C3=ADme strukturu detailu.
 
+Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
+
+Pozdravy
+Kristi=C3=A1n Plet=C3=A1nek
