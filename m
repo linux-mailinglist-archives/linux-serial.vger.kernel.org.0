@@ -2,68 +2,85 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10443717996
-	for <lists+linux-serial@lfdr.de>; Wed, 31 May 2023 10:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A420717994
+	for <lists+linux-serial@lfdr.de>; Wed, 31 May 2023 10:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbjEaIGT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 31 May 2023 04:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S235130AbjEaIGQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 31 May 2023 04:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbjEaIGM (ORCPT
+        with ESMTP id S235072AbjEaIF6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 31 May 2023 04:06:12 -0400
-Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDED122
-        for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 01:06:00 -0700 (PDT)
-Received: by mail.mahavavy.com (Postfix, from userid 1002)
-        id BD97A222FD; Wed, 31 May 2023 08:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
-        t=1685520358; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
-        h=Date:From:To:Subject:From;
-        b=Qg8ozAttbqEmeRf+lj6Hb8FvDjXwBQZL6a1H1cYJ7aFsGYyQhm2wMzA6sp8VRdNAv
-         KQY8m8cvOyPCszzPpLHjwNF0g65O4Auc9hQczLx1DxCX2FLxeBR4DwBPgVFeFo/0xb
-         0Nu82+PptjH3PpCx5Ax+waUVLjh+JkytLTgdriROp8jZkYBd/z64LrvfsF9A9HFct6
-         uKhHQ3XBJCE/8jhU++fknrT3B4PVlpLqLnWzUhEd///F3N4SvQJkPAMvh52FTogvob
-         5WtcvLC5cNkWYi/f17f/SBEMT2mdU1SmbD9MWfxwvlko2/RbBhGsMxY0XN/iqVS4q1
-         wYs7zNGK3SQIQ==
-Received: by mail.mahavavy.com for <linux-serial@vger.kernel.org>; Wed, 31 May 2023 08:05:38 GMT
-Message-ID: <20230531064500-0.1.2u.5kh2.0.3s884fvc0d@mahavavy.com>
-Date:   Wed, 31 May 2023 08:05:38 GMT
-From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
-        <kristian.pletanek@mahavavy.com>
-To:     <linux-serial@vger.kernel.org>
-Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
-X-Mailer: mail.mahavavy.com
+        Wed, 31 May 2023 04:05:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB99125;
+        Wed, 31 May 2023 01:05:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C374637D8;
+        Wed, 31 May 2023 08:05:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF41BC4339C;
+        Wed, 31 May 2023 08:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685520356;
+        bh=K+KjKWAoGR9PcfqQVAwZ38Xz3lxK1J+DQ3Dth4s0hX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dFLvv2D84CoINR4EOCzhFJsZUGK5vjc5+G4eied+ZYh/0xf6etM5Tg5ldSehmsDg3
+         CqdNYTjtN8X5ifZC4J+5jKfUoiop9ITh0l/a9ri9HZncPyoBK8DGwJ3Eu+2iERuD99
+         ew63Yzt5P3d+c0GV4bsG7dtlFR0LwHSNLcggY6IQ=
+Date:   Wed, 31 May 2023 09:05:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hongyu Xie <xiehongyu1@kylinos.cn>
+Cc:     linux@armlinux.org.uk, jirislaby@kernel.org, rdunlap@infradead.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xy521521@gmail.com
+Subject: Re: [RESEND RFC PATCH v3 -next] tty: serial: add panic serial helper
+Message-ID: <2023053113-surviving-ride-2dd6@gregkh>
+References: <20230531071802.414383-1-xiehongyu1@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531071802.414383-1-xiehongyu1@kylinos.cn>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
+On Wed, May 31, 2023 at 03:18:02PM +0800, Hongyu Xie wrote:
+> It was inspired by kgdboc.
+> 
+> This is a debug module that allows you to get all kernel logs
+> after panic.
+> 
+> Normally you need to attach a USB-to-UART tool or enable kdump
+> before panic happens to get log from kernel after panic. If you
+> didn't do that and kdump is not working, you can't get any log to
+> know what happened before panic. If you have a USB-to-UART tool
+> and the uart port on your computer is working. This module helps
+> you to get all kernel log after panic() is called.
+> 
+> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
+> 
+> Tested on arm64 device.
+> 
+> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+> ---
+> 
+> v3:
+>  1. modify the document about this module.
+>  2. provide case-ignored filter matching.
 
-zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
+Why is this a RESEND?
 
-M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
-=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
-robu mezi lokalitami.
+It's a RFC, I can't apply it, as obviously you do not feel like it is
+completed.  What needs to be done to make you feel comfortable with it?
 
-Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
-ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
-=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
-=AF.
-=20
-Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
-=C3=ADj=C3=ADme strukturu detailu.
+thanks,
 
-Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
-
-Pozdravy
-Kristi=C3=A1n Plet=C3=A1nek
+greg k-h
