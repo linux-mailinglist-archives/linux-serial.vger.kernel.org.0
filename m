@@ -2,161 +2,129 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADD8729952
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Jun 2023 14:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3A6729BBE
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Jun 2023 15:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjFIMPI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 9 Jun 2023 08:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S240143AbjFINkU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 9 Jun 2023 09:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbjFIMPA (ORCPT
+        with ESMTP id S240065AbjFINkT (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:15:00 -0400
-Received: from outbound-ip23a.ess.barracuda.com (outbound-ip23a.ess.barracuda.com [209.222.82.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7963A1A2
-        for <linux-serial@vger.kernel.org>; Fri,  9 Jun 2023 05:14:56 -0700 (PDT)
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101]) by mx-outbound-ea15-94.us-east-2a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 09 Jun 2023 12:14:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yn8L/XTH0Kw3AHda2PEsoO3fkN2JbCe/SLmlH1j/QFTO4P/ghnu9p5TDZSFEmGqbpszhwa3WzTAJrEcd4w7d4/A6qtrKdjeeyz7QS/XuRMCxr45FyNpWmAJMdvWUPJVBEoODSzee6hzM+xVjbpbCMXt1HXdNFQrYp6qk8tJQQoyNZknaVPt52kH7HrRqI99cI0CSXZK2USBZW87MgF6h2ZPlUKFwyrs5vXPjAT30PixihZPTtoYM4j11F5VT3PkuVaFHPpWhrqlV9ZWCgP3rdtKJ4ND8LlN7YoYIG0DhVNcLyudYhU8JeQ8qpCcN8G2NsnM82qQfX1+A2XSU/vOLqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=42XAOsWn7l4DaiD7QBmjyo9/bB9+8pKJEHBGcO9zCG8=;
- b=CApPlEBlT7q3C1wPkMzR3a28Q1kopz+RnB/HiHAhGaRX3QXsMcoKt2gSqc3fs8GW4DtBxynOV2rsB4ATF3ftnKQ5bBiMUFkB4TTHZX0iZFKcTvep0dDkyufmvzMF6psERppLL5yRmPwRLhYKyJ1smapdhv1zmXkrIDLea9ICUJLXbNSSP0qa7gcL7ZJDKMTaPFjK64ZcaUE+6SRLYwWJLjHPINVWmBU74NkPWLdQG0ShWZeXzQN1x+AzCkAWtYne9+Ic0KJXLNTBW46mILZ0tWwB/BngfXGbQTIwqckr5JpQqa1uOG25H4qhTM338njKOtV8ngECTayTMK/tcE3dWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=digi.com; dmarc=pass action=none header.from=digi.com;
- dkim=pass header.d=digi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digi.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=42XAOsWn7l4DaiD7QBmjyo9/bB9+8pKJEHBGcO9zCG8=;
- b=OM6coERJX+MBeoQvxR0LCgQQ0af4kk+XX9DPSuR1oMoWz2OdGi4KxRX9+QsL5FUnOl0q3TztFyJTXUbY2lwcZXl3sZfEllu0SxWH/LhQY1pNeuwlTQozC3385zQqUVehIktX5dPG2qfdwvBHEuCMv8jx9GiZktNUuEbiuK5eLDjeVBcBx4u3YmldlBKZ/B4wKn+lRrTV0SnYm8UmfipY8sV5kSsXSc9cIjlGEm4umZR7RNFgRZM2eitF9I+nYe8UKVz+U8tmHessdImjXHh+jhRVPLauI1+W//VkVWjesYLPCqg4k1henPSMBrcnP807/wq6gFFVsLw9gTf0Xuo5PQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=digi.com;
-Received: from CO1PR10MB4561.namprd10.prod.outlook.com (2603:10b6:303:9d::15)
- by SN7PR10MB6641.namprd10.prod.outlook.com (2603:10b6:806:2ac::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Fri, 9 Jun
- 2023 12:14:43 +0000
-Received: from CO1PR10MB4561.namprd10.prod.outlook.com
- ([fe80::c626:ce53:befb:11a9]) by CO1PR10MB4561.namprd10.prod.outlook.com
- ([fe80::c626:ce53:befb:11a9%5]) with mapi id 15.20.6455.039; Fri, 9 Jun 2023
- 12:14:43 +0000
-Message-ID: <bece99c6-2982-c067-f9d8-8d1ebd8428e8@digi.com>
-Date:   Fri, 9 Jun 2023 14:14:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] tty: serial: fsl_lpuart: reduce RX watermark to 0 on
- LS1028A
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>, sherry.sun@nxp.com
-References: <20230608111927.1808525-1-robert.hodaszi@digi.com>
- <2023060858-groove-riddance-0c09@gregkh>
- <94cae2c3-13c3-7c72-04d9-640a8ff1e7f7@digi.com>
- <a050e754-e15e-5cde-e838-f4a79885f7a3@linux.intel.com>
-From:   Robert Hodaszi <robert.hodaszi@digi.com>
-In-Reply-To: <a050e754-e15e-5cde-e838-f4a79885f7a3@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0264.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b5::19) To CO1PR10MB4561.namprd10.prod.outlook.com
- (2603:10b6:303:9d::15)
+        Fri, 9 Jun 2023 09:40:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966C43588
+        for <linux-serial@vger.kernel.org>; Fri,  9 Jun 2023 06:40:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q7cL5-00015b-Sm; Fri, 09 Jun 2023 15:39:40 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q7cL2-006DQC-9q; Fri, 09 Jun 2023 15:39:36 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q7cL1-00CbL7-Ms; Fri, 09 Jun 2023 15:39:35 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Liang He <windhl@126.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Helge Deller <deller@gmx.de>,
+        James Hilliard <james.hilliard1@gmail.com>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        linux-serial@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH v4 0/2] serial: 8250: Apply FSL workarounds also without SERIAL_8250_CONSOLE
+Date:   Fri,  9 Jun 2023 15:39:30 +0200
+Message-Id: <20230609133932.786117-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4561:EE_|SN7PR10MB6641:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac4781b3-b96a-4a00-0e1d-08db68e31b9a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b2vtw+G8R5t8G91iUiRt9fSisENdCPZVGgN/gLjkCD4dQNDhSl4/AcEVw7bZEF11M2JYTXYXO2wbWlhbxugYFVEb2+In+W4Z+5y07zRBwvuXgHqjVe4VPUdNCVkZ/3z3uUral5073k1d6qe/aApzrRqojWNkFj54zZXq6zkB3C+QxjzgWckL2GEw65kMLDD6PrfBvS/Z9MJpeog6jhJ5tw+JfwOwyglvP4FVL923G0I9/6dGzFAhAm0diccMLYKcdqVvT0JzQ4lnuK75sXMLoj1TenA/fKrZD/dhRexeaLVFRj/GADHYt1jGGni1jfb2/ueDanaANyytJMSkwxTSpGfDN34fTN7P1Kbf5mJ4YyH+2GoWuDHIfdPf33aZsajNwFSZLBfPrItX7NtIb+Rjgn4s5IvoWlniceA9xa/dMDt4XbzncNNgzjjGTCFmOe8CCpm2Oi2GLNu8itLaV2lEMku37ZshY7hA9Zei2PRo+c3hMxtBhK92gdlmSwjOV4olooPYRqLIClGJu+JEOlZbWds7yfzT0GJ3nMvCXvJFBIBA5pfzYP9YjaTeYKz3ZERa33nNBi9VvS/otUgw0dpmJALea6OjT+2rRJGaxZ6m8TqpHfpItw+fFp+TH2FzZfDDfMJDFgpAcx8PxGLp3uoTLQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4561.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(396003)(346002)(136003)(376002)(366004)(451199021)(86362001)(31686004)(38100700002)(54906003)(66556008)(66946007)(2616005)(66476007)(31696002)(4326008)(6916009)(4744005)(6666004)(6506007)(316002)(26005)(478600001)(6512007)(6486002)(44832011)(41300700001)(8676002)(186003)(5660300002)(2906002)(8936002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cFJMWnErSVJRQm5QZWhiRktQcHk1bzV0aFZwYU5FbVNabXBLTk1tYWY0dENn?=
- =?utf-8?B?dlphQ002UnZkS0FRSGpsMjE0K2JOdDNYVUJiWWJlVkJJS2IvUTNzaURtTXR1?=
- =?utf-8?B?L0tMMmtSTG5ESWsveG9BcFBCTld4TnJwRWl2M2tlS0MvRmFlcmxZdXF4UFNx?=
- =?utf-8?B?ZWk3dkxVb2lYSVp2UFJvc0xPZkhheWlwK2U2bGMzaEZIYXdyd0xqSFVBVnZo?=
- =?utf-8?B?TWdWelVNNnIzemlDNkcrRFZSTk1YTnFsU2pnYUJFRFFLWXhBc0o5eGoxSnNu?=
- =?utf-8?B?cjhKMmg3U1o5VVNRMUxHL0kzdHhPYnNmTUlQODNUeW9nY2RsNzNlUkh4cUZ0?=
- =?utf-8?B?UUpJMWlVK1UrNXRPSTBKNEM0SnpUWXJWZlI3Z1lwWTNkQ0VGcks2UTYxVzZi?=
- =?utf-8?B?aFZjeTNaTW5wRUROTDVoNzBhSkxQbTRRMnFCOXlOVXBidGt0dURTSHczdkVL?=
- =?utf-8?B?dTJ6cXlnSGlnNEpRN3lVNWFBZWw4RGU5L3BhLzgyTmtjT0VpcVB0R2ZFZ1ZC?=
- =?utf-8?B?TExtLzIwalpYaGN1VzJwSDNxN1AxVmpJL2RGOTYwL21NSTVOS0FmNUJGZkc3?=
- =?utf-8?B?azFiSE9JdHVnOWhKeEorY2VvdjgwRkNVQzFycEE5SlBTUXlBMml2OWFTMnc5?=
- =?utf-8?B?VWZSVnJpSk9IZzFJYVNFNWZZOUVVQjloak5rU3YyZlF3WE5aczgxM0NPMmhL?=
- =?utf-8?B?UHpNVTZabUxCSzdaWVBieVdLUE9PbUd2NWc1YjRBRVB1TEtodVFhREJDUndT?=
- =?utf-8?B?NG5Pb3JYZUtYYnExRytIQUVFaEJFb084VC9EMFluNTkrTTVZNUh5QVQvYXlV?=
- =?utf-8?B?NzF5UGVkSS95QzZWMGhzVXZnMXdaY1R3d0dZWXpkZXdFMnlLWVRac1VqbVcv?=
- =?utf-8?B?aXhiUjVOWjEwV3lVNitRRkRJSnB5L1ViWDdxeVU1NWhaL1J1SmJUQ1lyWXN1?=
- =?utf-8?B?RTRROC93QWUxLzdpYWx1cEJxMWZabUlXMzhyclRwSmE5YUg0UGU2MWdBcEU2?=
- =?utf-8?B?OFVPWnBzL3JsRHJzSktPMVI1Q3lkMFA0a28xeXZuU2FkS3VucWdoNlVJK2lz?=
- =?utf-8?B?c2hRMjVhaFBzTE1Sa1pZVUNwYmR1TENUdlVkT1pKelRzWnFza21UMWJHVkNh?=
- =?utf-8?B?eGpSZHlRaEJMRE5kZmdQa2RadU9HUjd2QkdBNHdhdllnejhDWU4xTGJjNTJI?=
- =?utf-8?B?NjdhMzE4ZkRRV293dlhmSTVmQjFWQWljWittSGR2WnprblNyMUVIa2dwSTdX?=
- =?utf-8?B?TFhKNzVMVWdpUVA2aGRMMWhTRTZENjJaQ2g1M01xZnNoSjR6RE9LVG0yalRp?=
- =?utf-8?B?TTFkcDdHaGNwV3E5ZUREai9GYUUrSEdpbVJKaHR5VTdNRWhwMkpBUmxPUnAw?=
- =?utf-8?B?T2NGNlZTaXBjTk0rR1JtZllUbXRCOXliZjFxTnNrTkkxS004czZBOExTd3ZD?=
- =?utf-8?B?Tit6UDR4R1ptbktrdUlPeEFJRldGVmtpSGxUdGdhQ0JIRlVhajdJRWt2UFlR?=
- =?utf-8?B?aThqMktJMHo2SjJaRG5peHdKemxTbUV1UEpvcFBkM3BuUnl6dGE3cEkyU2hq?=
- =?utf-8?B?ejhQclVDUFpMaEQxRTRiaWl1aG1CRTBvYTJqcFZ0SlZRRmxOSnNmQi9lL0Q4?=
- =?utf-8?B?NXlHeS9lcGhwTnhaVUlrb0p4Rk1jTXZzUGl4Z1RxRkJqSnZLTkI0WUkwNVhC?=
- =?utf-8?B?NGFVaEFwK0grQkFLYnBuWnBtWDFhNnFrOENQSEJMcE1lQU0yMjZkYmtmejV3?=
- =?utf-8?B?dDFKOFZPdzE0NWVsemxpakFVMVhYS3JJWUhYZFF3SDdpZ0RYekg4dEN4enBH?=
- =?utf-8?B?R09rQzVENFdsUFp6aVYvdG92bkFtSlhmN3g0ejc3TWQyOGtDckhJM0FxaDZq?=
- =?utf-8?B?Vm1zMHlPWlFpZzZxRVdEYi9JVjJmRUhlaFdnSStOQVRJcDdBSDVrYUZEVC9i?=
- =?utf-8?B?eTJ2ZkpETTQzNUI3UVBFbU1pWm9IMjNtUElWWitIQVFveURVdHdqZDNHTERU?=
- =?utf-8?B?bHR0OEFZdHNFTjB3U2IvbkhSclZMTkc5M0NQN2FtL2cycDdMbkJsT2VuaWZx?=
- =?utf-8?B?eVhPRmMvWUd1dWdwRzJCM1NOWXlZK010eEQ3eEJ3alpwTzJyUGtjZFdoNWNL?=
- =?utf-8?Q?bizYA3lTQuyJpgf3qcoh91BMh?=
-X-OriginatorOrg: digi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac4781b3-b96a-4a00-0e1d-08db68e31b9a
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4561.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 12:14:43.5746
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: abb4cdb7-1b7e-483e-a143-7ebfd1184b9e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NxR0tjlZenAkXu4R+4/wjarZV/5NS7y+fDHQ6fPtQAN0zBnLiLn2aURP+DAD1NI+I9/uc/GXKIKWi3B30ee9ZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6641
-X-BESS-ID: 1686312884-103934-17757-4670-1
-X-BESS-VER: 2019.3_20230605.2208
-X-BESS-Apparent-Source-IP: 104.47.70.101
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVsYmJkBGBlDM0MzY0sgg2czIND
-        HRLM3C2MIozcwELGJqaGGebKlUGwsA8JZLOUAAAAA=
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.248699 [from 
-        cloudscan15-243.us-east-2a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS112744 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2105; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=+cB9tyShgwjshIjt2kga32Gjjr1RbhwE+cfs5aJ925k=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkgyuIVtr7pD4lotNXh/iORjiYvWbBmyyQyJxIF HC1uLy6ba6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZIMriAAKCRCPgPtYfRL+ TpjgB/9KGK9p2YxZnajUVe2pDznpCZz8FORUS0Evd76KrUPGduGFLJTaXwjMMvN0AWuPBzOjtC5 xqiZ2wEdw7JtSVprH6JwO2S3KF3HjiK2t6eNl5zZrOCzOKNxK6HSDqqip6MWzbxVkWLJcU7dFRa ONyMkAAfiuXo0uZ6RrMZ80ZQOPUC/Byk/sK3B7/oFLnHN0ncWRpMT7o7t2sEjfpqCxDgRb/dwsP spJ1I2ZZaXDp0fdkvQLWNcYlg7My48FjhMnpvcTQiXZlXarg3B82UK3THIBIGwQd7ywC1J7IGiJ xJsz1n7YL7m/i2o1q5H4xSbUqWykOxc4UoxUXRsxkI9Irrfg
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2023. 06. 08. 17:56, Ilpo Järvinen wrote:
-> Please provide a new version of the patch with Fixes + Link tags then
-> (for Link tag, prefer to use lore archive links).
->
-> You can find out the correct format of those tags from the information
-> under Documentation/process/.
->
-> --
->  i.
->
-Hi,
+Hello,
 
-Thanks, done! Hope I added correctly.
+this is the fourth iteration of trying to make the FSL workaround code
+active even without 8250 console support.
 
-Robert
+The first patch is a fix for commit 66eff0ef528b (powerpc/legacy_serial:
+Warn about 8250 devices operated without active FSL workarounds) that
+currently is in tty-next. This patch originates from my v3 that was only
+partially applied. (That is a lame excuse though. While the applying the
+full series would not have shown this problem, bisection would still
+have a problem.)
+
+The second patch makes SERIAL_8250_FSL tristate and thus allows this to
+be enabled also with SERIAL_8250=m. This is also the relevant change
+since v3, where 8250_fsl.o was linked into 8250-base.ko.
+
+This series is build tested on amd64 and powerpc with all 27 possible
+configurations for
+
+	SERIAL_8250={y,m,n}
+	SERIAL_8250_FSL={y,m,n}
+	SERIAL_OF_PLATFORM={y,m,n}
+
+using:
+
+	choices=(y m n)
+	for i in $(seq 0 26); do
+		perl -p -e "s/SERIAL_8250=y/SERIAL_8250=${choices[$(((i / 9) % 3))]}/; s/SERIAL_8250_FSL=y/SERIAL_8250_FSL=${choices[$(((i / 3) % 3))]}/; s/SERIAL_OF_PLATFORM=y/SERIAL_OF_PLATFORM=${choices[$((i % 3))]}/;" .config-pre > .config &&
+		make -j 12 ||
+		break;
+	done
+
+with .config-pre having COMPILE_TEST=y so this time there shouldn't be a
+build regression. (Not all 27 variants are possible, so some valid
+configurations are tested twice or more, but that's still good enough.)
+
+The patches have no strong dependency on each other, so they could go in
+via different trees. But given that 66eff0ef528b is in tty-next, taking
+both via tty sounds most sensible.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (2):
+  powerpc/legacy_serial: Handle SERIAL_8250_FSL=n build failures
+  serial: 8250: Apply FSL workarounds also without SERIAL_8250_CONSOLE
+
+ arch/powerpc/kernel/legacy_serial.c | 2 +-
+ drivers/tty/serial/8250/8250_fsl.c  | 3 +++
+ drivers/tty/serial/8250/8250_of.c   | 2 +-
+ drivers/tty/serial/8250/Kconfig     | 6 +++---
+ 4 files changed, 8 insertions(+), 5 deletions(-)
+
+
+base-commit: 66eff0ef528b6d6e9a45b68f6cd969dcbe7b800a
+-- 
+2.39.2
 
