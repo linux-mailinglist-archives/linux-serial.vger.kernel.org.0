@@ -2,81 +2,62 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C177748E0B
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Jul 2023 21:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BD2748F92
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Jul 2023 23:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbjGETjx (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 5 Jul 2023 15:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S231511AbjGEVKj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 5 Jul 2023 17:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbjGETjr (ORCPT
+        with ESMTP id S231598AbjGEVKi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 5 Jul 2023 15:39:47 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3A71732;
-        Wed,  5 Jul 2023 12:39:43 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-77acb04309dso353633939f.2;
-        Wed, 05 Jul 2023 12:39:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585983; x=1691177983;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OR44xsl8dcDDRHket6JLRoRPh10jvQanfxZD4Qq5o5A=;
-        b=a0CEu5mqjWGo8IGRyJ6e667dY3I/m6XXzpZ51tZxpu8RysCYjJU+tN6Pmka10t+tNL
-         oooNFqm83WP8oryCBd8YKBj9BGnVaA9OJp1YeceXV9c20ivZJK6m0jULeeECNW/v4GG9
-         x8dCy734zSFeG39mJzXskDlPq5eZtaJ+lGTdENV6NPvjk6UoBywYPERS2lDOF5BJFYp3
-         kJ+DjiwGB/OgmAVLJvysrHDOJSw+JkZTes4lHWGKWo/RqD2xbITtUJZHuTLoO01u2VQB
-         IzhWhU7AKfZVJpNIPEp9FzfucL57i3weprBCaPDmCMWC9t7laGKYAoKamyGJQhOZlKRp
-         nh+Q==
-X-Gm-Message-State: ABy/qLbAA2KurpshNzjgaeeDFzqBEK03cTCXm7X3AdjyVDtdNsxFYJrP
-        9baxSsRd22kpom7bJP+cPg==
-X-Google-Smtp-Source: APBJJlFTsATQZZbeDYi05vWkxMhLO+2kIHQFYrmGtwqcASMsu98qNuBpLmP0dT/ZyPLVLU0YF4GwxA==
-X-Received: by 2002:a6b:f208:0:b0:77e:3598:e511 with SMTP id q8-20020a6bf208000000b0077e3598e511mr177308ioh.2.1688585983078;
-        Wed, 05 Jul 2023 12:39:43 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056638220a00b0042b1cd4c096sm3797893jas.74.2023.07.05.12.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:39:42 -0700 (PDT)
-Received: (nullmailer pid 1714650 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:39:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 5 Jul 2023 17:10:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0124319A6;
+        Wed,  5 Jul 2023 14:10:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9221A6173D;
+        Wed,  5 Jul 2023 21:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBA8C433C7;
+        Wed,  5 Jul 2023 21:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688591433;
+        bh=n2jgw51oOqSn4DZGTFd2enJxejq0SGh6zPoLj4QBa2A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r4YRd/P4b0xBGtl+HKyhU0UwFhwL1znKUu3F9E/nnPxXcYaDmYZo2z1Nee7kETmLx
+         lGb4g3mmhsHL5MqjFkUdAPbHJx3Vu1KEL7DPyec0LVnxz1zWd0gjZ5J1S8Q17n3r+C
+         zE9O2UqHY2qkWg1Tud8EzTY3sjFHZveAJE73dGQY7tug9JNpqnAeQ2bhK3ab7TZBKI
+         8+QgfmFjLOjzsbMdrPvxU0Xd5i0hVTch+cCiezXQz87sYjjxA9jurKoJiBpj+M/vmx
+         uAac8ugCdS/BiumCWdgDAvpq+AWbs+EmJMTUZXQQAvU5o8EDIaRETl9iMIuNLhm4wa
+         0opmVGwVy9bYw==
+Date:   Wed, 5 Jul 2023 22:10:27 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        jirislaby@kernel.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com, kelvin.zhang@amlogic.com,
+        xianwei.zhao@amlogic.com, kernel@sberdevices.ru,
+        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 6/7] dt-bindings: serial: amlogic,meson-uart: support
+ Amlogic A1
+Message-ID: <20230705-broadly-hyphen-de6a1eb0058b@spud>
+References: <20230705181833.16137-1-ddrokosov@sberdevices.ru>
+ <20230705181833.16137-7-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     hugues.fruchet@foss.st.com, vkoul@kernel.org,
-        linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-phy@lists.infradead.org, lee@kernel.org,
-        linux-kernel@vger.kernel.org, arnd@kernel.org,
-        linux-serial@vger.kernel.org, mchehab@kernel.org,
-        edumazet@google.com, arnaud.pouliquen@foss.st.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, jic23@kernel.org, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org,
-        olivier.moysan@foss.st.com, fabrice.gasnier@foss.st.com,
-        kuba@kernel.org, andi.shyti@kernel.org,
-        alexandre.torgue@foss.st.com, conor+dt@kernel.org,
-        richardcochran@gmail.com, will@kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mmc@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Oleksii_Moisieiev@epam.com, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        ulf.hansson@linaro.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org
-In-Reply-To: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
-Message-Id: <168858597155.1714560.12250834903693245143.robh@kernel.org>
-Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
- RIFSC
-Date:   Wed, 05 Jul 2023 13:39:32 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="NUg9anPJgPseBrgZ"
+Content-Disposition: inline
+In-Reply-To: <20230705181833.16137-7-ddrokosov@sberdevices.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,41 +66,62 @@ List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
 
-On Wed, 05 Jul 2023 19:27:51 +0200, Gatien Chevallier wrote:
-> Document RIFSC (RIF security controller). RIFSC is a firewall controller
-> composed of different kinds of hardware resources.
-> 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+--NUg9anPJgPseBrgZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jul 05, 2023 at 09:18:32PM +0300, Dmitry Rokosov wrote:
+> Introduce meson uart serial bindings for A1 SoC family.
+>=20
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+
+Looks like there's a missing Ack here from Rob:
+https://lore.kernel.org/all/168858360022.1592604.9922710628917242811.robh@k=
+ernel.org/
+
+Cheers,
+Conor.
+
 > ---
->  .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
-> 
+>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml          | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.=
+yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> index 01ec45b3b406..f1ae8c4934d9 100644
+> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> @@ -33,6 +33,7 @@ properties:
+>                - amlogic,meson8b-uart
+>                - amlogic,meson-gx-uart
+>                - amlogic,meson-s4-uart
+> +              - amlogic,meson-a1-uart
+>            - const: amlogic,meson-ao-uart
+>        - description: Always-on power domain UART controller on G12A SoCs
+>          items:
+> @@ -46,6 +47,7 @@ properties:
+>            - amlogic,meson8b-uart
+>            - amlogic,meson-gx-uart
+>            - amlogic,meson-s4-uart
+> +          - amlogic,meson-a1-uart
+>        - description: Everything-Else power domain UART controller on G12=
+A SoCs
+>          items:
+>            - const: amlogic,meson-g12a-uart
+> --=20
+> 2.36.0
+>=20
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+--NUg9anPJgPseBrgZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-yamllint warnings/errors:
+-----BEGIN PGP SIGNATURE-----
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml: title: 'STM32 Resource isolation framework security controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKXcQwAKCRB4tDGHoIJi
+0kUgAQDA95EfCnFuUU2bDSw86Ab1mLQG0Nbq74Hh2Ss1+NO5ZgD/Uk4aj8bCi0rC
+8PY85RrvoNH02RyBYPrxMpLdfi1bUgE=
+=igVN
+-----END PGP SIGNATURE-----
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230705172759.1610753-3-gatien.chevallier@foss.st.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--NUg9anPJgPseBrgZ--
