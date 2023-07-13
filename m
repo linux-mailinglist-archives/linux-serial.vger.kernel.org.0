@@ -2,107 +2,92 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F9D7525F0
-	for <lists+linux-serial@lfdr.de>; Thu, 13 Jul 2023 17:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA7E75291D
+	for <lists+linux-serial@lfdr.de>; Thu, 13 Jul 2023 18:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjGMPBa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jul 2023 11:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S232862AbjGMQvf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 13 Jul 2023 12:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjGMPB1 (ORCPT
+        with ESMTP id S231284AbjGMQve (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jul 2023 11:01:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDCF2706;
-        Thu, 13 Jul 2023 08:01:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D247618C5;
-        Thu, 13 Jul 2023 15:01:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DE6C433C9;
-        Thu, 13 Jul 2023 15:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689260484;
-        bh=sfmiO7castT7ell5jqLJUhNTWtiJ35JhwDwk7KkRsoA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NelBhBDYU1VCxkGX+R4lWxNyD6GFU7dn8CYivAJvkjrp/4IbkoEXJT1Izk7xFLer6
-         XWQKXcUa4TxULl3Asd88+ui4GPlflFcszX8oc/7YRkqc6I+YfVmje20ShgrRI36udW
-         4thM3nbKxciLFpFegF9ryWOETfAwqzzLLKvwgUiZr0O+UmRXIGikFkSc/t0XYKFUjZ
-         ZDvn2gwJJy2JikDj4e84VBfyEoKwQXTk/5dXe7cO+YbIeg8bxs8SYLpsq9IPPE/H9K
-         CZ9j8s7Y7yoEw/JGVhqpecmvDo1vWOwe/HMZK7yNbyduZUoisVPPdQwEC9auC2awe0
-         jPbmfm79S692w==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1qJxor-0007vo-0y;
-        Thu, 13 Jul 2023 17:01:25 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 3/3] serial: qcom-geni: drop bogus runtime pm state update
-Date:   Thu, 13 Jul 2023 16:57:41 +0200
-Message-ID: <20230713145741.30390-4-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230713145741.30390-1-johan+linaro@kernel.org>
-References: <20230713145741.30390-1-johan+linaro@kernel.org>
+        Thu, 13 Jul 2023 12:51:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C085426B1;
+        Thu, 13 Jul 2023 09:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689267093; x=1720803093;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NeS/7wjO+6YFPllvD48mAowelFtPp+/XWfqr/d+lNKo=;
+  b=c85mKgIW4g3dx848npadeA2rLCPK6a2WMVaEFtT9OnqcSIXzkzJkCaX5
+   nRWWRTMu7w7vKcXxqU5IcvmKnIjyTIpG6nJ23/wAAiAZg6jCW4RwZeCca
+   eybJorvtmykbjEBjlSbjsv4mOXckr1N8HkJa8sLJj3loy2lC2r9XLvAX5
+   fRMukRajpHmQOf4/o0YlLIEN5ko9IuofAGur1DVGvxx5ohYmyEoiClI3l
+   60jCzuehGD6FYPeiiYL3vPHl2gM0RpK49E3TsHQH+mcimPWTl7F5wIbwy
+   G3xzBtujtwJH8whKaedXDsX/2zlzfIQ5K4ieg9bG8osXkAz1/eS0w5ABw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345567996"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="345567996"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 09:51:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="896090246"
+X-IronPort-AV: E=Sophos;i="6.01,203,1684825200"; 
+   d="scan'208";a="896090246"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 13 Jul 2023 09:51:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qJzX8-002RQl-2q;
+        Thu, 13 Jul 2023 19:51:14 +0300
+Date:   Thu, 13 Jul 2023 19:51:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ruihong Luo <colorsu1922@gmail.com>
+Cc:     ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, stable@vger.kernel.org,
+        luoruihong@xiaomi.com, weipengliang@xiaomi.com,
+        wengjinfei@xiaomi.com
+Subject: Re: [PATCH v4] serial: 8250_dw: Preserve original value of DLF
+ register
+Message-ID: <ZLArgoe3TXF27gsE@smile.fi.intel.com>
+References: <20230713004235.35904-1-colorsu1922@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230713004235.35904-1-colorsu1922@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The runtime PM state should not be changed by drivers that do not
-implement runtime PM even if it happens to work around a bug in PM core.
+On Thu, Jul 13, 2023 at 08:42:36AM +0800, Ruihong Luo wrote:
+> Preserve the original value of the Divisor Latch Fraction (DLF) register.
+> When the DLF register is modified without preservation, it can disrupt
+> the baudrate settings established by firmware or bootloader, leading to
+> data corruption and the generation of unreadable or distorted characters.
 
-With the wake irq arming now fixed, drop the bogus runtime PM state
-update which left the device in active state (and could potentially
-prevent a parent device from suspending).
+You forgot to add my tag. Why? Do you think the name of variable warrants this?
+Whatever,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fixes: f3974413cf02 ("tty: serial: qcom_geni_serial: Wakeup IRQ cleanup")
-Cc: stable@vger.kernel.org      # 5.6
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/tty/serial/qcom_geni_serial.c | 7 -------
- 1 file changed, 7 deletions(-)
+Next time if you don't pick up somebody's tag, care to explain in the changelog
+why.
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 88ed5bbe25a8..b825b05e6137 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1681,13 +1681,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	/*
--	 * Set pm_runtime status as ACTIVE so that wakeup_irq gets
--	 * enabled/disabled from dev_pm_arm_wake_irq during system
--	 * suspend/resume respectively.
--	 */
--	pm_runtime_set_active(&pdev->dev);
--
- 	if (port->wakeup_irq > 0) {
- 		device_init_wakeup(&pdev->dev, true);
- 		ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
+> Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
+> Signed-off-by: Ruihong Luo <colorsu1922@gmail.com>
+
 -- 
-2.41.0
+With Best Regards,
+Andy Shevchenko
+
 
