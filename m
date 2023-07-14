@@ -2,70 +2,59 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7F7752E60
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jul 2023 02:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B34753094
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jul 2023 06:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbjGNA6j (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 13 Jul 2023 20:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S232372AbjGNEaW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 14 Jul 2023 00:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjGNA6i (ORCPT
+        with ESMTP id S234829AbjGNEaV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 13 Jul 2023 20:58:38 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A2E211E;
-        Thu, 13 Jul 2023 17:58:37 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-55e1ae72dceso952775eaf.3;
-        Thu, 13 Jul 2023 17:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689296317; x=1691888317;
-        h=content-transfer-encoding:content-disposition:mime-version:cc:to
-         :from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3QvPholry1IqB1vPy7IfcSd36j1iZLv+L0ZuRD/FGM=;
-        b=Od0sCmJxoe+HOJO//oPqNFMQHDQbiyO5KJSX3n/Etqnsf85dz8FGY8wrVsZ0vS/FyS
-         9uhjgv3JPOlmCDtH9ZKL5n6IZbw5uW/OLw5VmjlAAMVPnfevyOqh5b3Xcl3Du1A05zkP
-         z4KZzutdQ68vlAWVV8NTDvy7frxN4IRdFe05Hd3GJ7mIC9WNLWFVD55uGuutjgK/WrzI
-         MdhJUwU+usouTRejSO8Nux8JEhXtEo8gCCdgafOEoQ+jQi5PxjTFIoeEEgJzfIk/Ij5e
-         83zuPUnAZz9St92Epnm8kbs2yj4OOLkFrw/P+GDZQpnTSgEgoKRB/vvFCuwjtwzrXXlm
-         g18Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689296317; x=1691888317;
-        h=content-transfer-encoding:content-disposition:mime-version:cc:to
-         :from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y3QvPholry1IqB1vPy7IfcSd36j1iZLv+L0ZuRD/FGM=;
-        b=AeYD0PvXNB77jLP7xH34pTFDw1akLhP6RPOdkcany51XGL7A5iP7kQSdfoH7Z1TuEC
-         L75MwcyupdG9e7ts7a6KumTDLoRhEjgsXcsX7taYbA4nF46BO6pINCsiH10vCZMcYHcb
-         WZC4lUOqAicQJJ3huzxnNTjlw76pUFB3gM0MPeYWyQB05kbLMUT8CbCCYNmh7CclFIQN
-         snE/FoPGQDrOy1pJ+9lZBb6/ciBwnwAVNuakbuViJQD8pFRo7kW/hhHkY+DSFzn7eWZ8
-         qs2datnpxg4Do2FkyTRVhNfglL29O5EXv5IAJF48XDrheY4t5TysNPKRYrbV4cr0fBF6
-         7XtA==
-X-Gm-Message-State: ABy/qLajYVRbXLf+zunMo08/upLy8Pw2BHkpXgZP9l3BtpOI5m5ALsf1
-        wk/Sgvuuihqnh2XXjkIwymE=
-X-Google-Smtp-Source: APBJJlFrFGPeV2v/lahcV5pOQNJoQYWQf1yvMi7CyGI3CFAmU7imqJAnCuy8p5rp5JodRd7tqir6RQ==
-X-Received: by 2002:a05:6358:52c1:b0:134:d026:42d2 with SMTP id z1-20020a05635852c100b00134d02642d2mr5022104rwz.24.1689296316493;
-        Thu, 13 Jul 2023 17:58:36 -0700 (PDT)
-Received: from oa-luoruihong. ([43.224.245.252])
-        by smtp.gmail.com with ESMTPSA id p1-20020a63ab01000000b005348af1b84csm6242754pgf.74.2023.07.13.17.58.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jul 2023 17:58:35 -0700 (PDT)
-Message-ID: <64b09dbb.630a0220.e80b9.e2ed@mx.google.com>
-X-Google-Original-Message-ID: <20230714005829.GA45908@oa-luoruihong.>
-Date:   Fri, 14 Jul 2023 08:58:29 +0800
-From:   luoruihong <colorsu1922@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     ilpo.jarvinen@linux.intel.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, luoruihong@xiaomi.com,
-        weipengliang@xiaomi.com, wengjinfei@xiaomi.com
+        Fri, 14 Jul 2023 00:30:21 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0B52D47
+        for <linux-serial@vger.kernel.org>; Thu, 13 Jul 2023 21:30:18 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R2JRq24V9zBRSVy
+        for <linux-serial@vger.kernel.org>; Fri, 14 Jul 2023 12:30:15 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689309014; x=1691901015; bh=dZqnqZqBjGRAEON5ShfXliTdE7Z
+        9seHxdVTMng/HwSM=; b=K1SWXeBDwfCAX93KDt4utJr7hNeQiIl1xVs9YI2vutb
+        ei2VFaZ06iKbj3VDTCKaYb9kww0rCqb0ZKJ9DbnUEF8o/qM7z5piC+RJYAL+16KC
+        xkj5VpoSCF+SyHc3sHm2ZWHusiXD8bwFHqIldd3jfczcCpXAu9DWTodumoUXgDKK
+        JH1m7YOOoOvFw0qa+nPegwOEuoXt2/XR7zojtXlFto2/F6KZChwY8UUBAmQUNQYe
+        Co1Hy0JYJe1ps7GU+3hAASK1YDdSsGNnnUOHI7+iPFOAjm9tSNPC0vhuC/PHSB+I
+        vB2lCNO13dB3lmdPT4QbWGocn1pBhyj2qIIox5ftRKA==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 06j03W6AJMyw for <linux-serial@vger.kernel.org>;
+        Fri, 14 Jul 2023 12:30:14 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R2JRp5byVzBRSVj;
+        Fri, 14 Jul 2023 12:30:14 +0800 (CST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=gbk
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,MISSING_SUBJECT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Date:   Fri, 14 Jul 2023 12:30:14 +0800
+From:   liubin001@208suo.com
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Fwd: [PATCH] tty:Insert clk_put before return (clk) to release memory
+In-Reply-To: <tencent_EF85BF6D0EE7D05E10D527FD335467508106@qq.com>
+References: <tencent_EF85BF6D0EE7D05E10D527FD335467508106@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <57adb092639743f2619c4765379b3ec7@208suo.com>
+X-Sender: liubin001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +62,24 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-gregkh@linuxfoundation.org, jirislaby@kernel.org,
-linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org¡¢
-luoruihong@xiaomi.com,
-weipengliang@xiaomi.com,
-wengjinfei@xiaomi.com
-Subject: Re: [PATCH v4] serial: 8250_dw: Preserve original value of DLF
- register
-In-Reply-To: <ZLArgoe3TXF27gsE@smile.fi.intel.com>
 
-On Thu, Jul 13, 2023 at 07:51:14PM +0300, Andy Shevchenko wrote:
-> On Thu, Jul 13, 2023 at 08:42:36AM +0800, Ruihong Luo wrote:
-> > Preserve the original value of the Divisor Latch Fraction (DLF) register.
-> > When the DLF register is modified without preservation, it can disrupt
-> > the baudrate settings established by firmware or bootloader, leading to
-> > data corruption and the generation of unreadable or distorted characters.
->
-> You forgot to add my tag. Why? Do you think the name of variable warrants this?
-> Whatever,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Next time if you don't pick up somebody's tag, care to explain in the changelog
-> why.
->
-> > Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
-> > Signed-off-by: Ruihong Luo <colorsu1922@gmail.com>
+tty/serial:Insert clk_put before return (clk) to release memory
+Signed-off-by: Liu Bin <liubin001@08suo.com>
+---
+  drivers/tty/serial/bcm63xx_uart.c | 1 +
+  1 file changed, 1 insertion(+)
 
-I'm sorry, I didn't know about this rule. Thank you for helping me add
-the missing tags back and for all your previous kind assistance.
+diff --git a/drivers/tty/serial/bcm63xx_uart.c 
+b/drivers/tty/serial/bcm63xx_uart.c
+index 55e82d0bf92d..7353b683952d 100644
+--- a/drivers/tty/serial/bcm63xx_uart.c
++++ b/drivers/tty/serial/bcm63xx_uart.c
+@@ -851,6 +851,7 @@ static int bcm_uart_probe(struct platform_device 
+*pdev)
+          clk = of_clk_get(pdev->dev.of_node, 0);
 
---
-Best Regards,
-Ruihong Luo
+      if (IS_ERR(clk))
++        clk_put(clk);
+          return -ENODEV;
+
+      port->iotype = UPIO_MEM;
