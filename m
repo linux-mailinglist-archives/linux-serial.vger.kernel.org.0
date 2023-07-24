@@ -2,84 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5208775EDB4
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Jul 2023 10:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD0175EDE9
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Jul 2023 10:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjGXIet convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Mon, 24 Jul 2023 04:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S230225AbjGXIkT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 24 Jul 2023 04:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjGXIer (ORCPT
+        with ESMTP id S231727AbjGXIkF (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 24 Jul 2023 04:34:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6406D99
-        for <linux-serial@vger.kernel.org>; Mon, 24 Jul 2023 01:34:46 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1qNr1d-0008D2-KF; Mon, 24 Jul 2023 10:34:41 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1qNr1a-001iLG-LE; Mon, 24 Jul 2023 10:34:38 +0200
-Received: from pza by lupine with local (Exim 4.96)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1qNr1a-000NGv-0X;
-        Mon, 24 Jul 2023 10:34:38 +0200
-Message-ID: <3edf59510eda9806e254479cde3e1c8a3670f2d1.camel@pengutronix.de>
-Subject: Re: [PATCH v3 1/1] drm/i915: Move abs_diff() to math.h
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-fbdev@vger.kernel.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Nikita Shubin via B4 Relay 
-        <devnull+nikita.shubin.maquefel.me@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Date:   Mon, 24 Jul 2023 10:34:38 +0200
-In-Reply-To: <20230724082511.3225-1-andriy.shevchenko@linux.intel.com>
-References: <20230724082511.3225-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4-2 
+        Mon, 24 Jul 2023 04:40:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1383E10EF;
+        Mon, 24 Jul 2023 01:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690187999; x=1721723999;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x12lrtGBZQsSW3ujLW9h0V/KCIjM8IrYlUp2GSyhMfI=;
+  b=VfFns614YrMCCoRGXSr6KX3PaxCRzFKdZPYhw/v56M6WiIwV51B/aPxO
+   GbEFmIoBLAbPYnaqQzq4OHxyoTYQRGoinrwqmH0Md78nfnWG09Cvl1Mk2
+   vFHEdRbzj0NsCsrO3yYfMO4vNqPnaAN9A3r2gXPUBDKZubV6r9X0MssfR
+   dDN1oLBIoB+WF4nKNcbViw+a78KDu1IefriSL+CBCCqEQR1i5U7oBI0Rx
+   U+A471Fq6vBIiXgAHOCKE3uQtpudHIkPhvQsbhAKGeQs3s+KStydXWKsf
+   i7RdmbSNd32AYX8ZUxu8q2lT8GaEw0/JXc3NPJHbKTjVLpY1Db4D22NrR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="433627611"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="433627611"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 01:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="675749431"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="675749431"
+Received: from unknown (HELO jiaqingz-acrn-container.sh.intel.com) ([10.239.138.235])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 01:39:55 -0700
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+        support@ems-wuensche.com, linux-serial@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+Subject: [PATCH v3 0/4] add support for ASIX AX99100
+Date:   Mon, 24 Jul 2023 08:39:29 +0000
+Message-Id: <20230724083933.3173513-1-jiaqing.zhao@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mo, 2023-07-24 at 11:25 +0300, Andy Shevchenko wrote:
-> abs_diff() belongs to math.h. Move it there.
-> This will allow others to use it.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Jiri Slaby <jirislaby@kernel.org> # tty/serial
+This patch adds kernel inbox driver support for the serial port and
+parallel port mode controller of ASIX AX99100 PCIe to Multi I/O
+Controller. This device has 4 separate PCI functions and each functions
+can be configured to operate in different modes.
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de> # gpu/ipu-v3
+This patchset is tested with ASIX AX99100 in following modes:
+* 4 x Serial Port
+* 2 x Serial Port
+* 2 x Serial Port + 1 x Parallel Port
+* 1 x Parallel Port
 
-regards
-Philipp
+Changes in v3:
+* Keep all changes in a single patchset.
+* Update commit message of patch 3.
+* Get Acked-By from maintainers for patch 1 & 2.
+
+Changes in v2:
+* Split changes into 2 patchsets.
+Link: https://lore.kernel.org/all/20230720102859.2985655-1-jiaqing.zhao@linux.intel.com/
+
+Jiaqing Zhao (4):
+  can: ems_pci: remove PCI_SUBVENDOR_ID_ASIX definition
+  can: ems_pci: move ASIX AX99100 ids to pci_ids.h
+  serial: 8250_pci: add support for ASIX AX99100
+  parport_pc: add support for ASIX AX99100
+
+ drivers/net/can/sja1000/ems_pci.c  |  7 +------
+ drivers/parport/parport_pc.c       |  5 +++++
+ drivers/tty/serial/8250/8250_pci.c | 10 ++++++++++
+ include/linux/pci_ids.h            |  4 ++++
+ 4 files changed, 20 insertions(+), 6 deletions(-)
+
+-- 
+2.39.2
+
