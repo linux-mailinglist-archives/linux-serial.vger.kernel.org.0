@@ -2,171 +2,193 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30303761AFB
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 16:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865A3761B69
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 16:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbjGYOIu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jul 2023 10:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S232804AbjGYOYN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jul 2023 10:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbjGYOIs (ORCPT
+        with ESMTP id S232583AbjGYOYJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jul 2023 10:08:48 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF82D1FD7;
-        Tue, 25 Jul 2023 07:08:46 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PDXDMu010531;
-        Tue, 25 Jul 2023 16:08:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=aKox1fifr/MD7CscnSNaYClzgh1MKEowYV/1CFbHY8Q=;
- b=4sFWeFLREgJioc9H+rODp72hj3AVdLAeXn//m7QoqBPjLcHM3h6ErPmn4WA399Y/aITY
- Es+zEl+7c1OuNWP/mY/sYFUWBgIrS0ZnwoA5voqLfap1MOnNtJ/zdQsJH70zP6mKb4It
- up4nrSg6m/QvGFbwtP1STGuEVZLJ00BGoK2EjvjlEjCcZJFyhQQwWBxUeAAPCbeV4q3h
- 6aBJcowFMNfbDdrNiVfgGpJZ6jk6/MU4C0knjVH4EQXo3oCJXoEvofraY3JZmoYetI5I
- ZcYWT0tL9hA+ODD+fHxyfM0nlDUmDa3FOMio5gfyLhC4I0CiM1Tbi4NIEhA6R3rIQpjx iw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2bkbhv00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 16:08:01 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9F8E100048;
-        Tue, 25 Jul 2023 16:07:56 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5ACB4241EF6;
-        Tue, 25 Jul 2023 16:07:56 +0200 (CEST)
-Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Jul
- 2023 16:07:54 +0200
-Message-ID: <1faa5511-a341-9c17-5e2a-974f8139d1d6@foss.st.com>
-Date:   Tue, 25 Jul 2023 16:07:49 +0200
+        Tue, 25 Jul 2023 10:24:09 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1AC10DC;
+        Tue, 25 Jul 2023 07:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GH4DFvsFXW8HxyMaxhFu7HFeJ+P25ZX6SyEkxmWJA9Q=; b=PuBT85WBZ0t6SsodvImuFTmfhA
+        iHa1X53QasOKBN+PQfcwMk0aIesy840sRtKAS/47zBhsnEaRjORJL9Ab72onujxnMtT6UOtAm6BIy
+        MPZYMcMpf0IcO7m/77jVgCSR3wRetM3qPw5m2bdobSrTUfjlYrC/FinvNC39XbZn5n3c=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:34256 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qOIx1-0003Kt-AQ; Tue, 25 Jul 2023 10:23:48 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        isaac.true@canonical.com, jesse.sung@canonical.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com,
+        linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Date:   Tue, 25 Jul 2023 10:23:32 -0400
+Message-Id: <20230725142343.1724130-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 07/10] arm64: dts: st: add RIFSC as a domain controller
- for STM32MP25x boards
-Content-Language: en-US
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-8-gatien.chevallier@foss.st.com>
- <61d93738-4ffd-411d-d32c-912c14eea56d@foss.st.com>
- <997780a9-1cbc-46a2-2743-7fd493682278@foss.st.com>
-In-Reply-To: <997780a9-1cbc-46a2-2743-7fd493682278@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-25_08,2023-07-25_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [PATCH v9 00/10] serial: sc16is7xx: fix GPIO regression and rs485 improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Alex,
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-On 7/6/23 11:30, Gatien CHEVALLIER wrote:
-> Hi Alex,
-> 
-> On 7/6/23 11:25, Alexandre TORGUE wrote:
->> Hi Gatien
->>
->> On 7/5/23 19:27, Gatien Chevallier wrote:
->>> RIFSC is a firewall controller. Change its compatible so that is matches
->>> the documentation and reference RIFSC as a feature-domain-controller.
->>>
->>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->>> ---
->>>   arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
->>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi 
->>> b/arch/arm64/boot/dts/st/stm32mp251.dtsi
->>> index 5268a4321841..62101084cab8 100644
->>> --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
->>> +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
->>> @@ -106,17 +106,20 @@ soc@0 {
->>>           ranges = <0x0 0x0 0x0 0x80000000>;
->>>           rifsc: rifsc-bus@42080000 {
->>> -            compatible = "simple-bus";
->>> +            compatible = "st,stm32mp25-rifsc";
->>
->> You could keep "simple-bus" compatible (in second position). In case 
->> of the RIFSC is not probed, the platform will be able to boot. If you 
->> agree you can use the same for ETZPC.
->>
->> Cheers
->> Alex
-> 
-> Sure, good point.
-> 
-> I'll change that in V2
-> 
-> Best regards,
-> Gatien
+Hello,
+this patch series mainly fixes a GPIO regression and improve RS485 flags and
+properties detection from DT.
 
-Actually, it would be a bad idea to keep "simple-bus" as a compatible.
+It now also includes various small fixes and improvements that were previously
+sent as separate patches, but that made testing everything difficult.
 
-Practical example:
-1) Firewall controller forbids a device probe by marking the device's
-node as populated (OF_POPULATED flag).
-2) The simple-bus, which is simple, populates all the devices
-from the device tree data, overriding what the firewall bus has done.
-3)=>Forbidden device's driver will be probed.
+Patch 1 fixes an issue with init of first port during probing.
 
-I think it's best to keep one compatible. If someone wants these drivers
-as external modules, then it'll be best to handle this differently.
-I'll resubmit with a single compatible for V2, please do not
-hesitate to comment on the V2 if you're not okay with this.
+Patch 2 fixes an issue when debugging IOcontrol register, but it is also
+necessary for patch "fix regression with GPIO configuration" to work.
 
-Best regards,
-Gatien
+Patch 3 fixes an incorrect label in sc16is7xx_probe() cleanup code.
 
->>
->>>               reg = <0x42080000 0x1000>;
->>>               #address-cells = <1>;
->>>               #size-cells = <1>;
->>>               ranges;
->>> +            feature-domain-controller;
->>> +            #feature-domain-cells = <1>;
->>>               usart2: serial@400e0000 {
->>>                   compatible = "st,stm32h7-uart";
->>>                   reg = <0x400e0000 0x400>;
->>>                   interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
->>>                   clocks = <&ck_flexgen_08>;
->>> +                feature-domains = <&rifsc 32>;
->>>                   status = "disabled";
->>>               };
->>>           };
->>
+Patch 4 is a refactor of GPIO registration code in preparation for patch 5.
+
+Patches 5 and 6 fix a GPIO regression by (re)allowing to choose GPIO function
+for GPIO pins shared with modem status lines.
+
+Patch 7 fixes a bug with the output value when first setting the GPIO direction.
+
+Patch 8 allows to read common rs485 device-tree flags and properties.
+
+Patch 9 introduces a delay after a reset operation to respect datasheet
+timing recommandations.
+
+Patch 10 improves comments about chip variants.
+
+I have tested the changes on a custom board with two SC16IS752 DUART using a
+Variscite IMX8MN NANO SOM.
+
+Boards that need to have GPIOS configured as modem control lines
+should add that property to their device tree. Here is a list of
+boards using the sc16is7xx driver in their device tree and that may
+need to be modified:
+    arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+    mips/boot/dts/ingenic/cu1830-neo.dts
+    mips/boot/dts/ingenic/cu1000-neo.dts
+
+Thank you.
+
+Link: [v0] https://lkml.org/lkml/2023/5/15/923
+      [v1] https://lkml.org/lkml/2023/5/17/967
+      [v1] https://lkml.org/lkml/2023/5/17/777
+      [v1] https://lkml.org/lkml/2023/5/17/780
+      [v1] https://lkml.org/lkml/2023/5/17/785
+      [v1] https://lkml.org/lkml/2023/5/17/1311
+      [v2] https://lkml.org/lkml/2023/5/18/516
+      [v3] https://lkml.org/lkml/2023/5/25/7
+      [v4] https://lkml.org/lkml/2023/5/29/656
+      [v5] https://lkml.org/lkml/2023/6/1/1046
+      [v6] https://lkml.org/lkml/2023/6/1/1328
+      [v7] https://lkml.org/lkml/2023/6/2/861
+      [v8] https://lkml.org/lkml/2023/6/7/813
+           https://lkml.org/lkml/2023/7/21/1055
+
+Changes for V1:
+- Abandonned the approach of trying to fix GPIO regression by reverting the
+  original patches, because it created more problems than it solved (breaking
+  existing users). Instead, add DT property to fix the GPIO behavior.
+
+Changes for V2:
+- Integrate multiple patches into this serie.
+
+Changes for V3:
+- Integrated all patches into single serie to facilitate debugging and tests.
+- Reduce number of exported GPIOs depending on new property
+  nxp,modem-control-line-ports
+- Added additional example in DT bindings
+
+Changes for V4:
+- Increase reset post delay to relax scheduler.
+- Put comments patches at the end.
+- Remove Fixes tag for patch "mark IOCONTROL register as volatile".
+- Improve commit messages after reviews.
+- Fix coding style issues after reviews.
+- Change GPIO registration to always register the maximum number of GPIOs
+  supported by the chip, but maks-out GPIOs declared as modem control lines.
+- Add patch to refactor GPIO registration.
+- Remove patch "serial: sc16is7xx: fix syntax error in comments".
+- Remove patch "add dump registers function"
+
+Changes for V5:
+- Change patch order to facilitate stable backport(s).
+- Change duplicate device addresses in DT binding examples.
+- Use GENMASK for bit masks.
+- Replace of_property_for_each_u32() with device_property_read_u32_array
+- Add "Cc: stable..." tags
+
+Changes for V6:
+- Fix compilation bug introduced by patch 3
+
+Changes for V7:
+- Minor changes and coding style fixes after review for
+  patch 5 "fix regression with GPIO configuration".
+
+Changes for V8:
+- Move mctrl_mask to "struct sc16is7xx_port" to avoid compiler warning when
+  CONFIG_GPIOLIB is undefined.
+- Add "struct device" member to "struct sc16is7xx_port", in order to avoid
+  passing a raw "struct device" to called functions from sc16is7xx_probe().
+- Add new patch "serial: sc16is7xx: remove obsolete out_thread label"
+
+Changes for V9:
+- Change DT property name in commit message and move some comments to cover
+  letter for patch "fix regression with GPIO configuration".
+- Add proper link to pre-v1 (v0) RFC patch.
+- Add changes log for V1 and V2 to this cover letter.
+
+Hugo Villeneuve (10):
+  serial: sc16is7xx: fix broken port 0 uart init
+  serial: sc16is7xx: mark IOCONTROL register as volatile
+  serial: sc16is7xx: remove obsolete out_thread label
+  serial: sc16is7xx: refactor GPIO controller registration
+  dt-bindings: sc16is7xx: Add property to change GPIO function
+  serial: sc16is7xx: fix regression with GPIO configuration
+  serial: sc16is7xx: fix bug when first setting GPIO direction
+  serial: sc16is7xx: add call to get rs485 DT flags and properties
+  serial: sc16is7xx: add post reset delay
+  serial: sc16is7xx: improve comments about variants
+
+ .../bindings/serial/nxp,sc16is7xx.txt         |  46 +++++
+ drivers/tty/serial/sc16is7xx.c                | 177 +++++++++++++-----
+ 2 files changed, 181 insertions(+), 42 deletions(-)
+
+
+base-commit: 0b5547c51827e053cc754db47d3ec3e6c2c451d2
+-- 
+2.30.2
+
