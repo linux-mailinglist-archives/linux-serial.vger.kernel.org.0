@@ -2,44 +2,51 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7267E76098E
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 07:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FF1760A6F
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 08:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjGYFnL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jul 2023 01:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
+        id S230302AbjGYGl6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jul 2023 02:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjGYFmx (ORCPT
+        with ESMTP id S230187AbjGYGl5 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jul 2023 01:42:53 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DF301FC1;
-        Mon, 24 Jul 2023 22:42:45 -0700 (PDT)
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 841038176;
-        Tue, 25 Jul 2023 05:42:42 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
+        Tue, 25 Jul 2023 02:41:57 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44416116;
+        Mon, 24 Jul 2023 23:41:55 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 36P6f7i5071057;
+        Tue, 25 Jul 2023 14:41:07 +0800 (+08)
+        (envelope-from Chunyan.Zhang@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4R96p358q2z2K4D5v;
+        Tue, 25 Jul 2023 14:39:39 +0800 (CST)
+Received: from ubt.spreadtrum.com (10.0.73.70) by BJMBX02.spreadtrum.com
+ (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 25 Jul
+ 2023 14:41:04 +0800
+From:   Chunyan Zhang <chunyan.zhang@unisoc.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v5 3/3] serial: core: Fix serial core controller port name to show controller id
-Date:   Tue, 25 Jul 2023 08:42:12 +0300
-Message-ID: <20230725054216.45696-4-tony@atomide.com>
+        Jiri Slaby <jirislaby@kernel.org>
+CC:     <linux-serial@vger.kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH V3 1/2] serial: sprd: Assign sprd_port after initialized to avoid wrong access
+Date:   Tue, 25 Jul 2023 14:40:52 +0800
+Message-ID: <20230725064053.235448-1-chunyan.zhang@unisoc.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725054216.45696-1-tony@atomide.com>
-References: <20230725054216.45696-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.73.70]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX02.spreadtrum.com (10.0.64.8)
+X-MAIL: SHSQR01.spreadtrum.com 36P6f7i5071057
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,112 +54,115 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We are missing the serial core controller id for the serial core port
-name. Let's fix the issue for sane sysfs output, and to avoid issues
-addressing serial ports later on.
+The global pointer 'sprd_port' may not zero when sprd_probe returns
+failure, that is a risk for sprd_port to be accessed afterward, and
+may lead to unexpected errors.
 
-And as we're now showing the controller id, the "ctrl" and "port" prefix
-for the DEVNAME become useless, we can just drop them. Let's standardize on
-DEVNAME:0 for controller name, where 0 is the controller id. And
-DEVNAME:0.0 for port name, where 0.0 are the controller id and port id.
+For example:
 
-This makes the sysfs output nicer, on qemu for example:
+There are two UART ports, UART1 is used for console and configured in
+kernel command line, i.e. "console=";
 
-$ ls /sys/bus/serial-base/devices
-00:04:0         serial8250:0    serial8250:0.2
-00:04:0.0       serial8250:0.1  serial8250:0.3
+The UART1 probe failed and the memory allocated to sprd_port[1] was
+released, but sprd_port[1] was not set to NULL;
 
-Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
-Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+In UART2 probe, the same virtual address was allocated to sprd_port[2],
+and UART2 probe process finally will go into sprd_console_setup() to
+register UART1 as console since it is configured as preferred console
+(filled to console_cmdline[]), but the console parameters (sprd_port[1])
+belong to UART2.
+
+So move the sprd_port[] assignment to where the port already initialized
+can avoid the above issue.
+
+Fixes: b7396a38fb28 ("tty/serial: Add Spreadtrum sc9836-uart driver support")
+Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 ---
+V3:
+- Call uart_unregister_driver() only when the 'sprd_ports_num' decreases to 0;
+- Add calling sprd_rx_free_buf() instread of sprd_remove() under clean_up lable. 
 
-Andy, I kept your Reviewed-by although I updated the device naming and
-description, does the patch still look OK to you?
-
+V2:
+- Leave sprd_remove() to keep the unrelated code logic the same.
 ---
- drivers/tty/serial/serial_base_bus.c | 32 +++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ drivers/tty/serial/sprd_serial.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/tty/serial/serial_base_bus.c b/drivers/tty/serial/serial_base_bus.c
---- a/drivers/tty/serial/serial_base_bus.c
-+++ b/drivers/tty/serial/serial_base_bus.c
-@@ -19,6 +19,14 @@
- 
- static bool serial_base_initialized;
- 
-+static const struct device_type serial_ctrl_type = {
-+	.name = "ctrl",
-+};
-+
-+static const struct device_type serial_port_type = {
-+	.name = "port",
-+};
-+
- static int serial_base_match(struct device *dev, struct device_driver *drv)
+diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+index b58f51296ace..fc1377029021 100644
+--- a/drivers/tty/serial/sprd_serial.c
++++ b/drivers/tty/serial/sprd_serial.c
+@@ -1106,7 +1106,7 @@ static bool sprd_uart_is_console(struct uart_port *uport)
+ static int sprd_clk_init(struct uart_port *uport)
  {
- 	int len = strlen(drv->name);
-@@ -48,7 +56,8 @@ static int serial_base_device_init(struct uart_port *port,
- 				   struct device *parent_dev,
- 				   const struct device_type *type,
- 				   void (*release)(struct device *dev),
--				   int id)
-+				   unsigned int ctrl_id,
-+				   unsigned int port_id)
+ 	struct clk *clk_uart, *clk_parent;
+-	struct sprd_uart_port *u = sprd_port[uport->line];
++	struct sprd_uart_port *u = container_of(uport, struct sprd_uart_port, port);
+ 
+ 	clk_uart = devm_clk_get(uport->dev, "uart");
+ 	if (IS_ERR(clk_uart)) {
+@@ -1149,22 +1149,22 @@ static int sprd_probe(struct platform_device *pdev)
  {
- 	device_initialize(dev);
- 	dev->type = type;
-@@ -61,13 +70,16 @@ static int serial_base_device_init(struct uart_port *port,
- 		return -EPROBE_DEFER;
+ 	struct resource *res;
+ 	struct uart_port *up;
++	struct sprd_uart_port *sport;
+ 	int irq;
+ 	int index;
+ 	int ret;
+ 
+ 	index = of_alias_get_id(pdev->dev.of_node, "serial");
+-	if (index < 0 || index >= ARRAY_SIZE(sprd_port)) {
++	if (index < 0 || index >= UART_NR_MAX) {
+ 		dev_err(&pdev->dev, "got a wrong serial alias id %d\n", index);
+ 		return -EINVAL;
  	}
  
--	return dev_set_name(dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
-+	if (type == &serial_ctrl_type)
-+		return dev_set_name(dev, "%s:%d", dev_name(port->dev), ctrl_id);
+-	sprd_port[index] = devm_kzalloc(&pdev->dev, sizeof(*sprd_port[index]),
+-					GFP_KERNEL);
+-	if (!sprd_port[index])
++	sport = devm_kzalloc(&pdev->dev, sizeof(*sport), GFP_KERNEL);
++	if (!sport)
+ 		return -ENOMEM;
+ 
+-	up = &sprd_port[index]->port;
++	up = &sport->port;
+ 	up->dev = &pdev->dev;
+ 	up->line = index;
+ 	up->type = PORT_SPRD;
+@@ -1195,7 +1195,7 @@ static int sprd_probe(struct platform_device *pdev)
+ 	 * Allocate one dma buffer to prepare for receive transfer, in case
+ 	 * memory allocation failure at runtime.
+ 	 */
+-	ret = sprd_rx_alloc_buf(sprd_port[index]);
++	ret = sprd_rx_alloc_buf(sport);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1206,14 +1206,23 @@ static int sprd_probe(struct platform_device *pdev)
+ 			return ret;
+ 		}
+ 	}
 +
-+	if (type == &serial_port_type)
-+		return dev_set_name(dev, "%s:%d.%d", dev_name(port->dev),
-+				    ctrl_id, port_id);
+ 	sprd_ports_num++;
++	sprd_port[index] = sport;
+ 
+ 	ret = uart_add_one_port(&sprd_uart_driver, up);
+ 	if (ret)
+-		sprd_remove(pdev);
++		goto clean_port;
+ 
+ 	platform_set_drvdata(pdev, up);
+ 
++	return 0;
 +
-+	return -EINVAL;
++clean_port:
++	sprd_port[index] = NULL;
++	if (--sprd_ports_num == 0)
++		uart_unregister_driver(&sprd_uart_driver);
++	sprd_rx_free_buf(sport);
+ 	return ret;
  }
- 
--static const struct device_type serial_ctrl_type = {
--	.name = "ctrl",
--};
--
- static void serial_base_ctrl_release(struct device *dev)
- {
- 	struct serial_ctrl_device *ctrl_dev = to_serial_base_ctrl_device(dev);
-@@ -96,7 +108,7 @@ struct serial_ctrl_device *serial_base_ctrl_add(struct uart_port *port,
- 	err = serial_base_device_init(port, &ctrl_dev->dev,
- 				      parent, &serial_ctrl_type,
- 				      serial_base_ctrl_release,
--				      port->ctrl_id);
-+				      port->ctrl_id, 0);
- 	if (err)
- 		goto err_put_device;
- 
-@@ -112,10 +124,6 @@ struct serial_ctrl_device *serial_base_ctrl_add(struct uart_port *port,
- 	return ERR_PTR(err);
- }
- 
--static const struct device_type serial_port_type = {
--	.name = "port",
--};
--
- static void serial_base_port_release(struct device *dev)
- {
- 	struct serial_port_device *port_dev = to_serial_base_port_device(dev);
-@@ -136,7 +144,7 @@ struct serial_port_device *serial_base_port_add(struct uart_port *port,
- 	err = serial_base_device_init(port, &port_dev->dev,
- 				      &ctrl_dev->dev, &serial_port_type,
- 				      serial_base_port_release,
--				      port->port_id);
-+				      port->ctrl_id, port->port_id);
- 	if (err)
- 		goto err_put_device;
  
 -- 
 2.41.0
+
