@@ -2,106 +2,137 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8428760A70
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 08:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF35760AF0
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 08:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjGYGl7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jul 2023 02:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S232263AbjGYGv1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jul 2023 02:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjGYGl5 (ORCPT
+        with ESMTP id S232086AbjGYGvZ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jul 2023 02:41:57 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED721B0;
-        Mon, 24 Jul 2023 23:41:55 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 36P6f9i2071443;
-        Tue, 25 Jul 2023 14:41:09 +0800 (+08)
-        (envelope-from Chunyan.Zhang@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4R96p65DM4z2K4D5v;
-        Tue, 25 Jul 2023 14:39:42 +0800 (CST)
-Received: from ubt.spreadtrum.com (10.0.73.70) by BJMBX02.spreadtrum.com
- (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 25 Jul
- 2023 14:41:07 +0800
-From:   Chunyan Zhang <chunyan.zhang@unisoc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-CC:     <linux-serial@vger.kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3 2/2] serial: sprd: Fix DMA buffer leak issue
-Date:   Tue, 25 Jul 2023 14:40:53 +0800
-Message-ID: <20230725064053.235448-2-chunyan.zhang@unisoc.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725064053.235448-1-chunyan.zhang@unisoc.com>
-References: <20230725064053.235448-1-chunyan.zhang@unisoc.com>
+        Tue, 25 Jul 2023 02:51:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B142FE51
+        for <linux-serial@vger.kernel.org>; Mon, 24 Jul 2023 23:51:24 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qOBsF-0008CR-QE; Tue, 25 Jul 2023 08:50:23 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qOBs7-001wAn-Vc; Tue, 25 Jul 2023 08:50:15 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qOBs7-007bOg-45; Tue, 25 Jul 2023 08:50:15 +0200
+Date:   Tue, 25 Jul 2023 08:50:14 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jacky Huang <ychuang3@nuvoton.com>,
+        Shan-Chun Hung <schung@nuvoton.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] tty: Explicitly include correct DT includes
+Message-ID: <20230725065014.kjdcos77kzepprvw@pengutronix.de>
+References: <20230724205440.767071-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.73.70]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX02.spreadtrum.com (10.0.64.8)
-X-MAIL: SHSQR01.spreadtrum.com 36P6f9i2071443
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="egg3m5pjvujeb37y"
+Content-Disposition: inline
+In-Reply-To: <20230724205440.767071-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Release DMA buffer when _probe() returns failure to avoid memory leak.
 
-Fixes: f4487db58eb7 ("serial: sprd: Add DMA mode support")
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
-V3:
-- Corresponding changes based on patch-1.
+--egg3m5pjvujeb37y
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-V2:
-- Added Baolin's Reviewed-by;
-- Add setting rx_dma.virt to NULL after being freed.
----
- drivers/tty/serial/sprd_serial.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Hello Rob,
 
-diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
-index fc1377029021..99da964e8bd4 100644
---- a/drivers/tty/serial/sprd_serial.c
-+++ b/drivers/tty/serial/sprd_serial.c
-@@ -364,7 +364,7 @@ static void sprd_rx_free_buf(struct sprd_uart_port *sp)
- 	if (sp->rx_dma.virt)
- 		dma_free_coherent(sp->port.dev, SPRD_UART_RX_SIZE,
- 				  sp->rx_dma.virt, sp->rx_dma.phys_addr);
--
-+	sp->rx_dma.virt = NULL;
- }
- 
- static int sprd_rx_dma_config(struct uart_port *port, u32 burst)
-@@ -1203,7 +1203,7 @@ static int sprd_probe(struct platform_device *pdev)
- 		ret = uart_register_driver(&sprd_uart_driver);
- 		if (ret < 0) {
- 			pr_err("Failed to register SPRD-UART driver\n");
--			return ret;
-+			goto free_rx_buf;
- 		}
- 	}
- 
-@@ -1222,6 +1222,7 @@ static int sprd_probe(struct platform_device *pdev)
- 	sprd_port[index] = NULL;
- 	if (--sprd_ports_num == 0)
- 		uart_unregister_driver(&sprd_uart_driver);
-+free_rx_buf:
- 	sprd_rx_free_buf(sport);
- 	return ret;
- }
--- 
-2.41.0
+On Mon, Jul 24, 2023 at 02:54:38PM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> # for imx
+
+Thanks for your efforts!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--egg3m5pjvujeb37y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmS/cKYACgkQj4D7WH0S
+/k5DeQf/XZ9i2MKupQ474foZd/xSXDoeGP/mzcur4EO3Bu06s1VDyknWODS3IU5p
+VGN/GNMpV8QCC4UBbhddhyqP60D9vYNBqbyw6ZsVZTH5+9Ld4Dmfi8jTYeTNiYYc
++EmM4HrAdY1GVXkdkip00c1GWdcPsHQA6JgSwV1z2cjiJU/7AeRdF6FTB7LPtxCO
+lHZ+at0pra4cRma7o2dZyjIZCa3M05OFqBIX5FAbCCptQsRYlnfTJbOuA2Fr3aTq
+mn7uHJbHPuX+r4PnWXzeq/IC4eEynkYfcINsTmQtG2H2ecI+GvJGttDpTrZstKr7
+ThQy424A1jo0R00lnwmfFmOG/Q7gKQ==
+=p7gV
+-----END PGP SIGNATURE-----
+
+--egg3m5pjvujeb37y--
