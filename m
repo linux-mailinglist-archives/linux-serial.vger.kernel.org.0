@@ -2,94 +2,75 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C47780C3D
-	for <lists+linux-serial@lfdr.de>; Fri, 18 Aug 2023 15:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F20078112A
+	for <lists+linux-serial@lfdr.de>; Fri, 18 Aug 2023 19:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348317AbjHRNFj (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 18 Aug 2023 09:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S1378868AbjHRRCd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Fri, 18 Aug 2023 13:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377060AbjHRNFe (ORCPT
+        with ESMTP id S1378884AbjHRRCW (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 18 Aug 2023 09:05:34 -0400
-X-Greylist: delayed 9464 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Aug 2023 06:05:33 PDT
-Received: from server.dsmega.com (server.dsmega.com [185.186.208.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83C53A9A
-        for <linux-serial@vger.kernel.org>; Fri, 18 Aug 2023 06:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=remzavod.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=thoNrXbQv25mMK/3RviWbIqjmSGPAZCcCyNvsgRjrpM=; b=UPkXy4PBs7pCObhWBNlgVXmoYt
-        C1+h6WbGotmTRuCTPxoG7ms55B//qp1g8nEu9Qz5I6sNkqU0hx2fHoxS1FYh+K12+Fwaumk4+FVbF
-        yvg6c9XxXvPc5dQk63bDPfpKX5ZYr35yfYp1qrMurY9El1ArVXvddVpXN7L4Aqm3X5XIEr1Dvc0qv
-        Es2rapgiMnWI8RMcLWB4rIbnKGe/NhCDohEnSsa5nw+yJo72DfEM4PPmTzhD+BbE1xm/4kW1ODJsS
-        IXWghfuVx5MExAFBw/wJegupeG/h/RID3IA2NY+QpakMTZXJDnqR9ctJm6+zTnSA5v1MogOSqShR8
-        Vi0IwENQ==;
-Received: from [85.195.105.114] (port=53913 helo=gmail.com)
-        by server.dsmega.com with esmtpa (Exim 4.93)
-        (envelope-from <roberthelmut144@gmail.com>)
-        id 1qWwhn-0002n1-Cu
-        for linux-serial@vger.kernel.org; Fri, 18 Aug 2023 13:27:47 +0300
-Reply-To: robert.helmut@selectlaboratoriesltd.co.uk
-From:   Robert Helmut <roberthelmut144@gmail.com>
-To:     linux-serial@vger.kernel.org
-Subject: Re: Supply
-Date:   18 Aug 2023 03:27:46 -0700
-Message-ID: <20230818032746.D0CFF480DFDA6B51@gmail.com>
+        Fri, 18 Aug 2023 13:02:22 -0400
+Received: from 06d01.mspz3.gob.ec (182.60.46.186.static.anycast.cnt-grms.ec [186.46.60.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3363A3C2D
+        for <linux-serial@vger.kernel.org>; Fri, 18 Aug 2023 10:02:10 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by 06d01.mspz3.gob.ec (Postfix) with ESMTP id 856482A00B61;
+        Tue, 25 Jul 2023 09:53:49 -0500 (ECT)
+Received: from 06d01.mspz3.gob.ec ([127.0.0.1])
+        by localhost (06d01.mspz3.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id P6GEZXlwK1ku; Tue, 25 Jul 2023 09:53:49 -0500 (ECT)
+Received: from localhost (localhost [127.0.0.1])
+        by 06d01.mspz3.gob.ec (Postfix) with ESMTP id 951D929B23E7;
+        Tue, 25 Jul 2023 03:07:04 -0500 (ECT)
+X-Virus-Scanned: amavisd-new at 06d01.mspz3.gob.ec
+Received: from 06d01.mspz3.gob.ec ([127.0.0.1])
+        by localhost (06d01.mspz3.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id xWs725mupLwt; Tue, 25 Jul 2023 03:07:04 -0500 (ECT)
+Received: from [141.98.6.221] (unknown [141.98.6.221])
+        by 06d01.mspz3.gob.ec (Postfix) with ESMTPSA id BCDBE299B898;
+        Mon, 24 Jul 2023 21:19:21 -0500 (ECT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.dsmega.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - gmail.com
-X-Get-Message-Sender-Via: server.dsmega.com: authenticated_id: info@remzavod.com
-X-Authenticated-Sender: server.dsmega.com: info@remzavod.com
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
-        DKIM_SIGNED,DKIM_VALID,FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re: Investment & Project Funding
+To:     Recipients <alexandra.neira@06d01.mspz3.gob.ec>
+From:   "Principal Consultant" <alexandra.neira@06d01.mspz3.gob.ec>
+Date:   Mon, 24 Jul 2023 18:30:09 -0700
+Reply-To: joeybestman683@gmail.com
+Message-Id: <20230725021926.BCDBE299B898@06d01.mspz3.gob.ec>
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,KHOP_HELO_FCRDNS,
+        NO_DNS_FOR_FROM,RCVD_IN_SBL,RCVD_IN_SBL_CSS,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [186.46.60.182 listed in zen.spamhaus.org]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [141.98.6.221 listed in zen.spamhaus.org]
+        *  0.0 T_SPF_HELO_TEMPERROR SPF: test of HELO record failed
+        *      (temperror)
+        *  0.0 T_SPF_TEMPERROR SPF: test of record failed (temperror)
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [joeybestman683[at]gmail.com]
+        *  0.0 NO_DNS_FOR_FROM DNS: Envelope sender has no MX or A DNS records
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Greetings,
+Hello,
 
-I have a business plan that will benefit you from my company
-where i work as the head of research and dev. Contact me through
-my company provided email addresss and i will give you details of
-my intent for your consideration.
+I'm Joey Bestman, My Company can bridge funds for your New or Ongoing Business. You can reach me using this email address: joeybestman683@gmail.com
 
-Sincerely
-Robert Helmut
-Research & Dev Dept.
-Select Pharma Lab. Ltd .UK
----------------------------------
-Email: robert.helmut@selectlaboratoriesltd.co.uk
-Select Pharma Lab. Ltd .UK
-First Floor, Quay 2, 139 Fountain bridge, Edinburgh, EH3 9QG,
-United Kingdom
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3DDISCLAIMER NOTICE=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-The content of this message is confidential. If you have received=20
-it by mistake, please inform us by an email reply and then delete=20
-the message. It is forbidden to copy, forward, or in any way=20
-reveal the contents of this message to anyone. The integrity and=20
-security of this email cannot be guaranteed over the Internet.=20
-Therefore, the sender will not be held liable for any damage=20
-caused by the message.
-
-=C2=A9 Copyright 2023 Select Pharma Lab. Ltd. All Right Reserved.
-
-
+Regards,
+Joey Bestman
+Principal Consultant
