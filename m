@@ -2,53 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B16676203C
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 19:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B3D762086
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Jul 2023 19:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjGYRdl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 25 Jul 2023 13:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
+        id S232449AbjGYRtr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 25 Jul 2023 13:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjGYRdl (ORCPT
+        with ESMTP id S232032AbjGYRtl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 25 Jul 2023 13:33:41 -0400
+        Tue, 25 Jul 2023 13:49:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CAA6;
-        Tue, 25 Jul 2023 10:33:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346D31FEF;
+        Tue, 25 Jul 2023 10:49:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1EE561839;
-        Tue, 25 Jul 2023 17:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFF8C433C8;
-        Tue, 25 Jul 2023 17:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690306419;
-        bh=W2bYqQuaVMZ/wZjaKxCd2Tdu6cVEZXTe5IXAu3PvR+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yg9Es6XWE4Bo/8JKnt60txUTkQl0JRQUI4uswwHVwEB3upOVVO4xDsRJKLDT6gBg0
-         3tAuVPbKVZ0+gahmOyTEgoLM53esIdlo5LyHYjylgx6AT9Xg+kcCEwS2Wg8BM9L7LZ
-         NtrseQYGXpgVUsiwT9EAZ/zj2DO8pLmo4n/EK/P0=
-Date:   Tue, 25 Jul 2023 19:33:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3 1/2] serial: sprd: Assign sprd_port after initialized
- to avoid wrong access
-Message-ID: <2023072551-surrogate-reproach-3634@gregkh>
-References: <20230725064053.235448-1-chunyan.zhang@unisoc.com>
- <2023072548-jolliness-unbolted-621c@gregkh>
- <CAAfSe-ugFQZqNzuukghJHot71v=GoueamooFGzAdEUoPvEgh8g@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB8206184A;
+        Tue, 25 Jul 2023 17:49:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6AB4C433CA;
+        Tue, 25 Jul 2023 17:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690307375;
+        bh=WJL53er2hn/3EEx4DOJfAbOjXZnKjKBtRagFrtg05jg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CPO6RMRPaMRtVah/1RA1wO5FXxmP2DhlHptZXjtjeJZn524snzFNmGkI4PM2ckIo6
+         7FXzBD4qXePRo3PzLIkOFhZGyDj+4aolBAs7lhubS+/sugRBmEv5uwY2APQucc4EIz
+         1nGGt64bGnlel2IpehCbvoOPhAXT8wnt5XPyu8AhkROpI7dA7thAncucJtelJljMnw
+         atiZpLOBvBZ0F/r5WTJZfurX5L65y1q7LeSvDTjmcEUXR6SWW06bn+O1CXh/QQgkcV
+         FpqLMVfkRM4VMT0UlbHKmPRIUz4d0EWFPpNeyuIHEERTM60aZDTVat5SY/xyjqL5hf
+         qQXqITOBkCDlA==
+Received: (nullmailer pid 3497939 invoked by uid 1000);
+        Tue, 25 Jul 2023 17:49:25 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAfSe-ugFQZqNzuukghJHot71v=GoueamooFGzAdEUoPvEgh8g@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc:     kuba@kernel.org, lee@kernel.org, andi.shyti@kernel.org,
+        alsa-devel@alsa-project.org, linux-i2c@vger.kernel.org,
+        richardcochran@gmail.com, linux-mmc@vger.kernel.org,
+        arnaud.pouliquen@foss.st.com, olivier.moysan@foss.st.com,
+        vkoul@kernel.org, linux-serial@vger.kernel.org, robh+dt@kernel.org,
+        alexandre.torgue@foss.st.com, krzysztof.kozlowski+dt@linaro.org,
+        ulf.hansson@linaro.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, hugues.fruchet@foss.st.com,
+        mchehab@kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-phy@lists.infradead.org, pabeni@redhat.com,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, edumazet@google.com,
+        linux-crypto@vger.kernel.org, jic23@kernel.org,
+        Frank Rowand <frowand.list@gmail.com>, arnd@kernel.org,
+        linux-usb@vger.kernel.org, catalin.marinas@arm.com,
+        linux-iio@vger.kernel.org, davem@davemloft.net,
+        Oleksii_Moisieiev@epam.com, will@kernel.org,
+        dmaengine@vger.kernel.org, netdev@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, linux-spi@vger.kernel.org,
+        conor+dt@kernel.org, herbert@gondor.apana.org.au
+In-Reply-To: <20230725164104.273965-4-gatien.chevallier@foss.st.com>
+References: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
+ <20230725164104.273965-4-gatien.chevallier@foss.st.com>
+Message-Id: <169030736534.3497905.9507005013968358402.robh@kernel.org>
+Subject: Re: [PATCH v2 03/11] dt-bindings: bus: document ETZPC
+Date:   Tue, 25 Jul 2023 11:49:25 -0600
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -59,72 +76,53 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 03:49:15PM +0800, Chunyan Zhang wrote:
-> On Tue, 25 Jul 2023 at 14:50, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Jul 25, 2023 at 02:40:52PM +0800, Chunyan Zhang wrote:
-> > > The global pointer 'sprd_port' may not zero when sprd_probe returns
-> > > failure, that is a risk for sprd_port to be accessed afterward, and
-> > > may lead to unexpected errors.
-> > >
-> > > For example:
-> > >
-> > > There are two UART ports, UART1 is used for console and configured in
-> > > kernel command line, i.e. "console=";
-> > >
-> > > The UART1 probe failed and the memory allocated to sprd_port[1] was
-> > > released, but sprd_port[1] was not set to NULL;
-> > >
-> > > In UART2 probe, the same virtual address was allocated to sprd_port[2],
-> > > and UART2 probe process finally will go into sprd_console_setup() to
-> > > register UART1 as console since it is configured as preferred console
-> > > (filled to console_cmdline[]), but the console parameters (sprd_port[1])
-> > > belong to UART2.
-> > >
-> > > So move the sprd_port[] assignment to where the port already initialized
-> > > can avoid the above issue.
-> > >
-> > > Fixes: b7396a38fb28 ("tty/serial: Add Spreadtrum sc9836-uart driver support")
-> > > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > > ---
-> > > V3:
-> > > - Call uart_unregister_driver() only when the 'sprd_ports_num' decreases to 0;
-> > > - Add calling sprd_rx_free_buf() instread of sprd_remove() under clean_up lable.
-> > >
-> > > V2:
-> > > - Leave sprd_remove() to keep the unrelated code logic the same.
-> > > ---
-> > >  drivers/tty/serial/sprd_serial.c | 25 +++++++++++++++++--------
-> > >  1 file changed, 17 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
-> > > index b58f51296ace..fc1377029021 100644
-> > > --- a/drivers/tty/serial/sprd_serial.c
-> > > +++ b/drivers/tty/serial/sprd_serial.c
-> > > @@ -1106,7 +1106,7 @@ static bool sprd_uart_is_console(struct uart_port *uport)
-> > >  static int sprd_clk_init(struct uart_port *uport)
-> > >  {
-> > >       struct clk *clk_uart, *clk_parent;
-> > > -     struct sprd_uart_port *u = sprd_port[uport->line];
-> > > +     struct sprd_uart_port *u = container_of(uport, struct sprd_uart_port, port);
-> >
-> > Now that you are not allocaing the sprd_port[] pointers, shouldn't you
-> > also remove that variable entirely?
+
+On Tue, 25 Jul 2023 18:40:56 +0200, Gatien Chevallier wrote:
+> Document ETZPC (Extended TrustZone protection controller). ETZPC is a
+> firewall controller.
 > 
-> sprd_console_write() and sprd_console_setup() [1] also need sprd_port[].
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> ---
+> 
+> Changes in V2:
+> 	- Corrected errors highlighted by Rob's robot
+> 	- No longer define the maxItems for the "feature-domains"
+> 	  property
+> 	- Fix example (node name, status)
+> 	- Declare "feature-domain-names" as an optional
+> 	  property for child nodes
+> 	- Fix description of "feature-domains" property
+> 	- Reorder the properties so it matches RIFSC
+> 	- Add missing "feature-domain-controller" property
+> 
+>  .../bindings/bus/st,stm32-etzpc.yaml          | 96 +++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+> 
 
-Why?  Can't they also use the structure passed to them instead?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> So, this driver still needs to allocate the buffer for sprd_port[],
-> the change is using a local variable instead of allocating directly to
-> the global pointer.
+yamllint warnings/errors:
 
-Ah, I missed that you were saving the pointer off.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/bus/st,stm32-etzpc.example.dtb: serial@4c001000: Unevaluated properties are not allowed ('feature-domains' was unexpected)
+	from schema $id: http://devicetree.org/schemas/serial/st,stm32-uart.yaml#
 
-I think it would be better if you could just remove the static array
-entirely, that's a sign of a very old driver that should be fixed up.
+doc reference errors (make refcheckdocs):
 
-thanks,
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230725164104.273965-4-gatien.chevallier@foss.st.com
 
-greg k-h
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
