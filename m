@@ -2,57 +2,83 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEF2762EBD
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Jul 2023 09:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5324E76304D
+	for <lists+linux-serial@lfdr.de>; Wed, 26 Jul 2023 10:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbjGZHvr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 26 Jul 2023 03:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S232583AbjGZIq6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 26 Jul 2023 04:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbjGZHvP (ORCPT
+        with ESMTP id S233178AbjGZIq2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 26 Jul 2023 03:51:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A88E59EE
-        for <linux-serial@vger.kernel.org>; Wed, 26 Jul 2023 00:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690357518; x=1721893518;
-  h=date:from:to:cc:subject:message-id;
-  bh=BMv5BdvyCXCa5Kim4NR8Wid0rVqLKrJIER1pkINDaZk=;
-  b=QwhY3NmyNfxhVy/2gGGaKbC3dappUxFoaWkCWW9ZqFKO/ZGKCNunyQMz
-   q5CH1JDGh2WbtCA2gMhecf1LRn0yWWe2SM6DyT7Fbzu1onaAialEwpIu2
-   6HCl/N0JXUl+5V6ylIVOFRDPtAsHG7I7pD1AkjArV8nLOa91we2Tm+4vT
-   UPb4PmnQJdqIRKRp9W4gr1PmpZSxT/b7/oC9O59AkUzhb09RVGjQPrqev
-   l3ieC7Kg1jx0TFVKoWQdNL8MXSZgSfK4jGvuTCnhTObs0ifQI9UCfQr69
-   nhiRZ3eqpxC6uCxXj9jTPayG0StYw0sgWyS/sCrzMwa52Evo82IbCtRFj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="370620423"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="370620423"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 00:45:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10782"; a="791740205"
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="scan'208";a="791740205"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jul 2023 00:45:07 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qOZCO-0000nO-00;
-        Wed, 26 Jul 2023 07:44:50 +0000
-Date:   Wed, 26 Jul 2023 15:44:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [tty:tty-linus] BUILD SUCCESS
- 748c5ea8b8796ae8ee80b8d3a3d940570b588d59
-Message-ID: <202307261504.ORIuDh3W-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Wed, 26 Jul 2023 04:46:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280084EC7;
+        Wed, 26 Jul 2023 01:38:57 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36Q7mqi5023360;
+        Wed, 26 Jul 2023 10:38:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=3y1gAN+mwjFX0mmcob0coJ1SCFHX1T8V+14qzBSgYoA=;
+ b=N5B8z6sk0DqG0iOyKAz2AgU4noJ9XPHD2+5T5iX27bPzgHrFXh4Wd6QQV5NHYARnLYuy
+ FfsXC/y/WcOC67Y+a3/L07jxhG/OR21dxTEiruRaurn/OkFZuo3FYWVp2FE0NNwct8nV
+ y1Si+mWfmOcNhUDx8HXHu5gX1+AsG3abuw8f2Ygnt4AQwHzzATrwf0dI1BF5aIKnX4hL
+ d45Ca8DCN6Uo3UKf+YOzquRvgPuriEc/KaJFA7PJuuyyNpQohLqe4Wi3eo1hPKLxAvfQ
+ WZD1ACjnWZG4T46QzsFGCdtskRLGSf5ZzHw0NTxy8ApAgOe+Bspe33wVnVJWzUwANJUi qg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2ye8gd3h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jul 2023 10:38:18 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3861F100048;
+        Wed, 26 Jul 2023 10:38:16 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C6EB020FA39;
+        Wed, 26 Jul 2023 10:38:16 +0200 (CEST)
+Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 26 Jul
+ 2023 10:38:16 +0200
+From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
+        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: [PATCH v3 00/11] Introduce STM32 Firewall framework
+Date:   Wed, 26 Jul 2023 10:37:59 +0200
+Message-ID: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-26_01,2023-07-25_01,2023-05-22_02
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,207 +87,185 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-linus
-branch HEAD: 748c5ea8b8796ae8ee80b8d3a3d940570b588d59  serial: 8250_dw: Preserve original value of DLF register
+Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
+platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
+register to the framework to offer firewall services such as access
+granting.
 
-elapsed time: 776m
+This series of patches is a new approach on the previous STM32 system
+bus, history is available here:
+https://lore.kernel.org/lkml/20230127164040.1047583/
 
-configs tested: 188
-configs skipped: 7
+The need for such framework arises from the fact that there are now
+multiple hardware firewalls implemented across multiple products.
+Drivers are shared between different products, using the same code.
+When it comes to firewalls, the purpose mostly stays the same: Protect
+hardware resources. But the implementation differs, and there are
+multiple types of firewalls: peripheral, memory, ... 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Some hardware firewall controllers such as the RIFSC implemented on
+STM32MP2x platforms may require to take ownership of a resource before
+being able to use it, hence the requirement for firewall services to
+take/release the ownership of such resources.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r006-20230726   gcc  
-alpha                randconfig-r012-20230725   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230725   gcc  
-arc                  randconfig-r005-20230726   gcc  
-arc                  randconfig-r006-20230725   gcc  
-arc                  randconfig-r013-20230725   gcc  
-arc                  randconfig-r043-20230725   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r001-20230725   gcc  
-arm                  randconfig-r003-20230725   gcc  
-arm                  randconfig-r046-20230725   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230725   clang
-arm64                randconfig-r024-20230725   gcc  
-arm64                randconfig-r032-20230725   clang
-arm64                randconfig-r035-20230725   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r016-20230725   gcc  
-csky                 randconfig-r023-20230725   gcc  
-hexagon              randconfig-r004-20230725   clang
-hexagon              randconfig-r005-20230725   clang
-hexagon              randconfig-r023-20230725   clang
-hexagon              randconfig-r041-20230725   clang
-hexagon              randconfig-r041-20230726   clang
-hexagon              randconfig-r045-20230725   clang
-hexagon              randconfig-r045-20230726   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230725   clang
-i386         buildonly-randconfig-r004-20230726   gcc  
-i386         buildonly-randconfig-r005-20230725   clang
-i386         buildonly-randconfig-r005-20230726   gcc  
-i386         buildonly-randconfig-r006-20230725   clang
-i386         buildonly-randconfig-r006-20230726   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230725   clang
-i386                 randconfig-i001-20230726   gcc  
-i386                 randconfig-i002-20230725   clang
-i386                 randconfig-i002-20230726   gcc  
-i386                 randconfig-i003-20230725   clang
-i386                 randconfig-i003-20230726   gcc  
-i386                 randconfig-i004-20230725   clang
-i386                 randconfig-i004-20230726   gcc  
-i386                 randconfig-i005-20230725   clang
-i386                 randconfig-i005-20230726   gcc  
-i386                 randconfig-i006-20230725   clang
-i386                 randconfig-i006-20230726   gcc  
-i386                 randconfig-i011-20230725   gcc  
-i386                 randconfig-i011-20230726   clang
-i386                 randconfig-i012-20230725   gcc  
-i386                 randconfig-i012-20230726   clang
-i386                 randconfig-i013-20230725   gcc  
-i386                 randconfig-i013-20230726   clang
-i386                 randconfig-i014-20230725   gcc  
-i386                 randconfig-i014-20230726   clang
-i386                 randconfig-i015-20230725   gcc  
-i386                 randconfig-i015-20230726   clang
-i386                 randconfig-i016-20230725   gcc  
-i386                 randconfig-i016-20230726   clang
-i386                 randconfig-r001-20230725   clang
-i386                 randconfig-r003-20230725   clang
-i386                 randconfig-r036-20230725   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230725   gcc  
-loongarch            randconfig-r013-20230725   gcc  
-loongarch            randconfig-r015-20230725   gcc  
-loongarch            randconfig-r016-20230725   gcc  
-loongarch            randconfig-r021-20230725   gcc  
-loongarch            randconfig-r032-20230725   gcc  
-loongarch            randconfig-r034-20230725   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r001-20230725   gcc  
-m68k                 randconfig-r001-20230726   gcc  
-m68k                 randconfig-r026-20230725   gcc  
-microblaze           randconfig-r002-20230725   gcc  
-microblaze           randconfig-r012-20230725   gcc  
-microblaze           randconfig-r035-20230725   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r033-20230725   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r021-20230725   gcc  
-nios2                randconfig-r026-20230725   gcc  
-openrisc             randconfig-r031-20230725   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r013-20230725   gcc  
-parisc               randconfig-r016-20230725   gcc  
-parisc               randconfig-r025-20230725   gcc  
-parisc               randconfig-r036-20230725   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      ppc40x_defconfig   gcc  
-powerpc                     rainier_defconfig   gcc  
-powerpc              randconfig-r003-20230726   gcc  
-powerpc              randconfig-r005-20230725   clang
-powerpc              randconfig-r006-20230725   clang
-powerpc              randconfig-r032-20230725   clang
-powerpc              randconfig-r035-20230725   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r002-20230725   clang
-riscv                randconfig-r034-20230725   clang
-riscv                randconfig-r042-20230725   gcc  
-riscv                randconfig-r042-20230726   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r014-20230725   gcc  
-s390                 randconfig-r031-20230725   clang
-s390                 randconfig-r033-20230725   clang
-s390                 randconfig-r036-20230725   clang
-s390                 randconfig-r044-20230725   gcc  
-s390                 randconfig-r044-20230726   clang
-sh                               allmodconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                          r7780mp_defconfig   gcc  
-sh                   randconfig-r014-20230725   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                        sh7785lcr_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r005-20230725   gcc  
-sparc64              randconfig-r014-20230725   gcc  
-sparc64              randconfig-r022-20230725   gcc  
-sparc64              randconfig-r025-20230725   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r016-20230725   clang
-um                   randconfig-r026-20230725   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230725   clang
-x86_64       buildonly-randconfig-r001-20230726   gcc  
-x86_64       buildonly-randconfig-r002-20230725   clang
-x86_64       buildonly-randconfig-r002-20230726   gcc  
-x86_64       buildonly-randconfig-r003-20230725   clang
-x86_64       buildonly-randconfig-r003-20230726   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r015-20230725   gcc  
-x86_64               randconfig-r024-20230725   gcc  
-x86_64               randconfig-x001-20230725   gcc  
-x86_64               randconfig-x001-20230726   clang
-x86_64               randconfig-x002-20230725   gcc  
-x86_64               randconfig-x002-20230726   clang
-x86_64               randconfig-x003-20230725   gcc  
-x86_64               randconfig-x003-20230726   clang
-x86_64               randconfig-x004-20230725   gcc  
-x86_64               randconfig-x004-20230726   clang
-x86_64               randconfig-x005-20230725   gcc  
-x86_64               randconfig-x005-20230726   clang
-x86_64               randconfig-x006-20230725   gcc  
-x86_64               randconfig-x006-20230726   clang
-x86_64               randconfig-x011-20230725   clang
-x86_64               randconfig-x011-20230726   gcc  
-x86_64               randconfig-x012-20230725   clang
-x86_64               randconfig-x012-20230726   gcc  
-x86_64               randconfig-x013-20230725   clang
-x86_64               randconfig-x013-20230726   gcc  
-x86_64               randconfig-x014-20230725   clang
-x86_64               randconfig-x014-20230726   gcc  
-x86_64               randconfig-x015-20230725   clang
-x86_64               randconfig-x015-20230726   gcc  
-x86_64               randconfig-x016-20230725   clang
-x86_64               randconfig-x016-20230726   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r003-20230725   gcc  
+On the other hand, hardware firewall configurations are becoming
+more and more complex. These mecanisms prevent platform crashes
+or other firewall-related incoveniences by denying access to some
+resources.
+
+The stm32 firewall framework offers an API that is defined in
+firewall controllers drivers to best fit the specificity of each
+firewall.
+
+For every peripherals protected by either the ETZPC or the RIFSC, the
+firewall framework checks the firewall controlelr registers to see if
+the peripheral's access is granted to the Linux kernel. If not, the
+peripheral is configured as secure, the node is marked populated,
+so that the driver is not probed for that device.
+
+The firewall framework relies on the feature-domain-controller device
+tree bindings: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b.
+It is used by peripherals to reference a domain controller, in this
+case a firewall feature domain. The bus uses the ID referenced by
+the feature-domains property to know where to look in the firewall
+to get the security configuration for the peripheral. This allows
+a device tree description rather than a hardcoded peripheral table
+in the bus driver.
+
+The STM32 ETZPC device is responsible for filtering accesses based on
+security level, or co-processor isolation for any resource connected
+to it.
+
+The RIFSC is responsible for filtering accesses based on Compartment
+ID / security level / privilege level for any resource connected to
+it.
+
+STM32MP13/15/25 SoC device tree files are updated in this series to
+implement this mecanism.
+
+Changes in V2:
+
+	generic:
+		- Add fw_devlink dependency for "feature-domains"
+		  property.
+
+	bindings:
+		- Corrected YAMLS errors highlighted by Rob's robot
+		- Firewall controllers YAMLs no longer define the
+		  maxItems for the "feature-domains" property
+		- Renamed st,stm32-rifsc.yaml to
+		  st,stm32mp25-rifsc.yaml
+		- Fix examples in YAML files
+		- Change feature-domains maxItems to 2 in firewall
+		  consumer files as there should not be more than
+		  2 entries for now
+		- Declare "feature-domain-names" as an optional
+		  property for firewall controllers child nodes.
+		- Add missing "feature-domains" property declaration
+		  in bosch,m_can.yaml and st,stm32-cryp.yaml files
+
+	firewall framework:
+		- Support multiple entries for "feature-domains"
+		  property
+		- Better handle the device-tree parsing using
+		  phandle+args APIs
+		- Remove "resource firewall" type
+		- Add a field for the name of the firewall entry
+		- Fix licenses
+	
+	RIFSC:
+		- Add controller name
+		- Driver is now a module_platform_driver
+		- Fix license
+
+	ETZPC:
+		- Add controller name
+		- Driver is now a module_platform_driver
+		- Fix license
+
+	Device trees:
+		- Fix rifsc node name
+		- Move the "ranges" property under the
+		  "feature-domains" one
+
+Changes in V3:
+
+	Change incorrect ordering for bindings commits leading
+	to an error while running
+	"make DT_CHECKER_FLAGS=-m dt_binding_check"
+
+Oleksii Moisieiev (1):
+  dt-bindings: Document common device controller bindings
+
+Gatien Chevallier (10):
+  dt-bindings: treewide: add feature-domains description
+  dt-bindings: bus: document RIFSC
+  dt-bindings: bus: document ETZPC
+  firewall: introduce stm32_firewall framework
+  of: property: fw_devlink: Add support for "feature-domains"
+  bus: rifsc: introduce RIFSC firewall controller driver
+  arm64: dts: st: add RIFSC as a domain controller for STM32MP25x boards
+  bus: etzpc: introduce ETZPC firewall controller driver
+  ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+  ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+
+ .../bindings/bus/st,stm32-etzpc.yaml          |   96 +
+ .../bindings/bus/st,stm32mp25-rifsc.yaml      |  105 +
+ .../bindings/crypto/st,stm32-cryp.yaml        |    4 +
+ .../bindings/crypto/st,stm32-hash.yaml        |    4 +
+ .../devicetree/bindings/dma/st,stm32-dma.yaml |    4 +
+ .../bindings/dma/st,stm32-dmamux.yaml         |    4 +
+ .../feature-domain-controller.yaml            |   84 +
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    4 +
+ .../bindings/iio/adc/st,stm32-adc.yaml        |    4 +
+ .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    4 +
+ .../bindings/iio/dac/st,stm32-dac.yaml        |    4 +
+ .../bindings/media/cec/st,stm32-cec.yaml      |    4 +
+ .../bindings/media/st,stm32-dcmi.yaml         |    4 +
+ .../memory-controllers/st,stm32-fmc2-ebi.yaml |    4 +
+ .../bindings/mfd/st,stm32-lptimer.yaml        |    4 +
+ .../bindings/mfd/st,stm32-timers.yaml         |    5 +
+ .../devicetree/bindings/mmc/arm,pl18x.yaml    |    4 +
+ .../bindings/net/can/bosch,m_can.yaml         |    4 +
+ .../devicetree/bindings/net/stm32-dwmac.yaml  |    4 +
+ .../bindings/phy/phy-stm32-usbphyc.yaml       |    4 +
+ .../bindings/regulator/st,stm32-vrefbuf.yaml  |    4 +
+ .../devicetree/bindings/rng/st,stm32-rng.yaml |    4 +
+ .../bindings/serial/st,stm32-uart.yaml        |    4 +
+ .../bindings/sound/st,stm32-i2s.yaml          |    4 +
+ .../bindings/sound/st,stm32-sai.yaml          |    4 +
+ .../bindings/sound/st,stm32-spdifrx.yaml      |    4 +
+ .../bindings/spi/st,stm32-qspi.yaml           |    4 +
+ .../devicetree/bindings/spi/st,stm32-spi.yaml |    4 +
+ .../devicetree/bindings/usb/dwc2.yaml         |    4 +
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/st/stm32mp131.dtsi          | 1027 +++---
+ arch/arm/boot/dts/st/stm32mp133.dtsi          |   51 +-
+ arch/arm/boot/dts/st/stm32mp13xc.dtsi         |   19 +-
+ arch/arm/boot/dts/st/stm32mp13xf.dtsi         |   19 +-
+ arch/arm/boot/dts/st/stm32mp151.dtsi          | 2757 +++++++++--------
+ arch/arm/boot/dts/st/stm32mp153.dtsi          |   52 +-
+ arch/arm/boot/dts/st/stm32mp15xc.dtsi         |   19 +-
+ arch/arm64/Kconfig.platforms                  |    1 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |    7 +-
+ drivers/bus/Kconfig                           |    9 +
+ drivers/bus/Makefile                          |    1 +
+ drivers/bus/stm32_etzpc.c                     |  141 +
+ drivers/bus/stm32_firewall.c                  |  288 ++
+ drivers/bus/stm32_firewall.h                  |   83 +
+ drivers/bus/stm32_rifsc.c                     |  252 ++
+ drivers/of/property.c                         |    2 +
+ include/linux/bus/stm32_firewall_device.h     |  140 +
+ 47 files changed, 3346 insertions(+), 1919 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+ create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+ create mode 100644 drivers/bus/stm32_etzpc.c
+ create mode 100644 drivers/bus/stm32_firewall.c
+ create mode 100644 drivers/bus/stm32_firewall.h
+ create mode 100644 drivers/bus/stm32_rifsc.c
+ create mode 100644 include/linux/bus/stm32_firewall_device.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
