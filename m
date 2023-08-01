@@ -2,75 +2,67 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225B276A879
-	for <lists+linux-serial@lfdr.de>; Tue,  1 Aug 2023 07:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8F076A8E3
+	for <lists+linux-serial@lfdr.de>; Tue,  1 Aug 2023 08:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjHAFsu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 1 Aug 2023 01:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S230270AbjHAGXE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 1 Aug 2023 02:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjHAFst (ORCPT
+        with ESMTP id S231475AbjHAGWo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 1 Aug 2023 01:48:49 -0400
+        Tue, 1 Aug 2023 02:22:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095AB1FCA;
-        Mon, 31 Jul 2023 22:48:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A031738;
+        Mon, 31 Jul 2023 23:22:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A1661473;
-        Tue,  1 Aug 2023 05:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A2FC433C7;
-        Tue,  1 Aug 2023 05:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690868923;
-        bh=CSYR83m0hWJjYjIRujwvyFiMN2MH6lGieHS+KpcH5TI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F+v+oBPjg7WgK2jhl4qBub9O18tXXnx6yR9HpjbyTlMTq9j8VrdTh2kEtcaJVlg7o
-         sy4fvYWyyOeeGWhGez0j+4ln+DJHQxEQOJQALxK2wxNEOlvwQiTgJN1yCJJoVGWFqD
-         ypC6WdR6ijmYOJLItZ5htFUzFNLsgyH0cDPpWG4w=
-Date:   Tue, 1 Aug 2023 07:48:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH 0/3] PM / wakeirq: fix wake irq arming
-Message-ID: <2023080129-district-punk-3da3@gregkh>
-References: <20230713145741.30390-1-johan+linaro@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B449D61480;
+        Tue,  1 Aug 2023 06:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7428C433C8;
+        Tue,  1 Aug 2023 06:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690870962;
+        bh=yUuXLOElFeat+t6CBHvNZpwHXCKJGppnz0P+UGVyC/Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ryVMS3k1IHHGSmiWZJNtQ8SkC6aW32Ejf4B9puvFoolOelmhitqRC42aDo5UfHgsg
+         sOIpd2g6fPBI7JtjgqaLt8LfTTry/gT/ibCdnS8E9exLbqS2NgJ0/pUB3kB7skYm5l
+         uO9iwH+tFw9Z1Fli8+4P/DsCR0bYNk7gr8edxnX5ciIUdlMF9AX8BukHmjlByN5VFu
+         vS7ct2GVfraxVEQhICcWszZFt8wbwoeB7VEDiVzwAFgmvNiKSMImdZJ0i7Z/Ds98YS
+         3MakD9qmmYBh+9XMbLnTWAmb7dcdmLGuwzM0bWRXT03g+U6BfKzT3ENL5g8CKcqa+u
+         AM1Wc0jZ6myNg==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH 0/2] tty: remove casts from tty->disc_data
+Date:   Tue,  1 Aug 2023 08:22:35 +0200
+Message-ID: <20230801062237.2687-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230713145741.30390-1-johan+linaro@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 04:57:38PM +0200, Johan Hovold wrote:
-> When reviewing the Qualcomm serial-driver suspend implementation I
-> noticed the odd runtime PM state update which had snuck in. Turns out it
-> was added to work around a bug in PM core which prevented drivers not
-> implementing runtime PM from using dedicated wake irqs.
-> 
-> This series fixes the wake irq arming and drops the unused wake irq
-> enable helpers before dropping the bogus runtime PM state update in the
-> Qualcomm driver.
-> 
-> I suggest that Rafael takes all of these through his tree.
+There are still two "casters" remaining. Fix them.
 
-I agree:
+Jiri Slaby (SUSE) (2):
+  can: can327: remove casts from tty->disc_data
+  net: nfc: remove casts from tty->disc_data
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ drivers/net/can/can327.c | 8 ++++----
+ net/nfc/nci/uart.c       | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+-- 
+2.41.0
+
