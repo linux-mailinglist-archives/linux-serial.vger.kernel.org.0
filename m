@@ -2,82 +2,101 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C4A76EC5A
-	for <lists+linux-serial@lfdr.de>; Thu,  3 Aug 2023 16:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173CC76ECDB
+	for <lists+linux-serial@lfdr.de>; Thu,  3 Aug 2023 16:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236278AbjHCOWQ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 3 Aug 2023 10:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S236797AbjHCOkZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 3 Aug 2023 10:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236693AbjHCOVr (ORCPT
+        with ESMTP id S235011AbjHCOkM (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 3 Aug 2023 10:21:47 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200493A9F
-        for <linux-serial@vger.kernel.org>; Thu,  3 Aug 2023 07:21:25 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RGrbQ1vV2zrS4q;
-        Thu,  3 Aug 2023 22:20:18 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 3 Aug
- 2023 22:21:22 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <jorge.sanjuangarcia@duagon.com>, <JoseJavier.Rodriguez@duagon.com>
-CC:     <lizetao1@huawei.com>, <yangyingliang@huawei.com>,
-        <andriy.shevchenko@linux.intel.com>, <linux-serial@vger.kernel.org>
-Subject: [PATCH -next] 8250_men_mcb: Fix unsigned expression compared with zero
-Date:   Thu, 3 Aug 2023 22:20:53 +0800
-Message-ID: <20230803142053.1308926-1-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 3 Aug 2023 10:40:12 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B1D2D5F;
+        Thu,  3 Aug 2023 07:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=RwiPZlt5h+l4EEd8rB/jTQqRs++DtmWkgJ+ASZBIevQ=; b=oKnK7lRHjeM0i+OIw/kOkx+eER
+        pTAxR4L3yLU7FPGjZ/jLO9ju5GtEGxxcFGlty1ZuuJqaSLE6WwgWLquAK5abU/hO2oivzTXO1Gokb
+        CQyAKUd87AIH28B+pA77cfx1sqdu8hsCQjS2UOEKPEoIWusrDSBXJwGR9VGDpk43GqjI=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:59988 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qRZSx-0000hw-9W; Thu, 03 Aug 2023 10:38:15 -0400
+Date:   Thu, 3 Aug 2023 10:38:14 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        isaac.true@canonical.com, jesse.sung@canonical.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lech Perczak <lech.perczak@camlingroup.com>
+Message-Id: <20230803103814.ec35dbddad880a77565ff681@hugovil.com>
+In-Reply-To: <2023073146-gauntlet-lake-0b77@gregkh>
+References: <20230725142343.1724130-1-hugo@hugovil.com>
+        <20230725142343.1724130-9-hugo@hugovil.com>
+        <2023073146-gauntlet-lake-0b77@gregkh>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v9 08/10] serial: sc16is7xx: add call to get rs485 DT
+ flags and properties
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-There is a warning reported by coccinelle:
+On Mon, 31 Jul 2023 17:59:14 +0200
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
-./drivers/tty/serial/8250/8250_men_mcb.c:226:6-19: WARNING:
-	Unsigned expression compared with zero: data -> line [ i ]     <     0
+> On Tue, Jul 25, 2023 at 10:23:40AM -0400, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Add call to uart_get_rs485_mode() to probe for RS485 flags and
+> > properties from device tree.
+> 
+> Again, you are saying what you are doing, but not why.  I have no hint
+> as to if this is a bugfix, or a new features, or something else?
+> 
+> thanks,
+> 
+> greg k-h
 
-The array "line" of serial_8250_men_mcb_data is used to record the
-registered serial port. When register a port failed, it will return
-an error code, but the type of "line" is "unsigned int", causing
-the error code to reverse. Modify the type of "data -> line" to solve
-this problem.
+Hi Greg,
+I could change the commit message to:
 
-Fixes: 2554e6ba28a2 ("8250_men_mcb: Read num ports from register data.")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
- drivers/tty/serial/8250/8250_men_mcb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+---------
+serial: sc16is7xx: add missing support for rs485 devicetree properties
 
-diff --git a/drivers/tty/serial/8250/8250_men_mcb.c b/drivers/tty/serial/8250/8250_men_mcb.c
-index 5f301195575d..14cf6011a002 100644
---- a/drivers/tty/serial/8250/8250_men_mcb.c
-+++ b/drivers/tty/serial/8250/8250_men_mcb.c
-@@ -46,7 +46,7 @@
- 
- struct serial_8250_men_mcb_data {
- 	int num_ports;
--	unsigned int line[MAX_PORTS];
-+	int line[MAX_PORTS];
- 	unsigned int offset[MAX_PORTS];
- };
- 
--- 
-2.34.1
+Retrieve rs485 devicetree properties on registration of sc16is7xx ports
+in case they are attached to an rs485 transceiver.
+---------
 
+I don't think that it should be considered as a bug fix, but maybe as a
+missing feature.
+
+And does it mean that it should also go to older (stable) kernels then?
+If yes, then do I need to add the "Fixes" tag?
+
+Thank you,
+Hugo.
