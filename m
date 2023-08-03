@@ -2,160 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197EE76EC52
-	for <lists+linux-serial@lfdr.de>; Thu,  3 Aug 2023 16:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EC576EBC4
+	for <lists+linux-serial@lfdr.de>; Thu,  3 Aug 2023 16:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236610AbjHCOVd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 3 Aug 2023 10:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S234998AbjHCOG7 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 3 Aug 2023 10:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236677AbjHCOVJ (ORCPT
+        with ESMTP id S232999AbjHCOGo (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 3 Aug 2023 10:21:09 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F26B2684;
-        Thu,  3 Aug 2023 07:20:51 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4RGr4t1jffz9t4f;
-        Thu,  3 Aug 2023 15:57:18 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MCduBF0o_i5C; Thu,  3 Aug 2023 15:57:18 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4RGr4m0kFqz9t4n;
-        Thu,  3 Aug 2023 15:57:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 13F5B8B773;
-        Thu,  3 Aug 2023 15:57:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id SEOQdp5N5PsN; Thu,  3 Aug 2023 15:57:11 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.144])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B5E0E8B77A;
-        Thu,  3 Aug 2023 15:57:11 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 373Dv4Yu494213
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 3 Aug 2023 15:57:04 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 373Dv4LC494212;
-        Thu, 3 Aug 2023 15:57:04 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+        Thu, 3 Aug 2023 10:06:44 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD0230E9;
+        Thu,  3 Aug 2023 07:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=ei2wCQs5a8m/K55enHBWGLUeT7zj3KuxqVqPoZlHPio=; b=b
+        0BgpSixVIJOcmpcWBH6vWBTM1g1yaJTSN4HtX8wh7lf/OB2ViTYXM9e1EJLJGV86gFK+rD52QZEx2
+        StICkocnRmwFKeAKllQHt6vFv3HsJQXrSn1+p6ra36CSKTuVPs9z6FJh1DAqI/BnaxivPMdyqzrSe
+        cALV3c5uZGY+TYEQ=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:46952 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qRYxe-0000O1-Vi; Thu, 03 Aug 2023 10:05:55 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Timur Tabi <timur@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v1 12/12] serial: cpm_uart: Remove linux/fs_uart_pd.h
-Date:   Thu,  3 Aug 2023 15:56:53 +0200
-Message-ID: <f2cb444fa2b5776c9c51b5e46ea85edab62d1524.1691068700.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1691068700.git.christophe.leroy@csgroup.eu>
-References: <cover.1691068700.git.christophe.leroy@csgroup.eu>
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     hugo@hugovil.com, linux-serial@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-kernel@vger.kernel.org
+Date:   Thu,  3 Aug 2023 10:05:51 -0400
+Message-Id: <20230803140551.970141-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691071001; l=2154; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=HrW+xy1mV9LzVHBn5BKDV/j8NZ7SIr3YuDt4l5zZYWg=; b=SdK5pHkJWllauesE1RX5dyJy0LrcFgHaRXxxuxOaVzLotCbSaMVmZ0KMHIZFsaBKbAfua+39r hiNo4obrsUEAbvpe/ljhUWlxDBpm5I1eK5Q0ABO5zr++3evq4BLo2wD
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: [PATCH] serial: max310x: add comments for membase address workaround
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-linux/fs_uart_pd.h is not used anymore. Remove it.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Add comments about workaround used to configure membase address. This
+follows suggestions made during review of a sc16is7xx driver patch to
+add the same workaround.
+
+Link: https://lore.kernel.org/lkml/2936e18f-44ea-faed-9fa0-2ddefe7c3194@linux.intel.com
+Link: https://lore.kernel.org/lkml/20230801131655.80bd8f97f018dda6155d65f6@hugovil.com/
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
- include/linux/fs_uart_pd.h | 71 --------------------------------------
- 1 file changed, 71 deletions(-)
- delete mode 100644 include/linux/fs_uart_pd.h
+ drivers/tty/serial/max310x.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/fs_uart_pd.h b/include/linux/fs_uart_pd.h
-deleted file mode 100644
-index 36b61ff39277..000000000000
---- a/include/linux/fs_uart_pd.h
-+++ /dev/null
-@@ -1,71 +0,0 @@
--/*
-- * Platform information definitions for the CPM Uart driver.
-- *
-- * 2006 (c) MontaVista Software, Inc.
-- * Vitaly Bordug <vbordug@ru.mvista.com>
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2. This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
--
--#ifndef FS_UART_PD_H
--#define FS_UART_PD_H
--
--#include <asm/types.h>
--
--enum fs_uart_id {
--	fsid_smc1_uart,
--	fsid_smc2_uart,
--	fsid_scc1_uart,
--	fsid_scc2_uart,
--	fsid_scc3_uart,
--	fsid_scc4_uart,
--	fs_uart_nr,
--};
--
--static inline int fs_uart_id_scc2fsid(int id)
--{
--    return fsid_scc1_uart + id - 1;
--}
--
--static inline int fs_uart_id_fsid2scc(int id)
--{
--    return id - fsid_scc1_uart + 1;
--}
--
--static inline int fs_uart_id_smc2fsid(int id)
--{
--    return fsid_smc1_uart + id - 1;
--}
--
--static inline int fs_uart_id_fsid2smc(int id)
--{
--    return id - fsid_smc1_uart + 1;
--}
--
--struct fs_uart_platform_info {
--        void(*init_ioports)(struct fs_uart_platform_info *);
--	/* device specific information */
--	int fs_no;		/* controller index */
--	char fs_type[4];        /* controller type  */
--	u32 uart_clk;
--	u8 tx_num_fifo;
--	u8 tx_buf_size;
--	u8 rx_num_fifo;
--	u8 rx_buf_size;
--	u8 brg;
--	u8 clk_rx;
--	u8 clk_tx;
--};
--
--static inline int fs_uart_get_id(struct fs_uart_platform_info *fpi)
--{
--        if(strstr(fpi->fs_type, "SMC"))
--                return fs_uart_id_smc2fsid(fpi->fs_no);
--        if(strstr(fpi->fs_type, "SCC"))
--                return fs_uart_id_scc2fsid(fpi->fs_no);
--        return fpi->fs_no;
--}
--
--#endif
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index 416d553b73a7..5903dd033fd0 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -1369,6 +1369,11 @@ static int max310x_probe(struct device *dev, const struct max310x_devtype *devty
+ 		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
+ 		s->p[i].port.iotype	= UPIO_PORT;
+ 		s->p[i].port.iobase	= i;
++		/*
++		 * Use all ones as membase to make sure uart_configure_port() in
++		 * serial_core.c does not abort for SPI/I2C devices where the
++		 * membase address is not applicable.
++		 */
+ 		s->p[i].port.membase	= (void __iomem *)~0;
+ 		s->p[i].port.uartclk	= uartclk;
+ 		s->p[i].port.rs485_config = max310x_rs485_config;
+
+base-commit: 426263d5fb400ccde5444748693dc75bda18f01e
 -- 
-2.41.0
+2.30.2
 
