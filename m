@@ -2,109 +2,188 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B81D7745F4
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Aug 2023 20:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795CE774495
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Aug 2023 20:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbjHHSti (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Aug 2023 14:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S233452AbjHHSX6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Aug 2023 14:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbjHHStV (ORCPT
+        with ESMTP id S235729AbjHHSXi (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:49:21 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95E26E9E;
-        Tue,  8 Aug 2023 10:01:19 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 378Co9RM027282;
-        Tue, 8 Aug 2023 18:20:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding:content-type; s=
-        selector1; bh=qK+bLNEf/yd307CslLlG3mAR8/FcQJFZFqOUnUtJAh8=; b=L4
-        8PETXXDAlTQ+H366hlsEfdOGvtNU+zzJ6h55/fP9lJKsbGfZIJYcRMQW7hKX6iJR
-        CCU0MSVXQs1yVZAqh9QbeRADS6jcybVcUl4pnaGsMbcFFZ/NOZnuWGWVizSL9zNi
-        l+giYVqIUQNbKk0elPGuqSLL3UPfm8hfhOl/ZOfe10rZdk8kHzHkv6ure/d9ujgh
-        lkATtkmE6s8rXip/W4l0PWogfDff4ju31yptYqsTHsmEI9Ph7XLdO+j9PSc+8/Yc
-        8QZ5ig9LmEbrLS8aMYhgw4PfBhH5U0fEAMs0cQEmv3yuitI6QZDrDGUWfSNj7Eh7
-        SNveOMC4Mf4GMkTPZ97A==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3sbp2d95fu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Aug 2023 18:20:43 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 85C10100062;
-        Tue,  8 Aug 2023 18:20:42 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7DDBC236928;
-        Tue,  8 Aug 2023 18:20:42 +0200 (CEST)
-Received: from localhost (10.201.20.168) by EQNDAG1NODE4.st.com
- (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 8 Aug
- 2023 18:20:42 +0200
-From:   Valentin Caron <valentin.caron@foss.st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Tue, 8 Aug 2023 14:23:38 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929B23C33;
+        Tue,  8 Aug 2023 10:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+        :Date:subject:date:message-id:reply-to;
+        bh=XkZlvp32aRkJTNbGOKHPFPOVDj8xTKl+lMyseu9ZRpY=; b=hHzTyYqt9hPsBJ21nGtMp8MPJB
+        ycW/EtEnHqTW3Tr9GQH8pLqHCWaIpL9gfw1pFjdbzBJlreCQuHKxCtMTEtf5og5sanwk4odTkt1ni
+        74TAdCwbUC2EsUrbqGQIMlYHMlrQK3FNUNdalZj0rnfqqeiS95IshVMO/RHEL6b4YtMQ=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:37752 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qTQbZ-0001On-JD; Tue, 08 Aug 2023 13:34:50 -0400
+Date:   Tue, 8 Aug 2023 13:34:48 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Wenhua Lin <Wenhua.Lin@unisoc.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
         <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH v2 6/6] serial: stm32: synchronize RX DMA channel in shutdown
-Date:   Tue, 8 Aug 2023 18:19:06 +0200
-Message-ID: <20230808161906.178996-7-valentin.caron@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230808161906.178996-1-valentin.caron@foss.st.com>
-References: <20230808161906.178996-1-valentin.caron@foss.st.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.168]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To EQNDAG1NODE4.st.com
- (10.75.129.133)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-08_15,2023-08-08_01,2023-05-22_02
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        wenhua lin <wenhua.lin1994@gmail.com>,
+        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
+Message-Id: <20230808133448.96e39db8e86a67ad7e2e5a43@hugovil.com>
+In-Reply-To: <20230808033106.2174-1-Wenhua.Lin@unisoc.com>
+References: <20230808033106.2174-1-Wenhua.Lin@unisoc.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/3] gpio: sprd: Modify the calculation method of eic
+ number
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+On Tue, 8 Aug 2023 11:31:06 +0800
+Wenhua Lin <Wenhua.Lin@unisoc.com> wrote:
 
-In shutdown, RX DMA channel is terminated. If the DMA RX callback is
-scheduled but not yet executed, while a new RX DMA transfer is started, the
-callback can be executed, and then disturb the ongoing RX DMA transfer.
-To avoid such a case, call dmaengine_synchronize in shutdown, after the
-DMA RX channel is terminated.
+> Automatic calculation through matching nodes,
+> subsequent projects can avoid modifying driver files.
+> 
+> Signed-off-by: Wenhua Lin <Wenhua.Lin@unisoc.com>
+> ---
+>  drivers/gpio/gpio-eic-sprd.c | 49 +++++++++++++++++++-----------------
+>  1 file changed, 26 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpio-eic-sprd.c b/drivers/gpio/gpio-eic-sprd.c
+> index 84352a6f4973..0d85d9e80848 100644
+> --- a/drivers/gpio/gpio-eic-sprd.c
+> +++ b/drivers/gpio/gpio-eic-sprd.c
+> @@ -50,10 +50,10 @@
+>  #define SPRD_EIC_SYNC_DATA		0x1c
+>  
+>  /*
+> - * The digital-chip EIC controller can support maximum 3 banks, and each bank
+> + * The digital-chip EIC controller can support maximum 8 banks, and each bank
+>   * contains 8 EICs.
+>   */
+> -#define SPRD_EIC_MAX_BANK		3
+> +#define SPRD_EIC_MAX_BANK		8
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
----
- drivers/tty/serial/stm32-usart.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Hi,
+it seems as tough the commit title doesn't reflect the fact that you
+not only modify the calculation method, but also the maximum number of
+banks?
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 8fc0526be898..5e9cf0c48813 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -1123,8 +1123,10 @@ static void stm32_usart_shutdown(struct uart_port *port)
- 		dev_err(port->dev, "Transmission is not complete\n");
- 
- 	/* Disable RX DMA. */
--	if (stm32_port->rx_ch)
-+	if (stm32_port->rx_ch) {
- 		stm32_usart_rx_dma_terminate(stm32_port);
-+		dmaengine_synchronize(stm32_port->rx_ch);
-+	}
- 
- 	/* flush RX & TX FIFO */
- 	if (ofs->rqr != UNDEF_REG)
--- 
-2.25.1
 
+>  #define SPRD_EIC_PER_BANK_NR		8
+>  #define SPRD_EIC_DATA_MASK		GENMASK(7, 0)
+>  #define SPRD_EIC_BIT(x)			((x) & (SPRD_EIC_PER_BANK_NR - 1))
+> @@ -99,33 +99,32 @@ struct sprd_eic {
+>  
+>  struct sprd_eic_variant_data {
+>  	enum sprd_eic_type type;
+> -	u32 num_eics;
+>  };
+>  
+> +#define SPRD_EIC_VAR_DATA(soc_name)				\
+> +static const struct sprd_eic_variant_data soc_name##_eic_dbnc_data = {	\
+> +	.type = SPRD_EIC_DEBOUNCE,					\
+> +};									\
+> +									\
+> +static const struct sprd_eic_variant_data soc_name##_eic_latch_data = {	\
+> +	.type = SPRD_EIC_LATCH,						\
+> +};									\
+> +									\
+> +static const struct sprd_eic_variant_data soc_name##_eic_async_data = {	\
+> +	.type = SPRD_EIC_ASYNC,						\
+> +};									\
+> +									\
+> +static const struct sprd_eic_variant_data soc_name##_eic_sync_data = {	\
+> +	.type = SPRD_EIC_SYNC,						\
+> +}
+> +
+> +SPRD_EIC_VAR_DATA(sc9860);
+> +
+>  static const char *sprd_eic_label_name[SPRD_EIC_MAX] = {
+>  	"eic-debounce", "eic-latch", "eic-async",
+>  	"eic-sync",
+>  };
+>  
+> -static const struct sprd_eic_variant_data sc9860_eic_dbnc_data = {
+> -	.type = SPRD_EIC_DEBOUNCE,
+> -	.num_eics = 8,
+> -};
+> -
+> -static const struct sprd_eic_variant_data sc9860_eic_latch_data = {
+> -	.type = SPRD_EIC_LATCH,
+> -	.num_eics = 8,
+> -};
+> -
+> -static const struct sprd_eic_variant_data sc9860_eic_async_data = {
+> -	.type = SPRD_EIC_ASYNC,
+> -	.num_eics = 8,
+> -};
+> -
+> -static const struct sprd_eic_variant_data sc9860_eic_sync_data = {
+> -	.type = SPRD_EIC_SYNC,
+> -	.num_eics = 8,
+> -};
+>  
+>  static inline void __iomem *sprd_eic_offset_base(struct sprd_eic *sprd_eic,
+>  						 unsigned int bank)
+> @@ -583,6 +582,7 @@ static int sprd_eic_probe(struct platform_device *pdev)
+>  	struct sprd_eic *sprd_eic;
+>  	struct resource *res;
+>  	int ret, i;
+> +	u16 num_banks = 0;
+>  
+>  	pdata = of_device_get_match_data(&pdev->dev);
+>  	if (!pdata) {
+> @@ -613,12 +613,13 @@ static int sprd_eic_probe(struct platform_device *pdev)
+>  			break;
+>  
+>  		sprd_eic->base[i] = devm_ioremap_resource(&pdev->dev, res);
+> +		num_banks++;
+>  		if (IS_ERR(sprd_eic->base[i]))
+>  			return PTR_ERR(sprd_eic->base[i]);
+>  	}
+>  
+>  	sprd_eic->chip.label = sprd_eic_label_name[sprd_eic->type];
+> -	sprd_eic->chip.ngpio = pdata->num_eics;
+> +	sprd_eic->chip.ngpio = num_banks * SPRD_EIC_PER_BANK_NR;
+>  	sprd_eic->chip.base = -1;
+>  	sprd_eic->chip.parent = &pdev->dev;
+>  	sprd_eic->chip.direction_input = sprd_eic_direction_input;
+> @@ -630,10 +631,12 @@ static int sprd_eic_probe(struct platform_device *pdev)
+>  		sprd_eic->chip.set = sprd_eic_set;
+>  		fallthrough;
+>  	case SPRD_EIC_ASYNC:
+> +		fallthrough;
+>  	case SPRD_EIC_SYNC:
+>  		sprd_eic->chip.get = sprd_eic_get;
+>  		break;
+>  	case SPRD_EIC_LATCH:
+> +		fallthrough;
+>  	default:
+>  		break;
+>  	}
+> -- 
+> 2.17.1
+> 
