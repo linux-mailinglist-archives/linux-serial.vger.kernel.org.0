@@ -2,88 +2,186 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F1D773E50
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Aug 2023 18:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0EA77427D
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Aug 2023 19:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbjHHQ3c (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Aug 2023 12:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S234914AbjHHRqM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Aug 2023 13:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbjHHQ2C (ORCPT
+        with ESMTP id S232070AbjHHRpa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9543D12508;
-        Tue,  8 Aug 2023 08:50:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFCC36246E;
-        Tue,  8 Aug 2023 08:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C263C433C7;
-        Tue,  8 Aug 2023 08:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691484295;
-        bh=V0JjdjWFu8BlALkRvb98EGszbrLZ7TsBsZIaq0wNp3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QlJoo9863UPXmu6vUeNZZrupDqQMvlQtd/gwa+jI7UzoH7tQVnWI55mdW7GH2fNAy
-         geM9QPQ/FSDiOUIwuFk1Sjp6YhcqOEpaDtXkygPiGf1a3PADEkjCs1nDYDsZGtfTia
-         OsWh9lm+rh4LaGznlvpdJ1PO9dFuX9C53oNR3GscQsr9Yle/ABIUam8JSERftaFdgC
-         qf9e/lZUikS4GjY8tqCCViYu6HFe4TVq/CwTNKrkN7mFe6oKkENSHFJnrmAIbo/y6+
-         DrpL621Z16qIgO+EWd1uKkRSIu9NebLeeqVPDBZF+Yc1C9S6d0l/jNf9kkMMzj4X73
-         rboi9s6paiz8A==
-Date:   Tue, 8 Aug 2023 09:44:50 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Nick Hu <nick.hu@sifive.com>
-Cc:     zong.li@sifive.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: Re: [PATCH 1/2] serial: sifive: Add suspend and resume operations
-Message-ID: <20230808-pristine-celibate-60957ea523c0@spud>
-References: <20230808072625.2109564-1-nick.hu@sifive.com>
+        Tue, 8 Aug 2023 13:45:30 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E9125ED5;
+        Tue,  8 Aug 2023 09:20:39 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RKnQh6vVcz67tKy;
+        Tue,  8 Aug 2023 17:07:56 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 10:11:44 +0100
+Date:   Tue, 8 Aug 2023 10:11:43 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Wenhua Lin <Wenhua.Lin@unisoc.com>
+CC:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        "Mattijs Korpershoek" <mkorpershoek@baylibre.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        "Baolin Wang" <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        wenhua lin <wenhua.lin1994@gmail.com>,
+        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
+Subject: Re: [PATCH 1/2] devicetree: bindings: Add keypad driver
+ ducumentation
+Message-ID: <20230808101143.00007bb4@Huawei.com>
+In-Reply-To: <20230808072252.3229-1-Wenhua.Lin@unisoc.com>
+References: <20230808072252.3229-1-Wenhua.Lin@unisoc.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tg8By4CLw6nciaNc"
-Content-Disposition: inline
-In-Reply-To: <20230808072625.2109564-1-nick.hu@sifive.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Tue, 8 Aug 2023 15:22:52 +0800
+Wenhua Lin <Wenhua.Lin@unisoc.com> wrote:
 
---tg8By4CLw6nciaNc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Add keypad driver ducumentation.
 
-On Tue, Aug 08, 2023 at 03:26:25PM +0800, Nick Hu wrote:
-> If the Sifive Uart is not used as the wake up source, suspend the uart
-> before the system enter the suspend state to prevent it woken up by
-> unexpected uart interrupt. Resume the uart once the system woken up.
->=20
-> Signed-off-by: Nick Hu <nick.hu@sifive.com>
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+documentation
 
-Where is patch 2/2?
+Though naming convention for dt-bindings patches does not look like
+this. Take a look at what has been accepted as bindings recently.
+Also you aren't going to get much review of this without cc'ing the
+dt list and maintainers.
 
---tg8By4CLw6nciaNc
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Signed-off-by: Wenhua Lin <Wenhua.Lin@unisoc.com>
+> ---
+>  .../bindings/input/sprd-keypad.yaml           | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/input/sprd-keypad.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/input/sprd-keypad.yaml b/Documentation/devicetree/bindings/input/sprd-keypad.yaml
+> new file mode 100644
+> index 000000000000..51710e1eb389
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/sprd-keypad.yaml
+> @@ -0,0 +1,76 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2023 Unisoc Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/sprd-keypad.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Device-Tree bindings for GPIO attached keys
 
------BEGIN PGP SIGNATURE-----
+Seems rather more specific than that!
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNIAggAKCRB4tDGHoIJi
-0kjiAP9splKZLGeVPLX6Pjze+Q7jOtbYC3DyEPCQhvlQE23anAEA83jEjSG4Cz/0
-RPCozvkWTm9LHI8WRpoHeTGj21egiAM=
-=gbl6
------END PGP SIGNATURE-----
+> +
+> +maintainers:
+> +  - Orson Zhai <orsonzhai@gmail.com>
+> +  - Baolin Wang <baolin.wang7@gmail.com>
+> +  - Chunyan Zhang <zhang.lyra@gmail.com>
+> +
+> +description: |
+> +    Keypad controller is used to interface a SoC with a matrix-keypad device.
+> +    The keypad controller supports multiple row and column lines.
+> +    A key can be placed at each intersection of a unique row and a unique column.
+> +    The keypad controller can sense a key-press and key-release and report the
+> +    event using a interrupt to the cpu.
 
---tg8By4CLw6nciaNc--
+CPU
+
+> +
+> +properties:
+> +    compatible:
+> +    const: sprd,sc9860-keypad
+
+Make sure you follow the guidance on test building your binding and example.
+See Documentation/devicetree/bindings/writing-bindings.rst and submitting-patches.rst
+
+This has a lot of issues covered by that document.
+
+> +
+> +    reg:
+> +        maxItems: 1
+> +
+> +    interrupts:
+> +        maxItems: 1
+> +
+> +    keypad,num-rows:
+> +    description: Number of row lines connected to the keypad controller.
+> +
+> +    keypad,num-columns:
+> +    description: Number of column lines connected to the keypad.
+> +
+> +    debounce-interval:
+> +    description:
+> +        Debouncing interval time in milliseconds. If not specified defaults to 5.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +    default: 5
+> +
+> +    linux,keymap:
+> +    description: An array of packed 1-cell entries containing the equivalent
+> +        of row, column and linux key-code. The 32-bit big endian cell is packed.
+> +
+> +required:
+> +        - compatible
+> +        - reg
+> +        - keypad,num-rows
+> +        - keypad,num-columns
+> +        - linux,keymap
+> +
+> +unevaluatedProperties: false
+> +
+> +
+> +examples:
+> +  - |
+> +	keypad@40250000 {
+> +		compatible = "sprd,sc9860-keypad";
+> +		reg = 	<0x40250000 0x1000>;
+> +		interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&aonapb_gate CLK_KPD_EB>,
+> +			<&aonapb_gate CLK_KPD_RTC_EB>;
+> +		clock-names = "enable", "rtc";
+> +		keypad,num-rows= <3>;
+> +		keypad,num-columns = <3>;
+> +		debounce-interval = <5>;
+> +		linux,keymap = < 0x00000001
+> +				 0x01000002
+> +				 0x00020003>;
+> +		status = "okay";
+
+Status shouldn't be in an example.  Formatting wrong.
+IF your binding example doesn't build (this won't) then it won't be accepted
+by the dt-binding maintainers and their review is needed for it to be
+merged.  
+
+Jonathan
+
+
+> +	};
+> +...
+
