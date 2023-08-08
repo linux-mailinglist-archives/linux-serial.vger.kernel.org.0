@@ -2,192 +2,159 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED0C7744D7
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Aug 2023 20:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12AA774A75
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Aug 2023 22:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbjHHS33 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 8 Aug 2023 14:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S231296AbjHHU3l (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 8 Aug 2023 16:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235369AbjHHS3L (ORCPT
+        with ESMTP id S232925AbjHHU3c (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:29:11 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89174249B4;
-        Tue,  8 Aug 2023 10:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
-        :Date:subject:date:message-id:reply-to;
-        bh=uRe5DA9n4TN682/6jFN0fFTDiTtPa18+87Bw4kABhag=; b=hs7mTCGFDV/WgN6iXONJ7w//Zs
-        gaSTUd9xKLWA+1GsyzR53kHsFCzcRGYd8tjSaMFKsa3azSRk/5vuIsMKbBUYETOhZdpKnn/Sj2+IU
-        xXkhGewhQ+MQayPwOYCYxf072D7YI6Ke+iJ7Bl2WcPU8XFy/oNEmgkmdpnFsjhrQc0DU=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:52066 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qTQl9-0001cX-1e; Tue, 08 Aug 2023 13:44:43 -0400
-Date:   Tue, 8 Aug 2023 13:44:42 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Wenhua Lin <Wenhua.Lin@unisoc.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
+        Tue, 8 Aug 2023 16:29:32 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D373156F85
+        for <linux-serial@vger.kernel.org>; Tue,  8 Aug 2023 10:06:55 -0700 (PDT)
+Received: from SHSQR01.spreadtrum.com (localhost [127.0.0.2] (may be forged))
+        by SHSQR01.spreadtrum.com with ESMTP id 3787OdNn032682
+        for <linux-serial@vger.kernel.org>; Tue, 8 Aug 2023 15:24:39 +0800 (+08)
+        (envelope-from Wenhua.Lin@unisoc.com)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 3787MuLc026831;
+        Tue, 8 Aug 2023 15:22:56 +0800 (+08)
+        (envelope-from Wenhua.Lin@unisoc.com)
+Received: from SHDLP.spreadtrum.com (shmbx06.spreadtrum.com [10.0.1.11])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RKl3L3dTlz2NsJlw;
+        Tue,  8 Aug 2023 15:21:02 +0800 (CST)
+Received: from xm9614pcu.spreadtrum.com (10.13.2.29) by shmbx06.spreadtrum.com
+ (10.0.1.11) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 8 Aug 2023
+ 15:22:54 +0800
+From:   Wenhua Lin <Wenhua.Lin@unisoc.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Orson Zhai <orsonzhai@gmail.com>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+CC:     <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         wenhua lin <wenhua.lin1994@gmail.com>,
+        Wenhua Lin <Wenhua.Lin@unisoc.com>,
         Xiongpeng Wu <xiongpeng.wu@unisoc.com>
-Message-Id: <20230808134442.75bb6f04b5612c07d3b7d731@hugovil.com>
-In-Reply-To: <20230808033106.2174-1-Wenhua.Lin@unisoc.com>
-References: <20230808033106.2174-1-Wenhua.Lin@unisoc.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Subject: [PATCH 1/2] devicetree: bindings: Add keypad driver ducumentation
+Date:   Tue, 8 Aug 2023 15:22:52 +0800
+Message-ID: <20230808072252.3229-1-Wenhua.Lin@unisoc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.13.2.29]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ shmbx06.spreadtrum.com (10.0.1.11)
+X-MAIL: SHSQR01.spreadtrum.com 3787MuLc026831
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH 1/3] gpio: sprd: Modify the calculation method of eic
- number
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, 8 Aug 2023 11:31:06 +0800
-Wenhua Lin <Wenhua.Lin@unisoc.com> wrote:
+Add keypad driver ducumentation.
 
-> Automatic calculation through matching nodes,
-> subsequent projects can avoid modifying driver files.
-> 
-> Signed-off-by: Wenhua Lin <Wenhua.Lin@unisoc.com>
-> ---
->  drivers/gpio/gpio-eic-sprd.c | 49 +++++++++++++++++++-----------------
->  1 file changed, 26 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpio-eic-sprd.c b/drivers/gpio/gpio-eic-sprd.c
-> index 84352a6f4973..0d85d9e80848 100644
-> --- a/drivers/gpio/gpio-eic-sprd.c
-> +++ b/drivers/gpio/gpio-eic-sprd.c
-> @@ -50,10 +50,10 @@
->  #define SPRD_EIC_SYNC_DATA		0x1c
->  
->  /*
-> - * The digital-chip EIC controller can support maximum 3 banks, and each bank
-> + * The digital-chip EIC controller can support maximum 8 banks, and each bank
->   * contains 8 EICs.
->   */
-> -#define SPRD_EIC_MAX_BANK		3
-> +#define SPRD_EIC_MAX_BANK		8
->  #define SPRD_EIC_PER_BANK_NR		8
->  #define SPRD_EIC_DATA_MASK		GENMASK(7, 0)
->  #define SPRD_EIC_BIT(x)			((x) & (SPRD_EIC_PER_BANK_NR - 1))
-> @@ -99,33 +99,32 @@ struct sprd_eic {
->  
->  struct sprd_eic_variant_data {
->  	enum sprd_eic_type type;
-> -	u32 num_eics;
->  };
->  
-> +#define SPRD_EIC_VAR_DATA(soc_name)				\
-> +static const struct sprd_eic_variant_data soc_name##_eic_dbnc_data = {	\
-> +	.type = SPRD_EIC_DEBOUNCE,					\
-> +};									\
-> +									\
-> +static const struct sprd_eic_variant_data soc_name##_eic_latch_data = {	\
-> +	.type = SPRD_EIC_LATCH,						\
-> +};									\
-> +									\
-> +static const struct sprd_eic_variant_data soc_name##_eic_async_data = {	\
-> +	.type = SPRD_EIC_ASYNC,						\
-> +};									\
-> +									\
-> +static const struct sprd_eic_variant_data soc_name##_eic_sync_data = {	\
-> +	.type = SPRD_EIC_SYNC,						\
-> +}
-> +
-> +SPRD_EIC_VAR_DATA(sc9860);
-> +
->  static const char *sprd_eic_label_name[SPRD_EIC_MAX] = {
->  	"eic-debounce", "eic-latch", "eic-async",
->  	"eic-sync",
->  };
->  
-> -static const struct sprd_eic_variant_data sc9860_eic_dbnc_data = {
-> -	.type = SPRD_EIC_DEBOUNCE,
-> -	.num_eics = 8,
-> -};
-> -
-> -static const struct sprd_eic_variant_data sc9860_eic_latch_data = {
-> -	.type = SPRD_EIC_LATCH,
-> -	.num_eics = 8,
-> -};
-> -
-> -static const struct sprd_eic_variant_data sc9860_eic_async_data = {
-> -	.type = SPRD_EIC_ASYNC,
-> -	.num_eics = 8,
-> -};
-> -
-> -static const struct sprd_eic_variant_data sc9860_eic_sync_data = {
-> -	.type = SPRD_EIC_SYNC,
-> -	.num_eics = 8,
-> -};
->  
->  static inline void __iomem *sprd_eic_offset_base(struct sprd_eic *sprd_eic,
->  						 unsigned int bank)
-> @@ -583,6 +582,7 @@ static int sprd_eic_probe(struct platform_device *pdev)
->  	struct sprd_eic *sprd_eic;
->  	struct resource *res;
->  	int ret, i;
-> +	u16 num_banks = 0;
->  
->  	pdata = of_device_get_match_data(&pdev->dev);
->  	if (!pdata) {
-> @@ -613,12 +613,13 @@ static int sprd_eic_probe(struct platform_device *pdev)
->  			break;
->  
->  		sprd_eic->base[i] = devm_ioremap_resource(&pdev->dev, res);
-> +		num_banks++;
->  		if (IS_ERR(sprd_eic->base[i]))
->  			return PTR_ERR(sprd_eic->base[i]);
->  	}
->  
->  	sprd_eic->chip.label = sprd_eic_label_name[sprd_eic->type];
-> -	sprd_eic->chip.ngpio = pdata->num_eics;
-> +	sprd_eic->chip.ngpio = num_banks * SPRD_EIC_PER_BANK_NR;
->  	sprd_eic->chip.base = -1;
->  	sprd_eic->chip.parent = &pdev->dev;
->  	sprd_eic->chip.direction_input = sprd_eic_direction_input;
-> @@ -630,10 +631,12 @@ static int sprd_eic_probe(struct platform_device *pdev)
->  		sprd_eic->chip.set = sprd_eic_set;
->  		fallthrough;
->  	case SPRD_EIC_ASYNC:
-> +		fallthrough;
+Signed-off-by: Wenhua Lin <Wenhua.Lin@unisoc.com>
+---
+ .../bindings/input/sprd-keypad.yaml           | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/sprd-keypad.yaml
 
-Hi,
-this probably should go in a separate patch as a fix or an
-improvement with proper comments explaining the reason?
+diff --git a/Documentation/devicetree/bindings/input/sprd-keypad.yaml b/Documentation/devicetree/bindings/input/sprd-keypad.yaml
+new file mode 100644
+index 000000000000..51710e1eb389
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/sprd-keypad.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2023 Unisoc Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/sprd-keypad.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Device-Tree bindings for GPIO attached keys
++
++maintainers:
++  - Orson Zhai <orsonzhai@gmail.com>
++  - Baolin Wang <baolin.wang7@gmail.com>
++  - Chunyan Zhang <zhang.lyra@gmail.com>
++
++description: |
++    Keypad controller is used to interface a SoC with a matrix-keypad device.
++    The keypad controller supports multiple row and column lines.
++    A key can be placed at each intersection of a unique row and a unique column.
++    The keypad controller can sense a key-press and key-release and report the
++    event using a interrupt to the cpu.
++
++properties:
++    compatible:
++    const: sprd,sc9860-keypad
++
++    reg:
++        maxItems: 1
++
++    interrupts:
++        maxItems: 1
++
++    keypad,num-rows:
++    description: Number of row lines connected to the keypad controller.
++
++    keypad,num-columns:
++    description: Number of column lines connected to the keypad.
++
++    debounce-interval:
++    description:
++        Debouncing interval time in milliseconds. If not specified defaults to 5.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++    default: 5
++
++    linux,keymap:
++    description: An array of packed 1-cell entries containing the equivalent
++        of row, column and linux key-code. The 32-bit big endian cell is packed.
++
++required:
++        - compatible
++        - reg
++        - keypad,num-rows
++        - keypad,num-columns
++        - linux,keymap
++
++unevaluatedProperties: false
++
++
++examples:
++  - |
++	keypad@40250000 {
++		compatible = "sprd,sc9860-keypad";
++		reg = 	<0x40250000 0x1000>;
++		interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&aonapb_gate CLK_KPD_EB>,
++			<&aonapb_gate CLK_KPD_RTC_EB>;
++		clock-names = "enable", "rtc";
++		keypad,num-rows= <3>;
++		keypad,num-columns = <3>;
++		debounce-interval = <5>;
++		linux,keymap = < 0x00000001
++				 0x01000002
++				 0x00020003>;
++		status = "okay";
++	};
++...
+-- 
+2.17.1
 
->  	case SPRD_EIC_SYNC:
->  		sprd_eic->chip.get = sprd_eic_get;
->  		break;
->  	case SPRD_EIC_LATCH:
-> +		fallthrough;
-
-ditto.
-
-Hugo Villeneuve
-
-
->  	default:
->  		break;
->  	}
-> -- 
-> 2.17.1
-> 
