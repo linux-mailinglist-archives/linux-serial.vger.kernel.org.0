@@ -2,121 +2,98 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3472877756A
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Aug 2023 12:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07D27775F6
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Aug 2023 12:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbjHJKIW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 10 Aug 2023 06:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
+        id S234282AbjHJKjG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 10 Aug 2023 06:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbjHJKIT (ORCPT
+        with ESMTP id S234357AbjHJKjF (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 10 Aug 2023 06:08:19 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C94183;
-        Thu, 10 Aug 2023 03:08:19 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-99bcc0adab4so106509166b.2;
-        Thu, 10 Aug 2023 03:08:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691662098; x=1692266898;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DCqpkpv99z9fdqK9wNCpZa0APsArJ81t0bxSIKWwtvY=;
-        b=HSE88VqlBSSN6cXxbPmuxVR1BGxTwSOkkw4Lyy0tHidjLWkZEjkR7j8NKV0J8dg3P1
-         GayQ85Lk/snl49G8RYXbmxNBW//ru4G323jUvya2ZowW3FppkW11Vt1Ci2RG9Ii3YNwn
-         TBNgySnv8EFRE1gDac/W4yLbuNg2EXJ9O6wHQ3ZEMo8IPNiaFe0f5yMacxpbrXKT8/rg
-         C/0pD6sHYrMsuUz4vB1kTUTLYVaV9QKqC7s7b7YxAjYc4ZUBLZMRHjhJg1Pe9Xl9/uPP
-         UehKpqAlfDoO0JtnUEEJlFJ1sescDSNAX7RWhfMzHlAPSx5BDfa+wGGwLL/xTgkf9Eem
-         8XNA==
-X-Gm-Message-State: AOJu0YwFV32L9ZG6SDD0TLi7tLEI/a9W4t4h+CVNgxtSoKj08VkrVAcm
-        /v6MAoWBWBY5/rr/PHvGvTAGuWUotoOejQ==
-X-Google-Smtp-Source: AGHT+IFUsVRsTvVXCeOz9Q93PhdXP6MFeYTXkIqaczsm2jx6GCzRGgzs5VCSStlY/FPITjS2dH6jNA==
-X-Received: by 2002:a17:906:1daa:b0:99b:4ed4:5527 with SMTP id u10-20020a1709061daa00b0099b4ed45527mr1682894ejh.25.1691662097578;
-        Thu, 10 Aug 2023 03:08:17 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id gu11-20020a170906f28b00b0099bd86f9248sm717719ejb.63.2023.08.10.03.08.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 03:08:16 -0700 (PDT)
-Message-ID: <f6964a5e-ab1b-6bf3-ef65-5b826e36a8f9@kernel.org>
-Date:   Thu, 10 Aug 2023 12:08:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 34/36] tty: gdm724x: convert counts to size_t
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20230810091510.13006-1-jirislaby@kernel.org>
- <20230810091510.13006-35-jirislaby@kernel.org>
- <ba8becf4-786a-4923-92f7-b4ec3038295f@kadam.mountain>
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
+        Thu, 10 Aug 2023 06:39:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1659C10DA;
+        Thu, 10 Aug 2023 03:39:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EE1D6580F;
+        Thu, 10 Aug 2023 10:39:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9572BC433C7;
+        Thu, 10 Aug 2023 10:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691663944;
+        bh=dtMhaLdCEBf8LyDEChVuL94sp23JhfU16F+5lzQnbJ0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DjBdC+oZiqPod2lHLaj/kELB0xCrFiTTiBsEm8ho0n4F6TCHb7TyvPjz2ORb8Pdop
+         COsIiqW98YQcnTbKaeEjrtgPMUzTzERTPIgDISWDikITpY8V+vM3Yew03odqPWsu5Y
+         7z3VIdTaWXWzx+XQXZjWsgiMrfzuSkQMn0pu5yMQ/8Ca86xDAOSZV+y1h3kk6YVrPj
+         BOtk49zshQ++ODJ8/ypTvKOS4dc06NIb2hhiSzfF7zoI8yNPacUNxI8z9B4FG2mhuA
+         OYzEEmzxpHpRUWtDpKTK1T8PyLf7FEZY9SUP/ahStoG/sbOqmFclybG3eTgTDoHz7U
+         4nmP5REqdPhog==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-staging@lists.linux.dev
+Subject: [PATCH 34-and-three-quarters/36] tty: gdm724x: simplify gdm_tty_write()
+Date:   Thu, 10 Aug 2023 12:39:00 +0200
+Message-ID: <20230810103900.19353-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.41.0
 In-Reply-To: <ba8becf4-786a-4923-92f7-b4ec3038295f@kadam.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <ba8becf4-786a-4923-92f7-b4ec3038295f@kadam.mountain>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 10. 08. 23, 11:42, Dan Carpenter wrote:
-> On Thu, Aug 10, 2023 at 11:15:08AM +0200, Jiri Slaby (SUSE) wrote:
->> Unify the type of tty_operations::write() counters with the 'count'
->> parameter. I.e. use size_t for them.
->>
->> This includes changing constants to UL to keep min() and avoid min_t().
->>
->> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
->> Cc: linux-staging@lists.linux.dev
->> ---
->>   drivers/staging/gdm724x/gdm_tty.c | 11 +++++------
->>   1 file changed, 5 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
->> index b31f2afb0286..cbaaa8fa7474 100644
->> --- a/drivers/staging/gdm724x/gdm_tty.c
->> +++ b/drivers/staging/gdm724x/gdm_tty.c
->> @@ -17,9 +17,9 @@
->>   #define GDM_TTY_MAJOR 0
->>   #define GDM_TTY_MINOR 32
->>   
->> -#define WRITE_SIZE 2048
->> +#define WRITE_SIZE 2048UL
->>   
->> -#define MUX_TX_MAX_SIZE 2048
->> +#define MUX_TX_MAX_SIZE 2048UL
->>   
->>   static inline bool gdm_tty_ready(struct gdm *gdm)
->>   {
->> @@ -152,9 +152,8 @@ static void gdm_tty_send_complete(void *arg)
->>   static ssize_t gdm_tty_write(struct tty_struct *tty, const u8 *buf, size_t len)
->>   {
->>   	struct gdm *gdm = tty->driver_data;
->> -	int remain = len;
->> -	int sent_len = 0;
->> -	int sending_len = 0;
->> +	size_t remain = len;
-> 
-> We later check if remain <= 0.  It still works because remain could
-> never be negative, but now it's even less necessary to check for
-> negatives, I guess.
+len and remain can never be negative in gdm_tty_write(). So remove such
+a check and move the check of remaining bytes to the loop condition.
+This way, the preceding 'if' is now superfluous too. Fix all that and
+make the code cleaner.
 
-You're right. The whole loop should be now:
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-staging@lists.linux.dev
+---
+ drivers/staging/gdm724x/gdm_tty.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-while (remain) {
-   ...
-}
-
-Even without the preceding 'if'.
-
-thanks,
+diff --git a/drivers/staging/gdm724x/gdm_tty.c b/drivers/staging/gdm724x/gdm_tty.c
+index cbaaa8fa7474..67d9bf41e836 100644
+--- a/drivers/staging/gdm724x/gdm_tty.c
++++ b/drivers/staging/gdm724x/gdm_tty.c
+@@ -158,10 +158,7 @@ static ssize_t gdm_tty_write(struct tty_struct *tty, const u8 *buf, size_t len)
+ 	if (!gdm_tty_ready(gdm))
+ 		return -ENODEV;
+ 
+-	if (!len)
+-		return 0;
+-
+-	while (1) {
++	while (remain) {
+ 		size_t sending_len = min(MUX_TX_MAX_SIZE, remain);
+ 		gdm->tty_dev->send_func(gdm->tty_dev->priv_dev,
+ 					(void *)(buf + sent_len),
+@@ -171,8 +168,6 @@ static ssize_t gdm_tty_write(struct tty_struct *tty, const u8 *buf, size_t len)
+ 					gdm);
+ 		sent_len += sending_len;
+ 		remain -= sending_len;
+-		if (remain <= 0)
+-			break;
+ 	}
+ 
+ 	return len;
 -- 
-js
-suse labs
+2.41.0
 
