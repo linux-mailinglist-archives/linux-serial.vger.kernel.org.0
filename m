@@ -2,52 +2,63 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63F377B103
-	for <lists+linux-serial@lfdr.de>; Mon, 14 Aug 2023 08:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1117277B1FD
+	for <lists+linux-serial@lfdr.de>; Mon, 14 Aug 2023 09:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbjHNGCh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 14 Aug 2023 02:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S233967AbjHNHBO (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 14 Aug 2023 03:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbjHNGCU (ORCPT
+        with ESMTP id S233982AbjHNHAp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 14 Aug 2023 02:02:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F97B4;
-        Sun, 13 Aug 2023 23:02:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6AF362987;
-        Mon, 14 Aug 2023 06:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BDBEC433C7;
-        Mon, 14 Aug 2023 06:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691992938;
-        bh=bWQE+knkPDexsk5CayFor2pwXRX42J9XJ9j+G5K22WQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fLDhfybewPP9yvESjtahMyDlG8PZfkIu0PjSuqnTZD4i8lVnuIthwCoAdcrXExjNc
-         ifbQOR0LYE5+tlb+Ds2kXgnKIeEAQqhnBrLU3Yhe1o1ry9Dw7Lu6vnyhXO94sME2rN
-         dN7W7/A2TqJT4TZLhhqjp9v+1DkbNbRHvmmaW3sg=
-Date:   Mon, 14 Aug 2023 08:02:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nick Hu <nick.hu@sifive.com>
-Cc:     zong.li@sifive.com, jirislaby@kernel.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/1] Add Sifive uart suspend and resume
-Message-ID: <2023081432-level-prelaw-3794@gregkh>
-References: <20230809135042.2443350-1-nick.hu@sifive.com>
- <2023081143-flannels-verbally-9d0f@gregkh>
- <CAKddAkA9TZs2vVCzBWtfgo3gYJsrMMmsDMtA22iEMM3ok9TgPA@mail.gmail.com>
+        Mon, 14 Aug 2023 03:00:45 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D050E73;
+        Mon, 14 Aug 2023 00:00:43 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4RPQJr0LpDz9ssp;
+        Mon, 14 Aug 2023 09:00:28 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zuZCU_fctyZk; Mon, 14 Aug 2023 09:00:27 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4RPQJp25t7z9srs;
+        Mon, 14 Aug 2023 09:00:26 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4326E8B76C;
+        Mon, 14 Aug 2023 09:00:26 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id YEqhxg472S6o; Mon, 14 Aug 2023 09:00:26 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.203])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0CA0A8B763;
+        Mon, 14 Aug 2023 09:00:26 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 37E62ESs271141
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 08:02:14 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 37E62EhM271140;
+        Mon, 14 Aug 2023 08:02:14 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-serial@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 1/3] Documentation: devices.txt: Remove ttyIOC*
+Date:   Mon, 14 Aug 2023 08:02:09 +0200
+Message-ID: <b5deb1222eb92017f0efe5b5cae127ac11983b3d.1691992627.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691992928; l=1483; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=3DFU8bIJ7mw3pPTSc8blm/K1aP1rPFtUO/2S5FYALX8=; b=AHGJaqyXwaaBz8IkcAjvTt69oWesHlRokalggr5+nMG6/75fOPOriJ+W2f5hwFPy/QTEjJ+Nw QP9pmDr9ojHA+r515xukDymg/GggejEhFrU1iwmhHvVWuTmdzVVVU2z
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKddAkA9TZs2vVCzBWtfgo3gYJsrMMmsDMtA22iEMM3ok9TgPA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,36 +67,45 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 01:55:58PM +0800, Nick Hu wrote:
-> Hi Greg
-> 
-> On Sat, Aug 12, 2023 at 3:11 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Aug 09, 2023 at 09:50:41PM +0800, Nick Hu wrote:
-> > > Add Sifive uart suspend and resume functions for system suspend.
-> > >
-> > > Changes in v2:
-> > > - Change Signed-off-by: Ben Dooks to Reviewed-by: Ben Dooks
-> > > - Remove the unnecessary check
-> > >
-> > > Nick Hu (1):
-> > >   serial: sifive: Add suspend and resume operations
-> > >
-> > >  drivers/tty/serial/sifive.c | 18 ++++++++++++++++++
-> > >  1 file changed, 18 insertions(+)
-> > >
-> > > --
-> > > 2.34.1
-> > >
-> >
-> > Does not apply to my tree :(
-> Is there any reason that it doesn't apply to your tree?
-> Which tree should I go?
+IOC4 serial driver was removed, remove associated devices
+from documentation.
 
-Which tree did you make it against?  It doesn't apply due to conflicts.
-Perhaps either regenerate it against the tty-next branch of the tty.git
-tree, or linux-next?
+Fixes: a017ef17cfd8 ("tty/serial: remove the ioc4_serial driver")
+Cc: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ Documentation/admin-guide/devices.txt | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-thanks,
+diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
+index b1b57f638b94..75a408f72402 100644
+--- a/Documentation/admin-guide/devices.txt
++++ b/Documentation/admin-guide/devices.txt
+@@ -2692,14 +2692,8 @@
+ 		 46 = /dev/ttyCPM0		PPC CPM (SCC or SMC) - port 0
+ 		    ...
+ 		 49 = /dev/ttyCPM5		PPC CPM (SCC or SMC) - port 3
+-		 50 = /dev/ttyIOC0		Altix serial card
+-		    ...
+-		 81 = /dev/ttyIOC31		Altix serial card
+ 		 82 = /dev/ttyVR0		NEC VR4100 series SIU
+ 		 83 = /dev/ttyVR1		NEC VR4100 series DSIU
+-		 84 = /dev/ttyIOC84		Altix ioc4 serial card
+-		    ...
+-		 115 = /dev/ttyIOC115		Altix ioc4 serial card
+ 		 116 = /dev/ttySIOC0		Altix ioc3 serial card
+ 		    ...
+ 		 147 = /dev/ttySIOC31		Altix ioc3 serial card
+@@ -2762,9 +2756,6 @@
+ 		 46 = /dev/cucpm0		Callout device for ttyCPM0
+ 		    ...
+ 		 49 = /dev/cucpm5		Callout device for ttyCPM5
+-		 50 = /dev/cuioc40		Callout device for ttyIOC40
+-		    ...
+-		 81 = /dev/cuioc431		Callout device for ttyIOC431
+ 		 82 = /dev/cuvr0		Callout device for ttyVR0
+ 		 83 = /dev/cuvr1		Callout device for ttyVR1
+ 
+-- 
+2.41.0
 
-greg k-h
