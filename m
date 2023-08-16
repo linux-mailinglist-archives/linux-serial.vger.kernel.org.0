@@ -2,51 +2,49 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7878877DFAF
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Aug 2023 12:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5F877DFD3
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Aug 2023 13:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244205AbjHPK4K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Aug 2023 06:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
+        id S244147AbjHPK7w (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Aug 2023 06:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244125AbjHPKzu (ORCPT
+        with ESMTP id S244374AbjHPK7l (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Aug 2023 06:55:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF3E13E;
-        Wed, 16 Aug 2023 03:55:49 -0700 (PDT)
+        Wed, 16 Aug 2023 06:59:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8D12D68;
+        Wed, 16 Aug 2023 03:59:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AFE564C77;
-        Wed, 16 Aug 2023 10:55:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BDFC433C8;
-        Wed, 16 Aug 2023 10:55:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 398E16655C;
+        Wed, 16 Aug 2023 10:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8A2C433C8;
+        Wed, 16 Aug 2023 10:58:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692183348;
-        bh=VEJwLY7hoPdNX4XnvykJ3RU6LGaAEAvuCCAn2+uGWxk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f2XDJqTl/pi4RpIiL4mEcVSC4RFSFu6dF9VdWLJNMGOyt1fMTbKbHwaOaU15B4Rs8
-         NpLR5QsCB3Szt52ZVkdxT9ju8/sxRQp8yZ7eyZufL0ja6nDcq4IF/mBlbzanRcaoMg
-         3YHR9LyFfb8cmb5tuzWKcb4imdnlivnrntNKaqWX4bmY92Z+BV0ceawAVY78ev2ucL
-         wftcYbM/6RR2wVbf3LiW41SX32BBkut/iNUFfb/mrVmne1G3qmQy6j4jkp5WHdC0m7
-         /w6TFbX/MT5a2mcSHyofaE34a+ryKAjro+N0UFW5/S5FC6/hgv2/WeKERpxLuxnmjW
-         wlVtmqR8WfEIQ==
+        s=k20201202; t=1692183505;
+        bh=C+x2iRfn8GLwjrgWqWWRBUNt/4FRA0NEuWds6mhNJgc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ej27P6s3ZzQCJcsxfhORGRtt60q3skegAMLO/9yJCPU7jrvk30BxAifZbDvI3tp3s
+         OyKTEKimtbweLkYobwHNiUNzvwdrGsW9Z1zR3pH5hTY9HQDVhEPPCc87hIKqRi4GHJ
+         TaRZYk4gQRtY3PHfJJLo79GT1rla6eG6GWTJWZ5sGVRDfTq34SAaxG09hHSiQ/N5vC
+         aQzPrYA+2YtKn1BQquevVuZ8E83ugHotWRclHosJim5kNZ4pxhKNGTMFeJHYKyXHHb
+         Nbb8jPCFNp+pElueFwo0Z3zjwjUCTWOHP/nKYWbIsFcJbK7IeRy9iFnm7nxvyx3TU3
+         N3J5qsZSpqUaA==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH 10/10] tty: tty_buffer: invert conditions in __tty_buffer_request_room()
-Date:   Wed, 16 Aug 2023 12:55:30 +0200
-Message-ID: <20230816105530.3335-11-jirislaby@kernel.org>
+Subject: [PATCH 00/14] tty: n_tty: cleanup
+Date:   Wed, 16 Aug 2023 12:58:04 +0200
+Message-ID: <20230816105822.3685-1-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230816105530.3335-1-jirislaby@kernel.org>
-References: <20230816105530.3335-1-jirislaby@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,71 +52,36 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-We are used to handle "bad" states in the 'if's in the kernel. Refactor
-(invert the two conditions in) __tty_buffer_request_room(), so that the
-code returns from the fast paths immediately instead of postponing to
-the heavy end of the function.
+This is another part (say part III.) of the previous type unification
+across the tty layer[1]. This time, in n_tty line discipline. Apart from
+type changes, this series contains a larger set of refactoring of the
+code. Namely, separating hairy code into single functions for better
+readability.
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
----
- drivers/tty/tty_buffer.c | 44 ++++++++++++++++++++--------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+[1] https://lore.kernel.org/all/20230810091510.13006-1-jirislaby@kernel.org/
 
-diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-index 44c0adaec850..5f6d0cf67571 100644
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -266,28 +266,28 @@ static int __tty_buffer_request_room(struct tty_port *port, size_t size,
- 	size_t left = (b->flags ? 1 : 2) * b->size - b->used;
- 	bool change = !b->flags && flags;
- 
--	if (change || left < size) {
--		/* This is the slow path - looking for new buffers to use */
--		n = tty_buffer_alloc(port, size);
--		if (n != NULL) {
--			n->flags = flags;
--			buf->tail = n;
--			/*
--			 * Paired w/ acquire in flush_to_ldisc() and lookahead_bufs()
--			 * ensures they see all buffer data.
--			 */
--			smp_store_release(&b->commit, b->used);
--			/*
--			 * Paired w/ acquire in flush_to_ldisc() and lookahead_bufs()
--			 * ensures the latest commit value can be read before the head
--			 * is advanced to the next buffer.
--			 */
--			smp_store_release(&b->next, n);
--		} else if (change)
--			size = 0;
--		else
--			size = left;
--	}
-+	if (!change && left >= size)
-+		return size;
-+
-+	/* This is the slow path - looking for new buffers to use */
-+	n = tty_buffer_alloc(port, size);
-+	if (n == NULL)
-+		return change ? 0 : left;
-+
-+	n->flags = flags;
-+	buf->tail = n;
-+	/*
-+	 * Paired w/ acquire in flush_to_ldisc() and lookahead_bufs()
-+	 * ensures they see all buffer data.
-+	 */
-+	smp_store_release(&b->commit, b->used);
-+	/*
-+	 * Paired w/ acquire in flush_to_ldisc() and lookahead_bufs()
-+	 * ensures the latest commit value can be read before the head
-+	 * is advanced to the next buffer.
-+	 */
-+	smp_store_release(&b->next, n);
-+
- 	return size;
- }
- 
+Note this is completely independent on "part II." (tty_buffer cleanup),
+so those two can be applied in any order.
+
+Jiri Slaby (SUSE) (14):
+  tty: n_tty: make flow of n_tty_receive_buf_common() a bool
+  tty: n_tty: use output character directly
+  tty: n_tty: use 'retval' for writes' retvals
+  tty: n_tty: use time_is_before_jiffies() in n_tty_receive_overrun()
+  tty: n_tty: make n_tty_data::num_overrun unsigned
+  tty: n_tty: use MASK() for masking out size bits
+  tty: n_tty: move canon handling to a separate function
+  tty: n_tty: move newline handling to a separate function
+  tty: n_tty: remove unsigned char casts from character constants
+  tty: n_tty: simplify chars_in_buffer()
+  tty: n_tty: use u8 for chars and flags
+  tty: n_tty: unify counts to size_t
+  tty: n_tty: extract ECHO_OP processing to a separate function
+  tty: n_tty: deduplicate copy code in n_tty_receive_buf_real_raw()
+
+ drivers/tty/n_tty.c | 551 +++++++++++++++++++++++---------------------
+ 1 file changed, 284 insertions(+), 267 deletions(-)
+
 -- 
 2.41.0
 
