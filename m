@@ -2,85 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E24F77DD29
-	for <lists+linux-serial@lfdr.de>; Wed, 16 Aug 2023 11:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE8A77DFA6
+	for <lists+linux-serial@lfdr.de>; Wed, 16 Aug 2023 12:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243286AbjHPJV1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 16 Aug 2023 05:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S234596AbjHPK4G (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 16 Aug 2023 06:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243293AbjHPJVE (ORCPT
+        with ESMTP id S232470AbjHPKzf (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 16 Aug 2023 05:21:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE1E2698
-        for <linux-serial@vger.kernel.org>; Wed, 16 Aug 2023 02:21:02 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-7-tOIxv-NvMECBkHxU2QaG3g-1; Wed, 16 Aug 2023 10:20:00 +0100
-X-MC-Unique: tOIxv-NvMECBkHxU2QaG3g-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 16 Aug
- 2023 10:18:03 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 16 Aug 2023 10:18:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jiri Slaby' <jirislaby@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>
-Subject: RE: [PATCH 34/36] tty: gdm724x: convert counts to size_t
-Thread-Topic: [PATCH 34/36] tty: gdm724x: convert counts to size_t
-Thread-Index: AQHZ0A2Smc/5XT+NnUuSfmLwyiVGwq/smYqg///1V4CAABGqoA==
-Date:   Wed, 16 Aug 2023 09:18:03 +0000
-Message-ID: <9c4a831ae5284aec887ea60d4dda2b8c@AcuMS.aculab.com>
-References: <20230810091510.13006-1-jirislaby@kernel.org>
- <20230810091510.13006-35-jirislaby@kernel.org>
- <20230815172247.GA1690054@dev-arch.thelio-3990X>
- <937e14c1-d884-0b6e-595a-e8aaa3d09025@kernel.org>
- <bdbdfdaad3a842d2837ac9d15ef2ab25@AcuMS.aculab.com>
- <00de3273-9433-138d-b659-826457e6a008@kernel.org>
-In-Reply-To: <00de3273-9433-138d-b659-826457e6a008@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 16 Aug 2023 06:55:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7886A1985;
+        Wed, 16 Aug 2023 03:55:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC5E63FBB;
+        Wed, 16 Aug 2023 10:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552ADC433C7;
+        Wed, 16 Aug 2023 10:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692183333;
+        bh=lBmJFR9M91wfxaDPJazty0XSheTV8bspCpNfjNPkkTM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DquIEfCm4Jd3ngGUqDmln57RQgyDEer1IAtPW0YWFz6L+z/q7g/A9Rm9eq0QAM1Jx
+         gcrqKvUYBo5b6p/C3orCPSbIWkdfDhspXuStx+1HDDAtcNEZv68rX96CPn9IQSY0xi
+         J23E+ypfKrzLU6G1JPUE4A8gJomyQe6ulfnWy8MMPRLs/R1sZF4WUanP+43fFRYO6H
+         /j0zs6A78QAFfu5m5oNh9CFc+FPi7462B7LZnt7dKoo1hncLPEXveAWTbF4+GsahTg
+         sMsf4Nxj9j8c17yR2uRseW3CFiUsbilxw0TJvNmA5IanQ+2cHwHQVYCwqMsvQPkX0U
+         Zp94KIR4BbqHw==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH 00/10] tty: tty_buffer: cleanup
+Date:   Wed, 16 Aug 2023 12:55:20 +0200
+Message-ID: <20230816105530.3335-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-RnJvbTogSmlyaSBTbGFieQ0KPiBTZW50OiBXZWRuZXNkYXksIEF1Z3VzdCAxNiwgMjAyMyA5OjU5
-IEFNDQouLi4NCj4gPiAnVm90ZSB1cCcgbXkgcGF0Y2hlcyB0byBtaW5tYXguaCB0aGF0IG1ha2Ug
-dGhpcyBhbGwgd29yay4NCj4gPiBUaGVuIGl0IHdvbid0IGNhcmUgcHJvdmlkZWQgYm90aCB2YWx1
-ZXMgaGF2ZSB0aGUgc2FtZSBzaWduZWRuZXNzLg0KPiA+IChvciwgd2l0aCBwYXRjaCA1LCBhcmUg
-bm9uLW5lZ2F0aXZlIDMxYml0IGNvbXBpbGUgdGltZSBjb25zdGFudHMuKQ0KPiANCj4gT2ggeWVh
-aCwgdGhhdCBbMV0gbG9va3MgZ3JlYXQuIFdoeSBzaG91bGQgb25lIGNhcmUgaW4gbWluKDQwOTYs
-DQo+IHNpemVvZigpKSBhZnRlciBhbGzigKYNCj4gDQo+IFNvIHdoYXQncyB0aGUgY3VycmVudCBz
-dGF0dXMgb2YgdGhvc2U/DQoNCldhaXRpbmcuLi4gOi0oDQoNClRoZSBvbmx5IGNvbW1lbnQgaXMg
-ZnJvbSBMaW51cyB3aG8gcmVhbGx5IGRvZXNuJ3QgbGlrZSB0aGUgaWRlYQ0KdGhhdCBtaW4oc2ln
-bmVkX3ZhciwgNHUpIHNob3VsZCBiZSB0aGUgc2FtZSBhcyBtaW4oc2lnbmVkX3ZhciwgNCkuDQpJ
-IHRoaW5rIGhlIGlzIG9rIHdpdGggbWluKHVuc2lnbmVkX3ZhciwgNCkgdGhvdWdoLg0KDQpUaGUg
-bWluX3QodTE2LC4uLikgSSBxdW90ZWQgZnJvbSB0aGUgY29uc29sZSBidWZmZXIgY29kZSBpcw0K
-YSByZWFsIGJ1ZyB0aGF0IHdhcyBpZGVudGlmaWVkIGJ5IHNvbWVvbmUgZWxzZSBsYXN0IHdlZWsu
-DQoNClJlYWxseSBtaW5fdCgpIGlzIGp1c3QgYW4gYWNjaWRlbnQgd2FpdGluZyB0byBoYXBwZW4u
-DQoNCglEYXZpZA0KDQo+IA0KPiBbMV0NCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL2I0
-Y2U5ZGFkNzQ4ZTQ4OWY5MzE0YTJkYzk1NjE1MDMzQEFjdU1TLmFjdWxhYi5jb20vDQo+IA0KPiB0
-aGFua3MsDQo+IC0tDQo+IGpzDQo+IHN1c2UgbGFicw0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
-TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
-VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+This is another part (say part II.) of the previous type unification
+across the tty layer[1]. This time, in tty_buffer. Apart from type
+changes, this series contains a larger set of refactoring of the code.
+Namely, unification of byte stuffing into the tty buffers into a single
+function.
+
+[1] https://lore.kernel.org/all/20230810091510.13006-1-jirislaby@kernel.org/
+
+Jiri Slaby (SUSE) (10):
+  tty: tty_buffer: switch data type to u8
+  tty: tty_buffer: use struct_size() in tty_buffer_alloc()
+  tty: tty_buffer: unify tty_insert_flip_string_{fixed_flag,flags}()
+  tty: tty_buffer: warn if losing flags in
+    __tty_insert_flip_string_flags()
+  tty: tty_buffer: switch insert functions to size_t
+  tty: tty_buffer: let tty_prepare_flip_string() return size_t
+  tty: tty_buffer: use __tty_insert_flip_string_flags() in
+    tty_insert_flip_char()
+  tty: tty_buffer: better types in __tty_buffer_request_room()
+  tty: tty_buffer: initialize variables in initializers already
+  tty: tty_buffer: invert conditions in __tty_buffer_request_room()
+
+ Documentation/driver-api/tty/tty_buffer.rst |   7 +-
+ drivers/tty/tty_buffer.c                    | 169 ++++++--------------
+ include/linux/tty_buffer.h                  |   4 +-
+ include/linux/tty_flip.h                    |  64 ++++++--
+ 4 files changed, 111 insertions(+), 133 deletions(-)
+
+-- 
+2.41.0
 
