@@ -2,104 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B247E789BE8
-	for <lists+linux-serial@lfdr.de>; Sun, 27 Aug 2023 09:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D714789C02
+	for <lists+linux-serial@lfdr.de>; Sun, 27 Aug 2023 10:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjH0Hnu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 27 Aug 2023 03:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S230347AbjH0ICF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 27 Aug 2023 04:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjH0HmP (ORCPT
+        with ESMTP id S230297AbjH0IBl (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 27 Aug 2023 03:42:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A977AFA;
-        Sun, 27 Aug 2023 00:42:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42E1E61CA0;
-        Sun, 27 Aug 2023 07:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECECC433C8;
-        Sun, 27 Aug 2023 07:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693122131;
-        bh=ZZzrW8bCe0Cteehk6ZqBfbcWjR/I+i/gq8lRg9vf2WA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tql1LjTU7g8mlHtwTYYEgppjz13KzJg8CbOAzJOH+03SYjSO9+Iz7BtC4MuNdrnTs
-         e33fCxrt6+lclkxrvnRTpzFpQfvp9ec/armE5l2HHPMWdYEqNO5ikL1EfhpPOreD7x
-         ARgZ67Ge+TESVhsXvDq1k1cWEhBcjLjlYfmtvQu4D6gMxK6XFQnjurO7X0dQpc8I8M
-         OWIOQ/IH1TFpCkoo3g1D5B2caUkVGW4I1OlBoPNAtlYQk2CjSIYpejIvpeR4hAbmlV
-         SxqqwBxdivqNicLDA85awptDjZ6Sv0xF+++OOam1n2XRBJPLosQvoGbYwLSxGtXZOh
-         2ZkGjZSLo45wQ==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH v2 14/14] tty: n_tty: deduplicate copy code in n_tty_receive_buf_real_raw()
-Date:   Sun, 27 Aug 2023 09:41:47 +0200
-Message-ID: <20230827074147.2287-15-jirislaby@kernel.org>
+        Sun, 27 Aug 2023 04:01:41 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670511995;
+        Sun, 27 Aug 2023 01:01:25 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-99c0cb7285fso288902666b.0;
+        Sun, 27 Aug 2023 01:01:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693123284; x=1693728084;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UJQrxQq8+wggDdpWlS/QjLNuLOjuY19XSVAy4OQf8wA=;
+        b=ZkA4RDEEbYyObLLbPmSx5S5uO+h2bz5nMejlI3FiHadNm7+L4FiHwK7Fjb9SSNsN+E
+         JfKqSGjEIhN/eAL/BpTitY61/Fo6/8e/n9XxxWsX/J+gGz/qK7lEU0MQ1r1muaMHqWEC
+         UXLF41eeAq+qeX4iWcXVHObumpwUTe/hiJrARjabaxeElPnKl3/gnsWkT4tsB2oT/+Kz
+         Rm+qByqkpanDTy8E3J6EVocIZWX2cxK4sFPry7XtWyNxEgLLKOgODiPmer424iqS2+x9
+         o5LuU3eSaVIXLNF7wd/0hqG132WLycj3MEIdyRrX/8o5tnq2znTzh/2iqWFMkrzQZxI4
+         XS0A==
+X-Gm-Message-State: AOJu0Yxf9cji7pi3sOJNKbufM73zmgNHUWMz0PIAHK5pYRXNcM6y9OYY
+        4WbMdX9TPYRk/Zl6Kfq/5qw=
+X-Google-Smtp-Source: AGHT+IG+ttSdqT5Jha3JUwxZYiJJlJJCtQzdNAhIwuopeTVdVpuvYmkXZgtqvBH+M3EiZ6GbdP+yXg==
+X-Received: by 2002:a17:907:7714:b0:99d:fd27:b38d with SMTP id kw20-20020a170907771400b0099dfd27b38dmr16989810ejc.70.1693123283542;
+        Sun, 27 Aug 2023 01:01:23 -0700 (PDT)
+Received: from ryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.gmail.com with ESMTPSA id pg23-20020a170907205700b0098e34446464sm3181883ejb.25.2023.08.27.01.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Aug 2023 01:01:23 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, Lucas Tanure <tanure@linux.com>
+Subject: [PATCH] Revert "tty: serial: meson: Add a earlycon for the T7 SoC"
+Date:   Sun, 27 Aug 2023 09:01:13 +0100
+Message-ID: <20230827080113.2790-1-tanure@linux.com>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230827074147.2287-1-jirislaby@kernel.org>
-References: <20230827074147.2287-1-jirislaby@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The code is duplicated to perform the copy twice -- to handle buffer
-wrap-around. Instead of the duplication, roll this into the loop.
+This reverts commit 6a4197f9763325043abf7690a21124a9facbf52e.
+New SoC will use ttyS0 instead of ttyAML, so T7 SoC doesn't need a OF_EARLYCON_DECLARE.
 
-(And add some blank lines around to have the code a bit more readable.)
-
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 ---
- drivers/tty/n_tty.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ drivers/tty/serial/meson_uart.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index edf59f6fc669..6c9a408d67cd 100644
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1528,19 +1528,18 @@ n_tty_receive_buf_real_raw(const struct tty_struct *tty, const u8 *cp,
- 			   size_t count)
- {
- 	struct n_tty_data *ldata = tty->disc_data;
--	size_t n, head;
--
--	head = MASK(ldata->read_head);
--	n = min(count, N_TTY_BUF_SIZE - head);
--	memcpy(read_buf_addr(ldata, head), cp, n);
--	ldata->read_head += n;
--	cp += n;
--	count -= n;
--
--	head = MASK(ldata->read_head);
--	n = min(count, N_TTY_BUF_SIZE - head);
--	memcpy(read_buf_addr(ldata, head), cp, n);
--	ldata->read_head += n;
-+
-+	/* handle buffer wrap-around by a loop */
-+	for (unsigned int i = 0; i < 2; i++) {
-+		size_t head = MASK(ldata->read_head);
-+		size_t n = min(count, N_TTY_BUF_SIZE - head);
-+
-+		memcpy(read_buf_addr(ldata, head), cp, n);
-+
-+		ldata->read_head += n;
-+		cp += n;
-+		count -= n;
-+	}
- }
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index c4f61d82fb727..790d910dafa5d 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -648,8 +648,6 @@ meson_serial_early_console_setup(struct earlycon_device *device, const char *opt
  
- static void
+ OF_EARLYCON_DECLARE(meson, "amlogic,meson-ao-uart",
+ 		    meson_serial_early_console_setup);
+-OF_EARLYCON_DECLARE(meson, "amlogic,t7-uart",
+-		    meson_serial_early_console_setup);
+ 
+ #define MESON_SERIAL_CONSOLE_PTR(_devname) (&meson_serial_console_##_devname)
+ #else
 -- 
 2.42.0
 
