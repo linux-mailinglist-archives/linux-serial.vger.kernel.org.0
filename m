@@ -2,112 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DB87898E0
-	for <lists+linux-serial@lfdr.de>; Sat, 26 Aug 2023 22:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D5E789BD0
+	for <lists+linux-serial@lfdr.de>; Sun, 27 Aug 2023 09:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjHZUAD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 26 Aug 2023 16:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S229826AbjH0HmA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 27 Aug 2023 03:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjHZT7v (ORCPT
+        with ESMTP id S229639AbjH0Hly (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 26 Aug 2023 15:59:51 -0400
+        Sun, 27 Aug 2023 03:41:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB95D8;
-        Sat, 26 Aug 2023 12:59:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ABCF4;
+        Sun, 27 Aug 2023 00:41:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7B7A61F2F;
-        Sat, 26 Aug 2023 19:59:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84168C433C8;
-        Sat, 26 Aug 2023 19:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693079988;
-        bh=wk7TTw46I9VQ1vaqjL5oYSR1MWRvL3QqszPe1Ac3vEE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUceMAv4p78ZNILkEQmopDvcIZ44XkSx8YyqCQzeVhrnFNDWN3wcMc8ZoERhQFETn
-         c8e7ID/zkoi0nwVWXynboBvJsIvtCSXs4S3OcfJ2lr5Ac4GDBo5U/Nx3T1SLQfKXvo
-         VPZa3kfJE565DVd7Jkrtr2glSNkantuwuRdZjw1A=
-Date:   Sat, 26 Aug 2023 21:59:45 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lucas Tanure <tanure@linux.com>
-Cc:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Xianwei Zhao <xianwei.zhao@amlogic.com>,
-        Nick <nick@khadas.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v9 2/2] tty: serial: meson: Add a earlycon for the T7 SoC
-Message-ID: <2023082636-embolism-submitter-5e8c@gregkh>
-References: <20230814080128.143613-1-tanure@linux.com>
- <20230814080128.143613-2-tanure@linux.com>
- <20230823082940.t4xjgfzwpt2hsfst@CAB-WSD-L081021>
- <29cfd5ef-16ae-4960-a95e-13b58c090604@linux.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55E0760FC9;
+        Sun, 27 Aug 2023 07:41:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C23DC433C8;
+        Sun, 27 Aug 2023 07:41:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693122110;
+        bh=rQjRda5il1Qih4x4Sgsv9VVP6IJayf08n2wAKIBPsjc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hDNolPdICOmYP3fAK64ajNUJXLjFQ6iDjD4WwgndlTy6HCL3n9Mm6yyPq6n4KTTux
+         ODSDqzIZ0nS2Iv2tbgTfckOjK78IBDj73mqzY0xsF2MIqz0DvMg/s5j+rE0Z5NKkF/
+         4IQB0RZfiyw/l7LB1ey42iB1B1/PVeVrHk45l+Iw+4fq8HIsQoHwhTwPSPDKQzg79l
+         K8SU6yTJaKpJDBzoCjmI0lMHSh9LDj0MqLacvaoewx2dpn97ifWRMsCe/UHsaesxx3
+         SydUsBhyPAmbaN9LjSTngrlo1uQg0bOJ+WZHtBjxIvwD1u/C6PWcx/baxGTjUfw09F
+         W8+ej41E0zc/w==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH v2 00/14] tty: n_tty: cleanup
+Date:   Sun, 27 Aug 2023 09:41:33 +0200
+Message-ID: <20230827074147.2287-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <29cfd5ef-16ae-4960-a95e-13b58c090604@linux.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Aug 26, 2023 at 07:07:18PM +0100, Lucas Tanure wrote:
-> On 23-08-2023 09:29, Dmitry Rokosov wrote:
-> > Hello Lucas,
-> > 
-> > Thank you for the patch! Please find my small comment below.
-> > 
-> > On Mon, Aug 14, 2023 at 09:01:28AM +0100, Lucas Tanure wrote:
-> > > The new Amlogic T7 SoC does not have a always-on uart,
-> > > so add OF_EARLYCON_DECLARE for it.
-> > > 
-> > > Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > > Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-> > > ---
-> > > Since v8:
-> > >   - Fix issues with git send-mail command line
-> > > Since v7:
-> > >   - Send to the correct maintainers
-> > > 
-> > >   drivers/tty/serial/meson_uart.c | 2 ++
-> > >   1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> > > index 790d910dafa5..c4f61d82fb72 100644
-> > > --- a/drivers/tty/serial/meson_uart.c
-> > > +++ b/drivers/tty/serial/meson_uart.c
-> > > @@ -648,6 +648,8 @@ meson_serial_early_console_setup(struct earlycon_device *device, const char *opt
-> > >   OF_EARLYCON_DECLARE(meson, "amlogic,meson-ao-uart",
-> > >   		    meson_serial_early_console_setup);
-> > > +OF_EARLYCON_DECLARE(meson, "amlogic,t7-uart",
-> > > +		    meson_serial_early_console_setup);
-> > >   #define MESON_SERIAL_CONSOLE_PTR(_devname) (&meson_serial_console_##_devname)
-> > >   #else
-> > 
-> > I suppose you need to add a separate meson_t7_uart_data to switch the T7
-> > UART to a regular TTY devname 'ttyS'. For the new Amlogic SoCs, we have
-> > agreed to use 'ttyS' instead of 'ttyAML'. Please refer to the already
-> > applied patch series at [1] and the IRC discussion at [2].
-> > 
-> > Links:
-> >      [1] https://lore.kernel.org/all/20230705181833.16137-1-ddrokosov@sberdevices.ru/
-> >      [2] https://libera.irclog.whitequark.org/linux-amlogic/2023-07-03
-> > 
-> I asked Greg to drop this patch as is not need anymore.
-> T7 will use S4 TTY/UART code.
+This is another part (say part III.) of the previous type unification
+across the tty layer[1]. This time, in n_tty line discipline. Apart from
+type changes, this series contains a larger set of refactoring of the
+code. Namely, separating hairy code into single functions for better
+readability.
 
-I can't drop it, I need a revert :(
+[1] https://lore.kernel.org/all/20230810091510.13006-1-jirislaby@kernel.org/
+
+Note this is completely independent on "part II." (tty_buffer cleanup),
+so those two can be applied in any order.
+
+[v2]
+ * resend as I intertwined the series with and older one
+ * use better name for variable in 03/14
+
+Jiri Slaby (SUSE) (14):
+  tty: n_tty: make flow of n_tty_receive_buf_common() a bool
+  tty: n_tty: use output character directly
+  tty: n_tty: use 'num' for writes' counts
+  tty: n_tty: use time_is_before_jiffies() in n_tty_receive_overrun()
+  tty: n_tty: make n_tty_data::num_overrun unsigned
+  tty: n_tty: use MASK() for masking out size bits
+  tty: n_tty: move canon handling to a separate function
+  tty: n_tty: move newline handling to a separate function
+  tty: n_tty: remove unsigned char casts from character constants
+  tty: n_tty: simplify chars_in_buffer()
+  tty: n_tty: use u8 for chars and flags
+  tty: n_tty: unify counts to size_t
+  tty: n_tty: extract ECHO_OP processing to a separate function
+  tty: n_tty: deduplicate copy code in n_tty_receive_buf_real_raw()
+
+ drivers/tty/n_tty.c | 538 +++++++++++++++++++++++---------------------
+ 1 file changed, 278 insertions(+), 260 deletions(-)
+
+-- 
+2.42.0
+
