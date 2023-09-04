@@ -2,94 +2,71 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7E5791186
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Sep 2023 08:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4B7792A36
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Sep 2023 18:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjIDGkL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 4 Sep 2023 02:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S239003AbjIEQe3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 Sep 2023 12:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjIDGkK (ORCPT
+        with ESMTP id S1354048AbjIEJ2T (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 4 Sep 2023 02:40:10 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57578BB
-        for <linux-serial@vger.kernel.org>; Sun,  3 Sep 2023 23:40:07 -0700 (PDT)
-Received: from kwepemm600014.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RfJqZ3Mr7zrRrZ;
-        Mon,  4 Sep 2023 14:38:18 +0800 (CST)
-Received: from [10.67.110.164] (10.67.110.164) by
- kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Mon, 4 Sep 2023 14:40:03 +0800
-Subject: Re: [PATCH] tty: vcc: Add check for kstrdup() in vcc_probe()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <davem@davemloft.net>, <jirislaby@kernel.org>,
-        <jag.raman@oracle.com>, <linux-serial@vger.kernel.org>
-References: <20230903101322.205537-1-yiyang13@huawei.com>
- <2023090321-conch-stopper-51c7@gregkh>
- <b73d22ba-8f19-286e-9441-ac456bf37be5@huawei.com>
- <2023090400-sweat-algebra-1f34@gregkh>
-From:   "yiyang (D)" <yiyang13@huawei.com>
-Message-ID: <af31eba9-ad34-76f4-51fc-e20813a1607d@huawei.com>
-Date:   Mon, 4 Sep 2023 14:40:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Tue, 5 Sep 2023 05:28:19 -0400
+X-Greylist: delayed 4049 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:28:16 PDT
+Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC001A7
+        for <linux-serial@vger.kernel.org>; Tue,  5 Sep 2023 02:28:16 -0700 (PDT)
+Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
+        id D709C83731; Mon,  4 Sep 2023 09:41:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
+        s=mail; t=1693813353;
+        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
+        h=Date:From:To:Subject:From;
+        b=HutOVfGvN+t8NgGkeKUGg4pCj68pqkliAKIjd09IHEndfZzKMZNUYdY7RyaOE/S2a
+         bni2RGMf9DWzK2BF6x60d9sQuP8KAtgFaTwuZy2oOlms7dFz7B0YaTEeWVqDysa0s/
+         nwwjjKvygY9DkEWL1Ag/hCh5XT6MeSZANq03w4KCnCwzT4hDwO+rWw7HvzOLRnUgFo
+         Y66d3IztUcrgBLvQPzAr9J3K2t6hJ3JBpZNzSe8VaXR+JqJzH3Q/BzXeydLxrN5mWm
+         phaxD557SKb6q1x3AyxWPcuolJifz8HAThe3nGS30fQMFInjXroMNqT1EE+zBnMhNe
+         m12MMUbTq7UGQ==
+Received: by mail.equinoxrise.pl for <linux-serial@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
+Message-ID: <20230904084500-0.1.7.r7t.0.3kjj6vgtjv@equinoxrise.pl>
+Date:   Mon,  4 Sep 2023 07:40:34 GMT
+From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
+To:     <linux-serial@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.equinoxrise.pl
 MIME-Version: 1.0
-In-Reply-To: <2023090400-sweat-algebra-1f34@gregkh>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.164]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600014.china.huawei.com (7.193.23.54)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 2023/9/4 14:17, Greg KH wrote:
-> On Mon, Sep 04, 2023 at 11:45:11AM +0800, yiyang (D) wrote:
->> On 2023/9/3 18:49, Greg KH wrote:
->>> On Sun, Sep 03, 2023 at 06:13:22PM +0800, Yi Yang wrote:
->>>> Add check for the return value of kstrdup() and return the error, if it
->>>> fails in order to avoid NULL pointer dereference.
->>>>
->>>> Fixes: 5d171050e28f ("sparc64: vcc: Enable VCC port probe and removal")
->>>> Signed-off-by: Yi Yang <yiyang13@huawei.com>
->>>> ---
->>>>    drivers/tty/vcc.c | 9 +++++++++
->>>>    1 file changed, 9 insertions(+)
->>>>
->>>> diff --git a/drivers/tty/vcc.c b/drivers/tty/vcc.c
->>>> index a39ed981bfd3..420d334f6077 100644
->>>> --- a/drivers/tty/vcc.c
->>>> +++ b/drivers/tty/vcc.c
->>>> @@ -579,6 +579,10 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
->>>>    		return -ENOMEM;
->>>>    	name = kstrdup(dev_name(&vdev->dev), GFP_KERNEL);
->>>> +	if (!name) {
->>>> +		kfree(port);
->>>> +		return -ENOMEM;
->>>
->>> Please just add another goto target later in the function like the rest
->>> of the error paths follow.
->> Ok, i will send v2 patch for this issue.
->>>
->>> And how did you test this patch?
->>>
->> I use crosstool-ng build sparc arch for open CONFIG_VCC.
-> 
-> That is build-testing, how did you functionally test that this works
-> properly?
-> 
-Sorry, I only passed the build test, and did not perform the works test 
-because there was no corresponding hardware.
+Dzie=C5=84 dobry!
 
-thanks,
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-Yi Yang
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
+
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
+
+
+Pozdrawiam
+Mateusz Talaga
