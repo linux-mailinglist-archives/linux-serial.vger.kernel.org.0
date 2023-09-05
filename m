@@ -2,81 +2,77 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23784792C68
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Sep 2023 19:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598D9792D7C
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Sep 2023 20:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjIER3X (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 5 Sep 2023 13:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S233153AbjIESlL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 5 Sep 2023 14:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242784AbjIER2f (ORCPT
+        with ESMTP id S233723AbjIESlL (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 5 Sep 2023 13:28:35 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2153D52A35
-        for <linux-serial@vger.kernel.org>; Tue,  5 Sep 2023 09:52:58 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 38E7E809E;
-        Tue,  5 Sep 2023 16:51:49 +0000 (UTC)
-Date:   Tue, 5 Sep 2023 19:51:47 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Matthew Howell <matthew.howell@sealevel.com>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        ryan.wenglarz@sealevel.com, james.olson@sealevel.com
-Subject: Re: [PATCH] serial: Revert serial: core: Fix serial core port id to
- not use port->line
-Message-ID: <20230905165147.GS11662@atomide.com>
-References: <20230829035245.GF11662@atomide.com>
- <511f2dcf-f637-695-8e81-8eaa3735ba88@sealevel.com>
- <20230829201557.GK11662@atomide.com>
- <472581f-e7f6-6cc-c749-5be16e4fe9af@sealevel.com>
- <20230901044730.GL11662@atomide.com>
- <e8579280-2f44-a585-a3b8-98fad29e6a2d@sealevel.com>
- <20230902043424.GM11662@atomide.com>
- <c4b1db31-7814-0d22-36de-a7e6f117d89c@sealevel.com>
- <20230905155524.GR11662@atomide.com>
- <79e44ee3-f4a0-6f3e-cb5d-dc2b7bd048fb@sealevel.com>
+        Tue, 5 Sep 2023 14:41:11 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0491D94;
+        Tue,  5 Sep 2023 11:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:subject:date:message-id:reply-to;
+        bh=fKxlbdzabD3Saden8VRLorZNiqzEPZ7U7JMuIaJDyXs=; b=UVmq0rIivHqRG+O7xrnEYhHB9g
+        8PJzGa/vYgfuRyH+wlSBILQxDWmTaBSmkD4S0L8FDLUMXy7jPI7msw6iQ11ZccwxwowIQxLm3pSHu
+        X2qX4Rla6ja+LoDuKz5jlq2hU7g9eKVjFARf0pluwrU+Z3KpR6fPq20rk1+HutiOGb98=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:46604 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qdacA-0004nV-U3; Tue, 05 Sep 2023 14:17:27 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Date:   Tue,  5 Sep 2023 14:16:50 -0400
+Message-Id: <20230905181649.134720-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79e44ee3-f4a0-6f3e-cb5d-dc2b7bd048fb@sealevel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] serial: sc16is7xx: remove unused to_sc16is7xx_port macro
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-* Matthew Howell <matthew.howell@sealevel.com> [230905 16:43]:
-> On Tue, 5 Sep 2023, Tony Lindgren wrote:
-> > Maybe check if rmmod 8250_exar now somehow causes the following insmod
-> > 8250_exar attempts to fail?
-> 
-> Could you clarify what you mean? It is at that stage that I normally see 
-> the error in dmesg unless I have reverted the port id patch. In other 
-> words, if I just load it as-is I get the error in question.
-> 
-> Do you mean to try loading the installed kernel module with insmod?
-> If that is what you mean, I just tried loading the included binary with 
-> insmod but did not get the error and it loaded correctly. I loaded it 
-> with:
-> 
-> sudo insmod /usr/lib/modules/6.5.0-1-MANJARO/kernel/drivers/tty/serial/8250/8250_exar.ko.zst 
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-I meant maybe reloading 8250_exar fails. So the test I would do is build
-build a plain v6.5 kernel, boot it, modprobe 8250_exar, rmmod 8250_exar,
-and then again modprobe 8250_exar.
+This macro is not used anywhere.
 
-So maybe the first modprobe 8250_exar works after boot, but the second
-modprobe 8250_exar won't?
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/tty/serial/sc16is7xx.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> Do you see anything concerning or possibly incorrect with the way I am 
-> building the 8250_exar module?
+diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+index f61d98e09dc3..d8534580c6d5 100644
+--- a/drivers/tty/serial/sc16is7xx.c
++++ b/drivers/tty/serial/sc16is7xx.c
+@@ -358,7 +358,6 @@ static struct uart_driver sc16is7xx_uart = {
+ static void sc16is7xx_ier_set(struct uart_port *port, u8 bit);
+ static void sc16is7xx_stop_tx(struct uart_port *port);
+ 
+-#define to_sc16is7xx_port(p,e)	((container_of((p), struct sc16is7xx_port, e)))
+ #define to_sc16is7xx_one(p,e)	((container_of((p), struct sc16is7xx_one, e)))
+ 
+ static int sc16is7xx_line(struct uart_port *port)
 
-No I don't see how that would make a difference.
-
-Regards,
-
-Tony
+base-commit: 3f86ed6ec0b390c033eae7f9c487a3fea268e027
+-- 
+2.30.2
 
