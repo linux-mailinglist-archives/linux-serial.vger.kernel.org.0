@@ -2,113 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F3679ADDE
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Sep 2023 01:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251CD79B9EC
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Sep 2023 02:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348724AbjIKVaW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Sep 2023 17:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S1348731AbjIKVaZ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Sep 2023 17:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbjIKNW5 (ORCPT
+        with ESMTP id S235548AbjIKIzB (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:22:57 -0400
-Received: from DM4PR02CU002.outbound.protection.outlook.com (mail-centralusazon11013023.outbound.protection.outlook.com [52.101.64.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7C8193
-        for <linux-serial@vger.kernel.org>; Mon, 11 Sep 2023 06:22:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WH0fPGLrWL2Dv1WLS8uKOgNsWV3siqArO5uf3qMDoidREvCPFVYn5DOmiuYnBBv2dCt06Ua41n9jhOqdx3apjtrxZS0IlEhmS9LFpaX69z9ZpB87oHyX8Tm91/oBbsCVIb7PFwFM/CqrIkfg7cj/Lo3sJ3wnKbmnmv8U8TXEIb6HOe6Ryk4zzJtD+BOPqqbDCQBEUpe5+085hC2k4apEQbH3Ej+8VpI1XAMriRUPMGOzdFoRPUeXqwrh1Ile5rx5FFmzpkl2mO3LDyK1kCpReTLPB1Bf9WSg7DtinMyKbxBP6WqNTtjLopwRZBFcydyB+BWYoScWOUr2X7RF+p0V7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iAkCGVqG+4LTuXw+Uc7Ls9RzIE8QrBrc1fsIzZU/Iuo=;
- b=bs7eJcuxtBfCIwjGNiihEb3fqD487xTiykg3czmk75qDZC82tfUEuqxNSKi7PFFVlaIh7ae+qzCOwUfVC46sHhiCzmi76N9itVPDWIXYsFavH3De5lpEW3kpoJAWMMz52QLVge19+dWe4uy7BECNekdpHegz3MO3PbvW+zBgpz7wFW3tKcZ+spZrjxu7dt7Ja5qdzSDiex3sCqI9ID54U1w8KyfPgQVdSI0nO1ufrW5TkZBSoN2tnqxVE1vQYM1ePkrlm5t0j043FIzAFzCNJRHEZc752MfIALCtJ05fkj4NQ/z7k7T8rYusIExo7g4Id9u96hTDNmR7BywyZWJvqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sealevel.com; dmarc=pass action=none header.from=sealevel.com;
- dkim=pass header.d=sealevel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sealevel.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iAkCGVqG+4LTuXw+Uc7Ls9RzIE8QrBrc1fsIzZU/Iuo=;
- b=M34i9bQQdeBdlMtK4DkgMLEu5zAhLKIT0dHG6HVix/vEjAha9c7ApKzXtlW+hnVCFNy4ia/laa44GhXWxKjtQCt9P5Hl6LsiFr5mUSfyT+e+w8DY42UdvKAwbZlacMI0exOxN+xwWGznvehf3D8upD0/Ob70WBEODrA+WdZLoGyX7M9Di7K6wsT1XAM34KJIyg9KwZ2OzQqIZEkg+OTPHtCUBb+B6DYk2U3f5LatpcJlbrEFzxlkMW28zAhFLMK9H5P+HzkrtNlU69LhSQB0Hnq9Zk9yDPL5mehY36mvkMx7QpM7VeBD8ue7sSMMCBfPb4jo9qXs2DK07WNCdIy7Lg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=sealevel.com;
-Received: from CO1PR05MB8426.namprd05.prod.outlook.com (2603:10b6:303:e5::11)
- by DS7PR05MB8950.namprd05.prod.outlook.com (2603:10b6:8:86::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6745.33; Mon, 11 Sep 2023 13:22:49 +0000
-Received: from CO1PR05MB8426.namprd05.prod.outlook.com
- ([fe80::2d74:e628:e394:6669]) by CO1PR05MB8426.namprd05.prod.outlook.com
- ([fe80::2d74:e628:e394:6669%4]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
- 13:22:49 +0000
-Date:   Mon, 11 Sep 2023 09:22:45 -0400 (EDT)
-From:   Matthew Howell <matthew.howell@sealevel.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-cc:     Matthew Howell <matthew.howell@sealevel.com>,
-        gregkh@linuxfoundation.org, jeff.baldwin@sealevel.com,
-        james.olson@sealevel.com, ryan.wenglarz@sealevel.com,
-        darren.beeson@sealevel.com, linux-serial@vger.kernel.org,
-        ilpo.jarvinen@linux.intel.com
-Subject: Re: [PATCH V4 2/2] serial: exar: Add RS-485 support for Sealevel
- XR17V35X based cards
-In-Reply-To: <ZPiXLdATKs2pD20d@smile.fi.intel.com>
-Message-ID: <f9984ae7-354f-4c14-a62d-73e51cf3ba6e@sealevel.com>
-References: <e2564a57-128e-cd9c-9bae-23b155fd8ee9@sealevel.com> <ZPiCPJYfiR9ZfVJC@smile.fi.intel.com> <375eb5e0-27db-cadf-721e-2d5c0cd150f4@sealevel.com> <ZPiXLdATKs2pD20d@smile.fi.intel.com>
-Content-Type: text/plain; charset=US-ASCII
-X-ClientProxiedBy: BN7PR06CA0053.namprd06.prod.outlook.com
- (2603:10b6:408:34::30) To CO1PR05MB8426.namprd05.prod.outlook.com
- (2603:10b6:303:e5::11)
+        Mon, 11 Sep 2023 04:55:01 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8F41A2
+        for <linux-serial@vger.kernel.org>; Mon, 11 Sep 2023 01:54:56 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qfch4-00050h-5s; Mon, 11 Sep 2023 10:54:54 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qfch3-005VP3-Dv; Mon, 11 Sep 2023 10:54:53 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qfch2-000cay-Iq; Mon, 11 Sep 2023 10:54:52 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] serial: imx: Simplify compatibility handling
+Date:   Mon, 11 Sep 2023 10:54:51 +0200
+Message-Id: <20230911085451.628798-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR05MB8426:EE_|DS7PR05MB8950:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7edfd16c-7d76-4a7c-c7c1-08dbb2ca31af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /BQf12xADtBPNxPyDpuES1MyhNO0QVqZb4GgHUyGmF/TrFJaZqo9//PO1LLbbH8UFjPwXuN7VkyTn0ifOv3ov9/Z/o6NJb6T7i9b3DxJh1/YC72qGmG8QkJJ17cCFSFmUkI7pWOGiJf2XnYufi17qdTm4I/5zrodngPxAw2+Ifr2ClCG3wb+QYkT0yeW4h2XPcv4jEi2CpMJXIGuE9w2iSEqdgbcPHEs/kEtwuOLrAijmWP0WGsaYiPJYV9iS3tUOIvTsb6TJ0g2FbTHIwXAmoNjWi971CExZ8xup/KXJgHUuOWTA4uTQK6y80WxOIdLu+0ANyuo/Ak8eQMlbpRKWlNojK8WXqe9IjToJYangbURNNbGzEqgbmM5ky+nZ38Wv1XDobiyZatZW+1wdcX2qRmU9Aualkm1gkdClwti+aSny0upEWXc6egLcPH8qIxrEKDfP3OtEtKumK4dLYL1Audb9E/oTqktLonOFKnw03cDJ1nPvXO6R9RrIgqHiPn3kRrOvnZzmlU31m+1G74kz39n2FECBnvjicTFciAPITnnH8MnyEi7D3yBQazFbS64I9AroGKYOpF24EzJKBtOrnuzi0WRPMn/FS2nN81V82q5Ae7RIriMc99XZ1LrJELtL9CTIQE7oNtHtIoPd4ZdnoU6o94SyCDUrKJ9beOGlKw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR05MB8426.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39840400004)(136003)(346002)(376002)(396003)(366004)(451199024)(1800799009)(186009)(36756003)(6666004)(478600001)(6486002)(31686004)(44832011)(6506007)(5660300002)(8676002)(4326008)(38100700002)(8936002)(6512007)(2616005)(66556008)(41300700001)(66946007)(2906002)(6916009)(316002)(83380400001)(26005)(31696002)(86362001)(66476007)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5b86b7QxixG8g2G9dhZmg6wQaCzIiZZA0BOk0nhCKIxclluhoF1CSeKjHEh1?=
- =?us-ascii?Q?xh8ePLiJPRXGmBoqBqV0lGTGpaPhALCxXlcB7Dnv/hbWDzJyYZWtmU8JuWiG?=
- =?us-ascii?Q?v33e/4QHB52vcMD/sdVtHsabWbeC0vWO3eCFNDxdE+E0TxdqutvDXlJh/gX8?=
- =?us-ascii?Q?BsIx0Q3D+IRlt/xbVVooViWi81wXfuN0/H9yh7qTIQF/0ZObbEnxldALkwlt?=
- =?us-ascii?Q?TJpiMHlDdDyvW9daI+nNojij6qM954Z4aG0S4JO7oxihz09uVLd/oqh4U1L5?=
- =?us-ascii?Q?Ow41T/SOJQIdXuUqkjzIXHc+NptLXtlWZ6KERtYc/FbSYEGoac0p6dRwMJbu?=
- =?us-ascii?Q?7t03Obqj8Vvgnyemjl0TcTc3uaIpKAC/aZD0pEi9rNxgJfyHWak4DPyxTKZD?=
- =?us-ascii?Q?BGDDP2QXHTL766q5k6YsfM96+J2i7e4xmLJ20rUZELI6rmG3H784BMh1hgYW?=
- =?us-ascii?Q?8SjpiG9rwoBlvmO8d8jibOpJl2ApgQ1RnwB7d0OBiwu6CupsJqTZNyWGgb7q?=
- =?us-ascii?Q?g0ubllcpJCDKZBZBlLFJ0glPumI04Y9DtbBrv9vEEFn4v54E0ciCD9wIktSa?=
- =?us-ascii?Q?vHC9Fn09rVFjDsZCrZtuDWp9tkYHCcdXZhmdeggUEy3LDuEdaxWGbNnhAGvL?=
- =?us-ascii?Q?QrKpFT25FJUlPLBpE91XITIABx/kgVmv+qDNLAKNFoms6aJ2k9rf8KR0Vvdr?=
- =?us-ascii?Q?vVNRancJ3kWxqRQA8iL+75AItOE/Tx3yQRb0aMFlYpA/5zpM+hHr0AiT3Ttt?=
- =?us-ascii?Q?sWumDOQsbxtYb+YorHtTmQjQQQ3t9H7WvM9kBQM/T1hfuEPfzLUe+BLZvmDK?=
- =?us-ascii?Q?ajRCoLD2YBgY1uOUR/qNTBm0tyfoeFQQ5UIyAOJ/C5/H/b7E8/QFHqSWw9dF?=
- =?us-ascii?Q?SLGc65Ceo3Hsr8rfx0Of9enSytL7m3qVWd4W0szFHUJ7i9HuHTK3I79Xt8uq?=
- =?us-ascii?Q?S4XCWUIdM2X2d7zixYLOkyIdjYwlCtIBgafLGIdSKLrB5ucPnKCb/iomYMEA?=
- =?us-ascii?Q?rg3sqUFwOTuaZ0LBWB+OBGF/lpBypHfDGq2xWGGoQECcp14MA0ilATBYHFat?=
- =?us-ascii?Q?qWSr5QRpFyVY6ERSiEs6uxMMTJ9yicmwaZ4EBG1A4mbUz206YgKYHKhxL5em?=
- =?us-ascii?Q?vhY4wVCvoZLQZpR3ljQ2qUL00eBEQMfcQJ3j4IeTXSXOR6fXOBPvgm0h0OVn?=
- =?us-ascii?Q?V/CJdWjJrHQaB2qRYInYeHa19AtG3NSt0IF1vd8ZQARnJCXTnRPz96uYwDjW?=
- =?us-ascii?Q?JZP86HfeFX09kpyO6mqPxLy4A6RzLG6zKeZ/oCuqF3kuPmbEWGfqbLoiXBm3?=
- =?us-ascii?Q?gcuXKaL7NXiFc96GdJj1MKDEJ1KJxPmi5ymrewgTOxMvBbJKy9LIzI/TIkmK?=
- =?us-ascii?Q?W6wsNDip4Ld8bDFjfH16IG+95PU7mZ8V/r23qaAplxbt4u02G9ohwHFx1bbf?=
- =?us-ascii?Q?96TMlNh9OT6lH3tuNpbP5pgAn3X7hwrpwbXqYMG4BP02+ISu0Lj5K/BGJvVV?=
- =?us-ascii?Q?EXlLwcr3cPsHCONXmOnOQm8YzcRXI+7dJuQ+ujMB81rrGyOh3OulcfQZU8Kk?=
- =?us-ascii?Q?o4FMhruBcywkD8TtfIFl5vZm6pgZzEIHLED5c1cjwXxc/tR12oXNlsynhWFw?=
- =?us-ascii?Q?SQ=3D=3D?=
-X-OriginatorOrg: sealevel.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7edfd16c-7d76-4a7c-c7c1-08dbb2ca31af
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR05MB8426.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 13:22:49.1316
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e34c5615-b4e3-481c-abc8-602581f2e735
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZwD4TT7qaaLtTSfDXvq+tyd3rzwPw4ZsPTqBUZStLaFoiVr2d7ifKsY0SUGKO6Yd0yFhifK3lPCUBFeHZ/CHFFgFguUOIr22mPRyiT7JcIk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR05MB8950
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3198; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=kHSzMbdejvOtgW85iIxcMRjSOopIkDykzeNq4pyMxqk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBk/tXafJkAEFw7jAb/+mrTTmvTfhKx4tkOlsSaK 43IrfmMBEOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZP7V2gAKCRCPgPtYfRL+ ToBUB/9M6OTjK2kzL/F5mraWt7sgIFsC0+WPzXj163f0jJWdqnDZeBqZH1ElsRs+AU5BREkUAyu TUJ8X9sAsWqiHPZ6FmE7h8SXKHsWqTjhzaNIgjnAvf+bPaNU4WeM+BCSB3ov77nMOY6H0xYOtd7 Garc5P1oB8oSCBBcR9GbLQ6lZ8EpnJYuIIgquEZPrQt2ak2qdlFtCBswACwI6aV3XhLOOFteJh3 YQ1Detx0WcXjrvyW7S7zgfhH7FFf9+ly/DfAOTLo4H7hDTaVRnmYyru6kTrKm5f2m5KnmU/C94R BCcvDAVDGHz/RAq7tvvvc/6BANGhbgH+kyRDEOO2WVXgoS9c
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,75 +57,99 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, 6 Sep 2023, Andy Shevchenko wrote:
-> On Wed, Sep 06, 2023 at 11:05:20AM -0400, Matthew Howell wrote:
-> > On Wed, 6 Sep 2023, Andy Shevchenko wrote:
-> > > On Tue, Sep 05, 2023 at 12:06:20PM -0400, Matthew Howell wrote:
-> 
-> ...
-> 
-> > > > +     generic_rs485_config(port, termios, rs485);
-> > >
-> > > > +     if (rs485->flags & SER_RS485_ENABLED) {
-> > >
-> > > What I meant is to have
-> > >
-> > >         if (!)rs485->flags & SER_RS485_ENABLED))
-> > >                 return 0;
-> > >
-> > > here, which allows you to reduce indentation level in the below block.
-> > >
-> > > > +             /* Set EFR[4]=1 to enable enhanced feature registers */
-> > > > +             writeb(readb(p + UART_XR_EFR) | UART_EFR_ECB, p + UART_XR_EFR);
-> > > > +
-> > > > +             /* Set MCR to use DTR as Auto-RS485 Enable signal */
-> > > > +             writeb(UART_MCR_OUT1, p + UART_MCR);
-> > > > +
-> > > > +             /* Store original LCR and set LCR[7]=1 to enable access to DLD register */
-> > > > +             old_lcr = readb(p + UART_LCR);
-> > > > +             writeb(old_lcr | UART_LCR_DLAB, p + UART_LCR);
-> > > > +
-> > > > +             /* Set DLD[7]=1 for inverted RS485 Enable logic */
-> > > > +             writeb(readb(p + UART_EXAR_DLD) | UART_EXAR_DLD_485_POLARITY, p + UART_EXAR_DLD);
-> > > > +
-> > > > +             writeb(old_lcr, p + UART_LCR);
-> > > > +    }
-> > > > +
-> > > > +     return 0;
-> >
-> > I see where you are coming from now, but I find that slightly less clear
-> > than having the 'main action' within the conditional statement. And since
-> > the code is not heavily indented I don't see much benefit of removing the
-> > indent.
-> 
-> In that case it might make sense to split to two functions:
-> 
-> func1()
-> {
->         ...
-> }
-> 
-> func2()
-> {
->         if (...)
->                 return func1()
-> 
->         return 0;
-> }
+Three of the four entries of imx_uart_devdata[] use .uts_reg =
+IMX21_UTS. The difference in the .devtype member isn't relevant, the
+only thing that matters is if is equal to IMX1_UART.
 
-I will have to respectfully disagree on this. Splitting the function into 
-two still adds additional redirection, however small, to the function. I 
-would also like to point out that the level of indent I am using is not 
-uncommon in 8250_exar.c and as such I do not find the styling of the 
-function to be out of place. 
+So use an entry with .devtype = IMX21_UART on all platforms but i.MX1.
+There is no need to have the dev types in an array, so split them up in
+two separate variables.
 
-I will resubmit and try to address the other concerns raised by you and 
-Ilpo but unless Greg KH says otherwise I don't see any reason to change 
-the indent at this time.
+The fsl,imx53-uart devinfo can go away because in the binding and also
+the dts files all fsl,imx53-uart devices also are compatible to
+fsl,imx21-uart. That's not the case for fsl,imx6q-uart (which is a bit
+strange IMHO), so the fsl,imx6q-uart must stay around.
 
-> --
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-> 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
+
+this diff's idea appeared already in reply to a patch by Tom Rix that
+became commit 7553574900f37847a25c4d572b13c512811604ed. I just found the
+discussion[1] while cleaning up my inbox. This is a slightly improved
+version.
+
+Best regards
+Uwe
+
+[1] https://lore.kernel.org/linux-serial/20230318143041.n6rymackf6p776rq@pengutronix.de
+
+ drivers/tty/serial/imx.c | 40 +++++++++++++++++-----------------------
+ 1 file changed, 17 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index 13cb78340709..3d429f6fa048 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -177,8 +177,6 @@
+ enum imx_uart_type {
+ 	IMX1_UART,
+ 	IMX21_UART,
+-	IMX53_UART,
+-	IMX6Q_UART,
+ };
+ 
+ /* device type dependent stuff */
+@@ -240,30 +238,26 @@ struct imx_port_ucrs {
+ 	unsigned int	ucr3;
+ };
+ 
+-static struct imx_uart_data imx_uart_devdata[] = {
+-	[IMX1_UART] = {
+-		.uts_reg = IMX1_UTS,
+-		.devtype = IMX1_UART,
+-	},
+-	[IMX21_UART] = {
+-		.uts_reg = IMX21_UTS,
+-		.devtype = IMX21_UART,
+-	},
+-	[IMX53_UART] = {
+-		.uts_reg = IMX21_UTS,
+-		.devtype = IMX53_UART,
+-	},
+-	[IMX6Q_UART] = {
+-		.uts_reg = IMX21_UTS,
+-		.devtype = IMX6Q_UART,
+-	},
++static const struct imx_uart_data imx_uart_imx1_devdata = {
++	.uts_reg = IMX1_UTS,
++	.devtype = IMX1_UART,
++};
++
++static const struct imx_uart_data imx_uart_imx21_devdata = {
++	.uts_reg = IMX21_UTS,
++	.devtype = IMX21_UART,
+ };
+ 
+ static const struct of_device_id imx_uart_dt_ids[] = {
+-	{ .compatible = "fsl,imx6q-uart", .data = &imx_uart_devdata[IMX6Q_UART], },
+-	{ .compatible = "fsl,imx53-uart", .data = &imx_uart_devdata[IMX53_UART], },
+-	{ .compatible = "fsl,imx1-uart", .data = &imx_uart_devdata[IMX1_UART], },
+-	{ .compatible = "fsl,imx21-uart", .data = &imx_uart_devdata[IMX21_UART], },
++	/*
++	 * For reasons unknown to me, some UART devices (e.g. imx6ul's) are
++	 * compatible to fsl,imx6q-uart, but not fsl,imx21-uart, while the
++	 * original imx6q's UART is compatible to fsl,imx21-uart. This driver
++	 * doesn't make any distinction between these two variants.
++	 */
++	{ .compatible = "fsl,imx6q-uart", .data = &imx_uart_imx21_devdata, },
++	{ .compatible = "fsl,imx1-uart", .data = &imx_uart_imx1_devdata, },
++	{ .compatible = "fsl,imx21-uart", .data = &imx_uart_imx21_devdata, },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, imx_uart_dt_ids);
+
+base-commit: 57c2dab5596a2bd0cda64fcc208efdefe296788f
+-- 
+2.40.1
+
