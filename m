@@ -2,138 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448BF79BAA1
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Sep 2023 02:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742C279B66A
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Sep 2023 02:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239665AbjIKVaX (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Sep 2023 17:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S236629AbjIKVaa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Sep 2023 17:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238533AbjIKN6j (ORCPT
+        with ESMTP id S240399AbjIKOnV (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:58:39 -0400
-Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013005.outbound.protection.outlook.com [52.101.49.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58962CD7
-        for <linux-serial@vger.kernel.org>; Mon, 11 Sep 2023 06:58:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RFxTlUimgqgD2t/sQ01GAUpHUFpnMwTtLxp4Bujcr5DhOBBkFus8Mu34QpPcPVgACv4ykDXfdPsNCFSyBFgLWvfbPpyDjh7DBGwFMuntD5/mYFDXBaivolvEJT8/5z5ysgMSOVUPVSj4A+OjUU/3hOwFJBsoWUJhzRXKQEx6d1kUTyfPmzzjmfJLbnxkMhXGUCHRz9liNDqIFkQP+c+zdFaN0L5OC3nnueMiYgNU+IyagGnKAzXpFSh/8QgfPCZ0brNtLTAgsCthfT4SIZbaacQDKFAyrhof+iTe69lPXy9JaccY/YIPO82kPkDEUlzEqbDnPwJbsY2IkF0r81R8XQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q5qctwsSQ6LTEsXUCzT57uqQUYmIFyYqE43LmfvW1hs=;
- b=bg3u07YPaby25nMG1yYOnZuaZWW05zciom4GTv8DQ8NhOHfNnDVHJAD0r8f/WCfMR8JhGbJepLWNZcktpsoMoCpvo5tecfaY9OCPBe+0nxxRE4ziIDCsiXytiVHTLmAwEO/KYU0/kslMmM9y+AbKAlz9mT9rnejIBx/ZaarWjsw4mKWFQstIoeMQQiO1PyRjIYSJ1hRq9reYESvGaSTBNalY5qYr2TnttjrIbOQw+fgxaCEE3qPNyS3PjB3vtPBd8I9yGjsf45pCy3898xQt+jf1z62E+Nf5rRWDdREDslzvwN8k5fCH2u4j27+/1LUlc8ShQ12NlGQcaG2NzimwLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sealevel.com; dmarc=pass action=none header.from=sealevel.com;
- dkim=pass header.d=sealevel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sealevel.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q5qctwsSQ6LTEsXUCzT57uqQUYmIFyYqE43LmfvW1hs=;
- b=fyrIS0Z1JBHbEdC1ee2M7NYdFr3DB/J6jfNVLw1YTI+eag7WLs2X3HCPLpBEQ6ePhQewlCXxriLEbdzekiqw45OJ+Z4Jwot24ugXuRrLEEKhKUduYtHTlxgztq0gFBAsiAaUx2p6QygTP0dP/ILtHB0luz2QYAxlimLDKAmfV02AOocKa6TGEgIBHRRXjnLuBGDtpACmoEdw1+oPXYjmjsNhH2KS0ag4IKKRyRpvW+c5y6x5kRqKdCae8CM9svKuLuF6gfoyXvURVNowdayFLiAuNbHbGjDdfBH0bBwrXg7HRSvs+n/ZBU6WXydnPgmDDoLDNHOdf5LzQzuoVa2QfQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=sealevel.com;
-Received: from CO1PR05MB8426.namprd05.prod.outlook.com (2603:10b6:303:e5::11)
- by MN6PR05MB10260.namprd05.prod.outlook.com (2603:10b6:208:471::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Mon, 11 Sep
- 2023 13:58:29 +0000
-Received: from CO1PR05MB8426.namprd05.prod.outlook.com
- ([fe80::2d74:e628:e394:6669]) by CO1PR05MB8426.namprd05.prod.outlook.com
- ([fe80::2d74:e628:e394:6669%4]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
- 13:58:29 +0000
-Date:   Mon, 11 Sep 2023 09:58:25 -0400 (EDT)
-From:   Matthew Howell <matthew.howell@sealevel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     Matthew Howell <matthew.howell@sealevel.com>,
-        Tony Lindgren <tony@atomide.com>, linux-serial@vger.kernel.org,
-        ryan.wenglarz@sealevel.com, james.olson@sealevel.com
-Subject: Re: [PATCH] serial: Revert serial: core: Fix serial core port id to
- not use port->line
-In-Reply-To: <2023091154-gallery-janitor-6ae3@gregkh>
-Message-ID: <bbb47dd8-a837-4671-3ed4-c3a4ba805b6d@sealevel.com>
-References: <20230829201557.GK11662@atomide.com> <472581f-e7f6-6cc-c749-5be16e4fe9af@sealevel.com> <20230901044730.GL11662@atomide.com> <e8579280-2f44-a585-a3b8-98fad29e6a2d@sealevel.com> <20230902043424.GM11662@atomide.com> <c4b1db31-7814-0d22-36de-a7e6f117d89c@sealevel.com>
- <20230905155524.GR11662@atomide.com> <79e44ee3-f4a0-6f3e-cb5d-dc2b7bd048fb@sealevel.com> <20230905165147.GS11662@atomide.com> <73817d5-cab-341-be76-ee9d565df57@sealevel.com> <2023091154-gallery-janitor-6ae3@gregkh>
-Content-Type: text/plain; charset=US-ASCII
-X-ClientProxiedBy: BN9PR03CA0093.namprd03.prod.outlook.com
- (2603:10b6:408:fd::8) To CO1PR05MB8426.namprd05.prod.outlook.com
- (2603:10b6:303:e5::11)
+        Mon, 11 Sep 2023 10:43:21 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91750E40;
+        Mon, 11 Sep 2023 07:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694443396; x=1725979396;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=I4/ojXmeBQapC+xcNa44W6610Ukxsr716DrBWlchx7o=;
+  b=NtlsQqGpxw8h/SeIsQiKs0lXaCE2jO2uAPEGGQf0uq/mMc8fAyTC5OJm
+   jaOSCkcEDTBbkoO4dBbdmcVVC5YNo7hkMBsRwbDsij132/M8jaxDoU56d
+   BCo3l0tLq0deXH/7+A6R3Q/wTTSd93A+hfWUeXFRFvbnjTiKe+0VEM9cG
+   PnNIL+TkX8PYMUaw1t+SZ0tdbm3J1T+gFGjDeWmvHg5fQHuB+qSc85DGv
+   /GRhGteoVbh18Rit2KISmZvg9RhRcfA6FYIrgprcWUqN59WfqBZrkligu
+   GyQ9O9Rbd1RSnnHR/eAxDBJCPLdReRaO5bsaORuHbAbASiX79u1AatvQx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="409067664"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="409067664"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 07:43:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="886531624"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="886531624"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Sep 2023 07:42:49 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id AA14C45B; Mon, 11 Sep 2023 17:43:12 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] serial: 8250_port: Introduce UART_IIR_FIFO_ENABLED_16750
+Date:   Mon, 11 Sep 2023 17:43:08 +0300
+Message-Id: <20230911144308.4169752-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR05MB8426:EE_|MN6PR05MB10260:EE_
-X-MS-Office365-Filtering-Correlation-Id: a5defa56-12d7-46e8-cc50-08dbb2cf2d49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oh11cpu4JnTsJ9fhTw79aXRTqAzv9xF7KE67+pv/7rGCG4CX0xuWA5wmDEgfGFEaIq9D73UfYK+ymlzeWKBM7sO2FjDEKW5Nj9vLO/+Hi7Qh8jPCaqRiYbWMkXGA6rYAlJhbS+lvzwFqskU1D/eDFA9gIzib2el6ehI+pI5pHvsXpPLWOghQcrBCzBJHPI3jc4vQ2Pp0GnWP3lKAieq0L0SuILjgNN6PgJKFKzdmOJDMJUfGjBKY9DyWAeV3+RFXfzFm0gbHCcqH5HdSgkanvhAi4oCjoB3oUxfvMMRy8IGz5Fk/WJyszLD7FmIG3DXoJLSxIi66U30L/R8X4yDiZLkqTbs+tZ/Ay1N7s5ZE20Mq7RZDGpT4UbdgfJBmPUHD3kZ3UhE7q/ns0+3RYBXjJ7sI8on1Sf4adB6P6ScFYxBBt5KtK/5X59P/rq+fFDymODkazuM4T/PRf92VUisw/BzP7Jm7VyVDb5taV1JUq761ThOvLftJ4n5WQ6zuCYxErR9BFfSjP2xV4vjSq0PTMwXlbuk45eVbbXM+eKQkT6k3AONKIz8pwDdImMnsE1dXzEzkoM/ukxmqeDwCegR90gpZBwxrBm1vI8RKwvdRZllkHjAz81+8VeB6ZMBbibnl8sMjE69P3WAurfF5x44mBg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR05MB8426.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(366004)(39840400004)(376002)(451199024)(186009)(1800799009)(5660300002)(26005)(107886003)(8936002)(2616005)(4326008)(8676002)(2906002)(4744005)(31696002)(86362001)(36756003)(44832011)(38100700002)(54906003)(66476007)(6486002)(66946007)(66556008)(6506007)(6916009)(316002)(31686004)(478600001)(6666004)(41300700001)(6512007)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SijWoubMcEueM169okf5CVOp6DWZIi1KO1N/1DL5qAZ+OTyZOW29l0vP/2Yd?=
- =?us-ascii?Q?nHczegyJrdPUVzGsHnsn7bE+BkVV76OI69E47rEjF7N/Ze0+glj9HeOwShJF?=
- =?us-ascii?Q?ECELBYqpekHRfNdMib43hxhBs2H+UeaECaefEtjmgCdzC4mcncRm952vhNjY?=
- =?us-ascii?Q?UWuEl5o7WScaGfO8QVz0mFlHdU9FiaQNhbh6+ogyc5LvMucGa+40On7vsMeI?=
- =?us-ascii?Q?+XaBGebasiZzH8BSzD5xDNvTEeXwa4RPVNKQLNm9RGDf11KSSSrbikZ+HeZH?=
- =?us-ascii?Q?qiGKdrfRR4vFc0YzhNuDgu8I4aVJbwZyEFzKuUAFtuCmFO9KRLfgNt7OG3yL?=
- =?us-ascii?Q?WLh5tp7iSm8BFZpTvO8xha1Q9Ha3TxLtooOLAOs3ebdVN2z9oCT/eFcTPJ27?=
- =?us-ascii?Q?Kznjj27naLdQo37i66+IlYoqgoPoXi3HOzvdAg4m1NXi6pDu1bPIZ7jDyl1c?=
- =?us-ascii?Q?iFB8y7X9J+/lmtWTMtsDh5cMmAtEMJLM5Z6aT4+3a2EF+4e/WZYNTI7wfJp6?=
- =?us-ascii?Q?/k6lrWJu2QnU8W5EOScMaZjn3cohQnSU+Yki+GFsERj7izs3ImXuolvz/mDJ?=
- =?us-ascii?Q?NsPDQVHztb9YVuF03Jmia7Tly1X1HA+r7mdRZ5lX9lotAVojh05J2YK53vx5?=
- =?us-ascii?Q?lFLUFdzaB1yMpTRyZ5PSdJWpFbXRlqBtMEpS+MVVQK3B2b0BAYq38VaYFCpn?=
- =?us-ascii?Q?Tq4b9zBth3495WsaZOdcc/NDjXWHfWmba/w4z+yM8EJgXu8dqn0tLwDM/Csm?=
- =?us-ascii?Q?F1MYCHjcgJmz4i9Jug+4+QUEioVip52+j8aFJmX4oPH5xmqn95EcW5R8zg/v?=
- =?us-ascii?Q?doTva5gpLL9yXTMIGxPlkBiW4CQ760UfmCtUd6XAWGbnPnX/seeRwC4mvhKg?=
- =?us-ascii?Q?CHVkhC9KHXAhtUZkiNOjNijJ4Ud2dOoFhFtnsNxavah9hTKgqINHmXGs+/bv?=
- =?us-ascii?Q?e3U5OdD9w14V2dDY1mZ0oKtr8IQtVcibR/wU6WRk4Et+rFL5khkehgZd65kj?=
- =?us-ascii?Q?pYye8/EWOhA66QVPmEzRfjVgpMQUCDBwv3maIvFsTr4PXfyUR4b2AF+c/njg?=
- =?us-ascii?Q?LqcthOXImSxHB6c2xmQ5XLxIeGC0GFtF6y+QwFaFkDHGS8XEt7l29k8K5rNS?=
- =?us-ascii?Q?lCagIyeTbtW6BI8jpSIr39C8nU0AMoSJZGG5fkSfGfq2wSaA50/17TgvnbCL?=
- =?us-ascii?Q?ddQSSX3MFGUI0pALO1iAbiYmT7qDU00nYnJ/FgvvvkbwBrPabkdY5GzTij3V?=
- =?us-ascii?Q?Isnbqr3IDW7tVyTuf+HMuMdxavHAQtF5CTehpPtaAXII0ggyvuyyo12C9bU4?=
- =?us-ascii?Q?WdkTKL7UoEEnAXSf8+8Tc/d/WQ9VYEPyNQXN63JRM+cIz5QZ20Qg7EsniPX7?=
- =?us-ascii?Q?EuFWgv3T1FkPd1av2CS5D/YrcAC6/1en8+f7Zdoh6mmGi/+tcJDQrN1inBy1?=
- =?us-ascii?Q?K5sN0+qnV9MCKUuN1SZPLzDiqFyaeDz2rd2CmMsrGMkhnbY29UltokmjKPDJ?=
- =?us-ascii?Q?2XgKZ6KDXvboPA1bU93cc+GVB13H+E+EpSUVKAobaxQAIgjeRBLCFpJwucIR?=
- =?us-ascii?Q?7afousKZkQNnNMgbY2xopi4Dvy9RBVoOVcVobOv1nFTvibokkjXfiCPxypZG?=
- =?us-ascii?Q?Jw=3D=3D?=
-X-OriginatorOrg: sealevel.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5defa56-12d7-46e8-cc50-08dbb2cf2d49
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR05MB8426.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 13:58:29.2306
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e34c5615-b4e3-481c-abc8-602581f2e735
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AjWgOC6JBuOLwxIjCsjrsBgShFRWfjcyb4v8Y+wvdXx86OlP92wIR2XRvkqHGAMpG8X8xgugL0nI1JpS9cshNnur+uPIB7AAgdV9C5ttCy0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR05MB10260
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, 11 Sep 2023, Greg KH wrote:
-> On Mon, Sep 11, 2023 at 09:04:14AM -0400, Matthew Howell wrote:
-> > So it seems like this might not be an issue for typical 'users' of the
-> > kernel, but may impact people who need to build and load 8250_exar
-> > manually for whatever reason, unless I am just building the module
-> > incorrectly somehow.
-> 
-> Yes, Linux does not support building a module against one source
-> tree/configuration and attempting to load it into a different kernel at
-> all.  You are lucky that this was the only thing that broke :)
+The UART_IIR_64BYTE_FIFO is always being used in conjunction with
+UART_IIR_FIFO_ENABLED. Introduce a joined UART_IIR_FIFO_ENABLED_16750
+definition and use it.
 
-Ah, I had been under the impression that all that mattered for module 
-compatibility was a matching .config and 'base' kernel version (ie, 6.5), 
-so long as no backports or ABI changes had been made by the distro. I 
-guess that is not actually the case though.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_port.c | 11 +++++------
+ include/uapi/linux/serial_reg.h     |  1 +
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-> Thanks for the testing and letting us know that all is good with the
-> tree as-is.
-> 
-> greg k-h
-> 
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index fb891b67968f..a064698c2be0 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1008,12 +1008,11 @@ static void autoconfig_16550a(struct uart_8250_port *up)
+ 			serial_out(up, UART_LCR, 0);
+ 			serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO |
+ 				   UART_FCR7_64BYTE);
+-			status1 = serial_in(up, UART_IIR) & (UART_IIR_64BYTE_FIFO |
+-							     UART_IIR_FIFO_ENABLED);
++			status1 = serial_in(up, UART_IIR) & UART_IIR_FIFO_ENABLED_16750;
+ 			serial_out(up, UART_FCR, 0);
+ 			serial_out(up, UART_LCR, 0);
+ 
+-			if (status1 == (UART_IIR_64BYTE_FIFO | UART_IIR_FIFO_ENABLED))
++			if (status1 == UART_IIR_FIFO_ENABLED_16750)
+ 				up->port.type = PORT_16550A_FSL64;
+ 			else
+ 				DEBUG_AUTOCONF("Motorola 8xxx DUART ");
+@@ -1081,12 +1080,12 @@ static void autoconfig_16550a(struct uart_8250_port *up)
+ 	 */
+ 	serial_out(up, UART_LCR, 0);
+ 	serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO | UART_FCR7_64BYTE);
+-	status1 = serial_in(up, UART_IIR) & (UART_IIR_64BYTE_FIFO | UART_IIR_FIFO_ENABLED);
++	status1 = serial_in(up, UART_IIR) & UART_IIR_FIFO_ENABLED_16750;
+ 	serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO);
+ 
+ 	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_A);
+ 	serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO | UART_FCR7_64BYTE);
+-	status2 = serial_in(up, UART_IIR) & (UART_IIR_64BYTE_FIFO | UART_IIR_FIFO_ENABLED);
++	status2 = serial_in(up, UART_IIR) & UART_IIR_FIFO_ENABLED_16750;
+ 	serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO);
+ 
+ 	serial_out(up, UART_LCR, 0);
+@@ -1094,7 +1093,7 @@ static void autoconfig_16550a(struct uart_8250_port *up)
+ 	DEBUG_AUTOCONF("iir1=%d iir2=%d ", status1, status2);
+ 
+ 	if (status1 == UART_IIR_FIFO_ENABLED_16550A &&
+-	    status2 == (UART_IIR_64BYTE_FIFO | UART_IIR_FIFO_ENABLED_16550A)) {
++	    status2 == UART_IIR_FIFO_ENABLED_16750) {
+ 		up->port.type = PORT_16750;
+ 		up->capabilities |= UART_CAP_AFE | UART_CAP_SLEEP;
+ 		return;
+diff --git a/include/uapi/linux/serial_reg.h b/include/uapi/linux/serial_reg.h
+index 08b3527e1b93..9c987b04e2d0 100644
+--- a/include/uapi/linux/serial_reg.h
++++ b/include/uapi/linux/serial_reg.h
+@@ -49,6 +49,7 @@
+ #define  UART_IIR_FIFO_ENABLED_8250	0x00	/* 8250: no FIFO */
+ #define  UART_IIR_FIFO_ENABLED_16550	0x80	/* 16550: (broken/unusable) FIFO */
+ #define  UART_IIR_FIFO_ENABLED_16550A	0xc0	/* 16550A: FIFO enabled */
++#define  UART_IIR_FIFO_ENABLED_16750	0xe0	/* 16750: 64 bytes FIFO enabled */
+ 
+ #define UART_FCR	2	/* Out: FIFO Control Register */
+ #define UART_FCR_ENABLE_FIFO	0x01 /* Enable the FIFO */
+-- 
+2.40.0.1.gaa8946217a0b
+
