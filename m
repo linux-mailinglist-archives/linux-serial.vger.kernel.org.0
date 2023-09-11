@@ -2,53 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D570C79BE19
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Sep 2023 02:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BDE79BF59
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Sep 2023 02:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348716AbjIKVaP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 11 Sep 2023 17:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S237928AbjIKVaY (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 11 Sep 2023 17:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237860AbjIKNPv (ORCPT
+        with ESMTP id S238096AbjIKNhg (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 11 Sep 2023 09:15:51 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C25E9
-        for <linux-serial@vger.kernel.org>; Mon, 11 Sep 2023 06:15:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DDCC433C7;
-        Mon, 11 Sep 2023 13:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694438146;
-        bh=ZSPV7kLm8MLAk6zQ4JStK9Ot08WWA+yDCunO4FP/51Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=okXcOGwXBkCXE2N0Ytl018Bx5wodCkw84vBV+Cjr20O2YBv+IrQnHp0M926g88/9u
-         NvCUCB3Jfh7VaqGGMhDMiRDtp51K2s1F9benSfhub2/ZMQJmCPAZ2VAnEuNGeVsBOT
-         R25XChd3z0GpT/3Tz+8jg0Pdl0o6W0VvyXsC5GCk=
-Date:   Mon, 11 Sep 2023 15:15:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        Mon, 11 Sep 2023 09:37:36 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1C8CC3
+        for <linux-serial@vger.kernel.org>; Mon, 11 Sep 2023 06:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694439451; x=1725975451;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ykxXk5glEgQgkiggXtChsLxLQ4CU5vWW9/zGtV6DIcI=;
+  b=DpAY43A7u2S5n5NdxXhF7gaxf7rZ3UeW/JIdxb2Y9hqgTn1IDS2b6r4R
+   g72MiguWRFXoYGDTfa0Sl63RazNMs9PuH2T98RHJOcI4vDa8fvkFM2BaD
+   gCabLQxvWA8Muh45Z5dcM1ZtagnhfgKHoKFC+AplK1hkFHz1yEYAAR1Bo
+   u/639eGkkcEknkHwGmI7TZl4yJ29l8OABDV8EBuVE2ALgwcR2Ttmgpyd5
+   06rtdp502KG9hYMy2JT2KIrToo9p1uQop+NY8zS8e1rlap7I59fwpMljB
+   YbpB9IeFFKJ90ef363guCAYgkTKCavr0RklqwVAWMy/cU7UIoZJhaFrkx
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="377995113"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="377995113"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 06:37:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="719987265"
+X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
+   d="scan'208";a="719987265"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 06:37:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qfh6G-008L3v-0K;
+        Mon, 11 Sep 2023 16:37:12 +0300
+Date:   Mon, 11 Sep 2023 16:37:11 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     Matthew Howell <matthew.howell@sealevel.com>
-Cc:     Tony Lindgren <tony@atomide.com>, linux-serial@vger.kernel.org,
-        ryan.wenglarz@sealevel.com, james.olson@sealevel.com
-Subject: Re: [PATCH] serial: Revert serial: core: Fix serial core port id to
- not use port->line
-Message-ID: <2023091154-gallery-janitor-6ae3@gregkh>
-References: <20230829201557.GK11662@atomide.com>
- <472581f-e7f6-6cc-c749-5be16e4fe9af@sealevel.com>
- <20230901044730.GL11662@atomide.com>
- <e8579280-2f44-a585-a3b8-98fad29e6a2d@sealevel.com>
- <20230902043424.GM11662@atomide.com>
- <c4b1db31-7814-0d22-36de-a7e6f117d89c@sealevel.com>
- <20230905155524.GR11662@atomide.com>
- <79e44ee3-f4a0-6f3e-cb5d-dc2b7bd048fb@sealevel.com>
- <20230905165147.GS11662@atomide.com>
- <73817d5-cab-341-be76-ee9d565df57@sealevel.com>
+Cc:     gregkh@linuxfoundation.org, jeff.baldwin@sealevel.com,
+        james.olson@sealevel.com, ryan.wenglarz@sealevel.com,
+        darren.beeson@sealevel.com, linux-serial@vger.kernel.org,
+        ilpo.jarvinen@linux.intel.com
+Subject: Re: [PATCH V4 2/2] serial: exar: Add RS-485 support for Sealevel
+ XR17V35X based cards
+Message-ID: <ZP8YB9EI4ahhSySP@smile.fi.intel.com>
+References: <e2564a57-128e-cd9c-9bae-23b155fd8ee9@sealevel.com>
+ <ZPiCPJYfiR9ZfVJC@smile.fi.intel.com>
+ <375eb5e0-27db-cadf-721e-2d5c0cd150f4@sealevel.com>
+ <ZPiXLdATKs2pD20d@smile.fi.intel.com>
+ <f9984ae7-354f-4c14-a62d-73e51cf3ba6e@sealevel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <73817d5-cab-341-be76-ee9d565df57@sealevel.com>
+In-Reply-To: <f9984ae7-354f-4c14-a62d-73e51cf3ba6e@sealevel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,17 +73,88 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 09:04:14AM -0400, Matthew Howell wrote:
-> So it seems like this might not be an issue for typical 'users' of the 
-> kernel, but may impact people who need to build and load 8250_exar 
-> manually for whatever reason, unless I am just building the module 
-> incorrectly somehow. 
+On Mon, Sep 11, 2023 at 09:22:45AM -0400, Matthew Howell wrote:
+> On Wed, 6 Sep 2023, Andy Shevchenko wrote:
+> > On Wed, Sep 06, 2023 at 11:05:20AM -0400, Matthew Howell wrote:
+> > > On Wed, 6 Sep 2023, Andy Shevchenko wrote:
+> > > > On Tue, Sep 05, 2023 at 12:06:20PM -0400, Matthew Howell wrote:
 
-Yes, Linux does not support building a module against one source
-tree/configuration and attempting to load it into a different kernel at
-all.  You are lucky that this was the only thing that broke :)
+...
 
-Thanks for the testing and letting us know that all is good with the
-tree as-is.
+> > > > > +     if (rs485->flags & SER_RS485_ENABLED) {
+> > > >
+> > > > What I meant is to have
+> > > >
+> > > >         if (!)rs485->flags & SER_RS485_ENABLED))
+> > > >                 return 0;
+> > > >
+> > > > here, which allows you to reduce indentation level in the below block.
+> > > >
+> > > > > +             /* Set EFR[4]=1 to enable enhanced feature registers */
+> > > > > +             writeb(readb(p + UART_XR_EFR) | UART_EFR_ECB, p + UART_XR_EFR);
+> > > > > +
+> > > > > +             /* Set MCR to use DTR as Auto-RS485 Enable signal */
+> > > > > +             writeb(UART_MCR_OUT1, p + UART_MCR);
+> > > > > +
+> > > > > +             /* Store original LCR and set LCR[7]=1 to enable access to DLD register */
+> > > > > +             old_lcr = readb(p + UART_LCR);
+> > > > > +             writeb(old_lcr | UART_LCR_DLAB, p + UART_LCR);
+> > > > > +
+> > > > > +             /* Set DLD[7]=1 for inverted RS485 Enable logic */
+> > > > > +             writeb(readb(p + UART_EXAR_DLD) | UART_EXAR_DLD_485_POLARITY, p + UART_EXAR_DLD);
+> > > > > +
+> > > > > +             writeb(old_lcr, p + UART_LCR);
+> > > > > +    }
+> > > > > +
+> > > > > +     return 0;
+> > >
+> > > I see where you are coming from now, but I find that slightly less clear
+> > > than having the 'main action' within the conditional statement. And since
+> > > the code is not heavily indented I don't see much benefit of removing the
+> > > indent.
+> > 
+> > In that case it might make sense to split to two functions:
+> > 
+> > func1()
+> > {
+> >         ...
+> > }
+> > 
+> > func2()
+> > {
+> >         if (...)
+> >                 return func1()
+> > 
+> >         return 0;
+> > }
+> 
+> I will have to respectfully disagree on this. Splitting the function into 
+> two still adds additional redirection, however small, to the function.
 
-greg k-h
+You mean in the C code? Because in assembly it will be the same (as long as
+the compiler optimisation is on).
+
+But besides that it's a common practice to split in case the function is long
+enough to be on a single screen page (meaning the body of the conditional ~20
+LoCs threshold).
+
+> I would also like to point out that the level of indent I am using is not 
+> uncommon in 8250_exar.c and as such I do not find the styling of the 
+> function to be out of place. 
+
+You are probably referring to actually two functions, i.e.
+pci_fastcom335_setup() and xr17v35x_register_gpio(), right?
+
+Each of these three cases (including yours) are different. I do not think
+there is a common ground to support your way by pointing out on them.
+
+> I will resubmit and try to address the other concerns raised by you and 
+> Ilpo but unless Greg KH says otherwise I don't see any reason to change 
+> the indent at this time.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
