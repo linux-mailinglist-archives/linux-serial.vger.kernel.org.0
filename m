@@ -2,121 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A62F7A07BD
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Sep 2023 16:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753F67A08D4
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Sep 2023 17:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240347AbjINOsU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 14 Sep 2023 10:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S240687AbjINPRt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 14 Sep 2023 11:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240415AbjINOsR (ORCPT
+        with ESMTP id S232858AbjINPRs (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 14 Sep 2023 10:48:17 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B3B1BFC;
-        Thu, 14 Sep 2023 07:48:13 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E03C433C7;
-        Thu, 14 Sep 2023 14:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694702892;
-        bh=XlH2++cozlMCXeR9EvUckhmVWrwhR2yKc6Vvzh31WCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mvSBW9JAqDrz6UWIPcFcklUoKB8kHwI/5dWtybKDRXOdLDJTCLwouG0s902rAirPm
-         Wql9iXKt+kKfwbKSvsWsT2yx0tKQNVDOKVtR1MFjky+IXIxinawVoF3GIi+Ol6rWPF
-         Yp2TGaF2YE9xDE0fUr8Hnt64md6qHOgygQYzXMiqWapAy2ihvhl9mDDx6NZkz3ZDIL
-         HzvYiU+HoZpxlVH+y8lUy7Lh6wTOXCAUVTGSsvSY5GQTU+MqB8p8zb2acxI7QJLhdp
-         w7dBT5RHBaM3h2FBncEux2uO7SofWur4Gcwtqbpnj4NECdQhA1qTrWXKpy20Wavooz
-         sMBoitRfxuizQ==
-Date:   Thu, 14 Sep 2023 15:48:08 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Max Filippov <jcmvbkbc@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 1/4] dt-bindings: serial: document esp32-uart bindings
-Message-ID: <20230914-stumbling-smother-2b048381952c@spud>
-References: <20230913211449.668796-1-jcmvbkbc@gmail.com>
- <20230913211449.668796-2-jcmvbkbc@gmail.com>
- <d7bf0ae3-d263-4231-9656-2b7af4b372a3@linaro.org>
+        Thu, 14 Sep 2023 11:17:48 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE3E1FC9;
+        Thu, 14 Sep 2023 08:17:44 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-d7e741729a2so1151317276.2;
+        Thu, 14 Sep 2023 08:17:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694704661; x=1695309461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bEkJKx0NjBVdd3xMHiONy8V+yf50ybZmUTpOXQj8RoE=;
+        b=dH7SuCRer46KaOVn+hpGtIwakV9ev8dWyNIHp7LX43rgOautvVzKq+dP3ICYL/MVjW
+         iEE1W6fiLiNRQasifDd8g7HWk+BcS7dj3azd+li8rXj2tnYV68qn43nT9ygW9eGAF1HR
+         IYxbHm+ylNvv8EBrJePQsmmdYGkSul8HnSQ1e1ZBNUxlMrkkbePSuwE+aiJkhsRZFy+s
+         2yX0rNQvLDfPYN3Uj+6+8KoyqUk8F9dFlgSqngnVyjrIsWUXdEy5gHlDmIirICAqSz3C
+         7JHnMYun6pXs4BuASYRqSdnKUb64E986SiX+caTSEV9S3jifxHI8nTlEHfreijp1VUGt
+         jlbg==
+X-Gm-Message-State: AOJu0YzGwSFKRybfvDsSS7E/buzPkLMYYY3roFy6e/opQB+0lKhtVZti
+        D8rMMoLCEpjl7LUMGJgqq1NjP+o1MRQP+Q==
+X-Google-Smtp-Source: AGHT+IElEWg2j/G1TPDgJ6GDDWWMMTKuTjJ6ifTRLmy7lxHCixE5BxLuAvmp0gp+Gm6DBVq4jio4lA==
+X-Received: by 2002:a25:2d03:0:b0:d78:3f9c:138e with SMTP id t3-20020a252d03000000b00d783f9c138emr5969314ybt.37.1694704660879;
+        Thu, 14 Sep 2023 08:17:40 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id b5-20020a5b0b45000000b00d816fa23bd4sm355682ybr.26.2023.09.14.08.17.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Sep 2023 08:17:40 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-d7e741729a2so1151297276.2;
+        Thu, 14 Sep 2023 08:17:40 -0700 (PDT)
+X-Received: by 2002:a25:760c:0:b0:d7b:9d44:76dc with SMTP id
+ r12-20020a25760c000000b00d7b9d4476dcmr6035360ybc.38.1694704660368; Thu, 14
+ Sep 2023 08:17:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="w5dGWB6bqtjegC91"
-Content-Disposition: inline
-In-Reply-To: <d7bf0ae3-d263-4231-9656-2b7af4b372a3@linaro.org>
+References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-17-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20230912045157.177966-17-claudiu.beznea.uj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 14 Sep 2023 17:17:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXJUsbSbKhvxwvi4oG_K2v4w+5YU3VJL9J1X2mrdCA0ag@mail.gmail.com>
+Message-ID: <CAMuHMdXJUsbSbKhvxwvi4oG_K2v4w+5YU3VJL9J1X2mrdCA0ag@mail.gmail.com>
+Subject: Re: [PATCH 16/37] clk: renesas: rzg2l: add struct clk_hw_data
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
+        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        wsa+renesas@sang-engineering.com,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+On Tue, Sep 12, 2023 at 6:52 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Add clk_hw_data struct that keeps the core part of a clock data. The
+> sd_hw_data embeds a member of type struct clk_hw_data along with other
+> members (in the next commits). This commit prepares the field for
+> refactoring the SD MUX clock driver.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
---w5dGWB6bqtjegC91
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On Thu, Sep 14, 2023 at 07:55:35AM +0200, Krzysztof Kozlowski wrote:
-> On 13/09/2023 23:14, Max Filippov wrote:
-> > Add documentation for the ESP32xx UART controllers.
-> >=20
-> > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> > ---
-> >  .../bindings/serial/esp,esp32-uart.yaml       | 48 +++++++++++++++++++
-> >  1 file changed, 48 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/serial/esp,esp32-=
-uart.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/serial/esp,esp32-uart.ya=
-ml b/Documentation/devicetree/bindings/serial/esp,esp32-uart.yaml
-> > new file mode 100644
-> > index 000000000000..8b45ef808107
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/serial/esp,esp32-uart.yaml
-> > @@ -0,0 +1,48 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/serial/esp,esp32-uart.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: ESP32 UART controller
-> > +
-> > +maintainers:
-> > +  - Max Filippov <jcmvbkbc@gmail.com>
-> > +
-> > +description: |
-> > +  ESP32 UART controller is a part of ESP32 SoC series.
->=20
-> 1. Company name?
-> 2. ESP32 SoC series suggests esp32 is a series.
->=20
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - description: UART controller for the ESP32 SoC
-> > +        const: esp,esp32-uart
->=20
-> Also, the vendor prefix looks incorrect, so again - what is the company
-> name?
+Gr{oetje,eeting}s,
 
-esp32 is made by expressif, which would match with "esp" as a vendor
-prefix.
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
---w5dGWB6bqtjegC91
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQMdKAAKCRB4tDGHoIJi
-0jdGAP4sUKNXkMwoIScWfBLsAsvhasgz8yvWr3ZT714K8R9RTgD+K5NqOOlcTqGa
-7guFL9U09dCkKLI+vEoOgY4PtJ3gCwQ=
-=ENOh
------END PGP SIGNATURE-----
-
---w5dGWB6bqtjegC91--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
