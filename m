@@ -2,44 +2,44 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739457A1A84
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Sep 2023 11:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536BF7A1AA2
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Sep 2023 11:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbjIOJ1n (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 15 Sep 2023 05:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S233371AbjIOJf2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 15 Sep 2023 05:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbjIOJ1m (ORCPT
+        with ESMTP id S233117AbjIOJf1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 15 Sep 2023 05:27:42 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF13E1700;
-        Fri, 15 Sep 2023 02:26:40 -0700 (PDT)
+        Fri, 15 Sep 2023 05:35:27 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCFE171C;
+        Fri, 15 Sep 2023 02:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694770000; x=1726306000;
+  t=1694770522; x=1726306522;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=yl5Skd55X/lYjofp9pJE8uI3m8maxabpQwNbSQvXLsA=;
-  b=IgrFkrYKxrRq/AUAD8qfLGIFFm/jyJUMfoSHwpwG3kP9mt96AcLaznVk
-   FsWwak3+aM5+S0sfoct2ytIN5PZBXGIkb2py4VNInpH07zB+mSGe5Oh1u
-   9PykF6pCDRTE1ps3Jf/9ELBkRPfUcT2M1rask3zev+k3H1be4+ZmJZIsx
-   SCrSuL3+NF98gkXiTGY64qAdISZbbS26PQDeiijjzmde2P+YU+lejjT9A
-   7i9PFhVuoc90uudmYwjo0dgSJ3F7wI8lto5+92043tIzkOChETWm9zKBa
-   kcZBynP756Oqv6IZuTqfnIBgG6SRXgrrc1MmBv/PxLTHedn/t6JsZTW00
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="378122551"
+  bh=UgXXbWdkQH1ECa9Ar2m27pqTIEtUL3zv5cVAncIx9xA=;
+  b=GzU/R+l/VeqrxKSV4lmZ3EAwKftyJMUjsWcbKXrEOhQRrl8Zf++Cxclv
+   DF6Q+pYt0/Wuu25yo10gry6OKR+NCIInr0DaUq7OExH0ui4ds9iOJj83o
+   ZMRrfBv/mzXm0xGWsBoOiSGQ/cHIELmbyiv0TMmjdBouGRooCoYVZmsMl
+   pRjvz2XvqGzjiYuE9Bk6txyRfXohX2+mfUDoymxkSkKoRwhSbOXcohkkN
+   vho9n05Bzsj6RpZ1Qgq/3+g3gKo742kv/xNK1auukvFh1n+gp8cjOSD9p
+   pDu0Ea6uFBXTv6Gc1KnJVoaHtsVPl2R6EJd0K3R9jdGLF/hw+wWy+K/w4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="445666742"
 X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="scan'208";a="378122551"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 02:26:40 -0700
+   d="scan'208";a="445666742"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 02:35:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="888167296"
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="868646146"
 X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
-   d="scan'208";a="888167296"
+   d="scan'208";a="868646146"
 Received: from srdoo-mobl1.ger.corp.intel.com ([10.252.38.99])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 02:26:03 -0700
-Date:   Fri, 15 Sep 2023 12:26:35 +0300 (EEST)
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 02:35:19 -0700
+Date:   Fri, 15 Sep 2023 12:35:17 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     John Ogness <john.ogness@linutronix.de>
 cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,13 +47,16 @@ cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-serial <linux-serial@vger.kernel.org>,
         Petr Mladek <pmladek@suse.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH tty v1 02/74] serial: core: Use lock wrappers
-In-Reply-To: <20230914183831.587273-3-john.ogness@linutronix.de>
-Message-ID: <bd5a9e3e-711a-ba47-e47a-e3fcf8812086@linux.intel.com>
-References: <20230914183831.587273-1-john.ogness@linutronix.de> <20230914183831.587273-3-john.ogness@linutronix.de>
+        LKML <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH tty v1 06/74] serial: 8250: Use port lock wrappers
+In-Reply-To: <20230914183831.587273-7-john.ogness@linutronix.de>
+Message-ID: <2045de5e-b7f8-18fe-dc92-e1d88a62f810@linux.intel.com>
+References: <20230914183831.587273-1-john.ogness@linutronix.de> <20230914183831.587273-7-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1914440644-1694769999=:2347"
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -62,13 +65,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1914440644-1694769999=:2347
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
 
 On Thu, 14 Sep 2023, John Ogness wrote:
 
@@ -100,67 +96,50 @@ On Thu, 14 Sep 2023, John Ogness wrote:
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  include/linux/serial_core.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> index f1d5c0d1568c..3091c62ec37b 100644
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -1035,14 +1035,14 @@ static inline void uart_unlock_and_check_sysrq(struct uart_port *port)
->  	u8 sysrq_ch;
->  
->  	if (!port->has_sysrq) {
-> -		spin_unlock(&port->lock);
-> +		uart_port_unlock(port);
->  		return;
->  	}
->  
->  	sysrq_ch = port->sysrq_ch;
->  	port->sysrq_ch = 0;
->  
-> -	spin_unlock(&port->lock);
-> +	uart_port_unlock(port);
->  
->  	if (sysrq_ch)
->  		handle_sysrq(sysrq_ch);
-> @@ -1054,14 +1054,14 @@ static inline void uart_unlock_and_check_sysrq_irqrestore(struct uart_port *port
->  	u8 sysrq_ch;
->  
->  	if (!port->has_sysrq) {
-> -		spin_unlock_irqrestore(&port->lock, flags);
-> +		uart_port_unlock_irqrestore(port, flags);
->  		return;
->  	}
->  
->  	sysrq_ch = port->sysrq_ch;
->  	port->sysrq_ch = 0;
->  
-> -	spin_unlock_irqrestore(&port->lock, flags);
-> +	uart_port_unlock_irqrestore(port, flags);
->  
->  	if (sysrq_ch)
->  		handle_sysrq(sysrq_ch);
-> @@ -1077,12 +1077,12 @@ static inline int uart_prepare_sysrq_char(struct uart_port *port, u8 ch)
->  }
->  static inline void uart_unlock_and_check_sysrq(struct uart_port *port)
->  {
-> -	spin_unlock(&port->lock);
-> +	uart_port_unlock(port);
->  }
->  static inline void uart_unlock_and_check_sysrq_irqrestore(struct uart_port *port,
->  		unsigned long flags)
->  {
-> -	spin_unlock_irqrestore(&port->lock, flags);
-> +	uart_port_unlock_irqrestore(port, flags);
->  }
->  #endif	/* CONFIG_MAGIC_SYSRQ_SERIAL */
->  
-> 
+>  drivers/tty/serial/8250/8250_core.c |  12 ++--
+>  drivers/tty/serial/8250/8250_port.c | 100 ++++++++++++++--------------
+>  2 files changed, 56 insertions(+), 56 deletions(-)
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+> @@ -3403,9 +3403,9 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
+>  	touch_nmi_watchdog();
+>  
+>  	if (oops_in_progress)
+> -		locked = spin_trylock_irqsave(&port->lock, flags);
+> +		locked = uart_port_trylock_irqsave(port, &flags);
+>  	else
+> -		spin_lock_irqsave(&port->lock, flags);
+> +		uart_port_lock_irqsave(port, &flags);
+
+Not related to any problem (with this patch) but I'm a bit curious is this 
+construct going to remain there after the follow-up work? And there's the 
+similar one in some other drivers (with some variations related to 
+local_irq_save()):
+
+        if (port->sysrq) {
+                locked = 0;
+        } else if (oops_in_progress) {
+                locked = spin_trylock(&port->lock);
+        } else {
+                spin_lock(&port->lock);
+                locked = 1;
+        }
+
 
 -- 
  i.
 
---8323329-1914440644-1694769999=:2347--
+
+
+>  	/*
+>  	 *	First save the IER then disable the interrupts
+> @@ -3475,7 +3475,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
+>  		serial8250_modem_status(up);
+>  
+>  	if (locked)
+> -		spin_unlock_irqrestore(&port->lock, flags);
+> +		uart_port_unlock_irqrestore(port, flags);
+>  }
+>  
+>  static unsigned int probe_baud(struct uart_port *port)
+> 
