@@ -2,42 +2,41 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B487A43F5
-	for <lists+linux-serial@lfdr.de>; Mon, 18 Sep 2023 10:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC607A4409
+	for <lists+linux-serial@lfdr.de>; Mon, 18 Sep 2023 10:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbjIRIIJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 18 Sep 2023 04:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S236816AbjIRIKs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 18 Sep 2023 04:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240675AbjIRIIC (ORCPT
+        with ESMTP id S240500AbjIRIK0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 18 Sep 2023 04:08:02 -0400
+        Mon, 18 Sep 2023 04:10:26 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C331BE4F;
-        Mon, 18 Sep 2023 01:07:02 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2840C433C8;
-        Mon, 18 Sep 2023 08:07:01 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D87394;
+        Mon, 18 Sep 2023 01:10:20 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738C4C433C7;
+        Mon, 18 Sep 2023 08:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695024422;
-        bh=uJkf9iGWgr0ZsZQx4mCtdTcCP+ImSmVZVX+N5RQOjtg=;
+        s=korg; t=1695024620;
+        bh=CRIeDeVdhZmvgG8ZW1WaCGgmchWzoCZjUdxtSTLJV/A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SzIRtDZXPuPp5JDlrgyEEJALcW17PZWcxEx2CbfkTcPEsOTh7fZMyYZjsSo0x82uP
-         bW/dFRhiQQyELHc2edGywca89NaNbzeKfQN/xK4n0qMwvpaesSXaLpG3n3YN5QqfYi
-         bUVSxoV31Jbcy5N+BkkaOlM1qQfGla9T9EoLnRLM=
-Date:   Mon, 18 Sep 2023 10:06:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Edward AD <eadavis@sina.com>
-Cc:     syzbot+b5d1f455d385b2c7da3c@syzkaller.appspotmail.com,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] tty: fix memory leak in gsm_activate_mux
-Message-ID: <2023091826-spherical-shindig-016b@gregkh>
-References: <0000000000009bb78206055feb7c@google.com>
- <20230915112324.941574-1-eadavis@sina.com>
+        b=x4BlyBJDiBWr1kd1Ig5VTJA/mMN3WIZiY996QmmespWNm9IV8PFWp3yInsK68FA9X
+         pAu+exvk7+koqJmeI5LwNpb+dUoceo1O/C6DB6/ykYfPdnYwTvI53vdUXWg81qQogQ
+         l0viG6PRuoPEA5xzSfKbu9QpAHlcpPq/YPeeX2KU=
+Date:   Mon, 18 Sep 2023 10:10:16 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, Ingo Molnar <mingo@elte.hu>,
+        kernel@collabora.com, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3] tty/sysrq: replace smp_processor_id() with get_cpu()
+Message-ID: <2023091835-quill-congress-b691@gregkh>
+References: <20230822102606.2821311-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230915112324.941574-1-eadavis@sina.com>
+In-Reply-To: <20230822102606.2821311-1-usama.anjum@collabora.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,21 +46,72 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 07:23:24PM +0800, Edward AD wrote:
-> When the call to gsm_register_devices() fails, we need to reclaim the memory
-> requested in gsm_dlci_alloc().
+On Tue, Aug 22, 2023 at 03:26:06PM +0500, Muhammad Usama Anjum wrote:
+> The smp_processor_id() shouldn't be called from preemptible code.
+> Instead use get_cpu() and put_cpu() which disables preemption in
+> addition to getting the processor id. This fixes the following bug:
 > 
-> Fixes: 01aecd917114 ("tty: n_gsm: fix tty registration before control channel open")
-> Reported-and-tested-by: syzbot+b5d1f455d385b2c7da3c@syzkaller.appspotmail.com
-> Signed-off-by: Edward AD <eadavis@sina.com>
+> [  119.143590] sysrq: Show backtrace of all active CPUs
+> [  119.143902] BUG: using smp_processor_id() in preemptible [00000000] code: bash/873
+> [  119.144586] caller is debug_smp_processor_id+0x20/0x30
+> [  119.144827] CPU: 6 PID: 873 Comm: bash Not tainted 5.10.124-dirty #3
+> [  119.144861] Hardware name: QEMU QEMU Virtual Machine, BIOS 2023.05-1 07/22/2023
+> [  119.145053] Call trace:
+> [  119.145093]  dump_backtrace+0x0/0x1a0
+> [  119.145122]  show_stack+0x18/0x70
+> [  119.145141]  dump_stack+0xc4/0x11c
+> [  119.145159]  check_preemption_disabled+0x100/0x110
+> [  119.145175]  debug_smp_processor_id+0x20/0x30
+> [  119.145195]  sysrq_handle_showallcpus+0x20/0xc0
+> [  119.145211]  __handle_sysrq+0x8c/0x1a0
+> [  119.145227]  write_sysrq_trigger+0x94/0x12c
+> [  119.145247]  proc_reg_write+0xa8/0xe4
+> [  119.145266]  vfs_write+0xec/0x280
+> [  119.145282]  ksys_write+0x6c/0x100
+> [  119.145298]  __arm64_sys_write+0x20/0x30
+> [  119.145315]  el0_svc_common.constprop.0+0x78/0x1e4
+> [  119.145332]  do_el0_svc+0x24/0x8c
+> [  119.145348]  el0_svc+0x10/0x20
+> [  119.145364]  el0_sync_handler+0x134/0x140
+> [  119.145381]  el0_sync+0x180/0x1c0
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 47cab6a722d4 ("debug lockups: Improve lockup detection, fix generic arch fallback")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
->  drivers/tty/n_gsm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Changes since v2:
+> - Add changelog and resend
+> 
+> Changes since v1:
+> - Add "Cc: stable@vger.kernel.org" tag
+> ---
+>  drivers/tty/sysrq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+> index 23198e3f1461a..6b4a28bcf2f5f 100644
+> --- a/drivers/tty/sysrq.c
+> +++ b/drivers/tty/sysrq.c
+> @@ -262,13 +262,14 @@ static void sysrq_handle_showallcpus(u8 key)
+>  		if (in_hardirq())
+>  			regs = get_irq_regs();
+>  
+> -		pr_info("CPU%d:\n", smp_processor_id());
+> +		pr_info("CPU%d:\n", get_cpu());
 
-This message never made it to lore.kernel.org, so you might need to fix
-up your email system so that it doesn't get dropped from there.
+Why not call put_cpu() right here?
 
-Can you do so and resend?
+>  		if (regs)
+>  			show_regs(regs);
+>  		else
+>  			show_stack(NULL, NULL, KERN_INFO);
+>  
+>  		schedule_work(&sysrq_showallcpus);
+> +		put_cpu();
+
+Why wait so long here after you have scheduled work?  Please drop the
+cpu reference right away, you don't need to hold it for this length of
+time, right?
 
 thanks,
 
