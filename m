@@ -2,59 +2,86 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5087A97B5
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 19:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7947A95DE
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 18:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjIUR1K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 13:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S229556AbjIUQ4f (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 12:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjIUR0t (ORCPT
+        with ESMTP id S229533AbjIUQ4a (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:26:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99431BCE;
-        Thu, 21 Sep 2023 10:01:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83AB6C433BC;
-        Thu, 21 Sep 2023 07:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695281463;
-        bh=MMiANpm/tYrygvqzjXfEiCYC2yeCEyBRWQiNI0+pzFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z0PHmHygjWP1wKwlpRSiugrczCcpHcj8QTlBqQn/HoTurjSMHGHImFbMpzAGGnOL9
-         YT7saeq1G0DMNq0uo/d+YQ+cgPIcRb83YfVEymFdMCD/KgRs9hah3CtyoZA3QQ+wSb
-         Ax7Vfn6w7iOOiMmU5A4lkYNoV2Qdz+exHkWVCm+Q=
-Date:   Thu, 21 Sep 2023 09:31:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 1/6] serial: 8250: remove AR7 support
-Message-ID: <2023092152-unfilled-spinout-657c@gregkh>
-References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
- <20230920201035.3445-2-wsa+renesas@sang-engineering.com>
+        Thu, 21 Sep 2023 12:56:30 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E07BCF
+        for <linux-serial@vger.kernel.org>; Thu, 21 Sep 2023 09:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695315380; x=1726851380;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ln6E8ET7YxoeQkoNw8Yb9eOoSkQhL/2RvjVpAOQWuGc=;
+  b=IIMLOwS9+t6Vi9xQ3YWsOwjrf94jAJB35g/7JQPi3gdsPNsg06J+aFNn
+   RxJgsELYJx5+CHYKff+SZ1XLNEYcAbLkfWZS3IAAL3tK08uEMesXuo3qQ
+   9XTydtRwwZQf6QgK6XucMfXKP16NUfs2ViQBkM2oD6a4wofO5nKAkJxCm
+   ZDvcaN1svQrtVxQyLKAMuN2Ecicfslifo/TcnHtSTU/T5C0SmExvzaH7e
+   j5u5GFduE6TRJVrysTeDLCLszJrQ18SGDyGDsAVfK8NYqCcpm/loF3hti
+   0OsPKsds59L7QF/8caWXR/Aej0AfD5dNUeA3v7rPWf43bkYWwxs4EHBDf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="360735934"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="360735934"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 04:07:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="920694212"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="920694212"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 04:07:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qjHWR-0000000GsAQ-2GmB;
+        Thu, 21 Sep 2023 14:07:03 +0300
+Date:   Thu, 21 Sep 2023 14:07:03 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matthew Howell <matthew.howell@sealevel.com>
+Cc:     gregkh@linuxfoundation.org, jeff.baldwin@sealevel.com,
+        james.olson@sealevel.com, ryan.wenglarz@sealevel.com,
+        darren.beeson@sealevel.com, linux-serial@vger.kernel.org,
+        ilpo.jarvinen@linux.intel.com
+Subject: Re: [PATCH V7 1/2] serial: exar: Revert "serial: exar: Add support
+ for Sealevel 7xxxC serial cards"
+Message-ID: <ZQwj1xLhCApa9tc6@smile.fi.intel.com>
+References: <74f33e00-f8bf-5d82-3978-726fb78fca3f@sealevel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230920201035.3445-2-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <74f33e00-f8bf-5d82-3978-726fb78fca3f@sealevel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 10:10:27PM +0200, Wolfram Sang wrote:
-> AR7 is going to be removed from the Kernel, so remove its type
-> definition from 8250 code. As with previous removals, I checked with
-> Debian Code Search that 'PORT_AR7' is not used in userspace.
+On Wed, Sep 20, 2023 at 02:31:08PM -0400, Matthew Howell wrote:
+> From: Matthew Howell <matthew.howell@sealevel.com>
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
+> Hardware ID of Sealevel 7xxxC cards changed prior to release.
+> This has rendered 14ee78d5932a redundant.
+> 
+> Revert "serial: exar: Add support for Sealevel 7xxxC serial cards"
+> 
+> This reverts commit 14ee78d5932afeb710c8305196a676a715bfdea8.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
