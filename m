@@ -2,101 +2,164 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5F87A9D60
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 21:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9FB7AA26F
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 23:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjIUTbr (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 15:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
+        id S232720AbjIUVRR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 17:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjIUTbb (ORCPT
+        with ESMTP id S232453AbjIUVQO (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:31:31 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9A1905ED;
-        Thu, 21 Sep 2023 12:27:43 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 53273805CD;
-        Thu, 21 Sep 2023 21:27:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1695324461;
-        bh=w4s+MYqnZ2xQI1Rv17N0ZTQU2qMqwYRQ1GkDMHi0qgo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=v3WDDc4gsmyKWj6VTFziFLz2pdPGt8N0vSXCQWY0zmtZfUtxP7r66L9zAU7T7nbwN
-         bGya2QCYn3BdxihQd/O0bbVVoz7f0cYdRTt8vg0Y2TcRsTQ4DdBe0C/tvGR1NwPAWD
-         McmNjm/DBisTD1mm6PkuxOXYDvprXJz3uZlVI/1DnfA7C3+OzEqK+bA+kV7VlWi4HV
-         I9WtU6BycS0bYchNQ5EA+BoCJtoNVwxfPcRJdukQZkR3B6I9MC5ipG80yznv6Mug/Y
-         6GmETS3zUAPx+KgMxC806m6L2lRozP3Lo55XUKWWwTgf7TOvpeFkKfA4kkGiBEkItU
-         dtcPyp98r8MCg==
-From:   Marek Vasut <marex@denx.de>
-To:     devicetree@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: [PATCH] dt-bindings: serial: imx: Document wakeup-source property
-Date:   Thu, 21 Sep 2023 21:27:29 +0200
-Message-Id: <20230921192729.71259-1-marex@denx.de>
-X-Mailer: git-send-email 2.40.1
+        Thu, 21 Sep 2023 17:16:14 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7955A9C7;
+        Thu, 21 Sep 2023 10:07:11 -0700 (PDT)
+Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 55B3DCF277;
+        Thu, 21 Sep 2023 07:59:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 29C1560006;
+        Thu, 21 Sep 2023 07:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1695283116;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yLvHllXACN1zA5CMjFMhPYxtctKNWOEMglwvg9CAAd4=;
+        b=MCoTOXubAjcszgcr8Z1eKA3CjCCAjns8nCwCZRMm87VzMzY9OIneKFRDQZm+OuQ7Mz/sOg
+        gkQAu/cYR4cKx6KEXeUuPw+1qXHyUxKzkRu01LcWujXOJ9K4hN49u04K+NQd5fRs8iet01
+        lx5fbZwDi0ELe5u6knJySARn/hSM3aNy1ANYdnOumj66kkdxrRrzi65GNOdxlRX/3+sku4
+        A/d0Sjta67pqepvC/gAxOp9ip1miqMG5k41mtUjYAEO/1tVTJ2uALgrtDYxEndHnfQPxDe
+        DYTrhDTxuOtMRllc9Iff74S12+nlUEEAF+pbZDXYCEzfwMfvCDhUlrmaoWXu6w==
+Message-ID: <332111c2-f3f5-3d7f-09ef-f3ebb3f48eb0@bootlin.com>
+Date:   Thu, 21 Sep 2023 09:58:35 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: serial: 8250_omap: suspend issue with console_suspend disabled
+Content-Language: en-US
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Kumar Udit <u-kumar1@ti.com>, Dhruva Gole <d-gole@ti.com>
+References: <59b13c93-6637-3050-c145-31be0d6c12c9@bootlin.com>
+ <20230920053828.GD5282@atomide.com>
+From:   Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20230920053828.GD5282@atomide.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The i.MX UART can be used as a wake-up source, document the 'wakeup-source'
-property as allowed property.
+On 9/20/23 07:38, Tony Lindgren wrote:
+> Hi,
+> 
+> * Thomas Richard <thomas.richard@bootlin.com> [230915 09:57]:
+>> The regression was introduced in commit 20a41a62618d "serial: 8250_omap:
+>> Use force_suspend and resume for system suspend"
+> ...
+> 
+>> --- a/drivers/tty/serial/8250/8250_omap.c
+>> +++ b/drivers/tty/serial/8250/8250_omap.c
+>> @@ -1630,7 +1630,7 @@ static int omap8250_suspend(struct device *dev)
+>>         err = pm_runtime_force_suspend(dev);
+>>         flush_work(&priv->qos_work);
+>>
+>> -       return err;
+>> +       return 0;
+>>  }
+> 
+> Maybe we can now just simplify things a bit here with the patch below.
+> Care to give it a try, it's compile tested only so far.
+> 
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-serial@vger.kernel.org
----
- Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+I tested it, it works for me.
 
-diff --git a/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml b/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
-index 40414247d61a3..83035553044a2 100644
---- a/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/fsl-imx-uart.yaml
-@@ -70,6 +70,8 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  wakeup-source: true
-+
-   fsl,dte-mode:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description: |
--- 
-2.40.1
+>> Once the omap8250_suspend doesn't return an error, the suspend sequence
+>> can continue, but I get an other issue.
+>> This issue is not related to commit 20a41a62618d, it has already been
+>> present.
+>> The power domain of the console is powered-off, so no more messages are
+>> printed, and the SoC is stucked.
+>> As the uart port is used as console, we don't want to power-off it.
+>> My workaround is to set the corresponding power domain to
+>> GENPD_FLAG_ALWAYS_ON, so the uart port is not powered-off.
+> 
+> The runtime PM usage count should keep the related power domain on though,
+> sounds like this issue somewhere else if the power domains get force
+> suspended with runtime PM usage count?
+> 
+> Regards,
+> 
+> Tony
+> 
+> 8< ------------------------------
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
+>  {
+>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+>  	struct uart_8250_port *up = serial8250_get_port(priv->line);
+> -	int err;
+> +	int err = 0;
+>  
+>  	serial8250_suspend_port(priv->line);
+>  
+> @@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
+>  	if (!device_may_wakeup(dev))
+>  		priv->wer = 0;
+>  	serial_out(up, UART_OMAP_WER, priv->wer);
+> -	err = pm_runtime_force_suspend(dev);
+> +	if (uart_console(&up->port) && console_suspend_enabled)
+> +		err = pm_runtime_force_suspend(dev);
+>  	flush_work(&priv->qos_work);
+>  
+>  	return err;
+> @@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
+>  static int omap8250_resume(struct device *dev)
+>  {
+>  	struct omap8250_priv *priv = dev_get_drvdata(dev);
+> +	struct uart_8250_port *up = serial8250_get_port(priv->line);
+>  	int err;
+>  
+> -	err = pm_runtime_force_resume(dev);
+> -	if (err)
+> -		return err;
+> +	if (uart_console(&up->port) && console_suspend_enabled) {
+> +		err = pm_runtime_force_resume(dev);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	serial8250_resume_port(priv->line);
+>  	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
+>  	pm_runtime_mark_last_busy(dev);
+> @@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
+>  
+>  	if (priv->line >= 0)
+>  		up = serial8250_get_port(priv->line);
+> -	/*
+> -	 * When using 'no_console_suspend', the console UART must not be
+> -	 * suspended. Since driver suspend is managed by runtime suspend,
+> -	 * preventing runtime suspend (by returning error) will keep device
+> -	 * active during suspend.
+> -	 */
+> -	if (priv->is_suspending && !console_suspend_enabled) {
+> -		if (up && uart_console(&up->port))
+> -			return -EBUSY;
+> -	}
+>  
+>  	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
+>  		int ret;
+
 
