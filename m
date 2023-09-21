@@ -2,100 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95947A9A58
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 20:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8397A99A0
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 20:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjIUSig (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 14:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S230400AbjIUSQm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 21 Sep 2023 14:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjIUSiJ (ORCPT
+        with ESMTP id S230301AbjIUSQ1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:38:09 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F13CD7DA2;
-        Thu, 21 Sep 2023 11:29:05 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6926d5ad926so141271b3a.1;
-        Thu, 21 Sep 2023 11:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695320945; x=1695925745; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kk1JuLAjBu8ARQtDEROwDNkOvY+dM0M3GhfWzBga4AE=;
-        b=YyPFpjyON8esafdqgcUggal6BrniQvLlzi3Wv6URa+6zJ46wxdfx2fFuPHi1WqJVeA
-         bcctB2k0rAytFwrhBI5MaW9tXnPYSBr4wF4t24riYQ0WaSCCLdxoTiGwzHvLFXRXVfyd
-         fs8mrqVxRx+O1xns2+oDY1IyEpo7ShR8Yzm4/0tUTAy1SsUaLf+hy0YU9YoO6MSXDOdQ
-         cporG1AoFPqvyRaBXOfX3WnncEd5O1HkkJV7FJSiXQ9YVEzgmHdLbRXawxxthIg7w1oQ
-         7AZ7sdFFTl7RntfPWsO1a6s+sEC9COxj5ttQvSagC7osRg5oAYr3oZNM9xfAQqB3u/ZQ
-         20lg==
+        Thu, 21 Sep 2023 14:16:27 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17CE5AE2E;
+        Thu, 21 Sep 2023 10:21:40 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-52f9a45b4bdso1423259a12.3;
+        Thu, 21 Sep 2023 10:21:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695320945; x=1695925745;
+        d=1e100.net; s=20230601; t=1695316899; x=1695921699;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kk1JuLAjBu8ARQtDEROwDNkOvY+dM0M3GhfWzBga4AE=;
-        b=KUUdoFcdsnn0z2kRkMZIbX+79iPUIrz4CT7q6S6fKCbi57YoCeZ5m4tFxi+ubgxuyC
-         NuFCCrVh6V2DLsSqK0Dv7gxU/NgPwJfpxCiheOmyI7YCYInbQzuqaAxi+ML8XAtfCjJE
-         NeCkj8smGqhmo88v7JFFRkIX1ag365HpDPTUnR1+Rv2dTeZUNg2JkNELe0t1e9d/sipX
-         ife7E0VK+9VB8zMn9dli5uAXyCbg+pwU5Nm1EgQ9Bab0zFmxOXF1jcIXbqlZAKMyjYDo
-         xw3+UtTXcS3U2X5muUD6rixKcf4OXSFik9c1t1py5IaSrmDWmlM//yJbpeI+Uwp6Ab7T
-         2rDg==
-X-Gm-Message-State: AOJu0Yyeb9MMd0L1jXxKY7/Hj3L/woE4Eycj+zqNcaB5QnLcyMUsVWlP
-        31H3/rkxUUVilWaqfXmgYdeIlAtRFe5/z17ZNEOnfPQi8wQ=
-X-Google-Smtp-Source: AGHT+IFNWk1poEMYgYBY4CnqAzqr8kgBCYMunEAMtsTlVAjK8hjBA3rjeNZ6xE1SN0XX1vOBFdD37+4K2TOCGtNH9bc=
-X-Received: by 2002:a17:90a:7562:b0:26d:4312:17ec with SMTP id
- q89-20020a17090a756200b0026d431217ecmr5103689pjk.1.1695300837233; Thu, 21 Sep
- 2023 05:53:57 -0700 (PDT)
+        bh=78TMJJFlsLVACVaST0yD4fr1cOAvW144T6j75QycuXg=;
+        b=BAV30hJkYC7gDJg8tJ5MgmwgAeTItbBEzWUcixCeM/pAGaCgaQ8iMiyn0XLG6VH9AG
+         ATLhbdtVyCC4KBdQdSsCTH0JJXuR7XVOSpV3URxP7TbirqHqYFRHRbBWD7+I3DjzCUZ0
+         iu65ni8UHH5hJfVmugdCvjEeqTP4zFi4RxIie6MPXhe9eTmsLORXD/5wosNIUBMifG9j
+         lSBCLxcxr0nbNY41dJQU3tqmp4sKBbaCaM27tuidbCQzJUwFo7JleTbtt8kmem84QoDV
+         zKqJa3Leqv9IUbhA64LQUI3GFTuCZ4samvzOPMyY2jFjLR5XbI/opUALhieLgtJd7xXY
+         YUKA==
+X-Gm-Message-State: AOJu0Yy11+ifoLtQMj0zsVqtcJIIdGl/qpKcTULNtlXmQqyT9qQ/0DL6
+        JbaLbcnQYqAHQbj57DOkw4bWirx05e9jlYr9
+X-Google-Smtp-Source: AGHT+IH+uBVw292r+sxaKfU8NLmvm5e2Jkc2m0Sb1GJILXn42+85/1qKFwBKoGAB4t0PUKVC9cnpbw==
+X-Received: by 2002:a2e:8098:0:b0:2c0:c6a:eb2f with SMTP id i24-20020a2e8098000000b002c00c6aeb2fmr5027753ljg.1.1695302182923;
+        Thu, 21 Sep 2023 06:16:22 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id p2-20020a2e9a82000000b002c001e57e1asm337469lji.73.2023.09.21.06.16.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 06:16:22 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2c007d6159aso15303351fa.3;
+        Thu, 21 Sep 2023 06:16:22 -0700 (PDT)
+X-Received: by 2002:a05:6512:3987:b0:500:bb99:69a7 with SMTP id
+ j7-20020a056512398700b00500bb9969a7mr6201266lfu.14.1695301737311; Thu, 21 Sep
+ 2023 06:08:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230921005258.184705-1-festevam@gmail.com> <20230921-75ba68806e21c96531ea2d70@fedora>
-In-Reply-To: <20230921-75ba68806e21c96531ea2d70@fedora>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 21 Sep 2023 09:53:44 -0300
-Message-ID: <CAOMZO5AYTe1mJTvR=2zWCVrYqVVdmP7A9fCCrCPqgisXYQpeYw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: serial: mxs: Fix compatible list
-To:     Conor Dooley <conor@kernel.org>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-29-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20230912045157.177966-29-claudiu.beznea.uj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Sep 2023 15:08:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV5BuPPLkZUDfhjXzq_aQ+LFfEM=eXGT-XjmpxSjSqeJg@mail.gmail.com>
+Message-ID: <CAMuHMdV5BuPPLkZUDfhjXzq_aQ+LFfEM=eXGT-XjmpxSjSqeJg@mail.gmail.com>
+Subject: Re: [PATCH 28/37] pinctrl: renesas: rzg2l: make struct
+ rzg2l_pinctrl_data::dedicated_pins constant
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
+        ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
+        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        wsa+renesas@sang-engineering.com,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Conor,
+On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> struct rzg2l_pinctrl_data::dedicated_pins is constant thus mark it so.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On Thu, Sep 21, 2023 at 6:14=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-pinctrl-for-v6.7.
 
-> Dumb question maybe, but it is not mentioned here - they are actually
-> compatible devices, right? I see that they have some different match
-> data in the driver (relating to some DMA erratum on the 23 seemingly),
-> so it's not immediately obvious to me.
+Gr{oetje,eeting}s,
 
-That's correct.
+                        Geert
 
-imx23 and imx28 are SoCs from the same family (mxs) and they share the
-same AUART block, so the same programming model.
 
-imx23 is the first member of this family. It had an AUART erratum.
-imx28 is the second member of this family and had this erratum fixed.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-This means that using:
-
-compatible =3D "fsl,imx28-auart", "fsl,imx23-auart";
-
-is valid.
-
-Would you like me to improve the commit log with the information above?
-
-Please advise.
-
-Thanks
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
