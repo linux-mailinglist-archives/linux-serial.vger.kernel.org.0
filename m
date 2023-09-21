@@ -2,73 +2,87 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07A17AA469
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Sep 2023 00:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487497AA561
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Sep 2023 00:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbjIUWIa (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 18:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S230389AbjIUW5L (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 18:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjIUWIU (ORCPT
+        with ESMTP id S231827AbjIUW4y (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 18:08:20 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF72E113EB;
-        Thu, 21 Sep 2023 14:29:18 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8A9C433C8;
-        Thu, 21 Sep 2023 21:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695331758;
-        bh=CIj3Yjfyu5jYKgrbLyzudHxDeXI8ZnR9Fcl5Y/YjJeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IIq4EN9+jOOREbOZJhEGZfFj43PB2eO//DSpvDiWMKyDLpmMugWgLne635O70Xys6
-         bJYa7OXed0DzbVlKEdGbdmu/cIfplfUfX0lrpOwbLRQWZAzgxZPN6i9kBIzQq0Yhnv
-         gvRyN1jm17SYaTezuVY3UEha0a2N8OhP6LbnkT3M=
-Date:   Thu, 21 Sep 2023 23:29:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Cameron Williams <cang1@live.co.uk>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH 4/4] tty: 8250: Add more support for and fix up
- Brainboxes cards
-Message-ID: <2023092134-wizard-nintendo-9b74@gregkh>
-References: <DU0PR02MB7899EABA8C3DCAC94DCC79D4C4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com>
+        Thu, 21 Sep 2023 18:56:54 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B76ACEF;
+        Thu, 21 Sep 2023 15:56:45 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-27474f0f483so195847a91.0;
+        Thu, 21 Sep 2023 15:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695337005; x=1695941805; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4zCeZx485dzIdLOwHMiftTCXeqlVFvIXzm9Bah+eei4=;
+        b=SJItNGJtpe3sagY9924sjG+hiPPiHvDWjVm/p95TEgEasuGfE6oKSngjIs8TA+++of
+         a8fMyb3hdnlPoz70ViZpbBByWbaX9PQ1oSle0c30ovR4vbXaJFxGCX8S4FxhF8qgrjlC
+         xZwvDQs4kRln/o195i0uQbaq4av6DQmPk5cLeqETOpyBmOxhb2zuklOw/0J/pM5LedKS
+         NtvdfVkEx01RM8ahWFpJDvKptYtNMpfZfziguarQ4W352ykM8fQ21ZZp958Hl/neYTRa
+         GKapXPZBuRhZDe4jGnDCkx8pQlF1qKGjzMUjeAvW5Exr3OcCLgyqacgvx9NBZDF1jGfV
+         UKkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695337005; x=1695941805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4zCeZx485dzIdLOwHMiftTCXeqlVFvIXzm9Bah+eei4=;
+        b=fuymh3NAEyTzSiHOSHze50dg2g5GMmOrijzYgkR7gbABIlZrxuRP8h+/WJm3qCxcjQ
+         yvpVyOMix6eEja0CL9dqSFDDafx3sR3ip/GtdE7Qsz/QHThz4GFP5OHRsYDCteUZMBvf
+         FkatN0tf8QLkTSNRJIl0/3gIpK3fgyj+HnR7Vd2YNoZhCwD9gy/715HmJWAnu7eNg9kp
+         oG8vZVZs391q541g/LzSTC6MUIZI9W0YOV6eRGB2JhRqGlo5uE+K8YVM6oB18oGksMaF
+         mGgl9/TLRSpCLeaW5hyBelma5C4gzfnXO06sUMNHIcaN4T/8dAFkEHwbTmRhVSJDy1+p
+         4FJA==
+X-Gm-Message-State: AOJu0Yydf42jFaWLQjRwyHRqW9CCCr6gab5+1Bp6/mnS8tIFtv5P1KoE
+        ryf5maJo2Og0AKK1VrC9kED5pV6k703YnADjKO4=
+X-Google-Smtp-Source: AGHT+IFlKgN/dwPJXZuDsc/8j9JD3kD9aIEkIBM4E3L9qNXtU9titNsVtfqZzZSzPga/oQH9zuZWSzxHhdGnDW1+Ol0=
+X-Received: by 2002:a17:90a:6f61:b0:26d:4ade:fcf0 with SMTP id
+ d88-20020a17090a6f6100b0026d4adefcf0mr6460502pjk.4.1695337004654; Thu, 21 Sep
+ 2023 15:56:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DU0PR02MB7899EABA8C3DCAC94DCC79D4C4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230921192729.71259-1-marex@denx.de>
+In-Reply-To: <20230921192729.71259-1-marex@denx.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 21 Sep 2023 19:56:32 -0300
+Message-ID: <CAOMZO5A2JOwnuRycKVSQQU04a6VGHgP-52PHXJ-x_Smwtx_G5Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: serial: imx: Document wakeup-source property
+To:     Marek Vasut <marex@denx.de>
+Cc:     devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 10:13:33PM +0100, Cameron Williams wrote:
-> Add support for the rest of the Brainboxes range of serial cards,
-> except the 3-port variants as there is no suitable configuration
-> in this driver.
-> 
-> - The pci_ids.h file has been updated to define each card's ID, cleaner
-> than using the raw ID.
+On Thu, Sep 21, 2023 at 4:27=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
+>
+> The i.MX UART can be used as a wake-up source, document the 'wakeup-sourc=
+e'
+> property as allowed property.
+>
+> Signed-off-by: Marek Vasut <marex@denx.de>
 
-That's not happening in this patch, are you sure you got this correct?
-
-> - IntaShield IS-200 PCI ID comment corrected
-> - Added some missing device revision IDs
-> - All Oxford Semiconductor-based revisions of the cards had broken baud
-> rates, as they were tested against the same card on another PC which had
-> the same broken baud rate. After adding the correct init and setup quirks
-> these have now been re-tested against a third-party FTDI-based USB
-> converter and work fine. Thanks to Maciej W. Rozycki for clarification on
-> this IC.
-
-This all needs to be broken up into smaller changes, one per logical
-thing, for us to be able to take them.
-
-thanks,
-
-greg k-h
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
