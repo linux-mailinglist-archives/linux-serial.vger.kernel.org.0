@@ -2,128 +2,255 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5C17A9785
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 19:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145847A98B8
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 19:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjIURYx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Thu, 21 Sep 2023 13:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S230254AbjIURvs (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 13:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjIURY2 (ORCPT
+        with ESMTP id S230103AbjIURv2 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:24:28 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D2819B4;
-        Thu, 21 Sep 2023 10:09:37 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-34f6ce577a4so3741275ab.3;
-        Thu, 21 Sep 2023 10:09:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695316176; x=1695920976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5HYwGTI/K3y+X5a5etQVgBzGES/Yd2WtGgSCOPcsNEI=;
-        b=r5S/Qy7SeynG1xjJWEDKgYT+o6dWRZnER3SylCxk27tm9MiiZ1qSMHqqKdHljrkTqH
-         d2PgkM7OrEy5s+npMGLRxuvV3h/QGxFpjxTpL/7h2V5uV1L7jbkF8spIa1CdJAACVs1d
-         h6+enlNC8Ivbr7kGJyxHrc+GAkzK/RlKVk2mQpmdNXNrFhFeGB26xOl/lsqRbQl4F3Vy
-         opAMJe0xuxdKtxMVfk0DkmkQhZuZ84+VLIBDjK959MDt0MEEU0ss/L7YpXKUEbfeArDK
-         K8mAA7GSsPTmONIERe+VFno87mD/a0Hb8yrD60buVJEm9Bjnce3RFRpcPfhSlUUIKsTd
-         ITVQ==
-X-Gm-Message-State: AOJu0Ywz1rkIVYyTQeKxdtJ9sfaD+vnfGV5C+ga6h8UmfYLxi2sTMpA+
-        Q2VE+Ojm53Qpl4phXlR9vKRFET73CnbmsJB3
-X-Google-Smtp-Source: AGHT+IG1SAsdr7OPjWMbeexcN/QMSjtdBRnDhBKSkhmAy69v8Y8E4xym73cC+3y98NwzomUw442ElQ==
-X-Received: by 2002:a81:b40d:0:b0:59b:54b5:7d66 with SMTP id h13-20020a81b40d000000b0059b54b57d66mr6233999ywi.34.1695308591131;
-        Thu, 21 Sep 2023 08:03:11 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id h144-20020a816c96000000b00583d44b4b30sm368103ywc.99.2023.09.21.08.03.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 08:03:11 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-59c2ca01f27so12899837b3.2;
-        Thu, 21 Sep 2023 08:03:10 -0700 (PDT)
-X-Received: by 2002:a81:8385:0:b0:57a:2f01:31d7 with SMTP id
- t127-20020a818385000000b0057a2f0131d7mr6057323ywf.1.1695308590791; Thu, 21
- Sep 2023 08:03:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-37-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20230912045157.177966-37-claudiu.beznea.uj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Sep 2023 17:02:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW9Aj+sjka0n2fN4ME5YcqHSzsRrwEgSaBt-20SfGWr2Q@mail.gmail.com>
-Message-ID: <CAMuHMdW9Aj+sjka0n2fN4ME5YcqHSzsRrwEgSaBt-20SfGWr2Q@mail.gmail.com>
-Subject: Re: [PATCH 36/37] arm64: dts: renesas: r9a08g045s33-smarc: add
- initial device tree for RZ/G3S SMARC EVK board
-To:     Claudiu <claudiu.beznea@tuxon.dev>
-Cc:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+        Thu, 21 Sep 2023 13:51:28 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1901C585FC;
+        Thu, 21 Sep 2023 10:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+        :Date:subject:date:message-id:reply-to;
+        bh=+1FtBudE1t2AIFo9XZGtwN+rqnrYV1AoU/UkJZpAeEg=; b=lEEA3teq+EzGXLB9n74autwhf/
+        TH3GpF4VYY476EPxPcGKfvLptpOe8+97XsqtOuXkIpfRnuKdde56P/y1XSfq2ZGHxFpecCBAiKgm1
+        rOmoLGAIvpmsytgLCyPcagB4IQc7+2TL0B7STBPV/LV7OQTEWa7muWfCL7lU3vzVQlvQ=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:37928 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qjLdZ-0008R2-7p; Thu, 21 Sep 2023 11:30:42 -0400
+Date:   Thu, 21 Sep 2023 11:30:40 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, magnus.damm@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
-        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, rafal@milecki.pl,
-        wsa+renesas@sang-engineering.com,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        conor+dt@kernel.org, hvilleneuve@dimonoff.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org
+Message-Id: <20230921113040.2dafb3d50cfdd8727de42356@hugovil.com>
+In-Reply-To: <20230921-decorated-patronize-45285045adbf@spud>
+References: <20230920152015.1376838-1-hugo@hugovil.com>
+        <20230920152015.1376838-5-hugo@hugovil.com>
+        <20230921-decorated-patronize-45285045adbf@spud>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 4/4] dt-bindings: sc16is7xx: convert to YAML
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Claudiu,
+On Thu, 21 Sep 2023 14:45:06 +0100
+Conor Dooley <conor@kernel.org> wrote:
 
-On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Add initial device tree for RZ/G3S SMARC EVK board.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> Hey,
+> 
+> On Wed, Sep 20, 2023 at 11:20:15AM -0400, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Convert binding from text format to YAML.
+> > 
+> > Additions to original text binding:
+> >   - add rs485 reference.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  .../bindings/serial/nxp,sc16is7xx.txt         | 118 ----------------
+> >  .../bindings/serial/nxp,sc16is7xx.yaml        | 126 ++++++++++++++++++
+> >  2 files changed, 126 insertions(+), 118 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> >  create mode 100644 Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+> 
+> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+> > new file mode 100644
+> > index 000000000000..508639e09e06
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+> > @@ -0,0 +1,126 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/serial/nxp,sc16is7xx.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: NXP SC16IS7xx advanced Universal Asynchronous Receiver-Transmitter (UART)
+> 
+> nit, but my OCD was triggered - capitalise the a in "advanced"?
 
-Thanks for your patch!
+Hi Conor,
+no problem, I like that :)
+Will fix it for V2.
 
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts
-> @@ -0,0 +1,17 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/G3S SMARC EVK board
-> + *
-> + * Copyright (C) 2023 Renesas Electronics Corp.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "r9a08g045s33.dtsi"
-> +#include "rzg3s-smarc-som.dtsi"
-> +#include "rzg3s-smarc.dtsi"
-> +
-> +/ {
-> +       model = "Renesas SMARC EVK version 2 based on r9a08g045s33";
-> +       compatible = "renesas,smarc2-evk", "renesas,r9a08g045s33", "renesas,r9a08g045";
-> +};
+ 
+> > +
+> > +maintainers:
+> > +  - Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - nxp,sc16is740
+> > +      - nxp,sc16is741
+> > +      - nxp,sc16is750
+> > +      - nxp,sc16is752
+> > +      - nxp,sc16is760
+> > +      - nxp,sc16is762
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +    description: Reference to the IC source clock.
+> 
+> You could probably drop this, if it only has one clock it's a bit
+> redundant.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I don't understand, because there is already a 'clocks' property in
+the examples (and also in my real board DTS file) and if I remove it
+here it will cause a warning:
 
-Of course any updates to the DT bindings should be reflected here.
+serial@51: Unevaluated properties are not allowed ('clocks' was
+unexpected)
 
-Gr{oetje,eeting}s,
+ 
+> > +  clock-frequency:
+> > +    description: |
+> 
+> This | should not be needed here, there's no formatting to preserve.
 
-                        Geert
+Done.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> > +      When there is no clock provider visible to the platform, this
+> > +      is the source crystal or external clock frequency for the IC in Hz.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    minimum: 1
+> > +    maximum: 80000000
+> > +
+> > +  gpio-controller:
+> > +    description: Marks the device node as a GPIO controller.
+> > +    type: boolean
+> > +
+> > +  "#gpio-cells":
+> > +    const: 2
+> > +
+> > +  gpio-line-names:
+> > +    minItems: 1
+> > +    maxItems: 8
+> > +
+> > +  nxp,irda-mode-ports:
+> > +    description: |
+> > +      An array that lists the indices of the port that should operate in IrDA
+> > +      mode:
+> > +      0: port A
+> > +      1: port B
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +    items:
+> > +      minimum: 0
+> > +      maximum: 1
+> > +
+> > +  nxp,modem-control-line-ports:
+> > +    description: |
+> > +      An array that lists the indices of the port that should have shared GPIO
+> > +      lines configured as modem control lines:
+> > +      0: port A
+> > +      1: port B
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +    items:
+> > +      minimum: 0
+> > +      maximum: 1
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> > +  - $ref: /schemas/serial/serial.yaml#
+> > +  - $ref: /schemas/serial/rs485.yaml#
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +
+> > +oneOf:
+> > +  - required:
+> > +      - clocks
+> > +  - required:
+> > +      - clock-frequency
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    serial0: serial@51 {
+> 
+> These labels are not used and should be removed.
+
+Done.
+
+Thank you,
+Hugo.
+
+
+
+> Otherwise, conversion looks aight to me.
+> 
+> Thanks,
+> Conor.
+> 
+> > +        compatible = "nxp,sc16is750";
+> > +        reg = <0x51>;
+> > +        clocks = <&clk20m>;
+> > +        interrupt-parent = <&gpio3>;
+> > +        interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+> > +        gpio-controller;
+> > +        #gpio-cells = <2>;
+> > +    };
+> > +
+> > +    serial1: serial@53 {
+> > +        compatible = "nxp,sc16is752";
+> > +        reg = <0x53>;
+> > +        clocks = <&clk20m>;
+> > +        interrupt-parent = <&gpio3>;
+> > +        interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+> > +        nxp,modem-control-line-ports = <1>; /* Port 1 as modem control lines */
+> > +        gpio-controller; /* Port 0 as GPIOs */
+> > +        #gpio-cells = <2>;
+> > +    };
+> > +
+> > +    serial2: serial@54 {
+> > +        compatible = "nxp,sc16is752";
+> > +        reg = <0x54>;
+> > +        clocks = <&clk20m>;
+> > +        interrupt-parent = <&gpio3>;
+> > +        interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+> > +        nxp,modem-control-line-ports = <0 1>; /* Ports 0 and 1 as modem control lines */
+> > +    };
+> > -- 
+> > 2.30.2
+> > 
