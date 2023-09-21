@@ -2,252 +2,159 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1F67A9E67
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 22:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2266A7A9A5B
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 20:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjIUUBC (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 16:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S229513AbjIUSih (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 14:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjIUUAi (ORCPT
+        with ESMTP id S229533AbjIUSiJ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:00:38 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CCC6A71;
-        Thu, 21 Sep 2023 10:22:30 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1F5C4E68B;
-        Thu, 21 Sep 2023 13:45:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695303910;
-        bh=dUqsLtz7RErLFb7snsLdraj0PB791g8LuxpGKzEg1NU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SWIOlF7tYrfDESX6UEOkIxBDCRuDydgucMmdWxtLhQxwhRxGAQijO01PBJwJe9Lm5
-         faRolhrgR1mGGZVNRYBR8R7zIP/hHyZDLSpiHMAu06rDAcdN/lGV0XCEGOZDcDYypt
-         n2SiE/feWfNbP0ZdEbsDG2cLrWFhj5XSmyCzvdFDywobV3W3ZpebQhGHQR6bVLGw1W
-         IZhLSfQW2iuQvJ/MzexxYeRo2557Tny/PIP382odeJ9exqV5c06VuxqpPT1XaR6pFd
-         YdxaCi8ipI4WSQUnrpYOpMhmJS9OBRp36gE2oTlzaArJOG51ZdGO2X53eWe5zKFRRC
-         41MEylVQ/+QJQ==
-Date:   Thu, 21 Sep 2023 14:45:06 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, hvilleneuve@dimonoff.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: sc16is7xx: convert to YAML
-Message-ID: <20230921-decorated-patronize-45285045adbf@spud>
-References: <20230920152015.1376838-1-hugo@hugovil.com>
- <20230920152015.1376838-5-hugo@hugovil.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lL5KnB+yCBLhonNx"
-Content-Disposition: inline
-In-Reply-To: <20230920152015.1376838-5-hugo@hugovil.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Sep 2023 14:38:09 -0400
+X-Greylist: delayed 4199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 11:31:08 PDT
+Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [176.9.242.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF5ED9D31
+        for <linux-serial@vger.kernel.org>; Thu, 21 Sep 2023 11:31:08 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by mailout3.hostsharing.net (Postfix) with ESMTPS id F3415102CCA20;
+        Thu, 21 Sep 2023 16:53:09 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id A5D6060DC7CD;
+        Thu, 21 Sep 2023 16:53:09 +0200 (CEST)
+X-Mailbox-Line: From f3a35967c28b32f3c6432d0aa5936e6a9908282d Mon Sep 17 00:00:00 2001
+Message-Id: <f3a35967c28b32f3c6432d0aa5936e6a9908282d.1695307688.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Thu, 21 Sep 2023 16:52:33 +0200
+Subject: [PATCH tty-linus] serial: Reduce spinlocked portion of
+ uart_rs485_config()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Commit 44b27aec9d96 ("serial: core, 8250: set RS485 termination GPIO in
+serial core") enabled support for RS485 termination GPIOs behind i2c
+expanders by setting the GPIO outside of the critical section protected
+by the port spinlock.  Access to the i2c expander may sleep, which
+caused a splat with the port spinlock held.
 
---lL5KnB+yCBLhonNx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Commit 7c7f9bc986e6 ("serial: Deassert Transmit Enable on probe in
+driver-specific way") erroneously regressed that by spinlocking the
+GPIO manipulation again.
 
-Hey,
+Fix by moving uart_rs485_config() (the function manipulating the GPIO)
+outside of the spinlocked section and acquiring the spinlock inside of
+uart_rs485_config() for the invocation of ->rs485_config() only.
 
-On Wed, Sep 20, 2023 at 11:20:15AM -0400, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->=20
-> Convert binding from text format to YAML.
->=20
-> Additions to original text binding:
->   - add rs485 reference.
->=20
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  .../bindings/serial/nxp,sc16is7xx.txt         | 118 ----------------
->  .../bindings/serial/nxp,sc16is7xx.yaml        | 126 ++++++++++++++++++
->  2 files changed, 126 insertions(+), 118 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/serial/nxp,sc16is7x=
-x.txt
->  create mode 100644 Documentation/devicetree/bindings/serial/nxp,sc16is7x=
-x.yaml
+This gets us one step closer to pushing the spinlock down into the
+->rs485_config() callbacks which actually need it.  (Some callbacks
+do not want to be spinlocked because they perform sleepable register
+accesses, see e.g. sc16is7xx_config_rs485().)
 
-> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml =
-b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> new file mode 100644
-> index 000000000000..508639e09e06
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> @@ -0,0 +1,126 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/serial/nxp,sc16is7xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP SC16IS7xx advanced Universal Asynchronous Receiver-Transmitte=
-r (UART)
+Stack trace for posterity:
 
-nit, but my OCD was triggered - capitalise the a in "advanced"?
+ Voluntary context switch within RCU read-side critical section!
+ WARNING: CPU: 0 PID: 56 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch
+ Call trace:
+ rcu_note_context_switch
+ __schedule
+ schedule
+ schedule_timeout
+ wait_for_completion_timeout
+ bcm2835_i2c_xfer
+ __i2c_transfer
+ i2c_transfer
+ i2c_transfer_buffer_flags
+ regmap_i2c_write
+ _regmap_raw_write_impl
+ _regmap_bus_raw_write
+ _regmap_write
+ _regmap_update_bits
+ regmap_update_bits_base
+ pca953x_gpio_set_value
+ gpiod_set_raw_value_commit
+ gpiod_set_value_nocheck
+ gpiod_set_value_cansleep
+ uart_rs485_config
+ uart_add_one_port
+ pl011_register_port
+ pl011_probe
 
-> +
-> +maintainers:
-> +  - Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,sc16is740
-> +      - nxp,sc16is741
-> +      - nxp,sc16is750
-> +      - nxp,sc16is752
-> +      - nxp,sc16is760
-> +      - nxp,sc16is762
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: Reference to the IC source clock.
+Fixes: 7c7f9bc986e6 ("serial: Deassert Transmit Enable on probe in driver-specific way")
+Suggested-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org # v6.1+
+---
+ drivers/tty/serial/serial_core.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-You could probably drop this, if it only has one clock it's a bit
-redundant.
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 7bdc21d5e13b..ca26a8aef2cb 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1404,12 +1404,18 @@ static void uart_set_rs485_termination(struct uart_port *port,
+ static int uart_rs485_config(struct uart_port *port)
+ {
+ 	struct serial_rs485 *rs485 = &port->rs485;
++	unsigned long flags;
+ 	int ret;
+ 
++	if (!(rs485->flags & SER_RS485_ENABLED))
++		return 0;
++
+ 	uart_sanitize_serial_rs485(port, rs485);
+ 	uart_set_rs485_termination(port, rs485);
+ 
++	spin_lock_irqsave(&port->lock, flags);
+ 	ret = port->rs485_config(port, NULL, rs485);
++	spin_unlock_irqrestore(&port->lock, flags);
+ 	if (ret)
+ 		memset(rs485, 0, sizeof(*rs485));
+ 
+@@ -2474,11 +2480,10 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+ 			if (ret == 0) {
+ 				if (tty)
+ 					uart_change_line_settings(tty, state, NULL);
++				uart_rs485_config(uport);
+ 				spin_lock_irq(&uport->lock);
+ 				if (!(uport->rs485.flags & SER_RS485_ENABLED))
+ 					ops->set_mctrl(uport, uport->mctrl);
+-				else
+-					uart_rs485_config(uport);
+ 				ops->start_tx(uport);
+ 				spin_unlock_irq(&uport->lock);
+ 				tty_port_set_initialized(port, true);
+@@ -2587,10 +2592,10 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		port->mctrl &= TIOCM_DTR;
+ 		if (!(port->rs485.flags & SER_RS485_ENABLED))
+ 			port->ops->set_mctrl(port, port->mctrl);
+-		else
+-			uart_rs485_config(port);
+ 		spin_unlock_irqrestore(&port->lock, flags);
+ 
++		uart_rs485_config(port);
++
+ 		/*
+ 		 * If this driver supports console, and it hasn't been
+ 		 * successfully registered yet, try to re-register it.
+-- 
+2.40.1
 
-> +  clock-frequency:
-> +    description: |
-
-This | should not be needed here, there's no formatting to preserve.
-
-> +      When there is no clock provider visible to the platform, this
-> +      is the source crystal or external clock frequency for the IC in Hz.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 80000000
-> +
-> +  gpio-controller:
-> +    description: Marks the device node as a GPIO controller.
-> +    type: boolean
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  gpio-line-names:
-> +    minItems: 1
-> +    maxItems: 8
-> +
-> +  nxp,irda-mode-ports:
-> +    description: |
-> +      An array that lists the indices of the port that should operate in=
- IrDA
-> +      mode:
-> +      0: port A
-> +      1: port B
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      minimum: 0
-> +      maximum: 1
-> +
-> +  nxp,modem-control-line-ports:
-> +    description: |
-> +      An array that lists the indices of the port that should have share=
-d GPIO
-> +      lines configured as modem control lines:
-> +      0: port A
-> +      1: port B
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      minimum: 0
-> +      maximum: 1
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +  - $ref: /schemas/serial/serial.yaml#
-> +  - $ref: /schemas/serial/rs485.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +oneOf:
-> +  - required:
-> +      - clocks
-> +  - required:
-> +      - clock-frequency
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    serial0: serial@51 {
-
-These labels are not used and should be removed.
-
-Otherwise, conversion looks aight to me.
-
-Thanks,
-Conor.
-
-> +        compatible =3D "nxp,sc16is750";
-> +        reg =3D <0x51>;
-> +        clocks =3D <&clk20m>;
-> +        interrupt-parent =3D <&gpio3>;
-> +        interrupts =3D <7 IRQ_TYPE_EDGE_FALLING>;
-> +        gpio-controller;
-> +        #gpio-cells =3D <2>;
-> +    };
-> +
-> +    serial1: serial@53 {
-> +        compatible =3D "nxp,sc16is752";
-> +        reg =3D <0x53>;
-> +        clocks =3D <&clk20m>;
-> +        interrupt-parent =3D <&gpio3>;
-> +        interrupts =3D <7 IRQ_TYPE_EDGE_FALLING>;
-> +        nxp,modem-control-line-ports =3D <1>; /* Port 1 as modem control=
- lines */
-> +        gpio-controller; /* Port 0 as GPIOs */
-> +        #gpio-cells =3D <2>;
-> +    };
-> +
-> +    serial2: serial@54 {
-> +        compatible =3D "nxp,sc16is752";
-> +        reg =3D <0x54>;
-> +        clocks =3D <&clk20m>;
-> +        interrupt-parent =3D <&gpio3>;
-> +        interrupts =3D <7 IRQ_TYPE_EDGE_FALLING>;
-> +        nxp,modem-control-line-ports =3D <0 1>; /* Ports 0 and 1 as mode=
-m control lines */
-> +    };
-> --=20
-> 2.30.2
->=20
-
---lL5KnB+yCBLhonNx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQxI4QAKCRB4tDGHoIJi
-0rUOAQDqC8IJoyx0QwtsfS2fIY40qUE9tMXBSZfJNKMMI7zVKgEA9+Aik4dyDCV5
-l7HTGIZAHcY23n6LxU5QKQnBLg/hiAI=
-=fCao
------END PGP SIGNATURE-----
-
---lL5KnB+yCBLhonNx--
