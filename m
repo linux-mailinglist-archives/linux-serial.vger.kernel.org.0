@@ -2,111 +2,102 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE60A7A98CD
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 19:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DFA7A96B7
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 19:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjIURxR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 13:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S229796AbjIURHq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 13:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjIURwu (ORCPT
+        with ESMTP id S229862AbjIURHU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:52:50 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2059C43CAA;
-        Thu, 21 Sep 2023 10:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316575; x=1726852575;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=j/e5kx3KtW0oiBzzN4+AezEayhJ5LGFpaU3KZp4ujsg=;
-  b=k8SjMrjB4B/bqNJ8gPQQKiI3lu8QdSVRZVS0d8/V8UXu4dxNLwhuuUG3
-   B4wsFLFbbnhMPu3WO1SDvyGtEivor+vZMJyj6EbrNNDCpL1JMSKE4x9tY
-   jYqM8pmWjPRfZZmj622qVfBtPjMHH65iIYXyGihbDVrG2yN3+QkHivZ8M
-   SWmCFvqSDB3fLZG0cr9y0dOdrqVXFTYsa5w4XGkpCETXQd7GUlDcVFLRb
-   VS44T68Fj0cbz2hKOs5jq4tLTgAanDsSdBOm0XuNc4vB/811B4+xLvF6O
-   uYpQcIhX5sOpuI/I33xV3/Ek++Qb3AfJbq+mxdBFsuTc57SiARBWCmJGG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444598202"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="444598202"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 04:30:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="837284511"
-X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
-   d="scan'208";a="837284511"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 04:30:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qjHtD-0000000GsSk-2QdX;
-        Thu, 21 Sep 2023 14:30:35 +0300
-Date:   Thu, 21 Sep 2023 14:30:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 1/6] serial: 8250: remove AR7 support
-Message-ID: <ZQwpWyWo3Pur7TEJ@smile.fi.intel.com>
-References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
- <20230920201035.3445-2-wsa+renesas@sang-engineering.com>
- <a86483c4-9ec2-3435-198b-9773379c67be@linaro.org>
- <ZQwl+OXvhA6/x6f1@smile.fi.intel.com>
- <1165e159-62d1-4abd-88d7-b8eaeaf797df@kernel.org>
+        Thu, 21 Sep 2023 13:07:20 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820EC1A3
+        for <linux-serial@vger.kernel.org>; Thu, 21 Sep 2023 10:03:24 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28234C4E688;
+        Thu, 21 Sep 2023 13:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695302818;
+        bh=tNaMqXlX6gWQEtFXsOSS3Bt8DqFxrB36y2GWLAlRgU0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Low1o3cxRNpJ+kr+RcB2p0+vtcRmOjeEZ5P2bevbRwsunSHaR5pZWYq4IcLCu67qx
+         L5yUgJ6BOQe+qMaRmOrojjr5ejjpeu6hbCfA+8KhjV6DM+TAqwZHlf+FR96W4No555
+         bUnhPQdgRsSsO3z/2lTdLtQ762ENXxcTzxEcxNjuCAbaFXvQai6TeNXh31fMv8e65G
+         +pv/5xKBSLUhWWu+zHAr41etwjNMvAGYgEvucYu3XhnmcDoyKhyQAjfV/NGINDG8CM
+         hoUakUFn53O7Elu03wt+RqCncdqW46+CyGoD6oKd4IYQKWW1iev+Zb24ldSjikADNv
+         oztVuagd8RLBQ==
+Date:   Thu, 21 Sep 2023 14:26:54 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: serial: mxs: Fix compatible list
+Message-ID: <20230921-abide-humped-e1bc12732e1c@spud>
+References: <20230921005258.184705-1-festevam@gmail.com>
+ <20230921-75ba68806e21c96531ea2d70@fedora>
+ <CAOMZO5AYTe1mJTvR=2zWCVrYqVVdmP7A9fCCrCPqgisXYQpeYw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IcqB6TI9/rs/79Pq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1165e159-62d1-4abd-88d7-b8eaeaf797df@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <CAOMZO5AYTe1mJTvR=2zWCVrYqVVdmP7A9fCCrCPqgisXYQpeYw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 01:21:46PM +0200, Jiri Slaby wrote:
-> On 21. 09. 23, 13:16, Andy Shevchenko wrote:
-> > On Thu, Sep 21, 2023 at 12:36:05PM +0200, Philippe Mathieu-Daudé wrote:
-> > > On 20/9/23 22:10, Wolfram Sang wrote:
 
-...
+--IcqB6TI9/rs/79Pq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > > -#define PORT_AR7	18	/* Texas Instruments AR7 internal UART */
-> > > 
-> > > I'm a bit surprised definitions are removed from the uAPI, isn't
-> > > it expected to be very stable? Shouldn't it be better to keep it
-> > > defined but modify the comment, mentioning "obsolete" or "deprecated"?
-> > 
-> > The numbers up to 20 must stay, they are being used somewhere, setserial
-> > implementation in busybox (IIRC).
-> 
-> But they define it if we don't:
-> #ifndef PORT_AR7
-> # define PORT_AR7               18
-> #endif
+On Thu, Sep 21, 2023 at 09:53:44AM -0300, Fabio Estevam wrote:
+> Hi Conor,
+>=20
+> On Thu, Sep 21, 2023 at 6:14=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
+rote:
+>=20
+> > Dumb question maybe, but it is not mentioned here - they are actually
+> > compatible devices, right? I see that they have some different match
+> > data in the driver (relating to some DMA erratum on the 23 seemingly),
+> > so it's not immediately obvious to me.
+>=20
+> That's correct.
+>=20
+> imx23 and imx28 are SoCs from the same family (mxs) and they share the
+> same AUART block, so the same programming model.
 
-Yep, but the problem is that we may not use that number anyway, because two
-different versions of kernel can clash on the same version of tool that will
-think about AR7 while it's something different. That's why instead of having
-reserved space, better to leave with names assigned.
+Right. I wasn't sure if the erratum workaround would also work on the
+28, but sounds like it does.
 
-> > NAK.
-> I don't mind either way. But likely we should reserve the field if we go and
-> remove it (setserial has a number->string mapping in busybox). Hm, then
-> reserving it or keep it? Perhaps keep it is better... So ack the NACK :).
+> imx23 is the first member of this family. It had an AUART erratum.
+> imx28 is the second member of this family and had this erratum fixed.
+>=20
+> This means that using:
+>=20
+> compatible =3D "fsl,imx28-auart", "fsl,imx23-auart";
+>=20
+> is valid.
+>=20
+> Would you like me to improve the commit log with the information above?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Your call.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
 
+--IcqB6TI9/rs/79Pq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQxEngAKCRB4tDGHoIJi
+0nuMAP937mO9VNRWDf1l/gDGbqmC05x4T5SZgkaxd+5Z/QYBXwD/RqFy5rSwNJ4n
+iHPI5CivOvZwyHkf4Rxv8ZNcmMGy7QM=
+=+hsj
+-----END PGP SIGNATURE-----
+
+--IcqB6TI9/rs/79Pq--
