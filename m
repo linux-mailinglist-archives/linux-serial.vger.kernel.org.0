@@ -2,125 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3647AA1A2
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 23:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A197AA024
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 22:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjIUVEW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 17:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S231549AbjIUUdM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 21 Sep 2023 16:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbjIUVDp (ORCPT
+        with ESMTP id S232010AbjIUUcv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:03:45 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDF885D3A;
-        Thu, 21 Sep 2023 10:37:52 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8547CC4E687;
-        Thu, 21 Sep 2023 13:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695304054;
-        bh=Oo9AjLmvT40iXA2aHlcvjH+u91I2XspBDwHA99rab5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/nzU1poVexwNkd1uy8NYKF7nqNzSxBZguu99fbkUbbpOGB0M5SIkbkOKFB0tLFHK
-         4u4LRILb6bb/hPssO9FbQR6ITa+eINX7rERGA+6Cm+/Gj80MA+4Exh1CEGWqwfVHIw
-         TF8e19PDWWeOZsXJPl4Be7LrH+8OQstaf+zWw17Icr8pueLiaA+2Ej3awqB6c7juJ6
-         dOZmyoJP7YtQKWwVuQFnrxB4DFhB5Uk7lIMntm6OTJc+PVGtrJD0x4Bde1AVh2BU28
-         UrlntiPzMnfdfLtkDt2FL5PD5hbJIDFLdSf7nrXjg4A7Vg349CbDEHDgKKnuWPNq93
-         j0lnhWD/kOxbQ==
-Date:   Thu, 21 Sep 2023 14:47:30 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, hvilleneuve@dimonoff.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: sc16is7xx: add vendor prefix to
- irda-mode-ports property
-Message-ID: <20230921-epidermis-labrador-3e51bb0b2cb9@spud>
-References: <20230920152015.1376838-1-hugo@hugovil.com>
- <20230920152015.1376838-4-hugo@hugovil.com>
+        Thu, 21 Sep 2023 16:32:51 -0400
+Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906E78922E;
+        Thu, 21 Sep 2023 10:39:46 -0700 (PDT)
+Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-6c0b8f42409so743807a34.0;
+        Thu, 21 Sep 2023 10:39:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695317986; x=1695922786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+FnksNosVt+Hax24mR+RoN0eh3COVsIdIWx2BS+xejg=;
+        b=rEkx3pMMnIU7MUJ9vcnx/DCHNMC/mOb17XNiDHTnHAIovYhOvhE/8768ey7Fg50mWi
+         a2sDCOSJrJDSp+eWKsYJ5NQ49buCM5LBWumFy7qeSfPz8m4IsMHFmt3saylMWva5OgXd
+         MPpfmb7HSMg9XHCNDPBXvyxfKy/IUud0pMwOwAk5sySBHiN0nOSEOK2hJV1YmTU0DIJn
+         z/Jn7fjglrRBkWa8ZxUsPHae7XaTzGML++/2yKa8LKlTcjK3bAOfu4Flptr5wNE9EgEI
+         HClm3bJbT1aWwetKW4CoKK2jPTvCLldfSb6vgAw4oUC7eYOg1rJS7+yx2IhuUFGhYMpl
+         p0UA==
+X-Gm-Message-State: AOJu0YxAOJnUnrAX9ZKwf9iDhnavooLEUzzrZqejmwa8GLOU/h4eim+A
+        J8SqKKXgzvjdm/b0Nx9TamI2QQfinX0TFqO0qac=
+X-Google-Smtp-Source: AGHT+IEkfGDj8wYGohG9vtgfxj2bFMU98AQDYeQGae+2uTcjv+ZyzSZBMyN3zQhcBm3QftLUqtmlQQ==
+X-Received: by 2002:a81:83c1:0:b0:58d:7ec3:16c4 with SMTP id t184-20020a8183c1000000b0058d7ec316c4mr6054718ywf.34.1695308457056;
+        Thu, 21 Sep 2023 08:00:57 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id e1-20020a0dc201000000b0057a8de72338sm364072ywd.68.2023.09.21.08.00.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 08:00:57 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-d81afd5273eso1309619276.3;
+        Thu, 21 Sep 2023 08:00:56 -0700 (PDT)
+X-Received: by 2002:a5b:78d:0:b0:d81:bfbf:dd3 with SMTP id b13-20020a5b078d000000b00d81bfbf0dd3mr5437539ybq.51.1695308456709;
+ Thu, 21 Sep 2023 08:00:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dITO17on8mP4IvAa"
-Content-Disposition: inline
-In-Reply-To: <20230920152015.1376838-4-hugo@hugovil.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-30-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20230912045157.177966-30-claudiu.beznea.uj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Sep 2023 17:00:44 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWC8W9+a+8mewin5irujsEeVnSQfaoaNpD1GLHES54rCQ@mail.gmail.com>
+Message-ID: <CAMuHMdWC8W9+a+8mewin5irujsEeVnSQfaoaNpD1GLHES54rCQ@mail.gmail.com>
+Subject: Re: [PATCH 29/37] dt-bindings: pinctrl: renesas: document RZ/G3S SoC
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
+        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        wsa+renesas@sang-engineering.com,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hi Claudiu,
 
---dITO17on8mP4IvAa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Add documentation for pin controller found on RZ/G3S (R9A08G045) SoC.
+> Compared with RZ/G2{L,UL} RZ/G3S has 82 general-purpose IOs, no slew
+> rate and output impedance support and more values for drive strength
+> which needs to be expressed in microamp.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On Wed, Sep 20, 2023 at 11:20:14AM -0400, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->=20
-> The NXP-specific "irda-mode-ports" property lacks a proper vendor
-> prefix. Add "nxp," prefix to comply with DT best practises.
+Thanks for your patch!
 
-Looks like you've made changes to the driver in a way both will work,
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+LGTM, once you have taken Rob's comments into account.
 
-Cheers,
-Conor.
+Gr{oetje,eeting}s,
 
->=20
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  .../devicetree/bindings/serial/nxp,sc16is7xx.txt          | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b=
-/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> index 1a7e4bff0456..d89815c5c562 100644
-> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> @@ -21,8 +21,8 @@ Optional properties:
->    the second cell is used to specify the GPIO polarity:
->      0 =3D active high,
->      1 =3D active low.
-> -- irda-mode-ports: An array that lists the indices of the port that
-> -		   should operate in IrDA mode.
-> +- nxp,irda-mode-ports: An array that lists the indices of the port that
-> +		       should operate in IrDA mode.
->  - nxp,modem-control-line-ports: An array that lists the indices of the p=
-ort that
->  				should have shared GPIO lines configured as
->  				modem control lines.
-> @@ -80,8 +80,8 @@ Optional properties:
->    the second cell is used to specify the GPIO polarity:
->      0 =3D active high,
->      1 =3D active low.
-> -- irda-mode-ports: An array that lists the indices of the port that
-> -		   should operate in IrDA mode.
-> +- nxp,irda-mode-ports: An array that lists the indices of the port that
-> +		       should operate in IrDA mode.
->  - nxp,modem-control-line-ports: An array that lists the indices of the p=
-ort that
->  				should have shared GPIO lines configured as
->  				modem control lines.
-> --=20
-> 2.30.2
->=20
+                        Geert
 
---dITO17on8mP4IvAa
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQxJcgAKCRB4tDGHoIJi
-0i60AQDkv6NAQfFJKu9ceTROjQsUq5KvzHpILZ/l5wPEFqql6wEA16WdTQeQYNUJ
-S1/xZghGAvjC+nLpApgENKAvRXOFJg4=
-=eS7q
------END PGP SIGNATURE-----
-
---dITO17on8mP4IvAa--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
