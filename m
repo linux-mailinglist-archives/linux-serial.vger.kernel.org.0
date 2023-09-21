@@ -2,166 +2,125 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073897AA346
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 23:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3647AA1A2
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 23:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjIUVti convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-serial@lfdr.de>); Thu, 21 Sep 2023 17:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39774 "EHLO
+        id S232272AbjIUVEW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 21 Sep 2023 17:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjIUVtY (ORCPT
+        with ESMTP id S232470AbjIUVDp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:49:24 -0400
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2084C448F;
-        Thu, 21 Sep 2023 10:07:52 -0700 (PDT)
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-690bc3f82a7so1127520b3a.0;
-        Thu, 21 Sep 2023 10:07:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695316071; x=1695920871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4YK1weMDx1FKxLRBUAONRFKh9Xh1dDH4kzuT00SLrmA=;
-        b=jYpk4nKWDgQgChDkkVmmFI9i+gI1+c+FU+F5DBZ0RB8h4AOvZL2o17xSmdHiCFMjr9
-         h5SE3gvFMyqb0LeKY41bjZrHvrNIyatJrO5Mh2GgRJJNY1hPRHVmur0pywP/WioORfbo
-         X8TCl9Pa33frjxfgljdzb9pvNWFzZWzDoEGelYV+8u/RdWbo8BABxURiTSH5zdToraMN
-         fhYsNxSLzlz0Ry2EzS7ZRAN0ltz3q6AzibG7oXknu71/j+VgqF7EnumXlSMRP76zDgBv
-         MTOOouZiLuOxfwJXqXcMYojM0pcvo/KGix+T9e7V/W7gQFG45Ai/XDCBe1wT9itGjtOK
-         b5fg==
-X-Gm-Message-State: AOJu0Yx/5n868t349X/eSqsFpmDhTt7L+SIKreDMWRLCtX4piiaMbBc3
-        52mBfwwmb2mdtQEoiCAwEBE1A3yi1yhOqi6w
-X-Google-Smtp-Source: AGHT+IH84N7XN9EgwsRyAozkezBVyE59xu48k9ZHh5955znTtM6G4h5YLzbUH7LWy2Qeh/RbV0bMTQ==
-X-Received: by 2002:a81:91c2:0:b0:59b:4f2d:231 with SMTP id i185-20020a8191c2000000b0059b4f2d0231mr5439104ywg.45.1695300904001;
-        Thu, 21 Sep 2023 05:55:04 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id s185-20020a8182c2000000b00597e912e67esm309130ywf.131.2023.09.21.05.55.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 05:55:02 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-59bd2e19c95so11952697b3.0;
-        Thu, 21 Sep 2023 05:55:02 -0700 (PDT)
-X-Received: by 2002:a25:a329:0:b0:d84:e73a:6ac9 with SMTP id
- d38-20020a25a329000000b00d84e73a6ac9mr5019217ybi.24.1695300902378; Thu, 21
- Sep 2023 05:55:02 -0700 (PDT)
+        Thu, 21 Sep 2023 17:03:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDF885D3A;
+        Thu, 21 Sep 2023 10:37:52 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8547CC4E687;
+        Thu, 21 Sep 2023 13:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695304054;
+        bh=Oo9AjLmvT40iXA2aHlcvjH+u91I2XspBDwHA99rab5U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B/nzU1poVexwNkd1uy8NYKF7nqNzSxBZguu99fbkUbbpOGB0M5SIkbkOKFB0tLFHK
+         4u4LRILb6bb/hPssO9FbQR6ITa+eINX7rERGA+6Cm+/Gj80MA+4Exh1CEGWqwfVHIw
+         TF8e19PDWWeOZsXJPl4Be7LrH+8OQstaf+zWw17Icr8pueLiaA+2Ej3awqB6c7juJ6
+         dOZmyoJP7YtQKWwVuQFnrxB4DFhB5Uk7lIMntm6OTJc+PVGtrJD0x4Bde1AVh2BU28
+         UrlntiPzMnfdfLtkDt2FL5PD5hbJIDFLdSf7nrXjg4A7Vg349CbDEHDgKKnuWPNq93
+         j0lnhWD/kOxbQ==
+Date:   Thu, 21 Sep 2023 14:47:30 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, hvilleneuve@dimonoff.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/4] dt-bindings: sc16is7xx: add vendor prefix to
+ irda-mode-ports property
+Message-ID: <20230921-epidermis-labrador-3e51bb0b2cb9@spud>
+References: <20230920152015.1376838-1-hugo@hugovil.com>
+ <20230920152015.1376838-4-hugo@hugovil.com>
 MIME-Version: 1.0
-References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-27-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20230912045157.177966-27-claudiu.beznea.uj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Sep 2023 14:54:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU_P8QM1qrwTJQcDCaKhMDCDnO1G_u=Nx=kuzy9MGuT8Q@mail.gmail.com>
-Message-ID: <CAMuHMdU_P8QM1qrwTJQcDCaKhMDCDnO1G_u=Nx=kuzy9MGuT8Q@mail.gmail.com>
-Subject: Re: [PATCH 26/37] pinctrl: renesas: rzg2l: move ds and oi to SoC
- specific configuration
-To:     Claudiu <claudiu.beznea@tuxon.dev>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
-        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, rafal@milecki.pl,
-        wsa+renesas@sang-engineering.com,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dITO17on8mP4IvAa"
+Content-Disposition: inline
+In-Reply-To: <20230920152015.1376838-4-hugo@hugovil.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Claudiu,
 
-On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Move drive strength and output impedance values to SoC specific
-> configuration data structure (struct rzg2l_hwcfg). This allows extending
-> the drive strength support for RZ/G3S. Along with this the DS values
-> were converted to uA for simple integration with RZ/G3S support.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+--dITO17on8mP4IvAa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+On Wed, Sep 20, 2023 at 11:20:14AM -0400, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+>=20
+> The NXP-specific "irda-mode-ports" property lacks a proper vendor
+> prefix. Add "nxp," prefix to comply with DT best practises.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Looks like you've made changes to the driver in a way both will work,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> --- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-> @@ -133,13 +133,27 @@ struct rzg2l_register_offsets {
->         u16 sd_ch;
->  };
->
-> +/**
-> + * enum rzg2l_iolh_index - starting indexes in IOLH specific arrays
+Cheers,
+Conor.
 
-indices
+>=20
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  .../devicetree/bindings/serial/nxp,sc16is7xx.txt          | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b=
+/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> index 1a7e4bff0456..d89815c5c562 100644
+> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> @@ -21,8 +21,8 @@ Optional properties:
+>    the second cell is used to specify the GPIO polarity:
+>      0 =3D active high,
+>      1 =3D active low.
+> -- irda-mode-ports: An array that lists the indices of the port that
+> -		   should operate in IrDA mode.
+> +- nxp,irda-mode-ports: An array that lists the indices of the port that
+> +		       should operate in IrDA mode.
+>  - nxp,modem-control-line-ports: An array that lists the indices of the p=
+ort that
+>  				should have shared GPIO lines configured as
+>  				modem control lines.
+> @@ -80,8 +80,8 @@ Optional properties:
+>    the second cell is used to specify the GPIO polarity:
+>      0 =3D active high,
+>      1 =3D active low.
+> -- irda-mode-ports: An array that lists the indices of the port that
+> -		   should operate in IrDA mode.
+> +- nxp,irda-mode-ports: An array that lists the indices of the port that
+> +		       should operate in IrDA mode.
+>  - nxp,modem-control-line-ports: An array that lists the indices of the p=
+ort that
+>  				should have shared GPIO lines configured as
+>  				modem control lines.
+> --=20
+> 2.30.2
+>=20
 
-> + * @RZG2L_IOLH_IDX_3V3: starting index for 3V3 power source
-> + * @RZG2L_IOLH_IDX_MAX: maximum index
-> + */
-> +enum rzg2l_iolh_index {
-> +       RZG2L_IOLH_IDX_3V3 = 0,
-> +       RZG2L_IOLH_IDX_MAX = 4,
-> +};
-> +
->  /**
->   * struct rzg2l_hwcfg - hardware configuration data structure
->   * @regs: hardware specific register offsets
-> + * @iolh_groupa_ua: IOLH group A micro amps specific values
+--dITO17on8mP4IvAa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-uA (or µA ;-)
+-----BEGIN PGP SIGNATURE-----
 
-> + * @iolh_groupb_oi: IOLH group B output impedance specific values
->   * @func_base: base number for port function (see register PFC)
->   */
->  struct rzg2l_hwcfg {
->         const struct rzg2l_register_offsets regs;
-> +       u16 iolh_groupa_ua[RZG2L_IOLH_IDX_MAX];
-> +       u16 iolh_groupb_oi[RZG2L_IOLH_IDX_MAX];
->         u8 func_base;
->  };
->
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQxJcgAKCRB4tDGHoIJi
+0i60AQDkv6NAQfFJKu9ceTROjQsUq5KvzHpILZ/l5wPEFqql6wEA16WdTQeQYNUJ
+S1/xZghGAvjC+nLpApgENKAvRXOFJg4=
+=eS7q
+-----END PGP SIGNATURE-----
 
-> @@ -708,11 +719,11 @@ static int rzg2l_pinctrl_pinconf_set(struct pinctrl_dev *pctldev,
->                         if (!(cfg & PIN_CFG_IOLH_A))
->                                 return -EINVAL;
->
-> -                       for (index = 0; index < ARRAY_SIZE(iolh_groupa_mA); index++) {
-> -                               if (arg == iolh_groupa_mA[index])
-> +                       for (index = RZG2L_IOLH_IDX_3V3; index < RZG2L_IOLH_IDX_3V3 + 4; index++) {
-
-I'm not so fond of the hardcoded "+ 4", here and below.
-Please add and use a #define.
-
-> +                               if (arg == (hwcfg->iolh_groupa_ua[index] / 1000))
->                                         break;
->                         }
-> -                       if (index >= ARRAY_SIZE(iolh_groupa_mA))
-> +                       if (index == (RZG2L_IOLH_IDX_3V3 + 4))
->                                 return -EINVAL;
->
->                         rzg2l_rmw_pin_config(pctrl, IOLH(off), bit, IOLH_MASK, index);
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--dITO17on8mP4IvAa--
