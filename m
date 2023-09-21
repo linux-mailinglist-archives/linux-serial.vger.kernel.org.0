@@ -2,121 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A487AA04F
-	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 22:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36E67A9F3C
+	for <lists+linux-serial@lfdr.de>; Thu, 21 Sep 2023 22:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjIUUgD (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 21 Sep 2023 16:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S230249AbjIUUTh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 21 Sep 2023 16:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbjIUUfg (ORCPT
+        with ESMTP id S231621AbjIUUTP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:35:36 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFBA8E68A
-        for <linux-serial@vger.kernel.org>; Thu, 21 Sep 2023 10:44:37 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401da71b83cso12988175e9.2
-        for <linux-serial@vger.kernel.org>; Thu, 21 Sep 2023 10:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695318276; x=1695923076; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IHB7MokjFazEBVZHVWPQWx+ouAjuzlds+fkP2tznoWg=;
-        b=Z8I4Afu8x8Tgquf3WxTWqjYEKZtsP0sBDmTYZ5sA35sOBt+xhZDaAx6CQ7HmWe8zMg
-         2HPd0vl3iUnFUOKq6h/uTPqVtJr95h8vZzRary/2RjDrj2LBSWjvGivBG0xG1t+RpY1b
-         du7EnvWARe8i0EEWUbX0cgu18UxAJStCSTqo1XBxbtNaZ30HEFYhgKN0rszfjmwTEch6
-         uDq/Mx/l5nuRYSfD4BtGhnnojwu8XfLdtgptB3Gme951/aKGFQNbn5mIfS3gBe5lU85Z
-         r/CWtM/aQ7zVPJhDCThBAaMWILmk9qOpg+3K31Q0Sdso6RnUhiLZAsnYIxXkXTWgZBsc
-         coXA==
+        Thu, 21 Sep 2023 16:19:15 -0400
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A7B2AC41;
+        Thu, 21 Sep 2023 10:11:44 -0700 (PDT)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-578a44dfa88so808716a12.0;
+        Thu, 21 Sep 2023 10:11:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695318276; x=1695923076;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IHB7MokjFazEBVZHVWPQWx+ouAjuzlds+fkP2tznoWg=;
-        b=MWC3Xe47XYqX+CoQgX8KCvAbF5tFahu8Acv91ICb1g+63jMJ3TXtuhB27xhxkcw9bn
-         Y67Z9ogly22HBs56DXuOMclewxwCRjJ4vj6BDPUO8knH6vm9/jDaznMyQXYnFgPiE7Nv
-         +WoAdThD6fBM9RtGwkNYdffp8RhHbb61wJ9ZzRv7PsQFy66YQPgO/5FAQfP6pNie3Ln1
-         DgMHo6IEz+3lOT6V9dpDM/TRXFGW6RB+mFtS68aTL5Gskz9StGG5jLwCrLLJv+8CuOqU
-         5PiZAPW2W7sxs5VBopjMd/jU9XZAPzhqIiQXW3R3x1LEEe68APmftr6PeRxBxiLWyL78
-         uymw==
-X-Gm-Message-State: AOJu0Yx7ukqbeusdIcoUt01osf/Qj5xcHgdT9od8qdr6Xc0hMpESnW7a
-        uFWCeft6YNIBT9ziHvk4Hr54FckHiz8T8Mo4Kns=
-X-Google-Smtp-Source: AGHT+IGcpjHnDw8LA8Dyh0T2ryjOdihtn8w38po8JoSvFO1h83wyuE62Gs1r8YrosYCllwS5Zi78ew==
-X-Received: by 2002:a17:906:109e:b0:9a9:ef41:e5a6 with SMTP id u30-20020a170906109e00b009a9ef41e5a6mr4612465eju.1.1695292568673;
-        Thu, 21 Sep 2023 03:36:08 -0700 (PDT)
-Received: from [172.20.41.70] (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
-        by smtp.gmail.com with ESMTPSA id gv10-20020a170906f10a00b0099cd008c1a4sm825012ejb.136.2023.09.21.03.36.07
+        d=1e100.net; s=20230601; t=1695316304; x=1695921104;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+RPRgMtQ7qCU/brC+NvfIv29WXY/7wD47KIHBnDqHGA=;
+        b=XW7Y/gyKkn3zry2MWC7GN9TNgLSt5dHxfZcLXb+szocF0kbYiYcDr3k5xn8E8otmxe
+         i8fYRF1J0SVrzGsAoLft8EGRTOZzpAFin84604MiR93XGfUIz9KcCxBmZ+da4kspcQgC
+         x+NeHoOuctMgJoYhlE+gd8++nbCc9Puj0lF2waEwcWPb48yMtOMPkwlkURV3MdeiRLmv
+         +6asZqJKhKkjRK9pVhJ+y2TAfAOZeaxMP92rrZ5sMz0AwH6u3yoRmXlFN3f81h9wEPfU
+         30Q7PlfFsvDZVmFNm7bubFsL9H5sT2VZ+go+1QluKg2pKhdnLqReWzpHTi9GwqlCRLCQ
+         rPgg==
+X-Gm-Message-State: AOJu0Yza9dRcTuHhjh/BgTEnkIM9KmOIRXW+YpDuvyZLwr70E+R+E/Rf
+        tNhRSJRHLco34QiJg7x1P2f/hXsd6XzHQulg
+X-Google-Smtp-Source: AGHT+IERK5CYoZHbPlYt3rNggsKsuNjahQunWcbVai6KndOpdvCGz4YrSvq0luFY8urPBXDa2JHl9g==
+X-Received: by 2002:a0d:d8c2:0:b0:579:16e0:b1bf with SMTP id a185-20020a0dd8c2000000b0057916e0b1bfmr5944356ywe.12.1695298056358;
+        Thu, 21 Sep 2023 05:07:36 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id e62-20020a0df541000000b005844ae2bfa3sm291931ywf.95.2023.09.21.05.07.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 03:36:08 -0700 (PDT)
-Message-ID: <a86483c4-9ec2-3435-198b-9773379c67be@linaro.org>
-Date:   Thu, 21 Sep 2023 12:36:05 +0200
+        Thu, 21 Sep 2023 05:07:36 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-59c26aa19b7so10370997b3.2;
+        Thu, 21 Sep 2023 05:07:36 -0700 (PDT)
+X-Received: by 2002:a0d:eb93:0:b0:57a:9b2c:51f1 with SMTP id
+ u141-20020a0deb93000000b0057a9b2c51f1mr4883712ywe.1.1695298055833; Thu, 21
+ Sep 2023 05:07:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.1
-Subject: Re: [PATCH 1/6] serial: 8250: remove AR7 support
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mips@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
- <20230920201035.3445-2-wsa+renesas@sang-engineering.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230920201035.3445-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-25-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20230912045157.177966-25-claudiu.beznea.uj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Sep 2023 14:07:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUWUMMQ9dp5mf5wQ2X6CtpdAKH=FU-3xvNHcVknAsv+=w@mail.gmail.com>
+Message-ID: <CAMuHMdUWUMMQ9dp5mf5wQ2X6CtpdAKH=FU-3xvNHcVknAsv+=w@mail.gmail.com>
+Subject: Re: [PATCH 24/37] pinctrl: renesas: rzg2l: adapt for different SD,
+ PWPR register offsets
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
+        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        wsa+renesas@sang-engineering.com,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Wolfram,
+On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> SD, PWPR power registers have different offsets b/w RZ/G2L and RZ/G3S.
+> Commit adds a per SoC configuration data structure that is initialized with
+> proper register offset for individual SoCs. The struct rzg2l_hwcfg will be
+> further extended in next commits.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-(Adding Andy for commit 54b45ee8bd42 "serial: core: Remove
-unused PORT_* definitions").
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 20/9/23 22:10, Wolfram Sang wrote:
-> AR7 is going to be removed from the Kernel, so remove its type
-> definition from 8250 code. As with previous removals, I checked with
-> Debian Code Search that 'PORT_AR7' is not used in userspace.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->   drivers/tty/serial/8250/8250_port.c | 7 -------
->   include/uapi/linux/serial_core.h    | 1 -
->   2 files changed, 8 deletions(-)
+Gr{oetje,eeting}s,
 
+                        Geert
 
-> diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-> index add349889d0a..3b51901926f9 100644
-> --- a/include/uapi/linux/serial_core.h
-> +++ b/include/uapi/linux/serial_core.h
-> @@ -32,7 +32,6 @@
->   #define PORT_XSCALE	15
->   #define PORT_RM9000	16	/* PMC-Sierra RM9xxx internal UART */
->   #define PORT_OCTEON	17	/* Cavium OCTEON internal UART */
-> -#define PORT_AR7	18	/* Texas Instruments AR7 internal UART */
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-I'm a bit surprised definitions are removed from the uAPI, isn't
-it expected to be very stable? Shouldn't it be better to keep it
-defined but modify the comment, mentioning "obsolete" or "deprecated"?
-
-Regards,
-
-Phil.
-
->   #define PORT_U6_16550A	19	/* ST-Ericsson U6xxx internal UART */
->   #define PORT_TEGRA	20	/* NVIDIA Tegra internal UART */
->   #define PORT_XR17D15X	21	/* Exar XR17D15x UART */
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
