@@ -2,138 +2,155 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F457AA89B
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Sep 2023 07:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B797AA8D5
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Sep 2023 08:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjIVFxm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Sep 2023 01:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S230509AbjIVGPw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Sep 2023 02:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjIVFxl (ORCPT
+        with ESMTP id S231199AbjIVGPv (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Sep 2023 01:53:41 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2084.outbound.protection.outlook.com [40.92.89.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DA5C2;
-        Thu, 21 Sep 2023 22:53:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=koVbMwDUETqOWE74+cCM7hhqdxska5+ReiOcmRSCItp4eapLS0H5ebro0XNq4fctIAScs/qmcGBf1P4TmX4kiY0Vl+XBUm/heYBy8FuYQQD3+N+AlLJ1kTvQpmxHa5CJnlZ0NerkrQ+5j7yV4J9BBoh0eEu6lyGTQFb0qIEfzPePr4YzM7ea5OFtQP09j6/+8ohyUjuFGn+WcacWzEdyilRAAfR59VIJdCXkfltlEEZKADNrM/lo/mPmJO3wYCzzLTVYiQKrPBxE4SOnAKtqpR08YnBBRpalbkaPsx19zlEJX94Nz1pPLwyUHcB2OH1jPkavo401SZQDRBf6ZbnTJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Vq+iCL4fRwjPpgBYU+M+oSnf2X9iA6HGH+etITbNlw=;
- b=UVUZUTvv81rOQ5kH9JaDqpxbip5MorJhGN0mRpgB6mu+Z8TRQ1Y1k95tfn696KXEMB3WcOg1XyaJ6aKet4qcY5chnqRpctM4KubmVZthBtb98W7xYlelGstIC3jE2jjY/ppDWzx/iaDo4bZie2UaziFczrTA6+fTBvLOWFMomzCYq+aAQR8ZY+kqBG3o0rLsJcqLuLKapZiezNY/vcyE7Ay43N0g7n61dr+dRi2YOOleWxoEbov64L4dnBVmyxMKZeRebxBBtoTdusMRzeBsrojM/7NfRdTZEkARBAtMOWNHu544NpeC1L7C8osHUwFCKeILIXb0pF48hlWv0lhyOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from DU0PR02MB7899.eurprd02.prod.outlook.com (2603:10a6:10:347::11)
- by AM9PR02MB6897.eurprd02.prod.outlook.com (2603:10a6:20b:267::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.20; Fri, 22 Sep
- 2023 05:53:33 +0000
-Received: from DU0PR02MB7899.eurprd02.prod.outlook.com
- ([fe80::b753:178a:394e:af8e]) by DU0PR02MB7899.eurprd02.prod.outlook.com
- ([fe80::b753:178a:394e:af8e%6]) with mapi id 15.20.6792.026; Fri, 22 Sep 2023
- 05:53:32 +0000
-Date:   Fri, 22 Sep 2023 06:53:30 +0100
-From:   Cameron Williams <cang1@live.co.uk>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        sudipm.mukherjee@gmail.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH 1/4] PCI: Add device IDs for Brainboxes/Intashield
- PX/UC/UP cards
-Message-ID: <DU0PR02MB78996ED81C85C7FE7E722128C4FFA@DU0PR02MB7899.eurprd02.prod.outlook.com>
-References: <DU0PR02MB789950E64D808DB57E9D7312C4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com>
- <20230921215822.GA347672@bhelgaas>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921215822.GA347672@bhelgaas>
-X-TMN:  [Doo0mZk9ZsRK5GjYpaHwEEJxBjpQBcv+]
-X-ClientProxiedBy: DUZPR01CA0144.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4bd::26) To DU0PR02MB7899.eurprd02.prod.outlook.com
- (2603:10a6:10:347::11)
-X-Microsoft-Original-Message-ID: <ZQ0r2qrPdc2iJAjI@CHIHIRO>
+        Fri, 22 Sep 2023 02:15:51 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BC719B
+        for <linux-serial@vger.kernel.org>; Thu, 21 Sep 2023 23:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=from:to:cc:subject:date:message-id
+        :mime-version:content-transfer-encoding; s=k1; bh=RMnnVl4Ql662w9
+        OZiZW5LKuXonrd4+xLFQeCaWKnYkw=; b=Gp0ZeSxfOZ6uc1qoJJALavCNtjrzhf
+        7Jk3hL22FXDCdzjM0KHFgEs8t4QZiYf/5p/Z4C+YLfffoFwHezrTQmxSEd9vP97n
+        ad7+EvOuhu5Y7eAh4SnHGi9CS6UTIe5jL+sCqNSbmejEkpod8tjBn6sxA9I83Xsa
+        rgfjZeNUNFtQ7JJGvBiO5eORynTrDWCRmwBnV5kyNa/9Pl3BQrFjHOf7tXZwkr4E
+        pleJeU235eenle7hff/L3pobiF/bC8XdrEmjwA1cmxgge++XkT1j9MXv2irkFSpP
+        PsKyBHAOV5XmBE3gjIepBn6AcLgiZZ8R7J2SgG4UUE/ysOJglb4Xp9Fg==
+Received: (qmail 1268966 invoked from network); 22 Sep 2023 08:15:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2023 08:15:39 +0200
+X-UD-Smtp-Session: l3s3148p1@OqhriewF5pkujntX
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 0/6] remove AR7 platform and associated drivers
+Date:   Fri, 22 Sep 2023 08:15:21 +0200
+Message-Id: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR02MB7899:EE_|AM9PR02MB6897:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8bc889c5-ec2e-4cf3-6b6e-08dbbb3040e3
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YMdGxvAZFoHbke5oK253CTyb5tHwZouIuRFOpzBa9yXCXJ+J2YJrHCkLqjfybd+ROixyRguHBAxcr3noOBiNM0Tf6I1QCicWUyp8M2CpyuzpriQ9ey0K9s5mRx26Yu7DGLphhjcsQmaPQvFVJ6dto5iFL0S2Z6SlbZWZ0/GR/4610ZOGth0bxkwyDUiSyEtLSKlxRhkU5/xlkEKJw27rfMkjU73WOTGP+Ts7sSmqKwEa7dNP+TZWQy3swvAc3bjAbMVoPF+6eo/HC2VyA0XdfgTSw9MEt37+GGqkPSMU6DXblqfxYcoP9YttmHeKlLNg4zu9SMlEdwH1K8t1mgjaNnxEBk/l3uTLIQC8B4l7tTO+3pKRyb8DrCbjvZWGwD8lq9ehjN4lZMx4lYSG28OYVMDbdelk/e/gntwmIqMkQ1u2u/YnLJaKhHRUHXVnNiQfoMi27hiW40Lqv7mYJc3eZYMoG8elqO5tR1KuyZ4C1ZYZXgZurqo/ZGN98NdOWvOba+hbUMRoP+WSw5ZykOOhMd8TOQZlmN+HNMZwwQdv5RImF4JC7KDQieCrJTNnLdcB
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WJenwNAoYqfu8R7oZkvjsthzzahwiGGtyVYRQoY3zTbNlatk8TypAa1AMWt8?=
- =?us-ascii?Q?Oz1MOtumW7TN9/uqhh55OTkut1GqPuDwSXg/e0qlbXqxz3Ni5OauiV8g9aKX?=
- =?us-ascii?Q?U8n8oTLDC3UwRESdsLVKROx5VD2mGPzhf9yQ0KQ5MpSQnQE2bjJdqfm7+sNG?=
- =?us-ascii?Q?7pVHfrhkKiao0gNJtTiqiUZh03E/R/BeDDgsklETVtUCiQzkhdNkqo42yS4r?=
- =?us-ascii?Q?aXM52im8Z/Xsy+BsxuiP7QxboM1zKelpMJoEpQJiQmYddJZzILIse8d2FhFE?=
- =?us-ascii?Q?qXNKUqy8//NCjS7B+FCH1m9lEbFWKSQyLjNGPwzua2OnK8JDhp0H7n8SCPrQ?=
- =?us-ascii?Q?q0zT3/i6lCxN5YpxwMnNgaKiM6sIoW8zT6lgX5V7q5nn9SeHTIJfWzJpZasj?=
- =?us-ascii?Q?wFgR3y3cMhVPq0FsciWTAyr06Qg2J3Kc6geUv/GTt+7M9PedbDwjEMgDhPmk?=
- =?us-ascii?Q?jBjxxsC9JVggD/lo/Bh53fVv61IgS5lasyeLixrluHpZy/hS8PZ3m794u8Er?=
- =?us-ascii?Q?OIy7l4CrkcejAP/TvJJ/FU15MZdjFvXv8isz34jzi0eRQ3hj3qApZWurS7KN?=
- =?us-ascii?Q?P+ZbMglqt986NNhEFFrKn/McXH32YMas5R1sUclS7OOz8deG7K10ydLNLXtm?=
- =?us-ascii?Q?+8AfQwqNx8RqULr2kdIQbozefvAU2HeD1TQG3ejNaw7XD0/XozUEkI7qvXgI?=
- =?us-ascii?Q?XhGuOsXlFiMV129F1K5rkPNn36MhRNfNn+N08ncmUafVR3tvVcukP4lxkxUp?=
- =?us-ascii?Q?5F6l31XOxmhi0vkmaHaTPJ8fkuPmLJ/AX8ojBVZMsyMNBG/ik0OF0ugcbfbU?=
- =?us-ascii?Q?GOc1+2TEGo25/WBJh3y6ULIoRvGiBJdlxpzf11PdicU6sB9qRv4lnUQS9Bf4?=
- =?us-ascii?Q?4rS32HIZ/dQhwHhYS+ZrAsYO1ay3pIwD4XrOFSCWxDIus8J02THA/GCPQsiw?=
- =?us-ascii?Q?PsVGdr6Fh8Oc1D5G20WAGwVlEPM2kUxgvmeec44VbS8L0R9+ABBSWDXaQmex?=
- =?us-ascii?Q?T83CExt2yUDSRpmHSR3ar8pNyk/IcMXL/NdUvvP5h39Oxeo3orKlroK0Vvjt?=
- =?us-ascii?Q?y+0G9ywhKFiiwAGq0/tdbGks+2aBliwOBVO1/jj8paFVwo1+zpWvV9fD0zzX?=
- =?us-ascii?Q?BTo14MFXaoQMf101d2TO7zW9LESiXSHPowZzztoVOtSygT2NpAhIfL/U4D3M?=
- =?us-ascii?Q?cTYHns4eTkRo5z9wWGmniU+b2f7h/FbqjPxVBw=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-ab7de.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bc889c5-ec2e-4cf3-6b6e-08dbbb3040e3
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB7899.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2023 05:53:32.8978
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR02MB6897
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 04:58:22PM -0500, Bjorn Helgaas wrote:
-> On Thu, Sep 21, 2023 at 10:09:16PM +0100, Cameron Williams wrote:
-> > Add device IDs for PCI/PCIe serial cards manufactured by
-> > Brainboxes (IS/IX/UC/UP/PX).
-> > Apologies if this file isn't strictly for your tree. All trees
-> > I am sending this patch series to use these PCI IDs, I was unsure
-> > if this was the correct way to go about it, and better safe than
-> > sorry. Thank you for understanding and please disregard if
-> > its not required.
-> 
-> From the top of the file:
-> 
->  *      Do not add new entries to this file unless the definitions
->  *      are shared between multiple drivers.
-> 
-> I can't tell whether that applies here since I haven't seen the other
-> patches.  If they're only used in one file, you can add the #define to
-> that file or use the bare hex values.  This reduces merge conflicts in
-> pci_ids.h when backporting things.
->
-In that case, please disregard this patch series. The IDs are used in
-different drivers but exclusively, not shared. I will resubmit this patch
-with raw IDs.
-> Also it looks like there's a mix of tab vs space indentation below.
-> They should all be tabs before the device ID and it looks like a
-> single space before the comment.
-> 
-> > +#define PCI_DEVICE_ID_INTASHIELD_UC246	0x0aa1 /* Revision 2*/
-> > +#define PCI_DEVICE_ID_INTASHIELD_UC246R3	0x0aa2	/* Revision 3 */
-> 
-> Comment indentation error.
-> 
-> > +#define PCI_DEVICE_ID_INTASHIELD_PX803R3	0x401e /* Revision 3 */
-> > +#define PCI_DEVICE_ID_INTASHIELD_PX475LPT   0x401f /* LPT port */
-> 
-> Indentation error.
-> 
+Changes since v1:
+* kept uapi define for for serial port type
+* added acks
+
+Still valid cover letter from v1:
+
+When trying to get rid of the obsolete VLYNQ bus, Jonas and Florian
+pointed out that its only user, the AR7 platform can probaly go entirely
+[1]. This series does exactly that. Even OpenWRT has removed support
+because these devices are "stuck with 3.18" [2].
+
+It removes the drivers first, because watchdog and network include
+platform specific headers. Once the drivers are gone, we remove the
+platform. The patches are based on 6.6-rc2 and created with
+"--irreversible-delete" to save some space.
+
+My suggestion is that everything is merged via the MIPS tree in one go,
+so we don't have broken drivers because of missing platform headers. But
+maybe there are reasons for a two-cycle removal with the drivers first
+and the platform later?
+
+Looking forward to comments.
+
+Happy hacking,
+
+   Wolfram
+
+
+[1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
+[2] https://openwrt.org/docs/techref/targets/ar7
+
+
+Wolfram Sang (6):
+  serial: 8250: remove AR7 support
+  mtd: parsers: ar7: remove support
+  vlynq: remove bus driver
+  watchdog: ar7_wdt: remove driver to prepare for platform removal
+  net: cpmac: remove driver to prepare for platform removal
+  MIPS: AR7: remove platform
+
+ MAINTAINERS                             |   13 -
+ arch/arm/configs/pxa_defconfig          |    1 -
+ arch/mips/Kbuild.platforms              |    1 -
+ arch/mips/Kconfig                       |   22 -
+ arch/mips/ar7/Makefile                  |   11 -
+ arch/mips/ar7/Platform                  |    5 -
+ arch/mips/ar7/clock.c                   |  439 --------
+ arch/mips/ar7/gpio.c                    |  332 ------
+ arch/mips/ar7/irq.c                     |  165 ---
+ arch/mips/ar7/memory.c                  |   51 -
+ arch/mips/ar7/platform.c                |  722 -------------
+ arch/mips/ar7/prom.c                    |  256 -----
+ arch/mips/ar7/setup.c                   |   93 --
+ arch/mips/ar7/time.c                    |   31 -
+ arch/mips/boot/compressed/uart-16550.c  |    5 -
+ arch/mips/configs/ar7_defconfig         |  119 ---
+ arch/mips/include/asm/mach-ar7/ar7.h    |  191 ----
+ arch/mips/include/asm/mach-ar7/irq.h    |   16 -
+ arch/mips/include/asm/mach-ar7/prom.h   |   12 -
+ arch/mips/include/asm/mach-ar7/spaces.h |   22 -
+ drivers/Kconfig                         |    2 -
+ drivers/Makefile                        |    1 -
+ drivers/mtd/parsers/Kconfig             |    5 -
+ drivers/mtd/parsers/Makefile            |    1 -
+ drivers/mtd/parsers/ar7part.c           |  129 ---
+ drivers/net/ethernet/ti/Kconfig         |    9 +-
+ drivers/net/ethernet/ti/Makefile        |    1 -
+ drivers/net/ethernet/ti/cpmac.c         | 1251 -----------------------
+ drivers/tty/serial/8250/8250_port.c     |    7 -
+ drivers/vlynq/Kconfig                   |   21 -
+ drivers/vlynq/Makefile                  |    6 -
+ drivers/vlynq/vlynq.c                   |  799 ---------------
+ drivers/watchdog/Kconfig                |    6 -
+ drivers/watchdog/Makefile               |    1 -
+ drivers/watchdog/ar7_wdt.c              |  315 ------
+ include/linux/vlynq.h                   |  149 ---
+ 36 files changed, 1 insertion(+), 5209 deletions(-)
+ delete mode 100644 arch/mips/ar7/Makefile
+ delete mode 100644 arch/mips/ar7/Platform
+ delete mode 100644 arch/mips/ar7/clock.c
+ delete mode 100644 arch/mips/ar7/gpio.c
+ delete mode 100644 arch/mips/ar7/irq.c
+ delete mode 100644 arch/mips/ar7/memory.c
+ delete mode 100644 arch/mips/ar7/platform.c
+ delete mode 100644 arch/mips/ar7/prom.c
+ delete mode 100644 arch/mips/ar7/setup.c
+ delete mode 100644 arch/mips/ar7/time.c
+ delete mode 100644 arch/mips/configs/ar7_defconfig
+ delete mode 100644 arch/mips/include/asm/mach-ar7/ar7.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/irq.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/prom.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/spaces.h
+ delete mode 100644 drivers/mtd/parsers/ar7part.c
+ delete mode 100644 drivers/net/ethernet/ti/cpmac.c
+ delete mode 100644 drivers/vlynq/Kconfig
+ delete mode 100644 drivers/vlynq/Makefile
+ delete mode 100644 drivers/vlynq/vlynq.c
+ delete mode 100644 drivers/watchdog/ar7_wdt.c
+ delete mode 100644 include/linux/vlynq.h
+
+-- 
+2.35.1
+
