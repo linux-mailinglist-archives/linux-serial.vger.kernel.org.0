@@ -2,132 +2,89 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778FC7AB892
-	for <lists+linux-serial@lfdr.de>; Fri, 22 Sep 2023 19:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A8D7ABA4C
+	for <lists+linux-serial@lfdr.de>; Fri, 22 Sep 2023 21:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjIVRyq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 22 Sep 2023 13:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S231862AbjIVTw1 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 22 Sep 2023 15:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbjIVRy0 (ORCPT
+        with ESMTP id S230071AbjIVTw1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 22 Sep 2023 13:54:26 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064A71982
-        for <linux-serial@vger.kernel.org>; Fri, 22 Sep 2023 10:52:47 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c0ecb9a075so20943835ad.2
-        for <linux-serial@vger.kernel.org>; Fri, 22 Sep 2023 10:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695405167; x=1696009967; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQ6jwPkyyUPUihDFvg8XivaDrAIcNkn4eIr05k1aNqo=;
-        b=HHQQWH3P1Tg3hUpLX6jbe5d/oOItnMfupL9C2YUKqirNRxZ1NhkjtYhO/YMWunS1X/
-         na3ThauRHbv1iYFYmDXaG56tOreKU0dtTNn1Jix0qxJnYlc4EtlJq7Y8MAY6L2rEEQL9
-         L3PNjU/6b8GJYmpurZqLyV9SyBUhw8o0mWwlI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695405167; x=1696009967;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GQ6jwPkyyUPUihDFvg8XivaDrAIcNkn4eIr05k1aNqo=;
-        b=E0OuvgvdD8irqIBuYMwnk90Pwgc80pTtZ9C0rsOwJfaBHOiNyGNZXsD/D9fiFV16nl
-         I60VdGtlwkHUQk8LI4j3WQAnVIKeCumPMJGwrblFWwB99RXa4NZSNQCd3u/FNH5t0gyj
-         UjKRDqRfe2jmZHnTeWeTJGUwQe74LsPsLY4uvlNky9WxVOj+g0MkRCGXDRinLiJRhwdz
-         cEd+7a1BydJdMxxNirYwJkq0X+Rt+smHCoAWJdyumLdnqy31p9ne+MrkoJzDaZM5VPHj
-         FnHwGX1tdNpu0UM/cQ3C5LYrN6FVFMq3B5yxDrVemS1L5sou+HPiCGEumCYtXJDjnNVr
-         lusA==
-X-Gm-Message-State: AOJu0YzTq48BbRFM39PliXIpPUTNE8mrkxGOWxjbc+yyfkJOwZXbot5s
-        2YPgUErSUkPz2bh/CPrdfLs0Rg==
-X-Google-Smtp-Source: AGHT+IHK3gRykvqfXJ9KPG1xk8JjWYE+L3KukDHCn22hNF6awNX8UG77Va89x7qeOpxognyckL1BPw==
-X-Received: by 2002:a17:903:2281:b0:1c3:bc2a:f6b4 with SMTP id b1-20020a170903228100b001c3bc2af6b4mr225525plh.42.1695405167472;
-        Fri, 22 Sep 2023 10:52:47 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iw11-20020a170903044b00b001c582de968dsm3780689plb.72.2023.09.22.10.52.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 10:52:46 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: [PATCH] mxser: Annotate struct mxser_board with __counted_by
-Date:   Fri, 22 Sep 2023 10:52:45 -0700
-Message-Id: <20230922175245.work.196-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 22 Sep 2023 15:52:27 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BBD19D;
+        Fri, 22 Sep 2023 12:52:21 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FEFC433C7;
+        Fri, 22 Sep 2023 19:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695412341;
+        bh=imeUxCVuAEVLFhiNc4IeK3wuYja4OS++9ONx3qO3WBM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SqyOWOQh8dbD5rhF2gxDSXIeno3Mg5ZFM72XR/4d1SaWKwtLyZsBR9+eO1+Av9jJx
+         jRpzSkDsh4i15+Ud5c18MK9Bs2P1nspOfMEcWm3873/A0CjRA3dRRbHmPWJ4fveKs0
+         Mx1D8orr8GOf8XoJiwfqVlsCFTzmZsdNsRZjK3lLg+q+7kt+Iy0+JA7FTtYIAli527
+         onmF8bFYSQI2/oCGNZXHS1cldv3vGUPV3iDc6/hBSZpTloH5IizTFZV4ppW/nyVaWx
+         nVBuT2nGb9gscPqd//EC1qv0AvTmPly1OmSTVHp5/vEC0KyF1YALeU8jj5svzDyoln
+         qfXUMXsnIqF4g==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50435ad51bbso2554419e87.2;
+        Fri, 22 Sep 2023 12:52:20 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yya//mvfQtynf0HrKJBmEggrXZULqAb4udBKonJsq6FRSzA3ZV+
+        23406mXVfdRxsZWpSVzyzRKfBlQLRwsAHrjiTA==
+X-Google-Smtp-Source: AGHT+IEjbFWOc2dJSZl+LGspXeTZskF2ku6FT/4P4ACzKx2mojBSEIPlpHP7hQaNPypseQNqhkbrOaUGGWgshym7TGQ=
+X-Received: by 2002:a05:6512:23a5:b0:502:c615:99a9 with SMTP id
+ c37-20020a05651223a500b00502c61599a9mr572466lfv.30.1695412339219; Fri, 22 Sep
+ 2023 12:52:19 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1400; i=keescook@chromium.org;
- h=from:subject:message-id; bh=EF4J3adktVfobyY2g9VoH112mQT3HIJCM8AoszQv0eY=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBlDdRtJNIux5LoCOcVzIv6wUz7ihnbHZEwbcqTg
- pn+/5MuR9mJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZQ3UbQAKCRCJcvTf3G3A
- JonqD/sGsiP5krTXtLdtu/hVDGnXK5tfys6LaoqTOjcqrYNSjPh/NIuv/rqHb+YzfzFOJIQRSZ0
- HZAnHwpvjK7E2pSIcUYN0JqqA4DzASGV/MHa6BwsIMeTdsKJuFRECHikDcLVx+bs34ca1C8mVVE
- kGTNZuXBQ5aaYQm2sfBxZeBkBCUeVOOIeoNJMpJe65rhDFGCsiyMfu6y+sLoMI3sx3R03MkpxfG
- ++mCJQEsSjZl+mWB2yZq5aIKwat6HBhE1RQcHfOStLO6M+/0+Q3J89z2MCgj5ds4ZfO3wdXARz5
- kd0TniAInQZRMzjvnFE22IJQk98TOdrKyQtGcKcorlVdFL/Dq+5KbSvICHOCy5L7jgZ/ZPML2B6
- ByKmLs7DzdruyUsPiTvLRK+N0dPZ2QKEYUD/f7HO0gxKU+Uk8ItuJSliYo2ELn5I0D0IrtyiUpS
- /3ie1n/5nWYxVLyqLUYX303LNZSlfOUfn7CMZ0JhOpwZGk1SSpnJnve5oUmjbecse5GZydC8wPG
- 5x3YoHeS4t9E6EP3AGmNMq5o2OdQlTdVHNnAHbH6G/9QnTwPvxrnhrKf2wnHO0mHnPsLJB5Wyoh
- qHR9Y99dUyU8+LW0meomOlfg6B6zRuWDbWedOl0gYjzaAI9s6SG9AhW3ZrAHIegVz3nFw/0wv/j
- GwhUkPI DqtPoZzQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230920152015.1376838-1-hugo@hugovil.com> <20230920152015.1376838-4-hugo@hugovil.com>
+ <20230921162424.GA435508-robh@kernel.org> <20230921123237.b3c50eb12746724a4fd62237@hugovil.com>
+In-Reply-To: <20230921123237.b3c50eb12746724a4fd62237@hugovil.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 22 Sep 2023 14:52:06 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLpJuxJ1ZbMkwXPrzUAK3Xhfr4zFgSYvmFufyDRF1QjpQ@mail.gmail.com>
+Message-ID: <CAL_JsqLpJuxJ1ZbMkwXPrzUAK3Xhfr4zFgSYvmFufyDRF1QjpQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: sc16is7xx: add vendor prefix to
+ irda-mode-ports property
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        hvilleneuve@dimonoff.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Prepare for the coming implementation by GCC and Clang of the __counted_by
-attribute. Flexible array members annotated with __counted_by can have
-their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-functions).
+On Thu, Sep 21, 2023 at 11:32=E2=80=AFAM Hugo Villeneuve <hugo@hugovil.com>=
+ wrote:
+>
+> On Thu, 21 Sep 2023 11:24:24 -0500
+> Rob Herring <robh@kernel.org> wrote:
+>
+> > On Wed, Sep 20, 2023 at 11:20:14AM -0400, Hugo Villeneuve wrote:
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >
+> > > The NXP-specific "irda-mode-ports" property lacks a proper vendor
+> > > prefix. Add "nxp," prefix to comply with DT best practises.
+> >
+> > The opposite direction would be worth carrying in the driver, but I
+> > don't think adding a vendor prefix is. I would just leave this as-is.
+> >
+> > Rob
+>
+> Hi Rob,
+> I am not following you, can you clarify?
 
-As found with Coccinelle[1], add __counted_by for struct mxser_board.
+Just keep the property as-is and don't add a 'nxp,' prefixed version.
+It's not worth carrying the fallback in the driver.
 
-[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+If you were dropping a vendor prefix from a property, then that's
+worth it because there might be other users added.
 
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-serial@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/tty/mxser.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 10aa4ed38793..6ce7f259968f 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -288,7 +288,7 @@ struct mxser_board {
- 	enum mxser_must_hwid must_hwid;
- 	speed_t max_baud;
- 
--	struct mxser_port ports[];
-+	struct mxser_port ports[] __counted_by(nports);
- };
- 
- static DECLARE_BITMAP(mxser_boards, MXSER_BOARDS);
--- 
-2.34.1
-
+Rob
