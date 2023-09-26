@@ -2,154 +2,78 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FE17AE725
-	for <lists+linux-serial@lfdr.de>; Tue, 26 Sep 2023 09:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B338D7AE9B7
+	for <lists+linux-serial@lfdr.de>; Tue, 26 Sep 2023 11:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjIZHvn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 26 Sep 2023 03:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S233644AbjIZJ4q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Tue, 26 Sep 2023 05:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbjIZHvm (ORCPT
+        with ESMTP id S234219AbjIZJ4o (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 26 Sep 2023 03:51:42 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21C0DC;
-        Tue, 26 Sep 2023 00:51:34 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2842A240008;
-        Tue, 26 Sep 2023 07:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1695714693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7a5K1aAKuIj2iEvxprQZUE+LucC50eyHmU2MT85uylA=;
-        b=CLGB9apBwexIdVNECBBS9V0PnB4y8ocCvgQ4qFRIbu8UcFc7sir6TV0M3ws76qKGl/siSa
-        psuC7TAJwEoNrX55Q5evdslyP+wSjOssom4UVXPNEbANZQotVuc33ajteUO925Yfx9VIVk
-        LML9KPYSLVrKntr/wk5Vd0GHBbRMgz1RNiBb6ISY48qpuiNHLYRQf4W++QB/JsiT9r4w/8
-        9HNz95+c1GMD7CnFgYYsekmY/YKRbOSUqjrrOf5jcxY0vwSqvBn3rL3ofJBslsM4UZ8dYe
-        hP2B62LTdH+WfPXlXUDJ7xEB4BO/0NxdOBJucRQxpWkaTdNvehw022yAq0f5MQ==
-Message-ID: <652eb018-8e67-5f4b-8329-0f52159a27b1@bootlin.com>
-Date:   Tue, 26 Sep 2023 09:51:30 +0200
+        Tue, 26 Sep 2023 05:56:44 -0400
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA5A126;
+        Tue, 26 Sep 2023 02:56:37 -0700 (PDT)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=8647860101=fe@dev.tdt.de>)
+        id 1ql4UJ-008Nk3-1J; Tue, 26 Sep 2023 11:36:15 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1ql4UI-008Ngh-2b; Tue, 26 Sep 2023 11:36:14 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 996AB24004B;
+        Tue, 26 Sep 2023 11:36:13 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id ED4C4240040;
+        Tue, 26 Sep 2023 11:36:12 +0200 (CEST)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id 9B33532747;
+        Tue, 26 Sep 2023 11:36:12 +0200 (CEST)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
+        kabel@kernel.org, u.kleine-koenig@pengutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-leds@vger.kernel.org
+Subject: [PATCH 0/2] ledtrig-tty: add new state evaluation
+Date:   Tue, 26 Sep 2023 11:36:05 +0200
+Message-ID: <20230926093607.59536-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] serial: 8250_omap: Fix errors with no_console_suspend
-Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Udit Kumar <u-kumar1@ti.com>
-References: <20230926061319.15140-1-tony@atomide.com>
-From:   Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <20230926061319.15140-1-tony@atomide.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8BIT
+X-purgate-ID: 151534::1695720974-520A685C-EFD57BF8/0/0
+X-purgate: clean
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Tony,
+This is a follow-up patchset, based on the mailing list discussion from
+March 2023 based on the old patchset v7 [1]. I have changed, the LED trigger
+handling via the sysfs interfaces as suggested by Uwe Kleine-König.
 
-Thanks for the fix.
+[1] https://lore.kernel.org/linux-leds/20230306093524.amm7o4ppa7gon4ew@pengutronix.de/
 
-On 9/26/23 08:13, Tony Lindgren wrote:
-> We now get errors on system suspend if no_console_suspend is set as
-> reported by Thomas. The errors started with commit 20a41a62618d ("serial:
-> 8250_omap: Use force_suspend and resume for system suspend").
-> 
-> Let's fix the issue by checking for console_suspend_enabled in the system
-> suspend and resume path.
-> 
-> Note that with this fix the checks for console_suspend_enabled in
-> omap8250_runtime_suspend() become useless. We now keep runtime PM usage
-> count for an attached kernel console starting with commit bedb404e91bb
-> ("serial: 8250_port: Don't use power management for kernel console").
-> 
-> Fixes: 20a41a62618d ("serial: 8250_omap: Use force_suspend and resume for system suspend")
-> Cc: Udit Kumar <u-kumar1@ti.com>
-> Reported-by: Thomas Richard <thomas.richard@bootlin.com>
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
+Florian Eckert (2):
+  tty: add new helper function tty_get_mget
+  trigger: ledtrig-tty: add new line mode to triggers
 
-Tested-by: Thomas Richard <thomas.richard@bootlin.com>
+ .../ABI/testing/sysfs-class-led-trigger-tty   |  54 ++++
+ drivers/leds/trigger/ledtrig-tty.c            | 272 +++++++++++++++++-
+ drivers/tty/tty_io.c                          |  29 +-
+ include/linux/tty.h                           |   1 +
+ 4 files changed, 339 insertions(+), 17 deletions(-)
 
-> ---
->  drivers/tty/serial/8250/8250_omap.c | 25 ++++++++++---------------
->  1 file changed, 10 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-> --- a/drivers/tty/serial/8250/8250_omap.c
-> +++ b/drivers/tty/serial/8250/8250_omap.c
-> @@ -1617,7 +1617,7 @@ static int omap8250_suspend(struct device *dev)
->  {
->  	struct omap8250_priv *priv = dev_get_drvdata(dev);
->  	struct uart_8250_port *up = serial8250_get_port(priv->line);
-> -	int err;
-> +	int err = 0;
->  
->  	serial8250_suspend_port(priv->line);
->  
-> @@ -1627,7 +1627,8 @@ static int omap8250_suspend(struct device *dev)
->  	if (!device_may_wakeup(dev))
->  		priv->wer = 0;
->  	serial_out(up, UART_OMAP_WER, priv->wer);
-> -	err = pm_runtime_force_suspend(dev);
-> +	if (uart_console(&up->port) && console_suspend_enabled)
-> +		err = pm_runtime_force_suspend(dev);
->  	flush_work(&priv->qos_work);
->  
->  	return err;
-> @@ -1636,11 +1637,15 @@ static int omap8250_suspend(struct device *dev)
->  static int omap8250_resume(struct device *dev)
->  {
->  	struct omap8250_priv *priv = dev_get_drvdata(dev);
-> +	struct uart_8250_port *up = serial8250_get_port(priv->line);
->  	int err;
->  
-> -	err = pm_runtime_force_resume(dev);
-> -	if (err)
-> -		return err;
-> +	if (uart_console(&up->port) && console_suspend_enabled) {
-> +		err = pm_runtime_force_resume(dev);
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	serial8250_resume_port(priv->line);
->  	/* Paired with pm_runtime_resume_and_get() in omap8250_suspend() */
->  	pm_runtime_mark_last_busy(dev);
-> @@ -1717,16 +1722,6 @@ static int omap8250_runtime_suspend(struct device *dev)
->  
->  	if (priv->line >= 0)
->  		up = serial8250_get_port(priv->line);
-> -	/*
-> -	 * When using 'no_console_suspend', the console UART must not be
-> -	 * suspended. Since driver suspend is managed by runtime suspend,
-> -	 * preventing runtime suspend (by returning error) will keep device
-> -	 * active during suspend.
-> -	 */
-> -	if (priv->is_suspending && !console_suspend_enabled) {
-> -		if (up && uart_console(&up->port))
-> -			return -EBUSY;
-> -	}
->  
->  	if (priv->habit & UART_ERRATA_CLOCK_DISABLE) {
->  		int ret;
 -- 
-Thomas Richard
+2.30.2
 
