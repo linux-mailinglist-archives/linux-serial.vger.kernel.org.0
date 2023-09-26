@@ -2,112 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6992C7AEBC8
-	for <lists+linux-serial@lfdr.de>; Tue, 26 Sep 2023 13:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236757AEC1C
+	for <lists+linux-serial@lfdr.de>; Tue, 26 Sep 2023 14:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbjIZLto (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 26 Sep 2023 07:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        id S234324AbjIZMEU (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 26 Sep 2023 08:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbjIZLti (ORCPT
+        with ESMTP id S233899AbjIZMEU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 26 Sep 2023 07:49:38 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCC9DE;
-        Tue, 26 Sep 2023 04:49:32 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDFEC433C9;
-        Tue, 26 Sep 2023 11:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1695728971;
-        bh=BDIUttsZQQFkLvxRNL0OyVkQfC2FmRbuUcsXNdRp1pY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kW0wi9LEkIMVJnvXmXp+torrf3YvFpAzeV7qP8iLknnUYyG3mXazThOmML5lS+zg5
-         deyni9oM3UNTFP71+6qqIheiTpN2SKneXqjLO6TQ2vvn+eyLvzkEI953nC2qXEQt+I
-         dR+tZnHfXMfwDhD4DJ92hqFzCS7BoixKb8h7RHeQ=
-Date:   Tue, 26 Sep 2023 13:49:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Edward AD <twuufnxlz@gmail.com>
-Cc:     conor@kernel.org,
-        syzbot+8d2757d62d403b2d9275@syzkaller.appspotmail.com,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@kernel.org, alexghiti@rivosinc.com,
-        liushixin2@huawei.com, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] riscv: fix out of bounds in walk_stackframe
-Message-ID: <2023092617-polish-modify-3acb@gregkh>
-References: <0000000000000170df0605ccf91a@google.com>
- <20230926114343.1061739-2-twuufnxlz@gmail.com>
+        Tue, 26 Sep 2023 08:04:20 -0400
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BE5E6;
+        Tue, 26 Sep 2023 05:04:08 -0700 (PDT)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=8647860101=fe@dev.tdt.de>)
+        id 1ql6nJ-00DGsF-TT; Tue, 26 Sep 2023 14:04:01 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1ql6nJ-00FZfF-0r; Tue, 26 Sep 2023 14:04:01 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 90A63240049;
+        Tue, 26 Sep 2023 14:04:00 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id E4C63240040;
+        Tue, 26 Sep 2023 14:03:59 +0200 (CEST)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id 83F0E2EFEB;
+        Tue, 26 Sep 2023 14:03:59 +0200 (CEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230926114343.1061739-2-twuufnxlz@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 26 Sep 2023 14:03:59 +0200
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
+        pavel@ucw.cz, lee@kernel.org, kabel@kernel.org,
+        u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH 1/2] tty: add new helper function tty_get_mget
+In-Reply-To: <dc5ac2cb-71b3-4946-a58b-2ec353bc40a4@kernel.org>
+References: <20230926093607.59536-1-fe@dev.tdt.de>
+ <20230926093607.59536-2-fe@dev.tdt.de>
+ <dc5ac2cb-71b3-4946-a58b-2ec353bc40a4@kernel.org>
+Message-ID: <2c36a83654942416cfdcb2e40ecb539d@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate-ID: 151534::1695729841-26600C1B-B82AB986/0/0
+X-purgate: clean
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Tue, Sep 26, 2023 at 07:43:44PM +0800, Edward AD wrote:
-> Increase the check on the frame after assigning its value. This is to prevent 
-> frame access from crossing boundaries.
+Thanks for your fast respond!
+
+>> @@ -2494,6 +2494,25 @@ static int send_break(struct tty_struct *tty, 
+>> unsigned int duration)
+>>   	return retval;
+>>   }
+>>   +/**
+>> + * tty_get_mget		-	get modem status
 > 
-> Closes: https://lore.kernel.org/all/20230926105949.1025995-2-twuufnxlz@gmail.com/
-> Fixes: 5d8544e2d007 ("RISC-V: Generic library routines and assembly")
-> Reported-and-tested-by: syzbot+8d2757d62d403b2d9275@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/0000000000000170df0605ccf91a@google.com/T/
-> Signed-off-by: Edward AD <twuufnxlz@gmail.com>
-> ---
->  arch/riscv/kernel/stacktrace.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Heh, the naming is funny. It apparently comes from tiocmget. But that
+> comes from:
+> tty ioctl modem get (TIOCMGET)
+> tty ioctl modem set (TIOCMSET)
 > 
-> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-> index 64a9c093aef9..53bd18672329 100644
-> --- a/arch/riscv/kernel/stacktrace.c
-> +++ b/arch/riscv/kernel/stacktrace.c
-> @@ -54,6 +54,8 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
->  			break;
->  		/* Unwind stack frame */
->  		frame = (struct stackframe *)fp - 1;
-> +		if (!virt_addr_valid(frame))
-> +			break;
->  		sp = fp;
->  		if (regs && (regs->epc == pc) && (frame->fp & 0x7)) {
->  			fp = frame->ra;
-> -- 
-> 2.25.1
+> So you should name it like tty_get_modem() not get_mget().
+
+I didn't like the name too, but I couldn't think of another.
+The function is returning the state of serial control and status 
+signals.
+
+ From your suggestion for the name, however, you can not deduce that at 
+all.
+How would it be then with the following name?
+
+tty_tioctl_state() ?
+
 > 
+> Also those extra spaces around "-" caused some issues in the generated
+> output and should be removed (everywhere).
 
-Hi,
+Ok, I will change this in an own commit throughout the file.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Thanks
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documetnation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+Florian
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+@jirislaby: Forgot to send this message to the mailing list as well!
