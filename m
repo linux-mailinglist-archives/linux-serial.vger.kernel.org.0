@@ -2,134 +2,112 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2F77B2C68
-	for <lists+linux-serial@lfdr.de>; Fri, 29 Sep 2023 08:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24177B2C78
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Sep 2023 08:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbjI2Ged (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 29 Sep 2023 02:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S232655AbjI2GkB (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 29 Sep 2023 02:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjI2GeS (ORCPT
+        with ESMTP id S232664AbjI2GkA (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 29 Sep 2023 02:34:18 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D3619F;
-        Thu, 28 Sep 2023 23:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695969255; x=1727505255;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=rjspptSg7zSqg15bu/FnJMsdagx6q/43SjMsDTCWF3c=;
-  b=L471OKp2GzLHgA03HEqcGoxaWP5BkXf+ZSfR9JlPvgUU4darRYow5GUC
-   EbImqCigwMAenTxbCTJUsTpbC5Y0JPJmkLaLOLj7mhWpIWonLVNaz3Fha
-   9VcN1rmwQ+5H08m9Xd/8jq4Hwor2QmPjy0CgyUbFub/bWCSgDv/FAf9GP
-   i7fBGiNUdiNORCiow0LFwO3Wb/Ap24i5gtUkOzORsiEdhTbybVtKhCW8H
-   HM0B3zzBpxIdBpCQgu3peH/LFHGmOU9Ti0EgxLI1aRPP9Vrjl6QQAKQ7V
-   0Idmqhny4UWJ4AOHXRSJUJAacUEUjAk4A0g+/8UncGD5meKb69cXTb7od
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="386107495"
-X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
-   d="scan'208";a="386107495"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 23:34:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="923523838"
-X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
-   d="scan'208";a="923523838"
-Received: from smorozov-mobl1.ger.corp.intel.com ([10.252.52.167])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 23:34:13 -0700
-Date:   Fri, 29 Sep 2023 09:34:07 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v4 1/5] serial: core: tidy invalid baudrate handling in
- uart_get_baud_rate
-In-Reply-To: <20230928151631.149333-2-jcmvbkbc@gmail.com>
-Message-ID: <69902af8-103-38a8-c438-87f7a047497@linux.intel.com>
-References: <20230928151631.149333-1-jcmvbkbc@gmail.com> <20230928151631.149333-2-jcmvbkbc@gmail.com>
+        Fri, 29 Sep 2023 02:40:00 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3441A4
+        for <linux-serial@vger.kernel.org>; Thu, 28 Sep 2023 23:39:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qm7A9-0001A2-2a; Fri, 29 Sep 2023 08:39:45 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qm7A7-009kiZ-1I; Fri, 29 Sep 2023 08:39:43 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qm7A6-005qWN-Nj; Fri, 29 Sep 2023 08:39:42 +0200
+Date:   Fri, 29 Sep 2023 08:39:42 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        ilpo.jarvinen@linux.intel.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH 6/6] serial: imx: do not set RS485 enabled if it is not
+ supported
+Message-ID: <20230929063942.qukemr4o7l5vdmud@pengutronix.de>
+References: <20230928221246.13689-1-LinoSanfilippo@gmx.de>
+ <20230928221246.13689-7-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yu5mcexmqulaqvex"
+Content-Disposition: inline
+In-Reply-To: <20230928221246.13689-7-LinoSanfilippo@gmx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, 28 Sep 2023, Max Filippov wrote:
 
-> uart_get_baud_rate has input parameters 'min' and 'max' limiting the
-> range of acceptable baud rates from the caller's perspective. If neither
-> current or old termios structures have acceptable baud rate setting and
-> 9600 is not in the min/max range either the function returns 0 and
-> issues a warning.
-> However for a UART that does not support speed of 9600 baud this is
-> expected behavior.
-> Clarify that 0 can be (and always could be) returned from the
-> uart_get_baud_rate. Don't issue a warning in that case.
-> Move the warinng to the uart_get_divisor instead, which is often called
-> with the uart_get_baud_rate return value.
-> 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
-> Changes v3->v4:
-> - drop WARN_ON from uart_get_divisor()
-> 
->  drivers/tty/serial/serial_core.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 7bdc21d5e13b..3f130fe9f1a0 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -431,7 +431,7 @@ EXPORT_SYMBOL(uart_update_timeout);
->   * baud.
->   *
->   * If the new baud rate is invalid, try the @old termios setting. If it's still
-> - * invalid, we try 9600 baud.
-> + * invalid, we try 9600 baud. If that is also invalid 0 is returned.
->   *
->   * The @termios structure is updated to reflect the baud rate we're actually
->   * going to be using. Don't do this for the case where B0 is requested ("hang
-> @@ -515,8 +515,6 @@ uart_get_baud_rate(struct uart_port *port, struct ktermios *termios,
->  							max - 1, max - 1);
->  		}
->  	}
-> -	/* Should never happen */
-> -	WARN_ON(1);
->  	return 0;
->  }
->  EXPORT_SYMBOL(uart_get_baud_rate);
+--yu5mcexmqulaqvex
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-While looking into this, I found this old commit:
+On Fri, Sep 29, 2023 at 12:12:46AM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>=20
+> If the imx driver cannot support RS485 it sets the UARTS rs485_supported
+> structure to NULL. But it still calls uart_get_rs485_mode() which may set
+> the RS485_ENABLED flag.
+> The flag however is evaluated by the serial core in uart_configure_port()
 
-commit 16ae2a877bf4179737921235e85ceffd7b79354f
-Author: Alan Cox <alan@linux.intel.com>
-Date:   Mon Jan 4 16:26:21 2010 +0000
+I wonder if this is the code location where this problem should be
+addressed. Or alternatively don't let uart_get_rs485_mode() set
+RS485_ENABLED (and other flags) if rs485_supported doesn't suggest that
+this works?
 
-    serial: Fix crash if the minimum rate of the device is > 9600 baud
-    
-    In that situation if the old rate is invalid and the new rate is invalid
-    and the chip cannot do 9600 baud we report zero, which makes all the
-    drivers explode.
-    
-    Instead force the rate based on min/max
+> [...]
+>=20
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 
-But for some reason it does not work as advertized here? What is the exact 
-cause for that?
+I don't know how picky Greg is here, but formally you missed to add an
+S-o-b line for the sender of this patch (i.e. you with your gmx
+address).
 
-Is something wrong with how min/max have that +1/-1 there or what?
+Best regards
+Uwe
 
--- 
- i.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--yu5mcexmqulaqvex
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUWcS0ACgkQj4D7WH0S
+/k47wAgAniMRiA+dl7M7pf4WXvom8QfwhOuzi/ZJVgQr7Sj0ZAnIWPLIKiiaR0zP
+pNXr8qWggxnpYHw16JMLUsxCsPc5ZIudcgKzKBGQCbwG4TZreZJI7UGiV0UXoHku
+Owvhb7x76chV/Zp+pCusPHMZZiN1VlS90to/oc3FnAg4PH65vuyMvgxPAX3SSUhB
+qzHII257rxUIfET19HOFHKFyNgA4QNgme1XTyBxKbOB8tb+qLiMAFOpe+5XG/5Qq
+LxkfDfi1dV9UHpTY5JvlmwgODB04srgN2v5zsiZ+ghujB8T0RpR6aaTaMptqBCOy
++Gusp1Hp79etQUN4XmNNMWn9ozjWqw==
+=Gvvs
+-----END PGP SIGNATURE-----
+
+--yu5mcexmqulaqvex--
