@@ -2,54 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4497B2BB8
-	for <lists+linux-serial@lfdr.de>; Fri, 29 Sep 2023 07:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20467B2BC6
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Sep 2023 07:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjI2FmG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 29 Sep 2023 01:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S232613AbjI2FmP (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 29 Sep 2023 01:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjI2Fl3 (ORCPT
+        with ESMTP id S232884AbjI2Flc (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 29 Sep 2023 01:41:29 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CB21A7
-        for <linux-serial@vger.kernel.org>; Thu, 28 Sep 2023 22:39:59 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9ad8a822508so1827984366b.0
-        for <linux-serial@vger.kernel.org>; Thu, 28 Sep 2023 22:39:59 -0700 (PDT)
+        Fri, 29 Sep 2023 01:41:32 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FF3CC8
+        for <linux-serial@vger.kernel.org>; Thu, 28 Sep 2023 22:40:01 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9ae7383b7ecso64322366b.0
+        for <linux-serial@vger.kernel.org>; Thu, 28 Sep 2023 22:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1695965998; x=1696570798; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1695965999; x=1696570799; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=up2XNokZoiA5TPtK9O+gQhlckgwCOolxXgSc1vLyaO8=;
-        b=YknDKgl04XH/fGUl3cvgX27rH4ko0OA9ftaLD7CgqH6+DtQASHK/hWamd29DMk6O4u
-         yP17ENutevN+8+7RAaJyzS1rvaNr5k/gZCM8g9+Rb4QA3qA2QHzewSIurB+++KbkDjvi
-         iQLL3L6PyDmpmOIqpucAxPZ2+WrE7YNWtSymIcaAoHjhxDtVN8g+Ys2lN+dP8CGkENN+
-         Faxcoyf21DvMFS/j9BJ97CZpSbRkLbYrJ9j6UZrVcJJFmkGtQOujh6eMTlO7b5v9VALm
-         2xfrm1yZ4AhnQphANBOicIZQ9wXjXnFfXwe4oSQ8VukitbLtPTyoNvP5szo9Bt9w7itc
-         MMCg==
+        bh=wor+2ysYovWwz79wDHgf6lw48XDzirr+UHoMWUaKK0I=;
+        b=hv11lyyqdIZllhGvop+tiXsvBx+tCxEzKcTeHASCgpgZ9P2/FvzCwN43vmBXmgW9lU
+         WT5FouJdYvDCClB9VU8nBoiBZb5IbUKYe2aHIZmaGrBOeqt4xX/1SiDuj4zEQF83xA6+
+         XPqTN8YFTydiGU2wCnBNzQDIkhWp6pm6D5htLXIX+W4tzaxfm6A6BkQe2tPyFeyDhDK2
+         qV1AcaIYCZlwbLFSMgIxEdEgpIzgUij3uquB0kjLpJ3FrfUB4hIJD5MZ1mvvdZn+6JQX
+         l3IAv6QWf/bAzaRyzleVx0O5xlLqVd8BCDO6ZDyenLshiMqa12ghthwRxc3vqXZ+egsT
+         wPUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695965998; x=1696570798;
+        d=1e100.net; s=20230601; t=1695965999; x=1696570799;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=up2XNokZoiA5TPtK9O+gQhlckgwCOolxXgSc1vLyaO8=;
-        b=eZ/bKLVmqgSCnqV0htcVW9f/rSE0/q4CZggwCmEIUPZMuJ7sPJ7uQbRhdfOQmHqR/s
-         GVMcRu78kjPHda0JMYAtWlzOENj5oL/c+6Q+9y4Nd4ouofJRNLKEVTxPKNfM+pbT82o8
-         Zv1KwxGuDNfvN+Ey0aql7YULVjliQ/J2AZd5+blYH55ANCyJne+xQGqvmhcI2DkJDNs1
-         v2uprGf1BL0ANOWzuE1ucuh2aT8iLhuX8bNcZ9ErwDmXcFSckpGIzNvwU9O1+yTbZUra
-         mkRohzCqV7uhUztag2vMGaHDCyW2KU2kcEmwGUPeID7TVf3lHMnbQMjot57mCZ2oEhwW
-         2B1g==
-X-Gm-Message-State: AOJu0YyGERefSDluTh6zUID5gnT0KqY+/19DgnKsIdRqukKjV1QC5B5r
-        N/mXk31K6eH+P0okRYLLzcznWw==
-X-Google-Smtp-Source: AGHT+IHWGRdKt18vqmb08FW6Gqil2AJFzy4wYogTFWvh2EtAsEFK8s2z8hF1JCvsa15u5k7BOdpWVQ==
-X-Received: by 2002:a17:906:cc1:b0:9a2:28dc:4166 with SMTP id l1-20020a1709060cc100b009a228dc4166mr2898785ejh.75.1695965997654;
-        Thu, 28 Sep 2023 22:39:57 -0700 (PDT)
+        bh=wor+2ysYovWwz79wDHgf6lw48XDzirr+UHoMWUaKK0I=;
+        b=kHmDBvcKgT1If2WTFSLFVLstEzZxzn7uujENWecDHt0LVPt5rm/5H8c+fp8HxwIc+H
+         MfI2n9KUTQ/bepzWi/YbcwMLb/C12M08+k/4MdPqdv+M65epHDOZHAS30aGH7xZxWDUc
+         iyeh8nBfXr2aPIqmY2eKu+D4taKOdiT0UAwgPXLfLTwwFgOD2ltF9GJm0yu+4WAjHL1A
+         2sZNsSouAX9WzAc8weejmMUm0lp96XA3tLihHG85Ux02PF5or7c0YYXnPtoNDZ+jOfgg
+         DyirYdaN4/inJLI+fzOf15cD2hYS2maPtisJfEVl7OZVfUV3OSpJuACudUwLwiFqLGTM
+         wO9w==
+X-Gm-Message-State: AOJu0YxjwKzBd34SqcwF0Af1NV80nbE0CFMsAOkkZVNNDYP2dfKkkkIN
+        69aICVbWIgwOW0TImJ0W8Rntog==
+X-Google-Smtp-Source: AGHT+IGuHtC57n+o1bpWpASywaDobhLzZbsZm4sa2GVeKsCcbnMjDU8gtdTIYb+NLm0dPD1iTjOvRQ==
+X-Received: by 2002:a17:907:948b:b0:9a5:aa43:1c7c with SMTP id dm11-20020a170907948b00b009a5aa431c7cmr3069995ejc.26.1695965999656;
+        Thu, 28 Sep 2023 22:39:59 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id z19-20020a1709063ad300b009a1a653770bsm11971992ejd.87.2023.09.28.22.39.55
+        by smtp.gmail.com with ESMTPSA id z19-20020a1709063ad300b009a1a653770bsm11971992ejd.87.2023.09.28.22.39.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 22:39:57 -0700 (PDT)
+        Thu, 28 Sep 2023 22:39:59 -0700 (PDT)
 From:   Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea@bp.renesas.com>
 To:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
@@ -64,9 +64,9 @@ Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 19/28] dt-bindings: pinctrl: renesas: set additionalProperties: false
-Date:   Fri, 29 Sep 2023 08:39:06 +0300
-Message-Id: <20230929053915.1530607-20-claudiu.beznea@bp.renesas.com>
+Subject: [PATCH v2 20/28] dt-bindings: pinctrl: renesas: document RZ/G3S SoC
+Date:   Fri, 29 Sep 2023 08:39:07 +0300
+Message-Id: <20230929053915.1530607-21-claudiu.beznea@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
 References: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
@@ -84,32 +84,66 @@ X-Mailing-List: linux-serial@vger.kernel.org
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Set additionalProperties: false.
+Add documentation for pin controller found on RZ/G3S (R9A08G045) SoC.
+Compared with RZ/G2{L,UL} RZ/G3S has 82 general-purpose IOs, no slew
+rate and output impedance support and more values for drive strength
+which needs to be expressed in microamp.
 
-Suggested-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
 
 Changes in v2:
-- this patch is new in v2 and added as suggested by Rob
+- defined drive-strength-microamp as general and make if/then schema to
+  not allow specific properties depending on compatible
 
- .../devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml     | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../pinctrl/renesas,rzg2l-pinctrl.yaml        | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-index 4782f96feb7e..eb726770f571 100644
+index eb726770f571..86228ba69aab 100644
 --- a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-@@ -106,8 +106,7 @@ additionalProperties:
-         line-name: true
+@@ -25,6 +25,7 @@ properties:
+           - enum:
+               - renesas,r9a07g043-pinctrl # RZ/G2UL{Type-1,Type-2} and RZ/Five
+               - renesas,r9a07g044-pinctrl # RZ/G2{L,LC}
++              - renesas,r9a08g045-pinctrl # RZ/G3S
  
-     - type: object
--      additionalProperties:
--        $ref: "#/additionalProperties/anyOf/0"
-+      additionalProperties: false
+       - items:
+           - enum:
+@@ -78,6 +79,21 @@ additionalProperties:
+         - $ref: pincfg-node.yaml#
+         - $ref: pinmux-node.yaml#
  
- allOf:
-   - $ref: pinctrl.yaml#
++        - if:
++            properties:
++              compatible:
++                contains:
++                  enum:
++                    - renesas,r9a08g045-pinctrl
++          then:
++            properties:
++              drive-strength: false
++              output-impedance-ohms: false
++              slew-rate: false
++          else:
++            properties:
++              drive-strength-microamp: false
++
+       description:
+         Pin controller client devices use pin configuration subnodes (children
+         and grandchildren) for desired pin configuration.
+@@ -92,6 +108,10 @@ additionalProperties:
+         pins: true
+         drive-strength:
+           enum: [ 2, 4, 8, 12 ]
++        drive-strength-microamp:
++          enum: [ 1900, 2200, 4000, 4400, 4500, 4700, 5200, 5300, 5700,
++                  5800, 6000, 6050, 6100, 6550, 6800, 7000, 8000, 9000,
++                  10000 ]
+         output-impedance-ohms:
+           enum: [ 33, 50, 66, 100 ]
+         power-source:
 -- 
 2.39.2
 
