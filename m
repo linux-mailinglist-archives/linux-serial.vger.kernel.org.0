@@ -2,92 +2,128 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81BB7BA064
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F107BA386
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbjJEOgl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 10:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S237852AbjJEP55 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 11:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbjJEOej (ORCPT
+        with ESMTP id S233815AbjJEP4n (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:34:39 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17C3A4233;
-        Thu,  5 Oct 2023 06:53:03 -0700 (PDT)
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 51FE280A0;
-        Thu,  5 Oct 2023 07:56:47 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 5 Oct 2023 11:56:43 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467335253;
+        Thu,  5 Oct 2023 06:52:33 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89CDC116B6;
+        Thu,  5 Oct 2023 09:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696496596;
+        bh=Oh6z41EHlAHzegiycj3Z6oYPy1RmyXl7393yq+axU3s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UR6p4R+erialbPxyVBaJL+VX62WIR8Bz2v9JB71U/XVJSIIQNHrns0+nTXBeM8g/T
+         OGobN5quUApdhCidM5WG1cGtuaVNuyZm1hgS0ooqQeBuMocA3OIyhrif+bhiZA9VK4
+         UzRz3RrM8dyxiqc0zwCiXekiZ/6GkQB4rV7UykluYzCVh2JpW9/WzkI7qyRrKhNPqa
+         rewZKIro45kQa8b7gAmzOPI55uN/c6gMX7gj3QZw5XjQaUW9nz1seXnl36NdPyU6xB
+         a+SY1heOfrZEAtGvJ8GDdhUZqaBYEe/G6YOizxJSyvh5idHP3xKofDFx4KlCcvm5DJ
+         xvmaIT3sCP3Og==
+Date:   Thu, 5 Oct 2023 10:03:11 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Starke, Daniel" <daniel.starke@siemens.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fedor Pchelkin <pchelkin@ispras.ru>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH] serial: core: Fix checks for tx runtime PM state
-Date:   Thu,  5 Oct 2023 10:56:42 +0300
-Message-ID: <20231005075644.25936-1-tony@atomide.com>
-X-Mailer: git-send-email 2.42.0
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com" 
+        <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>
+Subject: Re: [PATCH 1/1] tty: n_gsm: Avoid sleeping during .write() whilst
+ atomic
+Message-ID: <20231005090311.GD83257@google.com>
+References: <20231003170020.830242-1-lee@kernel.org>
+ <2023100320-immorally-outboard-573a@gregkh>
+ <DB9PR10MB588170E923A6ED8B3D6D9613E0CBA@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+ <2023100421-negotiate-stammer-1b35@gregkh>
+ <20231004085720.GA9374@google.com>
+ <2023100448-cotton-safehouse-aca2@gregkh>
+ <20231004125704.GA83257@google.com>
+ <2023100435-xerox-idiocy-5cf0@gregkh>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2023100435-xerox-idiocy-5cf0@gregkh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Maximilian reported that surface_serial_hub serdev tx does not work during
-system suspend. During system suspend, runtime PM gets disabled in
-__device_suspend_late(), and tx is unable to wake-up the serial core port
-device that we use to check if tx is safe to start. Johan summarized the
-regression noting that serdev tx no longer always works as earlier when the
-serdev device is runtime PM active.
+On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
 
-The serdev device and the serial core controller devices are siblings of
-the serial port hardware device. The runtime PM usage count from serdev
-device does not propagate to the serial core device siblings, it only
-propagates to the parent.
+> On Wed, Oct 04, 2023 at 01:57:04PM +0100, Lee Jones wrote:
+> > On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
+> > 
+> > > On Wed, Oct 04, 2023 at 09:57:20AM +0100, Lee Jones wrote:
+> > > > On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
+> > > > 
+> > > > > On Wed, Oct 04, 2023 at 05:59:09AM +0000, Starke, Daniel wrote:
+> > > > > > > Daniel, any thoughts?
+> > > > > > 
+> > > > > > Our application of this protocol is only with specific modems to enable
+> > > > > > circuit switched operation (handling calls, selecting/querying networks,
+> > > > > > etc.) while doing packet switched communication (i.e. IP traffic over PPP).
+> > > > > > The protocol was developed for such use cases.
+> > > > > > 
+> > > > > > Regarding the issue itself:
+> > > > > > There was already an attempt to fix all this by switching from spinlocks to
+> > > > > > mutexes resulting in ~20% performance loss. However, the patch was reverted
+> > > > > > as it did not handle the T1 timer leading into sleep during atomic within
+> > > > > > gsm_dlci_t1() on every mutex lock there.
+> > > > 
+> > > > That's correct.  When I initially saw this report, my initial thought
+> > > > was to replace the spinlocks with mutexts, but having read the previous
+> > > > accepted attempt and it's subsequent reversion I started to think of
+> > > > other ways to solve this issue.  This solution, unlike the last, does
+> > > > not involve adding sleep inducing locks into atomic contexts, nor
+> > > > should it negatively affect performance.
+> > > > 
+> > > > > > There was also a suggestion to fix this in do_con_write() as
+> > > > > > tty_operations::write() appears to be documented as "not allowed to sleep".
+> > > > > > The patch for this was rejected. It did not fix the issue within n_gsm.
+> > > > > > 
+> > > > > > Link: https://lore.kernel.org/all/20221203215518.8150-1-pchelkin@ispras.ru/
+> > > > > > Link: https://lore.kernel.org/all/20221212023530.2498025-1-zengheng4@huawei.com/
+> > > > > > Link: https://lore.kernel.org/all/5a994a13-d1f2-87a8-09e4-a877e65ed166@kernel.org/
+> > > > > 
+> > > > > Ok, I thought I remembered this, I'll just drop this patch from my
+> > > > > review queue and wait for a better solution if it ever comes up as this
+> > > > > isn't a real issue that people are seeing on actual systems, but just a
+> > > > > syzbot report.
+> > > > 
+> > > > What does the "better solution" look like?
+> > > 
+> > > One that actually fixes the root problem here (i.e. does not break the
+> > > recursion loop, or cause a performance decrease for normal users, or
+> > > prevent this from being bound to the console).
+> > 
+> > Does this solution break the recursion loop or affect performance?
+> 
+> This solution broke the recursion by returning an error, right?
 
-In addition to the tx issue for suspend, testing for the serial core port
-device can cause an unnecessary delay in enabling tx while waiting for the
-serial core port device to wake-up. The serial core port device wake-up is
-only needed to flush pending tx when the serial port hardware device was
-in runtime PM suspended state.
+This is the part I was least sure about.
 
-To fix the regression, we need to check the runtime PM state of the parent
-serial port hardware device for tx instead of the serial core port device.
+If this was considered valid and we were to go forward with a solution
+like this, what would a quality improvement look like?  Should we have
+stayed in this function and waited for the previous occupant to leave
+before continuing through ->write()?
 
-As the serial port device drivers may or may not implement runtime PM, we
-need to also add a check for pm_runtime_enabled().
+> The performance one was by using mutexes as in previous attempts.
 
-Reported-by: Maximilian Luz <luzmaximilian@gmail.com>
-Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/tty/serial/serial_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Right.  This solution was designed to avoid that.
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -156,7 +156,7 @@ static void __uart_start(struct uart_state *state)
- 	 * enabled, serial_port_runtime_resume() calls start_tx() again
- 	 * after enabling the device.
- 	 */
--	if (pm_runtime_active(&port_dev->dev))
-+	if (!pm_runtime_enabled(port->dev) || pm_runtime_active(port->dev))
- 		port->ops->start_tx(port);
- 	pm_runtime_mark_last_busy(&port_dev->dev);
- 	pm_runtime_put_autosuspend(&port_dev->dev);
 -- 
-2.42.0
+Lee Jones [李琼斯]
