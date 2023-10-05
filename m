@@ -2,119 +2,103 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE157BA390
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30897BA3E9
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 18:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237884AbjJEP56 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 11:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
+        id S233831AbjJEQAI (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 12:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbjJEP4o (ORCPT
+        with ESMTP id S236665AbjJEP7L (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 11:56:44 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8984ED4;
-        Thu,  5 Oct 2023 06:52:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D177DC4AF6E;
-        Thu,  5 Oct 2023 13:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696512835;
-        bh=Ajq8gV1LGJFvnPZhXDFFK3hzihK5NkBL+73XF7NmfLI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gnPv76MvuwiBgqT0NgoekRfweaFvnh+3jHOlQlW7mrJYPUb4SPLy3W1JV1ZEtZpnU
-         SHKV1Kbs5ahtwZ31CnUJMi4jhkyP2Gaw13sJniLcx/imC72HsarqQ3+MV1L97SZcrm
-         ZLRVgnOb3HNVtxsqIjyQVKlBIL1Xa4Zj8QOR+QSg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-serial@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH 2/2] tty: vc_screen: make vc_class constant
-Date:   Thu,  5 Oct 2023 15:33:48 +0200
-Message-ID: <2023100549-sixth-anger-ac34@gregkh>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <2023100546-humbly-prologue-e58c@gregkh>
-References: <2023100546-humbly-prologue-e58c@gregkh>
+        Thu, 5 Oct 2023 11:59:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1950B59E4;
+        Thu,  5 Oct 2023 08:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696519195; x=1728055195;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rHv1yZ3QlkVxPZXwJjb2AlmfazUnbbUhKxhZTvKFYsw=;
+  b=bfB5r88Q3jWfIWKDXgq2nsB4B1n6slDoQDronDZAleA4utKiVc3pAMHc
+   Fb4qrqW7MzH+uHR/PEV5sMKgJL4rQb3PCsUfnNQkDTEQ5iRPEJQdS4tZ7
+   Vw7UIaNnEaRTbyWqHzEsuQ/poTUkj+tIaQrfpcNPnG8quXxUkU/abre05
+   j/Lrq99CynT0/GDXUuTrVNTw4sV8JzzdIHGY8BQCn+ifirP+bN0TOptRa
+   EgyZZABrN2WjJid9gU+76fEr7vRZpTJFx0CypY7KL00TrrUl3+NVOnkCX
+   gkmcQ3nN7xhjcr+x58tVYoCi5XeeEFh2nRUiofmwyvJLP4Si7KNjMDr49
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="386358273"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="386358273"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 08:19:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="875583433"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="875583433"
+Received: from yklum-mobl.gar.corp.intel.com (HELO intel.com) ([10.215.244.7])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 08:19:46 -0700
+Date:   Thu, 5 Oct 2023 17:19:38 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Al Cooper <alcooperx@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Subject: Re: [PATCH v2 1/1] serial: 8250_bcm7271: Use
+ devm_clk_get_optional_enabled()
+Message-ID: <ZR7UCtRKrycMD5d5@ashyti-mobl2.lan>
+References: <20231005124550.3607234-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Lines:  67
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2689; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=Ajq8gV1LGJFvnPZhXDFFK3hzihK5NkBL+73XF7NmfLI=; b=owGbwMvMwCRo6H6F97bub03G02pJDKlyu+3yq3oYfi5vZ1p9a+Hi5Av96lVGVge1BaQOep2o4 dZ8krC0I5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACYiJsmwYN38TToLHZN+7te/ 9LvMguFf8FV3P4Y5nG90Xhf83Xa61FfjptL/l0Z8FeseAgA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231005124550.3607234-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Now that the driver core allows for struct class to be in read-only
-memory, making all 'class' structures to be declared at build time
-placing them into read-only memory, instead of having to be dynamically
-allocated at load time.
+Hi Andy,
 
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/tty/vt/vc_screen.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+[...]
 
-diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-index 829c4be66f3b..b16ea517bb17 100644
---- a/drivers/tty/vt/vc_screen.c
-+++ b/drivers/tty/vt/vc_screen.c
-@@ -786,23 +786,22 @@ static const struct file_operations vcs_fops = {
- 	.release	= vcs_release,
- };
- 
--static struct class *vc_class;
-+static const struct class vc_class = {
-+	.name = "vc",
-+};
- 
- void vcs_make_sysfs(int index)
- {
--	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, index + 1), NULL,
--		      "vcs%u", index + 1);
--	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, index + 65), NULL,
--		      "vcsu%u", index + 1);
--	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, index + 129), NULL,
--		      "vcsa%u", index + 1);
-+	device_create(&vc_class, NULL, MKDEV(VCS_MAJOR, index + 1), NULL, "vcs%u", index + 1);
-+	device_create(&vc_class, NULL, MKDEV(VCS_MAJOR, index + 65), NULL, "vcsu%u", index + 1);
-+	device_create(&vc_class, NULL, MKDEV(VCS_MAJOR, index + 129), NULL, "vcsa%u", index + 1);
- }
- 
- void vcs_remove_sysfs(int index)
- {
--	device_destroy(vc_class, MKDEV(VCS_MAJOR, index + 1));
--	device_destroy(vc_class, MKDEV(VCS_MAJOR, index + 65));
--	device_destroy(vc_class, MKDEV(VCS_MAJOR, index + 129));
-+	device_destroy(&vc_class, MKDEV(VCS_MAJOR, index + 1));
-+	device_destroy(&vc_class, MKDEV(VCS_MAJOR, index + 65));
-+	device_destroy(&vc_class, MKDEV(VCS_MAJOR, index + 129));
- }
- 
- int __init vcs_init(void)
-@@ -811,11 +810,12 @@ int __init vcs_init(void)
- 
- 	if (register_chrdev(VCS_MAJOR, "vcs", &vcs_fops))
- 		panic("unable to get major %d for vcs device", VCS_MAJOR);
--	vc_class = class_create("vc");
-+	if (class_register(&vc_class))
-+		panic("unable to create vc_class");
- 
--	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, 0), NULL, "vcs");
--	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, 64), NULL, "vcsu");
--	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, 128), NULL, "vcsa");
-+	device_create(&vc_class, NULL, MKDEV(VCS_MAJOR, 0), NULL, "vcs");
-+	device_create(&vc_class, NULL, MKDEV(VCS_MAJOR, 64), NULL, "vcsu");
-+	device_create(&vc_class, NULL, MKDEV(VCS_MAJOR, 128), NULL, "vcsa");
- 	for (i = 0; i < MIN_NR_CONSOLES; i++)
- 		vcs_make_sysfs(i);
- 	return 0;
--- 
-2.42.0
+> -	baud_mux_clk = devm_clk_get(dev, "sw_baud");
+> -	if (IS_ERR(baud_mux_clk)) {
+> -		if (PTR_ERR(baud_mux_clk) == -EPROBE_DEFER) {
+> -			ret = -EPROBE_DEFER;
+> -			goto release_dma;
+> -		}
+> -		dev_dbg(dev, "BAUD MUX clock not specified\n");
+> -	} else {
+> +	baud_mux_clk = devm_clk_get_optional_enabled(dev, "sw_baud");
+> +	ret = PTR_ERR_OR_ZERO(baud_mux_clk);
+> +	if (ret)
+> +		goto release_dma;
+> +	if (baud_mux_clk) {
+>  		dev_dbg(dev, "BAUD MUX clock found\n");
+> -		ret = clk_prepare_enable(baud_mux_clk);
+> -		if (ret)
+> -			goto release_dma;
+> +
+>  		priv->baud_mux_clk = baud_mux_clk;
+>  		init_real_clk_rates(dev, priv);
+>  		clk_rate = priv->default_mux_rate;
+> +	} else {
+> +		dev_dbg(dev, "BAUD MUX clock not specified\n");
 
+little behavioral change here, but I don't think this is a
+problem.
+
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
+
+Thanks,
+Andi
