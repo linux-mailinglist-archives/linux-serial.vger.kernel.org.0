@@ -2,134 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7527BA332
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE6A7B9F02
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236057AbjJEPwb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 11:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S233160AbjJEOQv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 10:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235410AbjJEPvI (ORCPT
+        with ESMTP id S233820AbjJEOPD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 11:51:08 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B716079E;
-        Thu,  5 Oct 2023 07:07:44 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA90C116B8;
-        Thu,  5 Oct 2023 09:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696497497;
-        bh=er2gV/B0WGFGwTMx3YbhEbm41Uarn24n6lRwoScj7y4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0V/zks3qAJ5nzMioieCIDud+bGbfkFe+9f0mnDo772FRR8YsbFjMw0sctDIrO3PFZ
-         nZV0Gm93NEvl6n/mwYKwei2JXj330Jd4CZOYF9zaTScF7OBP5YMYV5ou3bTpQwWS3Z
-         Q355DK9M+2o0elgzOH08Weh4qq4s6NbYIdTGqF5s=
-Date:   Thu, 5 Oct 2023 11:18:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     "Starke, Daniel" <daniel.starke@siemens.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Fedor Pchelkin <pchelkin@ispras.ru>,
+        Thu, 5 Oct 2023 10:15:03 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87A7A5E9
+        for <linux-serial@vger.kernel.org>; Thu,  5 Oct 2023 02:32:51 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-53406799540so1267898a12.1
+        for <linux-serial@vger.kernel.org>; Thu, 05 Oct 2023 02:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696498370; x=1697103170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qNwLLYEchjqrT8u4dds+22/hvzzwVkXCbPu7CyE+3Mk=;
+        b=V4REbNl/YAk00RXPG9rZxg5pwJCWIBFL6E5x0WAlIICbPHdhHu2STeD/ZWKy739zw0
+         vkfNqbtr7nun1bxGzAJMLOzce40sjFpy3nJoo+lkuG7rAKzsVGkVPMpG9TpBE8/7f9+F
+         K73Dq2cz4suXtGGUuAJWN5jpwJDATKp3RJU3GdLFSYdK4WK6G/+4Bx7Z1N6dgi8nkxdL
+         kkDfq8pWYK8KkIQ3X4j6fNKKFrp3pN09WSkbjd0ci+2H/7sA/EY16yplSwsIC4lUVSQZ
+         m1LBONZfdebCqNX1+FKtzMmqkvaXg+jjzBmuh5hx0N/XYvuiqNG/9dc8calhLVhl3WM7
+         ORxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696498370; x=1697103170;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qNwLLYEchjqrT8u4dds+22/hvzzwVkXCbPu7CyE+3Mk=;
+        b=HBeXww3FtYRaT7mf3dt5TtAVtM72zqM91+TBAkW4BmtdMDy2+GLmEwJxBJ43rXJeOf
+         CL+grkYHiNdrrvenHgq5eAgYKQUBWVWww5iakr7w3BauuMqtZ0hoOhLn1PlPciVfKklo
+         OPpzGcIHvg2eUgkKGvMnnrxCTK2xnoukmGeGtwIZa3HIhWxVmAWGa5Acw6pAhLOLQltn
+         Is3B/NkTd0HBx/I0fAQw3fVYawzFYJZJfnMrXH6iFG8rZGkiIMagv7Q12OButfgQQxS9
+         EVxdGT+EW3dR9AI6mvVg/Y17TZp7BFtGOl11V4VJAOtjTfkW6T07r6gH7rMthoJqdDQ3
+         LL8A==
+X-Gm-Message-State: AOJu0Yyl6ZUEvksDOTWXKIMvMfB3YQTnYKpWu0RHMdbA5RfdLnHVig1x
+        Ngz/Y0jvufS7LtAd8GyDKpzJMw==
+X-Google-Smtp-Source: AGHT+IGGASEELZoOzZ6BfyTzvlBZV9PBihNgej7jZay1gXGRYHNhNO+WGFiREWZMmxKPAgpv4B/eZA==
+X-Received: by 2002:a17:906:310b:b0:9ae:5765:c134 with SMTP id 11-20020a170906310b00b009ae5765c134mr4869914ejx.15.1696498370178;
+        Thu, 05 Oct 2023 02:32:50 -0700 (PDT)
+Received: from krzk-bin.. (5-157-101-10.dyn.eolo.it. [5.157.101.10])
+        by smtp.gmail.com with ESMTPSA id rn4-20020a170906d92400b0099bc038eb2bsm863893ejb.58.2023.10.05.02.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 02:32:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com" 
-        <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>
-Subject: Re: [PATCH 1/1] tty: n_gsm: Avoid sleeping during .write() whilst
- atomic
-Message-ID: <2023100528-directory-arrogant-2ca9@gregkh>
-References: <20231003170020.830242-1-lee@kernel.org>
- <2023100320-immorally-outboard-573a@gregkh>
- <DB9PR10MB588170E923A6ED8B3D6D9613E0CBA@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
- <2023100421-negotiate-stammer-1b35@gregkh>
- <20231004085720.GA9374@google.com>
- <2023100448-cotton-safehouse-aca2@gregkh>
- <20231004125704.GA83257@google.com>
- <2023100435-xerox-idiocy-5cf0@gregkh>
- <20231005090311.GD83257@google.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH 1/2] dt-bindings: serial: fix regex pattern for matching serial node children
+Date:   Thu,  5 Oct 2023 11:32:46 +0200
+Message-Id: <20231005093247.128166-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231005090311.GD83257@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 10:03:11AM +0100, Lee Jones wrote:
-> On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
-> 
-> > On Wed, Oct 04, 2023 at 01:57:04PM +0100, Lee Jones wrote:
-> > > On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
-> > > 
-> > > > On Wed, Oct 04, 2023 at 09:57:20AM +0100, Lee Jones wrote:
-> > > > > On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
-> > > > > 
-> > > > > > On Wed, Oct 04, 2023 at 05:59:09AM +0000, Starke, Daniel wrote:
-> > > > > > > > Daniel, any thoughts?
-> > > > > > > 
-> > > > > > > Our application of this protocol is only with specific modems to enable
-> > > > > > > circuit switched operation (handling calls, selecting/querying networks,
-> > > > > > > etc.) while doing packet switched communication (i.e. IP traffic over PPP).
-> > > > > > > The protocol was developed for such use cases.
-> > > > > > > 
-> > > > > > > Regarding the issue itself:
-> > > > > > > There was already an attempt to fix all this by switching from spinlocks to
-> > > > > > > mutexes resulting in ~20% performance loss. However, the patch was reverted
-> > > > > > > as it did not handle the T1 timer leading into sleep during atomic within
-> > > > > > > gsm_dlci_t1() on every mutex lock there.
-> > > > > 
-> > > > > That's correct.  When I initially saw this report, my initial thought
-> > > > > was to replace the spinlocks with mutexts, but having read the previous
-> > > > > accepted attempt and it's subsequent reversion I started to think of
-> > > > > other ways to solve this issue.  This solution, unlike the last, does
-> > > > > not involve adding sleep inducing locks into atomic contexts, nor
-> > > > > should it negatively affect performance.
-> > > > > 
-> > > > > > > There was also a suggestion to fix this in do_con_write() as
-> > > > > > > tty_operations::write() appears to be documented as "not allowed to sleep".
-> > > > > > > The patch for this was rejected. It did not fix the issue within n_gsm.
-> > > > > > > 
-> > > > > > > Link: https://lore.kernel.org/all/20221203215518.8150-1-pchelkin@ispras.ru/
-> > > > > > > Link: https://lore.kernel.org/all/20221212023530.2498025-1-zengheng4@huawei.com/
-> > > > > > > Link: https://lore.kernel.org/all/5a994a13-d1f2-87a8-09e4-a877e65ed166@kernel.org/
-> > > > > > 
-> > > > > > Ok, I thought I remembered this, I'll just drop this patch from my
-> > > > > > review queue and wait for a better solution if it ever comes up as this
-> > > > > > isn't a real issue that people are seeing on actual systems, but just a
-> > > > > > syzbot report.
-> > > > > 
-> > > > > What does the "better solution" look like?
-> > > > 
-> > > > One that actually fixes the root problem here (i.e. does not break the
-> > > > recursion loop, or cause a performance decrease for normal users, or
-> > > > prevent this from being bound to the console).
-> > > 
-> > > Does this solution break the recursion loop or affect performance?
-> > 
-> > This solution broke the recursion by returning an error, right?
-> 
-> This is the part I was least sure about.
-> 
-> If this was considered valid and we were to go forward with a solution
-> like this, what would a quality improvement look like?  Should we have
-> stayed in this function and waited for the previous occupant to leave
-> before continuing through ->write()?
+The regular expression pattern for matching serial node children should
+accept only nodes starting and ending with the set of words: bluetooth,
+gnss, gps or mcu.  Add missing brackets to enforce such matching.
 
-This isn't valid, as it obviously never shows up in real use.
+Fixes: 0c559bc8abfb ("dt-bindings: serial: restrict possible child node names")
+Reported-by: Andreas Kemnade <andreas@kemnade.info>
+Closes: https://lore.kernel.org/all/20231004170021.36b32465@aktux/
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/serial/serial.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The real solution should be to prevent binding a console to this line
-discipline as it can not handle the recursion that consoles require for
-the write path.
+diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
+index ea277560a596..5727bd549dec 100644
+--- a/Documentation/devicetree/bindings/serial/serial.yaml
++++ b/Documentation/devicetree/bindings/serial/serial.yaml
+@@ -96,7 +96,7 @@ then:
+     rts-gpios: false
+ 
+ patternProperties:
+-  "^bluetooth|gnss|gps|mcu$":
++  "^(bluetooth|gnss|gps|mcu)$":
+     if:
+       type: object
+     then:
+-- 
+2.34.1
 
-Then, if consoles are really needed, the code can be fixed up to handle
-such recursion.  That's not a trivial thing to do, as can be seen by the
-crazy gyrations that the n_tty line discipline does in its write path...
-
-thanks,
-
-greg k-h
