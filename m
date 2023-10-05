@@ -2,136 +2,130 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2207BA6EC
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 18:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CAC7BA509
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 18:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjJEQnT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 12:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S240938AbjJEQNc (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 12:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjJEQlj (ORCPT
+        with ESMTP id S240970AbjJEQMU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:41:39 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DEF49C4
-        for <linux-serial@vger.kernel.org>; Wed,  4 Oct 2023 22:05:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-533df112914so841857a12.0
-        for <linux-serial@vger.kernel.org>; Wed, 04 Oct 2023 22:05:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1696482345; x=1697087145; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tumpG4fZu91mYpt2qQbWwuFfddli9/TW76sKXIYzTOk=;
-        b=deQ7A4mY5ePOw4jHVnPJCqadPHGXWot17MfTlsuzPmL1tAKWWcgtfIzYCl6Y26RH/2
-         Tg5vtPBAu0gJKO7CFEu7p2di+9Zo7ZnGiByuPZRH4rVpEmvI6Ad5Z1u3CH752De5xk+b
-         6k6CTfr0mgVEyVtkEVStiiy6ER34FpSe0ONd2J1hDIrOt+KFaJzkK7e2ZCnkgu2oFmTx
-         hJYJmKEe1oqQ26KbG9i+ATT9szB+0wzhWfDLnsox8IPOw7cn1kAP95Htmm4YSPIftgTn
-         WIV57dECWvJJjG2shxvBLoZgUjtRC3J09TgpgpGGMiZclNTXmV2XoELeTgvgyRXZqaUB
-         pGSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696482345; x=1697087145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tumpG4fZu91mYpt2qQbWwuFfddli9/TW76sKXIYzTOk=;
-        b=Se/dxak1Frmrq17Pw6Wt0lccZ4akpPRlVU3eaFDAbElEN3KVa51Pg847KwKaAZrwnN
-         nh6Ts50qEKsQB2HsypTeLrCieR5kvmQw88PDX2aAlAlxMbGlQ37jOwb7x+Ki0avtLVRF
-         z8crqn9XI4GYlc8FIt1Fx9vBV4LqobSj+xEVWM6OBKEDd+/otTRhWwKwG/um9NgS0QCe
-         ZxmvSozNybSxnUb7lVMD1Fl0b3OIYxvYgYuvg9lYAuKdZMRwjfkrQmDDtAUebYGRNZRt
-         ItCXQk1l1EgpMDnRmAyyi6oJJy5XQLmPEhHXNVlGjMP9m3hUG/LE2LHF952k60OI/WKl
-         0Dtw==
-X-Gm-Message-State: AOJu0YyfpnrKE0YzffbW5lEMOgrXQczi8Bcw5CiT8Hyp1bK8tgdmX45P
-        07oRRoTKdBJ4vP9qQmBJb11ITg==
-X-Google-Smtp-Source: AGHT+IE54MO+fhgdky4xkVipD6Wj3FDv6iN+CshxB2o1CFdPuoVHF2KKTNg0ZjphMiuqlQstCFMd7w==
-X-Received: by 2002:aa7:da8c:0:b0:530:9b94:96e with SMTP id q12-20020aa7da8c000000b005309b94096emr3525467eds.41.1696482345190;
-        Wed, 04 Oct 2023 22:05:45 -0700 (PDT)
-Received: from [192.168.32.2] ([147.161.130.252])
-        by smtp.gmail.com with ESMTPSA id u15-20020aa7d98f000000b00533bab9d9f1sm434409eds.1.2023.10.04.22.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Oct 2023 22:05:44 -0700 (PDT)
-Message-ID: <08ed16ff-14ca-a7e2-59c2-da949ceaa608@tuxon.dev>
-Date:   Thu, 5 Oct 2023 08:05:42 +0300
+        Thu, 5 Oct 2023 12:12:20 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01olkn0813.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe1e::813])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D7F93D1;
+        Thu,  5 Oct 2023 01:52:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VRwqzXXosPAbwsVLgptQh88u+dDR0y316QZlouzlClIpxom3pjv1dNW6OaKe0sQZJoIvk9Z9veZKtKcatlXnakGmdlhsM3uoh10yWMrDmO7w0vKagwylyPZUhNHHHKaFQwtAsFNxKNTx4ezt8s4enzd0eqjt3P1FDXckyuub1YxDMr/4taWExDieLg0UmQIICzZEuc20eSjgQM0fAjKDBKZAX+2gm12gUpA5vTkzhKUv9JYrOsu5vHx7M09Z0PeNDeiL+XWYd8J9HIc1/giBS61Rugaj7iSQjPMdtl1zLF4v11kH9CM8k0Z8w+7HB8JCHLPRvuvRO4cxyOq7efdOKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qSs6VLssUz41mgB5cZYvsadDrlLXxuEY702N38NLYOg=;
+ b=jAk+6Pv0VJpgKAv5rEOFPfhP0iARl3IpSsX/svPDAj417iSsRc9Tc7EFfvVOKODBH27euFJ+U8AsisfDzicm5py0HaSKSf/+lDZY01OIBC13zGa1Fgmi3cK32Cg1JFZ94Wn6sllfiiB58bJLmQWeSo1dE4Tu/fiJk84YXuCPakhF92raV66Fgov085Wx+gpPWjDXNGlqS0vCEIU0jG2BJGRiOItP9+QlK5hgLOuCM6ELEMrAz96dkQQ1EIh5WY2ISecsOHCxq5KASVUKqNRIES6XFc/gU5G1ufO3s0WLpb28Ja0oWYv72sN/ZIsa5Hnq3gtUWIsUOf6IhKXFEoBGSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from AM0PR09MB2675.eurprd09.prod.outlook.com (2603:10a6:208:d3::24)
+ by PAWPR09MB6613.eurprd09.prod.outlook.com (2603:10a6:102:342::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.33; Thu, 5 Oct
+ 2023 08:51:55 +0000
+Received: from AM0PR09MB2675.eurprd09.prod.outlook.com
+ ([fe80::b4c3:964f:93ac:4b0]) by AM0PR09MB2675.eurprd09.prod.outlook.com
+ ([fe80::b4c3:964f:93ac:4b0%7]) with mapi id 15.20.6813.027; Thu, 5 Oct 2023
+ 08:51:55 +0000
+From:   Paul Geurts <paul_geurts@live.nl>
+To:     u.kleine-koenig@pengutronix.de
+Cc:     festevam@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        paul_geurts@live.nl, s.hauer@pengutronix.de, shawnguo@kernel.org
+Subject: Re: [PATCH] serial: imx: fix tx statemachine deadlock
+Date:   Thu,  5 Oct 2023 10:51:44 +0200
+Message-ID: <AM0PR09MB267515B5C995C5FEA1A8833295CAA@AM0PR09MB2675.eurprd09.prod.outlook.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20231004102008.giyogvnsc26ucx4k@pengutronix.de>
+References: <20231004102008.giyogvnsc26ucx4k@pengutronix.de>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-TMN:  [Pyd27K2z+gzsipdoQo3oHACIXzOPVdu+TLHJiKBDLoDdjwcny6vJU97aT+vr10an]
+X-ClientProxiedBy: AS9P194CA0011.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:20b:46d::16) To AM0PR09MB2675.eurprd09.prod.outlook.com
+ (2603:10a6:208:d3::24)
+X-Microsoft-Original-Message-ID: <20231005085144.2649-1-paul_geurts@live.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v2 18/28] pinctrl: renesas: rzg2l: add support for
- different ds values on different groups
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        quic_bjorande@quicinc.com, konrad.dybcio@linaro.org, arnd@arndb.de,
-        neil.armstrong@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, linux-renesas-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
- <20230929053915.1530607-19-claudiu.beznea@bp.renesas.com>
- <CAMuHMdWQVtroKntVamANrWiheDYa6+=L8K53__1WUZg3bF8EFQ@mail.gmail.com>
-From:   claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAMuHMdWQVtroKntVamANrWiheDYa6+=L8K53__1WUZg3bF8EFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR09MB2675:EE_|PAWPR09MB6613:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e7896e0-694d-46ce-545f-08dbc580537a
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6X5RPZYFlmfmsr69mBIwAwqRKlbcCBsiI2wIRHRiFmYfqwaNmJ5nf/OLVSy+4W9M4NCQtNtMtaOxMqowsCfhaHVGJ7Ojij9oCSWiqq44CyOVU2uXO1IeVq1L9utPjdCOtgftb0TRbFaEYrOa/IkqpFG18nn2ZNN9oTNCU1BmauX6UF5+rVmL7j+KCxPgDheBnkyx0Mc9nR2ZGoeoU79ysEisuOVkXI9/niqmRdET1QG6FaGXUmJQAw18eXBMi3UeILkDJMC5C8U0C0wBW4Rk0DBEFyK1wUpcUKlj5lAubCAxUq/WI/RBtMdBXz0WKbt/SGpgoOTG12UheOJaAmcyVfO2AQBMufmyWTqRezs+3iI4/hTZju999NGMhL73oTSTDOsZjBNFTN9orYiJUoIloc7SWPMKF6gbH7QEpPpBWIloyjkuVUjRz0Uap/I64zI99hMZeCbgJ/k+7E7fYkMS2/ByennmBmycU4fBdTNo0T58KoAPTt4yeR9QLV2pSJyYM233e/mTdVPLS3AKq7Y95VIHkiamspBXJyrVTiVZ/W8lpDmGAgKNWwarzKZWXtzhS0A94nsFwiUWxeX0kWvtP3npRWlmqYJEF1L150UvjOMzzfUscm/x/lE/lP/jjFns
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6Z8esGMfrpNvGsmZ6OAp/9mfIfdtPOFKMw0V1J8InOoABBhYyWlfiCIei40P?=
+ =?us-ascii?Q?G5kTpMOAoUGa7L9npH395f70hl/za192mg5bkTsGi6kS+njoI5ZKouInuA2x?=
+ =?us-ascii?Q?tyWVXI1HbGDm117HlvGN2j5F2Qyf+WAmm/zte5XzyZOU1R09mCj4uFoLTD7h?=
+ =?us-ascii?Q?lcBfVtBUV+7fmz4IOZKTgCLNtoFWEvdw0x0lfKP/KLJlMxIweQ3A+6gfw2d3?=
+ =?us-ascii?Q?ZxnOlulmErpBoDpq9ODEkmmkfSYu7eGSdQ5/akRnqAzaH1F9xwueRPvs+cZq?=
+ =?us-ascii?Q?5N9QAvHj6Layi5JwIwCcZFUbuSs0RswdJnCHsSjqM5Jhk7VVR+bPAFjCsgZz?=
+ =?us-ascii?Q?VCCfg1Li3Pbwm84WiPPBMIhsXvHTZgjc6Rg3N5xxJ5nfTMvnDynB4inDDz6o?=
+ =?us-ascii?Q?PNebAyBGec9Mq7Zq70raIsnzOsF6O4MvyA7L67UEBrV0OUAanCG1r+3Wj51O?=
+ =?us-ascii?Q?oR+GDv/xmAnWSGBzEFUVFXbFeLf/wvIQeJ4CAAn8OpJOUKqZYi6NkcMZy0MZ?=
+ =?us-ascii?Q?9dDwdp0IiKQ/yWDFYASV1v4GujJOtyZi56F1KpxBuVE5r27/U0ILEbs9JlSa?=
+ =?us-ascii?Q?nE2PCYdiRuC5OQkFrvBpTxs+0mcaGCN99SOI9P/d0QVYaphNbdJH6mWEfmsr?=
+ =?us-ascii?Q?Z8Hm7QP782tGHLbB/gK8PQjz5fwBt4+/xl1c1U0Fi3r2FYKVD3VnMSw3uvN6?=
+ =?us-ascii?Q?36cjs8YC4BKyhbm0WUCirJzpFDMR4eZiTMxEZTflljANHGVWXfgEhr753P0W?=
+ =?us-ascii?Q?4tPb1+c+1RpDaFfpdAl28qXdQq460bLSZA6BGx9RawsGilS1052lsE/9f4C1?=
+ =?us-ascii?Q?8S2bJj05IC2PYBt2sI7CHauwy5zTPNEZJRb/STkKjy5RfKybaK8gyFtCqkO+?=
+ =?us-ascii?Q?tuLd26nUiW7psJ8W+OO0M57/PeI0pfmtMrElU223F8VdgMGesEJnMOkza89p?=
+ =?us-ascii?Q?pw8vUXN7mzaBE57tXBjtvUND5IBr4wvTrDmNCURzAqKoCZma4+QDQ42o6NBb?=
+ =?us-ascii?Q?dPYcDcsYX9nj5fm4/NXqgFJB2Z/F5zkeXPwfuYRoo9ar/H8MGwzdWPKYZJwv?=
+ =?us-ascii?Q?URoNJOShpJl0gSmaFbNwwBQGN7UqO4tpUdUhq7wpInmMl3+drY2Nh9NbwEee?=
+ =?us-ascii?Q?+J8bMm6CqNAHlnanTObRBfoqaVD6tUztif83mwUAKsjvEU9R74F6N/G5bi9w?=
+ =?us-ascii?Q?/7qk03OuLwKM1YBffwvmTYR4A2gENq6v+FHa9YXVqd2aVOWWfHV1XB+u/Viw?=
+ =?us-ascii?Q?8hiWm4d+MF9qnDl3a+C3S28uRhkHGZv7jbonRHi1bw=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-64da6.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e7896e0-694d-46ce-545f-08dbc580537a
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR09MB2675.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 08:51:55.5383
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR09MB6613
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Hi Uwe,
 
+> Sounds reasonable.
+> 
+> A Fixes: line would be nice.
 
-On 04.10.2023 16:17, Geert Uytterhoeven wrote:
-> On Fri, Sep 29, 2023 at 7:39 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> RZ/G3S supports different drive strength values for different power sources
->> and pin groups (A, B, C). On each group there could be up to 4 drive
->> strength values per power source. Available power sources are 1v8, 2v5,
->> 3v3. Drive strength values are fine tuned than what was previously
->> available on the driver thus the necessity of having micro-amp support.
->> As drive strength and power source values are linked together the
->> hardware setup for these was moved at the end of
->> rzg2l_pinctrl_pinconf_set() to ensure proper validation of the new
->> values.
->>
->> The drive strength values are expected to be initialized though SoC
->> specific hardware configuration data structure.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>
->> Changes in v2:
->> - s/strenght/strength, s/togheter/together in commit description
->> - got rid of RZG2L_INVALID_IOLH_VAL macro and consider zero as invalid
->>   value for entries in struct rzg2l_hwcfg::iolh_group[abc]_ua[] arrays
->> - removed spinlock in rzg2l_[sg]et_power_source()
->> - introduced caps_to_pwr_reg() and simplified the code in
->>   rzg2l_[sg]et_power_source()
->> - changed return type of rzg2l_iolh_ua_to_val() to int and return
->>   -EINVAL on failure cases
->> - s/rzg2l_ds_supported/rzg2l_ds_is_supported
->> - inverted the logic in rzg2l_pinctrl_pinconf_set() when applying drive
->>   strength and power source to hardware registers and thus simplified the
->>   code
->> - used devm_kcalloc() instead of devm_kzalloc()
->> - adderessed the rest of the review comments
-> 
-> Thanks, will queue in renesas-pinctrl-for-v6.7, with Paul's comment
-> addresses.
+Yes, I will add the Fixes line for sure.
 
-Thank you Geert and Paul!
+> So the new thing is: If the hardware is still busy sending stuff but
+> /dev/ttymxcX isn't open any more (i.e. .shutdown was called), the
+> transmitter gets disabled. I wonder if in this case disabling the
+> transmitter should be delayed until the shifter is empty? Or maybe this
+> should be handled in .shutdown, that is only disable TCEN once the
+> shifter is empty?
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+Good point. I am wondering whether this would be necessary. Writing to the
+TTY is blocking until the shifter is done, so closing it before the shifter
+is done is an error condition anyway, right? So if it already is an error
+condition, the data is already unreliable. Making sure the shifter is
+empty on shutdown would mean waiting for it, or doing it asynchronously,
+which IMO is both not a great idea. Maybe we can just dump the buffer on
+shutdown but I don't know whether the IP can do that.
+
+Let me know what you think.
+
+br,
+Paul
