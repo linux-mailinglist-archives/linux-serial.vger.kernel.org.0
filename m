@@ -2,105 +2,105 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE6A7B9F02
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A681D7BA05F
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbjJEOQv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 10:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S236582AbjJEOgn (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 10:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbjJEOPD (ORCPT
+        with ESMTP id S236139AbjJEOej (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:15:03 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87A7A5E9
-        for <linux-serial@vger.kernel.org>; Thu,  5 Oct 2023 02:32:51 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-53406799540so1267898a12.1
-        for <linux-serial@vger.kernel.org>; Thu, 05 Oct 2023 02:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696498370; x=1697103170; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNwLLYEchjqrT8u4dds+22/hvzzwVkXCbPu7CyE+3Mk=;
-        b=V4REbNl/YAk00RXPG9rZxg5pwJCWIBFL6E5x0WAlIICbPHdhHu2STeD/ZWKy739zw0
-         vkfNqbtr7nun1bxGzAJMLOzce40sjFpy3nJoo+lkuG7rAKzsVGkVPMpG9TpBE8/7f9+F
-         K73Dq2cz4suXtGGUuAJWN5jpwJDATKp3RJU3GdLFSYdK4WK6G/+4Bx7Z1N6dgi8nkxdL
-         kkDfq8pWYK8KkIQ3X4j6fNKKFrp3pN09WSkbjd0ci+2H/7sA/EY16yplSwsIC4lUVSQZ
-         m1LBONZfdebCqNX1+FKtzMmqkvaXg+jjzBmuh5hx0N/XYvuiqNG/9dc8calhLVhl3WM7
-         ORxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696498370; x=1697103170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qNwLLYEchjqrT8u4dds+22/hvzzwVkXCbPu7CyE+3Mk=;
-        b=HBeXww3FtYRaT7mf3dt5TtAVtM72zqM91+TBAkW4BmtdMDy2+GLmEwJxBJ43rXJeOf
-         CL+grkYHiNdrrvenHgq5eAgYKQUBWVWww5iakr7w3BauuMqtZ0hoOhLn1PlPciVfKklo
-         OPpzGcIHvg2eUgkKGvMnnrxCTK2xnoukmGeGtwIZa3HIhWxVmAWGa5Acw6pAhLOLQltn
-         Is3B/NkTd0HBx/I0fAQw3fVYawzFYJZJfnMrXH6iFG8rZGkiIMagv7Q12OButfgQQxS9
-         EVxdGT+EW3dR9AI6mvVg/Y17TZp7BFtGOl11V4VJAOtjTfkW6T07r6gH7rMthoJqdDQ3
-         LL8A==
-X-Gm-Message-State: AOJu0Yyl6ZUEvksDOTWXKIMvMfB3YQTnYKpWu0RHMdbA5RfdLnHVig1x
-        Ngz/Y0jvufS7LtAd8GyDKpzJMw==
-X-Google-Smtp-Source: AGHT+IGGASEELZoOzZ6BfyTzvlBZV9PBihNgej7jZay1gXGRYHNhNO+WGFiREWZMmxKPAgpv4B/eZA==
-X-Received: by 2002:a17:906:310b:b0:9ae:5765:c134 with SMTP id 11-20020a170906310b00b009ae5765c134mr4869914ejx.15.1696498370178;
-        Thu, 05 Oct 2023 02:32:50 -0700 (PDT)
-Received: from krzk-bin.. (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id rn4-20020a170906d92400b0099bc038eb2bsm863893ejb.58.2023.10.05.02.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 02:32:49 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 1/2] dt-bindings: serial: fix regex pattern for matching serial node children
-Date:   Thu,  5 Oct 2023 11:32:46 +0200
-Message-Id: <20231005093247.128166-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 5 Oct 2023 10:34:39 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D9B526D;
+        Thu,  5 Oct 2023 06:52:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B799AC116D7;
+        Thu,  5 Oct 2023 10:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696500793;
+        bh=RJWoMbVbJ151+uWDTX/jr/W0fr8rED5wB3RE5Q7hp/4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B+LvITA9/TODmPovJDG3ZIkXUJcV9Ds0N6YYFKHuMNE1kHES5iPpht2W9i4nTpdzO
+         NQo/V78oIcqgPvapVvUw/Gn7sDyPTStNIOyxHOyMDjAIXB4bxvP7xEaZT0CPPaWgCX
+         xeDB3HqgvAstsvDWxm8ZGT2AAk2hlhdcdk/OJCGmsh1+9j+WY8DbCz2I0zd9Rqnw9K
+         nyCmRpjLq2yUe7rrnKBuAGU30l8uu0qVYYmUaxufXUJGHcmyKIpBcMb9ThWVtZQWNb
+         3ug8M5Kq9avnc1JJ01h48Lq2yUWyZvBV7gF6RmYNKwi4Dt/eabYT8W1qMmIB6uohpX
+         HaJsyENCOHGmA==
+Date:   Thu, 5 Oct 2023 11:13:07 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Florian Eckert <fe@dev.tdt.de>, Jiri Slaby <jirislaby@kernel.org>,
+        Eckert.Florian@googlemail.com, pavel@ucw.cz, kabel@kernel.org,
+        u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-leds@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 3/4] trigger: ledtrig-tty: move variable definition to
+ the top
+Message-ID: <20231005101307.GE83257@google.com>
+References: <20230928132632.200263-1-fe@dev.tdt.de>
+ <20230928132632.200263-4-fe@dev.tdt.de>
+ <20231002140559.GB8453@google.com>
+ <acda5dc4-e6d3-4870-929f-fb91636b5649@kernel.org>
+ <59cc4073a94edbdec5d77f8457ed4f73@dev.tdt.de>
+ <05b03f3e-5863-4d33-8c70-03be7d7e972f@kernel.org>
+ <d59855493baa936485a2b00aa29d0449@dev.tdt.de>
+ <2023100508-prelaunch-marbled-3a93@gregkh>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2023100508-prelaunch-marbled-3a93@gregkh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The regular expression pattern for matching serial node children should
-accept only nodes starting and ending with the set of words: bluetooth,
-gnss, gps or mcu.  Add missing brackets to enforce such matching.
+On Thu, 05 Oct 2023, Greg KH wrote:
 
-Fixes: 0c559bc8abfb ("dt-bindings: serial: restrict possible child node names")
-Reported-by: Andreas Kemnade <andreas@kemnade.info>
-Closes: https://lore.kernel.org/all/20231004170021.36b32465@aktux/
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/serial/serial.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, Oct 04, 2023 at 10:36:09AM +0200, Florian Eckert wrote:
+> > 
+> > 
+> > > > I decided to move the variable definition with a separate commit
+> > > > to the top of the function, to make the build robot happy. After that
+> > > > I made my changes for v2 to the ledtrig-tty to add the feature.
+> > > > 
+> > > > > Ah, lkp, then also the Closes: line as it suggests.
+> > > > 
+> > > > Sorry I do not understand your statement
+> > > 
+> > > The link you pasted above states:
+> > > =======
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new
+> > > version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes:
+> > > https://lore.kernel.org/oe-kbuild-all/202309270440.IJB24Xap-lkp@intel.com/
+> > > =======
+> > > 
+> > > So please follow that suggestion ;).
+> > 
+> > Ok, I understand, thanks will to this on a v3 patchset.
+> > I will now wait for the comments of my changes in ledtrig-tty from the led
+> > subsystem.
+> > And then I will send a new patch set with the requested changes.
+> > 
+> > Sorry for the silly question. But do I have to send this patch again for a
+> > v3?
+> > https://lore.kernel.org/linux-leds/f41dc1e1-6d34-48b2-97dd-ba67df6003c6@kernel.org/T/#u
+> > It was already marked by you with a `Reviewed-by:` from you?
 
-diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
-index ea277560a596..5727bd549dec 100644
---- a/Documentation/devicetree/bindings/serial/serial.yaml
-+++ b/Documentation/devicetree/bindings/serial/serial.yaml
-@@ -96,7 +96,7 @@ then:
-     rts-gpios: false
- 
- patternProperties:
--  "^bluetooth|gnss|gps|mcu$":
-+  "^(bluetooth|gnss|gps|mcu)$":
-     if:
-       type: object
-     then:
+Yes please.  I will pick this up as a set once it's ready.
+
+> This series is long gone from my review queue, so a v3 will be needed at
+> the very least.
+
+Nothing for Greg to worry about here (unless you *want* to review).
+
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
