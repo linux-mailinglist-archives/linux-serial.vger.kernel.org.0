@@ -2,113 +2,132 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4407BA019
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9A47BA082
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbjJEOdW (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 10:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S235014AbjJEOjA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 10:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjJEObh (ORCPT
+        with ESMTP id S235976AbjJEOg0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:31:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153C110CE;
-        Thu,  5 Oct 2023 06:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696513714; x=1728049714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/qcg9z9QjvBBFf2lrrpqt3uTlEPx56wjWhM7cNUhZdk=;
-  b=DaVpxLG1ZwQB4MHj+/gzTu8CSLiAGjp1z7nfUXvDWVUsfBxC9+pPwnxq
-   f2fuCpmdjz1WD0FRy27NWgiox21j32NZDBeAVXEWSamm+jtJT1uBu2u+K
-   TXJR6Vej63HpBHDONxpncO2INswa4IznDOSwWeqZU2krjD0X1ff4u4lV+
-   CQ8pbtDRLhnbxFcp+JHh9tdd8UcmfZ66BW/2R0yGB4FUP/4HJFwhl12mX
-   +a0GDs2kblAc8s06lMcu2OEXqrWXg8dL8WL21FwaFuKkSsZN99MyoO9Jf
-   Vk/EV5dyAxKoA98FpEAS3cRtJUydqJqemDopwGrKx8yW+nXVHJpM1XB3c
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="469745820"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="469745820"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 05:00:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="867860677"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="867860677"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 05:00:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qoN2B-000000030w6-1WjO;
-        Thu, 05 Oct 2023 15:00:51 +0300
-Date:   Thu, 5 Oct 2023 15:00:51 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Subject: Re: [PATCH] serial: core: Fix checks for tx runtime PM state
-Message-ID: <ZR6lc/F1Esxt5ChI@smile.fi.intel.com>
-References: <20231005075644.25936-1-tony@atomide.com>
+        Thu, 5 Oct 2023 10:36:26 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52E240FA7;
+        Thu,  5 Oct 2023 06:59:06 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39EEC3279B;
+        Thu,  5 Oct 2023 12:37:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1696509461;
+        bh=yPssmHk+h0I732PLM72/lK/bohTqVJvSoMLO4hpb3D4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0wxIPavtBAUyeJXufOCmBYrGsalBt0X+Y/fZ+1f7IbmQtmxkzMsmJbQAqTKWiU3P9
+         awgP8FnfwpkOZvIUnLAjHJS3EYKj6L83fSwtnRA2Bp/g3xRN8TlfGg+k8wjSIzqa9c
+         3NQ/IXPowUMQ4UWRhCIA1yWbvAPUawd1Ro6Ck9cQ=
+Date:   Thu, 5 Oct 2023 14:37:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     "Starke, Daniel" <daniel.starke@siemens.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fedor Pchelkin <pchelkin@ispras.ru>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com" 
+        <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>
+Subject: Re: [PATCH 1/1] tty: n_gsm: Avoid sleeping during .write() whilst
+ atomic
+Message-ID: <2023100524-obituary-scoundrel-971d@gregkh>
+References: <20231004125704.GA83257@google.com>
+ <2023100435-xerox-idiocy-5cf0@gregkh>
+ <20231005090311.GD83257@google.com>
+ <2023100528-directory-arrogant-2ca9@gregkh>
+ <20231005104311.GG83257@google.com>
+ <2023100512-charger-cherisher-9a3d@gregkh>
+ <DB9PR10MB5881E8D3903C19EBAD9AF895E0CAA@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+ <20231005114632.GA681678@google.com>
+ <2023100507-worst-quarrel-2b97@gregkh>
+ <20231005121756.GB681678@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231005075644.25936-1-tony@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231005121756.GB681678@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 10:56:42AM +0300, Tony Lindgren wrote:
-> Maximilian reported that surface_serial_hub serdev tx does not work during
-> system suspend. During system suspend, runtime PM gets disabled in
-> __device_suspend_late(), and tx is unable to wake-up the serial core port
-> device that we use to check if tx is safe to start. Johan summarized the
-> regression noting that serdev tx no longer always works as earlier when the
-> serdev device is runtime PM active.
+On Thu, Oct 05, 2023 at 01:17:56PM +0100, Lee Jones wrote:
+> On Thu, 05 Oct 2023, Greg Kroah-Hartman wrote:
 > 
-> The serdev device and the serial core controller devices are siblings of
-> the serial port hardware device. The runtime PM usage count from serdev
-
-I'm a bit lost in terminology here.
-AFAIU there are:
-1) children of the serial physical device;
-2) siblings (to each other).
-
-But may be I mistakenly deciphered the diagram from the previous discussion.
-
-> device does not propagate to the serial core device siblings, it only
-> propagates to the parent.
+> > On Thu, Oct 05, 2023 at 12:46:32PM +0100, Lee Jones wrote:
+> > > On Thu, 05 Oct 2023, Starke, Daniel wrote:
+> > > 
+> > > > > > Would something like this tick that box?
+> > > > > > 
+> > > > > > diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c index 
+> > > > > > 1f3aba607cd51..5c1d2fcd5d9e2 100644
+> > > > > > --- a/drivers/tty/n_gsm.c
+> > > > > > +++ b/drivers/tty/n_gsm.c
+> > > > > > @@ -3716,6 +3716,10 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
+> > > > > >         if (!gsm)
+> > > > > >                 return -ENODEV;
+> > > > > >  
+> > > > > > +       /* The GSM line discipline does not support binding to console */
+> > > > > > +       if (strncmp(tty->name, "tty", 3))
+> > > > > > +               return -EINVAL;
+> > > > > 
+> > > > > No, that's not going to work, some consoles do not start with "tty" :(
+> > > 
+> > > Ah, you mean there are others that we need to consider?
+> > > 
+> > > I was just covering off con_write() from drivers/tty/vt/vt.c.
+> > > 
+> > > Does anyone have a counter proposal?
+> > 
+> > consoles are dynamically assigned, the device knows if it is a console
+> > or not, so there is a way to determine this at runtime.  It's not a
+> > device naming thing at all.
 > 
-> In addition to the tx issue for suspend, testing for the serial core port
-> device can cause an unnecessary delay in enabling tx while waiting for the
-> serial core port device to wake-up. The serial core port device wake-up is
-> only needed to flush pending tx when the serial port hardware device was
-> in runtime PM suspended state.
+> It's not a device naming thing, but it is a ... :)
 > 
-> To fix the regression, we need to check the runtime PM state of the parent
-> serial port hardware device for tx instead of the serial core port device.
+> Okay, here's another uninformed stab in the dark:
 > 
-> As the serial port device drivers may or may not implement runtime PM, we
-> need to also add a check for pm_runtime_enabled().
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 1f3aba607cd51..ddf00f6a4141d 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -3629,6 +3629,10 @@ static int gsmld_open(struct tty_struct *tty)
+>         if (tty->ops->write == NULL)
+>                 return -EINVAL;
+> 
+> +       /* The GSM line discipline does not support binding to console */
+> +       if (tty->driver->type == TTY_DRIVER_TYPE_CONSOLE)
+> +               return -EINVAL;
+> +
+>         /* Attach our ldisc data */
+>         gsm = gsm_alloc_mux();
+>         if (gsm == NULL)
+> 
+> This seems to allow for the real serial devices (TTY_DRIVER_TYPE_SERIAL)
+> suggested by Daniel.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Close, but not quite.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Driver "types" can say if they are a console or not, but that doesn't
+mean you can't run the console over a serial port as well, right?
 
+Sorry, I don't have a real solution right now, and wouldn't wish the
+phrase "just dig through the tty console code!" on anyone, but that's
+what it is going to take to figure it out somehow, I can't remember the
+exact way consoles are hooked up at the moment (I conviently skipped
+that portion of the tty layer in my Embedded Recipies talk last week,
+saying "it's magic...")
 
+thanks,
+
+greg k-h
