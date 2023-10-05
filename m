@@ -2,69 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142A97B9FB0
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7527BA332
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjJEO1a (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 10:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S236057AbjJEPwb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 11:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbjJEOZS (ORCPT
+        with ESMTP id S235410AbjJEPvI (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:25:18 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC8C28112;
-        Thu,  5 Oct 2023 06:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696513496; x=1728049496;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aRAusKFOHxTcivReObj21Yhl56rRDgruWVPVeRzCnw8=;
-  b=fH6mc/wpYzsAQCIfNimwZDO6ue3m4KHSpSNvoe7lt7S8G2drO2fFTu1p
-   C8kY5oi8l/uJRq960pW+CCMaBo7kFmY7mhLXBRX69OV8L0LQHSvwsMVkN
-   TjStILJKmA3BBt0Mx0lbhYQd9hAQ7vjvGG+B+t+qnD4if2tK3l7fenkge
-   f0tsNX8wpMWYE9xWqJiBKgBEhztrgZpkJZpYM4xyrrNM+zMqHoG9+itQg
-   EloQ8LlD8xumAbgRbB5UaSEeJzMHyOIogcZArl2imWp6y28CrTBD7I+wq
-   PLir+AgQpX4j/uVIp6ZYGPYuqpS42LEcdF6SUM0h6vozsfDVJNm0L3koO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="447633641"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="447633641"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:08:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="867817764"
-X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="867817764"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:08:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qoKLJ-00000002z0x-2FGX;
-        Thu, 05 Oct 2023 12:08:25 +0300
-Date:   Thu, 5 Oct 2023 12:08:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250: Check for valid console index
-Message-ID: <ZR59CTEOdGYS+8lE@smile.fi.intel.com>
-References: <20231004085511.42645-1-tony@atomide.com>
+        Thu, 5 Oct 2023 11:51:08 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B716079E;
+        Thu,  5 Oct 2023 07:07:44 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA90C116B8;
+        Thu,  5 Oct 2023 09:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1696497497;
+        bh=er2gV/B0WGFGwTMx3YbhEbm41Uarn24n6lRwoScj7y4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0V/zks3qAJ5nzMioieCIDud+bGbfkFe+9f0mnDo772FRR8YsbFjMw0sctDIrO3PFZ
+         nZV0Gm93NEvl6n/mwYKwei2JXj330Jd4CZOYF9zaTScF7OBP5YMYV5ou3bTpQwWS3Z
+         Q355DK9M+2o0elgzOH08Weh4qq4s6NbYIdTGqF5s=
+Date:   Thu, 5 Oct 2023 11:18:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     "Starke, Daniel" <daniel.starke@siemens.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fedor Pchelkin <pchelkin@ispras.ru>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com" 
+        <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>
+Subject: Re: [PATCH 1/1] tty: n_gsm: Avoid sleeping during .write() whilst
+ atomic
+Message-ID: <2023100528-directory-arrogant-2ca9@gregkh>
+References: <20231003170020.830242-1-lee@kernel.org>
+ <2023100320-immorally-outboard-573a@gregkh>
+ <DB9PR10MB588170E923A6ED8B3D6D9613E0CBA@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+ <2023100421-negotiate-stammer-1b35@gregkh>
+ <20231004085720.GA9374@google.com>
+ <2023100448-cotton-safehouse-aca2@gregkh>
+ <20231004125704.GA83257@google.com>
+ <2023100435-xerox-idiocy-5cf0@gregkh>
+ <20231005090311.GD83257@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231004085511.42645-1-tony@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20231005090311.GD83257@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,19 +60,76 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 11:55:10AM +0300, Tony Lindgren wrote:
-> Let's not allow negative numbers for console index.
+On Thu, Oct 05, 2023 at 10:03:11AM +0100, Lee Jones wrote:
+> On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
+> 
+> > On Wed, Oct 04, 2023 at 01:57:04PM +0100, Lee Jones wrote:
+> > > On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
+> > > 
+> > > > On Wed, Oct 04, 2023 at 09:57:20AM +0100, Lee Jones wrote:
+> > > > > On Wed, 04 Oct 2023, Greg Kroah-Hartman wrote:
+> > > > > 
+> > > > > > On Wed, Oct 04, 2023 at 05:59:09AM +0000, Starke, Daniel wrote:
+> > > > > > > > Daniel, any thoughts?
+> > > > > > > 
+> > > > > > > Our application of this protocol is only with specific modems to enable
+> > > > > > > circuit switched operation (handling calls, selecting/querying networks,
+> > > > > > > etc.) while doing packet switched communication (i.e. IP traffic over PPP).
+> > > > > > > The protocol was developed for such use cases.
+> > > > > > > 
+> > > > > > > Regarding the issue itself:
+> > > > > > > There was already an attempt to fix all this by switching from spinlocks to
+> > > > > > > mutexes resulting in ~20% performance loss. However, the patch was reverted
+> > > > > > > as it did not handle the T1 timer leading into sleep during atomic within
+> > > > > > > gsm_dlci_t1() on every mutex lock there.
+> > > > > 
+> > > > > That's correct.  When I initially saw this report, my initial thought
+> > > > > was to replace the spinlocks with mutexts, but having read the previous
+> > > > > accepted attempt and it's subsequent reversion I started to think of
+> > > > > other ways to solve this issue.  This solution, unlike the last, does
+> > > > > not involve adding sleep inducing locks into atomic contexts, nor
+> > > > > should it negatively affect performance.
+> > > > > 
+> > > > > > > There was also a suggestion to fix this in do_con_write() as
+> > > > > > > tty_operations::write() appears to be documented as "not allowed to sleep".
+> > > > > > > The patch for this was rejected. It did not fix the issue within n_gsm.
+> > > > > > > 
+> > > > > > > Link: https://lore.kernel.org/all/20221203215518.8150-1-pchelkin@ispras.ru/
+> > > > > > > Link: https://lore.kernel.org/all/20221212023530.2498025-1-zengheng4@huawei.com/
+> > > > > > > Link: https://lore.kernel.org/all/5a994a13-d1f2-87a8-09e4-a877e65ed166@kernel.org/
+> > > > > > 
+> > > > > > Ok, I thought I remembered this, I'll just drop this patch from my
+> > > > > > review queue and wait for a better solution if it ever comes up as this
+> > > > > > isn't a real issue that people are seeing on actual systems, but just a
+> > > > > > syzbot report.
+> > > > > 
+> > > > > What does the "better solution" look like?
+> > > > 
+> > > > One that actually fixes the root problem here (i.e. does not break the
+> > > > recursion loop, or cause a performance decrease for normal users, or
+> > > > prevent this from being bound to the console).
+> > > 
+> > > Does this solution break the recursion loop or affect performance?
+> > 
+> > This solution broke the recursion by returning an error, right?
+> 
+> This is the part I was least sure about.
+> 
+> If this was considered valid and we were to go forward with a solution
+> like this, what would a quality improvement look like?  Should we have
+> stayed in this function and waited for the previous occupant to leave
+> before continuing through ->write()?
 
-...
+This isn't valid, as it obviously never shows up in real use.
 
-> -	if (co->index >= UART_NR)
-> +	if (co->index < 0 || co->index >= UART_NR)
->  		co->index = 0;
+The real solution should be to prevent binding a console to this line
+discipline as it can not handle the recursion that consoles require for
+the write path.
 
-in_range() ?
+Then, if consoles are really needed, the code can be fixed up to handle
+such recursion.  That's not a trivial thing to do, as can be seen by the
+crazy gyrations that the n_tty line discipline does in its write path...
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
 
-
+greg k-h
