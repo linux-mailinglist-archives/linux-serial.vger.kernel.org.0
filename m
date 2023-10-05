@@ -2,92 +2,96 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FD77BA2B7
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E5C7BA26C
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbjJEPpm (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 11:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S233913AbjJEPgJ (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 11:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbjJEPpB (ORCPT
+        with ESMTP id S229766AbjJEPfa (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 11:45:01 -0400
+        Thu, 5 Oct 2023 11:35:30 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9207694;
-        Thu,  5 Oct 2023 07:32:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68020C433BC;
-        Thu,  5 Oct 2023 07:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696490769;
-        bh=OX4KD6sfNOWtabDqGM1DP4NFuApW1Y4ZymyK5RMSEPI=;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAED5C68B;
+        Thu,  5 Oct 2023 07:50:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E445C433BD;
+        Thu,  5 Oct 2023 07:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1696491510;
+        bh=IlcFL0Ucixl4pYJLprQCCNUw2SjWVzzJQeaMUDlMx0E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cZ6jTkFREYPJRFOwRFjbSPJ7/FDC/aGBRU0UrLvX7xZstG1VZmUsL6+x41d8A02ZI
-         B1CRAWlPaX2eIFD4fr/SJJUP0l1sY957YCEBfpwHesJjjfIbCPlxxhfYhDtckIPXdh
-         hRC5DUDj8QFpvjPzyLsuC+CQdlzXujp6enO4QlzNhEEY7zfWp5ceqDfwz1qf4/AXub
-         71OC4T1LFCeeUf5BB/SxQk9+G7TsMlk9Pw/PUz7xK2sQ5Ds/OMHsAf8GrhvDXppNj9
-         Ot2y4YfFLZ3VRZxUeubUk5FBbOZJPPvVk258+Jhs0dOOw63K9smDgiHwyFFOkcz2VQ
-         H+ZIDfq3b9wwQ==
-Date:   Thu, 5 Oct 2023 08:26:04 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>,
-        Fedor Pchelkin <pchelkin@ispras.ru>,
-        linux-serial@vger.kernel.org,
-        syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] tty: n_gsm: Avoid sleeping during .write() whilst
- atomic
-Message-ID: <20231005072604.GC83257@google.com>
-References: <20231003170020.830242-1-lee@kernel.org>
- <2023100320-immorally-outboard-573a@gregkh>
- <20231003185500.GD8453@google.com>
- <2023100457-entail-freefall-06fd@gregkh>
- <20231004090918.GB9374@google.com>
- <2023100425-unwieldy-reaffirm-2a1b@gregkh>
- <20231004125758.GB83257@google.com>
- <1c2afee3-6c1b-4703-8b9a-487f96a2526b@kernel.org>
- <2023100511-unpeeled-dinginess-fefd@gregkh>
+        b=OaIkL6A4CYjNbyQebbP6Yd0cnVsPIaK6QAG8faOg4JEacU7res4MGn61zx0ouZHxN
+         orkn8binUoDtP7EGuwK0XyQqSLgY5L7GYU7K6XNfXPshLf+V5ljzOLt0J2Vf8DDXzd
+         KLs1g8EvEmpWVwl6ZZ294xQYKQQotykzAPPGBJs8=
+Date:   Thu, 5 Oct 2023 09:38:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Florian Eckert <fe@dev.tdt.de>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, Lee Jones <lee@kernel.org>,
+        Eckert.Florian@googlemail.com, pavel@ucw.cz, kabel@kernel.org,
+        u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-leds@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 3/4] trigger: ledtrig-tty: move variable definition to
+ the top
+Message-ID: <2023100508-prelaunch-marbled-3a93@gregkh>
+References: <20230928132632.200263-1-fe@dev.tdt.de>
+ <20230928132632.200263-4-fe@dev.tdt.de>
+ <20231002140559.GB8453@google.com>
+ <acda5dc4-e6d3-4870-929f-fb91636b5649@kernel.org>
+ <59cc4073a94edbdec5d77f8457ed4f73@dev.tdt.de>
+ <05b03f3e-5863-4d33-8c70-03be7d7e972f@kernel.org>
+ <d59855493baa936485a2b00aa29d0449@dev.tdt.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023100511-unpeeled-dinginess-fefd@gregkh>
+In-Reply-To: <d59855493baa936485a2b00aa29d0449@dev.tdt.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, 05 Oct 2023, Greg Kroah-Hartman wrote:
-
-> On Thu, Oct 05, 2023 at 06:59:50AM +0200, Jiri Slaby wrote:
-> > On 04. 10. 23, 14:57, Lee Jones wrote:
-> > > > > n_gsm is available on all the systems I have available.  The mention of
-> > > > > 'EXPERIMENTAL' in the module description appears to have zero effect on
-> > > > > whether distros choose to make it available or not.  If you're saying
-> > > > > that we know this module is BROKEN however, then perhaps we should mark
-> > > > > it as such.
-> > > > 
-> > > > Also, I think this requires root to set this line discipline to the
-> > > > console, right?  A normal user can't do that, or am I missing a code
-> > > > path here?
+On Wed, Oct 04, 2023 at 10:36:09AM +0200, Florian Eckert wrote:
+> 
+> 
+> > > I decided to move the variable definition with a separate commit
+> > > to the top of the function, to make the build robot happy. After that
+> > > I made my changes for v2 to the ledtrig-tty to add the feature.
 > > > 
-> > > I haven't been testing long, but yes, early indications show that root
-> > > is required.
+> > > > Ah, lkp, then also the Closes: line as it suggests.
+> > > 
+> > > Sorry I do not understand your statement
 > > 
-> > FWIW I concluded to the same yesterday, so I disputed the connected
-> > CVE-2023-31082. Waiting for mitre's ack/nack.
+> > The link you pasted above states:
+> > =======
+> > If you fix the issue in a separate patch/commit (i.e. not just a new
+> > version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes:
+> > https://lore.kernel.org/oe-kbuild-all/202309270440.IJB24Xap-lkp@intel.com/
+> > =======
+> > 
+> > So please follow that suggestion ;).
 > 
-> Trying to dispute obviously-wrong CVEs is a never-ending task.
+> Ok, I understand, thanks will to this on a v3 patchset.
+> I will now wait for the comments of my changes in ledtrig-tty from the led
+> subsystem.
+> And then I will send a new patch set with the requested changes.
 > 
-> Personally, it's fun to see who keeps popping up to attempt to resolve
-> this issue showing what companies have their security policies dictated
-> by a random government authority that can be modified by anyone :)
+> Sorry for the silly question. But do I have to send this patch again for a
+> v3?
+> https://lore.kernel.org/linux-leds/f41dc1e1-6d34-48b2-97dd-ba67df6003c6@kernel.org/T/#u
+> It was already marked by you with a `Reviewed-by:` from you?
 
-It's a struggle! :)
+This series is long gone from my review queue, so a v3 will be needed at
+the very least.
 
--- 
-Lee Jones [李琼斯]
+thanks,
+
+greg k-h
