@@ -2,134 +2,121 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70A77BA00A
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 16:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3417BA393
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Oct 2023 17:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjJEOcu (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 5 Oct 2023 10:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S234266AbjJEP56 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 5 Oct 2023 11:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234300AbjJEObZ (ORCPT
+        with ESMTP id S234395AbjJEP4p (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:31:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF0328114;
-        Thu,  5 Oct 2023 06:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696513497; x=1728049497;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5SpEVemSirx21NVTF+jU5S1sEv0Gnxk/3NfB/f1IUz4=;
-  b=aQKUx/FTxmgbepNPNIG/kWF8sBDNepyMMmRnsReYPUs1iCTyRG9KGhr/
-   aW8ULEpE6gdquYw5Y4uDf83OEE5ceWBBWuoXUg8dCvplOUou7YG3J5Kzf
-   7T5RKx7EA567zpFvPkYy/uQNEpH+HiLwv01Iax42iHKiaWRv0CqrElMDO
-   08x+2gqpWSfauslQ7sThhZ077OVlCJOgX5X1G1DbWq+58aYiLz2aT8F/X
-   vsgT0TIRwLYYzy4gvryPh8vHhDvNJ8LfCH01Ld8jwwfP4cJhSCqNekDuT
-   1cJeWXuOCUoGEKdMDpDqbydzKUaTskjXdXW2R+ue/oJerBuh5U2izDYMy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="447665974"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="447665974"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 05:45:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="1083010888"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="1083010888"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Oct 2023 05:45:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0AC6C35A; Thu,  5 Oct 2023 15:45:51 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] serial: 8250_bcm7271: Use devm_clk_get_optional_enabled()
-Date:   Thu,  5 Oct 2023 15:45:50 +0300
-Message-Id: <20231005124550.3607234-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Thu, 5 Oct 2023 11:56:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559DD4EE1;
+        Thu,  5 Oct 2023 06:52:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEFF5C4AF72;
+        Thu,  5 Oct 2023 13:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1696512838;
+        bh=8IfVfF+yODlDKa6ANhxVLRvpIO3XLnWZup5NNRdo240=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I0V/yuL/So/i3//ZhJt78g3z9X9dZSJvUjZT2Uk6oSJ38b3Xdb06xMq5opiHyn9tr
+         5ggu82U+8h5xVgIJUhKTJ2I2roQX9BPnj/PR2f//xi4c2cXMQrExzXTg7l+ZYirj91
+         8G+QmwX+D3d0JqQ4cRbWo6cbWyx1mpxpZsDiNWUk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-serial@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH 1/2] tty: vt: make vtconsole_class constant
+Date:   Thu,  5 Oct 2023 15:33:47 +0200
+Message-ID: <2023100546-humbly-prologue-e58c@gregkh>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+Lines:  71
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2441; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=8IfVfF+yODlDKa6ANhxVLRvpIO3XLnWZup5NNRdo240=; b=owGbwMvMwCRo6H6F97bub03G02pJDKlyu60ypzWyc32//2TZlKD1l7e2zVldZvbzVmLG0cie1 YzVsUY7OmJZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAizQ4M81QKqhNu6LO0Pcxl eytbd3Xn96UyiQzzY+9qvWPICa89dqp8fjOPmtDn9Wy2AA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Use devm_clk_get_optional_enabled() to simplify the code.
+Now that the driver core allows for struct class to be in read-only
+memory, making all 'class' structures to be declared at build time
+placing them into read-only memory, instead of having to be dynamically
+allocated at load time.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-v2: fixed the returned value (Andi)
- drivers/tty/serial/8250/8250_bcm7271.c | 24 +++++++++---------------
- 1 file changed, 9 insertions(+), 15 deletions(-)
+ drivers/tty/vt/vt.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
-index 1a853a08654a..55dea2539c47 100644
---- a/drivers/tty/serial/8250/8250_bcm7271.c
-+++ b/drivers/tty/serial/8250/8250_bcm7271.c
-@@ -1015,26 +1015,23 @@ static int brcmuart_probe(struct platform_device *pdev)
- 	of_property_read_u32(np, "clock-frequency", &clk_rate);
- 
- 	/* See if a Baud clock has been specified */
--	baud_mux_clk = devm_clk_get(dev, "sw_baud");
--	if (IS_ERR(baud_mux_clk)) {
--		if (PTR_ERR(baud_mux_clk) == -EPROBE_DEFER) {
--			ret = -EPROBE_DEFER;
--			goto release_dma;
--		}
--		dev_dbg(dev, "BAUD MUX clock not specified\n");
--	} else {
-+	baud_mux_clk = devm_clk_get_optional_enabled(dev, "sw_baud");
-+	ret = PTR_ERR_OR_ZERO(baud_mux_clk);
-+	if (ret)
-+		goto release_dma;
-+	if (baud_mux_clk) {
- 		dev_dbg(dev, "BAUD MUX clock found\n");
--		ret = clk_prepare_enable(baud_mux_clk);
--		if (ret)
--			goto release_dma;
-+
- 		priv->baud_mux_clk = baud_mux_clk;
- 		init_real_clk_rates(dev, priv);
- 		clk_rate = priv->default_mux_rate;
-+	} else {
-+		dev_dbg(dev, "BAUD MUX clock not specified\n");
- 	}
- 
- 	if (clk_rate == 0) {
- 		ret = dev_err_probe(dev, -EINVAL, "clock-frequency or clk not defined\n");
--		goto err_clk_disable;
-+		goto release_dma;
- 	}
- 
- 	dev_dbg(dev, "DMA is %senabled\n", priv->dma_enabled ? "" : "not ");
-@@ -1118,8 +1115,6 @@ static int brcmuart_probe(struct platform_device *pdev)
- 	serial8250_unregister_port(priv->line);
- err:
- 	brcmuart_free_bufs(dev, priv);
--err_clk_disable:
--	clk_disable_unprepare(baud_mux_clk);
- release_dma:
- 	if (priv->dma_enabled)
- 		brcmuart_arbitration(priv, 0);
-@@ -1134,7 +1129,6 @@ static int brcmuart_remove(struct platform_device *pdev)
- 	hrtimer_cancel(&priv->hrt);
- 	serial8250_unregister_port(priv->line);
- 	brcmuart_free_bufs(&pdev->dev, priv);
--	clk_disable_unprepare(priv->baud_mux_clk);
- 	if (priv->dma_enabled)
- 		brcmuart_arbitration(priv, 0);
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 5c47f77804f0..7659b92db631 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -3565,7 +3565,9 @@ int __init vty_init(const struct file_operations *console_fops)
  	return 0;
+ }
+ 
+-static struct class *vtconsole_class;
++static const struct class vtconsole_class = {
++	.name = "vtconsole",
++};
+ 
+ static int do_bind_con_driver(const struct consw *csw, int first, int last,
+ 			   int deflt)
+@@ -4092,7 +4094,7 @@ static int do_register_con_driver(const struct consw *csw, int first, int last)
+ 		goto err;
+ 
+ 	con_driver->dev =
+-		device_create_with_groups(vtconsole_class, NULL,
++		device_create_with_groups(&vtconsole_class, NULL,
+ 					  MKDEV(0, con_driver->node),
+ 					  con_driver, con_dev_groups,
+ 					  "vtcon%i", con_driver->node);
+@@ -4173,7 +4175,7 @@ static void con_driver_unregister_callback(struct work_struct *ignored)
+ 		console_unlock();
+ 
+ 		vtconsole_deinit_device(con_driver);
+-		device_destroy(vtconsole_class, MKDEV(0, con_driver->node));
++		device_destroy(&vtconsole_class, MKDEV(0, con_driver->node));
+ 
+ 		console_lock();
+ 
+@@ -4234,12 +4236,9 @@ static int __init vtconsole_class_init(void)
+ {
+ 	int i;
+ 
+-	vtconsole_class = class_create("vtconsole");
+-	if (IS_ERR(vtconsole_class)) {
+-		pr_warn("Unable to create vt console class; errno = %ld\n",
+-			PTR_ERR(vtconsole_class));
+-		vtconsole_class = NULL;
+-	}
++	i = class_register(&vtconsole_class);
++	if (i)
++		pr_warn("Unable to create vt console class; errno = %d\n", i);
+ 
+ 	/* Add system drivers to sysfs */
+ 	for (i = 0; i < MAX_NR_CON_DRIVER; i++) {
+@@ -4247,7 +4246,7 @@ static int __init vtconsole_class_init(void)
+ 
+ 		if (con->con && !con->dev) {
+ 			con->dev =
+-				device_create_with_groups(vtconsole_class, NULL,
++				device_create_with_groups(&vtconsole_class, NULL,
+ 							  MKDEV(0, con->node),
+ 							  con, con_dev_groups,
+ 							  "vtcon%i", con->node);
 -- 
-2.40.0.1.gaa8946217a0b
+2.42.0
 
