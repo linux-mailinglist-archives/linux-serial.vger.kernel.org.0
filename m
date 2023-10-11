@@ -2,77 +2,124 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BF37C5B6C
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Oct 2023 20:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FE17C5B0A
+	for <lists+linux-serial@lfdr.de>; Wed, 11 Oct 2023 20:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjJKSiE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Oct 2023 14:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S233176AbjJKSQV (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 Oct 2023 14:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234840AbjJKSD6 (ORCPT
+        with ESMTP id S233200AbjJKSQP (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Oct 2023 14:03:58 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884A99D
-        for <linux-serial@vger.kernel.org>; Wed, 11 Oct 2023 11:03:56 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7740aa4b545so6537385a.3
-        for <linux-serial@vger.kernel.org>; Wed, 11 Oct 2023 11:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697047435; x=1697652235; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+lwLhk0eIlh4K7WyRSQjzGji/fhcQWQbO8LhvSYCpU=;
-        b=owlY9VP3yJws5dPieY1MCmI25kzOUzN6RWEIJrq+XDSu08zFW6cIo4FXj4usxImWrN
-         VhVny9whMaq9GrmqVhSSOVlu/wf7jwD2i12tsHFYj1j3P5mA6CuWmH97mhIrKsDtl2tN
-         JbGH0Lh+QT3NMccLO0bX8qAtpejq2XJ+2CEJ948JV0K90gkAvZUquBWRefnlOo06zgMD
-         lWSlaTAJMLew025SC0vxjXXADNReflUPGIIfg5q34PAvFzznWkFQ2juhGgueLgfEHEo8
-         OU4Zb4EWOgXYW76XVvrytXFve49emW8ZW4YWq1DMjG7VfTwRdyCTyQaJ/KS44mA6tEWm
-         BYHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697047435; x=1697652235;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2+lwLhk0eIlh4K7WyRSQjzGji/fhcQWQbO8LhvSYCpU=;
-        b=veKfd3uM/LABfEMjLkUNp0SwirJmrxSjVSkqzHzg53PgQt9z4eadJeqaA3LaBzQ7fC
-         91DZMjNUFSMN4Kkxt6XgZOVcf031nOfw202S0quxxRgm/glmdaqNZbp+6R3Aq8+9pXUE
-         E9AUPlZVn9tkG9vTx+jcRVAsr25YLlTUEHovZJ4PY94tX4p7DA9uccayobmyeHHL7dtC
-         fWIFVr+XF7SVAHgbBhD6oVe5KkMMEIANYBDbBJjWKiiDXczJZh3VJpW1p8ignan16JbR
-         FqxVeYthOyOJFI8hW/cD/r6dhTwE5YYYVq2lYFtV2FRAZoYPuq/ZgwKRKf3K661Xzwpe
-         YLVw==
-X-Gm-Message-State: AOJu0YyaxJawxThn3sAsW/grk7mlYekadRhjbLUQm4/jQEltkGrZ/0yz
-        Y1z5z2yI+4rA895XE0BiO95GESKm133Y1WTzUuT0Vg==
-X-Google-Smtp-Source: AGHT+IGt+0fVENikMfRGv423wq596E+D6hAqM0KbzwaZfRzrT8CBCTVaa4eh0NSbF1Brpy+RH3NFuekBbLkzj8qn004=
-X-Received: by 2002:a0c:b213:0:b0:64f:3de6:d502 with SMTP id
- x19-20020a0cb213000000b0064f3de6d502mr21163979qvd.5.1697047435542; Wed, 11
- Oct 2023 11:03:55 -0700 (PDT)
+        Wed, 11 Oct 2023 14:16:15 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2041.outbound.protection.outlook.com [40.107.6.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9C6D6;
+        Wed, 11 Oct 2023 11:16:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HjIY0ptr51IfPq3ZBnTZsY7uKrBIhj4tEtj555N/YouOEUe5oqodj2Pc0hkOuZ1YqHhvdJ/LRpSCIhxpyUa4ZQOUlXn+LitUnnU7UZcvqgE9j7OjaRixMVOsgxlEU8FEBqtyqtDGbePiUpD0ChAJzfFUGLNJz2oB72oCzqYqapiHjALkGcoOGJx4F2D1YK47RTuR8vm4u09Mxx2GaGKClEWGNapzAscVS1fo/gI+DplfLB3rwf9MMejvkP+G8wIRU7WdfS7NIyFLRRWiWQwXt3YoVx7B8zXqjtTsQJqdMC4RtxLiS8LRz4hvjfRs/fPnY2ukqVOeOPWFt6uZ2sF3Eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wmRo/AiBz8nrN0SpKkVMVhPBADrDyRF667kWifwwGAc=;
+ b=Q//I1bPlQWcJz+4E2FYnVZbql6zk6yjLwA5bChzsd0OGs5q/36mjo5mf/I6YKuFKEtZdQX0cHMVOB4iNI0C+IDqVjs3hr61NUQ+HBLDkE0jrD5ONY5ZLaEeLkJ+3buZRyU4B1qaW8U1WYQjrGNzySZNN7Vjp/WX41L9RCjzg+LYYwBd9bGHepxBDCddWcOSV2OqhfSnQlDP+W3w2F9fCbYEGTp9PA36Cv26Gjqkq0kurKdTd3AkS5PpvitbWfKQyRRyfDsZISTauPTCBZMeWu/Ceg+uXhZ+FAiV4PW4Fx88OTykYQ/q737VOZJNrRF7QZbftltdWL/IFBj41Cka4og==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
+ dkim=pass header.d=kunbus.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wmRo/AiBz8nrN0SpKkVMVhPBADrDyRF667kWifwwGAc=;
+ b=i/d5R4pei7M2JQ4pDIl7T5p8ZI1+LUIQmqe+K5nSu3Dx7DjQnDPPjHPj8HXwmQ12qdsr1DnjPBCqwfv3mHDUJhZTXpGdcvGq3kTGGvBmGBzuCxOmlVI6OuEAwds7Mj9/hZoJBxhh8RwXmJut6ZT7bqlv4WFjPcjqqJ654I79QgM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kunbus.com;
+Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
+ by DB9P193MB1497.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:26f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.41; Wed, 11 Oct
+ 2023 18:16:10 +0000
+Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ ([fe80::550d:2425:c0ed:3e59]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ ([fe80::550d:2425:c0ed:3e59%3]) with mapi id 15.20.6863.032; Wed, 11 Oct 2023
+ 18:16:10 +0000
+From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        cniedermaier@dh-electronics.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, LinoSanfilippo@gmx.de,
+        lukas@wunner.de, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: [PATCH v3 0/6] Fixes and improvements for RS485
+Date:   Wed, 11 Oct 2023 20:15:38 +0200
+Message-Id: <20231011181544.7893-1-l.sanfilippo@kunbus.com>
+X-Mailer: git-send-email 2.40.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-ClientProxiedBy: FR3P281CA0163.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::9) To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:803:4e::14)
 MIME-Version: 1.0
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
- <20231010224928.2296997-17-peter.griffin@linaro.org> <2023101109-crispy-escapable-0801@gregkh>
-In-Reply-To: <2023101109-crispy-escapable-0801@gregkh>
-From:   Peter Griffin <peter.griffin@linaro.org>
-Date:   Wed, 11 Oct 2023 19:03:44 +0100
-Message-ID: <CADrjBPouDPfcj9eCN0BN0Lfd1sOb=Q3jmkeD1aO2on5VHmROJg@mail.gmail.com>
-Subject: Re: [PATCH v2 16/20] tty: serial: samsung: Add gs101 compatible and
- SoC data
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
-        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-        semen.protsenko@linaro.org, saravanak@google.com,
-        willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1P193MB0413:EE_|DB9P193MB1497:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95bf9921-62c9-4a40-e0f9-08dbca8624fe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6HD+fKQtvHy9cBlZ3lQ3L8C4Jib7L3Ge2EkNVwzmE7uODRo0b+YUl02fdICFTQo6B9CqXb7CE9lLwRNF6bn9ssO10wR1wDNYZcrzOzY8B0j9wZmrhx9X1mvY4U+yTZ9PiXr3n2Lp/I0tytX11JvYuIiZMbCviII4U/FvbFPxoO9ITE5G9cGZoitMlFfPn7+bZOovTqafdOixbeoJ1Vm5hyrAUl3o8BbqjMGHVrYbQExWRKe8JsbXQh4TOGaOcyqAMThKaS/LC5sRlL2g0Ap2PuCx+fnS9ssVkBuaYKZeZzRRGag9V4YrCgv3V3goDCEBZ/4kb1Ndc2jLn5kGm0OtxUi1esJYzFW9AILMpkhb4RwUqIFRhwg0cA0y0O+SCfWbZ6dWVooKkI8xKFeX7t9icLos26RYn5Gfj3Chnv0unAS4lVs7RgTu/atyFFwoGs1M4h/5QU934WxZMPSAECWdVzeVxCkHxJ4rBuCKyCfj26T3k9R2FRwf4tBFhbx9r+DFjfULCEjA2C8oeUz1x/zmEu/jf77cIECr758GD6nkmfrGU/rxAQuxQejVp4uqysM8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(39840400004)(376002)(346002)(136003)(366004)(230922051799003)(1800799009)(451199024)(64100799003)(186009)(52116002)(6666004)(6506007)(478600001)(6486002)(6512007)(38100700002)(86362001)(36756003)(2906002)(5660300002)(7416002)(83380400001)(1076003)(2616005)(316002)(66946007)(107886003)(8936002)(4326008)(8676002)(41300700001)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TXhhbEUrTWQwaUZPUkFWZ1Z0aEw1akpsQ29mSnI1bFJ2bGNWdlR5QUh3bm9z?=
+ =?utf-8?B?ZWprNUNKWHAyWU5rRVBDVlpFdzh2OGlnK3pRR2pQVE8rdklTcU4vV2pGYU1D?=
+ =?utf-8?B?eXZRTFFxTlBTUGo5M2h5dUZyN1FrNFRPSVdzYnVRUkh3aGFkNDZ3bUFEVm9Q?=
+ =?utf-8?B?ZWJwVldwd0pnSzRZUUNVT05lajlIUlRxQ0hXUmN1Q0dOZ29lVEdiVHFJOXpw?=
+ =?utf-8?B?MlF6Zi9GNy9CZ01mZVcxdlRTMWlnWnBoZk10MWNuUHZqZktldTM0cmZyQlYv?=
+ =?utf-8?B?RnhuWlVjVXVMcWFaUTVaTlZ2dGhnZis0UUtSNGFSd3JRRnBpbDRzMlhpTGZI?=
+ =?utf-8?B?d3A4UjRqTVJwalgyc1BDZko3RHlRR29uNEIrSTNaQVk1OHBTb0tLc0RzL2xW?=
+ =?utf-8?B?N1NUVTRzejBuVTFJTmZQb3I3N25wR0NDbXowbW02clFKNGFELzkydjdTSG1a?=
+ =?utf-8?B?TXh0d2JJazR1c0NleWdnWTZzRWY5MFlobmhLbWdHQVZmSWxidFAvUmJMUVJS?=
+ =?utf-8?B?NW9DU1ljK2hSL3lOcitCYUl3TjVnLzlRdWlGdzJlYW8yYVhaN1RMd0lWZHVU?=
+ =?utf-8?B?b2p0MlZ0emFUbi9LVWVZQWR3M0hQZ0F2a2czSG1rb1cxMlZxZWY5TjZHeVpy?=
+ =?utf-8?B?Wmltb0VXcGhoTUQ3Ym8rVlhhTXkvSGw2Mzl4RVRlM1dyYjdWSGZjZkVISEpi?=
+ =?utf-8?B?M2pKeHJnd0dUc3A1a1hEa2I0ZW0xekFGRi9QVVMyNzgzczZwOUJ2cVFFTGNo?=
+ =?utf-8?B?VnBMNmNRN0tVTWdPb0NONzFvWlJRMitLbVdqWDN5UERNOGlTNCtOMXJjYlpx?=
+ =?utf-8?B?dWtFVmxzMmQyRFYvMTdOa0NVR0F0RVB4QjFnbG93RXhtY1hsSXV2d2h0VitC?=
+ =?utf-8?B?TEw5V3NWdTdINmdCa0dzWHFlcmxOQWNhTjA3Y2JtYmpVUzQraHFzYThhL0k4?=
+ =?utf-8?B?WUZIY1VTR1RBVlozRmNxenk0bngyTlVyK05LZG8xaGhROTh1eUJrRlFJZEVh?=
+ =?utf-8?B?VllCNFU0NUQxQ1hiUjB5NHpxYUdGeDJPdEptQ0xFeThtQ2Vxd0hhdDFRTCsw?=
+ =?utf-8?B?eGZERldFNkxObVJHSWFkQktnbTVWbUdFVnpsWXpSQlIxVFI2aldGRzJMci9l?=
+ =?utf-8?B?Y2Jkc3FPazVJOHF3K2tnalV0N1lNSFVCQURmWXJDTC80TE9QY2pZM2JVRlJ3?=
+ =?utf-8?B?cTl4d0pnbkFBaGIraVd4ZHRvMHQ3aVNEZ1ZCTUdHYng3bjBWbmZTdDBVeVZH?=
+ =?utf-8?B?T0huT0FIVjBrRzVPTmtOYldGajlLTVhpNHgzNnIyVEdERHNOT2RLVURwT1Vm?=
+ =?utf-8?B?c054UkhxWWdZZWc3SlYrOHB2UWp5MTBBRC92U0V2N2wvYXFoZGZwYTFzS29U?=
+ =?utf-8?B?SlRrSlIzRzVXbWRvN21oV0IrK28yOUVpaW8zbExkQzRyOE5BVkh1eHVNS1M1?=
+ =?utf-8?B?cjBmcjJqRXUzd0daSERhYTB0b1VsanM3cm5mQVU3OS93UmNSa1hLWjkvYlJV?=
+ =?utf-8?B?MzVBajF1VEtuTXM0U2ZyNnB2T2QwdnNNMEs4SFFxUzVsVWFzcFZOUkUwTS9N?=
+ =?utf-8?B?NHVVZFBhS0dEcmpYSjVHSDlvTHVjVGd0RllnbjZ4SU9ja1VTbHNMUmEzZzZt?=
+ =?utf-8?B?TnpsTkpSbVhQMGJwZTlIOHdwOUczdUk4bjcycTc5MnhpK1U1bE5EY01kalRZ?=
+ =?utf-8?B?dTBYVnRZZFdjdndKWjlDVUJqQkZ1eTdWa3pkbTh3Y2ZPeGV2S2J2NldKU3pL?=
+ =?utf-8?B?bnovS2NlRGxjTFZWVEU2all1ZEhpb1A1Tkp6SnBpbzdjK2Rndi9aeTBTNFRh?=
+ =?utf-8?B?cG0xS2FRRjNXZmZ0UXp2NERJRkJ5RTZQMHNCR2lkT1ZFZ3ZMd3p3dVJJbXVR?=
+ =?utf-8?B?NlJmWXlpbWZTMGRkRTZsSWE3K0RJVXJWdkQ3dHpmODJCbTZQaDlWdnRhYmJk?=
+ =?utf-8?B?NDBuNXFkL1M0YklPZVhhK3Nia3dJcXZubUpDV1Npbnh3cytkN0E0MnZEc0NV?=
+ =?utf-8?B?cG5rWTU3dmEvdDYraTFEeVBadmpIYmJ6enp1OVlvZ2llTGtobjVwaVIyYjQ0?=
+ =?utf-8?B?MnBSM2ZQaWhrNFlwMUZpRjFoYmYrL2padm1WTkxuclhhYVNsVEpURTBUbEVI?=
+ =?utf-8?B?cy84MkFyL0VNRGZ4L0lBUGppeWJ2cDdYTDdBays1ZXNkWWk5MTd4a1BMRDlj?=
+ =?utf-8?Q?ICD/gRIoZrthqliqBOifPn0P1CA74xdF05oIY/j/1by/?=
+X-OriginatorOrg: kunbus.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95bf9921-62c9-4a40-e0f9-08dbca8624fe
+X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2023 18:16:10.0448
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UBrgVm7XJgHyLJ7iWXSDKkGtMdkfIZptRhjkSSlXJnAF3mI+Ou+5Vxc/Y3A1AdWK8DrVvJm1ROgpcctHRbLNAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P193MB1497
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,96 +127,32 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Hi Greg,
-
-Thanks for the review.
-
-On Wed, 11 Oct 2023 at 08:47, Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Oct 10, 2023 at 11:49:24PM +0100, Peter Griffin wrote:
-> > Add serial driver data for Google Tensor gs101 SoC.
-> >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> > index 07fb8a9dac63..79a1a184d5c1 100644
-> > --- a/drivers/tty/serial/samsung_tty.c
-> > +++ b/drivers/tty/serial/samsung_tty.c
-> > @@ -2597,14 +2597,21 @@ static const struct s3c24xx_serial_drv_data exynos850_serial_drv_data = {
-> >       .fifosize = { 256, 64, 64, 64 },
-> >  };
-> >
-> > +static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
-> > +     EXYNOS_COMMON_SERIAL_DRV_DATA(),
-> > +     .fifosize = { 256, 64, 64, 64 },
-> > +};
->
-> Why are you duplicating a structure that is already in the same file?
-> What is the benifit here?
-
-There is a mistake here, the struct shouldn't be the same as e850 it
-should look like this
-
-static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
-     EXYNOS_COMMON_SERIAL_DRV_DATA(),
-     /* rely on samsung,uart-fifosize DT property for fifosize */
-     .fifosize = { 0 },
-};
-
-This then allows the fifosize to be taken from the samsung,uart-fifosize
-DT property for each of the 19 UARTs on this SoC.
-
->
-> >  #define EXYNOS4210_SERIAL_DRV_DATA (&exynos4210_serial_drv_data)
-> >  #define EXYNOS5433_SERIAL_DRV_DATA (&exynos5433_serial_drv_data)
-> >  #define EXYNOS850_SERIAL_DRV_DATA (&exynos850_serial_drv_data)
-> > +#define GS101_SERIAL_DRV_DATA (&gs101_serial_drv_data)
->
-> What is "GS101"?
-
-gs101 is the name of the SoC in Pixel 6, 6 pro, 6a phones. I've put
-some more info
-about the various names of the SoC in the bindings documentation. See
-https://lore.kernel.org/linux-arm-kernel/20231010224928.2296997-9-peter.griffin@linaro.org/T/#mb45492e58de0bef566df8cdf6191ab8f96f0cf99
-
->
-> >  #else
-> >  #define EXYNOS4210_SERIAL_DRV_DATA NULL
-> >  #define EXYNOS5433_SERIAL_DRV_DATA NULL
-> >  #define EXYNOS850_SERIAL_DRV_DATA NULL
-> > +#define GS101_SERIAL_DRV_DATA NULL
-> >  #endif
-> >
-> >  #ifdef CONFIG_ARCH_APPLE
-> > @@ -2688,6 +2695,9 @@ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
-> >       }, {
-> >               .name           = "artpec8-uart",
-> >               .driver_data    = (kernel_ulong_t)ARTPEC8_SERIAL_DRV_DATA,
-> > +     }, {
-> > +             .name           = "gs101-uart",
-> > +             .driver_data    = (kernel_ulong_t)GS101_SERIAL_DRV_DATA,
-> >       },
-> >       { },
-> >  };
-> > @@ -2709,6 +2719,8 @@ static const struct of_device_id s3c24xx_uart_dt_match[] = {
-> >               .data = EXYNOS850_SERIAL_DRV_DATA },
-> >       { .compatible = "axis,artpec8-uart",
-> >               .data = ARTPEC8_SERIAL_DRV_DATA },
-> > +     { .compatible = "google,gs101-uart",
-> > +             .data =  GS101_SERIAL_DRV_DATA },
->
-> Why aren't you just listing this hardware as the same one above?  There
-> doesn't need to be a new entry if you just fix up the DT for the board
-> to declare it as the proper type of device.  No need to keep adding new
-> entries that do the exact same thing, we don't normally like that at all
-> for other bus types, why is DT different?
->
-
-I believe Krzysztof already answered this from a dt maintainer point of view.
-
-regards,
-
-Peter.
+VGhlIGZvbGxvd2luZyBzZXJpZXMgaW5jbHVkZXMgc29tZSBmaXhlcyBhbmQgaW1wcm92ZW1lbnRz
+IGFyb3VuZCBSUzQ4NSBpbgp0aGUgc2VyaWFsIGNvcmUgYW5kIFVBUlQgZHJpdmVyczoKClBhdGNo
+IDE6IERvIG5vdCBob2xkIHRoZSBwb3J0IGxvY2sgd2hlbiBzZXR0aW5nIHJ4LWR1cmluZy10eCBH
+UElPClBhdGNoIDI6IEdldCByaWQgb2YgdXNlbGVzcyB3cmFwcGVyIHBsMDExX2dldF9yczQ4NV9t
+b2RlKCkKUGF0Y2ggMzogc2V0IG1pc3Npbmcgc3VwcG9ydGVkIGZsYWcgZm9yIFJYIGR1cmluZyBU
+WCBHUElPClBhdGNoIDQ6IGZpeCBzYW5pdGl6aW5nIGNoZWNrIGZvciBSVFMgc2V0dGluZ3MKUGF0
+Y2ggNTogbWFrZSBzdXJlIFJTNDg1IGlzIGNhbm5vdCBiZSBlbmFibGVkIHdoZW4gaXQgaXMgbm90
+IHN1cHBvcnRlZApQYXRjaCA2OiBpbXg6IGRvIG5vdCBzZXQgUlM0ODUgZW5hYmxlZCBpZiBpdCBp
+cyBub3Qgc3VwcG9ydGVkClBhdGNoIDc6IG9tYXA6IGRvIG5vdCBvdmVycmlkZSBzZXR0aW5ncyBm
+b3IgcnM0ODUgc3VwcG9ydAoKQ2hhbmdlcyBpbiB2MjoKLSBhZGQgbWlzc2luZyAnRml4ZXMnIHRh
+Z3MgYXMgcmVxdWVzdGVkIGJ5IEdyZWcKLSBjb3JyZWN0ZWQgYSB0eXBvIGFzIHBvaW50ZWQgb3V0
+IGJ5IEh1Z28KLSBmaXggaXNzdWUgaW4gaW14IGRyaXZlciBpbiB0aGUgc2VyaWFsIGNvcmUgYXMg
+c3VnZ2VzdGVkIGJ5IFV3ZQotIHBhcnRseSByZXBocmFzZSBzb21lIGNvbW1pdCBtZXNzYWdlcwot
+IGFkZCBwYXRjaCA3CgpDaGFuZ2VzIGluIHYzCi0gRHJvcCBwYXRjaCAiR2V0IHJpZCBvZiB1c2Vs
+ZXNzIHdyYXBwZXIgcGwwMTFfZ2V0X3JzNDg1X21vZGUoKSIgYXMKICByZXF1ZXN0ZWQgYnkgR3Jl
+ZwoKTGlubyBTYW5maWxpcHBvICg2KToKICBzZXJpYWw6IERvIG5vdCBob2xkIHRoZSBwb3J0IGxv
+Y2sgd2hlbiBzZXR0aW5nIHJ4LWR1cmluZy10eCBHUElPCiAgc2VyaWFsOiBjb3JlOiBzZXQgbWlz
+c2luZyBzdXBwb3J0ZWQgZmxhZyBmb3IgUlggZHVyaW5nIFRYIEdQSU8KICBzZXJpYWw6IGNvcmU6
+IGZpeCBzYW5pdGl6aW5nIGNoZWNrIGZvciBSVFMgc2V0dGluZ3MKICBzZXJpYWw6IGNvcmU6IG1h
+a2Ugc3VyZSBSUzQ4NSBjYW5ub3QgYmUgZW5hYmxlZCB3aGVuIGl0IGlzIG5vdAogICAgc3VwcG9y
+dGVkCiAgc2VyaWFsOiBjb3JlLCBpbXg6IGRvIG5vdCBzZXQgUlM0ODUgZW5hYmxlZCBpZiBpdCBp
+cyBub3Qgc3VwcG9ydGVkCiAgc2VyaWFsOiBvbWFwOiBkbyBub3Qgb3ZlcnJpZGUgc2V0dGluZ3Mg
+Zm9yIFJTNDg1IHN1cHBvcnQKCiBkcml2ZXJzL3R0eS9zZXJpYWwvaW14LmMgICAgICAgICB8ICA4
+IC0tLS0tLQogZHJpdmVycy90dHkvc2VyaWFsL29tYXAtc2VyaWFsLmMgfCAgOCArKystLS0KIGRy
+aXZlcnMvdHR5L3NlcmlhbC9zZXJpYWxfY29yZS5jIHwgNDggKysrKysrKysrKysrKysrKysrKysr
+Ky0tLS0tLS0tLS0KIGRyaXZlcnMvdHR5L3NlcmlhbC9zdG0zMi11c2FydC5jIHwgIDUgKy0tLQog
+NCBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspLCAzMSBkZWxldGlvbnMoLSkKCgpiYXNl
+LWNvbW1pdDogOTRmNmYwNTUwYzYyNWZhYjFmMzczYmI4NmE2NjY5YjQ1ZTk3NDhiMwotLSAKMi40
+MC4xCgo=
