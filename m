@@ -2,151 +2,230 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9299E7C5B18
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Oct 2023 20:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915FB7C5BA4
+	for <lists+linux-serial@lfdr.de>; Wed, 11 Oct 2023 20:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346890AbjJKSQb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Oct 2023 14:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S233241AbjJKStT (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 Oct 2023 14:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbjJKSQT (ORCPT
+        with ESMTP id S233087AbjJKStS (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Oct 2023 14:16:19 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2048.outbound.protection.outlook.com [40.107.22.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42413E0;
-        Wed, 11 Oct 2023 11:16:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DHLxwzJaMi7/ikHZ90F4TWvBBJgT5J2SlDkkAVtSo+uby1PqLgq2oN8R2KbqbCi3JQokkz25OlRw54mPgFXAvUxidl1ttKd4UITgonO9wKit/Q2AbJr98YXeg6ElQEmHncEgWa/eER6jqVEWZ9TVnPnd4DT6GNz8/rprIAJwsXj55jzpqlOxAlo2ZMslzRFcYURLpt6ax3jv0LtzzNXMKoSHwirgLHWFRj7vAxAxcqaUrJocD44jWlUzO2g2Dt/gpekRKZvw+CH3kUuZeHfMIE1pRQ9fTknZ8kgji/pmJFeBtMMbklAqzLWEEWVyQVDDNVu3ww81BRuAgL/fQaMFQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7/vH9Q9jKs2GzlPx8DEoi1T0SBAlJ5DZXJzhZrsbsp4=;
- b=GevGLuqtgfS/OdwaU7N817b/o12cz4KFlsOkXpramlpZNVP1VLVIg9ov/9IoUiDQd7VDiRg/HlXO1erHChayv31FVvbyF7sqVhM4I1PrBsb1Z+a8EgCIi6lQdue0LXlseP4P/JkuXo+lSISxL8lSX30mJM60r+ykS4X51ar7F/RdDEGJEyghMgAhet7NWesiCZ9iVBhK9drE7Z/OcFkeFq/AjfNglI1YPvgkh+qPMqLUXZQDTn87a5yyqftUVlILu/HC2iWvsyqZkDYxDSWEmLVXR+cso0F6SGy7XqgfDkCI1nW5nL2bg8vZN5E9RjBaxB6j8UcJe2MvTPI2iClxug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7/vH9Q9jKs2GzlPx8DEoi1T0SBAlJ5DZXJzhZrsbsp4=;
- b=U3Vl78QQwjdHhVCmURIJv9HM5N5OdhaidFv8UBto3TBpWYcg7N72K34jy/K4UyYEP7askgQCvOx/yTQLWEC5kTwsPavJ+klkjSO3rXwmtHOIZtfSnXXaDKhZ36D3ofw5PCoKkzWsaREMbFM13SeuCEe+AT8gGLk00LdFA/LS3XM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kunbus.com;
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
- by AS8P193MB1925.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:3fa::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Wed, 11 Oct
- 2023 18:16:13 +0000
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::550d:2425:c0ed:3e59]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::550d:2425:c0ed:3e59%3]) with mapi id 15.20.6863.032; Wed, 11 Oct 2023
- 18:16:13 +0000
-From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        cniedermaier@dh-electronics.com, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, LinoSanfilippo@gmx.de,
-        lukas@wunner.de, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v3 6/6] serial: omap: do not override settings for RS485 support
-Date:   Wed, 11 Oct 2023 20:15:44 +0200
-Message-Id: <20231011181544.7893-7-l.sanfilippo@kunbus.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231011181544.7893-1-l.sanfilippo@kunbus.com>
-References: <20231011181544.7893-1-l.sanfilippo@kunbus.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0163.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::9) To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:803:4e::14)
+        Wed, 11 Oct 2023 14:49:18 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D45BA
+        for <linux-serial@vger.kernel.org>; Wed, 11 Oct 2023 11:49:13 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-32d895584f1so142943f8f.1
+        for <linux-serial@vger.kernel.org>; Wed, 11 Oct 2023 11:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697050152; x=1697654952; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yAsScJxN4uOglQptTH7eHhhfHbdUKMQOFLdiRc8ULEg=;
+        b=THT0917fP2DknaeKEeeotX7NUd9eW1SkriwH0AUBJPvJQWgemuauWdPLS9crGyOY4J
+         VfRPUFjXtIPLw3H49PTxVhA4tWM1nqMHufv1cE3QG2CyPndRieyl1ETWHt33SbBUnAFK
+         5kHF0QJcY39eqA4CSRYZLZn9bwNIjCkG+GsXJFyjGj5H+Unonl4Gzif4fWEA8evjwEkB
+         FcxX3sQiNAiPxS0Lsij3WhS2uci2Fe1hOy4S8DEalJNc4RO4Aef8P6hjlhWKsFELFY7C
+         3z5+iD4oCuf3/FtEUdyzMh4t19ZSQQ5LxP1qiQklAgzgKE3MCbU9ajGBYJX9RHwOdIOf
+         xwFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697050152; x=1697654952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yAsScJxN4uOglQptTH7eHhhfHbdUKMQOFLdiRc8ULEg=;
+        b=JT8pJ4OHhcHe2j7yaQ7B4N9U9A7BQ5a8M25VesJaGdMk94sJBbY5PWkYO8PNMyO2us
+         VUCydGzRccAEVfP0kQnr11Gp08abGEvh8DPu0JpPYRNZBZcyuXqL74mRqxpFuwf9tnTC
+         3oaFUHsP2gvKuCballEduh4zstmxmHhTTuW/2OihMK9TgVKI5KwOaaGulOOPbP4XZBei
+         1MkxI/jg4DdICLfeNk3zQLYIIOoxtBU3irnQqNzeEDS8h043gpH2RB2R1fRJ8dwP2SyN
+         6xUE5fWZoDedYmpxjyGsph+acJHUeZ7OiFzqsRaO8LcYcWpFZivgeBg39H3fYf8j8ayz
+         BZRw==
+X-Gm-Message-State: AOJu0Ywyx42RvYchOLUjpqvteGRTuQ741dmSQ/xY/oIVBnhro7tL+v6r
+        pWoph4InMqe+s4x9Dqo1IZsOaw==
+X-Google-Smtp-Source: AGHT+IH8+EjOWpqphd3ofmVSFWdCO2gyM1MJ54UCGpRl1LhBjnM4xQsXupIug9GNC0Y1RW2iIuQvlw==
+X-Received: by 2002:a5d:4d12:0:b0:31f:f9a9:a742 with SMTP id z18-20020a5d4d12000000b0031ff9a9a742mr18078241wrt.23.1697050151665;
+        Wed, 11 Oct 2023 11:49:11 -0700 (PDT)
+Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
+        by smtp.gmail.com with ESMTPSA id v6-20020adff686000000b0031980294e9fsm16003875wrp.116.2023.10.11.11.49.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 11:49:11 -0700 (PDT)
+From:   Peter Griffin <peter.griffin@linaro.org>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        linus.walleij@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
+        cw00.choi@samsung.com
+Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
+        andre.draszik@linaro.org, semen.protsenko@linaro.org,
+        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-team@android.com, linux-serial@vger.kernel.org
+Subject: [PATCH v3 00/20] Add minimal Tensor/GS101 SoC support and Oriole/Pixel6 board
+Date:   Wed, 11 Oct 2023 19:48:03 +0100
+Message-ID: <20231011184823.443959-1-peter.griffin@linaro.org>
+X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P193MB0413:EE_|AS8P193MB1925:EE_
-X-MS-Office365-Filtering-Correlation-Id: a446f01d-0f94-44fe-f897-08dbca862727
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7w5gboKttdz/qV5Am5syTj7/z6gQ29fipRuq46KvlKxKuFZkVFT//Eht2JFIvO5u0yM65ikKeIU1j0LcAwWwqypmc9obGZUWlQOOrpbo7J25hTadwmW4pTGUP+plkg0S05sxNsO8j+I8s7Cce9AqT/IcZn2mLbt9HvqCdbqFzzuM8VMEz9TUW1Qlo21yKg5Ba/sAelwgu+nB9QlIL9uCMduVrKn1E11bq2RJfxiBWSClsIAtWfWDgpU7BcNYXtTe653MjfC6kUUTyl2SQFB0PK0kh3ImttRKh+rIOK/jqKW90HQPI3kL4+8PbYweEDKu+rcOYgVT7dAt5Py8w7A968nrGQol0cnBHPA3lkLeDhby3QnOEBMuPB33cPirg1IkcvTcZ9fDe554GxBvBC8vy8h/ea/mdr4qkPpR/kzZl7dqzg6Tw1rJoi94phzDASLwcw5/x/p3WUJ040Cu1/uTCw2/PwhZIKf/uR0KOUheUeEst8XcBQd83k0m/xPl606mLriH5NPLkl9/6ivJ9WsjjLbqaezSX11G1EuyEr5uezODTX0rlnDNSmo7sYDOY2Dt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366004)(39840400004)(396003)(346002)(376002)(136003)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(36756003)(6666004)(52116002)(83380400001)(6506007)(6486002)(6512007)(1076003)(2616005)(4326008)(41300700001)(2906002)(478600001)(8676002)(8936002)(5660300002)(7416002)(66556008)(316002)(66946007)(66476007)(86362001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ih6gXcvcdV2lH/hnOb+5pdWSGdpUQm861V+JvN4/jH6Py3x9a2fwfchoE57Y?=
- =?us-ascii?Q?piicU+FxMJpQyXPfnS0wdK3SoHclQqPEKINOrY7Y+xhIVV9XYCLnPK4G8Y6p?=
- =?us-ascii?Q?68uIw5TFPphHNz87oOew8BKrCCEOvTa0lgFvU1uOx2kInU0aiEc/MJtY3U4y?=
- =?us-ascii?Q?ZA6wRTpovdKJtE06pxCwzozz0IldcOLbqTHvKuE3Y2t2f3XYKypa28zSz0ky?=
- =?us-ascii?Q?Cn7Tc//jhZXBTfLpJbeYL+8Ty3yzLFJqov+yjkHJtTsYK1+iQLq/fC0sdxZo?=
- =?us-ascii?Q?J7pR04FmF/CRLUND0Uf9jjzbU5ySDJZkkRhJTqurycx+X+LT+AvGZTyFcPqa?=
- =?us-ascii?Q?OnnWR8WmaeYO68Erw0EqlsVzJ0BXRXlKuanATtsLf+yY8bpECwdi6Ad3DgkF?=
- =?us-ascii?Q?x1JdNd8Gr/jDr94Nyv5qG0bxlAPvAwu7soq0N1Imc4wZ21hiqL3e4Ponqh7S?=
- =?us-ascii?Q?olOdc6fadsNH+lW5xak3kZy8gfxOrVat7VP7VnMpLQzuq5PXddB4pg4R90sS?=
- =?us-ascii?Q?Wh0m9tsiJSqID1u8Lha/5v3TCMhDotFI4lYXRqqFj8Y7ST7sq0d2GTSUHcyH?=
- =?us-ascii?Q?Vh5gitC2UR8TpQKLEJiIgx007CmiD31n0DdyNpQEy3fhAx0DLhg8jTERTBM2?=
- =?us-ascii?Q?5/ULTISUOj+/sbfZfmCof14NMJhVVr5jGsrr4fxCnnZYXGDTkSgPLxfVWN5t?=
- =?us-ascii?Q?PuUqISsD1zE8H2ir4mTxPiqomgr4ePSkIayPUq1Q8bQYxVsCLb/ijPKfk/hV?=
- =?us-ascii?Q?MpMAfDJ0q2Kv+ndKShnpdhFwBVYqZUdxOaL+vvpL3vkao0cHOhog8sr9SK7v?=
- =?us-ascii?Q?QicXl3L5TUclJzRbhsKdxUqKJxRayXhpizo1kabZBnfGeEVElLMPzKp+uCdA?=
- =?us-ascii?Q?8jNrZyR2vDIt+lYVV4dqsnWnpDPSDqUc00Gxy9xAI3hnCU9X+XeRBfOO+Dua?=
- =?us-ascii?Q?Qf0I124u2pPKXwcDE5uzalF2cj56EH1H71Fe4zTwRAMivKnBL+rrD6esmG1d?=
- =?us-ascii?Q?ke5A8vn63nWg05XM8TChEPtyxGxsGN/5acYFTuuP2jytC+XtI2aVbOXgEZWE?=
- =?us-ascii?Q?ZCUwRfj7k5eXk+hIhbXu0QVHF1Zba6cMeh7PNO8oVQrA0DBrB4Eg0lg0vQtB?=
- =?us-ascii?Q?Zl+sqJSUIViDGWeTvOCifr49bQ1V5s6hV54jpcUjBSRS56RdKy3eX3w79BwZ?=
- =?us-ascii?Q?6IPLUfD5Oorm6OIH3gDgsKq+VgO2w2J2uJ03Jx2ydXG2R6eCrORwrGUk+6Am?=
- =?us-ascii?Q?sVhgIqnG3ZNQ+kHuxBWL+QyTuTEvs1gsuwe1UBoJvR5T6DO+SrNrF3tyl+SS?=
- =?us-ascii?Q?5y/en3l3RVIEk1M0TU/4WkPWcYkUYQkBeKGYQ3PW4RsQbV6QBoFSZdPFhIB1?=
- =?us-ascii?Q?EfVPw7thURSggXtwvGFDk2bUwTHoH7GKOi4r0VmxyQ2VpuYBHXGlTYUPXmrO?=
- =?us-ascii?Q?tB/0SZcTMAok5RCVQyJo2Mxe+KrvF8i/HjGQyv/WI8eZqBOKYLGLD3pZ2NKQ?=
- =?us-ascii?Q?am6HEG5kYNFHxnzwp0+jgeWrF3KSnZBeODxrVfYydiODjwDUpGrxh5NeJVJH?=
- =?us-ascii?Q?KO+9Enuc+GkDKcqS1FckQinQcvFsK6Rs9BkOW7r98UpKNMaL/olAn6p6Dtfn?=
- =?us-ascii?Q?D6yNJwfQ32Dt92w2KUIIUJqJj0G8paEQrgJbihTqQcKf?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a446f01d-0f94-44fe-f897-08dbca862727
-X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2023 18:16:13.5686
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CqHMcAUc6bKZCMmtEMFn+zx0LMPmplMhbZiJlg1u9qjMZ3LQC5MToJ5aDE0F7w1V5gCd0fAQH3xgqy2Gdge4Sw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P193MB1925
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_BASE64_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-SW4gc2VyaWFsX29tYXBfcnM0ODUoKSBSUzQ4NSBzdXBwb3J0IG1heSBiZSBkZWFjdGl2YXRlZCBk
-dWUgdG8gYSBtaXNzaW5nClJUUyBHUElPLiBUaGlzIGlzIGRvbmUgYnkgbnVsbGlmeWluZyB0aGUg
-cG9ydHMgcnM0ODVfc3VwcG9ydGVkIHN0cnVjdC4KQWZ0ZXIgdGhhdCBob3dldmVyIHRoZSBzZXJp
-YWxfb21hcF9yczQ4NV9zdXBwb3J0ZWQgc3RydWN0IGlzIGFzc2lnbmVkIHRvCnRoZSBzYW1lIHN0
-cnVjdHVyZSB1bmNvbmRpdGlvbmFsbHksIHdoaWNoIHJlc3VsdHMgaW4gYW4gdW5pbnRlbmRlZApy
-ZWFjdGl2YXRpb24gb2YgUlM0ODUgc3VwcG9ydC4KRml4IHRoaXMgYnkgY2FsbGxpbmcgc2VyaWFs
-X29tYXBfcnM0ODUoKSBhZnRlciB0aGUgYXNzaWdubWVudCBvZgpyczQ4NV9zdXBwb3J0ZWQuCgpG
-aXhlczogZTI3NTJhZTNjZmM5ICgic2VyaWFsOiBvbWFwOiBEaXNhbGxvdyBSUy00ODUgaWYgcnRz
-LWdwaW8gaXMgbm90IHNwZWNpZmllZCIpCkNjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnClNpZ25l
-ZC1vZmYtYnk6IExpbm8gU2FuZmlsaXBwbyA8bC5zYW5maWxpcHBvQGt1bmJ1cy5jb20+Ci0tLQog
-ZHJpdmVycy90dHkvc2VyaWFsL29tYXAtc2VyaWFsLmMgfCA4ICsrKystLS0tCiAxIGZpbGUgY2hh
-bmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdHR5L3NlcmlhbC9vbWFwLXNlcmlhbC5jIGIvZHJpdmVycy90dHkvc2VyaWFsL29tYXAtc2Vy
-aWFsLmMKaW5kZXggMGVhZDg4YzVhMTlhLi40ZjdlZTQzOTIwMzQgMTAwNjQ0Ci0tLSBhL2RyaXZl
-cnMvdHR5L3NlcmlhbC9vbWFwLXNlcmlhbC5jCisrKyBiL2RyaXZlcnMvdHR5L3NlcmlhbC9vbWFw
-LXNlcmlhbC5jCkBAIC0xNjA0LDEwICsxNjA0LDYgQEAgc3RhdGljIGludCBzZXJpYWxfb21hcF9w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQogCQlkZXZfaW5mbyh1cC0+cG9ydC5k
-ZXYsICJubyB3YWtlaXJxIGZvciB1YXJ0JWRcbiIsCiAJCQkgdXAtPnBvcnQubGluZSk7CiAKLQly
-ZXQgPSBzZXJpYWxfb21hcF9wcm9iZV9yczQ4NSh1cCwgJnBkZXYtPmRldik7Ci0JaWYgKHJldCA8
-IDApCi0JCWdvdG8gZXJyX3JzNDg1OwotCiAJc3ByaW50Zih1cC0+bmFtZSwgIk9NQVAgVUFSVCVk
-IiwgdXAtPnBvcnQubGluZSk7CiAJdXAtPnBvcnQubWFwYmFzZSA9IG1lbS0+c3RhcnQ7CiAJdXAt
-PnBvcnQubWVtYmFzZSA9IGJhc2U7CkBAIC0xNjIyLDYgKzE2MTgsMTAgQEAgc3RhdGljIGludCBz
-ZXJpYWxfb21hcF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQogCQkJIERFRkFV
-TFRfQ0xLX1NQRUVEKTsKIAl9CiAKKwlyZXQgPSBzZXJpYWxfb21hcF9wcm9iZV9yczQ4NSh1cCwg
-JnBkZXYtPmRldik7CisJaWYgKHJldCA8IDApCisJCWdvdG8gZXJyX3JzNDg1OworCiAJdXAtPmxh
-dGVuY3kgPSBQTV9RT1NfQ1BVX0xBVEVOQ1lfREVGQVVMVF9WQUxVRTsKIAl1cC0+Y2FsY19sYXRl
-bmN5ID0gUE1fUU9TX0NQVV9MQVRFTkNZX0RFRkFVTFRfVkFMVUU7CiAJY3B1X2xhdGVuY3lfcW9z
-X2FkZF9yZXF1ZXN0KCZ1cC0+cG1fcW9zX3JlcXVlc3QsIHVwLT5sYXRlbmN5KTsKLS0gCjIuNDAu
-MQoK
+Hi folks,
+
+Firstly, thanks to everyone who reviewed the v2/V1 series! V3 incorporates
+all the review feedback received so far.
+
+As this series spans multiple subsytems the expectation is that Krzysztof
+will apply the whole series through the Samsung SoC tree. If the relevant
+subsystem maintainers can give a acked-by or reviewed-by on the relevant
+patches that would be most appreciated!
+
+This series adds initial SoC support for the GS101 SoC and also initial board
+support for Pixel 6 phone (Oriole).
+
+The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
+(raven) phones. Currently DT is added for the gs101 SoC and Oriole.
+As you can see from the patches the SoC is based on a Samsung Exynos SoC,
+and therefore lots of the low level Exynos drivers and bindings can be
+re-used.
+
+The support added in this series consists of:
+* cpus
+* pinctrl
+* some CCF implementation
+* watchdog
+* uart
+* gpio
+
+This is enough to boot through to a busybox initramfs and shell using an
+upstream kernel though :) More platform support will be added over the
+following weeks and months.
+
+For further information on how to build and flash the upstream kernel on your
+Pixel 6, with a prebuilt busybox initramfs please refer to the script and
+README.md here:
+
+https://git.codelinaro.org/linaro/googlelt/pixelscripts
+
+Note 1: I've removed the dtbo overlay from v2 and later submissions and
+will re-submit once I have appropriate documentation for it.
+
+Note 2: I've left the bootargs in dts with earlycon for now, for two reasons.
+1) The bootloader hangs if bootargs isn't present in the dtb as it tries to
+re-write this with additional bootargs.
+2) there is a issue whereby the full serial console doesn't come up properly
+if earlycon isn't also specified. This issue needs further investigation.
+
+kind regards,
+
+Peter.
+
+Changes since v2:
+ - Fixup pinctrl@174d0000: interrupts: [..] is too long DTC warning (Tudor)
+ - Add missing windowed watchdog code (Guenter)
+ - Fixup UART YAML bindings error (Krzysztof)
+ - gs101.dtsi add missing serial_0 alias (me)
+ - samsung_tty.c: fixup gs101_serial_drv_data so fifosize os obtained from DT
+ 
+Changes since v1:
+ - Remove irq/gs101.h and replace macros with irq numbers globally
+ - exynos-pmu - keep alphabetical order
+ - add cmu_apm to clock bindings documentation
+ - sysreg bindings - remove superfluous `google,gs101-sysreg`
+ - watchdog bindings - Alphanumerical order, update gs201 comment
+ - samsung,pinctrl.yaml - add new "if:then:else:" to narrow for google SoC
+ - samsung,pinctrl-wakeup-interrupt.yaml - Alphanumerical order
+ - samsung,pinctrl- add google,gs101-wakeup-eint compatible
+ - clk-pll: fixup typos
+ - clk-gs101: fix kernel test robot warnings (add 2 new clocks,dividers,gate)
+ - clk-gs101: fix alphabetical order
+ - clk-gs101: cmu_apm: fixup typo and missing empty entry
+ - clk-gs101: cmu_misc: remove clocks that were being registerred twice
+ - pinctrl: filter sel: rename/reorder variables, add comment for FLTCON bitfield
+ - pinctrl: filter sel: avoid setting reserved bits by loop over FLTCON1 pins as well
+ - pinctrl: gs101: rename bank_type_6/7 structs to be more specific, split from filter
+ - watchdog: s3c2410_wdt: remove dev_info prints
+ - gs101.dtsi/oriole.dts: order by unit node, remove underscores from node name, blank lines
+   add SoC node, split dts and dtsi into separate patches, remove 'DVT' suffix
+ - gs101-oriole.dtso: Remove overlay until board_id is documented properly
+ - Add GS101_PIN_* macros to gs101-pinctrl.h instead of using Exynos ones
+ - gpio-keys: update linux,code to use input-event-code macros
+ - add dedicated gs101-uart compatible
+
+Peter Griffin (20):
+  dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+  dt-bindings: clock: Add Google gs101 clock management unit bindings
+  dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG
+    compatibles to GS101
+  dt-bindings: watchdog: Document Google gs101 & gs201 watchdog bindings
+  dt-bindings: arm: google: Add bindings for Google ARM platforms
+  dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
+  dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
+  dt-bindings: serial: samsung: Add google-gs101-uart compatible
+  clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+  clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
+  clk: samsung: clk-gs101: add CMU_APM support
+  clk: samsung: clk-gs101: Add support for CMU_MISC clock unit
+  pinctrl: samsung: Add filter selection support for alive banks
+  pinctrl: samsung: Add gs101 SoC pinctrl configuration
+  watchdog: s3c2410_wdt: Add support for Google tensor SoCs
+  tty: serial: samsung: Add gs101 compatible and SoC data
+  arm64: dts: google: Add initial Google gs101 SoC support
+  arm64: dts: google: Add initial Oriole/pixel 6 board support
+  arm64: defconfig: Enable Google Tensor SoC
+  MAINTAINERS: add entry for Google Tensor SoC
+
+ .../devicetree/bindings/arm/google.yaml       |   46 +
+ .../bindings/clock/google,gs101-clock.yaml    |  125 +
+ .../samsung,pinctrl-wakeup-interrupt.yaml     |    2 +
+ .../bindings/pinctrl/samsung,pinctrl.yaml     |   22 +-
+ .../bindings/serial/samsung_uart.yaml         |    1 +
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    2 +
+ .../soc/samsung/samsung,exynos-sysreg.yaml    |    6 +
+ .../bindings/watchdog/samsung-wdt.yaml        |   10 +-
+ MAINTAINERS                                   |   10 +
+ arch/arm64/Kconfig.platforms                  |    6 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/google/Makefile           |    4 +
+ arch/arm64/boot/dts/google/gs101-oriole.dts   |   79 +
+ arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1275 ++++++++++
+ arch/arm64/boot/dts/google/gs101-pinctrl.h    |   32 +
+ arch/arm64/boot/dts/google/gs101.dtsi         |  504 ++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/samsung/Kconfig                   |    9 +
+ drivers/clk/samsung/Makefile                  |    2 +
+ drivers/clk/samsung/clk-gs101.c               | 2164 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |    9 +-
+ drivers/clk/samsung/clk-pll.h                 |    3 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  163 ++
+ drivers/pinctrl/samsung/pinctrl-exynos.c      |   84 +-
+ drivers/pinctrl/samsung/pinctrl-exynos.h      |   41 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |    4 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |   24 +
+ drivers/tty/serial/samsung_tty.c              |   13 +
+ drivers/watchdog/s3c2410_wdt.c                |  127 +-
+ include/dt-bindings/clock/google,gs101.h      |  232 ++
+ 30 files changed, 4985 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/google/Makefile
+ create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
+ create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
+ create mode 100644 drivers/clk/samsung/clk-gs101.c
+ create mode 100644 include/dt-bindings/clock/google,gs101.h
+
+-- 
+2.42.0.655.g421f12c284-goog
+
