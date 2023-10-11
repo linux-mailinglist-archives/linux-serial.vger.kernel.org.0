@@ -2,120 +2,174 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C717C5A84
-	for <lists+linux-serial@lfdr.de>; Wed, 11 Oct 2023 19:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BF37C5B6C
+	for <lists+linux-serial@lfdr.de>; Wed, 11 Oct 2023 20:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjJKRtl (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Wed, 11 Oct 2023 13:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S230201AbjJKSiE (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Wed, 11 Oct 2023 14:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjJKRtk (ORCPT
+        with ESMTP id S234840AbjJKSD6 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Wed, 11 Oct 2023 13:49:40 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B468F;
-        Wed, 11 Oct 2023 10:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
- t=1697046554; x=1697651354; i=linosanfilippo@gmx.de;
- bh=UJJzaerlQRsDqbxZwPZpsK3aG/E9cxNuD4ysd9HCNkg=;
- h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
- b=QxJyHUiVXHjL9yISHHGz34eeSJAOUGCUDN9jFDlsBS/2B3veD2KapeZa+D0reKDZgmvSb2c7YER
- GfrOMrP5LvVmBCKHkZNi8b+etBlN5FIXg2nYBd5+Bda7IAVpir3HmkdcGE4WzopihGnnkYNkL7wlH
- 7QtyLdilxY3aFWLZxsmTcWWD66eKzAhdeDQFfOYGX4lznHQg/YWv0tcmS69c5EVjsXHCr5nEipWLn
- ZrVieTrze1tmNMhFrBPx/N/d7NDj7m+xGx/oINLtPZnBW8iNCYfEfXl3WMM5e5PAA4riEGiH7SV6v
- 7xkh4xtDOCLbgNhntMa9bx3diXqGa9KRmC7g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.2.37] ([84.162.21.41]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MXp9i-1r4rMk2oRw-00YDyX; Wed, 11
- Oct 2023 19:49:14 +0200
-Subject: Re: [PATCH v2 2/7] serial: amba-pl011: get rid of useless wrapper
- pl011_get_rs485_mode()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, cniedermaier@dh-electronics.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20231011173829.10508-1-l.sanfilippo@kunbus.com>
- <20231011173829.10508-3-l.sanfilippo@kunbus.com>
- <2023101134-theater-oversleep-a58b@gregkh>
- <20d22e11-b9be-b547-ec4e-9964a57924a4@gmx.de>
- <2023101101-knoll-dust-6308@gregkh>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <447eecb3-1ebc-e8ea-db6c-9964ef9fd0db@gmx.de>
-Date:   Wed, 11 Oct 2023 19:49:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 11 Oct 2023 14:03:58 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884A99D
+        for <linux-serial@vger.kernel.org>; Wed, 11 Oct 2023 11:03:56 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7740aa4b545so6537385a.3
+        for <linux-serial@vger.kernel.org>; Wed, 11 Oct 2023 11:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697047435; x=1697652235; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+lwLhk0eIlh4K7WyRSQjzGji/fhcQWQbO8LhvSYCpU=;
+        b=owlY9VP3yJws5dPieY1MCmI25kzOUzN6RWEIJrq+XDSu08zFW6cIo4FXj4usxImWrN
+         VhVny9whMaq9GrmqVhSSOVlu/wf7jwD2i12tsHFYj1j3P5mA6CuWmH97mhIrKsDtl2tN
+         JbGH0Lh+QT3NMccLO0bX8qAtpejq2XJ+2CEJ948JV0K90gkAvZUquBWRefnlOo06zgMD
+         lWSlaTAJMLew025SC0vxjXXADNReflUPGIIfg5q34PAvFzznWkFQ2juhGgueLgfEHEo8
+         OU4Zb4EWOgXYW76XVvrytXFve49emW8ZW4YWq1DMjG7VfTwRdyCTyQaJ/KS44mA6tEWm
+         BYHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697047435; x=1697652235;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2+lwLhk0eIlh4K7WyRSQjzGji/fhcQWQbO8LhvSYCpU=;
+        b=veKfd3uM/LABfEMjLkUNp0SwirJmrxSjVSkqzHzg53PgQt9z4eadJeqaA3LaBzQ7fC
+         91DZMjNUFSMN4Kkxt6XgZOVcf031nOfw202S0quxxRgm/glmdaqNZbp+6R3Aq8+9pXUE
+         E9AUPlZVn9tkG9vTx+jcRVAsr25YLlTUEHovZJ4PY94tX4p7DA9uccayobmyeHHL7dtC
+         fWIFVr+XF7SVAHgbBhD6oVe5KkMMEIANYBDbBJjWKiiDXczJZh3VJpW1p8ignan16JbR
+         FqxVeYthOyOJFI8hW/cD/r6dhTwE5YYYVq2lYFtV2FRAZoYPuq/ZgwKRKf3K661Xzwpe
+         YLVw==
+X-Gm-Message-State: AOJu0YyaxJawxThn3sAsW/grk7mlYekadRhjbLUQm4/jQEltkGrZ/0yz
+        Y1z5z2yI+4rA895XE0BiO95GESKm133Y1WTzUuT0Vg==
+X-Google-Smtp-Source: AGHT+IGt+0fVENikMfRGv423wq596E+D6hAqM0KbzwaZfRzrT8CBCTVaa4eh0NSbF1Brpy+RH3NFuekBbLkzj8qn004=
+X-Received: by 2002:a0c:b213:0:b0:64f:3de6:d502 with SMTP id
+ x19-20020a0cb213000000b0064f3de6d502mr21163979qvd.5.1697047435542; Wed, 11
+ Oct 2023 11:03:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <2023101101-knoll-dust-6308@gregkh>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4DLX6g8ZGchS1XtTecAHpxYCrURMdVvGDH0mpcd4YoSEcPYub+l
- dp9Ac/1jzfKbTOMhCg4rHrX+lEaiKKp8/0PU9Qi/+s6/2cugeBY4vyyDWOBBpAYZFJlQLdM
- Vczjcp8Mop1GMYiVaYdSP8xQiDzR85/0I2Xdb4JXQ/d3MA8MOWB02xwb9FxDRnwzL7edD8x
- Wtj6q/EEU3RzKosNu3pJQ==
-UI-OutboundReport: notjunk:1;M01:P0:IteMFpbMUBQ=;wjRF8QhpTpFpjyp7JvmrW+OQ55k
- bQJkm4Fe86TzUm0nnTrYhzHqb5xqylyYBI/oBLHa4pNXjrtk6uCit6zn6Rxh6LJEWgkRRC/qg
- e5uyFqKYMGLIExRiUs39+fI5RlXMtctsgsc6LNM8wa4SX4WiFdd9udePmFBuTfHGi/H3Mvy30
- oGEIARVkvAwW9wC4T5MOcZ6g4Z2uOAWWjdI9CyDCexwpCA5Qq0L52YVj4bS5yjClvEW2E4jCv
- EPZikOjaTFIWXNWwKwKCJlHXraknTL2sBTzm/OU4+5Tdmpbzap/ni9Pml3pvsJIWqyQDr0wGL
- Lna5OeyAcOJAAKWN3EOf0sZNyeRfGd1/rw3TrPA4JZJit9mIkM7DuyLh21dMUKG6ZAbou72nF
- jDCMqQ52Fkyd+v8RlOG4DWyq1pf8o3rc2SJ90Q1mWwUDRUuiVCI5xQPfPSBUicpipQEggQLPQ
- zuLxT4eiSQ4Oy522Xv8bx4YowcWF5rjkIzK25qULAIP9wOOrjd8Js08jJdUX7yGAKiZBevedE
- jBEGYN/osUHg9kkcG9eaTXCzqTvW2fvaqfd5tQjnnUrkbpLViuDDvJm21j6RJsELG/sz95n0s
- qACNaxBwvT9J8wFA1mns0hJfOZRVBDOh7g33bEb/XDvd9ibIFZGuGrirT6p9IVuAeokO1yy6F
- LeobZ3GW3Wsu9Q4TOQjsFdJpG41QKMz64ougaeVSfck4gffLjk5KIuVTV24jZcvEpO2OpPqEJ
- U/qpfV4zSCzZhpA7HzoQkyKZ39xdM/r1R7ONJRTr/xXZKP4/Z2p4HGldsyzIv1K0LvUJVIlTT
- N6KpMqukaJqq/1HgAm/11CZRulbgiXFg58kr1stbZLdKDWfm4LS+XcZtGTholpp4C+Awy30WC
- lvxLmOE2wQZdRDA4WsHKSCjWLioa6mIUuPpUPmhRsdc1VO4wMgO32qZ4ra7oPMC3XarwBvaUx
- StvmQg==
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+ <20231010224928.2296997-17-peter.griffin@linaro.org> <2023101109-crispy-escapable-0801@gregkh>
+In-Reply-To: <2023101109-crispy-escapable-0801@gregkh>
+From:   Peter Griffin <peter.griffin@linaro.org>
+Date:   Wed, 11 Oct 2023 19:03:44 +0100
+Message-ID: <CADrjBPouDPfcj9eCN0BN0Lfd1sOb=Q3jmkeD1aO2on5VHmROJg@mail.gmail.com>
+Subject: Re: [PATCH v2 16/20] tty: serial: samsung: Add gs101 compatible and
+ SoC data
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        linus.walleij@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
+        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+        semen.protsenko@linaro.org, saravanak@google.com,
+        willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-team@android.com, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 11.10.23 at 19:47, Greg KH wrote:
-> On Wed, Oct 11, 2023 at 07:44:51PM +0200, Lino Sanfilippo wrote:
->>
->> Hi,
->>
->> On 11.10.23 at 19:42, Greg KH wrote:
->>> On Wed, Oct 11, 2023 at 07:38:24PM +0200, Lino Sanfilippo wrote:
->>>> Due to earlier code changes function pl011_get_rs485_mode() is now me=
-rely
->>>> a wrapper for uart_get_rs485_mode() which does not add any further
->>>> functionality. So remove it and instead call uart_get_rs485_mode()
->>>> directly.
->>>>
->>>> Reviewed-by: Lukas Wunner <lukas@wunner.de>
->>>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>>> ---
->>>>  drivers/tty/serial/amba-pl011.c | 14 +-------------
->>>>  1 file changed, 1 insertion(+), 13 deletions(-)
->>>
->>> Why is patch 2/7 not cc: stable, when patches 3-7 are?  Either this
->>> patch isn't needed in this series, and can go later (or to a different
->>> branch), or it also needs to be marked for stable as the later patches
->>> depend on it?
->>>
->>
->> 2/7 is really only a cleanup patch that does not provide a bugfix.
->> Should I remove it from this series?
+Hi Greg,
+
+Thanks for the review.
+
+On Wed, 11 Oct 2023 at 08:47, Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> Please do, and send it later, or as part of a separate patch series
-> independant of this one.
+> On Tue, Oct 10, 2023 at 11:49:24PM +0100, Peter Griffin wrote:
+> > Add serial driver data for Google Tensor gs101 SoC.
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  drivers/tty/serial/samsung_tty.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> > index 07fb8a9dac63..79a1a184d5c1 100644
+> > --- a/drivers/tty/serial/samsung_tty.c
+> > +++ b/drivers/tty/serial/samsung_tty.c
+> > @@ -2597,14 +2597,21 @@ static const struct s3c24xx_serial_drv_data exynos850_serial_drv_data = {
+> >       .fifosize = { 256, 64, 64, 64 },
+> >  };
+> >
+> > +static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
+> > +     EXYNOS_COMMON_SERIAL_DRV_DATA(),
+> > +     .fifosize = { 256, 64, 64, 64 },
+> > +};
+>
+> Why are you duplicating a structure that is already in the same file?
+> What is the benifit here?
+
+There is a mistake here, the struct shouldn't be the same as e850 it
+should look like this
+
+static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
+     EXYNOS_COMMON_SERIAL_DRV_DATA(),
+     /* rely on samsung,uart-fifosize DT property for fifosize */
+     .fifosize = { 0 },
+};
+
+This then allows the fifosize to be taken from the samsung,uart-fifosize
+DT property for each of the 19 UARTs on this SoC.
+
+>
+> >  #define EXYNOS4210_SERIAL_DRV_DATA (&exynos4210_serial_drv_data)
+> >  #define EXYNOS5433_SERIAL_DRV_DATA (&exynos5433_serial_drv_data)
+> >  #define EXYNOS850_SERIAL_DRV_DATA (&exynos850_serial_drv_data)
+> > +#define GS101_SERIAL_DRV_DATA (&gs101_serial_drv_data)
+>
+> What is "GS101"?
+
+gs101 is the name of the SoC in Pixel 6, 6 pro, 6a phones. I've put
+some more info
+about the various names of the SoC in the bindings documentation. See
+https://lore.kernel.org/linux-arm-kernel/20231010224928.2296997-9-peter.griffin@linaro.org/T/#mb45492e58de0bef566df8cdf6191ab8f96f0cf99
+
+>
+> >  #else
+> >  #define EXYNOS4210_SERIAL_DRV_DATA NULL
+> >  #define EXYNOS5433_SERIAL_DRV_DATA NULL
+> >  #define EXYNOS850_SERIAL_DRV_DATA NULL
+> > +#define GS101_SERIAL_DRV_DATA NULL
+> >  #endif
+> >
+> >  #ifdef CONFIG_ARCH_APPLE
+> > @@ -2688,6 +2695,9 @@ static const struct platform_device_id s3c24xx_serial_driver_ids[] = {
+> >       }, {
+> >               .name           = "artpec8-uart",
+> >               .driver_data    = (kernel_ulong_t)ARTPEC8_SERIAL_DRV_DATA,
+> > +     }, {
+> > +             .name           = "gs101-uart",
+> > +             .driver_data    = (kernel_ulong_t)GS101_SERIAL_DRV_DATA,
+> >       },
+> >       { },
+> >  };
+> > @@ -2709,6 +2719,8 @@ static const struct of_device_id s3c24xx_uart_dt_match[] = {
+> >               .data = EXYNOS850_SERIAL_DRV_DATA },
+> >       { .compatible = "axis,artpec8-uart",
+> >               .data = ARTPEC8_SERIAL_DRV_DATA },
+> > +     { .compatible = "google,gs101-uart",
+> > +             .data =  GS101_SERIAL_DRV_DATA },
+>
+> Why aren't you just listing this hardware as the same one above?  There
+> doesn't need to be a new entry if you just fix up the DT for the board
+> to declare it as the proper type of device.  No need to keep adding new
+> entries that do the exact same thing, we don't normally like that at all
+> for other bus types, why is DT different?
 >
 
-Ok will do so.
+I believe Krzysztof already answered this from a dt maintainer point of view.
 
-BR,
-Lino
+regards,
 
+Peter.
