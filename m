@@ -2,117 +2,122 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BF07C8F05
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Oct 2023 23:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8097C9017
+	for <lists+linux-serial@lfdr.de>; Sat, 14 Oct 2023 00:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjJMV3T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 13 Oct 2023 17:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S229830AbjJMWKF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 13 Oct 2023 18:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjJMV3S (ORCPT
+        with ESMTP id S229679AbjJMWKE (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 13 Oct 2023 17:29:18 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52676B7
-        for <linux-serial@vger.kernel.org>; Fri, 13 Oct 2023 14:29:17 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-419b53acc11so35551cf.0
-        for <linux-serial@vger.kernel.org>; Fri, 13 Oct 2023 14:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697232556; x=1697837356; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cbnszuC6zZy9ZUsF74yWxSFhfV0I+Nmxa40zOQ2lSHM=;
-        b=IgK+mnsKu8Ft4bT9XiWU9pObZSzyJRLvAieYMC3f08hehTP9jVLMkTpG10L1paiBlK
-         JkSv10u18Ix5Kq/P4422fRm9wWDW+pDCrPRZ9XsHRaTlVNHrRcSb8QhVxi/y/nJGMD5U
-         UNdxHsKsCkH5Sf7EA7pd0mO2a/UACdhOjE7wJfaXI5cyMIdpBt1E9cvInLGU38j+0hxr
-         jW7Z0FQre9XxK2ru6nRlUMZ+PpElyLsbOob09vzxk4ivzXtq4PECLZt6O6fxhC1aFBrn
-         QpSZ/KyLCt8dKeQDAFY6yzkUStE9cEU9N1C6ry5HLETWcFATZekPscERJmpGHj76FgUM
-         gwhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697232556; x=1697837356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cbnszuC6zZy9ZUsF74yWxSFhfV0I+Nmxa40zOQ2lSHM=;
-        b=Li3BQEeyJzLvR7sSoHm1n2Jn4bQvSTYeqGPAbAYdwlqecvOtytySjcVpNS9C9Bvvz9
-         1x9cDGqsP6mM8fippusER+kBXeJFbxC9WNHkimoTQ0rtxlJ6rGkx9XJSIUnnSxAF6lP2
-         pub1uGfS463zNpKkQKJtklkVhLaFa+1CDKFaPZQPkA/qWZSmUpt0LbsmYWk4zuBXNGu8
-         IXaFLW1Z68y8P494DJZ4mz8VgbdVGBxKXXs0/vgFxJwkm9Jn/RL4nfalXUGJqFDm3qWo
-         TobLiStymSrRvpcMzlIz9SajqrwfRtX+5Y63tpByt7uO0dCEGJIPV5DELTsJrek11hIi
-         fGtA==
-X-Gm-Message-State: AOJu0Yy13aB3bYvOPf5smZK+6NrkptgSfVkDupakm+WiX85Q3Or2tPf1
-        JdWaelF0sZjmkqXo1KVbrwU07o9FynYfRRL+J9c8lQ==
-X-Google-Smtp-Source: AGHT+IHpRGFmriEzL/KQ9RKsS2oHgCTUAzVCmj/q0lNV14br53Tcpyvzbb4wsjq5Hz1EXcDQc6RCLu7ojVHBJSnpDQs=
-X-Received: by 2002:a05:622a:2c02:b0:417:9238:5a30 with SMTP id
- kk2-20020a05622a2c0200b0041792385a30mr283qtb.29.1697232556224; Fri, 13 Oct
- 2023 14:29:16 -0700 (PDT)
+        Fri, 13 Oct 2023 18:10:04 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04olkn2069.outbound.protection.outlook.com [40.92.74.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1B7B7;
+        Fri, 13 Oct 2023 15:10:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S9e0JATCYSvdRtCqlQ+GJtj1XLZw4wPDO/T3sKoDRSMfkGtrdjWNB6WnboPV3LvdKfUz412LdZFecjdliTJxrtqmCCw8n49dJrAUEvVkzl1nFUoPfR6pJfRPRQGqZmJRlKLmHB2KekfVKiKmEr1dy//CwFbFEM/sJoJ9CbejqHjNpPYhITDuo25vMBzF+XqmQod2ihJsi2ZR2NV2xHbO1XjnWQbldanbYVgcr/gq6NAnVFzvqnWUZ6xV00NlH/OOQCfFa90fMfqMfHzeY/Zmjk6JrIWeZq8ycj2iKyEHeBJLM7vMtA1rvZET1F7tNGpqtuGXwCvUXwVB/ZvM6LfNHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jfzy6YZliDadRRADfCMeLp6TW8OkXv9z/cPaPhlEtpI=;
+ b=YCpvpmoo1vAM5fB2iEEO+/Ix3UT1LDYHszVUe0Kbza7vb8E9Bjv8CdY4l/4ANYmLMy0r6hQwOweSynVjlF2Y66qzDQkLtT8VPWXsBTwjneDa+GZvTdXnU1WBef+h3Qbkgq7EZ2R17occijPesJvMiEDpEDv87CYddXd80iuQLtvMxbAx4yDI62vkD2jrtvgokmkRS6S7Pebhs/vyRHCBvPUD7b1iq0xwXEyG+Jxz8CvdctnDDZRSHK+DxiKk9SsHSbELKXbCf65cQQaZFVcoCI1R/Xpcf8TB8CTLuu3IQG1LEfBcVRCCG3JFxy9PwWb5pVtfiXUkrVErgw1D2H+ZBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from DU0PR02MB7899.eurprd02.prod.outlook.com (2603:10a6:10:347::11)
+ by AS8PR02MB8341.eurprd02.prod.outlook.com (2603:10a6:20b:521::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Fri, 13 Oct
+ 2023 22:10:00 +0000
+Received: from DU0PR02MB7899.eurprd02.prod.outlook.com
+ ([fe80::b753:178a:394e:af8e]) by DU0PR02MB7899.eurprd02.prod.outlook.com
+ ([fe80::b753:178a:394e:af8e%7]) with mapi id 15.20.6863.043; Fri, 13 Oct 2023
+ 22:10:00 +0000
+Date:   Fri, 13 Oct 2023 23:09:57 +0100
+From:   Cameron Williams <cang1@live.co.uk>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v2 0/7] Brainboxes serial cards additions/fixes
+Message-ID: <DU0PR02MB7899BAA0D2FD8853D93F99C8C4D2A@DU0PR02MB7899.eurprd02.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TMN:  [FyzpsQhDEd4fRNSW3pKCct0FPoyVb9Iq]
+X-ClientProxiedBy: LO6P123CA0060.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:310::20) To DU0PR02MB7899.eurprd02.prod.outlook.com
+ (2603:10a6:10:347::11)
+X-Microsoft-Original-Message-ID: <ZSnANWBikozgqroU@CHIHIRO>
 MIME-Version: 1.0
-References: <20231013154742.76836-1-emkan@prevas.dk>
-In-Reply-To: <20231013154742.76836-1-emkan@prevas.dk>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 13 Oct 2023 14:28:40 -0700
-Message-ID: <CAGETcx-MP7XNUa0uObFpEDBiwjaGgTGvKu6Q-RXkrh0+hvXZvQ@mail.gmail.com>
-Subject: Re: [PATCH] serial: amba-pl011: set fwnode from parent device
-To:     Emil Kronborg Andersen <emkan@prevas.dk>
-Cc:     linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR02MB7899:EE_|AS8PR02MB8341:EE_
+X-MS-Office365-Filtering-Correlation-Id: a06f4a76-2a34-4e3f-65de-08dbcc39247d
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MHwOomcBybaWhDmOOrBdWD6YKxmzUuE/F4LqDFCsgX1zz5GuwHwzzzIFgi0kutDGcpJd1hG9i0ZzzfFlqiRTpcmvbSQGembgjdtjHv6D1pLjE9UaEh40K5+OPA0ti1TmezLxZlpkmmqAdZyLZigVwtjB8K0yWDqpQpWmIIH410UHoZ5tT+r6ASFopr9rrhL8qCVz0WN6sMtksdXxHs+8Ah/JrQNMrOdJnCYgDH/HWzEsuqrJjh5wIc9PsP1Ik4n9Bw8f34xPcTcitOyy2S8rx4mXOFqi6qejjtJebn5w0F0w0/4j93XZQ9WtONksHBO+sZDwx+LhfOnprU/Zg+KpAXEMeJr8VudRmeoeVNfsy+GIM6tTlMws8Nd+8oUBZHamgv5ZtxOXMLfWx+GJh7ePueqbxVC5iELIzNCjbrLlKsmIqzT0SsLImqaZYSBNiXm6sAaim/yPW1tPl0dMPH+/IyUyail7YlbsHldI/lroE5LC+eiRMTJvwPrYiy332kJgAYjxJgn0VPLh9qAavQWv2vsWwgFgcrUw+KMFskt4mvFi1MOOl2z7XwhDg/bWJKtOS+O3VD8og3hJmaHcykIz9A==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VWz4o1b9i5+l1LVHezkM0JzUR5XRA6Y4wruCTOhx1h1NNrc/ODYVtZSWrVpy?=
+ =?us-ascii?Q?26WhhjNN9eQMemSNrq7Sq2ToH8rpLBU0hA3CZBG+jjs2eurRxx+Uyx8jYj9H?=
+ =?us-ascii?Q?9u9XfBhiC6zg9odSbsL/KDW1YwMPFKB7cLePaD6sytyMbXWeb3pZBfNBW+/A?=
+ =?us-ascii?Q?gHjWTTjbUspPkcvzItOBWW1Sy/jAbMcT1P4G0NQYToPJ67YXv5JuK8hmYul7?=
+ =?us-ascii?Q?5m8A8AUpqobDSkwCKp8tddASjT0lBFt222mW6xRZATeTUwzjuEZlSzCRBUsJ?=
+ =?us-ascii?Q?8p/DlzSggzm85CpHiV3Z69YGAc+lTHXSuKqLtMjNbRqW7VidEZK0gevNf8yy?=
+ =?us-ascii?Q?EptF5LJiVEXoVNuAj6TqO5O1OQ/eAPJ8QNO+nhOW1Repmw65ITnL164ZgLWX?=
+ =?us-ascii?Q?0ZPoBizrCXib1/5xjK0wY3JCK0UaHxD9TQAsYxFyOSiYxUkIdwR+yBVLw6ck?=
+ =?us-ascii?Q?lKU1CKQBto/Lf41NrGBsMQ7UtOU2Vuk+WgquEbL3SOTOl7/F2bZhBZNpatfS?=
+ =?us-ascii?Q?64nGA5TmdVmbHlA81blHu/KWXJTEcbolsR6RVgIq97CfaeFjM1JpD/u+zY9d?=
+ =?us-ascii?Q?VNGPPeWYvHI5q/BM9Nw79cTGz26Y1GY10yGc8k4isP3MI4aMv6zYnet8d9ew?=
+ =?us-ascii?Q?xZ98FGZ81T44G3MDcXrfG3kr8GJFw6pCOBvPOPCsHXUkNIOB3iq8YsDU3r1p?=
+ =?us-ascii?Q?w/W5gnxMz6Quu0Hj5gzvVvtXkbtSvWuBoo40q8ndjPBT3bDE0fU4lFMVeznk?=
+ =?us-ascii?Q?tWtFVc/9+5T6kKImSCw55DTRyd/lspRlPQ2+j7hMQ02YRe6+wZpLYPhIx4Td?=
+ =?us-ascii?Q?XLRawD3FNOEbgnSDBRRgjTZIOhyLPayvGdQg63iOgCywZhmxPHQcu/a7gU8R?=
+ =?us-ascii?Q?fus4UnMB4M+WwgkJhcrbG5mKlOTP3JYZSrfchhEHRk3/xEfKOv1+Oa5F1yTS?=
+ =?us-ascii?Q?RIGhapIvJLpip5JKn48gN8+aCNVZ9Th05in4XCdHtnzPqkELO8VKHt+SFq18?=
+ =?us-ascii?Q?WqfyFa0igJDzX8Xn4MOxzEgtbO/3IyJ9Bpev8fptI4BUGx0iw9TMXJ7RsVOz?=
+ =?us-ascii?Q?JN7Be96UvNbziKyT8hSuBXK1CrQPL1HCbfZu/EDT6sq+OcO6urNRAnB3p8CT?=
+ =?us-ascii?Q?plWrk8jJr3jJOarv9k2ZxruVO8yjDVerOXpJM4AkV+T1xE0+jHCHRGF8SA+V?=
+ =?us-ascii?Q?hZtkxqOovtl2/4AZX5T87FkyIy6Rnp2hCJUy5A=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-bcc80.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: a06f4a76-2a34-4e3f-65de-08dbcc39247d
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB7899.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 22:10:00.5409
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR02MB8341
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 8:48=E2=80=AFAM Emil Kronborg Andersen <emkan@preva=
-s.dk> wrote:
->
-> After commit 3fb16866b51d ("driver core: fw_devlink: Make cycle
-> detection more robust"), consumer devices without their fwnode set
-> printed errors like the one below:
->
-> [    0.261887] uart-pl011 3f201000.serial: Failed to create device link (=
-0x180) with soc:firmware:gpio
->
-> To fix this, set the fwnode so fw_devlink can find and handle it
-> properly.
->
-> Fixes: 3fb16866b51d ("driver core: fw_devlink: Make cycle detection more =
-robust")
-> Signed-off-by: Emil Kronborg Andersen <emkan@prevas.dk>
-> ---
->  drivers/tty/serial/amba-pl011.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl=
-011.c
-> index 3dc9b0fcab1c..29cef84b71c0 100644
-> --- a/drivers/tty/serial/amba-pl011.c
-> +++ b/drivers/tty/serial/amba-pl011.c
-> @@ -2798,6 +2798,8 @@ static int pl011_probe(struct amba_device *dev, con=
-st struct amba_id *id)
->         int portnr, ret;
->         u32 val;
->
-> +       device_set_node(&dev->dev, dev_fwnode(dev->dev.parent));
-> +
+This series adds and fixes the Brainboxes PCI/e range of serial cards,
+adding any missing production card IDs and fixing any bugs, mainly with
+the Oxford Semiconductor based PX cards.
 
-Can we do this at a tty/serial framework level instead of just this
-driver? Also, this is the latest kernel? I feel like I fixed exactly
-this (but at a framework level) several months ago.
+Change from v1 [1][2][3][4]:
+- Split the patch into multiple commits for one subsystem/maintainer
+rather than a large series for multiple subsystems.
+[1] https://lore.kernel.org/all/DU0PR02MB789950E64D808DB57E9D7312C4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com/
+[2] https://lore.kernel.org/all/DU0PR02MB7899DE53DFC900EFB50E53F2C4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com/
+[3] https://lore.kernel.org/all/DU0PR02MB7899033E7E81EAF3694BC20AC4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com/
+[4] https://lore.kernel.org/all/DU0PR02MB7899EABA8C3DCAC94DCC79D4C4F8A@DU0PR02MB7899.eurprd02.prod.outlook.com/
 
--Saravana
+Cameron Williams (7):
+  tty: 8250: Fix IS-200 PCI ID comment
+  tty: 8250: Add support for additional Brainboxes UC cards
+  tty: 8250: Add support for Brainboxes UP cards
+  tty: 8250: Add support for Intashield IS-100
+  tty: 8250: Add support for and fix up additional Brainboxes PX cards
+  tty: 8250: Add support for Intashield IX cards
+  tty: 8250: Add Brainboxes Oxford Semiconductor-based quirks
 
->         portnr =3D pl011_find_free_port();
->         if (portnr < 0)
->                 return portnr;
-> --
-> 2.41.0
->
+ drivers/tty/serial/8250/8250_pci.c | 330 ++++++++++++++++++++++++++++-
+ 1 file changed, 321 insertions(+), 9 deletions(-)
+
+-- 
+2.42.0
+
