@@ -2,522 +2,113 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7AF7CA039
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Oct 2023 09:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1F67CA058
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Oct 2023 09:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjJPHOG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Oct 2023 03:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S232487AbjJPHQq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 16 Oct 2023 03:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjJPHOE (ORCPT
+        with ESMTP id S232489AbjJPHQe (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Oct 2023 03:14:04 -0400
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C71101;
-        Mon, 16 Oct 2023 00:13:52 -0700 (PDT)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=966793e2c5=fe@dev.tdt.de>)
-        id 1qsHnJ-005biK-0g; Mon, 16 Oct 2023 09:13:41 +0200
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1qsHnI-00A6Ja-4m; Mon, 16 Oct 2023 09:13:40 +0200
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id ACA7924004D;
-        Mon, 16 Oct 2023 09:13:39 +0200 (CEST)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id 0C1C3240049;
-        Mon, 16 Oct 2023 09:13:39 +0200 (CEST)
-Received: from localhost.localdomain (unknown [10.2.3.40])
-        by mail.dev.tdt.de (Postfix) with ESMTPSA id 5E0272BD62;
-        Mon, 16 Oct 2023 09:13:38 +0200 (CEST)
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
-        kabel@kernel.org, u.kleine-koenig@pengutronix.de
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-leds@vger.kernel.org
-Subject: [PATCH v3 4/4] trigger: ledtrig-tty: add new line mode to triggers
-Date:   Mon, 16 Oct 2023 09:13:32 +0200
-Message-ID: <20231016071332.597654-5-fe@dev.tdt.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231016071332.597654-1-fe@dev.tdt.de>
-References: <20231016071332.597654-1-fe@dev.tdt.de>
+        Mon, 16 Oct 2023 03:16:34 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3592170F
+        for <linux-serial@vger.kernel.org>; Mon, 16 Oct 2023 00:16:13 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-507a62d4788so1977516e87.0
+        for <linux-serial@vger.kernel.org>; Mon, 16 Oct 2023 00:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697440572; x=1698045372; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DbPYbKLlJ5BiSO4wtuS6smxtQmGTNqq7d+35QDKzymY=;
+        b=reJODLtz2hNJzvVlSPCuC95sMSi0MoAi3h9P2UpPvmvPYq90QlBHZ24DRU5bAiULiy
+         YFGedzieEpbCH07U+ckC9X0HpsWP8k9lw/xJwZfvNSaFs0IxETuHG7EuEEd0J4MDjnYV
+         hfB0wbRlgMR6D2KIYYzyYJ8DoFgBc40jNU4VaKm4+7pE/cvqLukt/YDkmAXf8XlVH0j1
+         YUkASJwx6ViOMiqqfaJOTUfcquQIB1OYhkfnUwHC3ysliS6u9Sg/coUW1O0+hmRdnQEb
+         ivEurdCAZwQdsDL3oigWdyrLEHZWOxTDTOpooJlrPStr98M00O2hQ1mPepdCicxf41Bh
+         Ut/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697440572; x=1698045372;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DbPYbKLlJ5BiSO4wtuS6smxtQmGTNqq7d+35QDKzymY=;
+        b=sUpBTdEyJV7sJkGbQs+7s9kiaNa8SkgiHBeW6NYOJZk+ue2YtRo/oeXQ6v44/C9GOa
+         2G8dqSPTG+8AZ0bHhdDccvak8Ym7LPA7QIHrcDtzvnxOhUw32U83s3cb++nuUxv5wyHy
+         IVNczH4xvBVUqy1UHYGhbVVm1DfYLwHM25EnMf2x12yRPCr8wH7GVDimX1RNRNXnlxAS
+         xnlL+9gpTgfHmykfwlRr1ESlN1c3aNCV/uyNCnEEkl4DzU8v11iQY6A8eVgI03ZHVjfw
+         s1hNog/ElUkU/2ht1BRUSEUbRo4wteD17msWTk8zOIVP2oAzx0bH7TaU46Jg6JmPJ5Z+
+         s8og==
+X-Gm-Message-State: AOJu0YwJJI6by2IXKuYX0Fs9gnCSC1cA0HClC8jU8dhUoiduMjqL2VWi
+        5npChjHsF5L38y8RIfqvwliMrPTX2JfOncn9w1w=
+X-Google-Smtp-Source: AGHT+IE0Ow54vtv7ZyDXScGFdC8M5BizsL6ucXJsyxMusg7/XktNiy+qr5BqVm3Svcuu2vdpacBUXQ==
+X-Received: by 2002:a05:6512:48a:b0:507:984e:9f16 with SMTP id v10-20020a056512048a00b00507984e9f16mr6198600lfq.36.1697440572036;
+        Mon, 16 Oct 2023 00:16:12 -0700 (PDT)
+Received: from nuoska (dc7g6tyyyyyyyyyyyyhlt-3.rev.dnainternet.fi. [2001:14ba:16cb:a800::193])
+        by smtp.gmail.com with ESMTPSA id b10-20020ac2410a000000b004fe432108absm4444893lfi.182.2023.10.16.00.16.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Oct 2023 00:16:11 -0700 (PDT)
+Date:   Mon, 16 Oct 2023 10:16:06 +0300
+From:   Mikko Rapeli <mikko.rapeli@linaro.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Richard Purdie <richard.purdie@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org,
+        openembedded-core <openembedded-core@lists.openembedded.org>,
+        Bruce Ashfield <bruce.ashfield@gmail.com>,
+        Randy MacLeod <randy.macleod@windriver.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>
+Subject: Re: Kernel 6.5 ttyS1 hang with qemu (was Re: [OE-core] Summary of
+ the remaining 6.5 kernel serial issue (and 6.5 summary)
+Message-ID: <ZSzjNgdCH_wmB4u2@nuoska>
+References: <178BF2895FF685E6.5378@lists.openembedded.org>
+ <a2ad67a0575548b6d5d8d187e597dcd72ae07f64.camel@linuxfoundation.org>
+ <ZSPQY6UYg21Z0PnN@nuoska>
+ <1520ecb5f4b6959af835a7781b94694913f76912.camel@linuxfoundation.org>
+ <178DF50519C11C84.8679@lists.openembedded.org>
+ <b208c9c6b72be4ef0f2aadb7bed103280bff60a0.camel@linuxfoundation.org>
+ <2023101516-unmolded-otter-e3e0@gregkh>
+ <214757eca7f4cd639a7a8d9a822476c1ec30f01c.camel@linuxfoundation.org>
+ <20231016063501.GL27774@atomide.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231016063501.GL27774@atomide.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-Content-Transfer-Encoding: quoted-printable
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-ID: 151534::1697440420-D3E9C639-E5308D60/0/0
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Until now, the LED blinks when data is sent via the tty (rx/tx).
-The serial tty interface also supports additional input signals, that can
-also be evaluated within this trigger. This commit is adding the followin=
-g
-additional input sources, which could be controlled via the
-'/sys/class/<leds>/' sysfs interface.
+Hi,
 
-DCE =3D Data Communication Equipment (Modem)
-DTE =3D Data Terminal Equipment (Computer)
+On Mon, Oct 16, 2023 at 09:35:01AM +0300, Tony Lindgren wrote:
+> * Richard Purdie <richard.purdie@linuxfoundation.org> [231015 21:30]:
+> > On Sun, 2023-10-15 at 17:31 +0200, Greg Kroah-Hartman wrote:
+> > > Can you try the patch below?  I just sent it to Linus and it's from Tony
+> > > to resolve some other pm issues with the serial port code.
+> > 
+> > Thanks for the pointer to this. I've put it through some testing and
+> > had one failure so far so I suspect this isn't enough unfortunately.
+> >
+> > FWIW I was looping the testing on the complete removal of the
+> > conditions and didn't see any failures with that.
+> 
+> Care to clarify what's the failing test now?
+> 
+> Is the issue still the second port not always coming up after boot or
+> something else?
 
-- line_cts:
-  DCE is ready to accept data from the DTE (CTS =3D Clear To Send). If th=
-e
-  line state is detected, the LED is switched on.
-  If set to 0 (default), the LED will not evaluate CTS.
-  If set to 1, the LED will evaluate CTS.
+Yes, data from the ttyS1 getty is not coming through from kernel and qemu to
+the test framework looking for login prompt after qemu machine boot.
+Workarounds like sending "\n\n" from the test framework through qemu to ttyS1
+or "echo helloB > /dev/ttyS1" via working ttyS0 don't seem to help and wake
+it up.
 
-- line_dsr:
-  DCE is ready to receive and send data (DSR =3D Data Set Ready). If the =
-line
-  state is detected, the LED is switched on.
-  If set to 0 (default), the LED will not evaluate DSR.
-  If set to 1, the LED will evaluate DSR.
+Cheers,
 
-- line_car:
-  DTE is receiving a carrier from the DCE (DCD =3D Data Carrier Detect). =
-If
-  the line state is detected, the LED is switched on.
-  If set to 0 (default), the LED will not evaluate CAR (DCD).
-  If set to 1, the LED will evaluate CAR (DCD).
-
-- line_rng:
-  DCE has detected an incoming ring signal on the telephone line
-  (RI =3D Ring Indicator). If the line state is detected, the LED is
-  switched on.
-  If set to 0 (default), the LED will not evaluate RNG (RI).
-  If set to 1, the LED will evaluate RNG (RI).
-
-In addition to the new line_* entries in sysfs, the indication for the
-direction of the transmitted data is independently controllable via the
-new rx and tx sysfs entrie now too. These are on by default. Thus the
-trigger behaves as before this change.
-
-- rx:
-  Signal reception (rx) of data on the named tty device.
-  If set to 0, the LED will not blink on reception.
-  If set to 1 (default), the LED will blink on reception.
-
-- tx:
-  Signal transmission (tx) of data on the named tty device.
-  If set to 0, the LED will not blink on transmission.
-  If set to 1 (default), the LED will blink on transmission.
-
-Signed-off-by: Florian Eckert <fe@dev.tdt.de>
----
- .../ABI/testing/sysfs-class-led-trigger-tty   |  53 ++++
- drivers/leds/trigger/ledtrig-tty.c            | 279 +++++++++++++++++-
- 2 files changed, 322 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Docu=
-mentation/ABI/testing/sysfs-class-led-trigger-tty
-index 2bf6b24e781b..e1f578ac8656 100644
---- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-@@ -4,3 +4,56 @@ KernelVersion:	5.10
- Contact:	linux-leds@vger.kernel.org
- Description:
- 		Specifies the tty device name of the triggering tty
-+
-+What:		/sys/class/leds/<led>/rx
-+Date:		September 2023
-+KernelVersion:	6.7
-+Description:
-+		Signal reception (rx) of data on the named tty device.
-+		If set to 0, the LED will not blink on reception.
-+		If set to 1 (default), the LED will blink on reception.
-+
-+What:		/sys/class/leds/<led>/tx
-+Date:		September 2023
-+KernelVersion:	6.7
-+Description:
-+		Signal transmission (tx) of data on the named tty device.
-+		If set to 0, the LED will not blink on transmission.
-+		If set to 1 (default), the LED will blink on transmission.
-+
-+What:		/sys/class/leds/<led>/line_cts
-+Date:		September 2023
-+KernelVersion:	6.7
-+Description:
-+		DCE is ready to accept data from the DTE (Clear To Send). If
-+		the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate CTS.
-+		If set to 1, the LED will evaluate CTS.
-+
-+What:		/sys/class/leds/<led>/line_dsr
-+Date:		September 2023
-+KernelVersion:	6.7
-+Description:
-+		DCE is ready to receive and send data (Data Set Ready). If
-+		the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate DSR.
-+		If set to 1, the LED will evaluate DSR.
-+
-+What:		/sys/class/leds/<led>/line_car
-+Date:		September 2023
-+KernelVersion:	6.7
-+Description:
-+		DTE is receiving a carrier from the DCE (Data Carrier Detect).
-+		If the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate CAR (DCD).
-+		If set to 1, the LED will evaluate CAR (DCD).
-+
-+What:		/sys/class/leds/<led>/line_rng
-+Date:		September 2023
-+KernelVersion:	6.7
-+Description:
-+		DCE has detected an incoming ring signal on the telephone
-+		line (Ring Indicator). If the line state is detected, the
-+		LED is switched on.
-+		If set to 0 (default), the LED will not evaluate RNG (RI).
-+		If set to 1, the LED will evaluate RNG (RI).
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
-dtrig-tty.c
-index 1c6fadf0b856..50bef4c8f321 100644
---- a/drivers/leds/trigger/ledtrig-tty.c
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -16,6 +16,28 @@ struct ledtrig_tty_data {
- 	const char *ttyname;
- 	struct tty_struct *tty;
- 	int rx, tx;
-+	unsigned long mode;
-+#define LEDTRIG_TTY_MODE_TX	0
-+#define LEDTRIG_TTY_MODE_RX	1
-+#define LEDTRIG_TTY_MODE_CTS	2
-+#define LEDTRIG_TTY_MODE_DSR	3
-+#define LEDTRIG_TTY_MODE_CAR	4
-+#define LEDTRIG_TTY_MODE_RNG	5
-+};
-+
-+enum tty_led_state {
-+	TTY_LED_BLINK,
-+	TTY_LED_ENABLE,
-+	TTY_LED_DISABLE,
-+};
-+
-+enum ledtrig_tty_attr {
-+	LEDTRIG_TTY_ATTR_TX,
-+	LEDTRIG_TTY_ATTR_RX,
-+	LEDTRIG_TTY_ATTR_CTS,
-+	LEDTRIG_TTY_ATTR_DSR,
-+	LEDTRIG_TTY_ATTR_CAR,
-+	LEDTRIG_TTY_ATTR_RNG,
- };
-=20
- static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
-@@ -78,14 +100,186 @@ static ssize_t ttyname_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(ttyname);
-=20
-+static ssize_t ledtrig_tty_attr_show(struct device *dev, char *buf,
-+	enum ledtrig_tty_attr attr)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	int bit;
-+
-+	switch (attr) {
-+	case LEDTRIG_TTY_ATTR_TX:
-+		bit =3D LEDTRIG_TTY_MODE_TX;
-+		break;
-+	case LEDTRIG_TTY_ATTR_RX:
-+		bit =3D LEDTRIG_TTY_MODE_RX;
-+		break;
-+	case LEDTRIG_TTY_ATTR_CTS:
-+		bit =3D LEDTRIG_TTY_MODE_CTS;
-+		break;
-+	case LEDTRIG_TTY_ATTR_DSR:
-+		bit =3D LEDTRIG_TTY_MODE_DSR;
-+		break;
-+	case LEDTRIG_TTY_ATTR_CAR:
-+		bit =3D LEDTRIG_TTY_MODE_CAR;
-+		break;
-+	case LEDTRIG_TTY_ATTR_RNG:
-+		bit =3D LEDTRIG_TTY_MODE_RNG;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return sprintf(buf, "%u\n", test_bit(bit, &trigger_data->mode));
-+}
-+
-+static ssize_t ledtrig_tty_attr_store(struct device *dev, const char *bu=
-f,
-+	size_t size, enum ledtrig_tty_attr attr)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	unsigned long state;
-+	int ret;
-+	int bit;
-+
-+	ret =3D kstrtoul(buf, 0, &state);
-+	if (ret)
-+		return ret;
-+
-+	switch (attr) {
-+	case LEDTRIG_TTY_ATTR_TX:
-+		bit =3D LEDTRIG_TTY_MODE_TX;
-+		break;
-+	case LEDTRIG_TTY_ATTR_RX:
-+		bit =3D LEDTRIG_TTY_MODE_RX;
-+		break;
-+	case LEDTRIG_TTY_ATTR_CTS:
-+		bit =3D LEDTRIG_TTY_MODE_CTS;
-+		break;
-+	case LEDTRIG_TTY_ATTR_DSR:
-+		bit =3D LEDTRIG_TTY_MODE_DSR;
-+		break;
-+	case LEDTRIG_TTY_ATTR_CAR:
-+		bit =3D LEDTRIG_TTY_MODE_CAR;
-+		break;
-+	case LEDTRIG_TTY_ATTR_RNG:
-+		bit =3D LEDTRIG_TTY_MODE_RNG;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (state)
-+		set_bit(bit, &trigger_data->mode);
-+	else
-+		clear_bit(bit, &trigger_data->mode);
-+
-+	return size;
-+}
-+
-+static ssize_t tx_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	return ledtrig_tty_attr_show(dev, buf, LEDTRIG_TTY_ATTR_TX);
-+}
-+
-+static ssize_t tx_store(struct device *dev,
-+	struct device_attribute *attr, const char *buf, size_t size)
-+{
-+	return ledtrig_tty_attr_store(dev, buf, size, LEDTRIG_TTY_ATTR_TX);
-+}
-+static DEVICE_ATTR_RW(tx);
-+
-+static ssize_t rx_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	return ledtrig_tty_attr_show(dev, buf, LEDTRIG_TTY_ATTR_RX);
-+}
-+
-+static ssize_t rx_store(struct device *dev,
-+	struct device_attribute *attr, const char *buf, size_t size)
-+{
-+	return ledtrig_tty_attr_store(dev, buf, size, LEDTRIG_TTY_ATTR_RX);
-+}
-+static DEVICE_ATTR_RW(rx);
-+
-+static ssize_t line_cts_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	return ledtrig_tty_attr_show(dev, buf, LEDTRIG_TTY_ATTR_CTS);
-+}
-+
-+static ssize_t line_cts_store(struct device *dev,
-+	struct device_attribute *attr, const char *buf, size_t size)
-+{
-+	return ledtrig_tty_attr_store(dev, buf, size, LEDTRIG_TTY_ATTR_CTS);
-+}
-+static DEVICE_ATTR_RW(line_cts);
-+
-+static ssize_t line_dsr_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	return ledtrig_tty_attr_show(dev, buf, LEDTRIG_TTY_ATTR_DSR);
-+}
-+
-+static ssize_t line_dsr_store(struct device *dev,
-+	struct device_attribute *attr, const char *buf, size_t size)
-+{
-+	return ledtrig_tty_attr_store(dev, buf, size, LEDTRIG_TTY_ATTR_DSR);
-+}
-+static DEVICE_ATTR_RW(line_dsr);
-+
-+static ssize_t line_car_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	return ledtrig_tty_attr_show(dev, buf, LEDTRIG_TTY_ATTR_CAR);
-+}
-+
-+static ssize_t line_car_store(struct device *dev,
-+	struct device_attribute *attr, const char *buf, size_t size)
-+{
-+	return ledtrig_tty_attr_store(dev, buf, size, LEDTRIG_TTY_ATTR_CAR);
-+}
-+static DEVICE_ATTR_RW(line_car);
-+
-+static ssize_t line_rng_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	return ledtrig_tty_attr_show(dev, buf, LEDTRIG_TTY_ATTR_RNG);
-+}
-+
-+static ssize_t line_rng_store(struct device *dev,
-+	struct device_attribute *attr, const char *buf, size_t size)
-+{
-+	return ledtrig_tty_attr_store(dev, buf, size, LEDTRIG_TTY_ATTR_RNG);
-+}
-+static DEVICE_ATTR_RW(line_rng);
-+
-+
-+static int ledtrig_tty_flag(struct ledtrig_tty_data *trigger_data, unsig=
-ned int flag)
-+{
-+	unsigned int status;
-+	int ret;
-+
-+	status =3D tty_get_tiocm(trigger_data->tty);
-+	if (status & flag)
-+		ret =3D 1;
-+	else
-+		ret =3D 0;
-+
-+	return ret;
-+}
-+
- static void ledtrig_tty_work(struct work_struct *work)
- {
- 	struct ledtrig_tty_data *trigger_data =3D
- 		container_of(work, struct ledtrig_tty_data, dwork.work);
-+	struct led_classdev *led_cdev =3D trigger_data->led_cdev;
- 	unsigned long interval =3D LEDTRIG_TTY_INTERVAL;
- 	struct serial_icounter_struct icount;
-+	enum tty_led_state state;
-+	int current_brightness;
- 	int ret;
-=20
-+	state =3D TTY_LED_DISABLE;
- 	mutex_lock(&trigger_data->mutex);
-=20
- 	if (!trigger_data->ttyname) {
-@@ -116,20 +310,75 @@ static void ledtrig_tty_work(struct work_struct *wo=
-rk)
- 		trigger_data->tty =3D tty;
- 	}
-=20
--	ret =3D tty_get_icount(trigger_data->tty, &icount);
--	if (ret) {
--		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped pollin=
-g\n");
--		mutex_unlock(&trigger_data->mutex);
--		return;
-+	if (test_bit(LEDTRIG_TTY_MODE_CTS, &trigger_data->mode)) {
-+		ret =3D ledtrig_tty_flag(trigger_data, TIOCM_CTS);
-+		if (ret)
-+			state =3D TTY_LED_ENABLE;
- 	}
-=20
--	if (icount.rx !=3D trigger_data->rx ||
--	    icount.tx !=3D trigger_data->tx) {
-+	if (test_bit(LEDTRIG_TTY_MODE_DSR, &trigger_data->mode)) {
-+		ret =3D ledtrig_tty_flag(trigger_data, TIOCM_DSR);
-+		if (ret)
-+			state =3D TTY_LED_ENABLE;
-+	}
-+
-+	if (test_bit(LEDTRIG_TTY_MODE_CAR, &trigger_data->mode)) {
-+		ret =3D ledtrig_tty_flag(trigger_data, TIOCM_CAR);
-+		if (ret)
-+			state =3D TTY_LED_ENABLE;
-+	}
-+
-+	if (test_bit(LEDTRIG_TTY_MODE_RNG, &trigger_data->mode)) {
-+		ret =3D ledtrig_tty_flag(trigger_data, TIOCM_RNG);
-+		if (ret)
-+			state =3D TTY_LED_ENABLE;
-+	}
-+
-+	/* The rx/tx handling must come after the evaluation of TIOCM_*,
-+	 * since the display for rx/tx has priority
-+	 */
-+	if (test_bit(LEDTRIG_TTY_MODE_TX, &trigger_data->mode) ||
-+	    test_bit(LEDTRIG_TTY_MODE_RX, &trigger_data->mode)) {
-+		ret =3D tty_get_icount(trigger_data->tty, &icount);
-+		if (ret) {
-+			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polli=
-ng\n");
-+			mutex_unlock(&trigger_data->mutex);
-+			return;
-+		}
-+
-+		if (test_bit(LEDTRIG_TTY_MODE_TX, &trigger_data->mode) &&
-+		    (icount.tx !=3D trigger_data->tx)) {
-+			trigger_data->tx =3D icount.tx;
-+			state =3D TTY_LED_BLINK;
-+		}
-+
-+		if (test_bit(LEDTRIG_TTY_MODE_RX, &trigger_data->mode) &&
-+		    (icount.rx !=3D trigger_data->rx)) {
-+			trigger_data->rx =3D icount.rx;
-+			state =3D TTY_LED_BLINK;
-+		}
-+	}
-+
-+	current_brightness =3D led_cdev->brightness;
-+	if (current_brightness)
-+		led_cdev->blink_brightness =3D current_brightness;
-+
-+	if (!led_cdev->blink_brightness)
-+		led_cdev->blink_brightness =3D led_cdev->max_brightness;
-+
-+	switch (state) {
-+	case TTY_LED_BLINK:
- 		led_blink_set_oneshot(trigger_data->led_cdev, &interval,
- 				      &interval, 0);
--
--		trigger_data->rx =3D icount.rx;
--		trigger_data->tx =3D icount.tx;
-+		break;
-+	case TTY_LED_ENABLE:
-+		led_set_brightness(led_cdev, led_cdev->blink_brightness);
-+		break;
-+	case TTY_LED_DISABLE:
-+		fallthrough;
-+	default:
-+		led_set_brightness(led_cdev, LED_OFF);
-+		break;
- 	}
-=20
- out:
-@@ -140,6 +389,12 @@ static void ledtrig_tty_work(struct work_struct *wor=
-k)
-=20
- static struct attribute *ledtrig_tty_attrs[] =3D {
- 	&dev_attr_ttyname.attr,
-+	&dev_attr_rx.attr,
-+	&dev_attr_tx.attr,
-+	&dev_attr_line_cts.attr,
-+	&dev_attr_line_dsr.attr,
-+	&dev_attr_line_car.attr,
-+	&dev_attr_line_rng.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(ledtrig_tty);
-@@ -152,6 +407,10 @@ static int ledtrig_tty_activate(struct led_classdev =
-*led_cdev)
- 	if (!trigger_data)
- 		return -ENOMEM;
-=20
-+	/* Enable default rx/tx LED blink */
-+	set_bit(LEDTRIG_TTY_MODE_TX, &trigger_data->mode);
-+	set_bit(LEDTRIG_TTY_MODE_RX, &trigger_data->mode);
-+
- 	led_set_trigger_data(led_cdev, trigger_data);
-=20
- 	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
---=20
-2.30.2
-
+-Mikko
