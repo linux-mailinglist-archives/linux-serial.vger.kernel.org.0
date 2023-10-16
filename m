@@ -2,71 +2,99 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4367C9FAE
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Oct 2023 08:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B147CA03D
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Oct 2023 09:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbjJPGfF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 16 Oct 2023 02:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S232190AbjJPHOE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Mon, 16 Oct 2023 03:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjJPGfF (ORCPT
+        with ESMTP id S231853AbjJPHNz (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 16 Oct 2023 02:35:05 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 815EBAD
-        for <linux-serial@vger.kernel.org>; Sun, 15 Oct 2023 23:35:03 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 698B380CC;
-        Mon, 16 Oct 2023 06:35:02 +0000 (UTC)
-Date:   Mon, 16 Oct 2023 09:35:01 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Richard Purdie <richard.purdie@linuxfoundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mikko Rapeli <mikko.rapeli@linaro.org>,
-        linux-serial@vger.kernel.org,
-        openembedded-core <openembedded-core@lists.openembedded.org>,
-        Bruce Ashfield <bruce.ashfield@gmail.com>,
-        Randy MacLeod <randy.macleod@windriver.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>
-Subject: Re: Kernel 6.5 ttyS1 hang with qemu (was Re: [OE-core] Summary of
- the remaining 6.5 kernel serial issue (and 6.5 summary)
-Message-ID: <20231016063501.GL27774@atomide.com>
-References: <178BF2895FF685E6.5378@lists.openembedded.org>
- <a2ad67a0575548b6d5d8d187e597dcd72ae07f64.camel@linuxfoundation.org>
- <ZSPQY6UYg21Z0PnN@nuoska>
- <1520ecb5f4b6959af835a7781b94694913f76912.camel@linuxfoundation.org>
- <178DF50519C11C84.8679@lists.openembedded.org>
- <b208c9c6b72be4ef0f2aadb7bed103280bff60a0.camel@linuxfoundation.org>
- <2023101516-unmolded-otter-e3e0@gregkh>
- <214757eca7f4cd639a7a8d9a822476c1ec30f01c.camel@linuxfoundation.org>
+        Mon, 16 Oct 2023 03:13:55 -0400
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D66BFF;
+        Mon, 16 Oct 2023 00:13:52 -0700 (PDT)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=966793e2c5=fe@dev.tdt.de>)
+        id 1qsHnH-002Nhz-Aj; Mon, 16 Oct 2023 09:13:39 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1qsHnG-00ADhL-9f; Mon, 16 Oct 2023 09:13:38 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id DB2B424004D;
+        Mon, 16 Oct 2023 09:13:37 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 38533240049;
+        Mon, 16 Oct 2023 09:13:37 +0200 (CEST)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id D30732BD62;
+        Mon, 16 Oct 2023 09:13:36 +0200 (CEST)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
+        kabel@kernel.org, u.kleine-koenig@pengutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-leds@vger.kernel.org
+Subject: [PATCH v3 0/4] ledtrig-tty: add additional tty state evaluation
+Date:   Mon, 16 Oct 2023 09:13:28 +0200
+Message-ID: <20231016071332.597654-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <214757eca7f4cd639a7a8d9a822476c1ec30f01c.camel@linuxfoundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8BIT
+X-purgate-type: clean
+X-purgate-ID: 151534::1697440419-4E731C7C-B86B7ACA/0/0
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-* Richard Purdie <richard.purdie@linuxfoundation.org> [231015 21:30]:
-> On Sun, 2023-10-15 at 17:31 +0200, Greg Kroah-Hartman wrote:
-> > Can you try the patch below?  I just sent it to Linus and it's from Tony
-> > to resolve some other pm issues with the serial port code.
-> 
-> Thanks for the pointer to this. I've put it through some testing and
-> had one failure so far so I suspect this isn't enough unfortunately.
->
-> FWIW I was looping the testing on the complete removal of the
-> conditions and didn't see any failures with that.
+Changes in v3:
+- Add missing 'kernel test robot' information to the commit message.
+- Additional information added to the commit message
 
-Care to clarify what's the failing test now?
+Changes in v2:
+- rename new function from tty_get_mget() to tty_get_tiocm() as
+  requested by 'Jiri Slaby'.
+- As suggested by 'Jiri Slaby', fixed tabs in function documentation
+  throughout the file '/drivers/tty/tty_io.c' in a separate commit.
+- Move the variable definition to the top in function
+  'ledtrig_tty_work()'.
+  This was reported by the 'kernel test robot' after my change in v1.
+- Also set the 'max_brightness' to 'blink_brightness' if no
+  'blink_brightness' was set. This fixes a problem at startup when the
+  brightness is still set to 0 and only 'line_*' is evaluated. I looked
+in
+  the netdev trigger and that's exactly how it's done there.
 
-Is the issue still the second port not always coming up after boot or
-something else?
+v1:
+This is a follow-up patchset, based on the mailing list discussion from
+March 2023 based on the old patchset v7 [1]. I have changed, the LED
+trigger
+handling via the sysfs interfaces as suggested by Uwe Kleine-König.
 
-Regards,
+Florian Eckert (4):
+  tty: whitespaces in descriptions corrected by replacing tabs with
+    spaces.
+  tty: add new helper function tty_get_tiocm
+  trigger: ledtrig-tty: move variable definition to the top
+  trigger: ledtrig-tty: add new line mode to triggers
 
-Tony
+ .../ABI/testing/sysfs-class-led-trigger-tty   |  53 ++++
+ drivers/leds/trigger/ledtrig-tty.c            | 280 +++++++++++++++++-
+ drivers/tty/tty_io.c                          | 130 ++++----
+ include/linux/tty.h                           |   1 +
+ 4 files changed, 396 insertions(+), 68 deletions(-)
+
+-- 
+2.30.2
+
