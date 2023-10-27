@@ -2,69 +2,79 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92F77D9EFF
-	for <lists+linux-serial@lfdr.de>; Fri, 27 Oct 2023 19:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD3B7DA08B
+	for <lists+linux-serial@lfdr.de>; Fri, 27 Oct 2023 20:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjJ0Rpq (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 27 Oct 2023 13:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S1346384AbjJ0Scg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 27 Oct 2023 14:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjJ0Rpq (ORCPT
+        with ESMTP id S1346378AbjJ0ScR (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 27 Oct 2023 13:45:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988ABF3;
-        Fri, 27 Oct 2023 10:45:40 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1698428739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vCF2sTMjoJARe87DP7lAD8rcZvlM4BFzZKH7cV3QuU8=;
-        b=xXX2ovs1OHhXbwDuZac6CP8IsOrVj54bZeD5nyxWlPUBOXUniX1BJWPV+PcVr7obtLN3eF
-        I6uPBnLwqsSeXJfTpISEjW/ksbeWDMkDlGhuSLkQd0gwCvAm+Ogc1qakMhd99FaKFmFOz6
-        1GIjy1E+N/YDe03TxrnRIU53J4jidS28NuERCZkDyMkX8X5wFJu/OtV20oF773goJYLcMm
-        /ktLuCbvSshkq1Zxca8OxoWF8VJ4zqw5Ohr8CYTRGpLm9x96JuE60jmezp5gm6X3Yn94AK
-        7ns6idG1lqprpc0Y27+8vH0y0yrCC8o1DwW3zTycAy/bFh5YoXh4wv0+CbwiwA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1698428739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vCF2sTMjoJARe87DP7lAD8rcZvlM4BFzZKH7cV3QuU8=;
-        b=WWHizKPPbjghvXPvf1/QyrM9sNTsNYrmVq6GoM+JMN89I9M6CgHAYJRHoOSGLIiqmVpfsl
-        B+qpDGnW7YiT4hDg==
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-serial@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Kumar Patra <atishp@rivosinc.com>,
-        Haibo Xu <haibo1.xu@intel.com>, Marc Zyngier <maz@kernel.org>
-Subject: Re: [RFC PATCH v2 13/21] irqchip: riscv-intc: Add ACPI support for AIA
-In-Reply-To: <20231026165150.GA1825130@bhelgaas>
-References: <20231026165150.GA1825130@bhelgaas>
-Date:   Fri, 27 Oct 2023 19:45:38 +0200
-Message-ID: <87jzr82c3h.ffs@tglx>
+        Fri, 27 Oct 2023 14:32:17 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9052847BC;
+        Fri, 27 Oct 2023 11:29:54 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 74DBA32007F1;
+        Fri, 27 Oct 2023 14:26:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 27 Oct 2023 14:27:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1698431218; x=1698517618; bh=SX5fl+Ehwu
+        JvuJSgszNvKWpCysGddZbGyxPGegx2anM=; b=03IfJ58iQg6kqNHZAjKDSOW9WC
+        dyWo/vU4NUtyJZoGGkJLC0j3MXU84+1hpXAwShK4fBfDwFhVygwT1FszYi/sSr6O
+        v25Bs5xNplaNbpsvUou2carBJpqhvzps4kTmR82hVy/GapjEkSX+HIW7KeCBNOxD
+        4cVb0UYzyN7vuC/G7/7DlJNl3+hYozXf7PDOIq9tuzMvTkqiXlMed+3AWsOqOkX0
+        mzuABIydFwpTZrCn5EXiAe8aSPQFhEU4Er/BhjMcdfRqx3ja5Nx3fJFqFBnu0MhY
+        fqPka0WW4bE9zRlwSM0iPvmNvPnZLrr/BE5CrflqZgU62+HzHOSea2RKHq7w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1698431218; x=1698517618; bh=SX5fl+EhwuJvu
+        JSgszNvKWpCysGddZbGyxPGegx2anM=; b=HpPOfN2dlfROpP3t8TrgZNgJAQA6n
+        M8ZpKN93bsaQrh1sRVjyH6WKIhjCzvJ0LCPqBt9m4opxgekG1hrijcZ/VXkQowR0
+        nUh3DmzkJSjULI35unYyQ7L3uwwXbdSzY1TfCN3Vnw6JmjIFO/nQrjdwiAXjuO+J
+        L/hnUDWmNptkycwjjeY0cHZ5Z4JKGZ6eCUcJKPDvjyiCqWYj5dmVBwF4TN7MpJEZ
+        LdBW0v7Lzd6LSN4QcACuMsW6hJBlZ2OP1m4gXTSNYzSlfP+xfVBE96ypUoK1mmmR
+        exOXZHXrIRw9ImvfKgPjO3MwqRWjB1iZZYw8wkQJroBm24q2BzzqdjEwg==
+X-ME-Sender: <xms:8gA8ZbUIoLZC6XrAH9_8UjVGxYtUfMAbot2QdGXdvIwFT2pFOxxbCw>
+    <xme:8gA8ZTlvyM6wCgQMlYTf1VUBA7y14U2_Jry7zwvhSkrt89b_zxrMs2WpuoqfP26Sb
+    -nL5jU7JbjqBZfcess>
+X-ME-Received: <xmr:8gA8ZXbpMA2eK5OE8nRl7kSaksfGPixFhpLVy6ZkdNx4GvOCd_-_NCoaiofILBipizI0WkUcYPU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:8gA8ZWXXPmH_TsyAFIQ3LBaulq7D-tiHeXEPZVn_3rkPuZfNBwPiSQ>
+    <xmx:8gA8ZVk4pkDVrcyCVKSlmvJ74RVV6rfSoI9bM7vMLxM9ajokHsFhCA>
+    <xmx:8gA8ZTeQWH4zvfIuDNBu5524wwVQ9uoTRt2WfEJjyNWEp941Mulyhw>
+    <xmx:8gA8ZYu7uNvy9bMNUMP9MLzvYFUYXjNmEBi1yflfJfqPRQJ9Prom7A>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Oct 2023 14:26:57 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/3] serial, MIPS: Add MIPS UHI semihosting support
+Date:   Fri, 27 Oct 2023 19:26:43 +0100
+Message-Id: <20231027182650.281405-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,35 +82,40 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Thu, Oct 26 2023 at 11:51, Bjorn Helgaas wrote:
-> On Thu, Oct 26, 2023 at 01:53:36AM +0530, Sunil V L wrote:
->> The RINTC subtype structure in MADT also has information about other
->> interrupt controllers like MMIO. So, save those information and provide
->> interfaces to retrieve them when required by corresponding drivers.
->
->> @@ -218,7 +306,19 @@ static int __init riscv_intc_acpi_init(union acpi_subtable_headers *header,
->
->> +	 * MSI controller (IMSIC) in RISC-V is optional. So, unless
->> +	 * IMSIC is discovered, set system wide MSI support as
->> +	 * unsupported. Once IMSIC is probed, MSI support will be set.
->> +	 */
->> +	pci_no_msi();
->
-> It doesn't seem like we should have to tell the PCI core about
-> functionality we *don't* have.
->
-> I would think IMSIC would be detected before enumerating PCI devices
-> that might use it, and if we *haven't* found an IMSIC by the time we
-> get to pci_register_host_bridge(), would/should we set
-> PCI_BUS_FLAGS_NO_MSI there?
->
-> I see Thomas is cc'd; he'd have better insight.
+Hi all,
 
-I was not really involved with this bus and MSI domain logic. Marc
-should know. CC'ed.
+This patchset adds support for MIPS UHI semihosting.
+It has been implemented on many debugers such as MIPS CodeScape debugger
+and OpenOCD.
 
-Thanks,
+It is also supported by QEMU's -semihosting option.
 
-        tglx
+I didn't add MAINTAINERS entry for this driver because I find other
+simple earlycon drivers don't have one either. Do let me know if it
+should be added.
 
+Thanks
+Jiaxun
+
+Jiaxun Yang (3):
+  MIPS: Add header for UHI semihosting defines
+  MIPS: zboot: Add UHI semihosting debug print support
+  serial: Add an earlycon driver for MIPS UHI semihosting
+
+ arch/mips/Kconfig.debug                |  11 +
+ arch/mips/boot/compressed/Makefile     |   1 +
+ arch/mips/boot/compressed/dbg-uhi.c    |  11 +
+ arch/mips/boot/compressed/dbg.c        |   4 +-
+ arch/mips/boot/compressed/decompress.c |   4 +
+ arch/mips/include/asm/uhi.h            | 309 +++++++++++++++++++++++++
+ drivers/tty/serial/Kconfig             |  13 ++
+ drivers/tty/serial/Makefile            |   1 +
+ drivers/tty/serial/earlycon-mips-uhi.c |  85 +++++++
+ 9 files changed, 437 insertions(+), 2 deletions(-)
+ create mode 100644 arch/mips/boot/compressed/dbg-uhi.c
+ create mode 100644 arch/mips/include/asm/uhi.h
+ create mode 100644 drivers/tty/serial/earlycon-mips-uhi.c
+
+-- 
+2.34.1
 
