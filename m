@@ -2,259 +2,95 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D217DB4F0
-	for <lists+linux-serial@lfdr.de>; Mon, 30 Oct 2023 09:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0027E0DC3
+	for <lists+linux-serial@lfdr.de>; Sat,  4 Nov 2023 05:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjJ3IPh (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 Oct 2023 04:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S229585AbjKDE2T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sat, 4 Nov 2023 00:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbjJ3IPg (ORCPT
+        with ESMTP id S229509AbjKDE2T (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 Oct 2023 04:15:36 -0400
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54814A7
-        for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 01:15:33 -0700 (PDT)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=9681cd3a30=fe@dev.tdt.de>)
-        id 1qxNQo-00EzjB-Uw
-        for linux-serial@vger.kernel.org; Mon, 30 Oct 2023 09:15:31 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1qxNQo-00GSJl-Jp
-        for linux-serial@vger.kernel.org; Mon, 30 Oct 2023 09:15:30 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id 46039240049
-        for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 09:15:30 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id 01A4E240040;
-        Mon, 30 Oct 2023 09:15:29 +0100 (CET)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-        by mail.dev.tdt.de (Postfix) with ESMTP id 2BE07215D4;
-        Mon, 30 Oct 2023 09:15:28 +0100 (CET)
+        Sat, 4 Nov 2023 00:28:19 -0400
+X-Greylist: delayed 4229 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:28:15 PDT
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AEAD44
+        for <linux-serial@vger.kernel.org>; Fri,  3 Nov 2023 21:28:15 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id 1C99C4FBEB; Mon, 30 Oct 2023 08:30:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1698656363;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=PFgnEd5wdZcxUwFhfrIzckaziWArUF6AlnphdbJ6LOsUavovTOYAlDHfGSvXc2iCB
+         IcXbaXKCgWM4RohbT1jNLvcQaQ7TEVa+3LgFhBH/rOy9/Xlw1fWw6YIU7htymCoinw
+         DLNVpRmk6MH6esnaGIY83Q2lT3zuBmNIXsmYfeyRjcJSUbHFzyG/3jsYXAv2mlEviO
+         PKltfl4pZrNLU42G/dCi3wuHujQnhYuVxFXrSJ4bi055qUt1SYEcpKIdFPY1BCvWwk
+         zxn39ACHT8875y/t8gUD8X5kKQLwuKB5WuDMy2EZUy4KNDm4MMHTuOOupbhXjH/lB2
+         +rb5w2y8rL6QA==
+Received: by mail.profitpathwaygo.com for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 08:30:28 GMT
+Message-ID: <20231030074500-0.1.2s.154d9.0.k52mnsbkog@profitpathwaygo.com>
+Date:   Mon, 30 Oct 2023 08:30:28 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-serial@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 30 Oct 2023 09:15:28 +0100
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     m.brock@vanmierlo.com
-Cc:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
-        kabel@kernel.org, u.kleine-koenig@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] leds: ledtrig-tty: add new line mode evaluation
-In-Reply-To: <ddf9439a092576cd18c6e025d0b61602@vanmierlo.com>
-References: <20231023094205.2706812-1-fe@dev.tdt.de>
- <20231023094205.2706812-3-fe@dev.tdt.de>
- <ddf9439a092576cd18c6e025d0b61602@vanmierlo.com>
-Message-ID: <2951fd563fc6a364d8cddfb7ec17808b@dev.tdt.de>
-X-Sender: fe@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: profitpathwaygo.com]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [141.94.21.238 listed in bl.score.senderscore.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [141.94.21.238 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0088]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-purgate-type: clean
-X-purgate-ID: 151534::1698653730-4FF36C7C-91F7C049/0/0
-X-purgate: clean
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Dzie=C5=84 dobry,
+
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
+
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
-On 2023-10-28 12:43, m.brock@vanmierlo.com wrote:
-> Florian Eckert wrote on 2023-10-23 11:42:
-> 
->> @@ -16,6 +16,28 @@ struct ledtrig_tty_data {
->>      const char *ttyname;
->>      struct tty_struct *tty;
->>      int rx, tx;
->> +     unsigned long ttytrigger;
->> +};
-> 
-> ttytriggers ?
-
-Yes that would be nicer name. thanks
-
-> [...]
-> 
->>  static void ledtrig_tty_work(struct work_struct *work)
->>  {
->>  	struct ledtrig_tty_data *trigger_data =
->>  		container_of(work, struct ledtrig_tty_data, dwork.work);
->> +	struct led_classdev *led_cdev = trigger_data->led_cdev;
->> +	unsigned long interval = LEDTRIG_TTY_INTERVAL;
->>  	struct serial_icounter_struct icount;
->> +	enum led_trigger_tty_state state;
->> +	int current_brightness;
->> +	int status;
->>  	int ret;
->> 
->> +	state = TTY_LED_DISABLE;
->>  	mutex_lock(&trigger_data->mutex);
->> 
->>  	if (!trigger_data->ttyname) {
->> @@ -115,22 +218,74 @@ static void ledtrig_tty_work(struct work_struct 
->> *work)
->>  		trigger_data->tty = tty;
->>  	}
->> 
->> -	ret = tty_get_icount(trigger_data->tty, &icount);
->> -	if (ret) {
->> -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped 
->> polling\n");
->> -		mutex_unlock(&trigger_data->mutex);
->> -		return;
->> +	status = tty_get_tiocm(trigger_data->tty);
->> +	if (status > 0) {
->> +		if (test_bit(TRIGGER_TTY_CTS, &trigger_data->ttytrigger)) {
->> +			if (status & TIOCM_CTS)
->> +				state = TTY_LED_ENABLE;
->> +		}
->> +
->> +		if (test_bit(TRIGGER_TTY_DSR, &trigger_data->ttytrigger)) {
->> +			if (status & TIOCM_DSR)
->> +				state = TTY_LED_ENABLE;
->> +		}
->> +
->> +		if (test_bit(TRIGGER_TTY_CAR, &trigger_data->ttytrigger)) {
->> +			if (status & TIOCM_CAR)
->> +				state = TTY_LED_ENABLE;
->> +		}
->> +
->> +		if (test_bit(TRIGGER_TTY_RNG, &trigger_data->ttytrigger)) {
->> +			if (status & TIOCM_RNG)
->> +				state = TTY_LED_ENABLE;
->> +		}
->> +	}
->> +
->> +	/* The rx/tx handling must come after the evaluation of TIOCM_*,
->> +	 * since the display for rx/tx has priority
->> +	 */
->> +	if (test_bit(TRIGGER_TTY_RX, &trigger_data->ttytrigger) ||
->> +	    test_bit(TRIGGER_TTY_TX, &trigger_data->ttytrigger)) {
->> +		ret = tty_get_icount(trigger_data->tty, &icount);
->> +		if (ret) {
->> +			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped 
->> polling\n");
->> +			mutex_unlock(&trigger_data->mutex);
->> +			return;
->> +		}
->> +
->> +		if (test_bit(TRIGGER_TTY_RX, &trigger_data->ttytrigger) &&
->> +		    (icount.tx != trigger_data->tx)) {
-> 
-> You check for TRIGGER_TTY_RX and then compare icount.tx, is that 
-> correct?
-
-I would say this is correct. At first I check if the tx path should be 
-evaluated
-and if this is correct I check if there was a tx transmission during the 
-last run.
-
->> +			trigger_data->tx = icount.tx;
->> +			state = TTY_LED_BLINK;
->> +		}
->> +
->> +		if (test_bit(TRIGGER_TTY_TX, &trigger_data->ttytrigger) &&
->> +		    (icount.rx != trigger_data->rx)) {
-> 
-> You check for TRIGGER_TTY_TX and then compare icount.rx, is that 
-> correct?
-
-I would say this is correct. At first I check if the rx path should be 
-evaluated
-and if this is correct I check if there was a rx transmission during the 
-last run.
-
->> +			trigger_data->rx = icount.rx;
->> +			state = TTY_LED_BLINK;
->> +		}
->>  	}
->> 
->> -	if (icount.rx != trigger_data->rx ||
->> -	    icount.tx != trigger_data->tx) {
->> -		unsigned long interval = LEDTRIG_TTY_INTERVAL;
->> +	current_brightness = led_cdev->brightness;
->> +	if (current_brightness)
->> +		led_cdev->blink_brightness = current_brightness;
->> 
->> +	if (!led_cdev->blink_brightness)
->> +		led_cdev->blink_brightness = led_cdev->max_brightness;
-> 
-> Is it OK to override the chosen brightness here?
-
-In my setup my brightness in the sysfs path of the LED ist set to '0'.
-Even though the tty trigger was configured correctly the LED was not
-turned on. If I set max_brightness in this path the LED works correctly.
-I would check this a gain if this is still needed.
-
->> +
->> +	switch (state) {
->> +	case TTY_LED_BLINK:
->>  		led_blink_set_oneshot(trigger_data->led_cdev, &interval,
->>  				      &interval, 0);
-> 
-> Change trigger_data->led_cdev to simply led_cdev
-
-Thanks for the hint. I will change this.
-
-> Shouldn't the led return to the line controlled steady state?
-
-Sorry I do not understand your question.
-
-> Set an invert variable to true if state was TTY_LED_ENABLE before it 
-> got set
-> to TTY_LED_BLINK
-
-No matter whether the LED is on or off beforehand. I understand that the
-LED is always on for the first half of the period and off for the rest 
-of
-the period. I think that is correct and I don't need to make a 
-distinction
-via invert here. I hope I have understood your comment correctly here.
-
-> How do interval and the frequency of ledtrig_tty_work() relate?
-
-The work is twice as long as of the interval. So the variable
-LEDTRIG_TTY_INTERVAL = 50 and the work is scheduled LEDTRIG_TTY_INTERVAL 
-* 2.
-But that was also before my change.
-
->> -
->> -		trigger_data->rx = icount.rx;
->> -		trigger_data->tx = icount.tx;
->> +		break;
->> +	case TTY_LED_ENABLE:
->> +		led_set_brightness(led_cdev, led_cdev->blink_brightness);
->> +		break;
->> +	case TTY_LED_DISABLE:
->> +		fallthrough;
->> +	default:
->> +		led_set_brightness(led_cdev, LED_OFF);
->> +		break;
->>  	}
-> 
-> Maarten
-
-Thank you for your feedback. I must say, however, that I am currently in
-the process of preparing v6, which will implement the comments and
-change requests from 'greg k-h' [1]. The big change here in v6 is, that 
-I have
-switched to completion and split the change in more reviewable commits.
-I will see if your comments can also be incorporated into the new 
-approach.
-
----
-
-Florian
-
-[1] 
-https://lore.kernel.org/linux-leds/2023102341-jogger-matching-dded@gregkh/
+Pozdrawiam serdecznie
+Adam Charachuta
