@@ -2,86 +2,66 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4697DBF68
-	for <lists+linux-serial@lfdr.de>; Mon, 30 Oct 2023 18:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AEC7DC060
+	for <lists+linux-serial@lfdr.de>; Mon, 30 Oct 2023 20:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjJ3Ryk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 Oct 2023 13:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S231437AbjJ3TZw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 Oct 2023 15:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjJ3Ryj (ORCPT
+        with ESMTP id S232360AbjJ3SWD (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 Oct 2023 13:54:39 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3356D9C
-        for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 10:54:36 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6bd0e1b1890so3881228b3a.3
-        for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 10:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1698688475; x=1699293275; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=21YW+6fG17bA3AZxmYV1MGGTJ8p29kWqv098XZo38z4=;
-        b=ZG0ykLbHGUD2GEH950QKtsgGnijgHqeey8cIAPrvU4XcOoUXswe7Rjb9+T4IuEcEL5
-         EeMt4evioD8oS4Z+0ZqzarMe3xet3Wrer3jgjz3XGpU/y0lCBTYoCQ6xWQflByR+N6L2
-         rGA4xcfOavWqw5h6o8VpGQHXYXrFfUmuub95g13K0fBJ9Y1avNCwFsWXcVwMHKOv0iWs
-         gf9LkKxQ/sJeSsLQrC14UO4pYOr4oSiN9j2xbQrX7DhpejnPwWB9iBYyXYU/SJFJ7nyi
-         I1dIdSXB1Q2TcQMWMkNP+sK8E2jVk0ledp5TQYwkhJ0iEs48mt0T53gWChSMb9CaWrgU
-         iQ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698688475; x=1699293275;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=21YW+6fG17bA3AZxmYV1MGGTJ8p29kWqv098XZo38z4=;
-        b=Bo5aNBe+xopNHrs4Q+cCZnUI6jzTssx4yv0iMNa2+zheFo3E8qd++uee3s8WpmG4nR
-         s2F0a0L83/c1FgsCBhVDpRakmWztp/viMFlAMQCI6yJbFMF4HdPb5ST+JcQ71WhxrjDz
-         JyjAoIb9bCX9WGYTyWT6MQwQ+Huzk6psJMiVsHIDnmAMxP7uqY4fg71GdKLb6ttFismv
-         BjU8zQ17ErqTUEoXJaKLOKqiPZq2qYXp9JNBdAvLsXd5SEBAyyjNDvn2mpZvbVhfNkAU
-         5OIQyz9FVr0eTEYyZlZB1TA2U1MazseGje+r5aNV+mta4fbXgZZf0N+QMKLUFbnadaC3
-         jpvA==
-X-Gm-Message-State: AOJu0YxJjGOytEdBsD13yHFYr8++Mz5i8yQ2o+7EUbill94rlP9Z42OO
-        PZ73J4Jf6N5qA6ghdnLUuvxXxw==
-X-Google-Smtp-Source: AGHT+IGcO5mSWybe6n+dtGZAk2xcN8I4tCXS/WOTKt6LNejW/oYf1m4IEzTPCduyQ3/xCabvXgof9A==
-X-Received: by 2002:a05:6a00:cc6:b0:6be:11ac:98a5 with SMTP id b6-20020a056a000cc600b006be11ac98a5mr10716364pfv.27.1698688475658;
-        Mon, 30 Oct 2023 10:54:35 -0700 (PDT)
-Received: from sunil-laptop ([106.51.188.78])
-        by smtp.gmail.com with ESMTPSA id f29-20020a056a000b1d00b006be0fb89ac3sm6169630pfu.30.2023.10.30.10.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Oct 2023 10:54:35 -0700 (PDT)
-Date:   Mon, 30 Oct 2023 23:24:25 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-serial@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Kumar Patra <atishp@rivosinc.com>,
-        Haibo Xu <haibo1.xu@intel.com>
-Subject: Re: [RFC PATCH v2 11/21] PCI: MSI: Add helper function to set system
- wide MSI support
-Message-ID: <ZT/t0UY5rbudhjfH@sunil-laptop>
-References: <20231025202344.581132-1-sunilvl@ventanamicro.com>
- <20231025202344.581132-12-sunilvl@ventanamicro.com>
- <87a5s0yyje.ffs@tglx>
+        Mon, 30 Oct 2023 14:22:03 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2ECE1738;
+        Mon, 30 Oct 2023 11:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1698690066; x=1699294866; i=rwahl@gmx.de;
+        bh=juI+8xCOhSJyejFjOT2zkvfZkD279hxgL01eRZueXmI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=dhnkcWSOdzAkTce9+0fTzPMoVmi6fOPzmDE1BgDM9CfeIdKlFEwoYDiRDMvdSIAd
+         1jGYvTDc9KBE96pWCRY0a7T3+fc39EpTrF3CThFdu3JdIsT6yZULGbU+C+8QCDsIF
+         o7XxFF+JP77rTTL9wk6/4KJntb7PHNUC7qrO7P/+JoYqMd0KIkzFcgV83atE+TdVF
+         RTzHfDWnc8vM7m9Bis45Ljk/Fv//Pk8S1iHGy697NTimNx4B23NNW1xnBs68tqSLh
+         tQiQG4EsQeE0hBRd3rr3CPRiKZKTUdMWN5ITM0yAyqKY0CfPs41JNFk2zpZQPWMAR
+         odAB4uPU58HyIrDU7A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from rohan.localdomain ([84.156.147.134]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mnpns-1rGbIB3wj4-00pMjn; Mon, 30
+ Oct 2023 19:21:05 +0100
+From:   Ronald Wahl <rwahl@gmx.de>
+To:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ronald Wahl <ronald.wahl@raritan.com>
+Subject: [PATCH] serial: 8250: 8250_omap: Clear UART_HAS_RHR_IT_DIS bit
+Date:   Mon, 30 Oct 2023 19:20:44 +0100
+Message-ID: <20231030182044.14056-1-rwahl@gmx.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a5s0yyje.ffs@tglx>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6aEzOJf8ErnBwG/cjEQ/aqFw3nonnMkCVnajg0LlL2q0bNLLcLA
+ 9ajQSHt7hlGwrKrgidJ1nQQetWU8U1yMsO7HF9o9HyvNET9X+NlKpMSIYgn8ySOLqBuEvnB
+ pCo4UAwzcBPy9H4IQy0YiEXuIRPSYJUTrGuEkgWzGCXqh8BI1gFGcfoKU+8aR6E4BuyV2Nd
+ T5ED3kSMnL+orUyWoaKyw==
+UI-OutboundReport: notjunk:1;M01:P0:OFvOA48QsX4=;+71PI5ffwO95P42qbi7HnE9iE8B
+ mGeuc9wafxvcFgoiRqt8/9fDJSEmcIQzRhVZS3+SryF0hMQ7xGiuMrKCi8jel8rVrjB0WC3JU
+ FSSBJ1OkvCy0c+KZlc4cYhIS+i9dIt5fwMNkX3o1jTo1LdqDgxwVGQJpJ+jqs7jZc6zMCZDCQ
+ jMvoNnK8RKaYltsZ+Usuf2FTN+F4T7TU3MMq/Ngeyk/Z5QK4nkxMqjdreGGaO45PgoZ/2ER+e
+ mEJrHBC2fqXlQqBjkEPiXnjRL56mWuxcM23Ck53tPwpwp1ycTiSh+g2qFRxxzbbKySSF3k0Lc
+ 2hSBLZCF0uvmw9cZMfSzCj5douhIx3RKI/9bpmQIwPBB/VZGnmqJuYUbvU4v1s0O2CT73Zk0h
+ I+qL/e0cQevqJoBQyHdIwnAOToQVmpxVDLOEcb6uYECE12i9xKoQHgJPJ9al48hjJlDffPSfK
+ xY6fgtHdn2bJL+GdaLKKoz+pGfJhshDuVbiRs4CnXsyeXwEbFhD2xJTvRYYJACGelE+f5S+1Q
+ QLv/UFdA26IgdPjz9Wk7tHLMD1FHhWkOTyWluqbMWlWBeZH59dIqphqqPFiNBsrLNOq41zneN
+ eyeLF+y9AvMKoKVdfSjRpRtHzjNGPR2MeLxq84VkWG4Xaxz330Q2rlSUSJ8NbERKhusBi4gRT
+ WoIGX+A19TV8Xd3f/0it9hi+ZRBK9jxhWF24lpcLeyi+VpsSZM7mcLhqQWvle0EpVu4rUWkQk
+ zu6qAZ6JjcvReC7bs4XGtKRjW/TebAku7zg+5UmVkOOCt/hr+ptdFAcO6cNV8S14kMnMOT6c+
+ ElpBpMUaCaULV0F9UDr5gqGtn0RufFIRg0lIw6AtP4GNpZON6UPSNc1iX1jVTvwRfEtipSYIT
+ V+R1juwOsHj6nyRwevKAVuhawq1ZJg4cB2SRLuRgbRbnf9i+wqY1H/zFlLSGTFAdWMfgHsrmE
+ vEqBwMWg3GHssQLDt7yrjQuu2Xk=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,62 +69,41 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Mon, Oct 30, 2023 at 03:28:53PM +0100, Thomas Gleixner wrote:
-> On Thu, Oct 26 2023 at 01:53, Sunil V. L. wrote:
-> > Like pci_no_msi() used to disable MSI support, add a function to enable
-> > system wide MSI support.
-> 
-> Why?
-> 
-> int pci_msi_enable = 1;
-> 
-> So this function makes it more one or what am I missing here?
-> 
-Hi Thomas,
+This fixes commit 439c7183e5b9 ("serial: 8250: 8250_omap: Disable RX
+interrupt after DMA enable") which unfortunately set the
+UART_HAS_RHR_IT_DIS bit in the UART_OMAP_IER2 register and never
+cleared it.
 
-Just noting related discussion :
-https://www.spinics.net/lists/linux-serial/msg57616.html
+Signed-off-by: Ronald Wahl <ronald.wahl@raritan.com>
+=2D--
+ drivers/tty/serial/8250/8250_omap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The MSI controller on RISC-V (IMSIC) is optional for the platform. So,
-when by default pci_msi_enable = 1 and the MSI controller is not
-discovered, we get stack trace like below.
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250=
+/8250_omap.c
+index ca972fd37725..c7ab2963040b 100644
+=2D-- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -914,7 +914,7 @@ static void __dma_rx_do_complete(struct uart_8250_port=
+ *p)
+ 	if (priv->habit & UART_HAS_RHR_IT_DIS) {
+ 		reg =3D serial_in(p, UART_OMAP_IER2);
+ 		reg &=3D ~UART_OMAP_IER2_RHR_IT_DIS;
+-		serial_out(p, UART_OMAP_IER2, UART_OMAP_IER2_RHR_IT_DIS);
++		serial_out(p, UART_OMAP_IER2, reg);
+ 	}
 
-[    0.608941] [<ffffffff804d0400>] pci_msi_setup_msi_irqs+0x18/0x34
-[    0.608991] [<ffffffff804cfe04>] msix_capability_init+0x228/0x406
-[    0.609001] [<ffffffff804cfbc6>] __pci_enable_msix_range+0x1b4/0x1ca
-[    0.609011] [<ffffffff804ce8c2>]
-pci_alloc_irq_vectors_affinity+0x6e/0xee
-[    0.609020] [<ffffffff8055015c>] vp_find_vqs_msix+0xfa/0x350
-[    0.609031] [<ffffffff8054ff54>] vp_find_vqs+0x36/0x144
-[    0.609040] [<ffffffff8054f7b8>] vp_modern_find_vqs+0x14/0x48
-[    0.609049] [<ffffffff8064d3fc>] init_vqs+0x362/0x4ee
-[    0.609058] [<ffffffff8064c8be>] virtnet_probe+0x672/0xa70
-[    0.609067] [<ffffffff80549d38>] virtio_dev_probe+0x194/0x200
-[    0.609075] [<ffffffff805afb52>] really_probe+0x106/0x28a
-[    0.609083] [<ffffffff805aefda>] __driver_probe_device+0x62/0xdc
-[    0.609091] [<ffffffff805af920>] driver_probe_device+0x38/0x164
-[    0.609098] [<ffffffff805af146>] __driver_attach+0xd0/0x17c
-[    0.609106] [<ffffffff805ac6e2>] bus_for_each_dev+0xd0/0x11c
-[    0.609116] [<ffffffff805af06e>] driver_attach+0x1a/0x22
-[    0.609123] [<ffffffff805ace06>] bus_add_driver+0x136/0x208
-[    0.609132] [<ffffffff805b044e>] driver_register+0x48/0xda
-[    0.609140] [<ffffffff80549594>] register_virtio_driver+0x20/0x2a
-[    0.609157] [<ffffffff80a3060e>] virtio_net_driver_init+0x76/0xa6
-[    0.609168] [<ffffffff800020ec>] do_one_initcall+0xc0/0x21e
-[    0.609176] [<ffffffff80a00f68>] do_initcall_level+0x7c/0x8e
-[    0.609186] [<ffffffff80a00eb6>] do_initcalls+0x52/0x88
-[    0.609195] [<ffffffff80a00e5c>] do_basic_setup+0x1c/0x24
-[    0.609204] [<ffffffff80a00e00>] kernel_init_freeable+0xe2/0x122
-[    0.609213] [<ffffffff8090beb4>] kernel_init+0x1a/0x18e
-[    0.609223] [<ffffffff8000383e>] ret_from_fork+0xa/0x1c
+ 	dmaengine_tx_status(rxchan, cookie, &state);
+@@ -1060,7 +1060,7 @@ static int omap_8250_rx_dma(struct uart_8250_port *p=
+)
+ 	if (priv->habit & UART_HAS_RHR_IT_DIS) {
+ 		reg =3D serial_in(p, UART_OMAP_IER2);
+ 		reg |=3D UART_OMAP_IER2_RHR_IT_DIS;
+-		serial_out(p, UART_OMAP_IER2, UART_OMAP_IER2_RHR_IT_DIS);
++		serial_out(p, UART_OMAP_IER2, reg);
+ 	}
 
-So, what I did was, by default call pci_no_msi() to disable MSI and then
-call pci_set_msi() to enable when MSI controller is probed.
+ 	dma_async_issue_pending(dma->rxchan);
+=2D-
+2.41.0
 
-But I think Bjorn's suggestion to depend on PCI_BUS_FLAGS_NO_MSI may be
-better idea. In that case, we need to set bridge->msi_domain to true in
-pci_create_root_bus(). Let me know what do you prefer or if I am
-completely missing something here.
-
-Thanks,
-Sunil
