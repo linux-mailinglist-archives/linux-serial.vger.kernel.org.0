@@ -2,95 +2,90 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0027E0DC3
-	for <lists+linux-serial@lfdr.de>; Sat,  4 Nov 2023 05:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BC47DB5ED
+	for <lists+linux-serial@lfdr.de>; Mon, 30 Oct 2023 10:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjKDE2T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sat, 4 Nov 2023 00:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S232384AbjJ3JO2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 Oct 2023 05:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjKDE2T (ORCPT
+        with ESMTP id S232374AbjJ3JO0 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sat, 4 Nov 2023 00:28:19 -0400
-X-Greylist: delayed 4229 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:28:15 PDT
-Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AEAD44
-        for <linux-serial@vger.kernel.org>; Fri,  3 Nov 2023 21:28:15 -0700 (PDT)
-Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
-        id 1C99C4FBEB; Mon, 30 Oct 2023 08:30:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
-        s=mail; t=1698656363;
-        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
-        h=Date:From:To:Subject:From;
-        b=PFgnEd5wdZcxUwFhfrIzckaziWArUF6AlnphdbJ6LOsUavovTOYAlDHfGSvXc2iCB
-         IcXbaXKCgWM4RohbT1jNLvcQaQ7TEVa+3LgFhBH/rOy9/Xlw1fWw6YIU7htymCoinw
-         DLNVpRmk6MH6esnaGIY83Q2lT3zuBmNIXsmYfeyRjcJSUbHFzyG/3jsYXAv2mlEviO
-         PKltfl4pZrNLU42G/dCi3wuHujQnhYuVxFXrSJ4bi055qUt1SYEcpKIdFPY1BCvWwk
-         zxn39ACHT8875y/t8gUD8X5kKQLwuKB5WuDMy2EZUy4KNDm4MMHTuOOupbhXjH/lB2
-         +rb5w2y8rL6QA==
-Received: by mail.profitpathwaygo.com for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 08:30:28 GMT
-Message-ID: <20231030074500-0.1.2s.154d9.0.k52mnsbkog@profitpathwaygo.com>
-Date:   Mon, 30 Oct 2023 08:30:28 GMT
-From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
-To:     <linux-serial@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
-X-Mailer: mail.profitpathwaygo.com
+        Mon, 30 Oct 2023 05:14:26 -0400
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539FAC2
+        for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 02:14:24 -0700 (PDT)
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6c6370774e8so5916044a34.0
+        for <linux-serial@vger.kernel.org>; Mon, 30 Oct 2023 02:14:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698657263; x=1699262063;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FFwD3xWT5oqCS0O4af7YvkoJOuliGWNyJ/KuY2nX1ZU=;
+        b=WaR1Al6U7LAcw2XvCdP1nIBzG+KdAfmCSLXmqtR0o3MMWllGvicj4seUBwTB72Gu2O
+         rHFHhN1OPBq+xq9JKbJXR8qqRx7ovFF0oyjwaUaY8qiPuW4FlFhwf0AKzlnuB3AT3FwD
+         Min+30CKRuao0dAv+VgPpB0R9V+M+G9CD4SREQAyrQ5SpI3CJX+pkOLQnUwhfYOUh0zs
+         YNHpRQ8AnLXbKpJ+tvYoDoBNpWeCLLuGOlK2FBls8y/cAe1Y6yC19PfWU5uR81Uf3XpC
+         BV7TPHtNs6gKwA/rcFYmJSZDmlloQwslbr/dNW6iXmAY7Uwq0T50zAVu6uU57iViZbR4
+         4YPg==
+X-Gm-Message-State: AOJu0YySPOoccs4xw5QQunpn85Lt9IssddPbr4YDUw6LIKCfWgY76T2p
+        79+xvKGHbGCYrtcx6r/B9WB7Xs+c65jk+k0sr0bAjxTUSqAE
+X-Google-Smtp-Source: AGHT+IGVrdWp+aHEL4oApo6HrJlGIG6WhESJIcskwFV2cl2khGWVdjOBbnuViWlwOcH6psaxEVRYpLrjgRA2q7t+DdpCPMGva+wU
 MIME-Version: 1.0
+X-Received: by 2002:a05:6870:71d0:b0:1d1:3ff8:9f80 with SMTP id
+ p16-20020a05687071d000b001d13ff89f80mr4618079oag.8.1698657263634; Mon, 30 Oct
+ 2023 02:14:23 -0700 (PDT)
+Date:   Mon, 30 Oct 2023 02:14:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb55e20608eb7677@google.com>
+Subject: [syzbot] Monthly serial report (Oct 2023)
+From:   syzbot <syzbot+list6c6ceafbd04e2bbf4614@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: profitpathwaygo.com]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: profitpathwaygo.com]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [141.94.21.238 listed in bl.score.senderscore.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [141.94.21.238 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: profitpathwaygo.com]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0088]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hello serial maintainers/developers,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+This is a 31-day syzbot report for the serial subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/serial
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 14 issues are still open and 41 have been fixed so far.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Some of the still happening issues:
 
+Ref Crashes Repro Title
+<1> 4047    Yes   BUG: sleeping function called from invalid context in console_lock (2)
+                  https://syzkaller.appspot.com/bug?extid=dbac96d8e73b61aa559c
+<2> 58      Yes   general protection fault in serial8250_tx_chars
+                  https://syzkaller.appspot.com/bug?extid=837b8c9032c053262db8
+<3> 52      Yes   BUG: soft lockup in tx
+                  https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
+<4> 32      Yes   KASAN: stack-out-of-bounds Read in sched_show_task
+                  https://syzkaller.appspot.com/bug?extid=8d2757d62d403b2d9275
+<5> 22      Yes   INFO: task can't die in show_free_areas
+                  https://syzkaller.appspot.com/bug?extid=8f41dccfb6c03cc36fd6
 
-Pozdrawiam serdecznie
-Adam Charachuta
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
