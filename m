@@ -2,67 +2,70 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451067DBFFA
-	for <lists+linux-serial@lfdr.de>; Mon, 30 Oct 2023 19:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D027DC081
+	for <lists+linux-serial@lfdr.de>; Mon, 30 Oct 2023 20:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjJ3SkM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 30 Oct 2023 14:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        id S229684AbjJ3T3T (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 30 Oct 2023 15:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjJ3SkL (ORCPT
+        with ESMTP id S229626AbjJ3T3S (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 30 Oct 2023 14:40:11 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3DDB7;
-        Mon, 30 Oct 2023 11:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1698691198; x=1699295998; i=rwahl@gmx.de;
-        bh=27RRESGc2uODi+u0giI2RrxmPZLNkWSIaKlElwaCV/U=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=m4q/cNMHfPFXVDXhV7VC0poCbjnOHFxgFsSXoYHfsDCs4UVqSLbhuzVPrIX0jnwi
-         PCvPBAMQVg5lLd0Zt2cz7GM+IOHPwOdpTNa1GaNGkytL2Nv7A5X2seQiOyovBhvbw
-         8kME2mRTvRmA99OE3EmAdKBRz5qlOadn05coR8Va2RcEJSBKz3ABnDgwbUHNK+bkE
-         JS1PZhFywJVmmQ4Eq7TUtx0J8MDOt36vcn2+xGB2D94LL63cpbywdGNgJGEjzjmV6
-         /GMseLwBu0wzaWm9cKk8IGAIzuKF2AiAUl/XXKbDKkREXTIJwskNh8PzXQNZNc4uY
-         k62IFBvNziD4n0LUbQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from rohan.localdomain ([84.156.147.134]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGhyc-1qjjep3kEk-00DkmI; Mon, 30
- Oct 2023 19:39:57 +0100
-From:   Ronald Wahl <rwahl@gmx.de>
-To:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Ronald Wahl <ronald.wahl@raritan.com>
-Subject: [PATCH] serial: 8250: 8250_omap: Do not start RX DMA on THRI interrupt
-Date:   Mon, 30 Oct 2023 19:39:51 +0100
-Message-ID: <20231030183951.15331-1-rwahl@gmx.de>
-X-Mailer: git-send-email 2.41.0
+        Mon, 30 Oct 2023 15:29:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A3FCC;
+        Mon, 30 Oct 2023 12:29:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1698694154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=okhxQnUhQwZrbcdUo7XXc56UihUKqv6O8qJ7nxX4PVE=;
+        b=OvyHHOlBlpoVLw3xBWs9oqxtW+DXUQgwbbHbDbUfNF/MjfJs5bWPOU8I21CIumHlkp0uPz
+        5ZkiCmUvyIM5ITCYjU15vSbdzkoIOQAnrNLVHdJzkOUfToXjY1WMmUsPke3zwZKHUCO9fI
+        UtYzITvFTF3nlnm+WD5jBWNGfFPpU8AMut0ABL5tfyRWUR/XBuJ0FRwWcdE9BBLsMQjL0r
+        ale9RlO+OeXn67AaYYokAGjJR97Zg4Etah8s4XQzXOtJwRhaOaHgXwoOR0szhF1UpCkx4/
+        alkoCjUyP5TlAmmgcYuaYzYxYK8j3ZgTEgQwUuli6ov3DrOeN0uTx5PKsH/avw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1698694154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=okhxQnUhQwZrbcdUo7XXc56UihUKqv6O8qJ7nxX4PVE=;
+        b=zFOsaRvRMQAnYrWgBRCI2JmVbPJt7TDD6BVd6QW+l09Vh+xA2ZroG0fVwI53jasucJNFWr
+        /3KnCuuhvsW6sQCQ==
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-serial@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Kumar Patra <atishp@rivosinc.com>,
+        Haibo Xu <haibo1.xu@intel.com>
+Subject: Re: [RFC PATCH v2 11/21] PCI: MSI: Add helper function to set
+ system wide MSI support
+In-Reply-To: <ZT/t0UY5rbudhjfH@sunil-laptop>
+References: <20231025202344.581132-1-sunilvl@ventanamicro.com>
+ <20231025202344.581132-12-sunilvl@ventanamicro.com> <87a5s0yyje.ffs@tglx>
+ <ZT/t0UY5rbudhjfH@sunil-laptop>
+Date:   Mon, 30 Oct 2023 20:29:13 +0100
+Message-ID: <874ji7zz7a.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Fbjb7EBuSKecN9y3Stcy7ML/8gd17DauMMlKaSXlrmHhzRO8LyE
- 82/lESIwfH+SOlwshww6Kpm1HY7efEV4oa+V1MlSutGd1Agxxdm71go6hgt7ehnRsDsrbMS
- nGRip/Q2fR46TGc3DxUKm3mq3a+bU9wlQlG2YvyCiIAhAaEbz7thw7Xa+61Gin+bjv63Sfi
- iMdfuEh3wZfmvTt7HCW9A==
-UI-OutboundReport: notjunk:1;M01:P0:EqntbAvvnIk=;mVEf8wRMZgwoIkthCFxxD+snD6g
- 6e4RlIqCJbvuax1Qou3ZZJuCE7hlgJObVxKaN1gKk4hxYPn3aBuhNlp0aYVNb8iS0EGPsojtq
- CqyYVNEpoM7pQN22SqqJTxCHVn8a+NpESnlqaojbmF5KzbHCC80yZ9UqyMZoeMhcD+Yotd6XB
- upXpnhsDFUiZ0gy++p0hEbefqIytYcaXAQDYCKIKcuxYmUkzdG6HSTV4eMj2FaIVuoZ7y7EuI
- DybgmeaFEALETCgP4r9FbLS8/SS9Q7hWoCU8DE17Cesn+GZZpKaNQnXkt3gFcoidAA1L92nVx
- DgkA9+tWAJZ9BHuq4KHa4JYTfsmxG0TJq7GmnwGQPFqkDctAvYTP9x3J6m9Lx61UbxtQNjFnU
- XrSTJ4kbZst/bu6VSGVW75S8kxHP8Vam7N8Y3QWaDRfWbhJCUMr850yKLJG13PewltD8+Yjk8
- 5NpAjqpdsbcM3yZKjhHXBZYyThQ2TWBhJ4P8dUi4m/GDEENQ1VpNK0bjD8Zg0b/orwR4PuKqN
- fzJQsUfYiuDnk/+s5z75VMPcmCHZnxCrKt8ZHlfAPZTdiw9lSyMAffMosPrK9KcYe1+E78U0v
- MY5qwXwJcXPsvovbwRF4cOKcfHboghXm3kaFTOm3tMSldU+hWKPQ9o+iVn8fP2CXh4cCP9ltX
- WshWqyE5k8kRolxUHYhLOF8303eZD6X0HF7NiA/7UmsfA/bmRctRmsxfo/VxSEOBLjsKNXigA
- +YeWYCoCwFYWu1QYcLcnsZTeGvcX22uqX348yv4FugFtq9HROh8p3fJBrJsU02sPovR7WS+xg
- 4TnL9UyEGlE+OAtSBMbnqeTs1kQlqbpHM9snBX2pYP3gYMonlCeRWkYx2h0XHjeOvG7d4CvmK
- ptSzsgMHZj0E0bTHUJCT6EKMWqFbNirBaOi4AeI5wH4R+cTXM2LJyxAnqrbhYKGuuY73Du3PI
- Vb2XQQfFDzOWZY7Lz29m5Y2FE4o=
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,40 +73,31 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Starting RX DMA on THRI interrupt is too early because TX may not have
-finished yet.
+On Mon, Oct 30 2023 at 23:24, Sunil V. L. wrote:
+> On Mon, Oct 30, 2023 at 03:28:53PM +0100, Thomas Gleixner wrote:
+> Just noting related discussion :
+> https://www.spinics.net/lists/linux-serial/msg57616.html
+>
+> The MSI controller on RISC-V (IMSIC) is optional for the platform. So,
+> when by default pci_msi_enable = 1 and the MSI controller is not
+> discovered, we get stack trace like below.
 
-This change is inspired by commit 90b8596ac460 ("serial: 8250: Prevent
-starting up DMA Rx on THRI interrupt") and fixes DMA issues I had with
-an AM62 SoC that is using the 8250 OMAP variant.
+<SNIP>
 
-Signed-off-by: Ronald Wahl <ronald.wahl@raritan.com>
-=2D--
- drivers/tty/serial/8250/8250_omap.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+> So, what I did was, by default call pci_no_msi() to disable MSI and then
+> call pci_set_msi() to enable when MSI controller is probed.
 
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250=
-/8250_omap.c
-index c7ab2963040b..f2f59ec6b50b 100644
-=2D-- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -1282,10 +1282,11 @@ static int omap_8250_dma_handle_irq(struct uart_po=
-rt *port)
+Your taste sensors should have gone out of range ...
 
- 	status =3D serial_port_in(port, UART_LSR);
+> But I think Bjorn's suggestion to depend on PCI_BUS_FLAGS_NO_MSI may be
+> better idea. In that case, we need to set bridge->msi_domain to true in
+> pci_create_root_bus(). Let me know what do you prefer or if I am
+> completely missing something here.
 
--	if (priv->habit & UART_HAS_EFR2)
--		am654_8250_handle_rx_dma(up, iir, status);
--	else
--		status =3D omap_8250_handle_rx_dma(up, iir, status);
-+	if ((iir & 0x3f) !=3D UART_IIR_THRI)
-+		if (priv->habit & UART_HAS_EFR2)
-+			am654_8250_handle_rx_dma(up, iir, status);
-+		else
-+			status =3D omap_8250_handle_rx_dma(up, iir, status);
+That's definitely more sensible, but as I said in the other thread, Marc
+is the one who did the PCI core/bridge setup magic and he is definitely
+in a better position to answer that bridge->msi_domain question.
 
- 	serial8250_modem_status(up);
- 	if (status & UART_LSR_THRE && up->dma->tx_err) {
-=2D-
-2.41.0
+Thanks,
 
+        tglx
