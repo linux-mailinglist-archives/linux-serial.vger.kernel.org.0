@@ -2,82 +2,88 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045B27E171C
-	for <lists+linux-serial@lfdr.de>; Sun,  5 Nov 2023 23:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A597E16E0
+	for <lists+linux-serial@lfdr.de>; Sun,  5 Nov 2023 22:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjKEWAN (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Sun, 5 Nov 2023 17:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S229451AbjKEVog (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Sun, 5 Nov 2023 16:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjKEWAM (ORCPT
+        with ESMTP id S229445AbjKEVof (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Sun, 5 Nov 2023 17:00:12 -0500
-X-Greylist: delayed 5224 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:00:09 PST
-Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A37BF;
-        Sun,  5 Nov 2023 14:00:09 -0800 (PST)
-Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id 3945C19092;
-        Mon,  6 Nov 2023 01:57:29 +0700 (+07)
-Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id 3268215767;
-        Mon,  6 Nov 2023 01:57:29 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id C2FC61B824EE;
-        Mon,  6 Nov 2023 01:57:30 +0700 (+07)
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BYnJRaubdInR; Mon,  6 Nov 2023 01:57:30 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 90B211B8252B;
-        Mon,  6 Nov 2023 01:57:30 +0700 (+07)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn 90B211B8252B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
-        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210650;
-        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=upWRS3OWyxENQWiCJDQqoAuBx3OUjTR85kSnv2scqx6A1F42g8nqyYUjt+I5ce4vr
-         bQYcrGrcWfWZZvgCjeRQChMyKD62P+veWPd4lYhvL++Tzmq898af5S04ieADHCh3uu
-         ypLh5lK3OEt5fDWYP7nW7ckd8giU4UvAWRK+JgbtWp2d2CewMceL2dVsL170kvFfco
-         uoM3gUJ52BPln5LrikSbWHyHu6+pxRcpJrtBmWskbhAG+JRB60JYiTv7xGrB5ndSRP
-         BwWlwFJgb9RsV9IxEIzvpfeEyfoDrYijfo+akAxpE0jTk/gKV3aT540xx/h4O/GOZr
-         yVIJTd4XXVB9g==
-X-Virus-Scanned: amavisd-new at hcrc.vn
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kRSVfju_rQx3; Mon,  6 Nov 2023 01:57:30 +0700 (+07)
-Received: from [192.168.1.152] (unknown [51.179.100.52])
-        by zimbra.hcrc.vn (Postfix) with ESMTPSA id 4D2C31B824EE;
-        Mon,  6 Nov 2023 01:57:24 +0700 (+07)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 5 Nov 2023 16:44:35 -0500
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12FEBF
+        for <linux-serial@vger.kernel.org>; Sun,  5 Nov 2023 13:44:30 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qzkun-0005cC-Oi; Sun, 05 Nov 2023 22:44:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qzkul-006sXL-OP; Sun, 05 Nov 2023 22:44:15 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qzkul-00DHxV-Es; Sun, 05 Nov 2023 22:44:15 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, kernel@pengutronix.de,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 0/2] tty: hvc: Convert to platform remove callback returning void
+Date:   Sun,  5 Nov 2023 22:44:07 +0100
+Message-ID: <20231105214406.3765906-4-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
-To:     Recipients <ch.31hamnghi@hcrc.vn>
-From:   ch.31hamnghi@hcrc.vn
-Date:   Sun, 05 Nov 2023 19:57:13 +0100
-Reply-To: joliushk@gmail.com
-Message-Id: <20231105185724.4D2C31B824EE@zimbra.hcrc.vn>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1041; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=2G89HgbYBqf0Lwg13SXDRVWuf/UVadm57eZl7j7tSLs=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlSAynd3H0mMld8K/mCAxD8Ftf264W7AoOj2MGQ YI68GhmeDyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUgMpwAKCRCPgPtYfRL+ Ts9aB/9xWS/XexOtt4MrBteSIpKz45O4fgJ05w2EZFjyMcCQR+x6P5kmzIV7vMkeXc9a7yMh+0c 0B340N8ctuaQGvTEAPJdhYiOQoYLS+06FN1MP1M0a+N4MACHtomPKpvL5tarZHT1pqyfm/yBUfU cWO4pQ+73IoGd/casIVxeo6To/P460wir5nn9X1ad6o9VzfvSDvhvouTvzR9YYaOv05i4fbCj1Y pZ5XKnoHoJS2tcrM9XtTPpckwFQrdaNMSmPgyyQDHZZwulxBvUylPk+wT1UkEXZTs0/wgtApPmB maVVnEh4K0s3SiLOJuXeDrYmrsEolHgrfFVYKt0kWBUUL3w7
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-serial@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Goededag,
-Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
-Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
+Hello,
 
+The hvc_opal driver had an error path in its remove function resulting
+in returning a non-zero value. This is a bad thing because the core
+doesn't do error handling and effectively ignores the return value.
 
-Ik wacht op jullie reacties
-Met vriendelijke groeten
-mevrouw Joanna Liu
+In this case it's not as bad as it sounds though, as this error path is
+never taken.
+
+After the first patch changes hvc_remove() to return void the remove
+function obviously always returns zero. Then it can be trivially
+converted to .remove_new(). See commit 5c5a7680e67b ("platform: Provide
+a remove callback that returns no value") for an extended explanation
+and the eventual goal of this conversion.
+
+Uwe Kleine-König (2):
+  tty: hvc: Make hvc_remove() return no value
+  tty: hvc: hvc_opal: Convert to platform remove callback returning void
+
+ drivers/tty/hvc/hvc_console.c |  3 +--
+ drivers/tty/hvc/hvc_console.h |  2 +-
+ drivers/tty/hvc/hvc_opal.c    | 17 +++++++----------
+ 3 files changed, 9 insertions(+), 13 deletions(-)
+
+base-commit: e27090b1413ff236ca1aec26d6b022149115de2c
+-- 
+2.42.0
 
