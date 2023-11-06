@@ -2,356 +2,272 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9737E21B7
-	for <lists+linux-serial@lfdr.de>; Mon,  6 Nov 2023 13:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA357E2228
+	for <lists+linux-serial@lfdr.de>; Mon,  6 Nov 2023 13:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjKFMek (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 6 Nov 2023 07:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S231745AbjKFMq6 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 6 Nov 2023 07:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjKFMee (ORCPT
+        with ESMTP id S232069AbjKFMqp (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 6 Nov 2023 07:34:34 -0500
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E77EA
-        for <linux-serial@vger.kernel.org>; Mon,  6 Nov 2023 04:34:30 -0800 (PST)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=068806c1c2=fe@dev.tdt.de>)
-        id 1qzyoH-00HTxY-BA
-        for linux-serial@vger.kernel.org; Mon, 06 Nov 2023 13:34:29 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1qzyoG-00HTx9-Ve
-        for linux-serial@vger.kernel.org; Mon, 06 Nov 2023 13:34:29 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id B121D24004B
-        for <linux-serial@vger.kernel.org>; Mon,  6 Nov 2023 13:34:28 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id 773AC240040;
-        Mon,  6 Nov 2023 13:34:28 +0100 (CET)
-Received: from localhost.localdomain (unknown [10.2.3.40])
-        by mail.dev.tdt.de (Postfix) with ESMTPSA id F3E8D2225B;
-        Mon,  6 Nov 2023 13:34:27 +0100 (CET)
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
-        kabel@kernel.org, u.kleine-koenig@pengutronix.de,
-        m.brock@vanmierlo.com
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-leds@vger.kernel.org
-Subject: [Patch v7 6/6] leds: ledtrig-tty: add additional line state evaluation
-Date:   Mon,  6 Nov 2023 13:34:15 +0100
-Message-ID: <20231106123415.3365732-7-fe@dev.tdt.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231106123415.3365732-1-fe@dev.tdt.de>
-References: <20231106123415.3365732-1-fe@dev.tdt.de>
+        Mon, 6 Nov 2023 07:46:45 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC691703
+        for <linux-serial@vger.kernel.org>; Mon,  6 Nov 2023 04:46:21 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a84204e7aeso51431057b3.0
+        for <linux-serial@vger.kernel.org>; Mon, 06 Nov 2023 04:46:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699274780; x=1699879580; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HWAObhP5Y4Ruw2zeVW2EcRdOCA3o8d+11pOULKBklzI=;
+        b=AR1gaqFyReJ98U6ZDl3Pwgck3qQ9sBss1lW/gd2qgn1wDx8ojqFsF7jFpO3QETp97c
+         n7AkRk1iOO7At0NFFJx4uGx+MrPDuVuHbojOI8qHDrkTI4L6xu8yLhJ05MkKUIf4QYWM
+         o5oVTw9Mv+fnnsRyx941GUEJyUfo2dXyotVsk5Rx9rqz1CxREa3hXnSGPmckpXiwAJkg
+         VmOn8AuJKoMCURfJKTpjz3Y7TX1Zagn/6QU+f7qjGJg3GmWff10IrDLLDvLUAjc6CEBB
+         1TXj9GjB0Fx4TspwsnVwZCWdeH2mSG2c99keZnSmmaWDSyIeEUO6dH1Fqp8xrt6mYjZm
+         8gHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699274780; x=1699879580;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HWAObhP5Y4Ruw2zeVW2EcRdOCA3o8d+11pOULKBklzI=;
+        b=Utc0f4qIKncDqGaz4dT07VyXE0XlQ4PLgV6uAkCPcbg1k2ROsZ+8LdR7rNWucWqwj0
+         Mf4SqnMn2TuLC4hLj02G9BW6D0+aQhyvwRL1mT0ClC4bUtAzFq4uzoCUBauCXgjbr9aM
+         BKqBcPCi3VeULhmjsm3vEwieRq6XDSF4XU6JMRz5XkPf299opTusHNRneshKzyEPgarW
+         67ogP2Wn3BtdORn95JRXcMFl0qSeGOZhgccRQ2yX2PRhQ9fryeXv57H8H1HGBVnwzSVI
+         59UF4MOGvX1EjlILGWCBu5eKTj8Xvsc8LLAyi7RdQ+SeSUkESL/hcSbEt15qMdjWCsBW
+         xhEw==
+X-Gm-Message-State: AOJu0YxZDX85k9VulwsOevSpcDhESGt675iMK0/M+Tl+5iN5NLWHJAQk
+        RqHTqr8rY6tnLMxYRvyj9G94tzwKN7qFoBU/cPxqDw==
+X-Google-Smtp-Source: AGHT+IH0bQGrPvMEjqnPy2jbrB9q4MxjXaupGC2/8uUWT1XpgjHaJ8J2tt+u28M2q1iqEh+RdBAv9noS6tYeUvUMiq0=
+X-Received: by 2002:a25:aaae:0:b0:d9a:5666:7ab5 with SMTP id
+ t43-20020a25aaae000000b00d9a56667ab5mr30049732ybi.10.1699274780413; Mon, 06
+ Nov 2023 04:46:20 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+ <3d489d6c-2098-4f0c-9ec4-f6040665753e@lpnu.ua> <CADrjBPp+fyNoPdix6=Wp4cDCRFq2Mui8NS6WENejcHn+H1M-jA@mail.gmail.com>
+ <48e1c0bd-9518-4927-b490-f3206256bbd4@lpnu.ua>
+In-Reply-To: <48e1c0bd-9518-4927-b490-f3206256bbd4@lpnu.ua>
+From:   Peter Griffin <peter.griffin@linaro.org>
+Date:   Mon, 6 Nov 2023 12:46:08 +0000
+Message-ID: <CADrjBPqB5MOQeMV6uSJHLVyMJYWm7Nm_1XGSq331gPRfO1jkzg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/20] Add minimal Tensor/GS101 SoC support and
+ Oriole/Pixel6 board
+To:     Maksym Holovach <maksym.holovach.an.2022@lpnu.ua>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        linus.walleij@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
+        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+        semen.protsenko@linaro.org, saravanak@google.com,
+        willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-team@android.com, linux-serial@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,TRACKER_ID,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-Content-Transfer-Encoding: quoted-printable
-X-purgate-ID: 151534::1699274069-9DBC47EA-D785B27D/0/0
-X-purgate: clean
-X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The serial tty interface also supports additional input signals,that
-can also be evaluated within this trigger. This change is adding the
-following additional input sources, which could be controlled
-via the '/sys/class/<leds>/' sysfs interface.
+Hi Maksym,
 
-Explanation:
-DCE =3D Data Communication Equipment (Modem)
-DTE =3D Data Terminal Equipment (Computer)
+On Fri, 3 Nov 2023 at 13:56, Maksym Holovach
+<maksym.holovach.an.2022@lpnu.ua> wrote:
+>
+> Hi Peter,
+>
+> On 11/3/23 15:11, Peter Griffin wrote:
+> > Hi Maksym,
+> >
+> > Thanks for your feedback.
+> >
+> > On Thu, 2 Nov 2023 at 22:32, Maksym Holovach
+> > <maksym.holovach.an.2022@lpnu.ua> wrote:
+> >> Hi, all
+> >>
+> >> I wanted to inquire about how do you all feel about calling this SoC by
+> >> the Google "gs101" name.
+> > Interesting question, I think calling it gs101 is the correct approach see
+> > below for my rationale.
+> >
+> >> I believe the proper name for it should be the actual Samsung name,
+> >> written in the silicon and reported in the Chip ID hardware: Exynos9845.
+> >> This also touches the Tensor G2 (Exynos9855), Tensor G3 (Exynos9865),
+> >> and possibly the "Tesla" SoCs.
 
-- cts:
-  DCE is ready to accept data from the DTE (CTS =3D Clear To Send). If
-  the line state is detected, the LED is switched on.
-  If set to 0 (default), the LED will not evaluate CTS.
-  If set to 1, the LED will evaluate CTS.
+Also Exynos850 as I pointed out previously. I think that is the wrong approach
+and very confusing. This SoC is not commonly known by anyone as
+Exynos9845.
 
-- dsr:
-  DCE is ready to receive and send data (DSR =3D Data Set Ready). If the
-  line state is detected, the LED is switched on.
-  If set to 0 (default), the LED will not evaluate DSR.
-  If set to 1, the LED will evaluate DSR.
+The same as the Exynos850 isn't known by anyone apart from Samsung folks
+as Exynos 3830, and the tesla fsd SoC isn't known by whatever internal Samsung
+name that presumably had.
 
-- dcd:
-  DTE is receiving a carrier from the DCE (DCD =3D Data Carrier Detect).
-  If the line state is detected, the LED is switched on.
-  If set to 0 (default), the LED will not evaluate DCD.
-  If set to 1, the LED will evaluate DCD.
+Maybe Alim can comment what tesla fsd SoC has in the product id register.
 
-- rng:
-  DCE has detected an incoming ring signal on the telephone line
-  (RNG =3D Ring Indicator). If the line state is detected, the LED is
-  switched on.
-  If set to 0 (default), the LED will not evaluate RNG.
-  If set to 1, the LED will evaluate RNG.
+> >>
+> >> I do not think the Linux kernel should be a marketing material: it
+> >> should reflect reality. The chip is almost 100% composed of Samsung
+> >> Exynos IP blocks and should be called that way.
 
-Add an invert flag on LED blink, so that the LED blinks in the correct or=
-der.
-* LED was 'on' in the previous round, then it should first go 'off' and
-  then 'on' again when it should blink (data has been transferred).
-* LED was 'off' in the previous round, then it should first go 'on' and
-  then 'off' again when it should blink (data has been transferred).
+Where does this 'almost 100%' number come from? Are you measuring the die
+area here or something else?
 
-In order to also evaluate the LED 'state' form the previous round, so we
-could blink in the correct order, the 'state' must be saved in the trigge=
-r
-data struct.
+> > As you alluded to Tesla fsd and Axis artpec8 SoCs are also based on
+> > Exynos designs and support upstream uses the axis,artpec8* or tesla,fsd*
+> > compatibles.
+> >
+> > So using google,gs101 is consistent with the existing upstream naming
+> > scheme, for customized ASICs that were based off a Exynos design. But
+> > it also reflects the reality that this SoC is not a Exynos9845 as there is
+> > also a lot of Google owned and other third party IP integrated that is not
+> > found in Exynos9845.
+>
+> A quick question: Do you imply Exynos9845 exists outside of the context
+> of Tensor G1? I used to believe Exynos9845 **is** Tensor G1.
 
-Signed-off-by: Florian Eckert <fe@dev.tdt.de>
----
- .../ABI/testing/sysfs-class-led-trigger-tty   | 40 ++++++++
- drivers/leds/trigger/ledtrig-tty.c            | 91 ++++++++++++++++++-
- 2 files changed, 126 insertions(+), 5 deletions(-)
+You are correct. William clarified that point for us. Thanks William!
 
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Docu=
-mentation/ABI/testing/sysfs-class-led-trigger-tty
-index 504dece151b8..30cef9ac0f49 100644
---- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-@@ -20,3 +20,43 @@ Description:
- 		Signal transmission (tx) of data on the named tty device.
- 		If set to 0, the LED will not blink on transmission.
- 		If set to 1 (default), the LED will blink on transmission.
-+
-+What:		/sys/class/leds/<led>/cts
-+Date:		February 2024
-+KernelVersion:	6.8
-+Description:
-+		CTS =3D Clear To Send
-+		DCE is ready to accept data from the DTE.
-+		If the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate CTS.
-+		If set to 1, the LED will evaluate CTS.
-+
-+What:		/sys/class/leds/<led>/dsr
-+Date:		February 2024
-+KernelVersion:	6.8
-+Description:
-+		DSR =3D Data Set Ready
-+		DCE is ready to receive and send data.
-+		If the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate DSR.
-+		If set to 1, the LED will evaluate DSR.
-+
-+What:		/sys/class/leds/<led>/dcd
-+Date:		February 2024
-+KernelVersion:	6.8
-+Description:
-+		DCD =3D Data Carrier Detect
-+		DTE is receiving a carrier from the DCE.
-+		If the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate CAR (DCD).
-+		If set to 1, the LED will evaluate CAR (DCD).
-+
-+What:		/sys/class/leds/<led>/rng
-+Date:		February 2024
-+KernelVersion:	6.8
-+Description:
-+		RNG =3D Ring Indicator
-+		DCE has detected an incoming ring signal on the telephone
-+		line. If the line state is detected, the LED is switched on.
-+		If set to 0 (default), the LED will not evaluate RNG.
-+		If set to 1, the LED will evaluate RNG.
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
-dtrig-tty.c
-index 1a40a78bf1ee..107fbbca96de 100644
---- a/drivers/leds/trigger/ledtrig-tty.c
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -17,19 +17,29 @@ struct ledtrig_tty_data {
- 	const char *ttyname;
- 	struct tty_struct *tty;
- 	int rx, tx;
-+	int state;
- 	bool mode_rx;
- 	bool mode_tx;
-+	bool mode_cts;
-+	bool mode_dsr;
-+	bool mode_dcd;
-+	bool mode_rng;
- };
-=20
- /* Indicates which state the LED should now display */
- enum led_trigger_tty_state {
- 	TTY_LED_BLINK,
-+	TTY_LED_ENABLE,
- 	TTY_LED_DISABLE,
- };
-=20
- enum led_trigger_tty_modes {
- 	TRIGGER_TTY_RX =3D 0,
- 	TRIGGER_TTY_TX,
-+	TRIGGER_TTY_CTS,
-+	TRIGGER_TTY_DSR,
-+	TRIGGER_TTY_DCD,
-+	TRIGGER_TTY_RNG,
- };
-=20
- static int ledtrig_tty_waitforcompletion(struct device *dev)
-@@ -118,6 +128,18 @@ static ssize_t ledtrig_tty_attr_show(struct device *=
-dev, char *buf,
- 	case TRIGGER_TTY_TX:
- 		state =3D trigger_data->mode_tx;
- 		break;
-+	case TRIGGER_TTY_CTS:
-+		state =3D trigger_data->mode_cts;
-+		break;
-+	case TRIGGER_TTY_DSR:
-+		state =3D trigger_data->mode_dsr;
-+		break;
-+	case TRIGGER_TTY_DCD:
-+		state =3D trigger_data->mode_dcd;
-+		break;
-+	case TRIGGER_TTY_RNG:
-+		state =3D trigger_data->mode_rng;
-+		break;
- 	}
-=20
- 	return sysfs_emit(buf, "%u\n", state);
-@@ -147,6 +169,18 @@ static ssize_t ledtrig_tty_attr_store(struct device =
-*dev, const char *buf,
- 	case TRIGGER_TTY_TX:
- 		trigger_data->mode_tx =3D state;
- 		break;
-+	case TRIGGER_TTY_CTS:
-+		trigger_data->mode_cts =3D state;
-+		break;
-+	case TRIGGER_TTY_DSR:
-+		trigger_data->mode_dsr =3D state;
-+		break;
-+	case TRIGGER_TTY_DCD:
-+		trigger_data->mode_dcd =3D state;
-+		break;
-+	case TRIGGER_TTY_RNG:
-+		trigger_data->mode_rng =3D state;
-+		break;
- 	}
-=20
- 	return size;
-@@ -167,16 +201,27 @@ static ssize_t ledtrig_tty_attr_store(struct device=
- *dev, const char *buf,
-=20
- DEFINE_TTY_TRIGGER(rx, TRIGGER_TTY_RX);
- DEFINE_TTY_TRIGGER(tx, TRIGGER_TTY_TX);
-+DEFINE_TTY_TRIGGER(cts, TRIGGER_TTY_CTS);
-+DEFINE_TTY_TRIGGER(dsr, TRIGGER_TTY_DSR);
-+DEFINE_TTY_TRIGGER(dcd, TRIGGER_TTY_DCD);
-+DEFINE_TTY_TRIGGER(rng, TRIGGER_TTY_RNG);
-=20
- static void ledtrig_tty_work(struct work_struct *work)
- {
- 	struct ledtrig_tty_data *trigger_data =3D
- 		container_of(work, struct ledtrig_tty_data, dwork.work);
- 	struct led_classdev *led_cdev =3D trigger_data->led_cdev;
--	enum led_trigger_tty_state state =3D TTY_LED_DISABLE;
- 	unsigned long interval =3D LEDTRIG_TTY_INTERVAL;
-+	int invert =3D 0;
-+	int status;
- 	int ret;
-=20
-+	if (trigger_data->state =3D=3D TTY_LED_ENABLE)
-+		invert =3D 1;
-+
-+	/* Always disable the LED if no evaluation could be done */
-+	trigger_data->state =3D TTY_LED_DISABLE;
-+
- 	if (!trigger_data->ttyname)
- 		goto out;
-=20
-@@ -202,6 +247,33 @@ static void ledtrig_tty_work(struct work_struct *wor=
-k)
- 		trigger_data->tty =3D tty;
- 	}
-=20
-+	status =3D tty_get_tiocm(trigger_data->tty);
-+	if (status > 0) {
-+		if (trigger_data->mode_cts) {
-+			if (status & TIOCM_CTS)
-+				trigger_data->state =3D TTY_LED_ENABLE;
-+		}
-+
-+		if (trigger_data->mode_dsr) {
-+			if (status & TIOCM_DSR)
-+				trigger_data->state =3D TTY_LED_ENABLE;
-+		}
-+
-+		if (trigger_data->mode_dcd) {
-+			if (status & TIOCM_CAR)
-+				trigger_data->state =3D TTY_LED_ENABLE;
-+		}
-+
-+		if (trigger_data->mode_rng) {
-+			if (status & TIOCM_RNG)
-+				trigger_data->state =3D TTY_LED_ENABLE;
-+		}
-+	}
-+
-+	/*
-+	 * The evaluation of rx/tx must be done after the evaluation
-+	 * of TIOCM_*, because rx/tx has priority.
-+	 */
- 	if (trigger_data->mode_rx || trigger_data->mode_tx) {
- 		struct serial_icounter_struct icount;
-=20
-@@ -211,19 +283,22 @@ static void ledtrig_tty_work(struct work_struct *wo=
-rk)
-=20
- 		if (trigger_data->mode_tx && (icount.tx !=3D trigger_data->tx)) {
- 			trigger_data->tx =3D icount.tx;
--			state =3D TTY_LED_BLINK;
-+			trigger_data->state =3D TTY_LED_BLINK;
- 		}
-=20
- 		if (trigger_data->mode_rx && (icount.rx !=3D trigger_data->rx)) {
- 			trigger_data->rx =3D icount.rx;
--			state =3D TTY_LED_BLINK;
-+			trigger_data->state =3D TTY_LED_BLINK;
- 		}
- 	}
-=20
- out:
--	switch (state) {
-+	switch (trigger_data->state) {
- 	case TTY_LED_BLINK:
--		led_blink_set_oneshot(led_cdev, &interval, &interval, 0);
-+		led_blink_set_oneshot(led_cdev, &interval, &interval, invert);
-+		break;
-+	case TTY_LED_ENABLE:
-+		led_set_brightness(led_cdev, led_cdev->blink_brightness);
- 		break;
- 	case TTY_LED_DISABLE:
- 		fallthrough;
-@@ -241,6 +316,10 @@ static struct attribute *ledtrig_tty_attrs[] =3D {
- 	&dev_attr_ttyname.attr,
- 	&dev_attr_rx.attr,
- 	&dev_attr_tx.attr,
-+	&dev_attr_cts.attr,
-+	&dev_attr_dsr.attr,
-+	&dev_attr_dcd.attr,
-+	&dev_attr_rng.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(ledtrig_tty);
-@@ -257,6 +336,8 @@ static int ledtrig_tty_activate(struct led_classdev *=
-led_cdev)
- 	trigger_data->mode_rx =3D true;
- 	trigger_data->mode_tx =3D true;
-=20
-+	trigger_data->state =3D TTY_LED_DISABLE;
-+
- 	led_set_trigger_data(led_cdev, trigger_data);
-=20
- 	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
---=20
-2.30.2
+>
+> Also, what kind of Google IP are you talking about? I believe only the
+> neural accelerator should be custom-ish.
 
+This should not be considered an exhaustive list, but whilst looking in the
+downstream public drivers at least the following Google IPs in the SoC
+
+TPU/ML accelerator
+Bigocean av1 video accelerator
+Emerald hill compression engine
+Camera ISP blocks
+(AoC) Always on Compute
+
+Plus of course Arm IPs (CPU+GPU), Synopsis IPs (USB, PCI. phys) etc.
+
+The Exynos based IPs tend to be for things like pinmux, clocks, i2c, spi,
+uart, mfc, display controller, timer etc.
+
+>
+> Additionally, I believe it having or not having Google IP is irrelevant:
+> for example, the new Raspberry Pi 5 Broadcom SoC has a lot of
+> Raspberry's own IP, but it's still called Broadcom as it's the real
+> manufacturer and designer of the chip.
+
+I think RPi / Broadcom is a very different situation to this. The original SoC
+in RPi 1 was wholly designed by Broadcom, and marketed as a Broadcom
+SoC [1].
+
+Further iterations of the SoC until now have also not had RPi IP integrated.
+RPi themselves refer to them as "Broadcom SoCs" on their webpage [2],
+so it is completely expected that they live in a broadcom directory.
+
+BCM2717 has integrated the RPi ISP, but to all intents and purposes this is a
+Broadcom owned and designed SoC, albeit only now sold to one customer.
+
+[1] https://web.archive.org/web/20120215080023/https://www.broadcom.com/products/BCM2835
+[2] https://www.raspberrypi.com/documentation/computers/processors.html
+
+> >
+> > I guess the same is also true for `axis,artpec8` and `tesla,fsd` SoCs.
+> > IMO the SoC compatible string should be uniquely identifying the actual
+> > SoC, not a close relative.
+> >
+> > Regarding product_id you are correct this reads 0x09845000 but even
+> > within Samsung Exynos family there are examples where the register
+> > value does not match the SoC compatible. For example Exynos850 SoC
+> > has a product ID value of "E3830". Where the Linux compatible is
+> > matching the Samsung marketing name, not the internal/outdated name.
+>
+> I did not know Exynos 850 is also not going under it's real name.
+
+It is going by its real name :) just not by its internal name that nobody has
+heard of.
+
+> Ultimately, I believe all of those SoCs should go under their technical
+> name in the exynos/ directory.
+>
+> Another concern is that Google could in the future license other SoC: be
+> it Qualcomm, Nvidia or anything. If we put completely different hw under
+> google/ directory, does it really make sense? In that case, who'll
+> maintain the google/ directory? Exynos people? Qualcomm people if they
+> license it? Some other people?
+
+I expect Google, or Google sponsored devs (as is the case for Linaro) to be
+helping maintain the Google SoCs upstream. See the MAINTAINERS entry
+for this series of who I expect to maintain this google directory.
+
+>
+> Then, I don't think Tensor G3 has a proper "GS" name, it goes by "Zuma"
+> in decompiled kernel modules as far as I see.
+
+That is correct, it is named Zuma downstream and they did away with the
+gs101, gs201 type naming scheme.
+
+>
+> Finally, Tesla people already tried to submit drivers called by Tesla
+> name, but which basically copied the functionality of the Exynos
+> drivers. We would want to avoid that, ideally.
+
+As you can see from this series we are not proposing that. Any IPs that
+use Exynos IP we are using the existing upstream driver and enhance
+it where we have features that aren't present upstream.
+
+>
+> My opinion is that all the Tesla and Google SoCs should be in the
+> exynos/ directory, not only because they are basically Samsung Exynos,
+> but also because they don't really need a separate directory: neither
+> Google nor Tesla didn't neither manufacture or design those SoCs from
+> scratch.
+
+Who manufactures it seems irrelevant. Qcom and Broadcom don't
+manufacture their SoCs either, but they still live in qcom and broadcom
+directories upstream. Whether they designed the SoC from scratch or not
+is also IMO largely irrelevant. In many cases the upstream community
+has no way to determine whether things were outsourced or not anyway.
+Did Apple outsource things in their silicon design? Who knows, and why
+do we care? It's an apple branded chip in an apple branded product
+let's call the directory apple.
+
+Interestingly apple uses the same uart driver as Tensor, when I check back
+through the commits in the driver.
+
+fcbba344907afe26da487f1ed0b0e285c06a547b
+
+tty: serial: samsung_tty: Add support for Apple UARTs
+
+Apple SoCs are a distant descendant of Samsung designs and use yet
+ another variant of their UART style, with different interrupt handling.
+
+
+> The only reason I can think of for them to have it in a
+> separate directory is maybe because Google and Tesla actually paid
+> Samsung money for the right to call Exynos "Google designed" SoCs, but I
+> believe the kernel should be left out of that.
+
+Also the fact that they contain IPs not found in Samsung designed devices,
+aren't known to most people as Exynos, and the maintenance issues of
+having all the Google, Tesla, Axis, Exynos based SoCs in the same directory
+(and who knows how many other ASIC customers in the future).
+
+Ultimately it is Krzysztof's decision I think. I followed what he had previously
+accepted for other SoCs for consistency and also because it seemed like the
+correct approach to help scale up and ease the maintenance burden. If I look
+at the number of tensor based SoCs, phones per SoC and board variants per
+phone model, then you end up having a lot of files in the exynos directory over
+time.
+
+regards,
+
+Peter
