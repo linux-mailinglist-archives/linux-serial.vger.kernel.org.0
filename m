@@ -2,45 +2,45 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B567E4D58
-	for <lists+linux-serial@lfdr.de>; Wed,  8 Nov 2023 00:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109F47E4D83
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Nov 2023 00:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbjKGX2V (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Nov 2023 18:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S235701AbjKGXgb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Nov 2023 18:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235633AbjKGX2G (ORCPT
+        with ESMTP id S230158AbjKGXgU (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Nov 2023 18:28:06 -0500
+        Tue, 7 Nov 2023 18:36:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F423A9B;
-        Tue,  7 Nov 2023 15:25:06 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A81C433C9;
-        Tue,  7 Nov 2023 23:25:05 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC523C27;
+        Tue,  7 Nov 2023 15:25:22 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B49C433C8;
+        Tue,  7 Nov 2023 23:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699399506;
+        s=k20201202; t=1699399522;
         bh=66eRZbbpn1d2Z8u3cIZs2EUHC8FbX3bz5i+CPEDxP5k=;
         h=From:To:Cc:Subject:Date:From;
-        b=Td4TmcT33j8spMeJsadMh4pSksohY7dAIrbYHyYWF/iVq50QZRBRHN4AvetG8AmVg
-         11qhre/V622oyzogqfT0dfZjWC3+lhW50U9904z3HaZgOW5zL/cbpS4geeS4MjxQjz
-         rYdzLGmXaADnVkdLOH7SluOsesy/0Ew3I4098gBHhoSSHDMZlriK0yJ/KSoEvj42Fa
-         fFvPvjd5oHgySmVjbG6mlgD50jeDY2o4KAJIar9gzmRIwSuINaIsVYBparjWjgUAHO
-         dC3rmBHPPYFKrTOkQ2Ij79AwJBBQ0uWeT8GwMIQ9KqFrqTX5OGMfOc1mqNMiVoPbtD
-         QNVIubZxP+icA==
+        b=jjzHoC2FmLigUIFD88Ta7QA/RwdL9AAh7h34r3jro3F70jfYgfs2uIoBbzbATxQzO
+         t7jXoGU5Obxfv8n2JKmUiO1r5j/4IbRidYnjm5xzMozh6eTgsR992ixBKnyy03XIPy
+         5l/ZigJmVV1473oImpsC40UjaLlmB+UFeXEn7hl7EVQ16GJx3QzPIodxyMx4LBQJQ6
+         JPCLmjmmlXeN8bmWIpJJTyxr9m3ilw0QNeOVPX2qZtbC7e6usH/oeIRSMjzf2Emh8S
+         oA1shUFJbhAZxsDcWniK72/88laQnVEhOoeMUgmR2AaraJkwMZNmOJ4eRT4DYtU2aI
+         nPAglLfCIznCg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yi Yang <yiyang13@huawei.com>, Jiri Slaby <jirislaby@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         sparclinux@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 1/5] tty: vcc: Add check for kstrdup() in vcc_probe()
-Date:   Tue,  7 Nov 2023 18:24:56 -0500
-Message-ID: <20231107232503.3776802-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/4] tty: vcc: Add check for kstrdup() in vcc_probe()
+Date:   Tue,  7 Nov 2023 18:25:13 -0500
+Message-ID: <20231107232519.3776922-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.199
+X-stable-base: Linux 5.4.259
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
