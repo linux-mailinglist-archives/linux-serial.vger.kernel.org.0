@@ -2,45 +2,45 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109F47E4D83
-	for <lists+linux-serial@lfdr.de>; Wed,  8 Nov 2023 00:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125027E4D62
+	for <lists+linux-serial@lfdr.de>; Wed,  8 Nov 2023 00:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbjKGXgb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Tue, 7 Nov 2023 18:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S1344540AbjKGX3K (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 7 Nov 2023 18:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjKGXgU (ORCPT
+        with ESMTP id S235442AbjKGX2q (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Tue, 7 Nov 2023 18:36:20 -0500
+        Tue, 7 Nov 2023 18:28:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC523C27;
-        Tue,  7 Nov 2023 15:25:22 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B49C433C8;
-        Tue,  7 Nov 2023 23:25:20 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F9C4499;
+        Tue,  7 Nov 2023 15:25:35 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2009EC433C9;
+        Tue,  7 Nov 2023 23:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699399522;
-        bh=66eRZbbpn1d2Z8u3cIZs2EUHC8FbX3bz5i+CPEDxP5k=;
+        s=k20201202; t=1699399535;
+        bh=CX7tqLdpw6VsO1drUWFzFUM2xGluXB2Dd54jC87LLGk=;
         h=From:To:Cc:Subject:Date:From;
-        b=jjzHoC2FmLigUIFD88Ta7QA/RwdL9AAh7h34r3jro3F70jfYgfs2uIoBbzbATxQzO
-         t7jXoGU5Obxfv8n2JKmUiO1r5j/4IbRidYnjm5xzMozh6eTgsR992ixBKnyy03XIPy
-         5l/ZigJmVV1473oImpsC40UjaLlmB+UFeXEn7hl7EVQ16GJx3QzPIodxyMx4LBQJQ6
-         JPCLmjmmlXeN8bmWIpJJTyxr9m3ilw0QNeOVPX2qZtbC7e6usH/oeIRSMjzf2Emh8S
-         oA1shUFJbhAZxsDcWniK72/88laQnVEhOoeMUgmR2AaraJkwMZNmOJ4eRT4DYtU2aI
-         nPAglLfCIznCg==
+        b=h4uRf6Tl/SwBud5FTs7sPXX8Tnz+CKF1TFyVBQmm81qbtA4eaPhkKLfrsNoVaN6VU
+         QMrOtqVLD70sWN45duFc6DISUs6RUjVxwcB6ajDF+dLZ5B4USA4TXQfJza7BsLGkSv
+         W5msD3vpUEXmvg+H2oVmaWv1W2Om+cqYceb43cSXJ4+dYcmQXucCFZgC5oKlLVLX34
+         Ba9lhYSAk7z2YZo72QZ+3HuIP2pHtaJK6msPXiqmmYCFgDqxNg2Qu5HzsckSs+ESOq
+         OjJZFF0fOwHoTo1fiSM2Zan+2MAE8AJzO+xPlNJNmYb0CQ4u8h+xySCuJfNvmBeuoE
+         zwdff9eRXUfjA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yi Yang <yiyang13@huawei.com>, Jiri Slaby <jirislaby@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         sparclinux@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 1/4] tty: vcc: Add check for kstrdup() in vcc_probe()
-Date:   Tue,  7 Nov 2023 18:25:13 -0500
-Message-ID: <20231107232519.3776922-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 1/3] tty: vcc: Add check for kstrdup() in vcc_probe()
+Date:   Tue,  7 Nov 2023 18:25:27 -0500
+Message-ID: <20231107232532.3777022-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.259
+X-stable-base: Linux 4.19.297
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
@@ -63,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 13 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/tty/vcc.c b/drivers/tty/vcc.c
-index 9ffd42e333b83..6b2d35ac6e3b3 100644
+index 10a832a2135e2..31ecba1133159 100644
 --- a/drivers/tty/vcc.c
 +++ b/drivers/tty/vcc.c
-@@ -587,18 +587,22 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+@@ -586,18 +586,22 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
  		return -ENOMEM;
  
  	name = kstrdup(dev_name(&vdev->dev), GFP_KERNEL);
@@ -91,7 +91,7 @@ index 9ffd42e333b83..6b2d35ac6e3b3 100644
  
  	spin_lock_init(&port->lock);
  
-@@ -632,6 +636,11 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+@@ -631,6 +635,11 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
  		goto unreg_tty;
  	}
  	port->domain = kstrdup(domain, GFP_KERNEL);
@@ -103,7 +103,7 @@ index 9ffd42e333b83..6b2d35ac6e3b3 100644
  
  	mdesc_release(hp);
  
-@@ -661,8 +670,9 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
+@@ -660,8 +669,9 @@ static int vcc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
  	vcc_table_remove(port->index);
  free_ldc:
  	vio_ldc_free(&port->vio);
