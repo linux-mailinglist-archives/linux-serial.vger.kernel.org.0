@@ -2,174 +2,239 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFA47E656C
-	for <lists+linux-serial@lfdr.de>; Thu,  9 Nov 2023 09:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D467E6598
+	for <lists+linux-serial@lfdr.de>; Thu,  9 Nov 2023 09:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbjKIIjG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 9 Nov 2023 03:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
+        id S233594AbjKIIuw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-serial@lfdr.de>); Thu, 9 Nov 2023 03:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjKIIjE (ORCPT
+        with ESMTP id S233527AbjKIIuu (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 9 Nov 2023 03:39:04 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5803B210A
-        for <linux-serial@vger.kernel.org>; Thu,  9 Nov 2023 00:39:02 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231109083900epoutp012b9f8949be0c6e2b1514861bdfc90995~V56dgwNgo1388513885epoutp01G
-        for <linux-serial@vger.kernel.org>; Thu,  9 Nov 2023 08:39:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231109083900epoutp012b9f8949be0c6e2b1514861bdfc90995~V56dgwNgo1388513885epoutp01G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1699519140;
-        bh=IA8tVDEiR3OUTboPQ/PY/TxTQuBZRkJALEc43ISnuNw=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=efnhyxMsGaqfr7z8Na7Z/qh30v8tBNgLijusUHWi6q01cSuhLt5yQfssJqyr41RTt
-         rkbNP6cuPL/vDT3c54BV7m2c40IFjc/WQw7UkpjxXS3bvVSq8iwGEqmI/AYo78B6bt
-         YoJJjPNED8O6l2y74/vmFNrRIUK1dURpFcBpJ1rI=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20231109083900epcas2p39eed51ad7909b12b62e08be1ac5800ee~V56dJWP7F1153011530epcas2p3N;
-        Thu,  9 Nov 2023 08:39:00 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.89]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4SQwNM3dj6z4x9Pp; Thu,  9 Nov
-        2023 08:38:59 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D8.23.10006.3AA9C456; Thu,  9 Nov 2023 17:38:59 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20231109083858epcas2p48cae9d866b6b51405c76b01156b4ce95~V56cIIqxB0079200792epcas2p4z;
-        Thu,  9 Nov 2023 08:38:58 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20231109083858epsmtrp2538ba1605409bc6c9cca25c453e2662c~V56cHPEKs2879728797epsmtrp24;
-        Thu,  9 Nov 2023 08:38:58 +0000 (GMT)
-X-AuditID: b6c32a45-179ff70000002716-20-654c9aa3d2f2
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        78.56.08817.2AA9C456; Thu,  9 Nov 2023 17:38:58 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20231109083858epsmtip151265ef90607b87f0931ae4cf9ce8288~V56bwhdvF0398903989epsmtip16;
-        Thu,  9 Nov 2023 08:38:58 +0000 (GMT)
-Message-ID: <7c98023e-9207-c6fe-8a98-c8277c6d2c1a@samsung.com>
-Date:   Thu, 9 Nov 2023 17:36:12 +0900
+        Thu, 9 Nov 2023 03:50:50 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133DC258D
+        for <linux-serial@vger.kernel.org>; Thu,  9 Nov 2023 00:50:48 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=06912c668f=fe@dev.tdt.de>)
+        id 1r10kQ-00FPYt-6N
+        for linux-serial@vger.kernel.org; Thu, 09 Nov 2023 09:50:46 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1r10kP-00FPYj-Qj
+        for linux-serial@vger.kernel.org; Thu, 09 Nov 2023 09:50:45 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 79836240049
+        for <linux-serial@vger.kernel.org>; Thu,  9 Nov 2023 09:50:45 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 39006240040;
+        Thu,  9 Nov 2023 09:50:45 +0100 (CET)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id C669D211D4;
+        Thu,  9 Nov 2023 09:50:42 +0100 (CET)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Eckert.Florian@googlemail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org,
+        kabel@kernel.org, u.kleine-koenig@pengutronix.de,
+        m.brock@vanmierlo.com
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-leds@vger.kernel.org
+Subject: [Patch v8 0/6] ledtrig-tty: add additional tty state evaluation
+Date:   Thu,  9 Nov 2023 09:50:32 +0100
+Message-ID: <20231109085038.371977-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.11.0
-Subject: Re: [PATCH 04/10] dt-bindings: pwm: samsung: add exynosautov9
- compatible
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <545b681e-2da7-4adf-9c3c-0d292951ef94@linaro.org>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFJsWRmVeSWpSXmKPExsWy7bCmqe7iWT6pBs+Wi1o8mLeNzWLN3nNM
-        FvOPnGO1aF68ns3i3VwZi72vt7JbTPmznMli0+NrrBab5/9htLi8aw6bxd27qxgtZpzfx2Rx
-        ZnEvu0Xr3iPsFofftLNa/Nw1j8Vi1S6gutsTJzM6CHnsnHWX3WPTqk42jzvX9rB57J+7ht1j
-        85J6j/6/Bh59W1YxenzeJBfAEZVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6k
-        kJeYm2qr5OIToOuWmQP0iZJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgx
-        t7g0L10vL7XEytDAwMgUqDAhO+Nq4wf2go3cFTMWnmdvYOzl7GLk5JAQMJHYcOY1SxcjF4eQ
-        wA5GiY71n9ggnE+MEkceH2OFcL4xSpw9P58VpuXykutQLXsZJSbfW8YE4bxmlDj09Dc7SBWv
-        gJ3E41d9YDaLgIrE8gkHmSHighInZz5hAbFFBaIlWpfdZwOxhQWCJaYvnQZmMwuIS9x6Mp8J
-        xBYRqJP4Pukj2DZmgUssEksWvgMbxCagLfF9/WKwkziBlq2/3wXVLC/RvHU2M8Spbzgkft1O
-        gLBdJI68bGCEsIUlXh3fwg5hS0l8freXDcLOlmif/gfqzQqJixtmQ8WNJWY9awfq5QCarymx
-        fpc+iCkhoCxx5BYLxFY+iY7Df9khwrwSHW1CEI1qEvennoMaIiMx6chKJgjbQ2LyzVamCYyK
-        s5ACZRaS52ch+WUWwt4FjCyrGMVSC4pz01OLjQoM4ZGdnJ+7iRGcyLVcdzBOfvtB7xAjEwfj
-        IUYJDmYlEd4LJj6pQrwpiZVVqUX58UWlOanFhxhNgVEzkVlKNDkfmEvySuINTSwNTMzMDM2N
-        TA3MlcR577XOTRESSE8sSc1OTS1ILYLpY+LglGpgWr1/zu/j8Y5rtfs1NT6XP/VqZ5rf/GbW
-        /Mxz6yblPfv2+Zrg4T9brYr0JnUUSj48kLJjxY9ZfDXF04QSJ7h8dRY02x97z822eOnPTZFv
-        K0y3/xLLnlwby/69ZqZ39j1FIZ3dGywS5spvMooVXblnRW3d08lBLXJrqwTynC66m1bsX5i2
-        SPt7yukn7LotLv+y3LVlK1bb8KRunqGjl3HxoF/AkayDPgcn1iXqzWJ5c+z59VNSz65umT5t
-        /gft26bpzBcCbic63+jfM+dCTodf1WKj1fwRd926RNe/ivy+h8tM31rmy62y/PmfWIqv7ZjO
-        vursOVl+/pka1aWWspwlfcFTDRd6LTul6Xhyul2RqRJLcUaioRZzUXEiAGma4ohtBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFIsWRmVeSWpSXmKPExsWy7bCSnO6iWT6pBpceG1s8mLeNzWLN3nNM
-        FvOPnGO1aF68ns3i3VwZi72vt7JbTPmznMli0+NrrBab5/9htLi8aw6bxd27qxgtZpzfx2Rx
-        ZnEvu0Xr3iPsFofftLNa/Nw1j8Vi1S6gutsTJzM6CHnsnHWX3WPTqk42jzvX9rB57J+7ht1j
-        85J6j/6/Bh59W1YxenzeJBfAEcVlk5Kak1mWWqRvl8CVcbXxA3vBRu6KGQvPszcw9nJ2MXJy
-        SAiYSFxecp0FxBYS2M0o8WlrCERcRmL5sz42CFtY4n7LEVaImpeMErPf64DYvAJ2Eo9f9bGD
-        2CwCKhLLJxxkhogLSpyc+QRspqhAtMTqzxfAeoUFgiWmL50GNpNZQFzi1pP5TCC2iECdxKqX
-        f4HmcAHFr7BIvHr8hgnEERJYxyTReG47WAebgLbE9/WLwSZxAm1ef78LapKZRNfWLkYIW16i
-        eets5gmMQrOQHDILycJZSFpmIWlZwMiyilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMj
-        OHq1tHYw7ln1Qe8QIxMH4yFGCQ5mJRHeCyY+qUK8KYmVValF+fFFpTmpxYcYpTlYlMR5v73u
-        TRESSE8sSc1OTS1ILYLJMnFwSjUwWa58IjpNT8dJ4+jmWU3b+Z0PJt959vhV4+LD2fluel53
-        jqwyfvzv5eSMRWdSHxiF79zMO0mghoHP5MGFQqu4sMX/fl9bVxCUvJJZrCziNde1txZnYiId
-        k7iTv54/cNuhebJmWZam6oEVfzrmvM2327d4X86UbL4/kz8I/fmwuOFcuqnQA/XTjz+9nxh4
-        ZHvC2zTp7q+T77NHR3R9T2KaH8XTs/1kWsd1IWevJZ/dbv5bZjjvu9O8TR9Mti2Vubfy0P50
-        0ZjGGyGM8tYzfWf8WlB/RDCwbdu5qk3/WSeWXu5mv2Gy2tNqWdfrshUTDt7wbPP/87pngmB0
-        0LOGKJ6I3bGtt09dKp144Kiq/vq+L5uVWIozEg21mIuKEwFVLcuKTQMAAA==
-X-CMS-MailID: 20231109083858epcas2p48cae9d866b6b51405c76b01156b4ce95
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231031095017epcas2p306a504619cbaf1fc260f6c46f8b75dd8
-References: <20231031094852.118677-1-jaewon02.kim@samsung.com>
-        <CGME20231031095017epcas2p306a504619cbaf1fc260f6c46f8b75dd8@epcas2p3.samsung.com>
-        <20231031094852.118677-5-jaewon02.kim@samsung.com>
-        <20231109062807.ko53f63arpxgigd5@pengutronix.de>
-        <545b681e-2da7-4adf-9c3c-0d292951ef94@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dev.tdt.de
+Content-Transfer-Encoding: 8BIT
+X-purgate-ID: 151534::1699519846-6E8D6018-E37BE057/0/0
+X-purgate-type: clean
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+Changes in v8:
+==============
+- As requested by greg k-h [6], I have send the patch 2/7 of this series
+  about the memory leak also to stable.vger.kernel.org [7]. This has
+  already received a 'Reviewed-by' from Uwe [8].
+- As requested by Maarten, I have adopted his suggestion to invert the LED
+  blink, so that I do not have to save the 'state' in the tty data
+  struct [9].
 
-On 23. 11. 9. 17:23, Krzysztof Kozlowski wrote:
-> On 09/11/2023 07:28, Uwe Kleine-König wrote:
->> Hello,
->>
->> On Tue, Oct 31, 2023 at 06:47:46PM +0900, Jaewon Kim wrote:
->>> Add samsung,exynosautov920-pwm compatible string to binding document.
->>>
->>> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
->>> ---
->>>   Documentation/devicetree/bindings/pwm/pwm-samsung.yaml | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
->>> index 2162f661ed5a..b6beca2ae81e 100644
->>> --- a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
->>> +++ b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
->>> @@ -30,6 +30,7 @@ properties:
->>>         - items:
->>>             - enum:
->>>                 - samsung,exynosautov9-pwm
->>> +              - samsung,exynosautov920-pwm
->>>             - const: samsung,exynos4210-pwm
->> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->>
->> What is the merge plan here? Should this go via the pwm tree, or can it
->> better go via some exynos tree together with the dts files?
-> I propose I will take it. I will have conflicting change and keeping
-> bindings with DTS together allows smooth dtbs_check.
->
-> Best regards,
-> Krzysztof
->
->
+Links:
+[6] https://lore.kernel.org/linux-leds/20231106123415.3365732-1-fe@dev.tdt.de/T/#me43be56f4063082e7b47858773ea8067a3846466
+[7] https://lore.kernel.org/stable/20231106144914.bflq2jxejdxs6zjb@pengutronix.de/T/#t
+[8] https://lore.kernel.org/stable/20231106144914.bflq2jxejdxs6zjb@pengutronix.de/T/#m78a946889e4722903b2a79e3a465d8da0ca16333
+[9] https://lore.kernel.org/linux-leds/20231106123415.3365732-1-fe@dev.tdt.de/T/#m43df92b665f613fe0af7d5d003a3804404f1c494
 
-I also agree it would be better to enter the exynos tree.
+Changes in v7:
+==============
+v7: https://lore.kernel.org/linux-leds/20231106123415.3365732-1-fe@dev.tdt.de/
+- Patch 1/7 is no longer included from the previous patch set v6, as it has
+  already been merged into the master branch [5].
+- As requested by Maarten, I have added a 'Fixes:' tag to patch 2/6 of
+  this patch set, so that this commit should also be backported to the
+  stable branches, as it is a memory leak.
+- As requested by Maarten, I added an invert flag on LED blink, so that
+  the LED blinks in the correct order.
+  * LED was 'on' in the previous round, then it should first go 'off' and
+    then 'on' again when it should blink (data has been transferred).
+  * LED was 'off' in the previous round, then it should first go 'on' and
+    then 'off' again when it should blink (data has been transferred).
 
-Thanks Krzysztof.
+Links:
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/tty/tty_io.c?h=next-20231106&id=838eb763c3e939a8de8d4c55a17ddcce737685c1
+
+Changes in v6:
+==============
+v6: https://lore.kernel.org/linux-leds/20231030100447.63477-1-fe@dev.tdt.de/
+This is a paritial rewrite of the changes to make the function for
+setting the tty evaluation configurable. This change was requested and
+comment by Greg K-H at the last review [1]. The main changes are.
+- Split the changes into smaller commits to make reviewing easier.
+- Use a completion to sync the sysfs and the delay scheduler work on
+  shared variables.
+- Adding the base-commit to this overview, that reviewer know which base
+  commit I am using.
+  Base branch is:
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+Patch [1/7]:
+  This patch is already included in the tty branch [2], but it is still
+  included in this patchsset, so that the following patches of the
+  base-commit branch could be applied correctly.
+Patch [2/7]:
+  Add a new helper function tty_get_tiocm(). This got already a
+  'Acked-by: Greg Kroah-Hartman' [3] and is not changed.
+Patch [3/7]:
+  Add missing of freeing an allocated ttyname buffer on trigger
+  deactivation. This is a memory leak fix patch and should also be
+  backported to the 'stable' branches.
+Patch [4/7]:
+  As requested by greg k-h this is more a 'dev_warn' instead of a
+  'dev_info'. This could also be backported to the 'stable' branches if
+  needed.
+Patch [5/7]:
+  Use a completion to sync for sysfs read/write and the delay scheduler
+  work. I hope I am using the completion correctly. I wasn't sure if I
+  should secure the sysfs read and write access at the same time via a
+  mutex. With this change, the work is also not stopped as it was before
+  when no ttyname was set via sysfs. A tty should always be set when this
+  trigger is used. And is therefore not a problem from my point of view.
+Patch [6/7]:
+  Make rx tx activitate configurable. In the previous implementation,
+  there was still the ttytrigger flag variable. This flag variable was
+  replaced by individual variables in the data struct. Now these variables
+  can be accessed without masking. The commit was rebased and cleaned up
+  to use the completion implementation.
+Patch [7/7]:
+  Adding additional trigger line state sources. The commit was also
+  rebased and cleaned up to use the completion implementation.
+
+Changes in v5:
+==============
+v5: https://lore.kernel.org/linux-leds/20231023094205.2706812-1-fe@dev.tdt.de/
+- Update commit message as request by greg k-h, to make the commit
+  message more generic and not focusing on my use case [2].
+- Removing PATCH v4 1/3 from previous set. This has been already applied
+  to tty-testing [3] by greg k-h.
+- As requested by greq k-h. I have also made the following changes to
+  PATCH v4 3/3 [4].
+  * Add a comment to the enum that this is already used for bit
+    evaluation and sysfs read and write.
+  * Renaming the variable 'unsigned long mode' to
+    'unsigned long ttytrigger' in the ledtrig_tty_data structure to make
+    it clearer that the selected triggers are stored there.
+  * Using sysfs_emit() function to dump the requestd ttytrigger to
+    userland.
+  * Also using the kstrtobool() function to write the selected
+    ttytrigger via the sysfs. This values are booleans.
+- I also removed the function ledtrig_tty_evaluate() from my last
+  patchses PATCH v4 3/3 [4]. The new API tty_get_tiocm() function
+  is only called once now and checked for each ttytrigger bit.
+  Previously this function was called for each bit, which is not
+  necessary.
+
+Links:
+[2] https://lore.kernel.org/linux-leds/2023102115-stock-scrambled-f7d5@gregkh/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/commit/?h=tty-testing&id=838eb763c3e939a8de8d4c55a17ddcce737685c1
+[4] https://lore.kernel.org/linux-leds/20231019112809.881730-4-fe@dev.tdt.de/
+
+Changes in v4:
+==============
+v4: https://lore.kernel.org/linux-leds/20231019112809.881730-1-fe@dev.tdt.de/
+- Merging patch 3/4 into patch number 4/4 from previous series, because
+  it fixes a problem that does not exist upstream. This was a note from
+  the build robot regarding my change that I added with previous series.
+  This change was never upstream and therefore this is not relevant.
+- Update the commit message of patch 1/3 of this series, that this
+  commit
+  also changes the 'ndashes' to simple dashes. There were no changes, so
+  I add the 'Reviewed-by' that the commit received before.
+- With this patchset version I have reworked my implementation for the
+  evaluation of the additional line state, so that this changes becomes
+  smaller. As basis I have used the staged commits from Christian Marangi
+  that makes this changes to the netdev trigger. This has already been
+  applied to 'for-leds-next-next' by Lee Jones. I adapted this to the
+  tty trigger.
+  Convert device attr to macro:
+  https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/commit/drivers/leds/trigger?h=for-leds-next-next&id=509412749002f4bac4c29f2012fff90c08d8afca
+  Unify sysfs and state handling:
+  https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/commit/drivers/leds/trigger?h=for-leds-next-next&id=0fd93ac8582627bee9a3c824489f302dff722881
+
+Changes in v3:
+==============
+v3: https://lore.kernel.org/linux-leds/20231016071332.597654-1-fe@dev.tdt.de/
+- Add missing 'kernel test robot' information to the commit message.
+- Additional information added to the commit message
+
+Changes in v2:
+==============
+v2: https://lore.kernel.org/linux-leds/20230928132632.200263-1-fe@dev.tdt.de/
+- rename new function from tty_get_mget() to tty_get_tiocm() as
+  requested by 'Jiri Slaby'.
+- As suggested by 'Jiri Slaby', fixed tabs in function documentation
+  throughout the file '/drivers/tty/tty_io.c' in a separate commit.
+- Move the variable definition to the top in function
+  'ledtrig_tty_work()'.
+  This was reported by the 'kernel test robot' after my change in v1.
+- Also set the 'max_brightness' to 'blink_brightness' if no
+  'blink_brightness' was set. This fixes a problem at startup when the
+  brightness is still set to 0 and only 'line_*' is evaluated. I looked
+  in the netdev trigger and that's exactly how it's done there.
+
+Changes in v1:
+==============
+v1: https://lore.kernel.org/linux-leds/20230926093607.59536-1-fe@dev.tdt.de/
+This is a follow-up patchset, based on the mailing list discussion from
+March 2023 based on the old patchset v8 [1]. I have changed, the LED
+trigger handling via the sysfs interfaces as suggested by Uwe
+Kleine-König.
+Links:
+[1] https://lore.kernel.org/linux-leds/20230306094113.273988-1-fe@dev.tdt.de/
+
+Florian Eckert (6):
+  tty: add new helper function tty_get_tiocm
+  leds: ledtrig-tty: free allocated ttyname buffer on deactivate
+  leds: ledtrig-tty: change logging if get icount failed
+  leds: ledtrig-tty: replace mutex with completion
+  leds: ledtrig-tty: make rx tx activitate configurable
+  leds: ledtrig-tty: add additional line state evaluation
+
+ .../ABI/testing/sysfs-class-led-trigger-tty   |  56 ++++
+ drivers/leds/trigger/ledtrig-tty.c            | 259 +++++++++++++++---
+ drivers/tty/tty_io.c                          |  28 +-
+ include/linux/tty.h                           |   1 +
+ 4 files changed, 301 insertions(+), 43 deletions(-)
 
 
-Thanks,
-
-Jaewon Kim
+base-commit: 6bc986ab839c844e78a2333a02e55f02c9e57935
+-- 
+2.30.2
 
