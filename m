@@ -2,116 +2,84 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9342C7E729B
-	for <lists+linux-serial@lfdr.de>; Thu,  9 Nov 2023 21:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A537EBC7B
+	for <lists+linux-serial@lfdr.de>; Wed, 15 Nov 2023 04:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjKIUHF (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 9 Nov 2023 15:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S234414AbjKOD6k (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Tue, 14 Nov 2023 22:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbjKIUHE (ORCPT
+        with ESMTP id S234301AbjKOD6i (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 9 Nov 2023 15:07:04 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE2444B4
-        for <linux-serial@vger.kernel.org>; Thu,  9 Nov 2023 12:07:02 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5afbdbf3a19so15226047b3.2
-        for <linux-serial@vger.kernel.org>; Thu, 09 Nov 2023 12:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699560421; x=1700165221; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JxfBT9XrSRT5nrDSafWJh9sd+I3zu8gAVwzWVP+isuk=;
-        b=wRlxhK72w6O5c5iPkyqSco0awCEHjG8RKS1w691vXr5E5gHa1GxtFSK2UMBm0f7at7
-         lbRNSpBebmSMpS/Deg5XJ8VvdZNuhIjegYWGU5ikllSTvlUEP8LSXQsd4dBfNaR+yNXK
-         tPgTHRb1gaJ0cOAX643Ohba3mpPxbo8RCwnt1HpkiYrF5uJ1pGSnOHfiTueFWgE3Dqn/
-         u88ZBAn2tAuicHiOPEuD/SPxw3WsKqTO2GpW/38AnZRFTS2lp1XLiPLHp4J5/tMyK7fw
-         sHAwZ4aL2oq1uB08XwGLuEI+fXXa+7oK8w6n1R8PZVbltQoo1ZBbfMWh7vSR1ePzxy9a
-         uEjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699560421; x=1700165221;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JxfBT9XrSRT5nrDSafWJh9sd+I3zu8gAVwzWVP+isuk=;
-        b=h+sjQqO/0igeCgJuCufDo5jnNpW9QVQ3FBbDD4ZdNyQo5vmjg4XIaKF4CqVCIIJRzG
-         cMwDAOenh1K7qnBhUx6756E/0lsnSf/a+llWyLvf06theV6NImBltbidoiZ5NP5j4adT
-         Xz6on3cPm8bmyHyIr/xrvQcH91Jsb7oU+idzHrfIXZNH8rb0Qts4OR+aBOGBsMzVdGHo
-         RUuBBnDLnNVbYbvIsjaDVYWoCKKmuy50qWsFkD6WkvE7HxRcLkxP/VitCR0KJnoeanCu
-         4bPPnSiSN3d+CKZcXGZvBZFzYT3N0Dhb3tW+rXV1zenBQZFRnWb740btiQaYg6tnhKOe
-         yWIg==
-X-Gm-Message-State: AOJu0YxzrI3ezEIwa/z/0RUGG56NITryRaldbIJd9hA0y83LI3raowcx
-        7Pf1pwjlbPzfUMJCF7EMEwmiaqzcesoScZBweIpYgg==
-X-Google-Smtp-Source: AGHT+IEXBKt+FURrtNfddWlqR3gL5F6B4MyNTpLeCgYWcpg+lWu9UphB2hG1mn1lgkc9/kt9ZZeKnj4In3j2CaEDK+8=
-X-Received: by 2002:a81:df01:0:b0:5ae:c35a:807a with SMTP id
- c1-20020a81df01000000b005aec35a807amr5649968ywn.48.1699560421299; Thu, 09 Nov
- 2023 12:07:01 -0800 (PST)
+        Tue, 14 Nov 2023 22:58:38 -0500
+Received: from ns3154000.ip-51-89-173.eu (ns3154000.ip-51-89-173.eu [51.89.173.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7C7F0
+        for <linux-serial@vger.kernel.org>; Tue, 14 Nov 2023 19:58:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=corptia.com
+        ; s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID
+        :Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=AuFOzWEY1p4B/ao4HYur+KTak9IfXFRGw/OWFKPeT54=; b=MUI5uzxyoRVnA0r4Upn83nbxrQ
+        OFVSMoTRxbjanoEcxEsTD3IMsLcYVRVkGYWYU5XVj568dus8k72kXOwcCs05ohzjX0IYhtNlOyAFv
+        H7hQwWrIQFRXaN4vzScf2RZg5Va6AUJy4hMq9dfYNprgdaTGpnZ7F6qncDSQ4Nfz/b7GKo6NtFcgU
+        g2pnu2WZJXJrdM6ssPKMj1/4NRQNM/QvxpJ9fXP5Vpp7r0Et1Ufh/qEINXZjrnsI+O+J0zxJM9OPe
+        MICvquH1L/l0BohpMdiHRrrbiknhRis7bdtFHCptz8DPbk3gl6pjKoGySCb0RsTe/X5MUNUaoh4na
+        sojUeY5w==;
+Received: from [46.183.223.78] (port=53752 helo=corptia.com)
+        by ns3154000.ip-51-89-173.eu with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96.2)
+        (envelope-from <jobs@corptia.com>)
+        id 1r1Ck8-0006g7-12
+        for linux-serial@vger.kernel.org;
+        Thu, 09 Nov 2023 21:39:15 +0000
+Reply-To: projects@adnoc-suppplier.com
+From:   Abu Dhabi National Oil Company <jobs@corptia.com>
+To:     linux-serial@vger.kernel.org
+Subject: VENDORS EOI
+Date:   09 Nov 2023 23:39:14 +0200
+Message-ID: <20231109233914.579893530ADABA9B@corptia.com>
 MIME-Version: 1.0
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org> <20231108104343.24192-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20231108104343.24192-4-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Nov 2023 21:06:50 +0100
-Message-ID: <CACRpkdbAwOfjbD_CjC4Aqi_A2+pghTBeWyV7mPMZv25BXMPStw@mail.gmail.com>
-Subject: Re: [PATCH 03/17] dt-bindings: i2c: samsung,s3c2410-i2c: add specific
- compatibles for existing SoC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - ns3154000.ip-51-89-173.eu
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - corptia.com
+X-Get-Message-Sender-Via: ns3154000.ip-51-89-173.eu: authenticated_id: jobs@corptia.com
+X-Authenticated-Sender: ns3154000.ip-51-89-173.eu: jobs@corptia.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Wed, Nov 8, 2023 at 11:44=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
 
-> Samsung Exynos SoC reuses several devices from older designs, thus
-> historically we kept the old (block's) compatible only.  This works fine
-> and there is no bug here, however guidelines expressed in
-> Documentation/devicetree/bindings/writing-bindings.rst state that:
-> 1. Compatibles should be specific.
-> 2. We should add new compatibles in case of bugs or features.
->
-> Add compatibles specific to each SoC in front of all old-SoC-like
-> compatibles.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Greetings of the day,
 
-Makes perfect sense to me:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+We are inviting your esteemed company for vendor registration and=20
+intending partners for Abu Dhabi National Oil Company (ADNOC)
+2023/2024 projects.
 
-Yours,
-Linus Walleij
+These projects are open for all companies around the world, if=20
+you have intention to participate in the process, please confirm=20
+your interest by asking for Vendor Questionnaire and EOI.
+
+We appreciate your interest in this invitation, and look forward=20
+to your early response.
+
+Kind Regards,
+Mr. Mohamed Ghazi B.
+Senior Project Manager
+projects@adnoc-suppplier.com
