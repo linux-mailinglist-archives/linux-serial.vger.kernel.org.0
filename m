@@ -2,49 +2,48 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300037E8005
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 19:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED46B7E804B
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 19:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbjKJSDv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Nov 2023 13:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S229470AbjKJSJL (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Nov 2023 13:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235815AbjKJSCv (ORCPT
+        with ESMTP id S1346024AbjKJSHH (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Nov 2023 13:02:51 -0500
+        Fri, 10 Nov 2023 13:07:07 -0500
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F72B3AE19
-        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:31:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678383A8B3
+        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:53 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT8-0006Vs-CC; Fri, 10 Nov 2023 16:30:50 +0100
+        id 1r1TT8-0006X2-Hg; Fri, 10 Nov 2023 16:30:50 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT7-0083Li-Ky; Fri, 10 Nov 2023 16:30:49 +0100
+        id 1r1TT7-0083Ll-Qx; Fri, 10 Nov 2023 16:30:49 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT7-00Gnxz-Bw; Fri, 10 Nov 2023 16:30:49 +0100
+        id 1r1TT7-00Gny3-Hw; Fri, 10 Nov 2023 16:30:49 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>, kernel@pengutronix.de,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 48/52] serial: tegra-tcu: Convert to platform remove callback returning void
-Date:   Fri, 10 Nov 2023 16:30:16 +0100
-Message-ID: <20231110152927.70601-49-u.kleine-koenig@pengutronix.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>, kernel@pengutronix.de,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 49/52] serial: timbuart: Convert to platform remove callback returning void
+Date:   Fri, 10 Nov 2023 16:30:17 +0100
+Message-ID: <20231110152927.70601-50-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1884; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=swhoAVWkrMA1knLpinhSt78hBhGNQA0uOcknMNn7oHE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkyUQtzMD5FVl3PDgSX036X6YAVoStTH23z85 lRajOE6YUyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MlAAKCRCPgPtYfRL+ TrJLCACTXSSwXRfVKE8mNLNndtxd/K2yp4IbhNEu6zhTuS/S+8w+maZ7jBYj27IihUFrYwr5FkB Eyv3Q+LNFc2WV5kH2hQ8TKafa/6npOp533lnKpOPOyOtA3Kgp5jKNvvsgfnT3zkoO6XWpeGpUOT dkwpAzKfpmL8O1EOH9mSAKVUr+zLLMZHRfzFbL5AUBpYyriBZBWfUw0P1a5iIUEi/ztoDvS1Svn 2yd9WqczWY1U4AGXDgkxaba/xQKX9zOG9Q3hcOQ0lAf2SC8GPL+802+xVhb/h3imgxKojCyG3S3 RCyMIoJWMY+XUidK1d1DXTwJkZ/wprpGRSn0TXAWPxzHo02v
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1874; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jFSJXO2Xbl9fIXmf1iTPsGnVD2SUK+/zNSwUIlvg1Kk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkyVAVwwXKtxkjvIJhA0LtH/LAMwqyz8/VnCK zivQpq51MSJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MlQAKCRCPgPtYfRL+ TscnB/9jeu/c+jtZVSRDbAqYBvCHpv7MmCM4TwA7nW1SbJBGh9Bm9/7aodbINOYyCE0E0vb4DXi d3jvp8R4DjPk+tl5tDQ2McL/qbylUkpk9NtkilZ4KXnkUVv/e3j+OUs4jKWxuNUMamG37jAKiP+ w0lXCKiRXxvTdWrDt3zL5wTCZSzYeJpiMGHpS6b9iSAF7d3U2z620KkUqdeiX8RguW+W1R8uuiq uefZMA9t6XQqbQQ6+IM3d4xMRTQel6+roU1FcuO1nUEI0mwAVlNvNLNgi1bnwJlQ648iS7CM02N RLDFSSNZFFLryjrpHZ1hFcM0KLOExEuGycL2h0pHtGTDRPkB
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -75,40 +74,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/tegra-tcu.c | 6 ++----
+ drivers/tty/serial/timbuart.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/tegra-tcu.c b/drivers/tty/serial/tegra-tcu.c
-index 65069daf36ec..d9c78320eb02 100644
---- a/drivers/tty/serial/tegra-tcu.c
-+++ b/drivers/tty/serial/tegra-tcu.c
-@@ -266,7 +266,7 @@ static int tegra_tcu_probe(struct platform_device *pdev)
+diff --git a/drivers/tty/serial/timbuart.c b/drivers/tty/serial/timbuart.c
+index 0cc6524f5e8b..4bc89a9b380a 100644
+--- a/drivers/tty/serial/timbuart.c
++++ b/drivers/tty/serial/timbuart.c
+@@ -473,7 +473,7 @@ static int timbuart_probe(struct platform_device *dev)
  	return err;
  }
  
--static int tegra_tcu_remove(struct platform_device *pdev)
-+static void tegra_tcu_remove(struct platform_device *pdev)
+-static int timbuart_remove(struct platform_device *dev)
++static void timbuart_remove(struct platform_device *dev)
  {
- 	struct tegra_tcu *tcu = platform_get_drvdata(pdev);
+ 	struct timbuart_port *uart = platform_get_drvdata(dev);
  
-@@ -277,8 +277,6 @@ static int tegra_tcu_remove(struct platform_device *pdev)
- 	uart_remove_one_port(&tcu->driver, &tcu->port);
- 	uart_unregister_driver(&tcu->driver);
- 	mbox_free_channel(tcu->tx);
+@@ -481,8 +481,6 @@ static int timbuart_remove(struct platform_device *dev)
+ 	uart_remove_one_port(&timbuart_driver, &uart->port);
+ 	uart_unregister_driver(&timbuart_driver);
+ 	kfree(uart);
 -
 -	return 0;
  }
  
- static const struct of_device_id tegra_tcu_match[] = {
-@@ -293,7 +291,7 @@ static struct platform_driver tegra_tcu_driver = {
- 		.of_match_table = tegra_tcu_match,
+ static struct platform_driver timbuart_platform_driver = {
+@@ -490,7 +488,7 @@ static struct platform_driver timbuart_platform_driver = {
+ 		.name	= "timb-uart",
  	},
- 	.probe = tegra_tcu_probe,
--	.remove = tegra_tcu_remove,
-+	.remove_new = tegra_tcu_remove,
+ 	.probe		= timbuart_probe,
+-	.remove		= timbuart_remove,
++	.remove_new	= timbuart_remove,
  };
- module_platform_driver(tegra_tcu_driver);
  
+ module_platform_driver(timbuart_platform_driver);
 -- 
 2.42.0
 
