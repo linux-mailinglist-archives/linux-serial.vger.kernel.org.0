@@ -2,32 +2,32 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42BF7E83FF
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 21:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE887E8084
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 19:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235929AbjKJUgy (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Nov 2023 15:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S1345027AbjKJSMt (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Nov 2023 13:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbjKJUgk (ORCPT
+        with ESMTP id S1345757AbjKJSLW (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Nov 2023 15:36:40 -0500
+        Fri, 10 Nov 2023 13:11:22 -0500
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826633AE0A
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702EC3AE09
         for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:57 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT8-0006Tc-4o; Fri, 10 Nov 2023 16:30:50 +0100
+        id 1r1TT8-0006UG-4n; Fri, 10 Nov 2023 16:30:50 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT7-0083La-6T; Fri, 10 Nov 2023 16:30:49 +0100
+        id 1r1TT7-0083Le-EO; Fri, 10 Nov 2023 16:30:49 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT6-00Gnxr-Tj; Fri, 10 Nov 2023 16:30:48 +0100
+        id 1r1TT7-00Gnxv-4B; Fri, 10 Nov 2023 16:30:49 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,15 +35,15 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     "David S. Miller" <davem@davemloft.net>,
         sparclinux@vger.kernel.org, kernel@pengutronix.de,
         linux-serial@vger.kernel.org
-Subject: [PATCH 46/52] serial: sunsu: Convert to platform remove callback returning void
-Date:   Fri, 10 Nov 2023 16:30:14 +0100
-Message-ID: <20231110152927.70601-47-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 47/52] serial: sunzilog: Convert to platform remove callback returning void
+Date:   Fri, 10 Nov 2023 16:30:15 +0100
+Message-ID: <20231110152927.70601-48-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=bJvr6ajvc8acvcU6LpWDvOv5tO3tdCW3m+BAMBN9sSk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkySfFl2F/BTiBQOkgUXRv47nPJftRH90peJI DfvmZmIeAOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MkgAKCRCPgPtYfRL+ TnN7B/wLODkAOPQCFWUj4zF150l4kwLErWUwDX15OAohX+Bjvr3cvggKOwDd1eqQJyfRh2Aq3qd 0gtrGa09D2onXpxFGJU9gHHfCV73uttZTYRdbLqibO+mn88rJVLq+1GOZHnC3Ack3giSB4wqSs3 mExxuWH/y6zzdP7xViHRWx8v+dp48hKXcAwZXSLkPRRFvBmBss3omhCsdDvAtHyZQs0N8OGsNcE 6EpxsX4c8XIYx7USAYj2IJL3pf2+jY/A+8Dd7nBFcteFiCyWKX8Q6c8dMwl8IohKBBfogrsNjty VQzAvv3PfFA9hEzW6dIrTvJvmdPC5eAVqniqgA7/GRmi78VV
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1891; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=ojzyZIP8zF6K2DNhtlOtgImARvRZldsIavtDnrpT8Wg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkyT9pPYdGOuXsE2mftrIDFjA2NX7qf3MYJzZ gXNnl/P6eKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MkwAKCRCPgPtYfRL+ TqwXB/9sVWYIfEjfSc7k1cFD1xLERa/PUMr8YfKawkOTlH5t6OyEIcbiS2hVu5DAFUhzNN35Mzj rQCC/45DUbJO3r4uCvYtF9WSvkxjfAY8FFzEo7vuQpRMv3TINXz5Bo4K/kewBIVJPoCWewOyRlH nsSgXewJhbrl+/9OCbSO+0hoR7lfTmG+WrQ7T11xTKKzCmCUYfw9qgAVHiCNFMdgt+C48FwFuCT bf1FzJepKnZ7+kVtxL2bI7eOpHlVEdEw2az5sUEYuJl9FPBoQthIcZ5YSZ01OMnwKLEH/xHUdeC raGPcyTUWccJUVe31YavFXsDfyv6TClut/HGmzQ5EKYlLyaM
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,40 +74,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/sunsu.c | 6 ++----
+ drivers/tty/serial/sunzilog.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/sunsu.c b/drivers/tty/serial/sunsu.c
-index 1e051cc2591c..c8b65f4b2710 100644
---- a/drivers/tty/serial/sunsu.c
-+++ b/drivers/tty/serial/sunsu.c
-@@ -1515,7 +1515,7 @@ static int su_probe(struct platform_device *op)
- 	return err;
+diff --git a/drivers/tty/serial/sunzilog.c b/drivers/tty/serial/sunzilog.c
+index d3b5e864b727..c99289c6c8f8 100644
+--- a/drivers/tty/serial/sunzilog.c
++++ b/drivers/tty/serial/sunzilog.c
+@@ -1513,7 +1513,7 @@ static void zs_remove_one(struct uart_sunzilog_port *up)
+ 		uart_remove_one_port(&sunzilog_reg, &up->port);
  }
  
--static int su_remove(struct platform_device *op)
-+static void su_remove(struct platform_device *op)
+-static int zs_remove(struct platform_device *op)
++static void zs_remove(struct platform_device *op)
  {
- 	struct uart_sunsu_port *up = platform_get_drvdata(op);
- 	bool kbdms = false;
-@@ -1536,8 +1536,6 @@ static int su_remove(struct platform_device *op)
+ 	struct uart_sunzilog_port *up = platform_get_drvdata(op);
+ 	struct zilog_layout __iomem *regs;
+@@ -1523,8 +1523,6 @@ static int zs_remove(struct platform_device *op)
  
- 	if (kbdms)
- 		kfree(up);
+ 	regs = sunzilog_chip_regs[up[0].port.line / 2];
+ 	of_iounmap(&op->resource[0], regs, sizeof(struct zilog_layout));
 -
 -	return 0;
  }
  
- static const struct of_device_id su_match[] = {
-@@ -1565,7 +1563,7 @@ static struct platform_driver su_driver = {
- 		.of_match_table = su_match,
+ static const struct of_device_id zs_match[] = {
+@@ -1541,7 +1539,7 @@ static struct platform_driver zs_driver = {
+ 		.of_match_table = zs_match,
  	},
- 	.probe		= su_probe,
--	.remove		= su_remove,
-+	.remove_new	= su_remove,
+ 	.probe		= zs_probe,
+-	.remove		= zs_remove,
++	.remove_new	= zs_remove,
  };
  
- static int __init sunsu_init(void)
+ static int __init sunzilog_init(void)
 -- 
 2.42.0
 
