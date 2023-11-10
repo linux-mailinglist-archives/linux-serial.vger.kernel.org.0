@@ -2,185 +2,192 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8377E82A5
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 20:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9507E7F90
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 18:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235958AbjKJT3N (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Nov 2023 14:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S229985AbjKJR4P (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Nov 2023 12:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236002AbjKJT2m (ORCPT
+        with ESMTP id S229882AbjKJRz1 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Nov 2023 14:28:42 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7E88874
-        for <linux-serial@vger.kernel.org>; Thu,  9 Nov 2023 23:58:16 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-4083740f92dso12929665e9.3
-        for <linux-serial@vger.kernel.org>; Thu, 09 Nov 2023 23:58:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699603095; x=1700207895; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CmNsSkxGNQJ9Q4GP0q3MvT9no1MR/Ri0odVIQEptAvk=;
-        b=l2JsI4A3ypjEZ3AJjIqfhYM9UrYSuWsC3igICfZ6Jp91/KeHpFC6ryJ8IMFoN9U/nb
-         zni6vUO5a9PgydZmLUVlkinp5VIQ3tiIYoAPGK0EFhQTWXhPbz2ubNxMpQJIasdx1iyO
-         eq8nsby6nz+4tQqE8lhqmS6D3whw0ikHK5xf2TDk4YJ/cHbJL/6WfPAH80lz7o56lzne
-         EGD0nvfeDKVO3aiGEbWyaB58BhS0lLU6fSk06UYniqe2IHRJMo8859RQqx3wjf8V8Beh
-         2oE6Hvp2228G4lxQl1zOELU0IYHi9YCBTAQnWRauzh5uZ2z2TEZk15bX9dVwwSmiJ6c6
-         Vqzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699603095; x=1700207895;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CmNsSkxGNQJ9Q4GP0q3MvT9no1MR/Ri0odVIQEptAvk=;
-        b=OJymWuzQqZgC9tqvMGgsQykh79sr/Y3Vcki+elRH39YH75yvK2uwtV0cKb3+SI//LQ
-         c2WXnpW9SsaCuSNgD5e0q4zTJPI+35hMe1W4ChGiridFZXyjjQz1zs42pu10n7EHr1jG
-         pIQNodQOkV4esXLZFUf2Px3ohsFEzxd4IPGusz8J5OWukXredpPJCb2xrIUjJzIX8r6t
-         Rnpodyvgbm44xBPcnCuGX1DNaX98E62lAz9wafS0wZtO5hLMUtbjsvXWY4J9PhzpfJE+
-         lYp5xoqx0HTBbJb9sOsspn8NtFSw/t4IgCFlBCXOME4n92Lm6mwWbqHeNupX3yH2ClDK
-         OjAQ==
-X-Gm-Message-State: AOJu0YyMvPylpCZA1GfvX5BpINznkq2/r2OFqTcRMsJPTJ0JoZEAfBPy
-        Ac2gcim84W8WndPWV7pKSvBaFA==
-X-Google-Smtp-Source: AGHT+IGZKQiVi/l3PE3rMUGuuZB9Ya3QDCrJYK8NJRwEd76ii8VtTRZDdWH3qx39UjTk9tcaifEFJA==
-X-Received: by 2002:a05:6000:188c:b0:32d:9850:9e01 with SMTP id a12-20020a056000188c00b0032d98509e01mr4958052wri.61.1699603095075;
-        Thu, 09 Nov 2023 23:58:15 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id j17-20020adfea51000000b0032d829e10c0sm1362413wrn.28.2023.11.09.23.58.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 23:58:14 -0800 (PST)
-Message-ID: <9db77625-8dc0-4963-b200-851c209ac238@linaro.org>
-Date:   Fri, 10 Nov 2023 08:58:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/17] dt-bindings: i2c: exynos5: add specific compatibles
- for existing SoC
+        Fri, 10 Nov 2023 12:55:27 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4BE24485;
+        Fri, 10 Nov 2023 01:28:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I9Ln8lIztQECjVOPuaN6oZTSIUukP2QVG8CWermSO6gHWklVYDCSQ7KexrGg9UBGELd227cBKMY6sAnL8q3+tRW5XyMEhV4xrmIY3GmaRgeOJj7H2ZTrVW5KVpY3Jm8ukdNzRQQJZ1eQfiRzR4UN6kTDextLEtzebXADmPHDVS0VRWXPl7jxhQeu5fTglfI+iH64yszdJxm00/8wcVC+btIAHATTRsRz65eSMpePho/vYfY/VJi2yqPhFkrZWTiTR0dnAlhSly7kYqUgKWb5NkSEcF28ZbOq4ifAnFTryHuIBDZh3A03kmfEay+cizaTUDFzsi6gFjcvBMDgoOvVug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D0qRfr1msQijQTrSWrcS9QbGkrNRBJOY5Lm/8T3AjlE=;
+ b=ANmyTpxvnyTHtZP0vhXOK2gdYsOx1pGH1vuF/yon7pU58ZrELHiYbIBXGY0kwJj23v7HIea2kaJ6UJseiUzsFQrOpTK9jmgXWN/7DEJDcQ0S9mIfWZVWw++AWqzvYLxfY3y26sPeA3ISeYJUkZET20WqiQx+hX2sZGl3LGGEeWfipcBTHMxcTwF4WTE7qPA5ACW9yNMK9Esv9doMGFg9tKKrifN9sNOx+BuatBYI8rOTa5SHj4pdrvcJxXQPJU0P7LE97JwiB26ab6/n+PLzibKHU89fzGyJ/LECbpz1C1RSybVZG9cB9JZUPzafwBtf2N8crUSh5ny5vIWf9F2rmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D0qRfr1msQijQTrSWrcS9QbGkrNRBJOY5Lm/8T3AjlE=;
+ b=h6z4oSgGfG/P6Z4IWJ2MPkbXh3ttCbabNJbBMxABbFs+TEI4NssiL7yzIo+cIxge7PtmROq0DbAVZToKx4O/O1BTZqmhfmjHOvbz/Kq21rByKYMixCIPxNrac2sU8tmOxK4NZ5PZROOru3iph2ty9r3ud8BPzZqkCw1s4A21y+A=
+Received: from DM4PR12MB6109.namprd12.prod.outlook.com (2603:10b6:8:ae::11) by
+ DS0PR12MB7727.namprd12.prod.outlook.com (2603:10b6:8:135::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.31; Fri, 10 Nov 2023 09:28:40 +0000
+Received: from DM4PR12MB6109.namprd12.prod.outlook.com
+ ([fe80::46d8:a18a:12a:5e1b]) by DM4PR12MB6109.namprd12.prod.outlook.com
+ ([fe80::46d8:a18a:12a:5e1b%3]) with mapi id 15.20.6954.028; Fri, 10 Nov 2023
+ 09:28:40 +0000
+From:   "Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "git (AMD-Xilinx)" <git@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "jacmet@sunsite.dk" <jacmet@sunsite.dk>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
+        "Goud, Srinivas" <srinivas.goud@amd.com>,
+        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
+        "manion05gk@gmail.com" <manion05gk@gmail.com>
+Subject: RE: [PATCH] serial: uartlite: Use dynamic allocation for major number
+Thread-Topic: [PATCH] serial: uartlite: Use dynamic allocation for major
+ number
+Thread-Index: AQHaEwlt1sGLuI9yokCsNfjgH8r8ILBx+OyAgAEfE5A=
+Date:   Fri, 10 Nov 2023 09:28:40 +0000
+Message-ID: <DM4PR12MB6109220B13FCD2B1D7B48B3C8CAEA@DM4PR12MB6109.namprd12.prod.outlook.com>
+References: <20231109123640.1740310-1-manikanta.guntupalli@amd.com>
+ <2023110915-trusting-pointer-40b0@gregkh>
+In-Reply-To: <2023110915-trusting-pointer-40b0@gregkh>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        'David Airlie' <airlied@gmail.com>,
-        'Daniel Vetter' <daniel@ffwll.ch>,
-        'Maarten Lankhorst' <maarten.lankhorst@linux.intel.com>,
-        'Maxime Ripard' <mripard@kernel.org>,
-        'Thomas Zimmermann' <tzimmermann@suse.de>,
-        'Rob Herring' <robh+dt@kernel.org>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        'Conor Dooley' <conor+dt@kernel.org>,
-        'Andi Shyti' <andi.shyti@kernel.org>,
-        'Jonathan Cameron' <jic23@kernel.org>,
-        'Lars-Peter Clausen' <lars@metafoo.de>,
-        'Lee Jones' <lee@kernel.org>,
-        'Ulf Hansson' <ulf.hansson@linaro.org>,
-        'Tomasz Figa' <tomasz.figa@gmail.com>,
-        'Sylwester Nawrocki' <s.nawrocki@samsung.com>,
-        'Linus Walleij' <linus.walleij@linaro.org>,
-        'Thierry Reding' <thierry.reding@gmail.com>,
-        =?UTF-8?Q?=27Uwe_Kleine-K=C3=B6nig=27?= 
-        <u.kleine-koenig@pengutronix.de>,
-        'Alessandro Zummo' <a.zummo@towertech.it>,
-        'Alexandre Belloni' <alexandre.belloni@bootlin.com>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        'Jiri Slaby' <jirislaby@kernel.org>,
-        'Liam Girdwood' <lgirdwood@gmail.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        'Jaehoon Chung' <jh80.chung@samsung.com>,
-        'Sam Protsenko' <semen.protsenko@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
- <CGME20231108104407epcas5p4c52f140b035727b6110ff7d3c0f81bc0@epcas5p4.samsung.com>
- <20231108104343.24192-3-krzysztof.kozlowski@linaro.org>
- <02bb01da1337$65caf5e0$3160e1a0$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <02bb01da1337$65caf5e0$3160e1a0$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB6109:EE_|DS0PR12MB7727:EE_
+x-ms-office365-filtering-correlation-id: ded4364b-5da6-4a8b-4c31-08dbe1cf6d0f
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qoaowA2KtnfAfU21m6oSYAB4ILNF0D/GqMwvcVUxc6rSASAyzdIRlyKcJUC7s5bUp2/EJHuDBsjbNMKmLScfdERl0djwDZ2WZxOzjwbg+Cyk6981TkEoE1m20sG6iSHwkKY/8Oe/xUHF6iSHfaqhpEURcXlAuHeYwX1bUxlN2PQ5XSNhOr/F4fpz46LRxOEtve/uLJnnac9dKPdztYXaM/PQnhuYvyajBtj79uctrl8Gpjka5ZFvVorlKNEm9LU3p5CB1y0k4pR1QZnanOyeZlautXZO2u9QRSR2JJbqpKnCL0NvE0MEfUUnWJMvpVi4nOaVzrhy3QMg/TKgon4gRRubPLlRxgCAOg1XQo5VTU/9OUHp60fFHM5SKRi7vfiJwY4BeXN+jZkvlsXuDv+/n72YSe+FruFgyCKOlcz5Xc9A0G/4xrAc1hVmaQz1UtNeh3QISXcIfcPb5sZH/Y88uMXNuh/6E/X9hK6YE7IvXda3/q0r0telUGMORrqam2+E2SqIs1/GxDTV/LTjyuXnP+YiuViHB/lhUH3S6MZV0m20OvOxfuMaoHD3Aco+/M+GxE8JCx/ETqL9D/ReV+/QxGiSRLtpgKSwkBlDDBWCg8s=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(136003)(396003)(366004)(39860400002)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(9686003)(966005)(7696005)(6506007)(71200400001)(53546011)(478600001)(2906002)(83380400001)(41300700001)(26005)(5660300002)(64756008)(6916009)(66946007)(66476007)(316002)(66446008)(66556008)(76116006)(52536014)(8676002)(8936002)(4326008)(38070700009)(33656002)(38100700002)(122000001)(86362001)(54906003)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EjzqKr8m8BrRmXzn6epY4Qua+IJdgBawcgJYczoSdtcvAc5ctAKdrhcMykfp?=
+ =?us-ascii?Q?5kUrnAaBm/zsRul482ojdBUVkmuv3sp5yAB7D+suiNARSHLkxcPRssoCaRbh?=
+ =?us-ascii?Q?st2k415XhfvvfLmSaouvD22Bwl3gXnFVg0d+Z/8dDAT8MS7BeSltpDAddB0r?=
+ =?us-ascii?Q?R2GhjMOKfnLBRE8gCiXIE8NmiM66ER/LTnHYH5BckR5uR3cUhNHCbTj3WdUA?=
+ =?us-ascii?Q?4nZclZa06JXdm2JkwH7FRMG+niZqhb5uFk0zXJcZBPE/+E4TU/ooA8WCsWIV?=
+ =?us-ascii?Q?XzkLszsq1lAO6TEaArjKQcwXNRQVax9o+ajLDDet6l5Uj68jdYFiKCcDtD6c?=
+ =?us-ascii?Q?gIBmVSw2agclKn2bIuz08EGpoXKuuKsJPAnFZcLKFRMFDtUmdI9VMbaDOdrx?=
+ =?us-ascii?Q?AKzoQDmNzcIJz73TtQo8ZnXBCKePqfJOSeeezg0wF2q8l6bxSTpGzuSpTw2y?=
+ =?us-ascii?Q?VEEd+qnswaexuf3E/BVjzU0W7uHKBTBrrKM5bhnXArILFWeAIipm7uuH5u3/?=
+ =?us-ascii?Q?q+RS4dfNwBrBVLnUepS/VPyvvuEhfXYrUA5utUk7jNKn+V547fz/m5GDgLdR?=
+ =?us-ascii?Q?ASX3ooFGyWImMaFbWPsCnxgy1F06thoExy8KyxNlPpkaUxo6OHhsmIFZffm4?=
+ =?us-ascii?Q?PCjxIt81WxG5l+G1BYNftc5UDzIYSE2RBv+gT3ZgmHrm7/B0gLIiRbyyaJea?=
+ =?us-ascii?Q?/tiBelrm9LxXnroAdMLYCVuSA1ZkwFdhEqhB18dnMgqFHAqXH6arDOlUNs2O?=
+ =?us-ascii?Q?xiAuSO3EYKWPzC3eGXjX0yoBUBtpqrLcRk7ODxuN/yUFLaaOGDGPESlkYkH1?=
+ =?us-ascii?Q?tmNuCS942MCuBey5R2ND39qd65t5qiTbLtfHSDQL29tS8N0DPY+9q6nXKnYr?=
+ =?us-ascii?Q?pq0PgC/BLYcodcw/0ol7hlxObis5v1Y06yVJCqhjHUcqbmqEOxgY00hpn/wp?=
+ =?us-ascii?Q?kKbNTjSWJ+dncTrVBYzlpEL0l9k89ZO55x1kzv1w6+jRBLH8eV6pDteFZhW+?=
+ =?us-ascii?Q?bDlUYr17lESXuCIbwh5lD8PQN5dq6jbJLwsZJmbUM6QQT1uEMRi1X2hkQH2v?=
+ =?us-ascii?Q?UiMzocPjJsJBU8yvGIyhnonA4BvB7fBN1sx3JGrVBYUGFSvOmtqmox+ENcFf?=
+ =?us-ascii?Q?S2yu3e2PN9I5zGPb5X4tLcEQK1WujObTlVq7blbWDdezZuNqozc+PcYHP+rn?=
+ =?us-ascii?Q?+1f3DJRbXzxbNu5jYh17VA6IyCUgmHKg1ht8pjN2+Aei2p7ULz0S6e00N0go?=
+ =?us-ascii?Q?1sAJG1YlavrvlT4JR7g0fRORQxWoh0y2zzhWMRrOKDngofUs2MZQ9QxHWSTF?=
+ =?us-ascii?Q?jXAoKF0yibxKvJtJ7D3mZtxcvGsK/MCBUopV9uPqy4CHEultwjc8Ddgp66Cr?=
+ =?us-ascii?Q?9KbVt1Si7tzAR9s1dVDLJBzAJrBMy3tNwZ3TVUQXCrifmhAeaF8itHkKCzlu?=
+ =?us-ascii?Q?2H2/QzEqdsPkt3KvPsYbHA0Go7k+k6rkzBpsggpIs5tNQuTOFWlKW56drKxf?=
+ =?us-ascii?Q?5P9SzALn84oNQWvxp9P4YtPFu7BGgB9wmfOviLjS+0lckFyLa6pl/naaY/Ng?=
+ =?us-ascii?Q?3UCavxSJPLGdp8TX1YE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6109.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ded4364b-5da6-4a8b-4c31-08dbe1cf6d0f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2023 09:28:40.7224
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MYF1ofRKPoLrpki53qhOv7vBTER5Jx9pryO+yP2n1O/Y1PobcuAkkLo7gNShB77tozw9G0hPF1RJesRIcTDDGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7727
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On 09/11/2023 19:05, Alim Akhtar wrote:
+Hi Greg,
 
-(...)
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Thursday, November 9, 2023 6:50 PM
+> To: Guntupalli, Manikanta <manikanta.guntupalli@amd.com>
+> Cc: git (AMD-Xilinx) <git@amd.com>; Simek, Michal
+> <michal.simek@amd.com>; jacmet@sunsite.dk; jirislaby@kernel.org; linux-
+> serial@vger.kernel.org; linux-kernel@vger.kernel.org; Pandey, Radhey Shya=
+m
+> <radhey.shyam.pandey@amd.com>; Goud, Srinivas
+> <srinivas.goud@amd.com>; Datta, Shubhrajyoti
+> <shubhrajyoti.datta@amd.com>; manion05gk@gmail.com
+> Subject: Re: [PATCH] serial: uartlite: Use dynamic allocation for major n=
+umber
+>=20
+> On Thu, Nov 09, 2023 at 06:06:40PM +0530, Manikanta Guntupalli wrote:
+> > Device number 204 has a range of minors on major number.
+> > uart_register_driver is failing due to lack of minor numbers when more
+> > number of uart ports used.
+>=20
+> So you need more than the 4 allocated to you?
+Yes, we have a customer who has 32 uartlite instances in his board.
+>=20
+> > So, use dynamic allocation
+> > for major number to avoid minor number limitation on 204 major number.
+> >
+> > https://docs.kernel.org/arch/arm/sa1100/serial_uart.html
+>=20
+> What does this break by doing this?
+uart_register_driver() is failing due to lack of minor numbers when the cus=
+tomer
+has 32 uartlite instances in his board.
+>=20
+> Also, you forgot to update the documentation :(
+We will update the documentation.
+>=20
+> And how was this tested? =20
+We tested on both ZCU106 AMD/Xilinx evaluation board with 32 uartlite insta=
+nces with customer design.
 
-Please trim unrelated parts of response/quote before and after your message.
+>What about older systems with static device nodes,
+> are you sure none are out there for this old hardware anymore?
+Shall we use below approach to support both legacy hardware and hardware wi=
+th more number of uartlite instances use case. Please suggest.
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index 404c14acafa5..517f1f34143d 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -24,8 +24,13 @@
+ #include <linux/pm_runtime.h>
+=20
+ #define ULITE_NAME             "ttyUL"
++#if (CONFIG_SERIAL_UARTLITE_NR_UARTS > 4)
++#define ULITE_MAJOR             0       /* use dynamic node allocation */
++#define ULITE_MINOR             0
++#else
+ #define ULITE_MAJOR            204
+ #define ULITE_MINOR            187
++#endif
+ #define ULITE_NR_UARTS         CONFIG_SERIAL_UARTLITE_NR_UARTS
 
->> @@ -25,7 +25,15 @@ properties:
->>            - samsung,exynos5250-hsi2c    # Exynos5250 and Exynos5420
->>            - samsung,exynos5260-hsi2c    # Exynos5260
->>            - samsung,exynos7-hsi2c       # Exynos7
->> -          - samsung,exynosautov9-hsi2c  # ExynosAutoV9 and Exynos850
->> +          - samsung,exynosautov9-hsi2c
->> +      - items:
->> +          - enum:
->> +              - samsung,exynos5433-hsi2c
->> +          - const: samsung,exynos7-hsi2c
->> +      - items:
->> +          - enum:
->> +              - samsung,exynos850-hsi2c
-> Does this need an entry in allOf:? to indicate exynos850 also has 2 clocks?
-> 
 
-No, autov9 is there already.
-
->> +          - const: samsung,exynosautov9-hsi2c
-
-
-Best regards,
-Krzysztof
+Thanks,
+Manikanta.
 
