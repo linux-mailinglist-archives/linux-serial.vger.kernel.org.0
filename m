@@ -2,47 +2,47 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30017E7F9D
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 18:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1767E7F60
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 18:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbjKJR4k (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Nov 2023 12:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S229763AbjKJRx3 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Nov 2023 12:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235526AbjKJRzv (ORCPT
+        with ESMTP id S229524AbjKJRwq (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Nov 2023 12:55:51 -0500
+        Fri, 10 Nov 2023 12:52:46 -0500
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4103A8B2
-        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146073AE1D
+        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:31:01 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT8-0006Xi-Jp; Fri, 10 Nov 2023 16:30:50 +0100
+        id 1r1TT8-0006Yc-Ry; Fri, 10 Nov 2023 16:30:50 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT8-0083Lr-05; Fri, 10 Nov 2023 16:30:50 +0100
+        id 1r1TT8-0083Lu-5i; Fri, 10 Nov 2023 16:30:50 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT7-00Gny6-ND; Fri, 10 Nov 2023 16:30:49 +0100
+        id 1r1TT7-00GnyA-Sn; Fri, 10 Nov 2023 16:30:49 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
-Cc:     Peter Korsgaard <jacmet@sunsite.dk>, linux-serial@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 50/52] serial: uartlite: Convert to platform remove callback returning void
-Date:   Fri, 10 Nov 2023 16:30:18 +0100
-Message-ID: <20231110152927.70601-51-u.kleine-koenig@pengutronix.de>
+Cc:     Timur Tabi <timur@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        kernel@pengutronix.de, linux-serial@vger.kernel.org
+Subject: [PATCH 51/52] serial: ucc: Convert to platform remove callback returning void
+Date:   Fri, 10 Nov 2023 16:30:19 +0100
+Message-ID: <20231110152927.70601-52-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1922; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=WRkoKVReHUGPni5x6b33mENImAr6GGmSF8CbrJG0FMI=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkyWi1FZJZQMcYTbC31p8gBAri+0MusiKkRFb KxGqO2/6ueJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MlgAKCRCPgPtYfRL+ TqiuCACWipRDx8QA3OlOOA+wRxraypYhChxrvYagM8AzjGgCCQf08UWKiZlGEOivCzFeW4udw8c c3AvpD01RcutjBoIN0XYyh5Nyf/sB+ll+NznfWganN+hKEULCxrw0EqqfbZJFDLhH6Mc0hxtpYh yBKRmd0F36z/cSIFcuKZsqoHRo5Yqxy9JyKEpQmczCVhQu0C9mV0C+DrvkEYuj+lnYEVBSQ/qi9 6WAOAovAONzREPrXJTp4rpZuw8hx18d5N6jo32W6Aid2VIbbpc+Zd+Fd/Kuc9bOGKQCBkU0J5/2 9ElIfK7Dc2CFJniXt5PrIoZ2nvf7keFc4oF9tA5EE5uyRRMG
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1821; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=1i8KT+sh7QtkRDn6szKY9xL97sdpwMK7Je2MNdk5bn0=; b=owGbwMvMwMXY3/A7olbonx/jabUkhlQ/n+keJw9FvldhWW778kewBkupye3qT/5WqkxLxK9Zb MxYf2VHJ6MxCwMjF4OsmCKLfeOaTKsqucjOtf8uwwxiZQKZwsDFKQATuR3P/lfgSfgf1VPeWVbN scFyGyYeKHWMXT99z8xfkdW3XkZU/X28fMLnAof23gJH0825/UlGknvaKwS+hGapxKzm2fDqmJL 6/TYVxrbK+sadn/wduFy5b857FqmgEa1fuiX7/CXjeVqVEnkbbU6dDeYw8BFnC/jU4F1sO4s9ue k/z5FlkXvdm3erPRW0+7/uUMYuuYrLpzQ9m0uvfFUOv/z27tZ2Y5nzH/PkxH97qN++wXuBu7i/L 1+qYkLz4dh/C1o37pnw78JT5+eBcrNefdnxni+r8ATP0yTVfP9ZjdIcERlP196MY3jt8szfRSWy skfU5ljdXoVlk/SXNs4XvVn5pz3kxMVzPm41HIvbrDilAQ==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -73,39 +73,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/uartlite.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/serial/ucc_uart.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index 404c14acafa5..48c9fca1566b 100644
---- a/drivers/tty/serial/uartlite.c
-+++ b/drivers/tty/serial/uartlite.c
-@@ -890,7 +890,7 @@ static int ulite_probe(struct platform_device *pdev)
+diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
+index ed7a6bb5596a..f9ad942c9aaf 100644
+--- a/drivers/tty/serial/ucc_uart.c
++++ b/drivers/tty/serial/ucc_uart.c
+@@ -1459,7 +1459,7 @@ static int ucc_uart_probe(struct platform_device *ofdev)
  	return ret;
  }
  
--static int ulite_remove(struct platform_device *pdev)
-+static void ulite_remove(struct platform_device *pdev)
+-static int ucc_uart_remove(struct platform_device *ofdev)
++static void ucc_uart_remove(struct platform_device *ofdev)
  {
- 	struct uart_port *port = dev_get_drvdata(&pdev->dev);
- 	struct uartlite_data *pdata = port->private_data;
-@@ -900,7 +900,6 @@ static int ulite_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	struct uart_qe_port *qe_port = platform_get_drvdata(ofdev);
+ 
+@@ -1470,8 +1470,6 @@ static int ucc_uart_remove(struct platform_device *ofdev)
+ 	of_node_put(qe_port->np);
+ 
+ 	kfree(qe_port);
+-
 -	return 0;
  }
  
- /* work with hotplug and coldplug */
-@@ -908,7 +907,7 @@ MODULE_ALIAS("platform:uartlite");
+ static const struct of_device_id ucc_uart_match[] = {
+@@ -1492,7 +1490,7 @@ static struct platform_driver ucc_uart_of_driver = {
+ 		.of_match_table    = ucc_uart_match,
+ 	},
+ 	.probe  	= ucc_uart_probe,
+-	.remove 	= ucc_uart_remove,
++	.remove_new 	= ucc_uart_remove,
+ };
  
- static struct platform_driver ulite_platform_driver = {
- 	.probe = ulite_probe,
--	.remove = ulite_remove,
-+	.remove_new = ulite_remove,
- 	.driver = {
- 		.name  = "uartlite",
- 		.of_match_table = of_match_ptr(ulite_of_match),
+ static int __init ucc_uart_init(void)
 -- 
 2.42.0
 
